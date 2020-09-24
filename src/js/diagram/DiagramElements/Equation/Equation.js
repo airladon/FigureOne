@@ -10,7 +10,7 @@ import {
 import {
   DiagramFont,
 } from '../../DrawingObjects/TextObject/TextObject';
-import type { TypeDiagramFontDefinition } from '../../DrawingObjects/TextObject/TextObject';
+import type { OBJ_Font } from '../../DrawingObjects/TextObject/TextObject';
 import type { ElementInterface } from './Elements/Element';
 import { Elements } from './Elements/Element';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
@@ -47,7 +47,7 @@ import type { TypeEquationSymbolArrowBracket } from './Symbols/Arrow';
 
 export type TypeEquationTextElement = string | {
     text?: string;
-    font?: DiagramFont | TypeDiagramFontDefinition;
+    font?: DiagramFont | OBJ_Font;
     style?: 'italic' | 'normal' | null;
     weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
     size?: number,
@@ -392,7 +392,7 @@ export type EQN_Equation = {
   formSeries?: Array<string> | {};
   defaultFormSeries?: string;
   formRestart?: TypeFormRestart;
-  font?: DiagramFont | TypeDiagramFontDefinition;
+  font?: DiagramFont | OBJ_Font;
   position?: Point;
   transform?: Transform;
 };
@@ -766,7 +766,7 @@ export class Equation extends DiagramElementCollection {
   makeTextElem(
     options: {
       text?: string,
-      font?: DiagramFont | TypeDiagramFontDefinition,
+      font?: DiagramFont | OBJ_Font,
       style?: 'italic' | 'normal',
       weight?: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
       size?: number,

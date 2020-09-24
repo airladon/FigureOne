@@ -20,7 +20,7 @@ import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexObject from './DrawingObjects/VertexObject/VertexObject';
 import { TextObject } from './DrawingObjects/TextObject/TextObject';
-import type { TypeDiagramFontDefinition } from './DrawingObjects/TextObject/TextObject';
+import type { OBJ_Font } from './DrawingObjects/TextObject/TextObject';
 import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, SubscriptionManager,
 } from '../tools/tools';
@@ -3137,7 +3137,7 @@ class DiagramElementPrimitive extends DiagramElement {
     return [];
   }
 
-  setFont(font: TypeDiagramFontDefinition, index: number = 0) {
+  setFont(font: OBJ_Font, index: number = 0) {
     if (this.drawingObject instanceof TextObject) {
       this.drawingObject.setFont(font, index);
     }

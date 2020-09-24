@@ -46,7 +46,7 @@ import {
   TextObject, TextLineObject, TextLinesObject, DiagramFont,
 } from '../DrawingObjects/TextObject/TextObject';
 import type {
-  TypeDiagramFontDefinition,
+  OBJ_Font,
 } from '../DrawingObjects/TextObject/TextObject';
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
@@ -458,6 +458,83 @@ export type OBJ_Polygon = {
   offset?: TypeParsablePoint,
 };
 
+/** Text Definition object
+ * @property {OBJ_Font} [font]
+ * @property {TypeParsablePoint} [location] (`[0, 0]`)
+ * @property {'left' | 'right' | 'center'} [xAlign] x align of text with
+ * `location` (`'left'`)
+ * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] y align of
+ * text with `location` (`'left'`)
+ * @property {() => void} [onClick] fnction to execute on click
+ */
+export type OBJ_TextDefinition = {
+  font?: OBJ_Font,
+  location?: TypeParsablePoint,
+  xAlign?: 'left' | 'right' | 'center',
+  yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+  onClick?: () => void,
+};
+
+/**
+ * Text object
+ *
+ * ![](./assets1/text.png)
+ *
+ * @property {number} [sides] (`4`)
+ * @property {number} [radius] (`1`)
+ * @property {number} [width] line width - line will be drawn on inside of radius (`0.01`)
+ * @property {number} [rotation] shape rotation during vertex definition
+ * (different to a rotation step in a trasform) (`0`)
+ * @property {TypeParsablePoint} [offset] shape center offset from origin
+ * during vertex definition (different to a translation step in a transform)
+ * (`[0, 0]`)
+ * @property {number} [sidesToDraw] number of sides to draw (all sides)
+ * @property {number} [angleToDraw] same as `sidesToDraw` but using angle for
+ * the definition (`2π`)
+ * @property {-1 | 1} [direction] direction to draw polygon where 1 is
+ * counter clockwise and -1 is clockwise (`1`)
+ * center. This is different to position or transform as these translate the
+ * vertices on each draw. (`[0, 0]`)
+ * @property {OBJ_LineStyle} [line] line style options
+ * @property {boolean} [fill] (`false`)
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('polygon').standard()`)
+ * @property {Array<number>} [color] (`[1, 0, 0, 1`])
+ * @property {OBJ_Texture} [texture] Override color with a texture
+ * @property {number} [pulse] set the default pulse scale
+ * @example
+ * // Simple filled polygon
+ * diagram.addElement(
+ *   {
+ *     name: 'p',
+ *     method: 'polygon',
+ *     options: {
+ *       radius: 0.5,
+ *       fill: true,
+ *       sides: 6,
+ *     },
+ *   },
+ * );
+ * @example
+ * // Quarter circle
+ * diagram.addElement(
+ *   {
+ *     name: 'p',
+ *     method: 'text',
+ *     options: {
+ *     },
+ *   },
+ * );
+ */
+export type OBJ_Text = {
+  text: string | [OBJ_TextDefinition, string] | Array<string | [OBJ_TextDefinition, string]>;
+  position?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
+  font?: OBJ_Font,                    // default font
+  xAlign?: 'left' | 'right' | 'center',                // default xAlign
+  yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
+  color?: Array<number>
+}
 
 export type TypeTextOptions = {
   text?: string;
@@ -1238,14 +1315,14 @@ export default class DiagramPrimitives {
 
   textLine(...optionsIn: Array<{
     text: string | Array<string | [{
-      font?: TypeDiagramFontDefinition,
+      font?: OBJ_Font,
       offset?: TypeParsablePoint,
       inLine?: boolean,
       onClick?: () => void,
     }, string]>;
     position: TypeParsablePoint,
     transform: TypeParsableTransform,
-    font: TypeDiagramFontDefinition,                    // default font
+    font: OBJ_Font,                    // default font
     // How the line aligns with the position
     xAlign: 'left' | 'right' | 'center',
     yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
@@ -1259,7 +1336,7 @@ export default class DiagramPrimitives {
 
   textLines(...optionsIn: Array<{
     text: string | Array<string | [{
-      font?: TypeDiagramFontDefinition,
+      font?: OBJ_Font,
       justification?: 'left' | 'center' | 'right',
       lineSpace?: number
     }, string]>,
@@ -1268,11 +1345,11 @@ export default class DiagramPrimitives {
         text?: string,
         offset?: TypeParsablePoint,
         inLine?: boolean,
-        font?: TypeDiagramFontDefinition,
+        font?: OBJ_Font,
         onClick?: () => {},
       },
     },
-    font?: TypeDiagramFontDefinition,
+    font?: OBJ_Font,
     justification?: 'left' | 'center' | 'right',
     lineSpace?: number,
     position: TypeParsablePoint,
@@ -1296,15 +1373,15 @@ export default class DiagramPrimitives {
 
   text(...optionsIn: Array<{
     text: string | Array<string | [{
-      font?: TypeDiagramFontDefinition,
-      location?: TypeParsablePoint | number,
+      font?: OBJ_Font,
+      location?: TypeParsablePoint,
       xAlign?: 'left' | 'right' | 'center',
       yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
       onClick?: () => void,
     }, string]>;
     position?: TypeParsablePoint,
     transform?: TypeParsableTransform,
-    font?: TypeDiagramFontDefinition,                    // default font
+    font?: OBJ_Font,                    // default font
     xAlign?: 'left' | 'right' | 'center',                // default xAlign
     yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
     color?: Array<number>
@@ -1320,7 +1397,7 @@ export default class DiagramPrimitives {
 
   // textLinesLegacy(...optionsIn: Array<{
   //   text: string | Array<string | [{
-  //     font?: TypeDiagramFontDefinition,
+  //     font?: OBJ_Font,
   //     justification?: 'left' | 'center' | 'right',
   //     location?: TypeParsablePoint | number,
   //     lineSpace?: number
@@ -1330,11 +1407,11 @@ export default class DiagramPrimitives {
   //       text?: string,
   //       location?: TypeParsablePoint | number,
   //       offset?: TypeParsablePoint,
-  //       font?: TypeDiagramFontDefinition,
+  //       font?: OBJ_Font,
   //       onClick?: () => {},
   //     },
   //   },
-  //   font?: TypeDiagramFontDefinition,
+  //   font?: OBJ_Font,
   //   justification?: 'left' | 'center' | 'right',
   //   lineSpace?: number,
   //   position: TypeParsablePoint,
@@ -1432,13 +1509,13 @@ export default class DiagramPrimitives {
 
   // text(...optionsIn: Array<{
   //   text: string | Array<string | {
-  //     font?: TypeDiagramFontDefinition,
+  //     font?: OBJ_Font,
   //     location?: TypeParsablePoint | number,
   //     offset?: TypeParsablePoint,
   //     xAlign?: 'left' | 'right' | 'center',
   //     yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
   //   }>;
-  //   font: TypeDiagramFontDefinition,
+  //   font: OBJ_Font,
   //   position: TypeParsablePoint,
   //   transform: TypeParsableTransform,
   //   xAlign: 'left' | 'right' | 'center',

@@ -8,7 +8,37 @@ import DrawContext2D from '../../DrawContext2D';
 import { joinObjects, splitString } from '../../../tools/tools';
 import { colorArrayToRGBA } from '../../../tools/color';
 
-export type TypeDiagramFontDefinition = {
+/* eslint-disable max-len */
+/**
+ * Font Definition object
+ *
+ * ![](./assets1/text.png)
+ *
+ * @property {string} [family] The font family (`Times New Roman`)
+ * @property {`normal` | `italic`} [style] (`normal`)
+ * @property {number} [size] size of font in vertex space (`0.2`)
+ * @property {'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'} [weight]
+ * font weight (`200`)
+ * @property {[number, number, number, number]} [color] Font color
+ * [red, green, blue, alpha] between 0 and 1 - (`[1, 0, 0, 1]`)
+ * @property {number} [opacity] opacity multiplier (final opacity will be
+ * `opacity` * `color` alpha) [`1`]
+ * @example
+ * // Full font definition
+ * const font = new DiagramFont({
+ *   family: 'Helvetica',
+ *   style: 'italic',
+ *   weight: 'bold',
+ *   color: [1, 1, 0, 1],
+ *   opacity: 1,
+ * });
+ * @example
+ * // Define style only, remaining properties are defaults
+ * const font = new DiagramFont({
+ *   style: 'italic',
+ * });
+ */
+export type OBJ_Font = {
   family?: string,
   style?: 'normal' | 'italic',
   size?: number,
@@ -16,6 +46,7 @@ export type TypeDiagramFontDefinition = {
   color?: Array<number> | null,
   opacity?: number,
 };
+/* eslint-enable max-len */
 
 // DiagramFont defines the font properties to be used in a TextObject
 class DiagramFont {
@@ -26,7 +57,7 @@ class DiagramFont {
   color: Array<number> | null;
   opacity: number;
 
-  constructor(optionsIn: TypeDiagramFontDefinition | DiagramFont = {}) {
+  constructor(optionsIn: OBJ_Font | DiagramFont = {}) {
     if (optionsIn instanceof DiagramFont) {
       this.family = optionsIn.family;
       this.style = optionsIn.style;
@@ -38,7 +69,7 @@ class DiagramFont {
     }
     const defaultOptions = {
       family: 'Times New Roman',
-      style: '',
+      style: 'normal',
       size: 1,
       weight: '200',
       color: null,
@@ -135,7 +166,7 @@ class DiagramTextBase {
     drawContext2D: Array<DrawContext2D> | DrawContext2D,
     location: TypeParsablePoint = new Point(0, 0),
     text: string = '',
-    font: TypeDiagramFontDefinition = new DiagramFont().definition(),
+    font: OBJ_Font = new DiagramFont().definition(),
     xAlign: 'left' | 'center' | 'right' = 'left',
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
     // runUpdate: boolean = true,
@@ -169,7 +200,7 @@ class DiagramTextBase {
     this.measureAndAlignText();
   }
 
-  setFont(font: TypeDiagramFontDefinition) {
+  setFont(font: OBJ_Font) {
     const newFont = joinObjects({}, this.font.definition(), font);
     this.font = new DiagramFont(newFont);
     this.measureAndAlignText();
@@ -319,7 +350,7 @@ class DiagramText extends DiagramTextBase {
     drawContext2D: Array<DrawContext2D> | DrawContext2D,
     location: TypeParsablePoint = new Point(0, 0),
     text: string = '',
-    font: TypeDiagramFontDefinition = new DiagramFont().definition(),
+    font: OBJ_Font = new DiagramFont().definition(),
     xAlign: 'left' | 'center' | 'right' = 'left',
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
     // runUpdate: boolean = true,
@@ -338,7 +369,7 @@ class DiagramTextLine extends DiagramTextBase {
     drawContext2D: Array<DrawContext2D> | DrawContext2D,
     location: TypeParsablePoint = new Point(0, 0),
     text: string = '',
-    font: TypeDiagramFontDefinition = new DiagramFont().definition(),
+    font: OBJ_Font = new DiagramFont().definition(),
     offset: TypeParsablePoint = new Point(0, 0),
     inLine: boolean = true,
   ) {
@@ -372,7 +403,7 @@ class DiagramTextLines extends DiagramTextLine {
     drawContext2D: Array<DrawContext2D> | DrawContext2D,
     location: TypeParsablePoint = new Point(0, 0),
     text: string = '',
-    font: TypeDiagramFontDefinition = new DiagramFont().definition(),
+    font: OBJ_Font = new DiagramFont().definition(),
     offset: TypeParsablePoint = new Point(0, 0),
     inLine: boolean = true,
     line: number,
@@ -464,7 +495,7 @@ class TextObjectBase extends DrawingObject {
     return c;
   }
 
-  setFont(font: TypeDiagramFontDefinition, index: null | number = 0) {
+  setFont(font: OBJ_Font, index: null | number = 0) {
     if (index === null) {
       for (let i = 0; i < this.text.length; i += 1) {
         this.text[i].setFont(font);
@@ -681,20 +712,20 @@ class TextObject extends TextObjectBase {
     options: {
       text: string
         | [{
-            font?: TypeDiagramFontDefinition,
+            font?: OBJ_Font,
             location?: TypeParsablePoint,
             xAlign?: 'left' | 'right' | 'center',
             yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
             onClick?: () => void,
           }, string]
         | Array<string | [{
-        font?: TypeDiagramFontDefinition,
+        font?: OBJ_Font,
         location?: TypeParsablePoint,
         xAlign?: 'left' | 'right' | 'center',
         yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
         onClick?: () => void,
       }, string]>;
-      font: TypeDiagramFontDefinition,                    // default font
+      font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
       color: Array<number>
@@ -823,12 +854,12 @@ class TextLineObject extends TextObjectBase {
   loadText(
     options: {
       text: string | Array<string | [{
-        font?: TypeDiagramFontDefinition,
+        font?: OBJ_Font,
         offset?: TypeParsablePoint,
         inLine?: boolean,
         onClick?: () => void,
       }, string]>;
-      font: TypeDiagramFontDefinition,                    // default font
+      font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
       color: Array<number>
@@ -915,7 +946,7 @@ class TextLinesObject extends TextObjectBase {
       text?: string,
       offset?: TypeParsablePoint,
       inLine?: boolean,
-      font?: TypeDiagramFontDefinition,
+      font?: OBJ_Font,
       onClick?: () => {},
     },
   };
@@ -924,7 +955,7 @@ class TextLinesObject extends TextObjectBase {
   loadText(
     options: {
     text: string | Array<string | [{
-      font?: TypeDiagramFontDefinition,
+      font?: OBJ_Font,
       justification?: 'left' | 'center' | 'right',
       lineSpace?: number
     }, string]>,
@@ -933,11 +964,11 @@ class TextLinesObject extends TextObjectBase {
         text?: string,
         offset?: TypeParsablePoint,
         inLine?: boolean,
-        font?: TypeDiagramFontDefinition,
+        font?: OBJ_Font,
         onClick?: () => {},
       },
     },
-    font: TypeDiagramFontDefinition,
+    font: OBJ_Font,
     justification: 'left' | 'center' | 'right',
     lineSpace: number,
     xAlign: 'left' | 'right' | 'center',

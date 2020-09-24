@@ -56,30 +56,6 @@ describe('Equation Functions - Box', () => {
           position: [2, 2],
         },
       },
-      {
-        name: 'allOptions',
-        method: 'text',
-        options: {
-          font: {
-            family: 'Times New Roman',
-            color: [1, 0, 0, 1],
-            style: 'normal',
-            size: 0.2,
-            weight: '200',
-          },
-          text: [
-            'This is the ',
-            [{ font: { style: 'italic', color: [0, 0, 1] } }, 'first'],
-            ' line',
-            [{ location: [0, -0.2] }, 'This is a '],
-            [{ size: 0.1, offset: [0, 0.1] }, 'superscript'],
-            'example on a new line.',
-          ],
-          xAlign: 'left',
-          yAlign: 'middle',
-          color: [0.5, 0.5, 1, 1],
-        },
-      },
     ]);
     diagram.setFirstTransform();
   });

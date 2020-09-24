@@ -20,6 +20,9 @@
             placeholder='Filter'
             id='filter-input'
             class='col12 block input'
+            spellcheck='false'
+            autocapitalize='off'
+            autocorrect='off'
             type='text' />
           <div id='toc'>
             <ul class='list-reset h5 py1-ul'>
@@ -63,16 +66,6 @@
                   href='#equation-elements-types'
                   class="h5 bold black caps">
                   Equation Elements Types
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typeequationelement'
-                  class="">
-                  TypeEquationElement
                   
                 </a>
                 
@@ -730,9 +723,9 @@
               
                 
                 <li><a
-                  href='#obj_polygon'
+                  href='#obj_polyline'
                   class="">
-                  OBJ_Polygon
+                  OBJ_Polyline
                   
                 </a>
                 
@@ -740,9 +733,9 @@
               
                 
                 <li><a
-                  href='#obj_polyline'
+                  href='#obj_polygon'
                   class="">
-                  OBJ_Polyline
+                  OBJ_Polygon
                   
                 </a>
                 
@@ -844,6 +837,16 @@
               
                 
                 <li><a
+                  href='#typeequationtextelement'
+                  class="">
+                  TypeEquationTextElement
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#container'
                   class="">
                   container
@@ -923,6 +926,8 @@
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
@@ -952,6 +957,8 @@
   
   
   
+  
+
   
 
   
@@ -1044,6 +1051,8 @@ collection to add elements to
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -1097,113 +1106,6 @@ collection to add elements to
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='typeequationelement'>
-      TypeEquationElement
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Definition of a text or symbol equation element. Symbol properties take
-receive priority over text properties, so if 'symbol' is defined, then 'text'
-will be ignored.</p>
-
-  
-    <p style="display: none;">      Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, font: DiagramFont?, style: (<code>"italic"</code> | <code>"normal"</code> | null)?, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, numLines: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, side: (<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, mods: {}?} | DiagramElementPrimitive | DiagramElementCollection)
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : Text element only
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>font</span> <code class='quiet'>(DiagramFont?)</code>
-          : Text element only
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>style</span> <code class='quiet'>((<code>"italic"</code> | <code>"normal"</code>)?)</code>
-          : Text element only
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : Symbol element only
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>side</span> <code class='quiet'>((<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code>)?)</code>
-          : Symbol element only
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>mods</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?)</code>
-          : Properties to set on instantiated element
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          : Color to set the element
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='typeequationelements'>
       TypeEquationElements
     </h3>
@@ -1215,10 +1117,6 @@ will be ignored.</p>
   <p>Object with multiple equation elements.</p>
 
   
-    <p style="display: none;">      Type:
-      {}
-    </p>
-  
   
 
   
@@ -1226,6 +1124,8 @@ will be ignored.</p>
   
   
   
+  
+
   
 
   
@@ -1388,6 +1288,8 @@ ascent and descent to either match width, height or fully contain the content (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -1441,7 +1343,7 @@ ascent and descent to either match width, height or fully contain the content (
 
   
     <p style="display: none;">      Type:
-      ({numerator: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, denominator: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, numeratorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, denominatorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offsetY: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+      ({numerator: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, denominator: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, numeratorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, denominatorSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offsetY: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, baseline: (<code>"numerator"</code> | <code>"denominator"</code> | <code>"vinculum"</code>)?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<code>"numerator"</code> | <code>"denominator"</code> | <code>"vinculum"</code>)?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
   
@@ -1534,6 +1436,8 @@ horizontally by the this amount (
         </div>
       
     </div>
+  
+
   
 
   
@@ -1644,6 +1548,8 @@ eqn.addElements({
         </div>
       
     </div>
+  
+
   
 
   
@@ -1857,6 +1763,8 @@ brackets only surround a portion of the content (
         </div>
       
     </div>
+  
+
   
 
   
@@ -2081,6 +1989,8 @@ brackets only surround a portion of the content (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -2277,6 +2187,8 @@ brackets only surround a portion of the content (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -2463,6 +2375,8 @@ brackets only surround a portion of the content (
         </div>
       
     </div>
+  
+
   
 
   
@@ -2745,6 +2659,8 @@ brackets only surround a portion of the content (
         </div>
       
     </div>
+  
+
   
 
   
@@ -3219,6 +3135,8 @@ brackets only surround a portion of the content (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -3503,6 +3421,8 @@ brackets only surround a portion of the content (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -3777,6 +3697,8 @@ brackets only surround a portion of the content (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -3911,6 +3833,8 @@ resulting phrase (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -4020,6 +3944,8 @@ resulting phrase (
         </div>
       
     </div>
+  
+
   
 
   
@@ -4151,6 +4077,8 @@ resulting phrase (
         </div>
       
     </div>
+  
+
   
 
   
@@ -4319,6 +4247,8 @@ brackets only surround a portion of the content (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -4467,6 +4397,8 @@ beyond content (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -4589,6 +4521,8 @@ eqn.addElements({
         </div>
       
     </div>
+  
+
   
 
   
@@ -4782,6 +4716,8 @@ overriding any
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -4884,10 +4820,6 @@ Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
                       Bottom Glyph
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {content: <a href="#typeequationphrase">TypeEquationPhrase</a>, annotation: <a href="#eqn_annotation">EQN_Annotation</a>?, annotations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#eqn_annotation">EQN_Annotation</a>>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, glyphs: <a href="#eqn_glyphs">EQN_Glyphs</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, contentScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
-    </p>
   
   
 
@@ -5026,6 +4958,8 @@ brackets only surround a portion of the content (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -5145,10 +5079,6 @@ For instance, an annotation at the top right of the content:</p>
          CCCCCCCC
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {xPosition: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), yPosition: (<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), yAlign: (<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), offset: <a href="#point">Point</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, reference: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?}
-    </p>
   
   
 
@@ -5274,6 +5204,8 @@ and
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -5333,10 +5265,6 @@ can also be annotated.</p>
 
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, annotation: <a href="#eqn_annotation">EQN_Annotation</a>?, annotations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#eqn_annotation">EQN_Annotation</a>>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
-    </p>
   
   
 
@@ -5425,6 +5353,8 @@ left
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -5481,10 +5411,6 @@ The glyph can also be annotated.</p>
 
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, annotation: <a href="#eqn_annotation">EQN_Annotation</a>?, annotations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#eqn_annotation">EQN_Annotation</a>>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minContentHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minContentDescent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, minContentAscent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, yOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, annotationsOverContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
-    </p>
   
   
 
@@ -5623,6 +5549,8 @@ separated from content by
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -5693,10 +5621,6 @@ The glyph can also be annotated.</p>
 
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, annotation: <a href="#eqn_annotation">EQN_Annotation</a>?, annotations: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#eqn_annotation">EQN_Annotation</a>>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, overhang: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, xOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, annotationsOverContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}
-    </p>
   
   
 
@@ -5804,6 +5728,8 @@ separated from content by
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -5857,10 +5783,6 @@ annotate: {
   <p>Object defining all the glyphs annotating some content.</p>
 <p>Multiple glyphs are ok, but only one per position.</p>
 
-  
-    <p style="display: none;">      Type:
-      {left: <a href="#eqn_leftrightglyph">EQN_LeftRightGlyph</a>?, right: <a href="#eqn_leftrightglyph">EQN_LeftRightGlyph</a>?, top: <a href="#eqn_topbottomglyph">EQN_TopBottomGlyph</a>?, bottom: <a href="#eqn_topbottomglyph">EQN_TopBottomGlyph</a>?, encompass: <a href="#eqn_encompassglyph">EQN_EncompassGlyph</a>?}
-    </p>
   
   
 
@@ -5923,6 +5845,8 @@ annotate: {
   
 
   
+
+  
 </section>
 
           
@@ -5967,10 +5891,6 @@ annotate: {
 
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticWidth: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
   
   
 
@@ -6055,6 +5975,8 @@ based on first use (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -6115,10 +6037,6 @@ based on first use (
 
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, fill: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticWidth: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
   
   
 
@@ -6235,6 +6153,8 @@ based on first use
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -6308,10 +6228,6 @@ based on first use
                              lineWidth
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, direction: (<code>"up"</code> | <code>"down"</code> | <code>"left"</code> | <code>"right"</code>)?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, arrowHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, arrowWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
   
   
 
@@ -6426,6 +6342,8 @@ based on first use (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -6501,10 +6419,6 @@ based on first use (
                   |<------------------------------------>|
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
   
   
 
@@ -6592,6 +6506,8 @@ based on first use (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -6670,10 +6586,6 @@ based on first use (
          ----- 0000000000000000000000000           00000000000000000000000000
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
   
   
 
@@ -6759,6 +6671,8 @@ based on first use (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -6836,10 +6750,6 @@ based on first use (
 //     -------  0000000
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tipWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, serif: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, num: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, type: (<code>"line"</code> | <code>"generic"</code>)?, serifSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, lineIntegralSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
-    </p>
   
   
 
@@ -6980,6 +6890,8 @@ based on first use (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -7052,10 +6964,6 @@ based on first use (
 
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, style: (<code>"cross"</code> | <code>"forward"</code> | <code>"back"</code> | <code>"horizontal"</code>)?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>), staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, staticWidth: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
   
   
 
@@ -7178,6 +7086,8 @@ based on first use (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -7255,10 +7165,6 @@ eqn.addElements({
                       width
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tipWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
   
   
 
@@ -7366,6 +7272,8 @@ based on first use (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -7438,10 +7346,6 @@ eqn.addElements({
 
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"dynamic"</code> | <code>"static"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
   
   
 
@@ -7526,6 +7430,8 @@ based on first use (
         </div>
       
     </div>
+  
+
   
 
   
@@ -7625,10 +7531,6 @@ eqn.addElements({
 
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tipWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"dynamic"</code> | <code>"static"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
   
   
 
@@ -7736,6 +7638,8 @@ based on first use (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -7805,10 +7709,6 @@ eqn.addElements({
 
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"dynamic"</code> | <code>"static"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
   
   
 
@@ -7895,6 +7795,8 @@ based on first use (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -7973,10 +7875,6 @@ eqn.addElements({
 
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, side: (<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code>)?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tipWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, radius: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"dynamic"</code> | <code>"static"</code>)?, staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
   
   
 
@@ -8097,6 +7995,8 @@ based on first use (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -8179,10 +8079,6 @@ it will not be needed, but for edge case equation layouts it may be useful.</p>
                     startWidth
 </pre>
 
-  
-    <p style="display: none;">      Type:
-      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, lineWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, startWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, startHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, proportionalToHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, maxStartWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, maxStartHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, lineWidth2: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tickWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, tickHeight: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, downWidth: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, draw: (<code>"static"</code> | <code>"dynamic"</code>), staticHeight: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?, staticWidth: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?}
-    </p>
   
   
 
@@ -8378,6 +8274,8 @@ based on first use (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -8484,6 +8382,8 @@ phrases.</p>
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -8530,10 +8430,6 @@ forms: {
 
   <p>Defines how to align a form</p>
 
-  
-    <p style="display: none;">      Type:
-      {fixTo: (DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>), xAlign: TypeHAlign, yAlign: TypeVAlign}
-    </p>
   
   
 
@@ -8584,6 +8480,8 @@ forms: {
   
 
   
+
+  
 </section>
 
           
@@ -8604,10 +8502,6 @@ forms: {
 
   <p>Duration and translation options for form animation</p>
 
-  
-    <p style="display: none;">      Type:
-      {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: {}?}
-    </p>
   
   
 
@@ -8638,6 +8532,8 @@ forms: {
         </div>
       
     </div>
+  
+
   
 
   
@@ -8697,10 +8593,6 @@ duration or shouldn<span class="hljs-string">'t have a linear path</span></pre>
   <p>Form translation properties</p>
 
   
-    <p style="display: none;">      Type:
-      {style: (<code>"curved"</code> | <code>"linear"</code>), direction: (<code>"up"</code> | <code>"down"</code>)?, mag: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}
-    </p>
-  
   
 
   
@@ -8756,6 +8648,8 @@ through an up or down curve
   
 
   
+
+  
 </section>
 
           
@@ -8796,10 +8690,6 @@ complicating the overall equation navigation logic.</p>
 <p>See the examples below for how to define subForms.</p>
 <p><a href="#equationaddforms">Equation#addForms</a>.</p>
 
-  
-    <p style="display: none;">      Type:
-      {content: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, alignment: <a href="#typeformalignment">TypeFormAlignment</a>?, subForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, description: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, modifiers: {}?, fromPrev: <a href="#typeformanimationproperties">TypeFormAnimationProperties</a>?, fromNext: <a href="#typeformanimationproperties">TypeFormAnimationProperties</a>?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: <a href="#typeformtranslationproperties">TypeFormTranslationProperties</a>?, elementMods: {}?}
-    </p>
   
   
 
@@ -8902,7 +8792,15 @@ style (fromNext and fromPrev are prioritized over this)
           
         </div>
       
+        <div class='space-bottom0'>
+          <span class='code bold'>animation</span> <code class='quiet'>({duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, translation: <a href="#typeformtranslationproperties">TypeFormTranslationProperties</a>?}?)</code>
+          
+          
+        </div>
+      
     </div>
+  
+
   
 
   
@@ -9078,6 +8976,8 @@ subform2: ...
   
 
   
+
+  
 </section>
 
           
@@ -9130,6 +9030,8 @@ is a form defintion <a href="#typeequationform">TypeEquationForm</a></p>
   
 
   
+
+  
 </section>
 
           
@@ -9161,10 +9063,6 @@ in the series, then two special animations can be defined with this object:</p>
 </ul>
 
   
-    <p style="display: none;">      Type:
-      {formRestart: {moveFrom: (<a href="#point">Point</a>? | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, element: DiagramElement??}?}?}
-    </p>
-  
   
 
   
@@ -9187,6 +9085,8 @@ in the series, then two special animations can be defined with this object:</p>
         </div>
       
     </div>
+  
+
   
 
   
@@ -9236,10 +9136,6 @@ in the series, then two special animations can be defined with this object:</p>
 
   <p>Options objects to construct an <a href="#equation">Equation</a> class. All properties are optional.</p>
 
-  
-    <p style="display: none;">      Type:
-      {color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, elements: <a href="#typeequationelements">TypeEquationElements</a>?, defaultFormAlignment: <a href="#typeformalignment">TypeFormAlignment</a>?, forms: <a href="#typeequationforms">TypeEquationForms</a>?, formSeries: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | {})?, defaultFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, formRestart: <a href="#typeformrestart">TypeFormRestart</a>?, fontMath: DiagramFont?, position: <a href="#point">Point</a>?}
-    </p>
   
   
 
@@ -9322,7 +9218,7 @@ first form defined
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>fontMath</span> <code class='quiet'>(DiagramFont?)</code>
+          <span class='code bold'>font</span> <code class='quiet'>(DiagramFont?)</code>
           : default 
 <a href="DiagramFont">DiagramFont</a>
 ('Times
@@ -9340,7 +9236,21 @@ New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
           
         </div>
       
+        <div class='space-bottom0'>
+          <span class='code bold'>formDefaults</span> <code class='quiet'>({alignment: <a href="#typeformalignment">TypeFormAlignment</a>?, elementMods: {}, animation: <a href="#typeformanimationproperties">TypeFormAnimationProperties</a>})</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
+          
+          
+        </div>
+      
     </div>
+  
+
   
 
   
@@ -9411,10 +9321,6 @@ the end, and current goTo call will then be executed</li>
 its current state, and current goTo call will be executed</li>
 </ul>
 
-  
-    <p style="display: none;">      Type:
-      {name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, index: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, animate: (<code>"move"</code> | <code>"dissolve"</code> | <code>"moveFrom"</code> | <code>"pulse"</code> | <code>"dissolveInThenMove"</code>)?, delay: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, dissolveOutTime: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??, dissolveInTime: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, blankTime: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, prioritizeFormDuration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, fromWhere: (<code>"fromPrev"</code>? | <code>"fromNext"</code>)?, ifAnimating: {cancelGoTo: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, skipToTarget: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}?, callback: function (): void??}
-    </p>
   
   
 
@@ -9532,12 +9438,14 @@ Default:
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>callback</span> <code class='quiet'>(function (): void??)</code>
+          <span class='code bold'>callback</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)??)</code>
           
           
         </div>
       
     </div>
+  
+
   
 
   
@@ -9636,6 +9544,8 @@ forms.</p>
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -9691,7 +9601,7 @@ eqn.addElements({
 
   
     <p style="display: none;">      Type:
-      {forms: {}, functions: EquationFunctions, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, currentSubForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, fontMath: DiagramFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, subFormPriority: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, defaultFormAlignment: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>), xAlign: TypeHAlign, yAlign: TypeVAlign}, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (DiagramElementPrimitive | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: DiagramElement}?}?}
+      {forms: {}, functions: EquationFunctions, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, font: DiagramFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, formDefaults: any, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (DiagramElementPrimitive | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: DiagramElement}?}?}
     </p>
   
   
@@ -9717,6 +9627,8 @@ eqn.addElements({
         </div>
       
     </div>
+  
+
   
 
   
@@ -9791,6 +9703,8 @@ eqn.addElements({
   
 
   
+
+  
 </section>
 
       </div>
@@ -9829,6 +9743,8 @@ eqn.addElements({
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
     
+  
+
   
 
   
@@ -9884,6 +9800,8 @@ eqn.addElements({
         </div>
       
     </div>
+  
+
   
 
   
@@ -9960,6 +9878,8 @@ eqn.addElements({
   
 
   
+
+  
 </section>
 
       </div>
@@ -10011,6 +9931,8 @@ eqn.addElements({
   
 
   
+
+  
 </section>
 
       </div>
@@ -10020,7 +9942,7 @@ eqn.addElements({
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setCurrentForm(formOrName, subForm)</span>
+            <span class='code strong strong truncate'>setCurrentForm(formOrName)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -10052,16 +9974,9 @@ eqn.addElements({
           
         </div>
       
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>subForm</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
-            = <code>&#39;base&#39;</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
     </div>
+  
+
   
 
   
@@ -10088,7 +10003,7 @@ eqn.addElements({
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>showForm(formOrName, subForm, animationStop)</span>
+            <span class='code strong strong truncate'>showForm(formOrName, animationStop)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -10122,15 +10037,6 @@ eqn.addElements({
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>subForm</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?
-            = <code>null</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
             <span class='code bold'>animationStop</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
             = <code>true</code>)</code>
 	    
@@ -10139,6 +10045,8 @@ eqn.addElements({
         </div>
       
     </div>
+  
+
   
 
   
@@ -10165,7 +10073,7 @@ eqn.addElements({
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getForm(formOrName, subForm)</span>
+            <span class='code strong strong truncate'>getForm(formOrName)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -10197,14 +10105,6 @@ eqn.addElements({
           
         </div>
       
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>subForm</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-	    
-          </div>
-          
-        </div>
-      
     </div>
   
 
@@ -10215,6 +10115,8 @@ eqn.addElements({
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code>(null | EquationForm)</code>
     
+  
+
   
 
   
@@ -10271,6 +10173,8 @@ eqn.addElements({
         </div>
       
     </div>
+  
+
   
 
   
@@ -10357,6 +10261,8 @@ eqn.addElements({
   
 
   
+
+  
 </section>
 
       </div>
@@ -10426,6 +10332,8 @@ eqn.addElements({
   
 
   
+
+  
 </section>
 
       </div>
@@ -10468,6 +10376,8 @@ eqn.addElements({
         </div>
       
     </div>
+  
+
   
 
   
@@ -10569,10 +10479,6 @@ can only be clamped to their edge.</p>
 and then the rectangle repeated throughout the diagram.</p>
 
   
-    <p style="display: none;">      Type:
-      {src: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, mapTo: <a href="#rect">Rect</a>?, mapFrom: <a href="#rect">Rect</a>?, repeat: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, onLoad: function (): void?}
-    </p>
-  
   
 
   
@@ -10646,242 +10552,6 @@ images that are square whose number of side pixels is a power of 2 (
   
 
   
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_polygon'>
-      OBJ_Polygon
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Polygon or partial polygon shape options object</p>
-<p><img src="./assets1/polygon.png"></p>
-
-  
-    <p style="display: none;">      Type:
-      {sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, radius: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rotation: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, direction: (<code>-1</code> | <code>1</code>)?, line: <a href="#obj_linestyle">OBJ_LineStyle</a>?, sidesToDraw: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, angleToDraw: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, fill: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, transform: Transform?, position: TypeParsablePoint?, texture: <a href="#obj_texture">OBJ_Texture</a>?, onLoad: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, trianglePrimitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, offset: TypeParsablePoint?}
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>4</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : line width - line will be drawn on inside of radius (
-<code>0.01</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : shape rotation during vertex definition
-(different to a rotation step in a trasform) (
-<code>0</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>offset</span> <code class='quiet'>(TypeParsablePoint?)</code>
-          : shape center offset from origin
-during vertex definition (different to a translation step in a transform)
-(
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>sidesToDraw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : number of sides to draw (all sides)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>angleToDraw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : same as 
-<code>sidesToDraw</code>
- but using angle for
-the definition (
-<code>2π</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>direction</span> <code class='quiet'>((<code>-1</code> | <code>1</code>)?)</code>
-          : direction to draw polygon where 1 is
-counter clockwise and -1 is clockwise (
-<code>1</code>
-)
-center. This is different to position or transform as these translate the
-vertices on each draw. (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
-          : line style options
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
-          : (
-<code>Transform('polygon').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          : (
-<code>[1, 0, 0, 1</code>
-])
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
-          : Override color with a texture
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>onLoad</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>trianglePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple filled polygon</span>
-diagram.addElement(
-  {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
-    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
-    <span class="hljs-attr">options</span>: {
-      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
-      <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
-      <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
-    },
-  },
-);</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Quarter circle</span>
-diagram.addElement(
-  {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
-    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
-    <span class="hljs-attr">options</span>: {
-      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.4</span>,
-      <span class="hljs-attr">sides</span>: <span class="hljs-number">100</span>,
-      <span class="hljs-attr">width</span>: <span class="hljs-number">0.08</span>,
-      <span class="hljs-attr">angleToDraw</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>,
-      <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    },
-  },
-);</pre>
-    
-  
-
-  
-
-  
-
-  
 
   
 </section>
@@ -10924,10 +10594,6 @@ ideal corner. Eventually trucating the corner makes more visual sense
 and therefore, a minimum angle (<code>minAutoCornerAngle</code>) is used to
 specify when the corner should be drawn, and when it should be truncated.</p>
 
-  
-    <p style="display: none;">      Type:
-      {points: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, close: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, widthIs: (<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?, cornerStyle: (<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?, cornerSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornerSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornersOnly: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, cornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, forceCornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, minAutoCornerAngle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, dash: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, texture: <a href="#obj_texture">OBJ_Texture</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, position: <a href="#point">Point</a>??, transform: Transform?, border: (<code>"line"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>>)?, hole: (<code>"none"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParsablePoint>>)?, linePrimitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, lineNum: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
-    </p>
   
   
 
@@ -11191,6 +10857,8 @@ side of the line or completely custom (
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -11257,6 +10925,242 @@ diagram.addElement(
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_polygon'>
+      OBJ_Polygon
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Polygon or partial polygon shape options object</p>
+<p><img src="./assets1/polygon.png"></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>4</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : line width - line will be drawn on inside of radius (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : shape rotation during vertex definition
+(different to a rotation step in a trasform) (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          : shape center offset from origin
+during vertex definition (different to a translation step in a transform)
+(
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sidesToDraw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides to draw (all sides)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>angleToDraw</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : same as 
+<code>sidesToDraw</code>
+ but using angle for
+the definition (
+<code>2π</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>direction</span> <code class='quiet'>((<code>-1</code> | <code>1</code>)?)</code>
+          : direction to draw polygon where 1 is
+counter clockwise and -1 is clockwise (
+<code>1</code>
+)
+center. This is different to position or transform as these translate the
+vertices on each draw. (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
+          : line style options
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : convenience to override Transform translation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
+          : (
+<code>Transform('polygon').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1</code>
+])
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
+          : Override color with a texture
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : set the default pulse scale
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onLoad</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>trianglePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple filled polygon</span>
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
+    },
+  },
+);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Quarter circle</span>
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.4</span>,
+      <span class="hljs-attr">sides</span>: <span class="hljs-number">100</span>,
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.08</span>,
+      <span class="hljs-attr">angleToDraw</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    },
+  },
+);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='tools'>
       tools
     </h3>
@@ -11275,6 +11179,8 @@ diagram.addElement(
   
   
   
+  
+
   
 
   
@@ -11313,6 +11219,8 @@ diagram.addElement(
   
   
   
+  
+
   
 
   
@@ -11387,6 +11295,8 @@ diagram.addElement(
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
@@ -11423,6 +11333,8 @@ diagram.addElement(
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#point">Point</a></code>
     
+  
+
   
 
   
@@ -11474,6 +11386,8 @@ diagram.addElement(
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#point">Point</a></code>
     
+  
+
   
 
   
@@ -11545,6 +11459,8 @@ diagram.addElement(
   
 
   
+
+  
 </section>
 
       </div>
@@ -11576,6 +11492,8 @@ diagram.addElement(
   
   
   
+  
+
   
 
   
@@ -11646,6 +11564,8 @@ diagram.addElement(
   
 
   
+
+  
 </section>
 
       </div>
@@ -11697,6 +11617,8 @@ diagram.addElement(
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#point">Point</a></code>
     
+  
+
   
 
   
@@ -11778,6 +11700,8 @@ s = p.scale(<span class="hljs-number">3</span>);
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#point">Point</a></code>
     
+  
+
   
 
   
@@ -11869,6 +11793,8 @@ d = p.sub(q)
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -11899,7 +11825,7 @@ d = p.add(q)
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>distance()</span>
+            <span class='code strong strong truncate'>distance(toPointIn)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -11920,6 +11846,20 @@ d = p.add(q)
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>toPointIn</span> <code class='quiet'>((TypeParsablePoint | null)
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
 
   
 
@@ -11928,6 +11868,8 @@ d = p.add(q)
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
     
+  
+
   
 
   
@@ -12001,6 +11943,8 @@ d = p.distance();
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#point">Point</a></code>
     
+  
+
   
 
   
@@ -12089,6 +12033,8 @@ min/max values.</p>
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -12165,6 +12111,8 @@ q = p.clip(minClip, <span class="hljs-literal">null</span>);
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#point">Point</a></code>
     
+  
+
   
 
   
@@ -12255,6 +12203,8 @@ q = p.transformBy(m)
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -12337,6 +12287,8 @@ q = p.rotate(<span class="hljs-built_in">Math</span>.PI, <span class="hljs-keywo
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -12407,6 +12359,8 @@ p.isEqualTo(q, <span class="hljs-number">2</span>)
         </div>
       
     </div>
+  
+
   
 
   
@@ -12534,6 +12488,8 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
   
 
   
+
+  
 </section>
 
       </div>
@@ -12622,6 +12578,8 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
 
       
     
+  
+
   
 
   
@@ -12729,6 +12687,8 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
   
 
   
+
+  
 </section>
 
           
@@ -12808,6 +12768,8 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
   
 
   
+
+  
 </section>
 
           
@@ -12828,10 +12790,6 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
 
   <p>Diagram Input Options</p>
 
-  
-    <p style="display: none;">      Type:
-      {htmlId: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, limits: <a href="#rect">Rect</a>?}
-    </p>
   
   
 
@@ -12856,7 +12814,7 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>limits</span> <code class='quiet'>(<a href="#rect">Rect</a>)</code>
+          <span class='code bold'>limits</span> <code class='quiet'>(TypeParsableRect)</code>
           : Diagram coordinate limits - default: bottom left
 corner at (-1, -1), width 1, height 1
 
@@ -12864,6 +12822,8 @@ corner at (-1, -1), width 1, height 1
         </div>
       
     </div>
+  
+
   
 
   
@@ -12899,10 +12859,6 @@ corner at (-1, -1), width 1, height 1
 
   <p>Curved Corner Definition</p>
 
-  
-    <p style="display: none;">      Type:
-      {radius: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
-    </p>
   
   
 
@@ -12947,6 +12903,8 @@ corner at (-1, -1), width 1, height 1
   
 
   
+
+  
 </section>
 
           
@@ -12968,10 +12926,6 @@ corner at (-1, -1), width 1, height 1
   <p>Rectangle shape options object</p>
 <p><img src="./assets1/rectangle.png"></p>
 
-  
-    <p style="display: none;">      Type:
-      {yAlign: (<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fill: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, corner: {radius: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, sides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, transform: Transform?, position: <a href="#point">Point</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
-    </p>
   
   
 
@@ -13080,6 +13034,8 @@ corner at (-1, -1), width 1, height 1
   
 
   
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
@@ -13130,10 +13086,6 @@ diagram.addElement(
 <p>These properties are a subset of <a href="#obj_polyline">OBJ_Polyline</a> which has more details
 on how a line is defined.</p>
 
-  
-    <p style="display: none;">      Type:
-      {widthIs: (<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?, cornerStyle: (<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?, cornerSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornerSides: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, cornersOnly: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, cornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, forceCornerLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, minAutoCornerAngle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, dash: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, linePrimitives: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, lineNum: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}
-    </p>
   
   
 
@@ -13312,6 +13264,117 @@ triangle primitives to draw the line (
   
 
   
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeequationtextelement'>
+      TypeEquationTextElement
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Definition of a text or symbol equation element. Symbol properties take
+receive priority over text properties, so if 'symbol' is defined, then 'text'
+will be ignored.</p>
+
+  
+    <p style="display: none;">      Type:
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, font: (DiagramFont | OBJ_Font)?, style: (<code>"italic"</code> | <code>"normal"</code> | null)?, weight: (<code>"normal"</code> | <code>"bold"</code> | <code>"lighter"</code> | <code>"bolder"</code> | <code>"100"</code> | <code>"200"</code> | <code>"300"</code> | <code>"400"</code> | <code>"500"</code> | <code>"600"</code> | <code>"700"</code> | <code>"800"</code> | <code>"900"</code>)?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, mods: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?} | DiagramElementPrimitive | DiagramElementCollection)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : Text element only
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(DiagramFont?)</code>
+          : Text element only
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>style</span> <code class='quiet'>((<code>"italic"</code> | <code>"normal"</code>)?)</code>
+          : Text element only
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : Symbol element only
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>side</span> <code class='quiet'>((<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code>)?)</code>
+          : Symbol element only
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>mods</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?)</code>
+          : Properties to set on instantiated element
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : Color to set the element
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 </section>
 
           
@@ -13355,6 +13418,8 @@ triangle primitives to draw the line (
         </div>
       
     </div>
+  
+
   
 
   
@@ -13428,6 +13493,8 @@ eqn.addForms({
         </div>
       
     </div>
+  
+
   
 
   

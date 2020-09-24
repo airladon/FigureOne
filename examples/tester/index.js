@@ -156,22 +156,36 @@ diagram.addElements([
   //     }
   //   },
   // },
-  // {
-  //   name: 't',
-  //   method: 'text',
-  //   options: {
-  //     text: 'asdf',
-  //     font: { 
-  //       size: 0.1,
-  //       family: 'Helvetica',
-  //       style: 'italic',
-  //     },
-  //     position: [0, -0.5],
-  //     xAlign: 'center',
-  //     // size: 0.2,
-  //     // color: [1, 0, 1, 1],
-  //   },
-  // },
+  {
+    name: 't',
+    method: 'text',
+    options: {
+      text: 
+      [{
+        xAlign: 'left',
+        yAlign: 'bottom',
+        location: [-0.5, -0.5],
+        font: {
+          family: 'Helvetica',
+          weight: 'bold',
+          style: 'italic',
+          size: 0.5,
+          color: [1, 1, 0, 1],
+        },
+      }, 'g'],
+    
+    xAlign: 'center',
+    yAlign: 'middle',
+    font: {
+      family: 'Helvetica Neue',
+      weight: '300',
+      style: 'normal',
+      size: 0.2,
+    },
+    color: [1, 0, 0, 1],
+    position: [0, 0],
+    },
+  },
   // {
   //   name: 'allOptions',
   //   method: 'shapes.textLine',
@@ -196,65 +210,65 @@ diagram.addElements([
   //     color: [0.5, 0.5, 1, 1],
   //   },
   // },
-  {
-    name: 'tester',
-    method: 'textLines',
-    options: {
-      text: [
-        'This is the first line',
-        'Second line has a |superscript| modifier that isn\'t inline',
-        [
-          {
-            font: {
-              family: 'Times New Roman',
-              weight: 'bold',
-              style: 'italic',
-              size: 0.15,
-              color: [1, 1, 0, 1],
-            },
-            lineSpace: -0.3,
-            justification: 'center',
-          },
-          'A line with new defaults',
-        ],
-        'A spaced |line| with two |line| mods',
-        'An escaped special char: /|',
-      ],
-      modifiers: {
-        superscript: {
-          text: 'superscript!!',
-          offset: [-0.1, 0.1],
-          inLine: false,
-          font: {
-            family: 'Times New Roman',
-            weight: 'bold',
-            style: 'italic',
-            size: 0.05,
-            color: [1, 0, 1, 1],
-          },
-        },
-        line: {
-          font: {
-            color: [0, 1, 1, 1],
-            style: 'italic',
-          },
-        },
-      },
-      xAlign: 'left',
-      yAlign: 'baseline',
-      font: {
-        family: 'Helvetica Neue',
-        weight: '200',
-        style: 'normal',
-        size: 0.1,
-      },
-      justification: 'left',
-      lineSpace: -0.2,
-      color: [1, 0, 0, 1],
-      position: [-0.8, 0],
-      transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
-    },
-  },
+  // {
+  //   name: 'tester',
+  //   method: 'textLines',
+  //   options: {
+  //     text: [
+  //       'This is the first line',
+  //       'Second line has a |superscript| modifier that isn\'t inline',
+  //       [
+  //         {
+  //           font: {
+  //             family: 'Times New Roman',
+  //             weight: 'bold',
+  //             style: 'italic',
+  //             size: 0.15,
+  //             color: [1, 1, 0, 1],
+  //           },
+  //           lineSpace: -0.3,
+  //           justification: 'center',
+  //         },
+  //         'A line with new defaults',
+  //       ],
+  //       'A spaced |line| with two |line| mods',
+  //       'An escaped special char: /|',
+  //     ],
+  //     modifiers: {
+  //       superscript: {
+  //         text: 'superscript!!',
+  //         offset: [-0.1, 0.1],
+  //         inLine: false,
+  //         font: {
+  //           family: 'Times New Roman',
+  //           weight: 'bold',
+  //           style: 'italic',
+  //           size: 0.05,
+  //           color: [1, 0, 1, 1],
+  //         },
+  //       },
+  //       line: {
+  //         font: {
+  //           color: [0, 1, 1, 1],
+  //           style: 'italic',
+  //         },
+  //       },
+  //     },
+  //     xAlign: 'left',
+  //     yAlign: 'baseline',
+  //     font: {
+  //       family: 'Helvetica Neue',
+  //       weight: '200',
+  //       style: 'normal',
+  //       size: 0.1,
+  //     },
+  //     justification: 'left',
+  //     lineSpace: -0.2,
+  //     color: [1, 0, 0, 1],
+  //     position: [-0.8, 0],
+  //     transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
+  //   },
+  // },
   {
     name: 'a',
     method: 'polygon',
@@ -357,7 +371,7 @@ diagram.initialize();
 // diagram.elements._eqn.showForm('1')
 
 diagram.animateNextFrame();
-console.log(diagram.elements._tester)
+// console.log(diagram.elements._tester)
 // diagram.elements._tester.setColor([0, 1, 1, 1]);
 // console.log(diagram.elements._eqn._a.drawingObject.border)
 // console.log(diagram.elements._eqn._equals.drawingObject.border)
