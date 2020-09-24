@@ -1,13 +1,13 @@
 
 import {
-  TextObject, DiagramFont, DiagramText,
+  DiagramFont,
 } from './TextObject';
 import {
-  Point, Transform,
+  Point,
 } from '../../../tools/g2';
-import * as m2 from '../../../tools/m2';
-import { round } from '../../../tools/math';
-import DrawContext2D from '../../../__mocks__/DrawContext2DMock';
+// import * as m2 from '../../../tools/m2';
+// import { round } from '../../../tools/math';
+// import DrawContext2D from '../../../__mocks__/DrawContext2DMock';
 import makeDiagram from '../../../__mocks__/makeDiagram';
 
 describe('Diagram Text Object', () => {

@@ -44,22 +44,6 @@ import type { TypeEquationSymbolArrowBracket } from './Symbols/Arrow';
  * @property {object} [mods] - Properties to set on instantiated element
  * @property {Array<number>} [color] - Color to set the element
  */
-// type TypeEquationElement = string | {
-//     // Text only
-//     text?: string;
-//     font?: DiagramFont | TypeDiagramFontDefinition;
-//     style?: 'italic' | 'normal' | null;
-//     weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
-//     size?: number,
-//     // Symbol Only
-//     symbol?: string;
-//     // Added Symbol Related Options
-//     // numLines?: number;
-//     // side?: 'top' | 'left' | 'bottom' | 'right';
-//     // Both Text and Symbol
-//     color?: Array<number>;
-//     mods?: Object;
-//   } | DiagramElementPrimitive | DiagramElementCollection;
 
 export type TypeEquationTextElement = string | {
     text?: string;
@@ -1286,7 +1270,7 @@ export class Equation extends DiagramElementCollection {
         if (f.elementMods != null) {
           f.elementMods = transformElementMods(f.elementMods);
         }
-        if (f.animation != null && f.animation.translation != null) {
+        if (f.animation != null && f.animation.translation != null) { // $FlowFixMe
           f.animation.translation = transformTranslation(f.animation.translation);
         }
       });

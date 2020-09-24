@@ -792,7 +792,7 @@ describe('Different ways to make an equation', () => {
         diagram.mock.timeStep(0);
         expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.1, 0));
         diagram.mock.timeStep(0.25);
-        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.072, -0.05));;
+        expect(eqn._c.getPosition().round(3)).toEqual(new Point(-0.072, -0.05));
         diagram.mock.timeStep(0.25);
         expect(eqn._c.getPosition().round(3)).toEqual(new Point(0.04, -0.14));
         diagram.mock.timeStep(0.25);

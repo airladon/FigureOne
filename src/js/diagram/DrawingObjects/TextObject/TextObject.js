@@ -190,7 +190,7 @@ class DiagramTextBase {
   }
 
   _dup() {
-    return new DiagramText(
+    return new this.constructor(
       this.drawContext2D,
       this.location,
       this.text,
@@ -719,7 +719,7 @@ class TextObject extends TextObjectBase {
       let yAlign;
       let textToUse;
       if (Array.isArray(textDefinition) && textDefinition.length === 2) {
-        [{
+        [{  // $FlowFixMe
           font, location, xAlign, yAlign,
         }, textToUse] = textDefinition;
       } else {
@@ -739,7 +739,7 @@ class TextObject extends TextObjectBase {
 
       diagramTextArray.push(new DiagramText(
         this.drawContext2D,
-        locationToUse,
+        locationToUse,  // $FlowFixMe
         textToUse,
         fontDefinition,
         xAlign || options.xAlign,
@@ -753,7 +753,7 @@ class TextObject extends TextObjectBase {
   }
 
   _dup() {
-    const c = new TextObject(this.drawContext2D);
+    const c = new TextObject(this.drawContext2D); // $FlowFixMe
     c.text = this.text.map(t => t._dup());
     c.scalingFactor = this.scalingFactor;
     c.layoutText();

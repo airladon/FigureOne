@@ -367,7 +367,7 @@ describe('Diagram Primitives TextLine', () => {
       expect(w0.width).toBe(text[1].text.length * a.width * 0.1 / 0.2);
       expect(w1.width).toBe(text[2].text.length * a.width * 0.05 / 0.2);
       expect(w2.width).toBe(text[3].text.length * a.width * 0.1 / 0.2);
-      const w = w0 + w2;
+      // const width = w0 + w2;
       expect(round(w0.left)).toBe(0);
       expect(round(w0.right)).toBe(round(w0.width));
       expect(round(w2.left)).toBe(round(w0.right));
@@ -412,28 +412,5 @@ describe('Diagram Primitives TextLine', () => {
       expect(round(line.bottom)).toBe(round(lineSpace * 3 - 0.3 - g.descent * 0.1 / 0.2));
       expect(round(line.top)).toBe(round(line.bottom + (g.descent + b.ascent) * 0.1 / 0.2));
     });
-  //   test('bounds', () => {
-  //     const _b = tb.bounds;
-  //     const _g = tg.bounds;
-  //     const _a = ta.bounds;
-  //     expect(round(_b.left)).toBe(0);
-  //     expect(round(_b.bottom)).toBe(0);
-  //     expect(round(_b.right)).toBe(round(_b.left + _b.width));
-  //     expect(round(_b.width)).toBe(0.1);
-  //     expect(round(_a.width)).toBe(0.1);
-  //     expect(round(_g.width)).toBe(0.1 * 0.5 / 0.2);
-  //     expect(round(_a.left)).toBe(round(_b.right));
-  //     expect(round(_a.right)).toBe(round(_a.left + _a.width));
-  //     expect(round(_g.left)).toBe(round(_b.right + 0.2));
-  //     expect(round(_g.bottom))
-  //       .toBe(round(tb.measure.descent + _b.bottom + 0.2 - tg.measure.descent));
-  //     expect(round(_g.top)).toBe(round(_g.bottom + tg.measure.ascent + tg.measure.descent));
-
-  //     const t = diagram.elements._t.getBoundingRect('diagram');
-  //     expect(t.left).toBe(_b.left);
-  //     expect(t.right).toBe(_g.right);
-  //     expect(t.bottom).toBe(_b.bottom);
-  //     expect(t.top).toBe(_g.top);
-  //   });
   });
 });

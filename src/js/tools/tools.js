@@ -25,48 +25,6 @@ const classify = (key: string, value: string) => {
   return `${withKey.split(' -').join(joinStr)}`;
 };
 
-// function getObjectValueFromPath(
-//   obj: Object,
-//   path: string,
-//   createIfUndefined: boolean = false,
-//   levelSeparator: string = '.',
-// ) {
-//   if (path.length === 0 || (path.length === 1 && path[0] === levelSeparator)) {
-//     return obj;
-//   }
-//   if (createIfUndefined) {
-//     obj[path[0]] = {};
-//   }
-
-//   if (obj[path[0]] === undefined) {
-//     return undefined;
-//   }
-
-//   if (typeof obj[path[0]] === 'object') {
-//     return getObjectValueFromPath(obj[path[0]], path.slice(1), createIfUndefined, levelSeparator);
-//   }
-//   if (path.length === 1) {
-//     return obj[path[0]];
-//   }
-//   return undefined;
-// }
-
-// function setObjectValueWithPath(
-//   obj: Object,
-//   path: string,
-//   value: any,
-//   levelSeparator: string = '.',
-// ) {
-//   if (path.length === 0 || (path.length === 1 && path[0] === levelSeparator)) {
-//     return;
-//   }
-//   if (path.length === 1) {
-//     obj[path[0]] = value;
-//     return;
-//   }
-//   if(obj[path[0]])
-// }
-
 class ObjectKeyPointer {
   object: Object;
   key: string;
@@ -163,6 +121,7 @@ function getFromObject(
   if (result === undefined) {
     return undefined;
   }
+  // $FlowFixMe
   return result.value();
 }
 
@@ -1252,7 +1211,7 @@ function splitString(str: string, token: string = '|', escape: string = '') {
   let currentSplit = [];
   let escaped = false;
   let tokenStringIndex = 0;
-  letters.forEach((letter, index) => {
+  letters.forEach((letter) => {
     currentSplit.push(letter);
     if (tokenStringIndex === 0 && letter === escape) {
       escaped = true;

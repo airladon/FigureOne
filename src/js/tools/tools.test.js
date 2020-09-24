@@ -1307,7 +1307,7 @@ describe('ObjectTracker', () => {
   describe('Split String', () => {
     test('single letter without escape', () => {
       const s = 'This is |a| test';
-      const split = tools.splitString(s, '|')
+      const split = tools.splitString(s, '|');
       expect(split).toEqual([
         'This is ', 'a', ' test',
       ]);
