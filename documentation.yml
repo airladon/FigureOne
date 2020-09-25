@@ -60,6 +60,10 @@ toc:
   - OBJ_Texture
   - OBJ_Polyline
   - OBJ_Polygon
+  - name: Text
+  - OBJ_Font
+  - OBJ_TextDefinition
+  - OBJ_Text
   - name: tools
     description: These are generic tools
     children:

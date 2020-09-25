@@ -17,9 +17,9 @@ describe('Diagram Primitives TextLine', () => {
     diagram = makeDiagram();
     textOptions = {
       allOptions: {
-        text: [
+        line: [
           'b',
-          [{
+          {
             offset: [0.2, 0.2],
             inLine: false,
             font: {
@@ -29,7 +29,8 @@ describe('Diagram Primitives TextLine', () => {
               size: 0.5,
               color: [1, 1, 0, 1],
             },
-          }, 'g'],
+            text: 'g',
+          },
           'a',
         ],
         xAlign: 'left',
@@ -45,24 +46,24 @@ describe('Diagram Primitives TextLine', () => {
         transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
       },
       abLeftBaseline: {
-        text: ['a', 'b'],
+        line: ['a', 'b'],
       },
       abCenterMiddle: {
-        text: ['a', 'b'],
+        line: ['a', 'b'],
         xAlign: 'center',
         yAlign: 'middle',
       },
       abRightTop: {
-        text: ['a', 'b'],
+        line: ['a', 'b'],
         xAlign: 'right',
         yAlign: 'top',
       },
       transform: {
-        text: ['a', 'b'],
+        line: ['a', 'b'],
         transform: [['s', 2, 3], ['r', 4], ['t', 5, 6]],
       },
       positionOverride: {
-        text: ['a', 'b'],
+        line: ['a', 'b'],
         position: [9, 10],
         transform: [['s', 1, 1], ['r', 0], ['t', 5, 6]],
       },

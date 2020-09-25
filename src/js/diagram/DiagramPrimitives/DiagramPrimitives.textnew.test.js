@@ -19,7 +19,8 @@ describe('Diagram Primitives Text', () => {
       allOptions: {
         text: [
           'b',
-          [{
+          {
+            text: 'g',
             xAlign: 'left',
             yAlign: 'bottom',
             location: [-0.1, -0.1],
@@ -30,7 +31,7 @@ describe('Diagram Primitives Text', () => {
               size: 0.5,
               color: [1, 1, 0, 1],
             },
-          }, 'g'],
+          },
         ],
         xAlign: 'center',
         yAlign: 'middle',
@@ -59,7 +60,7 @@ describe('Diagram Primitives Text', () => {
         yAlign: 'middle',
       },
       aCenterMiddleFromText: {
-        text: [{ xAlign: 'center', yAlign: 'middle' }, 'a'],
+        text: { text: 'a', xAlign: 'center', yAlign: 'middle' },
       },
       gTopRight: {
         text: 'g',

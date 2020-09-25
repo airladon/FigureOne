@@ -459,15 +459,17 @@ export type OBJ_Polygon = {
 };
 
 /** Text Definition object
+ * @property {string} [text] string to show
  * @property {OBJ_Font} [font]
- * @property {TypeParsablePoint} [location] (`[0, 0]`)
- * @property {'left' | 'right' | 'center'} [xAlign] x align of text with
- * `location` (`'left'`)
- * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] y align of
- * text with `location` (`'left'`)
- * @property {() => void} [onClick] fnction to execute on click
+ * @property {TypeParsablePoint} [location] location to draw text (`[0, 0]`)
+ * @property {'left' | 'right' | 'center'} [xAlign] how to align text
+ * horizontally with `location` (`"left"`)
+ * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] how to align
+ * text vertically with `location` (`"left"`)
+ * @property {() => void} [onClick] function to execute on click
  */
 export type OBJ_TextDefinition = {
+  text: string,
   font?: OBJ_Font,
   location?: TypeParsablePoint,
   xAlign?: 'left' | 'right' | 'center',
@@ -478,79 +480,344 @@ export type OBJ_TextDefinition = {
 /**
  * Text object
  *
- * ![](./assets1/text.png)
- *
- * @property {number} [sides] (`4`)
- * @property {number} [radius] (`1`)
- * @property {number} [width] line width - line will be drawn on inside of radius (`0.01`)
- * @property {number} [rotation] shape rotation during vertex definition
- * (different to a rotation step in a trasform) (`0`)
- * @property {TypeParsablePoint} [offset] shape center offset from origin
- * during vertex definition (different to a translation step in a transform)
- * (`[0, 0]`)
- * @property {number} [sidesToDraw] number of sides to draw (all sides)
- * @property {number} [angleToDraw] same as `sidesToDraw` but using angle for
- * the definition (`2π`)
- * @property {-1 | 1} [direction] direction to draw polygon where 1 is
- * counter clockwise and -1 is clockwise (`1`)
- * center. This is different to position or transform as these translate the
- * vertices on each draw. (`[0, 0]`)
- * @property {OBJ_LineStyle} [line] line style options
- * @property {boolean} [fill] (`false`)
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('polygon').standard()`)
+ * @property {string | OBJ_TextDefinition | Array<string | OBJ_TextDefinition>} [text] text to draw,
+ * either as a single string or multiple strings in an array(`4`)
+ * @property {OBJ_Font} [font]
+ * @property {'left' | 'right' | 'center'} [xAlign] default horizontal text
+ * alignment for `text` relative to `location` (`"left"`)
+ * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] default
+ * vertical text alignment for `text` relative to `location` (`"baseline"`)
  * @property {Array<number>} [color] (`[1, 0, 0, 1`])
- * @property {OBJ_Texture} [texture] Override color with a texture
- * @property {number} [pulse] set the default pulse scale
+ * @property {TypeParsablePoint} [position] if defined, overrides translation
+ * in transform
+ * @property {TypeParsableTransform} [transform]
+ * (`Transform('text').standard()`)
  * @example
- * // Simple filled polygon
+ * // Single string
  * diagram.addElement(
  *   {
- *     name: 'p',
- *     method: 'polygon',
+ *     name: 't',
+ *     method: 'text',
  *     options: {
- *       radius: 0.5,
- *       fill: true,
- *       sides: 6,
+ *       text: 'hello',
+ *       xAlign: 'center',
+ *       yAlign: 'middle',
+ *       position: [-0.5, 0],
  *     },
  *   },
  * );
  * @example
- * // Quarter circle
+ * // Multi string
  * diagram.addElement(
  *   {
- *     name: 'p',
+ *     name: 't',
  *     method: 'text',
  *     options: {
+ *       text: [
+ *         {
+ *           text: 'hello',
+ *           font: { style: 'italic' },
+ *           xAlign: 'center',
+ *           yAlign: 'bottom',
+ *           location: [-0.5, 0],
+ *         },
+ *         {
+ *           text: 'world',
+ *           location: [0.5, 0],
+ *         },
+ *       ],
+ *       xAlign: 'right',
+ *       yAlign: 'top',
+ *       font: { size: 0.3 },
+ *       color: [0, 1, 0, 1],
+ *       transform: [['r', 1], ['t', 0, 0]],
  *     },
  *   },
  * );
  */
 export type OBJ_Text = {
-  text: string | [OBJ_TextDefinition, string] | Array<string | [OBJ_TextDefinition, string]>;
-  position?: TypeParsablePoint,
-  transform?: TypeParsableTransform,
+  text: string | OBJ_TextDefinition | Array<string | OBJ_TextDefinition>;
   font?: OBJ_Font,                    // default font
   xAlign?: 'left' | 'right' | 'center',                // default xAlign
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-  color?: Array<number>
+  color?: Array<number>,
+  position?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
 }
 
-export type TypeTextOptions = {
-  text?: string;
-  transform?: Transform;
-  position?: Point;
-  offset?: Point;
-  font?: DiagramFont;
-  family?: string;
-  style?: string;
-  size?: number;
-  weight?: string;
-  xAlign?: string;
-  yAlign?: string;
-  color?: Array<number>;
-  pulse?: number;
-  mods?: {},
+
+/**
+ * Line Text Definition object
+ * @property {string} [text] string to show
+ * @property {OBJ_Font} [font]
+ * @property {TypeParsablePoint} [offset] offset to draw text (`[0, 0]`)
+ * @property {boolean} [inLine] `false` means next text will follow previous
+ * and not this (`true`)
+ * @property {() => void} [onClick] function to execute on click
+ */
+export type OBJ_LineTextDefinition = {
+  text: string,
+  font?: OBJ_Font,
+  offset?: TypeParsablePoint,
+  inLine?: boolean,
+  onClick?: () => void,
+};
+
+/**
+ * Text Line
+ *
+ * ![](./assets1/text.png)
+ *
+ * @property {Array<string | OBJ_LineTextDefinition>} [line] array of strings,
+ * to layout into a line
+ * @property {OBJ_Font} [font] Default font for strings in line
+ * @property {Array<number>} [color] Default color for strings in line
+ * (`[1, 0, 0, 1`])
+ * @property {'left' | 'right' | 'center} [xAlign] horizontal alignment of
+ * line with `position` (`left`)
+ * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] vertical
+ * alignment of line with `position` (`baseline`)
+ * @property {TypeParsablePoint} [position] if defined, overrides translation
+ * in transform
+ * @property {TypeParsableTransform} [transform]
+ * (`Transform('text').standard()`)
+ * @example
+ * // "Hello to the world1" with highlighted "to the" and superscript "1"
+ * diagram.addElement(
+ *   {
+ *     name: 't',
+ *     method: 'textLine',
+ *     options: {
+ *       line: [
+ *         'Hello ',
+ *         {
+ *           text: 'to the',
+ *           font: {
+ *             style: 'italic',
+ *             color: [1, 1, 0, 1],
+ *           },
+ *         },
+ *         ' world',
+ *         {
+ *           text: '1',
+ *           offset: [0, 0.05],
+ *           font: { size: 0.05, color: [0, 1, 0, 1] },
+ *         },
+ *       ],
+ *       xAlign: 'center',
+ *       yAlign: 'bottom',
+ *       font: {
+ *         style: 'normal',
+ *         size: 0.1,
+ *       },
+ *       color: [1, 0, 0, 1],
+ *     },
+ *     },
+ *   },
+ * );
+ */
+export type OBJ_TextLine = {
+  line: Array<string | OBJ_LineTextDefinition>;
+  position: TypeParsablePoint,
+  transform: TypeParsableTransform,
+  font: OBJ_Font,
+  xAlign: 'left' | 'right' | 'center',
+  yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+  color: Array<number>
+}
+
+/**
+ * Lines Text Definition object.
+ * @property {string} [line] string representing a line of text
+ * @property {OBJ_Font} [font] line specific default font
+ * @property {'left' | 'right' | 'center'} [justification] line specific justification
+ * @property {number} [lineSpace] line specific separation from baseline of
+ * this line to baseline of next line
+ * @property {() => void} [onClick] function to execute on click
+ */
+export type OBJ_LinesTextDefinition = {
+  line: string,
+  font?: OBJ_Font,
+  justification?: 'left' | 'right' | 'center',
+  lineSpace?: number,
+};
+
+/**
+ * Modifier Text Definition object.
+ * @property {string} [text] text to replace modifier id with - if `undefined`
+ * then modifier id is used
+ * @property {OBJ_Font} [font] font changes for modified text
+ * @property {boolean} [inLine] `false` if modified text should not contribute
+ * to line layout (`true`)
+ * @property {() => void} [onClick] function to execute on click of modified
+ * text
+ */
+export type OBJ_TextModifierDefinition = {
+  text?: string,
+  offset?: TypeParsablePoint,
+  inLine?: boolean,
+  font?: OBJ_Font,
+  onClick?: () => {},
+}
+
+export type OBJ_TextModifiersDefinition = {
+  [modifierId: string]: OBJ_TextModifierDefinition,
+}
+
+/**
+ * Text Lines
+ *
+ * Use this to layout several lines of text, justified either to the `left`,
+ * `center` or `right`.
+ *
+ * Each element of the `lines` array is a line of text, defined by a simple
+ * string. To format phrases within the string, use modifiers. Define the
+ * phrases to be modified by surrounding them in "|" characters. The
+ * characters between the "|" are called the **modifier id**, and which is
+ * then used as a key in the `modifier` object to define the formatting of the
+ * text. The modifier id should not have spaces (as it needs to be the key of
+ * an object), so if spaces are required in the text to be shown, then include
+ * the final string in the modifier object. By default, the modifier id will be
+ * the same text used in the rendered output.
+ *
+ * For example, if you want to show "hello world", with the word "world" as
+ * bold, then you would use the following options:
+ * @code
+ * options:
+ *   {
+ *     lines: ['hello |world|'],
+ *     modifiers: {
+ *       world: { font: { style: 'bold' } },
+ *     },
+ *   },
+ * }
+ *
+ * If you wanted to use a phrase that can't be used as an object key, then
+ * use a valid modifier key:
+ * options:
+ *   {
+ *     lines: ['hello |world|'],
+ *     modifiers: {
+ *       world: {
+ *        text: 'world!!'
+ *        font: { style: 'bold' } },
+ *     },
+ *   },
+ * }
+ *
+ *
+ * @property {Array<string | OBJ_LinesTextDefinition>} [lines] array of line
+ * strings
+ * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
+ * @property {OBJ_Font} [font] Default font to use in lines
+ * @property {Array<number>} [color] Default color to use in lines
+ * (`[1, 0, 0, 1`])
+ * @property {'left' | 'right' | 'center} [justification] justification of lines
+ * (`left`)
+ * @property {number} [lineSpace] Space between baselines of lines
+ * (`font.size * 1.2`)
+ * @property {'left' | 'right' | 'center} [xAlign] horizontal alignment of
+ * lines with `position` (`left`)
+ * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] vertical
+ * alignment of lines with `position` (`baseline`)
+ * @property {TypeParsablePoint} [position] if defined, overrides translation
+ * in transform
+ * @property {TypeParsableTransform} [transform]
+ * (`Transform('text').standard()`)
+ * @example
+ * // "Two justified lines"
+ * diagram.addElement(
+ *   {
+ *     name: 't',
+ *     method: 'textLines',
+ *     options: {
+ *       line: [
+ *         'This is the first line',
+ *         'This is the second line',
+ *         },
+ *       ],
+ *       font: {
+ *         style: 'normal',
+ *         size: 0.1,
+ *       },
+ *       justification: 'center'
+ *       color: [1, 0, 0, 1],
+ *     },
+ *   },
+ * );
+ * @example
+ * // "Example showing many features of textLines"
+ * diagram.addElement(
+ *   {
+ *     name: 't',
+ *     method: 'textLines',
+ *     options: {
+ *        lines: [
+ *          'This is the first line',
+ *          'Second line has a |superscript| modifier that isn\'t inline',
+ *          {
+ *            font: {
+ *              family: 'Times New Roman',
+ *              weight: 'bold',
+ *              style: 'italic',
+ *              size: 0.15,
+ *              color: [1, 1, 0, 1],
+ *            },
+ *            lineSpace: -0.3,
+ *            justification: 'center',
+ *            line: 'A line with new defaults',
+ *          },
+ *          'A spaced |line| with two |line| mods',
+ *          'An escaped special char: /|',
+ *        ],
+ *        modifiers: {
+ *          superscript: {
+ *            text: 'superscript!!',
+ *            offset: [-0.1, 0.1],
+ *            inLine: false,
+ *            font: {
+ *              family: 'Times New Roman',
+ *              weight: 'bold',
+ *              style: 'italic',
+ *              size: 0.05,
+ *              color: [1, 0, 1, 1],
+ *            },
+ *          },
+ *          line: {
+ *            font: {
+ *              color: [0, 1, 1, 1],
+ *              style: 'italic',
+ *            },
+ *          },
+ *        },
+ *        xAlign: 'left',
+ *        yAlign: 'baseline',
+ *        font: {
+ *          family: 'Helvetica Neue',
+ *          weight: '200',
+ *          style: 'normal',
+ *          size: 0.1,
+ *        },
+ *        justification: 'left',
+ *        lineSpace: -0.2,
+ *        color: [1, 0, 0, 1],
+ *        position: [-0.8, 0],
+ *        transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
+ *      },
+ *   },
+ * );
+ */
+export type OBJ_TextLines = {
+  lines: Array<string | OBJ_LinesTextDefinition>,
+  modifiers: OBJ_TextModifiersDefinition,
+  font?: OBJ_Font,
+  justification?: 'left' | 'center' | 'right',
+  lineSpace?: number,
+  position: TypeParsablePoint,
+  transform: TypeParsableTransform,
+  xAlign: 'left' | 'right' | 'center',
+  yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+  color: Array<number>,
 };
 
 export type TypeGridOptions = {
@@ -1288,8 +1555,14 @@ export default class DiagramPrimitives {
       options.transform.updateTranslation(p);
     }
 
-    if (typeof options.text === 'string') {
+    if (options.text != null && !Array.isArray(options.text)) {
       options.text = [options.text];
+    }
+    if (options.line != null && !Array.isArray(options.line)) {
+      options.line = [options.line];
+    }
+    if (options.lines != null && !Array.isArray(options.lines)) {
+      options.lines = [options.lines];
     }
 
     return options;
@@ -1313,21 +1586,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  textLine(...optionsIn: Array<{
-    text: string | Array<string | [{
-      font?: OBJ_Font,
-      offset?: TypeParsablePoint,
-      inLine?: boolean,
-      onClick?: () => void,
-    }, string]>;
-    position: TypeParsablePoint,
-    transform: TypeParsableTransform,
-    font: OBJ_Font,                    // default font
-    // How the line aligns with the position
-    xAlign: 'left' | 'right' | 'center',
-    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-    color: Array<number>
-  }>) {
+  textLine(...optionsIn: Array<OBJ_TextLine>) {
     const options = this.parseTextOptions(...optionsIn);
     const to = new TextLineObject(this.draw2D);
     to.loadText(options);
@@ -1335,11 +1594,12 @@ export default class DiagramPrimitives {
   }
 
   textLines(...optionsIn: Array<{
-    text: string | Array<string | [{
+    lines: Array<string | {
+      line: string,
       font?: OBJ_Font,
       justification?: 'left' | 'center' | 'right',
       lineSpace?: number
-    }, string]>,
+    }>,
     modifiers: {
       [modifierName: string]: {
         text?: string,
@@ -1371,21 +1631,7 @@ export default class DiagramPrimitives {
     return this.createPrimitive(to, options);
   }
 
-  text(...optionsIn: Array<{
-    text: string | Array<string | [{
-      font?: OBJ_Font,
-      location?: TypeParsablePoint,
-      xAlign?: 'left' | 'right' | 'center',
-      yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-      onClick?: () => void,
-    }, string]>;
-    position?: TypeParsablePoint,
-    transform?: TypeParsableTransform,
-    font?: OBJ_Font,                    // default font
-    xAlign?: 'left' | 'right' | 'center',                // default xAlign
-    yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-    color?: Array<number>
-  }>) {
+  text(...optionsIn: Array<OBJ_Text>) {
     const options = this.parseTextOptions(...optionsIn);
     const to = new TextObject(
       this.draw2D,

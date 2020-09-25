@@ -26,7 +26,7 @@ describe('Diagram Text Object', () => {
       const df = new DiagramFont();
       const expected = new DiagramFont({
         family: 'Times New Roman',
-        style: '',
+        style: 'normal',
         size: 1,
         weight: '200',
         color: null,

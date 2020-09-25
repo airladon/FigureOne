@@ -743,6 +743,46 @@
               
                 
                 <li><a
+                  href='#text'
+                  class="h5 bold black caps">
+                  Text
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_font'
+                  class="">
+                  OBJ_Font
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_textdefinition'
+                  class="">
+                  OBJ_TextDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_text'
+                  class="">
+                  OBJ_Text
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#tools'
                   class="h5 bold black caps toggle-sibling">
                   tools
@@ -11156,6 +11196,423 @@ diagram.addElement(
           
         
           
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='text' class='mt0'>
+    Text
+  </h2>
+
+  
+    
+
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_font'>
+      OBJ_Font
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Font Definition object</p>
+<p><img src="./assets1/text.png"></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>family</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : The font family (
+<code>Times New Roman</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>style</span> <code class='quiet'>((`normal` | `italic`)?)</code>
+          : (
+<code>normal</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : size of font in vertex space (
+<code>0.2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>weight</span> <code class='quiet'>((<code>"normal"</code> | <code>"bold"</code> | <code>"lighter"</code> | <code>"bolder"</code> | <code>"100"</code> | <code>"200"</code> | <code>"300"</code> | <code>"400"</code> | <code>"500"</code> | <code>"600"</code> | <code>"700"</code> | <code>"800"</code> | <code>"900"</code>)?)</code>
+          : font weight (
+<code>200</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?)</code>
+          : Font color
+
+[red, green, blue, alpha]
+ between 0 and 1 - (
+<code>[1, 0, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>opacity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : opacity multiplier (final opacity will be
+
+<code>opacity</code>
+ * 
+<code>color</code>
+ alpha) 
+[
+<code>1</code>
+]
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full font definition</span>
+<span class="hljs-keyword">const</span> font = <span class="hljs-keyword">new</span> DiagramFont({
+  <span class="hljs-attr">family</span>: <span class="hljs-string">'Helvetica'</span>,
+  <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
+  <span class="hljs-attr">weight</span>: <span class="hljs-string">'bold'</span>,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">opacity</span>: <span class="hljs-number">1</span>,
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define style only, remaining properties are defaults</span>
+<span class="hljs-keyword">const</span> font = <span class="hljs-keyword">new</span> DiagramFont({
+  <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_textdefinition'>
+      OBJ_TextDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Text Definition object</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>location</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          : location to draw text (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          : how to align text
+horizontally with 
+<code>location</code>
+ (
+<code>'left'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
+          : how to align
+text vertically with 
+<code>location</code>
+ (
+<code>'left'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onClick</span> <code class='quiet'>(function (): void?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_text'>
+      OBJ_Text
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Text object</p>
+<p><img src="./assets1/text.png"></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textdefinition">OBJ_TextDefinition</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textdefinition">OBJ_TextDefinition</a>)>)?)</code>
+          : text to draw,
+either as a single string or multiple strings in an array(
+<code>4</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          : if defined, overrides translation
+in transform
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(TypeParsableTransform?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
+          : default
+vertical text alignment for 
+<code>text</code>
+ relative to 
+<code>location</code>
+ (
+<code>baseline</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1</code>
+])
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Single string</span>
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">text</span>: <span class="hljs-string">'hello'</span>,
+      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+      <span class="hljs-attr">position</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0</span>],
+    },
+  },
+);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Multi string</span>
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">text</span>: [
+        {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'hello'</span>,
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span> },
+          <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+          <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
+          <span class="hljs-attr">location</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0</span>],
+        },
+        {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'world'</span>,
+          <span class="hljs-attr">location</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>],
+        },
+      ],
+      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
+      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'top'</span>,
+      <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.3</span> },
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">transform</span>: [[<span class="hljs-string">'r'</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">'t'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]],
+    },
+  },
+);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
           <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
@@ -13290,7 +13747,7 @@ will be ignored.</p>
 
   
     <p style="display: none;">      Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, font: (DiagramFont | OBJ_Font)?, style: (<code>"italic"</code> | <code>"normal"</code> | null)?, weight: (<code>"normal"</code> | <code>"bold"</code> | <code>"lighter"</code> | <code>"bolder"</code> | <code>"100"</code> | <code>"200"</code> | <code>"300"</code> | <code>"400"</code> | <code>"500"</code> | <code>"600"</code> | <code>"700"</code> | <code>"800"</code> | <code>"900"</code>)?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, mods: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?} | DiagramElementPrimitive | DiagramElementCollection)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, font: (DiagramFont | <a href="#obj_font">OBJ_Font</a>)?, style: (<code>"italic"</code> | <code>"normal"</code> | null)?, weight: (<code>"normal"</code> | <code>"bold"</code> | <code>"lighter"</code> | <code>"bolder"</code> | <code>"100"</code> | <code>"200"</code> | <code>"300"</code> | <code>"400"</code> | <code>"500"</code> | <code>"600"</code> | <code>"700"</code> | <code>"800"</code> | <code>"900"</code>)?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, mods: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?} | DiagramElementPrimitive | DiagramElementCollection)
     </p>
   
   

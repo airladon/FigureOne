@@ -17,23 +17,21 @@ describe('Diagram Primitives TextLine', () => {
     diagram = makeDiagram();
     textOptions = {
       allOptions: {
-        text: [
+        lines: [
           'This is the first line',
           'Second line has a |superscript| modifier that isn\'t inline',
-          [
-            {
-              font: {
-                family: 'Times New Roman',
-                weight: 'bold',
-                style: 'italic',
-                size: 0.15,
-                color: [1, 1, 0, 1],
-              },
-              lineSpace: -0.3,
-              justification: 'center',
+          {
+            font: {
+              family: 'Times New Roman',
+              weight: 'bold',
+              style: 'italic',
+              size: 0.15,
+              color: [1, 1, 0, 1],
             },
-            'A line with new defaults',
-          ],
+            lineSpace: -0.3,
+            justification: 'center',
+            line: 'A line with new defaults',
+          },
           'A spaced |line| with two |line| mods',
           'An escaped special char: /|',
         ],
@@ -72,41 +70,41 @@ describe('Diagram Primitives TextLine', () => {
         transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
       },
       defaultLineSpace: {
-        text: ['a', 'b'],
+        lines: ['a', 'b'],
         font: {
           size: 0.5,
         },
       },
       abLeftBaseline: {
-        text: ['a', 'b'],
+        lines: ['a', 'b'],
         lineSpace: -0.2,
       },
       centerJustification: {
-        text: ['aaaaa', 'b'],
+        lines: ['aaaaa', 'b'],
         lineSpace: -0.2,
         justification: 'center',
       },
       rightJustification: {
-        text: ['aaaaa', 'b'],
+        lines: ['aaaaa', 'b'],
         lineSpace: -0.2,
         justification: 'right',
       },
       alignCenterMiddle: {
-        text: ['aaaaa', 'b'],
+        lines: ['aaaaa', 'b'],
         lineSpace: -0.2,
         justification: 'center',
         xAlign: 'center',
         yAlign: 'middle',
       },
       alignRightTop: {
-        text: ['aaaaa', 'b'],
+        lines: ['aaaaa', 'b'],
         lineSpace: -0.2,
         justification: 'right',
         xAlign: 'right',
         yAlign: 'top',
       },
       basicModifier: {
-        text: ['a |b|'],
+        lines: ['a |b|'],
         modifiers: {
           b: {
             text: 'gg',
@@ -114,11 +112,11 @@ describe('Diagram Primitives TextLine', () => {
         },
       },
       transform: {
-        text: ['a', 'b'],
+        lines: ['a', 'b'],
         transform: [['s', 2, 3], ['r', 4], ['t', 5, 6]],
       },
       positionOverride: {
-        text: ['a', 'b'],
+        lines: ['a', 'b'],
         position: [9, 10],
         transform: [['s', 1, 1], ['r', 0], ['t', 5, 6]],
       },

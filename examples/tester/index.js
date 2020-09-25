@@ -156,36 +156,76 @@ diagram.addElements([
   //     }
   //   },
   // },
-  {
-    name: 't',
-    method: 'text',
-    options: {
-      text: 
-      [{
-        xAlign: 'left',
-        yAlign: 'bottom',
-        location: [-0.5, -0.5],
-        font: {
-          family: 'Helvetica',
-          weight: 'bold',
-          style: 'italic',
-          size: 0.5,
-          color: [1, 1, 0, 1],
-        },
-      }, 'g'],
-    
-    xAlign: 'center',
-    yAlign: 'middle',
-    font: {
-      family: 'Helvetica Neue',
-      weight: '300',
-      style: 'normal',
-      size: 0.2,
-    },
-    color: [1, 0, 0, 1],
-    position: [0, 0],
-    },
-  },
+  // {
+  //   name: 't',
+  //   method: 'text',
+  //   options: {
+  //     text: 'hello',
+  //     xAlign: 'center',
+  //     yAlign: 'middle',
+  //     position: [-0.5, 0],
+  //   }
+  //   //   text: [
+  //   //   { text: 'b', location: [-0.1, -0.2] },
+  //   //   {
+  //   //     xAlign: 'left',
+  //   //     yAlign: 'bottom',
+  //   //     location: [-0.5, -0.5],
+  //   //     font: {
+  //   //       family: 'Helvetica',
+  //   //       weight: 'bold',
+  //   //       style: 'italic',
+  //   //       size: 0.5,
+  //   //       color: [1, 1, 0, 1],
+  //   //     },
+  //   //     text: 'g',
+  //   //   },
+  //   // ],
+  //   // xAlign: 'center',
+  //   // yAlign: 'baseline',
+  //   // font: {
+  //   //   family: 'Helvetica Neue',
+  //   //   weight: '300',
+  //   //   style: 'normal',
+  //   //   size: 0.2,
+  //   // },
+  //   // color: [1, 0, 0, 1],
+  //   // position: [0, 0],
+  //   // },
+  // },
+  // {
+  //   name: 't',
+  //   method: 'textLine',
+  //   options: {
+  //     line: [
+  //       'Hello ',
+  //       {
+  //         text: 'to the',
+  //         font: {
+  //           style: 'italic',
+  //           color: [1, 1, 0, 1],
+  //         },
+  //       },
+  //       ' world',
+  //       {
+  //         text: '1',
+  //         offset: [0, 0.05],
+  //         font: { size: 0.05, color: [0, 1, 0, 1] },
+  //       },
+  //     ],
+  //     xAlign: 'center',
+  //     yAlign: 'bottom',
+  //     font: {
+  //     //   family: 'Helvetica Neue',
+  //     //   weight: '200',
+  //       style: 'normal',
+  //       size: 0.1,
+  //     },
+  //     color: [1, 0, 0, 1],
+  //     position: [0, 0],
+  //     transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
+  //   },
+  // },
   // {
   //   name: 'allOptions',
   //   method: 'shapes.textLine',
@@ -269,6 +309,63 @@ diagram.addElements([
   //     transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
   //   },
   // },
+  {
+    name: 'te',
+    method: 'textLines',
+    options: {
+      lines: [
+        'This is the first line',
+        'Second line has a |superscript| modifier that isn\'t inline',
+        {
+          font: {
+            family: 'Times New Roman',
+            weight: 'bold',
+            style: 'italic',
+            size: 0.15,
+            color: [1, 1, 0, 1],
+          },
+          lineSpace: -0.3,
+          justification: 'center',
+          line: 'A line with new defaults',
+        },
+        'A spaced |line| with two |line| mods',
+        'An escaped special char: /|',
+      ],
+      modifiers: {
+        superscript: {
+          text: 'superscript!!',
+          offset: [-0.1, 0.1],
+          inLine: false,
+          font: {
+            family: 'Times New Roman',
+            weight: 'bold',
+            style: 'italic',
+            size: 0.05,
+            color: [1, 0, 1, 1],
+          },
+        },
+        line: {
+          font: {
+            color: [0, 1, 1, 1],
+            style: 'italic',
+          },
+        },
+      },
+      xAlign: 'left',
+      yAlign: 'baseline',
+      font: {
+        family: 'Helvetica Neue',
+        weight: '200',
+        style: 'normal',
+        size: 0.1,
+      },
+      justification: 'left',
+      lineSpace: -0.2,
+      color: [1, 0, 0, 1],
+      position: [-0.8, 0],
+      transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
+    },
+  },
   {
     name: 'a',
     method: 'polygon',

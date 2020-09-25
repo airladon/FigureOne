@@ -711,20 +711,22 @@ class TextObject extends TextObjectBase {
   loadText(
     options: {
       text: string
-        | [{
+        | {
+            text: string,
             font?: OBJ_Font,
             location?: TypeParsablePoint,
             xAlign?: 'left' | 'right' | 'center',
             yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
             onClick?: () => void,
-          }, string]
-        | Array<string | [{
+        }
+        | Array<string | {
+        text: string,
         font?: OBJ_Font,
         location?: TypeParsablePoint,
         xAlign?: 'left' | 'right' | 'center',
         yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
         onClick?: () => void,
-      }, string]>;
+      }>;
       font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
@@ -732,14 +734,7 @@ class TextObject extends TextObjectBase {
     },
   ) {
     let textArray = options.text;
-    if (
-      typeof textArray === 'string'
-      || (
-        Array.isArray(textArray)
-        && textArray.length === 2
-        && typeof textArray[0] === 'object'
-      )
-    ) {
+    if (!Array.isArray(textArray)) {
       textArray = [textArray];
     }
     const diagramTextArray = [];
@@ -749,12 +744,13 @@ class TextObject extends TextObjectBase {
       let xAlign;
       let yAlign;
       let textToUse;
-      if (Array.isArray(textDefinition) && textDefinition.length === 2) {
-        [{  // $FlowFixMe
-          font, location, xAlign, yAlign,
-        }, textToUse] = textDefinition;
-      } else {
+      if (typeof textDefinition === 'string') {
         textToUse = textDefinition;
+      } else {
+        ({
+          font, location, xAlign, yAlign,
+        } = textDefinition);
+        textToUse = textDefinition.text;
       }
       let locationToUse;
       if (location == null) {
@@ -853,20 +849,21 @@ class TextLineObject extends TextObjectBase {
   // $FlowFixMe
   loadText(
     options: {
-      text: string | Array<string | [{
+      line: Array<string | {
+        text: string,
         font?: OBJ_Font,
         offset?: TypeParsablePoint,
         inLine?: boolean,
         onClick?: () => void,
-      }, string]>;
+      }>;
       font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
       color: Array<number>
     },
   ) {
-    let textArray = options.text;
-    if (typeof textArray === 'string') {
+    let textArray = options.line;
+    if (!Array.isArray(textArray)) {
       textArray = [textArray];
     }
     const diagramTextArray = [];
@@ -875,12 +872,13 @@ class TextLineObject extends TextObjectBase {
       let offset;
       let inLine;
       let textToUse;
-      if (Array.isArray(textDefinition) && textDefinition.length === 2) {
-        [{
-          font, offset, inLine,
-        }, textToUse] = textDefinition;
-      } else {
+      if (typeof textDefinition === 'string') {
         textToUse = textDefinition;
+      } else {
+        ({
+          font, offset, inLine,
+        } = textDefinition);
+        textToUse = textDefinition.text;
       }
       let offsetToUse;
       if (offset == null) {
@@ -931,7 +929,7 @@ class TextLineObject extends TextObjectBase {
 
 class TextLinesObject extends TextObjectBase {
   // $FlowFixMe
-  text: Array<DiagramTextLines>;
+  line: Array<DiagramTextLines>;
   xAlign: 'left' | 'right' | 'center';                // default xAlign
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top';   // default yAlign
   lines: Array<{
@@ -954,11 +952,12 @@ class TextLinesObject extends TextObjectBase {
   // $FlowFixMe
   loadText(
     options: {
-    text: string | Array<string | [{
+    lines: Array<string | {
+      line: string,
       font?: OBJ_Font,
       justification?: 'left' | 'center' | 'right',
       lineSpace?: number
-    }, string]>,
+    }>,
     modifiers: {
       [modifierName: string]: {
         text?: string,
@@ -977,7 +976,7 @@ class TextLinesObject extends TextObjectBase {
   },
   ) {
     // console.log('asdfasdf')
-    let lines = options.text;
+    let { lines } = options;
     if (typeof lines === 'string') {
       lines = [lines];
     }
@@ -990,11 +989,11 @@ class TextLinesObject extends TextObjectBase {
       let lineLineSpace = options.lineSpace;
       let lineToUse;
       let lineFont = options.font;
-      if (Array.isArray(lineDefinition) && lineDefinition.length === 2) {
-        const [{
+      if (typeof lineDefinition !== 'string') {
+        const {
           font, justification, lineSpace,
-        }, lineText] = lineDefinition;
-        lineToUse = lineText;
+        } = lineDefinition;
+        lineToUse = lineDefinition.line;
         if (font != null) {
           lineFont = joinObjects({}, options.font, font);
         }
