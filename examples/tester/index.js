@@ -309,63 +309,63 @@ diagram.addElements([
   //     transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
   //   },
   // },
-  {
-    name: 'te',
-    method: 'textLines',
-    options: {
-      lines: [
-        'This is the first line',
-        'Second line has a |superscript| modifier that isn\'t inline',
-        {
-          font: {
-            family: 'Times New Roman',
-            weight: 'bold',
-            style: 'italic',
-            size: 0.15,
-            color: [1, 1, 0, 1],
-          },
-          lineSpace: -0.3,
-          justification: 'center',
-          line: 'A line with new defaults',
-        },
-        'A spaced |line| with two |line| mods',
-        'An escaped special char: /|',
-      ],
-      modifiers: {
-        superscript: {
-          text: 'superscript!!',
-          offset: [-0.1, 0.1],
-          inLine: false,
-          font: {
-            family: 'Times New Roman',
-            weight: 'bold',
-            style: 'italic',
-            size: 0.05,
-            color: [1, 0, 1, 1],
-          },
-        },
-        line: {
-          font: {
-            color: [0, 1, 1, 1],
-            style: 'italic',
-          },
-        },
-      },
-      xAlign: 'left',
-      yAlign: 'baseline',
-      font: {
-        family: 'Helvetica Neue',
-        weight: '200',
-        style: 'normal',
-        size: 0.1,
-      },
-      justification: 'left',
-      lineSpace: -0.2,
-      color: [1, 0, 0, 1],
-      position: [-0.8, 0],
-      transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
-    },
-  },
+  // {
+  //   name: 'te',
+  //   method: 'textLines',
+  //   options: {
+  //     lines: [
+  //       'This is the first line',
+  //       'Second line has a |superscript| modifier that isn\'t inline',
+  //       {
+  //         font: {
+  //           family: 'Times New Roman',
+  //           weight: 'bold',
+  //           style: 'italic',
+  //           size: 0.15,
+  //           color: [1, 1, 0, 1],
+  //         },
+  //         lineSpace: -0.3,
+  //         justification: 'center',
+  //         line: 'A line with new defaults',
+  //       },
+  //       'A spaced |line| with two |line| mods',
+  //       'An escaped special char: /|',
+  //     ],
+  //     modifiers: {
+  //       superscript: {
+  //         text: 'superscript!!',
+  //         offset: [-0.1, 0.1],
+  //         inLine: false,
+  //         font: {
+  //           family: 'Times New Roman',
+  //           weight: 'bold',
+  //           style: 'italic',
+  //           size: 0.05,
+  //           color: [1, 0, 1, 1],
+  //         },
+  //       },
+  //       line: {
+  //         font: {
+  //           color: [0, 1, 1, 1],
+  //           style: 'italic',
+  //         },
+  //       },
+  //     },
+  //     xAlign: 'left',
+  //     yAlign: 'baseline',
+  //     font: {
+  //       family: 'Helvetica Neue',
+  //       weight: '200',
+  //       style: 'normal',
+  //       size: 0.1,
+  //     },
+  //     justification: 'left',
+  //     lineSpace: -0.2,
+  //     color: [1, 0, 0, 1],
+  //     position: [-0.8, 0],
+  //     transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
+  //   },
+  // },
   {
     name: 'a',
     method: 'polygon',
@@ -373,9 +373,30 @@ diagram.addElements([
       radius: 0.01,
       width: 0.01,
       sides: 10,
+      color: [0.7, 0.7, 0.7, 1]
       // transform: new Fig.Transform().scale(2, 2).translate(0.5, 0),
     },
   },
+  // {
+  //   name: 'x',
+  //   method: 'line',
+  //   options: {
+  //     p1: [-0.05, 0],
+  //     p2: [0.05, 0],
+  //     width: 0.003,
+  //     color: [0.7, 0.7, 0.7, 1]
+  //   },
+  // },
+  // {
+  //   name: '7',
+  //   method: 'line',
+  //   options: {
+  //     p1: [0, -0.05],
+  //     p2: [0, 0.05],
+  //     width: 0.003,
+  //     color: [0.7, 0.7, 0.7, 1]
+  //   },
+  // },
   {
     name: 'grid',
     method: 'grid',
@@ -383,21 +404,21 @@ diagram.addElements([
       bounds: [-1, -1, 2, 2],
       yStep: 0.1,
       xStep: 0.1,
-      color: [0.2, 0.2, 0.2, 1],
-      width: 0.002,
+      color: [0.7, 0.7, 0.7, 1],
+      width: 0.0005,
     },
   },
-  {
-    name: 'gridMajor',
-    method: 'grid',
-    options: {
-      bounds: [-1, -1, 2, 2],
-      yStep: 0.5,
-      xStep: 0.5,
-      color: [0.5, 0.5, 0.5, 1],
-      width: 0.002,
-    },
-  },
+  // {
+  //   name: 'gridMajor',
+  //   method: 'grid',
+  //   options: {
+  //     bounds: [-1, -1, 2, 2],
+  //     yStep: 0.5,
+  //     xStep: 0.5,
+  //     color: [0.8, 0.8, 0.8, 1],
+  //     width: 0.002,
+  //   },
+  // },
   // {
   //   name: 'eqn',
   //   method: 'equation',
@@ -452,6 +473,37 @@ diagram.addElements([
   //   },
   // },
 ]);
+diagram.addElement(
+   {
+     name: 'line',
+     method: 'textLine',
+     options: {
+       line: [
+         'Hello ',
+         {
+           text: 'to the',
+           font: {
+             style: 'italic',
+             color: [0, 0.5, 1, 1],
+           },
+         },
+         ' world',
+         {
+           text: '1',
+           offset: [0, 0.05],
+           font: { size: 0.05, color: [0, 0.6, 0, 1] },
+         },
+       ],
+       xAlign: 'center',
+       yAlign: 'bottom',
+       font: {
+         style: 'normal',
+         size: 0.1,
+       },
+       color: [1, 0, 0, 1],
+     },
+   },
+ );
 diagram.initialize();
 
 // diagram.elements._tester.animations.new()

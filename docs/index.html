@@ -783,6 +783,56 @@
               
                 
                 <li><a
+                  href='#obj_linetextdefinition'
+                  class="">
+                  OBJ_LineTextDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_textline'
+                  class="">
+                  OBJ_TextLine
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_linestextdefinition'
+                  class="">
+                  OBJ_LinesTextDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_textmodifierdefinition'
+                  class="">
+                  OBJ_TextModifierDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_textlines'
+                  class="">
+                  OBJ_TextLines
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#tools'
                   class="h5 bold black caps toggle-sibling">
                   tools
@@ -11361,6 +11411,7 @@ diagram.addElement(
   
 
   <p>Text Definition object</p>
+<p>Used within <a href="#obj_text">OBJ_Text</a> to define a single string</p>
 
   
   
@@ -11377,6 +11428,13 @@ diagram.addElement(
   
     <div class='py1 quiet mt1 prose-big'>Properties</div>
     <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : string to show
+
+          
+        </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
@@ -11399,7 +11457,7 @@ diagram.addElement(
 horizontally with 
 <code>location</code>
  (
-<code>'left'</code>
+<code>"left"</code>
 )
 
           
@@ -11411,15 +11469,9 @@ horizontally with
 text vertically with 
 <code>location</code>
  (
-<code>'left'</code>
+<code>"left"</code>
 )
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          
           
         </div>
       
@@ -11465,8 +11517,13 @@ text vertically with
   </div>
   
 
-  <p>Text object</p>
-<p><img src="./assets1/text.png"></p>
+  <p>One or more text strings.</p>
+<p><img src="./assets1/text_ex2.png"></p>
+<p>Use this to make a DiagramElementPrimitive that renders simple text.</p>
+<p>If you need multiple strings, in different locations but all with the same
+transform, then use this to assign multiple strings to the same primitive.
+Different strings can have different fonts, colors, alignments, and
+locations.</p>
 
   
   
@@ -11485,7 +11542,7 @@ text vertically with
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>text</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textdefinition">OBJ_TextDefinition</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textdefinition">OBJ_TextDefinition</a>)>)?)</code>
+          <span class='code bold'>text</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textdefinition">OBJ_TextDefinition</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textdefinition">OBJ_TextDefinition</a>)>))</code>
           : text to draw,
 either as a single string or multiple strings in an array(
 <code>4</code>
@@ -11495,22 +11552,22 @@ either as a single string or multiple strings in an array(
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(TypeParsablePoint?)</code>
-          : if defined, overrides translation
-in transform
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(TypeParsableTransform?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
           <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
           
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          : default horizontal text
+alignment for 
+<code>text</code>
+ relative to 
+<code>location</code>
+ (
+<code>"left"</code>
+)
+
           
         </div>
       
@@ -11522,7 +11579,7 @@ vertical text alignment for
  relative to 
 <code>location</code>
  (
-<code>baseline</code>
+<code>"baseline"</code>
 )
 
           
@@ -11538,8 +11595,19 @@ vertical text alignment for
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          <span class='code bold'>position</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          : if defined, overrides translation
+in transform
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(TypeParsableTransform?)</code>
+          : (
+<code>Transform('text').standard()</code>
+)
+
           
         </div>
       
@@ -11565,7 +11633,6 @@ diagram.addElement(
       <span class="hljs-attr">text</span>: <span class="hljs-string">'hello'</span>,
       <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
       <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
-      <span class="hljs-attr">position</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0</span>],
     },
   },
 );</pre>
@@ -11580,22 +11647,685 @@ diagram.addElement(
       <span class="hljs-attr">text</span>: [
         {
           <span class="hljs-attr">text</span>: <span class="hljs-string">'hello'</span>,
-          <span class="hljs-attr">font</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span> },
-          <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> },
+          <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
           <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
-          <span class="hljs-attr">location</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0</span>],
+          <span class="hljs-attr">location</span>: [<span class="hljs-number">-0.35</span>, <span class="hljs-number">0</span>],
         },
         {
           <span class="hljs-attr">text</span>: <span class="hljs-string">'world'</span>,
-          <span class="hljs-attr">location</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>],
+          <span class="hljs-attr">location</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">-0.1</span>],
         },
       ],
-      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
-      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'top'</span>,
+      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
       <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.3</span> },
-      <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-      <span class="hljs-attr">transform</span>: [[<span class="hljs-string">'r'</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">'t'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]],
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
     },
+  },
+);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_linetextdefinition'>
+      OBJ_LineTextDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Line Text Definition object</p>
+<p>Used to define a string within a text line primitive <a href="#obj_textline">OBJ_TextLine</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : string to show
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          : offset to draw text (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inLine</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ means next text will follow previous
+and not this (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onClick</span> <code class='quiet'>(function (): void?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_textline'>
+      OBJ_TextLine
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Text Line</p>
+<p><img src="./assets1/textLine.png"></p>
+<p>Array of strings that are arranged into a line. Each string is arranged so
+that it is to the right of the previous string.</p>
+<p>Strings can be arranged out of the line flow by using the <code>inLine</code> property
+in <a href="#obj_linetextdefinition">OBJ_LineTextDefinition</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_linetextdefinition">OBJ_LineTextDefinition</a>)>?)</code>
+          : array of strings,
+to layout into a line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : Default font for strings in line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : Default color for strings in line
+(
+<code>[1, 0, 0, 1</code>
+])
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
+          : vertical
+alignment of line with 
+<code>position</code>
+ (
+<code>baseline</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          : if defined, overrides translation
+in transform
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(TypeParsableTransform?)</code>
+          : (
+<code>Transform('text').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// "Hello to the world1" with highlighted "to the" and superscript "1"</span>
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'line'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'textLine'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">line</span>: [
+        <span class="hljs-string">'Hello '</span>,
+        {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'to the'</span>,
+          <span class="hljs-attr">font</span>: {
+            <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
+            <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+          },
+        },
+        <span class="hljs-string">' world'</span>,
+        {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'1'</span>,
+          <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.05</span>],
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.05</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] },
+        },
+      ],
+      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
+      <span class="hljs-attr">font</span>: {
+        <span class="hljs-attr">style</span>: <span class="hljs-string">'normal'</span>,
+        <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span>,
+      },
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    },
+  },
+);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_linestextdefinition'>
+      OBJ_LinesTextDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Lines Text Definition object.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : string representing a line of text
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : line specific default font
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>justification</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          : line specific justification
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : line specific separation from baseline of
+this line to baseline of next line
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_textmodifierdefinition'>
+      OBJ_TextModifierDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Modifier Text Definition object.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : text to replace modifier id with - if 
+<code>undefined</code>
+
+then modifier id is used
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : font changes for modified text
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inLine</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ if modified text should not contribute
+to line layout (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onClick</span> <code class='quiet'>(function (): {}?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_textlines'>
+      OBJ_TextLines
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Text Lines</p>
+<p>Use this to layout several lines of text, justified either to the <code>left</code>,
+<code>center</code> or <code>right</code>.</p>
+<p>Each element of the <code>lines</code> array is a line of text, defined by a simple
+string. To format phrases within the string, use modifiers. Define the
+phrases to be modified by surrounding them in "|" characters. The
+characters between the "|" are called the <strong>modifier id</strong>, and which is
+then used as a key in the <code>modifier</code> object to define the formatting of the
+text. The modifier id should not have spaces (as it needs to be the key of
+an object), so if spaces are required in the text to be shown, then include
+the final string in the modifier object. By default, the modifier id will be
+the same text used in the rendered output.</p>
+<p>For example, if you want to show "hello world", with the word "world" as
+bold, then you would use the following options:</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_linestextdefinition">OBJ_LinesTextDefinition</a>)>?)</code>
+          : array of line
+strings
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>modifiers</span> <code class='quiet'>(OBJ_TextModifiersDefinition?)</code>
+          : modifier definitions
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : Default font to use in lines
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : Default color to use in lines
+(
+<code>[1, 0, 0, 1</code>
+])
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : Space between baselines of lines
+(
+<code>font.size * 1.2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
+          : vertical
+alignment of lines with 
+<code>position</code>
+ (
+<code>baseline</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          : if defined, overrides translation
+in transform
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(TypeParsableTransform?)</code>
+          : (
+<code>Transform('text').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>justification</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// "Two justified lines"</span>
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'textLines'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">line</span>: [
+        <span class="hljs-string">'This is the first line'</span>,
+        <span class="hljs-string">'This is the second line'</span>,
+        },
+      ],
+      <span class="hljs-attr">font</span>: {
+        <span class="hljs-attr">style</span>: <span class="hljs-string">'normal'</span>,
+        <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span>,
+      },
+      <span class="hljs-attr">justification</span>: <span class="hljs-string">'center'</span>
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    },
+  },
+);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// "Example showing many features of textLines"</span>
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'textLines'</span>,
+    <span class="hljs-attr">options</span>: {
+       <span class="hljs-attr">lines</span>: [
+         <span class="hljs-string">'This is the first line'</span>,
+         <span class="hljs-string">'Second line has a |superscript| modifier that isn\'t inline'</span>,
+         {
+           <span class="hljs-attr">font</span>: {
+             <span class="hljs-attr">family</span>: <span class="hljs-string">'Times New Roman'</span>,
+             <span class="hljs-attr">weight</span>: <span class="hljs-string">'bold'</span>,
+             <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
+             <span class="hljs-attr">size</span>: <span class="hljs-number">0.15</span>,
+             <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+           },
+           <span class="hljs-attr">lineSpace</span>: <span class="hljs-number">-0.3</span>,
+           <span class="hljs-attr">justification</span>: <span class="hljs-string">'center'</span>,
+           <span class="hljs-attr">line</span>: <span class="hljs-string">'A line with new defaults'</span>,
+         },
+         <span class="hljs-string">'A spaced |line| with two |line| mods'</span>,
+         <span class="hljs-string">'An escaped special char: /|'</span>,
+       ],
+       <span class="hljs-attr">modifiers</span>: {
+         <span class="hljs-attr">superscript</span>: {
+           <span class="hljs-attr">text</span>: <span class="hljs-string">'superscript!!'</span>,
+           <span class="hljs-attr">offset</span>: [<span class="hljs-number">-0.1</span>, <span class="hljs-number">0.1</span>],
+           <span class="hljs-attr">inLine</span>: <span class="hljs-literal">false</span>,
+           <span class="hljs-attr">font</span>: {
+             <span class="hljs-attr">family</span>: <span class="hljs-string">'Times New Roman'</span>,
+             <span class="hljs-attr">weight</span>: <span class="hljs-string">'bold'</span>,
+             <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
+             <span class="hljs-attr">size</span>: <span class="hljs-number">0.05</span>,
+             <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+           },
+         },
+         <span class="hljs-attr">line</span>: {
+           <span class="hljs-attr">font</span>: {
+             <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+             <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
+           },
+         },
+       },
+       <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
+       <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'baseline'</span>,
+       <span class="hljs-attr">font</span>: {
+         <span class="hljs-attr">family</span>: <span class="hljs-string">'Helvetica Neue'</span>,
+         <span class="hljs-attr">weight</span>: <span class="hljs-string">'200'</span>,
+         <span class="hljs-attr">style</span>: <span class="hljs-string">'normal'</span>,
+         <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span>,
+       },
+       <span class="hljs-attr">justification</span>: <span class="hljs-string">'left'</span>,
+       <span class="hljs-attr">lineSpace</span>: <span class="hljs-number">-0.2</span>,
+       <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+       <span class="hljs-attr">position</span>: [<span class="hljs-number">-0.8</span>, <span class="hljs-number">0</span>],
+       <span class="hljs-attr">transform</span>: [[<span class="hljs-string">'s'</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">'r'</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">'t'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]],
+     },
   },
 );</pre>
     

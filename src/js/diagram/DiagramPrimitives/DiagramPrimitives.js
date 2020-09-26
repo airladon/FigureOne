@@ -458,8 +458,11 @@ export type OBJ_Polygon = {
   offset?: TypeParsablePoint,
 };
 
-/** Text Definition object
- * @property {string} [text] string to show
+/**
+ * Text Definition object
+ *
+ * Used within {@link OBJ_Text} to define a single string
+ * @property {string} text string to show
  * @property {OBJ_Font} [font]
  * @property {TypeParsablePoint} [location] location to draw text (`[0, 0]`)
  * @property {'left' | 'right' | 'center'} [xAlign] how to align text
@@ -478,9 +481,18 @@ export type OBJ_TextDefinition = {
 };
 
 /**
- * Text object
+ * One or more text strings.
  *
- * @property {string | OBJ_TextDefinition | Array<string | OBJ_TextDefinition>} [text] text to draw,
+ * ![](./assets1/text_ex2.png)
+ *
+ * Use this to make a DiagramElementPrimitive that renders simple text.
+ *
+ * If you need multiple strings, in different locations but all with the same
+ * transform, then use this to assign multiple strings to the same primitive.
+ * Different strings can have different fonts, colors, alignments, and
+ * locations.
+ *
+ * @property {string | OBJ_TextDefinition | Array<string | OBJ_TextDefinition>} text text to draw,
  * either as a single string or multiple strings in an array(`4`)
  * @property {OBJ_Font} [font]
  * @property {'left' | 'right' | 'center'} [xAlign] default horizontal text
@@ -502,10 +514,10 @@ export type OBJ_TextDefinition = {
  *       text: 'hello',
  *       xAlign: 'center',
  *       yAlign: 'middle',
- *       position: [-0.5, 0],
  *     },
  *   },
  * );
+ *
  * @example
  * // Multi string
  * diagram.addElement(
@@ -516,21 +528,20 @@ export type OBJ_TextDefinition = {
  *       text: [
  *         {
  *           text: 'hello',
- *           font: { style: 'italic' },
- *           xAlign: 'center',
+ *           font: { style: 'italic', color: [0, 0.5, 1, 1], size: 0.1 },
+ *           xAlign: 'left',
  *           yAlign: 'bottom',
- *           location: [-0.5, 0],
+ *           location: [-0.35, 0],
  *         },
  *         {
  *           text: 'world',
- *           location: [0.5, 0],
+ *           location: [0, -0.1],
  *         },
  *       ],
- *       xAlign: 'right',
- *       yAlign: 'top',
+ *       xAlign: 'center',
+ *       yAlign: 'middle',
  *       font: { size: 0.3 },
- *       color: [0, 1, 0, 1],
- *       transform: [['r', 1], ['t', 0, 0]],
+ *       color: [1, 0, 0, 1],
  *     },
  *   },
  * );
@@ -548,6 +559,9 @@ export type OBJ_Text = {
 
 /**
  * Line Text Definition object
+ *
+ * Used to define a string within a text line primitive {@link OBJ_TextLine}.
+ *
  * @property {string} [text] string to show
  * @property {OBJ_Font} [font]
  * @property {TypeParsablePoint} [offset] offset to draw text (`[0, 0]`)
@@ -566,7 +580,13 @@ export type OBJ_LineTextDefinition = {
 /**
  * Text Line
  *
- * ![](./assets1/text.png)
+ * ![](./assets1/textLine.png)
+ *
+ * Array of strings that are arranged into a line. Each string is arranged so
+ * that it is to the right of the previous string.
+ *
+ * Strings can be arranged out of the line flow by using the `inLine` property
+ * in {@link OBJ_LineTextDefinition}.
  *
  * @property {Array<string | OBJ_LineTextDefinition>} [line] array of strings,
  * to layout into a line
@@ -585,7 +605,7 @@ export type OBJ_LineTextDefinition = {
  * // "Hello to the world1" with highlighted "to the" and superscript "1"
  * diagram.addElement(
  *   {
- *     name: 't',
+ *     name: 'line',
  *     method: 'textLine',
  *     options: {
  *       line: [
@@ -594,14 +614,14 @@ export type OBJ_LineTextDefinition = {
  *           text: 'to the',
  *           font: {
  *             style: 'italic',
- *             color: [1, 1, 0, 1],
+ *             color: [0, 0.5, 1, 1],
  *           },
  *         },
  *         ' world',
  *         {
  *           text: '1',
  *           offset: [0, 0.05],
- *           font: { size: 0.05, color: [0, 1, 0, 1] },
+ *           font: { size: 0.05, color: [0, 0.6, 0, 1] },
  *         },
  *       ],
  *       xAlign: 'center',
@@ -612,18 +632,17 @@ export type OBJ_LineTextDefinition = {
  *       },
  *       color: [1, 0, 0, 1],
  *     },
- *     },
  *   },
  * );
  */
 export type OBJ_TextLine = {
   line: Array<string | OBJ_LineTextDefinition>;
-  position: TypeParsablePoint,
-  transform: TypeParsableTransform,
   font: OBJ_Font,
+  color: Array<number>,
   xAlign: 'left' | 'right' | 'center',
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-  color: Array<number>
+  position: TypeParsablePoint,
+  transform: TypeParsableTransform,
 }
 
 /**
