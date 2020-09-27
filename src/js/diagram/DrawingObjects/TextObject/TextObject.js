@@ -10,9 +10,11 @@ import { colorArrayToRGBA } from '../../../tools/color';
 
 /* eslint-disable max-len */
 /**
- * Font Definition object
+ * Font definition object.
  *
- * ![](./assets1/text.png)
+ * Text is drawn in a [Context2D canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) and so `family`, `style` and `weight` are any valid [options](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font).
+ *
+ * `size` is the vertex space size of the font.
  *
  * @property {string} [family] The font family (`Times New Roman`)
  * @property {`normal` | `italic`} [style] (`normal`)

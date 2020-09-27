@@ -462,6 +462,7 @@ export type OBJ_Polygon = {
  * Text Definition object
  *
  * Used within {@link OBJ_Text} to define a single string
+ *
  * @property {string} text string to show
  * @property {OBJ_Font} [font]
  * @property {TypeParsablePoint} [location] location to draw text (`[0, 0]`)
@@ -482,6 +483,8 @@ export type OBJ_TextDefinition = {
 
 /**
  * One or more text strings.
+ *
+ * ![](./assets1/textLines_ex1.png)
  *
  * ![](./assets1/text_ex2.png)
  *
@@ -569,7 +572,7 @@ export type OBJ_Text = {
  * and not this (`true`)
  * @property {() => void} [onClick] function to execute on click
  */
-export type OBJ_LineTextDefinition = {
+export type OBJ_TextLineDefinition = {
   text: string,
   font?: OBJ_Font,
   offset?: TypeParsablePoint,
@@ -586,9 +589,9 @@ export type OBJ_LineTextDefinition = {
  * that it is to the right of the previous string.
  *
  * Strings can be arranged out of the line flow by using the `inLine` property
- * in {@link OBJ_LineTextDefinition}.
+ * in {@link OBJ_TextLineDefinition}.
  *
- * @property {Array<string | OBJ_LineTextDefinition>} [line] array of strings,
+ * @property {Array<string | OBJ_TextLineDefinition>} [line] array of strings,
  * to layout into a line
  * @property {OBJ_Font} [font] Default font for strings in line
  * @property {Array<number>} [color] Default color for strings in line
@@ -606,7 +609,7 @@ export type OBJ_LineTextDefinition = {
  * diagram.addElement(
  *   {
  *     name: 'line',
- *     method: 'textLine',
+ *     method: 'text.line',
  *     options: {
  *       line: [
  *         'Hello ',
@@ -636,7 +639,7 @@ export type OBJ_LineTextDefinition = {
  * );
  */
 export type OBJ_TextLine = {
-  line: Array<string | OBJ_LineTextDefinition>;
+  line: Array<string | OBJ_TextLineDefinition>;
   font: OBJ_Font,
   color: Array<number>,
   xAlign: 'left' | 'right' | 'center',
@@ -647,6 +650,9 @@ export type OBJ_TextLine = {
 
 /**
  * Lines Text Definition object.
+ *
+ * Used to define a string within a text lines primitive {@link OBJ_TextLines}.
+ *
  * @property {string} [line] string representing a line of text
  * @property {OBJ_Font} [font] line specific default font
  * @property {'left' | 'right' | 'center'} [justification] line specific justification
@@ -654,7 +660,7 @@ export type OBJ_TextLine = {
  * this line to baseline of next line
  * @property {() => void} [onClick] function to execute on click
  */
-export type OBJ_LinesTextDefinition = {
+export type OBJ_TextLinesDefinition = {
   line: string,
   font?: OBJ_Font,
   justification?: 'left' | 'right' | 'center',
@@ -663,6 +669,10 @@ export type OBJ_LinesTextDefinition = {
 
 /**
  * Modifier Text Definition object.
+ *
+ * Used to define the modifiers of a string within a text lines primitive
+ * {@link OBJ_TextModifiersDefinition}.
+ *
  * @property {string} [text] text to replace modifier id with - if `undefined`
  * then modifier id is used
  * @property {OBJ_Font} [font] font changes for modified text
@@ -679,6 +689,15 @@ export type OBJ_TextModifierDefinition = {
   onClick?: () => {},
 }
 
+/**
+ * Modifier object.
+ *
+ * Used to define the modifiers of a string within a text lines primitive
+ * {@link OBJ_TextLines}.
+ *
+ * @property {OBJ_TextModifiersDefinition} [modifierId] modifierId can be any
+ * key
+ */
 export type OBJ_TextModifiersDefinition = {
   [modifierId: string]: OBJ_TextModifierDefinition,
 }
@@ -686,46 +705,29 @@ export type OBJ_TextModifiersDefinition = {
 /**
  * Text Lines
  *
- * Use this to layout several lines of text, justified either to the `left`,
+ * ![](./assets1/textLines_ex1.png)
+ *
+ * ![](./assets1/textLines_ex2.png)
+ *
+ * Layout multiple lines of text, justified to the `left`,
  * `center` or `right`.
  *
- * Each element of the `lines` array is a line of text, defined by a simple
- * string. To format phrases within the string, use modifiers. Define the
- * phrases to be modified by surrounding them in "|" characters. The
- * characters between the "|" are called the **modifier id**, and which is
- * then used as a key in the `modifier` object to define the formatting of the
- * text. The modifier id should not have spaces (as it needs to be the key of
- * an object), so if spaces are required in the text to be shown, then include
- * the final string in the modifier object. By default, the modifier id will be
- * the same text used in the rendered output.
+ * Each line is defined by a string in `lines`.
  *
- * For example, if you want to show "hello world", with the word "world" as
- * bold, then you would use the following options:
- * @code
- * options:
- *   {
- *     lines: ['hello |world|'],
- *     modifiers: {
- *       world: { font: { style: 'bold' } },
- *     },
- *   },
- * }
+ * A word or phrase within the line can have custom formatting by defining a
+ * unique ID surrounded in “|” characters. The unique id is then used as a key
+ * in the modifiers object to define the formatting and replacement text. By
+ * default, the unique id will be used as the replacement text.
  *
- * If you wanted to use a phrase that can't be used as an object key, then
- * use a valid modifier key:
- * options:
- *   {
- *     lines: ['hello |world|'],
- *     modifiers: {
- *       world: {
- *        text: 'world!!'
- *        font: { style: 'bold' } },
- *     },
- *   },
- * }
+ * Each line can have custom formatting or justification by defining a
+ * {@link OBJ_TextLinesDefinition} object instead or a string in the lines
+ * array.
  *
+ * To escape the modifier special character "|", use a forward slash. e.g.
  *
- * @property {Array<string | OBJ_LinesTextDefinition>} [lines] array of line
+ * `"This line has a uses the special char: /|"`
+ *
+ * @property {Array<string | OBJ_TextLinesDefinition>} [lines] array of line
  * strings
  * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
  * @property {OBJ_Font} [font] Default font to use in lines
@@ -748,10 +750,10 @@ export type OBJ_TextModifiersDefinition = {
  * diagram.addElement(
  *   {
  *     name: 't',
- *     method: 'textLines',
+ *     method: 'text.lines',
  *     options: {
  *       line: [
- *         'This is the first line',
+ *         'First line',
  *         'This is the second line',
  *         },
  *       ],
@@ -768,49 +770,36 @@ export type OBJ_TextModifiersDefinition = {
  * // "Example showing many features of textLines"
  * diagram.addElement(
  *   {
- *     name: 't',
+ *     name: 'lines',
  *     method: 'textLines',
  *     options: {
  *        lines: [
- *          'This is the first line',
- *          'Second line has a |superscript| modifier that isn\'t inline',
+ *          'Lines justified to the left',
+ *          'A |line| with a |modified_phrase|',
  *          {
+ *            line: 'A |line| with custom defaults',
  *            font: {
- *              family: 'Times New Roman',
- *              weight: 'bold',
  *              style: 'italic',
- *              size: 0.15,
- *              color: [1, 1, 0, 1],
+ *              color: [0, 0.5, 1, 1],
  *            },
- *            lineSpace: -0.3,
- *            justification: 'center',
- *            line: 'A line with new defaults',
  *          },
- *          'A spaced |line| with two |line| mods',
- *          'An escaped special char: /|',
  *        ],
  *        modifiers: {
- *          superscript: {
- *            text: 'superscript!!',
- *            offset: [-0.1, 0.1],
- *            inLine: false,
+ *          modified_phrase: {
+ *            text: 'modified phrase',
  *            font: {
- *              family: 'Times New Roman',
- *              weight: 'bold',
  *              style: 'italic',
- *              size: 0.05,
- *              color: [1, 0, 1, 1],
+ *              color: [0, 0.5, 1, 1],
  *            },
  *          },
  *          line: {
  *            font: {
- *              color: [0, 1, 1, 1],
+ *              family: 'Times New Roman',
+ *              color: [0, 0.6, 0, 1],
  *              style: 'italic',
  *            },
  *          },
  *        },
- *        xAlign: 'left',
- *        yAlign: 'baseline',
  *        font: {
  *          family: 'Helvetica Neue',
  *          weight: '200',
@@ -819,15 +808,13 @@ export type OBJ_TextModifiersDefinition = {
  *        },
  *        justification: 'left',
  *        lineSpace: -0.2,
- *        color: [1, 0, 0, 1],
- *        position: [-0.8, 0],
- *        transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
+ *        position: [-0.5, 0.1],
  *      },
  *   },
  * );
  */
 export type OBJ_TextLines = {
-  lines: Array<string | OBJ_LinesTextDefinition>,
+  lines: Array<string | OBJ_TextLinesDefinition>,
   modifiers: OBJ_TextModifiersDefinition,
   font?: OBJ_Font,
   justification?: 'left' | 'center' | 'right',

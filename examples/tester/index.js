@@ -474,36 +474,49 @@ diagram.addElements([
   // },
 ]);
 diagram.addElement(
-   {
-     name: 'line',
-     method: 'textLine',
-     options: {
-       line: [
-         'Hello ',
+  {
+    name: 'lines',
+    method: 'text.lines',
+    options: {
+       lines: [
+         'Lines justified to the left',
+         'A |line| with a |modified_phrase|',
          {
-           text: 'to the',
+           line: 'A |line| with custom defaults',
            font: {
              style: 'italic',
              color: [0, 0.5, 1, 1],
            },
          },
-         ' world',
-         {
-           text: '1',
-           offset: [0, 0.05],
-           font: { size: 0.05, color: [0, 0.6, 0, 1] },
-         },
        ],
-       xAlign: 'center',
-       yAlign: 'bottom',
+       modifiers: {
+         modified_phrase: {
+           text: 'modified phrase',
+           font: {
+             style: 'italic',
+             color: [0, 0.5, 1, 1],
+           },
+         },
+         line: {
+           font: {
+             family: 'Times New Roman',
+             color: [0, 0.6, 0, 1],
+             style: 'italic',
+           },
+         },
+       },
        font: {
+         family: 'Helvetica Neue',
+         weight: '200',
          style: 'normal',
          size: 0.1,
        },
-       color: [1, 0, 0, 1],
+       justification: 'left',
+       lineSpace: -0.2,
+       position: [-0.5, 0.1],
      },
-   },
- );
+  },
+);
 diagram.initialize();
 
 // diagram.elements._tester.animations.new()

@@ -64,10 +64,11 @@ toc:
   - OBJ_Font
   - OBJ_TextDefinition
   - OBJ_Text
-  - OBJ_LineTextDefinition
+  - OBJ_TextLineDefinition
   - OBJ_TextLine
-  - OBJ_LinesTextDefinition
+  - OBJ_TextLinesDefinition
   - OBJ_TextModifierDefinition
+  - OBJ_TextModifiersDefinition
   - OBJ_TextLines
   - name: tools
     description: These are generic tools

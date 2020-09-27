@@ -783,9 +783,9 @@
               
                 
                 <li><a
-                  href='#obj_linetextdefinition'
+                  href='#obj_textlinedefinition'
                   class="">
-                  OBJ_LineTextDefinition
+                  OBJ_TextLineDefinition
                   
                 </a>
                 
@@ -803,9 +803,9 @@
               
                 
                 <li><a
-                  href='#obj_linestextdefinition'
+                  href='#obj_textlinesdefinition'
                   class="">
-                  OBJ_LinesTextDefinition
+                  OBJ_TextLinesDefinition
                   
                 </a>
                 
@@ -816,6 +816,16 @@
                   href='#obj_textmodifierdefinition'
                   class="">
                   OBJ_TextModifierDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_textmodifiersdefinition'
+                  class="">
+                  OBJ_TextModifiersDefinition
                   
                 </a>
                 
@@ -11273,8 +11283,9 @@ diagram.addElement(
   </div>
   
 
-  <p>Font Definition object</p>
-<p><img src="./assets1/text.png"></p>
+  <p>Font definition object.</p>
+<p>Text is drawn in a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">Context2D canvas</a> and so <code>family</code>, <code>style</code> and <code>weight</code> are any valid <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font">options</a>.</p>
+<p><code>size</code> is the vertex space size of the font.</p>
 
   
   
@@ -11518,6 +11529,7 @@ text vertically with
   
 
   <p>One or more text strings.</p>
+<p><img src="./assets1/textLines_ex1.png"></p>
 <p><img src="./assets1/text_ex2.png"></p>
 <p>Use this to make a DiagramElementPrimitive that renders simple text.</p>
 <p>If you need multiple strings, in different locations but all with the same
@@ -11684,8 +11696,8 @@ diagram.addElement(
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_linetextdefinition'>
-      OBJ_LineTextDefinition
+    <h3 class='fl m0' id='obj_textlinedefinition'>
+      OBJ_TextLineDefinition
     </h3>
     
     
@@ -11791,7 +11803,7 @@ and not this (
 <p>Array of strings that are arranged into a line. Each string is arranged so
 that it is to the right of the previous string.</p>
 <p>Strings can be arranged out of the line flow by using the <code>inLine</code> property
-in <a href="#obj_linetextdefinition">OBJ_LineTextDefinition</a>.</p>
+in <a href="#obj_textlinedefinition">OBJ_TextLineDefinition</a>.</p>
 
   
   
@@ -11810,7 +11822,7 @@ in <a href="#obj_linetextdefinition">OBJ_LineTextDefinition</a>.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>line</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_linetextdefinition">OBJ_LineTextDefinition</a>)>?)</code>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textlinedefinition">OBJ_TextLineDefinition</a>)>?)</code>
           : array of strings,
 to layout into a line
 
@@ -11934,8 +11946,8 @@ diagram.addElement(
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_linestextdefinition'>
-      OBJ_LinesTextDefinition
+    <h3 class='fl m0' id='obj_textlinesdefinition'>
+      OBJ_TextLinesDefinition
     </h3>
     
     
@@ -11943,6 +11955,7 @@ diagram.addElement(
   
 
   <p>Lines Text Definition object.</p>
+<p>Used to define a string within a text lines primitive <a href="#obj_textlines">OBJ_TextLines</a>.</p>
 
   
   
@@ -12026,6 +12039,8 @@ this line to baseline of next line
   
 
   <p>Modifier Text Definition object.</p>
+<p>Used to define the modifiers of a string within a text lines primitive
+<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>.</p>
 
   
   
@@ -12111,28 +12126,17 @@ to line layout (
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_textlines'>
-      OBJ_TextLines
+    <h3 class='fl m0' id='obj_textmodifiersdefinition'>
+      OBJ_TextModifiersDefinition
     </h3>
     
     
   </div>
   
 
-  <p>Text Lines</p>
-<p>Use this to layout several lines of text, justified either to the <code>left</code>,
-<code>center</code> or <code>right</code>.</p>
-<p>Each element of the <code>lines</code> array is a line of text, defined by a simple
-string. To format phrases within the string, use modifiers. Define the
-phrases to be modified by surrounding them in "|" characters. The
-characters between the "|" are called the <strong>modifier id</strong>, and which is
-then used as a key in the <code>modifier</code> object to define the formatting of the
-text. The modifier id should not have spaces (as it needs to be the key of
-an object), so if spaces are required in the text to be shown, then include
-the final string in the modifier object. By default, the modifier id will be
-the same text used in the rendered output.</p>
-<p>For example, if you want to show "hello world", with the word "world" as
-bold, then you would use the following options:</p>
+  <p>Modifier object.</p>
+<p>Used to define the modifiers of a string within a text lines primitive
+<a href="#obj_textlines">OBJ_TextLines</a>.</p>
 
   
   
@@ -12151,7 +12155,83 @@ bold, then you would use the following options:</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_linestextdefinition">OBJ_LinesTextDefinition</a>)>?)</code>
+          <span class='code bold'>modifierId</span> <code class='quiet'>(<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?)</code>
+          : modifierId can be any
+key
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_textlines'>
+      OBJ_TextLines
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Text Lines</p>
+<p><img src="./assets1/textLines_ex1.png"></p>
+<p><img src="./assets1/textLines_ex2.png"></p>
+<p>Layout multiple lines of text, justified to the <code>left</code>,
+<code>center</code> or <code>right</code>.</p>
+<p>Each line is defined by a string in <code>lines</code>.</p>
+<p>A word or phrase within the line can have custom formatting by defining a
+unique ID surrounded in “|” characters. The unique id is then used as a key
+in the modifiers object to define the formatting and replacement text. By
+default, the unique id will be used as the replacement text.</p>
+<p>Each line can have custom formatting or justification by defining a
+<a href="#obj_textlinesdefinition">OBJ_TextLinesDefinition</a> object instead or a string in the lines
+array.</p>
+<p>To escape the modifier special character "|", use a forward slash. e.g.</p>
+<p><code>"This line has a uses the special char: /|"</code></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textlinesdefinition">OBJ_TextLinesDefinition</a>)>?)</code>
           : array of line
 strings
 
@@ -12159,7 +12239,7 @@ strings
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>modifiers</span> <code class='quiet'>(OBJ_TextModifiersDefinition?)</code>
+          <span class='code bold'>modifiers</span> <code class='quiet'>(<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?)</code>
           : modifier definitions
 
           
@@ -12253,7 +12333,7 @@ diagram.addElement(
     <span class="hljs-attr">method</span>: <span class="hljs-string">'textLines'</span>,
     <span class="hljs-attr">options</span>: {
       <span class="hljs-attr">line</span>: [
-        <span class="hljs-string">'This is the first line'</span>,
+        <span class="hljs-string">'First line'</span>,
         <span class="hljs-string">'This is the second line'</span>,
         },
       ],
@@ -12271,49 +12351,36 @@ diagram.addElement(
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// "Example showing many features of textLines"</span>
 diagram.addElement(
   {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'lines'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'textLines'</span>,
     <span class="hljs-attr">options</span>: {
        <span class="hljs-attr">lines</span>: [
-         <span class="hljs-string">'This is the first line'</span>,
-         <span class="hljs-string">'Second line has a |superscript| modifier that isn\'t inline'</span>,
+         <span class="hljs-string">'Lines justified to the left'</span>,
+         <span class="hljs-string">'A |line| with a |modified_phrase|'</span>,
          {
+           <span class="hljs-attr">line</span>: <span class="hljs-string">'A |line| with custom defaults'</span>,
            <span class="hljs-attr">font</span>: {
-             <span class="hljs-attr">family</span>: <span class="hljs-string">'Times New Roman'</span>,
-             <span class="hljs-attr">weight</span>: <span class="hljs-string">'bold'</span>,
              <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
-             <span class="hljs-attr">size</span>: <span class="hljs-number">0.15</span>,
-             <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+             <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
            },
-           <span class="hljs-attr">lineSpace</span>: <span class="hljs-number">-0.3</span>,
-           <span class="hljs-attr">justification</span>: <span class="hljs-string">'center'</span>,
-           <span class="hljs-attr">line</span>: <span class="hljs-string">'A line with new defaults'</span>,
          },
-         <span class="hljs-string">'A spaced |line| with two |line| mods'</span>,
-         <span class="hljs-string">'An escaped special char: /|'</span>,
        ],
        <span class="hljs-attr">modifiers</span>: {
-         <span class="hljs-attr">superscript</span>: {
-           <span class="hljs-attr">text</span>: <span class="hljs-string">'superscript!!'</span>,
-           <span class="hljs-attr">offset</span>: [<span class="hljs-number">-0.1</span>, <span class="hljs-number">0.1</span>],
-           <span class="hljs-attr">inLine</span>: <span class="hljs-literal">false</span>,
+         <span class="hljs-attr">modified_phrase</span>: {
+           <span class="hljs-attr">text</span>: <span class="hljs-string">'modified phrase'</span>,
            <span class="hljs-attr">font</span>: {
-             <span class="hljs-attr">family</span>: <span class="hljs-string">'Times New Roman'</span>,
-             <span class="hljs-attr">weight</span>: <span class="hljs-string">'bold'</span>,
              <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
-             <span class="hljs-attr">size</span>: <span class="hljs-number">0.05</span>,
-             <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+             <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
            },
          },
          <span class="hljs-attr">line</span>: {
            <span class="hljs-attr">font</span>: {
-             <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+             <span class="hljs-attr">family</span>: <span class="hljs-string">'Times New Roman'</span>,
+             <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
              <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
            },
          },
        },
-       <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
-       <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'baseline'</span>,
        <span class="hljs-attr">font</span>: {
          <span class="hljs-attr">family</span>: <span class="hljs-string">'Helvetica Neue'</span>,
          <span class="hljs-attr">weight</span>: <span class="hljs-string">'200'</span>,
@@ -12322,9 +12389,7 @@ diagram.addElement(
        },
        <span class="hljs-attr">justification</span>: <span class="hljs-string">'left'</span>,
        <span class="hljs-attr">lineSpace</span>: <span class="hljs-number">-0.2</span>,
-       <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-       <span class="hljs-attr">position</span>: [<span class="hljs-number">-0.8</span>, <span class="hljs-number">0</span>],
-       <span class="hljs-attr">transform</span>: [[<span class="hljs-string">'s'</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">'r'</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">'t'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]],
+       <span class="hljs-attr">position</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0.1</span>],
      },
   },
 );</pre>

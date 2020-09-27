@@ -68,6 +68,12 @@ function addElements(
     if (method in methods) {
       return methods[method];
     }
+    if (method === 'text.line') {
+      return shapes.textLine.bind(shapes);
+    }
+    if (method === 'text.lines') {
+      return shapes.textLines.bind(shapes);
+    }
     const diagram = {
       shapes,
       objects,
