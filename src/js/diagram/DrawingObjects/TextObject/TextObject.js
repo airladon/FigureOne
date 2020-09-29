@@ -687,14 +687,16 @@ class TextObjectBase extends DrawingObject {
     const t = this.lastDrawTransform;
     ctx.save();
     ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);
-    this.text.forEach((text) => {
-      const x = text.bounds.left * this.scalingFactor;
-      const y = text.bounds.bottom * this.scalingFactor;
+    this.text.forEach((diagramText) => {
+      const x = diagramText.locationAligned.x * this.scalingFactor;
+      const y = diagramText.locationAligned.y * -this.scalingFactor;
+      const width = diagramText.bounds.width * this.scalingFactor;
+      const height = diagramText.bounds.height * this.scalingFactor;
       ctx.clearRect(
-        x,
-        y,
-        text.bounds.width * 3,
-        text.bounds.height * 2,
+        x - width * 0.5,
+        y + height + 0.25,
+        width * 3,
+        -height * 2,
       );
     });
     ctx.restore();

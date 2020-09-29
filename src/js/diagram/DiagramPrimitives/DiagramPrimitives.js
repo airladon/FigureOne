@@ -404,11 +404,11 @@ export type OBJ_LineStyle = {
  * vertices on each draw. (`[0, 0]`)
  * @property {OBJ_LineStyle} [line] line style options
  * @property {boolean} [fill] (`false`)
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('polygon').standard()`)
  * @property {Array<number>} [color] (`[1, 0, 0, 1`])
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {number} [pulse] set the default pulse scale
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('polygon').standard()`)
  * @example
  * // Simple filled polygon
  * diagram.addElement(
@@ -452,9 +452,8 @@ export type OBJ_Polygon = {
   transform?: Transform,
   position?: TypeParsablePoint,
   texture?: OBJ_Texture,
-  onLoad?: Function,
   pulse?: number;
-  trianglePrimitives?: boolean,
+  // trianglePrimitives?: boolean,
   offset?: TypeParsablePoint,
 };
 
@@ -977,6 +976,11 @@ function setupPulse(element: DiagramElement, options: Object) {
   }
 }
 
+/**
+ * Built in dagiagram primitives.
+ *
+ * Including simple shapes, grid and text.
+ */
 export default class DiagramPrimitives {
   webgl: Array<WebGLInstance>;
   draw2D: Array<DrawContext2D>;
@@ -986,6 +990,10 @@ export default class DiagramPrimitives {
   animateNextFrame: Function;
   draw2DFigures: Object;
 
+  /**
+    * This is a big big test
+    * @hideconstructor
+    */
   constructor(
     webgl: Array<WebGLInstance> | WebGLInstance,
     draw2D: Array<DrawContext2D> | DrawContext2D,
@@ -1000,12 +1008,15 @@ export default class DiagramPrimitives {
     } else {
       this.webgl = [webgl];
     }
-    // this.webgl = webgl;
+
     if (Array.isArray(draw2D)) {
       this.draw2D = draw2D;
     } else {
       this.draw2D = [draw2D];
     }
+    /**
+     * @private {htmlElement}
+     */
     this.htmlCanvas = htmlCanvas;
     this.limits = limits;
     this.animateNextFrame = animateNextFrame;
@@ -1181,34 +1192,12 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  polygon(...optionsIn: Array<{
-    radius?: number,
-    rotation?: number,
-    sides?: number,
-    sidesToDraw?: number,
-    angleToDraw?: number,
-    offset?: TypeParsablePoint,
-    width?: number,
-    direction?: -1 | 1,
-    line?: {
-      widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
-      cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
-      cornerSize?: number,
-      cornerSides?: number,
-      cornersOnly?: boolean,
-      cornerLength?: number,
-      forceCornerLength?: boolean,
-      minAutoCornerAngle?: number,
-      dash?: Array<number>,
-    },
-    fill?: boolean,
-    linePrimitives?: boolean,
-    color?: Array<number>,
-    texture?: OBJ_Texture,
-    position?: TypeParsablePoint,
-    transform?: Transform,
-    pulse?: number,
-  }>) {
+  /**
+   * Polygon or partial polygon shape options object
+   *
+   * ![](./assets1/polygon.png)
+   */
+  polygon(...options: Array<OBJ_Polygon>) {
     const defaultOptions = {
       radius: 1,
       sides: 4,
@@ -1225,43 +1214,43 @@ export default class DiagramPrimitives {
       touchableLineOnly: false,
     };
     let radiusMod = 0;
-    const options = processOptions(defaultOptions, ...optionsIn);
+    const optionsToUse = processOptions(defaultOptions, ...options);
 
     if (
-      options.line == null
-      || (options.line != null && options.line.widthIs == null)
+      optionsToUse.line == null
+      || (optionsToUse.line != null && optionsToUse.line.widthIs == null)
     ) {
-      if (options.line == null) {
-        options.line = {};
+      if (optionsToUse.line == null) {
+        optionsToUse.line = {};
       }
-      options.line.widthIs = 'mid';
-      const sideAngle = Math.PI * 2 / options.sides;
+      optionsToUse.line.widthIs = 'mid';
+      const sideAngle = Math.PI * 2 / optionsToUse.sides;
       const theta = (Math.PI - sideAngle) / 2;
-      radiusMod = options.width / 2 / Math.sin(theta);
+      radiusMod = optionsToUse.width / 2 / Math.sin(theta);
     }
 
-    parsePoints(options, ['offset']);
+    parsePoints(optionsToUse, ['offset']);
     let element;
-    if (options.angleToDraw != null) {
-      options.sidesToDraw = Math.floor(
-        options.angleToDraw / (Math.PI * 2 / options.sides),
+    if (optionsToUse.angleToDraw != null) {
+      optionsToUse.sidesToDraw = Math.floor(
+        optionsToUse.angleToDraw / (Math.PI * 2 / optionsToUse.sides),
       );
     }
-    if (options.sidesToDraw == null) {
-      options.sidesToDraw = options.sides;
+    if (optionsToUse.sidesToDraw == null) {
+      optionsToUse.sidesToDraw = optionsToUse.sides;
     }
-    if (options.fill) {
+    if (optionsToUse.fill) {
       const fan = getFanTrisPolygon(
-        options.radius, options.rotation, options.offset,
-        options.sides, options.sidesToDraw, options.direction,
+        optionsToUse.radius, optionsToUse.rotation, optionsToUse.offset,
+        optionsToUse.sides, optionsToUse.sidesToDraw, optionsToUse.direction,
       );
-      element = this.generic(options, {
+      element = this.generic(optionsToUse, {
         drawType: 'fan',
         points: fan, // $FlowFixMe
         border: [[...fan.slice(1, -1)]],
       });
       element.custom.update = (updateOptions) => {
-        const o = joinObjects({}, options, updateOptions);
+        const o = joinObjects({}, optionsToUse, updateOptions);
         const points = getFanTrisPolygon(
           o.radius, o.rotation, o.offset,
           o.sides, o.sidesToDraw, o.direction,
@@ -1272,23 +1261,23 @@ export default class DiagramPrimitives {
       };
     } else {
       const polygonPoints = getPolygonPoints(
-        options.radius - radiusMod, options.rotation, options.offset,
-        options.sides, options.sidesToDraw, options.direction,
+        optionsToUse.radius - radiusMod, optionsToUse.rotation, optionsToUse.offset,
+        optionsToUse.sides, optionsToUse.sidesToDraw, optionsToUse.direction,
       );
       let border = 'line';
       let hole;
-      if (options.direction === 1) {
+      if (optionsToUse.direction === 1) {
         border = 'negative';
         hole = 'positive';
       }
-      if (options.direction === -1) {
+      if (optionsToUse.direction === -1) {
         border = 'positive';
         hole = 'negative';
       }
       // console.log(polygonPoints)
-      element = this.polyline(options, options.line, {
+      element = this.polyline(optionsToUse, optionsToUse.line, {
         points: polygonPoints,
-        close: options.sides === options.sidesToDraw,
+        close: optionsToUse.sides === optionsToUse.sidesToDraw,
         border,
         hole,
       });
@@ -1302,7 +1291,7 @@ export default class DiagramPrimitives {
       simplifyBorder(element);
       // element.drawingObject.border = [simpleBorder];
       element.custom.update = (updateOptions) => {
-        const o = joinObjects({}, options, updateOptions);
+        const o = joinObjects({}, optionsToUse, updateOptions);
         const points = getPolygonPoints(
           o.radius - radiusMod, o.rotation, o.offset,
           o.sides, o.sidesToDraw, o.direction,
@@ -1599,31 +1588,7 @@ export default class DiagramPrimitives {
     return this.createPrimitive(to, options);
   }
 
-  textLines(...optionsIn: Array<{
-    lines: Array<string | {
-      line: string,
-      font?: OBJ_Font,
-      justification?: 'left' | 'center' | 'right',
-      lineSpace?: number
-    }>,
-    modifiers: {
-      [modifierName: string]: {
-        text?: string,
-        offset?: TypeParsablePoint,
-        inLine?: boolean,
-        font?: OBJ_Font,
-        onClick?: () => {},
-      },
-    },
-    font?: OBJ_Font,
-    justification?: 'left' | 'center' | 'right',
-    lineSpace?: number,
-    position: TypeParsablePoint,
-    transform: TypeParsableTransform,
-    xAlign: 'left' | 'right' | 'center',
-    yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-    color: Array<number>
-  }>) {
+  textLines(...optionsIn: Array<OBJ_TextLines>) {
     const options = this.parseTextOptions(...optionsIn);
     if (options.justification == null) {
       options.justification = 'left';
@@ -1646,283 +1611,6 @@ export default class DiagramPrimitives {
     // console.log(to.text[0].font)
     return this.createPrimitive(to, options);
   }
-
-  // textLinesLegacy(...optionsIn: Array<{
-  //   text: string | Array<string | [{
-  //     font?: OBJ_Font,
-  //     justification?: 'left' | 'center' | 'right',
-  //     location?: TypeParsablePoint | number,
-  //     lineSpace?: number
-  //   }, string]>,
-  //   modifiers: {
-  //     [modifierName: string]: {
-  //       text?: string,
-  //       location?: TypeParsablePoint | number,
-  //       offset?: TypeParsablePoint,
-  //       font?: OBJ_Font,
-  //       onClick?: () => {},
-  //     },
-  //   },
-  //   font?: OBJ_Font,
-  //   justification?: 'left' | 'center' | 'right',
-  //   lineSpace?: number,
-  //   position: TypeParsablePoint,
-  //   transform: TypeParsableTransform,
-  //   xAlign: 'left' | 'right' | 'center',
-  //   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-  //   color: Array<number>
-  // }>) {
-  //   const defaultColor = [1, 0, 0, 1];
-  //   const defaultOptions = {
-  //     text: '',
-  //     font: {
-  //       family: 'Times New Roman',
-  //       style: 'normal',
-  //       size: 0.2,
-  //       weight: '200',
-  //     },
-  //     xAlign: 'left',
-  //     yAlign: 'baseline',
-  //     lineSpace: 0.2,     // Remove and put in logic for font size
-  //     justification: 'left',
-  //     transform: new Transform('text').standard(),
-  //   };
-  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
-
-  //   if (options.color == null && options.font.color != null) {
-  //     options.color = options.font.color;
-  //   }
-  //   if (options.font.color == null && options.color != null) {
-  //     options.font.color = options.color;
-  //   }
-  //   if (options.color == null) {
-  //     options.color = defaultColor;
-  //   }
-
-  //   if (options.position != null) {
-  //     const p = getPoint(options.position);
-  //     options.transform.updateTranslation(p);
-  //   }
-
-  //   if (typeof options.text === 'string') {
-  //     options.text = [options.text];
-  //   }
-
-  //   // const dText = [];
-  //   // for (let i = 0; i < options.text.length; i += 1) {
-  //   //   const text = options.text[i];
-  //   //   let font;
-  //   //   let offset;
-  //   //   let location;
-  //   //   let xAlign;
-  //   //   let yAlign;
-  //   //   let textToUse;
-  //   //   if (Array.isArray(text) && text.length === 2) {
-  //   //     [textToUse, {
-  //   //       font, offset, location, xAlign, yAlign,
-  //   //     }] = text;
-  //   //   } else {
-  //   //     textToUse = text;
-  //   //   }
-  //   //   let fontToUse = options.font;
-  //   //   if (font != null) {
-  //   //     fontToUse = font;
-  //   //   }
-  //   //   const dFont = new DiagramFont(joinObjects({}, options.font, fontToUse));
-
-  //   //   dText.push(new DiagramText(
-  //   //     location || -1,
-  //   //     textToUse,
-  //   //     dFont,
-  //   //     xAlign || 'left',
-  //   //     yAlign || 'baseline',
-  //   //     offset || [0, 0],
-  //   //   ));
-  //   // }
-  //   const to = new LinesObject(
-  //     this.draw2D, options,
-  //   );
-  //   // console.log(to)
-  //   const element = new DiagramElementPrimitive(
-  //     to,
-  //     options.transform,
-  //     options.color,
-  //     this.limits,
-  //   );
-
-  //   setupPulse(element, options);
-
-  //   if (options.mods != null && options.mods !== {}) {
-  //     element.setProperties(options.mods);
-  //   }
-
-  //   return element;
-  // }
-
-  // text(...optionsIn: Array<{
-  //   text: string | Array<string | {
-  //     font?: OBJ_Font,
-  //     location?: TypeParsablePoint | number,
-  //     offset?: TypeParsablePoint,
-  //     xAlign?: 'left' | 'right' | 'center',
-  //     yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-  //   }>;
-  //   font: OBJ_Font,
-  //   position: TypeParsablePoint,
-  //   transform: TypeParsableTransform,
-  //   xAlign: 'left' | 'right' | 'center',
-  //   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-  //   color: Array<number>
-  // }>) {
-  //   const defaultOptions = {
-  //     text: '',
-  //     font: {
-  //       family: 'Times New Roman',
-  //       style: 'normal',
-  //       size: 0.2,
-  //       weight: '200',
-  //     },
-  //     xAlign: 'left',
-  //     yAlign: 'baseline',
-  //     transform: new Transform('text').standard(),
-  //   };
-  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
-
-  //   if (options.color == null && options.font.color != null) {
-  //     options.color = options.font.color;
-  //   }
-  //   if (options.font.color == null && options.color != null) {
-  //     options.font.color = options.color;
-  //   }
-  //   if (options.color == null) {
-  //     options.color = [1, 0, 0, 1];
-  //   }
-
-  //   if (options.position != null) {
-  //     const p = getPoint(options.position);
-  //     options.transform.updateTranslation(p);
-  //   }
-
-  //   if (typeof options.text === 'string') {
-  //     options.text = [options.text];
-  //   }
-  //   const dText = [];
-  //   for (let i = 0; i < options.text.length; i += 1) {
-  //     const text = options.text[i];
-  //     let font;
-  //     let offset;
-  //     let location;
-  //     let xAlign;
-  //     let yAlign;
-  //     let textToUse;
-  //     if (Array.isArray(text) && text.length === 2) {
-  //       [textToUse, {
-  //         font, offset, location, xAlign, yAlign,
-  //       }] = text;
-  //     } else {
-  //       textToUse = text;
-  //     }
-  //     let fontToUse = options.font;
-  //     if (font != null) {
-  //       fontToUse = font;
-  //     }
-  //     const dFont = new DiagramFont(joinObjects({}, options.font, fontToUse));
-
-  //     dText.push(new DiagramText(
-  //       location || -1,
-  //       textToUse,
-  //       dFont,
-  //       xAlign || 'left',
-  //       yAlign || 'baseline',
-  //       offset || [0, 0],
-  //     ));
-  //   }
-  //   const to = new TextObject(this.draw2D, dText, options.xAlign, options.yAlign);
-  //   const element = new DiagramElementPrimitive(
-  //     to,
-  //     options.transform,
-  //     options.color,
-  //     this.limits,
-  //   );
-
-  //   setupPulse(element, options);
-
-  //   if (options.mods != null && options.mods !== {}) {
-  //     element.setProperties(options.mods);
-  //   }
-
-  //   return element;
-  // }
-
-  // textLegacy(textOrOptions: string | TypeTextOptions, ...optionsIn: Array<TypeTextOptions>) {
-  //   const defaultOptions = {
-  //     text: '',
-  //     // position: new Point(0, 0),
-  //     font: null,
-  //     family: 'Times New Roman',
-  //     style: 'italic',
-  //     size: 0.2,
-  //     weight: '200',
-  //     xAlign: 'center',
-  //     yAlign: 'middle',
-  //     offset: new Point(0, 0),    // vertex space offset
-  //     color: [1, 0, 0, 1],
-  //     transform: new Transform('text').standard(),
-  //     // draw2D: this.draw2D,
-  //   };
-  //   let options;
-  //   if (typeof textOrOptions === 'string') {
-  //     options = joinObjects(
-  //       {}, defaultOptions, { text: textOrOptions }, ...optionsIn,
-  //     );
-  //   } else {
-  //     options = joinObjects({}, defaultOptions, textOrOptions, ...optionsIn);
-  //   }
-
-  //   if (options.position != null) {
-  //     const p = getPoint(options.position);
-  //     options.transform.updateTranslation(p);
-  //   }
-
-  //   const o = options;
-  //   const { text } = o;
-  //   let fontToUse = o.font;
-  //   if (fontToUse === null) {
-  //     fontToUse = new DiagramFont({
-  //       family: o.family,
-  //       style: o.style,
-  //       size: o.size,
-  //       weight: o.weight,
-  //       xAlign: o.xAlign,
-  //       yAlign: o.yAlign,
-  //       color: o.color,
-  //       opacity: 1,
-  //     });
-  //     // o.family, o.style, o.size, o.weight, o.xAlign, o.yAlign, o.color,
-  //     // );
-  //   }
-  //   const dT = new DiagramText(o.offset, text, fontToUse);
-  //   const to = new TextObject(this.draw2D, [dT]);
-  //   const element = new DiagramElementPrimitive(
-  //     to,
-  //     o.transform,
-  //     o.color,
-  //     this.limits,
-  //   );
-
-  //   // if (options.pulse != null) {
-  //   //   if (typeof element.pulseDefault !== 'function') {
-  //   //     element.pulseDefault.scale = options.pulse;
-  //   //   }
-  //   // }
-  //   setupPulse(element, options);
-
-  //   if (options.mods != null && options.mods !== {}) {
-  //     element.setProperties(options.mods);
-  //   }
-
-  //   return element;
-  // }
 
   arrow(...optionsIn: Array<{
     width?: number;

@@ -148,7 +148,7 @@ function getScale(s: TypeParsablePoint | number) {
 }
 
 /**
- * Rect
+ * Rectangle definition
  * @class
  */
 class Rect {
@@ -165,17 +165,38 @@ class Rect {
    * @param {number} left - left location
    * @param {number} bottom - bottom location
    * @param {number} width - rectangle width
-   * @param {number} bottom - rectangle height
+   * @param {number} height - rectangle height
    */
   constructor(left: number, bottom: number, width: number, height: number) {
+    /**
+      Left side x coordinate
+     */
     this.left = left;
+    /**
+      Rectange width
+     */
     this.width = width;
+    /**
+      Rectangle height
+     */
     this.height = height;
+    /**
+      Bottom side y coordinate
+     */
     this.bottom = bottom;
+    /**
+      Top side y coordinate
+     */
     this.top = bottom + height;
+    /**
+      Right side x coordinate
+     */
     this.right = left + width;
   }
 
+  /**
+   * Return a duplicate rectangle object
+   */
   _dup() {
     return new Rect(this.left, this.bottom, this.width, this.height);
   }
@@ -194,8 +215,13 @@ class Rect {
     };
   }
 
-  isPointInside(pointIn: TypeParsablePoint, precision: number = 8) {
-    const p = getPoint(pointIn).round(precision);
+  /**
+   * Returns `true` if `point` is within on on the border of the rectangle
+   * @param {TypeParsablePoint} point point to test
+   * @param {number} precision precision to test
+   */
+  isPointInside(point: TypeParsablePoint, precision: number = 8) {
+    const p = getPoint(point).round(precision);
     const top = roundNum(this.top, precision);
     const bottom = roundNum(this.bottom, precision);
     const left = roundNum(this.left, precision);
@@ -206,6 +232,10 @@ class Rect {
     return true;
   }
 
+  /**
+   * Returns a rectangle with coordinates rounded to `precision`
+   * @param {number} precision precision to test
+   */
   round(precision: number = 8) {
     return new Rect(
       roundNum(this.left, precision), roundNum(this.bottom, precision),
@@ -214,11 +244,34 @@ class Rect {
   }
 }
 
+/**
+ JSON definition of a rect.
+ @property {'rect'} f1Type rect identifier
+ @property {[number, number, number, number]} state left, bottom, width
+ * and height definition
+ */
 type TypeF1DefRect = {
   f1Type: 'rect',
   state: [number, number, number, number],
 };
 
+/**
+ * Rectangles can be defined as either as an
+ * Array (left, bottom, width, height), a {@link Rect} class,
+ * a string representing the json definition of the
+ * array form, or a {@link TypeF1DefRect}.
+ *
+ * @example
+ * // All rectangles are the same, with a lower left corner of `(-2, -1)`,
+ * // a width of `4`, and a height of `2`
+ * const r1 = getRect([-2, -1, 4, 2]);
+ * const r2 = getRect(new Fig.Rect(-2, -1, 4, 2));
+ * const r3 = getRect('[-2, -1, 4, 2]');
+ * const r4 = getRect({
+ *   f1Type: 'rect',
+ *   state: [-2, -1, 4, 2],
+ * });
+ */
 export type TypeParsableRect = [number, number, number, number]
                                | Rect
                                | TypeF1DefRect
@@ -265,6 +318,11 @@ function parseRect<T>(rIn: TypeParsableRect, onFail: T): Rect | T | null {
   return onFailToUse;
 }
 
+/**
+ * Convert a parsable rectangle definition to an instantiated rectangle object
+ * @param {TypeParsableRect} r rectangle definition
+ * @return {Rect} rectangle object
+ */
 function getRect(r: TypeParsableRect): Rect {
   let parsedRect = parseRect(r);
   if (parsedRect == null) {

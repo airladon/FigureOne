@@ -29,6 +29,16 @@
               
                 
                 <li><a
+                  href='#introduction'
+                  class="h5 bold black caps">
+                  Introduction
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#diagram'
                   class=" toggle-sibling">
                   Diagram
@@ -58,6 +68,16 @@
                   
                   
                 </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_diagramoptions'
+                  class="">
+                  OBJ_DiagramOptions
+                  
+                </a>
                 
                 </li>
               
@@ -897,16 +917,6 @@
               
                 
                 <li><a
-                  href='#typediagramoptions'
-                  class="">
-                  TypeDiagramOptions
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#obj_curvedcorner'
                   class="">
                   OBJ_CurvedCorner
@@ -932,6 +942,34 @@
                   OBJ_LineStyle
                   
                 </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#diagramprimitives'
+                  class=" toggle-sibling">
+                  DiagramPrimitives
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#diagramprimitivespolygon'
+                        class='regular pre-open'>
+                        #polygon
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -975,6 +1013,110 @@
       <div id='split-right' class='relative overflow-auto height-viewport-100'>
         
           
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='introduction' class='mt0'>
+    Introduction
+  </h2>
+
+  
+    <p>This introduction will introduce some key terms and concepts that are found frequently throughout the documentation.</p>
+<h4>Diagrams, Primitives and Collections</h4>
+<p><strong>FigureOne</strong> allows you to create a <em>figure</em>, or <em>diagram</em> that can be both interactive and animated.</p>
+<p>A diagram has one or more <em>diagram elements</em>. A diagram element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.</p>
+<p>In the language of <strong>FigureOne</strong>, there are two types of <a href="DiagramElements">DiagramElements</a>:</p>
+<ul>
+<li><a href="DiagramElementPrimitive">DiagramElementPrimitive</a> - an element that will draw something to the screen, such as a line, shape or text</li>
+<li><a href="DiagramElementCollection">DiagramElementCollection</a> - collections of primitives or other collections</li>
+</ul>
+<p>Each <code>DiagramElement</code> has a <a href="Transform">Transform</a> that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a <a href="DiagramElementPrimitive">DiagramElementPrimitive</a>, the shape or text will be transformed. In the case of a <a href="DiagramElementCollection">DiagramElementCollection</a>, all the <code>DiagramElements</code> it contains will have the transform applied to them.</p>
+<p>This means there is a heierachy of <code>DiagramElement</code> objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.</p>
+<p>Changing an element's transform moves the element through space. Changing the element's transform over time animates the element.</p>
+<h4>An Example</h4>
+<p>Let's say we want to create a rotating labeled line. As the line is rotated, the label follows the line.</p>
+<p><img src="./tutorials/ex1.png"></p>
+<p>To create this diagram, we might use a diagram element hierarchy like:</p>
+<p><img src="./tutorials/ex1-hierarchy.png"></p>
+<p>The drawn elements, the line and text, are primitives. They are created in the simple no rotation case. If the line is 0.8 long, and it starts at (0, 0), then the text might be at (0.4, 0.1)</p>
+<p><img src="./tutorials/ex1-collection.png"></p>
+<p>The diagram itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 3 wide and 2 high. We want the collection to be rotated, with the center of rotation at the center of the diagram. Therefore we apply a rotation and translation transform to the collection.</p>
+<p><img src="./tutorials/ex1-diagram.png"></p>
+<p>There are several different ways to create the same diagram, but this way is used as it highlights how a collection can be used to transform a group of primitive elements.</p>
+<h4>Coordinate spaces</h4>
+<p>Most rendering in FigureOne is done using WebGL, tied to a html <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">canvas</a> element.</p>
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">canvas</a> element is defined in screen pixels. The WebGL viewPort re-maps the canvas pixels to -1 to +1 in both the vertical and horizontal directions.</p>
+<p>When the canvas aspect ratio is not a square, or it is more convenient to create a diagram in a coordinate space not mapped between -1 to +1, then it is useful to have a separate diagram space. In the example above, the diagram space remaps the GL space to 0 to 3 in the horizontal and 0 to 2 in the vertical.</p>
+<p>These are three examples of different coordinate spaces - <em>pixel</em>, <em>GL</em> and <em>diagram</em> space.</p>
+<p>If you want to move or modify an element, you need to think about what you want to modify it relative to. Do you want to move it relative to other elements in the diagram? In other words, do you want to move it in <em>diagram space</em>? Or do you want to move it relative to other elements within the parent, or local collection - <em>local space</em>. Alternately, you might want to modify the vertices of the shape, in <em>vertex space</em>.</p>
+<p>In simple diagrams, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. Diagram space will be the same as local space and vertex space. You won't care about the higher level GL or pixel spaces.</p>
+<p>But if you have modular collections with transforms, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.</p>
+<p>Converting between spaces is relatively straight forward. All diagram elements have methods to find their position or bounds in <em>diagram</em>, <em>local</em> or <em>vertex</em> space. The diagram has transforms that allow conversion between <em>diagram</em>, <em>GL</em> and <em>pixel</em> spaces.</p>
+<h4>Drawing</h4>
+<p>When it is time to draw the scene, the diagram will pass an initial transform to the first element in the hierarchy. In the example above, the "Labeled Line" collection. This transform will include any translations and scaling needed to convert from <em>diagram</em> space to <em>GL</em> space for actual rendering.</p>
+<p>The "Labeled Line" collection will then cascade this transform with it's own rotation and translation transform, and pass this to its children, the "Label" and "Line" primitives.</p>
+<p>The "Label" primitive has it's own transform that translates it to the middle of the horizontal line in <em>local</em> space. The transform will be combined with the one from its parent, creating a final transform to draw the label with.</p>
+<p>The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of memory that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and each frame just a transform is passed informs the graphics processor how to orient the vertices.</p>
+<p>If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change.</p>
+<h4>Code</h4>
+<p><code>index.html</code></p>
+<pre class='hljs'><span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 1200px; height: 800px; background-color: white;"</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.2.3/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
+<p><code>index.html</code></p>
+<pre class='hljs'><span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span> ]});
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'labeledLine'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'collection'</span>,
+    <span class="hljs-attr">addElements</span>: [
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'line'</span>,
+        <span class="hljs-attr">method</span>: <span class="hljs-string">'line'</span>,
+        <span class="hljs-attr">options</span>: {
+          <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+          <span class="hljs-attr">p2</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>],
+          <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
+          <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+        },
+      },
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'label'</span>,
+        <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
+        <span class="hljs-attr">options</span>: {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'Line 1'</span>,
+          <span class="hljs-attr">position</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0.1</span>],
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
+          <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+        },
+      },
+    ],
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">position</span>: [<span class="hljs-number">3</span>, <span class="hljs-number">2</span>],
+    },
+    <span class="hljs-attr">mods</span>: {
+      <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">isMovable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">touchInBoundingRect</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">move</span>: {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">'rotation'</span>,
+      },
+    },
+  },
+);
+diagram.initialize();
+diagram.elements.isTouchable = <span class="hljs-literal">true</span>;</pre>
+
+  
+</section></div>
+          
+        
+          
           <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
@@ -988,7 +1130,20 @@
   </div>
   
 
-  <p>Diagram Class</p>
+  <p>Class to create a diagram.</p>
+<p>By default, a diagram will attach a WebGL canvas and Context2D
+canvas to the html <code>div</code> element with id<code>"figureOneContainer"</code>.</p>
+<p>To attach to a different <code>div</code>, use the <code>htmlId</code> property in the class
+constructor.</p>
+<p>The diagram manages all drawing elements, rendering the drawing elements
+on browser animation frames and listens for guestures from the user.</p>
+<p>The diagram also has a recorder, allowing to record and playback states,
+and gestures.</p>
+<p>If a diagram is paused, then all drawing element animations will
+also be paused.</p>
+<p>It also has a number of convenience functions for create drawing elements
+already attached to the drawing canvases, and useful transforms for
+converting between the different spaces (e.g. pixel, GL, diagram).</p>
 
   
   
@@ -1006,9 +1161,23 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#typediagramoptions">TypeDiagramOptions</a>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_diagramoptions">OBJ_DiagramOptions</a>)</code>
 	    
           </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>shapes</span> <code class='quiet'>(<a href="#diagramprimitives">DiagramPrimitives</a>)</code>
+          : Primitive shapes and text generation
+
           
         </div>
       
@@ -1022,7 +1191,59 @@
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple html and javascript example to create a diagram, and add a</span>
+<span class="hljs-comment">// hexagon.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// For additional examples, see https://github.com/airladon/FigureOne</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// Two files `index.html` and `index.js` in the same directory</span>
 
+<span class="hljs-comment">// index.html</span>
+&lt;!doctype html&gt;
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 800px; height: 800px; background-color: white;"</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.2.3/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span>
+
+<span class="hljs-comment">// index.js</span>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span> ]});
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
+    },
+  },
+);
+diagram.initialize();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Alternately, an element can be added programatically</span>
+<span class="hljs-comment">// index.js</span>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span> ]});
+<span class="hljs-keyword">const</span> p = diagram.shapes.polygon({})
+diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
+    },
+  },
+);</pre>
+    
   
 
   
@@ -1176,6 +1397,75 @@ collection to add elements to
     </div>
   
 </div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_diagramoptions'>
+      OBJ_DiagramOptions
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Diagram Input Options</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>htmlId</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : HTML div tag id - default: 'figureOneId'
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>limits</span> <code class='quiet'>(<a href="#typeparsablerect">TypeParsableRect</a>)</code>
+          : Diagram coordinate limits - default: bottom left
+corner at (-1, -1), width 1, height 1
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 
@@ -11150,22 +11440,6 @@ vertices on each draw. (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
-          : (
-<code>Transform('polygon').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
           <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
           : (
 <code>[1, 0, 0, 1</code>
@@ -11189,14 +11463,18 @@ vertices on each draw. (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>onLoad</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>?)</code>
-          
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : convenience to override Transform translation
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>trianglePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          
+          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
+          : (
+<code>Transform('polygon').standard()</code>
+)
+
           
         </div>
       
@@ -11898,7 +12176,7 @@ in transform
 diagram.addElement(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'line'</span>,
-    <span class="hljs-attr">method</span>: <span class="hljs-string">'textLine'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'text.line'</span>,
     <span class="hljs-attr">options</span>: {
       <span class="hljs-attr">line</span>: [
         <span class="hljs-string">'Hello '</span>,
@@ -12330,7 +12608,7 @@ in transform
 diagram.addElement(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
-    <span class="hljs-attr">method</span>: <span class="hljs-string">'textLines'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'text.lines'</span>,
     <span class="hljs-attr">options</span>: {
       <span class="hljs-attr">line</span>: [
         <span class="hljs-string">'First line'</span>,
@@ -13671,7 +13949,7 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
 
   
 
-  <p>Rect</p>
+  <p>Rectangle definition</p>
 
   
   
@@ -13699,7 +13977,7 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>bottom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    rectangle height
+	    bottom location
 
           </div>
           
@@ -13717,7 +13995,8 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    
+	    rectangle height
+
           </div>
           
         </div>
@@ -13725,6 +14004,690 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
     </div>
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='rectleft'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>left</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Left side x coordinate</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='rectwidth'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>width</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Rectange width</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='rectheight'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>height</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Rectangle height</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='rectbottom'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>bottom</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Bottom side y coordinate</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='recttop'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>top</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Top side y coordinate</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='rectright'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>right</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Right side x coordinate</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='rect_dup'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>_dup()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return a duplicate rectangle object</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='rectispointinside'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isPointInside(point, precision)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Returns <code>true</code> if <code>point</code> is within on on the border of the rectangle</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>point</span> <code class='quiet'>(TypeParsablePoint)</code>
+	    point to test
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>8</code>)</code>
+	    precision to test
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='rectround'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>round(precision)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Returns a rectangle with coordinates rounded to <code>precision</code></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>8</code>)</code>
+	    precision to test
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='typeparsablerect'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeParsableRect</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Rectangles can be defined as either as an
+Array (left, bottom, width, height), a <a href="#rect">Rect</a> class,
+a string representing the json definition of the
+array form, or a <a href="#typef1defrect">TypeF1DefRect</a>.</p>
+
+  
+    <p style="display: none;">      Type:
+      ([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | <a href="#rect">Rect</a> | <a href="#typef1defrect">TypeF1DefRect</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All rectangles are the same, with a lower left corner of `(-2, -1)`,</span>
+<span class="hljs-comment">// a width of `4`, and a height of `2`</span>
+<span class="hljs-keyword">const</span> r1 = getRect([<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>]);
+<span class="hljs-keyword">const</span> r2 = getRect(<span class="hljs-keyword">new</span> Fig.Rect(<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>));
+<span class="hljs-keyword">const</span> r3 = getRect(<span class="hljs-string">'[-2, -1, 4, 2]'</span>);
+<span class="hljs-keyword">const</span> r4 = getRect({
+  <span class="hljs-attr">f1Type</span>: <span class="hljs-string">'rect'</span>,
+  <span class="hljs-attr">state</span>: [<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>],
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='getrect'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getRect(r)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convert a parsable rectangle definition to an instantiated rectangle object</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>r</span> <code class='quiet'>(<a href="#typeparsablerect">TypeParsableRect</a>)</code>
+	    rectangle definition
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#rect">Rect</a></code>:
+        rectangle object
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='typef1defrect'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>TypeF1DefRect</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>JSON definition of a rect.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>f1Type</span> <code class='quiet'>(<code>"rect"</code>)</code>
+          : rect identifier
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>state</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])</code>
+          : left, bottom, width
+and height definition
+
+          
+        </div>
+      
+    </div>
   
 
   
@@ -14007,75 +14970,6 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
 
       
     
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typediagramoptions'>
-      TypeDiagramOptions
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Diagram Input Options</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>htmlId</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : HTML div tag id - default: 'figureOneId'
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>limits</span> <code class='quiet'>(TypeParsableRect)</code>
-          : Diagram coordinate limits - default: bottom left
-corner at (-1, -1), width 1, height 1
-
-          
-        </div>
-      
-    </div>
-  
-
   
 
   
@@ -14512,6 +15406,124 @@ triangle primitives to draw the line (
   
 
   
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='diagramprimitives'>
+      DiagramPrimitives
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Built in dagiagram primitives.</p>
+<p>Including simple shapes, grid and text.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='diagramprimitivespolygon'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>polygon(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Polygon or partial polygon shape options object</p>
+<p><img src="./assets1/polygon.png"></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_polygon">OBJ_Polygon</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 

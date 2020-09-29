@@ -1,7 +1,10 @@
 toc:
+  - name: Introduction
+    file: ./docs/tutorials/intro.md
   - Diagram
+  - OBJ_DiagramOptions
   - name: Equation Elements Types
-  - TypeEquationElement
+  # - TypeEquationElement
   - TypeEquationElements
   - name: Equation Layout OBJECTS
   - EQN_Container
@@ -78,3 +81,6 @@ toc:
         children:
           - Point
           - Rect
+          - TypeParsableRect
+          - getRect
+          - TypeF1DefRect

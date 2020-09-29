@@ -32,7 +32,7 @@ import type { TypeScenarioVelocity } from './Animation/AnimationStep/ElementAnim
   * @property {TypeParsableRect} limits - Diagram coordinate limits - default: bottom left
   *  corner at (-1, -1), width 1, height 1
  */
-export type TypeDiagramOptions = {
+export type OBJ_DiagramOptions = {
   htmlId?: string,
   limits?: TypeParsableRect,
   // backgroundColor?: Array<number>,
@@ -92,8 +92,79 @@ export type TypeSpaceTransforms = {
 //   */
 
 /**
-  * Diagram Class
-  * @param {TypeDiagramOptions} options
+  * Class to create a diagram.
+  *
+  * By default, a diagram will attach a WebGL canvas and Context2D
+  * canvas to the html `div` element with id`"figureOneContainer"`.
+  *
+  * To attach to a different `div`, use the `htmlId` property in the class
+  * constructor.
+  *
+  * The diagram manages all drawing elements, rendering the drawing elements
+  * on browser animation frames and listens for guestures from the user.
+  *
+  * The diagram also has a recorder, allowing to record and playback states,
+  * and gestures.
+  *
+  * If a diagram is paused, then all drawing element animations will
+  * also be paused.
+  *
+  * It also has a number of convenience functions for create drawing elements
+  * already attached to the drawing canvases, and useful transforms for
+  * converting between the different spaces (e.g. pixel, GL, diagram).
+  *
+  * @class
+  * @param {OBJ_DiagramOptions} options
+  * @property {DiagramPrimitives} shapes Primitive shapes and text generation
+  * @example
+  * // Simple html and javascript example to create a diagram, and add a
+  * // hexagon.
+  * //
+  * // For additional examples, see https://github.com/airladon/FigureOne
+  * //
+  * // Two files `index.html` and `index.js` in the same directory
+  *
+  * // index.html
+  * <!doctype html>
+  * <html>
+  * <body>
+  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
+  *     </div>
+  *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.2.3/figureone.min.js'></script>
+  *     <script type="text/javascript" src='./index.js'></script>
+  * </body>
+  * </html>
+  *
+  * // index.js
+  * const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
+  * diagram.addElement(
+  *   {
+  *     name: 'p',
+  *     method: 'polygon',
+  *     options: {
+  *       radius: 0.5,
+  *       fill: true,
+  *       sides: 6,
+  *     },
+  *   },
+  * );
+  * diagram.initialize();
+  * @example
+  * // Alternately, an element can be added programatically
+  * // index.js
+  * const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
+  * const p = diagram.shapes.polygon({})
+  * diagram.addElement(
+  *   {
+  *     name: 'p',
+  *     method: 'polygon',
+  *     options: {
+  *       radius: 0.5,
+  *       fill: true,
+  *       sides: 6,
+  *     },
+  *   },
+  * );
  */
 class Diagram {
   /** id of DIV that diagram is tied to */
@@ -132,7 +203,7 @@ class Diagram {
   stateTime: DOMHighResTimeStamp;
 
   // gestureElement: HTMLElement;
-  shapes: Object;
+  shapes: DiagramPrimitives;
   shapesLow: Object;
   primitive: Object;
   // shapesHigh: Object;
@@ -192,7 +263,7 @@ class Diagram {
   };
   // pauseAfterNextDrawFlag: boolean;
 
-  constructor(options: TypeDiagramOptions) {
+  constructor(options: OBJ_DiagramOptions) {
     const defaultOptions = {
       htmlId: 'figureOneContainer',
       limits: new Rect(-1, -1, 2, 2),

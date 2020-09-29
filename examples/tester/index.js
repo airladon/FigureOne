@@ -1,25 +1,26 @@
-const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
+// const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
+const diagram = new Fig.Diagram({ limits: [0, 0, 6, 4 ]});
 
-const f1 = {
-  family: 'Times New Roman',
-  color: [1, 0, 0, 1],
-  style: 'normal',
-  size: 0.2,
-};
-const f2 = {
-  family: 'Times New Roman',
-  color: [0, 1, 0, 1],
-  style: 'italic',
-  size: 0.2,
-  weight: 'bold',
-}
-const f3 = {
-  family: 'Times New Roman',
-  color: [0, 1, 0, 1],
-  style: 'italic',
-  size: 0.08,
-  weight: 'bold',
-}
+// const f1 = {
+//   family: 'Times New Roman',
+//   color: [1, 0, 0, 1],
+//   style: 'normal',
+//   size: 0.2,
+// };
+// const f2 = {
+//   family: 'Times New Roman',
+//   color: [0, 1, 0, 1],
+//   style: 'italic',
+//   size: 0.2,
+//   weight: 'bold',
+// }
+// const f3 = {
+//   family: 'Times New Roman',
+//   color: [0, 1, 0, 1],
+//   style: 'italic',
+//   size: 0.08,
+//   weight: 'bold',
+// }
 // console.log(new Fig.Transform().scale(2, 2).translate(0.5, 0).matrix())
 // console.log(new Fig.Transform().translate(0.5, 0).scale(2, 2).matrix())
 diagram.addElements([
@@ -401,7 +402,7 @@ diagram.addElements([
     name: 'grid',
     method: 'grid',
     options: {
-      bounds: [-1, -1, 2, 2],
+      bounds: [-1, -1, 4, 4],
       yStep: 0.1,
       xStep: 0.1,
       color: [0.7, 0.7, 0.7, 1],
@@ -475,50 +476,45 @@ diagram.addElements([
 ]);
 diagram.addElement(
   {
-    name: 'lines',
-    method: 'text.lines',
+    name: 'labeledLine',
+    method: 'collection',
+    addElements: [
+      {
+        name: 'line',
+        method: 'line',
+        options: {
+          p1: [0, 0],
+          p2: [2, 0],
+          width: 0.01,
+          color: [0, 0, 1, 1],
+        },
+      },
+      {
+        name: 'label',
+        method: 'text',
+        options: {
+          text: 'Line 1',
+          position: [1, 0.1],
+          font: { color: [0, 0, 1, 1] },
+          xAlign: 'center',
+        },
+      },
+    ],
     options: {
-       lines: [
-         'Lines justified to the left',
-         'A |line| with a |modified_phrase|',
-         {
-           line: 'A |line| with custom defaults',
-           font: {
-             style: 'italic',
-             color: [0, 0.5, 1, 1],
-           },
-         },
-       ],
-       modifiers: {
-         modified_phrase: {
-           text: 'modified phrase',
-           font: {
-             style: 'italic',
-             color: [0, 0.5, 1, 1],
-           },
-         },
-         line: {
-           font: {
-             family: 'Times New Roman',
-             color: [0, 0.6, 0, 1],
-             style: 'italic',
-           },
-         },
-       },
-       font: {
-         family: 'Helvetica Neue',
-         weight: '200',
-         style: 'normal',
-         size: 0.1,
-       },
-       justification: 'left',
-       lineSpace: -0.2,
-       position: [-0.5, 0.1],
-     },
+      position: [3, 2],
+    },
+    mods: {
+      isTouchable: true,
+      isMovable: true,
+      touchInBoundingRect: true,
+      move: {
+        type: 'rotation',
+      },
+    },
   },
 );
 diagram.initialize();
-
+diagram.elements.isTouchable = true;
 // diagram.elements._tester.animations.new()
 //   .translation({ target: [-0.5, 0], duration: 1 })
 //   .start();

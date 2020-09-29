@@ -2,134 +2,362 @@
 
 ### Table of Contents
 
--   [Diagram][1]
-    -   [htmlId][3]
-    -   [addElements][4]
--   [Equation Elements Types][7]
--   [TypeEquationElements][8]
--   [Equation Layout OBJECTS][9]
--   [EQN_Container][10]
--   [EQN_Fraction][13]
--   [EQN_Scale][16]
--   [EQN_Bracket][19]
--   [EQN_Root][22]
--   [EQN_Strike][25]
--   [EQN_Box][28]
--   [EQN_Bar][31]
--   [EQN_Integral][34]
--   [EQN_SumOf][37]
--   [EQN_ProdOf][40]
--   [EQN_Subcript][43]
--   [EQN_Superscript][46]
--   [EQN_SuperscriptSubscript][49]
--   [EQN_Comment][52]
--   [EQN_StrikeComment][55]
--   [EQN_Pad][58]
--   [EQN_Matrix][61]
--   [EQN_Annotate][64]
--   [EQN_Annotation][67]
--   [EQN_EncompassGlyph][70]
--   [EQN_LeftRightGlyph][73]
--   [EQN_TopBottomGlyph][76]
--   [EQN_Glyphs][79]
--   [Equation Symbol OBJECTS][81]
--   [EQN_VinculumSymbol][82]
--   [EQN_BoxSymbol][85]
--   [EQN_ArrowSymbol][88]
--   [EQN_SumSymbol][91]
--   [EQN_ProdSymbol][94]
--   [EQN_IntegralSymbol][97]
--   [EQN_StrikeSymbol][100]
--   [EQN_BracketSymbol][103]
--   [EQN_AngleBracketSymbol][106]
--   [EQN_BraceSymbol][109]
--   [EQN_BarSymbol][112]
--   [EQN_SquareBracketSymbol][115]
--   [EQN_RadicalSymbol][118]
--   [Equation Form Types][121]
--   [TypeEquationPhrase][122]
--   [TypeFormAlignment][124]
--   [TypeFormAnimationProperties][126]
--   [TypeFormTranslationProperties][129]
--   [TypeEquationFormObject][131]
--   [TypeEquationForm][134]
--   [TypeEquationForms][135]
--   [TypeFormRestart][136]
--   [Equation Option Types][138]
--   [EQN_Equation][139]
--   [TypeEquationGoToFormOptions][141]
--   [Equations][143]
--   [Equation][144]
-    -   [eqn][147]
-    -   [setFormSeries][149]
-    -   [getFormSeries][151]
-    -   [addElements][152]
-    -   [addForms][154]
-    -   [getCurrentForm][156]
-    -   [setCurrentForm][157]
-    -   [showForm][159]
-    -   [getForm][161]
-    -   [goToForm][163]
-    -   [prevForm][165]
-    -   [nextForm][167]
-    -   [replayCurrentForm][169]
--   [Shapes][171]
--   [OBJ_Texture][172]
--   [OBJ_Polyline][174]
--   [OBJ_Polygon][177]
--   [Text][180]
--   [OBJ_Font][181]
--   [OBJ_TextDefinition][184]
--   [OBJ_Text][186]
--   [OBJ_TextLineDefinition][189]
--   [OBJ_TextLine][191]
--   [OBJ_TextLinesDefinition][194]
--   [OBJ_TextModifierDefinition][196]
--   [OBJ_TextModifiersDefinition][198]
--   [OBJ_TextLines][200]
--   [tools][203]
-    -   [g2][204]
-        -   [Point][205]
-            -   [x][207]
-            -   [y][208]
-            -   [\_dup][209]
-            -   [scale][210]
-            -   [sub][213]
-            -   [add][216]
-            -   [distance][219]
-            -   [round][222]
-            -   [clip][225]
-            -   [transformBy][228]
-            -   [rotate][231]
-            -   [isEqualTo][234]
-            -   [isNotEqualTo][237]
-            -   [zero][240]
-            -   [Unity][241]
-        -   [Rect][242]
-    -   [range][244]
--   [tools][246]
--   [round][248]
--   [TypeDiagramOptions][250]
--   [OBJ_CurvedCorner][252]
--   [OBJ_Rectangle][254]
--   [OBJ_LineStyle][257]
--   [TypeEquationTextElement][259]
--   [container][261]
--   [frac][264]
+-   [Introduction][1]
+-   [Diagram][2]
+    -   [htmlId][6]
+    -   [addElements][7]
+-   [OBJ_DiagramOptions][10]
+-   [Equation Elements Types][12]
+-   [TypeEquationElements][13]
+-   [Equation Layout OBJECTS][14]
+-   [EQN_Container][15]
+-   [EQN_Fraction][18]
+-   [EQN_Scale][21]
+-   [EQN_Bracket][24]
+-   [EQN_Root][27]
+-   [EQN_Strike][30]
+-   [EQN_Box][33]
+-   [EQN_Bar][36]
+-   [EQN_Integral][39]
+-   [EQN_SumOf][42]
+-   [EQN_ProdOf][45]
+-   [EQN_Subcript][48]
+-   [EQN_Superscript][51]
+-   [EQN_SuperscriptSubscript][54]
+-   [EQN_Comment][57]
+-   [EQN_StrikeComment][60]
+-   [EQN_Pad][63]
+-   [EQN_Matrix][66]
+-   [EQN_Annotate][69]
+-   [EQN_Annotation][72]
+-   [EQN_EncompassGlyph][75]
+-   [EQN_LeftRightGlyph][78]
+-   [EQN_TopBottomGlyph][81]
+-   [EQN_Glyphs][84]
+-   [Equation Symbol OBJECTS][86]
+-   [EQN_VinculumSymbol][87]
+-   [EQN_BoxSymbol][90]
+-   [EQN_ArrowSymbol][93]
+-   [EQN_SumSymbol][96]
+-   [EQN_ProdSymbol][99]
+-   [EQN_IntegralSymbol][102]
+-   [EQN_StrikeSymbol][105]
+-   [EQN_BracketSymbol][108]
+-   [EQN_AngleBracketSymbol][111]
+-   [EQN_BraceSymbol][114]
+-   [EQN_BarSymbol][117]
+-   [EQN_SquareBracketSymbol][120]
+-   [EQN_RadicalSymbol][123]
+-   [Equation Form Types][126]
+-   [TypeEquationPhrase][127]
+-   [TypeFormAlignment][129]
+-   [TypeFormAnimationProperties][131]
+-   [TypeFormTranslationProperties][134]
+-   [TypeEquationFormObject][136]
+-   [TypeEquationForm][139]
+-   [TypeEquationForms][140]
+-   [TypeFormRestart][141]
+-   [Equation Option Types][143]
+-   [EQN_Equation][144]
+-   [TypeEquationGoToFormOptions][146]
+-   [Equations][148]
+-   [Equation][149]
+    -   [eqn][152]
+    -   [setFormSeries][154]
+    -   [getFormSeries][156]
+    -   [addElements][157]
+    -   [addForms][159]
+    -   [getCurrentForm][161]
+    -   [setCurrentForm][162]
+    -   [showForm][164]
+    -   [getForm][166]
+    -   [goToForm][168]
+    -   [prevForm][170]
+    -   [nextForm][172]
+    -   [replayCurrentForm][174]
+-   [Shapes][176]
+-   [OBJ_Texture][177]
+-   [OBJ_Polyline][179]
+-   [OBJ_Polygon][182]
+-   [Text][185]
+-   [OBJ_Font][186]
+-   [OBJ_TextDefinition][189]
+-   [OBJ_Text][191]
+-   [OBJ_TextLineDefinition][194]
+-   [OBJ_TextLine][196]
+-   [OBJ_TextLinesDefinition][199]
+-   [OBJ_TextModifierDefinition][201]
+-   [OBJ_TextModifiersDefinition][203]
+-   [OBJ_TextLines][205]
+-   [tools][208]
+    -   [g2][209]
+        -   [Point][210]
+            -   [x][212]
+            -   [y][213]
+            -   [\_dup][214]
+            -   [scale][215]
+            -   [sub][218]
+            -   [add][221]
+            -   [distance][224]
+            -   [round][227]
+            -   [clip][230]
+            -   [transformBy][233]
+            -   [rotate][236]
+            -   [isEqualTo][239]
+            -   [isNotEqualTo][242]
+            -   [zero][245]
+            -   [Unity][246]
+        -   [Rect][247]
+            -   [left][249]
+            -   [width][250]
+            -   [height][251]
+            -   [bottom][252]
+            -   [top][253]
+            -   [right][254]
+            -   [\_dup][255]
+            -   [isPointInside][256]
+            -   [round][258]
+        -   [TypeParsableRect][260]
+        -   [getRect][262]
+        -   [TypeF1DefRect][264]
+    -   [range][266]
+-   [tools][268]
+-   [round][270]
+-   [OBJ_CurvedCorner][272]
+-   [OBJ_Rectangle][274]
+-   [OBJ_LineStyle][277]
+-   [DiagramPrimitives][279]
+    -   [polygon][280]
+-   [TypeEquationTextElement][282]
+-   [container][284]
+-   [frac][287]
+
+## Introduction
+
+This introduction will introduce some key terms and concepts that are found frequently throughout the documentation.
+
+#### Diagrams, Primitives and Collections
+
+**FigureOne** allows you to create a _figure_, or _diagram_ that can be both interactive and animated.
+
+A diagram has one or more _diagram elements_. A diagram element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
+
+In the language of **FigureOne**, there are two types of [DiagramElements][290]:
+
+-   [DiagramElementPrimitive][291] - an element that will draw something to the screen, such as a line, shape or text
+-   [DiagramElementCollection][292] - collections of primitives or other collections
+
+Each `DiagramElement` has a [Transform][293] that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a [DiagramElementPrimitive][291], the shape or text will be transformed. In the case of a [DiagramElementCollection][292], all the `DiagramElements` it contains will have the transform applied to them.
+
+This means there is a heierachy of `DiagramElement` objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.
+
+Changing an element's transform moves the element through space. Changing the element's transform over time animates the element.
+
+#### An Example
+
+Let's say we want to create a rotating labeled line. As the line is rotated, the label follows the line.
+
+![][294]
+
+To create this diagram, we might use a diagram element hierarchy like:
+
+![][295]
+
+The drawn elements, the line and text, are primitives. They are created in the simple no rotation case. If the line is 0.8 long, and it starts at (0, 0), then the text might be at (0.4, 0.1)
+
+![][296]
+
+The diagram itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 3 wide and 2 high. We want the collection to be rotated, with the center of rotation at the center of the diagram. Therefore we apply a rotation and translation transform to the collection.
+
+![][297]
+
+There are several different ways to create the same diagram, but this way is used as it highlights how a collection can be used to transform a group of primitive elements.
+
+#### Coordinate spaces
+
+Most rendering in FigureOne is done using WebGL, tied to a html [canvas][298] element.
+
+The [canvas][298] element is defined in screen pixels. The WebGL viewPort re-maps the canvas pixels to -1 to +1 in both the vertical and horizontal directions.
+
+When the canvas aspect ratio is not a square, or it is more convenient to create a diagram in a coordinate space not mapped between -1 to +1, then it is useful to have a separate diagram space. In the example above, the diagram space remaps the GL space to 0 to 3 in the horizontal and 0 to 2 in the vertical.
+
+These are three examples of different coordinate spaces - _pixel_, _GL_ and _diagram_ space.
+
+If you want to move or modify an element, you need to think about what you want to modify it relative to. Do you want to move it relative to other elements in the diagram? In other words, do you want to move it in _diagram space_? Or do you want to move it relative to other elements within the parent, or local collection - _local space_. Alternately, you might want to modify the vertices of the shape, in _vertex space_.
+
+In simple diagrams, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. Diagram space will be the same as local space and vertex space. You won't care about the higher level GL or pixel spaces.
+
+But if you have modular collections with transforms, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.
+
+Converting between spaces is relatively straight forward. All diagram elements have methods to find their position or bounds in _diagram_, _local_ or _vertex_ space. The diagram has transforms that allow conversion between _diagram_, _GL_ and _pixel_ spaces.
+
+#### Drawing
+
+When it is time to draw the scene, the diagram will pass an initial transform to the first element in the hierarchy. In the example above, the "Labeled Line" collection. This transform will include any translations and scaling needed to convert from _diagram_ space to _GL_ space for actual rendering.
+
+The "Labeled Line" collection will then cascade this transform with it's own rotation and translation transform, and pass this to its children, the "Label" and "Line" primitives.
+
+The "Label" primitive has it's own transform that translates it to the middle of the horizontal line in _local_ space. The transform will be combined with the one from its parent, creating a final transform to draw the label with.
+
+The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of memory that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and each frame just a transform is passed informs the graphics processor how to orient the vertices.
+
+If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change.
+
+#### Code
+
+`index.html`
+
+```html
+<!doctype html>
+<html>
+<body>
+    <div id="figureOneContainer" style="width: 1200px; height: 800px; background-color: white;">
+    </div>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.2.3/figureone.min.js'></script>
+    <script type="text/javascript" src='./index.js'></script>
+</body>
+</html>
+```
+
+`index.html`
+
+```javascript
+const diagram = new Fig.Diagram({ limits: [0, 0, 6, 4 ]});
+diagram.addElement(
+  {
+    name: 'labeledLine',
+    method: 'collection',
+    addElements: [
+      {
+        name: 'line',
+        method: 'line',
+        options: {
+          p1: [0, 0],
+          p2: [2, 0],
+          width: 0.01,
+          color: [0, 0, 1, 1],
+        },
+      },
+      {
+        name: 'label',
+        method: 'text',
+        options: {
+          text: 'Line 1',
+          position: [1, 0.1],
+          font: { color: [0, 0, 1, 1] },
+          xAlign: 'center',
+        },
+      },
+    ],
+    options: {
+      position: [3, 2],
+    },
+    mods: {
+      isTouchable: true,
+      isMovable: true,
+      touchInBoundingRect: true,
+      move: {
+        type: 'rotation',
+      },
+    },
+  },
+);
+diagram.initialize();
+diagram.elements.isTouchable = true;
+```
+
 
 ## Diagram
 
-Diagram Class
+Class to create a diagram.
+
+By default, a diagram will attach a WebGL canvas and Context2D
+canvas to the html `div` element with id`"figureOneContainer"`.
+
+To attach to a different `div`, use the `htmlId` property in the class
+constructor.
+
+The diagram manages all drawing elements, rendering the drawing elements
+on browser animation frames and listens for guestures from the user.
+
+The diagram also has a recorder, allowing to record and playback states,
+and gestures.
+
+If a diagram is paused, then all drawing element animations will
+also be paused.
+
+It also has a number of convenience functions for create drawing elements
+already attached to the drawing canvases, and useful transforms for
+converting between the different spaces (e.g. pixel, GL, diagram).
 
 ### Parameters
 
--   `options` **[TypeDiagramOptions][267]** 
+-   `options` **[OBJ_DiagramOptions][299]** 
+
+### Properties
+
+-   `shapes` **[DiagramPrimitives][300]** Primitive shapes and text generation
+
+### Examples
+
+```javascript
+// Simple html and javascript example to create a diagram, and add a
+// hexagon.
+//
+// For additional examples, see https://github.com/airladon/FigureOne
+//
+// Two files `index.html` and `index.js` in the same directory
+
+// index.html
+<!doctype html>
+<html>
+<body>
+    <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
+    </div>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.2.3/figureone.min.js'></script>
+    <script type="text/javascript" src='./index.js'></script>
+</body>
+</html>
+
+// index.js
+const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
+diagram.addElement(
+  {
+    name: 'p',
+    method: 'polygon',
+    options: {
+      radius: 0.5,
+      fill: true,
+      sides: 6,
+    },
+  },
+);
+diagram.initialize();
+```
+
+```javascript
+// Alternately, an element can be added programatically
+// index.js
+const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
+const p = diagram.shapes.polygon({})
+diagram.addElement(
+  {
+    name: 'p',
+    method: 'polygon',
+    options: {
+      radius: 0.5,
+      fill: true,
+      sides: 6,
+    },
+  },
+);
+```
 
 ### htmlId
 
 id of DIV that diagram is tied to
 
-Type: [string][268]
+Type: [string][301]
 
 ### addElements
 
@@ -137,10 +365,10 @@ Add elements to diagram
 
 #### Parameters
 
--   `elementsToAdd` **[Array][269]&lt;TypeAddElementObject>** array of element definitions
+-   `elementsToAdd` **[Array][302]&lt;TypeAddElementObject>** array of element definitions
 -   `collection` **DiagramElementCollection** the
     collection to add elements to (optional, default `this.elements`)
--   `addElementsKey` **[string][268]** key to add elements (optional, default `'addElements'`)
+-   `addElementsKey` **[string][301]** key to add elements (optional, default `'addElements'`)
 
 #### Examples
 
@@ -150,6 +378,16 @@ diagram.addElements([
   { name: 'shape2', method: 'polygon', options: { position: [1, 1] } },
 ]);
 ```
+
+## OBJ_DiagramOptions
+
+Diagram Input Options
+
+### Properties
+
+-   `htmlId` **[string][301]?** HTML div tag id - default: 'figureOneId'
+-   `limits` **[TypeParsableRect][303]** Diagram coordinate limits - default: bottom left
+     corner at (-1, -1), width 1, height 1
 
 ## Equation Elements Types
 
@@ -175,16 +413,16 @@ equation forms.
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `width` **[number][271]?** (`null`)
--   `descent` **[number][271]?** (`null`)
--   `ascent` **[number][271]?** (`null`)
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][271])?** (`'center'`)
--   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"baseline"` \| [number][271])?** (`'baseline'`)
+-   `content` **[TypeEquationPhrase][304]** 
+-   `width` **[number][305]?** (`null`)
+-   `descent` **[number][305]?** (`null`)
+-   `ascent` **[number][305]?** (`null`)
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][305])?** (`'center'`)
+-   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"baseline"` \| [number][305])?** (`'baseline'`)
 -   `fit` **(`"width"` \| `"height"` \| `"contain"`)?** fit width,
     ascent and descent to either match width, height or fully contain the content (`null`)
--   `scale` **[number][271]?** (`1`)
--   `fullContentBounds` **[boolean][272]?** (`false`)
+-   `scale` **[number][305]?** (`1`)
+-   `fullContentBounds` **[boolean][306]?** (`false`)
 
 ### Examples
 
@@ -217,16 +455,16 @@ Equation fraction
 
 ### Properties
 
--   `numerator` **[TypeEquationPhrase][270]** 
--   `symbol` **[string][268]** Vinculum symbol
--   `denominator` **[TypeEquationPhrase][270]** 
--   `scale` **[number][271]?** (`1`)
--   `numeratorSpace` **[number][271]?** (`0.05`)
--   `denominatorSpace` **[number][271]?** (`0.05`)
--   `overhang` **[number][271]?** Vinculum extends beyond the content
+-   `numerator` **[TypeEquationPhrase][304]** 
+-   `symbol` **[string][301]** Vinculum symbol
+-   `denominator` **[TypeEquationPhrase][304]** 
+-   `scale` **[number][305]?** (`1`)
+-   `numeratorSpace` **[number][305]?** (`0.05`)
+-   `denominatorSpace` **[number][305]?** (`0.05`)
+-   `overhang` **[number][305]?** Vinculum extends beyond the content
     horizontally by the this amount (`0.05`)
--   `offsetY` **[number][271]?** Offset fraction in y (`0.07`)
--   `fullContentBounds` **[boolean][272]?** Use full bounds with content (`false`)
+-   `offsetY` **[number][305]?** Offset fraction in y (`0.07`)
+-   `fullContentBounds` **[boolean][306]?** Use full bounds with content (`false`)
 
 ### Examples
 
@@ -268,9 +506,9 @@ Scale an equation phrase
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `scale` **[number][271]?** (`1`)
--   `fullContentBounds` **[boolean][272]?** Use full bounds with content (`false`)
+-   `content` **[TypeEquationPhrase][304]** 
+-   `scale` **[number][305]?** (`1`)
+-   `fullContentBounds` **[boolean][306]?** Use full bounds with content (`false`)
 
 ### Examples
 
@@ -299,29 +537,29 @@ Surround an equation phrase with brackets
 
 ### Properties
 
--   `left` **[string][268]?** left bracket symbol
--   `content` **[TypeEquationPhrase][270]?** 
--   `right` **[string][268]?** right bracket symbol
--   `inSize` **[boolean][272]?** `false` excludes bracket symbols from
+-   `left` **[string][301]?** left bracket symbol
+-   `content` **[TypeEquationPhrase][304]?** 
+-   `right` **[string][301]?** right bracket symbol
+-   `inSize` **[boolean][306]?** `false` excludes bracket symbols from
     size of resulting phrase (`true`)
--   `insideSpace` **[number][271]?** space between brackets and content (`0.03`)
--   `outsideSpace` **[number][271]?** space between brackets and neighboring
+-   `insideSpace` **[number][305]?** space between brackets and content (`0.03`)
+-   `outsideSpace` **[number][305]?** space between brackets and neighboring
     phrases(`0.03`)
--   `topSpace` **[number][271]?** how far the brackets extend above the content
+-   `topSpace` **[number][305]?** how far the brackets extend above the content
     (`0.05`)
--   `bottomSpace` **[number][271]?** how far the brackets extend below the
+-   `bottomSpace` **[number][305]?** how far the brackets extend below the
     content (`0.05`)
--   `minContentHeight` **[number][271]?** if content height is less than this,
+-   `minContentHeight` **[number][305]?** if content height is less than this,
     then this number will be used when sizing the brackets (unless it is `null`)
     (`null`)
--   `minContentDescent` **[number][271]?** if content descent is less than this,
+-   `minContentDescent` **[number][305]?** if content descent is less than this,
     then this number will be used when sizing the brackets (unless it is `null`)
     (`null`)
--   `height` **[number][271]?** force height of brackets (`null`)
--   `descent` **[number][271]?** force descent of brackets (`null`)
--   `fullContentBounds` **[boolean][272]?** use full bounds of content,
+-   `height` **[number][305]?** force height of brackets (`null`)
+-   `descent` **[number][305]?** force descent of brackets (`null`)
+-   `fullContentBounds` **[boolean][306]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][272]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][306]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -372,26 +610,26 @@ needed
 
 ### Properties
 
--   `symbol` **[string][268]** radical symbol
--   `content` **[TypeEquationPhrase][270]** 
--   `inSize` **[boolean][272]?** `false` excludes radical symbol and root (if
+-   `symbol` **[string][301]** radical symbol
+-   `content` **[TypeEquationPhrase][304]** 
+-   `inSize` **[boolean][306]?** `false` excludes radical symbol and root (if
     defined) from size of resulting phrase (`true`)
--   `space` **[number][271]?** (`0.02`) default space between content and
+-   `space` **[number][305]?** (`0.02`) default space between content and
     radical symbol in left, right, top and bottom directions.
--   `topSpace` **[number][271]?** space between content top and radical symbol
+-   `topSpace` **[number][305]?** space between content top and radical symbol
     horiztonal line (`space`)
--   `rightSpace` **[number][271]?** radical symbol overhang of content on right
+-   `rightSpace` **[number][305]?** radical symbol overhang of content on right
     (`space`)
--   `bottomSpace` **[number][271]?** radical symbol descent below content
+-   `bottomSpace` **[number][305]?** radical symbol descent below content
     (`space`)
--   `leftSpace` **[number][271]?** space between radical symbol up stroke and
+-   `leftSpace` **[number][305]?** space between radical symbol up stroke and
     content (`space`)
--   `root` **[TypeEquationPhrase][270]?** custom root
--   `rootOffset` **[number][271]?** custom root offset (`[0, 0.06]`)
--   `rootScale` **[number][271]?** custom root scale (`0.6`)
--   `fullContentBounds` **[boolean][272]?** use full bounds of content,
+-   `root` **[TypeEquationPhrase][304]?** custom root
+-   `rootOffset` **[number][305]?** custom root offset (`[0, 0.06]`)
+-   `rootScale` **[number][305]?** custom root scale (`0.6`)
+-   `fullContentBounds` **[boolean][306]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][272]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][306]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -439,23 +677,23 @@ Overlay a strike symbol on an equation phrase
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `symbol` **[string][268]** 
--   `inSize` **[boolean][272]?** `false` excludes strike symbol from size of
+-   `content` **[TypeEquationPhrase][304]** 
+-   `symbol` **[string][301]** 
+-   `inSize` **[boolean][306]?** `false` excludes strike symbol from size of
     resulting phrase (`false`)
--   `space` **[number][271]?** amount the strike symbol overhangs the content on
+-   `space` **[number][305]?** amount the strike symbol overhangs the content on
     the left, right, bottom and top sides (`0.02`)
--   `topSpace` **[number][271]?** use when top overhang between content and
+-   `topSpace` **[number][305]?** use when top overhang between content and
      strike should be different thant `space` property (`space`)
--   `rightSpace` **[number][271]?** use when right overhang between content and
+-   `rightSpace` **[number][305]?** use when right overhang between content and
      strike should be different thant `space` property (`space`)
--   `bottomSpace` **[number][271]?** use when bottom overhang between content and
+-   `bottomSpace` **[number][305]?** use when bottom overhang between content and
      strike should be different thant `space` property (`space`)
--   `leftSpace` **[number][271]?** use when left overhang between content and
+-   `leftSpace` **[number][305]?** use when left overhang between content and
      strike should be different thant `space` property (`space`)
--   `fullContentBounds` **[boolean][272]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][306]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][272]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][306]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -500,23 +738,23 @@ Place a box symbol around an equation phrase
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `symbol` **[string][268]** 
--   `inSize` **[boolean][272]?** `false` excludes box symbol from size of
+-   `content` **[TypeEquationPhrase][304]** 
+-   `symbol` **[string][301]** 
+-   `inSize` **[boolean][306]?** `false` excludes box symbol from size of
     resulting phrase (`false`)
--   `space` **[number][271]?** space between box symbol and content on
+-   `space` **[number][305]?** space between box symbol and content on
     the left, right, bottom and top sides (`0`)
--   `topSpace` **[number][271]?** use when top space between content and
+-   `topSpace` **[number][305]?** use when top space between content and
      box should be different thant `space` property (`space`)
--   `rightSpace` **[number][271]?** use when right space between content and
+-   `rightSpace` **[number][305]?** use when right space between content and
      box should be different thant `space` property (`space`)
--   `bottomSpace` **[number][271]?** use when bottom space between content and
+-   `bottomSpace` **[number][305]?** use when bottom space between content and
      box should be different thant `space` property (`space`)
--   `leftSpace` **[number][271]?** use when left space between content and
+-   `leftSpace` **[number][305]?** use when left space between content and
      box should be different thant `space` property (`space`)
--   `fullContentBounds` **[boolean][272]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][306]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][272]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][306]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -561,33 +799,33 @@ Place a bar (or bracket) symbol to the side of an equation phrase
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `symbol` **[string][268]** 
--   `inSize` **[boolean][272]?** `false` excludes box symbol from size of
+-   `content` **[TypeEquationPhrase][304]** 
+-   `symbol` **[string][301]** 
+-   `inSize` **[boolean][306]?** `false` excludes box symbol from size of
     resulting phrase (`true`)
--   `space` **[number][271]?** space between content and the symbol (`0.03`)
--   `overhang` **[number][271]?** amount symbol extends beyond content (`0`)
--   `length` **[number][271]?** total length of symbol (overrides `overhang`)
--   `left` **[number][271]?** amount symbol extends beyond content to the left
+-   `space` **[number][305]?** space between content and the symbol (`0.03`)
+-   `overhang` **[number][305]?** amount symbol extends beyond content (`0`)
+-   `length` **[number][305]?** total length of symbol (overrides `overhang`)
+-   `left` **[number][305]?** amount symbol extends beyond content to the left
     (overrides `overhang` and `length`, and only for side `'top'` or `'bottom'`)
--   `left` **[number][271]?** amount symbol extends beyond content to the right
+-   `left` **[number][305]?** amount symbol extends beyond content to the right
     (overrides `overhang` and `length`, and only for side `'top'` or `'bottom'`)
--   `top` **[number][271]?** amount symbol extends beyond content to the top
+-   `top` **[number][305]?** amount symbol extends beyond content to the top
     (overrides `overhang` and `length`, and only for side `'left'` or `'right'`)
--   `top` **[number][271]?** amount symbol extends beyond content to the bottom
+-   `top` **[number][305]?** amount symbol extends beyond content to the bottom
     (overrides `overhang` and `length`, and only for side `'left'` or `'right'`)
 -   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** (`top`)
--   `minContentHeight` **[number][271]?** custom min content height for auto
+-   `minContentHeight` **[number][305]?** custom min content height for auto
     symbol sizing when side is `'top'` or `'bottom'`
--   `minContentDescent` **[number][271]?** custom min content descent for auto
+-   `minContentDescent` **[number][305]?** custom min content descent for auto
     symbol sizing when side is `'top'` or `'bottom'`
--   `minContentAscent` **[number][271]?** custom min content ascent for auto
+-   `minContentAscent` **[number][305]?** custom min content ascent for auto
     symbol sizing when side is `'top'` or `'bottom'`
--   `descent` **[number][271]?** force descent of symbol when side is `'top'` or
+-   `descent` **[number][305]?** force descent of symbol when side is `'top'` or
     `'bottom'` - height is forced with `length` property
--   `fullContentBounds` **[boolean][272]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][306]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][272]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][306]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -657,20 +895,20 @@ Place an integral (with optional limits) before an equation phrase
 
 ### Properties
 
--   `symbol` **[string][268]** 
--   `content` **[TypeEquationPhrase][270]** 
--   `from` **[TypeEquationPhrase][270]?** bottom limit
--   `to` **[TypeEquationPhrase][270]?** top limit
--   `inSize` **[boolean][272]?** `false` excludes box symbol from size of
+-   `symbol` **[string][301]** 
+-   `content` **[TypeEquationPhrase][304]** 
+-   `from` **[TypeEquationPhrase][304]?** bottom limit
+-   `to` **[TypeEquationPhrase][304]?** top limit
+-   `inSize` **[boolean][306]?** `false` excludes box symbol from size of
     resulting phrase (`true`)
--   `space` **[number][271]?** horizontal space between symbol and content (`0.05`)
--   `topSpace` **[number][271]?** space between content top and symbol top (`0.1`)
--   `bottomSpace` **[number][271]?** space between content bottom and symbol bottom (`0.1`)
--   `height` **[number][271]?** force height of symbol
--   `yOffset` **[number][271]?** y offset of symbol (`0`)
--   `scale` **[number][271]?** content scale (`1`)
--   `fromScale` **[number][271]?** scale of _from_ (bottom) limit (`0.5`)
--   `toScale` **[number][271]?** scale of _to_ (top) limit (`0.5`)
+-   `space` **[number][305]?** horizontal space between symbol and content (`0.05`)
+-   `topSpace` **[number][305]?** space between content top and symbol top (`0.1`)
+-   `bottomSpace` **[number][305]?** space between content bottom and symbol bottom (`0.1`)
+-   `height` **[number][305]?** force height of symbol
+-   `yOffset` **[number][305]?** y offset of symbol (`0`)
+-   `scale` **[number][305]?** content scale (`1`)
+-   `fromScale` **[number][305]?** scale of _from_ (bottom) limit (`0.5`)
+-   `toScale` **[number][305]?** scale of _to_ (top) limit (`0.5`)
 -   `fromOffset` **TypeParsablePoint?** from limit offest ( `side`:
     `[0, 0]`, `topBottom`: `[0, -0.04]`, `topBottomCenter`: `[0, -0.04]`)
 -   `toOffset` **TypeParsablePoint?** to limit offest (`side`: `[0, 0]`
@@ -679,30 +917,30 @@ Place an integral (with optional limits) before an equation phrase
     relative to symbol. `side` is to the right of the symbol ends, `topBottom`
     is above and below the symbol ends and `topBottomCenter` is above and below
     the integral mid point (`'side'`)
--   `limitsAroundContent` **[boolean][272]?** `false` means content left is
+-   `limitsAroundContent` **[boolean][306]?** `false` means content left is
     aligned with furthest right of limits
--   `fromXPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][271])?** x position
+-   `fromXPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][305])?** x position
     of limit relative to the symbol (`side`: `0.5`, `topBottom`: `0.1`,
     `topBottomCenter`: `'center'`)
--   `fromYPositio` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][271])?** y position of the limit relavite to the symbol (`'bottom'`)
--   `fromXAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][271])?** limit x
+-   `fromYPositio` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][305])?** y position of the limit relavite to the symbol (`'bottom'`)
+-   `fromXAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][305])?** limit x
     alignment (`side`: `'left'`, `topBottom`: `center`,
     `topBottomCenter`: `'center'`)
--   `fromYAlign` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][271])?** limit y alignment (`side`: `'middle'`, `topBottom`: `'top'`,
+-   `fromYAlign` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][305])?** limit y alignment (`side`: `'middle'`, `topBottom`: `'top'`,
     `topBottomCenter`: `'top'`)
--   `toXPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][271])?** x position
+-   `toXPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][305])?** x position
     of limit relative to the symbol (`side`: `'right'`, `topBottom`: `0.9`,
     `topBottomCenter`: `'center'`)
--   `toYPosition` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][271])?** y position of the limit relavite to the symbol (`side`: `'top'`,
+-   `toYPosition` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][305])?** y position of the limit relavite to the symbol (`side`: `'top'`,
     `topBottom`: `top`, `topBottomCenter`: `'top'`)
--   `toXAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][271])?** limit x
+-   `toXAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][305])?** limit x
     alignment (`side`: `'left'`, `topBottom`: `center`,
     `topBottomCenter`: `'center'`)
--   `toYAlign` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][271])?** limit y alignment (`side`: `'middle'`, `topBottom`: `bottom`,
+-   `toYAlign` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][305])?** limit y alignment (`side`: `'middle'`, `topBottom`: `bottom`,
     `topBottomCenter`: `'bottom'`)
--   `fullContentBounds` **[boolean][272]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][306]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][272]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][306]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -764,28 +1002,28 @@ Place an equation phrase in a sum of operation
 
 ### Properties
 
--   `symbol` **[string][268]** 
--   `content` **[TypeEquationPhrase][270]** 
--   `from` **[TypeEquationPhrase][270]?** 
--   `to` **[TypeEquationPhrase][270]?** 
--   `inSize` **[boolean][272]?** `false` excludes sum of operator from size of
+-   `symbol` **[string][301]** 
+-   `content` **[TypeEquationPhrase][304]** 
+-   `from` **[TypeEquationPhrase][304]?** 
+-   `to` **[TypeEquationPhrase][304]?** 
+-   `inSize` **[boolean][306]?** `false` excludes sum of operator from size of
     resulting phrase (`true`)
--   `space` **[number][271]?** horiztonaly space between symbol and content (`0.05`)
--   `topSpace` **[number][271]?** space symbol extends above content top (`0.07`)
--   `bottomSpace` **[number][271]?** space symbol extends below content bottom (`0.07`)
--   `height` **[number][271]?** force height of symbol overwriting `topSpace`
--   `yOffset` **[number][271]?** offset of symbol in y (`0`)
--   `scale` **[number][271]?** content scale (`1`)
--   `fromScale` **[number][271]?** scale of _from_ phrase (`0.5`)
--   `toScale` **[number][271]?** scale of _to_ phrase (`0.5`)
--   `fromSpace` **[number][271]?** space between symbol and `from` phrase
+-   `space` **[number][305]?** horiztonaly space between symbol and content (`0.05`)
+-   `topSpace` **[number][305]?** space symbol extends above content top (`0.07`)
+-   `bottomSpace` **[number][305]?** space symbol extends below content bottom (`0.07`)
+-   `height` **[number][305]?** force height of symbol overwriting `topSpace`
+-   `yOffset` **[number][305]?** offset of symbol in y (`0`)
+-   `scale` **[number][305]?** content scale (`1`)
+-   `fromScale` **[number][305]?** scale of _from_ phrase (`0.5`)
+-   `toScale` **[number][305]?** scale of _to_ phrase (`0.5`)
+-   `fromSpace` **[number][305]?** space between symbol and `from` phrase
     (`0.04`)
--   `toSpace` **[number][271]?** space between symbol and `to` phrase (`0.04`)
+-   `toSpace` **[number][305]?** space between symbol and `to` phrase (`0.04`)
 -   `fromOffset` **TypeParsablePoint?** offset of `from` phrase (`[0, 0]`)
 -   `toOffset` **TypeParsablePoint?** offset of `to` phrase (`[0, 0]`)
--   `fullContentBounds` **[boolean][272]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][306]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][272]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][306]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -837,28 +1075,28 @@ Place an equation phrase in a product of operation
 
 ### Properties
 
--   `symbol` **[string][268]** 
--   `content` **[TypeEquationPhrase][270]** 
--   `from` **[TypeEquationPhrase][270]?** 
--   `to` **[TypeEquationPhrase][270]?** 
--   `inSize` **[boolean][272]?** `false` excludes product of operator from size of
+-   `symbol` **[string][301]** 
+-   `content` **[TypeEquationPhrase][304]** 
+-   `from` **[TypeEquationPhrase][304]?** 
+-   `to` **[TypeEquationPhrase][304]?** 
+-   `inSize` **[boolean][306]?** `false` excludes product of operator from size of
     resulting phrase (`true`)
--   `space` **[number][271]?** horiztonaly space between symbol and content (`0.05`)
--   `topSpace` **[number][271]?** space symbol extends above content top (`0.07`)
--   `bottomSpace` **[number][271]?** space symbol extends below content bottom (`0.07`)
--   `height` **[number][271]?** force height of symbol overwriting `topSpace`
--   `yOffset` **[number][271]?** offset of symbol in y (`0`)
--   `scale` **[number][271]?** content scale (`1`)
--   `fromScale` **[number][271]?** scale of _from_ phrase (`0.5`)
--   `toScale` **[number][271]?** scale of _to_ phrase (`0.5`)
--   `fromSpace` **[number][271]?** space between symbol and `from` phrase
+-   `space` **[number][305]?** horiztonaly space between symbol and content (`0.05`)
+-   `topSpace` **[number][305]?** space symbol extends above content top (`0.07`)
+-   `bottomSpace` **[number][305]?** space symbol extends below content bottom (`0.07`)
+-   `height` **[number][305]?** force height of symbol overwriting `topSpace`
+-   `yOffset` **[number][305]?** offset of symbol in y (`0`)
+-   `scale` **[number][305]?** content scale (`1`)
+-   `fromScale` **[number][305]?** scale of _from_ phrase (`0.5`)
+-   `toScale` **[number][305]?** scale of _to_ phrase (`0.5`)
+-   `fromSpace` **[number][305]?** space between symbol and `from` phrase
     (`0.04`)
--   `toSpace` **[number][271]?** space between symbol and `to` phrase (`0.04`)
+-   `toSpace` **[number][305]?** space between symbol and `to` phrase (`0.04`)
 -   `fromOffset` **TypeParsablePoint?** offset of `from` phrase (`[0, 0]`)
 -   `toOffset` **TypeParsablePoint?** offset of `to` phrase (`[0, 0]`)
--   `fullContentBounds` **[boolean][272]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][306]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][272]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][306]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -908,11 +1146,11 @@ Equation subscript
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `subscript` **[TypeEquationPhrase][270]** 
--   `scale` **[number][271]?** scale of subscript (`0.5`)
+-   `content` **[TypeEquationPhrase][304]** 
+-   `subscript` **[TypeEquationPhrase][304]** 
+-   `scale` **[number][305]?** scale of subscript (`0.5`)
 -   `offset` **TypeParsablePoint?** offset of subscript (`[0, 0]`)
--   `inSize` **[boolean][272]?** `true` excludes subscript from size of
+-   `inSize` **[boolean][306]?** `true` excludes subscript from size of
     resulting phrase (`true`)
 
 ### Examples
@@ -942,11 +1180,11 @@ Equation superscript
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `superscript` **[TypeEquationPhrase][270]** 
--   `scale` **[number][271]?** scale of superscript (`0.5`)
+-   `content` **[TypeEquationPhrase][304]** 
+-   `superscript` **[TypeEquationPhrase][304]** 
+-   `scale` **[number][305]?** scale of superscript (`0.5`)
 -   `offset` **TypeParsablePoint?** offset of superscript (`[0, 0]`)
--   `inSize` **[boolean][272]?** `true` excludes superscript from size of
+-   `inSize` **[boolean][306]?** `true` excludes superscript from size of
     resulting phrase (`true`)
 
 ### Examples
@@ -976,13 +1214,13 @@ Equation superscript and subscript
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `superscript` **[TypeEquationPhrase][270]** 
--   `subscript` **[TypeEquationPhrase][270]** 
--   `scale` **[number][271]?** scale of superscript (`0.5`)
+-   `content` **[TypeEquationPhrase][304]** 
+-   `superscript` **[TypeEquationPhrase][304]** 
+-   `subscript` **[TypeEquationPhrase][304]** 
+-   `scale` **[number][305]?** scale of superscript (`0.5`)
 -   `superscriptOffset` **TypeParsablePoint?** offset of superscript (`[0, 0]`)
 -   `subscriptOffset` **TypeParsablePoint?** offset of subscript (`[0, 0]`)
--   `inSize` **[boolean][272]?** `true` excludes superscript from size of
+-   `inSize` **[boolean][306]?** `true` excludes superscript from size of
     resulting phrase (`true`)
 
 ### Examples
@@ -1017,17 +1255,17 @@ A symbol between the content and comment is optional.
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `comment` **[TypeEquationPhrase][270]** 
--   `symbol` **[string][268]?** optional symbol between content and comment
--   `contentSpace` **[number][271]?** space from content to symbol (`0.03`)
--   `commentSpace` **[number][271]?** space from symbol to comment (`0.03`)
--   `scale` **[number][271]?** comment scale (`0.6`)
--   `inSize` **[boolean][272]?** `false` excludes the symbol and comment from
+-   `content` **[TypeEquationPhrase][304]** 
+-   `comment` **[TypeEquationPhrase][304]** 
+-   `symbol` **[string][301]?** optional symbol between content and comment
+-   `contentSpace` **[number][305]?** space from content to symbol (`0.03`)
+-   `commentSpace` **[number][305]?** space from symbol to comment (`0.03`)
+-   `scale` **[number][305]?** comment scale (`0.6`)
+-   `inSize` **[boolean][306]?** `false` excludes the symbol and comment from
     thre resulting size of the equation phrase (`true`)
--   `fullContentBounds` **[boolean][272]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][306]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][272]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][306]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -1075,15 +1313,15 @@ functions.
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `symbol` **[string][268]** strike symbol
--   `comment` **[TypeEquationPhrase][270]** 
--   `inSize` **[boolean][272]?** `false` excludes the symbol and comment from
+-   `content` **[TypeEquationPhrase][304]** 
+-   `symbol` **[string][301]** strike symbol
+-   `comment` **[TypeEquationPhrase][304]** 
+-   `inSize` **[boolean][306]?** `false` excludes the symbol and comment from
     thre resulting size of the equation phrase (`true`)
--   `space` **[number][271]?** top, right, bottom and left extension of symbol
+-   `space` **[number][305]?** top, right, bottom and left extension of symbol
     beyond content (`0.03`)
--   `scale` **[number][271]?** comment scale (`0.6`)
--   `commentSpace` **[number][271]?** space from symbol to comment (`0.03`)
+-   `scale` **[number][305]?** comment scale (`0.6`)
+-   `commentSpace` **[number][305]?** space from symbol to comment (`0.03`)
 
 ### Examples
 
@@ -1126,11 +1364,11 @@ Equation padding options
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `top` **[number][271]?** (`0`)
--   `right` **[number][271]?** (`0`)
--   `bottom` **[number][271]?** (`0`)
--   `left` **[number][271]?** (`0`)
+-   `content` **[TypeEquationPhrase][304]** 
+-   `top` **[number][305]?** (`0`)
+-   `right` **[number][305]?** (`0`)
+-   `bottom` **[number][305]?** (`0`)
+-   `left` **[number][305]?** (`0`)
 
 ### Examples
 
@@ -1159,12 +1397,12 @@ Equation matrix
 
 ### Properties
 
--   `order` **\[[number][271], [number][271]]?** (`[1, length-of-content]`)
--   `left` **[string][268]?** left bracket symbol
--   `content` **[Array][269]&lt;[TypeEquationPhrase][270]>?** Array of equation phrases
+-   `order` **\[[number][305], [number][305]]?** (`[1, length-of-content]`)
+-   `left` **[string][301]?** left bracket symbol
+-   `content` **[Array][302]&lt;[TypeEquationPhrase][304]>?** Array of equation phrases
     where each element is a matrix element
--   `right` **[string][268]?** right bracket symbol
--   `scale` **[number][271]?** scale of matrix elements (`0.7`)
+-   `right` **[string][301]?** right bracket symbol
+-   `scale` **[number][305]?** scale of matrix elements (`0.7`)
 -   `fit` **(`"max"` \| `"min"` | TypeParsablePoint)?** cell size -
     `min` each cell is a rectangle with width equal to largest width in its
     column, and height equal to largest height in its row - `max`
@@ -1176,9 +1414,9 @@ Equation matrix
     (`[0.05, 0.05]`)
 -   `yAlign` **(`"baseline"` \| `"middle"`)?** align cells in a row with the
     text baseline, or middle of the cell (`baseline`)
--   `brac` **[EQN_Bracket][273]?** bracket options not including
+-   `brac` **[EQN_Bracket][307]?** bracket options not including
     the symbols (`{}`)
--   `fullContentBounds` **[boolean][272]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][306]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
 
 ### Examples
@@ -1240,7 +1478,7 @@ to another equation phrase ('content'). For example:
 </pre>
 
 The options for defining how to annotate one equation phrase with another is
-[EQN_Annotation][67]
+[EQN_Annotation][72]
 
 Content can also be annotated with a glyph (that itself may also be
 annotated). The glyph can either encompass the content, or can be to the
@@ -1268,26 +1506,26 @@ Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `annotation` **[EQN_Annotation][274]?** use for just one annotation
--   `annotations` **[Array][269]&lt;[EQN_Annotation][274]>?** use for multiple annotations
--   `inSize` **[boolean][272]?** `true` means resulting size includes
+-   `content` **[TypeEquationPhrase][304]** 
+-   `annotation` **[EQN_Annotation][308]?** use for just one annotation
+-   `annotations` **[Array][302]&lt;[EQN_Annotation][308]>?** use for multiple annotations
+-   `inSize` **[boolean][306]?** `true` means resulting size includes
     annotations (`true`)
--   `space` **[number][271]?** extend resulting equation phrase size by space on
+-   `space` **[number][305]?** extend resulting equation phrase size by space on
     top, right, bottom and left sides (`0`)
--   `topSpace` **[number][271]?** extend resulting equation phrase size by space
+-   `topSpace` **[number][305]?** extend resulting equation phrase size by space
     on top
--   `bottomSpace` **[number][271]?** extend resulting equation phrase size by
+-   `bottomSpace` **[number][305]?** extend resulting equation phrase size by
     space on bottom
--   `leftSpace` **[number][271]?** extend resulting equation phrase size by space
+-   `leftSpace` **[number][305]?** extend resulting equation phrase size by space
     on left
--   `rightSpace` **[number][271]?** extend resulting equation phrase size by
+-   `rightSpace` **[number][305]?** extend resulting equation phrase size by
     space on right
--   `contentScale` **[number][271]?** scale content (`1`)
--   `glyphs` **[EQN_Glyphs][275]?** glyphs to annotate content with
--   `fullContentBounds` **[boolean][272]?** use full bounds of content,
+-   `contentScale` **[number][305]?** scale content (`1`)
+-   `glyphs` **[EQN_Glyphs][309]?** glyphs to annotate content with
+-   `fullContentBounds` **[boolean][306]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][272]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][306]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -1393,19 +1631,19 @@ In comparison, if `yAlign` were equal to `'top'`, then it would result in:
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** 
--   `xPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][271])?** where number is
+-   `content` **[TypeEquationPhrase][304]** 
+-   `xPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][305])?** where number is
      the percentage width of the content (`'center'`)
--   `yPosition` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"` \| [number][271])?** where number is the percentage height of the content (`'top'`)
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][271])?** where number is
+-   `yPosition` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"` \| [number][305])?** where number is the percentage height of the content (`'top'`)
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][305])?** where number is
     the percentage width of the annotation (`'center'`)
--   `yAlign` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"` \| [number][271])?** where
+-   `yAlign` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"` \| [number][305])?** where
     number is the percentage width of the annotation (`'bottom'`)
--   `offset` **[Point][276]?** annotation offset (`[0, 0]`)
--   `scale` **[number][271]?** annotation scale (`1`)
--   `inSize` **[boolean][272]?** (`true`)
--   `fullContentBounds` **[boolean][272]?** (`false`)
--   `reference` **[string][268]?** calling getBounds on a glyph can return a
+-   `offset` **[Point][310]?** annotation offset (`[0, 0]`)
+-   `scale` **[number][305]?** annotation scale (`1`)
+-   `inSize` **[boolean][306]?** (`true`)
+-   `fullContentBounds` **[boolean][306]?** (`false`)
+-   `reference` **[string][301]?** calling getBounds on a glyph can return a
     suggested position, alignment and offset of an annotation with some name. If
     this name is defined here, then `xPosition`, `yPosition`, `xAlign`, `yAlign`
     and `offset` will be overwritten with the glyph's suggestion.
@@ -1448,19 +1686,19 @@ can also be annotated.
 
 ### Properties
 
--   `symbol` **[string][268]** 
--   `annotation` **[EQN_Annotation][274]?** use for one annotation only instead
+-   `symbol` **[string][301]** 
+-   `annotation` **[EQN_Annotation][308]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][269]&lt;[EQN_Annotation][274]>?** use for one or more
+-   `annotations` **[Array][302]&lt;[EQN_Annotation][308]>?** use for one or more
     annotations
--   `space` **[number][271]?** default space the glyph should extend beyond the
+-   `space` **[number][305]?** default space the glyph should extend beyond the
     top, right, left and bottom sides of the content (`0`)
--   `topSpace` **[number][271]?** space the glyph extends beyond the content top
--   `rightSpace` **[number][271]?** space the glyph extends beyond the content
+-   `topSpace` **[number][305]?** space the glyph extends beyond the content top
+-   `rightSpace` **[number][305]?** space the glyph extends beyond the content
     right
--   `bottomSpace` **[number][271]?** space the glyph extends beyond the content
+-   `bottomSpace` **[number][305]?** space the glyph extends beyond the content
     bottom
--   `leftSpace` **[number][271]?** space the glyph extends beyond the content
+-   `leftSpace` **[number][305]?** space the glyph extends beyond the content
     left
 
 ### Examples
@@ -1498,26 +1736,26 @@ The glyph can also be annotated.
 
 ### Properties
 
--   `symbol` **[string][268]** 
--   `annotation` **[EQN_Annotation][274]?** use for one annotation only instead
+-   `symbol` **[string][301]** 
+-   `annotation` **[EQN_Annotation][308]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][269]&lt;[EQN_Annotation][274]>?** use for one or more
+-   `annotations` **[Array][302]&lt;[EQN_Annotation][308]>?** use for one or more
     annotations
--   `space` **[number][271]?** horizontal space between glyph and content (`0`)
--   `overhang` **[number][271]?** amount glyph extends above content top and
+-   `space` **[number][305]?** horizontal space between glyph and content (`0`)
+-   `overhang` **[number][305]?** amount glyph extends above content top and
     below content bottom (`0`)
--   `topSpace` **[number][271]?** amount glyph extends above content top
--   `bottomSpace` **[number][271]?** amount glyph extends below content bottom
--   `minContentHeight` **[number][271]?** force min content height for auto
+-   `topSpace` **[number][305]?** amount glyph extends above content top
+-   `bottomSpace` **[number][305]?** amount glyph extends below content bottom
+-   `minContentHeight` **[number][305]?** force min content height for auto
     glyph scaling
--   `minContentDescent` **[number][271]?** force min content descent for auto
+-   `minContentDescent` **[number][305]?** force min content descent for auto
     glyph scaling
--   `minContentAscent` **[number][271]?** force min content ascent for auto
+-   `minContentAscent` **[number][305]?** force min content ascent for auto
     scaling
--   `descent` **[number][271]?** force descent of glyph
--   `height` **[number][271]?** force height of glyph
--   `yOffset` **[number][271]?** offset glyph in y (`0`)
--   `annotationsOverContent` **[boolean][272]?** `true` means only glyph is
+-   `descent` **[number][305]?** force descent of glyph
+-   `height` **[number][305]?** force height of glyph
+-   `yOffset` **[number][305]?** offset glyph in y (`0`)
+-   `annotationsOverContent` **[boolean][306]?** `true` means only glyph is
     separated from content by `space` and not annotations (false\`)
 
 ### Examples
@@ -1569,19 +1807,19 @@ The glyph can also be annotated.
 
 ### Properties
 
--   `symbol` **[string][268]** 
--   `annotation` **[EQN_Annotation][274]?** use for one annotation only instead
+-   `symbol` **[string][301]** 
+-   `annotation` **[EQN_Annotation][308]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][269]&lt;[EQN_Annotation][274]>?** use for one or more
+-   `annotations` **[Array][302]&lt;[EQN_Annotation][308]>?** use for one or more
     annotations
--   `space` **[number][271]?** vertical space between glyph and content (`0`)
--   `overhang` **[number][271]?** amount glyph extends above content top and
+-   `space` **[number][305]?** vertical space between glyph and content (`0`)
+-   `overhang` **[number][305]?** amount glyph extends above content top and
     below content bottom (`0`)
--   `width` **[number][271]?** force width of glyph
--   `leftSpace` **[number][271]?** amount glyph extends beyond content left
--   `rightSpace` **[number][271]?** amount glyph extends beyond content right
--   `xOffset` **[number][271]?** offset glyph in x (`0`)
--   `annotationsOverContent` **[boolean][272]?** `true` means only glyph is
+-   `width` **[number][305]?** force width of glyph
+-   `leftSpace` **[number][305]?** amount glyph extends beyond content left
+-   `rightSpace` **[number][305]?** amount glyph extends beyond content right
+-   `xOffset` **[number][305]?** offset glyph in x (`0`)
+-   `annotationsOverContent` **[boolean][306]?** `true` means only glyph is
     separated from content by `space` and not annotations (false\`)
 
 ### Examples
@@ -1616,11 +1854,11 @@ Multiple glyphs are ok, but only one per position.
 
 ### Properties
 
--   `encompass` **[EQN_EncompassGlyph][277]?** 
--   `top` **[EQN_TopBottomGlyph][278]?** 
--   `right` **[EQN_LeftRightGlyph][279]?** 
--   `bottom` **[EQN_TopBottomGlyph][278]?** 
--   `left` **[EQN_LeftRightGlyph][279]?** 
+-   `encompass` **[EQN_EncompassGlyph][311]?** 
+-   `top` **[EQN_TopBottomGlyph][312]?** 
+-   `right` **[EQN_LeftRightGlyph][313]?** 
+-   `bottom` **[EQN_TopBottomGlyph][312]?** 
+-   `left` **[EQN_LeftRightGlyph][313]?** 
 
 ## Equation Symbol OBJECTS
 
@@ -1645,14 +1883,14 @@ Vinculum equation symbol
 ### Properties
 
 -   `symbol` **`"vinculum"`** 
--   `color` **[Array][269]&lt;[number][271]>?** (equation color)
--   `lineWidth` **[number][271]?** (`0.01`)
+-   `color` **[Array][302]&lt;[number][305]>?** (equation color)
+-   `lineWidth` **[number][305]?** (`0.01`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'dynamic'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticWidth` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticWidth` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets width of static symbol - `'first'` calculates and sets width
     based on first use (`'first'`)
--   `staticHeight` **([number][271] \| `"first"`)?** 
+-   `staticHeight` **([number][305] \| `"first"`)?** 
 
 ### Examples
 
@@ -1694,17 +1932,17 @@ Box equation symbol
 ### Properties
 
 -   `symbol` **`"box"`** 
--   `color` **[Array][269]&lt;[number][271]>?** (equation color)
--   `lineWidth` **[number][271]?** (`0.01`)
--   `fill` **[boolean][272]?** (`false`)
--   `width` **[number][271]?** force width instead of auto calculation
--   `height` **[number][271]?** force height instead of auto calculationg
+-   `color` **[Array][302]&lt;[number][305]>?** (equation color)
+-   `lineWidth` **[number][305]?** (`0.01`)
+-   `fill` **[boolean][306]?** (`false`)
+-   `width` **[number][305]?** force width instead of auto calculation
+-   `height` **[number][305]?** force height instead of auto calculationg
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'dynamic'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticWidth` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticWidth` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets width of static symbol - `'first'` calculates and sets width
     based on first use
--   `staticHeight` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use
 
@@ -1761,15 +1999,15 @@ Arrow equation symbol
 ### Properties
 
 -   `symbol` **`"arrow"`** 
--   `color` **[Array][269]&lt;[number][271]>?** (equation color)
+-   `color` **[Array][302]&lt;[number][305]>?** (equation color)
 -   `direction` **(`"up"` \| `"down"` \| `"left"` \| `"right"`)?** (`'right'`)
--   `lineWidth` **[number][271]?** (`0.01`)
--   `arrowWidth` **[number][271]?** (`0.01`)
--   `arrowHeight` **[number][271]?** (`0.04`)
--   `lineWidth` **[number][271]?** (`0.01`)
+-   `lineWidth` **[number][305]?** (`0.01`)
+-   `arrowWidth` **[number][305]?** (`0.01`)
+-   `arrowHeight` **[number][305]?** (`0.04`)
+-   `lineWidth` **[number][305]?** (`0.01`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'dynamic'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -1828,12 +2066,12 @@ Sum equation symbol
 ### Properties
 
 -   `symbol` **`"sum"`** 
--   `color` **[Array][269]&lt;[number][271]>?** (equation color)
--   `lineWidth` **[number][271]?** (`height * 0.88 / (25 * height + 15)`)
--   `sides` **[number][271]?** number of sides that make up serif curve (`5`)
+-   `color` **[Array][302]&lt;[number][305]>?** (equation color)
+-   `lineWidth` **[number][305]?** (`height * 0.88 / (25 * height + 15)`)
+-   `sides` **[number][305]?** number of sides that make up serif curve (`5`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -1852,7 +2090,7 @@ eqn.addElements({
 
 ## EQN_ProdSymbol
 
-Product equation symbol used in [EQN_ProdOf][40]
+Product equation symbol used in [EQN_ProdOf][45]
 
 <pre>
                                          width
@@ -1895,12 +2133,12 @@ Product equation symbol used in [EQN_ProdOf][40]
 ### Properties
 
 -   `symbol` **`"prod"`** 
--   `color` **[Array][269]&lt;[number][271]>?** (equation color)
--   `lineWidth` **[number][271]?** (related to height)
--   `sides` **[number][271]?** number of sides that make up serif curve (`5`)
+-   `color` **[Array][302]&lt;[number][305]>?** (equation color)
+-   `lineWidth` **[number][305]?** (related to height)
+-   `sides` **[number][305]?** number of sides that make up serif curve (`5`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -1919,7 +2157,7 @@ eqn.addElements({
 
 ## EQN_IntegralSymbol
 
-Integral equation symbol used in [EQN_Integral][34]
+Integral equation symbol used in [EQN_Integral][39]
 
 <pre>
 //     --------------------------------------------------   0000000
@@ -1961,19 +2199,19 @@ Integral equation symbol used in [EQN_Integral][34]
 ### Properties
 
 -   `symbol` **`"int"`** 
--   `color` **[Array][269]&lt;[number][271]>?** (equation color)
--   `lineWidth` **[number][271]?** (related to height)
--   `sides` **[number][271]?** number of sides that make up s curve (`30`)
--   `num` **[number][271]?** number of integral symbols (`1`)
+-   `color` **[Array][302]&lt;[number][305]>?** (equation color)
+-   `lineWidth` **[number][305]?** (related to height)
+-   `sides` **[number][305]?** number of sides that make up s curve (`30`)
+-   `num` **[number][305]?** number of integral symbols (`1`)
 -   `type` **(`"line"` \| `"generic"`)?** `line` draws a circle through the
      symbols denoting a line integral (`generic`)
--   `tipWidth` **[number][271]?** width of s curve tip (related to lineWidth)
--   `serif` **[boolean][272]?** `false` to remove serifs (`true`)
--   `serifSides` **[number][271]?** number of sides in serif circles (`10`)
--   `lineIntegralSides` **[number][271]?** number of sides in line integral circle (`20`)
+-   `tipWidth` **[number][305]?** width of s curve tip (related to lineWidth)
+-   `serif` **[boolean][306]?** `false` to remove serifs (`true`)
+-   `serifSides` **[number][305]?** number of sides in serif circles (`10`)
+-   `lineIntegralSides` **[number][305]?** number of sides in line integral circle (`20`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -1999,7 +2237,7 @@ int: {
 
 ## EQN_StrikeSymbol
 
-Strike equation symbol used in [EQN_Strike][25].
+Strike equation symbol used in [EQN_Strike][30].
 
 Four styles of strike symbol are available:
 
@@ -2030,19 +2268,19 @@ Four styles of strike symbol are available:
 ### Properties
 
 -   `symbol` **`"strike"`** 
--   `color` **[Array][269]&lt;[number][271]>?** (equation default)
+-   `color` **[Array][302]&lt;[number][305]>?** (equation default)
 -   `style` **(`"cross"` \| `"forward"` \| `"back"` \| `"horizontal"`)?** (`'cross'`)
--   `lineWidth` **[number][271]?** (`0.015`)
--   `width` **[number][271]?** force width of strike (normally defined by
+-   `lineWidth` **[number][305]?** (`0.015`)
+-   `width` **[number][305]?** force width of strike (normally defined by
     content size)
--   `height` **[number][271]?** force height of strike (normally defined by
+-   `height` **[number][305]?** force height of strike (normally defined by
     content size)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
--   `staticWidth` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticWidth` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets width of static symbol - `'first'` calculates and sets width
     based on first use (`'first'`)
 
@@ -2104,16 +2342,16 @@ Bracket equation symbol
 ### Properties
 
 -   `symbol` **`"bracket"`** 
--   `color` **[Array][269]&lt;[number][271]>?** (equation default)
+-   `color` **[Array][302]&lt;[number][305]>?** (equation default)
 -   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
     bracket ('left')
--   `sides` **[number][271]?** number of sides in bracket curve (`10`)
--   `lineWidth` **[number][271]?** (depends on height)
--   `tipWidth` **[number][271]?** (depends on lineWidth)
--   `width` **[number][271]?** force width bracket (normally depends on height)
+-   `sides` **[number][305]?** number of sides in bracket curve (`10`)
+-   `lineWidth` **[number][305]?** (depends on height)
+-   `tipWidth` **[number][305]?** (depends on lineWidth)
+-   `width` **[number][305]?** force width bracket (normally depends on height)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -2170,14 +2408,14 @@ Angle bracket equation symbol
 ### Properties
 
 -   `symbol` **`"angleBracket"`** 
--   `color` **[Array][269]&lt;[number][271]>?** (equation default)
+-   `color` **[Array][302]&lt;[number][305]>?** (equation default)
 -   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
     angle bracket ('left')
--   `lineWidth` **[number][271]?** (depends on height)
--   `width` **[number][271]?** force width bracket (normally depends on height)
+-   `lineWidth` **[number][305]?** (depends on height)
+-   `width` **[number][305]?** force width bracket (normally depends on height)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -2254,16 +2492,16 @@ Brace equation symbol
 ### Properties
 
 -   `symbol` **`"brace"`** 
--   `color` **[Array][269]&lt;[number][271]>?** (equation default)
+-   `color` **[Array][302]&lt;[number][305]>?** (equation default)
 -   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
     brace ('left')
--   `lineWidth` **[number][271]?** (depends on height)
--   `tipWidth` **[number][271]?** (depends on lineWidth)
--   `width` **[number][271]?** force width bracket (normally depends on height)
--   `sides` **[number][271]?** number of sides in curved sections (`10`)
+-   `lineWidth` **[number][305]?** (depends on height)
+-   `tipWidth` **[number][305]?** (depends on lineWidth)
+-   `width` **[number][305]?** force width bracket (normally depends on height)
+-   `sides` **[number][305]?** number of sides in curved sections (`10`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -2317,13 +2555,13 @@ Bar equation symbol
 ### Properties
 
 -   `symbol` **`"bar"`** 
--   `color` **[Array][269]&lt;[number][271]>?** (equation default)
+-   `color` **[Array][302]&lt;[number][305]>?** (equation default)
 -   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
     bar ('left')
--   `lineWidth` **[number][271]?** (`0.01`)
+-   `lineWidth` **[number][305]?** (`0.01`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -2386,17 +2624,17 @@ Square bracket equation symbol
 ### Properties
 
 -   `symbol` **`"squareBracket"`** 
--   `color` **[Array][269]&lt;[number][271]>?** (equation default)
+-   `color` **[Array][302]&lt;[number][305]>?** (equation default)
 -   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
     square bracket ('left')
--   `lineWidth` **[number][271]?** (`0.01`)
--   `tipWidth` **[number][271]?** (`0.01`)
--   `width` **[number][271]?** (depends on lineWidth)
--   `radius` **[number][271]?** optional curved corner radius (`0`)
--   `sides` **[number][271]?** number of sides in curve (`5`)
+-   `lineWidth` **[number][305]?** (`0.01`)
+-   `tipWidth` **[number][305]?** (`0.01`)
+-   `width` **[number][305]?** (depends on lineWidth)
+-   `radius` **[number][305]?** optional curved corner radius (`0`)
+-   `sides` **[number][305]?** number of sides in curve (`5`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -2428,7 +2666,7 @@ eqn.addElements({
 
 ## EQN_RadicalSymbol
 
-Radical equation symbol used in [EQN_Root][22].
+Radical equation symbol used in [EQN_Root][27].
 
 The radical symbol allows customization on how to draw the radical. Mostly
 it will not be needed, but for edge case equation layouts it may be useful.
@@ -2464,27 +2702,27 @@ it will not be needed, but for edge case equation layouts it may be useful.
 ### Properties
 
 -   `symbol` **`"radical"`** 
--   `color` **[Array][269]&lt;[number][271]>?** 
--   `lineWidth` **[number][271]?** (`0.01`)
--   `width` **[number][271]?** force width of content area (normally defined by content size)
--   `height` **[number][271]?** force height of content area (normally defined by content size)
--   `startWidth` **[number][271]?** (`0.5`)
--   `startHeight` **[number][271]?** (`0.5`)
--   `maxStartWidth` **[number][271]??** (`0.15`)
--   `maxStartHeight` **[number][271]??** (`0.15`)
--   `tickHeight` **[number][271]?** 
--   `tickWidth` **[number][271]?** 
--   `downWidth` **[number][271]?** 
--   `proportionalToHeight` **[boolean][272]?** `true` makes `startHeight`,
+-   `color` **[Array][302]&lt;[number][305]>?** 
+-   `lineWidth` **[number][305]?** (`0.01`)
+-   `width` **[number][305]?** force width of content area (normally defined by content size)
+-   `height` **[number][305]?** force height of content area (normally defined by content size)
+-   `startWidth` **[number][305]?** (`0.5`)
+-   `startHeight` **[number][305]?** (`0.5`)
+-   `maxStartWidth` **[number][305]??** (`0.15`)
+-   `maxStartHeight` **[number][305]??** (`0.15`)
+-   `tickHeight` **[number][305]?** 
+-   `tickWidth` **[number][305]?** 
+-   `downWidth` **[number][305]?** 
+-   `proportionalToHeight` **[boolean][306]?** `true` makes `startHeight`,
     `startWidth`, `tickHeight`, `tickWidth`, and `downWidth` a percentage of
     height instead of absolute (`true`)
--   `lineWidth2` **[number][271]?** lineWidth of down stroke (`2 x lineWidth`)
+-   `lineWidth2` **[number][305]?** lineWidth of down stroke (`2 x lineWidth`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
--   `staticWidth` **([number][271] \| `"first"`)?** used when `draw`=`static`.
+-   `staticWidth` **([number][305] \| `"first"`)?** used when `draw`=`static`.
     `number` sets width of static symbol - `'first'` calculates and sets width
     based on first use (`'first'`)
 
@@ -2534,9 +2772,9 @@ An equation phrase is used to define an equation form. An equation phrase
 can either be the entirety of the form definition, or a series of nested
 phrases.
 
--   An object or array definition (e.g. [EQN_Fraction][13])
+-   An object or array definition (e.g. [EQN_Fraction][18])
 -   A string that represents an equation element
--   An array of [TypeEquationPhrase][122]
+-   An array of [TypeEquationPhrase][127]
 
 
 ### Examples
@@ -2563,7 +2801,7 @@ Defines how to align a form
 
 ### Properties
 
--   `fixTo` **(DiagramElementPrimitive | DiagramElementCollection | [Point][276])** 
+-   `fixTo` **(DiagramElementPrimitive | DiagramElementCollection | [Point][310])** 
 -   `xAlign` **TypeHAlign** 
 -   `yAlign` **TypeVAlign** 
 
@@ -2573,8 +2811,8 @@ Duration and translation options for form animation
 
 ### Properties
 
--   `duration` **[number][271]?** in seconds
--   `translation` **[Object][299]&lt;[TypeFormTranslationProperties][300]>?** 
+-   `duration` **[number][305]?** in seconds
+-   `translation` **[Object][333]&lt;[TypeFormTranslationProperties][334]>?** 
 
 ### Examples
 
@@ -2609,7 +2847,7 @@ Form translation properties
     line, or through a curve. Default: `"linear"`
 -   `direction` **(`"up"` \| `"down"`)?** curve only - element should move
     through an up or down curve
--   `mag` **[number][271]?** the magnitude of the curve
+-   `mag` **[number][305]?** the magnitude of the curve
 
 ## TypeEquationFormObject
 
@@ -2632,7 +2870,7 @@ elements.
 This object defines a how the elements are laid out, what properties the
 elements have, and some animation properties for when animating to this form.
 
-In the [Equation][144] object, forms are defined with form names, and
+In the [Equation][149] object, forms are defined with form names, and
 subForm names. Most of the time, the subForm name can be ignored.
 However, it is useful when dealing with units. Sometimes you will have a
 series of forms you want to animate through, that will be slightly different
@@ -2642,30 +2880,30 @@ complicating the overall equation navigation logic.
 
 See the examples below for how to define subForms.
 
-[Equation#addForms][301].
+[Equation#addForms][335].
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][270]** the equation phrase of the form
+-   `content` **[TypeEquationPhrase][304]** the equation phrase of the form
     defines how the elements are laid out
--   `scale` **[number][271]?** a scaling factor for this form
--   `alignment` **[TypeFormAlignment][302]?** how the Equation's position is aligned with
+-   `scale` **[number][305]?** a scaling factor for this form
+-   `alignment` **[TypeFormAlignment][336]?** how the Equation's position is aligned with
     this form
--   `subForm` **[string][268]?** subForm name - default: `"base"`
--   `description` **[string][268]?** a description associated with this form -
+-   `subForm` **[string][301]?** subForm name - default: `"base"`
+-   `description` **[string][301]?** a description associated with this form -
     used in equation navigator elements (@EquationNavigator)
--   `modifiers` **[object][299]?** string modifiers for the description
--   `fromPrev` **[TypeFormAnimationProperties][303]?** form animation
+-   `modifiers` **[object][333]?** string modifiers for the description
+-   `fromPrev` **[TypeFormAnimationProperties][337]?** form animation
     properties if animating forward from the previous form in a formSeries
--   `fromNext` **[TypeFormAnimationProperties][303]?** form animation
+-   `fromNext` **[TypeFormAnimationProperties][337]?** form animation
     properties if animating backward from the next form in a formSeries
--   `duration` **[TypeFormAnimationProperties][303]?** animation move duration
+-   `duration` **[TypeFormAnimationProperties][337]?** animation move duration
      (fromNext and fromPrev are prioritized over this)
--   `translation` **[TypeFormTranslationProperties][300]?** animation move
+-   `translation` **[TypeFormTranslationProperties][334]?** animation move
     style (fromNext and fromPrev are prioritized over this)
--   `elementMods` **[object][299]?** properties to set in the equation element
+-   `elementMods` **[object][333]?** properties to set in the equation element
     (@DiagramElementPrimitive) when this form is shown
--   `animation` **{duration: [number][271]??, translation: [TypeFormTranslationProperties][300]?}?** 
+-   `animation` **{duration: [number][305]??, translation: [TypeFormTranslationProperties][334]?}?** 
 
 ### Examples
 
@@ -2768,12 +3006,12 @@ forms: {
 
 A single form definition can either be:
 
--   an equation phrase [TypeEquationPhrase][122]
--   or an equation form object [TypeEquationFormObject][131]
+-   an equation phrase [TypeEquationPhrase][127]
+-   or an equation form object [TypeEquationFormObject][136]
 -   or an object of subforms:
 
      {
-        subform1: ([TypeEquationPhrase][122] \| [TypeEquationFormObject][131]),
+        subform1: ([TypeEquationPhrase][127] \| [TypeEquationFormObject][136]),
         subform2: ...
      },
 
@@ -2781,7 +3019,7 @@ A single form definition can either be:
 ## TypeEquationForms
 
 An object of equation forms where each key is the form name and each value
-is a form defintion [TypeEquationForm][134]
+is a form defintion [TypeEquationForm][139]
 
 
 ## TypeFormRestart
@@ -2799,7 +3037,7 @@ The default values in the pulse object are are:
 
 ### Properties
 
--   `formRestart` **{moveFrom: ([Point][276]? | DiagramElementCollection)?, pulse: {duration: [number][271]?, scale: [number][271]?, element: DiagramElement??}?}?** 
+-   `formRestart` **{moveFrom: ([Point][310]? | DiagramElementCollection)?, pulse: {duration: [number][305]?, scale: [number][305]?, element: DiagramElement??}?}?** 
 
 ## Equation Option Types
 
@@ -2808,33 +3046,33 @@ The default values in the pulse object are are:
 
 ## EQN_Equation
 
-Options objects to construct an [Equation][144] class. All properties are optional.
+Options objects to construct an [Equation][149] class. All properties are optional.
 
 ### Properties
 
--   `color` **[Array][269]&lt;[number][271]>?** default: [0.5, 0.5, 0.5, 1]
--   `scale` **[number][271]?** default: 0.7
--   `elements` **[TypeEquationElements][306]?** default: {}
--   `defaultFormAlignment` **[TypeFormAlignment][302]?** default:
-    { fixTo: new [Point][205](0, 0), xAlign: 'left', yAlign: 'baseline}
--   `forms` **[TypeEquationForms][307]?** default: {}
--   `formSeries` **([Array][269]&lt;[string][268]> | [Object][299]&lt;[Array][269]&lt;[string][268]>>)?** an object
+-   `color` **[Array][302]&lt;[number][305]>?** default: [0.5, 0.5, 0.5, 1]
+-   `scale` **[number][305]?** default: 0.7
+-   `elements` **[TypeEquationElements][340]?** default: {}
+-   `defaultFormAlignment` **[TypeFormAlignment][336]?** default:
+    { fixTo: new [Point][210](0, 0), xAlign: 'left', yAlign: 'baseline}
+-   `forms` **[TypeEquationForms][341]?** default: {}
+-   `formSeries` **([Array][302]&lt;[string][301]> | [Object][333]&lt;[Array][302]&lt;[string][301]>>)?** an object
     with each key being a form series name, and each value an array for form
     names. If defined as an array, then a form series object is created where
     the form series name is 'base'. Default: {}
--   `defaultFormSeries` **[string][268]?** If more than one form series is
+-   `defaultFormSeries` **[string][301]?** If more than one form series is
     defined, then a default must be chosen to be the first current one. Default:
     first form defined
--   `formRestart` **[TypeFormRestart][308]?** default: null
--   `font` **DiagramFont?** default [DiagramFont][309]('Times
+-   `formRestart` **[TypeFormRestart][342]?** default: null
+-   `font` **DiagramFont?** default [DiagramFont][343]('Times
     New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
--   `position` **[Point][276]?** default: new [Point][205](0, 0)
--   `formDefaults` **{alignment: [TypeFormAlignment][302]?, elementMods: {}, animation: [TypeFormAnimationProperties][303]}** 
+-   `position` **[Point][310]?** default: new [Point][210](0, 0)
+-   `formDefaults` **{alignment: [TypeFormAlignment][336]?, elementMods: {}, animation: [TypeFormAnimationProperties][337]}** 
 -   `transform` **Transform?** 
 
 ## TypeEquationGoToFormOptions
 
-Options object for [Equation#goToForm][310].
+Options object for [Equation#goToForm][344].
 
 Often, `goToForm` is called to animate from a shown form to a desired form.
 Therefore there will be some equation elements that:
@@ -2854,10 +3092,10 @@ The order that elements are shown, hidden and moved is defined by the
     move existing elements to their correct locations
 -   `'dissolve'`: Dissolve out the entire current form, and then dissolve in the entire new form
 -   `'moveFrom'`: Shows the desired form at the position defined in the
-    formRestart property of [EQN_Equation][139], then moves it to the
+    formRestart property of [EQN_Equation][144], then moves it to the
     current location
 -   `'pulse'`: Same as `'dissolve'`, but once finished will pulse the element
-    defined in the pulse object in the formRestart property of [EQN_Equation][139]
+    defined in the pulse object in the formRestart property of [EQN_Equation][144]
 
 If a form is already animating, then the `ifAnimating` property will define
 the behavior of the animation:
@@ -2873,25 +3111,25 @@ the behavior of the animation:
 
 ### Properties
 
--   `name` **[string][268]?** form name to goto
--   `index` **[number][271]?** form index to goto (can be used instead of name)
+-   `name` **[string][301]?** form name to goto
+-   `index` **[number][305]?** form index to goto (can be used instead of name)
 -   `animate` **(`"move"` \| `"dissolve"` \| `"moveFrom"` \| `"pulse"` \| `"dissolveInThenMove"`)?** default: `"dissolve"`
--   `delay` **[number][271]?** delay before goto start. Default: `0`
--   `dissolveOutTime` **[number][271]?** Default: 0.4 of duration, or 0.4s if
+-   `delay` **[number][305]?** delay before goto start. Default: `0`
+-   `dissolveOutTime` **[number][305]?** Default: 0.4 of duration, or 0.4s if
     no duration
--   `duration` **[number][271]?** animation duration. Default: `null`
--   `blankTime` **[number][271]?** time between dissolve out and dissolve in
+-   `duration` **[number][305]?** animation duration. Default: `null`
+-   `blankTime` **[number][305]?** time between dissolve out and dissolve in
     when animating with `dissolve` or `pulse`. Default: 0.2 of duration, or 0.2s
     if no duration
--   `dissolveInTime` **[number][271]?** Default: 0.4 of duration, or 0.4s if
+-   `dissolveInTime` **[number][305]?** Default: 0.4 of duration, or 0.4s if
     no duration
--   `prioritizeFormDuration` **[boolean][272]?** use duration from the form
-    definition [TypeEquationFormObject][131]. Default: `true`
+-   `prioritizeFormDuration` **[boolean][306]?** use duration from the form
+    definition [TypeEquationFormObject][136]. Default: `true`
 -   `fromWhere` **(`"fromPrev"` \| `"fromNext"`)?** prioritze _fromPrev_ or
-    _fromNext_ duration from the form definition. [TypeEquationFormObject][131]
+    _fromNext_ duration from the form definition. [TypeEquationFormObject][136]
     Default: `null`
--   `ifAnimating` **{cancelGoTo: [boolean][272]?, skipToTarget: [boolean][272]?}?** 
--   `callback` **([string][268] | function (): void)??** 
+-   `ifAnimating` **{cancelGoTo: [boolean][306]?, skipToTarget: [boolean][306]?}?** 
+-   `callback` **([string][301] | function (): void)??** 
 
 ## Equations
 
@@ -2907,8 +3145,8 @@ forms.
 
 ### Parameters
 
--   `shapes` **[Object][299]** 
--   `options` **[EQN_Equation][311]**  (optional, default `{}`)
+-   `shapes` **[Object][333]** 
+-   `options` **[EQN_Equation][345]**  (optional, default `{}`)
 
 ### Examples
 
@@ -2947,7 +3185,7 @@ eqn.addElements({
 
 Equation parameters and functions
 
-Type: {forms: {}, functions: EquationFunctions, symbols: EquationSymbols, currentForm: [string][268], font: DiagramFont, scale: [number][271], formSeries: {}, currentFormSeries: [Array][269]&lt;[string][268]>, currentFormSeriesName: [string][268], formDefaults: any, isAnimating: [boolean][272], descriptionElement: (DiagramElementPrimitive | null), descriptionPosition: [Point][276], formRestart: {moveFrom: ([Point][276] | DiagramElementCollection)?, pulse: {duration: [number][271], scale: [number][271], element: DiagramElement}?}?}
+Type: {forms: {}, functions: EquationFunctions, symbols: EquationSymbols, currentForm: [string][301], font: DiagramFont, scale: [number][305], formSeries: {}, currentFormSeries: [Array][302]&lt;[string][301]>, currentFormSeriesName: [string][301], formDefaults: any, isAnimating: [boolean][306], descriptionElement: (DiagramElementPrimitive | null), descriptionPosition: [Point][310], formRestart: {moveFrom: ([Point][310] | DiagramElementCollection)?, pulse: {duration: [number][305], scale: [number][305], element: DiagramElement}?}?}
 
 #### Properties
 
@@ -2959,13 +3197,13 @@ Set the current form series to 'name'
 
 #### Parameters
 
--   `name` **[string][268]** 
+-   `name` **[string][301]** 
 
 ### getFormSeries
 
 Get the current form series name
 
-Returns **[string][268]** 
+Returns **[string][301]** 
 
 ### addElements
 
@@ -2973,7 +3211,7 @@ Add elements to equation.
 
 #### Parameters
 
--   `elems` **[TypeEquationElements][306]** 
+-   `elems` **[TypeEquationElements][340]** 
 
 ### addForms
 
@@ -2981,7 +3219,7 @@ Add forms to equation.
 
 #### Parameters
 
--   `forms` **[TypeEquationForms][307]** 
+-   `forms` **[TypeEquationForms][341]** 
 
 ### getCurrentForm
 
@@ -2995,7 +3233,7 @@ Set current equation form - Note, this does not show the form.
 
 #### Parameters
 
--   `formOrName` **(EquationForm | [string][268])** 
+-   `formOrName` **(EquationForm | [string][301])** 
 
 ### showForm
 
@@ -3003,8 +3241,8 @@ Show equation form
 
 #### Parameters
 
--   `formOrName` **(EquationForm | [string][268])** 
--   `animationStop` **[boolean][272]**  (optional, default `true`)
+-   `formOrName` **(EquationForm | [string][301])** 
+-   `animationStop` **[boolean][306]**  (optional, default `true`)
 
 ### getForm
 
@@ -3012,7 +3250,7 @@ Get an equation form object from a form name
 
 #### Parameters
 
--   `formOrName` **([string][268] | EquationForm)** 
+-   `formOrName` **([string][301] | EquationForm)** 
 
 Returns **(null | EquationForm)** 
 
@@ -3022,7 +3260,7 @@ Start an animation to an equation form
 
 #### Parameters
 
--   `optionsIn` **[TypeEquationGoToFormOptions][312]**  (optional, default `{}`)
+-   `optionsIn` **[TypeEquationGoToFormOptions][346]**  (optional, default `{}`)
 
 ### prevForm
 
@@ -3030,8 +3268,8 @@ Animate to previous form in the current form series
 
 #### Parameters
 
--   `duration` **([number][271] | null)**  (optional, default `null`)
--   `delay` **[number][271]**  (optional, default `0`)
+-   `duration` **([number][305] | null)**  (optional, default `null`)
+-   `delay` **[number][305]**  (optional, default `0`)
 
 ### nextForm
 
@@ -3039,8 +3277,8 @@ Animate to next form in the current form series
 
 #### Parameters
 
--   `duration` **([number][271] | null)**  (optional, default `null`)
--   `delay` **[number][271]**  (optional, default `0`)
+-   `duration` **([number][305] | null)**  (optional, default `null`)
+-   `delay` **[number][305]**  (optional, default `0`)
 
 ### replayCurrentForm
 
@@ -3048,7 +3286,7 @@ Start from previous form and animate to current form
 
 #### Parameters
 
--   `duration` **[number][271]** 
+-   `duration` **[number][305]** 
 
 ## Shapes
 
@@ -3109,10 +3347,10 @@ and then the rectangle repeated throughout the diagram.
 
 ### Properties
 
--   `src` **[string][268]** The url or location of the image
--   `mapTo` **[Rect][313]?** vertex space window (`new Rect(-1, -1, 2, 2)`)
--   `mapFrom` **[Rect][313]?** image space window (`new Rect(0, 0, 1, 1)`)
--   `repeat` **[boolean][272]?** `true` will tile the image. Only works with
+-   `src` **[string][301]** The url or location of the image
+-   `mapTo` **[Rect][347]?** vertex space window (`new Rect(-1, -1, 2, 2)`)
+-   `mapFrom` **[Rect][347]?** image space window (`new Rect(0, 0, 1, 1)`)
+-   `repeat` **[boolean][306]?** `true` will tile the image. Only works with
     images that are square whose number of side pixels is a power of 2 (`false`)
 -   `onLoad` **function (): void?** 
 
@@ -3120,7 +3358,7 @@ and then the rectangle repeated throughout the diagram.
 
 Polyline shape options object
 
-![][314]
+![][348]
 
 A polyline is a series of lines that are connected end to end. It is defined
 by a series of points which are the ends and corners of the polyline.
@@ -3148,9 +3386,9 @@ specify when the corner should be drawn, and when it should be truncated.
 
 ### Properties
 
--   `points` **[Array][269]&lt;TypeParsablePoint>** 
--   `width` **[number][271]?** (`0.01`)
--   `close` **[boolean][272]?** close the polyline on itself (`false`)
+-   `points` **[Array][302]&lt;TypeParsablePoint>** 
+-   `width` **[number][305]?** (`0.01`)
+-   `close` **[boolean][306]?** close the polyline on itself (`false`)
 -   `widthIs` **(`"mid"` \| `"outside"` \| `"inside"` \| `"positive"` \| `"negative"`)?** defines how the width is grown from the polyline's points.
     Only `"mid"` is fully compatible with all options in
     `cornerStyle` and `dash`. (`"mid"`)
@@ -3158,32 +3396,32 @@ specify when the corner should be drawn, and when it should be truncated.
     sharp corners sharp when angle is less than `minAutoCornerAngle`, `"none"`: no
     corners, `"radius"`: curved corners, `"fill"`: fills the gapes between the line
     ends, (`"auto"`)
--   `cornerSize` **[number][271]?** only used when `cornerStyle` = `radius` (`0.01`)
--   `cornerSides` **[number][271]?** number of sides in curve - only used when
+-   `cornerSize` **[number][305]?** only used when `cornerStyle` = `radius` (`0.01`)
+-   `cornerSides` **[number][305]?** number of sides in curve - only used when
      `cornerStyle` = `radius` (`10`)
--   `cornersOnly` **[boolean][272]?** draw only the corners with size `cornerSize` (`false`)
--   `cornerLength` **[number][271]?** use only with `cornersOnly` = `true` -
+-   `cornersOnly` **[boolean][306]?** draw only the corners with size `cornerSize` (`false`)
+-   `cornerLength` **[number][305]?** use only with `cornersOnly` = `true` -
     length of corner to draw (`0.1`)
--   `minAutoCornerAngle` **[number][271]?** see `cornerStyle` = `auto` (`π/7`)
--   `dash` **[Array][269]&lt;[number][271]>?** leave empty for solid line - use array of
+-   `minAutoCornerAngle` **[number][305]?** see `cornerStyle` = `auto` (`π/7`)
+-   `dash` **[Array][302]&lt;[number][305]>?** leave empty for solid line - use array of
     numbers for dash line where first number is length of line, second number is
     length of gap and then the pattern repeats - can use more than one dash length
     and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
     short gap, short dash, short gap and then repeats.
--   `linePrimitives` **[boolean][272]?** Use WebGL line primitives instead of
+-   `linePrimitives` **[boolean][306]?** Use WebGL line primitives instead of
     triangle primitives to draw the line (`false`)
--   `lineNum` **[boolean][272]?** Number of line primitives to use when
+-   `lineNum` **[boolean][306]?** Number of line primitives to use when
     `linePrimitivs`: `true` (`2`)
--   `color` **[Array][269]&lt;[number][271]>?** (`[1, 0, 0, 1]`)
--   `texture` **[OBJ_Texture][315]?** Override color with a texture
--   `pulse` **[number][271]?** set the default pulse scale
--   `position` **[Point][276]?** convenience to override Transform translation
+-   `color` **[Array][302]&lt;[number][305]>?** (`[1, 0, 0, 1]`)
+-   `texture` **[OBJ_Texture][349]?** Override color with a texture
+-   `pulse` **[number][305]?** set the default pulse scale
+-   `position` **[Point][310]?** convenience to override Transform translation
 -   `transform` **Transform?** (`Transform('polyline').standard()`)
--   `border` **(`"line"` \| `"positive"` \| `"negative"` \| [Array][269]&lt;[Array][269]&lt;TypeParsablePoint>>)?** touch border of the line can be the points on the `positive`, `negative`
+-   `border` **(`"line"` \| `"positive"` \| `"negative"` \| [Array][302]&lt;[Array][302]&lt;TypeParsablePoint>>)?** touch border of the line can be the points on the `positive`, `negative`
     or boths sides (`line`) of the line, or completely custom (`line`)
--   `hole` **(`"none"` \| `"positive"` \| `"negative"` \| [Array][269]&lt;[Array][269]&lt;TypeParsablePoint>>)?** hole border of the line can be the points on the `positive` or `negative`
+-   `hole` **(`"none"` \| `"positive"` \| `"negative"` \| [Array][302]&lt;[Array][302]&lt;TypeParsablePoint>>)?** hole border of the line can be the points on the `positive` or `negative`
     side of the line or completely custom (`none`)
--   `forceCornerLength` **[boolean][272]?** 
+-   `forceCornerLength` **[boolean][306]?** 
 
 ### Examples
 
@@ -3239,34 +3477,32 @@ diagram.addElement(
 
 Polygon or partial polygon shape options object
 
-![][316]
+![][350]
 
 ### Properties
 
--   `sides` **[number][271]?** (`4`)
--   `radius` **[number][271]?** (`1`)
--   `width` **[number][271]?** line width - line will be drawn on inside of radius (`0.01`)
--   `rotation` **[number][271]?** shape rotation during vertex definition
+-   `sides` **[number][305]?** (`4`)
+-   `radius` **[number][305]?** (`1`)
+-   `width` **[number][305]?** line width - line will be drawn on inside of radius (`0.01`)
+-   `rotation` **[number][305]?** shape rotation during vertex definition
     (different to a rotation step in a trasform) (`0`)
 -   `offset` **TypeParsablePoint?** shape center offset from origin
     during vertex definition (different to a translation step in a transform)
     (`[0, 0]`)
--   `sidesToDraw` **[number][271]?** number of sides to draw (all sides)
--   `angleToDraw` **[number][271]?** same as `sidesToDraw` but using angle for
+-   `sidesToDraw` **[number][305]?** number of sides to draw (all sides)
+-   `angleToDraw` **[number][305]?** same as `sidesToDraw` but using angle for
     the definition (`2π`)
 -   `direction` **(`-1` \| `1`)?** direction to draw polygon where 1 is
     counter clockwise and -1 is clockwise (`1`)
     center. This is different to position or transform as these translate the
     vertices on each draw. (`[0, 0]`)
--   `line` **[OBJ_LineStyle][317]?** line style options
--   `fill` **[boolean][272]?** (`false`)
--   `position` **[Point][276]?** convenience to override Transform translation
+-   `line` **[OBJ_LineStyle][351]?** line style options
+-   `fill` **[boolean][306]?** (`false`)
+-   `color` **[Array][302]&lt;[number][305]>?** (`[1, 0, 0, 1`])
+-   `texture` **[OBJ_Texture][349]?** Override color with a texture
+-   `pulse` **[number][305]?** set the default pulse scale
+-   `position` **[Point][310]?** convenience to override Transform translation
 -   `transform` **Transform?** (`Transform('polygon').standard()`)
--   `color` **[Array][269]&lt;[number][271]>?** (`[1, 0, 0, 1`])
--   `texture` **[OBJ_Texture][315]?** Override color with a texture
--   `pulse` **[number][271]?** set the default pulse scale
--   `onLoad` **[Function][318]?** 
--   `trianglePrimitives` **[boolean][272]?** 
 
 ### Examples
 
@@ -3311,19 +3547,19 @@ diagram.addElement(
 
 Font definition object.
 
-Text is drawn in a [Context2D canvas][319] and so `family`, `style` and `weight` are any valid [options][320].
+Text is drawn in a [Context2D canvas][352] and so `family`, `style` and `weight` are any valid [options][353].
 
 `size` is the vertex space size of the font.
 
 ### Properties
 
--   `family` **[string][268]?** The font family (`Times New Roman`)
+-   `family` **[string][301]?** The font family (`Times New Roman`)
 -   `style` **(\`normal\` | \`italic\`)?** (`normal`)
--   `size` **[number][271]?** size of font in vertex space (`0.2`)
+-   `size` **[number][305]?** size of font in vertex space (`0.2`)
 -   `weight` **(`"normal"` \| `"bold"` \| `"lighter"` \| `"bolder"` \| `"100"` \| `"200"` \| `"300"` \| `"400"` \| `"500"` \| `"600"` \| `"700"` \| `"800"` \| `"900"`)?** font weight (`200`)
--   `color` **\[[number][271], [number][271], [number][271], [number][271]]?** Font color
+-   `color` **\[[number][305], [number][305], [number][305], [number][305]]?** Font color
     [red, green, blue, alpha] between 0 and 1 - (`[1, 0, 0, 1]`)
--   `opacity` **[number][271]?** opacity multiplier (final opacity will be
+-   `opacity` **[number][305]?** opacity multiplier (final opacity will be
     `opacity` \* `color` alpha) [`1`]
 
 ### Examples
@@ -3350,12 +3586,12 @@ const font = new DiagramFont({
 
 Text Definition object
 
-Used within [OBJ_Text][186] to define a single string
+Used within [OBJ_Text][191] to define a single string
 
 ### Properties
 
--   `text` **[string][268]** string to show
--   `font` **[OBJ_Font][321]?** 
+-   `text` **[string][301]** string to show
+-   `font` **[OBJ_Font][354]?** 
 -   `location` **TypeParsablePoint?** location to draw text (`[0, 0]`)
 -   `xAlign` **(`"left"` \| `"right"` \| `"center"`)?** how to align text
     horizontally with `location` (`"left"`)
@@ -3367,9 +3603,9 @@ Used within [OBJ_Text][186] to define a single string
 
 One or more text strings.
 
-![][322]
+![][355]
 
-![][323]
+![][356]
 
 Use this to make a DiagramElementPrimitive that renders simple text.
 
@@ -3380,14 +3616,14 @@ locations.
 
 ### Properties
 
--   `text` **([string][268] \| [OBJ_TextDefinition][324] \| [Array][269]&lt;([string][268] \| [OBJ_TextDefinition][324])>)** text to draw,
+-   `text` **([string][301] \| [OBJ_TextDefinition][357] \| [Array][302]&lt;([string][301] \| [OBJ_TextDefinition][357])>)** text to draw,
     either as a single string or multiple strings in an array(`4`)
--   `font` **[OBJ_Font][321]?** 
+-   `font` **[OBJ_Font][354]?** 
 -   `xAlign` **(`"left"` \| `"right"` \| `"center"`)?** default horizontal text
     alignment for `text` relative to `location` (`"left"`)
 -   `yAlign` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"`)?** default
     vertical text alignment for `text` relative to `location` (`"baseline"`)
--   `color` **[Array][269]&lt;[number][271]>?** (`[1, 0, 0, 1`])
+-   `color` **[Array][302]&lt;[number][305]>?** (`[1, 0, 0, 1`])
 -   `position` **TypeParsablePoint?** if defined, overrides translation
     in transform
 -   `transform` **TypeParsableTransform?** (`Transform('text').standard()`)
@@ -3442,14 +3678,14 @@ diagram.addElement(
 
 Line Text Definition object
 
-Used to define a string within a text line primitive [OBJ_TextLine][191].
+Used to define a string within a text line primitive [OBJ_TextLine][196].
 
 ### Properties
 
--   `text` **[string][268]?** string to show
--   `font` **[OBJ_Font][321]?** 
+-   `text` **[string][301]?** string to show
+-   `font` **[OBJ_Font][354]?** 
 -   `offset` **TypeParsablePoint?** offset to draw text (`[0, 0]`)
--   `inLine` **[boolean][272]?** `false` means next text will follow previous
+-   `inLine` **[boolean][306]?** `false` means next text will follow previous
     and not this (`true`)
 -   `onClick` **function (): void?** 
 
@@ -3457,20 +3693,20 @@ Used to define a string within a text line primitive [OBJ_TextLine][191].
 
 Text Line
 
-![][325]
+![][358]
 
 Array of strings that are arranged into a line. Each string is arranged so
 that it is to the right of the previous string.
 
 Strings can be arranged out of the line flow by using the `inLine` property
-in [OBJ_TextLineDefinition][189].
+in [OBJ_TextLineDefinition][194].
 
 ### Properties
 
--   `line` **[Array][269]&lt;([string][268] \| [OBJ_TextLineDefinition][326])>?** array of strings,
+-   `line` **[Array][302]&lt;([string][301] \| [OBJ_TextLineDefinition][359])>?** array of strings,
     to layout into a line
--   `font` **[OBJ_Font][321]?** Default font for strings in line
--   `color` **[Array][269]&lt;[number][271]>?** Default color for strings in line
+-   `font` **[OBJ_Font][354]?** Default font for strings in line
+-   `color` **[Array][302]&lt;[number][305]>?** Default color for strings in line
     (`[1, 0, 0, 1`])
 -   `yAlign` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"`)?** vertical
     alignment of line with `position` (`baseline`)
@@ -3486,7 +3722,7 @@ in [OBJ_TextLineDefinition][189].
 diagram.addElement(
   {
     name: 'line',
-    method: 'textLine',
+    method: 'text.line',
     options: {
       line: [
         'Hello ',
@@ -3520,14 +3756,14 @@ diagram.addElement(
 
 Lines Text Definition object.
 
-Used to define a string within a text lines primitive [OBJ_TextLines][200].
+Used to define a string within a text lines primitive [OBJ_TextLines][205].
 
 ### Properties
 
--   `line` **[string][268]?** string representing a line of text
--   `font` **[OBJ_Font][321]?** line specific default font
+-   `line` **[string][301]?** string representing a line of text
+-   `font` **[OBJ_Font][354]?** line specific default font
 -   `justification` **(`"left"` \| `"right"` \| `"center"`)?** line specific justification
--   `lineSpace` **[number][271]?** line specific separation from baseline of
+-   `lineSpace` **[number][305]?** line specific separation from baseline of
     this line to baseline of next line
 
 ## OBJ_TextModifierDefinition
@@ -3535,14 +3771,14 @@ Used to define a string within a text lines primitive [OBJ_TextLines][200].
 Modifier Text Definition object.
 
 Used to define the modifiers of a string within a text lines primitive
-[OBJ_TextModifiersDefinition][198].
+[OBJ_TextModifiersDefinition][203].
 
 ### Properties
 
--   `text` **[string][268]?** text to replace modifier id with - if `undefined`
+-   `text` **[string][301]?** text to replace modifier id with - if `undefined`
     then modifier id is used
--   `font` **[OBJ_Font][321]?** font changes for modified text
--   `inLine` **[boolean][272]?** `false` if modified text should not contribute
+-   `font` **[OBJ_Font][354]?** font changes for modified text
+-   `inLine` **[boolean][306]?** `false` if modified text should not contribute
     to line layout (`true`)
 -   `offset` **TypeParsablePoint?** 
 -   `onClick` **function (): {}?** 
@@ -3552,20 +3788,20 @@ Used to define the modifiers of a string within a text lines primitive
 Modifier object.
 
 Used to define the modifiers of a string within a text lines primitive
-[OBJ_TextLines][200].
+[OBJ_TextLines][205].
 
 ### Properties
 
--   `modifierId` **[OBJ_TextModifiersDefinition][327]?** modifierId can be any
+-   `modifierId` **[OBJ_TextModifiersDefinition][360]?** modifierId can be any
     key
 
 ## OBJ_TextLines
 
 Text Lines
 
-![][322]
+![][355]
 
-![][328]
+![][361]
 
 Layout multiple lines of text, justified to the `left`,
 `center` or `right`.
@@ -3578,7 +3814,7 @@ in the modifiers object to define the formatting and replacement text. By
 default, the unique id will be used as the replacement text.
 
 Each line can have custom formatting or justification by defining a
-[OBJ_TextLinesDefinition][194] object instead or a string in the lines
+[OBJ_TextLinesDefinition][199] object instead or a string in the lines
 array.
 
 To escape the modifier special character "|", use a forward slash. e.g.
@@ -3587,13 +3823,13 @@ To escape the modifier special character "|", use a forward slash. e.g.
 
 ### Properties
 
--   `lines` **[Array][269]&lt;([string][268] \| [OBJ_TextLinesDefinition][329])>?** array of line
+-   `lines` **[Array][302]&lt;([string][301] \| [OBJ_TextLinesDefinition][362])>?** array of line
     strings
--   `modifiers` **[OBJ_TextModifiersDefinition][327]?** modifier definitions
--   `font` **[OBJ_Font][321]?** Default font to use in lines
--   `color` **[Array][269]&lt;[number][271]>?** Default color to use in lines
+-   `modifiers` **[OBJ_TextModifiersDefinition][360]?** modifier definitions
+-   `font` **[OBJ_Font][354]?** Default font to use in lines
+-   `color` **[Array][302]&lt;[number][305]>?** Default color to use in lines
     (`[1, 0, 0, 1`])
--   `lineSpace` **[number][271]?** Space between baselines of lines
+-   `lineSpace` **[number][305]?** Space between baselines of lines
     (`font.size * 1.2`)
 -   `yAlign` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"`)?** vertical
     alignment of lines with `position` (`baseline`)
@@ -3610,7 +3846,7 @@ To escape the modifier special character "|", use a forward slash. e.g.
 diagram.addElement(
   {
     name: 't',
-    method: 'textLines',
+    method: 'text.lines',
     options: {
       line: [
         'First line',
@@ -3692,26 +3928,26 @@ Point class
 
 ##### Parameters
 
--   `x` **[number][271]** x coordinate of point
--   `y` **[number][271]** y coordinate of point
+-   `x` **[number][305]** x coordinate of point
+-   `y` **[number][305]** y coordinate of point
 
 ##### x
 
 x value of point
 
-Type: [number][271]
+Type: [number][305]
 
 ##### y
 
 y value of point
 
-Type: [number][271]
+Type: [number][305]
 
 ##### \_dup
 
-Return a duplicate of the [Point][205] object
+Return a duplicate of the [Point][210] object
 
-Returns **[Point][276]** 
+Returns **[Point][310]** 
 
 ##### scale
 
@@ -3719,7 +3955,7 @@ Scale x and y values of point by scalar
 
 ###### Parameters
 
--   `scalar` **[number][271]** 
+-   `scalar` **[number][305]** 
 
 ###### Examples
 
@@ -3729,16 +3965,16 @@ s = p.scale(3);
 // s = Point{x: 3, y: 3};
 ```
 
-Returns **[Point][276]** 
+Returns **[Point][310]** 
 
 ##### sub
 
-Subtract (x, y) values or a [Point][205] and return the difference as a new [Point][205]
+Subtract (x, y) values or a [Point][210] and return the difference as a new [Point][210]
 
 ###### Parameters
 
--   `pointOrX` **([Point][276] \| [number][271])** 
--   `y` **[number][271]**  (optional, default `0`)
+-   `pointOrX` **([Point][310] \| [number][305])** 
+-   `y` **[number][305]**  (optional, default `0`)
 
 ###### Examples
 
@@ -3753,16 +3989,16 @@ d = p.sub(q)
 // d = Point{x: 2, y: 2}
 ```
 
-Returns **[Point][276]** 
+Returns **[Point][310]** 
 
 ##### add
 
-Add (x, y) values or a [Point][205] and return the sum as a new [Point][205]
+Add (x, y) values or a [Point][210] and return the sum as a new [Point][210]
 
 ###### Parameters
 
--   `pointOrX` **([Point][276] \| [number][271])** 
--   `y` **[number][271]**  (optional, default `0`)
+-   `pointOrX` **([Point][310] \| [number][305])** 
+-   `y` **[number][305]**  (optional, default `0`)
 
 ###### Examples
 
@@ -3777,7 +4013,7 @@ d = p.add(q)
 // d = Point{x: 4, y: 4}
 ```
 
-Returns **[Point][276]** 
+Returns **[Point][310]** 
 
 ##### distance
 
@@ -3795,7 +4031,7 @@ d = p.distance();
 // d = 1.4142135623730951
 ```
 
-Returns **[number][271]** 
+Returns **[number][305]** 
 
 ##### round
 
@@ -3803,7 +4039,7 @@ Return a new point with (x, y) values rounded to some precision
 
 ###### Parameters
 
--   `precision` **[number][271]**  (optional, default `8`)
+-   `precision` **[number][305]**  (optional, default `8`)
 
 ###### Examples
 
@@ -3813,7 +4049,7 @@ q = p.round(2);
 // q = Point{x: 1.23, y: 1.23}
 ```
 
-Returns **[Point][276]** 
+Returns **[Point][310]** 
 
 ##### clip
 
@@ -3825,8 +4061,8 @@ min/max values.
 
 ###### Parameters
 
--   `min` **([Point][276] \| [number][271] | null)** 
--   `max` **([Point][276] \| [number][271] | null)** 
+-   `min` **([Point][310] \| [number][305] | null)** 
+-   `max` **([Point][310] \| [number][305] | null)** 
 
 ###### Examples
 
@@ -3845,7 +4081,7 @@ q = p.clip(minClip, null);
 // q = Point{x: -1, y: -1.5}
 ```
 
-Returns **[Point][276]** 
+Returns **[Point][310]** 
 
 ##### transformBy
 
@@ -3853,7 +4089,7 @@ Transform the point with a 3x3 matrix (2 dimensional transform)
 
 ###### Parameters
 
--   `matrix` **[Array][269]&lt;[number][271]>** 
+-   `matrix` **[Array][302]&lt;[number][305]>** 
 
 ###### Examples
 
@@ -3866,7 +4102,7 @@ q = p.transformBy(m)
 // q = Point{x: -3, y: 3}
 ```
 
-Returns **[Point][276]** 
+Returns **[Point][310]** 
 
 ##### rotate
 
@@ -3874,8 +4110,8 @@ Rotate a point some angle around a center point
 
 ###### Parameters
 
--   `angle` **[number][271]** in radians
--   `center` **[Point][276]**  (optional, default `new Point(0,0)`)
+-   `angle` **[number][305]** in radians
+-   `center` **[Point][310]**  (optional, default `new Point(0,0)`)
 
 ###### Examples
 
@@ -3891,7 +4127,7 @@ q = p.rotate(Math.PI, new Point(1, 1))
 // q = Point{x: 0, y: 1}
 ```
 
-Returns **[Point][276]** 
+Returns **[Point][310]** 
 
 ##### isEqualTo
 
@@ -3899,8 +4135,8 @@ Compare two points for equality to some precision
 
 ###### Parameters
 
--   `p` **[Point][276]** 
--   `precision` **[number][271]**  (optional, default `8`)
+-   `p` **[Point][310]** 
+-   `precision` **[number][305]**  (optional, default `8`)
 
 ###### Examples
 
@@ -3920,8 +4156,8 @@ Compare two points for unequality to some precision
 
 ###### Parameters
 
--   `p` **[Point][276]** 
--   `precision` **[number][271]?** 
+-   `p` **[Point][310]** 
+-   `precision` **[number][305]?** 
 
 ###### Examples
 
@@ -3939,24 +4175,111 @@ p.isNotEqualTo(q, 2)
 
 Return a point at (0, 0)
 
-Returns **[Point][276]** 
+Returns **[Point][310]** 
 
 ##### Unity
 
 Return a point at (1, 1)
 
-Returns **[Point][276]** 
+Returns **[Point][310]** 
 
 #### Rect
 
-Rect
+Rectangle definition
 
 ##### Parameters
 
--   `left` **[number][271]** left location
--   `bottom` **[number][271]** rectangle height
--   `width` **[number][271]** rectangle width
--   `height` **[number][271]** 
+-   `left` **[number][305]** left location
+-   `bottom` **[number][305]** bottom location
+-   `width` **[number][305]** rectangle width
+-   `height` **[number][305]** rectangle height
+
+##### left
+
+Left side x coordinate
+
+##### width
+
+Rectange width
+
+##### height
+
+Rectangle height
+
+##### bottom
+
+Bottom side y coordinate
+
+##### top
+
+Top side y coordinate
+
+##### right
+
+Right side x coordinate
+
+##### \_dup
+
+Return a duplicate rectangle object
+
+##### isPointInside
+
+Returns `true` if `point` is within on on the border of the rectangle
+
+###### Parameters
+
+-   `point` **TypeParsablePoint** point to test
+-   `precision` **[number][305]** precision to test (optional, default `8`)
+
+##### round
+
+Returns a rectangle with coordinates rounded to `precision`
+
+###### Parameters
+
+-   `precision` **[number][305]** precision to test (optional, default `8`)
+
+#### TypeParsableRect
+
+Rectangles can be defined as either as an
+Array (left, bottom, width, height), a [Rect][247] class,
+a string representing the json definition of the
+array form, or a [TypeF1DefRect][264].
+
+
+##### Examples
+
+```javascript
+// All rectangles are the same, with a lower left corner of `(-2, -1)`,
+// a width of `4`, and a height of `2`
+const r1 = getRect([-2, -1, 4, 2]);
+const r2 = getRect(new Fig.Rect(-2, -1, 4, 2));
+const r3 = getRect('[-2, -1, 4, 2]');
+const r4 = getRect({
+  f1Type: 'rect',
+  state: [-2, -1, 4, 2],
+});
+```
+
+#### getRect
+
+Convert a parsable rectangle definition to an instantiated rectangle object
+
+##### Parameters
+
+-   `r` **[TypeParsableRect][303]** rectangle definition
+
+Returns **[Rect][347]** rectangle object
+
+#### TypeF1DefRect
+
+JSON definition of a rect.
+
+##### Properties
+
+-   `f1Type` **`"rect"`** rect identifier
+-   `state` **\[[number][305], [number][305], [number][305], [number][305]]** left, bottom, width
+    and height definition
 
 ### range
 
@@ -3964,11 +4287,11 @@ Creates an array with a range of number
 
 #### Parameters
 
--   `start` **[number][271]** Range start
--   `stop` **[number][271]** Range stop
--   `step` **[number][271]** Range step (optional, default `1`)
+-   `start` **[number][305]** Range start
+-   `stop` **[number][305]** Range stop
+-   `step` **[number][305]** Range step (optional, default `1`)
 
-Returns **[Array][269]&lt;[number][271]>** Range of numbers in an array
+Returns **[Array][302]&lt;[number][305]>** Range of numbers in an array
 
 ## tools
 
@@ -3976,10 +4299,10 @@ Tools object that is so great
 
 ### Properties
 
--   `math` **[object][299]** Math tools
--   `g2` **[object][299]** 2D geometry tools
--   `color` **[object][299]** Color tools
--   `css` **[object][299]** CSS tools
+-   `math` **[object][333]** Math tools
+-   `g2` **[object][333]** 2D geometry tools
+-   `color` **[object][333]** Color tools
+-   `css` **[object][333]** CSS tools
 
 ## round
 
@@ -3987,20 +4310,10 @@ Rounds a number or numbers in an array
 
 ### Parameters
 
--   `arrayOrValue` **([number][271] \| [Array][269]&lt;[number][271]>)** Value or array of values to be rounded
--   `precision` **[number][271]** Number of decimal places to round to (optional, default `5`)
+-   `arrayOrValue` **([number][305] \| [Array][302]&lt;[number][305]>)** Value or array of values to be rounded
+-   `precision` **[number][305]** Number of decimal places to round to (optional, default `5`)
 
-Returns **([number][271] \| [Array][269]&lt;[number][271]>)** Rounded value or array of values
-
-## TypeDiagramOptions
-
-Diagram Input Options
-
-### Properties
-
--   `htmlId` **[string][268]?** HTML div tag id - default: 'figureOneId'
--   `limits` **TypeParsableRect** Diagram coordinate limits - default: bottom left
-     corner at (-1, -1), width 1, height 1
+Returns **([number][305] \| [Array][302]&lt;[number][305]>)** Rounded value or array of values
 
 ## OBJ_CurvedCorner
 
@@ -4008,27 +4321,27 @@ Curved Corner Definition
 
 ### Properties
 
--   `radius` **[number][271]?** 
--   `sides` **[number][271]?** 
+-   `radius` **[number][305]?** 
+-   `sides` **[number][305]?** 
 
 ## OBJ_Rectangle
 
 Rectangle shape options object
 
-![][330]
+![][364]
 
 ### Properties
 
--   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| [number][271])?** (`'middle'`)
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][271])?** (`'center'`)
--   `width` **[number][271]?** (`1`)
--   `height` **[number][271]?** (`1`)
--   `fill` **[boolean][272]?** (`false`)
--   `corner` **[OBJ_CurvedCorner][331]?** define for rounded corners
--   `color` **[Array][269]&lt;[number][271]>?** (`[1, 0, 0, 1]`)
--   `position` **[Point][276]?** convenience to override Transform translation
+-   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| [number][305])?** (`'middle'`)
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][305])?** (`'center'`)
+-   `width` **[number][305]?** (`1`)
+-   `height` **[number][305]?** (`1`)
+-   `fill` **[boolean][306]?** (`false`)
+-   `corner` **[OBJ_CurvedCorner][365]?** define for rounded corners
+-   `color` **[Array][302]&lt;[number][305]>?** (`[1, 0, 0, 1]`)
+-   `position` **[Point][310]?** convenience to override Transform translation
 -   `transform` **Transform?** (`Transform('rectangle').standard()`)
--   `pulse` **[number][271]?** set the default pulse scale
+-   `pulse` **[number][305]?** set the default pulse scale
 
 ### Examples
 
@@ -4055,7 +4368,7 @@ diagram.addElement(
 
 Line style object
 
-These properties are a subset of [OBJ_Polyline][174] which has more details
+These properties are a subset of [OBJ_Polyline][179] which has more details
 on how a line is defined.
 
 ### Properties
@@ -4067,23 +4380,39 @@ on how a line is defined.
     sharp corners sharp when angle is less than `minAutoCornerAngle`, `"none"`: no
     corners, `"radius"`: curved corners, `"fill"`: fills the gapes between the line
     ends, (`"auto"`)
--   `cornerSize` **[number][271]?** only used when `cornerStyle` = `radius` (`0.01`)
--   `cornerSides` **[number][271]?** number of sides in curve - only used when
+-   `cornerSize` **[number][305]?** only used when `cornerStyle` = `radius` (`0.01`)
+-   `cornerSides` **[number][305]?** number of sides in curve - only used when
      `cornerStyle` = `radius` (`10`)
--   `cornersOnly` **[boolean][272]?** draw only the corners with size `cornerSize` (`false`)
--   `cornerLength` **[number][271]?** use only with `cornersOnly` = `true` -
+-   `cornersOnly` **[boolean][306]?** draw only the corners with size `cornerSize` (`false`)
+-   `cornerLength` **[number][305]?** use only with `cornersOnly` = `true` -
     length of corner to draw (`0.1`)
--   `minAutoCornerAngle` **[number][271]?** see `cornerStyle` = `auto` (`π/7`)
--   `dash` **[Array][269]&lt;[number][271]>?** leave empty for solid line - use array of
+-   `minAutoCornerAngle` **[number][305]?** see `cornerStyle` = `auto` (`π/7`)
+-   `dash` **[Array][302]&lt;[number][305]>?** leave empty for solid line - use array of
     numbers for dash line where first number is length of line, second number is
     length of gap and then the pattern repeats - can use more than one dash length
     and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
     short gap, short dash, short gap and then repeats.
--   `linePrimitives` **[boolean][272]?** Use WebGL line primitives instead of
+-   `linePrimitives` **[boolean][306]?** Use WebGL line primitives instead of
     triangle primitives to draw the line (`false`)
--   `lineNum` **[boolean][272]?** Number of line primitives to use when
+-   `lineNum` **[boolean][306]?** Number of line primitives to use when
     `linePrimitivs`: `true` (`2`)
--   `forceCornerLength` **[boolean][272]?** 
+-   `forceCornerLength` **[boolean][306]?** 
+
+## DiagramPrimitives
+
+Built in dagiagram primitives.
+
+Including simple shapes, grid and text.
+
+### polygon
+
+Polygon or partial polygon shape options object
+
+![][350]
+
+#### Parameters
+
+-   `options` **...[Array][302]&lt;[OBJ_Polygon][366]>** 
 
 ## TypeEquationTextElement
 
@@ -4094,13 +4423,13 @@ will be ignored.
 
 ### Properties
 
--   `text` **[string][268]?** Text element only
+-   `text` **[string][301]?** Text element only
 -   `font` **DiagramFont?** Text element only
 -   `style` **(`"italic"` \| `"normal"`)?** Text element only
--   `symbol` **[string][268]?** Symbol element only
+-   `symbol` **[string][301]?** Symbol element only
 -   `side` **(`"top"` \| `"left"` \| `"bottom"` \| `"right"`)?** Symbol element only
--   `mods` **[object][299]?** Properties to set on instantiated element
--   `color` **[Array][269]&lt;[number][271]>?** Color to set the element
+-   `mods` **[object][333]?** Properties to set on instantiated element
+-   `color` **[Array][302]&lt;[number][305]>?** Color to set the element
 
 ## container
 
@@ -4108,7 +4437,7 @@ Equation container function
 
 ### Parameters
 
--   `optionsOrArray` **[EQN_Container][292]** 
+-   `optionsOrArray` **[EQN_Container][326]** 
 
 ### Examples
 
@@ -4129,7 +4458,7 @@ Equation fraction function
 
 ### Parameters
 
--   `optionsOrArray` **[EQN_Fraction][280]** 
+-   `optionsOrArray` **[EQN_Fraction][314]** 
 
 ### Examples
 
@@ -4144,664 +4473,734 @@ eqn.addForms({
 });
 ```
 
-[1]: #diagram
+[1]: #introduction
 
-[2]: #parameters
+[2]: #diagram
 
-[3]: #htmlid
+[3]: #parameters
 
-[4]: #addelements
+[4]: #properties
 
-[5]: #parameters-1
+[5]: #examples
 
-[6]: #examples
+[6]: #htmlid
 
-[7]: #equation-elements-types
+[7]: #addelements
 
-[8]: #typeequationelements
+[8]: #parameters-1
 
-[9]: #equation-layout-objects
+[9]: #examples-1
 
-[10]: #eqn_container
+[10]: #obj_diagramoptions
 
-[11]: #properties
+[11]: #properties-1
 
-[12]: #examples-1
+[12]: #equation-elements-types
 
-[13]: #eqn_fraction
+[13]: #typeequationelements
 
-[14]: #properties-1
+[14]: #equation-layout-objects
 
-[15]: #examples-2
+[15]: #eqn_container
 
-[16]: #eqn_scale
+[16]: #properties-2
 
-[17]: #properties-2
+[17]: #examples-2
 
-[18]: #examples-3
+[18]: #eqn_fraction
 
-[19]: #eqn_bracket
+[19]: #properties-3
 
-[20]: #properties-3
+[20]: #examples-3
 
-[21]: #examples-4
+[21]: #eqn_scale
 
-[22]: #eqn_root
+[22]: #properties-4
 
-[23]: #properties-4
+[23]: #examples-4
 
-[24]: #examples-5
+[24]: #eqn_bracket
 
-[25]: #eqn_strike
+[25]: #properties-5
 
-[26]: #properties-5
+[26]: #examples-5
 
-[27]: #examples-6
+[27]: #eqn_root
 
-[28]: #eqn_box
+[28]: #properties-6
 
-[29]: #properties-6
+[29]: #examples-6
 
-[30]: #examples-7
+[30]: #eqn_strike
 
-[31]: #eqn_bar
+[31]: #properties-7
 
-[32]: #properties-7
+[32]: #examples-7
 
-[33]: #examples-8
+[33]: #eqn_box
 
-[34]: #eqn_integral
+[34]: #properties-8
 
-[35]: #properties-8
+[35]: #examples-8
 
-[36]: #examples-9
+[36]: #eqn_bar
 
-[37]: #eqn_sumof
+[37]: #properties-9
 
-[38]: #properties-9
+[38]: #examples-9
 
-[39]: #examples-10
+[39]: #eqn_integral
 
-[40]: #eqn_prodof
+[40]: #properties-10
 
-[41]: #properties-10
+[41]: #examples-10
 
-[42]: #examples-11
+[42]: #eqn_sumof
 
-[43]: #eqn_subcript
+[43]: #properties-11
 
-[44]: #properties-11
+[44]: #examples-11
 
-[45]: #examples-12
+[45]: #eqn_prodof
 
-[46]: #eqn_superscript
+[46]: #properties-12
 
-[47]: #properties-12
+[47]: #examples-12
 
-[48]: #examples-13
+[48]: #eqn_subcript
 
-[49]: #eqn_superscriptsubscript
+[49]: #properties-13
 
-[50]: #properties-13
+[50]: #examples-13
 
-[51]: #examples-14
+[51]: #eqn_superscript
 
-[52]: #eqn_comment
+[52]: #properties-14
 
-[53]: #properties-14
+[53]: #examples-14
 
-[54]: #examples-15
+[54]: #eqn_superscriptsubscript
 
-[55]: #eqn_strikecomment
+[55]: #properties-15
 
-[56]: #properties-15
+[56]: #examples-15
 
-[57]: #examples-16
+[57]: #eqn_comment
 
-[58]: #eqn_pad
+[58]: #properties-16
 
-[59]: #properties-16
+[59]: #examples-16
 
-[60]: #examples-17
+[60]: #eqn_strikecomment
 
-[61]: #eqn_matrix
+[61]: #properties-17
 
-[62]: #properties-17
+[62]: #examples-17
 
-[63]: #examples-18
+[63]: #eqn_pad
 
-[64]: #eqn_annotate
+[64]: #properties-18
 
-[65]: #properties-18
+[65]: #examples-18
 
-[66]: #examples-19
+[66]: #eqn_matrix
 
-[67]: #eqn_annotation
+[67]: #properties-19
 
-[68]: #properties-19
+[68]: #examples-19
 
-[69]: #examples-20
+[69]: #eqn_annotate
 
-[70]: #eqn_encompassglyph
+[70]: #properties-20
 
-[71]: #properties-20
+[71]: #examples-20
 
-[72]: #examples-21
+[72]: #eqn_annotation
 
-[73]: #eqn_leftrightglyph
+[73]: #properties-21
 
-[74]: #properties-21
+[74]: #examples-21
 
-[75]: #examples-22
+[75]: #eqn_encompassglyph
 
-[76]: #eqn_topbottomglyph
+[76]: #properties-22
 
-[77]: #properties-22
+[77]: #examples-22
 
-[78]: #examples-23
+[78]: #eqn_leftrightglyph
 
-[79]: #eqn_glyphs
+[79]: #properties-23
 
-[80]: #properties-23
+[80]: #examples-23
 
-[81]: #equation-symbol-objects
+[81]: #eqn_topbottomglyph
 
-[82]: #eqn_vinculumsymbol
+[82]: #properties-24
 
-[83]: #properties-24
+[83]: #examples-24
 
-[84]: #examples-24
+[84]: #eqn_glyphs
 
-[85]: #eqn_boxsymbol
+[85]: #properties-25
 
-[86]: #properties-25
+[86]: #equation-symbol-objects
 
-[87]: #examples-25
+[87]: #eqn_vinculumsymbol
 
-[88]: #eqn_arrowsymbol
+[88]: #properties-26
 
-[89]: #properties-26
+[89]: #examples-25
 
-[90]: #examples-26
+[90]: #eqn_boxsymbol
 
-[91]: #eqn_sumsymbol
+[91]: #properties-27
 
-[92]: #properties-27
+[92]: #examples-26
 
-[93]: #examples-27
+[93]: #eqn_arrowsymbol
 
-[94]: #eqn_prodsymbol
+[94]: #properties-28
 
-[95]: #properties-28
+[95]: #examples-27
 
-[96]: #examples-28
+[96]: #eqn_sumsymbol
 
-[97]: #eqn_integralsymbol
+[97]: #properties-29
 
-[98]: #properties-29
+[98]: #examples-28
 
-[99]: #examples-29
+[99]: #eqn_prodsymbol
 
-[100]: #eqn_strikesymbol
+[100]: #properties-30
 
-[101]: #properties-30
+[101]: #examples-29
 
-[102]: #examples-30
+[102]: #eqn_integralsymbol
 
-[103]: #eqn_bracketsymbol
+[103]: #properties-31
 
-[104]: #properties-31
+[104]: #examples-30
 
-[105]: #examples-31
+[105]: #eqn_strikesymbol
 
-[106]: #eqn_anglebracketsymbol
+[106]: #properties-32
 
-[107]: #properties-32
+[107]: #examples-31
 
-[108]: #examples-32
+[108]: #eqn_bracketsymbol
 
-[109]: #eqn_bracesymbol
+[109]: #properties-33
 
-[110]: #properties-33
+[110]: #examples-32
 
-[111]: #examples-33
+[111]: #eqn_anglebracketsymbol
 
-[112]: #eqn_barsymbol
+[112]: #properties-34
 
-[113]: #properties-34
+[113]: #examples-33
 
-[114]: #examples-34
+[114]: #eqn_bracesymbol
 
-[115]: #eqn_squarebracketsymbol
+[115]: #properties-35
 
-[116]: #properties-35
+[116]: #examples-34
 
-[117]: #examples-35
+[117]: #eqn_barsymbol
 
-[118]: #eqn_radicalsymbol
+[118]: #properties-36
 
-[119]: #properties-36
+[119]: #examples-35
 
-[120]: #examples-36
+[120]: #eqn_squarebracketsymbol
 
-[121]: #equation-form-types
+[121]: #properties-37
 
-[122]: #typeequationphrase
+[122]: #examples-36
 
-[123]: #examples-37
+[123]: #eqn_radicalsymbol
 
-[124]: #typeformalignment
+[124]: #properties-38
 
-[125]: #properties-37
+[125]: #examples-37
 
-[126]: #typeformanimationproperties
+[126]: #equation-form-types
 
-[127]: #properties-38
+[127]: #typeequationphrase
 
 [128]: #examples-38
 
-[129]: #typeformtranslationproperties
+[129]: #typeformalignment
 
 [130]: #properties-39
 
-[131]: #typeequationformobject
+[131]: #typeformanimationproperties
 
 [132]: #properties-40
 
 [133]: #examples-39
 
-[134]: #typeequationform
+[134]: #typeformtranslationproperties
 
-[135]: #typeequationforms
+[135]: #properties-41
 
-[136]: #typeformrestart
+[136]: #typeequationformobject
 
-[137]: #properties-41
+[137]: #properties-42
 
-[138]: #equation-option-types
+[138]: #examples-40
 
-[139]: #eqn_equation
+[139]: #typeequationform
 
-[140]: #properties-42
+[140]: #typeequationforms
 
-[141]: #typeequationgotoformoptions
+[141]: #typeformrestart
 
 [142]: #properties-43
 
-[143]: #equations
+[143]: #equation-option-types
 
-[144]: #equation
+[144]: #eqn_equation
 
-[145]: #parameters-2
+[145]: #properties-44
 
-[146]: #examples-40
+[146]: #typeequationgotoformoptions
 
-[147]: #eqn
+[147]: #properties-45
 
-[148]: #properties-44
+[148]: #equations
 
-[149]: #setformseries
+[149]: #equation
 
-[150]: #parameters-3
+[150]: #parameters-2
 
-[151]: #getformseries
+[151]: #examples-41
 
-[152]: #addelements-1
+[152]: #eqn
 
-[153]: #parameters-4
+[153]: #properties-46
 
-[154]: #addforms
+[154]: #setformseries
 
-[155]: #parameters-5
+[155]: #parameters-3
 
-[156]: #getcurrentform
+[156]: #getformseries
 
-[157]: #setcurrentform
+[157]: #addelements-1
 
-[158]: #parameters-6
+[158]: #parameters-4
 
-[159]: #showform
+[159]: #addforms
 
-[160]: #parameters-7
+[160]: #parameters-5
 
-[161]: #getform
+[161]: #getcurrentform
 
-[162]: #parameters-8
+[162]: #setcurrentform
 
-[163]: #gotoform
+[163]: #parameters-6
 
-[164]: #parameters-9
+[164]: #showform
 
-[165]: #prevform
+[165]: #parameters-7
 
-[166]: #parameters-10
+[166]: #getform
 
-[167]: #nextform
+[167]: #parameters-8
 
-[168]: #parameters-11
+[168]: #gotoform
 
-[169]: #replaycurrentform
+[169]: #parameters-9
 
-[170]: #parameters-12
+[170]: #prevform
 
-[171]: #shapes
+[171]: #parameters-10
 
-[172]: #obj_texture
+[172]: #nextform
 
-[173]: #properties-45
+[173]: #parameters-11
 
-[174]: #obj_polyline
+[174]: #replaycurrentform
 
-[175]: #properties-46
+[175]: #parameters-12
 
-[176]: #examples-41
+[176]: #shapes
 
-[177]: #obj_polygon
+[177]: #obj_texture
 
 [178]: #properties-47
 
-[179]: #examples-42
+[179]: #obj_polyline
 
-[180]: #text
+[180]: #properties-48
 
-[181]: #obj_font
+[181]: #examples-42
 
-[182]: #properties-48
+[182]: #obj_polygon
 
-[183]: #examples-43
+[183]: #properties-49
 
-[184]: #obj_textdefinition
+[184]: #examples-43
 
-[185]: #properties-49
+[185]: #text
 
-[186]: #obj_text
+[186]: #obj_font
 
 [187]: #properties-50
 
 [188]: #examples-44
 
-[189]: #obj_textlinedefinition
+[189]: #obj_textdefinition
 
 [190]: #properties-51
 
-[191]: #obj_textline
+[191]: #obj_text
 
 [192]: #properties-52
 
 [193]: #examples-45
 
-[194]: #obj_textlinesdefinition
+[194]: #obj_textlinedefinition
 
 [195]: #properties-53
 
-[196]: #obj_textmodifierdefinition
+[196]: #obj_textline
 
 [197]: #properties-54
 
-[198]: #obj_textmodifiersdefinition
+[198]: #examples-46
 
-[199]: #properties-55
+[199]: #obj_textlinesdefinition
 
-[200]: #obj_textlines
+[200]: #properties-55
 
-[201]: #properties-56
+[201]: #obj_textmodifierdefinition
 
-[202]: #examples-46
+[202]: #properties-56
 
-[203]: #tools
+[203]: #obj_textmodifiersdefinition
 
-[204]: #g2
+[204]: #properties-57
 
-[205]: #point
+[205]: #obj_textlines
 
-[206]: #parameters-13
+[206]: #properties-58
 
-[207]: #x
+[207]: #examples-47
 
-[208]: #y
+[208]: #tools
 
-[209]: #_dup
+[209]: #g2
 
-[210]: #scale
+[210]: #point
 
-[211]: #parameters-14
+[211]: #parameters-13
 
-[212]: #examples-47
+[212]: #x
 
-[213]: #sub
+[213]: #y
 
-[214]: #parameters-15
+[214]: #_dup
 
-[215]: #examples-48
+[215]: #scale
 
-[216]: #add
+[216]: #parameters-14
 
-[217]: #parameters-16
+[217]: #examples-48
 
-[218]: #examples-49
+[218]: #sub
 
-[219]: #distance
+[219]: #parameters-15
 
-[220]: #parameters-17
+[220]: #examples-49
 
-[221]: #examples-50
+[221]: #add
 
-[222]: #round
+[222]: #parameters-16
 
-[223]: #parameters-18
+[223]: #examples-50
 
-[224]: #examples-51
+[224]: #distance
 
-[225]: #clip
+[225]: #parameters-17
 
-[226]: #parameters-19
+[226]: #examples-51
 
-[227]: #examples-52
+[227]: #round
 
-[228]: #transformby
+[228]: #parameters-18
 
-[229]: #parameters-20
+[229]: #examples-52
 
-[230]: #examples-53
+[230]: #clip
 
-[231]: #rotate
+[231]: #parameters-19
 
-[232]: #parameters-21
+[232]: #examples-53
 
-[233]: #examples-54
+[233]: #transformby
 
-[234]: #isequalto
+[234]: #parameters-20
 
-[235]: #parameters-22
+[235]: #examples-54
 
-[236]: #examples-55
+[236]: #rotate
 
-[237]: #isnotequalto
+[237]: #parameters-21
 
-[238]: #parameters-23
+[238]: #examples-55
 
-[239]: #examples-56
+[239]: #isequalto
 
-[240]: #zero
+[240]: #parameters-22
 
-[241]: #unity
+[241]: #examples-56
 
-[242]: #rect
+[242]: #isnotequalto
 
-[243]: #parameters-24
+[243]: #parameters-23
 
-[244]: #range
+[244]: #examples-57
 
-[245]: #parameters-25
+[245]: #zero
 
-[246]: #tools-1
+[246]: #unity
 
-[247]: #properties-57
+[247]: #rect
 
-[248]: #round-1
+[248]: #parameters-24
 
-[249]: #parameters-26
+[249]: #left
 
-[250]: #typediagramoptions
+[250]: #width
 
-[251]: #properties-58
+[251]: #height
 
-[252]: #obj_curvedcorner
+[252]: #bottom
 
-[253]: #properties-59
+[253]: #top
 
-[254]: #obj_rectangle
+[254]: #right
 
-[255]: #properties-60
+[255]: #_dup-1
 
-[256]: #examples-57
+[256]: #ispointinside
 
-[257]: #obj_linestyle
+[257]: #parameters-25
 
-[258]: #properties-61
+[258]: #round-1
 
-[259]: #typeequationtextelement
+[259]: #parameters-26
 
-[260]: #properties-62
+[260]: #typeparsablerect
 
-[261]: #container
+[261]: #examples-58
 
-[262]: #parameters-27
+[262]: #getrect
 
-[263]: #examples-58
+[263]: #parameters-27
 
-[264]: #frac
+[264]: #typef1defrect
 
-[265]: #parameters-28
+[265]: #properties-59
 
-[266]: #examples-59
+[266]: #range
 
-[267]: #typediagramoptions
+[267]: #parameters-28
 
-[268]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[268]: #tools-1
 
-[269]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[269]: #properties-60
 
-[270]: #typeequationphrase
+[270]: #round-2
 
-[271]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[271]: #parameters-29
 
-[272]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[272]: #obj_curvedcorner
 
-[273]: #eqn_bracket
+[273]: #properties-61
 
-[274]: #eqn_annotation
+[274]: #obj_rectangle
 
-[275]: #eqn_glyphs
+[275]: #properties-62
 
-[276]: #point
+[276]: #examples-59
 
-[277]: #eqn_encompassglyph
+[277]: #obj_linestyle
 
-[278]: #eqn_topbottomglyph
+[278]: #properties-63
 
-[279]: #eqn_leftrightglyph
+[279]: #diagramprimitives
 
-[280]: #eqn_fraction
+[280]: #polygon
 
-[281]: #eqn_strike
+[281]: #parameters-30
 
-[282]: #eqn_box
+[282]: #typeequationtextelement
 
-[283]: #eqn_root
+[283]: #properties-64
 
-[284]: #eqn_subcript
+[284]: #container
 
-[285]: #eqn_superscript
+[285]: #parameters-31
 
-[286]: #eqn_superscriptsubscript
+[286]: #examples-60
 
-[287]: #eqn_bar
+[287]: #frac
 
-[288]: #eqn_annotate
+[288]: #parameters-32
 
-[289]: #eqn_comment
+[289]: #examples-61
 
-[290]: #eqn_pad
+[290]: DiagramElements
 
-[291]: #eqn_scale
+[291]: DiagramElementPrimitive
 
-[292]: #eqn_container
+[292]: DiagramElementCollection
 
-[293]: #eqn_matrix
+[293]: Transform
 
-[294]: #eqn_integral
+[294]: ./tutorials/ex1.png
 
-[295]: #eqn_sumof
+[295]: ./tutorials/ex1-hierarchy.png
 
-[296]: #eqn_prodof
+[296]: ./tutorials/ex1-collection.png
 
-[297]: #eqn_strikecomment
+[297]: ./tutorials/ex1-diagram.png
 
-[298]: https://developer.mozilla.org/docs/Web/API/Element
+[298]: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
 
-[299]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[299]: #obj_diagramoptions
 
-[300]: #typeformtranslationproperties
+[300]: #diagramprimitives
 
-[301]: #equationaddforms
+[301]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[302]: #typeformalignment
+[302]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[303]: #typeformanimationproperties
+[303]: #typeparsablerect
 
-[304]: #typeequationformobject
+[304]: #typeequationphrase
 
-[305]: #typeequationform
+[305]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[306]: #typeequationelements
+[306]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[307]: #typeequationforms
+[307]: #eqn_bracket
 
-[308]: #typeformrestart
+[308]: #eqn_annotation
 
-[309]: DiagramFont
+[309]: #eqn_glyphs
 
-[310]: #equationgotoform
+[310]: #point
 
-[311]: #eqn_equation
+[311]: #eqn_encompassglyph
 
-[312]: #typeequationgotoformoptions
+[312]: #eqn_topbottomglyph
 
-[313]: #rect
+[313]: #eqn_leftrightglyph
 
-[314]: ./assets1/polyline.png
+[314]: #eqn_fraction
 
-[315]: #obj_texture
+[315]: #eqn_strike
 
-[316]: ./assets1/polygon.png
+[316]: #eqn_box
 
-[317]: #obj_linestyle
+[317]: #eqn_root
 
-[318]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[318]: #eqn_subcript
 
-[319]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+[319]: #eqn_superscript
 
-[320]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
+[320]: #eqn_superscriptsubscript
 
-[321]: #obj_font
+[321]: #eqn_bar
 
-[322]: ./assets1/textLines_ex1.png
+[322]: #eqn_annotate
 
-[323]: ./assets1/text_ex2.png
+[323]: #eqn_comment
 
-[324]: #obj_textdefinition
+[324]: #eqn_pad
 
-[325]: ./assets1/textLine.png
+[325]: #eqn_scale
 
-[326]: #obj_textlinedefinition
+[326]: #eqn_container
 
-[327]: #obj_textmodifiersdefinition
+[327]: #eqn_matrix
 
-[328]: ./assets1/textLines_ex2.png
+[328]: #eqn_integral
 
-[329]: #obj_textlinesdefinition
+[329]: #eqn_sumof
 
-[330]: ./assets1/rectangle.png
+[330]: #eqn_prodof
 
-[331]: #obj_curvedcorner
+[331]: #eqn_strikecomment
+
+[332]: https://developer.mozilla.org/docs/Web/API/Element
+
+[333]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+
+[334]: #typeformtranslationproperties
+
+[335]: #equationaddforms
+
+[336]: #typeformalignment
+
+[337]: #typeformanimationproperties
+
+[338]: #typeequationformobject
+
+[339]: #typeequationform
+
+[340]: #typeequationelements
+
+[341]: #typeequationforms
+
+[342]: #typeformrestart
+
+[343]: DiagramFont
+
+[344]: #equationgotoform
+
+[345]: #eqn_equation
+
+[346]: #typeequationgotoformoptions
+
+[347]: #rect
+
+[348]: ./assets1/polyline.png
+
+[349]: #obj_texture
+
+[350]: ./assets1/polygon.png
+
+[351]: #obj_linestyle
+
+[352]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+
+[353]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
+
+[354]: #obj_font
+
+[355]: ./assets1/textLines_ex1.png
+
+[356]: ./assets1/text_ex2.png
+
+[357]: #obj_textdefinition
+
+[358]: ./assets1/textLine.png
+
+[359]: #obj_textlinedefinition
+
+[360]: #obj_textmodifiersdefinition
+
+[361]: ./assets1/textLines_ex2.png
+
+[362]: #obj_textlinesdefinition
+
+[363]: #typef1defrect
+
+[364]: ./assets1/rectangle.png
+
+[365]: #obj_curvedcorner
+
+[366]: #obj_polygon
