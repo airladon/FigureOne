@@ -28,11 +28,12 @@ import type { TypeAddElementObject } from './DiagramAddElements/addElements';
 import type { TypeScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 /**
   * Diagram Input Options
-  * @property {string} [htmlId] HTML div tag id - default: 'figureOneId'
-  * @property {TypeParsableRect} limits - Diagram coordinate limits - default: bottom left
+  * @property {string} [htmlId] HTML `div` tag id to tie diagram to (`"figureOneContainer"`)
+  * @property {TypeParsableRect} limits -  limits
+  * (bottom left
   *  corner at (-1, -1), width 1, height 1
  */
-export type OBJ_DiagramOptions = {
+export type OPTIONS_DIAGRAM = {
   htmlId?: string,
   limits?: TypeParsableRect,
   // backgroundColor?: Array<number>,
@@ -114,7 +115,7 @@ export type TypeSpaceTransforms = {
   * converting between the different spaces (e.g. pixel, GL, diagram).
   *
   * @class
-  * @param {OBJ_DiagramOptions} options
+  * @param {OPTIONS_DIAGRAM} options
   * @property {DiagramPrimitives} shapes Primitive shapes and text generation
   * @example
   * // Simple html and javascript example to create a diagram, and add a
@@ -263,7 +264,7 @@ class Diagram {
   };
   // pauseAfterNextDrawFlag: boolean;
 
-  constructor(options: OBJ_DiagramOptions) {
+  constructor(options: OPTIONS_DIAGRAM) {
     const defaultOptions = {
       htmlId: 'figureOneContainer',
       limits: new Rect(-1, -1, 2, 2),

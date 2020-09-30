@@ -1,9 +1,10 @@
 toc:
   - name: Introduction
     file: ./docs/tutorials/intro.md
-  - name: Diagram and Diagram Elements
+  - name: Diagram
   - Diagram
-  - OBJ_DiagramOptions
+  - OPTIONS_DIAGRAM
+  - name: Diagram Elements
   - DiagramElement
   - DiagramElementPrimitive
   - DiagramElementCollection

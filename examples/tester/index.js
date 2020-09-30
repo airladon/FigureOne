@@ -1,5 +1,5 @@
-// const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
-const diagram = new Fig.Diagram({ limits: [0, 0, 6, 4 ]});
+const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
+// const diagram = new Fig.Diagram({ limits: [0, 0, 6, 4 ]});
 
 // const f1 = {
 //   family: 'Times New Roman',
@@ -402,7 +402,7 @@ diagram.addElements([
     name: 'grid',
     method: 'grid',
     options: {
-      bounds: [-1, -1, 4, 4],
+      bounds: [-1, -1, 2, 2],
       yStep: 0.1,
       xStep: 0.1,
       color: [0.7, 0.7, 0.7, 1],

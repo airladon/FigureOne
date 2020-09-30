@@ -39,11 +39,35 @@
               
                 
                 <li><a
-                  href='#diagram-and-diagram-elements'
-                  class="h5 bold black caps">
-                  Diagram and Diagram Elements
-                  
+                  href='#diagram'
+                  class="h5 bold black caps toggle-sibling">
+                  Diagram
+                  <span class='icon'>▸</span>
                 </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#htmlid'
+                        class='regular pre-open'>
+                        #htmlId
+                      </a></li>
+                      
+                      <li><a
+                        href='#addelements'
+                        class='regular pre-open'>
+                        #addElements
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -62,13 +86,13 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#diagramhtmlid'
+                        href='#htmlid'
                         class='regular pre-open'>
                         #htmlId
                       </a></li>
                       
                       <li><a
-                        href='#diagramaddelements'
+                        href='#addelements'
                         class='regular pre-open'>
                         #addElements
                       </a></li>
@@ -83,9 +107,19 @@
               
                 
                 <li><a
-                  href='#obj_diagramoptions'
+                  href='#options_diagram'
                   class="">
-                  OBJ_DiagramOptions
+                  OPTIONS_DIAGRAM
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#diagram-elements'
+                  class="h5 bold black caps">
+                  Diagram Elements
                   
                 </a>
                 
@@ -94,46 +128,10 @@
                 
                 <li><a
                   href='#diagramelement'
-                  class=" toggle-sibling">
+                  class="">
                   DiagramElement
-                  <span class='icon'>▸</span>
+                  
                 </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#diagramelementtransform'
-                        class='regular pre-open'>
-                        #transform
-                      </a></li>
-                      
-                      <li><a
-                        href='#diagramelementlastdrawtransform'
-                        class='regular pre-open'>
-                        #lastDrawTransform
-                      </a></li>
-                      
-                      <li><a
-                        href='#diagramelementparent'
-                        class='regular pre-open'>
-                        #parent
-                      </a></li>
-                      
-                      <li><a
-                        href='#diagramelementisshown'
-                        class='regular pre-open'>
-                        #isShown
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                  
-                </div>
                 
                 </li>
               
@@ -1069,6 +1067,26 @@
               
                 
                 <li><a
+                  href='#diagramelementmovefreely'
+                  class="">
+                  DiagramElementMoveFreely
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#diagramelementmove'
+                  class="">
+                  DiagramElementMove
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#typeequationtextelement'
                   class="">
                   TypeEquationTextElement
@@ -1253,8 +1271,8 @@ labeledLine.setMovable();</pre>
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='diagram-and-diagram-elements' class='mt0'>
-    Diagram and Diagram Elements
+  <h2 id='diagram' class='mt0'>
+    Diagram
   </h2>
 
   
@@ -1309,7 +1327,7 @@ converting between the different spaces (e.g. pixel, GL, diagram).</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_diagramoptions">OBJ_DiagramOptions</a>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#options_diagram">OPTIONS_DIAGRAM</a>)</code>
 	    
           </div>
           
@@ -1400,7 +1418,7 @@ diagram.addElement(
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='diagramhtmlid'>
+    <div class='border-bottom' id='htmlid'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1452,7 +1470,7 @@ diagram.addElement(
       </div>
     </div>
   
-    <div class='border-bottom' id='diagramaddelements'>
+    <div class='border-bottom' id='addelements'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
@@ -1561,8 +1579,8 @@ collection to add elements to
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_diagramoptions'>
-      OBJ_DiagramOptions
+    <h3 class='fl m0' id='options_diagram'>
+      OPTIONS_DIAGRAM
     </h3>
     
     
@@ -1622,6 +1640,20 @@ corner at (-1, -1), width 1, height 1
   
 </section>
 
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='diagram-elements' class='mt0'>
+    Diagram Elements
+  </h2>
+
+  
+    
+
+  
+</section></div>
           
         
           
@@ -1686,101 +1718,112 @@ corner at (-1, -1), width 1, height 1
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : reference name of element
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='diagramelementtransform'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>transform</span>
+          
         </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isShown</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          : if 
+<code>false</code>
+ then element will not be processed on
+next draw
 
-  
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          : transform to apply element
 
-  <p>Transform to apply to all children</p>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lastDrawTransform</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          : transform last used for drawing -
+includes cascade or all parent transforms
 
-  
-    <p style="display: none;">      Type:
-      <a href="#transform">Transform</a>
-    </p>
-  
-  
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>parent</span> <code class='quiet'>((<a href="#diagramelement">DiagramElement</a> | null))</code>
+          : parent diagram element - 
+<code>null</code>
+ if
+at top level of diagram
 
-  
-  
-  
-  
-  
-  
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>diagram</span> <code class='quiet'>(<a href="#diagram">Diagram</a>)</code>
+          : diagram element is attached to
 
-  
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isTouchable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          : must be 
+<code>true</code>
+ to move or execute 
+<code>onClick</code>
 
-  
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isMovable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          : must be 
+<code>true</code>
+ to move
 
-  
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])</code>
+          : color defined as red,
+green, blue, alpha with range 0 to 1
 
-  
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dimColor</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])</code>
+          : color to use when
+dimming element
 
-  
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>opacity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : number between 0 and 1 that is multiplied with
 
-  
+<code>color</code>
+ alpha channel to get final opacity
 
-  
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>move</span> <code class='quiet'>(<a href="#diagramelementmove">DiagramElementMove</a>)</code>
+          : movement parameters
 
-  
-
-  
-
-  
-</section>
-
-      </div>
+          
+        </div>
+      
     </div>
   
-    <div class='border-bottom' id='diagramelementlastdrawtransform'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>lastDrawTransform</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Transform that was last used for drawing - includes cascade or all parent
-transforms</p>
-
-  
-    <p style="display: none;">      Type:
-      <a href="#transform">Transform</a>
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
 
   
 
@@ -1791,126 +1834,6 @@ transforms</p>
   
 
   
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='diagramelementparent'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>parent</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Parent diagram element. <code>null</code> if at top level of diagram.</p>
-
-  
-    <p style="display: none;">      Type:
-      (<a href="#diagramelement">DiagramElement</a> | null)
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='diagramelementisshown'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>isShown</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p><code>false</code></p>
-
-  
-    <p style="display: none;">      Type:
-      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
 
   
 
@@ -16329,6 +16252,194 @@ triangle primitives to draw the line (
     </div>
   
 </div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='diagramelementmovefreely'>
+      DiagramElementMoveFreely
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Diagram element move freely parameters</p>
+<p>If a diagram element is released from moving with some velocity
+then these parameters will define how it continues to move freely</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>zeroVelocityThreshold</span> <code class='quiet'>(TypeTransformValue)</code>
+          : used to overcome
+limitations of floating point numbers not reaching 0
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>deceleration</span> <code class='quiet'>(TypeTransformValue)</code>
+          : amount to decelerate in local
+space units per second squared
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bounceLoss</span> <code class='quiet'>(TypeTransformValue)</code>
+          : 0.5 results in 50% velocity loss
+if bouncing of boundary
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>callback</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>): void)?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='diagramelementmove'>
+      DiagramElementMove
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Diagram element move parameters</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bounds</span> <code class='quiet'>(TransformBounds)</code>
+          : rectangle to limit movement within
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>maxVelocity</span> <code class='quiet'>(TypeTransformValue)</code>
+          : maximum velocity allowed (5)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>freely</span> <code class='quiet'>(<a href="#diagramelementmovefreely">DiagramElementMoveFreely</a>)</code>
+          : free movement parameters
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>canBeMovedAfterLosingTouch</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          : touch or mouse dragging will
+continue to move element even after the touch/cursor position is outside
+the element boundary
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>element</span> <code class='quiet'>((<a href="#diagramelement">DiagramElement</a> | null))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transformClip</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (<a href="#transform">Transform</a>): <a href="#transform">Transform</a>?))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>type</span> <code class='quiet'>((<code>"rotation"</code> | <code>"translation"</code> | <code>"scaleX"</code> | <code>"scaleY"</code> | <code>"scale"</code>))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 

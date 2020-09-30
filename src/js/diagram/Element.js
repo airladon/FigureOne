@@ -87,6 +87,50 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
   return inputTransforms.map(t => t._dup());
 };
 
+/**
+ * Diagram element move freely parameters
+ *
+ * If a diagram element is released from moving with some velocity
+ * then these parameters will define how it continues to move freely
+ *
+ * @property {TypeTransformValue} zeroVelocityThreshold used to overcome
+ * limitations of floating point numbers not reaching 0
+ * @property {TypeTransformValue} deceleration amount to decelerate in local
+ * space units per second squared
+ * @property {TypeTransformValue} bounceLoss 0.5 results in 50% velocity loss
+ * if bouncing of boundary
+ * @property {?(string | ((boolean) => void))} callback called each frame of
+ * free movement
+ */
+type DiagramElementMoveFreely = {
+  zeroVelocityThreshold: TypeTransformValue,  // Velocity considered 0
+  deceleration: TypeTransformValue,           // Deceleration
+  bounceLoss: TypeTransformValue,
+  callback: ?(string | ((boolean) => void)),
+}
+
+/**
+ * Diagram element move parameters
+ *
+ * @property {TransformBounds} bounds rectangle to limit movement within
+ * @property {string | (?(Transform) => Transform)} transformClip user
+ * defined method to clip velocity per frame
+ * @property {TypeTransformValue} maxVelocity maximum velocity allowed (5)
+ * @property {DiagramElementMoveFreely} freely free movement parameters
+ * @property {boolean} canBeMovedAfterLosingTouch touch or mouse dragging will
+ * continue to move element even after the touch/cursor position is outside
+ * the element boundary
+ * @property {DiagramElement | null} element
+ */
+type DiagramElementMove = {
+  bounds: TransformBounds,
+  transformClip: string | (?(Transform) => Transform);
+  maxVelocity: TypeTransformValue;
+  freely: DiagramElementMoveFreely,
+  canBeMovedAfterLosingTouch: boolean;
+  type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
+  element: DiagramElement | null;
+};
 
 // A diagram is composed of multiple diagram elements.
 //
@@ -128,14 +172,15 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
  *
  * The set of properties and methods shared by all diagram elements
  * @class
+ * @property {string} name reference name of element
+ * @property {boolean} isShown if `false` then element will not be processed on
+ * next draw
  * @property {Transform} transform transform to apply element
  * @property {Transform} lastDrawTransform transform last used for drawing -
  * includes cascade or all parent transforms
  * @property {DiagramElement | null} parent parent diagram element - `null` if
  * at top level of diagram
- * @property {string} name reference name of element
- * @property {boolean} isShown if `false` then element will not be processed on
- * next draw
+ * @property {Diagram} diagram diagram element is attached to
  * @property {boolean} isTouchable must be `true` to move or execute `onClick`
  * @property {boolean} isMovable must be `true` to move
  * @property {string | () => void} onClick callback if touched or clicked
@@ -145,7 +190,7 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
  * dimming element
  * @property {number} opacity number between 0 and 1 that is multiplied with
  * `color` alpha channel to get final opacity
- * @property {Diagram} diagram diagram element is attached to
+ * @property {DiagramElementMove} move movement parameters
  */
 class DiagramElement {
   transform: Transform;
@@ -193,35 +238,25 @@ class DiagramElement {
   interactiveLocation: Point;   // this is in vertex space
   // recorder: Recorder;
   diagram: Diagram;
-  move: {
-    // maxTransform: Transform,
-    // bounds: null
-    // bounds: { translation: [-1, -1, 2, 2], scale: [-1, 1], rotation: [-1, 1] }
-    // bounds: 'diagram',
-    // bounds: new TransformBounds(transform, [null, null] | { translation: null })
-    // bounds: [null, [-1, -1, 2, 2], null]
-    // bounds: [null, [null, -1, null, 2], null]
-    // bounds: TransformBounds | Rect | Array<number> | 'diagram',
-    bounds: TransformBounds,
-    // minTransform: Transform,
-    // boundary: ?Rect | Array<number> | 'diagram',
-    // limitLine: null | Line,
-    transformClip: string | (?(Transform) => Transform);
-    maxVelocity: TypeTransformValue;            // Maximum velocity allowed
-    // When moving freely, the velocity decelerates until it reaches a threshold,
-  // then it is considered 0 - at which point moving freely ends.
-    freely: {                 // Moving Freely properties
-      zeroVelocityThreshold: TypeTransformValue,  // Velocity considered 0
-      deceleration: TypeTransformValue,           // Deceleration
-      bounceLoss: TypeTransformValue,
-      callback: ?(string | ((boolean) => void)),
-    };
-    // bounce: boolean;
-    canBeMovedAfterLosingTouch: boolean;
-    type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
-    // eslint-disable-next-line no-use-before-define
-    element: DiagramElementCollection | DiagramElementPrimitive | null;
-  };
+  // move: {
+  //   bounds: TransformBounds,
+  //   transformClip: string | (?(Transform) => Transform);
+  //   maxVelocity: TypeTransformValue;            // Maximum velocity allowed
+  //   // When moving freely, the velocity decelerates until it reaches a threshold,
+  // // then it is considered 0 - at which point moving freely ends.
+  //   freely: {                 // Moving Freely properties
+  //     zeroVelocityThreshold: TypeTransformValue,  // Velocity considered 0
+  //     deceleration: TypeTransformValue,           // Deceleration
+  //     bounceLoss: TypeTransformValue,
+  //     callback: ?(string | ((boolean) => void)),
+  //   };
+  //   // bounce: boolean;
+  //   canBeMovedAfterLosingTouch: boolean;
+  //   type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
+  //   // eslint-disable-next-line no-use-before-define
+  //   element: DiagramElementCollection | DiagramElementPrimitive | null;
+  // };
+  move: DiagramElementMove;
 
   scenarios: {
     [scenarioName: string]: TypeScenario;
