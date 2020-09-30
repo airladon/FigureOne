@@ -122,14 +122,38 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
 // the element's current transform used for drawing itself and any children
 // elements it has.
 //
+
+/**
+ * Diagram Element base class
+ *
+ * The set of properties and methods shared by all diagram elements
+ * @class
+ * @property {Transform} transform transform to apply element
+ * @property {Transform} lastDrawTransform transform last used for drawing -
+ * includes cascade or all parent transforms
+ * @property {DiagramElement | null} parent parent diagram element - `null` if
+ * at top level of diagram
+ * @property {string} name reference name of element
+ * @property {boolean} isShown if `false` then element will not be processed on
+ * next draw
+ * @property {boolean} isTouchable must be `true` to move or execute `onClick`
+ * @property {boolean} isMovable must be `true` to move
+ * @property {string | () => void} onClick callback if touched or clicked
+ * @property {[number, number, number, number]} color color defined as red,
+ * green, blue, alpha with range 0 to 1
+ * @property {[number, number, number, number]} dimColor color to use when
+ * dimming element
+ * @property {number} opacity number between 0 and 1 that is multiplied with
+ * `color` alpha channel to get final opacity
+ * @property {Diagram} diagram diagram element is attached to
+ */
 class DiagramElement {
-  transform: Transform;        // Transform of diagram element
+  transform: Transform;
   pulseTransforms: Array<Transform>;
   frozenPulseTransforms: Array<Transform>;
   copyTransforms: Array<Transform>;
   drawTransforms: Array<Transform>;
 
-  // presetTransforms: Object;       // Convenience dict of transform presets
   lastDrawTransform: Transform; // Transform matrix used in last draw
   lastDrawPulseTransform: Transform; // Transform matrix used in last draw
   parentTransform: Transform;
@@ -2917,6 +2941,17 @@ class DiagramElement {
 // ***************************************************************
 // Geometry Object
 // ***************************************************************
+
+/**
+ * Primitive diagram element
+ *
+ * A primitive diagram element is one that handles an object (`drawingObject`)
+ * that draws to the screen. This object may be a {@link VertexObject}, a
+ * {@link TextObject} or a {@link {HTMLObject}}.
+ *
+ * @class
+ * @extends DiagramElement
+ */
 class DiagramElementPrimitive extends DiagramElement {
   drawingObject: DrawingObject;
   // color: Array<number>;
@@ -3378,6 +3413,18 @@ class DiagramElementPrimitive extends DiagramElement {
 // ***************************************************************
 // Collection of Geometry Objects or Collections
 // ***************************************************************
+
+/**
+ * Collection diagram element
+ *
+ * A collection manages a number of children {@link DiagramElements}, be they
+ * primitives or collections.
+ *
+ * A collection's transform will be passed onto all the children elements.
+ *
+ * @class
+ * @extends DiagramElement
+ */
 class DiagramElementCollection extends DiagramElement {
   elements: Object;
   drawOrder: Array<string>;
@@ -3568,14 +3615,22 @@ class DiagramElementCollection extends DiagramElement {
   //   return false;
   // }
 
+  /**
+   * Add a diagram element to the collection.
+   *
+   * @param {string} name reference name of element
+   * @param {DiagramElement} element element to add
+   * @param {number} index index to add in the `drawOrder` where -1 appends the
+   * element to the end of the draw order (-1),
+   */
   add(
     name: string,
-    diagramElement: DiagramElementPrimitive | DiagramElementCollection,
+    element: DiagramElementPrimitive | DiagramElementCollection,
     index: number = -1,
   ) {
     // eslint-disable-next-line no-param-reassign
-    diagramElement.parent = this;
-    this.elements[name] = diagramElement;
+    element.parent = this;
+    this.elements[name] = element;
     this.elements[name].name = name;
     // $FlowFixMe
     this[`_${name}`] = this.elements[name];

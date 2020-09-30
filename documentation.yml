@@ -1,8 +1,12 @@
 toc:
   - name: Introduction
     file: ./docs/tutorials/intro.md
+  - name: Diagram and Diagram Elements
   - Diagram
   - OBJ_DiagramOptions
+  - DiagramElement
+  - DiagramElementPrimitive
+  - DiagramElementCollection
   - name: Equation Elements Types
   # - TypeEquationElement
   - TypeEquationElements
@@ -81,6 +85,7 @@ toc:
         children:
           - Point
           - Rect
+          - Transform
           - TypeParsableRect
           - getRect
           - TypeF1DefRect

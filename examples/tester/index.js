@@ -474,47 +474,69 @@ diagram.addElements([
   //   },
   // },
 ]);
-diagram.addElement(
-  {
-    name: 'labeledLine',
-    method: 'collection',
-    addElements: [
-      {
-        name: 'line',
-        method: 'line',
-        options: {
-          p1: [0, 0],
-          p2: [2, 0],
-          width: 0.01,
-          color: [0, 0, 1, 1],
-        },
-      },
-      {
-        name: 'label',
-        method: 'text',
-        options: {
-          text: 'Line 1',
-          position: [1, 0.1],
-          font: { color: [0, 0, 1, 1] },
-          xAlign: 'center',
-        },
-      },
-    ],
-    options: {
-      position: [3, 2],
-    },
-    mods: {
-      isTouchable: true,
-      isMovable: true,
-      touchInBoundingRect: true,
-      move: {
-        type: 'rotation',
-      },
-    },
-  },
-);
+// diagram.addElement(
+//   {
+//     name: 'labeledLine',
+//     method: 'collection',
+//     addElements: [
+//       {
+//         name: 'line',
+//         method: 'line',
+//         options: {
+//           p1: [0, 0],
+//           p2: [2, 0],
+//           width: 0.01,
+//           color: [0, 0, 1, 1],
+//         },
+//       },
+//       {
+//         name: 'label',
+//         method: 'text',
+//         options: {
+//           text: 'Line 1',
+//           position: [1, 0.1],
+//           font: { color: [0, 0, 1, 1] },
+//           xAlign: 'center',
+//         },
+//       },
+//     ],
+//     options: {
+//       position: [3, 2],
+//     },
+//     mods: {
+//       isTouchable: true,
+//       isMovable: true,
+//       touchInBoundingRect: true,
+//       move: {
+//         type: 'rotation',
+//       },
+//     },
+//   },
+// );
 diagram.initialize();
-diagram.elements.isTouchable = true;
+
+const label = diagram.create.text({
+  text: 'Line 1',
+  position: [1, 0.1],
+  font: { color: [0, 0, 1, 1] },
+  xAlign: 'center',
+});
+const line = diagram.create.line({
+  p1: [0, 0],
+  p2: [2, 0],
+  width: 0.01,
+  color: [0, 0, 1, 1],
+});
+const labeledLine = diagram.create.collection({});
+diagram.elements.add('labeledLine', labeledLine);
+labeledLine.add('line', line);
+labeledLine.add('label', label);
+labeledLine.setPosition(3, 2);
+labeledLine.move.type = 'rotation';
+labeledLine.touchInBoundingRect = true;
+labeledLine.setMovable();
+
+
 // diagram.elements._tester.animations.new()
 //   .translation({ target: [-0.5, 0], duration: 1 })
 //   .start();

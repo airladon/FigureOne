@@ -335,7 +335,7 @@ function getRect(r: TypeParsableRect): Rect {
 /* eslint-disable comma-dangle */
 /**
  * Point class
- *
+ * @class
  */
 class Point {
   /**
@@ -2154,6 +2154,10 @@ export type TypeTransformValue = number | Array<number> | {
   rotation?: number,
 };
 
+/**
+ * Transform
+ * @class
+ */
 class Transform {
   order: Array<Translation | Rotation | Scale>;
   mat: Array<number>;

@@ -39,6 +39,16 @@
               
                 
                 <li><a
+                  href='#diagram-and-diagram-elements'
+                  class="h5 bold black caps">
+                  Diagram and Diagram Elements
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#diagram'
                   class=" toggle-sibling">
                   Diagram
@@ -78,6 +88,90 @@
                   OBJ_DiagramOptions
                   
                 </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#diagramelement'
+                  class=" toggle-sibling">
+                  DiagramElement
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#diagramelementtransform'
+                        class='regular pre-open'>
+                        #transform
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementlastdrawtransform'
+                        class='regular pre-open'>
+                        #lastDrawTransform
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementparent'
+                        class='regular pre-open'>
+                        #parent
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementisshown'
+                        class='regular pre-open'>
+                        #isShown
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#diagramelementprimitive'
+                  class="">
+                  DiagramElementPrimitive
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#diagramelementcollection'
+                  class=" toggle-sibling">
+                  DiagramElementCollection
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#diagramelementcollectionadd'
+                        class='regular pre-open'>
+                        #add
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -1026,31 +1120,42 @@
 <p>A diagram has one or more <em>diagram elements</em>. A diagram element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.</p>
 <p>In the language of <strong>FigureOne</strong>, there are two types of <a href="DiagramElements">DiagramElements</a>:</p>
 <ul>
-<li><a href="DiagramElementPrimitive">DiagramElementPrimitive</a> - an element that will draw something to the screen, such as a line, shape or text</li>
-<li><a href="DiagramElementCollection">DiagramElementCollection</a> - collections of primitives or other collections</li>
+<li><a href="#diagramelementprimitive">DiagramElementPrimitive</a> - an element that will draw something to the screen, such as a line, shape or text</li>
+<li><a href="#diagramelementcollection">DiagramElementCollection</a> - collections of primitives or other collections</li>
 </ul>
-<p>Each <code>DiagramElement</code> has a <a href="Transform">Transform</a> that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a <a href="DiagramElementPrimitive">DiagramElementPrimitive</a>, the shape or text will be transformed. In the case of a <a href="DiagramElementCollection">DiagramElementCollection</a>, all the <code>DiagramElements</code> it contains will have the transform applied to them.</p>
-<p>This means there is a heierachy of <code>DiagramElement</code> objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.</p>
+<p>Each <a href="#diagramelement">DiagramElement</a> has a <a href="#transform">Transform</a> that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a <a href="#diagramelementprimitive">DiagramElementPrimitive</a>, the shape or text will be transformed. In the case of a <a href="#diagramelementcollection">DiagramElementCollection</a>, all the diagram elements it contains will have the transform applied to them.</p>
+<p>This means there is a heierachy of <a href="#diagramelement">DiagramElement</a> objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.</p>
 <p>Changing an element's transform moves the element through space. Changing the element's transform over time animates the element.</p>
 <h4>An Example</h4>
 <p>Let's say we want to create a rotating labeled line. As the line is rotated, the label follows the line.</p>
-<p><img src="./tutorials/ex1.png"></p>
+<p style="text-align: center"><img src="./tutorials/ex1.png"></p>
 <p>To create this diagram, we might use a diagram element hierarchy like:</p>
-<p><img src="./tutorials/ex1-hierarchy.png"></p>
+<p style="text-align: center"><img src="./tutorials/ex1-hierarch.png"></p>
 <p>The drawn elements, the line and text, are primitives. They are created in the simple no rotation case. If the line is 0.8 long, and it starts at (0, 0), then the text might be at (0.4, 0.1)</p>
-<p><img src="./tutorials/ex1-collection.png"></p>
+<p style="text-align: center"><img src="./tutorials/ex1-collection.png"></p>
 <p>The diagram itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 3 wide and 2 high. We want the collection to be rotated, with the center of rotation at the center of the diagram. Therefore we apply a rotation and translation transform to the collection.</p>
-<p><img src="./tutorials/ex1-diagram.png"></p>
+<p style="text-align: center"><img src="./tutorials/ex1-diagram.png"></p>
 <p>There are several different ways to create the same diagram, but this way is used as it highlights how a collection can be used to transform a group of primitive elements.</p>
 <h4>Coordinate spaces</h4>
-<p>Most rendering in FigureOne is done using WebGL, tied to a html <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">canvas</a> element.</p>
-<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">canvas</a> element is defined in screen pixels. The WebGL viewPort re-maps the canvas pixels to -1 to +1 in both the vertical and horizontal directions.</p>
-<p>When the canvas aspect ratio is not a square, or it is more convenient to create a diagram in a coordinate space not mapped between -1 to +1, then it is useful to have a separate diagram space. In the example above, the diagram space remaps the GL space to 0 to 3 in the horizontal and 0 to 2 in the vertical.</p>
-<p>These are three examples of different coordinate spaces - <em>pixel</em>, <em>GL</em> and <em>diagram</em> space.</p>
-<p>If you want to move or modify an element, you need to think about what you want to modify it relative to. Do you want to move it relative to other elements in the diagram? In other words, do you want to move it in <em>diagram space</em>? Or do you want to move it relative to other elements within the parent, or local collection - <em>local space</em>. Alternately, you might want to modify the vertices of the shape, in <em>vertex space</em>.</p>
+<p>FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as diagram elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.</p>
+<p>WebGL is rendered in a html <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">canvas</a> element.</p>
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">canvas</a> element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.</p>
+<p>When the canvas aspect ratio is not a square, or it is more convenient to create a diagram in a coordinate space not mapped between -1 to +1, then it is useful to have a separate <em>diagram space</em>. In the example above, the diagram space re-maps the <em>GL space</em> to 0 to 3 in the horizontal and 0 to 2 in the vertical.</p>
+<p>These are three examples of different coordinate spaces - <em>pixel space</em>, <em>GL space</em> and <em>diagram space</em>.</p>
+<p>If you want to move or modify an element, you need to think about what you want to modify it <em>relative</em> to. Do you want to move it relative to other elements in the diagram? In other words, do you want to move it in <em>diagram space</em>? Or do you want to move it relative to other elements within the parent, or local collection - <em>local space</em>. Alternately, you might want to modify the vertices of the shape, in <em>vertex space</em>.</p>
 <p>In simple diagrams, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. Diagram space will be the same as local space and vertex space. You won't care about the higher level GL or pixel spaces.</p>
-<p>But if you have modular collections with transforms, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.</p>
+<p>But if you have transformed collections, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.</p>
+<p>One way to think about what space you are modifying is:</p>
+<ul>
+<li>Elements that are direct children of the diagram: element transforms are in diagram space</li>
+<li>Elements that are direct children of a collection: element transforms are in local space (the space of the parent colleciton)</li>
+<li>Vertex definitions in element primitives: vertex space</li>
+</ul>
+<p>For example, a square might be defined in vertex space as a square with length 1, centered around the origin.</p>
+<p>The transform of the diagram element primitive that controls the square will move the square in <em>local space</em> - the space relative to all other elements that are the children of the same parent collection.</p>
+<p>If the parent collection's parent is the diagram itself, then its transform will move the colleciton in diagram space.</p>
 <p>Converting between spaces is relatively straight forward. All diagram elements have methods to find their position or bounds in <em>diagram</em>, <em>local</em> or <em>vertex</em> space. The diagram has transforms that allow conversion between <em>diagram</em>, <em>GL</em> and <em>pixel</em> spaces.</p>
+<p>Where this is useful is if two primitives have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target element position to <em>diagram space</em>, and then to the <em>local space</em> of the element to move.</p>
 <h4>Drawing</h4>
 <p>When it is time to draw the scene, the diagram will pass an initial transform to the first element in the hierarchy. In the example above, the "Labeled Line" collection. This transform will include any translations and scaling needed to convert from <em>diagram</em> space to <em>GL</em> space for actual rendering.</p>
 <p>The "Labeled Line" collection will then cascade this transform with it's own rotation and translation transform, and pass this to its children, the "Label" and "Line" primitives.</p>
@@ -1058,8 +1163,9 @@
 <p>The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of memory that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and each frame just a transform is passed informs the graphics processor how to orient the vertices.</p>
 <p>If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change.</p>
 <h4>Code</h4>
-<p><code>index.html</code></p>
-<pre class='hljs'><span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
+<p>Finally, let's see the code for the example above. Two files, <code>index.html</code> and <code>index.js</code> should be in the same folder.</p>
+<pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
+<span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 1200px; height: 800px; background-color: white;"</span>&gt;</span>
@@ -1068,8 +1174,8 @@
     <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
-<p><code>index.html</code></p>
-<pre class='hljs'><span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span> ]});
+<pre class='hljs'><span class="hljs-comment">// index.js</span>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span> ]});
 diagram.addElement(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'labeledLine'</span>,
@@ -1109,8 +1215,50 @@ diagram.addElement(
     },
   },
 );
+diagram.elements.isTouchable = <span class="hljs-literal">true</span>;
+diagram.initialize();</pre>
+<h4>Using FigureOne</h4>
+<p>The example above shows how a figure can be defined with simple javascript objects, able to be encoded simply in JSON. This means complex figures or modules can be shared and reused easily.</p>
+<p>For many uses, it is fine to fully define a diagram and all its elements before a user interacts with it.</p>
+<p>Diagrams can also be defined more dynamically, such as in the example below which has exactly the same function as the example above.</p>
+<pre class='hljs'><span class="hljs-comment">// index.js</span>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span> ]});
 diagram.initialize();
-diagram.elements.isTouchable = <span class="hljs-literal">true</span>;</pre>
+
+<span class="hljs-keyword">const</span> label = diagram.create.text({
+  <span class="hljs-attr">text</span>: <span class="hljs-string">'Line 1'</span>,
+  <span class="hljs-attr">position</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0.1</span>],
+  <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
+  <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+});
+<span class="hljs-keyword">const</span> line = diagram.create.line({
+  <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">p2</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+});
+<span class="hljs-keyword">const</span> labeledLine = diagram.create.collection({});
+diagram.elements.add(<span class="hljs-string">'labeledLine'</span>, labeledLine);
+labeledLine.add(<span class="hljs-string">'line'</span>, line);
+labeledLine.add(<span class="hljs-string">'label'</span>, label);
+labeledLine.setPosition(<span class="hljs-number">3</span>, <span class="hljs-number">2</span>);
+labeledLine.move.type = <span class="hljs-string">'rotation'</span>;
+labeledLine.touchInBoundingRect = <span class="hljs-literal">true</span>;
+labeledLine.setMovable();</pre>
+
+  
+</section></div>
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='diagram-and-diagram-elements' class='mt0'>
+    Diagram and Diagram Elements
+  </h2>
+
+  
+    
 
   
 </section></div>
@@ -1343,7 +1491,7 @@ diagram.addElement(
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>collection</span> <code class='quiet'>(DiagramElementCollection
+            <span class='code bold'>collection</span> <code class='quiet'>(<a href="#diagramelementcollection">DiagramElementCollection</a>
             = <code>this.elements</code>)</code>
 	    the
 collection to add elements to
@@ -1466,6 +1614,592 @@ corner at (-1, -1), width 1, height 1
   
 
   
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='diagramelement'>
+      DiagramElement
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Diagram Element base class</p>
+<p>The set of properties and methods shared by all diagram elements</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>
+            = <code>new Transform()</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>diagramLimitsOrDiagram</span> <code class='quiet'>((<a href="#diagram">Diagram</a> | <a href="#rect">Rect</a>)
+            = <code>new Rect(-1,-1,2,2)</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>parent</span> <code class='quiet'>((<a href="#diagramelement">DiagramElement</a> | null)
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='diagramelementtransform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>transform</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Transform to apply to all children</p>
+
+  
+    <p style="display: none;">      Type:
+      <a href="#transform">Transform</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementlastdrawtransform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>lastDrawTransform</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Transform that was last used for drawing - includes cascade or all parent
+transforms</p>
+
+  
+    <p style="display: none;">      Type:
+      <a href="#transform">Transform</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementparent'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>parent</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Parent diagram element. <code>null</code> if at top level of diagram.</p>
+
+  
+    <p style="display: none;">      Type:
+      (<a href="#diagramelement">DiagramElement</a> | null)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementisshown'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isShown</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p><code>false</code></p>
+
+  
+    <p style="display: none;">      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='diagramelementprimitive'>
+      DiagramElementPrimitive
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Primitive diagram element</p>
+<p>A primitive diagram element is one that handles an object (<code>drawingObject</code>)
+that draws to the screen. This object may be a <a href="VertexObject">VertexObject</a>, a
+<a href="TextObject">TextObject</a> or a <a href="%7BHTMLObject">{HTMLObject</a>}.</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#diagramelement">DiagramElement</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>drawingObject</span> <code class='quiet'>(DrawingObject)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>
+            = <code>new Transform()</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>
+            = <code>[0.5,0.5,0.5,1]</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>diagramLimits</span> <code class='quiet'>(<a href="#rect">Rect</a>
+            = <code>new Rect(-1,-1,2,2)</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>parent</span> <code class='quiet'>((<a href="#diagramelement">DiagramElement</a> | null)
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='diagramelementcollection'>
+      DiagramElementCollection
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Collection diagram element</p>
+<p>A collection manages a number of children <a href="DiagramElements">DiagramElements</a>, be they
+primitives or collections.</p>
+<p>A collection's transform will be passed onto all the children elements.</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#diagramelement">DiagramElement</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>
+            = <code>new Transform()</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>diagramLimits</span> <code class='quiet'>(<a href="#rect">Rect</a>
+            = <code>new Rect(-1,1,2,2)</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>parent</span> <code class='quiet'>((<a href="#diagramelement">DiagramElement</a> | null)
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='diagramelementcollectionadd'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>add(name, element, index)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a diagram element to the collection.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    reference name of element
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>element</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>)</code>
+	    element to add
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>-1</code>)</code>
+	    index to add in the 
+<code>drawOrder</code>
+ where -1 appends the
+element to the end of the draw order (-1),
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
@@ -8751,7 +9485,7 @@ phrases.</p>
 
   
     <p style="display: none;">      Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#eqn_fraction">EQN_Fraction</a>} | {strike: <a href="#eqn_strike">EQN_Strike</a>} | {box: <a href="#eqn_box">EQN_Box</a>} | {root: <a href="#eqn_root">EQN_Root</a>} | {brac: <a href="#eqn_bracket">EQN_Bracket</a>} | {sub: <a href="#eqn_subcript">EQN_Subcript</a>} | {sup: <a href="#eqn_superscript">EQN_Superscript</a>} | {supSub: <a href="#eqn_superscriptsubscript">EQN_SuperscriptSubscript</a>} | {topBar: <a href="#eqn_bar">EQN_Bar</a>} | {bottomBar: <a href="#eqn_bar">EQN_Bar</a>} | {annotate: <a href="#eqn_annotate">EQN_Annotate</a>} | {topComment: <a href="#eqn_comment">EQN_Comment</a>} | {bottomComment: <a href="#eqn_comment">EQN_Comment</a>} | {pad: <a href="#eqn_pad">EQN_Pad</a>} | {bar: <a href="#eqn_bar">EQN_Bar</a>} | {scale: <a href="#eqn_scale">EQN_Scale</a>} | {container: <a href="#eqn_container">EQN_Container</a>} | {matrix: <a href="#eqn_matrix">EQN_Matrix</a>} | {int: <a href="#eqn_integral">EQN_Integral</a>} | {sumOf: <a href="#eqn_sumof">EQN_SumOf</a>} | {prodOf: <a href="#eqn_prodof">EQN_ProdOf</a>} | {topStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | {bottomStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | DiagramElementPrimitive | DiagramElementCollection | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#eqn_fraction">EQN_Fraction</a>} | {strike: <a href="#eqn_strike">EQN_Strike</a>} | {box: <a href="#eqn_box">EQN_Box</a>} | {root: <a href="#eqn_root">EQN_Root</a>} | {brac: <a href="#eqn_bracket">EQN_Bracket</a>} | {sub: <a href="#eqn_subcript">EQN_Subcript</a>} | {sup: <a href="#eqn_superscript">EQN_Superscript</a>} | {supSub: <a href="#eqn_superscriptsubscript">EQN_SuperscriptSubscript</a>} | {topBar: <a href="#eqn_bar">EQN_Bar</a>} | {bottomBar: <a href="#eqn_bar">EQN_Bar</a>} | {annotate: <a href="#eqn_annotate">EQN_Annotate</a>} | {topComment: <a href="#eqn_comment">EQN_Comment</a>} | {bottomComment: <a href="#eqn_comment">EQN_Comment</a>} | {pad: <a href="#eqn_pad">EQN_Pad</a>} | {bar: <a href="#eqn_bar">EQN_Bar</a>} | {scale: <a href="#eqn_scale">EQN_Scale</a>} | {container: <a href="#eqn_container">EQN_Container</a>} | {matrix: <a href="#eqn_matrix">EQN_Matrix</a>} | {int: <a href="#eqn_integral">EQN_Integral</a>} | {sumOf: <a href="#eqn_sumof">EQN_SumOf</a>} | {prodOf: <a href="#eqn_prodof">EQN_ProdOf</a>} | {topStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | {bottomStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | <a href="#diagramelementprimitive">DiagramElementPrimitive</a> | <a href="#diagramelementcollection">DiagramElementCollection</a> | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
     </p>
   
   
@@ -8837,7 +9571,7 @@ forms: {
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>fixTo</span> <code class='quiet'>((DiagramElementPrimitive | DiagramElementCollection | <a href="#point">Point</a>))</code>
+          <span class='code bold'>fixTo</span> <code class='quiet'>((<a href="#diagramelementprimitive">DiagramElementPrimitive</a> | <a href="#diagramelementcollection">DiagramElementCollection</a> | <a href="#point">Point</a>))</code>
           
           
         </div>
@@ -9469,7 +10203,7 @@ in the series, then two special animations can be defined with this object:</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>formRestart</span> <code class='quiet'>({moveFrom: (<a href="#point">Point</a>? | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, element: DiagramElement??}?}?)</code>
+          <span class='code bold'>formRestart</span> <code class='quiet'>({moveFrom: (<a href="#point">Point</a>? | <a href="#diagramelementcollection">DiagramElementCollection</a>)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, element: <a href="#diagramelement">DiagramElement</a>??}?}?)</code>
           
           
         </div>
@@ -9633,7 +10367,7 @@ New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
           
           
         </div>
@@ -9891,7 +10625,7 @@ forms.</p>
     <p>
       Extends
       
-        DiagramElementCollection
+        <a href="#diagramelementcollection">DiagramElementCollection</a>
       
     </p>
   
@@ -9991,7 +10725,7 @@ eqn.addElements({
 
   
     <p style="display: none;">      Type:
-      {forms: {}, functions: EquationFunctions, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, font: DiagramFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, formDefaults: any, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (DiagramElementPrimitive | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | DiagramElementCollection)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: DiagramElement}?}?}
+      {forms: {}, functions: EquationFunctions, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, font: DiagramFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, formDefaults: any, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (<a href="#diagramelementprimitive">DiagramElementPrimitive</a> | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | <a href="#diagramelementcollection">DiagramElementCollection</a>)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: <a href="#diagramelement">DiagramElement</a>}?}?}
     </p>
   
   
@@ -11195,7 +11929,7 @@ triangle primitives to draw the line (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
           : (
 <code>Transform('polyline').standard()</code>
 )
@@ -11470,7 +12204,7 @@ vertices on each draw. (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
           : (
 <code>Transform('polygon').standard()</code>
 )
@@ -14503,6 +15237,77 @@ p.isNotEqualTo(q, <span class="hljs-number">2</span>)
       </div>
     </div>
   
+    <div class='border-bottom' id='transform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>new Transform(orderOrName, name)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Transform</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>orderOrName</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(Translation | Rotation | Scale)> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)
+            = <code>[]</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+            = <code>&#39;&#39;</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='typeparsablerect'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -15157,7 +15962,7 @@ and height definition
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(Transform?)</code>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
           : (
 <code>Transform('rectangle').standard()</code>
 )
@@ -15554,7 +16359,7 @@ will be ignored.</p>
 
   
     <p style="display: none;">      Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, font: (DiagramFont | <a href="#obj_font">OBJ_Font</a>)?, style: (<code>"italic"</code> | <code>"normal"</code> | null)?, weight: (<code>"normal"</code> | <code>"bold"</code> | <code>"lighter"</code> | <code>"bolder"</code> | <code>"100"</code> | <code>"200"</code> | <code>"300"</code> | <code>"400"</code> | <code>"500"</code> | <code>"600"</code> | <code>"700"</code> | <code>"800"</code> | <code>"900"</code>)?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, mods: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?} | DiagramElementPrimitive | DiagramElementCollection)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, font: (DiagramFont | <a href="#obj_font">OBJ_Font</a>)?, style: (<code>"italic"</code> | <code>"normal"</code> | null)?, weight: (<code>"normal"</code> | <code>"bold"</code> | <code>"lighter"</code> | <code>"bolder"</code> | <code>"100"</code> | <code>"200"</code> | <code>"300"</code> | <code>"400"</code> | <code>"500"</code> | <code>"600"</code> | <code>"700"</code> | <code>"800"</code> | <code>"900"</code>)?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, mods: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?} | <a href="#diagramelementprimitive">DiagramElementPrimitive</a> | <a href="#diagramelementcollection">DiagramElementCollection</a>)
     </p>
   
   

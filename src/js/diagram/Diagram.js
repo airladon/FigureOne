@@ -459,6 +459,28 @@ class Diagram {
     this.oldScroll = window.pageYOffset;
     this.drawAnimationFrames = 0;
     this.cursorShown = false;
+    this.create = {
+      collection: this.shapes.collection.bind(this.shapes),
+      generic: this.shapes.generic.bind(this.shapes),
+      polyline: this.shapes.polyline.bind(this.shapes),
+      polygon: this.shapes.polygon.bind(this.shapes),
+      polygonSweep: this.shapes.polygonSweep.bind(this.shapes),
+      grid: this.shapes.grid.bind(this.shapes),
+      // fan: this.shapes.fan.bind(this.shapes),
+      radialLines: this.shapes.radialLines.bind(this.shapes),
+      // box: this.shapes.box.bind(this.shapes),
+      // rectangle: this.shapes.rectangle.bind(this.shapes),
+      text: this.shapes.text.bind(this.shapes),
+      textLine: this.shapes.textLine.bind(this.shapes),
+      textLines: this.shapes.textLines.bind(this.shapes),
+      // arrow: this.shapes.arrow.bind(this.shapes),
+      html: this.shapes.html.bind(this.shapes),
+      // htmlImage: this.shapes.htmlImage.bind(this.shapes),
+      // htmlText: this.shapes.htmlText.bind(this.shapes),
+      line: this.objects.line.bind(this.objects),
+      angle: this.objects.angle.bind(this.objects),
+      smartPolyLine: this.objects.polyline.bind(this.objects),
+    };
   }
 
   bindRecorder() {
