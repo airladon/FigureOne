@@ -24,7 +24,7 @@ Let's say we want to create a rotating labeled line. As the line is rotated, the
 
 To create this diagram, we might use a diagram element hierarchy like:
 
-<p style="text-align: center"><img src="./tutorials/ex1-hierarch.png"></p>
+<p style="text-align: center"><img src="./tutorials/ex1-hierarchy.png"></p>
 
 The drawn elements, the line and text, are primitives. They are created in the simple no rotation case. If the line is 0.8 long, and it starts at (0, 0), then the text might be at (0.4, 0.1)
 

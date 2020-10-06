@@ -128,20 +128,146 @@
                 
                 <li><a
                   href='#diagramelement'
-                  class="">
+                  class=" toggle-sibling">
                   DiagramElement
-                  
+                  <span class='icon'>▸</span>
                 </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#diagramelementpulse'
+                        class='regular pre-open'>
+                        #pulse
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementsetposition'
+                        class='regular pre-open'>
+                        #setPosition
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementsetrotation'
+                        class='regular pre-open'>
+                        #setRotation
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementsetscale'
+                        class='regular pre-open'>
+                        #setScale
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementsettransform'
+                        class='regular pre-open'>
+                        #setTransform
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementsetcolor'
+                        class='regular pre-open'>
+                        #setColor
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementgetpath'
+                        class='regular pre-open'>
+                        #getPath
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementgetboundaries'
+                        class='regular pre-open'>
+                        #getBoundaries
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementgetboundingrect'
+                        class='regular pre-open'>
+                        #getBoundingRect
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementshow'
+                        class='regular pre-open'>
+                        #show
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementmaketouchable'
+                        class='regular pre-open'>
+                        #makeTouchable
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementsetmovable'
+                        class='regular pre-open'>
+                        #setMovable
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementhide'
+                        class='regular pre-open'>
+                        #hide
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementtoggleshow'
+                        class='regular pre-open'>
+                        #toggleShow
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementismoving'
+                        class='regular pre-open'>
+                        #isMoving
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementisanimating'
+                        class='regular pre-open'>
+                        #isAnimating
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
                 
                 <li><a
                   href='#diagramelementprimitive'
-                  class="">
+                  class=" toggle-sibling">
                   DiagramElementPrimitive
-                  
+                  <span class='icon'>▸</span>
                 </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#diagramelementprimitivesetangletodraw'
+                        class='regular pre-open'>
+                        #setAngleToDraw
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -1067,6 +1193,26 @@
               
                 
                 <li><a
+                  href='#scenariodefinition'
+                  class="">
+                  ScenarioDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#pulseoptions'
+                  class="">
+                  PulseOptions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#diagramelementmovefreely'
                   class="">
                   DiagramElementMoveFreely
@@ -1080,6 +1226,46 @@
                   href='#diagramelementmove'
                   class="">
                   DiagramElementMove
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#scenarios'
+                  class="">
+                  Scenarios
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#elementmovementstate'
+                  class="">
+                  ElementMovementState
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#elementpulsestate'
+                  class="">
+                  ElementPulseState
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#elementstate'
+                  class="">
+                  ElementState
                   
                 </a>
                 
@@ -1148,7 +1334,7 @@
 <p>Let's say we want to create a rotating labeled line. As the line is rotated, the label follows the line.</p>
 <p style="text-align: center"><img src="./tutorials/ex1.png"></p>
 <p>To create this diagram, we might use a diagram element hierarchy like:</p>
-<p style="text-align: center"><img src="./tutorials/ex1-hierarch.png"></p>
+<p style="text-align: center"><img src="./tutorials/ex1-hierarchy.png"></p>
 <p>The drawn elements, the line and text, are primitives. They are created in the simple no rotation case. If the line is 0.8 long, and it starts at (0, 0), then the text might be at (0.4, 0.1)</p>
 <p style="text-align: center"><img src="./tutorials/ex1-collection.png"></p>
 <p>The diagram itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 3 wide and 2 high. We want the collection to be rotated, with the center of rotation at the center of the diagram. Therefore we apply a rotation and translation transform to the collection.</p>
@@ -1607,14 +1793,21 @@ collection to add elements to
       
         <div class='space-bottom0'>
           <span class='code bold'>htmlId</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : HTML div tag id - default: 'figureOneId'
+          : HTML 
+<code>div</code>
+ tag 
+<code>id</code>
+ to tie diagram to (
+<code>"figureOneContainer"</code>
+)
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>limits</span> <code class='quiet'>(<a href="#typeparsablerect">TypeParsableRect</a>)</code>
-          : Diagram coordinate limits - default: bottom left
+          :  limits
+(bottom left
 corner at (-1, -1), width 1, height 1
 
           
@@ -1822,6 +2015,28 @@ dimming element
           
         </div>
       
+        <div class='space-bottom0'>
+          <span class='code bold'>scenarios</span> <code class='quiet'>(<a href="#scenarios">Scenarios</a>)</code>
+          : scenario presets
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>animations</span> <code class='quiet'>(AnimationManager)</code>
+          : element animation manager
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>subscriptions</span> <code class='quiet'>(SubscriptionManager)</code>
+          : subscription manager for
+element
+
+          
+        </div>
+      
     </div>
   
 
@@ -1834,6 +2049,1022 @@ dimming element
   
 
   
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='diagramelementpulse'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>pulse(optionsOrDone, options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Pulse element</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsOrDone</span> <code class='quiet'>((<a href="#pulseoptions">PulseOptions</a> | function (any): void?)
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#pulseoptions">PulseOptions</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementsetposition'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setPosition(pointOrX, y)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Conveniently set the first <code>translation</code> of the element's <code>transform</code>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pointOrX</span> <code class='quiet'>((TypeParsablePoint | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
+	    x coordinate or full point
+definition
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>0</code>)</code>
+	    y coordinate if 
+<code>pointOrX</code>
+ is just the x coordinate (
+<code>0</code>
+)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementsetrotation'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setRotation(rotation)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Conveniently set the first <code>rotation</code> of the element's <code>transform</code>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementsetscale'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setScale(scaleOrX, y)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Conveniently set the first <code>scale</code> of the element's <code>transform</code>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>scaleOrX</span> <code class='quiet'>((TypeParsablePoint | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
+	    horizontal scale - either
+define as full x-y point, or as a number. If scaleOrX is a 
+<code>number</code>
+ and
+
+<code>y</code>
+ is null, then both 
+<code>x</code>
+ and 
+<code>y</code>
+ will be equally scaled
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>y</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)
+            = <code>null</code>)</code>
+	    y coordinate if 
+<code>scaleOrX</code>
+ is a 
+<code>number</code>
+ (
+<code>null</code>
+)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementsettransform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setTransform(transform)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set transform of element. Setting through this method will ensure
+<code>setTransfrom</code> subscription will publish, and transform will be
+appropriately clipped.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>void</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementsetcolor'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setColor(color, setDefault)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set element color.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>color</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])</code>
+	    RGBA color from 0 to 1
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>setDefault</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>true</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementgetpath'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getPath()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return diagram path of element</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementgetboundaries'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getBoundaries(space)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get boundaries of element.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>space</span> <code class='quiet'>((<code>"local"</code> | <code>"diagram"</code> | <code>"vertex"</code> | <code>"gl"</code>)
+            = <code>&#39;local&#39;</code>)</code>
+	    boundaries relative to which space
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementgetboundingrect'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getBoundingRect(space)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get bounding rect of element.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>space</span> <code class='quiet'>((<code>"local"</code> | <code>"diagram"</code> | <code>"vertex"</code> | <code>"gl"</code>)
+            = <code>&#39;local&#39;</code>)</code>
+	    bounding rect relative to which space
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementshow'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>show()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Show element</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>void</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementmaketouchable'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>makeTouchable(makeThisElementTouchable)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Configure all parents to, and make this element touchable</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>makeThisElementTouchable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>true</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>void</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementsetmovable'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setMovable(movable)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Configure all parents to make this element touchable, and
+make this element touchable and movable</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>movable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>true</code>)</code>
+	    <code>true</code>
+ to make movable, 
+<code>false</code>
+ to not (
+<code>true</code>
+)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementhide'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>hide()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Hide element</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>void</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementtoggleshow'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toggleShow()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Toggle hide/show of element</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>void</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementismoving'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isMoving()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p><code>true</code> if element is moving</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementisanimating'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isAnimating()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p><code>true</code> if element is animating</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
@@ -1887,7 +3118,9 @@ that draws to the screen. This object may be a <a href="VertexObject">VertexObje
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>drawingObject</span> <code class='quiet'>(DrawingObject)</code>
-	    
+	    an object that handles drawing
+to the screen or manages a HTML element
+
           </div>
           
         </div>
@@ -1896,16 +3129,21 @@ that draws to the screen. This object may be a <a href="VertexObject">VertexObje
           <div>
             <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>
             = <code>new Transform()</code>)</code>
-	    
+	    initial transform to set ('new Transform()`)
+
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>
+            <span class='code bold'>color</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
             = <code>[0.5,0.5,0.5,1]</code>)</code>
-	    
+	    color to set
+(
+<code>[0.5, 0.5, 0.5, 1]</code>
+)
+
           </div>
           
         </div>
@@ -1914,7 +3152,10 @@ that draws to the screen. This object may be a <a href="VertexObject">VertexObje
           <div>
             <span class='code bold'>diagramLimits</span> <code class='quiet'>(<a href="#rect">Rect</a>
             = <code>new Rect(-1,-1,2,2)</code>)</code>
-	    
+	    limits of diagram (
+<code>new Rect(-1, -1, 2, 2)</code>
+)
+
           </div>
           
         </div>
@@ -1923,7 +3164,10 @@ that draws to the screen. This object may be a <a href="VertexObject">VertexObje
           <div>
             <span class='code bold'>parent</span> <code class='quiet'>((<a href="#diagramelement">DiagramElement</a> | null)
             = <code>null</code>)</code>
-	    
+	    parent element (
+<code>null</code>
+)
+
           </div>
           
         </div>
@@ -1942,6 +3186,84 @@ that draws to the screen. This object may be a <a href="VertexObject">VertexObje
   
 
   
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='diagramelementprimitivesetangletodraw'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setAngleToDraw(intputAngle, angle)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set angle to draw.</p>
+<p>Some primitive elements can be partially drawn to some angle</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>intputAngle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>-1</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    Angle to draw
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
@@ -16268,6 +17590,254 @@ triangle primitives to draw the line (
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='scenariodefinition'>
+      ScenarioDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Transform, color and visbility scenario definition</p>
+<p>The properties <code>position</code>, <code>rotation</code> and <code>scale</code> overwrite
+the equivalent transforms in <code>transform</code></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(TypeParsablePoint?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>((TypeParsablePoint | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(TypeParsableTransform?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isShown</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='pulseoptions'>
+      PulseOptions
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Pulse options</p>
+<p>An element can have its scale pulsed of some <code>duration</code> with some
+<code>frequency</code>.</p>
+<p>If the scale is pulsed from the center of an object, the object will simply
+grow larger then smaller. If however, the scale is pulse from the side of the
+object, then the object will grow larger while moving away from the pulse
+center. Therefore the center of the scale pulse is defined with <code>centerOn</code>,
+<code>xAlign</code> and <code>yAlign</code>.</p>
+<p>How the pulse transitions from a scale of 1 to the pulse scale (s) is defined
+by the <code>progression</code>. A triangle progression will linearly progress from 1
+to s and back to 1 over time. Alternately <code>sinusoid</code> slows the progression
+at the minimums and maximums of the pulse.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : horiontal alignment with pulse center
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : vertical
+alignment with pulse center
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>centerOn</span> <code class='quiet'>((null | <a href="#diagramelement">DiagramElement</a> | TypeParsablePoint)?)</code>
+          : center
+of pulse
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>((<code>"diagram"</code> | <code>"gl"</code> | <code>"local"</code> | <code>"vertex"</code>)?)</code>
+          : space the
+
+<code>centerOn</code>
+ property operates when 
+<code>centerOn</code>
+ is a 
+<code>TypeParsablePoint</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>frequency</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : pulse frequency in Hz
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : pulse duration in seconds
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : pulse scale
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>progression</span> <code class='quiet'>((<code>"sinusoid"</code> | <code>"triangle"</code>)?)</code>
+          : function that defines
+how the scale should progress over time (
+<code>sinusoid</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>x</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>y</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>time</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>done</span> <code class='quiet'>(function (any): void??)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='diagramelementmovefreely'>
       DiagramElementMoveFreely
     </h3>
@@ -16424,6 +17994,294 @@ the element boundary
       
         <div class='space-bottom0'>
           <span class='code bold'>type</span> <code class='quiet'>((<code>"rotation"</code> | <code>"translation"</code> | <code>"scaleX"</code> | <code>"scaleY"</code> | <code>"scale"</code>))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='scenarios'>
+      Scenarios
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>All scenarios set to element.</p>
+<p>Scenarios are preset transforms, color and visibility settings that can be
+easily animated to.</p>
+<p>This is an object where the keys are scenario names and values are
+<a href="#scenariodefinition">ScenarioDefinition</a> objects defining the scenario.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scenarioName</span> <code class='quiet'>(<a href="#scenariodefinition">ScenarioDefinition</a>)</code>
+          : where scenarioName can be any
+string that names the scenario
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='elementmovementstate'>
+      ElementMovementState
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Element movement state</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>previousTime</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>previousTransform</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>velocity</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='elementpulsestate'>
+      ElementPulseState
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Element pulse state</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>startTime</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='elementstate'>
+      ElementState
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Element state</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isBeingMoved</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isMovingFreely</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>movement</span> <code class='quiet'>(<a href="#elementmovementstate">ElementMovementState</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isPulsing</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="#elementpulsestate">ElementPulseState</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>preparingToStop</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
           
           
         </div>

@@ -37,7 +37,7 @@ import type {
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
   TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
   TypeDelayStepInputOptions, TypePulseTransformAnimationStepInputOptions,
-  TypeScenarioAnimationStepInputOptions,
+  ScenarioDefinitionAnimationStepInputOptions,
 } from './Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import * as animations from './Animation/Animation';
@@ -60,7 +60,13 @@ import { FunctionMap } from '../tools/FunctionMap';
 //   return callbackToUse; + width
 // }
 
-export type TypeScenario = {
+/**
+ * Transform, color and visbility scenario definition
+ *
+ * The properties `position`, `rotation` and `scale` overwrite
+ * the equivalent transforms in `transform`
+ */
+export type ScenarioDefinition = {
   position?: TypeParsablePoint,
   rotation?: number,
   scale?: TypeParsablePoint | number,
@@ -85,6 +91,50 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
     // return newTransforms;
   }
   return inputTransforms.map(t => t._dup());
+};
+
+/**
+ * Pulse options
+ *
+ * An element can have its scale pulsed of some `duration` with some
+ * `frequency`.
+ *
+ * If the scale is pulsed from the center of an object, the object will simply
+ * grow larger then smaller. If however, the scale is pulse from the side of the
+ * object, then the object will grow larger while moving away from the pulse
+ * center. Therefore the center of the scale pulse is defined with `centerOn`,
+ * `xAlign` and `yAlign`.
+ *
+ * How the pulse transitions from a scale of 1 to the pulse scale (s) is defined
+ * by the `progression`. A triangle progression will linearly progress from 1
+ * to s and back to 1 over time. Alternately `sinusoid` slows the progression
+ * at the minimums and maximums of the pulse.
+ *
+ * @property {'left' | 'center' | 'right' | 'origin' | number} [xAlign]
+ * horiontal alignment with pulse center
+ * @property {'bottom' | 'middle' | 'top' | 'origin' | number} [yAlign] vertical
+ * alignment with pulse center
+ * @property {null | DiagramElement | TypeParsablePoint} [centerOn] center
+ * of pulse
+ * @property {'diagram' | 'gl' | 'local' | 'vertex'} [space] space the
+ * `centerOn` property operates when `centerOn` is a `TypeParsablePoint`
+ * @property {number} [frequency] pulse frequency in Hz
+ * @property {number} [duration] pulse duration in seconds
+ * @property {number} [scale] pulse scale
+ * @property {?(mixed) => void} [done] callback when pulse is finished
+ * @property {'sinusoid' | 'triangle'} [progression] function that defines
+ * how the scale should progress over time (`sinusoid`)
+ */
+type PulseOptions = {
+  x?: 'left' | 'center' | 'right' | 'origin' | number,
+  y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
+  centerOn?: null | DiagramElement | TypeParsablePoint,
+  space?: 'diagram' | 'gl' | 'local' | 'vertex',
+  frequency?: number,
+  time?: number,
+  scale?: number,
+  done?: ?(mixed) => void,
+  progression?: string | (number) => number,
 };
 
 /**
@@ -132,6 +182,7 @@ type DiagramElementMove = {
   element: DiagramElement | null;
 };
 
+
 // A diagram is composed of multiple diagram elements.
 //
 // A diagram element can either be a:
@@ -168,6 +219,52 @@ type DiagramElementMove = {
 //
 
 /**
+ * All scenarios set to element.
+ *
+ * Scenarios are preset transforms, color and visibility settings that can be
+ * easily animated to.
+ *
+ * This is an object where the keys are scenario names and values are
+ * {@link ScenarioDefinition} objects defining the scenario.
+ *
+ * @property {ScenarioDefinition} scenarioName where scenarioName can be any
+ * string that names the scenario
+ */
+type Scenarios = {
+  [scenarioName: string]: ScenarioDefinition,
+};
+
+/**
+ * Element movement state
+ */
+type ElementMovementState = {
+  previousTime: ?number,
+  previousTransform: Transform,
+  velocity: Transform,           // current velocity - will be clipped
+                                    // at max if element is being moved
+                                    // faster than max.
+};
+
+/**
+ * Element pulse state
+ */
+type ElementPulseState = {
+  startTime: ?number,
+};
+
+/**
+ * Element state
+ */
+type ElementState = {
+  isBeingMoved: boolean,
+  isMovingFreely: boolean,
+  movement: ElementMovementState,
+  isPulsing: boolean,
+  pulse: ElementPulseState,
+  preparingToStop: boolean;
+}
+
+/**
  * Diagram Element base class
  *
  * The set of properties and methods shared by all diagram elements
@@ -191,6 +288,10 @@ type DiagramElementMove = {
  * @property {number} opacity number between 0 and 1 that is multiplied with
  * `color` alpha channel to get final opacity
  * @property {DiagramElementMove} move movement parameters
+ * @property {Scenarios} scenarios scenario presets
+ * @property {AnimationManager} animations element animation manager
+ * @property {SubscriptionManager} subscriptions subscription manager for
+ * element
  */
 class DiagramElement {
   transform: Transform;
@@ -258,9 +359,10 @@ class DiagramElement {
   // };
   move: DiagramElementMove;
 
-  scenarios: {
-    [scenarioName: string]: TypeScenario;
-  };
+  // scenarios: {
+  //   [scenarioName: string]: ScenarioDefinition;
+  // };
+  scenarios: Scenarios;
 
   type: 'collection' | 'primitive';
 
@@ -290,22 +392,7 @@ class DiagramElement {
   diagramTransforms: TypeSpaceTransforms;
 
   // Current animation/movement state of element
-  state: {
-    isBeingMoved: boolean,
-    isMovingFreely: boolean,
-    movement: {
-      previousTime: ?number,
-      previousTransform: Transform,
-      velocity: Transform,           // current velocity - will be clipped
-                                        // at max if element is being moved
-                                        // faster than max.
-    },
-    isPulsing: boolean,
-    pulse: {
-      startTime: ?number,
-    },
-    preparingToStop: boolean;
-  };
+  state: ElementState;
 
   animations: animations.AnimationManager;
   animationFinishedCallback: ?(string | (() => void));
@@ -386,6 +473,9 @@ class DiagramElement {
   //    .parallel()
   //
 
+  /**
+   * @private
+   */
   constructor(
     transform: Transform = new Transform(),
     diagramLimitsOrDiagram: Diagram | Rect = new Rect(-1, -1, 2, 2),
@@ -534,15 +624,15 @@ class DiagramElement {
       },
       // eslint-disable-next-line max-len
       builder: (...optionsIn: Array<TypeAnimationBuilderInputOptions>) => new animations.AnimationBuilder(this, ...optionsIn),
-      scenario: (...optionsIn: Array<TypeScenarioAnimationStepInputOptions>) => {
+      scenario: (...optionsIn: Array<ScenarioDefinitionAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.ScenarioAnimationStep(options);
       },
       // eslint-disable-next-line max-len
       // scenario: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
       //                             & {
-      //                                 start?: TypeScenario,
-      //                                 target: TypeScenario,
+      //                                 start?: ScenarioDefinition,
+      //                                 target: ScenarioDefinition,
       //                                }>) => {
       //   const defaultOptions = { element: this, delay: 0 };
       //   const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -1290,17 +1380,13 @@ class DiagramElement {
   //     this.pulseScaleRelativeToPoint(e, space, time, scale, frequency, callback)
   //   }
   // }
-  pulse(optionsOrDone: {
-      x?: 'left' | 'center' | 'right' | 'origin' | number,
-      y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
-      space?: 'diagram' | 'gl' | 'local' | 'vertex',
-      centerOn?: null | DiagramElement | TypeParsablePoint,
-      frequency?: number,
-      time?: number,
-      scale?: number,
-      done?: ?(mixed) => void,
-      progression: string | (number) => number,
-    } | ?(mixed) => void = null) {
+
+  /**
+   * Pulse element
+   *
+   * @param {PulseOptions} options
+   */
+  pulse(optionsOrDone: PulseOptions | ?(mixed) => void = null) {
     const defaultPulseOptions = {
       frequency: 0,
       time: 1,
@@ -1315,15 +1401,15 @@ class DiagramElement {
       defaultPulseOptions.scale = this.pulseDefault.scale;
     }
     const defaultOptions = {
-      x: 'center',
-      y: 'middle',
+      xAlign: 'center',
+      yAlign: 'middle',
       space: 'diagram',
       centerOn: null,
       frequency: defaultPulseOptions.frequency,
-      time: defaultPulseOptions.time,
+      duration: defaultPulseOptions.time,
       scale: defaultPulseOptions.scale,
       done: null,
-      progression: 'tools.math.sinusoid',
+      progression: 'sinusoid',
     };
     let done;
     let options = defaultOptions;
@@ -1338,6 +1424,11 @@ class DiagramElement {
       options = joinObjects({}, defaultOptions, optionsOrDone);
       ({ done } = options);
     }
+    if (options.progression === 'sinusoid') {
+      options.progression = 'tools.math.sinusoid';
+    } else if (options.progression === 'triangle') {
+      options.progression = 'tools.math.triangle';
+    }
     if (
       typeof this.pulseDefault === 'function'
       || typeof this.pulseDefault === 'string'
@@ -1348,10 +1439,10 @@ class DiagramElement {
       // this.pulseScaleNow(time, scale, frequency, done);
       this.pulseScaleRelativeTo(
         options.centerOn,
-        options.x,
-        options.y,
+        options.xAlign,
+        options.yAlign,
         options.space,
-        options.time,
+        options.duration,
         options.scale,
         options.frequency,
         done,
@@ -1385,8 +1476,13 @@ class DiagramElement {
     this.undim();
   }
 
-
-  setPosition(pointOrX: Point | number, y: number = 0) {
+  /**
+   * Conveniently set the first `translation` of the element's `transform`.
+   * @param {TypeParsablePoint | number} pointOrX x coordinate or full point
+   * definition
+   * @param {number} y y coordinate if `pointOrX` is just the x coordinate (`0`)
+   */
+  setPosition(pointOrX: TypeParsablePoint | number, y: number = 0) {
     let position;
     if (typeof pointOrX === 'number') {
       position = new Point(pointOrX, y);
@@ -1402,13 +1498,24 @@ class DiagramElement {
     this.setTransform(currentTransform);
   }
 
+  /**
+   * Conveniently set the first `rotation` of the element's `transform`.
+   * @param {number} rotation
+   */
   setRotation(rotation: number) {
     const currentTransform = this.transform._dup();
     currentTransform.updateRotation(rotation);
     this.setTransform(currentTransform);
   }
 
-  setScale(scaleOrX: Point | number, y: ?number = null) {
+  /**
+   * Conveniently set the first `scale` of the element's `transform`.
+   * @param {TypeParsablePoint | number} scaleOrX horizontal scale - either
+   * define as full x-y point, or as a number. If scaleOrX is a `number` and
+   * `y` is null, then both `x` and `y` will be equally scaled
+   * @param {number | null} y y coordinate if `scaleOrX` is a `number` (`null`)
+   */
+  setScale(scaleOrX: TypeParsablePoint | number, y: ?number = null) {
     let scale;
     if (typeof scaleOrX === 'number') {
       if (typeof y === 'number') {
@@ -1434,6 +1541,12 @@ class DiagramElement {
 
   // Use this method to set the element's transform in case a callback has been
   // connected that is tied to an update of the transform.
+  /**
+   * Set transform of element. Setting through this method will ensure
+   * `setTransfrom` subscription will publish, and transform will be
+   * appropriately clipped.
+   * @param {Transform} transform
+   */
   setTransform(transform: Transform): void {
     if (this.move.transformClip != null) {
       const clip = this.fnMap.exec(this.move.transformClip, transform);
@@ -1507,6 +1620,10 @@ class DiagramElement {
     return false;
   }
 
+  /**
+   Set element color.
+   @param {[number, number, number, number]} color RGBA color from 0 to 1
+   */
   setColor(color: Array<number>, setDefault: boolean = true) {
     this.color = color != null ? color.slice() : [0, 0, 0, 0];
     if (setDefault) {
@@ -1556,7 +1673,7 @@ class DiagramElement {
 
   // retrieve a scenario
   getScenarioTarget(
-    scenarioIn: ?string | TypeScenario,
+    scenarioIn: ?string | ScenarioDefinition,
   ): { transform?: Transform, color?: Array<number>, isShown?: boolean } {
     let transform;
     let color;
@@ -1610,7 +1727,7 @@ class DiagramElement {
     };
   }
 
-  setScenario(scenario: string | TypeScenario) {
+  setScenario(scenario: string | ScenarioDefinition) {
     const target = this.getScenarioTarget(scenario);
     if (target.transform != null) {
       this.setTransform(target.transform._dup());
@@ -1753,6 +1870,9 @@ class DiagramElement {
     return new Transform(this.lastDrawTransform.order.slice(-parentCount));
   }
 
+  /**
+   Return diagram path of element
+   */
   getPath() {
     if (this.parent == null) {
       return this.name;
@@ -2356,6 +2476,10 @@ class DiagramElement {
     return [[]];
   }
 
+  /**
+   Get boundaries of element.
+   @param {'local' | 'diagram' | 'vertex' | 'gl'} space boundaries relative to which space
+   */
   getBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
     if (space === 'local') {
       return this.getLocalBoundaries();
@@ -2428,6 +2552,10 @@ class DiagramElement {
     // );
   }
 
+  /**
+   Get bounding rect of element.
+   @param {'local' | 'diagram' | 'vertex' | 'gl'} space bounding rect relative to which space
+   */
   getBoundingRect(
     space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
   ) {
@@ -2822,6 +2950,9 @@ class DiagramElement {
     // }
   }
 
+  /**
+   * Show element
+   */
   show(): void {
     this.isShown = true;
     this.setOpacity(1);
@@ -2832,6 +2963,9 @@ class DiagramElement {
     }
   }
 
+  /**
+   * Configure all parents to, and make this element touchable
+   */
   makeTouchable(makeThisElementTouchable: boolean = true): void {
     if (makeThisElementTouchable) {
       this.isTouchable = true;
@@ -2843,6 +2977,11 @@ class DiagramElement {
     }
   }
 
+  /**
+   * Configure all parents to make this element touchable, and
+   * make this element touchable and movable
+   * @param {boolean} movable `true` to make movable, `false` to not (`true`)
+   */
   setMovable(movable: boolean = true) {
     if (movable) {
       this.isMovable = true;
@@ -2893,6 +3032,9 @@ class DiagramElement {
     this.show();
   }
 
+  /**
+   * Hide element
+   */
   hide(): void {
     this.isShown = false;
   }
@@ -2901,6 +3043,9 @@ class DiagramElement {
     this.hide();
   }
 
+  /**
+   * Toggle hide/show of element
+   */
   toggleShow(): void {
     if (this.isShown) {
       this.hide();
@@ -2937,6 +3082,9 @@ class DiagramElement {
   //   return this.animations.isAnimating();
   // }
 
+  /**
+   * `true` if element is moving
+   */
   isMoving(): boolean {
     if (this.isShown === false) {
       return false;
@@ -2950,6 +3098,9 @@ class DiagramElement {
     return false;
   }
 
+  /**
+   * `true` if element is animating
+   */
   isAnimating(): boolean {
     if (this.isShown === false) {
       return false;
@@ -2999,6 +3150,21 @@ class DiagramElementPrimitive extends DiagramElement {
   setPointsFromDefinition: ?(() => void);
   +pulse: (?(mixed) => void) => void;
 
+  /**
+   * Primitive diagram element.
+   *
+   * This type of element is responsible for drawing something
+   * to the screen, or managing a HTML element in the DOM
+   *
+   * @param {DrawingObject} drawingObject an object that handles drawing
+   * to the screen or manages a HTML element
+   * @param {Transform} transform initial transform to set ('new Transform()`)
+   * @param {[number, number, number, number]} color color to set
+   * (`[0.5, 0.5, 0.5, 1]`)
+   * @param {Rect} diagramLimits limits of diagram (`new Rect(-1, -1, 2, 2)`)
+   * @param {DiagramElement | null} parent parent element (`null`)
+   * @param
+   */
   constructor(
     drawingObject: DrawingObject,
     transform: Transform = new Transform(),
@@ -3039,6 +3205,13 @@ class DiagramElementPrimitive extends DiagramElement {
     return super._getStateProperties(options);
   }
 
+  /**
+   * Set angle to draw.
+   *
+   * Some primitive elements can be partially drawn to some angle
+   *
+   * @param {number} angle Angle to draw
+   */
   setAngleToDraw(intputAngle: number = -1) {
     this.angleToDraw = intputAngle;
   }
