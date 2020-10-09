@@ -56,6 +56,20 @@ type TypeF1DefPoint = {
   state: [number, number],
 };
 
+/**
+ * A {@link Point} can be defined in several ways
+ * As a Point: new Point()
+ * As an x, y tuple: [number, number]
+ * As an x, y string: '[number, number]'
+ * As a definition object: { f1Type: 'p', state: [number, number] }
+ }
+ * @example
+ * // p1, p2, p3 and p4 are all the same
+ * p1 = new Point(2, 3);
+ * p2 = [2, 3];
+ * p3 = '[2, 3]';
+ * p4 = { f1Type: 'p', state: [2, 3] };
+ */
 export type TypeParsablePoint = [number, number]
                                 | Point
                                 // | { x: number, y: number}
@@ -2831,6 +2845,18 @@ export type TypeF1DefTransform = {
   state: Array<string | TypeF1DefTranslation | TypeF1DefRotation | TypeF1DefScale>,
 };
 
+/**
+ * A {@link Transform} can be defined in several ways
+ * As a Transform: new Transform()
+ * As an array of ['s', number, number], ['r', number] and/or ['t', number, number] arrays
+ * As a string representing the JSON of the array form
+ }
+ * @example
+ * // t1, t2, and p3 are all the same
+ * t1 = new Transform().scale(1, 1).rotate(0).translate(2, 2);
+ * t2 = [['s', 1, 1], ['r', 0], ['t', 2, 2]];
+ * t3 = '[['s', 1, 1], ['r', 0], ['t', 2, 2]]';
+ */
 export type TypeParsableTransform = Array<string | ['s', number, number] | ['r', number] | ['t', number, number]> | string | Transform | TypeF1DefTransform;
 
 function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Transform | T | null {

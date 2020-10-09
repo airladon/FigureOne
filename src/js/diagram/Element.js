@@ -1384,9 +1384,12 @@ class DiagramElement {
   /**
    * Pulse element
    *
-   * @param {PulseOptions} options
+   * Either pass in a callback, or an options object defining the pulse and
+   * callback.
+   *
+   * @param {null | PulseOptions | () => void} optionsOrDone
    */
-  pulse(optionsOrDone: PulseOptions | ?(mixed) => void = null) {
+  pulse(optionsOrDone: null | PulseOptions | () => void = null) {
     const defaultPulseOptions = {
       frequency: 0,
       time: 1,
@@ -1871,7 +1874,8 @@ class DiagramElement {
   }
 
   /**
-   Return diagram path of element
+   * Return diagram path of element
+   * @return {string} path of element relative to diagram
    */
   getPath() {
     if (this.parent == null) {
@@ -2477,8 +2481,12 @@ class DiagramElement {
   }
 
   /**
-   Get boundaries of element.
-   @param {'local' | 'diagram' | 'vertex' | 'gl'} space boundaries relative to which space
+   * Get boundaries of element.
+   * An element may have one or more contiguous boundaries.
+   *
+   * @param {'local' | 'diagram' | 'vertex' | 'gl'} space boundaries relative
+   * to which space
+   * @return {Array<Array<Point>>} An array of contiguous boundaries
    */
   getBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
     if (space === 'local') {
@@ -2553,8 +2561,12 @@ class DiagramElement {
   }
 
   /**
-   Get bounding rect of element.
-   @param {'local' | 'diagram' | 'vertex' | 'gl'} space bounding rect relative to which space
+   * Get bounding rect of element.
+   * An element may have one or more contiguous boundaries. The bounding rect
+   * is the rectangle that encapsulates all boundaries.
+   * @param {'local' | 'diagram' | 'vertex' | 'gl'} space bounding rect relative
+   * to which space
+   * @return {Rect} bounding rect of element
    */
   getBoundingRect(
     space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
@@ -2640,15 +2652,29 @@ class DiagramElement {
     );
   }
 
+  /**
+   * Return the first scale in the element's transform.
+   *
+   * Will return [1, 1] if element's transform doesn't have a scale.
+   *
+   * @return {Point} scale
+   */
   getScale() {
     const s = this.transform.s();
-    let scale = new Point(0, 0);
+    let scale = new Point(1, 1);
     if (s != null) {
       scale = s._dup();
     }
     return scale;
   }
 
+  /**
+   * Return the first rotation in the element's transform
+   *
+   * @param {'0to360' | '-180to180' | ''} normalize how to normalize the
+   * returned angle where `''` returns the raw angle
+   * @return {Point} scale
+   */
   getRotation(normalize: '0to360' | '-180to180' | '' = '') {
     const r = this.transform.r();
     let rotation = 0;
@@ -2661,6 +2687,13 @@ class DiagramElement {
     return rotation;
   }
 
+  /**
+   * Return the diagram space position of a point in this element's
+   * vertex space.
+   *
+   * @param {Point} vertexSpacePoint
+   * @return {Point} diagram space equivalent point
+   */
   getVertexSpaceDiagramPosition(vertexSpacePoint: Point) {
     const location = vertexSpacePoint.transformBy(this.lastDrawTransform.matrix());
     const glSpace = {
@@ -2702,6 +2735,11 @@ class DiagramElement {
   //   return new Point(0, 0);
   // }
 
+  /**
+   * Get position relative to bounding rect.
+   *
+   * @return {Point} position
+   */
   getPositionInBounds(
     space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local',
     x: 'center' | 'left' | 'right' | 'origin' | number,
@@ -2730,6 +2768,14 @@ class DiagramElement {
     return p;
   }
 
+  /**
+   * Get position of element
+   *
+   * By default the first translation of the element's transform is returned.
+   * This is effectively the element's location in 'local' coordinates.
+   *
+   *
+   */
   getPosition(
     space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local',
     x: 'center' | 'left' | 'right' | 'origin' | number = 'origin',
@@ -2953,7 +2999,7 @@ class DiagramElement {
   /**
    * Show element
    */
-  show(): void {
+  show() {
     this.isShown = true;
     this.setOpacity(1);
     if (this.parent != null) {
@@ -2966,7 +3012,7 @@ class DiagramElement {
   /**
    * Configure all parents to, and make this element touchable
    */
-  makeTouchable(makeThisElementTouchable: boolean = true): void {
+  makeTouchable(makeThisElementTouchable: boolean = true) {
     if (makeThisElementTouchable) {
       this.isTouchable = true;
     } else {
@@ -2980,7 +3026,7 @@ class DiagramElement {
   /**
    * Configure all parents to make this element touchable, and
    * make this element touchable and movable
-   * @param {boolean} movable `true` to make movable, `false` to not (`true`)
+   * @param {boolean} movable `true` to make movable, `false` to not
    */
   setMovable(movable: boolean = true) {
     if (movable) {
@@ -3046,7 +3092,7 @@ class DiagramElement {
   /**
    * Toggle hide/show of element
    */
-  toggleShow(): void {
+  toggleShow() {
     if (this.isShown) {
       this.hide();
     } else {
@@ -3054,7 +3100,7 @@ class DiagramElement {
     }
   }
 
-  click(): void {
+  click() {
     if (this.onClick !== null && this.onClick !== undefined) {
       if (this.recorder.state === 'recording') {
         this.recorder.recordEvent('elementClick', [this.getPath()]);
@@ -3083,7 +3129,7 @@ class DiagramElement {
   // }
 
   /**
-   * `true` if element is moving
+   * @return {boolean} `true` if element is moving
    */
   isMoving(): boolean {
     if (this.isShown === false) {
@@ -3099,7 +3145,7 @@ class DiagramElement {
   }
 
   /**
-   * `true` if element is animating
+   * @return {boolean} `true` if element is animating
    */
   isAnimating(): boolean {
     if (this.isShown === false) {
@@ -3208,12 +3254,14 @@ class DiagramElementPrimitive extends DiagramElement {
   /**
    * Set angle to draw.
    *
-   * Some primitive elements can be partially drawn to some angle
+   * Some primitive elements can be partially drawn to some angle.
+   *
+   * An angle of -1 represents the maximum angle allowed by the primitive.
    *
    * @param {number} angle Angle to draw
    */
-  setAngleToDraw(intputAngle: number = -1) {
-    this.angleToDraw = intputAngle;
+  setAngleToDraw(angle: number = -1) {
+    this.angleToDraw = angle;
   }
 
   // setScenario(scenarioName: string) {
@@ -3655,6 +3703,11 @@ class DiagramElementCollection extends DiagramElement {
   +exec: (string | Array<string | Object>, ?Array<string | DiagramElement>) => void;
   +highlight: (elementsToDim: ?Array<string | DiagramElement>) => void;
 
+  /**
+   * @param {Transform} transform initial transform to set ('new Transform()`)
+   * @param {Rect} diagramLimits limits of diagram ( new Rect(-1, -1, 2, 2) )
+   * @param {DiagramElement | null} parent  parent element ( null )
+   */
   constructor(
     transform: Transform = new Transform(),
     diagramLimits: Rect = new Rect(-1, 1, 2, 2),
@@ -3715,6 +3768,11 @@ class DiagramElementCollection extends DiagramElement {
     return collection;
   }
 
+  /**
+   * Move child elements to end of draw order - effectively moving to the back
+   * of the drawn collection. Later elements in the array will be further back.
+   * @param {Array<string | DiagramElement} elements
+   */
   toFront(elements: Array<string | DiagramElement>) {
     const names = [];
     elements.forEach((element) => {
@@ -3733,6 +3791,12 @@ class DiagramElementCollection extends DiagramElement {
     this.drawOrder = [...newOrder, ...names];
   }
 
+  /**
+   * Move child elements to end of draw order - effectively moving them to
+   * the front of the drawn collection. Later elements in the `elements` array
+   * will be drawn further forawrd.
+   * @param {Array<string | DiagramElement} elements
+   */
   toBack(elements: Array<string | DiagramElement>) {
     const names = [];
     elements.forEach((element) => {
@@ -3751,29 +3815,6 @@ class DiagramElementCollection extends DiagramElement {
     this.drawOrder = [...names.reverse(), ...newOrder];
   }
 
-  // isChildMoving(): boolean {
-  //   if (this.isShown === false) {
-  //     return false;
-  //   }
-  //   if (this.state.isMovingFreely
-  //       || this.state.isBeingMoved
-  //       || this.state.isPulsing
-  //       || this.animations.state === 'animating') {
-  //     return true;
-  //   }
-  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
-  //     const element = this.elements[this.drawOrder[i]];
-  //     if (element instanceof DiagramElementCollection) {
-  //       if (element.isMoving()) {
-  //         return true;
-  //       }
-  //     } else if (element.isShown && element.color[3] > 0 && element.isMoving()) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
   isAnyElementMoving(): boolean {
     if (this.isShown === false) {
       return false;
@@ -3790,46 +3831,13 @@ class DiagramElementCollection extends DiagramElement {
     return false;
   }
 
-  // isAnyElementAnimating(): boolean {
-  //   if (this.isShown === false) {
-  //     return false;
-  //   }
-  //   if (this.isAnimating()) {
-  //     return true;
-  //   }
-  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
-  //     const element = this.elements[this.drawOrder[i]];
-  //     if (element.isAnyElementAnimating()) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // isAnimating(): boolean {
-  //   if (this.isShown === false) {
-  //     return false;
-  //   }
-  //   const isThisAnimating = super.isAnimating();
-  //   if (isThisAnimating) {
-  //     return true;
-  //   }
-  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
-  //     const element = this.elements[this.drawOrder[i]];
-  //     if (element.isAnimating()) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
   /**
    * Add a diagram element to the collection.
    *
    * @param {string} name reference name of element
    * @param {DiagramElement} element element to add
    * @param {number} index index to add in the `drawOrder` where -1 appends the
-   * element to the end of the draw order (-1),
+   * element to the end of the draw order,
    */
   add(
     name: string,
@@ -4157,6 +4165,16 @@ class DiagramElementCollection extends DiagramElement {
     // }
   }
 
+  /**
+   * Get element from an element path with '.' separators.
+   *
+   * For instance, if a collection has a child collection 'a', which
+   * has a child primitive 'b', then the path would be: 'a.b'.
+   * @param {null | string | DiagramElement} elementPath
+   * @return {DiagramElement | null } element at path. If `elementPath`
+   * is `null`, then this element is returned. If `elementPath` is invalid
+   * then `null` is returned.
+   */
   getElement(elementPath: ?(string | DiagramElement) = null) {
     if (elementPath == null) {
       return this;
@@ -4185,6 +4203,15 @@ class DiagramElementCollection extends DiagramElement {
     return getElement(elementPath, this);
   }
 
+  /**
+   * Returns an array of result from
+   * [getElement](#diagramelementcollectiongetelement) calls on an
+   * array of paths.
+   *
+   * @param {Array<string | DiagramElement>} children
+   * @return {Array<DiagramElement>} Array of
+   * [getElement](#diagramelementcollectiongetelement) results
+   */
   getElements(children: Array<string | DiagramElement>) {
     const elements = [];
     children.forEach((child) => {
