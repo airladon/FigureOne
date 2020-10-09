@@ -74,7 +74,7 @@ class HTMLObject extends DrawingObject {
     this.border.push(boundary);
   }
 
-  getGLBoundaries(): Array<Array<Point>> {
+  getBoundaries(): Array<Array<Point>> {
     const parentRect = this.parentDiv.getBoundingClientRect();
     const glSpace = {
       x: { bottomLeft: -1, width: 2 },

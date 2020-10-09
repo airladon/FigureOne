@@ -54,28 +54,38 @@ class DrawingObject {
   update(options: Object) {
   }
 
-  getGLBoundaries(lastDrawTransformMatrix: Array<number>): Array<Array<Point>> {
-    const glBoundaries = [];
+  getBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
+    if (transformMatrix == null) {
+      return this.border;
+    }
+    const boundaries = [];
     this.border.forEach((boundary) => {
-      const glBorder = [];
+      const border = [];
       boundary.forEach((point) => {
-        glBorder.push(point.transformBy(lastDrawTransformMatrix));
+        border.push(point.transformBy(transformMatrix));
       });
-      glBoundaries.push(glBorder);
+      boundaries.push(border);
     });
-    return glBoundaries;
+    return boundaries;
   }
 
-  getGLBoundaryHoles(lastDrawTransformMatrix: Array<number>): Array<Array<Point>> {
-    const glBoundaries = [];
+  getBoundaryHoles(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
+    if (transformMatrix == null) {
+      return this.holeBorder;
+    }
+    const boundaries = [];
     this.holeBorder.forEach((boundary) => {
-      const glBorder = [];
+      const border = [];
       boundary.forEach((point) => {
-        glBorder.push(point.transformBy(lastDrawTransformMatrix));
+        if (transformMatrix != null) {
+          border.push(point.transformBy(transformMatrix));
+        } else {
+          border.push(point._dup());
+        }
       });
-      glBoundaries.push(glBorder);
+      boundaries.push(border);
     });
-    return glBoundaries;
+    return boundaries;
   }
   /* eslint-enable */
 
@@ -89,8 +99,8 @@ class DrawingObject {
   }
   /* eslint-enable */
 
-  getGLBoundingRect(lastDrawTransformMatrix: Array<number>): Rect {
-    const boundaries = this.getGLBoundaries(lastDrawTransformMatrix);
+  getBoundingRect(transformMatrix: Array<number> | null = null): Rect {
+    const boundaries = this.getBoundaries(transformMatrix);
     // const min = new Point(0, 0);
     // const max = new Point(0, 0);
     // let firstPoint = true;
@@ -115,43 +125,45 @@ class DrawingObject {
     return getBoundingRect(boundaries);
   }
 
-  getVertexSpaceBoundingRect() {
-    return getBoundingRect(this.border);
+  // getVertexSpaceBoundingRect() {
+  //   return getBoundingRect(this.border);
+  // }
+
+  // getLocation(): Point {
+  //   return this.location;
+  // }
+
+  getLocation(transformMatrix: Array<number> | null = null): Point {
+    if (transformMatrix == null) {
+      return this.location;
+    }
+    return this.getLocation().transformBy(transformMatrix);
   }
 
-  getLocation(): Point {
-    return this.location;
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getGLLocation(lastDrawTransformMatrix: Array<number>): Point {
-    return this.getLocation().transformBy(lastDrawTransformMatrix);
-  }
-
-  getRelativeGLBoundingRect(lastDrawTransformMatrix: Array<number>): Rect {
-    const glLocation = this.getGLLocation(lastDrawTransformMatrix);
-    const glAbsoluteBoundaries =
-      this.getGLBoundingRect(lastDrawTransformMatrix);
-    const glRelativeBoundaries = new Rect(
-      glAbsoluteBoundaries.left - glLocation.x,
-      glAbsoluteBoundaries.bottom - glLocation.y,
-      glAbsoluteBoundaries.width,
-      glAbsoluteBoundaries.height,
-    );
-    return glRelativeBoundaries;
-  }
-
-  getRelativeVertexSpaceBoundingRect() {
+  getRelativeBoundingRect(transformMatrix: Array<number> | null = null): Rect {
+    const location = this.getLocation(transformMatrix);
     const absoluteBoundaries =
-      this.getVertexSpaceBoundingRect();
+      this.getBoundingRect(transformMatrix);
     const relativeBoundaries = new Rect(
-      absoluteBoundaries.left - this.location.x,
-      absoluteBoundaries.bottom - this.location.y,
+      absoluteBoundaries.left - location.x,
+      absoluteBoundaries.bottom - location.y,
       absoluteBoundaries.width,
       absoluteBoundaries.height,
     );
     return relativeBoundaries;
   }
+
+  // getRelativeVertexSpaceBoundingRect() {
+  //   const absoluteBoundaries =
+  //     this.getVertexSpaceBoundingRect();
+  //   const relativeBoundaries = new Rect(
+  //     absoluteBoundaries.left - this.location.x,
+  //     absoluteBoundaries.bottom - this.location.y,
+  //     absoluteBoundaries.width,
+  //     absoluteBoundaries.height,
+  //   );
+  //   return relativeBoundaries;
+  // }
 
   // eslint-disable-next-line no-unused-vars, class-methods-use-this
   change(drawingPrimitive: any, border: Array<Array<Point>>, holes: Array<Array<Point>>) {

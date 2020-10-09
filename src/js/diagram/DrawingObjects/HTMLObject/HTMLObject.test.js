@@ -122,9 +122,9 @@ describe('Diagram HTML Object', () => {
       expect(h.element.style.visibility).toEqual('visible');
     });
   });
-  test('getGLBoundaries', () => {
+  test('getBoundaries', () => {
     mockElement.getBoundingClientRect = () => new Rect(475, 240, 50, 20);
-    const b = h.getGLBoundaries();
+    const b = h.getBoundaries();
     expect(b[0].map(p => p.round(3))).toEqual([
       new Point(-0.25, 2.36),
       new Point(-0.15, 2.36),

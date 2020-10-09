@@ -325,14 +325,17 @@ class DiagramTextBase {
     );
   }
 
-  getGLBoundary(
-    lastDrawTransformMatrix: Array<number>,
+  getBoundary(
+    transformMatrix: Array<number> | null,
   ): Array<Point> {
-    const glBoundary = [];
+    if (transformMatrix == null) {
+      return this.border;
+    }
+    const boundary = [];
     this.border.forEach((p) => {
-      glBoundary.push(p.transformBy(lastDrawTransformMatrix));
+      boundary.push(p.transformBy(transformMatrix));
     });
-    return glBoundary;
+    return boundary;
   }
 
   calcBorder() {
@@ -545,14 +548,14 @@ class TextObjectBase extends DrawingObject {
     });
   }
 
-  getGLBoundaries(
-    lastDrawTransformMatrix: Array<number>,
+  getBoundaries(
+    transformMatrix: Array<number>,
   ): Array<Array<Point>> {
-    const glBoundaries: Array<Array<Point>> = [];
+    const boundaries: Array<Array<Point>> = [];
     this.text.forEach((t) => {
-      glBoundaries.push(t.getGLBoundary(lastDrawTransformMatrix));
+      boundaries.push(t.getBoundary(transformMatrix));
     });
-    return glBoundaries;
+    return boundaries;
   }
 
   // Text is drawn in pixel space which is 0, 0 in the left hand top corner on

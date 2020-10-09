@@ -3281,10 +3281,10 @@ class DiagramElementPrimitive extends DiagramElement {
     // debugger;
 
     const boundaries =
-      this.drawingObject.getGLBoundaries(this.lastDrawTransform.matrix());
+      this.drawingObject.getBoundaries(this.lastDrawTransform.matrix());
     // console.log(boundaries)
     const holeBoundaries =
-      this.drawingObject.getGLBoundaryHoles(this.lastDrawTransform.matrix());
+      this.drawingObject.getBoundaryHoles(this.lastDrawTransform.matrix());
     for (let i = 0; i < boundaries.length; i += 1) {
       const boundary = boundaries[i];
       if (glLocation.isInPolygon(boundary)) {
@@ -3601,40 +3601,40 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   getLocalBoundaries() {
-    return this.drawingObject.getGLBoundaries(this.getTransform().matrix());
+    return this.drawingObject.getBoundaries(this.getTransform().matrix());
   }
 
   getDiagramBoundaries() {
-    return this.drawingObject.getGLBoundaries(this.vertexToDiagramSpaceTransformMatrix());
+    return this.drawingObject.getBoundaries(this.vertexToDiagramSpaceTransformMatrix());
   }
 
   getGLBoundaries() {
-    return this.drawingObject.getGLBoundaries(this.lastDrawTransform.matrix());
+    return this.drawingObject.getBoundaries(this.lastDrawTransform.matrix());
   }
 
 
   getVertexSpaceBoundingRect() {
-    return this.drawingObject.getVertexSpaceBoundingRect();
+    return this.drawingObject.getBoundingRect();
   }
 
   getLocalBoundingRect() {
-    return this.drawingObject.getGLBoundingRect(this.getTransform().matrix());
+    return this.drawingObject.getBoundingRect(this.getTransform().matrix());
   }
 
   getGLBoundingRect() {
-    return this.drawingObject.getGLBoundingRect(this.lastDrawTransform.matrix());
+    return this.drawingObject.getBoundingRect(this.lastDrawTransform.matrix());
   }
 
   getRelativeVertexSpaceBoundingRect(): Rect {
-    return this.drawingObject.getRelativeVertexSpaceBoundingRect();
+    return this.drawingObject.getRelativeBoundingRect();
   }
 
   getRelativeGLBoundingRect(): Rect {
-    return this.drawingObject.getRelativeGLBoundingRect(this.lastDrawTransform.matrix());
+    return this.drawingObject.getRelativeBoundingRect(this.lastDrawTransform.matrix());
   }
 
   getRelativeLocalBoundingRect(): Rect {
-    return this.drawingObject.getRelativeGLBoundingRect(this.getTransform().matrix());
+    return this.drawingObject.getRelativeBoundingRect(this.getTransform().matrix());
   }
 
   increaseBorderSize(
