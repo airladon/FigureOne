@@ -2482,7 +2482,11 @@ class DiagramElement {
 
   /**
    * Get boundaries of element.
-   * An element may have one or more contiguous boundaries.
+   *
+   * A contiguous boundary is an array of points.
+   *
+   * An element may have one or more contiguous boundaries, and so boundaries
+   * is an array of an array of points.
    *
    * @param {'local' | 'diagram' | 'vertex' | 'gl'} space boundaries relative
    * to which space
@@ -2562,10 +2566,12 @@ class DiagramElement {
 
   /**
    * Get bounding rect of element.
+   *
    * An element may have one or more contiguous boundaries. The bounding rect
    * is the rectangle that encapsulates all boundaries.
+   *
    * @param {'local' | 'diagram' | 'vertex' | 'gl'} space bounding rect relative
-   * to which space
+   * to a space
    * @return {Rect} bounding rect of element
    */
   getBoundingRect(
@@ -2653,9 +2659,8 @@ class DiagramElement {
   }
 
   /**
-   * Return the first scale in the element's transform.
-   *
-   * Will return [1, 1] if element's transform doesn't have a scale.
+   * Return the first scale in the element's transform. Will return
+   * `[1, 1]` if element's transform doesn't have a scale.
    *
    * @return {Point} scale
    */
@@ -2669,7 +2674,8 @@ class DiagramElement {
   }
 
   /**
-   * Return the first rotation in the element's transform
+   * Return the first rotation in the element's transform. Will return
+   * `0` if the element's transform doesn't have a rotation.
    *
    * @param {'0to360' | '-180to180' | ''} normalize how to normalize the
    * returned angle where `''` returns the raw angle
@@ -2735,35 +2741,35 @@ class DiagramElement {
   //   return new Point(0, 0);
   // }
 
-  /**
-   * Get position relative to bounding rect.
-   *
-   * @return {Point} position
-   */
+  // /**
+  //  * Get position relative to bounding rect.
+  //  *
+  //  * @return {Point} position
+  //  */
   getPositionInBounds(
     space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local',
-    x: 'center' | 'left' | 'right' | 'origin' | number,
-    y: 'middle' | 'top' | 'bottom' | 'origin' | number,
+    xAlign: 'center' | 'left' | 'right' | 'location' | number,
+    yAlign: 'middle' | 'top' | 'bottom' | 'location' | number,
   ) {
     const bounds = this.getBoundingRect(space);
     const p = this.getPosition(space);
-    if (x === 'left') {
+    if (xAlign === 'left') {
       p.x = bounds.left;
-    } else if (x === 'right') {
+    } else if (xAlign === 'right') {
       p.x = bounds.right;
-    } else if (x === 'center') {
+    } else if (xAlign === 'center') {
       p.x = bounds.left + bounds.width / 2;
-    } else if (typeof x === 'number') {
-      p.x = bounds.left + bounds.width * x;
+    } else if (typeof xAlign === 'number') {
+      p.x = bounds.left + bounds.width * xAlign;
     }
-    if (y === 'top') {
+    if (yAlign === 'top') {
       p.y = bounds.top;
-    } else if (y === 'bottom') {
+    } else if (yAlign === 'bottom') {
       p.y = bounds.bottom;
-    } else if (y === 'middle') {
+    } else if (yAlign === 'middle') {
       p.y = bounds.bottom + bounds.height / 2;
-    } else if (typeof y === 'number') {
-      p.y = bounds.bottom + bounds.height * y;
+    } else if (typeof yAlign === 'number') {
+      p.y = bounds.bottom + bounds.height * yAlign;
     }
     return p;
   }
@@ -2774,17 +2780,30 @@ class DiagramElement {
    * By default the first translation of the element's transform is returned.
    * This is effectively the element's location in 'local' coordinates.
    *
+   * The position of the element relative to its horizontal and vertical bounds
+   * can also be returned. Use `xAlign` to find the x coordinate of the left,
+   * center, right or percentage width from left of the element. Use `yAlign`
+   * to find the bottom, middle, top or percentage height from bottom of the
+   * element.
    *
+   * @param {'local' | 'diagram' | 'gl' | 'vertex'} space the space to return
+   * the position in
+   * @param {'center' | 'left' | 'right' | 'location' | number} xAlign
+   * horizontal alignment of position. Use a `number` to define the horizontal
+   * position in percentage width from the left.
+   * @param {'middle' | 'top' | 'bottom' | 'location' | number} yAlign
+   * vertical alignment of position. Use a `number` to define the vertical
+   * position in percentage height from the bottom.
    */
   getPosition(
     space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local',
-    x: 'center' | 'left' | 'right' | 'origin' | number = 'origin',
-    y: 'middle' | 'top' | 'bottom' | 'origin' | number = 'origin',
+    xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
+    yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
   ) {
-    // vertex space position doesn't mean much as it will always be 0, 0
-    if (x !== 'origin' || y !== 'origin') {
-      this.getPositionInBounds(space, x, y);
+    if (xAlign !== 'location' || yAlign !== 'location') {
+      return this.getPositionInBounds(space, xAlign, yAlign);
     }
+    // vertex space position doesn't mean much as it will always be 0, 0
     if (space === 'vertex') {
       return new Point(0, 0);
     }

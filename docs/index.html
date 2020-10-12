@@ -194,6 +194,36 @@
                       </a></li>
                       
                       <li><a
+                        href='#diagramelementgetscale'
+                        class='regular pre-open'>
+                        #getScale
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementgetrotation'
+                        class='regular pre-open'>
+                        #getRotation
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementgetvertexspacediagramposition'
+                        class='regular pre-open'>
+                        #getVertexSpaceDiagramPosition
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementgetpositioninbounds'
+                        class='regular pre-open'>
+                        #getPositionInBounds
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementgetposition'
+                        class='regular pre-open'>
+                        #getPosition
+                      </a></li>
+                      
+                      <li><a
                         href='#diagramelementshow'
                         class='regular pre-open'>
                         #show
@@ -2595,8 +2625,10 @@ appropriately clipped.</p>
 
   
 
-  <p>Get boundaries of element.
-An element may have one or more contiguous boundaries.</p>
+  <p>Get boundaries of element.</p>
+<p>A contiguous boundary is an array of points.</p>
+<p>An element may have one or more contiguous boundaries, and so boundaries
+is an array of an array of points.</p>
 
   
   
@@ -2668,8 +2700,8 @@ to which space
 
   
 
-  <p>Get bounding rect of element.
-An element may have one or more contiguous boundaries. The bounding rect
+  <p>Get bounding rect of element.</p>
+<p>An element may have one or more contiguous boundaries. The bounding rect
 is the rectangle that encapsulates all boundaries.</p>
 
   
@@ -2691,7 +2723,7 @@ is the rectangle that encapsulates all boundaries.</p>
             <span class='code bold'>space</span> <code class='quiet'>((<code>"local"</code> | <code>"diagram"</code> | <code>"vertex"</code> | <code>"gl"</code>)
             = <code>&#39;local&#39;</code>)</code>
 	    bounding rect relative
-to which space
+to a space
 
           </div>
           
@@ -2710,6 +2742,375 @@ to which space
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementgetscale'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getScale()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return the first scale in the element's transform.</p>
+<p>Will return [1, 1] if element's transform doesn't have a scale.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#point">Point</a></code>:
+        scale
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementgetrotation'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getRotation(normalize)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return the first rotation in the element's transform</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>normalize</span> <code class='quiet'>((<code>"0to360"</code> | <code>"-180to180"</code> | <code>""</code>)
+            = <code>&#39;&#39;</code>)</code>
+	    how to normalize the
+returned angle where 
+<code>''</code>
+ returns the raw angle
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#point">Point</a></code>:
+        scale
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementgetvertexspacediagramposition'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getVertexSpaceDiagramPosition(vertexSpacePoint)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return the diagram space position of a point in this element's
+vertex space.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>vertexSpacePoint</span> <code class='quiet'>(<a href="#point">Point</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#point">Point</a></code>:
+        diagram space equivalent point
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementgetpositioninbounds'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getPositionInBounds(space, x, y)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get position relative to bounding rect.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>space</span> <code class='quiet'>((<code>"local"</code> | <code>"diagram"</code> | <code>"gl"</code> | <code>"vertex"</code>)
+            = <code>&#39;local&#39;</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>x</span> <code class='quiet'>((<code>"center"</code> | <code>"left"</code> | <code>"right"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>y</span> <code class='quiet'>((<code>"middle"</code> | <code>"top"</code> | <code>"bottom"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#point">Point</a></code>:
+        position
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementgetposition'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getPosition(space, x, y)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get position of element</p>
+<p>By default the first translation of the element's transform is returned.
+This is effectively the element's location in 'local' coordinates.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>space</span> <code class='quiet'>((<code>"local"</code> | <code>"diagram"</code> | <code>"gl"</code> | <code>"vertex"</code>)
+            = <code>&#39;local&#39;</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>x</span> <code class='quiet'>((<code>"center"</code> | <code>"left"</code> | <code>"right"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)
+            = <code>&#39;origin&#39;</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>y</span> <code class='quiet'>((<code>"middle"</code> | <code>"top"</code> | <code>"bottom"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)
+            = <code>&#39;origin&#39;</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
   
 
   
