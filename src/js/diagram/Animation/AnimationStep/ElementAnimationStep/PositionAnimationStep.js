@@ -26,8 +26,8 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * @property {TypeParsablePoint} [delta]
  * @property {null | TypeParsablePoint | number} [velocity] velocity of
  * position overrides `duration` - `null` to use `duration` (`null`)
- * @property {'linear' | 'curved'} translationStyle
- * @property {CurvedPathOptionsType} translationOptions
+ * @property {'linear' | 'curved'} [translationStyle]
+ * @property {CurvedPathOptionsType} [translationOptions]
  * @property {number} [maxDuration]
  */
 export type OBJ_PositionAnimationStep = {

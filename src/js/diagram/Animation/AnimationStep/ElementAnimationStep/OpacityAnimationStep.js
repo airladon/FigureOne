@@ -11,7 +11,24 @@ import type {
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
-export type TypeOpacityAnimationStepInputOptions = {
+/**
+ * Opacity animation step - this animates the `opacity` property of a
+ * {@link DiagramElement}.
+ *
+ * By default, the opacity will start with the element's current opacity unless
+ * dissolving. If dissolving, the opacity will start at `0` if dissolving in, or
+ * `1` if dissolving out unless `dissolveFromCurrent` is `true` in which case
+ * the opacity will start from the current opacity.
+ *
+ *
+ * @extends OBJ_ElementAnimationStep
+ * @property {number} [start]
+ * @property {number} [target]
+ * @property {number} [delta]
+ * @property {null | 'in' | 'out'} dissolve (`null`)
+ * @property {boolean} dissolveFromCurrent (`false`)
+ */
+export type OBJ_OpacityAnimationStep = {
   start?: number;      // default is element transform
   target?: number;     // Either target or delta must be defined
   delta?: number;      // delta overrides target if both are defined
@@ -19,7 +36,10 @@ export type TypeOpacityAnimationStepInputOptions = {
   dissolveFromCurrent?: boolean,
 } & OBJ_ElementAnimationStep;
 
-
+/**
+ * Opacity Animation Step
+ * @extends ElementAnimationStep
+ */
 export class OpacityAnimationStep extends ElementAnimationStep {
   opacity: {
     start: number;     // null means use element color
@@ -30,7 +50,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
     dissolveFromCurrent: boolean,
   };
 
-  constructor(...optionsIn: Array<TypeOpacityAnimationStepInputOptions>) {
+  constructor(...optionsIn: Array<OBJ_OpacityAnimationStep>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, ...optionsIn, { type: 'opacity' });
     deleteKeys(ElementAnimationStepOptionsIn, [
@@ -174,6 +194,10 @@ export class OpacityAnimationStep extends ElementAnimationStep {
   }
 }
 
+/**
+ * Dissolve in animation step
+ * @extends OpacityAnimationStep
+ */
 export class DissolveInAnimationStep extends OpacityAnimationStep {
   constructor(
     timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
@@ -191,12 +215,16 @@ export class DissolveInAnimationStep extends OpacityAnimationStep {
 }
 
 export function dissolveIn(
-  timeOrOptionsIn: number | TypeOpacityAnimationStepInputOptions = {},
-  ...args: Array<TypeOpacityAnimationStepInputOptions>
+  timeOrOptionsIn: number | OBJ_OpacityAnimationStep = {},
+  ...args: Array<OBJ_OpacityAnimationStep>
 ) {
   return new DissolveInAnimationStep(timeOrOptionsIn, ...args);
 }
 
+/**
+ * Dissolve out animation step
+ * @extends OpacityAnimationStep
+ */
 export class DissolveOutAnimationStep extends OpacityAnimationStep {
   constructor(
     timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
@@ -214,8 +242,8 @@ export class DissolveOutAnimationStep extends OpacityAnimationStep {
 }
 
 export function dissolveOut(
-  timeOrOptionsIn: number | TypeOpacityAnimationStepInputOptions = {},
-  ...args: Array<TypeOpacityAnimationStepInputOptions>
+  timeOrOptionsIn: number | OBJ_OpacityAnimationStep = {},
+  ...args: Array<OBJ_OpacityAnimationStep>
 ) {
   return new DissolveOutAnimationStep(timeOrOptionsIn, ...args);
 }

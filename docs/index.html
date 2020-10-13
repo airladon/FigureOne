@@ -176,6 +176,24 @@
                       </a></li>
                       
                       <li><a
+                        href='#diagramelementdim'
+                        class='regular pre-open'>
+                        #dim
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementsetdimcolor'
+                        class='regular pre-open'>
+                        #setDimColor
+                      </a></li>
+                      
+                      <li><a
+                        href='#diagramelementundim'
+                        class='regular pre-open'>
+                        #undim
+                      </a></li>
+                      
+                      <li><a
                         href='#diagramelementgetpath'
                         class='regular pre-open'>
                         #getPath
@@ -1401,6 +1419,86 @@
               
                 
                 <li><a
+                  href='#obj_coloranimationstep'
+                  class="">
+                  OBJ_ColorAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#coloranimationstep'
+                  class="">
+                  ColorAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#dimanimationstep'
+                  class="">
+                  DimAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#undimanimationstep'
+                  class="">
+                  UndimAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_opacityanimationstep'
+                  class="">
+                  OBJ_OpacityAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#opacityanimationstep'
+                  class="">
+                  OpacityAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#dissolveinanimationstep'
+                  class="">
+                  DissolveInAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#dissolveoutanimationstep'
+                  class="">
+                  DissolveOutAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_rotationanimationstep'
                   class="">
                   OBJ_RotationAnimationStep
@@ -1537,6 +1635,42 @@
                         href='#animationmanagerposition'
                         class='regular pre-open'>
                         #position
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationmanagercolor'
+                        class='regular pre-open'>
+                        #color
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationmanageropacity'
+                        class='regular pre-open'>
+                        #opacity
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationmanagerdissolvein'
+                        class='regular pre-open'>
+                        #dissolveIn
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationmanagerdissolveout'
+                        class='regular pre-open'>
+                        #dissolveOut
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationmanagerdim'
+                        class='regular pre-open'>
+                        #dim
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationmanagerundim'
+                        class='regular pre-open'>
+                        #undim
                       </a></li>
                       
                     </ul>
@@ -2151,6 +2285,22 @@ corner at (-1, -1), width 1, height 1
 
   <p>Diagram Element base class</p>
 <p>The set of properties and methods shared by all diagram elements</p>
+<p>A diagram element has several color related properties. Color is
+defined as an RGBA array with values between 0 and 1. The alpha
+channel defines the transparency or opacity of the color where
+1 is fully opaque and 0 is fully transparent.</p>
+<p>The <code>color</code> property stores the element's current color, while the
+<code>defaultColor</code> property stores the element's color when not dimmed or
+dissolving. Color should only be set using the <code>setColor</code> method.</p>
+<p>An element can be "dimmed" or "undimmed". For instance,
+a red element might turn a less obvious grey when dimmed. The property
+<code>dimColor</code> stores the desired color to dim to and should be set with
+<code>setDimColor()</code></p>
+<p>An element can be dissolved in or out with animation. Dissolving
+an element out transitions its opacity from its current value to 0.
+The <code>opacity</code> property is used when dissolving. The opacity is multiplied by
+the alpha channel of <code>color</code> to net a final opacity. Opacity should not be
+set directly as it will be overwritten by dissolve animations.</p>
 
   
   
@@ -2270,8 +2420,8 @@ at top level of diagram
       
         <div class='space-bottom0'>
           <span class='code bold'>color</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])</code>
-          : color defined as red,
-green, blue, alpha with range 0 to 1
+          : element's current
+color defined as red, green, blue, alpha with range 0 to 1
 
           
         </div>
@@ -2702,7 +2852,7 @@ appropriately clipped.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>setColor(color, setDefault)</span>
+            <span class='code strong strong truncate'>setColor(color, setDefault = true)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -2737,14 +2887,172 @@ appropriately clipped.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>setDefault</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            <span class='code bold'>setDefault</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?
             = <code>true</code>)</code>
+	    also set the default color to this color
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementdim'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>dim()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set element color to <code>dimColor</code></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementsetdimcolor'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setDimColor(color)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set <code>dimColor</code> property</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</code>
 	    
           </div>
           
         </div>
       
     </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramelementundim'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>undim()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set element color to <code>defaultColor</code></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
   
 
   
@@ -19475,13 +19783,13 @@ position overrides
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>translationStyle</span> <code class='quiet'>((<code>"linear"</code> | <code>"curved"</code>))</code>
+          <span class='code bold'>translationStyle</span> <code class='quiet'>((<code>"linear"</code> | <code>"curved"</code>)?)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>translationOptions</span> <code class='quiet'>(<a href="#curvedpathoptionstype">CurvedPathOptionsType</a>)</code>
+          <span class='code bold'>translationOptions</span> <code class='quiet'>(<a href="#curvedpathoptionstype">CurvedPathOptionsType</a>?)</code>
           
           
         </div>
@@ -19789,6 +20097,656 @@ custom animations and
           <div>
             <span class='code bold'>optionsIn</span> <code class='quiet'>(<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
             = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_coloranimationstep'>
+      OBJ_ColorAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Color animation step</p>
+<p>By default, the color will start with the element's current color.</p>
+<p>Use either <code>delta</code> or <code>target</code> to define it's end color</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>target</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <code>"dim"</code> | <code>"undim"</code>)?)</code>
+          : use 
+<code>dim</code>
+ to animate to
+element's 
+<code>dimColor</code>
+, and 
+<code>undim</code>
+ to animate to element's 
+<code>defaultColor</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>delta</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='coloranimationstep'>
+      ColorAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Color Animation Step</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#elementanimationstep">ElementAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_coloranimationstep">OBJ_ColorAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='dimanimationstep'>
+      DimAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Dim color animation step</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#coloranimationstep">ColorAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeOrOptionsIn</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='undimanimationstep'>
+      UndimAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Undim color animation step</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#coloranimationstep">ColorAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeOrOptionsIn</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_opacityanimationstep'>
+      OBJ_OpacityAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Opacity animation step - this animates the <code>opacity</code> property of a
+<a href="#diagramelement">DiagramElement</a>.</p>
+<p>By default, the opacity will start with the element's current opacity unless
+dissolving. If dissolving, the opacity will start at <code>0</code> if dissolving in, or
+<code>1</code> if dissolving out unless <code>dissolveFromCurrent</code> is <code>true</code> in which case
+the opacity will start from the current opacity.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>delta</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dissolve</span> <code class='quiet'>((null | <code>"in"</code> | <code>"out"</code>))</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dissolveFromCurrent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          : (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='opacityanimationstep'>
+      OpacityAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Opacity Animation Step</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#elementanimationstep">ElementAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_opacityanimationstep">OBJ_OpacityAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='dissolveinanimationstep'>
+      DissolveInAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Dissolve in animation step</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#opacityanimationstep">OpacityAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeOrOptionsIn</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='dissolveoutanimationstep'>
+      DissolveOutAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Dissolve out animation step</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#opacityanimationstep">OpacityAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeOrOptionsIn</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>>)</code>
 	    
           </div>
           
@@ -20402,7 +21360,7 @@ callback - if the
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>numOrOptionsIn</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_animationstep">OBJ_AnimationStep</a>)
+            <span class='code bold'>numOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_animationstep">OBJ_AnimationStep</a>)
             = <code>{}</code>)</code>
 	    
           </div>
@@ -21161,6 +22119,436 @@ Use the <code>duration</code> value in <code>options</code> to define delay dura
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#positionanimationstep">PositionAnimationStep</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationmanagercolor'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>color(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Color animation step tied to this element</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_coloranimationstep">OBJ_ColorAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#coloranimationstep">ColorAnimationStep</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationmanageropacity'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>opacity(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Color animation step tied to this element</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_coloranimationstep">OBJ_ColorAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#opacityanimationstep">OpacityAnimationStep</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationmanagerdissolvein'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>dissolveIn(timeorOptions, timeOrOptions)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Dissolve in animation step
+Use the <code>duration</code> value in <code>options</code> to define dissolving duration</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeorOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#dissolveinanimationstep">DissolveInAnimationStep</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationmanagerdissolveout'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>dissolveOut(timeOrOptions)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Dissolve out animation step
+Use the <code>duration</code> value in <code>options</code> to define dissolving duration</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#dissolveoutanimationstep">DissolveOutAnimationStep</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationmanagerdim'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>dim(timeOrOptions)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Dim color animation step
+Use the <code>duration</code> value in <code>options</code> to define dimming duration</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#dimanimationstep">DimAnimationStep</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationmanagerundim'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>undim(timeOrOptions)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Undim color animation step
+Use the <code>duration</code> value in <code>options</code> to define undimming duration</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#undimanimationstep">UndimAnimationStep</a></code>:
         
 
       

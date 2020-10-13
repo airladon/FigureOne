@@ -6,10 +6,10 @@ import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/Serial
 import type {
   OBJ_PositionAnimationStep, TypeParallelAnimationStepInputOptions,
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
-  TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
+  OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
   TypeTransformAnimationStepInputOptions,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
-  TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
+  TypePulseAnimationStepInputOptions, OBJ_OpacityAnimationStep,
   TypePulseTransformAnimationStepInputOptions,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
@@ -219,7 +219,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  color(...optionsIn: Array<TypeColorAnimationStepInputOptions>) {
+  color(...optionsIn: Array<OBJ_ColorAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -228,7 +228,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  opacity(...optionsIn: Array<TypeOpacityAnimationStepInputOptions>) {
+  opacity(...optionsIn: Array<OBJ_OpacityAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -238,8 +238,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   dissolveOut(
-    timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
-    ...args: Array<TypeColorAnimationStepInputOptions>
+    timeOrOptionsIn: number | OBJ_ColorAnimationStep = {},
+    ...args: Array<OBJ_ColorAnimationStep>
   ) {
     const defaultOptions = { element: this.element };
     let options;
@@ -253,8 +253,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   dissolveIn(
-    timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
-    ...args: Array<TypeColorAnimationStepInputOptions>
+    timeOrOptionsIn: number | OBJ_ColorAnimationStep = {},
+    ...args: Array<OBJ_ColorAnimationStep>
   ) {
     const defaultOptions = { element: this.element };
     let options;
@@ -268,8 +268,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   dim(
-    timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
-    ...args: Array<TypeColorAnimationStepInputOptions>
+    timeOrOptionsIn: number | OBJ_ColorAnimationStep = {},
+    ...args: Array<OBJ_ColorAnimationStep>
   ) {
     const defaultOptions = { element: this.element };
     let options;
@@ -283,8 +283,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   undim(
-    timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
-    ...args: Array<TypeColorAnimationStepInputOptions>
+    timeOrOptionsIn: number | OBJ_ColorAnimationStep = {},
+    ...args: Array<OBJ_ColorAnimationStep>
   ) {
     const defaultOptions = { element: this.element };
     let options;

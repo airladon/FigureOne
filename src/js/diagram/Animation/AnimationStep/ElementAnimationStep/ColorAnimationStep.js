@@ -7,11 +7,25 @@ import {
 } from '../../../../tools/tools';
 // import * as tools from '../../../../tools/math';
 import type { OBJ_ElementAnimationStep } from '../ElementAnimationStep';
-import type { TypeOpacityAnimationStepInputOptions } from './OpacityAnimationStep';
+import type { OBJ_OpacityAnimationStep } from './OpacityAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
 type TypeColor = Array<number>;
-export type TypeColorAnimationStepInputOptions = {
+
+/**
+ * Color animation step
+ *
+ * By default, the color will start with the element's current color.
+ *
+ * Use either `delta` or `target` to define it's end color
+ *
+ * @extends OBJ_ElementAnimationStep
+ * @property {Array<number>} [start]
+ * @property {Array<number> | 'dim' | 'undim'} [target] use `dim` to animate to
+ * element's `dimColor`, and `undim` to animate to element's `defaultColor`
+ * @property {Array<number>} [delta]
+ */
+export type OBJ_ColorAnimationStep = {
   start?: TypeColor;      // default is element transform
   target?: TypeColor | 'dim' | 'undim';     // Either target or delta must be defined
   delta?: TypeColor;      // delta overrides target if both are defined
@@ -22,6 +36,10 @@ const addColors = (color1, color2) => color1.map((c, index) => Math.min(c + colo
 
 const subtractColors = (color1, color2) => color1.map((c, index) => c - color2[index]);
 
+/**
+ * Color Animation Step
+ * @extends ElementAnimationStep
+ */
 export class ColorAnimationStep extends ElementAnimationStep {
   color: {
     start: TypeColor;     // null means use element color
@@ -32,9 +50,9 @@ export class ColorAnimationStep extends ElementAnimationStep {
     setDefault?: boolean;
   };
 
-  constructor(...optionsIn: Array<TypeColorAnimationStepInputOptions>) {
+  constructor(...options: Array<OBJ_ColorAnimationStep>) {
     const ElementAnimationStepOptionsIn =
-      joinObjects({}, ...optionsIn, { type: 'color' });
+      joinObjects({}, ...options, { type: 'color' });
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'dissolve',
     ]);
@@ -45,10 +63,10 @@ export class ColorAnimationStep extends ElementAnimationStep {
       delta: null,
       dissolve: null,
     };
-    const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
+    const optionsToUse = joinObjects({}, defaultPositionOptions, ...options);
     // $FlowFixMe
     this.color = {};
-    copyKeysFromTo(options, this.color, [
+    copyKeysFromTo(optionsToUse, this.color, [
       'start', 'delta', 'target', 'dissolve',
     ]);
     if (this.color.target === 'dim') {
@@ -151,6 +169,11 @@ export class ColorAnimationStep extends ElementAnimationStep {
   }
 }
 
+
+/**
+ * Dim color animation step
+ * @extends ColorAnimationStep
+ */
 export class DimAnimationStep extends ColorAnimationStep {
   constructor(
     timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
@@ -168,12 +191,16 @@ export class DimAnimationStep extends ColorAnimationStep {
 }
 
 export function dim(
-  timeOrOptionsIn: number | TypeOpacityAnimationStepInputOptions = {},
-  ...args: Array<TypeOpacityAnimationStepInputOptions>
+  timeOrOptionsIn: number | OBJ_OpacityAnimationStep = {},
+  ...args: Array<OBJ_OpacityAnimationStep>
 ) {
   return new DimAnimationStep(timeOrOptionsIn, ...args);
 }
 
+/**
+ * Undim color animation step
+ * @extends ColorAnimationStep
+ */
 export class UndimAnimationStep extends ColorAnimationStep {
   constructor(
     timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
@@ -191,8 +218,8 @@ export class UndimAnimationStep extends ColorAnimationStep {
 }
 
 export function undim(
-  timeOrOptionsIn: number | TypeOpacityAnimationStepInputOptions = {},
-  ...args: Array<TypeOpacityAnimationStepInputOptions>
+  timeOrOptionsIn: number | OBJ_OpacityAnimationStep = {},
+  ...args: Array<OBJ_OpacityAnimationStep>
 ) {
   return new UndimAnimationStep(timeOrOptionsIn, ...args);
 }
@@ -214,8 +241,8 @@ export function undim(
 // }
 
 // export function dissolveIn(
-//   timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
-//   ...args: Array<TypeColorAnimationStepInputOptions>
+//   timeOrOptionsIn: number | OBJ_ColorAnimationStep = {},
+//   ...args: Array<OBJ_ColorAnimationStep>
 // ) {
 //   return new DissolveInAnimationStep(timeOrOptionsIn, ...args);
 // }
@@ -237,8 +264,8 @@ export function undim(
 // }
 
 // export function dissolveOut(
-//   timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {},
-//   ...args: Array<TypeColorAnimationStepInputOptions>
+//   timeOrOptionsIn: number | OBJ_ColorAnimationStep = {},
+//   ...args: Array<OBJ_ColorAnimationStep>
 // ) {
 //   return new DissolveOutAnimationStep(timeOrOptionsIn, ...args);
 // }

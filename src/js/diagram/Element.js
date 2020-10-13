@@ -32,9 +32,9 @@ import type { TypeWhen } from './webgl/GlobalAnimation';
 import type Diagram, { TypeSpaceTransforms } from './Diagram';
 import type {
   OBJ_PositionAnimationStep, TypeAnimationBuilderInputOptions,
-  TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
+  OBJ_ColorAnimationStep, TypeTransformAnimationStepInputOptions,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
-  TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
+  TypePulseAnimationStepInputOptions, OBJ_OpacityAnimationStep,
   TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
   TypeDelayStepInputOptions, TypePulseTransformAnimationStepInputOptions,
   ScenarioDefinitionAnimationStepInputOptions,
@@ -271,6 +271,26 @@ type ElementState = {
  * Diagram Element base class
  *
  * The set of properties and methods shared by all diagram elements
+ *
+ * A diagram element has several color related properties. Color is
+ * defined as an RGBA array with values between 0 and 1. The alpha
+ * channel defines the transparency or opacity of the color where
+ * 1 is fully opaque and 0 is fully transparent.
+ *
+ * The `color` property stores the element's current color, while the
+ * `defaultColor` property stores the element's color when not dimmed or
+ * dissolving. Color should only be set using the `setColor` method.
+ *
+ * An element can be "dimmed" or "undimmed". For instance,
+ * a red element might turn a less obvious grey when dimmed. The property
+ * `dimColor` stores the desired color to dim to and should be set with
+ * `setDimColor()`
+ *
+ * An element can be dissolved in or out with animation. Dissolving
+ * an element out transitions its opacity from its current value to 0.
+ * The `opacity` property is used when dissolving. The opacity is multiplied by
+ * the alpha channel of `color` to net a final opacity. Opacity should not be
+ * set directly as it will be overwritten by dissolve animations.
  * @class
  * @property {string} name reference name of element
  * @property {boolean} isShown if `false` then element will not be processed on
@@ -284,8 +304,8 @@ type ElementState = {
  * @property {boolean} isTouchable must be `true` to move or execute `onClick`
  * @property {boolean} isMovable must be `true` to move
  * @property {string | () => void} onClick callback if touched or clicked
- * @property {[number, number, number, number]} color color defined as red,
- * green, blue, alpha with range 0 to 1
+ * @property {[number, number, number, number]} color element's current
+ * color defined as red, green, blue, alpha with range 0 to 1
  * @property {[number, number, number, number]} dimColor color to use when
  * dimming element
  * @property {number} opacity number between 0 and 1 that is multiplied with
@@ -561,11 +581,11 @@ class DiagramElement {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.PositionAnimationStep(options);
       },
-      color: (...optionsIn: Array<TypeColorAnimationStepInputOptions>) => {
+      color: (...optionsIn: Array<OBJ_ColorAnimationStep>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.ColorAnimationStep(options);
       },
-      opacity: (...optionsIn: Array<TypeOpacityAnimationStepInputOptions>) => {
+      opacity: (...optionsIn: Array<OBJ_OpacityAnimationStep>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.OpacityAnimationStep(options);
       },
@@ -582,7 +602,7 @@ class DiagramElement {
         return new animations.PulseAnimationStep(options);
       },
       // eslint-disable-next-line max-len
-      dissolveIn: (timeOrOptionsIn: number | TypeOpacityAnimationStepInputOptions = {}, ...args: Array<TypeOpacityAnimationStepInputOptions>) => {
+      dissolveIn: (timeOrOptionsIn: number | OBJ_OpacityAnimationStep = {}, ...args: Array<OBJ_OpacityAnimationStep>) => {
         const defaultOptions = { element: this };
         let options;
         if (typeof timeOrOptionsIn === 'number') {
@@ -593,7 +613,7 @@ class DiagramElement {
         return new animations.DissolveInAnimationStep(options);
       },
       // eslint-disable-next-line max-len
-      dissolveOut: (timeOrOptionsIn: number | TypeOpacityAnimationStepInputOptions = {}, ...args: Array<TypeOpacityAnimationStepInputOptions>) => {
+      dissolveOut: (timeOrOptionsIn: number | OBJ_OpacityAnimationStep = {}, ...args: Array<OBJ_OpacityAnimationStep>) => {
         const defaultOptions = { element: this };
         let options;
         if (typeof timeOrOptionsIn === 'number') {
@@ -604,7 +624,7 @@ class DiagramElement {
         return new animations.DissolveOutAnimationStep(options);
       },
       // eslint-disable-next-line max-len
-      dim: (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
+      dim: (timeOrOptionsIn: number | OBJ_ColorAnimationStep = {}, ...args: Array<OBJ_ColorAnimationStep>) => {
         const defaultOptions = { element: this };
         let options;
         if (typeof timeOrOptionsIn === 'number') {
@@ -615,7 +635,7 @@ class DiagramElement {
         return new animations.DimAnimationStep(options);
       },
       // eslint-disable-next-line max-len
-      undim: (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
+      undim: (timeOrOptionsIn: number | OBJ_ColorAnimationStep = {}, ...args: Array<OBJ_ColorAnimationStep>) => {
         const defaultOptions = { element: this };
         let options;
         if (typeof timeOrOptionsIn === 'number') {
@@ -1629,6 +1649,7 @@ class DiagramElement {
   /**
    Set element color.
    @param {[number, number, number, number]} color RGBA color from 0 to 1
+   @param {boolean} [setDefault] also set the default color to this color
    */
   setColor(color: Array<number>, setDefault: boolean = true) {
     this.color = color != null ? color.slice() : [0, 0, 0, 0];
@@ -1637,14 +1658,23 @@ class DiagramElement {
     }
   }
 
+  /**
+   * Set element color to `dimColor`
+   */
   dim() {
     this.setColor(this.dimColor, false);
   }
 
+  /**
+   * Set `dimColor` property
+   */
   setDimColor(color: Array<number>) {
     this.dimColor = color != null ? color.slice() : [0, 0, 0, 0];
   }
 
+  /**
+   * Set element color to `defaultColor`
+   */
   undim() {
     this.setColor(this.defaultColor, true);
   }

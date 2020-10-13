@@ -11,7 +11,7 @@ import ScenarioAnimationStep from './AnimationStep/ElementAnimationStep/Scenario
 
 
 import type {
-  TypeColorAnimationStepInputOptions,
+  OBJ_ColorAnimationStep,
 } from './AnimationStep/ElementAnimationStep/ColorAnimationStep';
 import {
   ColorAnimationStep, DimAnimationStep, UndimAnimationStep, dim,
@@ -20,7 +20,7 @@ import {
 
 
 import type {
-  TypeOpacityAnimationStepInputOptions,
+  OBJ_OpacityAnimationStep,
 } from './AnimationStep/ElementAnimationStep/OpacityAnimationStep';
 import {
   OpacityAnimationStep, DissolveInAnimationStep, dissolveIn,
@@ -111,10 +111,10 @@ export type {
   TypeParallelAnimationStepInputOptions, TypeSerialAnimationStepInputOptions,
   TypeTransformAnimationStepInputOptions, OBJ_AnimationStep,
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
-  TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
+  OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
   TypeAnimationManagerInputOptions, OBJ_RotationAnimationStep,
   OBJ_ScaleAnimationStep, TypePulseAnimationStepInputOptions,
-  TypeOpacityAnimationStepInputOptions, TypeScenarioAnimationStepInputOptions,
+  OBJ_OpacityAnimationStep, TypeScenarioAnimationStepInputOptions,
   TypePulseTransformAnimationStepInputOptions,
 };
 export {

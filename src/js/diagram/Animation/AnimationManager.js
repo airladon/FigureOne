@@ -6,7 +6,7 @@ import { DiagramElement } from '../Element';
 // import type {
 //   OBJ_PositionAnimationStep, TypeParallelAnimationStepInputOptions,
 //   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
-//   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
+//   OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
 // } from './Animation';
 // eslint-disable-next-line import/no-cycle
 import * as anim from './Animation';
@@ -39,15 +39,15 @@ export type TypeAnimationManagerInputOptions = {
  * @property {(TypeDelayStepInputOptions) => anim.DelayStep} delay
  * @property {(OBJ_PositionAnimationStep) => anim.PositionAnimationStep} translation
  * @property {(OBJ_PositionAnimationStep) => anim.PositionAnimationStep} position
- * @property {(TypeColorAnimationStepInputOptions) => anim.ColorAnimationStep} color
- * @property {(TypeOpacityAnimationStepInputOptions) => anim.OpacityAnimationStep} opacity
+ * @property {(OBJ_ColorAnimationStep) => anim.ColorAnimationStep} color
+ * @property {(OBJ_OpacityAnimationStep) => anim.OpacityAnimationStep} opacity
  * @property {(TypeTransformAnimationStepInputOptions) =>  anim.TransformAnimationStep} transform
  * @property {(TypePulseTransformAnimationStepInputOptions) => anim.PulseTransformAnimationStep} pulseTransform
  * @property {(TypePulseAnimationStepInputOptions) => anim.PulseAnimationStep} pulse
- * @property {(TypeOpacityAnimationStepInputOptions = {}) => anim.DissolveInAnimationStep} dissolveIn
- * @property {(number | TypeOpacityAnimationStepInputOptions) => anim.DissolveOutAnimationStep} dissolveOut
- * @property {(number | TypeColorAnimationStepInputOptions) => anim.DimAnimationStep} dim
- * @property {(number | TypeColorAnimationStepInputOptions) => anim.UndimAnimationStep} undim
+ * @property {(OBJ_OpacityAnimationStep = {}) => anim.DissolveInAnimationStep} dissolveIn
+ * @property {(number | OBJ_OpacityAnimationStep) => anim.DissolveOutAnimationStep} dissolveOut
+ * @property {(number | OBJ_ColorAnimationStep) => anim.DimAnimationStep} dim
+ * @property {(number | OBJ_ColorAnimationStep) => anim.UndimAnimationStep} undim
  * @property {(TypeAnimationBuilderInputOptions) => new anim.AnimationBuilder} builder
  * @property {(ScenarioDefinitionAnimationStepInputOptions) => anim.ScenarioAnimationStep} scenario
  * @property {(TypeParallelAnimationStepInputOptions) => anim.ParallelAnimationStep} scenarios
@@ -173,12 +173,22 @@ export default class AnimationManager {
     return new anim.PositionAnimationStep(optionsToUse);
   }
 
-  color(...options: Array<TypeColorAnimationStepInputOptions>) {
+  /**
+   * Color animation step tied to this element
+   * @param {OBJ_ColorAnimationStep} options
+   * @return {ColorAnimationStep}
+   */
+  color(...options: Array<OBJ_ColorAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
     return new anim.ColorAnimationStep(optionsToUse);
   }
 
-  opacity(...options: Array<TypeOpacityAnimationStepInputOptions>) {
+  /**
+   * Color animation step tied to this element
+   * @param {OBJ_OpacityAnimationStep} options
+   * @return {OpacityAnimationStep}
+   */
+  opacity(...options: Array<OBJ_OpacityAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
     return new anim.OpacityAnimationStep(optionsToUse);
   }
@@ -198,50 +208,70 @@ export default class AnimationManager {
     return new anim.PulseAnimationStep(optionsToUse);
   }
 
-  // eslint-disable-next-line max-len
-  dissolveIn(timeorOptions: number | TypeOpacityAnimationStepInputOptions = {}, ...args: Array<TypeOpacityAnimationStepInputOptions>) {
+  /**
+   * Dissolve in animation step
+   * Use the `duration` value in `options` to define dissolving duration
+   * @param {number | OBJ_ElementAnimationStep} timeOrOptions
+   * @return {DissolveInAnimationStep}
+   */
+  dissolveIn(durationOrOptions: number | OBJ_ElementAnimationStep = {}) {
     const defaultOptions = { element: this.element };
     let optionsToUse;
     if (typeof timeorOptions === 'number') {
-      optionsToUse = joinObjects({}, defaultOptions, { duration: timeorOptions }, ...args);
+      optionsToUse = joinObjects({}, defaultOptions, { duration: durationOrOptions });
     } else {
-      optionsToUse = joinObjects({}, defaultOptions, timeorOptions, ...args);
+      optionsToUse = joinObjects({}, defaultOptions, durationOrOptions);
     }
     return new anim.DissolveInAnimationStep(optionsToUse);
   }
 
-  // eslint-disable-next-line max-len
-  dissolveOut(timeOrOptions: number | TypeOpacityAnimationStepInputOptions = {}, ...args: Array<TypeOpacityAnimationStepInputOptions>) {
+  /**
+   * Dissolve out animation step
+   * Use the `duration` value in `options` to define dissolving duration
+   * @param {number | OBJ_ElementAnimationStep} durationOrOptions
+   * @return {DissolveOutAnimationStep}
+   */
+  dissolveOut(durationOrOptions: number | OBJ_ElementAnimationStep = {}) {
     const defaultOptions = { element: this.element };
     let optionsToUse;
-    if (typeof timeOrOptions === 'number') {
-      optionsToUse = joinObjects({}, defaultOptions, { duration: timeOrOptions }, ...args);
+    if (typeof durationOrOptions === 'number') {
+      optionsToUse = joinObjects({}, defaultOptions, { duration: durationOrOptions });
     } else {
-      optionsToUse = joinObjects({}, defaultOptions, timeOrOptions, ...args);
+      optionsToUse = joinObjects({}, defaultOptions, durationOrOptions);
     }
     return new anim.DissolveOutAnimationStep(optionsToUse);
   }
 
-  // eslint-disable-next-line max-len
-  dim(timeOrOptions: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) {
+  /**
+   * Dim color animation step
+   * Use the `duration` value in `options` to define dimming duration
+   * @param {number | OBJ_ElementAnimationStep} durationOrOptions
+   * @return {DimAnimationStep}
+   */
+  dim(durationOrOptions: number | OBJ_ElementAnimationStep = {}) {
     const defaultOptions = { element: this.element };
     let optionsToUse;
-    if (typeof timeOrOptions === 'number') {
-      optionsToUse = joinObjects({}, defaultOptions, { duration: timeOrOptions }, ...args);
+    if (typeof durationOrOptions === 'number') {
+      optionsToUse = joinObjects({}, defaultOptions, { duration: durationOrOptions });
     } else {
-      optionsToUse = joinObjects({}, defaultOptions, timeOrOptions, ...args);
+      optionsToUse = joinObjects({}, defaultOptions, durationOrOptions);
     }
     return new anim.DimAnimationStep(optionsToUse);
   }
 
-  // eslint-disable-next-line max-len
-  undim(timeOrOptions: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) {
+  /**
+   * Undim color animation step
+   * Use the `duration` value in `options` to define undimming duration
+   * @param {number | OBJ_ElementAnimationStep} durationOrOptions
+   * @return {UndimAnimationStep}
+   */
+  undim(durationOrOptions: number | OBJ_ColorAnimationStep = {}) {
     const defaultOptions = { element: this.element };
     let optionsToUse;
-    if (typeof timeOrOptions === 'number') {
-      optionsToUse = joinObjects({}, defaultOptions, { duration: timeOrOptions }, ...args);
+    if (typeof durationOrOptions === 'number') {
+      optionsToUse = joinObjects({}, defaultOptions, { duration: durationOrOptions });
     } else {
-      optionsToUse = joinObjects({}, defaultOptions, timeOrOptions, ...args);
+      optionsToUse = joinObjects({}, defaultOptions, durationOrOptions);
     }
     return new anim.UndimAnimationStep(optionsToUse);
   }
