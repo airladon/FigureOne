@@ -6,18 +6,38 @@ import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
 import type {
-  TypeElementAnimationStepInputOptions,
+  OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
-export type TypeScaleAnimationStepInputOptions = {
+/**
+ * Scale animation step
+ *
+ * By default, the scale will start with the element's current scale.
+ *
+ * Use either `delta` or `target` to define it's end point
+ *
+ * `clipTo` will clip the element's rotation during animation
+ * @extends OBJ_ElementAnimationStep
+ * @property {TypeParsablePoint | number} [start]
+ * @property {TypeParsablePoint | number} [target]
+ * @property {TypeParsablePoint | number} [delta]
+ * @property {null | TypeParsablePoint | number} [velocity] velocity of scale
+ * overrides `duration` - `null` to use `duration` (`null`)
+ * @property {number} [maxDuration]
+ */
+export type OBJ_ScaleAnimationStep = {
   start?: Point | number;      // default is element transform
   target?: Point | number;     // Either target or delta must be defined
   delta?: Point | number;      // delta overrides target if both are defined
   velocity?: Point | number;
   maxDuration: ?number;
-} & TypeElementAnimationStepInputOptions;
+} & OBJ_ElementAnimationStep;
 
+/**
+ * Scale Animation Step
+ * @extends ElementAnimationStep
+ */
 export default class ScaleAnimationStep extends ElementAnimationStep {
   scale: {
     start: ?Point;  // null means use element transform when unit is started
@@ -27,7 +47,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
     maxDuration: ?number;
   };
 
-  constructor(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
+  constructor(...optionsIn: Array<OBJ_ScaleAnimationStep>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [

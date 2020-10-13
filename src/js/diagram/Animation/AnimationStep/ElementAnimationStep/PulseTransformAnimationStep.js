@@ -11,7 +11,7 @@ import {
   round,
 } from '../../../../tools/math';
 import type {
-  TypeElementAnimationStepInputOptions,
+  OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
@@ -33,7 +33,7 @@ export type TypePulseTransformAnimationStepInputOptions = {
   maxDuration?: number;
   zeroDurationThreshold?: Number;
   // minDuration?: number;
-} & TypeElementAnimationStepInputOptions;
+} & OBJ_ElementAnimationStep;
 
 // A transform animation unit manages a transform animation on an element.
 //

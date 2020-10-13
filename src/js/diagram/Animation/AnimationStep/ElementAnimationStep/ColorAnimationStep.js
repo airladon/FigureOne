@@ -6,7 +6,7 @@ import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
 // import * as tools from '../../../../tools/math';
-import type { TypeElementAnimationStepInputOptions } from '../ElementAnimationStep';
+import type { OBJ_ElementAnimationStep } from '../ElementAnimationStep';
 import type { TypeOpacityAnimationStepInputOptions } from './OpacityAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
@@ -16,7 +16,7 @@ export type TypeColorAnimationStepInputOptions = {
   target?: TypeColor | 'dim' | 'undim';     // Either target or delta must be defined
   delta?: TypeColor;      // delta overrides target if both are defined
   dissolve?: 'in' | 'out' | null
-} & TypeElementAnimationStepInputOptions;
+} & OBJ_ElementAnimationStep;
 
 const addColors = (color1, color2) => color1.map((c, index) => Math.min(c + color2[index], 1));
 
@@ -153,8 +153,8 @@ export class ColorAnimationStep extends ElementAnimationStep {
 
 export class DimAnimationStep extends ColorAnimationStep {
   constructor(
-    timeOrOptionsIn: number | TypeElementAnimationStepInputOptions = {},
-    ...args: Array<TypeElementAnimationStepInputOptions>
+    timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
+    ...args: Array<OBJ_ElementAnimationStep>
   ) {
     let options = {};
     const defaultOptions = { duration: 1, target: 'dim', completeOnCancel: true };
@@ -176,8 +176,8 @@ export function dim(
 
 export class UndimAnimationStep extends ColorAnimationStep {
   constructor(
-    timeOrOptionsIn: number | TypeElementAnimationStepInputOptions = {},
-    ...args: Array<TypeElementAnimationStepInputOptions>
+    timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
+    ...args: Array<OBJ_ElementAnimationStep>
   ) {
     let options = {};
     const defaultOptions = { duration: 1, target: 'undim', completeOnCancel: true };
@@ -199,8 +199,8 @@ export function undim(
 
 // export class DissolveInAnimationStep extends ColorAnimationStep {
 //   constructor(
-//     timeOrOptionsIn: number | TypeElementAnimationStepInputOptions = {},
-//     ...args: Array<TypeElementAnimationStepInputOptions>
+//     timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
+//     ...args: Array<OBJ_ElementAnimationStep>
 //   ) {
 //     let options = {};
 //     const defaultOptions = { duration: 1, dissolve: 'in', completeOnCancel: true };
@@ -222,8 +222,8 @@ export function undim(
 
 // export class DissolveOutAnimationStep extends ColorAnimationStep {
 //   constructor(
-//     timeOrOptionsIn: number | TypeElementAnimationStepInputOptions = {},
-//     ...args: Array<TypeElementAnimationStepInputOptions>
+//     timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
+//     ...args: Array<OBJ_ElementAnimationStep>
 //   ) {
 //     let options = {};
 //     const defaultOptions = { duration: 1, dissolve: 'out', completeOnCancel: true };

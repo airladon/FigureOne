@@ -11,7 +11,7 @@ import {
   // joinObjectsWithOptions,
 } from '../../../../tools/tools';
 import type {
-  TypeElementAnimationStepInputOptions,
+  OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 // import ElementAnimationStep from '../ElementAnimationStep';
 // import type { DiagramElement } from '../../../Element';
@@ -52,7 +52,7 @@ export type TypeScenarioAnimationStepInputOptions = {
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
   progression: ((number, ?boolean) => number) | string;
-} & TypeElementAnimationStepInputOptions;
+} & OBJ_ElementAnimationStep;
 
 export default class ScenarioAnimationStep extends ParallelAnimationStep {
   element: ?DiagramElement;

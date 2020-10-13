@@ -32,7 +32,7 @@ import GlobalAnimation from '../webgl/GlobalAnimation';
  * animation on cancel (`null`)
  * @property {number} [precision] precision to do calculations to (`8`)
  */
-export type TypeAnimationStepInputOptions = {
+export type OBJ_AnimationStep = {
   onFinish?: ?(boolean) => void;
   completeOnCancel?: ?boolean;    // true: yes, false: no, null: no preference
   removeOnFinish?: boolean;
@@ -76,7 +76,7 @@ export default class AnimationStep {
   fnMap: FunctionMap;
   precision: number;
 
-  constructor(optionsIn: TypeAnimationStepInputOptions = {}) {
+  constructor(optionsIn: OBJ_AnimationStep = {}) {
     const defaultOptions = {
       onFinish: null,
       completeOnCancel: null,

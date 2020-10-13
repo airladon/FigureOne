@@ -7,7 +7,7 @@ import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
 import type {
-  TypeElementAnimationStepInputOptions,
+  OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
@@ -17,7 +17,7 @@ export type TypeOpacityAnimationStepInputOptions = {
   delta?: number;      // delta overrides target if both are defined
   dissolve?: 'in' | 'out' | null,
   dissolveFromCurrent?: boolean,
-} & TypeElementAnimationStepInputOptions;
+} & OBJ_ElementAnimationStep;
 
 
 export class OpacityAnimationStep extends ElementAnimationStep {
@@ -176,8 +176,8 @@ export class OpacityAnimationStep extends ElementAnimationStep {
 
 export class DissolveInAnimationStep extends OpacityAnimationStep {
   constructor(
-    timeOrOptionsIn: number | TypeElementAnimationStepInputOptions = {},
-    ...args: Array<TypeElementAnimationStepInputOptions>
+    timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
+    ...args: Array<OBJ_ElementAnimationStep>
   ) {
     let options = {};
     const defaultOptions = { duration: 1, dissolve: 'in', completeOnCancel: true };
@@ -199,8 +199,8 @@ export function dissolveIn(
 
 export class DissolveOutAnimationStep extends OpacityAnimationStep {
   constructor(
-    timeOrOptionsIn: number | TypeElementAnimationStepInputOptions = {},
-    ...args: Array<TypeElementAnimationStepInputOptions>
+    timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
+    ...args: Array<OBJ_ElementAnimationStep>
   ) {
     let options = {};
     const defaultOptions = { duration: 1, dissolve: 'out', completeOnCancel: true };

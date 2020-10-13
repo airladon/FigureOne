@@ -8,7 +8,7 @@ import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
 import type {
-  TypeElementAnimationStepInputOptions,
+  OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
@@ -22,7 +22,7 @@ export type TypeTransformAnimationStepInputOptions = {
   clipRotationTo: '0to360' | '-180to180' | null;
   velocity: ?Transform | number;
   maxDuration?: number;
-} & TypeElementAnimationStepInputOptions;
+} & OBJ_ElementAnimationStep;
 
 // A transform animation unit manages a transform animation on an element.
 //

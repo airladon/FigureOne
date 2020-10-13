@@ -792,7 +792,17 @@ function linearPath(
 
 type linearPathOptionsType = {
 };
-type curvedPathOptionsType = {
+
+/**
+ * Curved translation path options
+ *
+ * @property {number} magnitude
+ * @property {number} offset
+ * @property {TypeParsablePoint | null} controlPoint
+ * @property {'' | 'up' | 'left' | 'down' | 'right'} direction
+ * @property {number} rot
+ */
+export type CurvedPathOptionsType = {
   // path: '(Point, Point, number) => Point';
   rot: number;
   magnitude: number;
@@ -800,7 +810,9 @@ type curvedPathOptionsType = {
   controlPoint: Point | null;
   direction: '' | 'up' | 'left' | 'down' | 'right';
 };
-export type pathOptionsType = curvedPathOptionsType & linearPathOptionsType;
+
+
+export type pathOptionsType = CurvedPathOptionsType & linearPathOptionsType;
 
 function curvedPath(
   start: Point,

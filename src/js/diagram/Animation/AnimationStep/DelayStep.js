@@ -1,27 +1,30 @@
 // @flow
 // import * as tools from '../../tools/math';
 // import { DiagramElement } from '../Element';
-import type { TypeAnimationStepInputOptions } from '../AnimationStep';
+import type { OBJ_AnimationStep } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 
 
-export type TypeDelayStepInputOptions = {
-  duration?: number;
-} & TypeAnimationStepInputOptions;
+// export type TypeDelayStepInputOptions = {
+//   duration?: number;
+// } & OBJ_AnimationStep;
 
-// Animations get started from a parent, but finish themselves
+/**
+ * Delay animation step
+ * @extends AnimationStep
+ */
 export class DelayStep extends AnimationStep {
   constructor(
-    numOrOptionsIn: number | TypeDelayStepInputOptions = {},
-    ...args: Array<TypeDelayStepInputOptions>
+    numOrOptions: number | OBJ_AnimationStep = {},
+    ...args: Array<OBJ_AnimationStep>
   ) {
     let options = {};
     const defaultOptions = { duration: 0 };
-    if (typeof numOrOptionsIn === 'number') {
-      options = joinObjects({}, defaultOptions, { duration: numOrOptionsIn }, ...args);
+    if (typeof numOrOptions === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: numOrOptions }, ...args);
     } else {
-      options = joinObjects({}, defaultOptions, numOrOptionsIn, ...args);
+      options = joinObjects({}, defaultOptions, numOrOptions, ...args);
     }
     super(options);
     // this.duration = options.duration;

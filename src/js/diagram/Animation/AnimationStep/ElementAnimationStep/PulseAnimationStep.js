@@ -3,7 +3,7 @@ import {
   joinObjects, duplicateFromTo,
 } from '../../../../tools/tools';
 import type {
-  TypeElementAnimationStepInputOptions,
+  OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
@@ -12,7 +12,7 @@ export type TypePulseAnimationStepInputOptions = {
   numLines: ?number;
   frequency: ?number;
   stopAfterDuration: ?boolean;
-} & TypeElementAnimationStepInputOptions;
+} & OBJ_ElementAnimationStep;
 
 export default class PulseAnimationStep extends ElementAnimationStep {
   scale: number;

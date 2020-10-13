@@ -1,14 +1,14 @@
 // @flow
 // import * as tools from '../../tools/math';
 // import { DiagramElement } from '../Element';
-import type { TypeAnimationStepInputOptions } from '../AnimationStep';
+import type { OBJ_AnimationStep } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import GlobalAnimation from '../../webgl/GlobalAnimation';
 
 export type TypeSerialAnimationStepInputOptions = {
   steps?: Array<AnimationStep>;
-} & TypeAnimationStepInputOptions;
+} & OBJ_AnimationStep;
 
 export class SerialAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;

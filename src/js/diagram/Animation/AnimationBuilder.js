@@ -4,11 +4,11 @@
 import { DiagramElement } from '../Element';
 import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/SerialAnimationStep';
 import type {
-  TypePositionAnimationStepInputOptions, TypeParallelAnimationStepInputOptions,
+  OBJ_PositionAnimationStep, TypeParallelAnimationStepInputOptions,
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
   TypeTransformAnimationStepInputOptions,
-  OBJ_RotationAnimationStep, TypeScaleAnimationStepInputOptions,
+  OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
   TypePulseTransformAnimationStepInputOptions,
 } from './Animation';
@@ -143,7 +143,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  position(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+  position(...optionsIn: Array<OBJ_PositionAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -152,11 +152,11 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  translation(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+  translation(...optionsIn: Array<OBJ_PositionAnimationStep>) {
     return this.position(...optionsIn);
   }
 
-  scale(...optionsIn: Array<TypeScaleAnimationStepInputOptions>) {
+  scale(...optionsIn: Array<OBJ_ScaleAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -165,11 +165,11 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  // moveTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+  // moveTo(...optionsIn: Array<OBJ_PositionAnimationStep>) {
   //   return this.moveToPosition(...optionsIn);
   // }
 
-  // positionTo(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+  // positionTo(...optionsIn: Array<OBJ_PositionAnimationStep>) {
   //   return this.moveToPosition(...optionsIn);
   // }
 

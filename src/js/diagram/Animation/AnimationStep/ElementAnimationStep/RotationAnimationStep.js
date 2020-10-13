@@ -6,7 +6,7 @@ import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
 import type {
-  TypeElementAnimationStepInputOptions,
+  OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
@@ -18,7 +18,7 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * Use either `delta` or `target` to define it's end point
  *
  * `clipTo` will clip the element's rotation during animation
- * @extends TypeElementAnimationStepInputOptions
+ * @extends OBJ_ElementAnimationStep
  * @property {number} [start]
  * @property {number} [target]
  * @property {number} [delta]
@@ -39,7 +39,7 @@ export type OBJ_RotationAnimationStep = {
   clipTo: '0to360' | '-180to180' | null;
   velocity?: ?number,
   maxDuration?: ?number;
-} & TypeElementAnimationStepInputOptions;
+} & OBJ_ElementAnimationStep;
 
 // A transform animation unit manages a transform animation on an element.
 //

@@ -1,7 +1,7 @@
 // @flow
 // import * as tools from '../../../tools/math';
 // import { DiagramElement } from '../../Element';
-import type { TypeAnimationStepInputOptions } from '../AnimationStep';
+import type { OBJ_AnimationStep } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import type { DiagramElement } from '../../Element';
@@ -24,25 +24,31 @@ export type AnimationProgression = (number) => number;
 /**
  * Base element animation step
  *
- * @extends TypeAnimationStepInputOptions
+ * @extends OBJ_AnimationStep
  * @property {DiagramElement} [element]
  * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
  * how the animation progresses - defaults to `linear` for color, opacity and
  * custom animations and `easeinout` for others
  */
-export type TypeElementAnimationStepInputOptions = {
+export type OBJ_ElementAnimationStep = {
   element?: DiagramElement; // Can't use DiagramElement as importing it makes a loop
   type?: 'transform' | 'color' | 'custom' | 'position' | 'rotation' | 'scale' | 'opacity';
   progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number; // default is easeinout except color and custom which is linear
-} & TypeAnimationStepInputOptions;
+} & OBJ_AnimationStep;
 
+/**
+ * Animation Step tied to an element
+ *
+ * Default values for the animation step will then come from this element.
+ * @extends AnimationStep
+ */
 export default class ElementAnimationStep extends AnimationStep {
   element: ?DiagramElement;
   type: 'transform' | 'color' | 'custom' | 'position' | 'setPosition' | 'opacity';
   duration: number;
   progression: ((number, ?boolean) => number) | string;
 
-  constructor(optionsIn: TypeElementAnimationStepInputOptions = {}) {
+  constructor(optionsIn: OBJ_ElementAnimationStep = {}) {
     super(optionsIn);
     let defaultProgression = 'easeinout';
     if (optionsIn.type === 'color' || optionsIn.type === 'custom' || optionsIn.type === 'opacity') {

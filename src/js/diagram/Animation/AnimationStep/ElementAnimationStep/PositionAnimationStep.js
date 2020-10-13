@@ -8,12 +8,29 @@ import {
   // joinObjectsWithOptions,
 } from '../../../../tools/tools';
 import type {
-  TypeElementAnimationStepInputOptions,
+  OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 // import type { DiagramElement } from '../../../Element';
 
-export type TypePositionAnimationStepInputOptions = {
+/**
+ * Position animation step
+ *
+ * By default, the position will start with the element's current position.
+ *
+ * Use either `delta` or `target` to define it's end point
+ *
+ * @extends OBJ_ElementAnimationStep
+ * @property {TypeParsablePoint} [start]
+ * @property {TypeParsablePoint} [target]
+ * @property {TypeParsablePoint} [delta]
+ * @property {null | TypeParsablePoint | number} [velocity] velocity of
+ * position overrides `duration` - `null` to use `duration` (`null`)
+ * @property {'linear' | 'curved'} translationStyle
+ * @property {CurvedPathOptionsType} translationOptions
+ * @property {number} [maxDuration]
+ */
+export type OBJ_PositionAnimationStep = {
   start?: Point;      // default is element transform
   target?: Point;     // Either target or delta must be defined
   delta?: Point;      // delta overrides target if both are defined
@@ -21,8 +38,12 @@ export type TypePositionAnimationStepInputOptions = {
   translationOptions?: pathOptionsType;
   velocity?: Point;
   maxDuration?: number;
-} & TypeElementAnimationStepInputOptions;
+} & OBJ_ElementAnimationStep;
 
+/**
+ * Position or Translation Animation Step
+ * @extends ElementAnimationStep
+ */
 export default class PositionAnimationStep extends ElementAnimationStep {
   position: {
     start: ?Point;  // null means use element transform when unit is started
@@ -30,12 +51,12 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     target: ?Point;
     rotDirection: 0 | 1 | -1 | 2;
     translationStyle: 'linear' | 'curved';
-    translationOptions: pathOptionsType;
+    translationOptions: CurvedPathOptionsType;
     velocity: ?Point;
     maxDuration: ?number;
   };
 
-  constructor(...optionsIn: Array<TypePositionAnimationStepInputOptions>) {
+  constructor(...optionsIn: Array<OBJ_PositionAnimationStep>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [

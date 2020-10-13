@@ -4,7 +4,7 @@ import {
   joinObjects, duplicateFromTo,
 } from '../../../tools/tools';
 import type {
-  TypeAnimationStepInputOptions,
+  OBJ_AnimationStep,
 } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import type { DiagramElement } from '../../Element';
@@ -13,7 +13,7 @@ export type TypeCustomAnimationStepInputOptions = {
   callback?: string | ((number) => void);
   startPercent?: number;
   progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number;
-} & TypeAnimationStepInputOptions;
+} & OBJ_AnimationStep;
 
 export class CustomAnimationStep extends AnimationStep {
   element: ?Object;

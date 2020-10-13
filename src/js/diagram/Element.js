@@ -31,9 +31,9 @@ import type { TypeWhen } from './webgl/GlobalAnimation';
 
 import type Diagram, { TypeSpaceTransforms } from './Diagram';
 import type {
-  TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
+  OBJ_PositionAnimationStep, TypeAnimationBuilderInputOptions,
   TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
-  OBJ_RotationAnimationStep, TypeScaleAnimationStepInputOptions,
+  OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
   TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
   TypeDelayStepInputOptions, TypePulseTransformAnimationStepInputOptions,
@@ -541,7 +541,7 @@ class DiagramElement {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.RotationAnimationStep(options);
       },
-      scale: (...optionsIn: Array<TypeScaleAnimationStepInputOptions>) => {
+      scale: (...optionsIn: Array<OBJ_ScaleAnimationStep>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.ScaleAnimationStep(options);
       },
@@ -553,11 +553,11 @@ class DiagramElement {
         const options = joinObjects({}, ...optionsIn);
         return new animations.DelayStep(options);
       },
-      translation: (...optionsIn: Array<TypePositionAnimationStepInputOptions>) => {
+      translation: (...optionsIn: Array<OBJ_PositionAnimationStep>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.PositionAnimationStep(options);
       },
-      position: (...optionsIn: Array<TypePositionAnimationStepInputOptions>) => {
+      position: (...optionsIn: Array<OBJ_PositionAnimationStep>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.PositionAnimationStep(options);
       },

@@ -1,7 +1,7 @@
 // @flow
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import type {
-  TypeAnimationStepInputOptions,
+  OBJ_AnimationStep,
 } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import type { DiagramElement } from '../../Element';
@@ -11,7 +11,7 @@ import type { DiagramElement } from '../../Element';
  *
  * A trigger step is a zero duration animation step that triggers a custom
  * function
- *
+ * @extends OBJ_AnimationStep
  * @property {string | () => {}} callback
  * @property {null | Object} [payload] payload to pass to callback (`null`)
  * @property {DiagramElement} element {@link DiagramElement} to associate with
@@ -21,8 +21,12 @@ import type { DiagramElement } from '../../Element';
 export type TypeTriggerStepInputOptions = {
   callback?: Function;      // default is element transform
   payload?: Object;
-} & TypeAnimationStepInputOptions;
+} & OBJ_AnimationStep;
 
+/**
+ * Trigger Animation Step
+ * @extends AnimationStep
+ */
 export class TriggerStep extends AnimationStep {
   element: ?Object;
   callback: ?(string | Function);

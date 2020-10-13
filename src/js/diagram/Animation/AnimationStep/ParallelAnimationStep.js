@@ -1,7 +1,7 @@
 // @flow
 // import * as tools from '../../tools/math';
 // import { DiagramElement } from '../Element';
-import type { TypeAnimationStepInputOptions } from '../AnimationStep';
+import type { OBJ_AnimationStep } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import GlobalAnimation from '../../webgl/GlobalAnimation';
@@ -9,7 +9,7 @@ import GlobalAnimation from '../../webgl/GlobalAnimation';
 
 export type TypeParallelAnimationStepInputOptions = {
   steps?: Array<AnimationStep>;
-} & TypeAnimationStepInputOptions;
+} & OBJ_AnimationStep;
 
 // Animations get started from a parent, but finish themselves
 export class ParallelAnimationStep extends AnimationStep {
