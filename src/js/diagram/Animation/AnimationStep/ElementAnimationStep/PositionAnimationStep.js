@@ -24,9 +24,9 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * @property {TypeParsablePoint} [start]
  * @property {TypeParsablePoint} [target]
  * @property {TypeParsablePoint} [delta]
- * @property {null | TypeParsablePoint | number} [velocity] velocity of
+ * @property {null | TypeParsablePoint} [velocity] velocity of
  * position overrides `duration` - `null` to use `duration` (`null`)
- * @property {'linear' | 'curved'} [translationStyle]
+ * @property {'linear' | 'curved'} [translationStyle] (`'linear'`)
  * @property {CurvedPathOptionsType} [translationOptions]
  * @property {number} [maxDuration]
  */

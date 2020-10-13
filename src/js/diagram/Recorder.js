@@ -10,7 +10,7 @@ import GlobalAnimation from './webgl/GlobalAnimation';
 // import type { DiagramElement } from './Element';
 import Worker from './recorder.worker';
 import type Diagram from './Diagram';
-import type { TypeScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
+import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 // import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
 
@@ -34,7 +34,7 @@ export type TypePlaySettings = {
     dissovlveIn: ?number,
     delay: ?number,
   },
-  velocity?: TypeScenarioVelocity,
+  velocity?: OBJ_ScenarioVelocity,
   maxDuration?: number,
   // minDuration?: number,
   zeroDurationThreshold?: boolean,

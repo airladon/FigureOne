@@ -1289,9 +1289,9 @@
               
                 
                 <li><a
-                  href='#scenariodefinition'
+                  href='#obj_scenario'
                   class="">
-                  ScenarioDefinition
+                  OBJ_Scenario
                   
                 </a>
                 
@@ -1389,9 +1389,9 @@
               
                 
                 <li><a
-                  href='#animationprogression'
+                  href='#obj_scenariovelocity'
                   class="">
-                  AnimationProgression
+                  OBJ_ScenarioVelocity
                   
                 </a>
                 
@@ -1399,19 +1399,9 @@
               
                 
                 <li><a
-                  href='#obj_elementanimationstep'
+                  href='#obj_scenarioanimationstep'
                   class="">
-                  OBJ_ElementAnimationStep
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#elementanimationstep'
-                  class="">
-                  ElementAnimationStep
+                  OBJ_ScenarioAnimationStep
                   
                 </a>
                 
@@ -1459,6 +1449,36 @@
               
                 
                 <li><a
+                  href='#animationprogression'
+                  class="">
+                  AnimationProgression
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_elementanimationstep'
+                  class="">
+                  OBJ_ElementAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#elementanimationstep'
+                  class="">
+                  ElementAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_opacityanimationstep'
                   class="">
                   OBJ_OpacityAnimationStep
@@ -1492,6 +1512,26 @@
                   href='#dissolveoutanimationstep'
                   class="">
                   DissolveOutAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_transformanimationstep'
+                  class="">
+                  OBJ_TransformAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#transformanimationstep'
+                  class="">
+                  TransformAnimationStep
                   
                 </a>
                 
@@ -1650,6 +1690,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#animationmanagertransform'
+                        class='regular pre-open'>
+                        #transform
+                      </a></li>
+                      
+                      <li><a
                         href='#animationmanagerdissolvein'
                         class='regular pre-open'>
                         #dissolveIn
@@ -1671,6 +1717,12 @@
                         href='#animationmanagerundim'
                         class='regular pre-open'>
                         #undim
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationmanagerscenario'
+                        class='regular pre-open'>
+                        #scenario
                       </a></li>
                       
                     </ul>
@@ -18985,8 +19037,8 @@ triangle primitives to draw the line (
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='scenariodefinition'>
-      ScenarioDefinition
+    <h3 class='fl m0' id='obj_scenario'>
+      OBJ_Scenario
     </h3>
     
     
@@ -18994,8 +19046,8 @@ triangle primitives to draw the line (
   
 
   <p>Transform, color and visbility scenario definition</p>
-<p>The properties <code>position</code>, <code>rotation</code> and <code>scale</code> overwrite
-the equivalent transforms in <code>transform</code></p>
+<p><code>translation</code> will overwirte <code>position</code>, and <code>translation,</code>position<code>, rotation</code> and <code>scale</code> overwrite the first equivalent transforms in
+<code>transform</code></p>
 
   
   
@@ -19014,37 +19066,43 @@ the equivalent transforms in <code>transform</code></p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          <span class='code bold'>translation</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          <span class='code bold'>scale</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>isShown</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isShown</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
           
           
         </div>
@@ -19433,7 +19491,7 @@ the element boundary
 <p>Scenarios are preset transforms, color and visibility settings that can be
 easily animated to.</p>
 <p>This is an object where the keys are scenario names and values are
-<a href="#scenariodefinition">ScenarioDefinition</a> objects defining the scenario.</p>
+<a href="#obj_scenario">OBJ_Scenario</a> objects defining the scenario.</p>
 
   
   
@@ -19452,7 +19510,7 @@ easily animated to.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>scenarioName</span> <code class='quiet'>(<a href="#scenariodefinition">ScenarioDefinition</a>)</code>
+          <span class='code bold'>scenarioName</span> <code class='quiet'>(<a href="#obj_scenario">OBJ_Scenario</a>)</code>
           : where scenarioName can be any
 string that names the scenario
 
@@ -19767,7 +19825,7 @@ string that names the scenario
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>velocity</span> <code class='quiet'>((null | <a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          <span class='code bold'>velocity</span> <code class='quiet'>((null | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
           : velocity of
 position overrides 
 <code>duration</code>
@@ -19784,7 +19842,10 @@ position overrides
       
         <div class='space-bottom0'>
           <span class='code bold'>translationStyle</span> <code class='quiet'>((<code>"linear"</code> | <code>"curved"</code>)?)</code>
-          
+          : (
+<code>'linear'</code>
+)
+
           
         </div>
       
@@ -19897,26 +19958,18 @@ position overrides
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='animationprogression'>
-      AnimationProgression
+    <h3 class='fl m0' id='obj_scenariovelocity'>
+      OBJ_ScenarioVelocity
     </h3>
     
     
   </div>
   
 
-  <p>Animation progression function.
-Function is passed the percent complete of the animation duration and
-returns the percent complete of the delta between the target and start
-values of the animation.</p>
-<p>A linear function would return the same percent as is passed. However,
-the returned percent would change if some smoothing was desired at the
-start or end of the animation.</p>
+  <p>Transform, color and visbility scenario definition</p>
+<p><code>translation</code> will overwirte <code>position</code>, and <code>translation,</code>position<code>, rotation</code> and <code>scale</code> overwrite the first equivalent transforms in
+<code>transform</code></p>
 
-  
-    <p style="display: none;">      Type:
-      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
-    </p>
   
   
 
@@ -19928,31 +19981,56 @@ start or end of the animation.</p>
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
       
         <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>percent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    percentage of duration
-
-          </div>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>translation</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>opacity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          
           
         </div>
       
     </div>
   
 
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
-        percent of animation complete
-
-      
-    
   
 
   
@@ -19978,15 +20056,16 @@ start or end of the animation.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_elementanimationstep'>
-      OBJ_ElementAnimationStep
+    <h3 class='fl m0' id='obj_scenarioanimationstep'>
+      OBJ_ScenarioAnimationStep
     </h3>
     
     
   </div>
   
 
-  <p>Base element animation step</p>
+  <p>Scenario animation step</p>
+<p>By default, the scenario will start with the element's current scenario.</p>
 
   
     <p style="display: none;">      Type:
@@ -19997,7 +20076,7 @@ start or end of the animation.</p>
     <p>
       Extends
       
-        <a href="#obj_animationstep">OBJ_AnimationStep</a>
+        <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
       
     </p>
   
@@ -20016,95 +20095,96 @@ start or end of the animation.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>element</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>?)</code>
+          <span class='code bold'>start</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_scenario">OBJ_Scenario</a>)?)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>progression</span> <code class='quiet'>((<code>"linear"</code> | <code>"easeinout"</code> | <code>"easein"</code> | <code>"easeout"</code> | <a href="#animationprogression">AnimationProgression</a>)?)</code>
-          : how the animation progresses - defaults to 
-<code>linear</code>
- for color, opacity and
-custom animations and 
-<code>easeinout</code>
- for others
-
+          <span class='code bold'>target</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_scenario">OBJ_Scenario</a>)?)</code>
+          
           
         </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='elementanimationstep'>
-      ElementAnimationStep
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Animation Step tied to an element</p>
-<p>Default values for the animation step will then come from this element.</p>
-
-  
-  
-    <p>
-      Extends
-      
-        <a href="#animationstep">AnimationStep</a>
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
       
         <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>optionsIn</span> <code class='quiet'>(<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
-            = <code>{}</code>)</code>
-	    
-          </div>
+          <span class='code bold'>velocity</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_scenariovelocity">OBJ_ScenarioVelocity</a>)?)</code>
+          : velocity
+will override duration with a calculated duration based on
+the 
+<code>start</code>
+, 
+<code>target</code>
+ and 
+<code>velocity</code>
+. If 
+<code>null</code>
+ is used
+then 
+<code>duration</code>
+ will not be overriden (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>maxDuration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>zeroDurationThreshold</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>allDurationsSame</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>translationStyle</span> <code class='quiet'>((<code>"linear"</code> | <code>"curved"</code>)?)</code>
+          : (
+<code>'linear'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>translationOptions</span> <code class='quiet'>(<a href="#curvedpathoptionstype">CurvedPathOptionsType</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotDirection</span> <code class='quiet'>((<code>0</code> | <code>1</code> | <code>-1</code> | <code>2</code>)?)</code>
+          : where 
+<code>0</code>
+ is quickest direction,
+
+<code>1</code>
+ is positive of CCW direction, 
+<code>-1</code>
+ is negative of CW direction and 
+<code>2</code>
+ is
+whichever direction doesn't pass through angle 0.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>clipRotationTo</span> <code class='quiet'>((<code>"0to360"</code> | <code>"-180to180"</code> | null)?)</code>
+          
           
         </div>
       
     </div>
-  
-
   
 
   
@@ -20451,6 +20531,241 @@ element's
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='animationprogression'>
+      AnimationProgression
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Animation progression function.
+Function is passed the percent complete of the animation duration and
+returns the percent complete of the delta between the target and start
+values of the animation.</p>
+<p>A linear function would return the same percent as is passed. However,
+the returned percent would change if some smoothing was desired at the
+start or end of the animation.</p>
+
+  
+    <p style="display: none;">      Type:
+      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>percent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    percentage of duration
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        percent of animation complete
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_elementanimationstep'>
+      OBJ_ElementAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Base element animation step</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_animationstep">OBJ_AnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>element</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>progression</span> <code class='quiet'>((<code>"linear"</code> | <code>"easeinout"</code> | <code>"easein"</code> | <code>"easeout"</code> | <a href="#animationprogression">AnimationProgression</a>)?)</code>
+          : how the animation progresses - defaults to 
+<code>linear</code>
+ for color, opacity and
+custom animations and 
+<code>easeinout</code>
+ for others
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='elementanimationstep'>
+      ElementAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Animation Step tied to an element</p>
+<p>Default values for the animation step will then come from this element.</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#animationstep">AnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='obj_opacityanimationstep'>
       OBJ_OpacityAnimationStep
     </h3>
@@ -20747,6 +21062,217 @@ the opacity will start from the current opacity.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_transformanimationstep'>
+      OBJ_TransformAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Transform animation step</p>
+<p>By default, the transform will start with the element's current transform.</p>
+<p>Use either <code>delta</code> or <code>target</code> to define it's end point</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>target</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>delta</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>velocity</span> <code class='quiet'>((null | <a href="#typeparsabletransform">TypeParsableTransform</a>)?)</code>
+          : velocity of
+transform overrides 
+<code>duration</code>
+ - 
+<code>null</code>
+ to use 
+<code>duration</code>
+ (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>translationStyle</span> <code class='quiet'>((<code>"linear"</code> | <code>"curved"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>translationOptions</span> <code class='quiet'>(<a href="#curvedpathoptionstype">CurvedPathOptionsType</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotDirection</span> <code class='quiet'>((<code>0</code> | <code>1</code> | <code>-1</code> | <code>2</code>)?)</code>
+          : where 
+<code>0</code>
+ is quickest direction,
+
+<code>1</code>
+ is positive of CCW direction, 
+<code>-1</code>
+ is negative of CW direction and 
+<code>2</code>
+ is
+whichever direction doesn't pass through angle 0.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>clipRotationTo</span> <code class='quiet'>((<code>"0to360"</code> | <code>"-180to180"</code> | null)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>maxDuration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='transformanimationstep'>
+      TransformAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Transform Animation Step</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#elementanimationstep">ElementAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_transformanimationstep">OBJ_TransformAnimationStep</a>>)</code>
 	    
           </div>
           
@@ -22242,7 +22768,7 @@ Use the <code>duration</code> value in <code>options</code> to define delay dura
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_coloranimationstep">OBJ_ColorAnimationStep</a>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_opacityanimationstep">OBJ_OpacityAnimationStep</a>)</code>
 	    
           </div>
           
@@ -22281,11 +22807,80 @@ Use the <code>duration</code> value in <code>options</code> to define delay dura
       </div>
     </div>
   
+    <div class='border-bottom' id='animationmanagertransform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>transform(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Transform animation step tied to this element</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_transformanimationstep">OBJ_TransformAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#transformanimationstep">TransformAnimationStep</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='animationmanagerdissolvein'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>dissolveIn(timeorOptions, timeOrOptions)</span>
+            <span class='code strong strong truncate'>dissolveIn(durationOrOptions, timeOrOptions)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -22312,7 +22907,7 @@ Use the <code>duration</code> value in <code>options</code> to define dissolving
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>timeorOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
             = <code>{}</code>)</code>
 	    
           </div>
@@ -22364,7 +22959,7 @@ Use the <code>duration</code> value in <code>options</code> to define dissolving
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>dissolveOut(timeOrOptions)</span>
+            <span class='code strong strong truncate'>dissolveOut(durationOrOptions)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -22391,7 +22986,7 @@ Use the <code>duration</code> value in <code>options</code> to define dissolving
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>timeOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
             = <code>{}</code>)</code>
 	    
           </div>
@@ -22435,7 +23030,7 @@ Use the <code>duration</code> value in <code>options</code> to define dissolving
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>dim(timeOrOptions)</span>
+            <span class='code strong strong truncate'>dim(durationOrOptions)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -22462,7 +23057,7 @@ Use the <code>duration</code> value in <code>options</code> to define dimming du
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>timeOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
             = <code>{}</code>)</code>
 	    
           </div>
@@ -22506,7 +23101,7 @@ Use the <code>duration</code> value in <code>options</code> to define dimming du
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>undim(timeOrOptions)</span>
+            <span class='code strong strong truncate'>undim(durationOrOptions)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -22533,7 +23128,7 @@ Use the <code>duration</code> value in <code>options</code> to define undimming 
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>timeOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
             = <code>{}</code>)</code>
 	    
           </div>
@@ -22549,6 +23144,75 @@ Use the <code>duration</code> value in <code>options</code> to define undimming 
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#undimanimationstep">UndimAnimationStep</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationmanagerscenario'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>scenario(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Transform animation step tied to this element</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_scenarioanimationstep">OBJ_ScenarioAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>ScenarioAnimationStep</code>:
         
 
       

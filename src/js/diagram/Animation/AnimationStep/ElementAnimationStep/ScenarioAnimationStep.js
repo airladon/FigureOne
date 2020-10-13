@@ -17,18 +17,25 @@ import type {
 // import type { DiagramElement } from '../../../Element';
 import { areColorsSame } from '../../../../tools/color';
 import { ParallelAnimationStep } from '../ParallelAnimationStep';
-import type { DiagramElement } from '../../../Element';
+import type { DiagramElement, OBJ_Scenario } from '../../../Element';
 
-export type TypeScenario = {
-  position?: TypeParsablePoint,
-  rotation?: number,
-  scale?: TypeParsablePoint | number,
-  transform?: TypeParsableTransform,
-  color?: Array<number>,
-  isShown?: boolean,
-};
 
-export type TypeScenarioVelocity = {
+/**
+ * Transform, color and visbility scenario definition
+ *
+ * `translation` will overwirte `position`, and `translation, `position`,
+ * rotation` and `scale` overwrite the first equivalent transforms in
+ * `transform`
+ *
+ * @property {TypeParsablePoint} position
+ * @property {TypeParsablePoint} translation
+ * @property {TypeParsablePoint | number} scale
+ * @property {number} rotation
+ * @property {TypeParsableTransform} transform
+ * @property {Array<number>} color
+ * @property {number} opacity
+ */
+export type OBJ_ScenarioVelocity = {
   position?: TypeParsablePoint | number,
   translation?: TypeParsablePoint | number,
   rotation?: number,
@@ -38,11 +45,32 @@ export type TypeScenarioVelocity = {
   opacity?: number,
 };
 
-export type TypeScenarioAnimationStepInputOptions = {
-  element: ?DiagramElement;
-  start?: string | TypeScenario;
-  target?: string | TypeScenario;
-  velocity?: TypeScenarioVelocity;
+/**
+ * Scenario animation step
+ *
+ * By default, the scenario will start with the element's current scenario.
+ *
+ * @extends OBJ_ElementAnimationStep
+ * @property {string | OBJ_Scenario} [start]
+ * @property {string | OBJ_Scenario} [target]
+ * @property {null | string | OBJ_ScenarioVelocity} [velocity] velocity
+ * will override duration with a calculated duration based on
+ * the `start`, `target` and `velocity`. If `null` is used
+ * then `duration` will not be overriden (`null`)
+ * @property {number} [maxDuration]
+ * @property {number} [zeroDurationThreshold]
+ * @property {boolean} [allDurationsSame]
+ * @property {'linear' | 'curved'} [translationStyle] (`'linear'`)
+ * @property {CurvedPathOptionsType} [translationOptions]
+ * @property {0 | 1 | -1 | 2} [rotDirection] where `0` is quickest direction,
+ * `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
+ * whichever direction doesn't pass through angle 0.
+ * @property {'0to360' | '-180to180' | null} [clipRotationTo]
+ */
+export type OBJ_ScenarioAnimationStep = {
+  start?: string | OBJ_Scenario;
+  target?: string | OBJ_Scenario;
+  velocity?: OBJ_ScenarioVelocity;
   // minDuration?: number,
   maxDuration?: number,
   zeroDurationThreshold?: number,
@@ -51,33 +79,32 @@ export type TypeScenarioAnimationStepInputOptions = {
   translationOptions?: pathOptionsType;
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
-  progression: ((number, ?boolean) => number) | string;
 } & OBJ_ElementAnimationStep;
 
 export default class ScenarioAnimationStep extends ParallelAnimationStep {
   element: ?DiagramElement;
   scenario: {
-    start: ?(string | TypeScenario);  // null means use element props when unit is started
-    target: ?(string | TypeScenario);
+    start: ?(string | OBJ_Scenario);  // null means use element props when unit is started
+    target: ?(string | OBJ_Scenario);
     rotDirection: 0 | 1 | -1 | 2;
     translationStyle: 'linear' | 'curved';
     translationOptions: pathOptionsType;
-    velocity: ?TypeScenarioVelocity;
+    velocity: ?OBJ_ScenarioVelocity;
     maxDuration: ?number;
     allDurationsSame: boolean;
     zeroDurationThreshold: number;
     clipRotationTo: '0to360' | '-180to180' | null;
-    progression: ((number, ?boolean) => number) | string;
+    // progression: ((number, ?boolean) => number) | string;
     // minDuration: number;
   };
 
-  constructor(...optionsIn: Array<TypeScenarioAnimationStepInputOptions>) {
+  constructor(...optionsIn: Array<OBJ_ScenarioAnimationStep>) {
     const AnimationStepOptionsIn =
       joinObjects({}, { type: 'scenario' }, ...optionsIn);
     deleteKeys(AnimationStepOptionsIn, [
       'start', 'target', 'translationStyle', 'translationOptions',
       'velocity', 'maxDuration', 'allDurationsSame', 'rotDirection',
-      'clipRotationTo', 'element', 'progression', // 'minDuration',
+      'clipRotationTo', 'element', // 'progression', // 'minDuration',
     ]);
     super(AnimationStepOptionsIn);
     this._stepType = 'position';
@@ -100,7 +127,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       maxDuration: null,
       allDurationsSame: true,
       zeroDurationThreshold: 0,
-      progression: 'tools.math.easeinout',
+      // progression: 'tools.math.easeinout',
       // minDuration: 0,
     };
     if (this.element && this.element.animations.options.translation) {
@@ -119,7 +146,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     copyKeysFromTo(options, this.scenario, [
       'start', 'target', 'translationStyle',
       'velocity', 'maxDuration', 'allDurationsSame', 'zeroDurationThreshold',
-      'rotDirection', 'clipRotationTo', 'progression', // 'minDuration',
+      'rotDirection', 'clipRotationTo', // 'progression', // 'minDuration',
     ]);
     duplicateFromTo(options.translationOptions, this.scenario.translationOptions);
   }
@@ -305,7 +332,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         translationStyle: this.scenario.translationStyle,
         translationOptions: this.scenario.translationOptions,
         clipRotationTo: this.scenario.clipRotationTo,
-        progression: this.scenario.progression,
+        progression: this.progression,
       }));
     }
 
@@ -314,7 +341,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         start: start.color,
         target: target.color,
         duration: colorDuration,
-        progression: this.scenario.progression,
+        progression: this.progression,
       }));
     }
 
@@ -323,7 +350,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         dissolve,
         dissolveFromCurrent,
         duration: opacityDuration,
-        progression: this.scenario.progression,
+        progression: this.progression,
       }));
     }
     this.steps = steps;

@@ -25,7 +25,7 @@ import DiagramEquation from './DiagramEquation/DiagramEquation';
 import DiagramObjects from './DiagramObjects/DiagramObjects';
 import addElements from './DiagramAddElements/addElements';
 import type { TypeAddElementObject } from './DiagramAddElements/addElements';
-import type { TypeScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
+import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 /**
   * Diagram Input Options
   * @property {string} [htmlId] HTML `div` tag `id` to tie diagram to (`"figureOneContainer"`)
@@ -646,7 +646,7 @@ class Diagram {
         dissovlveIn: ?number,
         delay: ?number,
       },
-      velocity?: TypeScenarioVelocity,
+      velocity?: OBJ_ScenarioVelocity,
       maxDuration?: number,
       // minDuration?: number,
       zeroDurationThreshold?: boolean,

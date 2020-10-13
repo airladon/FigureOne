@@ -32,12 +32,12 @@ import type { TypeWhen } from './webgl/GlobalAnimation';
 import type Diagram, { TypeSpaceTransforms } from './Diagram';
 import type {
   OBJ_PositionAnimationStep, TypeAnimationBuilderInputOptions,
-  OBJ_ColorAnimationStep, TypeTransformAnimationStepInputOptions,
+  OBJ_ColorAnimationStep, OBJ_TransformAnimationStep,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
   TypePulseAnimationStepInputOptions, OBJ_OpacityAnimationStep,
   TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
   TypeDelayStepInputOptions, TypePulseTransformAnimationStepInputOptions,
-  ScenarioDefinitionAnimationStepInputOptions,
+  OBJ_ScenarioAnimationStepInputOptions,
 } from './Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import * as animations from './Animation/Animation';
@@ -63,11 +63,21 @@ import { FunctionMap } from '../tools/FunctionMap';
 /**
  * Transform, color and visbility scenario definition
  *
- * The properties `position`, `rotation` and `scale` overwrite
- * the equivalent transforms in `transform`
+ * `translation` will overwirte `position`, and `translation, `position`,
+ * rotation` and `scale` overwrite the first equivalent transforms in
+ * `transform`
+ *
+ * @property {TypeParsablePoint} position
+ * @property {TypeParsablePoint} translation
+ * @property {TypeParsablePoint | number} scale
+ * @property {number} rotation
+ * @property {TypeParsableTransform} transform
+ * @property {Array<number>} color
+ * @property {boolean} isShown
  */
-export type ScenarioDefinition = {
+export type OBJ_Scenario = {
   position?: TypeParsablePoint,
+  translation?: TypeParsablePoint,
   rotation?: number,
   scale?: TypeParsablePoint | number,
   transform?: TypeParsableTransform,
@@ -228,13 +238,13 @@ type DiagramElementMove = {
  * easily animated to.
  *
  * This is an object where the keys are scenario names and values are
- * {@link ScenarioDefinition} objects defining the scenario.
+ * {@link OBJ_Scenario} objects defining the scenario.
  *
- * @property {ScenarioDefinition} scenarioName where scenarioName can be any
+ * @property {OBJ_Scenario} scenarioName where scenarioName can be any
  * string that names the scenario
  */
 type Scenarios = {
-  [scenarioName: string]: ScenarioDefinition,
+  [scenarioName: string]: OBJ_Scenario,
 };
 
 /**
@@ -383,7 +393,7 @@ class DiagramElement {
   move: DiagramElementMove;
 
   // scenarios: {
-  //   [scenarioName: string]: ScenarioDefinition;
+  //   [scenarioName: string]: OBJ_Scenario;
   // };
   scenarios: Scenarios;
 
@@ -589,7 +599,7 @@ class DiagramElement {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.OpacityAnimationStep(options);
       },
-      transform: (...optionsIn: Array<TypeTransformAnimationStepInputOptions>) => {
+      transform: (...optionsIn: Array<OBJ_TransformAnimationStep>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.TransformAnimationStep(options);
       },
@@ -647,15 +657,15 @@ class DiagramElement {
       },
       // eslint-disable-next-line max-len
       builder: (...optionsIn: Array<TypeAnimationBuilderInputOptions>) => new animations.AnimationBuilder(this, ...optionsIn),
-      scenario: (...optionsIn: Array<ScenarioDefinitionAnimationStepInputOptions>) => {
+      scenario: (...optionsIn: Array<OBJ_ScenarioAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.ScenarioAnimationStep(options);
       },
       // eslint-disable-next-line max-len
-      // scenario: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
+      // scenario: (...optionsIn: Array<OBJ_TransformAnimationStep
       //                             & {
-      //                                 start?: ScenarioDefinition,
-      //                                 target: ScenarioDefinition,
+      //                                 start?: OBJ_Scenario,
+      //                                 target: OBJ_Scenario,
       //                                }>) => {
       //   const defaultOptions = { element: this, delay: 0 };
       //   const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -749,7 +759,7 @@ class DiagramElement {
       //   }
       //   return new animations.ParallelAnimationStep(timeOptions, { steps });
       // },
-      // scenarioLegacy: (...optionsIn: Array<TypeTransformAnimationStepInputOptions
+      // scenarioLegacy: (...optionsIn: Array<OBJ_TransformAnimationStep
       //                          & { scenario: string }>) => {
       //   const defaultOptions = { element: this };
       //   const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -774,7 +784,7 @@ class DiagramElement {
       //   return new animations.TransformAnimationStep(options);
       // },
       // eslint-disable-next-line max-len
-      scenarios: (...optionsIn: Array<TypeParallelAnimationStepInputOptions & TypeTransformAnimationStepInputOptions>) => {
+      scenarios: (...optionsIn: Array<TypeParallelAnimationStepInputOptions & OBJ_TransformAnimationStep>) => {
         const defaultOptions = {};
         const options = joinObjects({}, defaultOptions, ...optionsIn);
         const elements = this.getAllElementsWithScenario(options.target);
@@ -1709,7 +1719,7 @@ class DiagramElement {
 
   // retrieve a scenario
   getScenarioTarget(
-    scenarioIn: ?string | ScenarioDefinition,
+    scenarioIn: ?string | OBJ_Scenario,
   ): { transform?: Transform, color?: Array<number>, isShown?: boolean } {
     let transform;
     let color;
@@ -1738,6 +1748,13 @@ class DiagramElement {
       transform.updateTranslation(getPoint(scenario.position));
     }
 
+    if (scenario.translation != null) {
+      if (transform == null) {
+        transform = this.transform._dup();
+      }
+      transform.updateTranslation(getPoint(scenario.translation));
+    }
+
     if (scenario.rotation != null) {
       if (transform == null) {
         transform = this.transform._dup();
@@ -1763,7 +1780,7 @@ class DiagramElement {
     };
   }
 
-  setScenario(scenario: string | ScenarioDefinition) {
+  setScenario(scenario: string | OBJ_Scenario) {
     const target = this.getScenarioTarget(scenario);
     if (target.transform != null) {
       this.setTransform(target.transform._dup());

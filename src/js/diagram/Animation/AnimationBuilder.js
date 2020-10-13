@@ -7,7 +7,7 @@ import type {
   OBJ_PositionAnimationStep, TypeParallelAnimationStepInputOptions,
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
   OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
-  TypeTransformAnimationStepInputOptions,
+  OBJ_TransformAnimationStep,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
   TypePulseAnimationStepInputOptions, OBJ_OpacityAnimationStep,
   TypePulseTransformAnimationStepInputOptions,
@@ -173,7 +173,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   //   return this.moveToPosition(...optionsIn);
   // }
 
-  transform(...optionsIn: Array<TypeTransformAnimationStepInputOptions>) {
+  transform(...optionsIn: Array<OBJ_TransformAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -192,7 +192,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   scenario(
-    ...optionsIn: Array<TypeTransformAnimationStepInputOptions & { scenario: string }>
+    ...optionsIn: Array<OBJ_TransformAnimationStep & { scenario: string }>
   ) {
     // if (this.element != null) {
     //   const defaultOptions = { element: this.element };
@@ -209,7 +209,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   scenarios(    // eslint-disable-next-line max-len
-    ...optionsIn: Array<TypeTransformAnimationStepInputOptions & TypeParallelAnimationStepInputOptions>
+    ...optionsIn: Array<OBJ_TransformAnimationStep & TypeParallelAnimationStepInputOptions>
   ) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };

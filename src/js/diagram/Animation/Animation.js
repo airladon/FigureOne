@@ -5,7 +5,7 @@ import type {
 import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 
 import type {
-  TypeScenarioAnimationStepInputOptions,
+  OBJ_ScenarioAnimationStep,
 } from './AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import ScenarioAnimationStep from './AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 
@@ -29,7 +29,7 @@ import {
 
 
 import type {
-  TypeTransformAnimationStepInputOptions,
+  OBJ_TransformAnimationStep,
 } from './AnimationStep/ElementAnimationStep/TransformAnimationStep';
 import TransformAnimationStep from './AnimationStep/ElementAnimationStep/TransformAnimationStep';
 
@@ -109,12 +109,12 @@ import AnimationBuilder from './AnimationBuilder';
 export type {
   OBJ_PositionAnimationStep, TypeAnimationBuilderInputOptions,
   TypeParallelAnimationStepInputOptions, TypeSerialAnimationStepInputOptions,
-  TypeTransformAnimationStepInputOptions, OBJ_AnimationStep,
+  OBJ_TransformAnimationStep, OBJ_AnimationStep,
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
   OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
   TypeAnimationManagerInputOptions, OBJ_RotationAnimationStep,
   OBJ_ScaleAnimationStep, TypePulseAnimationStepInputOptions,
-  OBJ_OpacityAnimationStep, TypeScenarioAnimationStepInputOptions,
+  OBJ_OpacityAnimationStep, OBJ_ScenarioAnimationStep,
   TypePulseTransformAnimationStepInputOptions,
 };
 export {

@@ -41,7 +41,7 @@ export type TypeAnimationManagerInputOptions = {
  * @property {(OBJ_PositionAnimationStep) => anim.PositionAnimationStep} position
  * @property {(OBJ_ColorAnimationStep) => anim.ColorAnimationStep} color
  * @property {(OBJ_OpacityAnimationStep) => anim.OpacityAnimationStep} opacity
- * @property {(TypeTransformAnimationStepInputOptions) =>  anim.TransformAnimationStep} transform
+ * @property {(OBJ_TransformAnimationStep) =>  anim.TransformAnimationStep} transform
  * @property {(TypePulseTransformAnimationStepInputOptions) => anim.PulseTransformAnimationStep} pulseTransform
  * @property {(TypePulseAnimationStepInputOptions) => anim.PulseAnimationStep} pulse
  * @property {(OBJ_OpacityAnimationStep = {}) => anim.DissolveInAnimationStep} dissolveIn
@@ -49,7 +49,7 @@ export type TypeAnimationManagerInputOptions = {
  * @property {(number | OBJ_ColorAnimationStep) => anim.DimAnimationStep} dim
  * @property {(number | OBJ_ColorAnimationStep) => anim.UndimAnimationStep} undim
  * @property {(TypeAnimationBuilderInputOptions) => new anim.AnimationBuilder} builder
- * @property {(ScenarioDefinitionAnimationStepInputOptions) => anim.ScenarioAnimationStep} scenario
+ * @property {(OBJ_ScenarioAnimationStepInputOptions) => anim.ScenarioAnimationStep} scenario
  * @property {(TypeParallelAnimationStepInputOptions) => anim.ParallelAnimationStep} scenarios
  *
  * @see {@link DiagramElement}
@@ -193,7 +193,12 @@ export default class AnimationManager {
     return new anim.OpacityAnimationStep(optionsToUse);
   }
 
-  transform(...options: Array<TypeTransformAnimationStepInputOptions>) {
+  /**
+   * Transform animation step tied to this element
+   * @param {OBJ_TransformAnimationStep} options
+   * @return {TransformAnimationStep}
+   */
+  transform(...options: Array<OBJ_TransformAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
     return new anim.TransformAnimationStep(optionsToUse);
   }
@@ -281,13 +286,18 @@ export default class AnimationManager {
     return new anim.AnimationBuilder(this, ...options);
   }
 
-  scenario(...options: Array<ScenarioDefinitionAnimationStepInputOptions>) {
+  /**
+   * Transform animation step tied to this element
+   * @param {OBJ_ScenarioAnimationStep} options
+   * @return {ScenarioAnimationStep}
+   */
+  scenario(...options: Array<OBJ_ScenarioAnimationStepInputOptions>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
     return new anim.ScenarioAnimationStep(optionsToUse);
   }
 
   // eslint-disable-next-line max-len
-  scenarios(...options: Array<TypeParallelAnimationStepInputOptions & TypeTransformAnimationStepInputOptions>) {
+  scenarios(...options: Array<TypeParallelAnimationStepInputOptions & OBJ_TransformAnimationStep>) {
     const defaultOptions = {};
     const optionsToUse = joinObjects({}, defaultOptions, ...options);
     const elements = this.getAllElementsWithScenario(optionsToUse.target);
@@ -295,7 +305,7 @@ export default class AnimationManager {
     const simpleOptions = {};
     duplicateFromTo(optionsToUse, simpleOptions, ['steps', 'element']);
     elements.forEach((element) => {
-      steps.push(element.anim.scenario(simpleOptions));
+      steps.push(element.animations.scenario(simpleOptions));
     });
     return new anim.ParallelAnimationStep(simpleOptions, { steps });
   }
