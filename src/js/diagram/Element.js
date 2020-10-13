@@ -33,7 +33,7 @@ import type Diagram, { TypeSpaceTransforms } from './Diagram';
 import type {
   TypePositionAnimationStepInputOptions, TypeAnimationBuilderInputOptions,
   TypeColorAnimationStepInputOptions, TypeTransformAnimationStepInputOptions,
-  TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
+  OBJ_RotationAnimationStep, TypeScaleAnimationStepInputOptions,
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
   TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
   TypeDelayStepInputOptions, TypePulseTransformAnimationStepInputOptions,
@@ -537,7 +537,7 @@ class DiagramElement {
 
     // Rename to animate in future
     this.anim = {
-      rotation: (...optionsIn: Array<TypeRotationAnimationStepInputOptions>) => {
+      rotation: (...optionsIn: Array<OBJ_RotationAnimationStep>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.RotationAnimationStep(options);
       },
@@ -577,7 +577,7 @@ class DiagramElement {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.PulseTransformAnimationStep(options);
       },
-      pulse(...optionsIn: Array<TypePulseAnimationStepInputOptions>) {
+      pulse: (...optionsIn: Array<TypePulseAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.PulseAnimationStep(options);
       },

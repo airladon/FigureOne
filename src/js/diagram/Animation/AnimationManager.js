@@ -33,7 +33,7 @@ export type TypeAnimationManagerInputOptions = {
  *
  * @property {Array<AnimationStep>} animations list of animations running
  * or about to start
- * @property {(TypeRotationAnimationStepInputOptions) => anim.RotationAnimationStep(options)} rotation
+ * @property {(OBJ_RotationAnimationStep) => anim.RotationAnimationStep(options)} rotation
  * @property {(TypeScaleAnimationStepInputOptions) => anim.ScaleAnimationStep} scale
  * @property {(TypeTriggerStepInputOptions) => TriggerStep} trigger
  * @property {(TypeDelayStepInputOptions) => anim.DelayStep} delay
@@ -103,7 +103,7 @@ export default class AnimationManager {
   }
 
   setupAnimationSteps() {
-    this.rotation = (...optionsIn: Array<TypeRotationAnimationStepInputOptions>) => {
+    this.rotation = (...optionsIn: Array<OBJ_RotationAnimationStep>) => {
       const options = joinObjects({}, { element: this.element }, ...optionsIn);
       return new anim.RotationAnimationStep(options);
     };

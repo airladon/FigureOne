@@ -8,7 +8,7 @@ import type {
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
   TypeTransformAnimationStepInputOptions,
-  TypeRotationAnimationStepInputOptions, TypeScaleAnimationStepInputOptions,
+  OBJ_RotationAnimationStep, TypeScaleAnimationStepInputOptions,
   TypePulseAnimationStepInputOptions, TypeOpacityAnimationStepInputOptions,
   TypePulseTransformAnimationStepInputOptions,
 } from './Animation';
@@ -134,7 +134,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  rotation(...optionsIn: Array<TypeRotationAnimationStepInputOptions>) {
+  rotation(...optionsIn: Array<OBJ_RotationAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);

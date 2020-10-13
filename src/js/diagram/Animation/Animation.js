@@ -39,7 +39,7 @@ import type {
 import PulseTransformAnimationStep from './AnimationStep/ElementAnimationStep/PulseTransformAnimationStep';
 
 import type {
-  TypeRotationAnimationStepInputOptions,
+  OBJ_RotationAnimationStep,
 } from './AnimationStep/ElementAnimationStep/RotationAnimationStep';
 import RotationAnimationStep from './AnimationStep/ElementAnimationStep/RotationAnimationStep';
 
@@ -112,7 +112,7 @@ export type {
   TypeTransformAnimationStepInputOptions, TypeAnimationStepInputOptions,
   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
   TypeColorAnimationStepInputOptions, TypeCustomAnimationStepInputOptions,
-  TypeAnimationManagerInputOptions, TypeRotationAnimationStepInputOptions,
+  TypeAnimationManagerInputOptions, OBJ_RotationAnimationStep,
   TypeScaleAnimationStepInputOptions, TypePulseAnimationStepInputOptions,
   TypeOpacityAnimationStepInputOptions, TypeScenarioAnimationStepInputOptions,
   TypePulseTransformAnimationStepInputOptions,

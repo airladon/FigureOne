@@ -30,7 +30,7 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * @property {'0to360' | '-180to180' | null} [clipTo]
  * @property {number} [maxDuration]
  */
-export type TypeRotationAnimationStepInputOptions = {
+export type OBJ_RotationAnimationStep = {
   start?: number;      // default is element transform
   target?: number;     // Either target or delta must be defined
   delta?: number;      // delta overrides target if both are defined
@@ -62,7 +62,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     clipTo: '0to360' | '-180to180' | null;
   };
 
-  constructor(...optionsIn: Array<TypeRotationAnimationStepInputOptions>) {
+  constructor(...optionsIn: Array<OBJ_RotationAnimationStep>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'rotation' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [

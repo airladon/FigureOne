@@ -170,7 +170,7 @@
 -   [ElementMovementState][352]
 -   [ElementPulseState][354]
 -   [ElementState][356]
--   [TypeRotationAnimationStepInputOptions][358]
+-   [OBJ_RotationAnimationStep][358]
 -   [AnimationProgression][360]
 -   [TypeElementAnimationStepInputOptions][362]
 -   [TypeTriggerStepInputOptions][364]
@@ -5036,7 +5036,7 @@ Element state
 -   `pulse` **[ElementPulseState][473]** 
 -   `preparingToStop` **[boolean][396]** 
 
-## TypeRotationAnimationStepInputOptions
+## OBJ_RotationAnimationStep
 
 **Extends TypeElementAnimationStepInputOptions**
 
