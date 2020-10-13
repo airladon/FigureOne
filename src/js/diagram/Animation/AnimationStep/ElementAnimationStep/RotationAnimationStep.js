@@ -10,6 +10,26 @@ import type {
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 
+/**
+ * Rotation animation step
+ *
+ * By default, the rotation will start with the element's current rotation.
+ *
+ * Use either `delta` or `target` to define it's end point
+ *
+ * `clipTo` will clip the element's rotation during animation
+ * @extends TypeElementAnimationStepInputOptions
+ * @property {number} [start]
+ * @property {number} [target]
+ * @property {number} [delta]
+ * @property {null | number} [velocity] velocity of rotation overrides
+ * `duration` - `null` to use `duration` (`null`)
+ * @property {0 | 1 | -1 | 2} [direction] where `0` is quickest direction, `1`
+ * is positive of CCW direction, `-1` is negative of CW direction and `2` is
+ * whichever direction doesn't pass through angle 0.
+ * @property {'0to360' | '-180to180' | null} [clipTo]
+ * @property {number} [maxDuration]
+ */
 export type TypeRotationAnimationStepInputOptions = {
   start?: number;      // default is element transform
   target?: number;     // Either target or delta must be defined
@@ -17,7 +37,8 @@ export type TypeRotationAnimationStepInputOptions = {
   // 1 is CCW, -1 is CW, 0 is fastest, 2 is not through 0
   direction: 0 | 1 | -1 | 2;
   clipTo: '0to360' | '-180to180' | null;
-  maxDuration?: number;
+  velocity?: ?number,
+  maxDuration?: ?number;
 } & TypeElementAnimationStepInputOptions;
 
 // A transform animation unit manages a transform animation on an element.
@@ -100,6 +121,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
         this.rotation.direction,
       );
       this.rotation.delta = delta;
+      // this.rotation.delta = this.rotation.target - this.rotation.start;
     } else if (this.rotation.delta != null) {
       this.rotation.target = this.rotation.start + this.rotation.delta;
     } else {

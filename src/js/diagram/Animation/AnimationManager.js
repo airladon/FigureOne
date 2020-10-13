@@ -10,6 +10,10 @@ import { DiagramElement } from '../Element';
 // } from './Animation';
 // eslint-disable-next-line import/no-cycle
 import * as anim from './Animation';
+// eslint-disable-next-line import/no-cycle
+// import {
+//   AnimationStep,
+// } from './Animation';
 import GlobalAnimation from '../webgl/GlobalAnimation';
 import { joinObjects, duplicateFromTo, SubscriptionManager } from '../../tools/tools';
 import { getState } from '../state';
@@ -21,6 +25,35 @@ export type TypeAnimationManagerInputOptions = {
   finishedCallback?: ?(string | (() => void)),
 };
 
+/* eslint-disable max-len */
+/**
+ * Animation Manager
+ *
+ * This class manages animations attached to a {@link DiagramElement}.
+ *
+ * @property {Array<AnimationStep>} animations list of animations running
+ * or about to start
+ * @property {(TypeRotationAnimationStepInputOptions) => anim.RotationAnimationStep(options)} rotation
+ * @property {(TypeScaleAnimationStepInputOptions) => anim.ScaleAnimationStep} scale
+ * @property {(TypeTriggerStepInputOptions) => TriggerStep} trigger
+ * @property {(TypeDelayStepInputOptions) => anim.DelayStep} delay
+ * @property {(TypePositionAnimationStepInputOptions) => anim.PositionAnimationStep} translation
+ * @property {(TypePositionAnimationStepInputOptions) => anim.PositionAnimationStep} position
+ * @property {(TypeColorAnimationStepInputOptions) => anim.ColorAnimationStep} color
+ * @property {(TypeOpacityAnimationStepInputOptions) => anim.OpacityAnimationStep} opacity
+ * @property {(TypeTransformAnimationStepInputOptions) =>  anim.TransformAnimationStep} transform
+ * @property {(TypePulseTransformAnimationStepInputOptions) => anim.PulseTransformAnimationStep} pulseTransform
+ * @property {(TypePulseAnimationStepInputOptions) => anim.PulseAnimationStep} pulse
+ * @property {(TypeOpacityAnimationStepInputOptions = {}) => anim.DissolveInAnimationStep} dissolveIn
+ * @property {(number | TypeOpacityAnimationStepInputOptions) => anim.DissolveOutAnimationStep} dissolveOut
+ * @property {(number | TypeColorAnimationStepInputOptions) => anim.DimAnimationStep} dim
+ * @property {(number | TypeColorAnimationStepInputOptions) => anim.UndimAnimationStep} undim
+ * @property {(TypeAnimationBuilderInputOptions) => new anim.AnimationBuilder} builder
+ * @property {(ScenarioDefinitionAnimationStepInputOptions) => anim.ScenarioAnimationStep} scenario
+ * @property {(TypeParallelAnimationStepInputOptions) => anim.ParallelAnimationStep} scenarios
+ *
+ * @see {@link DiagramElement}
+ */
 export default class AnimationManager {
   element: ?DiagramElement;
   animations: Array<anim.AnimationStep>;
@@ -39,6 +72,11 @@ export default class AnimationManager {
     },
   };
 
+  /* eslint-enable max-len */
+
+  /**
+   * @private
+   */
   constructor(
     elementOrOptionsIn: DiagramElement | TypeAnimationManagerInputOptions = {},
     ...optionsIn: Array<TypeAnimationManagerInputOptions>
@@ -60,7 +98,118 @@ export default class AnimationManager {
     this.fnMap = new FunctionMap();
     this.finishedCallback = options.finishedCallback;
     this.subscriptions = new SubscriptionManager();
+    this.setupAnimationSteps();
     return this;
+  }
+
+  setupAnimationSteps() {
+    this.rotation = (...optionsIn: Array<TypeRotationAnimationStepInputOptions>) => {
+      const options = joinObjects({}, { element: this.element }, ...optionsIn);
+      return new anim.RotationAnimationStep(options);
+    };
+    this.scale = (...optionsIn: Array<TypeScaleAnimationStepInputOptions>) => {
+      const options = joinObjects({}, { element: this.element }, ...optionsIn);
+      return new anim.ScaleAnimationStep(options);
+    };
+    this.trigger = (...optionsIn: Array<TypeTriggerStepInputOptions>) => {
+      const options = joinObjects({}, ...optionsIn);
+      return new anim.TriggerStep(options);
+    };
+    this.delay = (...optionsIn: Array<TypeDelayStepInputOptions>) => {
+      const options = joinObjects({}, ...optionsIn);
+      return new anim.DelayStep(options);
+    };
+    this.translation = (...optionsIn: Array<TypePositionAnimationStepInputOptions>) => {
+      const options = joinObjects({}, { element: this.element }, ...optionsIn);
+      return new anim.PositionAnimationStep(options);
+    };
+    this.position = (...optionsIn: Array<TypePositionAnimationStepInputOptions>) => {
+      const options = joinObjects({}, { element: this.element }, ...optionsIn);
+      return new anim.PositionAnimationStep(options);
+    };
+    this.color = (...optionsIn: Array<TypeColorAnimationStepInputOptions>) => {
+      const options = joinObjects({}, { element: this.element }, ...optionsIn);
+      return new anim.ColorAnimationStep(options);
+    };
+    this.opacity = (...optionsIn: Array<TypeOpacityAnimationStepInputOptions>) => {
+      const options = joinObjects({}, { element: this.element }, ...optionsIn);
+      return new anim.OpacityAnimationStep(options);
+    };
+    this.transform = (...optionsIn: Array<TypeTransformAnimationStepInputOptions>) => {
+      const options = joinObjects({}, { element: this.element }, ...optionsIn);
+      return new anim.TransformAnimationStep(options);
+    };
+    this.pulseTransform = (...optionsIn: Array<TypePulseTransformAnimationStepInputOptions>) => {
+      const options = joinObjects({}, { element: this.element }, ...optionsIn);
+      return new anim.PulseTransformAnimationStep(options);
+    };
+    this.pulse = (...optionsIn: Array<TypePulseAnimationStepInputOptions>) => {
+      const options = joinObjects({}, { element: this.element }, ...optionsIn);
+      return new anim.PulseAnimationStep(options);
+    };
+    // eslint-disable-next-line max-len
+    this.dissolveIn = (timeOrOptionsIn: number | TypeOpacityAnimationStepInputOptions = {}, ...args: Array<TypeOpacityAnimationStepInputOptions>) => {
+      const defaultOptions = { element: this.element };
+      let options;
+      if (typeof timeOrOptionsIn === 'number') {
+        options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+      } else {
+        options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+      }
+      return new anim.DissolveInAnimationStep(options);
+    };
+    // eslint-disable-next-line max-len
+    this.dissolveOut = (timeOrOptionsIn: number | TypeOpacityAnimationStepInputOptions = {}, ...args: Array<TypeOpacityAnimationStepInputOptions>) => {
+      const defaultOptions = { element: this.element };
+      let options;
+      if (typeof timeOrOptionsIn === 'number') {
+        options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+      } else {
+        options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+      }
+      return new anim.DissolveOutAnimationStep(options);
+    };
+    // eslint-disable-next-line max-len
+    this.dim = (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
+      const defaultOptions = { element: this.element };
+      let options;
+      if (typeof timeOrOptionsIn === 'number') {
+        options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+      } else {
+        options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+      }
+      return new anim.DimAnimationStep(options);
+    };
+    // eslint-disable-next-line max-len
+    this.undim = (timeOrOptionsIn: number | TypeColorAnimationStepInputOptions = {}, ...args: Array<TypeColorAnimationStepInputOptions>) => {
+      const defaultOptions = { element: this.element };
+      let options;
+      if (typeof timeOrOptionsIn === 'number') {
+        options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+      } else {
+        options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+      }
+      return new anim.UndimAnimationStep(options);
+    };
+    // eslint-disable-next-line max-len
+    this.builder = (...optionsIn: Array<TypeAnimationBuilderInputOptions>) => new anim.AnimationBuilder(this, ...optionsIn);
+    this.scenario = (...optionsIn: Array<ScenarioDefinitionAnimationStepInputOptions>) => {
+      const options = joinObjects({}, { element: this.element }, ...optionsIn);
+      return new anim.ScenarioAnimationStep(options);
+    };
+    // eslint-disable-next-line max-len
+    this.scenarios = (...optionsIn: Array<TypeParallelAnimationStepInputOptions & TypeTransformAnimationStepInputOptions>) => {
+      const defaultOptions = {};
+      const options = joinObjects({}, defaultOptions, ...optionsIn);
+      const elements = this.getAllElementsWithScenario(options.target);
+      const steps = [];
+      const simpleOptions = {};
+      duplicateFromTo(options, simpleOptions, ['steps', 'element']);
+      elements.forEach((element) => {
+        steps.push(element.anim.scenario(simpleOptions));
+      });
+      return new anim.ParallelAnimationStep(simpleOptions, { steps });
+    };
   }
 
   _state(options: Object) {

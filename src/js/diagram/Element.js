@@ -93,6 +93,8 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
   return inputTransforms.map(t => t._dup());
 };
 
+/* eslint-disable no-use-before-define */
+
 /**
  * Pulse options
  *
@@ -182,6 +184,7 @@ type DiagramElementMove = {
   element: DiagramElement | null;
 };
 
+/* eslint-enable no-use-before-define */
 
 // A diagram is composed of multiple diagram elements.
 //
@@ -2483,14 +2486,14 @@ class DiagramElement {
   /**
    * Get boundaries of element.
    *
-   * A contiguous boundary is an array of points.
+   * A closed boundary is an array of points.
    *
-   * An element may have one or more contiguous boundaries, and so boundaries
+   * An element may have one or more closed boundaries, and so boundaries
    * is an array of an array of points.
    *
    * @param {'local' | 'diagram' | 'vertex' | 'gl'} space boundaries relative
    * to which space
-   * @return {Array<Array<Point>>} An array of contiguous boundaries
+   * @return {Array<Array<Point>>} An array of closed boundaries
    */
   getBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
     if (space === 'local') {
@@ -2567,7 +2570,7 @@ class DiagramElement {
   /**
    * Get bounding rect of element.
    *
-   * An element may have one or more contiguous boundaries. The bounding rect
+   * An element may have one or more closed boundaries. The bounding rect
    * is the rectangle that encapsulates all boundaries.
    *
    * @param {'local' | 'diagram' | 'vertex' | 'gl'} space bounding rect relative
@@ -3223,11 +3226,10 @@ class DiagramElementPrimitive extends DiagramElement {
    *
    * @param {DrawingObject} drawingObject an object that handles drawing
    * to the screen or manages a HTML element
-   * @param {Transform} transform initial transform to set ('new Transform()`)
+   * @param {Transform} transform initial transform to set
    * @param {[number, number, number, number]} color color to set
-   * (`[0.5, 0.5, 0.5, 1]`)
-   * @param {Rect} diagramLimits limits of diagram (`new Rect(-1, -1, 2, 2)`)
-   * @param {DiagramElement | null} parent parent element (`null`)
+   * @param {Rect} diagramLimits limits of diagram
+   * @param {DiagramElement | null} parent parent element
    * @param
    */
   constructor(
@@ -3723,9 +3725,9 @@ class DiagramElementCollection extends DiagramElement {
   +highlight: (elementsToDim: ?Array<string | DiagramElement>) => void;
 
   /**
-   * @param {Transform} transform initial transform to set ('new Transform()`)
-   * @param {Rect} diagramLimits limits of diagram ( new Rect(-1, -1, 2, 2) )
-   * @param {DiagramElement | null} parent  parent element ( null )
+   * @param {Transform} transform initial transform to set
+   * @param {Rect} diagramLimits limits of diagram
+   * @param {DiagramElement | null} parent  parent element
    */
   constructor(
     transform: Transform = new Transform(),

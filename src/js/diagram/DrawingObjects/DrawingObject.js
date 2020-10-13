@@ -21,13 +21,28 @@ import { getState } from '../state';
 //     - drawWithTransformMatrix(transformMatrix)
 //     - calcBorder(lastDrawTransformMatrix, glToDiagramTransform)
 //
+
+/**
+ * Drawing Object
+ *
+ * Manages drawing an element to a WebGL or Context 2D canvas. Can also
+ * be used to manage a HTML element on the screen.
+ *
+ * @property {Array<Array<Point>>} border each array of points defines a
+ * closed boundary or border of the element. An element may have multiple
+ * closed borders. A border defines where a shape can be touched, or how it
+ * bounces of diagram boundaries
+ * @property {Array<Array<Point>>} holeBorder areas where a shape cannot be
+ * touched
+ * @see {@link DiagramElementPrimitive}
+ */
 class DrawingObject {
   // numPoints: number;           // Number of primative vertices
   border: Array<Array<Point>>; // Border vertices
   location: Point;
   holeBorder: Array<Array<Point>>;  // Border of any holes inside of main border
   +change: (any, any, any) => void;
-  onLoad: Function | null;   // Only used for drawing objects with asynchronous
+  // onLoad: Function | null;   // Only used for drawing objects with asynchronous
   //                            loading (like textures)
   type: string;
   state: 'loading' | 'loaded';
@@ -37,9 +52,9 @@ class DrawingObject {
     this.location = new Point(0, 0);
     this.border = [[]];
     this.holeBorder = [[]];
-    this.onLoad = null;
+    // this.onLoad = null;
     this.type = 'drawingObject';
-    this.state = 'loading';
+    // this.state = 'loading';
   }
 
   _dup() {

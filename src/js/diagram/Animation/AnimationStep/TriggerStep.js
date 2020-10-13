@@ -6,6 +6,18 @@ import type {
 import AnimationStep from '../AnimationStep';
 import type { DiagramElement } from '../../Element';
 
+/**
+ * Trigger Step animation options
+ *
+ * A trigger step is a zero duration animation step that triggers a custom
+ * function
+ *
+ * @property {string | () => {}} callback
+ * @property {null | Object} [payload] payload to pass to callback (`null`)
+ * @property {DiagramElement} element {@link DiagramElement} to associate with
+ * callback - if the `callback` is a string then this element's
+ * {@link FunctionMap} will be searched for the corresponding function
+ */
 export type TypeTriggerStepInputOptions = {
   callback?: Function;      // default is element transform
   payload?: Object;

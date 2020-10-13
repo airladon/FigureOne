@@ -6,6 +6,30 @@ import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import type { DiagramElement } from '../../Element';
 
+/**
+ * Animation progression function.
+ * Function is passed the percent complete of the animation duration and
+ * returns the percent complete of the delta between the target and start
+ * values of the animation.
+ *
+ * A linear function would return the same percent as is passed. However,
+ * the returned percent would change if some smoothing was desired at the
+ * start or end of the animation.
+ *
+ * @param {number} percent percentage of duration
+ * @return {number} percent of animation complete
+ */
+export type AnimationProgression = (number) => number;
+
+/**
+ * Base element animation step
+ *
+ * @extends TypeAnimationStepInputOptions
+ * @property {DiagramElement} [element]
+ * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
+ * how the animation progresses - defaults to `linear` for color, opacity and
+ * custom animations and `easeinout` for others
+ */
 export type TypeElementAnimationStepInputOptions = {
   element?: DiagramElement; // Can't use DiagramElement as importing it makes a loop
   type?: 'transform' | 'color' | 'custom' | 'position' | 'rotation' | 'scale' | 'opacity';

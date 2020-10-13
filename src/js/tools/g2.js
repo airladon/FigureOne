@@ -930,6 +930,10 @@ function normAngleTo90(angle: number) {
 
 export type TypeRotationDirection = 0 | 1 | 2 | -1;
 
+// 0 is quickest direction
+// 1 is CCW
+// -1 is CW
+// 2 is -1 if start > target and 1 if start < target
 function getDeltaAngle(
   startAngle: number,
   targetAngle: number,
@@ -951,17 +955,17 @@ function getDeltaAngle(
     }
   }
 
-  if (rotDirection === 0) {
+  if (dir === 0) {
     return minAngleDiff(target, start);
   }
 
-  if (rotDirection === 1) {
+  if (dir === 1) {
     if (start > target) {
       return Math.PI * 2 - start + target;
     }
   }
 
-  if (rotDirection === -1) {
+  if (dir === -1) {
     if (target > start) {
       return -start - (Math.PI * 2 - target);
     }

@@ -409,17 +409,17 @@ diagram.addElements([
       width: 0.0005,
     },
   },
-  // {
-  //   name: 'gridMajor',
-  //   method: 'grid',
-  //   options: {
-  //     bounds: [-1, -1, 2, 2],
-  //     yStep: 0.5,
-  //     xStep: 0.5,
-  //     color: [0.8, 0.8, 0.8, 1],
-  //     width: 0.002,
-  //   },
-  // },
+  {
+    name: 'gridMajor',
+    method: 'grid',
+    options: {
+      bounds: [-1, -1, 2, 2],
+      yStep: 0.5,
+      xStep: 0.5,
+      color: [0.8, 0.8, 0.8, 1],
+      width: 0.002,
+    },
+  },
   // {
   //   name: 'eqn',
   //   method: 'equation',
@@ -473,6 +473,24 @@ diagram.addElements([
   //     // position: [0, -0.5],
   //   },
   // },
+  {
+    name: 'm',
+    method: 'polygon',
+    options: {
+      sides: 5,
+      radius: 0.2,
+      fill: true,
+    },
+  },
+  {
+    name: 'n',
+    method: 'polygon',
+    options: {
+      sides: 3,
+      radius: 0.2,
+      fill: true,
+    },
+  }
 ]);
 // diagram.addElement(
 //   {
@@ -514,27 +532,39 @@ diagram.addElements([
 //   },
 // );
 diagram.initialize();
+const m = diagram.getElement('m');
+const n = diagram.getElement('n');
 
-const label = diagram.create.text({
-  text: 'Line 1',
-  position: [1, 0.1],
-  font: { color: [0, 0, 1, 1] },
-  xAlign: 'center',
-});
-const line = diagram.create.line({
-  p1: [0, 0],
-  p2: [2, 0],
-  width: 0.01,
-  color: [0, 0, 1, 1],
-});
-const labeledLine = diagram.create.collection({});
-diagram.elements.add('labeledLine', labeledLine);
-labeledLine.add('line', line);
-labeledLine.add('label', label);
-labeledLine.setPosition(3, 2);
-labeledLine.move.type = 'rotation';
-labeledLine.touchInBoundingRect = true;
-labeledLine.setMovable();
+m.animations.new()
+  .translation({ target: [-0.5, 0.5], duration: 1 })
+  // .then(n.animations.translation({ target: [0.5, -0.5], duration: 1 }))
+  .then(n.animations.builder()
+    .translation({ target: [0.5, -0.5], duration: 1})
+    .rotation({ target: -2, duration: 1, direction: 2 })
+  )
+  .start();
+
+
+// const label = diagram.create.text({
+//   text: 'Line 1',
+//   position: [1, 0.1],
+//   font: { color: [0, 0, 1, 1] },
+//   xAlign: 'center',
+// });
+// const line = diagram.create.line({
+//   p1: [0, 0],
+//   p2: [2, 0],
+//   width: 0.01,
+//   color: [0, 0, 1, 1],
+// });
+// const labeledLine = diagram.create.collection({});
+// diagram.elements.add('labeledLine', labeledLine);
+// labeledLine.add('line', line);
+// labeledLine.add('label', label);
+// labeledLine.setPosition(3, 2);
+// labeledLine.move.type = 'rotation';
+// labeledLine.touchInBoundingRect = true;
+// labeledLine.setMovable();
 
 
 // diagram.elements._tester.animations.new()

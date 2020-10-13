@@ -212,12 +212,6 @@
                       </a></li>
                       
                       <li><a
-                        href='#diagramelementgetpositioninbounds'
-                        class='regular pre-open'>
-                        #getPositionInBounds
-                      </a></li>
-                      
-                      <li><a
                         href='#diagramelementgetposition'
                         class='regular pre-open'>
                         #getPosition
@@ -1347,6 +1341,86 @@
               
                 
                 <li><a
+                  href='#animationprogression'
+                  class="">
+                  AnimationProgression
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeelementanimationstepinputoptions'
+                  class="">
+                  TypeElementAnimationStepInputOptions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typerotationanimationstepinputoptions'
+                  class="">
+                  TypeRotationAnimationStepInputOptions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typetriggerstepinputoptions'
+                  class="">
+                  TypeTriggerStepInputOptions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeanimationstepinputoptions'
+                  class="">
+                  TypeAnimationStepInputOptions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#animationstep'
+                  class="">
+                  AnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#animationmanager'
+                  class="">
+                  AnimationManager
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#drawingobject'
+                  class="">
+                  DrawingObject
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#typeequationtextelement'
                   class="">
                   TypeEquationTextElement
@@ -2097,7 +2171,7 @@ dimming element
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>animations</span> <code class='quiet'>(AnimationManager)</code>
+          <span class='code bold'>animations</span> <code class='quiet'>(<a href="#animationmanager">AnimationManager</a>)</code>
           : element animation manager
 
           
@@ -2626,8 +2700,8 @@ appropriately clipped.</p>
   
 
   <p>Get boundaries of element.</p>
-<p>A contiguous boundary is an array of points.</p>
-<p>An element may have one or more contiguous boundaries, and so boundaries
+<p>A closed boundary is an array of points.</p>
+<p>An element may have one or more closed boundaries, and so boundaries
 is an array of an array of points.</p>
 
   
@@ -2664,7 +2738,7 @@ to which space
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>></code>:
-        An array of contiguous boundaries
+        An array of closed boundaries
 
       
     
@@ -2701,7 +2775,7 @@ to which space
   
 
   <p>Get bounding rect of element.</p>
-<p>An element may have one or more contiguous boundaries. The bounding rect
+<p>An element may have one or more closed boundaries. The bounding rect
 is the rectangle that encapsulates all boundaries.</p>
 
   
@@ -2774,8 +2848,8 @@ to a space
 
   
 
-  <p>Return the first scale in the element's transform.</p>
-<p>Will return [1, 1] if element's transform doesn't have a scale.</p>
+  <p>Return the first scale in the element's transform. Will return
+<code>[1, 1]</code> if element's transform doesn't have a scale.</p>
 
   
   
@@ -2831,7 +2905,8 @@ to a space
 
   
 
-  <p>Return the first rotation in the element's transform</p>
+  <p>Return the first rotation in the element's transform. Will return
+<code>0</code> if the element's transform doesn't have a rotation.</p>
 
   
   
@@ -2963,97 +3038,11 @@ vertex space.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='diagramelementgetpositioninbounds'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getPositionInBounds(space, x, y)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Get position relative to bounding rect.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>space</span> <code class='quiet'>((<code>"local"</code> | <code>"diagram"</code> | <code>"gl"</code> | <code>"vertex"</code>)
-            = <code>&#39;local&#39;</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>x</span> <code class='quiet'>((<code>"center"</code> | <code>"left"</code> | <code>"right"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>y</span> <code class='quiet'>((<code>"middle"</code> | <code>"top"</code> | <code>"bottom"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#point">Point</a></code>:
-        position
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='diagramelementgetposition'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getPosition(space, x, y)</span>
+            <span class='code strong strong truncate'>getPosition(space, xAlign, yAlign)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3064,6 +3053,11 @@ vertex space.</p>
   <p>Get position of element</p>
 <p>By default the first translation of the element's transform is returned.
 This is effectively the element's location in 'local' coordinates.</p>
+<p>The position of the element relative to its horizontal and vertical bounds
+can also be returned. Use <code>xAlign</code> to find the x coordinate of the left,
+center, right or percentage width from left of the element. Use <code>yAlign</code>
+to find the bottom, middle, top or percentage height from bottom of the
+element.</p>
 
   
   
@@ -3083,25 +3077,35 @@ This is effectively the element's location in 'local' coordinates.</p>
           <div>
             <span class='code bold'>space</span> <code class='quiet'>((<code>"local"</code> | <code>"diagram"</code> | <code>"gl"</code> | <code>"vertex"</code>)
             = <code>&#39;local&#39;</code>)</code>
-	    
+	    the space to return
+the position in
+
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>x</span> <code class='quiet'>((<code>"center"</code> | <code>"left"</code> | <code>"right"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)
-            = <code>&#39;origin&#39;</code>)</code>
-	    
+            <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"center"</code> | <code>"left"</code> | <code>"right"</code> | <code>"location"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)
+            = <code>&#39;location&#39;</code>)</code>
+	    horizontal alignment of position. Use a 
+<code>number</code>
+ to define the horizontal
+position in percentage width from the left.
+
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>y</span> <code class='quiet'>((<code>"middle"</code> | <code>"top"</code> | <code>"bottom"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)
-            = <code>&#39;origin&#39;</code>)</code>
-	    
+            <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"middle"</code> | <code>"top"</code> | <code>"bottom"</code> | <code>"location"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)
+            = <code>&#39;location&#39;</code>)</code>
+	    vertical alignment of position. Use a 
+<code>number</code>
+ to define the vertical
+position in percentage height from the bottom.
+
           </div>
           
         </div>
@@ -3574,7 +3578,7 @@ that draws to the screen. This object may be a <a href="VertexObject">VertexObje
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>drawingObject</span> <code class='quiet'>(DrawingObject)</code>
+            <span class='code bold'>drawingObject</span> <code class='quiet'>(<a href="#drawingobject">DrawingObject</a>)</code>
 	    an object that handles drawing
 to the screen or manages a HTML element
 
@@ -3586,7 +3590,7 @@ to the screen or manages a HTML element
           <div>
             <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>
             = <code>new Transform()</code>)</code>
-	    initial transform to set ('new Transform()`)
+	    initial transform to set
 
           </div>
           
@@ -3597,9 +3601,6 @@ to the screen or manages a HTML element
             <span class='code bold'>color</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
             = <code>[0.5,0.5,0.5,1]</code>)</code>
 	    color to set
-(
-<code>[0.5, 0.5, 0.5, 1]</code>
-)
 
           </div>
           
@@ -3609,9 +3610,7 @@ to the screen or manages a HTML element
           <div>
             <span class='code bold'>diagramLimits</span> <code class='quiet'>(<a href="#rect">Rect</a>
             = <code>new Rect(-1,-1,2,2)</code>)</code>
-	    limits of diagram (
-<code>new Rect(-1, -1, 2, 2)</code>
-)
+	    limits of diagram
 
           </div>
           
@@ -3621,9 +3620,7 @@ to the screen or manages a HTML element
           <div>
             <span class='code bold'>parent</span> <code class='quiet'>((<a href="#diagramelement">DiagramElement</a> | null)
             = <code>null</code>)</code>
-	    parent element (
-<code>null</code>
-)
+	    parent element
 
           </div>
           
@@ -3768,7 +3765,7 @@ primitives or collections.</p>
           <div>
             <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>
             = <code>new Transform()</code>)</code>
-	    initial transform to set ('new Transform()`)
+	    initial transform to set
 
           </div>
           
@@ -3778,7 +3775,7 @@ primitives or collections.</p>
           <div>
             <span class='code bold'>diagramLimits</span> <code class='quiet'>(<a href="#rect">Rect</a>
             = <code>new Rect(-1,1,2,2)</code>)</code>
-	    limits of diagram ( new Rect(-1, -1, 2, 2) )
+	    limits of diagram
 
           </div>
           
@@ -3788,7 +3785,7 @@ primitives or collections.</p>
           <div>
             <span class='code bold'>parent</span> <code class='quiet'>((<a href="#diagramelement">DiagramElement</a> | null)
             = <code>null</code>)</code>
-	    parent element ( null )
+	    parent element
 
           </div>
           
@@ -19159,6 +19156,782 @@ string that names the scenario
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='animationprogression'>
+      AnimationProgression
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Animation progression function</p>
+
+  
+    <p style="display: none;">      Type:
+      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>percent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    percentage of duration
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        percent of animation complete
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeelementanimationstepinputoptions'>
+      TypeElementAnimationStepInputOptions
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Base element animation step</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#typeanimationstepinputoptions">TypeAnimationStepInputOptions</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>element</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>progression</span> <code class='quiet'>((<code>"linear"</code> | <code>"easeinout"</code> | <code>"easein"</code> | <code>"easeout"</code> | <a href="#animationprogression">AnimationProgression</a>)?)</code>
+          : how the animation progresses - defaults to 
+<code>linear</code>
+ for color, opacity and
+custom animations and 
+<code>easeinout</code>
+ for others
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typerotationanimationstepinputoptions'>
+      TypeRotationAnimationStepInputOptions
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Rotation animation step</p>
+<p>By default, the rotation will start with the element's current rotation.</p>
+<p>Use either <code>delta</code> or <code>target</code> to define it's end point</p>
+<p><code>clipTo</code> will clip the element's rotation during animation</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#typeelementanimationstepinputoptions">TypeElementAnimationStepInputOptions</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>delta</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>velocity</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : velocity of rotation overrides
+
+<code>duration</code>
+ - 
+<code>null</code>
+ to use 
+<code>duration</code>
+ (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>direction</span> <code class='quiet'>((<code>0</code> | <code>1</code> | <code>-1</code> | <code>2</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>clipTo</span> <code class='quiet'>((<code>"0to360"</code> | <code>"-180to180"</code> | null)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>maxDuration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typetriggerstepinputoptions'>
+      TypeTriggerStepInputOptions
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Trigger Step animation options</p>
+<p>A trigger step is a zero duration animation step that triggers a custom
+function</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>payload</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)?)</code>
+          : payload to pass to callback (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>element</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>)</code>
+          : <a href="#diagramelement">DiagramElement</a>
+ to associate with
+callback - if the 
+<code>callback</code>
+ is a string then this element's
+
+<a href="FunctionMap">FunctionMap</a>
+ will be searched for the corresponding function
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeanimationstepinputoptions'>
+      TypeAnimationStepInputOptions
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Animation Step options</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : in seconds (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>delay</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : delay before animation starts in seconds (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : animation name identifier (a random string)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>removeOnFinish</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ to remove the animation from the
+animation manager when it is finished (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>completeOnCancel</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+          : <code>true</code>
+ to skip to end of
+animation on cancel (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : precision to do calculations to (
+<code>8</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onFinish</span> <code class='quiet'>(function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>): void??)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='animationstep'>
+      AnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Animation Step options</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(<a href="#typeanimationstepinputoptions">TypeAnimationStepInputOptions</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : in seconds
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>startDelay</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          : delay before animation starts in seconds
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : animation name identifier
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>completeOnCancel</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+          : <code>true</code>
+ to skip to end of
+animation on cancel
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>removeOnFinish</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ to remove the animation from the
+animation manager when it is finished (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : precision to do calculations to (
+<code>8</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>state</span> <code class='quiet'>((<code>"animating"</code> | <code>"waitingToStart"</code> | <code>"idle"</code> | <code>"finished"</code>))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='animationmanager'>
+      AnimationManager
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Animation Manager</p>
+<p>This class manages animations attached to a <a href="#diagramelement">DiagramElement</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>elementOrOptionsIn</span> <code class='quiet'>((<a href="#diagramelement">DiagramElement</a> | TypeAnimationManagerInputOptions)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeAnimationManagerInputOptions>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>animations</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#animationstep">AnimationStep</a>>)</code>
+          : list of animations running
+or about to start
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#diagramelement">DiagramElement</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='drawingobject'>
+      DrawingObject
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Drawing Object</p>
+<p>Manages drawing an element to a WebGL or Context 2D canvas. Can also
+be used to manage a HTML element on the screen.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>>)</code>
+          : each array of points defines a
+closed boundary or border of the element. An element may have multiple
+closed borders. A border defines where a shape can be touched, or how it
+bounces of diagram boundaries
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>>)</code>
+          : areas where a shape cannot be
+touched
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#diagramelementprimitive">DiagramElementPrimitive</a>
+
+      
+    
   
 
   

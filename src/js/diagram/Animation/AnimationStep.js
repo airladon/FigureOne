@@ -17,6 +17,21 @@ import { FunctionMap } from '../../tools/FunctionMap';
 import GlobalAnimation from '../webgl/GlobalAnimation';
 // import * as anim from './Animation';
 
+/**
+ * Animation Step options
+ *
+ * @property {number} [duration] in seconds (`0`)
+ * @property {number} [delay] delay before animation starts in seconds (`0`)
+ * @property {string} [name] animation name identifier (a random string)
+ * @property {null | (boolean) => void} [onFinish] called when animation is
+ * finished - a `true` parameter is passed to the callback if the animation was
+ * cancelled
+ * @property {boolean} [removeOnFinish] `true` to remove the animation from the
+ * animation manager when it is finished (`true`)
+ * @property {null | boolean} [completeOnCancel] `true` to skip to end of
+ * animation on cancel (`null`)
+ * @property {number} [precision] precision to do calculations to (`8`)
+ */
 export type TypeAnimationStepInputOptions = {
   onFinish?: ?(boolean) => void;
   completeOnCancel?: ?boolean;    // true: yes, false: no, null: no preference
@@ -27,6 +42,22 @@ export type TypeAnimationStepInputOptions = {
   precision?: number;
 };
 
+/**
+ * Animation Step options
+ *
+ * @property {number} duration in seconds
+ * @property {number} startDelay delay before animation starts in seconds
+ * @property {string} name animation name identifier
+ * @property {null | (boolean) => void} [onFinish] called when animation is
+ * finished - a `true` parameter is passed to the callback if the animation was
+ * cancelled
+ * @property {null | boolean} [completeOnCancel] `true` to skip to end of
+ * animation on cancel
+ * @property {boolean} [removeOnFinish] `true` to remove the animation from the
+ * animation manager when it is finished (`true`)
+ * @property {number} [precision] precision to do calculations to (`8`)
+ * @property {'animating' | 'waitingToStart' | 'idle' | 'finished'} state
+ */
 export default class AnimationStep {
   startTime: ?number;
   duration: number;
