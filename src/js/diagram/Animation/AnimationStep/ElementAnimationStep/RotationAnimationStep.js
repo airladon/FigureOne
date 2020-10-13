@@ -51,6 +51,11 @@ export type OBJ_RotationAnimationStep = {
 // Target is used to predefine the target.
 // Delta is used to calculate the target when the unit is started with start()
 //
+
+/**
+ * Rotation Animation Step
+ * @extends ElementAnimationStep
+ */
 export default class RotationAnimationStep extends ElementAnimationStep {
   rotation: {
     start: number;  // null means use element transform when unit is started

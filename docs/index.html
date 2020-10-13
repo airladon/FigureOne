@@ -1341,6 +1341,26 @@
               
                 
                 <li><a
+                  href='#obj_rotationanimationstep'
+                  class="">
+                  OBJ_RotationAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#rotationanimationstep'
+                  class="">
+                  RotationAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#animationprogression'
                   class="">
                   AnimationProgression
@@ -1354,16 +1374,6 @@
                   href='#typeelementanimationstepinputoptions'
                   class="">
                   TypeElementAnimationStepInputOptions
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typerotationanimationstepinputoptions'
-                  class="">
-                  OBJ_RotationAnimationStep
                   
                 </a>
                 
@@ -1402,10 +1412,28 @@
                 
                 <li><a
                   href='#animationmanager'
-                  class="">
+                  class=" toggle-sibling">
                   AnimationManager
-                  
+                  <span class='icon'>▸</span>
                 </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#animationmanagerrotation'
+                        class='regular pre-open'>
+                        #rotation
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -19179,6 +19207,206 @@ string that names the scenario
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_rotationanimationstep'>
+      OBJ_RotationAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Rotation animation step</p>
+<p>By default, the rotation will start with the element's current rotation.</p>
+<p>Use either <code>delta</code> or <code>target</code> to define it's end point</p>
+<p><code>clipTo</code> will clip the element's rotation during animation</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#typeelementanimationstepinputoptions">TypeElementAnimationStepInputOptions</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>delta</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>velocity</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : velocity of rotation overrides
+
+<code>duration</code>
+ - 
+<code>null</code>
+ to use 
+<code>duration</code>
+ (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>direction</span> <code class='quiet'>((<code>0</code> | <code>1</code> | <code>-1</code> | <code>2</code>)?)</code>
+          : where 
+<code>0</code>
+ is quickest direction, 
+<code>1</code>
+
+is positive of CCW direction, 
+<code>-1</code>
+ is negative of CW direction and 
+<code>2</code>
+ is
+whichever direction doesn't pass through angle 0.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>clipTo</span> <code class='quiet'>((<code>"0to360"</code> | <code>"-180to180"</code> | null)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>maxDuration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='rotationanimationstep'>
+      RotationAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Rotation Animation Step</p>
+
+  
+  
+    <p>
+      Extends
+      
+        ElementAnimationStep
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_rotationanimationstep">OBJ_RotationAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='animationprogression'>
       AnimationProgression
     </h3>
@@ -19187,7 +19415,13 @@ string that names the scenario
   </div>
   
 
-  <p>Animation progression function</p>
+  <p>Animation progression function.
+Function is passed the percent complete of the animation duration and
+returns the percent complete of the delta between the target and start
+values of the animation.</p>
+<p>A linear function would return the same percent as is passed. However,
+the returned percent would change if some smoothing was desired at the
+start or end of the animation.</p>
 
   
     <p style="display: none;">      Type:
@@ -19306,126 +19540,6 @@ custom animations and
 <code>easeinout</code>
  for others
 
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typerotationanimationstepinputoptions'>
-      OBJ_RotationAnimationStep
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Rotation animation step</p>
-<p>By default, the rotation will start with the element's current rotation.</p>
-<p>Use either <code>delta</code> or <code>target</code> to define it's end point</p>
-<p><code>clipTo</code> will clip the element's rotation during animation</p>
-
-  
-    <p style="display: none;">      Type:
-      any
-    </p>
-  
-  
-    <p>
-      Extends
-      
-        <a href="#typeelementanimationstepinputoptions">TypeElementAnimationStepInputOptions</a>
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>delta</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>velocity</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : velocity of rotation overrides
-
-<code>duration</code>
- - 
-<code>null</code>
- to use 
-<code>duration</code>
- (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>direction</span> <code class='quiet'>((<code>0</code> | <code>1</code> | <code>-1</code> | <code>2</code>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>clipTo</span> <code class='quiet'>((<code>"0to360"</code> | <code>"-180to180"</code> | null)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>maxDuration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
           
         </div>
       
@@ -19857,6 +19971,81 @@ or about to start
   
 
   
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='animationmanagerrotation'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rotation</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Rotation animation step</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_rotationanimationstep">OBJ_RotationAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#rotationanimationstep">RotationAnimationStep</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 

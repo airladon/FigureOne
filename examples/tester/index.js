@@ -537,7 +537,7 @@ const n = diagram.getElement('n');
 
 m.animations.new()
   .translation({ target: [-0.5, 0.5], duration: 1 })
-  // .then(n.animations.translation({ target: [0.5, -0.5], duration: 1 }))
+  .then(n.animations.rotation({ target: 2, duration: 1 }))
   .then(n.animations.builder()
     .translation({ target: [0.5, -0.5], duration: 1})
     .rotation({ target: -2, duration: 1, direction: 2 })

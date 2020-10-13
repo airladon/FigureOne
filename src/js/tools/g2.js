@@ -931,9 +931,10 @@ function normAngleTo90(angle: number) {
 export type TypeRotationDirection = 0 | 1 | 2 | -1;
 
 // 0 is quickest direction
-// 1 is CCW
-// -1 is CW
-// 2 is -1 if start > target and 1 if start < target
+// 1 is positive direction CCW
+// -1 is negative direction CW
+// 2 is not through 0
+// 3 is numerical
 function getDeltaAngle(
   startAngle: number,
   targetAngle: number,
