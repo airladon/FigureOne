@@ -18,7 +18,7 @@ import type { DiagramElement } from '../../Element';
  * callback - if the `callback` is a string then this element's
  * {@link FunctionMap} will be searched for the corresponding function
  */
-export type TypeTriggerStepInputOptions = {
+export type OBJ_TriggerAnimationStep = {
   callback?: Function;      // default is element transform
   payload?: Object;
 } & OBJ_AnimationStep;
@@ -27,14 +27,14 @@ export type TypeTriggerStepInputOptions = {
  * Trigger Animation Step
  * @extends AnimationStep
  */
-export class TriggerStep extends AnimationStep {
+export class TriggerAnimationStep extends AnimationStep {
   element: ?Object;
   callback: ?(string | Function);
   payload: ?Object;
 
   constructor(
-    triggerOrOptionsIn: Function | TypeTriggerStepInputOptions = {},
-    ...optionsIn: Array<TypeTriggerStepInputOptions>
+    triggerOrOptionsIn: Function | OBJ_TriggerAnimationStep = {},
+    ...optionsIn: Array<OBJ_TriggerAnimationStep>
   ) {
     const defaultOptions = {
       payload: null,
@@ -127,15 +127,15 @@ export class TriggerStep extends AnimationStep {
   }
 
   _dup() {
-    const step = new TriggerStep();
+    const step = new TriggerAnimationStep();
     duplicateFromTo(this, step, ['element']);
     return step;
   }
 }
 
 export function trigger(
-  triggerOrOptionsIn: Function | TypeTriggerStepInputOptions = {},
-  ...optionsIn: Array<TypeTriggerStepInputOptions>
+  triggerOrOptionsIn: Function | OBJ_TriggerAnimationStep = {},
+  ...optionsIn: Array<OBJ_TriggerAnimationStep>
 ) {
-  return new TriggerStep(triggerOrOptionsIn, ...optionsIn);
+  return new TriggerAnimationStep(triggerOrOptionsIn, ...optionsIn);
 }

@@ -54,10 +54,10 @@ import type {
 import PulseAnimationStep from './AnimationStep/ElementAnimationStep/PulseAnimationStep';
 
 import type {
-  TypeTriggerStepInputOptions,
+  OBJ_TriggerAnimationStep,
 } from './AnimationStep/TriggerStep';
 import {
-  TriggerStep, trigger,
+  TriggerAnimationStep, trigger,
 } from './AnimationStep/TriggerStep';
 
 import type {
@@ -110,7 +110,7 @@ export type {
   OBJ_PositionAnimationStep, TypeAnimationBuilderInputOptions,
   TypeParallelAnimationStepInputOptions, TypeSerialAnimationStepInputOptions,
   OBJ_TransformAnimationStep, OBJ_AnimationStep,
-  TypeTriggerStepInputOptions,
+  OBJ_TriggerAnimationStep,
   OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
   TypeAnimationManagerInputOptions, OBJ_RotationAnimationStep,
   OBJ_ScaleAnimationStep, TypePulseAnimationStepInputOptions,
@@ -119,7 +119,7 @@ export type {
 };
 export {
   PositionAnimationStep, AnimationBuilder, ParallelAnimationStep, SerialAnimationStep,
-  TransformAnimationStep, AnimationStep, DelayAnimationStep, TriggerStep,
+  TransformAnimationStep, AnimationStep, DelayAnimationStep, TriggerAnimationStep,
   inParallel, inSerial, trigger, delay, ColorAnimationStep,
   DissolveInAnimationStep, dissolveIn, DissolveOutAnimationStep, dissolveOut,
   CustomAnimationStep, custom, AnimationManager, RotationAnimationStep,

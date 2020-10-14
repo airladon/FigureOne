@@ -390,6 +390,12 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
+                        href='#animationmanagernew'
+                        class='regular pre-open'>
+                        #new
+                      </a></li>
+                      
+                      <li><a
                         href='#animationmanagerrotation'
                         class='regular pre-open'>
                         #rotation
@@ -473,10 +479,128 @@
                         #scenario
                       </a></li>
                       
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#animationbuilder'
+                  class=" toggle-sibling">
+                  AnimationBuilder
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
                       <li><a
-                        href='#animationmanagernew'
+                        href='#animationbuilderrotation'
                         class='regular pre-open'>
-                        #new
+                        #rotation
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuilderposition'
+                        class='regular pre-open'>
+                        #position
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuildertranslation'
+                        class='regular pre-open'>
+                        #translation
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuilderscale'
+                        class='regular pre-open'>
+                        #scale
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuildertransform'
+                        class='regular pre-open'>
+                        #transform
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuilderscenario'
+                        class='regular pre-open'>
+                        #scenario
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuilderscenarios'
+                        class='regular pre-open'>
+                        #scenarios
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuildercolor'
+                        class='regular pre-open'>
+                        #color
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuilderopacity'
+                        class='regular pre-open'>
+                        #opacity
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuilderdissolveout'
+                        class='regular pre-open'>
+                        #dissolveOut
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuilderdissolvein'
+                        class='regular pre-open'>
+                        #dissolveIn
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuilderdim'
+                        class='regular pre-open'>
+                        #dim
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuilderundim'
+                        class='regular pre-open'>
+                        #undim
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuilderdelay'
+                        class='regular pre-open'>
+                        #delay
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuildertrigger'
+                        class='regular pre-open'>
+                        #trigger
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuilderinparallel'
+                        class='regular pre-open'>
+                        #inParallel
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationbuilderinserial'
+                        class='regular pre-open'>
+                        #inSerial
                       </a></li>
                       
                     </ul>
@@ -652,6 +776,26 @@
                   href='#delayanimationstep'
                   class="">
                   DelayAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#triggeranimationstep'
+                  class="">
+                  TriggerAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_triggeranimationstep'
+                  class="">
+                  OBJ_TriggerAnimationStep
                   
                 </a>
                 
@@ -1754,26 +1898,6 @@
                   href='#animationprogression'
                   class="">
                   AnimationProgression
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typetriggerstepinputoptions'
-                  class="">
-                  TypeTriggerStepInputOptions
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#triggerstep'
-                  class="">
-                  TriggerStep
                   
                 </a>
                 
@@ -4739,21 +4863,46 @@ array of paths.</p>
 
   
     <p>Animations change diagram elements over time.</p>
-<p>Each diagram element has its own <a href="#animationmanager">AnimationManager</a> (<code>animations</code> property) that coordinates animations primarily for that element, but also sometimes also for other elements.</p>
+<p>Each diagram element has its own <a href="#animationmanager">AnimationManager</a> (<code>animations</code> property) that can coordinate animations for any element.</p>
 <p>An animation is a number of <a href="#animationstep">AnimationStep</a>s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.</p>
-<p>Let's create a simple animation. Start by defining a diagram and retrieving the element to animate</p>
+<h3><a id="animation-boilerplate"></a> Animation Boilerplate</h3>
+<p>To test examples within the 'Animation' section of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
+<p>All examples are snippets which can be appended to the end of the <code>index.js</code> file.</p>
+<pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
+<span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 800px; height: 800px; background-color: white;"</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.2.3/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-comment">//</span>
-<span class="hljs-comment">// Create diagram</span>
-<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span> ]});
-
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>, <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>, <span class="hljs-attr">options</span>: { <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">radius</span>: <span class="hljs-number">0.2</span> },
-});
-diagram.initialize();
-
-<span class="hljs-comment">// element to animate</span>
-<span class="hljs-keyword">const</span> p = diagram.getElement(<span class="hljs-string">'p'</span>);</pre>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>]});
+diagram.addElements([
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">sides</span>: <span class="hljs-number">4</span>,
+      <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
+    },
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'q'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">sides</span>: <span class="hljs-number">5</span>,
+      <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
+    },
+  },
+]);
+<span class="hljs-keyword">const</span> p = diagram.getElement(<span class="hljs-string">'p'</span>);
+<span class="hljs-keyword">const</span> q = diagram.getElement(<span class="hljs-string">'q'</span>);
+diagram.initialize();</pre>
+<h3>Animation Examples</h3>
+<p>Let's create a simple animation. Start by defining a diagram and retrieving the element to animate by creating the boilerplate files <a href="#animation-boilerplate">above</a>.</p>
 <p>A <a href="#positionanimationstep">PositionAnimationStep</a> can be created to translate the shape, and a <a href="#rotationanimationstep">RotationAnimationStep</a> to rotate it</p>
 <pre class='hljs'><span class="hljs-keyword">const</span> translate = p.animations.position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });
 <span class="hljs-keyword">const</span> rotate = p.animations.rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });</pre>
@@ -4822,7 +4971,9 @@ p.animations.new()
   
 
   <p>Animation Manager</p>
-<p>This class manages animations attached to a <a href="#diagramelement">DiagramElement</a>.</p>
+<p>This class manages animations and creates animation steps for use in
+animations.</p>
+<p>Animation managers are the <code>animations</code> property of a <a href="#diagramelement">DiagramElement</a>.</p>
 
   
   
@@ -4859,19 +5010,6 @@ p.animations.new()
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>animations</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#animationstep">AnimationStep</a>>)</code>
-          : list of animations running
-or about to start
-
-          
-        </div>
-      
-    </div>
-  
 
   
 
@@ -4888,12 +5026,116 @@ or about to start
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// animate a position animation step, then rotation animation step</span>
+p.animations.new()
+  .then(p.animations.position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }))
+  .then(p.animations.rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }))
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// simple animations can create animation steps more elegantly</span>
+p.animations.new()
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// parallel animations must use explicit animation steps</span>
+p.animations.new()
+  .inParallel([
+     p.animations.position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0.5</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }),
+     p.animations.scale({ <span class="hljs-attr">target</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+   ])
+  .start();</pre>
+    
+  
 
   
 
   
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
+  
+    <div class='border-bottom' id='animationmanagernew'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>new(name)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>New animation builder</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        AnimationBuilder
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>p.animations.new()
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
   
     <div class='border-bottom' id='animationmanagerrotation'>
       <div class="clearfix small pointer toggle-sibling">
@@ -4907,7 +5149,7 @@ or about to start
 
   
 
-  <p>Rotation animation step tied to this element</p>
+  <p>Create a Rotation animation step that uses this element by default</p>
 
   
   
@@ -4951,6 +5193,15 @@ or about to start
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> rot = p.animations.rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });
+p.animations.new()
+  .then(rot)
+  .start();</pre>
+    
+  
 
   
 
@@ -4976,7 +5227,7 @@ or about to start
 
   
 
-  <p>Scale animation step tied to this element</p>
+  <p>Create a Scale animation step tied to this element</p>
 
   
   
@@ -5045,7 +5296,7 @@ or about to start
 
   
 
-  <p>Trigger animation step</p>
+  <p>Create a Trigger animation step</p>
 
   
   
@@ -5063,7 +5314,7 @@ or about to start
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#typetriggerstepinputoptions">TypeTriggerStepInputOptions</a>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a>)</code>
 	    
           </div>
           
@@ -5077,7 +5328,7 @@ or about to start
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#triggerstep">TriggerStep</a></code>:
+      <code><a href="#triggeranimationstep">TriggerAnimationStep</a></code>:
         
 
       
@@ -5114,7 +5365,7 @@ or about to start
 
   
 
-  <p>Delay animation step
+  <p>Create a Delay animation step
 Use the <code>duration</code> value in <code>options</code> to define delay duration</p>
 
   
@@ -5185,7 +5436,7 @@ Use the <code>duration</code> value in <code>options</code> to define delay dura
 
   
 
-  <p>Translation or Position animation step tied to this element</p>
+  <p>Create a Translation or Position animation step tied to this element</p>
 
   
   
@@ -5254,7 +5505,7 @@ Use the <code>duration</code> value in <code>options</code> to define delay dura
 
   
 
-  <p>Translation or Position animation step tied to this element</p>
+  <p>Create a Translation or Position animation step tied to this element</p>
 
   
   
@@ -5323,7 +5574,7 @@ Use the <code>duration</code> value in <code>options</code> to define delay dura
 
   
 
-  <p>Color animation step tied to this element</p>
+  <p>Create a Color animation step tied to this element</p>
 
   
   
@@ -5392,7 +5643,7 @@ Use the <code>duration</code> value in <code>options</code> to define delay dura
 
   
 
-  <p>Color animation step tied to this element</p>
+  <p>Create a Opacity animation step tied to this element</p>
 
   
   
@@ -5461,7 +5712,7 @@ Use the <code>duration</code> value in <code>options</code> to define delay dura
 
   
 
-  <p>Transform animation step tied to this element</p>
+  <p>Create a Transform animation step tied to this element</p>
 
   
   
@@ -5530,7 +5781,7 @@ Use the <code>duration</code> value in <code>options</code> to define delay dura
 
   
 
-  <p>Dissolve in animation step
+  <p>Create a Dissolve in animation step
 Use the <code>duration</code> value in <code>options</code> to define dissolving duration</p>
 
   
@@ -5609,7 +5860,7 @@ Use the <code>duration</code> value in <code>options</code> to define dissolving
 
   
 
-  <p>Dissolve out animation step
+  <p>Create a Dissolve out animation step
 Use the <code>duration</code> value in <code>options</code> to define dissolving duration</p>
 
   
@@ -5680,7 +5931,7 @@ Use the <code>duration</code> value in <code>options</code> to define dissolving
 
   
 
-  <p>Dim color animation step
+  <p>Create a Dim color animation step
 Use the <code>duration</code> value in <code>options</code> to define dimming duration</p>
 
   
@@ -5751,7 +6002,7 @@ Use the <code>duration</code> value in <code>options</code> to define dimming du
 
   
 
-  <p>Undim color animation step
+  <p>Create a Undim color animation step
 Use the <code>duration</code> value in <code>options</code> to define undimming duration</p>
 
   
@@ -5822,7 +6073,7 @@ Use the <code>duration</code> value in <code>options</code> to define undimming 
 
   
 
-  <p>Transform animation step tied to this element</p>
+  <p>Create a Scenario animation step tied to this element</p>
 
   
   
@@ -5879,11 +6130,106 @@ Use the <code>duration</code> value in <code>options</code> to define undimming 
       </div>
     </div>
   
-    <div class='border-bottom' id='animationmanagernew'>
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='animationbuilder'>
+      AnimationBuilder
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Animation Builder</p>
+<p>Use to build a series of animation steps</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#serialanimationstep">SerialAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>elementOrOptionsIn</span> <code class='quiet'>((<a href="#diagramelement">DiagramElement</a> | TypeAnimationBuilderInputOptions)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeAnimationBuilderInputOptions>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#animationmanagernew">
+AnimationManager
+</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='animationbuilderrotation'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>new(name)</span>
+            <span class='code strong strong truncate'>rotation(options)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -5891,7 +6237,7 @@ Use the <code>duration</code> value in <code>options</code> to define undimming 
 
   
 
-  <p>New animation builder</p>
+  <p>Add a rotation animation step that uses this element by default</p>
 
   
   
@@ -5909,7 +6255,7 @@ Use the <code>duration</code> value in <code>options</code> to define undimming 
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_rotationanimationstep">OBJ_RotationAnimationStep</a>)</code>
 	    
           </div>
           
@@ -5920,6 +6266,1206 @@ Use the <code>duration</code> value in <code>options</code> to define undimming 
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>p.animations.new()
+  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuilderposition'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>position(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a position animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_positionanimationstep">OBJ_PositionAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuildertranslation'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>translation(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a translation animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_positionanimationstep">OBJ_PositionAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuilderscale'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>scale(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a scale animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_scaleanimationstep">OBJ_ScaleAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuildertransform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>transform(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a transform animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(OBJ_ScaleAnimaOBJ_TransformAnimationStepionStep)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuilderscenario'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>scenario(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a scenario animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_scenarioanimationstep">OBJ_ScenarioAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuilderscenarios'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>scenarios(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a scenarios animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(OBJ_ScenariosAnimationStep)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuildercolor'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>color(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a color animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_coloranimationstep">OBJ_ColorAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuilderopacity'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>opacity(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add an opacity animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_opacityanimationstep">OBJ_OpacityAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuilderdissolveout'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>dissolveOut(durationOrOptions, args)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add an dissolve out animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>(<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuilderdissolvein'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>dissolveIn(durationOrOptions, args)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add an dissolve in animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>(<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuilderdim'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>dim(durationOrOptions, args)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add an dim animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>(<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuilderundim'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>undim(durationOrOptions, args)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add an undim animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>(<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuilderdelay'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>delay(delayOrOptions, args, durationOrOptions)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a delay animation step</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>delayOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_animationstep">OBJ_AnimationStep</a>)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_animationstep">OBJ_AnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>(<a href="#obj_animationstep">OBJ_AnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuildertrigger'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>trigger(triggerOrOptions, args)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a trigger animation step</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>triggerOrOptions</span> <code class='quiet'>(<a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuilderinparallel'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>inParallel(stepsOrOptions, options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a parallel animation step</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>stepsOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#animationstep">AnimationStep</a> | null)> | TypeParallelAnimationStepInputOptions)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeParallelAnimationStepInputOptions>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='animationbuilderinserial'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>inSerial(stepsOrOptions, options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a serial animation step</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>stepsOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#animationstep">AnimationStep</a> | null)> | TypeSerialAnimationStepInputOptions)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;TypeSerialAnimationStepInputOptions>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
   
 
   
@@ -7562,6 +9108,174 @@ whichever direction doesn't pass through angle 0.
     </div>
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='triggeranimationstep'>
+      TriggerAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Trigger Animation Step</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#animationstep">AnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>triggerOrOptionsIn</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a> | <a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a>)
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_triggeranimationstep'>
+      OBJ_TriggerAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Trigger Step animation options</p>
+<p>A trigger step is a zero duration animation step that triggers a custom
+function</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_animationstep">OBJ_AnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>payload</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)?)</code>
+          : payload to pass to callback (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>element</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>)</code>
+          : <a href="#diagramelement">DiagramElement</a>
+ to associate with
+callback - if the 
+<code>callback</code>
+ is a string then this element's
+
+<a href="FunctionMap">FunctionMap</a>
+ will be searched for the corresponding function
+
+          
+        </div>
+      
+    </div>
   
 
   
@@ -23470,174 +25184,6 @@ start or end of the animation.</p>
 
       
     
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typetriggerstepinputoptions'>
-      TypeTriggerStepInputOptions
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Trigger Step animation options</p>
-<p>A trigger step is a zero duration animation step that triggers a custom
-function</p>
-
-  
-    <p style="display: none;">      Type:
-      any
-    </p>
-  
-  
-    <p>
-      Extends
-      
-        <a href="#obj_animationstep">OBJ_AnimationStep</a>
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>payload</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)?)</code>
-          : payload to pass to callback (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>element</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>)</code>
-          : <a href="#diagramelement">DiagramElement</a>
- to associate with
-callback - if the 
-<code>callback</code>
- is a string then this element's
-
-<a href="FunctionMap">FunctionMap</a>
- will be searched for the corresponding function
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='triggerstep'>
-      TriggerStep
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Trigger Animation Step</p>
-
-  
-  
-    <p>
-      Extends
-      
-        <a href="#animationstep">AnimationStep</a>
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>triggerOrOptionsIn</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a> | <a href="#typetriggerstepinputoptions">TypeTriggerStepInputOptions</a>)
-            = <code>{}</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typetriggerstepinputoptions">TypeTriggerStepInputOptions</a>>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
   
 
   

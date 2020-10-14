@@ -1,4 +1,4 @@
-import { TriggerStep } from './TriggerStep';
+import { TriggerAnimationStep } from './TriggerStep';
 import * as tools from '../../../tools/tools';
 import makeDiagram from '../../../__mocks__/makeDiagram';
 import {
@@ -33,7 +33,7 @@ describe('Animation Trigger', () => {
   test('Instantiation', () => {
     const onFinish = () => {};
     const completeOnCancel = false;
-    const step = new TriggerStep({
+    const step = new TriggerAnimationStep({
       onFinish,
       completeOnCancel,
       callback: trigger1,

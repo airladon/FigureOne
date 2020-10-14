@@ -5,7 +5,7 @@ import { DiagramElement } from '../Element';
 // import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/SerialAnimationStep';
 // import type {
 //   OBJ_PositionAnimationStep, TypeParallelAnimationStepInputOptions,
-//   OBJ_AnimationStep, TypeTriggerStepInputOptions,
+//   OBJ_AnimationStep, OBJ_TriggerAnimationStep,
 //   OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
 // } from './Animation';
 // eslint-disable-next-line import/no-cycle
@@ -27,48 +27,35 @@ export type TypeAnimationManagerInputOptions = {
 
 /* eslint-disable max-len */
 /**
- * @class
  * Animation Manager
  *
  * This class manages animations and creates animation steps for use in
  * animations.
  *
- * @property {Array<AnimationStep>} animations list of animations running
- * or about to start
- * @method {(OBJ_RotationAnimationStep) => RotationAnimationStep} rotation
- * @property {(OBJ_ScaleAnimationStep) => anim.ScaleAnimationStep} scale
- * @property {(TypeTriggerStepInputOptions) => TriggerStep} trigger
- * @property {(OBJ_AnimationStep) => anim.DelayAnimationStep} delay
- * @property {(OBJ_PositionAnimationStep) => anim.PositionAnimationStep} translation
- * @property {(OBJ_PositionAnimationStep) => anim.PositionAnimationStep} position
- * @property {(OBJ_ColorAnimationStep) => anim.ColorAnimationStep} color
- * @property {(OBJ_OpacityAnimationStep) => anim.OpacityAnimationStep} opacity
- * @property {(OBJ_TransformAnimationStep) =>  anim.TransformAnimationStep} transform
- * @property {(TypePulseTransformAnimationStepInputOptions) => anim.PulseTransformAnimationStep} pulseTransform
- * @property {(TypePulseAnimationStepInputOptions) => anim.PulseAnimationStep} pulse
- * @property {(OBJ_OpacityAnimationStep = {}) => anim.DissolveInAnimationStep} dissolveIn
- * @property {(number | OBJ_OpacityAnimationStep) => anim.DissolveOutAnimationStep} dissolveOut
- * @property {(number | OBJ_ColorAnimationStep) => anim.DimAnimationStep} dim
- * @property {(number | OBJ_ColorAnimationStep) => anim.UndimAnimationStep} undim
- * @property {(TypeAnimationBuilderInputOptions) => new anim.AnimationBuilder} builder
- * @property {(OBJ_ScenarioAnimationStepInputOptions) => anim.ScenarioAnimationStep} scenario
- * @property {(TypeParallelAnimationStepInputOptions) => anim.ParallelAnimationStep} scenarios
+ * Animation managers are the `animations` property of a {@link DiagramElement}.
  *
  * @see {@link DiagramElement}
  * @example
- * //index.js
- * const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
+ * // animate a position animation step, then rotation animation step
+ * p.animations.new()
+ *   .then(p.animations.position({ target: [0.5, 0], duration: 2 }))
+ *   .then(p.animations.rotation({ target: Math.PI, duration: 2 }))
+ *   .start();
  *
- * diagram.addElement({
- *   name: 'p', method: 'polygon', options: { fill: true, radius: 0.2 },
- * });
- * diagram.initialize();
- *
- * // element to animate
- * const p = diagram.getElement('p');
+ * @example
+ * // simple animations can create animation steps more elegantly
  * p.animations.new()
  *   .position({ target: [0.5, 0], duration: 2 })
  *   .rotation({ target: Math.PI, duration: 2 })
+ *   .start();
+ *
+ * @example
+ * // parallel animations must use explicit animation steps
+ * p.animations.new()
+ *   .inParallel([
+ *      p.animations.position({ target: [-0.5, 0.5], duration: 2 }),
+ *      p.animations.scale({ target: 0.5, duration: 2 })
+ *    ])
  *   .start();
  */
 export default class AnimationManager {
@@ -120,9 +107,37 @@ export default class AnimationManager {
   }
 
   /**
-   * Rotation animation step tied to this element
+   * New animation builder
+   * @return AnimationBuilder
+   * @example
+   * p.animations.new()
+   *   .position({ target: [0.5, 0], duration: 2 })
+   *   .rotation({ target: Math.PI, duration: 2 })
+   *   .start();
+   *
+   */
+  new(name: ?string) {
+    const options = {};
+    if (this.element != null) {
+      options.element = this.element;
+    }
+    if (name != null) {
+      options.name = name;
+    }
+    const animation = new anim.AnimationBuilder(options);
+    this.animations.push(animation);
+    return animation;
+  }
+
+  /**
+   * Create a Rotation animation step that uses this element by default
    * @param {OBJ_RotationAnimationStep} options
    * @return {RotationAnimationStep}
+   * @example
+   * const rot = p.animations.rotation({ target: Math.PI, duration: 2 });
+   * p.animations.new()
+   *   .then(rot)
+   *   .start();
    */
   rotation(...options: Array<OBJ_RotationAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
@@ -130,7 +145,7 @@ export default class AnimationManager {
   }
 
   /**
-   * Scale animation step tied to this element
+   * Create a Scale animation step tied to this element
    * @param {OBJ_ScaleAnimationStep} options
    * @return {ScaleAnimationStep}
    */
@@ -140,18 +155,18 @@ export default class AnimationManager {
   }
 
   /**
-   * Trigger animation step
-   * @param {TypeTriggerStepInputOptions} options
-   * @return {TriggerStep}
+   * Create a Trigger animation step
+   * @param {OBJ_TriggerAnimationStep} options
+   * @return {TriggerAnimationStep}
    */
   // eslint-disable-next-line class-methods-use-this
-  trigger(...options: Array<TypeTriggerStepInputOptions>) {
+  trigger(...options: Array<OBJ_TriggerAnimationStep>) {
     const optionsToUse = joinObjects({}, ...options);
-    return new anim.TriggerStep(optionsToUse);
+    return new anim.TriggerAnimationStep(optionsToUse);
   }
 
   /**
-   * Delay animation step
+   * Create a Delay animation step
    * Use the `duration` value in `options` to define delay duration
    * @param {number | OBJ_AnimationStep} delayOrOptions
    * @return {DelayAnimationStep}
@@ -171,7 +186,7 @@ export default class AnimationManager {
   }
 
   /**
-   * Translation or Position animation step tied to this element
+   * Create a Translation or Position animation step tied to this element
    * @param {OBJ_PositionAnimationStep} options
    * @return {PositionAnimationStep}
    */
@@ -181,7 +196,7 @@ export default class AnimationManager {
   }
 
   /**
-   * Translation or Position animation step tied to this element
+   * Create a Translation or Position animation step tied to this element
    * @param {OBJ_PositionAnimationStep} options
    * @return {PositionAnimationStep}
    */
@@ -191,7 +206,7 @@ export default class AnimationManager {
   }
 
   /**
-   * Color animation step tied to this element
+   * Create a Color animation step tied to this element
    * @param {OBJ_ColorAnimationStep} options
    * @return {ColorAnimationStep}
    */
@@ -201,7 +216,7 @@ export default class AnimationManager {
   }
 
   /**
-   * Color animation step tied to this element
+   * Create a Opacity animation step tied to this element
    * @param {OBJ_OpacityAnimationStep} options
    * @return {OpacityAnimationStep}
    */
@@ -211,7 +226,7 @@ export default class AnimationManager {
   }
 
   /**
-   * Transform animation step tied to this element
+   * Create a Transform animation step tied to this element
    * @param {OBJ_TransformAnimationStep} options
    * @return {TransformAnimationStep}
    */
@@ -231,7 +246,7 @@ export default class AnimationManager {
   }
 
   /**
-   * Dissolve in animation step
+   * Create a Dissolve in animation step
    * Use the `duration` value in `options` to define dissolving duration
    * @param {number | OBJ_ElementAnimationStep} timeOrOptions
    * @return {DissolveInAnimationStep}
@@ -248,7 +263,7 @@ export default class AnimationManager {
   }
 
   /**
-   * Dissolve out animation step
+   * Create a Dissolve out animation step
    * Use the `duration` value in `options` to define dissolving duration
    * @param {number | OBJ_ElementAnimationStep} durationOrOptions
    * @return {DissolveOutAnimationStep}
@@ -265,7 +280,7 @@ export default class AnimationManager {
   }
 
   /**
-   * Dim color animation step
+   * Create a Dim color animation step
    * Use the `duration` value in `options` to define dimming duration
    * @param {number | OBJ_ElementAnimationStep} durationOrOptions
    * @return {DimAnimationStep}
@@ -282,7 +297,7 @@ export default class AnimationManager {
   }
 
   /**
-   * Undim color animation step
+   * Create a Undim color animation step
    * Use the `duration` value in `options` to define undimming duration
    * @param {number | OBJ_ElementAnimationStep} durationOrOptions
    * @return {UndimAnimationStep}
@@ -304,7 +319,7 @@ export default class AnimationManager {
   }
 
   /**
-   * Transform animation step tied to this element
+   * Create a Scenario animation step tied to this element
    * @param {OBJ_ScenarioAnimationStep} options
    * @return {ScenarioAnimationStep}
    */
@@ -588,22 +603,6 @@ export default class AnimationManager {
       }
     }
     return this.new(name);
-  }
-
-  /**
-   * New animation builder
-   */
-  new(name: ?string) {
-    const options = {};
-    if (this.element != null) {
-      options.element = this.element;
-    }
-    if (name != null) {
-      options.name = name;
-    }
-    const animation = new anim.AnimationBuilder(options);
-    this.animations.push(animation);
-    return animation;
   }
 
   newFromStep(nameOrStep: anim.AnimationStep) {

@@ -1,17 +1,25 @@
-// Create diagram
-const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
-
-diagram.addElement({
-  name: 'p', method: 'polygon', options: { fill: true, radius: 0.2 },
-});
+const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2]});
+diagram.addElements([
+  {
+    name: 'p',
+    method: 'polygon',
+    options: {
+      sides: 4,
+      fill: true,
+    },
+  },
+  {
+    name: 'q',
+    method: 'polygon',
+    options: {
+      sides: 5,
+      fill: true,
+    },
+  },
+]);
 diagram.initialize();
 
-const p = diagram.getElement('p');
 
-p.animations.new()
-  .translation({ target: [0.5, 0], duration: 2 })
-  .whenFinished(() => { console.log('done') })
-  .start();
 
 // const translate = p.animations.position({ target: [0.5, 0], duration: 2 });
 // const rotate = p.animations.rotation({ target: Math.PI, duration: 2 });

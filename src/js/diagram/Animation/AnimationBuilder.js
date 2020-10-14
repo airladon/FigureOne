@@ -5,7 +5,7 @@ import { DiagramElement } from '../Element';
 import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/SerialAnimationStep';
 import type {
   OBJ_PositionAnimationStep, TypeParallelAnimationStepInputOptions,
-  OBJ_AnimationStep, TypeTriggerStepInputOptions,
+  OBJ_AnimationStep, OBJ_TriggerAnimationStep,
   OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
   OBJ_TransformAnimationStep,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
@@ -24,9 +24,19 @@ export type TypeAnimationBuilderInputOptions = {
   element?: DiagramElement;
 } & TypeSerialAnimationStepInputOptions;
 
+/**
+ * Animation Builder
+ *
+ * Use to build a series of animation steps
+ * @extends SerialAnimationStep
+ * @see <a href="#animationmanagernew">AnimationManager</a>
+ */
 export default class AnimationBuilder extends animation.SerialAnimationStep {
   element: ?DiagramElement;
 
+  /**
+   * @private
+   */
   constructor(
     elementOrOptionsIn: DiagramElement | TypeAnimationBuilderInputOptions = {},
     ...optionsIn: Array<TypeAnimationBuilderInputOptions>
@@ -134,33 +144,57 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  rotation(...optionsIn: Array<OBJ_RotationAnimationStep>) {
+  /**
+   * Add a rotation animation step that uses this element by default
+   * @param {OBJ_RotationAnimationStep} options
+   * @return {AnimationBuilder}
+   * @example
+   * p.animations.new()
+   *   .rotation({ target: Math.PI, duration: 2 })
+   *   .start();
+   */
+  rotation(...options: Array<OBJ_RotationAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(new animation.RotationAnimationStep(options));
+      const optionsToUse = joinObjects({}, defaultOptions, ...options);
+      this.then(new animation.RotationAnimationStep(optionsToUse));
     }
     return this;
   }
 
-  position(...optionsIn: Array<OBJ_PositionAnimationStep>) {
+  /**
+   * Add a position animation step that uses this element by default
+   * @param {OBJ_PositionAnimationStep} options
+   * @return {AnimationBuilder}
+   */
+  position(...options: Array<OBJ_PositionAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(new animation.PositionAnimationStep(options));
+      const optionsToUse = joinObjects({}, defaultOptions, ...options);
+      this.then(new animation.PositionAnimationStep(optionsToUse));
     }
     return this;
   }
 
-  translation(...optionsIn: Array<OBJ_PositionAnimationStep>) {
-    return this.position(...optionsIn);
+  /**
+   * Add a translation animation step that uses this element by default
+   * @param {OBJ_PositionAnimationStep} options
+   * @return {AnimationBuilder}
+   */
+  translation(...options: Array<OBJ_PositionAnimationStep>) {
+    return this.position(...options);
   }
 
-  scale(...optionsIn: Array<OBJ_ScaleAnimationStep>) {
+  /**
+   * Add a scale animation step that uses this element by default
+   * @param {OBJ_ScaleAnimationStep} options
+   * @return {AnimationBuilder}
+   */
+  scale(...options: Array<OBJ_ScaleAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(new animation.ScaleAnimationStep(options));
+      const optionsToUse = joinObjects({}, defaultOptions, ...options);
+      this.then(new animation.ScaleAnimationStep(optionsToUse));
     }
     return this;
   }
@@ -173,167 +207,232 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   //   return this.moveToPosition(...optionsIn);
   // }
 
-  transform(...optionsIn: Array<OBJ_TransformAnimationStep>) {
+  /**
+   * Add a transform animation step that uses this element by default
+   * @param {OBJ_ScaleAnimaOBJ_TransformAnimationStepionStep} options
+   * @return {AnimationBuilder}
+   */
+  transform(...options: Array<OBJ_TransformAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(new animation.TransformAnimationStep(options));
+      const optionsToUse = joinObjects({}, defaultOptions, ...options);
+      this.then(new animation.TransformAnimationStep(optionsToUse));
     }
     return this;
   }
 
-  pulseTransforms(...optionsIn: Array<TypePulseTransformAnimationStepInputOptions>) {
+  pulseTransforms(...options: Array<TypePulseTransformAnimationStepInputOptions>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(new animation.PulseTransformAnimationStep(options));
+      const optionsToUse = joinObjects({}, defaultOptions, ...options);
+      this.then(new animation.PulseTransformAnimationStep(optionsToUse));
     }
     return this;
   }
 
+  /**
+   * Add a scenario animation step that uses this element by default
+   * @param {OBJ_ScenarioAnimationStep} options
+   * @return {AnimationBuilder}
+   */
   scenario(
-    ...optionsIn: Array<OBJ_TransformAnimationStep & { scenario: string }>
+    ...options: Array<OBJ_ScenarioAnimationStep & { scenario: string }>
   ) {
     // if (this.element != null) {
     //   const defaultOptions = { element: this.element };
-    //   const options = joinObjects({}, defaultOptions, ...optionsIn);
-    //   this.then(options.element.anim.scenario(options));
+    //   const optionsToUse = joinObjects({}, defaultOptions, ...options);
+    //   this.then(optionsToUse.element.anim.scenario(optionsToUse));
     // }
     // return this;
     if (this.element != null) {
       const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(new animation.ScenarioAnimationStep(options));
+      const optionsToUse = joinObjects({}, defaultOptions, ...options);
+      this.then(new animation.ScenarioAnimationStep(optionsToUse));
     }
     return this;
   }
 
+  /**
+   * Add a scenarios animation step that uses this element by default
+   * @param {OBJ_ScenariosAnimationStep} options
+   * @return {AnimationBuilder}
+   */
   scenarios(    // eslint-disable-next-line max-len
-    ...optionsIn: Array<OBJ_TransformAnimationStep & TypeParallelAnimationStepInputOptions>
+    ...options: Array<OBJ_TransformAnimationStep & TypeParallelAnimationStepInputOptions>
   ) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(options.element.anim.scenarios(options));
+      const optionsToUse = joinObjects({}, defaultOptions, ...options);
+      this.then(optionsToUse.element.anim.scenarios(optionsToUse));
     }
     return this;
   }
 
-  color(...optionsIn: Array<OBJ_ColorAnimationStep>) {
+  /**
+   * Add a color animation step that uses this element by default
+   * @param {OBJ_ColorAnimationStep} options
+   * @return {AnimationBuilder}
+   */
+  color(...options: Array<OBJ_ColorAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(new animation.ColorAnimationStep(options));
+      const optionsToUse = joinObjects({}, defaultOptions, ...options);
+      this.then(new animation.ColorAnimationStep(optionsToUse));
     }
     return this;
   }
 
-  opacity(...optionsIn: Array<OBJ_OpacityAnimationStep>) {
+  /**
+   * Add an opacity animation step that uses this element by default
+   * @param {OBJ_OpacityAnimationStep} options
+   * @return {AnimationBuilder}
+   */
+  opacity(...options: Array<OBJ_OpacityAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(new animation.OpacityAnimationStep(options));
+      const optionsToUse = joinObjects({}, defaultOptions, ...options);
+      this.then(new animation.OpacityAnimationStep(optionsToUse));
     }
     return this;
   }
 
+  /**
+   * Add an dissolve out animation step that uses this element by default
+   * @param {OBJ_ElementAnimationStep} durationOrOptions
+   * @return {AnimationBuilder}
+   */
   dissolveOut(
-    timeOrOptionsIn: number | OBJ_ColorAnimationStep = {},
-    ...args: Array<OBJ_ColorAnimationStep>
+    durationOrOptions: number | OBJ_ElementAnimationStep = {},
+    ...args: Array<OBJ_ElementAnimationStep>
   ) {
     const defaultOptions = { element: this.element };
     let options;
-    if (typeof timeOrOptionsIn === 'number') {
-      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    if (typeof durationOrOptions === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: durationOrOptions }, ...args);
     } else {
-      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+      options = joinObjects({}, defaultOptions, durationOrOptions, ...args);
     }
     this.then(animation.dissolveOut(options));
     return this;
   }
 
+  /**
+   * Add an dissolve in animation step that uses this element by default
+   * @param {OBJ_ElementAnimationStep} durationOrOptions
+   * @return {AnimationBuilder}
+   */
   dissolveIn(
-    timeOrOptionsIn: number | OBJ_ColorAnimationStep = {},
-    ...args: Array<OBJ_ColorAnimationStep>
+    durationOrOptions: number | OBJ_ElementAnimationStep = {},
+    ...args: Array<OBJ_ElementAnimationStep>
   ) {
     const defaultOptions = { element: this.element };
     let options;
-    if (typeof timeOrOptionsIn === 'number') {
-      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    if (typeof durationOrOptions === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: durationOrOptions }, ...args);
     } else {
-      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+      options = joinObjects({}, defaultOptions, durationOrOptions, ...args);
     }
     this.then(animation.dissolveIn(options));
     return this;
   }
 
+  /**
+   * Add an dim animation step that uses this element by default
+   * @param {OBJ_ElementAnimationStep} durationOrOptions
+   * @return {AnimationBuilder}
+   */
   dim(
-    timeOrOptionsIn: number | OBJ_ColorAnimationStep = {},
-    ...args: Array<OBJ_ColorAnimationStep>
+    durationOrOptions: number | OBJ_ElementAnimationStep = {},
+    ...args: Array<OBJ_ElementAnimationStep>
   ) {
     const defaultOptions = { element: this.element };
     let options;
-    if (typeof timeOrOptionsIn === 'number') {
-      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    if (typeof durationOrOptions === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: durationOrOptions }, ...args);
     } else {
-      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+      options = joinObjects({}, defaultOptions, durationOrOptions, ...args);
     }
     this.then(animation.dim(options));
     return this;
   }
 
+  /**
+   * Add an undim animation step that uses this element by default
+   * @param {OBJ_ElementAnimationStep} durationOrOptions
+   * @return {AnimationBuilder}
+   */
   undim(
-    timeOrOptionsIn: number | OBJ_ColorAnimationStep = {},
-    ...args: Array<OBJ_ColorAnimationStep>
+    durationOrOptions: number | OBJ_ElementAnimationStep = {},
+    ...args: Array<OBJ_ElementAnimationStep>
   ) {
     const defaultOptions = { element: this.element };
     let options;
-    if (typeof timeOrOptionsIn === 'number') {
-      options = joinObjects({}, defaultOptions, { duration: timeOrOptionsIn }, ...args);
+    if (typeof durationOrOptions === 'number') {
+      options = joinObjects({}, defaultOptions, { duration: durationOrOptions }, ...args);
     } else {
-      options = joinObjects({}, defaultOptions, timeOrOptionsIn, ...args);
+      options = joinObjects({}, defaultOptions, durationOrOptions, ...args);
     }
     this.then(animation.undim(options));
     return this;
   }
 
+  /**
+   * Add a delay animation step
+   * @param {OBJ_AnimationStep} durationOrOptions
+   * @return {AnimationBuilder}
+   */
   delay(
-    numOrOptionsIn: number | OBJ_AnimationStep = {},
+    delayOrOptions: number | OBJ_AnimationStep = {},
     ...args: Array<OBJ_AnimationStep>
   ) {
-    this.then(animation.delay(numOrOptionsIn, ...args));
+    this.then(animation.delay(delayOrOptions, ...args));
     return this;
   }
 
+  /**
+   * Add a trigger animation step
+   * @param {OBJ_TriggerAnimationStep} triggerOrOptions
+   * @return {AnimationBuilder}
+   */
   trigger(
-    triggerOrOptionsIn: Function | TypeTriggerStepInputOptions = {},
-    ...optionsIn: Array<TypeTriggerStepInputOptions>
+    triggerOrOptions: Function | OBJ_TriggerAnimationStep = {},
+    ...args: Array<OBJ_TriggerAnimationStep>
   ) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
-      const options = joinObjects({}, defaultOptions, ...optionsIn);
-      this.then(animation.trigger(triggerOrOptionsIn, options));
+      const optionsToUse = joinObjects({}, defaultOptions, ...args);
+      this.then(animation.trigger(triggerOrOptions, optionsToUse));
     } else {
-      this.then(animation.trigger(triggerOrOptionsIn, ...optionsIn));
+      this.then(animation.trigger(triggerOrOptions, ...args));
     }
     // this.then(animation.trigger(triggerOrOptionsIn, ...optionsIn));
     return this;
   }
 
+  /**
+   * Add a parallel animation step
+   * @param {Array<AnimationStep | null> | TypeParallelAnimationStepInputOptions} stepsOrOptions
+   * @return {AnimationBuilder}
+   */
   inParallel(
-    stepsOrOptionsIn: Array<animation.AnimationStep | null>
+    stepsOrOptions: Array<animation.AnimationStep | null>
                       | TypeParallelAnimationStepInputOptions = {},
-    ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
+    ...options: Array<TypeParallelAnimationStepInputOptions>
   ) {
-    this.then(animation.inParallel(stepsOrOptionsIn, ...optionsIn));
+    this.then(animation.inParallel(stepsOrOptions, ...options));
     return this;
   }
 
+  /**
+   * Add a serial animation step
+   * @param {Array<AnimationStep | null> | TypeSerialAnimationStepInputOptions} stepsOrOptions
+   * @return {AnimationBuilder}
+   */
   inSerial(
-    stepsOrOptionsIn: Array<animation.AnimationStep> | TypeSerialAnimationStepInputOptions = {},
-    ...optionsIn: Array<TypeSerialAnimationStepInputOptions>
+    stepsOrOptions: Array<animation.AnimationStep> | TypeSerialAnimationStepInputOptions = {},
+    ...options: Array<TypeSerialAnimationStepInputOptions>
   ) {
-    this.then(animation.inSerial(stepsOrOptionsIn, ...optionsIn));
+    this.then(animation.inSerial(stepsOrOptions, ...options));
     return this;
   }
 

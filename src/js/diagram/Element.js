@@ -35,7 +35,7 @@ import type {
   OBJ_ColorAnimationStep, OBJ_TransformAnimationStep,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
   TypePulseAnimationStepInputOptions, OBJ_OpacityAnimationStep,
-  TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
+  TypeParallelAnimationStepInputOptions, OBJ_TriggerAnimationStep,
   OBJ_AnimationStep, TypePulseTransformAnimationStepInputOptions,
   OBJ_ScenarioAnimationStepInputOptions,
 } from './Animation/Animation';
@@ -575,7 +575,7 @@ class DiagramElement {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.ScaleAnimationStep(options);
       },
-      trigger: (...optionsIn: Array<TypeTriggerStepInputOptions>) => {
+      trigger: (...optionsIn: Array<OBJ_TriggerAnimationStep>) => {
         const options = joinObjects({}, ...optionsIn);
         return new animations.TriggerStep(options);
       },
