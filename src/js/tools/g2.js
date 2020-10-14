@@ -3063,7 +3063,8 @@ class Transform {
   // If the two transforms have different order types, then just return
   // the current transform.
   /**
-   * Subtract `transformToSubtract` from this transform chain. Both transform
+   * Subtract each chain element in `transformToSubtract` from each chain
+   * element in this transform chain. Both transform
    * chains must be similar and have the same order of {@link Rotation},
    * {@link Scale} and {@link Translation} transform elements
    * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
@@ -3083,6 +3084,13 @@ class Transform {
   // Add a transform to the current one.
   // If the two transforms have different order types, then just return
   // the current transform.
+  /**
+   * Add each chain element in `transformToSubtract` to each chain
+   * element in this transform chain. Both transform
+   * chains must be similar and have the same order of {@link Rotation},
+   * {@link Scale} and {@link Translation} transform elements
+   * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
+   */
   add(transformToAdd: Transform = new Transform()): Transform {
     if (!this.isSimilarTo(transformToAdd)) {
       return new Transform(this.order, this.name);
@@ -3096,6 +3104,13 @@ class Transform {
   }
 
   // transform step wise multiplication
+  /**
+   * Multiply each chain element in `transformToSubtract` with each chain
+   * element in this transform chain. Both transform
+   * chains must be similar and have the same order of {@link Rotation},
+   * {@link Scale} and {@link Translation} transform elements
+   * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
+   */
   mul(transformToMul: Transform = new Transform()): Transform {
     if (!this.isSimilarTo(transformToMul)) {
       return new Transform(this.order, this.name);
@@ -3108,6 +3123,11 @@ class Transform {
     return new Transform(order, this.name);
   }
 
+  /**
+   * Return a transform chain that is `transform` transfomed by this transform
+   * chain.
+   * @return {Transform}
+   */
   transform(transform: Transform) {
     const t = new Transform([], this.name);
     t.order = transform.order.concat(this.order);
@@ -3115,6 +3135,10 @@ class Transform {
     return t;
   }
 
+  /**
+   * Return a transform chain that is this transform transformed by `transform`
+   * @return {Transform}
+   */
   transformBy(transform: Transform): Transform {
     const t = new Transform([], this.name);
     t.order = this.order.concat(transform.order);
@@ -3122,6 +3146,9 @@ class Transform {
     return t;
   }
 
+  /**
+   * Return a duplicate transform with all values rounded
+   */
   round(precision: number = 8): Transform {
     const order = [];
     for (let i = 0; i < this.order.length; i += 1) {
@@ -3130,6 +3157,16 @@ class Transform {
     return new Transform(order, this.name);
   }
 
+  /**
+   * Return a duplicate transform that is clipped to `minTransform` and
+   * `maxTransform`. Both `minTransform` and `maxTransform` must be similar
+   * to this transform meaning they must all share the same order of
+   * {@link Rotation}, {@link Scale} and {@link Translation} transform elements.
+   *
+   * Use `limitLine` to clip the first {@link Translation} transform in the
+   * chain to within a {@link Line}.
+   * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
+   */
   clip(
     minTransform: Transform,
     maxTransform: Transform,
@@ -3255,6 +3292,10 @@ class Transform {
     return this.constant(0);
   }
 
+  /**
+   * `true` if all transforms within the transform chain are below the
+   * `zeroThreshold`
+   */
   isZero(zeroThreshold: number = 0): boolean {
     for (let i = 0; i < this.order.length; i += 1) {
       const t = this.order[i];
@@ -3271,6 +3312,9 @@ class Transform {
     return true;
   }
 
+  /**
+   * Return a duplicate transform.
+   */
   _dup(): Transform {
     const t = new Transform(this.order, this.name);
     t.index = this.index;
@@ -3351,6 +3395,10 @@ class Transform {
     return v.clipMag(zeroThreshold, maxTransform);
   }
 
+  /**
+   * Return a duplicate transform chain where all transforms are
+   * identity transforms.
+   */
   identity() {
     const order = [];
     for (let i = 0; i < this.order.length; i += 1) {
