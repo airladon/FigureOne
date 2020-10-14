@@ -58,7 +58,7 @@ describe('Two Element Animation Examples', () => {
           duration: 1,
           progression: 'linear',
         });
-        const step2 = new anim.DelayStep({
+        const step2 = new anim.DelayAnimationStep({
           duration: 1,
         });
         const step3 = new anim.PositionAnimationStep({

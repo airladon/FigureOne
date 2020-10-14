@@ -10,6 +10,10 @@ export type TypeSerialAnimationStepInputOptions = {
   steps?: Array<AnimationStep>;
 } & OBJ_AnimationStep;
 
+/**
+ * Serial Animation Step
+ * @extends ElementAnimationStep
+ */
 export class SerialAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
   index: number;

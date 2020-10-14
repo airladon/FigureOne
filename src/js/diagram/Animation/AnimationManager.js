@@ -5,7 +5,7 @@ import { DiagramElement } from '../Element';
 // import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/SerialAnimationStep';
 // import type {
 //   OBJ_PositionAnimationStep, TypeParallelAnimationStepInputOptions,
-//   TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
+//   OBJ_AnimationStep, TypeTriggerStepInputOptions,
 //   OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
 // } from './Animation';
 // eslint-disable-next-line import/no-cycle
@@ -27,16 +27,18 @@ export type TypeAnimationManagerInputOptions = {
 
 /* eslint-disable max-len */
 /**
+ * @class
  * Animation Manager
  *
- * This class manages animations attached to a {@link DiagramElement}.
+ * This class manages animations and creates animation steps for use in
+ * animations.
  *
  * @property {Array<AnimationStep>} animations list of animations running
  * or about to start
  * @method {(OBJ_RotationAnimationStep) => RotationAnimationStep} rotation
  * @property {(OBJ_ScaleAnimationStep) => anim.ScaleAnimationStep} scale
  * @property {(TypeTriggerStepInputOptions) => TriggerStep} trigger
- * @property {(TypeDelayStepInputOptions) => anim.DelayStep} delay
+ * @property {(OBJ_AnimationStep) => anim.DelayAnimationStep} delay
  * @property {(OBJ_PositionAnimationStep) => anim.PositionAnimationStep} translation
  * @property {(OBJ_PositionAnimationStep) => anim.PositionAnimationStep} position
  * @property {(OBJ_ColorAnimationStep) => anim.ColorAnimationStep} color
@@ -53,6 +55,21 @@ export type TypeAnimationManagerInputOptions = {
  * @property {(TypeParallelAnimationStepInputOptions) => anim.ParallelAnimationStep} scenarios
  *
  * @see {@link DiagramElement}
+ * @example
+ * //index.js
+ * const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
+ *
+ * diagram.addElement({
+ *   name: 'p', method: 'polygon', options: { fill: true, radius: 0.2 },
+ * });
+ * diagram.initialize();
+ *
+ * // element to animate
+ * const p = diagram.getElement('p');
+ * p.animations.new()
+ *   .position({ target: [0.5, 0], duration: 2 })
+ *   .rotation({ target: Math.PI, duration: 2 })
+ *   .start();
  */
 export default class AnimationManager {
   element: ?DiagramElement;
@@ -137,7 +154,7 @@ export default class AnimationManager {
    * Delay animation step
    * Use the `duration` value in `options` to define delay duration
    * @param {number | OBJ_AnimationStep} delayOrOptions
-   * @return {DelayStep}
+   * @return {DelayAnimationStep}
    */
   // eslint-disable-next-line class-methods-use-this
   delay(
@@ -150,7 +167,7 @@ export default class AnimationManager {
     // } else {
     //   optionsToUse = joinObjects({}, delayOrOptions, ...args);
     // }
-    return new anim.DelayStep(delayOrOptions);
+    return new anim.DelayAnimationStep(delayOrOptions);
   }
 
   /**
@@ -573,13 +590,16 @@ export default class AnimationManager {
     return this.new(name);
   }
 
-  new(nameOrStep: ?string) {
+  /**
+   * New animation builder
+   */
+  new(name: ?string) {
     const options = {};
     if (this.element != null) {
       options.element = this.element;
     }
-    if (nameOrStep != null) {
-      options.name = nameOrStep;
+    if (name != null) {
+      options.name = name;
     }
     const animation = new anim.AnimationBuilder(options);
     this.animations.push(animation);

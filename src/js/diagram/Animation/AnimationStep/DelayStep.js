@@ -6,7 +6,7 @@ import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 
 
-// export type TypeDelayStepInputOptions = {
+// export type OBJ_AnimationStep = {
 //   duration?: number;
 // } & OBJ_AnimationStep;
 
@@ -14,7 +14,7 @@ import { joinObjects, duplicateFromTo } from '../../../tools/tools';
  * Delay animation step
  * @extends AnimationStep
  */
-export class DelayStep extends AnimationStep {
+export class DelayAnimationStep extends AnimationStep {
   constructor(
     numOrOptions: number | OBJ_AnimationStep = {},
     ...args: Array<OBJ_AnimationStep>
@@ -31,7 +31,7 @@ export class DelayStep extends AnimationStep {
   }
 
   _dup() {
-    const dup = new DelayStep();
+    const dup = new DelayAnimationStep();
     duplicateFromTo(this, dup);
     return dup;
   }
@@ -50,8 +50,8 @@ export class DelayStep extends AnimationStep {
 }
 
 export function delay(
-  numOrOptionsIn: number | TypeDelayStepInputOptions = {},
-  ...args: Array<TypeDelayStepInputOptions>
+  numOrOptionsIn: number | OBJ_AnimationStep = {},
+  ...args: Array<OBJ_AnimationStep>
 ) {
-  return new DelayStep(numOrOptionsIn, ...args);
+  return new DelayAnimationStep(numOrOptionsIn, ...args);
 }

@@ -81,6 +81,10 @@ export type OBJ_ScenarioAnimationStep = {
   clipRotationTo: '0to360' | '-180to180' | null;
 } & OBJ_ElementAnimationStep;
 
+/**
+ * Scenario Animation Step
+ * @extends ElementAnimationStep
+ */
 export default class ScenarioAnimationStep extends ParallelAnimationStep {
   element: ?DiagramElement;
   scenario: {

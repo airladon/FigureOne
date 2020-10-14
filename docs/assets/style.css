@@ -151,3 +151,6 @@ table {
   text-indent: -3em;
 }
 
+.hljs {
+  background: #e5e5e5 !important;
+}

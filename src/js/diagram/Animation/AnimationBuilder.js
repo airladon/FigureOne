@@ -5,7 +5,7 @@ import { DiagramElement } from '../Element';
 import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/SerialAnimationStep';
 import type {
   OBJ_PositionAnimationStep, TypeParallelAnimationStepInputOptions,
-  TypeDelayStepInputOptions, TypeTriggerStepInputOptions,
+  OBJ_AnimationStep, TypeTriggerStepInputOptions,
   OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
   OBJ_TransformAnimationStep,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
@@ -298,8 +298,8 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   }
 
   delay(
-    numOrOptionsIn: number | TypeDelayStepInputOptions = {},
-    ...args: Array<TypeDelayStepInputOptions>
+    numOrOptionsIn: number | OBJ_AnimationStep = {},
+    ...args: Array<OBJ_AnimationStep>
   ) {
     this.then(animation.delay(numOrOptionsIn, ...args));
     return this;

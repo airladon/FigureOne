@@ -1,4 +1,4 @@
-This introduction will introduce some key terms and concepts that are found frequently throughout the documentation.
+This will introduce some key terms and concepts that are found frequently throughout the documentation.
 
 #### Diagrams, Primitives and Collections
 

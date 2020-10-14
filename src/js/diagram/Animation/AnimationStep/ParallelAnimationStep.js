@@ -11,6 +11,10 @@ export type TypeParallelAnimationStepInputOptions = {
   steps?: Array<AnimationStep>;
 } & OBJ_AnimationStep;
 
+/**
+ * Parallel Animation Step
+ * @extends ElementAnimationStep
+ */
 // Animations get started from a parent, but finish themselves
 export class ParallelAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;

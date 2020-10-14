@@ -36,7 +36,7 @@ import type {
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
   TypePulseAnimationStepInputOptions, OBJ_OpacityAnimationStep,
   TypeParallelAnimationStepInputOptions, TypeTriggerStepInputOptions,
-  TypeDelayStepInputOptions, TypePulseTransformAnimationStepInputOptions,
+  OBJ_AnimationStep, TypePulseTransformAnimationStepInputOptions,
   OBJ_ScenarioAnimationStepInputOptions,
 } from './Animation/Animation';
 // eslint-disable-next-line import/no-cycle
@@ -579,9 +579,9 @@ class DiagramElement {
         const options = joinObjects({}, ...optionsIn);
         return new animations.TriggerStep(options);
       },
-      delay: (...optionsIn: Array<TypeDelayStepInputOptions>) => {
+      delay: (...optionsIn: Array<OBJ_AnimationStep>) => {
         const options = joinObjects({}, ...optionsIn);
-        return new animations.DelayStep(options);
+        return new animations.DelayAnimationStep(options);
       },
       translation: (...optionsIn: Array<OBJ_PositionAnimationStep>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
