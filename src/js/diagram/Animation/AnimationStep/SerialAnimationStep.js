@@ -10,21 +10,21 @@ import GlobalAnimation from '../../webgl/GlobalAnimation';
  * Serial animation step options object
  * @property {Array<AnimationStep>} steps animation steps to perform in serial
  */
-export type TypeSerialAnimationStepInputOptions = {
+export type OBJ_SerialAnimationStep = {
   steps?: Array<AnimationStep>;
 } & OBJ_AnimationStep;
 
 /**
  * Serial Animation Step
- * @extends ElementAnimationStep
+ * @extends AnimationStep
  */
 export class SerialAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
   index: number;
 
   constructor(
-    stepsOrOptionsIn: Array<AnimationStep> | TypeSerialAnimationStepInputOptions = {},
-    ...optionsIn: Array<TypeSerialAnimationStepInputOptions>
+    stepsOrOptionsIn: Array<AnimationStep> | OBJ_SerialAnimationStep = {},
+    ...optionsIn: Array<OBJ_SerialAnimationStep>
   ) {
     const defaultOptions = { steps: [] };
     let options;
@@ -55,7 +55,7 @@ export class SerialAnimationStep extends AnimationStep {
     return 'serialAnimationStep';
   }
 
-  // constructor(optionsIn: TypeSerialAnimationStepInputOptions = {}) {
+  // constructor(optionsIn: OBJ_SerialAnimationStep = {}) {
   //   super(optionsIn);
   //   this.index = 0;
   //   const defaultOptions = {};
@@ -92,7 +92,7 @@ export class SerialAnimationStep extends AnimationStep {
     });
   }
 
-  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
+  start(startTime: ?number | 'nextFrame' | 'prevFrame' | 'now' | 'syncNull' = null) {
     if (this.state !== 'animating') {
       this.startWaiting();
       super.start(startTime);
@@ -203,8 +203,8 @@ export class SerialAnimationStep extends AnimationStep {
 }
 
 export function inSerial(
-  stepsOrOptionsIn: Array<AnimationStep> | TypeSerialAnimationStepInputOptions = {},
-  ...optionsIn: Array<TypeSerialAnimationStepInputOptions>
+  stepsOrOptionsIn: Array<AnimationStep> | OBJ_SerialAnimationStep = {},
+  ...optionsIn: Array<OBJ_SerialAnimationStep>
 ) {
   return new SerialAnimationStep(stepsOrOptionsIn, ...optionsIn);
 }

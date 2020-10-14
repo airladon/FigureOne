@@ -1,4 +1,4 @@
-import { DelayAnimationStep } from './DelayAnimationStep';
+import { DelayAnimationStep } from './DelayStep';
 import * as tools from '../../../tools/tools';
 import * as math from '../../../tools/math';
 import makeDiagram from '../../../__mocks__/makeDiagram';

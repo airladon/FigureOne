@@ -11,21 +11,21 @@ import GlobalAnimation from '../../webgl/GlobalAnimation';
  * Parallel animation step options object
  * @property {Array<AnimationStep>} steps animation steps to perform in parallel
  */
-export type TypeParallelAnimationStepInputOptions = {
+export type OBJ_ParallelAnimationStep = {
   steps?: Array<AnimationStep>;
 } & OBJ_AnimationStep;
 
 /**
  * Parallel Animation Step
- * @extends ElementAnimationStep
+ * @extends AnimationStep
  */
 // Animations get started from a parent, but finish themselves
 export class ParallelAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
 
   constructor(
-    stepsOrOptionsIn: Array<AnimationStep | null> | TypeParallelAnimationStepInputOptions = {},
-    ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
+    stepsOrOptionsIn: Array<AnimationStep | null> | OBJ_ParallelAnimationStep = {},
+    ...optionsIn: Array<OBJ_ParallelAnimationStep>
   ) {
     const defaultOptions = { steps: [] };
     let options;
@@ -195,8 +195,8 @@ export class ParallelAnimationStep extends AnimationStep {
 }
 
 export function inParallel(
-  stepsOrOptionsIn: Array<AnimationStep | null> | TypeParallelAnimationStepInputOptions = {},
-  ...optionsIn: Array<TypeParallelAnimationStepInputOptions>
+  stepsOrOptionsIn: Array<AnimationStep | null> | OBJ_ParallelAnimationStep = {},
+  ...optionsIn: Array<OBJ_ParallelAnimationStep>
 ) {
   return new ParallelAnimationStep(stepsOrOptionsIn, ...optionsIn);
 }

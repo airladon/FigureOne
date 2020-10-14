@@ -53,14 +53,14 @@ describe('Seek', () => {
 
     const startPulse = () => {
       a.pulseScale({
-        duration: 2, scale: 2, when: 'sync', progression: 'tools.math.triangle',
+        duration: 2, scale: 2, when: 'syncNow', progression: 'tools.math.triangle',
       });
     };
     recorder.addEventType('startPulse', startPulse.bind(this));
     const startAnimation = () => {
       a.animations.new()
         .position({ target: [2, 2], duration: 2, progression: 'linear' })
-        .start('sync');
+        .start('syncNow');
     };
     recorder.addEventType('startAnimation', startAnimation.bind(this));
 

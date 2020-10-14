@@ -18,6 +18,7 @@ import type {
 import { areColorsSame } from '../../../../tools/color';
 import { ParallelAnimationStep } from '../ParallelAnimationStep';
 import type { DiagramElement, OBJ_Scenario } from '../../../Element';
+import type { AnimationStartTime } from '../../AnimationManager';
 
 
 /**
@@ -98,7 +99,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     allDurationsSame: boolean;
     zeroDurationThreshold: number;
     clipRotationTo: '0to360' | '-180to180' | null;
-    // progression: ((number, ?boolean) => number) | string;
+    progression: ((number, ?boolean) => number) | string;
     // minDuration: number;
   };
 
@@ -108,7 +109,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     deleteKeys(AnimationStepOptionsIn, [
       'start', 'target', 'translationStyle', 'translationOptions',
       'velocity', 'maxDuration', 'allDurationsSame', 'rotDirection',
-      'clipRotationTo', 'element', // 'progression', // 'minDuration',
+      'clipRotationTo', 'element', 'progression', // 'minDuration',
     ]);
     super(AnimationStepOptionsIn);
     this._stepType = 'position';
@@ -131,7 +132,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       maxDuration: null,
       allDurationsSame: true,
       zeroDurationThreshold: 0,
-      // progression: 'tools.math.easeinout',
+      progression: 'tools.math.easeinout',
       // minDuration: 0,
     };
     if (this.element && this.element.animations.options.translation) {
@@ -150,7 +151,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     copyKeysFromTo(options, this.scenario, [
       'start', 'target', 'translationStyle',
       'velocity', 'maxDuration', 'allDurationsSame', 'zeroDurationThreshold',
-      'rotDirection', 'clipRotationTo', // 'progression', // 'minDuration',
+      'rotDirection', 'clipRotationTo', 'progression', // 'minDuration',
     ]);
     duplicateFromTo(options.translationOptions, this.scenario.translationOptions);
   }
@@ -286,7 +287,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
+  start(startTime: AnimationStartTime = null) {
     super.start(startTime);
     const { element } = this;
     if (element == null) {
@@ -336,7 +337,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         translationStyle: this.scenario.translationStyle,
         translationOptions: this.scenario.translationOptions,
         clipRotationTo: this.scenario.clipRotationTo,
-        progression: this.progression,
+        progression: this.scenario.progression,
       }));
     }
 
@@ -345,7 +346,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         start: start.color,
         target: target.color,
         duration: colorDuration,
-        progression: this.progression,
+        progression: this.scenario.progression,
       }));
     }
 
@@ -354,7 +355,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         dissolve,
         dissolveFromCurrent,
         duration: opacityDuration,
-        progression: this.progression,
+        progression: this.scenario.progression,
       }));
     }
     this.steps = steps;

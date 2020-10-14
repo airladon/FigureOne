@@ -44,6 +44,7 @@ import type { TypeDiagramOptions } from './js/diagram/Diagram';
 import type {
   TypePolyLineOptions, TypePadOptions,
 } from './js/diagram/DiagramObjects/PolyLine';
+import * as anim from './js/diagram/Animation/Animation';
 
 export type {
   TypeRotationDirection,
@@ -75,7 +76,6 @@ const tools = {
 
 /**
  * FigureOne entry point
- * @type {object}
  * @module Fig
  * @global
  * @property {class} {@link Diagram}      - Diagram Class
@@ -110,6 +110,8 @@ const Fig = {
   Equation,
   //
   HTMLEquation,
+  //
+  Animation: anim,
   //
   Point: g2.Point,
   Line: g2.Line,

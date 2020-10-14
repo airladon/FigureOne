@@ -2,9 +2,9 @@
 // import * as tools from '../../tools/math';
 // eslint-disable-next-line import/no-cycle
 import { DiagramElement } from '../Element';
-// import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/SerialAnimationStep';
+// import type { OBJ_SerialAnimationStep } from './AnimationStep/SerialAnimationStep';
 // import type {
-//   OBJ_PositionAnimationStep, TypeParallelAnimationStepInputOptions,
+//   OBJ_PositionAnimationStep, OBJ_ParallelAnimationStep,
 //   OBJ_AnimationStep, OBJ_TriggerAnimationStep,
 //   OBJ_ColorAnimationStep, OBJ_CustomAnimationStep,
 // } from './Animation';
@@ -20,6 +20,61 @@ import { getState } from '../state';
 import { FunctionMap } from '../../tools/FunctionMap';
 // import type Diagram from '../Diagram';
 
+/**
+ * Scenarios animation step options object
+ * @extends OBJ_AnimationStep
+ * @property {string} target name of scenario
+ */
+export type OBJ_ScenariosAnimationStep = {
+  target: string;
+} & OBJ_AnimationStep;
+
+/**
+ * Animation start time options.
+ *
+ * `'nextFrame'` | `'prevFrame'` | `'nowSync'` | `'now'` | number | null
+ *
+ * When multiple animations need to be started, it is often
+ * desirable to synchronise their start times.
+ *
+ * `'nextFrame'` will start the animation on the
+ * next animation frame. Starting several animations with `nextFrame`
+ * will ensure they are all synchronized to that frame time.
+ *
+ * Similarly `'prevFrame'` starts the animation on the last animation
+ * frame.
+ *
+ * `'syncNow'` will start an animation at a synchronized 'now' time. The
+ * first time 'syncNow' is used, the current time will be stored and used
+ * for all subsequent calls to 'syncNow'. 'syncNow' is reset every
+ * time a new animation frame is drawn.
+ *
+ * Alternately, `'now'` can be used which will use the current time as
+ * the animation start time. As javascript is single threaded, using `'now`
+ * on multiple animations will result in them all having slightly different
+ * start times.
+ *
+ * A custom time can be used if a `number` is defined.
+ *
+ * `null` will result in `'nextFrame'` being used
+ * @typedef {('nextFrame' | 'prevFrame' | 'now' | 'syncNow')} AnimationStartTime
+ */
+export type AnimationStartTime = 'nextFrame' | 'prevFrame' | 'now' | 'syncNow' | number | null;
+
+/**
+ * Start animation options object.
+ *
+ * @property {null | string} [name] name of animation to start - f null, then
+ * all animations associated with this animation manager will start (`null`)
+ * @property {AnimationStartTime} startTime when to
+ * start the animation
+ */
+export type OBJ_AnimationStart = {
+  name?: string,
+  // startTIme?: 'nextFrame' | 'prevFrame' | 'now' | 'syncNow',
+  startTime: AnimationStartTime,
+};
+
 export type TypeAnimationManagerInputOptions = {
   element?: DiagramElement;
   finishedCallback?: ?(string | (() => void)),
@@ -34,6 +89,12 @@ export type TypeAnimationManagerInputOptions = {
  *
  * Animation managers are the `animations` property of a {@link DiagramElement}.
  *
+ * The `animations` property is an array that contains a number of parallel
+ * animation steps.
+ *
+ * @property {'animating' | 'idle' | 'waitingToStart'} state
+ * @property {Array<AnimationStep>} animations
+ * @property {SubscriptionManager} subscriptions
  * @see {@link DiagramElement}
  * @example
  * // animate a position animation step, then rotation animation step
@@ -107,7 +168,7 @@ export default class AnimationManager {
   }
 
   /**
-   * New animation builder
+   * New animation builder attached to this animation manager
    * @return AnimationBuilder
    * @example
    * p.animations.new()
@@ -127,6 +188,17 @@ export default class AnimationManager {
     const animation = new anim.AnimationBuilder(options);
     this.animations.push(animation);
     return animation;
+  }
+
+
+  /**
+   * Animation builder object
+   * @param {OBJ_AnimationBuilder} options
+   * @return {AnimationBuilder}
+   */
+  // eslint-disable-next-line max-len
+  builder(...options: Array<OBJ_AnimationBuilder>) {
+    return new anim.AnimationBuilder(this, ...options);
   }
 
   /**
@@ -313,11 +385,6 @@ export default class AnimationManager {
     return new anim.UndimAnimationStep(optionsToUse);
   }
 
-  // eslint-disable-next-line max-len
-  builder(...options: Array<TypeAnimationBuilderInputOptions>) {
-    return new anim.AnimationBuilder(this, ...options);
-  }
-
   /**
    * Create a Scenario animation step tied to this element
    * @param {OBJ_ScenarioAnimationStep} options
@@ -328,11 +395,16 @@ export default class AnimationManager {
     return new anim.ScenarioAnimationStep(optionsToUse);
   }
 
-  // eslint-disable-next-line max-len
-  scenarios(...options: Array<TypeParallelAnimationStepInputOptions & OBJ_TransformAnimationStep>) {
-    const defaultOptions = {};
+  /**
+   * Create a Parallel animation step that animates
+   * all child elements with the target scenario name
+   * @param {OBJ_ScenariosAnimationStep} options
+   * @return {ParallelAnimationStep}
+   */
+  scenarios(...options: Array<OBJ_ParallelAnimationStep & OBJ_TransformAnimationStep>) {
+    const defaultOptions = { element: this.element };
     const optionsToUse = joinObjects({}, defaultOptions, ...options);
-    const elements = this.getAllElementsWithScenario(optionsToUse.target);
+    const elements = optionsToUse.element.getAllElementsWithScenario(optionsToUse.target);
     const steps = [];
     const simpleOptions = {};
     duplicateFromTo(optionsToUse, simpleOptions, ['steps', 'element']);
@@ -497,6 +569,14 @@ export default class AnimationManager {
 
   // Cancel all primary animations with the name
   // animations will be cleaned up on next frame
+  /**
+   * Cancel one or all animations managed by this manager (in the `animations`
+   * array).
+   * @param {null | string} name name of animation or `null` to cancel all
+   * (`null`)
+   * @param {null | 'complete' | 'freeze'} force force the animation to complete
+   * or freeze - `null` will perform the default operation (`null`)
+   */
   cancel(name: ?string, force: ?'complete' | 'freeze' = null) {
     if (name == null) {
       this.cancelAll(force);
@@ -519,19 +599,22 @@ export default class AnimationManager {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getFrameTime(frame: 'next' | 'prev' | 'now' | 'sync') {
+  getFrameTime(frame: 'nextFrame' | 'prevFrame' | 'now' | 'syncNow') {
     new GlobalAnimation().getWhen(frame);
   }
 
-  start(optionsIn: {
-    name?: string,
-    frame?: 'next' | 'prev' | 'now' | 'syncNow',
-  }) {
-    const options = joinObjects({}, optionsIn, { name: null, frame: 'next' });
-    const { name, frame } = options;
-    const frameTime = this.getFrameTime(frame);
+  /**
+   * Start one or all animations managed by this manager (in the `animations`
+   * array).
+   *
+   * @param {OBJ_AnimationStart} [options]
+   */
+  start(options: OBJ_AnimationStart) {
+    const optionsToUse = joinObjects({}, options, { name: null, startTime: 'nextFrame' });
+    const { name, startTime } = optionsToUse;
+    const frameTime = this.getFrameTime(startTime);
     if (name == null) {
-      this.startAll(frame);
+      this.startAll(startTime);
     } else {
       for (let i = 0; i < this.animations.length; i += 1) {
         const animation = this.animations[i];
@@ -552,10 +635,10 @@ export default class AnimationManager {
     }
   }
 
-  startAll(optionsIn: { frame?: 'next' | 'prev' | 'now' }) {
-    const options = joinObjects({}, optionsIn, { frame: 'next' });
-    const { frame } = options;
-    const frameTime = this.getFrameTime(frame);
+  startAll(optionsIn: { startTime?: AnimationStartTime}) {
+    const options = joinObjects({}, optionsIn, { startTime: 'nextFrame' });
+    const { startTime } = options;
+    const frameTime = this.getFrameTime(startTime);
     for (let i = 0; i < this.animations.length; i += 1) {
       const animation = this.animations[i];
       if (animation.state !== 'animating') {
@@ -583,6 +666,11 @@ export default class AnimationManager {
     return duration;
   }
 
+  /**
+   * Get remaining duration of all animations
+   * @param {number} now define this if you want remaining duration from a
+   * custom time
+   */
   getRemainingTime(now: number = new GlobalAnimation().now() / 1000) {
     let remainingTime = 0;
     this.animations.forEach((animation) => {

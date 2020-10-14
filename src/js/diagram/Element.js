@@ -31,11 +31,11 @@ import type { TypeWhen } from './webgl/GlobalAnimation';
 
 import type Diagram, { TypeSpaceTransforms } from './Diagram';
 import type {
-  OBJ_PositionAnimationStep, TypeAnimationBuilderInputOptions,
+  OBJ_PositionAnimationStep, OBJ_AnimationBuilder,
   OBJ_ColorAnimationStep, OBJ_TransformAnimationStep,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
   TypePulseAnimationStepInputOptions, OBJ_OpacityAnimationStep,
-  TypeParallelAnimationStepInputOptions, OBJ_TriggerAnimationStep,
+  OBJ_ParallelAnimationStep, OBJ_TriggerAnimationStep,
   OBJ_AnimationStep, TypePulseTransformAnimationStepInputOptions,
   OBJ_ScenarioAnimationStepInputOptions,
 } from './Animation/Animation';
@@ -292,7 +292,7 @@ type ElementState = {
  * dissolving. Color should only be set using the `setColor` method.
  *
  * An element can be "dimmed" or "undimmed". For instance,
- * a red element might turn a less obvious grey when dimmed. The property
+ * a red element might turn grey when dimmed. The property
  * `dimColor` stores the desired color to dim to and should be set with
  * `setDimColor()`
  *
@@ -656,7 +656,7 @@ class DiagramElement {
         return new animations.UndimAnimationStep(options);
       },
       // eslint-disable-next-line max-len
-      builder: (...optionsIn: Array<TypeAnimationBuilderInputOptions>) => new animations.AnimationBuilder(this, ...optionsIn),
+      builder: (...optionsIn: Array<OBJ_AnimationBuilder>) => new animations.AnimationBuilder(this, ...optionsIn),
       scenario: (...optionsIn: Array<OBJ_ScenarioAnimationStepInputOptions>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.ScenarioAnimationStep(options);
@@ -784,7 +784,7 @@ class DiagramElement {
       //   return new animations.TransformAnimationStep(options);
       // },
       // eslint-disable-next-line max-len
-      scenarios: (...optionsIn: Array<TypeParallelAnimationStepInputOptions & OBJ_TransformAnimationStep>) => {
+      scenarios: (...optionsIn: Array<OBJ_ParallelAnimationStep & OBJ_TransformAnimationStep>) => {
         const defaultOptions = {};
         const options = joinObjects({}, defaultOptions, ...optionsIn);
         const elements = this.getAllElementsWithScenario(options.target);
@@ -2250,7 +2250,7 @@ class DiagramElement {
       scale: 2,
       callback: null,
       delta: [0, 0],
-      when: 'sync',
+      when: 'syncNow',
       progression: 'tools.math.sinusoid',
     }, optionsIn);
 
@@ -2370,7 +2370,7 @@ class DiagramElement {
       scale: 2,
       callback: null,
       // delta: [0, 0],
-      when: 'sync',
+      when: 'syncNow',
       num: 3,
     }, optionsIn);
     let bArray = [options.scale];

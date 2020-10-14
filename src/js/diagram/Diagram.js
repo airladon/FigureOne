@@ -27,13 +27,12 @@ import addElements from './DiagramAddElements/addElements';
 import type { TypeAddElementObject } from './DiagramAddElements/addElements';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 /**
-  * Diagram Input Options
+  * Diagram options object
   * @property {string} [htmlId] HTML `div` tag `id` to tie diagram to (`"figureOneContainer"`)
-  * @property {TypeParsableRect} limits -  limits
-  * (bottom left
-  *  corner at (-1, -1), width 1, height 1
+  * @property {TypeParsableRect} [limits] - limits (bottom left
+  *  corner at (-1, -1), width 2, height 2)
  */
-export type OPTIONS_DIAGRAM = {
+export type OBJ_Diagram = {
   htmlId?: string,
   limits?: TypeParsableRect,
   // backgroundColor?: Array<number>,
@@ -96,7 +95,7 @@ export type TypeSpaceTransforms = {
   * Class to create a diagram.
   *
   * By default, a diagram will attach a WebGL canvas and Context2D
-  * canvas to the html `div` element with id`"figureOneContainer"`.
+  * canvas to the html `div` element with id `"figureOneContainer"`.
   *
   * To attach to a different `div`, use the `htmlId` property in the class
   * constructor.
@@ -115,7 +114,7 @@ export type TypeSpaceTransforms = {
   * converting between the different spaces (e.g. pixel, GL, diagram).
   *
   * @class
-  * @param {OPTIONS_DIAGRAM} options
+  * @param {OBJ_Diagram} options
   * @property {DiagramPrimitives} shapes Primitive shapes and text generation
   * @example
   * // Simple html and javascript example to create a diagram, and add a
@@ -264,21 +263,13 @@ class Diagram {
   };
   // pauseAfterNextDrawFlag: boolean;
 
-  constructor(options: OPTIONS_DIAGRAM) {
+  constructor(options: OBJ_Diagram) {
     const defaultOptions = {
       htmlId: 'figureOneContainer',
       limits: new Rect(-1, -1, 2, 2),
-      // backgroundColor: [1, 1, 1, 1],
       fontScale: 1,
-      // updateFontSize: '',
     };
     this.fnMap = new FunctionMap();
-    // this.fnMap.global.add('tools.math.easein', math.easein);
-    // this.fnMap.global.add('tools.math.easeout', math.easeout);
-    // this.fnMap.global.add('tools.math.easeinout', math.easeinout);
-    // this.fnMap.global.add('tools.math.linear', math.linear);
-    // this.fnMap.global.add('tools.math.sinusoid', math.sinusoid);
-    // this.fnMap.add('doNothing', () => {});
     this.isPaused = false;
     this.scrolled = false;
     this.cursorElementName = 'cursor';

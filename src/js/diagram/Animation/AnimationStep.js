@@ -15,10 +15,11 @@ import { getState } from '../state';
 import type { DiagramElement } from '../Element';
 import { FunctionMap } from '../../tools/FunctionMap';
 import GlobalAnimation from '../webgl/GlobalAnimation';
+import type { AnimationStartTime } from './AnimationManager';
 // import * as anim from './Animation';
 
 /**
- * Animation Step options
+ * Animation Step options object
  *
  * @property {number} [duration] in seconds (`0`)
  * @property {number} [delay] delay before animation starts in seconds (`0`)
@@ -43,7 +44,7 @@ export type OBJ_AnimationStep = {
 };
 
 /**
- * Animation Step options
+ * Animation step base class. All animation steps extend this class.
  *
  * @property {number} duration in seconds
  * @property {number} startDelay delay before animation starts in seconds
@@ -274,6 +275,11 @@ export default class AnimationStep {
     return remainingTime;
   }
 
+  /**
+   * Get remaining duration of the animation.
+   * @param {number} now define this if you want remaining duration from a
+   * custom time
+   */
   getRemainingTime(now: number = new GlobalAnimation().now() / 1000) {
     const totalDuration = this.getTotalDuration();
     if (this.startTime == null) {
@@ -306,21 +312,26 @@ export default class AnimationStep {
     this.state = 'waitingToStart';
   }
 
+  /**
+   * Start animation
+   * @param {AnimationStartTime} startTime
+   */
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
+  start(startTime: AnimationStartTime = null) {
     this.state = 'animating';
     if (typeof startTime === 'number' || startTime == null) {
       this.startTime = startTime;
       return;
     }
-    if (startTime === 'next') {
+    if (startTime === 'nextFrame') {
       this.startTime = null;
       return;
     }
-    if (startTime === 'prev') {
-      this.startTime = new GlobalAnimation().lastFrame;
-    }
-    this.startTime = new GlobalAnimation().now() / 1000;
+    this.startTime = new GlobalAnimation().getWhen(startTime) / 1000;
+    // if (startTime === 'prev') {
+    //   this.startTime = new GlobalAnimation().lastFrame;
+    // }
+    // this.startTime = new GlobalAnimation().now() / 1000;
   }
 
   finishIfZeroDuration() {

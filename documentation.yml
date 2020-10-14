@@ -3,7 +3,7 @@ toc:
     file: ./docs/tutorials/intro.md
   - name: Diagram
   - Diagram
-  - OPTIONS_DIAGRAM
+  - OBJ_Diagram
   - name: Diagram Elements
   - DiagramElement
   - DiagramElementPrimitive
@@ -27,36 +27,38 @@ toc:
   - AnimationManager
   - AnimationBuilder
   - AnimationStep
-  - OBJ_AnimationStep
-  - ElementAnimationStep
-  - OBJ_ElementAnimationStep
   - SerialAnimationStep
-  - OBJ_SerialAnimationStep
   - ParallelAnimationStep
-  - OBJ_ParallelAnimationStep
-  - PositionAnimationStep
-  - OBJ_PositionAnimationStep
-  - RotationAnimationStep
-  - OBJ_RotationAnimationStep
-  - ScaleAnimationStep
-  - OBJ_ScaleAnimationStep
-  - TransformAnimationStep
-  - OBJ_TransformAnimationStep
-  - ScenarioAnimationStep
-  - OBJ_ScenarioAnimationStep
   - DelayAnimationStep
   - TriggerAnimationStep
-  - OBJ_TriggerAnimationStep
   - CustomAnimationStep
-  - OBJ_CustomAnimationStep
+  - ElementAnimationStep
+  - PositionAnimationStep
+  - RotationAnimationStep
+  - ScaleAnimationStep
+  - TransformAnimationStep
+  - ScenarioAnimationStep
   - ColorAnimationStep
-  - OBJ_ColorAnimationStep
   - DimAnimationStep
   - UndimAnimationStep
   - OpacityAnimationStep
-  - OBJ_OpacityAnimationStep
   - DissolveInAnimationStep
   - DissolveOutAnimationStep
+  - OBJ_AnimationBuilder
+  - OBJ_AnimationStep
+  - OBJ_SerialAnimationStep
+  - OBJ_ParallelAnimationStep
+  - OBJ_TriggerAnimationStep
+  - OBJ_CustomAnimationStep
+  - OBJ_ElementAnimationStep
+  - OBJ_PositionAnimationStep
+  - OBJ_RotationAnimationStep
+  - OBJ_ScaleAnimationStep
+  - OBJ_TransformAnimationStep
+  - OBJ_ScenarioAnimationStep
+  - OBJ_ScenariosAnimationStep
+  - OBJ_ColorAnimationStep
+  - OBJ_OpacityAnimationStep
   - name: Equation Elements Types
   # - TypeEquationElement
   - TypeEquationElements

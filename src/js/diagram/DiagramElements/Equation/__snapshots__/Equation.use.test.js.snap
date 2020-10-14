@@ -27,12 +27,6 @@ DiagramElementPrimitive {
   "animationFinishedCallback": null,
   "animations": AnimationManager {
     "animations": Array [],
-    "builder": [Function],
-    "color": [Function],
-    "delay": [Function],
-    "dim": [Function],
-    "dissolveIn": [Function],
-    "dissolveOut": [Function],
     "element": [Circular],
     "finishedCallback": [Function],
     "fnMap": FunctionMap {
@@ -41,17 +35,9 @@ DiagramElementPrimitive {
       },
       "map": Object {},
     },
-    "opacity": [Function],
     "options": Object {
       "translation": Object {},
     },
-    "position": [Function],
-    "pulse": [Function],
-    "pulseTransform": [Function],
-    "rotation": [Function],
-    "scale": [Function],
-    "scenario": [Function],
-    "scenarios": [Function],
     "state": "idle",
     "subscriptions": SubscriptionManager {
       "fnMap": FunctionMap {
@@ -62,10 +48,6 @@ DiagramElementPrimitive {
       },
       "subscriptions": Object {},
     },
-    "transform": [Function],
-    "translation": [Function],
-    "trigger": [Function],
-    "undim": [Function],
   },
   "beforeDrawCallback": null,
   "cannotTouchHole": false,

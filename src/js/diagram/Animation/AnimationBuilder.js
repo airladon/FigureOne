@@ -2,9 +2,9 @@
 // import * as tools from '../../tools/math';
 // eslint-disable-next-line import/no-cycle
 import { DiagramElement } from '../Element';
-import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/SerialAnimationStep';
+import type { OBJ_SerialAnimationStep } from './AnimationStep/SerialAnimationStep';
 import type {
-  OBJ_PositionAnimationStep, TypeParallelAnimationStepInputOptions,
+  OBJ_PositionAnimationStep, OBJ_ParallelAnimationStep,
   OBJ_AnimationStep, OBJ_TriggerAnimationStep,
   OBJ_ColorAnimationStep, OBJ_CustomAnimationStep,
   OBJ_TransformAnimationStep,
@@ -20,9 +20,14 @@ import { joinObjects, duplicateFromTo } from '../../tools/tools';
 // import { getState, setState } from '../state';
 // import type Diagram from '../Diagram';
 
-export type TypeAnimationBuilderInputOptions = {
+/**
+ * Animation builder options object
+ * @extends OBJ_SerialAnimationStep
+ * @property {DiagramElement} [element]
+ */
+export type OBJ_AnimationBuilder = {
   element?: DiagramElement;
-} & TypeSerialAnimationStepInputOptions;
+} & OBJ_SerialAnimationStep;
 
 /**
  * Animation Builder
@@ -39,19 +44,19 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    * @private
    */
   constructor(
-    elementOrOptionsIn: DiagramElement | TypeAnimationBuilderInputOptions = {},
-    ...optionsIn: Array<TypeAnimationBuilderInputOptions>
+    elementOrOptions: DiagramElement | OBJ_AnimationBuilder = {},
+    ...options: Array<OBJ_AnimationBuilder>
   ) {
     const defaultOptions = {};
-    let options;
-    if (elementOrOptionsIn instanceof DiagramElement) {
-      options = joinObjects({}, defaultOptions, ...optionsIn);
-      options.element = elementOrOptionsIn;
+    let optionsToUse;
+    if (elementOrOptions instanceof DiagramElement) {
+      optionsToUse = joinObjects({}, defaultOptions, ...options);
+      optionsToUse.element = elementOrOptions;
     } else {
-      options = joinObjects({}, defaultOptions, elementOrOptionsIn, ...optionsIn);
+      optionsToUse = joinObjects({}, defaultOptions, elementOrOptions, ...options);
     }
-    super(options);
-    this.element = options.element;
+    super(optionsToUse);
+    this.element = optionsToUse.element;
     this._stepType = 'builder';
     return this;
   }
@@ -260,12 +265,12 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    * @return {AnimationBuilder}
    */
   scenarios(    // eslint-disable-next-line max-len
-    ...options: Array<OBJ_TransformAnimationStep & TypeParallelAnimationStepInputOptions>
+    ...options: Array<OBJ_TransformAnimationStep & OBJ_ParallelAnimationStep>
   ) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const optionsToUse = joinObjects({}, defaultOptions, ...options);
-      this.then(optionsToUse.element.anim.scenarios(optionsToUse));
+      this.then(optionsToUse.element.animations.scenarios(optionsToUse));
     }
     return this;
   }
@@ -413,13 +418,13 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
 
   /**
    * Add a parallel animation step
-   * @param {Array<AnimationStep | null> | TypeParallelAnimationStepInputOptions} stepsOrOptions
+   * @param {Array<AnimationStep | null> | OBJ_ParallelAnimationStep} stepsOrOptions
    * @return {AnimationBuilder}
    */
   inParallel(
     stepsOrOptions: Array<animation.AnimationStep | null>
-                      | TypeParallelAnimationStepInputOptions = {},
-    ...options: Array<TypeParallelAnimationStepInputOptions>
+                      | OBJ_ParallelAnimationStep = {},
+    ...options: Array<OBJ_ParallelAnimationStep>
   ) {
     this.then(animation.inParallel(stepsOrOptions, ...options));
     return this;
@@ -427,12 +432,12 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
 
   /**
    * Add a serial animation step
-   * @param {Array<AnimationStep | null> | TypeSerialAnimationStepInputOptions} stepsOrOptions
+   * @param {Array<AnimationStep | null> | OBJ_SerialAnimationStep} stepsOrOptions
    * @return {AnimationBuilder}
    */
   inSerial(
-    stepsOrOptions: Array<animation.AnimationStep> | TypeSerialAnimationStepInputOptions = {},
-    ...options: Array<TypeSerialAnimationStepInputOptions>
+    stepsOrOptions: Array<animation.AnimationStep> | OBJ_SerialAnimationStep = {},
+    ...options: Array<OBJ_SerialAnimationStep>
   ) {
     this.then(animation.inSerial(stepsOrOptions, ...options));
     return this;

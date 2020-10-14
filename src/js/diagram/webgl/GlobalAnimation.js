@@ -1,6 +1,6 @@
 // @flow
 
-export type TypeWhen = 'now' | 'nextFrame' | 'prevFrame' | 'sync';
+export type TypeWhen = 'now' | 'nextFrame' | 'prevFrame' | 'syncNow';
 
 // Singleton class that contains projects global variables
 class GlobalAnimation {
@@ -69,14 +69,14 @@ class GlobalAnimation {
     this.updateSyncNow = true;
   }
 
-  getWhen(when: 'now' | 'nextFrame' | 'prevFrame' | 'sync') {
+  getWhen(when: TypeWhen) {
     if (when === 'now') {
       return this.now();
     }
     if (when === 'prevFrame') {
       return this.lastFrame;
     }
-    if (when === 'sync') {
+    if (when === 'syncNow') {
       return this.syncNow();
     }
     return null;

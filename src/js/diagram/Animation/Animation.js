@@ -69,14 +69,14 @@ import {
 
 
 import type {
-  TypeParallelAnimationStepInputOptions,
+  OBJ_ParallelAnimationStep,
 } from './AnimationStep/ParallelAnimationStep';
 import {
   ParallelAnimationStep, inParallel,
 } from './AnimationStep/ParallelAnimationStep';
 
 import type {
-  TypeSerialAnimationStepInputOptions,
+  OBJ_SerialAnimationStep,
 } from './AnimationStep/SerialAnimationStep';
 import {
   SerialAnimationStep, inSerial,
@@ -101,14 +101,14 @@ import type {
 // eslint-disable-next-line import/no-cycle
 import AnimationManager from './AnimationManager';
 
-import type { TypeAnimationBuilderInputOptions } from './AnimationBuilder';
+import type { OBJ_AnimationBuilder } from './AnimationBuilder';
 // eslint-disable-next-line import/no-cycle
 import AnimationBuilder from './AnimationBuilder';
 
 
 export type {
-  OBJ_PositionAnimationStep, TypeAnimationBuilderInputOptions,
-  TypeParallelAnimationStepInputOptions, TypeSerialAnimationStepInputOptions,
+  OBJ_PositionAnimationStep, OBJ_AnimationBuilder,
+  OBJ_ParallelAnimationStep, OBJ_SerialAnimationStep,
   OBJ_TransformAnimationStep, OBJ_AnimationStep,
   OBJ_TriggerAnimationStep,
   OBJ_ColorAnimationStep, OBJ_CustomAnimationStep,
