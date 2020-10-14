@@ -13,7 +13,7 @@ import ElementAnimationStep from '../ElementAnimationStep';
 type TypeColor = Array<number>;
 
 /**
- * Color animation step
+ * Color animation step options object
  *
  * By default, the color will start with the element's current color.
  *

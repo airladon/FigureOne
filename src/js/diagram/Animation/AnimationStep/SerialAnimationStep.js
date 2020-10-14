@@ -6,6 +6,10 @@ import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import GlobalAnimation from '../../webgl/GlobalAnimation';
 
+/**
+ * Serial animation step options object
+ * @property {Array<AnimationStep>} steps animation steps to perform in serial
+ */
 export type TypeSerialAnimationStepInputOptions = {
   steps?: Array<AnimationStep>;
 } & OBJ_AnimationStep;

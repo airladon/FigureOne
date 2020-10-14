@@ -11,7 +11,7 @@ import type {
 import ElementAnimationStep from '../ElementAnimationStep';
 
 /**
- * Rotation animation step
+ * Rotation animation step options object
  *
  * By default, the rotation will start with the element's current rotation.
  *

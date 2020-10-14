@@ -22,7 +22,7 @@ import type { DiagramElement } from '../../Element';
 export type AnimationProgression = (number) => number;
 
 /**
- * Base element animation step
+ * Base element animation step options object
  *
  * @extends OBJ_AnimationStep
  * @property {DiagramElement} [element]

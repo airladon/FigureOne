@@ -502,6 +502,12 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
+                        href='#animationbuildercustom'
+                        class='regular pre-open'>
+                        #custom
+                      </a></li>
+                      
+                      <li><a
                         href='#animationbuilderrotation'
                         class='regular pre-open'>
                         #rotation
@@ -1898,6 +1904,26 @@
                   href='#animationprogression'
                   class="">
                   AnimationProgression
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_customanimationstep'
+                  class="">
+                  OBJ_CustomAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#customanimationstep'
+                  class="">
+                  CustomAnimationStep
                   
                 </a>
                 
@@ -6156,7 +6182,7 @@ Use the <code>duration</code> value in <code>options</code> to define undimming 
   
 
   <p>Animation Builder</p>
-<p>Use to build a series of animation steps</p>
+<p>Use to build a series of animation steps. Each step will return the same</p>
 
   
   
@@ -6208,7 +6234,7 @@ Use the <code>duration</code> value in <code>options</code> to define undimming 
     
       
         <a href="#animationmanagernew">
-AnimationManager
+AnimationManager.new
 </a>
 
       
@@ -6224,6 +6250,83 @@ AnimationManager
   
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
+  
+    <div class='border-bottom' id='animationbuildercustom'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>custom(optionsIn, options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add a custom animation step that uses this element by default</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_customanimationstep">OBJ_CustomAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_customanimationstep">OBJ_CustomAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#animationbuilder">AnimationBuilder</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
   
     <div class='border-bottom' id='animationbuilderrotation'>
       <div class="clearfix small pointer toggle-sibling">
@@ -6280,14 +6383,6 @@ AnimationManager
 
   
 
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'>p.animations.new()
-  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .start();</pre>
-    
   
 
   
@@ -25184,6 +25279,161 @@ start or end of the animation.</p>
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_customanimationstep'>
+      OBJ_CustomAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Custom function animation step options object</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_animationstep">OBJ_AnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>startPercent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : percent to start animation at (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>progression</span> <code class='quiet'>((<code>"linear"</code> | <code>"easeinout"</code> | <code>"easein"</code> | <code>"easeout"</code> | <a href="#animationprogression">AnimationProgression</a>)?)</code>
+          : how the animation progresses - defaults to 
+<code>linear</code>
+ for color, opacity and
+custom animations and 
+<code>easeinout</code>
+ for others
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='customanimationstep'>
+      CustomAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Custom function animation step</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#animationstep">AnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_customanimationstep">OBJ_CustomAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
   
 
   

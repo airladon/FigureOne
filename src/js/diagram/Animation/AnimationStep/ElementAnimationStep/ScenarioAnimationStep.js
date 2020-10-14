@@ -46,7 +46,7 @@ export type OBJ_ScenarioVelocity = {
 };
 
 /**
- * Scenario animation step
+ * Scenario animation step options object
  *
  * By default, the scenario will start with the element's current scenario.
  *

@@ -61,7 +61,7 @@ import {
 } from './AnimationStep/TriggerStep';
 
 import type {
-  TypeCustomAnimationStepInputOptions,
+  OBJ_CustomAnimationStep,
 } from './AnimationStep/CustomStep';
 import {
   CustomAnimationStep, custom,
@@ -111,7 +111,7 @@ export type {
   TypeParallelAnimationStepInputOptions, TypeSerialAnimationStepInputOptions,
   OBJ_TransformAnimationStep, OBJ_AnimationStep,
   OBJ_TriggerAnimationStep,
-  OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
+  OBJ_ColorAnimationStep, OBJ_CustomAnimationStep,
   TypeAnimationManagerInputOptions, OBJ_RotationAnimationStep,
   OBJ_ScaleAnimationStep, TypePulseAnimationStepInputOptions,
   OBJ_OpacityAnimationStep, OBJ_ScenarioAnimationStep,

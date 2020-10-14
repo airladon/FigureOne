@@ -6,7 +6,7 @@ import { DiagramElement } from '../Element';
 // import type {
 //   OBJ_PositionAnimationStep, TypeParallelAnimationStepInputOptions,
 //   OBJ_AnimationStep, OBJ_TriggerAnimationStep,
-//   OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
+//   OBJ_ColorAnimationStep, OBJ_CustomAnimationStep,
 // } from './Animation';
 // eslint-disable-next-line import/no-cycle
 import * as anim from './Animation';

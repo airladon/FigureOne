@@ -7,7 +7,7 @@ import AnimationStep from '../AnimationStep';
 import type { DiagramElement } from '../../Element';
 
 /**
- * Trigger Step animation options
+ * Trigger Step animation options object
  *
  * A trigger step is a zero duration animation step that triggers a custom
  * function

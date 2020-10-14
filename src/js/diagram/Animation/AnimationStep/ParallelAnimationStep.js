@@ -7,6 +7,10 @@ import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import GlobalAnimation from '../../webgl/GlobalAnimation';
 
 
+/**
+ * Parallel animation step options object
+ * @property {Array<AnimationStep>} steps animation steps to perform in parallel
+ */
 export type TypeParallelAnimationStepInputOptions = {
   steps?: Array<AnimationStep>;
 } & OBJ_AnimationStep;

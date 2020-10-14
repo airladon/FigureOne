@@ -14,7 +14,7 @@ import type {
 import ElementAnimationStep from '../ElementAnimationStep';
 
 /**
- * Transform animation step
+ * Transform animation step options object
  *
  * By default, the transform will start with the element's current transform.
  *

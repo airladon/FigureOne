@@ -8,6 +8,20 @@ toc:
   - DiagramElement
   - DiagramElementPrimitive
   - DiagramElementCollection
+  - name: Shapes
+  - OBJ_Texture
+  - OBJ_Polyline
+  - OBJ_Polygon
+  - name: Text
+  - OBJ_Font
+  - OBJ_TextDefinition
+  - OBJ_Text
+  - OBJ_TextLineDefinition
+  - OBJ_TextLine
+  - OBJ_TextLinesDefinition
+  - OBJ_TextModifierDefinition
+  - OBJ_TextModifiersDefinition
+  - OBJ_TextLines
   - name: Animation
     file: ./docs/tutorials/animation/animation.md
   - AnimationManager
@@ -17,7 +31,9 @@ toc:
   - ElementAnimationStep
   - OBJ_ElementAnimationStep
   - SerialAnimationStep
+  - OBJ_SerialAnimationStep
   - ParallelAnimationStep
+  - OBJ_ParallelAnimationStep
   - PositionAnimationStep
   - OBJ_PositionAnimationStep
   - RotationAnimationStep
@@ -31,6 +47,8 @@ toc:
   - DelayAnimationStep
   - TriggerAnimationStep
   - OBJ_TriggerAnimationStep
+  - CustomAnimationStep
+  - OBJ_CustomAnimationStep
   - ColorAnimationStep
   - OBJ_ColorAnimationStep
   - DimAnimationStep
@@ -95,20 +113,6 @@ toc:
   - TypeEquationGoToFormOptions
   - name: Equations
   - Equation
-  - name: Shapes
-  - OBJ_Texture
-  - OBJ_Polyline
-  - OBJ_Polygon
-  - name: Text
-  - OBJ_Font
-  - OBJ_TextDefinition
-  - OBJ_Text
-  - OBJ_TextLineDefinition
-  - OBJ_TextLine
-  - OBJ_TextLinesDefinition
-  - OBJ_TextModifierDefinition
-  - OBJ_TextModifiersDefinition
-  - OBJ_TextLines
   - name: tools
     description: These are generic tools
     children:

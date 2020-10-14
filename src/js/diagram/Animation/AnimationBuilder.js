@@ -6,7 +6,7 @@ import type { TypeSerialAnimationStepInputOptions } from './AnimationStep/Serial
 import type {
   OBJ_PositionAnimationStep, TypeParallelAnimationStepInputOptions,
   OBJ_AnimationStep, OBJ_TriggerAnimationStep,
-  OBJ_ColorAnimationStep, TypeCustomAnimationStepInputOptions,
+  OBJ_ColorAnimationStep, OBJ_CustomAnimationStep,
   OBJ_TransformAnimationStep,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
   TypePulseAnimationStepInputOptions, OBJ_OpacityAnimationStep,
@@ -27,9 +27,10 @@ export type TypeAnimationBuilderInputOptions = {
 /**
  * Animation Builder
  *
- * Use to build a series of animation steps
+ * Use to build a series of animation steps. Each step will return the same
+ * builder object.
  * @extends SerialAnimationStep
- * @see <a href="#animationmanagernew">AnimationManager</a>
+ * @see <a href="#animationmanagernew">AnimationManager.new</a>
  */
 export default class AnimationBuilder extends animation.SerialAnimationStep {
   element: ?DiagramElement;
@@ -133,7 +134,12 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return state;
   }
 
-  custom(...optionsIn: Array<TypeCustomAnimationStepInputOptions>) {
+  /**
+   * Add a custom animation step that uses this element by default
+   * @param {OBJ_CustomAnimationStep} options
+   * @return {AnimationBuilder}
+   */
+  custom(...optionsIn: Array<OBJ_CustomAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -148,10 +154,6 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
    * Add a rotation animation step that uses this element by default
    * @param {OBJ_RotationAnimationStep} options
    * @return {AnimationBuilder}
-   * @example
-   * p.animations.new()
-   *   .rotation({ target: Math.PI, duration: 2 })
-   *   .start();
    */
   rotation(...options: Array<OBJ_RotationAnimationStep>) {
     if (this.element != null) {

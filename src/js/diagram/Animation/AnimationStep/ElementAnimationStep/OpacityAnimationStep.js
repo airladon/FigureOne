@@ -12,7 +12,7 @@ import type {
 import ElementAnimationStep from '../ElementAnimationStep';
 
 /**
- * Opacity animation step - this animates the `opacity` property of a
+ * Opacity animation step options object
  * {@link DiagramElement}.
  *
  * By default, the opacity will start with the element's current opacity unless

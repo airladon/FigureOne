@@ -9,19 +9,33 @@ import type {
 import AnimationStep from '../AnimationStep';
 import type { DiagramElement } from '../../Element';
 
-export type TypeCustomAnimationStepInputOptions = {
+/**
+ * Custom function animation step options object
+ * @extends OBJ_AnimationStep
+ * @property {string | ((number) => void)} callback function to run each
+ * animation frame
+ * @property {number} [startPercent] percent to start animation at (`0`)
+ * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
+ * how the animation progresses - defaults to `linear` for color, opacity and
+ * custom animations and `easeinout` for others
+ */
+export type OBJ_CustomAnimationStep = {
   callback?: string | ((number) => void);
   startPercent?: number;
   progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number;
 } & OBJ_AnimationStep;
 
+/**
+ * Custom function animation step
+ * @extends AnimationStep
+ */
 export class CustomAnimationStep extends AnimationStep {
   element: ?Object;
   callback: ?(number) => void;
   startPercent: ?number;
   progression: string | ((number, ?boolean) => number);
 
-  constructor(...optionsIn: Array<TypeCustomAnimationStepInputOptions>) {
+  constructor(...optionsIn: Array<OBJ_CustomAnimationStep>) {
     const AnimationStepOptionsIn = joinObjects({}, ...optionsIn);
     super(AnimationStepOptionsIn);
     const defaultPositionOptions = {
@@ -134,7 +148,7 @@ export class CustomAnimationStep extends AnimationStep {
   }
 }
 
-export function custom(...optionsIn: Array<TypeCustomAnimationStepInputOptions>) {
+export function custom(...optionsIn: Array<OBJ_CustomAnimationStep>) {
   return new CustomAnimationStep(...optionsIn);
 }
 

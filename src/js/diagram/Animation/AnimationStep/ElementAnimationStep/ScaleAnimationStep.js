@@ -11,7 +11,7 @@ import type {
 import ElementAnimationStep from '../ElementAnimationStep';
 
 /**
- * Scale animation step
+ * Scale animation step options object
  *
  * By default, the scale will start with the element's current scale.
  *

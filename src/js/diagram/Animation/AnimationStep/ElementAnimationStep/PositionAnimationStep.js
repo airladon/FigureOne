@@ -14,7 +14,7 @@ import ElementAnimationStep from '../ElementAnimationStep';
 // import type { DiagramElement } from '../../../Element';
 
 /**
- * Position animation step
+ * Position animation step options object
  *
  * By default, the position will start with the element's current position.
  *
