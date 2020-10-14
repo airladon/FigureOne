@@ -2141,11 +2141,11 @@ function parseLine<T>(lIn: TypeParsableLine, onFail: T): Line | T | null {
 
 /**
  * Convert a parsable line definition to a {@link Line}.
- * @param {TypeParsableLine} r parsable rectangle definition
- * @return {Line} rectangle object
+ * @param {TypeParsableLine} l parsable line definition
+ * @return {Line} `Line` object
  */
-function getLine(p: TypeParsableLine): Line {
-  let parsedLine = parseLine(p);
+function getLine(l: TypeParsableLine): Line {
+  let parsedLine = parseLine(l);
   if (parsedLine == null) {
     parsedLine = new Line(new Point(0, 0), new Point(1, 0));
   }
@@ -3513,8 +3513,8 @@ function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Trans
 
 /**
  * Convert a parsable transform definition to a {@link Transform}.
- * @param {TypeParsableTransform} r parsable rectangle definition
- * @return {Transform} rectangle object
+ * @param {TypeParsableTransform} t parsable transform definition
+ * @return {Transform} transform object
  */
 function getTransform(t: TypeParsableTransform): Transform {
   let parsedTransform = parseTransform(t);

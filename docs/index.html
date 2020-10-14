@@ -874,6 +874,60 @@
                         #sub
                       </a></li>
                       
+                      <li><a
+                        href='#transformadd'
+                        class='regular pre-open'>
+                        #add
+                      </a></li>
+                      
+                      <li><a
+                        href='#transformmul'
+                        class='regular pre-open'>
+                        #mul
+                      </a></li>
+                      
+                      <li><a
+                        href='#transformtransform'
+                        class='regular pre-open'>
+                        #transform
+                      </a></li>
+                      
+                      <li><a
+                        href='#transformtransformby'
+                        class='regular pre-open'>
+                        #transformBy
+                      </a></li>
+                      
+                      <li><a
+                        href='#transformround'
+                        class='regular pre-open'>
+                        #round
+                      </a></li>
+                      
+                      <li><a
+                        href='#transformclip'
+                        class='regular pre-open'>
+                        #clip
+                      </a></li>
+                      
+                      <li><a
+                        href='#transformiszero'
+                        class='regular pre-open'>
+                        #isZero
+                      </a></li>
+                      
+                      <li><a
+                        href='#transform_dup'
+                        class='regular pre-open'>
+                        #_dup
+                      </a></li>
+                      
+                      <li><a
+                        href='#transformidentity'
+                        class='regular pre-open'>
+                        #identity
+                      </a></li>
+                      
                     </ul>
                   
                   
@@ -10987,7 +11041,8 @@ be more useful than rounding when values are close to rounding thresholds.</p>
 
   
 
-  <p>Subtract <code>transformToSubtract</code> from this transform chain. Both transform
+  <p>Subtract each chain element in <code>transformToSubtract</code> from each chain
+element in this transform chain. Both transform
 chains must be similar and have the same order of <a href="#rotation">Rotation</a>,
 <a href="#scale">Scale</a> and <a href="#translation">Translation</a> transform elements</p>
 
@@ -11036,6 +11091,634 @@ Transform.isSimilarTo
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='transformadd'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>add(transformToAdd)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Add each chain element in <code>transformToSubtract</code> to each chain
+element in this transform chain. Both transform
+chains must be similar and have the same order of <a href="#rotation">Rotation</a>,
+<a href="#scale">Scale</a> and <a href="#translation">Translation</a> transform elements</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>transformToAdd</span> <code class='quiet'>(<a href="#transform">Transform</a>
+            = <code>new Transform()</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#transform">Transform</a></code>
+    
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#transformissimilarto">
+Transform.isSimilarTo
+</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='transformmul'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>mul(transformToMul)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Multiply each chain element in <code>transformToSubtract</code> with each chain
+element in this transform chain. Both transform
+chains must be similar and have the same order of <a href="#rotation">Rotation</a>,
+<a href="#scale">Scale</a> and <a href="#translation">Translation</a> transform elements</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>transformToMul</span> <code class='quiet'>(<a href="#transform">Transform</a>
+            = <code>new Transform()</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#transform">Transform</a></code>
+    
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#transformissimilarto">
+Transform.isSimilarTo
+</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='transformtransform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>transform(transform)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return a transform chain that is <code>transform</code> transfomed by this transform
+chain.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#transform">Transform</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='transformtransformby'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>transformBy(transform)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return a transform chain that is this transform transformed by <code>transform</code></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#transform">Transform</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='transformround'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>round(precision)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return a duplicate transform with all values rounded</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>8</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#transform">Transform</a></code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='transformclip'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>clip(minTransform, maxTransform, limitLine)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return a duplicate transform that is clipped to <code>minTransform</code> and
+<code>maxTransform</code>. Both <code>minTransform</code> and <code>maxTransform</code> must be similar
+to this transform meaning they must all share the same order of
+<a href="#rotation">Rotation</a>, <a href="#scale">Scale</a> and <a href="#translation">Translation</a> transform elements.</p>
+<p>Use <code>limitLine</code> to clip the first <a href="#translation">Translation</a> transform in the
+chain to within a <a href="#line">Line</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>minTransform</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>maxTransform</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>limitLine</span> <code class='quiet'>((null | <a href="#line">Line</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#transformissimilarto">
+Transform.isSimilarTo
+</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='transformiszero'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isZero(zeroThreshold)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p><code>true</code> if all transforms within the transform chain are below the
+<code>zeroThreshold</code></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>zeroThreshold</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>0</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='transform_dup'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>_dup()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return a duplicate transform.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#transform">Transform</a></code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='transformidentity'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>identity()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return a duplicate transform chain where all transforms are
+identity transforms.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
   
 
   
