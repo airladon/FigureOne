@@ -2578,8 +2578,8 @@ export type TypeTransformValue = number | Array<number> | {
 };
 
 /**
- * Transform
- * @class
+ * Object that represents a chain of {@link Rotation}, {@link Translation} and
+ * {@link Scale} transforms
  */
 class Transform {
   order: Array<Translation | Rotation | Scale>;
@@ -2589,10 +2589,17 @@ class Transform {
   _type: 'transform';
   custom: ?Object;
 
-  constructor(orderOrName: Array<Translation | Rotation | Scale> | string = [], name: string = '') {
-    if (typeof orderOrName === 'string') {
+  /**
+   * @param {Array<Translation | Rotation | Scale> | string} chainOrName chain
+   * of transforms to initialize this Transform with, or name of transform if
+   * not initializing with transforms.
+   * @param {string} name transform name if `chainOrName` defines initializing
+   * transforms
+   */
+  constructor(chainOrName: Array<Translation | Rotation | Scale> | string = [], name: string = '') {
+    if (typeof chainOrName === 'string') {
       this.order = [];
-      this.name = orderOrName;
+      this.name = chainOrName;
     } else {
       // for (let i = 0; i < orderOrName.length; i += 1 ) {
       //   const t = orderOrName[i];
@@ -2605,7 +2612,7 @@ class Transform {
       //   }
       // }
       // debugger;
-      this.order = orderOrName.map(t => t._dup());
+      this.order = chainOrName.map(t => t._dup());
       this.name = name;
     }
     // this.order = order.slice();
@@ -2633,12 +2640,26 @@ class Transform {
     };
   }
 
+  /**
+   * Return a standard unity transform chain that includes scale, rotation and
+   * translation blocks
+   * @return {Transform}
+   */
   standard() {
     return this.scale(1, 1).rotate(0).translate(0, 0);
   }
 
-  translate(x: number | Point | TypeF1DefTranslation, y: number = 0, name: string = this.name) {
-    const translation = new Translation(x, y, name);
+  /**
+   * Return a duplicate transform with an added {@link Translation} transform
+   * @param {number | Point} xOrTranslation
+   * @return {Transform}
+   */
+  translate(
+    xOrTranslation: number | Point | TypeF1DefTranslation,
+    y: number = 0,
+    name: string = this.name,
+  ) {
+    const translation = new Translation(xOrTranslation, y, name);
     const order = this.order.slice();
 
     if (this.index === this.order.length) {
@@ -2652,6 +2673,11 @@ class Transform {
     return new Transform(order, name);
   }
 
+  /**
+   * Return a duplicate transform with an added {@link Rotation} transform
+   * @param {number} r
+   * @return {Transform}
+   */
   rotate(r: number | TypeF1DefRotation, name: string = this.name) {
     const rotation = new Rotation(r, name);
     // rotation.name = name;
@@ -2669,8 +2695,13 @@ class Transform {
     return new Transform(order, name);
   }
 
-  scale(x: number | Point | TypeF1DefScale, y: number = 0, name: string = this.name) {
-    const scale = new Scale(x, y, name);
+  /**
+   * Return a duplicate transform with an added {@link Scale} transform
+   * @param {number | Point} xOrScale
+   * @return {Transform}
+   */
+  scale(xOrScale: number | Point | TypeF1DefScale, y: number = 0, name: string = this.name) {
+    const scale = new Scale(xOrScale, y, name);
     const order = this.order.slice();
 
     if (this.index === this.order.length) {
@@ -2684,6 +2715,10 @@ class Transform {
     return new Transform(order, name);
   }
 
+  /**
+   * Remove some transforms from this transform chain
+   * @return {Transform}
+   */
   remove(transformNames: string | Array<string>) {
     const newOrder = [];
     let names;
@@ -2700,6 +2735,10 @@ class Transform {
     return new Transform(newOrder, this.name);
   }
 
+  /**
+   * Transform matrix of the transform chain
+   * @return {Array<number>}
+   */
   calcMatrix() {
     let m = m2.identity();
     for (let i = this.order.length - 1; i >= 0; i -= 1) {
@@ -2717,12 +2756,19 @@ class Transform {
     return this;
   }
 
-  t(index: number = 0): ?Point {
+  /**
+   * Retrieve the nth {@link Translation} transform value from this transform
+   * chain where n = `translationIndex`. If `translationIndex` is invalid
+   * (like if it is larger than the number of `Translation` transforms available)
+   * then `null` will be returned.
+   * @return {Point | null}
+   */
+  t(translationIndex: number = 0): ?Point {
     let count = 0;
     for (let i = 0; i < this.order.length; i += 1) {
       const t = this.order[i];
       if (t instanceof Translation) {
-        if (count === index) {
+        if (count === translationIndex) {
           return new Point(t.x, t.y);
         }
         count += 1;
@@ -2731,6 +2777,10 @@ class Transform {
     return null;
   }
 
+  /**
+   * Clip all {@link Rotation} transforms within this transform chain to
+   * angles between 0º-360º, -180º-180º, or not at all (`null`)
+   */
   clipRotation(clipTo: '0to360' | '-180to180' | null) {
     for (let i = 0; i < this.order.length; i += 1) {
       const transformStep = this.order[i];
@@ -2740,6 +2790,11 @@ class Transform {
     }
   }
 
+  /**
+   * Return a duplicate transform chain with an updated the nth
+   * {@link Translation} transform where n = `index`
+   * @return {Transform}
+   */
   updateTranslation(x: number | Point, yOrIndex: number = 0, index: number = 0) {
     let count = 0;
     let actualIndex = index;
@@ -2760,12 +2815,19 @@ class Transform {
     return this;
   }
 
-  s(index: number = 0): ?Point {
+  /**
+   * Retrieve the nth {@link Scale} transform value from this transform
+   * chain where n = `scaleIndex`. If `scaleIndex` is invalid
+   * (like if it is larger than the number of `Scale` transforms available)
+   * then `null` will be returned.
+   * @return {Point | null}
+   */
+  s(scaleIndex: number = 0): ?Point {
     let count = 0;
     for (let i = 0; i < this.order.length; i += 1) {
       const t = this.order[i];
       if (t instanceof Scale) {
-        if (count === index) {
+        if (count === scaleIndex) {
           return new Point(t.x, t.y);
         }
         count += 1;
@@ -2774,6 +2836,13 @@ class Transform {
     return null;
   }
 
+  /**
+   * Return an interpolated transform between this transform and `delta` at
+   * some `percent` between the two.
+   *
+   * Interpolation can either be `'linear'` or '`curved'`.
+   * @return {Transform}
+   */
   toDelta(
     delta: Transform,
     percent: number,
@@ -2806,6 +2875,11 @@ class Transform {
     return calcTransform;
   }
 
+  /**
+   * Return a duplicate transform chain with an updated the nth
+   * {@link Scale} transform where n = `index`
+   * @return {Transform}
+   */
   updateScale(x: number | Point, yOrIndex: ?number = null, index: number = 0) {
     let count = 0;
     let actualIndex = index;
@@ -2838,12 +2912,19 @@ class Transform {
     return this;
   }
 
-  r(index: number = 0): ?number {
+  /**
+   * Retrieve the nth {@link Rotation} transform value from this transform
+   * chain where n = `rotationIndex`. If `scaleIndex` is invalid
+   * (like if it is larger than the number of `Rotation` transforms available)
+   * then `null` will be returned.
+   * @return {Point | null}
+   */
+  r(rotationIndex: number = 0): ?number {
     let count = 0;
     for (let i = 0; i < this.order.length; i += 1) {
       const t = this.order[i];
       if (t instanceof Rotation) {
-        if (count === index) {
+        if (count === rotationIndex) {
           return t.r;
         }
         count += 1;
@@ -2852,6 +2933,11 @@ class Transform {
     return null;
   }
 
+  /**
+   * Return a duplicate transform chain with an updated the nth
+   * {@link Rotation} transform where n = `index`
+   * @return {Transform}
+   */
   updateRotation(r: number, index: number = 0) {
     let count = 0;
     for (let i = 0; i < this.order.length; i += 1) {
@@ -2868,14 +2954,28 @@ class Transform {
     return this;
   }
 
+  /**
+   * Return the matrix that respresents the cascaded transform chain
+   * @return {Array<number>}
+   */
   m(): Array<number> {
     return this.mat;
   }
 
+  /**
+   * Return the matrix that respresents the cascaded transform chain
+   * @return {Array<number>}
+   */
   matrix(): Array<number> {
     return this.mat;
   }
 
+  /**
+   * `true` if `transformToCompare` has the same order of {@link Rotation},
+   * {@link Scale} and {@link Translation} transform elements in the transform
+   * chain.
+   * @return {boolean}
+   */
   isSimilarTo(transformToCompare: Transform): boolean {
     if (transformToCompare.order.length !== this.order.length) {
       return false;
@@ -2889,6 +2989,11 @@ class Transform {
     return true;
   }
 
+  /**
+   * `true` if `transformToCompare` is equal to this transform within some
+   * `precision`.
+   * @return {boolean}
+   */
   isEqualTo(transformToCompare: Transform, precision: number = 8): boolean {
     // if (transformToCompare.order.length !== this.order.length) {
     //   return false;
@@ -2919,6 +3024,13 @@ class Transform {
     return true;
   }
 
+  /**
+   * `true` if `transformToCompare` is wihtin some `delta` of this transform.
+   * `isEqualTo` rounds the values to some precision to compare values. In
+   * comparison this will directly compare the delta between values. This may
+   * be more useful than rounding when values are close to rounding thresholds.
+   * @return {boolean}
+   */
   isWithinDelta(transformToCompare: Transform, delta: number = 0.00000001) {
     if (!this.isSimilarTo(transformToCompare)) {
       return false;
@@ -2950,6 +3062,12 @@ class Transform {
   // Subtract a transform from the current one.
   // If the two transforms have different order types, then just return
   // the current transform.
+  /**
+   * Subtract `transformToSubtract` from this transform chain. Both transform
+   * chains must be similar and have the same order of {@link Rotation},
+   * {@link Scale} and {@link Translation} transform elements
+   * @see <a href="#transformissimilarto">Transform.isSimilarTo</a>
+   */
   sub(transformToSubtract: Transform = new Transform()): Transform {
     if (!this.isSimilarTo(transformToSubtract)) {
       return new Transform(this.order, this.name);
