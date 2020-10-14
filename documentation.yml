@@ -8,6 +8,20 @@ toc:
   - DiagramElement
   - DiagramElementPrimitive
   - DiagramElementCollection
+  - name: Geometric Definitions
+  - Point
+  - Rect
+  - Line
+  - Transform
+  - TypeParsablePoint
+  - TypeParsableRect
+  - TypeParsableLine
+  - TypeParsableTransform
+  - getPoint
+  - getScale
+  - getRect
+  - getLine
+  - getTransform
   - name: Shapes
   - OBJ_Texture
   - OBJ_Polyline
@@ -46,6 +60,7 @@ toc:
   - DissolveOutAnimationStep
   - OBJ_AnimationBuilder
   - OBJ_AnimationStep
+  - OBJ_AnimationStart
   - OBJ_SerialAnimationStep
   - OBJ_ParallelAnimationStep
   - OBJ_TriggerAnimationStep
@@ -56,6 +71,7 @@ toc:
   - OBJ_ScaleAnimationStep
   - OBJ_TransformAnimationStep
   - OBJ_ScenarioAnimationStep
+  - OBJ_ScenarioVelocity
   - OBJ_ScenariosAnimationStep
   - OBJ_ColorAnimationStep
   - OBJ_OpacityAnimationStep
@@ -121,9 +137,9 @@ toc:
       - name: g2
         description: 2D geometry tools
         children:
-          - Point
-          - Rect
-          - Transform
-          - TypeParsableRect
-          - getRect
+          # - Point
+          # - Rect
+          # - Transform
+          # - TypeParsableRect
+          # - getRect
           - TypeF1DefRect

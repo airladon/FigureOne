@@ -115,7 +115,7 @@ export type TypeSpaceTransforms = {
   *
   * @class
   * @param {OBJ_Diagram} options
-  * @property {DiagramPrimitives} shapes Primitive shapes and text generation
+  * @property {DiagramPrimitives} create create elements with this
   * @example
   * // Simple html and javascript example to create a diagram, and add a
   * // hexagon.

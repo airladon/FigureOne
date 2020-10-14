@@ -18,6 +18,7 @@ import GlobalAnimation from '../webgl/GlobalAnimation';
 import { joinObjects, duplicateFromTo, SubscriptionManager } from '../../tools/tools';
 import { getState } from '../state';
 import { FunctionMap } from '../../tools/FunctionMap';
+import type { TypeWhen } from '../webgl/GlobalAnimation';
 // import type Diagram from '../Diagram';
 
 /**
@@ -32,7 +33,7 @@ export type OBJ_ScenariosAnimationStep = {
 /**
  * Animation start time options.
  *
- * `'nextFrame'` | `'prevFrame'` | `'nowSync'` | `'now'` | number | null
+ * {@link TypeWhen} | number | null
  *
  * When multiple animations need to be started, it is often
  * desirable to synchronise their start times.
@@ -57,9 +58,9 @@ export type OBJ_ScenariosAnimationStep = {
  * A custom time can be used if a `number` is defined.
  *
  * `null` will result in `'nextFrame'` being used
- * @typedef {('nextFrame' | 'prevFrame' | 'now' | 'syncNow')} AnimationStartTime
+ * @typedef {TypeWhen | number | null} AnimationStartTime
  */
-export type AnimationStartTime = 'nextFrame' | 'prevFrame' | 'now' | 'syncNow' | number | null;
+export type AnimationStartTime = TypeWhen | number | null;
 
 /**
  * Start animation options object.

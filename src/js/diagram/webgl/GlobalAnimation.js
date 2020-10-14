@@ -1,5 +1,22 @@
 // @flow
 
+/**
+ * `'nextFrame'` | `'prevFrame'` | `'syncNow'` | `'now'`
+ *
+ *
+ * `'syncNow'` is a synchronized 'now' time. The
+ * first time 'syncNow' is used, the current time will be stored and used
+ * for all subsequent calls to 'syncNow'. 'syncNow' is reset every
+ * time a new animation frame is drawn, or 100ms after a first syncNow call
+ * has been made after a reset.
+ *
+ * 'now' is the instantaneous time
+ *
+ * `'nextFrame'` will be the time of the next animation frame
+ *
+ * `'prevFrame'` is the time of the last animation frame
+ * @typedef {'now' | 'nextFrame' | 'prevFrame' | 'syncNow'} TypeWhen
+ */
 export type TypeWhen = 'now' | 'nextFrame' | 'prevFrame' | 'syncNow';
 
 // Singleton class that contains projects global variables
@@ -35,16 +52,6 @@ class GlobalAnimation {
         || window.msRequestAnimationFrame
       );
       GlobalAnimation.instance = this;
-      // this.drawQueue = [];
-      // this.nextDrawQueue = [];
-      // this.lastFrame = null;
-      // this.debug = false;
-      // this.simulatedFPS = 60;
-      // this.debugFrameTime = 0.5;
-      // this.timeoutId = null;
-      // this.now = () => performance.now();
-      // this.updateSyncNow = false;
-      // this.drawScene = this.draw.bind(this);
       this.reset();
     }
     return GlobalAnimation.instance;

@@ -58,10 +58,10 @@ type TypeF1DefPoint = {
 
 /**
  * A {@link Point} can be defined in several ways
- * As a Point: new Point()
- * As an x, y tuple: [number, number]
- * As an x, y string: '[number, number]'
- * As a definition object: { f1Type: 'p', state: [number, number] }
+ * - As a Point: new Point()
+ * - As an x, y tuple: [number, number]
+ * - As an x, y string: '[number, number]'
+ * - As a definition object: { f1Type: 'p', state: [number, number] }
  }
  * @example
  * // p1, p2, p3 and p4 are all the same
@@ -131,7 +131,10 @@ function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
   return onFailToUse;
 }
 
-
+/**
+ * Parse a {@link TypeParsablePoint} and return a {@link Point}.
+ * @return {Point}
+ */
 function getPoint(p: TypeParsablePoint): Point {
   let parsedPoint = parsePoint(p);
   if (parsedPoint == null) {
@@ -151,6 +154,13 @@ function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<
   return [getPoint(points)];
 }
 
+/**
+ * Parse a scale definition and return a {@link Point} representing the scale
+ * in x and y.
+ * Scale can either be defined as a {@link TypeParsablePoint} or a `number` if
+ * the x and y scale is equal.
+ * @return {Point} x and y scale
+ */
 function getScale(s: TypeParsablePoint | number) {
   let parsedPoint;
   if (typeof s === 'number') {
@@ -162,8 +172,14 @@ function getScale(s: TypeParsablePoint | number) {
 }
 
 /**
- * Rectangle definition
- * @class
+ * An object representing a rectangle.
+ *
+ * @example
+ * // get Rect from Fig
+ * const { Rect } = Fig;
+ *
+ * // define a rect centered at origin with width 4 and height 2
+ * const r = new Rect(-2, -1, 4, 2);
  */
 class Rect {
   left: number;
@@ -233,6 +249,11 @@ class Rect {
    * Returns `true` if `point` is within on on the border of the rectangle
    * @param {TypeParsablePoint} point point to test
    * @param {number} precision precision to test
+   * @example
+   * const r = new Rect(-2, -1, 4, 2);
+   *
+   * // check if point is within the rectangle (will return `true`)
+   * const result = r.isPointInside([0, 1]);
    */
   isPointInside(point: TypeParsablePoint, precision: number = 8) {
     const p = getPoint(point).round(precision);
@@ -270,10 +291,11 @@ type TypeF1DefRect = {
 };
 
 /**
- * Rectangles can be defined as either as an
- * Array (left, bottom, width, height), a {@link Rect} class,
- * a string representing the json definition of the
- * array form, or a {@link TypeF1DefRect}.
+ * A [Rectangle]{@link Rect} can be defined as either as an
+ * - Array (left, bottom, width, height)
+ * - a {@link Rect} class
+ * - a string representing the json definition of the
+ *   array form, or a {@link TypeF1DefRect}.
  *
  * @example
  * // All rectangles are the same, with a lower left corner of `(-2, -1)`,
@@ -290,6 +312,7 @@ export type TypeParsableRect = [number, number, number, number]
                                | Rect
                                | TypeF1DefRect
                                | string;
+
 
 function parseRect<T>(rIn: TypeParsableRect, onFail: T): Rect | T | null {
   if (rIn instanceof Rect) {
@@ -333,8 +356,8 @@ function parseRect<T>(rIn: TypeParsableRect, onFail: T): Rect | T | null {
 }
 
 /**
- * Convert a parsable rectangle definition to an instantiated rectangle object
- * @param {TypeParsableRect} r rectangle definition
+ * Convert a parsable rectangle definition to a {@link Rect}.
+ * @param {TypeParsableRect} r parsable rectangle definition
  * @return {Rect} rectangle object
  */
 function getRect(r: TypeParsableRect): Rect {
@@ -348,8 +371,23 @@ function getRect(r: TypeParsableRect): Rect {
 
 /* eslint-disable comma-dangle */
 /**
- * Point class
- * @class
+ * Object representing a point.
+ *
+ * Contains methods that makes it conventient to add, subtract and
+ * transform points.
+ *
+ * @example
+ * // get Point from Fig
+ * const { Point } = Fig;
+ *
+ * // define a point at (0, 2)
+ * const p = new Point(0, 2);
+ *
+ * // find the distance to another point (0, 1) which will be 1
+ * const d = p.distance([0, 1]);
+ *
+ * // add to another point (3, 1) which will result in (3, 3)
+ * const q = p.add(3, 1);
  */
 class Point {
   /**
@@ -879,9 +917,9 @@ function translationPath(
   return new Point(0, 0);
 }
 
-function point(x: number, y: number) {
-  return new Point(x, y);
-}
+// function point(x: number, y: number) {
+//   return new Point(x, y);
+// }
 
 function pointinRect(q: Point, p1: Point, p2: Point, precision?: number) {
   if (precision === undefined || precision === null) {
@@ -1045,6 +1083,35 @@ function getDeltaAngle(
 //   - m = y2 - y1 / x2 - x1 = A / (-B) = - A / B
 //
 
+/**
+ * Object representing a line that has numerous methods that make it easy to
+ * manipulate lines and points.
+ *
+ * A line is defined by two points, or a point and the distance and
+ * angle to another point.
+ *
+ * A finite line exists only between these two points.
+ *
+ * An infinite line can extend beyond either or both of the points to infinity.
+ *
+ * A line can also be defined as an infinite line by saying it extends beyond one
+ * @example
+ * // get Line from Fig
+ * const { Line } = Fig;
+ *
+ * // define a finite line from [0, 0] to [1, 0] with a point, magnitude and
+ * // angle
+ * const l1 = new Line([0, 0], 1, 0)
+ *
+ * // define a finite line from [0, 0] to [1, 0] with two points
+ * const l2 = new Line([0, 0], [1, 0])
+ *
+ * // define an infinite line from [0, 0], through [1, 0] and to infinity
+ * const l3 = new Line([0, 0], [1, 0], 1)
+ *
+ * // define an infinite line trough [0, 0] and [1, 0]
+ * const l4 = new Line([0, 0], [1, 0], 0)
+ */
 class Line {
   p1: Point;
   p2: Point;
@@ -1789,10 +1856,37 @@ function line(p1: Point, p2: Point) {
 
 
 type TypeF1DefLine = {
-  f1Type: 'p',
+  f1Type: 'l',
   state: [[number, number], [number, number], 2 | 1 | 0],
 };
 
+
+/**
+ * A {@link Line} is defined with either two points, or a point, magbintude and angle.
+ * The end definitions define if the line is finite or infinite. And end
+ * definition of `2` means both ends are finite and the line stops at its
+ * definition. `1` means the first end is finite, and the line extends through
+ * the second point to infinity. `0` means the line extends through both
+ * points to infinite on either side.
+ *
+ * A line can be defined in several ways.
+ *
+ * As a Line: `new Line()`
+ * - As two points: `[{@link TypeParsablePoint}, {@link TypeParsablePoint}]`
+ * - As two points and end definitions:
+ *   `[{@link TypeParsablePoint}, {@link TypeParsablePoint}, 2 | 1 | 0]`
+ * - As a point, mag angle: `[{@link TypeParsablePoint}, number, number]`
+ * - As a point, mag angle and end definitions: '[number, number, 2, 1, 0]'
+ * - As a definition object where state is
+ *   [[p1.x, p1.y], [p2.x, p2.y], endDefinition]:
+ *   { f1Type: 'l', state: [[number, number], [number, number], 2 | 1 | 0 }
+ * @example
+ * // p1, p2, p3 and p4 are all the same
+ * p1 = new Point(2, 3);
+ * p2 = [2, 3];
+ * p3 = '[2, 3]';
+ * p4 = { f1Type: 'p', state: [2, 3] };
+ */
 export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint, 2 | 1 | 0]
                                 | [TypeParsablePoint, TypeParsablePoint]
                                 | [TypeParsablePoint, number, number, 2 | 1 | 0]
@@ -1855,7 +1949,11 @@ function parseLine<T>(lIn: TypeParsableLine, onFail: T): Line | T | null {
   return onFailToUse;
 }
 
-// To Update tests
+/**
+ * Convert a parsable line definition to a {@link Line}.
+ * @param {TypeParsableLine} r parsable rectangle definition
+ * @return {Line} rectangle object
+ */
 function getLine(p: TypeParsableLine): Line {
   let parsedLine = parseLine(p);
   if (parsedLine == null) {
@@ -2953,6 +3051,11 @@ function parseTransform<T>(inTransform: TypeParsableTransform, onFail: T): Trans
   return onFailToUse;
 }
 
+/**
+ * Convert a parsable transform definition to a {@link Transform}.
+ * @param {TypeParsableTransform} r parsable rectangle definition
+ * @return {Transform} rectangle object
+ */
 function getTransform(t: TypeParsableTransform): Transform {
   let parsedTransform = parseTransform(t);
   if (parsedTransform == null) {
@@ -4963,7 +5066,7 @@ function decelerateTransform(
 }
 
 export {
-  point,
+  // point,
   Point,
   line,
   Line,

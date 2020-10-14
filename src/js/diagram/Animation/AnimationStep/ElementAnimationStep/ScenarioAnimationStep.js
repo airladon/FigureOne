@@ -28,13 +28,13 @@ import type { AnimationStartTime } from '../../AnimationManager';
  * rotation` and `scale` overwrite the first equivalent transforms in
  * `transform`
  *
- * @property {TypeParsablePoint} position
- * @property {TypeParsablePoint} translation
- * @property {TypeParsablePoint | number} scale
- * @property {number} rotation
- * @property {TypeParsableTransform} transform
- * @property {Array<number>} color
- * @property {number} opacity
+ * @property {TypeParsablePoint} [position]
+ * @property {TypeParsablePoint} [translation]
+ * @property {TypeParsablePoint | number} [scale]
+ * @property {number} [rotation]
+ * @property {TypeParsableTransform} [transform]
+ * @property {Array<number>} [color]
+ * @property {number} [opacity]
  */
 export type OBJ_ScenarioVelocity = {
   position?: TypeParsablePoint | number,
@@ -67,6 +67,9 @@ export type OBJ_ScenarioVelocity = {
  * `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
  * whichever direction doesn't pass through angle 0.
  * @property {'0to360' | '-180to180' | null} [clipRotationTo]
+ * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
+ * how the animation progresses - defaults to `linear` for color, opacity and
+ * custom animations and `easeinout` for others
  */
 export type OBJ_ScenarioAnimationStep = {
   start?: string | OBJ_Scenario;
@@ -80,6 +83,7 @@ export type OBJ_ScenarioAnimationStep = {
   translationOptions?: pathOptionsType;
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
+  progression: 'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression;
 } & OBJ_ElementAnimationStep;
 
 /**
