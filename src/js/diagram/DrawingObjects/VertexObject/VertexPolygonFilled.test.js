@@ -15,7 +15,7 @@ describe('PolygonFilled', () => {
     expect(round(p.dAngle)).toEqual(round(Math.PI * 2 / 5));
   });
   test('Square with corner radius 1', () => {
-    const square = new VertexPolygonFilled([webgl], 4, 1, 0, g2.point(0,0));
+    const square = new VertexPolygonFilled([webgl], 4, 1, 0, new g2.Point(0,0));
     const targetSquare = [
       0, 0,
       1, 0,
@@ -25,11 +25,11 @@ describe('PolygonFilled', () => {
       1, 0,
     ];
     const targetBorder = [
-      g2.point( 1,  0),
-      g2.point( 0  ,  1),
-      g2.point(-1,  0),
-      g2.point( 0  , -1),
-      g2.point( 1,  0),
+      new g2.Point( 1,  0),
+      new g2.Point( 0  ,  1),
+      new g2.Point(-1,  0),
+      new g2.Point( 0  , -1),
+      new g2.Point( 1,  0),
     ];
     expect(round(square.points)).toEqual(round(targetSquare));
     const squareBorder = square.border[0].map(p => p.round());
@@ -37,7 +37,7 @@ describe('PolygonFilled', () => {
   });
 
   test('Square with 3 sides drawn', () => {
-    const square = new VertexPolygonFilled([webgl], 4, 1, 0, g2.point(0,0), 3);
+    const square = new VertexPolygonFilled([webgl], 4, 1, 0, new g2.Point(0,0), 3);
     const targetSquare = [
       0, 0,
       1, 0,
@@ -46,12 +46,12 @@ describe('PolygonFilled', () => {
       0, -1,
     ];
     const targetBorder = [
-      g2.point( 0,  0),
-      g2.point( 1,  0),
-      g2.point( 0  ,  1),
-      g2.point(-1,  0),
-      g2.point( 0,  -1),
-      g2.point( 0,  0),
+      new g2.Point( 0,  0),
+      new g2.Point( 1,  0),
+      new g2.Point( 0  ,  1),
+      new g2.Point(-1,  0),
+      new g2.Point( 0,  -1),
+      new g2.Point( 0,  0),
     ];
     expect(round(square.points)).toEqual(round(targetSquare));
     const squareBorder = square.border[0].map(p => p.round());
@@ -59,7 +59,7 @@ describe('PolygonFilled', () => {
   });
 
   test('Rotated and offset', () => {
-    const square = new VertexPolygonFilled([webgl], 4, Math.sqrt(2), Math.PI / 4, g2.point(1,1));
+    const square = new VertexPolygonFilled([webgl], 4, Math.sqrt(2), Math.PI / 4, new g2.Point(1,1));
     const targetSquare = [
       1, 1,
       2, 2,
@@ -69,11 +69,11 @@ describe('PolygonFilled', () => {
       2, 2,
     ];
     const targetBorder = [
-      g2.point(2, 2),
-      g2.point(0, 2),
-      g2.point(0, 0),
-      g2.point(2, 0),
-      g2.point(2, 2),
+      new g2.Point(2, 2),
+      new g2.Point(0, 2),
+      new g2.Point(0, 0),
+      new g2.Point(2, 0),
+      new g2.Point(2, 2),
     ];
     expect(round(square.points)).toEqual(round(targetSquare));
     const squareBorder = square.border[0].map(p => p.round());
@@ -81,7 +81,7 @@ describe('PolygonFilled', () => {
   });
 
   test('Too many sides to draw', () => {
-    const square = new VertexPolygonFilled([webgl], 4, 1, 0, g2.point(0,0), 10);
+    const square = new VertexPolygonFilled([webgl], 4, 1, 0, new g2.Point(0,0), 10);
     const targetSquare = [
       0, 0,
       1, 0,
@@ -91,11 +91,11 @@ describe('PolygonFilled', () => {
       1, 0,
     ];
     const targetBorder = [
-      g2.point( 1,  0),
-      g2.point( 0  ,  1),
-      g2.point(-1,  0),
-      g2.point( 0  , -1),
-      g2.point( 1,  0),
+      new g2.Point( 1,  0),
+      new g2.Point( 0  ,  1),
+      new g2.Point(-1,  0),
+      new g2.Point( 0  , -1),
+      new g2.Point( 1,  0),
     ];
     expect(round(square.points)).toEqual(round(targetSquare));
     const squareBorder = square.border[0].map(p => p.round());
@@ -103,7 +103,7 @@ describe('PolygonFilled', () => {
   });
 
   test('Too few sides', () => {
-    const square = new VertexPolygonFilled([webgl], 2, 1, 0, g2.point(0,0), 3);
+    const square = new VertexPolygonFilled([webgl], 2, 1, 0, new g2.Point(0,0), 3);
     const x = Math.abs(Math.cos(Math.PI * 2 / 3));
     const y = Math.abs(Math.sin(Math.PI * 2 / 3));
     const targetSquare = [
@@ -114,10 +114,10 @@ describe('PolygonFilled', () => {
       1, 0,
     ];
     const targetBorder = [
-      g2.point(1, 0).round(),
-      g2.point(-x, y).round(),
-      g2.point(-x, -y).round(),
-      g2.point(1, 0).round(),
+      new g2.Point(1, 0).round(),
+      new g2.Point(-x, y).round(),
+      new g2.Point(-x, -y).round(),
+      new g2.Point(1, 0).round(),
     ];
     expect(round(square.points)).toEqual(round(targetSquare));
     const squareBorder = square.border[0].map(p => p.round());

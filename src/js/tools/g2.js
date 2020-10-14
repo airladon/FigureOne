@@ -1084,8 +1084,21 @@ function getDeltaAngle(
 //
 
 /**
- * Object representing a line that has numerous methods that make it easy to
- * manipulate lines and points.
+ * Line intersection result object with keys:
+ * @property {undefined | Point} intersect
+ * @property {boolean} alongLine `true` if `intersect` is along line calling
+ * `intersectsWith`
+ * @property {boolean} withinLine `true` if `intersect` is within line calling
+ * `intersectsWith`
+ */
+type Intersect = {
+  intersect: undefined | Point,
+  alongLine: boolean,
+  withinLine: boolean,
+}
+
+/**
+ * Object representing a line.
  *
  * A line is defined by two points, or a point and the distance and
  * angle to another point.
@@ -1122,6 +1135,12 @@ class Line {
   distance: number;
   ends: 2 | 1 | 0;
 
+  /**
+   * @param {0 | 1 | 2} ends number of ends the line has. `2` ends is a finite
+   * line. `1` end is an infinite line that terminates at the first point, and
+   * goes through the second point to infinity. `0` ends is an infinite line
+   * that goes through both first and second points to infinity.
+   */
   constructor(
     p1: TypeParsablePoint,
     p2OrMag: TypeParsablePoint | number | null,
@@ -1170,25 +1189,39 @@ class Line {
     return new Line(this.p1, this.p2, 0, this.ends);
   }
 
-  setP1(p1: Point | [number, number]) {
+  /**
+   * Change p1 of the line
+   */
+  setP1(p1: TypeParsablePoint) {
     this.p1 = getPoint(p1);
     this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
     this.setupLine();
   }
 
+  /**
+   * Change p2 of the line
+   */
   setP2(p2: Point | [number, number]) {
     this.p2 = getPoint(p2);
     this.ang = Math.atan2(this.p2.y - this.p1.y, this.p2.x - this.p1.x);
     this.setupLine();
   }
 
-  getPoint(index: number = 1) {
+  /**
+   * Get p1 or p2
+   * @return {Point}
+   */
+  getPoint(index: 1 | 2 = 1) {
     if (index === 2) {
       return this.p2;
     }
     return this.p1;
   }
 
+  /**
+   * Get the y coordinate of a point on the line with a given x coordinate
+   * @return {number | null} where `null` is returned if the line is vertical
+   */
   getYFromX(x: number) {
     if (this.B !== 0) {
       return (this.C - this.A * x) / this.B;
@@ -1196,6 +1229,10 @@ class Line {
     return null;
   }
 
+  /**
+   * Get the x coordinate of a point on the line with a given y coordinate
+   * @return {number | null} where `null` is returned if the line is horiztonal
+   */
   getXFromY(y: number) {
     if (this.A !== 0) {
       return (this.C - this.B * y) / this.A;
@@ -1203,14 +1240,26 @@ class Line {
     return null;
   }
 
+  /**
+   * Get the y intercept (at x = 0) of line
+   * @return {number | null} where `null` is returned if the line is vertical
+   */
   getYIntercept() {
     return this.getYFromX(0);
   }
 
+  /**
+   * Get the x intercept (at y = 0) of line
+   * @return {number | null} where `null` is returned if the line is horizontal
+   */
   getXIntercept() {
     return this.getXFromY(0);
   }
 
+  /**
+   * Get the gradient of the line
+   * @return {number}
+   */
   getGradient() {
     if (this.B === 0) {
       return null;
@@ -1218,10 +1267,18 @@ class Line {
     return -this.A / this.B;
   }
 
+  /**
+   * Get the angle of the line from p1 to p2
+   * @return {number}
+   */
   angle() {
     return this.ang;
   }
 
+  /**
+   * Return a duplicate line with values rounded to `precision`
+   * @return {Line}
+   */
   round(precision?: number = 8) {
     const lineRounded = new Line(this.p1, this.p2, 0, this.ends);
     lineRounded.A = roundNum(lineRounded.A, precision);
@@ -1232,12 +1289,22 @@ class Line {
     return lineRounded;
   }
 
+  /**
+   * Return the distance between p1 and p2. Note, for infinite lines
+   * this will still return the distance between p1 and p2 that defines
+   * the line.
+   * @return {number}
+   */
   length() {
     // return this.p1.sub(this.p2).distance();
     return this.distance;
   }
 
   /* eslint-disable comma-dangle */
+  /**
+   * Return the midpoint between p1 and p2.
+   * @return {Point}
+   */
   midPoint() {
     // const length = this.length();
     // const direction = this.p2.sub(this.p1);
@@ -1250,30 +1317,43 @@ class Line {
     return this.pointAtPercent(0.5);
   }
 
+  /**
+   * Return the point along some percent of the distance between p1 and p2.
+   * @return {Point}
+   */
   pointAtPercent(percent: number) {
     const length = this.length();
     const direction = this.p2.sub(this.p1);
     const angle = Math.atan2(direction.y, direction.x);
-    const midPoint = point(
+    const p = new Point(
       this.p1.x + length * percent * Math.cos(angle),
       this.p1.y + length * percent * Math.sin(angle)
     );
-    return midPoint;
+    return p;
   }
 
+  /**
+   * Return the point along the line at some length from p1
+   * @return {Point}
+   */
   pointAtLength(length: number) {
-    const direction = this.p2.sub(this.p1);
-    const angle = Math.atan2(direction.y, direction.x);
-    const midPoint = point(
-      this.p1.x + length * Math.cos(angle),
-      this.p1.y + length * Math.sin(angle)
-    );
-    return midPoint;
+    const totalLength = this.p2.sub(this.p1);
+    return this.pointAtPercent(length / totalLength);
+    // const angle = Math.atan2(direction.y, direction.x);
+    // const p = new Point(
+    //   this.p1.x + length * Math.cos(angle),
+    //   this.p1.y + length * Math.sin(angle)
+    // );
+    // return p;
   }
   /* eslint-enable comma-dangle */
 
-  hasPointAlong(pIn: TypeParsablePoint, precision?: number = 8) {
-    const p = getPoint(pIn);
+  /**
+   * `true` if `point` is along the line extended to infinity on both ends
+   * @return {boolean}
+   */
+  hasPointAlong(point: TypeParsablePoint, precision?: number = 8) {
+    const p = getPoint(point);
     if (precision === undefined || precision === null) {
       if (this.C === this.A * p.x + this.B * p.y) {
         return true;
@@ -1287,17 +1367,27 @@ class Line {
   }
 
 
-  // perpendicular distance of line to point
-  distanceToPoint(pIn: TypeParsablePoint, precision?: number = 8) {
-    const p = getPoint(pIn);
+  /**
+   * Perpendicular distance from `point` to line
+   * @return {number}
+   */
+  distanceToPoint(point: TypeParsablePoint, precision?: number = 8) {
+    const p = getPoint(point);
     return roundNum(
       Math.abs(this.A * p.x + this.B * p.y - this.C) / Math.sqrt(this.A ** 2 + this.B ** 2),
       precision,
     );
   }
 
-  hasPointOn(pIn: TypeParsablePoint, precision?: number = 8) {
-    const p = getPoint(pIn);
+  /**
+   * `true` if `point` is on the line.
+   *
+   * If the line has 2 or 1 finite ends, point must be on or between the
+   * defined ends.
+   * @return {boolean}
+   */
+  hasPointOn(point: TypeParsablePoint, precision?: number = 8) {
+    const p = getPoint(point);
     if (this.hasPointAlong(p, precision)) {
       if (this.ends === 2) {
         if (pointinRect(p, this.p1, this.p2, precision)) {
@@ -1320,6 +1410,10 @@ class Line {
     return false;
   }
 
+  /**
+   * `true` if two lines are equal to within some rounding `precision`.
+   * @return {boolean}
+   */
   isEqualTo(line2: Line, precision?: number = 8) {
     const l1 = this;
     const l2 = line2;
@@ -1353,6 +1447,14 @@ class Line {
     return true;
   }
 
+  /**
+   * `true` if two lines are within a delta of each other.
+   *
+   * This is distinct from a rounding precision as it is an absolute
+   * delta.
+   *
+   * @return {boolean}
+   */
   isWithinDelta(line2: Line, delta: number = 0.00000001) {
     const l1 = this;
     const l2 = line2;
@@ -1396,10 +1498,18 @@ class Line {
   //   return line2.isOn(this, precision);
   // }
 
+  /**
+   * `true` if this line is within `line2`
+   * @return {boolean}
+   */
   hasLineWithin(line2: Line, precision: number = 8) {
     return line2.isWithinLine(this, precision);
   }
 
+  /**
+   * `true` if this line is along the infinite length of `line2`
+   * @return {boolean}
+   */
   isAlongLine(line2: Line, precision: number = 8) {
     const l1 = this.round(precision);
     const l2 = line2.round(precision);
@@ -1452,6 +1562,10 @@ class Line {
     return true;
   }
 
+  /**
+   * `true` if this line is contained within `line2`
+   * @return {boolean}
+   */
   isWithinLine(line2: Line, precision: number = 8) {
     const l1 = this.round(precision);
     const l2 = line2.round(precision);
@@ -1474,6 +1588,21 @@ class Line {
   // left, right, top, bottom is relative to cartesian coordinates
   // 'outside' is the outside of a polygon defined in the positive direction
   // (CCW).
+  /**
+   * Create a line that is offset by some space from this line.
+   *
+   * `'left'`, `'right'`, `'top'` and `'bottom'` are relative to cartesian
+   * coordinates.
+   *
+   * `'positive'` to the right of a vertical line defined from bottom to top and
+   * above a horizontal line defined from right to left. Another way to think of
+   * it is if lines are used to create a polygon in the positive rotation
+   * direction (CCW), the the `'positive'` side will be on the outside of the
+   * polygon.
+   *
+   * `'negative'` is then the inside of the same polygon.
+   * @return  {Line}
+   */
   offset(
     direction: 'left' | 'right' | 'top' | 'bottom' | 'positive' | 'negative',
     space: number,
@@ -1509,6 +1638,10 @@ class Line {
   }
 
   // If two lines are parallel, their determinant is 0
+  /**
+   * `true` if this line is parralel with `line2`
+   * @return {boolean}
+   */
   isParallelWith(line2: Line, precision: number = 8) {
     const l2 = line2; // line2.round(precision);
     const l1 = this;  // this.round(precision);
@@ -1520,7 +1653,7 @@ class Line {
   }
 
   // This needs to be tested somewhere as p1ToShaddow = line was updated
-  reflectsOn(l: Line, precision: number = 8) {
+  shaddowOn(l: Line, precision: number = 8) {
     const { intersect } = this.intersectsWith(l, precision);
     if (intersect == null) {
       return null;
@@ -1548,7 +1681,62 @@ class Line {
   //   y = -A1/B1x + C1/B1
   // If however B1 is 0, then y can be found from eqn 2
   //   y = -A2/B2x + C2/B2
-  intersectsWith(line2: Line, precision: number = 8) {
+
+  /**
+   * The intersection between this line and `line2`.
+   *
+   * The returned result is an {@link Intersect} object with keys `intersect`,
+   * `alongLine` and `withinLine`. The `intersect` is found by extending both
+   * lines to infinity and recording where they cross. If the two lines never
+   * cross, and are not collinear, then the result will be `undefined`.
+   * `alongLine` and `withinLine` can then be used as metadata to defermine if
+   * the intersection is within finite lines or not.
+   *
+   * The properties of the two lines, such as whether they have zero, finite,
+   * or infinite length, and are parallel or collinear will define the result.
+   *
+   * If the lines are not parallel and/or collinear then the returned intercept
+   * will be the point where the two lines, extended to infinity, cross. The
+   * `withinLine` returned property can then be used to determine if the
+   * intercept point is within this line.
+   *
+   * If one of the lines has zero length, then `intersect` will only be
+   * defined if p1 of the zero length line lies along the other line.
+   *
+   * If both of the lines have zero length, then `intersect` will only be
+   * defined if p1 of both lines is the same.
+   *
+   * If the lines are parallel and not collinear, then `intercept` will be
+   * undefined.
+   *
+   * If lines are collinear then the `intercept` point will be defined by how
+   * many finite ends the lines have and wheter the lines are overlapping or
+   * not
+   *
+   * Lines are equal:
+   *    - 0 ends: take the yIntercept (or xIntercept if vertical)
+   *    - 1 ends: take the p1 point
+   *    - 2 ends: take the midPoint
+   *
+   * One line within the other: take mid point between mid points
+   *    - 2 ends around 2 ends: take the midPoint of the two midPoints
+   *    - 0 ends around 2 ends: take the midPoint of the 2 ends
+   *    - 0 ends around 1 ends: take the p1 of the 1 ends
+   *    - 1 end around 1 end: take the midPoint between the p1s
+   *    - 1 end around 2 ends: take the midPoint of the two ends
+   *
+   * Lines are not overlapping:
+   *    - Both 2 ends - take midPoint between 2 closest ends
+   *    - Both 1 ends - take midPoint between 2 p1s
+   *    - One 1 end and 2 end - take midPoint between p1 and closest point
+   *
+   * Lines are partially overlapping:
+   *    - Both 2 ends - take midPoint between 2 overlapping ends
+   *    - Both 1 ends - take midPoint between both p1s
+   *    - One 1 end and 2 end - take midPoint between overlapping end and p1
+   * @return {Intersect}
+   */
+  intersectsWith(line2: Line, precision: number = 8): Intersect {
     const l2 = line2; // line2.round(precision);
     const l1 = this;  // this.round(precision);
 

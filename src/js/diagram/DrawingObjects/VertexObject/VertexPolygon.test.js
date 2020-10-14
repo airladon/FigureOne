@@ -15,7 +15,7 @@ describe('Polygon', () => {
     // expect(round(polygon.dAngle)).toEqual(round(Math.PI * 2 / 5));
   });
   test('Square with corner radius 1 and thickness 0.1', () => {
-    const square = new VertexPolygon([webgl], 4, 1.1, 0.2, 0, g2.point(0,0));
+    const square = new VertexPolygon([webgl], 4, 1.1, 0.2, 0, new g2.Point(0,0));
     const targetSquare = [
       0.9,  0,
       1.1,  0,
@@ -29,11 +29,11 @@ describe('Polygon', () => {
       1.1,  0,
     ];
     const targetBorder = [
-      g2.point( 1.1,  0),
-      g2.point( 0  ,  1.1),
-      g2.point(-1.1,  0),
-      g2.point( 0  , -1.1),
-      g2.point( 1.1,  0),
+      new g2.Point( 1.1,  0),
+      new g2.Point( 0  ,  1.1),
+      new g2.Point(-1.1,  0),
+      new g2.Point( 0  , -1.1),
+      new g2.Point( 1.1,  0),
     ];
     expect(round(square.points)).toEqual(round(targetSquare));
     const squareBorder = square.border[0].map(p => p.round());
@@ -41,7 +41,7 @@ describe('Polygon', () => {
   });
 
   test('Square: corner radius 1, thickness 0.2, and only 3 sides drawn', () => {
-    const square = new VertexPolygon([webgl], 4, 1.1,0.2, 0, g2.point(0,0), 3);
+    const square = new VertexPolygon([webgl], 4, 1.1,0.2, 0, new g2.Point(0,0), 3);
     const targetSquare = [
       0.9,  0,
       1.1,  0,
@@ -53,22 +53,22 @@ describe('Polygon', () => {
       0  , -1.1,
     ];
     const targetBorder = [
-      g2.point( 1.1,  0),
-      g2.point( 0  ,  1.1),
-      g2.point(-1.1,  0),
-      g2.point( 0  , -1.1),
-      g2.point( 0  , -0.9),
-      g2.point(-0.9,  0),
-      g2.point( 0  ,  0.9),
-      g2.point( 0.9,  0),
-      g2.point( 1.1,  0),
+      new g2.Point( 1.1,  0),
+      new g2.Point( 0  ,  1.1),
+      new g2.Point(-1.1,  0),
+      new g2.Point( 0  , -1.1),
+      new g2.Point( 0  , -0.9),
+      new g2.Point(-0.9,  0),
+      new g2.Point( 0  ,  0.9),
+      new g2.Point( 0.9,  0),
+      new g2.Point( 1.1,  0),
     ];
     expect(round(square.points)).toEqual(round(targetSquare));
     const squareBorder = square.border[0].map(p => p.round());
     expect(squareBorder).toEqual(targetBorder);
   });
   test('Square: corner radius 2 and thickness 1', () => {
-    const square = new VertexPolygon([webgl],4, 2.5, 1.0, 0, g2.point(0,0));
+    const square = new VertexPolygon([webgl],4, 2.5, 1.0, 0, new g2.Point(0,0));
     const targetSquare = [
       1.5,  0,
       2.5,  0,
@@ -82,11 +82,11 @@ describe('Polygon', () => {
       2.5,  0,
     ];
     const targetBorder = [
-      g2.point(2.5,  0),
-      g2.point(0  ,  2.5),
-      g2.point(-2.5,  0),
-      g2.point(0  , -2.5),
-      g2.point(2.5,  0),
+      new g2.Point(2.5,  0),
+      new g2.Point(0  ,  2.5),
+      new g2.Point(-2.5,  0),
+      new g2.Point(0  , -2.5),
+      new g2.Point(2.5,  0),
     ];
     expect(round(square.points)).toEqual(round(targetSquare));
     const squareBorder = square.border[0].map(p => p.round());
@@ -99,7 +99,7 @@ describe('Polygon', () => {
       Math.sqrt(2) * 2.5,
       Math.sqrt(2) * 1.0,
       Math.PI / 4,
-      g2.point(0,0),
+      new g2.Point(0,0),
     );
     const targetSquare = [
       1.5,  1.5,
@@ -114,11 +114,11 @@ describe('Polygon', () => {
       2.5,  2.5,
     ];
     const targetBorder = [
-      g2.point(2.5,  2.5),
-      g2.point(-2.5, 2.5),
-      g2.point(-2.5, -2.5),
-      g2.point(2.5 , -2.5),
-      g2.point(2.5,  2.5),
+      new g2.Point(2.5,  2.5),
+      new g2.Point(-2.5, 2.5),
+      new g2.Point(-2.5, -2.5),
+      new g2.Point(2.5 , -2.5),
+      new g2.Point(2.5,  2.5),
     ];
     expect(round(square.points)).toEqual(round(targetSquare));
     const squareBorder = square.border[0].map(p => p.round());
