@@ -3135,8 +3135,8 @@ class Transform {
    * @return {Transform}
    * @example
    * // rotate and then translate
-   * const rotation = new Fig.Transform().rotate(Math.PI / 2);
-   * const translation = new Fig.Transform().translate(0.5, 0);
+   * const rotation = new Transform().rotate(Math.PI / 2);
+   * const translation = new Transform().translate(0.5, 0);
    * const t = translation.transform(rotation)
    */
   transform(initialTransform: Transform) {
@@ -3152,8 +3152,8 @@ class Transform {
    * @return {Transform}
    * @example
    * // rotate and then translate
-   * const rotation = new Fig.Transform().rotate(Math.PI / 2);
-   * const translation = new Fig.Transform().translate(0.5, 0);
+   * const rotation = new Transform().rotate(Math.PI / 2);
+   * const translation = new Transform().translate(0.5, 0);
    * const t = rotation.transformBy(translation)
    */
   transformBy(t: Transform): Transform {
