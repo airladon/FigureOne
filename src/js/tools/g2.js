@@ -2069,11 +2069,13 @@ type TypeF1DefLine = {
  *   [[p1.x, p1.y], [p2.x, p2.y], endDefinition]:
  *   { f1Type: 'l', state: [[number, number], [number, number], 2 | 1 | 0 }
  * @example
- * // p1, p2, p3 and p4 are all the same
- * p1 = new Point(2, 3);
- * p2 = [2, 3];
- * p3 = '[2, 3]';
- * p4 = { f1Type: 'p', state: [2, 3] };
+ * // l1, l2, l3, l4, l5 and l6 are all the same if parsed by `getLine`
+ * l1 = new Line([0, 0], [2, 2]);
+ * l2 = new Line([0, 0], 2 * Math.sqrt(2), Math.PI / 4);
+ * l3 = new Line([0, 0], [2, 2], 2);
+ * l4 = [[0, 0], [2, 2]];
+ * l5 = [[0, 0], 2 * Math.sqrt(2), Math.PI / 4];
+ * l6 = [[0, 0], [2, 2], 2];
  */
 export type TypeParsableLine = [TypeParsablePoint, TypeParsablePoint, 2 | 1 | 0]
                                 | [TypeParsablePoint, TypeParsablePoint]
@@ -2154,12 +2156,21 @@ type TypeF1DefRotation = {
   f1Type: 'r',
   state: [string, number],
 };
+
+/**
+ * Rotation transform element
+ */
 class Rotation {
   r: number;
   name: string;
-  constructor(angleIn: number | TypeF1DefRotation | string, nameIn: string = '') {
-    let name: string = nameIn;
-    let angle = angleIn;
+  /**
+   * @param {number | string} rotationAngle
+   * @param {string} name name to give to rotation to identify it in a more
+   * complex {@link Transform}
+   */
+  constructor(rotationAngle: number | TypeF1DefRotation | string, name: string = '') {
+    let nameToUse: string = name;
+    let angle = rotationAngle;
     if (typeof angle === 'string') {
       try {
         angle = JSON.parse(angle);
@@ -2178,12 +2189,12 @@ class Rotation {
       && angle.state.length === 2
     ) {
       const [n, r] = angle.state;
-      name = n;
+      nameToUse = n;
       this.r = r;
     } else {
       this.r = 0;
     }
-    this.name = name;
+    this.name = nameToUse;
   }
 
   _state(options: { precision: number }) {
@@ -2195,26 +2206,50 @@ class Rotation {
     };
   }
 
+  /**
+   * Return a rotation matrix representing the rotation
+   * @return {Array<number>}
+   */
   matrix(): Array<number> {
     return m2.rotationMatrix(this.r);
   }
 
+  /**
+   * Subtract `rotToSub` from this rotation
+   * @return {Rotation}
+   */
   sub(rotToSub: Rotation = new Rotation(0, this.name)): Rotation {
     return new Rotation(this.r - rotToSub.r, this.name);
   }
 
+  /**
+   * Round this rotation to some `precision`
+   * @return {Rotation}
+   */
   round(precision: number = 8): Rotation {
     return new Rotation(roundNum(this.r, precision), this.name);
   }
 
+  /**
+   * Add `rotToAdd` to this rotation
+   * @return {Rotation}
+   */
   add(rotToAdd: Rotation = new Rotation(0, this.name)): Rotation {
     return new Rotation(this.r + rotToAdd.r, this.name);
   }
 
+  /**
+   * Multiply `rotToMul` to this rotation
+   * @return {Rotation}
+   */
   mul(rotToMul: Rotation = new Rotation(1, this.name)): Rotation {
     return new Rotation(this.r * rotToMul.r, this.name);
   }
 
+  /**
+   * Return a duplicate rotation
+   * @return {Rotation}
+   */
   _dup() {
     return new Rotation(this.r, this.name);
   }
@@ -2225,19 +2260,31 @@ type TypeF1DefTranslation = {
   f1Type: 't',
   state: [string, number, number],
 };
+
+/**
+ * Translation transform element
+ */
 class Translation extends Point {
   x: number;
   y: number;
   name: string;
 
+  /**
+   * @param {Point | number} txOrTranslation translation or x value of
+   * translation
+   * @param {number} ty y value of translation (only used if `txOrTranslation`
+   * is a `number`)
+   * @param {string} name name to identify translation when included in a more
+   * complex {@link Transform}
+   */
   constructor(
-    txIn: Point | number | TypeF1DefTranslation,
-    tyIn: number = 0,
-    nameIn: string = '',
+    txOrTranslation: Point | number | TypeF1DefTranslation,
+    ty: number = 0,
+    name: string = '',
   ) {
-    let name: string = nameIn;
-    let tx = txIn;
-    let ty = tyIn;
+    let nameToUse: string = name;
+    let tx = txOrTranslation;
+    let tyToUse = ty;
     if (typeof tx === 'string') {
       try {
         tx = JSON.parse(tx);
@@ -2245,13 +2292,13 @@ class Translation extends Point {
         tx = 0;
       }
       if (Array.isArray(tx) && tx.length === 2) {
-        [tx, ty] = tx;
+        [tx, tyToUse] = tx;
       }
     }
     if (tx instanceof Point) {
       super(tx.x, tx.y);
     } else if (typeof tx === 'number') {
-      super(tx, ty);
+      super(tx, tyToUse);
     } else if (
       tx.f1Type != null
       && tx.f1Type === 't'
@@ -2260,12 +2307,12 @@ class Translation extends Point {
       && tx.state.length === 3
     ) {
       const [n, x, y] = tx.state;
-      name = n;
+      nameToUse = n;
       super(x, y);
     } else {
       super(0, 0);
     }
-    this.name = name;
+    this.name = nameToUse;
   }
 
   _state(options: { precision: number }) {
@@ -2280,10 +2327,18 @@ class Translation extends Point {
     };
   }
 
+  /**
+   * Returns a translation matrix
+   * @return {Array<number>}
+   */
   matrix(): Array<number> {
     return m2.translationMatrix(this.x, this.y);
   }
 
+  /**
+   * Subtract `translationToSub` from this translation
+   * @return {Translation}
+   */
   sub(
     translationToSub: Translation | Point | number = new Translation(0, 0),
     y: number = 0,
@@ -2301,6 +2356,10 @@ class Translation extends Point {
     );
   }
 
+  /**
+   * Add `translationToAdd` to this translation
+   * @return {Translation}
+   */
   add(
     translationToAdd: Translation | Point | number = new Translation(0, 0),
     y: number = 0,
@@ -2318,6 +2377,10 @@ class Translation extends Point {
     );
   }
 
+  /**
+   * Multiply `translationToMul` to this translation
+   * @return {Translation}
+   */
   mul(translationToMul: Translation = new Translation(1, 1)): Translation {
     return new Translation(
       this.x * translationToMul.x,
@@ -2326,6 +2389,10 @@ class Translation extends Point {
     );
   }
 
+  /**
+   * Round this translation to some `precision`
+   * @return {Translation}
+   */
   round(precision: number = 8): Translation {
     return new Translation(
       roundNum(this.x, precision),
@@ -2334,6 +2401,9 @@ class Translation extends Point {
     );
   }
 
+  /**
+   * Return a duplicate translation
+   */
   _dup() {
     return new Translation(this.x, this.y, this.name);
   }
@@ -2343,15 +2413,27 @@ type TypeF1DefScale = {
   f1Type: 't',
   state: [string, number, number],
 };
+
+/**
+ * Scale transform element
+ */
 class Scale extends Point {
   x: number;
   y: number;
   name: string;
 
-  constructor(sxIn: Point | number | TypeF1DefScale, syIn: ?number, nameIn: string = '') {
+  /**
+   * @param {Point | number} sxOrScale scale or x value of
+   * scale
+   * @param {number} ty y value of scale (only used if `sxOrScale`
+   * is a `number`)
+   * @param {string} name name to identify scale when included in a more
+   * complex {@link Transform}
+   */
+  constructor(sxOrScale: Point | number | TypeF1DefScale, sy: ?number, nameIn: string = '') {
     let name: string = nameIn;
-    let sx = sxIn;
-    let sy = syIn;
+    let sx = sxOrScale;
+    let syToUse = sy;
     if (typeof sx === 'string') {
       try {
         sx = JSON.parse(sx);
@@ -2359,14 +2441,14 @@ class Scale extends Point {
         sx = 0;
       }
       if (Array.isArray(sx) && sx.length === 2) {
-        [sx, sy] = sx;
+        [sx, syToUse] = sx;
       }
     }
     if (sx instanceof Point) {
       super(sx.x, sx.y);
     } else if (typeof sx === 'number') {
-      if (sy != null) {
-        super(sx, sy);
+      if (syToUse != null) {
+        super(sx, syToUse);
       } else {
         super(sx, sx);
       }
@@ -2399,10 +2481,18 @@ class Scale extends Point {
     };
   }
 
+  /**
+   * Returns a scale matrix
+   * @return {Array<number>}
+   */
   matrix(): Array<number> {
     return m2.scaleMatrix(this.x, this.y);
   }
 
+  /**
+   * Subtract `scaleToSub` from this scale
+   * @return {Scale}
+   */
   sub(
     scaleToSub: Scale | Point | number = new Scale(0, 0),
     y: number = 0,
@@ -2420,6 +2510,10 @@ class Scale extends Point {
     );
   }
 
+  /**
+   * Round this scale to some `precision`
+   * @return {Scale}
+   */
   round(precision: number = 8): Scale {
     return new Scale(
       roundNum(this.x, precision),
@@ -2428,6 +2522,10 @@ class Scale extends Point {
     );
   }
 
+  /**
+   * Add `scaleToAdd` to this scale
+   * @return {Scale}
+   */
   add(
     scaleToAdd: Scale | Point | number = new Scale(0, 0),
     y: number = 0,
@@ -2445,6 +2543,10 @@ class Scale extends Point {
     );
   }
 
+  /**
+   * Multiply `scaleToMul` to this scale
+   * @return {Scale}
+   */
   mul(scaleToMul: Scale | Point | number = new Scale(1, 1)): Scale {
     if (scaleToMul instanceof Scale || scaleToMul instanceof Point) {
       return new Scale(
@@ -2459,6 +2561,10 @@ class Scale extends Point {
     );
   }
 
+  /**
+   * Return a duplicate of this scale
+   * @return {Scale}
+   */
   _dup() {
     return new Scale(this.x, this.y, this.name);
   }
