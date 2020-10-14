@@ -367,9 +367,9 @@
               
                 
                 <li><a
-                  href='#geometric-definitions'
+                  href='#geometric-classes'
                   class="h5 bold black caps">
-                  Geometric Definitions
+                  Geometric classes
                   
                 </a>
                 
@@ -5831,12 +5831,39 @@ array of paths.</p>
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='geometric-definitions' class='mt0'>
-    Geometric Definitions
+  <h2 id='geometric-classes' class='mt0'>
+    Geometric classes
   </h2>
 
   
-    
+    <p>To define many shapes, geometric primitives (not to be confused with diagram element primitives) such as points and lines need to be used.</p>
+<p>FigureOne includes classes that define a:</p>
+<ul>
+<li><a href="#point">Point</a></li>
+<li><a href="#line">Line</a></li>
+<li><a href="#rect">Rectangle</a></li>
+<li><a href="#translation">Translation</a> transform</li>
+<li><a href="#rotation">Rotation</a> transofrm</li>
+<li><a href="#scale">Scale</a> transform</li>
+<li>[Transform Chain]<a href="#transform">Transform</a></li>
+</ul>
+<p>Each of these classes have convenience methods that make it easy to to work with them such as</p>
+<ul>
+<li>Checking if two points are equal or within some delta</li>
+<li>Adding, subtracting and multiplying points</li>
+<li>Checking if a point is on a line</li>
+<li>Finding the intersection between two lines</li>
+<li>Transforming a point with a transform</li>
+<li>Chaining transforms together</li>
+</ul>
+<p>There are many more methods in each class and it is recommended you quickly review them so you know what is available and don't need to reimplement existing logic.</p>
+<p>Many of these classes are used by each other. For instance, <a href="#line">Line</a> makes a lot of use of <a href="#point">Point</a>. Therefore instead of defining a point by creating a class each time, short hand, parsable equivalents for Points, Lines, Rectangles and Transforms are available. For more information refer to:</p>
+<ul>
+<li><a href="#typeparsablepoint">TypeParsablePoint</a></li>
+<li><a href="#typeparsableline">TypeParsableLine</a></li>
+<li><a href="#typeparsablerect">TypeParsableRect</a></li>
+<li><a href="#typeparsabletransform">TypeParsableTransform</a></li>
+</ul>
 
   
 </section></div>
@@ -9614,6 +9641,13 @@ transforms
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create a tranform that first scales, then rotates then translates</span>
+<span class="hljs-keyword">const</span> t1 = <span class="hljs-keyword">new</span> Transform().scale(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>).rotate(<span class="hljs-built_in">Math</span>.PI).translate(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>)</pre>
+    
+  
 
   
 
@@ -12285,16 +12319,8 @@ the x and y scale is equal.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>p</span> <code class='quiet'>(<a href="#typeparsableline">TypeParsableLine</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>r</span> <code class='quiet'>(<a href="#typeparsableline">TypeParsableLine</a>)</code>
-	    parsable rectangle definition
+            <span class='code bold'>l</span> <code class='quiet'>(<a href="#typeparsableline">TypeParsableLine</a>)</code>
+	    parsable line definition
 
           </div>
           
@@ -12309,7 +12335,8 @@ the x and y scale is equal.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#line">Line</a></code>:
-        rectangle object
+        <code>Line</code>
+ object
 
       
     
@@ -12365,15 +12392,7 @@ the x and y scale is equal.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>t</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>r</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>)</code>
-	    parsable rectangle definition
+	    parsable transform definition
 
           </div>
           
@@ -12388,7 +12407,7 @@ the x and y scale is equal.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#transform">Transform</a></code>:
-        rectangle object
+        transform object
 
       
     

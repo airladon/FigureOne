@@ -64,7 +64,7 @@ type TypeF1DefPoint = {
  * - As a definition object: { f1Type: 'p', state: [number, number] }
  }
  * @example
- * // p1, p2, p3 and p4 are all the same
+ * // p1, p2, p3 and p4 are all the same when parsed by `getPoint`
  * p1 = new Point(2, 3);
  * p2 = [2, 3];
  * p3 = '[2, 3]';
@@ -298,15 +298,15 @@ type TypeF1DefRect = {
  *   array form, or a {@link TypeF1DefRect}.
  *
  * @example
- * // All rectangles are the same, with a lower left corner of `(-2, -1)`,
- * // a width of `4`, and a height of `2`
- * const r1 = getRect([-2, -1, 4, 2]);
- * const r2 = getRect(new Fig.Rect(-2, -1, 4, 2));
- * const r3 = getRect('[-2, -1, 4, 2]');
- * const r4 = getRect({
+ * // All rectangles are the same when parsed by `getRect` and have a lower
+ * left corner of `(-2, -1)`, a width of `4`, and a height of `2`
+ * const r1 = [-2, -1, 4, 2];
+ * const r2 = new Fig.Rect(-2, -1, 4, 2);
+ * const r3 = '[-2, -1, 4, 2]';
+ * const r4 = {
  *   f1Type: 'rect',
  *   state: [-2, -1, 4, 2],
- * });
+ * };
  */
 export type TypeParsableRect = [number, number, number, number]
                                | Rect
@@ -2580,6 +2580,12 @@ export type TypeTransformValue = number | Array<number> | {
 /**
  * Object that represents a chain of {@link Rotation}, {@link Translation} and
  * {@link Scale} transforms
+ *
+ * Use `translate`, `scale` and `rotate` methods to create chains (see example).
+ *
+ * @example
+ * // Create a tranform that first scales, then rotates then translates
+ * const t1 = new Transform().scale(2, 2).rotate(Math.PI).translate(1, 1)
  */
 class Transform {
   order: Array<Translation | Rotation | Scale>;
@@ -3124,26 +3130,37 @@ class Transform {
   }
 
   /**
-   * Return a transform chain that is `transform` transfomed by this transform
-   * chain.
+   * Return a transform chain whose order is `initialTransform` and then this
+   * transform chain
    * @return {Transform}
+   * @example
+   * // rotate and then translate
+   * const rotation = new Fig.Transform().rotate(Math.PI / 2);
+   * const translation = new Fig.Transform().translate(0.5, 0);
+   * const t = translation.transform(rotation)
    */
-  transform(transform: Transform) {
+  transform(initialTransform: Transform) {
     const t = new Transform([], this.name);
-    t.order = transform.order.concat(this.order);
-    t.mat = m2.mul(this.matrix(), transform.matrix());
+    t.order = initialTransform.order.concat(this.order);
+    t.mat = m2.mul(this.matrix(), initialTransform.matrix());
     return t;
   }
 
   /**
-   * Return a transform chain that is this transform transformed by `transform`
+   * Return a transform chain whose order is this transform chain, then the
+   * `t` chain.
    * @return {Transform}
+   * @example
+   * // rotate and then translate
+   * const rotation = new Fig.Transform().rotate(Math.PI / 2);
+   * const translation = new Fig.Transform().translate(0.5, 0);
+   * const t = rotation.transformBy(translation)
    */
-  transformBy(transform: Transform): Transform {
-    const t = new Transform([], this.name);
-    t.order = this.order.concat(transform.order);
-    t.mat = m2.mul(transform.matrix(), this.matrix());
-    return t;
+  transformBy(t: Transform): Transform {
+    const t1 = new Transform([], this.name);
+    t1.order = this.order.concat(t.order);
+    t1.mat = m2.mul(t.matrix(), this.matrix());
+    return t1;
   }
 
   /**
@@ -3427,7 +3444,7 @@ export type TypeF1DefTransform = {
  * As a string representing the JSON of the array form
  }
  * @example
- * // t1, t2, and p3 are all the same
+ * // t1, t2, and t3 are all the same when parsed by `getTransform`
  * t1 = new Transform().scale(1, 1).rotate(0).translate(2, 2);
  * t2 = [['s', 1, 1], ['r', 0], ['t', 2, 2]];
  * t3 = '[['s', 1, 1], ['r', 0], ['t', 2, 2]]';

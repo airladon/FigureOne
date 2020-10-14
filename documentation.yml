@@ -8,19 +8,23 @@ toc:
   - DiagramElement
   - DiagramElementPrimitive
   - DiagramElementCollection
-  - name: Geometric Definitions
+  - name: Geometric Classes
+    file: ./docs/tutorials/geometric/geometric.md
   - Point
   - Rect
   - Line
+  - Translation
+  - Rotation
+  - Scale
   - Transform
   - TypeParsablePoint
-  - TypeParsableRect
   - TypeParsableLine
+  - TypeParsableRect
   - TypeParsableTransform
   - getPoint
   - getScale
-  - getRect
   - getLine
+  - getRect
   - getTransform
   - name: Shapes
   - OBJ_Texture
