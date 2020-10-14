@@ -357,7 +357,7 @@ describe('Seek', () => {
       beforeEach(() => {
         diagram.unpause();
         // a.pulseScaleNow(2, 2);
-        a.pulseScale({ duration: 2, scale: 2, when: 'sync' });
+        a.pulseScale({ duration: 2, scale: 2, when: 'syncNow' });
         diagram.mock.timeStep(0);
         diagram.mock.timeStep(0.5, frameStep);
         diagram.mock.timeStep(0.5, frameStep);
@@ -400,7 +400,7 @@ describe('Seek', () => {
       beforeEach(() => {
         diagram.unpause();
         // a.pulseScaleNow(2, 2);
-        a.pulseScale({ duration: 2, scale: 2, when: 'sync' });
+        a.pulseScale({ duration: 2, scale: 2, when: 'syncNow' });
         a.setPosition(2, 2);
         diagram.mock.timeStep(0);
         diagram.mock.timeStep(0.5, frameStep);
@@ -499,7 +499,7 @@ describe('Seek', () => {
       beforeEach(() => {
         diagram.unpause();
         // a.pulseScaleNow(2, 2);
-        a.pulseScale({ scale: 2, duration: 2, when: 'sync' });
+        a.pulseScale({ scale: 2, duration: 2, when: 'syncNow' });
         diagram.mock.timeStep(0);
         diagram.mock.timeStep(0.5, frameStep);
         diagram.mock.timeStep(0.5, frameStep);
@@ -542,7 +542,7 @@ describe('Seek', () => {
       beforeEach(() => {
         diagram.unpause();
         // a.pulseScaleNow(2, 2);
-        a.pulseScale({ scale: 2, duration: 2, when: 'sync' });
+        a.pulseScale({ scale: 2, duration: 2, when: 'syncNow' });
         a.setPosition(2, 2);
         diagram.mock.timeStep(0);
         diagram.mock.timeStep(0.5, frameStep);
@@ -639,7 +639,7 @@ describe('Seek', () => {
     describe('Pulse Change', () => {
       beforeEach(() => {
         diagram.unpause();
-        a.pulseScale({ duration: 2, scale: 2, when: 'sync' });
+        a.pulseScale({ duration: 2, scale: 2, when: 'syncNow' });
         // diagram.mock.timeStep(0);
         diagram.mock.timeStep(0.5, frameStep);
         diagram.mock.timeStep(0.5, frameStep);
@@ -681,7 +681,7 @@ describe('Seek', () => {
       beforeEach(() => {
         diagram.unpause();
         // a.pulseScaleNow(2, 2);
-        a.pulseScale({ duration: 2, scale: 2, when: 'sync' });
+        a.pulseScale({ duration: 2, scale: 2, when: 'syncNow' });
         a.setPosition(2.5, 2.5);
         diagram.mock.timeStep(0);
         diagram.mock.timeStep(0.5, frameStep);
@@ -781,7 +781,7 @@ describe('Seek', () => {
     describe('Pulse Change', () => {
       beforeEach(() => {
         diagram.unpause();
-        a.pulseScale({ duration: 2, scale: 2, when: 'sync' });
+        a.pulseScale({ duration: 2, scale: 2, when: 'syncNow' });
         diagram.mock.timeStep(0.5, frameStep);
         diagram.mock.timeStep(0.5, frameStep);
         expect(transforms()).toEqual(['idle', 1, [2], [], [2], 1]);
@@ -822,7 +822,7 @@ describe('Seek', () => {
       beforeEach(() => {
         diagram.unpause();
         // a.pulseScaleNow(2, 2);
-        a.pulseScale({ duration: 2, scale: 2, when: 'sync' });
+        a.pulseScale({ duration: 2, scale: 2, when: 'syncNow' });
         a.setPosition(3, 3);
         diagram.mock.timeStep(0);
         diagram.mock.timeStep(0.5, frameStep);
@@ -924,7 +924,7 @@ describe('Seek', () => {
     describe('Pulse Change', () => {
       beforeEach(() => {
         diagram.unpause();
-        a.pulseScale({ duration: 2, scale: 2.5, when: 'sync' });
+        a.pulseScale({ duration: 2, scale: 2.5, when: 'syncNow' });
         diagram.mock.timeStep(0.5, frameStep);
         diagram.mock.timeStep(0.5, frameStep);
         expect(transforms()).toEqual(['idle', 2, [2.5], [], [2.5], 1]);
@@ -962,7 +962,7 @@ describe('Seek', () => {
       beforeEach(() => {
         diagram.unpause();
         // a.pulseScaleNow(2, 2);
-        a.pulseScale({ duration: 2, scale: 2.5, when: 'sync' });
+        a.pulseScale({ duration: 2, scale: 2.5, when: 'syncNow' });
         a.setPosition(4, 4);
         diagram.mock.timeStep(0);
         diagram.mock.timeStep(0.5, frameStep);
@@ -1071,7 +1071,7 @@ describe('Seek', () => {
     describe('Pulse Change', () => {
       beforeEach(() => {
         diagram.unpause();
-        a.pulseScale({ duration: 2, scale: 2, when: 'sync' });
+        a.pulseScale({ duration: 2, scale: 2, when: 'syncNow' });
         diagram.mock.timeStep(0.5, frameStep);
         diagram.mock.timeStep(0.5, frameStep);
         expect(transforms()).toEqual(['idle', 2, [2], [], [2], 1]);
@@ -1108,7 +1108,7 @@ describe('Seek', () => {
     describe('Position and Pulse Change', () => {
       beforeEach(() => {
         diagram.unpause();
-        a.pulseScale({ duration: 2, scale: 2, when: 'sync' });
+        a.pulseScale({ duration: 2, scale: 2, when: 'syncNow' });
         a.setPosition(4, 4);
         diagram.mock.timeStep(0);
         diagram.mock.timeStep(0.5, frameStep);
