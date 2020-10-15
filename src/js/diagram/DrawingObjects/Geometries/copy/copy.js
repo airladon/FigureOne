@@ -53,6 +53,92 @@ import {
  *
  * When `original` is false, only the copied points are retained and the points
  * being copied are discarded.
+ *
+ * @example
+ * // Grid copy
+ * diagram.addElement({
+ *   name: 'p',
+ *   method: 'polygon',
+ *   options: {
+ *     radius: 0.1,
+ *     sides: 20,
+ *     fill: 'tris',
+ *     copy: [
+ *       {
+ *         along: 'x',
+ *         num: 4,
+ *         step: 0.3,
+ *       },
+ *       {
+ *         along: 'y',
+ *         num: 4,
+ *         step: 0.3,
+ *       },
+ *     ],
+ *   },
+ * });
+ *
+ * @example
+ * // Radial lines copy without original points
+ * diagram.addElement({
+ *   name: 'p',
+ *   method: 'polygon',
+ *   options: {
+ *     radius: 0.1,
+ *     sides: 3,
+ *     fill: 'tris',
+ *     rotation: -Math.PI / 6,
+ *     copy: [
+ *       {
+ *         to: [[0.5, 0], [1.3, 0], [1.6, 0]],
+ *       },
+ *       {
+ *         along: 'rotation',
+ *         num: 5,
+ *         step: Math.PI / 5,
+ *         start: 1,              // only want to copy the last copy step
+ *       },
+ *     ],
+ *   },
+ * });
+ *
+ * @example
+ * // Ring copy
+ * diagram.addElement({
+ *   name: 'p',
+ *   method: 'generic',
+ *   options: {
+ *      points: [
+ *       [-0.2, -0.1], [-0.2, 0.1], [0.2, 0.1],
+ *       [-0.2, -0.1], [0.2, 0.1], [0.2, -0.1],
+ *     ],
+ *
+ *     copy: [
+ *       'ring1',
+ *       {
+ *         to: [0.8, 0],
+ *       },
+ *       {
+ *         along: 'rotation',
+ *         num: 7,
+ *         step: Math.PI / 7,
+ *         start: 'ring1',
+ *       },
+ *       'ring2',
+ *       {
+ *         to: [1.4, 0],
+ *         start: 0,
+ *         end: 1,
+ *       },
+ *       {
+ *         along: 'rotation',
+ *         num: 15,
+ *         step: Math.PI / 15,
+ *         start: 'ring2',
+ *       },
+ *     ],
+ *   },
+ * });
  */
 export type CPY_Step = {
   start?: number | string,

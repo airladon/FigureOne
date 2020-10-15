@@ -2770,6 +2770,16 @@
               
                 
                 <li><a
+                  href='#cpy_step'
+                  class="">
+                  CPY_Step
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#typewhen'
                   class="">
                   TypeWhen
@@ -14000,18 +14010,21 @@ diagram.elements.add(<span class="hljs-string">'p'</span>, p);</pre>
 <h3>Built-in Shapes</h3>
 <p>There are several built in shape methods that can be used to create complex diagrams:</p>
 <ul>
-<li><a href="#OBJ_Polyline">polyline</a></li>
+<li><a href="#obj_polyline">polyline</a></li>
 <li><a href="#obj_polygon">polygon</a></li>
-<li><a href="#OBJ_PolygonSweep">polygonSweep</a></li>
-<li><a href="#OBJ_Grid">grid</a></li>
-<li><a href="#OBJ_Fan">fan</a></li>
-<li><a href="#OBJ_Arrow">arrow</a></li>
-<li><a href="#OBJ_Rectangle">rectangle</a></li>
-<li><a href="#OBJ_RadialLines">radialLines</a></li>
-<li><a href="#OBJ_Marks">marks</a></li>
-<li><a href="#OBJ_Angle">angle</a></li>
-<li><a href="#OBJ_Line">line</a></li>
-<li><a href="#OBJ_SmartPolyLine">smartPolyline</a></li>
+<li><a href="#obj_polygonSweep">polygonSweep</a></li>
+<li><a href="#obj_grid">grid</a></li>
+<li><a href="#obj_fan">fan</a></li>
+<li><a href="#obj_arrow">arrow</a></li>
+<li><a href="#obj_rectangle">rectangle</a></li>
+<li><a href="#obj_radialLines">radialLines</a></li>
+<li><a href="#obj_marks">marks</a></li>
+</ul>
+<p>There are also built in shape methods that include annotations</p>
+<ul>
+<li><a href="#obj_angle">angle</a></li>
+<li><a href="#obj_line">line</a></li>
+<li><a href="#obj_polylineAdv">polylineAdv</a></li>
 </ul>
 <h3>Drawing a generic shape</h3>
 <p>There are several built-in shapes such as polygons, rectangles and polylines in FigureOne. There is also a 'generic' method that will allow creation of any shape.</p>
@@ -14710,8 +14723,16 @@ vertices on each draw. (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : (
+          <span class='code bold'>fill</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <code>"tris"</code>)?)</code>
+          : <code>true</code>
+ will fill polygon with efficient
+fan vertices. 
+<code>'tris'</code>
+ will fill polygon with less efficient separate
+triangle vertices. Use 
+<code>'tris'</code>
+ if copying a filled polygon with
+copy steps (
 <code>false</code>
 )
 
@@ -32699,6 +32720,224 @@ triangle primitives to draw the line (
     </div>
   
 </div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='cpy_step'>
+      CPY_Step
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Copy Step options object</p>
+<p>A copy step defines how to copy points.</p>
+<p>Multiple copy steps can be included in an array to cumulatively copy an
+original set of points.</p>
+<p>For example, the first step will create a copy of the original points.
+The second step will then copy the original points and the points created in
+the first copy step.</p>
+<p>By default, copy steps operate on all points created in previous steps. If
+<code>start</code> and <code>end</code> are used in a copy step, then only points created between
+the start and end copy steps will be used in the current copy step's copy
+operation. An array of copy steps can include <code>string</code> elements which act
+as markers. These marker strings can then be used in <code>start</code> and <code>end</code>
+to conveniently select the points to copy. Otherwise copy step array
+indeces need to be used.</p>
+<p>There are two main ways to make a copy, either copy the points <code>to</code> a
+location, or copy the points <code>along</code> a path.</p>
+<p>When using the <code>to</code> property, if a point is defined
+then the points will be copied to that point. If a transform is defined,
+then a copy of the points will be transformed by that transform. An array
+of points and transforms can be defined to make multiple copies of the
+points.</p>
+<p>When using the <code>along</code> property, the points are copied a number (<code>num</code>) of
+times along a path with some <code>step</code>. The paths can be horiztonally (<code>'x'</code>),
+vertically (<code>'y'</code>), at an angle (<code>number</code>) or through a <code>'rotation'</code> around
+a <code>center</code> point.</p>
+<p>When copying in a linear line (<code>along</code> is <code>'x'</code>, <code>y'</code> or a <code>number</code>), then
+<code>step</code> will be the distance offset along the line.</p>
+<p>When copying along a rotation (<code>along</code> is <code>'rotation'</code>), then <code>step</code> will be
+the angular step in radians.</p>
+<p>When <code>original</code> is false, only the copied points are retained and the points
+being copied are discarded.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>end</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>original</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>along</span> <code class='quiet'>((<code>"x"</code> | <code>"y"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rotation"</code> | <code>"moveOnly"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>to</span> <code class='quiet'>((<a href="#point">Point</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | <a href="#transform">Transform</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#point">Point</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | <a href="#transform">Transform</a>)> | <a href="#transform">Transform</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>num</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>step</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>center</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Make a grid with two copy steps</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+    <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
+    <span class="hljs-attr">copy</span>: [
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'x'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-number">0.3</span>,
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'y'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-number">0.3</span>,
+      },
+    ],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// rotation copy of a line of circles</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+    <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
+    <span class="hljs-attr">copy</span>: [
+      {
+        <span class="hljs-attr">to</span>: [[<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.3</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.6</span>, <span class="hljs-number">0</span>]],
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">5</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">5</span>,
+        <span class="hljs-attr">start</span>: <span class="hljs-number">1</span>,              <span class="hljs-comment">// only want to copy the last copy step</span>
+      },
+    ],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Copy independant rings from just the original points</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+    <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
+    <span class="hljs-attr">copy</span>: [
+      <span class="hljs-string">'ring1'</span>,               <span class="hljs-comment">// marker 1</span>
+      {
+        <span class="hljs-attr">to</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>],
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">7</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">7</span>,
+        <span class="hljs-attr">start</span>: <span class="hljs-string">'ring1'</span>,      <span class="hljs-comment">// copy only from Marker 1</span>
+      },
+      <span class="hljs-string">'ring2'</span>,               <span class="hljs-comment">// marker 2</span>
+      {
+        <span class="hljs-attr">to</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+        <span class="hljs-attr">start</span>: <span class="hljs-number">0</span>,            <span class="hljs-comment">// copy only the original points</span>
+        <span class="hljs-attr">end</span>: <span class="hljs-number">1</span>,
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">15</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">15</span>,
+        <span class="hljs-attr">start</span>: <span class="hljs-string">'ring2'</span>,      <span class="hljs-comment">// copy only from Marker 2</span>
+      },
+    ],
+  },
+});</pre>
+    
+  
+
+  
 
   
 

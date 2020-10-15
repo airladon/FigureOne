@@ -11,36 +11,19 @@ diagram.addElement({
       {
         along: 'x',
         num: 4,
-        step: 0.3,
+        step: 0.5,
+        original: false,
       },
       {
-        along: 'y',
-        num: 4,
-        step: 0.3,
+        along: 'rotation',
+        num: 5,
+        step: Math.PI / 5,
+        // original: false,
+        start: 0,              // only want to copy the last copy step
       },
-
-      // {
-      //     along: 'rotation',
-      //     num: 1,
-      //     step: Math.PI / 2,
-      // },
-      // { to: new Fig.Transform().scale(0.5, 0.5).rotate(1).translate(2, 0) },
-      // {
-      //   center: [-1, 0],
-      //   along: 'rotation',
-      //   num: 3,
-      //   step: 0.5,
-      //   original: false,
-      // }
-      // {
-      //   num: 3,
-      //   step: 0.5,
-      //   along: 'x',
-      // },
     ],
   },
 });
-
 
 
 // const p = diagram.getElement('p')
