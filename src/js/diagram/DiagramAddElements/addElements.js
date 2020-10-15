@@ -41,6 +41,7 @@ function addElements(
       polyline: objects.polyline.bind(objects),
       // polylineCorners: shapes.polylineCorners.bind(shapes),
       polygon: shapes.polygon.bind(shapes),
+      generic: shapes.generic.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       fan: shapes.fan.bind(shapes),
       text: shapes.text.bind(shapes),

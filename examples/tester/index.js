@@ -1,32 +1,25 @@
-const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2]});
-diagram.addElements([
-  {
-    name: 'p',
-    method: 'polygon',
-    options: {
-      sides: 4,
-      fill: true,
-      radius: 0.2,
-    },
-  },
-  {
-    name: 'q',
-    method: 'polygon',
-    options: {
-      sides: 5,
-      fill: true,
-      radius: 0.2,
-      position: [-0.5, 0],
-    },
-  },
-]);
-diagram.initialize();
+const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
-const p = diagram.getElement('p')
-const rotation = new Fig.Transform().rotate(Math.PI / 2);
-const translation = new Fig.Transform().translate(0.5, 0);
-const t = translation.transformBy(rotation)
-p.transform = t;
+diagram.addElement(
+ {
+   name: 'p',
+   method: 'shapes.polyline',
+   options: {
+     points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
+     width: 0.05,
+     close: true,
+     cornersOnly: true,
+     cornerLength: 0.2,
+   },
+ },
+);
+
+
+// const p = diagram.getElement('p')
+// const rotation = new Fig.Transform().rotate(Math.PI / 2);
+// const translation = new Fig.Transform().translate(0.5, 0);
+// const t = translation.transformBy(rotation)
+// p.transform = t;
 
 // const translate = p.animations.position({ target: [0.5, 0], duration: 2 });
 // const rotate = p.animations.rotation({ target: Math.PI, duration: 2 });

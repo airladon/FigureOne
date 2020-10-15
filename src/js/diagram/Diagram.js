@@ -451,6 +451,10 @@ class Diagram {
     this.oldScroll = window.pageYOffset;
     this.drawAnimationFrames = 0;
     this.cursorShown = false;
+    // /**
+    //  * Create built in {@link DiagramElement}s
+    //  * @property {function(OBJ_Polygon): DiagramElementPrimitive} polygon
+    //  */
     this.create = {
       collection: this.shapes.collection.bind(this.shapes),
       generic: this.shapes.generic.bind(this.shapes),
