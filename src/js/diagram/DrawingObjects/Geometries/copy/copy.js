@@ -11,6 +11,49 @@ import {
   joinObjects,
 } from '../../../../tools/tools';
 
+/**
+ * Copy Step options object
+ *
+ * A copy step defines how to copy points.
+ *
+ * Multiple copy steps can be included in an array to cumulatively copy an
+ * original set of points.
+ *
+ * For example, the first step will create a copy of the original points.
+ * The second step will then copy the original points and the points created in
+ * the first copy step.
+ *
+ * By default, copy steps operate on all points created in previous steps. If
+ * `start` and `end` are used in a copy step, then only points created between
+ * the start and end copy steps will be used in the current copy step's copy
+ * operation. An array of copy steps can include `string` elements which act
+ * as markers. These marker strings can then be used in `start` and `end`
+ * to conveniently select the points to copy. Otherwise copy step array
+ * indeces need to be used.
+ *
+ * There are two main ways to make a copy, either copy the points `to` a
+ * location, or copy the points `along` a path.
+ *
+ * When using the `to` property, if a point is defined
+ * then the points will be copied to that point. If a transform is defined,
+ * then a copy of the points will be transformed by that transform. An array
+ * of points and transforms can be defined to make multiple copies of the
+ * points.
+ *
+ * When using the `along` property, the points are copied a number (`num`) of
+ * times along a path with some `step`. The paths can be horiztonally (`'x'`),
+ * vertically (`'y'`), at an angle (`number`) or through a `'rotation'` around
+ * a `center` point.
+ *
+ * When copying in a linear line (`along` is `'x'`, `y'` or a `number`), then
+ * `step` will be the distance offset along the line.
+ *
+ * When copying along a rotation (`along` is `'rotation'`), then `step` will be
+ * the angular step in radians.
+ *
+ * When `original` is false, only the copied points are retained and the points
+ * being copied are discarded.
+ */
 export type CPY_Step = {
   start?: number | string,
   end?: number | string,

@@ -51,7 +51,7 @@ import type {
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
-import { getPolygonPoints, getFanTrisPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
+import { getPolygonPoints, getFanTrisPolygon, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 import type {
   OBJ_Copy,
 } from './DiagramPrimitiveTypes';
@@ -403,7 +403,10 @@ export type OBJ_LineStyle = {
  * center. This is different to position or transform as these translate the
  * vertices on each draw. (`[0, 0]`)
  * @property {OBJ_LineStyle} [line] line style options
- * @property {boolean} [fill] (`false`)
+ * @property {boolean | 'tris'} [fill] `true` will fill polygon with efficient
+ * fan vertices. `'tris'` will fill polygon with less efficient separate
+ * triangle vertices. Use `'tris'` if copying a filled polygon with
+ * copy steps (`false`)
  * @property {Array<number>} [color] (`[1, 0, 0, 1`])
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {number} [pulse] set the default pulse scale
@@ -448,7 +451,7 @@ export type OBJ_Polygon = {
   sidesToDraw?: number,
   angleToDraw?: number,
   color?: Array<number>,
-  fill?: boolean,
+  fill?: boolean | 'tris',
   transform?: Transform,
   position?: TypeParsablePoint,
   texture?: OBJ_Texture,
@@ -1239,7 +1242,7 @@ export default class DiagramPrimitives {
     if (optionsToUse.sidesToDraw == null) {
       optionsToUse.sidesToDraw = optionsToUse.sides;
     }
-    if (optionsToUse.fill) {
+    if (optionsToUse.fill === true) {
       const fan = getFanTrisPolygon(
         optionsToUse.radius, optionsToUse.rotation, optionsToUse.offset,
         optionsToUse.sides, optionsToUse.sidesToDraw, optionsToUse.direction,
@@ -1257,6 +1260,33 @@ export default class DiagramPrimitives {
         );
         element.drawingObject.change(
           points, [[...points.slice(1, -1)]], [],
+        );
+      };
+    } else if (optionsToUse.fill === 'tris') {
+      const tris = getTrisFillPolygon(
+        optionsToUse.radius, optionsToUse.rotation, optionsToUse.offset,
+        optionsToUse.sides, optionsToUse.sidesToDraw, optionsToUse.direction,
+      );
+      const border = getPolygonPoints(
+        optionsToUse.radius, optionsToUse.rotation, optionsToUse.offset,
+        optionsToUse.sides, optionsToUse.sidesToDraw, optionsToUse.direction,
+      );
+      element = this.generic(optionsToUse, {
+        points: tris, // $FlowFixMe
+        border: [border],
+      });
+      element.custom.update = (updateOptions) => {
+        const o = joinObjects({}, optionsToUse, updateOptions);
+        const points = getTrisFillPolygon(
+          o.radius, o.rotation, o.offset,
+          o.sides, o.sidesToDraw, o.direction,
+        );
+        const borderPoints = getPolygonPoints(
+          o.radius, o.rotation, o.offset,
+          o.sides, o.sidesToDraw, o.direction,
+        );
+        element.drawingObject.change(
+          points, [borderPoints], [],
         );
       };
     } else {

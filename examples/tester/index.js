@@ -1,18 +1,46 @@
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
-diagram.addElement(
- {
-   name: 'p',
-   method: 'shapes.polyline',
-   options: {
-     points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
-     width: 0.05,
-     close: true,
-     cornersOnly: true,
-     cornerLength: 0.2,
-   },
- },
-);
+diagram.addElement({
+  name: 'p',
+  method: 'polygon',
+  options: {
+    radius: 0.1,
+    sides: 20,
+    fill: 'tris',
+    copy: [
+      {
+        along: 'x',
+        num: 4,
+        step: 0.3,
+      },
+      {
+        along: 'y',
+        num: 4,
+        step: 0.3,
+      },
+
+      // {
+      //     along: 'rotation',
+      //     num: 1,
+      //     step: Math.PI / 2,
+      // },
+      // { to: new Fig.Transform().scale(0.5, 0.5).rotate(1).translate(2, 0) },
+      // {
+      //   center: [-1, 0],
+      //   along: 'rotation',
+      //   num: 3,
+      //   step: 0.5,
+      //   original: false,
+      // }
+      // {
+      //   num: 3,
+      //   step: 0.5,
+      //   along: 'x',
+      // },
+    ],
+  },
+});
+
 
 
 // const p = diagram.getElement('p')
