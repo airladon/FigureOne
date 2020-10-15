@@ -1,25 +1,25 @@
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
+// Copy independant rings from just the original points
+// rotation copy of a line of circles
 diagram.addElement({
   name: 'p',
   method: 'polygon',
   options: {
     radius: 0.1,
-    sides: 20,
+    sides: 3,
+    rotation: -Math.PI / 6,
     fill: 'tris',
     copy: [
       {
         along: 'x',
         num: 4,
-        step: 0.5,
-        original: false,
+        step: 0.3,
       },
       {
-        along: 'rotation',
-        num: 5,
-        step: Math.PI / 5,
-        // original: false,
-        start: 0,              // only want to copy the last copy step
+        along: 'y',
+        num: 4,
+        step: 0.3,
       },
     ],
   },

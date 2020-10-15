@@ -12,48 +12,78 @@ import {
 } from '../../../../tools/tools';
 
 /**
+ *
+ * ![](./assets1/copy.png)
+ *
  * Copy Step options object
  *
- * A copy step defines how to copy points.
+ * A copy step defines how to copy existing points.
  *
- * Multiple copy steps can be included in an array to cumulatively copy an
- * original set of points.
+ * An array of copy steps will cumulatively copy points from an original set of
+ * points.
  *
- * For example, the first step will create a copy of the original points.
- * The second step will then copy the original points and the points created in
- * the first copy step.
+ * So, if there are two copy steps then:
+ * - the first step will copy the original points
+ * - the second step will copy the original points and the first copy of the
+ *   points
  *
- * By default, copy steps operate on all points created in previous steps. If
- * `start` and `end` are used in a copy step, then only points created between
- * the start and end copy steps will be used in the current copy step's copy
- * operation. An array of copy steps can include `string` elements which act
- * as markers. These marker strings can then be used in `start` and `end`
- * to conveniently select the points to copy. Otherwise copy step array
- * indeces need to be used.
+ * For example, a grid of a shape can be made with two copy steps. The first
+ * replicates the shape along the x axis, creating a line of shapes. The second
+ * copy step then replicates the line of shapes in the y axis, creating a grid
+ * of shapes.
+ *
+ * Each copy step appends its copied points onto an array of points that
+ * started with the original points. By default, copy steps operate on all
+ * points created in previous steps. However, the properties `start` and `end`
+ * can be used to make the current step only operate on a subset of the points.
+ *
+ * `start` and `end` refer to the indexes of the copy steps where the original
+ * points is at index 0, and the first copy step is at index 1. Copy step
+ * arrays can also include *marker strings* which make defining `start` and
+ * `end` more convient (see the third example below). These marker strings
+ * can be used as `start` and `end` values. Marker strings are included
+ * in the copy step indexing.
  *
  * There are two main ways to make a copy, either copy the points `to` a
  * location, or copy the points `along` a path.
  *
- * When using the `to` property, if a point is defined
- * then the points will be copied to that point. If a transform is defined,
- * then a copy of the points will be transformed by that transform. An array
- * of points and transforms can be defined to make multiple copies of the
+ * When using the `to` property, if a {@link Point} is defined
+ * then the points will be copied to that point. If a {@link Transform} is
+ * defined, then a copy of the points will be transformed by that transform. An
+ * array of points and transforms can be defined to make multiple copies of the
  * points.
  *
  * When using the `along` property, the points are copied a number (`num`) of
- * times along a path with some `step`. The paths can be horiztonally (`'x'`),
- * vertically (`'y'`), at an angle (`number`) or through a `'rotation'` around
+ * times along a path with some `step`. The paths can be horiztonal (`'x'`),
+ * vertical (`'y'`), at an angle (`number`) or through a `'rotation'` around
  * a `center` point.
  *
- * When copying in a linear line (`along` is `'x'`, `y'` or a `number`), then
+ * When copying along a line (`along` is `'x'`, `y'` or a `number`), then
  * `step` will be the distance offset along the line.
  *
  * When copying along a rotation (`along` is `'rotation'`), then `step` will be
  * the angular step in radians.
  *
- * When `original` is false, only the copied points are retained and the points
- * being copied are discarded.
+ * Any step can use the `original` property - but it will only operate on the
+ * last step that uses it. When `original` is `false`, then all points before
+ * that copy step will not be included in the returned Point array.
  *
+ * @property {TypeParsablePoint | TypeParsableTransform | Array<TypeParsablePoint | TypeParsableTransform>} [to] copy points to
+ * a location or locations or transform a copy of the points
+ * @property {'x' | 'y' | number | 'rotation' | 'moveOnly'} [along] copy points
+ * along a linear path where `number` is a path at an angle in radians
+ * @property {number} [num] the number of copies to make when copying `along` a
+ * path
+ * @property {number} [step] distance between copies if `along` is `'x'` or
+ * `'y'` or a `number`, delta angle between copies if `along` is `'rotation'`
+ * @property {TypeParsablePoint} [center] the center point about which to rotate
+ * the copies when using `along` = `'rotation'`
+ * @property {number | string} [start] copy step index or marker defining the
+ * start of the points to copy
+ * @property {number | string} [end] copy step index or marker defining the end
+ * of the points to copy
+ * @property {boolean} [original] `false` excludes all points before this step
+ * in the final result (`true`)
  * @example
  * // Grid copy
  * diagram.addElement({
@@ -61,7 +91,8 @@ import {
  *   method: 'polygon',
  *   options: {
  *     radius: 0.1,
- *     sides: 20,
+ *     sides: 3,
+ *     rotation: -Math.PI / 6,
  *     fill: 'tris',
  *     copy: [
  *       {
@@ -79,62 +110,61 @@ import {
  * });
  *
  * @example
- * // Radial lines copy without original points
+ * // Radial lines copy
  * diagram.addElement({
  *   name: 'p',
- *   method: 'polygon',
+ *   method: 'generic',
  *   options: {
- *     radius: 0.1,
- *     sides: 3,
- *     fill: 'tris',
- *     rotation: -Math.PI / 6,
+ *     points: [
+ *       [-0.2, -0.1], [-0.2, 0.1], [0.2, 0.1],
+ *       [-0.2, -0.1], [0.2, 0.1], [0.2, -0.1],
+ *     ],
  *     copy: [
  *       {
- *         to: [[0.5, 0], [1.3, 0], [1.6, 0]],
+ *         to: [[0.6, 0], [1.05, 0], [1.5, 0], [2.2, 0]],
  *       },
  *       {
  *         along: 'rotation',
  *         num: 5,
  *         step: Math.PI / 5,
- *         start: 1,              // only want to copy the last copy step
+ *         start: 1,              // only copy last step, not original points
  *       },
  *     ],
  *   },
  * });
  *
  * @example
- * // Ring copy
+ * // Ring copy (without original shape)
  * diagram.addElement({
  *   name: 'p',
- *   method: 'generic',
+ *   method: 'polygon',
  *   options: {
- *      points: [
- *       [-0.2, -0.1], [-0.2, 0.1], [0.2, 0.1],
- *       [-0.2, -0.1], [0.2, 0.1], [0.2, -0.1],
- *     ],
- *
+ *     radius: 0.1,
+ *     sides: 20,
+ *     fill: 'tris',
  *     copy: [
- *       'ring1',
+ *       'ring1',               // marker 1
  *       {
- *         to: [0.8, 0],
+ *         to: [0.5, 0],
+ *         original: false,     // don't include the original shape
  *       },
  *       {
  *         along: 'rotation',
  *         num: 7,
  *         step: Math.PI / 7,
- *         start: 'ring1',
+ *         start: 'ring1',      // copy only from marker 1
  *       },
- *       'ring2',
+ *       'ring2',               // marker 2
  *       {
- *         to: [1.4, 0],
- *         start: 0,
+ *         to: [1, 0],
+ *         start: 0,            // make a copy of the original shape only
  *         end: 1,
  *       },
  *       {
  *         along: 'rotation',
  *         num: 15,
  *         step: Math.PI / 15,
- *         start: 'ring2',
+ *         start: 'ring2',      // copy points from Marker 2 only
  *       },
  *     ],
  *   },
@@ -371,9 +401,10 @@ function copyPoints(
     chainToUse = chain;
   }
   marks['0'] = 0;
-  marks['1'] = points.length;
+  // marks['1'] = points.length;
 
   chainToUse.forEach((c, index) => {
+    marks[`${index + 1}`] = out.length;
     if (typeof c === 'string') {
       marks[c] = out.length;
     } else {
@@ -393,11 +424,10 @@ function copyPoints(
       if (options.original === false) {
         startIndex = out.length;
       }
-
       out = [...out, ...copyStep(pointsToCopy, copyStyle, options)];
-      marks[`${index + 2}`] = out.length;
     }
   });
+  console.log(marks)
 
   return [...out.slice(startIndex)];
 }
