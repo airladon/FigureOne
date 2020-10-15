@@ -7517,6 +7517,8 @@ Polygon or partial polygon shape options object
 
 ## CPY_Step
 
+![][828]
+
 Copy Step options object
 
 A copy step defines how to copy existing points.
@@ -7599,7 +7601,8 @@ diagram.addElement({
   method: 'polygon',
   options: {
     radius: 0.1,
-    sides: 20,
+    sides: 3,
+    rotation: -Math.PI / 6,
     fill: 'tris',
     copy: [
       {
@@ -7618,24 +7621,24 @@ diagram.addElement({
 ```
 
 ```javascript
-// Radial lines copy without original points
+// Radial lines copy
 diagram.addElement({
   name: 'p',
-  method: 'polygon',
+  method: 'generic',
   options: {
-    radius: 0.1,
-    sides: 3,
-    fill: 'tris',
-    rotation: -Math.PI / 6,
+    points: [
+      [-0.2, -0.1], [-0.2, 0.1], [0.2, 0.1],
+      [-0.2, -0.1], [0.2, 0.1], [0.2, -0.1],
+    ],
     copy: [
       {
-        to: [[0.5, 0], [1.3, 0], [1.6, 0]],
+        to: [[0.6, 0], [1.05, 0], [1.5, 0], [2.2, 0]],
       },
       {
         along: 'rotation',
         num: 5,
         step: Math.PI / 5,
-        start: 1,              // only want to copy the last copy step
+        start: 1,              // only copy last step, not original points
       },
     ],
   },
@@ -7643,7 +7646,7 @@ diagram.addElement({
 ```
 
 ```javascript
-// Ring copy
+// Ring copy (without original shape)
 diagram.addElement({
   name: 'p',
   method: 'polygon',
@@ -7777,7 +7780,7 @@ Diagram element move parameters
 
 -   `bounds` **TransformBounds** rectangle to limit movement within
 -   `maxVelocity` **TypeTransformValue** maximum velocity allowed (5)
--   `freely` **[DiagramElementMoveFreely][828]** free movement parameters
+-   `freely` **[DiagramElementMoveFreely][829]** free movement parameters
 -   `canBeMovedAfterLosingTouch` **[boolean][707]** touch or mouse dragging will
     continue to move element even after the touch/cursor position is outside
     the element boundary
@@ -7826,9 +7829,9 @@ Element state
 
 -   `isBeingMoved` **[boolean][707]** 
 -   `isMovingFreely` **[boolean][707]** 
--   `movement` **[ElementMovementState][829]** 
+-   `movement` **[ElementMovementState][830]** 
 -   `isPulsing` **[boolean][707]** 
--   `pulse` **[ElementPulseState][830]** 
+-   `pulse` **[ElementPulseState][831]** 
 -   `preparingToStop` **[boolean][707]** 
 
 ## DrawingObject
@@ -7958,7 +7961,7 @@ A custom time can be used if a `number` is defined.
 
 `null` will result in `'nextFrame'` being used
 
-Type: ([TypeWhen][831] \| [number][708] | null)
+Type: ([TypeWhen][832] \| [number][708] | null)
 
 [1]: #introduction
 
@@ -9614,10 +9617,12 @@ Type: ([TypeWhen][831] \| [number][708] | null)
 
 [827]: #obj_polygon
 
-[828]: #diagramelementmovefreely
+[828]: ./assets1/copy.png
 
-[829]: #elementmovementstate
+[829]: #diagramelementmovefreely
 
-[830]: #elementpulsestate
+[830]: #elementmovementstate
 
-[831]: #typewhen
+[831]: #elementpulsestate
+
+[832]: #typewhen

@@ -32744,7 +32744,8 @@ triangle primitives to draw the line (
   </div>
   
 
-  <p>Copy Step options object</p>
+  <p><img src="./assets1/copy.png"></p>
+<p>Copy Step options object</p>
 <p>A copy step defines how to copy existing points.</p>
 <p>An array of copy steps will cumulatively copy points from an original set of
 points.</p>
@@ -32907,7 +32908,8 @@ diagram.addElement({
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
   <span class="hljs-attr">options</span>: {
     <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">3</span>,
+    <span class="hljs-attr">rotation</span>: -<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">6</span>,
     <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
     <span class="hljs-attr">copy</span>: [
       {
@@ -32925,31 +32927,31 @@ diagram.addElement({
 });</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Radial lines copy without original points</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Radial lines copy</span>
 diagram.addElement({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
   <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">sides</span>: <span class="hljs-number">3</span>,
-    <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
-    <span class="hljs-attr">rotation</span>: -<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">6</span>,
+    <span class="hljs-attr">points</span>: [
+      [<span class="hljs-number">-0.2</span>, <span class="hljs-number">-0.1</span>], [<span class="hljs-number">-0.2</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>],
+      [<span class="hljs-number">-0.2</span>, <span class="hljs-number">-0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">-0.1</span>],
+    ],
     <span class="hljs-attr">copy</span>: [
       {
-        <span class="hljs-attr">to</span>: [[<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.3</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.6</span>, <span class="hljs-number">0</span>]],
+        <span class="hljs-attr">to</span>: [[<span class="hljs-number">0.6</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.05</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2.2</span>, <span class="hljs-number">0</span>]],
       },
       {
         <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
         <span class="hljs-attr">num</span>: <span class="hljs-number">5</span>,
         <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">5</span>,
-        <span class="hljs-attr">start</span>: <span class="hljs-number">1</span>,              <span class="hljs-comment">// only want to copy the last copy step</span>
+        <span class="hljs-attr">start</span>: <span class="hljs-number">1</span>,              <span class="hljs-comment">// only copy last step, not original points</span>
       },
     ],
   },
 });</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Ring copy</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Ring copy (without original shape)</span>
 diagram.addElement({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,

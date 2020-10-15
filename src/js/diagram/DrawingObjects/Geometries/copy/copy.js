@@ -87,7 +87,7 @@ import {
  * @example
  * // Grid copy
  * diagram.addElement({
- *   name: 'p',
+ *   name: 'triGrid',
  *   method: 'polygon',
  *   options: {
  *     radius: 0.1,
@@ -112,7 +112,7 @@ import {
  * @example
  * // Radial lines copy
  * diagram.addElement({
- *   name: 'p',
+ *   name: 'radialLines',
  *   method: 'generic',
  *   options: {
  *     points: [
@@ -136,7 +136,7 @@ import {
  * @example
  * // Ring copy (without original shape)
  * diagram.addElement({
- *   name: 'p',
+ *   name: 'halfRings',
  *   method: 'polygon',
  *   options: {
  *     radius: 0.1,
