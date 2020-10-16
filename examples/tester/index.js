@@ -1,30 +1,26 @@
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
-// Copy independant rings from just the original points
-// rotation copy of a line of circles
+ // Grid of triangles
 diagram.addElement({
-  name: 'p',
-  method: 'polygon',
+  name: 'r',
+  method: 'rectangle',
   options: {
-    radius: 0.1,
-    sides: 3,
-    rotation: -Math.PI / 6,
-    fill: 'tris',
-    copy: [
-      {
-        along: 'x',
-        num: 4,
-        step: 0.3,
-      },
-      {
-        along: 'y',
-        num: 4,
-        step: 0.3,
-      },
-    ],
+    width: 0.5,
+    height: 0.5,
+    line: {
+      width: 0.03,
+    },
+    copy: {
+      along: 'rotation',
+      num: 3,
+      step: Math.PI / 2 / 3
+    },
   },
 });
 
+// diagram.initialize();
+
+// diagram.elements.hasTouchableElements = true;
 
 // const p = diagram.getElement('p')
 // const rotation = new Fig.Transform().rotate(Math.PI / 2);

@@ -11,6 +11,7 @@ import {
   joinObjects,
 } from '../../../../tools/tools';
 
+/* eslint-disable max-len */
 /**
  *
  * ![](./assets1/copy.png)
@@ -171,16 +172,17 @@ import {
  * });
  */
 export type CPY_Step = {
-  start?: number | string,
-  end?: number | string,
-  original?: boolean,
-  along?: 'x' | 'y' | number | 'rotation' | 'moveOnly',
   to?: Point | [number, number] | Transform
     | Array<Point | [number, number] | Transform> | Transform,
+  along?: 'x' | 'y' | number | 'rotation' | 'moveOnly',
   num?: number,
   step?: number,
   center?: TypeParsablePoint,
+  start?: number | string,
+  end?: number | string,
+  original?: boolean,
 };
+/* eslint-enable max-len */
 
 type CPY_Steps = Array<CPY_Step>;
 

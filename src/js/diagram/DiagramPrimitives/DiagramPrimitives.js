@@ -52,78 +52,12 @@ import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
 import { getPolygonPoints, getFanTrisPolygon, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
+import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle/rectangle';
 import type {
   OBJ_Copy,
 } from './DiagramPrimitiveTypes';
 import { copyPoints } from '../DrawingObjects/Geometries/copy/copy';
-
-
-/**
-  Curved Corner Definition
- */
-export type OBJ_CurvedCorner = {
-  radius?: number,
-  sides?: number,
-};
-
-/**
- * Rectangle shape options object
- *
- * ![](./assets1/rectangle.png)
- *
- * @property {'bottom' | 'middle' | 'top' | number} [yAlign] (`'middle'`)
- * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
- * @property {number} [width] (`1`)
- * @property {number} [height] (`1`)
- * @property {boolean} [fill] (`false`)
- * @property {OBJ_CurvedCorner} [corner] define for rounded corners
- * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('rectangle').standard()`)
- * @property {number} [pulse] set the default pulse scale
- * @example
- * // Filled rectangle
- * diagram.addElement(
- *  {
- *    name: 'r',
- *    method: 'rectangle',
- *    options: {
- *      width: 0.4,
- *      height: 0.2,
- *      fill: true,
- *    },
- *  },
- * );
- * @example
- * // Rectangle with rounded corners
- */
-export type OBJ_Rectangle = {
-  yAlign?: 'bottom' | 'middle' | 'top' | number,
-  xAlign?: 'left' | 'center' | 'right' | number,
-  width?: number,
-  height?: number,
-  fill?: boolean,
-  corner?: {
-    radius?: number,
-    sides?: number,
-  },
-  color?: Array<number>,
-  transform?: Transform,
-  position?: Point,
-  pulse?: number,
-}
-
-// generic
-// polyline
-// rectangle
-// polygon
-// polygonSweep
-// repeat
-// grid
-
-// Special
-// box (surround)
-// shape
+import type { CPY_Step } from '../DrawingObjects/Geometries/copy/copy';
 
 
 /**
@@ -202,6 +136,166 @@ export type OBJ_Texture = {
 }
 
 /**
+ * Pulse options object
+ *
+ * @property {number} [scale] scale to pulse
+ * @property {number} [duration] duration to pulse
+ * @property {number} [frequency] frequency to pulse where 0
+ */
+export type OBJ_PulseScale = {
+  duration?: number,
+  scale?: number,
+  frequency?: number,
+};
+
+/**
+ * ![](./assets1/generic.png)
+ *
+ * Options object for a {@link DiagramElementPrimitive} of a generic shape
+ *
+ * `points` will define either triangles or lines which combine
+ * to make the shape.
+ *
+ * `drawType` defines what sort of triangles or lines the `points` make
+ * and is analagous to WebGL [drawing primitives](https://webglfundamentals.org/webgl/lessons/webgl-points-lines-triangles.html)
+ * where the mapping between the two are:
+ * - `'triangles'`: TRIANGLES
+ * - `'strip'`: TRIANGLE_STRIP
+ * - `'fan'`: TRIANGLE_FAN
+ * - `'lines'`: LINES
+ *
+ * The most useful, common and generic `drawType` is `'triangles'`
+ * which can be used to create any shape.
+ *
+ * The shape is colored with either `color` or `texture`.
+ *
+ * The shape's points can be duplicated using the `copy` property
+ * to conveniently create multiple copies (like grids) of shapes.
+ *
+ * The shape will have a touch `border` which may also have `holes`
+ * or areas where touching has no effect.
+ *
+ * @property {Array<TypeParsablePoint>} points
+ * @property {'triangles' | 'strip' | 'fan' | 'lines'} [drawType]
+ * (`'triangles'`)
+ * @property {Array<CPY_Step | string> | CPY_Step} [copy] use `drawType` as
+ * `'triangles'` when using copy (`[]`)
+ * @property {Array<number>} [color] (`[1, 0, 0, 1])
+ * @property {OBJ_Texture} [texture] override `color` with a texture if defined
+ * @property {Array<Array<TypeParsablePoint>>} [border]
+ * @property {Array<Array<TypeParsablePoint>> | Array<Array<Point>>} [hole]
+ * @property {TypeParsablePoint} [position] will overwrite first translation
+ * transform of `transform` chain
+ * @property {Transform} [transform]
+ * @property {OBJ_PulseScale | number} [pulse] set default scale pulse options
+ * (`OBJ_PulseScale`) or pulse scale directly (`number`)
+ *
+ * @example
+ * // Square and triangle
+ * diagram.addElement({
+ *   name: 'squareAndTri',
+ *   method: 'generic',
+ *   options: {
+ *     points: [
+ *       [-1, 0.5], [-1, -0.5], [0, 0.5],
+ *       [0, 0.5], [-1, -0.5], [0, -0.5],
+ *       [0, -0.5], [1, 0.5], [1, -0.5],
+ *     ],
+ *   },
+ * });
+ * @example
+ * // rhombus with larger touch borders
+ * diagram.addElement({
+ *   name: 'rhombus',
+ *   method: 'generic',
+ *   options: {
+ *     points: [
+ *       [-0.5, -0.5], [0, 0.5], [1, 0.5],
+ *       [-0.5, -0.5], [1, 0.5], [0.5, -0.5],
+ *     ],
+ *     border: [[
+ *       [-1, -1], [-0.5, 1], [1.5, 1], [1, -1],
+ *     ]],
+ *   },
+ *   mods: {
+ *     isTouchable: true,
+ *     isMovable: true,
+ *     move: {
+ *       bounds: 'diagram',
+ *     },
+ *   },
+ * });
+ * diagram.setTouchable();
+ *
+ * @example
+ * // Grid of triangles
+ * diagram.addElement({
+ *   name: 'gridOfTris',
+ *   method: 'generic',
+ *   options: {
+ *     points: [
+ *       [-1, -1], [-0.7, -1], [-1, -0.7],
+ *     ],
+ *     copy: [
+ *       { along: 'x', num: 5, step: 0.4 },
+ *       { along: 'y', num: 5, step: 0.4 },
+ *     ],
+ *   },
+ * });
+ */
+export type OBJ_Generic = {
+  points?: Array<TypeParsablePoint> | Array<Point>,
+  drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+  copy?: Array<CPY_Step | string> | CPY_Step,
+  color?: Array<number>,
+  texture?: OBJ_Texture,
+  border?: Array<Array<TypeParsablePoint>>,
+  hole?: Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
+  position?: TypeParsablePoint,
+  transform?: Transform,
+  pulse?: number,
+}
+
+/**
+  Curved Corner Definition
+ */
+export type OBJ_CurvedCorner = {
+  radius?: number,
+  sides?: number,
+};
+
+
+//  */
+// export type OBJ_Rectangle = {
+//   yAlign?: 'bottom' | 'middle' | 'top' | number,
+//   xAlign?: 'left' | 'center' | 'right' | number,
+//   width?: number,
+//   height?: number,
+//   fill?: boolean,
+//   corner?: {
+//     radius?: number,
+//     sides?: number,
+//   },
+//   color?: Array<number>,
+//   transform?: Transform,
+//   position?: Point,
+//   pulse?: number,
+// }
+
+// generic
+// polyline
+// rectangle
+// polygon
+// polygonSweep
+// repeat
+// grid
+
+// Special
+// box (surround)
+// shape
+
+
+/**
  * Polyline shape options object
  *
  * ![](./assets1/polyline.png)
@@ -258,6 +352,8 @@ export type OBJ_Texture = {
  * triangle primitives to draw the line (`false`)
  * @property {boolean} [lineNum] Number of line primitives to use when
  * `linePrimitivs`: `true` (`2`)
+ * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
+ * the polyline
  * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {number} [pulse] set the default pulse scale
@@ -335,6 +431,7 @@ export type OBJ_Polyline = {
   hole?: 'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
   linePrimitives?: boolean,
   lineNum?: number,
+  copy?: Array<CPY_Step | string> | CPY_Step,
 };
 
 /**
@@ -407,9 +504,11 @@ export type OBJ_LineStyle = {
  * fan vertices. `'tris'` will fill polygon with less efficient separate
  * triangle vertices. Use `'tris'` if copying a filled polygon with
  * copy steps (`false`)
+ * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
+ * the polygon if defined. If using fill and copying, use `fill`: `'tris'`
  * @property {Array<number>} [color] (`[1, 0, 0, 1`])
  * @property {OBJ_Texture} [texture] Override color with a texture
- * @property {number} [pulse] set the default pulse scale
+ * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polygon').standard()`)
  * @example
@@ -455,11 +554,96 @@ export type OBJ_Polygon = {
   transform?: Transform,
   position?: TypeParsablePoint,
   texture?: OBJ_Texture,
-  pulse?: number;
-  // trianglePrimitives?: boolean,
+  copy?: Array<CPY_Step | string> | CPY_Step,
+  pulse?: number | OBJ_PulseScale,
   offset?: TypeParsablePoint,
 };
 
+/**
+ * Rectangle shape options object
+ *
+ * ![](./assets1/rectangle.png)
+ *
+ * @property {number} [width] (`1`)
+ * @property {number} [height] (`1`)
+ * @property {'bottom' | 'middle' | 'top' | number} [yAlign] (`'middle'`)
+ * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
+ * @property {OBJ_CurvedCorner} [corner] define for rounded corners
+ * @property {OBJ_LineStyle} [line] line style options
+ * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
+ * the rectangle
+ * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {OBJ_Texture} [texture] Override color with a texture
+ * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('rectangle').standard()`)
+ * @example
+ * // Filled rectangle
+ * diagram.addElement({
+ *   name: 'r',
+ *   method: 'rectangle',
+ *   options: {
+ *     width: 1,
+ *     height: 0.5,
+ *   },
+ * });
+ *
+ * @example
+ * // Corners with radius and dashed line
+ * diagram.addElement({
+ *   name: 'r',
+ *   method: 'rectangle',
+ *   options: {
+ *     width: 0.5,
+ *     height: 0.5,
+ *     line: {
+ *       width: 0.02,
+ *       dash: [0.05, 0.03]
+ *     },
+ *     corner: {
+ *       radius: 0.1,
+ *       sides: 10,
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Rectangle copies rotated
+ * diagram.addElement({
+ *   name: 'r',
+ *   method: 'rectangle',
+ *   options: {
+ *     width: 0.5,
+ *     height: 0.5,
+ *     line: {
+ *       width: 0.01,
+ *     },
+ *     copy: {
+ *       along: 'rotation',
+ *       num: 3,
+ *       step: Math.PI / 2 / 3
+ *     },
+ *   },
+ * });
+ */
+export type OBJ_Rectangle = {
+  width?: number,
+  height?: number,
+  xAlign?: 'left' | 'center' | 'right' | number,
+  yAlign?: 'bottom' | 'middle' | 'top' | number,
+  corner?: {
+    radius: 0,
+    sides: 1,
+  },
+  fill?: boolean,
+  line?: OBJ_LineStyle,
+  color?: Array<number>,
+  transform?: Transform,
+  position?: TypeParsablePoint,
+  texture?: OBJ_Texture,
+  copy?: Array<CPY_Step | string> | CPY_Step,
+  pulse?: number | OBJ_PulseScale,
+}
 /**
  * Text Definition object
  *
@@ -973,8 +1157,18 @@ function setupPulse(element: DiagramElement, options: Object) {
       typeof element.pulseDefault !== 'function'
       && typeof element.pulseDefault !== 'string'
     ) {
-      // eslint-disable-next-line no-param-reassign
-      element.pulseDefault.scale = options.pulse;
+      if (typeof options.pulse === 'number') {
+        // eslint-disable-next-line no-param-reassign
+        element.pulseDefault.scale = options.pulse;
+      } else {
+        const { scale, frequency, duration } = options.pulse;
+        // eslint-disable-next-line no-param-reassign
+        if (scale != null) { element.pulseDefault.scale = scale; }
+        // eslint-disable-next-line no-param-reassign
+        if (frequency != null) { element.pulseDefault.frequency = frequency; }
+        // eslint-disable-next-line no-param-reassign
+        if (duration != null) { element.pulseDefault.time = duration; }
+      }
     }
   }
 }
@@ -1040,8 +1234,7 @@ export default class DiagramPrimitives {
       repeat?: boolean,
       onLoad?: () => void,
     },
-    copy?: Array<OBJ_Copy> | OBJ_Copy,
-    // copyChain?: Array<OBJ_Copy>,
+    copy?: Array<CPY_Step | string> | CPY_Step,
     position?: TypeParsablePoint,
     transform?: Transform,
     pulse?: number,
@@ -1329,6 +1522,87 @@ export default class DiagramPrimitives {
         element.custom.updatePoints(points);
         // element.border = [points];
         simplifyBorder(element);
+      };
+    }
+    // element.drawingObject.getPointCountForAngle = (angle: number) => {
+    //   const sidesToDraw = Math.floor(
+    //     tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * optionsToUse.sides,
+    //   );
+    //   if (optionsToUse.fill === true) {
+    //     return sidesToDraw + 2;
+    //   }
+    //   if (optionsToUse.fill === 'tris') {
+    //     return sidesToDraw * 3;
+    //   }
+    //   if (optionsToUse.line && optionsToUse.line.linePrimitives) {
+    //     return sidesToDraw * optionsToUse.line.lineNum * 2;
+    //   }
+    //   return sidesToDraw * 6;
+    // };
+    return element;
+  }
+
+  rectangle(...options: Array<{
+    width?: number,
+    height?: number,
+    xAlign?: 'left' | 'center' | 'right' | number,
+    yAlign?: 'bottom' | 'middle' | 'top' | number,
+    corner?: {
+      radius: 0,
+      sides: 1,
+    },
+    fill?: boolean,
+    line?: OBJ_LineStyle,
+    color?: Array<number>,
+    transform?: Transform,
+    position?: TypeParsablePoint,
+    texture?: OBJ_Texture,
+    copy?: Array<CPY_Step | string> | CPY_Step,
+    pulse?: number | OBJ_PulseScale,
+  }>) {
+    const defaultOptions = {
+      width: 1,
+      height: 1,
+      xAlign: 'center',
+      yAlign: 'middle',
+      corner: {
+        radius: 0,
+        sides: 1,
+      },
+      transform: new Transform('polygon').standard(),
+    };
+    const optionsToUse = processOptions(defaultOptions, ...options);
+
+    if (
+      optionsToUse.line != null && optionsToUse.line.widthIs == null
+    ) {
+      optionsToUse.line.widthIs = 'mid';
+    }
+
+    const border = getRectangleBorder(optionsToUse);
+    let element;
+    if (optionsToUse.line == null) {
+      element = this.generic(optionsToUse, {
+        points: rectangleBorderToTris(border),
+        border: [border],
+      });
+      element.custom.update = (updateOptions) => {
+        const o = joinObjects({}, optionsToUse, updateOptions);
+        const updatedBorder = getRectangleBorder(o);
+        element.drawingObject.change(
+          rectangleBorderToTris(updatedBorder), [updatedBorder], [],
+        );
+      };
+    } else {
+      element = this.polyline(optionsToUse, optionsToUse.line, {
+        points: border,
+        close: true,
+        border: [border],
+      });
+      element.custom.update = (updateOptions) => {
+        const o = joinObjects({}, optionsToUse, updateOptions);
+        const updatedBorder = getRectangleBorder(o);
+        element.custom.updatePoints(updatedBorder);
       };
     }
     return element;
@@ -2037,7 +2311,7 @@ export default class DiagramPrimitives {
   //   );
   // }
 
-  rectangle(...optionsIn: Array<OBJ_Rectangle>) {
+  rectangleLegacy(...optionsIn: Array<OBJ_Rectangle>) {
     const defaultOptions = {
       yAlign: 'middle',
       xAlign: 'center',

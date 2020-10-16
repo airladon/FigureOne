@@ -1212,9 +1212,9 @@
               
                 
                 <li><a
-                  href='#obj_texture'
+                  href='#obj_generic'
                   class="">
-                  OBJ_Texture
+                  OBJ_Generic
                   
                 </a>
                 
@@ -1235,6 +1235,26 @@
                   href='#obj_polygon'
                   class="">
                   OBJ_Polygon
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_rectangle'
+                  class="">
+                  OBJ_Rectangle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_texture'
+                  class="">
+                  OBJ_Texture
                   
                 </a>
                 
@@ -2712,84 +2732,6 @@
               
                 
                 <li><a
-                  href='#obj_curvedcorner'
-                  class="">
-                  OBJ_CurvedCorner
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_rectangle'
-                  class="">
-                  OBJ_Rectangle
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_linestyle'
-                  class="">
-                  OBJ_LineStyle
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#diagramprimitives'
-                  class=" toggle-sibling">
-                  DiagramPrimitives
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#diagramprimitivespolygon'
-                        class='regular pre-open'>
-                        #polygon
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                  
-                </div>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#cpy_step'
-                  class="">
-                  CPY_Step
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typewhen'
-                  class="">
-                  TypeWhen
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#obj_scenario'
                   class="">
                   OBJ_Scenario
@@ -2800,9 +2742,9 @@
               
                 
                 <li><a
-                  href='#pulseoptions'
+                  href='#obj_pulse'
                   class="">
-                  PulseOptions
+                  OBJ_Pulse
                   
                 </a>
                 
@@ -2870,9 +2812,87 @@
               
                 
                 <li><a
+                  href='#typewhen'
+                  class="">
+                  TypeWhen
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#drawingobject'
                   class="">
                   DrawingObject
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_pulsescale'
+                  class="">
+                  OBJ_PulseScale
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_curvedcorner'
+                  class="">
+                  OBJ_CurvedCorner
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_linestyle'
+                  class="">
+                  OBJ_LineStyle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#diagramprimitives'
+                  class=" toggle-sibling">
+                  DiagramPrimitives
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#diagramprimitivespolygon'
+                        class='regular pre-open'>
+                        #polygon
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#cpy_step'
+                  class="">
+                  CPY_Step
                   
                 </a>
                 
@@ -3728,7 +3748,7 @@ callback.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>optionsOrDone</span> <code class='quiet'>((null | <a href="#pulseoptions">PulseOptions</a> | function (): void)
+            <span class='code bold'>optionsOrDone</span> <code class='quiet'>((null | <a href="#obj_pulse">OBJ_Pulse</a> | function (): void)
             = <code>null</code>)</code>
 	    
           </div>
@@ -14113,52 +14133,34 @@ diagram.elements.add(<span class="hljs-string">'p'</span>, p);</pre>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_texture'>
-      OBJ_Texture
+    <h3 class='fl m0' id='obj_generic'>
+      OBJ_Generic
     </h3>
     
     
   </div>
   
 
-  <p>Texture definition object</p>
-<p>A texture file is an image file like a jpg, or png.</p>
-<p>Textures can be used instead of colors to fill a shape in WebGL.</p>
-<p>Textures are effectively overlaid on a shape. Therefore, to overlay the
-texture with the correct offset, magnification and aspect ratio the texture
-must be mapped to the space the shape's vertices are defined in
-(vertex space).</p>
-<p>This is done by defining a window, or rectangle, for the texture file
-(<code>mapFrom</code>) and a similar window in vertex space (<code>mapTo</code>).
-The texture is then offset and scaled such that its window aligns with the
-vertex space window.</p>
-<p>The texture file has coordinates of (0, 0) in the bottom left corner and
-(1, 1) in the top right corner.</p>
-<p>Therefore, to make a 1000 x 500 image fill a 2 x 1 rectangle in vertex space
-centered at (0, 0) you would define:</p>
-<pre><code>mapFrom: new Rect(0, 0, 1, 1)
-mapTo: new Rect(-1, -0.5, 2, 1)
-</code></pre>
-<p>If instead you wanted to zoom the image in the same rectange by a factor of 2
-you could either:</p>
-<pre><code>mapFrom: new Rect(0.25, 0.25, 0.5, 0.5)
-mapTo: new Rect(-1, -0.5, 2, 1)
-</code></pre>
-<p>or</p>
-<pre><code>mapFrom: new Rect(0, 0, 1, 1)
-mapTo: new Rect(-2, -1, 4, 2)
-</code></pre>
-<p>Two ways of doing this are provided as sometimes it is more convenient to
-think about the window on the image, and other times the window in vertex
-space.</p>
-<p>If the shape has fill outside the texture boundaries then either the
-texture can be repeated, or a pixel from the border (edge) of the image is
-used (called clamping to edge).
-WebGL only allows images that are square with a side length that is a
-power of 2 (such as 16, 32, 64, 128 etc) to be repeated. All other images
-can only be clamped to their edge.</p>
-<p>To repeat all other image resolutions, a texture can be mapped to a rectangle
-and then the rectangle repeated throughout the diagram.</p>
+  <p><img src="./assets1/generic.png"></p>
+<p>Options object for a <a href="#diagramelementprimitive">DiagramElementPrimitive</a> of a generic shape</p>
+<p><code>points</code> will define either triangles or lines which combine
+to make the shape.</p>
+<p><code>drawType</code> defines what sort of triangles or lines the <code>points</code> make
+and is analagous to WebGL <a href="https://webglfundamentals.org/webgl/lessons/webgl-points-lines-triangles.html">drawing primitives</a>
+where the mapping between the two are:</p>
+<ul>
+<li><code>'triangles'</code>: TRIANGLES</li>
+<li><code>'strip'</code>: TRIANGLE_STRIP</li>
+<li><code>'fan'</code>: TRIANGLE_FAN</li>
+<li><code>'lines'</code>: LINES</li>
+</ul>
+<p>The most useful, common and generic <code>drawType</code> is <code>'triangles'</code>
+which can be used to create any shape.</p>
+<p>The shape is colored with either <code>color</code> or <code>texture</code>.</p>
+<p>The shape's points can be duplicated using the <code>copy</code> property
+to conveniently create multiple copies (like grids) of shapes.</p>
+<p>The shape will have a touch <code>border</code> which may also have <code>holes</code>
+or areas where touching has no effect.</p>
 
   
   
@@ -14177,44 +14179,89 @@ and then the rectangle repeated throughout the diagram.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>src</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          : The url or location of the image
-
+          <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)</code>
+          
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>mapTo</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
-          : vertex space window (
-<code>new Rect(-1, -1, 2, 2)</code>
+          <span class='code bold'>drawType</span> <code class='quiet'>((<code>"triangles"</code> | <code>"strip"</code> | <code>"fan"</code> | <code>"lines"</code>)?)</code>
+          : (
+<code>'triangles'</code>
 )
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>mapFrom</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
-          : image space window (
-<code>new Rect(0, 0, 1, 1)</code>
+          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
+          : use 
+<code>drawType</code>
+ as
+
+<code>'triangles'</code>
+ when using copy (
+<code>[]</code>
 )
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>repeat</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- will tile the image. Only works with
-images that are square whose number of side pixels is a power of 2 (
-<code>false</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (`
+[1, 0, 0, 1]
 )
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>onLoad</span> <code class='quiet'>(function (): void?)</code>
+          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
+          : override 
+<code>color</code>
+ with a texture if defined
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>hole</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : will overwrite first translation
+transform of 
+<code>transform</code>
+ chain
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="#obj_pulsescale">OBJ_PulseScale</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : set default scale pulse options
+(
+<code>OBJ_PulseScale</code>
+) or pulse scale directly (
+<code>number</code>
+)
+
           
         </div>
       
@@ -14227,6 +14274,63 @@ images that are square whose number of side pixels is a power of 2 (
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Square and triangle</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'squareAndTri'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">points</span>: [
+      [<span class="hljs-number">-1</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">-1</span>, <span class="hljs-number">-0.5</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>],
+      [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">-1</span>, <span class="hljs-number">-0.5</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">-0.5</span>],
+      [<span class="hljs-number">0</span>, <span class="hljs-number">-0.5</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">-0.5</span>],
+    ],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// rhombus with larger touch borders</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'rhombus'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">points</span>: [
+      [<span class="hljs-number">-0.5</span>, <span class="hljs-number">-0.5</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0.5</span>],
+      [<span class="hljs-number">-0.5</span>, <span class="hljs-number">-0.5</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">-0.5</span>],
+    ],
+    <span class="hljs-attr">border</span>: [[
+      [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>], [<span class="hljs-number">-0.5</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">1.5</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">-1</span>],
+    ]],
+  },
+  <span class="hljs-attr">mods</span>: {
+    <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">isMovable</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">move</span>: {
+      <span class="hljs-attr">bounds</span>: <span class="hljs-string">'diagram'</span>,
+    },
+  },
+});
+diagram.setTouchable();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid of triangles</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'gridOfTris'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">points</span>: [
+      [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>], [<span class="hljs-number">-0.7</span>, <span class="hljs-number">-1</span>], [<span class="hljs-number">-1</span>, <span class="hljs-number">-0.7</span>],
+    ],
+    <span class="hljs-attr">copy</span>: [
+      { <span class="hljs-attr">along</span>: <span class="hljs-string">'x'</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">step</span>: <span class="hljs-number">0.4</span> },
+      { <span class="hljs-attr">along</span>: <span class="hljs-string">'y'</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">step</span>: <span class="hljs-number">0.4</span> },
+    ],
+  },
+});</pre>
+    
   
 
   
@@ -14452,6 +14556,14 @@ triangle primitives to draw the line (
  (
 <code>2</code>
 )
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
+          : make copies of
+the polyline
 
           
         </div>
@@ -14740,6 +14852,17 @@ copy steps (
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
+          : make copies of
+the polygon if defined. If using fill and copying, use 
+<code>fill</code>
+: 
+<code>'tris'</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
           : (
 <code>[1, 0, 0, 1</code>
@@ -14756,7 +14879,7 @@ copy steps (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
           : set the default pulse scale
 
           
@@ -14820,6 +14943,349 @@ diagram.addElement(
   },
 );</pre>
     
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_rectangle'>
+      OBJ_Rectangle
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Rectangle shape options object</p>
+<p><img src="./assets1/rectangle.png"></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : (
+<code>'middle'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : (
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>corner</span> <code class='quiet'>(<a href="#obj_curvedcorner">OBJ_CurvedCorner</a>?)</code>
+          : define for rounded corners
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
+          : line style options
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
+          : make copies of
+the rectangle if defined
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
+          : Override color with a texture
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
+          : set the default pulse scale
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : convenience to override Transform translation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
+          : (
+<code>Transform('rectangle').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Filled rectangle</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'r'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'rectangle'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">width</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">0.5</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Corners with radius and dashed line</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'r'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'rectangle'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">line</span>: {
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+      <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.05</span>, <span class="hljs-number">0.03</span>]
+    },
+    <span class="hljs-attr">corner</span>: {
+      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span>,
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Rectangle copies rotated</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'r'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'rectangle'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">line</span>: {
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
+    },
+    <span class="hljs-attr">copy</span>: {
+      <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
+      <span class="hljs-attr">num</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span> / <span class="hljs-number">3</span>
+    },
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_texture'>
+      OBJ_Texture
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Texture definition object</p>
+<p>A texture file is an image file like a jpg, or png.</p>
+<p>Textures can be used instead of colors to fill a shape in WebGL.</p>
+<p>Textures are effectively overlaid on a shape. Therefore, to overlay the
+texture with the correct offset, magnification and aspect ratio the texture
+must be mapped to the space the shape's vertices are defined in
+(vertex space).</p>
+<p>This is done by defining a window, or rectangle, for the texture file
+(<code>mapFrom</code>) and a similar window in vertex space (<code>mapTo</code>).
+The texture is then offset and scaled such that its window aligns with the
+vertex space window.</p>
+<p>The texture file has coordinates of (0, 0) in the bottom left corner and
+(1, 1) in the top right corner.</p>
+<p>Therefore, to make a 1000 x 500 image fill a 2 x 1 rectangle in vertex space
+centered at (0, 0) you would define:</p>
+<pre><code>mapFrom: new Rect(0, 0, 1, 1)
+mapTo: new Rect(-1, -0.5, 2, 1)
+</code></pre>
+<p>If instead you wanted to zoom the image in the same rectange by a factor of 2
+you could either:</p>
+<pre><code>mapFrom: new Rect(0.25, 0.25, 0.5, 0.5)
+mapTo: new Rect(-1, -0.5, 2, 1)
+</code></pre>
+<p>or</p>
+<pre><code>mapFrom: new Rect(0, 0, 1, 1)
+mapTo: new Rect(-2, -1, 4, 2)
+</code></pre>
+<p>Two ways of doing this are provided as sometimes it is more convenient to
+think about the window on the image, and other times the window in vertex
+space.</p>
+<p>If the shape has fill outside the texture boundaries then either the
+texture can be repeated, or a pixel from the border (edge) of the image is
+used (called clamping to edge).
+WebGL only allows images that are square with a side length that is a
+power of 2 (such as 16, 32, 64, 128 etc) to be repeated. All other images
+can only be clamped to their edge.</p>
+<p>To repeat all other image resolutions, a texture can be mapped to a rectangle
+and then the rectangle repeated throughout the diagram.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>src</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : The url or location of the image
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>mapTo</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
+          : vertex space window (
+<code>new Rect(-1, -1, 2, 2)</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>mapFrom</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
+          : image space window (
+<code>new Rect(0, 0, 1, 1)</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>repeat</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ will tile the image. Only works with
+images that are square whose number of side pixels is a power of 2 (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onLoad</span> <code class='quiet'>(function (): void?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
   
 
   
@@ -32191,882 +32657,6 @@ and height definition
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_curvedcorner'>
-      OBJ_CurvedCorner
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Curved Corner Definition</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_rectangle'>
-      OBJ_Rectangle
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Rectangle shape options object</p>
-<p><img src="./assets1/rectangle.png"></p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : (
-<code>'middle'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : (
-<code>'center'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>corner</span> <code class='quiet'>(<a href="#obj_curvedcorner">OBJ_CurvedCorner</a>?)</code>
-          : define for rounded corners
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          : (
-<code>[1, 0, 0, 1]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
-          : (
-<code>Transform('rectangle').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Filled rectangle</span>
-diagram.addElement(
- {
-   <span class="hljs-attr">name</span>: <span class="hljs-string">'r'</span>,
-   <span class="hljs-attr">method</span>: <span class="hljs-string">'rectangle'</span>,
-   <span class="hljs-attr">options</span>: {
-     <span class="hljs-attr">width</span>: <span class="hljs-number">0.4</span>,
-     <span class="hljs-attr">height</span>: <span class="hljs-number">0.2</span>,
-     <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
-   },
- },
-);</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Rectangle with rounded corners</span></pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_linestyle'>
-      OBJ_LineStyle
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Line style object</p>
-<p>These properties are a subset of <a href="#obj_polyline">OBJ_Polyline</a> which has more details
-on how a line is defined.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?)</code>
-          : defines how the width is grown from the polyline's points.
-Only 
-<code>"mid"</code>
- is fully compatible with all options in
-
-<code>cornerStyle</code>
- and 
-<code>dash</code>
-. (
-<code>"mid"</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>cornerStyle</span> <code class='quiet'>((<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?)</code>
-          : <code>"auto"</code>
-:
-sharp corners sharp when angle is less than 
-<code>minAutoCornerAngle</code>
-, 
-<code>"none"</code>
-: no
-corners, 
-<code>"radius"</code>
-: curved corners, 
-<code>"fill"</code>
-: fills the gapes between the line
-ends, (
-<code>"auto"</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>cornerSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : only used when 
-<code>cornerStyle</code>
- = 
-<code>radius</code>
- (
-<code>0.01</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>cornerSides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : number of sides in curve - only used when
-
-<code>cornerStyle</code>
- = 
-<code>radius</code>
- (
-<code>10</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>cornersOnly</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : draw only the corners with size 
-<code>cornerSize</code>
- (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>cornerLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : use only with 
-<code>cornersOnly</code>
- = 
-<code>true</code>
- -
-length of corner to draw (
-<code>0.1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>minAutoCornerAngle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : see 
-<code>cornerStyle</code>
- = 
-<code>auto</code>
- (
-<code>π/7</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>dash</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          : leave empty for solid line - use array of
-numbers for dash line where first number is length of line, second number is
-length of gap and then the pattern repeats - can use more than one dash length
-and gap  - e.g. 
-[0.1, 0.01, 0.02, 0.01]
- produces a lines with a long dash,
-short gap, short dash, short gap and then repeats.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>linePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : Use WebGL line primitives instead of
-triangle primitives to draw the line (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>lineNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : Number of line primitives to use when
-
-<code>linePrimitivs</code>
-: 
-<code>true</code>
- (
-<code>2</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>forceCornerLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='diagramprimitives'>
-      DiagramPrimitives
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Built in dagiagram primitives.</p>
-<p>Including simple shapes, grid and text.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='diagramprimitivespolygon'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>polygon(options)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Polygon or partial polygon shape options object</p>
-<p><img src="./assets1/polygon.png"></p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_polygon">OBJ_Polygon</a>>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='cpy_step'>
-      CPY_Step
-    </h3>
-    
-    
-  </div>
-  
-
-  <p><img src="./assets1/copy.png"></p>
-<p>Copy Step options object</p>
-<p>A copy step defines how to copy existing points.</p>
-<p>An array of copy steps will cumulatively copy points from an original set of
-points.</p>
-<p>So, if there are two copy steps then:</p>
-<ul>
-<li>the first step will copy the original points</li>
-<li>the second step will copy the original points and the first copy of the
-points</li>
-</ul>
-<p>For example, a grid of a shape can be made with two copy steps. The first
-replicates the shape along the x axis, creating a line of shapes. The second
-copy step then replicates the line of shapes in the y axis, creating a grid
-of shapes.</p>
-<p>Each copy step appends its copied points onto an array of points that
-started with the original points. By default, copy steps operate on all
-points created in previous steps. However, the properties <code>start</code> and <code>end</code>
-can be used to make the current step only operate on a subset of the points.</p>
-<p><code>start</code> and <code>end</code> refer to the indexes of the copy steps where the original
-points is at index 0, and the first copy step is at index 1. Copy step
-arrays can also include <em>marker strings</em> which make defining <code>start</code> and
-<code>end</code> more convient (see the third example below). These marker strings
-can be used as <code>start</code> and <code>end</code> values. Marker strings are included
-in the copy step indexing.</p>
-<p>There are two main ways to make a copy, either copy the points <code>to</code> a
-location, or copy the points <code>along</code> a path.</p>
-<p>When using the <code>to</code> property, if a <a href="#point">Point</a> is defined
-then the points will be copied to that point. If a <a href="#transform">Transform</a> is
-defined, then a copy of the points will be transformed by that transform. An
-array of points and transforms can be defined to make multiple copies of the
-points.</p>
-<p>When using the <code>along</code> property, the points are copied a number (<code>num</code>) of
-times along a path with some <code>step</code>. The paths can be horiztonal (<code>'x'</code>),
-vertical (<code>'y'</code>), at an angle (<code>number</code>) or through a <code>'rotation'</code> around
-a <code>center</code> point.</p>
-<p>When copying along a line (<code>along</code> is <code>'x'</code>, <code>y'</code> or a <code>number</code>), then
-<code>step</code> will be the distance offset along the line.</p>
-<p>When copying along a rotation (<code>along</code> is <code>'rotation'</code>), then <code>step</code> will be
-the angular step in radians.</p>
-<p>Any step can use the <code>original</code> property - but it will only operate on the
-last step that uses it. When <code>original</code> is <code>false</code>, then all points before
-that copy step will not be included in the returned Point array.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>to</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="#typeparsabletransform">TypeParsableTransform</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="#typeparsabletransform">TypeParsableTransform</a>)>)?)</code>
-          : copy points to
-a location or locations or transform a copy of the points
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>along</span> <code class='quiet'>((<code>"x"</code> | <code>"y"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rotation"</code> | <code>"moveOnly"</code>)?)</code>
-          : copy points
-along a linear path where 
-<code>number</code>
- is a path at an angle in radians
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>num</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : the number of copies to make when copying 
-<code>along</code>
- a
-path
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>step</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : distance between copies if 
-<code>along</code>
- is 
-<code>'x'</code>
- or
-
-<code>'y'</code>
- or a 
-<code>number</code>
-, delta angle between copies if 
-<code>along</code>
- is 
-<code>'rotation'</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>center</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : the center point about which to rotate
-the copies when using 
-<code>along</code>
- = 
-<code>'rotation'</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>start</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
-          : copy step index or marker defining the
-start of the points to copy
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>end</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
-          : copy step index or marker defining the end
-of the points to copy
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>original</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>false</code>
- excludes all points before this step
-in the final result (
-<code>true</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid copy</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">sides</span>: <span class="hljs-number">3</span>,
-    <span class="hljs-attr">rotation</span>: -<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">6</span>,
-    <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
-    <span class="hljs-attr">copy</span>: [
-      {
-        <span class="hljs-attr">along</span>: <span class="hljs-string">'x'</span>,
-        <span class="hljs-attr">num</span>: <span class="hljs-number">4</span>,
-        <span class="hljs-attr">step</span>: <span class="hljs-number">0.3</span>,
-      },
-      {
-        <span class="hljs-attr">along</span>: <span class="hljs-string">'y'</span>,
-        <span class="hljs-attr">num</span>: <span class="hljs-number">4</span>,
-        <span class="hljs-attr">step</span>: <span class="hljs-number">0.3</span>,
-      },
-    ],
-  },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Radial lines copy</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">points</span>: [
-      [<span class="hljs-number">-0.2</span>, <span class="hljs-number">-0.1</span>], [<span class="hljs-number">-0.2</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>],
-      [<span class="hljs-number">-0.2</span>, <span class="hljs-number">-0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">-0.1</span>],
-    ],
-    <span class="hljs-attr">copy</span>: [
-      {
-        <span class="hljs-attr">to</span>: [[<span class="hljs-number">0.6</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.05</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2.2</span>, <span class="hljs-number">0</span>]],
-      },
-      {
-        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
-        <span class="hljs-attr">num</span>: <span class="hljs-number">5</span>,
-        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">5</span>,
-        <span class="hljs-attr">start</span>: <span class="hljs-number">1</span>,              <span class="hljs-comment">// only copy last step, not original points</span>
-      },
-    ],
-  },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Ring copy (without original shape)</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
-    <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
-    <span class="hljs-attr">copy</span>: [
-      <span class="hljs-string">'ring1'</span>,               <span class="hljs-comment">// marker 1</span>
-      {
-        <span class="hljs-attr">to</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>],
-        <span class="hljs-attr">original</span>: <span class="hljs-literal">false</span>,     <span class="hljs-comment">// don't include the original shape</span>
-      },
-      {
-        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
-        <span class="hljs-attr">num</span>: <span class="hljs-number">7</span>,
-        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">7</span>,
-        <span class="hljs-attr">start</span>: <span class="hljs-string">'ring1'</span>,      <span class="hljs-comment">// copy only from marker 1</span>
-      },
-      <span class="hljs-string">'ring2'</span>,               <span class="hljs-comment">// marker 2</span>
-      {
-        <span class="hljs-attr">to</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
-        <span class="hljs-attr">start</span>: <span class="hljs-number">0</span>,            <span class="hljs-comment">// make a copy of the original shape only</span>
-        <span class="hljs-attr">end</span>: <span class="hljs-number">1</span>,
-      },
-      {
-        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
-        <span class="hljs-attr">num</span>: <span class="hljs-number">15</span>,
-        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">15</span>,
-        <span class="hljs-attr">start</span>: <span class="hljs-string">'ring2'</span>,      <span class="hljs-comment">// copy points from Marker 2 only</span>
-      },
-    ],
-  },
-});</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typewhen'>
-      TypeWhen
-    </h3>
-    
-    
-  </div>
-  
-
-  <p><code>'nextFrame'</code> | <code>'prevFrame'</code> | <code>'syncNow'</code> | <code>'now'</code></p>
-<p><code>'syncNow'</code> is a synchronized 'now' time. The
-first time 'syncNow' is used, the current time will be stored and used
-for all subsequent calls to 'syncNow'. 'syncNow' is reset every
-time a new animation frame is drawn, or 100ms after a first syncNow call
-has been made after a reset.</p>
-<p>'now' is the instantaneous time</p>
-<p><code>'nextFrame'</code> will be the time of the next animation frame</p>
-<p><code>'prevFrame'</code> is the time of the last animation frame</p>
-
-  
-    <p style="display: none;">      Type:
-      (<code>"now"</code> | <code>"nextFrame"</code> | <code>"prevFrame"</code> | <code>"syncNow"</code>)
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='obj_scenario'>
       OBJ_Scenario
     </h3>
@@ -33165,15 +32755,15 @@ has been made after a reset.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='pulseoptions'>
-      PulseOptions
+    <h3 class='fl m0' id='obj_pulse'>
+      OBJ_Pulse
     </h3>
     
     
   </div>
   
 
-  <p>Pulse options</p>
+  <p>Pulse options object</p>
 <p>An element can have its scale pulsed of some <code>duration</code> with some
 <code>frequency</code>.</p>
 <p>If the scale is pulsed from the center of an object, the object will simply
@@ -33277,12 +32867,6 @@ how the scale should progress over time (
       
         <div class='space-bottom0'>
           <span class='code bold'>y</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>time</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           
           
         </div>
@@ -33797,6 +33381,67 @@ string that names the scenario
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='typewhen'>
+      TypeWhen
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><code>'nextFrame'</code> | <code>'prevFrame'</code> | <code>'syncNow'</code> | <code>'now'</code></p>
+<p><code>'syncNow'</code> is a synchronized 'now' time. The
+first time 'syncNow' is used, the current time will be stored and used
+for all subsequent calls to 'syncNow'. 'syncNow' is reset every
+time a new animation frame is drawn, or 100ms after a first syncNow call
+has been made after a reset.</p>
+<p>'now' is the instantaneous time</p>
+<p><code>'nextFrame'</code> will be the time of the next animation frame</p>
+<p><code>'prevFrame'</code> is the time of the last animation frame</p>
+
+  
+    <p style="display: none;">      Type:
+      (<code>"now"</code> | <code>"nextFrame"</code> | <code>"prevFrame"</code> | <code>"syncNow"</code>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='drawingobject'>
       DrawingObject
     </h3>
@@ -33860,6 +33505,737 @@ touched
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_pulsescale'>
+      OBJ_PulseScale
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Pulse options object</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale to pulse
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : duration to pulse
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>frequency</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : frequency to pulse where 0
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_curvedcorner'>
+      OBJ_CurvedCorner
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Curved Corner Definition</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_linestyle'>
+      OBJ_LineStyle
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Line style object</p>
+<p>These properties are a subset of <a href="#obj_polyline">OBJ_Polyline</a> which has more details
+on how a line is defined.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?)</code>
+          : defines how the width is grown from the polyline's points.
+Only 
+<code>"mid"</code>
+ is fully compatible with all options in
+
+<code>cornerStyle</code>
+ and 
+<code>dash</code>
+. (
+<code>"mid"</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerStyle</span> <code class='quiet'>((<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?)</code>
+          : <code>"auto"</code>
+:
+sharp corners sharp when angle is less than 
+<code>minAutoCornerAngle</code>
+, 
+<code>"none"</code>
+: no
+corners, 
+<code>"radius"</code>
+: curved corners, 
+<code>"fill"</code>
+: fills the gapes between the line
+ends, (
+<code>"auto"</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : only used when 
+<code>cornerStyle</code>
+ = 
+<code>radius</code>
+ (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerSides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in curve - only used when
+
+<code>cornerStyle</code>
+ = 
+<code>radius</code>
+ (
+<code>10</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornersOnly</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : draw only the corners with size 
+<code>cornerSize</code>
+ (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use only with 
+<code>cornersOnly</code>
+ = 
+<code>true</code>
+ -
+length of corner to draw (
+<code>0.1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>minAutoCornerAngle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : see 
+<code>cornerStyle</code>
+ = 
+<code>auto</code>
+ (
+<code>π/7</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : leave empty for solid line - use array of
+numbers for dash line where first number is length of line, second number is
+length of gap and then the pattern repeats - can use more than one dash length
+and gap  - e.g. 
+[0.1, 0.01, 0.02, 0.01]
+ produces a lines with a long dash,
+short gap, short dash, short gap and then repeats.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>linePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Use WebGL line primitives instead of
+triangle primitives to draw the line (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Number of line primitives to use when
+
+<code>linePrimitivs</code>
+: 
+<code>true</code>
+ (
+<code>2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>forceCornerLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='diagramprimitives'>
+      DiagramPrimitives
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Built in dagiagram primitives.</p>
+<p>Including simple shapes, grid and text.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='diagramprimitivespolygon'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>polygon(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Polygon or partial polygon shape options object</p>
+<p><img src="./assets1/polygon.png"></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_polygon">OBJ_Polygon</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='cpy_step'>
+      CPY_Step
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><img src="./assets1/copy.png"></p>
+<p>Copy Step options object</p>
+<p>A copy step defines how to copy existing points.</p>
+<p>An array of copy steps will cumulatively copy points from an original set of
+points.</p>
+<p>So, if there are two copy steps then:</p>
+<ul>
+<li>the first step will copy the original points</li>
+<li>the second step will copy the original points and the first copy of the
+points</li>
+</ul>
+<p>For example, a grid of a shape can be made with two copy steps. The first
+replicates the shape along the x axis, creating a line of shapes. The second
+copy step then replicates the line of shapes in the y axis, creating a grid
+of shapes.</p>
+<p>Each copy step appends its copied points onto an array of points that
+started with the original points. By default, copy steps operate on all
+points created in previous steps. However, the properties <code>start</code> and <code>end</code>
+can be used to make the current step only operate on a subset of the points.</p>
+<p><code>start</code> and <code>end</code> refer to the indexes of the copy steps where the original
+points is at index 0, and the first copy step is at index 1. Copy step
+arrays can also include <em>marker strings</em> which make defining <code>start</code> and
+<code>end</code> more convient (see the third example below). These marker strings
+can be used as <code>start</code> and <code>end</code> values. Marker strings are included
+in the copy step indexing.</p>
+<p>There are two main ways to make a copy, either copy the points <code>to</code> a
+location, or copy the points <code>along</code> a path.</p>
+<p>When using the <code>to</code> property, if a <a href="#point">Point</a> is defined
+then the points will be copied to that point. If a <a href="#transform">Transform</a> is
+defined, then a copy of the points will be transformed by that transform. An
+array of points and transforms can be defined to make multiple copies of the
+points.</p>
+<p>When using the <code>along</code> property, the points are copied a number (<code>num</code>) of
+times along a path with some <code>step</code>. The paths can be horiztonal (<code>'x'</code>),
+vertical (<code>'y'</code>), at an angle (<code>number</code>) or through a <code>'rotation'</code> around
+a <code>center</code> point.</p>
+<p>When copying along a line (<code>along</code> is <code>'x'</code>, <code>y'</code> or a <code>number</code>), then
+<code>step</code> will be the distance offset along the line.</p>
+<p>When copying along a rotation (<code>along</code> is <code>'rotation'</code>), then <code>step</code> will be
+the angular step in radians.</p>
+<p>Any step can use the <code>original</code> property - but it will only operate on the
+last step that uses it. When <code>original</code> is <code>false</code>, then all points before
+that copy step will not be included in the returned Point array.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>to</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="#typeparsabletransform">TypeParsableTransform</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="#typeparsabletransform">TypeParsableTransform</a>)>)?)</code>
+          : copy points to
+a location or locations or transform a copy of the points
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>along</span> <code class='quiet'>((<code>"x"</code> | <code>"y"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rotation"</code> | <code>"moveOnly"</code>)?)</code>
+          : copy points
+along a linear path where 
+<code>number</code>
+ is a path at an angle in radians
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>num</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : the number of copies to make when copying 
+<code>along</code>
+ a
+path
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>step</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : distance between copies if 
+<code>along</code>
+ is 
+<code>'x'</code>
+ or
+
+<code>'y'</code>
+ or a 
+<code>number</code>
+, delta angle between copies if 
+<code>along</code>
+ is 
+<code>'rotation'</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>center</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : the center point about which to rotate
+the copies when using 
+<code>along</code>
+ = 
+<code>'rotation'</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          : copy step index or marker defining the
+start of the points to copy
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>end</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          : copy step index or marker defining the end
+of the points to copy
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>original</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ excludes all points before this step
+in the final result (
+<code>true</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid copy</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'triGrid'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">3</span>,
+    <span class="hljs-attr">rotation</span>: -<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">6</span>,
+    <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
+    <span class="hljs-attr">copy</span>: [
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'x'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-number">0.3</span>,
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'y'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-number">0.3</span>,
+      },
+    ],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Radial lines copy</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'radialLines'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">points</span>: [
+      [<span class="hljs-number">-0.2</span>, <span class="hljs-number">-0.1</span>], [<span class="hljs-number">-0.2</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>],
+      [<span class="hljs-number">-0.2</span>, <span class="hljs-number">-0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">-0.1</span>],
+    ],
+    <span class="hljs-attr">copy</span>: [
+      {
+        <span class="hljs-attr">to</span>: [[<span class="hljs-number">0.6</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.05</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2.2</span>, <span class="hljs-number">0</span>]],
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">5</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">5</span>,
+        <span class="hljs-attr">start</span>: <span class="hljs-number">1</span>,              <span class="hljs-comment">// only copy last step, not original points</span>
+      },
+    ],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Ring copy (without original shape)</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'halfRings'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+    <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
+    <span class="hljs-attr">copy</span>: [
+      <span class="hljs-string">'ring1'</span>,               <span class="hljs-comment">// marker 1</span>
+      {
+        <span class="hljs-attr">to</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>],
+        <span class="hljs-attr">original</span>: <span class="hljs-literal">false</span>,     <span class="hljs-comment">// don't include the original shape</span>
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">7</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">7</span>,
+        <span class="hljs-attr">start</span>: <span class="hljs-string">'ring1'</span>,      <span class="hljs-comment">// copy only from marker 1</span>
+      },
+      <span class="hljs-string">'ring2'</span>,               <span class="hljs-comment">// marker 2</span>
+      {
+        <span class="hljs-attr">to</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+        <span class="hljs-attr">start</span>: <span class="hljs-number">0</span>,            <span class="hljs-comment">// make a copy of the original shape only</span>
+        <span class="hljs-attr">end</span>: <span class="hljs-number">1</span>,
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">15</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">15</span>,
+        <span class="hljs-attr">start</span>: <span class="hljs-string">'ring2'</span>,      <span class="hljs-comment">// copy points from Marker 2 only</span>
+      },
+    ],
+  },
+});</pre>
+    
   
 
   

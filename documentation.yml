@@ -28,9 +28,11 @@ toc:
   - getTransform
   - name: Drawing
     file: ./docs/tutorials/draw/draw.md
-  - OBJ_Texture
+  - OBJ_Generic
   - OBJ_Polyline
   - OBJ_Polygon
+  - OBJ_Rectangle
+  - OBJ_Texture
   - name: Text
   - OBJ_Font
   - OBJ_TextDefinition

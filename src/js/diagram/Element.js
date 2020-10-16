@@ -106,7 +106,7 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
 /* eslint-disable no-use-before-define */
 
 /**
- * Pulse options
+ * Pulse options object
  *
  * An element can have its scale pulsed of some `duration` with some
  * `frequency`.
@@ -137,13 +137,13 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
  * @property {'sinusoid' | 'triangle'} [progression] function that defines
  * how the scale should progress over time (`sinusoid`)
  */
-type PulseOptions = {
+type OBJ_Pulse = {
   x?: 'left' | 'center' | 'right' | 'origin' | number,
   y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
   centerOn?: null | DiagramElement | TypeParsablePoint,
   space?: 'diagram' | 'gl' | 'local' | 'vertex',
   frequency?: number,
-  time?: number,
+  duration?: number,
   scale?: number,
   done?: ?(mixed) => void,
   progression?: string | (number) => number,
@@ -558,7 +558,7 @@ class DiagramElement {
     this.pulseDefault = {
       frequency: 0,
       scale: 2,
-      time: 1,
+      duration: 1,
     };
     // this.isPaused = false;
     // this.copies = [];
@@ -1420,9 +1420,9 @@ class DiagramElement {
    * Either pass in a callback, or an options object defining the pulse and
    * callback.
    *
-   * @param {null | PulseOptions | () => void} optionsOrDone
+   * @param {null | OBJ_Pulse | () => void} optionsOrDone
    */
-  pulse(optionsOrDone: null | PulseOptions | () => void = null) {
+  pulse(optionsOrDone: null | OBJ_Pulse | () => void = null) {
     const defaultPulseOptions = {
       frequency: 0,
       time: 1,
@@ -1433,7 +1433,7 @@ class DiagramElement {
       && typeof this.pulseDefault !== 'string'
     ) {
       defaultPulseOptions.frequency = this.pulseDefault.frequency;
-      defaultPulseOptions.time = this.pulseDefault.time;
+      defaultPulseOptions.duration = this.pulseDefault.duration;
       defaultPulseOptions.scale = this.pulseDefault.scale;
     }
     const defaultOptions = {
@@ -1442,7 +1442,7 @@ class DiagramElement {
       space: 'diagram',
       centerOn: null,
       frequency: defaultPulseOptions.frequency,
-      duration: defaultPulseOptions.time,
+      duration: defaultPulseOptions.duration,
       scale: defaultPulseOptions.scale,
       done: null,
       progression: 'sinusoid',
@@ -4143,7 +4143,7 @@ class DiagramElementCollection extends DiagramElement {
       && typeof this.pulseDefault !== 'string'
     ) {
       defaultPulseOptions.frequency = this.pulseDefault.frequency;
-      defaultPulseOptions.time = this.pulseDefault.time;
+      defaultPulseOptions.duration = this.pulseDefault.duration;
       defaultPulseOptions.scale = this.pulseDefault.scale;
     }
     const defaultOptions = {
@@ -4152,7 +4152,7 @@ class DiagramElementCollection extends DiagramElement {
       space: 'diagram',
       centerOn: null,
       frequency: defaultPulseOptions.frequency,
-      time: defaultPulseOptions.time,
+      duration: defaultPulseOptions.duration,
       scale: defaultPulseOptions.scale,
       done: null,
       elements: null,
@@ -4176,8 +4176,8 @@ class DiagramElementCollection extends DiagramElement {
       if (optionsOrElementsOrDone.frequency == null) {
         options.frequency = undefined;
       }
-      if (optionsOrElementsOrDone.time == null) {
-        options.time = undefined;
+      if (optionsOrElementsOrDone.duration == null) {
+        options.duration = undefined;
       }
     }
     options.elements = null;
