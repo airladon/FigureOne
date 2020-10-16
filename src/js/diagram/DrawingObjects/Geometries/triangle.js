@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, Transform, Line,
+  Point, Transform, Line, minAngleDiff,
 } from '../../../tools/g2';
 
 function getTriangleBorder(
@@ -20,6 +20,9 @@ function getTriangleBorder(
   }
   if (options.ASA != null) {
     return getASAPoints(options);
+  }
+  if (options.SAS != null) {
+    return getSASPoints(options);
   }
   const {
     width, height, xAlign, yAlign, top,
@@ -64,44 +67,31 @@ function getCenter(points: Array<Point>) {
   return new Point(Ox, Oy);
 }
 
-//                             c3
-//                              .
-//                            .   .
-//                         .   a3   .
-//                       .            .
-//                s3   .                .   s2
-//                   .                    .
-//                 .                        .
-//               /                           \
-//             /  a1                       a2  \
-//         c1  ---------------------------------   c2
-//                           s1
-//
-//
-function getASAPoints(
-  options: {
-    xAlign: 'left' | 'center' | 'right' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
-    yAlign: 'bottom' | 'middle' | 'top' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
-    ASA?: [number, number, number],
-    direction: 1 | -1,
-    rotation: number,
-  },
+function alignTriangle(
+  pointsIn: Array<Point>,
+  xAlign: 'left' | 'center' | 'right' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
+  yAlign: 'bottom' | 'middle' | 'top' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
+  rotation: number | { side: number, angle: number },
 ) {
-  const {
-    xAlign, yAlign, direction,
-  } = options;
-
-  const [a1, s1, a2] = options.ASA;
-  let points = [new Point(0, 0), new Point(s1, 0)];
-  const a3 = Math.PI - a1 - a2;
-  const s2 = s1 / Math.sin(a3) * Math.sin(a1);
-  points.push(new Point(
-    s1 + s2 * Math.cos((Math.PI - a2) * direction),
-    0 + s2 * Math.sin((Math.PI - a2) * direction),
-  ));
-
-  const rotationMatrix = new Transform().rotate(options.rotation).matrix();
-  points = points.map(p => p.transformBy(rotationMatrix));
+  let rotationMatrix;
+  if (typeof rotation === 'number') {
+    rotationMatrix = new Transform().rotate(rotation).matrix();
+  } else {
+    const { side, angle } = rotation;
+    let r = 0;
+    if (side === 's1') {
+      const sideRot = new Line(pointsIn[0], pointsIn[1]).angle();
+      r = minAngleDiff(angle, sideRot);
+    } else if (side === 's2') {
+      const sideRot = new Line(pointsIn[1], pointsIn[2]).angle();
+      r = minAngleDiff(angle, sideRot);
+    } else if (side === 's3') {
+      const sideRot = new Line(pointsIn[2], pointsIn[0]).angle();
+      r = minAngleDiff(angle, sideRot);
+    }
+    rotationMatrix = new Transform().rotate(r).matrix();
+  }
+  const points = pointsIn.map(p => p.transformBy(rotationMatrix));
 
   const minX = Math.min(points[0].x, points[1].x, points[2].x);
   const minY = Math.min(points[0].y, points[1].y, points[2].y);
@@ -155,6 +145,82 @@ function getASAPoints(
     y = -s3Center.y;
   }
   return points.map(p => new Point(p.x + x, p.y + y));
+}
+
+//                             c3
+//                              .
+//                            .   .
+//                         .   a3   .
+//                       .            .
+//                s3   .                .   s2
+//                   .                    .
+//                 .                        .
+//               /                           \
+//             /  a1                       a2  \
+//         c1  ---------------------------------   c2
+//                           s1
+//
+//
+function getASAPoints(
+  options: {
+    xAlign: 'left' | 'center' | 'right' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
+    yAlign: 'bottom' | 'middle' | 'top' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
+    ASA: [number, number, number],
+    direction: 1 | -1,
+    rotation: number | { side: number, angle: number },
+  },
+) {
+  const {
+    direction,
+  } = options;
+
+  const [a1, s1, a2] = options.ASA;
+  const points = [new Point(0, 0), new Point(s1, 0)];
+  const a3 = Math.PI - a1 - a2;
+  const s2 = s1 / Math.sin(a3) * Math.sin(a1);
+  points.push(new Point(
+    s1 + s2 * Math.cos((Math.PI - a2) * direction),
+    0 + s2 * Math.sin((Math.PI - a2) * direction),
+  ));
+
+  return alignTriangle(points, options.xAlign, options.yAlign, options.rotation);
+}
+
+//                             c3
+//                              .
+//                            .   \
+//                         .   a3   \
+//                       .            \
+//                s3   .                \   s2
+//                   .                    \
+//                 .                       \
+//               .                           \
+//             .  a1                       a2  \
+//         c1  ---------------------------------   c2
+//                           s1
+//
+//
+function getSASPoints(
+  options: {
+    xAlign: 'left' | 'center' | 'right' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
+    yAlign: 'bottom' | 'middle' | 'top' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
+    SAS: [number, number, number],
+    direction: 1 | -1,
+    rotation: number | { side: number, angle: number },
+  },
+) {
+  const {
+    direction,
+  } = options;
+
+  const [s1, a2, s2] = options.SAS;
+  const points = [new Point(0, 0), new Point(s1, 0)];
+  points.push(new Point(
+    s1 + s2 * Math.cos((Math.PI - a2) * direction),
+    0 + s2 * Math.sin((Math.PI - a2) * direction),
+  ));
+
+  return alignTriangle(points, options.xAlign, options.yAlign, options.rotation);
 }
 
 export default getTriangleBorder;
