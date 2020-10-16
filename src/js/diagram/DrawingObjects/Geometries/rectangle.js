@@ -1,7 +1,7 @@
 // @flow
 import {
   Point,
-} from '../../../../tools/g2';
+} from '../../../tools/g2';
 
 // import {
 //   round,

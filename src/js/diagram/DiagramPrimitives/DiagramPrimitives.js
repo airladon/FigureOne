@@ -1,6 +1,6 @@
 // @flow
 import {
-  Rect, Point, Transform, getPoint, getRect, getTransform,
+  Rect, Point, Transform, getPoint, getRect, getTransform, getPoints,
 } from '../../tools/g2';
 // import {
 //   round
@@ -52,7 +52,8 @@ import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
 import { getPolygonPoints, getFanTrisPolygon, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
-import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle/rectangle';
+import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle';
+import getTriangleBorder from '../DrawingObjects/Geometries/triangle';
 import type {
   OBJ_Copy,
 } from './DiagramPrimitiveTypes';
@@ -644,6 +645,7 @@ export type OBJ_Rectangle = {
   copy?: Array<CPY_Step | string> | CPY_Step,
   pulse?: number | OBJ_PulseScale,
 }
+
 /**
  * Text Definition object
  *
@@ -1542,24 +1544,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  rectangle(...options: Array<{
-    width?: number,
-    height?: number,
-    xAlign?: 'left' | 'center' | 'right' | number,
-    yAlign?: 'bottom' | 'middle' | 'top' | number,
-    corner?: {
-      radius: 0,
-      sides: 1,
-    },
-    fill?: boolean,
-    line?: OBJ_LineStyle,
-    color?: Array<number>,
-    transform?: Transform,
-    position?: TypeParsablePoint,
-    texture?: OBJ_Texture,
-    copy?: Array<CPY_Step | string> | CPY_Step,
-    pulse?: number | OBJ_PulseScale,
-  }>) {
+  rectangle(...options: Array<OBJ_Rectangle>) {
     const defaultOptions = {
       width: 1,
       height: 1,
@@ -1569,7 +1554,7 @@ export default class DiagramPrimitives {
         radius: 0,
         sides: 1,
       },
-      transform: new Transform('polygon').standard(),
+      transform: new Transform('rectangle').standard(),
     };
     const optionsToUse = processOptions(defaultOptions, ...options);
 
@@ -1598,6 +1583,77 @@ export default class DiagramPrimitives {
         points: border,
         close: true,
         border: [border],
+      });
+      element.custom.update = (updateOptions) => {
+        const o = joinObjects({}, optionsToUse, updateOptions);
+        const updatedBorder = getRectangleBorder(o);
+        element.custom.updatePoints(updatedBorder);
+      };
+    }
+    return element;
+  }
+
+  triangle(...options: Array<{
+    width?: number,
+    height?: number,
+    xAlign?: 'left' | 'center' | 'right' | number,
+    yAlign?: 'bottom' | 'middle' | 'top' | number,
+    top?: 'left' | 'center' | 'right',
+    points?: Array<TypeParsablePoint>,
+    line?: OBJ_LineStyle,
+    color?: Array<number>,
+    transform?: Transform,
+    position?: TypeParsablePoint,
+    texture?: OBJ_Texture,
+    copy?: Array<CPY_Step | string> | CPY_Step,
+    pulse?: number | OBJ_PulseScale,
+    corner: {
+      angle: number,
+      rotation: number,
+    },
+    SSS: [number, number, number],
+    SAS: [number, number, number],
+    ASA: [number, number, number],
+    AAS: [number, number, number]
+  }>) {
+    const defaultOptions = {
+      width: 1,
+      height: 1,
+      xAlign: 'center',
+      yAlign: 'middle',
+      top: 'center',
+      transform: new Transform('triangle').standard(),
+    };
+    const optionsToUse = processOptions(defaultOptions, ...options);
+    if (optionsToUse.points != null) {
+      optionsToUse.points = getPoints(optionsToUse.points);
+    }
+
+    if (
+      optionsToUse.line != null && optionsToUse.line.widthIs == null
+    ) {
+      optionsToUse.line.widthIs = 'mid';
+    }
+
+    const border = getTriangleBorder(optionsToUse);
+    let element;
+    if (optionsToUse.line == null) {
+      element = this.generic(optionsToUse, {
+        points: border,
+        border: [border.map(b => b._dup())],
+      });
+      element.custom.update = (updateOptions) => {
+        const o = joinObjects({}, optionsToUse, updateOptions);
+        const updatedBorder = getTriangleBorder(o);
+        element.drawingObject.change(
+          updatedBorder, [updatedBorder.map(b => b._dup())], [],
+        );
+      };
+    } else {
+      element = this.polyline(optionsToUse, optionsToUse.line, {
+        points: border,
+        close: true,
+        border: [border.map(b => b._dup())],
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
