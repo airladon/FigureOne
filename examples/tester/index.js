@@ -8,18 +8,20 @@ diagram.addElement({
     // width: 1,
     // height: 1,
     // top: 'right',
-    xAlign: 's3',
-    yAlign: 's3',
+    xAlign: 'c1',
+    yAlign: 'c1',
     // line: {
     //   width: 0.03,
     //   widthIs: 'inside',
     // },
     // points: [[-1, -1], [1, -1], [2, 2]],
     // ASA: [Math.PI / 6, 1, Math.PI / 3],
-    SAS: [0.5, Math.PI/6, 2],
+    // SAS: [0.5, Math.PI/6, 2],
+    // AAS: [Math.PI / 2, Math.PI / 6, 2],
+    SSS: [1, 1, 1]
     // rotation: Math.PI / 2 + Math.PI / 12,
-    rotation: { side: 's3', angle: -Math.PI / 4 },
-    direction: -1,
+    // rotation: { side: 's3', angle: -Math.PI / 4 },
+    // direction: -1,
   },
 });
 
