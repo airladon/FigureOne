@@ -1623,6 +1623,8 @@ export default class DiagramPrimitives {
       yAlign: 'middle',
       top: 'center',
       transform: new Transform('triangle').standard(),
+      direction: 1,
+      rotation: 0,
     };
     const optionsToUse = processOptions(defaultOptions, ...options);
     if (optionsToUse.points != null) {

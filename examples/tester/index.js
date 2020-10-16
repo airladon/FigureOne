@@ -5,15 +5,19 @@ diagram.addElement({
   name: 'r',
   method: 'shapes.triangle',
   options: {
-    width: 1,
-    height: 1,
-    top: 'right',
-    line: {
-      width: 0.03,
-      widthIs: 'inside',
-    },
+    // width: 1,
+    // height: 1,
+    // top: 'right',
+    xAlign: 's1',
+    yAlign: 's1',
+    // line: {
+    //   width: 0.03,
+    //   widthIs: 'inside',
+    // },
     // points: [[-1, -1], [1, -1], [2, 2]],
-    ASA: [Math.PI / 4, 1, Math.PI / 4]
+    ASA: [Math.PI / 6, 1, Math.PI / 3],
+    // rotation: Math.PI / 3,
+    direction: 1,
   },
 });
 
@@ -37,21 +41,21 @@ diagram.addElement({
 // diagram.animateNextFrame();
 
 diagram.addElements([
-  // {
-  //   name: 'a',
-  //   method: 'polygon',
-  //   options: {
-  //     radius: 0.01,
-  //     width: 0.01,
-  //     sides: 10,
-  //     color: [0.7, 0.7, 0.7, 1]
-  //   },
-  // },
+  {
+    name: 'a',
+    method: 'polygon',
+    options: {
+      radius: 0.01,
+      width: 0.01,
+      sides: 10,
+      color: [0.7, 0.7, 0.7, 1]
+    },
+  },
   {
     name: 'grid',
     method: 'grid',
     options: {
-      bounds: [-1, -1, 2, 2],
+      bounds: [-2, -2, 4, 4],
       yStep: 0.1,
       xStep: 0.1,
       color: [0.7, 0.7, 0.7, 1],
@@ -62,7 +66,7 @@ diagram.addElements([
     name: 'gridMajor',
     method: 'grid',
     options: {
-      bounds: [-1, -1, 2, 2],
+      bounds: [-2, -2, 4, 4],
       yStep: 0.5,
       xStep: 0.5,
       color: [0.8, 0.8, 0.8, 1],

@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point,
+  Point, Transform, Line,
 } from '../../../tools/g2';
 
 function getTriangleBorder(
@@ -57,6 +57,13 @@ function getTriangleBorder(
   return points;
 }
 
+function getCenter(points: Array<Point>) {
+  const [A, B, C] = points;
+  const Ox = (A.x + B.x + C.x) / 3;
+  const Oy = (A.y + B.y + C.y) / 3;
+  return new Point(Ox, Oy);
+}
+
 //                             c3
 //                              .
 //                            .   .
@@ -73,10 +80,11 @@ function getTriangleBorder(
 //
 function getASAPoints(
   options: {
-    xAlign: 'left' | 'center' | 'right' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'triCenter',
-    yAlign: 'bottom' | 'middle' | 'top' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'triCenter',
+    xAlign: 'left' | 'center' | 'right' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
+    yAlign: 'bottom' | 'middle' | 'top' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
     ASA?: [number, number, number],
     direction: 1 | -1,
+    rotation: number,
   },
 ) {
   const {
@@ -84,14 +92,69 @@ function getASAPoints(
   } = options;
 
   const [a1, s1, a2] = options.ASA;
-  const points = [new Point(0, 0), new Point(s1, 0)];
+  let points = [new Point(0, 0), new Point(s1, 0)];
   const a3 = Math.PI - a1 - a2;
   const s2 = s1 / Math.sin(a3) * Math.sin(a1);
   points.push(new Point(
     s1 + s2 * Math.cos((Math.PI - a2) * direction),
     0 + s2 * Math.sin((Math.PI - a2) * direction),
   ));
-  return points;
+
+  const rotationMatrix = new Transform().rotate(options.rotation).matrix();
+  points = points.map(p => p.transformBy(rotationMatrix));
+
+  const minX = Math.min(points[0].x, points[1].x, points[2].x);
+  const minY = Math.min(points[0].y, points[1].y, points[2].y);
+  const maxX = Math.max(points[0].x, points[1].x, points[2].x);
+  const maxY = Math.max(points[0].y, points[1].y, points[2].y);
+  const width = maxX - minX;
+  const height = maxY - minY;
+  const center = getCenter(points);
+  const s1Center = new Line(points[0], points[1]).midPoint();
+  const s2Center = new Line(points[1], points[2]).midPoint();
+  const s3Center = new Line(points[2], points[0]).midPoint();
+  let x = 0;
+  let y = 0;
+  if (xAlign === 'left') {
+    x = -minX;
+  } else if (xAlign === 'center') {
+    x = -maxX + width / 2;
+  } else if (xAlign === 'right') {
+    x = -maxX;
+  } else if (xAlign === 'centroid') {
+    x = -center.x;
+  } else if (xAlign === 'c2') {
+    x = -points[1].x;
+  } else if (xAlign === 'c3') {
+    x = -points[2].x;
+  } else if (xAlign === 's1') {
+    x = -s1Center.x;
+  } else if (xAlign === 's2') {
+    x = -s2Center.x;
+  } else if (xAlign === 's3') {
+    x = -s3Center.x;
+  }
+
+  if (yAlign === 'bottom') {
+    y = -minY;
+  } else if (yAlign === 'middle') {
+    y = -maxY + height / 2;
+  } else if (yAlign === 'top') {
+    y = -maxY;
+  } else if (yAlign === 'centroid') {
+    y = -center.y;
+  } else if (yAlign === 'c2') {
+    y = -points[1].y;
+  } else if (yAlign === 'c3') {
+    y = -points[2].y;
+  } else if (yAlign === 's1') {
+    y = -s1Center.y;
+  } else if (yAlign === 's2') {
+    y = -s2Center.y;
+  } else if (yAlign === 's3') {
+    y = -s3Center.y;
+  }
+  return points.map(p => new Point(p.x + x, p.y + y));
 }
 
 export default getTriangleBorder;
