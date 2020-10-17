@@ -54,6 +54,7 @@ import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/
 import { getPolygonPoints, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle';
 import getTriangle from '../DrawingObjects/Geometries/triangle';
+import getLineBorder from '../DrawingObjects/Geometries/line';
 import type {
   OBJ_Copy,
 } from './DiagramPrimitiveTypes';
@@ -1852,20 +1853,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  grid(...optionsIn: Array<{
-    bounds?: TypeParsableRect,
-    xStep?: number,
-    yStep?: number,
-    xNum?: number,
-    yNum?: number,
-    line?: OBJ_LineStyle,
-    copy?: OBJ_Copy | Array<OBJ_Copy>,
-    color?: Array<number>,
-    texture?: OBJ_Texture,
-    position?: TypeParsablePoint,
-    transform?: Transform,
-    pulse?: OBJ_PulseScale | number,
-  }>) {
+  grid(...optionsIn: Array<OBJ_Grid>) {
     const defaultOptions = {
       bounds: new Rect(-1, -1, 2, 2),
       transform: new Transform('grid').standard(),
@@ -1959,6 +1947,101 @@ export default class DiagramPrimitives {
       ]],
     });
     return element;
+  }
+
+  simpleLine(...options: Array<{
+    p1?: TypeParsablePoint,
+    p2?: TypeParsablePoint,
+    length?: number,
+    angle?: number,
+    width?: number,
+    border?: 'boundingRect' | Array<Points> | {
+      width?: number,
+      length?: number | {
+        p1?: number,
+        p2?: number,
+      },
+    },
+    dash?: Array<number>,
+    copy?: OBJ_Copy | Array<OBJ_Copy>,
+    color?: Array<number>,
+    texture?: OBJ_Texture,
+    position?: TypeParsablePoint,
+    transform?: Transform,
+    pulse?: OBJ_PulseScale | number,
+  }>) {
+    const defaultOptions = {
+      p1: [0, 0],
+      angle: 0,
+      length: 1,
+      width: 0.001,
+      transform: new Transform('line').standard(),
+    };
+    const optionsToUse = processOptions(defaultOptions, ...options);
+    if (optionsToUse.points != null) {
+      optionsToUse.points = getPoints(optionsToUse.points);
+    }
+    if (optionsToUse.border == null) {
+      optionsToUse.border = {};
+    }
+    if (optionsToUse.border.width == null) {
+      optionsToUse.border.width = optionsToUse.width;
+    }
+    if (optionsToUse.border.length == null) {
+      optionsToUse.border.length = { p1: 0, p2: 0 };
+    }
+
+    const {
+      p1, p2, length, angle,
+    } = optionsToUse;
+    const points = [p1];
+    if (p2 != null) {
+      points.push(p2);
+    } else {
+      points.push(new Point(
+        p1.x + length * Math.cos(angle),
+        p1.y + length * Math.sin(angle),
+      ));
+    }
+    const element = this.polyline(optionsToUse, {
+      points,
+      border: 'line',
+    });
+    const { border } = optionsToUse;
+    const borderPoints = getLineBorder({
+      p1,
+      p2,
+      width: border.width,
+      length: border.length,
+    });
+    element.drawingObject.border = [borderPoints];
+    return element;
+    // let element;
+    // if (optionsToUse.line == null) {
+    //   element = this.generic(optionsToUse, {
+    //     points: border,
+    //     border: [border.map(b => b._dup())],
+    //   });
+    //   element.custom.update = (updateOptions) => {
+    //     const o = joinObjects({}, optionsToUse, updateOptions);
+    //     const updatedBorder = getTriangle(o);
+    //     element.drawingObject.change(
+    //       updatedBorder, [updatedBorder.map(b => b._dup())], [],
+    //     );
+    //   };
+    // } else {
+    //   element = this.polyline(optionsToUse, optionsToUse.line, {
+    //     points: border,
+    //     close: true,
+    //     border: [border.map(b => b._dup())],
+    //   });
+    //   element.custom.update = (updateOptions) => {
+    //     const o = joinObjects({}, optionsToUse, updateOptions);
+    //     const updatedBorder = getRectangleBorder(o);
+    //     element.custom.updatePoints(updatedBorder);
+    //   };
+    // }
+    // return element;
   }
 
   polygonSweep(...optionsIn: Array<{
@@ -2215,6 +2298,50 @@ export default class DiagramPrimitives {
     }
 
     return element;
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  lineNew(...optionsIn: Array<{
+    length?: number,
+    angle?: number,
+    p1?: TypeParsablePoint,
+    p2?: TypeParsablePoint,
+    line?: OBJ_LineStyle,
+    maxLength?: number,
+    move?: {
+      type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale';
+      middleLengthPercent?: number;
+      translationBounds?: Rect;
+    },
+    arrow?: {
+      1: {},
+      2: {},
+      tri?: { width?: number, length?: number },
+      lines?: { width?: number, length?: number },
+      circle?: { radius?: number },
+      flat?: { width?: number },
+      triTail?: { width?: number, length?: number, tail?: number },
+    },
+    border?: {
+      width?: number,
+      length?: number,
+      align?: 'p1' | 'p2' | 'center' | number,
+    },
+    label?: {
+      text?: string | Equation | TypeLabelEquationOptions,
+      offset?: number | TypeParsablePoint,
+      location?: 'top' | 'left' | 'bottom' | 'right'
+                                    | 'end1' | 'end2' | 'positive' | 'negative' | 'inside' | 'outside';
+      subLocation?: 'top' | 'left' | 'bottom' | 'right';
+      orientation?: 'horizontal' | 'baseToLine' | 'baseAway'
+                                      | 'baseUpright';
+      linePosition?: number,
+      scale?: number,
+      color?: Array<number>,
+      precision?: number,
+    },
+  }>) {
+
   }
 
   // arrowLegacy(

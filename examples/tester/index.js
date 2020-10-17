@@ -1,15 +1,37 @@
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
 // Right angle triangle
-const circ = diagram.create.polygon({
-  sides: 100,
-  radius: 0.5,
-  line: {
-    width: 0.03,
-    dash: [0.1, 0.03 ],
+diagram.addElement({
+  name: 'lines',
+  method: 'shapes.simpleLine',
+  options: {
+    p1: [0.5, 0],
+    p2: [1, 0],
+    width: 0.01,
+    dash: [0.08, 0.02 ],
+    // border: {
+    //   width: 1,
+    //   length: 2,
+    // },
+    copy: [
+      // {
+      //   along: 'x',
+      //   num: 10,
+      //   step: 0.3,
+      // }
+      {
+        along: 'rotation',
+        num: 10,
+        step: Math.PI / 10,
+      },
+    ],
+  },
+  mods: {
+    isTouchable: true,
+    isMovable: true,
   },
 });
-diagram.elements.add('circle', circ);
+diagram.setTouchable();
 
 // diagram.initialize();
 
