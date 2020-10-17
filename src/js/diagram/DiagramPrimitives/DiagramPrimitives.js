@@ -487,7 +487,6 @@ export type OBJ_LineStyle = {
  *
  * @property {number} [sides] (`4`)
  * @property {number} [radius] (`1`)
- * @property {number} [width] line width - line will be drawn on inside of radius (`0.01`)
  * @property {number} [rotation] shape rotation during vertex definition
  * (different to a rotation step in a trasform) (`0`)
  * @property {TypeParsablePoint} [offset] shape center offset from origin
@@ -501,63 +500,68 @@ export type OBJ_LineStyle = {
  * center. This is different to position or transform as these translate the
  * vertices on each draw. (`[0, 0]`)
  * @property {OBJ_LineStyle} [line] line style options
- * @property {boolean | 'tris'} [fill] `true` will fill polygon with efficient
- * fan vertices. `'tris'` will fill polygon with less efficient separate
- * triangle vertices. Use `'tris'` if copying a filled polygon with
- * copy steps (`false`)
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the polygon if defined. If using fill and copying, use `fill`: `'tris'`
  * @property {Array<number>} [color] (`[1, 0, 0, 1`])
  * @property {OBJ_Texture} [texture] Override color with a texture
- * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polygon').standard()`)
+ * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
  * @example
- * // Simple filled polygon
- * diagram.addElement(
- *   {
- *     name: 'p',
- *     method: 'polygon',
- *     options: {
- *       radius: 0.5,
- *       fill: true,
- *       sides: 6,
- *     },
+ * // Simple filled hexagon
+ * diagram.addElement({
+ *   name: 'hexagon',
+ *   method: 'polygon',
+ *   options: {
+ *     sides: 6,
+ *     radius: 0.5,
  *   },
- * );
+ * });
+ *
  * @example
- * // Quarter circle
- * diagram.addElement(
- *   {
- *     name: 'p',
- *     method: 'polygon',
- *     options: {
- *       radius: 0.4,
- *       sides: 100,
- *       width: 0.08,
- *       angleToDraw: Math.PI / 2,
- *       color: [1, 1, 0, 1],
- *     },
+ * // Circle from dashed line
+ * const circ = diagram.create.polygon({
+ *   sides: 100,
+ *   radius: 0.5,
+ *   line: {
+ *     width: 0.03,
+ *     dash: [0.1, 0.03 ],
  *   },
- * );
+ * });
+ * diagram.elements.add('circle', circ);
+ *
+ * @example
+ * // Half octagon rotated
+ * diagram.addElement({
+ *   name: 'halfOctagon',
+ *   method: 'polygon',
+ *   options: {
+ *     sides: 8,
+ *     radius: 0.5,
+ *     angleToDraw: Math.PI,
+ *     line: {
+ *       width: 0.03,
+ *     },
+ *     direction: -1,
+ *     rotation: Math.PI / 2,
+ *   },
+ * });
  */
 export type OBJ_Polygon = {
   sides?: number,
   radius?: number,
-  width?: number,
   rotation?: number,
-  direction?: -1 | 1,
-  line?: OBJ_LineStyle,
+  offset?: TypeParsablePoint,
   sidesToDraw?: number,
   angleToDraw?: number,
-  color?: Array<number>,
-  fill?: boolean | 'tris',
-  transform?: Transform,
-  position?: TypeParsablePoint,
-  texture?: OBJ_Texture,
+  direction?: -1 | 1,
+  line?: OBJ_LineStyle,
   copy?: Array<CPY_Step | string> | CPY_Step,
+  color?: Array<number>,
+  texture?: OBJ_Texture,
+  position?: TypeParsablePoint,
+  transform?: Transform,
   pulse?: number | OBJ_PulseScale,
-  offset?: TypeParsablePoint,
 };
 
 /**
@@ -1658,31 +1662,24 @@ export default class DiagramPrimitives {
       radius: 1,
       sides: 4,
       direction: 1,
-      // sidesToDraw: 4,
       rotation: 0,
-      width: 0.01,
-      // line: {
-      //   widthIs: 'mid',
-      // },
-      // angle: Math.PI * 2,
       offset: new Point(0, 0),
       transform: new Transform('polygon').standard(),
       touchableLineOnly: false,
     };
-    let radiusMod = 0;
+    // let radiusMod = 0;
     const optionsToUse = processOptions(defaultOptions, ...options);
 
-    if (
-      optionsToUse.line == null
-      || (optionsToUse.line != null && optionsToUse.line.widthIs == null)
-    ) {
-      if (optionsToUse.line == null) {
-        optionsToUse.line = {};
-      }
-      optionsToUse.line.widthIs = 'mid';
-      const sideAngle = Math.PI * 2 / optionsToUse.sides;
-      const theta = (Math.PI - sideAngle) / 2;
-      radiusMod = optionsToUse.width / 2 / Math.sin(theta);
+    if (optionsToUse.line != null) {
+      optionsToUse.line = joinObjects({}, {
+        width: 0.01,
+        widthIs: 'mid',
+      }, optionsToUse.line);
+    }
+
+    // deprecated - to help migration from old polygon
+    if (optionsToUse.line == null && optionsToUse.width != null) {
+      optionsToUse.line.width = optionsToUse.width;
     }
 
     parsePoints(optionsToUse, ['offset']);
@@ -1695,58 +1692,36 @@ export default class DiagramPrimitives {
     if (optionsToUse.sidesToDraw == null) {
       optionsToUse.sidesToDraw = optionsToUse.sides;
     }
-    if (optionsToUse.fill === true) {
-      const fan = getFanTrisPolygon(
-        optionsToUse.radius, optionsToUse.rotation, optionsToUse.offset,
-        optionsToUse.sides, optionsToUse.sidesToDraw, optionsToUse.direction,
-      );
-      element = this.generic(optionsToUse, {
-        drawType: 'fan',
-        points: fan, // $FlowFixMe
-        border: [[...fan.slice(1, -1)]],
-      });
-      element.custom.update = (updateOptions) => {
-        const o = joinObjects({}, optionsToUse, updateOptions);
-        const points = getFanTrisPolygon(
-          o.radius, o.rotation, o.offset,
-          o.sides, o.sidesToDraw, o.direction,
-        );
-        element.drawingObject.change(
-          points, [[...points.slice(1, -1)]], [],
-        );
-      };
-    } else if (optionsToUse.fill === 'tris') {
+    const outline = getPolygonPoints(
+      optionsToUse.radius, optionsToUse.rotation, optionsToUse.offset,
+      optionsToUse.sides, optionsToUse.sidesToDraw, optionsToUse.direction,
+    );
+
+    if (optionsToUse.line == null) {
       const tris = getTrisFillPolygon(
-        optionsToUse.radius, optionsToUse.rotation, optionsToUse.offset,
-        optionsToUse.sides, optionsToUse.sidesToDraw, optionsToUse.direction,
+        optionsToUse.offset, outline, optionsToUse.sides,
+        optionsToUse.sidesToDraw,
       );
-      const border = getPolygonPoints(
-        optionsToUse.radius, optionsToUse.rotation, optionsToUse.offset,
-        optionsToUse.sides, optionsToUse.sidesToDraw, optionsToUse.direction,
-      );
+
       element = this.generic(optionsToUse, {
         points: tris, // $FlowFixMe
-        border: [border],
+        border: [outline],
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
-        const points = getTrisFillPolygon(
+        const udpatedBorder = getPolygonPoints(
           o.radius, o.rotation, o.offset,
           o.sides, o.sidesToDraw, o.direction,
         );
-        const borderPoints = getPolygonPoints(
-          o.radius, o.rotation, o.offset,
-          o.sides, o.sidesToDraw, o.direction,
+        const updatedTris = getTrisFillPolygon(
+          o.offset, udpatedBorder,
+          o.sides, o.sidesToDraw,
         );
         element.drawingObject.change(
-          points, [borderPoints], [],
+          updatedTris, [udpatedBorder], [],
         );
       };
     } else {
-      const polygonPoints = getPolygonPoints(
-        optionsToUse.radius - radiusMod, optionsToUse.rotation, optionsToUse.offset,
-        optionsToUse.sides, optionsToUse.sidesToDraw, optionsToUse.direction,
-      );
       let border = 'line';
       let hole;
       if (optionsToUse.direction === 1) {
@@ -1759,7 +1734,7 @@ export default class DiagramPrimitives {
       }
       // console.log(polygonPoints)
       element = this.polyline(optionsToUse, optionsToUse.line, {
-        points: polygonPoints,
+        points: outline,
         close: optionsToUse.sides === optionsToUse.sidesToDraw,
         border,
         hole,
@@ -1775,11 +1750,11 @@ export default class DiagramPrimitives {
       // element.drawingObject.border = [simpleBorder];
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
-        const points = getPolygonPoints(
-          o.radius - radiusMod, o.rotation, o.offset,
+        const udpatedBorder = getPolygonPoints(
+          o.radius, o.rotation, o.offset,
           o.sides, o.sidesToDraw, o.direction,
         );
-        element.custom.updatePoints(points);
+        element.custom.updatePoints(udpatedBorder);
         // element.border = [points];
         simplifyBorder(element);
       };

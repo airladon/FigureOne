@@ -54,17 +54,11 @@ function getFanTrisPolygon(
 }
 
 function getTrisFillPolygon(
-  radius: number,
-  rotation: number,
-  offset: Point,
+  center: Point,
+  border: Array<Point>,
   sides: number,
   sidesToDraw: number,
-  direction: -1 | 1,
 ): Array<Point> {
-  const border = getPolygonPoints(
-    radius, rotation, offset, sides, sidesToDraw, direction,
-  );
-  const center = offset._dup();
   const points = [];
   for (let i = 1; i < border.length; i += 1) {
     points.push(center._dup());
