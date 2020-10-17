@@ -51,7 +51,7 @@ import type {
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
-import { getPolygonPoints, getFanTrisPolygon, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
+import { getPolygonPoints, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle';
 import getTriangle from '../DrawingObjects/Geometries/triangle';
 import type {
@@ -1692,10 +1692,7 @@ export default class DiagramPrimitives {
     if (optionsToUse.sidesToDraw == null) {
       optionsToUse.sidesToDraw = optionsToUse.sides;
     }
-    const outline = getPolygonPoints(
-      optionsToUse.radius, optionsToUse.rotation, optionsToUse.offset,
-      optionsToUse.sides, optionsToUse.sidesToDraw, optionsToUse.direction,
-    );
+    const outline = getPolygonPoints(optionsToUse);
 
     if (optionsToUse.line == null) {
       const tris = getTrisFillPolygon(
@@ -1709,10 +1706,7 @@ export default class DiagramPrimitives {
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
-        const udpatedBorder = getPolygonPoints(
-          o.radius, o.rotation, o.offset,
-          o.sides, o.sidesToDraw, o.direction,
-        );
+        const udpatedBorder = getPolygonPoints(o);
         const updatedTris = getTrisFillPolygon(
           o.offset, udpatedBorder,
           o.sides, o.sidesToDraw,
@@ -1750,30 +1744,11 @@ export default class DiagramPrimitives {
       // element.drawingObject.border = [simpleBorder];
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
-        const udpatedBorder = getPolygonPoints(
-          o.radius, o.rotation, o.offset,
-          o.sides, o.sidesToDraw, o.direction,
-        );
+        const udpatedBorder = getPolygonPoints(o);
         element.custom.updatePoints(udpatedBorder);
-        // element.border = [points];
         simplifyBorder(element);
       };
     }
-    // element.drawingObject.getPointCountForAngle = (angle: number) => {
-    //   const sidesToDraw = Math.floor(
-    //     tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * optionsToUse.sides,
-    //   );
-    //   if (optionsToUse.fill === true) {
-    //     return sidesToDraw + 2;
-    //   }
-    //   if (optionsToUse.fill === 'tris') {
-    //     return sidesToDraw * 3;
-    //   }
-    //   if (optionsToUse.line && optionsToUse.line.linePrimitives) {
-    //     return sidesToDraw * optionsToUse.line.lineNum * 2;
-    //   }
-    //   return sidesToDraw * 6;
-    // };
     return element;
   }
 
@@ -1986,115 +1961,6 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  gridLegacy(...optionsIn: Array<{
-    bounds?: TypeParsableRect,
-    xStep?: number,
-    yStep?: number,
-    xNum?: number,
-    yNum?: number,
-    // start?: TypeParsablePoint,
-    width?: number,
-    linePrimitives?: boolean,
-    lineNum?: number,
-    dash?: Array<number>,
-    texture?: OBJ_Texture,
-    color?: Array<number>,
-    position?: TypeParsablePoint,
-    transform?: Transform,
-    copy?: OBJ_Copy | Array<OBJ_Copy>,
-  }>) {
-    const defaultOptions = {
-      bounds: new Rect(-1, -1, 2, 2),
-      width: 0.005,
-      transform: new Transform('grid').standard(),
-      dash: [],
-      linePrimitives: false,
-      lineNum: 2,
-    };
-    const options = processOptions(defaultOptions, ...optionsIn);
-    parsePoints(options, []);
-    options.bounds = getRect(options.bounds);
-    const getTris = points => makePolyLine(
-      points,
-      options.width,
-      false,
-      'mid',
-      'auto', // cornerStyle doesn't matter
-      0.1,    // cornerSize doesn't matter
-      1,      // cornerSides,
-      Math.PI / 7, // minAutoCornerAngle,
-      options.dash,
-      options.linePrimitives,
-      options.lineNum,
-      [[]],
-      [[]],
-    );
-
-    // Prioritize Num over Step. Only define Num from Step if Num is undefined.
-    const { bounds } = options;
-    let {
-      xStep, xNum, yStep, yNum, width,
-    } = options;
-    if (options.linePrimitives && options.lineNum === 1) {
-      width = 0;
-    }
-    const totWidth = bounds.width;
-    const totHeight = bounds.height;
-    if (xStep != null && xNum == null) {
-      xNum = xStep === 0 ? 1 : 1 + Math.floor((totWidth + xStep * 0.1) / xStep);
-    }
-    if (yStep != null && yNum == null) {
-      yNum = yStep === 0 ? 1 : 1 + Math.floor((totHeight + yStep * 0.1) / yStep);
-    }
-
-    if (xNum == null) {
-      xNum = 2;
-    }
-    if (yNum == null) {
-      yNum = 2;
-    }
-
-    xStep = xNum < 2 ? 0 : totWidth / (xNum - 1);
-    yStep = yNum < 2 ? 0 : totHeight / (yNum - 1);
-
-    const start = new Point(
-      bounds.left,
-      bounds.bottom,
-    );
-    const xLineStart = start.add(-width / 2, 0);
-    const xLineStop = start.add(totWidth + width / 2, 0);
-    const yLineStart = start.add(0, -width / 2);
-    const yLineStop = start.add(0, totHeight + width / 2);
-
-    let xTris = [];
-    let yTris = [];
-    if (xNum > 0) {
-      const [yLine] = getTris([yLineStart, yLineStop]);
-      yTris = copyPoints(yLine, [
-        { along: 'x', num: xNum - 1, step: xStep },
-      ]);
-    }
-
-    if (yNum > 0) {
-      const [xLine] = getTris([xLineStart, xLineStop]);
-      xTris = copyPoints(xLine, [
-        { along: 'y', num: yNum - 1, step: yStep },
-      ]);
-    }
-
-    const element = this.generic(options, {
-      drawType: options.linePrimitives ? 'lines' : 'triangles',    // $FlowFixMe
-      points: [...xTris, ...yTris],
-      border: [[
-        start.add(-width / 2, -width / 2),
-        start.add(totWidth + width / 2, -width / 2),
-        start.add(totWidth + width / 2, totHeight + width / 2),
-        start.add(-width / 2, totHeight + width / 2),
-      ]],
-    });
-    return element;
-  }
-
   polygonSweep(...optionsIn: Array<{
     radius?: number,
     rotation?: number,
@@ -2142,6 +2008,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
+  // deprecated
   fan(...optionsIn: Array<{
     points?: Array<Point>,
     color?: Array<number>,

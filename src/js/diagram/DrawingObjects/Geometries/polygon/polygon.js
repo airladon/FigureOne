@@ -7,14 +7,17 @@ import {
 //   round,
 // } from '../../../../tools/math';
 
-function getPolygonPoints(
+function getPolygonPoints(options: {
   radius: number,
   rotation: number,
   offset: Point,
   sides: number,
   sidesToDraw: number,
   direction: 1 | -1,
-): Array<Point> {
+}): Array<Point> {
+  const {
+    radius, rotation, offset, sides, sidesToDraw, direction,
+  } = options;
   const deltaAngle = Math.PI * 2 / sides;
   const points = [];
   if (sidesToDraw === 0) {
@@ -36,22 +39,22 @@ function getPolygonPoints(
   return points;
 }
 
-function getFanTrisPolygon(
-  radius: number,
-  rotation: number,
-  offset: Point,
-  sides: number,
-  sidesToDraw: number,
-  direction: -1 | 1,
-): Array<Point> {
-  const fan = [offset._dup(), ...getPolygonPoints(
-    radius, rotation, offset, sides, sidesToDraw, direction,
-  )];
-  if (sides === sidesToDraw) {
-    fan.push(fan[1]._dup());
-  }
-  return fan;
-}
+// function getFanTrisPolygon(
+//   radius: number,
+//   rotation: number,
+//   offset: Point,
+//   sides: number,
+//   sidesToDraw: number,
+//   direction: -1 | 1,
+// ): Array<Point> {
+//   const fan = [offset._dup(), ...getPolygonPoints(
+//     radius, rotation, offset, sides, sidesToDraw, direction,
+//   )];
+//   if (sides === sidesToDraw) {
+//     fan.push(fan[1]._dup());
+//   }
+//   return fan;
+// }
 
 function getTrisFillPolygon(
   center: Point,
@@ -75,6 +78,6 @@ function getTrisFillPolygon(
 
 export {
   getPolygonPoints,
-  getFanTrisPolygon,
-  getTrisFillPolygon
+  // getFanTrisPolygon,
+  getTrisFillPolygon,
 };

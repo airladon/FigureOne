@@ -154,15 +154,15 @@
 -   [getLine][276]
 -   [getRect][278]
 -   [getTransform][280]
--   [Drawing][282]
+-   [Drawing Shapes][282]
 -   [OBJ_Generic][283]
 -   [OBJ_Polyline][286]
--   [OBJ_Polygon][289]
+-   [OBJ_Triangle][289]
 -   [OBJ_Rectangle][292]
--   [OBJ_Triangle][295]
+-   [OBJ_Polygon][295]
 -   [OBJ_Grid][298]
 -   [OBJ_Texture][301]
--   [Text][303]
+-   [Drawing Text][303]
 -   [OBJ_Font][304]
 -   [OBJ_TextDefinition][307]
 -   [OBJ_Text][309]
@@ -2492,7 +2492,7 @@ Convert a parsable transform definition to a [Transform][207].
 
 Returns **[Transform][714]** transform object
 
-## Drawing
+## Drawing Shapes
 
 Each [DiagramElementPrimitive][54] element manages drawing a shape, drawing text, or manipulating a HTML element.
 
@@ -2903,81 +2903,153 @@ diagram.addElement(
 );
 ```
 
-## OBJ_Polygon
+## OBJ_Triangle
 
-Polygon or partial polygon shape options object
+Triangle shape options object
 
 ![][745]
 
+The most generic way to define a triangle is with three points (`points`
+property). When using `points`, all the other properties that can also
+define a triangle are ignored: `width`, `height`, `top`,
+`SSS`, `ASA`, `AAS`, `SAS`, `direction`, `rotation`, `xAlign` and `yAlign`.
+
+The other ways to define a triangle are (in order of highest override
+preference to lowest if more than one is defined in the object):
+
+-   `ASA` or Angle-Side-Angle
+-   `SAS` or Side-Angle-Side
+-   `AAS` or Angle-Angle-Side
+-   `SSS` or Side-Side-Side
+-   `width`, `height` and `top` location
+
+All these methods also use `direction` to define the triangles, and
+`rotation`, `xAlign` and `yAlign` to position the triangles. Each corner
+and side of the triangle is indexed, and can be used for positioning.
+
+![][746]
+
+A triangle starts with an angle (a1) at (0, 0) and base side extending along
+the x axis to a second angle a2. The base side is side 1 (s1).
+
+Angles a1 and a2 exten the triangle above s1 if `direction` is `1`, and
+below s1 when `direction` is `-1`.
+
+s2, a3, and s3 are then the consecutive sides and angles.
+
+Triangles can be defined with a combination of side length and angle using
+`ASA`, `SAS`, `AAS` and `SSS`, where the first side or angle is s1 or a1
+respectively, and the subsequent sides and angles progress consecutively.
+For instance, `ASA` defines the angle a1, then side length s1, then angle
+a2. `SSS` defines the side lenghts s1, s2 then s3. All these combinations of
+three properties are sufficient to define a unique triangle completely.
+
+When defining the triangle with `width`, `height` and `top`, the base side
+s1 is the width, and the top point is either aligned with the `left`,
+`center` or `right` of the base at some `height` above s1.
+
+When defined, a triangle's a1 corner will be at (0, 0), and s1 will be along
+the x axis. Next, a `rotation` can be applied to the triangle. A `rotation`
+can either be a `number` rotating it relative to its definition, or relative
+to one of its sides: s1, s2 or s3.
+
+Finally, the triangle can be positioned (in vertex space) using `xAlign` and
+`yAlign`. An `xAlign` of `'left'` will position the triangle so that it's
+left most point will be at (0, 0). Similarly, a `yAlign` of `'top'` will
+position the triangle so its top most point is at (0, 0). Triangles
+can also be aligned by angles (corners) and side mid points. For instance, an
+`xAlign` of `'a2'`, will position the a2 corner at x = 0. Similarly a
+`yAlign` of `'s3'` will position the triangle vertically such that the mid
+point of s3 is at y = 0. `'centroid'` is relative to the geometric center of
+the triangle.
+
+Once a triangle is defined and positioned in vertex space, it can then be
+copied (`copy`) if more than one triangle is desired.
+
+The triangle(s) can then be positioned (`position`) or transformed
+(`transform`) in the DiagramElementPrimitive local space.
+
+Triangles can either be a solid fill, texture fill or outline. When `line`
+is not defined, the triangle will be filled.
+
 ### Properties
 
--   `sides` **[number][719]?** (`4`)
--   `radius` **[number][719]?** (`1`)
--   `width` **[number][719]?** line width - line will be drawn on inside of radius (`0.01`)
--   `rotation` **[number][719]?** shape rotation during vertex definition
-    (different to a rotation step in a trasform) (`0`)
--   `offset` **[TypeParsablePoint][724]?** shape center offset from origin
-    during vertex definition (different to a translation step in a transform)
-    (`[0, 0]`)
--   `sidesToDraw` **[number][719]?** number of sides to draw (all sides)
--   `angleToDraw` **[number][719]?** same as `sidesToDraw` but using angle for
-    the definition (`2π`)
--   `direction` **(`-1` \| `1`)?** direction to draw polygon where 1 is
-    counter clockwise and -1 is clockwise (`1`)
-    center. This is different to position or transform as these translate the
-    vertices on each draw. (`[0, 0]`)
--   `line` **[OBJ_LineStyle][746]?** line style options
--   `fill` **([boolean][718] \| `"tris"`)?** `true` will fill polygon with efficient
-    fan vertices. `'tris'` will fill polygon with less efficient separate
-    triangle vertices. Use `'tris'` if copying a filled polygon with
-    copy steps (`false`)
+-   `points` **[Array][711]&lt;[Point][725]>?** defining points will take precedence over
+    all other ways to define a triangle.
+-   `width` **[number][719]?** (`1`)
+-   `height` **[number][719]?** (`1`)
+-   `top` **(`"left"` \| `"right"` \| `"center"`)?** (`center`)
+-   `SSS` **\[[number][719], [number][719], [number][719]]?** 
+-   `ASA` **\[[number][719], [number][719], [number][719]]?** 
+-   `AAS` **\[[number][719], [number][719], [number][719]]?** 
+-   `SAS` **\[[number][719], [number][719], [number][719]]?** 
+-   `direction` **(`1` \| `-1`)?** 
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][719] \| `"a1"` \| `"a2"` \| `"a3"` \| `"s1"` \| `"s2"` \| `"s3"` \| `"centroid"`)?** (`'centroid'`)
+-   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| [number][719] \| `"a1"` \| `"a2"` \| `"a3"` \| `"s1"` \| `"s2"` \| `"s3"` \| `"centroid"`)?** (`'centroid'`)
+-   `corner` **[OBJ_CurvedCorner][747]?** define for rounded corners
+-   `line` **[OBJ_LineStyle][748]?** line style options - do not use any corner
+    options
 -   `copy` **([Array][711]&lt;([CPY_Step][741] \| [string][710])> | [CPY_Step][741])?** make copies of
-    the polygon if defined. If using fill and copying, use `fill`: `'tris'`
--   `color` **[Array][711]&lt;[number][719]>?** (`[1, 0, 0, 1`])
+    the rectangle
+-   `color` **[Array][711]&lt;[number][719]>?** (`[1, 0, 0, 1]`)
 -   `texture` **[OBJ_Texture][742]?** Override color with a texture
--   `pulse` **([number][719] \| [OBJ_PulseScale][743])?** set the default pulse scale
 -   `position` **[Point][725]?** convenience to override Transform translation
--   `transform` **[Transform][714]?** (`Transform('polygon').standard()`)
+-   `transform` **[Transform][714]?** (`Transform('rectangle').standard()`)
+-   `pulse` **([number][719] \| [OBJ_PulseScale][743])?** set the default pulse scale
+-   `rotation` **([number][719] | {side: [number][719], angle: [number][719]})?** 
 
 ### Examples
 
 ```javascript
-// Simple filled polygon
-diagram.addElement(
-  {
-    name: 'p',
-    method: 'polygon',
-    options: {
-      radius: 0.5,
-      fill: true,
-      sides: 6,
-    },
+// Right angle triangle
+diagram.addElement({
+  name: 't',
+  method: 'triangle',
+  options: {
+    width: 0.5,
+    height: 1,
+    top: 'right',
   },
-);
+});
 ```
 
 ```javascript
-// Quarter circle
-diagram.addElement(
-  {
-    name: 'p',
-    method: 'polygon',
-    options: {
-      radius: 0.4,
-      sides: 100,
-      width: 0.08,
-      angleToDraw: Math.PI / 2,
-      color: [1, 1, 0, 1],
+// 30-60-90 triangle with dashed line
+const t = diagram.create.triangle({
+  options: {
+    ASA: [Math.PI / 2, 1, Math.PI / 6],
+    line: {
+      width: 0.02,
+      dash: [0.12, 0.04],
     },
   },
-);
+});
+diagram.elements.add('t', t);
+```
+
+```javascript
+// Star from 4 equilateral triangles
+diagram.addElement({
+  name: 'star',
+  method: 'triangle',
+  options: {
+    SSS: [1, 1, 1],
+    xAlign: 'centroid',
+    yAlign: 'centroid',
+    copy: {
+      along: 'rotation',
+      num: 3,
+      step: Math.PI / 6,
+    },
+  },
+});
 ```
 
 ## OBJ_Rectangle
 
 Rectangle shape options object
 
-![][747]
+![][749]
 
 ### Properties
 
@@ -2985,8 +3057,8 @@ Rectangle shape options object
 -   `height` **[number][719]?** (`1`)
 -   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| [number][719])?** (`'middle'`)
 -   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][719])?** (`'center'`)
--   `corner` **[OBJ_CurvedCorner][748]?** define for rounded corners
--   `line` **[OBJ_LineStyle][746]?** line style options - do not use any corner
+-   `corner` **[OBJ_CurvedCorner][747]?** define for rounded corners
+-   `line` **[OBJ_LineStyle][748]?** line style options - do not use any corner
     options
 -   `copy` **([Array][711]&lt;([CPY_Step][741] \| [string][710])> | [CPY_Step][741])?** make copies of
     the rectangle
@@ -3051,144 +3123,78 @@ diagram.addElement({
 });
 ```
 
-## OBJ_Triangle
+## OBJ_Polygon
 
-Triangle shape options object
-
-![][749]
-
-The most generic way to define a triangle is with three points (`points`
-property). When using `points`, all the other properties that can also
-define a triangle are ignored: `width`, `height`, `top`,
-`SSS`, `ASA`, `AAS`, `SAS`, `direction`, `rotation`, `xAlign` and `yAlign`.
-
-The other ways to define a triangle are (in order of highest override
-preference to lowest if more than one is defined in the object):
-
--   `ASA` or Angle-Side-Angle
--   `SAS` or Side-Angle-Side
--   `AAS` or Angle-Angle-Side
--   `SSS` or Side-Side-Side
--   `width`, `height` and `top` location
-
-All these methods also use `direction` to define the triangles, and
-`rotation`, `xAlign` and `yAlign` to position the triangles. Each corner
-and side of the triangle is indexed, and can be used for positioning.
+Polygon or partial polygon shape options object
 
 ![][750]
 
-A triangle starts with an angle (a1) at (0, 0) and base side extending along
-the x axis to a second angle a2. The base side is side 1 (s1).
-
-Angles a1 and a2 exten the triangle above s1 if `direction` is `1`, and
-below s1 when `direction` is `-1`.
-
-s2, a3, and s3 are then the consecutive sides and angles.
-
-Triangles can be defined with a combination of side length and angle using
-`ASA`, `SAS`, `AAS` and `SSS`, where the first side or angle is s1 or a1
-respectively, and the subsequent sides and angles progress consecutively.
-For instance, `ASA` defines the angle a1, then side length s1, then angle
-a2. `SSS` defines the side lenghts s1, s2 then s3. All these combinations of
-three properties are sufficient to define a unique triangle completely.
-
-When defining the triangle with `width`, `height` and `top`, the base side
-s1 is the width, and the top point is either aligned with the `left`,
-`center` or `right` of the base at some `height` above s1.
-
-When defined, a triangle's a1 corner will be at (0, 0), and s1 will be along
-the x axis. Next, a `rotation` can be applied to the triangle. A `rotation`
-can either be a `number` rotating it relative to its definition, or relative
-to one of its sides: s1, s2 or s3.
-
-Finally, the triangle can be positioned (in vertex space) using `xAlign` and
-`yAlign`. An `xAlign` of `'left'` will position the triangle so that it's
-left most point will be at (0, 0). Similarly, a `yAlign` of `'top'` will
-position the triangle so its top most point is at (0, 0). Triangles
-can also be aligned by angles (corners) and side mid points. For instance, an
-`xAlign` of `'a2'`, will position the a2 corner at x = 0. Similarly a
-`yAlign` of `'s3'` will position the triangle vertically such that the mid
-point of s3 is at y = 0. `'centroid'` is relative to the geometric center of
-the triangle.
-
-Once a triangle is defined and positioned in vertex space, it can then be
-copied (`copy`) if more than one triangle is desired.
-
-The triangle(s) can then be positioned (`position`) or transformed
-(`transform`) in the DiagramElementPrimitive local space.
-
-Triangles can either be a solid fill, texture fill or outline. When `line`
-is not defined, the triangle will be filled.
-
 ### Properties
 
--   `points` **[Array][711]&lt;[Point][725]>?** defining points will take precedence over
-    all other ways to define a triangle.
--   `width` **[number][719]?** (`1`)
--   `height` **[number][719]?** (`1`)
--   `top` **(`"left"` \| `"right"` \| `"center"`)?** (`center`)
--   `SSS` **\[[number][719], [number][719], [number][719]]?** 
--   `ASA` **\[[number][719], [number][719], [number][719]]?** 
--   `AAS` **\[[number][719], [number][719], [number][719]]?** 
--   `SAS` **\[[number][719], [number][719], [number][719]]?** 
--   `direction` **(`1` \| `-1`)?** 
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][719] \| `"a1"` \| `"a2"` \| `"a3"` \| `"s1"` \| `"s2"` \| `"s3"` \| `"centroid"`)?** (`'centroid'`)
--   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| [number][719] \| `"a1"` \| `"a2"` \| `"a3"` \| `"s1"` \| `"s2"` \| `"s3"` \| `"centroid"`)?** (`'centroid'`)
--   `corner` **[OBJ_CurvedCorner][748]?** define for rounded corners
--   `line` **[OBJ_LineStyle][746]?** line style options - do not use any corner
-    options
+-   `sides` **[number][719]?** (`4`)
+-   `radius` **[number][719]?** (`1`)
+-   `rotation` **[number][719]?** shape rotation during vertex definition
+    (different to a rotation step in a trasform) (`0`)
+-   `offset` **[TypeParsablePoint][724]?** shape center offset from origin
+    during vertex definition (different to a translation step in a transform)
+    (`[0, 0]`)
+-   `sidesToDraw` **[number][719]?** number of sides to draw (all sides)
+-   `angleToDraw` **[number][719]?** same as `sidesToDraw` but using angle for
+    the definition (`2π`)
+-   `direction` **(`-1` \| `1`)?** direction to draw polygon where 1 is
+    counter clockwise and -1 is clockwise (`1`)
+    center. This is different to position or transform as these translate the
+    vertices on each draw. (`[0, 0]`)
+-   `line` **[OBJ_LineStyle][748]?** line style options
 -   `copy` **([Array][711]&lt;([CPY_Step][741] \| [string][710])> | [CPY_Step][741])?** make copies of
-    the rectangle
--   `color` **[Array][711]&lt;[number][719]>?** (`[1, 0, 0, 1]`)
+    the polygon if defined. If using fill and copying, use `fill`: `'tris'`
+-   `color` **[Array][711]&lt;[number][719]>?** (`[1, 0, 0, 1`])
 -   `texture` **[OBJ_Texture][742]?** Override color with a texture
 -   `position` **[Point][725]?** convenience to override Transform translation
--   `transform` **[Transform][714]?** (`Transform('rectangle').standard()`)
+-   `transform` **[Transform][714]?** (`Transform('polygon').standard()`)
 -   `pulse` **([number][719] \| [OBJ_PulseScale][743])?** set the default pulse scale
--   `rotation` **([number][719] | {side: [number][719], angle: [number][719]})?** 
 
 ### Examples
 
 ```javascript
-// Right angle triangle
+// Simple filled hexagon
 diagram.addElement({
-  name: 't',
-  method: 'triangle',
+  name: 'hexagon',
+  method: 'polygon',
   options: {
-    width: 0.5,
-    height: 1,
-    top: 'right',
+    sides: 6,
+    radius: 0.5,
   },
 });
 ```
 
 ```javascript
-// 30-60-90 triangle with dashed line
-const t = diagram.create.triangle({
+// Circle from dashed line
+const circ = diagram.create.polygon({
+  sides: 100,
+  radius: 0.5,
+  line: {
+    width: 0.03,
+    dash: [0.1, 0.03 ],
+  },
+});
+diagram.elements.add('circle', circ);
+```
+
+```javascript
+// Half octagon rotated
+diagram.addElement({
+  name: 'halfOctagon',
+  method: 'polygon',
   options: {
-    ASA: [Math.PI / 2, 1, Math.PI / 6],
+    sides: 8,
+    radius: 0.5,
+    angleToDraw: Math.PI,
     line: {
-      width: 0.02,
-      dash: [0.12, 0.04],
+      width: 0.03,
     },
-  },
-});
-diagram.elements.add('t', t);
-```
-
-```javascript
-// Star from 4 equilateral triangles
-diagram.addElement({
-  name: 'star',
-  method: 'triangle',
-  options: {
-    SSS: [1, 1, 1],
-    xAlign: 'centroid',
-    yAlign: 'centroid',
-    copy: {
-      along: 'rotation',
-      num: 3,
-      step: Math.PI / 6,
-    },
+    direction: -1,
+    rotation: Math.PI / 2,
   },
 });
 ```
@@ -3222,7 +3228,7 @@ The line width and style is defined with `line`.
     bottom lines - overrides xStep
 -   `yNum` **[number][719]?** number of horizontal lines in grid including left
     and right lines - overrides yStep
--   `line` **[OBJ_LineStyle][746]?** line style options - do not use any corner
+-   `line` **[OBJ_LineStyle][748]?** line style options - do not use any corner
     options
 -   `copy` **([Array][711]&lt;([CPY_Step][741] \| [string][710])> | [CPY_Step][741])?** make copies of
     the rectangle
@@ -3345,7 +3351,7 @@ and then the rectangle repeated throughout the diagram.
     images that are square whose number of side pixels is a power of 2 (`false`)
 -   `onLoad` **function (): void?** 
 
-## Text
+## Drawing Text
 
 
 
@@ -7902,7 +7908,7 @@ Including simple shapes, grid and text.
 
 Polygon or partial polygon shape options object
 
-![][745]
+![][750]
 
 #### Parameters
 
@@ -8917,7 +8923,7 @@ Type: ([TypeWhen][850] \| [number][719] | null)
 
 [281]: #parameters-102
 
-[282]: #drawing
+[282]: #drawing-shapes
 
 [283]: #obj_generic
 
@@ -8931,7 +8937,7 @@ Type: ([TypeWhen][850] \| [number][719] | null)
 
 [288]: #examples-24
 
-[289]: #obj_polygon
+[289]: #obj_triangle
 
 [290]: #properties-5
 
@@ -8943,7 +8949,7 @@ Type: ([TypeWhen][850] \| [number][719] | null)
 
 [294]: #examples-26
 
-[295]: #obj_triangle
+[295]: #obj_polygon
 
 [296]: #properties-7
 
@@ -8959,7 +8965,7 @@ Type: ([TypeWhen][850] \| [number][719] | null)
 
 [302]: #properties-9
 
-[303]: #text
+[303]: #drawing-text
 
 [304]: #obj_font
 
@@ -9843,17 +9849,17 @@ Type: ([TypeWhen][850] \| [number][719] | null)
 
 [744]: ./assets1/polyline.png
 
-[745]: ./assets1/polygon.png
+[745]: ./assets1/triangle.png
 
-[746]: #obj_linestyle
+[746]: ./assets1/triangle_definition.png
 
-[747]: ./assets1/rectangle.png
+[747]: #obj_curvedcorner
 
-[748]: #obj_curvedcorner
+[748]: #obj_linestyle
 
-[749]: ./assets1/triangle.png
+[749]: ./assets1/rectangle.png
 
-[750]: ./assets1/triangle_definition.png
+[750]: ./assets1/polygon.png
 
 [751]: ./assets1/grid.png
 
