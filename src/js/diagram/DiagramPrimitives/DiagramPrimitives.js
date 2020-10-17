@@ -53,7 +53,7 @@ import type { TypeSpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
 import { getPolygonPoints, getFanTrisPolygon, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle';
-import getTriangleBorder from '../DrawingObjects/Geometries/triangle';
+import getTriangle from '../DrawingObjects/Geometries/triangle';
 import type {
   OBJ_Copy,
 } from './DiagramPrimitiveTypes';
@@ -646,6 +646,160 @@ export type OBJ_Rectangle = {
   pulse?: number | OBJ_PulseScale,
 }
 
+/**
+ * Triangle shape options object
+ *
+ * ![](./assets1/triangle.png)
+ *
+ * The most generic way to define a triangle is with three points (`points`
+ * property). When using `points`, all the other properties that can also
+ * define a triangle are ignored: `width`, `height`, `top`,
+ * `SSS`, `ASA`, `AAS`, `SAS`, `direction`, `rotation`, `xAlign` and `yAlign`.
+ *
+ * The other ways to define a triangle are (in order of highest override
+ * preference to lowest if more than one is defined in the object):
+ * - `ASA` or Angle-Side-Angle
+ * - `SAS` or Side-Angle-Side
+ * - `AAS` or Angle-Angle-Side
+ * - `SSS` or Side-Side-Side
+ * - `width`, `height` and `top` location
+ *
+ * All these methods also use `direction` to define the triangles, and
+ * `rotation`, `xAlign` and `yAlign` to position the triangles. Each corner
+ * and side of the triangle is indexed, and can be used for positioning.
+ *
+ * ![](./assets1/triangle_definition.png)
+ *
+ * A triangle starts with an angle (a1) at (0, 0) and base side extending along
+ * the x axis to a second angle a2. The base side is side 1 (s1).
+ *
+ * Angles a1 and a2 exten the triangle above s1 if `direction` is `1`, and
+ * below s1 when `direction` is `-1`.
+ *
+ * s2, a3, and s3 are then the consecutive sides and angles.
+ *
+ * Triangles can be defined with a combination of side length and angle using
+ * `ASA`, `SAS`, `AAS` and `SSS`, where the first side or angle is s1 or a1
+ * respectively, and the subsequent sides and angles progress consecutively.
+ * For instance, `ASA` defines the angle a1, then side length s1, then angle
+ * a2. `SSS` defines the side lenghts s1, s2 then s3. All these combinations of
+ * three properties are sufficient to define a unique triangle completely.
+ *
+ * When defining the triangle with `width`, `height` and `top`, the base side
+ * s1 is the width, and the top point is either aligned with the `left`,
+ * `center` or `right` of the base at some `height` above s1.
+ *
+ * When defined, a triangle's a1 corner will be at (0, 0), and s1 will be along
+ * the x axis. Next, a `rotation` can be applied to the triangle. A `rotation`
+ * can either be a `number` rotating it relative to its definition, or relative
+ * to one of its sides: s1, s2 or s3.
+ *
+ * Finally, the triangle can be positioned (in vertex space) using `xAlign` and
+ * `yAlign`. An `xAlign` of `'left'` will position the triangle so that it's
+ * left most point will be at (0, 0). Similarly, a `yAlign` of `'top'` will
+ * position the triangle so its top most point is at (0, 0). Triangles
+ * can also be aligned by angles (corners) and side mid points. For instance, an
+ * `xAlign` of `'a2'`, will position the a2 corner at x = 0. Similarly a
+ * `yAlign` of `'s3'` will position the triangle vertically such that the mid
+ * point of s3 is at y = 0. `'centroid'` is relative to the geometric center of
+ * the triangle.
+ *
+ * Once a triangle is defined and positioned in vertex space, it can then be
+ * copied (`copy`) if more than one triangle is desired.
+ *
+ * The triangle(s) can then be positioned (`position`) or transformed
+ * (`transform`) in the DiagramElementPrimitive local space.
+ *
+ * Triangles can either be a solid fill, texture fill or outline. When `line`
+ * is not defined, the triangle will be filled.
+ *
+ * @property {Array<Point>} [points] defining points will take precedence over
+ * all other ways to define a triangle.
+ * @property {number} [width] (`1`)
+ * @property {number} [height] (`1`)
+ * @property {'left' | 'right' | 'center'} [top] (`center`)
+ * @property {[number, number, number]} [SSS]
+ * @property {[number, number, number]} [ASA]
+ * @property {[number, number, number]} [AAS]
+ * @property {[number, number, number]} [SAS]
+ * @property {1 | -1} [direction]
+ * @property {number | { side: 's1' | 's2' | 's3', angle: number }} [rotation]
+ * @property {'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid'} [xAlign] (`'centroid'`)
+ * @property {'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1'| 's2' | 's3' | 'centroid'} [yAlign] (`'centroid'`)
+ * @property {OBJ_CurvedCorner} [corner] define for rounded corners
+ * @property {OBJ_LineStyle} [line] line style options
+ * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
+ * the rectangle
+ * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {OBJ_Texture} [texture] Override color with a texture
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('rectangle').standard()`)
+ * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ *
+ * @example
+ * // Right angle triangle
+ * diagram.addElement({
+ *   name: 't',
+ *   method: 'triangle',
+ *   options: {
+ *     width: 0.5,
+ *     height: 1,
+ *     top: 'right',
+ *   },
+ * });
+ *
+ * @example
+ * // 30-60-90 triangle with dashed line
+ * diagram.addElement({
+ *   name: 't',
+ *   method: 'triangle',
+ *   options: {
+ *     ASA: [Math.PI / 2, 1, Math.PI / 6],
+ *     line: {
+ *       width: 0.02,
+ *       dash: [0.12, 0.04],
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Star from 4 equilateral triangles
+ * diagram.addElement({
+ *   name: 'star',
+ *   method: 'triangle',
+ *   options: {
+ *     SSS: [1, 1, 1],
+ *     xAlign: 'centroid',
+ *     yAlign: 'centroid',
+ *     copy: {
+ *       along: 'rotation',
+ *       num: 3,
+ *       step: Math.PI / 6,
+ *     },
+ *   },
+ * });
+ */
+export type OBJ_Triangle = {
+  width?: number,
+  height?: number,
+  top?: 'left' | 'right' | 'center',
+  SSS?: [number, number, number],
+  ASA?: [number, number, number],
+  AAS?: [number, number, number],
+  SAS?: [number, number, number],
+  direction?: 1 | -1,
+  points?: Array<Point>,
+  rotation?: number | { side: number, angle: number },
+  xAlign: 'left' | 'center' | 'right' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
+  yAlign: 'bottom' | 'middle' | 'top' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
+  line?: OBJ_LineStyle,
+  copy?: Array<CPY_Step | string> | CPY_Step,
+  color?: Array<number>,
+  texture?: OBJ_Texture,
+  position?: TypeParsablePoint,
+  transform?: Transform,
+  pulse?: number | OBJ_PulseScale,
+}
 /**
  * Text Definition object
  *
@@ -1594,12 +1748,18 @@ export default class DiagramPrimitives {
   }
 
   triangle(...options: Array<{
-    width?: number,
-    height?: number,
-    xAlign?: 'left' | 'center' | 'right' | number,
-    yAlign?: 'bottom' | 'middle' | 'top' | number,
-    top?: 'left' | 'center' | 'right',
-    points?: Array<TypeParsablePoint>,
+    width: number,
+    height: number,
+    top: 'left' | 'right' | 'center',
+    SSS?: [number, number, number],
+    ASA?: [number, number, number],
+    AAS?: [number, number, number],
+    SAS?: [number, number, number],
+    direction: 1 | -1,
+    points?: Array<Point>,
+    rotation: number | { side: number, angle: number },
+    xAlign: 'left' | 'center' | 'right' | number,
+    yAlign: 'bottom' | 'middle' | 'top' | number,
     line?: OBJ_LineStyle,
     color?: Array<number>,
     transform?: Transform,
@@ -1607,20 +1767,12 @@ export default class DiagramPrimitives {
     texture?: OBJ_Texture,
     copy?: Array<CPY_Step | string> | CPY_Step,
     pulse?: number | OBJ_PulseScale,
-    corner: {
-      angle: number,
-      rotation: number,
-    },
-    SSS: [number, number, number],
-    SAS: [number, number, number],
-    ASA: [number, number, number],
-    AAS: [number, number, number]
   }>) {
     const defaultOptions = {
       width: 1,
       height: 1,
-      xAlign: 'center',
-      yAlign: 'middle',
+      xAlign: 'centroid',
+      yAlign: 'centroid',
       top: 'center',
       transform: new Transform('triangle').standard(),
       direction: 1,
@@ -1637,7 +1789,7 @@ export default class DiagramPrimitives {
       optionsToUse.line.widthIs = 'mid';
     }
 
-    const border = getTriangleBorder(optionsToUse);
+    const border = getTriangle(optionsToUse);
     let element;
     if (optionsToUse.line == null) {
       element = this.generic(optionsToUse, {
@@ -1646,7 +1798,7 @@ export default class DiagramPrimitives {
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
-        const updatedBorder = getTriangleBorder(o);
+        const updatedBorder = getTriangle(o);
         element.drawingObject.change(
           updatedBorder, [updatedBorder.map(b => b._dup())], [],
         );

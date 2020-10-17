@@ -1,27 +1,21 @@
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
- // Grid of triangles
+// Right angle triangle
 diagram.addElement({
   name: 'r',
-  method: 'shapes.triangle',
+  method: 'triangle',
   options: {
-    // width: 1,
-    // height: 1,
-    // top: 'right',
-    xAlign: 'c1',
-    yAlign: 'c1',
+    SSS: [1, 1, 1],
     // line: {
-    //   width: 0.03,
-    //   widthIs: 'inside',
+    //   width: 0.02,
     // },
-    // points: [[-1, -1], [1, -1], [2, 2]],
-    // ASA: [Math.PI / 6, 1, Math.PI / 3],
-    // SAS: [0.5, Math.PI/6, 2],
-    // AAS: [Math.PI / 2, Math.PI / 6, 2],
-    SSS: [1, 1, 1]
-    // rotation: Math.PI / 2 + Math.PI / 12,
-    // rotation: { side: 's3', angle: -Math.PI / 4 },
-    // direction: -1,
+    xAlign: 'centroid',
+    yAlign: 'centroid',
+    copy: {
+      along: 'rotation',
+      num: 3,
+      step: Math.PI / 6,
+    },
   },
 });
 
@@ -44,58 +38,58 @@ diagram.addElement({
 
 // diagram.animateNextFrame();
 
-diagram.addElements([
-  {
-    name: 'a',
-    method: 'polygon',
-    options: {
-      radius: 0.01,
-      width: 0.01,
-      sides: 10,
-      color: [0.7, 0.7, 0.7, 1]
-    },
-  },
-  {
-    name: 'grid',
-    method: 'grid',
-    options: {
-      bounds: [-2, -2, 4, 4],
-      yStep: 0.1,
-      xStep: 0.1,
-      color: [0.7, 0.7, 0.7, 1],
-      width: 0.0005,
-    },
-  },
-  {
-    name: 'gridMajor',
-    method: 'grid',
-    options: {
-      bounds: [-2, -2, 4, 4],
-      yStep: 0.5,
-      xStep: 0.5,
-      color: [0.8, 0.8, 0.8, 1],
-      width: 0.002,
-    },
-  },
-  // {
-  //   name: 'm',
-  //   method: 'polygon',
-  //   options: {
-  //     sides: 5,
-  //     radius: 0.2,
-  //     fill: true,
-  //   },
-  // },
-  // {
-  //   name: 'n',
-  //   method: 'polygon',
-  //   options: {
-  //     sides: 3,
-  //     radius: 0.2,
-  //     fill: true,
-  //   },
-  // }
-]);
+// diagram.addElements([
+//   {
+//     name: 'a',
+//     method: 'polygon',
+//     options: {
+//       radius: 0.01,
+//       width: 0.01,
+//       sides: 10,
+//       color: [0.7, 0.7, 0.7, 1]
+//     },
+//   },
+//   {
+//     name: 'grid',
+//     method: 'grid',
+//     options: {
+//       bounds: [-2, -2, 4, 4],
+//       yStep: 0.1,
+//       xStep: 0.1,
+//       color: [0.7, 0.7, 0.7, 1],
+//       width: 0.0005,
+//     },
+//   },
+//   {
+//     name: 'gridMajor',
+//     method: 'grid',
+//     options: {
+//       bounds: [-2, -2, 4, 4],
+//       yStep: 0.5,
+//       xStep: 0.5,
+//       color: [0.8, 0.8, 0.8, 1],
+//       width: 0.002,
+//     },
+//   },
+//   // {
+//   //   name: 'm',
+//   //   method: 'polygon',
+//   //   options: {
+//   //     sides: 5,
+//   //     radius: 0.2,
+//   //     fill: true,
+//   //   },
+//   // },
+//   // {
+//   //   name: 'n',
+//   //   method: 'polygon',
+//   //   options: {
+//   //     sides: 3,
+//   //     radius: 0.2,
+//   //     fill: true,
+//   //   },
+//   // }
+// ]);
 // // diagram.initialize();
 // // const m = diagram.getElement('m');
 // // const n = diagram.getElement('n');
