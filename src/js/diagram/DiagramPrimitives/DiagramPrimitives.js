@@ -570,7 +570,8 @@ export type OBJ_Polygon = {
  * @property {'bottom' | 'middle' | 'top' | number} [yAlign] (`'middle'`)
  * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
  * @property {OBJ_CurvedCorner} [corner] define for rounded corners
- * @property {OBJ_LineStyle} [line] line style options
+ * @property {OBJ_LineStyle} [line] line style options - do not use any corner
+ * options
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the rectangle
  * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
@@ -646,6 +647,7 @@ export type OBJ_Rectangle = {
   pulse?: number | OBJ_PulseScale,
 }
 
+/* eslint-disable max-len */
 /**
  * Triangle shape options object
  *
@@ -727,7 +729,8 @@ export type OBJ_Rectangle = {
  * @property {'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid'} [xAlign] (`'centroid'`)
  * @property {'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1'| 's2' | 's3' | 'centroid'} [yAlign] (`'centroid'`)
  * @property {OBJ_CurvedCorner} [corner] define for rounded corners
- * @property {OBJ_LineStyle} [line] line style options
+ * @property {OBJ_LineStyle} [line] line style options - do not use any corner
+ * options
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the rectangle
  * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
@@ -750,9 +753,7 @@ export type OBJ_Rectangle = {
  *
  * @example
  * // 30-60-90 triangle with dashed line
- * diagram.addElement({
- *   name: 't',
- *   method: 'triangle',
+ * const t = diagram.create.triangle({
  *   options: {
  *     ASA: [Math.PI / 2, 1, Math.PI / 6],
  *     line: {
@@ -761,6 +762,7 @@ export type OBJ_Rectangle = {
  *     },
  *   },
  * });
+ * diagram.elements.add('t', t);
  *
  * @example
  * // Star from 4 equilateral triangles
@@ -800,6 +802,108 @@ export type OBJ_Triangle = {
   transform?: Transform,
   pulse?: number | OBJ_PulseScale,
 }
+/* eslint-enable max-len */
+
+
+/**
+ * Grid shape options object
+ *
+ * ![](./assets1/grid.png)
+ *
+ * A grid is a rectangle divided into a series of vertical and horizontal lines.
+ *
+ * The rectangle is defined by `bounds`.
+ *
+ * `xNum` and `yNum` can be used to defined a number of equally spaced lines
+ * in the rectangle (including the edges).
+ *
+ * Alternatively `xStep` and `yStep` can be used to define the spacing between
+ * lines from the bottom left corner.
+ *
+ * The line width and style is defined with `line`.
+ *
+ * @property {TypeParsableRect} [bounds] rectangle definition
+ * @property {number} [xStep] distance between vertical lines in grid from
+ * left - use this instead of `xNum`.
+ * @property {number} [yStep] distance between horizontal lines in grid from
+ * bottom - use this instead of `yNum`
+ * @property {number} [xNum] number of vertical lines in grid including top and
+ * bottom lines - overrides xStep
+ * @property {number} [yNum] number of horizontal lines in grid including left
+ * and right lines - overrides yStep
+ * @property {OBJ_LineStyle} [line] line style options - do not use any corner
+ * options
+ * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
+ * the rectangle
+ * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {OBJ_Texture} [texture] Override color with a texture
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('rectangle').standard()`)
+ * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ *
+ *
+ * @example
+ * // Grid defined by xStep and yStep
+ * diagram.addElement({
+ *   name: 'g',
+ *   method: 'grid',
+ *   options: {
+ *     bounds: [-0.5, -0.5, 1, 1],
+ *     xStep: 0.25,
+ *     yStep: 0.25,
+ *     line: {
+ *       width: 0.03,
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Grid defined by xNum and yNum with dashed lines
+ * const grid = diagram.create.grid({
+ *   bounds: [-0.5, -0.5, 1, 1],
+ *   xNum: 4,
+ *   yNum: 4,
+ *   line: {
+ *     width: 0.03,
+ *     dash: [0.1, 0.02],
+ *   },
+ * });
+ * diagram.elements.add('g', grid);
+ *
+ * @example
+ * // Grid of grids
+ * diagram.addElement({
+ *   name: 'g',
+ *   method: 'grid',
+ *   options: {
+ *     bounds: [-0.7, -0.7, 0.6, 0.6],
+ *     xNum: 4,
+ *     yNum: 4,
+ *     line: {
+ *       width: 0.03,
+ *     },
+ *     copy: [
+ *       { along: 'x', num: 1, step: 0.8},
+ *       { along: 'y', num: 1, step: 0.8},
+ *     ],
+ *   },
+ * });
+ */
+export type OBJ_Grid = {
+  bounds?: TypeParsableRect,
+  xStep?: number,
+  yStep?: number,
+  xNum?: number,
+  yNum?: number,
+  line?: OBJ_LineStyle,
+  copy?: OBJ_Copy | Array<OBJ_Copy>,
+  color?: Array<number>,
+  texture?: OBJ_Texture,
+  position?: TypeParsablePoint,
+  transform?: Transform,
+  pulse?: OBJ_PulseScale | number,
+}
+
 /**
  * Text Definition object
  *
@@ -1168,16 +1272,16 @@ export type OBJ_TextLines = {
   color: Array<number>,
 };
 
-export type TypeGridOptions = {
-  bounds?: Rect,
-  xStep?: number,
-  yStep?: number,
-  numLinesThick?: number,
-  color?: Array<number>,
-  position?: Point,
-  transform?: Transform,
-  pulse?: number,
-};
+// export type TypeGridOptions = {
+//   bounds?: Rect,
+//   xStep?: number,
+//   yStep?: number,
+//   numLinesThick?: number,
+//   color?: Array<number>,
+//   position?: Point,
+//   transform?: Transform,
+//   pulse?: number,
+// };
 
 export type TypeRepeatPatternVertex = {
   element?: DiagramElementPrimitive,
@@ -1747,27 +1851,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  triangle(...options: Array<{
-    width: number,
-    height: number,
-    top: 'left' | 'right' | 'center',
-    SSS?: [number, number, number],
-    ASA?: [number, number, number],
-    AAS?: [number, number, number],
-    SAS?: [number, number, number],
-    direction: 1 | -1,
-    points?: Array<Point>,
-    rotation: number | { side: number, angle: number },
-    xAlign: 'left' | 'center' | 'right' | number,
-    yAlign: 'bottom' | 'middle' | 'top' | number,
-    line?: OBJ_LineStyle,
-    color?: Array<number>,
-    transform?: Transform,
-    position?: TypeParsablePoint,
-    texture?: OBJ_Texture,
-    copy?: Array<CPY_Step | string> | CPY_Step,
-    pulse?: number | OBJ_PulseScale,
-  }>) {
+  triangle(...options: Array<OBJ_Triangle>) {
     const defaultOptions = {
       width: 1,
       height: 1,
@@ -1819,6 +1903,115 @@ export default class DiagramPrimitives {
   }
 
   grid(...optionsIn: Array<{
+    bounds?: TypeParsableRect,
+    xStep?: number,
+    yStep?: number,
+    xNum?: number,
+    yNum?: number,
+    line?: OBJ_LineStyle,
+    copy?: OBJ_Copy | Array<OBJ_Copy>,
+    color?: Array<number>,
+    texture?: OBJ_Texture,
+    position?: TypeParsablePoint,
+    transform?: Transform,
+    pulse?: OBJ_PulseScale | number,
+  }>) {
+    const defaultOptions = {
+      bounds: new Rect(-1, -1, 2, 2),
+      transform: new Transform('grid').standard(),
+      line: {
+        linePrimitives: false,
+        width: 0.005,
+        lineNum: 2,
+        dash: [],
+      },
+    };
+    const options = processOptions(defaultOptions, ...optionsIn);
+    parsePoints(options, []);
+    options.bounds = getRect(options.bounds);
+    const getTris = points => makePolyLine(
+      points,
+      options.line.width,
+      false,
+      'mid',
+      'auto', // cornerStyle doesn't matter
+      0.1,    // cornerSize doesn't matter
+      1,      // cornerSides,
+      Math.PI / 7, // minAutoCornerAngle,
+      options.line.dash,
+      options.line.linePrimitives,
+      options.line.lineNum,
+      [[]],
+      [[]],
+    );
+
+    // Prioritize Num over Step. Only define Num from Step if Num is undefined.
+    const { bounds } = options;
+    let {
+      xStep, xNum, yStep, yNum,
+    } = options;
+    let { width } = options.line;
+    if (options.line.linePrimitives && options.line.lineNum === 1) {
+      width = 0;
+    }
+    const totWidth = bounds.width;
+    const totHeight = bounds.height;
+    if (xStep != null && xNum == null) {
+      xNum = xStep === 0 ? 1 : 1 + Math.floor((totWidth + xStep * 0.1) / xStep);
+    }
+    if (yStep != null && yNum == null) {
+      yNum = yStep === 0 ? 1 : 1 + Math.floor((totHeight + yStep * 0.1) / yStep);
+    }
+
+    if (xNum == null) {
+      xNum = 2;
+    }
+    if (yNum == null) {
+      yNum = 2;
+    }
+
+    xStep = xNum < 2 ? 0 : totWidth / (xNum - 1);
+    yStep = yNum < 2 ? 0 : totHeight / (yNum - 1);
+
+    const start = new Point(
+      bounds.left,
+      bounds.bottom,
+    );
+    const xLineStart = start.add(-width / 2, 0);
+    const xLineStop = start.add(totWidth + width / 2, 0);
+    const yLineStart = start.add(0, -width / 2);
+    const yLineStop = start.add(0, totHeight + width / 2);
+
+    let xTris = [];
+    let yTris = [];
+    if (xNum > 0) {
+      const [yLine] = getTris([yLineStart, yLineStop]);
+      yTris = copyPoints(yLine, [
+        { along: 'x', num: xNum - 1, step: xStep },
+      ]);
+    }
+
+    if (yNum > 0) {
+      const [xLine] = getTris([xLineStart, xLineStop]);
+      xTris = copyPoints(xLine, [
+        { along: 'y', num: yNum - 1, step: yStep },
+      ]);
+    }
+
+    const element = this.generic(options, {
+      drawType: options.line.linePrimitives ? 'lines' : 'triangles', // $FlowFixMe
+      points: [...xTris, ...yTris],
+      border: [[
+        start.add(-width / 2, -width / 2),
+        start.add(totWidth + width / 2, -width / 2),
+        start.add(totWidth + width / 2, totHeight + width / 2),
+        start.add(-width / 2, totHeight + width / 2),
+      ]],
+    });
+    return element;
+  }
+
+  gridLegacy(...optionsIn: Array<{
     bounds?: TypeParsableRect,
     xStep?: number,
     yStep?: number,

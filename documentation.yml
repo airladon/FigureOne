@@ -32,6 +32,8 @@ toc:
   - OBJ_Polyline
   - OBJ_Polygon
   - OBJ_Rectangle
+  - OBJ_Triangle
+  - OBJ_Grid
   - OBJ_Texture
   - name: Text
   - OBJ_Font

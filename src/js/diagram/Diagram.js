@@ -462,6 +462,8 @@ class Diagram {
       polygon: this.shapes.polygon.bind(this.shapes),
       polygonSweep: this.shapes.polygonSweep.bind(this.shapes),
       grid: this.shapes.grid.bind(this.shapes),
+      triangle: this.shapes.triangle.bind(this.shapes),
+      rectangle: this.shapes.rectangle.bind(this.shapes),
       // fan: this.shapes.fan.bind(this.shapes),
       radialLines: this.shapes.radialLines.bind(this.shapes),
       // box: this.shapes.box.bind(this.shapes),

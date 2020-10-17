@@ -1252,6 +1252,26 @@
               
                 
                 <li><a
+                  href='#obj_triangle'
+                  class="">
+                  OBJ_Triangle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_grid'
+                  class="">
+                  OBJ_Grid
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_texture'
                   class="">
                   OBJ_Texture
@@ -2732,6 +2752,84 @@
               
                 
                 <li><a
+                  href='#typewhen'
+                  class="">
+                  TypeWhen
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_pulsescale'
+                  class="">
+                  OBJ_PulseScale
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_curvedcorner'
+                  class="">
+                  OBJ_CurvedCorner
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_linestyle'
+                  class="">
+                  OBJ_LineStyle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#diagramprimitives'
+                  class=" toggle-sibling">
+                  DiagramPrimitives
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#diagramprimitivespolygon'
+                        class='regular pre-open'>
+                        #polygon
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#cpy_step'
+                  class="">
+                  CPY_Step
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_scenario'
                   class="">
                   OBJ_Scenario
@@ -2812,87 +2910,9 @@
               
                 
                 <li><a
-                  href='#typewhen'
-                  class="">
-                  TypeWhen
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#drawingobject'
                   class="">
                   DrawingObject
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_pulsescale'
-                  class="">
-                  OBJ_PulseScale
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_curvedcorner'
-                  class="">
-                  OBJ_CurvedCorner
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_linestyle'
-                  class="">
-                  OBJ_LineStyle
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#diagramprimitives'
-                  class=" toggle-sibling">
-                  DiagramPrimitives
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#diagramprimitivespolygon'
-                        class='regular pre-open'>
-                        #polygon
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                  
-                </div>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#cpy_step'
-                  class="">
-                  CPY_Step
                   
                 </a>
                 
@@ -15034,7 +15054,8 @@ diagram.addElement(
       
         <div class='space-bottom0'>
           <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
-          : line style options
+          : line style options - do not use any corner
+options
 
           
         </div>
@@ -15042,7 +15063,7 @@ diagram.addElement(
         <div class='space-bottom0'>
           <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
           : make copies of
-the rectangle if defined
+the rectangle
 
           
         </div>
@@ -15150,6 +15171,516 @@ diagram.addElement({
       <span class="hljs-attr">num</span>: <span class="hljs-number">3</span>,
       <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span> / <span class="hljs-number">3</span>
     },
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_triangle'>
+      OBJ_Triangle
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Triangle shape options object</p>
+<p><img src="./assets1/triangle.png"></p>
+<p>The most generic way to define a triangle is with three points (<code>points</code>
+property). When using <code>points</code>, all the other properties that can also
+define a triangle are ignored: <code>width</code>, <code>height</code>, <code>top</code>,
+<code>SSS</code>, <code>ASA</code>, <code>AAS</code>, <code>SAS</code>, <code>direction</code>, <code>rotation</code>, <code>xAlign</code> and <code>yAlign</code>.</p>
+<p>The other ways to define a triangle are (in order of highest override
+preference to lowest if more than one is defined in the object):</p>
+<ul>
+<li><code>ASA</code> or Angle-Side-Angle</li>
+<li><code>SAS</code> or Side-Angle-Side</li>
+<li><code>AAS</code> or Angle-Angle-Side</li>
+<li><code>SSS</code> or Side-Side-Side</li>
+<li><code>width</code>, <code>height</code> and <code>top</code> location</li>
+</ul>
+<p>All these methods also use <code>direction</code> to define the triangles, and
+<code>rotation</code>, <code>xAlign</code> and <code>yAlign</code> to position the triangles. Each corner
+and side of the triangle is indexed, and can be used for positioning.</p>
+<p><img src="./assets1/triangle_definition.png"></p>
+<p>A triangle starts with an angle (a1) at (0, 0) and base side extending along
+the x axis to a second angle a2. The base side is side 1 (s1).</p>
+<p>Angles a1 and a2 exten the triangle above s1 if <code>direction</code> is <code>1</code>, and
+below s1 when <code>direction</code> is <code>-1</code>.</p>
+<p>s2, a3, and s3 are then the consecutive sides and angles.</p>
+<p>Triangles can be defined with a combination of side length and angle using
+<code>ASA</code>, <code>SAS</code>, <code>AAS</code> and <code>SSS</code>, where the first side or angle is s1 or a1
+respectively, and the subsequent sides and angles progress consecutively.
+For instance, <code>ASA</code> defines the angle a1, then side length s1, then angle
+a2. <code>SSS</code> defines the side lenghts s1, s2 then s3. All these combinations of
+three properties are sufficient to define a unique triangle completely.</p>
+<p>When defining the triangle with <code>width</code>, <code>height</code> and <code>top</code>, the base side
+s1 is the width, and the top point is either aligned with the <code>left</code>,
+<code>center</code> or <code>right</code> of the base at some <code>height</code> above s1.</p>
+<p>When defined, a triangle's a1 corner will be at (0, 0), and s1 will be along
+the x axis. Next, a <code>rotation</code> can be applied to the triangle. A <code>rotation</code>
+can either be a <code>number</code> rotating it relative to its definition, or relative
+to one of its sides: s1, s2 or s3.</p>
+<p>Finally, the triangle can be positioned (in vertex space) using <code>xAlign</code> and
+<code>yAlign</code>. An <code>xAlign</code> of <code>'left'</code> will position the triangle so that it's
+left most point will be at (0, 0). Similarly, a <code>yAlign</code> of <code>'top'</code> will
+position the triangle so its top most point is at (0, 0). Triangles
+can also be aligned by angles (corners) and side mid points. For instance, an
+<code>xAlign</code> of <code>'a2'</code>, will position the a2 corner at x = 0. Similarly a
+<code>yAlign</code> of <code>'s3'</code> will position the triangle vertically such that the mid
+point of s3 is at y = 0. <code>'centroid'</code> is relative to the geometric center of
+the triangle.</p>
+<p>Once a triangle is defined and positioned in vertex space, it can then be
+copied (<code>copy</code>) if more than one triangle is desired.</p>
+<p>The triangle(s) can then be positioned (<code>position</code>) or transformed
+(<code>transform</code>) in the DiagramElementPrimitive local space.</p>
+<p>Triangles can either be a solid fill, texture fill or outline. When <code>line</code>
+is not defined, the triangle will be filled.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>?)</code>
+          : defining points will take precedence over
+all other ways to define a triangle.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>top</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          : (
+<code>center</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>SSS</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>ASA</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>AAS</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>SAS</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>direction</span> <code class='quiet'>((<code>1</code> | <code>-1</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"a1"</code> | <code>"a2"</code> | <code>"a3"</code> | <code>"s1"</code> | <code>"s2"</code> | <code>"s3"</code> | <code>"centroid"</code>)?)</code>
+          : (
+<code>'centroid'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"a1"</code> | <code>"a2"</code> | <code>"a3"</code> | <code>"s1"</code> | <code>"s2"</code> | <code>"s3"</code> | <code>"centroid"</code>)?)</code>
+          : (
+<code>'centroid'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>corner</span> <code class='quiet'>(<a href="#obj_curvedcorner">OBJ_CurvedCorner</a>?)</code>
+          : define for rounded corners
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
+          : line style options - do not use any corner
+options
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
+          : make copies of
+the rectangle
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
+          : Override color with a texture
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : convenience to override Transform translation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
+          : (
+<code>Transform('rectangle').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
+          : set the default pulse scale
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {side: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>})?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Right angle triangle</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'triangle'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">top</span>: <span class="hljs-string">'right'</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// 30-60-90 triangle with dashed line</span>
+<span class="hljs-keyword">const</span> t = diagram.create.triangle({
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">ASA</span>: [<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">6</span>],
+    <span class="hljs-attr">line</span>: {
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+      <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.12</span>, <span class="hljs-number">0.04</span>],
+    },
+  },
+});
+diagram.elements.add(<span class="hljs-string">'t'</span>, t);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Star from 4 equilateral triangles</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'star'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'triangle'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">SSS</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'centroid'</span>,
+    <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'centroid'</span>,
+    <span class="hljs-attr">copy</span>: {
+      <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
+      <span class="hljs-attr">num</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">6</span>,
+    },
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_grid'>
+      OBJ_Grid
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Grid shape options object</p>
+<p><img src="./assets1/grid.png"></p>
+<p>A grid is a rectangle divided into a series of vertical and horizontal lines.</p>
+<p>The rectangle is defined by <code>bounds</code>.</p>
+<p><code>xNum</code> and <code>yNum</code> can be used to defined a number of equally spaced lines
+in the rectangle (including the edges).</p>
+<p>Alternatively <code>xStep</code> and <code>yStep</code> can be used to define the spacing between
+lines from the bottom left corner.</p>
+<p>The line width and style is defined with <code>line</code>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bounds</span> <code class='quiet'>(<a href="#typeparsablerect">TypeParsableRect</a>?)</code>
+          : rectangle definition
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xStep</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : distance between vertical lines in grid from
+left - use this instead of 
+<code>xNum</code>
+.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yStep</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : distance between horizontal lines in grid from
+bottom - use this instead of 
+<code>yNum</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of vertical lines in grid including top and
+bottom lines - overrides xStep
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of horizontal lines in grid including left
+and right lines - overrides yStep
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
+          : line style options - do not use any corner
+options
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
+          : make copies of
+the rectangle
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
+          : Override color with a texture
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : convenience to override Transform translation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
+          : (
+<code>Transform('rectangle').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
+          : set the default pulse scale
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid defined by xStep and yStep</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'g'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'grid'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">bounds</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">-0.5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.25</span>,
+    <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.25</span>,
+    <span class="hljs-attr">line</span>: {
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.03</span>,
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid defined by xNum and yNum with dashed lines</span>
+<span class="hljs-keyword">const</span> grid = diagram.create.grid({
+  <span class="hljs-attr">bounds</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">-0.5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">xNum</span>: <span class="hljs-number">4</span>,
+  <span class="hljs-attr">yNum</span>: <span class="hljs-number">4</span>,
+  <span class="hljs-attr">line</span>: {
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.03</span>,
+    <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.02</span>],
+  },
+});
+diagram.elements.add(<span class="hljs-string">'g'</span>, grid);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid of grids</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'g'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'grid'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">bounds</span>: [<span class="hljs-number">-0.7</span>, <span class="hljs-number">-0.7</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.6</span>],
+    <span class="hljs-attr">xNum</span>: <span class="hljs-number">4</span>,
+    <span class="hljs-attr">yNum</span>: <span class="hljs-number">4</span>,
+    <span class="hljs-attr">line</span>: {
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.03</span>,
+    },
+    <span class="hljs-attr">copy</span>: [
+      { <span class="hljs-attr">along</span>: <span class="hljs-string">'x'</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">step</span>: <span class="hljs-number">0.8</span>},
+      { <span class="hljs-attr">along</span>: <span class="hljs-string">'y'</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">step</span>: <span class="hljs-number">0.8</span>},
+    ],
   },
 });</pre>
     
@@ -32657,730 +33188,6 @@ and height definition
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_scenario'>
-      OBJ_Scenario
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Transform, color and visbility scenario definition</p>
-<p><code>translation</code> will overwirte <code>position</code>, and <code>translation,</code>position<code>, rotation</code> and <code>scale</code> overwrite the first equivalent transforms in
-<code>transform</code></p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>translation</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>isShown</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_pulse'>
-      OBJ_Pulse
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Pulse options object</p>
-<p>An element can have its scale pulsed of some <code>duration</code> with some
-<code>frequency</code>.</p>
-<p>If the scale is pulsed from the center of an object, the object will simply
-grow larger then smaller. If however, the scale is pulse from the side of the
-object, then the object will grow larger while moving away from the pulse
-center. Therefore the center of the scale pulse is defined with <code>centerOn</code>,
-<code>xAlign</code> and <code>yAlign</code>.</p>
-<p>How the pulse transitions from a scale of 1 to the pulse scale (s) is defined
-by the <code>progression</code>. A triangle progression will linearly progress from 1
-to s and back to 1 over time. Alternately <code>sinusoid</code> slows the progression
-at the minimums and maximums of the pulse.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : horiontal alignment with pulse center
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : vertical
-alignment with pulse center
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>centerOn</span> <code class='quiet'>((null | <a href="#diagramelement">DiagramElement</a> | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
-          : center
-of pulse
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>space</span> <code class='quiet'>((<code>"diagram"</code> | <code>"gl"</code> | <code>"local"</code> | <code>"vertex"</code>)?)</code>
-          : space the
-
-<code>centerOn</code>
- property operates when 
-<code>centerOn</code>
- is a 
-<code>TypeParsablePoint</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>frequency</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : pulse frequency in Hz
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : pulse duration in seconds
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : pulse scale
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>progression</span> <code class='quiet'>((<code>"sinusoid"</code> | <code>"triangle"</code>)?)</code>
-          : function that defines
-how the scale should progress over time (
-<code>sinusoid</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>x</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>y</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>done</span> <code class='quiet'>(function (any): void??)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='diagramelementmovefreely'>
-      DiagramElementMoveFreely
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Diagram element move freely parameters</p>
-<p>If a diagram element is released from moving with some velocity
-then these parameters will define how it continues to move freely</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>zeroVelocityThreshold</span> <code class='quiet'>(TypeTransformValue)</code>
-          : used to overcome
-limitations of floating point numbers not reaching 0
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>deceleration</span> <code class='quiet'>(TypeTransformValue)</code>
-          : amount to decelerate in local
-space units per second squared
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>bounceLoss</span> <code class='quiet'>(TypeTransformValue)</code>
-          : 0.5 results in 50% velocity loss
-if bouncing of boundary
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>callback</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>): void)?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='diagramelementmove'>
-      DiagramElementMove
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Diagram element move parameters</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>bounds</span> <code class='quiet'>(TransformBounds)</code>
-          : rectangle to limit movement within
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>maxVelocity</span> <code class='quiet'>(TypeTransformValue)</code>
-          : maximum velocity allowed (5)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>freely</span> <code class='quiet'>(<a href="#diagramelementmovefreely">DiagramElementMoveFreely</a>)</code>
-          : free movement parameters
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>canBeMovedAfterLosingTouch</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
-          : touch or mouse dragging will
-continue to move element even after the touch/cursor position is outside
-the element boundary
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>element</span> <code class='quiet'>((<a href="#diagramelement">DiagramElement</a> | null))</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transformClip</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (<a href="#transform">Transform</a>): <a href="#transform">Transform</a>?))</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>type</span> <code class='quiet'>((<code>"rotation"</code> | <code>"translation"</code> | <code>"scaleX"</code> | <code>"scaleY"</code> | <code>"scale"</code>))</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='scenarios'>
-      Scenarios
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>All scenarios set to element.</p>
-<p>Scenarios are preset transforms, color and visibility settings that can be
-easily animated to.</p>
-<p>This is an object where the keys are scenario names and values are
-<a href="#obj_scenario">OBJ_Scenario</a> objects defining the scenario.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scenarioName</span> <code class='quiet'>(<a href="#obj_scenario">OBJ_Scenario</a>)</code>
-          : where scenarioName can be any
-string that names the scenario
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='elementmovementstate'>
-      ElementMovementState
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Element movement state</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>previousTime</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>previousTransform</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>velocity</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='elementpulsestate'>
-      ElementPulseState
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Element pulse state</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>startTime</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='elementstate'>
-      ElementState
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Element state</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>isBeingMoved</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>isMovingFreely</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>movement</span> <code class='quiet'>(<a href="#elementmovementstate">ElementMovementState</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>isPulsing</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="#elementpulsestate">ElementPulseState</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>preparingToStop</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='typewhen'>
       TypeWhen
     </h3>
@@ -33419,88 +33226,6 @@ has been made after a reset.</p>
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='drawingobject'>
-      DrawingObject
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Drawing Object</p>
-<p>Manages drawing an element to a WebGL or Context 2D canvas. Can also
-be used to manage a HTML element on the screen.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>>)</code>
-          : each array of points defines a
-closed boundary or border of the element. An element may have multiple
-closed borders. A border defines where a shape can be touched, or how it
-bounces of diagram boundaries
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>>)</code>
-          : areas where a shape cannot be
-touched
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        <a href="#diagramelementprimitive">DiagramElementPrimitive</a>
-
-      
-    
   
 
   
@@ -34236,6 +33961,812 @@ diagram.addElement({
   },
 });</pre>
     
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_scenario'>
+      OBJ_Scenario
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Transform, color and visbility scenario definition</p>
+<p><code>translation</code> will overwirte <code>position</code>, and <code>translation,</code>position<code>, rotation</code> and <code>scale</code> overwrite the first equivalent transforms in
+<code>transform</code></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>translation</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isShown</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_pulse'>
+      OBJ_Pulse
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Pulse options object</p>
+<p>An element can have its scale pulsed of some <code>duration</code> with some
+<code>frequency</code>.</p>
+<p>If the scale is pulsed from the center of an object, the object will simply
+grow larger then smaller. If however, the scale is pulse from the side of the
+object, then the object will grow larger while moving away from the pulse
+center. Therefore the center of the scale pulse is defined with <code>centerOn</code>,
+<code>xAlign</code> and <code>yAlign</code>.</p>
+<p>How the pulse transitions from a scale of 1 to the pulse scale (s) is defined
+by the <code>progression</code>. A triangle progression will linearly progress from 1
+to s and back to 1 over time. Alternately <code>sinusoid</code> slows the progression
+at the minimums and maximums of the pulse.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : horiontal alignment with pulse center
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : vertical
+alignment with pulse center
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>centerOn</span> <code class='quiet'>((null | <a href="#diagramelement">DiagramElement</a> | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
+          : center
+of pulse
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>((<code>"diagram"</code> | <code>"gl"</code> | <code>"local"</code> | <code>"vertex"</code>)?)</code>
+          : space the
+
+<code>centerOn</code>
+ property operates when 
+<code>centerOn</code>
+ is a 
+<code>TypeParsablePoint</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>frequency</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : pulse frequency in Hz
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : pulse duration in seconds
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : pulse scale
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>progression</span> <code class='quiet'>((<code>"sinusoid"</code> | <code>"triangle"</code>)?)</code>
+          : function that defines
+how the scale should progress over time (
+<code>sinusoid</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>x</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>y</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>done</span> <code class='quiet'>(function (any): void??)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='diagramelementmovefreely'>
+      DiagramElementMoveFreely
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Diagram element move freely parameters</p>
+<p>If a diagram element is released from moving with some velocity
+then these parameters will define how it continues to move freely</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>zeroVelocityThreshold</span> <code class='quiet'>(TypeTransformValue)</code>
+          : used to overcome
+limitations of floating point numbers not reaching 0
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>deceleration</span> <code class='quiet'>(TypeTransformValue)</code>
+          : amount to decelerate in local
+space units per second squared
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bounceLoss</span> <code class='quiet'>(TypeTransformValue)</code>
+          : 0.5 results in 50% velocity loss
+if bouncing of boundary
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>callback</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>): void)?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='diagramelementmove'>
+      DiagramElementMove
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Diagram element move parameters</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bounds</span> <code class='quiet'>(TransformBounds)</code>
+          : rectangle to limit movement within
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>maxVelocity</span> <code class='quiet'>(TypeTransformValue)</code>
+          : maximum velocity allowed (5)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>freely</span> <code class='quiet'>(<a href="#diagramelementmovefreely">DiagramElementMoveFreely</a>)</code>
+          : free movement parameters
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>canBeMovedAfterLosingTouch</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          : touch or mouse dragging will
+continue to move element even after the touch/cursor position is outside
+the element boundary
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>element</span> <code class='quiet'>((<a href="#diagramelement">DiagramElement</a> | null))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transformClip</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (<a href="#transform">Transform</a>): <a href="#transform">Transform</a>?))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>type</span> <code class='quiet'>((<code>"rotation"</code> | <code>"translation"</code> | <code>"scaleX"</code> | <code>"scaleY"</code> | <code>"scale"</code>))</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='scenarios'>
+      Scenarios
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>All scenarios set to element.</p>
+<p>Scenarios are preset transforms, color and visibility settings that can be
+easily animated to.</p>
+<p>This is an object where the keys are scenario names and values are
+<a href="#obj_scenario">OBJ_Scenario</a> objects defining the scenario.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scenarioName</span> <code class='quiet'>(<a href="#obj_scenario">OBJ_Scenario</a>)</code>
+          : where scenarioName can be any
+string that names the scenario
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='elementmovementstate'>
+      ElementMovementState
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Element movement state</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>previousTime</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>previousTransform</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>velocity</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='elementpulsestate'>
+      ElementPulseState
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Element pulse state</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>startTime</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='elementstate'>
+      ElementState
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Element state</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isBeingMoved</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isMovingFreely</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>movement</span> <code class='quiet'>(<a href="#elementmovementstate">ElementMovementState</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isPulsing</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="#elementpulsestate">ElementPulseState</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>preparingToStop</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='drawingobject'>
+      DrawingObject
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Drawing Object</p>
+<p>Manages drawing an element to a WebGL or Context 2D canvas. Can also
+be used to manage a HTML element on the screen.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>>)</code>
+          : each array of points defines a
+closed boundary or border of the element. An element may have multiple
+closed borders. A border defines where a shape can be touched, or how it
+bounces of diagram boundaries
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>>)</code>
+          : areas where a shape cannot be
+touched
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#diagramelementprimitive">DiagramElementPrimitive</a>
+
+      
+    
+  
+
+  
+
   
 
   

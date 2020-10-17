@@ -2,20 +2,20 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
 // Right angle triangle
 diagram.addElement({
-  name: 'r',
-  method: 'triangle',
+  name: 'g',
+  method: 'line',
   options: {
-    SSS: [1, 1, 1],
-    // line: {
-    //   width: 0.02,
-    // },
-    xAlign: 'centroid',
-    yAlign: 'centroid',
-    copy: {
-      along: 'rotation',
-      num: 3,
-      step: Math.PI / 6,
+    p0: [0, 0],
+    p1: [0, 1],
+    width: 0.02,
+    arrows: {
+      width: 0.1,
+      height: 0.1,
     },
+    label: {
+      text: 'Hello',
+      offset: 0.01,
+    }
   },
 });
 
