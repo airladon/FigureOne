@@ -363,10 +363,12 @@ export type OBJ_CurvedCorner = {
  * @property {Transform} [transform] (`Transform('polyline').standard()`)
  * @property {'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [border]
  * touch border of the line can be the points on the `positive`, `negative`
- * or boths sides (`line`) of the line, or completely custom (`line`)
+ * or boths sides (`line`) of the line, completely custom
+ * (`Array<Array<TypeParsablePoint>>`) or the enclosing rectangle (`null`),
  * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [hole]
  * hole border of the line can be the points on the `positive` or `negative`
- * side of the line or completely custom (`none`)
+ * side of the line, completely custom (`Array<Array<TypeParsablePoint>>`)
+ * or `'none'` is the default (`'none'`)
  * @example
  * // Line
  * diagram.addElement(
@@ -429,7 +431,7 @@ export type OBJ_Polyline = {
   pulse?: number,
   position?: ?Point,
   transform?: Transform,
-  border?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
+  border?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>> | null,
   hole?: 'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
   linePrimitives?: boolean,
   lineNum?: number,
@@ -1630,12 +1632,13 @@ export default class DiagramPrimitives {
         options.hole,
       );
     }
+    console.log(options.border)
     const [triangles, borders, holes] = getTris(options.points);
     const element = this.generic(options, {
       drawType: options.linePrimitives ? 'lines' : 'triangles',
       points: triangles,    // $FlowFixMe
-      border: Array.isArray(options.border) ? options.border : borders,
-      holeBorder: Array.isArray(options.hole) ? options.hole : holes,
+      border: Array.isArray(options.border) || options.border === null ? options.border : borders,
+      holeBorder: Array.isArray(options.hole) || options.border === null ? options.hole : holes,
       // repeat: options.repeat,
     });
 
@@ -1955,7 +1958,7 @@ export default class DiagramPrimitives {
     length?: number,
     angle?: number,
     width?: number,
-    border?: 'boundingRect' | Array<Points> | {
+    border?: null | Array<Points> | {
       width?: number,
       length?: number | {
         p1?: number,
@@ -1981,14 +1984,16 @@ export default class DiagramPrimitives {
     if (optionsToUse.points != null) {
       optionsToUse.points = getPoints(optionsToUse.points);
     }
-    if (optionsToUse.border == null) {
+    if (optionsToUse.copy != null && optionsToUse.border == null) {
+      optionsToUse.border = null;
+    } else if (optionsToUse.border == null) {
       optionsToUse.border = {};
-    }
-    if (optionsToUse.border.width == null) {
-      optionsToUse.border.width = optionsToUse.width;
-    }
-    if (optionsToUse.border.length == null) {
-      optionsToUse.border.length = { p1: 0, p2: 0 };
+      if (optionsToUse.border.width == null) {
+        optionsToUse.border.width = optionsToUse.width;
+      }
+      if (optionsToUse.border.length == null) {
+        optionsToUse.border.length = { p1: 0, p2: 0 };
+      }
     }
 
     const {
@@ -2005,16 +2010,18 @@ export default class DiagramPrimitives {
     }
     const element = this.polyline(optionsToUse, {
       points,
-      border: 'line',
+      border: optionsToUse.border === null ? null : 'line',
     });
     const { border } = optionsToUse;
-    const borderPoints = getLineBorder({
-      p1,
-      p2,
-      width: border.width,
-      length: border.length,
-    });
-    element.drawingObject.border = [borderPoints];
+    if (border != null) {
+      const borderPoints = getLineBorder({
+        p1,
+        p2,
+        width: border.width,
+        length: border.length,
+      });
+      element.drawingObject.border = [borderPoints];
+    }
     return element;
     // let element;
     // if (optionsToUse.line == null) {
