@@ -94,7 +94,7 @@ class VertexGeneric extends VertexObject {
       this.points.push(v.x);
       this.points.push(v.y);
     });
-    if (border == null || touchBorder === 'rect') {
+    if (border == null || touchBorder === 'rect' || touchBorder === null) {
       const bounds = getBoundingRect(newVerts);
       if (border == null) {
         this.border = [[
