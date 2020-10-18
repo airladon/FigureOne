@@ -3350,7 +3350,7 @@ class DiagramElementPrimitive extends DiagramElement {
     if (this.drawingObject.touchBorder == null) {
       return false;
     }
-
+    // console.log(this.drawingObject.touchBorder)
     const boundaries =
       this.drawingObject.getTouchBoundaries(this.lastDrawTransform.matrix());
     // console.log(boundaries)

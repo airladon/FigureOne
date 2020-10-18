@@ -257,7 +257,7 @@ export type OBJ_Generic = {
   texture?: OBJ_Texture,
   border?: null | Array<Array<TypeParsablePoint>>,
   touchBorder?: null | Array<Array<TypeParsablePoint>> | 'rect' | 'border',
-  hole?: null | Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
+  holeBorder?: null | Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
   position?: TypeParsablePoint,
   transform?: Transform,
   pulse?: number,
@@ -370,6 +370,10 @@ export type OBJ_CurvedCorner = {
  * touch border of the line can be the points on the `positive`, `negative`
  * or boths sides (`line`) of the line, completely custom
  * (`Array<Array<TypeParsablePoint>>`) or the enclosing rectangle (`null`),
+ * @property {'border' | 'rect' | Array<Array<TypeParsablePoint>>} [touchBorder]
+ * touch border of the line can be the same as the border (`'border'`),
+ * completely custom (`Array<Array<TypeParsablePoint>>`) or the enclosing
+ * rectangle (`rect`) - (`'border'`)
  * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [hole]
  * hole border of the line can be the points on the `positive` or `negative`
  * side of the line, completely custom (`Array<Array<TypeParsablePoint>>`)
@@ -437,6 +441,7 @@ export type OBJ_Polyline = {
   position?: ?Point,
   transform?: Transform,
   border?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>> | null,
+  touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | 'rect',
   hole?: 'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
   linePrimitives?: boolean,
   lineNum?: number,
@@ -515,6 +520,10 @@ export type OBJ_LineStyle = {
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polygon').standard()`)
  * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ * @property {number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>} [touchBorder]
+ * the touch border can be the same as the border (`'border'`), can be the
+ * encompassing rect (`'rect'`), can be a radius: `number`, or can be
+ * completely custom (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
  * @example
  * // Simple filled hexagon
  * diagram.addElement({
@@ -570,6 +579,7 @@ export type OBJ_Polygon = {
   position?: TypeParsablePoint,
   transform?: Transform,
   pulse?: number | OBJ_PulseScale,
+  touchBorder?: number | 'border' | 'rect' | Array<Array<Point>>,
 };
 
 /**
@@ -1584,7 +1594,8 @@ export default class DiagramPrimitives {
       lineNum: 1,
       transform: new Transform('polyline').standard(),
       border: 'line',
-      hole: 'none',
+      touchBorder: 'border',
+      holeBorder: 'none',
       // repeat: null,
     };
     const options = processOptions(defaultOptions, ...optionsIn);
@@ -1632,12 +1643,14 @@ export default class DiagramPrimitives {
       drawType: options.linePrimitives ? 'lines' : 'triangles',
       points: triangles,    // $FlowFixMe
       border: Array.isArray(options.border) || options.border === null ? options.border : borders,
+      touchBorder: options.touchBorder,
       holeBorder: Array.isArray(options.hole) || options.border === null ? options.hole : holes,
       // repeat: options.repeat,
     });
 
-    element.custom.updatePoints = (points) => {
-      element.drawingObject.change(...getTris(points));
+    element.custom.updatePoints = (points, touchBorder = options.touchBorder) => {
+      const [triangles1, borders1, holes1] = getTris(points);
+      element.drawingObject.change(triangles1, borders1, touchBorder, holes1);
     };
 
     // if (options.pulse != null) {
@@ -1664,6 +1677,7 @@ export default class DiagramPrimitives {
       offset: new Point(0, 0),
       transform: new Transform('polygon').standard(),
       touchableLineOnly: false,
+      touchBorder: 'border',
     };
     // let radiusMod = 0;
     const optionsToUse = processOptions(defaultOptions, ...options);
@@ -1691,6 +1705,12 @@ export default class DiagramPrimitives {
       optionsToUse.sidesToDraw = optionsToUse.sides;
     }
     const outline = getPolygonPoints(optionsToUse);
+    let { touchBorder } = optionsToUse;
+    if (typeof optionsToUse.touchBorder === 'number') {
+      touchBorder = [getPolygonPoints(
+        joinObjects({}, optionsToUse, { radius: optionsToUse.touchBorder }),
+      )];
+    }
 
     if (optionsToUse.line == null) {
       const tris = getTrisFillPolygon(
@@ -1701,6 +1721,7 @@ export default class DiagramPrimitives {
       element = this.generic(optionsToUse, {
         points: tris, // $FlowFixMe
         border: [outline],
+        touchBorder,
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
@@ -1709,8 +1730,13 @@ export default class DiagramPrimitives {
           o.offset, udpatedBorder,
           o.sides, o.sidesToDraw,
         );
+        if (typeof o.touchBorder === 'number') {
+          touchBorder = [getPolygonPoints(
+            joinObjects({}, o, { radius: o.touchBorder }),
+          )];
+        }
         element.drawingObject.change(
-          updatedTris, [udpatedBorder], [],
+          updatedTris, [udpatedBorder], touchBorder, [],
         );
       };
     } else {
@@ -1729,22 +1755,29 @@ export default class DiagramPrimitives {
         points: outline,
         close: optionsToUse.sides === optionsToUse.sidesToDraw,
         border,
+        touchBorder,
         hole,
       });
-      const simplifyBorder = (e) => {
-        const simpleBorder = [];
-        for (let i = 0; i < e.drawingObject.border[0].length; i += 2) {
-          simpleBorder.push(e.drawingObject.border[0][i]._dup());
-        }
-        e.drawingObject.border = [simpleBorder];
-      };
-      simplifyBorder(element);
+      // const simplifyBorder = (e) => {
+      //   const simpleBorder = [];
+      //   for (let i = 0; i < e.drawingObject.border[0].length; i += 2) {
+      //     simpleBorder.push(e.drawingObject.border[0][i]._dup());
+      //   }
+      //   e.drawingObject.border = [simpleBorder];
+      // };
+      // simplifyBorder(element);
       // element.drawingObject.border = [simpleBorder];
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
         const udpatedBorder = getPolygonPoints(o);
-        element.custom.updatePoints(udpatedBorder);
-        simplifyBorder(element);
+        let tb = o.touchBorder;
+        if (typeof o.touchBorder === 'number') {
+          tb = [getPolygonPoints(
+            joinObjects({}, o, { radius: o.touchBorder }),
+          )];
+        }
+        element.custom.updatePoints(udpatedBorder, tb);
+        // simplifyBorder(element);
       };
     }
     return element;

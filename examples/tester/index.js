@@ -1,23 +1,47 @@
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
 // Right angle triangle
+// diagram.addElement({
+//   name: 'lines',
+//   method: 'generic',
+//   options: {
+//     points: [[0, 0], [1, 0], [0, 1]],
+//     border: [[[0, 0], [1, 0], [0, 1]]],
+//     touchBorder: [[[-0.5, -0.5], [1.5, -0.5], [-0.5, 1.5]]],
+//     holeBorder: [[[0, 0], [0.5, 0], [0, 0.5]]],
+//   },
+//   mods: {
+//     isTouchable: true,
+//     isMovable: true,
+//     cannotTouchHole: true,
+//   },
+// });
+// diagram.setTouchable();
+
 diagram.addElement({
   name: 'lines',
-  method: 'generic',
+  method: 'shapes.polygon',
   options: {
-    points: [[0, 0], [1, 0], [0, 1]],
-    border: [[[0, 0], [1, 0], [0, 1]]],
-    touchBorder: [[[-0.5, -0.5], [1.5, -0.5], [-0.5, 1.5]]],
-    holeBorder: [[[0, 0], [0.5, 0], [0, 0.5]]],
+    radius: 1,
+    sides: 4,
+    touchBorder: 1.5,
+    line: { width: 0.08 },
+    // width: 0.08,
+    // // border: null,
+    // touchBorder: null,
+    // border: [[[0, 0], [1, 0], [0, 1]]],
+    // touchBorder: [[[-0.5, -0.5], [1.5, -0.5], [-0.5, 1.5]]],
+    // holeBorder: [[[0, 0], [0.5, 0], [0, 0.5]]],
   },
   mods: {
     isTouchable: true,
     isMovable: true,
-    cannotTouchHole: true,
+    // cannotTouchHole: true,
   },
 });
 diagram.setTouchable();
 
+console.log(diagram.elements._lines)
 // diagram.initialize();
 
 // diagram.elements.hasTouchableElements = true;
