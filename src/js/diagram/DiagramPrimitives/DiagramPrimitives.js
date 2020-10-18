@@ -1794,6 +1794,7 @@ export default class DiagramPrimitives {
         sides: 1,
       },
       transform: new Transform('rectangle').standard(),
+      border: null,
     };
     const optionsToUse = processOptions(defaultOptions, ...options);
 
@@ -1808,7 +1809,6 @@ export default class DiagramPrimitives {
     if (optionsToUse.line == null) {
       element = this.generic(optionsToUse, {
         points: rectangleBorderToTris(border),
-        border: [border],
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
@@ -1821,7 +1821,6 @@ export default class DiagramPrimitives {
       element = this.polyline(optionsToUse, optionsToUse.line, {
         points: border,
         close: true,
-        border: [border],
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);

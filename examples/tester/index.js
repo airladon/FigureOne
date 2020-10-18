@@ -20,12 +20,13 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
 diagram.addElement({
   name: 'lines',
-  method: 'shapes.polygon',
+  method: 'rectangle',
   options: {
-    radius: 1,
-    sides: 4,
-    touchBorder: 1.5,
-    line: { width: 0.08 },
+    width: 1,
+    height: 1,
+    line: { width: 0.06 },
+    // border: 'line',
+    // touchBorder: 'rect'
     // width: 0.08,
     // // border: null,
     // touchBorder: null,
