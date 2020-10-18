@@ -1497,8 +1497,8 @@ export default class DiagramPrimitives {
     const defaultOptions = {
       points: [],
       border: null,
-      touchBorder: null,
-      hole: null,
+      touchBorder: 'border',
+      holeBorder: null,
       drawType: 'triangles',
       color: [1, 0, 0, 1],
       transform: new Transform('generic').standard(),
@@ -1533,7 +1533,7 @@ export default class DiagramPrimitives {
     };
 
     const parsedBorder = parseBorder(options.border);
-    const parsedBorderHoles = parseBorder(options.hole);
+    const parsedBorderHoles = parseBorder(options.holeBorder);
     let parsedTouchBorder = options.touchBorder;
     if (Array.isArray(options.touchBorder)) {
       parsedTouchBorder = parseBorder(options.touchBorder);
@@ -2796,51 +2796,51 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  repeatPatternVertex(...optionsIn: Array<TypeRepeatPatternVertex>) {
-    const defaultOptions = {
-      element: null,
-      xNum: 2,
-      yNum: 2,
-      xStep: 1,
-      yStep: 1,
-      transform: new Transform('repeatPattern').standard(),
-    };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
-    if (options.position != null) {
-      options.transform.updateTranslation(getPoint(options.position));
-    }
-    const {
-      element, transform, xNum, yNum, xStep, yStep,
-    } = options;
-    if (element == null) {
-      return this.collection();
-    }
-    const copy = element._dup();
-    const { drawingObject } = element;
-    // console.log(element.drawingObject.points)
-    if (drawingObject instanceof VertexObject) {
-      copy.transform = transform._dup();
-      const newPoints = [];
-      const { points } = drawingObject;
-      for (let x = 0; x < xNum; x += 1) {
-        for (let y = 0; y < yNum; y += 1) {
-          for (let p = 0; p < points.length; p += 2) {
-            newPoints.push(new Point(
-              points[p] + x * xStep,
-              points[p + 1] + y * yStep,
-            ));
-            // console.log(points[p], points[p+1], newPoints.slice(-1))
-          }
-        }
-      }
-      // console.log(newPoints)
-      copy.drawingObject.changeVertices(newPoints);
-    }
-    if (options.pulse != null && typeof element.pulseDefault !== 'function') {
-      copy.pulseDefault.scale = options.pulse;
-    }
-    return copy;
-  }
+  // repeatPatternVertex(...optionsIn: Array<TypeRepeatPatternVertex>) {
+  //   const defaultOptions = {
+  //     element: null,
+  //     xNum: 2,
+  //     yNum: 2,
+  //     xStep: 1,
+  //     yStep: 1,
+  //     transform: new Transform('repeatPattern').standard(),
+  //   };
+  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+  //   if (options.position != null) {
+  //     options.transform.updateTranslation(getPoint(options.position));
+  //   }
+  //   const {
+  //     element, transform, xNum, yNum, xStep, yStep,
+  //   } = options;
+  //   if (element == null) {
+  //     return this.collection();
+  //   }
+  //   const copy = element._dup();
+  //   const { drawingObject } = element;
+  //   // console.log(element.drawingObject.points)
+  //   if (drawingObject instanceof VertexObject) {
+  //     copy.transform = transform._dup();
+  //     const newPoints = [];
+  //     const { points } = drawingObject;
+  //     for (let x = 0; x < xNum; x += 1) {
+  //       for (let y = 0; y < yNum; y += 1) {
+  //         for (let p = 0; p < points.length; p += 2) {
+  //           newPoints.push(new Point(
+  //             points[p] + x * xStep,
+  //             points[p + 1] + y * yStep,
+  //           ));
+  //           // console.log(points[p], points[p+1], newPoints.slice(-1))
+  //         }
+  //       }
+  //     }
+  //     // console.log(newPoints)
+  //     copy.drawingObject.changeVertices(newPoints);
+  //   }
+  //   if (options.pulse != null && typeof element.pulseDefault !== 'function') {
+  //     copy.pulseDefault.scale = options.pulse;
+  //   }
+  //   return copy;
+  // }
 
   cursor(
     optionsIn: {
@@ -2951,37 +2951,37 @@ export default class DiagramPrimitives {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  repeatPatternVertexLegacy(
-    element: DiagramElementPrimitive,
-    xNum: number,
-    yNum: number,
-    xStep: number,
-    yStep: number,
-    transform: Transform | Point = new Transform(),
-  ) {
-    const copy = element._dup();
-    const { drawingObject } = element;
-    // console.log(element.drawingObject.points)
-    if (drawingObject instanceof VertexObject) {
-      copy.transform = transform._dup();
-      const newPoints = [];
-      const { points } = drawingObject;
-      for (let x = 0; x < xNum; x += 1) {
-        for (let y = 0; y < yNum; y += 1) {
-          for (let p = 0; p < points.length; p += 2) {
-            newPoints.push(new Point(
-              points[p] + x * xStep,
-              points[p + 1] + y * yStep,
-            ));
-            // console.log(points[p], points[p+1], newPoints.slice(-1))
-          }
-        }
-      }
-      // console.log(newPoints)
-      copy.drawingObject.changeVertices(newPoints);
-    }
-    return copy;
-  }
+  // repeatPatternVertexLegacy(
+  //   element: DiagramElementPrimitive,
+  //   xNum: number,
+  //   yNum: number,
+  //   xStep: number,
+  //   yStep: number,
+  //   transform: Transform | Point = new Transform(),
+  // ) {
+  //   const copy = element._dup();
+  //   const { drawingObject } = element;
+  //   // console.log(element.drawingObject.points)
+  //   if (drawingObject instanceof VertexObject) {
+  //     copy.transform = transform._dup();
+  //     const newPoints = [];
+  //     const { points } = drawingObject;
+  //     for (let x = 0; x < xNum; x += 1) {
+  //       for (let y = 0; y < yNum; y += 1) {
+  //         for (let p = 0; p < points.length; p += 2) {
+  //           newPoints.push(new Point(
+  //             points[p] + x * xStep,
+  //             points[p + 1] + y * yStep,
+  //           ));
+  //           // console.log(points[p], points[p+1], newPoints.slice(-1))
+  //         }
+  //       }
+  //     }
+  //     // console.log(newPoints)
+  //     copy.drawingObject.changeVertices(newPoints);
+  //   }
+  //   return copy;
+  // }
 
   axes(...optionsIn: Array<{
     width?: number,

@@ -3354,25 +3354,30 @@ class DiagramElementPrimitive extends DiagramElement {
     const boundaries =
       this.drawingObject.getTouchBoundaries(this.lastDrawTransform.matrix());
     // console.log(boundaries)
+    // console.log(this.drawingObject.border, this.drawingObject.touchBorder, boundaries)
     const holeBoundaries =
       this.drawingObject.getBoundaryHoles(this.lastDrawTransform.matrix());
     for (let i = 0; i < boundaries.length; i += 1) {
       const boundary = boundaries[i];
-      if (glLocation.isInPolygon(boundary)) {
-        let isTouched = true;
-        if (this.cannotTouchHole) {
-          for (let j = 0; j < holeBoundaries.length; j += 1) {
-            const holeBoundary = holeBoundaries[j];
-            if (Array.isArray(holeBoundary) && holeBoundary.length > 2) {
-              if (glLocation.isInPolygon(holeBoundary)) {
-                isTouched = false;
-                j = holeBoundaries.length;
+      if (boundary.length > 2) {
+        if (glLocation.isInPolygon(boundary)) {
+          let isTouched = true;
+          if (this.cannotTouchHole) {
+            for (let j = 0; j < holeBoundaries.length; j += 1) {
+              const holeBoundary = holeBoundaries[j];
+              if (holeBoundary.length > 2) {
+                if (Array.isArray(holeBoundary) && holeBoundary.length > 2) {
+                  if (glLocation.isInPolygon(holeBoundary)) {
+                    isTouched = false;
+                    j = holeBoundaries.length;
+                  }
+                }
               }
             }
           }
-        }
-        if (isTouched) {
-          return true;
+          if (isTouched) {
+            return true;
+          }
         }
       }
     }

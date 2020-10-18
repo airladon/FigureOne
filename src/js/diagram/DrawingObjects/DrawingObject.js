@@ -22,6 +22,21 @@ import { getState } from '../state';
 //     - calcBorder(lastDrawTransformMatrix, glToDiagramTransform)
 //
 
+function getBounds(borderIn: null | Array<Array<Point>>, transformMatrix: Array<number> | null) {
+  if (transformMatrix == null) {
+    return borderIn;
+  }
+  const boundaries = [];
+  borderIn.forEach((boundary) => {
+    const border = [];
+    boundary.forEach((point) => {
+      border.push(point.transformBy(transformMatrix));
+    });
+    boundaries.push(border);
+  });
+  return boundaries;
+}
+
 /**
  * Drawing Object
  *
@@ -38,10 +53,10 @@ import { getState } from '../state';
  */
 class DrawingObject {
   // numPoints: number;           // Number of primative vertices
-  border: Array<Array<Point>>; // Border vertices
   location: Point;
+  border: Array<Array<Point>>; // Border vertices
   touchBorder: Array<Array<Point>>;
-  holeBorder: Array<Array<Point>>;  // Border of any holes inside of main border
+  hole: Array<Array<Point>>;  // Border of any holes inside of main border
   +change: (any, any, any) => void;
   // onLoad: Function | null;   // Only used for drawing objects with asynchronous
   //                            loading (like textures)
@@ -53,7 +68,7 @@ class DrawingObject {
     this.location = new Point(0, 0);
     this.border = [[]];
     this.touchBorder = [[]];
-    this.holeBorder = [[]];
+    this.hole = [[]];
     // this.onLoad = null;
     this.type = 'drawingObject';
     // this.state = 'loading';
@@ -71,53 +86,57 @@ class DrawingObject {
   update(options: Object) {
   }
 
+
   getBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
-    if (transformMatrix == null) {
-      return this.border;
-    }
-    const boundaries = [];
-    this.border.forEach((boundary) => {
-      const border = [];
-      boundary.forEach((point) => {
-        border.push(point.transformBy(transformMatrix));
-      });
-      boundaries.push(border);
-    });
-    return boundaries;
+    // if (transformMatrix == null) {
+    //   return this.border;
+    // }
+    // const boundaries = [];
+    // this.border.forEach((boundary) => {
+    //   const border = [];
+    //   boundary.forEach((point) => {
+    //     border.push(point.transformBy(transformMatrix));
+    //   });
+    //   boundaries.push(border);
+    // });
+    return getBounds(this.border, transformMatrix);
+    // return boundaries;
   }
 
   getTouchBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
-    if (transformMatrix == null) {
-      return this.touchBorder;
-    }
-    const boundaries = [];
-    this.touchBorder.forEach((boundary) => {
-      const border = [];
-      boundary.forEach((point) => {
-        border.push(point.transformBy(transformMatrix));
-      });
-      boundaries.push(border);
-    });
-    return boundaries;
+    // if (transformMatrix == null) {
+    //   return this.touchBorder;
+    // }
+    // const boundaries = [];
+    // this.touchBorder.forEach((boundary) => {
+    //   const border = [];
+    //   boundary.forEach((point) => {
+    //     border.push(point.transformBy(transformMatrix));
+    //   });
+    //   boundaries.push(border);
+    // });
+    // return boundaries;
+    return getBounds(this.touchBorder, transformMatrix);
   }
 
   getBoundaryHoles(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
-    if (transformMatrix == null) {
-      return this.holeBorder;
-    }
-    const boundaries = [];
-    this.holeBorder.forEach((boundary) => {
-      const border = [];
-      boundary.forEach((point) => {
-        if (transformMatrix != null) {
-          border.push(point.transformBy(transformMatrix));
-        } else {
-          border.push(point._dup());
-        }
-      });
-      boundaries.push(border);
-    });
-    return boundaries;
+    // if (transformMatrix == null) {
+    //   return this.holeBorder;
+    // }
+    // const boundaries = [];
+    // this.holeBorder.forEach((boundary) => {
+    //   const border = [];
+    //   boundary.forEach((point) => {
+    //     if (transformMatrix != null) {
+    //       border.push(point.transformBy(transformMatrix));
+    //     } else {
+    //       border.push(point._dup());
+    //     }
+    //   });
+    //   boundaries.push(border);
+    // });
+    // return boundaries;
+    return getBounds(this.hole, transformMatrix);
   }
   /* eslint-enable */
 

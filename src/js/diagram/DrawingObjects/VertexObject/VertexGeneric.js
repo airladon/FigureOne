@@ -120,8 +120,9 @@ class VertexGeneric extends VertexObject {
     } else if (Array.isArray(touchBorder)) {
       this.touchBorder = touchBorder;
     }
+
     if (holeBorder != null) {
-      this.holeBorder = holeBorder;
+      this.hole = holeBorder;
     }
   }
 }
