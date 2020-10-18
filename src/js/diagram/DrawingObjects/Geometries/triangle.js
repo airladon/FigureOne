@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, Transform, Line, minAngleDiff,
+  Point, Transform, Line, minAngleDiff, threePointAngle,
 } from '../../../tools/g2';
 
 
@@ -260,4 +260,16 @@ function getTriangle(
   return alignTriangle(points, options.xAlign, options.yAlign, options.rotation);
 }
 
-export default getTriangle;
+function getTriangleDirection(points: Array<Point>) {
+  const [p1, p2, p3] = points;
+  const angle = threePointAngle(p1, p2, p3);
+  if (angle > Math.PI) {
+    return -1;
+  }
+  return 1;
+}
+
+export {
+  getTriangle,
+  getTriangleDirection,
+};

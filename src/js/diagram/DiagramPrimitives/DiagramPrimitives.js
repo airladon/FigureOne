@@ -53,7 +53,7 @@ import type { TypeSpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
 import { getPolygonPoints, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle';
-import getTriangle from '../DrawingObjects/Geometries/triangle';
+import { getTriangle, getTriangleDirection } from '../DrawingObjects/Geometries/triangle';
 import getLineBorder from '../DrawingObjects/Geometries/line';
 import type {
   OBJ_Copy,
@@ -1868,14 +1868,21 @@ export default class DiagramPrimitives {
         );
       };
     } else {
+      const dir = getTriangleDirection(border);
+      const borderToUse = dir === 1 ? 'positive' : 'negative';
       element = this.polyline(optionsToUse, optionsToUse.line, {
         points: border,
         close: true,
-        border: [border.map(b => b._dup())],
+        // border: [border.map(b => b._dup())],
+        border: borderToUse,
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
         const updatedBorder = getRectangleBorder(o);
+        // TODO fix border bug for when element is updated with a different
+        // direction triangle the border direction will be wrong
+        // const updatedDir = getTriangleDirection(updatedBorder);
+        // const updatedBorderToUse = updatedDir === 1 ? 'positive' : 'negative';
         element.custom.updatePoints(updatedBorder);
       };
     }

@@ -20,11 +20,10 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
 diagram.addElement({
   name: 'lines',
-  method: 'rectangle',
+  method: 'triangle',
   options: {
-    width: 1,
-    height: 1,
-    line: { width: 0.06 },
+    points: [[0, 0], [0, 1], [1, 0]],
+    line: { width: 0.07, widthIs: 'outside' },
     // border: 'line',
     // touchBorder: 'rect'
     // width: 0.08,
