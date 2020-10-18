@@ -489,6 +489,7 @@ class DiagramElement {
 
   recorder: Recorder;
 
+
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -3346,10 +3347,12 @@ class DiagramElementPrimitive extends DiagramElement {
     if (!this.isTouchable) {
       return false;
     }
-    // debugger;
+    if (this.drawingObject.touchBorder == null) {
+      return false;
+    }
 
     const boundaries =
-      this.drawingObject.getBoundaries(this.lastDrawTransform.matrix());
+      this.drawingObject.getTouchBoundaries(this.lastDrawTransform.matrix());
     // console.log(boundaries)
     const holeBoundaries =
       this.drawingObject.getBoundaryHoles(this.lastDrawTransform.matrix());

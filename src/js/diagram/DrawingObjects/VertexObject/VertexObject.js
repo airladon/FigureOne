@@ -23,6 +23,7 @@ class VertexObject extends DrawingObject {
   points: Array<number>;        // Primitive vertices of shape
   numPoints: number;            // Number of primative vertices
   border: Array<Array<g2.Point>>; // Border vertices
+
   z: number;
   texture: ?{
     id: string;
@@ -236,10 +237,16 @@ class VertexObject extends DrawingObject {
     }
   }
 
-  // eslint-disable-next-line no-unused-vars
-  change(coords: Array<g2.Point>, border: Array<Array<g2.Point>>, holes: Array<Array<g2.Point>>) {
+  /* eslint-disable no-unused-vars */
+  change(
+    coords: Array<g2.Point>,
+    border: Array<Array<g2.Point>>,
+    touchBorder: Array<Array<g2.Point>>,
+    holes: Array<Array<g2.Point>>,
+  ) {
     this.resetBuffer();
   }
+  /* eslint-enable no-unused-vars */
 
   // eslint-disable-next-line no-unused-vars
   update(options: Object) {

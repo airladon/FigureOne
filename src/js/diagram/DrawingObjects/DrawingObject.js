@@ -40,6 +40,7 @@ class DrawingObject {
   // numPoints: number;           // Number of primative vertices
   border: Array<Array<Point>>; // Border vertices
   location: Point;
+  touchBorder: Array<Array<Point>>;
   holeBorder: Array<Array<Point>>;  // Border of any holes inside of main border
   +change: (any, any, any) => void;
   // onLoad: Function | null;   // Only used for drawing objects with asynchronous
@@ -51,6 +52,7 @@ class DrawingObject {
     // this.numPoints = 0;
     this.location = new Point(0, 0);
     this.border = [[]];
+    this.touchBorder = [[]];
     this.holeBorder = [[]];
     // this.onLoad = null;
     this.type = 'drawingObject';
@@ -75,6 +77,21 @@ class DrawingObject {
     }
     const boundaries = [];
     this.border.forEach((boundary) => {
+      const border = [];
+      boundary.forEach((point) => {
+        border.push(point.transformBy(transformMatrix));
+      });
+      boundaries.push(border);
+    });
+    return boundaries;
+  }
+
+  getTouchBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
+    if (transformMatrix == null) {
+      return this.touchBorder;
+    }
+    const boundaries = [];
+    this.touchBorder.forEach((boundary) => {
       const border = [];
       boundary.forEach((point) => {
         border.push(point.transformBy(transformMatrix));

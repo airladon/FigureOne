@@ -184,8 +184,12 @@ export type OBJ_PulseScale = {
  * `'triangles'` when using copy (`[]`)
  * @property {Array<number>} [color] (`[1, 0, 0, 1])
  * @property {OBJ_Texture} [texture] override `color` with a texture if defined
- * @property {Array<Array<TypeParsablePoint>>} [border]
- * @property {Array<Array<TypeParsablePoint>> | Array<Array<Point>>} [hole]
+ * @property {Array<Array<TypeParsablePoint>> | null} [border] border used for
+ * keeping shape within limits
+ * @property {Array<Array<TypeParsablePoint>> | 'rect' | 'border' | null} [touchBorder]
+ * border used for touching
+ * @property {Array<Array<TypeParsablePoint>> | null} [hole] borders where
+ * touching will not work
  * @property {TypeParsablePoint} [position] will overwrite first translation
  * transform of `transform` chain
  * @property {Transform} [transform]
@@ -251,8 +255,9 @@ export type OBJ_Generic = {
   copy?: Array<CPY_Step | string> | CPY_Step,
   color?: Array<number>,
   texture?: OBJ_Texture,
-  border?: Array<Array<TypeParsablePoint>>,
-  hole?: Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
+  border?: null | Array<Array<TypeParsablePoint>>,
+  touchBorder?: null | Array<Array<TypeParsablePoint>> | 'rect' | 'border',
+  hole?: null | Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
   position?: TypeParsablePoint,
   transform?: Transform,
   pulse?: number,
@@ -1488,27 +1493,11 @@ export default class DiagramPrimitives {
     // this.draw2DFigures = draw2DFigures;
   }
 
-  generic(...optionsIn: Array<{
-    points?: Array<TypeParsablePoint> | Array<Point>,
-    border?: Array<Array<TypeParsablePoint>>,
-    hole?: Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
-    drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
-    color?: Array<number>,
-    texture?: {
-      src?: string,
-      mapTo?: Rect,
-      mapFrom?: Rect,
-      repeat?: boolean,
-      onLoad?: () => void,
-    },
-    copy?: Array<CPY_Step | string> | CPY_Step,
-    position?: TypeParsablePoint,
-    transform?: Transform,
-    pulse?: number,
-  }>) {
+  generic(...optionsIn: Array<OBJ_Generic>) {
     const defaultOptions = {
       points: [],
       border: null,
+      touchBorder: null,
       hole: null,
       drawType: 'triangles',
       color: [1, 0, 0, 1],
@@ -1545,6 +1534,10 @@ export default class DiagramPrimitives {
 
     const parsedBorder = parseBorder(options.border);
     const parsedBorderHoles = parseBorder(options.hole);
+    let parsedTouchBorder = options.touchBorder;
+    if (Array.isArray(options.touchBorder)) {
+      parsedTouchBorder = parseBorder(options.touchBorder);
+    }
     let copyToUse = options.copy;
     if (options.copy != null && !Array.isArray(options.copy)) {
       copyToUse = [options.copy];
@@ -1554,6 +1547,7 @@ export default class DiagramPrimitives {
       this.webgl,
       parsedPoints,
       parsedBorder,
+      parsedTouchBorder,
       parsedBorderHoles,
       options.drawType,
       options.color,
@@ -1632,7 +1626,7 @@ export default class DiagramPrimitives {
         options.hole,
       );
     }
-    console.log(options.border)
+
     const [triangles, borders, holes] = getTris(options.points);
     const element = this.generic(options, {
       drawType: options.linePrimitives ? 'lines' : 'triangles',

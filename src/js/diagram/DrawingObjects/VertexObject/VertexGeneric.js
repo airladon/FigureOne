@@ -18,6 +18,7 @@ class VertexGeneric extends VertexObject {
     webgl: Array<WebGLInstance>,
     vertices: Array<Point>,
     border: ?Array<Array<Point>>,
+    touchBorder: ?Array<Array<Point>> | 'border' | 'rect',
     holeBorder: ?Array<Array<Point>>,
     drawType: 'triangles' | 'strip' | 'fan' | 'lines',
     textureLocation: string = '',
@@ -40,7 +41,7 @@ class VertexGeneric extends VertexObject {
       this.glPrimitive = this.gl[0].TRIANGLE_FAN;
     }
 
-    this.setupPoints(vertices, border, holeBorder, copy);
+    this.setupPoints(vertices, border, touchBorder, holeBorder, copy);
     this.setupTexture(textureLocation, textureVertexSpace, textureCoords, textureRepeat);
     this.setupBuffer();
   }
@@ -48,9 +49,10 @@ class VertexGeneric extends VertexObject {
   change(
     vertices: Array<Point>,
     border: ?Array<Array<Point>>,
+    touchBorder: ?Array<Array<Point>> | 'border' | 'rect',
     holeBorder: ?Array<Array<Point>>,
   ) {
-    this.setupPoints(vertices, border, holeBorder);
+    this.setupPoints(vertices, border, touchBorder, holeBorder);
     this.resetBuffer();
   }
 
@@ -81,6 +83,7 @@ class VertexGeneric extends VertexObject {
   setupPoints(
     vertices: Array<Point>,
     border: ?Array<Array<Point>>,
+    touchBorder: ?Array<Array<Point>> | 'rect' | 'border',
     holeBorder: ?Array<Array<Point>>,
     copy: ?Array<CPY_Step>,
   ) {
@@ -91,16 +94,31 @@ class VertexGeneric extends VertexObject {
       this.points.push(v.x);
       this.points.push(v.y);
     });
-    if (border == null) {
+    if (border == null || touchBorder === 'rect') {
       const bounds = getBoundingRect(newVerts);
-      this.border[0] = [
-        new Point(bounds.left, bounds.bottom),
-        new Point(bounds.right, bounds.bottom),
-        new Point(bounds.right, bounds.top),
-        new Point(bounds.left, bounds.top),
-      ];
-    } else {
+      if (border == null) {
+        this.border = [[
+          new Point(bounds.left, bounds.bottom),
+          new Point(bounds.right, bounds.bottom),
+          new Point(bounds.right, bounds.top),
+          new Point(bounds.left, bounds.top),
+        ]];
+      }
+      if (touchBorder === 'rect') {
+        this.touchBorder = [[
+          new Point(bounds.left, bounds.bottom),
+          new Point(bounds.right, bounds.bottom),
+          new Point(bounds.right, bounds.top),
+          new Point(bounds.left, bounds.top),
+        ]];
+      }
+    } else if (border != null) {
       this.border = border;
+    }
+    if (touchBorder === 'border') {
+      this.touchBorder = this.border;
+    } else if (Array.isArray(touchBorder)) {
+      this.touchBorder = touchBorder;
     }
     if (holeBorder != null) {
       this.holeBorder = holeBorder;
