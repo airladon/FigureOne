@@ -331,6 +331,17 @@ export type OBJ_CurvedCorner = {
  * and therefore, a minimum angle (`minAutoCornerAngle`) is used to
  * specify when the corner should be drawn, and when it should be truncated.
  *
+ * By default, the border of the polyline is the line itself (`border` =
+ * `'line'`). The border can also just be the points on the positive side of
+ * the line, or the negative side of the line. This is useful for caturing
+ * the hole shape of a closed polyline within a border. The border can also
+ * be the encompassing rectangle of the polyline (`border` = `'rect'`) or
+ * defined as a custom set of points.
+ *
+ * The touch border can either be the same as the border (`'border'`), the
+ * encompassing rect (`'rect'`), a custom set of points, or the same as the
+ * line but with some buffer that effectively increases the width on both sides
+ * of the line.
  *
  * @property {Array<TypeParsablePoint>} points
  * @property {number} [width] (`0.01`)
@@ -366,14 +377,17 @@ export type OBJ_CurvedCorner = {
  * @property {number} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polyline').standard()`)
- * @property {'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [border]
- * touch border of the line can be the points on the `positive`, `negative`
- * or boths sides (`line`) of the line, completely custom
- * (`Array<Array<TypeParsablePoint>>`) or the enclosing rectangle (`null`),
+ * @property {'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>> | 'rect'} [border]
+ * border of the line can be the points on the `'positive'`, `'negative'`
+ * of the line, can be the line itself (`'line'`), can be the rect
+ * encompassing the line (`'rect'`) or a custom set of points
+ * (`Array<Array<TypeParsablePoint>>`) (`'line'`),
  * @property {'border' | 'rect' | Array<Array<TypeParsablePoint>> | number} [touchBorder]
  * touch border of the line can be the same as the border (`'border'`),
  * completely custom (`Array<Array<TypeParsablePoint>>`), the enclosing
- * rectangle (`rect`) or the same as the border with sum buffer (`number`) - (`'border'`)
+ * rectangle (`rect`) or the same as the border with some buffer that
+ * effectively increases the width of the line on either side of it
+ * (`number`) - (`'border'`)
  * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [hole]
  * hole border of the line can be the points on the `positive` or `negative`
  * side of the line, completely custom (`Array<Array<TypeParsablePoint>>`)
@@ -579,7 +593,8 @@ export type OBJ_Polygon = {
   position?: TypeParsablePoint,
   transform?: Transform,
   pulse?: number | OBJ_PulseScale,
-  touchBorder?: number | 'border' | 'rect' | Array<Array<Point>>,
+  border?: 'outline' | 'rect' | Array<Array<TypeParsablePoint>>,
+  touchBorder?: number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>,
 };
 
 /**
@@ -1682,6 +1697,7 @@ export default class DiagramPrimitives {
       offset: new Point(0, 0),
       transform: new Transform('polygon').standard(),
       touchableLineOnly: false,
+      border: 'outline',
       touchBorder: 'border',
     };
     // let radiusMod = 0;
@@ -1696,7 +1712,10 @@ export default class DiagramPrimitives {
 
     // deprecated - to help migration from old polygon
     if (optionsToUse.line == null && optionsToUse.width != null) {
-      optionsToUse.line.width = optionsToUse.width;
+      optionsToUse.line = {
+        width: optionsToUse.width,
+        widthIs: 'mid',
+      };
     }
 
     parsePoints(optionsToUse, ['offset']);
@@ -1709,15 +1728,71 @@ export default class DiagramPrimitives {
     if (optionsToUse.sidesToDraw == null) {
       optionsToUse.sidesToDraw = optionsToUse.sides;
     }
-    const outline = getPolygonPoints(optionsToUse);
-    let { touchBorder } = optionsToUse;
-    if (typeof optionsToUse.touchBorder === 'number') {
-      touchBorder = [getPolygonPoints(
-        joinObjects({}, optionsToUse, { radius: optionsToUse.touchBorder }),
-      )];
-    }
+    // let triangles;
+    // let border;
+    // let touchBorder;
+
+    // const getPolygon = (o) => {
+    //   outline = getPolygonPoints(o);
+    //   touchBorder = outline;
+    //   if (typeof o.touchBorder === 'number') {
+    //     touchBorder = getPolygonPoints(
+    //       joinObjects({}, o, { radius: optionsToUse.touchBorder }),
+    //     );
+    //   }
+    //   if (o.line == null) {
+    //     triangles = getTrisFillPolygon(o.offset, outline, o.sides, o.sidesToDraw);
+    //   } else {
+    //     triangles = this.polyLine
+    //   }
+    // }
+
+    const getBorder = (o) => {
+      const points = getPolygonPoints(o);
+      let { touchBorder } = o;
+      let { border } = o;
+      let borderOffset = 0;
+
+      if (o.border === 'outline' && o.line != null) {
+        const { width, widthIs } = o.line;
+        const dir = o.direction;
+        if (
+          (dir === 1 && (widthIs === 'negative' || widthIs === 'outside'))
+          || (dir === -1 && (widthIs === 'positive' || widthIs === 'inside'))
+        ) {
+          borderOffset = width;
+        } else if (widthIs === 'mid') {
+          borderOffset = width / 2;
+        }
+        if (borderOffset > 0) {
+          const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
+          borderOffset /= Math.sin(cornerAngle / 2);
+        }
+      }
+
+      if (o.border === 'outline') {
+        if (borderOffset === 0) {
+          border = [points];
+        } else {
+          border = [getPolygonPoints(joinObjects({}, o, { radius: o.radius + borderOffset }))];
+        }
+      }
+
+      // let { touchBorder } = o;
+      if (typeof o.touchBorder === 'number') {
+        const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
+        const cornerWidth = o.touchBorder / Math.sin(cornerAngle / 2);
+        touchBorder = [getPolygonPoints(
+          joinObjects({}, o, {
+            radius: cornerWidth + o.radius + borderOffset,
+          }),
+        )];
+      }
+      return [points, border, touchBorder];
+    };
 
     if (optionsToUse.line == null) {
+      const [outline, border, touchBorder] = getBorder(optionsToUse);
       const tris = getTrisFillPolygon(
         optionsToUse.offset, outline, optionsToUse.sides,
         optionsToUse.sidesToDraw,
@@ -1725,43 +1800,29 @@ export default class DiagramPrimitives {
 
       element = this.generic(optionsToUse, {
         points: tris, // $FlowFixMe
-        border: [outline],
+        border,
         touchBorder,
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
-        const udpatedBorder = getPolygonPoints(o);
+        const [updatedOutline, updatedBorder, updatedTouchBorder] = getBorder(o);
         const updatedTris = getTrisFillPolygon(
-          o.offset, udpatedBorder,
+          o.offset, updatedOutline,
           o.sides, o.sidesToDraw,
         );
-        if (typeof o.touchBorder === 'number') {
-          touchBorder = [getPolygonPoints(
-            joinObjects({}, o, { radius: o.touchBorder }),
-          )];
-        }
         element.drawingObject.change(
-          updatedTris, [udpatedBorder], touchBorder, [],
+          updatedTris, [updatedBorder], [updatedTouchBorder], updateOptions.holeBorder,
         );
       };
     } else {
-      let border = 'line';
-      let hole;
-      if (optionsToUse.direction === 1) {
-        border = 'negative';
-        hole = 'positive';
-      }
-      if (optionsToUse.direction === -1) {
-        border = 'positive';
-        hole = 'negative';
-      }
-      // console.log(polygonPoints)
+      const [outline, border, touchBorder] = getBorder(optionsToUse);
+
       element = this.polyline(optionsToUse, optionsToUse.line, {
         points: outline,
         close: optionsToUse.sides === optionsToUse.sidesToDraw,
         border,
         touchBorder,
-        hole,
+        holeBorder: optionsToUse.holeBorder,
       });
       // const simplifyBorder = (e) => {
       //   const simpleBorder = [];
@@ -1774,14 +1835,13 @@ export default class DiagramPrimitives {
       // element.drawingObject.border = [simpleBorder];
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
-        const udpatedBorder = getPolygonPoints(o);
-        let tb = o.touchBorder;
-        if (typeof o.touchBorder === 'number') {
-          tb = [getPolygonPoints(
-            joinObjects({}, o, { radius: o.touchBorder }),
-          )];
-        }
-        element.custom.updatePoints(udpatedBorder, tb);
+        const [updatedOutline, updatedBorder, updatedTouchBorder] = getBorder(o);
+        element.custom.updatePoints({
+          points: updatedOutline,
+          border: updatedBorder,
+          touchBorder: updatedTouchBorder,
+          holeBorder: o.holeBorder,
+        });
         // simplifyBorder(element);
       };
     }

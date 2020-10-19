@@ -1,5 +1,5 @@
 import {
-  Point, Transform, getPoints,
+  getPoints,
 } from '../../tools/g2';
 import {
   round,
@@ -91,7 +91,7 @@ describe('Polyline', () => {
       addElement('customBorder');
       expect(round(pd.points)).toEqual([
         0, 0.1,
-        1, 0.1, 
+        1, 0.1,
         0, -0.1,
         0, -0.1,
         1, 0.1,
@@ -458,7 +458,3 @@ describe('Polyline', () => {
     });
   });
 });
-
-// border?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>> | null,
-// touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | number,
-// hole?: 'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
