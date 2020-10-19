@@ -1,34 +1,12 @@
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
 // Right angle triangle
-// diagram.addElement({
-//   name: 'lines',
-//   method: 'generic',
-//   options: {
-//     points: [[0, 0], [1, 0], [0, 1]],
-//     border: [[[0, 0], [1, 0], [0, 1]]],
-//     touchBorder: [[[-0.5, -0.5], [1.5, -0.5], [-0.5, 1.5]]],
-//     holeBorder: [[[0, 0], [0.5, 0], [0, 0.5]]],
-//   },
-//   mods: {
-//     isTouchable: true,
-//     isMovable: true,
-//     cannotTouchHole: true,
-//   },
-// });
-// diagram.setTouchable();
-
 diagram.addElement({
-  name: 'lines',
-  method: 'triangle',
+  name: 'g',
+  method: 'generic',
   options: {
-    points: [[0, 0], [0, 1], [1, 0]],
-    line: { width: 0.07, widthIs: 'outside' },
-    // border: 'line',
-    // touchBorder: 'rect'
-    // width: 0.08,
-    // // border: null,
-    // touchBorder: null,
+    points: [[0, 0], [1, 0], [0, 1]],
+    border: 'points',
     // border: [[[0, 0], [1, 0], [0, 1]]],
     // touchBorder: [[[-0.5, -0.5], [1.5, -0.5], [-0.5, 1.5]]],
     // holeBorder: [[[0, 0], [0.5, 0], [0, 0.5]]],
@@ -36,12 +14,35 @@ diagram.addElement({
   mods: {
     isTouchable: true,
     isMovable: true,
-    // cannotTouchHole: true,
+    cannotTouchHole: true,
   },
 });
 diagram.setTouchable();
 
-console.log(diagram.elements._lines)
+// diagram.addElement({
+//   name: 'lines',
+//   method: 'triangle',
+//   options: {
+//     points: [[0, 0], [0, 1], [1, 0]],
+//     line: { width: 0.07, widthIs: 'outside' },
+//     // border: 'line',
+//     // touchBorder: 'rect'
+//     // width: 0.08,
+//     // // border: null,
+//     // touchBorder: null,
+//     // border: [[[0, 0], [1, 0], [0, 1]]],
+//     // touchBorder: [[[-0.5, -0.5], [1.5, -0.5], [-0.5, 1.5]]],
+//     // holeBorder: [[[0, 0], [0.5, 0], [0, 0.5]]],
+//   },
+//   mods: {
+//     isTouchable: true,
+//     isMovable: true,
+//     // cannotTouchHole: true,
+//   },
+// });
+// diagram.setTouchable();
+
+// console.log(diagram.elements._lines)
 // diagram.initialize();
 
 // diagram.elements.hasTouchableElements = true;

@@ -255,9 +255,9 @@ export type OBJ_Generic = {
   copy?: Array<CPY_Step | string> | CPY_Step,
   color?: Array<number>,
   texture?: OBJ_Texture,
-  border?: null | Array<Array<TypeParsablePoint>>,
-  touchBorder?: null | Array<Array<TypeParsablePoint>> | 'rect' | 'border',
-  holeBorder?: null | Array<Array<TypeParsablePoint>> | Array<Array<Point>>,
+  border?: 'points' | Array<Array<TypeParsablePoint>> | 'rect',
+  touchBorder?: Array<Array<TypeParsablePoint>> | 'rect' | 'border' | 'none',
+  holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
   position?: TypeParsablePoint,
   transform?: Transform,
   pulse?: number,
@@ -1506,13 +1506,13 @@ export default class DiagramPrimitives {
   generic(...optionsIn: Array<OBJ_Generic>) {
     const defaultOptions = {
       points: [],
-      border: null,
+      border: 'rect',
       touchBorder: 'border',
-      holeBorder: null,
+      holeBorder: 'none',
       drawType: 'triangles',
       color: [1, 0, 0, 1],
-      transform: new Transform('generic').standard(),
       position: null,
+      transform: new Transform('generic').standard(),
       texture: {
         src: '',
         mapTo: new Rect(-1, -1, 2, 2),
@@ -1524,30 +1524,28 @@ export default class DiagramPrimitives {
 
     const options = joinObjects(defaultOptions, ...optionsIn);
 
+    options.transform = getTransform(options.transform);
+
     if (options.position != null) {
       const p = getPoint(options.position);
       options.transform.updateTranslation(p);
     }
     const parsedPoints = options.points.map(p => getPoint(p));
     const parseBorder = (borders) => {
-      if (borders == null || !Array.isArray(borders)) {
-        return null;
+      if (!Array.isArray(borders)) {
+        return borders;
       }
       const borderOut = [];
       borders.forEach((b) => {
-        if (Array.isArray(b)) {
-          borderOut.push(b.map(bElement => getPoint(bElement)));
-        }
+        borderOut.push(b.map(bElement => getPoint(bElement)));
       });
       return borderOut;
     };
 
     const parsedBorder = parseBorder(options.border);
     const parsedBorderHoles = parseBorder(options.holeBorder);
-    let parsedTouchBorder = options.touchBorder;
-    if (Array.isArray(options.touchBorder)) {
-      parsedTouchBorder = parseBorder(options.touchBorder);
-    }
+    const parsedTouchBorder = parseBorder(options.touchBorder);
+
     let copyToUse = options.copy;
     if (options.copy != null && !Array.isArray(options.copy)) {
       copyToUse = [options.copy];
@@ -1570,6 +1568,16 @@ export default class DiagramPrimitives {
       options.texture.onLoad,
       copyToUse,
     );
+
+    element.custom.update = function update(
+      points: Array<TypeParsablePoint>,
+      b: Array<Array<TypeParsablePoint>> | 'points' | 'rect' = 'rect',
+      tB: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none' = 'border',
+      h: Array<Array<TypeParsablePoint>> | 'none' = 'none',
+      copy: Array<CPY_Step> = [],
+    ) {
+      element.drawingObject.change(points, b, tB, h, copy);
+    };
 
     setupPulse(element, options);
 
@@ -1599,58 +1607,77 @@ export default class DiagramPrimitives {
       // repeat: null,
     };
     const options = processOptions(defaultOptions, ...optionsIn);
-    parsePoints(options, ['points', 'border', 'hole']);
+    parsePoints(options, ['points', 'border', 'hole', 'touchBorder']);
     if (options.linePrimitives === false) {
       options.lineNum = 2;
     }
 
-    let getTris;
-    if (options.cornersOnly) {
-      getTris = points => makePolyLineCorners(
-        points,
-        options.width,
-        options.close,
-        options.cornerLength,
-        // options.forceCornerLength,
-        options.widthIs,
-        options.cornerStyle,
-        options.cornerSize,
-        options.cornerSides,
-        options.minAutoCornerAngle,
-        options.linePrimitives,
-        options.lineNum,
+    const getTris = (o) => {
+      if (o.cornersOnly) {
+        return makePolyLineCorners(
+          o.points, o.width, o.close, o.cornerLength, o.widthIs, o.cornerStyle,
+          o.cornerSize, o.cornerSides, o.minAutoCornerAngle, o.linePrimitives,
+          o.lineNum,
+        );
+      }
+      return makePolyLine(
+        o.points, o.width, o.close, o.widthIs, o.cornerStyle, o.cornerSize,
+        o.cornerSides, o.minAutoCornerAngle, o.dash, o.linePrimitives,
+        o.lineNum, o.border, o.hole,
       );
-    } else {
-      getTris = points => makePolyLine(
-        points,
-        options.width,
-        options.close,
-        options.widthIs,
-        options.cornerStyle,
-        options.cornerSize,
-        options.cornerSides,
-        options.minAutoCornerAngle,
-        options.dash,
-        options.linePrimitives,
-        options.lineNum,
-        options.border,
-        options.hole,
-      );
-    }
+    };
+    // let getTris;
+    // if (options.cornersOnly) {
+    //   getTris = points => makePolyLineCorners(
+    //     points,
+    //     options.width,
+    //     options.close,
+    //     options.cornerLength,
+    //     // options.forceCornerLength,
+    //     options.widthIs,
+    //     options.cornerStyle,
+    //     options.cornerSize,
+    //     options.cornerSides,
+    //     options.minAutoCornerAngle,
+    //     options.linePrimitives,
+    //     options.lineNum,
+    //   );
+    // } else {
+    //   getTris = points => makePolyLine(
+    //     points,
+    //     options.width,
+    //     options.close,
+    //     options.widthIs,
+    //     options.cornerStyle,
+    //     options.cornerSize,
+    //     options.cornerSides,
+    //     options.minAutoCornerAngle,
+    //     options.dash,
+    //     options.linePrimitives,
+    //     options.lineNum,
+    //     options.border,
+    //     options.hole,
+    //   );
+    // }
 
-    const [triangles, borders, holes] = getTris(options.points);
+    const [triangles, borders, holes] = getTris(options);
     const element = this.generic(options, {
       drawType: options.linePrimitives ? 'lines' : 'triangles',
       points: triangles,    // $FlowFixMe
-      border: Array.isArray(options.border) || options.border === null ? options.border : borders,
+      // This needs to be fixed as border is defined in default lines
+      border: Array.isArray(options.border) || options.border == null ? options.border : borders,
       touchBorder: options.touchBorder,
-      holeBorder: Array.isArray(options.hole) || options.border === null ? options.hole : holes,
-      // repeat: options.repeat,
+      holeBorder: Array.isArray(options.hole) ? options.hole : holes,
     });
 
-    element.custom.updatePoints = (points, touchBorder = options.touchBorder) => {
-      const [triangles1, borders1, holes1] = getTris(points);
-      element.drawingObject.change(triangles1, borders1, touchBorder, holes1);
+    element.custom.updatePoints = (updatedOptions) => {
+      const o = joinObjects({}, options, updatedOptions);
+      const [triangles1, borders1, holes1] = getTris(o);
+      element.drawingObject.change(
+        triangles1,
+        Array.isArray(o.border) || o.border == null ? o.border : borders1,
+        Array.isArray(o.hole) ? o.hole : holes1,
+      );
     };
 
     // if (options.pulse != null) {

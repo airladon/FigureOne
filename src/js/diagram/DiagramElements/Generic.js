@@ -11,9 +11,9 @@ import type { CPY_Step } from '../DrawingObjects/Geometries/copy/copy';
 export default function Generic(
   webgl: Array<WebGLInstance>,
   vertices: Array<Point>,
-  border: ?Array<Array<Point>>,
-  touchBorder: ?Array<Array<Point>> | 'rect' | 'border',
-  holeBorder: ?Array<Array<Point>>,
+  border: Array<Array<Point>> | 'points' | 'rect',
+  touchBorder: Array<Array<Point>> | 'rect' | 'border' | 'none',
+  holeBorder: Array<Array<Point>> | 'none',
   drawType: 'triangles' | 'strip' | 'fan' | 'lines',
   color: Array<number>,
   transformOrLocation: Transform | Point,

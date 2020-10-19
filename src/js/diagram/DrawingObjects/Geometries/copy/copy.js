@@ -429,7 +429,6 @@ function copyPoints(
       out = [...out, ...copyStep(pointsToCopy, copyStyle, options)];
     }
   });
-  console.log(marks)
 
   return [...out.slice(startIndex)];
 }

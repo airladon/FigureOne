@@ -26,6 +26,14 @@ function getBounds(borderIn: null | Array<Array<Point>>, transformMatrix: Array<
   if (transformMatrix == null) {
     return borderIn;
   }
+  if (
+    borderIn == null
+    || (borderIn.length === 1 && borderIn[0].length === 0)
+    || borderIn.length === 0
+  ) {
+    return [];
+  }
+
   const boundaries = [];
   borderIn.forEach((boundary) => {
     const border = [];
@@ -88,54 +96,14 @@ class DrawingObject {
 
 
   getBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
-    // if (transformMatrix == null) {
-    //   return this.border;
-    // }
-    // const boundaries = [];
-    // this.border.forEach((boundary) => {
-    //   const border = [];
-    //   boundary.forEach((point) => {
-    //     border.push(point.transformBy(transformMatrix));
-    //   });
-    //   boundaries.push(border);
-    // });
     return getBounds(this.border, transformMatrix);
-    // return boundaries;
   }
 
   getTouchBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
-    // if (transformMatrix == null) {
-    //   return this.touchBorder;
-    // }
-    // const boundaries = [];
-    // this.touchBorder.forEach((boundary) => {
-    //   const border = [];
-    //   boundary.forEach((point) => {
-    //     border.push(point.transformBy(transformMatrix));
-    //   });
-    //   boundaries.push(border);
-    // });
-    // return boundaries;
     return getBounds(this.touchBorder, transformMatrix);
   }
 
   getBoundaryHoles(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
-    // if (transformMatrix == null) {
-    //   return this.holeBorder;
-    // }
-    // const boundaries = [];
-    // this.holeBorder.forEach((boundary) => {
-    //   const border = [];
-    //   boundary.forEach((point) => {
-    //     if (transformMatrix != null) {
-    //       border.push(point.transformBy(transformMatrix));
-    //     } else {
-    //       border.push(point._dup());
-    //     }
-    //   });
-    //   boundaries.push(border);
-    // });
-    // return boundaries;
     return getBounds(this.hole, transformMatrix);
   }
   /* eslint-enable */
@@ -152,37 +120,8 @@ class DrawingObject {
 
   getBoundingRect(transformMatrix: Array<number> | null = null): Rect {
     const boundaries = this.getBoundaries(transformMatrix);
-    // const min = new Point(0, 0);
-    // const max = new Point(0, 0);
-    // let firstPoint = true;
-
-    // boundaries.forEach((boundary) => {
-    //   boundary.forEach((point) => {
-    //     if (firstPoint) {
-    //       min.x = point.x;
-    //       min.y = point.y;
-    //       max.x = point.x;
-    //       max.y = point.y;
-    //       firstPoint = false;
-    //     } else {
-    //       min.x = point.x < min.x ? point.x : min.x;
-    //       min.y = point.y < min.y ? point.y : min.y;
-    //       max.x = point.x > max.x ? point.x : max.x;
-    //       max.y = point.y > max.y ? point.y : max.y;
-    //     }
-    //   });
-    // });
-    // return new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
     return getBoundingRect(boundaries);
   }
-
-  // getVertexSpaceBoundingRect() {
-  //   return getBoundingRect(this.border);
-  // }
-
-  // getLocation(): Point {
-  //   return this.location;
-  // }
 
   getLocation(transformMatrix: Array<number> | null = null): Point {
     if (transformMatrix == null) {

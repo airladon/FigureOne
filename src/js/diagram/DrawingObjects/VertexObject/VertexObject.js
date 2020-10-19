@@ -5,6 +5,7 @@ import * as m2 from '../../../tools/m2';
 import WebGLInstance from '../../webgl/webgl';
 import * as g2 from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
+import type { CPY_Step } from '../Geometries/copy/copy';
 
 // Base clase of all shape objects made from verteces for webgl.
 // The job of a VertexObject is to:
@@ -243,6 +244,7 @@ class VertexObject extends DrawingObject {
     border: Array<Array<g2.Point>>,
     touchBorder: Array<Array<g2.Point>>,
     holes: Array<Array<g2.Point>>,
+    copy: Array<CPY_Step>,
   ) {
     this.resetBuffer();
   }
@@ -257,44 +259,6 @@ class VertexObject extends DrawingObject {
     return [...super._getStateProperties(),
     ];
   }
-
-  // changeVertices(coords: Array<g2.Point>, border: Array<Array<g2.Point>> = []) {
-  //   this.points = [];
-  //   this.border = [];
-  //   let minX = null;
-  //   let minY = null;
-  //   let maxX = null;
-  //   let maxY = null;
-  //   coords.forEach((p) => {
-  //     this.points.push(p.x);
-  //     this.points.push(p.y);
-  //     if (minX === null || p.x < minX) {
-  //       minX = p.x;
-  //     }
-  //     if (minY === null || p.y < minY) {
-  //       minY = p.y;
-  //     }
-  //     if (maxY === null || p.y > maxY) {
-  //       maxY = p.y;
-  //     }
-  //     if (maxX === null || p.x > maxX) {
-  //       maxX = p.x;
-  //     }
-  //   });
-  //   if (border.length === 0) {
-  //     if (minX != null && minY != null && maxX != null && maxY != null) {
-  //       this.border[0] = [
-  //         new g2.Point(minX, minY),
-  //         new g2.Point(minX, maxY),
-  //         new g2.Point(maxX, maxY),
-  //         new g2.Point(maxX, minY),
-  //       ];
-  //     }
-  //   } else {
-  //     this.border = border;
-  //   }
-  //   this.resetBuffer();
-  // }
 
   // Abstract method - should be reimplemented for any vertexObjects that
   // eslint-disable-next-line no-unused-vars
