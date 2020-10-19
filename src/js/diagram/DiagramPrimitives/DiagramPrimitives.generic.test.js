@@ -1,9 +1,9 @@
 import {
   Point, Transform,
 } from '../../tools/g2';
-import {
-  round,
-} from '../../tools/math';
+// import {
+//   round,
+// } from '../../tools/math';
 import { joinObjects } from '../../tools/tools';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
