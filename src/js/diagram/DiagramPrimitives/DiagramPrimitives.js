@@ -1824,15 +1824,7 @@ export default class DiagramPrimitives {
         touchBorder,
         holeBorder: optionsToUse.holeBorder,
       });
-      // const simplifyBorder = (e) => {
-      //   const simpleBorder = [];
-      //   for (let i = 0; i < e.drawingObject.border[0].length; i += 2) {
-      //     simpleBorder.push(e.drawingObject.border[0][i]._dup());
-      //   }
-      //   e.drawingObject.border = [simpleBorder];
-      // };
-      // simplifyBorder(element);
-      // element.drawingObject.border = [simpleBorder];
+
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
         const [updatedOutline, updatedBorder, updatedTouchBorder] = getBorder(o);
@@ -1842,7 +1834,6 @@ export default class DiagramPrimitives {
           touchBorder: updatedTouchBorder,
           holeBorder: o.holeBorder,
         });
-        // simplifyBorder(element);
       };
     }
     return element;
