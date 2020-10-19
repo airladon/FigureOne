@@ -370,10 +370,10 @@ export type OBJ_CurvedCorner = {
  * touch border of the line can be the points on the `positive`, `negative`
  * or boths sides (`line`) of the line, completely custom
  * (`Array<Array<TypeParsablePoint>>`) or the enclosing rectangle (`null`),
- * @property {'border' | 'rect' | Array<Array<TypeParsablePoint>>} [touchBorder]
+ * @property {'border' | 'rect' | Array<Array<TypeParsablePoint>> | number} [touchBorder]
  * touch border of the line can be the same as the border (`'border'`),
- * completely custom (`Array<Array<TypeParsablePoint>>`) or the enclosing
- * rectangle (`rect`) - (`'border'`)
+ * completely custom (`Array<Array<TypeParsablePoint>>`), the enclosing
+ * rectangle (`rect`) or the same as the border with sum buffer (`number`) - (`'border'`)
  * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [hole]
  * hole border of the line can be the points on the `positive` or `negative`
  * side of the line, completely custom (`Array<Array<TypeParsablePoint>>`)
@@ -441,7 +441,7 @@ export type OBJ_Polyline = {
   position?: ?Point,
   transform?: Transform,
   border?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>> | null,
-  touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | 'rect',
+  touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | number,
   hole?: 'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
   linePrimitives?: boolean,
   lineNum?: number,
@@ -1595,7 +1595,6 @@ export default class DiagramPrimitives {
       cornerSides: 10,
       cornersOnly: false,
       cornerLength: 0.1,
-      // forceCornerLength: false,
       minAutoCornerAngle: Math.PI / 7,
       dash: [],
       linePrimitives: false,
@@ -1604,87 +1603,66 @@ export default class DiagramPrimitives {
       border: 'line',
       touchBorder: 'border',
       holeBorder: 'none',
-      // repeat: null,
     };
     const options = processOptions(defaultOptions, ...optionsIn);
-    parsePoints(options, ['points', 'border', 'hole', 'touchBorder']);
+    parsePoints(options, ['points', 'border', 'hole']);
+    if (typeof options.touchBorder !== 'number') {
+      parsePoints(options, ['touchBorder']);
+    }
     if (options.linePrimitives === false) {
       options.lineNum = 2;
     }
 
+    let border;
+    let triangles;
+    let touchBorder;
+    let holeBorder;
     const getTris = (o) => {
+      let touchBorderBuffer = 0;
+      if (typeof o.touchBorder === 'number') {
+        touchBorderBuffer = o.touchBorder;
+      }
       if (o.cornersOnly) {
-        return makePolyLineCorners(
+        [triangles, border, holeBorder] = makePolyLineCorners(
           o.points, o.width, o.close, o.cornerLength, o.widthIs, o.cornerStyle,
           o.cornerSize, o.cornerSides, o.minAutoCornerAngle, o.linePrimitives,
           o.lineNum,
         );
+      } else {
+        [triangles, border, touchBorder, holeBorder] = makePolyLine(
+          o.points, o.width, o.close, o.widthIs, o.cornerStyle, o.cornerSize,
+          o.cornerSides, o.minAutoCornerAngle, o.dash, o.linePrimitives,
+          o.lineNum, o.border, touchBorderBuffer, o.hole,
+        );
+        if (o.touchBorder !== 'line' && typeof o.touchBorder !== 'number') {
+          touchBorder = o.touchBorder;
+        }
       }
-      return makePolyLine(
-        o.points, o.width, o.close, o.widthIs, o.cornerStyle, o.cornerSize,
-        o.cornerSides, o.minAutoCornerAngle, o.dash, o.linePrimitives,
-        o.lineNum, o.border, o.hole,
-      );
+      if (o.border !== 'line') {
+        border = o.border;
+      }
+      if (typeof o.touchBorder !== 'number') {
+        touchBorder = o.touchBorder;
+      }
+      if (Array.isArray(o.holeBorder)) {
+        holeBorder = o.holeBorder;
+      }
     };
-    // let getTris;
-    // if (options.cornersOnly) {
-    //   getTris = points => makePolyLineCorners(
-    //     points,
-    //     options.width,
-    //     options.close,
-    //     options.cornerLength,
-    //     // options.forceCornerLength,
-    //     options.widthIs,
-    //     options.cornerStyle,
-    //     options.cornerSize,
-    //     options.cornerSides,
-    //     options.minAutoCornerAngle,
-    //     options.linePrimitives,
-    //     options.lineNum,
-    //   );
-    // } else {
-    //   getTris = points => makePolyLine(
-    //     points,
-    //     options.width,
-    //     options.close,
-    //     options.widthIs,
-    //     options.cornerStyle,
-    //     options.cornerSize,
-    //     options.cornerSides,
-    //     options.minAutoCornerAngle,
-    //     options.dash,
-    //     options.linePrimitives,
-    //     options.lineNum,
-    //     options.border,
-    //     options.hole,
-    //   );
-    // }
 
-    const [triangles, borders, holes] = getTris(options);
+    getTris(options);
     const element = this.generic(options, {
       drawType: options.linePrimitives ? 'lines' : 'triangles',
-      points: triangles,    // $FlowFixMe
-      // This needs to be fixed as border is defined in default lines
-      border: Array.isArray(options.border) || options.border == null ? options.border : borders,
-      touchBorder: options.touchBorder,
-      holeBorder: Array.isArray(options.hole) ? options.hole : holes,
+      points: triangles,
+      border,
+      touchBorder,
+      holeBorder,
     });
 
     element.custom.updatePoints = (updatedOptions) => {
-      const o = joinObjects({}, options, updatedOptions);
-      const [triangles1, borders1, holes1] = getTris(o);
-      element.drawingObject.change(
-        triangles1,
-        Array.isArray(o.border) || o.border == null ? o.border : borders1,
-        Array.isArray(o.hole) ? o.hole : holes1,
-      );
+      getTris(joinObjects({}, options, updatedOptions));
+      element.drawingObject.change(triangles, border, touchBorder, holeBorder);
     };
 
-    // if (options.pulse != null) {
-    //   if (typeof element.pulseDefault !== 'function') {
-    //     element.pulseDefault.scale = options.pulse;
-    //   }
-    // }
     setupPulse(element, options);
 
     return element;

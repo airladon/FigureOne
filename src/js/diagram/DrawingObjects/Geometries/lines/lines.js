@@ -529,13 +529,14 @@ function makePolyLine(
   linePrimitives: boolean = false,
   lineNum: number = 2,
   borderIs: 'positive' | 'negative' | 'line' | Array<Array<Point>>,
+  touchBorderBuffer: number = 0,
   holeIs: 'positive' | 'negative' | 'none' | Array<Array<Point>>,
   precision: number = 8,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   let points = [];
   let cornerStyleToUse;
   const orderedPoints = pointsIn;
-  // const orderedPoints = setPointOrder(pointsIn, close, widthIs);
+
   // Convert line to line with corners
   if (cornerStyle === 'auto') {
     points = orderedPoints.map(p => p._dup());
@@ -543,39 +544,46 @@ function makePolyLine(
   } else if (cornerStyle === 'radius') {
     points = cornerLine(orderedPoints, close, 'fromVertex', cornerSides, cornerSize);
     cornerStyleToUse = 'fill';
-    // console.log(points)
   } else {
-    // autoCorners = 'none';
     cornerStyleToUse = cornerStyle;
     points = orderedPoints.map(p => p._dup());
   }
 
   // Convert line to dashed line
+  let dashedTris = [];
   if (dash.length > 1) {
     const dashes = lineToDash(points, dash, close, 0, precision);
     let closeDashes = false;
     if (dashes.length === 1) {
       closeDashes = close;
     }
-    let dashedTris = [];
-    let dashedBorder = [[]];
-    let dashedHole = [[]];
     dashes.forEach((d) => {
-      const [tris, border, hole] = makeThickLine(
+      const [tris] = makeThickLine(
         d, width, widthIs, closeDashes, cornerStyleToUse, minAutoCornerAngle,
         linePrimitives, lineNum, borderIs, holeIs,
       );
       dashedTris = [...dashedTris, ...tris];
-      dashedBorder = [[...dashedBorder[0], ...border[0]]];
-      dashedHole = [[...dashedHole[0], ...hole[0]]];
     });
-    return [dashedTris, dashedBorder, dashedHole];
   }
 
-  return makeThickLine(
+  // Get tris and border of solid line
+  const [tris, border, hole] = makeThickLine(
     points, width, widthIs, close, cornerStyleToUse, minAutoCornerAngle,
     linePrimitives, lineNum, borderIs, holeIs,
   );
+
+  // Get touch border if there is a buffer
+  let touchBorder = border;
+  if (touchBorderBuffer !== 0) {
+    [, touchBorder] = makeThickLine(
+      points, width + touchBorderBuffer * 2, widthIs, close, cornerStyleToUse, minAutoCornerAngle,
+      linePrimitives, lineNum, borderIs, holeIs,
+    );
+  }
+  if (dash.length > 1) {
+    return [dashedTris, border, touchBorder, hole];
+  }
+  return [tris, border, touchBorder, hole];
 }
 
 function makePolyLineCorners(
