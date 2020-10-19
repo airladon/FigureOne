@@ -440,7 +440,7 @@ export type OBJ_Polyline = {
   pulse?: number,
   position?: ?Point,
   transform?: Transform,
-  border?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>> | null,
+  border?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>> | 'rect',
   touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | number,
   hole?: 'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
   linePrimitives?: boolean,
@@ -1638,13 +1638,13 @@ export default class DiagramPrimitives {
           touchBorder = o.touchBorder;
         }
       }
-      if (o.border !== 'line') {
+      if (Array.isArray(o.border) || o.border === 'rect') {
         border = o.border;
       }
       if (typeof o.touchBorder !== 'number') {
         touchBorder = o.touchBorder;
       }
-      if (Array.isArray(o.holeBorder)) {
+      if (Array.isArray(o.holeBorder) || o.holeBorder === 'none') {
         holeBorder = o.holeBorder;
       }
     };

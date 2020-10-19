@@ -6,11 +6,12 @@ diagram.addElement({
   method: 'shapes.polyline',
   options: {
     points: [[0, 0], [1, 0], [0, 1]],
-    width: 0.04,
-    dash: [0.1, 0.1],
+    width: 0.1,
+    // border: 'negative',
+    // dash: [0.1, 0.1],
     close: true,
-    border: 'line',
-    touchBorder: 0.1,
+    // border: 'line',
+    // touchBorder: 0.1,
 
     // border: 'points',
     // border: [[[0, 0], [1, 0], [0, 1]]],
@@ -70,7 +71,7 @@ diagram.setTouchable();
 
 diagram.addElements([
   {
-    name: 'a',
+    name: 'origin',
     method: 'polygon',
     options: {
       radius: 0.01,
@@ -83,7 +84,7 @@ diagram.addElements([
     name: 'grid',
     method: 'grid',
     options: {
-      bounds: [-2, -2, 4, 4],
+      bounds: [-3, -3, 6, 6],
       yStep: 0.1,
       xStep: 0.1,
       color: [0.7, 0.7, 0.7, 1],
@@ -94,7 +95,7 @@ diagram.addElements([
     name: 'gridMajor',
     method: 'grid',
     options: {
-      bounds: [-2, -2, 4, 4],
+      bounds: [-3, -3, 6, 6],
       yStep: 0.5,
       xStep: 0.5,
       color: [0.8, 0.8, 0.8, 1],
