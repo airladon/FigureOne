@@ -146,6 +146,32 @@ describe('Polyline', () => {
       ])]);
       expect(pd.hole).toEqual([]);
     });
+    test('Update', () => {
+      addElement('default');
+      expect(round(pd.points, 3)).toEqual(square);
+      expect(round(pd.border, 3)).toEqual([getPoints([
+        [1, 1], [-1, 1], [-1, -1], [1, -1],
+      ])]);
+      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+        [1, 1], [-1, 1], [-1, -1], [1, -1],
+      ])]);
+      expect(pd.hole).toEqual([]);
+
+      p.custom.update({ radius: 2 * Math.sqrt(2) });
+      expect(round(pd.points, 3)).toEqual([
+        0, 0, -2, 2, 2, 2,
+        0, 0, -2, -2, -2, 2,
+        0, 0, 2, -2, -2, -2,
+        0, 0, 2, 2, 2, -2,
+      ]);
+      expect(round(pd.border, 3)).toEqual([getPoints([
+        [2, 2], [-2, 2], [-2, -2], [2, -2],
+      ])]);
+      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+        [2, 2], [-2, 2], [-2, -2], [2, -2],
+      ])]);
+      expect(pd.hole).toEqual([]);
+    });
   });
   describe('Line', () => {
     beforeEach(() => {
@@ -406,6 +432,37 @@ describe('Polyline', () => {
       ])]);
       expect(round(pd.touchBorder, 3)).toEqual([getPoints([
         [-1, -1], [1, -1], [1, 1], [-1, 1],
+      ])]);
+      expect(pd.hole).toEqual([]);
+    });
+    test('Update', () => {
+      addElement('default');
+      expect(round(pd.points, 3)).toEqual(midLineSquare);
+      expect(round(pd.border, 3)).toEqual([getPoints([
+        [1.05, 1.05], [-1.05, 1.05], [-1.05, -1.05], [1.05, -1.05],
+      ])]);
+      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+        [1.05, 1.05], [-1.05, 1.05], [-1.05, -1.05], [1.05, -1.05],
+      ])]);
+      expect(pd.hole).toEqual([]);
+
+      p.custom.update({ radius: 2 * Math.sqrt(2) });
+
+      expect(round(pd.points, 3)).toEqual([
+        1.95, 1.95, -1.95, 1.95, 2.05, 2.05,
+        2.05, 2.05, -1.95, 1.95, -2.05, 2.05,
+        -1.95, 1.95, -1.95, -1.95, -2.05, 2.05,
+        -2.05, 2.05, -1.95, -1.95, -2.05, -2.05,
+        -1.95, -1.95, 1.95, -1.95, -2.05, -2.05,
+        -2.05, -2.05, 1.95, -1.95, 2.05, -2.05,
+        1.95, -1.95, 1.95, 1.95, 2.05, -2.05,
+        2.05, -2.05, 1.95, 1.95, 2.05, 2.05,
+      ]);
+      expect(round(pd.border, 3)).toEqual([getPoints([
+        [2.05, 2.05], [-2.05, 2.05], [-2.05, -2.05], [2.05, -2.05],
+      ])]);
+      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+        [2.05, 2.05], [-2.05, 2.05], [-2.05, -2.05], [2.05, -2.05],
       ])]);
       expect(pd.hole).toEqual([]);
     });

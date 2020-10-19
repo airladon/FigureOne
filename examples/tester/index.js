@@ -11,8 +11,8 @@ diagram.addElement({
     // dash: [0.1, 0.1],
     // close: true,
     radius: 1,
-            line: { width: 0.1, widthIs: 'mid' },
-            touchBorder: 'rect',
+    // line: { width: 0.1, widthIs: 'mid' },
+    // touchBorder: 'rect',
     sides: 4,
     // border: 'negative',
     // touchBorder: 0.1,
@@ -29,6 +29,7 @@ diagram.addElement({
   },
 });
 diagram.setTouchable();
+diagram.elements._g.custom.update({ radius: 2 })
 
 // diagram.addElement({
 //   name: 'lines',

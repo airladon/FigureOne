@@ -1728,24 +1728,6 @@ export default class DiagramPrimitives {
     if (optionsToUse.sidesToDraw == null) {
       optionsToUse.sidesToDraw = optionsToUse.sides;
     }
-    // let triangles;
-    // let border;
-    // let touchBorder;
-
-    // const getPolygon = (o) => {
-    //   outline = getPolygonPoints(o);
-    //   touchBorder = outline;
-    //   if (typeof o.touchBorder === 'number') {
-    //     touchBorder = getPolygonPoints(
-    //       joinObjects({}, o, { radius: optionsToUse.touchBorder }),
-    //     );
-    //   }
-    //   if (o.line == null) {
-    //     triangles = getTrisFillPolygon(o.offset, outline, o.sides, o.sidesToDraw);
-    //   } else {
-    //     triangles = this.polyLine
-    //   }
-    // }
 
     const getBorder = (o) => {
       const points = getPolygonPoints(o);
@@ -1806,12 +1788,13 @@ export default class DiagramPrimitives {
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
         const [updatedOutline, updatedBorder, updatedTouchBorder] = getBorder(o);
+
         const updatedTris = getTrisFillPolygon(
           o.offset, updatedOutline,
           o.sides, o.sidesToDraw,
         );
         element.drawingObject.change(
-          updatedTris, [updatedBorder], [updatedTouchBorder], updateOptions.holeBorder,
+          updatedTris, updatedBorder, updatedTouchBorder, updateOptions.holeBorder,
         );
       };
     } else {
