@@ -10,6 +10,7 @@ diagram.addElement({
     // border: 'negative',
     // dash: [0.1, 0.1],
     // close: true,
+    line: { width: 0.1, widthIs: 'inside' },
     radius: 1 * Math.sqrt(2),
     // line: { width: 0.1, widthIs: 'mid' },
     // border: 'outline',

@@ -15,6 +15,9 @@ describe('Polyline', () => {
   let options;
   let diamond;
   let square;
+  let midLineSquare;
+  let insideLineSquare;
+  let outsideLineSquare;
   beforeEach(() => {
     diagram = makeDiagram();
     addElement = (optionsName) => {
@@ -37,8 +40,38 @@ describe('Polyline', () => {
       -1, 0, 0, 1, 0, 0, 0, -1,
       -1, 0, 0, 0, 1, 0, 0, -1,
     ];
+    midLineSquare = [
+      0.95, 0.95, -0.95, 0.95, 1.05, 1.05,
+      1.05, 1.05, -0.95, 0.95, -1.05, 1.05,
+      -0.95, 0.95, -0.95, -0.95, -1.05, 1.05,
+      -1.05, 1.05, -0.95, -0.95, -1.05, -1.05,
+      -0.95, -0.95, 0.95, -0.95, -1.05, -1.05,
+      -1.05, -1.05, 0.95, -0.95, 1.05, -1.05,
+      0.95, -0.95, 0.95, 0.95, 1.05, -1.05,
+      1.05, -1.05, 0.95, 0.95, 1.05, 1.05,
+    ];
+    insideLineSquare = [
+      1, 0.9, -1, 0.9, 1, 1,
+      1, 1, -1, 0.9, -1, 1,
+      -0.9, 1, -0.9, -1, -1, 1,
+      -1, 1, -0.9, -1, -1, -1,
+      -1, -0.9, 1, -0.9, -1, -1,
+      -1, -1, 1, -0.9, 1, -1,
+      0.9, -1, 0.9, 1, 1, -1,
+      1, -1, 0.9, 1, 1, 1,
+    ];
+    outsideLineSquare = [
+      1, 1, -1, 1, 1.1, 1.1,
+      1.1, 1.1, -1, 1, -1.1, 1.1,
+      -1, 1, -1, -1, -1.1, 1.1,
+      -1.1, 1.1, -1, -1, -1.1, -1.1,
+      -1, -1, 1, -1, -1.1, -1.1,
+      -1.1, -1.1, 1, -1, 1.1, -1.1,
+      1, -1, 1, 1, 1.1, -1.1,
+      1.1, -1.1, 1, 1, 1.1, 1.1,
+    ];
   });
-  describe.only('Filled', () => {
+  describe('Filled', () => {
     beforeEach(() => {
       options = {
         default: {
@@ -114,354 +147,106 @@ describe('Polyline', () => {
       expect(pd.hole).toEqual([]);
     });
   });
-  describe('Closed Triangle', () => {
+  describe('Line', () => {
+    // Border: rect
+    // TouchBorder: buffer, rect
     beforeEach(() => {
       options = {
-        lineBorder: {
+        default: {
           options: {
-            points: [[0, 0], [1, 0], [0, 1]],
-            width: 0.2,
-            close: true,
-            // default is border: 'line'
+            radius: 1 * Math.sqrt(2),
+            rotation: Math.PI / 4,
+            line: { width: 0.1 }, // default widthIs: 'mid'
+            // default is border: 'outline'
           },
         },
-        outsideBorder: {
+        lineInsideBorderOutline: {
           options: {
-            points: [[0, 0], [1, 0], [0, 1]],
-            width: 0.2,
-            close: true,
-            border: 'negative',
+            radius: 1 * Math.sqrt(2),
+            rotation: Math.PI / 4,
+            line: { width: 0.1, widthIs: 'inside' },
+            border: 'outline',
           },
         },
-        insideBorder: {
+        linePositiveBorderOutline: {
           options: {
-            points: [[0, 0], [1, 0], [0, 1]],
-            width: 0.2,
-            close: true,
-            border: 'positive',
+            radius: 1 * Math.sqrt(2),
+            rotation: Math.PI / 4,
+            line: { width: 0.1, widthIs: 'positive' },
+            border: 'outline',
           },
         },
-        rectBorder: {
+        lineOutsideBorderOutline: {
           options: {
-            points: [[0, 0], [1, 0], [0, 1]],
-            width: 0.2,
-            close: true,
-            border: 'rect',
+            radius: 1 * Math.sqrt(2),
+            rotation: Math.PI / 4,
+            line: { width: 0.1, widthIs: 'outside' },
+            border: 'outline',
           },
         },
-        touchRectBorder: {
+        lineNegativeBorderOutline: {
           options: {
-            points: [[0, 0], [1, 0], [0, 1]],
-            width: 0.2,
-            close: true,
-            touchBorder: 'rect',
-          },
-        },
-        bufferBorder: {
-          options: {
-            points: [[0, 0], [1, 0], [0, 1]],
-            width: 0.2,
-            close: true,
-            touchBorder: 0.1,
-          },
-        },
-        dashedBorder: {
-          options: {
-            points: [[0, 0], [1, 0], [0, 1]],
-            width: 0.2,
-            close: true,
-            dash: [0.3, 0.3],
+            radius: 1 * Math.sqrt(2),
+            rotation: Math.PI / 4,
+            line: { width: 0.1, widthIs: 'negative' },
+            border: 'outline',
           },
         },
       };
     });
-    test('Default Border', () => {
-      addElement('lineBorder');
-      expect(round(pd.points, 3)).toEqual([
-        0.1, 0.1, 0.759, 0.1, -0.1, -0.1,
-        -0.1, -0.1, 0.759, 0.1, 1.241, -0.1,
-        0.759, 0.1, 0.1, 0.759, 1.241, -0.1,
-        1.241, -0.1, 0.1, 0.759, -0.1, 1.241,
-        0.1, 0.759, 0.1, 0.1, -0.1, 1.241,
-        -0.1, 1.241, 0.1, 0.1, -0.1, -0.1,
-      ]);
-
-      expect(round(pd.border[0], 3)).toEqual(getPoints([
-        [-0.1, -0.1],
-        [1.241, -0.1],
-        [0.759, 0.1],
-        [0.1, 0.1],
-      ]));
-      expect(round(pd.border[1], 3)).toEqual(getPoints([
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [0.1, 0.759],
-        [0.759, 0.1],
-      ]));
-      expect(round(pd.border[2], 3)).toEqual(getPoints([
-        [-0.1, 1.241],
-        [-0.1, -0.1],
-        [0.1, 0.1],
-        [0.1, 0.759],
-      ]));
-
-      expect(round(pd.touchBorder[0], 3)).toEqual(getPoints([
-        [-0.1, -0.1],
-        [1.241, -0.1],
-        [0.759, 0.1],
-        [0.1, 0.1],
-      ]));
-      expect(round(pd.touchBorder[1], 3)).toEqual(getPoints([
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [0.1, 0.759],
-        [0.759, 0.1],
-      ]));
-      expect(round(pd.touchBorder[2], 3)).toEqual(getPoints([
-        [-0.1, 1.241],
-        [-0.1, -0.1],
-        [0.1, 0.1],
-        [0.1, 0.759],
-      ]));
-
+    test('Default', () => {
+      addElement('default');
+      expect(round(pd.points, 3)).toEqual(midLineSquare);
+      expect(round(pd.border, 3)).toEqual([getPoints([
+        [1.05, 1.05], [-1.05, 1.05], [-1.05, -1.05], [1.05, -1.05],
+      ])]);
+      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+        [1.05, 1.05], [-1.05, 1.05], [-1.05, -1.05], [1.05, -1.05],
+      ])]);
       expect(pd.hole).toEqual([]);
     });
-    test('outside Border', () => {
-      addElement('outsideBorder');
-      expect(round(pd.points, 3)).toEqual([
-        0.1, 0.1, 0.759, 0.1, -0.1, -0.1,
-        -0.1, -0.1, 0.759, 0.1, 1.241, -0.1,
-        0.759, 0.1, 0.1, 0.759, 1.241, -0.1,
-        1.241, -0.1, 0.1, 0.759, -0.1, 1.241,
-        0.1, 0.759, 0.1, 0.1, -0.1, 1.241,
-        -0.1, 1.241, 0.1, 0.1, -0.1, -0.1,
-      ]);
-
-      expect(round(pd.border[0], 3)).toEqual(getPoints([
-        [-0.1, -0.1],
-        [1.241, -0.1],
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [-0.1, 1.241],
-        [-0.1, -0.1],
-      ]));
-
-      expect(round(pd.touchBorder[0], 3)).toEqual(getPoints([
-        [-0.1, -0.1],
-        [1.241, -0.1],
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [-0.1, 1.241],
-        [-0.1, -0.1],
-      ]));
-
+    test('Line inside, border outline', () => {
+      addElement('lineInsideBorderOutline');
+      expect(round(pd.points, 3)).toEqual(insideLineSquare);
+      expect(round(pd.border, 3)).toEqual([getPoints([
+        [1, 1], [-1, 1], [-1, -1], [1, -1],
+      ])]);
+      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+        [1, 1], [-1, 1], [-1, -1], [1, -1],
+      ])]);
       expect(pd.hole).toEqual([]);
     });
-    test('inside Border', () => {
-      addElement('insideBorder');
-      expect(round(pd.points, 3)).toEqual([
-        0.1, 0.1, 0.759, 0.1, -0.1, -0.1,
-        -0.1, -0.1, 0.759, 0.1, 1.241, -0.1,
-        0.759, 0.1, 0.1, 0.759, 1.241, -0.1,
-        1.241, -0.1, 0.1, 0.759, -0.1, 1.241,
-        0.1, 0.759, 0.1, 0.1, -0.1, 1.241,
-        -0.1, 1.241, 0.1, 0.1, -0.1, -0.1,
-      ]);
-
-      expect(round(pd.border[0], 3)).toEqual(getPoints([
-        [0.1, 0.1],
-        [0.759, 0.1],
-        [0.759, 0.1],
-        [0.1, 0.759],
-        [0.1, 0.759],
-        [0.1, 0.1],
-      ]));
-
-      expect(round(pd.touchBorder[0], 3)).toEqual(getPoints([
-        [0.1, 0.1],
-        [0.759, 0.1],
-        [0.759, 0.1],
-        [0.1, 0.759],
-        [0.1, 0.759],
-        [0.1, 0.1],
-      ]));
-
+    test('Line positive, border outline', () => {
+      addElement('linePositiveBorderOutline');
+      expect(round(pd.points, 3)).toEqual(insideLineSquare);
+      expect(round(pd.border, 3)).toEqual([getPoints([
+        [1, 1], [-1, 1], [-1, -1], [1, -1],
+      ])]);
+      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+        [1, 1], [-1, 1], [-1, -1], [1, -1],
+      ])]);
       expect(pd.hole).toEqual([]);
     });
-    test('Rect Border', () => {
-      addElement('rectBorder');
-      expect(round(pd.points, 3)).toEqual([
-        0.1, 0.1, 0.759, 0.1, -0.1, -0.1,
-        -0.1, -0.1, 0.759, 0.1, 1.241, -0.1,
-        0.759, 0.1, 0.1, 0.759, 1.241, -0.1,
-        1.241, -0.1, 0.1, 0.759, -0.1, 1.241,
-        0.1, 0.759, 0.1, 0.1, -0.1, 1.241,
-        -0.1, 1.241, 0.1, 0.1, -0.1, -0.1,
-      ]);
-
-      expect(round(pd.border[0], 3)).toEqual(getPoints([
-        [-0.1, -0.1],
-        [1.241, -0.1],
-        [1.241, 1.241],
-        [-0.1, 1.241],
-      ]));
-
-      expect(round(pd.touchBorder[0], 3)).toEqual(getPoints([
-        [-0.1, -0.1],
-        [1.241, -0.1],
-        [1.241, 1.241],
-        [-0.1, 1.241],
-      ]));
-
+    test('Line outside, border outline', () => {
+      addElement('lineOutsideBorderOutline');
+      expect(round(pd.points, 3)).toEqual(outsideLineSquare);
+      expect(round(pd.border, 3)).toEqual([getPoints([
+        [1.1, 1.1], [-1.1, 1.1], [-1.1, -1.1], [1.1, -1.1],
+      ])]);
+      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+        [1.1, 1.1], [-1.1, 1.1], [-1.1, -1.1], [1.1, -1.1],
+      ])]);
       expect(pd.hole).toEqual([]);
     });
-    test('Touch Rect Border', () => {
-      addElement('touchRectBorder');
-      expect(round(pd.points, 3)).toEqual([
-        0.1, 0.1, 0.759, 0.1, -0.1, -0.1,
-        -0.1, -0.1, 0.759, 0.1, 1.241, -0.1,
-        0.759, 0.1, 0.1, 0.759, 1.241, -0.1,
-        1.241, -0.1, 0.1, 0.759, -0.1, 1.241,
-        0.1, 0.759, 0.1, 0.1, -0.1, 1.241,
-        -0.1, 1.241, 0.1, 0.1, -0.1, -0.1,
-      ]);
-
-      expect(round(pd.border[0], 3)).toEqual(getPoints([
-        [-0.1, -0.1],
-        [1.241, -0.1],
-        [0.759, 0.1],
-        [0.1, 0.1],
-      ]));
-      expect(round(pd.border[1], 3)).toEqual(getPoints([
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [0.1, 0.759],
-        [0.759, 0.1],
-      ]));
-      expect(round(pd.border[2], 3)).toEqual(getPoints([
-        [-0.1, 1.241],
-        [-0.1, -0.1],
-        [0.1, 0.1],
-        [0.1, 0.759],
-      ]));
-
-      expect(round(pd.touchBorder[0], 3)).toEqual(getPoints([
-        [-0.1, -0.1],
-        [1.241, -0.1],
-        [1.241, 1.241],
-        [-0.1, 1.241],
-      ]));
-
-      expect(pd.hole).toEqual([]);
-    });
-    test('Buffer Border', () => {
-      addElement('bufferBorder');
-      expect(round(pd.points, 3)).toEqual([
-        0.1, 0.1, 0.759, 0.1, -0.1, -0.1,
-        -0.1, -0.1, 0.759, 0.1, 1.241, -0.1,
-        0.759, 0.1, 0.1, 0.759, 1.241, -0.1,
-        1.241, -0.1, 0.1, 0.759, -0.1, 1.241,
-        0.1, 0.759, 0.1, 0.1, -0.1, 1.241,
-        -0.1, 1.241, 0.1, 0.1, -0.1, -0.1,
-      ]);
-
-      expect(round(pd.border[0], 3)).toEqual(getPoints([
-        [-0.1, -0.1],
-        [1.241, -0.1],
-        [0.759, 0.1],
-        [0.1, 0.1],
-      ]));
-      expect(round(pd.border[1], 3)).toEqual(getPoints([
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [0.1, 0.759],
-        [0.759, 0.1],
-      ]));
-      expect(round(pd.border[2], 3)).toEqual(getPoints([
-        [-0.1, 1.241],
-        [-0.1, -0.1],
-        [0.1, 0.1],
-        [0.1, 0.759],
-      ]));
-
-      expect(round(pd.touchBorder[0], 3)).toEqual(getPoints([
-        [-0.2, -0.2],
-        [1.483, -0.2],
-        [0.517, 0.2],
-        [0.2, 0.2],
-      ]));
-      expect(round(pd.touchBorder[1], 3)).toEqual(getPoints([
-        [1.483, -0.2],
-        [-0.2, 1.483],
-        [0.2, 0.517],
-        [0.517, 0.2],
-      ]));
-      expect(round(pd.touchBorder[2], 3)).toEqual(getPoints([
-        [-0.2, 1.483],
-        [-0.2, -0.2],
-        [0.2, 0.2],
-        [0.2, 0.517],
-      ]));
-
-      expect(pd.hole).toEqual([]);
-    });
-    test('Dashed Border', () => {
-      addElement('dashedBorder');
-      expect(round(pd.points, 3)).toEqual([
-        0, 0.1, 0.3, 0.1, 0, -0.1,
-        0, -0.1, 0.3, 0.1, 0.3, -0.1,
-        0.6, 0.1, 0.9, 0.1, 0.6, -0.1,
-        0.6, -0.1, 0.9, 0.1, 0.9, -0.1,
-        0.788, 0.071, 0.576, 0.283, 0.929, 0.212,
-        0.929, 0.212, 0.576, 0.283, 0.717, 0.424,
-        0.364, 0.495, 0.151, 0.707, 0.505, 0.636,
-        0.505, 0.636, 0.151, 0.707, 0.293, 0.849,
-        -0.061, 0.919, 0.1, 0.759, 0.081, 1.061,
-        0.081, 1.061, 0.1, 0.759, -0.1, 1.241,
-        0.1, 0.759, 0.1, 0.714, -0.1, 1.241,
-        -0.1, 1.241, 0.1, 0.714, -0.1, 0.714,
-        0.1, 0.414, 0.1, 0.114, -0.1, 0.414,
-        -0.1, 0.414, 0.1, 0.114, -0.1, 0.114,
-      ]);
-
-      expect(round(pd.border[0], 3)).toEqual(getPoints([
-        [-0.1, -0.1],
-        [1.241, -0.1],
-        [0.759, 0.1],
-        [0.1, 0.1],
-      ]));
-      expect(round(pd.border[1], 3)).toEqual(getPoints([
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [0.1, 0.759],
-        [0.759, 0.1],
-      ]));
-      expect(round(pd.border[2], 3)).toEqual(getPoints([
-        [-0.1, 1.241],
-        [-0.1, -0.1],
-        [0.1, 0.1],
-        [0.1, 0.759],
-      ]));
-
-      expect(round(pd.touchBorder[0], 3)).toEqual(getPoints([
-        [-0.1, -0.1],
-        [1.241, -0.1],
-        [0.759, 0.1],
-        [0.1, 0.1],
-      ]));
-      expect(round(pd.touchBorder[1], 3)).toEqual(getPoints([
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [0.1, 0.759],
-        [0.759, 0.1],
-      ]));
-      expect(round(pd.touchBorder[2], 3)).toEqual(getPoints([
-        [-0.1, 1.241],
-        [-0.1, -0.1],
-        [0.1, 0.1],
-        [0.1, 0.759],
-      ]));
-
+    test('Line negative, border outline', () => {
+      addElement('lineNegativeBorderOutline');
+      expect(round(pd.points, 3)).toEqual(outsideLineSquare);
+      expect(round(pd.border, 3)).toEqual([getPoints([
+        [1.1, 1.1], [-1.1, 1.1], [-1.1, -1.1], [1.1, -1.1],
+      ])]);
+      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+        [1.1, 1.1], [-1.1, 1.1], [-1.1, -1.1], [1.1, -1.1],
+      ])]);
       expect(pd.hole).toEqual([]);
     });
   });
