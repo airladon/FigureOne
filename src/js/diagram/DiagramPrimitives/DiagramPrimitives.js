@@ -272,23 +272,6 @@ export type OBJ_CurvedCorner = {
 };
 
 
-//  */
-// export type OBJ_Rectangle = {
-//   yAlign?: 'bottom' | 'middle' | 'top' | number,
-//   xAlign?: 'left' | 'center' | 'right' | number,
-//   width?: number,
-//   height?: number,
-//   fill?: boolean,
-//   corner?: {
-//     radius?: number,
-//     sides?: number,
-//   },
-//   color?: Array<number>,
-//   transform?: Transform,
-//   position?: Point,
-//   pulse?: number,
-// }
-
 // generic
 // polyline
 // rectangle
@@ -626,10 +609,10 @@ export type OBJ_Polygon = {
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('rectangle').standard()`)
  * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
- * @property {'outline' | Array<Array<TypeParsablePoint>>} [border]
+ * @property {'outline' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
  * the rectangle border can either be the outline of the rectangle
- * (`'outline'`) or a custom set of points `Array<Array<TypeParsablePoint>>`
- * - (`'outline'`)
+ * (`'outline'`), an encompassing rect (`'rect'`) or a custom set of points
+ * `Array<Array<TypeParsablePoint>>` - (`'outline'`)
  * @property {number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>} [touchBorder]
  * the touch border can be the same as the border (`'border'`), can be the
  * encompassing rect (`'rect'`), can be a buffer around the shape with
