@@ -4,6 +4,12 @@ import { lineToDash } from './dashes';
 import {
   Line, Point, threePointAngleMin, threePointAngle,
 } from '../../../../tools/g2';
+import {
+  joinObjects,
+} from '../../../../tools/tools';
+import {
+  getArrow, getArrowLength, simplifyArrowOptions,
+} from '../arrow';
 
 /* eslint-disable yoda */
 
@@ -516,6 +522,130 @@ function makeThickLine(
   return [[...tris, ...cornerFills], border, hole];
 }
 
+
+
+// from https://mathworld.wolfram.com/Circle-LineIntersection.html
+function circleLineIntersection(
+  center: Point,
+  radius: number,
+  lineIn: Line,
+) {
+  const offsetToZero = new Point(-center.x, -center.y);
+  const line = new Line(lineIn.p1.add(offsetToZero), lineIn.p2.add(offsetToZero));
+  const x1 = line.p1.x;
+  const y1 = line.p1.y;
+  const x2 = line.p2.x;
+  const y2 = line.p2.y;
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const dr = Math.sqrt(dx * dx + dy * dy);
+  const D = x1 * y2 - x2 * y1;
+  const r = radius;
+  const sgn = value => (value < 0 ? -1 : 1);
+
+  const i1x = (D * dy + sgn(dy) * dx * Math.sqrt(r * r * dr * dr - D * D)) / (dr * dr);
+  const i2x = (D * dy - sgn(dy) * dx * Math.sqrt(r * r * dr * dr - D * D)) / (dr * dr);
+  const i1y = (-D * dx + Math.abs(dy) * Math.sqrt(r * r * dr * dr - D * D)) / (dr * dr);
+  const i2y = (-D * dx - Math.abs(dy) * Math.sqrt(r * r * dr * dr - D * D)) / (dr * dr);
+
+  const intersections = [];
+  if (!isNaN(i1x) && !isNaN(i1y)) {
+    const i = new Point(i1x, i1y).sub(offsetToZero);
+    if (lineIn.hasPointOn(i)) {
+      intersections.push(i);
+    }
+  }
+  if (!isNaN(i2x) && !isNaN(i2y)) {
+    const i = new Point(i2x, i2y).sub(offsetToZero);
+    if (lineIn.hasPointOn(i)) {
+      intersections.push(i);
+    }
+  }
+
+  return intersections;
+}
+
+
+// From end of line
+// Go back lines until distance to p1 is > arrow length
+// Find intersection between circle (arrow length) and line
+// That is the end of the line, and defines the arrow start
+
+function shortenLineForArrows(
+  points: Array<Point>,
+  arrow: {
+    start?: {
+      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
+      length: number,
+      width: number,
+      barb: number,
+      lineWidth: number,
+    },
+    end?: {
+      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
+      length: number,
+      width: number,
+      barb: number,
+      lineWidth: number,
+    },
+  },
+) {
+  const { start, end } = arrow;
+
+  let shortenedPoints;
+
+  // let addStartArrow = false;
+  if (start != null) {
+    const startPoint = points[0];
+    let index = 0;
+    const arrowLength = getArrowLength(start);
+    let pointFound = false;
+    while (index < points.length - 1 && pointFound === false) {
+      index += 1;
+      const distanceToEnd = startPoint.distance(points[index]);
+      if (arrowLength < distanceToEnd) {
+        pointFound = true;
+      }
+    }
+
+    if (pointFound) {
+      const line = new Line(points[index - 1], points[index])
+      const [intersect] = circleLineIntersection(startPoint, arrowLength, line);
+      if (intersect != null) {
+        shortenedPoints = [intersect, ...points.slice(index)];
+        // addStartArrow = true;
+      }
+    }
+  } else {
+    shortenedPoints = points;
+  }
+
+  // let addEndArrow = false;
+  if (end != null) {
+    const endPoint = points[points.length - 1];
+    let index = points.length - 1;
+    const arrowLength = getArrowLength(end);
+    let pointFound = false;
+    while (index > 0 && pointFound === false) {
+      index -= 1;
+      const distanceToEnd = endPoint.distance(points[index]);
+      if (arrowLength < distanceToEnd) {
+        pointFound = true;
+      }
+    }
+    if (pointFound) {
+      const line = new Line(points[index + 1], points[index])
+      const [intersect] = circleLineIntersection(endPoint, arrowLength, line);
+      if (intersect != null) {
+        shortenedPoints = [...shortenedPoints.slice(0, index + 1), intersect];
+        // addEndArrow = true;
+      }
+    }
+  }
+
+  return shortenedPoints;
+}
+
 function makePolyLine(
   pointsIn: Array<Point>,
   width: number = 0.01,
@@ -531,11 +661,33 @@ function makePolyLine(
   borderIs: 'positive' | 'negative' | 'line' | Array<Array<Point>>,
   touchBorderBuffer: number = 0,
   holeIs: 'positive' | 'negative' | 'none' | Array<Array<Point>>,
+  arrowIn: {
+    head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
+    length: number,
+    width: number,
+    start: {
+      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
+      length: number,
+      width: number,
+    },
+    end: {
+      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
+      length: number,
+      width: number,
+    },
+  } = null,
   precision: number = 8,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   let points = [];
   let cornerStyleToUse;
-  const orderedPoints = pointsIn;
+  let orderedPoints = pointsIn;
+
+  const arrow = simplifyArrowOptions(arrowIn, width);
+
+  if (close === false && arrowIn != null) {
+    orderedPoints = shortenLineForArrows(pointsIn, arrow);
+  }
+  console.log(orderedPoints)
 
   // Convert line to line with corners
   if (cornerStyle === 'auto') {
@@ -580,8 +732,21 @@ function makePolyLine(
       linePrimitives, lineNum, borderIs, holeIs,
     );
   }
-  if (dash.length > 1) {
-    return [dashedTris, border, touchBorder, hole];
+
+  const trisToUse = dash.length > 1 ? dashedTris : tris;
+  // if (dash.length > 1) {
+  //   if (arrow != null && close === false) {
+  //     return addArrows(arrow, dashedTris, border, touchBorder, hole);
+  //   }
+  //   return [dashedTris, border, touchBorder, hole];
+  // }
+  if (arrowIn != null && close === false) {
+    return addArrows(
+      arrow,
+      [orderedPoints[0], pointsIn[0]],
+      [orderedPoints[orderedPoints.length - 1], pointsIn[pointsIn.length - 1]],
+      trisToUse, border, touchBorder, hole, touchBorderBuffer, width,
+    );
   }
   return [tris, border, touchBorder, hole];
 }
@@ -618,6 +783,73 @@ function makePolyLineCorners(
   return [tris, borders, holes];
 }
 
+function addArrows(
+  arrow: {
+    start?: {
+      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
+      length: number,
+      width: number,
+      barb: number,
+      lineWidth: number,
+    },
+    end?: {
+      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
+      length: number,
+      width: number,
+      barb: number,
+      lineWidth: number,
+    },
+  },
+  startArrow: [Point, Point],
+  endArrow: [Point, Point],
+  existingTriangles: Array<Points>,
+  existingBorder: Array<Array<Point>>,
+  existingTouchBorder: Array<Array<Point>>,
+  holeBorder: Array<Array<Point>>,
+  touchBorderBuffer: number,
+  lineWidth: number,
+) {
+  let updatedTriangles = existingTriangles;
+  let updatedBorder = existingBorder;
+  let updatedTouchBorder = existingTouchBorder;
+  if (arrow.start != null) {
+    const [points, border, touchBorder] = getArrow(joinObjects(
+      {},
+      arrow.start,
+      {
+        start: startArrow[0],
+        end: startArrow[1],
+        touchBorderBuffer,
+        lineWidth,
+      },
+    ));
+    updatedTriangles = [...updatedTriangles, ...points];
+    updatedBorder = [...updatedBorder, border];
+    updatedTouchBorder = [...updatedTouchBorder, touchBorder];
+  }
+  if (arrow.end != null) {
+    const [points, border, touchBorder] = getArrow(joinObjects(
+      {},
+      arrow.end,
+      {
+        start: endArrow[0],
+        end: endArrow[1],
+        touchBorderBuffer,
+        lineWidth,
+      },
+    ));
+    updatedTriangles = [...updatedTriangles, ...points];
+    updatedBorder = [...updatedBorder, border];
+    updatedTouchBorder = [...updatedTouchBorder, touchBorder];
+  }
+  return [
+    updatedTriangles,
+    updatedBorder,
+    updatedTouchBorder,
+    holeBorder,
+  ];
+}
+
 export {
   joinLinesInPoint,
   lineSegmentsToPoints,
@@ -626,6 +858,7 @@ export {
   // makeThickLineInsideOutside,
   makePolyLine,
   makePolyLineCorners,
+  addArrows,
 };
 
 

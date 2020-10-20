@@ -50,7 +50,7 @@ import type {
 } from '../DrawingObjects/TextObject/TextObject';
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
-import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
+import { makePolyLine, makePolyLineCorners, makeArrows } from '../DrawingObjects/Geometries/lines/lines';
 import { getPolygonPoints, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle';
 import { getTriangle, getTriangleDirection } from '../DrawingObjects/Geometries/triangle';
@@ -1625,6 +1625,11 @@ export default class DiagramPrimitives {
       border: 'line',
       touchBorder: 'border',
       holeBorder: 'none',
+      // arrow: {
+      //   type: 'triangle' | 'circle' | 'line' | 'bar',
+      //   width: number,
+      //   length: number,
+      // },
     };
     const options = processOptions(defaultOptions, ...optionsIn);
     parsePoints(options, ['points', 'border', 'hole']);
@@ -1640,7 +1645,6 @@ export default class DiagramPrimitives {
     let touchBorder;
     let holeBorder;
     const getTris = (o) => {
-      console.log(o)
       let touchBorderBuffer = 0;
       if (typeof o.touchBorder === 'number') {
         touchBorderBuffer = o.touchBorder;
@@ -1655,7 +1659,7 @@ export default class DiagramPrimitives {
         [triangles, border, touchBorder, holeBorder] = makePolyLine(
           o.points, o.width, o.close, o.widthIs, o.cornerStyle, o.cornerSize,
           o.cornerSides, o.minAutoCornerAngle, o.dash, o.linePrimitives,
-          o.lineNum, o.border, touchBorderBuffer, o.hole,
+          o.lineNum, o.border, touchBorderBuffer, o.hole, o.arrow,
         );
         if (o.touchBorder !== 'line' && typeof o.touchBorder !== 'number') {
           touchBorder = o.touchBorder;
@@ -1670,6 +1674,9 @@ export default class DiagramPrimitives {
       if (Array.isArray(o.holeBorder) || o.holeBorder === 'none') {
         holeBorder = o.holeBorder;
       }
+      // if (o.close === false || o.arrow != null) {
+      //   [triangles, border, touchBorder] = makeArrows(triangles, border, touchBorder, o);
+      // }
     };
 
     getTris(options);
