@@ -16,6 +16,7 @@ describe('Polyline', () => {
   let corneredRect;
   let corneredRectLineOutside;
   let corneredRectLineInside;
+  let corneredRectLineMid;
   beforeEach(() => {
     diagram = makeDiagram();
     addElement = (optionsName) => {
@@ -34,6 +35,20 @@ describe('Polyline', () => {
       -0.2, 1, 0.2, -1, -0.2, 1, 0.2,
       0.7, 0.5, -1, -0.2, 0.7, 0.5, -0.7,
       0.5, -1, -0.2, -0.7, 0.5, -1, 0.2,
+    ];
+    corneredRectLineMid = [
+      -0.9, -0.159, -0.659, -0.4, -1.1, -0.241, -1.1, -0.241,
+      -0.659, -0.4, -0.741, -0.6, -0.659, -0.4, 0.659, -0.4,
+      -0.741, -0.6, -0.741, -0.6, 0.659, -0.4, 0.741, -0.6,
+      0.659, -0.4, 0.9, -0.159, 0.741, -0.6, 0.741, -0.6,
+      0.9, -0.159, 1.1, -0.241, 0.9, -0.159, 0.9, 0.159,
+      1.1, -0.241, 1.1, -0.241, 0.9, 0.159, 1.1, 0.241,
+      0.9, 0.159, 0.659, 0.4, 1.1, 0.241, 1.1, 0.241,
+      0.659, 0.4, 0.741, 0.6, 0.659, 0.4, -0.659, 0.4,
+      0.741, 0.6, 0.741, 0.6, -0.659, 0.4, -0.741, 0.6,
+      -0.659, 0.4, -0.9, 0.159, -0.741, 0.6, -0.741, 0.6,
+      -0.9, 0.159, -1.1, 0.241, -0.9, 0.159, -0.9, -0.159,
+      -1.1, 0.241, -1.1, 0.241, -0.9, -0.159, -1.1, -0.241,
     ];
     corneredRectLineOutside = [
       -0.9, -0.2, -0.7, -0.4, -1, -0.241, -1, -0.241,
@@ -204,6 +219,36 @@ describe('Polyline', () => {
   describe('Line', () => {
     beforeEach(() => {
       options = {
+        mid: {
+          options: {
+            width: 2,
+            height: 1,
+            corner: {
+              radius: 0.3,
+              sides: 1,
+            },
+            line: {
+              width: 0.2,
+              widthIs: 'mid',
+            },
+            // default is border: 'outline'
+          },
+        },
+        midRectBorder: {
+          options: {
+            width: 2,
+            height: 1,
+            corner: {
+              radius: 0.3,
+              sides: 1,
+            },
+            line: {
+              width: 0.2,
+              widthIs: 'mid',
+            },
+            border: 'rect',
+          },
+        },
         inside: {
           options: {
             width: 2,
@@ -329,6 +374,32 @@ describe('Polyline', () => {
           },
         },
       };
+    });
+    test('Mid', () => {
+      addElement('mid');
+      expect(round(rd.points, 3)).toEqual(corneredRectLineMid);
+      expect(round(rd.border, 3)).toEqual([getPoints([
+        [-1.1, -0.3], [-0.8, -0.6], [0.8, -0.6],
+        [1.1, -0.3], [1.1, 0.3], [0.8, 0.6],
+        [-0.8, 0.6], [-1.1, 0.3],
+      ])]);
+      expect(round(rd.touchBorder, 3)).toEqual([getPoints([
+        [-1.1, -0.3], [-0.8, -0.6], [0.8, -0.6],
+        [1.1, -0.3], [1.1, 0.3], [0.8, 0.6],
+        [-0.8, 0.6], [-1.1, 0.3],
+      ])]);
+      expect(rd.hole).toEqual([]);
+    });
+    test('Mid rect border', () => {
+      addElement('midRectBorder');
+      expect(round(rd.points, 3)).toEqual(corneredRectLineMid);
+      expect(round(rd.border, 3)).toEqual([getPoints([
+        [-1.1, -0.6], [1.1, -0.6], [1.1, 0.6], [-1.1, 0.6],
+      ])]);
+      expect(round(rd.touchBorder, 3)).toEqual([getPoints([
+        [-1.1, -0.6], [1.1, -0.6], [1.1, 0.6], [-1.1, 0.6],
+      ])]);
+      expect(rd.hole).toEqual([]);
     });
     test('Inside', () => {
       addElement('inside');
