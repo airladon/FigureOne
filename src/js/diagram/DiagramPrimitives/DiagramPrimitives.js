@@ -388,7 +388,7 @@ export type OBJ_CurvedCorner = {
  * rectangle (`rect`) or the same as the border with some buffer that
  * effectively increases the width of the line on either side of it
  * (`number`) - (`'border'`)
- * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [hole]
+ * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [holeBorder]
  * hole border of the line can be the points on the `positive` or `negative`
  * side of the line, completely custom (`Array<Array<TypeParsablePoint>>`)
  * or `'none'` is the default (`'none'`)
@@ -456,7 +456,7 @@ export type OBJ_Polyline = {
   transform?: Transform,
   border?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>> | 'rect',
   touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | number,
-  hole?: 'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
+  holeBorder?: 'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
   linePrimitives?: boolean,
   lineNum?: number,
   copy?: Array<CPY_Step | string> | CPY_Step,
@@ -534,10 +534,18 @@ export type OBJ_LineStyle = {
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polygon').standard()`)
  * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ * @property {'outline' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
+ * the polygon border can either be the outline of the polygon (`'outline'`),
+ * the rectangle that encompasses the polygon (`'rect'`) or a custom set
+ * of points `Array<Array<TypeParsablePoint>>` - (`'outline'`)
  * @property {number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>} [touchBorder]
  * the touch border can be the same as the border (`'border'`), can be the
- * encompassing rect (`'rect'`), can be a radius: `number`, or can be
- * completely custom (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
+ * encompassing rect (`'rect'`), can be a buffer around the shape with
+ * some with `number`, or can be a custom set of points
+ * (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
+ * @property {'none' | Array<Array<TypeParsablePoint>>} [holeBorder]
+ * hole border of the line can be the points custom points
+ *(`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
  * @example
  * // Simple filled hexagon
  * diagram.addElement({
@@ -595,6 +603,7 @@ export type OBJ_Polygon = {
   pulse?: number | OBJ_PulseScale,
   border?: 'outline' | 'rect' | Array<Array<TypeParsablePoint>>,
   touchBorder?: number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>,
+  holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
 };
 
 /**
@@ -616,6 +625,19 @@ export type OBJ_Polygon = {
  * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('rectangle').standard()`)
+ * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ * @property {'outline' | Array<Array<TypeParsablePoint>>} [border]
+ * the rectangle border can either be the outline of the rectangle
+ * (`'outline'`) or a custom set of points `Array<Array<TypeParsablePoint>>`
+ * - (`'outline'`)
+ * @property {number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>} [touchBorder]
+ * the touch border can be the same as the border (`'border'`), can be the
+ * encompassing rect (`'rect'`), can be a buffer around the shape with
+ * some with `number`, or can be a custom set of points
+ * (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
+ * @property {'none' | Array<Array<TypeParsablePoint>>} [holeBorder]
+ * hole border of the rectangle can be the points custom points
+ *(`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
  * @example
  * // Filled rectangle
  * diagram.addElement({
@@ -682,6 +704,9 @@ export type OBJ_Rectangle = {
   texture?: OBJ_Texture,
   copy?: Array<CPY_Step | string> | CPY_Step,
   pulse?: number | OBJ_PulseScale,
+  border?: 'outline' | 'rect' | Array<Array<TypeParsablePoint>>,
+  touchBorder?: number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>,
+  holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
 }
 
 /* eslint-disable max-len */
@@ -775,7 +800,6 @@ export type OBJ_Rectangle = {
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('rectangle').standard()`)
  * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
- *
  * @example
  * // Right angle triangle
  * diagram.addElement({
@@ -1833,7 +1857,9 @@ export default class DiagramPrimitives {
         sides: 1,
       },
       transform: new Transform('rectangle').standard(),
-      border: null,
+      border: 'outline',
+      touchBorder: 'border',
+      holeBorder: 'none',
     };
     const optionsToUse = processOptions(defaultOptions, ...options);
 
@@ -1843,28 +1869,42 @@ export default class DiagramPrimitives {
       optionsToUse.line.widthIs = 'mid';
     }
 
-    const border = getRectangleBorder(optionsToUse);
+    const [points, border, touchBorder] = getRectangleBorder(optionsToUse);
+
     let element;
     if (optionsToUse.line == null) {
       element = this.generic(optionsToUse, {
-        points: rectangleBorderToTris(border),
+        points: rectangleBorderToTris(points),
+        border,
+        touchBorder,
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
-        const updatedBorder = getRectangleBorder(o);
+        const [updatedPoints, updatedBorder, updatedTouchBorder] = getRectangleBorder(o);
         element.drawingObject.change(
-          rectangleBorderToTris(updatedBorder), [updatedBorder], [],
+          rectangleBorderToTris(updatedPoints),
+          updatedBorder,
+          updatedTouchBorder,
+          o.holeBorder,
         );
       };
     } else {
       element = this.polyline(optionsToUse, optionsToUse.line, {
-        points: border,
+        points,
+        border,
+        touchBorder,
         close: true,
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
-        const updatedBorder = getRectangleBorder(o);
-        element.custom.updatePoints(updatedBorder);
+        const [updatedPoints, updatedBorder, updatedTouchBorder] = getRectangleBorder(o);
+        // const updatedBorder = getRectangleBorder(o);
+        element.custom.updatePoints({
+          points: updatedPoints,
+          border: updatedBorder,
+          touchBorder: updatedTouchBorder,
+          holeBorder: o.holeBorder,
+        });
       };
     }
     return element;

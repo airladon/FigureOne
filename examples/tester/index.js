@@ -3,17 +3,30 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // Right angle triangle
 diagram.addElement({
   name: 'g',
-  method: 'shapes.polygon',
+  method: 'shapes.rectangle',
   options: {
+    width: 2,
+    height: 1,
+    corner: {
+      radius: 0.3,
+      sides: 5,
+    },
+    line: {
+      width: 0.1,
+      widthIs: 'positive',
+    },
+    // touchBorder: 0.1,
+    xAlign: 'left',
+    yAlign: 'bottom',
     // points: [[0, 0], [1, 0], [0, 1]],
     // width: 0.1,
     // border: 'negative',
     // dash: [0.1, 0.1],
     // close: true,
-    radius: 1,
-    // line: { width: 0.1, widthIs: 'mid' },
-    // touchBorder: 'rect',
-    sides: 4,
+    // radius: 1,
+    // // line: { width: 0.1, widthIs: 'mid' },
+    // touchBorder: 1,
+    // sides: 4,
     // border: 'negative',
     // touchBorder: 0.1,
 
@@ -29,7 +42,7 @@ diagram.addElement({
   },
 });
 diagram.setTouchable();
-diagram.elements._g.custom.update({ radius: 2 })
+// diagram.elements._g.custom.update({ radius: 2 })
 
 // diagram.addElement({
 //   name: 'lines',
