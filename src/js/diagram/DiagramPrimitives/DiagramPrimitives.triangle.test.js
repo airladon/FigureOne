@@ -450,7 +450,5 @@ describe('Polyline', () => {
         [0, 2],
       ])]);
     });
-    test('Update', () => {
-    });
   });
 });

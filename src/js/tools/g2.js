@@ -1337,7 +1337,7 @@ class Line {
    * @return {Point}
    */
   pointAtLength(length: number) {
-    const totalLength = this.p2.sub(this.p1);
+    const totalLength = this.p2.sub(this.p1).distance();
     return this.pointAtPercent(length / totalLength);
     // const angle = Math.atan2(direction.y, direction.x);
     // const p = new Point(
