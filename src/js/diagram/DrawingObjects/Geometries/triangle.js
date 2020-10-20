@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, Transform, Line, minAngleDiff, threePointAngle,
+  Point, Transform, Line, minAngleDiff, threePointAngle, getPoints,
 } from '../../../tools/g2';
 import {
   makePolyLine,
@@ -27,9 +27,9 @@ function getTriangleDirection(points: Array<Point>) {
 function increaseTriangleByOffset(points: Array<Point>, delta) {
   const direction = getTriangleDirection(points);
   const [, outline] = makePolyLine(
-    points, delta, true, 'outside', 'auto', 0.1,
+    points, delta, true, direction === -1 ? 'negative' : 'positive', 'auto', 0.1,
     10, Math.PI / 7, [], false,
-    2, direction === 1 ? 'negative' : 'positive', 0, [],
+    2, direction === -1 ? 'negative' : 'positive', 0, [],
   );
   return outline;
 }
@@ -259,12 +259,14 @@ function getTriangle(
     touchBorder: number | 'rect' | 'border' | Array<Array<Point>>
   },
 ): Array<Point> {
-  if (options.points != null) {
-    return options.points;
-  }
+  // if (options.points != null) {
+  //   return options.points;
+  // }
   let points;
   const { direction } = options;
-  if (options.ASA != null) {
+  if (options.points != null) {
+    points = getPoints(options.points);
+  } else if (options.ASA != null) {
     points = getASAPoints(options.ASA, direction);
   } else if (options.SAS != null) {
     points = getSASPoints(options.SAS, direction);
@@ -287,12 +289,18 @@ function getTriangle(
     }
   }
 
-  const alignedTriangle = alignTriangle(points, options.xAlign, options.yAlign, options.rotation);
+  let alignedTriangle;
+  if (options.points != null) {
+    alignedTriangle = points;
+  } else {
+    alignedTriangle = alignTriangle(points, options.xAlign, options.yAlign, options.rotation);
+  }
 
-  let borderToUse = [alignedTriangle.map(p => p._dup())];
-  let touchBorderToUse = [alignedTriangle.map(p => p._dup())];
 
   const { border, line, touchBorder } = options;
+  let borderToUse = border;
+  let touchBorderToUse = touchBorder;
+
   let lineWidthDelta = 0;
   let touchBorderDelta = 0;
   if (line != null && (line.widthIs === 'outside' || line.widthIs === 'negative')) {
@@ -300,8 +308,11 @@ function getTriangle(
   } else if (line != null && (line.widthIs === 'mid')) {
     lineWidthDelta = line.width / 2;
   }
+
   if (lineWidthDelta > 0 && border === 'outline') {
-    borderToUse = [increaseTriangleByOffset(points, lineWidthDelta)];
+    borderToUse = increaseTriangleByOffset(alignedTriangle, lineWidthDelta);
+  } else if (border === 'outline') {
+    borderToUse = [alignedTriangle.map(p => p._dup())];
   }
 
   if (typeof touchBorder === 'number') {
@@ -309,7 +320,7 @@ function getTriangle(
   }
 
   if (touchBorderDelta > 0) {
-    touchBorderToUse = [increaseTriangleByOffset(points, lineWidthDelta + touchBorderDelta)];
+    touchBorderToUse = increaseTriangleByOffset(alignedTriangle, lineWidthDelta + touchBorderDelta);
   }
 
   return [alignedTriangle, borderToUse, touchBorderToUse];

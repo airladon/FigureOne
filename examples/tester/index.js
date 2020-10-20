@@ -5,13 +5,21 @@ diagram.addElement({
   name: 'g',
   method: 'shapes.triangle',
   options: {
-    width: 1,
-    height: 1,
-    line: {
-      width: 0.1,
-      widthIs: 'negative',
-    },
-    yAlign: 'top',
+    // width: 2,
+    // height: 1,
+    // top: 'left',
+    // line: {
+    //   width: 0.1,
+    //   widthIs: 'outside',
+    // },
+    // yAlign: 'bottom',
+    points: [[0, 0], [2, 0], [0, 1]],
+    // ASA: [Math.PI / 2, 2, Math.PI / 6],
+    // xAlign: 'left',
+    // yAlign: 'bottom',
+    // line: {
+    //   width: 0.1,
+    // }
   },
   mods: {
     isTouchable: true,

@@ -1908,9 +1908,9 @@ export default class DiagramPrimitives {
       holeBorder: 'none',
     };
     const optionsToUse = processOptions(defaultOptions, ...options);
-    if (optionsToUse.points != null) {
-      optionsToUse.points = getPoints(optionsToUse.points);
-    }
+    // if (optionsToUse.points != null) {
+    //   optionsToUse.points = getPoints(optionsToUse.points);
+    // }
 
     if (
       optionsToUse.line != null && optionsToUse.line.widthIs == null
@@ -1919,6 +1919,7 @@ export default class DiagramPrimitives {
     }
 
     const [points, border, touchBorder] = getTriangle(optionsToUse);
+
     let element;
     if (optionsToUse.line == null) {
       element = this.generic(optionsToUse, {
@@ -1932,15 +1933,11 @@ export default class DiagramPrimitives {
         );
       };
     } else {
-      // const dir = getTriangleDirection(border);
-      // const borderToUse = dir === 1 ? 'positive' : 'negative';
       element = this.polyline(optionsToUse, optionsToUse.line, {
         points,
         close: true,
         border,
         touchBorder,
-        // border: [border.map(b => b._dup())],
-        // border: borderToUse,
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
