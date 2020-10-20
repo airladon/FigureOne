@@ -5,13 +5,27 @@ diagram.addElement({
   name: 'g',
   method: 'shapes.rectangle',
   options: {
-    width: 2,
-    height: 1,
+    width: 1.8,
+    height: 0.8,
     corner: {
-      radius: 0.3,
+      radius: 0.242,
       sides: 1,
     },
-    border: 'rect',
+    line: {
+      width: 0.1,
+      widthIs: 'outside',
+    },
+    // width: 2,
+    // height: 1,
+    // corner: {
+    //   radius: 0.3,
+    //   sides: 1,
+    // },
+    // line: {
+    //   width: 0.1,
+    //   widthIs: 'inside',
+    // },
+    // border: 'rect',
     // line: {
     //   width: 0.1,
     //   widthIs: 'positive',
