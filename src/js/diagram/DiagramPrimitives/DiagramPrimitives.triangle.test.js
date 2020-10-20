@@ -15,6 +15,13 @@ describe('Polyline', () => {
   let options;
   let tri;
   let triBorder;
+  let mid;
+  let midBorder;
+  let outside;
+  let outsideBorder;
+  let inside;
+  let insideBorder;
+  // let midBorder;
   // let corneredRectLineOutside;
   // let corneredRectLineInside;
   // let corneredRectLineMid;
@@ -33,6 +40,51 @@ describe('Polyline', () => {
     triBorder = [
       [new Point(0, 0), new Point(2, 0), new Point(0, 1)],
     ];
+    mid = [
+      0.05, 0.05, 1.788, 0.05, -0.05,
+      -0.05, -0.05, -0.05, 1.788, 0.05,
+      2.212, -0.05, 1.788, 0.05, 0.05,
+      0.919, 2.212, -0.05, 2.212, -0.05,
+      0.05, 0.919, -0.05, 1.081, 0.05,
+      0.919, 0.05, 0.05, -0.05, 1.081,
+      -0.05, 1.081, 0.05, 0.05, -0.05,
+      -0.05,
+    ];
+    midBorder = [[
+      new Point(-0.05, -0.05),
+      new Point(2.212, -0.05),
+      new Point(2.212, -0.05),
+      new Point(-0.05, 1.081),
+      new Point(-0.05, 1.081),
+      new Point(-0.05, -0.05),
+    ]];
+    outside = [
+      0, 0, 2, 0, -0.1, -0.1,
+      -0.1, -0.1, 2, 0, 2.424, -0.1,
+      2, 0, 0, 1, 2.424, -0.1,
+      2.424, -0.1, 0, 1, -0.1, 1.162,
+      0, 1, 0, 0, -0.1, 1.162,
+      -0.1, 1.162, 0, 0, -0.1, -0.1,
+    ];
+    outsideBorder = [[
+      new Point(-0.1, -0.1),
+      new Point(2.424, -0.1),
+      new Point(2.424, -0.1),
+      new Point(-0.1, 1.162),
+      new Point(-0.1, 1.162),
+      new Point(-0.1, -0.1),
+    ]];
+
+    inside = [
+      0, 0.1, 1.8, 0.1, 0, 0,
+      0, 0, 1.8, 0.1, 2, 0,
+      1.776, 0, 0, 0.888, 2, 0,
+      2, 0, 0, 0.888, 0, 1,
+      0.1, 0.95, 0.1, 0, 0, 1,
+      0, 1, 0.1, 0, 0, 0,
+    ];
+
+    insideBorder = triBorder;
   });
   describe('Definitions', () => {
     beforeEach(() => {
@@ -197,43 +249,208 @@ describe('Polyline', () => {
       ])]);
       expect(td.hole).toEqual([]);
     });
+    test('Update', () => {
+      addElement('default');
+      expect(round(td.points, 3)).toEqual(tri);
+      expect(round(td.border, 3)).toEqual(triBorder);
+      expect(round(td.touchBorder, 3)).toEqual(triBorder);
+      expect(td.hole).toEqual([]);
+
+      t.custom.update({
+        width: 3,
+        height: 2,
+        top: 'right',
+        xAlign: 'right',
+        yAlign: 'top',
+      });
+
+      expect(round(td.points, 3)).toEqual(
+        [-3, -2, 0, -2, 0, 0],
+      );
+      expect(round(td.border, 3)).toEqual([getPoints([
+        [-3, -2], [0, -2], [0, 0],
+      ])]);
+      expect(round(td.touchBorder, 3)).toEqual([getPoints([
+        [-3, -2], [0, -2], [0, 0],
+      ])]);
+    });
   });
-  // describe('Line', () => {
-  //   beforeEach(() => {
-  //     options = {
-  //       mid: {
-  //         options: {
-  //           width: 2,
-  //           height: 1,
-  //           corner: {
-  //             radius: 0.3,
-  //             sides: 1,
-  //           },
-  //           line: {
-  //             width: 0.2,
-  //             widthIs: 'mid',
-  //           },
-  //           // default is border: 'outline'
-  //         },
-  //       },
-  //     },
-  //   });
-  //   test('Mid', () => {
-  //     // addElement('mid');
-  //     // expect(round(rd.points, 3)).toEqual(corneredRectLineMid);
-  //     // expect(round(rd.border, 3)).toEqual([getPoints([
-  //     //   [-1.1, -0.3], [-0.8, -0.6], [0.8, -0.6],
-  //     //   [1.1, -0.3], [1.1, 0.3], [0.8, 0.6],
-  //     //   [-0.8, 0.6], [-1.1, 0.3],
-  //     // ])]);
-  //     // expect(round(rd.touchBorder, 3)).toEqual([getPoints([
-  //     //   [-1.1, -0.3], [-0.8, -0.6], [0.8, -0.6],
-  //     //   [1.1, -0.3], [1.1, 0.3], [0.8, 0.6],
-  //     //   [-0.8, 0.6], [-1.1, 0.3],
-  //     // ])]);
-  //     // expect(rd.hole).toEqual([]);
-  //   });
-  //   test('Update', () => {
-  //   });
-  // });
+  describe('Line', () => {
+    beforeEach(() => {
+      options = {
+        mid: {
+          options: {
+            width: 2,
+            height: 1,
+            top: 'left',
+            line: {
+              width: 0.1,
+              widthIs: 'mid',
+            },
+            xAlign: 'left',
+            yAlign: 'bottom',
+            // default is border: 'outline'
+          },
+        },
+        inside: {
+          options: {
+            width: 2,
+            height: 1,
+            top: 'left',
+            line: {
+              width: 0.1,
+              widthIs: 'inside',
+            },
+            xAlign: 'left',
+            yAlign: 'bottom',
+            // default is border: 'outline'
+          },
+        },
+        outside: {
+          options: {
+            width: 2,
+            height: 1,
+            top: 'left',
+            line: {
+              width: 0.1,
+              widthIs: 'outside',
+            },
+            xAlign: 'left',
+            yAlign: 'bottom',
+            // default is border: 'outline'
+          },
+        },
+        outsideBorderRect: {
+          options: {
+            width: 2,
+            height: 1,
+            top: 'left',
+            line: {
+              width: 0.1,
+              widthIs: 'outside',
+            },
+            xAlign: 'left',
+            yAlign: 'bottom',
+            border: 'rect',
+          },
+        },
+        outsideTouchBorderRect: {
+          options: {
+            width: 2,
+            height: 1,
+            top: 'left',
+            line: {
+              width: 0.1,
+              widthIs: 'outside',
+            },
+            xAlign: 'left',
+            yAlign: 'bottom',
+            border: 'outline',
+            touchBorder: 'rect',
+          },
+        },
+        outsideTouchBorderBuffer: {
+          options: {
+            width: 2,
+            height: 1,
+            top: 'left',
+            line: {
+              width: 0.1,
+              widthIs: 'outside',
+            },
+            xAlign: 'left',
+            yAlign: 'bottom',
+            border: 'outline',
+            touchBorder: 0.1,
+          },
+        },
+      };
+    });
+    test('Mid', () => {
+      addElement('mid');
+      expect(round(td.points, 3)).toEqual(mid);
+      expect(round(td.border, 3)).toEqual(midBorder);
+      expect(round(td.touchBorder, 3)).toEqual(midBorder);
+      expect(td.hole).toEqual([]);
+    });
+    test('Inside', () => {
+      addElement('inside');
+      expect(round(td.points, 3)).toEqual(inside);
+      expect(round(td.border, 3)).toEqual(insideBorder);
+      expect(round(td.touchBorder, 3)).toEqual(insideBorder);
+      expect(td.hole).toEqual([]);
+    });
+    test('Outside', () => {
+      addElement('outside');
+      expect(round(td.points, 3)).toEqual(outside);
+      expect(round(td.border, 3)).toEqual(outsideBorder);
+      expect(round(td.touchBorder, 3)).toEqual(outsideBorder);
+      expect(td.hole).toEqual([]);
+    });
+    test('Outside border rect', () => {
+      addElement('outsideBorderRect');
+      expect(round(td.points, 3)).toEqual(outside);
+      expect(round(td.border, 3)).toEqual([getPoints([
+        [-0.1, -0.1], [2.424, -0.1], [2.424, 1.162], [-0.1, 1.162],
+      ])]);
+      expect(round(td.touchBorder, 3)).toEqual([getPoints([
+        [-0.1, -0.1], [2.424, -0.1], [2.424, 1.162], [-0.1, 1.162],
+      ])]);
+      expect(td.hole).toEqual([]);
+    });
+    test('Outside touch border rect', () => {
+      addElement('outsideTouchBorderRect');
+      expect(round(td.points, 3)).toEqual(outside);
+      expect(round(td.border, 3)).toEqual(outsideBorder);
+      expect(round(td.touchBorder, 3)).toEqual([getPoints([
+        [-0.1, -0.1], [2.424, -0.1], [2.424, 1.162], [-0.1, 1.162],
+      ])]);
+      expect(td.hole).toEqual([]);
+    });
+    test('Outside touch border buffer', () => {
+      addElement('outsideTouchBorderBuffer');
+      expect(round(td.points, 3)).toEqual(outside);
+      expect(round(td.border, 3)).toEqual(outsideBorder);
+      expect(round(td.touchBorder, 3)).toEqual([getPoints([
+        [-0.2, -0.2],
+        [2.847, -0.2],
+        [2.847, -0.2],
+        [-0.2, 1.324],
+        [-0.2, 1.324],
+        [-0.2, -0.2],
+      ])]);
+      expect(td.hole).toEqual([]);
+    });
+    test('Update', () => {
+      addElement('inside');
+      expect(round(td.points, 3)).toEqual(inside);
+      expect(round(td.border, 3)).toEqual(insideBorder);
+      expect(round(td.touchBorder, 3)).toEqual(insideBorder);
+      expect(td.hole).toEqual([]);
+      t.custom.update({
+        width: 4,
+        height: 2,
+      });
+      expect(round(td.points, 3)).toEqual([
+        0, 0.1, 3.8, 0.1, 0, 0,
+        0, 0, 3.8, 0.1, 4, 0,
+        3.776, 0, 0, 1.888, 4, 0,
+        4, 0, 0, 1.888, 0, 2,
+        0.1, 1.95, 0.1, 0, 0, 2,
+        0, 2, 0.1, 0, 0, 0,
+      ]);
+      expect(round(td.border, 3)).toEqual([getPoints([
+        [0, 0],
+        [4, 0],
+        [0, 2],
+      ])]);
+      expect(round(td.touchBorder, 3)).toEqual([getPoints([
+        [0, 0],
+        [4, 0],
+        [0, 2],
+      ])]);
+    });
+    test('Update', () => {
+    });
+  });
 });

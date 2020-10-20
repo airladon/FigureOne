@@ -5,21 +5,15 @@ diagram.addElement({
   name: 'g',
   method: 'shapes.triangle',
   options: {
-    // width: 2,
-    // height: 1,
-    // top: 'left',
-    // line: {
-    //   width: 0.1,
-    //   widthIs: 'outside',
-    // },
-    // yAlign: 'bottom',
-    points: [[0, 0], [2, 0], [0, 1]],
-    // ASA: [Math.PI / 2, 2, Math.PI / 6],
-    // xAlign: 'left',
-    // yAlign: 'bottom',
-    // line: {
-    //   width: 0.1,
-    // }
+    width: 2,
+    height: 1,
+    top: 'left',
+    line: {
+      width: 0.1,
+      widthIs: 'inside',
+    },
+    xAlign: 'left',
+    yAlign: 'bottom',
   },
   mods: {
     isTouchable: true,
@@ -28,7 +22,7 @@ diagram.addElement({
   },
 });
 diagram.setTouchable();
-// diagram.elements._g.custom.update({ radius: 2 })
+diagram.elements._g.custom.update({ width: 4, height: 2, })
 
 // diagram.addElement({
 //   name: 'lines',
