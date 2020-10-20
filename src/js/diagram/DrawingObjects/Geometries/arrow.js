@@ -64,25 +64,28 @@ function getBarbArrow(options: {
   } = options;
   const arrowBorder = [
     new Point(0, -lineWidth / 2),
-    new Point(-barbLength, -width / 2),
+    new Point(barbLength, -lineWidth / 2),
+    new Point(0, -width / 2),
     new Point(length, 0),
-    new Point(-barbLength, width / 2),
+    new Point(0, width / 2),
+    new Point(barbLength, lineWidth / 2),
     new Point(0, lineWidth / 2),
-  ]
+  ];
   const points = [
-    arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
-    arrowBorder[0]._dup(), arrowBorder[2]._dup(), arrowBorder[4]._dup(),
-    arrowBorder[4]._dup(), arrowBorder[2]._dup(), arrowBorder[3]._dup(),
+    arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[6]._dup(),
+    arrowBorder[6]._dup(), arrowBorder[1]._dup(), arrowBorder[5]._dup(),
+    arrowBorder[2]._dup(), arrowBorder[3]._dup(), arrowBorder[1]._dup(),
+    arrowBorder[1]._dup(), arrowBorder[3]._dup(), arrowBorder[5]._dup(),
+    arrowBorder[5]._dup(), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
   ];
   const borderToUse = arrowBorder;
   let touchBorder = borderToUse;
   if (touchBorderBuffer > 0) {
     touchBorder = [
-      new Point(-touchBorderBuffer - barbLength, -width / 2 - touchBorderBuffer),
-      new Point(length + touchBorderBuffer, -width / 2 - touchBorderBuffer),
+      new Point(-touchBorderBuffer, -width / 2 - touchBorderBuffer),
       new Point(length + touchBorderBuffer, -width / 2 - touchBorderBuffer),
       new Point(length + touchBorderBuffer, width / 2 + touchBorderBuffer),
-      new Point(-touchBorderBuffer - barbLength, width / 2 + touchBorderBuffer),
+      new Point(-touchBorderBuffer, width / 2 + touchBorderBuffer),
     ];
   }
   return orientArrow(points, borderToUse, touchBorder, start, end);
