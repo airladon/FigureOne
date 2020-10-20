@@ -2,13 +2,36 @@
 import {
   Point, Transform, Line, minAngleDiff, threePointAngle,
 } from '../../../tools/g2';
+import {
+  makePolyLine,
+} from './lines/lines';
 
 
-function getCenter(points: Array<Point>) {
+function getTriangleCenter(points: Array<Point>) {
   const [A, B, C] = points;
   const Ox = (A.x + B.x + C.x) / 3;
   const Oy = (A.y + B.y + C.y) / 3;
   return new Point(Ox, Oy);
+}
+
+
+function getTriangleDirection(points: Array<Point>) {
+  const [p1, p2, p3] = points;
+  const angle = threePointAngle(p1, p2, p3);
+  if (angle > Math.PI) {
+    return -1;
+  }
+  return 1;
+}
+
+function increaseTriangleByOffset(points: Array<Point>, delta) {
+  const direction = getTriangleDirection(points);
+  const [, outline] = makePolyLine(
+    points, delta, true, 'outside', 'auto', 0.1,
+    10, Math.PI / 7, [], false,
+    2, direction === 1 ? 'negative' : 'positive', 0, [],
+  );
+  return outline;
 }
 
 function alignTriangle(
@@ -43,7 +66,7 @@ function alignTriangle(
   const maxY = Math.max(points[0].y, points[1].y, points[2].y);
   const width = maxX - minX;
   const height = maxY - minY;
-  const center = getCenter(points);
+  const center = getTriangleCenter(points);
   const s1Center = new Line(points[0], points[1]).midPoint();
   const s2Center = new Line(points[1], points[2]).midPoint();
   const s3Center = new Line(points[2], points[0]).midPoint();
@@ -79,9 +102,9 @@ function alignTriangle(
     y = -maxY;
   } else if (yAlign === 'centroid') {
     y = -center.y;
-  } else if (yAlign === 'c2') {
+  } else if (yAlign === 'a2') {
     y = -points[1].y;
-  } else if (yAlign === 'c3') {
+  } else if (yAlign === 'a3') {
     y = -points[2].y;
   } else if (yAlign === 's1') {
     y = -s1Center.y;
@@ -228,6 +251,12 @@ function getTriangle(
     SAS?: [number, number, number],
     direction: 1 | -1,
     rotation: number | { side: number, angle: number },
+    line?: {
+      widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
+      width: number,
+    },
+    border: 'rect' | 'outline' | Array<Array<Point>>,
+    touchBorder: number | 'rect' | 'border' | Array<Array<Point>>
   },
 ): Array<Point> {
   if (options.points != null) {
@@ -257,19 +286,38 @@ function getTriangle(
       points.push(new Point(width, height * direction));
     }
   }
-  return alignTriangle(points, options.xAlign, options.yAlign, options.rotation);
+
+  const alignedTriangle = alignTriangle(points, options.xAlign, options.yAlign, options.rotation);
+
+  let borderToUse = [alignedTriangle.map(p => p._dup())];
+  let touchBorderToUse = [alignedTriangle.map(p => p._dup())];
+
+  const { border, line, touchBorder } = options;
+  let lineWidthDelta = 0;
+  let touchBorderDelta = 0;
+  if (line != null && (line.widthIs === 'outside' || line.widthIs === 'negative')) {
+    lineWidthDelta = line.width;
+  } else if (line != null && (line.widthIs === 'mid')) {
+    lineWidthDelta = line.width / 2;
+  }
+  if (lineWidthDelta > 0 && border === 'outline') {
+    borderToUse = [increaseTriangleByOffset(points, lineWidthDelta)];
+  }
+
+  if (typeof touchBorder === 'number') {
+    touchBorderDelta = touchBorder;
+  }
+
+  if (touchBorderDelta > 0) {
+    touchBorderToUse = [increaseTriangleByOffset(points, lineWidthDelta + touchBorderDelta)];
+  }
+
+  return [alignedTriangle, borderToUse, touchBorderToUse];
 }
 
-function getTriangleDirection(points: Array<Point>) {
-  const [p1, p2, p3] = points;
-  const angle = threePointAngle(p1, p2, p3);
-  if (angle > Math.PI) {
-    return -1;
-  }
-  return 1;
-}
 
 export {
   getTriangle,
+  getTriangleCenter,
   getTriangleDirection,
 };

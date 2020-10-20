@@ -3,52 +3,15 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // Right angle triangle
 diagram.addElement({
   name: 'g',
-  method: 'shapes.rectangle',
+  method: 'shapes.triangle',
   options: {
-    width: 1.8,
-    height: 0.8,
-    corner: {
-      radius: 0.242,
-      sides: 1,
-    },
+    width: 1,
+    height: 1,
     line: {
       width: 0.1,
-      widthIs: 'outside',
+      widthIs: 'negative',
     },
-    // width: 2,
-    // height: 1,
-    // corner: {
-    //   radius: 0.3,
-    //   sides: 1,
-    // },
-    // line: {
-    //   width: 0.1,
-    //   widthIs: 'inside',
-    // },
-    // border: 'rect',
-    // line: {
-    //   width: 0.1,
-    //   widthIs: 'positive',
-    // },
-    // touchBorder: 0.1,
-    // xAlign: 'left',
-    // yAlign: 'bottom',
-    // points: [[0, 0], [1, 0], [0, 1]],
-    // width: 0.1,
-    // border: 'negative',
-    // dash: [0.1, 0.1],
-    // close: true,
-    // radius: 1,
-    // // line: { width: 0.1, widthIs: 'mid' },
-    // touchBorder: 1,
-    // sides: 4,
-    // border: 'negative',
-    // touchBorder: 0.1,
-
-    // border: 'points',
-    // border: [[[0, 0], [1, 0], [0, 1]]],
-    // touchBorder: [[[-0.5, -0.5], [1.5, -0.5], [-0.5, 1.5]]],
-    // holeBorder: [[[0, 0], [0.5, 0], [0, 0.5]]],
+    yAlign: 'top',
   },
   mods: {
     isTouchable: true,

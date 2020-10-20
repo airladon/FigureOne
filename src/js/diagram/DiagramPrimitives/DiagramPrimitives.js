@@ -1903,6 +1903,9 @@ export default class DiagramPrimitives {
       transform: new Transform('triangle').standard(),
       direction: 1,
       rotation: 0,
+      border: 'outline',
+      touchBorder: 'border',
+      holeBorder: 'none',
     };
     const optionsToUse = processOptions(defaultOptions, ...options);
     if (optionsToUse.points != null) {
@@ -1915,37 +1918,40 @@ export default class DiagramPrimitives {
       optionsToUse.line.widthIs = 'mid';
     }
 
-    const border = getTriangle(optionsToUse);
+    const [points, border, touchBorder] = getTriangle(optionsToUse);
     let element;
     if (optionsToUse.line == null) {
       element = this.generic(optionsToUse, {
-        points: border,
-        border: [border.map(b => b._dup())],
+        points, border, touchBorder,
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
-        const updatedBorder = getTriangle(o);
+        const [updatedPoints, updatedBorder, updatedTouchBorder] = getTriangle(o);
         element.drawingObject.change(
-          updatedBorder, [updatedBorder.map(b => b._dup())], [],
+          updatedPoints, updatedBorder, updatedTouchBorder, o.holeBorder,
         );
       };
     } else {
-      const dir = getTriangleDirection(border);
-      const borderToUse = dir === 1 ? 'positive' : 'negative';
+      // const dir = getTriangleDirection(border);
+      // const borderToUse = dir === 1 ? 'positive' : 'negative';
       element = this.polyline(optionsToUse, optionsToUse.line, {
-        points: border,
+        points,
         close: true,
+        border,
+        touchBorder,
         // border: [border.map(b => b._dup())],
-        border: borderToUse,
+        // border: borderToUse,
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
-        const updatedBorder = getRectangleBorder(o);
-        // TODO fix border bug for when element is updated with a different
-        // direction triangle the border direction will be wrong
-        // const updatedDir = getTriangleDirection(updatedBorder);
-        // const updatedBorderToUse = updatedDir === 1 ? 'positive' : 'negative';
-        element.custom.updatePoints(updatedBorder);
+        const [updatedPoints, updatedBorder, updatedTouchBorder] = getTriangle(o);
+
+        element.custom.updatePoints({
+          points: updatedPoints,
+          border: updatedBorder,
+          touchBorder: updatedTouchBorder,
+          holeBorder: o.holeBorder,
+        });
       };
     }
     return element;
