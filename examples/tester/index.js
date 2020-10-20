@@ -9,15 +9,16 @@ diagram.addElement({
     height: 1,
     corner: {
       radius: 0.3,
-      sides: 5,
+      sides: 1,
     },
-    line: {
-      width: 0.1,
-      widthIs: 'positive',
-    },
+    border: 'rect',
+    // line: {
+    //   width: 0.1,
+    //   widthIs: 'positive',
+    // },
     // touchBorder: 0.1,
-    xAlign: 'left',
-    yAlign: 'bottom',
+    // xAlign: 'left',
+    // yAlign: 'bottom',
     // points: [[0, 0], [1, 0], [0, 1]],
     // width: 0.1,
     // border: 'negative',
