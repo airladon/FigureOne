@@ -65,13 +65,14 @@ function makeDashes(
   let cumDistance = 0;
   // eslint-disable-next-line prefer-const
   let [index, remainder] = getDashElementAndRemainder(dash, offset, precision);
-
+  let onLine = true;
   const line12 = new Line(p1, p2);
   const totLength = roundNum(line12.length(), precision);
   let dashLength = roundNum(remainder, precision);
   let lastIndex = index;
   while (cumDistance < totLength) {
     const isOnLine = index % 2 === 0;
+    onLine = isOnLine;
     if (isOnLine) {
       const q1 = line12.pointAtPercent(cumDistance / totLength);
       let q2;
@@ -95,6 +96,7 @@ function makeDashes(
   return {
     points,
     continues: cumDistance > totLength && lastIndex % 2 === 0,
+    onLine,
   };
 }
 
@@ -109,9 +111,10 @@ function lineToDash(
   const dd = makeDashDefinition(dash);
   let cumLength = offset;
   let lastContinue = false;
-
+  let onLine = true;
   const processLine = (p1, p2) => {
     const dashes = makeDashes(dd, p1, p2, cumLength, precision);
+    ({ onLine } = dashes);
     const dashLines = dashes.points;
     const dashContinues = dashes.continues;
     if (lastContinue && dashLines[0] != null) {
@@ -140,7 +143,7 @@ function lineToDash(
     }
   }
 
-  return out;
+  return [out, onLine];
 }
 
 export {

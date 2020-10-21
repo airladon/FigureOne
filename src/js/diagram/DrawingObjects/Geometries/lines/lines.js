@@ -702,8 +702,10 @@ function makePolyLine(
 
   // Convert line to dashed line
   let dashedTris = [];
+  let onLine = true;
   if (dash.length > 1) {
-    const dashes = lineToDash(points, dash, close, 0, precision);
+    const [dashes, onDash] = lineToDash(points, dash, close, 0, precision);
+    onLine = onDash;
     let closeDashes = false;
     if (dashes.length === 1) {
       closeDashes = close;
@@ -745,6 +747,7 @@ function makePolyLine(
       [orderedPoints[0], pointsIn[0]],
       [orderedPoints[orderedPoints.length - 1], pointsIn[pointsIn.length - 1]],
       trisToUse, border, touchBorder, hole, touchBorderBuffer, width,
+      onLine,
     );
   }
   return [tris, border, touchBorder, hole];
@@ -807,6 +810,7 @@ function addArrows(
   holeBorder: Array<Array<Point>>,
   touchBorderBuffer: number,
   lineWidth: number,
+  onLine: boolean,
 ) {
   let updatedTriangles = existingTriangles;
   let updatedBorder = existingBorder;
@@ -842,11 +846,16 @@ function addArrows(
         lineWidth,
       },
     ));
-    const l = count;
+    let connection = [];
+    if (onLine) {
+      const l = count;
+      connection = [
+        updatedTriangles[l - 2]._dup(), updatedTriangles[l - 1]._dup(), tail[0]._dup(),
+        tail[0]._dup(), updatedTriangles[l - 1]._dup(), tail[1]._dup(),
+      ];
+    }
     updatedTriangles = [
-      ...updatedTriangles, ...points,
-      updatedTriangles[l - 2]._dup(), updatedTriangles[l - 1]._dup(), tail[0]._dup(),
-      tail[0]._dup(), updatedTriangles[l - 1]._dup(), tail[1]._dup(),
+      ...updatedTriangles, ...points, ...connection,
     ];
     updatedBorder = [...updatedBorder, border];
     updatedTouchBorder = [...updatedTouchBorder, touchBorder];
