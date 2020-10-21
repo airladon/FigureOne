@@ -14615,15 +14615,16 @@ short gap, short dash, short gap and then repeats.
       
         <div class='space-bottom0'>
           <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_arrow">OBJ_Arrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
-          : if defined, then the line will
-have arrows on one or both ends. Either an object defining custom arrows
-or a string representing the name of an arrow head style can be used.
-If a string is used, then the line will have an arrow at both start and
-end points. Arrows are only available for 
+          : either an object defining custom
+arrows or a string representing the name of an arrow head style can be used.
+If a string is used, then the line will have an arrow at both ends.
+Arrows are only available for 
 <code>close: false</code>
- and
+,
 
 <code>widthIs: 'mid'</code>
+ and 
+<code>linePrimitives: false</code>
 
           
         </div>
@@ -34206,7 +34207,8 @@ has been made after a reset.</p>
   </div>
   
 
-  <p>Arrow head options.</p>
+  <p>Arrow heads</p>
+<p><code>'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'rectangle'</code></p>
 
   
     <p style="display: none;">      Type:
@@ -34233,6 +34235,7 @@ has been made after a reset.</p>
     
       
         <a href="#obj_arrow">OBJ_Arrow</a>
+ for properties related to each arrow head
 
       
     

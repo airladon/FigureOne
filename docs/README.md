@@ -2863,12 +2863,11 @@ of the line.
     length of gap and then the pattern repeats - can use more than one dash length
     and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
     short gap, short dash, short gap and then repeats.
--   `arrow` **([OBJ_Arrow][758] \| [ArrowHead][759])?** if defined, then the line will
-    have arrows on one or both ends. Either an object defining custom arrows
-    or a string representing the name of an arrow head style can be used.
-    If a string is used, then the line will have an arrow at both start and
-    end points. Arrows are only available for `close: false` and
-    `widthIs: 'mid'`
+-   `arrow` **([OBJ_Arrow][758] \| [ArrowHead][759])?** either an object defining custom
+    arrows or a string representing the name of an arrow head style can be used.
+    If a string is used, then the line will have an arrow at both ends.
+    Arrows are only available for `close: false`,
+    `widthIs: 'mid'` and `linePrimitives: false`
 -   `linePrimitives` **[boolean][731]?** Use WebGL line primitives instead of
     triangle primitives to draw the line (`false`)
 -   `lineNum` **[boolean][731]?** Number of line primitives to use when
@@ -8183,10 +8182,12 @@ has been made after a reset.
 
 ## ArrowHead
 
--   **See: [OBJ_Arrow][678]
+-   **See: [OBJ_Arrow][678] for properties related to each arrow head
     **
 
-Arrow head options.
+Arrow heads
+
+`'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'rectangle'`
 
 Type: (`"triangle"` \| `"circle"` \| `"line"` \| `"barb"` \| `"bar"` \| `"polygon"` \| `"rectangle"`)
 

@@ -30,37 +30,35 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 //   arrow({ head: 'triangle', reverse: 'true' }),
 // ])
 
-// diagram.addElement({
-//   name: 'arrowedLine',
-//   method: 'shapes.polyline',
-//   options: {
-//     points: [[0, 0], [1, 0], [0, 0.7], [1, 0.7]],
-//     width: 0.05,
-//     cornerStyle: 'fill',
-//     dash: [0.1, 0.1],
-//     // arrow: {
-//     //   scale: 0.7,
-//     //   start: {
-//     //     head: 'triangle',
-//     //     reverse: true,
-//     //   },
-//     //   end: 'barb',
-//     // },
-//   },
-// });
-diagram.addElement(
- {
-   name: 'p',
-   method: 'shapes.polyline',
-   options: {
-     points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
-     width: 0.05,
-     close: true,
-     cornersOnly: true,
-     cornerLength: 0.2,
-   },
- },
-);
+diagram.addElement({
+  name: 'a',
+  method: 'shapes.polyline',
+  options: {
+    points: [[0, 0], [1, 0]],
+    width: 0.02,
+    arrow: {
+      scale: 1.2,
+      start: 'bar',
+      end: {
+        head: 'polygon',
+        sides: 6,
+      },
+    },
+  },
+});
+// diagram.addElement(
+//  {
+//    name: 'p',
+//    method: 'shapes.polyline',
+//    options: {
+//      points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
+//      width: 0.05,
+//      close: true,
+//      cornersOnly: true,
+//      cornerLength: 0.2,
+//    },
+//  },
+// );
 
 // diagram.addElement(
 //   {

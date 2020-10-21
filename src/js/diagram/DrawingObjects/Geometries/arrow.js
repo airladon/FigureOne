@@ -86,6 +86,56 @@ export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polyg
  * @property {number} [radius] radius of polygon or circle arrow head
  * @property {number} [barb] barb length (along the length of the line) of the
  * barb arrow head
+ *
+ * @example
+ * // Line with triangle arrows on both ends
+ * diagram.addElement({
+ *   name: 'a',
+ *   method: 'shapes.polyline',
+ *   options: {
+ *     points: [[0, 0], [1, 0]],
+ *     width: 0.02,
+ *     arrow: 'triangle',
+ *   },
+ * });
+ *
+ * @example
+ * // Line with customized barb arrow at end only
+ * diagram.addElement({
+ *   name: 'a',
+ *   method: 'shapes.polyline',
+ *   options: {
+ *     points: [[0, 0], [1, 0]],
+ *     width: 0.02,
+ *     arrow: {
+ *       end: {
+ *         head: 'barb',
+ *         width: 0.15,
+ *         length: 0.25,
+ *         barb: 0.05,
+ *       },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Line with two different arrow ends scaled by 0.7x
+ * diagram.addElement({
+ *   name: 'a',
+ *   method: 'shapes.polyline',
+ *   options: {
+ *     points: [[0, 0], [1, 0]],
+ *     width: 0.02,
+ *     arrow: {
+ *       scale: 1.2,
+ *       start: 'bar',
+ *       end: {
+ *         head: 'polygon',
+ *         sides: 6,
+ *       },
+ *     },
+ *   },
+ * });
  */
 export type OBJ_Arrow = {
   head?: ArrowHead,
