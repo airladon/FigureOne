@@ -1222,6 +1222,16 @@
               
                 
                 <li><a
+                  href='#obj_line'
+                  class="">
+                  OBJ_Line
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_polyline'
                   class="">
                   OBJ_Polyline
@@ -9358,7 +9368,7 @@ delta.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>offset(direction, space)</span>
+            <span class='code strong strong truncate'>offset(direction, distanceValue, distance)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -9366,7 +9376,7 @@ delta.</p>
 
   
 
-  <p>Create a line that is offset by some space from this line.</p>
+  <p>Create a line that is offset by some distance from this line.</p>
 <p><code>'left'</code>, <code>'right'</code>, <code>'top'</code> and <code>'bottom'</code> are relative to cartesian
 coordinates.</p>
 <p><code>'positive'</code> to the right of a vertical line defined from bottom to top and
@@ -9393,6 +9403,15 @@ polygon.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>direction</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code> | <code>"positive"</code> | <code>"negative"</code>))</code>
+	    the direction to offset the line
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>distanceValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
 	    
           </div>
           
@@ -9400,8 +9419,9 @@ polygon.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    
+            <span class='code bold'>distance</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    offset distance
+
           </div>
           
         </div>
@@ -14395,6 +14415,328 @@ diagram.addElement({
       { <span class="hljs-attr">along</span>: <span class="hljs-string">'x'</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">step</span>: <span class="hljs-number">0.4</span> },
       { <span class="hljs-attr">along</span>: <span class="hljs-string">'y'</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">step</span>: <span class="hljs-number">0.4</span> },
     ],
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_line'>
+      OBJ_Line
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Line definition options object.</p>
+<p><img src="./assets1/line.png"></p>
+<p>A line can either be defined as two points <code>p1</code> and <code>p2</code>, or
+a single points <code>p1</code>, a <code>length</code> and an <code>angle</code>.</p>
+<p>The line has some <code>width</code> that will be filled on both sides
+of the line points evenly (<code>'mid'</code>), or on one side only.
+The line's <code>'positive'</code> side is the side to which it rotates toward
+when rotating in the positive angle direction around <code>p1</code>.
+Similarly the line's <code>'negative'</code> side is the opposite.</p>
+<p>The line can be solid or dashed where dashing is defined as an
+array of numbers. The first number is the length of solid line and the
+second is the length of the gap. If a third number is defined, then it is
+the length of the next solid line, and so on. The dash pattern will repeat.</p>
+<p>The line can have arrows at one or both ends using the <code>arrow</code> property.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>p1</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : start point of line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>p2</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : end point of line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : length of line from 
+<code>p1</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : angle of line from 
+<code>p1</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?)</code>
+          : defines how the width is grown from the polyline's points.
+Only 
+<code>"mid"</code>
+ is fully compatible with all options in
+
+<code>arrow</code>
+ and 
+<code>dash</code>
+. (
+<code>"mid"</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : leave empty for solid line - use array of
+numbers for dash line where first number is length of line, second number is
+length of gap and then the pattern repeats - can use more than one dash length
+and gap  - e.g. 
+[0.1, 0.01, 0.02, 0.01]
+ produces a lines with a long dash,
+short gap, short dash, short gap and then repeats.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_arrow">OBJ_Arrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
+          : either an object defining custom
+arrows or a string representing the name of an arrow head style can be used.
+If a string is used, then the line will have an arrow at both ends.
+Arrows are only available for 
+<code>widthIs: 'mid'</code>
+ and 
+<code>linePrimitives: false</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>linePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Use WebGL line primitives instead of
+triangle primitives to draw the line (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Number of line primitives to use when
+
+<code>linePrimitivs</code>
+: 
+<code>true</code>
+ (
+<code>2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
+          : make copies of
+the line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
+          : Override color with a texture
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : set the default pulse scale
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : convenience to override Transform translation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
+          : (
+<code>Transform('line').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"line"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"rect"</code>)?)</code>
+          : border of the line can be the line itself (
+<code>'outline'</code>
+), can be the rect
+encompassing the line (
+<code>'rect'</code>
+) or a custom set of points
+(
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+) (
+<code>'outline'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : touch border of the line can be the same as the border (
+<code>'border'</code>
+),
+completely custom (
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+), the enclosing
+rectangle (
+<code>rect</code>
+) or the same as the border with some buffer that
+effectively increases the width of the line on either side of it
+(
+<code>number</code>
+) - (
+<code>'border'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : hole border of the line can be the points on the 
+<code>positive</code>
+ or 
+<code>negative</code>
+
+side of the line, completely custom (
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+)
+or 
+<code>'none'</code>
+ is the default (
+<code>'none'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple line defined by two points</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'l'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.line'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">p2</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Dashed line defined by a point, a length and an angle</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'l'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.line'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">length</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">angle</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>,
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.03</span>,
+    <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.02</span>, <span class="hljs-number">0.03</span>, <span class="hljs-number">0.02</span>],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with two different arrows on ends</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'l'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.line'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">p2</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.03</span>,
+    <span class="hljs-attr">arrow</span>: {
+      <span class="hljs-attr">start</span>: <span class="hljs-string">'rectangle'</span>,
+      <span class="hljs-attr">end</span>: <span class="hljs-string">'barb'</span>,
+    },
   },
 });</pre>
     
@@ -34390,6 +34732,59 @@ barb arrow head
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with triangle arrows on both ends</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.polyline'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+    <span class="hljs-attr">arrow</span>: <span class="hljs-string">'triangle'</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with customized barb arrow at end only</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.polyline'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+    <span class="hljs-attr">arrow</span>: {
+      <span class="hljs-attr">end</span>: {
+        <span class="hljs-attr">head</span>: <span class="hljs-string">'barb'</span>,
+        <span class="hljs-attr">width</span>: <span class="hljs-number">0.15</span>,
+        <span class="hljs-attr">length</span>: <span class="hljs-number">0.25</span>,
+        <span class="hljs-attr">barb</span>: <span class="hljs-number">0.05</span>,
+      },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with two different arrow ends scaled by 0.7x</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.polyline'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+    <span class="hljs-attr">arrow</span>: {
+      <span class="hljs-attr">scale</span>: <span class="hljs-number">1.2</span>,
+      <span class="hljs-attr">start</span>: <span class="hljs-string">'bar'</span>,
+      <span class="hljs-attr">end</span>: {
+        <span class="hljs-attr">head</span>: <span class="hljs-string">'polygon'</span>,
+        <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
+      },
+    },
+  },
+});</pre>
+    
   
 
   

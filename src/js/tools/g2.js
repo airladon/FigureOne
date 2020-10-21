@@ -1589,7 +1589,7 @@ class Line {
   // 'outside' is the outside of a polygon defined in the positive direction
   // (CCW).
   /**
-   * Create a line that is offset by some space from this line.
+   * Create a line that is offset by some distance from this line.
    *
    * `'left'`, `'right'`, `'top'` and `'bottom'` are relative to cartesian
    * coordinates.
@@ -1605,7 +1605,7 @@ class Line {
    */
   offset(
     direction: 'left' | 'right' | 'top' | 'bottom' | 'positive' | 'negative',
-    space: number,
+    dist: number,
   ) {
     let normalizedAngle = this.ang;
     if (normalizedAngle >= Math.PI) {
@@ -1627,12 +1627,12 @@ class Line {
       offsetAngle = normalizedAngle + Math.PI / 2;
     }
     const p1 = new Point(
-      this.p1.x + space * Math.cos(offsetAngle),
-      this.p1.y + space * Math.sin(offsetAngle),
+      this.p1.x + dist * Math.cos(offsetAngle),
+      this.p1.y + dist * Math.sin(offsetAngle),
     );
     const p2 = new Point(
-      this.p2.x + space * Math.cos(offsetAngle),
-      this.p2.y + space * Math.sin(offsetAngle),
+      this.p2.x + dist * Math.cos(offsetAngle),
+      this.p2.y + dist * Math.sin(offsetAngle),
     );
     return new Line(p1, p2, 0, this.ends);
   }
