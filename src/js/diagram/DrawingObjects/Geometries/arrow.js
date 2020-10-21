@@ -3,9 +3,21 @@ import {
   Point, Line, Transform,
 } from '../../../tools/g2';
 import {
-  joinObjects,
+  joinObjects, joinObjectsWithOptions,
 } from '../../../tools/tools';
 import { getPolygonPoints, getTrisFillPolygon } from './polygon/polygon';
+
+export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'rectangle';
+export type OBJ_Arrow = {
+  head?: ArrowHead,
+  length?: number,
+  width?: number,
+  rotation?: number,
+  reverse?: number,
+  sides?: number,
+  radius?: number,
+  barb?: number,
+}
 
 function orientArrow(
   points: Array<Point>,
@@ -73,18 +85,18 @@ function getBarbArrow(options: {
   width: number,
   start: Point,
   stop: Point,
-  barbLength: number,
+  barb: number,
   touchBorderBuffer: number,
   lineWidth: number,
 }) {
   const {
-    width, length, start, end, touchBorderBuffer, lineWidth, barbLength,
+    width, length, start, end, touchBorderBuffer, lineWidth, barb,
   } = options;
   const arrowBorder = [
     new Point(0, 0),
-    new Point(-barbLength, -width / 2),
+    new Point(-barb, -width / 2),
     new Point(length, 0),
-    new Point(-barbLength, width / 2),
+    new Point(-barb, width / 2),
   ];
   const points = [
     arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
@@ -94,10 +106,10 @@ function getBarbArrow(options: {
   let touchBorder = borderToUse;
   if (touchBorderBuffer > 0) {
     touchBorder = [
-      new Point(-touchBorderBuffer - barbLength, -width / 2 - touchBorderBuffer),
+      new Point(-touchBorderBuffer - barb, -width / 2 - touchBorderBuffer),
       new Point(length + touchBorderBuffer, -width / 2 - touchBorderBuffer),
       new Point(length + touchBorderBuffer, width / 2 + touchBorderBuffer),
-      new Point(-touchBorderBuffer - barbLength, width / 2 + touchBorderBuffer),
+      new Point(-touchBorderBuffer - barb, width / 2 + touchBorderBuffer),
     ];
   }
   const tail = [
@@ -197,8 +209,8 @@ function getLineArrow(options: {
 
 
 function getPolygonArrow(options: {
-  length: number,
-  width: number,
+  // length: number,
+  // width: number,
   radius: number,
   start: Point,
   stop: Point,
@@ -208,13 +220,11 @@ function getPolygonArrow(options: {
   rotation: number,
 }) {
   const {
-    width, length, start, end, touchBorderBuffer, lineWidth, sides, radius, rotation,
+    start, end, touchBorderBuffer, lineWidth, sides, radius, rotation,
   } = options;
 
-  let r = radius;
-  if (options.radius == null) {
-    r = Math.max(width, length);
-  }
+  const r = radius;
+
   const s = Math.max(sides, 3);
   const arrowBorder = getPolygonPoints({
     radius: r,
@@ -230,10 +240,10 @@ function getPolygonArrow(options: {
   let touchBorder = borderToUse;
   if (touchBorderBuffer > 0) {
     touchBorder = [
-      new Point(-touchBorderBuffer, -width / 2 - touchBorderBuffer),
-      new Point(length + touchBorderBuffer, -width / 2 - touchBorderBuffer),
-      new Point(length + touchBorderBuffer, width / 2 + touchBorderBuffer),
-      new Point(-touchBorderBuffer, width / 2 + touchBorderBuffer),
+      new Point(-touchBorderBuffer, -r - touchBorderBuffer),
+      new Point(r + touchBorderBuffer, -r - touchBorderBuffer),
+      new Point(r + touchBorderBuffer, r + touchBorderBuffer),
+      new Point(-touchBorderBuffer, r + touchBorderBuffer),
     ];
   }
   const tail = [
@@ -244,10 +254,10 @@ function getPolygonArrow(options: {
 }
 
 function getArrow(options: {
-  head: 'barb' | 'triangle' | 'rectangle',
+  head: ArrowHead,
   length: number,
   width: number,
-  barbLength: number,
+  barb: number,
   start: Point,
   stop: Point,
   touchBorderBuffer: number,
@@ -256,83 +266,129 @@ function getArrow(options: {
   if (options.head === 'barb') {
     return getBarbArrow(options);
   }
-  if (options.head === 'rectangle') {
+  if (options.head === 'rectangle' || options.head === 'bar') {
     return getRectangleArrow(options);
   }
   if (options.head === 'line') {
     return getLineArrow(options);
   }
-  if (options.head === 'polygon') {
+  if (options.head === 'polygon' || options.head === 'circle') {
     return getPolygonArrow(options);
   }
   return getTriangleArrow(options);
 }
 
 function getArrowLength(options: {
-  head: 'barb' | 'triangle' | 'circle' | 'line' | 'bar' | 'square' | 'diamond',
+  head: ArrowHead,
   length: number,
   lineWidth: number,
 }) {
-  const { head } = options;
-  if (head === 'bar') {
-    return options.lineWidth;
+  const {
+    head, width, length, lineWidth, radius,
+  } = options;
+  if (head === 'circle' || head === 'polygon') {
+    return radius;
   }
-  return options.length;
+  if (head === 'line') {
+    const line = new Line([0, -width / 2], [length, 0]);
+    const horizontal = new Line([0, -lineWidth], [length, -lineWidth]);
+    const i = horizontal.intersectsWith(line).intersect;
+    return length - i.x;
+  }
+  return length;
+}
+
+
+function defaultArrowOptions(
+  head: ArrowHead,
+  lineWidth: number,
+) {
+  if (head === 'triangle' || head == null) {
+    return {
+      head: 'triangle',
+      width: lineWidth * 3,
+      length: lineWidth * 3,
+      reverse: false,
+    };
+  }
+  if (head === 'polygon') {
+    return {
+      radius: lineWidth * 1.5,
+      sides: 4,
+      rotation: 0,
+    };
+  }
+  if (head === 'circle') {
+    return {
+      radius: lineWidth * 1.5,
+      sides: 30,
+      rotation: 0,
+    };
+  }
+  if (head === 'barb') {
+    return {
+      width: lineWidth * 3,
+      length: lineWidth * 3,
+      barb: lineWidth,
+    };
+  }
+  if (head === 'bar') {
+    return {
+      width: lineWidth * 3,
+      length: lineWidth,
+    };
+  }
+  if (head === 'line') {
+    return {
+      width: lineWidth * 4,
+      length: lineWidth * 3,
+    };
+  }
+  if (head === 'rectangle') {
+    return {
+      width: lineWidth * 3,
+      length: lineWidth * 3,
+    };
+  }
 }
 
 function simplifyArrowOptions(
   arrow: ?{
-    head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
-    length: number,
-    width: number,
-    start: {
-      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
-      length: number,
-      width: number,
-      barb: number,
-    },
-    end: {
-      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
-      length: number,
-      width: number,
-      barb: number,
-    },
-  },
+    start: OBJ_Arrow | ArrowHead,
+    end: OBJ_Arrow | ArrowHead,
+  } & OBJ_Arrow | ArrowHead,
   lineWidth: number,
 ) {
   if (arrow == null) {
     return undefined;
   }
-  let start;
-  let end;
   const out = {};
   if (
     arrow.start != null
     || (arrow.start == null && arrow.end == null)
   ) {
-    start = joinObjects({}, {
-      head: arrow.head,
-      length: arrow.length,
-      width: arrow.width,
-      barb: arrow.barb,
-      lineWidth,
-    }, arrow.start);
-    out.start = start;
+    const start = joinObjectsWithOptions(
+      { except: ['end', 'start'] }, { lineWidth }, arrow, arrow.start,
+    );
+    out.start = joinObjects(
+      defaultArrowOptions(start.head, start.lineWidth),
+      start,
+    );
   }
   if (
     arrow.end != null
     || (arrow.start == null && arrow.end == null)
   ) {
-    end = joinObjects({}, {
-      head: arrow.head,
-      length: arrow.length,
-      width: arrow.width,
-      barb: arrow.barb,
-      lineWidth,
-    }, arrow.end);
-    out.end = end;
+    const end = joinObjectsWithOptions(
+      { except: ['start', 'end'] }, { lineWidth }, arrow, arrow.end,
+    );
+    out.end = joinObjects(
+      defaultArrowOptions(end.head, end.lineWidth),
+      end,
+    );
   }
-  if (start != null || end != null) {
+
+  if (Object.keys(out).length > 0) {
     return out;
   }
   return undefined;
