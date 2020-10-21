@@ -302,91 +302,112 @@ function getArrowLength(options: {
 function defaultArrowOptions(
   head: ArrowHead,
   lineWidth: number,
+  scaleIn: number,
 ) {
+  const scale = 4 * scaleIn;
   if (head === 'triangle' || head == null) {
     return {
       head: 'triangle',
-      width: lineWidth * 3,
-      length: lineWidth * 3,
+      width: lineWidth * scale,
+      length: lineWidth * scale,
       reverse: false,
     };
   }
   if (head === 'polygon') {
     return {
-      radius: lineWidth * 1.5,
+      radius: lineWidth * scale / 2,
       sides: 4,
       rotation: 0,
     };
   }
   if (head === 'circle') {
     return {
-      radius: lineWidth * 1.5,
+      radius: lineWidth * scale / 2,
       sides: 30,
       rotation: 0,
     };
   }
   if (head === 'barb') {
     return {
-      width: lineWidth * 3,
-      length: lineWidth * 3,
+      width: lineWidth * scale,
+      length: lineWidth * scale,
       barb: lineWidth,
     };
   }
   if (head === 'bar') {
     return {
-      width: lineWidth * 3,
+      width: lineWidth * scale,
       length: lineWidth,
     };
   }
   if (head === 'line') {
     return {
-      width: lineWidth * 4,
-      length: lineWidth * 3,
+      width: lineWidth * scale,
+      length: lineWidth * scale,
     };
   }
   if (head === 'rectangle') {
     return {
-      width: lineWidth * 3,
-      length: lineWidth * 3,
+      width: lineWidth * scale,
+      length: lineWidth * scale,
     };
   }
+  return {
+    head: 'triangle',
+    width: lineWidth * scale,
+    length: lineWidth * scale,
+    reverse: false,
+  };
 }
 
 function simplifyArrowOptions(
-  arrow: ?{
+  arrowIn: ?{
     start: OBJ_Arrow | ArrowHead,
     end: OBJ_Arrow | ArrowHead,
   } & OBJ_Arrow | ArrowHead,
   lineWidth: number,
 ) {
-  if (arrow == null) {
+  if (arrowIn == null) {
     return undefined;
   }
+  let arrow = arrowIn;
+  if (typeof arrowIn === 'string') {
+    arrow = {
+      start: arrowIn,
+      end: arrowIn,
+    };
+  }
+  const optionsForBoth = joinObjectsWithOptions({ except: ['end', 'start'] }, {}, arrow);
+
   const out = {};
-  if (
-    arrow.start != null
-    || (arrow.start == null && arrow.end == null)
-  ) {
-    const start = joinObjectsWithOptions(
-      { except: ['end', 'start'] }, { lineWidth }, arrow, arrow.start,
-    );
-    out.start = joinObjects(
-      defaultArrowOptions(start.head, start.lineWidth),
-      start,
-    );
-  }
-  if (
-    arrow.end != null
-    || (arrow.start == null && arrow.end == null)
-  ) {
-    const end = joinObjectsWithOptions(
-      { except: ['start', 'end'] }, { lineWidth }, arrow, arrow.end,
-    );
-    out.end = joinObjects(
-      defaultArrowOptions(end.head, end.lineWidth),
-      end,
-    );
-  }
+  const processEnd = (startOrEnd) => {
+    if (typeof arrow[startOrEnd] === 'string') {
+      arrow[startOrEnd] = {
+        head: arrow[startOrEnd],
+      };
+    }
+    if (Object.keys(optionsForBoth).length > 0) {
+      if (arrow[startOrEnd] == null) {
+        arrow[startOrEnd] = joinObjects({}, optionsForBoth);
+      } else {
+        arrow[startOrEnd] = joinObjects({}, optionsForBoth, arrow[startOrEnd]);
+      }
+    }
+    if (
+      arrow[startOrEnd] != null
+      || (arrow.start == null && arrow.end == null)
+    ) {
+      const o = joinObjectsWithOptions(
+        { except: ['end', 'start'] }, { lineWidth }, arrow[startOrEnd],
+      );
+      out[startOrEnd] = joinObjects(
+        defaultArrowOptions(o.head, o.lineWidth, o.scale),
+        o,
+      );
+    }
+  };
+  processEnd('start');
+  processEnd('end');
 
   if (Object.keys(out).length > 0) {
     return out;
