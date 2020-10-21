@@ -687,7 +687,6 @@ function makePolyLine(
   if (close === false && arrowIn != null) {
     orderedPoints = shortenLineForArrows(pointsIn, arrow);
   }
-  console.log(orderedPoints)
 
   // Convert line to line with corners
   if (cornerStyle === 'auto') {
@@ -812,8 +811,9 @@ function addArrows(
   let updatedTriangles = existingTriangles;
   let updatedBorder = existingBorder;
   let updatedTouchBorder = existingTouchBorder;
+  const count = updatedTriangles.length;
   if (arrow.start != null) {
-    const [points, border, touchBorder] = getArrow(joinObjects(
+    const [points, border, touchBorder, tail] = getArrow(joinObjects(
       {},
       arrow.start,
       {
@@ -823,12 +823,16 @@ function addArrows(
         lineWidth,
       },
     ));
-    updatedTriangles = [...updatedTriangles, ...points];
+    updatedTriangles = [
+      ...updatedTriangles, ...points,
+      updatedTriangles[0]._dup(), updatedTriangles[1]._dup(), tail[0]._dup(),
+      tail[0]._dup(), updatedTriangles[1]._dup(), tail[1]._dup(),
+    ];
     updatedBorder = [...updatedBorder, border];
     updatedTouchBorder = [...updatedTouchBorder, touchBorder];
   }
   if (arrow.end != null) {
-    const [points, border, touchBorder] = getArrow(joinObjects(
+    const [points, border, touchBorder, tail] = getArrow(joinObjects(
       {},
       arrow.end,
       {
@@ -838,7 +842,12 @@ function addArrows(
         lineWidth,
       },
     ));
-    updatedTriangles = [...updatedTriangles, ...points];
+    const l = count;
+    updatedTriangles = [
+      ...updatedTriangles, ...points,
+      updatedTriangles[l - 2]._dup(), updatedTriangles[l - 1]._dup(), tail[0]._dup(),
+      tail[0]._dup(), updatedTriangles[l - 1]._dup(), tail[1]._dup(),
+    ];
     updatedBorder = [...updatedBorder, border];
     updatedTouchBorder = [...updatedTouchBorder, touchBorder];
   }

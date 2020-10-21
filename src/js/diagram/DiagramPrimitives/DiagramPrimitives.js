@@ -1632,7 +1632,7 @@ export default class DiagramPrimitives {
       // },
     };
     const options = processOptions(defaultOptions, ...optionsIn);
-    parsePoints(options, ['points', 'border', 'hole']);
+    parsePoints(options, ['points', 'border', 'holeBorder', 'touchBorder']);
     if (typeof options.touchBorder !== 'number') {
       parsePoints(options, ['touchBorder']);
     }
@@ -1645,6 +1645,7 @@ export default class DiagramPrimitives {
     let touchBorder;
     let holeBorder;
     const getTris = (o) => {
+      parsePoints(o, ['points', 'border', 'holeBorder', 'touchBorder']);
       let touchBorderBuffer = 0;
       if (typeof o.touchBorder === 'number') {
         touchBorderBuffer = o.touchBorder;

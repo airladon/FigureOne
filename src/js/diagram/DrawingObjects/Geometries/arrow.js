@@ -12,6 +12,7 @@ function orientArrow(
   touchBorder: Array<Point>,
   start: Point,
   end: Point,
+  tail: Array<Point>,
 ) {
   const line = new Line(start, end);
   const matrix = new Transform().rotate(line.angle()).translate(start).matrix();
@@ -19,17 +20,21 @@ function orientArrow(
     points.map(p => p.transformBy(matrix)),
     border.map(p => p.transformBy(matrix)),
     touchBorder.map(p => p.transformBy(matrix)),
+    tail.map(p => p.transformBy(matrix)),
+    // points.length,
   ];
 }
+
 function getTriangleArrow(options: {
   length: number,
   width: number,
   start: Point,
   end: Point,
+  lineWidth: number,
   touchBorderBuffer: number,
 }) {
   const {
-    width, length, start, end, touchBorderBuffer,
+    width, length, start, end, touchBorderBuffer, lineWidth,
   } = options;
   const points = [
     new Point(0, -width / 2),
@@ -47,7 +52,11 @@ function getTriangleArrow(options: {
       new Point(-touchBorderBuffer, width / 2 + touchBorderBuffer),
     ];
   }
-  return orientArrow(points, border, touchBorder, start, end);
+  const tail = [
+    new Point(0, lineWidth / 2),
+    new Point(0, -lineWidth / 2),
+  ];
+  return orientArrow(points, border, touchBorder, start, end, tail);
 }
 
 function getBarbArrow(options: {
@@ -72,7 +81,7 @@ function getBarbArrow(options: {
     new Point(0, lineWidth / 2),
   ];
   const points = [
-    arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[6]._dup(),
+    arrowBorder[6]._dup(), arrowBorder[0]._dup(), arrowBorder[1]._dup(),
     arrowBorder[6]._dup(), arrowBorder[1]._dup(), arrowBorder[5]._dup(),
     arrowBorder[2]._dup(), arrowBorder[3]._dup(), arrowBorder[1]._dup(),
     arrowBorder[1]._dup(), arrowBorder[3]._dup(), arrowBorder[5]._dup(),
@@ -88,7 +97,11 @@ function getBarbArrow(options: {
       new Point(-touchBorderBuffer, width / 2 + touchBorderBuffer),
     ];
   }
-  return orientArrow(points, borderToUse, touchBorder, start, end);
+  const tail = [
+    new Point(0, lineWidth / 2),
+    new Point(0, -lineWidth / 2),
+  ];
+  return orientArrow(points, borderToUse, touchBorder, start, end, tail);
 }
 
 function getArrow(options: {
