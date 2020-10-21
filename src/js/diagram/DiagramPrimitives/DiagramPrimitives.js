@@ -349,6 +349,11 @@ export type OBJ_CurvedCorner = {
  * length of gap and then the pattern repeats - can use more than one dash length
  * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
  * short gap, short dash, short gap and then repeats.
+ * @property {OBJ_Arrow | ArrowHead} [arrow] either an object defining custom
+ * arrows or a string representing the name of an arrow head style can be used.
+ * If a string is used, then the line will have an arrow at both ends.
+ * Arrows are only available for `close: false`,
+ * `widthIs: 'mid'` and `linePrimitives: false`
  * @property {boolean} [linePrimitives] Use WebGL line primitives instead of
  * triangle primitives to draw the line (`false`)
  * @property {boolean} [lineNum] Number of line primitives to use when
@@ -384,6 +389,7 @@ export type OBJ_CurvedCorner = {
  *     options: {
  *       points: [[-0.5, -0.5], [-0.1, 0.5], [0.3, -0.2], [0.5, 0.5]],
  *       width: 0.05,
+ *     },
  *   },
  * );
  *
@@ -418,6 +424,25 @@ export type OBJ_CurvedCorner = {
  *    },
  *  },
  *);
+ * @example
+ * // Zig zag with arrows
+ * diagram.addElement({
+ *   name: 'arrowedLine',
+ *   method: 'shapes.polyline',
+ *   options: {
+ *     points: [[0, 0], [1, 0], [0, 0.7], [1, 0.7]],
+ *     width: 0.05,
+ *     cornerStyle: 'fill',
+ *     arrow: {
+ *       scale: 0.7,
+ *       start: {
+ *         head: 'triangle',
+ *         reverse: true,
+ *       },
+ *       end: 'barb',
+ *     },
+ *   },
+ * });
  */
 export type OBJ_Polyline = {
   points: Array<TypeParsablePoint> | Array<Point>,
@@ -432,6 +457,7 @@ export type OBJ_Polyline = {
   forceCornerLength?: boolean,
   minAutoCornerAngle?: number,
   dash?: Array<number>,
+  arrow?: OBJ_Arrow | ArrowHead,
   color?: Array<number>,
   texture?: OBJ_Texture,
   pulse?: number,

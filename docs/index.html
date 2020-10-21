@@ -2830,6 +2830,36 @@
               
                 
                 <li><a
+                  href='#arrowhead'
+                  class="">
+                  ArrowHead
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_arrow'
+                  class="">
+                  OBJ_Arrow
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_arrows'
+                  class="">
+                  OBJ_Arrows
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_scenario'
                   class="">
                   OBJ_Scenario
@@ -14246,14 +14276,25 @@ or areas where touching has no effect.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>?)</code>
-          
+          <span class='code bold'>border</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | null)?)</code>
+          : border used for
+keeping shape within limits
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>hole</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"rect"</code> | <code>"border"</code> | null)?)</code>
+          : border used for touching
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>hole</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | null)?)</code>
+          : borders where
+touching will not work
+
           
         </div>
       
@@ -14282,6 +14323,12 @@ transform of
 <code>number</code>
 )
 
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          
           
         </div>
       
@@ -14399,6 +14446,16 @@ sharper, the outside width joins at a point further and further from the
 ideal corner. Eventually trucating the corner makes more visual sense
 and therefore, a minimum angle (<code>minAutoCornerAngle</code>) is used to
 specify when the corner should be drawn, and when it should be truncated.</p>
+<p>By default, the border of the polyline is the line itself (<code>border</code> =
+<code>'line'</code>). The border can also just be the points on the positive side of
+the line, or the negative side of the line. This is useful for caturing
+the hole shape of a closed polyline within a border. The border can also
+be the encompassing rectangle of the polyline (<code>border</code> = <code>'rect'</code>) or
+defined as a custom set of points.</p>
+<p>The touch border can either be the same as the border (<code>'border'</code>), the
+encompassing rect (<code>'rect'</code>), a custom set of points, or the same as the
+line but with some buffer that effectively increases the width on both sides
+of the line.</p>
 
   
   
@@ -14557,6 +14614,21 @@ short gap, short dash, short gap and then repeats.
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_arrow">OBJ_Arrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
+          : if defined, then the line will
+have arrows on one or both ends. Either an object defining custom arrows
+or a string representing the name of an arrow head style can be used.
+If a string is used, then the line will have an arrow at both start and
+end points. Arrows are only available for 
+<code>close: false</code>
+ and
+
+<code>widthIs: 'mid'</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>linePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           : Use WebGL line primitives instead of
 triangle primitives to draw the line (
@@ -14628,30 +14700,62 @@ the polyline
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"line"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : touch border of the line can be the points on the 
-<code>positive</code>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"line"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"rect"</code>)?)</code>
+          : border of the line can be the points on the 
+<code>'positive'</code>
 , 
-<code>negative</code>
+<code>'negative'</code>
 
-or boths sides (
-<code>line</code>
-) of the line, or completely custom (
-<code>line</code>
+of the line, can be the line itself (
+<code>'line'</code>
+), can be the rect
+encompassing the line (
+<code>'rect'</code>
+) or a custom set of points
+(
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+) (
+<code>'line'</code>
+),
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : touch border of the line can be the same as the border (
+<code>'border'</code>
+),
+completely custom (
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+), the enclosing
+rectangle (
+<code>rect</code>
+) or the same as the border with some buffer that
+effectively increases the width of the line on either side of it
+(
+<code>number</code>
+) - (
+<code>'border'</code>
 )
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>hole</span> <code class='quiet'>((<code>"none"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
           : hole border of the line can be the points on the 
 <code>positive</code>
  or 
 <code>negative</code>
 
-side of the line or completely custom (
-<code>none</code>
+side of the line, completely custom (
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+)
+or 
+<code>'none'</code>
+ is the default (
+<code>'none'</code>
 )
 
           
@@ -14684,6 +14788,7 @@ diagram.addElement(
     <span class="hljs-attr">options</span>: {
       <span class="hljs-attr">points</span>: [[<span class="hljs-number">-0.5</span>, <span class="hljs-number">-0.5</span>], [<span class="hljs-number">-0.1</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">0.3</span>, <span class="hljs-number">-0.2</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>]],
       <span class="hljs-attr">width</span>: <span class="hljs-number">0.05</span>,
+    },
   },
 );</pre>
     
@@ -14719,6 +14824,26 @@ diagram.addElement(
    },
  },
 );</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Zig zag with arrows</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'arrowedLine'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.polyline'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">0.7</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0.7</span>]],
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.05</span>,
+    <span class="hljs-attr">cornerStyle</span>: <span class="hljs-string">'fill'</span>,
+    <span class="hljs-attr">arrow</span>: {
+      <span class="hljs-attr">scale</span>: <span class="hljs-number">0.7</span>,
+      <span class="hljs-attr">start</span>: {
+        <span class="hljs-attr">head</span>: <span class="hljs-string">'triangle'</span>,
+        <span class="hljs-attr">reverse</span>: <span class="hljs-literal">true</span>,
+      },
+      <span class="hljs-attr">end</span>: <span class="hljs-string">'barb'</span>,
+    },
+  },
+});</pre>
     
   
 
@@ -15166,6 +15291,64 @@ the rectangle
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
+          : set the default pulse scale
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"outline"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : the rectangle border can either be the outline of the rectangle
+(
+<code>'outline'</code>
+), an encompassing rect (
+<code>'rect'</code>
+) or a custom set of points
+
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+ - (
+<code>'outline'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : the touch border can be the same as the border (
+<code>'border'</code>
+), can be the
+encompassing rect (
+<code>'rect'</code>
+), can be a buffer around the shape with
+some with 
+<code>number</code>
+, or can be a custom set of points
+(
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+) - (
+<code>'border'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : hole border of the rectangle can be the points custom points
+(
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+) or 
+<code>'none'</code>
+ - (
+<code>'none'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           
           
@@ -15403,6 +15586,57 @@ the polygon if defined. If using fill and copying, use
         <div class='space-bottom0'>
           <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
           : set the default pulse scale
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"outline"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : the polygon border can either be the outline of the polygon (
+<code>'outline'</code>
+),
+the rectangle that encompasses the polygon (
+<code>'rect'</code>
+) or a custom set
+of points 
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+ - (
+<code>'outline'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : the touch border can be the same as the border (
+<code>'border'</code>
+), can be the
+encompassing rect (
+<code>'rect'</code>
+), can be a buffer around the shape with
+some with 
+<code>number</code>
+, or can be a custom set of points
+(
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+) - (
+<code>'border'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : hole border of the line can be the points custom points
+(
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+) or 
+<code>'none'</code>
+ - (
+<code>'none'</code>
+)
 
           
         </div>
@@ -33937,6 +34171,355 @@ has been made after a reset.</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='arrowhead'>
+      ArrowHead
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Arrow head options.</p>
+
+  
+    <p style="display: none;">      Type:
+      (<code>"triangle"</code> | <code>"circle"</code> | <code>"line"</code> | <code>"barb"</code> | <code>"bar"</code> | <code>"polygon"</code> | <code>"rectangle"</code>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#obj_arrow">OBJ_Arrow</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_arrow'>
+      OBJ_Arrow
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Arrow options object.</p>
+<p>Lines and polylines can be terminated with different styles of arrows. The
+<code>head</code> parameter is used to define the style of arrow head.</p>
+<h3><code>head: 'triangle'</code></h3>
+<p><img src="./assets1/arrow_triangle.png"></p>
+<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
+<p>Use <code>reverse</code> to reverse the triangle:</p>
+<p><img src="./assets1/arrow_reversetri.png"></p>
+<h3><code>head: 'barb'</code></h3>
+<p><img src="./assets1/arrow_barb.png"></p>
+<p>Use <code>length</code>, <code>width</code> and <code>barb</code> to customize head shape.</p>
+<h3><code>head: 'line'</code></h3>
+<p><img src="./assets1/arrow_line.png"></p>
+<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
+<h3><code>head: 'circle'</code></h3>
+<p><img src="./assets1/arrow_circle.png"></p>
+<p>Use <code>radius</code> and <code>sides</code> to customize head shape.</p>
+<h3><code>head: 'polygon'</code></h3>
+<p><img src="./assets1/arrow_polygon.png"></p>
+<p>Use <code>radius</code>, <code>sides</code> and <code>rotation</code> to customize head shape.</p>
+<h3><code>head: 'bar'</code></h3>
+<p><img src="./assets1/arrow_bar.png"></p>
+<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
+<h3><code>head: 'rectangle'</code></h3>
+<p><img src="./assets1/arrow_rectangle.png"></p>
+<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
+<h3>General</h3>
+<p>For arrow heads that use <code>length</code> and <code>width</code> properties, the <code>length</code> is the
+dimension along the line.</p>
+<p>All properties have default values that can be scaled with the <code>scale</code>
+property. So a <code>scale</code> of 2 will double the size of the default arrow.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>head</span> <code class='quiet'>(<a href="#arrowhead">ArrowHead</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale the default dimensions of the arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : dimension of the arrow head along the line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : dimension of the arrow head along the line width
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : rotation of the polygon
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>reverse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : reverse the direction of the triangle arrow head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in polygon or circle arrow head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : radius of polygon or circle arrow head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>barb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : barb length (along the length of the line) of the
+barb arrow head
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_arrows'>
+      OBJ_Arrows
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Line end's arrow definition options object.</p>
+<p><code>start</code> and <code>end</code> define the properties of the arrows at the start and
+end of the line. Instead of defining <a href="#obj_arrow">OBJ_Arrow</a> objects for the
+start and end, a string that is the arrow's <code>head</code> property can also be
+used and the size dimensions will be the default.</p>
+<p>All other properties will be used as the default for the <code>start</code> and
+<code>end</code> objects.</p>
+<p>If any of the default properties are defined, then the line will have
+both a start and end arrow.</p>
+<p>If only one end of the line is to have an arrow, then define only the
+<code>start</code> or <code>end</code> properties and no others.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>((<a href="#obj_arrow">OBJ_Arrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
+          : arrow at start of line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>end</span> <code class='quiet'>((<a href="#obj_arrow">OBJ_Arrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
+          : arrow at end of line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>head</span> <code class='quiet'>(<a href="#arrowhead">ArrowHead</a>?)</code>
+          : default head to use for start and end arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default scale to use for start and end arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default length to use for start and end arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default width to use for start and end arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default rotation to use for start and end arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>reverse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default reverse to use for start and end arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default sides to use for start and end arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default radius to use for start and end arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>barb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default barb to use for start and end arrow
+
+          
+        </div>
+      
+    </div>
   
 
   

@@ -7,9 +7,132 @@ import {
 } from '../../../tools/tools';
 import { getPolygonPoints, getTrisFillPolygon } from './polygon/polygon';
 
+/**
+ * Arrow heads
+ *
+ * `'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'rectangle'`
+ *
+ * @see {@link OBJ_Arrow} for properties related to each arrow head
+ */
 export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'rectangle';
+
+/**
+ * Arrow options object.
+ *
+ * Lines and polylines can be terminated with different styles of arrows. The
+ * `head` parameter is used to define the style of arrow head.
+ *
+ * ### `head: 'triangle'`
+ *
+ * ![](./assets1/arrow_triangle.png)
+ *
+ * Use `length` and `width` to customize head shape.
+ *
+ * Use `reverse` to reverse the triangle:
+ *
+ * ![](./assets1/arrow_reversetri.png)
+ *
+ * ### `head: 'barb'`
+ *
+ * ![](./assets1/arrow_barb.png)
+ *
+ * Use `length`, `width` and `barb` to customize head shape.
+ *
+ * ### `head: 'line'`
+ *
+ * ![](./assets1/arrow_line.png)
+ *
+ * Use `length` and `width` to customize head shape.
+ *
+ * ### `head: 'circle'`
+ *
+ * ![](./assets1/arrow_circle.png)
+ *
+ * Use `radius` and `sides` to customize head shape.
+ *
+ * ### `head: 'polygon'`
+ *
+ * ![](./assets1/arrow_polygon.png)
+ *
+ * Use `radius`, `sides` and `rotation` to customize head shape.
+ *
+ * ### `head: 'bar'`
+ *
+ * ![](./assets1/arrow_bar.png)
+ *
+ * Use `length` and `width` to customize head shape.
+ *
+ * ### `head: 'rectangle'`
+ *
+ * ![](./assets1/arrow_rectangle.png)
+ *
+ * Use `length` and `width` to customize head shape.
+ *
+ * ### General
+ *
+ * For arrow heads that use `length` and `width` properties, the `length` is the
+ * dimension along the line.
+ *
+ * All properties have default values that can be scaled with the `scale`
+ * property. So a `scale` of 2 will double the size of the default arrow.
+ *
+ * @property {ArrowHead} [head]
+ * @property {number} [scale] scale the default dimensions of the arrow
+ * @property {number} [length] dimension of the arrow head along the line
+ * @property {number} [width] dimension of the arrow head along the line width
+ * @property {number} [rotation] rotation of the polygon
+ * @property {number} [reverse] reverse the direction of the triangle arrow head
+ * @property {number} [sides] number of sides in polygon or circle arrow head
+ * @property {number} [radius] radius of polygon or circle arrow head
+ * @property {number} [barb] barb length (along the length of the line) of the
+ * barb arrow head
+ */
 export type OBJ_Arrow = {
   head?: ArrowHead,
+  scale?: number,
+  length?: number,
+  width?: number,
+  rotation?: number,
+  reverse?: number,
+  sides?: number,
+  radius?: number,
+  barb?: number,
+}
+
+/**
+ * Line end's arrow definition options object.
+ *
+ * `start` and `end` define the properties of the arrows at the start and
+ * end of the line. Instead of defining {@link OBJ_Arrow} objects for the
+ * start and end, a string that is the arrow's `head` property can also be
+ * used and the size dimensions will be the default.
+ *
+ * All other properties will be used as the default for the `start` and
+ * `end` objects.
+ *
+ * If any of the default properties are defined, then the line will have
+ * both a start and end arrow.
+ *
+ * If only one end of the line is to have an arrow, then define only the
+ * `start` or `end` properties and no others.
+ *
+ * @property {OBJ_Arrow | ArrowHead} [start] arrow at start of line
+ * @property {OBJ_Arrow | ArrowHead} [end] arrow at end of line
+ * @property {ArrowHead} [head] default head to use for start and end arrow
+ * @property {number} [scale] default scale to use for start and end arrow
+ * @property {number} [length] default length to use for start and end arrow
+ * @property {number} [width] default width to use for start and end arrow
+ * @property {number} [rotation] default rotation to use for start and end arrow
+ * @property {number} [reverse] default reverse to use for start and end arrow
+ * @property {number} [sides] default sides to use for start and end arrow
+ * @property {number} [radius] default radius to use for start and end arrow
+ * @property {number} [barb] default barb to use for start and end arrow
+ */
+export type OBJ_Arrows = {
+  start: OBJ_Arrow | ArrowHead,
+  end: OBJ_Arrow | ArrowHead,
+  head?: ArrowHead,
+  scale?: number,
   length?: number,
   width?: number,
   rotation?: number,
@@ -50,20 +173,38 @@ function getTriangleArrow(options: {
   const {
     width, length, start, end, touchBorderBuffer, lineWidth, reverse,
   } = options;
-  let points = [
+  let arrowBorder = [
     new Point(0, -width / 2),
     new Point(length, 0),
     new Point(0, width / 2),
   ];
   if (reverse) {
-    points = [
-      new Point(0, -width / 2),
-      new Point(-length, 0),
-      new Point(0, width / 2),
+    const tanAngle = width / 2 / length;
+    const x = lineWidth / 2 / tanAngle;
+    arrowBorder = [
+      new Point(0, -lineWidth / 2),
+      new Point(x, -lineWidth / 2),
+      new Point(length, -width / 2),
+      new Point(length, width / 2),
+      new Point(x, lineWidth / 2),
+      new Point(0, lineWidth / 2),
+      // new Point(length, -width / 2),
+      // new Point(0, 0),
+      // new Point(length, width / 2),
     ];
   }
-  const border = points.map(p => p._dup());
-  let touchBorder = border;
+  let points;
+  if (reverse) {
+    points = [
+      arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[4]._dup(),
+      arrowBorder[0]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
+      arrowBorder[1]._dup(), arrowBorder[2]._dup(), arrowBorder[3]._dup(),
+      arrowBorder[1]._dup(), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
+    ];
+  } else {
+    points = arrowBorder.map(p => p._dup());
+  }
+  let touchBorder = arrowBorder;
   if (touchBorderBuffer > 0) {
     touchBorder = [
       new Point(-touchBorderBuffer, -width / 2 - touchBorderBuffer),
@@ -73,11 +214,19 @@ function getTriangleArrow(options: {
       new Point(-touchBorderBuffer, width / 2 + touchBorderBuffer),
     ];
   }
-  const tail = [
+  let tail = [
     new Point(0, lineWidth / 2),
     new Point(0, -lineWidth / 2),
   ];
-  return orientArrow(points, border, touchBorder, start, end, tail);
+  // if (reverse) {
+  //   const tanAngle = width / 2 / length;
+  //   const x = lineWidth / 2 / tanAngle;
+  //   tail = [
+  //     new Point(x / 2, lineWidth / 2),
+  //     new Point(x / 2, -lineWidth / 2),
+  //   ];
+  // }
+  return orientArrow(points, arrowBorder, touchBorder, start, end, tail);
 }
 
 function getBarbArrow(options: {
@@ -284,7 +433,7 @@ function getArrowLength(options: {
   lineWidth: number,
 }) {
   const {
-    head, width, length, lineWidth, radius,
+    head, width, length, lineWidth, radius, reverse,
   } = options;
   if (head === 'circle' || head === 'polygon') {
     return radius;
@@ -295,6 +444,9 @@ function getArrowLength(options: {
     const i = horizontal.intersectsWith(line).intersect;
     return length - i.x;
   }
+  // if (head === 'triangle' && reverse) {
+  //   return 0;
+  // }
   return length;
 }
 
@@ -302,9 +454,9 @@ function getArrowLength(options: {
 function defaultArrowOptions(
   head: ArrowHead,
   lineWidth: number,
-  scaleIn: number,
+  scaleIn: number = 1,
 ) {
-  const scale = 4 * scaleIn;
+  const scale = 6 * scaleIn;
   if (head === 'triangle' || head == null) {
     return {
       head: 'triangle',
@@ -348,8 +500,8 @@ function defaultArrowOptions(
   }
   if (head === 'rectangle') {
     return {
-      width: lineWidth * scale,
-      length: lineWidth * scale,
+      width: lineWidth * scale * 0.8,
+      length: lineWidth * scale * 0.8,
     };
   }
   return {

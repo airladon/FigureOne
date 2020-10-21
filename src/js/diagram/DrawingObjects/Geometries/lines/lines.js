@@ -750,7 +750,7 @@ function makePolyLine(
       onLine,
     );
   }
-  return [tris, border, touchBorder, hole];
+  return [trisToUse, border, touchBorder, hole];
 }
 
 function makePolyLineCorners(
