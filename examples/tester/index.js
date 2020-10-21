@@ -31,18 +31,15 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // ])
 
 diagram.addElement({
-  name: 'a',
-  method: 'shapes.polyline',
+  name: 'l',
+  method: 'shapes.line',
   options: {
-    points: [[0, 0], [1, 0]],
-    width: 0.02,
+    p1: [0, 0],
+    p2: [0, 1],
+    width: 0.03,
     arrow: {
-      scale: 1.2,
-      start: 'bar',
-      end: {
-        head: 'polygon',
-        sides: 6,
-      },
+      start: 'rectangle',
+      end: 'barb',
     },
   },
 });
@@ -71,34 +68,24 @@ diagram.addElement({
 //     },
 //   },
 // );
-// // Right angle triangle
+// Right angle triangle
 // diagram.addElement({
 //   name: 'g',
-//   method: 'shapes.polyline',
+//   method: 'shapes.line',
 //   options: {
-//     points: [[0, 0], [1, 0], [2, 1]],
-//     // length: 1,
-//     // angle: 0,
-//     width: 0.015,
-//     widthIs: 'mid',
-//     // dash: [0.1, 0.1],
+//     // points: [[0, 0], [1, 0]],
+//     p1: [0, 0],
+//     p2: [1, 0],
+//     width: 0.02,
 //     arrow: {
-//       head: 'barb',
-//       scale: 2,
+//       scale: 1.2,
+//       start: 'bar',
 //       end: {
-//         head: 'triangle',
-//         reverse: true,
-//         scale: 4,
+//         head: 'polygon',
+//         sides: 6,
 //       },
-
-//       // radius: 0.3,
-//       // sides: 6,
 //     },
-//     // touchBorder: 0.1,
-//     // radius: 1,
-//     // width: 2,
-//     // height: 1,
-//     // line: { width: 0.1 },
+//     touchBorder: 0.2,
 //   },
 //   mods: {
 //     isTouchable: true,
@@ -108,7 +95,7 @@ diagram.addElement({
 // });
 // diagram.setTouchable();
 // // console.log('update')
-// diagram.elements._g.custom.update({ points: [[0, 0], [1, 0], [2, -1]] })
+// diagram.elements._g.custom.update({ p1: [-1, -1], p2: [-1, 0] })
 
 // diagram.elements._pad.setMovable();
 // diagram.elements._pad.setTransformCallback = () => {

@@ -29,6 +29,7 @@ toc:
   - name: Drawing Shapes
     file: ./docs/tutorials/draw/draw.md
   - OBJ_Generic
+  - OBJ_Line
   - OBJ_Polyline
   - OBJ_Triangle
   - OBJ_Rectangle

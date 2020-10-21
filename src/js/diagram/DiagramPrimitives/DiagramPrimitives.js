@@ -874,6 +874,132 @@ export type OBJ_Triangle = {
 }
 /* eslint-enable max-len */
 
+/**
+ * Line definition options object.
+ *
+ * ![](./assets1/line.png)
+ *
+ * A line can either be defined as two points `p1` and `p2`, or
+ * a single points `p1`, a `length` and an `angle`.
+ *
+ * The line has some `width` that will be filled on both sides
+ * of the line points evenly (`'mid'`), or on one side only.
+ * The line's `'positive'` side is the side to which it rotates toward
+ * when rotating in the positive angle direction around `p1`.
+ * Similarly the line's `'negative'` side is the opposite.
+ *
+ * The line can be solid or dashed where dashing is defined as an
+ * array of numbers. The first number is the length of solid line and the
+ * second is the length of the gap. If a third number is defined, then it is
+ * the length of the next solid line, and so on. The dash pattern will repeat.
+ *
+ * The line can have arrows at one or both ends using the `arrow` property.
+ *
+ * @property {TypeParsablePoint} [p1] start point of line
+ * @property {TypeParsablePoint} [p2] end point of line
+ * @property {number} [length] length of line from `p1`
+ * @property {number} [angle] angle of line from `p1`
+ * @property {number} [width] (`0.01`)
+ * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative'} [widthIs]
+ * defines how the width is grown from the polyline's points.
+ * Only `"mid"` is fully compatible with all options in
+ * `arrow` and `dash`. (`"mid"`)
+ * @property {Array<number>} [dash] leave empty for solid line - use array of
+ * numbers for dash line where first number is length of line, second number is
+ * length of gap and then the pattern repeats - can use more than one dash length
+ * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
+ * short gap, short dash, short gap and then repeats.
+ * @property {OBJ_Arrow | ArrowHead} [arrow] either an object defining custom
+ * arrows or a string representing the name of an arrow head style can be used.
+ * If a string is used, then the line will have an arrow at both ends.
+ * Arrows are only available for `widthIs: 'mid'` and `linePrimitives: false`
+ * @property {boolean} [linePrimitives] Use WebGL line primitives instead of
+ * triangle primitives to draw the line (`false`)
+ * @property {boolean} [lineNum] Number of line primitives to use when
+ * `linePrimitivs`: `true` (`2`)
+ * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
+ * the line
+ * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {OBJ_Texture} [texture] Override color with a texture
+ * @property {number} [pulse] set the default pulse scale
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('line').standard()`)
+ * @property {'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>> | 'rect'} [border]
+ * border of the line can be the line itself (`'outline'`), can be the rect
+ * encompassing the line (`'rect'`) or a custom set of points
+ * (`Array<Array<TypeParsablePoint>>`) (`'outline'`)
+ * @property {'border' | 'rect' | Array<Array<TypeParsablePoint>> | number} [touchBorder]
+ * touch border of the line can be the same as the border (`'border'`),
+ * completely custom (`Array<Array<TypeParsablePoint>>`), the enclosing
+ * rectangle (`rect`) or the same as the border with some buffer that
+ * effectively increases the width of the line on either side of it
+ * (`number`) - (`'border'`)
+ * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [holeBorder]
+ * hole border of the line can be the points on the `positive` or `negative`
+ * side of the line, completely custom (`Array<Array<TypeParsablePoint>>`)
+ * or `'none'` is the default (`'none'`)
+ *
+ * @example
+ * // Simple line defined by two points
+ * diagram.addElement({
+ *   name: 'l',
+ *   method: 'shapes.line',
+ *   options: {
+ *     p1: [0, 0],
+ *     p2: [0, 1],
+ *     width: 0.02,
+ *   },
+ * });
+ *
+ * @example
+ * // Dashed line defined by a point, a length and an angle
+ * diagram.addElement({
+ *   name: 'l',
+ *   method: 'shapes.line',
+ *   options: {
+ *     p1: [0, 0],
+ *     length: 1,
+ *     angle: Math.PI / 2,
+ *     width: 0.03,
+ *     dash: [0.1, 0.02, 0.03, 0.02],
+ *   },
+ * });
+ *
+ * @example
+ * // Line with two different arrows on ends
+ * diagram.addElement({
+ *   name: 'l',
+ *   method: 'shapes.line',
+ *   options: {
+ *     p1: [0, 0],
+ *     p2: [0, 1],
+ *     width: 0.03,
+ *     arrow: {
+ *       start: 'rectangle',
+ *       end: 'barb',
+ *     },
+ *   },
+ * });
+ */
+export type OBJ_Line = {
+  p1?: TypeParsablePoint,
+  p2?: TypeParsablePoint,
+  length?: number,
+  angle?: number,
+  width?: number,
+  widthIs?: 'positive' | 'negative' | 'mid',
+  dash?: Array<number>,
+  arrow?: OBJ_Arrow | ArrowHead,
+  copy?: OBJ_Copy | Array<OBJ_Copy>,
+  color?: Array<number>,
+  texture?: OBJ_Texture,
+  position?: TypeParsablePoint,
+  transform?: Transform,
+  pulse?: OBJ_PulseScale | number,
+  border?: Array<Array<Point>> | 'outline' | 'rect',
+  touchBorder?: number | Array<Array<Point>> | 'border' | 'rect',
+  holeBorder?: Array<Array<Point>> | 'none',
+}
 
 /**
  * Grid shape options object
@@ -2095,7 +2221,7 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  simpleLine(...options: Array<{
+  line(...options: Array<{
     p1?: TypeParsablePoint,
     p2?: TypeParsablePoint,
     length?: number,
@@ -2103,6 +2229,7 @@ export default class DiagramPrimitives {
     widthIs?: 'positive' | 'negative' | 'mid',
     width?: number,
     dash?: Array<number>,
+    arrow?: OBJ_Arrow | ArrowHead,
     copy?: OBJ_Copy | Array<OBJ_Copy>,
     color?: Array<number>,
     texture?: OBJ_Texture,
@@ -2125,20 +2252,6 @@ export default class DiagramPrimitives {
       touchBorder: 'border',
     };
     const optionsToUse = processOptions(defaultOptions, ...options);
-    // if (optionsToUse.points != null) {
-    //   optionsToUse.points = getPoints(optionsToUse.points);
-    // }
-    // if (optionsToUse.copy != null && optionsToUse.border == null) {
-    //   optionsToUse.border = null;
-    // } else if (optionsToUse.border == null) {
-    //   optionsToUse.border = {};
-    //   if (optionsToUse.border.width == null) {
-    //     optionsToUse.border.width = optionsToUse.width;
-    //   }
-    //   if (optionsToUse.border.length == null) {
-    //     optionsToUse.border.length = { p1: 0, p2: 0 };
-    //   }
-    // }
     const [points, border, touchBorder] = getLine(optionsToUse);
 
     const element = this.polyline(optionsToUse, {
