@@ -204,55 +204,84 @@ diagram.addElements([
 //   },
 // );
 // diagram.elements._t.fnMap.add('testFn', () => { console.log('asdf')});
+// diagram.addElement(
+//   {
+//     name: 't',
+//     method: 'text.lines',
+//     options: {
+//       lines: [
+//         'Lines justified to the left',
+//         'A |line| with a |modified_phrase|',
+//         {
+//           line: 'A |line| with custom defaults',
+//           font: {
+//             style: 'italic',
+//             color: [0, 0.5, 1, 1],
+//           },
+//         },
+//       ],
+//       modifiers: {
+//         modified_phrase: {
+//           text: 'modified phrase',
+//           font: {
+//             style: 'italic',
+//             color: [0, 0.5, 1, 1],
+//           },
+//         },
+//         line: {
+//           font: {
+//             family: 'Times New Roman',
+//             color: [0, 0.6, 0, 1],
+//             style: 'italic',
+//           },
+//           onClick: () => { console.log(1) },
+//         },
+//       },
+//       font: {
+//         family: 'Helvetica Neue',
+//         weight: '200',
+//         style: 'normal',
+//         size: 0.2,
+//       },
+//       justification: 'left',
+//       lineSpace: -0.3,
+//       position: [-0.5, 0.1],
+//     },
+//     mods: {
+//       isTouchable: true,
+//       isMovable: true,
+//       move: { bounds: 'diagram' },
+//     },
+//   },
+// );
+// console.log(diagram.elements._t.drawingObject)
+// diagram.elements._t.setMovable();
+
 diagram.addElement(
   {
     name: 't',
     method: 'text.lines',
     options: {
       lines: [
-        'Lines justified to the left',
-        'A |line| with a |modified_phrase|',
-        {
-          line: 'A |line| with custom defaults',
-          font: {
-            style: 'italic',
-            color: [0, 0.5, 1, 1],
-          },
-        },
+        'This is the |first| line',
+        'This is the |second| line',
+        'This is the |third| line'
       ],
       modifiers: {
-        modified_phrase: {
-          text: 'modified phrase',
-          font: {
-            style: 'italic',
-            color: [0, 0.5, 1, 1],
-          },
+        first: {
+          font: { color: [0, 0, 1, 1], style: 'italic' },
         },
-        line: {
-          font: {
-            family: 'Times New Roman',
-            color: [0, 0.6, 0, 1],
-            style: 'italic',
-          },
-          onClick: () => { console.log(1) },
+        second: {
+          font: { color: [0, 0.6, 0.6, 1], style: 'italic' },
+        },
+        third: {
+          font: { color: [1, 0, 1, 1], style: 'italic' },
         },
       },
-      font: {
-        family: 'Helvetica Neue',
-        weight: '200',
-        style: 'normal',
-        size: 0.2,
-      },
-      justification: 'left',
-      lineSpace: -0.3,
-      position: [-0.5, 0.1],
-    },
-    mods: {
-      isTouchable: true,
-      isMovable: true,
-      move: { bounds: 'diagram' },
+      xAlign: 'center',
+      yAlign: 'middle',
+      justify: 'center',
     },
   },
 );
-console.log(diagram.elements._t.drawingObject)
-diagram.elements._t.setMovable();
+diagram.setTouchable();

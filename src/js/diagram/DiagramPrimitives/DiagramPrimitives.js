@@ -1381,7 +1381,6 @@ export type OBJ_TextLine = {
  * @property {'left' | 'right' | 'center'} [justification] line specific justification
  * @property {number} [lineSpace] line specific separation from baseline of
  * this line to baseline of next line
- * @property {() => void} [onClick] function to execute on click
  */
 export type OBJ_TextLinesDefinition = {
   line: string,
@@ -1401,15 +1400,25 @@ export type OBJ_TextLinesDefinition = {
  * @property {OBJ_Font} [font] font changes for modified text
  * @property {boolean} [inLine] `false` if modified text should not contribute
  * to line layout (`true`)
- * @property {() => void} [onClick] function to execute on click of modified
- * text
+ * @property {string | () => void} [onClick] function to execute on click
+ * within the `touchBorder` of the modified text
+ * @property {'rect' | Array<TypeParsablePoint>} [border] border of modified
+ * text can be custom (`Array<TypeParsablePoint>`) or set to `'rect'` for the
+ * encompassing rectangle of the text (`'rect'`)
+ * @property {'rect' | number | 'border' | Array<TypeParsablePoint>} [touchBorder]
+ * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
+ * the encompassing rectangle of the text, set to `'border'` to be the same as
+ * the border of the text, or set to some buffer (`number`) around
+ * the rectangle (`'rect'`)
  */
 export type OBJ_TextModifierDefinition = {
   text?: string,
   offset?: TypeParsablePoint,
   inLine?: boolean,
   font?: OBJ_Font,
-  onClick?: () => {},
+  border?: 'rect' | Array<TypeParsablePoint>,
+  touchBorder?: 'rect' | number | 'border' | Array<TypeParsablePoint>,
+  onClick?: string | () => {},
 }
 
 /**
@@ -1468,6 +1477,16 @@ export type OBJ_TextModifiersDefinition = {
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (`Transform('text').standard()`)
+ * @property {'text' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
+ * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
+ * encompassing rectangle around all text borders combined,
+ * or set to `'text'` for the individual text borders (`'rect'`)
+ * @property {'text' | 'rect' | number | 'border' | Array<Array<TypeParsablePoint>>} [touchBorder]
+ * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
+ * the encompassing rectangle around all text touch borders, set to `'text'`
+ * for the individual text touch borders (`'text'`), set to `'border'` to be the
+ * same as the element border or a (`number`) for a rectangle with some buffer
+ * around all text touch borders combined into an encompassing rect (`'rect'`)
  * @example
  * // "Two justified lines"
  * diagram.addElement(
@@ -1547,6 +1566,8 @@ export type OBJ_TextLines = {
   xAlign: 'left' | 'right' | 'center',
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
   color: Array<number>,
+  border?: 'rect' | 'text' | Array<TypeParsablePoint>,
+  touchBorder?: 'rect' | number | 'border' | 'text' | Array<TypeParsablePoint>,
 };
 
 // export type TypeGridOptions = {

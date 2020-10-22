@@ -1,8 +1,4 @@
-Simple text can be drawn one of three ways:
-
-* Simple text - use for simple layout of letters, words or phrases with the same formating
-* A line of text - convenient way to layout words and phrases with different formatting
-* Multiple lines of text - convenient way to layout several lines of text with different formatting and justifications
+FigureOne provides text layout for both simple text, and lines of text with rich formatting.
 
 ### <a id="text-boilerplate"></a> Text Boilerplate
 To test examples within the 'Drawing Text' sections of the API reference create an `index.html` file and `index.js` file.
@@ -62,14 +58,14 @@ diagram.addElements([
 ]);
 ```
 
-### Quick Start
+### Quick Start - `text`
 
 Let's start by creating a {@link DiagramElementPrimitive} element that writes 'hello world' to the diagram.
 
 ```javascript
 diagram.addElement(
   {
-    name: 't',
+    name: 'simpleText',
     method: 'text',
     options: {
       text: 'hello world',
@@ -83,19 +79,125 @@ diagram.addElement(
 The text has been horizontally aligned to its center, and vertically aligned to its middle around its default location of `(0, 0)`.
 ![](./assets1/text_intro.png)
 
-As this is a {@link DiagramElementPrimitive}, transforms can be applied to it to as with any shape, and it can be touched and moved
+As this is a {@link DiagramElementPrimitive}, transforms can be applied to it, and it can be touched and moved. For instance, the example below will rotate the text when it is dragged with a touch from the user.
 
 ```javascript
 diagram.addElement(
   {
-    name: 't',
+    name: 'spinner',
     method: 'text',
     options: {
       text: 'hello world',
       xAlign: 'center',
       yAlign: 'middle',
-      transform: [['s', 1, 2]],
+      touchBorder: 0.5,   // add a touch buffer of 0.5 around the text
+    },
+    mods: {
+      isTouchable: true,
+      isMovable: true,
+      move: { type: 'rotation' },
+    }
+  },
+);
+diagram.setTouchable();
+```
+
+The same `text` method can be used to create text at different locations.
+```javascript
+
+diagram.addElement(
+  {
+    name: 'compass',
+    method: 'text',
+    options: {
+      text: [
+        {
+          text: 'North',
+          location: [0, 0.5],
+        },
+        {
+          text: 'East',
+          location: [0.5, 0],
+        },
+        {
+          text: 'South',
+          location: [0, -0.5],
+        },
+        {
+          text: 'West',
+          location: [-0.5, 0],
+        },
+      ],
+      xAlign: 'center',
+      yAlign: 'middle',
+    },
+  },
+);
+diagram.setTouchable();
+```
+
+See {@link OBJ_Text} to apply custom formatting to each element in the `text`, but note that all the text in a sinle element will have the same formatting.
+
+### Arranging text in a line - `text.line`
+
+Often a phrase of text will want to apply specific formatting to a word or part of the phrase.
+
+The above example can be used to do this, but it is cumbersome as the locations of part of the phrase with different formatting will need to be experimented with.
+
+Alternately, `text.line` can be used as it will automatically layout the text elements from left to right based on their calculated widths.
+
+```javascript
+diagram.addElement(
+  {
+    name: 'formattedLine',
+    method: 'text.line',
+    options: {
+      line: [
+        'hello ',
+        {
+          text: 'world',
+          font: { color: [0, 0, 1, 1], style: 'italic' },
+        },
+        ' it is great to meet you',
+      ],
+      xAlign: 'center',
+      yAlign: 'middle',
     },
   },
 );
 ```
+
+See {@link OBJ_TextLine} for more options including how to superscript and subscript text, or move it out of the line layout completely.
+
+
+### Rich lines - `text.lines`
+
+`text.line` keeps the text and formatting definitions next to each other in the API.
+
+When using more text, it is sometimes useful to split these in the API to make it easier to read the text.
+
+`text.lines` uses the special character `'|'` to surround parts of a phrase that needs to me modified with custom formating. The modifier definitions are then provided later in the interface.
+
+```javascript
+diagram.addElement(
+  {
+    name: 'formattedLine',
+    method: 'text.lines',
+    options: {
+      lines: [
+        'hello |world| it is great to see you',
+      ],
+      modifiers: {
+        world: {
+          font: { color: [0, 0, 1, 1], style: 'italic' },
+        }
+      },
+      xAlign: 'center',
+      yAlign: 'middle',
+    },
+  },
+);
+diagram.setTouchable();
+```
+
+`text.lines` also allows for multiple lines of text to be laid out and justified.
