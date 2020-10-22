@@ -1,5 +1,5 @@
 import {
-  Point,
+  Point, getPoints, Rect,
 } from '../../tools/g2';
 import {
   round,
@@ -410,5 +410,365 @@ describe('Diagram Primitives TextLine', () => {
       expect(round(line.bottom)).toBe(round(lineSpace * 3 - 0.3 - g.descent * 0.1 / 0.2));
       expect(round(line.top)).toBe(round(line.bottom + (g.descent + b.ascent) * 0.1 / 0.2));
     });
+  });
+});
+describe('Text Borders', () => {
+  let diagram;
+  let addElement;
+  let t;
+  let td;
+  // let tr;
+  let buffer;
+  let callback;
+  let bot;
+  let top;
+  let w;
+  let fontSize;
+  let l;  // lineSpace
+  beforeEach(() => {
+    const char = new Rect(0, -0.008, 0.1, 0.148).round(3);
+    bot = char.bottom;
+    w = char.width;
+    ({ top } = char);
+    buffer = 0.5;
+    fontSize = 0.2;
+    l = fontSize * 1.2;
+    diagram = makeDiagram();
+    callback = jest.fn();
+    const options = {
+      simple: {
+        lines: [
+          't',
+          't',
+        ],
+        xAlign: 'left',
+        yAlign: 'baseline',
+        lineSpace: -l,
+        // border: 'rect',  // default
+        // touchBorder: 'rect',  // default
+      },
+      customBorder: {
+        lines: [
+          't',
+          't',
+        ],
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: [[[-1, -1], [1, -1], [1, 1], [-1, 1]]],
+        touchBorder: 'rect',
+      },
+      customTouchBorder: {
+        lines: [
+          't',
+          't',
+        ],
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: 'rect',
+        touchBorder: [[[-1, -1], [1, -1], [1, 1], [-1, 1]]],
+      },
+      buffer: {
+        lines: [
+          't',
+          't',
+        ],
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: 'rect',
+        touchBorder: 0.5,
+      },
+      bufferText: {
+        lines: [
+          't',
+          '|test|',
+        ],
+        modifiers: {
+          test: {
+            text: 't',
+            touchBorder: 0.1,
+          },
+        },
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: 'rect',
+        touchBorder: 'rect',
+      },
+      customBorderText: {
+        lines: [
+          't',
+          '|test|',
+        ],
+        modifiers: {
+          test: {
+            text: 't',
+            border: [[-0.1, -0.3], [0.2, -0.3], [0.2, -0.1], [-0.1, -0.1]],
+          },
+        },
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: 'rect',
+        touchBorder: 'rect',
+      },
+      customTouchBorderText: {
+        lines: [
+          't',
+          '|test|',
+        ],
+        modifiers: {
+          test: {
+            text: 't',
+            touchBorder: [[-0.1, -0.3], [0.2, -0.3], [0.2, -0.1], [-0.1, -0.1]],
+          },
+        },
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: 'rect',
+        touchBorder: 'rect',
+      },
+      textBorders: {
+        lines: [
+          't',
+          't',
+        ],
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: 'text',
+        touchBorder: 'text',
+      },
+      click: {
+        lines: [
+          't',
+          '|test|',
+        ],
+        modifiers: {
+          test: {
+            text: 't',
+            onClick: callback,
+          },
+        },
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: 'rect',
+        touchBorder: 'rect',
+        position: [-2, -2],
+      },
+    };
+    addElement = (option) => {
+      diagram.addElement({
+        name: 't',
+        method: 'text.lines',
+        options: options[option],
+      });
+      diagram.initialize();
+      t = diagram.elements._t;
+      td = t.drawingObject;
+      // tr = t.getBoundingRect('diagram');
+      t.fnMap.add('testFn', callback);
+    };
+  });
+  test('Simple', () => {
+    addElement('simple');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+    ]), 3));
+
+    expect(round(td.border, 3)).toEqual([round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, top], [0, top],
+    ]), 3)]);
+    expect(round(td.touchBorder, 3)).toEqual([round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, top], [0, top],
+    ]), 3)]);
+  });
+  test('Custom border', () => {
+    addElement('customBorder');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+    ]), 3));
+
+    expect(round(td.border, 3)).toEqual([round(getPoints([
+      [-1, -1], [1, -1], [1, 1], [-1, 1],
+    ]), 3)]);
+    expect(round(td.touchBorder, 3)).toEqual([round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, top], [0, top],
+    ]), 3)]);
+  });
+  test('Custom touch border', () => {
+    addElement('customTouchBorder');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+    ]), 3));
+
+    expect(round(td.border, 3)).toEqual([round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, top], [0, top],
+    ]), 3)]);
+    expect(round(td.touchBorder, 3)).toEqual([round(getPoints([
+      [-1, -1], [1, -1], [1, 1], [-1, 1],
+    ]), 3)]);
+  });
+  test('Buffer', () => {
+    addElement('buffer');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+    ]), 3));
+
+    expect(round(td.border, 3)).toEqual([round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, top], [0, top],
+    ]), 3)]);
+    expect(round(td.touchBorder, 3)).toEqual([round(getPoints([
+      [-buffer, -l + bot - buffer],
+      [w + buffer, -l + bot - buffer],
+      [w + buffer, top + buffer],
+      [-buffer, top + buffer],
+    ]), 3)]);
+  });
+  test('Buffer text', () => {
+    addElement('bufferText');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [0 - 0.1, -l + bot - 0.1],
+      [w + 0.1, -l + bot - 0.1],
+      [w + 0.1, -l + top + 0.1],
+      [0 - 0.1, -l + top + 0.1],
+    ]), 3));
+
+    expect(round(td.border, 3)).toEqual([round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, top], [0, top],
+    ]), 3)]);
+    expect(round(td.touchBorder, 3)).toEqual([round(getPoints([
+      [-0.1, -l + bot - 0.1], [w + 0.1, -l + bot - 0.1], [w + 0.1, top], [-0.1, top],
+    ]), 3)]);
+  });
+  test('Custom Border Text', () => {
+    addElement('customBorderText');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [-0.1, -0.3], [0.2, -0.3], [0.2, -0.1], [-0.1, -0.1],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [-0.1, -0.3], [0.2, -0.3], [0.2, -0.1], [-0.1, -0.1],
+    ]), 3));
+
+    expect(round(td.border, 3)).toEqual([round(getPoints([
+      [-0.1, -0.3], [0.2, -0.3], [0.2, top], [-0.1, top]
+      // [0, -l + bot], [w, -l + bot], [w, top], [0, top],
+    ]), 3)]);
+    expect(round(td.touchBorder, 3)).toEqual([round(getPoints([
+      [-0.1, -0.3], [0.2, -0.3], [0.2, top], [-0.1, top]
+    ]), 3)]);
+  });
+  test('Custom Touch Border Text', () => {
+    addElement('customTouchBorderText');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [-0.1, -0.3], [0.2, -0.3], [0.2, -0.1], [-0.1, -0.1],
+    ]), 3));
+
+    expect(round(td.border, 3)).toEqual([round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, top], [0, top],
+    ]), 3)]);
+    expect(round(td.touchBorder, 3)).toEqual([round(getPoints([
+      [-0.1, -0.3], [0.2, -0.3], [0.2, top], [-0.1, top],
+    ]), 3)]);
+  });
+  test('Text border', () => {
+    addElement('textBorders');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+    ]), 3));
+
+    expect(round(td.border, 3)).toEqual([
+      round(getPoints([
+        [0, bot], [w, bot], [w, top], [0, top],
+      ]), 3),
+      round(getPoints([
+        [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+      ]), 3),
+    ]);
+    expect(round(td.touchBorder, 3)).toEqual([
+      round(getPoints([
+        [0, bot], [w, bot], [w, top], [0, top],
+      ]), 3),
+      round(getPoints([
+        [0, -l + bot], [w, -l + bot], [w, -l + top], [0, -l + top],
+      ]), 3),
+    ]);
+  });
+  test('Click', () => {
+    addElement('click');
+    t.makeTouchable();
+    expect(callback.mock.calls.length).toBe(0);
+    diagram.mock.touchDown([-2, -2]);
+    diagram.mock.touchUp();
+    expect(callback.mock.calls.length).toBe(0);
+
+    diagram.mock.touchDown([-2 + 0.05, -2 - l]);
+    diagram.mock.touchUp();
+    expect(callback.mock.calls.length).toBe(1);
   });
 });
