@@ -1140,9 +1140,10 @@ export type OBJ_Grid = {
  * @property {'rect' | Array<TypeParsablePoint>} [border] border can be custom
  * (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
  * rectangle of the text (`'rect'`)
- * @property {'rect' | number | Array<TypeParsablePoint>} [touchBorder] touch
- * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
- * encompassing rectangle of the text or set to some buffer (`number`) around
+ * @property {'rect' | number | 'border' | Array<TypeParsablePoint>} [touchBorder]
+ * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
+ * the encompassing rectangle of the text, set to `'border'` to be the same as
+ * the border of the text, or set to some buffer (`number`) around
  * the rectangle (`'rect'`)
  */
 export type OBJ_TextDefinition = {
@@ -1153,7 +1154,7 @@ export type OBJ_TextDefinition = {
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
   onClick?: () => void,
   border?: 'rect' | Array<TypeParsablePoint>,
-  touchBorder?: 'rect' | number | Array<TypeParsablePoint>,
+  touchBorder?: 'rect' | number | 'border' | Array<TypeParsablePoint>,
 };
 
 /**
@@ -1186,11 +1187,12 @@ export type OBJ_TextDefinition = {
  * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
  * encompassing rectangle around all text borders combined,
  * or set to `'text'` for the individual text borders (`'text'`)
- * @property {'text' | 'rect' | number | Array<Array<TypeParsablePoint>>} [touchBorder]
+ * @property {'text' | 'rect' | number | 'border' | Array<Array<TypeParsablePoint>>} [touchBorder]
  * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
  * the encompassing rectangle around all text touch borders, set to `'text'`
- * for the individual text touch borders (`'text'`) or a (`number`) for a
- * rectangle with some buffer around all text touch borders combined (`'text'`)
+ * for the individual text touch borders (`'text'`), set to `'border'` to be the
+ * same as the element border or a (`number`) for a rectangle with some buffer
+ * around all text touch borders combined into an encompassing rect (`'text'`)
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -1246,7 +1248,7 @@ export type OBJ_Text = {
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
   border?: 'text' | 'rect' | Array<Array<TypeParsablePoint>>,
-  touchBorder?: 'text' | 'rect' | number | Array<Array<TypeParsablePoint>>,
+  touchBorder?: 'text' | 'rect' | number | 'border' | Array<Array<TypeParsablePoint>>,
 }
 
 
