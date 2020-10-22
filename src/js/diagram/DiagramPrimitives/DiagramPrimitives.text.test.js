@@ -13,7 +13,7 @@ jest.mock('../Gesture');
 jest.mock('../webgl/webgl');
 jest.mock('../DrawContext2D');
 
-describe('Equation Functions - Box', () => {
+describe('Text', () => {
   let diagram;
   beforeEach(() => {
     diagram = makeDiagram();

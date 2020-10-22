@@ -3171,7 +3171,7 @@ class DiagramElement {
   }
 
   click() {
-    if (this.onClick !== null && this.onClick !== undefined) {
+    if (this.onClick != null) {
       if (this.recorder.state === 'recording') {
         this.recorder.recordEvent('elementClick', [this.getPath()]);
       }
@@ -3382,6 +3382,16 @@ class DiagramElementPrimitive extends DiagramElement {
       }
     }
     return false;
+  }
+
+  click(glPoint: Point) {
+    super.click();
+    if (this.drawingObject instanceof TextObject) {
+      this.drawingObject.click(glPoint, this.lastDrawTransform.matrix());
+      if (this.recorder.state === 'recording') {
+        this.recorder.recordEvent('elementTextClick', [this.getPath()]);
+      }
+    }
   }
 
   // updateContext(context: DrawContext2D) {

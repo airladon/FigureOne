@@ -1428,10 +1428,10 @@ class Diagram {
     // console.log(this.beingTouchedElements)
     if (this.moveTopElementOnly) {
       if (this.beingTouchedElements.length > 0) {
-        this.beingTouchedElements[0].click();
+        this.beingTouchedElements[0].click(glPoint);
       }
     } else {
-      this.beingTouchedElements.forEach(e => e.click());
+      this.beingTouchedElements.forEach(e => e.click(glPoint));
     }
 
     // Make a list of, and start moving elements that are being moved

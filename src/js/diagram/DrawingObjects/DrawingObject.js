@@ -86,6 +86,15 @@ class DrawingObject {
     return this;
   }
 
+  // Helper function hack used in TextObject
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  transformBorder(
+    borderIn: null | Array<Array<Point>>,
+    transformMatrix: Array<number> | null,
+  ) {
+    return getBounds(borderIn, transformMatrix);
+  }
+
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   setText(text: string) {
   }

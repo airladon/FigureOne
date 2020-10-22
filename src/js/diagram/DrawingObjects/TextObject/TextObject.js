@@ -163,6 +163,7 @@ class DiagramTextBase {
   border: [Point, Point, Point, Point];
   touchBorder: [Point, Point, Point, Point];
   touchBorderSetup: 'rect' | number | Array<Point>;
+  onClick: null | () => {};
   measure: {
     ascent: number,
     descent: number,
@@ -178,6 +179,7 @@ class DiagramTextBase {
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
     border: 'rect' | Array<Array<Point>>,
     touchBorder: 'rect' | number | Array<Array<Point>>,
+    onClick: null | () => {},
     // runUpdate: boolean = true,
   ) {
     this.location = getPoint(location)._dup();
@@ -194,6 +196,7 @@ class DiagramTextBase {
     }
     this.touchBorderSetup = touchBorder;
     this.borderSetup = border;
+    this.onClick = onClick;
   }
 
   measureAndAlignText() {
@@ -392,9 +395,10 @@ class DiagramText extends DiagramTextBase {
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
     border: 'rect' | Array<Point>,
     touchBorder: 'rect' | number | Array<Point>,
+    onClick: null | () => {},
     // runUpdate: boolean = true,
   ) {
-    super(drawContext2D, location, text, font, xAlign, yAlign, border, touchBorder);
+    super(drawContext2D, location, text, font, xAlign, yAlign, border, touchBorder, onClick);
     this.measureAndAlignText();
     this.calcBorderAndBounds();
   }
@@ -413,8 +417,9 @@ class DiagramTextLine extends DiagramTextBase {
     inLine: boolean = true,
     border: 'rect' | Array<Point>,
     touchBorder: 'rect' | number | Array<Array<Point>>,
+    onClick: null | () => {},
   ) {
-    super(drawContext2D, location, text, font, 'left', 'baseline', border, touchBorder);
+    super(drawContext2D, location, text, font, 'left', 'baseline', border, touchBorder, onClick);
     this.offset = getPoint(offset);
     this.inLine = inLine;
     this.measureAndAlignText();
@@ -450,8 +455,9 @@ class DiagramTextLines extends DiagramTextLine {
     line: number,
     border: 'rect' | Array<Point>,
     touchBorder: 'rect' | number | Array<Array<Point>>,
+    onClick: null | () => {},
   ) {
-    super(drawContext2D, location, text, font, offset, inLine, border, touchBorder);
+    super(drawContext2D, location, text, font, offset, inLine, border, touchBorder, onClick);
     this.line = line;
     // this.update();
   }
@@ -516,6 +522,19 @@ class TextObjectBase extends DrawingObject {
 
   // eslint-disable-next-line class-methods-use-this
   setTextLocations() {
+  }
+
+  click(glPoint: Point, lastDrawTransformMatrix: Array<Point>) {
+    this.text.forEach((text) => {
+      if (text.onClick != null) {
+        // console.log(text.touchBorder, lastDrawTransformMatrix)
+        const glBorder = this.transformBorder([text.touchBorder], lastDrawTransformMatrix);
+        // console.log(glBorder)
+        if (glPoint.isInPolygon(glBorder[0])) {
+          text.onClick();
+        }
+      }
+    });
   }
 
   calcScalingFactor() {
@@ -882,11 +901,12 @@ class TextObject extends TextObjectBase {
       let textToUse;
       let border;
       let touchBorder;
+      let onClick;
       if (typeof textDefinition === 'string') {
         textToUse = textDefinition;
       } else {
         ({
-          font, location, xAlign, yAlign, touchBorder, border,
+          font, location, xAlign, yAlign, touchBorder, border, onClick,
         } = textDefinition);
         textToUse = textDefinition.text;
         if (border != null) {
@@ -917,6 +937,7 @@ class TextObject extends TextObjectBase {
         yAlign || options.yAlign,
         border || 'rect',
         touchBorder || 'rect',
+        onClick,
       ));
     });
     this.text = diagramTextArray;

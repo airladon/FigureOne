@@ -178,6 +178,7 @@ diagram.addElement(
           yAlign: 'bottom',
           location: [-0.35, 0],
           touchBorder: [[-0.4, 0], [0, 0], [0, 0.1], [-0.4, 0.1]],
+          onClick: () => { console.log('asdfasdfasdf') },
         },
         {
           text: 'world',
