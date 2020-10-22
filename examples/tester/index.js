@@ -178,7 +178,7 @@ diagram.addElement(
           yAlign: 'bottom',
           location: [-0.35, 0],
           touchBorder: [[-0.4, 0], [0, 0], [0, 0.1], [-0.4, 0.1]],
-          onClick: () => { console.log('asdfasdfasdf') },
+          onClick: 'testFn',
         },
         {
           text: 'world',
@@ -203,6 +203,7 @@ diagram.addElement(
     },
   },
 );
+diagram.elements._t.fnMap.add('testFn', () => { console.log('asdf')});
 // diagram.addElement(
 //   {
 //     name: 'line',

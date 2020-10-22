@@ -531,14 +531,14 @@ class TextObjectBase extends DrawingObject {
   setTextLocations() {
   }
 
-  click(glPoint: Point, lastDrawTransformMatrix: Array<Point>) {
+  click(glPoint: Point, lastDrawTransformMatrix: Array<Point>, fnMap: FunctionMap) {
     this.text.forEach((text) => {
       if (text.onClick != null) {
         // console.log(text.touchBorder, lastDrawTransformMatrix)
         const glBorder = this.transformBorder([text.touchBorder], lastDrawTransformMatrix);
         // console.log(glBorder)
         if (glPoint.isInPolygon(glBorder[0])) {
-          text.onClick();
+          fnMap.exec(text.onClick, fnMap);
         }
       }
     });

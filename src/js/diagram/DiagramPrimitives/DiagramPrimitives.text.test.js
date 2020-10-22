@@ -103,10 +103,12 @@ describe('Text Borders', () => {
   let tr;
   let a;
   let buffer;
+  let callback;
   beforeEach(() => {
     a = new Rect(0, -0.008, 0.1, 0.148).round(3);
     buffer = 0.5;
     diagram = makeDiagram();
+    callback = jest.fn();
     const options = {
       simple: {
         text: 't',
@@ -229,6 +231,24 @@ describe('Text Borders', () => {
         border: 'rect',
         touchBorder: 'rect',
       },
+      click: {
+        text: [
+          {
+            text: 't',
+            border: [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
+            onClick: 'testFn',
+          },
+          {
+            text: 't',
+            location: [1, 0],
+          },
+        ],
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: 'rect',
+        touchBorder: 'rect',
+        position: [-2, -2],
+      },
     };
     addElement = (option) => {
       diagram.addElement({
@@ -240,6 +260,7 @@ describe('Text Borders', () => {
       t = diagram.elements._t;
       td = t.drawingObject;
       tr = t.getBoundingRect('diagram');
+      t.fnMap.add('testFn', callback);
     };
   });
   test('Simple', () => {
@@ -492,5 +513,21 @@ describe('Text Borders', () => {
     expect(td.touchBorder).toEqual([getPoints([
       [-0.5, -0.5], [1 + a.width, -0.5], [1 + a.width, 0.5], [-0.5, 0.5],
     ])]);
+  });
+  test('Click', () => {
+    addElement('click');
+    t.makeTouchable();
+    expect(callback.mock.calls.length).toBe(0);
+    diagram.mock.touchDown([-2, -2]);
+    diagram.mock.touchUp();
+    expect(callback.mock.calls.length).toBe(1);
+
+    diagram.mock.touchDown([-1.5000001, -1.50000001]);
+    diagram.mock.touchUp();
+    expect(callback.mock.calls.length).toBe(2);
+
+    diagram.mock.touchDown([-1, -1]);
+    diagram.mock.touchUp();
+    expect(callback.mock.calls.length).toBe(2);
   });
 });
