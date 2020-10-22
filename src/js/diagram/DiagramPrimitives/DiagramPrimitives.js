@@ -2577,7 +2577,7 @@ export default class DiagramPrimitives {
   }
 
   textLines(...optionsIn: Array<OBJ_TextLines>) {
-    const options = this.parseTextOptions(...optionsIn);
+    const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsIn);
     if (options.justification == null) {
       options.justification = 'left';
     }

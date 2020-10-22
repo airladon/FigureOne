@@ -1120,6 +1120,8 @@ class TextLinesObject extends TextObjectBase {
         offset?: TypeParsablePoint,
         inLine?: boolean,
         font?: OBJ_Font,
+        border?: 'rect' | Array<Point>,
+        touchBorder?: 'border' | 'rect' | number | Array<Point>,
         onClick?: () => {},
       },
     },
@@ -1169,6 +1171,9 @@ class TextLinesObject extends TextObjectBase {
         let textFont = lineFont;
         let offset = new Point(0, 0);
         let inLine = true;
+        let border;
+        let touchBorder;
+        let onClick;
         if (this.modifiers[s] != null) {
           const mod = this.modifiers[s];
           if (mod.text != null) {
@@ -1183,6 +1188,21 @@ class TextLinesObject extends TextObjectBase {
           if (mod.offset != null) {
             offset = mod.offset;
           }
+          if (mod.border != null) {
+            border = mod.border;
+          }
+          if (mod.touchBorder != null) {
+            touchBorder = mod.touchBorder;
+          }
+          if (mod.onClick != null) {
+            onClick = mod.onClick;
+          }
+          if (Array.isArray(border)) {
+            border = getPoints(border);
+          }
+          if (Array.isArray(touchBorder)) {
+            touchBorder = getPoints(touchBorder);
+          }
         }
         const t = new DiagramTextLines(
           this.drawContext2D,
@@ -1192,6 +1212,9 @@ class TextLinesObject extends TextObjectBase {
           offset,
           inLine,
           lineIndex,
+          border || 'rect',
+          touchBorder || 'border',
+          onClick,
         );
         diagramTextArray.push(t);
         line.push(t);
@@ -1208,6 +1231,8 @@ class TextLinesObject extends TextObjectBase {
     this.yAlign = options.yAlign;
     // super.super.loadText();
     this.calcScalingFactor();
+    this.borderSetup = options.border;
+    this.touchBorderSetup = options.touchBorder;
     this.layoutText();
   }
 

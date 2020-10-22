@@ -228,7 +228,7 @@ describe('Text Borders', () => {
   let addElement;
   let t;
   let td;
-  let tr;
+  // let tr;
   let buffer;
   let callback;
   let bot;

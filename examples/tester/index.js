@@ -207,33 +207,45 @@ diagram.addElements([
 diagram.addElement(
   {
     name: 't',
-    method: 'text.line',
+    method: 'text.lines',
     options: {
-      line: [
-        'Hello ',
+      lines: [
+        'Lines justified to the left',
+        'A |line| with a |modified_phrase|',
         {
-          text: 'to the',
+          line: 'A |line| with custom defaults',
           font: {
             style: 'italic',
             color: [0, 0.5, 1, 1],
           },
-          onClick: () => { console.log('11')},
-          touchBorder: 0.2,
-        },
-        ' world',
-        {
-          text: '1',
-          offset: [0, 0.05],
-          font: { size: 0.05, color: [0, 0.6, 0, 1] },
         },
       ],
-      xAlign: 'center',
-      yAlign: 'bottom',
-      font: {
-        style: 'normal',
-        size: 0.3,
+      modifiers: {
+        modified_phrase: {
+          text: 'modified phrase',
+          font: {
+            style: 'italic',
+            color: [0, 0.5, 1, 1],
+          },
+        },
+        line: {
+          font: {
+            family: 'Times New Roman',
+            color: [0, 0.6, 0, 1],
+            style: 'italic',
+          },
+          onClick: () => { console.log(1) },
+        },
       },
-      color: [1, 0, 0, 1],
+      font: {
+        family: 'Helvetica Neue',
+        weight: '200',
+        style: 'normal',
+        size: 0.2,
+      },
+      justification: 'left',
+      lineSpace: -0.3,
+      position: [-0.5, 0.1],
     },
     mods: {
       isTouchable: true,
@@ -243,4 +255,4 @@ diagram.addElement(
   },
 );
 console.log(diagram.elements._t.drawingObject)
-diagram.setTouchable();
+diagram.elements._t.setMovable();
