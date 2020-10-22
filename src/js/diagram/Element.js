@@ -19,7 +19,7 @@ import * as math from '../tools/math';
 import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexObject from './DrawingObjects/VertexObject/VertexObject';
-import { TextObject } from './DrawingObjects/TextObject/TextObject';
+import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
 import type { OBJ_Font } from './DrawingObjects/TextObject/TextObject';
 import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, SubscriptionManager,
@@ -578,7 +578,7 @@ class DiagramElement {
       },
       trigger: (...optionsIn: Array<OBJ_TriggerAnimationStep>) => {
         const options = joinObjects({}, ...optionsIn);
-        return new animations.TriggerStep(options);
+        return new animations.TriggerAnimationStep(options);
       },
       delay: (...optionsIn: Array<OBJ_AnimationStep>) => {
         const options = joinObjects({}, ...optionsIn);
@@ -3386,7 +3386,7 @@ class DiagramElementPrimitive extends DiagramElement {
 
   click(glPoint: Point) {
     super.click();
-    if (this.drawingObject instanceof TextObject) {
+    if (this.drawingObject instanceof TextObjectBase) {
       this.drawingObject.click(glPoint, this.lastDrawTransform.matrix(), this.fnMap);
       if (this.recorder.state === 'recording') {
         this.recorder.recordEvent('elementTextClick', [this.getPath()]);
@@ -3421,7 +3421,7 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   clear(canvasIndex: number = 0) {
-    if (this.drawingObject instanceof TextObject) {
+    if (this.drawingObject instanceof TextObjectBase) {
       this.drawingObject.clear(canvasIndex);
     }
   }
@@ -3445,7 +3445,7 @@ class DiagramElementPrimitive extends DiagramElement {
       this.defaultColor = this.color.slice();
     }
     if (this instanceof DiagramElementPrimitive) {
-      if (this.drawingObject instanceof TextObject) {
+      if (this.drawingObject instanceof TextObjectBase) {
         this.drawingObject.setColor(this.color);
       }
       if (this.drawingObject instanceof HTMLObject) {
@@ -3459,7 +3459,7 @@ class DiagramElementPrimitive extends DiagramElement {
     // this.color[3] = opacity;
     this.opacity = opacity;
     if (this instanceof DiagramElementPrimitive) {
-      if (this.drawingObject instanceof TextObject) {
+      if (this.drawingObject instanceof TextObjectBase) {
         this.drawingObject.setOpacity(opacity);
       }
       if (this.drawingObject instanceof HTMLObject) {
@@ -3515,7 +3515,7 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   setFont(font: OBJ_Font, index: number = 0) {
-    if (this.drawingObject instanceof TextObject) {
+    if (this.drawingObject instanceof TextObjectBase) {
       this.drawingObject.setFont(font, index);
     }
   }

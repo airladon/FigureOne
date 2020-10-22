@@ -370,7 +370,7 @@ class DiagramTextBase {
     if (this.touchBorderSetup === 'border') {
       this.touchBorder = this.border;
     } else if (this.touchBorderSetup === 'rect') {
-      this.border = [
+      this.touchBorder = [
         new Point(this.bounds.left, this.bounds.bottom),
         new Point(this.bounds.right, this.bounds.bottom),
         new Point(this.bounds.right, this.bounds.top),
@@ -430,6 +430,7 @@ class DiagramTextLine extends DiagramTextBase {
     this.offset = getPoint(offset);
     this.inLine = inLine;
     this.measureAndAlignText();
+    this.calcBorderAndBounds();
   }
 
   alignText() {
@@ -651,6 +652,7 @@ class TextObjectBase extends DrawingObject {
       return;
     }
     this.setGenericBorder('touchBorder');
+    // console.log(this.touchBorderSetup, this.touchBorder)
   }
 
   // getBoundaries(
@@ -791,6 +793,7 @@ class TextObjectBase extends DrawingObject {
   }
 
   clear(contextIndex: number = 0) {
+    console.log('clear')
     const { ctx } = this.drawContext2D[contextIndex];
     const t = this.lastDrawTransform;
     ctx.save();
@@ -831,7 +834,7 @@ class TextObject extends TextObjectBase {
             yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
             border?: 'rect' | Array<Point>,
             touchBorder?: 'rect' | number | 'border' | Array<Point>,
-            onClick?: () => void,
+            onClick?: string | () => void,
         }
         | Array<string | {
         text: string,
@@ -841,7 +844,7 @@ class TextObject extends TextObjectBase {
         yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
         border?: 'rect' | Array<Point>,
           touchBorder?: 'rect' | number | 'border' | Array<Point>,
-        onClick?: () => void,
+        onClick?: string | () => void,
       }>;
       font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
@@ -986,16 +989,20 @@ class TextLineObject extends TextObjectBase {
         font?: OBJ_Font,
         offset?: TypeParsablePoint,
         inLine?: boolean,
-        onClick?: () => void,
+        // onClick?: () => void,
+        // border?: 'rect' | Array<Point>,
+        // touchBorder?: 'rect' | number | Array<Point>,
         border?: 'rect' | Array<Point>,
-        touchBorder?: 'rect' | number | Array<Point>,
+        touchBorder?: 'rect' | number | 'border' | Array<Point>,
+        onClick?: string | () => void,
       }>;
       font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
       color: Array<number>,
       border?: 'rect' | Array<Point>,
-      touchBorder?: 'rect' | number | Array<Point>,
+      touchBorder?: 'rect' | number | 'border' | Array<Point>,
+      onClick?: string | () => void,
     },
   ) {
     let textArray = options.line;
@@ -1010,6 +1017,7 @@ class TextLineObject extends TextObjectBase {
       let textToUse;
       let border;
       let touchBorder;
+      let onClick;
       if (typeof textDefinition === 'string') {
         textToUse = textDefinition;
       } else {
@@ -1040,14 +1048,17 @@ class TextLineObject extends TextObjectBase {
         fontDefinition,
         offsetToUse,
         inLine,
-        border || options.border,
-        touchBorder || options.touchBorder,
+        border || 'rect',
+        touchBorder || 'border',
+        onClick,
       ));
     });
     this.text = diagramTextArray;
     this.xAlign = options.xAlign;
     this.yAlign = options.yAlign;
     this.calcScalingFactor();
+    this.borderSetup = options.border;
+    this.touchBorderSetup = options.touchBorder;
     this.layoutText();
   }
 
@@ -1246,5 +1257,5 @@ class TextLinesObject extends TextObjectBase {
 
 export {
   DiagramFont, DiagramText, TextObject, TextLineObject,
-  TextLinesObject,
+  TextLinesObject, TextObjectBase,
 };

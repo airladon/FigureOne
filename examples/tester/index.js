@@ -165,80 +165,80 @@ diagram.addElements([
 //   },
 // );
 // Multi string
-diagram.addElement(
-  {
-    name: 't',
-    method: 'text',
-    options: {
-      text: [
-        {
-          text: 'hello',
-          font: { style: 'italic', color: [0, 0.5, 1, 1], size: 0.1 },
-          xAlign: 'left',
-          yAlign: 'bottom',
-          location: [-0.35, 0],
-          touchBorder: [[-0.4, 0], [0, 0], [0, 0.1], [-0.4, 0.1]],
-          onClick: 'testFn',
-        },
-        {
-          text: 'world',
-          location: [0, -0.1],
-        },
-      ],
-      xAlign: 'center',
-      yAlign: 'middle',
-      font: { size: 0.3 },
-      color: [1, 0, 0, 1],
-      touchBorder: 'rect',
-    },
-    mods: {
-      isTouchable: true,
-      isMovable: true,
-      move: { bounds: 'diagram' },
-      // touchInBoundingRect: true,
-      // move: { bounds: 'diagram' },
-      // move: {
-      //   type: 'rotation',
-      // },
-    },
-  },
-);
-diagram.elements._t.fnMap.add('testFn', () => { console.log('asdf')});
 // diagram.addElement(
 //   {
-//     name: 'line',
-//     method: 'text.line',
+//     name: 't',
+//     method: 'text',
 //     options: {
-//       line: [
-//         'Hello ',
+//       text: [
 //         {
-//           text: 'to the',
-//           font: {
-//             style: 'italic',
-//             color: [0, 0.5, 1, 1],
-//           },
+//           text: 'hello',
+//           font: { style: 'italic', color: [0, 0.5, 1, 1], size: 0.1 },
+//           xAlign: 'left',
+//           yAlign: 'bottom',
+//           location: [-0.35, 0],
+//           touchBorder: [[-0.4, 0], [0, 0], [0, 0.1], [-0.4, 0.1]],
+//           onClick: 'testFn',
 //         },
-//         ' world',
 //         {
-//           text: '1',
-//           offset: [0, 0.05],
-//           font: { size: 0.05, color: [0, 0.6, 0, 1] },
+//           text: 'world',
+//           location: [0, -0.1],
 //         },
 //       ],
 //       xAlign: 'center',
-//       yAlign: 'bottom',
-//       font: {
-//         style: 'normal',
-//         size: 0.3,
-//       },
+//       yAlign: 'middle',
+//       font: { size: 0.3 },
 //       color: [1, 0, 0, 1],
+//       touchBorder: 'rect',
 //     },
 //     mods: {
 //       isTouchable: true,
 //       isMovable: true,
 //       move: { bounds: 'diagram' },
+//       // touchInBoundingRect: true,
+//       // move: { bounds: 'diagram' },
+//       // move: {
+//       //   type: 'rotation',
+//       // },
 //     },
 //   },
 // );
-console.log(diagram.elements._t.drawingObject)
+// diagram.elements._t.fnMap.add('testFn', () => { console.log('asdf')});
+diagram.addElement(
+  {
+    name: 't',
+    method: 'text.line',
+    options: {
+      line: [
+        'Hello ',
+        {
+          text: 'to the',
+          font: {
+            style: 'italic',
+            color: [0, 0.5, 1, 1],
+          },
+        },
+        ' world',
+        {
+          text: '1',
+          offset: [0, 0.05],
+          font: { size: 0.05, color: [0, 0.6, 0, 1] },
+        },
+      ],
+      xAlign: 'center',
+      yAlign: 'bottom',
+      font: {
+        style: 'normal',
+        size: 0.3,
+      },
+      color: [1, 0, 0, 1],
+    },
+    mods: {
+      isTouchable: true,
+      isMovable: true,
+      move: { bounds: 'diagram' },
+    },
+  },
+);
+console.log(diagram.elements._t.drawingObject.touchBorder)
 diagram.setTouchable();
