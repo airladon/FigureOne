@@ -29,7 +29,7 @@ describe('Diagram Primitives TextLine', () => {
               color: [1, 1, 0, 1],
             },
             lineSpace: -0.3,
-            justification: 'center',
+            justify: 'center',
             line: 'A line with new defaults',
           },
           'A spaced |line| with two |line| mods',
@@ -63,7 +63,7 @@ describe('Diagram Primitives TextLine', () => {
           style: 'normal',
           size: 0.1,
         },
-        justification: 'left',
+        justify: 'left',
         lineSpace: -0.2,
         color: [1, 0, 0, 1],
         position: [-0.8, 0],
@@ -82,24 +82,24 @@ describe('Diagram Primitives TextLine', () => {
       centerJustification: {
         lines: ['aaaaa', 'b'],
         lineSpace: -0.2,
-        justification: 'center',
+        justify: 'center',
       },
       rightJustification: {
         lines: ['aaaaa', 'b'],
         lineSpace: -0.2,
-        justification: 'right',
+        justify: 'right',
       },
       alignCenterMiddle: {
         lines: ['aaaaa', 'b'],
         lineSpace: -0.2,
-        justification: 'center',
+        justify: 'center',
         xAlign: 'center',
         yAlign: 'middle',
       },
       alignRightTop: {
         lines: ['aaaaa', 'b'],
         lineSpace: -0.2,
-        justification: 'right',
+        justify: 'right',
         xAlign: 'right',
         yAlign: 'top',
       },
@@ -175,7 +175,7 @@ describe('Diagram Primitives TextLine', () => {
     expect(round(ta.bottom)).toBe(round(-a.descent));
     expect(round(tb.bottom)).toBe(round(-0.2 - b.descent));
   });
-  test('center justification', () => {
+  test('center justify', () => {
     loadText('centerJustification');
     const t = diagram.elements._t.getBoundingRect('diagram');
     const ta = diagram.elements._t.drawingObject.text[0].bounds;
@@ -193,7 +193,7 @@ describe('Diagram Primitives TextLine', () => {
     expect(round(ta.bottom)).toBe(round(-a.descent));
     expect(round(tb.bottom)).toBe(round(-0.2 - b.descent));
   });
-  test('right justification', () => {
+  test('right justify', () => {
     loadText('rightJustification');
     const t = diagram.elements._t.getBoundingRect('diagram');
     const ta = diagram.elements._t.drawingObject.text[0].bounds;
@@ -698,11 +698,11 @@ describe('Text Borders', () => {
     ]), 3));
 
     expect(round(td.border, 3)).toEqual([round(getPoints([
-      [-0.1, -0.3], [0.2, -0.3], [0.2, top], [-0.1, top]
+      [-0.1, -0.3], [0.2, -0.3], [0.2, top], [-0.1, top],
       // [0, -l + bot], [w, -l + bot], [w, top], [0, top],
     ]), 3)]);
     expect(round(td.touchBorder, 3)).toEqual([round(getPoints([
-      [-0.1, -0.3], [0.2, -0.3], [0.2, top], [-0.1, top]
+      [-0.1, -0.3], [0.2, -0.3], [0.2, top], [-0.1, top],
     ]), 3)]);
   });
   test('Custom Touch Border Text', () => {

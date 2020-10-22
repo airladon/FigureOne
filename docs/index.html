@@ -16328,15 +16328,15 @@ diagram.addElement(
         <span class="hljs-string">' world'</span>,
         {
           <span class="hljs-attr">text</span>: <span class="hljs-string">'1'</span>,
-          <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.05</span>],
-          <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.05</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] },
+          <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.1</span>],
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] },
         },
       ],
       <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
       <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
       <span class="hljs-attr">font</span>: {
         <span class="hljs-attr">style</span>: <span class="hljs-string">'normal'</span>,
-        <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span>,
+        <span class="hljs-attr">size</span>: <span class="hljs-number">0.2</span>,
       },
       <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
     },
@@ -16533,6 +16533,18 @@ around all text touch borders combined into an encompassing rect (
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#text-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
@@ -16546,16 +16558,15 @@ diagram.addElement(
     <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text.lines'</span>,
     <span class="hljs-attr">options</span>: {
-      <span class="hljs-attr">line</span>: [
+      <span class="hljs-attr">lines</span>: [
         <span class="hljs-string">'First line'</span>,
         <span class="hljs-string">'This is the second line'</span>,
-        },
       ],
       <span class="hljs-attr">font</span>: {
         <span class="hljs-attr">style</span>: <span class="hljs-string">'normal'</span>,
-        <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span>,
+        <span class="hljs-attr">size</span>: <span class="hljs-number">0.2</span>,
       },
-      <span class="hljs-attr">justify</span>: <span class="hljs-string">'center'</span>
+      <span class="hljs-attr">justify</span>: <span class="hljs-string">'center'</span>,
       <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
     },
   },
@@ -16599,10 +16610,10 @@ diagram.addElement(
          <span class="hljs-attr">family</span>: <span class="hljs-string">'Helvetica Neue'</span>,
          <span class="hljs-attr">weight</span>: <span class="hljs-string">'200'</span>,
          <span class="hljs-attr">style</span>: <span class="hljs-string">'normal'</span>,
-         <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span>,
+         <span class="hljs-attr">size</span>: <span class="hljs-number">0.2</span>,
        },
        <span class="hljs-attr">justify</span>: <span class="hljs-string">'left'</span>,
-       <span class="hljs-attr">lineSpace</span>: <span class="hljs-number">-0.2</span>,
+       <span class="hljs-attr">lineSpace</span>: <span class="hljs-number">-0.4</span>,
        <span class="hljs-attr">position</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0.1</span>],
      },
   },
@@ -33360,13 +33371,14 @@ the rectangle (default:
       
         <div class='space-bottom0'>
           <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
-          
+          : font to apply to string
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : offset to draw text (
+          : offset to draw text (default: 
 <code>[0, 0]</code>
 )
 
@@ -33377,9 +33389,19 @@ the rectangle (default:
           <span class='code bold'>inLine</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           : <code>false</code>
  means next text will follow previous
-and not this (
+and not this (default: 
 <code>true</code>
 )
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onClick</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?)</code>
+          : function to execute on click
+within the 
+<code>touchBorder</code>
+ of string
 
           
         </div>
@@ -33392,7 +33414,7 @@ and not this (
 ) or set to 
 <code>'rect'</code>
  for the encompassing
-rectangle of the text (
+rectangle of the text (default: 
 <code>'rect'</code>
 )
 
@@ -33412,16 +33434,10 @@ the encompassing rectangle of the text, set to
 the border of the text, or set to some buffer (
 <code>number</code>
 ) around
-the rectangle (
+the rectangle (default: 
 <code>'rect'</code>
 )
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>onClick</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?)</code>
-          
           
         </div>
       
@@ -33547,7 +33563,7 @@ this line to baseline of next line
 
   <p>Modifier Text Definition object.</p>
 <p>Used to define the modifiers of a string within a text lines primitive
-<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>.</p>
+<a href="#obj_textlines">OBJ_TextLines</a>.</p>
 
   
   
@@ -33567,10 +33583,14 @@ this line to baseline of next line
       
         <div class='space-bottom0'>
           <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : text to replace modifier id with - if 
+          : text to replace 
+<code>modifierId</code>
+ with - if 
 <code>undefined</code>
 
-then modifier id is used
+then 
+<code>modifierId</code>
+ is used
 
           
         </div>
@@ -33586,9 +33606,19 @@ then modifier id is used
           <span class='code bold'>inLine</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           : <code>false</code>
  if modified text should not contribute
-to line layout (
+to line layout (defqult: 
 <code>true</code>
 )
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onClick</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?)</code>
+          : function to execute on click
+within the 
+<code>touchBorder</code>
+ of the modified text
 
           
         </div>
@@ -33601,7 +33631,7 @@ text can be custom (
 ) or set to 
 <code>'rect'</code>
  for the
-encompassing rectangle of the text (
+encompassing rectangle of the text (default: 
 <code>'rect'</code>
 )
 
@@ -33621,7 +33651,7 @@ the encompassing rectangle of the text, set to
 the border of the text, or set to some buffer (
 <code>number</code>
 ) around
-the rectangle (
+the rectangle (default: 
 <code>'rect'</code>
 )
 
@@ -33630,12 +33660,6 @@ the rectangle (
       
         <div class='space-bottom0'>
           <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>onClick</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): {})?)</code>
           
           
         </div>

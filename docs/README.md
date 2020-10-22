@@ -3768,15 +3768,15 @@ diagram.addElement(
         ' world',
         {
           text: '1',
-          offset: [0, 0.05],
-          font: { size: 0.05, color: [0, 0.6, 0, 1] },
+          offset: [0, 0.1],
+          font: { size: 0.1, color: [0, 0.6, 0, 1] },
         },
       ],
       xAlign: 'center',
       yAlign: 'bottom',
       font: {
         style: 'normal',
-        size: 0.1,
+        size: 0.2,
       },
       color: [1, 0, 0, 1],
     },
@@ -3785,6 +3785,10 @@ diagram.addElement(
 ```
 
 ## OBJ_TextLines
+
+-   **See: To test examples, append them to the
+    <a href="#text-boilerplate">boilerplate</a>
+    **
 
 Text Lines
 
@@ -3845,16 +3849,15 @@ diagram.addElement(
     name: 't',
     method: 'text.lines',
     options: {
-      line: [
+      lines: [
         'First line',
         'This is the second line',
-        },
       ],
       font: {
         style: 'normal',
-        size: 0.1,
+        size: 0.2,
       },
-      justify: 'center'
+      justify: 'center',
       color: [1, 0, 0, 1],
     },
   },
@@ -3899,10 +3902,10 @@ diagram.addElement(
          family: 'Helvetica Neue',
          weight: '200',
          style: 'normal',
-         size: 0.1,
+         size: 0.2,
        },
        justify: 'left',
-       lineSpace: -0.2,
+       lineSpace: -0.4,
        position: [-0.5, 0.1],
      },
   },
@@ -8247,18 +8250,19 @@ Used to define a string within a text line primitive [OBJ_TextLine][290].
 ### Properties
 
 -   `text` **[string][729]?** string to show
--   `font` **[OBJ_Font][774]?** 
--   `offset` **[TypeParsablePoint][743]?** offset to draw text (`[0, 0]`)
+-   `font` **[OBJ_Font][774]?** font to apply to string
+-   `offset` **[TypeParsablePoint][743]?** offset to draw text (default: `[0, 0]`)
 -   `inLine` **[boolean][737]?** `false` means next text will follow previous
-    and not this (`true`)
+    and not this (default: `true`)
+-   `onClick` **([string][729] | function (): void)?** function to execute on click
+    within the `touchBorder` of string
 -   `border` **(`"rect"` \| [Array][730]&lt;[TypeParsablePoint][743]>)?** border can be custom
     (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
-    rectangle of the text (`'rect'`)
+    rectangle of the text (default: `'rect'`)
 -   `touchBorder` **(`"rect"` \| [number][738] \| `"border"` \| [Array][730]&lt;[TypeParsablePoint][743]>)?** touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
     the encompassing rectangle of the text, set to `'border'` to be the same as
     the border of the text, or set to some buffer (`number`) around
-    the rectangle (`'rect'`)
--   `onClick` **([string][729] | function (): void)?** 
+    the rectangle (default: `'rect'`)
 
 ## OBJ_TextLinesDefinition
 
@@ -8279,24 +8283,25 @@ Used to define a string within a text lines primitive [OBJ_TextLines][293].
 Modifier Text Definition object.
 
 Used to define the modifiers of a string within a text lines primitive
-[OBJ_TextModifiersDefinition][653].
+[OBJ_TextLines][293].
 
 ### Properties
 
--   `text` **[string][729]?** text to replace modifier id with - if `undefined`
-    then modifier id is used
+-   `text` **[string][729]?** text to replace `modifierId` with - if `undefined`
+    then `modifierId` is used
 -   `font` **[OBJ_Font][774]?** font changes for modified text
 -   `inLine` **[boolean][737]?** `false` if modified text should not contribute
-    to line layout (`true`)
+    to line layout (defqult: `true`)
+-   `onClick` **([string][729] | function (): void)?** function to execute on click
+    within the `touchBorder` of the modified text
 -   `border` **(`"rect"` \| [Array][730]&lt;[TypeParsablePoint][743]>)?** border of modified
     text can be custom (`Array<TypeParsablePoint>`) or set to `'rect'` for the
-    encompassing rectangle of the text (`'rect'`)
+    encompassing rectangle of the text (default: `'rect'`)
 -   `touchBorder` **(`"rect"` \| [number][738] \| `"border"` \| [Array][730]&lt;[TypeParsablePoint][743]>)?** touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
     the encompassing rectangle of the text, set to `'border'` to be the same as
     the border of the text, or set to some buffer (`number`) around
-    the rectangle (`'rect'`)
+    the rectangle (default: `'rect'`)
 -   `offset` **[TypeParsablePoint][743]?** 
--   `onClick` **([string][729] | function (): {})?** 
 
 ## OBJ_TextModifiersDefinition
 

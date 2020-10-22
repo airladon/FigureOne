@@ -104,200 +104,67 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 //   diagram.animateNextFrame();
 // }
 
+// diagram.addElements([
+//   {
+//     name: 'origin',
+//     method: 'polygon',
+//     options: {
+//       radius: 0.01,
+//       line: { width: 0.01 },
+//       sides: 10,
+//       color: [0.7, 0.7, 0.7, 1]
+//     },
+//   },
+//   {
+//     name: 'grid',
+//     method: 'grid',
+//     options: {
+//       bounds: [-3, -3, 6, 6],
+//       yStep: 0.1,
+//       xStep: 0.1,
+//       color: [0.7, 0.7, 0.7, 1],
+//       line: { width: 0.001 },
+//     },
+//   },
+//   {
+//     name: 'gridMajor',
+//     method: 'grid',
+//     options: {
+//       bounds: [-3, -3, 6, 6],
+//       yStep: 0.5,
+//       xStep: 0.5,
+//       color: [0.8, 0.8, 0.8, 1],
+//       line: { width: 0.004 }
+//     },
+//   },
+// ]);
+
+// const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2]});
 diagram.addElements([
   {
-    name: 'origin',
+    name: 'p',
     method: 'polygon',
     options: {
-      radius: 0.01,
-      line: { width: 0.01 },
-      sides: 10,
-      color: [0.7, 0.7, 0.7, 1]
+      sides: 4,
+      fill: true,
+      radius: 0.5,
+      position: [0, 0],
     },
   },
   {
-    name: 'grid',
-    method: 'grid',
+    name: 'q',
+    method: 'polygon',
     options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.1,
-      xStep: 0.1,
-      color: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.001 },
+      sides: 5,
+      fill: true,
+      radius: 0.5,
+      position: [1, 0],
     },
-  },
-  {
-    name: 'gridMajor',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.5,
-      xStep: 0.5,
-      color: [0.8, 0.8, 0.8, 1],
-      line: { width: 0.004 }
-    },
+    mods: {
+      isShown: false,
+    }
   },
 ]);
-
-// // Single string
-// diagram.addElement(
-//   {
-//     name: 't',
-//     method: 'text',
-//     options: {
-//       text: 'hello world',
-//       xAlign: 'center',
-//       yAlign: 'middle',
-//       // border: [[[-1, -1], [1, -1], [1, 1], [-1, 1]]],
-//       touchBorder: 0.5,
-//       // transform: [['s', 1, 2]],
-//     },
-//     mods: {
-//       isTouchable: true,
-//       isMovable: true,
-//       move: { bounds: 'diagram' },
-//       // touchInBoundingRect: true,
-//       // move: { bounds: 'diagram' },
-//       // move: {
-//       //   type: 'rotation',
-//       // },
-//     },
-//   },
-// );
-// Multi string
-// diagram.addElement(
-//   {
-//     name: 't',
-//     method: 'text',
-//     options: {
-//       text: [
-//         {
-//           text: 'hello',
-//           font: { style: 'italic', color: [0, 0.5, 1, 1], size: 0.1 },
-//           xAlign: 'left',
-//           yAlign: 'bottom',
-//           location: [-0.35, 0],
-//           touchBorder: [[-0.4, 0], [0, 0], [0, 0.1], [-0.4, 0.1]],
-//           onClick: 'testFn',
-//         },
-//         {
-//           text: 'world',
-//           location: [0, -0.1],
-//         },
-//       ],
-//       xAlign: 'center',
-//       yAlign: 'middle',
-//       font: { size: 0.3 },
-//       color: [1, 0, 0, 1],
-//       touchBorder: 'rect',
-//     },
-//     mods: {
-//       isTouchable: true,
-//       isMovable: true,
-//       move: { bounds: 'diagram' },
-//       // touchInBoundingRect: true,
-//       // move: { bounds: 'diagram' },
-//       // move: {
-//       //   type: 'rotation',
-//       // },
-//     },
-//   },
-// );
-// diagram.elements._t.fnMap.add('testFn', () => { console.log('asdf')});
-// diagram.addElement(
-//   {
-//     name: 't',
-//     method: 'text.lines',
-//     options: {
-//       lines: [
-//         'Lines justified to the left',
-//         'A |line| with a |modified_phrase|',
-//         {
-//           line: 'A |line| with custom defaults',
-//           font: {
-//             style: 'italic',
-//             color: [0, 0.5, 1, 1],
-//           },
-//         },
-//       ],
-//       modifiers: {
-//         modified_phrase: {
-//           text: 'modified phrase',
-//           font: {
-//             style: 'italic',
-//             color: [0, 0.5, 1, 1],
-//           },
-//         },
-//         line: {
-//           font: {
-//             family: 'Times New Roman',
-//             color: [0, 0.6, 0, 1],
-//             style: 'italic',
-//           },
-//           onClick: () => { console.log(1) },
-//         },
-//       },
-//       font: {
-//         family: 'Helvetica Neue',
-//         weight: '200',
-//         style: 'normal',
-//         size: 0.2,
-//       },
-//       justification: 'left',
-//       lineSpace: -0.3,
-//       position: [-0.5, 0.1],
-//     },
-//     mods: {
-//       isTouchable: true,
-//       isMovable: true,
-//       move: { bounds: 'diagram' },
-//     },
-//   },
-// );
-// console.log(diagram.elements._t.drawingObject)
-// diagram.elements._t.setMovable();
-
-diagram.addElement(
-  {
-    name: 'lines',
-    method: 'textLines',
-    options: {
-       lines: [
-         'Lines justified to the left',
-         'A |line| with a |modified_phrase|',
-         {
-           line: 'A |line| with custom defaults',
-           font: {
-             style: 'italic',
-             color: [0, 0.5, 1, 1],
-           },
-         },
-       ],
-       modifiers: {
-         modified_phrase: {
-           text: 'modified phrase',
-           font: {
-             style: 'italic',
-             color: [0, 0.5, 1, 1],
-           },
-         },
-         line: {
-           font: {
-             family: 'Times New Roman',
-             color: [0, 0.6, 0, 1],
-             style: 'italic',
-           },
-         },
-       },
-       font: {
-         family: 'Helvetica Neue',
-         weight: '200',
-         style: 'normal',
-         size: 0.2,
-       },
-       justify: 'left',
-       lineSpace: -0.4,
-       position: [-0.5, 0.1],
-     },
-  },
-);
+const p = diagram.getElement('p');
+const q = diagram.getElement('q');
+diagram.initialize();
