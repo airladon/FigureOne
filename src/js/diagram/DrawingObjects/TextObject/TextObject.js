@@ -874,10 +874,10 @@ class TextObject extends TextObjectBase {
           font, location, xAlign, yAlign, touchBorder, border, onClick,
         } = textDefinition);
         textToUse = textDefinition.text;
-        if (border != null) {
+        if (Array.isArray(border)) {
           border = getPoints(border);
         }
-        if (touchBorder != null && typeof touchBorder !== 'number') {
+        if (Array.isArray(touchBorder)) {
           touchBorder = getPoints(touchBorder);
         }
       }
@@ -1024,6 +1024,12 @@ class TextLineObject extends TextObjectBase {
           font, offset, inLine, border, touchBorder, onClick,
         } = textDefinition);
         textToUse = textDefinition.text;
+        if (Array.isArray(border)) {
+          border = getPoints(border);
+        }
+        if (Array.isArray(touchBorder)) {
+          touchBorder = getPoints(touchBorder);
+        }
       }
       let offsetToUse;
       if (offset == null) {

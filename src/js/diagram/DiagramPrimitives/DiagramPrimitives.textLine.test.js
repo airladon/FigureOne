@@ -268,6 +268,91 @@ describe('Text Borders', () => {
         // border: 'rect',  // default
         // touchBorder: 'rect',  // default
       },
+      highMiddle: {
+        line: [
+          't',
+          {
+            text: 't',
+            offset: [0, 1],
+            inLine: false,
+          },
+          't',
+        ],
+        xAlign: 'left',
+        yAlign: 'baseline',
+        // border: 'rect',  // default
+        // touchBorder: 'rect',  // default
+      },
+      highMiddleText: {
+        line: [
+          't',
+          {
+            text: 't',
+            offset: [0, 1],
+            inLine: false,
+          },
+          't',
+        ],
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: 'text',
+        touchBorder: 'text',
+      },
+      customDiagramObjectBorder: {
+        line: [
+          't',
+          't',
+          't',
+        ],
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: [[[-1, -1], [1, -1], [1, 1], [-1, 1]]],
+        touchBorder: 'border',
+      },
+      customDiagramObjectTouchBorder: {
+        line: [
+          't',
+          't',
+          't',
+        ],
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: [[[-1, -1], [1, -1], [1, 1], [-1, 1]]],
+        touchBorder: [[[-2, -2], [2, -2], [2, 2], [-2, 2]]],
+      },
+      customTextBorder: {
+        line: [
+          't',
+          {
+            text: 't',
+            border: [[0.1, -1], [0.2, -1], [0.2, 1], [0.1, 1]],
+            touchBorder: 'rect',
+          },
+          {
+            text: 't',
+            touchBorder: [[0.2, -2], [0.3, -2], [0.3, 2], [0.2, 2]],
+          },
+        ],
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: 'rect',
+        touchBorder: 'rect',
+      },
+      click: {
+        line: [
+          't',
+          {
+            text: 't',
+            onClick: callback,
+          },
+          't',
+        ],
+        xAlign: 'left',
+        yAlign: 'baseline',
+        border: 'rect',
+        touchBorder: 'rect',
+        position: [-2, -2],
+      },
     };
     addElement = (option) => {
       diagram.addElement({
@@ -344,74 +429,180 @@ describe('Text Borders', () => {
       [w - buffer, top + buffer],
     ]), 3)]);
   });
-  // test('DrawingObject Buffer', () => {
-  //   addElement('drawingObjectBuffer');
-  //   expect(round(tr.left, 3)).toBe(0);
-  //   expect(round(tr.bottom, 3)).toBe(a.bottom);
-  //   expect(round(tr.right, 3)).toBe(a.right);
-  //   expect(round(tr.top, 3)).toBe(a.top);
+  test('High middle', () => {
+    addElement('highMiddle');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [w, bot + 1], [w * 2, bot + 1], [w * 2, top + 1], [w, top + 1],
+    ]), 3));
+    expect(round(td.text[2].border, 3)).toEqual(round(getPoints([
+      [w, bot], [w * 2, bot], [w * 2, top], [w, top],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [w, bot + 1], [w * 2, bot + 1], [w * 2, top + 1], [w, top + 1],
+    ]), 3));
+    expect(round(td.text[2].touchBorder, 3)).toEqual(round(getPoints([
+      [w, bot], [w * 2, bot], [w * 2, top], [w, top],
+    ]), 3));
 
-  //   // DiagramText borders
-  //   expect(td.text[0].border).toEqual(getPoints([
-  //     [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
-  //   ]));
-  //   expect(td.text[0].touchBorder).toEqual(getPoints([
-  //     [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
-  //   ]));
+    expect(round(td.border, 3)).toEqual([round(getPoints([
+      [0, bot], [w * 2, bot], [w * 2, top + 1], [0, top + 1],
+    ]), 3)]);
+    expect(round(td.touchBorder, 3)).toEqual([round(getPoints([
+      [0, bot], [w * 2, bot], [w * 2, top + 1], [0, top + 1],
+    ]), 3)]);
+  });
+  test('High middle text border', () => {
+    addElement('highMiddleText');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [w, bot + 1], [w * 2, bot + 1], [w * 2, top + 1], [w, top + 1],
+    ]), 3));
+    expect(round(td.text[2].border, 3)).toEqual(round(getPoints([
+      [w, bot], [w * 2, bot], [w * 2, top], [w, top],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [w, bot + 1], [w * 2, bot + 1], [w * 2, top + 1], [w, top + 1],
+    ]), 3));
+    expect(round(td.text[2].touchBorder, 3)).toEqual(round(getPoints([
+      [w, bot], [w * 2, bot], [w * 2, top], [w, top],
+    ]), 3));
 
-  //   expect(td.border).toEqual([getPoints([
-  //     [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
-  //   ])]);
-  //   expect(td.touchBorder).toEqual([getPoints([
-  //     [-buffer, a.bottom - buffer],
-  //     [a.width + buffer, a.bottom - buffer],
-  //     [a.width + buffer, a.top + buffer],
-  //     [-buffer, a.top + buffer],
-  //   ])]);
-  // });
-  // test('Text Buffer', () => {
-  //   addElement('textBuffer');
-  //   expect(round(tr.left, 3)).toBe(0);
-  //   expect(round(tr.bottom, 3)).toBe(a.bottom);
-  //   expect(round(tr.right, 3)).toBe(a.right);
-  //   expect(round(tr.top, 3)).toBe(a.top);
+    expect(round(td.border, 3)).toEqual([
+      round(getPoints([
+        [0, bot], [w, bot], [w, top], [0, top],
+      ]), 3),
+      round(getPoints([
+        [w, bot + 1], [w * 2, bot + 1], [w * 2, top + 1], [w, top + 1],
+      ]), 3),
+      round(getPoints([
+        [w, bot], [w * 2, bot], [w * 2, top], [w, top],
+      ]), 3),
+    ]);
+    expect(round(td.touchBorder, 3)).toEqual([
+      round(getPoints([
+        [0, bot], [w, bot], [w, top], [0, top],
+      ]), 3),
+      round(getPoints([
+        [w, bot + 1], [w * 2, bot + 1], [w * 2, top + 1], [w, top + 1],
+      ]), 3),
+      round(getPoints([
+        [w, bot], [w * 2, bot], [w * 2, top], [w, top],
+      ]), 3),
+    ]);
+  });
+  test('customDiagramObjectBorder', () => {
+    addElement('customDiagramObjectBorder');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [w, bot], [w * 2, bot], [w * 2, top], [w, top],
+    ]), 3));
+    expect(round(td.text[2].border, 3)).toEqual(round(getPoints([
+      [w * 2, bot], [w * 3, bot], [w * 3, top], [w * 2, top],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [w, bot], [w * 2, bot], [w * 2, top], [w, top],
+    ]), 3));
+    expect(round(td.text[2].touchBorder, 3)).toEqual(round(getPoints([
+      [w * 2, bot], [w * 3, bot], [w * 3, top], [w * 2, top],
+    ]), 3));
 
-  //   // DiagramText borders
-  //   expect(td.text[0].border).toEqual(getPoints([
-  //     [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
-  //   ]));
-  //   expect(td.text[0].touchBorder).toEqual(getPoints([
-  //     [-buffer, a.bottom - buffer],
-  //     [a.width + buffer, a.bottom - buffer],
-  //     [a.width + buffer, a.top + buffer],
-  //     [-buffer, a.top + buffer],
-  //   ]));
+    expect(round(td.border, 3)).toEqual([round(getPoints([
+      [-1, -1], [1, -1], [1, 1], [-1, 1],
+    ]), 3)]);
+    expect(round(td.touchBorder, 3)).toEqual([round(getPoints([
+      [-1, -1], [1, -1], [1, 1], [-1, 1],
+    ]), 3)]);
+  });
+  test('customDiagramObjectTouchBorder', () => {
+    addElement('customDiagramObjectTouchBorder');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [w, bot], [w * 2, bot], [w * 2, top], [w, top],
+    ]), 3));
+    expect(round(td.text[2].border, 3)).toEqual(round(getPoints([
+      [w * 2, bot], [w * 3, bot], [w * 3, top], [w * 2, top],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [w, bot], [w * 2, bot], [w * 2, top], [w, top],
+    ]), 3));
+    expect(round(td.text[2].touchBorder, 3)).toEqual(round(getPoints([
+      [w * 2, bot], [w * 3, bot], [w * 3, top], [w * 2, top],
+    ]), 3));
 
-  //   // DrawingObject borders
-  //   expect(td.border).toEqual([getPoints([
-  //     [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
-  //   ])]);
-  //   expect(td.touchBorder).toEqual([getPoints([
-  //     [-buffer, a.bottom - buffer],
-  //     [a.width + buffer, a.bottom - buffer],
-  //     [a.width + buffer, a.top + buffer],
-  //     [-buffer, a.top + buffer],
-  //   ])]);
-  // });
-  // test('Click', () => {
-  //   addElement('click');
-  //   t.makeTouchable();
-  //   expect(callback.mock.calls.length).toBe(0);
-  //   diagram.mock.touchDown([-2, -2]);
-  //   diagram.mock.touchUp();
-  //   expect(callback.mock.calls.length).toBe(1);
+    expect(round(td.border, 3)).toEqual([round(getPoints([
+      [-1, -1], [1, -1], [1, 1], [-1, 1],
+    ]), 3)]);
+    expect(round(td.touchBorder, 3)).toEqual([round(getPoints([
+      [-2, -2], [2, -2], [2, 2], [-2, 2],
+    ]), 3)]);
+  });
+  test('customTextBorder', () => {
+    addElement('customTextBorder');
+    expect(round(td.text[0].border, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].border, 3)).toEqual(round(getPoints([
+      [0.1, -1], [0.2, -1], [0.2, 1], [0.1, 1],
+    ]), 3));
+    expect(round(td.text[2].border, 3)).toEqual(round(getPoints([
+      [w * 2, bot], [w * 3, bot], [w * 3, top], [w * 2, top],
+    ]), 3));
+    expect(round(td.text[0].touchBorder, 3)).toEqual(round(getPoints([
+      [0, bot], [w, bot], [w, top], [0, top],
+    ]), 3));
+    expect(round(td.text[1].touchBorder, 3)).toEqual(round(getPoints([
+      [w, bot], [w * 2, bot], [w * 2, top], [w, top],
+    ]), 3));
+    expect(round(td.text[2].touchBorder, 3)).toEqual(round(getPoints([
+      [0.2, -2], [0.3, -2], [0.3, 2], [0.2, 2],
+    ]), 3));
 
-  //   diagram.mock.touchDown([-1.5000001, -1.50000001]);
-  //   diagram.mock.touchUp();
-  //   expect(callback.mock.calls.length).toBe(2);
+    expect(round(td.border, 3)).toEqual([round(getPoints([
+      [0, -1], [w * 3, -1], [w * 3, 1], [0, 1],
+    ]), 3)]);
+    expect(round(td.touchBorder, 3)).toEqual([round(getPoints([
+      [0, -2], [w * 3, -2], [w * 3, 2], [0, 2],
+    ]), 3)]);
+  });
+  test('Click', () => {
+    addElement('click');
+    t.makeTouchable();
+    expect(callback.mock.calls.length).toBe(0);
+    diagram.mock.touchDown([-2, -2]);
+    diagram.mock.touchUp();
+    expect(callback.mock.calls.length).toBe(0);
 
-  //   diagram.mock.touchDown([-1, -1]);
-  //   diagram.mock.touchUp();
-  //   expect(callback.mock.calls.length).toBe(2);
-  // });
+    diagram.mock.touchDown([0.15 - 2, -2]);
+    diagram.mock.touchUp();
+    expect(callback.mock.calls.length).toBe(1);
+
+    diagram.mock.touchDown([0.25 - 2, -2]);
+    diagram.mock.touchUp();
+    expect(callback.mock.calls.length).toBe(1);
+
+    diagram.mock.touchDown([0.15, 0]);
+    diagram.mock.touchUp();
+    expect(callback.mock.calls.length).toBe(1);
+  });
 });
