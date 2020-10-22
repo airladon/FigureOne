@@ -217,6 +217,8 @@ diagram.addElement(
             style: 'italic',
             color: [0, 0.5, 1, 1],
           },
+          onClick: () => { console.log('11')},
+          touchBorder: 0.2,
         },
         ' world',
         {
@@ -240,5 +242,5 @@ diagram.addElement(
     },
   },
 );
-console.log(diagram.elements._t.drawingObject.touchBorder)
+console.log(diagram.elements._t.drawingObject)
 diagram.setTouchable();

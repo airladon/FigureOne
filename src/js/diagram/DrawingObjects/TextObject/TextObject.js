@@ -793,7 +793,6 @@ class TextObjectBase extends DrawingObject {
   }
 
   clear(contextIndex: number = 0) {
-    console.log('clear')
     const { ctx } = this.drawContext2D[contextIndex];
     const t = this.lastDrawTransform;
     ctx.save();
@@ -1022,7 +1021,7 @@ class TextLineObject extends TextObjectBase {
         textToUse = textDefinition;
       } else {
         ({
-          font, offset, inLine,
+          font, offset, inLine, border, touchBorder, onClick,
         } = textDefinition);
         textToUse = textDefinition.text;
       }

@@ -1367,8 +1367,8 @@ export type OBJ_TextLine = {
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
   position: TypeParsablePoint,
   transform: TypeParsableTransform,
-  border?: 'rect' | Array<TypeParsablePoint>,
-  touchBorder?: 'rect' | number | Array<TypeParsablePoint>,
+  border?: 'rect' | 'text' | Array<TypeParsablePoint>,
+  touchBorder?: 'rect' | number | 'border' | 'text' | Array<TypeParsablePoint>,
 }
 
 /**

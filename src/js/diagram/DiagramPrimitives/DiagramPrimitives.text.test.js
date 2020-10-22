@@ -1,10 +1,10 @@
 import {
-  Point, getPoints, Rect,
+  getPoints, Rect,
 } from '../../tools/g2';
 import {
   round,
 } from '../../tools/math';
-import * as tools from '../../tools/tools';
+// import * as tools from '../../tools/tools';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
 // tools.isTouchDevice = jest.fn();
