@@ -259,29 +259,45 @@ diagram.addElements([
 
 diagram.addElement(
   {
-    name: 't',
-    method: 'text.lines',
+    name: 'lines',
+    method: 'textLines',
     options: {
-      lines: [
-        'This is the |first| line',
-        'This is the |second| line',
-        'This is the |third| line'
-      ],
-      modifiers: {
-        first: {
-          font: { color: [0, 0, 1, 1], style: 'italic' },
-        },
-        second: {
-          font: { color: [0, 0.6, 0.6, 1], style: 'italic' },
-        },
-        third: {
-          font: { color: [1, 0, 1, 1], style: 'italic' },
-        },
-      },
-      xAlign: 'center',
-      yAlign: 'middle',
-      justify: 'center',
-    },
+       lines: [
+         'Lines justified to the left',
+         'A |line| with a |modified_phrase|',
+         {
+           line: 'A |line| with custom defaults',
+           font: {
+             style: 'italic',
+             color: [0, 0.5, 1, 1],
+           },
+         },
+       ],
+       modifiers: {
+         modified_phrase: {
+           text: 'modified phrase',
+           font: {
+             style: 'italic',
+             color: [0, 0.5, 1, 1],
+           },
+         },
+         line: {
+           font: {
+             family: 'Times New Roman',
+             color: [0, 0.6, 0, 1],
+             style: 'italic',
+           },
+         },
+       },
+       font: {
+         family: 'Helvetica Neue',
+         weight: '200',
+         style: 'normal',
+         size: 0.2,
+       },
+       justify: 'left',
+       lineSpace: -0.4,
+       position: [-0.5, 0.1],
+     },
   },
 );
-diagram.setTouchable();

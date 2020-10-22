@@ -1192,39 +1192,9 @@
               
                 
                 <li><a
-                  href='#obj_texture'
-                  class="">
-                  OBJ_Texture
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#drawing-text'
                   class="h5 bold black caps">
                   Drawing Text
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_font'
-                  class="">
-                  OBJ_Font
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_textdefinition'
-                  class="">
-                  OBJ_TextDefinition
                   
                 </a>
                 
@@ -1242,49 +1212,9 @@
               
                 
                 <li><a
-                  href='#obj_textlinedefinition'
-                  class="">
-                  OBJ_TextLineDefinition
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#obj_textline'
                   class="">
                   OBJ_TextLine
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_textlinesdefinition'
-                  class="">
-                  OBJ_TextLinesDefinition
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_textmodifierdefinition'
-                  class="">
-                  OBJ_TextModifierDefinition
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_textmodifiersdefinition'
-                  class="">
-                  OBJ_TextModifiersDefinition
                   
                 </a>
                 
@@ -2598,9 +2528,9 @@
               
                 
                 <li><a
-                  href='#misc'
+                  href='#misc-geometry'
                   class="h5 bold black caps">
-                  Misc
+                  Misc Geometry
                   
                 </a>
                 
@@ -2691,6 +2621,86 @@
                   href='#gettransform'
                   class="">
                   getTransform
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#misc-drawing'
+                  class="h5 bold black caps">
+                  Misc Drawing
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_texture'
+                  class="">
+                  OBJ_Texture
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_textdefinition'
+                  class="">
+                  OBJ_TextDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_font'
+                  class="">
+                  OBJ_Font
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_textlinedefinition'
+                  class="">
+                  OBJ_TextLineDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_textlinesdefinition'
+                  class="">
+                  OBJ_TextLinesDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_textmodifierdefinition'
+                  class="">
+                  OBJ_TextModifierDefinition
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_textmodifiersdefinition'
+                  class="">
+                  OBJ_TextModifiersDefinition
                   
                 </a>
                 
@@ -5943,7 +5953,7 @@ array of paths.</p>
 <li><a href="#line">Line</a></li>
 <li><a href="#rect">Rectangle</a></li>
 <li><a href="#translation">Translation</a> transform</li>
-<li><a href="#rotation">Rotation</a> transofrm</li>
+<li><a href="#rotation">Rotation</a> transform</li>
 <li><a href="#scale">Scale</a> transform</li>
 <li><a href="transform">Transform Chain</a></li>
 </ul>
@@ -13420,7 +13430,7 @@ identity transforms.</p>
     <p>Each <a href="#diagramelementprimitive">DiagramElementPrimitive</a> element manages drawing a shape, drawing text, or manipulating a HTML element.</p>
 <p>FigureOne's built-in shapes are drawn using WebGL, which uses triangles to create different shapes. To draw a shape, you define the verticies of the triangles. Every drawing frame (animation or screen refresh), the color of the vertices and the transform that moves them around is used to render the final shape to the screen.</p>
 <h3><a id="drawing-boilerplate"></a> Drawing Boilerplate</h3>
-<p>To test examples within the 'Drawing Shapes' and 'Drawing Text' sections of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
+<p>To test examples within the 'Drawing Shapes' sections of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
 <p>All examples are snippets which can be appended to the end of the <code>index.js</code> file.</p>
 <pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
 <span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
@@ -13461,24 +13471,14 @@ diagram.elements.add(<span class="hljs-string">'p'</span>, p);</pre>
 <h3>Built-in Shapes</h3>
 <p>There are several built in shape methods that can be used to create complex diagrams:</p>
 <ul>
-<li><a href="#obj_polyline">polyline</a></li>
-<li><a href="#obj_polygon">polygon</a></li>
-<li><a href="#obj_polygonSweep">polygonSweep</a></li>
-<li><a href="#obj_grid">grid</a></li>
-<li><a href="#obj_fan">fan</a></li>
-<li><a href="#obj_arrow">arrow</a></li>
-<li><a href="#obj_rectangle">rectangle</a></li>
-<li><a href="#obj_radialLines">radialLines</a></li>
-<li><a href="#obj_marks">marks</a></li>
-</ul>
-<p>There are also built in shape methods that include annotations</p>
-<ul>
-<li><a href="#obj_angle">angle</a></li>
 <li><a href="#obj_line">line</a></li>
-<li><a href="#obj_polylineAdv">polylineAdv</a></li>
+<li><a href="#obj_polyline">polyline</a></li>
+<li><a href="#obj_triangle">triangle</a></li>
+<li><a href="#obj_rectangle">rectangle</a></li>
+<li><a href="#obj_polygon">polygon</a></li>
 </ul>
 <h3>Drawing a generic shape</h3>
-<p>There are several built-in shapes such as polygons, rectangles and polylines in FigureOne. There is also a 'generic' method that will allow creation of any shape.</p>
+<p>While there are several built-in shapes such as polygons, rectangles and polylines in FigureOne, there is also a 'generic' method that will allow creation of any shape.</p>
 <p>To use the generic method however, it is important to understand how WebGL uses triangles to create shapes.</p>
 <p>Any shape can be quantized into triangles. For instance, the digram below shows a rectangle broken into two triangles with vertices labeled.</p>
 <p style="text-align: center"><img src="./tutorials/draw/rect.png"></p>
@@ -15704,139 +15704,6 @@ diagram.addElement({
           
         
           
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_texture'>
-      OBJ_Texture
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Texture definition object</p>
-<p>A texture file is an image file like a jpg, or png.</p>
-<p>Textures can be used instead of colors to fill a shape in WebGL.</p>
-<p>Textures are effectively overlaid on a shape. Therefore, to overlay the
-texture with the correct offset, magnification and aspect ratio the texture
-must be mapped to the space the shape's vertices are defined in
-(vertex space).</p>
-<p>This is done by defining a window, or rectangle, for the texture file
-(<code>mapFrom</code>) and a similar window in vertex space (<code>mapTo</code>).
-The texture is then offset and scaled such that its window aligns with the
-vertex space window.</p>
-<p>The texture file has coordinates of (0, 0) in the bottom left corner and
-(1, 1) in the top right corner.</p>
-<p>Therefore, to make a 1000 x 500 image fill a 2 x 1 rectangle in vertex space
-centered at (0, 0) you would define:</p>
-<pre><code>mapFrom: new Rect(0, 0, 1, 1)
-mapTo: new Rect(-1, -0.5, 2, 1)
-</code></pre>
-<p>If instead you wanted to zoom the image in the same rectange by a factor of 2
-you could either:</p>
-<pre><code>mapFrom: new Rect(0.25, 0.25, 0.5, 0.5)
-mapTo: new Rect(-1, -0.5, 2, 1)
-</code></pre>
-<p>or</p>
-<pre><code>mapFrom: new Rect(0, 0, 1, 1)
-mapTo: new Rect(-2, -1, 4, 2)
-</code></pre>
-<p>Two ways of doing this are provided as sometimes it is more convenient to
-think about the window on the image, and other times the window in vertex
-space.</p>
-<p>If the shape has fill outside the texture boundaries then either the
-texture can be repeated, or a pixel from the border (edge) of the image is
-used (called clamping to edge).
-WebGL only allows images that are square with a side length that is a
-power of 2 (such as 16, 32, 64, 128 etc) to be repeated. All other images
-can only be clamped to their edge.</p>
-<p>To repeat all other image resolutions, a texture can be mapped to a rectangle
-and then the rectangle repeated throughout the diagram.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>src</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          : The url or location of the image
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>mapTo</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
-          : vertex space window (
-<code>new Rect(-1, -1, 2, 2)</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>mapFrom</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
-          : image space window (
-<code>new Rect(0, 0, 1, 1)</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>repeat</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- will tile the image. Only works with
-images that are square whose number of side pixels is a power of 2 (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>onLoad</span> <code class='quiet'>(function (): void?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
   <h2 id='drawing-text' class='mt0'>
@@ -15844,255 +15711,203 @@ images that are square whose number of side pixels is a power of 2 (
   </h2>
 
   
-    
+    <p>FigureOne provides text layout for both simple text, and lines of text with rich formatting.</p>
+<h3><a id="text-boilerplate"></a> Text Boilerplate</h3>
+<p>To test examples within the 'Drawing Text' sections of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
+<p>All examples are snippets which can be appended to the end of the <code>index.js</code> file.</p>
+<pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
+<span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 800px; height: 800px; background-color: white;"</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.2.3/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
+<p>A grid is included in this javascript file to make it obvious how text is aligned and justified</p>
+<pre class='hljs'><span class="hljs-comment">// index.js</span>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>]});
+diagram.addElements([
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'origin'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span> },
+      <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>]
+    },
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'gridMinor'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'grid'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">bounds</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>],
+      <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.001</span> },
+    },
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'gridMajor'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'grid'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">bounds</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>],
+      <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.004</span> }
+    },
+  },
+]);</pre>
+<h3>Quick Start - <code>text</code></h3>
+<p>Let's start by creating a <a href="#diagramelementprimitive">DiagramElementPrimitive</a> element that writes 'hello world' to the diagram.</p>
+<p style="text-align: center"><img src="./tutorials/text/text.png"></p>
+<pre class='hljs'>diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'simpleText'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">text</span>: <span class="hljs-string">'hello world'</span>,
+      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+    },
+  },
+);</pre>
+<p>The text has been horizontally aligned to its center, and vertically aligned to its middle around its default location of <code>(0, 0)</code>.</p>
+<p>As this is a <a href="#diagramelementprimitive">DiagramElementPrimitive</a>, transforms can be applied to it, and it can be touched and moved. For instance, the example below will rotate the text when it is dragged with a touch from the user.</p>
+<pre class='hljs'>diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'spinner'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">text</span>: <span class="hljs-string">'hello world'</span>,
+      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+      <span class="hljs-attr">touchBorder</span>: <span class="hljs-number">0.5</span>,   <span class="hljs-comment">// add a touch buffer of 0.5 around the text</span>
+    },
+    <span class="hljs-attr">mods</span>: {
+      <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">isMovable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">move</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">'rotation'</span> },
+    }
+  },
+);
+diagram.setTouchable();</pre>
+<p>The same <code>text</code> method can be used to create text at different locations.</p>
+<p style="text-align: center"><img src="./tutorials/text/compass.png"></p>
+<pre class='hljs'>diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'compass'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">text</span>: [
+        {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'North'</span>,
+          <span class="hljs-attr">location</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>],
+        },
+        {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'East'</span>,
+          <span class="hljs-attr">location</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>],
+        },
+        {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'South'</span>,
+          <span class="hljs-attr">location</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">-0.5</span>],
+        },
+        {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'West'</span>,
+          <span class="hljs-attr">location</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0</span>],
+        },
+      ],
+      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+    },
+  },
+);</pre>
+<p>See <a href="#obj_text">OBJ_Text</a> to apply custom formatting to each element in the <code>text</code>, but note that all the text in a sinle element will have the same formatting.</p>
+<h3>Arranging text in a line - <code>text.line</code></h3>
+<p>Often a phrase of text will want to apply specific formatting to a word or part of the phrase.</p>
+<p>The above example can be used to do this, but it is cumbersome as the locations of part of the phrase with different formatting will need to be experimented with.</p>
+<p>Alternately, <code>text.line</code> can be used as it will automatically layout the text elements from left to right based on their calculated widths.</p>
+<p style="text-align: center"><img src="./tutorials/text/text-line.png"></p>
+<pre class='hljs'>diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'formattedLine'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'text.line'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">line</span>: [
+        <span class="hljs-string">'hello '</span>,
+        {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'world'</span>,
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span> },
+        },
+        <span class="hljs-string">' it is great to meet you'</span>,
+      ],
+      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+    },
+  },
+);</pre>
+<p>See <a href="#obj_textline">OBJ_TextLine</a> for more options including how to superscript and subscript text, or move it out of the line layout completely.</p>
+<h3>Rich lines - <code>text.lines</code></h3>
+<p><code>text.line</code> keeps the text and formatting definitions next to each other in the API.</p>
+<p>When using more text, it is sometimes useful to split these in the API to make it easier to read the text.</p>
+<p><code>text.lines</code> uses the special character <code>'|'</code> to surround parts of a phrase that needs to me modified with custom formating. The modifier definitions are then provided later in the interface.</p>
+<p>The same example above can be done with <code>text.lines</code>:</p>
+<pre class='hljs'>diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'formattedLine'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'text.lines'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">lines</span>: [
+        <span class="hljs-string">'hello |world| it is great to see you'</span>,
+      ],
+      <span class="hljs-attr">modifiers</span>: {
+        <span class="hljs-attr">world</span>: {
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span> },
+        }
+      },
+      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+    },
+  },
+);
+diagram.setTouchable();</pre>
+<p><code>text.lines</code> also allows for multiple lines of text to be laid out and justified.</p>
+<p style="text-align: center"><img src="./tutorials/text/text-lines.png"></p>
+<pre class='hljs'>diagram.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'text.lines'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">lines</span>: [
+        <span class="hljs-string">'This is the |first| line'</span>,
+        <span class="hljs-string">'This is the |second| line - and it is long'</span>,
+        <span class="hljs-string">'This is the |third| line'</span>
+      ],
+      <span class="hljs-attr">modifiers</span>: {
+        <span class="hljs-attr">first</span>: {
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span> },
+        },
+        <span class="hljs-attr">second</span>: {
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span> },
+        },
+        <span class="hljs-attr">third</span>: {
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span> },
+        },
+      },
+      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+      <span class="hljs-attr">justify</span>: <span class="hljs-string">'center'</span>,
+    },
+  },
+);</pre>
+<p>For more properties of <code>text.lines</code> see <a href="#obj_textlines">OBJ_TextLines</a>.</p>
 
   
 </section></div>
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_font'>
-      OBJ_Font
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Font definition object.</p>
-<p>Text is drawn in a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">Context2D canvas</a> and so <code>family</code>, <code>style</code> and <code>weight</code> are any valid <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font">options</a>.</p>
-<p><code>size</code> is the vertex space size of the font.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>family</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : The font family (
-<code>Times New Roman</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>style</span> <code class='quiet'>((`normal` | `italic`)?)</code>
-          : (
-<code>normal</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : size of font in vertex space (
-<code>0.2</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>weight</span> <code class='quiet'>((<code>"normal"</code> | <code>"bold"</code> | <code>"lighter"</code> | <code>"bolder"</code> | <code>"100"</code> | <code>"200"</code> | <code>"300"</code> | <code>"400"</code> | <code>"500"</code> | <code>"600"</code> | <code>"700"</code> | <code>"800"</code> | <code>"900"</code>)?)</code>
-          : font weight (
-<code>200</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?)</code>
-          : Font color
-
-[red, green, blue, alpha]
- between 0 and 1 - (
-<code>[1, 0, 0, 1]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>opacity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : opacity multiplier (final opacity will be
-
-<code>opacity</code>
- * 
-<code>color</code>
- alpha) 
-[
-<code>1</code>
-]
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full font definition</span>
-<span class="hljs-keyword">const</span> font = <span class="hljs-keyword">new</span> DiagramFont({
-  <span class="hljs-attr">family</span>: <span class="hljs-string">'Helvetica'</span>,
-  <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
-  <span class="hljs-attr">weight</span>: <span class="hljs-string">'bold'</span>,
-  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-  <span class="hljs-attr">opacity</span>: <span class="hljs-number">1</span>,
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define style only, remaining properties are defaults</span>
-<span class="hljs-keyword">const</span> font = <span class="hljs-keyword">new</span> DiagramFont({
-  <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
-});</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_textdefinition'>
-      OBJ_TextDefinition
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Text Definition object</p>
-<p>Used within <a href="#obj_text">OBJ_Text</a> to define a single string</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          : string to show
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>location</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : location to draw text (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
-          : how to align text
-horizontally with 
-<code>location</code>
- (
-<code>"left"</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
-          : how to align
-text vertically with 
-<code>location</code>
- (
-<code>"left"</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>onClick</span> <code class='quiet'>(function (): void?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
           
         
           
@@ -16110,13 +15925,21 @@ text vertically with
   
 
   <p>One or more text strings.</p>
-<p><img src="./assets1/textLines_ex1.png"></p>
+<p><img src="./assets1/text_ex1.png"></p>
 <p><img src="./assets1/text_ex2.png"></p>
-<p>Use this to make a DiagramElementPrimitive that renders simple text.</p>
-<p>If you need multiple strings, in different locations but all with the same
-transform, then use this to assign multiple strings to the same primitive.
-Different strings can have different fonts, colors, alignments, and
-locations.</p>
+<p>Simple text options object.</p>
+<p>Use this to make a <a href="#diagramelementprimitive">DiagramElementPrimitive</a> that renders text.</p>
+<p><code>text</code> can either be a single string, or an array of
+<a href="#obj_textdefinition">OBJ_TextDefinition</a> objects to define multiple strings. Each string
+can have a different location, alignment (<code>xAlign</code>, <code>yAlign</code>) and formatting.</p>
+<p><a href="#diagramelementprimitive">DiagramElementPrimitive</a> objects allow for a callback to be defined
+when they are touched by a user. In text <a href="#diagramelementprimitive">DiagramElementPrimitive</a>,
+each string can have its own callback assigned using the <code>onClick</code> property
+of <a href="#obj_textdefinition">OBJ_TextDefinition</a>. In addition custom touch borders to make it
+easier to click the strings can be defined.</p>
+<p>Note: there is a slight performance improvement in including multiple
+strings at different locations in the same <a href="#diagramelementprimitive">DiagramElementPrimitive</a>,
+rather than creating a <a href="#diagramelementprimitive">DiagramElementPrimitive</a> for each string.</p>
 
   
   
@@ -16136,17 +15959,15 @@ locations.</p>
       
         <div class='space-bottom0'>
           <span class='code bold'>text</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textdefinition">OBJ_TextDefinition</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textdefinition">OBJ_TextDefinition</a>)>))</code>
-          : text to draw,
-either as a single string or multiple strings in an array(
-<code>4</code>
-)
+          : text to draw, either as a single string or multiple strings in an array
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
-          
+          : default font to apply to all text
+
           
         </div>
       
@@ -16157,7 +15978,7 @@ alignment for
 <code>text</code>
  relative to 
 <code>location</code>
- (
+ (default: 
 <code>"left"</code>
 )
 
@@ -16171,7 +15992,7 @@ vertical text alignment for
 <code>text</code>
  relative to 
 <code>location</code>
- (
+ (default: 
 <code>"baseline"</code>
 )
 
@@ -16180,7 +16001,7 @@ vertical text alignment for
       
         <div class='space-bottom0'>
           <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          : (
+          : (default: 
 <code>[1, 0, 0, 1</code>
 ])
 
@@ -16197,8 +16018,50 @@ in transform
       
         <div class='space-bottom0'>
           <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
-          : (
+          : (default: 
 <code>Transform('text').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : border can be custom (
+<code>Array&#x3C;TypeParsablePoint></code>
+), set to 
+<code>'rect'</code>
+ for the
+encompassing rectangle around all text borders combined,
+or set to 
+<code>'text'</code>
+ for the individual text borders (default: 
+<code>'text'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : touch border can be custom (
+<code>Array&#x3C;TypeParsablePoint></code>
+), set to 
+<code>'rect'</code>
+ for
+the encompassing rectangle around all text touch borders, set to 
+<code>'text'</code>
+
+for the individual text touch borders (
+<code>'text'</code>
+), set to 
+<code>'border'</code>
+ to be the
+same as the element border or a (
+<code>number</code>
+) for a rectangle with some buffer
+around all text touch borders combined into an encompassing rect (default: 
+<code>'text'</code>
 )
 
           
@@ -16215,7 +16078,7 @@ in transform
       
         To test examples, append them to the
 
-<a href="#drawing-boilerplate">
+<a href="#text-boilerplate">
 boilerplate
 </a>
 
@@ -16270,100 +16133,6 @@ diagram.addElement(
   },
 );</pre>
     
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_textlinedefinition'>
-      OBJ_TextLineDefinition
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Line Text Definition object</p>
-<p>Used to define a string within a text line primitive <a href="#obj_textline">OBJ_TextLine</a>.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : string to show
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : offset to draw text (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>inLine</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>false</code>
- means next text will follow previous
-and not this (
-<code>true</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>onClick</span> <code class='quiet'>(function (): void?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
   
 
   
@@ -16469,6 +16238,48 @@ in transform
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : border can be custom (
+<code>Array&#x3C;TypeParsablePoint></code>
+), set to 
+<code>'rect'</code>
+ for the
+encompassing rectangle around all text borders combined,
+or set to 
+<code>'text'</code>
+ for the individual text borders (
+<code>'rect'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : touch border can be custom (
+<code>Array&#x3C;TypeParsablePoint></code>
+), set to 
+<code>'rect'</code>
+ for
+the encompassing rectangle around all text touch borders, set to 
+<code>'text'</code>
+
+for the individual text touch borders (
+<code>'text'</code>
+), set to 
+<code>'border'</code>
+ to be the
+same as the element border or a (
+<code>number</code>
+) for a rectangle with some buffer
+around all text touch borders combined into an encompassing rect (
+<code>'rect'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>))</code>
           
           
@@ -16485,7 +16296,7 @@ in transform
       
         To test examples, append them to the
 
-<a href="#drawing-boilerplate">
+<a href="#text-boilerplate">
 boilerplate
 </a>
 
@@ -16532,250 +16343,6 @@ diagram.addElement(
   },
 );</pre>
     
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_textlinesdefinition'>
-      OBJ_TextLinesDefinition
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Lines Text Definition object.</p>
-<p>Used to define a string within a text lines primitive <a href="#obj_textlines">OBJ_TextLines</a>.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>line</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : string representing a line of text
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
-          : line specific default font
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>justification</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
-          : line specific justification
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>lineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : line specific separation from baseline of
-this line to baseline of next line
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_textmodifierdefinition'>
-      OBJ_TextModifierDefinition
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Modifier Text Definition object.</p>
-<p>Used to define the modifiers of a string within a text lines primitive
-<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : text to replace modifier id with - if 
-<code>undefined</code>
-
-then modifier id is used
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
-          : font changes for modified text
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>inLine</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>false</code>
- if modified text should not contribute
-to line layout (
-<code>true</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>onClick</span> <code class='quiet'>(function (): {}?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_textmodifiersdefinition'>
-      OBJ_TextModifiersDefinition
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Modifier object.</p>
-<p>Used to define the modifiers of a string within a text lines primitive
-<a href="#obj_textlines">OBJ_TextLines</a>.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>modifierId</span> <code class='quiet'>(<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?)</code>
-          : modifierId can be any
-key
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
   
 
   
@@ -16907,7 +16474,49 @@ in transform
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>justification</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code>)?)</code>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : border can be custom (
+<code>Array&#x3C;TypeParsablePoint></code>
+), set to 
+<code>'rect'</code>
+ for the
+encompassing rectangle around all text borders combined,
+or set to 
+<code>'text'</code>
+ for the individual text borders (
+<code>'rect'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : touch border can be custom (
+<code>Array&#x3C;TypeParsablePoint></code>
+), set to 
+<code>'rect'</code>
+ for
+the encompassing rectangle around all text touch borders, set to 
+<code>'text'</code>
+
+for the individual text touch borders (
+<code>'text'</code>
+), set to 
+<code>'border'</code>
+ to be the
+same as the element border or a (
+<code>number</code>
+) for a rectangle with some buffer
+around all text touch borders combined into an encompassing rect (
+<code>'rect'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>justify</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code>)?)</code>
           
           
         </div>
@@ -16946,7 +16555,7 @@ diagram.addElement(
         <span class="hljs-attr">style</span>: <span class="hljs-string">'normal'</span>,
         <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span>,
       },
-      <span class="hljs-attr">justification</span>: <span class="hljs-string">'center'</span>
+      <span class="hljs-attr">justify</span>: <span class="hljs-string">'center'</span>
       <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
     },
   },
@@ -16992,7 +16601,7 @@ diagram.addElement(
          <span class="hljs-attr">style</span>: <span class="hljs-string">'normal'</span>,
          <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span>,
        },
-       <span class="hljs-attr">justification</span>: <span class="hljs-string">'left'</span>,
+       <span class="hljs-attr">justify</span>: <span class="hljs-string">'left'</span>,
        <span class="hljs-attr">lineSpace</span>: <span class="hljs-number">-0.2</span>,
        <span class="hljs-attr">position</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0.1</span>],
      },
@@ -32618,8 +32227,8 @@ eqn.addElements({
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='misc' class='mt0'>
-    Misc
+  <h2 id='misc-geometry' class='mt0'>
+    Misc Geometry
   </h2>
 
   
@@ -33258,6 +32867,846 @@ the x and y scale is equal.</p>
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='misc-drawing' class='mt0'>
+    Misc Drawing
+  </h2>
+
+  
+    
+
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_texture'>
+      OBJ_Texture
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Texture definition object</p>
+<p>A texture file is an image file like a jpg, or png.</p>
+<p>Textures can be used instead of colors to fill a shape in WebGL.</p>
+<p>Textures are effectively overlaid on a shape. Therefore, to overlay the
+texture with the correct offset, magnification and aspect ratio the texture
+must be mapped to the space the shape's vertices are defined in
+(vertex space).</p>
+<p>This is done by defining a window, or rectangle, for the texture file
+(<code>mapFrom</code>) and a similar window in vertex space (<code>mapTo</code>).
+The texture is then offset and scaled such that its window aligns with the
+vertex space window.</p>
+<p>The texture file has coordinates of (0, 0) in the bottom left corner and
+(1, 1) in the top right corner.</p>
+<p>Therefore, to make a 1000 x 500 image fill a 2 x 1 rectangle in vertex space
+centered at (0, 0) you would define:</p>
+<pre><code>mapFrom: new Rect(0, 0, 1, 1)
+mapTo: new Rect(-1, -0.5, 2, 1)
+</code></pre>
+<p>If instead you wanted to zoom the image in the same rectange by a factor of 2
+you could either:</p>
+<pre><code>mapFrom: new Rect(0.25, 0.25, 0.5, 0.5)
+mapTo: new Rect(-1, -0.5, 2, 1)
+</code></pre>
+<p>or</p>
+<pre><code>mapFrom: new Rect(0, 0, 1, 1)
+mapTo: new Rect(-2, -1, 4, 2)
+</code></pre>
+<p>Two ways of doing this are provided as sometimes it is more convenient to
+think about the window on the image, and other times the window in vertex
+space.</p>
+<p>If the shape has fill outside the texture boundaries then either the
+texture can be repeated, or a pixel from the border (edge) of the image is
+used (called clamping to edge).
+WebGL only allows images that are square with a side length that is a
+power of 2 (such as 16, 32, 64, 128 etc) to be repeated. All other images
+can only be clamped to their edge.</p>
+<p>To repeat all other image resolutions, a texture can be mapped to a rectangle
+and then the rectangle repeated throughout the diagram.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>src</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : The url or location of the image
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>mapTo</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
+          : vertex space window (
+<code>new Rect(-1, -1, 2, 2)</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>mapFrom</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
+          : image space window (
+<code>new Rect(0, 0, 1, 1)</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>repeat</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ will tile the image. Only works with
+images that are square whose number of side pixels is a power of 2 (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onLoad</span> <code class='quiet'>(function (): void?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_textdefinition'>
+      OBJ_TextDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Text Definition object</p>
+<p>Used within <a href="#obj_text">OBJ_Text</a> to define a single string</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : string to show
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : font to apply to string
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>location</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : vertex space location to draw text
+(default: 
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          : how to align text
+horizontally relative to 
+<code>location</code>
+ (default: from 
+<a href="#obj_text">OBJ_Text</a>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
+          : how to align
+text vertically relative to 
+<code>location</code>
+ (default: from 
+<a href="#obj_text">OBJ_Text</a>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onClick</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?)</code>
+          : function to execute on click
+within the 
+<code>touchBorder</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          : border can be custom
+points (
+<code>Array&#x3C;TypeParsablePoint></code>
+) or set to 
+<code>'rect'</code>
+ for the encompassing
+rectangle of the text (default: 
+<code>"rect"</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          : touch border can be custom points (
+<code>Array&#x3C;TypeParsablePoint></code>
+), set to
+
+<code>'rect'</code>
+ for the encompassing rectangle of the text, set to 
+<code>'border'</code>
+ to be
+the same as the border of the text, or set to some buffer (
+<code>number</code>
+) around
+the rectangle (default: 
+<code>"rect"</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_font'>
+      OBJ_Font
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Font definition object.</p>
+<p>Text is drawn in a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">Context2D canvas</a> and so <code>family</code>, <code>style</code> and <code>weight</code> are any valid <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font">options</a>.</p>
+<p><code>size</code> is the vertex space size of the font.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>family</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : The font family (
+<code>Times New Roman</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>style</span> <code class='quiet'>((`normal` | `italic`)?)</code>
+          : (
+<code>normal</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>size</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : size of font in vertex space (
+<code>0.2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>weight</span> <code class='quiet'>((<code>"normal"</code> | <code>"bold"</code> | <code>"lighter"</code> | <code>"bolder"</code> | <code>"100"</code> | <code>"200"</code> | <code>"300"</code> | <code>"400"</code> | <code>"500"</code> | <code>"600"</code> | <code>"700"</code> | <code>"800"</code> | <code>"900"</code>)?)</code>
+          : font weight (
+<code>200</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?)</code>
+          : Font color
+
+[red, green, blue, alpha]
+ between 0 and 1 - (
+<code>[1, 0, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>opacity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : opacity multiplier (final opacity will be
+
+<code>opacity</code>
+ * 
+<code>color</code>
+ alpha) 
+[
+<code>1</code>
+]
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full font definition</span>
+<span class="hljs-keyword">const</span> font = <span class="hljs-keyword">new</span> DiagramFont({
+  <span class="hljs-attr">family</span>: <span class="hljs-string">'Helvetica'</span>,
+  <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
+  <span class="hljs-attr">weight</span>: <span class="hljs-string">'bold'</span>,
+  <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">opacity</span>: <span class="hljs-number">1</span>,
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define style only, remaining properties are defaults</span>
+<span class="hljs-keyword">const</span> font = <span class="hljs-keyword">new</span> DiagramFont({
+  <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_textlinedefinition'>
+      OBJ_TextLineDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Line Text Definition object</p>
+<p>Used to define a string within a text line primitive <a href="#obj_textline">OBJ_TextLine</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : string to show
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : offset to draw text (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inLine</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ means next text will follow previous
+and not this (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          : border can be custom
+(
+<code>Array&#x3C;TypeParsablePoint></code>
+) or set to 
+<code>'rect'</code>
+ for the encompassing
+rectangle of the text (
+<code>'rect'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          : touch border can be custom (
+<code>Array&#x3C;TypeParsablePoint></code>
+), set to 
+<code>'rect'</code>
+ for
+the encompassing rectangle of the text, set to 
+<code>'border'</code>
+ to be the same as
+the border of the text, or set to some buffer (
+<code>number</code>
+) around
+the rectangle (
+<code>'rect'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onClick</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_textlinesdefinition'>
+      OBJ_TextLinesDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Lines Text Definition object.</p>
+<p>Used to define a string within a text lines primitive <a href="#obj_textlines">OBJ_TextLines</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : string representing a line of text
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : line specific default font
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>justify</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          : line specific justification
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : line specific separation from baseline of
+this line to baseline of next line
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_textmodifierdefinition'>
+      OBJ_TextModifierDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Modifier Text Definition object.</p>
+<p>Used to define the modifiers of a string within a text lines primitive
+<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : text to replace modifier id with - if 
+<code>undefined</code>
+
+then modifier id is used
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : font changes for modified text
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inLine</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ if modified text should not contribute
+to line layout (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          : border of modified
+text can be custom (
+<code>Array&#x3C;TypeParsablePoint></code>
+) or set to 
+<code>'rect'</code>
+ for the
+encompassing rectangle of the text (
+<code>'rect'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          : touch border can be custom (
+<code>Array&#x3C;TypeParsablePoint></code>
+), set to 
+<code>'rect'</code>
+ for
+the encompassing rectangle of the text, set to 
+<code>'border'</code>
+ to be the same as
+the border of the text, or set to some buffer (
+<code>number</code>
+) around
+the rectangle (
+<code>'rect'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onClick</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): {})?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_textmodifiersdefinition'>
+      OBJ_TextModifiersDefinition
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Modifier object.</p>
+<p>Used to define the modifiers of a string within a text lines primitive
+<a href="#obj_textlines">OBJ_TextLines</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>modifierId</span> <code class='quiet'>(<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?)</code>
+          : modifierId can be any
+key
+
+          
+        </div>
+      
+    </div>
+  
+
   
 
   

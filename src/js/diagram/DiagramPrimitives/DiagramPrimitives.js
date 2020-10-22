@@ -1130,22 +1130,23 @@ export type OBJ_Grid = {
  * Used within {@link OBJ_Text} to define a single string
  *
  * @property {string} text string to show
- * @property {OBJ_Font} [font]
- * @property {TypeParsablePoint} [location] location to draw text (`[0, 0]`)
+ * @property {OBJ_Font} [font] font to apply to string
+ * @property {TypeParsablePoint} [location] vertex space location to draw text
+ * (default: `[0, 0]`)
  * @property {'left' | 'right' | 'center'} [xAlign] how to align text
- * horizontally with `location` (`"left"`)
+ * horizontally relative to `location` (default: from {@link OBJ_Text})
  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] how to align
- * text vertically with `location` (`"left"`)
- * @property {string | () => void} [onClick] function to execute on click
+ * text vertically relative to `location` (default: from {@link OBJ_Text})
+ * @property {string | function(): void} [onClick] function to execute on click
  * within the `touchBorder`
  * @property {'rect' | Array<TypeParsablePoint>} [border] border can be custom
- * (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
- * rectangle of the text (`'rect'`)
+ * points (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
+ * rectangle of the text (default: `"rect"`)
  * @property {'rect' | number | 'border' | Array<TypeParsablePoint>} [touchBorder]
- * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
- * the encompassing rectangle of the text, set to `'border'` to be the same as
- * the border of the text, or set to some buffer (`number`) around
- * the rectangle (`'rect'`)
+ * touch border can be custom points (`Array<TypeParsablePoint>`), set to
+ * `'rect'` for the encompassing rectangle of the text, set to `'border'` to be
+ * the same as the border of the text, or set to some buffer (`number`) around
+ * the rectangle (default: `"rect"`)
  */
 export type OBJ_TextDefinition = {
   text: string,
@@ -1161,42 +1162,53 @@ export type OBJ_TextDefinition = {
 /**
  * One or more text strings.
  *
- * ![](./assets1/textLines_ex1.png)
+ * ![](./assets1/text_ex1.png)
  *
  * ![](./assets1/text_ex2.png)
  *
- * Use this to make a DiagramElementPrimitive that renders simple text.
+ * Simple text options object.
  *
- * If you need multiple strings, in different locations but all with the same
- * transform, then use this to assign multiple strings to the same primitive.
- * Different strings can have different fonts, colors, alignments, and
- * locations.
+ * Use this to make a {@link DiagramElementPrimitive} that renders text.
  *
- * @property {string | OBJ_TextDefinition | Array<string | OBJ_TextDefinition>} text text to draw,
- * either as a single string or multiple strings in an array(`4`)
- * @property {OBJ_Font} [font]
+ * `text` can either be a single string, or an array of
+ * {@link OBJ_TextDefinition} objects to define multiple strings. Each string
+ * can have a different location, alignment (`xAlign`, `yAlign`) and formatting.
+ *
+ * {@link DiagramElementPrimitive} objects allow for a callback to be defined
+ * when they are touched by a user. In text {@link DiagramElementPrimitive},
+ * each string can have its own callback assigned using the `onClick` property
+ * of {@link OBJ_TextDefinition}. In addition custom touch borders to make it
+ * easier to click the strings can be defined.
+ *
+ * Note: there is a slight performance improvement in including multiple
+ * strings at different locations in the same {@link DiagramElementPrimitive},
+ * rather than creating a {@link DiagramElementPrimitive} for each string.
+ *
+ * @property {string | OBJ_TextDefinition | Array<string | OBJ_TextDefinition>} text
+ * text to draw, either as a single string or multiple strings in an array
+ * @property {OBJ_Font} [font] default font to apply to all text
  * @property {'left' | 'right' | 'center'} [xAlign] default horizontal text
- * alignment for `text` relative to `location` (`"left"`)
+ * alignment for `text` relative to `location` (default: `"left"`)
  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] default
- * vertical text alignment for `text` relative to `location` (`"baseline"`)
- * @property {Array<number>} [color] (`[1, 0, 0, 1`])
+ * vertical text alignment for `text` relative to `location` (default: `"baseline"`)
+ * @property {Array<number>} [color] (default: `[1, 0, 0, 1`])
  * @property {TypeParsablePoint} [position] if defined, overrides translation
  * in transform
  * @property {TypeParsableTransform} [transform]
- * (`Transform('text').standard()`)
+ * (default: `Transform('text').standard()`)
  * @property {'text' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
  * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
  * encompassing rectangle around all text borders combined,
- * or set to `'text'` for the individual text borders (`'text'`)
+ * or set to `'text'` for the individual text borders (default: `'text'`)
  * @property {'text' | 'rect' | number | 'border' | Array<Array<TypeParsablePoint>>} [touchBorder]
  * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
  * the encompassing rectangle around all text touch borders, set to `'text'`
  * for the individual text touch borders (`'text'`), set to `'border'` to be the
  * same as the element border or a (`number`) for a rectangle with some buffer
- * around all text touch borders combined into an encompassing rect (`'text'`)
+ * around all text touch borders combined into an encompassing rect (default: `'text'`)
  *
  * @see To test examples, append them to the
- * <a href="#drawing-boilerplate">boilerplate</a>
+ * <a href="#text-boilerplate">boilerplate</a>
  *
  * @example
  * // Single string
@@ -1259,20 +1271,20 @@ export type OBJ_Text = {
  * Used to define a string within a text line primitive {@link OBJ_TextLine}.
  *
  * @property {string} [text] string to show
- * @property {OBJ_Font} [font]
- * @property {TypeParsablePoint} [offset] offset to draw text (`[0, 0]`)
+ * @property {OBJ_Font} [font] font to apply to string
+ * @property {TypeParsablePoint} [offset] offset to draw text (default: `[0, 0]`)
  * @property {boolean} [inLine] `false` means next text will follow previous
- * and not this (`true`)
- * @property {string | () => void} [onClick] function to execute on click
- * within the `touchBorder`
+ * and not this (default: `true`)
+ * @property {string | function(): void} [onClick] function to execute on click
+ * within the `touchBorder` of string
  * @property {'rect' | Array<TypeParsablePoint>} [border] border can be custom
  * (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
- * rectangle of the text (`'rect'`)
+ * rectangle of the text (default: `'rect'`)
  * @property {'rect' | number | 'border' | Array<TypeParsablePoint>} [touchBorder]
  * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
  * the encompassing rectangle of the text, set to `'border'` to be the same as
  * the border of the text, or set to some buffer (`number`) around
- * the rectangle (`'rect'`)
+ * the rectangle (default: `'rect'`)
  */
 export type OBJ_TextLineDefinition = {
   text: string,
@@ -1282,9 +1294,6 @@ export type OBJ_TextLineDefinition = {
   onClick?: string | () => void,
   border?: 'rect' | Array<TypeParsablePoint>,
   touchBorder?: 'rect' | number | 'border' | Array<TypeParsablePoint>,
-  // onClick?: () => void,
-  // border?: 'rect' | Array<TypeParsablePoint>,
-  // touchBorder?: 'rect' | number | Array<TypeParsablePoint>,
 };
 
 /**
@@ -1323,7 +1332,7 @@ export type OBJ_TextLineDefinition = {
  * around all text touch borders combined into an encompassing rect (`'rect'`)
  *
  * @see To test examples, append them to the
- * <a href="#drawing-boilerplate">boilerplate</a>
+ * <a href="#text-boilerplate">boilerplate</a>
  *
  * @example
  * // "Hello to the world1" with highlighted "to the" and superscript "1"
@@ -1344,15 +1353,15 @@ export type OBJ_TextLineDefinition = {
  *         ' world',
  *         {
  *           text: '1',
- *           offset: [0, 0.05],
- *           font: { size: 0.05, color: [0, 0.6, 0, 1] },
+ *           offset: [0, 0.1],
+ *           font: { size: 0.1, color: [0, 0.6, 0, 1] },
  *         },
  *       ],
  *       xAlign: 'center',
  *       yAlign: 'bottom',
  *       font: {
  *         style: 'normal',
- *         size: 0.1,
+ *         size: 0.2,
  *       },
  *       color: [1, 0, 0, 1],
  *     },
@@ -1378,14 +1387,14 @@ export type OBJ_TextLine = {
  *
  * @property {string} [line] string representing a line of text
  * @property {OBJ_Font} [font] line specific default font
- * @property {'left' | 'right' | 'center'} [justification] line specific justification
+ * @property {'left' | 'right' | 'center'} [justify] line specific justification
  * @property {number} [lineSpace] line specific separation from baseline of
  * this line to baseline of next line
  */
 export type OBJ_TextLinesDefinition = {
   line: string,
   font?: OBJ_Font,
-  justification?: 'left' | 'right' | 'center',
+  justify?: 'left' | 'right' | 'center',
   lineSpace?: number,
 };
 
@@ -1393,23 +1402,23 @@ export type OBJ_TextLinesDefinition = {
  * Modifier Text Definition object.
  *
  * Used to define the modifiers of a string within a text lines primitive
- * {@link OBJ_TextModifiersDefinition}.
+ * {@link OBJ_TextLines}.
  *
- * @property {string} [text] text to replace modifier id with - if `undefined`
- * then modifier id is used
+ * @property {string} [text] text to replace `modifierId` with - if `undefined`
+ * then `modifierId` is used
  * @property {OBJ_Font} [font] font changes for modified text
  * @property {boolean} [inLine] `false` if modified text should not contribute
- * to line layout (`true`)
- * @property {string | () => void} [onClick] function to execute on click
+ * to line layout (defqult: `true`)
+ * @property {string | function(): void} [onClick] function to execute on click
  * within the `touchBorder` of the modified text
  * @property {'rect' | Array<TypeParsablePoint>} [border] border of modified
  * text can be custom (`Array<TypeParsablePoint>`) or set to `'rect'` for the
- * encompassing rectangle of the text (`'rect'`)
+ * encompassing rectangle of the text (default: `'rect'`)
  * @property {'rect' | number | 'border' | Array<TypeParsablePoint>} [touchBorder]
  * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
  * the encompassing rectangle of the text, set to `'border'` to be the same as
  * the border of the text, or set to some buffer (`number`) around
- * the rectangle (`'rect'`)
+ * the rectangle (default: `'rect'`)
  */
 export type OBJ_TextModifierDefinition = {
   text?: string,
@@ -1465,7 +1474,7 @@ export type OBJ_TextModifiersDefinition = {
  * @property {OBJ_Font} [font] Default font to use in lines
  * @property {Array<number>} [color] Default color to use in lines
  * (`[1, 0, 0, 1`])
- * @property {'left' | 'right' | 'center} [justification] justification of lines
+ * @property {'left' | 'right' | 'center} [justify] justification of lines
  * (`left`)
  * @property {number} [lineSpace] Space between baselines of lines
  * (`font.size * 1.2`)
@@ -1487,6 +1496,10 @@ export type OBJ_TextModifiersDefinition = {
  * for the individual text touch borders (`'text'`), set to `'border'` to be the
  * same as the element border or a (`number`) for a rectangle with some buffer
  * around all text touch borders combined into an encompassing rect (`'rect'`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#text-boilerplate">boilerplate</a>
+ *
  * @example
  * // "Two justified lines"
  * diagram.addElement(
@@ -1494,20 +1507,20 @@ export type OBJ_TextModifiersDefinition = {
  *     name: 't',
  *     method: 'text.lines',
  *     options: {
- *       line: [
+ *       lines: [
  *         'First line',
  *         'This is the second line',
- *         },
  *       ],
  *       font: {
  *         style: 'normal',
- *         size: 0.1,
+ *         size: 0.2,
  *       },
- *       justification: 'center'
+ *       justify: 'center',
  *       color: [1, 0, 0, 1],
  *     },
  *   },
  * );
+ *
  * @example
  * // "Example showing many features of textLines"
  * diagram.addElement(
@@ -1546,10 +1559,10 @@ export type OBJ_TextModifiersDefinition = {
  *          family: 'Helvetica Neue',
  *          weight: '200',
  *          style: 'normal',
- *          size: 0.1,
+ *          size: 0.2,
  *        },
- *        justification: 'left',
- *        lineSpace: -0.2,
+ *        justify: 'left',
+ *        lineSpace: -0.4,
  *        position: [-0.5, 0.1],
  *      },
  *   },
@@ -1559,7 +1572,7 @@ export type OBJ_TextLines = {
   lines: Array<string | OBJ_TextLinesDefinition>,
   modifiers: OBJ_TextModifiersDefinition,
   font?: OBJ_Font,
-  justification?: 'left' | 'center' | 'right',
+  justify?: 'left' | 'center' | 'right',
   lineSpace?: number,
   position: TypeParsablePoint,
   transform: TypeParsableTransform,
@@ -2599,8 +2612,8 @@ export default class DiagramPrimitives {
 
   textLines(...optionsIn: Array<OBJ_TextLines>) {
     const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsIn);
-    if (options.justification == null) {
-      options.justification = 'left';
+    if (options.justify == null) {
+      options.justify = 'left';
     }
     if (options.lineSpace == null) {
       options.lineSpace = -options.font.size * 1.2;

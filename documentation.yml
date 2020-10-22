@@ -27,7 +27,7 @@ toc:
   - OBJ_Polygon
   - OBJ_Grid
   - name: Drawing Text
-  file: ./docs/tutorials/text/text.md
+    file: ./docs/tutorials/text/text.md
   - OBJ_Text
   - OBJ_TextLine
   - OBJ_TextLines

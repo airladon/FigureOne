@@ -1089,7 +1089,7 @@ class TextLinesObject extends TextObjectBase {
   xAlign: 'left' | 'right' | 'center';                // default xAlign
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top';   // default yAlign
   lines: Array<{
-    justification: 'left' | 'right' | 'center',
+    justify: 'left' | 'right' | 'center',
     space: number,
     text: Array<DiagramTextLines>;
     width: number,
@@ -1111,7 +1111,7 @@ class TextLinesObject extends TextObjectBase {
     lines: Array<string | {
       line: string,
       font?: OBJ_Font,
-      justification?: 'left' | 'center' | 'right',
+      justify?: 'left' | 'center' | 'right',
       lineSpace?: number
     }>,
     modifiers: {
@@ -1126,7 +1126,7 @@ class TextLinesObject extends TextObjectBase {
       },
     },
     font: OBJ_Font,
-    justification: 'left' | 'center' | 'right',
+    justify: 'left' | 'center' | 'right',
     lineSpace: number,
     xAlign: 'left' | 'right' | 'center',
     yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
@@ -1143,13 +1143,13 @@ class TextLinesObject extends TextObjectBase {
     const diagramTextArray = [];
 
     lines.forEach((lineDefinition, lineIndex) => {
-      let lineJustification = options.justification;
+      let lineJustification = options.justify;
       let lineLineSpace = options.lineSpace;
       let lineToUse;
       let lineFont = options.font;
       if (typeof lineDefinition !== 'string') {
         const {
-          font, justification, lineSpace,
+          font, justify, lineSpace,
         } = lineDefinition;
         lineToUse = lineDefinition.line;
         if (font != null) {
@@ -1158,8 +1158,8 @@ class TextLinesObject extends TextObjectBase {
         if (lineSpace != null) {
           lineLineSpace = lineSpace;
         }
-        if (justification != null) {
-          lineJustification = justification;
+        if (justify != null) {
+          lineJustification = justify;
         }
       } else {
         lineToUse = lineDefinition;
@@ -1220,7 +1220,7 @@ class TextLinesObject extends TextObjectBase {
         line.push(t);
       });
       this.lines.push({
-        justification: lineJustification,
+        justify: lineJustification,
         space: lineLineSpace,
         text: line,
         width: 0,
@@ -1257,9 +1257,9 @@ class TextLinesObject extends TextObjectBase {
     // justify lines
     this.lines.forEach((line) => {
       const locationAlignOffset = new Point(0, 0);
-      if (line.justification === 'center') {
+      if (line.justify === 'center') {
         locationAlignOffset.x += maxLinesWidth / 2 - line.width / 2;
-      } else if (line.justification === 'right') {
+      } else if (line.justify === 'right') {
         locationAlignOffset.x += maxLinesWidth - line.width;
       }
       line.text.forEach((text) => {

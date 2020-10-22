@@ -1,5 +1,6 @@
 FigureOne provides text layout for both simple text, and lines of text with rich formatting.
 
+
 ### <a id="text-boilerplate"></a> Text Boilerplate
 To test examples within the 'Drawing Text' sections of the API reference create an `index.html` file and `index.js` file.
 
@@ -62,6 +63,8 @@ diagram.addElements([
 
 Let's start by creating a {@link DiagramElementPrimitive} element that writes 'hello world' to the diagram.
 
+<p style="text-align: center"><img src="./tutorials/text/text.png"></p>
+
 ```javascript
 diagram.addElement(
   {
@@ -77,7 +80,6 @@ diagram.addElement(
 ```
 
 The text has been horizontally aligned to its center, and vertically aligned to its middle around its default location of `(0, 0)`.
-![](./assets1/text_intro.png)
 
 As this is a {@link DiagramElementPrimitive}, transforms can be applied to it, and it can be touched and moved. For instance, the example below will rotate the text when it is dragged with a touch from the user.
 
@@ -103,8 +105,10 @@ diagram.setTouchable();
 ```
 
 The same `text` method can be used to create text at different locations.
-```javascript
 
+<p style="text-align: center"><img src="./tutorials/text/compass.png"></p>
+
+```javascript
 diagram.addElement(
   {
     name: 'compass',
@@ -133,7 +137,6 @@ diagram.addElement(
     },
   },
 );
-diagram.setTouchable();
 ```
 
 See {@link OBJ_Text} to apply custom formatting to each element in the `text`, but note that all the text in a sinle element will have the same formatting.
@@ -145,6 +148,8 @@ Often a phrase of text will want to apply specific formatting to a word or part 
 The above example can be used to do this, but it is cumbersome as the locations of part of the phrase with different formatting will need to be experimented with.
 
 Alternately, `text.line` can be used as it will automatically layout the text elements from left to right based on their calculated widths.
+
+<p style="text-align: center"><img src="./tutorials/text/text-line.png"></p>
 
 ```javascript
 diagram.addElement(
@@ -178,6 +183,8 @@ When using more text, it is sometimes useful to split these in the API to make i
 
 `text.lines` uses the special character `'|'` to surround parts of a phrase that needs to me modified with custom formating. The modifier definitions are then provided later in the interface.
 
+The same example above can be done with `text.lines`:
+
 ```javascript
 diagram.addElement(
   {
@@ -201,3 +208,37 @@ diagram.setTouchable();
 ```
 
 `text.lines` also allows for multiple lines of text to be laid out and justified.
+
+<p style="text-align: center"><img src="./tutorials/text/text-lines.png"></p>
+
+```javascript
+diagram.addElement(
+  {
+    name: 't',
+    method: 'text.lines',
+    options: {
+      lines: [
+        'This is the |first| line',
+        'This is the |second| line - and it is long',
+        'This is the |third| line'
+      ],
+      modifiers: {
+        first: {
+          font: { color: [0, 0, 1, 1], style: 'italic' },
+        },
+        second: {
+          font: { color: [0, 0.6, 0.6, 1], style: 'italic' },
+        },
+        third: {
+          font: { color: [1, 0, 1, 1], style: 'italic' },
+        },
+      },
+      xAlign: 'center',
+      yAlign: 'middle',
+      justify: 'center',
+    },
+  },
+);
+```
+
+For more properties of `text.lines` see {@link OBJ_TextLines}.
