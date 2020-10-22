@@ -30,19 +30,19 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 //   arrow({ head: 'triangle', reverse: 'true' }),
 // ])
 
-diagram.addElement({
-  name: 'l',
-  method: 'shapes.line',
-  options: {
-    p1: [0, 0],
-    p2: [0, 1],
-    width: 0.03,
-    arrow: {
-      start: 'rectangle',
-      end: 'barb',
-    },
-  },
-});
+// diagram.addElement({
+//   name: 'l',
+//   method: 'shapes.line',
+//   options: {
+//     p1: [0, 0],
+//     p2: [0, 1],
+//     width: 0.03,
+//     arrow: {
+//       start: 'rectangle',
+//       end: 'barb',
+//     },
+//   },
+// });
 // diagram.addElement(
 //  {
 //    name: 'p',
@@ -104,37 +104,139 @@ diagram.addElement({
 //   diagram.animateNextFrame();
 // }
 
-// diagram.addElements([
+diagram.addElements([
+  {
+    name: 'origin',
+    method: 'polygon',
+    options: {
+      radius: 0.01,
+      line: { width: 0.01 },
+      sides: 10,
+      color: [0.7, 0.7, 0.7, 1]
+    },
+  },
+  {
+    name: 'grid',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.1,
+      xStep: 0.1,
+      color: [0.7, 0.7, 0.7, 1],
+      line: { width: 0.001 },
+    },
+  },
+  {
+    name: 'gridMajor',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.5,
+      xStep: 0.5,
+      color: [0.8, 0.8, 0.8, 1],
+      line: { width: 0.004 }
+    },
+  },
+]);
+
+// // Single string
+// diagram.addElement(
 //   {
-//     name: 'origin',
-//     method: 'polygon',
+//     name: 't',
+//     method: 'text',
 //     options: {
-//       radius: 0.01,
-//       line: { width: 0.01 },
-//       sides: 10,
-//       color: [0.7, 0.7, 0.7, 1]
+//       text: 'hello world',
+//       xAlign: 'center',
+//       yAlign: 'middle',
+//       // border: [[[-1, -1], [1, -1], [1, 1], [-1, 1]]],
+//       touchBorder: 0.5,
+//       // transform: [['s', 1, 2]],
+//     },
+//     mods: {
+//       isTouchable: true,
+//       isMovable: true,
+//       move: { bounds: 'diagram' },
+//       // touchInBoundingRect: true,
+//       // move: { bounds: 'diagram' },
+//       // move: {
+//       //   type: 'rotation',
+//       // },
 //     },
 //   },
+// );
+// Multi string
+diagram.addElement(
+  {
+    name: 't',
+    method: 'text',
+    options: {
+      text: [
+        {
+          text: 'hello',
+          font: { style: 'italic', color: [0, 0.5, 1, 1], size: 0.1 },
+          xAlign: 'left',
+          yAlign: 'bottom',
+          location: [-0.35, 0],
+          touchBorder: [[-0.4, 0], [0, 0], [0, 0.1], [-0.4, 0.1]],
+        },
+        {
+          text: 'world',
+          location: [0, -0.1],
+        },
+      ],
+      xAlign: 'center',
+      yAlign: 'middle',
+      font: { size: 0.3 },
+      color: [1, 0, 0, 1],
+      touchBorder: 'rect',
+    },
+    mods: {
+      isTouchable: true,
+      isMovable: true,
+      move: { bounds: 'diagram' },
+      // touchInBoundingRect: true,
+      // move: { bounds: 'diagram' },
+      // move: {
+      //   type: 'rotation',
+      // },
+    },
+  },
+);
+// diagram.addElement(
 //   {
-//     name: 'grid',
-//     method: 'grid',
+//     name: 'line',
+//     method: 'text.line',
 //     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.1,
-//       xStep: 0.1,
-//       color: [0.7, 0.7, 0.7, 1],
-//       line: { width: 0.001 },
+//       line: [
+//         'Hello ',
+//         {
+//           text: 'to the',
+//           font: {
+//             style: 'italic',
+//             color: [0, 0.5, 1, 1],
+//           },
+//         },
+//         ' world',
+//         {
+//           text: '1',
+//           offset: [0, 0.05],
+//           font: { size: 0.05, color: [0, 0.6, 0, 1] },
+//         },
+//       ],
+//       xAlign: 'center',
+//       yAlign: 'bottom',
+//       font: {
+//         style: 'normal',
+//         size: 0.3,
+//       },
+//       color: [1, 0, 0, 1],
+//     },
+//     mods: {
+//       isTouchable: true,
+//       isMovable: true,
+//       move: { bounds: 'diagram' },
 //     },
 //   },
-//   {
-//     name: 'gridMajor',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.5,
-//       xStep: 0.5,
-//       color: [0.8, 0.8, 0.8, 1],
-//       line: { width: 0.004 }
-//     },
-//   },
-// ]);
+// );
+console.log(diagram.elements._t.drawingObject)
+diagram.setTouchable();

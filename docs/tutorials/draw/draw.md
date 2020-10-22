@@ -4,7 +4,7 @@ FigureOne's built-in shapes are drawn using WebGL, which uses triangles to creat
 
 
 ### <a id="drawing-boilerplate"></a> Drawing Boilerplate
-To test examples within the 'Drawing Shapes' and 'Drawing Text' sections of the API reference create an `index.html` file and `index.js` file.
+To test examples within the 'Drawing Shapes' sections of the API reference create an `index.html` file and `index.js` file.
 
 All examples are snippets which can be appended to the end of the `index.js` file.
 
@@ -64,24 +64,15 @@ For most of the API reference, the second way will be used.
 ### Built-in Shapes
 
 There are several built in shape methods that can be used to create complex diagrams:
-* <a href="#obj_polyline">polyline</a>
-* <a href="#obj_polygon">polygon</a>
-* <a href="#obj_polygonSweep">polygonSweep</a>
-* <a href="#obj_grid">grid</a>
-* <a href="#obj_fan">fan</a>
-* <a href="#obj_arrow">arrow</a>
-* <a href="#obj_rectangle">rectangle</a>
-* <a href="#obj_radialLines">radialLines</a>
-* <a href="#obj_marks">marks</a>
-
-There are also built in shape methods that include annotations
-* <a href="#obj_angle">angle</a>
 * <a href="#obj_line">line</a>
-* <a href="#obj_polylineAdv">polylineAdv</a>
+* <a href="#obj_polyline">polyline</a>
+* <a href="#obj_triangle">triangle</a>
+* <a href="#obj_rectangle">rectangle</a>
+* <a href="#obj_polygon">polygon</a>
 
 ### Drawing a generic shape
 
-There are several built-in shapes such as polygons, rectangles and polylines in FigureOne. There is also a 'generic' method that will allow creation of any shape.
+While there are several built-in shapes such as polygons, rectangles and polylines in FigureOne, there is also a 'generic' method that will allow creation of any shape.
 
 To use the generic method however, it is important to understand how WebGL uses triangles to create shapes.
 

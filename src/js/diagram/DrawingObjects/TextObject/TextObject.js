@@ -1,7 +1,9 @@
 // @flow
 
 import * as m2 from '../../../tools/m2';
-import { Point, getPoint, Rect } from '../../../tools/g2';
+import {
+  Point, getPoint, Rect, getBoundingRect, getPoints,
+} from '../../../tools/g2';
 import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
@@ -157,7 +159,10 @@ class DiagramTextBase {
   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
   lastDrawRect: Rect;
   bounds: Rect;
+  borderSetup: 'rect' | Array<Point>;
   border: [Point, Point, Point, Point];
+  touchBorder: [Point, Point, Point, Point];
+  touchBorderSetup: 'rect' | number | Array<Point>;
   measure: {
     ascent: number,
     descent: number,
@@ -171,6 +176,8 @@ class DiagramTextBase {
     font: OBJ_Font = new DiagramFont().definition(),
     xAlign: 'left' | 'center' | 'right' = 'left',
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
+    border: 'rect' | Array<Array<Point>>,
+    touchBorder: 'rect' | number | Array<Array<Point>>,
     // runUpdate: boolean = true,
   ) {
     this.location = getPoint(location)._dup();
@@ -185,6 +192,8 @@ class DiagramTextBase {
     } else {
       this.drawContext2D = [drawContext2D];
     }
+    this.touchBorderSetup = touchBorder;
+    this.borderSetup = border;
   }
 
   measureAndAlignText() {
@@ -195,6 +204,7 @@ class DiagramTextBase {
   calcBorderAndBounds() {
     this.calcBounds();
     this.calcBorder();
+    this.calcTouchBorder();
   }
 
   setText(text: string) {
@@ -213,6 +223,7 @@ class DiagramTextBase {
     this.alignText();
     this.calcBounds();
     this.calcBorder();
+    this.calcTouchBorder();
   }
 
   setYAlign(yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline') {
@@ -220,6 +231,7 @@ class DiagramTextBase {
     this.alignText();
     this.calcBounds();
     this.calcBorder();
+    this.calcTouchBorder();
   }
 
   _dup() {
@@ -339,12 +351,32 @@ class DiagramTextBase {
   }
 
   calcBorder() {
-    this.border = [
-      new Point(this.bounds.left, this.bounds.bottom),
-      new Point(this.bounds.left, this.bounds.top),
-      new Point(this.bounds.right, this.bounds.top),
-      new Point(this.bounds.right, this.bounds.bottom),
-    ];
+    if (this.borderSetup === 'rect') {
+      this.border = [
+        new Point(this.bounds.left, this.bounds.bottom),
+        new Point(this.bounds.left, this.bounds.top),
+        new Point(this.bounds.right, this.bounds.top),
+        new Point(this.bounds.right, this.bounds.bottom),
+      ];
+    } else {
+      this.border = this.borderSetup;
+    }
+  }
+
+  calcTouchBorder() {
+    if (this.touchBorderSetup === 'rect') {
+      this.touchBorder = this.border;
+    } else if (typeof this.touchBorderSetup === 'number') {
+      const buffer = this.touchBorderSetup;
+      this.touchBorder = [
+        new Point(this.bounds.left - buffer, this.bounds.bottom - buffer),
+        new Point(this.bounds.left - buffer, this.bounds.top + buffer),
+        new Point(this.bounds.right + buffer, this.bounds.top + buffer),
+        new Point(this.bounds.right + buffer, this.bounds.bottom - buffer),
+      ];
+    } else {
+      this.touchBorder = this.touchBorderSetup;
+    }
   }
 }
 
@@ -358,9 +390,11 @@ class DiagramText extends DiagramTextBase {
     font: OBJ_Font = new DiagramFont().definition(),
     xAlign: 'left' | 'center' | 'right' = 'left',
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
+    border: 'rect' | Array<Point>,
+    touchBorder: 'rect' | number | Array<Point>,
     // runUpdate: boolean = true,
   ) {
-    super(drawContext2D, location, text, font, xAlign, yAlign);
+    super(drawContext2D, location, text, font, xAlign, yAlign, border, touchBorder);
     this.measureAndAlignText();
     this.calcBorderAndBounds();
   }
@@ -377,8 +411,10 @@ class DiagramTextLine extends DiagramTextBase {
     font: OBJ_Font = new DiagramFont().definition(),
     offset: TypeParsablePoint = new Point(0, 0),
     inLine: boolean = true,
+    border: 'rect' | Array<Point>,
+    touchBorder: 'rect' | number | Array<Array<Point>>,
   ) {
-    super(drawContext2D, location, text, font, 'left', 'baseline');
+    super(drawContext2D, location, text, font, 'left', 'baseline', border, touchBorder);
     this.offset = getPoint(offset);
     this.inLine = inLine;
     this.measureAndAlignText();
@@ -412,8 +448,10 @@ class DiagramTextLines extends DiagramTextLine {
     offset: TypeParsablePoint = new Point(0, 0),
     inLine: boolean = true,
     line: number,
+    border: 'rect' | Array<Point>,
+    touchBorder: 'rect' | number | Array<Array<Point>>,
   ) {
-    super(drawContext2D, location, text, font, offset, inLine);
+    super(drawContext2D, location, text, font, offset, inLine, border, touchBorder);
     this.line = line;
     // this.update();
   }
@@ -442,6 +480,9 @@ class TextObjectBase extends DrawingObject {
   text: Array<DiagramText>;
   scalingFactor: number;
   lastDrawTransform: Array<number>;
+  borderSetup: 'rect' | Array<Array<Point>>;
+  touchBorderSetup: 'rect' | Array<Array<Point>>;
+
   constructor(
     drawContext2D: Array<DrawContext2D> | DrawContext2D,
   ) {
@@ -537,26 +578,108 @@ class TextObjectBase extends DrawingObject {
       t.calcBorderAndBounds();
     });
     this.setBorder();
+    this.setTouchBorder();
+  }
+
+  setGenericBorder(name: string) {
+    if (Array.isArray(this[`${name}Setup`])) {
+      this[name] = this[`${name}Setup`];
+      return;
+    }
+    const border = [];
+    this.text.forEach((text) => {
+      border.push(
+        text[name],
+      );
+    });
+    if (this[`${name}Setup`] === 'text') {
+      this[name] = border;
+      return;
+    }
+    const bounds = getBoundingRect(border);
+    if (this[`${name}Setup`] === 'rect') {
+      this[name] = [[
+        new Point(bounds.left, bounds.bottom),
+        new Point(bounds.right, bounds.bottom),
+        new Point(bounds.right, bounds.top),
+        new Point(bounds.left, bounds.top),
+      ]];
+      return;
+    }
+    const buffer = this[`${name}Setup`];
+    this[name] = [[
+      new Point(bounds.left - buffer, bounds.bottom - buffer),
+      new Point(bounds.right + buffer, bounds.bottom - buffer),
+      new Point(bounds.right + buffer, bounds.top + buffer),
+      new Point(bounds.left - buffer, bounds.top + buffer),
+    ]];
   }
 
   setBorder() {
-    this.border = [];
-    this.text.forEach((text) => {
-      this.border.push(   // $FlowFixMe
-        text.border,
-      );
-    });
+    // if (this.borderSetup === 'text') {
+    //   this.border = [];
+    //   this.text.forEach((text) => {
+    //     this.border.push(   // $FlowFixMe
+    //       text.border,
+    //     );
+    //   });
+    // } else if (this.borderSetup === 'rect') {
+    //   const border = [];
+    //   this.text.forEach((text) => {
+    //     border.push(
+    //       ...text.border,
+    //     );
+    //   });
+    //   this.border = getBoundingRect(border);
+    // } else {
+    //   this.border = this.borderSetup;
+    // }
+    this.setGenericBorder('border');
   }
 
-  getBoundaries(
-    transformMatrix: Array<number>,
-  ): Array<Array<Point>> {
-    const boundaries: Array<Array<Point>> = [];
-    this.text.forEach((t) => {
-      boundaries.push(t.getBoundary(transformMatrix));
-    });
-    return boundaries;
+  setTouchBorder() {
+    // if (Array.isArray(this.touchBorderSetup)) {
+    //   this.touchBorder = this.touchBorderSetup;
+    //   return;
+    // }
+    // const touchBorder = [];
+    // this.text.forEach((text) => {
+    //   touchBorder.push(
+    //     text.touchBorder,
+    //   );
+    // });
+    // if (this.touchBorderSetup === 'text') {
+    //   this.touchBorder = touchBorder;
+    //   return;
+    // }
+    // const bounds = getBoundingRect(touchBorder);
+    // if (this.touchBorderSetup === 'rect') {
+    //   this.touchBorder = [[
+    //     new Point(bounds.left, bounds.bottom),
+    //     new Point(bounds.right, bounds.top),
+    //     new Point(bounds.right, bounds.top),
+    //     new Point(bounds.left, bounds.bottom),
+    //   ]];
+    // }
+    // const buffer = this.touchBorderSetup;
+    // this.touchBorder = [[
+    //   new Point(bounds.left - buffer, bounds.bottom - buffer),
+    //   new Point(bounds.right + buffer, bounds.top + buffer),
+    //   new Point(bounds.right + buffer, bounds.top + buffer),
+    //   new Point(bounds.left - buffer, bounds.bottom - buffer),
+    // ]];
+    this.setGenericBorder('touchBorder');
   }
+
+  // getBoundaries(
+  //   transformMatrix: Array<number>,
+  // ): Array<Array<Point>> {
+  //   const boundaries: Array<Array<Point>> = [];
+  //   this.text.forEach((t) => {
+  //     boundaries.push(t.getBoundary(transformMatrix));
+  //   });
+  //   return boundaries;
+  // }
 
   // Text is drawn in pixel space which is 0, 0 in the left hand top corner on
   // a canvas of size canvas.offsetWidth x canvas.offsetHeight.
@@ -724,6 +847,8 @@ class TextObject extends TextObjectBase {
             location?: TypeParsablePoint,
             xAlign?: 'left' | 'right' | 'center',
             yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+            border?: 'rect' | Array<Point>,
+            touchBorder?: 'rect' | number | Array<Point>,
             onClick?: () => void,
         }
         | Array<string | {
@@ -732,11 +857,15 @@ class TextObject extends TextObjectBase {
         location?: TypeParsablePoint,
         xAlign?: 'left' | 'right' | 'center',
         yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+        border?: 'rect' | Array<Point>,
+          touchBorder?: 'rect' | number | Array<Point>,
         onClick?: () => void,
       }>;
       font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
+      border?: 'text' | 'rect' | Array<Point>,
+      touchBorder?: 'text' | 'rect' | number | Array<Point>,
       color: Array<number>
     },
   ) {
@@ -751,13 +880,21 @@ class TextObject extends TextObjectBase {
       let xAlign;
       let yAlign;
       let textToUse;
+      let border;
+      let touchBorder;
       if (typeof textDefinition === 'string') {
         textToUse = textDefinition;
       } else {
         ({
-          font, location, xAlign, yAlign,
+          font, location, xAlign, yAlign, touchBorder, border,
         } = textDefinition);
         textToUse = textDefinition.text;
+        if (border != null) {
+          border = getPoints(border);
+        }
+        if (touchBorder != null) {
+          touchBorder = getPoints(touchBorder);
+        }
       }
       let locationToUse;
       if (location == null) {
@@ -778,11 +915,15 @@ class TextObject extends TextObjectBase {
         fontDefinition,
         xAlign || options.xAlign,
         yAlign || options.yAlign,
+        border || 'rect',
+        touchBorder || 'rect',
       ));
     });
     this.text = diagramTextArray;
     // super.loadText();
     this.calcScalingFactor();
+    this.borderSetup = options.border;
+    this.touchBorderSetup = options.touchBorder;
     this.layoutText();
   }
 
@@ -862,11 +1003,15 @@ class TextLineObject extends TextObjectBase {
         offset?: TypeParsablePoint,
         inLine?: boolean,
         onClick?: () => void,
+        border?: 'rect' | Array<Point>,
+        touchBorder?: 'rect' | number | Array<Point>,
       }>;
       font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-      color: Array<number>
+      color: Array<number>,
+      border?: 'rect' | Array<Point>,
+      touchBorder?: 'rect' | number | Array<Point>,
     },
   ) {
     let textArray = options.line;
@@ -879,6 +1024,8 @@ class TextLineObject extends TextObjectBase {
       let offset;
       let inLine;
       let textToUse;
+      let border;
+      let touchBorder;
       if (typeof textDefinition === 'string') {
         textToUse = textDefinition;
       } else {
@@ -909,6 +1056,8 @@ class TextLineObject extends TextObjectBase {
         fontDefinition,
         offsetToUse,
         inLine,
+        border || options.border,
+        touchBorder || options.touchBorder,
       ));
     });
     this.text = diagramTextArray;

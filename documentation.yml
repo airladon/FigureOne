@@ -26,16 +26,10 @@ toc:
   - OBJ_Rectangle
   - OBJ_Polygon
   - OBJ_Grid
-  - OBJ_Texture
   - name: Drawing Text
-  - OBJ_Font
-  - OBJ_TextDefinition
+  file: ./docs/tutorials/text/text.md
   - OBJ_Text
-  - OBJ_TextLineDefinition
   - OBJ_TextLine
-  - OBJ_TextLinesDefinition
-  - OBJ_TextModifierDefinition
-  - OBJ_TextModifiersDefinition
   - OBJ_TextLines
   - name: Animation
     file: ./docs/tutorials/animation/animation.md
@@ -132,7 +126,7 @@ toc:
   - TypeEquationGoToFormOptions
   - name: Equations
   - Equation
-  - name: Misc
+  - name: Misc Geometry
   - TypeParsablePoint
   - TypeParsableLine
   - TypeParsableRect
@@ -142,6 +136,14 @@ toc:
   - getLine
   - getRect
   - getTransform
+  - name: Misc Drawing
+  - OBJ_Texture
+  - OBJ_TextDefinition
+  - OBJ_Font
+  - OBJ_TextLineDefinition
+  - OBJ_TextLinesDefinition
+  - OBJ_TextModifierDefinition
+  - OBJ_TextModifiersDefinition
   - name: tools
     description: These are generic tools
     children:

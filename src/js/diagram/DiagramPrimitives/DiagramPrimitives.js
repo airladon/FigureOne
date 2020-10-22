@@ -1137,6 +1137,12 @@ export type OBJ_Grid = {
  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] how to align
  * text vertically with `location` (`"left"`)
  * @property {() => void} [onClick] function to execute on click
+ * @property {'rect' | Array<TypeParsablePoint>} [border] border can be custom
+ * (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
+ * @property {'rect' | number | Array<TypeParsablePoint>} [touchBorder] touch
+ * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
+ * encompassing rectangle of the text or set to some buffer (`number`) around
+ * the rectangle (`'rect'`)
  */
 export type OBJ_TextDefinition = {
   text: string,
@@ -1145,6 +1151,8 @@ export type OBJ_TextDefinition = {
   xAlign?: 'left' | 'right' | 'center',
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
   onClick?: () => void,
+  border?: 'rect' | Array<TypeParsablePoint>,
+  touchBorder?: 'rect' | number | Array<TypeParsablePoint>,
 };
 
 /**
@@ -1173,6 +1181,12 @@ export type OBJ_TextDefinition = {
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (`Transform('text').standard()`)
+ * @property {'text' | 'rect' | Array<Array<TypeParsablePoint>>} [border] border can be custom
+ * (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
+ * @property {'text' | 'rect' | number | Array<Array<TypeParsablePoint>>} [touchBorder] touch
+ * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
+ * encompassing rectangle of all text, a number or set to some buffer (`number`) around
+ * the rectangle (`'rect'`)
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -1227,6 +1241,8 @@ export type OBJ_Text = {
   color?: Array<number>,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
+  border?: 'text' | 'rect' | Array<Array<TypeParsablePoint>>,
+  touchBorder?: 'text' | 'rect' | number | Array<Array<TypeParsablePoint>>,
 }
 
 
@@ -1241,6 +1257,12 @@ export type OBJ_Text = {
  * @property {boolean} [inLine] `false` means next text will follow previous
  * and not this (`true`)
  * @property {() => void} [onClick] function to execute on click
+ * @property {'rect' | Array<TypeParsablePoint>} [border] border can be custom
+ * (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
+ * @property {'rect' | number | Array<TypeParsablePoint>} [touchBorder] touch
+ * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
+ * encompassing rectangle of the text or set to some buffer (`number`) around
+ * the rectangle (`'rect'`)
  */
 export type OBJ_TextLineDefinition = {
   text: string,
@@ -1248,6 +1270,8 @@ export type OBJ_TextLineDefinition = {
   offset?: TypeParsablePoint,
   inLine?: boolean,
   onClick?: () => void,
+  border?: 'rect' | Array<TypeParsablePoint>,
+  touchBorder?: 'rect' | number | Array<TypeParsablePoint>,
 };
 
 /**
@@ -1274,6 +1298,12 @@ export type OBJ_TextLineDefinition = {
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (`Transform('text').standard()`)
+ * @property {'rect' | Array<TypeParsablePoint>} [border] border can be custom
+ * (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
+ * @property {'rect' | number | Array<TypeParsablePoint>} [touchBorder] touch
+ * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
+ * encompassing rectangle of the text or set to some buffer (`number`) around
+ * the rectangle (`'rect'`)
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -1320,6 +1350,8 @@ export type OBJ_TextLine = {
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
   position: TypeParsablePoint,
   transform: TypeParsableTransform,
+  border?: 'rect' | Array<TypeParsablePoint>,
+  touchBorder?: 'rect' | number | Array<TypeParsablePoint>,
 }
 
 /**
@@ -2452,6 +2484,8 @@ export default class DiagramPrimitives {
       },
       xAlign: 'left',
       yAlign: 'baseline',
+      border: 'text',
+      touchBorder: 'text',
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
 
@@ -2487,6 +2521,14 @@ export default class DiagramPrimitives {
     }
     if (options.lines != null && !Array.isArray(options.lines)) {
       options.lines = [options.lines];
+    }
+
+    if (options.touchBorder != null && Array.isArray(options.touchBorder)) {
+      parsePoints(options, ['touchBorder']);
+    }
+
+    if (options.border != null && Array.isArray(options.border)) {
+      parsePoints(options, ['border']);
     }
 
     return options;
