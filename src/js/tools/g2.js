@@ -272,10 +272,15 @@ class Rect {
    * @param {number} precision precision to test
    */
   round(precision: number = 8) {
-    return new Rect(
+    const newRect = new Rect(
       roundNum(this.left, precision), roundNum(this.bottom, precision),
       roundNum(this.width, precision), roundNum(this.height, precision),
     );
+    newRect.width = roundNum(newRect.width, precision);
+    newRect.height = roundNum(newRect.height, precision);
+    newRect.top = roundNum(newRect.top, precision);
+    newRect.right = roundNum(newRect.right, precision);
+    return newRect;
   }
 }
 

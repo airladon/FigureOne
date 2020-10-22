@@ -357,9 +357,9 @@ class DiagramTextBase {
     if (this.borderSetup === 'rect') {
       this.border = [
         new Point(this.bounds.left, this.bounds.bottom),
-        new Point(this.bounds.left, this.bounds.top),
-        new Point(this.bounds.right, this.bounds.top),
         new Point(this.bounds.right, this.bounds.bottom),
+        new Point(this.bounds.right, this.bounds.top),
+        new Point(this.bounds.left, this.bounds.top),
       ];
     } else {
       this.border = this.borderSetup;
@@ -373,9 +373,9 @@ class DiagramTextBase {
       const buffer = this.touchBorderSetup;
       this.touchBorder = [
         new Point(this.bounds.left - buffer, this.bounds.bottom - buffer),
-        new Point(this.bounds.left - buffer, this.bounds.top + buffer),
-        new Point(this.bounds.right + buffer, this.bounds.top + buffer),
         new Point(this.bounds.right + buffer, this.bounds.bottom - buffer),
+        new Point(this.bounds.right + buffer, this.bounds.top + buffer),
+        new Point(this.bounds.left - buffer, this.bounds.top + buffer),
       ];
     } else {
       this.touchBorder = this.touchBorderSetup;
@@ -912,7 +912,7 @@ class TextObject extends TextObjectBase {
         if (border != null) {
           border = getPoints(border);
         }
-        if (touchBorder != null) {
+        if (touchBorder != null && typeof touchBorder !== 'number') {
           touchBorder = getPoints(touchBorder);
         }
       }
