@@ -196,6 +196,9 @@ export type OBJ_PulseScale = {
  * @property {OBJ_PulseScale | number} [pulse] set default scale pulse options
  * (`OBJ_PulseScale`) or pulse scale directly (`number`)
  *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
  * @example
  * // Square and triangle
  * diagram.addElement({
@@ -380,6 +383,10 @@ export type OBJ_CurvedCorner = {
  * hole border of the line can be the points on the `positive` or `negative`
  * side of the line, completely custom (`Array<Array<TypeParsablePoint>>`)
  * or `'none'` is the default (`'none'`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
  * @example
  * // Line
  * diagram.addElement(
@@ -555,6 +562,10 @@ export type OBJ_LineStyle = {
  * @property {'none' | Array<Array<TypeParsablePoint>>} [holeBorder]
  * hole border of the line can be the points custom points
  *(`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
  * @example
  * // Simple filled hexagon
  * diagram.addElement({
@@ -647,6 +658,10 @@ export type OBJ_Polygon = {
  * @property {'none' | Array<Array<TypeParsablePoint>>} [holeBorder]
  * hole border of the rectangle can be the points custom points
  *(`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
  * @example
  * // Filled rectangle
  * diagram.addElement({
@@ -809,6 +824,10 @@ export type OBJ_Rectangle = {
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('rectangle').standard()`)
  * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
  * @example
  * // Right angle triangle
  * diagram.addElement({
@@ -939,6 +958,9 @@ export type OBJ_Triangle = {
  * side of the line, completely custom (`Array<Array<TypeParsablePoint>>`)
  * or `'none'` is the default (`'none'`)
  *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
  * @example
  * // Simple line defined by two points
  * diagram.addElement({
@@ -1037,6 +1059,8 @@ export type OBJ_Line = {
  * @property {Transform} [transform] (`Transform('rectangle').standard()`)
  * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
  *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
  *
  * @example
  * // Grid defined by xStep and yStep
@@ -1149,6 +1173,10 @@ export type OBJ_TextDefinition = {
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (`Transform('text').standard()`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
  * @example
  * // Single string
  * diagram.addElement(
@@ -1246,6 +1274,10 @@ export type OBJ_TextLineDefinition = {
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (`Transform('text').standard()`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
  * @example
  * // "Hello to the world1" with highlighted "to the" and superscript "1"
  * diagram.addElement(

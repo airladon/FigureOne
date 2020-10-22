@@ -4,14 +4,26 @@ FigureOne's built-in shapes are drawn using WebGL, which uses triangles to creat
 
 
 ### <a id="drawing-boilerplate"></a> Drawing Boilerplate
-To test examples within the 'Drawing' section of the API reference create an `index.html` file and `index.js` file.
+To test examples within the 'Drawing Shapes' and 'Drawing Text' sections of the API reference create an `index.html` file and `index.js` file.
 
 All examples are snippets which can be appended to the end of the `index.js` file.
+
+```html
+<!-- index.html -->
+<!doctype html>
+<html>
+<body>
+    <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
+    </div>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.2.3/figureone.min.js'></script>
+    <script type="text/javascript" src='./index.js'></script>
+</body>
+</html>
+```
 
 ```javascript
 // index.js
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
-diagram.initialize();
 ```
 
 ### Quick Start
@@ -45,7 +57,7 @@ diagram.addElement({
 });
 ```
 
-Both ways create the same element. The first way is more programatic and especially useful when extending shape creation classes. In comparison, the second way can allow you to layout an entire diagram in a single object that is compatible with JSON. This means it is relatively straight forward to share diagram elements between projects.
+Both ways create the same element. The first way is more programatic and especially useful when extending shape creation classes. In comparison, the second way can allow you to layout an entire diagram in a single object that is compatible with JSON. This means it is relatively straight forward to share diagram elements between projects. When using code folding in an IDE, the second way also makes it easy to work with diagrams with many elements.
 
 For most of the API reference, the second way will be used.
 
@@ -176,4 +188,3 @@ diagram.addElement({
   },
 });
 ```
-

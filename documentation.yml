@@ -17,15 +17,6 @@ toc:
   - Rotation
   - Scale
   - Transform
-  - TypeParsablePoint
-  - TypeParsableLine
-  - TypeParsableRect
-  - TypeParsableTransform
-  - getPoint
-  - getScale
-  - getLine
-  - getRect
-  - getTransform
   - name: Drawing Shapes
     file: ./docs/tutorials/draw/draw.md
   - OBJ_Generic
@@ -141,6 +132,16 @@ toc:
   - TypeEquationGoToFormOptions
   - name: Equations
   - Equation
+  - name: Misc
+  - TypeParsablePoint
+  - TypeParsableLine
+  - TypeParsableRect
+  - TypeParsableTransform
+  - getPoint
+  - getScale
+  - getLine
+  - getRect
+  - getTransform
   - name: tools
     description: These are generic tools
     children:

@@ -1112,96 +1112,6 @@
               
                 
                 <li><a
-                  href='#typeparsablepoint'
-                  class="">
-                  TypeParsablePoint
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typeparsableline'
-                  class="">
-                  TypeParsableLine
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typeparsablerect'
-                  class="">
-                  TypeParsableRect
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typeparsabletransform'
-                  class="">
-                  TypeParsableTransform
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#getpoint'
-                  class="">
-                  getPoint
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#getscale'
-                  class="">
-                  getScale
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#getline'
-                  class="">
-                  getLine
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#getrect'
-                  class="">
-                  getRect
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#gettransform'
-                  class="">
-                  getTransform
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#drawing-shapes'
                   class="h5 bold black caps">
                   Drawing Shapes
@@ -2683,6 +2593,106 @@
                   
                   
                 </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#misc'
+                  class="h5 bold black caps">
+                  Misc
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeparsablepoint'
+                  class="">
+                  TypeParsablePoint
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeparsableline'
+                  class="">
+                  TypeParsableLine
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeparsablerect'
+                  class="">
+                  TypeParsableRect
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeparsabletransform'
+                  class="">
+                  TypeParsableTransform
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getpoint'
+                  class="">
+                  getPoint
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getscale'
+                  class="">
+                  getScale
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getline'
+                  class="">
+                  getLine
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getrect'
+                  class="">
+                  getRect
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#gettransform'
+                  class="">
+                  getTransform
+                  
+                </a>
                 
                 </li>
               
@@ -9368,7 +9378,7 @@ delta.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>offset(direction, distanceValue, distance)</span>
+            <span class='code strong strong truncate'>offset(direction, dist)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -9403,15 +9413,6 @@ polygon.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>direction</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"top"</code> | <code>"bottom"</code> | <code>"positive"</code> | <code>"negative"</code>))</code>
-	    the direction to offset the line
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>distanceValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
 	    
           </div>
           
@@ -9419,9 +9420,8 @@ polygon.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>distance</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    offset distance
-
+            <span class='code bold'>dist</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    
           </div>
           
         </div>
@@ -13410,654 +13410,6 @@ identity transforms.</p>
           
         
           
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typeparsablepoint'>
-      TypeParsablePoint
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>A <a href="#point">Point</a> can be defined in several ways</p>
-<ul>
-<li>As a Point: new Point()</li>
-<li>As an x, y tuple: [number, number]</li>
-<li>As an x, y string: '[number, number]'</li>
-<li>As a definition object: { f1Type: 'p', state: [number, number] }
-}</li>
-</ul>
-
-  
-    <p style="display: none;">      Type:
-      ([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | <a href="#point">Point</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | TypeF1DefPoint)
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// p1, p2, p3 and p4 are all the same when parsed by `getPoint`</span>
-p1 = <span class="hljs-keyword">new</span> Point(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>);
-p2 = [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
-p3 = <span class="hljs-string">'[2, 3]'</span>;
-p4 = { <span class="hljs-attr">f1Type</span>: <span class="hljs-string">'p'</span>, <span class="hljs-attr">state</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>] };</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typeparsableline'>
-      TypeParsableLine
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>A <a href="#line">Line</a> is defined with either two points, or a point, magbintude and angle.
-The end definitions define if the line is finite or infinite. And end
-definition of <code>2</code> means both ends are finite and the line stops at its
-definition. <code>1</code> means the first end is finite, and the line extends through
-the second point to infinity. <code>0</code> means the line extends through both
-points to infinite on either side.</p>
-<p>A line can be defined in several ways.</p>
-<p>As a Line: <code>new Line()</code></p>
-<ul>
-<li>As two points: <code>[{@link TypeParsablePoint}, {@link TypeParsablePoint}]</code></li>
-<li>As two points and end definitions:
-<code>[{@link TypeParsablePoint}, {@link TypeParsablePoint}, 2 | 1 | 0]</code></li>
-<li>As a point, mag angle: <code>[{@link TypeParsablePoint}, number, number]</code></li>
-<li>As a point, mag angle and end definitions: '[number, number, 2, 1, 0]'</li>
-<li>As a definition object where state is
-[[p1.x, p1.y], [p2.x, p2.y], endDefinition]:
-{ f1Type: 'l', state: [[number, number], [number, number], 2 | 1 | 0 }</li>
-</ul>
-
-  
-    <p style="display: none;">      Type:
-      ([<a href="#typeparsablepoint">TypeParsablePoint</a>, <a href="#typeparsablepoint">TypeParsablePoint</a>, (<code>2</code> | <code>1</code> | <code>0</code>)] | [<a href="#typeparsablepoint">TypeParsablePoint</a>, <a href="#typeparsablepoint">TypeParsablePoint</a>] | [<a href="#typeparsablepoint">TypeParsablePoint</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, (<code>2</code> | <code>1</code> | <code>0</code>)] | [<a href="#typeparsablepoint">TypeParsablePoint</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | TypeF1DefLine | <a href="#line">Line</a>)
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// l1, l2, l3, l4, l5 and l6 are all the same if parsed by `getLine`</span>
-l1 = <span class="hljs-keyword">new</span> Line([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>]);
-l2 = <span class="hljs-keyword">new</span> Line([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-number">2</span> * <span class="hljs-built_in">Math</span>.sqrt(<span class="hljs-number">2</span>), <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span>);
-l3 = <span class="hljs-keyword">new</span> Line([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], <span class="hljs-number">2</span>);
-l4 = [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>]];
-l5 = [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-number">2</span> * <span class="hljs-built_in">Math</span>.sqrt(<span class="hljs-number">2</span>), <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span>];
-l6 = [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], <span class="hljs-number">2</span>];</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typeparsablerect'>
-      TypeParsableRect
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>A [Rectangle]<a href="#rect">Rect</a> can be defined as either as an</p>
-<ul>
-<li>Array (left, bottom, width, height)</li>
-<li>a <a href="#rect">Rect</a> class</li>
-<li>a string representing the json definition of the
-array form, or a <a href="#typef1defrect">TypeF1DefRect</a>.</li>
-</ul>
-
-  
-    <p style="display: none;">      Type:
-      ([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | <a href="#rect">Rect</a> | <a href="#typef1defrect">TypeF1DefRect</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All rectangles are the same when parsed by `getRect` and have a lower</span>
-left corner <span class="hljs-keyword">of</span> <span class="hljs-string">`(-2, -1)`</span>, a width <span class="hljs-keyword">of</span> <span class="hljs-string">`4`</span>, and a height <span class="hljs-keyword">of</span> <span class="hljs-string">`2`</span>
-<span class="hljs-keyword">const</span> r1 = [<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>];
-<span class="hljs-keyword">const</span> r2 = <span class="hljs-keyword">new</span> Fig.Rect(<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>);
-<span class="hljs-keyword">const</span> r3 = <span class="hljs-string">'[-2, -1, 4, 2]'</span>;
-<span class="hljs-keyword">const</span> r4 = {
-  <span class="hljs-attr">f1Type</span>: <span class="hljs-string">'rect'</span>,
-  <span class="hljs-attr">state</span>: [<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>],
-};</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typeparsabletransform'>
-      TypeParsableTransform
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>A <a href="#transform">Transform</a> can be defined in several ways
-As a Transform: new Transform()
-As an array of ['s', number, number], ['r', number] and/or ['t', number, number] arrays
-As a string representing the JSON of the array form
-}</p>
-
-  
-    <p style="display: none;">      Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | [<code>"s"</code>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | [<code>"r"</code>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | [<code>"t"</code>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#transform">Transform</a> | TypeF1DefTransform)
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// t1, t2, and t3 are all the same when parsed by `getTransform`</span>
-t1 = <span class="hljs-keyword">new</span> Transform().scale(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>).rotate(<span class="hljs-number">0</span>).translate(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>);
-t2 = [[<span class="hljs-string">'s'</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">'r'</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">'t'</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>]];
-t3 = <span class="hljs-string">'[['</span>s<span class="hljs-string">', 1, 1], ['</span>r<span class="hljs-string">', 0], ['</span>t<span class="hljs-string">', 2, 2]]'</span>;</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='getpoint'>
-      getPoint
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Parse a <a href="#typeparsablepoint">TypeParsablePoint</a> and return a <a href="#point">Point</a>.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>p</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#point">Point</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='getscale'>
-      getScale
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Parse a scale definition and return a <a href="#point">Point</a> representing the scale
-in x and y.
-Scale can either be defined as a <a href="#typeparsablepoint">TypeParsablePoint</a> or a <code>number</code> if
-the x and y scale is equal.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>s</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#point">Point</a></code>:
-        x and y scale
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='getline'>
-      getLine
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Convert a parsable line definition to a <a href="#line">Line</a>.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>l</span> <code class='quiet'>(<a href="#typeparsableline">TypeParsableLine</a>)</code>
-	    parsable line definition
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#line">Line</a></code>:
-        <code>Line</code>
- object
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='getrect'>
-      getRect
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Convert a parsable rectangle definition to a <a href="#rect">Rect</a>.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>r</span> <code class='quiet'>(<a href="#typeparsablerect">TypeParsableRect</a>)</code>
-	    parsable rectangle definition
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#rect">Rect</a></code>:
-        rectangle object
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='gettransform'>
-      getTransform
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Convert a parsable transform definition to a <a href="#transform">Transform</a>.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>t</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>)</code>
-	    parsable transform definition
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#transform">Transform</a></code>:
-        transform object
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
   <h2 id='drawing-shapes' class='mt0'>
@@ -14068,11 +13420,20 @@ the x and y scale is equal.</p>
     <p>Each <a href="#diagramelementprimitive">DiagramElementPrimitive</a> element manages drawing a shape, drawing text, or manipulating a HTML element.</p>
 <p>FigureOne's built-in shapes are drawn using WebGL, which uses triangles to create different shapes. To draw a shape, you define the verticies of the triangles. Every drawing frame (animation or screen refresh), the color of the vertices and the transform that moves them around is used to render the final shape to the screen.</p>
 <h3><a id="drawing-boilerplate"></a> Drawing Boilerplate</h3>
-<p>To test examples within the 'Drawing' section of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
+<p>To test examples within the 'Drawing Shapes' and 'Drawing Text' sections of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
 <p>All examples are snippets which can be appended to the end of the <code>index.js</code> file.</p>
+<pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
+<span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 800px; height: 800px; background-color: white;"</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.2.3/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>]});
-diagram.initialize();</pre>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>]});</pre>
 <h3>Quick Start</h3>
 <p>Let's start by creating a <a href="#diagramelementprimitive">DiagramElementPrimitive</a> element that draws a polygon and adding it to the diagram.</p>
 <pre class='hljs'><span class="hljs-comment">// create the `DiagramElementPrimitive`</span>
@@ -14095,7 +13456,7 @@ diagram.elements.add(<span class="hljs-string">'p'</span>, p);</pre>
     <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
   },
 });</pre>
-<p>Both ways create the same element. The first way is more programatic and especially useful when extending shape creation classes. In comparison, the second way can allow you to layout an entire diagram in a single object that is compatible with JSON. This means it is relatively straight forward to share diagram elements between projects.</p>
+<p>Both ways create the same element. The first way is more programatic and especially useful when extending shape creation classes. In comparison, the second way can allow you to layout an entire diagram in a single object that is compatible with JSON. This means it is relatively straight forward to share diagram elements between projects. When using code folding in an IDE, the second way also makes it easy to work with diagrams with many elements.</p>
 <p>For most of the API reference, the second way will be used.</p>
 <h3>Built-in Shapes</h3>
 <p>There are several built in shape methods that can be used to create complex diagrams:</p>
@@ -14357,6 +13718,18 @@ transform of
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
   
 
   
@@ -14691,6 +14064,18 @@ or
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
   
 
   
@@ -15116,6 +14501,18 @@ or
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
@@ -15441,6 +14838,18 @@ the rectangle
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
@@ -15702,6 +15111,18 @@ some with
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
   
 
   
@@ -15990,6 +15411,18 @@ some with
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
@@ -16191,6 +15624,18 @@ the rectangle
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
   
 
   
@@ -16765,6 +16210,18 @@ in transform
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
@@ -17022,6 +16479,18 @@ in transform
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
   
 
   
@@ -33136,6 +32605,668 @@ eqn.addElements({
     </div>
   
 </div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='misc' class='mt0'>
+    Misc
+  </h2>
+
+  
+    
+
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeparsablepoint'>
+      TypeParsablePoint
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A <a href="#point">Point</a> can be defined in several ways</p>
+<ul>
+<li>As a Point: new Point()</li>
+<li>As an x, y tuple: [number, number]</li>
+<li>As an x, y string: '[number, number]'</li>
+<li>As a definition object: { f1Type: 'p', state: [number, number] }
+}</li>
+</ul>
+
+  
+    <p style="display: none;">      Type:
+      ([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | <a href="#point">Point</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | TypeF1DefPoint)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// p1, p2, p3 and p4 are all the same when parsed by `getPoint`</span>
+p1 = <span class="hljs-keyword">new</span> Point(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>);
+p2 = [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+p3 = <span class="hljs-string">'[2, 3]'</span>;
+p4 = { <span class="hljs-attr">f1Type</span>: <span class="hljs-string">'p'</span>, <span class="hljs-attr">state</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>] };</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeparsableline'>
+      TypeParsableLine
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A <a href="#line">Line</a> is defined with either two points, or a point, magbintude and angle.
+The end definitions define if the line is finite or infinite. And end
+definition of <code>2</code> means both ends are finite and the line stops at its
+definition. <code>1</code> means the first end is finite, and the line extends through
+the second point to infinity. <code>0</code> means the line extends through both
+points to infinite on either side.</p>
+<p>A line can be defined in several ways.</p>
+<p>As a Line: <code>new Line()</code></p>
+<ul>
+<li>As two points: <code>[{@link TypeParsablePoint}, {@link TypeParsablePoint}]</code></li>
+<li>As two points and end definitions:
+<code>[{@link TypeParsablePoint}, {@link TypeParsablePoint}, 2 | 1 | 0]</code></li>
+<li>As a point, mag angle: <code>[{@link TypeParsablePoint}, number, number]</code></li>
+<li>As a point, mag angle and end definitions: '[number, number, 2, 1, 0]'</li>
+<li>As a definition object where state is
+[[p1.x, p1.y], [p2.x, p2.y], endDefinition]:
+{ f1Type: 'l', state: [[number, number], [number, number], 2 | 1 | 0 }</li>
+</ul>
+
+  
+    <p style="display: none;">      Type:
+      ([<a href="#typeparsablepoint">TypeParsablePoint</a>, <a href="#typeparsablepoint">TypeParsablePoint</a>, (<code>2</code> | <code>1</code> | <code>0</code>)] | [<a href="#typeparsablepoint">TypeParsablePoint</a>, <a href="#typeparsablepoint">TypeParsablePoint</a>] | [<a href="#typeparsablepoint">TypeParsablePoint</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, (<code>2</code> | <code>1</code> | <code>0</code>)] | [<a href="#typeparsablepoint">TypeParsablePoint</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | TypeF1DefLine | <a href="#line">Line</a>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// l1, l2, l3, l4, l5 and l6 are all the same if parsed by `getLine`</span>
+l1 = <span class="hljs-keyword">new</span> Line([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>]);
+l2 = <span class="hljs-keyword">new</span> Line([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-number">2</span> * <span class="hljs-built_in">Math</span>.sqrt(<span class="hljs-number">2</span>), <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span>);
+l3 = <span class="hljs-keyword">new</span> Line([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], <span class="hljs-number">2</span>);
+l4 = [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>]];
+l5 = [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-number">2</span> * <span class="hljs-built_in">Math</span>.sqrt(<span class="hljs-number">2</span>), <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span>];
+l6 = [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], <span class="hljs-number">2</span>];</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeparsablerect'>
+      TypeParsableRect
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A [Rectangle]<a href="#rect">Rect</a> can be defined as either as an</p>
+<ul>
+<li>Array (left, bottom, width, height)</li>
+<li>a <a href="#rect">Rect</a> class</li>
+<li>a string representing the json definition of the
+array form, or a <a href="#typef1defrect">TypeF1DefRect</a>.</li>
+</ul>
+
+  
+    <p style="display: none;">      Type:
+      ([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | <a href="#rect">Rect</a> | <a href="#typef1defrect">TypeF1DefRect</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All rectangles are the same when parsed by `getRect` and have a lower</span>
+left corner <span class="hljs-keyword">of</span> <span class="hljs-string">`(-2, -1)`</span>, a width <span class="hljs-keyword">of</span> <span class="hljs-string">`4`</span>, and a height <span class="hljs-keyword">of</span> <span class="hljs-string">`2`</span>
+<span class="hljs-keyword">const</span> r1 = [<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>];
+<span class="hljs-keyword">const</span> r2 = <span class="hljs-keyword">new</span> Fig.Rect(<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>);
+<span class="hljs-keyword">const</span> r3 = <span class="hljs-string">'[-2, -1, 4, 2]'</span>;
+<span class="hljs-keyword">const</span> r4 = {
+  <span class="hljs-attr">f1Type</span>: <span class="hljs-string">'rect'</span>,
+  <span class="hljs-attr">state</span>: [<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>],
+};</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeparsabletransform'>
+      TypeParsableTransform
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A <a href="#transform">Transform</a> can be defined in several ways
+As a Transform: new Transform()
+As an array of ['s', number, number], ['r', number] and/or ['t', number, number] arrays
+As a string representing the JSON of the array form
+}</p>
+
+  
+    <p style="display: none;">      Type:
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | [<code>"s"</code>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | [<code>"r"</code>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | [<code>"t"</code>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>])> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#transform">Transform</a> | TypeF1DefTransform)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// t1, t2, and t3 are all the same when parsed by `getTransform`</span>
+t1 = <span class="hljs-keyword">new</span> Transform().scale(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>).rotate(<span class="hljs-number">0</span>).translate(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>);
+t2 = [[<span class="hljs-string">'s'</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">'r'</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">'t'</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>]];
+t3 = <span class="hljs-string">'[['</span>s<span class="hljs-string">', 1, 1], ['</span>r<span class="hljs-string">', 0], ['</span>t<span class="hljs-string">', 2, 2]]'</span>;</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getpoint'>
+      getPoint
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Parse a <a href="#typeparsablepoint">TypeParsablePoint</a> and return a <a href="#point">Point</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>p</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#point">Point</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getscale'>
+      getScale
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Parse a scale definition and return a <a href="#point">Point</a> representing the scale
+in x and y.
+Scale can either be defined as a <a href="#typeparsablepoint">TypeParsablePoint</a> or a <code>number</code> if
+the x and y scale is equal.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>s</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#point">Point</a></code>:
+        x and y scale
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getline'>
+      getLine
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Convert a parsable line definition to a <a href="#line">Line</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>l</span> <code class='quiet'>(<a href="#typeparsableline">TypeParsableLine</a>)</code>
+	    parsable line definition
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#line">Line</a></code>:
+        <code>Line</code>
+ object
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getrect'>
+      getRect
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Convert a parsable rectangle definition to a <a href="#rect">Rect</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>r</span> <code class='quiet'>(<a href="#typeparsablerect">TypeParsableRect</a>)</code>
+	    parsable rectangle definition
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#rect">Rect</a></code>:
+        rectangle object
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='gettransform'>
+      getTransform
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Convert a parsable transform definition to a <a href="#transform">Transform</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>t</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>)</code>
+	    parsable transform definition
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#transform">Transform</a></code>:
+        transform object
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
 
   
 

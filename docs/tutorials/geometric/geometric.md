@@ -5,7 +5,7 @@ FigureOne includes classes that define a:
 * {@link Line}
 * <a href="#rect">Rectangle</a>
 * {@link Translation} transform
-* {@link Rotation} transofrm
+* {@link Rotation} transform
 * {@link Scale} transform
 * <a href="transform">Transform Chain</a>
 
