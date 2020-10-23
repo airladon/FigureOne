@@ -19,7 +19,7 @@ export type TypePulseTransformAnimationStepInputOptions = {
   start?: Array<Transform>;      // default is element transform
   target?: Array<Transform>;     // Either target or delta must be defined
   // delta?: Transform;      // delta overrides target if both are defined
-  translationStyle?: 'linear' | 'curved'; // default is linear
+  path?: 'linear' | 'curved'; // default is linear
   translationOptions?: pathOptionsType;
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
@@ -51,7 +51,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     delta: Array<Transform>;
     target: Array<Transform>;
     rotDirection: 0 | 1 | -1 | 2;
-    translationStyle: 'linear' | 'curved';
+    path: 'linear' | 'curved';
     translationOptions: pathOptionsType;
     velocity: ?Transform | number | {
       position?: TypeParsablePoint | number,
@@ -70,7 +70,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'transform' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'rotDirection', 'translationStyle',
+      'start', 'delta', 'target', 'rotDirection', 'path',
       'translationOptions', 'velocity', 'clipRotationTo', 'maxDuration',
       'zeroDurationThreshold', // 'minDuration',
     ]);
@@ -79,7 +79,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       start: null,
       target: null,
       delta: [],
-      translationStyle: 'linear',
+      path: 'linear',
       rotDirection: 0,
       translationOptions: {
         magnitude: 0.5,
@@ -96,7 +96,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     if (this.element && this.element.animations.options.translation) {
       const translationOptions = this.element.animations.options.translation;
       if (translationOptions.style != null) {
-        defaultTransformOptions.translationStyle = translationOptions.style;
+        defaultTransformOptions.path = translationOptions.style;
       }
       joinObjects(defaultTransformOptions.translationOptions, translationOptions);
     }
@@ -104,7 +104,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     // $FlowFixMe
     this.transform = { translationOptions: {} };
     copyKeysFromTo(options, this.transform, [
-      'start', 'delta', 'target', 'translationStyle',
+      'start', 'delta', 'target', 'path',
       'velocity', 'rotDirection', 'clipRotationTo', 'maxDuration',
       'zeroDurationThreshold',  // 'minDuration',
     ]);
@@ -324,7 +324,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     for (let i = 0; i < this.transform.start.length; i += 1) {
       const next = this.transform.start[i].toDelta(
         this.transform.delta[i], p,
-        this.transform.translationStyle,
+        this.transform.path,
         this.transform.translationOptions,
       );
       if (this.transform.clipRotationTo !== null) {

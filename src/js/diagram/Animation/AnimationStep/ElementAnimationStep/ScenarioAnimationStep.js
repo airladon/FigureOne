@@ -61,7 +61,7 @@ export type OBJ_ScenarioVelocity = {
  * @property {number} [maxDuration]
  * @property {number} [zeroDurationThreshold]
  * @property {boolean} [allDurationsSame]
- * @property {'linear' | 'curved'} [translationStyle] (`'linear'`)
+ * @property {'linear' | 'curved'} [path] (`'linear'`)
  * @property {OBJ_QuadraticBezier} [translationOptions]
  * @property {0 | 1 | -1 | 2} [rotDirection] where `0` is quickest direction,
  * `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
@@ -79,7 +79,7 @@ export type OBJ_ScenarioAnimationStep = {
   maxDuration?: number,
   zeroDurationThreshold?: number,
   allDurationsSame?: boolean,
-  translationStyle?: 'linear' | 'curved'; // default is linear
+  path?: 'linear' | 'curved'; // default is linear
   translationOptions?: pathOptionsType;
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
@@ -96,7 +96,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     start: ?(string | OBJ_Scenario);  // null means use element props when unit is started
     target: ?(string | OBJ_Scenario);
     rotDirection: 0 | 1 | -1 | 2;
-    translationStyle: 'linear' | 'curved';
+    path: 'linear' | 'curved';
     translationOptions: pathOptionsType;
     velocity: ?OBJ_ScenarioVelocity;
     maxDuration: ?number;
@@ -111,7 +111,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     const AnimationStepOptionsIn =
       joinObjects({}, { type: 'scenario' }, ...optionsIn);
     deleteKeys(AnimationStepOptionsIn, [
-      'start', 'target', 'translationStyle', 'translationOptions',
+      'start', 'target', 'path', 'translationOptions',
       'velocity', 'maxDuration', 'allDurationsSame', 'rotDirection',
       'clipRotationTo', 'element', 'progression', // 'minDuration',
     ]);
@@ -122,7 +122,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       element: null,
       start: null,
       target: null,
-      translationStyle: 'linear',
+      path: 'linear',
       translationOptions: {
         // rot: 1,
         magnitude: 0.5,
@@ -143,7 +143,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       const translationOptions = this.element.animations.options.translation;
       if (translationOptions.style != null) {
         // $FlowFixMe - this is messy, but deal with it
-        defaultScenarioOptions.translationStyle = translationOptions.style;
+        defaultScenarioOptions.path = translationOptions.style;
       }
       joinObjects(defaultScenarioOptions.translationOptions, translationOptions);
     }
@@ -153,7 +153,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     // $FlowFixMe
     this.scenario = { translationOptions: {} };
     copyKeysFromTo(options, this.scenario, [
-      'start', 'target', 'translationStyle',
+      'start', 'target', 'path',
       'velocity', 'maxDuration', 'allDurationsSame', 'zeroDurationThreshold',
       'rotDirection', 'clipRotationTo', 'progression', // 'minDuration',
     ]);
@@ -338,7 +338,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         target: target.transform,
         duration: transformDuration,
         rotDirection: this.scenario.rotDirection,
-        translationStyle: this.scenario.translationStyle,
+        path: this.scenario.path,
         translationOptions: this.scenario.translationOptions,
         clipRotationTo: this.scenario.clipRotationTo,
         progression: this.scenario.progression,

@@ -156,13 +156,12 @@ diagram.initialize();
 p.animations.new()
   .position({
     start: [0, 0],
-    target: [1, 1],
+    target: [1, 0],
     duration: 2,
     translationStyle: 'curved',
     translationOptions: {
       magnitude: 0.8,
-      direction: 'left',
-      // angle: Math.PI / 2 * 3,
+      direction: 'up',
     },
   })
   .start();

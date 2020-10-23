@@ -853,17 +853,17 @@ type linearPathOptionsType = {
  * - Define a control line from point `P` with length `d` and some
  *   angle delta from the original line.
  *
- * The  properties then customize this calculation:
+ * The properties then customize this calculation:
  * - `magnitude` will scale the distance d
  * - `offset` will define where on the line point `P` is where `0.5` is
- *   the midpoint and `0.1` is 10% along the line from the start location 
- * - `direction` will define which side of the line between start
- *   and target the perpendicular should be drawn
- * - `angle` defines the angle delta of the control line - by default this
- *   is the perpendicular angle (Math.PI / 2)
+ *   the midpoint and `0.1` is 10% along the line from the start location
+ * - `direction` will define which side of the line the control line should be
+ *   drawn
+ * - `angle` defines the angle delta between the line and the control line - by
+ *    default this a right angle (Math.PI / 2)
  *
  * The directions `'up'`, `'down'`, `'left'`, `'right'` all reference the side
- * of the line defined by the start and target locations. The `'positive'`
+ * of the line. The `'positive'`
  * direction is the side of the line that the line would move toward when
  * rotated in the positive direction around the start point. The
  * '`negative`' side of the line is then the opposite side.

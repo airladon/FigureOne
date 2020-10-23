@@ -22,8 +22,9 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * Use either `delta` or `target` to define it's end point.
  *
  * The path of travel between `start` and `target` can either be a straight
- * line (`'linear'`) or curved (`'curved'`). A quadratic bezier curve is
- * used for the `'curved'` option.
+ * line (`'linear'`) or a quadratic bezier curve (`'curved'`)
+ *
+ * For custom paths, the @{link CustomAnimationStep} can be used.
  *
  * @extends OBJ_ElementAnimationStep
  * @property {TypeParsablePoint} [start] start position - if undefined then
@@ -36,8 +37,8 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * position overrides `duration` - `null` to use `duration` (`null`)
  * @property {number} [null | maxDuration] maximum duration to cap to -
  * `null` for no cap (`null`)
- * @property {'linear' | 'curved'} [translationStyle] (`'linear'`)
- * @property {OBJ_QuadraticBezier} [translationOptions]
+ * @property {'linear' | 'curved'} [path] (`'linear'`)
+ * @property {OBJ_QuadraticBezier} [pathOptions]
  * (`{ magnitude: 0.5, direction: 'positive', offset: 0.5 }`)
  *
  * @extends ElementAnimationStep
@@ -61,8 +62,8 @@ export type OBJ_PositionAnimationStep = {
   start?: Point;      // default is element transform
   target?: Point;     // Either target or delta must be defined
   delta?: Point;      // delta overrides target if both are defined
-  translationStyle?: 'linear' | 'curved'; // default is linear
-  translationOptions?: pathOptionsType;
+  path?: 'linear' | 'curved'; // default is linear
+  pathOptions?: pathOptionsType;
   velocity?: Point;
   maxDuration?: number;
 } & OBJ_ElementAnimationStep;
@@ -77,8 +78,8 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     delta: ?Point;
     target: ?Point;
     // rotDirection: 0 | 1 | -1 | 2;
-    translationStyle: 'linear' | 'curved';
-    translationOptions: OBJ_QuadraticBezier;
+    path: 'linear' | 'curved';
+    pathOptions: OBJ_QuadraticBezier;
     velocity: ?Point;
     maxDuration: ?number;
   };
@@ -87,7 +88,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'position' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'translationStyle', 'translationOptions',
+      'start', 'delta', 'target', 'path', 'pathOptions',
       'velocity', 'maxDuration',
     ]);
     super(ElementAnimationStepOptionsIn);
@@ -96,8 +97,8 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       start: null,
       target: null,
       delta: null,
-      translationStyle: 'linear',
-      translationOptions: {
+      path: 'linear',
+      pathOptions: {
         magnitude: 0.5,
         offset: 0.5,
         controlPoint: null,
@@ -107,12 +108,12 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       velocity: null,
     };
     if (this.element && this.element.animations.options.translation) {
-      const translationOptions = this.element.animations.options.translation;
-      if (translationOptions.style != null) {
+      const pathOptions = this.element.animations.options.translation;
+      if (pathOptions.style != null) {
         // $FlowFixMe - this is messy, but deal with it
-        defaultPositionOptions.style = translationOptions.style;
+        defaultPositionOptions.style = pathOptions.style;
       }
-      joinObjects(defaultPositionOptions.translationOptions, translationOptions);
+      joinObjects(defaultPositionOptions.pathOptions, pathOptions);
     }
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     if (options.start != null) {
@@ -125,12 +126,12 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       options.delta = getPoint(options.delta);
     }
     // $FlowFixMe
-    this.position = { translationOptions: {} };
+    this.position = { pathOptions: {} };
     copyKeysFromTo(options, this.position, [
-      'start', 'delta', 'target', 'translationStyle',
+      'start', 'delta', 'target', 'path',
       'velocity', 'maxDuration',
     ]);
-    duplicateFromTo(options.translationOptions, this.position.translationOptions);
+    duplicateFromTo(options.pathOptions, this.position.pathOptions);
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
@@ -200,8 +201,8 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     if (this.position.delta != null && this.position.start != null) {
       const next = this.position.start.toDelta(
         this.position.delta, p,
-        this.position.translationStyle,
-        this.position.translationOptions,
+        this.position.path,
+        this.position.pathOptions,
       );
       if (this.element != null) {
         this.element.setPosition(next);

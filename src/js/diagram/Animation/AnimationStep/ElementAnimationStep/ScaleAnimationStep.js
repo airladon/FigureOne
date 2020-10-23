@@ -75,7 +75,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
     }
 
     copyKeysFromTo(options, this.scale, [
-      'start', 'delta', 'target', 'translationStyle',
+      'start', 'delta', 'target', 'path',
       'velocity', 'maxDuration',
     ]);
   }

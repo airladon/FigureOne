@@ -26,7 +26,7 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * @property {TypeParsableTransform} [delta]
  * @property {null | TypeParsableTransform} [velocity] velocity of
  * transform overrides `duration` - `null` to use `duration` (`null`)
- * @property {'linear' | 'curved'} [translationStyle]
+ * @property {'linear' | 'curved'} [path]
  * @property {OBJ_QuadraticBezier} [translationOptions]
  * @property {0 | 1 | -1 | 2} [rotDirection] where `0` is quickest direction,
  * `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
@@ -38,7 +38,7 @@ export type OBJ_TransformAnimationStep = {
   start?: Transform;      // default is element transform
   target?: Transform;     // Either target or delta must be defined
   delta?: Transform;      // delta overrides target if both are defined
-  translationStyle?: 'linear' | 'curved'; // default is linear
+  path?: 'linear' | 'curved'; // default is linear
   translationOptions?: pathOptionsType;
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
@@ -67,7 +67,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     delta: Transform;
     target: Transform;
     rotDirection: 0 | 1 | -1 | 2;
-    translationStyle: 'linear' | 'curved';
+    path: 'linear' | 'curved';
     translationOptions: pathOptionsType;
     velocity: ?Transform | number;
     clipRotationTo: '0to360' | '-180to180' | null;
@@ -78,7 +78,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'transform' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
-      'start', 'delta', 'target', 'rotDirection', 'translationStyle',
+      'start', 'delta', 'target', 'rotDirection', 'path',
       'translationOptions', 'velocity', 'clipRotationTo', 'maxDuration',
     ]);
     super(ElementAnimationStepOptionsIn);
@@ -86,7 +86,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       start: null,
       target: null,
       delta: null,
-      translationStyle: 'linear',
+      path: 'linear',
       rotDirection: 0,
       translationOptions: {
         // rot: 1,
@@ -102,7 +102,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     if (this.element && this.element.animations.options.translation) {
       const translationOptions = this.element.animations.options.translation;
       if (translationOptions.style != null) {
-        defaultTransformOptions.translationStyle = translationOptions.style;
+        defaultTransformOptions.path = translationOptions.style;
       }
       joinObjects(defaultTransformOptions.translationOptions, translationOptions);
     }
@@ -122,7 +122,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     // $FlowFixMe
     this.transform = { translationOptions: {} };
     copyKeysFromTo(options, this.transform, [
-      'start', 'delta', 'target', 'translationStyle',
+      'start', 'delta', 'target', 'path',
       'velocity', 'rotDirection', 'clipRotationTo', 'maxDuration',
     ]);
     duplicateFromTo(options.translationOptions, this.transform.translationOptions);
@@ -207,7 +207,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     // next = start.add(delta.mul(next));
     const next = this.transform.start.toDelta(
       this.transform.delta, p,
-      this.transform.translationStyle,
+      this.transform.path,
       this.transform.translationOptions,
     );
 
