@@ -5,10 +5,12 @@ import type { OBJ_AnimationStep } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import GlobalAnimation from '../../webgl/GlobalAnimation';
+import type { AnimationStartTime } from '../AnimationManager';
 
 
 /**
  * Parallel animation step options object
+ * @extends OBJ_AnimationStep
  * @property {Array<AnimationStep>} steps animation steps to perform in parallel
  */
 export type OBJ_ParallelAnimationStep = {
@@ -16,8 +18,31 @@ export type OBJ_ParallelAnimationStep = {
 } & OBJ_AnimationStep;
 
 /**
- * Parallel Animation Step
+ * Execute an array of `{@link AnimationStep}`s in parallel.
+ *
+ * ![](./assets1/parallel_animation.gif)
+ *
+ * The parallel animation step will not complete till all steps are finished.
+ *
+ * @param {Array<AnimationStep> | OBJ_SerialAnimationStep} steps
+ * animation steps to perform in serial
  * @extends AnimationStep
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Use `AnimationBuilder` for a more clean look
+ * p.animations.new()
+ *   .delay(1)
+ *   .inParallel([
+ *     p.animations.builder()
+ *       .scale({ target: 0.5, duration: 1 })
+ *       .scale({ target: 2, duration: 1 })
+ *       .scale({ target: 1, duration: 2 }),
+ *     p.animations.color({ target: [0, 0, 1, 1], duration: 4 }),
+ *     p.animations.rotation({ target: Math.PI, duration: 4 }),
+ *   ])
+ *   .start();
  */
 // Animations get started from a parent, but finish themselves
 export class ParallelAnimationStep extends AnimationStep {
@@ -132,7 +157,7 @@ export class ParallelAnimationStep extends AnimationStep {
     });
   }
 
-  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
+  start(startTime: ?AnimationStartTime = null) {
     this.startWaiting();
     super.start(startTime);
     this.steps.forEach((step) => {

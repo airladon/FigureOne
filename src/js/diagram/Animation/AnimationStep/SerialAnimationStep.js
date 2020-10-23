@@ -5,6 +5,7 @@ import type { OBJ_AnimationStep } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import GlobalAnimation from '../../webgl/GlobalAnimation';
+import type { AnimationStartTime } from '../AnimationManager';
 
 /**
  * Serial animation step options object
@@ -17,7 +18,7 @@ export type OBJ_SerialAnimationStep = {
 } & OBJ_AnimationStep;
 
 /**
- * Execute an array of `{@link AnimationStep}`s in series.
+ * Execute an array of {@link AnimationStep}s in series.
  *
  * ![](./assets1/serial_animation.gif)
  *
@@ -32,34 +33,34 @@ export type OBJ_SerialAnimationStep = {
  * <a href="#animation-boilerplate">boilerplate</a>
  *
  * @example
- * // A series animation is useful when executed with a number
- * // of parallel steps
+ * // Using a SerialAnimation step can be cumbersome, but
+ * // can be useful if modularizing animations between files
+ * const Rot = Fig.Animation.RotationAnimationStep;
+ * const Delay = Fig.Animation.DelayAnimationStep;
+ * const Pos = Fig.Animation.PositionAnimationStep;
+ *
  * const series = new Fig.Animation.SerialAnimationStep([
- *   p.animations.scale({ target: 0.5, duration: 1 }),
- *   p.animations.scale({ target: 2, duration: 1 }),
- *   p.animations.scale({ target: 1, duration: 2 }),
+ *   new Rot({ element: p, target: Math.PI / 2, duration: 2 }),
+ *   new Delay({ duration: 0.2 }),
+ *   new Rot({ element: p, target: Math.PI, duration: 2 }),
+ *   new Delay({ duration: 0.2 }),
+ *   new Rot({ element: p, target: 0, direction: -1, duration: 1.3, progression: 'easein' }),
+ *   new Pos({ element: p, target: [1, 0], duration: 2, progression: 'easeout' }),
  * ]);
- * p.animations.new()
- *   .delay(1)
- *   .inParallel([
- *     series,
- *     p.animations.color({ target: [0, 0, 1, 1], duration: 4 }),
- *     p.animations.rotation({ target: Math.PI, duration: 4 }),
- *   ])
- *   .start();
+ *
+ * p.animations.animations.push(series);
+ * p.animations.start()
  *
  * @example
- * // Use `AnimationBuilder` for a more clean look
+ * // Same animation but with `AnimationBuilder` (which is an extension of
+ * // `SerialAnimationStep`)
  * p.animations.new()
- *   .delay(1)
- *   .inParallel([
- *     p.animations.builder()
- *       .scale({ target: 0.5, duration: 1 })
- *       .scale({ target: 2, duration: 1 })
- *       .scale({ target: 1, duration: 2 }),
- *     p.animations.color({ target: [0, 0, 1, 1], duration: 4 }),
- *     p.animations.rotation({ target: Math.PI, duration: 4 }),
- *   ])
+ *   .rotation({ target: Math.PI / 2, duration: 2 })
+ *   .delay(0.2)
+ *   .rotation({ target: Math.PI, duration: 2 })
+ *   .delay(0.2)
+ *   .rotation({ target: 0, duration: 1, direction: -1, progression: 'easein' })
+ *   .position({ target: [1, 0], duration: 2, progression: 'easeout' })
  *   .start();
  */
 export class SerialAnimationStep extends AnimationStep {
@@ -139,7 +140,7 @@ export class SerialAnimationStep extends AnimationStep {
     });
   }
 
-  start(startTime: ?number | 'nextFrame' | 'prevFrame' | 'now' | 'syncNull' = null) {
+  start(startTime: ?AnimationStartTime = null) {
     if (this.state !== 'animating') {
       this.startWaiting();
       super.start(startTime);

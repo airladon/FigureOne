@@ -2764,7 +2764,7 @@
                 <li><a
                   href='#curvedpathoptionstype'
                   class="">
-                  CurvedPathOptionsType
+                  OBJ_QuadraticBezier
                   
                 </a>
                 
@@ -16771,8 +16771,6 @@ setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;
 setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
   diagram.stop(<span class="hljs-string">'freeze'</span>);
 }, <span class="hljs-number">1000</span>);</pre>
-<h3>Animations at their heart</h3>
-<p>The </p>
 
   
 </section></div>
@@ -19804,7 +19802,7 @@ AnimationManager.new
   </div>
   
 
-  <p>Execute an array of <code>{@link AnimationStep}</code>s in series.</p>
+  <p>Execute an array of <a href="#animationstep">AnimationStep</a>s in series.</p>
 <p><img src="./assets1/serial_animation.gif"></p>
 <p>Often the <a href="#animationbuilder">AnimationBuilder</a> class which extends
 <code>SerialAnimationStep</code> can be used to create serial animations
@@ -19867,34 +19865,34 @@ boilerplate
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// A series animation is useful when executed with a number</span>
-<span class="hljs-comment">// of parallel steps</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using a SerialAnimation step can be cumbersome, but</span>
+<span class="hljs-comment">// can be useful if modularizing animations between files</span>
+<span class="hljs-keyword">const</span> Rot = Fig.Animation.RotationAnimationStep;
+<span class="hljs-keyword">const</span> Delay = Fig.Animation.DelayAnimationStep;
+<span class="hljs-keyword">const</span> Pos = Fig.Animation.PositionAnimationStep;
+
 <span class="hljs-keyword">const</span> series = <span class="hljs-keyword">new</span> Fig.Animation.SerialAnimationStep([
-  p.animations.scale({ <span class="hljs-attr">target</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> }),
-  p.animations.scale({ <span class="hljs-attr">target</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> }),
-  p.animations.scale({ <span class="hljs-attr">target</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }),
+  <span class="hljs-keyword">new</span> Rot({ <span class="hljs-attr">element</span>: p, <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }),
+  <span class="hljs-keyword">new</span> Delay({ <span class="hljs-attr">duration</span>: <span class="hljs-number">0.2</span> }),
+  <span class="hljs-keyword">new</span> Rot({ <span class="hljs-attr">element</span>: p, <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }),
+  <span class="hljs-keyword">new</span> Delay({ <span class="hljs-attr">duration</span>: <span class="hljs-number">0.2</span> }),
+  <span class="hljs-keyword">new</span> Rot({ <span class="hljs-attr">element</span>: p, <span class="hljs-attr">target</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">direction</span>: <span class="hljs-number">-1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1.3</span>, <span class="hljs-attr">progression</span>: <span class="hljs-string">'easein'</span> }),
+  <span class="hljs-keyword">new</span> Pos({ <span class="hljs-attr">element</span>: p, <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">progression</span>: <span class="hljs-string">'easeout'</span> }),
 ]);
-p.animations.new()
-  .delay(<span class="hljs-number">1</span>)
-  .inParallel([
-    series,
-    p.animations.color({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">4</span> }),
-    p.animations.rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">4</span> }),
-  ])
-  .start();</pre>
+
+p.animations.animations.push(series);
+p.animations.start()</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Use `AnimationBuilder` for a more clean look</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Same animation but with `AnimationBuilder` (which is an extension of</span>
+<span class="hljs-comment">// `SerialAnimationStep`)</span>
 p.animations.new()
-  .delay(<span class="hljs-number">1</span>)
-  .inParallel([
-    p.animations.builder()
-      .scale({ <span class="hljs-attr">target</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> })
-      .scale({ <span class="hljs-attr">target</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> })
-      .scale({ <span class="hljs-attr">target</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }),
-    p.animations.color({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">4</span> }),
-    p.animations.rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">4</span> }),
-  ])
+  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .delay(<span class="hljs-number">0.2</span>)
+  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .delay(<span class="hljs-number">0.2</span>)
+  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">direction</span>: <span class="hljs-number">-1</span>, <span class="hljs-attr">progression</span>: <span class="hljs-string">'easein'</span> })
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">progression</span>: <span class="hljs-string">'easeout'</span> })
   .start();</pre>
     
   
@@ -19924,7 +19922,9 @@ p.animations.new()
   </div>
   
 
-  <p>Parallel Animation Step</p>
+  <p>Execute an array of <code>{@link AnimationStep}</code>s in parallel.</p>
+<p><img src="./assets1/parallel_animation.gif"></p>
+<p>The parallel animation step will not complete till all steps are finished.</p>
 
   
   
@@ -19944,7 +19944,19 @@ p.animations.new()
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>steps</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#animationstep">AnimationStep</a>> | <a href="#obj_serialanimationstep">OBJ_SerialAnimationStep</a>))</code>
+	    animation steps to perform in serial
 
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -19952,7 +19964,38 @@ p.animations.new()
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
 
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Use `AnimationBuilder` for a more clean look</span>
+p.animations.new()
+  .delay(<span class="hljs-number">1</span>)
+  .inParallel([
+    p.animations.builder()
+      .scale({ <span class="hljs-attr">target</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> })
+      .scale({ <span class="hljs-attr">target</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> })
+      .scale({ <span class="hljs-attr">target</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }),
+    p.animations.color({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">4</span> }),
+    p.animations.rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">4</span> }),
+  ])
+  .start();</pre>
+    
   
 
   
@@ -20853,7 +20896,13 @@ p.animations.new()
   </div>
   
 
-  <p>Custom function animation step</p>
+  <p>Custom animation step</p>
+<p><img src="./assets1/custom_animation.gif"></p>
+<p>This step will execute a custom callback function on each animation frame
+for the duration of the animation. The callback function will be passed the
+percentage progress of the animation.</p>
+<p>Custom animation steps are useful for orchestrating complex animations, or
+performing non-linear animations.</p>
 
   
   
@@ -20892,9 +20941,37 @@ p.animations.new()
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Move an object through a sine wave of wavelength 1 from</span>
+<span class="hljs-comment">// x = -1 to x = 1</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sine</span>(<span class="hljs-params">percentComplete</span>) </span>{
+  <span class="hljs-keyword">const</span> x = <span class="hljs-number">-1</span> + percentComplete * <span class="hljs-number">2</span>;
+  <span class="hljs-keyword">const</span> y = <span class="hljs-number">0.5</span> * <span class="hljs-built_in">Math</span>.sin(<span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span> * x);
+  p.setPosition(x, y);
+}
+
+p.animations.new()
+  .custom({ <span class="hljs-attr">callback</span>: sine, <span class="hljs-attr">duration</span>: <span class="hljs-number">5</span> })
+  .start();</pre>
+    
   
 
   
@@ -32520,6 +32597,13 @@ start the animation
     </p>
   
   
+    <p>
+      Extends
+      
+        <a href="#obj_animationstep">OBJ_AnimationStep</a>
+      
+    </p>
+  
 
   
   
@@ -32667,7 +32751,7 @@ callback - if the
   </div>
   
 
-  <p>Custom function animation step options object</p>
+  <p>Custom  animation step options object</p>
 
   
     <p style="display: none;">      Type:
@@ -32695,6 +32779,14 @@ callback - if the
   
     <div class='py1 quiet mt1 prose-big'>Properties</div>
     <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>callback</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (int): void))</code>
+          : function to run each
+animation frame
+
+          
+        </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>startPercent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
@@ -32911,7 +33003,7 @@ position overrides
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>translationOptions</span> <code class='quiet'>(<a href="#curvedpathoptionstype">CurvedPathOptionsType</a>?)</code>
+          <span class='code bold'>translationOptions</span> <code class='quiet'>(<a href="#curvedpathoptionstype">OBJ_QuadraticBezier</a>?)</code>
           
           
         </div>
@@ -33269,7 +33361,7 @@ transform overrides
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>translationOptions</span> <code class='quiet'>(<a href="#curvedpathoptionstype">CurvedPathOptionsType</a>?)</code>
+          <span class='code bold'>translationOptions</span> <code class='quiet'>(<a href="#curvedpathoptionstype">OBJ_QuadraticBezier</a>?)</code>
           
           
         </div>
@@ -33431,7 +33523,7 @@ then
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>translationOptions</span> <code class='quiet'>(<a href="#curvedpathoptionstype">CurvedPathOptionsType</a>?)</code>
+          <span class='code bold'>translationOptions</span> <code class='quiet'>(<a href="#curvedpathoptionstype">OBJ_QuadraticBezier</a>?)</code>
           
           
         </div>
@@ -34218,7 +34310,7 @@ and height definition
   <div class='clearfix'>
     
     <h3 class='fl m0' id='curvedpathoptionstype'>
-      CurvedPathOptionsType
+      OBJ_QuadraticBezier
     </h3>
     
     

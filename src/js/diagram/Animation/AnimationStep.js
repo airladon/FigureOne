@@ -317,7 +317,7 @@ export default class AnimationStep {
    * @param {AnimationStartTime} startTime
    */
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  start(startTime: AnimationStartTime = null) {
+  start(startTime: ?AnimationStartTime = null) {
     this.state = 'animating';
     if (typeof startTime === 'number' || startTime == null) {
       this.startTime = startTime;

@@ -62,7 +62,7 @@ export type OBJ_ScenarioVelocity = {
  * @property {number} [zeroDurationThreshold]
  * @property {boolean} [allDurationsSame]
  * @property {'linear' | 'curved'} [translationStyle] (`'linear'`)
- * @property {CurvedPathOptionsType} [translationOptions]
+ * @property {OBJ_QuadraticBezier} [translationOptions]
  * @property {0 | 1 | -1 | 2} [rotDirection] where `0` is quickest direction,
  * `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
  * whichever direction doesn't pass through angle 0.
@@ -124,7 +124,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       target: null,
       translationStyle: 'linear',
       translationOptions: {
-        rot: 1,
+        // rot: 1,
         magnitude: 0.5,
         offset: 0.5,
         controlPoint: null,

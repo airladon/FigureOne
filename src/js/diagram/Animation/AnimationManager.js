@@ -201,11 +201,11 @@ export default class AnimationManager {
   options: {
     translation?: {
       style: 'curve' | 'linear',
-      rot: number,
+      angle: number,
       magnitude: number,
       offset: number,
-      controlPoint: number | null,
-      direction: '' | 'up' | 'down' | 'left' | 'right',
+      controlPoint: TypeParsablePoint | null,
+      direction: 'positive' | 'negative' | 'up' | 'down' | 'left' | 'right',
     },
   };
 

@@ -153,32 +153,20 @@ diagram.addElement({
 const p = diagram.getElement('p');
 diagram.initialize();
 
-
-// const series = new Fig.Animation.SerialAnimationStep([
-//   p.animations.scale({ target: 0.5, duration: 1 }),
-//   p.animations.scale({ target: 2, duration: 1 }),
-//   p.animations.scale({ target: 1, duration: 2 }),
-// ]);
 p.animations.new()
-  .delay(1)
-  .inParallel([
-    p.animations.builder()
-      .scale({ target: 0.5, duration: 1 })
-      .scale({ target: 2, duration: 1 })
-      .scale({ target: 1, duration: 2 }),
-    p.animations.color({ target: [0, 0, 1, 1], duration: 4 }),
-    p.animations.rotation({ target: Math.PI, duration: 4 }),
-  ])
+  .position({
+    start: [0, 0],
+    target: [1, 1],
+    duration: 2,
+    translationStyle: 'curved',
+    translationOptions: {
+      magnitude: 0.8,
+      direction: 'left',
+      // angle: Math.PI / 2 * 3,
+    },
+  })
   .start();
-// const steps = [
-//   p.animations.position({ target: [1, 1], duration: 2 }),
-//   p.animations.scale({ target: [0.5, 0.5], duration: 1 }),
-//   p.animations.scenario({ target: { position: [0, 0], rotation: Math.PI }, duration: 2}),
-// ];
 
 // p.animations.new()
-//   .inParallel([
-//     new Fig.Animation.SerialAnimationStep(steps),
-//     new Fig.Animation.ColorAnimationStep({ element: p, target: [0, 0, 1, 1], duration: 5}),
-//   ])
-//   .start();
+//   .position({ target: [1, 0], velocity: 0.5 })
+//   .start()

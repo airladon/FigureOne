@@ -2,7 +2,7 @@
 import {
   Transform, Point, getMaxTimeFromVelocity, getPoint,
 } from '../../../../tools/g2';
-import type { pathOptionsType } from '../../../../tools/g2';
+import type { OBJ_QuadraticBezier } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
   // joinObjectsWithOptions,
@@ -11,6 +11,7 @@ import type {
   OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
+// import type { OBJ_QuadraticBezier } from 
 // import type { DiagramElement } from '../../../Element';
 
 /**
@@ -18,17 +19,43 @@ import ElementAnimationStep from '../ElementAnimationStep';
  *
  * By default, the position will start with the element's current position.
  *
- * Use either `delta` or `target` to define it's end point
+ * Use either `delta` or `target` to define it's end point.
+ *
+ * The path of travel between `start` and `target` can either be a straight
+ * line (`'linear'`) or curved (`'curved'`). A quadratic bezier curve is
+ * used for the `'curved'` option.
  *
  * @extends OBJ_ElementAnimationStep
- * @property {TypeParsablePoint} [start]
- * @property {TypeParsablePoint} [target]
- * @property {TypeParsablePoint} [delta]
+ * @property {TypeParsablePoint} [start] start position - if undefined then
+ * current position is used
+ * @property {TypeParsablePoint} [target] target position - if undefined then
+ * `delta` is used
+ * @property {TypeParsablePoint} [delta] target delta - only used if `target`
+ * is undefined
  * @property {null | TypeParsablePoint} [velocity] velocity of
  * position overrides `duration` - `null` to use `duration` (`null`)
+ * @property {number} [null | maxDuration] maximum duration to cap to -
+ * `null` for no cap (`null`)
  * @property {'linear' | 'curved'} [translationStyle] (`'linear'`)
- * @property {CurvedPathOptionsType} [translationOptions]
- * @property {number} [maxDuration]
+ * @property {OBJ_QuadraticBezier} [translationOptions]
+ * (`{ magnitude: 0.5, direction: 'positive', offset: 0.5 }`)
+ *
+ * @extends ElementAnimationStep
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Using duration
+ * p.animations.new()
+ *   .position({ target: [1, 0], duration: 2 })
+ *   .start()
+ *
+ * @example
+ * // Using velocity
+ * p.animations.new()
+ *   .position({ target: [1, 0], velocity: 0.5 })
+ *   .start()
  */
 export type OBJ_PositionAnimationStep = {
   start?: Point;      // default is element transform
@@ -49,9 +76,9 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     start: ?Point;  // null means use element transform when unit is started
     delta: ?Point;
     target: ?Point;
-    rotDirection: 0 | 1 | -1 | 2;
+    // rotDirection: 0 | 1 | -1 | 2;
     translationStyle: 'linear' | 'curved';
-    translationOptions: CurvedPathOptionsType;
+    translationOptions: OBJ_QuadraticBezier;
     velocity: ?Point;
     maxDuration: ?number;
   };
@@ -71,13 +98,12 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       delta: null,
       translationStyle: 'linear',
       translationOptions: {
-        rot: 1,
         magnitude: 0.5,
         offset: 0.5,
         controlPoint: null,
-        direction: '',
-        maxDuration: null,
+        direction: 'positive',
       },
+      maxDuration: null,
       velocity: null,
     };
     if (this.element && this.element.animations.options.translation) {

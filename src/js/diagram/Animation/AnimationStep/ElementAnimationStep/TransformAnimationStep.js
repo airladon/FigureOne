@@ -27,7 +27,7 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * @property {null | TypeParsableTransform} [velocity] velocity of
  * transform overrides `duration` - `null` to use `duration` (`null`)
  * @property {'linear' | 'curved'} [translationStyle]
- * @property {CurvedPathOptionsType} [translationOptions]
+ * @property {OBJ_QuadraticBezier} [translationOptions]
  * @property {0 | 1 | -1 | 2} [rotDirection] where `0` is quickest direction,
  * `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
  * whichever direction doesn't pass through angle 0.
@@ -89,7 +89,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       translationStyle: 'linear',
       rotDirection: 0,
       translationOptions: {
-        rot: 1,
+        // rot: 1,
         magnitude: 0.5,
         offset: 0.5,
         controlPoint: null,

@@ -82,7 +82,6 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
       translationStyle: 'linear',
       rotDirection: 0,
       translationOptions: {
-        rot: 1,
         magnitude: 0.5,
         offset: 0.5,
         controlPoint: null,

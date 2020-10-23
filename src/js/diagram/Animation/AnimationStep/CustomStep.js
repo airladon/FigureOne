@@ -10,9 +10,10 @@ import AnimationStep from '../AnimationStep';
 import type { DiagramElement } from '../../Element';
 
 /**
- * Custom function animation step options object
+ * Custom  animation step options object
+ *
  * @extends OBJ_AnimationStep
- * @property {string | ((number) => void)} callback function to run each
+ * @property {string | function(int): void} callback function to run each
  * animation frame
  * @property {number} [startPercent] percent to start animation at (`0`)
  * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
@@ -26,8 +27,34 @@ export type OBJ_CustomAnimationStep = {
 } & OBJ_AnimationStep;
 
 /**
- * Custom function animation step
+ * Custom animation step
+ *
+ * ![](./assets1/custom_animation.gif)
+ *
+ * This step will execute a custom callback function on each animation frame
+ * for the duration of the animation. The callback function will be passed the
+ * percentage progress of the animation.
+ *
+ * Custom animation steps are useful for orchestrating complex animations, or
+ * performing non-linear animations.
+ *
  * @extends AnimationStep
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Move an object through a sine wave of wavelength 1 from
+ * // x = -1 to x = 1
+ * function sine(percentComplete) {
+ *   const x = -1 + percentComplete * 2;
+ *   const y = 0.5 * Math.sin(Math.PI * 2 * x);
+ *   p.setPosition(x, y);
+ * }
+ *
+ * p.animations.new()
+ *   .custom({ callback: sine, duration: 5 })
+ *   .start();
  */
 export class CustomAnimationStep extends AnimationStep {
   element: ?Object;

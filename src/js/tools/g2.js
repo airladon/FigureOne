@@ -808,7 +808,7 @@ class Point {
     percent: number,
     translationStyle: 'linear' | 'curved' = 'linear',
     translationOptions: pathOptionsType = {
-      rot: 1,
+      // rot: 1,
       magnitude: 0.5,
       offset: 0.5,
       controlPoint: null,
@@ -837,25 +837,56 @@ type linearPathOptionsType = {
 };
 
 /**
- * Curved translation path options
+ * Curved translation path options, that defineds the control
+ * point of a quadratic bezier curve.
  *
+ * Use `controlPoint` to define the control point directly. This
+ * will override all other properties.
+ *
+ * Otherwise `direction`, `magnitude` and `offset` can be used
+ * to calculate the control point based on the start and end
+ * points of the curve.
+ *
+ * The control point is calculated by:
+ * - Define a line from start to target - it will have length `d`
+ * - Define a point `P` on the line
+ * - Define a control line from point `P` with length `d` and some
+ *   angle delta from the original line.
+ *
+ * The  properties then customize this calculation:
+ * - `magnitude` will scale the distance d
+ * - `offset` will define where on the line point `P` is where `0.5` is
+ *   the midpoint and `0.1` is 10% along the line from the start location 
+ * - `direction` will define which side of the line between start
+ *   and target the perpendicular should be drawn
+ * - `angle` defines the angle delta of the control line - by default this
+ *   is the perpendicular angle (Math.PI / 2)
+ *
+ * The directions `'up'`, `'down'`, `'left'`, `'right'` all reference the side
+ * of the line defined by the start and target locations. The `'positive'`
+ * direction is the side of the line that the line would move toward when
+ * rotated in the positive direction around the start point. The
+ * '`negative`' side of the line is then the opposite side.
+ *
+ * These directions only work when the `angle` is between `0` and `Math.PI`.
+ *
+ * @property {TypeParsablePoint | null} controlPoint
  * @property {number} magnitude
  * @property {number} offset
- * @property {TypeParsablePoint | null} controlPoint
- * @property {'' | 'up' | 'left' | 'down' | 'right'} direction
- * @property {number} rot
+ * @property {number} angle (`Math.PI / 2`)
+ * @property {'positive' | 'negative' | 'up' | 'left' | 'down' | 'right'} direction
  */
-export type CurvedPathOptionsType = {
+export type OBJ_QuadraticBezier = {
   // path: '(Point, Point, number) => Point';
-  rot: number;
+  controlPoint: TypeParsablePoint | null;
+  angle: number;
   magnitude: number;
   offset: number;
-  controlPoint: Point | null;
-  direction: '' | 'up' | 'left' | 'down' | 'right';
+  direction: 'up' | 'left' | 'down' | 'right' | 'positive' | 'negative';
 };
 
 
-export type pathOptionsType = CurvedPathOptionsType & linearPathOptionsType;
+export type pathOptionsType = OBJ_QuadraticBezier & linearPathOptionsType;
 
 function curvedPath(
   start: Point,
@@ -864,40 +895,113 @@ function curvedPath(
   options: pathOptionsType,
 ) {
   const o = options;
-  const angle = Math.atan2(delta.y, delta.x);
-  const midPoint = start.add(new Point(delta.x * o.offset, delta.y * o.offset));
-  const dist = delta.toPolar().mag * o.magnitude;
+  // const angle = Math.atan2(delta.y, delta.x);
+  // const midPoint = start.add(new Point(delta.x * o.offset, delta.y * o.offset));
+  // const dist = delta.toPolar().mag * o.magnitude;
+
   let { controlPoint } = options;
+
+  // const o = options;
+
+  // const dist = delta.toPolar().mag * o.magnitude;
+
   if (controlPoint == null) {
-    const { direction } = options;
-    let xDelta = Math.cos(angle + o.rot * Math.PI / 2);
-    let yDelta = Math.sin(angle + o.rot * Math.PI / 2);
-    if (direction === 'up') {
-      if (yDelta < 0) {
-        yDelta = Math.sin(angle + o.rot * Math.PI / 2 + Math.PI);
+    // let angleDelta = Math.PI / 2;
+    // if (o.angle != null) {
+    //   angleDelta = o.angle;
+    // }
+    // const { direction } = options;
+    // let xDelta = Math.cos(angle + angleDelta);
+    // let yDelta = Math.sin(angle + angleDelta);
+    // if (direction === 'up') {
+    //   if (yDelta < 0) {
+    //     yDelta = Math.sin(angle + angleDelta + Math.PI);
+    //   }
+    //   if (xDelta < 0) {
+    //     xDelta = Math.cos(angle + angleDelta + Math.PI);
+    //   }
+    // } else if (direction === 'down') {
+    //   if (yDelta > 0) {
+    //     yDelta = Math.sin(angle + angleDelta + Math.PI);
+    //   }
+    //   if (xDelta > 0) {
+    //     xDelta = Math.cos(angle + angleDelta + Math.PI);
+    //   }
+    // } else if (direction === 'left') {
+    //   if (yDelta > 0) {
+    //     yDelta = Math.sin(angle + angleDelta + Math.PI);
+    //   }
+    //   if (xDelta > 0) {
+    //     xDelta = Math.cos(angle + angleDelta + Math.PI);
+    //   }
+    // } else if (direction === 'right') {
+    //   if (yDelta < 0) {
+    //     yDelta = Math.sin(angle + angleDelta + Math.PI);
+    //   }
+    //   if (xDelta < 0) {
+    //     xDelta = Math.cos(angle + angleDelta + Math.PI);
+    //   }
+    // }
+    let angleDelta = Math.PI / 2;
+    if (o.angle != null) {
+      angleDelta = o.angle;
+    }
+    const displacementLine = new Line(start, start.add(delta));
+    const lineAngle = clipAngle(displacementLine.angle(), '0to360');
+    const linePoint = start.add(new Point(delta.x * o.offset, delta.y * o.offset));
+
+    // norm line angle is between 0 and 180
+    let normLineAngle = lineAngle; // clipAngle(lineAngle, '0to360');
+    if (normLineAngle >= Math.PI) {
+      normLineAngle -= Math.PI;
+    }
+    // if (lineAngle < 0) {
+    //   lineAngle += Math.PI;
+    // }
+    let controlAngle = lineAngle + angleDelta;
+    const { direction } = o;
+
+    if (direction === 'positive') {
+      controlAngle = lineAngle + angleDelta;
+    } else if (direction === 'negative') {
+      controlAngle = lineAngle - angleDelta;
+    } else if (direction === 'up') {
+      if (lineAngle <= Math.PI / 2 || lineAngle >= Math.PI / 2 * 3) {
+        controlAngle = lineAngle + angleDelta;
+      } else {
+        controlAngle = lineAngle - angleDelta;
       }
     } else if (direction === 'down') {
-      if (yDelta > 0) {
-        yDelta = Math.sin(angle + o.rot * Math.PI / 2 + Math.PI);
+      if (lineAngle <= Math.PI / 2 || lineAngle >= Math.PI / 2 * 3) {
+        controlAngle = lineAngle - angleDelta;
+      } else {
+        controlAngle = lineAngle + angleDelta;
       }
     } else if (direction === 'left') {
-      if (xDelta > 0) {
-        xDelta = Math.cos(angle + o.rot * Math.PI / 2 + Math.PI);
+      if (lineAngle <= Math.PI) {
+        controlAngle = lineAngle + angleDelta;
+      } else {
+        controlAngle = lineAngle - angleDelta;
       }
     } else if (direction === 'right') {
-      if (xDelta < 0) {
-        xDelta = Math.cos(angle + o.rot * Math.PI / 2 + Math.PI);
+      if (lineAngle <= Math.PI) {
+        controlAngle = lineAngle - angleDelta;
+      } else {
+        controlAngle = lineAngle + angleDelta;
       }
     }
 
+    const dist = o.magnitude * displacementLine.length();
     controlPoint = new Point(
-      midPoint.x + dist * xDelta,
-      midPoint.y + dist * yDelta,
+      linePoint.x + dist * Math.cos(controlAngle),
+      linePoint.y + dist * Math.sin(controlAngle),
+      // midPoint.x + dist * xDelta,
+      // midPoint.y + dist * yDelta,
     );
   }
 
   const p0 = start;
-  const p1 = controlPoint;
+  const p1 = getPoint(controlPoint);
   const p2 = start.add(delta);
   const t = percent;
   const bx = quadraticBezier(p0.x, p1.x, p2.x, t);
