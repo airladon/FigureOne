@@ -41,7 +41,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
   element: ?DiagramElement;
 
   /**
-   * @private
+   * @hideconstructor
    */
   constructor(
     elementOrOptions: DiagramElement | OBJ_AnimationBuilder = {},

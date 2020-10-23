@@ -8,20 +8,67 @@ import GlobalAnimation from '../../webgl/GlobalAnimation';
 
 /**
  * Serial animation step options object
- * @property {Array<AnimationStep>} steps animation steps to perform in serial
+ *
+ * @extends OBJ_AnimationStep
+ * @property {Array<AnimationStep>} [steps] animation steps to execute in series
  */
 export type OBJ_SerialAnimationStep = {
   steps?: Array<AnimationStep>;
 } & OBJ_AnimationStep;
 
 /**
- * Serial Animation Step
+ * Execute an array of `{@link AnimationStep}`s in series.
+ *
+ * ![](./assets1/serial_animation.gif)
+ *
+ * Often the {@link AnimationBuilder} class which extends
+ * `SerialAnimationStep` can be used to create serial animations
+ * in a more clean way.
+ *
+ * @param {Array<AnimationStep> | OBJ_SerialAnimationStep} steps
+ * animation steps to perform in serial
  * @extends AnimationStep
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // A series animation is useful when executed with a number
+ * // of parallel steps
+ * const series = new Fig.Animation.SerialAnimationStep([
+ *   p.animations.scale({ target: 0.5, duration: 1 }),
+ *   p.animations.scale({ target: 2, duration: 1 }),
+ *   p.animations.scale({ target: 1, duration: 2 }),
+ * ]);
+ * p.animations.new()
+ *   .delay(1)
+ *   .inParallel([
+ *     series,
+ *     p.animations.color({ target: [0, 0, 1, 1], duration: 4 }),
+ *     p.animations.rotation({ target: Math.PI, duration: 4 }),
+ *   ])
+ *   .start();
+ *
+ * @example
+ * // Use `AnimationBuilder` for a more clean look
+ * p.animations.new()
+ *   .delay(1)
+ *   .inParallel([
+ *     p.animations.builder()
+ *       .scale({ target: 0.5, duration: 1 })
+ *       .scale({ target: 2, duration: 1 })
+ *       .scale({ target: 1, duration: 2 }),
+ *     p.animations.color({ target: [0, 0, 1, 1], duration: 4 }),
+ *     p.animations.rotation({ target: Math.PI, duration: 4 }),
+ *   ])
+ *   .start();
  */
 export class SerialAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
   index: number;
 
+  /**
+   * @hideconstructor
+   */
   constructor(
     stepsOrOptionsIn: Array<AnimationStep> | OBJ_SerialAnimationStep = {},
     ...optionsIn: Array<OBJ_SerialAnimationStep>

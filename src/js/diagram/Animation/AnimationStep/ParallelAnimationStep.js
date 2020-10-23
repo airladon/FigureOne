@@ -23,6 +23,9 @@ export type OBJ_ParallelAnimationStep = {
 export class ParallelAnimationStep extends AnimationStep {
   steps: Array<AnimationStep>;
 
+  /**
+   * @hideconstructor
+   */
   constructor(
     stepsOrOptionsIn: Array<AnimationStep | null> | OBJ_ParallelAnimationStep = {},
     ...optionsIn: Array<OBJ_ParallelAnimationStep>

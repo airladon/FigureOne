@@ -153,10 +153,32 @@ diagram.addElement({
 const p = diagram.getElement('p');
 diagram.initialize();
 
+
+// const series = new Fig.Animation.SerialAnimationStep([
+//   p.animations.scale({ target: 0.5, duration: 1 }),
+//   p.animations.scale({ target: 2, duration: 1 }),
+//   p.animations.scale({ target: 1, duration: 2 }),
+// ]);
 p.animations.new()
   .delay(1)
-  .transform({ target: new Fig.Transform().scale(0.5, 2).rotate(Math.PI).translate(1, 0), duration: 2 })
-  .scale({ target: [1, 1], duration: 2 })
-  .dissolveOut(1)
-  .whenFinished(() => { console.log('animation done') })
+  .inParallel([
+    p.animations.builder()
+      .scale({ target: 0.5, duration: 1 })
+      .scale({ target: 2, duration: 1 })
+      .scale({ target: 1, duration: 2 }),
+    p.animations.color({ target: [0, 0, 1, 1], duration: 4 }),
+    p.animations.rotation({ target: Math.PI, duration: 4 }),
+  ])
   .start();
+// const steps = [
+//   p.animations.position({ target: [1, 1], duration: 2 }),
+//   p.animations.scale({ target: [0.5, 0.5], duration: 1 }),
+//   p.animations.scenario({ target: { position: [0, 0], rotation: Math.PI }, duration: 2}),
+// ];
+
+// p.animations.new()
+//   .inParallel([
+//     new Fig.Animation.SerialAnimationStep(steps),
+//     new Fig.Animation.ColorAnimationStep({ element: p, target: [0, 0, 1, 1], duration: 5}),
+//   ])
+//   .start();

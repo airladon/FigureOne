@@ -88,36 +88,107 @@ export type TypeAnimationManagerInputOptions = {
  * This class manages animations and creates animation steps for use in
  * animations.
  *
- * Animation managers are the `animations` property of a {@link DiagramElement}.
+ * Each {@link DiagramElement} has its own `AnimationManager` in the
+ * `animations` property, though any
+ * animation manager can animate any other element. Therefore all parallel
+ * animations can go through the same manager, or be spread throughout
+ * different element's animation managers. Spread animations out between
+ * elements, or keeping them all in one `AnimationManager` can change how
+ * readable code is, how convenient it is to cancel running animations, and
+ * what order the animations are performed in (`AnimationManager`s tied
+ * to elements drawn earlier will perform their animation steps before those
+ * tied to elements drawn later). `AnimationManager`s will only be processed
+ * on each animation frame if the element they are tied to is not hidden.
  *
- * The `animations` property is an array that contains a number of parallel
- * animation steps.
+ * The `animations` property within `AnimationManager` is simply an array that
+ * contains a number {@link AnimationStep}s that are executed in parallel.
+ * Typically, these steps would themselves be {@link SerialAnimationStep}s or a
+ * series of animations. This means the animation manager is running a number of
+ * animation series in parallel.
  *
+ *
+ * The `AnimationManager`s on {@link DiagramElement}s should be used instead
+ * of instantiating this class separately, as those on `DiagramElements` will
+ * be automatically processed every animation frame.
+ *
+ * @param
  * @property {'animating' | 'idle' | 'waitingToStart'} state
  * @property {Array<AnimationStep>} animations
  * @property {SubscriptionManager} subscriptions
  * @see {@link DiagramElement}
+ * @see {@link AnimationBuilder}
  * @example
- * // animate a position animation step, then rotation animation step
+ * // At its heart the `AnimationManager` is just executing
+ * // an array of animation steps.
+ *
+ * // Create animation steps
+ * const position = new Fig.Animation.PositionAnimationStep({
+ *   element: p,
+ *   target: [1, 0],
+ *   duration: 2,
+ * });
+ * const rotation = new Fig.Animation.RotationAnimationStep({
+ *   element: p,
+ *   target: Math.PI,
+ *   duration: 2,
+ * });
+ *
+ * // Combine the animations into a SerialAnimationStep
+ * const series = new Fig.Animation.SerialAnimationStep([
+ *   position,
+ *   rotation,
+ * ]);
+ *
+ * // Add the animations to the animation manager and start
+ * p.animations.animations.push(series);
+ * p.animations.start();
+ *
+ * @example
+ * // Using the `new` method in `AnimationManager` creates a convenient
+ * // `AnimationBuilder` which extends a `SerialAnimationStep` by using
+ * // a fluent API pattern
+ * //
+ * // Create animation steps
+ * const position = new Fig.Animation.PositionAnimationStep({
+ *   element: p,
+ *   target: [1, 0],
+ *   duration: 2,
+ * });
+ * const rotation = new Fig.Animation.RotationAnimationStep({
+ *   element: p,
+ *   target: Math.PI,
+ *   duration: 2,
+ * });
+ *
+ * // Build and start the animation
  * p.animations.new()
- *   .then(p.animations.position({ target: [0.5, 0], duration: 2 }))
- *   .then(p.animations.rotation({ target: Math.PI, duration: 2 }))
+ *   .then(position)
+ *   .then(rotation)
  *   .start();
  *
  * @example
- * // simple animations can create animation steps more elegantly
+ * // `AnimationStep`s can also be created from the `AnimationManager`
+ * // with the added convenience that the `DiagramElement` that
+ * // has the `AnimationManager` will be used as the default
+ * // `element` property. This combined with the `AnimationBuilder`
+ * // makes defining most animations clean and readable code
+ *
+ * // Build and start the animation
  * p.animations.new()
- *   .position({ target: [0.5, 0], duration: 2 })
+ *   .position({ target: [1, 0], duration: 2 })
  *   .rotation({ target: Math.PI, duration: 2 })
  *   .start();
  *
  * @example
- * // parallel animations must use explicit animation steps
+ * // Parallel animations however still need to use explicit animation steps.
+ * // Creating the steps from the `AnimationManager` means the `element` doesn't
+ * // need to be defined.
+ * //
  * p.animations.new()
  *   .inParallel([
- *      p.animations.position({ target: [-0.5, 0.5], duration: 2 }),
- *      p.animations.scale({ target: 0.5, duration: 2 })
- *    ])
+ *     p.animations.position({ target: [1, 0], duration: 2 }),
+ *     p.animations.rotation({ target: Math.PI, duration: 2 })
+ *   ])
  *   .start();
  */
 export default class AnimationManager {
@@ -141,7 +212,7 @@ export default class AnimationManager {
   /* eslint-enable max-len */
 
   /**
-   * @private
+   * @hideconstructor
    */
   constructor(
     elementOrOptionsIn: DiagramElement | TypeAnimationManagerInputOptions = {},

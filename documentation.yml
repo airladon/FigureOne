@@ -35,13 +35,8 @@ toc:
     file: ./docs/tutorials/animation/animation.md
   - AnimationManager
   - AnimationBuilder
-  - AnimationStep
   - SerialAnimationStep
   - ParallelAnimationStep
-  - DelayAnimationStep
-  - TriggerAnimationStep
-  - CustomAnimationStep
-  - ElementAnimationStep
   - PositionAnimationStep
   - RotationAnimationStep
   - ScaleAnimationStep
@@ -53,23 +48,8 @@ toc:
   - OpacityAnimationStep
   - DissolveInAnimationStep
   - DissolveOutAnimationStep
-  - OBJ_AnimationBuilder
-  - OBJ_AnimationStep
-  - OBJ_AnimationStart
-  - OBJ_SerialAnimationStep
-  - OBJ_ParallelAnimationStep
-  - OBJ_TriggerAnimationStep
-  - OBJ_CustomAnimationStep
-  - OBJ_ElementAnimationStep
-  - OBJ_PositionAnimationStep
-  - OBJ_RotationAnimationStep
-  - OBJ_ScaleAnimationStep
-  - OBJ_TransformAnimationStep
-  - OBJ_ScenarioAnimationStep
-  - OBJ_ScenarioVelocity
-  - OBJ_ScenariosAnimationStep
-  - OBJ_ColorAnimationStep
-  - OBJ_OpacityAnimationStep
+  - TriggerAnimationStep
+  - CustomAnimationStep
   - name: Equation Elements Types
   # - TypeEquationElement
   - TypeEquationElements
@@ -144,6 +124,27 @@ toc:
   - OBJ_TextLinesDefinition
   - OBJ_TextModifierDefinition
   - OBJ_TextModifiersDefinition
+  - name: Misc Animation
+  - AnimationStep
+  - DelayAnimationStep
+  - ElementAnimationStep
+  - OBJ_AnimationBuilder
+  - OBJ_AnimationStep
+  - OBJ_AnimationStart
+  - OBJ_SerialAnimationStep
+  - OBJ_ParallelAnimationStep
+  - OBJ_TriggerAnimationStep
+  - OBJ_CustomAnimationStep
+  - OBJ_ElementAnimationStep
+  - OBJ_PositionAnimationStep
+  - OBJ_RotationAnimationStep
+  - OBJ_ScaleAnimationStep
+  - OBJ_TransformAnimationStep
+  - OBJ_ScenarioAnimationStep
+  - OBJ_ScenarioVelocity
+  - OBJ_ScenariosAnimationStep
+  - OBJ_ColorAnimationStep
+  - OBJ_OpacityAnimationStep
   - name: tools
     description: These are generic tools
     children:
