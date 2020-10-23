@@ -35,21 +35,20 @@ toc:
     file: ./docs/tutorials/animation/animation.md
   - AnimationManager
   - AnimationBuilder
+  - OBJ_PositionAnimationStep
+  - OBJ_RotationAnimationStep
+  - OBJ_ScaleAnimationStep
+  - OBJ_CustomAnimationStep
+  - OBJ_TriggerAnimationStep
+  - OBJ_ElementAnimationStep
+  - OBJ_TransformAnimationStep
+  - OBJ_ScenarioAnimationStep
+  - OBJ_ScenarioVelocity
+  - OBJ_ScenariosAnimationStep
+  - OBJ_ColorAnimationStep
+  - OBJ_OpacityAnimationStep
   - SerialAnimationStep
   - ParallelAnimationStep
-  - PositionAnimationStep
-  - RotationAnimationStep
-  - ScaleAnimationStep
-  - TransformAnimationStep
-  - ScenarioAnimationStep
-  - ColorAnimationStep
-  - DimAnimationStep
-  - UndimAnimationStep
-  - OpacityAnimationStep
-  - DissolveInAnimationStep
-  - DissolveOutAnimationStep
-  - TriggerAnimationStep
-  - CustomAnimationStep
   - name: Equation Elements Types
   # - TypeEquationElement
   - TypeEquationElements
@@ -133,18 +132,19 @@ toc:
   - OBJ_AnimationStart
   - OBJ_SerialAnimationStep
   - OBJ_ParallelAnimationStep
-  - OBJ_TriggerAnimationStep
-  - OBJ_CustomAnimationStep
-  - OBJ_ElementAnimationStep
-  - OBJ_PositionAnimationStep
-  - OBJ_RotationAnimationStep
-  - OBJ_ScaleAnimationStep
-  - OBJ_TransformAnimationStep
-  - OBJ_ScenarioAnimationStep
-  - OBJ_ScenarioVelocity
-  - OBJ_ScenariosAnimationStep
-  - OBJ_ColorAnimationStep
-  - OBJ_OpacityAnimationStep
+  - PositionAnimationStep
+  - RotationAnimationStep
+  - ScaleAnimationStep
+  - TransformAnimationStep
+  - ScenarioAnimationStep
+  - ColorAnimationStep
+  - DimAnimationStep
+  - UndimAnimationStep
+  - OpacityAnimationStep
+  - DissolveInAnimationStep
+  - DissolveOutAnimationStep
+  - TriggerAnimationStep
+  - CustomAnimationStep
   - name: tools
     description: These are generic tools
     children:

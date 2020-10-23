@@ -8,13 +8,16 @@ import type { DiagramElement } from '../../Element';
 
 /**
  * Animation progression function.
- * Function is passed the percent complete of the animation duration and
- * returns the percent complete of the delta between the target and start
- * values of the animation.
  *
- * A linear function would return the same percent as is passed. However,
- * the returned percent would change if some smoothing was desired at the
- * start or end of the animation.
+ * As the animation time progresses, a percentage of the total animation
+ * duration will be passed to this function.
+ *
+ * This function then calculates and returns the percent progress of the
+ * animation.
+ *
+ * This function can be used to make non-linear progressions of an animation.
+ * For instance, it could be used to create a progression that is slowed
+ * at the start or end of the animation.
  *
  * @param {number} percent percentage of duration
  * @return {number} percent of animation complete

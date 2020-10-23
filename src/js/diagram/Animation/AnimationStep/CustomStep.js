@@ -10,35 +10,31 @@ import AnimationStep from '../AnimationStep';
 import type { DiagramElement } from '../../Element';
 
 /**
- * Custom  animation step options object
- *
- * @extends OBJ_AnimationStep
- * @property {string | function(int): void} callback function to run each
- * animation frame
- * @property {number} [startPercent] percent to start animation at (`0`)
- * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
- * how the animation progresses - defaults to `linear` for color, opacity and
- * custom animations and `easeinout` for others
- */
-export type OBJ_CustomAnimationStep = {
-  callback?: string | ((number) => void);
-  startPercent?: number;
-  progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number;
-} & OBJ_AnimationStep;
-
-/**
- * Custom animation step
+ * {@link CustomAnimationStep} options object
  *
  * ![](./assets1/custom_animation.gif)
+ *
+ * Custom animation steps are useful for orchestrating complex animations, or
+ * performing non-linear animations.
  *
  * This step will execute a custom callback function on each animation frame
  * for the duration of the animation. The callback function will be passed the
  * percentage progress of the animation.
  *
- * Custom animation steps are useful for orchestrating complex animations, or
- * performing non-linear animations.
+ * The percentage progress can either be linear with time, or non-linear.
+ * Built-in non-linear progressions are `'easeinout'`, `'easein`' and
+ * `'easeout'` which will slow progress at the start or end of the animation.
+ * A function to create a custom non-linear progressor can also be used.
  *
- * @extends AnimationStep
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @extends OBJ_AnimationStep
+ *
+ * @property {string | function(int): void} callback function to run each
+ * animation frame
+ * @property {number} [startPercent] percent to start animation at (`0`)
+ * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
@@ -56,12 +52,28 @@ export type OBJ_CustomAnimationStep = {
  *   .custom({ callback: sine, duration: 5 })
  *   .start();
  */
+export type OBJ_CustomAnimationStep = {
+  callback?: string | ((number) => void);
+  startPercent?: number;
+  progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number;
+} & OBJ_AnimationStep;
+
+/**
+ * Custom animation step
+ *
+ * @extends AnimationStep
+ *
+ * @param {OBJ_CustomAnimationStep} options
+ */
 export class CustomAnimationStep extends AnimationStep {
   element: ?Object;
   callback: ?(number) => void;
   startPercent: ?number;
   progression: string | ((number, ?boolean) => number);
 
+  /**
+   * @hideconstructor
+   */
   constructor(...optionsIn: Array<OBJ_CustomAnimationStep>) {
     const AnimationStepOptionsIn = joinObjects({}, ...optionsIn);
     super(AnimationStepOptionsIn);

@@ -11,14 +11,21 @@ import type {
 import ElementAnimationStep from '../ElementAnimationStep';
 
 /**
- * Rotation animation step options object
+ * {@link RotationAnimationStep} step options object
+ *
+ * ![](./assets1/rotation_animation.gif)
+ *
+ * The rotation animation step animates the first {@link Rotation} transform
+ * in the {@link DiagramElement}'s {@link Transform}.
  *
  * By default, the rotation will start with the element's current rotation.
  *
  * Use either `delta` or `target` to define it's end point
  *
  * `clipTo` will clip the element's rotation during animation
+ *
  * @extends OBJ_ElementAnimationStep
+ *
  * @property {number} [start]
  * @property {number} [target]
  * @property {number} [delta]
@@ -26,11 +33,42 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * `duration` - `null` to use `duration` (`null`)
  * @property {0 | 1 | -1 | 2} [direction] where `0` is quickest direction, `1`
  * is positive of CCW direction, `-1` is negative of CW direction and `2` is
- * whichever direction doesn't pass through angle 0.
- * @property {'0to360' | '-180to180' | null} [clipTo]
- * @property {number} [maxDuration]
+ * whichever direction doesn't pass through angle 0 (`0`).
+ * @property {'0to360' | '-180to180' | null} [clipTo] (`null`)
+ * @property {number | null} [maxDuration] maximum duration to clip animation
+ * to where `null` is unlimited (`null`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Using duration
+ * p.animations.new()
+ *   .rotation({ target: Math.PI, duration: 2 })
+ *   .start();
+ *
+ * @example
+ * // Using velocity
+ * p.animations.new()
+ *   .rotation({ target: Math.PI, velocity: Math.PI / 2 })
+ *   .start();
+ *
+ * @example
+ * // Different ways to create a stand alone step
+ * const step1 = p.animations.rotation({ target: Math.PI, duration: 2 });
+ * const step2 = new Fig.Animation.RotationAnimationStep({
+ *   element: p,
+ *   target: 0,
+ *   direction: -1,
+ *   duration: 2,
+ * });
+ *
+ * p.animations.new()
+ *   .then(step1)
+ *   .then(step2)
+ *   .start();
  */
-export type OBJ_RotationAnimationStep = {
+ export type OBJ_RotationAnimationStep = {
   start?: number;      // default is element transform
   target?: number;     // Either target or delta must be defined
   delta?: number;      // delta overrides target if both are defined
@@ -53,8 +91,10 @@ export type OBJ_RotationAnimationStep = {
 //
 
 /**
- * Rotation Animation Step
+ * Rotation animation Step
+ *
  * @extends ElementAnimationStep
+ * @param {OBJ_RotationAnimationStep} options
  */
 export default class RotationAnimationStep extends ElementAnimationStep {
   rotation: {
@@ -67,6 +107,9 @@ export default class RotationAnimationStep extends ElementAnimationStep {
     clipTo: '0to360' | '-180to180' | null;
   };
 
+  /**
+   * @hideconstructor
+   */
   constructor(...optionsIn: Array<OBJ_RotationAnimationStep>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'rotation' }, ...optionsIn);

@@ -140,6 +140,7 @@ export class SerialAnimationStep extends AnimationStep {
     });
   }
 
+  // $FlowFixMe
   start(startTime: ?AnimationStartTime = null) {
     if (this.state !== 'animating') {
       this.startWaiting();

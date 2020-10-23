@@ -16,18 +16,25 @@ import type { AnimationStartTime } from '../../AnimationManager';
 // import type { DiagramElement } from '../../../Element';
 
 /**
- * Position animation step options object
+ * {@link PositionAnimationStep} options object
+ *
+ * ![](./assets1/position_animation.gif)
+ *
+ * The position animation step animates the first {@link Translation} transform
+ * in the {@link DiagramElement}'s {@link Transform}.
  *
  * By default, the position will start with the element's current position.
  *
  * Use either `delta` or `target` to define it's end point.
  *
  * The path of travel between `start` and `target` can either be a straight
- * line (`'linear'`) or a quadratic bezier curve (`'curved'`)
+ * line (`'linear'`) or a quadratic bezier curve (`'curve'`)
  *
  * For custom paths, the @{link CustomAnimationStep} can be used.
  *
+ *
  * @extends OBJ_ElementAnimationStep
+ *
  * @property {TypeParsablePoint} [start] start position - if undefined then
  * current position is used
  * @property {TypeParsablePoint} [target] target position - if undefined then
@@ -39,8 +46,8 @@ import type { AnimationStartTime } from '../../AnimationManager';
  * @property {number} [null | maxDuration] maximum duration to cap to -
  * `null` for no cap (`null`)
  * @property {OBJ_TranslationPath} [path] (`{ style: 'linear' }`)
- *
- * @extends ElementAnimationStep
+ * @property {number | null} [maxDuration] maximum duration to clip animation
+ * to where `null` is unlimited (`null`)
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
@@ -58,17 +65,33 @@ import type { AnimationStartTime } from '../../AnimationManager';
  *   .start()
  *
  * @example
- * // Curved path
+ * // Linear and curved path
  * p.animations.new()
+ *   .delay(1)
+ *   .position({ target: [1, 0], duration: 2 })
  *   .position({
- *     start: [0, 0],
- *     target: [1, 0],
+ *     target: [0, 0],
  *     duration: 2,
  *     path: {
  *       style: 'curve',
+ *       magnitude: 0.8,
  *       direction: 'up',
  *     },
  *   })
+ *   .start();
+ *
+ * @example
+ * // Different ways to create a stand-alone step
+ * const step1 = p.animations.position({ target: [1, 0], duration: 2 });
+ * const step2 = new Fig.Animation.PositionAnimationStep({
+ *   element: p,
+ *   target: [0, 0],
+ *   duration: 2,
+ * });
+ *
+ * p.animations.new()
+ *   .then(step1)
+ *   .then(step2)
  *   .start();
  */
 export type OBJ_PositionAnimationStep = {
@@ -83,8 +106,11 @@ export type OBJ_PositionAnimationStep = {
 } & OBJ_ElementAnimationStep;
 
 /**
- * Position or Translation Animation Step
+ * Position animation step
+ *
  * @extends ElementAnimationStep
+ *
+ * @param {OBJ_PositionAnimationStep} options
  */
 export default class PositionAnimationStep extends ElementAnimationStep {
   position: {
@@ -98,6 +124,9 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     maxDuration: ?number;
   };
 
+  /**
+   * @hideconstructor
+   */
   constructor(...optionsIn: Array<OBJ_PositionAnimationStep>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'position' }, ...optionsIn);

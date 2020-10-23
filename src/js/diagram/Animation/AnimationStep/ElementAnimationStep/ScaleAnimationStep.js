@@ -11,20 +11,59 @@ import type {
 import ElementAnimationStep from '../ElementAnimationStep';
 
 /**
- * Scale animation step options object
+ * {@link ScaleAnimationStep} options object
+ *
+ * ![](./assets1/scale_animation.gif)
+ *
+ * The scale animation step animates the first {@link Scale} transform
+ * in the {@link DiagramElement}'s {@link Transform}.
  *
  * By default, the scale will start with the element's current scale.
  *
- * Use either `delta` or `target` to define it's end point
+ * Use either `delta` or `target` to define it's end point.
  *
- * `clipTo` will clip the element's rotation during animation
+ * Scale can be defined as either a point or number. If number,
+ * both x and y scale terms will be the same.
+ *
+ *
  * @extends OBJ_ElementAnimationStep
+ *
  * @property {TypeParsablePoint | number} [start]
  * @property {TypeParsablePoint | number} [target]
  * @property {TypeParsablePoint | number} [delta]
  * @property {null | TypeParsablePoint | number} [velocity] velocity of scale
  * overrides `duration` - `null` to use `duration` (`null`)
- * @property {number} [maxDuration]
+ * @property {number | null} [maxDuration] maximum duration to clip animation
+ * to where `null` is unlimited (`null`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Using duration
+ * p.animations.new()
+ *   .scale({ target: 2, duration: 2 })
+ *   .start();
+ *
+ * @example
+ * // Using velocity
+ * p.animations.new()
+ *   .scale({ target: 2, velocity: 0.5 })
+ *   .start();
+ *
+ * @example
+ * // Different ways to create a stand alone step
+ * const step1 = p.animations.scale({ target: 1.5, duration: 2 });
+ * const step2 = new Fig.Animation.ScaleAnimationStep({
+ *   element: p,
+ *   target: 1,
+ *   duration: 2,
+ * });
+ *
+ * p.animations.new()
+ *   .then(step1)
+ *   .then(step2)
+ *   .start();
  */
 export type OBJ_ScaleAnimationStep = {
   start?: Point | number;      // default is element transform
@@ -37,6 +76,7 @@ export type OBJ_ScaleAnimationStep = {
 /**
  * Scale Animation Step
  * @extends ElementAnimationStep
+ * @param {OBJ_ScaleAnimationStep} options
  */
 export default class ScaleAnimationStep extends ElementAnimationStep {
   scale: {
@@ -47,6 +87,9 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
     maxDuration: ?number;
   };
 
+  /**
+   * @hideconstructor
+   */
   constructor(...optionsIn: Array<OBJ_ScaleAnimationStep>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'position' }, ...optionsIn);

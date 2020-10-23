@@ -14,13 +14,29 @@ import type {
 import ElementAnimationStep from '../ElementAnimationStep';
 
 /**
- * Transform animation step options object
+ * {@link TransformAnimationStep} options object
+ *
+ * ![](./assets1/transform_animation.gif)
  *
  * By default, the transform will start with the element's current transform.
  *
- * Use either `delta` or `target` to define it's end point
+ * A {@link Transform} chains many transform links where each link might be
+ * a {@link Rotation}, {@link Scale} or {@link Translation} transform.
+ *
+ * `start`, `target` and `delta` should have the same order of transform links
+ * as the `element`'s transform.
+ *
+ * The {@link TransformAnimationStep} will animate each of these links with the
+ * same duration. If `velocity` is used to calculate the duration, then the link
+ * with the longest duration will define the duration of the animation.
+ * `velocity` can either be a transform with the same order of transform links
+ * as the `element` or it can be a constant value, which will be applied to
+ * all transform links. `velocity` cannot be 0.
+ *
+ * Use either `delta` or `target` to define it's end point of the animation.
  *
  * @extends OBJ_ElementAnimationStep
+ *
  * @property {TypeParsableTransform} [start]
  * @property {TypeParsableTransform} [target]
  * @property {TypeParsableTransform} [delta]
@@ -30,9 +46,66 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * (`{ style: 'linear' }`)
  * @property {0 | 1 | -1 | 2} [rotDirection] where `0` is quickest direction,
  * `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
- * whichever direction doesn't pass through angle 0.
+ * whichever direction doesn't pass through angle 0 (`0`).
  * @property {'0to360' | '-180to180' | null} [clipRotationTo]
- * @property {number} [maxDuration]
+ * @property {number | null} [maxDuration] maximum duration to clip animation
+ * to where `null` is unlimited (`null`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Using duration
+ * p.animations.new()
+ *   .transform({
+ *     target: new Fig.Transform().scale(2, 2).rotate(0.5).translate(1, 0),
+ *     duration: 2,
+ *   })
+ *   .start();
+ *
+ * @example
+ * // Using velocity as a transform
+ * p.animations.new()
+ *   .transform({
+ *     target: new Fig.Transform().scale(2, 2).rotate(0.5).translate(1, 0),
+ *     velocity: new Fig.Transform().scale(0.5, 0.5).rotate(0.25).translate(0.5, 0.5),
+ *   })
+ *   .start();
+ *
+ * @example
+ * // Using velocity as a number
+ * p.animations.new()
+ *   .transform({
+ *     target: new Fig.Transform().scale(2, 2).rotate(0.5).translate(1, 0),
+ *     velocity: 0.5,
+ *   })
+ *   .start();
+ *
+ * @example
+ * // Using TypeParsableTransform as transform definition
+ * p.animations.new()
+ *   .transform({
+ *     target: [['s', 1.5, 1.5], ['r', 0.5], ['t', 1, 0]],
+ *     duration: 2,
+ *   })
+ *   .start();
+ *
+ * @example
+ * // Different ways to create a stand alone step
+ * const step1 = p.animations.transform({
+ *   target: [['s', 1.5, 1.5], ['r', 1], ['t', 1, 0]],
+ *   duration: 2,
+ * });
+ * const step2 = new Fig.Animation.TransformAnimationStep({
+ *   element: p,
+ *   target: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
+ *   duration: 2,
+ * });
+ * 
+ * p.animations.new()
+ *   .then(step1)
+ *   .then(step2)
+ *   .start();
  */
 export type OBJ_TransformAnimationStep = {
   start?: Transform;      // default is element transform
@@ -59,6 +132,7 @@ export type OBJ_TransformAnimationStep = {
 /**
  * Transform Animation Step
  * @extends ElementAnimationStep
+ * @param {OBJ_TransformAnimationStep} options
  */
 export default class TransformAnimationStep extends ElementAnimationStep {
   transform: {
@@ -72,6 +146,9 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     maxDuration: ?number;
   };
 
+  /**
+   * @hideconstructor
+   */
   constructor(...optionsIn: Array<OBJ_TransformAnimationStep>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'transform' }, ...optionsIn);
@@ -110,7 +187,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     if (options.delta != null) {
       options.delta = getTransform(options.delta);
     }
-    if (options.velocity != null) {
+    if (options.velocity != null && typeof options.velocity !== 'number') {
       options.velocity = getTransform(options.velocity);
     }
     // $FlowFixMe
