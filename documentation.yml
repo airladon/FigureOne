@@ -39,14 +39,12 @@ toc:
   - OBJ_RotationAnimationStep
   - OBJ_ScaleAnimationStep
   - OBJ_CustomAnimationStep
-  - OBJ_TriggerAnimationStep
-  - OBJ_ElementAnimationStep
   - OBJ_TransformAnimationStep
   - OBJ_ScenarioAnimationStep
-  - OBJ_ScenarioVelocity
-  - OBJ_ScenariosAnimationStep
+  - OBJ_TriggerAnimationStep
   - OBJ_ColorAnimationStep
   - OBJ_OpacityAnimationStep
+  - OBJ_ScenariosAnimationStep
   - SerialAnimationStep
   - ParallelAnimationStep
   - name: Equation Elements Types
@@ -124,6 +122,8 @@ toc:
   - OBJ_TextModifierDefinition
   - OBJ_TextModifiersDefinition
   - name: Misc Animation
+  - OBJ_ElementAnimationStep
+  - OBJ_ScenarioVelocity
   - AnimationStep
   - DelayAnimationStep
   - ElementAnimationStep

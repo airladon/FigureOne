@@ -3,7 +3,7 @@ import {
   Transform, getMaxTimeFromVelocity, getScale, getTransform,
 } from '../../../../tools/g2';
 import type {
-  pathOptionsType, TypeParsableTransform, TypeParsablePoint,
+  OBJ_TranslationPath, TypeParsableTransform, TypeParsablePoint,
 
 } from '../../../../tools/g2';
 import {
@@ -19,7 +19,6 @@ import { areColorsSame } from '../../../../tools/color';
 import { ParallelAnimationStep } from '../ParallelAnimationStep';
 import type { DiagramElement, OBJ_Scenario } from '../../../Element';
 import type { AnimationStartTime } from '../../AnimationManager';
-
 
 /**
  * Transform, color and visbility scenario definition
@@ -47,20 +46,30 @@ export type OBJ_ScenarioVelocity = {
 };
 
 /**
- * Scenario animation step options object
+ * {@link ScenarioAnimationStep} options object
  *
- * By default, the scenario will start with the element's current scenario.
+ * ![](./assets1/scenario_animation.gif)
+ *
+ * A scenario defines an element's transform and color and can be used to make
+ * code more readable and reusable.
+ *
+ * By default, the scenario will start with the element's current transform and
+ * color.
  *
  * @extends OBJ_ElementAnimationStep
+ *
  * @property {string | OBJ_Scenario} [start]
  * @property {string | OBJ_Scenario} [target]
  * @property {null | string | OBJ_ScenarioVelocity} [velocity] velocity
  * will override duration with a calculated duration based on
  * the `start`, `target` and `velocity`. If `null` is used
- * then `duration` will not be overriden (`null`)
- * @property {number} [maxDuration]
- * @property {number} [zeroDurationThreshold]
- * @property {boolean} [allDurationsSame]
+ * then `duration` will not be overriden. Any scenario velocity elements that
+ * are undefined will default to 1 (`null`)
+ * @property {number | null} [maxDuration] maximum duration to clip animation
+ * to where `null` is unlimited (`null`)
+ * @property {number} [zeroDurationThreshold] value considered 0 to stop
+ * animation - this is useful when numbers get very small and rounding problems
+ * with javascripts floating point implementation arise
  * @property {OBJ_TranslationPath} [path] translation path style and options
  * (`{ style: 'linear' }`)
  * @property {0 | 1 | -1 | 2} [rotDirection] where `0` is quickest direction,
@@ -68,8 +77,53 @@ export type OBJ_ScenarioVelocity = {
  * whichever direction doesn't pass through angle 0.
  * @property {'0to360' | '-180to180' | null} [clipRotationTo]
  * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
- * how the animation progresses - defaults to `linear` for color, opacity and
- * custom animations and `easeinout` for others
+ * (`'easeinout'`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // NOTE - use these scenario definitions for all examples below
+ * p.scenarios['center'] = { position: [0, 0], scale: [1, 1], color: [1, 0, 0, 1] }  * ;
+ * p.scenarios['right'] = { position: [1, 0], scale: [2, 1], color: [0, 0, 1, 1] };
+ * p.scenarios['bottom'] = { position: [0, -0.5], scale: [0.5, 1], color: [0, 0.5, 0, 1] };
+ *
+ * @example
+ * // Using duration
+ * p.animations.new()
+ *   .scenario({ target: 'right', duration: 2 })
+ *   .scenario({ target: 'bottom', duration: 2 })
+ *   .scenario({ target: 'center', duration: 2 })
+ *   .start();
+ *
+ * @example
+ * // Using velocity
+ * p.animations.new()
+ *   .scenario({
+ *     target: 'right',
+ *     velocity: { position: 0.5, scale: 0.2 },
+ *   })
+ *   .scenario({ target: 'bottom', velocity: { position: 0.5 } })
+ *   .scenario({ target: 'center', velocity: { color: 0.2 } })
+ *   .start();
+ *
+ * @example 
+ * // Different ways to create a stand alone step
+ * const step1 = p.animations.scenario({
+ *   target: 'right',
+ *   duration: 2,
+ * });
+ * const step2 = new Fig.Animation.ScenarioAnimationStep({
+ *   element: p,
+ *   target: 'bottom',
+ *   duration: 2,
+ * });
+ *
+ * @example
+ * p.animations.new()
+ *   .then(step1)
+ *   .then(step2)
+ *   .start();
  */
 export type OBJ_ScenarioAnimationStep = {
   start?: string | OBJ_Scenario;
@@ -88,6 +142,7 @@ export type OBJ_ScenarioAnimationStep = {
 /**
  * Scenario Animation Step
  * @extends ElementAnimationStep
+ * @param {OBJ_ScenarioAnimationStep} options
  */
 export default class ScenarioAnimationStep extends ParallelAnimationStep {
   element: ?DiagramElement;
@@ -105,6 +160,9 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     // minDuration: number;
   };
 
+  /**
+   * @hideconstructor
+   */
   constructor(...optionsIn: Array<OBJ_ScenarioAnimationStep>) {
     const AnimationStepOptionsIn =
       joinObjects({}, { type: 'scenario' }, ...optionsIn);

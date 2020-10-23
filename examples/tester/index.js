@@ -153,50 +153,41 @@ diagram.addElement({
 const p = diagram.getElement('p');
 diagram.initialize();
 
-// Different ways to create a stand alone step
-const step1 = p.animations.transform({
-  target: [['s', 1.5, 1.5], ['r', 1], ['t', 1, 0]],
-  duration: 2,
-});
-const step2 = new Fig.Animation.TransformAnimationStep({
-  element: p,
-  target: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
-  duration: 2,
-});
+p.scenarios['center'] = { position: [0, 0], scale: [1, 1], color: [1, 0, 0, 1] };
+p.scenarios['right'] = { position: [1, 0], scale: [2, 1], color: [0, 0, 1, 1] };
+p.scenarios['bottom'] = { position: [0, -0.5], scale: [0.5, 1], color: [0, 0.5, 0, 1] };
 
+// Using duration
 p.animations.new()
-  .then(step1)
-  .then(step2)
+  .delay(1)
+  .scenario({ target: 'right', duration: 2 })
+  .scenario({ target: 'bottom', duration: 2 })
+  .scenario({ target: 'center', duration: 2 })
   .start();
 
-// // Using duration
+// // Using velocity
 // p.animations.new()
-//   .transform({
-//     target: new Fig.Transform().scale(2, 2).rotate(0.5).translate(1, 0),
-//     duration: 2,
+//   .scenario({
+//     target: 'right',
+//     velocity: { position: 0.5, scale: 0.2 },
 //   })
+//   .scenario({ target: 'bottom', velocity: { position: 0.5 } })
+//   .scenario({ target: 'center', velocity: { color: 0.2 } })
 //   .start();
 
-// // Using velocity as a transform
-// p.animations.new()
-//   .transform({
-//     target: new Fig.Transform().scale(2, 2).rotate(0.5).translate(1, 0),
-//     velocity: new Fig.Transform().scale(0.5, 0.5).rotate(0.25).translate(0.5, 0.5),
-//   })
-//   .start();
 
-// // Using velocity as a number
-// p.animations.new()
-//   .transform({
-//     target: new Fig.Transform().scale(2, 2).rotate(0.5).translate(1, 0),
-//     velocity: 0.5,
-//   })
-//   .start();
+// // Different ways to create a stand alone step
+// const step1 = p.animations.scenario({
+//   target: 'right',
+//   duration: 2,
+// });
+// const step2 = new Fig.Animation.ScenarioAnimationStep({
+//   element: p,
+//   target: 'bottom',
+//   duration: 2,
+// });
 
-// // Using TypeParsableTransform as transform definition
 // p.animations.new()
-//   .transform({
-//     target: [['s', 1.5, 1.5], ['r', 0.5], ['t', 1, 0]],
-//     duration: 2,
-//   })
+//   .then(step1)
+//   .then(step2)
 //   .start();

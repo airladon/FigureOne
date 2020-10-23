@@ -20651,9 +20651,20 @@ custom animations and
   </div>
   
 
-  <p>Transform animation step options object</p>
+  <p><a href="#transformanimationstep">TransformAnimationStep</a> options object</p>
+<p><img src="./assets1/transform_animation.gif"></p>
 <p>By default, the transform will start with the element's current transform.</p>
-<p>Use either <code>delta</code> or <code>target</code> to define it's end point</p>
+<p>A <a href="#transform">Transform</a> chains many transform links where each link might be
+a <a href="#rotation">Rotation</a>, <a href="#scale">Scale</a> or <a href="#translation">Translation</a> transform.</p>
+<p><code>start</code>, <code>target</code> and <code>delta</code> should have the same order of transform links
+as the <code>element</code>'s transform.</p>
+<p>The <a href="#transformanimationstep">TransformAnimationStep</a> will animate each of these links with the
+same duration. If <code>velocity</code> is used to calculate the duration, then the link
+with the longest duration will define the duration of the animation.
+<code>velocity</code> can either be a transform with the same order of transform links
+as the <code>element</code> or it can be a constant value, which will be applied to
+all transform links. <code>velocity</code> cannot be 0.</p>
+<p>Use either <code>delta</code> or <code>target</code> to define it's end point of the animation.</p>
 
   
     <p style="display: none;">      Type:
@@ -20738,7 +20749,9 @@ transform overrides
  is negative of CW direction and 
 <code>2</code>
  is
-whichever direction doesn't pass through angle 0.
+whichever direction doesn't pass through angle 0 (
+<code>0</code>
+).
 
           
         </div>
@@ -20750,8 +20763,14 @@ whichever direction doesn't pass through angle 0.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>maxDuration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
+          <span class='code bold'>maxDuration</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)?)</code>
+          : maximum duration to clip animation
+to where 
+<code>null</code>
+ is unlimited (
+<code>null</code>
+)
+
           
         </div>
       
@@ -20761,9 +20780,77 @@ whichever direction doesn't pass through angle 0.
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using duration</span>
+p.animations.new()
+  .transform({
+    <span class="hljs-attr">target</span>: <span class="hljs-keyword">new</span> Fig.Transform().scale(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>).rotate(<span class="hljs-number">0.5</span>).translate(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>),
+    <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+  })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using velocity as a transform</span>
+p.animations.new()
+  .transform({
+    <span class="hljs-attr">target</span>: <span class="hljs-keyword">new</span> Fig.Transform().scale(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>).rotate(<span class="hljs-number">0.5</span>).translate(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>),
+    <span class="hljs-attr">velocity</span>: <span class="hljs-keyword">new</span> Fig.Transform().scale(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>).rotate(<span class="hljs-number">0.25</span>).translate(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>),
+  })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using velocity as a number</span>
+p.animations.new()
+  .transform({
+    <span class="hljs-attr">target</span>: <span class="hljs-keyword">new</span> Fig.Transform().scale(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>).rotate(<span class="hljs-number">0.5</span>).translate(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>),
+    <span class="hljs-attr">velocity</span>: <span class="hljs-number">0.5</span>,
+  })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using TypeParsableTransform as transform definition</span>
+p.animations.new()
+  .transform({
+    <span class="hljs-attr">target</span>: [[<span class="hljs-string">'s'</span>, <span class="hljs-number">1.5</span>, <span class="hljs-number">1.5</span>], [<span class="hljs-string">'r'</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-string">'t'</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+    <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+  })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand alone step</span>
+<span class="hljs-keyword">const</span> step1 = p.animations.transform({
+  <span class="hljs-attr">target</span>: [[<span class="hljs-string">'s'</span>, <span class="hljs-number">1.5</span>, <span class="hljs-number">1.5</span>], [<span class="hljs-string">'r'</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">'t'</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.TransformAnimationStep({
+  <span class="hljs-attr">element</span>: p,
+  <span class="hljs-attr">target</span>: [[<span class="hljs-string">'s'</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">'r'</span>, <span class="hljs-number">0</span>], [<span class="hljs-string">'t'</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]],
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+
+p.animations.new()
+  .then(step1)
+  .then(step2)
+  .start();</pre>
+    
   
 
   
@@ -20791,7 +20878,7 @@ whichever direction doesn't pass through angle 0.
   </div>
   
 
-  <p>Scenario animation step options object</p>
+  <p><a href="#scenarioanimationstep">ScenarioAnimationStep</a> options object</p>
 <p>By default, the scenario will start with the element's current scenario.</p>
 
   
@@ -33439,7 +33526,7 @@ start the animation
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_transformanimationstep">OBJ_TransformAnimationStep</a>>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_transformanimationstep">OBJ_TransformAnimationStep</a>)</code>
 	    
           </div>
           
@@ -37039,13 +37126,14 @@ eqn.addForms({
   </div>
   
 
-  <p>Animation progression function.
-Function is passed the percent complete of the animation duration and
-returns the percent complete of the delta between the target and start
-values of the animation.</p>
-<p>A linear function would return the same percent as is passed. However,
-the returned percent would change if some smoothing was desired at the
-start or end of the animation.</p>
+  <p>Animation progression function.</p>
+<p>As the animation time progresses, a percentage of the total animation
+duration will be passed to this function.</p>
+<p>This function then calculates and returns the percent progress of the
+animation.</p>
+<p>This function can be used to make non-linear progressions of an animation.
+For instance, it could be used to create a progression that is slowed
+at the start or end of the animation.</p>
 
   
     <p style="display: none;">      Type:
