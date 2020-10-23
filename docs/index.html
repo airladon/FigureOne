@@ -16657,78 +16657,110 @@ diagram.addElement(
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>]});
-diagram.addElements([
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>]});
+diagram.addElement(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
     <span class="hljs-attr">options</span>: {
       <span class="hljs-attr">sides</span>: <span class="hljs-number">4</span>,
       <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">position</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
     },
   },
-  {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">'q'</span>,
-    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
-    <span class="hljs-attr">options</span>: {
-      <span class="hljs-attr">sides</span>: <span class="hljs-number">5</span>,
-      <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
-    },
-  },
-]);
+);
 <span class="hljs-keyword">const</span> p = diagram.getElement(<span class="hljs-string">'p'</span>);
-<span class="hljs-keyword">const</span> q = diagram.getElement(<span class="hljs-string">'q'</span>);
 diagram.initialize();</pre>
 <h3>Animation Examples</h3>
 <p>Let's create a simple animation. Start by defining a diagram and retrieving the element to animate by creating the boilerplate files <a href="#animation-boilerplate">above</a>.</p>
 <p>A <a href="#positionanimationstep">PositionAnimationStep</a> can be created to translate the shape, and a <a href="#rotationanimationstep">RotationAnimationStep</a> to rotate it</p>
-<pre class='hljs'><span class="hljs-keyword">const</span> translate = p.animations.position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });
+<pre class='hljs'><span class="hljs-keyword">const</span> translate = p.animations.position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });
 <span class="hljs-keyword">const</span> rotate = p.animations.rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });</pre>
 <p>The animation can then be created and started</p>
 <pre class='hljs'>p.animations.new()
   .then(translate)
   .then(rotate)
   .start();</pre>
-<p>The above animation has two steps in series, but they can also be done in parallel</p>
-<pre class='hljs'>p.animations.new()
-  .inParallel([translate, rotate])
-  .start();</pre>
+<p style="text-align: center"><img src="./tutorials/animation/ex1.gif"></p>
 <p>A more convenient way to chain animation steps in series is to create them inline</p>
 <pre class='hljs'>p.animations.new()
-  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
   .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
   .start();</pre>
 <p>An animation manager is tied to one element, can be used to animate other elements too</p>
-<pre class='hljs'>diagram.addElements([
-  {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>, <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>, <span class="hljs-attr">options</span>: { <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">radius</span>: <span class="hljs-number">0.2</span> }
+<pre class='hljs'><span class="hljs-comment">// add another element</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'q'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">position</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">0</span>]
   },
-  {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">'q'</span>, <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>, <span class="hljs-attr">options</span>: { <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">radius</span>: <span class="hljs-number">0.2</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">3</span> },
-  },
-]);
-diagram.initialize();
+});
 
-<span class="hljs-keyword">const</span> p = diagram.getElement(<span class="hljs-string">'p'</span>);
 <span class="hljs-keyword">const</span> q = diagram.getElement(<span class="hljs-string">'q'</span>);
 
+<span class="hljs-comment">// Use p animation manager to animate q</span>
 p.animations.new()
-  .translation({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .rotation({ <span class="hljs-attr">element</span>: q, <span class="hljs-attr">target</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>})
+  .translation({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .rotation({ <span class="hljs-attr">element</span>: q, <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">3</span> * <span class="hljs-number">2</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>})
   .start();</pre>
-<p>Multiple animations can be added to a single element, but if they modify the same property of the element, then the latter one will overwrite the earlier on each animation frame</p>
-<pre class='hljs'>p.animations.new()
-  .translation({ target: [0.5, 0], duration: 2 })
+<p style="text-align: center"><img src="./tutorials/animation/ex2.gif"></p>
+<p>Multiple animations can be added to a single element, but if they modify the same property of the element, then the latter one will overwrite the earlier on each animation frame. In the next example, both animations animate different parts of the element's transform and so will happen in parallel.</p>
+<pre class='hljs'><span class="hljs-comment">// animate the translation</span>
+p.animations.new()
+  .translation({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
   .start();
 
+<span class="hljs-comment">// animate the rotation</span>
 p.animations.new()
-  .rotation({ target: 2, duration: 2 })
+  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span> * <span class="hljs-number">3</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
   .start();</pre>
+<p style="text-align: center"><img src="./tutorials/animation/ex3.gif"></p>
+<p>While this is one way to do a parallel animation, a more convenient way (especially when dealing with many steps) is to use a parallel animation step:</p>
+<pre class='hljs'>p.animations.new()
+  .inParallel([
+    p.animations.translation({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }),
+    p.animations.rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span> * <span class="hljs-number">3</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }),
+    p.animations.color({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }),
+  ])
+  .start();</pre>
+<p style="text-align: center"><img src="./tutorials/animation/ex4.gif"></p>
 <p>Callbacks can be defined when animations finish</p>
 <pre class='hljs'>p.animations.new()
-  .translation({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .whenFinished(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'done'</span>) })
+  .delay(<span class="hljs-number">1</span>)
+  .transform({ <span class="hljs-attr">target</span>: <span class="hljs-keyword">new</span> Fig.Transform().scale(<span class="hljs-number">0.5</span>, <span class="hljs-number">2</span>).rotate(<span class="hljs-built_in">Math</span>.PI).translate(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>), <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .scale({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .dissolveOut(<span class="hljs-number">1</span>)
+  .whenFinished(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'animation done'</span>) })
   .start();</pre>
+<p style="text-align: center"><img src="./tutorials/animation/ex5.gif"></p>
+<h3>Stopping animations</h3>
+<p>Animations can be stopped from the animation, element and diagram levels.</p>
+<pre class='hljs'>p.animations.new(<span class="hljs-string">'mover'</span>)
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">4</span>})
+  .start();
+
+<span class="hljs-comment">// after 1 second, cancel the specific animation by freezing it in place</span>
+setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  p.animations.cancel(<span class="hljs-string">'mover'</span>, <span class="hljs-string">'freeze'</span>);
+}, <span class="hljs-number">1000</span>);</pre>
+<pre class='hljs'>p.animations.new()
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">4</span>})
+  .start();
+
+<span class="hljs-comment">// after 1 second, cancel all an element's animations by instantly completing them</span>
+setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  p.stop(<span class="hljs-string">'complete'</span>);
+}, <span class="hljs-number">1000</span>);</pre>
+<pre class='hljs'>p.animations.new()
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">4</span>})
+  .start();
+
+<span class="hljs-comment">// after 1 second, cancel all diagram animations by freezing them</span>
+setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  diagram.stop(<span class="hljs-string">'freeze'</span>);
+}, <span class="hljs-number">1000</span>);</pre>
 
   
 </section></div>

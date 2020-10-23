@@ -104,67 +104,59 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 //   diagram.animateNextFrame();
 // }
 
-// diagram.addElements([
-//   {
-//     name: 'origin',
-//     method: 'polygon',
-//     options: {
-//       radius: 0.01,
-//       line: { width: 0.01 },
-//       sides: 10,
-//       color: [0.7, 0.7, 0.7, 1]
-//     },
-//   },
-//   {
-//     name: 'grid',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.1,
-//       xStep: 0.1,
-//       color: [0.7, 0.7, 0.7, 1],
-//       line: { width: 0.001 },
-//     },
-//   },
-//   {
-//     name: 'gridMajor',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.5,
-//       xStep: 0.5,
-//       color: [0.8, 0.8, 0.8, 1],
-//       line: { width: 0.004 }
-//     },
-//   },
-// ]);
-
-// const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2]});
 diagram.addElements([
   {
-    name: 'p',
+    name: 'origin',
     method: 'polygon',
     options: {
-      sides: 4,
-      fill: true,
-      radius: 0.5,
-      position: [0, 0],
+      radius: 0.01,
+      line: { width: 0.01 },
+      sides: 10,
+      color: [0.7, 0.7, 0.7, 1]
     },
   },
   {
-    name: 'q',
-    method: 'polygon',
+    name: 'grid',
+    method: 'grid',
     options: {
-      sides: 5,
-      fill: true,
-      radius: 0.5,
-      position: [1, 0],
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.1,
+      xStep: 0.1,
+      color: [0.7, 0.7, 0.7, 1],
+      line: { width: 0.001 },
     },
-    mods: {
-      isShown: false,
-    }
+  },
+  {
+    name: 'gridMajor',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.5,
+      xStep: 0.5,
+      color: [0.8, 0.8, 0.8, 1],
+      line: { width: 0.004 }
+    },
   },
 ]);
+
+// const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2]});
+diagram.addElement({
+  name: 'p',
+  method: 'polygon',
+  options: {
+    sides: 4,
+    fill: true,
+    radius: 0.5,
+    position: [0, 0],
+  },
+});
 const p = diagram.getElement('p');
-const q = diagram.getElement('q');
 diagram.initialize();
+
+p.animations.new()
+  .delay(1)
+  .transform({ target: new Fig.Transform().scale(0.5, 2).rotate(Math.PI).translate(1, 0), duration: 2 })
+  .scale({ target: [1, 1], duration: 2 })
+  .dissolveOut(1)
+  .whenFinished(() => { console.log('animation done') })
+  .start();
