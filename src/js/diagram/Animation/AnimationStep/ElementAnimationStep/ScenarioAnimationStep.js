@@ -61,8 +61,8 @@ export type OBJ_ScenarioVelocity = {
  * @property {number} [maxDuration]
  * @property {number} [zeroDurationThreshold]
  * @property {boolean} [allDurationsSame]
- * @property {'linear' | 'curved'} [path] (`'linear'`)
- * @property {OBJ_QuadraticBezier} [translationOptions]
+ * @property {OBJ_TranslationPath} [path] translation path style and options
+ * (`{ style: 'linear' }`)
  * @property {0 | 1 | -1 | 2} [rotDirection] where `0` is quickest direction,
  * `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
  * whichever direction doesn't pass through angle 0.
@@ -79,8 +79,7 @@ export type OBJ_ScenarioAnimationStep = {
   maxDuration?: number,
   zeroDurationThreshold?: number,
   allDurationsSame?: boolean,
-  path?: 'linear' | 'curved'; // default is linear
-  translationOptions?: pathOptionsType;
+  path?: OBJ_TranslationPath,
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
   progression: 'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression;
@@ -96,8 +95,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     start: ?(string | OBJ_Scenario);  // null means use element props when unit is started
     target: ?(string | OBJ_Scenario);
     rotDirection: 0 | 1 | -1 | 2;
-    path: 'linear' | 'curved';
-    translationOptions: pathOptionsType;
+    path: OBJ_TranslationPath;
     velocity: ?OBJ_ScenarioVelocity;
     maxDuration: ?number;
     allDurationsSame: boolean;
@@ -111,7 +109,7 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
     const AnimationStepOptionsIn =
       joinObjects({}, { type: 'scenario' }, ...optionsIn);
     deleteKeys(AnimationStepOptionsIn, [
-      'start', 'target', 'path', 'translationOptions',
+      'start', 'target', 'path',
       'velocity', 'maxDuration', 'allDurationsSame', 'rotDirection',
       'clipRotationTo', 'element', 'progression', // 'minDuration',
     ]);
@@ -122,13 +120,12 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       element: null,
       start: null,
       target: null,
-      path: 'linear',
-      translationOptions: {
-        // rot: 1,
+      path: {
+        style: 'linear',
         magnitude: 0.5,
         offset: 0.5,
         controlPoint: null,
-        direction: '',
+        direction: 'positive',
       },
       rotDirection: 0,
       clipRotationTo: null,
@@ -140,24 +137,19 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
       // minDuration: 0,
     };
     if (this.element && this.element.animations.options.translation) {
-      const translationOptions = this.element.animations.options.translation;
-      if (translationOptions.style != null) {
-        // $FlowFixMe - this is messy, but deal with it
-        defaultScenarioOptions.path = translationOptions.style;
-      }
-      joinObjects(defaultScenarioOptions.translationOptions, translationOptions);
+      const pathOptions = this.element.animations.options.translation;
+      joinObjects(defaultScenarioOptions.path, pathOptions);
     }
     const options = joinObjects({}, defaultScenarioOptions, ...optionsIn);
     this.element = options.element;
 
     // $FlowFixMe
-    this.scenario = { translationOptions: {} };
+    this.scenario = {};
     copyKeysFromTo(options, this.scenario, [
       'start', 'target', 'path',
       'velocity', 'maxDuration', 'allDurationsSame', 'zeroDurationThreshold',
       'rotDirection', 'clipRotationTo', 'progression', // 'minDuration',
     ]);
-    duplicateFromTo(options.translationOptions, this.scenario.translationOptions);
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
@@ -339,7 +331,6 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
         duration: transformDuration,
         rotDirection: this.scenario.rotDirection,
         path: this.scenario.path,
-        translationOptions: this.scenario.translationOptions,
         clipRotationTo: this.scenario.clipRotationTo,
         progression: this.scenario.progression,
       }));

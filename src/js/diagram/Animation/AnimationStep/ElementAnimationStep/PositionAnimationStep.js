@@ -2,7 +2,7 @@
 import {
   Transform, Point, getMaxTimeFromVelocity, getPoint,
 } from '../../../../tools/g2';
-import type { OBJ_QuadraticBezier } from '../../../../tools/g2';
+import type { OBJ_TranslationPath } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
   // joinObjectsWithOptions,
@@ -11,6 +11,7 @@ import type {
   OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
+import type { AnimationStartTime } from '../../AnimationManager';
 // import type { OBJ_QuadraticBezier } from 
 // import type { DiagramElement } from '../../../Element';
 
@@ -37,9 +38,7 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * position overrides `duration` - `null` to use `duration` (`null`)
  * @property {number} [null | maxDuration] maximum duration to cap to -
  * `null` for no cap (`null`)
- * @property {'linear' | 'curved'} [path] (`'linear'`)
- * @property {OBJ_QuadraticBezier} [pathOptions]
- * (`{ magnitude: 0.5, direction: 'positive', offset: 0.5 }`)
+ * @property {OBJ_TranslationPath} [path] (`{ style: 'linear' }`)
  *
  * @extends ElementAnimationStep
  *
@@ -57,13 +56,28 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * p.animations.new()
  *   .position({ target: [1, 0], velocity: 0.5 })
  *   .start()
+ *
+ * @example
+ * // Curved path
+ * p.animations.new()
+ *   .position({
+ *     start: [0, 0],
+ *     target: [1, 0],
+ *     duration: 2,
+ *     path: {
+ *       style: 'curve',
+ *       direction: 'up',
+ *     },
+ *   })
+ *   .start();
  */
 export type OBJ_PositionAnimationStep = {
   start?: Point;      // default is element transform
   target?: Point;     // Either target or delta must be defined
   delta?: Point;      // delta overrides target if both are defined
-  path?: 'linear' | 'curved'; // default is linear
-  pathOptions?: pathOptionsType;
+  // path?: 'linear' | 'curved'; // default is linear
+  // pathOptions?: pathOptionsType;
+  path?: OBJ_TranslationPath;
   velocity?: Point;
   maxDuration?: number;
 } & OBJ_ElementAnimationStep;
@@ -78,8 +92,8 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     delta: ?Point;
     target: ?Point;
     // rotDirection: 0 | 1 | -1 | 2;
-    path: 'linear' | 'curved';
-    pathOptions: OBJ_QuadraticBezier;
+    path: OBJ_TranslationPath;
+    // pathOptions: OBJ_QuadraticBezier;
     velocity: ?Point;
     maxDuration: ?number;
   };
@@ -97,8 +111,8 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       start: null,
       target: null,
       delta: null,
-      path: 'linear',
-      pathOptions: {
+      path: {
+        style: 'linear',
         magnitude: 0.5,
         offset: 0.5,
         controlPoint: null,
@@ -109,11 +123,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     };
     if (this.element && this.element.animations.options.translation) {
       const pathOptions = this.element.animations.options.translation;
-      if (pathOptions.style != null) {
-        // $FlowFixMe - this is messy, but deal with it
-        defaultPositionOptions.style = pathOptions.style;
-      }
-      joinObjects(defaultPositionOptions.pathOptions, pathOptions);
+      joinObjects(defaultPositionOptions.path, pathOptions);
     }
     const options = joinObjects({}, defaultPositionOptions, ...optionsIn);
     if (options.start != null) {
@@ -126,12 +136,12 @@ export default class PositionAnimationStep extends ElementAnimationStep {
       options.delta = getPoint(options.delta);
     }
     // $FlowFixMe
-    this.position = { pathOptions: {} };
+    this.position = { path: {} };
     copyKeysFromTo(options, this.position, [
       'start', 'delta', 'target', 'path',
       'velocity', 'maxDuration',
     ]);
-    duplicateFromTo(options.pathOptions, this.position.pathOptions);
+    // duplicateFromTo(options.path, this.position.path);
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
@@ -148,7 +158,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
+  start(startTime: ?AnimationStartTime = null) {
     super.start(startTime);
     if (this.position.start == null) {
       if (this.element != null) {
@@ -201,8 +211,8 @@ export default class PositionAnimationStep extends ElementAnimationStep {
     if (this.position.delta != null && this.position.start != null) {
       const next = this.position.start.toDelta(
         this.position.delta, p,
+        this.position.path.style,
         this.position.path,
-        this.position.pathOptions,
       );
       if (this.element != null) {
         this.element.setPosition(next);

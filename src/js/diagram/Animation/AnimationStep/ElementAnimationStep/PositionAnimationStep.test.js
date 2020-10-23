@@ -120,6 +120,32 @@ describe('Position Animation', () => {
     expect(step.element.getPosition().round()).toEqual(target);
     expect(math.round(remainingTime)).toBe(0.1);
   });
+  test('Animation flow curved', () => {
+    const start = new Point(0, 0);
+    const target = new Point(1, 1);
+    const step = new PositionAnimationStep({
+      element,
+      duration: 1,
+      progression: 'linear',
+      start,
+      target,
+      path: {
+        style: 'curve',
+        mag: 1,
+        offset: 0.5,
+        direction: 'up',
+      },
+    });
+    step.start();
+    expect(step.startTime).toBe(null);
+
+    step.nextFrame(100);
+    expect(step.startTime).toBe(100);
+    expect(step.element.getPosition()).toEqual(start);
+
+    step.nextFrame(100.5);
+    expect(step.element.getPosition().round()).toEqual(new Point(0.25, 0.75));
+  });
   test('Duplication', () => {
     const start = new Point(0, 0);
     const target = new Point(3, 3);

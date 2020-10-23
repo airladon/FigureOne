@@ -144,6 +144,34 @@ describe('Transfrom Animation Unit', () => {
     expect(step.element.transform.round()).toEqual(target);
     expect(math.round(remainingTime)).toBe(0.1);
   });
+  test('Animation flow curve', () => {
+    const start = element.transform.zero();
+    const target = element.transform._dup().updateTranslation(1, 1);
+    const step = new TransformAnimationStep({
+      element,
+      duration: 1,
+      progression: 'linear',
+      type: 'transform',
+      start,
+      target,
+      path: {
+        style: 'curve',
+        mag: 1,
+        offset: 0.5,
+        direction: 'up',
+      },
+    });
+    step.start();
+    expect(step.startTime).toBe(null);
+
+    step.nextFrame(100);
+    expect(step.startTime).toBe(100);
+    expect(step.element.transform).toEqual(start);
+
+    step.nextFrame(100.5);
+    expect(step.element.transform.t().x).toBe(0.25);
+    expect(step.element.transform.t().y).toBe(0.75);
+  });
   test('Duplication', () => {
     const start = element.transform.zero();
     const target = element.transform.constant(1);

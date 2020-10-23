@@ -4,7 +4,7 @@ import {
   Rotation, getDeltaAngle, getMaxTimeFromVelocity,
   getTransform,
 } from '../../../../tools/g2';
-import type { pathOptionsType } from '../../../../tools/g2';
+import type { OBJ_TranslationPath } from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
@@ -26,8 +26,8 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * @property {TypeParsableTransform} [delta]
  * @property {null | TypeParsableTransform} [velocity] velocity of
  * transform overrides `duration` - `null` to use `duration` (`null`)
- * @property {'linear' | 'curved'} [path]
- * @property {OBJ_QuadraticBezier} [translationOptions]
+ * @property {OBJ_TranslationPath} [path] translation path style and options
+ * (`{ style: 'linear' }`)
  * @property {0 | 1 | -1 | 2} [rotDirection] where `0` is quickest direction,
  * `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
  * whichever direction doesn't pass through angle 0.
@@ -38,8 +38,7 @@ export type OBJ_TransformAnimationStep = {
   start?: Transform;      // default is element transform
   target?: Transform;     // Either target or delta must be defined
   delta?: Transform;      // delta overrides target if both are defined
-  path?: 'linear' | 'curved'; // default is linear
-  translationOptions?: pathOptionsType;
+  path?: OBJ_TranslationPath;       // default is linear
   rotDirection: 0 | 1 | -1 | 2;
   clipRotationTo: '0to360' | '-180to180' | null;
   velocity: ?Transform | number;
@@ -67,8 +66,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     delta: Transform;
     target: Transform;
     rotDirection: 0 | 1 | -1 | 2;
-    path: 'linear' | 'curved';
-    translationOptions: pathOptionsType;
+    path: OBJ_TranslationPath;
     velocity: ?Transform | number;
     clipRotationTo: '0to360' | '-180to180' | null;
     maxDuration: ?number;
@@ -79,32 +77,28 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       joinObjects({}, { type: 'transform' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [
       'start', 'delta', 'target', 'rotDirection', 'path',
-      'translationOptions', 'velocity', 'clipRotationTo', 'maxDuration',
+      'velocity', 'clipRotationTo', 'maxDuration',
     ]);
     super(ElementAnimationStepOptionsIn);
     const defaultTransformOptions = {
       start: null,
       target: null,
       delta: null,
-      path: 'linear',
       rotDirection: 0,
-      translationOptions: {
-        // rot: 1,
+      path: {
+        style: 'linear',
         magnitude: 0.5,
         offset: 0.5,
         controlPoint: null,
-        direction: '',
+        direction: 'positive',
       },
       velocity: null,
       clipRotationTo: null,
       maxDuration: null,
     };
     if (this.element && this.element.animations.options.translation) {
-      const translationOptions = this.element.animations.options.translation;
-      if (translationOptions.style != null) {
-        defaultTransformOptions.path = translationOptions.style;
-      }
-      joinObjects(defaultTransformOptions.translationOptions, translationOptions);
+      const pathOptions = this.element.animations.options.translation;
+      joinObjects(defaultTransformOptions.path, pathOptions);
     }
     const options = joinObjects({}, defaultTransformOptions, ...optionsIn);
     if (options.start != null) {
@@ -120,12 +114,11 @@ export default class TransformAnimationStep extends ElementAnimationStep {
       options.velocity = getTransform(options.velocity);
     }
     // $FlowFixMe
-    this.transform = { translationOptions: {} };
+    this.transform = {};
     copyKeysFromTo(options, this.transform, [
       'start', 'delta', 'target', 'path',
       'velocity', 'rotDirection', 'clipRotationTo', 'maxDuration',
     ]);
-    duplicateFromTo(options.translationOptions, this.transform.translationOptions);
   }
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
@@ -142,7 +135,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
+  start(startTime: ?AnimationStartTime = null) {
     super.start(startTime);
     if (this.transform.start === null) {
       if (this.element != null) {
@@ -207,8 +200,8 @@ export default class TransformAnimationStep extends ElementAnimationStep {
     // next = start.add(delta.mul(next));
     const next = this.transform.start.toDelta(
       this.transform.delta, p,
+      this.transform.path.style,
       this.transform.path,
-      this.transform.translationOptions,
     );
 
     if (this.transform.clipRotationTo !== null) {

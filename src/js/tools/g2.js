@@ -885,14 +885,24 @@ export type OBJ_QuadraticBezier = {
   direction: 'up' | 'left' | 'down' | 'right' | 'positive' | 'negative';
 };
 
+export type OBJ_TranslationPath = {
+  style: 'curve' | 'linear',
+  // curve options
+  angle: number,
+  magnitude: number,
+  offset: number,
+  controlPoint: TypeParsablePoint | null,
+  direction: 'positive' | 'negative' | 'up' | 'down' | 'left' | 'right',
+}
 
-export type pathOptionsType = OBJ_QuadraticBezier & linearPathOptionsType;
+
+// export type pathOptionsType = OBJ_QuadraticBezier & linearPathOptionsType;
 
 function curvedPath(
   start: Point,
   delta: Point,
   percent: number,
-  options: pathOptionsType,
+  options: OBJ_TranslationPath,
 ) {
   const o = options;
   // const angle = Math.atan2(delta.y, delta.x);
@@ -1020,7 +1030,7 @@ function translationPath(
   if (pathType === 'linear') {
     return linearPath(start, delta, percent);
   }
-  if (pathType === 'curved') {
+  if (pathType === 'curved' || pathType === 'curve') {
     return curvedPath(start, delta, percent, options);
   }
   return new Point(0, 0);

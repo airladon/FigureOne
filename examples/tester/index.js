@@ -154,14 +154,13 @@ const p = diagram.getElement('p');
 diagram.initialize();
 
 p.animations.new()
-  .position({
-    start: [0, 0],
-    target: [1, 0],
+  .transform({
+    start: new Fig.Transform().scale(1, 1).rotate(0).translate(0, 0),
+    target: new Fig.Transform().scale(1, 1).rotate(0).translate(1, 0),
     duration: 2,
-    translationStyle: 'curved',
-    translationOptions: {
-      magnitude: 0.8,
-      direction: 'up',
+    path: {
+      style: 'curve',
+      direction: 'down',
     },
   })
   .start();
