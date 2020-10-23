@@ -174,6 +174,3 @@ setTimeout(() => {
   diagram.stop('freeze');
 }, 1000);
 ```
-
-### Animations at their heart
-The 
