@@ -15,6 +15,27 @@ type TypeColor = Array<number>;
 /**
  * {@link ColorAnimationStep} options object
  *
+ * @extends OBJ_ElementAnimationStep
+ * @property {Array<number>} [start]
+ * @property {Array<number> | 'dim' | 'undim'} [target] use `dim` to animate to
+ * element's `dimColor`, and `undim` to animate to element's `defaultColor`
+ * @property {Array<number>} [delta]
+ *
+ */
+export type OBJ_ColorAnimationStep = {
+  start?: TypeColor;      // default is element transform
+  target?: TypeColor | 'dim' | 'undim';     // Either target or delta must be defined
+  delta?: TypeColor;      // delta overrides target if both are defined
+  dissolve?: 'in' | 'out' | null
+} & OBJ_ElementAnimationStep;
+
+const addColors = (color1, color2) => color1.map((c, index) => Math.min(c + color2[index], 1));
+
+const subtractColors = (color1, color2) => color1.map((c, index) => c - color2[index]);
+
+/**
+ * Color animation Step
+ *
  * ![](./assets1/color_animation.gif)
  *
  * By default, the color will start with the element's current color.
@@ -35,11 +56,8 @@ type TypeColor = Array<number>;
  * be used to do the same, which is especially useful when trying to build
  * easy to read code in a complex animation.
  *
- * @extends OBJ_ElementAnimationStep
- * @property {Array<number>} [start]
- * @property {Array<number> | 'dim' | 'undim'} [target] use `dim` to animate to
- * element's `dimColor`, and `undim` to animate to element's `defaultColor`
- * @property {Array<number>} [delta]
+ * @extends ElementAnimationStep
+ * @param {OBJ_ColorAnimationStep} options
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
@@ -76,22 +94,6 @@ type TypeColor = Array<number>;
  *   .then(step1)
  *   .then(step2)
  *   .start();
- */
-export type OBJ_ColorAnimationStep = {
-  start?: TypeColor;      // default is element transform
-  target?: TypeColor | 'dim' | 'undim';     // Either target or delta must be defined
-  delta?: TypeColor;      // delta overrides target if both are defined
-  dissolve?: 'in' | 'out' | null
-} & OBJ_ElementAnimationStep;
-
-const addColors = (color1, color2) => color1.map((c, index) => Math.min(c + color2[index], 1));
-
-const subtractColors = (color1, color2) => color1.map((c, index) => c - color2[index]);
-
-/**
- * Color animation Step
- * @extends ElementAnimationStep
- * @param {OBJ_ColorAnimationStep} options
  */
 export class ColorAnimationStep extends ElementAnimationStep {
   color: {
@@ -163,7 +165,6 @@ export class ColorAnimationStep extends ElementAnimationStep {
       if (this.color.start == null) {
         this.color.start = element.color.slice();
       } else if (startTime === 'now' || startTime === 'prev') {
-        element.setColor(this.color.start);
       }
       if (this.color.delta == null && this.color.target == null) {
         this.color.target = this.color.start.slice();
@@ -228,13 +229,52 @@ export class ColorAnimationStep extends ElementAnimationStep {
 
 /**
  * Dim color animation step
+ *
+ * ![](./assets1/dim_animation.gif)
+ *
+ * Animates color of element to the `dimColor` property of {@link DiagramElement}
+ *
  * @extends ColorAnimationStep
+ * @param {number | OBJ_ElementAnimationStep} timeOrOptions
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple dim
+ * p.animations.new()
+ *   .dim(2)
+ *   .start();
+ *
+ * @example
+ * // Dim using options object
+ * p.animations.new()
+ *   .dim({ delay: 1, duration: 2 })
+ *   .start();
+ *
+ * @example
+ * // Different ways to create a stand-alone step
+ * const step1 = p.animations.dim(2);
+ * const step2 = new Fig.Animation.DimAnimationStep({
+ *   element: p,
+ *   duration: 2,
+ * });
+ *
+ * p.animations.new()
+ *   .then(step1)
+ *   .undim(1)
+ *   .then(step2)
+ *   .start();
  */
 export class DimAnimationStep extends ColorAnimationStep {
+  /**
+   * @hideconstructor
+   */
   constructor(
     timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
     ...args: Array<OBJ_ElementAnimationStep>
   ) {
+    console.log(timeOrOptionsIn)
     let options = {};
     const defaultOptions = { duration: 1, target: 'dim', completeOnCancel: true };
     if (typeof timeOrOptionsIn === 'number') {
@@ -255,9 +295,50 @@ export function dim(
 
 /**
  * Undim color animation step
+ *
+ * ![](./assets1/undim_animation.gif)
+ *
+ * Animates color of element to the `defaultColor` property of {@link DiagramElement}
+ *
  * @extends ColorAnimationStep
+ * @param {number | OBJ_ElementAnimationStep} timeOrOptions
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple undim
+ * p.dim();
+ * p.animations.new()
+ *   .undim(2)
+ *   .start();
+ *
+ * @example
+ * // Undim using options object
+ * p.dim();
+ * p.animations.new()
+ *   .undim({ delay: 1, duration: 2 })
+ *   .start();
+ *
+ * @example
+ * // Different ways to create a stand-alone step
+ * const step1 = p.animations.undim(2);
+ * const step2 = new Fig.Animation.UndimAnimationStep({
+ *   element: p,
+ *   duration: 2,
+ * });
+ *
+ * p.dim();
+ * p.animations.new()
+ *   .then(step1)
+ *   .dim(1)
+ *   .then(step2)
+ *   .start();
  */
 export class UndimAnimationStep extends ColorAnimationStep {
+  /**
+   * @hideconstructor
+   */
   constructor(
     timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
     ...args: Array<OBJ_ElementAnimationStep>

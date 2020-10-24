@@ -16,6 +16,47 @@ import ElementAnimationStep from '../ElementAnimationStep';
 /**
  * {@link TransformAnimationStep} options object
  *
+ * @extends OBJ_ElementAnimationStep
+ *
+ * @property {TypeParsableTransform} [start]
+ * @property {TypeParsableTransform} [target]
+ * @property {TypeParsableTransform} [delta]
+ * @property {null | TypeParsableTransform} [velocity] velocity of
+ * transform overrides `duration` - `null` to use `duration` (`null`)
+ * @property {OBJ_TranslationPath} [path] translation path style and options
+ * (`{ style: 'linear' }`)
+ * @property {0 | 1 | -1 | 2} [rotDirection] where `0` is quickest direction,
+ * `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
+ * whichever direction doesn't pass through angle 0 (`0`).
+ * @property {'0to360' | '-180to180' | null} [clipRotationTo]
+ * @property {number | null} [maxDuration] maximum duration to clip animation
+ * to where `null` is unlimited (`null`)
+ */
+export type OBJ_TransformAnimationStep = {
+  start?: Transform;      // default is element transform
+  target?: Transform;     // Either target or delta must be defined
+  delta?: Transform;      // delta overrides target if both are defined
+  path?: OBJ_TranslationPath;       // default is linear
+  rotDirection: 0 | 1 | -1 | 2;
+  clipRotationTo: '0to360' | '-180to180' | null;
+  velocity: ?Transform | number;
+  maxDuration?: number;
+} & OBJ_ElementAnimationStep;
+
+// A transform animation unit manages a transform animation on an element.
+//
+// The start transform can either be defined initially, or null. Null means
+// the start transform is whatever the current element transform is when the
+// unit is started with start().
+//
+// The transform target is defined with either the target or delta properties.
+// Target is used to predefine the target.
+// Delta is used to calculate the target when the unit is started with start()
+//
+
+/**
+ * Transform Animation Step
+ *
  * ![](./assets1/transform_animation.gif)
  *
  * By default, the transform will start with the element's current transform.
@@ -35,21 +76,8 @@ import ElementAnimationStep from '../ElementAnimationStep';
  *
  * Use either `delta` or `target` to define it's end point of the animation.
  *
- * @extends OBJ_ElementAnimationStep
- *
- * @property {TypeParsableTransform} [start]
- * @property {TypeParsableTransform} [target]
- * @property {TypeParsableTransform} [delta]
- * @property {null | TypeParsableTransform} [velocity] velocity of
- * transform overrides `duration` - `null` to use `duration` (`null`)
- * @property {OBJ_TranslationPath} [path] translation path style and options
- * (`{ style: 'linear' }`)
- * @property {0 | 1 | -1 | 2} [rotDirection] where `0` is quickest direction,
- * `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
- * whichever direction doesn't pass through angle 0 (`0`).
- * @property {'0to360' | '-180to180' | null} [clipRotationTo]
- * @property {number | null} [maxDuration] maximum duration to clip animation
- * to where `null` is unlimited (`null`)
+ * @extends ElementAnimationStep
+ * @param {OBJ_TransformAnimationStep} options
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
@@ -101,38 +129,11 @@ import ElementAnimationStep from '../ElementAnimationStep';
  *   target: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
  *   duration: 2,
  * });
- * 
+ *
  * p.animations.new()
  *   .then(step1)
  *   .then(step2)
  *   .start();
- */
-export type OBJ_TransformAnimationStep = {
-  start?: Transform;      // default is element transform
-  target?: Transform;     // Either target or delta must be defined
-  delta?: Transform;      // delta overrides target if both are defined
-  path?: OBJ_TranslationPath;       // default is linear
-  rotDirection: 0 | 1 | -1 | 2;
-  clipRotationTo: '0to360' | '-180to180' | null;
-  velocity: ?Transform | number;
-  maxDuration?: number;
-} & OBJ_ElementAnimationStep;
-
-// A transform animation unit manages a transform animation on an element.
-//
-// The start transform can either be defined initially, or null. Null means
-// the start transform is whatever the current element transform is when the
-// unit is started with start().
-//
-// The transform target is defined with either the target or delta properties.
-// Target is used to predefine the target.
-// Delta is used to calculate the target when the unit is started with start()
-//
-
-/**
- * Transform Animation Step
- * @extends ElementAnimationStep
- * @param {OBJ_TransformAnimationStep} options
  */
 export default class TransformAnimationStep extends ElementAnimationStep {
   transform: {

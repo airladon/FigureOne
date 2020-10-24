@@ -37,14 +37,17 @@ toc:
   - AnimationBuilder
   - PositionAnimationStep
   - RotationAnimationStep
-  - OBJ_ScaleAnimationStep
-  - OBJ_CustomAnimationStep
-  - OBJ_TransformAnimationStep
-  - OBJ_ScenarioAnimationStep
-  - OBJ_TriggerAnimationStep
-  - OBJ_ColorAnimationStep
-  - OBJ_OpacityAnimationStep
-  - OBJ_ScenariosAnimationStep
+  - ScaleAnimationStep
+  - TransformAnimationStep
+  - ScenarioAnimationStep
+  - ColorAnimationStep
+  - DimAnimationStep
+  - UndimAnimationStep
+  - OpacityAnimationStep
+  - DissolveInAnimationStep
+  - DissolveOutAnimationStep
+  - TriggerAnimationStep
+  - CustomAnimationStep
   - SerialAnimationStep
   - ParallelAnimationStep
   - name: Equation Elements Types
@@ -134,17 +137,14 @@ toc:
   - OBJ_AnimationStart
   - OBJ_SerialAnimationStep
   - OBJ_ParallelAnimationStep
-  - ScaleAnimationStep
-  - TransformAnimationStep
-  - ScenarioAnimationStep
-  - ColorAnimationStep
-  - DimAnimationStep
-  - UndimAnimationStep
-  - OpacityAnimationStep
-  - DissolveInAnimationStep
-  - DissolveOutAnimationStep
-  - TriggerAnimationStep
-  - CustomAnimationStep
+  - OBJ_ScaleAnimationStep
+  - OBJ_CustomAnimationStep
+  - OBJ_TransformAnimationStep
+  - OBJ_ScenarioAnimationStep
+  - OBJ_TriggerAnimationStep
+  - OBJ_ColorAnimationStep
+  - OBJ_OpacityAnimationStep
+  - OBJ_ScenariosAnimationStep
   - name: tools
     description: These are generic tools
     children:

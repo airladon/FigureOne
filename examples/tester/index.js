@@ -153,43 +153,28 @@ diagram.addElement({
 const p = diagram.getElement('p');
 diagram.initialize();
 
-// // Simple trigger
-// p.animations.new()
-//   .delay(1)
-//   .position({ target: [1, 0], duration: 2 })
-//   .trigger(() => { console.log('arrived at (1, 0)') })
-//   .position({ target: [0, 0], duration: 2 })
-//   .trigger(() => { console.log('arrived at (0, 0)') })
-//   .start();
-
-// Trigger with delay, duration and payload
-const printPosition = (pos) => {
-  console.log(`arrived at ${pos}`);
-};
-
+// Simple undim
 p.animations.new()
-  .position({ target: [1, 0], duration: 2 })
-  .trigger({
-    delay: 1,
-    callback: printPosition,
-    payload: '(1, 0)',
-    duration: 1,
-  })
-  .position({ target: [0, 0], duration: 2 })
-  .trigger({ callback: printPosition, payload: '(0, 0)' })
+  .delay(1)
+  .dim(2)
   .start();
 
+// // Undim using options object
+// p.dim();
+// p.animations.new()
+//   .undim({ delay: 1, duration: 2 })
+//   .start();
+
 // // Different ways to create a stand-alone step
-// const step1 = p.animations.trigger({
-//   callback: () => { console.log('arrived at (1, 0)') },
-// });
-// const step2 = new Fig.Animation.TriggerAnimationStep({
-//   callback: () => { console.log('arrived at (0, 0)') },
+// const step1 = p.animations.undim(2);
+// const step2 = new Fig.Animation.UndimAnimationStep({
+//   element: p,
+//   duration: 2,
 // });
 
+// p.dim();
 // p.animations.new()
-//   .position({ target: [1, 0], duration: 2 })
 //   .then(step1)
-//   .position({ target: [0, 0], duration: 2 })
+//   .dim(1)
 //   .then(step2)
 //   .start();

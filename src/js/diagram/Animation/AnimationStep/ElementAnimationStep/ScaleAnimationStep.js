@@ -13,6 +13,27 @@ import ElementAnimationStep from '../ElementAnimationStep';
 /**
  * {@link ScaleAnimationStep} options object
  *
+ * @extends OBJ_ElementAnimationStep
+ *
+ * @property {TypeParsablePoint | number} [start]
+ * @property {TypeParsablePoint | number} [target]
+ * @property {TypeParsablePoint | number} [delta]
+ * @property {null | TypeParsablePoint | number} [velocity] velocity of scale
+ * overrides `duration` - `null` to use `duration` (`null`)
+ * @property {number | null} [maxDuration] maximum duration to clip animation
+ * to where `null` is unlimited (`null`)
+ */
+export type OBJ_ScaleAnimationStep = {
+  start?: Point | number;      // default is element transform
+  target?: Point | number;     // Either target or delta must be defined
+  delta?: Point | number;      // delta overrides target if both are defined
+  velocity?: Point | number;
+  maxDuration: ?number;
+} & OBJ_ElementAnimationStep;
+
+/**
+ * Scale Animation Step
+ *
  * ![](./assets1/scale_animation.gif)
  *
  * The scale animation step animates the first {@link Scale} transform
@@ -25,16 +46,8 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * Scale can be defined as either a point or number. If number,
  * both x and y scale terms will be the same.
  *
- *
- * @extends OBJ_ElementAnimationStep
- *
- * @property {TypeParsablePoint | number} [start]
- * @property {TypeParsablePoint | number} [target]
- * @property {TypeParsablePoint | number} [delta]
- * @property {null | TypeParsablePoint | number} [velocity] velocity of scale
- * overrides `duration` - `null` to use `duration` (`null`)
- * @property {number | null} [maxDuration] maximum duration to clip animation
- * to where `null` is unlimited (`null`)
+ * @extends ElementAnimationStep
+ * @param {OBJ_ScaleAnimationStep} options
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
@@ -64,19 +77,6 @@ import ElementAnimationStep from '../ElementAnimationStep';
  *   .then(step1)
  *   .then(step2)
  *   .start();
- */
-export type OBJ_ScaleAnimationStep = {
-  start?: Point | number;      // default is element transform
-  target?: Point | number;     // Either target or delta must be defined
-  delta?: Point | number;      // delta overrides target if both are defined
-  velocity?: Point | number;
-  maxDuration: ?number;
-} & OBJ_ElementAnimationStep;
-
-/**
- * Scale Animation Step
- * @extends ElementAnimationStep
- * @param {OBJ_ScaleAnimationStep} options
  */
 export default class ScaleAnimationStep extends ElementAnimationStep {
   scale: {

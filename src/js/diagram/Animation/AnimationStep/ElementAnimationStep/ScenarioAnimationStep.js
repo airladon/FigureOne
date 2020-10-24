@@ -48,14 +48,6 @@ export type OBJ_ScenarioVelocity = {
 /**
  * {@link ScenarioAnimationStep} options object
  *
- * ![](./assets1/scenario_animation.gif)
- *
- * A scenario defines an element's transform and color and can be used to make
- * code more readable and reusable.
- *
- * By default, the scenario will start with the element's current transform and
- * color.
- *
  * @extends OBJ_ElementAnimationStep
  *
  * @property {string | OBJ_Scenario} [start]
@@ -78,6 +70,34 @@ export type OBJ_ScenarioVelocity = {
  * @property {'0to360' | '-180to180' | null} [clipRotationTo]
  * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
  * (`'easeinout'`)
+ */
+export type OBJ_ScenarioAnimationStep = {
+  start?: string | OBJ_Scenario;
+  target?: string | OBJ_Scenario;
+  velocity?: OBJ_ScenarioVelocity;
+  // minDuration?: number,
+  maxDuration?: number,
+  zeroDurationThreshold?: number,
+  allDurationsSame?: boolean,
+  path?: OBJ_TranslationPath,
+  rotDirection: 0 | 1 | -1 | 2;
+  clipRotationTo: '0to360' | '-180to180' | null;
+  progression: 'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression;
+} & OBJ_ElementAnimationStep;
+
+/**
+ * Scenario Animation Step
+ *
+ * ![](./assets1/scenario_animation.gif)
+ *
+ * A scenario defines an element's transform and color and can be used to make
+ * code more readable and reusable.
+ *
+ * By default, the scenario will start with the element's current transform and
+ * color.
+ *
+ * @extends ElementAnimationStep
+ * @param {OBJ_ScenarioAnimationStep} options
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
@@ -123,25 +143,6 @@ export type OBJ_ScenarioVelocity = {
  *   .then(step1)
  *   .then(step2)
  *   .start();
- */
-export type OBJ_ScenarioAnimationStep = {
-  start?: string | OBJ_Scenario;
-  target?: string | OBJ_Scenario;
-  velocity?: OBJ_ScenarioVelocity;
-  // minDuration?: number,
-  maxDuration?: number,
-  zeroDurationThreshold?: number,
-  allDurationsSame?: boolean,
-  path?: OBJ_TranslationPath,
-  rotDirection: 0 | 1 | -1 | 2;
-  clipRotationTo: '0to360' | '-180to180' | null;
-  progression: 'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression;
-} & OBJ_ElementAnimationStep;
-
-/**
- * Scenario Animation Step
- * @extends ElementAnimationStep
- * @param {OBJ_ScenarioAnimationStep} options
  */
 export default class ScenarioAnimationStep extends ParallelAnimationStep {
   element: ?DiagramElement;
