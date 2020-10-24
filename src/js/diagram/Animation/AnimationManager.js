@@ -398,7 +398,7 @@ export default class AnimationManager {
   dissolveIn(durationOrOptions: number | OBJ_ElementAnimationStep = {}) {
     const defaultOptions = { element: this.element };
     let optionsToUse;
-    if (typeof timeorOptions === 'number') {
+    if (typeof durationOrOptions === 'number') {
       optionsToUse = joinObjects({}, defaultOptions, { duration: durationOrOptions });
     } else {
       optionsToUse = joinObjects({}, defaultOptions, durationOrOptions);

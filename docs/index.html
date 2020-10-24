@@ -20661,7 +20661,7 @@ p.animations.new()
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>timeOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>))</code>
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>))</code>
 	    
           </div>
           
@@ -20773,7 +20773,7 @@ p.animations.new()
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>timeOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>))</code>
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>))</code>
 	    
           </div>
           
@@ -20862,6 +20862,21 @@ p.animations.new()
   
 
   <p>Opacity Animation Step</p>
+<p><img src="./assets1/opacity_animation.gif"></p>
+<p>A <a href="#diagramelement">DiagramElement</a> has <code>color</code> and <code>opacity</code> properties. The <code>color</code>
+property has an alpha channel that defines opacity, but it should be used
+as a base color definition, and not used to dissolve an element in and out.</p>
+<p>Therefore, to animate an element's opacity or temporarily dissolve in or out
+an element, use an opacity animation step.</p>
+<p>The <code>opacity</code> is multiplied by the
+<code>color</code> alpha channel to get the final opacity of the element.</p>
+<p>By default, the opacity will start with the <a href="#diagramelement">DiagramElement</a>'s current
+opacity unless dissolving. If dissolving, the opacity will start at <code>0</code> if
+dissolving in, or <code>1</code> if dissolving out unless <code>dissolveFromCurrent</code> is
+<code>true</code> in which case the opacity will start from the current opacity.</p>
+<p>The <a href="#dissolveinanimationstep">DissolveInAnimationStep</a> and <a href="#dissolveoutanimationstep">DissolveOutAnimationStep</a>
+extend the <code>OpacityAnimationStep</code> to make it even more convenient to
+dissolve.</p>
 
   
   
@@ -20900,9 +20915,71 @@ p.animations.new()
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using numerical values for opacity</span>
+p.animations.new()
+  .opacity({ <span class="hljs-attr">target</span>: <span class="hljs-number">0.4</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .opacity({ <span class="hljs-attr">target</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Dissolve out then in</span>
+p.animations.new()
+  .opacity({ <span class="hljs-attr">dissolve</span>: <span class="hljs-string">'out'</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .opacity({ <span class="hljs-attr">dissolve</span>: <span class="hljs-string">'in'</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using the dissolve animation step</span>
+p.animations.new()
+  .dissolveOut(<span class="hljs-number">2</span>)
+  .dissolveIn({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
+<span class="hljs-keyword">const</span> step1 = p.animations.opacity({
+  <span class="hljs-attr">target</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.OpacityAnimationStep({
+  <span class="hljs-attr">element</span>: p,
+  <span class="hljs-attr">target</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+<span class="hljs-keyword">const</span> step3 = p.animations.dissolveOut({
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+<span class="hljs-keyword">const</span> step4 = <span class="hljs-keyword">new</span> Fig.Animation.DissolveInAnimationStep({
+  <span class="hljs-attr">element</span>: p,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+
+p.animations.new()
+  .then(step1)
+  .then(step2)
+  .then(step3)
+  .then(step4)
+  .start();</pre>
+    
   
 
   
@@ -20931,6 +21008,8 @@ p.animations.new()
   
 
   <p>Dissolve in animation step</p>
+<p><img src="./assets1/dissolvein_animation.gif"></p>
+<p>Animates opacity of element to dissolve in.</p>
 
   
   
@@ -20955,16 +21034,7 @@ p.animations.new()
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>timeOrOptionsIn</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
-            = <code>{}</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>>)</code>
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>))</code>
 	    
           </div>
           
@@ -20978,9 +21048,53 @@ p.animations.new()
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple dissolve in</span>
+p.setOpacity(<span class="hljs-number">0</span>)
+p.animations.new()
+  .dissolveIn(<span class="hljs-number">2</span>)
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Dissolve in using options object</span>
+p.setOpacity(<span class="hljs-number">0</span>);
+p.animations.new()
+  .dissolveIn({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
+<span class="hljs-keyword">const</span> step1 = p.animations.dissolveIn(<span class="hljs-number">2</span>);
+<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.DissolveInAnimationStep({
+  <span class="hljs-attr">element</span>: p,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+
+p.setOpacity(<span class="hljs-number">0</span>);
+p.animations.new()
+  .then(step1)
+  .dissolveOut(<span class="hljs-number">1</span>)
+  .then(step2)
+  .start();</pre>
+    
   
 
   
@@ -21009,6 +21123,8 @@ p.animations.new()
   
 
   <p>Dissolve out animation step</p>
+<p><img src="./assets1/dissolveout_animation.gif"></p>
+<p>Animates opacity of element to dissolve out.</p>
 
   
   
@@ -21033,16 +21149,7 @@ p.animations.new()
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>timeOrOptionsIn</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>)
-            = <code>{}</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>>)</code>
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>))</code>
 	    
           </div>
           
@@ -21056,9 +21163,50 @@ p.animations.new()
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple dissolve out</span>
+p.animations.new()
+  .dissolveOut(<span class="hljs-number">2</span>)
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Dissolve out using options object</span>
+p.animations.new()
+  .dissolveOut({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
+<span class="hljs-keyword">const</span> step1 = p.animations.dissolveOut(<span class="hljs-number">2</span>);
+<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.DissolveOutAnimationStep({
+  <span class="hljs-attr">element</span>: p,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+
+p.animations.new()
+  .then(step1)
+  .dissolveIn(<span class="hljs-number">1</span>)
+  .then(step2)
+  .start();</pre>
+    
   
 
   
@@ -34381,21 +34529,6 @@ element's
   
 
   <p><a href="#opacityanimationstep">OpacityAnimationStep</a> options object</p>
-<p><img src="./assets1/opacity_animation.gif"></p>
-<p>A <a href="#diagramelement">DiagramElement</a> has <code>color</code> and <code>opacity</code> properties. The <code>color</code>
-property has an alpha channel that defines opacity, but it should be used
-as a base color definition, and not used to dissolve an element in and out.</p>
-<p>Therefore, to animate an element's opacity or temporarily dissolve in or out
-an element, use an opacity animation step.</p>
-<p>The <code>opacity</code> is multiplied by the
-<code>color</code> alpha channel to get the final opacity of the element.</p>
-<p>By default, the opacity will start with the <a href="#diagramelement">DiagramElement</a>'s current
-opacity unless dissolving. If dissolving, the opacity will start at <code>0</code> if
-dissolving in, or <code>1</code> if dissolving out unless <code>dissolveFromCurrent</code> is
-<code>true</code> in which case the opacity will start from the current opacity.</p>
-<p>The <a href="#dissolveinanimationstep">DissolveInAnimationStep</a> and <a href="#dissolveoutanimationstep">DissolveOutAnimationStep</a>
-extend the <code>OpacityAnimationStep</code> to make it even more convenient to
-dissolve.</p>
 
   
     <p style="display: none;">      Type:
@@ -34469,71 +34602,9 @@ dissolve.</p>
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        To test examples, append them to the
-
-<a href="#animation-boilerplate">
-boilerplate
-</a>
-
-      
-    
-  
 
   
 
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using numerical values for opacity</span>
-p.animations.new()
-  .opacity({ <span class="hljs-attr">target</span>: <span class="hljs-number">0.4</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .opacity({ <span class="hljs-attr">target</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .start();</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Dissolve out then in</span>
-p.animations.new()
-  .opacity({ <span class="hljs-attr">dissolve</span>: <span class="hljs-string">'out'</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .opacity({ <span class="hljs-attr">dissolve</span>: <span class="hljs-string">'in'</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .start();</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using the dissolve animation step</span>
-p.animations.new()
-  .dissolveOut(<span class="hljs-number">2</span>)
-  .dissolveIn({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .start();</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
-<span class="hljs-keyword">const</span> step1 = p.animations.opacity({
-  <span class="hljs-attr">target</span>: <span class="hljs-number">0</span>,
-  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
-});
-<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.OpacityAnimationStep({
-  <span class="hljs-attr">element</span>: p,
-  <span class="hljs-attr">target</span>: <span class="hljs-number">1</span>,
-  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
-});
-<span class="hljs-keyword">const</span> step3 = p.animations.dissolveOut({
-  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
-});
-<span class="hljs-keyword">const</span> step4 = <span class="hljs-keyword">new</span> Fig.Animation.DissolveInAnimationStep({
-  <span class="hljs-attr">element</span>: p,
-  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
-});
-
-p.animations.new()
-  .then(step1)
-  .then(step2)
-  .then(step3)
-  .then(step4)
-  .start();</pre>
-    
   
 
   

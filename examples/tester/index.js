@@ -153,28 +153,27 @@ diagram.addElement({
 const p = diagram.getElement('p');
 diagram.initialize();
 
-// Simple undim
-p.animations.new()
-  .delay(1)
-  .dim(2)
-  .start();
-
-// // Undim using options object
-// p.dim();
+// // Simple dissolve out
 // p.animations.new()
-//   .undim({ delay: 1, duration: 2 })
+//   .dissolveOut(2)
 //   .start();
 
+
+// // Dissolve out using options object
+// p.animations.new()
+//   .dissolveOut({ delay: 1, duration: 2 })
+//   .start();
+
+
 // // Different ways to create a stand-alone step
-// const step1 = p.animations.undim(2);
-// const step2 = new Fig.Animation.UndimAnimationStep({
+// const step1 = p.animations.dissolveOut(2);
+// const step2 = new Fig.Animation.DissolveOutAnimationStep({
 //   element: p,
 //   duration: 2,
 // });
 
-// p.dim();
 // p.animations.new()
 //   .then(step1)
-//   .dim(1)
+//   .dissolveIn(1)
 //   .then(step2)
 //   .start();

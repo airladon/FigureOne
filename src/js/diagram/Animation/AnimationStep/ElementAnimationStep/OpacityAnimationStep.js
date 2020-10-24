@@ -12,7 +12,27 @@ import type {
 import ElementAnimationStep from '../ElementAnimationStep';
 
 /**
-  * {@link OpacityAnimationStep} options object
+ * {@link OpacityAnimationStep} options object
+ *
+ * @extends OBJ_ElementAnimationStep
+ *
+ * @property {number} [start]
+ * @property {number} [target]
+ * @property {number} [delta]
+ * @property {null | 'in' | 'out'} dissolve will override target opacity if not
+ * `null` (`null`)
+ * @property {boolean} dissolveFromCurrent (`false`)
+ */
+export type OBJ_OpacityAnimationStep = {
+  start?: number;      // default is element transform
+  target?: number;     // Either target or delta must be defined
+  delta?: number;      // delta overrides target if both are defined
+  dissolve?: 'in' | 'out' | null,
+  dissolveFromCurrent?: boolean,
+} & OBJ_ElementAnimationStep;
+
+/**
+ * Opacity Animation Step
  *
  * ![](./assets1/opacity_animation.gif)
  *
@@ -35,14 +55,8 @@ import ElementAnimationStep from '../ElementAnimationStep';
  * extend the `OpacityAnimationStep` to make it even more convenient to
  * dissolve.
  *
- * @extends OBJ_ElementAnimationStep
- *
- * @property {number} [start]
- * @property {number} [target]
- * @property {number} [delta]
- * @property {null | 'in' | 'out'} dissolve will override target opacity if not
- * `null` (`null`)
- * @property {boolean} dissolveFromCurrent (`false`)
+ * @extends ElementAnimationStep
+ * @param {OBJ_OpacityAnimationStep} options
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
@@ -93,19 +107,6 @@ import ElementAnimationStep from '../ElementAnimationStep';
  *   .then(step3)
  *   .then(step4)
  *   .start();
- */
-export type OBJ_OpacityAnimationStep = {
-  start?: number;      // default is element transform
-  target?: number;     // Either target or delta must be defined
-  delta?: number;      // delta overrides target if both are defined
-  dissolve?: 'in' | 'out' | null,
-  dissolveFromCurrent?: boolean,
-} & OBJ_ElementAnimationStep;
-
-/**
- * Opacity Animation Step
- * @extends ElementAnimationStep
- * @param {OBJ_OpacityAnimationStep} options
  */
 export class OpacityAnimationStep extends ElementAnimationStep {
   opacity: {
@@ -266,9 +267,50 @@ export class OpacityAnimationStep extends ElementAnimationStep {
 
 /**
  * Dissolve in animation step
+ *
+ * ![](./assets1/dissolvein_animation.gif)
+ *
+ * Animates opacity of element to dissolve in.
+ *
  * @extends OpacityAnimationStep
+ * @param {number | OBJ_ElementAnimationStep} durationOrOptions
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple dissolve in
+ * p.setOpacity(0)
+ * p.animations.new()
+ *   .dissolveIn(2)
+ *   .start();
+ *
+ * @example
+ * // Dissolve in using options object
+ * p.setOpacity(0);
+ * p.animations.new()
+ *   .dissolveIn({ delay: 1, duration: 2 })
+ *   .start();
+ *
+ * @example
+ * // Different ways to create a stand-alone step
+ * const step1 = p.animations.dissolveIn(2);
+ * const step2 = new Fig.Animation.DissolveInAnimationStep({
+ *   element: p,
+ *   duration: 2,
+ * });
+ *
+ * p.setOpacity(0);
+ * p.animations.new()
+ *   .then(step1)
+ *   .dissolveOut(1)
+ *   .then(step2)
+ *   .start();
  */
 export class DissolveInAnimationStep extends OpacityAnimationStep {
+  /**
+   * @hideconstructor
+   */
   constructor(
     timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
     ...args: Array<OBJ_ElementAnimationStep>
@@ -293,9 +335,47 @@ export function dissolveIn(
 
 /**
  * Dissolve out animation step
+ *
+ * ![](./assets1/dissolveout_animation.gif)
+ *
+ * Animates opacity of element to dissolve out.
+ *
  * @extends OpacityAnimationStep
+ * @param {number | OBJ_ElementAnimationStep} durationOrOptions
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple dissolve out
+ * p.animations.new()
+ *   .dissolveOut(2)
+ *   .start();
+ *
+ * @example
+ * // Dissolve out using options object
+ * p.animations.new()
+ *   .dissolveOut({ delay: 1, duration: 2 })
+ *   .start();
+ *
+ * @example
+ * // Different ways to create a stand-alone step
+ * const step1 = p.animations.dissolveOut(2);
+ * const step2 = new Fig.Animation.DissolveOutAnimationStep({
+ *   element: p,
+ *   duration: 2,
+ * });
+ *
+ * p.animations.new()
+ *   .then(step1)
+ *   .dissolveIn(1)
+ *   .then(step2)
+ *   .start();
  */
 export class DissolveOutAnimationStep extends OpacityAnimationStep {
+  /**
+   * @hideconstructor
+   */
   constructor(
     timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
     ...args: Array<OBJ_ElementAnimationStep>

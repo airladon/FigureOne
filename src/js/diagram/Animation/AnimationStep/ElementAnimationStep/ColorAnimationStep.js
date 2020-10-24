@@ -235,7 +235,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
  * Animates color of element to the `dimColor` property of {@link DiagramElement}
  *
  * @extends ColorAnimationStep
- * @param {number | OBJ_ElementAnimationStep} timeOrOptions
+ * @param {number | OBJ_ElementAnimationStep} durationOrOptions
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
@@ -274,7 +274,6 @@ export class DimAnimationStep extends ColorAnimationStep {
     timeOrOptionsIn: number | OBJ_ElementAnimationStep = {},
     ...args: Array<OBJ_ElementAnimationStep>
   ) {
-    console.log(timeOrOptionsIn)
     let options = {};
     const defaultOptions = { duration: 1, target: 'dim', completeOnCancel: true };
     if (typeof timeOrOptionsIn === 'number') {
@@ -301,7 +300,7 @@ export function dim(
  * Animates color of element to the `defaultColor` property of {@link DiagramElement}
  *
  * @extends ColorAnimationStep
- * @param {number | OBJ_ElementAnimationStep} timeOrOptions
+ * @param {number | OBJ_ElementAnimationStep} durationOrOptions
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
