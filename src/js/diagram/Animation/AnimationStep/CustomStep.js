@@ -12,6 +12,22 @@ import type { DiagramElement } from '../../Element';
 /**
  * {@link CustomAnimationStep} options object
  *
+ * @extends OBJ_AnimationStep
+ *
+ * @property {string | function(int): void} callback function to run each
+ * animation frame
+ * @property {number} [startPercent] percent to start animation at (`0`)
+ * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
+ */
+export type OBJ_CustomAnimationStep = {
+  callback?: string | ((number) => void);
+  startPercent?: number;
+  progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number;
+} & OBJ_AnimationStep;
+
+/**
+ * Custom animation step
+ *
  * ![](./assets1/custom_animation.gif)
  *
  * Custom animation steps are useful for orchestrating complex animations, or
@@ -26,15 +42,9 @@ import type { DiagramElement } from '../../Element';
  * `'easeout'` which will slow progress at the start or end of the animation.
  * A function to create a custom non-linear progressor can also be used.
  *
- * @see To test examples, append them to the
- * <a href="#animation-boilerplate">boilerplate</a>
+ * @extends AnimationStep
  *
- * @extends OBJ_AnimationStep
- *
- * @property {string | function(int): void} callback function to run each
- * animation frame
- * @property {number} [startPercent] percent to start animation at (`0`)
- * @property {'linear' | 'easeinout' | 'easein' | 'easeout' | AnimationProgression} [progression]
+ * @param {OBJ_CustomAnimationStep} options
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
@@ -51,19 +61,6 @@ import type { DiagramElement } from '../../Element';
  * p.animations.new()
  *   .custom({ callback: sine, duration: 5 })
  *   .start();
- */
-export type OBJ_CustomAnimationStep = {
-  callback?: string | ((number) => void);
-  startPercent?: number;
-  progression?: 'linear' | 'easeinout' | 'easein' | 'easeout' | (number) => number;
-} & OBJ_AnimationStep;
-
-/**
- * Custom animation step
- *
- * @extends AnimationStep
- *
- * @param {OBJ_CustomAnimationStep} options
  */
 export class CustomAnimationStep extends AnimationStep {
   element: ?Object;

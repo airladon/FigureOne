@@ -25,7 +25,7 @@ import type { DiagramElement } from '../../Element';
 export type AnimationProgression = (number) => number;
 
 /**
- * Base element animation step options object
+ * {@link ElementAnimationStep} options object
  *
  * @extends OBJ_AnimationStep
  * @property {DiagramElement} [element]
@@ -43,6 +43,7 @@ export type OBJ_ElementAnimationStep = {
  * Animation Step tied to an element
  *
  * Default values for the animation step will then come from this element.
+ *
  * @extends AnimationStep
  */
 export default class ElementAnimationStep extends AnimationStep {

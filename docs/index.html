@@ -21235,6 +21235,11 @@ p.animations.new()
   
 
   <p>Trigger Animation Step</p>
+<p><img src="./assets1/trigger_animation.gif"></p>
+<p>A trigger step executes a custom function</p>
+<p>A <code>delay</code> will delay the triggering of the custom function
+while <code>duration</code> will pad time at the end of the trigger before
+the animation step finishes.</p>
 
   
   
@@ -21273,9 +21278,67 @@ p.animations.new()
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple trigger</span>
+p.animations.new()
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .trigger(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (1, 0)'</span>) })
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .trigger(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (0, 0)'</span>) })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Trigger with delay, duration and payload</span>
+<span class="hljs-keyword">const</span> printPosition = <span class="hljs-function">(<span class="hljs-params">pos</span>) =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`arrived at <span class="hljs-subst">${pos}</span>`</span>);
+};
+
+p.animations.new()
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .trigger({
+    <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">callback</span>: printPosition,
+    <span class="hljs-attr">payload</span>: <span class="hljs-string">'(1, 0)'</span>,
+    <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
+  })
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .trigger({ <span class="hljs-attr">callback</span>: printPosition, <span class="hljs-attr">payload</span>: <span class="hljs-string">'(0, 0)'</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
+<span class="hljs-keyword">const</span> step1 = p.animations.trigger({
+  <span class="hljs-attr">callback</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (1, 0)'</span>) },
+});
+<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.TriggerAnimationStep({
+  <span class="hljs-attr">callback</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (0, 0)'</span>) },
+});
+
+p.animations.new()
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .then(step1)
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .then(step2)
+  .start();</pre>
+    
   
 
   
@@ -21304,6 +21367,16 @@ p.animations.new()
   
 
   <p>Custom animation step</p>
+<p><img src="./assets1/custom_animation.gif"></p>
+<p>Custom animation steps are useful for orchestrating complex animations, or
+performing non-linear animations.</p>
+<p>This step will execute a custom callback function on each animation frame
+for the duration of the animation. The callback function will be passed the
+percentage progress of the animation.</p>
+<p>The percentage progress can either be linear with time, or non-linear.
+Built-in non-linear progressions are <code>'easeinout'</code>, <code>'easein</code>' and
+<code>'easeout'</code> which will slow progress at the start or end of the animation.
+A function to create a custom non-linear progressor can also be used.</p>
 
   
   
@@ -21342,9 +21415,37 @@ p.animations.new()
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Move an object through a sine wave of wavelength 1 from</span>
+<span class="hljs-comment">// x = -1 to x = 1</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sine</span>(<span class="hljs-params">percentComplete</span>) </span>{
+  <span class="hljs-keyword">const</span> x = <span class="hljs-number">-1</span> + percentComplete * <span class="hljs-number">2</span>;
+  <span class="hljs-keyword">const</span> y = <span class="hljs-number">0.5</span> * <span class="hljs-built_in">Math</span>.sin(<span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span> * x);
+  p.setPosition(x, y);
+}
+
+p.animations.new()
+  .custom({ <span class="hljs-attr">callback</span>: sine, <span class="hljs-attr">duration</span>: <span class="hljs-number">5</span> })
+  .start();</pre>
+    
   
 
   
@@ -32741,7 +32842,7 @@ to where
   </div>
   
 
-  <p>Base element animation step options object</p>
+  <p><a href="#elementanimationstep">ElementAnimationStep</a> options object</p>
 
   
     <p style="display: none;">      Type:
@@ -33179,6 +33280,9 @@ custom time
   
 
   <p>Delay animation step</p>
+<p>While all animations steps accept a delay property,
+having this step sometimes makes the animatino series
+more readable.</p>
 
   
   
@@ -33203,16 +33307,7 @@ custom time
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>numOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_animationstep">OBJ_AnimationStep</a>)
-            = <code>{}</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>args</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_animationstep">OBJ_AnimationStep</a>>)</code>
+            <span class='code bold'>delayOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_animationstep">OBJ_AnimationStep</a>))</code>
 	    
           </div>
           
@@ -33842,16 +33937,6 @@ to where
   
 
   <p><a href="#customanimationstep">CustomAnimationStep</a> options object</p>
-<p><img src="./assets1/custom_animation.gif"></p>
-<p>Custom animation steps are useful for orchestrating complex animations, or
-performing non-linear animations.</p>
-<p>This step will execute a custom callback function on each animation frame
-for the duration of the animation. The callback function will be passed the
-percentage progress of the animation.</p>
-<p>The percentage progress can either be linear with time, or non-linear.
-Built-in non-linear progressions are <code>'easeinout'</code>, <code>'easein</code>' and
-<code>'easeout'</code> which will slow progress at the start or end of the animation.
-A function to create a custom non-linear progressor can also be used.</p>
 
   
     <p style="display: none;">      Type:
@@ -33909,46 +33994,9 @@ animation frame
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        To test examples, append them to the
-
-<a href="#animation-boilerplate">
-boilerplate
-</a>
-
-      
-    
-      
-        To test examples, append them to the
-
-<a href="#animation-boilerplate">
-boilerplate
-</a>
-
-      
-    
-  
 
   
 
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Move an object through a sine wave of wavelength 1 from</span>
-<span class="hljs-comment">// x = -1 to x = 1</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sine</span>(<span class="hljs-params">percentComplete</span>) </span>{
-  <span class="hljs-keyword">const</span> x = <span class="hljs-number">-1</span> + percentComplete * <span class="hljs-number">2</span>;
-  <span class="hljs-keyword">const</span> y = <span class="hljs-number">0.5</span> * <span class="hljs-built_in">Math</span>.sin(<span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span> * x);
-  p.setPosition(x, y);
-}
-
-p.animations.new()
-  .custom({ <span class="hljs-attr">callback</span>: sine, <span class="hljs-attr">duration</span>: <span class="hljs-number">5</span> })
-  .start();</pre>
-    
   
 
   
@@ -34286,11 +34334,6 @@ whichever direction doesn't pass through angle 0.
   
 
   <p><a href="TriggernAnimationStep">TriggernAnimationStep</a> options object</p>
-<p><img src="./assets1/trigger_animation.gif"></p>
-<p>A trigger step executes a custom function</p>
-<p>A <code>delay</code> will delay the triggering of the custom function
-while <code>duration</code> will pad time at the end of the trigger before
-the animation step finishes.</p>
 
   
     <p style="display: none;">      Type:
@@ -34348,67 +34391,9 @@ callback - if the
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        To test examples, append them to the
-
-<a href="#animation-boilerplate">
-boilerplate
-</a>
-
-      
-    
-  
 
   
 
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple trigger</span>
-p.animations.new()
-  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .trigger(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (1, 0)'</span>) })
-  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .trigger(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (0, 0)'</span>) })
-  .start();</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Trigger with delay, duration and payload</span>
-<span class="hljs-keyword">const</span> printPosition = <span class="hljs-function">(<span class="hljs-params">pos</span>) =&gt;</span> {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`arrived at <span class="hljs-subst">${pos}</span>`</span>);
-};
-
-p.animations.new()
-  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .trigger({
-    <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">callback</span>: printPosition,
-    <span class="hljs-attr">payload</span>: <span class="hljs-string">'(1, 0)'</span>,
-    <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
-  })
-  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .trigger({ <span class="hljs-attr">callback</span>: printPosition, <span class="hljs-attr">payload</span>: <span class="hljs-string">'(0, 0)'</span> })
-  .start();</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
-<span class="hljs-keyword">const</span> step1 = p.animations.trigger({
-  <span class="hljs-attr">callback</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (1, 0)'</span>) },
-});
-<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.TriggerAnimationStep({
-  <span class="hljs-attr">callback</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (0, 0)'</span>) },
-});
-
-p.animations.new()
-  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .then(step1)
-  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .then(step2)
-  .start();</pre>
-    
   
 
   

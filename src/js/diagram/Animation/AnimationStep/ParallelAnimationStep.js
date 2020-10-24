@@ -31,7 +31,15 @@ export type OBJ_ParallelAnimationStep = {
  * <a href="#animation-boilerplate">boilerplate</a>
  *
  * @example
- * // Use `AnimationBuilder` for a more clean look
+ * p.animations.new()
+ *   .inParallel([
+ *     p.animations.position({ target: [1, 0], duration: 2 }),
+ *     p.animations.scale({ target: 2, duration: 2 }),
+ *   ])
+ *   .start();
+ *
+ * @example
+ * // One of the parallel steps is a series of steps
  * p.animations.new()
  *   .delay(1)
  *   .inParallel([

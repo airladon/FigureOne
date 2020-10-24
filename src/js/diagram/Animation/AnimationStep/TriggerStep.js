@@ -9,6 +9,23 @@ import type { DiagramElement } from '../../Element';
 /**
  * {@link TriggernAnimationStep} options object
  *
+ * @extends OBJ_AnimationStep
+ *
+ * @property {string | () => {}} callback
+ * @property {any} [payload] payload to pass to callback (`null`)
+ * @property {DiagramElement} element {@link DiagramElement} to associate with
+ * callback - if the `callback` is a string then this element's
+ * {@link FunctionMap} will be searched for the corresponding function
+ *
+ */
+export type OBJ_TriggerAnimationStep = {
+  callback?: Function;      // default is element transform
+  payload?: Object;
+} & OBJ_AnimationStep;
+
+/**
+ * Trigger Animation Step
+ *
  * ![](./assets1/trigger_animation.gif)
  *
  * A trigger step executes a custom function
@@ -17,13 +34,8 @@ import type { DiagramElement } from '../../Element';
  * while `duration` will pad time at the end of the trigger before
  * the animation step finishes.
  *
- * @extends OBJ_AnimationStep
- *
- * @property {string | () => {}} callback
- * @property {any} [payload] payload to pass to callback (`null`)
- * @property {DiagramElement} element {@link DiagramElement} to associate with
- * callback - if the `callback` is a string then this element's
- * {@link FunctionMap} will be searched for the corresponding function
+ * @extends AnimationStep
+ * @param {OBJ_TriggerAnimationStep | function(): void} options
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
@@ -70,16 +82,6 @@ import type { DiagramElement } from '../../Element';
  *   .position({ target: [0, 0], duration: 2 })
  *   .then(step2)
  *   .start();
- */
-export type OBJ_TriggerAnimationStep = {
-  callback?: Function;      // default is element transform
-  payload?: Object;
-} & OBJ_AnimationStep;
-
-/**
- * Trigger Animation Step
- * @extends AnimationStep
- * @param {OBJ_TriggerAnimationStep | function(): void} options
  */
 export class TriggerAnimationStep extends AnimationStep {
   element: ?Object;

@@ -12,9 +12,18 @@ import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 
 /**
  * Delay animation step
+ *
+ * While all animations steps accept a delay property,
+ * having this step sometimes makes the animatino series
+ * more readable.
+ *
+ * @param {number | OBJ_AnimationStep} delayOrOptions
  * @extends AnimationStep
  */
 export class DelayAnimationStep extends AnimationStep {
+  /**
+   * @hideconstructor
+   */
   constructor(
     numOrOptions: number | OBJ_AnimationStep = {},
     ...args: Array<OBJ_AnimationStep>

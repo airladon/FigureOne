@@ -177,3 +177,10 @@ diagram.initialize();
 //   .dissolveIn(1)
 //   .then(step2)
 //   .start();
+
+p.animations.new()
+  .inParallel([
+    p.animations.position({ target: [1, 0], duration: 2 }),
+    p.animations.scale({ target: 2, duration: 2 }),
+  ])
+  .start();
