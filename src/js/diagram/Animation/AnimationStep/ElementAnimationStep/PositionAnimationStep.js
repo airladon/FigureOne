@@ -18,21 +18,6 @@ import type { AnimationStartTime } from '../../AnimationManager';
 /**
  * {@link PositionAnimationStep} options object
  *
- * ![](./assets1/position_animation.gif)
- *
- * The position animation step animates the first {@link Translation} transform
- * in the {@link DiagramElement}'s {@link Transform}.
- *
- * By default, the position will start with the element's current position.
- *
- * Use either `delta` or `target` to define it's end point.
- *
- * The path of travel between `start` and `target` can either be a straight
- * line (`'linear'`) or a quadratic bezier curve (`'curve'`)
- *
- * For custom paths, the @{link CustomAnimationStep} can be used.
- *
- *
  * @extends OBJ_ElementAnimationStep
  *
  * @property {TypeParsablePoint} [start] start position - if undefined then
@@ -48,6 +33,41 @@ import type { AnimationStartTime } from '../../AnimationManager';
  * @property {OBJ_TranslationPath} [path] (`{ style: 'linear' }`)
  * @property {number | null} [maxDuration] maximum duration to clip animation
  * to where `null` is unlimited (`null`)
+ *
+ * @see {@link PositionAnimationStep} for description and examples
+ */
+export type OBJ_PositionAnimationStep = {
+  start?: Point;      // default is element transform
+  target?: Point;     // Either target or delta must be defined
+  delta?: Point;      // delta overrides target if both are defined
+  // path?: 'linear' | 'curved'; // default is linear
+  // pathOptions?: pathOptionsType;
+  path?: OBJ_TranslationPath;
+  velocity?: Point;
+  maxDuration?: number;
+} & OBJ_ElementAnimationStep;
+
+/**
+ * Position animation step
+ *
+ * ![](./assets1/position_animation.gif)
+ *
+ * The position animation step animates the first {@link Translation} transform
+ * in the {@link DiagramElement}'s {@link Transform}.
+ *
+ * By default, the position will start with the element's current position.
+ *
+ * Use either `delta` or `target` to define it's end point.
+ *
+ * The path of travel between `start` and `target` can either be a straight
+ * line (`'linear'`) or a quadratic bezier curve (`'curve'`)
+ *
+ * For custom paths, the {@link CustomAnimationStep} can be used.
+ *
+ *
+ * @extends ElementAnimationStep
+ *
+ * @param {OBJ_PositionAnimationStep} options
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
@@ -94,25 +114,7 @@ import type { AnimationStartTime } from '../../AnimationManager';
  *   .then(step2)
  *   .start();
  */
-export type OBJ_PositionAnimationStep = {
-  start?: Point;      // default is element transform
-  target?: Point;     // Either target or delta must be defined
-  delta?: Point;      // delta overrides target if both are defined
-  // path?: 'linear' | 'curved'; // default is linear
-  // pathOptions?: pathOptionsType;
-  path?: OBJ_TranslationPath;
-  velocity?: Point;
-  maxDuration?: number;
-} & OBJ_ElementAnimationStep;
-
-/**
- * Position animation step
- *
- * @extends ElementAnimationStep
- *
- * @param {OBJ_PositionAnimationStep} options
- */
-export default class PositionAnimationStep extends ElementAnimationStep {
+ export default class PositionAnimationStep extends ElementAnimationStep {
   position: {
     start: ?Point;  // null means use element transform when unit is started
     delta: ?Point;

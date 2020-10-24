@@ -35,8 +35,8 @@ toc:
     file: ./docs/tutorials/animation/animation.md
   - AnimationManager
   - AnimationBuilder
-  - OBJ_PositionAnimationStep
-  - OBJ_RotationAnimationStep
+  - PositionAnimationStep
+  - RotationAnimationStep
   - OBJ_ScaleAnimationStep
   - OBJ_CustomAnimationStep
   - OBJ_TransformAnimationStep
@@ -122,6 +122,8 @@ toc:
   - OBJ_TextModifierDefinition
   - OBJ_TextModifiersDefinition
   - name: Misc Animation
+  - OBJ_PositionAnimationStep
+  - OBJ_RotationAnimationStep
   - OBJ_ElementAnimationStep
   - OBJ_ScenarioVelocity
   - AnimationStep
@@ -132,8 +134,6 @@ toc:
   - OBJ_AnimationStart
   - OBJ_SerialAnimationStep
   - OBJ_ParallelAnimationStep
-  - PositionAnimationStep
-  - RotationAnimationStep
   - ScaleAnimationStep
   - TransformAnimationStep
   - ScenarioAnimationStep

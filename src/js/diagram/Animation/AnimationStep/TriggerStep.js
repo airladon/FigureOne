@@ -7,16 +7,69 @@ import AnimationStep from '../AnimationStep';
 import type { DiagramElement } from '../../Element';
 
 /**
- * Trigger Step animation options object
+ * {@link TriggernAnimationStep} options object
  *
- * A trigger step is a zero duration animation step that triggers a custom
- * function
+ * ![](./assets1/trigger_animation.gif)
+ *
+ * A trigger step executes a custom function
+ *
+ * A `delay` will delay the triggering of the custom function
+ * while `duration` will pad time at the end of the trigger before
+ * the animation step finishes.
+ *
  * @extends OBJ_AnimationStep
+ *
  * @property {string | () => {}} callback
- * @property {null | Object} [payload] payload to pass to callback (`null`)
+ * @property {any} [payload] payload to pass to callback (`null`)
  * @property {DiagramElement} element {@link DiagramElement} to associate with
  * callback - if the `callback` is a string then this element's
  * {@link FunctionMap} will be searched for the corresponding function
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple trigger
+ * p.animations.new()
+ *   .position({ target: [1, 0], duration: 2 })
+ *   .trigger(() => { console.log('arrived at (1, 0)') })
+ *   .position({ target: [0, 0], duration: 2 })
+ *   .trigger(() => { console.log('arrived at (0, 0)') })
+ *   .start();
+ *
+ * @example
+ * // Trigger with delay, duration and payload
+ * const printPosition = (pos) => {
+ *   console.log(`arrived at ${pos}`);
+ * };
+ *
+ * p.animations.new()
+ *   .position({ target: [1, 0], duration: 2 })
+ *   .trigger({
+ *     delay: 1,
+ *     callback: printPosition,
+ *     payload: '(1, 0)',
+ *     duration: 1,
+ *   })
+ *   .position({ target: [0, 0], duration: 2 })
+ *   .trigger({ callback: printPosition, payload: '(0, 0)' })
+ *   .start();
+ *
+ * @example
+ * // Different ways to create a stand alone step
+ * const step1 = p.animations.trigger({
+ *   callback: () => { console.log('arrived at (1, 0)') },
+ * });
+ * const step2 = new Fig.Animation.TriggerAnimationStep({
+ *   callback: () => { console.log('arrived at (0, 0)') },
+ * });
+ *
+ * p.animations.new()
+ *   .position({ target: [1, 0], duration: 2 })
+ *   .then(step1)
+ *   .position({ target: [0, 0], duration: 2 })
+ *   .then(step2)
+ *   .start();
  */
 export type OBJ_TriggerAnimationStep = {
   callback?: Function;      // default is element transform
@@ -26,12 +79,16 @@ export type OBJ_TriggerAnimationStep = {
 /**
  * Trigger Animation Step
  * @extends AnimationStep
+ * @param {OBJ_TriggerAnimationStep | function(): void} options
  */
 export class TriggerAnimationStep extends AnimationStep {
   element: ?Object;
   callback: ?(string | Function);
   payload: ?Object;
 
+  /**
+   * @hideconstructor
+   */
   constructor(
     triggerOrOptionsIn: Function | OBJ_TriggerAnimationStep = {},
     ...optionsIn: Array<OBJ_TriggerAnimationStep>
@@ -109,6 +166,9 @@ export class TriggerAnimationStep extends AnimationStep {
   }
 
   setFrame() {
+    if (this.callback != null && this.payload != null) {
+      console.log(this.payload)
+    }
     this.fnExec(this.callback, this.payload);
     this.callback = null;
     // if (this.callback != null) {

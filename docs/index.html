@@ -1534,6 +1534,16 @@
               
                 
                 <li><a
+                  href='#positionanimationstep'
+                  class="">
+                  PositionAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_scaleanimationstep'
                   class="">
                   OBJ_ScaleAnimationStep
@@ -1547,26 +1557,6 @@
                   href='#obj_customanimationstep'
                   class="">
                   OBJ_CustomAnimationStep
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_triggeranimationstep'
-                  class="">
-                  OBJ_TriggerAnimationStep
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_elementanimationstep'
-                  class="">
-                  OBJ_ElementAnimationStep
                   
                 </a>
                 
@@ -1594,19 +1584,9 @@
               
                 
                 <li><a
-                  href='#obj_scenariovelocity'
+                  href='#obj_triggeranimationstep'
                   class="">
-                  OBJ_ScenarioVelocity
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_scenariosanimationstep'
-                  class="">
-                  OBJ_ScenariosAnimationStep
+                  OBJ_TriggerAnimationStep
                   
                 </a>
                 
@@ -1627,6 +1607,16 @@
                   href='#obj_opacityanimationstep'
                   class="">
                   OBJ_OpacityAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_scenariosanimationstep'
+                  class="">
+                  OBJ_ScenariosAnimationStep
                   
                 </a>
                 
@@ -2484,6 +2474,26 @@
               
                 
                 <li><a
+                  href='#obj_elementanimationstep'
+                  class="">
+                  OBJ_ElementAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_scenariovelocity'
+                  class="">
+                  OBJ_ScenarioVelocity
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#animationstep'
                   class=" toggle-sibling">
                   AnimationStep
@@ -2581,16 +2591,6 @@
                   href='#obj_parallelanimationstep'
                   class="">
                   OBJ_ParallelAnimationStep
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#positionanimationstep'
-                  class="">
-                  PositionAnimationStep
                   
                 </a>
                 
@@ -18399,8 +18399,8 @@ custom time
   
 
   <p>Animation Builder</p>
-<p>Use to build a series of animation steps. Each step will return the same
-builder object.</p>
+<p>Convenient way to build animation steps in serial. Each step returns the
+same builder object, and so chaining in a fluent like API can be achieved.</p>
 
   
   
@@ -18439,6 +18439,17 @@ AnimationManager.new
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>p.animations.new()
+  .delay(<span class="hljs-number">1</span>)
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .delay(<span class="hljs-number">1</span>)
+  .rotate({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
   
 
   
@@ -19803,14 +19814,13 @@ AnimationManager.new
   
 
   <p><a href="#positionanimationstep">PositionAnimationStep</a> options object</p>
-<p><img src="./assets1/position_animation.gif"></p>
 <p>The position animation step animates the first <a href="#translation">Translation</a> transform
 in the <a href="#diagramelement">DiagramElement</a>'s <a href="#transform">Transform</a>.</p>
 <p>By default, the position will start with the element's current position.</p>
 <p>Use either <code>delta</code> or <code>target</code> to define it's end point.</p>
 <p>The path of travel between <code>start</code> and <code>target</code> can either be a straight
 line (<code>'linear'</code>) or a quadratic bezier curve (<code>'curve'</code>)</p>
-<p>For custom paths, the @{link CustomAnimationStep} can be used.</p>
+<p>For custom paths, the <a href="#customanimationstep">CustomAnimationStep</a> can be used.</p>
 
   
     <p style="display: none;">      Type:
@@ -19913,11 +19923,8 @@ to where
     <div class='py1 quiet mt1 prose-big'>Related</div>
     
       
-        To test examples, append them to the
-
-<a href="#animation-boilerplate">
-boilerplate
-</a>
+        <a href="#positionanimationstep">PositionAnimationStep</a>
+ for examples on use
 
       
     
@@ -19925,51 +19932,6 @@ boilerplate
 
   
 
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using duration</span>
-p.animations.new()
-  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .start()</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using velocity</span>
-p.animations.new()
-  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">velocity</span>: <span class="hljs-number">0.5</span> })
-  .start()</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Linear and curved path</span>
-p.animations.new()
-  .delay(<span class="hljs-number">1</span>)
-  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .position({
-    <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-    <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
-    <span class="hljs-attr">path</span>: {
-      <span class="hljs-attr">style</span>: <span class="hljs-string">'curve'</span>,
-      <span class="hljs-attr">magnitude</span>: <span class="hljs-number">0.8</span>,
-      <span class="hljs-attr">direction</span>: <span class="hljs-string">'up'</span>,
-    },
-  })
-  .start();</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
-<span class="hljs-keyword">const</span> step1 = p.animations.position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });
-<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.PositionAnimationStep({
-  <span class="hljs-attr">element</span>: p,
-  <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
-});
-
-p.animations.new()
-  .then(step1)
-  .then(step2)
-  .start();</pre>
-    
   
 
   
@@ -20149,6 +20111,140 @@ p.animations.new()
   <span class="hljs-attr">element</span>: p,
   <span class="hljs-attr">target</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">direction</span>: <span class="hljs-number">-1</span>,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+
+p.animations.new()
+  .then(step1)
+  .then(step2)
+  .start();</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='positionanimationstep'>
+      PositionAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Position animation step</p>
+<p><img src="./assets1/position_animation.gif"></p>
+<p>The position animation step animates the first <a href="#translation">Translation</a> transform
+in the <a href="#diagramelement">DiagramElement</a>'s <a href="#transform">Transform</a>.</p>
+<p>By default, the position will start with the element's current position.</p>
+<p>Use either <code>delta</code> or <code>target</code> to define it's end point.</p>
+<p>The path of travel between <code>start</code> and <code>target</code> can either be a straight
+line (<code>'linear'</code>) or a quadratic bezier curve (<code>'curve'</code>)</p>
+<p>For custom paths, the <a href="#customanimationstep">CustomAnimationStep</a> can be used.</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#elementanimationstep">ElementAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_positionanimationstep">OBJ_PositionAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using duration</span>
+p.animations.new()
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start()</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using velocity</span>
+p.animations.new()
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">velocity</span>: <span class="hljs-number">0.5</span> })
+  .start()</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Linear and curved path</span>
+p.animations.new()
+  .delay(<span class="hljs-number">1</span>)
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .position({
+    <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">path</span>: {
+      <span class="hljs-attr">style</span>: <span class="hljs-string">'curve'</span>,
+      <span class="hljs-attr">magnitude</span>: <span class="hljs-number">0.8</span>,
+      <span class="hljs-attr">direction</span>: <span class="hljs-string">'up'</span>,
+    },
+  })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
+<span class="hljs-keyword">const</span> step1 = p.animations.position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });
+<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.PositionAnimationStep({
+  <span class="hljs-attr">element</span>: p,
+  <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
   <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
 });
 
@@ -20470,179 +20566,6 @@ p.animations.new()
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_triggeranimationstep'>
-      OBJ_TriggerAnimationStep
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Trigger Step animation options object</p>
-<p>A trigger step is a zero duration animation step that triggers a custom
-function</p>
-
-  
-    <p style="display: none;">      Type:
-      any
-    </p>
-  
-  
-    <p>
-      Extends
-      
-        <a href="#obj_animationstep">OBJ_AnimationStep</a>
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>payload</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)?)</code>
-          : payload to pass to callback (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>element</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>)</code>
-          : <a href="#diagramelement">DiagramElement</a>
- to associate with
-callback - if the 
-<code>callback</code>
- is a string then this element's
-
-<a href="FunctionMap">FunctionMap</a>
- will be searched for the corresponding function
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_elementanimationstep'>
-      OBJ_ElementAnimationStep
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Base element animation step options object</p>
-
-  
-    <p style="display: none;">      Type:
-      any
-    </p>
-  
-  
-    <p>
-      Extends
-      
-        <a href="#obj_animationstep">OBJ_AnimationStep</a>
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>element</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>progression</span> <code class='quiet'>((<code>"linear"</code> | <code>"easeinout"</code> | <code>"easein"</code> | <code>"easeout"</code> | <a href="#animationprogression">AnimationProgression</a>)?)</code>
-          : how the animation progresses - defaults to 
-<code>linear</code>
- for color, opacity and
-custom animations and 
-<code>easeinout</code>
- for others
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='obj_transformanimationstep'>
       OBJ_TransformAnimationStep
     </h3>
@@ -20879,7 +20802,11 @@ p.animations.new()
   
 
   <p><a href="#scenarioanimationstep">ScenarioAnimationStep</a> options object</p>
-<p>By default, the scenario will start with the element's current scenario.</p>
+<p><img src="./assets1/scenario_animation.gif"></p>
+<p>A scenario defines an element's transform and color and can be used to make
+code more readable and reusable.</p>
+<p>By default, the scenario will start with the element's current transform and
+color.</p>
 
   
     <p style="display: none;">      Type:
@@ -20935,7 +20862,8 @@ the
  is used
 then 
 <code>duration</code>
- will not be overriden (
+ will not be overriden. Any scenario velocity elements that
+are undefined will default to 1 (
 <code>null</code>
 )
 
@@ -20943,20 +20871,23 @@ then
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>maxDuration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
+          <span class='code bold'>maxDuration</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)?)</code>
+          : maximum duration to clip animation
+to where 
+<code>null</code>
+ is unlimited (
+<code>null</code>
+)
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>zeroDurationThreshold</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>allDurationsSame</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          
+          : value considered 0 to stop
+animation - this is useful when numbers get very small and rounding problems
+with javascripts floating point implementation arise
+
           
         </div>
       
@@ -20995,12 +20926,9 @@ whichever direction doesn't pass through angle 0.
       
         <div class='space-bottom0'>
           <span class='code bold'>progression</span> <code class='quiet'>((<code>"linear"</code> | <code>"easeinout"</code> | <code>"easein"</code> | <code>"easeout"</code> | <a href="#animationprogression">AnimationProgression</a>)?)</code>
-          : how the animation progresses - defaults to 
-<code>linear</code>
- for color, opacity and
-custom animations and 
-<code>easeinout</code>
- for others
+          : (
+<code>'easeinout'</code>
+)
 
           
         </div>
@@ -21011,9 +20939,66 @@ custom animations and
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// NOTE - use these scenario definitions for all examples below</span>
+p.scenarios[<span class="hljs-string">'center'</span>] = { <span class="hljs-attr">position</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">scale</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] };
+p.scenarios[<span class="hljs-string">'right'</span>] = { <span class="hljs-attr">position</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">scale</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] };
+p.scenarios[<span class="hljs-string">'bottom'</span>] = { <span class="hljs-attr">position</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">-0.5</span>], <span class="hljs-attr">scale</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] };</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using duration</span>
+p.animations.new()
+  .scenario({ <span class="hljs-attr">target</span>: <span class="hljs-string">'right'</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .scenario({ <span class="hljs-attr">target</span>: <span class="hljs-string">'bottom'</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .scenario({ <span class="hljs-attr">target</span>: <span class="hljs-string">'center'</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using velocity</span>
+p.animations.new()
+  .scenario({
+    <span class="hljs-attr">target</span>: <span class="hljs-string">'right'</span>,
+    <span class="hljs-attr">velocity</span>: { <span class="hljs-attr">position</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">scale</span>: <span class="hljs-number">0.2</span> },
+  })
+  .scenario({ <span class="hljs-attr">target</span>: <span class="hljs-string">'bottom'</span>, <span class="hljs-attr">velocity</span>: { <span class="hljs-attr">position</span>: <span class="hljs-number">0.5</span> } })
+  .scenario({ <span class="hljs-attr">target</span>: <span class="hljs-string">'center'</span>, <span class="hljs-attr">velocity</span>: { <span class="hljs-attr">color</span>: <span class="hljs-number">0.2</span> } })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand alone step</span>
+<span class="hljs-keyword">const</span> step1 = p.animations.scenario({
+  <span class="hljs-attr">target</span>: <span class="hljs-string">'right'</span>,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.ScenarioAnimationStep({
+  <span class="hljs-attr">element</span>: p,
+  <span class="hljs-attr">target</span>: <span class="hljs-string">'bottom'</span>,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+
+p.animations.new()
+  .then(step1)
+  .then(step2)
+  .start();</pre>
+    
   
 
   
@@ -21033,113 +21018,20 @@ custom animations and
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_scenariovelocity'>
-      OBJ_ScenarioVelocity
+    <h3 class='fl m0' id='obj_triggeranimationstep'>
+      OBJ_TriggerAnimationStep
     </h3>
     
     
   </div>
   
 
-  <p>Transform, color and visbility scenario definition</p>
-<p><code>translation</code> will overwirte <code>position</code>, and <code>translation,</code>position<code>, rotation</code> and <code>scale</code> overwrite the first equivalent transforms in
-<code>transform</code></p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>translation</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>opacity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_scenariosanimationstep'>
-      OBJ_ScenariosAnimationStep
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Scenarios animation step options object</p>
+  <p><a href="TriggernAnimationStep">TriggernAnimationStep</a> options object</p>
+<p><img src="./assets1/trigger_animation.gif"></p>
+<p>A trigger step executes a custom function</p>
+<p>A <code>delay</code> will delay the triggering of the custom function
+while <code>duration</code> will pad time at the end of the trigger before
+the animation step finishes.</p>
 
   
     <p style="display: none;">      Type:
@@ -21169,8 +21061,24 @@ custom animations and
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          : name of scenario
+          <span class='code bold'>payload</span> <code class='quiet'>(any?)</code>
+          : payload to pass to callback (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>element</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>)</code>
+          : <a href="#diagramelement">DiagramElement</a>
+ to associate with
+callback - if the 
+<code>callback</code>
+ is a string then this element's
+
+<a href="FunctionMap">FunctionMap</a>
+ will be searched for the corresponding function
 
           
         </div>
@@ -21181,9 +21089,67 @@ custom animations and
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple trigger</span>
+p.animations.new()
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .trigger(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (1, 0)'</span>) })
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .trigger(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (0, 0)'</span>) })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Trigger with delay, duration and payload</span>
+<span class="hljs-keyword">const</span> printPosition = <span class="hljs-function">(<span class="hljs-params">pos</span>) =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`arrived at <span class="hljs-subst">${pos}</span>`</span>);
+};
+
+p.animations.new()
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .trigger({
+    <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">callback</span>: printPosition,
+    <span class="hljs-attr">payload</span>: <span class="hljs-string">'(1, 0)'</span>,
+    <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
+  })
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .trigger({ <span class="hljs-attr">callback</span>: printPosition, <span class="hljs-attr">payload</span>: <span class="hljs-string">'(0, 0)'</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand alone step</span>
+<span class="hljs-keyword">const</span> step1 = p.animations.trigger({
+  <span class="hljs-attr">callback</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (1, 0)'</span>) },
+});
+<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.TriggerAnimationStep({
+  <span class="hljs-attr">callback</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (0, 0)'</span>) },
+});
+
+p.animations.new()
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .then(step1)
+  .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .then(step2)
+  .start();</pre>
+    
   
 
   
@@ -21211,9 +21177,23 @@ custom animations and
   </div>
   
 
-  <p>Color animation step options object</p>
+  <p><a href="#coloranimationstep">ColorAnimationStep</a> options object</p>
+<p><img src="./assets1/color_animation.gif"></p>
 <p>By default, the color will start with the element's current color.</p>
-<p>Use either <code>delta</code> or <code>target</code> to define it's end color</p>
+<p>Use either <code>delta</code> or <code>target</code> to define the end color</p>
+<p>In an interactive diagram, it is often useful to highlight elements of the
+diagram by coloring them and greying out, or dimming the elements not of
+interest. As such, a <a href="#diagramelement">DiagramElement</a> has several color attributes:</p>
+<ul>
+<li>color - current color</li>
+<li>dimColor - color to dim to</li>
+<li>defaultColor - color to undim to</li>
+</ul>
+<p>The <code>target</code> property can accept <code>'dim'</code> and <code>'undim'</code> as shortcuts to dim
+or undim the element.</p>
+<p>In addition, the <a href="#dimanimationstep">DimAnimationStep</a> and <a href="#undimanimationstep">UndimAnimationStep</a> can
+be used to do the same, which is especially useful when trying to build
+easy to read code in a complex animation.</p>
 
   
     <p style="display: none;">      Type:
@@ -21275,9 +21255,57 @@ element's
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using duration</span>
+p.animations.new()
+  .color({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> })
+  .color({ <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> })
+  .color({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// dim and undim an element using dim and undim animation steps</span>
+p.animations.new()
+  .dim(<span class="hljs-number">1</span>)
+  .delay(<span class="hljs-number">1</span>)
+  .undim(<span class="hljs-number">1</span>)
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand alone step</span>
+<span class="hljs-keyword">const</span> step1 = p.animations.color({
+  <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.ColorAnimationStep({
+  <span class="hljs-attr">element</span>: p,
+  <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+
+p.animations.new()
+  .then(step1)
+  .then(step2)
+  .start();</pre>
+    
   
 
   
@@ -21305,12 +21333,22 @@ element's
   </div>
   
 
-  <p>Opacity animation step options object
-<a href="#diagramelement">DiagramElement</a>.</p>
-<p>By default, the opacity will start with the element's current opacity unless
-dissolving. If dissolving, the opacity will start at <code>0</code> if dissolving in, or
-<code>1</code> if dissolving out unless <code>dissolveFromCurrent</code> is <code>true</code> in which case
-the opacity will start from the current opacity.</p>
+  <p><a href="#opacityanimationstep">OpacityAnimationStep</a> options object</p>
+<p><img src="./assets1/opacity_animation.gif"></p>
+<p>A <a href="#diagramelement">DiagramElement</a> has <code>color</code> and <code>opacity</code> properties. The <code>color</code>
+property has an alpha channel that defines opacity, but it should be used
+as a base color definition, and not used to dissolve an element in and out.</p>
+<p>Therefore, to animate an element's opacity or temporarily dissolve in or out
+an element, use an opacity animation step.</p>
+<p>The <code>opacity</code> is multiplied by the
+<code>color</code> alpha channel to get the final opacity of the element.</p>
+<p>By default, the opacity will start with the <a href="#diagramelement">DiagramElement</a>'s current
+opacity unless dissolving. If dissolving, the opacity will start at <code>0</code> if
+dissolving in, or <code>1</code> if dissolving out unless <code>dissolveFromCurrent</code> is
+<code>true</code> in which case the opacity will start from the current opacity.</p>
+<p>The <a href="#dissolveinanimationstep">DissolveInAnimationStep</a> and <a href="#dissolveoutanimationstep">DissolveOutAnimationStep</a>
+extend the <code>OpacityAnimationStep</code> to make it even more convenient to
+dissolve.</p>
 
   
     <p style="display: none;">      Type:
@@ -21359,7 +21397,10 @@ the opacity will start from the current opacity.</p>
       
         <div class='space-bottom0'>
           <span class='code bold'>dissolve</span> <code class='quiet'>((null | <code>"in"</code> | <code>"out"</code>))</code>
-          : (
+          : will override target opacity if not
+
+<code>null</code>
+ (
 <code>null</code>
 )
 
@@ -21371,6 +21412,140 @@ the opacity will start from the current opacity.</p>
           : (
 <code>false</code>
 )
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using numerical values for opacity</span>
+p.animations.new()
+  .opacity({ <span class="hljs-attr">target</span>: <span class="hljs-number">0.4</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .opacity({ <span class="hljs-attr">target</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Dissolve out then in</span>
+p.animations.new()
+  .opacity({ <span class="hljs-attr">dissolve</span>: <span class="hljs-string">'out'</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .opacity({ <span class="hljs-attr">dissolve</span>: <span class="hljs-string">'in'</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using the dissolve animation step</span>
+p.animations.new()
+  .dissolveOut(<span class="hljs-number">2</span>)
+  .dissolveIn({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand alone step</span>
+<span class="hljs-keyword">const</span> step1 = p.animations.opacity({
+  <span class="hljs-attr">target</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.OpacityAnimationStep({
+  <span class="hljs-attr">element</span>: p,
+  <span class="hljs-attr">target</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+<span class="hljs-keyword">const</span> step3 = p.animations.dissolveOut({
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+<span class="hljs-keyword">const</span> step4 = <span class="hljs-keyword">new</span> Fig.Animation.DissolveInAnimationStep({
+  <span class="hljs-attr">element</span>: p,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+
+p.animations.new()
+  .then(step1)
+  .then(step2)
+  .then(step3)
+  .then(step4)
+  .start();</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_scenariosanimationstep'>
+      OBJ_ScenariosAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Scenarios animation step options object</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_animationstep">OBJ_AnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : name of scenario
 
           
         </div>
@@ -32478,6 +32653,187 @@ key
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_elementanimationstep'>
+      OBJ_ElementAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Base element animation step options object</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_animationstep">OBJ_AnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>element</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>progression</span> <code class='quiet'>((<code>"linear"</code> | <code>"easeinout"</code> | <code>"easein"</code> | <code>"easeout"</code> | <a href="#animationprogression">AnimationProgression</a>)?)</code>
+          : how the animation progresses - defaults to 
+<code>linear</code>
+ for color, opacity and
+custom animations and 
+<code>easeinout</code>
+ for others
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_scenariovelocity'>
+      OBJ_ScenarioVelocity
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Transform, color and visbility scenario definition</p>
+<p><code>translation</code> will overwirte <code>position</code>, and <code>translation,</code>position<code>, rotation</code> and <code>scale</code> overwrite the first equivalent transforms in
+<code>transform</code></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>translation</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>opacity</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='animationstep'>
       AnimationStep
     </h3>
@@ -33286,75 +33642,6 @@ start the animation
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='positionanimationstep'>
-      PositionAnimationStep
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Position animation step</p>
-
-  
-  
-    <p>
-      Extends
-      
-        <a href="#elementanimationstep">ElementAnimationStep</a>
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_positionanimationstep">OBJ_PositionAnimationStep</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='rotationanimationstep'>
       RotationAnimationStep
     </h3>
@@ -33595,7 +33882,7 @@ start the animation
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_scenarioanimationstep">OBJ_ScenarioAnimationStep</a>>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_scenarioanimationstep">OBJ_ScenarioAnimationStep</a>)</code>
 	    
           </div>
           
@@ -33639,7 +33926,7 @@ start the animation
   </div>
   
 
-  <p>Color Animation Step</p>
+  <p>Color animation Step</p>
 
   
   
@@ -33664,7 +33951,7 @@ start the animation
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_coloranimationstep">OBJ_ColorAnimationStep</a>>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_coloranimationstep">OBJ_ColorAnimationStep</a>)</code>
 	    
           </div>
           
@@ -33889,7 +34176,7 @@ start the animation
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_opacityanimationstep">OBJ_OpacityAnimationStep</a>>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_opacityanimationstep">OBJ_OpacityAnimationStep</a>)</code>
 	    
           </div>
           
@@ -34114,16 +34401,7 @@ start the animation
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>triggerOrOptionsIn</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a> | <a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a>)
-            = <code>{}</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a>>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>((<a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a> | function (): void))</code>
 	    
           </div>
           

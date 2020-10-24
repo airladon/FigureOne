@@ -13,6 +13,48 @@ import ElementAnimationStep from '../ElementAnimationStep';
 /**
  * {@link RotationAnimationStep} step options object
  *
+ * @extends OBJ_ElementAnimationStep
+ *
+ * @property {number} [start] start rotation - current rotation used if
+ * undefined
+ * @property {number} [target] target rotation - will overwrite `delta` rotation
+ * @property {number} [delta] delta rotation that can be used instead of `target`
+ * @property {null | number} [velocity] velocity of rotation overrides
+ * `duration` - `null` to use `duration` (`null`)
+ * @property {0 | 1 | -1 | 2} [direction] where `0` is quickest direction, `1`
+ * is positive of CCW direction, `-1` is negative of CW direction and `2` is
+ * whichever direction doesn't pass through angle 0 (`0`).
+ * @property {'0to360' | '-180to180' | null} [clipTo] (`null`)
+ * @property {number | null} [maxDuration] maximum duration to clip animation
+ * to where `null` is unlimited (`null`)
+ *
+ * @see {@link RotationAnimationStep} for description and examples
+ */
+ export type OBJ_RotationAnimationStep = {
+  start?: number;      // default is element transform
+  target?: number;     // Either target or delta must be defined
+  delta?: number;      // delta overrides target if both are defined
+  // 1 is CCW, -1 is CW, 0 is fastest, 2 is not through 0
+  direction: 0 | 1 | -1 | 2;
+  clipTo: '0to360' | '-180to180' | null;
+  velocity?: ?number,
+  maxDuration?: ?number;
+} & OBJ_ElementAnimationStep;
+
+// A transform animation unit manages a transform animation on an element.
+//
+// The start transform can either be defined initially, or null. Null means
+// the start transform is whatever the current element transform is when the
+// unit is started with start().
+//
+// The transform target is defined with either the target or delta properties.
+// Target is used to predefine the target.
+// Delta is used to calculate the target when the unit is started with start()
+//
+
+/**
+ * Rotation animation step
+ *
  * ![](./assets1/rotation_animation.gif)
  *
  * The rotation animation step animates the first {@link Rotation} transform
@@ -24,19 +66,9 @@ import ElementAnimationStep from '../ElementAnimationStep';
  *
  * `clipTo` will clip the element's rotation during animation
  *
- * @extends OBJ_ElementAnimationStep
+ * @extends ElementAnimationStep
+ * @param {OBJ_RotationAnimationStep} options
  *
- * @property {number} [start]
- * @property {number} [target]
- * @property {number} [delta]
- * @property {null | number} [velocity] velocity of rotation overrides
- * `duration` - `null` to use `duration` (`null`)
- * @property {0 | 1 | -1 | 2} [direction] where `0` is quickest direction, `1`
- * is positive of CCW direction, `-1` is negative of CW direction and `2` is
- * whichever direction doesn't pass through angle 0 (`0`).
- * @property {'0to360' | '-180to180' | null} [clipTo] (`null`)
- * @property {number | null} [maxDuration] maximum duration to clip animation
- * to where `null` is unlimited (`null`)
  *
  * @see To test examples, append them to the
  * <a href="#animation-boilerplate">boilerplate</a>
@@ -67,34 +99,6 @@ import ElementAnimationStep from '../ElementAnimationStep';
  *   .then(step1)
  *   .then(step2)
  *   .start();
- */
- export type OBJ_RotationAnimationStep = {
-  start?: number;      // default is element transform
-  target?: number;     // Either target or delta must be defined
-  delta?: number;      // delta overrides target if both are defined
-  // 1 is CCW, -1 is CW, 0 is fastest, 2 is not through 0
-  direction: 0 | 1 | -1 | 2;
-  clipTo: '0to360' | '-180to180' | null;
-  velocity?: ?number,
-  maxDuration?: ?number;
-} & OBJ_ElementAnimationStep;
-
-// A transform animation unit manages a transform animation on an element.
-//
-// The start transform can either be defined initially, or null. Null means
-// the start transform is whatever the current element transform is when the
-// unit is started with start().
-//
-// The transform target is defined with either the target or delta properties.
-// Target is used to predefine the target.
-// Delta is used to calculate the target when the unit is started with start()
-//
-
-/**
- * Rotation animation Step
- *
- * @extends ElementAnimationStep
- * @param {OBJ_RotationAnimationStep} options
  */
 export default class RotationAnimationStep extends ElementAnimationStep {
   rotation: {

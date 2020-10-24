@@ -11,7 +11,7 @@ import {
   // joinObjectsWithOptions,
 } from '../../../../tools/tools';
 import type {
-  OBJ_ElementAnimationStep,
+  OBJ_ElementAnimationStep, AnimationProgression,
 } from '../ElementAnimationStep';
 // import ElementAnimationStep from '../ElementAnimationStep';
 // import type { DiagramElement } from '../../../Element';
@@ -84,7 +84,7 @@ export type OBJ_ScenarioVelocity = {
  *
  * @example
  * // NOTE - use these scenario definitions for all examples below
- * p.scenarios['center'] = { position: [0, 0], scale: [1, 1], color: [1, 0, 0, 1] }  * ;
+ * p.scenarios['center'] = { position: [0, 0], scale: [1, 1], color: [1, 0, 0, 1] };
  * p.scenarios['right'] = { position: [1, 0], scale: [2, 1], color: [0, 0, 1, 1] };
  * p.scenarios['bottom'] = { position: [0, -0.5], scale: [0.5, 1], color: [0, 0.5, 0, 1] };
  *
@@ -107,7 +107,7 @@ export type OBJ_ScenarioVelocity = {
  *   .scenario({ target: 'center', velocity: { color: 0.2 } })
  *   .start();
  *
- * @example 
+ * @example
  * // Different ways to create a stand alone step
  * const step1 = p.animations.scenario({
  *   target: 'right',
@@ -119,7 +119,6 @@ export type OBJ_ScenarioVelocity = {
  *   duration: 2,
  * });
  *
- * @example
  * p.animations.new()
  *   .then(step1)
  *   .then(step2)

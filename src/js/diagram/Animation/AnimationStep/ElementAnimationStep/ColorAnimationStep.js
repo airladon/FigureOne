@@ -13,17 +13,69 @@ import ElementAnimationStep from '../ElementAnimationStep';
 type TypeColor = Array<number>;
 
 /**
- * Color animation step options object
+ * {@link ColorAnimationStep} options object
+ *
+ * ![](./assets1/color_animation.gif)
  *
  * By default, the color will start with the element's current color.
  *
- * Use either `delta` or `target` to define it's end color
+ * Use either `delta` or `target` to define the end color
+ *
+ * In an interactive diagram, it is often useful to highlight elements of the
+ * diagram by coloring them and greying out, or dimming the elements not of
+ * interest. As such, a {@link DiagramElement} has several color attributes:
+ * - color - current color
+ * - dimColor - color to dim to
+ * - defaultColor - color to undim to
+ *
+ * The `target` property can accept `'dim'` and `'undim'` as shortcuts to dim
+ * or undim the element.
+ *
+ * In addition, the {@link DimAnimationStep} and {@link UndimAnimationStep} can
+ * be used to do the same, which is especially useful when trying to build
+ * easy to read code in a complex animation.
  *
  * @extends OBJ_ElementAnimationStep
  * @property {Array<number>} [start]
  * @property {Array<number> | 'dim' | 'undim'} [target] use `dim` to animate to
  * element's `dimColor`, and `undim` to animate to element's `defaultColor`
  * @property {Array<number>} [delta]
+ *
+ * @see To test examples, append them to the
+ * <a href="#animation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Using duration
+ * p.animations.new()
+ *   .color({ target: [0, 0, 1, 1], duration: 1 })
+ *   .color({ target: [0, 0.8, 0, 1], duration: 1 })
+ *   .color({ target: [1, 0, 0, 1], duration: 1 })
+ *   .start();
+ *
+ * @example
+ * // dim and undim an element using dim and undim animation steps
+ * p.animations.new()
+ *   .dim(1)
+ *   .delay(1)
+ *   .undim(1)
+ *   .start();
+ *
+ * @example
+ * // Different ways to create a stand alone step
+ * const step1 = p.animations.color({
+ *   target: [0, 0, 1, 1],
+ *   duration: 2,
+ * });
+ * const step2 = new Fig.Animation.ColorAnimationStep({
+ *   element: p,
+ *   target: [0, 0.8, 0, 1],
+ *   duration: 2,
+ * });
+ *
+ * p.animations.new()
+ *   .then(step1)
+ *   .then(step2)
+ *   .start();
  */
 export type OBJ_ColorAnimationStep = {
   start?: TypeColor;      // default is element transform
@@ -37,8 +89,9 @@ const addColors = (color1, color2) => color1.map((c, index) => Math.min(c + colo
 const subtractColors = (color1, color2) => color1.map((c, index) => c - color2[index]);
 
 /**
- * Color Animation Step
+ * Color animation Step
  * @extends ElementAnimationStep
+ * @param {OBJ_ColorAnimationStep} options
  */
 export class ColorAnimationStep extends ElementAnimationStep {
   color: {
@@ -50,6 +103,9 @@ export class ColorAnimationStep extends ElementAnimationStep {
     setDefault?: boolean;
   };
 
+  /**
+   * @hideconstructor
+   */
   constructor(...options: Array<OBJ_ColorAnimationStep>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, ...options, { type: 'color' });

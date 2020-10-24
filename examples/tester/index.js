@@ -153,41 +153,43 @@ diagram.addElement({
 const p = diagram.getElement('p');
 diagram.initialize();
 
-p.scenarios['center'] = { position: [0, 0], scale: [1, 1], color: [1, 0, 0, 1] };
-p.scenarios['right'] = { position: [1, 0], scale: [2, 1], color: [0, 0, 1, 1] };
-p.scenarios['bottom'] = { position: [0, -0.5], scale: [0.5, 1], color: [0, 0.5, 0, 1] };
-
-// Using duration
-p.animations.new()
-  .delay(1)
-  .scenario({ target: 'right', duration: 2 })
-  .scenario({ target: 'bottom', duration: 2 })
-  .scenario({ target: 'center', duration: 2 })
-  .start();
-
-// // Using velocity
+// // Simple trigger
 // p.animations.new()
-//   .scenario({
-//     target: 'right',
-//     velocity: { position: 0.5, scale: 0.2 },
-//   })
-//   .scenario({ target: 'bottom', velocity: { position: 0.5 } })
-//   .scenario({ target: 'center', velocity: { color: 0.2 } })
+//   .delay(1)
+//   .position({ target: [1, 0], duration: 2 })
+//   .trigger(() => { console.log('arrived at (1, 0)') })
+//   .position({ target: [0, 0], duration: 2 })
+//   .trigger(() => { console.log('arrived at (0, 0)') })
 //   .start();
 
+// Trigger with delay, duration and payload
+const printPosition = (pos) => {
+  console.log(`arrived at ${pos}`);
+};
+
+p.animations.new()
+  .position({ target: [1, 0], duration: 2 })
+  .trigger({
+    delay: 1,
+    callback: printPosition,
+    payload: '(1, 0)',
+    duration: 1,
+  })
+  .position({ target: [0, 0], duration: 2 })
+  .trigger({ callback: printPosition, payload: '(0, 0)' })
+  .start();
 
 // // Different ways to create a stand alone step
-// const step1 = p.animations.scenario({
-//   target: 'right',
-//   duration: 2,
+// const step1 = p.animations.trigger({
+//   callback: () => { console.log('arrived at (1, 0)') },
 // });
-// const step2 = new Fig.Animation.ScenarioAnimationStep({
-//   element: p,
-//   target: 'bottom',
-//   duration: 2,
+// const step2 = new Fig.Animation.TriggerAnimationStep({
+//   callback: () => { console.log('arrived at (0, 0)') },
 // });
 
 // p.animations.new()
+//   .position({ target: [1, 0], duration: 2 })
 //   .then(step1)
+//   .position({ target: [0, 0], duration: 2 })
 //   .then(step2)
 //   .start();

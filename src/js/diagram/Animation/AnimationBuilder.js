@@ -32,10 +32,19 @@ export type OBJ_AnimationBuilder = {
 /**
  * Animation Builder
  *
- * Use to build a series of animation steps. Each step will return the same
- * builder object.
+ * Convenient way to build animation steps in serial. Each step returns the
+ * same builder object, and so chaining in a fluent like API can be achieved.
+ *
  * @extends SerialAnimationStep
  * @see <a href="#animationmanagernew">AnimationManager.new</a>
+ *
+ * @example
+ * p.animations.new()
+ *   .delay(1)
+ *   .position({ target: [1, 0], duration: 2 })
+ *   .delay(1)
+ *   .rotate({ target: Math.PI, duration: 2 })
+ *   .start();
  */
 export default class AnimationBuilder extends animation.SerialAnimationStep {
   element: ?DiagramElement;
