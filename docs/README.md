@@ -198,119 +198,119 @@
     -   [trigger][374]
     -   [inParallel][376]
     -   [inSerial][378]
--   [OBJ_PositionAnimationStep][380]
--   [OBJ_RotationAnimationStep][382]
--   [PositionAnimationStep][385]
--   [OBJ_ScaleAnimationStep][388]
--   [OBJ_CustomAnimationStep][391]
--   [OBJ_TransformAnimationStep][394]
--   [OBJ_ScenarioAnimationStep][397]
--   [OBJ_TriggerAnimationStep][400]
--   [OBJ_ColorAnimationStep][403]
--   [OBJ_OpacityAnimationStep][406]
--   [OBJ_ScenariosAnimationStep][409]
--   [SerialAnimationStep][411]
--   [ParallelAnimationStep][414]
--   [Equation Elements Types][417]
--   [TypeEquationElements][418]
--   [Equation Layout OBJECTS][419]
--   [EQN_Container][420]
--   [EQN_Fraction][423]
--   [EQN_Scale][426]
--   [EQN_Bracket][429]
--   [EQN_Root][432]
--   [EQN_Strike][435]
--   [EQN_Box][438]
--   [EQN_Bar][441]
--   [EQN_Integral][444]
--   [EQN_SumOf][447]
--   [EQN_ProdOf][450]
--   [EQN_Subcript][453]
--   [EQN_Superscript][456]
--   [EQN_SuperscriptSubscript][459]
--   [EQN_Comment][462]
--   [EQN_StrikeComment][465]
--   [EQN_Pad][468]
--   [EQN_Matrix][471]
--   [EQN_Annotate][474]
--   [EQN_Annotation][477]
--   [EQN_EncompassGlyph][480]
--   [EQN_LeftRightGlyph][483]
--   [EQN_TopBottomGlyph][486]
--   [EQN_Glyphs][489]
--   [Equation Symbol OBJECTS][491]
--   [EQN_VinculumSymbol][492]
--   [EQN_BoxSymbol][495]
--   [EQN_ArrowSymbol][498]
--   [EQN_SumSymbol][501]
--   [EQN_ProdSymbol][504]
--   [EQN_IntegralSymbol][507]
--   [EQN_StrikeSymbol][510]
--   [EQN_BracketSymbol][513]
--   [EQN_AngleBracketSymbol][516]
--   [EQN_BraceSymbol][519]
--   [EQN_BarSymbol][522]
--   [EQN_SquareBracketSymbol][525]
--   [EQN_RadicalSymbol][528]
--   [Equation Form Types][531]
--   [TypeEquationPhrase][532]
--   [TypeFormAlignment][534]
--   [TypeFormAnimationProperties][536]
--   [TypeFormTranslationProperties][539]
--   [TypeEquationFormObject][541]
--   [TypeEquationForm][544]
--   [TypeEquationForms][545]
--   [TypeFormRestart][546]
--   [Equation Option Types][548]
--   [EQN_Equation][549]
--   [TypeEquationGoToFormOptions][551]
--   [Equations][553]
--   [Equation][554]
-    -   [eqn][557]
-    -   [setFormSeries][559]
-    -   [getFormSeries][561]
-    -   [addElements][562]
-    -   [addForms][564]
-    -   [getCurrentForm][566]
-    -   [setCurrentForm][567]
-    -   [showForm][569]
-    -   [getForm][571]
-    -   [goToForm][573]
-    -   [prevForm][575]
-    -   [nextForm][577]
-    -   [replayCurrentForm][579]
--   [Misc Geometry][581]
--   [TypeParsablePoint][582]
--   [TypeParsableLine][584]
--   [TypeParsableRect][586]
--   [TypeParsableTransform][588]
--   [getPoint][590]
--   [getScale][592]
--   [getLine][594]
--   [getRect][596]
--   [getTransform][598]
--   [Misc Drawing][600]
--   [OBJ_Texture][601]
--   [OBJ_TextDefinition][603]
--   [OBJ_Font][605]
--   [OBJ_TextLineDefinition][608]
--   [OBJ_TextLinesDefinition][610]
--   [OBJ_TextModifierDefinition][612]
--   [OBJ_TextModifiersDefinition][614]
--   [Misc Animation][616]
--   [OBJ_ElementAnimationStep][617]
--   [OBJ_ScenarioVelocity][619]
--   [AnimationStep][621]
-    -   [getRemainingTime][624]
-    -   [start][626]
--   [DelayAnimationStep][628]
--   [ElementAnimationStep][630]
--   [OBJ_AnimationBuilder][632]
--   [OBJ_AnimationStep][634]
--   [OBJ_AnimationStart][636]
--   [OBJ_SerialAnimationStep][638]
--   [OBJ_ParallelAnimationStep][640]
--   [RotationAnimationStep][642]
+-   [PositionAnimationStep][380]
+-   [RotationAnimationStep][383]
+-   [OBJ_ScaleAnimationStep][386]
+-   [OBJ_CustomAnimationStep][389]
+-   [OBJ_TransformAnimationStep][392]
+-   [OBJ_ScenarioAnimationStep][395]
+-   [OBJ_TriggerAnimationStep][398]
+-   [OBJ_ColorAnimationStep][401]
+-   [OBJ_OpacityAnimationStep][404]
+-   [OBJ_ScenariosAnimationStep][407]
+-   [SerialAnimationStep][409]
+-   [ParallelAnimationStep][412]
+-   [Equation Elements Types][415]
+-   [TypeEquationElements][416]
+-   [Equation Layout OBJECTS][417]
+-   [EQN_Container][418]
+-   [EQN_Fraction][421]
+-   [EQN_Scale][424]
+-   [EQN_Bracket][427]
+-   [EQN_Root][430]
+-   [EQN_Strike][433]
+-   [EQN_Box][436]
+-   [EQN_Bar][439]
+-   [EQN_Integral][442]
+-   [EQN_SumOf][445]
+-   [EQN_ProdOf][448]
+-   [EQN_Subcript][451]
+-   [EQN_Superscript][454]
+-   [EQN_SuperscriptSubscript][457]
+-   [EQN_Comment][460]
+-   [EQN_StrikeComment][463]
+-   [EQN_Pad][466]
+-   [EQN_Matrix][469]
+-   [EQN_Annotate][472]
+-   [EQN_Annotation][475]
+-   [EQN_EncompassGlyph][478]
+-   [EQN_LeftRightGlyph][481]
+-   [EQN_TopBottomGlyph][484]
+-   [EQN_Glyphs][487]
+-   [Equation Symbol OBJECTS][489]
+-   [EQN_VinculumSymbol][490]
+-   [EQN_BoxSymbol][493]
+-   [EQN_ArrowSymbol][496]
+-   [EQN_SumSymbol][499]
+-   [EQN_ProdSymbol][502]
+-   [EQN_IntegralSymbol][505]
+-   [EQN_StrikeSymbol][508]
+-   [EQN_BracketSymbol][511]
+-   [EQN_AngleBracketSymbol][514]
+-   [EQN_BraceSymbol][517]
+-   [EQN_BarSymbol][520]
+-   [EQN_SquareBracketSymbol][523]
+-   [EQN_RadicalSymbol][526]
+-   [Equation Form Types][529]
+-   [TypeEquationPhrase][530]
+-   [TypeFormAlignment][532]
+-   [TypeFormAnimationProperties][534]
+-   [TypeFormTranslationProperties][537]
+-   [TypeEquationFormObject][539]
+-   [TypeEquationForm][542]
+-   [TypeEquationForms][543]
+-   [TypeFormRestart][544]
+-   [Equation Option Types][546]
+-   [EQN_Equation][547]
+-   [TypeEquationGoToFormOptions][549]
+-   [Equations][551]
+-   [Equation][552]
+    -   [eqn][555]
+    -   [setFormSeries][557]
+    -   [getFormSeries][559]
+    -   [addElements][560]
+    -   [addForms][562]
+    -   [getCurrentForm][564]
+    -   [setCurrentForm][565]
+    -   [showForm][567]
+    -   [getForm][569]
+    -   [goToForm][571]
+    -   [prevForm][573]
+    -   [nextForm][575]
+    -   [replayCurrentForm][577]
+-   [Misc Geometry][579]
+-   [TypeParsablePoint][580]
+-   [TypeParsableLine][582]
+-   [TypeParsableRect][584]
+-   [TypeParsableTransform][586]
+-   [getPoint][588]
+-   [getScale][590]
+-   [getLine][592]
+-   [getRect][594]
+-   [getTransform][596]
+-   [Misc Drawing][598]
+-   [OBJ_Texture][599]
+-   [OBJ_TextDefinition][601]
+-   [OBJ_Font][603]
+-   [OBJ_TextLineDefinition][606]
+-   [OBJ_TextLinesDefinition][608]
+-   [OBJ_TextModifierDefinition][610]
+-   [OBJ_TextModifiersDefinition][612]
+-   [Misc Animation][614]
+-   [OBJ_PositionAnimationStep][615]
+-   [OBJ_RotationAnimationStep][617]
+-   [OBJ_ElementAnimationStep][619]
+-   [OBJ_ScenarioVelocity][621]
+-   [AnimationStep][623]
+    -   [getRemainingTime][626]
+    -   [start][628]
+-   [DelayAnimationStep][630]
+-   [ElementAnimationStep][632]
+-   [OBJ_AnimationBuilder][634]
+-   [OBJ_AnimationStep][636]
+-   [OBJ_AnimationStart][638]
+-   [OBJ_SerialAnimationStep][640]
+-   [OBJ_ParallelAnimationStep][642]
 -   [ScaleAnimationStep][644]
 -   [TransformAnimationStep][646]
 -   [ScenarioAnimationStep][648]
@@ -1075,10 +1075,10 @@ There are many more methods in each class and it is recommended you quickly revi
 
 Many of these classes are used by each other. For instance, [Line][124] makes a lot of use of [Point][71]. Therefore instead of defining a point by creating a class each time, short hand, parsable equivalents for Points, Lines, Rectangles and Transforms are available. For more information refer to:
 
--   [TypeParsablePoint][582]
--   [TypeParsableLine][584]
--   [TypeParsableRect][586]
--   [TypeParsableTransform][588]
+-   [TypeParsablePoint][580]
+-   [TypeParsableLine][582]
+-   [TypeParsableRect][584]
+-   [TypeParsableTransform][586]
 
 
 ## Point
@@ -3630,13 +3630,13 @@ Simple text options object.
 Use this to make a [DiagramElementPrimitive][54] that renders text.
 
 `text` can either be a single string, or an array of
-[OBJ_TextDefinition][603] objects to define multiple strings. Each string
+[OBJ_TextDefinition][601] objects to define multiple strings. Each string
 can have a different location, alignment (`xAlign`, `yAlign`) and formatting.
 
 [DiagramElementPrimitive][54] objects allow for a callback to be defined
 when they are touched by a user. In text [DiagramElementPrimitive][54],
 each string can have its own callback assigned using the `onClick` property
-of [OBJ_TextDefinition][603]. In addition custom touch borders to make it
+of [OBJ_TextDefinition][601]. In addition custom touch borders to make it
 easier to click the strings can be defined.
 
 Note: there is a slight performance improvement in including multiple
@@ -3724,7 +3724,7 @@ Array of strings that are arranged into a line. Each string is arranged so
 that it is to the right of the previous string.
 
 Strings can be arranged out of the line flow by using the `inLine` property
-in [OBJ_TextLineDefinition][608].
+in [OBJ_TextLineDefinition][606].
 
 ### Properties
 
@@ -3808,7 +3808,7 @@ in the modifiers object to define the formatting and replacement text. By
 default, the unique id will be used as the replacement text.
 
 Each line can have custom formatting or justification by defining a
-[OBJ_TextLinesDefinition][610] object instead or a string in the lines
+[OBJ_TextLinesDefinition][608] object instead or a string in the lines
 array.
 
 To escape the modifier special character "|", use a forward slash. e.g.
@@ -3919,7 +3919,7 @@ Animations change diagram elements over time.
 
 Each diagram element has its own [AnimationManager][297] (`animations` property) that can coordinate animations for any element.
 
-An animation is a number of [AnimationStep][621]s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.
+An animation is a number of [AnimationStep][623]s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.
 
 ### <a id="animation-boilerplate"></a> Animation Boilerplate
 
@@ -3940,9 +3940,49 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 </html>
 ```
 
+A grid is included in this javascript file to make it obvious how shapes are animated
+
 ```javascript
 // index.js
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
+
+// grid
+diagram.addElements([
+  {
+    name: 'origin',
+    method: 'polygon',
+    options: {
+      radius: 0.01,
+      line: { width: 0.01 },
+      sides: 10,
+      color: [0.7, 0.7, 0.7, 1]
+    },
+  },
+  {
+    name: 'grid',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.1,
+      xStep: 0.1,
+      color: [0.7, 0.7, 0.7, 1],
+      line: { width: 0.001 },
+    },
+  },
+  {
+    name: 'gridMajor',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.5,
+      xStep: 0.5,
+      color: [0.8, 0.8, 0.8, 1],
+      line: { width: 0.004 }
+    },
+  },
+]);
+
+// shape to animate
 diagram.addElement(
   {
     name: 'p',
@@ -3963,7 +4003,7 @@ diagram.initialize();
 
 Let's create a simple animation. Start by defining a diagram and retrieving the element to animate by creating the boilerplate files [above][793].
 
-A [PositionAnimationStep][385] can be created to translate the shape, and a [RotationAnimationStep][642] to rotate it
+A [PositionAnimationStep][380] can be created to translate the shape, and a [RotationAnimationStep][383] to rotate it
 
 ```javascript
 const translate = p.animations.position({ target: [1, 0], duration: 2 });
@@ -4120,8 +4160,8 @@ tied to elements drawn later). `AnimationManager`s will only be processed
 on each animation frame if the element they are tied to is not hidden.
 
 The `animations` property within `AnimationManager` is simply an array that
-contains a number [AnimationStep][621]s that are executed in parallel.
-Typically, these steps would themselves be [SerialAnimationStep][411]s or a
+contains a number [AnimationStep][623]s that are executed in parallel.
+Typically, these steps would themselves be [SerialAnimationStep][409]s or a
 series of animations. This means the animation manager is running a number of
 animation series in parallel.
 
@@ -4653,112 +4693,6 @@ Add a serial animation step
 
 Returns **[AnimationBuilder][796]** 
 
-## OBJ_PositionAnimationStep
-
-**Extends OBJ_ElementAnimationStep**
-
--   **See: [PositionAnimationStep][385] for examples on use
-    **
-
-[PositionAnimationStep][385] options object
-
-The position animation step animates the first [Translation][171] transform
-in the [DiagramElement][14]'s [Transform][207].
-
-By default, the position will start with the element's current position.
-
-Use either `delta` or `target` to define it's end point.
-
-The path of travel between `start` and `target` can either be a straight
-line (`'linear'`) or a quadratic bezier curve (`'curve'`)
-
-For custom paths, the [CustomAnimationStep][664] can be used.
-
-Type: any
-
-### Properties
-
--   `start` **[TypeParsablePoint][754]?** start position - if undefined then
-    current position is used
--   `target` **[TypeParsablePoint][754]?** target position - if undefined then
-    `delta` is used
--   `delta` **[TypeParsablePoint][754]?** target delta - only used if `target`
-    is undefined
--   `velocity` **(null | [TypeParsablePoint][754])?** velocity of
-    position overrides `duration` - `null` to use `duration` (`null`)
--   `path` **OBJ_TranslationPath?** (`{ style: 'linear' }`)
--   `maxDuration` **([number][749] | null)?** maximum duration to clip animation
-    to where `null` is unlimited (`null`)
-
-## OBJ_RotationAnimationStep
-
-**Extends OBJ_ElementAnimationStep**
-
--   **See: To test examples, append them to the
-    <a href="#animation-boilerplate">boilerplate</a>
-    **
-
-[RotationAnimationStep][642] step options object
-
-![][826]
-
-The rotation animation step animates the first [Rotation][183] transform
-in the [DiagramElement][14]'s [Transform][207].
-
-By default, the rotation will start with the element's current rotation.
-
-Use either `delta` or `target` to define it's end point
-
-`clipTo` will clip the element's rotation during animation
-
-Type: any
-
-### Properties
-
--   `start` **[number][749]?** 
--   `target` **[number][749]?** 
--   `delta` **[number][749]?** 
--   `velocity` **(null | [number][749])?** velocity of rotation overrides
-    `duration` - `null` to use `duration` (`null`)
--   `direction` **(`0` \| `1` \| `-1` \| `2`)?** where `0` is quickest direction, `1`
-    is positive of CCW direction, `-1` is negative of CW direction and `2` is
-    whichever direction doesn't pass through angle 0 (`0`).
--   `clipTo` **(`"0to360"` \| `"-180to180"` | null)?** (`null`)
--   `maxDuration` **([number][749] | null)?** maximum duration to clip animation
-    to where `null` is unlimited (`null`)
-
-### Examples
-
-```javascript
-// Using duration
-p.animations.new()
-  .rotation({ target: Math.PI, duration: 2 })
-  .start();
-```
-
-```javascript
-// Using velocity
-p.animations.new()
-  .rotation({ target: Math.PI, velocity: Math.PI / 2 })
-  .start();
-```
-
-```javascript
-// Different ways to create a stand alone step
-const step1 = p.animations.rotation({ target: Math.PI, duration: 2 });
-const step2 = new Fig.Animation.RotationAnimationStep({
-  element: p,
-  target: 0,
-  direction: -1,
-  duration: 2,
-});
-
-p.animations.new()
-  .then(step1)
-  .then(step2)
-  .start();
-```
-
 ## PositionAnimationStep
 
 **Extends ElementAnimationStep**
@@ -4769,7 +4703,7 @@ p.animations.new()
 
 Position animation step
 
-![][827]
+![][826]
 
 The position animation step animates the first [Translation][171] transform
 in the [DiagramElement][14]'s [Transform][207].
@@ -4835,6 +4769,63 @@ p.animations.new()
   .start();
 ```
 
+## RotationAnimationStep
+
+**Extends ElementAnimationStepstand-alone step
+
+-   **See: To test examples, append them to the
+    <a href="#animation-boilerplate">boilerplate</a>
+    **
+
+Rotation animation step
+
+![][827]
+
+The rotation animation step animates the first [Rotation][183] transform
+in the [DiagramElement][14]'s [Transform][207].
+
+By default, the rotation will start with the element's current rotation.
+
+Use either `delta` or `target` to define it's end point
+
+`clipTo` will clip the element's rotation during animation
+
+### Parameters
+
+-   `options` **[OBJ_RotationAnimationStep][797]** 
+
+### Examples
+
+```javascript
+// Using duration
+p.animations.new()
+  .rotation({ target: Math.PI, duration: 2 })
+  .start();
+```
+
+```javascript
+// Using velocity
+p.animations.new()
+  .rotation({ target: Math.PI, velocity: Math.PI / 2 })
+  .start();
+```
+
+```javascript
+// Different ways to create a stand alone step
+const step1 = p.animations.rotation({ target: Math.PI, duration: 2 });
+const step2 = new Fig.Animation.RotationAnimationStep({
+  element: p,
+  target: 0,
+  direction: -1,
+  duration: 2,
+});
+
+p.animations.new()
+  .then(step1)
+  .then(step2)
+  .start();
+```
+
 ## OBJ_ScaleAnimationStep
 
 **Extends OBJ_ElementAnimationStep**
@@ -4846,7 +4837,7 @@ p.animations.new()
 [ScaleAnimationStep][644] options object
 
 ![][828]
-
+stand-alone step
 The scale animation step animates the first [Scale][77] transform
 in the [DiagramElement][14]'s [Transform][207].
 
@@ -5002,7 +4993,7 @@ Type: any
 ### Examples
 
 ```javascript
-// Using duration
+// Using durationstand-alone step
 p.animations.new()
   .transform({
     target: new Fig.Transform().scale(2, 2).rotate(0.5).translate(1, 0),
@@ -5092,7 +5083,7 @@ Type: any
     to where `null` is unlimited (`null`)
 -   `zeroDurationThreshold` **[number][749]?** value considered 0 to stop
     animation - this is useful when numbers get very small and rounding problems
-    with javascripts floating point implementation arise
+    with javascripts floating stand-alone steption arise
 -   `path` **OBJ_TranslationPath?** translation path style and options
     (`{ style: 'linear' }`)
 -   `rotDirection` **(`0` \| `1` \| `-1` \| `2`)?** where `0` is quickest direction,
@@ -5168,7 +5159,7 @@ while `duration` will pad time at the end of the trigger before
 the animation step finishes.
 
 Type: any
-
+stand-alone step
 ### Properties
 
 -   `payload` **any?** payload to pass to callback (`null`)
@@ -5245,7 +5236,7 @@ diagram by coloring them and greying out, or dimming the elements not of
 interest. As such, a [DiagramElement][14] has several color attributes:
 
 -   color - current color
--   dimColor - color to dim to
+-   dimColor - color to dim tostand-alone step
 -   defaultColor - color to undim to
 
 The `target` property can accept `'dim'` and `'undim'` as shortcuts to dim
@@ -5331,7 +5322,7 @@ dissolving in, or `1` if dissolving out unless `dissolveFromCurrent` is
 
 The [DissolveInAnimationStep][658] and [DissolveOutAnimationStep][660]
 extend the `OpacityAnimationStep` to make it even more convenient to
-dissolve.
+dissolve.stand-alone step
 
 Type: any
 
@@ -5417,7 +5408,7 @@ Type: any
     <a href="#animation-boilerplate">boilerplate</a>
     **
 
-Execute an array of [AnimationStep][621]s in series.
+Execute an array of [AnimationStep][623]s in series.
 
 ![][840]
 
@@ -6588,7 +6579,7 @@ to another equation phrase ('content'). For example:
 </pre>
 
 The options for defining how to annotate one equation phrase with another is
-[EQN_Annotation][477]
+[EQN_Annotation][475]
 
 Content can also be annotated with a glyph (that itself may also be
 annotated). The glyph can either encompass the content, or can be to the
@@ -7200,7 +7191,7 @@ eqn.addElements({
 
 ## EQN_ProdSymbol
 
-Product equation symbol used in [EQN_ProdOf][450]
+Product equation symbol used in [EQN_ProdOf][448]
 
 <pre>
                                          width
@@ -7267,7 +7258,7 @@ eqn.addElements({
 
 ## EQN_IntegralSymbol
 
-Integral equation symbol used in [EQN_Integral][444]
+Integral equation symbol used in [EQN_Integral][442]
 
 <pre>
 //     --------------------------------------------------   0000000
@@ -7347,7 +7338,7 @@ int: {
 
 ## EQN_StrikeSymbol
 
-Strike equation symbol used in [EQN_Strike][435].
+Strike equation symbol used in [EQN_Strike][433].
 
 Four styles of strike symbol are available:
 
@@ -7776,7 +7767,7 @@ eqn.addElements({
 
 ## EQN_RadicalSymbol
 
-Radical equation symbol used in [EQN_Root][432].
+Radical equation symbol used in [EQN_Root][430].
 
 The radical symbol allows customization on how to draw the radical. Mostly
 it will not be needed, but for edge case equation layouts it may be useful.
@@ -7882,9 +7873,9 @@ An equation phrase is used to define an equation form. An equation phrase
 can either be the entirety of the form definition, or a series of nested
 phrases.
 
--   An object or array definition (e.g. [EQN_Fraction][423])
+-   An object or array definition (e.g. [EQN_Fraction][421])
 -   A string that represents an equation element
--   An array of [TypeEquationPhrase][532]
+-   An array of [TypeEquationPhrase][530]
 
 
 ### Examples
@@ -7980,7 +7971,7 @@ elements.
 This object defines a how the elements are laid out, what properties the
 elements have, and some animation properties for when animating to this form.
 
-In the [Equation][554] object, forms are defined with form names, and
+In the [Equation][552] object, forms are defined with form names, and
 subForm names. Most of the time, the subForm name can be ignored.
 However, it is useful when dealing with units. Sometimes you will have a
 series of forms you want to animate through, that will be slightly different
@@ -8116,12 +8107,12 @@ forms: {
 
 A single form definition can either be:
 
--   an equation phrase [TypeEquationPhrase][532]
--   or an equation form object [TypeEquationFormObject][541]
+-   an equation phrase [TypeEquationPhrase][530]
+-   or an equation form object [TypeEquationFormObject][539]
 -   or an object of subforms:
 
      {
-        subform1: ([TypeEquationPhrase][532] \| [TypeEquationFormObject][541]),
+        subform1: ([TypeEquationPhrase][530] \| [TypeEquationFormObject][539]),
         subform2: ...
      },
 
@@ -8129,7 +8120,7 @@ A single form definition can either be:
 ## TypeEquationForms
 
 An object of equation forms where each key is the form name and each value
-is a form defintion [TypeEquationForm][544]
+is a form defintion [TypeEquationForm][542]
 
 
 ## TypeFormRestart
@@ -8156,7 +8147,7 @@ The default values in the pulse object are are:
 
 ## EQN_Equation
 
-Options objects to construct an [Equation][554] class. All properties are optional.
+Options objects to construct an [Equation][552] class. All properties are optional.
 
 ### Properties
 
@@ -8202,10 +8193,10 @@ The order that elements are shown, hidden and moved is defined by the
     move existing elements to their correct locations
 -   `'dissolve'`: Dissolve out the entire current form, and then dissolve in the entire new form
 -   `'moveFrom'`: Shows the desired form at the position defined in the
-    formRestart property of [EQN_Equation][549], then moves it to the
+    formRestart property of [EQN_Equation][547], then moves it to the
     current location
 -   `'pulse'`: Same as `'dissolve'`, but once finished will pulse the element
-    defined in the pulse object in the formRestart property of [EQN_Equation][549]
+    defined in the pulse object in the formRestart property of [EQN_Equation][547]
 
 If a form is already animating, then the `ifAnimating` property will define
 the behavior of the animation:
@@ -8234,9 +8225,9 @@ the behavior of the animation:
 -   `dissolveInTime` **[number][749]?** Default: 0.4 of duration, or 0.4s if
     no duration
 -   `prioritizeFormDuration` **[boolean][748]?** use duration from the form
-    definition [TypeEquationFormObject][541]. Default: `true`
+    definition [TypeEquationFormObject][539]. Default: `true`
 -   `fromWhere` **(`"fromPrev"` \| `"fromNext"`)?** prioritze _fromPrev_ or
-    _fromNext_ duration from the form definition. [TypeEquationFormObject][541]
+    _fromNext_ duration from the form definition. [TypeEquationFormObject][539]
     Default: `null`
 -   `ifAnimating` **{cancelGoTo: [boolean][748]?, skipToTarget: [boolean][748]?}?** 
 -   `callback` **([string][740] | function (): void)??** 
@@ -8503,7 +8494,7 @@ t3 = '[['s', 1, 1], ['r', 0], ['t', 2, 2]]';
 
 ## getPoint
 
-Parse a [TypeParsablePoint][582] and return a [Point][71].
+Parse a [TypeParsablePoint][580] and return a [Point][71].
 
 ### Parameters
 
@@ -8515,7 +8506,7 @@ Returns **[Point][755]**
 
 Parse a scale definition and return a [Point][71] representing the scale
 in x and y.
-Scale can either be defined as a [TypeParsablePoint][582] or a `number` if
+Scale can either be defined as a [TypeParsablePoint][580] or a `number` if
 the x and y scale is equal.
 
 ### Parameters
@@ -8764,6 +8755,57 @@ Used to define the modifiers of a string within a text lines primitive
 
 
 
+## OBJ_PositionAnimationStep
+
+**Extends OBJ_ElementAnimationStep**
+
+-   **See: [PositionAnimationStep][380] for description and examples
+    **
+
+[PositionAnimationStep][380] options object
+
+Type: any
+
+### Properties
+
+-   `start` **[TypeParsablePoint][754]?** start position - if undefined then
+    current position is used
+-   `target` **[TypeParsablePoint][754]?** target position - if undefined then
+    `delta` is used
+-   `delta` **[TypeParsablePoint][754]?** target delta - only used if `target`
+    is undefined
+-   `velocity` **(null | [TypeParsablePoint][754])?** velocity of
+    position overrides `duration` - `null` to use `duration` (`null`)
+-   `path` **OBJ_TranslationPath?** (`{ style: 'linear' }`)
+-   `maxDuration` **([number][749] | null)?** maximum duration to clip animation
+    to where `null` is unlimited (`null`)
+
+## OBJ_RotationAnimationStep
+
+**Extends OBJ_ElementAnimationStep**
+
+-   **See: [RotationAnimationStep][383] for description and examples
+    **
+
+[RotationAnimationStep][383] step options object
+
+Type: any
+
+### Properties
+
+-   `start` **[number][749]?** start rotation - current rotation used if
+    undefined
+-   `target` **[number][749]?** target rotation - will overwrite `delta` rotation
+-   `delta` **[number][749]?** delta rotation that can be used instead of `target`
+-   `velocity` **(null | [number][749])?** velocity of rotation overrides
+    `duration` - `null` to use `duration` (`null`)
+-   `direction` **(`0` \| `1` \| `-1` \| `2`)?** where `0` is quickest direction, `1`
+    is positive of CCW direction, `-1` is negative of CW direction and `2` is
+    whichever direction doesn't pass through angle 0 (`0`).
+-   `clipTo` **(`"0to360"` \| `"-180to180"` | null)?** (`null`)
+-   `maxDuration` **([number][749] | null)?** maximum duration to clip animation
+    to where `null` is unlimited (`null`)
+
 ## OBJ_ElementAnimationStep
 
 **Extends OBJ_AnimationStep**
@@ -8918,16 +8960,6 @@ Type: any
 ### Properties
 
 -   `steps` **[Array][741]&lt;[AnimationStep][794]>** animation steps to perform in parallel
-
-## RotationAnimationStep
-
-**Extends ElementAnimationStep**
-
-Rotation animation Step
-
-### Parameters
-
--   `options` **[OBJ_RotationAnimationStep][797]** 
 
 ## ScaleAnimationStep
 
@@ -10603,533 +10635,533 @@ Type: ([TypeWhen][902] \| [number][749] | null)
 
 [379]: #parameters-135
 
-[380]: #obj_positionanimationstep
+[380]: #positionanimationstep
 
-[381]: #properties-14
+[381]: #parameters-136
 
-[382]: #obj_rotationanimationstep
+[382]: #examples-33
 
-[383]: #properties-15
+[383]: #rotationanimationstep
 
-[384]: #examples-33
+[384]: #parameters-137
 
-[385]: #positionanimationstep
+[385]: #examples-34
 
-[386]: #parameters-136
+[386]: #obj_scaleanimationstep
 
-[387]: #examples-34
+[387]: #properties-14
 
-[388]: #obj_scaleanimationstep
+[388]: #examples-35
 
-[389]: #properties-16
+[389]: #obj_customanimationstep
 
-[390]: #examples-35
+[390]: #properties-15
 
-[391]: #obj_customanimationstep
+[391]: #examples-36
 
-[392]: #properties-17
+[392]: #obj_transformanimationstep
 
-[393]: #examples-36
+[393]: #properties-16
 
-[394]: #obj_transformanimationstep
+[394]: #examples-37
 
-[395]: #properties-18
+[395]: #obj_scenarioanimationstep
 
-[396]: #examples-37
+[396]: #properties-17
 
-[397]: #obj_scenarioanimationstep
+[397]: #examples-38
 
-[398]: #properties-19
+[398]: #obj_triggeranimationstep
 
-[399]: #examples-38
+[399]: #properties-18
 
-[400]: #obj_triggeranimationstep
+[400]: #examples-39
 
-[401]: #properties-20
+[401]: #obj_coloranimationstep
 
-[402]: #examples-39
+[402]: #properties-19
 
-[403]: #obj_coloranimationstep
+[403]: #examples-40
 
-[404]: #properties-21
+[404]: #obj_opacityanimationstep
 
-[405]: #examples-40
+[405]: #properties-20
 
-[406]: #obj_opacityanimationstep
+[406]: #examples-41
 
-[407]: #properties-22
+[407]: #obj_scenariosanimationstep
 
-[408]: #examples-41
+[408]: #properties-21
 
-[409]: #obj_scenariosanimationstep
+[409]: #serialanimationstep
 
-[410]: #properties-23
+[410]: #parameters-138
 
-[411]: #serialanimationstep
+[411]: #examples-42
 
-[412]: #parameters-137
+[412]: #parallelanimationstep
 
-[413]: #examples-42
+[413]: #parameters-139
 
-[414]: #parallelanimationstep
+[414]: #examples-43
 
-[415]: #parameters-138
+[415]: #equation-elements-types
 
-[416]: #examples-43
+[416]: #typeequationelements
 
-[417]: #equation-elements-types
+[417]: #equation-layout-objects
 
-[418]: #typeequationelements
+[418]: #eqn_container
 
-[419]: #equation-layout-objects
+[419]: #properties-22
 
-[420]: #eqn_container
+[420]: #examples-44
 
-[421]: #properties-24
+[421]: #eqn_fraction
 
-[422]: #examples-44
+[422]: #properties-23
 
-[423]: #eqn_fraction
+[423]: #examples-45
 
-[424]: #properties-25
+[424]: #eqn_scale
 
-[425]: #examples-45
+[425]: #properties-24
 
-[426]: #eqn_scale
+[426]: #examples-46
 
-[427]: #properties-26
+[427]: #eqn_bracket
 
-[428]: #examples-46
+[428]: #properties-25
 
-[429]: #eqn_bracket
+[429]: #examples-47
 
-[430]: #properties-27
+[430]: #eqn_root
 
-[431]: #examples-47
+[431]: #properties-26
 
-[432]: #eqn_root
+[432]: #examples-48
 
-[433]: #properties-28
+[433]: #eqn_strike
 
-[434]: #examples-48
+[434]: #properties-27
 
-[435]: #eqn_strike
+[435]: #examples-49
 
-[436]: #properties-29
+[436]: #eqn_box
 
-[437]: #examples-49
+[437]: #properties-28
 
-[438]: #eqn_box
+[438]: #examples-50
 
-[439]: #properties-30
+[439]: #eqn_bar
 
-[440]: #examples-50
+[440]: #properties-29
 
-[441]: #eqn_bar
+[441]: #examples-51
 
-[442]: #properties-31
+[442]: #eqn_integral
 
-[443]: #examples-51
+[443]: #properties-30
 
-[444]: #eqn_integral
+[444]: #examples-52
 
-[445]: #properties-32
+[445]: #eqn_sumof
 
-[446]: #examples-52
+[446]: #properties-31
 
-[447]: #eqn_sumof
+[447]: #examples-53
 
-[448]: #properties-33
+[448]: #eqn_prodof
 
-[449]: #examples-53
+[449]: #properties-32
 
-[450]: #eqn_prodof
+[450]: #examples-54
 
-[451]: #properties-34
+[451]: #eqn_subcript
 
-[452]: #examples-54
+[452]: #properties-33
 
-[453]: #eqn_subcript
+[453]: #examples-55
 
-[454]: #properties-35
+[454]: #eqn_superscript
 
-[455]: #examples-55
+[455]: #properties-34
 
-[456]: #eqn_superscript
+[456]: #examples-56
 
-[457]: #properties-36
+[457]: #eqn_superscriptsubscript
 
-[458]: #examples-56
+[458]: #properties-35
 
-[459]: #eqn_superscriptsubscript
+[459]: #examples-57
 
-[460]: #properties-37
+[460]: #eqn_comment
 
-[461]: #examples-57
+[461]: #properties-36
 
-[462]: #eqn_comment
+[462]: #examples-58
 
-[463]: #properties-38
+[463]: #eqn_strikecomment
 
-[464]: #examples-58
+[464]: #properties-37
 
-[465]: #eqn_strikecomment
+[465]: #examples-59
 
-[466]: #properties-39
+[466]: #eqn_pad
 
-[467]: #examples-59
+[467]: #properties-38
 
-[468]: #eqn_pad
+[468]: #examples-60
 
-[469]: #properties-40
+[469]: #eqn_matrix
 
-[470]: #examples-60
+[470]: #properties-39
 
-[471]: #eqn_matrix
+[471]: #examples-61
 
-[472]: #properties-41
+[472]: #eqn_annotate
 
-[473]: #examples-61
+[473]: #properties-40
 
-[474]: #eqn_annotate
+[474]: #examples-62
 
-[475]: #properties-42
+[475]: #eqn_annotation
 
-[476]: #examples-62
+[476]: #properties-41
 
-[477]: #eqn_annotation
+[477]: #examples-63
 
-[478]: #properties-43
+[478]: #eqn_encompassglyph
 
-[479]: #examples-63
+[479]: #properties-42
 
-[480]: #eqn_encompassglyph
+[480]: #examples-64
 
-[481]: #properties-44
+[481]: #eqn_leftrightglyph
 
-[482]: #examples-64
+[482]: #properties-43
 
-[483]: #eqn_leftrightglyph
+[483]: #examples-65
 
-[484]: #properties-45
+[484]: #eqn_topbottomglyph
 
-[485]: #examples-65
+[485]: #properties-44
 
-[486]: #eqn_topbottomglyph
+[486]: #examples-66
 
-[487]: #properties-46
+[487]: #eqn_glyphs
 
-[488]: #examples-66
+[488]: #properties-45
 
-[489]: #eqn_glyphs
+[489]: #equation-symbol-objects
 
-[490]: #properties-47
+[490]: #eqn_vinculumsymbol
 
-[491]: #equation-symbol-objects
+[491]: #properties-46
 
-[492]: #eqn_vinculumsymbol
+[492]: #examples-67
 
-[493]: #properties-48
+[493]: #eqn_boxsymbol
 
-[494]: #examples-67
+[494]: #properties-47
 
-[495]: #eqn_boxsymbol
+[495]: #examples-68
 
-[496]: #properties-49
+[496]: #eqn_arrowsymbol
 
-[497]: #examples-68
+[497]: #properties-48
 
-[498]: #eqn_arrowsymbol
+[498]: #examples-69
 
-[499]: #properties-50
+[499]: #eqn_sumsymbol
 
-[500]: #examples-69
+[500]: #properties-49
 
-[501]: #eqn_sumsymbol
+[501]: #examples-70
 
-[502]: #properties-51
+[502]: #eqn_prodsymbol
 
-[503]: #examples-70
+[503]: #properties-50
 
-[504]: #eqn_prodsymbol
+[504]: #examples-71
 
-[505]: #properties-52
+[505]: #eqn_integralsymbol
 
-[506]: #examples-71
+[506]: #properties-51
 
-[507]: #eqn_integralsymbol
+[507]: #examples-72
 
-[508]: #properties-53
+[508]: #eqn_strikesymbol
 
-[509]: #examples-72
+[509]: #properties-52
 
-[510]: #eqn_strikesymbol
+[510]: #examples-73
 
-[511]: #properties-54
+[511]: #eqn_bracketsymbol
 
-[512]: #examples-73
+[512]: #properties-53
 
-[513]: #eqn_bracketsymbol
+[513]: #examples-74
 
-[514]: #properties-55
+[514]: #eqn_anglebracketsymbol
 
-[515]: #examples-74
+[515]: #properties-54
 
-[516]: #eqn_anglebracketsymbol
+[516]: #examples-75
 
-[517]: #properties-56
+[517]: #eqn_bracesymbol
 
-[518]: #examples-75
+[518]: #properties-55
 
-[519]: #eqn_bracesymbol
+[519]: #examples-76
 
-[520]: #properties-57
+[520]: #eqn_barsymbol
 
-[521]: #examples-76
+[521]: #properties-56
 
-[522]: #eqn_barsymbol
+[522]: #examples-77
 
-[523]: #properties-58
+[523]: #eqn_squarebracketsymbol
 
-[524]: #examples-77
+[524]: #properties-57
 
-[525]: #eqn_squarebracketsymbol
+[525]: #examples-78
 
-[526]: #properties-59
+[526]: #eqn_radicalsymbol
 
-[527]: #examples-78
+[527]: #properties-58
 
-[528]: #eqn_radicalsymbol
+[528]: #examples-79
 
-[529]: #properties-60
+[529]: #equation-form-types
 
-[530]: #examples-79
+[530]: #typeequationphrase
 
-[531]: #equation-form-types
+[531]: #examples-80
 
-[532]: #typeequationphrase
+[532]: #typeformalignment
 
-[533]: #examples-80
+[533]: #properties-59
 
-[534]: #typeformalignment
+[534]: #typeformanimationproperties
 
-[535]: #properties-61
+[535]: #properties-60
 
-[536]: #typeformanimationproperties
+[536]: #examples-81
 
-[537]: #properties-62
+[537]: #typeformtranslationproperties
 
-[538]: #examples-81
+[538]: #properties-61
 
-[539]: #typeformtranslationproperties
+[539]: #typeequationformobject
 
-[540]: #properties-63
+[540]: #properties-62
 
-[541]: #typeequationformobject
+[541]: #examples-82
 
-[542]: #properties-64
+[542]: #typeequationform
 
-[543]: #examples-82
+[543]: #typeequationforms
 
-[544]: #typeequationform
+[544]: #typeformrestart
 
-[545]: #typeequationforms
+[545]: #properties-63
 
-[546]: #typeformrestart
+[546]: #equation-option-types
 
-[547]: #properties-65
+[547]: #eqn_equation
 
-[548]: #equation-option-types
+[548]: #properties-64
 
-[549]: #eqn_equation
+[549]: #typeequationgotoformoptions
 
-[550]: #properties-66
+[550]: #properties-65
 
-[551]: #typeequationgotoformoptions
+[551]: #equations
 
-[552]: #properties-67
+[552]: #equation
 
-[553]: #equations
+[553]: #parameters-140
 
-[554]: #equation
+[554]: #examples-83
 
-[555]: #parameters-139
+[555]: #eqn
 
-[556]: #examples-83
+[556]: #properties-66
 
-[557]: #eqn
+[557]: #setformseries
 
-[558]: #properties-68
+[558]: #parameters-141
 
-[559]: #setformseries
+[559]: #getformseries
 
-[560]: #parameters-140
+[560]: #addelements-1
 
-[561]: #getformseries
+[561]: #parameters-142
 
-[562]: #addelements-1
+[562]: #addforms
 
-[563]: #parameters-141
+[563]: #parameters-143
 
-[564]: #addforms
+[564]: #getcurrentform
 
-[565]: #parameters-142
+[565]: #setcurrentform
 
-[566]: #getcurrentform
+[566]: #parameters-144
 
-[567]: #setcurrentform
+[567]: #showform
 
-[568]: #parameters-143
+[568]: #parameters-145
 
-[569]: #showform
+[569]: #getform
 
-[570]: #parameters-144
+[570]: #parameters-146
 
-[571]: #getform
+[571]: #gotoform
 
-[572]: #parameters-145
+[572]: #parameters-147
 
-[573]: #gotoform
+[573]: #prevform
 
-[574]: #parameters-146
+[574]: #parameters-148
 
-[575]: #prevform
+[575]: #nextform
 
-[576]: #parameters-147
+[576]: #parameters-149
 
-[577]: #nextform
+[577]: #replaycurrentform
 
-[578]: #parameters-148
+[578]: #parameters-150
 
-[579]: #replaycurrentform
+[579]: #misc-geometry
 
-[580]: #parameters-149
+[580]: #typeparsablepoint
 
-[581]: #misc-geometry
+[581]: #examples-84
 
-[582]: #typeparsablepoint
+[582]: #typeparsableline
 
-[583]: #examples-84
+[583]: #examples-85
 
-[584]: #typeparsableline
+[584]: #typeparsablerect
 
-[585]: #examples-85
+[585]: #examples-86
 
-[586]: #typeparsablerect
+[586]: #typeparsabletransform
 
-[587]: #examples-86
+[587]: #examples-87
 
-[588]: #typeparsabletransform
+[588]: #getpoint-1
 
-[589]: #examples-87
+[589]: #parameters-151
 
-[590]: #getpoint-1
+[590]: #getscale-1
 
-[591]: #parameters-150
+[591]: #parameters-152
 
-[592]: #getscale-1
+[592]: #getline
 
-[593]: #parameters-151
+[593]: #parameters-153
 
-[594]: #getline
+[594]: #getrect
 
-[595]: #parameters-152
+[595]: #parameters-154
 
-[596]: #getrect
+[596]: #gettransform
 
-[597]: #parameters-153
+[597]: #parameters-155
 
-[598]: #gettransform
+[598]: #misc-drawing
 
-[599]: #parameters-154
+[599]: #obj_texture
 
-[600]: #misc-drawing
+[600]: #properties-67
 
-[601]: #obj_texture
+[601]: #obj_textdefinition
 
-[602]: #properties-69
+[602]: #properties-68
 
-[603]: #obj_textdefinition
+[603]: #obj_font
 
-[604]: #properties-70
+[604]: #properties-69
 
-[605]: #obj_font
+[605]: #examples-88
 
-[606]: #properties-71
+[606]: #obj_textlinedefinition
 
-[607]: #examples-88
+[607]: #properties-70
 
-[608]: #obj_textlinedefinition
+[608]: #obj_textlinesdefinition
 
-[609]: #properties-72
+[609]: #properties-71
 
-[610]: #obj_textlinesdefinition
+[610]: #obj_textmodifierdefinition
 
-[611]: #properties-73
+[611]: #properties-72
 
-[612]: #obj_textmodifierdefinition
+[612]: #obj_textmodifiersdefinition
 
-[613]: #properties-74
+[613]: #properties-73
 
-[614]: #obj_textmodifiersdefinition
+[614]: #misc-animation
 
-[615]: #properties-75
+[615]: #obj_positionanimationstep
 
-[616]: #misc-animation
+[616]: #properties-74
 
-[617]: #obj_elementanimationstep
+[617]: #obj_rotationanimationstep
 
-[618]: #properties-76
+[618]: #properties-75
 
-[619]: #obj_scenariovelocity
+[619]: #obj_elementanimationstep
 
-[620]: #properties-77
+[620]: #properties-76
 
-[621]: #animationstep
+[621]: #obj_scenariovelocity
 
-[622]: #parameters-155
+[622]: #properties-77
 
-[623]: #properties-78
+[623]: #animationstep
 
-[624]: #getremainingtime-1
+[624]: #parameters-156
 
-[625]: #parameters-156
+[625]: #properties-78
 
-[626]: #start-1
+[626]: #getremainingtime-1
 
 [627]: #parameters-157
 
-[628]: #delayanimationstep
+[628]: #start-1
 
 [629]: #parameters-158
 
-[630]: #elementanimationstep
+[630]: #delayanimationstep
 
 [631]: #parameters-159
 
-[632]: #obj_animationbuilder
+[632]: #elementanimationstep
 
-[633]: #properties-79
+[633]: #parameters-160
 
-[634]: #obj_animationstep
+[634]: #obj_animationbuilder
 
-[635]: #properties-80
+[635]: #properties-79
 
-[636]: #obj_animationstart
+[636]: #obj_animationstep
 
-[637]: #properties-81
+[637]: #properties-80
 
-[638]: #obj_serialanimationstep
+[638]: #obj_animationstart
 
-[639]: #properties-82
+[639]: #properties-81
 
-[640]: #obj_parallelanimationstep
+[640]: #obj_serialanimationstep
 
-[641]: #properties-83
+[641]: #properties-82
 
-[642]: #rotationanimationstep
+[642]: #obj_parallelanimationstep
 
-[643]: #parameters-160
+[643]: #properties-83
 
 [644]: #scaleanimationstep
 
@@ -11495,9 +11527,9 @@ Type: ([TypeWhen][902] \| [number][749] | null)
 
 [825]: #obj_serialanimationstep
 
-[826]: ./assets1/rotation_animation.gif
+[826]: ./assets1/position_animation.gif
 
-[827]: ./assets1/position_animation.gif
+[827]: ./assets1/rotation_animation.gif
 
 [828]: ./assets1/scale_animation.gif
 

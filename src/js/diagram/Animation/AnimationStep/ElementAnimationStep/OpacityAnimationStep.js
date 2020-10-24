@@ -69,7 +69,7 @@ import ElementAnimationStep from '../ElementAnimationStep';
  *   .start();
  *
  * @example
- * // Different ways to create a stand alone step
+ * // Different ways to create a stand-alone step
  * const step1 = p.animations.opacity({
  *   target: 0,
  *   duration: 2,

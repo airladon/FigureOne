@@ -91,7 +91,7 @@ import ElementAnimationStep from '../ElementAnimationStep';
  *   .start();
  *
  * @example
- * // Different ways to create a stand alone step
+ * // Different ways to create a stand-alone step
  * const step1 = p.animations.transform({
  *   target: [['s', 1.5, 1.5], ['r', 1], ['t', 1, 0]],
  *   duration: 2,

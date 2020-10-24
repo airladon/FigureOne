@@ -86,7 +86,7 @@ import ElementAnimationStep from '../ElementAnimationStep';
  *   .start();
  *
  * @example
- * // Different ways to create a stand alone step
+ * // Different ways to create a stand-alone step
  * const step1 = p.animations.rotation({ target: Math.PI, duration: 2 });
  * const step2 = new Fig.Animation.RotationAnimationStep({
  *   element: p,

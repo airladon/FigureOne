@@ -56,7 +56,7 @@ import type { DiagramElement } from '../../Element';
  *   .start();
  *
  * @example
- * // Different ways to create a stand alone step
+ * // Different ways to create a stand-alone step
  * const step1 = p.animations.trigger({
  *   callback: () => { console.log('arrived at (1, 0)') },
  * });

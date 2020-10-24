@@ -108,7 +108,7 @@ export type OBJ_ScenarioVelocity = {
  *   .start();
  *
  * @example
- * // Different ways to create a stand alone step
+ * // Different ways to create a stand-alone step
  * const step1 = p.animations.scenario({
  *   target: 'right',
  *   duration: 2,

@@ -1514,29 +1514,19 @@
               
                 
                 <li><a
-                  href='#obj_positionanimationstep'
-                  class="">
-                  OBJ_PositionAnimationStep
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_rotationanimationstep'
-                  class="">
-                  OBJ_RotationAnimationStep
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#positionanimationstep'
                   class="">
                   PositionAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#rotationanimationstep'
+                  class="">
+                  RotationAnimationStep
                   
                 </a>
                 
@@ -2474,6 +2464,26 @@
               
                 
                 <li><a
+                  href='#obj_positionanimationstep'
+                  class="">
+                  OBJ_PositionAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_rotationanimationstep'
+                  class="">
+                  OBJ_RotationAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_elementanimationstep'
                   class="">
                   OBJ_ElementAnimationStep
@@ -2591,16 +2601,6 @@
                   href='#obj_parallelanimationstep'
                   class="">
                   OBJ_ParallelAnimationStep
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#rotationanimationstep'
-                  class="">
-                  RotationAnimationStep
                   
                 </a>
                 
@@ -2792,6 +2792,16 @@
               
                 
                 <li><a
+                  href='#typewhen'
+                  class="">
+                  TypeWhen
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_pulsescale'
                   class="">
                   OBJ_PulseScale
@@ -2853,16 +2863,6 @@
                   href='#cpy_step'
                   class="">
                   CPY_Step
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#typewhen'
-                  class="">
-                  TypeWhen
                   
                 </a>
                 
@@ -16666,8 +16666,47 @@ diagram.addElement(
     <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
+<p>A grid is included in this javascript file to make it obvious how shapes are animated</p>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>]});
+
+<span class="hljs-comment">// grid</span>
+diagram.addElements([
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'origin'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span> },
+      <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>]
+    },
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'grid'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'grid'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">bounds</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>],
+      <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.001</span> },
+    },
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'gridMajor'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'grid'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">bounds</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>],
+      <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.004</span> }
+    },
+  },
+]);
+
+<span class="hljs-comment">// shape to animate</span>
 diagram.addElement(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
@@ -19805,339 +19844,6 @@ AnimationManager.new
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_positionanimationstep'>
-      OBJ_PositionAnimationStep
-    </h3>
-    
-    
-  </div>
-  
-
-  <p><a href="#positionanimationstep">PositionAnimationStep</a> options object</p>
-<p>The position animation step animates the first <a href="#translation">Translation</a> transform
-in the <a href="#diagramelement">DiagramElement</a>'s <a href="#transform">Transform</a>.</p>
-<p>By default, the position will start with the element's current position.</p>
-<p>Use either <code>delta</code> or <code>target</code> to define it's end point.</p>
-<p>The path of travel between <code>start</code> and <code>target</code> can either be a straight
-line (<code>'linear'</code>) or a quadratic bezier curve (<code>'curve'</code>)</p>
-<p>For custom paths, the <a href="#customanimationstep">CustomAnimationStep</a> can be used.</p>
-
-  
-    <p style="display: none;">      Type:
-      any
-    </p>
-  
-  
-    <p>
-      Extends
-      
-        <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>start</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : start position - if undefined then
-current position is used
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>target</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : target position - if undefined then
-
-<code>delta</code>
- is used
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>delta</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : target delta - only used if 
-<code>target</code>
-
-is undefined
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>velocity</span> <code class='quiet'>((null | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
-          : velocity of
-position overrides 
-<code>duration</code>
- - 
-<code>null</code>
- to use 
-<code>duration</code>
- (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>path</span> <code class='quiet'>(OBJ_TranslationPath?)</code>
-          : (
-<code>{ style: 'linear' }</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>maxDuration</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)?)</code>
-          : maximum duration to clip animation
-to where 
-<code>null</code>
- is unlimited (
-<code>null</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        <a href="#positionanimationstep">PositionAnimationStep</a>
- for examples on use
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_rotationanimationstep'>
-      OBJ_RotationAnimationStep
-    </h3>
-    
-    
-  </div>
-  
-
-  <p><a href="#rotationanimationstep">RotationAnimationStep</a> step options object</p>
-<p><img src="./assets1/rotation_animation.gif"></p>
-<p>The rotation animation step animates the first <a href="#rotation">Rotation</a> transform
-in the <a href="#diagramelement">DiagramElement</a>'s <a href="#transform">Transform</a>.</p>
-<p>By default, the rotation will start with the element's current rotation.</p>
-<p>Use either <code>delta</code> or <code>target</code> to define it's end point</p>
-<p><code>clipTo</code> will clip the element's rotation during animation</p>
-
-  
-    <p style="display: none;">      Type:
-      any
-    </p>
-  
-  
-    <p>
-      Extends
-      
-        <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>delta</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>velocity</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : velocity of rotation overrides
-
-<code>duration</code>
- - 
-<code>null</code>
- to use 
-<code>duration</code>
- (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>direction</span> <code class='quiet'>((<code>0</code> | <code>1</code> | <code>-1</code> | <code>2</code>)?)</code>
-          : where 
-<code>0</code>
- is quickest direction, 
-<code>1</code>
-
-is positive of CCW direction, 
-<code>-1</code>
- is negative of CW direction and 
-<code>2</code>
- is
-whichever direction doesn't pass through angle 0 (
-<code>0</code>
-).
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>clipTo</span> <code class='quiet'>((<code>"0to360"</code> | <code>"-180to180"</code> | null)?)</code>
-          : (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>maxDuration</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)?)</code>
-          : maximum duration to clip animation
-to where 
-<code>null</code>
- is unlimited (
-<code>null</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        To test examples, append them to the
-
-<a href="#animation-boilerplate">
-boilerplate
-</a>
-
-      
-    
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using duration</span>
-p.animations.new()
-  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
-  .start();</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using velocity</span>
-p.animations.new()
-  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">velocity</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span> })
-  .start();</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand alone step</span>
-<span class="hljs-keyword">const</span> step1 = p.animations.rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });
-<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.RotationAnimationStep({
-  <span class="hljs-attr">element</span>: p,
-  <span class="hljs-attr">target</span>: <span class="hljs-number">0</span>,
-  <span class="hljs-attr">direction</span>: <span class="hljs-number">-1</span>,
-  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
-});
-
-p.animations.new()
-  .then(step1)
-  .then(step2)
-  .start();</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='positionanimationstep'>
       PositionAnimationStep
     </h3>
@@ -20245,6 +19951,123 @@ p.animations.new()
 <span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.PositionAnimationStep({
   <span class="hljs-attr">element</span>: p,
   <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
+});
+
+p.animations.new()
+  .then(step1)
+  .then(step2)
+  .start();</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='rotationanimationstep'>
+      RotationAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Rotation animation step</p>
+<p><img src="./assets1/rotation_animation.gif"></p>
+<p>The rotation animation step animates the first <a href="#rotation">Rotation</a> transform
+in the <a href="#diagramelement">DiagramElement</a>'s <a href="#transform">Transform</a>.</p>
+<p>By default, the rotation will start with the element's current rotation.</p>
+<p>Use either <code>delta</code> or <code>target</code> to define it's end point</p>
+<p><code>clipTo</code> will clip the element's rotation during animation</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#elementanimationstep">ElementAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_rotationanimationstep">OBJ_RotationAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using duration</span>
+p.animations.new()
+  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Using velocity</span>
+p.animations.new()
+  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">velocity</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
+<span class="hljs-keyword">const</span> step1 = p.animations.rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });
+<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.RotationAnimationStep({
+  <span class="hljs-attr">element</span>: p,
+  <span class="hljs-attr">target</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">direction</span>: <span class="hljs-number">-1</span>,
   <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
 });
 
@@ -20399,7 +20222,7 @@ p.animations.new()
   .start();</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand alone step</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
 <span class="hljs-keyword">const</span> step1 = p.animations.scale({ <span class="hljs-attr">target</span>: <span class="hljs-number">1.5</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });
 <span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.ScaleAnimationStep({
   <span class="hljs-attr">element</span>: p,
@@ -20758,7 +20581,7 @@ p.animations.new()
   .start();</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand alone step</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
 <span class="hljs-keyword">const</span> step1 = p.animations.transform({
   <span class="hljs-attr">target</span>: [[<span class="hljs-string">'s'</span>, <span class="hljs-number">1.5</span>, <span class="hljs-number">1.5</span>], [<span class="hljs-string">'r'</span>, <span class="hljs-number">1</span>], [<span class="hljs-string">'t'</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
   <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
@@ -20983,7 +20806,7 @@ p.animations.new()
   .start();</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand alone step</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
 <span class="hljs-keyword">const</span> step1 = p.animations.scenario({
   <span class="hljs-attr">target</span>: <span class="hljs-string">'right'</span>,
   <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
@@ -21135,7 +20958,7 @@ p.animations.new()
   .start();</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand alone step</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
 <span class="hljs-keyword">const</span> step1 = p.animations.trigger({
   <span class="hljs-attr">callback</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'arrived at (1, 0)'</span>) },
 });
@@ -21290,7 +21113,7 @@ p.animations.new()
   .start();</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand alone step</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
 <span class="hljs-keyword">const</span> step1 = p.animations.color({
   <span class="hljs-attr">target</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
   <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
@@ -21462,7 +21285,7 @@ p.animations.new()
   .start();</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand alone step</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
 <span class="hljs-keyword">const</span> step1 = p.animations.opacity({
   <span class="hljs-attr">target</span>: <span class="hljs-number">0</span>,
   <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
@@ -32653,6 +32476,300 @@ key
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_positionanimationstep'>
+      OBJ_PositionAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#positionanimationstep">PositionAnimationStep</a> options object</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : start position - if undefined then
+current position is used
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>target</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : target position - if undefined then
+
+<code>delta</code>
+ is used
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>delta</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : target delta - only used if 
+<code>target</code>
+
+is undefined
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>velocity</span> <code class='quiet'>((null | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
+          : velocity of
+position overrides 
+<code>duration</code>
+ - 
+<code>null</code>
+ to use 
+<code>duration</code>
+ (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>path</span> <code class='quiet'>(OBJ_TranslationPath?)</code>
+          : (
+<code>{ style: 'linear' }</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>maxDuration</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)?)</code>
+          : maximum duration to clip animation
+to where 
+<code>null</code>
+ is unlimited (
+<code>null</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#positionanimationstep">PositionAnimationStep</a>
+ for description and examples
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_rotationanimationstep'>
+      OBJ_RotationAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#rotationanimationstep">RotationAnimationStep</a> step options object</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : start rotation - current rotation used if
+undefined
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : target rotation - will overwrite 
+<code>delta</code>
+ rotation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>delta</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : delta rotation that can be used instead of 
+<code>target</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>velocity</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : velocity of rotation overrides
+
+<code>duration</code>
+ - 
+<code>null</code>
+ to use 
+<code>duration</code>
+ (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>direction</span> <code class='quiet'>((<code>0</code> | <code>1</code> | <code>-1</code> | <code>2</code>)?)</code>
+          : where 
+<code>0</code>
+ is quickest direction, 
+<code>1</code>
+
+is positive of CCW direction, 
+<code>-1</code>
+ is negative of CW direction and 
+<code>2</code>
+ is
+whichever direction doesn't pass through angle 0 (
+<code>0</code>
+).
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>clipTo</span> <code class='quiet'>((<code>"0to360"</code> | <code>"-180to180"</code> | null)?)</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>maxDuration</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)?)</code>
+          : maximum duration to clip animation
+to where 
+<code>null</code>
+ is unlimited (
+<code>null</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#rotationanimationstep">RotationAnimationStep</a>
+ for description and examples
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='obj_elementanimationstep'>
       OBJ_ElementAnimationStep
     </h3>
@@ -33615,75 +33732,6 @@ start the animation
         </div>
       
     </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='rotationanimationstep'>
-      RotationAnimationStep
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Rotation animation Step</p>
-
-  
-  
-    <p>
-      Extends
-      
-        <a href="#elementanimationstep">ElementAnimationStep</a>
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_rotationanimationstep">OBJ_RotationAnimationStep</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
   
 
   
@@ -35135,6 +35183,67 @@ rotated in the positive direction around the start point. The
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='typewhen'>
+      TypeWhen
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><code>'nextFrame'</code> | <code>'prevFrame'</code> | <code>'syncNow'</code> | <code>'now'</code></p>
+<p><code>'syncNow'</code> is a synchronized 'now' time. The
+first time 'syncNow' is used, the current time will be stored and used
+for all subsequent calls to 'syncNow'. 'syncNow' is reset every
+time a new animation frame is drawn, or 100ms after a first syncNow call
+has been made after a reset.</p>
+<p>'now' is the instantaneous time</p>
+<p><code>'nextFrame'</code> will be the time of the next animation frame</p>
+<p><code>'prevFrame'</code> is the time of the last animation frame</p>
+
+  
+    <p style="display: none;">      Type:
+      (<code>"now"</code> | <code>"nextFrame"</code> | <code>"prevFrame"</code> | <code>"syncNow"</code>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='obj_pulsescale'>
       OBJ_PulseScale
     </h3>
@@ -35847,67 +35956,6 @@ diagram.addElement({
   },
 });</pre>
     
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='typewhen'>
-      TypeWhen
-    </h3>
-    
-    
-  </div>
-  
-
-  <p><code>'nextFrame'</code> | <code>'prevFrame'</code> | <code>'syncNow'</code> | <code>'now'</code></p>
-<p><code>'syncNow'</code> is a synchronized 'now' time. The
-first time 'syncNow' is used, the current time will be stored and used
-for all subsequent calls to 'syncNow'. 'syncNow' is reset every
-time a new animation frame is drawn, or 100ms after a first syncNow call
-has been made after a reset.</p>
-<p>'now' is the instantaneous time</p>
-<p><code>'nextFrame'</code> will be the time of the next animation frame</p>
-<p><code>'prevFrame'</code> is the time of the last animation frame</p>
-
-  
-    <p style="display: none;">      Type:
-      (<code>"now"</code> | <code>"nextFrame"</code> | <code>"prevFrame"</code> | <code>"syncNow"</code>)
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
   
 
   

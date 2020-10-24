@@ -61,7 +61,7 @@ type TypeColor = Array<number>;
  *   .start();
  *
  * @example
- * // Different ways to create a stand alone step
+ * // Different ways to create a stand-alone step
  * const step1 = p.animations.color({
  *   target: [0, 0, 1, 1],
  *   duration: 2,
