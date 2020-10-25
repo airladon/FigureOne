@@ -3691,6 +3691,7 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   getDiagramBoundaries() {
+    console.log(this.name, this.lastDrawTransform, this.drawingObject.getBoundaries(this.vertexToDiagramSpaceTransformMatrix()))
     return this.drawingObject.getBoundaries(this.vertexToDiagramSpaceTransformMatrix());
   }
 

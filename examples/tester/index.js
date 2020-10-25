@@ -178,30 +178,89 @@ diagram.addElements([
 //   .then(step2)
 //   .start();
 
+// diagram.addElement(
+//   // Add equation element
+//   {
+//     name: 'eqn',
+//     method: 'equation',
+//     options: {
+//       color: [1, 0, 0, 1],
+//       // Equation elements are the individual terms in the equation
+//       elements: {
+//         a: 'a',
+//         b: 'b',
+//         c: 'c',
+//         v: { symbol: 'vinculum'},
+//         equals: ' = ',
+//         times: ' \u00D7 ',
+//       },
+//       // An equation form is how those terms are arranged
+//       forms: {
+//         a: ['a', 'equals', 'b', 'times', 'c'],
+//         b: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+//       },
+//     },
+//   },
+// );
+// // Show the equation form
+// diagram.getElement('eqn').showForm('b');
+// diagram.initialize();
 diagram.addElement(
-  // Add equation element
   {
-    name: 'eqn',
+    name: 'equation',
     method: 'equation',
     options: {
       color: [1, 0, 0, 1],
-      // Equation elements are the individual terms in the equation
+      font: { size: 0.2 },
       elements: {
         a: 'a',
         b: 'b',
         c: 'c',
         v: { symbol: 'vinculum'},
         equals: ' = ',
-        times: ' \u00D7 ',
+        times: ' \u00D7 ',  // unicode times symbol
       },
-      // An equation form is how those terms are arranged
       forms: {
         a: ['a', 'equals', 'b', 'times', 'c'],
         b: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+        bCurve: {
+          content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+          animation: {
+            translation: {
+              a: { style: 'curve', direction: 'up', mag: 0.8 },
+              b: { style: 'curve', direction: 'down', mag: 1.2 },
+            },
+          },
+        },
       },
     },
   },
 );
-// Show the equation form
-diagram.getElement('eqn').showForm('b');
+
+const equation = diagram.getElement('equation')
+// equation.addForms({
+//   bCurved: {
+//     content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+//     animation: {
+//       translation: {
+//         a: { style: 'curve', direction: 'up', mag: 0.8 },
+//         b: { style: 'curve', direction: 'down', mag: 1.2 },
+//       },
+//     },
+//   },
+// });
+
+
+equation.showForm('b');
+// equation.goToForm({
+//   form: 'bCurved',
+//   animate: 'move',
+//   duration: 2,
+//   delay: 1,
+// });
+
+equation.touchInBoundingRect = true;
+equation.setMovable();
 diagram.initialize();
+equation.setMoveBounds('diagram', true);
+// equation.setMoveBounds('diagram');

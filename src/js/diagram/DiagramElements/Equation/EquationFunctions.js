@@ -2500,6 +2500,7 @@ export class EquationFunctions {
       baseline,
     };
     const options = joinObjects(defaultOptions, optionsIn);
+
     return new Fraction(
       [this.contentToElement(numerator), this.contentToElement(denominator)],       // $FlowFixMe
       this.getExistingOrAddSymbol(symbol),

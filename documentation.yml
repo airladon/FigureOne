@@ -52,6 +52,8 @@ toc:
   - ParallelAnimationStep
   - name: Equations
     file: ./docs/tutorials/equation/equation.md
+  - Equation
+  - EQN_Equation
   - TypeEquationElements
   - name: Equation Layout OBJECTS
   - EQN_Container
@@ -102,10 +104,8 @@ toc:
   - TypeEquationForms
   - TypeFormRestart
   - name: Equation Option Types
-  - EQN_Equation
   - TypeEquationGoToFormOptions
   # - name: Equations
-  - Equation
   - name: Misc Geometry
   - TypeParsablePoint
   - TypeParsableLine

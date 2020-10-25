@@ -478,6 +478,7 @@ class Diagram {
       line: this.objects.line.bind(this.objects),
       angle: this.objects.angle.bind(this.objects),
       smartPolyLine: this.objects.polyline.bind(this.objects),
+      equation: this.equation.equation.bind(this.equation),
     };
   }
 
