@@ -50,8 +50,8 @@ toc:
   - CustomAnimationStep
   - SerialAnimationStep
   - ParallelAnimationStep
-  - name: Equation Elements Types
-  # - TypeEquationElement
+  - name: Equations
+    file: ./docs/tutorials/equation/equation.md
   - TypeEquationElements
   - name: Equation Layout OBJECTS
   - EQN_Container
@@ -104,7 +104,7 @@ toc:
   - name: Equation Option Types
   - EQN_Equation
   - TypeEquationGoToFormOptions
-  - name: Equations
+  # - name: Equations
   - Equation
   - name: Misc Geometry
   - TypeParsablePoint

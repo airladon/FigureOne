@@ -1664,9 +1664,9 @@
               
                 
                 <li><a
-                  href='#equation-elements-types'
+                  href='#equations'
                   class="h5 bold black caps">
-                  Equation Elements Types
+                  Equations
                   
                 </a>
                 
@@ -2187,16 +2187,6 @@
                   href='#typeequationgotoformoptions'
                   class="">
                   TypeEquationGoToFormOptions
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#equations'
-                  class="h5 bold black caps">
-                  Equations
                   
                 </a>
                 
@@ -21654,7 +21644,15 @@ boilerplate
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Use `AnimationBuilder` for a more clean look</span>
+      <pre class='p1 overflow-auto round fill-light'>p.animations.new()
+  .inParallel([
+    p.animations.position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }),
+    p.animations.scale({ <span class="hljs-attr">target</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> }),
+  ])
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// One of the parallel steps is a series of steps</span>
 p.animations.new()
   .delay(<span class="hljs-number">1</span>)
   .inParallel([
@@ -21683,12 +21681,107 @@ p.animations.new()
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='equation-elements-types' class='mt0'>
-    Equation Elements Types
+  <h2 id='equations' class='mt0'>
+    Equations
   </h2>
 
   
-    
+    <p>An equation is a set of terms and operators arranged to make some mathematical statement.</p>
+<p>Consider the equation:</p>
+<p><code>a = b + c</code></p>
+<p>We will call <code>a</code>, <code>b</code> and <code>c</code> the <strong>terms</strong> and <code>=</code> and <code>+</code> the <strong>operators</strong>.</p>
+<p>This is one <strong>form</strong> of an equation. It can be rearranged into a different form:</p>
+<p><code>a - b = c</code></p>
+<p>To create an equation in FigureOne, the <strong>terms</strong> and <strong>operators</strong> are created as <a href="DiagramElementPrimitives">DiagramElementPrimitives</a>s, that are grouped within a <a href="#diagramelementcollection">DiagramElementCollection</a>. An equation form is then defined which determines the position and size of the <a href="DiagramElementPrimitives">DiagramElementPrimitives</a>s to layout the equation appropriately.</p>
+<p>As the equation and elements are all <a href="#diagramelement">DiagramElement</a>s, then they have all the same interactivety and animation abilities as shapes and text.</p>
+<h3><a id="equation-boilerplate"></a> Equation Boilerplate</h3>
+<p>To test examples within the 'Equation' section of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
+<p>All examples are snippets which can be appended to the end of the <code>index.js</code> file.</p>
+<pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
+<span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"figureOneContainer"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"width: 800px; height: 800px; background-color: white;"</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/figureone@0.2.3/figureone.min.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'./index.js'</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
+<p>A grid is included in this javascript file to make it obvious how equations are aligned</p>
+<pre class='hljs'><span class="hljs-comment">// index.js</span>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>]});
+
+<span class="hljs-comment">// grid</span>
+diagram.addElements([
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'origin'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.01</span>,
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span> },
+      <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>]
+    },
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'grid'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'grid'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">bounds</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>],
+      <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.1</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.001</span> },
+    },
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'gridMajor'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'grid'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">bounds</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>],
+      <span class="hljs-attr">yStep</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">xStep</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.004</span> }
+    },
+  },
+]);
+
+diagram.initialize();</pre>
+<h3>Quick Start</h3>
+<p>Let's start with a simple example equation</p>
+<pre class='hljs'>diagram.addElement(
+  <span class="hljs-comment">// Add equation element</span>
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-comment">// Equation elements are the individual terms and operators in the equation</span>
+      <span class="hljs-attr">elements</span>: {
+        <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
+        <span class="hljs-attr">b</span>: <span class="hljs-string">'b'</span>,
+        <span class="hljs-attr">c</span>: <span class="hljs-string">'c'</span>,
+        <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span>},
+        <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
+        <span class="hljs-attr">times</span>: <span class="hljs-string">' \u00D7 '</span>,  <span class="hljs-comment">// unicode times symbol</span>
+      },
+      <span class="hljs-comment">// An equation form is how those terms are arranged</span>
+      <span class="hljs-attr">forms</span>: {
+        <span class="hljs-attr">a</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, <span class="hljs-string">'c'</span>],
+        <span class="hljs-attr">b</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'c'</span>] }],
+      },
+    },
+  },
+);
+<span class="hljs-keyword">const</span> eqn = diagram.getElement(<span class="hljs-string">'eqn'</span>)
+eqn.showForm(<span class="hljs-string">'a'</span>);</pre>
+<p><img src="./tutorials/equation/simple.png"></p>
+<p>An equation element can either be text or a <strong>symbol</strong>. A symbol might be a vinculum (line in the fraction) or an integral sign as two examples.</p>
+<p>A <strong>form</strong> then arranges those elements. The simplest form (form <code>a</code> in the example above), is an array that lists the elements to show. In this case the elements will be laid our from left to right with their baselines aligned.</p>
+<p>Objects with special keywords can be used for special layouts. Form <code>b</code> in the equation above creates a fraction using the <code>frac</code> key.</p>
+<pre class='hljs'>eqn.showForm(<span class="hljs-string">'b'</span>);</pre>
+<p><img src="./tutorials/equation/fraction.png"></p>
 
   
 </section></div>
@@ -30057,20 +30150,6 @@ Default:
   
 </section>
 
-          
-        
-          
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
-
-  <h2 id='equations' class='mt0'>
-    Equations
-  </h2>
-
-  
-    
-
-  
-</section></div>
           
         
           

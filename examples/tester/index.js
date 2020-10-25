@@ -140,18 +140,18 @@ diagram.addElements([
 ]);
 
 // const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2]});
-diagram.addElement({
-  name: 'p',
-  method: 'polygon',
-  options: {
-    sides: 4,
-    fill: true,
-    radius: 0.5,
-    position: [0, 0],
-  },
-});
-const p = diagram.getElement('p');
-diagram.initialize();
+// diagram.addElement({
+//   name: 'p',
+//   method: 'polygon',
+//   options: {
+//     sides: 4,
+//     fill: true,
+//     radius: 0.5,
+//     position: [0, 0],
+//   },
+// });
+// const p = diagram.getElement('p');
+// diagram.initialize();
 
 // // Simple dissolve out
 // p.animations.new()
@@ -178,9 +178,30 @@ diagram.initialize();
 //   .then(step2)
 //   .start();
 
-p.animations.new()
-  .inParallel([
-    p.animations.position({ target: [1, 0], duration: 2 }),
-    p.animations.scale({ target: 2, duration: 2 }),
-  ])
-  .start();
+diagram.addElement(
+  // Add equation element
+  {
+    name: 'eqn',
+    method: 'equation',
+    options: {
+      color: [1, 0, 0, 1],
+      // Equation elements are the individual terms in the equation
+      elements: {
+        a: 'a',
+        b: 'b',
+        c: 'c',
+        v: { symbol: 'vinculum'},
+        equals: ' = ',
+        times: ' \u00D7 ',
+      },
+      // An equation form is how those terms are arranged
+      forms: {
+        a: ['a', 'equals', 'b', 'times', 'c'],
+        b: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+      },
+    },
+  },
+);
+// Show the equation form
+diagram.getElement('eqn').showForm('b');
+diagram.initialize();
