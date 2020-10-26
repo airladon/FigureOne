@@ -2668,158 +2668,165 @@ class DiagramElement {
   // * Bounds: The expanse of the object from a drawingSpace of 0, 0
   // * BoundingRect: The rectangle enclosing all the border points
   // * BoundingRectBorder: The perimeter of the boundingRect
-  getBorder(space: 'draw' | 'local' | 'diagram' | 'pixel') {
-  }
-
-  getBoundingRect(space: 'draw' | 'local' | 'diagram' | 'pixel') {
-    const border = this.getBorder(space);
-    return getBoundingRect(border);
-  }
-
-  // getBoundingRectBorder(space: 'draw' | 'local' | 'diagram' | 'pixel') {
-  // }
-  // ***************************************************************
-  // Boundaries
-  // ***************************************************************
-  // eslint-disable-next-line class-methods-use-this
-  getVertexSpaceBoundaries() {
-    return [[]];
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getGLBoundaries() {
-    return [[]];
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getLocalBoundaries() {
-    return [[]];
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getDiagramBoundaries() {
-    return [[]];
-  }
-
-  /**
-   * Get boundaries of element.
-   *
-   * A closed boundary is an array of points.
-   *
-   * An element may have one or more closed boundaries, and so boundaries
-   * is an array of an array of points.
-   *
-   * @param {'local' | 'diagram' | 'vertex' | 'gl'} space boundaries relative
-   * to which space
-   * @return {Array<Array<Point>>} An array of closed boundaries
-   */
-  getBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
-    if (space === 'local') {
-      return this.getLocalBoundaries();
-    }
-    if (space === 'diagram') {
-      return this.getDiagramBoundaries();
-    }
-    if (space === 'vertex') {
-      return this.getVertexSpaceBoundaries();
-    }
-    if (space === 'gl') {
-      return this.getGLBoundaries();
-    }
-    return [[]];
-  }
-
-  // ***************************************************************
-  // Bounding Rect
-  // ***************************************************************
-  // eslint-disable-next-line class-methods-use-this
-  getGLBoundingRect() {
-    return new Rect(0, 0, 1, 1);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getLocalBoundingRect() {
-    return new Rect(0, 0, 1, 1);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getVertexSpaceBoundingRect() {
-    return new Rect(0, 0, 1, 1);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getDiagramBoundingRect() {
-    const gl = this.getGLBoundingRect();
-    const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
-    };
-    const diagramSpace = {
-      x: {
-        bottomLeft: this.diagramLimits.left,
-        width: this.diagramLimits.width,
-      },
-      y: {
-        bottomLeft: this.diagramLimits.bottom,
-        height: this.diagramLimits.height,
-      },
-    };
-    const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
-    // const glToDiagramScale = new Point(
-    //   this.diagramLimits.width / 2,
-    //   this.diagramLimits.height / 2,
-    // );
-    const bottomLeft = new Point(gl.left, gl.bottom)
-      .transformBy(glToDiagramSpace.matrix());
-    const topRight = new Point(gl.right, gl.top)
-      .transformBy(glToDiagramSpace.matrix());
-    return new Rect(
-      bottomLeft.x, bottomLeft.y,
-      topRight.x - bottomLeft.x, topRight.y - bottomLeft.y,
-    );
-    // return new Rect(
-    //   gl.left * glToDiagramScale.x,
-    //   gl.bottom * glToDiagramScale.y,
-    //   gl.width * glToDiagramScale.x,
-    //   gl.height * glToDiagramScale.y,
-    // );
-  }
-
-  /**
-   * Get bounding rect of element.
-   *
-   * An element may have one or more closed boundaries. The bounding rect
-   * is the rectangle that encapsulates all boundaries.
-   *
-   * @param {'local' | 'diagram' | 'vertex' | 'gl'} space bounding rect relative
-   * to a space
-   * @return {Rect} bounding rect of element
-   */
-  getBoundingRect(
-    space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
+  getBorder(
+    space: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel',
+    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
-    if (space === 'local') {
-      return this.getLocalBoundingRect();
-    }
-    if (space === 'diagram') {
-      return this.getDiagramBoundingRect();
-    }
-    if (space === 'vertex') {
-      return this.getVertexSpaceBoundingRect();
-    }
-    if (space === 'gl') {
-      return this.getGLBoundingRect();
-    }
-    return new Rect(0, 0, 1, 1);
   }
+
+  getBoundingRect(
+    space: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel',
+    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+  ) {
+    const transformedBorder = this.getBorder(space, border);
+    return getBoundingRect(transformedBorder);
+  }
+
+  // // getBoundingRectBorder(space: 'draw' | 'local' | 'diagram' | 'pixel') {
+  // // }
+  // // ***************************************************************
+  // // Boundaries
+  // // ***************************************************************
+  // // eslint-disable-next-line class-methods-use-this
+  // getVertexSpaceBoundaries() {
+  //   return [[]];
+  // }
+
+  // // eslint-disable-next-line class-methods-use-this
+  // getGLBoundaries() {
+  //   return [[]];
+  // }
+
+  // // eslint-disable-next-line class-methods-use-this
+  // getLocalBoundaries() {
+  //   return [[]];
+  // }
+
+  // // eslint-disable-next-line class-methods-use-this
+  // getDiagramBoundaries() {
+  //   return [[]];
+  // }
+
+  // /**
+  //  * Get boundaries of element.
+  //  *
+  //  * A closed boundary is an array of points.
+  //  *
+  //  * An element may have one or more closed boundaries, and so boundaries
+  //  * is an array of an array of points.
+  //  *
+  //  * @param {'local' | 'diagram' | 'vertex' | 'gl'} space boundaries relative
+  //  * to which space
+  //  * @return {Array<Array<Point>>} An array of closed boundaries
+  //  */
+  // getBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
+  //   if (space === 'local') {
+  //     return this.getLocalBoundaries();
+  //   }
+  //   if (space === 'diagram') {
+  //     return this.getDiagramBoundaries();
+  //   }
+  //   if (space === 'vertex') {
+  //     return this.getVertexSpaceBoundaries();
+  //   }
+  //   if (space === 'gl') {
+  //     return this.getGLBoundaries();
+  //   }
+  //   return [[]];
+  // }
+
+  // // ***************************************************************
+  // // Bounding Rect
+  // // ***************************************************************
+  // // eslint-disable-next-line class-methods-use-this
+  // getGLBoundingRect() {
+  //   return new Rect(0, 0, 1, 1);
+  // }
+
+  // // eslint-disable-next-line class-methods-use-this
+  // getLocalBoundingRect() {
+  //   return new Rect(0, 0, 1, 1);
+  // }
+
+  // // eslint-disable-next-line class-methods-use-this
+  // getVertexSpaceBoundingRect() {
+  //   return new Rect(0, 0, 1, 1);
+  // }
+
+  // // eslint-disable-next-line class-methods-use-this
+  // getDiagramBoundingRect() {
+  //   const gl = this.getGLBoundingRect();
+  //   const glSpace = {
+  //     x: { bottomLeft: -1, width: 2 },
+  //     y: { bottomLeft: -1, height: 2 },
+  //   };
+  //   const diagramSpace = {
+  //     x: {
+  //       bottomLeft: this.diagramLimits.left,
+  //       width: this.diagramLimits.width,
+  //     },
+  //     y: {
+  //       bottomLeft: this.diagramLimits.bottom,
+  //       height: this.diagramLimits.height,
+  //     },
+  //   };
+  //   const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
+  //   // const glToDiagramScale = new Point(
+  //   //   this.diagramLimits.width / 2,
+  //   //   this.diagramLimits.height / 2,
+  //   // );
+  //   const bottomLeft = new Point(gl.left, gl.bottom)
+  //     .transformBy(glToDiagramSpace.matrix());
+  //   const topRight = new Point(gl.right, gl.top)
+  //     .transformBy(glToDiagramSpace.matrix());
+  //   return new Rect(
+  //     bottomLeft.x, bottomLeft.y,
+  //     topRight.x - bottomLeft.x, topRight.y - bottomLeft.y,
+  //   );
+  //   // return new Rect(
+  //   //   gl.left * glToDiagramScale.x,
+  //   //   gl.bottom * glToDiagramScale.y,
+  //   //   gl.width * glToDiagramScale.x,
+  //   //   gl.height * glToDiagramScale.y,
+  //   // );
+  // }
+
+  // /**
+  //  * Get bounding rect of element.
+  //  *
+  //  * An element may have one or more closed boundaries. The bounding rect
+  //  * is the rectangle that encapsulates all boundaries.
+  //  *
+  //  * @param {'local' | 'diagram' | 'vertex' | 'gl'} space bounding rect relative
+  //  * to a space
+  //  * @return {Rect} bounding rect of element
+  //  */
+  // getBoundingRect(
+  //   space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
+  // ) {
+  //   if (space === 'local') {
+  //     return this.getLocalBoundingRect();
+  //   }
+  //   if (space === 'diagram') {
+  //     return this.getDiagramBoundingRect();
+  //   }
+  //   if (space === 'vertex') {
+  //     return this.getVertexSpaceBoundingRect();
+  //   }
+  //   if (space === 'gl') {
+  //     return this.getGLBoundingRect();
+  //   }
+  //   return new Rect(0, 0, 1, 1);
+  // }
 
   // ***************************************************************
   // Size
   // ***************************************************************
   getRelativeBoundingRect(
     space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
+    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
-    const rect = this.getBoundingRect(space);
+    const rect = this.getBoundingRect(space, border);
     const position = this.getPosition(space);
     return new Rect(
       rect.left - position.x,
@@ -2830,49 +2837,50 @@ class DiagramElement {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getRelativeGLBoundingRect() {
-    return new Rect(0, 0, 1, 1);
-  }
+  // getRelativeGLBoundingRect() {
+  //   return new Rect(0, 0, 1, 1);
+  // }
 
-  getRelativeDiagramBoundingRect() {
-    const gl = this.getRelativeGLBoundingRect();
-    const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
-    };
-    const diagramSpace = {
-      x: {
-        bottomLeft: this.diagramLimits.left,
-        width: this.diagramLimits.width,
-      },
-      y: {
-        bottomLeft: this.diagramLimits.bottom,
-        height: this.diagramLimits.height,
-      },
-    };
-    const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
-    const bottomLeft = new Point(gl.left, gl.bottom)
-      .transformBy(glToDiagramSpace.matrix());
-    const topRight = new Point(gl.right, gl.top)
-      .transformBy(glToDiagramSpace.matrix());
-    return new Rect(
-      bottomLeft.x, bottomLeft.y,
-      topRight.x - bottomLeft.x, topRight.y - bottomLeft.y,
-    );
-    // const glToDiagramScale = new Point(
-    //   this.diagramLimits.width / 2,
-    //   this.diagramLimits.height / 2,
-    // );
-    // return new Rect(
-    //   gl.left * glToDiagramScale.x,
-    //   gl.bottom * glToDiagramScale.y,
-    //   gl.width * glToDiagramScale.x,
-    //   gl.height * glToDiagramScale.y,
-    // );
-  }
+  // getRelativeDiagramBoundingRect() {
+  //   const gl = this.getRelativeGLBoundingRect();
+  //   const glSpace = {
+  //     x: { bottomLeft: -1, width: 2 },
+  //     y: { bottomLeft: -1, height: 2 },
+  //   };
+  //   const diagramSpace = {
+  //     x: {
+  //       bottomLeft: this.diagramLimits.left,
+  //       width: this.diagramLimits.width,
+  //     },
+  //     y: {
+  //       bottomLeft: this.diagramLimits.bottom,
+  //       height: this.diagramLimits.height,
+  //     },
+  //   };
+  //   const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
+  //   const bottomLeft = new Point(gl.left, gl.bottom)
+  //     .transformBy(glToDiagramSpace.matrix());
+  //   const topRight = new Point(gl.right, gl.top)
+  //     .transformBy(glToDiagramSpace.matrix());
+  //   return new Rect(
+  //     bottomLeft.x, bottomLeft.y,
+  //     topRight.x - bottomLeft.x, topRight.y - bottomLeft.y,
+  //   );
+  //   // const glToDiagramScale = new Point(
+  //   //   this.diagramLimits.width / 2,
+  //   //   this.diagramLimits.height / 2,
+  //   // );
+  //   // return new Rect(
+  //   //   gl.left * glToDiagramScale.x,
+  //   //   gl.bottom * glToDiagramScale.y,
+  //   //   gl.width * glToDiagramScale.x,
+  //   //   gl.height * glToDiagramScale.y,
+  //   // );
+  // }
 
-  getCenterDiagramPosition() {
-    const rect = this.getDiagramBoundingRect();
+  getCenterDiagramPosition(border: Array<Array<Point>> = this.border) {
+    const rect = this.getBoundingRect('diagram', border);
+    // const rect = this.getDiagramBoundingRect();
     return new Point(
       rect.left + rect.width / 2,
       rect.bottom + rect.height / 2,
@@ -2916,41 +2924,41 @@ class DiagramElement {
 
 // space: 'diagram' | 'local' | 'drawing'
 
-  /**
-   * Return the diagram space position of a point in this element's
-   * vertex space.
-   *
-   * @param {Point} vertexSpacePoint
-   * @return {Point} diagram space equivalent point
-   */
-  getVertexSpaceDiagramPosition(vertexSpacePoint: Point) {
-    const location = vertexSpacePoint.transformBy(this.lastDrawTransform.matrix());
-    const glSpace = {
-      x: { bottomLeft: -1, width: 2 },
-      y: { bottomLeft: -1, height: 2 },
-    };
-    const diagramSpace = {
-      x: {
-        bottomLeft: this.diagramLimits.left,
-        width: this.diagramLimits.width,
-      },
-      y: {
-        bottomLeft: this.diagramLimits.bottom,
-        height: this.diagramLimits.height,
-      },
-    };
-    const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
-    return location.transformBy(glToDiagramSpace.matrix());
-  }
+  // /**
+  //  * Return the diagram space position of a point in this element's
+  //  * vertex space.
+  //  *
+  //  * @param {Point} vertexSpacePoint
+  //  * @return {Point} diagram space equivalent point
+  //  */
+  // getVertexSpaceDiagramPosition(vertexSpacePoint: Point) {
+  //   const location = vertexSpacePoint.transformBy(this.lastDrawTransform.matrix());
+  //   const glSpace = {
+  //     x: { bottomLeft: -1, width: 2 },
+  //     y: { bottomLeft: -1, height: 2 },
+  //   };
+  //   const diagramSpace = {
+  //     x: {
+  //       bottomLeft: this.diagramLimits.left,
+  //       width: this.diagramLimits.width,
+  //     },
+  //     y: {
+  //       bottomLeft: this.diagramLimits.bottom,
+  //       height: this.diagramLimits.height,
+  //     },
+  //   };
+  //   const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
+  //   return location.transformBy(glToDiagramSpace.matrix());
+  // }
 
-  getLocalPosition() {
-    const t = this.transform.t();
-    let position = new Point(0, 0);
-    if (t != null) {
-      position = t._dup();
-    }
-    return position;
-  }
+  // getLocalPosition() {
+  //   const t = this.transform.t();
+  //   let position = new Point(0, 0);
+  //   if (t != null) {
+  //     position = t._dup();
+  //   }
+  //   return position;
+  // }
 
   // // deprecated
   // getDiagramPosition() {
@@ -2973,8 +2981,9 @@ class DiagramElement {
     space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number,
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number,
+    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
-    const bounds = this.getBoundingRect(space);
+    const bounds = this.getBoundingRect(space, border);
     const p = this.getPosition(space);
     if (xAlign === 'left') {
       p.x = bounds.left;
@@ -3019,7 +3028,7 @@ class DiagramElement {
    * position in percentage height from the bottom.
    */
   getPosition(
-    space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local',
+    space: 'local' | 'diagram' | 'gl' | 'vertex' | 'pixel' = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
   ) {
@@ -3030,20 +3039,36 @@ class DiagramElement {
     if (space === 'vertex') {
       return new Point(0, 0);
     }
-    if (space === 'local') {
-      return this.getLocalPosition();
-    }
-    if (space === 'diagram') {
-      // Note, this should be 0,0 as the current transform's translation will
-      // be included in getVertexSpaceDiagramPosition
-      return this.getVertexSpaceDiagramPosition(new Point(0, 0));
-    }
-    if (space === 'gl') {
-      // Note, this should be 0,0 as the current transform's translation will
-      // be included in getVertexSpaceDiagramPosition
-      return (new Point(0, 0)).transformBy(this.lastDrawTransform.matrix());
-    }
-    return new Point(0, 0);
+    // if (space === 'local') {
+    //   const t = this.transform.t();
+    //   let position = new Point(0, 0);
+    //   if (t != null) {
+    //     position = t._dup();
+    //   }
+    //   return position;
+    // }
+    return new Point(0, 0).transformBy(this.spaceTransformMatrix('vertex', space));
+    // if (space === 'local') {
+    //   // return this.getLocalPosition();
+    //   const t = this.transform.t();
+    //   let position = new Point(0, 0);
+    //   if (t != null) {
+    //     position = t._dup();
+    //   }
+    //   return position;
+    // }
+    // if (space === 'diagram') {
+    //   // Note, this should be 0,0 as the current transform's translation will
+    //   // be included in getVertexSpaceDiagramPosition
+    //   // return this.getVertexSpaceDiagramPosition(new Point(0, 0));
+    //   return new Point(0, 0).transformBy(this.spaceTransformMatrix('vertex', 'diagram'));
+    // }
+    // if (space === 'gl') {
+    //   // Note, this should be 0,0 as the current transform's translation will
+    //   // be included in getVertexSpaceDiagramPosition
+    //   return (new Point(0, 0)).transformBy(this.lastDrawTransform.matrix());
+    // }
+    // return new Point(0, 0);
   }
 
   setDiagramPosition(diagramPosition: Point) {
@@ -3492,26 +3517,29 @@ class DiagramElementPrimitive extends DiagramElement {
     if (this.drawingObject.touchBorder == null) {
       return false;
     }
+    const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'vertex'));
     // console.log(this.drawingObject.touchBorder)
-    const boundaries =
-      this.drawingObject.getTouchBoundaries(this.lastDrawTransform.matrix());
+    const borders = this.getBorder('vertex', 'touchBorder');
+    // const boundaries =
+    //   this.drawingObject.getTouchBoundaries(this.lastDrawTransform.matrix());
     // console.log(boundaries)
     // console.log(this.drawingObject.border, this.drawingObject.touchBorder, boundaries)
-    const holeBoundaries =
-      this.drawingObject.getBoundaryHoles(this.lastDrawTransform.matrix());
-    for (let i = 0; i < boundaries.length; i += 1) {
-      const boundary = boundaries[i];
-      if (boundary.length > 2) {
-        if (glLocation.isInPolygon(boundary)) {
+    // const holeBoundaries =
+    //   this.drawingObject.getBoundaryHoles(this.lastDrawTransform.matrix());
+    const holeBorders = this.getBorder('vertex', 'holeBorder');
+    for (let i = 0; i < borders.length; i += 1) {
+      const border = borders[i];
+      if (border.length > 2) {
+        if (vertexLocation.isInPolygon(border)) {
           let isTouched = true;
           if (this.cannotTouchHole) {
-            for (let j = 0; j < holeBoundaries.length; j += 1) {
-              const holeBoundary = holeBoundaries[j];
-              if (holeBoundary.length > 2) {
-                if (Array.isArray(holeBoundary) && holeBoundary.length > 2) {
-                  if (glLocation.isInPolygon(holeBoundary)) {
+            for (let j = 0; j < holeBorders.length; j += 1) {
+              const holeBorder = holeBorders[j];
+              if (holeBorder.length > 2) {
+                if (Array.isArray(holeBorder) && holeBorder.length > 2) {
+                  if (vertexLocation.isInPolygon(holeBorder)) {
                     isTouched = false;
-                    j = holeBoundaries.length;
+                    j = holeBorders.length;
                   }
                 }
               }
@@ -3645,6 +3673,30 @@ class DiagramElementPrimitive extends DiagramElement {
   // hideAll() {
   //   this.hide();
   // }
+
+  getBorder(
+    space: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel',
+    border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
+  ) {
+    let bordersToUse = this.drawingObject.border;
+    if (border === 'touchBorder') {
+      bordersToUse = this.drawingObject.touchBorder;
+    }
+    if (border === 'holeBorder') {
+      bordersToUse = this.drawingObject.hole;
+    }
+    if (space === 'vertex') {
+      return bordersToUse;
+    }
+    const transformedBorders = [];
+    const matrix = this.spaceTransformMatrix('vertex', space);
+    bordersToUse.forEach((b, index) => {
+      transformedBorders.push(
+        b.map(p => p.transformBy(matrix)),
+      );
+    })
+    return bordersToUse;
+  }
 
   getTouched(glLocation: Point): Array<DiagramElementPrimitive> {
     if (!this.isTouchable) {
@@ -3824,44 +3876,54 @@ class DiagramElementPrimitive extends DiagramElement {
   //   return oldWebgl;
   // }
 
+  // deprecated
   getVertexSpaceBoundaries() {
     return this.drawingObject.border;
   }
 
+  // deprecated
   getLocalBoundaries() {
     return this.drawingObject.getBoundaries(this.getTransform().matrix());
   }
 
+  // deprecated
   getDiagramBoundaries() {
     // return this.drawingObject.getBoundaries(this.vertexSpaceToDiagramSpaceTransformMatrix());
-    return this.drawingObject.getBoundaries(this.spaceTransform('vertex', 'diagram'));
+    return this.drawingObject.getBoundaries(this.spaceTransformMatrix('vertex', 'diagram'));
   }
 
+  // deprecated
   getGLBoundaries() {
     return this.drawingObject.getBoundaries(this.lastDrawTransform.matrix());
   }
 
 
+  // deprecated
   getVertexSpaceBoundingRect() {
     return this.drawingObject.getBoundingRect();
   }
 
+  // deprecated
   getLocalBoundingRect() {
     return this.drawingObject.getBoundingRect(this.getTransform().matrix());
   }
 
+  // deprecated
   getGLBoundingRect() {
     return this.drawingObject.getBoundingRect(this.lastDrawTransform.matrix());
   }
 
+  // deprecated
   getRelativeVertexSpaceBoundingRect(): Rect {
     return this.drawingObject.getRelativeBoundingRect();
   }
 
+  // deprecated
   getRelativeGLBoundingRect(): Rect {
     return this.drawingObject.getRelativeBoundingRect(this.lastDrawTransform.matrix());
   }
 
+  // deprecated
   getRelativeLocalBoundingRect(): Rect {
     return this.drawingObject.getRelativeBoundingRect(this.getTransform().matrix());
   }
@@ -4525,12 +4587,13 @@ class DiagramElementCollection extends DiagramElement {
     if (!this.isTouchable) {
       return false;
     }
+    const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'vertex'));
     if (this.touchInBoundingRect) {
-      const boundingRect = this.getGLBoundingRect();
-      if (glLocation.x >= boundingRect.left
-        && glLocation.x <= boundingRect.right
-        && glLocation.y <= boundingRect.top
-        && glLocation.y >= boundingRect.bottom
+      const boundingRect = this.getBoundingRect('vertex');
+      if (vertexLocation.x >= boundingRect.left
+        && vertexLocation.x <= boundingRect.right
+        && vertexLocation.y <= boundingRect.top
+        && vertexLocation.y >= boundingRect.bottom
       ) {
         return true;
       }
@@ -4580,62 +4643,98 @@ class DiagramElementCollection extends DiagramElement {
     this.checkMoveBounds();
   }
 
-  getAllBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
-    let boundaries: Array<Array<Point>> = [];
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      if (element.isShown) {
-        const elementBoundaries = element.getBoundaries(space);
-        boundaries = boundaries.concat(elementBoundaries);
-      }
-    }
-    return boundaries;
-  }
-
-  getBoundaries(
-    space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
+  getBorder(
+    space: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel',
+    border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
     children: ?Array<string | DiagramElement> = null,
+    shownOnly: boolean = true,
   ) {
-    let boundaries: Array<Array<Point>> = [];
-    if (children == null) {
-      return this.getAllBoundaries(space);
+    const bordersToUse: Array<Array<Point>> = [];
+    let childrenToUse = children;
+    if (childrenToUse == null) {
+      childrenToUse = this.elements;
     }
-    children.forEach((child) => {
+    childrenToUse.forEach((child) => {
       const e = this.getElement(child);
-      if (e == null) {
+      if (
+        e == null
+        || (shownOnly && e.isShown === false)
+      ) {
         return;
       }
-      const elementBoundaries = e.getBoundaries(space);
-      boundaries = boundaries.concat(elementBoundaries);
+      bordersToUse.push(...e.getBorder(space, border, null, shownOnly));
     });
-    return boundaries;
+    return bordersToUse;
   }
 
-  // deprecated
-  getGLBoundaries() {
-    let boundaries: Array<Array<Point>> = [];
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      if (element.isShown) {
-        const elementBoundaries = element.getGLBoundaries();
-        boundaries = boundaries.concat(elementBoundaries);
-      }
-    }
-    return boundaries;
+  getBoundingRect(
+    space: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel',
+    border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
+    children: ?Array<string | DiagramElement> = null,
+    shownOnly: boolean = true,
+  ) {
+    const transformedBorder = this.getBorder(space, border, children, shownOnly);
+    return getBoundingRect(transformedBorder);
   }
 
-  // deprecated
-  getVertexSpaceBoundaries() {
-    let boundaries: Array<Array<Point>> = [];
-    for (let i = 0; i < this.drawOrder.length; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      if (element.isShown) {
-        const elementBoundaries = element.getVertexSpaceBoundaries();
-        boundaries = boundaries.concat(elementBoundaries);
-      }
-    }
-    return boundaries;
-  }
+  // // deprecated
+  // getAllBoundaries(space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local') {
+  //   let boundaries: Array<Array<Point>> = [];
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element.isShown) {
+  //       const elementBoundaries = element.getBoundaries(space);
+  //       boundaries = boundaries.concat(elementBoundaries);
+  //     }
+  //   }
+  //   return boundaries;
+  // }
+
+  // // deprecated
+  // getBoundaries(
+  //   space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
+  //   children: ?Array<string | DiagramElement> = null,
+  // ) {
+  //   let boundaries: Array<Array<Point>> = [];
+  //   if (children == null) {
+  //     return this.getAllBoundaries(space);
+  //   }
+  //   children.forEach((child) => {
+  //     const e = this.getElement(child);
+  //     if (e == null) {
+  //       return;
+  //     }
+  //     const elementBoundaries = e.getBoundaries(space);
+  //     boundaries = boundaries.concat(elementBoundaries);
+  //   });
+  //   return boundaries;
+  // }
+
+  // // deprecated
+  // getGLBoundaries() {
+  //   let boundaries: Array<Array<Point>> = [];
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element.isShown) {
+  //       const elementBoundaries = element.getGLBoundaries();
+  //       boundaries = boundaries.concat(elementBoundaries);
+  //     }
+  //   }
+  //   return boundaries;
+  // }
+
+  // // deprecated
+  // getVertexSpaceBoundaries() {
+  //   let boundaries: Array<Array<Point>> = [];
+  //   for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element.isShown) {
+  //       const elementBoundaries = element.getVertexSpaceBoundaries();
+  //       boundaries = boundaries.concat(elementBoundaries);
+  //     }
+  //   }
+  //   return boundaries;
+  // }
 
   // getBoundaries() {
   //   let boundaries = [];
@@ -4650,105 +4749,110 @@ class DiagramElementCollection extends DiagramElement {
   // }
 
   getPositionInBounds(
-    space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local',
-    x: 'center' | 'left' | 'right' | 'origin' | number,
-    y: 'middle' | 'top' | 'bottom' | 'origin' | number,
+    space: 'local' | 'diagram' | 'gl' | 'vertex' |'pixel' = 'local',
+    xAlign: 'center' | 'left' | 'right' | 'location' | number,
+    yAlign: 'middle' | 'top' | 'bottom' | 'location' | number,
     children: ?Array<string | DiagramElement> = null,
+    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    shownOnly: boolean = true,
   ) {
-    const bounds = this.getBoundingRect(space, children);
+    const bounds = this.getBoundingRect(space, children, border, shownOnly);
     const p = this.getPosition(space);
-    if (x === 'left') {
+    if (xAlign === 'left') {
       p.x = bounds.left;
-    } else if (x === 'right') {
+    } else if (xAlign === 'right') {
       p.x = bounds.right;
-    } else if (x === 'center') {
+    } else if (xAlign === 'center') {
       p.x = bounds.left + bounds.width / 2;
-    } else if (typeof x === 'number') {
-      p.x = bounds.left + bounds.width * x;
+    } else if (typeof xAlign === 'number') {
+      p.x = bounds.left + bounds.width * xAlign;
     }
-    if (y === 'top') {
+    if (yAlign === 'top') {
       p.y = bounds.top;
-    } else if (y === 'bottom') {
+    } else if (yAlign === 'bottom') {
       p.y = bounds.bottom;
-    } else if (y === 'middle') {
+    } else if (yAlign === 'middle') {
       p.y = bounds.bottom + bounds.height / 2;
-    } else if (typeof y === 'number') {
-      p.y = bounds.bottom + bounds.height * y;
+    } else if (typeof yAlign === 'number') {
+      p.y = bounds.bottom + bounds.height * yAlign;
     }
     return p;
   }
 
-  getBoundingRect(
-    space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
-    children: ?Array<string | DiagramElement> = null,
-  ) {
-    if (children == null) {
-      const boundaries = this.getBoundaries(space);
-      return getBoundingRect(boundaries);
-    }
+  // getBoundingRect(
+  //   space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
+  //   children: ?Array<string | DiagramElement> = null,
+  // ) {
+  //   if (children == null) {
+  //     const boundaries = this.getBoundaries(space);
+  //     return getBoundingRect(boundaries);
+  //   }
 
-    const points: Array<Point> = [];
-    children.forEach((child) => {
-      const e = this.getElement(child);
-      if (e == null) {
-        return;
-      }
-      const bound = e.getBoundingRect();
-      points.push(new Point(bound.left, bound.bottom));
-      points.push(new Point(bound.right, bound.top));
-    });
-    return getBoundingRect(points);
-  }
+  //   const points: Array<Point> = [];
+  //   children.forEach((child) => {
+  //     const e = this.getElement(child);
+  //     if (e == null) {
+  //       return;
+  //     }
+  //     const bound = e.getBoundingRect();
+  //     points.push(new Point(bound.left, bound.bottom));
+  //     points.push(new Point(bound.right, bound.top));
+  //   });
+  //   return getBoundingRect(points);
+  // }
 
-  getGLBoundingRect() {
-    const glAbsoluteBoundaries = this.getGLBoundaries();
-    return getBoundingRect(glAbsoluteBoundaries);
-  }
+  // // deprecated
+  // getGLBoundingRect() {
+  //   const glAbsoluteBoundaries = this.getGLBoundaries();
+  //   return getBoundingRect(glAbsoluteBoundaries);
+  // }
 
-  getVertexSpaceBoundingRect(elementsToBound: ?Array<string | DiagramElement> = null) {
-    if (elementsToBound == null) {
-      // return super.getDiagramBoundingRect();
-      const boundaries = this.getVertexSpaceBoundaries();
-      return getBoundingRect(boundaries);
-    }
-    const points: Array<Point> = [];
-    elementsToBound.forEach((element) => {
-      const e = this.getElement(element);
-      if (e == null) {
-        return;
-      }
-      const bound = e.getBoundingRect();
-      points.push(new Point(bound.left, bound.bottom));
-      points.push(new Point(bound.right, bound.top));
-    });
-    return getBoundingRect(points);
-  }
+  // // deprecated
+  // getVertexSpaceBoundingRect(elementsToBound: ?Array<string | DiagramElement> = null) {
+  //   if (elementsToBound == null) {
+  //     // return super.getDiagramBoundingRect();
+  //     const boundaries = this.getVertexSpaceBoundaries();
+  //     return getBoundingRect(boundaries);
+  //   }
+  //   const points: Array<Point> = [];
+  //   elementsToBound.forEach((element) => {
+  //     const e = this.getElement(element);
+  //     if (e == null) {
+  //       return;
+  //     }
+  //     const bound = e.getBoundingRect();
+  //     points.push(new Point(bound.left, bound.bottom));
+  //     points.push(new Point(bound.right, bound.top));
+  //   });
+  //   return getBoundingRect(points);
+  // }
 
-  getRelativeGLBoundingRect() {
-    const boundingRect = this.getGLBoundingRect();
-    const location = new Point(0, 0).transformBy(this.lastDrawTransform.matrix());
+  // // deprecated
+  // getRelativeGLBoundingRect() {
+  //   const boundingRect = this.getGLBoundingRect();
+  //   const location = new Point(0, 0).transformBy(this.lastDrawTransform.matrix());
 
-    return new Rect(
-      boundingRect.left - location.x,
-      boundingRect.bottom - location.y,
-      boundingRect.width,
-      boundingRect.height,
-    );
-  }
+  //   return new Rect(
+  //     boundingRect.left - location.x,
+  //     boundingRect.bottom - location.y,
+  //     boundingRect.width,
+  //     boundingRect.height,
+  //   );
+  // }
 
-  // deprecated
-  getRelativeVertexSpaceBoundingRect(): Rect {
-    const boundingRect = this.getVertexSpaceBoundingRect();
+  // // deprecated
+  // getRelativeVertexSpaceBoundingRect(): Rect {
+  //   const boundingRect = this.getVertexSpaceBoundingRect();
 
-    const location = new Point(0, 0);
+  //   const location = new Point(0, 0);
 
-    return new Rect(
-      boundingRect.left - location.x,
-      boundingRect.bottom - location.y,
-      boundingRect.width,
-      boundingRect.height,
-    );
-  }
+  //   return new Rect(
+  //     boundingRect.left - location.x,
+  //     boundingRect.bottom - location.y,
+  //     boundingRect.width,
+  //     boundingRect.height,
+  //   );
+  // }
 
   updateLimits(
     limits: Rect,
@@ -4891,27 +4995,28 @@ class DiagramElementCollection extends DiagramElement {
     this.exec('undim', elementsToHighlight);
   }
 
-  getDiagramBoundingRect(elementsToBound: ?Array<string | DiagramElement> = null) {
-    if (elementsToBound == null) {
-      return super.getDiagramBoundingRect();
-    }
-    const points: Array<Point> = [];
-    elementsToBound.forEach((element) => {
-      let e;
-      if (typeof element === 'string') {
-        e = this.getElement(element);
-      } else {
-        e = element;
-      }
-      if (e == null) {
-        return;
-      }
-      const bound = e.getDiagramBoundingRect();
-      points.push(new Point(bound.left, bound.bottom));
-      points.push(new Point(bound.right, bound.top));
-    });
-    return getBoundingRect(points);
-  }
+  // // Deprecated
+  // getDiagramBoundingRect(elementsToBound: ?Array<string | DiagramElement> = null) {
+  //   if (elementsToBound == null) {
+  //     return super.getDiagramBoundingRect();
+  //   }
+  //   const points: Array<Point> = [];
+  //   elementsToBound.forEach((element) => {
+  //     let e;
+  //     if (typeof element === 'string') {
+  //       e = this.getElement(element);
+  //     } else {
+  //       e = element;
+  //     }
+  //     if (e == null) {
+  //       return;
+  //     }
+  //     const bound = e.getDiagramBoundingRect();
+  //     points.push(new Point(bound.left, bound.bottom));
+  //     points.push(new Point(bound.right, bound.top));
+  //   });
+  //   return getBoundingRect(points);
+  // }
 
   setOpacity(opacity: number) {
     // for (let i = 0; i < this.drawOrder.length; i += 1) {
