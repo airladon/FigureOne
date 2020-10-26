@@ -193,6 +193,7 @@ class VertexPolygon extends VertexObject {
         ));
       }
     }
+    this.touchBorder = this.border;
   }
 
   drawToAngle(

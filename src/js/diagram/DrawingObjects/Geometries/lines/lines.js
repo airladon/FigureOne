@@ -523,7 +523,6 @@ function makeThickLine(
 }
 
 
-
 // from https://mathworld.wolfram.com/Circle-LineIntersection.html
 function circleLineIntersection(
   center: Point,
@@ -661,7 +660,7 @@ function makePolyLine(
   borderIs: 'positive' | 'negative' | 'line' | Array<Array<Point>>,
   touchBorderBuffer: number = 0,
   holeIs: 'positive' | 'negative' | 'none' | Array<Array<Point>>,
-  arrowIn: {
+  arrowIn: null | {
     head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
     length: number,
     width: number,
@@ -677,7 +676,7 @@ function makePolyLine(
     },
   } = null,
   precision: number = 8,
-): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
+): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>, Array<Array<Point>>] {
   let points = [];
   let cornerStyleToUse;
   let orderedPoints = pointsIn;
@@ -776,7 +775,7 @@ function makePolyLineCorners(
   corners.forEach((corner) => {
     const [t, b, h] = makePolyLine(
       corner, width, false, widthIs, cornerStyle, cornerSize,
-      cornerSides, minAutoCornerAngle, [], linePrimitives, lineNum, 'line', 'none',
+      cornerSides, minAutoCornerAngle, [], linePrimitives, lineNum, 'line', 0, 'none',
     );
     tris = [...tris, ...t];
     borders = [...borders, ...b];

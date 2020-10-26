@@ -215,6 +215,96 @@ Array [
     ],
   ],
   Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.05,
+        "y": -0.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.05,
+        "y": -0.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95,
+        "y": 0.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.05,
+        "y": 0.05,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.05,
+        "y": -0.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.05,
+        "y": 1.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95,
+        "y": 0.95,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95,
+        "y": 0.05,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.05,
+        "y": 1.05,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.05,
+        "y": 1.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.05,
+        "y": 0.95,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95,
+        "y": 0.95,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.05,
+        "y": 1.05,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.05,
+        "y": -0.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.05,
+        "y": 0.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.05,
+        "y": 0.95,
+      },
+    ],
+  ],
+  Array [
     Array [],
   ],
 ]
@@ -769,66 +859,6 @@ Array [
       Point {
         "_type": "point",
         "x": -0.05,
-        "y": 0.08,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.05,
-        "y": -0.05,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.05,
-        "y": 0.05,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.05,
-        "y": 0.08,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.28,
-        "y": -0.05,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.48,
-        "y": -0.05,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.48,
-        "y": 0.05,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.28,
-        "y": 0.05,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.56,
-        "y": -0.05,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.76,
-        "y": -0.05,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.76,
-        "y": 0.05,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.56,
-        "y": 0.05,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.84,
         "y": -0.05,
       },
       Point {
@@ -843,73 +873,105 @@ Array [
       },
       Point {
         "_type": "point",
-        "x": 0.84,
+        "x": 0.05,
+        "y": 0.05,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.05,
+        "y": -0.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.05,
+        "y": 1.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95,
+        "y": 0.95,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95,
+        "y": 0.05,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.05,
+        "y": 1.05,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.05,
+        "y": 1.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.05,
+        "y": 0.95,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95,
+        "y": 0.95,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.05,
+        "y": 1.05,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.05,
+        "y": -0.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.05,
         "y": 0.05,
       },
       Point {
         "_type": "point",
-        "x": 1.05,
-        "y": 0.12,
+        "x": 0.05,
+        "y": 0.95,
+      },
+    ],
+  ],
+  Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.05,
+        "y": -0.05,
       },
       Point {
         "_type": "point",
         "x": 1.05,
-        "y": 0.32,
+        "y": -0.05,
       },
       Point {
         "_type": "point",
         "x": 0.95,
-        "y": 0.32,
+        "y": 0.05,
       },
       Point {
         "_type": "point",
-        "x": 0.95,
-        "y": 0.12,
+        "x": 0.05,
+        "y": 0.05,
       },
-      Point {
-        "_type": "point",
-        "x": 1.05,
-        "y": 0.4,
-      },
+    ],
+    Array [
       Point {
         "_type": "point",
         "x": 1.05,
-        "y": 0.6,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.95,
-        "y": 0.6,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.95,
-        "y": 0.4,
-      },
-      Point {
-        "_type": "point",
-        "x": 1.05,
-        "y": 0.68,
-      },
-      Point {
-        "_type": "point",
-        "x": 1.05,
-        "y": 0.88,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.95,
-        "y": 0.88,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.95,
-        "y": 0.68,
-      },
-      Point {
-        "_type": "point",
-        "x": 1.05,
-        "y": 0.96,
+        "y": -0.05,
       },
       Point {
         "_type": "point",
@@ -924,147 +986,51 @@ Array [
       Point {
         "_type": "point",
         "x": 0.95,
-        "y": 0.96,
+        "y": 0.05,
       },
+    ],
+    Array [
       Point {
         "_type": "point",
-        "x": 0.76,
+        "x": 1.05,
         "y": 1.05,
       },
       Point {
         "_type": "point",
-        "x": 0.56,
+        "x": -0.05,
         "y": 1.05,
       },
       Point {
         "_type": "point",
-        "x": 0.56,
+        "x": 0.05,
         "y": 0.95,
       },
       Point {
         "_type": "point",
-        "x": 0.76,
+        "x": 0.95,
         "y": 0.95,
       },
+    ],
+    Array [
       Point {
         "_type": "point",
-        "x": 0.48,
+        "x": -0.05,
         "y": 1.05,
       },
       Point {
         "_type": "point",
-        "x": 0.28,
-        "y": 1.05,
+        "x": -0.05,
+        "y": -0.05,
       },
       Point {
         "_type": "point",
-        "x": 0.28,
+        "x": 0.05,
+        "y": 0.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.05,
         "y": 0.95,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.48,
-        "y": 0.95,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.2,
-        "y": 1.05,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 1.05,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.95,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.2,
-        "y": 0.95,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.05,
-        "y": 0.92,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.05,
-        "y": 0.72,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.05,
-        "y": 0.72,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.05,
-        "y": 0.92,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.05,
-        "y": 0.64,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.05,
-        "y": 0.44,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.05,
-        "y": 0.44,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.05,
-        "y": 0.64,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.05,
-        "y": 0.36,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.05,
-        "y": 0.16,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.05,
-        "y": 0.16,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.05,
-        "y": 0.36,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.05,
-        "y": 0.08,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.05,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.05,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.05,
-        "y": 0.08,
       },
     ],
   ],
@@ -1257,6 +1223,96 @@ Array [
       "x": 0,
       "y": -0.05,
     },
+  ],
+  Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": -0.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": -0.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.05,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.05,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.05,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95,
+        "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1.05,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.95,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.95,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.05,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.05,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.05,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.05,
+        "y": 1,
+      },
+    ],
   ],
   Array [
     Array [
@@ -3554,6 +3610,96 @@ Array [
     ],
   ],
   Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": -0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": -0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": -0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": -0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
+      },
+    ],
+  ],
+  Array [
     Array [],
   ],
 ]
@@ -4108,66 +4254,6 @@ Array [
       Point {
         "_type": "point",
         "x": -0.1,
-        "y": 0.08,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.1,
-        "y": -0.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.08,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.28,
-        "y": -0.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.48,
-        "y": -0.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.48,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.28,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.56,
-        "y": -0.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.76,
-        "y": -0.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.76,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.56,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.84,
         "y": -0.1,
       },
       Point {
@@ -4182,73 +4268,15 @@ Array [
       },
       Point {
         "_type": "point",
-        "x": 0.84,
+        "x": 0,
         "y": 0,
       },
+    ],
+    Array [
       Point {
         "_type": "point",
         "x": 1.1,
-        "y": 0.12,
-      },
-      Point {
-        "_type": "point",
-        "x": 1.1,
-        "y": 0.32,
-      },
-      Point {
-        "_type": "point",
-        "x": 1,
-        "y": 0.32,
-      },
-      Point {
-        "_type": "point",
-        "x": 1,
-        "y": 0.12,
-      },
-      Point {
-        "_type": "point",
-        "x": 1.1,
-        "y": 0.4,
-      },
-      Point {
-        "_type": "point",
-        "x": 1.1,
-        "y": 0.6,
-      },
-      Point {
-        "_type": "point",
-        "x": 1,
-        "y": 0.6,
-      },
-      Point {
-        "_type": "point",
-        "x": 1,
-        "y": 0.4,
-      },
-      Point {
-        "_type": "point",
-        "x": 1.1,
-        "y": 0.68,
-      },
-      Point {
-        "_type": "point",
-        "x": 1.1,
-        "y": 0.88,
-      },
-      Point {
-        "_type": "point",
-        "x": 1,
-        "y": 0.88,
-      },
-      Point {
-        "_type": "point",
-        "x": 1,
-        "y": 0.68,
-      },
-      Point {
-        "_type": "point",
-        "x": 1.1,
-        "y": 0.96,
+        "y": -0.1,
       },
       Point {
         "_type": "point",
@@ -4263,137 +4291,41 @@ Array [
       Point {
         "_type": "point",
         "x": 1,
-        "y": 0.96,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.76,
-        "y": 1.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.56,
-        "y": 1.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.56,
-        "y": 1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.76,
-        "y": 1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.48,
-        "y": 1.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.28,
-        "y": 1.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.28,
-        "y": 1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.48,
-        "y": 1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.2,
-        "y": 1.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 1.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.2,
-        "y": 1,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.1,
-        "y": 0.92,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.1,
-        "y": 0.72,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.72,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.92,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.1,
-        "y": 0.64,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.1,
-        "y": 0.44,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.44,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.64,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.1,
-        "y": 0.36,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.1,
-        "y": 0.16,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.16,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.36,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.1,
-        "y": 0.08,
-      },
-      Point {
-        "_type": "point",
-        "x": -0.1,
         "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": -0.1,
       },
       Point {
         "_type": "point",
@@ -4403,7 +4335,97 @@ Array [
       Point {
         "_type": "point",
         "x": 0,
-        "y": 0.08,
+        "y": 1,
+      },
+    ],
+  ],
+  Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": -0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": -0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": -0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": -0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
       },
     ],
   ],
@@ -4596,6 +4618,96 @@ Array [
       "x": 0,
       "y": -0.1,
     },
+  ],
+  Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": -0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": -0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
+      },
+    ],
   ],
   Array [
     Array [
@@ -7648,6 +7760,976 @@ Array [
     ],
   ],
   Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.09969,
+        "y": 0.00715,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.09951,
+        "y": 0.00481,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00018,
+        "y": 0.01265,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.015,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.09705,
+        "y": -0.01069,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.0965,
+        "y": -0.01298,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00073,
+        "y": 0.01036,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00018,
+        "y": 0.01265,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.09165,
+        "y": -0.0279,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.09075,
+        "y": -0.03008,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00163,
+        "y": 0.00819,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00073,
+        "y": 0.01036,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.08363,
+        "y": -0.04406,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.0824,
+        "y": -0.04607,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00286,
+        "y": 0.00618,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00163,
+        "y": 0.00819,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.07318,
+        "y": -0.05876,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.07165,
+        "y": -0.06055,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00439,
+        "y": 0.00439,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00286,
+        "y": 0.00618,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.06055,
+        "y": -0.07165,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.05876,
+        "y": -0.07318,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00618,
+        "y": 0.00286,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00439,
+        "y": 0.00439,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.04607,
+        "y": -0.0824,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.04406,
+        "y": -0.08363,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00819,
+        "y": 0.00163,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00618,
+        "y": 0.00286,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.03008,
+        "y": -0.09075,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.0279,
+        "y": -0.09165,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.01036,
+        "y": 0.00073,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00819,
+        "y": 0.00163,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.01298,
+        "y": -0.0965,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.01069,
+        "y": -0.09705,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.01265,
+        "y": 0.00018,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.01036,
+        "y": 0.00073,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00481,
+        "y": -0.09951,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00715,
+        "y": -0.09969,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.015,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.01265,
+        "y": 0.00018,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.015,
+        "y": -0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.985,
+        "y": -0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.985,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.015,
+        "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99285,
+        "y": -0.09969,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99519,
+        "y": -0.09951,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.98735,
+        "y": 0.00018,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.985,
+        "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.01069,
+        "y": -0.09705,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.01298,
+        "y": -0.0965,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.98964,
+        "y": 0.00073,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.98735,
+        "y": 0.00018,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.0279,
+        "y": -0.09165,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.03008,
+        "y": -0.09075,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99181,
+        "y": 0.00163,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.98964,
+        "y": 0.00073,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.04406,
+        "y": -0.08363,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.04607,
+        "y": -0.0824,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99382,
+        "y": 0.00286,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99181,
+        "y": 0.00163,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.05876,
+        "y": -0.07318,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.06055,
+        "y": -0.07165,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99561,
+        "y": 0.00439,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99382,
+        "y": 0.00286,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.07165,
+        "y": -0.06055,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.07318,
+        "y": -0.05876,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99714,
+        "y": 0.00618,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99561,
+        "y": 0.00439,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.0824,
+        "y": -0.04607,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.08363,
+        "y": -0.04406,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99837,
+        "y": 0.00819,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99714,
+        "y": 0.00618,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.09075,
+        "y": -0.03008,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.09165,
+        "y": -0.0279,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99927,
+        "y": 0.01036,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99837,
+        "y": 0.00819,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.0965,
+        "y": -0.01298,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.09705,
+        "y": -0.01069,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99982,
+        "y": 0.01265,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99927,
+        "y": 0.01036,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.09951,
+        "y": 0.00481,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.09969,
+        "y": 0.00715,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.015,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99982,
+        "y": 0.01265,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": 0.015,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.1,
+        "y": 0.985,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.985,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.015,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.09969,
+        "y": 0.99285,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.09951,
+        "y": 0.99519,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99982,
+        "y": 0.98735,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.985,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.09705,
+        "y": 1.01069,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.0965,
+        "y": 1.01298,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99927,
+        "y": 0.98964,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99982,
+        "y": 0.98735,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.09165,
+        "y": 1.0279,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.09075,
+        "y": 1.03008,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99837,
+        "y": 0.99181,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99927,
+        "y": 0.98964,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.08363,
+        "y": 1.04406,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.0824,
+        "y": 1.04607,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99714,
+        "y": 0.99382,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99837,
+        "y": 0.99181,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.07318,
+        "y": 1.05876,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.07165,
+        "y": 1.06055,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99561,
+        "y": 0.99561,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99714,
+        "y": 0.99382,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.06055,
+        "y": 1.07165,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.05876,
+        "y": 1.07318,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99382,
+        "y": 0.99714,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99561,
+        "y": 0.99561,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.04607,
+        "y": 1.0824,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.04406,
+        "y": 1.08363,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99181,
+        "y": 0.99837,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99382,
+        "y": 0.99714,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.03008,
+        "y": 1.09075,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.0279,
+        "y": 1.09165,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.98964,
+        "y": 0.99927,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99181,
+        "y": 0.99837,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1.01298,
+        "y": 1.0965,
+      },
+      Point {
+        "_type": "point",
+        "x": 1.01069,
+        "y": 1.09705,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.98735,
+        "y": 0.99982,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.98964,
+        "y": 0.99927,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99519,
+        "y": 1.09951,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99285,
+        "y": 1.09969,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.985,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.98735,
+        "y": 0.99982,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.985,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.015,
+        "y": 1.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.015,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.985,
+        "y": 1,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00715,
+        "y": 1.09969,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00481,
+        "y": 1.09951,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.01265,
+        "y": 0.99982,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.015,
+        "y": 1,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.01069,
+        "y": 1.09705,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.01298,
+        "y": 1.0965,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.01036,
+        "y": 0.99927,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.01265,
+        "y": 0.99982,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.0279,
+        "y": 1.09165,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.03008,
+        "y": 1.09075,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00819,
+        "y": 0.99837,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.01036,
+        "y": 0.99927,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.04406,
+        "y": 1.08363,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.04607,
+        "y": 1.0824,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00618,
+        "y": 0.99714,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00819,
+        "y": 0.99837,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.05876,
+        "y": 1.07318,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.06055,
+        "y": 1.07165,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00439,
+        "y": 0.99561,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00618,
+        "y": 0.99714,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.07165,
+        "y": 1.06055,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.07318,
+        "y": 1.05876,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00286,
+        "y": 0.99382,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00439,
+        "y": 0.99561,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.0824,
+        "y": 1.04607,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.08363,
+        "y": 1.04406,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00163,
+        "y": 0.99181,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00286,
+        "y": 0.99382,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.09075,
+        "y": 1.03008,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.09165,
+        "y": 1.0279,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00073,
+        "y": 0.98964,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00163,
+        "y": 0.99181,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.0965,
+        "y": 1.01298,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.09705,
+        "y": 1.01069,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00018,
+        "y": 0.98735,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00073,
+        "y": 0.98964,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.09951,
+        "y": 0.99519,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.09969,
+        "y": 0.99285,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.985,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00018,
+        "y": 0.98735,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": 0.985,
+      },
+      Point {
+        "_type": "point",
+        "x": -0.1,
+        "y": 0.015,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.015,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.985,
+      },
+    ],
+  ],
+  Array [
     Array [],
   ],
 ]
@@ -7776,6 +8858,96 @@ Array [
       "x": 0,
       "y": 0,
     },
+  ],
+  Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.1,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.9,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.9,
+        "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.9,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.9,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.1,
+        "y": 1,
+      },
+    ],
   ],
   Array [
     Array [
@@ -8422,66 +9594,6 @@ Array [
       Point {
         "_type": "point",
         "x": 0,
-        "y": 0.08,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.1,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.1,
-        "y": 0.08,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.28,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.48,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.48,
-        "y": 0.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.28,
-        "y": 0.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.56,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.76,
-        "y": 0,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.76,
-        "y": 0.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.56,
-        "y": 0.1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.84,
         "y": 0,
       },
       Point {
@@ -8496,73 +9608,105 @@ Array [
       },
       Point {
         "_type": "point",
-        "x": 0.84,
+        "x": 0,
+        "y": 0.1,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.9,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.9,
+        "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.9,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.9,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.1,
+        "y": 1,
+      },
+    ],
+  ],
+  Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
         "y": 0.1,
       },
       Point {
         "_type": "point",
-        "x": 1,
-        "y": 0.12,
+        "x": 0,
+        "y": 0.1,
       },
+    ],
+    Array [
       Point {
         "_type": "point",
         "x": 1,
-        "y": 0.32,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.9,
-        "y": 0.32,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.9,
-        "y": 0.12,
-      },
-      Point {
-        "_type": "point",
-        "x": 1,
-        "y": 0.4,
-      },
-      Point {
-        "_type": "point",
-        "x": 1,
-        "y": 0.6,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.9,
-        "y": 0.6,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.9,
-        "y": 0.4,
-      },
-      Point {
-        "_type": "point",
-        "x": 1,
-        "y": 0.68,
-      },
-      Point {
-        "_type": "point",
-        "x": 1,
-        "y": 0.88,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.9,
-        "y": 0.88,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.9,
-        "y": 0.68,
-      },
-      Point {
-        "_type": "point",
-        "x": 1,
-        "y": 0.96,
+        "y": 0,
       },
       Point {
         "_type": "point",
@@ -8577,51 +9721,13 @@ Array [
       Point {
         "_type": "point",
         "x": 0.9,
-        "y": 0.96,
+        "y": 0,
       },
+    ],
+    Array [
       Point {
         "_type": "point",
-        "x": 0.76,
-        "y": 1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.56,
-        "y": 1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.56,
-        "y": 0.9,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.76,
-        "y": 0.9,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.48,
-        "y": 1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.28,
-        "y": 1,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.28,
-        "y": 0.9,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.48,
-        "y": 0.9,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.2,
+        "x": 1,
         "y": 1,
       },
       Point {
@@ -8636,73 +9742,15 @@ Array [
       },
       Point {
         "_type": "point",
-        "x": 0.2,
+        "x": 1,
         "y": 0.9,
       },
+    ],
+    Array [
       Point {
         "_type": "point",
         "x": 0,
-        "y": 0.92,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.72,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.1,
-        "y": 0.72,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.1,
-        "y": 0.92,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.64,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.44,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.1,
-        "y": 0.44,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.1,
-        "y": 0.64,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.36,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.16,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.1,
-        "y": 0.16,
-      },
-      Point {
-        "_type": "point",
-        "x": 0.1,
-        "y": 0.36,
-      },
-      Point {
-        "_type": "point",
-        "x": 0,
-        "y": 0.08,
+        "y": 1,
       },
       Point {
         "_type": "point",
@@ -8717,7 +9765,7 @@ Array [
       Point {
         "_type": "point",
         "x": 0.1,
-        "y": 0.08,
+        "y": 1,
       },
     ],
   ],
@@ -8910,6 +9958,96 @@ Array [
       "x": 0,
       "y": 0,
     },
+  ],
+  Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.1,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.9,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.9,
+        "y": 0,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.9,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.9,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.1,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.1,
+        "y": 1,
+      },
+    ],
   ],
   Array [
     Array [
@@ -10990,6 +12128,976 @@ Array [
       "x": 0,
       "y": 0.015,
     },
+  ],
+  Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.015,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00018,
+        "y": 0.01265,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.09988,
+        "y": 0.0205,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.09969,
+        "y": 0.02285,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00018,
+        "y": 0.01265,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00073,
+        "y": 0.01036,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.09797,
+        "y": 0.03371,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.09742,
+        "y": 0.036,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00073,
+        "y": 0.01036,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00163,
+        "y": 0.00819,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.09402,
+        "y": 0.04646,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.09312,
+        "y": 0.04863,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00163,
+        "y": 0.00819,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00286,
+        "y": 0.00618,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.08813,
+        "y": 0.05843,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.0869,
+        "y": 0.06044,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00286,
+        "y": 0.00618,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00439,
+        "y": 0.00439,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.08043,
+        "y": 0.06934,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.07891,
+        "y": 0.07113,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00439,
+        "y": 0.00439,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00618,
+        "y": 0.00286,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.07113,
+        "y": 0.07891,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.06934,
+        "y": 0.08043,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00618,
+        "y": 0.00286,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00819,
+        "y": 0.00163,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.06044,
+        "y": 0.0869,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.05843,
+        "y": 0.08813,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00819,
+        "y": 0.00163,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.01036,
+        "y": 0.00073,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.04863,
+        "y": 0.09312,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.04646,
+        "y": 0.09402,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.01036,
+        "y": 0.00073,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.01265,
+        "y": 0.00018,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.036,
+        "y": 0.09742,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.03371,
+        "y": 0.09797,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.01265,
+        "y": 0.00018,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.015,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.02285,
+        "y": 0.09969,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.0205,
+        "y": 0.09988,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.015,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.985,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.985,
+        "y": 0.1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.015,
+        "y": 0.1,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.985,
+        "y": 0,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.98735,
+        "y": 0.00018,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.9795,
+        "y": 0.09988,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.97715,
+        "y": 0.09969,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.98735,
+        "y": 0.00018,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.98964,
+        "y": 0.00073,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.96629,
+        "y": 0.09797,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.964,
+        "y": 0.09742,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.98964,
+        "y": 0.00073,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99181,
+        "y": 0.00163,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95354,
+        "y": 0.09402,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95137,
+        "y": 0.09312,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99181,
+        "y": 0.00163,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99382,
+        "y": 0.00286,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.94157,
+        "y": 0.08813,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.93956,
+        "y": 0.0869,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99382,
+        "y": 0.00286,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99561,
+        "y": 0.00439,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.93066,
+        "y": 0.08043,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.92887,
+        "y": 0.07891,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99561,
+        "y": 0.00439,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99714,
+        "y": 0.00618,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.92109,
+        "y": 0.07113,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.91957,
+        "y": 0.06934,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99714,
+        "y": 0.00618,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99837,
+        "y": 0.00819,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.9131,
+        "y": 0.06044,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.91187,
+        "y": 0.05843,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99837,
+        "y": 0.00819,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99927,
+        "y": 0.01036,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.90688,
+        "y": 0.04863,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.90598,
+        "y": 0.04646,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99927,
+        "y": 0.01036,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99982,
+        "y": 0.01265,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.90258,
+        "y": 0.036,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.90203,
+        "y": 0.03371,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99982,
+        "y": 0.01265,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.015,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.90031,
+        "y": 0.02285,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.90012,
+        "y": 0.0205,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.015,
+      },
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.985,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.9,
+        "y": 0.985,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.9,
+        "y": 0.015,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 1,
+        "y": 0.985,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99982,
+        "y": 0.98735,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.90012,
+        "y": 0.9795,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.90031,
+        "y": 0.97715,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99982,
+        "y": 0.98735,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99927,
+        "y": 0.98964,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.90203,
+        "y": 0.96629,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.90258,
+        "y": 0.964,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99927,
+        "y": 0.98964,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99837,
+        "y": 0.99181,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.90598,
+        "y": 0.95354,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.90688,
+        "y": 0.95137,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99837,
+        "y": 0.99181,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99714,
+        "y": 0.99382,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.91187,
+        "y": 0.94157,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.9131,
+        "y": 0.93956,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99714,
+        "y": 0.99382,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99561,
+        "y": 0.99561,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.91957,
+        "y": 0.93066,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.92109,
+        "y": 0.92887,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99561,
+        "y": 0.99561,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99382,
+        "y": 0.99714,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.92887,
+        "y": 0.92109,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.93066,
+        "y": 0.91957,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99382,
+        "y": 0.99714,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.99181,
+        "y": 0.99837,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.93956,
+        "y": 0.9131,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.94157,
+        "y": 0.91187,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.99181,
+        "y": 0.99837,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.98964,
+        "y": 0.99927,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95137,
+        "y": 0.90688,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.95354,
+        "y": 0.90598,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.98964,
+        "y": 0.99927,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.98735,
+        "y": 0.99982,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.964,
+        "y": 0.90258,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.96629,
+        "y": 0.90203,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.98735,
+        "y": 0.99982,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.985,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.97715,
+        "y": 0.90031,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.9795,
+        "y": 0.90012,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.985,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.015,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.015,
+        "y": 0.9,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.985,
+        "y": 0.9,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.015,
+        "y": 1,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.01265,
+        "y": 0.99982,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.0205,
+        "y": 0.90012,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.02285,
+        "y": 0.90031,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.01265,
+        "y": 0.99982,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.01036,
+        "y": 0.99927,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.03371,
+        "y": 0.90203,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.036,
+        "y": 0.90258,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.01036,
+        "y": 0.99927,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00819,
+        "y": 0.99837,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.04646,
+        "y": 0.90598,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.04863,
+        "y": 0.90688,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00819,
+        "y": 0.99837,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00618,
+        "y": 0.99714,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.05843,
+        "y": 0.91187,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.06044,
+        "y": 0.9131,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00618,
+        "y": 0.99714,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00439,
+        "y": 0.99561,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.06934,
+        "y": 0.91957,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.07113,
+        "y": 0.92109,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00439,
+        "y": 0.99561,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00286,
+        "y": 0.99382,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.07891,
+        "y": 0.92887,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.08043,
+        "y": 0.93066,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00286,
+        "y": 0.99382,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00163,
+        "y": 0.99181,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.0869,
+        "y": 0.93956,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.08813,
+        "y": 0.94157,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00163,
+        "y": 0.99181,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00073,
+        "y": 0.98964,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.09312,
+        "y": 0.95137,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.09402,
+        "y": 0.95354,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00073,
+        "y": 0.98964,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.00018,
+        "y": 0.98735,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.09742,
+        "y": 0.964,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.09797,
+        "y": 0.96629,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0.00018,
+        "y": 0.98735,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.985,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.09969,
+        "y": 0.97715,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.09988,
+        "y": 0.9795,
+      },
+    ],
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.985,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.015,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.1,
+        "y": 0.015,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.1,
+        "y": 0.985,
+      },
+    ],
   ],
   Array [
     Array [

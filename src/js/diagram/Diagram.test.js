@@ -126,6 +126,10 @@ describe('Diagram', () => {
       const diagram = new Diagram({ htmlId: 'c', limits });
       diagram.webglLow = webgl;
       diagram.webglHigh = webgl;
+      diagram.webgl = webgl;
+      diagram.shapesLow = diagram.getShapes(false);
+      diagram.shapesHigh = diagram.getShapes(true);
+      diagram.shapes = diagram.shapesLow;
       diagram.canvasLow = canvasMock;
       diagram.canvasHigh = canvasMock;
       diagram.htmlCanvas = htmlCanvasMock;
@@ -158,6 +162,20 @@ describe('Diagram', () => {
         squares[sKey] = squareElement;
         collection.add(sKey, squareElement);
         collection.isTouchable = true;
+        // const squareElement = diagram.shapes.polygon({
+        //   offset: def.center,
+        //   rotation: def.rotation,
+        //   radius: (def.sideLength / 2) * Math.sqrt(2),
+        //   line: { width: 0.05 * Math.sqrt(2) },
+        //   transform: def.transform,
+        // });
+        // collection.add(sKey, squareElement);
+        // collection.isTouchable = true;
+        // squareElement.isMovable = true;
+        // squareElement.isTouchable = true;
+        // squareElement.move.bounds = 'diagram';
+        // squares[sKey] = squareElement;
+        // collection.isTouchable = true;
       });
       diagram.moveTopElementOnly = false;
       diagram.elements = collection;
@@ -430,7 +448,7 @@ describe('Diagram', () => {
       expect(d.elements._a.transform.t().round(2)).toEqual(a3);
       expect(d.elements._c.transform.t().round(2)).toEqual(c3);
     });
-    test('Move A and C on Landscape Offset', () => {
+    test.only('Move A and C on Landscape Offset', () => {
       // canvasW=1000, canvasH=500, clipL=0, clipW=4, clipT=2, clipH=2
       const d = diagrams.landscapeOffset;
       // d.initialize();
@@ -461,6 +479,10 @@ describe('Diagram', () => {
       // C will get stuck at 3.5, 1.5
       const c3 = new Point(3.5, 1.5);
 
+      // console.log(t0)
+      // console.log(t1)
+      // console.log(t2)
+      // console.log(t3)
       d.touchDownHandler(t0);          // Touch -0.01, -0.01
       expect(d.beingMovedElements).toHaveLength(2);
       expect(d.beingMovedElements[1]).toBe(d.elements._a);
@@ -472,13 +494,20 @@ describe('Diagram', () => {
       // debugger;
       d.touchMoveHandler(t0, t1);
       expect(d.beingMovedElements).toHaveLength(2);
+      // console.log(d.elements._a.getPosition())
+      // console.log(d.elements._c.getPosition())
+      // console.log(t1)
       expect(d.elements._a.transform.t().round(2)).toEqual(a1);
       expect(d.elements._c.transform.t().round(2)).toEqual(c1);
       d.draw(1);
 
       // Move to 0.25, 0.25
+      // debugger
       d.touchMoveHandler(t1, t2);
       expect(d.beingMovedElements).toHaveLength(2);
+      // console.log(d.elements._a.getPosition())
+      // console.log(d.elements._c.getPosition())
+      // console.log(t2)
       expect(d.elements._a.transform.t().round(2)).toEqual(a2);
       expect(d.elements._c.transform.t().round(2)).toEqual(c2);
       d.draw(2);

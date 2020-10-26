@@ -202,11 +202,12 @@ function orientArrow(
 ) {
   const line = new Line(start, end);
   const matrix = new Transform().rotate(line.angle()).translate(start).matrix();
+  const newPoints = points.map(p => p.transformBy(matrix));
+  const newBorder = border.map(p => p.transformBy(matrix));
+  const newTouchBorder = touchBorder.map(p => p.transformBy(matrix));
+  const newTail = tail.map(p => p.transformBy(matrix));
   return [
-    points.map(p => p.transformBy(matrix)),
-    border.map(p => p.transformBy(matrix)),
-    touchBorder.map(p => p.transformBy(matrix)),
-    tail.map(p => p.transformBy(matrix)),
+    newPoints, newBorder, newTouchBorder, newTail,
     // points.length,
   ];
 }
@@ -264,7 +265,7 @@ function getTriangleArrow(options: {
       new Point(-touchBorderBuffer, width / 2 + touchBorderBuffer),
     ];
   }
-  let tail = [
+  const tail = [
     new Point(0, lineWidth / 2),
     new Point(0, -lineWidth / 2),
   ];
@@ -283,7 +284,7 @@ function getBarbArrow(options: {
   length: number,
   width: number,
   start: Point,
-  stop: Point,
+  end: Point,
   barb: number,
   touchBorderBuffer: number,
   lineWidth: number,
@@ -322,7 +323,7 @@ function getRectangleArrow(options: {
   length: number,
   width: number,
   start: Point,
-  stop: Point,
+  end: Point,
   touchBorderBuffer: number,
   lineWidth: number,
 }) {
@@ -361,7 +362,7 @@ function getLineArrow(options: {
   length: number,
   width: number,
   start: Point,
-  stop: Point,
+  end: Point,
   touchBorderBuffer: number,
   lineWidth: number,
 }) {
@@ -412,7 +413,7 @@ function getPolygonArrow(options: {
   // width: number,
   radius: number,
   start: Point,
-  stop: Point,
+  end: Point,
   touchBorderBuffer: number,
   lineWidth: number,
   sides: number,
@@ -458,9 +459,12 @@ function getArrow(options: {
   width: number,
   barb: number,
   start: Point,
-  stop: Point,
+  end: Point,
   touchBorderBuffer: number,
   lineWidth: number,
+  radius: number,
+  rotation: number,
+  sides: number,
 }) {
   if (options.head === 'barb') {
     return getBarbArrow(options);
@@ -481,6 +485,9 @@ function getArrowLength(options: {
   head: ArrowHead,
   length: number,
   lineWidth: number,
+  width: number,
+  radius: number,
+  reverse: boolean,
 }) {
   const {
     head, width, length, lineWidth, radius, reverse,

@@ -92,21 +92,22 @@ DiagramElementPrimitive {
         },
         Point {
           "_type": "point",
-          "x": 0,
-          "y": 0.095,
-        },
-        Point {
-          "_type": "point",
-          "x": 0.1,
-          "y": 0.095,
-        },
-        Point {
-          "_type": "point",
           "x": 0.1,
           "y": -0.008,
         },
+        Point {
+          "_type": "point",
+          "x": 0.1,
+          "y": 0.095,
+        },
+        Point {
+          "_type": "point",
+          "x": 0,
+          "y": 0.095,
+        },
       ],
     ],
+    "borderSetup": "text",
     "drawContext2D": Array [
       DrawContext2D {
         "canvas": Object {
@@ -148,7 +149,7 @@ DiagramElementPrimitive {
         "resize": [Function],
       },
     ],
-    "holeBorder": Array [
+    "hole": Array [
       Array [],
     ],
     "lastDrawTransform": Array [],
@@ -168,20 +169,21 @@ DiagramElementPrimitive {
           },
           Point {
             "_type": "point",
-            "x": 0,
-            "y": 0.095,
-          },
-          Point {
-            "_type": "point",
-            "x": 0.1,
-            "y": 0.095,
-          },
-          Point {
-            "_type": "point",
             "x": 0.1,
             "y": -0.008,
           },
+          Point {
+            "_type": "point",
+            "x": 0.1,
+            "y": 0.095,
+          },
+          Point {
+            "_type": "point",
+            "x": 0,
+            "y": 0.095,
+          },
         ],
+        "borderSetup": "rect",
         "bounds": Rect {
           "bottom": -0.008,
           "height": 0.10300000000000001,
@@ -267,11 +269,60 @@ DiagramElementPrimitive {
           "descent": 0.008,
           "width": 0.1,
         },
+        "onClick": undefined,
         "text": "a",
+        "touchBorder": Array [
+          Point {
+            "_type": "point",
+            "x": 0,
+            "y": -0.008,
+          },
+          Point {
+            "_type": "point",
+            "x": 0.1,
+            "y": -0.008,
+          },
+          Point {
+            "_type": "point",
+            "x": 0.1,
+            "y": 0.095,
+          },
+          Point {
+            "_type": "point",
+            "x": 0,
+            "y": 0.095,
+          },
+        ],
+        "touchBorderSetup": "border",
         "xAlign": "left",
         "yAlign": "baseline",
       },
     ],
+    "touchBorder": Array [
+      Array [
+        Point {
+          "_type": "point",
+          "x": 0,
+          "y": -0.008,
+        },
+        Point {
+          "_type": "point",
+          "x": 0.1,
+          "y": -0.008,
+        },
+        Point {
+          "_type": "point",
+          "x": 0.1,
+          "y": 0.095,
+        },
+        Point {
+          "_type": "point",
+          "x": 0,
+          "y": 0.095,
+        },
+      ],
+    ],
+    "touchBorderSetup": "text",
     "type": "drawingObject",
   },
   "fnMap": FunctionMap {
@@ -467,9 +518,9 @@ DiagramElementPrimitive {
   "pointsDefinition": Object {},
   "pointsToDraw": -1,
   "pulseDefault": Object {
+    "duration": 1,
     "frequency": 0,
     "scale": 2,
-    "time": 1,
   },
   "pulseSettings": Object {
     "A": 1,
