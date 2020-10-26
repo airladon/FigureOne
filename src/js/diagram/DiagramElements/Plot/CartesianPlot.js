@@ -54,16 +54,7 @@ class CartesianPlot extends DiagramElementCollection {
       ));
     }
     this.touchInBoundingRect = true;
-
-    // this.glBoundingRect = this.getGLBoundingRect();
-    // this.updateMoveTranslationBoundary();
   }
-
-  // updateLimits(limits: Rect) {
-  //   super.updateLimits(limits);
-  //   this.glBoundingRect = this.getGLBoundingRect();
-  //   this.updateMoveTranslationBoundary();
-  // }
 
   // isBeingTouched(glLocation: Point) {
   //   if (!this.isTouchable) {

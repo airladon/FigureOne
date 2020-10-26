@@ -494,7 +494,7 @@ describe('Animationa and Movement', () => {
           Math.PI / 4, Point.zero(),
         );
         const square = new DiagramElementPrimitive(sq);
-        const box = square.getGLBoundingRect();
+        const box = square.getBoundingRect('gl');
         expect(round(box.left, 3)).toEqual(-0.105);
         expect(round(box.bottom, 3)).toEqual(-0.105);
         expect(round(box.right, 3)).toEqual(0.105);
@@ -508,7 +508,7 @@ describe('Animationa and Movement', () => {
           Math.PI / 4, new Point(0.5, 0),
         );
         const square = new DiagramElementPrimitive(sq);
-        const box = square.getGLBoundingRect();
+        const box = square.getBoundingRect('gl');
         expect(round(box.left, 3)).toEqual(-0.105 + 0.5);
         expect(round(box.bottom, 3)).toEqual(-0.105);
         expect(round(box.right, 3)).toEqual(0.105 + 0.5);
@@ -526,7 +526,7 @@ describe('Animationa and Movement', () => {
           new Transform().scale(1, 1).rotate(0).translate(0.5, 0),
         );
         square.setFirstTransform();
-        const box = square.getGLBoundingRect();
+        const box = square.getBoundingRect('gl');
         expect(round(box.left, 3)).toEqual(-0.105 + 0.5);
         expect(round(box.bottom, 3)).toEqual(-0.105);
         expect(round(box.right, 3)).toEqual(0.105 + 0.5);
@@ -544,7 +544,7 @@ describe('Animationa and Movement', () => {
           new Transform().scale(2, 2).rotate(0).translate(0, 0),
         );
         square.setFirstTransform();
-        const box = square.getGLBoundingRect();
+        const box = square.getBoundingRect('gl');
         expect(round(box.left, 3)).toEqual(-0.105 * 2 + 0.5 * 2);
         expect(round(box.bottom, 3)).toEqual(-0.105 * 2);
         expect(round(box.right, 3)).toEqual(0.105 * 2 + 0.5 * 2);
@@ -953,7 +953,7 @@ describe('Animationa and Movement', () => {
       collection.add('square', square);
       collection.setFirstTransform(new Transform());
 
-      const box = collection.getGLBoundingRect();
+      const box = collection.getBoundingRect('gl');
       expect(round(box.left, 3)).toEqual(-0.105);
       expect(round(box.bottom, 3)).toEqual(-0.105);
       expect(round(box.right, 3)).toEqual(0.105);
@@ -974,7 +974,7 @@ describe('Animationa and Movement', () => {
       collection.add('square', square);
       collection.setFirstTransform(new Transform());
 
-      const box = collection.getGLBoundingRect();
+      const box = collection.getBoundingRect('gl');
       expect(round(box.left, 3)).toEqual(-0.105 + 0.5);
       expect(round(box.bottom, 3)).toEqual(-0.105);
       expect(round(box.right, 3)).toEqual(0.105 + 0.5);
@@ -995,7 +995,7 @@ describe('Animationa and Movement', () => {
       collection.add('square', square);
       collection.setFirstTransform(new Transform());
 
-      const box = collection.getGLBoundingRect();
+      const box = collection.getBoundingRect('gl');
       expect(round(box.left, 3)).toEqual(-0.105 + 0.5);
       expect(round(box.bottom, 3)).toEqual(-0.105);
       expect(round(box.right, 3)).toEqual(0.105 + 0.5);
@@ -1019,7 +1019,7 @@ describe('Animationa and Movement', () => {
       collection.add('square', square);
       collection.setFirstTransform(new Transform());
 
-      const box = collection.getGLBoundingRect();
+      const box = collection.getBoundingRect('gl');
       expect(round(box.left, 3)).toEqual(-0.105 + 1.0);
       expect(round(box.bottom, 3)).toEqual(-0.105);
       expect(round(box.right, 3)).toEqual(0.105 + 1.0);
@@ -1043,7 +1043,7 @@ describe('Animationa and Movement', () => {
       collection.add('square', square);
       collection.setFirstTransform(new Transform());
 
-      const box = collection.getGLBoundingRect();
+      const box = collection.getBoundingRect('gl');
       expect(round(box.left, 3)).toEqual((-0.105 + 0.5) * 2 + 0.5);
       expect(round(box.bottom, 3)).toEqual(-0.105 * 2);
       expect(round(box.right, 3)).toEqual((0.105 + 0.5) * 2 + 0.5);
@@ -1072,7 +1072,7 @@ describe('Animationa and Movement', () => {
       collection.add('square2', square2);
       collection.setFirstTransform(new Transform());
 
-      const box = collection.getGLBoundingRect();
+      const box = collection.getBoundingRect('gl');
       expect(round(box.left, 3)).toEqual(round(-0.105 * 2 + 0.5, 3));
       expect(round(box.bottom, 3)).toEqual((-0.105 - 0.5) * 2 + 0.5);
       expect(round(box.right, 3)).toEqual((0.105 + 0.5) * 2 + 0.5);

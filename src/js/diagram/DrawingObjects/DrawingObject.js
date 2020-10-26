@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  Point, Rect, getBoundingRect,
+  Point, // Rect, getBoundingRect,
 } from '../../tools/g2';
 import { getState } from '../state';
 
@@ -22,28 +22,28 @@ import { getState } from '../state';
 //     - calcBorder(lastDrawTransformMatrix, glToDiagramTransform)
 //
 
-function getBounds(borderIn: null | Array<Array<Point>>, transformMatrix: Array<number> | null) {
-  if (transformMatrix == null) {
-    return borderIn;
-  }
-  if (
-    borderIn == null
-    || (borderIn.length === 1 && borderIn[0].length === 0)
-    || borderIn.length === 0
-  ) {
-    return [];
-  }
+// function getBounds(borderIn: null | Array<Array<Point>>, transformMatrix: Array<number> | null) {
+//   if (transformMatrix == null) {
+//     return borderIn;
+//   }
+//   if (
+//     borderIn == null
+//     || (borderIn.length === 1 && borderIn[0].length === 0)
+//     || borderIn.length === 0
+//   ) {
+//     return [];
+//   }
 
-  const boundaries = [];
-  borderIn.forEach((boundary) => {
-    const border = [];
-    boundary.forEach((point) => {
-      border.push(point.transformBy(transformMatrix));
-    });
-    boundaries.push(border);
-  });
-  return boundaries;
-}
+//   const boundaries = [];
+//   borderIn.forEach((boundary) => {
+//     const border = [];
+//     boundary.forEach((point) => {
+//       border.push(point.transformBy(transformMatrix));
+//     });
+//     boundaries.push(border);
+//   });
+//   return boundaries;
+// }
 
 /**
  * Drawing Object
@@ -86,14 +86,14 @@ class DrawingObject {
     return this;
   }
 
-  // Helper function hack used in TextObject
-  // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  transformBorder(
-    borderIn: null | Array<Array<Point>>,
-    transformMatrix: Array<number> | null,
-  ) {
-    return getBounds(borderIn, transformMatrix);
-  }
+  // // Helper function hack used in TextObject
+  // // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  // transformBorder(
+  //   borderIn: null | Array<Array<Point>>,
+  //   transformMatrix: Array<number> | null,
+  // ) {
+  //   return getBounds(borderIn, transformMatrix);
+  // }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
   setText(text: string) {
@@ -104,17 +104,17 @@ class DrawingObject {
   }
 
 
-  getBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
-    return getBounds(this.border, transformMatrix);
-  }
+  // getBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
+  //   return getBounds(this.border, transformMatrix);
+  // }
 
-  getTouchBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
-    return getBounds(this.touchBorder, transformMatrix);
-  }
+  // getTouchBoundaries(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
+  //   return getBounds(this.touchBorder, transformMatrix);
+  // }
 
-  getBoundaryHoles(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
-    return getBounds(this.hole, transformMatrix);
-  }
+  // getBoundaryHoles(transformMatrix: null | Array<number> = null): Array<Array<Point>> {
+  //   return getBounds(this.hole, transformMatrix);
+  // }
   /* eslint-enable */
 
   /* eslint-disable class-methods-use-this, no-unused-vars */
@@ -127,10 +127,10 @@ class DrawingObject {
   }
   /* eslint-enable */
 
-  getBoundingRect(transformMatrix: Array<number> | null = null): Rect {
-    const boundaries = this.getBoundaries(transformMatrix);
-    return getBoundingRect(boundaries);
-  }
+  // getBoundingRect(transformMatrix: Array<number> | null = null): Rect {
+  //   const boundaries = this.getBoundaries(transformMatrix);
+  //   return getBoundingRect(boundaries);
+  // }
 
   getLocation(transformMatrix: Array<number> | null = null): Point {
     if (transformMatrix == null) {
@@ -139,18 +139,18 @@ class DrawingObject {
     return this.getLocation().transformBy(transformMatrix);
   }
 
-  getRelativeBoundingRect(transformMatrix: Array<number> | null = null): Rect {
-    const location = this.getLocation(transformMatrix);
-    const absoluteBoundaries =
-      this.getBoundingRect(transformMatrix);
-    const relativeBoundaries = new Rect(
-      absoluteBoundaries.left - location.x,
-      absoluteBoundaries.bottom - location.y,
-      absoluteBoundaries.width,
-      absoluteBoundaries.height,
-    );
-    return relativeBoundaries;
-  }
+  // getRelativeBoundingRect(transformMatrix: Array<number> | null = null): Rect {
+  //   const location = this.getLocation(transformMatrix);
+  //   const absoluteBoundaries =
+  //     this.getBoundingRect(transformMatrix);
+  //   const relativeBoundaries = new Rect(
+  //     absoluteBoundaries.left - location.x,
+  //     absoluteBoundaries.bottom - location.y,
+  //     absoluteBoundaries.width,
+  //     absoluteBoundaries.height,
+  //   );
+  //   return relativeBoundaries;
+  // }
 
   // getRelativeVertexSpaceBoundingRect() {
   //   const absoluteBoundaries =

@@ -285,7 +285,8 @@ diagram.addElements([
                 name: 'a',
                 method: 'text',
                 options: {
-                  text: 'hello world'
+                  text: 'hello world',
+                  touchBorder: 0.5,
                 }
               }
             ],
