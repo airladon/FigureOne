@@ -119,7 +119,7 @@ describe('Dash tests', () => {
   });
   describe('lineToDash', () => {
     test('Two Points', () => {
-      const d = lineToDash(
+      const [d] = lineToDash(
         [new Point(0, 0), new Point(1, 0)],
         [0.25, 0.25], false, 0,
       );
@@ -129,7 +129,7 @@ describe('Dash tests', () => {
       expect(round(d[1][1])).toEqual(new Point(0.75, 0));
     });
     test('Three Points', () => {
-      const d = lineToDash(
+      const [d] = lineToDash(
         [new Point(0, 0), new Point(1, 0), new Point(1, 1)],
         [0.3, 0.3], false, 0,
       );
@@ -143,7 +143,7 @@ describe('Dash tests', () => {
       expect(round(d[3][1])).toEqual(new Point(1, 1));
     });
     test('Three Points - dash ends on corner', () => {
-      const d = lineToDash(
+      const [d] = lineToDash(
         [new Point(0, 0), new Point(1, 0), new Point(1, 1)],
         [0.2, 0.2], false, 0,
       );
@@ -159,7 +159,7 @@ describe('Dash tests', () => {
       expect(round(d[4][1])).toEqual(new Point(1, 0.8));
     });
     test('Three Points - dash starts on corner', () => {
-      const d = lineToDash(
+      const [d] = lineToDash(
         [new Point(0, 0), new Point(1, 0), new Point(1, 1)],
         [0.5, 0.5], false, 0,
       );
@@ -169,7 +169,7 @@ describe('Dash tests', () => {
       expect(round(d[1][1])).toEqual(new Point(1, 0.5));
     });
     test('Three Points Angle Join', () => {
-      const d = lineToDash(
+      const [d] = lineToDash(
         [new Point(0, 0), new Point(1, 0), new Point(1, 1)],
         [0.4, 0.4], false, 0,
       );
@@ -182,7 +182,7 @@ describe('Dash tests', () => {
       expect(round(d[2][1])).toEqual(new Point(1, 1));
     });
     test('Three Points with offset', () => {
-      const d = lineToDash(
+      const [d] = lineToDash(
         [new Point(0, 0), new Point(1, 0), new Point(1, 1)],
         [0.3, 0.3], false, 0.05,
       );
@@ -196,7 +196,7 @@ describe('Dash tests', () => {
       expect(round(d[3][1])).toEqual(new Point(1, 1));
     });
     test('Four Points with close not on dash', () => {
-      const d = lineToDash(
+      const [d] = lineToDash(
         [new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)],
         [0.6, 0.5], true, 0,
       );
@@ -210,7 +210,7 @@ describe('Dash tests', () => {
       expect(round(d[3][1])).toEqual(new Point(0, 0.1));
     });
     test('Four Points with close on dash', () => {
-      const d = lineToDash(
+      const [d] = lineToDash(
         [new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(0, 1)],
         [0.6, 0.6], true, 0,
       );

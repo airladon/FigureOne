@@ -1682,6 +1682,9 @@ function parsePoints(
     if (typeof value === 'string') {
       return;
     }
+    if (typeof value === 'number') {
+      return;
+    }
     const processArray = (a) => {
       for (let i = 0; i < a.length; i += 1) {
         if (Array.isArray(a[i]) && !(typeof a[i][0] === 'number')) {
