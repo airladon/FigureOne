@@ -55,18 +55,22 @@ describe('Diagram Recorder', () => {
     expect(aa.getPosition('diagram')).toEqual(new Point(0, 2));
     expect(b.getPosition('diagram')).toEqual(new Point(0, -1));
     expect(bb.getPosition('diagram')).toEqual(new Point(0, -2));
+    expect(a.getPosition('local')).toEqual(new Point(0, 1));
+    expect(aa.getPosition('local')).toEqual(new Point(0, 1));
+    expect(b.getPosition('local')).toEqual(new Point(0, -1));
+    expect(bb.getPosition('local')).toEqual(new Point(0, -1));
   });
   test('local - collection', () => {
-    a.setPositionToElement(b);
+    a.setPositionToElement(b, 'local');
     diagram.mock.timeStep(0);
     expect(a.getPosition()).toEqual(new Point(0, -1));
     expect(a.getPosition('diagram')).toEqual(new Point(0, -1));
   });
   test('local - primitive', () => {
-    aa.setPositionToElement(bb);
+    aa.setPositionToElement(bb, 'local');
     diagram.mock.timeStep(0);
-    expect(aa.getPosition()).toEqual(new Point(0, -1));
-    expect(aa.getPosition('diagram')).toEqual(new Point(0, 0));
+    expect(aa.getPosition()).toEqual(new Point(0, -3));
+    expect(aa.getPosition('diagram')).toEqual(new Point(0, -2));
   });
   test('diagram - primitive', () => {
     aa.setPositionToElement(bb, 'diagram');

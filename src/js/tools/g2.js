@@ -2743,7 +2743,7 @@ class Transform {
     // this.order = order.slice();
     this.index = this.order.length;
     this._type = 'transform';
-    this.calcMatrix();
+    this.calcAndSetMatrix();
   }
 
   _state(options: { precision: number } = { precision: 8 }) {
@@ -2792,7 +2792,7 @@ class Transform {
     } else {
       this.order[this.index] = translation;
       this.index += 1;
-      this.calcMatrix();
+      this.calcAndSetMatrix();
       return this;
     }
     return new Transform(order, name);
@@ -2812,7 +2812,7 @@ class Transform {
     } else {
       this.order[this.index] = rotation;
       this.index += 1;
-      this.calcMatrix();
+      this.calcAndSetMatrix();
       return this;
     }
     // this.order.push(new Rotation(r));
@@ -2834,7 +2834,7 @@ class Transform {
     } else {
       this.order[this.index] = scale;
       this.index += 1;
-      this.calcMatrix();
+      this.calcAndSetMatrix();
       return this;
     }
     return new Transform(order, name);
@@ -2864,15 +2864,50 @@ class Transform {
    * Transform matrix of the transform chain
    * @return {Array<number>}
    */
-  calcMatrix() {
+  calcMatrix(
+    orderStart: number = 0,
+    orderEnd: number = this.order.length - 1,
+  ) {
+    let orderEndToUse = orderEnd;
+    if (orderEnd < 0) {
+      orderEndToUse = this.order.length + orderEnd;
+    }
     let m = m2.identity();
-    for (let i = this.order.length - 1; i >= 0; i -= 1) {
+    for (let i = orderEndToUse; i >= orderStart; i -= 1) {
       m = m2.mul(m, this.order[i].matrix());
     }
+    return m;
     // this.mat = m2.copy(m);
     // return m;
-    this.mat = m;
+    // this.mat = m;
   }
+
+  calcAndSetMatrix() {
+    this.mat = this.calcMatrix();
+  }
+  // /**
+  //  * Transform matrix of the transform chain
+  //  * @return {Array<number>}
+  //  */
+  // calcMatrix(
+  //   orderStart: number = 0,
+  //   orderEnd: number = this.order.length - 1,
+  // ) {
+  //   let orderEndToUse = orderEnd;
+  //   if (orderEnd < 0) {
+  //     orderEndToUse = this.order.length + orderEnd;
+  //   }
+  //   let m = m2.identity();
+  //   for (let i = orderEndToUse; i >= orderStart; i -= 1) {
+  //     m = m2.mul(m, this.order[i].matrix());
+  //   }
+  //   // this.mat = m2.copy(m);
+  //   // return m;
+  //   this.mat = m;
+  // }
+
+
+
 
   update(index: number) {
     if (index < this.order.length) {
@@ -2931,7 +2966,7 @@ class Transform {
       if (t instanceof Translation) {
         if (count === actualIndex) {
           this.order[i] = new Translation(x, yOrIndex, this.name);
-          this.calcMatrix();
+          this.calcAndSetMatrix();
           return this;
         }
         count += 1;
@@ -3028,7 +3063,7 @@ class Transform {
       if (t instanceof Scale) {
         if (count === actualIndex) {
           this.order[i] = new Scale(scale.x, scale.y, this.name);
-          this.calcMatrix();
+          this.calcAndSetMatrix();
           return this;
         }
         count += 1;
@@ -3070,7 +3105,7 @@ class Transform {
       if (t instanceof Rotation) {
         if (count === index) {
           this.order[i] = new Rotation(r, this.name);
-          this.calcMatrix();
+          this.calcAndSetMatrix();
           return this;
         }
         count += 1;

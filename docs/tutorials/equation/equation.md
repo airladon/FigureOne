@@ -173,6 +173,8 @@ equation.goToForm({
 
 ### Equation Interactivity
 
+Just like any {@link DiagramElement}, an equation can be moved.
+
 
 ### Object Definition
 Similar to shapes and text, the same equation above can be defined with an options object. For complicated equations, options objects can be used with code folding in an IDE to more easily read and navigate an equation definition. Also, because object form is JSON compatible, complex equations can be easily shared.

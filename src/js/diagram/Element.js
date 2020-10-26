@@ -186,6 +186,8 @@ type DiagramElementMoveFreely = {
  */
 type DiagramElementMove = {
   bounds: TransformBounds,
+  // limits: TransformBounds,
+  includeSize: boolean,
   transformClip: string | (?(Transform) => Transform);
   maxVelocity: TypeTransformValue;
   freely: DiagramElementMoveFreely,
@@ -1909,6 +1911,14 @@ class DiagramElement {
     };
   }
 
+  getMoveBoundsRelativeToSize() {
+    if (this.move.includeSizeInBounds) {
+      const size = this.getBoundingRect('diagram');
+      //asdfasdf
+    }
+    return this.move.bound
+  }
+
   updateLastDrawTransform() {
     const { parentCount } = this.lastDrawElementTransformPosition;
     const pLength = this.lastDrawTransform.order.length;
@@ -1916,7 +1926,7 @@ class DiagramElement {
     transform.order.forEach((t, index) => {
       this.lastDrawTransform.order[pLength - parentCount - index - 1] = t._dup();
     });
-    this.lastDrawTransform.calcMatrix();
+    this.lastDrawTransform.calcAndSetMatrix();
   }
 
   getParentLastDrawTransform() {
@@ -2896,19 +2906,42 @@ class DiagramElement {
 
   diagramSpaceToVertexSpaceTransformMatrix() {
     // Diagram transform will always be two
-    const t = new Transform(this.lastDrawTransform.order.slice(
-      this.lastDrawElementTransformPosition.elementCount,
-      this.lastDrawTransform.order.length - 2,
-    ));
-    return m2.inverse(t.matrix());
+    // const t = new Transform(this.lastDrawTransform.order.slice(
+    //   this.lastDrawElementTransformPosition.elementCount,
+    //   this.lastDrawTransform.order.length - 2,
+    // ));
+    return m2.inverse(this.lastDrawTransform.calcMatrix(0, -2));
+    // return m2.inverse(t.matrix());
   }
 
-  vertexToDiagramSpaceTransformMatrix() {
-    const t = new Transform(this.lastDrawTransform.order.slice(
-      0,
-      this.lastDrawTransform.order.length - 2,
-    ));
-    return t.matrix();
+  diagramSpaceToLocalSpaceTransformMatrix() {
+    // Diagram transform will always be two
+    // const t = new Transform(this.lastDrawTransform.order.slice(
+    //   this.lastDrawElementTransformPosition.elementCount,
+    //   this.lastDrawTransform.order.length - 2,
+    // ));
+    // return m2.inverse(t.matrix());
+    return m2.inverse(
+      this.lastDrawTransform.calcMatrix(this.transform.order.length, -2),
+    );
+  }
+
+  vertexSpaceToDiagramSpaceTransformMatrix() {
+    return this.lastDrawTransform.calcMatrix(0, -2);
+    // const t = new Transform(this.lastDrawTransform.order.slice(
+    //   0,
+    //   this.lastDrawTransform.order.length - 2,
+    // ));
+    // return t.matrix();
+  }
+
+  localSpaceToDiagramSpaceTransformMatrix() {
+    return this.lastDrawTransform.calcMatrix(this.transform.order.length, -2);
+    // const t = new Transform(this.lastDrawTransform.order.slice(
+    //   0,
+    //   this.lastDrawTransform.order.length - 2,
+    // ));
+    // return t.matrix();
   }
 
   setDiagramPosition(diagramPosition: Point) {
@@ -2940,20 +2973,26 @@ class DiagramElement {
 
   setPositionToElement(
     element: DiagramElement,
-    space: 'local' | 'diagram' = 'local',
+    // space: 'local' | 'diagram' = 'diagram',
   ) {
-    if (space === 'local') {
+    if (element.parent === this.parent) {
+    // if (space === 'local') {
       const p = element.transform.t();
       if (p != null) {
         this.setPosition(p._dup());
       }
       return;
     }
-    const diagram = this.getPosition('diagram');
-    const local = this.getPosition('local');
-    const p = element.getPosition('diagram');
-    const deltaDiagram = p.sub(diagram);
-    this.setPosition(local.add(deltaDiagram));
+    const diagramPosition = element.getPosition('diagram');
+    const local = diagramPosition.transformBy(
+      this.diagramSpaceToLocalSpaceTransformMatrix(),
+    );
+    // const diagram = this.getPosition('diagram');
+    // const local = this.getPosition('local');
+    // const p = element.getPosition('diagram');
+    // const deltaDiagram = p.sub(diagram);
+    // this.setPosition(local.add(deltaDiagram));
+    this.setPosition(local);
   }
 
   checkMoveBounds() {
@@ -3691,7 +3730,6 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   getDiagramBoundaries() {
-    console.log(this.name, this.lastDrawTransform, this.drawingObject.getBoundaries(this.vertexToDiagramSpaceTransformMatrix()))
     return this.drawingObject.getBoundaries(this.vertexToDiagramSpaceTransformMatrix());
   }
 
