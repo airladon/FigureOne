@@ -3285,7 +3285,7 @@ export default class DiagramPrimitives {
     } else {
       const optionsToUse = joinObjects(transformOrPointOrOptions, ...moreOptions);
       if (optionsToUse.transform != null) {
-        ({ transform } = optionsToUse);
+        transform = getTransform(optionsToUse.transform);
       }
       if (optionsToUse.position != null) {
         transform.updateTranslation(getPoint(optionsToUse.position));

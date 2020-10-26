@@ -104,40 +104,40 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // //   diagram.animateNextFrame();
 // // }
 
-// diagram.addElements([
-//   {
-//     name: 'origin',
-//     method: 'polygon',
-//     options: {
-//       radius: 0.01,
-//       line: { width: 0.01 },
-//       sides: 10,
-//       color: [0.7, 0.7, 0.7, 1]
-//     },
-//   },
-//   {
-//     name: 'grid',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.1,
-//       xStep: 0.1,
-//       color: [0.7, 0.7, 0.7, 1],
-//       line: { width: 0.001 },
-//     },
-//   },
-//   {
-//     name: 'gridMajor',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.5,
-//       xStep: 0.5,
-//       color: [0.8, 0.8, 0.8, 1],
-//       line: { width: 0.004 }
-//     },
-//   },
-// ]);
+diagram.addElements([
+  {
+    name: 'origin',
+    method: 'polygon',
+    options: {
+      radius: 0.01,
+      line: { width: 0.01 },
+      sides: 10,
+      color: [0.7, 0.7, 0.7, 1]
+    },
+  },
+  {
+    name: 'grid',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.1,
+      xStep: 0.1,
+      color: [0.7, 0.7, 0.7, 1],
+      line: { width: 0.001 },
+    },
+  },
+  {
+    name: 'gridMajor',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.5,
+      xStep: 0.5,
+      color: [0.8, 0.8, 0.8, 1],
+      line: { width: 0.004 }
+    },
+  },
+]);
 
 // // const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2]});
 // // diagram.addElement({
@@ -267,50 +267,52 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
 
 
-// diagram.addElements([
-//   {
-//     name: 'c',
-//     method: 'collection',
-//     addElements: [
-//       { name: 'p', method: 'polygon' },
-//     ],
-//   },
-// ]);
+diagram.addElements([
+  {
+    name: 'c',
+    method: 'collection',
+    addElements: [
+      {
+        name: 'a',
+        method: 'polygon',
+        options: {
+          radius: 1,
+          sides: 4,
+          transform: [['t', 1, 0]],
+        },
+      },
+    ],
+    options: {
+      transform: [['t', 1, 0]],
+    },
+  },
+]);
 
-// diagram.initialize();
-
-// const c = diagram.elements._c;
-// const p = c._p;
+const c = diagram.elements._c;
+const a = c._a;
 // c.setPosition(1, 0);
+// c.setScale(0.5, 0.5);
+// c.setRotation(Math.PI / 4);
+// c.setTransform(new Fig.Transform().scale(0.5, 0.5).translate(1, 0).rotate(Math.PI / 4))
 // p.setPosition(1, 0);
-// diagram.initialize();
-// console.log(p.getPosition('vertex'));
-// console.log(p.getPosition('local'));
-// console.log(p.getPosition('diagram'));
-// console.log(p.getPosition('gl'));
-// console.log(p.lastDrawTransform)
+diagram.initialize();
+// console.log(a.getPosition('vertex'));
+// console.log(a.getPosition('local'));
+// console.log(a.getPosition('diagram'));
+// // console.log(a.getPosition('gl'));
+// // console.log(a.lastDrawTransform)
+// console.log(a)
 
+// console.log(new Fig.Point(0, 0).transformBy(a.spaceTransform('vertex', 'diagram')))
+// console.log(new Fig.Point(0, 0).transformBy(a.spaceTransform('diagram', 'vertex')))
+// console.log(new Fig.Point(0, 0).transformBy(a.spaceTransform('vertex', 'pixel')))
+
+// console.log(new Fig.Point(500, 500).transformBy(a.spaceTransform('pixel', 'vertex')))
+
+console.log(new Fig.Point(0, 0).transformBy(a.spaceTransform('local', 'diagram')))
 // c.spaceTransforms.vertexToDiagram
 // c.spaceTransforms.vertexToLocal
 // c.spaceTransforms.localToDiagram
 // c.spaceTransforms.diagramToVertex
 // c.spaceTransforms.diagramToLocal
 // c.spaceTransforms.localToVertex
-
-diagram.addElements([
-  {
-    name: 'grid',
-    method: 'grid',
-    options: {
-      bounds: new Fig.Rect(0, 0, 1, 1),
-      xNum: 3,
-      yNum: 3,
-      // line: {
-      //   linePrimitives: true,
-      //   lineNum: 20,
-      //   width: 0.1,
-      // },
-    },
-  }
-]);
-console.log(diagram.elements._grid)

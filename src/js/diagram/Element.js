@@ -1515,6 +1515,7 @@ class DiagramElement {
     this.undim();
   }
 
+
   /**
    * Conveniently set the first `translation` of the element's `transform`.
    * @param {TypeParsablePoint | number} pointOrX x coordinate or full point
@@ -2518,6 +2519,143 @@ class DiagramElement {
     }
   }
 
+
+  getPixelToVertexSpaceScale() {
+    const pixelToDiagram = this.diagramTransforms.pixelToDiagram.matrix();
+    const diagramToVertex = this.diagramSpaceToVertexSpaceTransformMatrix();
+    const scaleX = pixelToDiagram[0] * diagramToVertex[0];
+    const scaleY = pixelToDiagram[4] * diagramToVertex[4];
+    return new Point(scaleX, scaleY);
+  }
+
+  getVertexToPixelSpaceScale() {
+    const pixelToVertexSpaceScale = this.getPixelToVertexSpaceScale();
+    return new Point(
+      1 / pixelToVertexSpaceScale.x,
+      1 / pixelToVertexSpaceScale.y,
+    );
+  }
+
+  spaceTransform(from: string, to: string) {
+    // All Vertex related conversions
+    if (from === 'vertex' && to === 'pixel') {
+      return m2.mul(
+        this.diagram.spaceTransforms.glToPixel.matrix(),
+        this.lastDrawTransform.matrix(),
+      );
+    }
+    if (from === 'vertex' && to === 'gl') {
+      return this.lastDrawTransform.matrix();
+    }
+    if (from === 'vertex' && to === 'diagram') {
+      return this.lastDrawTransform.calcMatrix(0, -3);
+    }
+    if (from === 'vertex' && to === 'local') {
+      return this.transform.matrix();
+    }
+    if (from === 'pixel' && to === 'vertex') {
+      return m2.mul(
+        m2.inverse(this.lastDrawTransform.matrix()),
+        this.diagram.spaceTransforms.pixelToGL.matrix(),
+      );
+    }
+    if (from === 'gl' && to === 'vertex') {
+      return m2.inverse(this.lastDrawTransform.matrix());
+    }
+    if (from === 'diagram' && to === 'vertex') {
+      return m2.inverse(this.lastDrawTransform.calcMatrix(0, -3));
+    }
+    if (from === 'local' && to === 'vertex') {
+      return m2.inverse(this.transform.matrix());
+    }
+
+    // Remaining Local related conversions
+    if (from === 'local' && to === 'pixel') {
+      return m2.mul(
+        this.diagram.spaceTransforms.glToPixel.matrix(),
+        this.lastDrawTransform.calcMatrix(this.transform.order.length),
+      );
+    }
+    if (from === 'local' && to === 'gl') {
+      return this.lastDrawTransform.calcMatrix(this.transform.order.length);
+    }
+    if (from === 'local' && to === 'diagram') {
+      return this.lastDrawTransform.calcMatrix(this.transform.order.length, -3);
+    }
+    if (from === 'pixel' && to === 'local') {
+      return m2.mul(
+        m2.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length)),
+        this.diagram.spaceTransforms.pixelToGL.matrix(),
+      );
+    }
+    if (from === 'gl' && to === 'local') {
+      return m2.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length));
+    }
+    if (from === 'diagram' && to === 'local') {
+      return m2.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length, -3));
+    }
+    return new Transform().identity();
+  }
+
+  pointFromSpaceToSpace(
+    point: TypeParsablePoint,
+    fromSpace: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel',
+    toSpace: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel',
+  ) {
+    return getPoint(point).transformBy(this.spaceTransform(fromSpace, toSpace));
+  }
+
+  getDiagramPositionInVertexSpace(diagramPosition: Point) {
+    return diagramPosition.transformBy(this.diagramSpaceToVertexSpaceTransformMatrix());
+  }
+
+  diagramSpaceToVertexSpaceTransformMatrix() {
+    return m2.inverse(this.lastDrawTransform.calcMatrix(0, -2));
+  }
+
+  diagramSpaceToLocalSpaceTransformMatrix() {
+    return m2.inverse(
+      this.lastDrawTransform.calcMatrix(this.transform.order.length, -2),
+    );
+  }
+
+  vertexSpaceToDiagramSpaceTransformMatrix() {
+    return this.lastDrawTransform.calcMatrix(0, -2);
+  }
+
+  localSpaceToDiagramSpaceTransformMatrix() {
+    return this.lastDrawTransform.calcMatrix(this.transform.order.length, -2);
+  }
+
+  glSpaceToVertexSpaceMatrix() {
+    return m2.inverse(this.lastDrawTransform.matrix());
+  }
+
+  vertexSpaceToGLSpaceMatrix() {
+    return m2.inverse(this.lastDrawTransform.matrix());
+  }
+
+
+  // A DrawingObject has borders, touchBorders and and holeBorders
+  //
+  // A DiagramElement's border is then the DrawingObject's border transformed by
+  // the element's transform
+  //
+  // Something can have borders, bounds and a boundingRect
+  // * Borders: the points defining the enclosing border
+  // * Bounds: The expanse of the object from a drawingSpace of 0, 0
+  // * BoundingRect: The rectangle enclosing all the border points
+  // * BoundingRectBorder: The perimeter of the boundingRect
+  getBorder(space: 'draw' | 'local' | 'diagram' | 'pixel') {
+  }
+
+  getBoundingRect(space: 'draw' | 'local' | 'diagram' | 'pixel') {
+    const border = this.getBorder(space);
+    return getBoundingRect(border);
+  }
+
+  // getBoundingRectBorder(space: 'draw' | 'local' | 'diagram' | 'pixel') {
+  // }
   // ***************************************************************
   // Boundaries
   // ***************************************************************
@@ -2884,66 +3022,6 @@ class DiagramElement {
       return (new Point(0, 0)).transformBy(this.lastDrawTransform.matrix());
     }
     return new Point(0, 0);
-  }
-
-  getPixelToVertexSpaceScale() {
-    const pixelToDiagram = this.diagramTransforms.pixelToDiagram.matrix();
-    const diagramToVertex = this.diagramSpaceToVertexSpaceTransformMatrix();
-    const scaleX = pixelToDiagram[0] * diagramToVertex[0];
-    const scaleY = pixelToDiagram[4] * diagramToVertex[4];
-    return new Point(scaleX, scaleY);
-  }
-
-  getVertexToPixelSpaceScale() {
-    const pixelToVertexSpaceScale = this.getPixelToVertexSpaceScale();
-    return new Point(
-      1 / pixelToVertexSpaceScale.x,
-      1 / pixelToVertexSpaceScale.y,
-    );
-  }
-
-  getDiagramPositionInVertexSpace(diagramPosition: Point) {
-    return diagramPosition.transformBy(this.diagramSpaceToVertexSpaceTransformMatrix());
-  }
-
-  diagramSpaceToVertexSpaceTransformMatrix() {
-    // Diagram transform will always be two
-    // const t = new Transform(this.lastDrawTransform.order.slice(
-    //   this.lastDrawElementTransformPosition.elementCount,
-    //   this.lastDrawTransform.order.length - 2,
-    // ));
-    return m2.inverse(this.lastDrawTransform.calcMatrix(0, -2));
-    // return m2.inverse(t.matrix());
-  }
-
-  diagramSpaceToLocalSpaceTransformMatrix() {
-    // Diagram transform will always be two
-    // const t = new Transform(this.lastDrawTransform.order.slice(
-    //   this.lastDrawElementTransformPosition.elementCount,
-    //   this.lastDrawTransform.order.length - 2,
-    // ));
-    // return m2.inverse(t.matrix());
-    return m2.inverse(
-      this.lastDrawTransform.calcMatrix(this.transform.order.length, -2),
-    );
-  }
-
-  vertexSpaceToDiagramSpaceTransformMatrix() {
-    return this.lastDrawTransform.calcMatrix(0, -2);
-    // const t = new Transform(this.lastDrawTransform.order.slice(
-    //   0,
-    //   this.lastDrawTransform.order.length - 2,
-    // ));
-    // return t.matrix();
-  }
-
-  localSpaceToDiagramSpaceTransformMatrix() {
-    return this.lastDrawTransform.calcMatrix(this.transform.order.length, -2);
-    // const t = new Transform(this.lastDrawTransform.order.slice(
-    //   0,
-    //   this.lastDrawTransform.order.length - 2,
-    // ));
-    // return t.matrix();
   }
 
   setDiagramPosition(diagramPosition: Point) {
