@@ -267,28 +267,28 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
 
 
-diagram.addElements([
-  {
-    name: 'c',
-    method: 'collection',
-    addElements: [
-      { name: 'p', method: 'polygon' },
-    ],
-  },
-]);
+// diagram.addElements([
+//   {
+//     name: 'c',
+//     method: 'collection',
+//     addElements: [
+//       { name: 'p', method: 'polygon' },
+//     ],
+//   },
+// ]);
 
-diagram.initialize();
+// diagram.initialize();
 
-const c = diagram.elements._c;
-const p = c._p;
-c.setPosition(1, 0);
-p.setPosition(1, 0);
-diagram.initialize();
-console.log(p.getPosition('vertex'));
-console.log(p.getPosition('local'));
-console.log(p.getPosition('diagram'));
-console.log(p.getPosition('gl'));
-console.log(p.lastDrawTransform)
+// const c = diagram.elements._c;
+// const p = c._p;
+// c.setPosition(1, 0);
+// p.setPosition(1, 0);
+// diagram.initialize();
+// console.log(p.getPosition('vertex'));
+// console.log(p.getPosition('local'));
+// console.log(p.getPosition('diagram'));
+// console.log(p.getPosition('gl'));
+// console.log(p.lastDrawTransform)
 
 // c.spaceTransforms.vertexToDiagram
 // c.spaceTransforms.vertexToLocal
@@ -296,3 +296,21 @@ console.log(p.lastDrawTransform)
 // c.spaceTransforms.diagramToVertex
 // c.spaceTransforms.diagramToLocal
 // c.spaceTransforms.localToVertex
+
+diagram.addElements([
+  {
+    name: 'grid',
+    method: 'grid',
+    options: {
+      bounds: new Fig.Rect(0, 0, 1, 1),
+      xNum: 3,
+      yNum: 3,
+      // line: {
+      //   linePrimitives: true,
+      //   lineNum: 20,
+      //   width: 0.1,
+      // },
+    },
+  }
+]);
+console.log(diagram.elements._grid)

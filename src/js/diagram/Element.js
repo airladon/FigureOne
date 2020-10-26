@@ -2754,6 +2754,8 @@ class DiagramElement {
     return rotation;
   }
 
+// space: 'diagram' | 'local' | 'drawing'
+
   /**
    * Return the diagram space position of a point in this element's
    * vertex space.
@@ -3730,7 +3732,7 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   getDiagramBoundaries() {
-    return this.drawingObject.getBoundaries(this.vertexToDiagramSpaceTransformMatrix());
+    return this.drawingObject.getBoundaries(this.vertexSpaceToDiagramSpaceTransformMatrix());
   }
 
   getGLBoundaries() {

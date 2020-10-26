@@ -37,7 +37,7 @@ const toPoints = (points) => {
   return p;
 };
 
-describe('Equation Functions - Box', () => {
+describe('Diagram Primitives - Grid', () => {
   let diagram;
   let makeGrid;
   beforeEach(() => {
@@ -50,8 +50,10 @@ describe('Equation Functions - Box', () => {
           bounds: new Rect(0, 0, 1, 1),
           xNum: 3,
           yNum: 3,
-          linePrimitives: true,
-          lineNum: 1,
+          line: {
+            linePrimitives: true,
+            lineNum: 1,
+          },
         },
       },
       baseStep: {
@@ -61,8 +63,10 @@ describe('Equation Functions - Box', () => {
           bounds: new Rect(0, 0, 1, 1),
           xStep: 0.5,
           yStep: 0.5,
-          linePrimitives: true,
-          lineNum: 1,
+          line: {
+            linePrimitives: true,
+            lineNum: 1,
+          },
         },
       },
       xOnly: {
@@ -72,8 +76,10 @@ describe('Equation Functions - Box', () => {
           bounds: new Rect(0, 0, 1, 1),
           xStep: 0.5,
           yNum: 0,
-          linePrimitives: true,
-          lineNum: 1,
+          line: {
+            linePrimitives: true,
+            lineNum: 1,
+          },
         },
       },
       yOnly: {
@@ -83,8 +89,10 @@ describe('Equation Functions - Box', () => {
           bounds: new Rect(0, 0, 1, 1),
           yStep: 0.5,
           xNum: 0,
-          linePrimitives: true,
-          lineNum: 1,
+          line: {
+            linePrimitives: true,
+            lineNum: 1,
+          },
         },
       },
       stepZero: {
@@ -94,8 +102,10 @@ describe('Equation Functions - Box', () => {
           bounds: new Rect(0, 0, 1, 1),
           xStep: 0,
           yStep: 0,
-          linePrimitives: true,
-          lineNum: 1,
+          line: {
+            linePrimitives: true,
+            lineNum: 1,
+          },
         },
       },
       stepLargerThanBounds: {
@@ -105,8 +115,10 @@ describe('Equation Functions - Box', () => {
           bounds: new Rect(0, 0, 1, 1),
           xStep: 2,
           yStep: 2,
-          linePrimitives: true,
-          lineNum: 1,
+          line: {
+            linePrimitives: true,
+            lineNum: 1,
+          },
         },
       },
       numOverrideStep: {
@@ -118,8 +130,10 @@ describe('Equation Functions - Box', () => {
           yStep: 0.1,
           xNum: 1,
           yNum: 1,
-          linePrimitives: true,
-          lineNum: 1,
+          line: {
+            linePrimitives: true,
+            lineNum: 1,
+          },
         },
       },
       defaultNum: {
@@ -127,8 +141,10 @@ describe('Equation Functions - Box', () => {
         method: 'grid',
         options: {
           bounds: new Rect(0, 0, 1, 1),
-          linePrimitives: true,
-          lineNum: 1,
+          line: {
+            linePrimitives: true,
+            lineNum: 1,
+          },
         },
       },
       oneNum: {
@@ -138,8 +154,10 @@ describe('Equation Functions - Box', () => {
           bounds: new Rect(0, 0, 1, 1),
           xNum: 1,
           yNum: 1,
-          linePrimitives: true,
-          lineNum: 1,
+          line: {
+            linePrimitives: true,
+            lineNum: 1,
+          },
         },
       },
       multiLine: {
@@ -149,9 +167,11 @@ describe('Equation Functions - Box', () => {
           bounds: new Rect(0, 0, 1, 1),
           xNum: 1,
           yNum: 1,
-          width: 0.1,
-          linePrimitives: true,
-          lineNum: 2,
+          line: {
+            width: 0.1,
+            linePrimitives: true,
+            lineNum: 2,
+          },
         },
       },
       triangles: {
@@ -161,9 +181,11 @@ describe('Equation Functions - Box', () => {
           bounds: new Rect(0, 0, 1, 1),
           xNum: 1,
           yNum: 1,
-          width: 0.1,
-          linePrimitives: true,
-          lineNum: 2,
+          line: {
+            linePrimitives: true,
+            width: 0.1,
+            lineNum: 2,
+          },
         },
       },
     };
