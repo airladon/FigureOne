@@ -1587,7 +1587,8 @@ class Diagram {
       previousPixelPoint.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
     const currentDiagramPoint =
       currentPixelPoint.transformBy(this.spaceTransforms.pixelToDiagram.matrix());
-    const m = element.diagramSpaceToLocalSpaceTransformMatrix();
+    // const m = element.diagramSpaceToLocalSpaceTransformMatrix();
+    const m = element.spaceTransformMatrix('diagram', 'local');
 
     const currentVertexSpacePoint = currentDiagramPoint.transformBy(m);
     const previousVertexSpacePoint = previousDiagramPoint.transformBy(m);

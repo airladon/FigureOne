@@ -1,4 +1,5 @@
-const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
+// const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
+const diagram = new Fig.Diagram({ limits: [1, 1, 4, 2]});
 
 // // const yValues = [0.8, 0.6, 0.4, 0.2, 0, -0.2, -0.4, -0.6]
 // // const names = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
@@ -268,25 +269,25 @@ diagram.addElements([
 
 
 diagram.addElements([
-  {
-    name: 'c',
-    method: 'collection',
-    addElements: [
-      {
-        name: 'a',
-        method: 'polygon',
-        options: {
-          radius: 1,
-          sides: 4,
-          transform: [['t', 1, 0]],
-        },
-      },
-    ],
-    options: {
-      transform: [['t', 1, 0]],
-    },
-  },
-]);
+          {
+            name: 'c',
+            method: 'collection',
+            addElements: [
+              {
+                name: 'a',
+                method: 'polygon',
+                options: {
+                  radius: 1,
+                  sides: 4,
+                  transform: [['t', 1, 0]],
+                },
+              },
+            ],
+            options: {
+              transform: [['s', 0.5, 0.5], ['t', 2, 0], ['r', Math.PI / 4]],
+            },
+          },
+        ]);
 
 const c = diagram.elements._c;
 const a = c._a;
@@ -309,7 +310,7 @@ diagram.initialize();
 
 // console.log(new Fig.Point(500, 500).transformBy(a.spaceTransform('pixel', 'vertex')))
 
-console.log(new Fig.Point(0, 0).transformBy(a.spaceTransform('local', 'diagram')))
+console.log(new Fig.Point(0, 0).transformBy(a.spaceTransform('diagram', 'vertex')))
 // c.spaceTransforms.vertexToDiagram
 // c.spaceTransforms.vertexToLocal
 // c.spaceTransforms.localToDiagram

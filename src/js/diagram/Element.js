@@ -2522,7 +2522,7 @@ class DiagramElement {
 
   getPixelToVertexSpaceScale() {
     const pixelToDiagram = this.diagramTransforms.pixelToDiagram.matrix();
-    const diagramToVertex = this.diagramSpaceToVertexSpaceTransformMatrix();
+    const diagramToVertex = this.spaceTransformMatrix(diagram, 'vertex');
     const scaleX = pixelToDiagram[0] * diagramToVertex[0];
     const scaleY = pixelToDiagram[4] * diagramToVertex[4];
     return new Point(scaleX, scaleY);
@@ -2536,7 +2536,7 @@ class DiagramElement {
     );
   }
 
-  spaceTransform(from: string, to: string) {
+  spaceTransformMatrix(from: string, to: string) {
     // All Vertex related conversions
     if (from === 'vertex' && to === 'pixel') {
       return m2.mul(
@@ -2594,6 +2594,28 @@ class DiagramElement {
     if (from === 'diagram' && to === 'local') {
       return m2.inverse(this.lastDrawTransform.calcMatrix(this.transform.order.length, -3));
     }
+
+    // Remaining Diagram related conversions
+    if (from === 'diagram' && to === 'gl') {
+      return this.diagram.spaceTransforms.diagramToGL.matrix();
+    }
+    if (from === 'diagram' && to === 'pixel') {
+      return this.diagram.spaceTransforms.diagramToPixel.matrix();
+    }
+    if (from === 'gl' && to === 'diagram') {
+      return this.diagram.spaceTransforms.glToDiagram.matrix();
+    }
+    if (from === 'pixel' && to === 'diagram') {
+      return this.diagram.spaceTransforms.pixelToDiagram.matrix();
+    }
+
+    // Remaining GL related conversions
+    if (from === 'gl' && to === 'pixel') {
+      return this.diagram.spaceTransforms.glToPixel.matrix();
+    }
+    if (from === 'pixel' && to === 'gl') {
+      return this.diagram.spaceTransforms.pixelToGL.matrix();
+    }
     return new Transform().identity();
   }
 
@@ -2602,38 +2624,38 @@ class DiagramElement {
     fromSpace: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel',
     toSpace: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel',
   ) {
-    return getPoint(point).transformBy(this.spaceTransform(fromSpace, toSpace));
+    return getPoint(point).transformBy(this.spaceTransformMatrix(fromSpace, toSpace));
   }
 
-  getDiagramPositionInVertexSpace(diagramPosition: Point) {
-    return diagramPosition.transformBy(this.diagramSpaceToVertexSpaceTransformMatrix());
-  }
+  // getDiagramPositionInVertexSpace(diagramPosition: Point) {
+  //   return diagramPosition.transformBy(this.diagramSpaceToVertexSpaceTransformMatrix());
+  // }
 
-  diagramSpaceToVertexSpaceTransformMatrix() {
-    return m2.inverse(this.lastDrawTransform.calcMatrix(0, -2));
-  }
+  // diagramSpaceToVertexSpaceTransformMatrix() {
+  //   return m2.inverse(this.lastDrawTransform.calcMatrix(0, -2));
+  // }
 
-  diagramSpaceToLocalSpaceTransformMatrix() {
-    return m2.inverse(
-      this.lastDrawTransform.calcMatrix(this.transform.order.length, -2),
-    );
-  }
+  // diagramSpaceToLocalSpaceTransformMatrix() {
+  //   return m2.inverse(
+  //     this.lastDrawTransform.calcMatrix(this.transform.order.length, -2),
+  //   );
+  // }
 
-  vertexSpaceToDiagramSpaceTransformMatrix() {
-    return this.lastDrawTransform.calcMatrix(0, -2);
-  }
+  // vertexSpaceToDiagramSpaceTransformMatrix() {
+  //   return this.lastDrawTransform.calcMatrix(0, -2);
+  // }
 
-  localSpaceToDiagramSpaceTransformMatrix() {
-    return this.lastDrawTransform.calcMatrix(this.transform.order.length, -2);
-  }
+  // localSpaceToDiagramSpaceTransformMatrix() {
+  //   return this.lastDrawTransform.calcMatrix(this.transform.order.length, -2);
+  // }
 
-  glSpaceToVertexSpaceMatrix() {
-    return m2.inverse(this.lastDrawTransform.matrix());
-  }
+  // glSpaceToVertexSpaceMatrix() {
+  //   return m2.inverse(this.lastDrawTransform.matrix());
+  // }
 
-  vertexSpaceToGLSpaceMatrix() {
-    return m2.inverse(this.lastDrawTransform.matrix());
-  }
+  // vertexSpaceToGLSpaceMatrix() {
+  //   return m2.inverse(this.lastDrawTransform.matrix());
+  // }
 
 
   // A DrawingObject has borders, touchBorders and and holeBorders
@@ -3065,7 +3087,8 @@ class DiagramElement {
     }
     const diagramPosition = element.getPosition('diagram');
     const local = diagramPosition.transformBy(
-      this.diagramSpaceToLocalSpaceTransformMatrix(),
+      // this.diagramSpaceToLocalSpaceTransformMatrix(),
+      this.spaceTransformMatrix('diagram', 'local'),
     );
     // const diagram = this.getPosition('diagram');
     // const local = this.getPosition('local');
@@ -3810,7 +3833,8 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
   getDiagramBoundaries() {
-    return this.drawingObject.getBoundaries(this.vertexSpaceToDiagramSpaceTransformMatrix());
+    // return this.drawingObject.getBoundaries(this.vertexSpaceToDiagramSpaceTransformMatrix());
+    return this.drawingObject.getBoundaries(this.spaceTransform('vertex', 'diagram'));
   }
 
   getGLBoundaries() {
