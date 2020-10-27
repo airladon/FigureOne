@@ -448,7 +448,7 @@ describe('Diagram', () => {
       expect(d.elements._a.transform.t().round(2)).toEqual(a3);
       expect(d.elements._c.transform.t().round(2)).toEqual(c3);
     });
-    test.only('Move A and C on Landscape Offset', () => {
+    test('Move A and C on Landscape Offset', () => {
       // canvasW=1000, canvasH=500, clipL=0, clipW=4, clipT=2, clipH=2
       const d = diagrams.landscapeOffset;
       // d.initialize();
