@@ -792,22 +792,48 @@ class TextObjectBase extends DrawingObject {
     ctx.restore();
   }
 
-  clear(contextIndex: number = 0) {
+  clear(contextIndex: number = 0, pulseTransforms: Array<Transform>) {
     const { ctx } = this.drawContext2D[contextIndex];
     const t = this.lastDrawTransform;
     ctx.save();
     ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);
+    // console.log('start clear');
     this.text.forEach((diagramText) => {
       const x = diagramText.locationAligned.x * this.scalingFactor;
       const y = diagramText.locationAligned.y * -this.scalingFactor;
       const width = diagramText.bounds.width * this.scalingFactor;
       const height = diagramText.bounds.height * this.scalingFactor;
       ctx.clearRect(
-        x - width * 0.5,
-        y + height + 0.25,
+        x - width * 1,
+        y + height * 1,
         width * 3,
-        -height * 2,
+        -height * 3,
       );
+      // console.log(x - width * 1.5,
+      //   y + height * 1.25,
+      //   width * 3,
+      //   -height * 2.5)
+      // if (pulseTransforms.length > 0) {
+      //   const points = [
+      //     new Point(x - width * 1.5, y + height * 1.25),
+      //     new Point(x - width * 1.5 + width * 3, y + height * 1.25),
+      //     new Point(x - width * 1.5 + width * 3, y + height * 1.25 - height * 2.5),
+      //     // new Point(x - width * 0.5, y + height + 0.25 - height * 2),
+      //   ];
+      //   // console.log('start')
+      //   pulseTransforms.forEach((pt) => {
+      //     // console.log(pt.matrix())
+      //     const p = points.map(p => p.transformBy(pt.matrix()));
+      //     console.log(pt)
+      //     console.log(p[0].x, p[0].y, p[1].x - p[0].x, -Math.abs(p[2].y - p[1].y));
+      //     ctx.clearRect(
+      //       p[0].x,
+      //       p[0].y,
+      //       p[1].x - p[0].x,
+      //       -Math.abs(p[2].y - p[1].y),
+      //     );
+      //   });
+      // }
     });
     ctx.restore();
   }

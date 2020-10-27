@@ -293,6 +293,16 @@ function sinusoid(
   return bias + mag * Math.sin(deltaTime * frequency * 2.0 * Math.PI + phaseOffset);
 }
 
+function sinusoidAbs(
+  deltaTime: number = 1,
+  frequency: number = 1,
+  bias: number = 0,
+  mag: number = 1,
+  phaseOffset: number = 0,
+) {
+  return Math.abs(bias + mag * Math.sin(deltaTime * frequency * 2.0 * Math.PI + phaseOffset));
+}
+
 // const animationPhase = (transform, time, rotDirection = 0, animationStyle = easeinout) => {
 //     return {
 //         transform: transform._dup(),
@@ -386,6 +396,7 @@ export {
   easeout,
   easein,
   sinusoid,
+  sinusoidAbs,
   linear,
   triangle,
   clipMag,

@@ -149,6 +149,11 @@ type OBJ_Pulse = {
   y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
   done?: ?(mixed) => void,
   progression?: string | (number) => number,
+  thick?: {
+    num?: number,
+    min?: number,
+    max?: number,
+  }
 };
 
 /**
@@ -421,12 +426,18 @@ class DiagramElement {
   };
 
   pulseDefault: string | ((?() => void) => void) | {
-    scale: null | number,
+    scale: null | number | Point,
     rotation: null | number,
-    translation: null | number,
+    translation: null | number | Point,
     duration: number,
     frequency: number,
+    // thick?: {
+    //   num: number,
+    //   min?: number | Point,
+    //   max?: number | Point,
+    // },
     num: number,
+    min: number | Point,
     xAlign: 'center' | 'left' | 'right' | number,
     yAlign: 'middle' | 'bottom' | 'top' | number,
     centerOn: null | DiagramElement | string,
@@ -581,7 +592,8 @@ class DiagramElement {
       xAlign: 'center',
       yAlign: 'middle',
       centerOn: this,
-      num: 0,
+      num: 1,
+      min: 1,
       space: 'diagram',
       done: null,
       progression: 'sinusoid',
@@ -868,6 +880,7 @@ class DiagramElement {
     this.fnMap.add('tools.math.easeinout', math.easeinout);
     this.fnMap.add('tools.math.linear', math.linear);
     this.fnMap.add('tools.math.sinusoid', math.sinusoid);
+    this.fnMap.add('tools.math.sinusoidAbs', math.sinusoidAbs);
     this.fnMap.add('tools.math.triangle', math.triangle);
     this.pulseSettings = {
       time: 1,
@@ -2142,6 +2155,7 @@ class DiagramElement {
           this.pulseSettings.B instanceof Array ? this.pulseSettings.B[i] : this.pulseSettings.B,
           this.pulseSettings.C instanceof Array ? this.pulseSettings.C[i] : this.pulseSettings.C,
         );
+        // console.log(this.pulseSettings.num, this.pulseSettings.B instanceof Array ? this.pulseSettings.B[i] : this.pulseSettings.B)
 
         // Use the pulse magnitude to get the current pulse transform
         const pTransform = this.fnMap.exec(
@@ -2253,7 +2267,7 @@ class DiagramElement {
     // const currentPosition = this.getPosition('local');
     // const delta = p.sub(currentPosition);
     const {
-      duration, scale, frequency, progression, when, num,
+      duration, scale, frequency, progression, when, num, min,
     } = options;
 
     let frequencyToUse = frequency;
@@ -2267,27 +2281,49 @@ class DiagramElement {
       frequencyToUse = 1;
     }
 
-    let bArray = [scale];
-    this.pulseSettings.num = num;
-    if (this.pulseSettings.num > 1) {
-      const b = Math.abs(1 - options.scale);
-      const bMax = b;
-      const bMin = -b;
-      const range = bMax - bMin;
-      const bStep = range / (this.pulseSettings.num - 1);
+    this.pulseSettings.num = 1;
+    const range = scale - min;
+    let bArray = [range / 2];
+    if (num > 1) {
+      // let { min } = options;
+      // if (min == null) {
+      //   min = Math.abs(1 / scale);
+      // }
+      // if (max == null) {
+      //   max = Math.abs(scale);
+      // }
+      this.pulseSettings.num = num;
+      // const b = Math.abs(1 - options.scale);
+      // const bMax = scale;
+      // const bMin = min;
+      // const range = bMax - bMin;
+      const bStep = range / (num - 1);
       bArray = [];
-      for (let i = 0; i < this.pulseSettings.num; i += 1) {
-        bArray.push(bMax - i * bStep);
+      for (let i = 0; i < num; i += 1) {
+        bArray.push(range / 2 - i * bStep);
       }
+      console.log(range)
+      console.log(bArray)
     }
-    console.log(bArray)
+    // if (this.pulseSettings.num > 1) {
+    //   const b = Math.abs(1 - options.scale);
+    //   const bMax = b;
+    //   const bMin = -b;
+    //   const range = bMax - bMin;
+    //   const bStep = range / (this.pulseSettings.num - 1);
+    //   bArray = [];
+    //   for (let i = 0; i < this.pulseSettings.num; i += 1) {
+    //     bArray.push(bMax - i * bStep);
+    //   }
+    // }
+    // console.log(bArray)
 
     this.pulseSettings.time = duration;
     this.pulseSettings.frequency = frequencyToUse;
-    this.pulseSettings.A = 1;                   // bias
+    this.pulseSettings.A = min + range / 2;                   // bias
     this.pulseSettings.B = bArray;
-    this.pulseSettings.C = 0;                   // phase offset
-    this.pulseSettings.num = 1;
+    this.pulseSettings.C = Math.PI / 2 * 3;                   // phase offset
+    // this.pulseSettings.num = 1;
     this.pulseSettings.delta = delta;
     // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
     this.pulseSettings.callback = done;
@@ -3351,7 +3387,7 @@ class DiagramElementPrimitive extends DiagramElement {
 
   clear(canvasIndex: number = 0) {
     if (this.drawingObject instanceof TextObjectBase) {
-      this.drawingObject.clear(canvasIndex);
+      this.drawingObject.clear(canvasIndex, this.pulseTransforms);
     }
   }
 

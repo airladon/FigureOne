@@ -213,7 +213,7 @@ diagram.addElement(
     method: 'equation',
     options: {
       color: [1, 0, 0, 1],
-      font: { size: 0.2 },
+      font: { size: 0.5 },
       elements: {
         a: 'a',
         b: 'b',
@@ -270,13 +270,19 @@ equation.setPosition([1, 0]);
 diagram.initialize();
 console.log()
 
-equation.pulse({
-  elements: ['a', 'c'],
+equation._a.pulse({
+  // elements: ['a', 'c'],
   // centerOn: diagram.elements._equation,
-  centerOn: [1.3, 0.05],
-  space: 'diagram',
+  // centerOn: [1.3, 0.05],
+  // space: 'diagram',
+  xAlign: 0.5,
+  yAlign: 0.5,
+  scale: 2,
   duration: 2,
-  // num: 4,
+  frequency: 0.5,
+  // thick: { num: 10, min: 0.5 },
+  num: 10,
+  min: 1,
 });
 // equation.setMoveBounds('diagram');
 
