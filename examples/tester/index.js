@@ -205,39 +205,39 @@ diagram.addElements([
 // // // Show the equation form
 // // diagram.getElement('eqn').showForm('b');
 // // diagram.initialize();
-// diagram.addElement(
-//   {
-//     name: 'equation',
-//     method: 'equation',
-//     options: {
-//       color: [1, 0, 0, 1],
-//       font: { size: 0.2 },
-//       elements: {
-//         a: 'a',
-//         b: 'b',
-//         c: 'c',
-//         v: { symbol: 'vinculum'},
-//         equals: ' = ',
-//         times: ' \u00D7 ',  // unicode times symbol
-//       },
-//       forms: {
-//         a: ['a', 'equals', 'b', 'times', 'c'],
-//         b: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
-//         bCurve: {
-//           content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
-//           animation: {
-//             translation: {
-//               a: { style: 'curve', direction: 'up', mag: 0.8 },
-//               b: { style: 'curve', direction: 'down', mag: 1.2 },
-//             },
-//           },
-//         },
-//       },
-//     },
-//   },
-// );
+diagram.addElement(
+  {
+    name: 'equation',
+    method: 'equation',
+    options: {
+      color: [1, 0, 0, 1],
+      font: { size: 0.2 },
+      elements: {
+        a: 'a',
+        b: 'b',
+        c: 'c',
+        v: { symbol: 'vinculum'},
+        equals: ' = ',
+        times: ' \u00D7 ',  // unicode times symbol
+      },
+      forms: {
+        a: ['a', 'equals', 'b', 'times', 'c'],
+        b: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+        bCurve: {
+          content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+          animation: {
+            translation: {
+              a: { style: 'curve', direction: 'up', mag: 0.8 },
+              b: { style: 'curve', direction: 'down', mag: 1.2 },
+            },
+          },
+        },
+      },
+    },
+  },
+);
 
-// const equation = diagram.getElement('equation')
+const equation = diagram.getElement('equation')
 // // equation.addForms({
 // //   bCurved: {
 // //     content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
@@ -251,19 +251,19 @@ diagram.addElements([
 // // });
 
 
-// equation.showForm('b');
-// // equation.goToForm({
-// //   form: 'bCurved',
-// //   animate: 'move',
-// //   duration: 2,
-// //   delay: 1,
-// // });
+equation.showForm('b');
+// equation.goToForm({
+//   form: 'bCurved',
+//   animate: 'move',
+//   duration: 2,
+//   delay: 1,
+// });
 
-// equation.touchInBoundingRect = true;
-// equation.setMovable();
-// diagram.initialize();
-// equation.setMoveBounds('diagram', true);
-// // equation.setMoveBounds('diagram');
+equation.touchInBoundingRect = true;
+equation.setMovable();
+diagram.initialize();
+equation.setMoveBounds('diagram', true);
+// equation.setMoveBounds('diagram');
 
 
 
@@ -331,44 +331,55 @@ diagram.addElements([
 // // c.spaceTransforms.diagramToVertex
 // // c.spaceTransforms.diagramToLocal
 // // c.spaceTransforms.localToVertex
-diagram.addElements([
-  {
-    name: 'c',
-    method: 'collection',
-    options: {
-      position: [0.5, 0],
-    },
-    addElements: [
-      {
-        name: 'c',
-        method: 'collection',
-        options: {
-          position: [0.5, 0],
-        },
-        addElements: [
-          {
-            name: 'p',
-            method: 'shapes.rectangle',
-            options: {
-              width: 1,
-              height: 1,
-              position: [0.5, 0],
-            },
-          },
-        ],
-      },
-    ],
-  },
-]);
-diagram.initialize();
-console.log(diagram.elements._c)
-const c = diagram.getElement('c');
-const cc = diagram.getElement('c.c');
-const p = diagram.getElement('c.c.p');
 
-console.log(p.getPosition('diagram'))
-console.log(p.getBoundingRect('diagram'))
-console.log(p.getBoundingRect('local'))
-console.log(cc.getBoundingRect('diagram'))
-console.log(cc.getBoundingRect('local'))
-console.log(c.getBoundingRect('local'))
+
+// diagram.addElements([
+//   {
+//     name: 'c',
+//     method: 'collection',
+//     options: {
+//       position: [0.5, 0],
+//     },
+//     addElements: [
+//       {
+//         name: 'c',
+//         method: 'collection',
+//         options: {
+//           position: [0.5, 0],
+//         },
+//         addElements: [
+//           {
+//             name: 'p',
+//             method: 'shapes.rectangle',
+//             options: {
+//               width: 1,
+//               height: 1,
+//               position: [0.5, 0],
+//             },
+//           },
+//         ],
+//       },
+//     ],
+//   },
+// ]);
+// const p = diagram.getElement('c.c.p')
+
+// diagram.addElements([
+//   {
+//     name: 'r',
+//     method: 'shapes.rectangle',
+//     options: {
+//       width: 1,
+//       height: 1,
+//       // position: [0.5, 0],
+//     },
+//     mods: {
+//       move: { bounds: 'diagram' },
+//     },
+//   },
+// ]);
+// const r = diagram.getElement('r');
+// r.setRotation(Math.PI / 4)
+// r.setMovable();
+// diagram.initialize();
+// console.log(r)

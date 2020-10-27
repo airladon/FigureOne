@@ -187,9 +187,11 @@ type DiagramElementMoveFreely = {
  * @property {DiagramElement | null} element
  */
 type DiagramElementMove = {
-  bounds: TransformBounds,
+  bounds: TransformBounds | 'none' | 'diagram',
+  // boundsToUse: TransformBounds,
+  sizeInBounds: boolean,
   // limits: TransformBounds,
-  includeSize: boolean,
+  // includeSize: boolean,
   transformClip: string | (?(Transform) => Transform);
   maxVelocity: TypeTransformValue;
   freely: DiagramElementMoveFreely,
@@ -810,7 +812,9 @@ class DiagramElement {
     this.move = {
       // maxTransform: this.transform.constant(1000),
       // minTransform: this.transform.constant(-1000),
-      bounds: new TransformBounds(this.transform),
+      bounds: 'none',
+      sizeInBounds: true,
+      // boundsToUse: new TransformBounds(this.transform),
       // bounds: { scale: null, rotation: null, position: null },
       // boundary: null,
       maxVelocity: 5,
@@ -908,16 +912,17 @@ class DiagramElement {
   //   }
   // }
 
+
   setProperties(properties: Object, exceptIn: Array<string> | string = []) {
     let except = exceptIn;
     if (properties.move != null) {
-      if (properties.move.bounds != null && properties.move.bounds !== 'diagram') {
+      const cleanBounds = (key) => {
         if (typeof except === 'string') {
-          except = [except, 'move.bounds'];
+          except = [except, `move.${key}`];
         } else {
-          except.push('move.bounds');
+          except.push(`move.${key}`);
         }
-        const bounds = getBounds(properties.move.bounds, 'transform', this.transform);
+        const bounds = getBounds(properties.move[key], 'transform', this.transform);
         if (bounds instanceof TransformBounds) {
           for (let i = 0; i < bounds.boundary.length; i += 1) {
             const bound = bounds.boundary[i];
@@ -935,8 +940,18 @@ class DiagramElement {
               });
             }
           }
-          this.move.bounds = bounds;
+          this.move[key] = bounds;
         }
+      };
+      // if (properties.move.boundsToUse != null) {
+      //   cleanBounds('boundsToUse');
+      // }
+      if (
+        properties.move.bounds != null
+        && properties.move.bounds !== 'diagram'
+        && properties.move.bounds !== 'none'
+      ) {
+        cleanBounds('bounds');
       }
     }
     joinObjectsWithOptions({
@@ -1596,10 +1611,14 @@ class DiagramElement {
         this.transform = clip;
       }
     } else {
-      this.checkMoveBounds();
-      if (this.move.bounds instanceof TransformBounds) {
-        this.transform = this.move.bounds.clip(transform);
+      // this.checkMoveBounds();
+      const bounds = this.getMoveBounds();
+      // console.log(bounds)
+      if (bounds !== 'none') {
+      // if (this.move.bounds instanceof TransformBounds) {
+        this.transform = bounds.clip(transform);
       }
+      // }
     }
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
@@ -1896,8 +1915,9 @@ class DiagramElement {
     // } else {
     //   ({ bounds } = this.move);
     // }
-    this.checkMoveBounds();
-    const { bounds } = this.move;
+    // this.checkMoveBounds();
+    // const { bounds } = this.move;
+    const bounds = this.getMoveBounds();
 
     const next = this.transform.decelerate(
       this.state.movement.velocity,
@@ -1914,13 +1934,13 @@ class DiagramElement {
     };
   }
 
-  getMoveBoundsRelativeToSize() {
-    if (this.move.includeSizeInBounds) {
-      const size = this.getBoundingRect('diagram');
-      //asdfasdf
-    }
-    return this.move.bound
-  }
+  // getMoveBoundsRelativeToSize() {
+  //   if (this.move.includeSizeInBounds) {
+  //     const size = this.getBoundingRect('diagram');
+  //     //asdfasdf
+  //   }
+  //   return this.move.bound
+  // }
 
   updateLastDrawTransform() {
     const { parentCount } = this.lastDrawElementTransformPosition;
@@ -1973,7 +1993,10 @@ class DiagramElement {
   moved(newTransform: Transform): void {
     const prevTransform = this.transform._dup();
     this.setTransform(newTransform._dup());
-    const tBounds = this.move.bounds.getTranslation();
+    let tBounds;
+    if (this.move.bounds != null && this.move.bounds !== 'none') {
+      tBounds = this.move.bounds.getTranslation();
+    }
     // In a finite rect bounds, if we calculate the velocity from the clipped
     // transform, the object will skip along the wall if the user lets the
     // object go after intersecting with the wall
@@ -2982,11 +3005,15 @@ class DiagramElement {
 
   checkMoveBounds() {
     if (this.move.bounds === 'diagram') {
-      this.setMoveBounds('diagram', true);
+      this.setMoveBounds('diagram');
+      return;
+    }
+    if (this.move.bounds === 'none' || this.move.bounds === null) {
+      this.setMoveBounds('none');
       return;
     }
     if (!(this.move.bounds instanceof TransformBounds)) {
-      this.setMoveBounds();
+      this.setMoveBounds(this.move.bounds);
     }
     // if (!(this.move.bounds instanceof TransformBounds)) {
     //   bounds = new TransformBounds(this.transform);
@@ -2996,20 +3023,26 @@ class DiagramElement {
   }
 
   setMoveBounds(
-    boundaryIn: TransformBounds | TypeTransformBoundsDefinition | 'diagram' | null = null,
-    includeSize: boolean = false,
+    boundaryIn: TransformBounds | TypeTransformBoundsDefinition | 'diagram' | 'none' = 'none',
+    // includeSize: boolean = false,
   ): void {
-    if (!this.isMovable) {
-      return;
-    }
+      // if (!this.isMovable) {
+      //   return;
+      // }
 
     if (boundaryIn instanceof TransformBounds) {
       this.move.bounds = boundaryIn;
-      // return;
-    } else if (boundaryIn === null) {
-      this.move.bounds = new TransformBounds(this.transform);
-      // return;
-    } else if (boundaryIn === 'diagram') {
+      return;
+    }
+
+    if (boundaryIn === null || boundaryIn === 'none') {
+      // this.move.bounds = new TransformBounds(this.transform);
+      this.move.bounds = 'none';
+      return;
+    }
+
+    // console.log(boundaryIn)
+    if (boundaryIn === 'diagram') {
       if (!(this.move.bounds instanceof TransformBounds)) {
         this.move.bounds = new TransformBounds(this.transform);
       }
@@ -3019,75 +3052,46 @@ class DiagramElement {
         right: this.diagramLimits.right,
         top: this.diagramLimits.top,
       }));
-      // const rect = this.getRelativeBoundingRect('diagram');
-      // this.move.bounds.updateTranslation(new RectBounds({
-      //   left: this.diagramLimits.left - rect.left,
-      //   bottom: this.diagramLimits.bottom - rect.bottom,
-      //   right: this.diagramLimits.right - rect.right,
-      //   top: this.diagramLimits.top - rect.top,
-      // }));
-      // return;
-    } else {
-      const bounds = getBounds(boundaryIn, 'transform', this.transform);
-      if (bounds instanceof TransformBounds) {
-        this.move.bounds = bounds;
-      }
+      return;
     }
-    if (includeSize) {
-      const rect = this.getRelativeBoundingRect('diagram');
-      const b = this.move.bounds.getTranslation();
+
+    const bounds = getBounds(boundaryIn, 'transform', this.transform);
+    if (bounds instanceof TransformBounds) {
+      this.move.bounds = bounds;
+    }
+    // if (includeSize) {
+    //   const rect = this.getRelativeBoundingRect('diagram');
+    //   const b = this.move.bounds.getTranslation();
+    //   if (b != null) {
+    //     b.boundary.left -= rect.left;
+    //     b.boundary.bottom -= rect.bottom;
+    //     b.boundary.right -= rect.right;
+    //     b.boundary.top -= rect.top;
+    //     this.move.bounds.updateTranslation(b);
+    //   }
+    // }
+  }
+
+  getMoveBounds() {
+    this.checkMoveBounds();
+    if (this.move.bounds === 'none') {
+      return this.move.bounds;
+    }
+    if (this.move.sizeInBounds) {
+      const rect = this.getRelativeBoundingRect('local');
+      // const p = this.getPosition('local');
+      const dup = this.move.bounds._dup();
+      const b = dup.getTranslation();
       if (b != null) {
         b.boundary.left -= rect.left;
         b.boundary.bottom -= rect.bottom;
         b.boundary.right -= rect.right;
         b.boundary.top -= rect.top;
-        this.move.bounds.updateTranslation(b);
+        dup.updateTranslation(b);
+        return dup;
       }
-      // this.move.bounds.updateTranslation(new RectBounds({
-      //   left: this.diagramLimits.left - rect.left,
-      //   bottom: this.diagramLimits.bottom - rect.bottom,
-      //   right: this.diagramLimits.right - rect.right,
-      //   top: this.diagramLimits.top - rect.top,
-      // }));
     }
-    // if (window.asdf) {
-    //   debugger;
-    // }
-    // let boundary = boundaryIn;
-    // if (boundaryIn == null) {
-    //   if (
-    //     this.move.bounds === 'diagram'
-    //     || Array.isArray(this.move.bounds)
-    //     || (this.move.bounds instanceof Bounds && !(this.move.bounds instanceof TransformBounds))
-    //     // || this.move.bounds instanceof Rect,
-    //   ) {
-    //   // if (boundaryIn !== null) {
-    //     boundary = this.move.bounds;
-    //     this.move.bounds = new TransformBounds(this.transform);
-    //   } else {
-    //     this.move.bounds.updateTranslation(null);
-    //     return;
-    //   }
-    // }
-    // if (boundary == null) {
-    //   return;
-    // }
-
-    // if (Array.isArray(boundary)) {
-    //   const [left, bottom, width, height] = boundary;
-    //   boundary = new Rect(left, bottom, width, height);
-    // } else if (boundary === 'diagram') {
-    //   boundary = this.diagramLimits;
-    // }
-    // const rect = this.getRelativeBoundingRect('diagram');
-    // if (this.move.bounds instanceof TransformBounds) {
-    //   this.move.bounds.updateTranslation(new RectBounds({
-    //     left: boundary.left - rect.left,
-    //     bottom: boundary.bottom - rect.bottom,
-    //     right: boundary.right - rect.right,
-    //     top: boundary.top - rect.top,
-    //   }));
-    // }
+    return this.move.bounds;
   }
 
   /**

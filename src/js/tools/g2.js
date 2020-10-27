@@ -3496,7 +3496,7 @@ class Transform {
     velocity: Transform,
     decelerationIn: TypeTransformValue,
     deltaTime: number | null,
-    boundsIn: TypeTransformBounds | TypeTransformBoundsDefinition,
+    boundsIn: TypeTransformBounds | TypeTransformBoundsDefinition | 'none',
     bounceLossIn: TypeTransformValue,
     zeroVelocityThresholdIn: TypeTransformValue,
     precision: number = 8,
@@ -3507,6 +3507,8 @@ class Transform {
     let bounds;
     if (boundsIn instanceof TransformBounds) {
       bounds = boundsIn;
+    } else if (boundsIn === 'none'){
+      bounds = new TransformBounds(this);
     } else {
       bounds = new TransformBounds(this, boundsIn);
     }
