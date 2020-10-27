@@ -2141,27 +2141,6 @@ class DiagramElement {
     }
   }
 
-  // stopMovingFreelyLegacy(result: boolean = true): void {
-  //   // console.trace()
-  //   // console.log('was moving freely', this.name, this.state.isMovingFreely)
-  //   let wasMovingFreely = false;
-  //   if (this.state.isMovingFreely === true) {
-  //     wasMovingFreely = true;
-  //   }
-  //   this.state.isMovingFreely = false;
-  //   this.state.movement.previousTime = null;
-  //   if (this.move.freely.callback) {
-  //     this.fnMap.exec(this.move.freely.callback, result);
-  //     this.move.freely.callback = null;
-  //   }
-  //   if (wasMovingFreely) {
-  //     // console.log('stop moving freely callback', this.animationFinishedCallback)
-  //     this.fnMap.exec(this.animationFinishedCallback);
-  //     // this.subscriptions.publish('animationFinished', ['movingFreely']);
-  //     this.animationFinished('movingFreely');
-  //   }
-  // }
-
   getRemainingPulseTime(now: number = new GlobalAnimation().now() / 1000) {
     if (this.state.isPulsing === false) {
       return 0;
@@ -2243,27 +2222,6 @@ class DiagramElement {
     delta: TypeParsablePoint = new Point(0, 0),
     progression: string | (number) => number = 'tools.math.sinusoid',
   ) {
-    // this.pulseSettings.time = time;
-    // if (frequency === 0 && time === 0) {
-    //   this.pulseSettings.frequency = 1;
-    // }
-    // if (frequency !== 0) {
-    //   this.pulseSettings.frequency = frequency;
-    // }
-    // if (time !== 0 && frequency === 0) {
-    //   this.pulseSettings.frequency = 1 / (time * 2);
-    // }
-
-    // this.pulseSettings.A = 1;
-    // this.pulseSettings.B = scale - 1;
-    // this.pulseSettings.C = 0;
-    // this.pulseSettings.num = 1;
-    // this.pulseSettings.delta = getPoint(delta);
-    // // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
-    // this.pulseSettings.callback = callback;
-    // this.pulseSettings.progression = progression;
-    // this.startPulsing();
-
     this.pulseScale({
       duration: time,
       scale,
@@ -2680,34 +2638,6 @@ class DiagramElement {
     return getBoundingRect(transformedBorder);
   }
 
-  // /**
-  //  * Get bounding rect of element.
-  //  *
-  //  * An element may have one or more closed boundaries. The bounding rect
-  //  * is the rectangle that encapsulates all boundaries.
-  //  *
-  //  * @param {'local' | 'diagram' | 'vertex' | 'gl'} space bounding rect relative
-  //  * to a space
-  //  * @return {Rect} bounding rect of element
-  //  */
-  // getBoundingRect(
-  //   space: 'local' | 'diagram' | 'vertex' | 'gl' = 'local',
-  // ) {
-  //   if (space === 'local') {
-  //     return this.getLocalBoundingRect();
-  //   }
-  //   if (space === 'diagram') {
-  //     return this.getDiagramBoundingRect();
-  //   }
-  //   if (space === 'vertex') {
-  //     return this.getVertexSpaceBoundingRect();
-  //   }
-  //   if (space === 'gl') {
-  //     return this.getGLBoundingRect();
-  //   }
-  //   return new Rect(0, 0, 1, 1);
-  // }
-
   // ***************************************************************
   // Size
   // ***************************************************************
@@ -2724,48 +2654,6 @@ class DiagramElement {
       rect.height,
     );
   }
-
-  // eslint-disable-next-line class-methods-use-this
-  // getRelativeGLBoundingRect() {
-  //   return new Rect(0, 0, 1, 1);
-  // }
-
-  // getRelativeDiagramBoundingRect() {
-  //   const gl = this.getRelativeGLBoundingRect();
-  //   const glSpace = {
-  //     x: { bottomLeft: -1, width: 2 },
-  //     y: { bottomLeft: -1, height: 2 },
-  //   };
-  //   const diagramSpace = {
-  //     x: {
-  //       bottomLeft: this.diagramLimits.left,
-  //       width: this.diagramLimits.width,
-  //     },
-  //     y: {
-  //       bottomLeft: this.diagramLimits.bottom,
-  //       height: this.diagramLimits.height,
-  //     },
-  //   };
-  //   const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
-  //   const bottomLeft = new Point(gl.left, gl.bottom)
-  //     .transformBy(glToDiagramSpace.matrix());
-  //   const topRight = new Point(gl.right, gl.top)
-  //     .transformBy(glToDiagramSpace.matrix());
-  //   return new Rect(
-  //     bottomLeft.x, bottomLeft.y,
-  //     topRight.x - bottomLeft.x, topRight.y - bottomLeft.y,
-  //   );
-  //   // const glToDiagramScale = new Point(
-  //   //   this.diagramLimits.width / 2,
-  //   //   this.diagramLimits.height / 2,
-  //   // );
-  //   // return new Rect(
-  //   //   gl.left * glToDiagramScale.x,
-  //   //   gl.bottom * glToDiagramScale.y,
-  //   //   gl.width * glToDiagramScale.x,
-  //   //   gl.height * glToDiagramScale.y,
-  //   // );
-  // }
 
   getCenterDiagramPosition(border: Array<Array<Point>> = this.border) {
     const rect = this.getBoundingRect('diagram', border);
@@ -2810,49 +2698,6 @@ class DiagramElement {
     }
     return rotation;
   }
-
-// space: 'diagram' | 'local' | 'drawing'
-
-  // /**
-  //  * Return the diagram space position of a point in this element's
-  //  * vertex space.
-  //  *
-  //  * @param {Point} vertexSpacePoint
-  //  * @return {Point} diagram space equivalent point
-  //  */
-  // getVertexSpaceDiagramPosition(vertexSpacePoint: Point) {
-  //   const location = vertexSpacePoint.transformBy(this.lastDrawTransform.matrix());
-  //   const glSpace = {
-  //     x: { bottomLeft: -1, width: 2 },
-  //     y: { bottomLeft: -1, height: 2 },
-  //   };
-  //   const diagramSpace = {
-  //     x: {
-  //       bottomLeft: this.diagramLimits.left,
-  //       width: this.diagramLimits.width,
-  //     },
-  //     y: {
-  //       bottomLeft: this.diagramLimits.bottom,
-  //       height: this.diagramLimits.height,
-  //     },
-  //   };
-  //   const glToDiagramSpace = spaceToSpaceTransform(glSpace, diagramSpace);
-  //   return location.transformBy(glToDiagramSpace.matrix());
-  // }
-
-  // getLocalPosition() {
-  //   const t = this.transform.t();
-  //   let position = new Point(0, 0);
-  //   if (t != null) {
-  //     position = t._dup();
-  //   }
-  //   return position;
-  // }
-
-  // // eslint-disable-next-line class-methods-use-this
-  // getGLPosition() {
-  //   return new Point(0, 0);
-  // }
 
   // /**
   //  * Get position relative to bounding rect.
@@ -2921,36 +2766,7 @@ class DiagramElement {
     if (space === 'vertex') {
       return new Point(0, 0);
     }
-    // if (space === 'local') {
-    //   const t = this.transform.t();
-    //   let position = new Point(0, 0);
-    //   if (t != null) {
-    //     position = t._dup();
-    //   }
-    //   return position;
-    // }
     return new Point(0, 0).transformBy(this.spaceTransformMatrix('vertex', space));
-    // if (space === 'local') {
-    //   // return this.getLocalPosition();
-    //   const t = this.transform.t();
-    //   let position = new Point(0, 0);
-    //   if (t != null) {
-    //     position = t._dup();
-    //   }
-    //   return position;
-    // }
-    // if (space === 'diagram') {
-    //   // Note, this should be 0,0 as the current transform's translation will
-    //   // be included in getVertexSpaceDiagramPosition
-    //   // return this.getVertexSpaceDiagramPosition(new Point(0, 0));
-    //   return new Point(0, 0).transformBy(this.spaceTransformMatrix('vertex', 'diagram'));
-    // }
-    // if (space === 'gl') {
-    //   // Note, this should be 0,0 as the current transform's translation will
-    //   // be included in getVertexSpaceDiagramPosition
-    //   return (new Point(0, 0)).transformBy(this.lastDrawTransform.matrix());
-    // }
-    // return new Point(0, 0);
   }
 
   setDiagramPosition(diagramPosition: Point) {
@@ -3704,44 +3520,6 @@ class DiagramElementPrimitive extends DiagramElement {
     this.checkMoveBounds();
   }
 
-  // isMoving(): boolean {
-  //   if (
-  //     // this.state.isAnimating
-  //     this.state.isMovingFreely
-  //     || this.state.isBeingMoved
-  //     || this.state.isPulsing
-  //     // || this.state.isAnimatingColor
-  //     // || this.state.isAnimatingCustom
-  //     || this.animations.willStartAnimating()
-  //   ) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
-  // setupWebGLBuffers(newWebgl: WebGLInstance) {
-  //   const { drawingObject } = this;
-  //   if (drawingObject instanceof VertexObject) {
-  //     const oldWebgl = drawingObject.webgl;
-  //     drawingObject.webgl = newWebgl;
-  //     drawingObject.gl = newWebgl.gl;
-  //     drawingObject.setupBuffer();
-  //     drawingObject.webgl = oldWebgl;
-  //     drawingObject.gl = oldWebgl.gl;
-  //   }
-  // }
-
-  // changeWebGLInstance(newWebgl: WebGLInstance) {
-  //   let oldWebgl;
-  //   const { drawingObject } = this;
-  //   if (drawingObject instanceof VertexObject) {
-  //     oldWebgl = drawingObject.webgl;
-  //     drawingObject.webgl = newWebgl;
-  //     drawingObject.gl = newWebgl.gl;
-  //   }
-  //   return oldWebgl;
-  // }
-
   increaseBorderSize(
     xMultiplierOrPoint: number | Point = 1,
     yMultiplier: number | null = null,
@@ -4096,31 +3874,6 @@ class DiagramElementCollection extends DiagramElement {
       }
     }
   }
-
-  // drawNew() {
-  //   if (this.isShown) {
-  //     for (let k = 0; k < this.pulseTransforms.length; k += 1) {
-  //       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-  //         this.elements[this.drawOrder[i]].draw(this.pulseTransforms[k], now, canvasIndex);
-  //       }
-  //     }
-  //     if (this.unrenderNextDraw) {
-  //       this.clearRender();
-  //       this.unrenderNextDraw = false;
-  //     }
-  //     if (this.renderedOnNextDraw) {
-  //       this.isRenderedAsImage = true;
-  //       this.renderedOnNextDraw = false;
-  //     }
-  //     // this.redrawElements.forEach((element) => {
-  //     //   element.draw(element.getParentLastDrawTransform(), now);
-  //     // })
-  //     if (this.afterDrawCallback != null) {
-  //       // this.afterDrawCallback(now);
-  //       this.fnMap.exec(this.afterDrawCallback, now);
-  //     }
-  //   }
-  // }
 
   exec(
     execFunctionAndArgs: string | Array<string | Object>,
@@ -4695,29 +4448,6 @@ class DiagramElementCollection extends DiagramElement {
     this.exec('undim', elementsToHighlight);
   }
 
-  // // Deprecated
-  // getDiagramBoundingRect(elementsToBound: ?Array<string | DiagramElement> = null) {
-  //   if (elementsToBound == null) {
-  //     return super.getDiagramBoundingRect();
-  //   }
-  //   const points: Array<Point> = [];
-  //   elementsToBound.forEach((element) => {
-  //     let e;
-  //     if (typeof element === 'string') {
-  //       e = this.getElement(element);
-  //     } else {
-  //       e = element;
-  //     }
-  //     if (e == null) {
-  //       return;
-  //     }
-  //     const bound = e.getDiagramBoundingRect();
-  //     points.push(new Point(bound.left, bound.bottom));
-  //     points.push(new Point(bound.right, bound.top));
-  //   });
-  //   return getBoundingRect(points);
-  // }
-
   setOpacity(opacity: number) {
     // for (let i = 0; i < this.drawOrder.length; i += 1) {
     //   const element = this.elements[this.drawOrder[i]];
@@ -4764,26 +4494,6 @@ class DiagramElementCollection extends DiagramElement {
       }
     }
   }
-
-  // animateTo(
-  //   elements: {
-  //     transform?: Transform,
-  //     color?: Array<number>,
-  //     show?: boolean,
-  //   },
-  //   options: {
-  //     delay?: number,
-  //     time?: {
-  //       fadeIn?: number,
-  //       move?: number,
-  //       fadeOut?: number,
-  //     },
-  //     order: Array<Array<'fadeIn' | 'fadeOut' | 'move'>>,
-  //     rotDirection?: number,
-  //     callback?: ?(string | ((?mixed) => void)),
-  //     easeFunction: string | ((number) => number),
-  //   }
-  // ) {
 
   // }
   animateToTransforms(
