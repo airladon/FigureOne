@@ -266,14 +266,17 @@ equation.setMovable();
 equation.setMoveBounds('diagram');
 // equation.setRotation(Math.PI / 3);
 console.log(equation.move.bounds)
+equation.setPosition([1, 0]);
 diagram.initialize();
 console.log()
 
 equation.pulse({
-  // centerOn: diagram.elements._a,
-  centerOn: [0.3, 0],
+  elements: ['a', 'c'],
+  // centerOn: diagram.elements._equation,
+  centerOn: [1.3, 0.05],
   space: 'diagram',
   duration: 2,
+  // num: 4,
 });
 // equation.setMoveBounds('diagram');
 

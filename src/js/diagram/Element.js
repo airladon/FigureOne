@@ -140,13 +140,13 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
  * how the scale should progress over time (`sinusoid`)
  */
 type OBJ_Pulse = {
-  x?: 'left' | 'center' | 'right' | 'origin' | number,
-  y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
+  scale?: number,
+  duration?: number,
+  frequency?: number,
   centerOn?: null | DiagramElement | TypeParsablePoint,
   space?: 'diagram' | 'gl' | 'local' | 'draw',
-  frequency?: number,
-  duration?: number,
-  scale?: number,
+  x?: 'left' | 'center' | 'right' | 'origin' | number,
+  y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
   done?: ?(mixed) => void,
   progression?: string | (number) => number,
 };
@@ -421,9 +421,19 @@ class DiagramElement {
   };
 
   pulseDefault: string | ((?() => void) => void) | {
-    scale: number,
-    time: number,
+    scale: null | number,
+    rotation: null | number,
+    translation: null | number,
+    duration: number,
     frequency: number,
+    num: number,
+    xAlign: 'center' | 'left' | 'right' | number,
+    yAlign: 'middle' | 'bottom' | 'top' | number,
+    centerOn: null | DiagramElement | string,
+    space: TypeSpace,
+    done: null | () => void,
+    progression: string | (number) => number,
+    when: TypeWhen,
   };
 
 
@@ -563,9 +573,19 @@ class DiagramElement {
     //   this.pulseScaleNow(1, 2, 0, callback);
     // };
     this.pulseDefault = {
-      frequency: 0,
       scale: 2,
+      rotation: null,
+      translation: null,
       duration: 1,
+      frequency: 0,
+      xAlign: 'center',
+      yAlign: 'middle',
+      centerOn: this,
+      num: 0,
+      space: 'diagram',
+      done: null,
+      progression: 'sinusoid',
+      when: 'syncNow',
     };
     // this.isPaused = false;
     // this.copies = [];
@@ -1434,78 +1454,6 @@ class DiagramElement {
   //   }
   // }
 
-  /**
-   * Pulse element
-   *
-   * Either pass in a callback, or an options object defining the pulse and
-   * callback.
-   *
-   * @param {null | OBJ_Pulse | () => void} optionsOrDone
-   */
-  pulse(optionsOrDone: null | OBJ_Pulse | () => void = null) {
-    const defaultPulseOptions = {
-      frequency: 0,
-      time: 1,
-      scale: 2,
-    };
-    if (
-      typeof this.pulseDefault !== 'function'
-      && typeof this.pulseDefault !== 'string'
-    ) {
-      defaultPulseOptions.frequency = this.pulseDefault.frequency;
-      defaultPulseOptions.duration = this.pulseDefault.duration;
-      defaultPulseOptions.scale = this.pulseDefault.scale;
-    }
-    const defaultOptions = {
-      xAlign: 'center',
-      yAlign: 'middle',
-      space: 'diagram',
-      centerOn: null,
-      frequency: defaultPulseOptions.frequency,
-      duration: defaultPulseOptions.duration,
-      scale: defaultPulseOptions.scale,
-      done: null,
-      progression: 'sinusoid',
-    };
-    let done;
-    let options = defaultOptions;
-
-    if (typeof optionsOrDone === 'function' || typeof optionsOrDone === 'string') {
-      options = defaultOptions;
-      done = optionsOrDone;
-    } else if (optionsOrDone == null) {
-      options = defaultOptions;
-      done = null;
-    } else {
-      options = joinObjects({}, defaultOptions, optionsOrDone);
-      ({ done } = options);
-    }
-    if (options.progression === 'sinusoid') {
-      options.progression = 'tools.math.sinusoid';
-    } else if (options.progression === 'triangle') {
-      options.progression = 'tools.math.triangle';
-    }
-    if (
-      typeof this.pulseDefault === 'function'
-      || typeof this.pulseDefault === 'string'
-    ) {
-      this.fnMap.exec(this.pulseDefault, done);
-    } else {
-      // const { frequency, time, scale } = this.pulseDefault;
-      // this.pulseScaleNow(time, scale, frequency, done);
-      this.pulseScaleRelativeTo(
-        options.centerOn,
-        options.xAlign,
-        options.yAlign,
-        options.space,
-        options.duration,
-        options.scale,
-        options.frequency,
-        done,
-        options.progression,
-      );
-    }
-  }
 
   // pulseLegacy(done: ?(mixed) => void = null) {
   //   if (
@@ -2216,6 +2164,137 @@ class DiagramElement {
     return pulseTransforms;
   }
 
+  /**
+   * Pulse element
+   *
+   * Either pass in a callback, or an options object defining the pulse and
+   * callback.
+   *
+   * @param {null | OBJ_Pulse | () => void} optionsOrDone
+   */
+  pulse(optionsOrDone: null | OBJ_Pulse | () => void = null) {
+    // const defaultPulseOptions = {
+    //   frequency: 0,
+    //   time: 1,
+    //   scale: 2,
+    // };
+    // if (
+    //   typeof this.pulseDefault !== 'function'
+    //   && typeof this.pulseDefault !== 'string'
+    // ) {
+    //   defaultPulseOptions.frequency = this.pulseDefault.frequency;
+    //   defaultPulseOptions.duration = this.pulseDefault.duration;
+    //   defaultPulseOptions.scale = this.pulseDefault.scale;
+    // }
+    // const defaultOptions = {
+    //   scale: defaultPulseOptions.scale,
+    //   duration: defaultPulseOptions.duration,
+    //   frequency: defaultPulseOptions.frequency,
+    //   num: 0,
+    //   centerOn: null,
+    //   space: 'diagram',
+    //   xAlign: 'center',
+    //   yAlign: 'middle',
+    //   done: null,
+    //   progression: 'sinusoid',
+    //   when: 'syncNow',
+    //   callback: null,
+    // };
+    if (
+      typeof this.pulseDefault === 'function'
+      || typeof this.pulseDefault === 'string'
+    ) {
+      let done = null;
+      if (typeof optionsOrDone === 'function') {
+        done = optionsOrDone;
+      } else if (optionsOrDone.done != null) {
+        ({ done } = optionsOrDonw);
+      }
+      this.fnMap.exec(this.pulseDefault, done);
+      return;
+    }
+
+    const defaultOptions = this.pulseDefault;
+    let done = null;
+    let options;
+
+    if (typeof optionsOrDone === 'function' || typeof optionsOrDone === 'string') {
+      options = joinObjects({}, defaultOptions);
+      done = optionsOrDone;
+    } else if (optionsOrDone == null) {
+      options = joinObjects({}, defaultOptions);
+      done = null;
+    } else {
+      options = joinObjects({}, defaultOptions, optionsOrDone);
+      ({ done } = options);
+    }
+
+    if (options.progression === 'sinusoid') {
+      options.progression = 'tools.math.sinusoid';
+    } else if (options.progression === 'triangle') {
+      options.progression = 'tools.math.triangle';
+    }
+
+    const {
+      centerOn, xAlign, yAlign, space,
+    } = options;
+
+    let delta;
+    if (centerOn == null) {
+      delta = new Point(0, 0);
+    } else if (centerOn instanceof DiagramElement) {
+      delta = centerOn.getPositionInBounds('diagram', xAlign, yAlign)
+        .transformBy(this.spaceTransformMatrix('diagram', 'draw'));
+    } else {
+      delta = getPoint(centerOn)
+        .transformBy(this.spaceTransformMatrix(space, 'draw'));
+    }
+
+    // const currentPosition = this.getPosition('local');
+    // const delta = p.sub(currentPosition);
+    const {
+      duration, scale, frequency, progression, when, num,
+    } = options;
+
+    let frequencyToUse = frequency;
+    if (
+      frequencyToUse == null
+      || (frequencyToUse === 0 && options.duration !== 0)
+    ) {
+      frequencyToUse = 1 / (options.duration * 2);
+    }
+    if (frequencyToUse === 0 && options.duration === 0) {
+      frequencyToUse = 1;
+    }
+
+    let bArray = [scale];
+    this.pulseSettings.num = num;
+    if (this.pulseSettings.num > 1) {
+      const b = Math.abs(1 - options.scale);
+      const bMax = b;
+      const bMin = -b;
+      const range = bMax - bMin;
+      const bStep = range / (this.pulseSettings.num - 1);
+      bArray = [];
+      for (let i = 0; i < this.pulseSettings.num; i += 1) {
+        bArray.push(bMax - i * bStep);
+      }
+    }
+    console.log(bArray)
+
+    this.pulseSettings.time = duration;
+    this.pulseSettings.frequency = frequencyToUse;
+    this.pulseSettings.A = 1;                   // bias
+    this.pulseSettings.B = bArray;
+    this.pulseSettings.C = 0;                   // phase offset
+    this.pulseSettings.num = 1;
+    this.pulseSettings.delta = delta;
+    // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
+    this.pulseSettings.callback = done;
+    this.pulseSettings.progression = progression;
+    this.startPulsing(when);
+  }
+
   pulseScaleNow(
     time: number, scale: number,
     frequency: number = 0, callback: ?(string | ((?mixed) => void)) = null,
@@ -2522,6 +2601,9 @@ class DiagramElement {
 
   spaceTransformMatrix(from: string, to: string) {
     // All Vertex related conversions
+    if (from === to) {
+      return new Transform().identity().matrix();
+    }
     if (from === 'draw' && to === 'pixel') {
       return m2.mul(
         this.diagram.spaceTransforms.glToPixel.matrix(),
@@ -2600,7 +2682,7 @@ class DiagramElement {
     if (from === 'pixel' && to === 'gl') {
       return this.diagram.spaceTransforms.pixelToGL.matrix();
     }
-    return new Transform().identity();
+    return new Transform().identity().matrix();
   }
 
   pointFromSpaceToSpace(
@@ -3923,31 +4005,40 @@ class DiagramElementCollection extends DiagramElement {
       super.pulse(optionsOrElementsOrDone);
       return;
     }
-    const defaultPulseOptions = {
-      frequency: 0,
-      time: 1,
-      scale: 2,
-    };
+    // const defaultPulseOptions = {
+    //   frequency: 0,
+    //   time: 1,
+    //   scale: 2,
+    // };
+    // if (
+    //   typeof this.pulseDefault !== 'function'
+    //   && typeof this.pulseDefault !== 'string'
+    // ) {
+    //   defaultPulseOptions.frequency = this.pulseDefault.frequency;
+    //   defaultPulseOptions.duration = this.pulseDefault.duration;
+    //   defaultPulseOptions.scale = this.pulseDefault.scale;
+    // }
+    // const defaultOptions = {
+    //   x: 'center',
+    //   y: 'middle',
+    //   space: 'diagram',
+    //   centerOn: null,
+    //   frequency: defaultPulseOptions.frequency,
+    //   duration: defaultPulseOptions.duration,
+    //   scale: defaultPulseOptions.scale,
+    //   done: null,
+    //   elements: null,
+    //   progression: 'tools.math.sinusoid',
+    // };
     if (
-      typeof this.pulseDefault !== 'function'
-      && typeof this.pulseDefault !== 'string'
+      optionsOrElementsOrDone.elements == null
+      || optionsOrElementsOrDone.elements.length === 0
     ) {
-      defaultPulseOptions.frequency = this.pulseDefault.frequency;
-      defaultPulseOptions.duration = this.pulseDefault.duration;
-      defaultPulseOptions.scale = this.pulseDefault.scale;
+      super.pulse(optionsOrElementsOrDone);
+      return;
     }
-    const defaultOptions = {
-      x: 'center',
-      y: 'middle',
-      space: 'diagram',
-      centerOn: null,
-      frequency: defaultPulseOptions.frequency,
-      duration: defaultPulseOptions.duration,
-      scale: defaultPulseOptions.scale,
-      done: null,
-      elements: null,
-      progression: 'tools.math.sinusoid',
-    };
+    // const defaultOptions = this.pulseDefault;
+    const defaultOptions = {};
 
     let doneToUse;
     let options;
@@ -3971,10 +4062,10 @@ class DiagramElementCollection extends DiagramElement {
       }
     }
     options.elements = null;
-    if (elements == null || elements.length === 0) {
-      super.pulse(optionsOrElementsOrDone);
-      return;
-    }
+    // if (elements == null || elements.length === 0) {
+    //   super.pulse(optionsOrElementsOrDone);
+    //   return;
+    // }
 
     let counter = 0;
     const combinedCallback = () => {
