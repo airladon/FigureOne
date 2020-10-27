@@ -3406,7 +3406,11 @@ class DiagramElementPrimitive extends DiagramElement {
   click(glPoint: Point) {
     super.click();
     if (this.drawingObject instanceof TextObjectBase) {
-      this.drawingObject.click(glPoint, this.lastDrawTransform.matrix(), this.fnMap);
+      this.drawingObject.click(
+        glPoint.transformBy(this.spaceTransformMatrix('gl', 'vertex')),
+        // this.lastDrawTransform.matrix(),
+        this.fnMap,
+      );
       if (this.recorder.state === 'recording') {
         this.recorder.recordEvent('elementTextClick', [this.getPath()]);
       }
