@@ -48,10 +48,14 @@ const makeCollection = () => {
 
 describe('Pulse', () => {
   let diagram;
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
     diagram = makeDiagram();
   });
+  // afterEach(() => {
+  //   jest.clearAllMocks();
+  //   diagram = makeDiagram();
+  // });
   describe('Primitive', () => {
     test('Simple', () => {
       const element = makeSquare();

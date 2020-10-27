@@ -2644,6 +2644,7 @@ class DiagramElement {
     space: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
+    return [[]];
   }
   /* eslint-enable class-methods-use-this, no-unused-vars */
 
@@ -4457,8 +4458,11 @@ class DiagramElementCollection extends DiagramElement {
   ) {
     const bordersToUse: Array<Array<Point>> = [];
     let childrenToUse = children;
-    if (children == null) {
+    if (childrenToUse == null) {
       childrenToUse = Object.keys(this.elements);
+    }
+    if (childrenToUse.length === 0) {
+      return [[]];
     }
     let spaceToUse;
     if (Array.isArray(space)) {
@@ -4503,7 +4507,7 @@ class DiagramElementCollection extends DiagramElement {
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
     shownOnly: boolean = true,
   ) {
-    const bounds = this.getBoundingRect(space, children, border, shownOnly);
+    const bounds = this.getBoundingRect(space, border, children, shownOnly);
     const p = this.getPosition(space);
     if (xAlign === 'left') {
       p.x = bounds.left;
