@@ -171,7 +171,7 @@ export default class Box extends Symbol {
     parent: DiagramElement,
     children: ?Array<string | DiagramElement>,
     spaceIn: TypeParsablePoint | number = 0,
-    drawingSpace: 'diagram' | 'local' | 'gl' | 'vertex' = 'local',
+    drawingSpace: 'diagram' | 'local' | 'gl' | 'draw' = 'local',
   ) {
     let elements = [parent];
     if (children != null && children.length !== 0) {

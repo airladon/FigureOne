@@ -60,7 +60,7 @@ import { FunctionMap } from '../tools/FunctionMap';
 //   return callbackToUse; + width
 // }
 
-export type TypeSpace = 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel';
+export type TypeSpace = 'draw' | 'local' | 'diagram' | 'gl' | 'pixel';
 
 /**
  * Transform, color and visbility scenario definition
@@ -130,7 +130,7 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
  * alignment with pulse center
  * @property {null | DiagramElement | TypeParsablePoint} [centerOn] center
  * of pulse
- * @property {'diagram' | 'gl' | 'local' | 'vertex'} [space] space the
+ * @property {'diagram' | 'gl' | 'local' | 'draw'} [space] space the
  * `centerOn` property operates when `centerOn` is a `TypeParsablePoint`
  * @property {number} [frequency] pulse frequency in Hz
  * @property {number} [duration] pulse duration in seconds
@@ -143,7 +143,7 @@ type OBJ_Pulse = {
   x?: 'left' | 'center' | 'right' | 'origin' | number,
   y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
   centerOn?: null | DiagramElement | TypeParsablePoint,
-  space?: 'diagram' | 'gl' | 'local' | 'vertex',
+  space?: 'diagram' | 'gl' | 'local' | 'draw',
   frequency?: number,
   duration?: number,
   scale?: number,
@@ -1421,7 +1421,7 @@ class DiagramElement {
   //   e: DiagramElement | TypeParsablePoint | null,
   //   x: 'left' | 'center' | 'right' | 'origin' | number,
   //   y: 'bottom' | 'middle' | 'top' | 'origin' | number,
-  //   space: 'diagram' | 'gl' | 'vertex' | 'local',
+  //   space: 'diagram' | 'gl' | 'draw' | 'local',
   //   time: number,
   //   scale: number,
   //   frequency: number = 0,
@@ -2274,7 +2274,7 @@ class DiagramElement {
 
   pulseScaleRelativeToPoint(
     p: TypeParsablePoint,
-    space: 'diagram' | 'gl' | 'vertex' | 'local',
+    space: 'diagram' | 'gl' | 'draw' | 'local',
     time: number,
     scale: number,
     frequency: number = 0,
@@ -2288,9 +2288,9 @@ class DiagramElement {
 
   pulseScaleRelativeToElement(
     e: ?DiagramElement,
-    x: 'left' | 'center' | 'right' | 'origin' | number,
-    y: 'bottom' | 'middle' | 'top' | 'origin' | number,
-    space: 'diagram' | 'gl' | 'vertex' | 'local',
+    x: 'left' | 'center' | 'right' | 'location' | number,
+    y: 'bottom' | 'middle' | 'top' | 'location' | number,
+    space: 'diagram' | 'gl' | 'draw' | 'local',
     time: number,
     scale: number,
     frequency: number = 0,
@@ -2310,7 +2310,7 @@ class DiagramElement {
     e: DiagramElement | TypeParsablePoint | null,
     x: 'left' | 'center' | 'right' | 'origin' | number,
     y: 'bottom' | 'middle' | 'top' | 'origin' | number,
-    space: 'diagram' | 'gl' | 'vertex' | 'local',
+    space: 'diagram' | 'gl' | 'draw' | 'local',
     time: number,
     scale: number,
     frequency: number = 0,
@@ -2506,7 +2506,7 @@ class DiagramElement {
 
   getPixelToVertexSpaceScale() {
     const pixelToDiagram = this.diagramTransforms.pixelToDiagram.matrix();
-    const diagramToVertex = this.spaceTransformMatrix(diagram, 'vertex');
+    const diagramToVertex = this.spaceTransformMatrix(diagram, 'draw');
     const scaleX = pixelToDiagram[0] * diagramToVertex[0];
     const scaleY = pixelToDiagram[4] * diagramToVertex[4];
     return new Point(scaleX, scaleY);
@@ -2522,34 +2522,34 @@ class DiagramElement {
 
   spaceTransformMatrix(from: string, to: string) {
     // All Vertex related conversions
-    if (from === 'vertex' && to === 'pixel') {
+    if (from === 'draw' && to === 'pixel') {
       return m2.mul(
         this.diagram.spaceTransforms.glToPixel.matrix(),
         this.lastDrawTransform.matrix(),
       );
     }
-    if (from === 'vertex' && to === 'gl') {
+    if (from === 'draw' && to === 'gl') {
       return this.lastDrawTransform.matrix();
     }
-    if (from === 'vertex' && to === 'diagram') {
+    if (from === 'draw' && to === 'diagram') {
       return this.lastDrawTransform.calcMatrix(0, -3);
     }
-    if (from === 'vertex' && to === 'local') {
+    if (from === 'draw' && to === 'local') {
       return this.transform.matrix();
     }
-    if (from === 'pixel' && to === 'vertex') {
+    if (from === 'pixel' && to === 'draw') {
       return m2.mul(
         m2.inverse(this.lastDrawTransform.matrix()),
         this.diagram.spaceTransforms.pixelToGL.matrix(),
       );
     }
-    if (from === 'gl' && to === 'vertex') {
+    if (from === 'gl' && to === 'draw') {
       return m2.inverse(this.lastDrawTransform.matrix());
     }
-    if (from === 'diagram' && to === 'vertex') {
+    if (from === 'diagram' && to === 'draw') {
       return m2.inverse(this.lastDrawTransform.calcMatrix(0, -3));
     }
-    if (from === 'local' && to === 'vertex') {
+    if (from === 'local' && to === 'draw') {
       return m2.inverse(this.transform.matrix());
     }
 
@@ -2605,8 +2605,8 @@ class DiagramElement {
 
   pointFromSpaceToSpace(
     point: TypeParsablePoint,
-    fromSpace: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel',
-    toSpace: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel',
+    fromSpace: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel',
+    toSpace: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel',
   ) {
     return getPoint(point).transformBy(this.spaceTransformMatrix(fromSpace, toSpace));
   }
@@ -2642,7 +2642,7 @@ class DiagramElement {
   // Size
   // ***************************************************************
   getRelativeBoundingRect(
-    space: 'local' | 'diagram' | 'vertex' | 'gl' | 'pixel' = 'local',
+    space: 'local' | 'diagram' | 'draw' | 'gl' | 'pixel' = 'local',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
     const rect = this.getBoundingRect(space, border);
@@ -2705,7 +2705,7 @@ class DiagramElement {
   //  * @return {Point} position
   //  */
   getPositionInBounds(
-    space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local',
+    space: 'local' | 'diagram' | 'gl' | 'draw' = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
@@ -2745,7 +2745,7 @@ class DiagramElement {
    * to find the bottom, middle, top or percentage height from bottom of the
    * element.
    *
-   * @param {'local' | 'diagram' | 'gl' | 'vertex'} space the space to return
+   * @param {'local' | 'diagram' | 'gl' | 'draw'} space the space to return
    * the position in
    * @param {'center' | 'left' | 'right' | 'location' | number} xAlign
    * horizontal alignment of position. Use a `number` to define the horizontal
@@ -2755,7 +2755,7 @@ class DiagramElement {
    * position in percentage height from the bottom.
    */
   getPosition(
-    space: 'local' | 'diagram' | 'gl' | 'vertex' | 'pixel' = 'local',
+    space: 'local' | 'diagram' | 'gl' | 'draw' | 'pixel' = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
   ) {
@@ -2763,10 +2763,10 @@ class DiagramElement {
       return this.getPositionInBounds(space, xAlign, yAlign);
     }
     // vertex space position doesn't mean much as it will always be 0, 0
-    if (space === 'vertex') {
+    if (space === 'draw') {
       return new Point(0, 0);
     }
-    return new Point(0, 0).transformBy(this.spaceTransformMatrix('vertex', space));
+    return new Point(0, 0).transformBy(this.spaceTransformMatrix('draw', space));
   }
 
   setDiagramPosition(diagramPosition: Point) {
@@ -3197,9 +3197,9 @@ class DiagramElementPrimitive extends DiagramElement {
     if (this.drawingObject.touchBorder == null) {
       return false;
     }
-    const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'vertex'));
-    const borders = this.getBorder('vertex', 'touchBorder');
-    const holeBorders = this.getBorder('vertex', 'holeBorder');
+    const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
+    const borders = this.getBorder('draw', 'touchBorder');
+    const holeBorders = this.getBorder('draw', 'holeBorder');
     for (let i = 0; i < borders.length; i += 1) {
       const border = borders[i];
       if (border.length > 2) {
@@ -3231,7 +3231,7 @@ class DiagramElementPrimitive extends DiagramElement {
     super.click();
     if (this.drawingObject instanceof TextObjectBase) {
       this.drawingObject.click(
-        glPoint.transformBy(this.spaceTransformMatrix('gl', 'vertex')),
+        glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw')),
         // this.lastDrawTransform.matrix(),
         this.fnMap,
       );
@@ -3362,7 +3362,7 @@ class DiagramElementPrimitive extends DiagramElement {
     if (border === 'holeBorder') {
       bordersToUse = this.drawingObject.hole;
     }
-    if (space === 'vertex') {
+    if (space === 'draw') {
       return bordersToUse;
     }
     const transformedBorders = [];
@@ -3370,7 +3370,7 @@ class DiagramElementPrimitive extends DiagramElement {
     if (Array.isArray(space)) {
       matrix = m2.mul(space, this.transform.matrix());
     } else {
-      matrix = this.spaceTransformMatrix('vertex', space);
+      matrix = this.spaceTransformMatrix('draw', space);
     }
     bordersToUse.forEach((b) => {
       transformedBorders.push(
@@ -3572,7 +3572,7 @@ class DiagramElementCollection extends DiagramElement {
   +pulse: (?({
       x?: 'left' | 'center' | 'right' | 'origin' | number,
       y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
-      space?: 'diagram' | 'gl' | 'local' | 'vertex',
+      space?: 'diagram' | 'gl' | 'local' | 'draw',
       centerOn?: null | DiagramElement | TypeParsablePoint,
       frequency?: number,
       time?: number,
@@ -3905,7 +3905,7 @@ class DiagramElementCollection extends DiagramElement {
     optionsOrElementsOrDone: ?({
       x?: 'left' | 'center' | 'right' | 'origin' | number,
       y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
-      space?: 'diagram' | 'gl' | 'local' | 'vertex',
+      space?: 'diagram' | 'gl' | 'local' | 'draw',
       centerOn?: null | DiagramElement | TypeParsablePoint,
       frequency?: number,
       time?: number,
@@ -4154,9 +4154,9 @@ class DiagramElementCollection extends DiagramElement {
     if (!this.isTouchable) {
       return false;
     }
-    const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'vertex'));
+    const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
     if (this.touchInBoundingRect) {
-      const boundingRect = this.getBoundingRect('vertex');
+      const boundingRect = this.getBoundingRect('draw');
       if (vertexLocation.x >= boundingRect.left
         && vertexLocation.x <= boundingRect.right
         && vertexLocation.y <= boundingRect.top
@@ -4229,7 +4229,7 @@ class DiagramElementCollection extends DiagramElement {
       spaceToUse = m2.mul(this.transform.matrix(), space);
     } else if (space === 'local') {
       spaceToUse = this.transform.matrix();
-    } else if (space === 'vertex') {
+    } else if (space === 'draw') {
       spaceToUse = this.transform.identity().matrix();
     } else {
       spaceToUse = space;

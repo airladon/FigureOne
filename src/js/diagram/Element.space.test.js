@@ -122,28 +122,28 @@ describe('Element Space Transforms', () => {
       create('simple');
     });
     test('Vertex to Local', () => {
-      expect(get(a, [0, 0], 'vertex', 'local')).toEqual(getP(1, 0));
+      expect(get(a, [0, 0], 'draw', 'local')).toEqual(getP(1, 0));
     });
     test('Local to Vertex', () => {
-      expect(get(a, [0, 0], 'local', 'vertex')).toEqual(getP(-1, 0));
+      expect(get(a, [0, 0], 'local', 'draw')).toEqual(getP(-1, 0));
     });
     test('Vertex to Diagram', () => {
-      expect(get(a, [0, 0], 'vertex', 'diagram')).toEqual(getP(2, 0));
+      expect(get(a, [0, 0], 'draw', 'diagram')).toEqual(getP(2, 0));
     });
     test('Diagram to Vertex', () => {
-      expect(get(a, [0, 0], 'diagram', 'vertex')).toEqual(getP(-2, 0));
+      expect(get(a, [0, 0], 'diagram', 'draw')).toEqual(getP(-2, 0));
     });
     test('Vertex to GL', () => {
-      expect(get(a, [0, 0], 'vertex', 'gl')).toEqual(getP(0.667, 0));
+      expect(get(a, [0, 0], 'draw', 'gl')).toEqual(getP(0.667, 0));
     });
     test('GL to Vertex', () => {
-      expect(get(a, [0, 0], 'gl', 'vertex')).toEqual(getP(-2, 0));
+      expect(get(a, [0, 0], 'gl', 'draw')).toEqual(getP(-2, 0));
     });
     test('Vertex to Pixel', () => {
-      expect(get(a, [0, 0], 'vertex', 'pixel')).toEqual(getP(833.333, 500));
+      expect(get(a, [0, 0], 'draw', 'pixel')).toEqual(getP(833.333, 500));
     });
     test('Pixel to Vertex', () => {
-      expect(get(a, [0, 0], 'pixel', 'vertex')).toEqual(getP(-5, 3));
+      expect(get(a, [0, 0], 'pixel', 'draw')).toEqual(getP(-5, 3));
     });
     // Remaining Local
     test('Local to Diagram', () => {
@@ -192,16 +192,16 @@ describe('Element Space Transforms', () => {
       create('rectangleOffZero');
     });
     test('Vertex to Diagram', () => {
-      expect(get(a, [0, 0], 'vertex', 'diagram')).toEqual(getP(1.768, 1.768));
+      expect(get(a, [0, 0], 'draw', 'diagram')).toEqual(getP(1.768, 1.768));
     });
     test('Diagram to Vertex', () => {
-      expect(get(a, [0, 0], 'diagram', 'vertex')).toEqual(getP(-5, 0));
+      expect(get(a, [0, 0], 'diagram', 'draw')).toEqual(getP(-5, 0));
     });
     test('Vertex to Pixel', () => {
-      expect(get(a, [0, 0], 'vertex', 'pixel')).toEqual(getP(191.942, 308.058));
+      expect(get(a, [0, 0], 'draw', 'pixel')).toEqual(getP(191.942, 308.058));
     });
     test('Pixel to Vertex', () => {
-      expect(get(a, [0, 0], 'pixel', 'vertex')).toEqual(getP(0.657, 2.828));
+      expect(get(a, [0, 0], 'pixel', 'draw')).toEqual(getP(0.657, 2.828));
     });
   });
   describe('Collection in collection', () => {
@@ -239,12 +239,12 @@ describe('Element Space Transforms', () => {
       expect(p.getBoundingRect('local').round(3)).toEqual(new Rect(0, -0.5, 1, 1));
     });
     test('Vertex', () => {
-      expect(c.getPosition('vertex').round(3)).toEqual(getP(0, 0));
-      expect(cc.getPosition('vertex').round(3)).toEqual(getP(0, 0));
-      expect(p.getPosition('vertex').round(3)).toEqual(getP(0, 0));
-      expect(c.getBoundingRect('vertex').round(3)).toEqual(new Rect(0.5, -0.5, 1, 1));
-      expect(cc.getBoundingRect('vertex').round(3)).toEqual(new Rect(0, -0.5, 1, 1));
-      expect(p.getBoundingRect('vertex').round(3)).toEqual(new Rect(-0.5, -0.5, 1, 1));
+      expect(c.getPosition('draw').round(3)).toEqual(getP(0, 0));
+      expect(cc.getPosition('draw').round(3)).toEqual(getP(0, 0));
+      expect(p.getPosition('draw').round(3)).toEqual(getP(0, 0));
+      expect(c.getBoundingRect('draw').round(3)).toEqual(new Rect(0.5, -0.5, 1, 1));
+      expect(cc.getBoundingRect('draw').round(3)).toEqual(new Rect(0, -0.5, 1, 1));
+      expect(p.getBoundingRect('draw').round(3)).toEqual(new Rect(-0.5, -0.5, 1, 1));
     });
   });
 });

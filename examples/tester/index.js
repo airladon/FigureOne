@@ -264,10 +264,17 @@ equation.showForm('b');
 equation.touchInBoundingRect = true;
 equation.setMovable();
 equation.setMoveBounds('diagram');
-equation.setRotation(Math.PI / 3);
+// equation.setRotation(Math.PI / 3);
 console.log(equation.move.bounds)
 diagram.initialize();
 console.log()
+
+equation.pulse({
+  // centerOn: diagram.elements._a,
+  centerOn: [0.3, 0],
+  space: 'diagram',
+  duration: 2,
+});
 // equation.setMoveBounds('diagram');
 
 
