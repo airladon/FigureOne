@@ -2641,7 +2641,7 @@ class DiagramElement {
   // * BoundingRectBorder: The perimeter of the boundingRect
   /* eslint-disable class-methods-use-this, no-unused-vars */
   getBorder(
-    space: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel',
+    space: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel' = 'local',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
     return [[]];
@@ -2649,7 +2649,7 @@ class DiagramElement {
   /* eslint-enable class-methods-use-this, no-unused-vars */
 
   getBoundingRect(
-    space: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel',
+    space: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel' = 'local',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
     const transformedBorder = this.getBorder(space, border);
@@ -2837,8 +2837,8 @@ class DiagramElement {
   //  */
   getPositionInBounds(
     space: 'local' | 'diagram' | 'gl' | 'vertex' = 'local',
-    xAlign: 'center' | 'left' | 'right' | 'location' | number,
-    yAlign: 'middle' | 'top' | 'bottom' | 'location' | number,
+    xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
+    yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
     const bounds = this.getBoundingRect(space, border);
@@ -3529,7 +3529,7 @@ class DiagramElementPrimitive extends DiagramElement {
   // }
 
   getBorder(
-    space: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel' | Array<number>,
+    space: TypeSpace | Array<number> = 'local',
     border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
   ) {
     let bordersToUse = this.drawingObject.border;
@@ -4451,7 +4451,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   getBorder(
-    space: TypeSpace,
+    space: TypeSpace = 'local',
     border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
     children: ?Array<string | DiagramElement> = null,
     shownOnly: boolean = true,
@@ -4488,7 +4488,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   getBoundingRect(
-    space: TypeSpace,
+    space: TypeSpace = 'local',
     border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
     children: ?Array<string | DiagramElement> = null,
     shownOnly: boolean = true,
@@ -4501,8 +4501,8 @@ class DiagramElementCollection extends DiagramElement {
 
   getPositionInBounds(
     space: TypeSpace = 'local',
-    xAlign: 'center' | 'left' | 'right' | 'location' | number,
-    yAlign: 'middle' | 'top' | 'bottom' | 'location' | number,
+    xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
+    yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
     children: ?Array<string | DiagramElement> = null,
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
     shownOnly: boolean = true,
