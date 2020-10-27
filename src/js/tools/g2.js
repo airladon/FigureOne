@@ -5128,6 +5128,14 @@ class TransformBounds extends Bounds {
     this.createBounds(bounds);
   }
 
+  isUnbounded() {
+    for (let i = 0; i < this.boundary.length; i += 1) {
+      if (this.boundary[i] !== null) {
+        return false;
+      }
+    }
+    return true;
+  }
   _dup() {
     const t = new TransformBounds(new Transform(), {}, this.precision);
     t.order = this.order.slice();

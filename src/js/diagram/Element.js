@@ -1617,6 +1617,8 @@ class DiagramElement {
       if (bounds !== 'none') {
       // if (this.move.bounds instanceof TransformBounds) {
         this.transform = bounds.clip(transform);
+      } else {
+        this.transform = transform._dup();
       }
       // }
     }

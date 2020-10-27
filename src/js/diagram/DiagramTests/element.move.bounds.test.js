@@ -1,5 +1,5 @@
 import {
-  Point, Line, Rect,
+  Point, Line, Rect, RectBounds,
 } from '../../tools/g2';
 // import {
 //   round,
@@ -30,10 +30,11 @@ describe('Set Position with Bounds', () => {
     a.setPosition(100, 0);
     expect(a.getPosition().round(3).x).toBe(100);
   });
-  test('Rect Bounds', () => {
-    a.move.bounds.updateTranslation({
-      left: -10, bottom: -20, right: 30, top: 40,
-    });
+  test.only('Rect Bounds', () => {
+    // a.move.bounds.updateTranslation({
+    //   left: -10, bottom: -20, right: 30, top: 40,
+    // });
+    a.move.bounds = new RectBounds({ left: -10, bottom: -20, right: 30, top: 40, })
     a.setPosition(100, 0);
     expect(a.getPosition().round(3)).toEqual(new Point(30, 0));
     a.setPosition(100, 100);
