@@ -338,9 +338,9 @@ describe('Equation Functions - Root', () => {
     functions.definedRoot();
     eqn.showForm('0');
     diagram.setFirstTransform();
-    const rad = eqn._root4.getBoundingRect();
-    const a = eqn._a.getBoundingRect();
-    const b = eqn._b.getBoundingRect();
+    const rad = eqn._root4.getBoundingRect('diagram');
+    const a = eqn._a.getBoundingRect('diagram');
+    const b = eqn._b.getBoundingRect('diagram');
     expect(round(a.left)).toBe(round(rad.left + 0.04 + 0.1));
     expect(round(rad.top)).toBe(round(a.top + 0.1 + 0.01));
     expect(round(rad.bottom)).toBe(round(a.bottom - 0.1));
