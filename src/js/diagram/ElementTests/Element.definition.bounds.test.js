@@ -97,7 +97,7 @@ describe('Move Freely', () => {
     add('diagram');
     const { bounds } = a.move;
     expect(bounds).toBeInstanceOf(TransformBounds);
-    check(-0.8, -0.8, 0.8, 0.8);
+    check(-1, -1, 1, 1);
   });
   test('Rect', () => {
     add('rect');

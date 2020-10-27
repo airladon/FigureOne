@@ -813,7 +813,7 @@ class DiagramElement {
       // maxTransform: this.transform.constant(1000),
       // minTransform: this.transform.constant(-1000),
       bounds: 'none',
-      sizeInBounds: true,
+      sizeInBounds: false,
       // boundsToUse: new TransformBounds(this.transform),
       // bounds: { scale: null, rotation: null, position: null },
       // boundary: null,
@@ -1614,12 +1614,11 @@ class DiagramElement {
       // this.checkMoveBounds();
       const bounds = this.getMoveBounds();
       // console.log(bounds)
-      if (bounds !== 'none') {
       // if (this.move.bounds instanceof TransformBounds) {
-        this.transform = bounds.clip(transform);
-      } else {
-        this.transform = transform._dup();
-      }
+      this.transform = bounds.clip(transform);
+      // } else {
+      //   this.transform = transform._dup();
+      // }
       // }
     }
     if (this.internalSetTransformCallback) {
@@ -1996,7 +1995,7 @@ class DiagramElement {
     const prevTransform = this.transform._dup();
     this.setTransform(newTransform._dup());
     let tBounds;
-    if (this.move.bounds != null && this.move.bounds !== 'none') {
+    if (this.move.bounds != null) {
       tBounds = this.move.bounds.getTranslation();
     }
     // In a finite rect bounds, if we calculate the velocity from the clipped
@@ -3026,7 +3025,7 @@ class DiagramElement {
 
   setMoveBounds(
     boundaryIn: TransformBounds | TypeTransformBoundsDefinition | 'diagram' | 'none' = 'none',
-    // includeSize: boolean = false,
+    // includeSize: boolean = true,
   ): void {
       // if (!this.isMovable) {
       //   return;
@@ -3038,8 +3037,7 @@ class DiagramElement {
     }
 
     if (boundaryIn === null || boundaryIn === 'none') {
-      // this.move.bounds = new TransformBounds(this.transform);
-      this.move.bounds = 'none';
+      this.move.bounds = new TransformBounds(this.transform);
       return;
     }
 
@@ -3048,6 +3046,7 @@ class DiagramElement {
       if (!(this.move.bounds instanceof TransformBounds)) {
         this.move.bounds = new TransformBounds(this.transform);
       }
+      this.move.sizeInBounds = true;
       this.move.bounds.updateTranslation(new RectBounds({
         left: this.diagramLimits.left,
         bottom: this.diagramLimits.bottom,
@@ -3076,14 +3075,16 @@ class DiagramElement {
 
   getMoveBounds() {
     this.checkMoveBounds();
-    if (this.move.bounds === 'none') {
+    if (this.move.bounds.isUnbounded()) {
       return this.move.bounds;
     }
+
     if (this.move.sizeInBounds) {
       const rect = this.getRelativeBoundingRect('local');
       // const p = this.getPosition('local');
       const dup = this.move.bounds._dup();
       const b = dup.getTranslation();
+      // console.log(rect)
       if (b != null) {
         b.boundary.left -= rect.left;
         b.boundary.bottom -= rect.bottom;
@@ -3551,7 +3552,7 @@ class DiagramElementPrimitive extends DiagramElement {
     const transformedBorders = [];
     let matrix;
     if (Array.isArray(space)) {
-      matrix = m2.mul(this.transform.matrix(), space);
+      matrix = m2.mul(space, this.transform.matrix());
     } else {
       matrix = this.spaceTransformMatrix('vertex', space);
     }
@@ -4480,6 +4481,7 @@ class DiagramElementCollection extends DiagramElement {
     } else {
       spaceToUse = space;
     }
+    // console.log(spaceToUse)
     childrenToUse.forEach((child) => {
       const e = this.getElement(child);
       if (
@@ -4503,6 +4505,22 @@ class DiagramElementCollection extends DiagramElement {
     // console.log(space, border, children, shownOnly)
     // console.log(transformedBorder)
     return getBoundingRect(transformedBorder);
+  }
+
+  getRelativeBoundingRect(
+    space: TypeSpace = 'local',
+    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    children: ?Array<string | DiagramElement> = null,
+    shownOnly: boolean = true,
+  ) {
+    const rect = this.getBoundingRect(space, border, children, shownOnly);
+    const position = this.getPosition(space);
+    return new Rect(
+      rect.left - position.x,
+      rect.bottom - position.y,
+      rect.width,
+      rect.height,
+    );
   }
 
   getPositionInBounds(

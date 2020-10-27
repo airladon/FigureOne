@@ -5136,6 +5136,7 @@ class TransformBounds extends Bounds {
     }
     return true;
   }
+
   _dup() {
     const t = new TransformBounds(new Transform(), {}, this.precision);
     t.order = this.order.slice();

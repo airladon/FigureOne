@@ -491,6 +491,7 @@ DiagramElementPrimitive {
       "zeroVelocityThreshold": 0.0001,
     },
     "maxVelocity": 5,
+    "sizeInBounds": false,
     "transformClip": null,
     "type": "translation",
   },

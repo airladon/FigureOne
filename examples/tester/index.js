@@ -205,6 +205,8 @@ diagram.addElements([
 // // // Show the equation form
 // // diagram.getElement('eqn').showForm('b');
 // // diagram.initialize();
+
+
 diagram.addElement(
   {
     name: 'equation',
@@ -261,8 +263,11 @@ equation.showForm('b');
 
 equation.touchInBoundingRect = true;
 equation.setMovable();
+equation.setMoveBounds('diagram');
+equation.setRotation(Math.PI / 3);
+console.log(equation.move.bounds)
 diagram.initialize();
-equation.setMoveBounds('diagram', true);
+console.log()
 // equation.setMoveBounds('diagram');
 
 

@@ -30,11 +30,11 @@ describe('Set Position with Bounds', () => {
     a.setPosition(100, 0);
     expect(a.getPosition().round(3).x).toBe(100);
   });
-  test.only('Rect Bounds', () => {
-    // a.move.bounds.updateTranslation({
-    //   left: -10, bottom: -20, right: 30, top: 40,
-    // });
-    a.move.bounds = new RectBounds({ left: -10, bottom: -20, right: 30, top: 40, })
+  test('Rect Bounds', () => {
+    a.move.bounds.updateTranslation({
+      left: -10, bottom: -20, right: 30, top: 40,
+    });
+    // a.move.bounds = new RectBounds({ left: -10, bottom: -20, right: 30, top: 40, })
     a.setPosition(100, 0);
     expect(a.getPosition().round(3)).toEqual(new Point(30, 0));
     a.setPosition(100, 100);
@@ -98,54 +98,5 @@ describe('Set Position with Bounds', () => {
     expect(a.getPosition().round(3)).toEqual(new Point(-10, -10));
     a.setPosition(5, 0);
     expect(a.getPosition().round(3)).toEqual(new Point(2.5, 2.5));
-  });
-});
-describe('Diagram Bounds', () => {
-  let diagram;
-  let a;
-  let create;
-  beforeEach(() => {
-    diagram = makeDiagram(
-      new Rect(0, 0, 1000, 1000),
-      new Rect(-3, -3, 6, 6),
-    );
-    const diagramOptions = {
-      simple: () => {
-        diagram.addElement({
-          name: 'a',
-          method: 'rectangle',
-          options: {
-            width: 1,
-            height: 1,
-          },
-          mods: {
-            move: { bounds: 'diagram' },
-          },
-        });
-        a = diagram.elements._a;
-      },
-    };
-    create = (option) => {
-      diagramOptions[option]();
-      a.setMovable();
-      diagram.initialize();
-    };
-  });
-  describe('Simple', () => {
-    beforeEach(() => {
-      create('simple');
-    });
-    test('static bounds', () => {
-      expect(a.move.bounds.boundary[2].boundary).toEqual({
-        left: -2.5, bottom: -2.5, right: 2.5, top: 2.5,
-      });
-    });
-    test('updated bounds', () => {
-      a.custom.update({ width: 2, height: 2 });
-      console.log(a.getBoundingRect('diagram'));
-      expect(a.move.bounds.boundary[2].boundary).toEqual({
-        left: -2, bottom: -2, right: 2, top: 2,
-      });
-    });
   });
 });
