@@ -120,7 +120,7 @@ function getRectangleBorder(
 
 function rectangleBorderToTris(border: Array<Point>) {
   const points = [border[0]._dup(), border[1]._dup(), border[2]._dup()];
-  for (let i = 1; i < border.length - 1; i += 1) {
+  for (let i = 2; i < border.length - 1; i += 1) {
     points.push(border[0]);
     points.push(border[i]);
     points.push(border[i + 1]);

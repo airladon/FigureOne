@@ -3540,7 +3540,7 @@ class DiagramElementPrimitive extends DiagramElement {
     const transformedBorders = [];
     let matrix;
     if (Array.isArray(space)) {
-      matrix = space;
+      matrix = m2.mul(this.transform.matrix(), space);
     } else {
       matrix = this.spaceTransformMatrix('vertex', space);
     }
@@ -4461,6 +4461,8 @@ class DiagramElementCollection extends DiagramElement {
       spaceToUse = m2.mul(this.transform.matrix(), space);
     } else if (space === 'local') {
       spaceToUse = this.transform.matrix();
+    } else if (space === 'vertex') {
+      spaceToUse = this.transform.identity().matrix();
     } else {
       spaceToUse = space;
     }

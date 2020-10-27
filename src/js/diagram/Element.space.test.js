@@ -72,6 +72,41 @@ describe('Element Space Transforms', () => {
           },
         ]);
       },
+      collectionInCollection: () => {
+        diagram = makeDiagram(
+          new Rect(0, 0, 1000, 1000),
+          new Rect(-3, -3, 6, 6),
+        );
+        diagram.addElements([
+          {
+            name: 'c',
+            method: 'collection',
+            options: {
+              position: [0.5, 0],
+            },
+            addElements: [
+              {
+                name: 'c',
+                method: 'collection',
+                options: {
+                  position: [0.5, 0],
+                },
+                addElements: [
+                  {
+                    name: 'p',
+                    method: 'shapes.rectangle',
+                    options: {
+                      width: 1,
+                      height: 1,
+                      position: [0.5, 0],
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ]);
+      },
     };
     create = (option) => {
       diagramOptions[option]();
@@ -167,6 +202,49 @@ describe('Element Space Transforms', () => {
     });
     test('Pixel to Vertex', () => {
       expect(get(a, [0, 0], 'pixel', 'vertex')).toEqual(getP(0.657, 2.828));
+    });
+  });
+  describe('Collection in collection', () => {
+    let c;
+    let cc;
+    let p;
+    beforeEach(() => {
+      create('collectionInCollection');
+      c = diagram.getElement('c');
+      cc = diagram.getElement('c.c');
+      p = diagram.getElement('c.c.p');
+    });
+    test('Pixel', () => {
+      expect(c.getPosition('pixel').round(3)).toEqual(getP(583.333, 500));
+      expect(cc.getPosition('pixel').round(3)).toEqual(getP(666.667, 500));
+      expect(p.getPosition('pixel').round(3)).toEqual(getP(750, 500));
+      expect(c.getBoundingRect('pixel').round(3)).toEqual(
+        new Rect(666.667, 416.667, 166.667, 166.667).round(3),
+      );
+    });
+    test('Diagram', () => {
+      expect(c.getPosition('diagram').round(3)).toEqual(getP(0.5, 0));
+      expect(cc.getPosition('diagram').round(3)).toEqual(getP(1, 0));
+      expect(p.getPosition('diagram').round(3)).toEqual(getP(1.5, 0));
+      expect(c.getBoundingRect('diagram').round(3)).toEqual(new Rect(1, -0.5, 1, 1));
+      expect(cc.getBoundingRect('diagram').round(3)).toEqual(new Rect(1, -0.5, 1, 1));
+      expect(p.getBoundingRect('diagram').round(3)).toEqual(new Rect(1, -0.5, 1, 1));
+    });
+    test('local', () => {
+      expect(c.getPosition('local').round(3)).toEqual(getP(0.5, 0));
+      expect(cc.getPosition('local').round(3)).toEqual(getP(0.5, 0));
+      expect(p.getPosition('local').round(3)).toEqual(getP(0.5, 0));
+      expect(c.getBoundingRect('local').round(3)).toEqual(new Rect(1, -0.5, 1, 1));
+      expect(cc.getBoundingRect('local').round(3)).toEqual(new Rect(0.5, -0.5, 1, 1));
+      expect(p.getBoundingRect('local').round(3)).toEqual(new Rect(0, -0.5, 1, 1));
+    });
+    test('Vertex', () => {
+      expect(c.getPosition('vertex').round(3)).toEqual(getP(0, 0));
+      expect(cc.getPosition('vertex').round(3)).toEqual(getP(0, 0));
+      expect(p.getPosition('vertex').round(3)).toEqual(getP(0, 0));
+      expect(c.getBoundingRect('vertex').round(3)).toEqual(new Rect(0.5, -0.5, 1, 1));
+      expect(cc.getBoundingRect('vertex').round(3)).toEqual(new Rect(0, -0.5, 1, 1));
+      expect(p.getBoundingRect('vertex').round(3)).toEqual(new Rect(-0.5, -0.5, 1, 1));
     });
   });
 });

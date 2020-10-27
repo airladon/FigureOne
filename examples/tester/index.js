@@ -331,26 +331,44 @@ diagram.addElements([
 // // c.spaceTransforms.diagramToVertex
 // // c.spaceTransforms.diagramToLocal
 // // c.spaceTransforms.localToVertex
-
-collection = diagram.addElement({
-  name: 'c',
-  method: 'collection',
-          // transform: cTransform,
-          addElements: [
-            {
-              name: 'square',
-              method: 'polygon',
-              options: {
-                radius: Math.sqrt(2) * 0.1,
-                line: { width: 0.01 },
-                rotation: Math.PI / 4,
-                // offset,
-                // transform: sTransform,
-              },
+diagram.addElements([
+  {
+    name: 'c',
+    method: 'collection',
+    options: {
+      position: [0.5, 0],
+    },
+    addElements: [
+      {
+        name: 'c',
+        method: 'collection',
+        options: {
+          position: [0.5, 0],
+        },
+        addElements: [
+          {
+            name: 'p',
+            method: 'shapes.rectangle',
+            options: {
+              width: 1,
+              height: 1,
+              position: [0.5, 0],
             },
-          ],
-        });
-        diagram.elements.add('c', collection);
-        diagram.initialize();
+          },
+        ],
+      },
+    ],
+  },
+]);
+diagram.initialize();
+console.log(diagram.elements._c)
+const c = diagram.getElement('c');
+const cc = diagram.getElement('c.c');
+const p = diagram.getElement('c.c.p');
 
-        console.log(diagram.elements)
+console.log(p.getPosition('diagram'))
+console.log(p.getBoundingRect('diagram'))
+console.log(p.getBoundingRect('local'))
+console.log(cc.getBoundingRect('diagram'))
+console.log(cc.getBoundingRect('local'))
+console.log(c.getBoundingRect('local'))
