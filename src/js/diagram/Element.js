@@ -3524,7 +3524,7 @@ class DiagramElementPrimitive extends DiagramElement {
   // }
 
   getBorder(
-    space: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel',
+    space: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel' | Array<number>,
     border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
   ) {
     let bordersToUse = this.drawingObject.border;
@@ -3538,13 +3538,18 @@ class DiagramElementPrimitive extends DiagramElement {
       return bordersToUse;
     }
     const transformedBorders = [];
-    const matrix = this.spaceTransformMatrix('vertex', space);
-    bordersToUse.forEach((b, index) => {
+    let matrix;
+    if (Array.isArray(space)) {
+      matrix = space;
+    } else {
+      matrix = this.spaceTransformMatrix('vertex', space);
+    }
+    bordersToUse.forEach((b) => {
       transformedBorders.push(
         b.map(p => p.transformBy(matrix)),
       );
-    })
-    return bordersToUse;
+    });
+    return transformedBorders;
   }
 
   getTouched(glLocation: Point): Array<DiagramElementPrimitive> {
@@ -4441,15 +4446,23 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   getBorder(
-    space: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel',
+    space: TypeSpace,
     border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
     children: ?Array<string | DiagramElement> = null,
     shownOnly: boolean = true,
   ) {
     const bordersToUse: Array<Array<Point>> = [];
     let childrenToUse = children;
-    if (childrenToUse == null) {
-      childrenToUse = this.elements;
+    if (children == null) {
+      childrenToUse = Object.keys(this.elements);
+    }
+    let spaceToUse;
+    if (Array.isArray(space)) {
+      spaceToUse = m2.mul(this.transform.matrix(), space);
+    } else if (space === 'local') {
+      spaceToUse = this.transform.matrix();
+    } else {
+      spaceToUse = space;
     }
     childrenToUse.forEach((child) => {
       const e = this.getElement(child);
@@ -4459,18 +4472,20 @@ class DiagramElementCollection extends DiagramElement {
       ) {
         return;
       }
-      bordersToUse.push(...e.getBorder(space, border, null, shownOnly));
+      bordersToUse.push(...e.getBorder(spaceToUse, border, null, shownOnly));
     });
     return bordersToUse;
   }
 
   getBoundingRect(
-    space: 'vertex' | 'local' | 'diagram' | 'gl' | 'pixel',
+    space: TypeSpace,
     border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
     children: ?Array<string | DiagramElement> = null,
     shownOnly: boolean = true,
   ) {
     const transformedBorder = this.getBorder(space, border, children, shownOnly);
+    // console.log(space, border, children, shownOnly)
+    // console.log(transformedBorder)
     return getBoundingRect(transformedBorder);
   }
 

@@ -452,32 +452,38 @@ describe('Animationa and Movement', () => {
     });
     describe('Get and Is being touched', () => {
       let square;
+      let glPoint;
       beforeEach(() => {
-        const sq = new VertexPolygon([webgl], 4, Math.sqrt(2.205), 0.1, 0, Point.zero());
-        square = new DiagramElementPrimitive(
-          sq,
-          new Transform().rotate(Math.PI / 4),
-          [0, 0, 1, 1],
-        );
+        const diagram = makeDiagram();
+        square = diagram.shapes.polygon({
+          sides: 4,
+          radius: Math.sqrt(2),
+          line: { width: 0.1 },
+          rotation: Math.PI / 4,
+        });
         square.isTouchable = true;
+        diagram.elements.add('square', square);
+        diagram.initialize();
+        glPoint = (x, y) => new Point(x, y)
+          .transformBy(diagram.spaceTransforms.diagramToGL.matrix());
       });
       test('Inside square and border', () => {
-        expect(square.isBeingTouched(new Point(0, 0))).toBe(true);
-        expect(square.isBeingTouched(new Point(1.0499, 0))).toBe(true);
-        expect(square.isBeingTouched(new Point(0, 1.0499))).toBe(true);
-        expect(square.isBeingTouched(new Point(1.0499, 1.0499))).toBe(true);
-        expect(square.isBeingTouched(new Point(-1.0499, -1.0499))).toBe(true);
-        expect(square.isBeingTouched(new Point(0, -1.0499))).toBe(true);
-        expect(square.isBeingTouched(new Point(-1.0499, 0))).toBe(true);
+        expect(square.isBeingTouched(glPoint(0, 0))).toBe(true);
+        expect(square.isBeingTouched(glPoint(1.0499, 0))).toBe(true);
+        expect(square.isBeingTouched(glPoint(0, 1.0499))).toBe(true);
+        expect(square.isBeingTouched(glPoint(1.0499, 1.0499))).toBe(true);
+        expect(square.isBeingTouched(glPoint(-1.0499, -1.0499))).toBe(true);
+        expect(square.isBeingTouched(glPoint(0, -1.0499))).toBe(true);
+        expect(square.isBeingTouched(glPoint(-1.0499, 0))).toBe(true);
       });
       test('Outside of border', () => {
-        expect(square.isBeingTouched(new Point(1.05001, 0))).toBe(false);
-        expect(square.isBeingTouched(new Point(0, 1.05001))).toBe(false);
-        expect(square.isBeingTouched(new Point(1.05001, 1.05001))).toBe(false);
-        expect(square.isBeingTouched(new Point(-1.05001, -1.05001))).toBe(false);
-        expect(square.isBeingTouched(new Point(0, -1.05001))).toBe(false);
-        expect(square.isBeingTouched(new Point(-1.05001, 0))).toBe(false);
-        expect(square.isBeingTouched(new Point(100, 100))).toBe(false);
+        expect(square.isBeingTouched(glPoint(1.05001, 0))).toBe(false);
+        expect(square.isBeingTouched(glPoint(0, 1.05001))).toBe(false);
+        expect(square.isBeingTouched(glPoint(1.05001, 1.05001))).toBe(false);
+        expect(square.isBeingTouched(glPoint(-1.05001, -1.05001))).toBe(false);
+        expect(square.isBeingTouched(glPoint(0, -1.05001))).toBe(false);
+        expect(square.isBeingTouched(glPoint(-1.05001, 0))).toBe(false);
+        expect(square.isBeingTouched(glPoint(100, 100))).toBe(false);
       });
       test('Get being touched', () => {
         expect(square.getTouched(new Point(0, 0))).toEqual([square]);
@@ -486,65 +492,54 @@ describe('Animationa and Movement', () => {
       });
     });
     describe('Get bounding box', () => {
+      let square;
+      let diagram;
+      let createSquare;
+      beforeEach(() => {
+        diagram = makeDiagram();
+        createSquare = (offset) => {
+          square = diagram.shapes.polygon({
+            sides: 4,
+            radius: Math.sqrt(2) * 0.1,
+            line: { width: 0.01 },
+            rotation: Math.PI / 4,
+            offset,
+          });
+          diagram.elements.add('square', square);
+          diagram.initialize();
+        };
+      });
       test('square centered on origin with scale 1', () => {
-        const sq = new VertexPolygon(
-          [webgl],
-          4,
-          Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
-          Math.PI / 4, Point.zero(),
-        );
-        const square = new DiagramElementPrimitive(sq);
-        const box = square.getBoundingRect('gl');
+        createSquare([0, 0]);
+        const box = square.getBoundingRect('diagram');
         expect(round(box.left, 3)).toEqual(-0.105);
         expect(round(box.bottom, 3)).toEqual(-0.105);
         expect(round(box.right, 3)).toEqual(0.105);
         expect(round(box.top, 3)).toEqual(0.105);
       });
       test('square vertices offset to origin with scale 1', () => {
-        const sq = new VertexPolygon(
-          [webgl],
-          4,
-          Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
-          Math.PI / 4, new Point(0.5, 0),
-        );
-        const square = new DiagramElementPrimitive(sq);
-        const box = square.getBoundingRect('gl');
+        createSquare([0, 0]);
+        square.setPosition(0.5, 0);
+        diagram.setFirstTransform();
+        const box = square.getBoundingRect('diagram');
         expect(round(box.left, 3)).toEqual(-0.105 + 0.5);
         expect(round(box.bottom, 3)).toEqual(-0.105);
         expect(round(box.right, 3)).toEqual(0.105 + 0.5);
         expect(round(box.top, 3)).toEqual(0.105);
       });
       test('square element offset to origin with scale 1', () => {
-        const sq = new VertexPolygon(
-          [webgl],
-          4,
-          Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
-          Math.PI / 4, new Point(0, 0),
-        );
-        const square = new DiagramElementPrimitive(
-          sq,
-          new Transform().scale(1, 1).rotate(0).translate(0.5, 0),
-        );
-        square.setFirstTransform();
-        const box = square.getBoundingRect('gl');
+        createSquare([0.5, 0]);
+        const box = square.getBoundingRect('diagram');
         expect(round(box.left, 3)).toEqual(-0.105 + 0.5);
         expect(round(box.bottom, 3)).toEqual(-0.105);
         expect(round(box.right, 3)).toEqual(0.105 + 0.5);
         expect(round(box.top, 3)).toEqual(0.105);
       });
       test('square element offset to origin with scale 2', () => {
-        const sq = new VertexPolygon(
-          [webgl],
-          4,
-          Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
-          Math.PI / 4, new Point(0.5, 0),
-        );
-        const square = new DiagramElementPrimitive(
-          sq,
-          new Transform().scale(2, 2).rotate(0).translate(0, 0),
-        );
-        square.setFirstTransform();
-        const box = square.getBoundingRect('gl');
+        createSquare([0.5, 0]);
+        square.setTransform(new Transform().scale(2, 2).rotate(0).translate(0, 0));
+        diagram.setFirstTransform();
+        const box = square.getBoundingRect('diagram');
         expect(round(box.left, 3)).toEqual(-0.105 * 2 + 0.5 * 2);
         expect(round(box.bottom, 3)).toEqual(-0.105 * 2);
         expect(round(box.right, 3)).toEqual(0.105 * 2 + 0.5 * 2);
@@ -941,137 +936,142 @@ describe('Animationa and Movement', () => {
     });
   });
   describe('Get bounding box', () => {
+    let diagram;
+    // let square;
+    let collection;
+    let createSquare;
+    beforeEach(() => {
+      diagram = makeDiagram();
+      createSquare = function cs(
+        offset = [0, 0],
+        sTransform = new Transform(),
+        cTransform = new Transform(),
+      ) {
+        // square = diagram.shapes.polygon({
+        //   radius: Math.sqrt(2) * 0.1,
+        //   line: { width: 0.01 },
+        //   rotation: Math.PI / 4,
+        //   offset,
+        //   transform: sTransform,
+        // });
+        collection = diagram.addElement({
+          name: 'c',
+          method: 'collection',
+          options: {
+            transform: cTransform,
+          },
+          addElements: [
+            {
+              name: 'square',
+              method: 'polygon',
+              options: {
+                radius: Math.sqrt(2) * 0.1,
+                line: { width: 0.01 },
+                rotation: Math.PI / 4,
+                offset,
+                transform: sTransform,
+              },
+            },
+          ],
+        });
+        collection = diagram.elements._c;
+        diagram.initialize();
+        diagram.setFirstTransform();
+      };
+    });
     test('square centered on origin with scale 1', () => {
-      const sq = new VertexPolygon(
-        [webgl],
-        4,
-        Math.sqrt(2) * (0.105), Math.sqrt(2) * 0.01,
-        Math.PI / 4, Point.zero(),
-      );
-      const square = new DiagramElementPrimitive(sq);
-      const collection = new DiagramElementCollection();
-      collection.add('square', square);
-      collection.setFirstTransform(new Transform());
+      createSquare();
 
-      const box = collection.getBoundingRect('gl');
+      const box = collection.getBoundingRect('diagram');
+
       expect(round(box.left, 3)).toEqual(-0.105);
       expect(round(box.bottom, 3)).toEqual(-0.105);
       expect(round(box.right, 3)).toEqual(0.105);
       expect(round(box.top, 3)).toEqual(0.105);
     });
     test('square offset from origin with scale 1, normal collection', () => {
-      const sq = new VertexPolygon(
-        [webgl],
-        4,
-        Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
-        Math.PI / 4, Point.zero(),
-      );
-      const square = new DiagramElementPrimitive(sq, new Transform()
+      createSquare([0, 0], new Transform()
         .scale(1, 1)
         .rotate(0)
         .translate(0.5, 0));
-      const collection = new DiagramElementCollection();
-      collection.add('square', square);
-      collection.setFirstTransform(new Transform());
 
-      const box = collection.getBoundingRect('gl');
+      const box = collection.getBoundingRect('diagram');
       expect(round(box.left, 3)).toEqual(-0.105 + 0.5);
       expect(round(box.bottom, 3)).toEqual(-0.105);
       expect(round(box.right, 3)).toEqual(0.105 + 0.5);
       expect(round(box.top, 3)).toEqual(0.105);
     });
     test('square on origin with scale 1, collection offset', () => {
-      const sq = new VertexPolygon(
-        [webgl],
-        4,
-        Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
-        Math.PI / 4, Point.zero(),
-      );
-      const square = new DiagramElementPrimitive(sq);
-      const collection = new DiagramElementCollection(new Transform()
+      createSquare([0, 0], new Transform(), new Transform()
         .scale(1, 1)
         .rotate(0)
         .translate(0.5, 0));
-      collection.add('square', square);
-      collection.setFirstTransform(new Transform());
+      // collection.setFirstTransform(new Transform());
 
-      const box = collection.getBoundingRect('gl');
+      const box = collection.getBoundingRect('diagram');
       expect(round(box.left, 3)).toEqual(-0.105 + 0.5);
       expect(round(box.bottom, 3)).toEqual(-0.105);
       expect(round(box.right, 3)).toEqual(0.105 + 0.5);
       expect(round(box.top, 3)).toEqual(0.105);
     });
     test('square element offset and colleciton offset', () => {
-      const sq = new VertexPolygon(
-        [webgl],
-        4,
-        Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
-        Math.PI / 4, Point.zero(),
+      createSquare(
+        [0, 0],
+        new Transform().scale(1, 1).rotate(0).translate(0.5, 0),
+        new Transform().scale(1, 1).rotate(0).translate(0.5, 0),
       );
-      const square = new DiagramElementPrimitive(sq, new Transform()
-        .scale(1, 1)
-        .rotate(0)
-        .translate(0.5, 0));
-      const collection = new DiagramElementCollection(new Transform()
-        .scale(1, 1)
-        .rotate(0)
-        .translate(0.5, 0));
-      collection.add('square', square);
-      collection.setFirstTransform(new Transform());
-
-      const box = collection.getBoundingRect('gl');
+      const box = collection.getBoundingRect('diagram');
       expect(round(box.left, 3)).toEqual(-0.105 + 1.0);
       expect(round(box.bottom, 3)).toEqual(-0.105);
       expect(round(box.right, 3)).toEqual(0.105 + 1.0);
       expect(round(box.top, 3)).toEqual(0.105);
     });
     test('square element offset and scaled and colleciton offset', () => {
-      const sq = new VertexPolygon(
-        [webgl],
-        4,
-        Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
-        Math.PI / 4, Point.zero(),
+      createSquare(
+        [0, 0],
+        new Transform().scale(1, 1).rotate(0).translate(0.5, 0),
+        new Transform().scale(2, 2).rotate(0).translate(0.5, 0),
       );
-      const square = new DiagramElementPrimitive(sq, new Transform()
-        .scale(1, 1)
-        .rotate(0)
-        .translate(0.5, 0));
-      const collection = new DiagramElementCollection(new Transform()
-        .scale(2, 2)
-        .rotate(0)
-        .translate(0.5, 0));
-      collection.add('square', square);
-      collection.setFirstTransform(new Transform());
-
-      const box = collection.getBoundingRect('gl');
+      const box = collection.getBoundingRect('diagram');
       expect(round(box.left, 3)).toEqual((-0.105 + 0.5) * 2 + 0.5);
       expect(round(box.bottom, 3)).toEqual(-0.105 * 2);
       expect(round(box.right, 3)).toEqual((0.105 + 0.5) * 2 + 0.5);
       expect(round(box.top, 3)).toEqual(0.105 * 2);
     });
     test('two squares', () => {
-      const sq = new VertexPolygon(
-        [webgl],
-        4,
-        Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
-        Math.PI / 4, Point.zero(),
-      );
-      const square1 = new DiagramElementPrimitive(sq, new Transform()
-        .scale(1, 1)
-        .rotate(0)
-        .translate(0.5, 0));
-      const square2 = new DiagramElementPrimitive(sq, new Transform()
-        .scale(1, 1)
-        .rotate(0)
-        .translate(0, -0.5));
-      const collection = new DiagramElementCollection(new Transform()
-        .scale(2, 2)
-        .rotate(0)
-        .translate(0.5, 0.5));
-      collection.add('square1', square1);
-      collection.add('square2', square2);
-      collection.setFirstTransform(new Transform());
-
+      diagram.addElement({
+        name: 'coll',
+        method: 'collection',
+        options: {
+          transform: new Transform().scale(2, 2).rotate(0).translate(0.5, 0.5),
+        },
+        addElements: ([
+          {
+            name: 'square1',
+            method: 'polygon',
+            options: {
+              radius: Math.sqrt(2) * 0.1,
+              line: { width: 0.01 },
+              sides: 4,
+              rotation: Math.PI / 4,
+              transform: new Transform().scale(1, 1).rotate(0).translate(0.5, 0),
+            },
+          },
+          {
+            name: 'square2',
+            method: 'polygon',
+            options: {
+              radius: Math.sqrt(2) * 0.1,
+              line: { width: 0.01 },
+              sides: 4,
+              rotation: Math.PI / 4,
+              transform: new Transform().scale(1, 1).rotate(0).translate(0, -0.5),
+            },
+          },
+        ]),
+      });
+      diagram.setFirstTransform();
+      collection = diagram.elements._coll;
       const box = collection.getBoundingRect('gl');
       expect(round(box.left, 3)).toEqual(round(-0.105 * 2 + 0.5, 3));
       expect(round(box.bottom, 3)).toEqual((-0.105 - 0.5) * 2 + 0.5);

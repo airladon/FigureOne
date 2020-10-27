@@ -267,67 +267,90 @@ diagram.addElements([
 
 
 
-diagram.addElements([
-          {
-            name: 'c',
-            method: 'collection',
-            addElements: [
-              // {
-              //   name: 'a',
-              //   method: 'polygon',
-              //   options: {
-              //     radius: 1,
-              //     sides: 4,
-              //     // transform: [['t', 1, 0], ['r', Math.PI / 4]],
-              //   },
-              // },
-              {
-                name: 'a',
-                method: 'text',
-                options: {
-                  text: 'hello world',
-                  touchBorder: 0.5,
-                }
-              }
-            ],
-            options: {
-              // transform: [['s', 0.5, 0.5], ['t', 1, 0], ['r', Math.PI / 4]],
-              // transform: [['s', 0.5, 0.5]],
+// diagram.addElements([
+//           {
+//             name: 'c',
+//             method: 'collection',
+//             addElements: [
+//               // {
+//               //   name: 'a',
+//               //   method: 'polygon',
+//               //   options: {
+//               //     radius: 1,
+//               //     sides: 4,
+//               //     // transform: [['t', 1, 0], ['r', Math.PI / 4]],
+//               //   },
+//               // },
+//               {
+//                 name: 'a',
+//                 method: 'text',
+//                 options: {
+//                   text: 'hello world',
+//                   touchBorder: 0.5,
+//                 }
+//               }
+//             ],
+//             options: {
+//               // transform: [['s', 0.5, 0.5], ['t', 1, 0], ['r', Math.PI / 4]],
+//               // transform: [['s', 0.5, 0.5]],
+//             },
+//           },
+//         ]);
+
+// const c = diagram.elements._c;
+// const a = c._a;
+// // c.setPosition(1, 0);
+// // c.setScale(0.5, 0.5);
+// // c.setRotation(Math.PI / 4);
+// // c.setTransform(new Fig.Transform().scale(0.5, 0.5).translate(1, 0).rotate(Math.PI / 4))
+// // p.setPosition(1, 0);
+// diagram.initialize();
+// // console.log(a.getPosition('vertex'));
+// // console.log(a.getPosition('local'));
+// // console.log(a.getPosition('diagram'));
+// // // console.log(a.getPosition('gl'));
+// // // console.log(a.lastDrawTransform)
+// // console.log(a)
+
+// // console.log(new Fig.Point(0, 0).transformBy(a.spaceTransform('vertex', 'diagram')))
+// // console.log(new Fig.Point(0, 0).transformBy(a.spaceTransform('diagram', 'vertex')))
+// // console.log(new Fig.Point(0, 0).transformBy(a.spaceTransform('vertex', 'pixel')))
+
+// // console.log(new Fig.Point(500, 500).transformBy(a.spaceTransform('pixel', 'vertex')))
+
+// console.log(a.getPosition('vertex'))
+// console.log(a.getPosition('local'))
+// console.log(a.getPosition('diagram'))
+// console.log(a.getPosition('pixel'))
+
+// a.setMovable();
+
+// // c.spaceTransforms.vertexToDiagram
+// // c.spaceTransforms.vertexToLocal
+// // c.spaceTransforms.localToDiagram
+// // c.spaceTransforms.diagramToVertex
+// // c.spaceTransforms.diagramToLocal
+// // c.spaceTransforms.localToVertex
+
+collection = diagram.addElement({
+  name: 'c',
+  method: 'collection',
+          // transform: cTransform,
+          addElements: [
+            {
+              name: 'square',
+              method: 'polygon',
+              options: {
+                radius: Math.sqrt(2) * 0.1,
+                line: { width: 0.01 },
+                rotation: Math.PI / 4,
+                // offset,
+                // transform: sTransform,
+              },
             },
-          },
-        ]);
+          ],
+        });
+        diagram.elements.add('c', collection);
+        diagram.initialize();
 
-const c = diagram.elements._c;
-const a = c._a;
-// c.setPosition(1, 0);
-// c.setScale(0.5, 0.5);
-// c.setRotation(Math.PI / 4);
-// c.setTransform(new Fig.Transform().scale(0.5, 0.5).translate(1, 0).rotate(Math.PI / 4))
-// p.setPosition(1, 0);
-diagram.initialize();
-// console.log(a.getPosition('vertex'));
-// console.log(a.getPosition('local'));
-// console.log(a.getPosition('diagram'));
-// // console.log(a.getPosition('gl'));
-// // console.log(a.lastDrawTransform)
-// console.log(a)
-
-// console.log(new Fig.Point(0, 0).transformBy(a.spaceTransform('vertex', 'diagram')))
-// console.log(new Fig.Point(0, 0).transformBy(a.spaceTransform('diagram', 'vertex')))
-// console.log(new Fig.Point(0, 0).transformBy(a.spaceTransform('vertex', 'pixel')))
-
-// console.log(new Fig.Point(500, 500).transformBy(a.spaceTransform('pixel', 'vertex')))
-
-console.log(a.getPosition('vertex'))
-console.log(a.getPosition('local'))
-console.log(a.getPosition('diagram'))
-console.log(a.getPosition('pixel'))
-
-a.setMovable();
-
-// c.spaceTransforms.vertexToDiagram
-// c.spaceTransforms.vertexToLocal
-// c.spaceTransforms.localToDiagram
-// c.spaceTransforms.diagramToVertex
-// c.spaceTransforms.diagramToLocal
-// c.spaceTransforms.localToVertex
+        console.log(diagram.elements)
