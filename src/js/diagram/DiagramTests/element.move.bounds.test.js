@@ -1,5 +1,5 @@
 import {
-  Point, Line,
+  Point, Line, Rect,
 } from '../../tools/g2';
 // import {
 //   round,
@@ -97,5 +97,54 @@ describe('Set Position with Bounds', () => {
     expect(a.getPosition().round(3)).toEqual(new Point(-10, -10));
     a.setPosition(5, 0);
     expect(a.getPosition().round(3)).toEqual(new Point(2.5, 2.5));
+  });
+});
+describe('Diagram Bounds', () => {
+  let diagram;
+  let a;
+  let create;
+  beforeEach(() => {
+    diagram = makeDiagram(
+      new Rect(0, 0, 1000, 1000),
+      new Rect(-3, -3, 6, 6),
+    );
+    const diagramOptions = {
+      simple: () => {
+        diagram.addElement({
+          name: 'a',
+          method: 'rectangle',
+          options: {
+            width: 1,
+            height: 1,
+          },
+          mods: {
+            move: { bounds: 'diagram' },
+          },
+        });
+        a = diagram.elements._a;
+      },
+    };
+    create = (option) => {
+      diagramOptions[option]();
+      a.setMovable();
+      diagram.initialize();
+    };
+  });
+  describe('Simple', () => {
+    beforeEach(() => {
+      create('simple');
+    });
+    test('static bounds', () => {
+      expect(a.move.bounds.boundary[2].boundary).toEqual({
+        left: -2.5, bottom: -2.5, right: 2.5, top: 2.5,
+      });
+    });
+    test('updated bounds', () => {
+      a.custom.update({ width: 2, height: 2 });
+      console.log(a.getBoundingRect('diagram'));
+      expect(a.move.bounds.boundary[2].boundary).toEqual({
+        left: -2, bottom: -2, right: 2, top: 2,
+      });
+    });
   });
 });
