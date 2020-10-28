@@ -110,50 +110,84 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
 /**
  * Pulse options object
  *
- * An element can have its scale pulsed of some `duration` with some
- * `frequency`.
+ * Pulsing can be useful to highlight a diagram element to a user, without
+ * changing its underlying properties.
  *
- * If the scale is pulsed from the center of an object, the object will simply
- * grow larger then smaller. If however, the scale is pulse from the side of the
- * object, then the object will grow larger while moving away from the pulse
- * center. Therefore the center of the scale pulse is defined with `centerOn`,
- * `xAlign` and `yAlign`.
+ * When an element is pulsed, it will be scaled, translated or rotated from
+ * a start value (1 for scale, 0 for rotation and translation),
+ * to a maximum value (`scale`, `translate` or `rotate`),
+ * to a `min` value, and then back to the `start` value. An element can
+ * be pulsed through this cycle `frequency` times per second, over some
+ * `duration`.
  *
- * How the pulse transitions from a scale of 1 to the pulse scale (s) is defined
- * by the `progression`. A triangle progression will linearly progress from 1
- * to s and back to 1 over time. Alternately `sinusoid` slows the progression
- * at the minimums and maximums of the pulse.
+ * The pulse does not change the {@link DiagramElement}.transform property, and
+ * only changes the draw transform.
  *
- * @property {'left' | 'center' | 'right' | 'origin' | number} [xAlign]
- * horiontal alignment with pulse center
- * @property {'bottom' | 'middle' | 'top' | 'origin' | number} [yAlign] vertical
- * alignment with pulse center
+ * By default, a scale or rotation pulse will scale or rotate around the the
+ * center of the rectangle encompassing the border of the element. `centerOn`
+ * can be used to define a different {@link DiagramElement} or point to center
+ * on. If centering on a {@link DiagramElement}, `xAlign` and `yAlign` can be
+ * used to center on a point aligned within it. For instance, `xAlign: 'left'`
+ * will center on a point on the left edte of the {@link DiagramElement}.
+ *
+ * The pulse can also draw multiple copies of the element with pulse transforms
+ * distributed between the `min` and maximum pulse values. This is particularly
+ * useful for shapes with outlines that have a regular spacing from a center
+ * point (such as regular polygons) as it will look like the thickness of the
+ * outlines are becomming thicker.
+ *
+ * @property {number} [duration] pulse duration in seconds (`1`)
+ * @property {number} [frequency] pulse frequency in Hz - a frequency of zero
+ * will set the frequency so just one cycle will be performed in the duration
+ * (`0`)
+ * @property {number} [scale] maximum scale value to pulse to (`1.5`)
+ * @property {number} [rotation] maximum rotation value to pulse to
+ * @property {number} [translation] maximum translation displacment value to
+ * pulse to (`1.5`)
+ * @property {number} [angle] translation angle (`0`)
+ * @property {number} [min] minimum value to pulse to
  * @property {null | DiagramElement | TypeParsablePoint} [centerOn] center
- * of pulse
- * @property {'diagram' | 'gl' | 'local' | 'draw'} [space] space the
- * `centerOn` property operates when `centerOn` is a `TypeParsablePoint`
- * @property {number} [frequency] pulse frequency in Hz
- * @property {number} [duration] pulse duration in seconds
- * @property {number} [scale] pulse scale
- * @property {?(mixed) => void} [done] callback when pulse is finished
+ * of scale or rotation pulse. By default, the element calling the pulse
+ * will be the default `centerOn`.
+ * @property {'left' | 'center' | 'right' | 'location' | number} [xAlign]
+ * if `centerOn` is a {@link DiagramElement} then this property can be used to
+ * horizontally align the pulse center with the element. `'location'` is the
+ * (0, 0) draw space coordinate of the element. `number` defines the percent
+ * width from the left of the element (`'center'`)
+ * @property {'bottom' | 'middle' | 'top' | 'location' | number} [yAlign]
+ * if `centerOn` is a {@link DiagramElement} then this property can be used to
+ * vertically align the pulse center with the element. `'location'` is the
+ * (0, 0) draw space coordinate of the element. `number` defines the percent
+ * width from the left of the element (`'center'`)
+ * @property {'diagram' | 'gl' | 'local' | 'draw' | 'pixel'} [space]
+ * if `centerOn` is a point, use this to define the space the point is in
+ * (`'diagram'`)
+ * @property {number} [num] the number of draw copies of the pulse to make (`1`)
+ * @property {null | string | function(): void} [done] callback when pulse is
+ * finished. If `string` then the element's {@link FunctionMap} `fnMap` will be
+ * used (`null`)
+ * @property {TypeWhen} [when] when to start the pulse (`'syncNow'`)
  * @property {'sinusoid' | 'triangle'} [progression] function that defines
  * how the scale should progress over time (`sinusoid`)
  */
 type OBJ_Pulse = {
-  scale?: number,
   duration?: number,
   frequency?: number,
+  scale?: number,
+  rotation?: number,
+  translation?: number,
+  angle?: number,
+  min?: number,
   centerOn?: null | DiagramElement | TypeParsablePoint,
-  space?: 'diagram' | 'gl' | 'local' | 'draw',
   x?: 'left' | 'center' | 'right' | 'origin' | number,
   y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
+  space?: 'diagram' | 'gl' | 'local' | 'draw',
   done?: ?(mixed) => void,
+  num?: number,
+  when?: TypeWhen,
+  done: string | () => void | null,
   progression?: string | (number) => number,
-  thick?: {
-    num?: number,
-    min?: number,
-    max?: number,
-  }
+  // start?: number,
 };
 
 /**
@@ -595,7 +629,6 @@ class DiagramElement {
       yAlign: 'middle',
       centerOn: this,
       num: 1,
-      // min: 1,
       space: 'diagram',
       done: null,
       progression: 'sinusoid',
@@ -2214,7 +2247,7 @@ class DiagramElement {
       if (typeof optionsOrDone === 'function') {
         done = optionsOrDone;
       } else if (optionsOrDone.done != null) {
-        ({ done } = optionsOrDonw);
+        ({ done } = optionsOrDone);
       }
       this.fnMap.exec(this.pulseDefault, done);
       return;
