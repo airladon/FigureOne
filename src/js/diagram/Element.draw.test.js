@@ -61,7 +61,7 @@ describe('Element Drawing', () => {
     a.setPosition(1, 1);
     expect(diagram.webglLow.gl.uniformMatrix3fv.mock.calls).toHaveLength(0);
     diagram.setFirstTransform();
-    a.pulseScaleNow(1, 1.5);
+    a.pulse({ duaration: 1, scale: 1.5 });
     diagram.mock.timeStep(0);
     diagram.mock.timeStep(0.5);
     const expectedLastDrawTransform = new Transform()
@@ -74,7 +74,10 @@ describe('Element Drawing', () => {
       .scale(1, 1, 'Diagram')
       .translate(0, 0, 'Diagram');
     const expectedDrawTransform = expectedLastDrawTransform.transform(
-      new Transform().scale(1.5, 1.5),
+      new Transform()
+        .translate(-0, -0)
+        .scale(1.5, 1.5)
+        .translate(0, 0),
     );
 
     // LastDrawTransform
