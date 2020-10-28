@@ -34,7 +34,7 @@ import type {
   OBJ_PositionAnimationStep, OBJ_AnimationBuilder,
   OBJ_ColorAnimationStep, OBJ_TransformAnimationStep,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
-  TypePulseAnimationStepInputOptions, OBJ_OpacityAnimationStep,
+  OBJ_PulseAnimationStep, OBJ_OpacityAnimationStep,
   OBJ_ParallelAnimationStep, OBJ_TriggerAnimationStep,
   OBJ_AnimationStep, TypePulseTransformAnimationStepInputOptions,
   OBJ_ScenarioAnimationStepInputOptions,
@@ -728,7 +728,7 @@ class DiagramElement {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.PulseTransformAnimationStep(options);
       },
-      pulse: (...optionsIn: Array<TypePulseAnimationStepInputOptions>) => {
+      pulse: (...optionsIn: Array<OBJ_PulseAnimationStep>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.PulseAnimationStep(options);
       },
@@ -951,6 +951,7 @@ class DiagramElement {
 
     const pulseTransformMethod = (mag, d, type) => {
       // if (type === 'scale' && (d == null || (d.x === 0 && d.y === 0))) {
+      // if (type === 'scale' && d == null) {
       //   return new Transform().scale(mag, mag);
       // }
       if (type === 'scale') {

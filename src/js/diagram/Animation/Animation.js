@@ -49,7 +49,7 @@ import type {
 import ScaleAnimationStep from './AnimationStep/ElementAnimationStep/ScaleAnimationStep';
 
 import type {
-  TypePulseAnimationStepInputOptions,
+  OBJ_PulseAnimationStep,
 } from './AnimationStep/ElementAnimationStep/PulseAnimationStep';
 import PulseAnimationStep from './AnimationStep/ElementAnimationStep/PulseAnimationStep';
 
@@ -113,7 +113,7 @@ export type {
   OBJ_TriggerAnimationStep,
   OBJ_ColorAnimationStep, OBJ_CustomAnimationStep,
   TypeAnimationManagerInputOptions, OBJ_RotationAnimationStep,
-  OBJ_ScaleAnimationStep, TypePulseAnimationStepInputOptions,
+  OBJ_ScaleAnimationStep, OBJ_PulseAnimationStep,
   OBJ_OpacityAnimationStep, OBJ_ScenarioAnimationStep,
   TypePulseTransformAnimationStepInputOptions,
 };

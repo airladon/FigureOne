@@ -14,20 +14,22 @@ describe('Scale Animation Step', () => {
   let elem1;
   let diagram;
   beforeEach(() => {
+    jest.useFakeTimers();
     diagram = makeDiagram();
-    elem1 = diagram.objects.line();
+    elem1 = diagram.shapes.polygon();
     diagram.elements.add('elem1', elem1);
     elem1.setScale(1, 1);
   });
   test('Simple scale', () => {
     elem1.animations.new()
-      .pulse({ scale: 2, duration: 1 })
+      .pulse({ scale: 2, duration: 1, when: 'nextFrame' })
       .start();
-    diagram.draw(0);
+    diagram.mock.timeStep(0);
     expect(elem1.getScale().round()).toEqual(new Point(1, 1));
-    diagram.draw(0.5);
+    expect(elem1.lastDrawPulseTransform.s()).toEqual(new Point(1, 1));
+    diagram.mock.timeStep(0.5);
     expect(elem1.lastDrawPulseTransform.s()).toEqual(new Point(2, 2));
-    diagram.draw(0.75);
-    expect(elem1.lastDrawPulseTransform.s().round(3)).toEqual(new Point(1.707, 1.707));
+    diagram.mock.timeStep(0.25);
+    expect(elem1.lastDrawPulseTransform.s().round(3)).toEqual(new Point(1.5, 1.5));
   });
 });

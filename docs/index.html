@@ -1546,6 +1546,16 @@
               
                 
                 <li><a
+                  href='#pulseanimationstep'
+                  class="">
+                  PulseAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#coloranimationstep'
                   class="">
                   ColorAnimationStep
@@ -2660,6 +2670,16 @@
               
                 
                 <li><a
+                  href='#obj_pulse'
+                  class="">
+                  OBJ_Pulse
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_coloranimationstep'
                   class="">
                   OBJ_ColorAnimationStep
@@ -2882,16 +2902,6 @@
               
                 
                 <li><a
-                  href='#obj_pulse'
-                  class="">
-                  OBJ_Pulse
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#diagramelementmovefreely'
                   class="">
                   DiagramElementMoveFreely
@@ -2995,6 +3005,16 @@
                   href='#animationprogression'
                   class="">
                   AnimationProgression
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_pulseanimationstep'
+                  class="">
+                  OBJ_PulseAnimationStep
                   
                 </a>
                 
@@ -20272,6 +20292,136 @@ p.animations.new()
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='pulseanimationstep'>
+      PulseAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Pulse animation step</p>
+<p><img src="./assets1/pulse_animation.gif"></p>
+<p>The pulse animation step animates a pulse.</p>
+<p>The options are the same as those in the * <a href="#diagramelementpulse">pulse</a> method.</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#elementanimationstep">ElementAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_pulseanimationstep">OBJ_PulseAnimationStep</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_rotationanimationstep">OBJ_RotationAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#animation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>p.animations.new()
+  .pulse({
+    <span class="hljs-attr">scale</span>: <span class="hljs-number">1.5</span>,
+    <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
+  })
+  .pulse({
+    <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">rotation</span>: <span class="hljs-number">0.15</span>,
+    <span class="hljs-attr">frequency</span>: <span class="hljs-number">4</span>,
+  })
+  .pulse({
+    <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">translation</span>: <span class="hljs-number">0.02</span>,
+    <span class="hljs-attr">min</span>: <span class="hljs-number">-0.02</span>,
+    <span class="hljs-attr">frequency</span>: <span class="hljs-number">4</span>,
+  })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Different ways to create a stand-alone step</span>
+<span class="hljs-keyword">const</span> step1 = p.animations.pulse({
+  <span class="hljs-attr">scale</span>: <span class="hljs-number">1.5</span>,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
+});
+<span class="hljs-keyword">const</span> step2 = <span class="hljs-keyword">new</span> Fig.Animation.PulseAnimationStep({
+  <span class="hljs-attr">element</span>: p,
+  <span class="hljs-attr">rotation</span>: <span class="hljs-number">0.15</span>,
+  <span class="hljs-attr">frequency</span>: <span class="hljs-number">4</span>,
+});
+p.animations.new()
+  .then(step1)
+  .then(step2)
+  .start();</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='coloranimationstep'>
       ColorAnimationStep
     </h3>
@@ -34333,6 +34483,313 @@ callback - if the
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_pulse'>
+      OBJ_Pulse
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Pulse options object</p>
+<p><img src="./assets1/pulse.gif"></p>
+<p>Pulsing can be useful to highlight a diagram element to a user, without
+changing its underlying properties.</p>
+<p>When an element is pulsed, it will be scaled, translated or rotated from
+a start value (1 for scale, 0 for rotation and translation),
+to a maximum value (<code>scale</code>, <code>translate</code> or <code>rotate</code>),
+to a <code>min</code> value, and then back to the <code>start</code> value. An element can
+be pulsed through this cycle <code>frequency</code> times per second, over some
+<code>duration</code>.</p>
+<p>The pulse does not change the <a href="#diagramelement">DiagramElement</a>.transform property, and
+only changes the draw transform.</p>
+<p>By default, a scale or rotation pulse will scale or rotate around the the
+center of the rectangle encompassing the border of the element. <code>centerOn</code>
+can be used to define a different <a href="#diagramelement">DiagramElement</a> or point to center
+on. If centering on a <a href="#diagramelement">DiagramElement</a>, <code>xAlign</code> and <code>yAlign</code> can be
+used to center on a point aligned within it. For instance, <code>xAlign: 'left'</code>
+will center on a point on the left edte of the <a href="#diagramelement">DiagramElement</a>.</p>
+<p>The pulse can also draw multiple copies of the element with pulse transforms
+distributed between the <code>min</code> and maximum pulse values. This is particularly
+useful for shapes with outlines that have a regular spacing from a center
+point (such as regular polygons) as it will look like the thickness of the
+outlines are becomming thicker.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : pulse duration in seconds (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>frequency</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : pulse frequency in Hz - a frequency of zero
+will set the frequency so just one cycle will be performed in the duration
+(
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : maximum scale value to pulse to (
+<code>1.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : maximum rotation value to pulse to
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>translation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : maximum translation displacment value to
+pulse to (
+<code>1.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : translation angle (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>min</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : minimum value to pulse to
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>centerOn</span> <code class='quiet'>((null | <a href="#diagramelement">DiagramElement</a> | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
+          : center
+of scale or rotation pulse. By default, the element calling the pulse
+will be the default 
+<code>centerOn</code>
+.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <code>"location"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : if 
+<code>centerOn</code>
+ is a 
+<a href="#diagramelement">DiagramElement</a>
+ then this property can be used to
+horizontally align the pulse center with the element. 
+<code>'location'</code>
+ is the
+(0, 0) draw space coordinate of the element. 
+<code>number</code>
+ defines the percent
+width from the left of the element (
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"location"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : if 
+<code>centerOn</code>
+ is a 
+<a href="#diagramelement">DiagramElement</a>
+ then this property can be used to
+vertically align the pulse center with the element. 
+<code>'location'</code>
+ is the
+(0, 0) draw space coordinate of the element. 
+<code>number</code>
+ defines the percent
+width from the left of the element (
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>((<code>"diagram"</code> | <code>"gl"</code> | <code>"local"</code> | <code>"draw"</code> | <code>"pixel"</code>)?)</code>
+          : if 
+<code>centerOn</code>
+ is a point, use this to define the space the point is in
+(
+<code>'diagram'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>num</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : the number of draw copies of the pulse to make (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>done</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?)</code>
+          : callback when pulse is
+finished. If 
+<code>string</code>
+ then the element's 
+<a href="FunctionMap">FunctionMap</a>
+ 
+<code>fnMap</code>
+ will be
+used (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>when</span> <code class='quiet'>(<a href="#typewhen">TypeWhen</a>?)</code>
+          : when to start the pulse (
+<code>'syncNow'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>progression</span> <code class='quiet'>((<code>"sinusoid"</code> | <code>"triangle"</code>)?)</code>
+          : function that defines
+how the scale should progress over time (
+<code>sinusoid</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>x</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>y</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For all examples below, use this to add an element to the diagram</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.3</span>,
+    <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.05</span>, },
+  },
+});
+
+<span class="hljs-keyword">const</span> p = diagram.getElement(<span class="hljs-string">'p'</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Scale pulse</span>
+p.pulse({
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">scale</span>: <span class="hljs-number">1.3</span>
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Rotation pulse</span>
+p.pulse({
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">rotation</span>: <span class="hljs-number">0.15</span>,
+  <span class="hljs-attr">frequency</span>: <span class="hljs-number">4</span>,
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Translation pulse</span>
+p.pulse({
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">translation</span>: <span class="hljs-number">0.02</span>,
+  <span class="hljs-attr">min</span>: <span class="hljs-number">-0.02</span>,
+  <span class="hljs-attr">frequency</span>: <span class="hljs-number">4</span>,
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Thick pulse</span>
+p.pulse({
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">scale</span>: <span class="hljs-number">1.1</span>,
+  <span class="hljs-attr">min</span>: <span class="hljs-number">0.9</span>,
+  <span class="hljs-attr">num</span>: <span class="hljs-number">7</span>,
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='obj_coloranimationstep'>
       OBJ_ColorAnimationStep
     </h3>
@@ -36524,313 +36981,6 @@ both a start and end arrow.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_pulse'>
-      OBJ_Pulse
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Pulse options object</p>
-<p><img src="./assets1/pulse.gif"></p>
-<p>Pulsing can be useful to highlight a diagram element to a user, without
-changing its underlying properties.</p>
-<p>When an element is pulsed, it will be scaled, translated or rotated from
-a start value (1 for scale, 0 for rotation and translation),
-to a maximum value (<code>scale</code>, <code>translate</code> or <code>rotate</code>),
-to a <code>min</code> value, and then back to the <code>start</code> value. An element can
-be pulsed through this cycle <code>frequency</code> times per second, over some
-<code>duration</code>.</p>
-<p>The pulse does not change the <a href="#diagramelement">DiagramElement</a>.transform property, and
-only changes the draw transform.</p>
-<p>By default, a scale or rotation pulse will scale or rotate around the the
-center of the rectangle encompassing the border of the element. <code>centerOn</code>
-can be used to define a different <a href="#diagramelement">DiagramElement</a> or point to center
-on. If centering on a <a href="#diagramelement">DiagramElement</a>, <code>xAlign</code> and <code>yAlign</code> can be
-used to center on a point aligned within it. For instance, <code>xAlign: 'left'</code>
-will center on a point on the left edte of the <a href="#diagramelement">DiagramElement</a>.</p>
-<p>The pulse can also draw multiple copies of the element with pulse transforms
-distributed between the <code>min</code> and maximum pulse values. This is particularly
-useful for shapes with outlines that have a regular spacing from a center
-point (such as regular polygons) as it will look like the thickness of the
-outlines are becomming thicker.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : pulse duration in seconds (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>frequency</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : pulse frequency in Hz - a frequency of zero
-will set the frequency so just one cycle will be performed in the duration
-(
-<code>0</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : maximum scale value to pulse to (
-<code>1.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : maximum rotation value to pulse to
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>translation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : maximum translation displacment value to
-pulse to (
-<code>1.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : translation angle (
-<code>0</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>min</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : minimum value to pulse to
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>centerOn</span> <code class='quiet'>((null | <a href="#diagramelement">DiagramElement</a> | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
-          : center
-of scale or rotation pulse. By default, the element calling the pulse
-will be the default 
-<code>centerOn</code>
-.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <code>"location"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : if 
-<code>centerOn</code>
- is a 
-<a href="#diagramelement">DiagramElement</a>
- then this property can be used to
-horizontally align the pulse center with the element. 
-<code>'location'</code>
- is the
-(0, 0) draw space coordinate of the element. 
-<code>number</code>
- defines the percent
-width from the left of the element (
-<code>'center'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"location"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : if 
-<code>centerOn</code>
- is a 
-<a href="#diagramelement">DiagramElement</a>
- then this property can be used to
-vertically align the pulse center with the element. 
-<code>'location'</code>
- is the
-(0, 0) draw space coordinate of the element. 
-<code>number</code>
- defines the percent
-width from the left of the element (
-<code>'center'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>space</span> <code class='quiet'>((<code>"diagram"</code> | <code>"gl"</code> | <code>"local"</code> | <code>"draw"</code> | <code>"pixel"</code>)?)</code>
-          : if 
-<code>centerOn</code>
- is a point, use this to define the space the point is in
-(
-<code>'diagram'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>num</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : the number of draw copies of the pulse to make (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>done</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?)</code>
-          : callback when pulse is
-finished. If 
-<code>string</code>
- then the element's 
-<a href="FunctionMap">FunctionMap</a>
- 
-<code>fnMap</code>
- will be
-used (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>when</span> <code class='quiet'>(<a href="#typewhen">TypeWhen</a>?)</code>
-          : when to start the pulse (
-<code>'syncNow'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>progression</span> <code class='quiet'>((<code>"sinusoid"</code> | <code>"triangle"</code>)?)</code>
-          : function that defines
-how the scale should progress over time (
-<code>sinusoid</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>x</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>y</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"origin"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For all examples below, use this to add an element to the diagram</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.3</span>,
-    <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.05</span>, },
-  },
-});
-
-<span class="hljs-keyword">const</span> p = diagram.getElement(<span class="hljs-string">'p'</span>);</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Scale pulse</span>
-p.pulse({
-  <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
-  <span class="hljs-attr">scale</span>: <span class="hljs-number">1.3</span>
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Rotation pulse</span>
-p.pulse({
-  <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
-  <span class="hljs-attr">rotation</span>: <span class="hljs-number">0.15</span>,
-  <span class="hljs-attr">frequency</span>: <span class="hljs-number">4</span>,
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Translation pulse</span>
-p.pulse({
-  <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
-  <span class="hljs-attr">translation</span>: <span class="hljs-number">0.02</span>,
-  <span class="hljs-attr">min</span>: <span class="hljs-number">-0.02</span>,
-  <span class="hljs-attr">frequency</span>: <span class="hljs-number">4</span>,
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Thick pulse</span>
-p.pulse({
-  <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>,
-  <span class="hljs-attr">scale</span>: <span class="hljs-number">1.1</span>,
-  <span class="hljs-attr">min</span>: <span class="hljs-number">0.9</span>,
-  <span class="hljs-attr">num</span>: <span class="hljs-number">7</span>,
-});</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='diagramelementmovefreely'>
       DiagramElementMoveFreely
     </h3>
@@ -37711,6 +37861,222 @@ at the start or end of the animation.</p>
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_pulseanimationstep'>
+      OBJ_PulseAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#pulseanimationstep">PulseAnimationStep</a> options object</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_elementanimationstep">OBJ_ElementAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>frequency</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : pulse frequency in Hz - a frequency of zero
+will set the frequency so just one cycle will be performed in the duration
+(
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : maximum scale value to pulse to (
+<code>1.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : maximum rotation value to pulse to
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>translation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : maximum translation displacment value to
+pulse to (
+<code>1.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : translation angle (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>min</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : minimum value to pulse to
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>centerOn</span> <code class='quiet'>((null | <a href="#diagramelement">DiagramElement</a> | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
+          : center
+of scale or rotation pulse. By default, the element calling the pulse
+will be the default 
+<code>centerOn</code>
+.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <code>"location"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : if 
+<code>centerOn</code>
+ is a 
+<a href="#diagramelement">DiagramElement</a>
+ then this property can be used to
+horizontally align the pulse center with the element. 
+<code>'location'</code>
+ is the
+(0, 0) draw space coordinate of the element. 
+<code>number</code>
+ defines the percent
+width from the left of the element (
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"location"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : if 
+<code>centerOn</code>
+ is a 
+<a href="#diagramelement">DiagramElement</a>
+ then this property can be used to
+vertically align the pulse center with the element. 
+<code>'location'</code>
+ is the
+(0, 0) draw space coordinate of the element. 
+<code>number</code>
+ defines the percent
+width from the left of the element (
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>((<code>"diagram"</code> | <code>"gl"</code> | <code>"local"</code> | <code>"draw"</code> | <code>"pixel"</code>)?)</code>
+          : if 
+<code>centerOn</code>
+ is a point, use this to define the space the point is in
+(
+<code>'diagram'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>num</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : the number of draw copies of the pulse to make (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>done</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): void)?)</code>
+          : callback when pulse is
+finished. If 
+<code>string</code>
+ then the element's 
+<a href="FunctionMap">FunctionMap</a>
+ 
+<code>fnMap</code>
+ will be
+used (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>when</span> <code class='quiet'>(<a href="#typewhen">TypeWhen</a>?)</code>
+          : when to start the pulse (
+<code>'syncNow'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
   
 
   

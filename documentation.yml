@@ -40,6 +40,7 @@ toc:
   - ScaleAnimationStep
   - TransformAnimationStep
   - ScenarioAnimationStep
+  - PulseAnimationStep
   - ColorAnimationStep
   - DimAnimationStep
   - UndimAnimationStep
@@ -142,6 +143,7 @@ toc:
   - OBJ_TransformAnimationStep
   - OBJ_ScenarioAnimationStep
   - OBJ_TriggerAnimationStep
+  - OBJ_Pulse
   - OBJ_ColorAnimationStep
   - OBJ_OpacityAnimationStep
   - OBJ_ScenariosAnimationStep

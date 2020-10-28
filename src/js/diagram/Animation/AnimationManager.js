@@ -384,7 +384,7 @@ export default class AnimationManager {
     return new anim.PulseTransformAnimationStep(optionsToUse);
   }
 
-  pulse(...options: Array<TypePulseAnimationStepInputOptions>) {
+  pulse(...options: Array<OBJ_PulseAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
     return new anim.PulseAnimationStep(optionsToUse);
   }
