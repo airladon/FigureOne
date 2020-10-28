@@ -429,6 +429,7 @@ class DiagramElement {
     scale: null | number | Point,
     rotation: null | number,
     translation: null | number | Point,
+    angle: number,
     duration: number,
     frequency: number,
     // thick?: {
@@ -587,6 +588,7 @@ class DiagramElement {
       scale: 2,
       rotation: null,
       translation: null,
+      angle: 0,
       duration: 1,
       frequency: 0,
       xAlign: 'center',
@@ -867,20 +869,25 @@ class DiagramElement {
 
     this.scenarios = {};
 
-    const pulseTransformMethod = (x, y, d, type) => {
+    const pulseTransformMethod = (mag, d, type) => {
       if (d == null || (d.x === 0 && d.y === 0)) {
-        return new Transform().scale(x, y);
+        return new Transform().scale(mag, mag);
       }
       if (type === 'scale') {
         return new Transform()
           .translate(-d.x, -d.y)
-          .scale(x, y)
+          .scale(mag, mag)
           .translate(d.x, d.y);
       }
-      return new Transform()
-        .translate(-d.x, -d.y)
-        .rotate(x)
-        .translate(d.x, d.y);
+      if (type === 'rotation') {
+        return new Transform()
+          .translate(-d.x, -d.y)
+          .rotate(mag)
+          .translate(d.x, d.y);
+      }
+      const x = mag * Math.cos(type);
+      const y = mag * Math.sin(type);
+      return new Transform().translate(x, y);
     };
     this.fnMap.add('_elementPulseSettingsTransformMethod', pulseTransformMethod);
     this.fnMap.add('tools.math.easeinout', math.easeinout);
@@ -2167,7 +2174,6 @@ class DiagramElement {
         const pTransform = this.fnMap.exec(
           this.pulseSettings.transformMethod,
           pulseMag,
-          pulseMag,
           getPoint(this.pulseSettings.delta),
           this.pulseSettings.type,
         );
@@ -2195,33 +2201,6 @@ class DiagramElement {
    * @param {null | OBJ_Pulse | () => void} optionsOrDone
    */
   pulse(optionsOrDone: null | OBJ_Pulse | () => void = null) {
-    // const defaultPulseOptions = {
-    //   frequency: 0,
-    //   time: 1,
-    //   scale: 2,
-    // };
-    // if (
-    //   typeof this.pulseDefault !== 'function'
-    //   && typeof this.pulseDefault !== 'string'
-    // ) {
-    //   defaultPulseOptions.frequency = this.pulseDefault.frequency;
-    //   defaultPulseOptions.duration = this.pulseDefault.duration;
-    //   defaultPulseOptions.scale = this.pulseDefault.scale;
-    // }
-    // const defaultOptions = {
-    //   scale: defaultPulseOptions.scale,
-    //   duration: defaultPulseOptions.duration,
-    //   frequency: defaultPulseOptions.frequency,
-    //   num: 0,
-    //   centerOn: null,
-    //   space: 'diagram',
-    //   xAlign: 'center',
-    //   yAlign: 'middle',
-    //   done: null,
-    //   progression: 'sinusoid',
-    //   when: 'syncNow',
-    //   callback: null,
-    // };
     if (
       typeof this.pulseDefault === 'function'
       || typeof this.pulseDefault === 'string'
@@ -2277,10 +2256,10 @@ class DiagramElement {
     // const currentPosition = this.getPosition('local');
     // const delta = p.sub(currentPosition);
     const {
-      duration, scale, frequency, progression, when, num, rotation,
+      duration, scale, frequency, progression, when, num, rotation, angle, translation,
     } = options;
     let {
-      min, start
+      min, start,
     } = options;
 
     let frequencyToUse = frequency;
@@ -2299,6 +2278,9 @@ class DiagramElement {
       if (rotation != null) {
         start = 0;
       }
+      if (translation != null) {
+        start = 0;
+      }
     }
     if (min == null) {
       min = start;
@@ -2306,6 +2288,9 @@ class DiagramElement {
     let max = scale;
     if (rotation != null) {
       max = rotation;
+    }
+    if (translation != null) {
+      max = translation;
     }
 
     this.pulseSettings.time = duration;
@@ -2322,6 +2307,9 @@ class DiagramElement {
     this.pulseSettings.type = 'scale';
     if (rotation != null) {
       this.pulseSettings.type = 'rotation';
+    }
+    if (translation != null) {
+      this.pulseSettings.type = angle;
     }
 
     const range = max - min;
@@ -2355,29 +2343,6 @@ class DiagramElement {
       this.pulseSettings.B = bArray;
       this.pulseSettings.C = startAngle;
     }
-    // if (this.pulseSettings.num > 1) {
-    //   const b = Math.abs(1 - options.scale);
-    //   const bMax = b;
-    //   const bMin = -b;
-    //   const range = bMax - bMin;
-    //   const bStep = range / (this.pulseSettings.num - 1);
-    //   bArray = [];
-    //   for (let i = 0; i < this.pulseSettings.num; i += 1) {
-    //     bArray.push(bMax - i * bStep);
-    //   }
-    // }
-    // console.log(bArray)
-
-    // this.pulseSettings.time = duration;
-    // this.pulseSettings.frequency = frequencyToUse;
-    // this.pulseSettings.A = start;                         // bias
-    // this.pulseSettings.B = bArray;
-    // this.pulseSettings.C = startAngle;                   // phase offset
-    // // this.pulseSettings.num = 1;
-    // this.pulseSettings.delta = delta;
-    // // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
-    // this.pulseSettings.callback = done;
-    // this.pulseSettings.progression = progression;
     this.startPulsing(when);
   }
 
