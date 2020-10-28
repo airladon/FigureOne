@@ -110,6 +110,8 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
 /**
  * Pulse options object
  *
+ * ![](./assets1/pulse.gif)
+ *
  * Pulsing can be useful to highlight a diagram element to a user, without
  * changing its underlying properties.
  *
@@ -169,6 +171,52 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
  * @property {TypeWhen} [when] when to start the pulse (`'syncNow'`)
  * @property {'sinusoid' | 'triangle'} [progression] function that defines
  * how the scale should progress over time (`sinusoid`)
+ *
+ * @example
+ * // For all examples below, use this to add an element to the diagram
+ * diagram.addElement({
+ *   name: 'p',
+ *   method: 'polygon',
+ *   options: {
+ *     radius: 0.3,
+ *     line: { width: 0.05, },
+ *   },
+ * });
+ *
+ * const p = diagram.getElement('p');
+ *
+ * @example
+ * // Scale pulse
+ * p.pulse({
+ *   duration: 1,
+ *   scale: 1.3
+ * });
+ *
+ * @example
+ * // Rotation pulse
+ * p.pulse({
+ *   duration: 1,
+ *   rotation: 0.15,
+ *   frequency: 4,
+ * });
+ *
+ * @example
+ * // Translation pulse
+ * p.pulse({
+ *   duration: 1,
+ *   translation: 0.02,
+ *   min: -0.02,
+ *   frequency: 4,
+ * });
+ *
+ * @example
+ * // Thick pulse
+ * p.pulse({
+ *   duration: 1,
+ *   scale: 1.1,
+ *   min: 0.9,
+ *   num: 7,
+ * });
  */
 type OBJ_Pulse = {
   duration?: number,
@@ -187,7 +235,6 @@ type OBJ_Pulse = {
   when?: TypeWhen,
   done: string | () => void | null,
   progression?: string | (number) => number,
-  // start?: number,
 };
 
 /**
@@ -619,7 +666,7 @@ class DiagramElement {
     //   this.pulseScaleNow(1, 2, 0, callback);
     // };
     this.pulseDefault = {
-      scale: 2,
+      scale: 1.5,
       rotation: null,
       translation: null,
       angle: 0,
@@ -903,7 +950,7 @@ class DiagramElement {
     this.scenarios = {};
 
     const pulseTransformMethod = (mag, d, type) => {
-      if (d == null || (d.x === 0 && d.y === 0)) {
+      if (type === 'scale' && (d == null || (d.x === 0 && d.y === 0))) {
         return new Transform().scale(mag, mag);
       }
       if (type === 'scale') {
@@ -2210,6 +2257,9 @@ class DiagramElement {
           getPoint(this.pulseSettings.delta),
           this.pulseSettings.type,
         );
+        // if (this.name === 'p2') {
+        //   console.log(pTransform._dup(), pulseMag)
+        // }
         // if(this.name === '_radius') {
         // }
         // Transform the current transformMatrix by the pulse transform matrix

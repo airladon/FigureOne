@@ -1727,6 +1727,7 @@ function processOptions(...optionsIn: Array<Object>) {
 
 function setupPulse(element: DiagramElement, options: Object) {
   if (options.pulse != null) {
+    console.log(options.pulse)
     if (
       typeof element.pulseDefault !== 'function'
       && typeof element.pulseDefault !== 'string'
@@ -1734,14 +1735,16 @@ function setupPulse(element: DiagramElement, options: Object) {
       if (typeof options.pulse === 'number') {
         // eslint-disable-next-line no-param-reassign
         element.pulseDefault.scale = options.pulse;
+        console.log(element.pulseDefault.scale)
       } else {
-        const { scale, frequency, duration } = options.pulse;
-        // eslint-disable-next-line no-param-reassign
-        if (scale != null) { element.pulseDefault.scale = scale; }
-        // eslint-disable-next-line no-param-reassign
-        if (frequency != null) { element.pulseDefault.frequency = frequency; }
-        // eslint-disable-next-line no-param-reassign
-        if (duration != null) { element.pulseDefault.time = duration; }
+        // const { scale, frequency, duration } = options.pulse;
+        // // eslint-disable-next-line no-param-reassign
+        // if (scale != null) { element.pulseDefault.scale = scale; }
+        // // eslint-disable-next-line no-param-reassign
+        // if (frequency != null) { element.pulseDefault.frequency = frequency; }
+        // // eslint-disable-next-line no-param-reassign
+        // if (duration != null) { element.pulseDefault.time = duration; }
+        element.pulseDefault = joinObjects({}, element.pulseDefault, options.pulse);
       }
     }
   }

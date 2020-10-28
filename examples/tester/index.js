@@ -104,40 +104,40 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // //   diagram.animateNextFrame();
 // // }
 
-diagram.addElements([
-  {
-    name: 'origin',
-    method: 'polygon',
-    options: {
-      radius: 0.01,
-      line: { width: 0.01 },
-      sides: 10,
-      color: [0.7, 0.7, 0.7, 1]
-    },
-  },
-  {
-    name: 'grid',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.1,
-      xStep: 0.1,
-      color: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.001 },
-    },
-  },
-  {
-    name: 'gridMajor',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.5,
-      xStep: 0.5,
-      color: [0.8, 0.8, 0.8, 1],
-      line: { width: 0.004 }
-    },
-  },
-]);
+// diagram.addElements([
+//   {
+//     name: 'origin',
+//     method: 'polygon',
+//     options: {
+//       radius: 0.01,
+//       line: { width: 0.01 },
+//       sides: 10,
+//       color: [0.7, 0.7, 0.7, 1]
+//     },
+//   },
+//   {
+//     name: 'grid',
+//     method: 'grid',
+//     options: {
+//       bounds: [-3, -3, 6, 6],
+//       yStep: 0.1,
+//       xStep: 0.1,
+//       color: [0.7, 0.7, 0.7, 1],
+//       line: { width: 0.001 },
+//     },
+//   },
+//   {
+//     name: 'gridMajor',
+//     method: 'grid',
+//     options: {
+//       bounds: [-3, -3, 6, 6],
+//       yStep: 0.5,
+//       xStep: 0.5,
+//       color: [0.8, 0.8, 0.8, 1],
+//       line: { width: 0.004 }
+//     },
+//   },
+// ]);
 
 // // const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2]});
 // // diagram.addElement({
@@ -207,97 +207,97 @@ diagram.addElements([
 // // diagram.initialize();
 
 
-diagram.addElement(
-  {
-    name: 'equation',
-    method: 'equation',
-    options: {
-      color: [1, 0, 0, 1],
-      font: { size: 0.5 },
-      elements: {
-        a: 't',
-        b: 'b',
-        c: 'c',
-        v: { symbol: 'vinculum'},
-        equals: ' = ',
-        times: ' \u00D7 ',  // unicode times symbol
-      },
-      forms: {
-        a: ['a', 'equals', 'b', 'times', 'c'],
-        b: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
-        bCurve: {
-          content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
-          animation: {
-            translation: {
-              a: { style: 'curve', direction: 'up', mag: 0.8 },
-              b: { style: 'curve', direction: 'down', mag: 1.2 },
-            },
-          },
-        },
-      },
-    },
-  },
-);
+// diagram.addElement(
+//   {
+//     name: 'equation',
+//     method: 'equation',
+//     options: {
+//       color: [1, 0, 0, 1],
+//       font: { size: 0.5 },
+//       elements: {
+//         a: 't',
+//         b: 'b',
+//         c: 'c',
+//         v: { symbol: 'vinculum'},
+//         equals: ' = ',
+//         times: ' \u00D7 ',  // unicode times symbol
+//       },
+//       forms: {
+//         a: ['a', 'equals', 'b', 'times', 'c'],
+//         b: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+//         bCurve: {
+//           content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+//           animation: {
+//             translation: {
+//               a: { style: 'curve', direction: 'up', mag: 0.8 },
+//               b: { style: 'curve', direction: 'down', mag: 1.2 },
+//             },
+//           },
+//         },
+//       },
+//     },
+//   },
+// );
 
-const equation = diagram.getElement('equation')
-// // equation.addForms({
-// //   bCurved: {
-// //     content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
-// //     animation: {
-// //       translation: {
-// //         a: { style: 'curve', direction: 'up', mag: 0.8 },
-// //         b: { style: 'curve', direction: 'down', mag: 1.2 },
-// //       },
-// //     },
-// //   },
+// const equation = diagram.getElement('equation')
+// // // equation.addForms({
+// // //   bCurved: {
+// // //     content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+// // //     animation: {
+// // //       translation: {
+// // //         a: { style: 'curve', direction: 'up', mag: 0.8 },
+// // //         b: { style: 'curve', direction: 'down', mag: 1.2 },
+// // //       },
+// // //     },
+// // //   },
+// // // });
+
+
+// equation.showForm('b');
+// // equation.goToForm({
+// //   form: 'bCurved',
+// //   animate: 'move',
+// //   duration: 2,
+// //   delay: 1,
 // // });
 
-
-equation.showForm('b');
-// equation.goToForm({
-//   form: 'bCurved',
-//   animate: 'move',
-//   duration: 2,
-//   delay: 1,
-// });
-
-equation.touchInBoundingRect = true;
-// equation.setMovable();
-equation.setMoveBounds('diagram');
-// equation.setRotation(Math.PI / 3);
-console.log(equation.move.bounds)
-equation.setPosition([1, 0]);
-diagram.initialize();
-console.log()
-equation._a.onClick = () => {
-equation._a.pulse({
-  // elements: ['a', 'c'],
-  // centerOn: diagram.elements._equation,
-  // centerOn: [1.3, 0.05],
-  // space: 'diagram',
-  // xAlign: 0,
-  // yAlign: 0,
-  // start: 2,
-  // min: 0.8,
-  // scale: 1.3,
-  // rotation: -0.5,
-  // min: -0.02,
-  // translation: 0.02,
-  // start: 0.1,
-  angle: 0,
-  scale: 1.5,
-  // min: 0.6,
-  duration: 1,
-  frequency: 2,
-  // thick: { num: 10, min: 0.5 },
-  // num: 10,
-  progression: 'sinusoid',
-  // start: 1,
-});
-diagram.animateNextFrame();
-};
-equation._a.makeTouchable();
+// equation.touchInBoundingRect = true;
+// // equation.setMovable();
 // equation.setMoveBounds('diagram');
+// // equation.setRotation(Math.PI / 3);
+// console.log(equation.move.bounds)
+// equation.setPosition([1, 0]);
+// diagram.initialize();
+// console.log()
+// equation._a.onClick = () => {
+// equation._a.pulse({
+//   // elements: ['a', 'c'],
+//   // centerOn: diagram.elements._equation,
+//   // centerOn: [1.3, 0.05],
+//   // space: 'diagram',
+//   // xAlign: 0,
+//   // yAlign: 0,
+//   // start: 2,
+//   // min: 0.8,
+//   // scale: 1.3,
+//   // rotation: -0.5,
+//   // min: -0.02,
+//   translation: 0.02,
+//   // start: 0.1,
+//   angle: 0,
+//   // scale: 1.5,
+//   // min: 0.6,
+//   duration: 1,
+//   frequency: 2,
+//   // thick: { num: 10, min: 0.5 },
+//   // num: 10,
+//   progression: 'sinusoid',
+//   // start: 1,
+// });
+// diagram.animateNextFrame();
+// };
+// equation._a.makeTouchable();
+// // equation.setMoveBounds('diagram');
 
 
 
@@ -416,4 +416,97 @@ equation._a.makeTouchable();
 // r.setRotation(Math.PI / 4)
 // r.setMovable();
 // diagram.initialize();
-// console.log(r)
+// // console.log(r)
+
+// diagram.addElements([
+//   {
+//     name: 'p1',
+//     method: 'polygon',
+//     options: {
+//       radius: 0.3,
+//       line: { width: 0.05, },
+//       position: [-1, 0],
+//     },
+//   },
+//   {
+//     name: 'p2',
+//     method: 'polygon',
+//     options: {
+//       radius: 0.3,
+//       line: { width: 0.05, },
+//       position: [0, 0],
+//     },
+//   },
+//   {
+//     name: 'p3',
+//     method: 'polygon',
+//     options: {
+//       radius: 0.3,
+//       line: { width: 0.05, },
+//       position: [1, 0],
+//     },
+//   },
+//   {
+//     name: 'p4',
+//     method: 'polygon',
+//     options: {
+//       radius: 0.3,
+//       line: { width: 0.05, },
+//       position: [2, 0],
+//     },
+//   },
+// ]);
+
+// const p1 = diagram.elements._p1;
+// const p2 = diagram.elements._p2;
+// const p3 = diagram.elements._p3;
+// const p4 = diagram.elements._p4;
+// p1.makeTouchable();
+// p1.onClick = () => {
+//   p1.pulse({
+//     duration: 1,
+//     scale: 1.3,
+//   });
+//   setTimeout(() => {
+//     p2.pulse({
+//       duration: 1,
+//       rotation: 0.15,
+//       frequency: 4,
+//     });
+//   }, 1000);
+//   setTimeout(() => {
+//     p3.pulse({
+//       duration: 1,
+//       translation: 0.02,
+//       min: -0.02,
+//       frequency: 4,
+//     });
+//   }, 2000);
+//   setTimeout(() => {
+//     p4.pulse({
+//       duration: 1,
+//       scale: 1.1,
+//       min: 0.9,
+//       num: 7,
+//     });
+//   }, 3000);
+//   diagram.animateNextFrame();
+// };
+
+
+diagram.addElement({
+  name: 'p',
+  method: 'polygon',
+  options: {
+    radius: 0.3,
+    line: { width: 0.05, },
+  },
+});
+
+const p = diagram.getElement('p');
+p.pulse({
+  duration: 1,
+  scale: 1.1,
+  min: 0.9,
+  num: 7,
+});
