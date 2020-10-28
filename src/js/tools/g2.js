@@ -3874,8 +3874,8 @@ function getMaxTimeFromVelocity(
         && v.x !== 0
         && v.y !== 0
       ) {
-        const xTime = Math.abs(delta.x) / v.x;
-        const yTime = Math.abs(delta.y) / v.y;
+        const xTime = Math.abs(delta.x / v.x);
+        const yTime = Math.abs(delta.y / v.y);
         time = xTime > time ? xTime : time;
         time = yTime > time ? yTime : time;
       }

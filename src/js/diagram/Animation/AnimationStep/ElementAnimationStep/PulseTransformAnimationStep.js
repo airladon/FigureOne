@@ -2,6 +2,7 @@
 import {
   Transform, getScale, getTransform,
   Rotation, getDeltaAngle, getMaxTimeFromVelocity,
+  Scale, Translation,
 } from '../../../../tools/g2';
 import type { pathOptionsType, TypeParsablePoint, TypeParsableTransform } from '../../../../tools/g2';
 import {
@@ -196,10 +197,10 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
   }
 
   getVelocityTransform() {
-    const { element } = this;
-    if (element == null) {
-      return new Transform();
-    }
+    // const { element } = this;
+    // if (element == null) {
+    //   return new Transform();
+    // }
     const { velocity } = this.transform;
     if (velocity == null) {
       return new Transform();
@@ -210,26 +211,48 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     }
 
     if (typeof velocity === 'number') {
-      return element.transform._dup().constant(velocity);
+      return this.transform.start[0]._dup().constant(velocity);
     }
 
-    let transformVelocity = element.transform._dup().constant(1);
+    let transformVelocity = this.transform.start[0]._dup().constant(1);
 
     if (velocity.transform != null) {
       transformVelocity = getTransform(velocity.transform)._dup();
     }
-    if (velocity.position != null) {
-      transformVelocity.updateTranslation(getScale(velocity.position));
+
+    for (let i = 0; i < transformVelocity.order.length; i += 1) {
+      const t = transformVelocity.order[i];
+      if (t instanceof Scale && velocity.scale != null) {
+        const s = getScale(velocity.scale);
+        t.x = s.x;
+        t.y = s.y;
+      }
+      if (t instanceof Translation && velocity.translation != null) {
+        const s = getScale(velocity.translation);
+        t.x = s.x;
+        t.y = s.y;
+      }
+      if (t instanceof Translation && velocity.position != null) {
+        const s = getScale(velocity.position);
+        t.x = s.x;
+        t.y = s.y;
+      }
+      if (t instanceof Rotation && velocity.rotation != null) {
+        t.r = velocity.rotation;
+      }
     }
-    if (velocity.translation != null) {
-      transformVelocity.updateTranslation(getScale(velocity.translation));
-    }
-    if (velocity.scale != null) {
-      transformVelocity.updateScale(getScale(velocity.scale));
-    }
-    if (velocity.rotation != null) {
-      transformVelocity.updateRotation(velocity.rotation);
-    }
+    // if (velocity.position != null) {
+    //   transformVelocity.updateTranslation(getScale(velocity.position));
+    // }
+    // if (velocity.translation != null) {
+    //   transformVelocity.updateTranslation(getScale(velocity.translation));
+    // }
+    // if (velocity.scale != null) {
+    //   transformVelocity.updateScale(getScale(velocity.scale));
+    // }
+    // if (velocity.rotation != null) {
+    //   transformVelocity.updateRotation(velocity.rotation);
+    // }
     return transformVelocity;
   }
 
@@ -239,6 +262,8 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
   // Setting a duration to 0 will effectively skip this animation step
   start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
     super.start(startTime);
+    // console.log(this.element.name, this.transform.start[0].order)
+    // console.log(this.transform.target[0].order)
     if (this.transform.start == null || this.transform.start.length === 0) {
       if (this.element != null) {
         if (this.element.pulseTransforms.length > 0) {
@@ -276,6 +301,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
           velocity,
           this.transform.rotDirection,
         );
+        // console.log(duration, start, target, velocity)
         if (duration > this.duration) {
           this.duration = duration;
         }

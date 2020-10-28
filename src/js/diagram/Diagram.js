@@ -788,6 +788,7 @@ class Diagram {
     const duration = this.elements.animateToState(
       state.elements, optionsIn, true, startTime,
     );
+
     // countEnd();
     if (done != null) {
       if (duration === 0) {

@@ -950,10 +950,16 @@ class DiagramElement {
     this.scenarios = {};
 
     const pulseTransformMethod = (mag, d, type) => {
-      if (type === 'scale' && (d == null || (d.x === 0 && d.y === 0))) {
-        return new Transform().scale(mag, mag);
-      }
+      // if (type === 'scale' && (d == null || (d.x === 0 && d.y === 0))) {
+      //   return new Transform().scale(mag, mag);
+      // }
       if (type === 'scale') {
+        if (d == null) {
+          return new Transform()
+            .translate(0, 0)
+            .scale(mag, mag)
+            .translate(0, 0);
+        }
         return new Transform()
           .translate(-d.x, -d.y)
           .scale(mag, mag)
@@ -1379,7 +1385,6 @@ class DiagramElement {
     // let pulseDelay = null;
     // let delay = 0;
     let pulseAnimation = null;
-
     if (!this.arePulseTransformsSame(state, 0.001)) {
       let startPulseTransforms = this.pulseTransforms.map(t => t._dup());
       if (this.pulseTransforms.length === 0) {
@@ -1410,6 +1415,7 @@ class DiagramElement {
         // .then(pulseDelay)
         .start(startTime);
     }
+
     // if (this.animations.animations.length > 0) {
     //   console.log(this.getPath(), this.animations.animations[0]._dup());
     // }
