@@ -2297,11 +2297,8 @@ class DiagramElement {
     this.pulseSettings.frequency = frequencyToUse;
     this.pulseSettings.num = num;
     this.pulseSettings.A = start;                         // bias
-    // this.pulseSettings.B = bArray;
     this.pulseSettings.C = 0;                   // phase offset
-    // this.pulseSettings.num = 1;
     this.pulseSettings.delta = delta;
-    // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
     this.pulseSettings.callback = done;
     this.pulseSettings.progression = progression;
     this.pulseSettings.type = 'scale';
@@ -2315,33 +2312,36 @@ class DiagramElement {
     const range = max - min;
     const mid = range / 2 + min;
     let bArray = [max - start];
-    let startAngle = 0;
+    // let startAngle = 0;
     if (num > 1) {
-      // let { min } = options;
-      // if (min == null) {
-      //   min = Math.abs(1 / scale);
-      // }
-      // if (max == null) {
-      //   max = Math.abs(scale);
-      // }
-      // this.pulseSettings.num = num;
-      // const b = Math.abs(1 - options.scale);
-      // const bMax = scale;
-      // const bMin = min;
-      // const range = bMax - bMin;
       const bStep = range / (num - 1);
       bArray = [];
+      const CArray = [];
+      const AArray = [];
       for (let i = 0; i < num; i += 1) {
-        bArray.push(range - i * bStep);
+        const minMax = max - i * bStep;
+        if (minMax < 1) {
+          const r = 1 - minMax;
+          CArray.push(Math.PI / 2);
+          AArray.push(1 - r / 2);
+          bArray.push(r / 2);
+        } else {
+          const r = minMax - 1;
+          CArray.push(-Math.PI / 2);
+          AArray.push(1 + r / 2);
+          bArray.push(r / 2);
+        }
       }
+      this.pulseSettings.A = AArray;
       this.pulseSettings.B = bArray;
+      this.pulseSettings.C = CArray;
     } else {
       const startNormalized = (start - mid) / (range / 2);
-      startAngle = Math.asin(startNormalized);
-      bArray = [range / 2];
+      // startAngle = Math.asin(startNormalized);
+      // bArray = [range / 2];
       this.pulseSettings.A = mid;
-      this.pulseSettings.B = bArray;
-      this.pulseSettings.C = startAngle;
+      this.pulseSettings.B = range / 2;
+      this.pulseSettings.C = Math.asin(startNormalized);
     }
     this.startPulsing(when);
   }
