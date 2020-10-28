@@ -438,7 +438,7 @@ class DiagramElement {
     //   max?: number | Point,
     // },
     num: number,
-    min: number | Point,
+    // min: number | Point,
     xAlign: 'center' | 'left' | 'right' | number,
     yAlign: 'middle' | 'bottom' | 'top' | number,
     centerOn: null | DiagramElement | string,
@@ -595,7 +595,7 @@ class DiagramElement {
       yAlign: 'middle',
       centerOn: this,
       num: 1,
-      min: 1,
+      // min: 1,
       space: 'diagram',
       done: null,
       progression: 'sinusoid',
@@ -2285,6 +2285,7 @@ class DiagramElement {
     if (min == null) {
       min = start;
     }
+
     let max = scale;
     if (rotation != null) {
       max = rotation;
