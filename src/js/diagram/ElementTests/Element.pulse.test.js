@@ -71,7 +71,7 @@ describe('Pulse', () => {
       // Initial state
       expect(element.state.isPulsing).toBe(false);
       expect(mockDone.mock.calls).toHaveLength(0);
-
+      diagram.mock.timeStep(0);
       element.pulse(mockDone);
 
       // First time stamp
@@ -107,6 +107,7 @@ describe('Pulse', () => {
     });
     test('Callback', () => {
       expect(mockDone.mock.calls).toHaveLength(0);
+      diagram.mock.timeStep(0);
       collection.pulse(mockDone);
       diagram.mock.timeStep(0);
       diagram.mock.timeStep(1.1);
@@ -114,6 +115,7 @@ describe('Pulse', () => {
     });
     test('Specific Elements', () => {
       expect(mockDone.mock.calls).toHaveLength(0);
+      diagram.mock.timeStep(0);
       collection.pulse(['s3', 'squares.s1'], mockDone);
       expect(collection.state.isPulsing).toBe(false);
       expect(collection._s3.state.isPulsing).toBe(true);

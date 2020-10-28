@@ -4116,18 +4116,11 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   pulse(
-    optionsOrElementsOrDone: ?({
-      x?: 'left' | 'center' | 'right' | 'origin' | number,
-      y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
-      space?: 'diagram' | 'gl' | 'local' | 'draw',
-      centerOn?: null | DiagramElement | TypeParsablePoint,
-      frequency?: number,
-      time?: number,
-      scale?: number,
-      done?: ?(mixed) => void,
-      elements?: Array<string | DiagramElement>,
-      progression: string | (number) => number,
-    } | Array<string | DiagramElement> | ((mixed) => void)) = null,
+    optionsOrElementsOrDone: ?(
+      OBJ_Pulse & { elements?: Array<string | DiagramElement> }
+      | Array<string | DiagramElement>
+      | ((mixed) => void)
+    ) = null,
     done: ?(mixed) => void = null,
   ) {
     if (optionsOrElementsOrDone == null
@@ -4163,24 +4156,26 @@ class DiagramElementCollection extends DiagramElement {
     //   progression: 'tools.math.sinusoid',
     // };
     if (
-      optionsOrElementsOrDone.elements == null
-      || optionsOrElementsOrDone.elements.length === 0
+      !Array.isArray(optionsOrElementsOrDone)
+      && (
+        optionsOrElementsOrDone.elements == null
+        || optionsOrElementsOrDone.elements.length === 0
+      )
     ) {
       super.pulse(optionsOrElementsOrDone);
       return;
     }
     // const defaultOptions = this.pulseDefault;
-    const defaultOptions = {};
 
     let doneToUse;
     let options;
     let elements;
     if (Array.isArray(optionsOrElementsOrDone)) {
-      options = defaultOptions;
+      options = {};
       doneToUse = done;
       elements = optionsOrElementsOrDone;
     } else {
-      options = joinObjects({}, defaultOptions, optionsOrElementsOrDone);
+      options = joinObjects({}, optionsOrElementsOrDone);
       ({ elements } = options);
       doneToUse = options.done;
       if (optionsOrElementsOrDone.scale == null) {
