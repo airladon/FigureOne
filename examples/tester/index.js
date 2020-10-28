@@ -279,21 +279,20 @@ equation._a.pulse({
   // yAlign: 0,
   // start: 2,
   // min: 0.8,
-  scale: 1.3,
-  // rotation: -0.2,
-  // min: 0,
-  translation: 0.05,
-  angle: Math.PI / 2,
+  // scale: 1.3,
+  // rotation: -0.5,
+  min: -0.02,
+  translation: 0.02,
+  angle: 0,
   // min: 0.6,
   duration: 1,
   frequency: 2,
   // thick: { num: 10, min: 0.5 },
-  // num: 7,
+  num: 10,
   progression: 'sinusoid',
   // start: 1,
 });
 diagram.animateNextFrame();
-console.log('asdfasdf')
 };
 equation._a.makeTouchable();
 // equation.setMoveBounds('diagram');

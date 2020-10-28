@@ -2193,7 +2193,12 @@ class DiagramElement {
   }
 
   /**
-   * Pulse element
+   * Pulse element.
+   *
+   * An element can be pulsed in scale, a rotation or a translation.
+   *
+   * The scale pulse can either be a single pulse, or a number of copies with a
+   * range of scales - which has the effect of making regular polygons thick.
    *
    * Either pass in a callback, or an options object defining the pulse and
    * callback.
@@ -2253,52 +2258,65 @@ class DiagramElement {
         .transformBy(this.spaceTransformMatrix(space, 'draw'));
     }
 
-    // const currentPosition = this.getPosition('local');
-    // const delta = p.sub(currentPosition);
     const {
-      duration, scale, frequency, progression, when, num, rotation, angle, translation,
+      duration, scale, progression, when, num, rotation, angle, translation,
     } = options;
     let {
-      min, start,
+      min, start, frequency,
     } = options;
 
-    let frequencyToUse = frequency;
-    if (
-      frequencyToUse == null
-      || (frequencyToUse === 0 && options.duration !== 0)
-    ) {
-      frequencyToUse = 1 / (options.duration * 2);
-    }
-    if (frequencyToUse === 0 && options.duration === 0) {
-      frequencyToUse = 1;
+    if (frequency === 0 || frequency == null) {
+      frequency = duration === 0 ? 1 : 1 / duration;
     }
 
-    if (start == null) {
-      start = 1;
-      if (rotation != null) {
-        start = 0;
-      }
-      if (translation != null) {
-        start = 0;
-      }
-    }
-    if (min == null) {
-      min = start;
-    }
-
-    let max = scale;
-    if (rotation != null) {
-      max = rotation;
-    }
+    let max;
     if (translation != null) {
+      start = start == null ? 0 : start;
       max = translation;
+    } else if (rotation != null) {
+      start = start == null ? 0 : start;
+      max = rotation;
+    } else {
+      start = start == null ? 1 : start;
+      max = scale;
+    }
+
+    min = min == null ? start : min;
+    const range = max - min;
+
+    if (num > 1) {
+      const bStep = range / (num - 1);
+      const BArray = [];
+      const CArray = [];
+      const AArray = [];
+      for (let i = 0; i < num; i += 1) {
+        const minMax = max - i * bStep;
+        if (minMax < start) {
+          const r = start - minMax;
+          CArray.push(Math.PI / 2);
+          AArray.push(start - r / 2);
+          BArray.push(r / 2);
+        } else {
+          const r = minMax - start;
+          CArray.push(-Math.PI / 2);
+          AArray.push(start + r / 2);
+          BArray.push(r / 2);
+        }
+      }
+      this.pulseSettings.A = AArray;
+      this.pulseSettings.B = BArray;
+      this.pulseSettings.C = CArray;
+    } else {
+      const mid = range / 2 + min;
+      const startNormalized = (start - mid) / (range / 2);
+      this.pulseSettings.A = mid;
+      this.pulseSettings.B = range / 2;
+      this.pulseSettings.C = Math.asin(startNormalized);
     }
 
     this.pulseSettings.time = duration;
-    this.pulseSettings.frequency = frequencyToUse;
+    this.pulseSettings.frequency = frequency;
     this.pulseSettings.num = num;
-    this.pulseSettings.A = start;                         // bias
-    this.pulseSettings.C = 0;                   // phase offset
     this.pulseSettings.delta = delta;
     this.pulseSettings.callback = done;
     this.pulseSettings.progression = progression;
@@ -2308,41 +2326,6 @@ class DiagramElement {
     }
     if (translation != null) {
       this.pulseSettings.type = angle;
-    }
-
-    const range = max - min;
-    const mid = range / 2 + min;
-    let bArray = [max - start];
-    // let startAngle = 0;
-    if (num > 1) {
-      const bStep = range / (num - 1);
-      bArray = [];
-      const CArray = [];
-      const AArray = [];
-      for (let i = 0; i < num; i += 1) {
-        const minMax = max - i * bStep;
-        if (minMax < 1) {
-          const r = 1 - minMax;
-          CArray.push(Math.PI / 2);
-          AArray.push(1 - r / 2);
-          bArray.push(r / 2);
-        } else {
-          const r = minMax - 1;
-          CArray.push(-Math.PI / 2);
-          AArray.push(1 + r / 2);
-          bArray.push(r / 2);
-        }
-      }
-      this.pulseSettings.A = AArray;
-      this.pulseSettings.B = bArray;
-      this.pulseSettings.C = CArray;
-    } else {
-      const startNormalized = (start - mid) / (range / 2);
-      // startAngle = Math.asin(startNormalized);
-      // bArray = [range / 2];
-      this.pulseSettings.A = mid;
-      this.pulseSettings.B = range / 2;
-      this.pulseSettings.C = Math.asin(startNormalized);
     }
     this.startPulsing(when);
   }
