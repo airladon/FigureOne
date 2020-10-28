@@ -2245,6 +2245,8 @@ class DiagramElement {
 
     if (options.progression === 'sinusoid') {
       options.progression = 'tools.math.sinusoid';
+    } else if (options.progression === 'sinusoidAbs') {
+      options.progression = 'tools.math.sinusoidAbs';
     } else if (options.progression === 'triangle') {
       options.progression = 'tools.math.triangle';
     }
@@ -2267,7 +2269,10 @@ class DiagramElement {
     // const currentPosition = this.getPosition('local');
     // const delta = p.sub(currentPosition);
     const {
-      duration, scale, frequency, progression, when, num, min,
+      duration, scale, frequency, progression, when, num,
+    } = options;
+    let {
+      min, start
     } = options;
 
     let frequencyToUse = frequency;
@@ -2281,9 +2286,29 @@ class DiagramElement {
       frequencyToUse = 1;
     }
 
-    this.pulseSettings.num = 1;
+    if (start == null) {
+      start = 1;
+    }
+    if (min == null) {
+      min = start;
+    }
+
+    this.pulseSettings.time = duration;
+    this.pulseSettings.frequency = frequencyToUse;
+    this.pulseSettings.num = num;
+    this.pulseSettings.A = start;                         // bias
+    // this.pulseSettings.B = bArray;
+    this.pulseSettings.C = 0;                   // phase offset
+    // this.pulseSettings.num = 1;
+    this.pulseSettings.delta = delta;
+    // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
+    this.pulseSettings.callback = done;
+    this.pulseSettings.progression = progression;
+
     const range = scale - min;
-    let bArray = [range / 2];
+    const mid = range / 2 + min;
+    let bArray = [scale - start];
+    let startAngle = 0;
     if (num > 1) {
       // let { min } = options;
       // if (min == null) {
@@ -2292,7 +2317,7 @@ class DiagramElement {
       // if (max == null) {
       //   max = Math.abs(scale);
       // }
-      this.pulseSettings.num = num;
+      // this.pulseSettings.num = num;
       // const b = Math.abs(1 - options.scale);
       // const bMax = scale;
       // const bMin = min;
@@ -2300,10 +2325,19 @@ class DiagramElement {
       const bStep = range / (num - 1);
       bArray = [];
       for (let i = 0; i < num; i += 1) {
-        bArray.push(range / 2 - i * bStep);
+        bArray.push(range - i * bStep);
       }
-      console.log(range)
-      console.log(bArray)
+      this.pulseSettings.B = bArray;
+    } else {
+      console.log(min, start, this.transform.s().x, range, mid)
+      const startNormalized = (start - mid) / (range / 2);
+      console.log(startNormalized)
+      startAngle = Math.asin(startNormalized);
+      console.log(startAngle / Math.PI * 180)
+      bArray = [range / 2];
+      this.pulseSettings.A = mid;
+      this.pulseSettings.B = bArray;
+      this.pulseSettings.C = startAngle;
     }
     // if (this.pulseSettings.num > 1) {
     //   const b = Math.abs(1 - options.scale);
@@ -2318,16 +2352,16 @@ class DiagramElement {
     // }
     // console.log(bArray)
 
-    this.pulseSettings.time = duration;
-    this.pulseSettings.frequency = frequencyToUse;
-    this.pulseSettings.A = min + range / 2;                   // bias
-    this.pulseSettings.B = bArray;
-    this.pulseSettings.C = Math.PI / 2 * 3;                   // phase offset
-    // this.pulseSettings.num = 1;
-    this.pulseSettings.delta = delta;
-    // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
-    this.pulseSettings.callback = done;
-    this.pulseSettings.progression = progression;
+    // this.pulseSettings.time = duration;
+    // this.pulseSettings.frequency = frequencyToUse;
+    // this.pulseSettings.A = start;                         // bias
+    // this.pulseSettings.B = bArray;
+    // this.pulseSettings.C = startAngle;                   // phase offset
+    // // this.pulseSettings.num = 1;
+    // this.pulseSettings.delta = delta;
+    // // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
+    // this.pulseSettings.callback = done;
+    // this.pulseSettings.progression = progression;
     this.startPulsing(when);
   }
 

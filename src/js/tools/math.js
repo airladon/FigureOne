@@ -300,7 +300,7 @@ function sinusoidAbs(
   mag: number = 1,
   phaseOffset: number = 0,
 ) {
-  return Math.abs(bias + mag * Math.sin(deltaTime * frequency * 2.0 * Math.PI + phaseOffset));
+  return bias + Math.abs(mag * Math.sin(deltaTime * frequency * 2.0 * Math.PI + phaseOffset));
 }
 
 // const animationPhase = (transform, time, rotDirection = 0, animationStyle = easeinout) => {

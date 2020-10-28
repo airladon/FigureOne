@@ -262,28 +262,35 @@ equation.showForm('b');
 // });
 
 equation.touchInBoundingRect = true;
-equation.setMovable();
+// equation.setMovable();
 equation.setMoveBounds('diagram');
 // equation.setRotation(Math.PI / 3);
 console.log(equation.move.bounds)
 equation.setPosition([1, 0]);
 diagram.initialize();
 console.log()
-
+equation._a.onClick = () => {
 equation._a.pulse({
   // elements: ['a', 'c'],
   // centerOn: diagram.elements._equation,
   // centerOn: [1.3, 0.05],
   // space: 'diagram',
-  xAlign: 0.5,
-  yAlign: 0.5,
-  scale: 2,
-  duration: 2,
-  frequency: 0.5,
+  // xAlign: 0.5,
+  // yAlign: 0.5,
+  // start: 2,
+  min: 0.4,
+  scale: 3,
+  duration: 1,
+  frequency: 1,
   // thick: { num: 10, min: 0.5 },
-  num: 10,
-  min: 1,
+  // num: 10,
+  progression: 'sinusoid',
+  // start: 1,
 });
+diagram.animateNextFrame();
+console.log('asdfasdf')
+};
+equation._a.makeTouchable();
 // equation.setMoveBounds('diagram');
 
 
