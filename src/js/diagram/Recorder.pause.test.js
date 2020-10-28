@@ -603,7 +603,7 @@ describe('Animate To State', () => {
     beforeEach(() => {
       const startPulse = () => {
         // a.pulseScaleNow(2, 2);
-        a.pulseScale({ duration: 2, scale: 2, when: 'syncNow' });
+        a.pulse({ duration: 2, scale: 2, when: 'syncNow' });
       };
       recorder.addEventType('startPulse', startPulse.bind(this));
 
@@ -771,7 +771,7 @@ describe('Animate To State', () => {
         beforeEach(() => {
           diagram.unpause();
           // a.pulseScaleNow(2, 4);
-          a.pulseScale({ duration: 2, scale: 4, when: 'syncNow' });
+          a.pulse({ duration: 2, scale: 4, when: 'syncNow' });
           // This is ok as it kicks off the pulse
           diagram.mock.timeStep(0); // Ok
           diagram.mock.timeStep(1);
@@ -977,7 +977,7 @@ describe('Animate To State', () => {
           diagram.unpause();
           a.setPosition(4, 4);
           // a.pulseScaleNow(2, 4);
-          a.pulseScale({ duration: 2, scale: 4, when: 'syncNow' });
+          a.pulse({ duration: 2, scale: 4, when: 'syncNow' });
           // This is ok as it kicks off the pulse
           diagram.mock.timeStep(0);  // Ok
           diagram.mock.timeStep(1);
@@ -1185,8 +1185,8 @@ describe('Animate To State', () => {
     beforeEach(() => {
       const startPulse = () => {
         // a.pulseThickNow(2, 1.1, 3);
-        a.pulseThick({
-          duration: 2, scale: 1.1, num: 3, when: 'syncNow',
+        a.pulse({
+          duration: 2, scale: 1.1, min: 0.9, num: 3, when: 'syncNow',
         });
       };
       recorder.addEventType('startPulse', startPulse.bind(this));
@@ -1342,8 +1342,8 @@ describe('Animate To State', () => {
         beforeEach(() => {
           diagram.unpause();
           // a.pulseThickNow(2, 1.2, 3);
-          a.pulseThick({
-            duration: 2, scale: 1.2, num: 3, when: 'syncNow',
+          a.pulse({
+            duration: 2, scale: 1.2, min: 0.8, num: 3, when: 'syncNow',
           });
           // This is Ok as it kicks off pulse
           diagram.mock.timeStep(0);  // Ok
@@ -1899,7 +1899,7 @@ describe('Animate To State', () => {
     beforeEach(() => {
       const startPulse = () => {
         // a.pulseScaleNow(2, 2);
-        a.pulseScale({ duration: 2, scale: 2, when: 'syncNow' });
+        a.pulse({ duration: 2, scale: 2, when: 'syncNow' });
       };
       recorder.addEventType('startPulse', startPulse.bind(this));
 
@@ -1964,9 +1964,9 @@ describe('Animate To State', () => {
 
       diagram.mock.timeStep(0.5);
       expect(recorder.state).toBe('playing');
-      expect(a.pulseTransforms[0].s().round(3).x).toBe(1.707);
+      expect(a.pulseTransforms[0].s().round(3).x).toBe(1.5);
       expect(a.frozenPulseTransforms.length).toBe(0);
-      expect(a.drawTransforms[0].s().round(3).x).toBe(1.707);
+      expect(a.drawTransforms[0].s().round(3).x).toBe(1.5);
       expect(b.drawTransforms[0].t().round(3).x).toBe(0);
 
       diagram.mock.timeStep(0.5);

@@ -666,7 +666,7 @@ class DiagramElement {
     //   this.pulseScaleNow(1, 2, 0, callback);
     // };
     this.pulseDefault = {
-      scale: 1.5,
+      scale: 2,
       rotation: null,
       translation: null,
       angle: 0,
@@ -2413,6 +2413,7 @@ class DiagramElement {
     this.startPulsing(when);
   }
 
+  // deprecate
   pulseScaleNow(
     time: number, scale: number,
     frequency: number = 0, callback: ?(string | ((?mixed) => void)) = null,
@@ -2430,6 +2431,7 @@ class DiagramElement {
     });
   }
 
+  // deprecate
   pulseScale(optionsIn: {
     duration?: number,
     scale?: number,
@@ -2469,6 +2471,7 @@ class DiagramElement {
     this.startPulsing(options.when);
   }
 
+  // deprecate
   pulseScaleRelativeToPoint(
     p: TypeParsablePoint,
     space: 'diagram' | 'gl' | 'draw' | 'local',
@@ -2483,6 +2486,7 @@ class DiagramElement {
     this.pulseScaleNow(time, scale, frequency, callback, delta, progression);
   }
 
+  // deprecate
   pulseScaleRelativeToElement(
     e: ?DiagramElement,
     x: 'left' | 'center' | 'right' | 'location' | number,
@@ -2503,6 +2507,7 @@ class DiagramElement {
     this.pulseScaleRelativeToPoint(p, space, time, scale, frequency, callback, progression);
   }
 
+  // deprecate
   pulseScaleRelativeTo(
     e: DiagramElement | TypeParsablePoint | null,
     x: 'left' | 'center' | 'right' | 'origin' | number,
@@ -2525,6 +2530,7 @@ class DiagramElement {
     }
   }
 
+  // deprecate
   pulseThickNow(
     time: number, scale: number,
     num: number = 3, callback: ?(string | ((?mixed) => void)) = null,
@@ -2551,6 +2557,7 @@ class DiagramElement {
     this.startPulsing();
   }
 
+  // deprecate
   pulseThick(optionsIn: {
     duration: number,
     scale: number,
