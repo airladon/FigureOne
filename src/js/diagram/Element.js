@@ -867,13 +867,19 @@ class DiagramElement {
 
     this.scenarios = {};
 
-    const pulseTransformMethod = (s, d) => {
+    const pulseTransformMethod = (x, y, d, type) => {
       if (d == null || (d.x === 0 && d.y === 0)) {
-        return new Transform().scale(s, s);
+        return new Transform().scale(x, y);
+      }
+      if (type === 'scale') {
+        return new Transform()
+          .translate(-d.x, -d.y)
+          .scale(x, y)
+          .translate(d.x, d.y);
       }
       return new Transform()
         .translate(-d.x, -d.y)
-        .scale(s, s)
+        .rotate(x)
         .translate(d.x, d.y);
     };
     this.fnMap.add('_elementPulseSettingsTransformMethod', pulseTransformMethod);
@@ -2161,7 +2167,9 @@ class DiagramElement {
         const pTransform = this.fnMap.exec(
           this.pulseSettings.transformMethod,
           pulseMag,
+          pulseMag,
           getPoint(this.pulseSettings.delta),
+          this.pulseSettings.type,
         );
         // if(this.name === '_radius') {
         // }
@@ -2269,7 +2277,7 @@ class DiagramElement {
     // const currentPosition = this.getPosition('local');
     // const delta = p.sub(currentPosition);
     const {
-      duration, scale, frequency, progression, when, num,
+      duration, scale, frequency, progression, when, num, rotation,
     } = options;
     let {
       min, start
@@ -2288,9 +2296,16 @@ class DiagramElement {
 
     if (start == null) {
       start = 1;
+      if (rotation != null) {
+        start = 0;
+      }
     }
     if (min == null) {
       min = start;
+    }
+    let max = scale;
+    if (rotation != null) {
+      max = rotation;
     }
 
     this.pulseSettings.time = duration;
@@ -2304,10 +2319,14 @@ class DiagramElement {
     // this.pulseSettings.transformMethod = s => new Transform().scale(s, s);
     this.pulseSettings.callback = done;
     this.pulseSettings.progression = progression;
+    this.pulseSettings.type = 'scale';
+    if (rotation != null) {
+      this.pulseSettings.type = 'rotation';
+    }
 
-    const range = scale - min;
+    const range = max - min;
     const mid = range / 2 + min;
-    let bArray = [scale - start];
+    let bArray = [max - start];
     let startAngle = 0;
     if (num > 1) {
       // let { min } = options;
@@ -2329,11 +2348,8 @@ class DiagramElement {
       }
       this.pulseSettings.B = bArray;
     } else {
-      console.log(min, start, this.transform.s().x, range, mid)
       const startNormalized = (start - mid) / (range / 2);
-      console.log(startNormalized)
       startAngle = Math.asin(startNormalized);
-      console.log(startAngle / Math.PI * 180)
       bArray = [range / 2];
       this.pulseSettings.A = mid;
       this.pulseSettings.B = bArray;
