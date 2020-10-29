@@ -1102,10 +1102,10 @@ class Diagram {
     //   element.recorder = this.recorder;
     //   element.animationFinishedCallback = this.animationFinished.bind(this, element);
     // });
-    this.elements.setDiagram(this);
-    /* eslint-enable no-param-reassign */
-    this.setFirstTransform();
-    this.animateNextFrame();
+    // this.elements.setDiagram(this);
+    // /* eslint-enable no-param-reassign */
+    // this.setFirstTransform();
+    // this.animateNextFrame();
   }
 
   getRemainingAnimationTime(nowIn: number = this.globalAnimation.now() / 1000) {
