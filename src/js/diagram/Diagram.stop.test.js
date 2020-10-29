@@ -183,7 +183,7 @@ describe('Diagram Stop', () => {
   describe('Pulsing', () => {
     let state;
     beforeEach(() => {
-      a.pulseScale({
+      a.pulse({
         duration: 2, scale: 2, when: 'now', progression: 'tools.math.triangle',
       });
       state = () => [

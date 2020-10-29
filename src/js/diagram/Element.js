@@ -3473,10 +3473,13 @@ class DiagramElementPrimitive extends DiagramElement {
     // primitive.pointsToDraw = this.pointsToDraw;
     // primitive.angleToDraw = this.angleToDraw;
     // primitive.copyFrom(this);
-    duplicateFromTo(this, primitive, ['parent', 'diagram', 'recorder']);
+    duplicateFromTo(this, primitive, ['parent', 'diagram', 'recorder', 'pulseDefault.centerOn']);
     if (transform != null) {
       primitive.transform = transform._dup();
     }
+    // primitive.pulseDefault = {};
+    // duplicateFromTo(primitive.pulseDefault, this.pulseDefault, ['centerOn']);
+    primitive.pulseDefault.centerOn = this.pulseDefault.centerOn;
     primitive.recorder = this.recorder;
     return primitive;
   }
@@ -3853,7 +3856,7 @@ class DiagramElementCollection extends DiagramElement {
     const doNotDuplicate = this.drawOrder.map(e => `_${e}`);
     duplicateFromTo(this, collection, [
       'elements', 'drawOrder', 'parent', 'recorder', 'diagram',
-      'shapes', 'objects', 'equation',
+      'shapes', 'objects', 'equation', 'pulseDefault.centerOn',
       ...doNotDuplicate, ...exceptions,
     ]);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -3861,6 +3864,9 @@ class DiagramElementCollection extends DiagramElement {
       collection.add(name, this.elements[name]._dup());
     }
     collection.recorder = this.recorder;
+    // collection.pulseDefault = {};
+    // duplicateFromTo(collection.pulseDefault, this.pulseDefault, ['centerOn']);
+    collection.pulseDefault.centerOn = this.pulseDefault.centerOn;
 
     return collection;
   }

@@ -399,9 +399,9 @@ describe('Animationa and Movement', () => {
       test('pulse scale now', () => {
         let pulseTransform;
         let expectM;
-        element.pulseScaleNow(1, 1.1);
-        // element.setupDraw(identity, 0);
         diagram.mock.timeStep(0);
+        element.pulse({ duration: 1, scale: 1.1 });
+        // element.setupDraw(identity, 0);
         expect(element.state.pulse.startTime).toBe(0);
         expect(element.lastDrawTransform.matrix()).toEqual(element.transform.matrix());
 
@@ -428,26 +428,30 @@ describe('Animationa and Movement', () => {
       test('pulse thick', () => {
         const draw = jest.fn();
         element.drawingObject.drawWithTransformMatrix = draw;
-        element.pulseThickNow(1, 1.2, 5);
+        diagram.mock.timeStep(0);
+        expect(draw.mock.calls).toHaveLength(1);
+        element.pulse({
+          duration: 1, scale: 1.2, min: 0.8, num: 5,
+        });
         // element.setupDraw(identity, 0.0);
         diagram.mock.timeStep(0);
         // element.draw(0.0);
         // element.setupDraw(identity, 0.5);
         diagram.mock.timeStep(0.5);
         // element.draw(0.5);
-        expect(draw.mock.calls).toHaveLength(10);
+        expect(draw.mock.calls).toHaveLength(11);
 
         const maxPulseTransform = new Transform()
           .scale(1.2, 1.2).rotate(0).translate(0, 0);
         // (Point.zero(), 0, new Point(1.2, 1.2));
         const maxM = m2.mul(element.transform.matrix(), maxPulseTransform.matrix());
-        expect(draw.mock.calls[5][0]).toEqual(maxM);
+        expect(round(draw.mock.calls[6][0], 3)).toEqual(round(maxM, 3));
 
         const minPulseTransform = new Transform()
           .scale(0.8, 0.8).rotate(0).translate(0, 0);
         // Point.zero(), 0, new Point(0.8, 0.8));
         const minM = m2.mul(element.transform.matrix(), minPulseTransform.matrix());
-        expect(draw.mock.calls[9][0]).toEqual(minM);
+        expect(round(draw.mock.calls[10][0], 3)).toEqual(round(minM, 3));
       });
     });
     describe('Get and Is being touched', () => {
