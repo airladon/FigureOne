@@ -2750,7 +2750,7 @@ class DiagramElement {
       return this.lastDrawTransform.calcMatrix(0, -3);
     }
     if (from === 'draw' && to === 'local') {
-      return this.transform.matrix();
+      return this.getTransform().matrix();
     }
     if (from === 'pixel' && to === 'draw') {
       return m2.mul(
@@ -2765,7 +2765,7 @@ class DiagramElement {
       return m2.inverse(this.lastDrawTransform.calcMatrix(0, -3));
     }
     if (from === 'local' && to === 'draw') {
-      return m2.inverse(this.transform.matrix());
+      return m2.inverse(this.getTransform().matrix());
     }
 
     // Remaining Local related conversions
@@ -3078,11 +3078,19 @@ class DiagramElement {
         this.move.bounds = new TransformBounds(this.transform);
       }
       this.move.sizeInBounds = true;
+      const m = this.spaceTransformMatrix('diagram', 'local');
+      const p0 = new Point(this.diagramLimits.left, this.diagramLimits.bottom).transformBy(m);
+      // const p1 = new Point(this.diagramLimits.right, p0.y).transformBy(m);
+      const p1 = new Point(this.diagramLimits.right, this.diagramLimits.top).transformBy(m);
       this.move.bounds.updateTranslation(new RectBounds({
-        left: this.diagramLimits.left,
-        bottom: this.diagramLimits.bottom,
-        right: this.diagramLimits.right,
-        top: this.diagramLimits.top,
+        // left: this.diagramLimits.left,
+        // bottom: this.diagramLimits.bottom,
+        // right: this.diagramLimits.right,
+        // top: this.diagramLimits.top,
+        left: p0.x,
+        bottom: p0.y,
+        right: p1.x,
+        top: p1.y,
       }));
       return;
     }
@@ -3586,7 +3594,7 @@ class DiagramElementPrimitive extends DiagramElement {
     const transformedBorders = [];
     let matrix;
     if (Array.isArray(space)) {
-      matrix = m2.mul(space, this.transform.matrix());
+      matrix = m2.mul(space, this.getTransform().matrix());
     } else {
       matrix = this.spaceTransformMatrix('draw', space);
     }
@@ -4453,7 +4461,7 @@ class DiagramElementCollection extends DiagramElement {
     if (Array.isArray(space)) {
       spaceToUse = m2.mul(this.transform.matrix(), space);
     } else if (space === 'local') {
-      spaceToUse = this.transform.matrix();
+      spaceToUse = this.getTransform().matrix();
     } else if (space === 'draw') {
       spaceToUse = this.transform.identity().matrix();
     } else {
@@ -4470,6 +4478,7 @@ class DiagramElementCollection extends DiagramElement {
       }
       bordersToUse.push(...e.getBorder(spaceToUse, border, null, shownOnly));
     });
+    // console.log(bordersToUse)
     return bordersToUse;
   }
 

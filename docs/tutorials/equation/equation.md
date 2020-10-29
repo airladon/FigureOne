@@ -4,17 +4,17 @@ Consider the equation:
 
 `a = b + c`
 
-We will call:
-* **terms**: `a`, `b`, `c`
-* **operators**: `=`, `+`
+Where the terms and operators are:
+* terms: `a`, `b`, `c`
+* operators: `=`, `+`
 
 An equation can have different **forms**. One form is above, but it can be rearranged into a different form:
 
 `a - b = c`
 
-If FigureOne, an equation is a {@link DiagramElementCollection} that manages the **terms** and **operators** which are {@link DiagramElementPrimitive}s. To layout the terms and operators into an equation, a form is defined. An equation can define many forms, and animation can be used to change forms.
+If FigureOne, an equation is a collection ({@link DiagramElementCollection}) of **terms** and **operators** (which are {@link DiagramElementPrimitive}s). A **form** defines the layout of terms and operators to create an equation. An equation can have many forms, and animation can be used to move between forms.
 
-As the equation and elements are all {@link DiagramElement}s, then they have all the same interactivety and animation abilities as shapes and text.
+As the equation, terms and operators are all {@link DiagramElement}s, then they have all the same interactivety and animation abilities as shapes and text.
 
 
 ### <a id="equation-boilerplate"></a> Equation Boilerplate
@@ -47,7 +47,7 @@ First let's create an equation, with red as the default color:
 const equation = diagram.create.equation({ color: [1, 0, 0, 1] });
 ```
 
-Next lets add the definitions for the terms and operators, or the equation elements. The keys of the object are unique identifiers that will be used in the equation forms to order the elements appropriately. The values of the object are the text to display in the equation, or objects that define the text with some formatting.
+Next lets add the definitions for the terms and operators, or the equation elements. The keys of the object are unique identifiers that will be used in the equation forms to layout the elements appropriately. The values of the object are the text to display in the equation, or objects that define the text with additional options including formatting.
 ```javascript
 equation.addElements({
   a: 'a',
@@ -83,7 +83,7 @@ FigureOne treats symbols like any other equation element, and uses {@link Diagra
 
 Let's take the equation from the last example, and show the form as a fraction.
 
-Start by adding a vinculum symbol to the equation's elements:
+Start by adding a vinculum symbol (with id 'v') to the equation's elements:
 
 ```javascript
 equation.addElements({
@@ -144,12 +144,12 @@ equation.goToForm({
 
 ![](./tutorials/equation/linear.gif)
 
-The animation can be improved by moving the terms of the equation in curves instead of linearly:
+The animation can be improved by moving the terms of the equation in curves instead of linearly. To do this we can use the object form definition that also defines translation animation properties:
 
 ```javascript
 equation.addForms({
   bCurve: {
-    content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+    content: ['b', 'equals', { frac: ['a', 'v', 'c'] }],
     animation: {
       translation: {
         a: { style: 'curve', direction: 'up', mag: 0.8 },
@@ -197,9 +197,9 @@ diagram.addElement(
       },
       forms: {
         a: ['a', 'equals', 'b', 'times', 'c'],
-        b: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+        b: ['b', 'equals', { frac: ['a', 'v', 'c'] }],
         bCurve: {
-          content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+          content: ['b', 'equals', { frac: ['a', 'v', 'c'] }],
           animation: {
             translation: {
               a: { style: 'curve', direction: 'up', mag: 0.8 },

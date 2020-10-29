@@ -104,40 +104,40 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // //   diagram.animateNextFrame();
 // // }
 
-// diagram.addElements([
-//   {
-//     name: 'origin',
-//     method: 'polygon',
-//     options: {
-//       radius: 0.01,
-//       line: { width: 0.01 },
-//       sides: 10,
-//       color: [0.7, 0.7, 0.7, 1]
-//     },
-//   },
-//   {
-//     name: 'grid',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.1,
-//       xStep: 0.1,
-//       color: [0.7, 0.7, 0.7, 1],
-//       line: { width: 0.001 },
-//     },
-//   },
-//   {
-//     name: 'gridMajor',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.5,
-//       xStep: 0.5,
-//       color: [0.8, 0.8, 0.8, 1],
-//       line: { width: 0.004 }
-//     },
-//   },
-// ]);
+diagram.addElements([
+  {
+    name: 'origin',
+    method: 'polygon',
+    options: {
+      radius: 0.01,
+      line: { width: 0.01 },
+      sides: 10,
+      color: [0.7, 0.7, 0.7, 1]
+    },
+  },
+  {
+    name: 'grid',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.1,
+      xStep: 0.1,
+      color: [0.7, 0.7, 0.7, 1],
+      line: { width: 0.001 },
+    },
+  },
+  {
+    name: 'gridMajor',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.5,
+      xStep: 0.5,
+      color: [0.8, 0.8, 0.8, 1],
+      line: { width: 0.004 }
+    },
+  },
+]);
 
 // // const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2]});
 // // diagram.addElement({
@@ -207,45 +207,45 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // // diagram.initialize();
 
 
-diagram.addElement(
-  {
-    name: 'equation',
-    method: 'equation',
-    options: {
-      color: [1, 0, 0, 1],
-      font: { size: 0.5 },
-      elements: {
-        a: 't',
-        b: 'b',
-        c: 'c',
-        v: { symbol: 'vinculum'},
-        equals: ' = ',
-        times: ' \u00D7 ',  // unicode times symbol
-      },
-      forms: {
-        a: ['a', 'equals', 'b', 'times', 'c'],
-        b: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
-        bCurve: {
-          content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
-          animation: {
-            translation: {
-              a: { style: 'curve', direction: 'up', mag: 0.8 },
-              b: { style: 'curve', direction: 'down', mag: 1.2 },
-            },
-          },
-        },
-      },
-    },
-  },
-);
+// diagram.addElement(
+//   {
+//     name: 'equation',
+//     method: 'equation',
+//     options: {
+//       color: [1, 0, 0, 1],
+//       font: { size: 0.5 },
+//       elements: {
+//         a: 't',
+//         b: 'b',
+//         c: 'c',
+//         v: { symbol: 'vinculum'},
+//         equals: ' = ',
+//         times: ' \u00D7 ',  // unicode times symbol
+//       },
+//       forms: {
+//         a: ['a', 'equals', 'b', 'times', 'c'],
+//         b: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+//         bCurve: {
+//           content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+//           animation: {
+//             translation: {
+//               a: { style: 'curve', direction: 'up', mag: 0.8 },
+//               b: { style: 'curve', direction: 'down', mag: 1.2 },
+//             },
+//           },
+//         },
+//       },
+//     },
+//   },
+// );
 
-const equation = diagram.getElement('equation')
-equation.showForm('b');
-// equation.pulse(['a', 'c'], () => { console.log('qwer') });
-equation.animations.new()
-      .delay(1)
-      .pulse({ scale: 2, duration: 2 })
-      .start();
+// const equation = diagram.getElement('equation')
+// equation.showForm('b');
+// // equation.pulse(['a', 'c'], () => { console.log('qwer') });
+// equation.animations.new()
+//       .delay(1)
+//       .pulse({ scale: 2, duration: 2 })
+//       .start();
 // // // equation.addForms({
 // // //   bCurved: {
 // // //     content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
@@ -524,3 +524,49 @@ equation.animations.new()
 //   .position({ target: [0, 0], duration: 1 })
 //   .start();
 
+diagram.addElement(
+  {
+    name: 'equation',
+    method: 'equation',
+    options: {
+      color: [1, 0, 0, 1],
+      font: { size: 0.2 },
+      elements: {
+        a: 'a',
+        b: 'b',
+        c: 'c',
+        v: { symbol: 'vinculum' },
+        equals: ' = ',
+        times: ' \u00D7 ',  // unicode times symbol
+      },
+      forms: {
+        a: ['a', 'equals', 'b', 'times', 'c'],
+        b: ['b', 'equals', { frac: ['a', 'v', 'c'] }],
+        bCurve: {
+          content: ['b', 'equals', { frac: ['a', 'v', 'c'] }],
+          animation: {
+            translation: {
+              a: { style: 'curve', direction: 'up', mag: 0.8 },
+              b: { style: 'curve', direction: 'down', mag: 1.2 },
+            },
+          },
+        },
+      },
+    },
+  },
+);
+const equation = diagram.getElement('equation')
+equation.showForm('b');
+// equation.setPosition(0.04, 0);
+diagram.initialize();
+equation.setMovable();
+equation.setMoveBounds('diagram');
+equation.touchInBoundingRect = true;
+console.log(equation._v.getBoundingRect('diagram'))
+console.log(equation._v.getBoundingRect('local'))
+console.log(equation.getBoundingRect('local'))
+// console.log(equation._v.spaceTransformMatrix('draw', 'local'))
+// console.log(equation._v.spaceTransformMatrix('draw', 'diagram'))
+// console.log(equation._v.lastDrawTransform)
+// console.log(equation._v.transform)
+// console.log(equation._v)

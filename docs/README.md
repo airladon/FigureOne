@@ -357,8 +357,8 @@
 -   [TypeEquationTextElement][727]
 -   [container][729]
 -   [frac][732]
--   [AnimationProgression][735]
--   [OBJ_PulseAnimationStep][737]
+-   [OBJ_PulseAnimationStep][735]
+-   [AnimationProgression][737]
 -   [AnimationStartTime][739]
 
 ## Introduction
@@ -5037,6 +5037,7 @@ The options are the same as those in the \* <a href="#diagramelementpulse">pulse
 ### Examples
 
 ```javascript
+// Scale pulse, rotation pulse and translation pulse
 p.animations.new()
   .pulse({
     scale: 1.5,
@@ -10316,28 +10317,6 @@ eqn.addForms({
 });
 ```
 
-## AnimationProgression
-
-Animation progression function.
-
-As the animation time progresses, a percentage of the total animation
-duration will be passed to this function.
-
-This function then calculates and returns the percent progress of the
-animation.
-
-This function can be used to make non-linear progressions of an animation.
-For instance, it could be used to create a progression that is slowed
-at the start or end of the animation.
-
-Type: function ([number][753]): [number][753]
-
-### Parameters
-
--   `percent` **[number][753]** percentage of duration
-
-Returns **[number][753]** percent of animation complete
-
 ## OBJ_PulseAnimationStep
 
 **Extends OBJ_ElementAnimationStep**
@@ -10375,6 +10354,28 @@ Type: any
     finished. If `string` then the element's [FunctionMap][901] `fnMap` will be
     used (`null`)
 -   `when` **[TypeWhen][903]?** when to start the pulse (`'syncNow'`)
+
+## AnimationProgression
+
+Animation progression function.
+
+As the animation time progresses, a percentage of the total animation
+duration will be passed to this function.
+
+This function then calculates and returns the percent progress of the
+animation.
+
+This function can be used to make non-linear progressions of an animation.
+For instance, it could be used to create a progression that is slowed
+at the start or end of the animation.
+
+Type: function ([number][753]): [number][753]
+
+### Parameters
+
+-   `percent` **[number][753]** percentage of duration
+
+Returns **[number][753]** percent of animation complete
 
 ## AnimationStartTime
 
@@ -11876,13 +11877,13 @@ Type: ([TypeWhen][903] \| [number][753] | null)
 
 [734]: #examples-98
 
-[735]: #animationprogression
+[735]: #obj_pulseanimationstep
 
-[736]: #parameters-176
+[736]: #properties-104
 
-[737]: #obj_pulseanimationstep
+[737]: #animationprogression
 
-[738]: #properties-104
+[738]: #parameters-176
 
 [739]: #animationstarttime
 
