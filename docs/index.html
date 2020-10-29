@@ -3148,15 +3148,13 @@ diagram.addElement(
     },
   },
 );
-diagram.elements.isTouchable = <span class="hljs-literal">true</span>;
-diagram.initialize();</pre>
+diagram.elements.isTouchable = <span class="hljs-literal">true</span>;</pre>
 <h4>Using FigureOne</h4>
 <p>The example above shows how a figure can be defined with simple javascript objects, able to be encoded simply in JSON. This means complex figures or modules can be shared and reused easily.</p>
 <p>For many uses, it is fine to fully define a diagram and all its elements before a user interacts with it.</p>
 <p>Diagrams can also be defined more dynamically, such as in the example below which has exactly the same function as the example above.</p>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span> ]});
-diagram.initialize();
 
 <span class="hljs-keyword">const</span> label = diagram.create.text({
   <span class="hljs-attr">text</span>: <span class="hljs-string">'Line 1'</span>,
@@ -16518,8 +16516,7 @@ diagram.addElement(
     },
   },
 );
-<span class="hljs-keyword">const</span> p = diagram.getElement(<span class="hljs-string">'p'</span>);
-diagram.initialize();</pre>
+<span class="hljs-keyword">const</span> p = diagram.getElement(<span class="hljs-string">'p'</span>);</pre>
 <h3>Animation Examples</h3>
 <p>Let's create a simple animation. Start by defining a diagram and retrieving the element to animate by creating the boilerplate files <a href="#animation-boilerplate">above</a>.</p>
 <p>A <a href="#positionanimationstep">PositionAnimationStep</a> can be created to translate the shape, and a <a href="#rotationanimationstep">RotationAnimationStep</a> to rotate it</p>
@@ -21629,15 +21626,15 @@ p.animations.new()
     <p>An equation is a set of terms and operators arranged to make some mathematical statement.</p>
 <p>Consider the equation:</p>
 <p><code>a = b + c</code></p>
-<p>We will call:</p>
+<p>Where the terms and operators are:</p>
 <ul>
-<li><strong>terms</strong>: <code>a</code>, <code>b</code>, <code>c</code></li>
-<li><strong>operators</strong>: <code>=</code>, <code>+</code></li>
+<li>terms: <code>a</code>, <code>b</code>, <code>c</code></li>
+<li>operators: <code>=</code>, <code>+</code></li>
 </ul>
 <p>An equation can have different <strong>forms</strong>. One form is above, but it can be rearranged into a different form:</p>
 <p><code>a - b = c</code></p>
-<p>If FigureOne, an equation is a <a href="#diagramelementcollection">DiagramElementCollection</a> that manages the <strong>terms</strong> and <strong>operators</strong> which are <a href="#diagramelementprimitive">DiagramElementPrimitive</a>s. To layout the terms and operators into an equation, a form is defined. An equation can define many forms, and animation can be used to change forms.</p>
-<p>As the equation and elements are all <a href="#diagramelement">DiagramElement</a>s, then they have all the same interactivety and animation abilities as shapes and text.</p>
+<p>If FigureOne, an equation is a collection (<a href="#diagramelementcollection">DiagramElementCollection</a>) of <strong>terms</strong> and <strong>operators</strong> (which are <a href="#diagramelementprimitive">DiagramElementPrimitive</a>s). A <strong>form</strong> defines the layout of terms and operators to create an equation. An equation can have many forms, and animation can be used to move between forms.</p>
+<p>As the equation, terms and operators are all <a href="#diagramelement">DiagramElement</a>s, then they have all the same interactivety and animation abilities as shapes and text.</p>
 <h3><a id="equation-boilerplate"></a> Equation Boilerplate</h3>
 <p>To test examples within the 'Equation' section of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
 <p>All examples are snippets which can be appended to the end of the <code>index.js</code> file.</p>
@@ -21656,7 +21653,7 @@ p.animations.new()
 <h3>Quick Start</h3>
 <p>First let's create an equation, with red as the default color:</p>
 <pre class='hljs'><span class="hljs-keyword">const</span> equation = diagram.create.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });</pre>
-<p>Next lets add the definitions for the terms and operators, or the equation elements. The keys of the object are unique identifiers that will be used in the equation forms to order the elements appropriately. The values of the object are the text to display in the equation, or objects that define the text with some formatting.</p>
+<p>Next lets add the definitions for the terms and operators, or the equation elements. The keys of the object are unique identifiers that will be used in the equation forms to layout the elements appropriately. The values of the object are the text to display in the equation, or objects that define the text with additional options including formatting.</p>
 <pre class='hljs'>equation.addElements({
   <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">b</span>: <span class="hljs-string">'b'</span>,
@@ -21669,14 +21666,14 @@ p.animations.new()
   <span class="hljs-attr">a</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, <span class="hljs-string">'c'</span>],
 });</pre>
 <p>Finally, we can add the equation to the diagram and show the form:</p>
-<pre class='hljs'>diagram.elements.add(<span class="hljs-string">'equation'</span>, equation);
+<pre class='hljs'>diagram.add(<span class="hljs-string">'equation'</span>, equation);
 equation.showForm(<span class="hljs-string">'b'</span>);</pre>
 <p><img src="./tutorials/equation/simple.png"></p>
 <h3>Symbols and Equation Functions</h3>
 <p>Mathematics has many special symbols that operate on terms, or annotate an equation. These symbols usually have a special layout relative to the terms they operate on.</p>
 <p>FigureOne treats symbols like any other equation element, and uses <a href="#diagramelementprimitive">DiagramElementPrimitive</a>s to draw them. FigureOne then provides a series of functions that can layout terms around these symbols.</p>
 <p>Let's take the equation from the last example, and show the form as a fraction.</p>
-<p>Start by adding a vinculum symbol to the equation's elements:</p>
+<p>Start by adding a vinculum symbol (with id 'v') to the equation's elements:</p>
 <pre class='hljs'>equation.addElements({
   <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span>},
 });</pre>
@@ -21705,7 +21702,7 @@ equation.addForms({
   <span class="hljs-attr">b</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, e.frac([<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>])],
 });
 
-diagram.elements.add(<span class="hljs-string">'equation'</span>, equation);
+diagram.add(<span class="hljs-string">'equation'</span>, equation);
 equation.showForm(<span class="hljs-string">'a'</span>);</pre>
 <h3>Equation Animation</h3>
 <p>Equations can animate between forms. For example, to animate from form <code>a</code> to <code>b</code> in the equation above:</p>
@@ -21716,10 +21713,10 @@ equation.goToForm({
   <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
 });</pre>
 <p><img src="./tutorials/equation/linear.gif"></p>
-<p>The animation can be improved by moving the terms of the equation in curves instead of linearly:</p>
+<p>The animation can be improved by moving the terms of the equation in curves instead of linearly. To do this we can use the object form definition that also defines translation animation properties:</p>
 <pre class='hljs'>equation.addForms({
   <span class="hljs-attr">bCurve</span>: {
-    <span class="hljs-attr">content</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'c'</span>] }],
+    <span class="hljs-attr">content</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>] }],
     <span class="hljs-attr">animation</span>: {
       <span class="hljs-attr">translation</span>: {
         <span class="hljs-attr">a</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'curve'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'up'</span>, <span class="hljs-attr">mag</span>: <span class="hljs-number">0.8</span> },
@@ -21737,8 +21734,6 @@ equation.goToForm({
   <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>,
 });</pre>
 <p><img src="./tutorials/equation/curved.gif"></p>
-<h3>Equation Interactivity</h3>
-<p>Just like any <a href="#diagramelement">DiagramElement</a>, an equation can be moved.</p>
 <h3>Object Definition</h3>
 <p>Similar to shapes and text, the same equation above can be defined with an options object. For complicated equations, options objects can be used with code folding in an IDE to more easily read and navigate an equation definition. Also, because object form is JSON compatible, complex equations can be easily shared.</p>
 <pre class='hljs'>diagram.addElement(
@@ -21758,9 +21753,9 @@ equation.goToForm({
       },
       <span class="hljs-attr">forms</span>: {
         <span class="hljs-attr">a</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, <span class="hljs-string">'c'</span>],
-        <span class="hljs-attr">b</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'c'</span>] }],
+        <span class="hljs-attr">b</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>] }],
         <span class="hljs-attr">bCurve</span>: {
-          <span class="hljs-attr">content</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'c'</span>] }],
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>] }],
           <span class="hljs-attr">animation</span>: {
             <span class="hljs-attr">translation</span>: {
               <span class="hljs-attr">a</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'curve'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'up'</span>, <span class="hljs-attr">mag</span>: <span class="hljs-number">0.8</span> },
@@ -21774,6 +21769,24 @@ equation.goToForm({
 );
 <span class="hljs-keyword">const</span> equation = diagram.getElement(<span class="hljs-string">'equation'</span>)
 equation.showForm(<span class="hljs-string">'a'</span>);</pre>
+<h3>Equation highlighting and interactivity</h3>
+<p>Just like any <a href="#diagramelement">DiagramElement</a>, an equation or its elements can be pulsed, touched or moved.</p>
+<p>For example, an element can be pulsed:</p>
+<pre class='hljs'><span class="hljs-comment">// Pulse the c element</span>
+equation.showForm(<span class="hljs-string">'b'</span>)
+equation._c.pulse({ <span class="hljs-attr">scale</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'top'</span> });</pre>
+<p><img src="./tutorials/equation/pulse.gif"></p>
+<p>An element can be touched:</p>
+<pre class='hljs'>equation.showForm(<span class="hljs-string">'b'</span>)
+equation._c.makeTouchable();
+equation._c.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'c was touched'</span>) }</pre>
+<p><img src="./tutorials/equation/touch.gif"></p>
+<p>And the equation can be moved:</p>
+<pre class='hljs'>equation.showForm(<span class="hljs-string">'b'</span>)
+equation.setMovable();
+equation.touchInBoundingRect = <span class="hljs-number">0.5</span>;</pre>
+<p><img src="./tutorials/equation/move.gif"></p>
+<p>Here we are putting a buffer of 0.5 around the bounding rect of the equation to make it easy to touch and drag around.</p>
 
   
 </section></div>

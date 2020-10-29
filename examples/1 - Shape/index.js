@@ -15,5 +15,3 @@ diagram.addElement(
   },
 );
 
-// Initialize diagram
-diagram.initialize();

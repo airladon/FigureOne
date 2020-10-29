@@ -39,9 +39,6 @@ diagram.addElement(
   },
 );
 
-// Initialize diagram
-diagram.initialize();
-
 ```
 ## Explanation
 
@@ -101,11 +98,6 @@ diagram.addElement(
 
 We are defining a *circle* diagram element using the `polygon` method with the parameters of `sides`, `radius`, `fill`, and `color`.
 
-```js
-diagram.initialize();
-```
-
-`diagram.initialize()` initializes the diagram and queues drawing for the next available frame. It only needs to be called once, and is best called after all the initial diagram elements are defined.
 
 If the digram is changed in the future and drawing needs to be drawing needs to be queued again, then use:
 

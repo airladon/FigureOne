@@ -77,7 +77,6 @@ diagram.addElement(
   },
 );
 const p = diagram.getElement('p');
-diagram.initialize();
 ```
 
 ### Animation Examples

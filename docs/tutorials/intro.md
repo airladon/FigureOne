@@ -142,7 +142,6 @@ diagram.addElement(
   },
 );
 diagram.elements.isTouchable = true;
-diagram.initialize();
 ```
 
 #### Using FigureOne
@@ -156,7 +155,6 @@ Diagrams can also be defined more dynamically, such as in the example below whic
 ```javascript
 // index.js
 const diagram = new Fig.Diagram({ limits: [0, 0, 6, 4 ]});
-diagram.initialize();
 
 const label = diagram.create.text({
   text: 'Line 1',

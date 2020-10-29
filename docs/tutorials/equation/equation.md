@@ -221,12 +221,16 @@ equation.showForm('b')
 equation._c.pulse({ scale: 2, yAlign: 'top' });
 ```
 
+![](./tutorials/equation/pulse.gif)
+
 An element can be touched:
 ```javascript
 equation.showForm('b')
 equation._c.makeTouchable();
 equation._c.onClick = () => { console.log('c was touched') }
 ```
+
+![](./tutorials/equation/touch.gif)
 
 And the equation can be moved:
 ```javascript
@@ -235,8 +239,6 @@ equation.setMovable();
 equation.touchInBoundingRect = 0.5;
 ```
 
+![](./tutorials/equation/move.gif)
+
 Here we are putting a buffer of 0.5 around the bounding rect of the equation to make it easy to touch and drag around.
-
-### An Example
-
-FigureOne provides equations that can animate between forms and be interactive. Therefore, let's do an example that shows 

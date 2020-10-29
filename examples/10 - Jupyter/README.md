@@ -167,7 +167,6 @@ require(['Fig'], function(Fig) {
         },
       },
     });
-    diagram.initialize();
 
     const eqn = diagram.getElement('eqn');
     const a = diagram.getElement('eqn.a');

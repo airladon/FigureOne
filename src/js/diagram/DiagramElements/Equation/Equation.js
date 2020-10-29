@@ -585,7 +585,7 @@ export class Equation extends DiagramElementCollection {
   ) {
     let { color } = options;
     if (color == null) {
-      color = [0.5, 0.5, 0.5, 1];
+      color = [1, 0, 0, 1];
     }
     const defaultFont = {
       family: 'Times New Roman',
