@@ -385,6 +385,7 @@ class Diagram {
     this.isTouchDown = false;
     // this.pauseAfterNextDrawFlag = false;
     this.fontScale = optionsToUse.fontScale;
+    // console.log(this.canvasLow.getClientBoundingRect())
     this.updateLimits(limits);
     this.drawQueued = false;
     this.lastDrawTime = 0;
@@ -394,19 +395,6 @@ class Diagram {
     this.moveTopElementOnly = true;
     this.globalAnimation = new GlobalAnimation();
     this.subscriptions = new SubscriptionManager(this.fnMap);
-    // this.recorder = new Recorder(
-    //   this.simulateTouchDown.bind(this),
-    //   this.simulateTouchUp.bind(this),
-    //   // this.simulateTouchMove.bind(this),
-    //   this.simulateCursorMove.bind(this),
-    //   this.animateNextFrame.bind(this),
-    //   this.getElement.bind(this),
-    //   this.getState.bind(this),
-    //   this.setState.bind(this),
-    //   // this.pauseAfterNextDraw.bind(this),
-    //   this.pause.bind(this),
-    //   this.unpause.bind(this),
-    // );
     this.recorder = new Recorder();
     this.recorder.diagram = this;
     this.bindRecorder();
@@ -436,13 +424,13 @@ class Diagram {
 
     window.addEventListener('resize', this.resize.bind(this));
     this.sizeHtmlText();
-    this.initialize();
     this.isTouchDevice = isTouchDevice();
     this.animateNextFrame(true, 'first frame');
     if (optionsToUse.elements) {
       // eslint-disable-next-line new-cap
       this.elements = new optionsToUse.elements(this);
       this.elements.diagramLimits = this.limits;
+      this.initElements();
     }
     this.waitForFrames = 0;
     this.scrollingFast = false;
@@ -1064,6 +1052,7 @@ class Diagram {
       y: { bottomLeft: this.limits.bottom, height: this.limits.height },
     };
 
+    // console.log(this.canvasLow)
     const canvasRect = this.canvasLow.getBoundingClientRect();
     const pixelSpace = {
       x: { bottomLeft: 0, width: canvasRect.width },
@@ -1102,8 +1091,51 @@ class Diagram {
     //   element.recorder = this.recorder;
     //   element.animationFinishedCallback = this.animationFinished.bind(this, element);
     // });
+    
     // this.elements.setDiagram(this);
-    // /* eslint-enable no-param-reassign */
+    // // /* eslint-enable no-param-reassign */
+    // this.setFirstTransform();
+    // this.animateNextFrame();
+    // this.elements.setDiagram({
+    //   limits: this.limits,
+    //   spaceTransforms: this.spaceTransforms,
+    //   animateNextFrame: this.animateNextFrame.bind(this),
+    //   animationFinished: this.animationFinished.bind(this),
+    //   recorder: this.recorder,
+    // });
+    // this.setFirstTransform();
+    // this.animateNextFrame();
+  }
+
+  initElements() {
+    // const elements = this.elements.getAllElements();
+    // /* eslint-disable no-param-reassign */
+    // elements.forEach((element) => {
+    //   element.diagram = this;
+    //   element.recorder = this.recorder;
+    //   element.animationFinishedCallback = this.animationFinished.bind(this, element);
+    // });
+    
+    // this.elements.setDiagram(this);
+    // // /* eslint-enable no-param-reassign */
+    // this.setFirstTransform();
+    // this.animateNextFrame();
+    this.elements.setDiagram({
+      limits: this.limits,
+      spaceTransforms: this.spaceTransforms,
+      animateNextFrame: this.animateNextFrame.bind(this),
+      animationFinished: this.animationFinished.bind(this),
+      recorder: this.recorder,
+    });
+    this.setFirstTransform();
+    this.animateNextFrame();
+  }
+
+  setElements(collection: DiagramElementCollection) {
+    this.elements = collection;
+    this.initElements();
+    // this.elements.setDiagram(this);
+    // // /* eslint-enable no-param-reassign */
     // this.setFirstTransform();
     // this.animateNextFrame();
   }
@@ -1820,14 +1852,15 @@ class Diagram {
   createDiagramElements() {
     // this.elements = new DiagramElementCollection();
     this.elements = this.primitive.collection();
-    this.elements.setDiagram({
-      limits: this.limits,
-      spaceTransforms: this.spaceTransforms,
-      animateNextFrame: this.animateNextFrame,
-      animationFinished: this.animationFinished.bind(this),
-    });
-    this.setFirstTransform();
-    this.animateNextFrame();
+    this.initElements();
+    // this.elements.setDiagram({
+    //   limits: this.limits,
+    //   spaceTransforms: this.spaceTransforms,
+    //   animateNextFrame: this.animateNextFrame,
+    //   animationFinished: this.animationFinished.bind(this),
+    // });
+    // this.setFirstTransform();
+    // this.animateNextFrame();
     // this.elements.diagramLimits = this.limits;
   }
 

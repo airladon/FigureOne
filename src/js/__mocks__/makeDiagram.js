@@ -99,6 +99,8 @@ export default function makeDiagram(
   diagram.objectsHigh = diagram.getObjects(true);
   diagram.objects = diagram.objectsLow;
   diagram.setSpaceTransforms();
+  // needed as the first element needs to be set with the space Transforms
+  diagram.initElements();
   diagram.mock = {
     initialTime: 0,
     duration: 0,

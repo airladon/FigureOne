@@ -38,7 +38,7 @@ describe('Diagram Recorder', () => {
         ],
       },
     ]);
-    diagram.initialize();
+    // diagram.initialize();
     a = diagram.getElement('a');
     aa = diagram.getElement('a.a');
     b = diagram.getElement('b');
