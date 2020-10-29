@@ -180,7 +180,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     copyKeysFromTo(options, this.pulse, [
       'stopAfterDuration', 'frequency', 'scale', 'rotation', 'translation',
       'angle', 'min', 'centerOn', 'x', 'y', 'space', 'done', 'num', 'when',
-      'stopAfterDuration', 'velocity', 'maxDuration',
+      'stopAfterDuration', 'velocity', 'maxDuration', 'duration',
     ]);
     this.pulse.centerOn = options.centerOn;
 
@@ -213,6 +213,8 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     super.start(startTime);
     const { element } = this;
     if (element != null) {
+      // console.log('asdf')
+      // console.log(this.pulse)
       element.pulse(this.pulse);
       // if (this.numLines === 1) {
       //   element.pulseScaleNow(this.duration, this.scale, this.frequency);

@@ -241,7 +241,11 @@ diagram.addElement(
 
 const equation = diagram.getElement('equation')
 equation.showForm('b');
-equation.pulse(['a', 'c'], () => { console.log('qwer') });
+// equation.pulse(['a', 'c'], () => { console.log('qwer') });
+equation.animations.new()
+      .delay(1)
+      .pulse({ scale: 2, duration: 2 })
+      .start();
 // // // equation.addForms({
 // // //   bCurved: {
 // // //     content: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],

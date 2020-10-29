@@ -14,8 +14,9 @@ describe('Animation Step State', () => {
   let diagram;
   let now;
   beforeEach(() => {
+    jest.useFakeTimers();
     diagram = makeDiagram();
-    elem1 = diagram.objects.line();
+    elem1 = diagram.shapes.polygon();
     diagram.elements.add('elem1', elem1);
     global.performance.now = () => now * 1000;
   });
@@ -318,33 +319,45 @@ describe('Animation Step State', () => {
   });
   test('Pulse', () => {
     elem1.setScale(1);
+    // now = 0;
+    diagram.mock.timeStep(0);
     elem1.animations.new()
       .pulse({ scale: 2, duration: 2 })
       .start();
-    now = 0;
-    diagram.draw(now);
-    now = 0.5;
-    diagram.draw(now);
-    expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(1.70711);
+    diagram.mock.timeStep(0);
+    // diagram.mock.timeStep(0.1);
+    // diagram.mock.timeStep(0.1);
+    // diagram.mock.timeStep(0.1);
+    // diagram.mock.timeStep(0.1);
+    // diagram.mock.timeStep(0.1);
+    // now = 0.5;
+    diagram.mock.timeStep(0.5);
+    // console.log(elem1.state.isPulsing)
+    // console.log(elem1.animations.animations[0].steps)
+    expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(1.5);
     const state = diagram.getState();
-    now = 1;
-    diagram.draw(now);
+    // now = 1;
+    diagram.mock.timeStep(0.5);
     expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(2);
     elem1.stop();
     expect(elem1.animations.animations).toHaveLength(0);
 
     // now lets delay 10s
     now = 11;
+    diagram.mock.timeStep(10);
     diagram.setState(state);
-    diagram.draw(now);
-    expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(1.70711);
+    // diagram.draw(now);
+    diagram.mock.timeStep(0);
+    expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(1.5);
 
-    now = 11.1;
-    diagram.draw(now);
-    expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(1.80902);
+    // now = 11.1;
+    diagram.mock.timeStep(0.1);
+    // diagram.draw(now);
+    expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(1.65451);
 
-    now = 11.5;
-    diagram.draw(now);
+    // now = 11.5;
+    diagram.mock.timeStep(0.4);
+    // diagram.draw(now);
     expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(2);
   });
   test('Custom', () => {

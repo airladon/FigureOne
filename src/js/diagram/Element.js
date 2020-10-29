@@ -2237,6 +2237,7 @@ class DiagramElement {
       // clip the elapsed time to the pulse time, and end pulsing (after this
       // draw). If the pulse time is 0, that means pulsing will loop
       // indefinitely.
+
       if (deltaTime >= this.pulseSettings.time && this.pulseSettings.time !== 0) {
         // this.state.isPulsing = false;
         this.stopPulsing('complete');
