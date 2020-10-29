@@ -342,6 +342,9 @@ DiagramElementPrimitive {
       "tools.math.sinusoid": Object {
         "fn": [Function],
       },
+      "tools.math.sinusoidAbs": Object {
+        "fn": [Function],
+      },
       "tools.math.triangle": Object {
         "fn": [Function],
       },
@@ -519,9 +522,20 @@ DiagramElementPrimitive {
   "pointsDefinition": Object {},
   "pointsToDraw": -1,
   "pulseDefault": Object {
+    "angle": 0,
+    "centerOn": [Circular],
+    "done": null,
     "duration": 1,
     "frequency": 0,
+    "num": 1,
+    "progression": "sinusoid",
+    "rotation": null,
     "scale": 2,
+    "space": "diagram",
+    "translation": null,
+    "when": "syncNow",
+    "xAlign": "center",
+    "yAlign": "middle",
   },
   "pulseSettings": Object {
     "A": 1,
@@ -692,6 +706,9 @@ DiagramElementPrimitive {
           "fn": [Function],
         },
         "tools.math.sinusoid": Object {
+          "fn": [Function],
+        },
+        "tools.math.sinusoidAbs": Object {
           "fn": [Function],
         },
         "tools.math.triangle": Object {
