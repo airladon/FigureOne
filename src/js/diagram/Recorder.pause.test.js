@@ -602,7 +602,6 @@ describe('Animate To State', () => {
     let callbacks;
     beforeEach(() => {
       const startPulse = () => {
-        // a.pulseScaleNow(2, 2);
         a.pulse({ duration: 2, scale: 2, when: 'syncNow' });
       };
       recorder.addEventType('startPulse', startPulse.bind(this));
@@ -770,7 +769,6 @@ describe('Animate To State', () => {
       describe('Pulse State Change', () => {
         beforeEach(() => {
           diagram.unpause();
-          // a.pulseScaleNow(2, 4);
           a.pulse({ duration: 2, scale: 4, when: 'syncNow' });
           // This is ok as it kicks off the pulse
           diagram.mock.timeStep(0); // Ok
@@ -976,7 +974,6 @@ describe('Animate To State', () => {
         beforeEach(() => {
           diagram.unpause();
           a.setPosition(4, 4);
-          // a.pulseScaleNow(2, 4);
           a.pulse({ duration: 2, scale: 4, when: 'syncNow' });
           // This is ok as it kicks off the pulse
           diagram.mock.timeStep(0);  // Ok
@@ -1898,7 +1895,6 @@ describe('Animate To State', () => {
   describe('Two Elements', () => {
     beforeEach(() => {
       const startPulse = () => {
-        // a.pulseScaleNow(2, 2);
         a.pulse({ duration: 2, scale: 2, when: 'syncNow' });
       };
       recorder.addEventType('startPulse', startPulse.bind(this));
@@ -1999,7 +1995,6 @@ describe('Animate To State', () => {
       diagram.initialize();
       a = diagram.elements._l._line;
       const startPulse = () => {
-        // a.pulseScaleNow(2, 2);
         diagram.elements._l.pulseWidth({ line: 2, duration: 2 });
       };
       recorder.addEventType('startPulse', startPulse.bind(this));
@@ -2337,8 +2332,7 @@ describe('Animate To State', () => {
         beforeEach(() => {
           diagram.unpause();
           a.setPosition(4, 4);
-          // a.pulseScaleNow(2, 4);
-          // a.pulseScale({ duration: 2, scale: 4, when: 'syncNow' });
+            // a.pulseScale({ duration: 2, scale: 4, when: 'syncNow' });
           diagram.elements._l.pulseWidth({ duration: 2, line: 4, when: 'syncNow' });
           // This is ok as it kicks off the pulse
           diagram.mock.timeStep(0);  // Ok

@@ -15,7 +15,7 @@ describe('Diagram Element State', () => {
   let now;
   beforeEach(() => {
     diagram = makeDiagram();
-    elem1 = diagram.objects.line();
+    elem1 = diagram.shapes.polygon();
     diagram.elements.add('elem1', elem1);
     global.performance.now = () => now * 1000;
   });
@@ -60,7 +60,9 @@ describe('Diagram Element State', () => {
     elem1.fnMap.add('pulseCallback', pulseCallback);
     expect(pulseCallback.mock.calls.length).toBe(0);
 
-    elem1.pulseScaleNow(2, 2, 0.5, 'pulseCallback');
+    elem1.pulse({
+      duration: 2, scale: 2, frequency: 0.5, done: 'pulseCallback', when: 'nextFrame',
+    });
 
     now = 0;
     diagram.draw(now);

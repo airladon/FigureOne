@@ -1574,12 +1574,17 @@ export class Equation extends DiagramElementCollection {
       ) {
         const { pulse } = this.eqn.formRestart;
         const newEnd = () => {
-          this.pulseScaleNow(pulse.duration, pulse.scale, 0, end);
+          this.pulse({
+            duration: pulse.duration,
+            scale: pulse.scale,
+            frequency: 0,
+            done: end,
+          });
           if (pulse.element != null
             && pulse.element instanceof Equation  // $FlowFixMe
             && pulse.element.getCurrentForm().name === form.name
           ) {
-            pulse.element.pulseScaleNow(pulse.duration, pulse.scale);
+            pulse.element.pulse({ duration: pulse.duration, scale: pulse.scale });
           }
         };
         form.allHideShow(
