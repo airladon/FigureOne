@@ -523,7 +523,7 @@ DiagramElementPrimitive {
   "pointsToDraw": -1,
   "pulseDefault": Object {
     "angle": 0,
-    "centerOn": [Circular],
+    "centerOn": "this",
     "done": null,
     "duration": 1,
     "frequency": 0,

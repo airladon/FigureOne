@@ -69,7 +69,7 @@ equation.addForms({
 Finally, we can add the equation to the diagram and show the form:
 
 ```javascript
-diagram.elements.add('equation', equation);
+diagram.add('equation', equation);
 equation.showForm('b');
 ```
 
@@ -125,7 +125,7 @@ equation.addForms({
   b: ['b', 'equals', e.frac(['a', 'v', 'c'])],
 });
 
-diagram.elements.add('equation', equation);
+diagram.add('equation', equation);
 equation.showForm('a');
 ```
 
@@ -236,3 +236,7 @@ equation.touchInBoundingRect = 0.5;
 ```
 
 Here we are putting a buffer of 0.5 around the bounding rect of the equation to make it easy to touch and drag around.
+
+### An Example
+
+FigureOne provides equations that can animate between forms and be interactive. Therefore, let's do an example that shows 

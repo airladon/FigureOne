@@ -674,7 +674,7 @@ class DiagramElement {
       frequency: 0,
       xAlign: 'center',
       yAlign: 'middle',
-      centerOn: this,
+      centerOn: 'this',
       num: 1,
       space: 'diagram',
       done: null,
@@ -1164,8 +1164,10 @@ class DiagramElement {
 
   setDiagram(diagram: Diagram) {
     this.diagram = diagram;
-    this.recorder = diagram.recorder;
-    this.animationFinishedCallback = diagram.animationFinished.bind(diagram, this);
+    if (diagram != null) {
+      this.recorder = diagram.recorder;
+      this.animationFinishedCallback = diagram.animationFinished.bind(diagram, this);
+    }
   }
 
   setTimeDelta(delta: number) {
@@ -2355,6 +2357,9 @@ class DiagramElement {
     let delta;
     if (centerOn == null) {
       delta = new Point(0, 0);
+    } else if (centerOn === 'this') {
+      delta = this.getPositionInBounds('diagram', xAlign, yAlign)
+        .transformBy(this.spaceTransformMatrix('diagram', 'draw'));
     } else if (centerOn instanceof DiagramElement) {
       delta = centerOn.getPositionInBounds('diagram', xAlign, yAlign)
         .transformBy(this.spaceTransformMatrix('diagram', 'draw'));

@@ -1820,8 +1820,14 @@ class Diagram {
   createDiagramElements() {
     // this.elements = new DiagramElementCollection();
     this.elements = this.primitive.collection();
-    this.elements.setDiagram(this);
+    this.elements.setDiagram({
+      limits: this.limits,
+      spaceTransforms: this.spaceTransforms,
+      animateNextFrame: this.animateNextFrame,
+      animationFinished: this.animationFinished.bind(this),
+    });
     this.setFirstTransform();
+    this.animateNextFrame();
     // this.elements.diagramLimits = this.limits;
   }
 
