@@ -171,11 +171,6 @@ equation.goToForm({
 ![](./tutorials/equation/curved.gif)
 
 
-### Equation Interactivity
-
-Just like any {@link DiagramElement}, an equation can be moved.
-
-
 ### Object Definition
 Similar to shapes and text, the same equation above can be defined with an options object. For complicated equations, options objects can be used with code folding in an IDE to more easily read and navigate an equation definition. Also, because object form is JSON compatible, complex equations can be easily shared.
 
@@ -214,3 +209,30 @@ diagram.addElement(
 const equation = diagram.getElement('equation')
 equation.showForm('a');
 ```
+
+### Equation highlighting and interactivity
+
+Just like any {@link DiagramElement}, an equation or its elements can be pulsed, touched or moved.
+
+For example, an element can be pulsed:
+```javascript
+// Pulse the c element
+equation.showForm('b')
+equation._c.pulse({ scale: 2, yAlign: 'top' });
+```
+
+An element can be touched:
+```javascript
+equation.showForm('b')
+equation._c.makeTouchable();
+equation._c.onClick = () => { console.log('c was touched') }
+```
+
+And the equation can be moved:
+```javascript
+equation.showForm('b')
+equation.setMovable();
+equation.touchInBoundingRect = 0.5;
+```
+
+Here we are putting a buffer of 0.5 around the bounding rect of the equation to make it easy to touch and drag around.

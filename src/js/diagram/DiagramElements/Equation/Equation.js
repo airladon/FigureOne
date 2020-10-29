@@ -771,7 +771,8 @@ export class Equation extends DiagramElementCollection {
       weight?: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
       size?: number,
       family?: string,
-      color?: Array<number>
+      color?: Array<number>,
+      touchBorder?: number,
     },
     defaultText: string = '',
   ) {
@@ -823,6 +824,7 @@ export class Equation extends DiagramElementCollection {
         font: fontDefinition,
         xAlign: 'left',
         yAlign: 'baseline',
+        touchBorder: options.touchBorder,
       },
     );
     return p;

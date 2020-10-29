@@ -1045,6 +1045,11 @@ class DiagramElement {
   //   }
   // }
 
+  animateNextFrame() {
+    if (this.diagram != null) {
+      this.diagram.animateNextFrame();
+    }
+  }
 
   setProperties(properties: Object, exceptIn: Array<string> | string = []) {
     let except = exceptIn;
@@ -1156,6 +1161,12 @@ class DiagramElement {
   //   }
   //   return fn(...args);
   // }
+
+  setDiagram(diagram: Diagram) {
+    this.diagram = diagram;
+    this.recorder = diagram.recorder;
+    this.animationFinishedCallback = diagram.animationFinished.bind(diagram, this);
+  }
 
   setTimeDelta(delta: number) {
     if (this.animations.state === 'animating') {
@@ -1687,6 +1698,7 @@ class DiagramElement {
     }
     this.fnMap.exec(this.setTransformCallback, this.transform);
     this.subscriptions.publish('setTransform', [this.transform]);
+    this.animateNextFrame();
   }
 
   // Set the next transform (and velocity if moving freely) for the next
@@ -1753,6 +1765,7 @@ class DiagramElement {
     if (setDefault) {
       this.defaultColor = this.color.slice();
     }
+    this.animateNextFrame();
   }
 
   /**
@@ -1779,6 +1792,7 @@ class DiagramElement {
   setOpacity(opacity: number) {
     // this.color[3] = opacity;
     this.opacity = opacity;
+    this.animateNextFrame();
   }
 
   // getScenarioTargetLegacy(
@@ -2419,6 +2433,8 @@ class DiagramElement {
       this.pulseSettings.type = angle;
     }
     this.startPulsing(when);
+    // console.log(this.diagram)
+    // this.diagram.animateNextFrame();
   }
 
   // deprecate
@@ -2609,6 +2625,7 @@ class DiagramElement {
     this.state.pulse.startTime = time == null ? time : time / 1000;
     this.unrender();
     this.frozenPulseTransforms = [];
+    this.animateNextFrame();
   }
 
   stopPulsing(
@@ -3971,6 +3988,18 @@ class DiagramElementCollection extends DiagramElement {
     } else {
       this.drawOrder.push(name);
     }
+    if (this.diagram != null) {
+      element.setDiagram(this.diagram);
+    }
+    element.setFirstTransform(this.lastDrawTransform);
+    this.animateNextFrame();
+  }
+
+  setDiagram(diagram: Diagram) {
+    super.setDiagram(diagram);
+    for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+      this.elements[this.drawOrder[i]].setDiagram(diagram);
+    }
   }
 
   willStartAnimating() {
@@ -4388,12 +4417,16 @@ class DiagramElementCollection extends DiagramElement {
       return false;
     }
     const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
-    if (this.touchInBoundingRect) {
+    if (this.touchInBoundingRect !== false) {
+      let buffer = 0;
+      if (typeof this.touchInBoundingRect === 'number') {
+        buffer = this.touchInBoundingRect;
+      }
       const boundingRect = this.getBoundingRect('draw');
-      if (vertexLocation.x >= boundingRect.left
-        && vertexLocation.x <= boundingRect.right
-        && vertexLocation.y <= boundingRect.top
-        && vertexLocation.y >= boundingRect.bottom
+      if (vertexLocation.x >= boundingRect.left - buffer
+        && vertexLocation.x <= boundingRect.right + buffer
+        && vertexLocation.y <= boundingRect.top + buffer
+        && vertexLocation.y >= boundingRect.bottom - buffer
       ) {
         return true;
       }
@@ -4582,7 +4615,7 @@ class DiagramElementCollection extends DiagramElement {
       return [];
     }
     let touched = [];
-    if (this.touchInBoundingRect || this.isTouchable) {
+    if (this.touchInBoundingRect !== false || this.isTouchable) {
       if (this.isBeingTouched(glLocation)) {
         touched.push(this);
       }

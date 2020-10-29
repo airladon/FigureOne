@@ -705,6 +705,9 @@ export default class AnimationManager {
       this.fnMap.exec(this.finishedCallback);
       this.subscriptions.publish('finished');
     }
+    if (this.element != null) {
+      this.element.animateNextFrame();
+    }
   }
 
   startAll(optionsIn: { startTime?: AnimationStartTime}) {
@@ -724,6 +727,9 @@ export default class AnimationManager {
     if (this.state === 'idle') {
       this.fnMap.exec(this.finishedCallback);
       this.subscriptions.publish('finished');
+    }
+    if (this.element != null) {
+      this.element.animateNextFrame();
     }
   }
 

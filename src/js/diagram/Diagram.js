@@ -1095,13 +1095,14 @@ class Diagram {
   // }
 
   initialize() {
-    const elements = this.elements.getAllElements();
-    /* eslint-disable no-param-reassign */
-    elements.forEach((element) => {
-      element.diagram = this;
-      element.recorder = this.recorder;
-      element.animationFinishedCallback = this.animationFinished.bind(this, element);
-    });
+    // const elements = this.elements.getAllElements();
+    // /* eslint-disable no-param-reassign */
+    // elements.forEach((element) => {
+    //   element.diagram = this;
+    //   element.recorder = this.recorder;
+    //   element.animationFinishedCallback = this.animationFinished.bind(this, element);
+    // });
+    this.elements.setDiagram(this);
     /* eslint-enable no-param-reassign */
     this.setFirstTransform();
     this.animateNextFrame();
@@ -1819,7 +1820,9 @@ class Diagram {
   createDiagramElements() {
     // this.elements = new DiagramElementCollection();
     this.elements = this.primitive.collection();
-    this.elements.diagramLimits = this.limits;
+    this.elements.setDiagram(this);
+    this.setFirstTransform();
+    // this.elements.diagramLimits = this.limits;
   }
 
   add(
@@ -1831,6 +1834,7 @@ class Diagram {
 
   setElementsToCollection(collection: DiagramElementCollection) {
     this.elements = collection;
+    this.elements.setDigram(this);
     this.setFirstTransform();
   }
 

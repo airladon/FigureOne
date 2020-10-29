@@ -534,7 +534,7 @@ diagram.addElement(
       elements: {
         a: 'a',
         b: 'b',
-        c: 'c',
+        c: { touchBorder: 0.2 },
         v: { symbol: 'vinculum' },
         equals: ' = ',
         times: ' \u00D7 ',  // unicode times symbol
@@ -555,18 +555,40 @@ diagram.addElement(
     },
   },
 );
-const equation = diagram.getElement('equation')
-equation.showForm('b');
-// equation.setPosition(0.04, 0);
-diagram.initialize();
-equation.setMovable();
-equation.setMoveBounds('diagram');
-equation.touchInBoundingRect = true;
-console.log(equation._v.getBoundingRect('diagram'))
-console.log(equation._v.getBoundingRect('local'))
-console.log(equation.getBoundingRect('local'))
-// console.log(equation._v.spaceTransformMatrix('draw', 'local'))
-// console.log(equation._v.spaceTransformMatrix('draw', 'diagram'))
-// console.log(equation._v.lastDrawTransform)
-// console.log(equation._v.transform)
-// console.log(equation._v)
+const equation = diagram.getElement('equation');
+
+equation.showForm('b')
+setTimeout(() => {
+  equation._c.pulse({ scale: 2, yAlign: 'top' });
+}, 1000);
+
+diagram.addElements(
+  {
+    name: 'p',
+    method: 'shapes.polygon'
+  },
+  ['name', ]
+)
+// equation.showForm('b');
+// // equation.setPosition(0.04, 0);
+// diagram.initialize();
+// equation.setMovable();
+// equation.setMoveBounds('diagram');
+// equation.touchInBoundingRect = true;
+// console.log(equation._v.getBoundingRect('diagram'))
+// console.log(equation._v.getBoundingRect('local'))
+// console.log(equation.getBoundingRect('local'))
+// // console.log(equation._v.spaceTransformMatrix('draw', 'local'))
+// // console.log(equation._v.spaceTransformMatrix('draw', 'diagram'))
+// // console.log(equation._v.lastDrawTransform)
+// // console.log(equation._v.transform)
+// // console.log(equation._v)
+// equation.showForm('b')
+// equation.setMovable();
+// equation.touchInBoundingRect = 0.2;
+
+equation.showForm('b')
+// equation._c.makeTouchable();
+// equation._c.onClick = () => { console.log('c was touched') }
+equation._a.makeTouchable();
+equation._a.onClick = () => { console.log('a was touched') }
