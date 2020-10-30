@@ -906,7 +906,11 @@ export type EQN_Box = {
 /**
  * Equation bar
  *
+ * ![](./assets1/eqn_bar.gif)
+ *
  * Place a bar (or bracket) symbol to the side of an equation phrase
+ *
+ * Options can be an object, or an array in the property order below
  *
  * @property {TypeEquationPhrase} content
  * @property {string} symbol
@@ -937,53 +941,73 @@ export type EQN_Box = {
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // For examples, a box symbol is defined as an equation element
- * eqn.addElements({
- *   hBar: { symbol: 'bar', side: 'top' }
- *   vBar: { symbol: 'bar', side: 'left' }
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       bar: { symbol: 'bar', side: 'top' },
+ *     },
+ *     forms: {
+ *       1: { bar: ['a', 'bar', 'top'] },
+ *     },
+ *   },
  * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Full object definition for horizontal bar
- * {
- *   bar: {
- *     content: 'a',
- *     symbol: 'hBar',
- *     side: 'top',
- *     inSize: true,
- *     space: 0.1,
- *     overhang: null,
- *     length: null,
- *     left: null,
- *     right: null,
- *     fullContentBounds: false,
- *     useFullBounds: false,
+ * // Some different bar examples
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       hBar: { symbol: 'bar', side: 'top' },
+ *       vBar: { symbol: 'bar', side: 'right' },
+ *       hArrow: { symbol: 'arrow', direction: 'right' },
+ *     },
+ *     forms: {
+ *       // Array equation
+ *       1: { bar: [['a', 'b'], 'hBar', 'top'] },
+ *       // Object definition
+ *       2: {
+ *         bar: {
+ *           content: ['a', 'b'],
+ *           symbol: 'hBar',
+ *           side: 'bottom',
+ *         },
+ *       },
+ *       // Additional options for layout
+ *       3: {
+ *         bar: {
+ *           content: ['a', 'b'],
+ *           symbol: 'vBar',
+ *           side: 'right',
+ *           overhang: 0.1,
+ *         },
+ *       },
+ *       // Vector arrow
+ *       4: {
+ *         bar: {
+ *           content: ['a', 'b'],
+ *           symbol: 'hArrow',
+ *           side: 'top',
+ *         },
+ *       },
+ *     },
+ *     formSeries: ['1', '2', '3', '4']
  *   },
- * }
- * @example
- * // Full object definition for vertical bar
- * {
- *   bar: {
- *     content: 'a',
- *     symbol: 'vBar',
- *     side: 'left',
- *     inSize: true,
- *     space: 0.1,
- *     overhang: null,
- *     length: null,
- *     top: null,
- *     bottom: null,
- *     minContentHeight: null,
- *     minContentDescent: null,
- *     minContentAscent: null,
- *     descent: null,
- *     fullContentBounds: false,
- *     useFullBounds: false,
- *   },
- * }
- * @example
- * // Example array definition
- *  { bar: ['a', 'hBar', 'top'] }
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_Bar = {
   content: TypeEquationPhrase;

@@ -1916,9 +1916,9 @@
               
                 
                 <li><a
-                  href='#eqn_container'
+                  href='#eqn_box'
                   class="">
-                  EQN_Container
+                  EQN_Box
                   
                 </a>
                 
@@ -1926,9 +1926,9 @@
               
                 
                 <li><a
-                  href='#eqn_box'
+                  href='#eqn_container'
                   class="">
-                  EQN_Box
+                  EQN_Container
                   
                 </a>
                 
@@ -26046,6 +26046,250 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='eqn_box'>
+      EQN_Box
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation box</p>
+<p><img src="./assets1/eqn_box.gif"></p>
+<p>Place a box symbol around an equation phrase</p>
+<p>Options can be an object, or an array in the property order below</p>
+
+  
+    <p style="display: none;">      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ excludes box symbol from size of
+resulting phrase (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between box symbol and content on
+the left, right, bottom and top sides (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use when top space between content and
+box should be different thant 
+<code>space</code>
+ property (
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rightSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use when right space between content and
+box should be different thant 
+<code>space</code>
+ property (
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use when bottom space between content and
+box should be different thant 
+<code>space</code>
+ property (
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>leftSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use when left space between content and
+box should be different thant 
+<code>space</code>
+ property (
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : use full bounds of content,
+overriding any 
+<code>inSize=false</code>
+ properties in the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : make the bounds of this phrase equal to
+the full bounds of the content even if 
+<code>fullContentBounds=false</code>
+ and the
+brackets only surround a portion of the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">box</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'box'</span>, <span class="hljs-literal">true</span>, <span class="hljs-number">0.1</span>] },
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different box examples</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">box</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'box'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Array equation</span>
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, { <span class="hljs-attr">box</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'box'</span>] }, <span class="hljs-string">'c'</span>],
+      <span class="hljs-comment">// Object definition</span>
+      <span class="hljs-number">2</span>: {
+        <span class="hljs-attr">box</span>: {
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>],
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'box'</span>,
+        },
+      },
+      <span class="hljs-comment">// Additional options for layout</span>
+      <span class="hljs-number">3</span>: {
+        <span class="hljs-attr">box</span>: {
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>],
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'box'</span>,
+          <span class="hljs-attr">space</span>: <span class="hljs-number">0.2</span>,
+        },
+      },
+      <span class="hljs-comment">// Box is included in the layout spacing</span>
+      <span class="hljs-number">4</span>: [
+        <span class="hljs-string">'a'</span>,
+        {
+          <span class="hljs-attr">box</span>: {
+            <span class="hljs-attr">content</span>: <span class="hljs-string">'b'</span>,
+            <span class="hljs-attr">symbol</span>: <span class="hljs-string">'box'</span>,
+            <span class="hljs-attr">space</span>: <span class="hljs-number">0.2</span>,
+            <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
+          },
+        },
+        <span class="hljs-string">'c'</span>
+      ],
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>]
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='eqn_container'>
       EQN_Container
     </h3>
@@ -26232,201 +26476,6 @@ diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
 eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eqn_box'>
-      EQN_Box
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation box</p>
-<p>Place a box symbol around an equation phrase</p>
-
-  
-    <p style="display: none;">      Type:
-      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>false</code>
- excludes box symbol from size of
-resulting phrase (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space between box symbol and content on
-the left, right, bottom and top sides (
-<code>0</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : use when top space between content and
-box should be different thant 
-<code>space</code>
- property (
-<code>space</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rightSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : use when right space between content and
-box should be different thant 
-<code>space</code>
- property (
-<code>space</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : use when bottom space between content and
-box should be different thant 
-<code>space</code>
- property (
-<code>space</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>leftSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : use when left space between content and
-box should be different thant 
-<code>space</code>
- property (
-<code>space</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : use full bounds of content,
-overriding any 
-<code>inSize=false</code>
- properties in the content (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : make the bounds of this phrase equal to
-the full bounds of the content even if 
-<code>fullContentBounds=false</code>
- and the
-brackets only surround a portion of the content (
-<code>false</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For examples, a box symbol is defined as an equation element</span>
-eqn.addElements({
-  <span class="hljs-attr">x</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'box'</span> }
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
-{
-  <span class="hljs-attr">box</span>: {
-    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'box'</span>,
-    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">space</span>: <span class="hljs-number">0</span>,
-    <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">rightSpace</span>: <span class="hljs-number">0.2</span>,
-    <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.3</span>,
-    <span class="hljs-attr">leftSpace</span>: <span class="hljs-number">0.4</span>,
-    <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
-    <span class="hljs-attr">useFullBounds</span>: <span class="hljs-literal">false</span>,
-  },
-}</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">box</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'box'</span>] }</pre>
     
   
 

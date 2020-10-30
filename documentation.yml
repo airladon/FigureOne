@@ -70,8 +70,8 @@ toc:
   - EQN_Strike
   - EQN_StrikeComment
   - EQN_Box
-  - EQN_Container
   - EQN_Bar
+  - EQN_Container
   - EQN_Comment
   - EQN_Pad
   - EQN_Matrix

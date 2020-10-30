@@ -94,57 +94,60 @@ diagram.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
+    elements: {
+      bar: { symbol: 'bar', side: 'top' },
+    },
     forms: {
-      1: { box: ['a', 'box', true, 0.1] },
+      1: { bar: ['a', 'bar', 'top'] },
     },
   },
 });
 diagram.elements._eqn.showForm('1');
 
-// // Some different bracket examples
-// diagram.addElement({
-//   name: 'eqn',
-//   method: 'equation',
-//   options: {
-//     elements: {
-//       box: { symbol: 'box' },
-//     },
-//     forms: {
-//       // Array equation
-//       1: ['a', { box: ['b', 'box'] }, 'c'],
-//       // Object definition
-//       2: {
-//         box: {
-//           content: ['a', 'b', 'c'],
-//           symbol: 'box',
-//         },
-//       },
-//       // Additional options for layout
-//       3: {
-//         box: {
-//           content: ['a', 'b', 'c'],
-//           symbol: 'box',
-//           space: 0.2,
-//         },
-//       },
-//       // Box is included in the layout spacing
-//       4: [
-//         'a',
-//         {
-//           box: {
-//             content: 'b',
-//             symbol: 'box',
-//             space: 0.2,
-//             inSize: true,
-//           },
-//         },
-//         'c'
-//       ],
-//     },
-//     formSeries: ['1', '2', '3', '4']
-//   },
-// });
-// const eqn = diagram.elements._eqn;
-// eqn.onClick = () => eqn.nextForm();
-// eqn.setTouchableRect(0.5);
-// eqn.showForm('1');
+
+// Some different bar examples
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      hBar: { symbol: 'bar', side: 'top' },
+      vBar: { symbol: 'bar', side: 'right' },
+      hArrow: { symbol: 'arrow', direction: 'right' },
+    },
+    forms: {
+      // Array equation
+      1: { bar: [['a', 'b'], 'hBar', 'top'] },
+      // Object definition
+      2: {
+        bar: {
+          content: ['a', 'b'],
+          symbol: 'hBar',
+          side: 'bottom',
+        },
+      },
+      // Additional options for layout
+      3: {
+        bar: {
+          content: ['a', 'b'],
+          symbol: 'vBar',
+          side: 'right',
+          overhang: 0.1,
+        },
+      },
+      // Arrow bar
+      4: {
+        bar: {
+          content: ['a', 'b'],
+          symbol: 'hArrow',
+          side: 'top',
+        },
+      },
+    },
+    formSeries: ['1', '2', '3', '4']
+  },
+});
+const eqn = diagram.elements._eqn;
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('1');
