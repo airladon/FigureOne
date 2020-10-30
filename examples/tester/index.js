@@ -41,36 +41,37 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 //   method: 'equation',
 //   options: {
 //     forms: {
-//       1: { sumOf: ['sum', 'x', 'b', 'a'] },
+//       1: { prodOf: ['prod', 'x', 'b', 'a'] },
 //     },
 //   },
 // });
 // diagram.elements._eqn.showForm('1');
 
-// Example showing different super-sub script options
+// Example showing different options
 diagram.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
     elements: {
-      s: { symbol: 'sum', draw: 'dynamic' },
+      p: { symbol: 'prod', draw: 'dynamic' },
       inf: '\u221e',
     },
     forms: {
       // Object form
       1: {
-        sumOf: {
-          symbol: 's',
+        prodOf: {
+          symbol: 'p',
           content: [{ sup: ['x', 'n'] }],
           from: ['n_1', ' ', '=', ' ', '_0'],
           to: '_10',
         },
       },
       // Array form
-      2: { sumOf: ['s', [{ sup: ['x', 'm'] }], 'm_1', null]},
+      2: { prodOf: ['p', [{ sup: ['x', 'm'] }], 'm_1', null]},
+      // Styling with options
       3: {
-        sumOf: {
-          symbol: 's',
+        prodOf: {
+          symbol: 'p',
           content: { frac: [['x', ' ', '+', ' ', 'm'], 'vinculum', 'a'] },
           from: ['m_1', ' ', '=', ' ', '_0'],
           to: 'inf',

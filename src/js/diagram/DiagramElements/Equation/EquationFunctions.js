@@ -1057,7 +1057,7 @@ export type EQN_Integral = {
  * @property {TypeEquationPhrase} [to]
  * @property {boolean} [inSize] `false` excludes sum of operator from size of
  * resulting phrase (`true`)
- * @property {number} [space] horiztonaly space between symbol and content (`0.05`)
+ * @property {number} [space] horiztonaly space between symbol and content (`0.1`)
  * @property {number} [topSpace] space symbol extends above content top (`0.07`)
  * @property {number} [bottomSpace] space symbol extends below content bottom (`0.07`)
  * @property {number} [height] force height of symbol overwriting `topSpace`
@@ -1093,7 +1093,7 @@ export type EQN_Integral = {
  * diagram.elements._eqn.showForm('1');
  *
  * @example
- * // Example showing different super-sub script options
+ * // Example showing different options
  * diagram.addElement({
  *   name: 'eqn',
  *   method: 'equation',
@@ -1179,7 +1179,11 @@ export type EQN_SumOf = {
 /**
  * Equation product of
  *
+ * ![](./assets1/eqn_prodof.gif)
+ *
  * Place an equation phrase in a product of operation
+ *
+ * Options can be an object, or an array in the property order below
  *
  * @property {string} symbol
  * @property {TypeEquationPhrase} content
@@ -1187,7 +1191,7 @@ export type EQN_SumOf = {
  * @property {TypeEquationPhrase} [to]
  * @property {boolean} [inSize] `false` excludes product of operator from size of
  * resulting phrase (`true`)
- * @property {number} [space] horiztonaly space between symbol and content (`0.05`)
+ * @property {number} [space] horiztonaly space between symbol and content (`0.1`)
  * @property {number} [topSpace] space symbol extends above content top (`0.07`)
  * @property {number} [bottomSpace] space symbol extends below content bottom (`0.07`)
  * @property {number} [height] force height of symbol overwriting `topSpace`
@@ -1205,37 +1209,64 @@ export type EQN_SumOf = {
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // For examples, a sum of symbol (pi) is defined as an equation element
- * eqn.addElements({
- *   s: { symbol: 'prod' }
- * });
- * @example
- * // Full object definition
- * {
- *   prodOf: {
- *     symbol: 's',
- *     content: 'a',
- *     from: 'b',
- *     to: 'c',
- *     inSize: true,
- *     space: 0,
- *     topSpace: 0.1,
- *     bottomSpace: 0.1,
- *     height: null,
- *     yOffset: 0,
- *     scale: 1,
- *     fromScale: 1,
- *     toScale: 1,
- *     fromSpace: 0.1,
- *     toSpace: 0.1,
- *     fromOffset: [0.1, 0.1],
- *     toOffset: [-0.1, -0.1],
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       1: { prodOf: ['prod', 'x', 'b', 'a'] },
+ *     },
  *   },
- * }
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Example array definition
- *  { prodOf: ['s', 'a', 'b', 'c'] }
+ * // Example showing different options
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       p: { symbol: 'prod', draw: 'dynamic' },
+ *       inf: '\u221e',
+ *     },
+ *     forms: {
+ *       // Object form
+ *       1: {
+ *         prodOf: {
+ *           symbol: 'p',
+ *           content: [{ sup: ['x', 'n'] }],
+ *           from: ['n_1', ' ', '=', ' ', '_0'],
+ *           to: '_10',
+ *         },
+ *       },
+ *       // Array form
+ *       2: { prodOf: ['p', [{ sup: ['x', 'm'] }], 'm_1', null]},
+ *       // Styling with options
+ *       3: {
+ *         prodOf: {
+ *           symbol: 'p',
+ *           content: { frac: [['x', ' ', '+', ' ', 'm'], 'vinculum', 'a'] },
+ *           from: ['m_1', ' ', '=', ' ', '_0'],
+ *           to: 'inf',
+ *           fromScale: 0.8,
+ *           toScale: 0.8,
+ *         },
+ *       },
+ *     },
+ *     formSeries: ['1', '2', '3'],
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_ProdOf = {
   symbol?: string,
