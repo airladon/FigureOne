@@ -94,60 +94,58 @@ diagram.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
-    elements: {
-      bar: { symbol: 'bar', side: 'top' },
-    },
     forms: {
-      1: { bar: ['a', 'bar', 'top'] },
+      1: { topComment: ['radius', 'r = 1'] },
     },
   },
 });
 diagram.elements._eqn.showForm('1');
 
 
-// Some different bar examples
-diagram.addElement({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    elements: {
-      hBar: { symbol: 'bar', side: 'top' },
-      vBar: { symbol: 'bar', side: 'right' },
-      hArrow: { symbol: 'arrow', direction: 'right' },
-    },
-    forms: {
-      // Array equation
-      1: { bar: [['a', 'b'], 'hBar', 'top'] },
-      // Object definition
-      2: {
-        bar: {
-          content: ['a', 'b'],
-          symbol: 'hBar',
-          side: 'bottom',
-        },
-      },
-      // Additional options for layout
-      3: {
-        bar: {
-          content: ['a', 'b'],
-          symbol: 'vBar',
-          side: 'right',
-          overhang: 0.1,
-        },
-      },
-      // Arrow bar
-      4: {
-        bar: {
-          content: ['a', 'b'],
-          symbol: 'hArrow',
-          side: 'top',
-        },
-      },
-    },
-    formSeries: ['1', '2', '3', '4']
-  },
-});
-const eqn = diagram.elements._eqn;
-eqn.onClick = () => eqn.nextForm();
-eqn.setTouchableRect(0.5);
-eqn.showForm('1');
+// // Some different bar examples
+// diagram.addElement({
+//   name: 'eqn',
+//   method: 'equation',
+//   options: {
+//     elements: {
+//       bBkt: { symbol: 'bracket', side: 'bottom' },
+//       tBrc: { symbol: 'brace', side: 'top' },
+//       bSqr: { symbol: 'squareBracket', side: 'bottom' },
+//     },
+//     forms: {
+//       // Array equation
+//       1: { topComment: ['a \u00d7 b \u00d7 c', 'b = 1, c = 1', 'tBrc'] },
+//       // Object definition
+//       2: {
+//         bottomComment: {
+//           content: 'a \u00d7 b \u00d7 c',
+//           symbol: 'bBkt',
+//           comment: 'b = 1, c = 1',
+//         },
+//       },
+//       // Additional options for layout
+//       3: {
+//         bottomComment: {
+//           content: 'a \u00d7 b \u00d7 c',
+//           symbol: 'bSqr',
+//           comment: 'b = 1, c = 1',
+//           contentSpace: 0.1,
+//           commentSpace: 0.1,
+//           scale: 0.7,
+//         },
+//       },
+//       // Just comment
+//       4: {
+//         bottomComment: {
+//           content: 'a \u00d7 b \u00d7 c',
+//           comment: 'for a > 3',
+//         },
+//       },
+//     },
+//     formSeries: ['1', '2', '3', '4']
+//   },
+// });
+// const eqn = diagram.elements._eqn;
+// eqn.onClick = () => eqn.nextForm();
+// eqn.setTouchableRect(0.5);
+// eqn.showForm('1');

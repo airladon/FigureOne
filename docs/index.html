@@ -1926,9 +1926,9 @@
               
                 
                 <li><a
-                  href='#eqn_container'
+                  href='#eqn_bar'
                   class="">
-                  EQN_Container
+                  EQN_Bar
                   
                 </a>
                 
@@ -1936,9 +1936,9 @@
               
                 
                 <li><a
-                  href='#eqn_bar'
+                  href='#eqn_container'
                   class="">
-                  EQN_Bar
+                  EQN_Container
                   
                 </a>
                 
@@ -3002,9 +3002,9 @@
               
                 
                 <li><a
-                  href='#animationprogression'
+                  href='#obj_pulseanimationstep'
                   class="">
-                  AnimationProgression
+                  OBJ_PulseAnimationStep
                   
                 </a>
                 
@@ -3012,9 +3012,9 @@
               
                 
                 <li><a
-                  href='#obj_pulseanimationstep'
+                  href='#animationprogression'
                   class="">
-                  OBJ_PulseAnimationStep
+                  AnimationProgression
                   
                 </a>
                 
@@ -26290,212 +26290,6 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='eqn_container'>
-      EQN_Container
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation container options</p>
-<p><img src="./assets1/eqn_container.gif"></p>
-<p>A container is useful to fix spacing around content as it changes between
-equation forms.</p>
-<p>Options can be an object, or an array in the property order below</p>
-
-  
-    <p style="display: none;">      Type:
-      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, ascent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, yAlign: (<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fit: (<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"width"</code>? | <code>"height"</code> | <code>"contain"</code>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>descent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>ascent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : (
-<code>'center'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : (
-<code>'baseline'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fit</span> <code class='quiet'>((<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?)</code>
-          : fit width,
-ascent and descent to either match width, height or fully contain the content (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : (
-<code>false</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        To test examples, append them to the
-
-<a href="#equation-boilerplate">
-boilerplate
-</a>
-
-      
-    
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing the difference between with and without container</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">forms</span>: {
-      <span class="hljs-comment">// Container object definition</span>
-      <span class="hljs-number">1</span>: [
-        <span class="hljs-string">'length'</span>,
-        {
-          <span class="hljs-attr">container</span>: {
-            <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>,
-            <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
-          },
-        },
-        <span class="hljs-string">'height'</span>,
-      ],
-      <span class="hljs-comment">// Container array definition</span>
-      <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
-      <span class="hljs-comment">// No container</span>
-      <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
-    },
-    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
-  },
-});
-<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
-eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
-eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to diagram</span>
-<span class="hljs-keyword">const</span> eqn = diagram.create.equation({
-  <span class="hljs-attr">forms</span>: {
-    <span class="hljs-number">1</span>: [
-      <span class="hljs-string">'length'</span>,
-      { <span class="hljs-attr">container</span>: { <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span> } },
-      <span class="hljs-string">'height'</span>,
-    ],
-    <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
-    <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
-  },
-  <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
-});
-diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
-eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
-eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='eqn_bar'>
       EQN_Bar
     </h3>
@@ -26505,7 +26299,9 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   
 
   <p>Equation bar</p>
+<p><img src="./assets1/eqn_bar.gif"></p>
 <p>Place a bar (or bracket) symbol to the side of an equation phrase</p>
+<p>Options can be an object, or an array in the property order below</p>
 
   
     <p style="display: none;">      Type:
@@ -26728,6 +26524,18 @@ brackets only surround a portion of the content (
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
@@ -26735,55 +26543,274 @@ brackets only surround a portion of the content (
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For examples, a box symbol is defined as an equation element</span>
-eqn.addElements({
-  <span class="hljs-attr">hBar</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bar'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'top'</span> }
-  <span class="hljs-attr">vBar</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bar'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> }
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition for horizontal bar</span>
-{
-  <span class="hljs-attr">bar</span>: {
-    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'hBar'</span>,
-    <span class="hljs-attr">side</span>: <span class="hljs-string">'top'</span>,
-    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">space</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">overhang</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">length</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">left</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">right</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
-    <span class="hljs-attr">useFullBounds</span>: <span class="hljs-literal">false</span>,
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">bar</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bar'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'top'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">bar</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'bar'</span>, <span class="hljs-string">'top'</span>] },
+    },
   },
-}</pre>
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition for vertical bar</span>
-{
-  <span class="hljs-attr">bar</span>: {
-    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vBar'</span>,
-    <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span>,
-    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">space</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">overhang</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">length</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">top</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">bottom</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">minContentHeight</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">minContentDescent</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">minContentAscent</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">descent</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
-    <span class="hljs-attr">useFullBounds</span>: <span class="hljs-literal">false</span>,
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different bar examples</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">hBar</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bar'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'top'</span> },
+      <span class="hljs-attr">vBar</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bar'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span> },
+      <span class="hljs-attr">hArrow</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'arrow'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'right'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Array equation</span>
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">bar</span>: [[<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>], <span class="hljs-string">'hBar'</span>, <span class="hljs-string">'top'</span>] },
+      <span class="hljs-comment">// Object definition</span>
+      <span class="hljs-number">2</span>: {
+        <span class="hljs-attr">bar</span>: {
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>],
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'hBar'</span>,
+          <span class="hljs-attr">side</span>: <span class="hljs-string">'bottom'</span>,
+        },
+      },
+      <span class="hljs-comment">// Additional options for layout</span>
+      <span class="hljs-number">3</span>: {
+        <span class="hljs-attr">bar</span>: {
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>],
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vBar'</span>,
+          <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span>,
+          <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.1</span>,
+        },
+      },
+      <span class="hljs-comment">// Vector arrow</span>
+      <span class="hljs-number">4</span>: {
+        <span class="hljs-attr">bar</span>: {
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>],
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'hArrow'</span>,
+          <span class="hljs-attr">side</span>: <span class="hljs-string">'top'</span>,
+        },
+      },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>]
   },
-}</pre>
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_container'>
+      EQN_Container
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation container options</p>
+<p><img src="./assets1/eqn_container.gif"></p>
+<p>A container is useful to fix spacing around content as it changes between
+equation forms.</p>
+<p>Options can be an object, or an array in the property order below</p>
+
+  
+    <p style="display: none;">      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, ascent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, yAlign: (<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fit: (<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"width"</code>? | <code>"height"</code> | <code>"contain"</code>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>descent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>ascent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : (
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : (
+<code>'baseline'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fit</span> <code class='quiet'>((<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?)</code>
+          : fit width,
+ascent and descent to either match width, height or fully contain the content (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">bar</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'hBar'</span>, <span class="hljs-string">'top'</span>] }</pre>
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing the difference between with and without container</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Container object definition</span>
+      <span class="hljs-number">1</span>: [
+        <span class="hljs-string">'length'</span>,
+        {
+          <span class="hljs-attr">container</span>: {
+            <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>,
+            <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+          },
+        },
+        <span class="hljs-string">'height'</span>,
+      ],
+      <span class="hljs-comment">// Container array definition</span>
+      <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
+      <span class="hljs-comment">// No container</span>
+      <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to diagram</span>
+<span class="hljs-keyword">const</span> eqn = diagram.create.equation({
+  <span class="hljs-attr">forms</span>: {
+    <span class="hljs-number">1</span>: [
+      <span class="hljs-string">'length'</span>,
+      { <span class="hljs-attr">container</span>: { <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span> } },
+      <span class="hljs-string">'height'</span>,
+    ],
+    <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
+    <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
+  },
+  <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+});
+diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
 
@@ -26814,7 +26841,9 @@ eqn.addElements({
 
   <p>Equation comment options used with <code>topComment</code> and <code>bottomComment</code>
 functions.</p>
+<p><img src="./assets1/eqn_comment.gif"></p>
 <p>A symbol between the content and comment is optional.</p>
+<p>Options can be an object, or an array in the property order below</p>
 
   
     <p style="display: none;">      Type:
@@ -26924,6 +26953,18 @@ brackets only surround a portion of the content (
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
@@ -26931,34 +26972,66 @@ brackets only surround a portion of the content (
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For following examples, a bottom brace is defined as an equation element</span>
-eqn.addElements({
-  <span class="hljs-attr">brace</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'brace'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'bottom'</span> }
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// BottomComment full object definition</span>
-{
-  <span class="hljs-attr">bottomComment</span>: {
-    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-    <span class="hljs-attr">comment</span>: <span class="hljs-string">'b'</span>,
-    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bar'</span>,
-    <span class="hljs-attr">contentSpace</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">commentSpace</span>: <span class="hljs-number">0.2</span>,
-    <span class="hljs-attr">scale</span>: <span class="hljs-number">2</span>,
-    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
-    <span class="hljs-attr">useFullBounds</span>: <span class="hljs-literal">false</span>,
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">'radius'</span>, <span class="hljs-string">'r = 1'</span>] },
+    },
   },
-}</pre>
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Top comment example without symbol</span>
- { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>] }</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Bottom comment example with symbol</span>
- { <span class="hljs-attr">bottomComment</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'brace'</span>] }</pre>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different comment examples</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">bBkt</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'bottom'</span> },
+      <span class="hljs-attr">tBrc</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'brace'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'top'</span> },
+      <span class="hljs-attr">bSqr</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'bottom'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Array equation</span>
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">'a \u00d7 b \u00d7 c'</span>, <span class="hljs-string">'b = 1, c = 1'</span>, <span class="hljs-string">'tBrc'</span>] },
+      <span class="hljs-comment">// Object definition</span>
+      <span class="hljs-number">2</span>: {
+        <span class="hljs-attr">bottomComment</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'a \u00d7 b \u00d7 c'</span>,
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bBkt'</span>,
+          <span class="hljs-attr">comment</span>: <span class="hljs-string">'b = 1, c = 1'</span>,
+        },
+      },
+      <span class="hljs-comment">// Additional options for layout</span>
+      <span class="hljs-number">3</span>: {
+        <span class="hljs-attr">bottomComment</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'a \u00d7 b \u00d7 c'</span>,
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bSqr'</span>,
+          <span class="hljs-attr">comment</span>: <span class="hljs-string">'b = 1, c = 1'</span>,
+          <span class="hljs-attr">contentSpace</span>: <span class="hljs-number">0.1</span>,
+          <span class="hljs-attr">commentSpace</span>: <span class="hljs-number">0.1</span>,
+          <span class="hljs-attr">scale</span>: <span class="hljs-number">0.7</span>,
+        },
+      },
+      <span class="hljs-comment">// Just comment</span>
+      <span class="hljs-number">4</span>: {
+        <span class="hljs-attr">bottomComment</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'a \u00d7 b \u00d7 c'</span>,
+          <span class="hljs-attr">comment</span>: <span class="hljs-string">'for a &gt; 3'</span>,
+        },
+      },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>]
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
 
@@ -38575,88 +38648,6 @@ eqn.addForms({
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='animationprogression'>
-      AnimationProgression
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Animation progression function.</p>
-<p>As the animation time progresses, a percentage of the total animation
-duration will be passed to this function.</p>
-<p>This function then calculates and returns the percent progress of the
-animation.</p>
-<p>This function can be used to make non-linear progressions of an animation.
-For instance, it could be used to create a progression that is slowed
-at the start or end of the animation.</p>
-
-  
-    <p style="display: none;">      Type:
-      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>percent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    percentage of duration
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
-        percent of animation complete
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='obj_pulseanimationstep'>
       OBJ_PulseAnimationStep
     </h3>
@@ -38848,6 +38839,88 @@ used (
     </div>
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='animationprogression'>
+      AnimationProgression
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Animation progression function.</p>
+<p>As the animation time progresses, a percentage of the total animation
+duration will be passed to this function.</p>
+<p>This function then calculates and returns the percent progress of the
+animation.</p>
+<p>This function can be used to make non-linear progressions of an animation.
+For instance, it could be used to create a progression that is slowed
+at the start or end of the animation.</p>
+
+  
+    <p style="display: none;">      Type:
+      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>percent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    percentage of duration
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        percent of animation complete
+
+      
+    
   
 
   
