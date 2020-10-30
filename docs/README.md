@@ -240,11 +240,11 @@
 -   [EQN_Bracket][479]
 -   [EQN_Scale][482]
 -   [EQN_Strike][485]
--   [EQN_Container][488]
--   [EQN_Box][491]
--   [EQN_Bar][494]
--   [EQN_Comment][497]
--   [EQN_StrikeComment][500]
+-   [EQN_StrikeComment][488]
+-   [EQN_Container][491]
+-   [EQN_Box][494]
+-   [EQN_Bar][497]
+-   [EQN_Comment][500]
 -   [EQN_Pad][503]
 -   [EQN_Matrix][506]
 -   [EQN_Annotate][509]
@@ -328,32 +328,32 @@
 -   [OBJ_QuadraticBezier][678]
 -   [Intersect][680]
 -   [round][682]
--   [OBJ_PulseScale][684]
--   [OBJ_CurvedCorner][686]
--   [OBJ_LineStyle][688]
--   [DiagramPrimitives][690]
-    -   [polygon][691]
--   [CPY_Step][693]
--   [TypeWhen][696]
--   [ArrowHead][697]
--   [OBJ_Arrow][698]
-    -   [head: 'triangle'][699]
-    -   [head: 'barb'][700]
-    -   [head: 'line'][701]
-    -   [head: 'circle'][702]
-    -   [head: 'polygon'][703]
-    -   [head: 'bar'][704]
-    -   [head: 'rectangle'][705]
-    -   [General][706]
--   [OBJ_Arrows][709]
--   [OBJ_Scenario][711]
--   [DiagramElementMoveFreely][713]
--   [DiagramElementMove][715]
--   [Scenarios][717]
--   [ElementMovementState][719]
--   [ElementPulseState][721]
--   [ElementState][723]
--   [DrawingObject][725]
+-   [TypeWhen][684]
+-   [ArrowHead][685]
+-   [OBJ_Arrow][686]
+    -   [head: 'triangle'][687]
+    -   [head: 'barb'][688]
+    -   [head: 'line'][689]
+    -   [head: 'circle'][690]
+    -   [head: 'polygon'][691]
+    -   [head: 'bar'][692]
+    -   [head: 'rectangle'][693]
+    -   [General][694]
+-   [OBJ_Arrows][697]
+-   [OBJ_Scenario][699]
+-   [DiagramElementMoveFreely][701]
+-   [DiagramElementMove][703]
+-   [Scenarios][705]
+-   [ElementMovementState][707]
+-   [ElementPulseState][709]
+-   [ElementState][711]
+-   [DrawingObject][713]
+-   [OBJ_PulseScale][715]
+-   [OBJ_CurvedCorner][717]
+-   [OBJ_LineStyle][719]
+-   [DiagramPrimitives][721]
+    -   [polygon][722]
+-   [CPY_Step][724]
 -   [TypeEquationTextElement][727]
 -   [container][729]
 -   [frac][732]
@@ -7330,6 +7330,92 @@ eqn.setTouchableRect(0.5);
 eqn.showForm('1');
 ```
 
+## EQN_StrikeComment
+
+-   **See: To test examples, append them to the
+    <a href="#equation-boilerplate">boilerplate</a>
+    **
+
+Equation strike with comment options used with `topStrike` and `bottomStrike`
+functions.
+
+![][881]
+
+Options can be an object, or an array in the property order below
+
+
+### Properties
+
+-   `content` **[TypeEquationPhrase][870]** 
+-   `symbol` **[string][744]** strike symbol
+-   `comment` **[TypeEquationPhrase][870]** 
+-   `inSize` **[boolean][752]?** `false` excludes the symbol and comment from
+    thre resulting size of the equation phrase (`true`)
+-   `space` **[number][753]?** top, right, bottom and left extension of symbol
+    beyond content (`0.03`)
+-   `scale` **[number][753]?** comment scale (`0.6`)
+-   `commentSpace` **[number][753]?** space from symbol to comment (`0.03`)
+
+### Examples
+
+```javascript
+// Simple
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
+    },
+    forms: {
+      1: { topStrike: ['radius', 'x', 'radius = 1'] },
+    },
+  },
+});
+diagram.elements._eqn.showForm('1');
+```
+
+```javascript
+// Some different strike examples
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      s1: { symbol: 'strike', style: 'forward', color: [0.6, 0.6, 0.6, 1] },
+    },
+    forms: {
+      // Array equation
+      1: { topStrike: ['radius', 's1', 'radius = 1'] },
+      // Object definition
+      2: {
+        bottomStrike: {
+          content: 'radius',
+          symbol: 's1',
+          comment: 'radius = 1',
+        },
+      },
+      // Additional options for layout
+      3: {
+        bottomStrike: {
+          content: 'radius',
+          comment: 'radius = 1',
+          symbol: 's1',
+          scale: 0.8,
+          space: 0.1,
+          commentSpace: 0.01,
+        },
+      },
+    },
+    formSeries: ['1', '2', '3']
+  },
+});
+const eqn = diagram.elements._eqn;
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('1');
+```
+
 ## EQN_Container
 
 -   **See: To test examples, append them to the
@@ -7338,7 +7424,7 @@ eqn.showForm('1');
 
 Equation container options
 
-![][881]
+![][882]
 
 A container is useful to fix spacing around content as it changes between
 equation forms.
@@ -7630,58 +7716,6 @@ eqn.addElements({
  { bottomComment: ['a', 'b', 'brace'] }
 ```
 
-## EQN_StrikeComment
-
-Equation strike with comment options used with `topStrike` and `bottomStrike`
-functions.
-
-
-### Properties
-
--   `content` **[TypeEquationPhrase][870]** 
--   `symbol` **[string][744]** strike symbol
--   `comment` **[TypeEquationPhrase][870]** 
--   `inSize` **[boolean][752]?** `false` excludes the symbol and comment from
-    thre resulting size of the equation phrase (`true`)
--   `space` **[number][753]?** top, right, bottom and left extension of symbol
-    beyond content (`0.03`)
--   `scale` **[number][753]?** comment scale (`0.6`)
--   `commentSpace` **[number][753]?** space from symbol to comment (`0.03`)
-
-### Examples
-
-```javascript
-// For following examples, a strike symbol is defined as an equation element
-eqn.addElements({
-  x: { symbol: 'strike', style: 'cross' }
-});
-```
-
-```javascript
-// BottomStrike full object definition
-{
-  bottomStrike: {
-    content: 'a',
-    symbol: 'x',
-    comment: 'b',
-    inSize: true,
-    commentSpace: 0,
-    scale: 1,
-    space: 0,
-  },
-},
-```
-
-```javascript
-// Top strike array example
- { topStrike: ['a', 'x', 'b'] }
-```
-
-```javascript
-// Bottom strike array examples
- { bottomStrike: ['a', 'x', 'b'] }
-```
-
 ## EQN_Pad
 
 Equation padding options
@@ -7739,7 +7773,7 @@ Equation matrix
     (`[0.05, 0.05]`)
 -   `yAlign` **(`"baseline"` \| `"middle"`)?** align cells in a row with the
     text baseline, or middle of the cell (`baseline`)
--   `brac` **[EQN_Bracket][882]?** bracket options not including
+-   `brac` **[EQN_Bracket][883]?** bracket options not including
     the symbols (`{}`)
 -   `fullContentBounds` **[boolean][752]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
@@ -7832,8 +7866,8 @@ Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
 ### Properties
 
 -   `content` **[TypeEquationPhrase][870]** 
--   `annotation` **[EQN_Annotation][883]?** use for just one annotation
--   `annotations` **[Array][745]&lt;[EQN_Annotation][883]>?** use for multiple annotations
+-   `annotation` **[EQN_Annotation][884]?** use for just one annotation
+-   `annotations` **[Array][745]&lt;[EQN_Annotation][884]>?** use for multiple annotations
 -   `inSize` **[boolean][752]?** `true` means resulting size includes
     annotations (`true`)
 -   `space` **[number][753]?** extend resulting equation phrase size by space on
@@ -7847,7 +7881,7 @@ Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
 -   `rightSpace` **[number][753]?** extend resulting equation phrase size by
     space on right
 -   `contentScale` **[number][753]?** scale content (`1`)
--   `glyphs` **[EQN_Glyphs][884]?** glyphs to annotate content with
+-   `glyphs` **[EQN_Glyphs][885]?** glyphs to annotate content with
 -   `fullContentBounds` **[boolean][752]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
 -   `useFullBounds` **[boolean][752]?** make the bounds of this phrase equal to
@@ -8012,9 +8046,9 @@ can also be annotated.
 ### Properties
 
 -   `symbol` **[string][744]** 
--   `annotation` **[EQN_Annotation][883]?** use for one annotation only instead
+-   `annotation` **[EQN_Annotation][884]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][745]&lt;[EQN_Annotation][883]>?** use for one or more
+-   `annotations` **[Array][745]&lt;[EQN_Annotation][884]>?** use for one or more
     annotations
 -   `space` **[number][753]?** default space the glyph should extend beyond the
     top, right, left and bottom sides of the content (`0`)
@@ -8062,9 +8096,9 @@ The glyph can also be annotated.
 ### Properties
 
 -   `symbol` **[string][744]** 
--   `annotation` **[EQN_Annotation][883]?** use for one annotation only instead
+-   `annotation` **[EQN_Annotation][884]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][745]&lt;[EQN_Annotation][883]>?** use for one or more
+-   `annotations` **[Array][745]&lt;[EQN_Annotation][884]>?** use for one or more
     annotations
 -   `space` **[number][753]?** horizontal space between glyph and content (`0`)
 -   `overhang` **[number][753]?** amount glyph extends above content top and
@@ -8133,9 +8167,9 @@ The glyph can also be annotated.
 ### Properties
 
 -   `symbol` **[string][744]** 
--   `annotation` **[EQN_Annotation][883]?** use for one annotation only instead
+-   `annotation` **[EQN_Annotation][884]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][745]&lt;[EQN_Annotation][883]>?** use for one or more
+-   `annotations` **[Array][745]&lt;[EQN_Annotation][884]>?** use for one or more
     annotations
 -   `space` **[number][753]?** vertical space between glyph and content (`0`)
 -   `overhang` **[number][753]?** amount glyph extends above content top and
@@ -8179,11 +8213,11 @@ Multiple glyphs are ok, but only one per position.
 
 ### Properties
 
--   `encompass` **[EQN_EncompassGlyph][885]?** 
--   `top` **[EQN_TopBottomGlyph][886]?** 
--   `right` **[EQN_LeftRightGlyph][887]?** 
--   `bottom` **[EQN_TopBottomGlyph][886]?** 
--   `left` **[EQN_LeftRightGlyph][887]?** 
+-   `encompass` **[EQN_EncompassGlyph][886]?** 
+-   `top` **[EQN_TopBottomGlyph][887]?** 
+-   `right` **[EQN_LeftRightGlyph][888]?** 
+-   `bottom` **[EQN_TopBottomGlyph][887]?** 
+-   `left` **[EQN_LeftRightGlyph][888]?** 
 
 ## Equation Symbol Objects
 
@@ -9137,7 +9171,7 @@ Duration and translation options for form animation
 ### Properties
 
 -   `duration` **[number][753]?** in seconds
--   `translation` **[Object][865]&lt;[TypeFormTranslationProperties][907]>?** 
+-   `translation` **[Object][865]&lt;[TypeFormTranslationProperties][908]>?** 
 
 ### Examples
 
@@ -9205,7 +9239,7 @@ complicating the overall equation navigation logic.
 
 See the examples below for how to define subForms.
 
-[Equation#addForms][908].
+[Equation#addForms][909].
 
 ### Properties
 
@@ -9224,11 +9258,11 @@ See the examples below for how to define subForms.
     properties if animating backward from the next form in a formSeries
 -   `duration` **[TypeFormAnimationProperties][868]?** animation move duration
      (fromNext and fromPrev are prioritized over this)
--   `translation` **[TypeFormTranslationProperties][907]?** animation move
+-   `translation` **[TypeFormTranslationProperties][908]?** animation move
     style (fromNext and fromPrev are prioritized over this)
 -   `elementMods` **[object][865]?** properties to set in the equation element
     (@DiagramElementPrimitive) when this form is shown
--   `animation` **{duration: [number][753]??, translation: [TypeFormTranslationProperties][907]?}?** 
+-   `animation` **{duration: [number][753]??, translation: [TypeFormTranslationProperties][908]?}?** 
 
 ### Examples
 
@@ -9371,7 +9405,7 @@ The default values in the pulse object are are:
 
 ## TypeEquationGoToFormOptions
 
-Options object for [Equation#goToForm][911].
+Options object for [Equation#goToForm][912].
 
 Often, `goToForm` is called to animate from a shown form to a desired form.
 Therefore there will be some equation elements that:
@@ -9562,7 +9596,7 @@ Convert a parsable line definition to a [Line][118].
 
 ### Parameters
 
--   `l` **[TypeParsableLine][913]** parsable line definition
+-   `l` **[TypeParsableLine][914]** parsable line definition
 
 Returns **[Line][765]** `Line` object
 
@@ -9682,7 +9716,7 @@ Used within [OBJ_Text][282] to define a single string
 
 Font definition object.
 
-Text is drawn in a [Context2D canvas][914] and so `family`, `style` and `weight` are any valid [options][915].
+Text is drawn in a [Context2D canvas][915] and so `family`, `style` and `weight` are any valid [options][916].
 
 `size` is the vertex space size of the font.
 
@@ -9858,7 +9892,7 @@ Type: any
 ### Properties
 
 -   `element` **[DiagramElement][751]?** 
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][916])?** how the animation progresses - defaults to `linear` for color, opacity and
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][917])?** how the animation progresses - defaults to `linear` for color, opacity and
     custom animations and `easeinout` for others
 
 ## OBJ_ScenarioVelocity
@@ -9914,7 +9948,7 @@ Start animation
 
 #### Parameters
 
--   `startTime` **[AnimationStartTime][917]**  (optional, default `null`)
+-   `startTime` **[AnimationStartTime][918]**  (optional, default `null`)
 
 ## DelayAnimationStep
 
@@ -9978,7 +10012,7 @@ Start animation options object.
 
 -   `name` **(null | [string][744])?** name of animation to start - f null, then
     all animations associated with this animation manager will start (`null`)
--   `startTime` **[AnimationStartTime][917]** when to
+-   `startTime` **[AnimationStartTime][918]** when to
     start the animation
 
 ## OBJ_SerialAnimationStep
@@ -10036,7 +10070,7 @@ Type: any
 -   `callback` **([string][744] | function (int): void)** function to run each
     animation frame
 -   `startPercent` **[number][753]?** percent to start animation at (`0`)
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][916])?** 
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][917])?** 
 
 ## OBJ_TransformAnimationStep
 
@@ -10072,9 +10106,9 @@ Type: any
 
 ### Properties
 
--   `start` **([string][744] \| [OBJ_Scenario][918])?** 
--   `target` **([string][744] \| [OBJ_Scenario][918])?** 
--   `velocity` **(null | [string][744] \| [OBJ_ScenarioVelocity][919])?** velocity
+-   `start` **([string][744] \| [OBJ_Scenario][919])?** 
+-   `target` **([string][744] \| [OBJ_Scenario][919])?** 
+-   `velocity` **(null | [string][744] \| [OBJ_ScenarioVelocity][920])?** velocity
     will override duration with a calculated duration based on
     the `start`, `target` and `velocity`. If `null` is used
     then `duration` will not be overriden. Any scenario velocity elements that
@@ -10090,13 +10124,13 @@ Type: any
     `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
     whichever direction doesn't pass through angle 0.
 -   `clipRotationTo` **(`"0to360"` \| `"-180to180"` | null)?** 
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][916])?** (`'easeinout'`)
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][917])?** (`'easeinout'`)
 
 ## OBJ_TriggerAnimationStep
 
 **Extends OBJ_AnimationStep**
 
-[TriggernAnimationStep][920] options object
+[TriggernAnimationStep][921] options object
 
 Type: any
 
@@ -10105,13 +10139,13 @@ Type: any
 -   `payload` **any?** payload to pass to callback (`null`)
 -   `element` **[DiagramElement][751]** [DiagramElement][14] to associate with
     callback - if the `callback` is a string then this element's
-    [FunctionMap][921] will be searched for the corresponding function
+    [FunctionMap][922] will be searched for the corresponding function
 
 ## OBJ_Pulse
 
 Pulse options object
 
-![][922]
+![][923]
 
 Pulsing can be useful to highlight a diagram element to a user, without
 changing its underlying properties.
@@ -10166,9 +10200,9 @@ outlines are becomming thicker.
     (`'diagram'`)
 -   `num` **[number][753]?** the number of draw copies of the pulse to make (`1`)
 -   `done` **(null | [string][744] | function (): void)?** callback when pulse is
-    finished. If `string` then the element's [FunctionMap][921] `fnMap` will be
+    finished. If `string` then the element's [FunctionMap][922] `fnMap` will be
     used (`null`)
--   `when` **[TypeWhen][923]?** when to start the pulse (`'syncNow'`)
+-   `when` **[TypeWhen][924]?** when to start the pulse (`'syncNow'`)
 -   `progression` **(`"sinusoid"` \| `"triangle"`)?** function that defines
     how the scale should progress over time (`sinusoid`)
 -   `x` **(`"left"` \| `"center"` \| `"right"` \| `"origin"` \| [number][753])?** 
@@ -10365,7 +10399,7 @@ Line intersection result object with keys:
 
 ### Properties
 
--   `intersect` **([undefined][924] \| [Point][759])** 
+-   `intersect` **([undefined][925] \| [Point][759])** 
 -   `alongLine` **[boolean][752]** `true` if `intersect` is along line calling
     `intersectsWith`
 -   `withinLine` **[boolean][752]** `true` if `intersect` is within line calling
@@ -10381,6 +10415,312 @@ Rounds a number or numbers in an array
 -   `precision` **[number][753]** Number of decimal places to round to (optional, default `5`)
 
 Returns **([number][753] \| [Array][745]&lt;[number][753]>)** Rounded value or array of values
+
+## TypeWhen
+
+`'nextFrame'` \| `'prevFrame'` \| `'syncNow'` \| `'now'`
+
+`'syncNow'` is a synchronized 'now' time. The
+first time 'syncNow' is used, the current time will be stored and used
+for all subsequent calls to 'syncNow'. 'syncNow' is reset every
+time a new animation frame is drawn, or 100ms after a first syncNow call
+has been made after a reset.
+
+'now' is the instantaneous time
+
+`'nextFrame'` will be the time of the next animation frame
+
+`'prevFrame'` is the time of the last animation frame
+
+
+## ArrowHead
+
+-   **See: [OBJ_Arrow][686] for properties related to each arrow head
+    **
+
+Arrow heads
+
+`'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'rectangle'`
+
+Type: (`"triangle"` \| `"circle"` \| `"line"` \| `"barb"` \| `"bar"` \| `"polygon"` \| `"rectangle"`)
+
+## OBJ_Arrow
+
+Arrow options object.
+
+Lines and polylines can be terminated with different styles of arrows. The
+`head` parameter is used to define the style of arrow head.
+
+### `head: 'triangle'`
+
+![][926]
+
+Use `length` and `width` to customize head shape.
+
+Use `reverse` to reverse the triangle:
+
+![][927]
+
+### `head: 'barb'`
+
+![][928]
+
+Use `length`, `width` and `barb` to customize head shape.
+
+### `head: 'line'`
+
+![][929]
+
+Use `length` and `width` to customize head shape.
+
+### `head: 'circle'`
+
+![][930]
+
+Use `radius` and `sides` to customize head shape.
+
+### `head: 'polygon'`
+
+![][931]
+
+Use `radius`, `sides` and `rotation` to customize head shape.
+
+### `head: 'bar'`
+
+![][932]
+
+Use `length` and `width` to customize head shape.
+
+### `head: 'rectangle'`
+
+![][933]
+
+Use `length` and `width` to customize head shape.
+
+### General
+
+For arrow heads that use `length` and `width` properties, the `length` is the
+dimension along the line.
+
+All properties have default values that can be scaled with the `scale`
+property. So a `scale` of 2 will double the size of the default arrow.
+
+### Properties
+
+-   `head` **[ArrowHead][777]?** 
+-   `scale` **[number][753]?** scale the default dimensions of the arrow
+-   `length` **[number][753]?** dimension of the arrow head along the line
+-   `width` **[number][753]?** dimension of the arrow head along the line width
+-   `rotation` **[number][753]?** rotation of the polygon
+-   `reverse` **[number][753]?** reverse the direction of the triangle arrow head
+-   `sides` **[number][753]?** number of sides in polygon or circle arrow head
+-   `radius` **[number][753]?** radius of polygon or circle arrow head
+-   `barb` **[number][753]?** barb length (along the length of the line) of the
+    barb arrow head
+
+### Examples
+
+```javascript
+// Line with triangle arrows on both ends
+diagram.addElement({
+  name: 'a',
+  method: 'shapes.polyline',
+  options: {
+    points: [[0, 0], [1, 0]],
+    width: 0.02,
+    arrow: 'triangle',
+  },
+});
+```
+
+```javascript
+// Line with customized barb arrow at end only
+diagram.addElement({
+  name: 'a',
+  method: 'shapes.polyline',
+  options: {
+    points: [[0, 0], [1, 0]],
+    width: 0.02,
+    arrow: {
+      end: {
+        head: 'barb',
+        width: 0.15,
+        length: 0.25,
+        barb: 0.05,
+      },
+    },
+  },
+});
+```
+
+```javascript
+// Line with two different arrow ends scaled by 0.7x
+diagram.addElement({
+  name: 'a',
+  method: 'shapes.polyline',
+  options: {
+    points: [[0, 0], [1, 0]],
+    width: 0.02,
+    arrow: {
+      scale: 1.2,
+      start: 'bar',
+      end: {
+        head: 'polygon',
+        sides: 6,
+      },
+    },
+  },
+});
+```
+
+## OBJ_Arrows
+
+Line end's arrow definition options object.
+
+`start` and `end` define the properties of the arrows at the start and
+end of the line. Instead of defining [OBJ_Arrow][686] objects for the
+start and end, a string that is the arrow's `head` property can also be
+used and the size dimensions will be the default.
+
+All other properties will be used as the default for the `start` and
+`end` objects.
+
+If any of the default properties are defined, then the line will have
+both a start and end arrow.
+
+If only one end of the line is to have an arrow, then define only the
+`start` or `end` properties and no others.
+
+### Properties
+
+-   `start` **([OBJ_Arrow][776] \| [ArrowHead][777])?** arrow at start of line
+-   `end` **([OBJ_Arrow][776] \| [ArrowHead][777])?** arrow at end of line
+-   `head` **[ArrowHead][777]?** default head to use for start and end arrow
+-   `scale` **[number][753]?** default scale to use for start and end arrow
+-   `length` **[number][753]?** default length to use for start and end arrow
+-   `width` **[number][753]?** default width to use for start and end arrow
+-   `rotation` **[number][753]?** default rotation to use for start and end arrow
+-   `reverse` **[number][753]?** default reverse to use for start and end arrow
+-   `sides` **[number][753]?** default sides to use for start and end arrow
+-   `radius` **[number][753]?** default radius to use for start and end arrow
+-   `barb` **[number][753]?** default barb to use for start and end arrow
+
+## OBJ_Scenario
+
+Transform, color and visbility scenario definition
+
+`translation` will overwirte `position`, and `translation,`position`,
+rotation` and `scale` overwrite the first equivalent transforms in
+`transform`
+
+### Properties
+
+-   `position` **[TypeParsablePoint][757]** 
+-   `translation` **[TypeParsablePoint][757]** 
+-   `scale` **([TypeParsablePoint][757] \| [number][753])** 
+-   `rotation` **[number][753]** 
+-   `transform` **[TypeParsableTransform][790]** 
+-   `color` **[Array][745]&lt;[number][753]>** 
+-   `isShown` **[boolean][752]** 
+
+## DiagramElementMoveFreely
+
+Diagram element move freely parameters
+
+If a diagram element is released from moving with some velocity
+then these parameters will define how it continues to move freely
+
+### Properties
+
+-   `zeroVelocityThreshold` **TypeTransformValue** used to overcome
+    limitations of floating point numbers not reaching 0
+-   `deceleration` **TypeTransformValue** amount to decelerate in local
+    space units per second squared
+-   `bounceLoss` **TypeTransformValue** 0.5 results in 50% velocity loss
+    if bouncing of boundary
+-   `callback` **([string][744] | function ([boolean][752]): void)?** 
+
+## DiagramElementMove
+
+Diagram element move parameters
+
+### Properties
+
+-   `bounds` **TransformBounds** rectangle to limit movement within
+-   `maxVelocity` **TypeTransformValue** maximum velocity allowed (5)
+-   `freely` **[DiagramElementMoveFreely][934]** free movement parameters
+-   `canBeMovedAfterLosingTouch` **[boolean][752]** touch or mouse dragging will
+    continue to move element even after the touch/cursor position is outside
+    the element boundary
+-   `element` **([DiagramElement][751] | null)** 
+-   `sizeInBounds` **[boolean][752]** 
+-   `transformClip` **([string][744] | function ([Transform][748]): [Transform][748]?)** 
+-   `type` **(`"rotation"` \| `"translation"` \| `"scaleX"` \| `"scaleY"` \| `"scale"`)** 
+
+## Scenarios
+
+All scenarios set to element.
+
+Scenarios are preset transforms, color and visibility settings that can be
+easily animated to.
+
+This is an object where the keys are scenario names and values are
+[OBJ_Scenario][699] objects defining the scenario.
+
+### Properties
+
+-   `scenarioName` **[OBJ_Scenario][919]** where scenarioName can be any
+    string that names the scenario
+
+## ElementMovementState
+
+Element movement state
+
+### Properties
+
+-   `previousTime` **[number][753]?** 
+-   `previousTransform` **[Transform][748]** 
+-   `velocity` **[Transform][748]** 
+
+## ElementPulseState
+
+Element pulse state
+
+### Properties
+
+-   `startTime` **[number][753]?** 
+
+## ElementState
+
+Element state
+
+### Properties
+
+-   `isBeingMoved` **[boolean][752]** 
+-   `isMovingFreely` **[boolean][752]** 
+-   `movement` **[ElementMovementState][935]** 
+-   `isPulsing` **[boolean][752]** 
+-   `pulse` **[ElementPulseState][936]** 
+-   `preparingToStop` **[boolean][752]** 
+
+## DrawingObject
+
+-   **See: [DiagramElementPrimitive][48]
+    **
+
+Drawing Object
+
+Manages drawing an element to a WebGL or Context 2D canvas. Can also
+be used to manage a HTML element on the screen.
+
+### Properties
+
+-   `border` **[Array][745]&lt;[Array][745]&lt;[Point][759]>>** each array of points defines a
+    closed boundary or border of the element. An element may have multiple
+    closed borders. A border defines where a shape can be touched, or how it
+    bounces of diagram boundaries
+-   `holeBorder` **[Array][745]&lt;[Array][745]&lt;[Point][759]>>** areas where a shape cannot be
+    touched
 
 ## OBJ_PulseScale
 
@@ -10449,11 +10789,11 @@ Polygon or partial polygon shape options object
 
 #### Parameters
 
--   `options` **...[Array][745]&lt;[OBJ_Polygon][925]>** 
+-   `options` **...[Array][745]&lt;[OBJ_Polygon][937]>** 
 
 ## CPY_Step
 
-![][926]
+![][938]
 
 Copy Step options object
 
@@ -10619,312 +10959,6 @@ diagram.addElement({
 });
 ```
 
-## TypeWhen
-
-`'nextFrame'` \| `'prevFrame'` \| `'syncNow'` \| `'now'`
-
-`'syncNow'` is a synchronized 'now' time. The
-first time 'syncNow' is used, the current time will be stored and used
-for all subsequent calls to 'syncNow'. 'syncNow' is reset every
-time a new animation frame is drawn, or 100ms after a first syncNow call
-has been made after a reset.
-
-'now' is the instantaneous time
-
-`'nextFrame'` will be the time of the next animation frame
-
-`'prevFrame'` is the time of the last animation frame
-
-
-## ArrowHead
-
--   **See: [OBJ_Arrow][698] for properties related to each arrow head
-    **
-
-Arrow heads
-
-`'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'rectangle'`
-
-Type: (`"triangle"` \| `"circle"` \| `"line"` \| `"barb"` \| `"bar"` \| `"polygon"` \| `"rectangle"`)
-
-## OBJ_Arrow
-
-Arrow options object.
-
-Lines and polylines can be terminated with different styles of arrows. The
-`head` parameter is used to define the style of arrow head.
-
-### `head: 'triangle'`
-
-![][927]
-
-Use `length` and `width` to customize head shape.
-
-Use `reverse` to reverse the triangle:
-
-![][928]
-
-### `head: 'barb'`
-
-![][929]
-
-Use `length`, `width` and `barb` to customize head shape.
-
-### `head: 'line'`
-
-![][930]
-
-Use `length` and `width` to customize head shape.
-
-### `head: 'circle'`
-
-![][931]
-
-Use `radius` and `sides` to customize head shape.
-
-### `head: 'polygon'`
-
-![][932]
-
-Use `radius`, `sides` and `rotation` to customize head shape.
-
-### `head: 'bar'`
-
-![][933]
-
-Use `length` and `width` to customize head shape.
-
-### `head: 'rectangle'`
-
-![][934]
-
-Use `length` and `width` to customize head shape.
-
-### General
-
-For arrow heads that use `length` and `width` properties, the `length` is the
-dimension along the line.
-
-All properties have default values that can be scaled with the `scale`
-property. So a `scale` of 2 will double the size of the default arrow.
-
-### Properties
-
--   `head` **[ArrowHead][777]?** 
--   `scale` **[number][753]?** scale the default dimensions of the arrow
--   `length` **[number][753]?** dimension of the arrow head along the line
--   `width` **[number][753]?** dimension of the arrow head along the line width
--   `rotation` **[number][753]?** rotation of the polygon
--   `reverse` **[number][753]?** reverse the direction of the triangle arrow head
--   `sides` **[number][753]?** number of sides in polygon or circle arrow head
--   `radius` **[number][753]?** radius of polygon or circle arrow head
--   `barb` **[number][753]?** barb length (along the length of the line) of the
-    barb arrow head
-
-### Examples
-
-```javascript
-// Line with triangle arrows on both ends
-diagram.addElement({
-  name: 'a',
-  method: 'shapes.polyline',
-  options: {
-    points: [[0, 0], [1, 0]],
-    width: 0.02,
-    arrow: 'triangle',
-  },
-});
-```
-
-```javascript
-// Line with customized barb arrow at end only
-diagram.addElement({
-  name: 'a',
-  method: 'shapes.polyline',
-  options: {
-    points: [[0, 0], [1, 0]],
-    width: 0.02,
-    arrow: {
-      end: {
-        head: 'barb',
-        width: 0.15,
-        length: 0.25,
-        barb: 0.05,
-      },
-    },
-  },
-});
-```
-
-```javascript
-// Line with two different arrow ends scaled by 0.7x
-diagram.addElement({
-  name: 'a',
-  method: 'shapes.polyline',
-  options: {
-    points: [[0, 0], [1, 0]],
-    width: 0.02,
-    arrow: {
-      scale: 1.2,
-      start: 'bar',
-      end: {
-        head: 'polygon',
-        sides: 6,
-      },
-    },
-  },
-});
-```
-
-## OBJ_Arrows
-
-Line end's arrow definition options object.
-
-`start` and `end` define the properties of the arrows at the start and
-end of the line. Instead of defining [OBJ_Arrow][698] objects for the
-start and end, a string that is the arrow's `head` property can also be
-used and the size dimensions will be the default.
-
-All other properties will be used as the default for the `start` and
-`end` objects.
-
-If any of the default properties are defined, then the line will have
-both a start and end arrow.
-
-If only one end of the line is to have an arrow, then define only the
-`start` or `end` properties and no others.
-
-### Properties
-
--   `start` **([OBJ_Arrow][776] \| [ArrowHead][777])?** arrow at start of line
--   `end` **([OBJ_Arrow][776] \| [ArrowHead][777])?** arrow at end of line
--   `head` **[ArrowHead][777]?** default head to use for start and end arrow
--   `scale` **[number][753]?** default scale to use for start and end arrow
--   `length` **[number][753]?** default length to use for start and end arrow
--   `width` **[number][753]?** default width to use for start and end arrow
--   `rotation` **[number][753]?** default rotation to use for start and end arrow
--   `reverse` **[number][753]?** default reverse to use for start and end arrow
--   `sides` **[number][753]?** default sides to use for start and end arrow
--   `radius` **[number][753]?** default radius to use for start and end arrow
--   `barb` **[number][753]?** default barb to use for start and end arrow
-
-## OBJ_Scenario
-
-Transform, color and visbility scenario definition
-
-`translation` will overwirte `position`, and `translation,`position`,
-rotation` and `scale` overwrite the first equivalent transforms in
-`transform`
-
-### Properties
-
--   `position` **[TypeParsablePoint][757]** 
--   `translation` **[TypeParsablePoint][757]** 
--   `scale` **([TypeParsablePoint][757] \| [number][753])** 
--   `rotation` **[number][753]** 
--   `transform` **[TypeParsableTransform][790]** 
--   `color` **[Array][745]&lt;[number][753]>** 
--   `isShown` **[boolean][752]** 
-
-## DiagramElementMoveFreely
-
-Diagram element move freely parameters
-
-If a diagram element is released from moving with some velocity
-then these parameters will define how it continues to move freely
-
-### Properties
-
--   `zeroVelocityThreshold` **TypeTransformValue** used to overcome
-    limitations of floating point numbers not reaching 0
--   `deceleration` **TypeTransformValue** amount to decelerate in local
-    space units per second squared
--   `bounceLoss` **TypeTransformValue** 0.5 results in 50% velocity loss
-    if bouncing of boundary
--   `callback` **([string][744] | function ([boolean][752]): void)?** 
-
-## DiagramElementMove
-
-Diagram element move parameters
-
-### Properties
-
--   `bounds` **TransformBounds** rectangle to limit movement within
--   `maxVelocity` **TypeTransformValue** maximum velocity allowed (5)
--   `freely` **[DiagramElementMoveFreely][935]** free movement parameters
--   `canBeMovedAfterLosingTouch` **[boolean][752]** touch or mouse dragging will
-    continue to move element even after the touch/cursor position is outside
-    the element boundary
--   `element` **([DiagramElement][751] | null)** 
--   `sizeInBounds` **[boolean][752]** 
--   `transformClip` **([string][744] | function ([Transform][748]): [Transform][748]?)** 
--   `type` **(`"rotation"` \| `"translation"` \| `"scaleX"` \| `"scaleY"` \| `"scale"`)** 
-
-## Scenarios
-
-All scenarios set to element.
-
-Scenarios are preset transforms, color and visibility settings that can be
-easily animated to.
-
-This is an object where the keys are scenario names and values are
-[OBJ_Scenario][711] objects defining the scenario.
-
-### Properties
-
--   `scenarioName` **[OBJ_Scenario][918]** where scenarioName can be any
-    string that names the scenario
-
-## ElementMovementState
-
-Element movement state
-
-### Properties
-
--   `previousTime` **[number][753]?** 
--   `previousTransform` **[Transform][748]** 
--   `velocity` **[Transform][748]** 
-
-## ElementPulseState
-
-Element pulse state
-
-### Properties
-
--   `startTime` **[number][753]?** 
-
-## ElementState
-
-Element state
-
-### Properties
-
--   `isBeingMoved` **[boolean][752]** 
--   `isMovingFreely` **[boolean][752]** 
--   `movement` **[ElementMovementState][936]** 
--   `isPulsing` **[boolean][752]** 
--   `pulse` **[ElementPulseState][937]** 
--   `preparingToStop` **[boolean][752]** 
-
-## DrawingObject
-
--   **See: [DiagramElementPrimitive][48]
-    **
-
-Drawing Object
-
-Manages drawing an element to a WebGL or Context 2D canvas. Can also
-be used to manage a HTML element on the screen.
-
-### Properties
-
--   `border` **[Array][745]&lt;[Array][745]&lt;[Point][759]>>** each array of points defines a
-    closed boundary or border of the element. An element may have multiple
-    closed borders. A border defines where a shape can be touched, or how it
-    bounces of diagram boundaries
--   `holeBorder` **[Array][745]&lt;[Array][745]&lt;[Point][759]>>** areas where a shape cannot be
-    touched
-
 ## TypeEquationTextElement
 
 Definition of a text or symbol equation element. Symbol properties take
@@ -10948,7 +10982,7 @@ Equation container function
 
 ### Parameters
 
--   `optionsOrArray` **[EQN_Container][900]** 
+-   `optionsOrArray` **[EQN_Container][901]** 
 
 ### Examples
 
@@ -10969,7 +11003,7 @@ Equation fraction function
 
 ### Parameters
 
--   `optionsOrArray` **[EQN_Fraction][888]** 
+-   `optionsOrArray` **[EQN_Fraction][889]** 
 
 ### Examples
 
@@ -11040,15 +11074,15 @@ Type: any
     (`'diagram'`)
 -   `num` **[number][753]?** the number of draw copies of the pulse to make (`1`)
 -   `done` **(null | [string][744] | function (): void)?** callback when pulse is
-    finished. If `string` then the element's [FunctionMap][921] `fnMap` will be
+    finished. If `string` then the element's [FunctionMap][922] `fnMap` will be
     used (`null`)
--   `when` **[TypeWhen][923]?** when to start the pulse (`'syncNow'`)
+-   `when` **[TypeWhen][924]?** when to start the pulse (`'syncNow'`)
 
 ## AnimationStartTime
 
 Animation start time options.
 
-[TypeWhen][696] | number | null
+[TypeWhen][684] | number | null
 
 When multiple animations need to be started, it is often
 desirable to synchronise their start times.
@@ -11074,7 +11108,7 @@ A custom time can be used if a `number` is defined.
 
 `null` will result in `'nextFrame'` being used
 
-Type: ([TypeWhen][923] \| [number][753] | null)
+Type: ([TypeWhen][924] \| [number][753] | null)
 
 [1]: #introduction
 
@@ -12050,31 +12084,31 @@ Type: ([TypeWhen][923] \| [number][753] | null)
 
 [487]: #examples-60
 
-[488]: #eqn_container
+[488]: #eqn_strikecomment
 
 [489]: #properties-27
 
 [490]: #examples-61
 
-[491]: #eqn_box
+[491]: #eqn_container
 
 [492]: #properties-28
 
 [493]: #examples-62
 
-[494]: #eqn_bar
+[494]: #eqn_box
 
 [495]: #properties-29
 
 [496]: #examples-63
 
-[497]: #eqn_comment
+[497]: #eqn_bar
 
 [498]: #properties-30
 
 [499]: #examples-64
 
-[500]: #eqn_strikecomment
+[500]: #eqn_comment
 
 [501]: #properties-31
 
@@ -12442,91 +12476,91 @@ Type: ([TypeWhen][923] \| [number][753] | null)
 
 [683]: #parameters-172
 
-[684]: #obj_pulsescale
+[684]: #typewhen
 
-[685]: #properties-89
+[685]: #arrowhead
 
-[686]: #obj_curvedcorner
+[686]: #obj_arrow
 
-[687]: #properties-90
+[687]: #head-triangle
 
-[688]: #obj_linestyle
+[688]: #head-barb
 
-[689]: #properties-91
+[689]: #head-line
 
-[690]: #diagramprimitives
+[690]: #head-circle
 
-[691]: #polygon
+[691]: #head-polygon
 
-[692]: #parameters-173
+[692]: #head-bar
 
-[693]: #cpy_step
+[693]: #head-rectangle
 
-[694]: #properties-92
+[694]: #general
 
-[695]: #examples-95
+[695]: #properties-89
 
-[696]: #typewhen
+[696]: #examples-95
 
-[697]: #arrowhead
+[697]: #obj_arrows
 
-[698]: #obj_arrow
+[698]: #properties-90
 
-[699]: #head-triangle
+[699]: #obj_scenario
 
-[700]: #head-barb
+[700]: #properties-91
 
-[701]: #head-line
+[701]: #diagramelementmovefreely
 
-[702]: #head-circle
+[702]: #properties-92
 
-[703]: #head-polygon
+[703]: #diagramelementmove
 
-[704]: #head-bar
+[704]: #properties-93
 
-[705]: #head-rectangle
+[705]: #scenarios-2
 
-[706]: #general
+[706]: #properties-94
 
-[707]: #properties-93
+[707]: #elementmovementstate
 
-[708]: #examples-96
+[708]: #properties-95
 
-[709]: #obj_arrows
+[709]: #elementpulsestate
 
-[710]: #properties-94
+[710]: #properties-96
 
-[711]: #obj_scenario
+[711]: #elementstate
 
-[712]: #properties-95
+[712]: #properties-97
 
-[713]: #diagramelementmovefreely
+[713]: #drawingobject
 
-[714]: #properties-96
+[714]: #properties-98
 
-[715]: #diagramelementmove
+[715]: #obj_pulsescale
 
-[716]: #properties-97
+[716]: #properties-99
 
-[717]: #scenarios-2
+[717]: #obj_curvedcorner
 
-[718]: #properties-98
+[718]: #properties-100
 
-[719]: #elementmovementstate
+[719]: #obj_linestyle
 
-[720]: #properties-99
+[720]: #properties-101
 
-[721]: #elementpulsestate
+[721]: #diagramprimitives
 
-[722]: #properties-100
+[722]: #polygon
 
-[723]: #elementstate
+[723]: #parameters-173
 
-[724]: #properties-101
+[724]: #cpy_step
 
-[725]: #drawingobject
+[725]: #properties-102
 
-[726]: #properties-102
+[726]: #examples-96
 
 [727]: #typeequationtextelement
 
@@ -12836,116 +12870,118 @@ Type: ([TypeWhen][923] \| [number][753] | null)
 
 [880]: ./assets1/eqn_strike.gif
 
-[881]: ./assets1/eqn_container.gif
+[881]: ./assets1/eqn_strikecomment.gif
 
-[882]: #eqn_bracket
+[882]: ./assets1/eqn_container.gif
 
-[883]: #eqn_annotation
+[883]: #eqn_bracket
 
-[884]: #eqn_glyphs
+[884]: #eqn_annotation
 
-[885]: #eqn_encompassglyph
+[885]: #eqn_glyphs
 
-[886]: #eqn_topbottomglyph
+[886]: #eqn_encompassglyph
 
-[887]: #eqn_leftrightglyph
+[887]: #eqn_topbottomglyph
 
-[888]: #eqn_fraction
+[888]: #eqn_leftrightglyph
 
-[889]: #eqn_strike
+[889]: #eqn_fraction
 
-[890]: #eqn_box
+[890]: #eqn_strike
 
-[891]: #eqn_root
+[891]: #eqn_box
 
-[892]: #eqn_subscript
+[892]: #eqn_root
 
-[893]: #eqn_superscript
+[893]: #eqn_subscript
 
-[894]: #eqn_superscriptsubscript
+[894]: #eqn_superscript
 
-[895]: #eqn_bar
+[895]: #eqn_superscriptsubscript
 
-[896]: #eqn_annotate
+[896]: #eqn_bar
 
-[897]: #eqn_comment
+[897]: #eqn_annotate
 
-[898]: #eqn_pad
+[898]: #eqn_comment
 
-[899]: #eqn_scale
+[899]: #eqn_pad
 
-[900]: #eqn_container
+[900]: #eqn_scale
 
-[901]: #eqn_matrix
+[901]: #eqn_container
 
-[902]: #eqn_integral
+[902]: #eqn_matrix
 
-[903]: #eqn_sumof
+[903]: #eqn_integral
 
-[904]: #eqn_prodof
+[904]: #eqn_sumof
 
-[905]: #eqn_strikecomment
+[905]: #eqn_prodof
 
-[906]: https://developer.mozilla.org/docs/Web/API/Element
+[906]: #eqn_strikecomment
 
-[907]: #typeformtranslationproperties
+[907]: https://developer.mozilla.org/docs/Web/API/Element
 
-[908]: #equationaddforms
+[908]: #typeformtranslationproperties
 
-[909]: #typeequationformobject
+[909]: #equationaddforms
 
-[910]: #typeequationform
+[910]: #typeequationformobject
 
-[911]: #equationgotoform
+[911]: #typeequationform
 
-[912]: #typef1defrect
+[912]: #equationgotoform
 
-[913]: #typeparsableline
+[913]: #typef1defrect
 
-[914]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+[914]: #typeparsableline
 
-[915]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
+[915]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
 
-[916]: #animationprogression
+[916]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
 
-[917]: #animationstarttime
+[917]: #animationprogression
 
-[918]: #obj_scenario
+[918]: #animationstarttime
 
-[919]: #obj_scenariovelocity
+[919]: #obj_scenario
 
-[920]: TriggernAnimationStep
+[920]: #obj_scenariovelocity
 
-[921]: FunctionMap
+[921]: TriggernAnimationStep
 
-[922]: ./assets1/pulse.gif
+[922]: FunctionMap
 
-[923]: #typewhen
+[923]: ./assets1/pulse.gif
 
-[924]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
+[924]: #typewhen
 
-[925]: #obj_polygon
+[925]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
 
-[926]: ./assets1/copy.png
+[926]: ./assets1/arrow_triangle.png
 
-[927]: ./assets1/arrow_triangle.png
+[927]: ./assets1/arrow_reversetri.png
 
-[928]: ./assets1/arrow_reversetri.png
+[928]: ./assets1/arrow_barb.png
 
-[929]: ./assets1/arrow_barb.png
+[929]: ./assets1/arrow_line.png
 
-[930]: ./assets1/arrow_line.png
+[930]: ./assets1/arrow_circle.png
 
-[931]: ./assets1/arrow_circle.png
+[931]: ./assets1/arrow_polygon.png
 
-[932]: ./assets1/arrow_polygon.png
+[932]: ./assets1/arrow_bar.png
 
-[933]: ./assets1/arrow_bar.png
+[933]: ./assets1/arrow_rectangle.png
 
-[934]: ./assets1/arrow_rectangle.png
+[934]: #diagramelementmovefreely
 
-[935]: #diagramelementmovefreely
+[935]: #elementmovementstate
 
-[936]: #elementmovementstate
+[936]: #elementpulsestate
 
-[937]: #elementpulsestate
+[937]: #obj_polygon
+
+[938]: ./assets1/copy.png

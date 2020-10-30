@@ -68,11 +68,11 @@ toc:
   - EQN_Bracket
   - EQN_Scale
   - EQN_Strike
-  - EQN_Container
+  - EQN_StrikeComment
   - EQN_Box
+  - EQN_Container
   - EQN_Bar
   - EQN_Comment
-  - EQN_StrikeComment
   - EQN_Pad
   - EQN_Matrix
   - EQN_Annotate

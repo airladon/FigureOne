@@ -787,7 +787,11 @@ export type EQN_Strike = {
 /**
  * Equation box
  *
+ * ![](./assets1/eqn_box.gif)
+ *
  * Place a box symbol around an equation phrase
+ *
+ * Options can be an object, or an array in the property order below
  *
  * @property {TypeEquationPhrase} content
  * @property {string} symbol
@@ -808,30 +812,72 @@ export type EQN_Strike = {
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
-* @example
- * // For examples, a box symbol is defined as an equation element
- * eqn.addElements({
- *   x: { symbol: 'box' }
- * });
+ *
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // Full object definition
- * {
- *   box: {
- *     content: 'a',
- *     symbol: 'box',
- *     inSize: true,
- *     space: 0,
- *     topSpace: 0.1,
- *     rightSpace: 0.2,
- *     bottomSpace: 0.3,
- *     leftSpace: 0.4,
- *     fullContentBounds: false,
- *     useFullBounds: false,
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       1: { box: ['a', 'box', true, 0.1] },
+ *     },
  *   },
- * }
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Example array definition
- *  { box: ['a', 'box'] }
+ * // Some different box examples
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       box: { symbol: 'box' },
+ *     },
+ *     forms: {
+ *       // Array equation
+ *       1: ['a', { box: ['b', 'box'] }, 'c'],
+ *       // Object definition
+ *       2: {
+ *         box: {
+ *           content: ['a', 'b', 'c'],
+ *           symbol: 'box',
+ *         },
+ *       },
+ *       // Additional options for layout
+ *       3: {
+ *         box: {
+ *           content: ['a', 'b', 'c'],
+ *           symbol: 'box',
+ *           space: 0.2,
+ *         },
+ *       },
+ *       // Box is included in the layout spacing
+ *       4: [
+ *         'a',
+ *         {
+ *           box: {
+ *             content: 'b',
+ *             symbol: 'box',
+ *             space: 0.2,
+ *             inSize: true,
+ *           },
+ *         },
+ *         'c'
+ *       ],
+ *     },
+ *     formSeries: ['1', '2', '3', '4']
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_Box = {
   content: TypeEquationPhrase,

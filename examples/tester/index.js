@@ -89,56 +89,62 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // eqn.showForm('1');
 
 
-// // Simple
+// Simple
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    forms: {
+      1: { box: ['a', 'box', true, 0.1] },
+    },
+  },
+});
+diagram.elements._eqn.showForm('1');
+
+// // Some different bracket examples
 // diagram.addElement({
 //   name: 'eqn',
 //   method: 'equation',
 //   options: {
 //     elements: {
-//       x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
+//       box: { symbol: 'box' },
 //     },
 //     forms: {
-//       1: { topStrike: ['radius', 'x', 'radius = 1'] },
+//       // Array equation
+//       1: ['a', { box: ['b', 'box'] }, 'c'],
+//       // Object definition
+//       2: {
+//         box: {
+//           content: ['a', 'b', 'c'],
+//           symbol: 'box',
+//         },
+//       },
+//       // Additional options for layout
+//       3: {
+//         box: {
+//           content: ['a', 'b', 'c'],
+//           symbol: 'box',
+//           space: 0.2,
+//         },
+//       },
+//       // Box is included in the layout spacing
+//       4: [
+//         'a',
+//         {
+//           box: {
+//             content: 'b',
+//             symbol: 'box',
+//             space: 0.2,
+//             inSize: true,
+//           },
+//         },
+//         'c'
+//       ],
 //     },
+//     formSeries: ['1', '2', '3', '4']
 //   },
 // });
-// diagram.elements._eqn.showForm('1');
-
-// Some different bracket examples
-diagram.addElement({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    elements: {
-      s1: { symbol: 'strike', style: 'forward', color: [0.6, 0.6, 0.6, 1] },
-    },
-    forms: {
-      // Array equation
-      1: { topStrike: ['radius', 's1', 'radius = 1'] },
-      // Object definition
-      2: {
-        bottomStrike: {
-          content: 'radius',
-          symbol: 's1',
-          comment: 'radius = 1',
-        },
-      },
-      // Additional options for layout
-      3: {
-        bottomStrike: {
-          content: 'radius',
-          comment: 'radius = 1',
-          symbol: 's1',
-          scale: 0.8,
-          space: 0.1,
-          commentSpace: 0.01,
-        },
-      },
-    },
-    formSeries: ['1', '2', '3']
-  },
-});
-const eqn = diagram.elements._eqn;
-eqn.onClick = () => eqn.nextForm();
-eqn.setTouchableRect(0.5);
-eqn.showForm('1');
+// const eqn = diagram.elements._eqn;
+// eqn.onClick = () => eqn.nextForm();
+// eqn.setTouchableRect(0.5);
+// eqn.showForm('1');
