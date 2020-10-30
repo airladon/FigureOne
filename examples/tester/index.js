@@ -94,12 +94,8 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 //   name: 'eqn',
 //   method: 'equation',
 //   options: {
-//     elements: {
-//       lb: { symbol: 'squareBracket', side: 'left' },
-//       rb: { symbol: 'squareBracket', side: 'right' },
-//     },
 //     forms: {
-//       1: { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] },
+//       1: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
 //     },
 //   },
 // });
@@ -111,50 +107,25 @@ diagram.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
-    elements: {
-      lb: { symbol: 'squareBracket', side: 'left' },
-      rb: { symbol: 'squareBracket', side: 'right' },
-      v: { symbol: 'vinculum' },
-    },
-    phrases: {
-      f: { frac: ['a', 'v', 'b'] },
-    },
     forms: {
-      // Array equation 2x2 matrix
-      1: { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] },
-      // Object definition vector
-      2: {
-        matrix: {
-          content: ['a', 'b', 'c', 'd'],
-          left: 'lb',
-          right: 'rb',
-          order: [1, 4],
+      // No padding
+      1: ['a', 'b', 'c'],
+      // Array form
+      2: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
+      // Object form
+      3: [
+        'a',
+        {
+          pad: {
+            content: 'b',
+            left: 0.3,
+            right: 0.1,
+          },
         },
-      },
-      // Additional options for layout
-      3: {
-        matrix: {
-          content: ['f', 'wxyz', 'c', 'd'],
-          symbol: 'bSqr',
-          left: 'lb',
-          right: 'rb',
-          order: [2, 2],
-        },
-      },
-      // Fixed size matrix cells
-      4: {
-        matrix: {
-          content: ['f', 'wxyz', 'c', 'd'],
-          symbol: 'bSqr',
-          left: 'lb',
-          right: 'rb',
-          order: [2, 2],
-          fit: [0.2, 0.2],
-          yAlign: 'middle',
-        },
-      },
+        'c',
+      ],
     },
-    formSeries: ['1', '2', '3', '4']
+    formSeries: ['1', '2', '3'],
   },
 });
 const eqn = diagram.elements._eqn;

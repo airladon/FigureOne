@@ -422,3 +422,9 @@ eqn.showForm('1');
 
 ![](./tutorials/equation/readability.gif)
 
+#### Phrases
+
+Often different forms of an equation reuse equation phrases, like fractions. To make equations more readable, it can be useful to define a phrase once, and then refer to its identifier throughout the forms.
+
+```javascript
+```

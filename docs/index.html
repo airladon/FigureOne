@@ -3002,9 +3002,9 @@
               
                 
                 <li><a
-                  href='#obj_pulseanimationstep'
+                  href='#animationprogression'
                   class="">
-                  OBJ_PulseAnimationStep
+                  AnimationProgression
                   
                 </a>
                 
@@ -3012,9 +3012,9 @@
               
                 
                 <li><a
-                  href='#animationprogression'
+                  href='#obj_pulseanimationstep'
                   class="">
-                  AnimationProgression
+                  OBJ_PulseAnimationStep
                   
                 </a>
                 
@@ -21930,6 +21930,9 @@ eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&
 eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 <p><img src="./tutorials/equation/readability.gif"></p>
+<h4>Phrases</h4>
+<p>Often different forms of an equation reuse equation phrases, like fractions. To make equations more readable, it can be useful to define a phrase once, and then refer to its identifier throughout the forms.</p>
+<pre class='hljs'></pre>
 
   
 </section></div>
@@ -27060,7 +27063,8 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   </div>
   
 
-  <p>Equation padding options</p>
+  <p>Equation padding options.</p>
+<p>Pads the size of the equation phrase with space.</p>
 
   
     <p style="display: none;">      Type:
@@ -27180,6 +27184,8 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   
 
   <p>Equation matrix</p>
+<p><img src="./assets1/eqn_matrix.gif"></p>
+<p>Options can be an object, or an array in the property order below</p>
 
   
     <p style="display: none;">      Type:
@@ -27318,6 +27324,18 @@ overriding any
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
@@ -27325,41 +27343,78 @@ overriding any
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// The following examples use left and right square brackets as symbols:</span>
-eqn.addElements({
-  <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
-  <span class="hljs-attr">rb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span> },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
-{
-  <span class="hljs-attr">matrix</span>: {
-    <span class="hljs-attr">order</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>],
-    <span class="hljs-attr">left</span>: <span class="hljs-string">'lb'</span>,
-    <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>],
-    <span class="hljs-attr">right</span>: <span class="hljs-string">'rb'</span>,
-    <span class="hljs-attr">scale</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">fit</span>: <span class="hljs-string">'min'</span>,
-    <span class="hljs-attr">space</span>: [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.1</span>],
-    <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'baseline'</span>,
-    <span class="hljs-attr">brac</span>: {
-      <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-      <span class="hljs-attr">insideSpace</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">outsideSpace</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">minContentHeight</span>: <span class="hljs-literal">null</span>,
-      <span class="hljs-attr">minContentDescent</span>: <span class="hljs-literal">null</span>,
-      <span class="hljs-attr">height</span>: <span class="hljs-literal">null</span>,
-      <span class="hljs-attr">descent</span>: <span class="hljs-literal">null</span>,
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
+      <span class="hljs-attr">rb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">matrix</span>: [[<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], <span class="hljs-string">'lb'</span>, [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>], <span class="hljs-string">'rb'</span>] },
     },
   },
-},</pre>
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Array example</span>
- { <span class="hljs-attr">matrix</span>: [[<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], <span class="hljs-string">'lb'</span>, [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>], <span class="hljs-string">'rb'</span>] }</pre>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different bar examples</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
+      <span class="hljs-attr">rb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span> },
+      <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
+    },
+    <span class="hljs-attr">phrases</span>: {
+      <span class="hljs-attr">f</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'b'</span>] },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Array equation 2x2 matrix</span>
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">matrix</span>: [[<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], <span class="hljs-string">'lb'</span>, [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>], <span class="hljs-string">'rb'</span>] },
+      <span class="hljs-comment">// Object definition vector</span>
+      <span class="hljs-number">2</span>: {
+        <span class="hljs-attr">matrix</span>: {
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>],
+          <span class="hljs-attr">left</span>: <span class="hljs-string">'lb'</span>,
+          <span class="hljs-attr">right</span>: <span class="hljs-string">'rb'</span>,
+          <span class="hljs-attr">order</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">4</span>],
+        },
+      },
+      <span class="hljs-comment">// Additional options for layout</span>
+      <span class="hljs-number">3</span>: {
+        <span class="hljs-attr">matrix</span>: {
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'f'</span>, <span class="hljs-string">'wxyz'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>],
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bSqr'</span>,
+          <span class="hljs-attr">left</span>: <span class="hljs-string">'lb'</span>,
+          <span class="hljs-attr">right</span>: <span class="hljs-string">'rb'</span>,
+          <span class="hljs-attr">order</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>],
+        },
+      },
+      <span class="hljs-comment">// Fixed size matrix cells</span>
+      <span class="hljs-number">4</span>: {
+        <span class="hljs-attr">matrix</span>: {
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'f'</span>, <span class="hljs-string">'wxyz'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>],
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bSqr'</span>,
+          <span class="hljs-attr">left</span>: <span class="hljs-string">'lb'</span>,
+          <span class="hljs-attr">right</span>: <span class="hljs-string">'rb'</span>,
+          <span class="hljs-attr">order</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>],
+          <span class="hljs-attr">fit</span>: [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>],
+          <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+        },
+      },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>]
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
 
@@ -38648,6 +38703,88 @@ eqn.addForms({
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='animationprogression'>
+      AnimationProgression
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Animation progression function.</p>
+<p>As the animation time progresses, a percentage of the total animation
+duration will be passed to this function.</p>
+<p>This function then calculates and returns the percent progress of the
+animation.</p>
+<p>This function can be used to make non-linear progressions of an animation.
+For instance, it could be used to create a progression that is slowed
+at the start or end of the animation.</p>
+
+  
+    <p style="display: none;">      Type:
+      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>percent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    percentage of duration
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        percent of animation complete
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='obj_pulseanimationstep'>
       OBJ_PulseAnimationStep
     </h3>
@@ -38839,88 +38976,6 @@ used (
     </div>
   
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='animationprogression'>
-      AnimationProgression
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Animation progression function.</p>
-<p>As the animation time progresses, a percentage of the total animation
-duration will be passed to this function.</p>
-<p>This function then calculates and returns the percent progress of the
-animation.</p>
-<p>This function can be used to make non-linear progressions of an animation.
-For instance, it could be used to create a progression that is slowed
-at the start or end of the animation.</p>
-
-  
-    <p style="display: none;">      Type:
-      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>percent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    percentage of duration
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
-        percent of animation complete
-
-      
-    
   
 
   

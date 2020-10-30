@@ -1930,27 +1930,67 @@ export type EQN_StrikeComment = {
 
 
 /**
- * Equation padding options
+ * Equation padding options.
+ *
+ * ![](./assets1/eqn_pad.gif)
+ *
+ * Pads the size of the equation phrase with space.
+ *
+ * Options can be an object, or an array in the property order below
  *
  * @property {TypeEquationPhrase} content
  * @property {number} [top] (`0`)
  * @property {number} [right] (`0`)
  * @property {number} [bottom] (`0`)
  * @property {number} [left] (`0`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // Full object definition
- * {
- *   pad: {
- *     content: 'a',,
- *     top: 0.1,
- *     right: 0.2,
- *     bottom: 0.3,
- *     left: 0.4,
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       1: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
+ *     },
  *   },
- * },
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Array example
- *  { pad: ['a', 0.1, 0.2, 0.3, 0.4] }
+ * // Some different padding examples
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       // No padding
+ *       1: ['a', 'b', 'c'],
+ *       // Array form
+ *       2: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
+ *       // Object form
+ *       3: [
+ *         'a',
+ *         {
+ *           pad: {
+ *             content: 'b',
+ *             left: 0.3,
+ *             right: 0.1,
+ *           },
+ *         },
+ *         'c',
+ *       ],
+ *     },
+ *     formSeries: ['1', '2', '3'],
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_Pad = {
   content: TypeEquationPhrase;
