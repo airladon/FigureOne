@@ -65,10 +65,10 @@ toc:
   - EQN_Integral
   - EQN_SumOf
   - EQN_ProdOf
-  - EQN_Container
-  - EQN_Scale
   - EQN_Bracket
+  - EQN_Scale
   - EQN_Strike
+  - EQN_Container
   - EQN_Box
   - EQN_Bar
   - EQN_Comment

@@ -94,15 +94,53 @@ diagram.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
+    elements: {
+      x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
+    },
     forms: {
-      1: ['b', '_ = ', { frac: ['a', 'v_vinculum', 'c'] }],
-      2: ['c', '_ = ', { frac: ['a', 'v', 'b'] }],
+      1: [{ strike: ['a', 'x']}, ' ', 'b'],
     },
   },
 });
 diagram.elements._eqn.showForm('1');
-diagram.elements._eqn.goToForm({
-  form: 2,
-  animate: 'move',
-  delay: 3,
+
+// Some different bracket examples
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      s1: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
+      s2: { symbol: 'strike', style: 'forward', color: [0.6, 0.6, 0.6, 1] },
+    },
+    forms: {
+      // Array definition
+      1: [{ strike: ['a', 's1']}, ' ', 'b'],
+      // Object definition
+      2: {
+        strike: {
+          content: ['a', '_ + ', 'b'],
+          symbol: 's1',
+        },
+      },
+      // Additional options to make strike overhang more
+      3: {
+        strike: {
+          content: ['a', 'b'],
+          symbol: 's1',
+          topSpace: 0.2,
+          rightSpace: 0.2,
+          leftSpace: 0.2,
+          bottomSpace: 0.2,
+        },
+      },
+      // Forward strike
+      4: { strike: [['a', '_ +', 'b'], 's2'] },
+    },
+    formSeries: ['1', '2', '3', '4']
+  },
 });
+const eqn = diagram.elements._eqn;
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('1');

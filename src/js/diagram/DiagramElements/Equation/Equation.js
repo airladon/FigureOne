@@ -482,34 +482,50 @@ type TypeEquationGoToFormOptions = {
 /**
  * An Equation is a collection of elements that can be arranged into different
  * forms.
+ *
+ * `Equation` should be instantiated from an *object definition*, or from
+ * the `diagram.create.equation` method.
+ *
+ * @extends DiagramElementCollection
+ *
  * @param {EQN_Equation} options
  * @example
- * // Create with options object
- * eqn = new Equation({
- *    elements: {
- *      a: 'a',
- *      b: 'b',
- *      c: 'c',
- *      equals: ' = ',
- *      plus: ' + ',
- *    },
- *    forms: {
- *      base: ['a', 'equals', 'b', 'plus', 'c'],
- *    },
- * );
+ * // Create with options definition
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       a: 'a',
+ *       b: { color: [0, 0, 1, 1] },
+ *       c: 'c',
+ *       equals: ' = ',
+ *       plus: ' + ',
+ *     },
+ *     forms: {
+ *       1: ['a', 'equals', 'b', 'plus', 'c'],
+ *     },
+ *   },
+ * });
+ * // `eqn` is the instance of `Equation`
+ * const eqn = diagram.elements._eqn;
+ * eqn.showForm('1');
+ *
  * @example
  * // Create with methods
- * eqn = new Equation();
+ * const eqn = diagram.create.equation();
  * eqn.addElements({
- *    a: 'a',
- *    b: 'b',
- *    c: 'c',
- *    equals: ' = ',
- *    plus: ' + ',
- *  });
- *  eqn.addForms({
- *    base: ['a', 'equals', 'b', 'plus', 'c'],
- *  });
+ *   a: 'a',
+ *   b: { color: [0, 0, 1, 1] },
+ *   c: 'c',
+ *   equals: ' = ',
+ *   plus: ' + ',
+ * });
+ * eqn.addForms({
+ *   1: ['a', 'equals', 'b', 'plus', 'c'],
+ * });
+ * diagram.add('eqn', eqn);
+ * eqn.showForm('1');
  */
 export class Equation extends DiagramElementCollection {
   /**
@@ -579,6 +595,9 @@ export class Equation extends DiagramElementCollection {
 
   getCurrentForm: () => ?EquationForm;
 
+  /**
+   * @hideconstructor
+   */
   constructor(
     shapes: Object,
     options: EQN_Equation = {},

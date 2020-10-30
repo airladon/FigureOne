@@ -335,23 +335,63 @@ export type EQN_Fraction = {
 /**
  * Equation scale
  *
+ * ![](./assets1/eqn_scale.gif)
+ *
  * Scale an equation phrase
+ *
+ * Options can be an object, or an array in the property order below
  *
  * @property {TypeEquationPhrase} content
  * @property {number} [scale] - (`1`)
  * @property {boolean} [fullContentBounds] Use full bounds with content (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // Full object definition
- *  {
- *    scale: {
- *      content: ['a', 'b'],
- *      scale: 0.5,
- *      fullContentBounds: false,
- *    },
- *  }
- * @example
- * // Example array definition
- *  { scale: [['a', 'b'], 0.5] }
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       2: ['a', { scale: ['b', 2] }, 'c'],
+ *     },
+ *   },
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
+ * // Some different bracket examples
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       // Default
+ *       1: ['a', 'b', 'c'],
+ *       // Array definition magnify
+ *       2: ['a', { scale: ['b', 2] }, 'c'],
+ *       // Object definition shrink
+ *       3: [
+ *         'a',
+ *         {
+ *           scale: {
+ *             content: ['b', 1],
+ *             scale: 0.5,
+ *           },
+ *         },
+ *         'c',
+ *       ],
+ *       // Back to start
+ *       4: ['a', { scale: ['b', 1] }, 'c'],
+ *     },
+ *     formSeries: ['1', '2', '3']
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_Scale = {
   content: TypeEquationPhrase,
@@ -366,7 +406,11 @@ export type EQN_Scale = {
 /**
  * Equation bracket
  *
+ * ![](./assets1/eqn_bracket.gif)
+ *
  * Surround an equation phrase with brackets
+ *
+ * Options can be an object, or an array in the property order below
  *
  * @property {string} [left] left bracket symbol
  * @property {TypeEquationPhrase} [content]
@@ -399,29 +443,61 @@ export type EQN_Scale = {
  *   lb: { symbol: 'bracket', side: 'left' }
  *   rb: { symbol: 'bracket', side: 'right' }
  * });
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // Full object definition
- *  {
- *    brac: {
- *      left: 'lb',
- *      content: 'a',
- *      right: 'rb',
- *      inSize: true,
- *      insideSpace: 0.1,
- *      outsideSpace: 0.1,
- *      topSpace: 0.1,
- *      bottomSpace: 0.1,
- *      minContentHeight: 0.1,
- *      minContentDescent: 0.1,
- *      height: 0.1,
- *      descent: 0.1,
- *      fullContentBounds: false,
- *      useFullBounds: false,
- *    },
- *  }
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       lb: { symbol: 'bracket', side: 'left' },
+ *       rb: { symbol: 'bracket', side: 'right' },
+ *     },
+ *     forms: {
+ *       1: ['a', { brac: ['lb', ['b', '_ + ', 'c'], 'rb'] }],
+ *     },
+ *   },
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Example array definition
- *  { brac: ['lb', 'a', 'rb'] }
+ * // Some different bracket examples
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       lb: { symbol: 'bracket', side: 'left' },
+ *       rb: { symbol: 'bracket', side: 'right' },
+ *       lsb: { symbol: 'squareBracket', side: 'left' },
+ *       rsb: { symbol: 'squareBracket', side: 'right' },
+ *       leftBrace: { }
+ *     },
+ *     forms: {
+ *       // Array definition
+ *       1: ['a', { brac: ['lb', ['b', '_ + ', 'c'], 'rb'] }],
+ *       // Object definition
+ *       2: ['a', {
+ *         brac: {
+ *           left: 'lb',
+ *           content: { frac: ['b', 'vinculum', 'c'] }, 
+ *           right: 'rb',
+ *         },
+ *       }],
+ *       // Square brackets
+ *       3: ['a', { brac: ['lsb', ['b', '_ + ', 'c'], 'rsb'] }],
+ *     },
+ *     formSeries: ['1', '2', '3']
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 
 export type EQN_Bracket = {
@@ -597,7 +673,11 @@ export type EQN_Root = {
 /**
  * Equation strike-through
  *
+ * ![](./assets1/eqn_strike.gif)
+ *
  * Overlay a strike symbol on an equation phrase
+ *
+ * Options can be an object, or an array in the property order below
  *
  * @property {TypeEquationPhrase} content
  * @property {string} symbol
@@ -618,30 +698,67 @@ export type EQN_Root = {
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
-* @example
- * // For examples, a strike symbol is defined as an equation element
- * eqn.addElements({
- *   x: { symbol: 'strike', style: 'cross' }
- * });
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // Full object definition
- * {
- *   strike: {
- *     content: 'a',
- *     symbol: 'x',
- *     inSize: true,
- *     space: 0,
- *     topSpace: 0.1,
- *     rightSpace: 0.2,
- *     bottomSpace: 0.3,
- *     leftSpace: 0.4,
- *     fullContentBounds: false,
- *     useFullBounds: false,
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
+ *     },
+ *     forms: {
+ *       1: [{ strike: ['a', 'x']}, ' ', 'b'],
+ *     },
  *   },
- * }
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Example array definition
- *  { strike: ['a', 'x'] }
+ * // Some different strike examples
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       s1: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
+ *       s2: { symbol: 'strike', style: 'forward', color: [0.6, 0.6, 0.6, 1] },
+ *     },
+ *     forms: {
+ *       // Array definition
+ *       1: [{ strike: ['a', 's1']}, ' ', 'b'],
+ *       // Object definition
+ *       2: {
+ *         strike: {
+ *           content: ['a', '_ + ', 'b'],
+ *           symbol: 's1',
+ *         },
+ *       },
+ *       // Additional options to make strike overhang more
+ *       3: {
+ *         strike: {
+ *           content: ['a', 'b'],
+ *           symbol: 's1',
+ *           topSpace: 0.2,
+ *           rightSpace: 0.2,
+ *           leftSpace: 0.2,
+ *           bottomSpace: 0.2,
+ *         },
+ *       },
+ *       // Forward strike
+ *       4: { strike: [['a', '_ +', 'b'], 's2'] },
+ *     },
+ *     formSeries: ['1', '2', '3', '4']
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_Strike = {
   content: TypeEquationPhrase;

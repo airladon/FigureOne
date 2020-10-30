@@ -1876,9 +1876,9 @@
               
                 
                 <li><a
-                  href='#eqn_container'
+                  href='#eqn_bracket'
                   class="">
-                  EQN_Container
+                  EQN_Bracket
                   
                 </a>
                 
@@ -1896,9 +1896,9 @@
               
                 
                 <li><a
-                  href='#eqn_bracket'
+                  href='#eqn_strike'
                   class="">
-                  EQN_Bracket
+                  EQN_Strike
                   
                 </a>
                 
@@ -1906,9 +1906,9 @@
               
                 
                 <li><a
-                  href='#eqn_strike'
+                  href='#eqn_container'
                   class="">
-                  EQN_Strike
+                  EQN_Container
                   
                 </a>
                 
@@ -2784,74 +2784,6 @@
               
                 
                 <li><a
-                  href='#obj_pulsescale'
-                  class="">
-                  OBJ_PulseScale
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_curvedcorner'
-                  class="">
-                  OBJ_CurvedCorner
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_linestyle'
-                  class="">
-                  OBJ_LineStyle
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#diagramprimitives'
-                  class=" toggle-sibling">
-                  DiagramPrimitives
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#diagramprimitivespolygon'
-                        class='regular pre-open'>
-                        #polygon
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                  
-                </div>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#cpy_step'
-                  class="">
-                  CPY_Step
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#typewhen'
                   class="">
                   TypeWhen
@@ -2965,6 +2897,74 @@
                   href='#drawingobject'
                   class="">
                   DrawingObject
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_pulsescale'
+                  class="">
+                  OBJ_PulseScale
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_curvedcorner'
+                  class="">
+                  OBJ_CurvedCorner
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_linestyle'
+                  class="">
+                  OBJ_LineStyle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#diagramprimitives'
+                  class=" toggle-sibling">
+                  DiagramPrimitives
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#diagramprimitivespolygon'
+                        class='regular pre-open'>
+                        #polygon
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#cpy_step'
+                  class="">
+                  CPY_Step
                   
                 </a>
                 
@@ -21880,8 +21880,56 @@ diagram.elements._eqn.goToForm({
 });</pre>
 <p><img src="./tutorials/equation/reuse_symbol.gif"></p>
 <h4>Function Definitions</h4>
-<p>Function definitions can either be array definitions or object definitions. Array definitions are useful in simple definitions, or not customizing a layout. Object definitions are more readable when may options are required to customize a layout, or the input to the functions are more complicated equation phrases.</p>
-<h3>Multiline vs single line</h3>
+<p>Function definitions can either be array definitions (an equation phrase) or object definitions. Array definitions are useful in simple definitions with minimal layout customizations. Object definitions are more readable when many options are required to customize a layout, or the input to the functions are more complicated equation phrases.</p>
+<p>Array definitions, or equation phrases, can also be spread over several lines to increase readability.</p>
+<pre class='hljs'>diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Array definition for simple fraction</span>
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'b'</span>]},
+      <span class="hljs-comment">// Object definition for fraction with complex phrases</span>
+      <span class="hljs-number">2</span>: {
+        <span class="hljs-attr">frac</span>: {
+          <span class="hljs-attr">numerator</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'_ + '</span>, <span class="hljs-string">'c'</span>],
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'v'</span>,
+          <span class="hljs-attr">denominator</span>: [<span class="hljs-string">'t'</span>, { <span class="hljs-attr">sub</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'2'</span>] }],
+        },
+      },
+      <span class="hljs-comment">// Array definition split over several lines</span>
+      <span class="hljs-number">3</span>: {
+        <span class="hljs-attr">frac</span>: [
+          [<span class="hljs-string">'a'</span>, <span class="hljs-string">'_ + '</span>, <span class="hljs-string">'x'</span>],
+          <span class="hljs-string">'v'</span>,
+          [<span class="hljs-string">'t'</span>, { <span class="hljs-attr">sub</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'3'</span>] }],
+        ],
+      },
+      <span class="hljs-comment">// Object definition when additional options are needed</span>
+      <span class="hljs-number">4</span>: {
+        <span class="hljs-attr">frac</span>: {
+          <span class="hljs-attr">numerator</span>: <span class="hljs-string">'a'</span>,
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'v'</span>,
+          <span class="hljs-attr">denominator</span>: <span class="hljs-string">'b'</span>,
+          <span class="hljs-attr">numeratorSpace</span>: <span class="hljs-number">0.07</span>,
+          <span class="hljs-attr">denominatorSpace</span>: <span class="hljs-number">0.07</span>,
+          <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.1</span>,
+          <span class="hljs-attr">scale</span>: <span class="hljs-number">1.5</span>,
+        },
+      },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>],
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+<p><img src="./tutorials/equation/readability.gif"></p>
 
   
 </section></div>
@@ -21903,6 +21951,8 @@ diagram.elements._eqn.goToForm({
 
   <p>An Equation is a collection of elements that can be arranged into different
 forms.</p>
+<p><code>Equation</code> should be instantiated from an <em>object definition</em>, or from
+the <code>diagram.create.equation</code> method.</p>
 
   
   
@@ -21927,16 +21977,7 @@ forms.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>shapes</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#eqn_equation">EQN_Equation</a>
-            = <code>{}</code>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#eqn_equation">EQN_Equation</a>)</code>
 	    
           </div>
           
@@ -21957,33 +21998,42 @@ forms.</p>
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create with options object</span>
-eqn = <span class="hljs-keyword">new</span> Equation({
-   <span class="hljs-attr">elements</span>: {
-     <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
-     <span class="hljs-attr">b</span>: <span class="hljs-string">'b'</span>,
-     <span class="hljs-attr">c</span>: <span class="hljs-string">'c'</span>,
-     <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
-     <span class="hljs-attr">plus</span>: <span class="hljs-string">' + '</span>,
-   },
-   <span class="hljs-attr">forms</span>: {
-     <span class="hljs-attr">base</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'c'</span>],
-   },
-);</pre>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create with options definition</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
+      <span class="hljs-attr">b</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
+      <span class="hljs-attr">c</span>: <span class="hljs-string">'c'</span>,
+      <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
+      <span class="hljs-attr">plus</span>: <span class="hljs-string">' + '</span>,
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'c'</span>],
+    },
+  },
+});
+<span class="hljs-comment">// `eqn` is the instance of `Equation`</span>
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create with methods</span>
-eqn = <span class="hljs-keyword">new</span> Equation();
+<span class="hljs-keyword">const</span> eqn = diagram.create.equation();
 eqn.addElements({
-   <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
-   <span class="hljs-attr">b</span>: <span class="hljs-string">'b'</span>,
-   <span class="hljs-attr">c</span>: <span class="hljs-string">'c'</span>,
-   <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
-   <span class="hljs-attr">plus</span>: <span class="hljs-string">' + '</span>,
- });
- eqn.addForms({
-   <span class="hljs-attr">base</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'c'</span>],
- });</pre>
+  <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
+  <span class="hljs-attr">b</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
+  <span class="hljs-attr">c</span>: <span class="hljs-string">'c'</span>,
+  <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
+  <span class="hljs-attr">plus</span>: <span class="hljs-string">' + '</span>,
+});
+eqn.addForms({
+  <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'c'</span>],
+});
+diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
 
@@ -25147,312 +25197,6 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='eqn_container'>
-      EQN_Container
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation container options</p>
-<p><img src="./assets1/eqn_container.gif"></p>
-<p>A container is useful to fix spacing around content as it changes between
-equation forms.</p>
-<p>Options can be an object, or an array in the property order below</p>
-
-  
-    <p style="display: none;">      Type:
-      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, ascent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, yAlign: (<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fit: (<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"width"</code>? | <code>"height"</code> | <code>"contain"</code>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>descent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>ascent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : (
-<code>'center'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : (
-<code>'baseline'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fit</span> <code class='quiet'>((<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?)</code>
-          : fit width,
-ascent and descent to either match width, height or fully contain the content (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : (
-<code>false</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        To test examples, append them to the
-
-<a href="#equation-boilerplate">
-boilerplate
-</a>
-
-      
-    
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing the difference between with and without container</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">forms</span>: {
-      <span class="hljs-comment">// Container object definition</span>
-      <span class="hljs-number">1</span>: [
-        <span class="hljs-string">'length'</span>,
-        {
-          <span class="hljs-attr">container</span>: {
-            <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>,
-            <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
-          },
-        },
-        <span class="hljs-string">'height'</span>,
-      ],
-      <span class="hljs-comment">// Container array definition</span>
-      <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
-      <span class="hljs-comment">// No container</span>
-      <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
-    },
-    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
-  },
-});
-<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
-eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
-eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to diagram</span>
-<span class="hljs-keyword">const</span> eqn = diagram.create.equation({
-  <span class="hljs-attr">forms</span>: {
-    <span class="hljs-number">1</span>: [
-      <span class="hljs-string">'length'</span>,
-      { <span class="hljs-attr">container</span>: { <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span> } },
-      <span class="hljs-string">'height'</span>,
-    ],
-    <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
-    <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
-  },
-  <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
-});
-diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
-eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
-eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eqn_scale'>
-      EQN_Scale
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation scale</p>
-<p>Scale an equation phrase</p>
-
-  
-    <p style="display: none;">      Type:
-      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : Use full bounds with content (
-<code>false</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
- {
-   <span class="hljs-attr">scale</span>: {
-     <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>],
-     <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
-     <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
-   },
- }</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">scale</span>: [[<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>], <span class="hljs-number">0.5</span>] }</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='eqn_bracket'>
       EQN_Bracket
     </h3>
@@ -25462,7 +25206,9 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   
 
   <p>Equation bracket</p>
+<p><img src="./assets1/eqn_bracket.gif"></p>
 <p>Surround an equation phrase with brackets</p>
+<p>Options can be an object, or an array in the property order below</p>
 
   
     <p style="display: none;">      Type:
@@ -25629,6 +25375,18 @@ brackets only surround a portion of the content (
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
@@ -25643,29 +25401,201 @@ eqn.addElements({
 });</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
- {
-   <span class="hljs-attr">brac</span>: {
-     <span class="hljs-attr">left</span>: <span class="hljs-string">'lb'</span>,
-     <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-     <span class="hljs-attr">right</span>: <span class="hljs-string">'rb'</span>,
-     <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-     <span class="hljs-attr">insideSpace</span>: <span class="hljs-number">0.1</span>,
-     <span class="hljs-attr">outsideSpace</span>: <span class="hljs-number">0.1</span>,
-     <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.1</span>,
-     <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.1</span>,
-     <span class="hljs-attr">minContentHeight</span>: <span class="hljs-number">0.1</span>,
-     <span class="hljs-attr">minContentDescent</span>: <span class="hljs-number">0.1</span>,
-     <span class="hljs-attr">height</span>: <span class="hljs-number">0.1</span>,
-     <span class="hljs-attr">descent</span>: <span class="hljs-number">0.1</span>,
-     <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
-     <span class="hljs-attr">useFullBounds</span>: <span class="hljs-literal">false</span>,
-   },
- }</pre>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
+      <span class="hljs-attr">rb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, { <span class="hljs-attr">brac</span>: [<span class="hljs-string">'lb'</span>, [<span class="hljs-string">'b'</span>, <span class="hljs-string">'_ + '</span>, <span class="hljs-string">'c'</span>], <span class="hljs-string">'rb'</span>] }],
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">brac</span>: [<span class="hljs-string">'lb'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'rb'</span>] }</pre>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different bracket examples</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
+      <span class="hljs-attr">rb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span> },
+      <span class="hljs-attr">lsb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
+      <span class="hljs-attr">rsb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span> },
+      <span class="hljs-attr">leftBrace</span>: { }
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Array definition</span>
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, { <span class="hljs-attr">brac</span>: [<span class="hljs-string">'lb'</span>, [<span class="hljs-string">'b'</span>, <span class="hljs-string">'_ + '</span>, <span class="hljs-string">'c'</span>], <span class="hljs-string">'rb'</span>] }],
+      <span class="hljs-comment">// Object definition</span>
+      <span class="hljs-number">2</span>: [<span class="hljs-string">'a'</span>, {
+        <span class="hljs-attr">brac</span>: {
+          <span class="hljs-attr">left</span>: <span class="hljs-string">'lb'</span>,
+          <span class="hljs-attr">content</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'c'</span>] }, 
+          <span class="hljs-attr">right</span>: <span class="hljs-string">'rb'</span>,
+        },
+      }],
+      <span class="hljs-comment">// Square brackets</span>
+      <span class="hljs-number">3</span>: [<span class="hljs-string">'a'</span>, { <span class="hljs-attr">brac</span>: [<span class="hljs-string">'lsb'</span>, [<span class="hljs-string">'b'</span>, <span class="hljs-string">'_ + '</span>, <span class="hljs-string">'c'</span>], <span class="hljs-string">'rsb'</span>] }],
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>]
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_scale'>
+      EQN_Scale
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation scale</p>
+<p><img src="./assets1/eqn_scale.gif"></p>
+<p>Scale an equation phrase</p>
+<p>Options can be an object, or an array in the property order below</p>
+
+  
+    <p style="display: none;">      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Use full bounds with content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">2</span>: [<span class="hljs-string">'a'</span>, { <span class="hljs-attr">scale</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-number">2</span>] }, <span class="hljs-string">'c'</span>],
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);
+
+<span class="hljs-comment">// Some different bracket examples</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Default</span>
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>],
+      <span class="hljs-comment">// Array definition magnify</span>
+      <span class="hljs-number">2</span>: [<span class="hljs-string">'a'</span>, { <span class="hljs-attr">scale</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-number">2</span>] }, <span class="hljs-string">'c'</span>],
+      <span class="hljs-comment">// Object definition shrink</span>
+      <span class="hljs-number">3</span>: [
+        <span class="hljs-string">'a'</span>,
+        {
+          <span class="hljs-attr">scale</span>: {
+            <span class="hljs-attr">content</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-number">1</span>],
+            <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
+          },
+        },
+        <span class="hljs-string">'c'</span>,
+      ],
+      <span class="hljs-comment">// Back to start</span>
+      <span class="hljs-number">4</span>: [<span class="hljs-string">'a'</span>, { <span class="hljs-attr">scale</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-number">1</span>] }, <span class="hljs-string">'c'</span>],
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>]
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
 
@@ -25861,6 +25791,212 @@ eqn.addElements({
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
  { <span class="hljs-attr">strike</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'x'</span>] }</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_container'>
+      EQN_Container
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation container options</p>
+<p><img src="./assets1/eqn_container.gif"></p>
+<p>A container is useful to fix spacing around content as it changes between
+equation forms.</p>
+<p>Options can be an object, or an array in the property order below</p>
+
+  
+    <p style="display: none;">      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, ascent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, yAlign: (<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fit: (<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"width"</code>? | <code>"height"</code> | <code>"contain"</code>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>descent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>ascent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : (
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : (
+<code>'baseline'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fit</span> <code class='quiet'>((<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?)</code>
+          : fit width,
+ascent and descent to either match width, height or fully contain the content (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing the difference between with and without container</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Container object definition</span>
+      <span class="hljs-number">1</span>: [
+        <span class="hljs-string">'length'</span>,
+        {
+          <span class="hljs-attr">container</span>: {
+            <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>,
+            <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+          },
+        },
+        <span class="hljs-string">'height'</span>,
+      ],
+      <span class="hljs-comment">// Container array definition</span>
+      <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
+      <span class="hljs-comment">// No container</span>
+      <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to diagram</span>
+<span class="hljs-keyword">const</span> eqn = diagram.create.equation({
+  <span class="hljs-attr">forms</span>: {
+    <span class="hljs-number">1</span>: [
+      <span class="hljs-string">'length'</span>,
+      { <span class="hljs-attr">container</span>: { <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span> } },
+      <span class="hljs-string">'height'</span>,
+    ],
+    <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
+    <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
+  },
+  <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+});
+diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
 
@@ -36186,737 +36322,6 @@ rotated in the positive direction around the start point. The
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_pulsescale'>
-      OBJ_PulseScale
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Pulse options object</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : scale to pulse
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : duration to pulse
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>frequency</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : frequency to pulse where 0
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_curvedcorner'>
-      OBJ_CurvedCorner
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Curved Corner Definition</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_linestyle'>
-      OBJ_LineStyle
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Line style object</p>
-<p>These properties are a subset of <a href="#obj_polyline">OBJ_Polyline</a> which has more details
-on how a line is defined.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?)</code>
-          : defines how the width is grown from the polyline's points.
-Only 
-<code>"mid"</code>
- is fully compatible with all options in
-
-<code>cornerStyle</code>
- and 
-<code>dash</code>
-. (
-<code>"mid"</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>cornerStyle</span> <code class='quiet'>((<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?)</code>
-          : <code>"auto"</code>
-:
-sharp corners sharp when angle is less than 
-<code>minAutoCornerAngle</code>
-, 
-<code>"none"</code>
-: no
-corners, 
-<code>"radius"</code>
-: curved corners, 
-<code>"fill"</code>
-: fills the gapes between the line
-ends, (
-<code>"auto"</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>cornerSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : only used when 
-<code>cornerStyle</code>
- = 
-<code>radius</code>
- (
-<code>0.01</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>cornerSides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : number of sides in curve - only used when
-
-<code>cornerStyle</code>
- = 
-<code>radius</code>
- (
-<code>10</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>cornersOnly</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : draw only the corners with size 
-<code>cornerSize</code>
- (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>cornerLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : use only with 
-<code>cornersOnly</code>
- = 
-<code>true</code>
- -
-length of corner to draw (
-<code>0.1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>minAutoCornerAngle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : see 
-<code>cornerStyle</code>
- = 
-<code>auto</code>
- (
-<code>π/7</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>dash</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          : leave empty for solid line - use array of
-numbers for dash line where first number is length of line, second number is
-length of gap and then the pattern repeats - can use more than one dash length
-and gap  - e.g. 
-[0.1, 0.01, 0.02, 0.01]
- produces a lines with a long dash,
-short gap, short dash, short gap and then repeats.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>linePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : Use WebGL line primitives instead of
-triangle primitives to draw the line (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>lineNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : Number of line primitives to use when
-
-<code>linePrimitivs</code>
-: 
-<code>true</code>
- (
-<code>2</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>forceCornerLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='diagramprimitives'>
-      DiagramPrimitives
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Built in dagiagram primitives.</p>
-<p>Including simple shapes, grid and text.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='diagramprimitivespolygon'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>polygon(options)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Polygon or partial polygon shape options object</p>
-<p><img src="./assets1/polygon.png"></p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_polygon">OBJ_Polygon</a>>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='cpy_step'>
-      CPY_Step
-    </h3>
-    
-    
-  </div>
-  
-
-  <p><img src="./assets1/copy.png"></p>
-<p>Copy Step options object</p>
-<p>A copy step defines how to copy existing points.</p>
-<p>An array of copy steps will cumulatively copy points from an original set of
-points.</p>
-<p>So, if there are two copy steps then:</p>
-<ul>
-<li>the first step will copy the original points</li>
-<li>the second step will copy the original points and the first copy of the
-points</li>
-</ul>
-<p>For example, a grid of a shape can be made with two copy steps. The first
-replicates the shape along the x axis, creating a line of shapes. The second
-copy step then replicates the line of shapes in the y axis, creating a grid
-of shapes.</p>
-<p>Each copy step appends its copied points onto an array of points that
-started with the original points. By default, copy steps operate on all
-points created in previous steps. However, the properties <code>start</code> and <code>end</code>
-can be used to make the current step only operate on a subset of the points.</p>
-<p><code>start</code> and <code>end</code> refer to the indexes of the copy steps where the original
-points is at index 0, and the first copy step is at index 1. Copy step
-arrays can also include <em>marker strings</em> which make defining <code>start</code> and
-<code>end</code> more convient (see the third example below). These marker strings
-can be used as <code>start</code> and <code>end</code> values. Marker strings are included
-in the copy step indexing.</p>
-<p>There are two main ways to make a copy, either copy the points <code>to</code> a
-location, or copy the points <code>along</code> a path.</p>
-<p>When using the <code>to</code> property, if a <a href="#point">Point</a> is defined
-then the points will be copied to that point. If a <a href="#transform">Transform</a> is
-defined, then a copy of the points will be transformed by that transform. An
-array of points and transforms can be defined to make multiple copies of the
-points.</p>
-<p>When using the <code>along</code> property, the points are copied a number (<code>num</code>) of
-times along a path with some <code>step</code>. The paths can be horiztonal (<code>'x'</code>),
-vertical (<code>'y'</code>), at an angle (<code>number</code>) or through a <code>'rotation'</code> around
-a <code>center</code> point.</p>
-<p>When copying along a line (<code>along</code> is <code>'x'</code>, <code>y'</code> or a <code>number</code>), then
-<code>step</code> will be the distance offset along the line.</p>
-<p>When copying along a rotation (<code>along</code> is <code>'rotation'</code>), then <code>step</code> will be
-the angular step in radians.</p>
-<p>Any step can use the <code>original</code> property - but it will only operate on the
-last step that uses it. When <code>original</code> is <code>false</code>, then all points before
-that copy step will not be included in the returned Point array.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>to</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="#typeparsabletransform">TypeParsableTransform</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="#typeparsabletransform">TypeParsableTransform</a>)>)?)</code>
-          : copy points to
-a location or locations or transform a copy of the points
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>along</span> <code class='quiet'>((<code>"x"</code> | <code>"y"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rotation"</code> | <code>"moveOnly"</code>)?)</code>
-          : copy points
-along a linear path where 
-<code>number</code>
- is a path at an angle in radians
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>num</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : the number of copies to make when copying 
-<code>along</code>
- a
-path
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>step</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : distance between copies if 
-<code>along</code>
- is 
-<code>'x'</code>
- or
-
-<code>'y'</code>
- or a 
-<code>number</code>
-, delta angle between copies if 
-<code>along</code>
- is 
-<code>'rotation'</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>center</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : the center point about which to rotate
-the copies when using 
-<code>along</code>
- = 
-<code>'rotation'</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>start</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
-          : copy step index or marker defining the
-start of the points to copy
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>end</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
-          : copy step index or marker defining the end
-of the points to copy
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>original</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>false</code>
- excludes all points before this step
-in the final result (
-<code>true</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid copy</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'triGrid'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">sides</span>: <span class="hljs-number">3</span>,
-    <span class="hljs-attr">rotation</span>: -<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">6</span>,
-    <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
-    <span class="hljs-attr">copy</span>: [
-      {
-        <span class="hljs-attr">along</span>: <span class="hljs-string">'x'</span>,
-        <span class="hljs-attr">num</span>: <span class="hljs-number">4</span>,
-        <span class="hljs-attr">step</span>: <span class="hljs-number">0.3</span>,
-      },
-      {
-        <span class="hljs-attr">along</span>: <span class="hljs-string">'y'</span>,
-        <span class="hljs-attr">num</span>: <span class="hljs-number">4</span>,
-        <span class="hljs-attr">step</span>: <span class="hljs-number">0.3</span>,
-      },
-    ],
-  },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Radial lines copy</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'radialLines'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">points</span>: [
-      [<span class="hljs-number">-0.2</span>, <span class="hljs-number">-0.1</span>], [<span class="hljs-number">-0.2</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>],
-      [<span class="hljs-number">-0.2</span>, <span class="hljs-number">-0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">-0.1</span>],
-    ],
-    <span class="hljs-attr">copy</span>: [
-      {
-        <span class="hljs-attr">to</span>: [[<span class="hljs-number">0.6</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.05</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2.2</span>, <span class="hljs-number">0</span>]],
-      },
-      {
-        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
-        <span class="hljs-attr">num</span>: <span class="hljs-number">5</span>,
-        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">5</span>,
-        <span class="hljs-attr">start</span>: <span class="hljs-number">1</span>,              <span class="hljs-comment">// only copy last step, not original points</span>
-      },
-    ],
-  },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Ring copy (without original shape)</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'halfRings'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
-    <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
-    <span class="hljs-attr">copy</span>: [
-      <span class="hljs-string">'ring1'</span>,               <span class="hljs-comment">// marker 1</span>
-      {
-        <span class="hljs-attr">to</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>],
-        <span class="hljs-attr">original</span>: <span class="hljs-literal">false</span>,     <span class="hljs-comment">// don't include the original shape</span>
-      },
-      {
-        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
-        <span class="hljs-attr">num</span>: <span class="hljs-number">7</span>,
-        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">7</span>,
-        <span class="hljs-attr">start</span>: <span class="hljs-string">'ring1'</span>,      <span class="hljs-comment">// copy only from marker 1</span>
-      },
-      <span class="hljs-string">'ring2'</span>,               <span class="hljs-comment">// marker 2</span>
-      {
-        <span class="hljs-attr">to</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
-        <span class="hljs-attr">start</span>: <span class="hljs-number">0</span>,            <span class="hljs-comment">// make a copy of the original shape only</span>
-        <span class="hljs-attr">end</span>: <span class="hljs-number">1</span>,
-      },
-      {
-        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
-        <span class="hljs-attr">num</span>: <span class="hljs-number">15</span>,
-        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">15</span>,
-        <span class="hljs-attr">start</span>: <span class="hljs-string">'ring2'</span>,      <span class="hljs-comment">// copy points from Marker 2 only</span>
-      },
-    ],
-  },
-});</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='typewhen'>
       TypeWhen
     </h3>
@@ -38025,6 +37430,737 @@ touched
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_pulsescale'>
+      OBJ_PulseScale
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Pulse options object</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale to pulse
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : duration to pulse
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>frequency</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : frequency to pulse where 0
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_curvedcorner'>
+      OBJ_CurvedCorner
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Curved Corner Definition</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_linestyle'>
+      OBJ_LineStyle
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Line style object</p>
+<p>These properties are a subset of <a href="#obj_polyline">OBJ_Polyline</a> which has more details
+on how a line is defined.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?)</code>
+          : defines how the width is grown from the polyline's points.
+Only 
+<code>"mid"</code>
+ is fully compatible with all options in
+
+<code>cornerStyle</code>
+ and 
+<code>dash</code>
+. (
+<code>"mid"</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerStyle</span> <code class='quiet'>((<code>"auto"</code> | <code>"none"</code> | <code>"radius"</code> | <code>"fill"</code>)?)</code>
+          : <code>"auto"</code>
+:
+sharp corners sharp when angle is less than 
+<code>minAutoCornerAngle</code>
+, 
+<code>"none"</code>
+: no
+corners, 
+<code>"radius"</code>
+: curved corners, 
+<code>"fill"</code>
+: fills the gapes between the line
+ends, (
+<code>"auto"</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : only used when 
+<code>cornerStyle</code>
+ = 
+<code>radius</code>
+ (
+<code>0.01</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerSides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in curve - only used when
+
+<code>cornerStyle</code>
+ = 
+<code>radius</code>
+ (
+<code>10</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornersOnly</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : draw only the corners with size 
+<code>cornerSize</code>
+ (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>cornerLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use only with 
+<code>cornersOnly</code>
+ = 
+<code>true</code>
+ -
+length of corner to draw (
+<code>0.1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>minAutoCornerAngle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : see 
+<code>cornerStyle</code>
+ = 
+<code>auto</code>
+ (
+<code>π/7</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : leave empty for solid line - use array of
+numbers for dash line where first number is length of line, second number is
+length of gap and then the pattern repeats - can use more than one dash length
+and gap  - e.g. 
+[0.1, 0.01, 0.02, 0.01]
+ produces a lines with a long dash,
+short gap, short dash, short gap and then repeats.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>linePrimitives</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Use WebGL line primitives instead of
+triangle primitives to draw the line (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : Number of line primitives to use when
+
+<code>linePrimitivs</code>
+: 
+<code>true</code>
+ (
+<code>2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>forceCornerLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='diagramprimitives'>
+      DiagramPrimitives
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Built in dagiagram primitives.</p>
+<p>Including simple shapes, grid and text.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='diagramprimitivespolygon'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>polygon(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Polygon or partial polygon shape options object</p>
+<p><img src="./assets1/polygon.png"></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_polygon">OBJ_Polygon</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='cpy_step'>
+      CPY_Step
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><img src="./assets1/copy.png"></p>
+<p>Copy Step options object</p>
+<p>A copy step defines how to copy existing points.</p>
+<p>An array of copy steps will cumulatively copy points from an original set of
+points.</p>
+<p>So, if there are two copy steps then:</p>
+<ul>
+<li>the first step will copy the original points</li>
+<li>the second step will copy the original points and the first copy of the
+points</li>
+</ul>
+<p>For example, a grid of a shape can be made with two copy steps. The first
+replicates the shape along the x axis, creating a line of shapes. The second
+copy step then replicates the line of shapes in the y axis, creating a grid
+of shapes.</p>
+<p>Each copy step appends its copied points onto an array of points that
+started with the original points. By default, copy steps operate on all
+points created in previous steps. However, the properties <code>start</code> and <code>end</code>
+can be used to make the current step only operate on a subset of the points.</p>
+<p><code>start</code> and <code>end</code> refer to the indexes of the copy steps where the original
+points is at index 0, and the first copy step is at index 1. Copy step
+arrays can also include <em>marker strings</em> which make defining <code>start</code> and
+<code>end</code> more convient (see the third example below). These marker strings
+can be used as <code>start</code> and <code>end</code> values. Marker strings are included
+in the copy step indexing.</p>
+<p>There are two main ways to make a copy, either copy the points <code>to</code> a
+location, or copy the points <code>along</code> a path.</p>
+<p>When using the <code>to</code> property, if a <a href="#point">Point</a> is defined
+then the points will be copied to that point. If a <a href="#transform">Transform</a> is
+defined, then a copy of the points will be transformed by that transform. An
+array of points and transforms can be defined to make multiple copies of the
+points.</p>
+<p>When using the <code>along</code> property, the points are copied a number (<code>num</code>) of
+times along a path with some <code>step</code>. The paths can be horiztonal (<code>'x'</code>),
+vertical (<code>'y'</code>), at an angle (<code>number</code>) or through a <code>'rotation'</code> around
+a <code>center</code> point.</p>
+<p>When copying along a line (<code>along</code> is <code>'x'</code>, <code>y'</code> or a <code>number</code>), then
+<code>step</code> will be the distance offset along the line.</p>
+<p>When copying along a rotation (<code>along</code> is <code>'rotation'</code>), then <code>step</code> will be
+the angular step in radians.</p>
+<p>Any step can use the <code>original</code> property - but it will only operate on the
+last step that uses it. When <code>original</code> is <code>false</code>, then all points before
+that copy step will not be included in the returned Point array.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>to</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="#typeparsabletransform">TypeParsableTransform</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="#typeparsabletransform">TypeParsableTransform</a>)>)?)</code>
+          : copy points to
+a location or locations or transform a copy of the points
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>along</span> <code class='quiet'>((<code>"x"</code> | <code>"y"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rotation"</code> | <code>"moveOnly"</code>)?)</code>
+          : copy points
+along a linear path where 
+<code>number</code>
+ is a path at an angle in radians
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>num</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : the number of copies to make when copying 
+<code>along</code>
+ a
+path
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>step</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : distance between copies if 
+<code>along</code>
+ is 
+<code>'x'</code>
+ or
+
+<code>'y'</code>
+ or a 
+<code>number</code>
+, delta angle between copies if 
+<code>along</code>
+ is 
+<code>'rotation'</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>center</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : the center point about which to rotate
+the copies when using 
+<code>along</code>
+ = 
+<code>'rotation'</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          : copy step index or marker defining the
+start of the points to copy
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>end</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          : copy step index or marker defining the end
+of the points to copy
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>original</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ excludes all points before this step
+in the final result (
+<code>true</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid copy</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'triGrid'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">3</span>,
+    <span class="hljs-attr">rotation</span>: -<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">6</span>,
+    <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
+    <span class="hljs-attr">copy</span>: [
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'x'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-number">0.3</span>,
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'y'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-number">0.3</span>,
+      },
+    ],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Radial lines copy</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'radialLines'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">points</span>: [
+      [<span class="hljs-number">-0.2</span>, <span class="hljs-number">-0.1</span>], [<span class="hljs-number">-0.2</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>],
+      [<span class="hljs-number">-0.2</span>, <span class="hljs-number">-0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>], [<span class="hljs-number">0.2</span>, <span class="hljs-number">-0.1</span>],
+    ],
+    <span class="hljs-attr">copy</span>: [
+      {
+        <span class="hljs-attr">to</span>: [[<span class="hljs-number">0.6</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.05</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.5</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2.2</span>, <span class="hljs-number">0</span>]],
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">5</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">5</span>,
+        <span class="hljs-attr">start</span>: <span class="hljs-number">1</span>,              <span class="hljs-comment">// only copy last step, not original points</span>
+      },
+    ],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Ring copy (without original shape)</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'halfRings'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+    <span class="hljs-attr">fill</span>: <span class="hljs-string">'tris'</span>,
+    <span class="hljs-attr">copy</span>: [
+      <span class="hljs-string">'ring1'</span>,               <span class="hljs-comment">// marker 1</span>
+      {
+        <span class="hljs-attr">to</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>],
+        <span class="hljs-attr">original</span>: <span class="hljs-literal">false</span>,     <span class="hljs-comment">// don't include the original shape</span>
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">7</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">7</span>,
+        <span class="hljs-attr">start</span>: <span class="hljs-string">'ring1'</span>,      <span class="hljs-comment">// copy only from marker 1</span>
+      },
+      <span class="hljs-string">'ring2'</span>,               <span class="hljs-comment">// marker 2</span>
+      {
+        <span class="hljs-attr">to</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+        <span class="hljs-attr">start</span>: <span class="hljs-number">0</span>,            <span class="hljs-comment">// make a copy of the original shape only</span>
+        <span class="hljs-attr">end</span>: <span class="hljs-number">1</span>,
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">15</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">15</span>,
+        <span class="hljs-attr">start</span>: <span class="hljs-string">'ring2'</span>,      <span class="hljs-comment">// copy points from Marker 2 only</span>
+      },
+    ],
+  },
+});</pre>
+    
   
 
   

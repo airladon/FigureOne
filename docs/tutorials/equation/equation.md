@@ -366,7 +366,59 @@ diagram.elements._eqn.goToForm({
 
 #### Function Definitions
 
-Function definitions can either be array definitions or object definitions. Array definitions are useful in simple definitions, or not customizing a layout. Object definitions are more readable when may options are required to customize a layout, or the input to the functions are more complicated equation phrases.
+Function definitions can either be array definitions (an equation phrase) or object definitions. Array definitions are useful in simple definitions with minimal layout customizations. Object definitions are more readable when many options are required to customize a layout, or the input to the functions are more complicated equation phrases.
 
-### Multiline vs single line
+Array definitions, or equation phrases, can also be spread over several lines to increase readability.
+
+```javascript
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      v: { symbol: 'vinculum' },
+    },
+    forms: {
+      // Array definition for simple fraction
+      1: { frac: ['a', 'v', 'b']},
+      // Object definition for fraction with complex phrases
+      2: {
+        frac: {
+          numerator: ['a', '_ + ', 'c'],
+          symbol: 'v',
+          denominator: ['t', { sub: ['b', '2'] }],
+        },
+      },
+      // Array definition split over several lines
+      3: {
+        frac: [
+          ['a', '_ + ', 'x'],
+          'v',
+          ['t', { sub: ['b', '3'] }],
+        ],
+      },
+      // Object definition when additional options are needed
+      4: {
+        frac: {
+          numerator: 'a',
+          symbol: 'v',
+          denominator: 'b',
+          numeratorSpace: 0.07,
+          denominatorSpace: 0.07,
+          overhang: 0.1,
+          scale: 1.5,
+        },
+      },
+    },
+    formSeries: ['1', '2', '3', '4'],
+  },
+});
+diagram.elements._eqn.showForm('1');
+const eqn = diagram.elements._eqn;
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('1');
+```
+
+![](./tutorials/equation/readability.gif)
 
