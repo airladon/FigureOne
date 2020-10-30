@@ -1724,6 +1724,10 @@ export type EQN_Comment = {
  * Equation strike with comment options used with `topStrike` and `bottomStrike`
  * functions.
  *
+ * ![](./assets1/eqn_strikecomment.gif)
+ *
+ * Options can be an object, or an array in the property order below
+ *
  * @property {TypeEquationPhrase} content
  * @property {string} symbol strike symbol
  * @property {TypeEquationPhrase} comment
@@ -1733,30 +1737,65 @@ export type EQN_Comment = {
  * beyond content (`0.03`)
  * @property {number} [scale] comment scale (`0.6`)
  * @property {number} [commentSpace] space from symbol to comment (`0.03`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // For following examples, a strike symbol is defined as an equation element
- * eqn.addElements({
- *   x: { symbol: 'strike', style: 'cross' }
- * });
- * @example
- * // BottomStrike full object definition
- * {
- *   bottomStrike: {
- *     content: 'a',
- *     symbol: 'x',
- *     comment: 'b',
- *     inSize: true,
- *     commentSpace: 0,
- *     scale: 1,
- *     space: 0,
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
+ *     },
+ *     forms: {
+ *       1: { topStrike: ['radius', 'x', 'radius = 1'] },
+ *     },
  *   },
- * },
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Top strike array example
- *  { topStrike: ['a', 'x', 'b'] }
- * @example
- * // Bottom strike array examples
- *  { bottomStrike: ['a', 'x', 'b'] }
+ * // Some different strike examples
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       s1: { symbol: 'strike', style: 'forward', color: [0.6, 0.6, 0.6, 1] },
+ *     },
+ *     forms: {
+ *       // Array equation
+ *       1: { topStrike: ['radius', 's1', 'radius = 1'] },
+ *       // Object definition
+ *       2: {
+ *         bottomStrike: {
+ *           content: 'radius',
+ *           symbol: 's1',
+ *           comment: 'radius = 1',
+ *         },
+ *       },
+ *       // Additional options for layout
+ *       3: {
+ *         bottomStrike: {
+ *           content: 'radius',
+ *           comment: 'radius = 1',
+ *           symbol: 's1',
+ *           scale: 0.8,
+ *           space: 0.1,
+ *           commentSpace: 0.01,
+ *         },
+ *       },
+ *     },
+ *     formSeries: ['1', '2', '3']
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_StrikeComment = {
   content?: TypeEquationPhrase,

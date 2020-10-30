@@ -89,20 +89,20 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // eqn.showForm('1');
 
 
-// Simple
-diagram.addElement({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    elements: {
-      x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
-    },
-    forms: {
-      1: [{ strike: ['a', 'x']}, ' ', 'b'],
-    },
-  },
-});
-diagram.elements._eqn.showForm('1');
+// // Simple
+// diagram.addElement({
+//   name: 'eqn',
+//   method: 'equation',
+//   options: {
+//     elements: {
+//       x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
+//     },
+//     forms: {
+//       1: { topStrike: ['radius', 'x', 'radius = 1'] },
+//     },
+//   },
+// });
+// diagram.elements._eqn.showForm('1');
 
 // Some different bracket examples
 diagram.addElement({
@@ -110,34 +110,32 @@ diagram.addElement({
   method: 'equation',
   options: {
     elements: {
-      s1: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
-      s2: { symbol: 'strike', style: 'forward', color: [0.6, 0.6, 0.6, 1] },
+      s1: { symbol: 'strike', style: 'forward', color: [0.6, 0.6, 0.6, 1] },
     },
     forms: {
-      // Array definition
-      1: [{ strike: ['a', 's1']}, ' ', 'b'],
+      // Array equation
+      1: { topStrike: ['radius', 's1', 'radius = 1'] },
       // Object definition
       2: {
-        strike: {
-          content: ['a', '_ + ', 'b'],
+        bottomStrike: {
+          content: 'radius',
           symbol: 's1',
+          comment: 'radius = 1',
         },
       },
-      // Additional options to make strike overhang more
+      // Additional options for layout
       3: {
-        strike: {
-          content: ['a', 'b'],
+        bottomStrike: {
+          content: 'radius',
+          comment: 'radius = 1',
           symbol: 's1',
-          topSpace: 0.2,
-          rightSpace: 0.2,
-          leftSpace: 0.2,
-          bottomSpace: 0.2,
+          scale: 0.8,
+          space: 0.1,
+          commentSpace: 0.01,
         },
       },
-      // Forward strike
-      4: { strike: [['a', '_ +', 'b'], 's2'] },
     },
-    formSeries: ['1', '2', '3', '4']
+    formSeries: ['1', '2', '3']
   },
 });
 const eqn = diagram.elements._eqn;
