@@ -35,56 +35,37 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 //   },
 // ]);
 
-//Simple
+// Simple
 diagram.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
     forms: {
-      1: { int: ['int', 'x dx', 'a', 'b'] },
+      1: { supSub: ['x', 'b', 'a'] },
     },
   },
 });
 diagram.elements._eqn.showForm('1');
 
-// Example showing different integral options
+// Example showing different super-sub script options
 diagram.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
-    elements: {
-      i: { symbol: 'int' },
-      // ic: { symbol: 'int', num: 1, type: 'line' },
-    },
-    formDefaults: { alignment: { fixTo: 'x' } },
     forms: {
-      // Root object form
+      // Object form
       1: {
-        int: {
-          symbol: 'i',
-          content: ['x', ' ', 'dx'],
-          from: 'a',
-          to: 'b',
+        supSub: {
+          content: 'x',
+          superscript: 'b',
+          subscript: 'a',
         },
       },
-      // Root array form
-      2: { int: ['i', ['x', '  ', '+', ' ', '_1', ' ', 'dx'], 'a', 'b'] },
-      // Indefinite tripple integral
-      3: { int: ['i', ['x', '  ', '+', ' ', '_1', ' ', 'dx']] },
-      // Custom spacing
-      4: {
-        int: {
-          symbol: 'i',
-          content: ['x', '  ', '+', ' ', '_1', ' ', 'dx'],
-          to: 'b',
-          from: { frac: ['a', 'vinculum', 'd + 2'] },
-          topSpace: 0.2,
-          bottomSpace: 0.2,
-          limitsAroundContent: false,
-        },
-      },
+      // Array form
+      2: [{ supSub: ['x', 'b', 'a'] }, '  ', { supSub: ['x_1', 'c', 'a_1'] }],
+      3: { supSub: ['x', ['b', '  ', '+', '  ', 'c'], 'a'] },
     },
-    formSeries: ['1', '2', '3', '4'],
+    formSeries: ['1', '2', '3'],
   },
 });
 const eqn = diagram.elements._eqn;
@@ -92,29 +73,3 @@ eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
 
-
-// // Create equation object then add to diagram
-// const eqn = diagram.create.equation({
-//   elements: {
-//     r: { symbol: 'radical' },
-//     plus: '  +  ',
-//   },
-//   formDefaults: {
-//     alignment: { fixTo: 'd' },
-//   },
-//   forms: {
-//     1: {
-//       root: {
-//         symbol: 'r',
-//         content: ['a', 'plus', 'd'],
-//       },
-//     },
-//     2: { root: ['r', 'd'] },
-//     3: { root: { content: 'd', symbol: 'r', root: '_3' } },
-//   },
-//   formSeries: ['1', '2', '3'],
-// });
-// diagram.add('eqn', eqn);
-// eqn.onClick = () => eqn.nextForm();
-// eqn.setTouchableRect(0.5);
-// eqn.showForm('1');

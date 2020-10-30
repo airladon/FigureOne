@@ -80,7 +80,7 @@ export type TypeEquationPhrase =
   | { box: EQN_Box }
   | { root: EQN_Root }
   | { brac: EQN_Bracket }
-  | { sub: EQN_Subcript }
+  | { sub: EQN_Subscript }
   | { sup: EQN_Superscript }
   | { supSub: EQN_SuperscriptSubscript }
   | { topBar: EQN_Bar }
@@ -1251,28 +1251,68 @@ export type EQN_ProdOf = {
 /**
  * Equation subscript
  *
+ * ![](./assets1/eqn_subscript.gif)
+ *
+ * Options can be an object, or an array in the property order below
+ *
  * @property {TypeEquationPhrase} content
  * @property {TypeEquationPhrase} subscript
  * @property {number} [scale] scale of subscript (`0.5`)
  * @property {TypeParsablePoint} [offset] offset of subscript (`[0, 0]`)
  * @property {boolean} [inSize] `true` excludes subscript from size of
  * resulting phrase (`true`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // Full object definition
- * {
- *   sub: {
- *     content: 'a',
- *     subscript: 'b',
- *     scale: 0.5,
- *     offset: [0, 0],
- *     inSize: true,
+ * //Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       1: { sub: ['x', '_2'] },
+ *     },
  *   },
- * }
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Example array definition
- *  { sub: ['a', 'b'] }
+ * // Example showing different subscript options
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       // Object form
+ *       1: {
+ *         sub: {
+ *           content: 'x',
+ *           subscript: 'b',
+ *         },
+ *       },
+ *       // Array form
+ *       2: [{ sub: ['x', 'b'] }, ' ', { sub: ['y', 'd'] }],
+ *       3: { sub: ['x', ['b', '  ', '+', '  ', 'd']] },
+ *       // Subscript offset to adjust layout to keep animation smooth
+ *       4: {
+ *         sub: {
+ *           content: 'x',
+ *           subscript: { frac: [['b', '  ', '+', '  ', 'd'], 'vinculum', '_2'] },
+ *           offset: [-0.025, -0.02],
+ *         },
+ *       },
+ *     },
+ *     formSeries: ['1', '2', '3', '4'],
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
-export type EQN_Subcript = {
+export type EQN_Subscript = {
   content: TypeEquationPhrase;
   subscript: TypeEquationPhrase;
   scale?: number,
@@ -1289,26 +1329,58 @@ export type EQN_Subcript = {
 /**
  * Equation superscript
  *
+ * ![](./assets1/eqn_superscript.gif)
+ *
+ * Options can be an object, or an array in the property order below
+ *
  * @property {TypeEquationPhrase} content
  * @property {TypeEquationPhrase} superscript
  * @property {number} [scale] scale of superscript (`0.5`)
  * @property {TypeParsablePoint} [offset] offset of superscript (`[0, 0]`)
  * @property {boolean} [inSize] `true` excludes superscript from size of
  * resulting phrase (`true`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // Full object definition
- * {
- *   sup: {
- *     content: 'a',
- *     superscript: 'b',
- *     scale: 0.5,
- *     offset: [0, 0],
- *     inSize: true,
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       1: { sup: ['e', 'x'] },
+ *     },
  *   },
- * }
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Example array definition
- *  { sup: ['a', 'b'] }
+ * // Examples of superscript animations
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       // Object form
+ *       1: {
+ *         sup: {
+ *           content: 'e',
+ *           superscript: 'x',
+ *         },
+ *       },
+ *       // Array form
+ *       2: [{ sup: ['e', 'x'] }, '  ', { sup: ['e_1', 'y'] }],
+ *       3: { sup: ['e', ['x', '  ', '+', '  ', 'y']] },
+ *     },
+ *     formSeries: ['1', '2', '3'],
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_Superscript = {
   content: TypeEquationPhrase;
@@ -1327,6 +1399,10 @@ export type EQN_Superscript = {
 /**
  * Equation superscript and subscript
  *
+ * ![](./assets1/eqn_supsub.gif)
+ *
+ * Options can be an object, or an array in the property order below
+ *
  * @property {TypeEquationPhrase} content
  * @property {TypeEquationPhrase} superscript
  * @property {TypeEquationPhrase} subscript
@@ -1335,22 +1411,49 @@ export type EQN_Superscript = {
  * @property {TypeParsablePoint} [subscriptOffset] offset of subscript (`[0, 0]`)
  * @property {boolean} [inSize] `true` excludes superscript from size of
  * resulting phrase (`true`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // Full object definition
- * {
- *   supSub: {
- *     content: 'a',
- *     superscript: 'b',
- *     subscript: 'c',
- *     scale: 0.5,
- *     superscriptOffset: [0, 0],
- *     subscriptOffset: [0, 0],
- *     inSize: true,
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       1: { supSub: ['x', 'b', 'a'] },
+ *     },
  *   },
- * }
+ * });
+ * diagram.elements._eqn.showForm('1'); * 
+ *
  * @example
- * // Example array definition
- *  { supSub: ['a', 'b', 'c'] }
+ * // Example showing different super-sub script options
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       // Object form
+ *       1: {
+ *         supSub: {
+ *           content: 'x',
+ *           superscript: 'b',
+ *           subscript: 'a',
+ *         },
+ *       },
+ *       // Array form
+ *       2: [{ supSub: ['x', 'b', 'a'] }, '  ', { supSub: ['x_1', 'c', 'a_1'] }],
+ *       3: { supSub: ['x', ['b', '  ', '+', '  ', 'c'], 'a'] },
+ *     },
+ *     formSeries: ['1', '2', '3'],
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_SuperscriptSubscript = {
   content: TypeEquationPhrase;
@@ -2815,7 +2918,7 @@ export class EquationFunctions {
         yPosition: '0.7a',
         xAlign: 'left',
         yAlign: 'baseline',
-        offset: options.superscriptOffset,
+        offset: getPoint(options.superscriptOffset).add(new Point(options.scale * 0.04, 0)),
         scale: options.scale,
       });
     }
@@ -2863,7 +2966,7 @@ export class EquationFunctions {
     });
   }
 
-  sub(optionsOrArray: EQN_Subcript) {
+  sub(optionsOrArray: EQN_Subscript) {
     let content;
     let subscript;
     let scale;

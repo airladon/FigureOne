@@ -59,6 +59,9 @@ toc:
   - name: Equation Layout Function Objects
   - EQN_Fraction
   - EQN_Root
+  - EQN_Subscript
+  - EQN_Superscript
+  - EQN_SuperscriptSubscript
   - EQN_Integral
   - EQN_Container
   - EQN_Scale
@@ -68,9 +71,6 @@ toc:
   - EQN_Bar
   - EQN_SumOf
   - EQN_ProdOf
-  - EQN_Subcript
-  - EQN_Superscript
-  - EQN_SuperscriptSubscript
   - EQN_Comment
   - EQN_StrikeComment
   - EQN_Pad

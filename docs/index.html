@@ -1816,6 +1816,36 @@
               
                 
                 <li><a
+                  href='#eqn_subscript'
+                  class="">
+                  EQN_Subscript
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eqn_superscript'
+                  class="">
+                  EQN_Superscript
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eqn_superscriptsubscript'
+                  class="">
+                  EQN_SuperscriptSubscript
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#eqn_integral'
                   class="">
                   EQN_Integral
@@ -1899,36 +1929,6 @@
                   href='#eqn_prodof'
                   class="">
                   EQN_ProdOf
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#eqn_subcript'
-                  class="">
-                  EQN_Subcript
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#eqn_superscript'
-                  class="">
-                  EQN_Superscript
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#eqn_superscriptsubscript'
-                  class="">
-                  EQN_SuperscriptSubscript
                   
                 </a>
                 
@@ -23450,6 +23450,461 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='eqn_subscript'>
+      EQN_Subscript
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation subscript</p>
+<p><img src="./assets1/eqn_subscript.gif"></p>
+<p>Options can be an object, or an array in the property order below</p>
+
+  
+    <p style="display: none;">      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, subscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="#typeparsablepoint">TypeParsablePoint</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>subscript</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale of subscript (
+<code>0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : offset of subscript (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ excludes subscript from size of
+resulting phrase (
+<code>true</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">//Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">sub</span>: [<span class="hljs-string">'x'</span>, <span class="hljs-string">'_2'</span>] },
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing different subscript options</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">formDefaults</span>: { <span class="hljs-attr">alignment</span>: { <span class="hljs-attr">fixTo</span>: <span class="hljs-string">'x'</span> } },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Object form</span>
+      <span class="hljs-number">1</span>: {
+        <span class="hljs-attr">sub</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'x'</span>,
+          <span class="hljs-attr">subscript</span>: <span class="hljs-string">'b'</span>,
+        },
+      },
+      <span class="hljs-comment">// Array form</span>
+      <span class="hljs-number">2</span>: [{ <span class="hljs-attr">sub</span>: [<span class="hljs-string">'x'</span>, <span class="hljs-string">'b'</span>] }, <span class="hljs-string">' '</span>, { <span class="hljs-attr">sub</span>: [<span class="hljs-string">'y'</span>, <span class="hljs-string">'d'</span>] }],
+      <span class="hljs-number">3</span>: { <span class="hljs-attr">sub</span>: [<span class="hljs-string">'x'</span>, [<span class="hljs-string">'b'</span>, <span class="hljs-string">'  '</span>, <span class="hljs-string">'+'</span>, <span class="hljs-string">'  '</span>, <span class="hljs-string">'d'</span>]] },
+      <span class="hljs-comment">// Subscript offset to adjust layout to keep animation smooth</span>
+      <span class="hljs-number">4</span>: {
+        <span class="hljs-attr">sub</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'x'</span>,
+          <span class="hljs-attr">subscript</span>: { <span class="hljs-attr">frac</span>: [[<span class="hljs-string">'b'</span>, <span class="hljs-string">'  '</span>, <span class="hljs-string">'+'</span>, <span class="hljs-string">'  '</span>, <span class="hljs-string">'d'</span>], <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'_2'</span>] },
+          <span class="hljs-attr">offset</span>: [<span class="hljs-number">-0.025</span>, <span class="hljs-number">-0.02</span>],
+        },
+      },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_superscript'>
+      EQN_Superscript
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation superscript</p>
+<p><img src="./assets1/eqn_superscript.gif"></p>
+<p>Options can be an object, or an array in the property order below</p>
+
+  
+    <p style="display: none;">      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, superscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="#typeparsablepoint">TypeParsablePoint</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>superscript</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale of superscript (
+<code>0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : offset of superscript (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ excludes superscript from size of
+resulting phrase (
+<code>true</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">sup</span>: [<span class="hljs-string">'e'</span>, <span class="hljs-string">'_x'</span>] },
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Examples of superscript animations</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">formDefaults</span>: { <span class="hljs-attr">alignment</span>: { <span class="hljs-attr">fixTo</span>: <span class="hljs-string">'x'</span> } },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Object form</span>
+      <span class="hljs-number">1</span>: {
+        <span class="hljs-attr">sup</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'e'</span>,
+          <span class="hljs-attr">superscript</span>: <span class="hljs-string">'x'</span>,
+        },
+      },
+      <span class="hljs-comment">// Array form</span>
+      <span class="hljs-number">2</span>: [{ <span class="hljs-attr">sup</span>: [<span class="hljs-string">'e'</span>, <span class="hljs-string">'x'</span>] }, <span class="hljs-string">'  '</span>, { <span class="hljs-attr">sup</span>: [<span class="hljs-string">'e_1'</span>, <span class="hljs-string">'y'</span>] }],
+      <span class="hljs-number">3</span>: { <span class="hljs-attr">sup</span>: [<span class="hljs-string">'e'</span>, [<span class="hljs-string">'x'</span>, <span class="hljs-string">'  '</span>, <span class="hljs-string">'+'</span>, <span class="hljs-string">'  '</span>, <span class="hljs-string">'y'</span>]] },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_superscriptsubscript'>
+      EQN_SuperscriptSubscript
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation superscript and subscript</p>
+
+  
+    <p style="display: none;">      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, subscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, superscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, superscriptOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, subscriptOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="#typeparsablepoint">TypeParsablePoint</a>?, <a href="#typeparsablepoint">TypeParsablePoint</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>superscript</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>subscript</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale of superscript (
+<code>0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>superscriptOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : offset of superscript (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>subscriptOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : offset of subscript (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ excludes superscript from size of
+resulting phrase (
+<code>true</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
+{
+  <span class="hljs-attr">supSub</span>: {
+    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+    <span class="hljs-attr">superscript</span>: <span class="hljs-string">'b'</span>,
+    <span class="hljs-attr">subscript</span>: <span class="hljs-string">'c'</span>,
+    <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">superscriptOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">subscriptOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
+  },
+}</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
+ { <span class="hljs-attr">supSub</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>] }</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='eqn_integral'>
       EQN_Integral
     </h3>
@@ -25710,377 +26165,6 @@ eqn.addElements({
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
  { <span class="hljs-attr">prodOf</span>: [<span class="hljs-string">'s'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>] }</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eqn_subcript'>
-      EQN_Subcript
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation subscript</p>
-
-  
-    <p style="display: none;">      Type:
-      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, subscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="#typeparsablepoint">TypeParsablePoint</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>subscript</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : scale of subscript (
-<code>0.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : offset of subscript (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- excludes subscript from size of
-resulting phrase (
-<code>true</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
-{
-  <span class="hljs-attr">sub</span>: {
-    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-    <span class="hljs-attr">subscript</span>: <span class="hljs-string">'b'</span>,
-    <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
-    <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-  },
-}</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">sub</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>] }</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eqn_superscript'>
-      EQN_Superscript
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation superscript</p>
-
-  
-    <p style="display: none;">      Type:
-      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, superscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, offset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="#typeparsablepoint">TypeParsablePoint</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>superscript</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : scale of superscript (
-<code>0.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : offset of superscript (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- excludes superscript from size of
-resulting phrase (
-<code>true</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
-{
-  <span class="hljs-attr">sup</span>: {
-    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-    <span class="hljs-attr">superscript</span>: <span class="hljs-string">'b'</span>,
-    <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
-    <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-  },
-}</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">sup</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>] }</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eqn_superscriptsubscript'>
-      EQN_SuperscriptSubscript
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation superscript and subscript</p>
-
-  
-    <p style="display: none;">      Type:
-      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, subscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, superscript: <a href="#typeequationphrase">TypeEquationPhrase</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, superscriptOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, subscriptOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="#typeparsablepoint">TypeParsablePoint</a>?, <a href="#typeparsablepoint">TypeParsablePoint</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>superscript</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>subscript</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : scale of superscript (
-<code>0.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>superscriptOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : offset of superscript (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>subscriptOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : offset of subscript (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- excludes superscript from size of
-resulting phrase (
-<code>true</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
-{
-  <span class="hljs-attr">supSub</span>: {
-    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-    <span class="hljs-attr">superscript</span>: <span class="hljs-string">'b'</span>,
-    <span class="hljs-attr">subscript</span>: <span class="hljs-string">'c'</span>,
-    <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
-    <span class="hljs-attr">superscriptOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-    <span class="hljs-attr">subscriptOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-  },
-}</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">supSub</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>] }</pre>
     
   
 
@@ -30337,7 +30421,7 @@ phrases.</p>
 
   
     <p style="display: none;">      Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#eqn_fraction">EQN_Fraction</a>} | {strike: <a href="#eqn_strike">EQN_Strike</a>} | {box: <a href="#eqn_box">EQN_Box</a>} | {root: <a href="#eqn_root">EQN_Root</a>} | {brac: <a href="#eqn_bracket">EQN_Bracket</a>} | {sub: <a href="#eqn_subcript">EQN_Subcript</a>} | {sup: <a href="#eqn_superscript">EQN_Superscript</a>} | {supSub: <a href="#eqn_superscriptsubscript">EQN_SuperscriptSubscript</a>} | {topBar: <a href="#eqn_bar">EQN_Bar</a>} | {bottomBar: <a href="#eqn_bar">EQN_Bar</a>} | {annotate: <a href="#eqn_annotate">EQN_Annotate</a>} | {topComment: <a href="#eqn_comment">EQN_Comment</a>} | {bottomComment: <a href="#eqn_comment">EQN_Comment</a>} | {pad: <a href="#eqn_pad">EQN_Pad</a>} | {bar: <a href="#eqn_bar">EQN_Bar</a>} | {scale: <a href="#eqn_scale">EQN_Scale</a>} | {container: <a href="#eqn_container">EQN_Container</a>} | {matrix: <a href="#eqn_matrix">EQN_Matrix</a>} | {int: <a href="#eqn_integral">EQN_Integral</a>} | {sumOf: <a href="#eqn_sumof">EQN_SumOf</a>} | {prodOf: <a href="#eqn_prodof">EQN_ProdOf</a>} | {topStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | {bottomStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | <a href="#diagramelementprimitive">DiagramElementPrimitive</a> | <a href="#diagramelementcollection">DiagramElementCollection</a> | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#eqn_fraction">EQN_Fraction</a>} | {strike: <a href="#eqn_strike">EQN_Strike</a>} | {box: <a href="#eqn_box">EQN_Box</a>} | {root: <a href="#eqn_root">EQN_Root</a>} | {brac: <a href="#eqn_bracket">EQN_Bracket</a>} | {sub: <a href="#eqn_subscript">EQN_Subscript</a>} | {sup: <a href="#eqn_superscript">EQN_Superscript</a>} | {supSub: <a href="#eqn_superscriptsubscript">EQN_SuperscriptSubscript</a>} | {topBar: <a href="#eqn_bar">EQN_Bar</a>} | {bottomBar: <a href="#eqn_bar">EQN_Bar</a>} | {annotate: <a href="#eqn_annotate">EQN_Annotate</a>} | {topComment: <a href="#eqn_comment">EQN_Comment</a>} | {bottomComment: <a href="#eqn_comment">EQN_Comment</a>} | {pad: <a href="#eqn_pad">EQN_Pad</a>} | {bar: <a href="#eqn_bar">EQN_Bar</a>} | {scale: <a href="#eqn_scale">EQN_Scale</a>} | {container: <a href="#eqn_container">EQN_Container</a>} | {matrix: <a href="#eqn_matrix">EQN_Matrix</a>} | {int: <a href="#eqn_integral">EQN_Integral</a>} | {sumOf: <a href="#eqn_sumof">EQN_SumOf</a>} | {prodOf: <a href="#eqn_prodof">EQN_ProdOf</a>} | {topStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | {bottomStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | <a href="#diagramelementprimitive">DiagramElementPrimitive</a> | <a href="#diagramelementcollection">DiagramElementCollection</a> | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
     </p>
   
   
