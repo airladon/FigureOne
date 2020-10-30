@@ -63,14 +63,14 @@ toc:
   - EQN_Superscript
   - EQN_SuperscriptSubscript
   - EQN_Integral
+  - EQN_SumOf
+  - EQN_ProdOf
   - EQN_Container
   - EQN_Scale
   - EQN_Bracket
   - EQN_Strike
   - EQN_Box
   - EQN_Bar
-  - EQN_SumOf
-  - EQN_ProdOf
   - EQN_Comment
   - EQN_StrikeComment
   - EQN_Pad

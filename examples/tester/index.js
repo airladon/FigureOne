@@ -47,44 +47,62 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // });
 // diagram.elements._eqn.showForm('1');
 
-// Example showing different options
+// // Example showing different options
+// diagram.addElement({
+//   name: 'eqn',
+//   method: 'equation',
+//   options: {
+//     elements: {
+//       p: { symbol: 'prod', draw: 'dynamic' },
+//       inf: '\u221e',
+//     },
+//     forms: {
+//       // Object form
+//       1: {
+//         prodOf: {
+//           symbol: 'p',
+//           content: [{ sup: ['x', 'n'] }],
+//           from: ['n_1', ' ', '=', ' ', '_0'],
+//           to: '_10',
+//         },
+//       },
+//       // Array form
+//       2: { prodOf: ['p', [{ sup: ['x', 'm'] }], 'm_1', null]},
+//       // Styling with options
+//       3: {
+//         prodOf: {
+//           symbol: 'p',
+//           content: { frac: [['x', ' ', '+', ' ', 'm'], 'vinculum', 'a'] },
+//           from: ['m_1', ' ', '=', ' ', '_0'],
+//           to: 'inf',
+//           fromScale: 0.8,
+//           toScale: 0.8,
+//         },
+//       },
+//     },
+//     formSeries: ['1', '2', '3'],
+//   },
+// });
+// const eqn = diagram.elements._eqn;
+// eqn.onClick = () => eqn.nextForm();
+// eqn.setTouchableRect(0.5);
+// eqn.showForm('1');
+
+
+// Simple
 diagram.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
-    elements: {
-      p: { symbol: 'prod', draw: 'dynamic' },
-      inf: '\u221e',
-    },
     forms: {
-      // Object form
-      1: {
-        prodOf: {
-          symbol: 'p',
-          content: [{ sup: ['x', 'n'] }],
-          from: ['n_1', ' ', '=', ' ', '_0'],
-          to: '_10',
-        },
-      },
-      // Array form
-      2: { prodOf: ['p', [{ sup: ['x', 'm'] }], 'm_1', null]},
-      // Styling with options
-      3: {
-        prodOf: {
-          symbol: 'p',
-          content: { frac: [['x', ' ', '+', ' ', 'm'], 'vinculum', 'a'] },
-          from: ['m_1', ' ', '=', ' ', '_0'],
-          to: 'inf',
-          fromScale: 0.8,
-          toScale: 0.8,
-        },
-      },
+      1: ['b', '_ = ', { frac: ['a', 'v_vinculum', 'c'] }],
+      2: ['c', '_ = ', { frac: ['a', 'v', 'b'] }],
     },
-    formSeries: ['1', '2', '3'],
   },
 });
-const eqn = diagram.elements._eqn;
-eqn.onClick = () => eqn.nextForm();
-eqn.setTouchableRect(0.5);
-eqn.showForm('1');
-
+diagram.elements._eqn.showForm('1');
+diagram.elements._eqn.goToForm({
+  form: 2,
+  animate: 'move',
+  delay: 3,
+});

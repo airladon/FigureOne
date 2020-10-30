@@ -1856,6 +1856,26 @@
               
                 
                 <li><a
+                  href='#eqn_sumof'
+                  class="">
+                  EQN_SumOf
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eqn_prodof'
+                  class="">
+                  EQN_ProdOf
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#eqn_container'
                   class="">
                   EQN_Container
@@ -1909,26 +1929,6 @@
                   href='#eqn_bar'
                   class="">
                   EQN_Bar
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#eqn_sumof'
-                  class="">
-                  EQN_SumOf
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#eqn_prodof'
-                  class="">
-                  EQN_ProdOf
                   
                 </a>
                 
@@ -21665,6 +21665,7 @@ p.animations.new()
 <pre class='hljs'>equation.addForms({
   <span class="hljs-attr">a</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, <span class="hljs-string">'c'</span>],
 });</pre>
+<p>An array of elements is called an <em>equation phrase</em>. In the example above, the form is a simple phrase, but in more complicated examples there may be several nested phrases.</p>
 <p>Finally, we can add the equation to the diagram and show the form:</p>
 <pre class='hljs'>diagram.add(<span class="hljs-string">'equation'</span>, equation);
 equation.showForm(<span class="hljs-string">'b'</span>);</pre>
@@ -21713,7 +21714,7 @@ equation.goToForm({
   <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>,
 });</pre>
 <p><img src="./tutorials/equation/linear.gif"></p>
-<p>The animation can be improved by moving the terms of the equation in curves instead of linearly. To do this we can use the object form definition that also defines translation animation properties:</p>
+<p>The animation can be improved by moving the terms of the equation in curves instead of linearly. To do this we can use the object definition of a form that also defines translation animation properties:</p>
 <pre class='hljs'>equation.addForms({
   <span class="hljs-attr">bCurve</span>: {
     <span class="hljs-attr">content</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>] }],
@@ -21778,15 +21779,109 @@ equation._c.pulse({ <span class="hljs-attr">scale</span>: <span class="hljs-numb
 <p><img src="./tutorials/equation/pulse.gif"></p>
 <p>An element can be touched:</p>
 <pre class='hljs'>equation.showForm(<span class="hljs-string">'b'</span>)
-equation._c.makeTouchable();
+equation._c.setTouchable();
 equation._c.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'c was touched'</span>) }</pre>
 <p><img src="./tutorials/equation/touch.gif"></p>
 <p>And the equation can be moved:</p>
 <pre class='hljs'>equation.showForm(<span class="hljs-string">'b'</span>)
-equation.setMovable();
-equation.touchInBoundingRect = <span class="hljs-number">0.5</span>;</pre>
+equation.setTouchableRect(<span class="hljs-number">0.5</span>);
+equation.setMovable();</pre>
 <p><img src="./tutorials/equation/move.gif"></p>
 <p>Here we are putting a buffer of 0.5 around the bounding rect of the equation to make it easy to touch and drag around.</p>
+<h3>Managing Equations</h3>
+<p>Complicated equations can have long, complicated definitions that are hard to read.</p>
+<p>Therefore there are several useful shortcuts when defining equations that are useful to improve readability.</p>
+<h4>Inline element definitions</h4>
+<p>Equation elements can all be defined in the <code>elements</code> property. However, simple elements that have the same text as the unique id that would be used to identify it can be defined inline.</p>
+<p>For instance, we can recreate an example above as:</p>
+<pre class='hljs'>diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">times</span>: <span class="hljs-string">' \u00D7 '</span>,
+      <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// 'a', 'b', and 'c' are defined inline</span>
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, <span class="hljs-string">'c'</span>],
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+<p><img src="./tutorials/equation/inline.png"></p>
+<p>Elements defined inline can be used in other forms:</p>
+<pre class='hljs'>diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">times</span>: <span class="hljs-string">' \u00D7 '</span>,
+      <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
+      <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, <span class="hljs-string">'c'</span>],
+      <span class="hljs-number">2</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>] }],
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);
+diagram.elements._eqn.goToForm({
+  <span class="hljs-attr">form</span>: <span class="hljs-number">2</span>,
+  <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span>,
+  <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>,
+});</pre>
+<p><img src="./tutorials/equation/inline_same.gif"></p>
+<p>Even symbols can be defined inline:</p>
+<pre class='hljs'>diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'c'</span>] }],
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+<p>Underscores have a special meaning for inline definitions.</p>
+<p>Underscores before text will be hidden when rendered, but can make unique ids that are valid javascript object keys (a requirement for a unique id). In javascript, a space cannot be the first character of an object key, but it can be after the first character.</p>
+<p>Underscores after text can be used to create unique identifiers and therefore used to make multiple elements with the same text. The underscore, and all text after it will not be rendered.</p>
+<pre class='hljs'>diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'2'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'_ = '</span>, <span class="hljs-string">'a_1'</span>, <span class="hljs-string">'_ + '</span>, <span class="hljs-string">'a_2'</span>],
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+<p><img src="./tutorials/equation/valid_key.png"></p>
+<p>Underscores can also be used to give inline symbol definitions unqiue identifiers. In this case, the text before the underscore is the unique identifier, and the text after defines the symbol.</p>
+<pre class='hljs'>diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'_ = '</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v_vinculum'</span>, <span class="hljs-string">'c'</span>] }],
+      <span class="hljs-number">2</span>: [<span class="hljs-string">'c'</span>, <span class="hljs-string">'_ = '</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'b'</span>] }],
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);
+diagram.elements._eqn.goToForm({
+  <span class="hljs-attr">form</span>: <span class="hljs-number">2</span>,
+  <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span>,
+  <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>,
+});</pre>
+<p><img src="./tutorials/equation/reuse_symbol.gif"></p>
+<h4>Function Definitions</h4>
+<p>Function definitions can either be array definitions or object definitions. Array definitions are useful in simple definitions, or not customizing a layout. Object definitions are more readable when may options are required to customize a layout, or the input to the functions are more complicated equation phrases.</p>
+<h3>Multiline vs single line</h3>
 
   
 </section></div>
@@ -24430,6 +24525,628 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='eqn_sumof'>
+      EQN_SumOf
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation sum of</p>
+<p><img src="./assets1/eqn_sumof.gif"></p>
+<p>Place an equation phrase in a sum of operation</p>
+<p>Options can be an object, or an array in the property order below</p>
+
+  
+    <p style="display: none;">      Type:
+      ({symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, from: <a href="#typeequationphrase">TypeEquationPhrase</a>?, to: <a href="#typeequationphrase">TypeEquationPhrase</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, yOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, toOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, fullBoundsContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<a href="#typeparsablepoint">TypeParsablePoint</a>? | null), (<a href="#typeparsablepoint">TypeParsablePoint</a>? | null), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>from</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>to</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ excludes sum of operator from size of
+resulting phrase (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : horiztonaly space between symbol and content (
+<code>0.1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space symbol extends above content top (
+<code>0.07</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space symbol extends below content bottom (
+<code>0.07</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force height of symbol overwriting 
+<code>topSpace</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yOffset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : offset of symbol in y (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : content scale (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale of 
+<em>from</em>
+ phrase (
+<code>0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale of 
+<em>to</em>
+ phrase (
+<code>0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between symbol and 
+<code>from</code>
+ phrase
+(
+<code>0.04</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between symbol and 
+<code>to</code>
+ phrase (
+<code>0.04</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : offset of 
+<code>from</code>
+ phrase (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : offset of 
+<code>to</code>
+ phrase (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : use full bounds of content,
+overriding any 
+<code>inSize=false</code>
+ properties in the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : make the bounds of this phrase equal to
+the full bounds of the content even if 
+<code>fullContentBounds=false</code>
+ and the
+brackets only surround a portion of the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">sumOf</span>: [<span class="hljs-string">'sum'</span>, <span class="hljs-string">'x'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'a'</span>] },
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing different options</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">s</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'sum'</span>, <span class="hljs-attr">draw</span>: <span class="hljs-string">'dynamic'</span> },
+      <span class="hljs-attr">inf</span>: <span class="hljs-string">'\u221e'</span>,
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Object form</span>
+      <span class="hljs-number">1</span>: {
+        <span class="hljs-attr">sumOf</span>: {
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'s'</span>,
+          <span class="hljs-attr">content</span>: [{ <span class="hljs-attr">sup</span>: [<span class="hljs-string">'x'</span>, <span class="hljs-string">'n'</span>] }],
+          <span class="hljs-attr">from</span>: [<span class="hljs-string">'n_1'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'='</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'_0'</span>],
+          <span class="hljs-attr">to</span>: <span class="hljs-string">'_10'</span>,
+        },
+      },
+      <span class="hljs-comment">// Array form</span>
+      <span class="hljs-number">2</span>: { <span class="hljs-attr">sumOf</span>: [<span class="hljs-string">'s'</span>, [{ <span class="hljs-attr">sup</span>: [<span class="hljs-string">'x'</span>, <span class="hljs-string">'m'</span>] }], <span class="hljs-string">'m_1'</span>, <span class="hljs-literal">null</span>]},
+      <span class="hljs-comment">// Styling with options</span>
+      <span class="hljs-number">3</span>: {
+        <span class="hljs-attr">sumOf</span>: {
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'s'</span>,
+          <span class="hljs-attr">content</span>: { <span class="hljs-attr">frac</span>: [[<span class="hljs-string">'x'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'+'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'m'</span>], <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'a'</span>] },
+          <span class="hljs-attr">from</span>: [<span class="hljs-string">'m_1'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'='</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'_0'</span>],
+          <span class="hljs-attr">to</span>: <span class="hljs-string">'inf'</span>,
+          <span class="hljs-attr">fromScale</span>: <span class="hljs-number">0.8</span>,
+          <span class="hljs-attr">toScale</span>: <span class="hljs-number">0.8</span>,
+        },
+      },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_prodof'>
+      EQN_ProdOf
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation product of</p>
+<p><img src="./assets1/eqn_prodof.gif"></p>
+<p>Place an equation phrase in a product of operation</p>
+<p>Options can be an object, or an array in the property order below</p>
+
+  
+    <p style="display: none;">      Type:
+      ({symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, from: <a href="#typeequationphrase">TypeEquationPhrase</a>?, to: <a href="#typeequationphrase">TypeEquationPhrase</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, yOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, toOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, fullBoundsContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<a href="#typeparsablepoint">TypeParsablePoint</a>? | null), (<a href="#typeparsablepoint">TypeParsablePoint</a>? | null), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>from</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>to</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ excludes product of operator from size of
+resulting phrase (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : horiztonaly space between symbol and content (
+<code>0.1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space symbol extends above content top (
+<code>0.07</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space symbol extends below content bottom (
+<code>0.07</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force height of symbol overwriting 
+<code>topSpace</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yOffset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : offset of symbol in y (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : content scale (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale of 
+<em>from</em>
+ phrase (
+<code>0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale of 
+<em>to</em>
+ phrase (
+<code>0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between symbol and 
+<code>from</code>
+ phrase
+(
+<code>0.04</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between symbol and 
+<code>to</code>
+ phrase (
+<code>0.04</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : offset of 
+<code>from</code>
+ phrase (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : offset of 
+<code>to</code>
+ phrase (
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : use full bounds of content,
+overriding any 
+<code>inSize=false</code>
+ properties in the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : make the bounds of this phrase equal to
+the full bounds of the content even if 
+<code>fullContentBounds=false</code>
+ and the
+brackets only surround a portion of the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">prodOf</span>: [<span class="hljs-string">'prod'</span>, <span class="hljs-string">'x'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'a'</span>] },
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing different options</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">p</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'prod'</span>, <span class="hljs-attr">draw</span>: <span class="hljs-string">'dynamic'</span> },
+      <span class="hljs-attr">inf</span>: <span class="hljs-string">'\u221e'</span>,
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Object form</span>
+      <span class="hljs-number">1</span>: {
+        <span class="hljs-attr">prodOf</span>: {
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'p'</span>,
+          <span class="hljs-attr">content</span>: [{ <span class="hljs-attr">sup</span>: [<span class="hljs-string">'x'</span>, <span class="hljs-string">'n'</span>] }],
+          <span class="hljs-attr">from</span>: [<span class="hljs-string">'n_1'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'='</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'_0'</span>],
+          <span class="hljs-attr">to</span>: <span class="hljs-string">'_10'</span>,
+        },
+      },
+      <span class="hljs-comment">// Array form</span>
+      <span class="hljs-number">2</span>: { <span class="hljs-attr">prodOf</span>: [<span class="hljs-string">'p'</span>, [{ <span class="hljs-attr">sup</span>: [<span class="hljs-string">'x'</span>, <span class="hljs-string">'m'</span>] }], <span class="hljs-string">'m_1'</span>, <span class="hljs-literal">null</span>]},
+      <span class="hljs-comment">// Styling with options</span>
+      <span class="hljs-number">3</span>: {
+        <span class="hljs-attr">prodOf</span>: {
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'p'</span>,
+          <span class="hljs-attr">content</span>: { <span class="hljs-attr">frac</span>: [[<span class="hljs-string">'x'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'+'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'m'</span>], <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'a'</span>] },
+          <span class="hljs-attr">from</span>: [<span class="hljs-string">'m_1'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'='</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'_0'</span>],
+          <span class="hljs-attr">to</span>: <span class="hljs-string">'inf'</span>,
+          <span class="hljs-attr">fromScale</span>: <span class="hljs-number">0.8</span>,
+          <span class="hljs-attr">toScale</span>: <span class="hljs-number">0.8</span>,
+        },
+      },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='eqn_container'>
       EQN_Container
     </h3>
@@ -25647,558 +26364,6 @@ eqn.addElements({
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
  { <span class="hljs-attr">bar</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'hBar'</span>, <span class="hljs-string">'top'</span>] }</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eqn_sumof'>
-      EQN_SumOf
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation sum of</p>
-<p>Place an equation phrase in a sum of operation</p>
-
-  
-    <p style="display: none;">      Type:
-      ({symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, from: <a href="#typeequationphrase">TypeEquationPhrase</a>?, to: <a href="#typeequationphrase">TypeEquationPhrase</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, yOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, toOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, fullBoundsContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<a href="#typeparsablepoint">TypeParsablePoint</a>? | null), (<a href="#typeparsablepoint">TypeParsablePoint</a>? | null), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>from</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>to</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>false</code>
- excludes sum of operator from size of
-resulting phrase (
-<code>true</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : horiztonaly space between symbol and content (
-<code>0.05</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space symbol extends above content top (
-<code>0.07</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space symbol extends below content bottom (
-<code>0.07</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : force height of symbol overwriting 
-<code>topSpace</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yOffset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : offset of symbol in y (
-<code>0</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : content scale (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : scale of 
-<em>from</em>
- phrase (
-<code>0.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>toScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : scale of 
-<em>to</em>
- phrase (
-<code>0.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space between symbol and 
-<code>from</code>
- phrase
-(
-<code>0.04</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>toSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space between symbol and 
-<code>to</code>
- phrase (
-<code>0.04</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : offset of 
-<code>from</code>
- phrase (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>toOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : offset of 
-<code>to</code>
- phrase (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : use full bounds of content,
-overriding any 
-<code>inSize=false</code>
- properties in the content (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : make the bounds of this phrase equal to
-the full bounds of the content even if 
-<code>fullContentBounds=false</code>
- and the
-brackets only surround a portion of the content (
-<code>false</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For examples, a sum of symbol (sigma) is defined as an equation element</span>
-eqn.addElements({
-  <span class="hljs-attr">s</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'sum'</span> }
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
-{
-  <span class="hljs-attr">sumOf</span>: {
-    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'s'</span>,
-    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-    <span class="hljs-attr">from</span>: <span class="hljs-string">'b'</span>,
-    <span class="hljs-attr">to</span>: <span class="hljs-string">'c'</span>,
-    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">space</span>: <span class="hljs-number">0</span>,
-    <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">height</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">yOffset</span>: <span class="hljs-number">0</span>,
-    <span class="hljs-attr">scale</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">fromScale</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">toScale</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">fromSpace</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">toSpace</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">fromOffset</span>: [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.1</span>],
-    <span class="hljs-attr">toOffset</span>: [<span class="hljs-number">-0.1</span>, <span class="hljs-number">-0.1</span>],
-  },
-}</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">sumOf</span>: [<span class="hljs-string">'s'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>] }</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eqn_prodof'>
-      EQN_ProdOf
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation product of</p>
-<p>Place an equation phrase in a product of operation</p>
-
-  
-    <p style="display: none;">      Type:
-      ({symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, from: <a href="#typeequationphrase">TypeEquationPhrase</a>?, to: <a href="#typeequationphrase">TypeEquationPhrase</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, yOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, toOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, fullBoundsContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<a href="#typeparsablepoint">TypeParsablePoint</a>? | null), (<a href="#typeparsablepoint">TypeParsablePoint</a>? | null), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>from</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>to</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>false</code>
- excludes product of operator from size of
-resulting phrase (
-<code>true</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : horiztonaly space between symbol and content (
-<code>0.05</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space symbol extends above content top (
-<code>0.07</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space symbol extends below content bottom (
-<code>0.07</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : force height of symbol overwriting 
-<code>topSpace</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yOffset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : offset of symbol in y (
-<code>0</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : content scale (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : scale of 
-<em>from</em>
- phrase (
-<code>0.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>toScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : scale of 
-<em>to</em>
- phrase (
-<code>0.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space between symbol and 
-<code>from</code>
- phrase
-(
-<code>0.04</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>toSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space between symbol and 
-<code>to</code>
- phrase (
-<code>0.04</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : offset of 
-<code>from</code>
- phrase (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>toOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : offset of 
-<code>to</code>
- phrase (
-<code>[0, 0]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : use full bounds of content,
-overriding any 
-<code>inSize=false</code>
- properties in the content (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : make the bounds of this phrase equal to
-the full bounds of the content even if 
-<code>fullContentBounds=false</code>
- and the
-brackets only surround a portion of the content (
-<code>false</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For examples, a sum of symbol (pi) is defined as an equation element</span>
-eqn.addElements({
-  <span class="hljs-attr">s</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'prod'</span> }
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
-{
-  <span class="hljs-attr">prodOf</span>: {
-    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'s'</span>,
-    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-    <span class="hljs-attr">from</span>: <span class="hljs-string">'b'</span>,
-    <span class="hljs-attr">to</span>: <span class="hljs-string">'c'</span>,
-    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">space</span>: <span class="hljs-number">0</span>,
-    <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">height</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">yOffset</span>: <span class="hljs-number">0</span>,
-    <span class="hljs-attr">scale</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">fromScale</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">toScale</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">fromSpace</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">toSpace</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">fromOffset</span>: [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.1</span>],
-    <span class="hljs-attr">toOffset</span>: [<span class="hljs-number">-0.1</span>, <span class="hljs-number">-0.1</span>],
-  },
-}</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">prodOf</span>: [<span class="hljs-string">'s'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>] }</pre>
     
   
 

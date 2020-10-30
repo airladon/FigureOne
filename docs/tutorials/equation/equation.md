@@ -66,6 +66,8 @@ equation.addForms({
 });
 ```
 
+An array of elements is called an *equation phrase*. In the example above, the form is a simple phrase, but in more complicated examples there may be several nested phrases.
+
 Finally, we can add the equation to the diagram and show the form:
 
 ```javascript
@@ -144,7 +146,7 @@ equation.goToForm({
 
 ![](./tutorials/equation/linear.gif)
 
-The animation can be improved by moving the terms of the equation in curves instead of linearly. To do this we can use the object form definition that also defines translation animation properties:
+The animation can be improved by moving the terms of the equation in curves instead of linearly. To do this we can use the object definition of a form that also defines translation animation properties:
 
 ```javascript
 equation.addForms({
@@ -226,7 +228,7 @@ equation._c.pulse({ scale: 2, yAlign: 'top' });
 An element can be touched:
 ```javascript
 equation.showForm('b')
-equation._c.makeTouchable();
+equation._c.setTouchable();
 equation._c.onClick = () => { console.log('c was touched') }
 ```
 
@@ -235,10 +237,136 @@ equation._c.onClick = () => { console.log('c was touched') }
 And the equation can be moved:
 ```javascript
 equation.showForm('b')
+equation.setTouchableRect(0.5);
 equation.setMovable();
-equation.touchInBoundingRect = 0.5;
 ```
 
 ![](./tutorials/equation/move.gif)
 
 Here we are putting a buffer of 0.5 around the bounding rect of the equation to make it easy to touch and drag around.
+
+### Managing Equations
+
+Complicated equations can have long, complicated definitions that are hard to read.
+
+Therefore there are several useful shortcuts when defining equations that are useful to improve readability.
+
+#### Inline element definitions
+
+Equation elements can all be defined in the `elements` property. However, simple elements that have the same text as the unique id that would be used to identify it can be defined inline.
+
+For instance, we can recreate an example above as:
+```javascript
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      times: ' \u00D7 ',
+      equals: ' = ',
+    },
+    forms: {
+      // 'a', 'b', and 'c' are defined inline
+      1: ['a', 'equals', 'b', 'times', 'c'],
+    },
+  },
+});
+diagram.elements._eqn.showForm('1');
+```
+
+![](./tutorials/equation/inline.png)
+
+Elements defined inline can be used in other forms:
+
+```javascript
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      times: ' \u00D7 ',
+      equals: ' = ',
+      v: { symbol: 'vinculum' },
+    },
+    forms: {
+      1: ['a', 'equals', 'b', 'times', 'c'],
+      2: ['b', 'equals', { frac: ['a', 'v', 'c'] }],
+    },
+  },
+});
+diagram.elements._eqn.showForm('1');
+diagram.elements._eqn.goToForm({
+  form: 2,
+  animate: 'move',
+  delay: 1,
+});
+```
+
+![](./tutorials/equation/inline_same.gif)
+
+Even symbols can be defined inline:
+```javascript
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      equals: ' = ',
+    },
+    forms: {
+      1: ['b', 'equals', { frac: ['a', 'vinculum', 'c'] }],
+    },
+  },
+});
+diagram.elements._eqn.showForm('1');
+```
+
+Underscores have a special meaning for inline definitions.
+
+Underscores before text will be hidden when rendered, but can make unique ids that are valid javascript object keys (a requirement for a unique id). In javascript, a space cannot be the first character of an object key, but it can be after the first character.
+
+Underscores after text can be used to create unique identifiers and therefore used to make multiple elements with the same text. The underscore, and all text after it will not be rendered.
+
+```javascript
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    forms: {
+      1: ['2', 'a', '_ = ', 'a_1', '_ + ', 'a_2'],
+    },
+  },
+});
+diagram.elements._eqn.showForm('1');
+```
+
+![](./tutorials/equation/valid_key.png)
+
+Underscores can also be used to give inline symbol definitions unqiue identifiers. In this case, the text before the underscore is the unique identifier, and the text after defines the symbol.
+```javascript
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    forms: {
+      1: ['b', '_ = ', { frac: ['a', 'v_vinculum', 'c'] }],
+      2: ['c', '_ = ', { frac: ['a', 'v', 'b'] }],
+    },
+  },
+});
+diagram.elements._eqn.showForm('1');
+diagram.elements._eqn.goToForm({
+  form: 2,
+  animate: 'move',
+  delay: 1,
+});
+```
+
+![](./tutorials/equation/reuse_symbol.gif)
+
+#### Function Definitions
+
+Function definitions can either be array definitions or object definitions. Array definitions are useful in simple definitions, or not customizing a layout. Object definitions are more readable when may options are required to customize a layout, or the input to the functions are more complicated equation phrases.
+
+### Multiline vs single line
+
