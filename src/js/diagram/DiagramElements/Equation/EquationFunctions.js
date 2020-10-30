@@ -225,6 +225,20 @@ export type EQN_Container = {
  * <a href="#equation-boilerplate">boilerplate</a>
  *
  * @example
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       1: { frac: ['a', 'vinculum', 'b'] },
+ *     },
+ *   },
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
+ * @example
+ * // Example showing object and array fraction definitions, and nesting
  * diagram.addElement({
  *   name: 'eqn',
  *   method: 'equation',
@@ -244,11 +258,11 @@ export type EQN_Container = {
  *         },
  *       },
  *       // Fraction array form
- *       2: { frac: ['a', 'v1', 'c'] },
+ *       2: { frac: ['a', 'v1', 'd'] },
  *       // Nested
  *       3: {
  *         frac: {
- *           numerator: [{ frac: ['a', 'v1', 'c', 0.7] }, 'plus', '_1'],
+ *           numerator: [{ frac: ['a', 'v1', 'd', 0.7] }, 'plus', '_1'],
  *           symbol: 'v2',
  *           denominator: 'b',
  *         }
@@ -278,10 +292,10 @@ export type EQN_Container = {
  *           symbol: 'v1',
  *         },
  *       },
- *       2: { frac: ['a', 'v1', 'c'] },
+ *       2: { frac: ['a', 'v1', 'd'] },
  *       3: {
  *         frac: {
- *           numerator: [{ frac: ['a', 'v1', 'c', 0.7] }, 'plus', '_1'],
+ *           numerator: [{ frac: ['a', 'v1', 'd', 0.7] }, 'plus', '_1'],
  *           symbol: 'v2',
  *           denominator: 'b',
  *         }
@@ -444,6 +458,8 @@ export type EQN_Bracket = {
 /**
  * Equation root
  *
+ * ![](./assets1/eqn_root.gif)
+ *
  * Surround an equation phrase with a radical symbol and add a custom root if
  * needed
  *
@@ -469,33 +485,81 @@ export type EQN_Bracket = {
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
-* @example
- * // For examples, a radical symbol is defined as an equation element
- * eqn.addElements({
- *   radical: { symbol: 'radical' }
- * });
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // Full object definition
- * {
- *   root: {
- *     content: 'a',
- *     symbol: 'radical',
- *     inSize: true,
- *     space: 0.1,
- *     topSpace: 0.1,
- *     rightSpace: 0.1,
- *     bottomSpace: 0.1,
- *     leftSpace: 0.1,
- *     root: 'b',
- *     rootOffset: [0, 0],
- *     rootScale: 1,
- *     fullContentBounds: false,
- *     useFullBounds: false,
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       1: { root: ['radical', 'a'] },
+ *     },
  *   },
- * }
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Example array definition
- *  { root: ['radical', 'a'] }
+ * // Example showing object and array root definitions, and custom roots
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       r: { symbol: 'radical' },
+ *       plus: '  +  ',
+ *     },
+ *     formDefaults: { alignment: { fixTo: 'd' } },
+ *     forms: {
+ *       // Root object form
+ *       1: {
+ *         root: {
+ *           symbol: 'r',
+ *           content: ['a', 'plus', 'd'],
+ *         },
+ *       },
+ *       // Root array form
+ *       2: { root: ['r', 'd'] },
+ *       // Cube root
+ *       3: { root: { content: 'd', symbol: 'r', root: '_3' } },
+ *     },
+ *     formSeries: ['1', '2', '3'],
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
+ *
+ * @example
+ * // Create equation object then add to diagram
+ * const eqn = diagram.create.equation({
+ *   elements: {
+ *     r: { symbol: 'radical' },
+ *     plus: '  +  ',
+ *   },
+ *   formDefaults: {
+ *     alignment: { fixTo: 'd' },
+ *   },
+ *   forms: {
+ *     1: {
+ *       root: {
+ *         symbol: 'r',
+ *         content: ['a', 'plus', 'd'],
+ *       },
+ *     },
+ *     2: { root: ['r', 'd'] },
+ *     3: { root: { content: 'd', symbol: 'r', root: '_3' } },
+ *   },
+ *   formSeries: ['1', '2', '3'],
+ * });
+ * diagram.add('eqn', eqn);
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 
 export type EQN_Root = {
