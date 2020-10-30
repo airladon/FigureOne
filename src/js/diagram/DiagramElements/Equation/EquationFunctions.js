@@ -1969,6 +1969,10 @@ export type EQN_Pad = {
 /**
  * Equation matrix
  *
+ * ![](./assets1/eqn_matrix.gif)
+ *
+ * Options can be an object, or an array in the property order below
+ *
  * @property {[number, number]} [order] (`[1, length-of-content]`)
  * @property {string} [left] left bracket symbol
  * @property {Array<TypeEquationPhrase>} [content] Array of equation phrases
@@ -1990,40 +1994,83 @@ export type EQN_Pad = {
  * the symbols (`{}`)
  * @property {boolean} [fullContentBounds] use full bounds of content,
  * overriding any `inSize=false` properties in the content (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // The following examples use left and right square brackets as symbols:
- * eqn.addElements({
- *   lb: { symbol: 'squareBracket', side: 'left' },
- *   rb: { symbol: 'squareBracket', side: 'right' },
- * });
- * @example
- * // Full object definition
- * {
- *   matrix: {
- *     order: [2, 2],
- *     left: 'lb',
- *     content: ['a', 'b', 'c', 'd'],
- *     right: 'rb',
- *     scale: 1,
- *     fit: 'min',
- *     space: [0.1, 0.1],
- *     yAlign: 'baseline',
- *     brac: {
- *       inSize: true,
- *       insideSpace: 0.1,
- *       outsideSpace: 0.1,
- *       topSpace: 0.1,
- *       bottomSpace: 0.1,
- *       minContentHeight: null,
- *       minContentDescent: null,
- *       height: null,
- *       descent: null,
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       lb: { symbol: 'squareBracket', side: 'left' },
+ *       rb: { symbol: 'squareBracket', side: 'right' },
+ *     },
+ *     forms: {
+ *       1: { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] },
  *     },
  *   },
- * },
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Array example
- *  { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] }
+ * // Some different bar examples
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       lb: { symbol: 'squareBracket', side: 'left' },
+ *       rb: { symbol: 'squareBracket', side: 'right' },
+ *       v: { symbol: 'vinculum' },
+ *     },
+ *     phrases: {
+ *       f: { frac: ['a', 'v', 'b'] },
+ *     },
+ *     forms: {
+ *       // Array equation 2x2 matrix
+ *       1: { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] },
+ *       // Object definition vector
+ *       2: {
+ *         matrix: {
+ *           content: ['a', 'b', 'c', 'd'],
+ *           left: 'lb',
+ *           right: 'rb',
+ *           order: [1, 4],
+ *         },
+ *       },
+ *       // Additional options for layout
+ *       3: {
+ *         matrix: {
+ *           content: ['f', 'wxyz', 'c', 'd'],
+ *           symbol: 'bSqr',
+ *           left: 'lb',
+ *           right: 'rb',
+ *           order: [2, 2],
+ *         },
+ *       },
+ *       // Fixed size matrix cells
+ *       4: {
+ *         matrix: {
+ *           content: ['f', 'wxyz', 'c', 'd'],
+ *           symbol: 'bSqr',
+ *           left: 'lb',
+ *           right: 'rb',
+ *           order: [2, 2],
+ *           fit: [0.2, 0.2],
+ *           yAlign: 'middle',
+ *         },
+ *       },
+ *     },
+ *     formSeries: ['1', '2', '3', '4']
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_Matrix = {
   order?: [number, number],

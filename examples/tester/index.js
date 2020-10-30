@@ -89,63 +89,75 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // eqn.showForm('1');
 
 
-// Simple
-diagram.addElement({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    forms: {
-      1: { topComment: ['radius', 'r = 1'] },
-    },
-  },
-});
-diagram.elements._eqn.showForm('1');
-
-
-// // Some different bar examples
+// // Simple
 // diagram.addElement({
 //   name: 'eqn',
 //   method: 'equation',
 //   options: {
 //     elements: {
-//       bBkt: { symbol: 'bracket', side: 'bottom' },
-//       tBrc: { symbol: 'brace', side: 'top' },
-//       bSqr: { symbol: 'squareBracket', side: 'bottom' },
+//       lb: { symbol: 'squareBracket', side: 'left' },
+//       rb: { symbol: 'squareBracket', side: 'right' },
 //     },
 //     forms: {
-//       // Array equation
-//       1: { topComment: ['a \u00d7 b \u00d7 c', 'b = 1, c = 1', 'tBrc'] },
-//       // Object definition
-//       2: {
-//         bottomComment: {
-//           content: 'a \u00d7 b \u00d7 c',
-//           symbol: 'bBkt',
-//           comment: 'b = 1, c = 1',
-//         },
-//       },
-//       // Additional options for layout
-//       3: {
-//         bottomComment: {
-//           content: 'a \u00d7 b \u00d7 c',
-//           symbol: 'bSqr',
-//           comment: 'b = 1, c = 1',
-//           contentSpace: 0.1,
-//           commentSpace: 0.1,
-//           scale: 0.7,
-//         },
-//       },
-//       // Just comment
-//       4: {
-//         bottomComment: {
-//           content: 'a \u00d7 b \u00d7 c',
-//           comment: 'for a > 3',
-//         },
-//       },
+//       1: { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] },
 //     },
-//     formSeries: ['1', '2', '3', '4']
 //   },
 // });
-// const eqn = diagram.elements._eqn;
-// eqn.onClick = () => eqn.nextForm();
-// eqn.setTouchableRect(0.5);
-// eqn.showForm('1');
+// diagram.elements._eqn.showForm('1');
+
+
+// Some different bar examples
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      lb: { symbol: 'squareBracket', side: 'left' },
+      rb: { symbol: 'squareBracket', side: 'right' },
+      v: { symbol: 'vinculum' },
+    },
+    phrases: {
+      f: { frac: ['a', 'v', 'b'] },
+    },
+    forms: {
+      // Array equation 2x2 matrix
+      1: { matrix: [[2, 2], 'lb', ['a', 'b', 'c', 'd'], 'rb'] },
+      // Object definition vector
+      2: {
+        matrix: {
+          content: ['a', 'b', 'c', 'd'],
+          left: 'lb',
+          right: 'rb',
+          order: [1, 4],
+        },
+      },
+      // Additional options for layout
+      3: {
+        matrix: {
+          content: ['f', 'wxyz', 'c', 'd'],
+          symbol: 'bSqr',
+          left: 'lb',
+          right: 'rb',
+          order: [2, 2],
+        },
+      },
+      // Fixed size matrix cells
+      4: {
+        matrix: {
+          content: ['f', 'wxyz', 'c', 'd'],
+          symbol: 'bSqr',
+          left: 'lb',
+          right: 'rb',
+          order: [2, 2],
+          fit: [0.2, 0.2],
+          yAlign: 'middle',
+        },
+      },
+    },
+    formSeries: ['1', '2', '3', '4']
+  },
+});
+const eqn = diagram.elements._eqn;
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('1');
