@@ -34,7 +34,7 @@ describe('Diagram Equations From Object', () => {
     eqn = new Equation(diagram.shapes);
     color1 = [0.95, 0, 0, 1];
     color2 = [0, 0.95, 0, 1];
-    defaultColor = [0.5, 0.5, 0.5, 1];
+    defaultColor = [1, 0, 0, 1];
     addElements = {
       // Simplest way to define elements is to just use text
       simple: {
@@ -202,7 +202,7 @@ describe('Diagram Equations From Object', () => {
     expect(eqn._b.isTouchable).toBe(true);
     expect(eqn._v.isTouchable).toBe(true);
 
-    expect(round(eqn._a.color)).toEqual(round([0.5, 0.5, 0.5, 1]));
+    expect(round(eqn._a.color)).toEqual(round([1, 0, 0, 1]));
     expect(eqn._b.color).toEqual(color1);
     expect(eqn._v.color).toEqual(color1);
   });

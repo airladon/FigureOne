@@ -168,9 +168,9 @@ export class TriggerAnimationStep extends AnimationStep {
   }
 
   setFrame() {
-    if (this.callback != null && this.payload != null) {
-      console.log(this.payload)
-    }
+    // if (this.callback != null && this.payload != null) {
+    //   console.log(this.payload)
+    // }
     this.fnExec(this.callback, this.payload);
     this.callback = null;
     // if (this.callback != null) {

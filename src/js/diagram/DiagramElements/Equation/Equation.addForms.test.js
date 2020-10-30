@@ -382,7 +382,7 @@ describe('Diagram Equations From Object', () => {
     expect(content[1].content.drawingObject.text[0].text).toBe('a');
     expect(content[2].content.drawingObject.text[0].text).toBe('c');
     expect(forms['0'].elementMods.b.mods.color).toEqual(color1);
-    expect(eqn._b.color).toEqual([0.5, 0.5, 0.5, 1]);
+    expect(eqn._b.color).toEqual([1, 0, 0, 1]);
     eqn.showForm('0');
     expect(eqn._b.color).toEqual([0.95, 0, 0, 1]);
   });

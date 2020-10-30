@@ -238,7 +238,9 @@ export default class EquationForm extends Elements {
     const elementsCurrentlyShowing = elementsInCollection.filter(e => e.isShown);
     this.collectionMethods.hideAll();
     this.collectionMethods.show();
+
     super.calcSize(new Point(0, 0), scale);
+    this.setPositions();
 
     let fixPoint = new Point(0, 0);
     if (fixTo instanceof DiagramElementPrimitive
@@ -268,11 +270,11 @@ export default class EquationForm extends Elements {
       // p = t._dup();
       const t = fixTo.transform.t();
       const s = fixTo.transform.s();
-      console.log(fixTo.transform._dup())
+      // console.log(fixTo.transform._dup())
       // console.log(t, s, fixTo.name)
       if (t != null && s != null) {
         const rect = fixTo.getBoundingRect('draw');
-        console.log(rect)
+        // console.log(rect)
         // const rect = getBoundingRect(fixTo.drawingObject.border);
         w = rect.width * s.x;
         h = rect.height * s.y;
