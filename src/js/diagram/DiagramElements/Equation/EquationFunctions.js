@@ -1045,7 +1045,11 @@ export type EQN_Integral = {
 /**
  * Equation sum of
  *
+ * ![](./assets1/eqn_sumof.gif)
+ *
  * Place an equation phrase in a sum of operation
+ *
+ * Options can be an object, or an array in the property order below
  *
  * @property {string} symbol
  * @property {TypeEquationPhrase} content
@@ -1071,37 +1075,64 @@ export type EQN_Integral = {
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
-* @example
- * // For examples, a sum of symbol (sigma) is defined as an equation element
- * eqn.addElements({
- *   s: { symbol: 'sum' }
- * });
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // Full object definition
- * {
- *   sumOf: {
- *     symbol: 's',
- *     content: 'a',
- *     from: 'b',
- *     to: 'c',
- *     inSize: true,
- *     space: 0,
- *     topSpace: 0.1,
- *     bottomSpace: 0.1,
- *     height: null,
- *     yOffset: 0,
- *     scale: 1,
- *     fromScale: 1,
- *     toScale: 1,
- *     fromSpace: 0.1,
- *     toSpace: 0.1,
- *     fromOffset: [0.1, 0.1],
- *     toOffset: [-0.1, -0.1],
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       1: { sumOf: ['sum', 'x', 'b', 'a'] },
+ *     },
  *   },
- * }
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Example array definition
- *  { sumOf: ['s', 'a', 'b', 'c'] }
+ * // Example showing different super-sub script options
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       s: { symbol: 'sum', draw: 'dynamic' },
+ *       inf: '\u221e',
+ *     },
+ *     forms: {
+ *       // Object form
+ *       1: {
+ *         sumOf: {
+ *           symbol: 's',
+ *           content: [{ sup: ['x', 'n'] }],
+ *           from: ['n_1', ' ', '=', ' ', '_0'],
+ *           to: '_10',
+ *         },
+ *       },
+ *       // Array form
+ *       2: { sumOf: ['s', [{ sup: ['x', 'm'] }], 'm_1', null]},
+ *       // Styling with options
+ *       3: {
+ *         sumOf: {
+ *           symbol: 's',
+ *           content: { frac: [['x', ' ', '+', ' ', 'm'], 'vinculum', 'a'] },
+ *           from: ['m_1', ' ', '=', ' ', '_0'],
+ *           to: 'inf',
+ *           fromScale: 0.8,
+ *           toScale: 0.8,
+ *         },
+ *       },
+ *     },
+ *     formSeries: ['1', '2', '3'],
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_SumOf = {
   symbol?: string,
@@ -3387,7 +3418,7 @@ export class EquationFunctions {
     let useFullBounds;
     const defaultOptions = {
       inSize: true,
-      space: 0.05,
+      space: 0.1,
       topSpace: 0.07,
       bottomSpace: 0.07,
       height: null,
@@ -3468,7 +3499,7 @@ export class EquationFunctions {
         left: {         // $FlowFixMe
           symbol,         // $FlowFixMe
           annotations,         // $FlowFixMe
-          space,
+          space: options.space,
           topSpace: options.topSpace,
           bottomSpace: options.bottomSpace,
           yOffset: options.yOffset,

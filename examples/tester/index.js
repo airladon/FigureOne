@@ -35,35 +35,49 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 //   },
 // ]);
 
-// Simple
-diagram.addElement({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    forms: {
-      1: { supSub: ['x', 'b', 'a'] },
-    },
-  },
-});
-diagram.elements._eqn.showForm('1');
+// // Simple
+// diagram.addElement({
+//   name: 'eqn',
+//   method: 'equation',
+//   options: {
+//     forms: {
+//       1: { sumOf: ['sum', 'x', 'b', 'a'] },
+//     },
+//   },
+// });
+// diagram.elements._eqn.showForm('1');
 
 // Example showing different super-sub script options
 diagram.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
+    elements: {
+      s: { symbol: 'sum', draw: 'dynamic' },
+      inf: '\u221e',
+    },
     forms: {
       // Object form
       1: {
-        supSub: {
-          content: 'x',
-          superscript: 'b',
-          subscript: 'a',
+        sumOf: {
+          symbol: 's',
+          content: [{ sup: ['x', 'n'] }],
+          from: ['n_1', ' ', '=', ' ', '_0'],
+          to: '_10',
         },
       },
       // Array form
-      2: [{ supSub: ['x', 'b', 'a'] }, '  ', { supSub: ['x_1', 'c', 'a_1'] }],
-      3: { supSub: ['x', ['b', '  ', '+', '  ', 'c'], 'a'] },
+      2: { sumOf: ['s', [{ sup: ['x', 'm'] }], 'm_1', null]},
+      3: {
+        sumOf: {
+          symbol: 's',
+          content: { frac: [['x', ' ', '+', ' ', 'm'], 'vinculum', 'a'] },
+          from: ['m_1', ' ', '=', ' ', '_0'],
+          to: 'inf',
+          fromScale: 0.8,
+          toScale: 0.8,
+        },
+      },
     },
     formSeries: ['1', '2', '3'],
   },

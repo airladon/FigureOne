@@ -23566,7 +23566,6 @@ diagram.addElement({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">formDefaults</span>: { <span class="hljs-attr">alignment</span>: { <span class="hljs-attr">fixTo</span>: <span class="hljs-string">'x'</span> } },
     <span class="hljs-attr">forms</span>: {
       <span class="hljs-comment">// Object form</span>
       <span class="hljs-number">1</span>: {
@@ -23718,7 +23717,7 @@ diagram.addElement({
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
     <span class="hljs-attr">forms</span>: {
-      <span class="hljs-number">1</span>: { <span class="hljs-attr">sup</span>: [<span class="hljs-string">'e'</span>, <span class="hljs-string">'_x'</span>] },
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">sup</span>: [<span class="hljs-string">'e'</span>, <span class="hljs-string">'x'</span>] },
     },
   },
 });
@@ -23730,7 +23729,6 @@ diagram.addElement({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">formDefaults</span>: { <span class="hljs-attr">alignment</span>: { <span class="hljs-attr">fixTo</span>: <span class="hljs-string">'x'</span> } },
     <span class="hljs-attr">forms</span>: {
       <span class="hljs-comment">// Object form</span>
       <span class="hljs-number">1</span>: {
@@ -23779,6 +23777,8 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   
 
   <p>Equation superscript and subscript</p>
+<p><img src="./assets1/eqn_supsub.gif"></p>
+<p>Options can be an object, or an array in the property order below</p>
 
   
     <p style="display: none;">      Type:
@@ -23862,6 +23862,18 @@ resulting phrase (
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
@@ -23869,22 +23881,44 @@ resulting phrase (
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
-{
-  <span class="hljs-attr">supSub</span>: {
-    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-    <span class="hljs-attr">superscript</span>: <span class="hljs-string">'b'</span>,
-    <span class="hljs-attr">subscript</span>: <span class="hljs-string">'c'</span>,
-    <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
-    <span class="hljs-attr">superscriptOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-    <span class="hljs-attr">subscriptOffset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">supSub</span>: [<span class="hljs-string">'x'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'a'</span>] },
+    },
   },
-}</pre>
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>); *</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">supSub</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>] }</pre>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing different super-sub script options</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Object form</span>
+      <span class="hljs-number">1</span>: {
+        <span class="hljs-attr">supSub</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'x'</span>,
+          <span class="hljs-attr">superscript</span>: <span class="hljs-string">'b'</span>,
+          <span class="hljs-attr">subscript</span>: <span class="hljs-string">'a'</span>,
+        },
+      },
+      <span class="hljs-comment">// Array form</span>
+      <span class="hljs-number">2</span>: [{ <span class="hljs-attr">supSub</span>: [<span class="hljs-string">'x'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'a'</span>] }, <span class="hljs-string">'  '</span>, { <span class="hljs-attr">supSub</span>: [<span class="hljs-string">'x_1'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'a_1'</span>] }],
+      <span class="hljs-number">3</span>: { <span class="hljs-attr">supSub</span>: [<span class="hljs-string">'x'</span>, [<span class="hljs-string">'b'</span>, <span class="hljs-string">'  '</span>, <span class="hljs-string">'+'</span>, <span class="hljs-string">'  '</span>, <span class="hljs-string">'c'</span>], <span class="hljs-string">'a'</span>] },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
 
