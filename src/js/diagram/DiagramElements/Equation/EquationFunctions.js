@@ -863,7 +863,7 @@ export type EQN_Bar = {
 /**
  * Equation integral
  *
- * ![]('./assets1/eqn_integral.gif)
+ * ![](./assets1/eqn_integral.gif)
  *
  * Place an integral (with optional limits) before an equation phrase
  *

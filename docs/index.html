@@ -1796,9 +1796,9 @@
               
                 
                 <li><a
-                  href='#eqn_container'
+                  href='#eqn_fraction'
                   class="">
-                  EQN_Container
+                  EQN_Fraction
                   
                 </a>
                 
@@ -1806,9 +1806,29 @@
               
                 
                 <li><a
-                  href='#eqn_fraction'
+                  href='#eqn_root'
                   class="">
-                  EQN_Fraction
+                  EQN_Root
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eqn_integral'
+                  class="">
+                  EQN_Integral
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eqn_container'
+                  class="">
+                  EQN_Container
                   
                 </a>
                 
@@ -1829,16 +1849,6 @@
                   href='#eqn_bracket'
                   class="">
                   EQN_Bracket
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#eqn_root'
-                  class="">
-                  EQN_Root
                   
                 </a>
                 
@@ -1869,16 +1879,6 @@
                   href='#eqn_bar'
                   class="">
                   EQN_Bar
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#eqn_integral'
-                  class="">
-                  EQN_Integral
                   
                 </a>
                 
@@ -22943,212 +22943,6 @@ New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='eqn_container'>
-      EQN_Container
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation container options</p>
-<p><img src="./assets1/eqn_container.gif"></p>
-<p>A container is useful to fix spacing around content as it changes between
-equation forms.</p>
-<p>Options can be an object, or an array in the property order below</p>
-
-  
-    <p style="display: none;">      Type:
-      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, ascent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, yAlign: (<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fit: (<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"width"</code>? | <code>"height"</code> | <code>"contain"</code>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>descent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>ascent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : (
-<code>'center'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : (
-<code>'baseline'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fit</span> <code class='quiet'>((<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?)</code>
-          : fit width,
-ascent and descent to either match width, height or fully contain the content (
-<code>null</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : (
-<code>false</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        To test examples, append them to the
-
-<a href="#equation-boilerplate">
-boilerplate
-</a>
-
-      
-    
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing the difference between with and without container</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">forms</span>: {
-      <span class="hljs-comment">// Container object definition</span>
-      <span class="hljs-number">1</span>: [
-        <span class="hljs-string">'length'</span>,
-        {
-          <span class="hljs-attr">container</span>: {
-            <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>,
-            <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
-          },
-        },
-        <span class="hljs-string">'height'</span>,
-      ],
-      <span class="hljs-comment">// Container array definition</span>
-      <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
-      <span class="hljs-comment">// No container</span>
-      <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
-    },
-    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
-  },
-});
-<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
-eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
-eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to diagram</span>
-<span class="hljs-keyword">const</span> eqn = diagram.create.equation({
-  <span class="hljs-attr">forms</span>: {
-    <span class="hljs-number">1</span>: [
-      <span class="hljs-string">'length'</span>,
-      { <span class="hljs-attr">container</span>: { <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span> } },
-      <span class="hljs-string">'height'</span>,
-    ],
-    <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
-    <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
-  },
-  <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
-});
-diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
-eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
-eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='eqn_fraction'>
       EQN_Fraction
     </h3>
@@ -23358,6 +23152,976 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
       },
     },
     <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+});
+diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_root'>
+      EQN_Root
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation root</p>
+<p><img src="./assets1/eqn_root.gif"></p>
+<p>Surround an equation phrase with a radical symbol and add a custom root if
+needed</p>
+<p>Options can be an object, or an array in the property order below.</p>
+
+  
+    <p style="display: none;">      Type:
+      ({symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, root: <a href="#typeequationphrase">TypeEquationPhrase</a>, rootOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rootScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          : radical symbol
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ excludes radical symbol and root (if
+defined) from size of resulting phrase (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>0.02</code>
+) default space between content and
+radical symbol in left, right, top and bottom directions.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between content top and radical symbol
+horiztonal line (
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rightSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : radical symbol overhang of content on right
+(
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : radical symbol descent below content
+(
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>leftSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between radical symbol up stroke and
+content (
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>root</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
+          : custom root
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rootOffset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : custom root offset (
+<code>[0, 0.06]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rootScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : custom root scale (
+<code>0.6</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : use full bounds of content,
+overriding any 
+<code>inSize=false</code>
+ properties in the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : make the bounds of this phrase equal to
+the full bounds of the content even if 
+<code>fullContentBounds=false</code>
+ and the
+brackets only surround a portion of the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">root</span>: [<span class="hljs-string">'radical'</span>, <span class="hljs-string">'a'</span>] },
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing object and array root definitions, and custom roots</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">r</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'radical'</span> },
+      <span class="hljs-attr">plus</span>: <span class="hljs-string">'  +  '</span>,
+    },
+    <span class="hljs-attr">formDefaults</span>: { <span class="hljs-attr">alignment</span>: { <span class="hljs-attr">fixTo</span>: <span class="hljs-string">'d'</span> } },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Root object form</span>
+      <span class="hljs-number">1</span>: {
+        <span class="hljs-attr">root</span>: {
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'r'</span>,
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'d'</span>],
+        },
+      },
+      <span class="hljs-comment">// Root array form</span>
+      <span class="hljs-number">2</span>: { <span class="hljs-attr">root</span>: [<span class="hljs-string">'r'</span>, <span class="hljs-string">'d'</span>] },
+      <span class="hljs-comment">// Cube root</span>
+      <span class="hljs-number">3</span>: { <span class="hljs-attr">root</span>: { <span class="hljs-attr">content</span>: <span class="hljs-string">'d'</span>, <span class="hljs-attr">symbol</span>: <span class="hljs-string">'r'</span>, <span class="hljs-attr">root</span>: <span class="hljs-string">'_3'</span> } },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to diagram</span>
+<span class="hljs-keyword">const</span> eqn = diagram.create.equation({
+  <span class="hljs-attr">elements</span>: {
+    <span class="hljs-attr">r</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'radical'</span> },
+    <span class="hljs-attr">plus</span>: <span class="hljs-string">'  +  '</span>,
+  },
+  <span class="hljs-attr">formDefaults</span>: {
+    <span class="hljs-attr">alignment</span>: { <span class="hljs-attr">fixTo</span>: <span class="hljs-string">'d'</span> },
+  },
+  <span class="hljs-attr">forms</span>: {
+    <span class="hljs-number">1</span>: {
+      <span class="hljs-attr">root</span>: {
+        <span class="hljs-attr">symbol</span>: <span class="hljs-string">'r'</span>,
+        <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'d'</span>],
+      },
+    },
+    <span class="hljs-number">2</span>: { <span class="hljs-attr">root</span>: [<span class="hljs-string">'r'</span>, <span class="hljs-string">'d'</span>] },
+    <span class="hljs-number">3</span>: { <span class="hljs-attr">root</span>: { <span class="hljs-attr">content</span>: <span class="hljs-string">'d'</span>, <span class="hljs-attr">symbol</span>: <span class="hljs-string">'r'</span>, <span class="hljs-attr">root</span>: <span class="hljs-string">'_3'</span> } },
+  },
+  <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+});
+diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_integral'>
+      EQN_Integral
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation integral</p>
+<p><img src="./assets1/eqn_integral.gif"></p>
+<p>Place an integral (with optional limits) before an equation phrase</p>
+<p>Options can be an object, or an array in the property order below.</p>
+
+  
+    <p style="display: none;">      Type:
+      ({symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, content: <a href="#typeequationphrase">TypeEquationPhrase</a>?, from: <a href="#typeequationphrase">TypeEquationPhrase</a>?, to: <a href="#typeequationphrase">TypeEquationPhrase</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, yOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, toOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, limitsPosition: (<code>"side"</code> | <code>"topBottom"</code> | <code>"topBottomCenter"</code>)?, limitsAroundContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, fromXPosition: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fromYPosition: (<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fromXAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fromYAlign: (<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, toXPosition: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, toYPosition: (<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, toXAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, toYAlign: (<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fullBoundsContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="#typeparsablepoint">TypeParsablePoint</a>?, <a href="#typeparsablepoint">TypeParsablePoint</a>?, (<code>"side"</code>? | <code>"topBottom"</code> | <code>"topBottomCenter"</code>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>from</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
+          : bottom limit
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>to</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
+          : top limit
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ excludes box symbol from size of
+resulting phrase (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : horizontal space between symbol and content (
+<code>0.05</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between content top and symbol top (
+<code>0.1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between content bottom and symbol bottom (
+<code>0.1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : force height of symbol
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yOffset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : y offset of symbol (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : content scale (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale of 
+<em>from</em>
+ (bottom) limit (
+<code>0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale of 
+<em>to</em>
+ (top) limit (
+<code>0.5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : from limit offest ( 
+<code>side</code>
+:
+
+<code>[0, 0]</code>
+, 
+<code>topBottom</code>
+: 
+<code>[0, -0.04]</code>
+, 
+<code>topBottomCenter</code>
+: 
+<code>[0, -0.04]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : to limit offest (
+<code>side</code>
+: 
+<code>[0, 0]</code>
+
+
+<code>topBottom</code>
+: 
+<code>[0, 0.04]</code>
+, 
+<code>topBottomCenter</code>
+: 
+<code>[0, 0.04]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>limitsPosition</span> <code class='quiet'>((<code>"side"</code> | <code>"topBottom"</code> | <code>"topBottomCenter"</code>)?)</code>
+          : limits
+relative to symbol. 
+<code>side</code>
+ is to the right of the symbol ends, 
+<code>topBottom</code>
+
+is above and below the symbol ends and 
+<code>topBottomCenter</code>
+ is above and below
+the integral mid point (
+<code>'side'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>limitsAroundContent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ means content left is
+aligned with furthest right of limits
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromXPosition</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : x position
+of limit relative to the symbol (
+<code>side</code>
+: 
+<code>0.5</code>
+, 
+<code>topBottom</code>
+: 
+<code>0.1</code>
+,
+
+<code>topBottomCenter</code>
+: 
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromYPositio</span> <code class='quiet'>((<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : y position of the limit relavite to the symbol (
+<code>'bottom'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromXAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : limit x
+alignment (
+<code>side</code>
+: 
+<code>'left'</code>
+, 
+<code>topBottom</code>
+: 
+<code>center</code>
+,
+
+<code>topBottomCenter</code>
+: 
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromYAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : limit y alignment (
+<code>side</code>
+: 
+<code>'middle'</code>
+, 
+<code>topBottom</code>
+: 
+<code>'top'</code>
+,
+
+<code>topBottomCenter</code>
+: 
+<code>'top'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toXPosition</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : x position
+of limit relative to the symbol (
+<code>side</code>
+: 
+<code>'right'</code>
+, 
+<code>topBottom</code>
+: 
+<code>0.9</code>
+,
+
+<code>topBottomCenter</code>
+: 
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toYPosition</span> <code class='quiet'>((<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : y position of the limit relavite to the symbol (
+<code>side</code>
+: 
+<code>'top'</code>
+,
+
+<code>topBottom</code>
+: 
+<code>top</code>
+, 
+<code>topBottomCenter</code>
+: 
+<code>'top'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toXAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : limit x
+alignment (
+<code>side</code>
+: 
+<code>'left'</code>
+, 
+<code>topBottom</code>
+: 
+<code>center</code>
+,
+
+<code>topBottomCenter</code>
+: 
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>toYAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : limit y alignment (
+<code>side</code>
+: 
+<code>'middle'</code>
+, 
+<code>topBottom</code>
+: 
+<code>bottom</code>
+,
+
+<code>topBottomCenter</code>
+: 
+<code>'bottom'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : use full bounds of content,
+overriding any 
+<code>inSize=false</code>
+ properties in the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : make the bounds of this phrase equal to
+the full bounds of the content even if 
+<code>fullContentBounds=false</code>
+ and the
+brackets only surround a portion of the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: { <span class="hljs-attr">int</span>: [<span class="hljs-string">'int'</span>, <span class="hljs-string">'x dx'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>] },
+    },
+  },
+});
+diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing different integral options</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">i</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'int'</span> },
+      <span class="hljs-comment">// ic: { symbol: 'int', num: 1, type: 'line' },</span>
+    },
+    <span class="hljs-attr">formDefaults</span>: { <span class="hljs-attr">alignment</span>: { <span class="hljs-attr">fixTo</span>: <span class="hljs-string">'x'</span> } },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Root object form</span>
+      <span class="hljs-number">1</span>: {
+        <span class="hljs-attr">int</span>: {
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'i'</span>,
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'x'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'dx'</span>],
+          <span class="hljs-attr">from</span>: <span class="hljs-string">'a'</span>,
+          <span class="hljs-attr">to</span>: <span class="hljs-string">'b'</span>,
+        },
+      },
+      <span class="hljs-comment">// Root array form</span>
+      <span class="hljs-number">2</span>: { <span class="hljs-attr">int</span>: [<span class="hljs-string">'i'</span>, [<span class="hljs-string">'x'</span>, <span class="hljs-string">'  '</span>, <span class="hljs-string">'+'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'_1'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'dx'</span>], <span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>] },
+      <span class="hljs-comment">// Indefinite tripple integral</span>
+      <span class="hljs-number">3</span>: { <span class="hljs-attr">int</span>: [<span class="hljs-string">'i'</span>, [<span class="hljs-string">'x'</span>, <span class="hljs-string">'  '</span>, <span class="hljs-string">'+'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'_1'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'dx'</span>]] },
+      <span class="hljs-comment">// Custom spacing</span>
+      <span class="hljs-number">4</span>: {
+        <span class="hljs-attr">int</span>: {
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'i'</span>,
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'x'</span>, <span class="hljs-string">'  '</span>, <span class="hljs-string">'+'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'_1'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'dx'</span>],
+          <span class="hljs-attr">to</span>: <span class="hljs-string">'b'</span>,
+          <span class="hljs-attr">from</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'d + 2'</span>] },
+          <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.2</span>,
+          <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.2</span>,
+          <span class="hljs-attr">limitsAroundContent</span>: <span class="hljs-literal">false</span>,
+        },
+      },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_container'>
+      EQN_Container
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation container options</p>
+<p><img src="./assets1/eqn_container.gif"></p>
+<p>A container is useful to fix spacing around content as it changes between
+equation forms.</p>
+<p>Options can be an object, or an array in the property order below</p>
+
+  
+    <p style="display: none;">      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, descent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, ascent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, xAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, yAlign: (<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fit: (<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"width"</code>? | <code>"height"</code> | <code>"contain"</code>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>descent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>ascent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : (
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : (
+<code>'baseline'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fit</span> <code class='quiet'>((<code>"width"</code> | <code>"height"</code> | <code>"contain"</code>)?)</code>
+          : fit width,
+ascent and descent to either match width, height or fully contain the content (
+<code>null</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing the difference between with and without container</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Container object definition</span>
+      <span class="hljs-number">1</span>: [
+        <span class="hljs-string">'length'</span>,
+        {
+          <span class="hljs-attr">container</span>: {
+            <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>,
+            <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+          },
+        },
+        <span class="hljs-string">'height'</span>,
+      ],
+      <span class="hljs-comment">// Container array definition</span>
+      <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
+      <span class="hljs-comment">// No container</span>
+      <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to diagram</span>
+<span class="hljs-keyword">const</span> eqn = diagram.create.equation({
+  <span class="hljs-attr">forms</span>: {
+    <span class="hljs-number">1</span>: [
+      <span class="hljs-string">'length'</span>,
+      { <span class="hljs-attr">container</span>: { <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span> } },
+      <span class="hljs-string">'height'</span>,
+    ],
+    <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
+    <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
+  },
+  <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
 });
 diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
@@ -23696,278 +24460,6 @@ eqn.addElements({
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
  { <span class="hljs-attr">brac</span>: [<span class="hljs-string">'lb'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'rb'</span>] }</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eqn_root'>
-      EQN_Root
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation root</p>
-<p><img src="./assets1/eqn_root.gif"></p>
-<p>Surround an equation phrase with a radical symbol and add a custom root if
-needed</p>
-
-  
-    <p style="display: none;">      Type:
-      ({symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, content: <a href="#typeequationphrase">TypeEquationPhrase</a>, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, root: <a href="#typeequationphrase">TypeEquationPhrase</a>, rootOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rootScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          : radical symbol
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>false</code>
- excludes radical symbol and root (if
-defined) from size of resulting phrase (
-<code>true</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>0.02</code>
-) default space between content and
-radical symbol in left, right, top and bottom directions.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space between content top and radical symbol
-horiztonal line (
-<code>space</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rightSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : radical symbol overhang of content on right
-(
-<code>space</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : radical symbol descent below content
-(
-<code>space</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>leftSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space between radical symbol up stroke and
-content (
-<code>space</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>root</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
-          : custom root
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rootOffset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : custom root offset (
-<code>[0, 0.06]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rootScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : custom root scale (
-<code>0.6</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : use full bounds of content,
-overriding any 
-<code>inSize=false</code>
- properties in the content (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : make the bounds of this phrase equal to
-the full bounds of the content even if 
-<code>fullContentBounds=false</code>
- and the
-brackets only surround a portion of the content (
-<code>false</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        To test examples, append them to the
-
-<a href="#equation-boilerplate">
-boilerplate
-</a>
-
-      
-    
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">forms</span>: {
-      <span class="hljs-number">1</span>: { <span class="hljs-attr">root</span>: [<span class="hljs-string">'radical'</span>, <span class="hljs-string">'a'</span>] },
-    },
-  },
-});
-diagram.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing object and array root definitions, and custom roots</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">elements</span>: {
-      <span class="hljs-attr">r</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'radical'</span> },
-      <span class="hljs-attr">plus</span>: <span class="hljs-string">'  +  '</span>,
-    },
-    <span class="hljs-attr">formDefaults</span>: { <span class="hljs-attr">alignment</span>: { <span class="hljs-attr">fixTo</span>: <span class="hljs-string">'d'</span> } },
-    <span class="hljs-attr">forms</span>: {
-      <span class="hljs-comment">// Root object form</span>
-      <span class="hljs-number">1</span>: {
-        <span class="hljs-attr">root</span>: {
-          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'r'</span>,
-          <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'d'</span>],
-        },
-      },
-      <span class="hljs-comment">// Root array form</span>
-      <span class="hljs-number">2</span>: { <span class="hljs-attr">root</span>: [<span class="hljs-string">'r'</span>, <span class="hljs-string">'d'</span>] },
-      <span class="hljs-comment">// Cube root</span>
-      <span class="hljs-number">3</span>: { <span class="hljs-attr">root</span>: { <span class="hljs-attr">content</span>: <span class="hljs-string">'d'</span>, <span class="hljs-attr">symbol</span>: <span class="hljs-string">'r'</span>, <span class="hljs-attr">root</span>: <span class="hljs-string">'_3'</span> } },
-    },
-    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
-  },
-});
-<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
-eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
-eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to diagram</span>
-<span class="hljs-keyword">const</span> eqn = diagram.create.equation({
-  <span class="hljs-attr">elements</span>: {
-    <span class="hljs-attr">r</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'radical'</span> },
-    <span class="hljs-attr">plus</span>: <span class="hljs-string">'  +  '</span>,
-  },
-  <span class="hljs-attr">formDefaults</span>: {
-    <span class="hljs-attr">alignment</span>: { <span class="hljs-attr">fixTo</span>: <span class="hljs-string">'d'</span> },
-  },
-  <span class="hljs-attr">forms</span>: {
-    <span class="hljs-number">1</span>: {
-      <span class="hljs-attr">root</span>: {
-        <span class="hljs-attr">symbol</span>: <span class="hljs-string">'r'</span>,
-        <span class="hljs-attr">content</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'d'</span>],
-      },
-    },
-    <span class="hljs-number">2</span>: { <span class="hljs-attr">root</span>: [<span class="hljs-string">'r'</span>, <span class="hljs-string">'d'</span>] },
-    <span class="hljs-number">3</span>: { <span class="hljs-attr">root</span>: { <span class="hljs-attr">content</span>: <span class="hljs-string">'d'</span>, <span class="hljs-attr">symbol</span>: <span class="hljs-string">'r'</span>, <span class="hljs-attr">root</span>: <span class="hljs-string">'_3'</span> } },
-  },
-  <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
-});
-diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
-eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
-eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
 
@@ -24666,468 +25158,6 @@ eqn.addElements({
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
  { <span class="hljs-attr">bar</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'hBar'</span>, <span class="hljs-string">'top'</span>] }</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eqn_integral'>
-      EQN_Integral
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation integral</p>
-<p>Place an integral (with optional limits) before an equation phrase</p>
-
-  
-    <p style="display: none;">      Type:
-      ({symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, content: <a href="#typeequationphrase">TypeEquationPhrase</a>?, from: <a href="#typeequationphrase">TypeEquationPhrase</a>?, to: <a href="#typeequationphrase">TypeEquationPhrase</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, yOffset: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, toScale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, fromOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, toOffset: <a href="#typeparsablepoint">TypeParsablePoint</a>?, limitsPosition: (<code>"side"</code> | <code>"topBottom"</code> | <code>"topBottomCenter"</code>)?, limitsAroundContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, fromXPosition: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fromYPosition: (<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fromXAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fromYAlign: (<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, toXPosition: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, toYPosition: (<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, toXAlign: (<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, toYAlign: (<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?, fullBoundsContent: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="#typeequationphrase">TypeEquationPhrase</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="#typeparsablepoint">TypeParsablePoint</a>?, <a href="#typeparsablepoint">TypeParsablePoint</a>?, (<code>"side"</code>? | <code>"topBottom"</code> | <code>"topBottomCenter"</code>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"left"</code>? | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), (<code>"bottom"</code>? | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>from</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
-          : bottom limit
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>to</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>?)</code>
-          : top limit
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>inSize</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>false</code>
- excludes box symbol from size of
-resulting phrase (
-<code>true</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : horizontal space between symbol and content (
-<code>0.05</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space between content top and symbol top (
-<code>0.1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space between content bottom and symbol bottom (
-<code>0.1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : force height of symbol
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yOffset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : y offset of symbol (
-<code>0</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : content scale (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : scale of 
-<em>from</em>
- (bottom) limit (
-<code>0.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>toScale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : scale of 
-<em>to</em>
- (top) limit (
-<code>0.5</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : from limit offest ( 
-<code>side</code>
-:
-
-<code>[0, 0]</code>
-, 
-<code>topBottom</code>
-: 
-<code>[0, -0.04]</code>
-, 
-<code>topBottomCenter</code>
-: 
-<code>[0, -0.04]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>toOffset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : to limit offest (
-<code>side</code>
-: 
-<code>[0, 0]</code>
-
-
-<code>topBottom</code>
-: 
-<code>[0, 0.04]</code>
-, 
-<code>topBottomCenter</code>
-: 
-<code>[0, 0.04]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>limitsPosition</span> <code class='quiet'>((<code>"side"</code> | <code>"topBottom"</code> | <code>"topBottomCenter"</code>)?)</code>
-          : limits
-relative to symbol. 
-<code>side</code>
- is to the right of the symbol ends, 
-<code>topBottom</code>
-
-is above and below the symbol ends and 
-<code>topBottomCenter</code>
- is above and below
-the integral mid point (
-<code>'side'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>limitsAroundContent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>false</code>
- means content left is
-aligned with furthest right of limits
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromXPosition</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : x position
-of limit relative to the symbol (
-<code>side</code>
-: 
-<code>0.5</code>
-, 
-<code>topBottom</code>
-: 
-<code>0.1</code>
-,
-
-<code>topBottomCenter</code>
-: 
-<code>'center'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromYPositio</span> <code class='quiet'>((<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : y position of the limit relavite to the symbol (
-<code>'bottom'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromXAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : limit x
-alignment (
-<code>side</code>
-: 
-<code>'left'</code>
-, 
-<code>topBottom</code>
-: 
-<code>center</code>
-,
-
-<code>topBottomCenter</code>
-: 
-<code>'center'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fromYAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : limit y alignment (
-<code>side</code>
-: 
-<code>'middle'</code>
-, 
-<code>topBottom</code>
-: 
-<code>'top'</code>
-,
-
-<code>topBottomCenter</code>
-: 
-<code>'top'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>toXPosition</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : x position
-of limit relative to the symbol (
-<code>side</code>
-: 
-<code>'right'</code>
-, 
-<code>topBottom</code>
-: 
-<code>0.9</code>
-,
-
-<code>topBottomCenter</code>
-: 
-<code>'center'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>toYPosition</span> <code class='quiet'>((<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : y position of the limit relavite to the symbol (
-<code>side</code>
-: 
-<code>'top'</code>
-,
-
-<code>topBottom</code>
-: 
-<code>top</code>
-, 
-<code>topBottomCenter</code>
-: 
-<code>'top'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>toXAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : limit x
-alignment (
-<code>side</code>
-: 
-<code>'left'</code>
-, 
-<code>topBottom</code>
-: 
-<code>center</code>
-,
-
-<code>topBottomCenter</code>
-: 
-<code>'center'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>toYAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"top"</code> | <code>"middle"</code> | <code>"baseline"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : limit y alignment (
-<code>side</code>
-: 
-<code>'middle'</code>
-, 
-<code>topBottom</code>
-: 
-<code>bottom</code>
-,
-
-<code>topBottomCenter</code>
-: 
-<code>'bottom'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : use full bounds of content,
-overriding any 
-<code>inSize=false</code>
- properties in the content (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>useFullBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : make the bounds of this phrase equal to
-the full bounds of the content even if 
-<code>fullContentBounds=false</code>
- and the
-brackets only surround a portion of the content (
-<code>false</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For examples, a box symbol is defined as an equation element</span>
-eqn.addElements({
-  <span class="hljs-attr">integral</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'int'</span> }
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition for horizontal bar</span>
-{
-  <span class="hljs-attr">int</span>: {
-    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'integral'</span>,
-    <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-    <span class="hljs-attr">from</span>: <span class="hljs-string">'b'</span>,
-    <span class="hljs-attr">to</span>: <span class="hljs-string">'c'</span>,
-    <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">space</span>: <span class="hljs-number">0</span>,
-    <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.1</span>,
-    <span class="hljs-attr">height</span>: <span class="hljs-literal">null</span>,
-    <span class="hljs-attr">yOffset</span>: <span class="hljs-number">0</span>,
-    <span class="hljs-attr">scale</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">fromScale</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">toScale</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">fromOffset</span>: [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.1</span>],
-    <span class="hljs-attr">toOffset</span>: [<span class="hljs-number">-0.1</span>, <span class="hljs-number">-0.1</span>],
-    <span class="hljs-attr">limitsPosition</span>: <span class="hljs-string">'topBottom'</span>,
-    <span class="hljs-attr">limitsAroundContent</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">fromXPosition</span>: <span class="hljs-string">'center'</span>,
-    <span class="hljs-attr">fromYPosition</span>: <span class="hljs-string">'bottom'</span>,
-    <span class="hljs-attr">fromXAlign</span>: <span class="hljs-string">'center'</span>,
-    <span class="hljs-attr">fromYAlign</span>: <span class="hljs-string">'top'</span>,
-    <span class="hljs-attr">toXPosition</span>: <span class="hljs-string">'center'</span>,
-    <span class="hljs-attr">toYPosition</span>: <span class="hljs-string">'top'</span>,
-    <span class="hljs-attr">toXAlign</span>: <span class="hljs-string">'center'</span>,
-    <span class="hljs-attr">toYAlign</span>: <span class="hljs-string">'bottom'</span>,
-    <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
-    <span class="hljs-attr">useFullBounds</span>: <span class="hljs-literal">false</span>,
-  },
-}</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">int</span>: [<span class="hljs-string">'integral'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>] }</pre>
     
   
 

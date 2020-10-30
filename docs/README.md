@@ -229,15 +229,15 @@
 -   [EQN_Equation][451]
 -   [TypeEquationElements][453]
 -   [Equation Layout Function Objects][454]
--   [EQN_Container][455]
--   [EQN_Fraction][458]
--   [EQN_Scale][461]
--   [EQN_Bracket][464]
--   [EQN_Root][467]
--   [EQN_Strike][470]
--   [EQN_Box][473]
--   [EQN_Bar][476]
--   [EQN_Integral][479]
+-   [EQN_Fraction][455]
+-   [EQN_Root][458]
+-   [EQN_Integral][461]
+-   [EQN_Container][464]
+-   [EQN_Scale][467]
+-   [EQN_Bracket][470]
+-   [EQN_Strike][473]
+-   [EQN_Box][476]
+-   [EQN_Bar][479]
 -   [EQN_SumOf][482]
 -   [EQN_ProdOf][485]
 -   [EQN_Subcript][488]
@@ -6090,89 +6090,6 @@ Object with multiple equation elements.
 
 
 
-## EQN_Container
-
--   **See: To test examples, append them to the
-    <a href="#equation-boilerplate">boilerplate</a>
-    **
-
-Equation container options
-
-![][864]
-
-A container is useful to fix spacing around content as it changes between
-equation forms.
-
-Options can be an object, or an array in the property order below
-
-
-### Properties
-
--   `content` **[TypeEquationPhrase][865]** 
--   `width` **[number][753]?** (`null`)
--   `descent` **[number][753]?** (`null`)
--   `ascent` **[number][753]?** (`null`)
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][753])?** (`'center'`)
--   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"baseline"` \| [number][753])?** (`'baseline'`)
--   `fit` **(`"width"` \| `"height"` \| `"contain"`)?** fit width,
-    ascent and descent to either match width, height or fully contain the content (`null`)
--   `scale` **[number][753]?** (`1`)
--   `fullContentBounds` **[boolean][752]?** (`false`)
-
-### Examples
-
-```javascript
-// Example showing the difference between with and without container
-diagram.addElement({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    forms: {
-      // Container object definition
-      1: [
-        'length',
-        {
-          container: {
-            content: 'width',
-            width: 0.5,
-          },
-        },
-        'height',
-      ],
-      // Container array definition
-      2: ['length', { container: ['w', 0.5] }, 'height'],
-      // No container
-      3: ['length', ' ', 'w', ' ', 'height']
-    },
-    formSeries: ['1', '2', '3'],
-  },
-});
-const eqn = diagram.elements._eqn;
-eqn.onClick = () => eqn.nextForm();
-eqn.setTouchableRect(0.5);
-eqn.showForm('1');
-```
-
-```javascript
-// Create equation object then add to diagram
-const eqn = diagram.create.equation({
-  forms: {
-    1: [
-      'length',
-      { container: { content: 'width', width: 0.5 } },
-      'height',
-    ],
-    2: ['length', { container: ['w', 0.5] }, 'height'],
-    3: ['length', ' ', 'w', ' ', 'height']
-  },
-  formSeries: ['1', '2', '3'],
-});
-diagram.add('eqn', eqn);
-eqn.onClick = () => eqn.nextForm();
-eqn.setTouchableRect(0.5);
-eqn.showForm('1');
-```
-
 ## EQN_Fraction
 
 -   **See: To test examples, append them to the
@@ -6181,7 +6098,7 @@ eqn.showForm('1');
 
 Equation fraction options
 
-![][866]
+![][864]
 
 A fraction has a numerator, denominator and vinculum symbol (line).
 
@@ -6290,109 +6207,6 @@ eqn.setTouchableRect(0.5);
 eqn.showForm('1');
 ```
 
-## EQN_Scale
-
-Equation scale
-
-Scale an equation phrase
-
-
-### Properties
-
--   `content` **[TypeEquationPhrase][865]** 
--   `scale` **[number][753]?** (`1`)
--   `fullContentBounds` **[boolean][752]?** Use full bounds with content (`false`)
-
-### Examples
-
-```javascript
-// Full object definition
- {
-   scale: {
-     content: ['a', 'b'],
-     scale: 0.5,
-     fullContentBounds: false,
-   },
- }
-```
-
-```javascript
-// Example array definition
- { scale: [['a', 'b'], 0.5] }
-```
-
-## EQN_Bracket
-
-Equation bracket
-
-Surround an equation phrase with brackets
-
-
-### Properties
-
--   `left` **[string][744]?** left bracket symbol
--   `content` **[TypeEquationPhrase][865]?** 
--   `right` **[string][744]?** right bracket symbol
--   `inSize` **[boolean][752]?** `false` excludes bracket symbols from
-    size of resulting phrase (`true`)
--   `insideSpace` **[number][753]?** space between brackets and content (`0.03`)
--   `outsideSpace` **[number][753]?** space between brackets and neighboring
-    phrases(`0.03`)
--   `topSpace` **[number][753]?** how far the brackets extend above the content
-    (`0.05`)
--   `bottomSpace` **[number][753]?** how far the brackets extend below the
-    content (`0.05`)
--   `minContentHeight` **[number][753]?** if content height is less than this,
-    then this number will be used when sizing the brackets (unless it is `null`)
-    (`null`)
--   `minContentDescent` **[number][753]?** if content descent is less than this,
-    then this number will be used when sizing the brackets (unless it is `null`)
-    (`null`)
--   `height` **[number][753]?** force height of brackets (`null`)
--   `descent` **[number][753]?** force descent of brackets (`null`)
--   `fullContentBounds` **[boolean][752]?** use full bounds of content,
-    overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][752]?** make the bounds of this phrase equal to
-    the full bounds of the content even if `fullContentBounds=false` and the
-    brackets only surround a portion of the content (`false`)
-
-### Examples
-
-```javascript
-// For examples, two bracket symbols are defined as equation elements
-eqn.addElements({
-  lb: { symbol: 'bracket', side: 'left' }
-  rb: { symbol: 'bracket', side: 'right' }
-});
-```
-
-```javascript
-// Full object definition
- {
-   brac: {
-     left: 'lb',
-     content: 'a',
-     right: 'rb',
-     inSize: true,
-     insideSpace: 0.1,
-     outsideSpace: 0.1,
-     topSpace: 0.1,
-     bottomSpace: 0.1,
-     minContentHeight: 0.1,
-     minContentDescent: 0.1,
-     height: 0.1,
-     descent: 0.1,
-     fullContentBounds: false,
-     useFullBounds: false,
-   },
- }
-```
-
-```javascript
-// Example array definition
- { brac: ['lb', 'a', 'rb'] }
-```
-
 ## EQN_Root
 
 -   **See: To test examples, append them to the
@@ -6401,10 +6215,12 @@ eqn.addElements({
 
 Equation root
 
-![][867]
+![][866]
 
 Surround an equation phrase with a radical symbol and add a custom root if
 needed
+
+Options can be an object, or an array in the property order below.
 
 
 ### Properties
@@ -6507,6 +6323,321 @@ diagram.add('eqn', eqn);
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
+```
+
+## EQN_Integral
+
+-   **See: To test examples, append them to the
+    <a href="#equation-boilerplate">boilerplate</a>
+    **
+
+Equation integral
+
+![][867]
+
+Place an integral (with optional limits) before an equation phrase
+
+Options can be an object, or an array in the property order below.
+
+
+### Properties
+
+-   `symbol` **[string][744]** 
+-   `content` **[TypeEquationPhrase][865]** 
+-   `from` **[TypeEquationPhrase][865]?** bottom limit
+-   `to` **[TypeEquationPhrase][865]?** top limit
+-   `inSize` **[boolean][752]?** `false` excludes box symbol from size of
+    resulting phrase (`true`)
+-   `space` **[number][753]?** horizontal space between symbol and content (`0.05`)
+-   `topSpace` **[number][753]?** space between content top and symbol top (`0.1`)
+-   `bottomSpace` **[number][753]?** space between content bottom and symbol bottom (`0.1`)
+-   `height` **[number][753]?** force height of symbol
+-   `yOffset` **[number][753]?** y offset of symbol (`0`)
+-   `scale` **[number][753]?** content scale (`1`)
+-   `fromScale` **[number][753]?** scale of _from_ (bottom) limit (`0.5`)
+-   `toScale` **[number][753]?** scale of _to_ (top) limit (`0.5`)
+-   `fromOffset` **[TypeParsablePoint][757]?** from limit offest ( `side`:
+    `[0, 0]`, `topBottom`: `[0, -0.04]`, `topBottomCenter`: `[0, -0.04]`)
+-   `toOffset` **[TypeParsablePoint][757]?** to limit offest (`side`: `[0, 0]`
+    `topBottom`: `[0, 0.04]`, `topBottomCenter`: `[0, 0.04]`)
+-   `limitsPosition` **(`"side"` \| `"topBottom"` \| `"topBottomCenter"`)?** limits
+    relative to symbol. `side` is to the right of the symbol ends, `topBottom`
+    is above and below the symbol ends and `topBottomCenter` is above and below
+    the integral mid point (`'side'`)
+-   `limitsAroundContent` **[boolean][752]?** `false` means content left is
+    aligned with furthest right of limits
+-   `fromXPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][753])?** x position
+    of limit relative to the symbol (`side`: `0.5`, `topBottom`: `0.1`,
+    `topBottomCenter`: `'center'`)
+-   `fromYPositio` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][753])?** y position of the limit relavite to the symbol (`'bottom'`)
+-   `fromXAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][753])?** limit x
+    alignment (`side`: `'left'`, `topBottom`: `center`,
+    `topBottomCenter`: `'center'`)
+-   `fromYAlign` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][753])?** limit y alignment (`side`: `'middle'`, `topBottom`: `'top'`,
+    `topBottomCenter`: `'top'`)
+-   `toXPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][753])?** x position
+    of limit relative to the symbol (`side`: `'right'`, `topBottom`: `0.9`,
+    `topBottomCenter`: `'center'`)
+-   `toYPosition` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][753])?** y position of the limit relavite to the symbol (`side`: `'top'`,
+    `topBottom`: `top`, `topBottomCenter`: `'top'`)
+-   `toXAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][753])?** limit x
+    alignment (`side`: `'left'`, `topBottom`: `center`,
+    `topBottomCenter`: `'center'`)
+-   `toYAlign` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][753])?** limit y alignment (`side`: `'middle'`, `topBottom`: `bottom`,
+    `topBottomCenter`: `'bottom'`)
+-   `fullContentBounds` **[boolean][752]?** use full bounds of content,
+    overriding any `inSize=false` properties in the content (`false`)
+-   `useFullBounds` **[boolean][752]?** make the bounds of this phrase equal to
+    the full bounds of the content even if `fullContentBounds=false` and the
+    brackets only surround a portion of the content (`false`)
+
+### Examples
+
+```javascript
+// Simple
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    forms: {
+      1: { int: ['int', 'x dx', 'a', 'b'] },
+    },
+  },
+});
+diagram.elements._eqn.showForm('1');
+```
+
+```javascript
+// Example showing different integral options
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      i: { symbol: 'int' },
+      // ic: { symbol: 'int', num: 1, type: 'line' },
+    },
+    formDefaults: { alignment: { fixTo: 'x' } },
+    forms: {
+      // Root object form
+      1: {
+        int: {
+          symbol: 'i',
+          content: ['x', ' ', 'dx'],
+          from: 'a',
+          to: 'b',
+        },
+      },
+      // Root array form
+      2: { int: ['i', ['x', '  ', '+', ' ', '_1', ' ', 'dx'], 'a', 'b'] },
+      // Indefinite tripple integral
+      3: { int: ['i', ['x', '  ', '+', ' ', '_1', ' ', 'dx']] },
+      // Custom spacing
+      4: {
+        int: {
+          symbol: 'i',
+          content: ['x', '  ', '+', ' ', '_1', ' ', 'dx'],
+          to: 'b',
+          from: { frac: ['a', 'vinculum', 'd + 2'] },
+          topSpace: 0.2,
+          bottomSpace: 0.2,
+          limitsAroundContent: false,
+        },
+      },
+    },
+    formSeries: ['1', '2', '3', '4'],
+  },
+});
+const eqn = diagram.elements._eqn;
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('1');
+```
+
+## EQN_Container
+
+-   **See: To test examples, append them to the
+    <a href="#equation-boilerplate">boilerplate</a>
+    **
+
+Equation container options
+
+![][868]
+
+A container is useful to fix spacing around content as it changes between
+equation forms.
+
+Options can be an object, or an array in the property order below
+
+
+### Properties
+
+-   `content` **[TypeEquationPhrase][865]** 
+-   `width` **[number][753]?** (`null`)
+-   `descent` **[number][753]?** (`null`)
+-   `ascent` **[number][753]?** (`null`)
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][753])?** (`'center'`)
+-   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"baseline"` \| [number][753])?** (`'baseline'`)
+-   `fit` **(`"width"` \| `"height"` \| `"contain"`)?** fit width,
+    ascent and descent to either match width, height or fully contain the content (`null`)
+-   `scale` **[number][753]?** (`1`)
+-   `fullContentBounds` **[boolean][752]?** (`false`)
+
+### Examples
+
+```javascript
+// Example showing the difference between with and without container
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    forms: {
+      // Container object definition
+      1: [
+        'length',
+        {
+          container: {
+            content: 'width',
+            width: 0.5,
+          },
+        },
+        'height',
+      ],
+      // Container array definition
+      2: ['length', { container: ['w', 0.5] }, 'height'],
+      // No container
+      3: ['length', ' ', 'w', ' ', 'height']
+    },
+    formSeries: ['1', '2', '3'],
+  },
+});
+const eqn = diagram.elements._eqn;
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('1');
+```
+
+```javascript
+// Create equation object then add to diagram
+const eqn = diagram.create.equation({
+  forms: {
+    1: [
+      'length',
+      { container: { content: 'width', width: 0.5 } },
+      'height',
+    ],
+    2: ['length', { container: ['w', 0.5] }, 'height'],
+    3: ['length', ' ', 'w', ' ', 'height']
+  },
+  formSeries: ['1', '2', '3'],
+});
+diagram.add('eqn', eqn);
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('1');
+```
+
+## EQN_Scale
+
+Equation scale
+
+Scale an equation phrase
+
+
+### Properties
+
+-   `content` **[TypeEquationPhrase][865]** 
+-   `scale` **[number][753]?** (`1`)
+-   `fullContentBounds` **[boolean][752]?** Use full bounds with content (`false`)
+
+### Examples
+
+```javascript
+// Full object definition
+ {
+   scale: {
+     content: ['a', 'b'],
+     scale: 0.5,
+     fullContentBounds: false,
+   },
+ }
+```
+
+```javascript
+// Example array definition
+ { scale: [['a', 'b'], 0.5] }
+```
+
+## EQN_Bracket
+
+Equation bracket
+
+Surround an equation phrase with brackets
+
+
+### Properties
+
+-   `left` **[string][744]?** left bracket symbol
+-   `content` **[TypeEquationPhrase][865]?** 
+-   `right` **[string][744]?** right bracket symbol
+-   `inSize` **[boolean][752]?** `false` excludes bracket symbols from
+    size of resulting phrase (`true`)
+-   `insideSpace` **[number][753]?** space between brackets and content (`0.03`)
+-   `outsideSpace` **[number][753]?** space between brackets and neighboring
+    phrases(`0.03`)
+-   `topSpace` **[number][753]?** how far the brackets extend above the content
+    (`0.05`)
+-   `bottomSpace` **[number][753]?** how far the brackets extend below the
+    content (`0.05`)
+-   `minContentHeight` **[number][753]?** if content height is less than this,
+    then this number will be used when sizing the brackets (unless it is `null`)
+    (`null`)
+-   `minContentDescent` **[number][753]?** if content descent is less than this,
+    then this number will be used when sizing the brackets (unless it is `null`)
+    (`null`)
+-   `height` **[number][753]?** force height of brackets (`null`)
+-   `descent` **[number][753]?** force descent of brackets (`null`)
+-   `fullContentBounds` **[boolean][752]?** use full bounds of content,
+    overriding any `inSize=false` properties in the content (`false`)
+-   `useFullBounds` **[boolean][752]?** make the bounds of this phrase equal to
+    the full bounds of the content even if `fullContentBounds=false` and the
+    brackets only surround a portion of the content (`false`)
+
+### Examples
+
+```javascript
+// For examples, two bracket symbols are defined as equation elements
+eqn.addElements({
+  lb: { symbol: 'bracket', side: 'left' }
+  rb: { symbol: 'bracket', side: 'right' }
+});
+```
+
+```javascript
+// Full object definition
+ {
+   brac: {
+     left: 'lb',
+     content: 'a',
+     right: 'rb',
+     inSize: true,
+     insideSpace: 0.1,
+     outsideSpace: 0.1,
+     topSpace: 0.1,
+     bottomSpace: 0.1,
+     minContentHeight: 0.1,
+     minContentDescent: 0.1,
+     height: 0.1,
+     descent: 0.1,
+     fullContentBounds: false,
+     useFullBounds: false,
+   },
+ }
+```
+
+```javascript
+// Example array definition
+ { brac: ['lb', 'a', 'rb'] }
 ```
 
 ## EQN_Strike
@@ -6725,113 +6856,6 @@ eqn.addElements({
 ```javascript
 // Example array definition
  { bar: ['a', 'hBar', 'top'] }
-```
-
-## EQN_Integral
-
-Equation integral
-
-Place an integral (with optional limits) before an equation phrase
-
-
-### Properties
-
--   `symbol` **[string][744]** 
--   `content` **[TypeEquationPhrase][865]** 
--   `from` **[TypeEquationPhrase][865]?** bottom limit
--   `to` **[TypeEquationPhrase][865]?** top limit
--   `inSize` **[boolean][752]?** `false` excludes box symbol from size of
-    resulting phrase (`true`)
--   `space` **[number][753]?** horizontal space between symbol and content (`0.05`)
--   `topSpace` **[number][753]?** space between content top and symbol top (`0.1`)
--   `bottomSpace` **[number][753]?** space between content bottom and symbol bottom (`0.1`)
--   `height` **[number][753]?** force height of symbol
--   `yOffset` **[number][753]?** y offset of symbol (`0`)
--   `scale` **[number][753]?** content scale (`1`)
--   `fromScale` **[number][753]?** scale of _from_ (bottom) limit (`0.5`)
--   `toScale` **[number][753]?** scale of _to_ (top) limit (`0.5`)
--   `fromOffset` **[TypeParsablePoint][757]?** from limit offest ( `side`:
-    `[0, 0]`, `topBottom`: `[0, -0.04]`, `topBottomCenter`: `[0, -0.04]`)
--   `toOffset` **[TypeParsablePoint][757]?** to limit offest (`side`: `[0, 0]`
-    `topBottom`: `[0, 0.04]`, `topBottomCenter`: `[0, 0.04]`)
--   `limitsPosition` **(`"side"` \| `"topBottom"` \| `"topBottomCenter"`)?** limits
-    relative to symbol. `side` is to the right of the symbol ends, `topBottom`
-    is above and below the symbol ends and `topBottomCenter` is above and below
-    the integral mid point (`'side'`)
--   `limitsAroundContent` **[boolean][752]?** `false` means content left is
-    aligned with furthest right of limits
--   `fromXPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][753])?** x position
-    of limit relative to the symbol (`side`: `0.5`, `topBottom`: `0.1`,
-    `topBottomCenter`: `'center'`)
--   `fromYPositio` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][753])?** y position of the limit relavite to the symbol (`'bottom'`)
--   `fromXAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][753])?** limit x
-    alignment (`side`: `'left'`, `topBottom`: `center`,
-    `topBottomCenter`: `'center'`)
--   `fromYAlign` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][753])?** limit y alignment (`side`: `'middle'`, `topBottom`: `'top'`,
-    `topBottomCenter`: `'top'`)
--   `toXPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][753])?** x position
-    of limit relative to the symbol (`side`: `'right'`, `topBottom`: `0.9`,
-    `topBottomCenter`: `'center'`)
--   `toYPosition` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][753])?** y position of the limit relavite to the symbol (`side`: `'top'`,
-    `topBottom`: `top`, `topBottomCenter`: `'top'`)
--   `toXAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][753])?** limit x
-    alignment (`side`: `'left'`, `topBottom`: `center`,
-    `topBottomCenter`: `'center'`)
--   `toYAlign` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][753])?** limit y alignment (`side`: `'middle'`, `topBottom`: `bottom`,
-    `topBottomCenter`: `'bottom'`)
--   `fullContentBounds` **[boolean][752]?** use full bounds of content,
-    overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][752]?** make the bounds of this phrase equal to
-    the full bounds of the content even if `fullContentBounds=false` and the
-    brackets only surround a portion of the content (`false`)
-
-### Examples
-
-```javascript
-// For examples, a box symbol is defined as an equation element
-eqn.addElements({
-  integral: { symbol: 'int' }
-});
-```
-
-```javascript
-// Full object definition for horizontal bar
-{
-  int: {
-    symbol: 'integral',
-    content: 'a',
-    from: 'b',
-    to: 'c',
-    inSize: true,
-    space: 0,
-    topSpace: 0.1,
-    bottomSpace: 0.1,
-    height: null,
-    yOffset: 0,
-    scale: 1,
-    fromScale: 1,
-    toScale: 1,
-    fromOffset: [0.1, 0.1],
-    toOffset: [-0.1, -0.1],
-    limitsPosition: 'topBottom',
-    limitsAroundContent: true,
-    fromXPosition: 'center',
-    fromYPosition: 'bottom',
-    fromXAlign: 'center',
-    fromYAlign: 'top',
-    toXPosition: 'center',
-    toYPosition: 'top',
-    toXAlign: 'center',
-    toYAlign: 'bottom',
-    fullContentBounds: false,
-    useFullBounds: false,
-  },
-}
-```
-
-```javascript
-// Example array definition
- { int: ['integral', 'a', 'b', 'c'] }
 ```
 
 ## EQN_SumOf
@@ -7255,7 +7279,7 @@ Equation matrix
     (`[0.05, 0.05]`)
 -   `yAlign` **(`"baseline"` \| `"middle"`)?** align cells in a row with the
     text baseline, or middle of the cell (`baseline`)
--   `brac` **[EQN_Bracket][868]?** bracket options not including
+-   `brac` **[EQN_Bracket][869]?** bracket options not including
     the symbols (`{}`)
 -   `fullContentBounds` **[boolean][752]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
@@ -7348,8 +7372,8 @@ Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
 ### Properties
 
 -   `content` **[TypeEquationPhrase][865]** 
--   `annotation` **[EQN_Annotation][869]?** use for just one annotation
--   `annotations` **[Array][745]&lt;[EQN_Annotation][869]>?** use for multiple annotations
+-   `annotation` **[EQN_Annotation][870]?** use for just one annotation
+-   `annotations` **[Array][745]&lt;[EQN_Annotation][870]>?** use for multiple annotations
 -   `inSize` **[boolean][752]?** `true` means resulting size includes
     annotations (`true`)
 -   `space` **[number][753]?** extend resulting equation phrase size by space on
@@ -7363,7 +7387,7 @@ Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
 -   `rightSpace` **[number][753]?** extend resulting equation phrase size by
     space on right
 -   `contentScale` **[number][753]?** scale content (`1`)
--   `glyphs` **[EQN_Glyphs][870]?** glyphs to annotate content with
+-   `glyphs` **[EQN_Glyphs][871]?** glyphs to annotate content with
 -   `fullContentBounds` **[boolean][752]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
 -   `useFullBounds` **[boolean][752]?** make the bounds of this phrase equal to
@@ -7528,9 +7552,9 @@ can also be annotated.
 ### Properties
 
 -   `symbol` **[string][744]** 
--   `annotation` **[EQN_Annotation][869]?** use for one annotation only instead
+-   `annotation` **[EQN_Annotation][870]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][745]&lt;[EQN_Annotation][869]>?** use for one or more
+-   `annotations` **[Array][745]&lt;[EQN_Annotation][870]>?** use for one or more
     annotations
 -   `space` **[number][753]?** default space the glyph should extend beyond the
     top, right, left and bottom sides of the content (`0`)
@@ -7578,9 +7602,9 @@ The glyph can also be annotated.
 ### Properties
 
 -   `symbol` **[string][744]** 
--   `annotation` **[EQN_Annotation][869]?** use for one annotation only instead
+-   `annotation` **[EQN_Annotation][870]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][745]&lt;[EQN_Annotation][869]>?** use for one or more
+-   `annotations` **[Array][745]&lt;[EQN_Annotation][870]>?** use for one or more
     annotations
 -   `space` **[number][753]?** horizontal space between glyph and content (`0`)
 -   `overhang` **[number][753]?** amount glyph extends above content top and
@@ -7649,9 +7673,9 @@ The glyph can also be annotated.
 ### Properties
 
 -   `symbol` **[string][744]** 
--   `annotation` **[EQN_Annotation][869]?** use for one annotation only instead
+-   `annotation` **[EQN_Annotation][870]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][745]&lt;[EQN_Annotation][869]>?** use for one or more
+-   `annotations` **[Array][745]&lt;[EQN_Annotation][870]>?** use for one or more
     annotations
 -   `space` **[number][753]?** vertical space between glyph and content (`0`)
 -   `overhang` **[number][753]?** amount glyph extends above content top and
@@ -7695,11 +7719,11 @@ Multiple glyphs are ok, but only one per position.
 
 ### Properties
 
--   `encompass` **[EQN_EncompassGlyph][871]?** 
--   `top` **[EQN_TopBottomGlyph][872]?** 
--   `right` **[EQN_LeftRightGlyph][873]?** 
--   `bottom` **[EQN_TopBottomGlyph][872]?** 
--   `left` **[EQN_LeftRightGlyph][873]?** 
+-   `encompass` **[EQN_EncompassGlyph][872]?** 
+-   `top` **[EQN_TopBottomGlyph][873]?** 
+-   `right` **[EQN_LeftRightGlyph][874]?** 
+-   `bottom` **[EQN_TopBottomGlyph][873]?** 
+-   `left` **[EQN_LeftRightGlyph][874]?** 
 
 ## Equation Symbol Objects
 
@@ -7998,7 +8022,7 @@ eqn.addElements({
 
 ## EQN_IntegralSymbol
 
-Integral equation symbol used in [EQN_Integral][479]
+Integral equation symbol used in [EQN_Integral][461]
 
 <pre>
 //     --------------------------------------------------   0000000
@@ -8078,7 +8102,7 @@ int: {
 
 ## EQN_StrikeSymbol
 
-Strike equation symbol used in [EQN_Strike][470].
+Strike equation symbol used in [EQN_Strike][473].
 
 Four styles of strike symbol are available:
 
@@ -8507,7 +8531,7 @@ eqn.addElements({
 
 ## EQN_RadicalSymbol
 
-Radical equation symbol used in [EQN_Root][467].
+Radical equation symbol used in [EQN_Root][458].
 
 The radical symbol allows customization on how to draw the radical. Mostly
 it will not be needed, but for edge case equation layouts it may be useful.
@@ -8613,7 +8637,7 @@ An equation phrase is used to define an equation form. An equation phrase
 can either be the entirety of the form definition, or a series of nested
 phrases.
 
--   An object or array definition (e.g. [EQN_Fraction][458])
+-   An object or array definition (e.g. [EQN_Fraction][455])
 -   A string that represents an equation element
 -   An array of [TypeEquationPhrase][567]
 
@@ -8653,7 +8677,7 @@ Duration and translation options for form animation
 ### Properties
 
 -   `duration` **[number][753]?** in seconds
--   `translation` **[Object][854]&lt;[TypeFormTranslationProperties][893]>?** 
+-   `translation` **[Object][854]&lt;[TypeFormTranslationProperties][894]>?** 
 
 ### Examples
 
@@ -8721,7 +8745,7 @@ complicating the overall equation navigation logic.
 
 See the examples below for how to define subForms.
 
-[Equation#addForms][894].
+[Equation#addForms][895].
 
 ### Properties
 
@@ -8740,11 +8764,11 @@ See the examples below for how to define subForms.
     properties if animating backward from the next form in a formSeries
 -   `duration` **[TypeFormAnimationProperties][863]?** animation move duration
      (fromNext and fromPrev are prioritized over this)
--   `translation` **[TypeFormTranslationProperties][893]?** animation move
+-   `translation` **[TypeFormTranslationProperties][894]?** animation move
     style (fromNext and fromPrev are prioritized over this)
 -   `elementMods` **[object][854]?** properties to set in the equation element
     (@DiagramElementPrimitive) when this form is shown
--   `animation` **{duration: [number][753]??, translation: [TypeFormTranslationProperties][893]?}?** 
+-   `animation` **{duration: [number][753]??, translation: [TypeFormTranslationProperties][894]?}?** 
 
 ### Examples
 
@@ -8887,7 +8911,7 @@ The default values in the pulse object are are:
 
 ## TypeEquationGoToFormOptions
 
-Options object for [Equation#goToForm][897].
+Options object for [Equation#goToForm][898].
 
 Often, `goToForm` is called to animate from a shown form to a desired form.
 Therefore there will be some equation elements that:
@@ -9078,7 +9102,7 @@ Convert a parsable line definition to a [Line][118].
 
 ### Parameters
 
--   `l` **[TypeParsableLine][899]** parsable line definition
+-   `l` **[TypeParsableLine][900]** parsable line definition
 
 Returns **[Line][765]** `Line` object
 
@@ -9198,7 +9222,7 @@ Used within [OBJ_Text][282] to define a single string
 
 Font definition object.
 
-Text is drawn in a [Context2D canvas][900] and so `family`, `style` and `weight` are any valid [options][901].
+Text is drawn in a [Context2D canvas][901] and so `family`, `style` and `weight` are any valid [options][902].
 
 `size` is the vertex space size of the font.
 
@@ -9374,7 +9398,7 @@ Type: any
 ### Properties
 
 -   `element` **[DiagramElement][751]?** 
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][902])?** how the animation progresses - defaults to `linear` for color, opacity and
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][903])?** how the animation progresses - defaults to `linear` for color, opacity and
     custom animations and `easeinout` for others
 
 ## OBJ_ScenarioVelocity
@@ -9430,7 +9454,7 @@ Start animation
 
 #### Parameters
 
--   `startTime` **[AnimationStartTime][903]**  (optional, default `null`)
+-   `startTime` **[AnimationStartTime][904]**  (optional, default `null`)
 
 ## DelayAnimationStep
 
@@ -9494,7 +9518,7 @@ Start animation options object.
 
 -   `name` **(null | [string][744])?** name of animation to start - f null, then
     all animations associated with this animation manager will start (`null`)
--   `startTime` **[AnimationStartTime][903]** when to
+-   `startTime` **[AnimationStartTime][904]** when to
     start the animation
 
 ## OBJ_SerialAnimationStep
@@ -9552,7 +9576,7 @@ Type: any
 -   `callback` **([string][744] | function (int): void)** function to run each
     animation frame
 -   `startPercent` **[number][753]?** percent to start animation at (`0`)
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][902])?** 
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][903])?** 
 
 ## OBJ_TransformAnimationStep
 
@@ -9588,9 +9612,9 @@ Type: any
 
 ### Properties
 
--   `start` **([string][744] \| [OBJ_Scenario][904])?** 
--   `target` **([string][744] \| [OBJ_Scenario][904])?** 
--   `velocity` **(null | [string][744] \| [OBJ_ScenarioVelocity][905])?** velocity
+-   `start` **([string][744] \| [OBJ_Scenario][905])?** 
+-   `target` **([string][744] \| [OBJ_Scenario][905])?** 
+-   `velocity` **(null | [string][744] \| [OBJ_ScenarioVelocity][906])?** velocity
     will override duration with a calculated duration based on
     the `start`, `target` and `velocity`. If `null` is used
     then `duration` will not be overriden. Any scenario velocity elements that
@@ -9606,13 +9630,13 @@ Type: any
     `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
     whichever direction doesn't pass through angle 0.
 -   `clipRotationTo` **(`"0to360"` \| `"-180to180"` | null)?** 
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][902])?** (`'easeinout'`)
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][903])?** (`'easeinout'`)
 
 ## OBJ_TriggerAnimationStep
 
 **Extends OBJ_AnimationStep**
 
-[TriggernAnimationStep][906] options object
+[TriggernAnimationStep][907] options object
 
 Type: any
 
@@ -9621,13 +9645,13 @@ Type: any
 -   `payload` **any?** payload to pass to callback (`null`)
 -   `element` **[DiagramElement][751]** [DiagramElement][14] to associate with
     callback - if the `callback` is a string then this element's
-    [FunctionMap][907] will be searched for the corresponding function
+    [FunctionMap][908] will be searched for the corresponding function
 
 ## OBJ_Pulse
 
 Pulse options object
 
-![][908]
+![][909]
 
 Pulsing can be useful to highlight a diagram element to a user, without
 changing its underlying properties.
@@ -9682,9 +9706,9 @@ outlines are becomming thicker.
     (`'diagram'`)
 -   `num` **[number][753]?** the number of draw copies of the pulse to make (`1`)
 -   `done` **(null | [string][744] | function (): void)?** callback when pulse is
-    finished. If `string` then the element's [FunctionMap][907] `fnMap` will be
+    finished. If `string` then the element's [FunctionMap][908] `fnMap` will be
     used (`null`)
--   `when` **[TypeWhen][909]?** when to start the pulse (`'syncNow'`)
+-   `when` **[TypeWhen][910]?** when to start the pulse (`'syncNow'`)
 -   `progression` **(`"sinusoid"` \| `"triangle"`)?** function that defines
     how the scale should progress over time (`sinusoid`)
 -   `x` **(`"left"` \| `"center"` \| `"right"` \| `"origin"` \| [number][753])?** 
@@ -9881,7 +9905,7 @@ Line intersection result object with keys:
 
 ### Properties
 
--   `intersect` **([undefined][910] \| [Point][759])** 
+-   `intersect` **([undefined][911] \| [Point][759])** 
 -   `alongLine` **[boolean][752]** `true` if `intersect` is along line calling
     `intersectsWith`
 -   `withinLine` **[boolean][752]** `true` if `intersect` is within line calling
@@ -9965,11 +9989,11 @@ Polygon or partial polygon shape options object
 
 #### Parameters
 
--   `options` **...[Array][745]&lt;[OBJ_Polygon][911]>** 
+-   `options` **...[Array][745]&lt;[OBJ_Polygon][912]>** 
 
 ## CPY_Step
 
-![][912]
+![][913]
 
 Copy Step options object
 
@@ -10172,47 +10196,47 @@ Lines and polylines can be terminated with different styles of arrows. The
 
 ### `head: 'triangle'`
 
-![][913]
+![][914]
 
 Use `length` and `width` to customize head shape.
 
 Use `reverse` to reverse the triangle:
 
-![][914]
+![][915]
 
 ### `head: 'barb'`
 
-![][915]
+![][916]
 
 Use `length`, `width` and `barb` to customize head shape.
 
 ### `head: 'line'`
 
-![][916]
+![][917]
 
 Use `length` and `width` to customize head shape.
 
 ### `head: 'circle'`
 
-![][917]
+![][918]
 
 Use `radius` and `sides` to customize head shape.
 
 ### `head: 'polygon'`
 
-![][918]
+![][919]
 
 Use `radius`, `sides` and `rotation` to customize head shape.
 
 ### `head: 'bar'`
 
-![][919]
+![][920]
 
 Use `length` and `width` to customize head shape.
 
 ### `head: 'rectangle'`
 
-![][920]
+![][921]
 
 Use `length` and `width` to customize head shape.
 
@@ -10367,7 +10391,7 @@ Diagram element move parameters
 
 -   `bounds` **TransformBounds** rectangle to limit movement within
 -   `maxVelocity` **TypeTransformValue** maximum velocity allowed (5)
--   `freely` **[DiagramElementMoveFreely][921]** free movement parameters
+-   `freely` **[DiagramElementMoveFreely][922]** free movement parameters
 -   `canBeMovedAfterLosingTouch` **[boolean][752]** touch or mouse dragging will
     continue to move element even after the touch/cursor position is outside
     the element boundary
@@ -10388,7 +10412,7 @@ This is an object where the keys are scenario names and values are
 
 ### Properties
 
--   `scenarioName` **[OBJ_Scenario][904]** where scenarioName can be any
+-   `scenarioName` **[OBJ_Scenario][905]** where scenarioName can be any
     string that names the scenario
 
 ## ElementMovementState
@@ -10417,9 +10441,9 @@ Element state
 
 -   `isBeingMoved` **[boolean][752]** 
 -   `isMovingFreely` **[boolean][752]** 
--   `movement` **[ElementMovementState][922]** 
+-   `movement` **[ElementMovementState][923]** 
 -   `isPulsing` **[boolean][752]** 
--   `pulse` **[ElementPulseState][923]** 
+-   `pulse` **[ElementPulseState][924]** 
 -   `preparingToStop` **[boolean][752]** 
 
 ## DrawingObject
@@ -10464,7 +10488,7 @@ Equation container function
 
 ### Parameters
 
--   `optionsOrArray` **[EQN_Container][886]** 
+-   `optionsOrArray` **[EQN_Container][887]** 
 
 ### Examples
 
@@ -10485,7 +10509,7 @@ Equation fraction function
 
 ### Parameters
 
--   `optionsOrArray` **[EQN_Fraction][874]** 
+-   `optionsOrArray` **[EQN_Fraction][875]** 
 
 ### Examples
 
@@ -10556,9 +10580,9 @@ Type: any
     (`'diagram'`)
 -   `num` **[number][753]?** the number of draw copies of the pulse to make (`1`)
 -   `done` **(null | [string][744] | function (): void)?** callback when pulse is
-    finished. If `string` then the element's [FunctionMap][907] `fnMap` will be
+    finished. If `string` then the element's [FunctionMap][908] `fnMap` will be
     used (`null`)
--   `when` **[TypeWhen][909]?** when to start the pulse (`'syncNow'`)
+-   `when` **[TypeWhen][910]?** when to start the pulse (`'syncNow'`)
 
 ## AnimationStartTime
 
@@ -10590,7 +10614,7 @@ A custom time can be used if a `number` is defined.
 
 `null` will result in `'nextFrame'` being used
 
-Type: ([TypeWhen][909] \| [number][753] | null)
+Type: ([TypeWhen][910] \| [number][753] | null)
 
 [1]: #introduction
 
@@ -11500,55 +11524,55 @@ Type: ([TypeWhen][909] \| [number][753] | null)
 
 [454]: #equation-layout-function-objects
 
-[455]: #eqn_container
+[455]: #eqn_fraction
 
 [456]: #properties-16
 
 [457]: #examples-50
 
-[458]: #eqn_fraction
+[458]: #eqn_root
 
 [459]: #properties-17
 
 [460]: #examples-51
 
-[461]: #eqn_scale
+[461]: #eqn_integral
 
 [462]: #properties-18
 
 [463]: #examples-52
 
-[464]: #eqn_bracket
+[464]: #eqn_container
 
 [465]: #properties-19
 
 [466]: #examples-53
 
-[467]: #eqn_root
+[467]: #eqn_scale
 
 [468]: #properties-20
 
 [469]: #examples-54
 
-[470]: #eqn_strike
+[470]: #eqn_bracket
 
 [471]: #properties-21
 
 [472]: #examples-55
 
-[473]: #eqn_box
+[473]: #eqn_strike
 
 [474]: #properties-22
 
 [475]: #examples-56
 
-[476]: #eqn_bar
+[476]: #eqn_box
 
 [477]: #properties-23
 
 [478]: #examples-57
 
-[479]: #eqn_integral
+[479]: #eqn_bar
 
 [480]: #properties-24
 
@@ -12318,122 +12342,124 @@ Type: ([TypeWhen][909] \| [number][753] | null)
 
 [863]: #typeformanimationproperties
 
-[864]: ./assets1/eqn_container.gif
+[864]: ./assets1/eqn_fraction.gif
 
 [865]: #typeequationphrase
 
-[866]: ./assets1/eqn_fraction.gif
+[866]: ./assets1/eqn_root.gif
 
-[867]: ./assets1/eqn_root.gif
+[867]: ./assets1/eqn_integral.gif
 
-[868]: #eqn_bracket
+[868]: ./assets1/eqn_container.gif
 
-[869]: #eqn_annotation
+[869]: #eqn_bracket
 
-[870]: #eqn_glyphs
+[870]: #eqn_annotation
 
-[871]: #eqn_encompassglyph
+[871]: #eqn_glyphs
 
-[872]: #eqn_topbottomglyph
+[872]: #eqn_encompassglyph
 
-[873]: #eqn_leftrightglyph
+[873]: #eqn_topbottomglyph
 
-[874]: #eqn_fraction
+[874]: #eqn_leftrightglyph
 
-[875]: #eqn_strike
+[875]: #eqn_fraction
 
-[876]: #eqn_box
+[876]: #eqn_strike
 
-[877]: #eqn_root
+[877]: #eqn_box
 
-[878]: #eqn_subcript
+[878]: #eqn_root
 
-[879]: #eqn_superscript
+[879]: #eqn_subcript
 
-[880]: #eqn_superscriptsubscript
+[880]: #eqn_superscript
 
-[881]: #eqn_bar
+[881]: #eqn_superscriptsubscript
 
-[882]: #eqn_annotate
+[882]: #eqn_bar
 
-[883]: #eqn_comment
+[883]: #eqn_annotate
 
-[884]: #eqn_pad
+[884]: #eqn_comment
 
-[885]: #eqn_scale
+[885]: #eqn_pad
 
-[886]: #eqn_container
+[886]: #eqn_scale
 
-[887]: #eqn_matrix
+[887]: #eqn_container
 
-[888]: #eqn_integral
+[888]: #eqn_matrix
 
-[889]: #eqn_sumof
+[889]: #eqn_integral
 
-[890]: #eqn_prodof
+[890]: #eqn_sumof
 
-[891]: #eqn_strikecomment
+[891]: #eqn_prodof
 
-[892]: https://developer.mozilla.org/docs/Web/API/Element
+[892]: #eqn_strikecomment
 
-[893]: #typeformtranslationproperties
+[893]: https://developer.mozilla.org/docs/Web/API/Element
 
-[894]: #equationaddforms
+[894]: #typeformtranslationproperties
 
-[895]: #typeequationformobject
+[895]: #equationaddforms
 
-[896]: #typeequationform
+[896]: #typeequationformobject
 
-[897]: #equationgotoform
+[897]: #typeequationform
 
-[898]: #typef1defrect
+[898]: #equationgotoform
 
-[899]: #typeparsableline
+[899]: #typef1defrect
 
-[900]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+[900]: #typeparsableline
 
-[901]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
+[901]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
 
-[902]: #animationprogression
+[902]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
 
-[903]: #animationstarttime
+[903]: #animationprogression
 
-[904]: #obj_scenario
+[904]: #animationstarttime
 
-[905]: #obj_scenariovelocity
+[905]: #obj_scenario
 
-[906]: TriggernAnimationStep
+[906]: #obj_scenariovelocity
 
-[907]: FunctionMap
+[907]: TriggernAnimationStep
 
-[908]: ./assets1/pulse.gif
+[908]: FunctionMap
 
-[909]: #typewhen
+[909]: ./assets1/pulse.gif
 
-[910]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
+[910]: #typewhen
 
-[911]: #obj_polygon
+[911]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
 
-[912]: ./assets1/copy.png
+[912]: #obj_polygon
 
-[913]: ./assets1/arrow_triangle.png
+[913]: ./assets1/copy.png
 
-[914]: ./assets1/arrow_reversetri.png
+[914]: ./assets1/arrow_triangle.png
 
-[915]: ./assets1/arrow_barb.png
+[915]: ./assets1/arrow_reversetri.png
 
-[916]: ./assets1/arrow_line.png
+[916]: ./assets1/arrow_barb.png
 
-[917]: ./assets1/arrow_circle.png
+[917]: ./assets1/arrow_line.png
 
-[918]: ./assets1/arrow_polygon.png
+[918]: ./assets1/arrow_circle.png
 
-[919]: ./assets1/arrow_bar.png
+[919]: ./assets1/arrow_polygon.png
 
-[920]: ./assets1/arrow_rectangle.png
+[920]: ./assets1/arrow_bar.png
 
-[921]: #diagramelementmovefreely
+[921]: ./assets1/arrow_rectangle.png
 
-[922]: #elementmovementstate
+[922]: #diagramelementmovefreely
 
-[923]: #elementpulsestate
+[923]: #elementmovementstate
+
+[924]: #elementpulsestate
