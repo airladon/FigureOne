@@ -89,41 +89,98 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // eqn.showForm('1');
 
 
-// // Simple
-// diagram.addElement({
-//   name: 'eqn',
-//   method: 'equation',
-//   options: {
-//     forms: {
-//       1: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
-//     },
-//   },
-// });
-// diagram.elements._eqn.showForm('1');
-
-
-// Some different bar examples
+// Simple
 diagram.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
     forms: {
-      // No padding
-      1: ['a', 'b', 'c'],
-      // Array form
-      2: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
-      // Object form
-      3: [
-        'a',
-        {
-          pad: {
+      1: {
+        annotate: {
+          content: 'a',
+          annotation: {
             content: 'b',
-            left: 0.3,
-            right: 0.1,
+            yPosition: 'top',
+            yAlign: 'bottom',
+            xPosition: 'right',
+            xAlign: 'left',
           },
         },
-        'c',
-      ],
+      },
+    },
+  },
+});
+diagram.elements._eqn.showForm('1');
+
+
+// Some different annotation examples
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      bar: { symbol: 'bar', side: 'right' },
+    },
+    forms: {
+      // Single annotation
+      1: {
+        annotate: {
+          content: 'a',
+          annotation: {
+            content: 'bbb',
+            yPosition: 'top',
+            yAlign: 'bottom',
+            xPosition: 'left',
+            xAlign: 'right',
+            scale: 0.5,
+          },
+        },
+      },
+      // Multiple annotations
+      2: {
+        annotate: {
+          content: 'a',
+          annotations: [
+            {
+              content: 'bbb',
+              yPosition: 'top',
+              yAlign: 'bottom',
+              xPosition: 'left',
+              xAlign: 'right',
+              scale: 0.5,
+            },
+            {
+              content: 'ccc',
+              xPosition: 'right',
+              yPosition: 'middle',
+              xAlign: 'left',
+              yAlign: 'middle',
+              scale: 0.5,
+              offset: [0.05, 0],
+            },
+          ],
+        },
+      },
+      // With glyph
+      3: {
+        annotate: {
+          content: 'a',
+          glyphs: {
+            left:{
+              symbol: 'bar',
+              overhang: 0.1,
+              annotation: {
+                content: 'bbb',
+                xPosition: 'right',
+                yPosition: 'bottom',
+                xAlign: 'left',
+                yAlign: 'middle',
+                scale: 0.5,
+              },
+            },
+          },
+        },
+      },
     },
     formSeries: ['1', '2', '3'],
   },

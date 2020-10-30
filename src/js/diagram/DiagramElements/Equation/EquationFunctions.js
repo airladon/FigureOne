@@ -2426,6 +2426,8 @@ export type EQN_Glyphs = {
 /**
  * Equation annotation
  *
+ * ![](./assets1/eqn_annotate.gif)
+ *
  * An annotation is an equation phrase ('annotation') which is laid out relative
  * to another equation phrase ('content'). For example:
  * <pre>
@@ -2463,6 +2465,18 @@ export type EQN_Glyphs = {
  *                  GGGGGGGGGGGGGGGGGGGGGGG
  *                       Bottom Glyph
  * </pre>
+ *
+ * This function is used internally by almost all equation functions
+ * (except for fraction) for their layout. As such, it is very generic and
+ * powerful. It should also almost never neeed to be used as most layouts
+ * can be achieved with a different functions that will have more succinct
+ * code that is more readable.
+ *
+ * This is provided so all layout corner cases not covered by the functions
+ * above are possible - including with custom glyphs.
+ *
+ * Options can *only* be an object.
+ *
  * @property {TypeEquationPhrase} content
  * @property {EQN_Annotation} [annotation] use for just one annotation
  * @property {Array<EQN_Annotation>} [annotations] use for multiple annotations
@@ -2485,66 +2499,87 @@ export type EQN_Glyphs = {
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
- * @example
- * // Simple annotation
- *  annotate: {
- *    content: 'a',
- *    annotation: {
- *      content: 'b',
- *      yPosition: 'top',
- *      yAlign: 'bottom',
- *      xPosition: 'right',
- *      xAlign: 'left',
- *    },
- *  },
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
  *
  * @example
- * // Multiple Annotations
- *  annotate: {
- *    content: 'a',
- *    annotations: [
- *      {
- *        content: 'b',
- *        xPosition: 'right',
- *        yPosition: 'top',
- *        xAlign: 'left',
- *        yAlign: 'bottom',
- *      },
- *      {
- *        content: 'c',
- *        xPosition: 'right',
- *        yPosition: 'bottom',
- *        xAlign: 'left',
- *        yAlign: 'top',
- *      },
- *    ],
- *  },
- * @example
- * // left glyph with annotation
- * eqn.addElements([
- *   { bar: { symbol: 'bar', side: 'right' },
- * ])
- * eqn.addForms({
- *   form1: {
- *     annotate: {
- *       content: 'a',
- *       glyphs: {
- *         left:{
- *           symbol: 'bar',
- *           overhang: 0.1,
+ * // Some different annotation examples
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       bar: { symbol: 'bar', side: 'right' },
+ *     },
+ *     forms: {
+ *       // Single annotation
+ *       1: {
+ *         annotate: {
+ *           content: 'a',
  *           annotation: {
  *             content: 'bbb',
- *             xPosition: 'right',
- *             yPosition: 'bottom',
- *             xAlign: 'left',
- *             yAlign: 'middle',
+ *             yPosition: 'top',
+ *             yAlign: 'bottom',
+ *             xPosition: 'left',
+ *             xAlign: 'right',
  *             scale: 0.5,
  *           },
  *         },
  *       },
+ *       // Multiple annotations
+ *       2: {
+ *         annotate: {
+ *           content: 'a',
+ *           annotations: [
+ *             {
+ *               content: 'bbb',
+ *               yPosition: 'top',
+ *               yAlign: 'bottom',
+ *               xPosition: 'left',
+ *               xAlign: 'right',
+ *               scale: 0.5,
+ *             },
+ *             {
+ *               content: 'ccc',
+ *               xPosition: 'right',
+ *               yPosition: 'middle',
+ *               xAlign: 'left',
+ *               yAlign: 'middle',
+ *               scale: 0.5,
+ *               offset: [0.05, 0],
+ *             },
+ *           ],
+ *         },
+ *       },
+ *       // With glyph
+ *       3: {
+ *         annotate: {
+ *           content: 'a',
+ *           glyphs: {
+ *             left:{
+ *               symbol: 'bar',
+ *               overhang: 0.1,
+ *               annotation: {
+ *                 content: 'bbb',
+ *                 xPosition: 'right',
+ *                 yPosition: 'bottom',
+ *                 xAlign: 'left',
+ *                 yAlign: 'middle',
+ *                 scale: 0.5,
+ *               },
+ *             },
+ *           },
+ *         },
+ *       },
  *     },
+ *     formSeries: ['1', '2', '3'],
  *   },
  * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_Annotate = {
   content: TypeEquationPhrase,

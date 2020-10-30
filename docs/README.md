@@ -7825,9 +7825,17 @@ eqn.showForm('1');
 
 ## EQN_Pad
 
+-   **See: To test examples, append them to the
+    <a href="#equation-boilerplate">boilerplate</a>
+    **
+
 Equation padding options.
 
+![][886]
+
 Pads the size of the equation phrase with space.
+
+Options can be an object, or an array in the property order below
 
 
 ### Properties
@@ -7841,21 +7849,50 @@ Pads the size of the equation phrase with space.
 ### Examples
 
 ```javascript
-// Full object definition
-{
-  pad: {
-    content: 'a',,
-    top: 0.1,
-    right: 0.2,
-    bottom: 0.3,
-    left: 0.4,
+// Simple
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    forms: {
+      1: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
+    },
   },
-},
+});
+diagram.elements._eqn.showForm('1');
 ```
 
 ```javascript
-// Array example
- { pad: ['a', 0.1, 0.2, 0.3, 0.4] }
+// Some different padding examples
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    forms: {
+      // No padding
+      1: ['a', 'b', 'c'],
+      // Array form
+      2: ['a', { pad: ['b', 0.1, 0.1, 0.1, 0.1] }, 'c'],
+      // Object form
+      3: [
+        'a',
+        {
+          pad: {
+            content: 'b',
+            left: 0.3,
+            right: 0.1,
+          },
+        },
+        'c',
+      ],
+    },
+    formSeries: ['1', '2', '3'],
+  },
+});
+const eqn = diagram.elements._eqn;
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('1');
 ```
 
 ## EQN_Matrix
@@ -7866,7 +7903,7 @@ Pads the size of the equation phrase with space.
 
 Equation matrix
 
-![][886]
+![][887]
 
 Options can be an object, or an array in the property order below
 
@@ -7890,7 +7927,7 @@ Options can be an object, or an array in the property order below
     (`[0.05, 0.05]`)
 -   `yAlign` **(`"baseline"` \| `"middle"`)?** align cells in a row with the
     text baseline, or middle of the cell (`baseline`)
--   `brac` **[EQN_Bracket][887]?** bracket options not including
+-   `brac` **[EQN_Bracket][888]?** bracket options not including
     the symbols (`{}`)
 -   `fullContentBounds` **[boolean][752]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
@@ -7975,7 +8012,13 @@ eqn.showForm('1');
 
 ## EQN_Annotate
 
+-   **See: To test examples, append them to the
+    <a href="#equation-boilerplate">boilerplate</a>
+    **
+
 Equation annotation
+
+![][889]
 
 An annotation is an equation phrase ('annotation') which is laid out relative
 to another equation phrase ('content'). For example:
@@ -8016,11 +8059,22 @@ Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
                       Bottom Glyph
 </pre>
 
+This function is used internally by almost all equation functions
+(except for fraction) for their layout. As such, it is very generic and
+powerful. It should also almost never neeed to be used as most layouts
+can be achieved with a different functions that will have more succinct
+code that is more readable.
+
+This is provided so all layout corner cases not covered by the functions
+above are possible - including with custom glyphs.
+
+Options can _only_ be an object.
+
 ### Properties
 
 -   `content` **[TypeEquationPhrase][870]** 
--   `annotation` **[EQN_Annotation][888]?** use for just one annotation
--   `annotations` **[Array][745]&lt;[EQN_Annotation][888]>?** use for multiple annotations
+-   `annotation` **[EQN_Annotation][890]?** use for just one annotation
+-   `annotations` **[Array][745]&lt;[EQN_Annotation][890]>?** use for multiple annotations
 -   `inSize` **[boolean][752]?** `true` means resulting size includes
     annotations (`true`)
 -   `space` **[number][753]?** extend resulting equation phrase size by space on
@@ -8034,7 +8088,7 @@ Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
 -   `rightSpace` **[number][753]?** extend resulting equation phrase size by
     space on right
 -   `contentScale` **[number][753]?** scale content (`1`)
--   `glyphs` **[EQN_Glyphs][889]?** glyphs to annotate content with
+-   `glyphs` **[EQN_Glyphs][891]?** glyphs to annotate content with
 -   `fullContentBounds` **[boolean][752]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
 -   `useFullBounds` **[boolean][752]?** make the bounds of this phrase equal to
@@ -8044,68 +8098,82 @@ Glyph  GGG       GGG     CCCCCCC     GGG        GGG   Glyph
 ### Examples
 
 ```javascript
-// Simple annotation
- annotate: {
-   content: 'a',
-   annotation: {
-     content: 'b',
-     yPosition: 'top',
-     yAlign: 'bottom',
-     xPosition: 'right',
-     xAlign: 'left',
-   },
- },
-```
-
-```javascript
-// Multiple Annotations
- annotate: {
-   content: 'a',
-   annotations: [
-     {
-       content: 'b',
-       xPosition: 'right',
-       yPosition: 'top',
-       xAlign: 'left',
-       yAlign: 'bottom',
-     },
-     {
-       content: 'c',
-       xPosition: 'right',
-       yPosition: 'bottom',
-       xAlign: 'left',
-       yAlign: 'top',
-     },
-   ],
- },
-```
-
-```javascript
-// left glyph with annotation
-eqn.addElements([
-  { bar: { symbol: 'bar', side: 'right' },
-])
-eqn.addForms({
-  form1: {
-    annotate: {
-      content: 'a',
-      glyphs: {
-        left:{
-          symbol: 'bar',
-          overhang: 0.1,
+// Some different annotation examples
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      bar: { symbol: 'bar', side: 'right' },
+    },
+    forms: {
+      // Single annotation
+      1: {
+        annotate: {
+          content: 'a',
           annotation: {
             content: 'bbb',
-            xPosition: 'right',
-            yPosition: 'bottom',
-            xAlign: 'left',
-            yAlign: 'middle',
+            yPosition: 'top',
+            yAlign: 'bottom',
+            xPosition: 'left',
+            xAlign: 'right',
             scale: 0.5,
           },
         },
       },
+      // Multiple annotations
+      2: {
+        annotate: {
+          content: 'a',
+          annotations: [
+            {
+              content: 'bbb',
+              yPosition: 'top',
+              yAlign: 'bottom',
+              xPosition: 'left',
+              xAlign: 'right',
+              scale: 0.5,
+            },
+            {
+              content: 'ccc',
+              xPosition: 'right',
+              yPosition: 'middle',
+              xAlign: 'left',
+              yAlign: 'middle',
+              scale: 0.5,
+              offset: [0.05, 0],
+            },
+          ],
+        },
+      },
+      // With glyph
+      3: {
+        annotate: {
+          content: 'a',
+          glyphs: {
+            left:{
+              symbol: 'bar',
+              overhang: 0.1,
+              annotation: {
+                content: 'bbb',
+                xPosition: 'right',
+                yPosition: 'bottom',
+                xAlign: 'left',
+                yAlign: 'middle',
+                scale: 0.5,
+              },
+            },
+          },
+        },
+      },
     },
+    formSeries: ['1', '2', '3'],
   },
 });
+const eqn = diagram.elements._eqn;
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('1');
 ```
 
 ## EQN_Annotation
@@ -8199,9 +8267,9 @@ can also be annotated.
 ### Properties
 
 -   `symbol` **[string][744]** 
--   `annotation` **[EQN_Annotation][888]?** use for one annotation only instead
+-   `annotation` **[EQN_Annotation][890]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][745]&lt;[EQN_Annotation][888]>?** use for one or more
+-   `annotations` **[Array][745]&lt;[EQN_Annotation][890]>?** use for one or more
     annotations
 -   `space` **[number][753]?** default space the glyph should extend beyond the
     top, right, left and bottom sides of the content (`0`)
@@ -8249,9 +8317,9 @@ The glyph can also be annotated.
 ### Properties
 
 -   `symbol` **[string][744]** 
--   `annotation` **[EQN_Annotation][888]?** use for one annotation only instead
+-   `annotation` **[EQN_Annotation][890]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][745]&lt;[EQN_Annotation][888]>?** use for one or more
+-   `annotations` **[Array][745]&lt;[EQN_Annotation][890]>?** use for one or more
     annotations
 -   `space` **[number][753]?** horizontal space between glyph and content (`0`)
 -   `overhang` **[number][753]?** amount glyph extends above content top and
@@ -8320,9 +8388,9 @@ The glyph can also be annotated.
 ### Properties
 
 -   `symbol` **[string][744]** 
--   `annotation` **[EQN_Annotation][888]?** use for one annotation only instead
+-   `annotation` **[EQN_Annotation][890]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][745]&lt;[EQN_Annotation][888]>?** use for one or more
+-   `annotations` **[Array][745]&lt;[EQN_Annotation][890]>?** use for one or more
     annotations
 -   `space` **[number][753]?** vertical space between glyph and content (`0`)
 -   `overhang` **[number][753]?** amount glyph extends above content top and
@@ -8366,11 +8434,11 @@ Multiple glyphs are ok, but only one per position.
 
 ### Properties
 
--   `encompass` **[EQN_EncompassGlyph][890]?** 
--   `top` **[EQN_TopBottomGlyph][891]?** 
--   `right` **[EQN_LeftRightGlyph][892]?** 
--   `bottom` **[EQN_TopBottomGlyph][891]?** 
--   `left` **[EQN_LeftRightGlyph][892]?** 
+-   `encompass` **[EQN_EncompassGlyph][892]?** 
+-   `top` **[EQN_TopBottomGlyph][893]?** 
+-   `right` **[EQN_LeftRightGlyph][894]?** 
+-   `bottom` **[EQN_TopBottomGlyph][893]?** 
+-   `left` **[EQN_LeftRightGlyph][894]?** 
 
 ## Equation Symbol Objects
 
@@ -9324,7 +9392,7 @@ Duration and translation options for form animation
 ### Properties
 
 -   `duration` **[number][753]?** in seconds
--   `translation` **[Object][865]&lt;[TypeFormTranslationProperties][912]>?** 
+-   `translation` **[Object][865]&lt;[TypeFormTranslationProperties][914]>?** 
 
 ### Examples
 
@@ -9392,7 +9460,7 @@ complicating the overall equation navigation logic.
 
 See the examples below for how to define subForms.
 
-[Equation#addForms][913].
+[Equation#addForms][915].
 
 ### Properties
 
@@ -9411,11 +9479,11 @@ See the examples below for how to define subForms.
     properties if animating backward from the next form in a formSeries
 -   `duration` **[TypeFormAnimationProperties][868]?** animation move duration
      (fromNext and fromPrev are prioritized over this)
--   `translation` **[TypeFormTranslationProperties][912]?** animation move
+-   `translation` **[TypeFormTranslationProperties][914]?** animation move
     style (fromNext and fromPrev are prioritized over this)
 -   `elementMods` **[object][865]?** properties to set in the equation element
     (@DiagramElementPrimitive) when this form is shown
--   `animation` **{duration: [number][753]??, translation: [TypeFormTranslationProperties][912]?}?** 
+-   `animation` **{duration: [number][753]??, translation: [TypeFormTranslationProperties][914]?}?** 
 
 ### Examples
 
@@ -9558,7 +9626,7 @@ The default values in the pulse object are are:
 
 ## TypeEquationGoToFormOptions
 
-Options object for [Equation#goToForm][916].
+Options object for [Equation#goToForm][918].
 
 Often, `goToForm` is called to animate from a shown form to a desired form.
 Therefore there will be some equation elements that:
@@ -9749,7 +9817,7 @@ Convert a parsable line definition to a [Line][118].
 
 ### Parameters
 
--   `l` **[TypeParsableLine][918]** parsable line definition
+-   `l` **[TypeParsableLine][920]** parsable line definition
 
 Returns **[Line][765]** `Line` object
 
@@ -9869,7 +9937,7 @@ Used within [OBJ_Text][282] to define a single string
 
 Font definition object.
 
-Text is drawn in a [Context2D canvas][919] and so `family`, `style` and `weight` are any valid [options][920].
+Text is drawn in a [Context2D canvas][921] and so `family`, `style` and `weight` are any valid [options][922].
 
 `size` is the vertex space size of the font.
 
@@ -10045,7 +10113,7 @@ Type: any
 ### Properties
 
 -   `element` **[DiagramElement][751]?** 
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][921])?** how the animation progresses - defaults to `linear` for color, opacity and
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][923])?** how the animation progresses - defaults to `linear` for color, opacity and
     custom animations and `easeinout` for others
 
 ## OBJ_ScenarioVelocity
@@ -10101,7 +10169,7 @@ Start animation
 
 #### Parameters
 
--   `startTime` **[AnimationStartTime][922]**  (optional, default `null`)
+-   `startTime` **[AnimationStartTime][924]**  (optional, default `null`)
 
 ## DelayAnimationStep
 
@@ -10165,7 +10233,7 @@ Start animation options object.
 
 -   `name` **(null | [string][744])?** name of animation to start - f null, then
     all animations associated with this animation manager will start (`null`)
--   `startTime` **[AnimationStartTime][922]** when to
+-   `startTime` **[AnimationStartTime][924]** when to
     start the animation
 
 ## OBJ_SerialAnimationStep
@@ -10223,7 +10291,7 @@ Type: any
 -   `callback` **([string][744] | function (int): void)** function to run each
     animation frame
 -   `startPercent` **[number][753]?** percent to start animation at (`0`)
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][921])?** 
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][923])?** 
 
 ## OBJ_TransformAnimationStep
 
@@ -10259,9 +10327,9 @@ Type: any
 
 ### Properties
 
--   `start` **([string][744] \| [OBJ_Scenario][923])?** 
--   `target` **([string][744] \| [OBJ_Scenario][923])?** 
--   `velocity` **(null | [string][744] \| [OBJ_ScenarioVelocity][924])?** velocity
+-   `start` **([string][744] \| [OBJ_Scenario][925])?** 
+-   `target` **([string][744] \| [OBJ_Scenario][925])?** 
+-   `velocity` **(null | [string][744] \| [OBJ_ScenarioVelocity][926])?** velocity
     will override duration with a calculated duration based on
     the `start`, `target` and `velocity`. If `null` is used
     then `duration` will not be overriden. Any scenario velocity elements that
@@ -10277,13 +10345,13 @@ Type: any
     `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
     whichever direction doesn't pass through angle 0.
 -   `clipRotationTo` **(`"0to360"` \| `"-180to180"` | null)?** 
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][921])?** (`'easeinout'`)
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][923])?** (`'easeinout'`)
 
 ## OBJ_TriggerAnimationStep
 
 **Extends OBJ_AnimationStep**
 
-[TriggernAnimationStep][925] options object
+[TriggernAnimationStep][927] options object
 
 Type: any
 
@@ -10292,13 +10360,13 @@ Type: any
 -   `payload` **any?** payload to pass to callback (`null`)
 -   `element` **[DiagramElement][751]** [DiagramElement][14] to associate with
     callback - if the `callback` is a string then this element's
-    [FunctionMap][926] will be searched for the corresponding function
+    [FunctionMap][928] will be searched for the corresponding function
 
 ## OBJ_Pulse
 
 Pulse options object
 
-![][927]
+![][929]
 
 Pulsing can be useful to highlight a diagram element to a user, without
 changing its underlying properties.
@@ -10353,9 +10421,9 @@ outlines are becomming thicker.
     (`'diagram'`)
 -   `num` **[number][753]?** the number of draw copies of the pulse to make (`1`)
 -   `done` **(null | [string][744] | function (): void)?** callback when pulse is
-    finished. If `string` then the element's [FunctionMap][926] `fnMap` will be
+    finished. If `string` then the element's [FunctionMap][928] `fnMap` will be
     used (`null`)
--   `when` **[TypeWhen][928]?** when to start the pulse (`'syncNow'`)
+-   `when` **[TypeWhen][930]?** when to start the pulse (`'syncNow'`)
 -   `progression` **(`"sinusoid"` \| `"triangle"`)?** function that defines
     how the scale should progress over time (`sinusoid`)
 -   `x` **(`"left"` \| `"center"` \| `"right"` \| `"origin"` \| [number][753])?** 
@@ -10552,7 +10620,7 @@ Line intersection result object with keys:
 
 ### Properties
 
--   `intersect` **([undefined][929] \| [Point][759])** 
+-   `intersect` **([undefined][931] \| [Point][759])** 
 -   `alongLine` **[boolean][752]** `true` if `intersect` is along line calling
     `intersectsWith`
 -   `withinLine` **[boolean][752]** `true` if `intersect` is within line calling
@@ -10636,11 +10704,11 @@ Polygon or partial polygon shape options object
 
 #### Parameters
 
--   `options` **...[Array][745]&lt;[OBJ_Polygon][930]>** 
+-   `options` **...[Array][745]&lt;[OBJ_Polygon][932]>** 
 
 ## CPY_Step
 
-![][931]
+![][933]
 
 Copy Step options object
 
@@ -10843,47 +10911,47 @@ Lines and polylines can be terminated with different styles of arrows. The
 
 ### `head: 'triangle'`
 
-![][932]
+![][934]
 
 Use `length` and `width` to customize head shape.
 
 Use `reverse` to reverse the triangle:
 
-![][933]
+![][935]
 
 ### `head: 'barb'`
 
-![][934]
+![][936]
 
 Use `length`, `width` and `barb` to customize head shape.
 
 ### `head: 'line'`
 
-![][935]
+![][937]
 
 Use `length` and `width` to customize head shape.
 
 ### `head: 'circle'`
 
-![][936]
+![][938]
 
 Use `radius` and `sides` to customize head shape.
 
 ### `head: 'polygon'`
 
-![][937]
+![][939]
 
 Use `radius`, `sides` and `rotation` to customize head shape.
 
 ### `head: 'bar'`
 
-![][938]
+![][940]
 
 Use `length` and `width` to customize head shape.
 
 ### `head: 'rectangle'`
 
-![][939]
+![][941]
 
 Use `length` and `width` to customize head shape.
 
@@ -11038,7 +11106,7 @@ Diagram element move parameters
 
 -   `bounds` **TransformBounds** rectangle to limit movement within
 -   `maxVelocity` **TypeTransformValue** maximum velocity allowed (5)
--   `freely` **[DiagramElementMoveFreely][940]** free movement parameters
+-   `freely` **[DiagramElementMoveFreely][942]** free movement parameters
 -   `canBeMovedAfterLosingTouch` **[boolean][752]** touch or mouse dragging will
     continue to move element even after the touch/cursor position is outside
     the element boundary
@@ -11059,7 +11127,7 @@ This is an object where the keys are scenario names and values are
 
 ### Properties
 
--   `scenarioName` **[OBJ_Scenario][923]** where scenarioName can be any
+-   `scenarioName` **[OBJ_Scenario][925]** where scenarioName can be any
     string that names the scenario
 
 ## ElementMovementState
@@ -11088,9 +11156,9 @@ Element state
 
 -   `isBeingMoved` **[boolean][752]** 
 -   `isMovingFreely` **[boolean][752]** 
--   `movement` **[ElementMovementState][941]** 
+-   `movement` **[ElementMovementState][943]** 
 -   `isPulsing` **[boolean][752]** 
--   `pulse` **[ElementPulseState][942]** 
+-   `pulse` **[ElementPulseState][944]** 
 -   `preparingToStop` **[boolean][752]** 
 
 ## DrawingObject
@@ -11135,7 +11203,7 @@ Equation container function
 
 ### Parameters
 
--   `optionsOrArray` **[EQN_Container][905]** 
+-   `optionsOrArray` **[EQN_Container][907]** 
 
 ### Examples
 
@@ -11156,7 +11224,7 @@ Equation fraction function
 
 ### Parameters
 
--   `optionsOrArray` **[EQN_Fraction][893]** 
+-   `optionsOrArray` **[EQN_Fraction][895]** 
 
 ### Examples
 
@@ -11227,9 +11295,9 @@ Type: any
     (`'diagram'`)
 -   `num` **[number][753]?** the number of draw copies of the pulse to make (`1`)
 -   `done` **(null | [string][744] | function (): void)?** callback when pulse is
-    finished. If `string` then the element's [FunctionMap][926] `fnMap` will be
+    finished. If `string` then the element's [FunctionMap][928] `fnMap` will be
     used (`null`)
--   `when` **[TypeWhen][928]?** when to start the pulse (`'syncNow'`)
+-   `when` **[TypeWhen][930]?** when to start the pulse (`'syncNow'`)
 
 ## AnimationStartTime
 
@@ -11261,7 +11329,7 @@ A custom time can be used if a `number` is defined.
 
 `null` will result in `'nextFrame'` being used
 
-Type: ([TypeWhen][928] \| [number][753] | null)
+Type: ([TypeWhen][930] \| [number][753] | null)
 
 [1]: #introduction
 
@@ -13033,116 +13101,120 @@ Type: ([TypeWhen][928] \| [number][753] | null)
 
 [885]: ./assets1/eqn_comment.gif
 
-[886]: ./assets1/eqn_matrix.gif
+[886]: ./assets1/eqn_pad.gif
 
-[887]: #eqn_bracket
+[887]: ./assets1/eqn_matrix.gif
 
-[888]: #eqn_annotation
+[888]: #eqn_bracket
 
-[889]: #eqn_glyphs
+[889]: ./assets1/eqn_annotate.gif
 
-[890]: #eqn_encompassglyph
+[890]: #eqn_annotation
 
-[891]: #eqn_topbottomglyph
+[891]: #eqn_glyphs
 
-[892]: #eqn_leftrightglyph
+[892]: #eqn_encompassglyph
 
-[893]: #eqn_fraction
+[893]: #eqn_topbottomglyph
 
-[894]: #eqn_strike
+[894]: #eqn_leftrightglyph
 
-[895]: #eqn_box
+[895]: #eqn_fraction
 
-[896]: #eqn_root
+[896]: #eqn_strike
 
-[897]: #eqn_subscript
+[897]: #eqn_box
 
-[898]: #eqn_superscript
+[898]: #eqn_root
 
-[899]: #eqn_superscriptsubscript
+[899]: #eqn_subscript
 
-[900]: #eqn_bar
+[900]: #eqn_superscript
 
-[901]: #eqn_annotate
+[901]: #eqn_superscriptsubscript
 
-[902]: #eqn_comment
+[902]: #eqn_bar
 
-[903]: #eqn_pad
+[903]: #eqn_annotate
 
-[904]: #eqn_scale
+[904]: #eqn_comment
 
-[905]: #eqn_container
+[905]: #eqn_pad
 
-[906]: #eqn_matrix
+[906]: #eqn_scale
 
-[907]: #eqn_integral
+[907]: #eqn_container
 
-[908]: #eqn_sumof
+[908]: #eqn_matrix
 
-[909]: #eqn_prodof
+[909]: #eqn_integral
 
-[910]: #eqn_strikecomment
+[910]: #eqn_sumof
 
-[911]: https://developer.mozilla.org/docs/Web/API/Element
+[911]: #eqn_prodof
 
-[912]: #typeformtranslationproperties
+[912]: #eqn_strikecomment
 
-[913]: #equationaddforms
+[913]: https://developer.mozilla.org/docs/Web/API/Element
 
-[914]: #typeequationformobject
+[914]: #typeformtranslationproperties
 
-[915]: #typeequationform
+[915]: #equationaddforms
 
-[916]: #equationgotoform
+[916]: #typeequationformobject
 
-[917]: #typef1defrect
+[917]: #typeequationform
 
-[918]: #typeparsableline
+[918]: #equationgotoform
 
-[919]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+[919]: #typef1defrect
 
-[920]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
+[920]: #typeparsableline
 
-[921]: #animationprogression
+[921]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
 
-[922]: #animationstarttime
+[922]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
 
-[923]: #obj_scenario
+[923]: #animationprogression
 
-[924]: #obj_scenariovelocity
+[924]: #animationstarttime
 
-[925]: TriggernAnimationStep
+[925]: #obj_scenario
 
-[926]: FunctionMap
+[926]: #obj_scenariovelocity
 
-[927]: ./assets1/pulse.gif
+[927]: TriggernAnimationStep
 
-[928]: #typewhen
+[928]: FunctionMap
 
-[929]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
+[929]: ./assets1/pulse.gif
 
-[930]: #obj_polygon
+[930]: #typewhen
 
-[931]: ./assets1/copy.png
+[931]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
 
-[932]: ./assets1/arrow_triangle.png
+[932]: #obj_polygon
 
-[933]: ./assets1/arrow_reversetri.png
+[933]: ./assets1/copy.png
 
-[934]: ./assets1/arrow_barb.png
+[934]: ./assets1/arrow_triangle.png
 
-[935]: ./assets1/arrow_line.png
+[935]: ./assets1/arrow_reversetri.png
 
-[936]: ./assets1/arrow_circle.png
+[936]: ./assets1/arrow_barb.png
 
-[937]: ./assets1/arrow_polygon.png
+[937]: ./assets1/arrow_line.png
 
-[938]: ./assets1/arrow_bar.png
+[938]: ./assets1/arrow_circle.png
 
-[939]: ./assets1/arrow_rectangle.png
+[939]: ./assets1/arrow_polygon.png
 
-[940]: #diagramelementmovefreely
+[940]: ./assets1/arrow_bar.png
 
-[941]: #elementmovementstate
+[941]: ./assets1/arrow_rectangle.png
 
-[942]: #elementpulsestate
+[942]: #diagramelementmovefreely
+
+[943]: #elementmovementstate
+
+[944]: #elementpulsestate

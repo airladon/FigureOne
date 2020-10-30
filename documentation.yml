@@ -55,32 +55,26 @@ toc:
     file: ./docs/tutorials/equation/equation.md
   - Equation
   - EQN_Equation
-  - TypeEquationElements
   - name: Equation Layout Function Objects
   - EQN_Fraction
   - EQN_Root
   - EQN_Subscript
   - EQN_Superscript
   - EQN_SuperscriptSubscript
+  - EQN_Matrix
   - EQN_Integral
   - EQN_SumOf
   - EQN_ProdOf
+  - EQN_Bar
   - EQN_Bracket
-  - EQN_Scale
+  - EQN_Box
   - EQN_Strike
   - EQN_StrikeComment
-  - EQN_Box
-  - EQN_Bar
-  - EQN_Container
   - EQN_Comment
   - EQN_Pad
-  - EQN_Matrix
+  - EQN_Scale
+  - EQN_Container
   - EQN_Annotate
-  - EQN_Annotation
-  - EQN_EncompassGlyph
-  - EQN_LeftRightGlyph
-  - EQN_TopBottomGlyph
-  - EQN_Glyphs
   - name: Equation Symbol Objects
   - EQN_VinculumSymbol
   - EQN_BoxSymbol
@@ -95,15 +89,6 @@ toc:
   - EQN_BarSymbol
   - EQN_SquareBracketSymbol
   - EQN_RadicalSymbol
-  - name: Equation Form Types
-  - TypeEquationPhrase
-  - TypeFormAlignment
-  - TypeFormAnimationProperties
-  - TypeFormTranslationProperties
-  - TypeEquationFormObject
-  - TypeEquationForm
-  - TypeEquationForms
-  - TypeFormRestart
   - name: Equation Option Types
   - TypeEquationGoToFormOptions
   # - name: Equations
@@ -147,6 +132,21 @@ toc:
   - OBJ_ColorAnimationStep
   - OBJ_OpacityAnimationStep
   - OBJ_ScenariosAnimationStep
+  - name: Misc Equation
+  - EQN_Annotation
+  - EQN_EncompassGlyph
+  - EQN_LeftRightGlyph
+  - EQN_TopBottomGlyph
+  - EQN_Glyphs
+  - TypeEquationElements
+  - TypeEquationPhrase
+  - TypeFormAlignment
+  - TypeFormAnimationProperties
+  - TypeFormTranslationProperties
+  - TypeEquationFormObject
+  - TypeEquationForm
+  - TypeEquationForms
+  - TypeFormRestart
   - name: tools
     description: These are generic tools
     children:
