@@ -47,9 +47,9 @@ diagram.addElement({
     },
     formDefaults: {
       alignment: {
-        fixTo: 'a',
-        xAlign: 'right',
-        yAlign: 'top',
+        // fixTo: 'a',
+        xAlign: 'center',
+        yAlign: 'middle',
       },
     },
     forms: {
@@ -62,23 +62,54 @@ diagram.addElement({
         },
       },
       // Fraction array form
-      // 2: { frac: ['a', 'v1', 'c'] },
-      // // Nested
-      // 3: {
-      //   frac: {
-      //     numerator: [{ frac: ['a', 'v1', 'c', 0.7] }, 'plus', '_1'],
-      //     symbol: 'v2',
-      //     denominator: 'b',
-      //   }
-      // },
+      2: { frac: ['a', 'v1', 'd'] },
+      // Nested
+      3: {
+        frac: {
+          numerator: [{ frac: ['a', 'v1', 'd', 0.7] }, 'plus', '_1'],
+          symbol: 'v2',
+          denominator: 'b',
+        }
+      },
+      0: {
+        bottomComment: {
+          content: 'a',
+          comment: 'b',
+          symbol: { 'bar': {
+        symbol: 'brace', side: 'top', lineWidth: 0.01,
+      }},
+      contentSpace: 0.1,
+              commentSpace: 0.2,
+              scale: 2,
+          // contentSpace: 0.1,
+          // commentSpace: 0.2,
+          // scale: 2,
+        },
+      },
     },
     formSeries: ['1', '2', '3'],
   },
 });
 const eqn = diagram.elements._eqn;
+const e = eqn.eqn.functions;
+eqn.addForms({
+  without: e.bottomComment('a', 'b', 'bar'),
+  // With parameters
+  11: {
+    bottomComment: {
+      content: 'a',
+      comment: 'b',
+      symbol: 'bar',
+      contentSpace: 0.1,
+      commentSpace: 0.2,
+      scale: 2,
+    },
+  },
+})
+
 eqn.setTouchableRect(0.5);
 eqn.onClick = () => eqn.nextForm();
-eqn.showForm('1');
+eqn.showForm('without');
 
 
 // const eqn = diagram.create.equation({

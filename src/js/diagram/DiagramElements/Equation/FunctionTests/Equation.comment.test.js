@@ -10,9 +10,9 @@ import { Equation } from '../Equation';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('../../../Gesture');
-jest.mock('../../../webgl/webgl');
-jest.mock('../../../DrawContext2D');
+// jest.mock('../../../Gesture');
+// jest.mock('../../../webgl/webgl');
+// jest.mock('../../../DrawContext2D');
 
 describe('Equation Functions - Bar', () => {
   let diagram;
@@ -42,6 +42,8 @@ describe('Equation Functions - Bar', () => {
     functions = {
       topComment: () => {
         eqn = new Equation(diagram.shapes, { color: color1 });
+        // eqn = diagram.create.equation({ color: color1 });
+        diagram.add('eqn', eqn);
         const e = eqn.eqn.functions;
         const topComment = e.topComment.bind(e);
         eqn.addElements(elements);
@@ -79,7 +81,7 @@ describe('Equation Functions - Bar', () => {
             symbol: 'bar',
           }),
         });
-        diagram.elements = eqn;
+        // diagram.add('eqn', eqn);
       },
       bottomComment: () => {
         eqn = new Equation(diagram.shapes, { color: color1 });
@@ -120,6 +122,7 @@ describe('Equation Functions - Bar', () => {
             symbol: 'bar',
           }),
         });
+        diagram.add('eqn', eqn);
       },
       topCommentParameters: () => {
         eqn = new Equation(diagram.shapes, { color: color1 });
@@ -146,6 +149,7 @@ describe('Equation Functions - Bar', () => {
           // Function with parameters
           2: e.topComment(['a', 'b', 'bar', 0.1, 0.2, 2]),
         });
+        diagram.add('eqn', eqn);
       },
       bottomCommentParameters: () => {
         eqn = new Equation(diagram.shapes, { color: color1 });
@@ -155,7 +159,7 @@ describe('Equation Functions - Bar', () => {
         eqn.addForms({
           // without
           //   // Method Object
-          without: bottomComment('a', 'b', 'bar'),
+          without: bottomComment(['a', 'b', 'bar']),
           // With parameters
           0: {
             bottomComment: {
@@ -172,6 +176,7 @@ describe('Equation Functions - Bar', () => {
           // Function with parameters
           2: e.bottomComment(['a', 'b', 'bar', 0.1, 0.2, 2]),
         });
+        diagram.add('eqn', eqn);
       },
       bottomCommentNoGlyph: () => {
         eqn = new Equation(diagram.shapes, { color: color1 });
@@ -181,23 +186,27 @@ describe('Equation Functions - Bar', () => {
         eqn.addForms({
           // without
           //   // Method Object
-          without: bottomComment('a', 'b'),
+          without: bottomComment(['a', 'b']),
           // With parameters
           0: {
             bottomComment: {
               content: 'a',
               comment: 'b',
+              contentSpace: 0.1,
+              commentSpace: 0.2,
+              scale: 2,
             },
           },
           // Method Array
-          1: { bottomComment: ['a', 'b'] },
+          1: { bottomComment: ['a', 'b', null, 0.1, 0.2, 2] },
           // Function with parameters
-          2: e.bottomComment(['a', 'b']),
+          2: e.bottomComment(['a', 'b', null, 0.1, 0.2, 2]),
         });
+        diagram.add('eqn', eqn);
       },
       nestedTopComment: () => {
         eqn = new Equation(diagram.shapes, { color: color1 });
-        diagram.elements = eqn;
+        // diagram.elements = eqn;
         eqn.addElements(elements);
         eqn.addForms({
           base: {
@@ -210,10 +219,11 @@ describe('Equation Functions - Bar', () => {
             scale: 1,
           },
         });
+        diagram.add('eqn', eqn);
       },
       nestedBottomComment: () => {
         eqn = new Equation(diagram.shapes, { color: color1 });
-        diagram.elements = eqn;
+        // diagram.elements = eqn;
         eqn.addElements(elements);
         eqn.addForms({
           base: {
@@ -226,6 +236,7 @@ describe('Equation Functions - Bar', () => {
             scale: 1,
           },
         });
+        diagram.add('eqn', eqn);
       },
     };
   });
@@ -277,7 +288,6 @@ describe('Equation Functions - Bar', () => {
     // Snapshot test on most simple layout
     eqn.showForm('0');
     diagram.setFirstTransform();
-    tools.cleanUIDs(eqn);
     const a = eqn._a.getBoundingRect('diagram');
     const b = eqn._b.getBoundingRect('diagram');
     const bar = eqn._bar.getBoundingRect('diagram');
@@ -302,7 +312,6 @@ describe('Equation Functions - Bar', () => {
 
     // Snapshot test on most simple layout
     eqn.showForm('0');
-    tools.cleanUIDs(eqn);
     expect(round(eqn._a.transform.mat)).toMatchSnapshot();
     expect(round(eqn._bar.transform.mat)).toMatchSnapshot();
   });
@@ -329,7 +338,7 @@ describe('Equation Functions - Bar', () => {
   });
   test('Bottom Comment without Glyph', () => {
     functions.bottomCommentNoGlyph();
-    const elems = [eqn._a, eqn._b, eqn._bar];
+    const elems = [eqn._a, eqn._b];
     const withFormsToTest = ['1', '2'];
 
     // get without positions
@@ -349,7 +358,7 @@ describe('Equation Functions - Bar', () => {
     });
   });
   test('Bottom Comment Parameters', () => {
-    functions.bottomComment();
+    functions.bottomCommentParameters();
     const elems = [eqn._a, eqn._b, eqn._bar];
     const withFormsToTest = ['1', '2'];
 

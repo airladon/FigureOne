@@ -3389,7 +3389,6 @@ export class EquationFunctions {
       scale: scaleToUse,
       offset: [0, -commentSpaceToUse],
     }];
-
     if (symbol === '' || symbol == null) {
       return this.annotate({
         content,           // $FlowFixMe
