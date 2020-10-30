@@ -463,6 +463,8 @@ export type EQN_Bracket = {
  * Surround an equation phrase with a radical symbol and add a custom root if
  * needed
  *
+ * Options can be an object, or an array in the property order below.
+ *
  * @property {string} symbol radical symbol
  * @property {TypeEquationPhrase} content
  * @property {boolean} [inSize] `false` excludes radical symbol and root (if
@@ -861,7 +863,11 @@ export type EQN_Bar = {
 /**
  * Equation integral
  *
+ * ![]('./assets1/eqn_integral.gif)
+ *
  * Place an integral (with optional limits) before an equation phrase
+ *
+ * Options can be an object, or an array in the property order below.
  *
  * @property {string} symbol
  * @property {TypeEquationPhrase} content
@@ -915,47 +921,68 @@ export type EQN_Bar = {
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // For examples, a box symbol is defined as an equation element
- * eqn.addElements({
- *   integral: { symbol: 'int' }
- * });
- * @example
- * // Full object definition for horizontal bar
- * {
- *   int: {
- *     symbol: 'integral',
- *     content: 'a',
- *     from: 'b',
- *     to: 'c',
- *     inSize: true,
- *     space: 0,
- *     topSpace: 0.1,
- *     bottomSpace: 0.1,
- *     height: null,
- *     yOffset: 0,
- *     scale: 1,
- *     fromScale: 1,
- *     toScale: 1,
- *     fromOffset: [0.1, 0.1],
- *     toOffset: [-0.1, -0.1],
- *     limitsPosition: 'topBottom',
- *     limitsAroundContent: true,
- *     fromXPosition: 'center',
- *     fromYPosition: 'bottom',
- *     fromXAlign: 'center',
- *     fromYAlign: 'top',
- *     toXPosition: 'center',
- *     toYPosition: 'top',
- *     toXAlign: 'center',
- *     toYAlign: 'bottom',
- *     fullContentBounds: false,
- *     useFullBounds: false,
+ * // Simple
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       1: { int: ['int', 'x dx', 'a', 'b'] },
+ *     },
  *   },
- * }
+ * });
+ * diagram.elements._eqn.showForm('1');
+ *
  * @example
- * // Example array definition
- *  { int: ['integral', 'a', 'b', 'c'] }
+ * // Example showing different integral options
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       i: { symbol: 'int' },
+ *       // ic: { symbol: 'int', num: 1, type: 'line' },
+ *     },
+ *     formDefaults: { alignment: { fixTo: 'x' } },
+ *     forms: {
+ *       // Root object form
+ *       1: {
+ *         int: {
+ *           symbol: 'i',
+ *           content: ['x', ' ', 'dx'],
+ *           from: 'a',
+ *           to: 'b',
+ *         },
+ *       },
+ *       // Root array form
+ *       2: { int: ['i', ['x', '  ', '+', ' ', '_1', ' ', 'dx'], 'a', 'b'] },
+ *       // Indefinite tripple integral
+ *       3: { int: ['i', ['x', '  ', '+', ' ', '_1', ' ', 'dx']] },
+ *       // Custom spacing
+ *       4: {
+ *         int: {
+ *           symbol: 'i',
+ *           content: ['x', '  ', '+', ' ', '_1', ' ', 'dx'],
+ *           to: 'b',
+ *           from: { frac: ['a', 'vinculum', 'd + 2'] },
+ *           topSpace: 0.2,
+ *           bottomSpace: 0.2,
+ *           limitsAroundContent: false,
+ *         },
+ *       },
+ *     },
+ *     formSeries: ['1', '2', '3', '4'],
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_Integral = {
   symbol?: string,

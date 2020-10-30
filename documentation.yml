@@ -57,15 +57,15 @@ toc:
   - EQN_Equation
   - TypeEquationElements
   - name: Equation Layout Function Objects
-  - EQN_Container
   - EQN_Fraction
+  - EQN_Root
+  - EQN_Integral
+  - EQN_Container
   - EQN_Scale
   - EQN_Bracket
-  - EQN_Root
   - EQN_Strike
   - EQN_Box
   - EQN_Bar
-  - EQN_Integral
   - EQN_SumOf
   - EQN_ProdOf
   - EQN_Subcript

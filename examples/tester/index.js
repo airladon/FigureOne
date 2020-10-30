@@ -35,62 +35,63 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 //   },
 // ]);
 
-// diagram.addElement({
-//   name: 'eqn',
-//   method: 'equation',
-//   options: {
-//     elements: {
-//       a: 'a',
-//       v1: { symbol: 'vinculum' },
-//       v2: { symbol: 'vinculum' },
-//       plus: '  +  ',
-//     },
-//     formDefaults: {
-//       alignment: {
-//         // fixTo: 'a',
-//         xAlign: 'center',
-//         yAlign: 'middle',
-//       },
-//     },
-//     forms: {
-//       // Fraction object form
-//       1: {
-//         frac: {
-//           numerator: 'a',
-//           denominator: 'b',
-//           symbol: 'v1',
-//         },
-//       },
-//       // Fraction array form
-//       2: { frac: ['a', 'v1', 'd'] },
-//       // Nested
-//       3: {
-//         frac: {
-//           numerator: [{ frac: ['a', 'v1', 'd', 0.7] }, 'plus', '_1'],
-//           symbol: 'v2',
-//           denominator: 'b',
-//         }
-//       },
-//     },
-//     formSeries: ['1', '2', '3'],
-//   },
-// });
-// const eqn = diagram.elements._eqn;
-
-// eqn.setTouchableRect(0.5);
-// eqn.onClick = () => eqn.nextForm();
-// eqn.showForm('without');
-
+//Simple
 diagram.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
     forms: {
-      1: { frac: ['a', 'vinculum', 'b'] },
+      1: { int: ['int', 'x dx', 'a', 'b'] },
     },
   },
 });
 diagram.elements._eqn.showForm('1');
+
+// Example showing different integral options
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      i: { symbol: 'int' },
+      // ic: { symbol: 'int', num: 1, type: 'line' },
+    },
+    formDefaults: { alignment: { fixTo: 'x' } },
+    forms: {
+      // Root object form
+      1: {
+        int: {
+          symbol: 'i',
+          content: ['x', ' ', 'dx'],
+          from: 'a',
+          to: 'b',
+        },
+      },
+      // Root array form
+      2: { int: ['i', ['x', '  ', '+', ' ', '_1', ' ', 'dx'], 'a', 'b'] },
+      // Indefinite tripple integral
+      3: { int: ['i', ['x', '  ', '+', ' ', '_1', ' ', 'dx']] },
+      // Custom spacing
+      4: {
+        int: {
+          symbol: 'i',
+          content: ['x', '  ', '+', ' ', '_1', ' ', 'dx'],
+          to: 'b',
+          from: { frac: ['a', 'vinculum', 'd + 2'] },
+          topSpace: 0.2,
+          bottomSpace: 0.2,
+          limitsAroundContent: false,
+        },
+      },
+    },
+    formSeries: ['1', '2', '3', '4'],
+  },
+});
+const eqn = diagram.elements._eqn;
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('1');
+
 
 // // Create equation object then add to diagram
 // const eqn = diagram.create.equation({
