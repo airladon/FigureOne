@@ -424,7 +424,44 @@ eqn.showForm('1');
 
 #### Phrases
 
-Often different forms of an equation reuse equation phrases, like fractions. To make equations more readable, it can be useful to define a phrase once, and then refer to its identifier throughout the forms.
+Often different forms of an equation reuse equation phrases, like fractions. To make equation forms more readable, it can be useful to define a phrase once, and then refer to its identifier throughout the forms.
 
 ```javascript
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      v: { symbol: 'vinculum' },
+      times: ' \u00d7 ',
+      div: ' \u00f7 ',
+      lb: { symbol: 'bracket', side: 'left' },
+      rb: { symbol: 'bracket', side: 'right' },
+    },
+    phrases: {
+      ac: ['a', '_ + ', 'c'],
+      // Phrases can be nested
+      br: { brac: ['lb', 'ac', 'rb'] },
+    },
+    forms: {
+      1: ['d', 'times', 'br'],
+      2: ['d', 'times', { bottomComment: ['br', ['div', 'b']] }],
+      3: ['d', 'times', { frac: ['ac', 'v', 'b']},],
+    },
+    formSeries: ['1', '2', '3'],
+  },
+});
+diagram.elements._eqn.showForm('1');
+const eqn = diagram.elements._eqn;
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('1');
 ```
+
+![](./tutorials/equation/phrases.gif)
+
+
+### Form Series
+
+The above example uses a *form series*. A form series allows animation between equation forms using the
+<a href="#equationnextform">equation.nextForm</a> and <a href="#equationprevform">equation.prevForm</a> methods.

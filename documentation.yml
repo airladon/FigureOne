@@ -55,7 +55,7 @@ toc:
     file: ./docs/tutorials/equation/equation.md
   - Equation
   - EQN_Equation
-  - name: Equation Layout Function Objects
+  - name: Equation Layout
   - EQN_Fraction
   - EQN_Root
   - EQN_Subscript
@@ -75,7 +75,7 @@ toc:
   - EQN_Scale
   - EQN_Container
   - EQN_Annotate
-  - name: Equation Symbol Objects
+  - name: Equation Symbols
   - EQN_VinculumSymbol
   - EQN_BoxSymbol
   - EQN_ArrowSymbol
@@ -89,9 +89,6 @@ toc:
   - EQN_BarSymbol
   - EQN_SquareBracketSymbol
   - EQN_RadicalSymbol
-  - name: Equation Option Types
-  - TypeEquationGoToFormOptions
-  # - name: Equations
   - name: Misc Geometry
   - TypeParsablePoint
   - TypeParsableLine
@@ -147,6 +144,7 @@ toc:
   - TypeEquationForm
   - TypeEquationForms
   - TypeFormRestart
+  - TypeEquationGoToFormOptions
   - name: tools
     description: These are generic tools
     children:

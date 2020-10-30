@@ -89,103 +89,72 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // eqn.showForm('1');
 
 
-// Simple
+// // Simple
+// diagram.addElement({
+//   name: 'eqn',
+//   method: 'equation',
+//   options: {
+//     forms: {
+//       1: {
+//         annotate: {
+//           content: 'a',
+//           annotation: {
+//             content: 'b',
+//             yPosition: 'top',
+//             yAlign: 'bottom',
+//             xPosition: 'right',
+//             xAlign: 'left',
+//           },
+//         },
+//       },
+//     },
+//   },
+// });
+// diagram.elements._eqn.showForm('1');
+
+
+// diagram.addElement({
+//   name: 'eqn',
+//   method: 'equation',
+//   options: {
+//     elements: {
+//       v: { symbol: 'vinculum' },
+//       times: ' \u00d7 ',
+//       div: ' \u00f7 ',
+//       lb: { symbol: 'bracket', side: 'left' },
+//       rb: { symbol: 'bracket', side: 'right' },
+//     },
+//     phrases: {
+//       ac: ['a', '_ + ', 'c'],
+//       // Phrases can be nested
+//       br: { brac: ['lb', 'ac', 'rb'] },
+//     },
+//     forms: {
+//       1: ['d', 'times', 'br'],
+//       2: ['d', 'times', { bottomComment: ['br', ['div', 'b']] }],
+//       3: ['d', 'times', { frac: ['ac', 'v', 'b']},],
+//     },
+//     formSeries: ['1', '2', '3'],
+//   },
+// });
+// diagram.elements._eqn.showForm('1');
+// const eqn = diagram.elements._eqn;
+// eqn.onClick = () => eqn.nextForm();
+// eqn.setTouchableRect(0.5);
+// eqn.showForm('1');
 diagram.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
     forms: {
-      1: {
-        annotate: {
-          content: 'a',
-          annotation: {
-            content: 'b',
-            yPosition: 'top',
-            yAlign: 'bottom',
-            xPosition: 'right',
-            xAlign: 'left',
-          },
-        },
-      },
+      1: ['b', '_ = ', { frac: ['a', 'v_vinculum', 'c'] }],
+      2: ['c', '_ = ', { frac: ['a', 'v', 'b'] }],
     },
   },
 });
 diagram.elements._eqn.showForm('1');
-
-
-// Some different annotation examples
-diagram.addElement({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    elements: {
-      bar: { symbol: 'bar', side: 'right' },
-    },
-    forms: {
-      // Single annotation
-      1: {
-        annotate: {
-          content: 'a',
-          annotation: {
-            content: 'bbb',
-            yPosition: 'top',
-            yAlign: 'bottom',
-            xPosition: 'left',
-            xAlign: 'right',
-            scale: 0.5,
-          },
-        },
-      },
-      // Multiple annotations
-      2: {
-        annotate: {
-          content: 'a',
-          annotations: [
-            {
-              content: 'bbb',
-              yPosition: 'top',
-              yAlign: 'bottom',
-              xPosition: 'left',
-              xAlign: 'right',
-              scale: 0.5,
-            },
-            {
-              content: 'ccc',
-              xPosition: 'right',
-              yPosition: 'middle',
-              xAlign: 'left',
-              yAlign: 'middle',
-              scale: 0.5,
-              offset: [0.05, 0],
-            },
-          ],
-        },
-      },
-      // With glyph
-      3: {
-        annotate: {
-          content: 'a',
-          glyphs: {
-            left:{
-              symbol: 'bar',
-              overhang: 0.1,
-              annotation: {
-                content: 'bbb',
-                xPosition: 'right',
-                yPosition: 'bottom',
-                xAlign: 'left',
-                yAlign: 'middle',
-                scale: 0.5,
-              },
-            },
-          },
-        },
-      },
-    },
-    formSeries: ['1', '2', '3'],
-  },
+diagram.elements._eqn.goToForm({
+  form: 2,
+  animate: 'move',
+  delay: 2,
 });
-const eqn = diagram.elements._eqn;
-eqn.onClick = () => eqn.nextForm();
-eqn.setTouchableRect(0.5);
-eqn.showForm('1');
