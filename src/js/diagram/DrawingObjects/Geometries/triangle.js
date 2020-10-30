@@ -1,18 +1,10 @@
 // @flow
 import {
-  Point, Transform, Line, minAngleDiff, threePointAngle, getPoints,
+  Point, Transform, Line, minAngleDiff, threePointAngle, getPoints, getTriangleCenter,
 } from '../../../tools/g2';
 import {
   makePolyLine,
 } from './lines/lines';
-
-
-function getTriangleCenter(points: Array<Point>) {
-  const [A, B, C] = points;
-  const Ox = (A.x + B.x + C.x) / 3;
-  const Oy = (A.y + B.y + C.y) / 3;
-  return new Point(Ox, Oy);
-}
 
 
 function getTriangleDirection(points: Array<Point>) {

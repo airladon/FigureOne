@@ -158,3 +158,8 @@ diagram.elements._eqn.goToForm({
   animate: 'move',
   delay: 2,
 });
+
+const g2 = Fig.tools.g2;
+const diff = g2.minAngleDiff(0.3, 0.2);
+console.log(diff);
+// 0.2

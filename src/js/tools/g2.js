@@ -1065,6 +1065,27 @@ function deg(angle: number) {
   return angle * 180 / Math.PI;
 }
 
+/**
+ * Get the minimum absolute angle difference between two angles
+ *
+ * @example
+ * const g2 = Fig.tools.g2;
+ * const diff = g2.minAngleDiff(0.1, 0.2);
+ * console.log(diff);
+ * // 0.1
+ *
+ * @example
+ * const g2 = Fig.tools.g2;
+ * const diff = g2.minAngleDiff(0.2, 0.1);
+ * console.log(diff);
+ * // 0.1
+ *
+ * @example
+ * const g2 = Fig.tools.g2;
+ * const diff = g2.minAngleDiff(0.1, -0.1);
+ * console.log(diff);
+ * // 0.2
+ */
 function minAngleDiff(angle1: number, angle2: number) {
   if (angle1 === angle2) {
     return 0;
@@ -5707,6 +5728,22 @@ function decelerateTransform(
   };
 }
 
+/**
+ * Get center of a triangle
+ *
+ * @example
+ * const g2 = Fig.tools.g2;
+ * const center = g2.getTriangleCenter([[0, 0], [1, 0], [0, 1]]);
+ * console.log(center);
+ * // Point {x: 0.3333333333333333, y: 0.3333333333333333}
+ */
+function getTriangleCenter(points: [TypeParsablePoint, TypeParsablePoint, TypeParsablePoint]) {
+  const [A, B, C] = points.map(p => getPoint(p));
+  const Ox = (A.x + B.x + C.x) / 3;
+  const Oy = (A.y + B.y + C.y) / 3;
+  return new Point(Ox, Oy);
+}
+
 export {
   // point,
   Point,
@@ -5758,4 +5795,5 @@ export {
   transformValueToArray,
   getBounds,
   Bounds,
+  getTriangleCenter,
 };

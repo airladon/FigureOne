@@ -145,15 +145,19 @@ toc:
   - TypeEquationForms
   - TypeFormRestart
   - TypeEquationGoToFormOptions
-  - name: tools
-    description: These are generic tools
-    children:
-      - name: g2
-        description: 2D geometry tools
-        children:
-          # - Point
-          # - Rect
-          # - Transform
-          # - TypeParsableRect
-          # - getRect
-          - TypeF1DefRect
+  - name: 2D Geometry Tools
+  - minAngleDiff
+  - getTriangleCenter
+
+  # - name: tools
+  #   description: These are generic tools
+  #   children:
+  #     - name: g2
+  #       description: 2D geometry tools
+  #       children:
+  #         # - Point
+  #         # - Rect
+  #         # - Transform
+  #         # - TypeParsableRect
+  #         # - getRect
+  #         - TypeF1DefRect
