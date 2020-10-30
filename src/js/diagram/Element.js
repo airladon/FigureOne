@@ -444,6 +444,7 @@ class DiagramElement {
   isTouchable: boolean;           // Element can be touched
   isInteractive: ?boolean;         // Touch event is not processed by Diagram
   hasTouchableElements: boolean;
+  touchInBoundingRect: boolean | number;
 
   drawPriority: number;
 
@@ -633,6 +634,7 @@ class DiagramElement {
     this.subscriptions = new SubscriptionManager(this.fnMap);
     this.isMovable = false;
     this.isTouchable = false;
+    this.touchInBoundingRect = false;
     this.isInteractive = undefined;
     this.hasTouchableElements = false;
     this.color = [1, 1, 1, 1];
@@ -3171,6 +3173,19 @@ class DiagramElement {
     }
   }
 
+  setTouchable(touchable: boolean) {
+    if (touchable === false) {
+      this.isTouchable = false;
+      return;
+    }
+    this.makeTouchable();
+  }
+
+  setTouchableRect(touchable: number = 0) {
+    this.touchInBoundingRect = touchable;
+    this.makeTouchable();
+  }
+
   /**
    * Configure all parents to, and make this element touchable
    */
@@ -3443,7 +3458,23 @@ class DiagramElementPrimitive extends DiagramElement {
       return false;
     }
     const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
-    const borders = this.getBorder('draw', 'touchBorder');
+    let borders = this.getBorder('draw', 'touchBorder');
+    if (this.touchInBoundingRect !== false) {
+      let buffer = 0;
+      if (typeof this.touchInBoundingRect === 'number') {
+        buffer = this.touchInBoundingRect;
+      }
+      const boundingRect = getBoundingRect(borders, buffer);
+      const {
+        left, bottom, right, top,
+      } = boundingRect;
+      borders = [[
+        new Point(left, bottom),
+        new Point(right, bottom),
+        new Point(right, top),
+        new Point(left, top),
+      ]];
+    }
     const holeBorders = this.getBorder('draw', 'holeBorder');
     for (let i = 0; i < borders.length; i += 1) {
       const border = borders[i];

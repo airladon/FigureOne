@@ -3782,7 +3782,7 @@ function rectToPolar(x: number | Point, y: number = 0) {
   };
 }
 
-function getBoundingRect(pointArrays: Array<Point> | Array<Array<Point>>) {
+function getBoundingRect(pointArrays: Array<Point> | Array<Array<Point>>, buffer: number = 0) {
   let firstPoint = true;
   let result = { min: new Point(0, 0), max: new Point(0, 0) };
 
@@ -3799,10 +3799,10 @@ function getBoundingRect(pointArrays: Array<Point> | Array<Array<Point>>) {
     firstPoint = false;
   });
   return new Rect(
-    result.min.x,
-    result.min.y,
-    result.max.x - result.min.x,
-    result.max.y - result.min.y,
+    result.min.x - buffer,
+    result.min.y - buffer,
+    result.max.x - result.min.x + buffer,
+    result.max.y - result.min.y + buffer,
   );
 }
 

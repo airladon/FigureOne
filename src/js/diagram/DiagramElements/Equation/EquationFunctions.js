@@ -106,10 +106,14 @@ export type TypeEquationPhrase =
   | BaseAnnotationFunction;
 
 /**
- * Equation container
+ * Equation container options
+ *
+ * ![](./assets1/eqn_container.gif)
  *
  * A container is useful to fix spacing around content as it changes between
  * equation forms.
+ *
+ * Options can be an object, or an array in the property order below
  *
  * @property {TypeEquationPhrase} content
  * @property {number} [width] (`null`)
@@ -121,24 +125,59 @@ export type TypeEquationPhrase =
  * ascent and descent to either match width, height or fully contain the content (`null`)
  * @property {number} [scale] - (`1`)
  * @property {boolean} [fullContentBounds] - (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // Full object definition
- *  {
- *    container: {
- *      content: 'a',
- *      width: null,
- *      descent: null,
- *      ascent: null,
- *      xAlign: 'left',
- *      yAlign: 'baseline',
- *      fit: null,
- *      scale: 1,
- *      fullContentBounds: false
- *    },
- *  }
+ * // Example showing the difference between with and without container
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       // Container object definition
+ *       1: [
+ *         'length',
+ *         {
+ *           container: {
+ *             content: 'width',
+ *             width: 0.5,
+ *           },
+ *         },
+ *         'height',
+ *       ],
+ *       // Container array definition
+ *       2: ['length', { container: ['w', 0.5] }, 'height'],
+ *       // No container
+ *       3: ['length', ' ', 'w', ' ', 'height']
+ *     },
+ *     formSeries: ['1', '2', '3'],
+ *   },
+ * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
+ *
  * @example
- * // Example array definition
- *  { container: ['a', 1, 0.2, 0.5] }
+ * // Create equation object then add to diagram
+ * const eqn = diagram.create.equation({
+ *   forms: {
+ *     1: [
+ *       'length',
+ *       { container: { content: 'width', width: 0.5 } },
+ *       'height',
+ *     ],
+ *     2: ['length', { container: ['w', 0.5] }, 'height'],
+ *     3: ['length', ' ', 'w', ' ', 'height']
+ *   },
+ *   formSeries: ['1', '2', '3'],
+ * });
+ * diagram.add('eqn', eqn);
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_Container = {
   content: TypeEquationPhrase,
@@ -163,7 +202,13 @@ export type EQN_Container = {
 ];
 
 /**
- * Equation fraction
+ * Equation fraction options
+ *
+ * ![](./assets1/eqn_fraction.gif)
+ *
+ * A fraction has a numerator, denominator and vinculum symbol (line).
+ *
+ * Options can be an object, or an array in the property order below
  *
  * @property {TypeEquationPhrase} numerator
  * @property {string} symbol - Vinculum symbol
@@ -175,29 +220,79 @@ export type EQN_Container = {
  * horizontally by the this amount (`0.05`)
  * @property {number} [offsetY] Offset fraction in y (`0.07`)
  * @property {boolean} [fullContentBounds] Use full bounds with content (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
  * @example
- * // For examples, a vinculum symbol is defined as an equation element
- * eqn.addElements({
- *   v: { symbol: 'vinculum' }
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       v1: { symbol: 'vinculum' },
+ *       v2: { symbol: 'vinculum' },
+ *       plus: '  +  ',
+ *     },
+ *     forms: {
+ *       // Fraction object form
+ *       1: {
+ *         frac: {
+ *           numerator: 'a',
+ *           denominator: 'b',
+ *           symbol: 'v1',
+ *         },
+ *       },
+ *       // Fraction array form
+ *       2: { frac: ['a', 'v1', 'c'] },
+ *       // Nested
+ *       3: {
+ *         frac: {
+ *           numerator: [{ frac: ['a', 'v1', 'c', 0.7] }, 'plus', '_1'],
+ *           symbol: 'v2',
+ *           denominator: 'b',
+ *         }
+ *       },
+ *     },
+ *     formSeries: ['1', '2', '3'],
+ *   },
  * });
+ * const eqn = diagram.elements._eqn;
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
+ *
  * @example
- * // Full object definition example
- *  {
- *    frac: {
- *      numerator: 'a',
- *      symbol: 'v',
- *      denominator: 'b',
- *      scale: 0.8,
- *      numeratorSpace: 0.01,
- *      denominatorSpace: 0.02,
- *      overhang: 0.03,
- *      offsetY: 0.04,
- *      fullContentBounds: false,
- *    },
- *  }
- * @example
- * // Array definition example
- * { frac: ['a', 'v', 'b'] }
+ * // Create equation object then add to diagram
+ * const eqn = diagram.create.equation({
+ *   elements: {
+ *       v1: { symbol: 'vinculum' },
+ *       v2: { symbol: 'vinculum' },
+ *       plus: '  +  ',
+ *     },
+ *     forms: {
+ *       1: {
+ *         frac: {
+ *           numerator: 'a',
+ *           denominator: 'b',
+ *           symbol: 'v1',
+ *         },
+ *       },
+ *       2: { frac: ['a', 'v1', 'c'] },
+ *       3: {
+ *         frac: {
+ *           numerator: [{ frac: ['a', 'v1', 'c', 0.7] }, 'plus', '_1'],
+ *           symbol: 'v2',
+ *           denominator: 'b',
+ *         }
+ *       },
+ *     },
+ *     formSeries: ['1', '2', '3'],
+ * });
+ * diagram.add('eqn', eqn);
+ * eqn.onClick = () => eqn.nextForm();
+ * eqn.setTouchableRect(0.5);
+ * eqn.showForm('1');
  */
 export type EQN_Fraction = {
   numerator: TypeEquationPhrase;

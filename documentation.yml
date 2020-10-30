@@ -56,7 +56,7 @@ toc:
   - Equation
   - EQN_Equation
   - TypeEquationElements
-  - name: Equation Layout OBJECTS
+  - name: Equation Layout Function Objects
   - EQN_Container
   - EQN_Fraction
   - EQN_Scale
@@ -81,7 +81,7 @@ toc:
   - EQN_LeftRightGlyph
   - EQN_TopBottomGlyph
   - EQN_Glyphs
-  - name: Equation Symbol OBJECTS
+  - name: Equation Symbol Objects
   - EQN_VinculumSymbol
   - EQN_BoxSymbol
   - EQN_ArrowSymbol

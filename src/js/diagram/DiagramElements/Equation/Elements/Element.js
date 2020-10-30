@@ -111,6 +111,7 @@ class Element implements ElementInterface {
     if (content instanceof DiagramElementCollection
         || content instanceof DiagramElementPrimitive) {
       // Update translation and scale
+      console.log(content.name, content.lastDrawTransform._dup())
       content.transform.updateTranslation(location.x, location.y);
       content.transform.updateScale(scale, scale);
       content.updateLastDrawTransform();

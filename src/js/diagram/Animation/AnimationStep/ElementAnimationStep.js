@@ -5,6 +5,7 @@ import type { OBJ_AnimationStep } from '../AnimationStep';
 import AnimationStep from '../AnimationStep';
 import { joinObjects, duplicateFromTo } from '../../../tools/tools';
 import type { DiagramElement } from '../../Element';
+import type { AnimationStartTime } from '../AnimationManager';
 
 /**
  * Animation progression function.
@@ -143,6 +144,13 @@ export default class ElementAnimationStep extends AnimationStep {
       return (this.progression(percentTime));
     }
     return 0;
+  }
+
+  start(startTime: ?AnimationStartTime = null) {
+    super.start(startTime);
+    if (this.element != null) {
+      this.element.animateNextFrame();
+    }
   }
 
   _dup() {

@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, getMoveTime, Transform,
+  Point, getMoveTime, Transform, getBoundingRect,
 } from '../../../tools/g2';
 // import { roundNum } from '../../../tools/math';
 import { duplicateFromTo, joinObjects } from '../../../tools/tools';
@@ -259,10 +259,21 @@ export default class EquationForm extends Elements {
 
     if (fixTo instanceof DiagramElementPrimitive
         || fixTo instanceof DiagramElementCollection) {
+      // const rect = fixTo.getBoundingRect('local');
+      // const t = fixTo.getPosition('local');
+      // w = rect.width;
+      // h = rect.height;
+      // a = rect.top - t.y;
+      // d = t.y - rect.bottom;
+      // p = t._dup();
       const t = fixTo.transform.t();
       const s = fixTo.transform.s();
+      console.log(fixTo.transform._dup())
+      // console.log(t, s, fixTo.name)
       if (t != null && s != null) {
         const rect = fixTo.getBoundingRect('draw');
+        console.log(rect)
+        // const rect = getBoundingRect(fixTo.drawingObject.border);
         w = rect.width * s.x;
         h = rect.height * s.y;
         a = rect.top * s.y - t.y;

@@ -1786,9 +1786,9 @@
               
                 
                 <li><a
-                  href='#equation-layout-objects'
+                  href='#equation-layout-function-objects'
                   class="h5 bold black caps">
-                  Equation Layout OBJECTS
+                  Equation Layout Function Objects
                   
                 </a>
                 
@@ -2038,7 +2038,7 @@
                 <li><a
                   href='#equation-symbol-objects'
                   class="h5 bold black caps">
-                  Equation Symbol OBJECTS
+                  Equation Symbol Objects
                   
                 </a>
                 
@@ -3002,9 +3002,9 @@
               
                 
                 <li><a
-                  href='#animationprogression'
+                  href='#obj_pulseanimationstep'
                   class="">
-                  AnimationProgression
+                  OBJ_PulseAnimationStep
                   
                 </a>
                 
@@ -3012,9 +3012,9 @@
               
                 
                 <li><a
-                  href='#obj_pulseanimationstep'
+                  href='#animationprogression'
                   class="">
-                  OBJ_PulseAnimationStep
+                  AnimationProgression
                   
                 </a>
                 
@@ -22926,8 +22926,8 @@ New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='equation-layout-objects' class='mt0'>
-    Equation Layout OBJECTS
+  <h2 id='equation-layout-function-objects' class='mt0'>
+    Equation Layout Function Objects
   </h2>
 
   
@@ -22951,9 +22951,11 @@ New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
   </div>
   
 
-  <p>Equation container</p>
+  <p>Equation container options</p>
+<p><img src="./assets1/eqn_container.gif"></p>
 <p>A container is useful to fix spacing around content as it changes between
 equation forms.</p>
+<p>Options can be an object, or an array in the property order below</p>
 
   
     <p style="display: none;">      Type:
@@ -23060,6 +23062,18 @@ ascent and descent to either match width, height or fully contain the content (
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
@@ -23067,24 +23081,54 @@ ascent and descent to either match width, height or fully contain the content (
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition</span>
- {
-   <span class="hljs-attr">container</span>: {
-     <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-     <span class="hljs-attr">width</span>: <span class="hljs-literal">null</span>,
-     <span class="hljs-attr">descent</span>: <span class="hljs-literal">null</span>,
-     <span class="hljs-attr">ascent</span>: <span class="hljs-literal">null</span>,
-     <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
-     <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'baseline'</span>,
-     <span class="hljs-attr">fit</span>: <span class="hljs-literal">null</span>,
-     <span class="hljs-attr">scale</span>: <span class="hljs-number">1</span>,
-     <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>
-   },
- }</pre>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing the difference between with and without container</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Container object definition</span>
+      <span class="hljs-number">1</span>: [
+        <span class="hljs-string">'length'</span>,
+        {
+          <span class="hljs-attr">container</span>: {
+            <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>,
+            <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+          },
+        },
+        <span class="hljs-string">'height'</span>,
+      ],
+      <span class="hljs-comment">// Container array definition</span>
+      <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
+      <span class="hljs-comment">// No container</span>
+      <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example array definition</span>
- { <span class="hljs-attr">container</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.5</span>] }</pre>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to diagram</span>
+<span class="hljs-keyword">const</span> eqn = diagram.create.equation({
+  <span class="hljs-attr">forms</span>: {
+    <span class="hljs-number">1</span>: [
+      <span class="hljs-string">'length'</span>,
+      { <span class="hljs-attr">container</span>: { <span class="hljs-attr">content</span>: <span class="hljs-string">'width'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span> } },
+      <span class="hljs-string">'height'</span>,
+    ],
+    <span class="hljs-number">2</span>: [<span class="hljs-string">'length'</span>, { <span class="hljs-attr">container</span>: [<span class="hljs-string">'w'</span>, <span class="hljs-number">0.5</span>] }, <span class="hljs-string">'height'</span>],
+    <span class="hljs-number">3</span>: [<span class="hljs-string">'length'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'height'</span>]
+  },
+  <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+});
+diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
 
@@ -23113,7 +23157,10 @@ ascent and descent to either match width, height or fully contain the content (
   </div>
   
 
-  <p>Equation fraction</p>
+  <p>Equation fraction options</p>
+<p><img src="./assets1/eqn_fraction.gif"></p>
+<p>A fraction has a numerator, denominator and vinculum symbol (line).</p>
+<p>Options can be an object, or an array in the property order below</p>
 
   
     <p style="display: none;">      Type:
@@ -23215,6 +23262,18 @@ horizontally by the this amount (
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
@@ -23222,30 +23281,74 @@ horizontally by the this amount (
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For examples, a vinculum symbol is defined as an equation element</span>
-eqn.addElements({
-  <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> }
-});</pre>
+      <pre class='p1 overflow-auto round fill-light'>diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">v1</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
+      <span class="hljs-attr">v2</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
+      <span class="hljs-attr">plus</span>: <span class="hljs-string">'  +  '</span>,
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-comment">// Fraction object form</span>
+      <span class="hljs-number">1</span>: {
+        <span class="hljs-attr">frac</span>: {
+          <span class="hljs-attr">numerator</span>: <span class="hljs-string">'a'</span>,
+          <span class="hljs-attr">denominator</span>: <span class="hljs-string">'b'</span>,
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'v1'</span>,
+        },
+      },
+      <span class="hljs-comment">// Fraction array form</span>
+      <span class="hljs-number">2</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v1'</span>, <span class="hljs-string">'c'</span>] },
+      <span class="hljs-comment">// Nested</span>
+      <span class="hljs-number">3</span>: {
+        <span class="hljs-attr">frac</span>: {
+          <span class="hljs-attr">numerator</span>: [{ <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v1'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-number">0.7</span>] }, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'_1'</span>],
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'v2'</span>,
+          <span class="hljs-attr">denominator</span>: <span class="hljs-string">'b'</span>,
+        }
+      },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> eqn = diagram.elements._eqn;
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Full object definition example</span>
- {
-   <span class="hljs-attr">frac</span>: {
-     <span class="hljs-attr">numerator</span>: <span class="hljs-string">'a'</span>,
-     <span class="hljs-attr">symbol</span>: <span class="hljs-string">'v'</span>,
-     <span class="hljs-attr">denominator</span>: <span class="hljs-string">'b'</span>,
-     <span class="hljs-attr">scale</span>: <span class="hljs-number">0.8</span>,
-     <span class="hljs-attr">numeratorSpace</span>: <span class="hljs-number">0.01</span>,
-     <span class="hljs-attr">denominatorSpace</span>: <span class="hljs-number">0.02</span>,
-     <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.03</span>,
-     <span class="hljs-attr">offsetY</span>: <span class="hljs-number">0.04</span>,
-     <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
-   },
- }</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Array definition example</span>
-{ <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'b'</span>] }</pre>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to diagram</span>
+<span class="hljs-keyword">const</span> eqn = diagram.create.equation({
+  <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">v1</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
+      <span class="hljs-attr">v2</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
+      <span class="hljs-attr">plus</span>: <span class="hljs-string">'  +  '</span>,
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: {
+        <span class="hljs-attr">frac</span>: {
+          <span class="hljs-attr">numerator</span>: <span class="hljs-string">'a'</span>,
+          <span class="hljs-attr">denominator</span>: <span class="hljs-string">'b'</span>,
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'v1'</span>,
+        },
+      },
+      <span class="hljs-number">2</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v1'</span>, <span class="hljs-string">'c'</span>] },
+      <span class="hljs-number">3</span>: {
+        <span class="hljs-attr">frac</span>: {
+          <span class="hljs-attr">numerator</span>: [{ <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v1'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-number">0.7</span>] }, <span class="hljs-string">'plus'</span>, <span class="hljs-string">'_1'</span>],
+          <span class="hljs-attr">symbol</span>: <span class="hljs-string">'v2'</span>,
+          <span class="hljs-attr">denominator</span>: <span class="hljs-string">'b'</span>,
+        }
+      },
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
+});
+diagram.add(<span class="hljs-string">'eqn'</span>, eqn);
+eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
+eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
 
@@ -27629,7 +27732,7 @@ annotate: {
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
   <h2 id='equation-symbol-objects' class='mt0'>
-    Equation Symbol OBJECTS
+    Equation Symbol Objects
   </h2>
 
   
@@ -37818,88 +37921,6 @@ eqn.addForms({
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='animationprogression'>
-      AnimationProgression
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Animation progression function.</p>
-<p>As the animation time progresses, a percentage of the total animation
-duration will be passed to this function.</p>
-<p>This function then calculates and returns the percent progress of the
-animation.</p>
-<p>This function can be used to make non-linear progressions of an animation.
-For instance, it could be used to create a progression that is slowed
-at the start or end of the animation.</p>
-
-  
-    <p style="display: none;">      Type:
-      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>percent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    percentage of duration
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
-        percent of animation complete
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='obj_pulseanimationstep'>
       OBJ_PulseAnimationStep
     </h3>
@@ -38091,6 +38112,88 @@ used (
     </div>
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='animationprogression'>
+      AnimationProgression
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Animation progression function.</p>
+<p>As the animation time progresses, a percentage of the total animation
+duration will be passed to this function.</p>
+<p>This function then calculates and returns the percent progress of the
+animation.</p>
+<p>This function can be used to make non-linear progressions of an animation.
+For instance, it could be used to create a progression that is slowed
+at the start or end of the animation.</p>
+
+  
+    <p style="display: none;">      Type:
+      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>percent</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    percentage of duration
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        percent of animation complete
+
+      
+    
   
 
   

@@ -326,7 +326,8 @@ export default class AnimationStep {
       this.startTime = null;
       return;
     }
-    this.startTime = new GlobalAnimation().getWhen(startTime) / 1000;
+    const globalAnim = new GlobalAnimation();
+    this.startTime = globalAnim.getWhen(startTime) / 1000;
     // if (startTime === 'prev') {
     //   this.startTime = new GlobalAnimation().lastFrame;
     // }
