@@ -35,6 +35,7 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 //   },
 // ]);
 
+
 // // Simple
 // diagram.addElement({
 //   name: 'eqn',
@@ -112,56 +113,68 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // });
 // diagram.elements._eqn.showForm('1');
 
+const bot = (content, comment, symbol = null, scale = 0.6, inSize = false) => ({ bottomComment: {
+  content,
+  comment,
+  scale,
+  symbol,
+  inSize,
+} });
 
-// diagram.addElement({
-//   name: 'eqn',
-//   method: 'equation',
-//   options: {
-//     elements: {
-//       v: { symbol: 'vinculum' },
-//       times: ' \u00d7 ',
-//       div: ' \u00f7 ',
-//       lb: { symbol: 'bracket', side: 'left' },
-//       rb: { symbol: 'bracket', side: 'right' },
-//     },
-//     phrases: {
-//       ac: ['a', '_ + ', 'c'],
-//       // Phrases can be nested
-//       br: { brac: ['lb', 'ac', 'rb'] },
-//     },
-//     forms: {
-//       1: ['d', 'times', 'br'],
-//       2: ['d', 'times', { bottomComment: ['br', ['div', 'b']] }],
-//       3: ['d', 'times', { frac: ['ac', 'v', 'b']},],
-//     },
-//     formSeries: ['1', '2', '3'],
-//   },
-// });
-// diagram.elements._eqn.showForm('1');
-// const eqn = diagram.elements._eqn;
-// eqn.onClick = () => eqn.nextForm();
-// eqn.setTouchableRect(0.5);
-// eqn.showForm('1');
-
-// diagram.addElement({
-//   name: 'eqn',
-//   method: 'equation',
-//   options: {
-//     forms: {
-//       1: ['b', '_ = ', { frac: ['a', 'v_vinculum', 'c'] }],
-//       2: ['c', '_ = ', { frac: ['a', 'v', 'b'] }],
-//     },
-//   },
-// });
-// diagram.elements._eqn.showForm('1');
-// diagram.elements._eqn.goToForm({
-//   form: 2,
-//   animate: 'move',
-//   delay: 2,
-// });
-
-const getTriangleCenter = Fig.getTriangleCenter;
-
-const center = getTriangleCenter([0, 0], [1, 0], [0, 1]);
-console.log(center);
-// Point {x: 0.3333333333333333, y: 0.3333333333333333}
+diagram.addElement({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    elements: {
+      equals: '  =  ',
+      plus_1: '  +  ',
+      plus_2: '  +  ',
+      plus_3: '  +  ',
+      plus_4: '  +  ',
+      lb: { symbol: 'bracket', side: 'left' },
+      rb: { symbol: 'bracket', side: 'right' },
+      brace1: { symbol: 'brace', side: 'bottom' },
+      strike1: { symbol: 'strike', style: 'cross' },
+      strike2: { symbol: 'strike', style: 'cross' },
+      times: ' \u00D7 ',
+    },
+    formDefaults: {
+      alignment: { fixTo: 'equals' },
+    },
+    phrases: {
+      area1: bot('Area_1', 'large square', null, 0.4, true),
+      area2: bot('Area_2', 'triangle', null, 0.4, true),
+      area3: bot('Area_3', 'small square', null, 0.4, true),
+      A_B: { sup: [{ brac: ['lb', ['A', 'plus_2', 'B'], 'rb'] }, '2_1']},
+      hAB: [{ frac: ['1_1', 'vinculum', '2_2', 0.7] }, 'A_2', 'B_2'],
+      Csq: { sup: ['C', '2_3'] },
+      Asq: { sup: ['A_3', '2_4'] },
+      Bsq: { sup: ['B_3', '2_6'] },
+      ABExp: ['Asq', 'plus_3', '2_5', 'A_4', 'B_4', 'plus_4', 'Bsq' ],
+      equals_4t: ['equals', '4', 'times'],
+      _4th: ['4', 'times', { frac: ['1_1', 'vinculum', '2_2', 0.7] }],
+      s1: { strike: [['2_5', 'A_4', 'B_4'], 'strike1'] },
+      s2: { strike: [['2_7', 'A_2', 'B_2'], 'strike2'] },
+    },
+    forms: {
+      1: ['area1', 'equals_4t', 'area2', 'plus_1', 'area3'],
+      2: [bot('area1', 'A_B', 'brace1'), 'equals_4t','area2', 'plus_1', 'area3'],
+      3: ['A_B', 'equals_4t','area2', 'plus_1', 'area3'],
+      4: ['A_B', 'equals_4t',bot('area2', 'hAB', 'brace1'), 'plus_1', 'area3'],
+      5: ['A_B', 'equals_4t','hAB', 'plus_1', 'area3'],
+      6: ['A_B', 'equals_4t','hAB', 'plus_1', bot('area3', 'Csq', 'brace1')],
+      7: ['A_B', 'equals_4t','hAB', 'plus_1', 'Csq'],
+      8: [bot('A_B', 'ABExp', 'brace1'), 'equals_4t','hAB', 'plus_1', 'Csq'],
+      9: ['ABExp', 'equals_4t','hAB', 'plus_1', 'Csq'],
+      10: ['ABExp', 'equals', bot('_4th', '2_7', 'brace1'), 'A_2', 'B_2', 'plus_1', 'Csq'],
+      11: ['ABExp', 'equals', '2_7', 'A_2', 'B_2', 'plus_1', 'Csq'],
+      12: ['Asq', 'plus_3', 's1', 'plus_4', 'Bsq', 'equals', 's2', 'plus_1', 'Csq'],
+      13: ['Asq', 'plus_4', 'Bsq', 'equals', 'Csq'],
+    },
+    formSeries: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'],
+  },
+});
+const eqn = diagram.elements._eqn;
+eqn.onClick = () => eqn.nextForm();
+eqn.setTouchableRect(0.5);
+eqn.showForm('8');
