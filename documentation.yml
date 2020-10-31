@@ -170,6 +170,7 @@ toc:
   - TypeWhen
   - AnimationStartTime
   - name: Misc Equation
+  - EquationFunctions
   - EQN_Annotation
   - EQN_EncompassGlyph
   - EQN_LeftRightGlyph

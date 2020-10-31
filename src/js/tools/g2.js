@@ -308,12 +308,12 @@ class Rect {
   }
 }
 
-/**
- JSON definition of a rect.
- @property {'rect'} f1Type rect identifier
- @property {[number, number, number, number]} state left, bottom, width
- * and height definition
- */
+// /**
+//  JSON definition of a rect.
+//  @property {'rect'} f1Type rect identifier
+//  @property {[number, number, number, number]} state left, bottom, width
+//  * and height definition
+//  */
 type TypeF1DefRect = {
   f1Type: 'rect',
   state: [number, number, number, number],

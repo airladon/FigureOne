@@ -56,14 +56,14 @@ export type {
   TypeLabelledAngle, TypeLabelledLine,
 };
 
-/** Tools object that is so great
-* @namespace tools
-* @memberof module:Fig
-* @property {object} math   - Math tools
-* @property {object} g2     - 2D geometry tools
-* @property {object} color  - Color tools
-* @property {object} css    - CSS tools
-*/
+// /** Tools object that is so great
+// * @namespace tools
+// * @memberof module:Fig
+// * @property {object} math   - Math tools
+// * @property {object} g2     - 2D geometry tools
+// * @property {object} color  - Color tools
+// * @property {object} css    - CSS tools
+// */
 const tools = {
   math,
   g2,

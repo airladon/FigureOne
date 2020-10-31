@@ -312,6 +312,7 @@ function sinusoidAbs(
 //     }
 // }
 
+
 /**
  * Creates an array with a range of numbers
  * @method
@@ -340,7 +341,7 @@ function randSign() {
 /**
  * Return a random int.
  *
- * If a `max = null`, then the returned number will be in the range of 0 to
+ * If a `max = null`, then the returned integer will be in the range of 0 to
  * `minOrMax`.
  *
  * Otherwise the returned value is in the range of `minOrMax` to `max`.
@@ -363,6 +364,18 @@ function randInt(minOrMax: number, max: ?number = null, sign: boolean = false) {
   return r;
 }
 
+/**
+ * Return a random number.
+ *
+ * If a `max = null`, then the returned number will be in the range of 0 to
+ * `minOrMax`.
+ *
+ * Otherwise the returned value is in the range of `minOrMax` to `max`.
+ *
+ * Use `sign` to also return a random sign (negative or positive);
+ *
+ * @return {number} random number
+ */
 function rand(minOrMax: number, max: ?number = null, plusOrMinus: boolean = false) {
   let r = 0;
   if (max != null) {
@@ -377,16 +390,25 @@ function rand(minOrMax: number, max: ?number = null, plusOrMinus: boolean = fals
   return r;
 }
 
+/**
+ * Get a random element from an array.
+ */
 function randElement<T>(inputArray: Array<T>): T {
   const index = randInt(inputArray.length);
   return inputArray[index];
 }
 
+/**
+ * Remove and return random element from an array.
+ */
 function removeRandElement<T>(inputArray: Array<T>): T {
   const index = rand(inputArray.length);
   return inputArray.splice(index, 1)[0];
 }
 
+/**
+ * Get a number of random elements from an array.
+ */
 function randElements<T>(num: number, inputArray: Array<T>): Array<T> {
   const possibleIndeces = range(0, inputArray.length - 1, 1);
   const elements = [];

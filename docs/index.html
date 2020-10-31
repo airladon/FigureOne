@@ -2216,6 +2216,66 @@
               
                 
                 <li><a
+                  href='#randsign'
+                  class="">
+                  randSign
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#randint'
+                  class="">
+                  randInt
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#rand'
+                  class="">
+                  rand
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#randelement'
+                  class="">
+                  randElement
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#randelements'
+                  class="">
+                  randElements
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#removerandelement'
+                  class="">
+                  removeRandElement
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#misc-diagram-element'
                   class="h5 bold black caps">
                   Misc Diagram Element
@@ -2349,6 +2409,16 @@
                   href='#getpoint'
                   class="">
                   getPoint
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getpoints'
+                  class="">
+                  getPoints
                   
                 </a>
                 
@@ -3030,6 +3100,16 @@
               
                 
                 <li><a
+                  href='#other'
+                  class="h5 bold black caps">
+                  Other
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#tools'
                   class="">
                   tools
@@ -3088,21 +3168,47 @@
               
                 
                 <li><a
-                  href='#container'
-                  class="">
-                  container
-                  
+                  href='#equationfunctions'
+                  class=" toggle-sibling">
+                  EquationFunctions
+                  <span class='icon'>▸</span>
                 </a>
                 
-                </li>
-              
-                
-                <li><a
-                  href='#frac'
-                  class="">
-                  frac
+                <div class='toggle-target display-none'>
                   
-                </a>
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#equationfunctionscontainer'
+                        class='regular pre-open'>
+                        #container
+                      </a></li>
+                      
+                      <li><a
+                        href='#equationfunctionsbrac'
+                        class='regular pre-open'>
+                        #brac
+                      </a></li>
+                      
+                      <li><a
+                        href='#equationfunctionsbar'
+                        class='regular pre-open'>
+                        #bar
+                      </a></li>
+                      
+                      <li><a
+                        href='#equationfunctionsfrac'
+                        class='regular pre-open'>
+                        #frac
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -3124,6 +3230,7 @@
 
   
     <p>This will introduce some key terms and concepts that are found frequently throughout the documentation.</p>
+<p>This is a work in progress and the entire API is not yet documented.</p>
 <h4>Diagrams, Primitives and Collections</h4>
 <p><strong>FigureOne</strong> allows you to create a <em>figure</em>, or <em>diagram</em> that can be both interactive and animated.</p>
 <p>A diagram has one or more <em>diagram elements</em>. A diagram element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.</p>
@@ -22170,7 +22277,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 
   
     <p style="display: none;">      Type:
-      {forms: {}, functions: EquationFunctions, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, font: DiagramFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, formDefaults: any, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (<a href="#diagramelementprimitive">DiagramElementPrimitive</a> | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | <a href="#diagramelementcollection">DiagramElementCollection</a>)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: <a href="#diagramelement">DiagramElement</a>}?}?}
+      {forms: {}, functions: <a href="#equationfunctions">EquationFunctions</a>, symbols: EquationSymbols, currentForm: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, font: DiagramFont, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, formSeries: {}, currentFormSeries: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>, currentFormSeriesName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, formDefaults: any, isAnimating: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>, descriptionElement: (<a href="#diagramelementprimitive">DiagramElementPrimitive</a> | null), descriptionPosition: <a href="#point">Point</a>, formRestart: {moveFrom: (<a href="#point">Point</a> | <a href="#diagramelementcollection">DiagramElementCollection</a>)?, pulse: {duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, element: <a href="#diagramelement">DiagramElement</a>}?}?}
     </p>
   
   
@@ -22189,7 +22296,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>functions</span> <code class='quiet'>(EquationFunctions)</code>
+          <span class='code bold'>functions</span> <code class='quiet'>(<a href="#equationfunctions">EquationFunctions</a>)</code>
           : equation functions
 
           
@@ -31028,6 +31135,456 @@ rotation direction and normalized from 0 to Math.PI * 2.</p>
           
         
           
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='randsign'>
+      randSign
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Return a -1 or 1 randomly</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        -1 or 1
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='randint'>
+      randInt
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Return a random int.</p>
+<p>If a <code>max = null</code>, then the returned integer will be in the range of 0 to
+<code>minOrMax</code>.</p>
+<p>Otherwise the returned value is in the range of <code>minOrMax</code> to <code>max</code>.</p>
+<p>Use <code>sign</code> to also return a random sign (negative or positive);</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>minOrMax</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>max</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>sign</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>false</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        random integer
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='rand'>
+      rand
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Return a random number.</p>
+<p>If a <code>max = null</code>, then the returned number will be in the range of 0 to
+<code>minOrMax</code>.</p>
+<p>Otherwise the returned value is in the range of <code>minOrMax</code> to <code>max</code>.</p>
+<p>Use <code>sign</code> to also return a random sign (negative or positive);</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>minOrMax</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>max</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>plusOrMinus</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>false</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        random number
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='randelement'>
+      randElement
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Get a random element from an array.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>inputArray</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;T>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>T</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='randelements'>
+      randElements
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Get a number of random elements from an array.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>num</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>inputArray</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;T>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;T></code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='removerandelement'>
+      removeRandElement
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Remove and return random element from an array.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>inputArray</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;T>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>T</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
   <h2 id='misc-diagram-element' class='mt0'>
@@ -31957,6 +32514,77 @@ t3 = <span class="hljs-string">'[['</span>s<span class="hljs-string">', 1, 1], [
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#point">Point</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getpoints'>
+      getPoints
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Parse an array of parsable point definitions (<a href="#typeparsablepoint">TypeParsablePoint</a>)
+returning an array of points.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>points</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>))</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>></code>:
         
 
       
@@ -39279,6 +39907,20 @@ will be ignored.</p>
           
         
           
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='other' class='mt0'>
+    Other
+  </h2>
+
+  
+    
+
+  
+</section></div>
+          
+        
+          
           <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
@@ -39443,7 +40085,7 @@ and height definition
   </div>
   
 
-  <p>Creates an array with a range of number</p>
+  <p>Creates an array with a range of numbers</p>
 
   
   
@@ -39643,12 +40285,55 @@ and height definition
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='container'>
-      container
+    <h3 class='fl m0' id='equationfunctions'>
+      EquationFunctions
     </h3>
     
     
   </div>
+  
+
+  <p>Equation Functions.</p>
+<p>Contains methods for all equation functions.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='equationfunctionscontainer'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>container(options?)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
   
 
   <p>Equation container function</p>
@@ -39669,7 +40354,7 @@ and height definition
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>optionsOrArray</span> <code class='quiet'>(<a href="#eqn_container">EQN_Container</a>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#eqn_container">EQN_Container</a>?)</code>
 	    
           </div>
           
@@ -39683,22 +40368,18 @@ and height definition
   
 
   
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
+    <div class='py1 quiet mt1 prose-big'>Related</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>e = <span class="hljs-keyword">new</span> Equation();
-e.addElements({
-  <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
-});
-frac = e.eqn.functions.frac;
-eqn.addForms({
-  <span class="hljs-attr">base</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, frac([<span class="hljs-string">'b'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>])],
-});</pre>
+        <a href="#eqn_container">EQN_Container</a>
+ for description and examples
+
+      
     
+  
+
+  
+
   
 
   
@@ -39710,20 +40391,168 @@ eqn.addForms({
   
 </section>
 
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='equationfunctionsbrac'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>brac(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
-  <div class='clearfix'>
+
+  <p>Equation bracket function</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#eqn_bracket">EQN_Bracket</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
     
-    <h3 class='fl m0' id='frac'>
-      frac
-    </h3>
+      
+        <a href="#eqn_bracket">EQN_Bracket</a>
+ for description and examples
+
+      
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='equationfunctionsbar'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>bar(options, forceOptions)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Equation bar function</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#eqn_bar">EQN_Bar</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>forceOptions</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
     
-  </div>
+      
+        <a href="#eqn_bar">EQN_Bar</a>
+ for description and examples
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='equationfunctionsfrac'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>frac(optionsOrArray)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
   
 
   <p>Equation fraction function</p>
@@ -39777,6 +40606,18 @@ eqn.addForms({
   
 
   
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
