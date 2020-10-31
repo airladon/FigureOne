@@ -92,82 +92,76 @@ export type TypeSpaceTransforms = {
 //   */
 
 /**
-  * Class to create a diagram.
-  *
-  * By default, a diagram will attach a WebGL canvas and Context2D
-  * canvas to the html `div` element with id `"figureOneContainer"`.
-  *
-  * To attach to a different `div`, use the `htmlId` property in the class
-  * constructor.
-  *
-  * The diagram manages all drawing elements, rendering the drawing elements
-  * on browser animation frames and listens for guestures from the user.
-  *
-  * The diagram also has a recorder, allowing to record and playback states,
-  * and gestures.
-  *
-  * If a diagram is paused, then all drawing element animations will
-  * also be paused.
-  *
-  * It also has a number of convenience functions for create drawing elements
-  * already attached to the drawing canvases, and useful transforms for
-  * converting between the different spaces (e.g. pixel, GL, diagram).
-  *
-  * @class
-  * @param {OBJ_Diagram} options
-  * @property {DiagramPrimitives} create create elements with this
-  * @example
-  * // Simple html and javascript example to create a diagram, and add a
-  * // hexagon.
-  * //
-  * // For additional examples, see https://github.com/airladon/FigureOne
-  * //
-  * // Two files `index.html` and `index.js` in the same directory
-  *
-  * // index.html
-  * <!doctype html>
-  * <html>
-  * <body>
-  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
-  *     </div>
-  *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.2.3/figureone.min.js'></script>
-  *     <script type="text/javascript" src='./index.js'></script>
-  * </body>
-  * </html>
-  *
-  * // index.js
-  * const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
-  * diagram.addElement(
-  *   {
-  *     name: 'p',
-  *     method: 'polygon',
-  *     options: {
-  *       radius: 0.5,
-  *       fill: true,
-  *       sides: 6,
-  *     },
-  *   },
-  * );
-  * diagram.initialize();
-  * @example
-  * // Alternately, an element can be added programatically
-  * // index.js
-  * const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
-  * const p = diagram.shapes.polygon({})
-  * diagram.addElement(
-  *   {
-  *     name: 'p',
-  *     method: 'polygon',
-  *     options: {
-  *       radius: 0.5,
-  *       fill: true,
-  *       sides: 6,
-  *     },
-  *   },
-  * );
+ * Class to create a diagram.
+ *
+ * By default, a diagram will attach a WebGL canvas and Context2D
+ * canvas to the html `div` element with id `"figureOneContainer"`.
+ *
+ * To attach to a different `div`, use the `htmlId` property in the class
+ * constructor.
+ *
+ * The diagram manages all drawing elements, rendering the drawing elements
+ * on browser animation frames and listens for guestures from the user.
+ *
+ * The diagram also has a recorder, allowing to record and playback states,
+ * and gestures.
+ *
+ * If a diagram is paused, then all drawing element animations will
+ * also be paused.
+ *
+ * It also has a number of convenience functions for create drawing elements
+ * already attached to the drawing canvases, and useful transforms for
+ * converting between the different spaces (e.g. pixel, GL, diagram).
+ *
+ * @class
+ * @param {OBJ_Diagram} options
+ * @property {DiagramPrimitives} create create elements with this
+ * @example
+ * // Simple html and javascript example to create a diagram, and add a
+ * // hexagon.
+ * //
+ * // For additional examples, see https://github.com/airladon/FigureOne
+ * //
+ * // Two files `index.html` and `index.js` in the same directory
+ *
+ * // index.html
+ * <!doctype html>
+ * <html>
+ * <body>
+ *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
+ *     </div>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.2.3/figureone.min.js'></script>
+ *     <script type="text/javascript" src='./index.js'></script>
+ * </body>
+ * </html>
+ *
+ * // index.js
+ * const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
+ * diagram.addElement(
+ *   {
+ *     name: 'p',
+ *     method: 'polygon',
+ *     options: {
+ *       radius: 0.5,
+ *       fill: true,
+ *       sides: 6,
+ *     },
+ *   },
+ * );
+ * diagram.initialize();
+ *
+ * @example
+ * // Alternately, an element can be added programatically
+ * // index.js
+ * const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
+ * const hex = diagram.create.polygon({
+ *   radius: 0.5,
+ *   fill: true,
+ *   sides: 6,
+ * });
+ * diagram.add('hexagon', hex);
  */
 class Diagram {
-  /** id of DIV that diagram is tied to */
   htmlId: string;
   canvasLow: HTMLCanvasElement;
   canvasOffscreen: HTMLCanvasElement;
@@ -925,7 +919,25 @@ class Diagram {
   }
 
   /**
-   * Add elements to diagram
+   * Add a {@link DiagramElement} to the diagram with some `name`.
+   * @example
+   * const hex = diagram.create.polygon({
+   *   radius: 0.5,
+   *   fill: true,
+   *   sides: 6,
+   * });
+   * diagram.add('hexagon', hex);
+   */
+  add(
+    name: string,
+    diagramElement: DiagramElementPrimitive | DiagramElementCollection,
+  ) {
+    this.elements.add(name, diagramElement);
+  }
+
+  /**
+   * Add elements from element definitions to the diagram.
+   *
    * @param {Array<TypeAddElementObject>} elementsToAdd - array of element definitions
    * @param {DiagramElementCollection} [collection = this.elements] - the
    * collection to add elements to
@@ -933,8 +945,26 @@ class Diagram {
    *
    * @example
    * diagram.addElements([
-   *   { name: 'shape1', method: 'polygon', options: { position: [0, 0] } },
-   *   { name: 'shape2', method: 'polygon', options: { position: [1, 1] } },
+   *   {
+   *     name: 'hex',
+   *     method: 'polygon',
+   *     options: {
+   *       radius: 0.5,
+   *       fill: true,
+   *       sides: 6,
+   *       position: [-0.5, 0],
+   *     },
+   *   },
+   *   {
+   *     name: 'tri',
+   *     method: 'polygon',
+   *     options: {
+   *       radius: 0.5,
+   *       fill: true,
+   *       sides: 3,
+   *       position: [0.5, 0],
+   *     },
+   *   },
    * ]);
    */
   addElements(
@@ -953,16 +983,23 @@ class Diagram {
   }
 
   /**
-   * Add an element to diagram
+   * Add an element from an element definitions to the diagram.
    * @param {TypeAddElementObject} elementDefinition - array of element definitions
    * @param {DiagramElementCollection} [collection = this.elements] - the
    * collection to add elements to
    * @param {string} [addElementsKey = 'addElements'] - key to add elements
    *
    * @example
-   * diagram.addElement(
-   *   { name: 'shape1', method: 'polygon', options: { position: [0, 0] } },
-   * ]);
+   * diagram.addElement({
+   *   name: 'hex',
+   *   method: 'polygon',
+   *   options: {
+   *     radius: 0.5,
+   *     fill: true,
+   *     sides: 6,
+   *     position: [-0.5, 0],
+   *   },
+   * });
    */
   addElement(
     elementDefinition: TypeAddElementObject,
@@ -980,7 +1017,39 @@ class Diagram {
   }
 
   /**
-   * Get element from element name or path
+   * Get element from element name or path.
+
+   * @see <a href="#diagramelementcollectiongetelement">element.getElement</a>
+   *
+   * @example
+   * // Get a diagram element and rotate it
+   * diagram.addElements([
+   *   {
+   *     name: 'hex',
+   *     method: 'polygon',
+   *     options: {
+   *       radius: 0.5,
+   *       fill: true,
+   *       sides: 6,
+   *       position: [-0.5, 0],
+   *     },
+   *   },
+   *   {
+   *     name: 'tri',
+   *     method: 'polygon',
+   *     options: {
+   *       radius: 0.5,
+   *       fill: true,
+   *       sides: 3,
+   *       position: [0.5, 0],
+   *     },
+   *   },
+   * ]);
+   *
+   * const hex = diagram.getElement('hex');
+   * hex.animations.new()
+   *   .rotation({ target: Math.PI, duration: 2, delay: 1 })
+   *   .start();
    */
   getElement(elementName: string) {
     if (elementName === this.elements.name) {
@@ -991,6 +1060,9 @@ class Diagram {
 
   /**
    * Set the diagram to be touchable.
+   *
+   * Using <a href="#diagramelementsettouchable">element.setTouchable</a> will
+   * automatically set this.
    */
   setTouchable(touchable: boolean = true) {
     if (touchable) {
@@ -1898,15 +1970,6 @@ class Diagram {
     // this.elements.diagramLimits = this.limits;
   }
 
-  /**
-   * Add an instantiated {@link DiagramElement} to the diagram with some `name`.
-   */
-  add(
-    name: string,
-    diagramElement: DiagramElementPrimitive | DiagramElementCollection,
-  ) {
-    this.elements.add(name, diagramElement);
-  }
 
   setElementsToCollection(collection: DiagramElementCollection) {
     this.elements = collection;

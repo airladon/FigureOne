@@ -117,7 +117,6 @@ const Fig = {
   Line: g2.Line,
   Rect: g2.Rect,
   Transform: g2.Transform,
-  // TransformLimit: g2.TransformLimit,
   Translation: g2.Translation,
   Scale: g2.Scale,
   Rotation: g2.Rotation,
@@ -126,6 +125,29 @@ const Fig = {
   TransformBounds: g2.TransformBounds,
   RectBounds: g2.RectBounds,
   RangeBounds: g2.RangeBounds,
+  minAngleDiff: g2.minAngleDiff,
+  getTriangleCenter: g2.getTriangleCenter,
+  polarToRect: g2.polarToRect,
+  rectToPolar: g2.rectToPolar,
+  threePointAngle: g2.threePointAngle,
+  threePointAngleMin: g2.threePointAngleMin,
+  clipAngle: g2.clipAngle,
+  getPoint: g2.getPoint,
+  getPoints: g2.getPoints,
+  getScale: g2.getScale,
+  getLine: g2.getLine,
+  getRect: g2.getRect,
+  getTransform: g2.getTransform,
+
+  // math
+  round: math.round,
+  range: math.range,
+  randSign: math.randSign,
+  randInt: math.randInt,
+  rand: math.rand,
+  randElement: math.randElement,
+  randElements: math.randElements,
+  removeRandElement: math.removeRandElement,
 };
 
 export default Fig;

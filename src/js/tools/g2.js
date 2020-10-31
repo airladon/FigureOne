@@ -16,18 +16,17 @@ function quadraticBezier(P0: number, P1: number, P2: number, t: number) {
  * Clip and angle between 0 and 2π (`'0to360'`) or -π to π (`'-180to180'`).
  * `null` will return the angle between -2π to 2π.
  * @example
- * const g2 = Fig.tools.g2;
- * const getPoint = g2.getPoint;
+ * const clipAngle = Fig.clipAngle
  *
- * const a1 = g2.clipAngle(Math.PI / 2 * 5, '0to360');
+ * const a1 = clipAngle(Math.PI / 2 * 5, '0to360');
  * console.log(a1);
  * // 1.5707963267948966
  *
- * const a2 = g2.clipAngle(Math.PI / 4 * 5, '-180to180');
+ * const a2 = clipAngle(Math.PI / 4 * 5, '-180to180');
  * console.log(a2);
  * // -2.356194490192345
  *
- * const a3 = g2.clipAngle(-Math.PI / 4 * 10, null);
+ * const a3 = clipAngle(-Math.PI / 4 * 10, null);
  * console.log(a3);
  * // -1.5707963267948966
  */
@@ -1093,21 +1092,17 @@ function deg(angle: number) {
  * Get the minimum absolute angle difference between two angles
  *
  * @example
- * const g2 = Fig.tools.g2;
- * const diff = g2.minAngleDiff(0.1, 0.2);
- * console.log(diff);
+ * const minAngleDiff = Fig.minAngleDiff;
+ * const d1 = minAngleDiff(0.1, 0.2);
+ * console.log(d1);
+ * // -0.1
+ *
+ * const d2 = minAngleDiff(0.2, 0.1);
+ * console.log(d2);
  * // 0.1
  *
- * @example
- * const g2 = Fig.tools.g2;
- * const diff = g2.minAngleDiff(0.2, 0.1);
- * console.log(diff);
- * // 0.1
- *
- * @example
- * const g2 = Fig.tools.g2;
- * const diff = g2.minAngleDiff(0.1, -0.1);
- * console.log(diff);
+ * const d3 = minAngleDiff(0.1, -0.1);
+ * console.log(d3);
  * // 0.2
  */
 function minAngleDiff(angle1: number, angle2: number) {
@@ -3806,10 +3801,10 @@ function comparePoints(
  * Polar coordinates to cartesian coordinates conversion
  *
  * @example
- * const g2 = Fig.tools.g2;
- * const p = g2.polarToRect(Math.sqrt(2), Math.PI / 4);
+ * const polarToRect = Fig.polarToRect;
+ * const p = polarToRect(Math.sqrt(2), Math.PI / 4);
  * console.log(p);
- * // Point {x: 1, y: 1)
+ * // Point {x: 1, y: 1)
  */
 function polarToRect(mag: number, angle: number) {
   return new Point(
@@ -3822,10 +3817,10 @@ function polarToRect(mag: number, angle: number) {
  * Cartesian coordinates to polar coordinates conversion
  *
  * @example
- * const g2 = Fig.tools.g2;
- * const p = g2.rectToPolar(0, 1);
- * console.log(p);
- * // {mag: 1, angle: 1.5707963267948966}
+* const rectToPolar = Fig.rectToPolar;
+* const p = rectToPolar(0, 1);
+* console.log(p);
+* // {mag: 1, angle: 1.5707963267948966}
  */
 function rectToPolar(x: number | Point, y: number = 0) {
   let rect;
@@ -3889,13 +3884,14 @@ function getBoundingRect(
  * rotation direction and normalized from 0 to Math.PI * 2.
  *
  * @example
- * const g2 = Fig.tools.g2;
- * const getPoint = g2.getPoint;
- * const p1 = g2.threePointAngle(getPoint([1, 0]), getPoint([0, 0]), getPoint([0, 1]));
+ * const threePointAngle = Fig.threePointAngle;
+ * const getPoint = Fig.getPoint;
+ *
+ * const p1 = threePointAngle(getPoint([1, 0]), getPoint([0, 0]), getPoint([0, 1]));
  * console.log(p1);
  * // 1.5707963267948966
  *
- * const p2 = g2.threePointAngle(getPoint([0, 1]), getPoint([0, 0]), getPoint([1, 0]));
+ * const p2 = threePointAngle(getPoint([0, 1]), getPoint([0, 0]), getPoint([1, 0]));
  * console.log(p2);
  * // 4.71238898038469
  */
@@ -3917,13 +3913,14 @@ function threePointAngle(p2: Point, p1: Point, p3: Point) {
  * Returns the minimum angle from the line (p1, p2) to the line (p1, p3).
  *
  * @example
- * const g2 = Fig.tools.g2;
- * const getPoint = g2.getPoint;
- * const p1 = g2.threePointAngle(getPoint([1, 0]), getPoint([0, 0]), getPoint([0, 1]));
- * console.log(p1);
- * // 1.5707963267948966
+ * const threePointAngleMin = Fig.threePointAngleMin;
+ * const getPoint = Fig.getPoint;
  *
- * const p2 = g2.threePointAngle(getPoint([0, 1]), getPoint([0, 0]), getPoint([1, 0]));
+ * const p1 = threePointAngleMin(getPoint([1, 0]), getPoint([0, 0]), getPoint([0, 1]));
+ * console.log(p1);
+// 1.5707963267948966
+ *
+ * const p2 = threePointAngleMin(getPoint([0, 1]), getPoint([0, 0]), getPoint([1, 0]));
  * console.log(p2);
  * // -1.5707963267948966
  */
@@ -5808,10 +5805,11 @@ function decelerateTransform(
  * Get center of a triangle
  *
  * @example
- * const g2 = Fig.tools.g2;
- * const center = g2.getTriangleCenter([0, 0], [1, 0], [0, 1]);
+ * const getTriangleCenter = Fig.getTriangleCenter;
+ *
+ * const center = getTriangleCenter([0, 0], [1, 0], [0, 1]);
  * console.log(center);
- * // Point {x: 0.3333333333333333, y: 0.3333333333333333}
+ * // Point {x: 0.3333333333333333, y: 0.3333333333333333}
  */
 function getTriangleCenter(
   p1: TypeParsablePoint,

@@ -3196,9 +3196,6 @@ class DiagramElement {
     this.makeTouchable();
   }
 
-  /**
-   * Configure all parents to, and make this element touchable
-   */
   makeTouchable(makeThisElementTouchable: boolean = true) {
     if (makeThisElementTouchable) {
       this.isTouchable = true;

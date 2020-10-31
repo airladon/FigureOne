@@ -160,16 +160,8 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 //   delay: 2,
 // });
 
-const g2 = Fig.tools.g2;
-const getPoint = g2.getPoint;
-const a1 = g2.clipAngle(Math.PI / 2 * 5, '0to360');
-console.log(a1);
-// 1.5707963267948966
+const getTriangleCenter = Fig.getTriangleCenter;
 
-const a2 = g2.clipAngle(Math.PI / 4 * 5, '-180to180');
-console.log(a2);
-// -2.356194490192345
-
-const a3 = g2.clipAngle(-Math.PI / 4 * 10, null);
-console.log(a3);
-// -1.5707963267948966
+const center = getTriangleCenter([0, 0], [1, 0], [0, 1]);
+console.log(center);
+// Point {x: 0.3333333333333333, y: 0.3333333333333333}
