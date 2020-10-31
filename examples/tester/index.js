@@ -142,24 +142,34 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 // eqn.onClick = () => eqn.nextForm();
 // eqn.setTouchableRect(0.5);
 // eqn.showForm('1');
-diagram.addElement({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    forms: {
-      1: ['b', '_ = ', { frac: ['a', 'v_vinculum', 'c'] }],
-      2: ['c', '_ = ', { frac: ['a', 'v', 'b'] }],
-    },
-  },
-});
-diagram.elements._eqn.showForm('1');
-diagram.elements._eqn.goToForm({
-  form: 2,
-  animate: 'move',
-  delay: 2,
-});
+
+// diagram.addElement({
+//   name: 'eqn',
+//   method: 'equation',
+//   options: {
+//     forms: {
+//       1: ['b', '_ = ', { frac: ['a', 'v_vinculum', 'c'] }],
+//       2: ['c', '_ = ', { frac: ['a', 'v', 'b'] }],
+//     },
+//   },
+// });
+// diagram.elements._eqn.showForm('1');
+// diagram.elements._eqn.goToForm({
+//   form: 2,
+//   animate: 'move',
+//   delay: 2,
+// });
 
 const g2 = Fig.tools.g2;
-const diff = g2.minAngleDiff(0.3, 0.2);
-console.log(diff);
-// 0.2
+const getPoint = g2.getPoint;
+const a1 = g2.clipAngle(Math.PI / 2 * 5, '0to360');
+console.log(a1);
+// 1.5707963267948966
+
+const a2 = g2.clipAngle(Math.PI / 4 * 5, '-180to180');
+console.log(a2);
+// -2.356194490192345
+
+const a3 = g2.clipAngle(-Math.PI / 4 * 10, null);
+console.log(a3);
+// -1.5707963267948966

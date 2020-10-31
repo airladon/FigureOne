@@ -89,16 +89,44 @@ toc:
   - EQN_BarSymbol
   - EQN_SquareBracketSymbol
   - EQN_RadicalSymbol
+  - name: 2D Geometry Tools
+  - minAngleDiff
+  - getTriangleCenter
+  - polarToRect
+  - rectToPolar
+  - threePointAngle
+  - threePointAngleMin
+  - clipAngle
+  - name: Math tools
+  - round
+  - range
+  - randSign
+  - randInt
+  - rand
+  - randElement
+  - randElements
+  - removeRandElement
+  - name: Misc Diagram Element
+  - DiagramElementMoveFreely
+  - DiagramElementMove
+  - Scenarios
+  - ElementMovementState
+  - ElementPulseState
+  - ElementState
+  - DrawingObject
   - name: Misc Geometry
   - TypeParsablePoint
   - TypeParsableLine
   - TypeParsableRect
   - TypeParsableTransform
   - getPoint
+  - getPoints
   - getScale
   - getLine
   - getRect
   - getTransform
+  - OBJ_QuadraticBezier
+  - Intersect
   - name: Misc Drawing
   - OBJ_Texture
   - OBJ_TextDefinition
@@ -107,6 +135,14 @@ toc:
   - OBJ_TextLinesDefinition
   - OBJ_TextModifierDefinition
   - OBJ_TextModifiersDefinition
+  - OBJ_PulseScale
+  - OBJ_CurvedCorner
+  - OBJ_LineStyle
+  - CPY_Step
+  - ArrowHead
+  - OBJ_Arrow
+  - OBJ_Arrows
+  - OBJ_Scenario
   - name: Misc Animation
   - OBJ_PositionAnimationStep
   - OBJ_RotationAnimationStep
@@ -126,9 +162,13 @@ toc:
   - OBJ_ScenarioAnimationStep
   - OBJ_TriggerAnimationStep
   - OBJ_Pulse
+  - OBJ_PulseAnimationStep
   - OBJ_ColorAnimationStep
   - OBJ_OpacityAnimationStep
   - OBJ_ScenariosAnimationStep
+  - AnimationProgression
+  - TypeWhen
+  - AnimationStartTime
   - name: Misc Equation
   - EQN_Annotation
   - EQN_EncompassGlyph
@@ -145,9 +185,8 @@ toc:
   - TypeEquationForms
   - TypeFormRestart
   - TypeEquationGoToFormOptions
-  - name: 2D Geometry Tools
-  - minAngleDiff
-  - getTriangleCenter
+  - TypeEquationTextElement
+  - name: Other
 
   # - name: tools
   #   description: These are generic tools

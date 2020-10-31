@@ -1,5 +1,7 @@
 This will introduce some key terms and concepts that are found frequently throughout the documentation.
 
+This is a work in progress and the entire API is not yet documented.
+
 #### Diagrams, Primitives and Collections
 
 **FigureOne** allows you to create a *figure*, or *diagram* that can be both interactive and animated.

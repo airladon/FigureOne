@@ -12,6 +12,25 @@ function quadraticBezier(P0: number, P1: number, P2: number, t: number) {
   return (1 - t) * ((1 - t) * P0 + t * P1) + t * ((1 - t) * P1 + t * P2);
 }
 
+/**
+ * Clip and angle between 0 and 2π (`'0to360'`) or -π to π (`'-180to180'`).
+ * `null` will return the angle between -2π to 2π.
+ * @example
+ * const g2 = Fig.tools.g2;
+ * const getPoint = g2.getPoint;
+ *
+ * const a1 = g2.clipAngle(Math.PI / 2 * 5, '0to360');
+ * console.log(a1);
+ * // 1.5707963267948966
+ *
+ * const a2 = g2.clipAngle(Math.PI / 4 * 5, '-180to180');
+ * console.log(a2);
+ * // -2.356194490192345
+ *
+ * const a3 = g2.clipAngle(-Math.PI / 4 * 10, null);
+ * console.log(a3);
+ * // -1.5707963267948966
+ */
 function clipAngle(
   angleToClip: number,
   clipTo: '0to360' | '-180to180' | null,
@@ -144,6 +163,11 @@ function getPoint(p: TypeParsablePoint): Point {
 }
 
 
+/**
+ * Parse an array of parsable point definitions ({@link TypeParsablePoint})
+ * returning an array of points.
+ * @return {Array<Point>}
+ */
 function getPoints(points: TypeParsablePoint | Array<TypeParsablePoint>): Array<Point> {
   if (Array.isArray(points)) {
     if (points.length === 2 && typeof points[0] === 'number') { // $FlowFixMe
@@ -3778,6 +3802,15 @@ function comparePoints(
   return { min, max };
 }
 
+/**
+ * Polar coordinates to cartesian coordinates conversion
+ *
+ * @example
+ * const g2 = Fig.tools.g2;
+ * const p = g2.polarToRect(Math.sqrt(2), Math.PI / 4);
+ * console.log(p);
+ * // Point {x: 1, y: 1)
+ */
 function polarToRect(mag: number, angle: number) {
   return new Point(
     mag * Math.cos(angle),
@@ -3785,6 +3818,15 @@ function polarToRect(mag: number, angle: number) {
   );
 }
 
+/**
+ * Cartesian coordinates to polar coordinates conversion
+ *
+ * @example
+ * const g2 = Fig.tools.g2;
+ * const p = g2.rectToPolar(0, 1);
+ * console.log(p);
+ * // {mag: 1, angle: 1.5707963267948966}
+ */
 function rectToPolar(x: number | Point, y: number = 0) {
   let rect;
   if (typeof x === 'number') {
@@ -3803,7 +3845,11 @@ function rectToPolar(x: number | Point, y: number = 0) {
   };
 }
 
-function getBoundingRect(pointArrays: Array<Point> | Array<Array<Point>>, buffer: number = 0) {
+
+function getBoundingRect(
+  pointArrays: Array<Point> | Array<Array<Point>>,
+  buffer: number = 0,
+) {
   let firstPoint = true;
   let result = { min: new Point(0, 0), max: new Point(0, 0) };
 
@@ -3837,6 +3883,22 @@ function getBoundingRect(pointArrays: Array<Point> | Array<Array<Point>>, buffer
 
 // Finds the angle between three points for p12 to p13 in the positive
 // angle direction
+
+/**
+ * Returns the angle from the line (p1, p2) to the line (p1, p3) in the positive
+ * rotation direction and normalized from 0 to Math.PI * 2.
+ *
+ * @example
+ * const g2 = Fig.tools.g2;
+ * const getPoint = g2.getPoint;
+ * const p1 = g2.threePointAngle(getPoint([1, 0]), getPoint([0, 0]), getPoint([0, 1]));
+ * console.log(p1);
+ * // 1.5707963267948966
+ *
+ * const p2 = g2.threePointAngle(getPoint([0, 1]), getPoint([0, 0]), getPoint([1, 0]));
+ * console.log(p2);
+ * // 4.71238898038469
+ */
 function threePointAngle(p2: Point, p1: Point, p3: Point) {
   const r12 = p2.sub(p1);
   const r13 = p3.sub(p1);
@@ -3851,6 +3913,20 @@ function threePointAngle(p2: Point, p1: Point, p3: Point) {
   return clipAngle(angle13, '0to360');
 }
 
+/**
+ * Returns the minimum angle from the line (p1, p2) to the line (p1, p3).
+ *
+ * @example
+ * const g2 = Fig.tools.g2;
+ * const getPoint = g2.getPoint;
+ * const p1 = g2.threePointAngle(getPoint([1, 0]), getPoint([0, 0]), getPoint([0, 1]));
+ * console.log(p1);
+ * // 1.5707963267948966
+ *
+ * const p2 = g2.threePointAngle(getPoint([0, 1]), getPoint([0, 0]), getPoint([1, 0]));
+ * console.log(p2);
+ * // -1.5707963267948966
+ */
 function threePointAngleMin(p2: Point, p1: Point, p3: Point) {
   const a12 = clipAngle(Math.atan2(p2.y - p1.y, p2.x - p1.x), '0to360');
   const a13 = clipAngle(Math.atan2(p3.y - p1.y, p3.x - p1.x), '0to360');
@@ -5733,12 +5809,18 @@ function decelerateTransform(
  *
  * @example
  * const g2 = Fig.tools.g2;
- * const center = g2.getTriangleCenter([[0, 0], [1, 0], [0, 1]]);
+ * const center = g2.getTriangleCenter([0, 0], [1, 0], [0, 1]);
  * console.log(center);
  * // Point {x: 0.3333333333333333, y: 0.3333333333333333}
  */
-function getTriangleCenter(points: [TypeParsablePoint, TypeParsablePoint, TypeParsablePoint]) {
-  const [A, B, C] = points.map(p => getPoint(p));
+function getTriangleCenter(
+  p1: TypeParsablePoint,
+  p2: TypeParsablePoint,
+  p3: TypeParsablePoint,
+) {
+  const A = getPoint(p1);
+  const B = getPoint(p2);
+  const C = getPoint(p3);
   const Ox = (A.x + B.x + C.x) / 3;
   const Oy = (A.y + B.y + C.y) / 3;
   return new Point(Ox, Oy);

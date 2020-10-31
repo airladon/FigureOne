@@ -313,7 +313,7 @@ function sinusoidAbs(
 // }
 
 /**
- * Creates an array with a range of number
+ * Creates an array with a range of numbers
  * @method
  * @memberof tools
  * @param start - Range start
@@ -329,11 +329,27 @@ function range(start: number, stop: number, step: number = 1) {
   return out;
 }
 
+/**
+ * Return a -1 or 1 randomly
+ * @return {number} -1 or 1
+ */
 function randSign() {
   return Math.random() > 0.5 ? 1 : -1;
 }
 
-function randInt(minOrMax: number, max: ?number = null, plusOrMinus: boolean = false) {
+/**
+ * Return a random int.
+ *
+ * If a `max = null`, then the returned number will be in the range of 0 to
+ * `minOrMax`.
+ *
+ * Otherwise the returned value is in the range of `minOrMax` to `max`.
+ *
+ * Use `sign` to also return a random sign (negative or positive);
+ *
+ * @return {number} random integer
+ */
+function randInt(minOrMax: number, max: ?number = null, sign: boolean = false) {
   let r = 0;
   if (max != null) {
     const min = minOrMax;
@@ -341,7 +357,7 @@ function randInt(minOrMax: number, max: ?number = null, plusOrMinus: boolean = f
   } else {
     r = Math.floor(Math.random() * Math.floor(minOrMax));
   }
-  if (plusOrMinus) {
+  if (sign) {
     r *= randSign();
   }
   return r;

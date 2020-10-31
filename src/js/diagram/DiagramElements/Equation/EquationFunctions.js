@@ -2605,6 +2605,11 @@ export type EQN_Annotate = {
 // are subsets of the other, then when its parameters are extracted, their type
 // is all confused.
 
+/**
+ * Equation Functions.
+ *
+ * Contains methods for all equation functions.
+ */
 export class EquationFunctions {
   // eslint-disable-next-line no-use-before-define
   elements: { [name: string]: DiagramElementCollection | DiagramElementPrimitive };
@@ -2620,6 +2625,9 @@ export class EquationFunctions {
 
   // [methodName: string]: (TypeEquationPhrase) => {};
 
+  /**
+   * @hideconstructor
+   */
   // eslint-disable-next-line no-use-before-define
   constructor(
     elements: { [name: string]: DiagramElementCollection | DiagramElementPrimitive },
@@ -2750,18 +2758,11 @@ export class EquationFunctions {
 
   /**
    * Equation container function
-   * @example
-   * e = new Equation();
-   * e.addElements({
-   *   v: { symbol: 'vinculum' },
-   * });
-   * frac = e.eqn.functions.frac;
-   * eqn.addForms({
-   *   base: ['a', 'equals', frac(['b', 'v', 'c'])],
-   * });
+   * @param {EQN_Container} [options]
+   * @see {@link EQN_Container} for description and examples
    */
   container(
-    optionsOrArray: EQN_Container,
+    options: EQN_Container,
   ) {
     let content;
     let scale;
@@ -2783,16 +2784,16 @@ export class EquationFunctions {
       yAlign: 'baseline',
       fullContentBounds: false,
     };
-    if (Array.isArray(optionsOrArray)) {
+    if (Array.isArray(options)) {
       [
         content, width, descent, ascent, xAlign, yAlign, fit, scale,
         fullContentBounds,
-      ] = optionsOrArray;
+      ] = options;
     } else {
       ({
         content, width, descent, ascent, xAlign, yAlign, fit, scale,
         fullContentBounds,
-      } = optionsOrArray);
+      } = options);
     }
     const optionsIn = {
       scaleModifier: scale,
@@ -2804,16 +2805,20 @@ export class EquationFunctions {
       yAlign,
       fullContentBounds,
     };
-    const options = joinObjects(defaultOptions, optionsIn);
+    const o = joinObjects(defaultOptions, optionsIn);
     return new Container(
       [this.contentToElement(content)],
       [],
-      options,
+      o,
     );
   }
 
+  /**
+   * Equation bracket function
+   * @see {@link EQN_Bracket} for description and examples
+   */
   brac(
-    optionsOrArray: EQN_Bracket,
+    bracketOptions: EQN_Bracket,
   ) {
     let content;
     let left;
@@ -2830,19 +2835,19 @@ export class EquationFunctions {
     let useFullBounds;
     let fullContentBounds;
 
-    if (Array.isArray(optionsOrArray)) {
+    if (Array.isArray(bracketOptions)) {
       [
         left, content, right, inSize, insideSpace, outsideSpace,   // $FlowFixMe
         topSpace, bottomSpace, minContentHeight,                   // $FlowFixMe
         minContentDescent, height, descent, fullContentBounds,     // $FlowFixMe
         useFullBounds,
-      ] = optionsOrArray;
+      ] = bracketOptions;
     } else {
       ({
         left, content, right, inSize, insideSpace, outsideSpace,
         topSpace, bottomSpace, minContentHeight,
         minContentDescent, height, descent, fullContentBounds, useFullBounds,
-      } = optionsOrArray);
+      } = bracketOptions);
     }
     const defaultOptions = {
       insideSpace: 0.03,
@@ -2907,6 +2912,11 @@ export class EquationFunctions {
     });
   }
 
+  /**
+   * Equation bar function
+   * @param {EQN_Bar} [options]
+   * @see {@link EQN_Bar} for description and examples
+   */
   bar(
     optionsOrArray: EQN_Bar,
     forceOptions: Object = {},

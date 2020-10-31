@@ -58,7 +58,7 @@ function alignTriangle(
   const maxY = Math.max(points[0].y, points[1].y, points[2].y);
   const width = maxX - minX;
   const height = maxY - minY;
-  const center = getTriangleCenter(points);
+  const center = getTriangleCenter(points[0], points[1], points[2]);
   const s1Center = new Line(points[0], points[1]).midPoint();
   const s2Center = new Line(points[1], points[2]).midPoint();
   const s3Center = new Line(points[2], points[0]).midPoint();
@@ -321,6 +321,6 @@ function getTriangle(
 
 export {
   getTriangle,
-  getTriangleCenter,
+  // getTriangleCenter,
   getTriangleDirection,
 };
