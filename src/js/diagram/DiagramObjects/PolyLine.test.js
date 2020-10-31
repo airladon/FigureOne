@@ -370,7 +370,7 @@ describe('Diagram Objects PolyLine', () => {
   describe('Diagram Level', () => {
     test('Pad change shape', () => {
       diagram.addElement({
-        method: 'polyline',
+        method: 'opolyline',
         name: 'a',
         options: {
           points,
@@ -395,7 +395,7 @@ describe('Diagram Objects PolyLine', () => {
     });
     test('Pad Move freely along line shape', () => {
       diagram.addElement({
-        method: 'polyline',
+        method: 'opolyline',
         name: 'a',
         options: {
           points: [

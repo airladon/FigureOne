@@ -16,7 +16,7 @@ describe('Grow Line', () => {
     diagram.addElements([
       {
         name: 'a',
-        method: 'line',
+        method: 'oline',
         options: {
           length: 2,
           width: 0.1,

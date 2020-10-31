@@ -392,7 +392,7 @@ export type OBJ_CurvedCorner = {
  * diagram.addElement(
  *   {
  *     name: 'p',
- *     method: 'shapes.polyline',
+ *     method: 'polyline',
  *     options: {
  *       points: [[-0.5, -0.5], [-0.1, 0.5], [0.3, -0.2], [0.5, 0.5]],
  *       width: 0.05,
@@ -405,7 +405,7 @@ export type OBJ_CurvedCorner = {
  * diagram.addElement(
  *   {
  *     name: 'p',
- *     method: 'shapes.polyline',
+ *     method: 'polyline',
  *     options: {
  *       points: [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
  *       width: 0.05,
@@ -421,7 +421,7 @@ export type OBJ_CurvedCorner = {
  * diagram.addElement(
  *  {
  *    name: 'p',
- *    method: 'shapes.polyline',
+ *    method: 'polyline',
  *    options: {
  *      points: [[-0.5, -0.5], [0.5, -0.5], [0, 0.5]],
  *      width: 0.05,
@@ -435,7 +435,7 @@ export type OBJ_CurvedCorner = {
  * // Zig zag with arrows
  * diagram.addElement({
  *   name: 'arrowedLine',
- *   method: 'shapes.polyline',
+ *   method: 'polyline',
  *   options: {
  *     points: [[0, 0], [1, 0], [0, 0.7], [1, 0.7]],
  *     width: 0.05,
@@ -965,7 +965,7 @@ export type OBJ_Triangle = {
  * // Simple line defined by two points
  * diagram.addElement({
  *   name: 'l',
- *   method: 'shapes.line',
+ *   method: 'line',
  *   options: {
  *     p1: [0, 0],
  *     p2: [0, 1],
@@ -977,7 +977,7 @@ export type OBJ_Triangle = {
  * // Dashed line defined by a point, a length and an angle
  * diagram.addElement({
  *   name: 'l',
- *   method: 'shapes.line',
+ *   method: 'line',
  *   options: {
  *     p1: [0, 0],
  *     length: 1,
@@ -991,7 +991,7 @@ export type OBJ_Triangle = {
  * // Line with two different arrows on ends
  * diagram.addElement({
  *   name: 'l',
- *   method: 'shapes.line',
+ *   method: 'line',
  *   options: {
  *     p1: [0, 0],
  *     p2: [0, 1],
@@ -1798,6 +1798,10 @@ export default class DiagramPrimitives {
     // this.draw2DFigures = draw2DFigures;
   }
 
+  /**
+   * {@link DiagramElementPrimitive} that draws a generic shape.
+   * @see {@link OBJ_Generic} for options and examples.
+   */
   generic(...optionsIn: Array<OBJ_Generic>) {
     const defaultOptions = {
       points: [],
@@ -1879,6 +1883,10 @@ export default class DiagramPrimitives {
     return element;
   }
 
+  /**
+   * {@link DiagramElementPrimitive} that draws a polyline.
+   * @see {@link OBJ_Polyline} for options and examples.
+   */
   polyline(...optionsIn: Array<OBJ_Polyline>) {
     const defaultOptions = {
       width: 0.01,
@@ -1974,9 +1982,8 @@ export default class DiagramPrimitives {
   }
 
   /**
-   * Polygon or partial polygon shape options object
-   *
-   * ![](./assets1/polygon.png)
+   * {@link DiagramElementPrimitive} that draws a regular polygon.
+   * @see {@link OBJ_Polygon} for options and examples.
    */
   polygon(...options: Array<OBJ_Polygon>) {
     const defaultOptions = {
@@ -2115,6 +2122,10 @@ export default class DiagramPrimitives {
     return element;
   }
 
+  /**
+   * {@link DiagramElementPrimitive} that draws a rectangle.
+   * @see {@link OBJ_Rectangle} for options and examples.
+   */
   rectangle(...options: Array<OBJ_Rectangle>) {
     const defaultOptions = {
       width: 1,
@@ -2182,6 +2193,10 @@ export default class DiagramPrimitives {
     return element;
   }
 
+  /**
+   * {@link DiagramElementPrimitive} that draws a triangle.
+   * @see {@link OBJ_Triangle} for options and examples.
+   */
   triangle(...options: Array<OBJ_Triangle>) {
     const defaultOptions = {
       width: 1,
@@ -2246,6 +2261,10 @@ export default class DiagramPrimitives {
     return element;
   }
 
+  /**
+   * {@link DiagramElementPrimitive} that draws a grid.
+   * @see {@link OBJ_Grid} for options and examples.
+   */
   grid(...optionsIn: Array<OBJ_Grid>) {
     const defaultOptions = {
       bounds: new Rect(-1, -1, 2, 2),
@@ -2342,25 +2361,11 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  line(...options: Array<{
-    p1?: TypeParsablePoint,
-    p2?: TypeParsablePoint,
-    length?: number,
-    angle?: number,
-    widthIs?: 'positive' | 'negative' | 'mid',
-    width?: number,
-    dash?: Array<number>,
-    arrow?: OBJ_Arrow | ArrowHead,
-    copy?: OBJ_Copy | Array<OBJ_Copy>,
-    color?: Array<number>,
-    texture?: OBJ_Texture,
-    position?: TypeParsablePoint,
-    transform?: Transform,
-    pulse?: OBJ_PulseScale | number,
-    border?: Array<Array<Point>> | 'outline' | 'rect',
-    touchBorder?: number | Array<Array<Point>> | 'border' | 'rect',
-    holeBorder?: Array<Array<Point>> | 'none',
-  }>) {
+  /**
+   * {@link DiagramElementPrimitive} that draws a line.
+   * @see {@link OBJ_Line} for options and examples.
+   */
+  line(...options: OBJ_Line) {
     const defaultOptions = {
       p1: [0, 0],
       angle: 0,
@@ -2609,6 +2614,10 @@ export default class DiagramPrimitives {
     return element;
   }
 
+  /**
+   * {@link DiagramElementPrimitive} that draws a line of text.
+   * @see {@link OBJ_TextLine} for options and examples.
+   */
   textLine(...optionsIn: Array<OBJ_TextLine>) {
     const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsIn);
     const to = new TextLineObject(this.draw2D);
@@ -2616,6 +2625,10 @@ export default class DiagramPrimitives {
     return this.createPrimitive(to, options);
   }
 
+  /**
+   * {@link DiagramElementPrimitive} that draws text lines.
+   * @see {@link OBJ_TextLines} for options and examples.
+   */
   textLines(...optionsIn: Array<OBJ_TextLines>) {
     const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsIn);
     if (options.justify == null) {
@@ -2630,6 +2643,10 @@ export default class DiagramPrimitives {
     return this.createPrimitive(to, options);
   }
 
+  /**
+   * {@link DiagramElementPrimitive} that draws text.
+   * @see {@link OBJ_Text} for options and examples.
+   */
   text(...optionsIn: Array<OBJ_Text>) {
     const options = this.parseTextOptions(...optionsIn);
     const to = new TextObject(
@@ -3264,6 +3281,9 @@ export default class DiagramPrimitives {
     return cursor;
   }
 
+  /**
+   * Create a {@link DiagramElementCollection}.
+   */
   collection(
     transformOrPointOrOptions: Transform | Point | {
       transform?: Transform,

@@ -1023,7 +1023,7 @@ describe('Diagram Recorder', () => {
       recorder.reset();
       diagram.addElement({
         name: 'line',
-        method: 'line',
+        method: 'oline',
         options: {
           width: 0.01,
           p1: [0, 0],

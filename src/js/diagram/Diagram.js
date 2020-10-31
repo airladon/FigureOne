@@ -218,6 +218,16 @@ class Diagram {
   fontScale: number;
   // layout: Object;
 
+  /**
+   * Useful transforms between spaces at the diagram level and above.
+  * @property {Transform} glToDiagram
+  * @property {Transform} diagramToGL
+  * @property {Transform} pixelToDiagram
+  * @property {Transform} diagramToPixel
+  * @property {Transform} pixelToGL
+  * @property {Transform} glToPixel
+  * @property {Transform} diagramToCSSPercent
+   */
   spaceTransforms: {
     glToDiagram: Transform;
     diagramToGL: Transform;
@@ -942,8 +952,20 @@ class Diagram {
     );
   }
 
+  /**
+   * Add an element to diagram
+   * @param {TypeAddElementObject} elementDefinition - array of element definitions
+   * @param {DiagramElementCollection} [collection = this.elements] - the
+   * collection to add elements to
+   * @param {string} [addElementsKey = 'addElements'] - key to add elements
+   *
+   * @example
+   * diagram.addElement(
+   *   { name: 'shape1', method: 'polygon', options: { position: [0, 0] } },
+   * ]);
+   */
   addElement(
-    layout: TypeAddElementObject,
+    elementDefinition: TypeAddElementObject,
     rootCollection: DiagramElementCollection = this.elements,
     addElementsKey: string = 'addElements',
   ) {
@@ -952,11 +974,14 @@ class Diagram {
       this.equation,
       this.objects,
       rootCollection,
-      [layout],
+      [elementDefinition],
       addElementsKey,
     );
   }
 
+  /**
+   * Get element from element name or path
+   */
   getElement(elementName: string) {
     if (elementName === this.elements.name) {
       return this.elements;
@@ -964,6 +989,9 @@ class Diagram {
     return this.elements.getElement(elementName);
   }
 
+  /**
+   * Set the diagram to be touchable.
+   */
   setTouchable(touchable: boolean = true) {
     if (touchable) {
       this.elements.hasTouchableElements = true;
@@ -1140,6 +1168,9 @@ class Diagram {
     // this.animateNextFrame();
   }
 
+  /**
+   * Get remaining animation durations of running animations
+   */
   getRemainingAnimationTime(nowIn: number = this.globalAnimation.now() / 1000) {
     const elements = this.elements.getAllElements();
     let now = nowIn;
@@ -1786,6 +1817,9 @@ class Diagram {
     return true;
   }
 
+  /**
+   * Stop all animations, movement and pulses in diagram.
+   */
   stop(
     how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
   ) {
@@ -1864,6 +1898,9 @@ class Diagram {
     // this.elements.diagramLimits = this.limits;
   }
 
+  /**
+   * Add an instantiated {@link DiagramElement} to the diagram with some `name`.
+   */
   add(
     name: string,
     diagramElement: DiagramElementPrimitive | DiagramElementCollection,
@@ -2106,6 +2143,9 @@ class Diagram {
     this.oldScroll = window.pageYOffset;
   }
 
+  /**
+   * Force diagram to draw on next available animation frame.
+   */
   animateNextFrame(draw: boolean = true, fromWhere: string = '') {
     this.fromWhere = fromWhere;
     if (!this.drawQueued) {

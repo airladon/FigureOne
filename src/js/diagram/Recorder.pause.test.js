@@ -1986,7 +1986,7 @@ describe('Animate To State', () => {
     beforeEach(() => {
       diagram.addElements([{
         name: 'l',
-        method: 'line',
+        method: 'oline',
         options: {
           length: 1.2,
           width: 0.1,

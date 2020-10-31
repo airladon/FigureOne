@@ -14,7 +14,7 @@ import { joinObjects, duplicateFromTo } from '../../../tools/tools';
  * Delay animation step
  *
  * While all animations steps accept a delay property,
- * having this step sometimes makes the animatino series
+ * having this step sometimes makes the animation seem
  * more readable.
  *
  * @param {number | OBJ_AnimationStep} delayOrOptions

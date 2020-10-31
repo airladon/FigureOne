@@ -3173,6 +3173,12 @@ class DiagramElement {
     }
   }
 
+  /**
+   * `true` set this element as touchable and configures all parent elements
+   * to accept touches for their children
+   *
+   * `false` makes this element not touchable.
+   */
   setTouchable(touchable: boolean) {
     if (touchable === false) {
       this.isTouchable = false;
@@ -3181,6 +3187,10 @@ class DiagramElement {
     this.makeTouchable();
   }
 
+  /**
+   * Make the touchable border of this element a rect encompassing it
+   * plus some `touchable` buffer on all sides.
+   */
   setTouchableRect(touchable: number = 0) {
     this.touchInBoundingRect = touchable;
     this.makeTouchable();
@@ -3293,6 +3303,10 @@ class DiagramElement {
   //   }
   // }
 
+  /**
+   * Get current transform of element.
+   * @return {Transform}
+   */
   getTransform() {
     return this.transform;
   }

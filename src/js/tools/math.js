@@ -315,8 +315,6 @@ function sinusoidAbs(
 
 /**
  * Creates an array with a range of numbers
- * @method
- * @memberof tools
  * @param start - Range start
  * @param stop - Range stop
  * @param step - Range step

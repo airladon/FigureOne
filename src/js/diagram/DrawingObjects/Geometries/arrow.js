@@ -91,7 +91,7 @@ export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polyg
  * // Line with triangle arrows on both ends
  * diagram.addElement({
  *   name: 'a',
- *   method: 'shapes.polyline',
+ *   method: 'polyline',
  *   options: {
  *     points: [[0, 0], [1, 0]],
  *     width: 0.02,
@@ -103,7 +103,7 @@ export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polyg
  * // Line with customized barb arrow at end only
  * diagram.addElement({
  *   name: 'a',
- *   method: 'shapes.polyline',
+ *   method: 'polyline',
  *   options: {
  *     points: [[0, 0], [1, 0]],
  *     width: 0.02,
@@ -122,7 +122,7 @@ export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polyg
  * // Line with two different arrow ends scaled by 0.7x
  * diagram.addElement({
  *   name: 'a',
- *   method: 'shapes.polyline',
+ *   method: 'polyline',
  *   options: {
  *     points: [[0, 0], [1, 0]],
  *     width: 0.02,

@@ -38,30 +38,33 @@ function addElements(
   const getMethod = (method: string) => {
     const methods = {
       collection: shapes.collection.bind(shapes),
-      polyline: objects.polyline.bind(objects),
-      // polylineCorners: shapes.polylineCorners.bind(shapes),
+      opolyline: objects.polyline.bind(objects),
+      polyline: shapes.polyline.bind(objects),
       polygon: shapes.polygon.bind(shapes),
       rectangle: shapes.rectangle.bind(shapes),
       triangle: shapes.triangle.bind(shapes),
       generic: shapes.generic.bind(shapes),
+      grid: shapes.grid.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
-      fan: shapes.fan.bind(shapes),
+      line: shapes.line.bind(objects),
+      //
       text: shapes.text.bind(shapes),
       textLine: shapes.textLine.bind(shapes),
       textLines: shapes.textLines.bind(shapes),
+      //
+      fan: shapes.fan.bind(shapes),
       textGL: shapes.textGL.bind(shapes),
       textHTML: shapes.htmlText.bind(shapes),
       htmlImage: shapes.htmlImage.bind(shapes),
       axes: shapes.axes.bind(shapes),
       radialLines: shapes.radialLines.bind(shapes),
       // rectangle: shapes.rectangle.bind(shapes),
-      grid: shapes.grid.bind(shapes),
       dashedLine: shapes.dashedLine.bind(shapes),
       parallelMarks: shapes.parallelMarks.bind(shapes),
       marks: shapes.marks.bind(shapes),
       box: shapes.box.bind(shapes),
       //
-      line: objects.line.bind(objects),
+      oline: objects.line.bind(objects),
       angle: objects.angle.bind(objects),
       //
       addEquation: equation.addEquation.bind(equation),

@@ -190,19 +190,19 @@ describe('Diagram Equations From Object', () => {
             addElements: [
               {
                 name: 'line',
-                method: 'polyline',
+                method: 'opolyline',
                 options: tri,
                 mods: { isTouchable: true },
               },
               {
                 name: 'side12',
-                method: 'line',
+                method: 'oline',
                 options: tools.joinObjects({}, sideLength, side12),
                 mods: { isTouchable: true },
               },
               {
                 name: 'side23',
-                method: 'line',
+                method: 'oline',
                 options: tools.joinObjects({}, sideLength, side23),
               },
             ],

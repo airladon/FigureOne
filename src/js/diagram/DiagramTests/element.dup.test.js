@@ -20,11 +20,11 @@ describe('Move Freely', () => {
       },
       {
         name: 'polyline',
-        method: 'polyline',
+        method: 'opolyline',
       },
       {
         name: 'line',
-        method: 'line',
+        method: 'oline',
       },
       {
         name: 'angle',

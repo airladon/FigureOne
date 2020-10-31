@@ -51,6 +51,7 @@ toc:
   - CustomAnimationStep
   - SerialAnimationStep
   - ParallelAnimationStep
+  - DelayAnimationStep
   - name: Equations
     file: ./docs/tutorials/equation/equation.md
   - Equation
@@ -114,6 +115,7 @@ toc:
   - ElementPulseState
   - ElementState
   - DrawingObject
+  - DiagramPrimitives
   - name: Misc Geometry
   - TypeParsablePoint
   - TypeParsableLine
@@ -144,13 +146,12 @@ toc:
   - OBJ_Arrows
   - OBJ_Scenario
   - name: Misc Animation
+  - AnimationStep
+  - ElementAnimationStep
   - OBJ_PositionAnimationStep
   - OBJ_RotationAnimationStep
   - OBJ_ElementAnimationStep
   - OBJ_ScenarioVelocity
-  - AnimationStep
-  - DelayAnimationStep
-  - ElementAnimationStep
   - OBJ_AnimationBuilder
   - OBJ_AnimationStep
   - OBJ_AnimationStart
