@@ -320,12 +320,6 @@
                       </a></li>
                       
                       <li><a
-                        href='#diagramelementmaketouchable'
-                        class='regular pre-open'>
-                        #makeTouchable
-                      </a></li>
-                      
-                      <li><a
                         href='#diagramelementsetmovable'
                         class='regular pre-open'>
                         #setMovable
@@ -3742,7 +3736,7 @@ diagram.initialize();</pre>
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Alternately, an element can be added programatically</span>
 <span class="hljs-comment">// index.js</span>
-<span class="hljs-comment">// const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});</span>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span> ]});
 <span class="hljs-keyword">const</span> hex = diagram.create.polygon({
   <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
   <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
@@ -3912,6 +3906,17 @@ diagram.add(<span class="hljs-string">'hexagon'</span>, hex);</pre>
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> hex = diagram.create.polygon({
+  <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
+  <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
+});
+diagram.add(<span class="hljs-string">'hexagon'</span>, hex);</pre>
+    
   
 
   
@@ -4260,8 +4265,7 @@ hex.animations.new()
   
 
   <p>Set the diagram to be touchable.</p>
-<p>Using <a href="#diagramelementmaketouchable">element.makeTouchable</a> or
-<a href="#diagramelementsettouchable">element.setTouchable</a> will
+<p>Using <a href="#diagramelementsettouchable">element.setTouchable</a> will
 automatically set this.</p>
 
   
@@ -5847,68 +5851,6 @@ plus some <code>touchable</code> buffer on all sides.</p>
           <div>
             <span class='code bold'>touchable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
             = <code>0</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='diagramelementmaketouchable'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>makeTouchable(makeThisElementTouchable)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Configure all parents to, and make this element touchable</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>makeThisElementTouchable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
-            = <code>true</code>)</code>
 	    
           </div>
           
@@ -31591,21 +31533,17 @@ eqn.addElements({
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> g2 = Fig.tools.g2;
-<span class="hljs-keyword">const</span> diff = g2.minAngleDiff(<span class="hljs-number">0.1</span>, <span class="hljs-number">0.2</span>);
-<span class="hljs-built_in">console</span>.log(diff);
-<span class="hljs-comment">// 0.1</span></pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> g2 = Fig.tools.g2;
-<span class="hljs-keyword">const</span> diff = g2.minAngleDiff(<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>);
-<span class="hljs-built_in">console</span>.log(diff);
-<span class="hljs-comment">// 0.1</span></pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> g2 = Fig.tools.g2;
-<span class="hljs-keyword">const</span> diff = g2.minAngleDiff(<span class="hljs-number">0.1</span>, <span class="hljs-number">-0.1</span>);
-<span class="hljs-built_in">console</span>.log(diff);
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> minAngleDiff = Fig.minAngleDiff;
+<span class="hljs-keyword">const</span> d1 = minAngleDiff(<span class="hljs-number">0.1</span>, <span class="hljs-number">0.2</span>);
+<span class="hljs-built_in">console</span>.log(d1);
+<span class="hljs-comment">// -0.1</span>
+
+<span class="hljs-keyword">const</span> d2 = minAngleDiff(<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>);
+<span class="hljs-built_in">console</span>.log(d2);
+<span class="hljs-comment">// 0.1</span>
+
+<span class="hljs-keyword">const</span> d3 = minAngleDiff(<span class="hljs-number">0.1</span>, <span class="hljs-number">-0.1</span>);
+<span class="hljs-built_in">console</span>.log(d3);
 <span class="hljs-comment">// 0.2</span></pre>
     
   
@@ -31690,10 +31628,11 @@ eqn.addElements({
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> g2 = Fig.tools.g2;
-<span class="hljs-keyword">const</span> center = g2.getTriangleCenter([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]);
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> getTriangleCenter = Fig.getTriangleCenter;
+
+<span class="hljs-keyword">const</span> center = getTriangleCenter([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]);
 <span class="hljs-built_in">console</span>.log(center);
-<span class="hljs-comment">// Point {x: 0.3333333333333333, y: 0.3333333333333333}</span></pre>
+<span class="hljs-comment">// Point {x: 0.3333333333333333, y: 0.3333333333333333}</span></pre>
     
   
 
@@ -31769,10 +31708,10 @@ eqn.addElements({
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> g2 = Fig.tools.g2;
-<span class="hljs-keyword">const</span> p = g2.polarToRect(<span class="hljs-built_in">Math</span>.sqrt(<span class="hljs-number">2</span>), <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span>);
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> polarToRect = Fig.polarToRect;
+<span class="hljs-keyword">const</span> p = polarToRect(<span class="hljs-built_in">Math</span>.sqrt(<span class="hljs-number">2</span>), <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span>);
 <span class="hljs-built_in">console</span>.log(p);
-<span class="hljs-comment">// Point {x: 1, y: 1)</span></pre>
+<span class="hljs-comment">// Point {x: 1, y: 1)</span></pre>
     
   
 
@@ -31849,8 +31788,8 @@ eqn.addElements({
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> g2 = Fig.tools.g2;
-<span class="hljs-keyword">const</span> p = g2.rectToPolar(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>);
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> rectToPolar = Fig.rectToPolar;
+<span class="hljs-keyword">const</span> p = rectToPolar(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>);
 <span class="hljs-built_in">console</span>.log(p);
 <span class="hljs-comment">// {mag: 1, angle: 1.5707963267948966}</span></pre>
     
@@ -31937,13 +31876,14 @@ rotation direction and normalized from 0 to Math.PI * 2.</p>
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> g2 = Fig.tools.g2;
-<span class="hljs-keyword">const</span> getPoint = g2.getPoint;
-<span class="hljs-keyword">const</span> p1 = g2.threePointAngle(getPoint([<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]), getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]), getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]));
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> threePointAngle = Fig.threePointAngle;
+<span class="hljs-keyword">const</span> getPoint = Fig.getPoint;
+
+<span class="hljs-keyword">const</span> p1 = threePointAngle(getPoint([<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]), getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]), getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]));
 <span class="hljs-built_in">console</span>.log(p1);
 <span class="hljs-comment">// 1.5707963267948966</span>
 
-<span class="hljs-keyword">const</span> p2 = g2.threePointAngle(getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]), getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]), getPoint([<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]));
+<span class="hljs-keyword">const</span> p2 = threePointAngle(getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]), getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]), getPoint([<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]));
 <span class="hljs-built_in">console</span>.log(p2);
 <span class="hljs-comment">// 4.71238898038469</span></pre>
     
@@ -32029,13 +31969,14 @@ rotation direction and normalized from 0 to Math.PI * 2.</p>
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> g2 = Fig.tools.g2;
-<span class="hljs-keyword">const</span> getPoint = g2.getPoint;
-<span class="hljs-keyword">const</span> p1 = g2.threePointAngle(getPoint([<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]), getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]), getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]));
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> threePointAngleMin = Fig.threePointAngleMin;
+<span class="hljs-keyword">const</span> getPoint = Fig.getPoint;
+
+<span class="hljs-keyword">const</span> p1 = threePointAngleMin(getPoint([<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]), getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]), getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]));
 <span class="hljs-built_in">console</span>.log(p1);
 <span class="hljs-comment">// 1.5707963267948966</span>
 
-<span class="hljs-keyword">const</span> p2 = g2.threePointAngle(getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]), getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]), getPoint([<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]));
+<span class="hljs-keyword">const</span> p2 = threePointAngleMin(getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]), getPoint([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>]), getPoint([<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]));
 <span class="hljs-built_in">console</span>.log(p2);
 <span class="hljs-comment">// -1.5707963267948966</span></pre>
     
@@ -32114,18 +32055,17 @@ rotation direction and normalized from 0 to Math.PI * 2.</p>
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> g2 = Fig.tools.g2;
-<span class="hljs-keyword">const</span> getPoint = g2.getPoint;
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> clipAngle = Fig.clipAngle
 
-<span class="hljs-keyword">const</span> a1 = g2.clipAngle(<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span> * <span class="hljs-number">5</span>, <span class="hljs-string">'0to360'</span>);
+<span class="hljs-keyword">const</span> a1 = clipAngle(<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span> * <span class="hljs-number">5</span>, <span class="hljs-string">'0to360'</span>);
 <span class="hljs-built_in">console</span>.log(a1);
 <span class="hljs-comment">// 1.5707963267948966</span>
 
-<span class="hljs-keyword">const</span> a2 = g2.clipAngle(<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span> * <span class="hljs-number">5</span>, <span class="hljs-string">'-180to180'</span>);
+<span class="hljs-keyword">const</span> a2 = clipAngle(<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span> * <span class="hljs-number">5</span>, <span class="hljs-string">'-180to180'</span>);
 <span class="hljs-built_in">console</span>.log(a2);
 <span class="hljs-comment">// -2.356194490192345</span>
 
-<span class="hljs-keyword">const</span> a3 = g2.clipAngle(-<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span> * <span class="hljs-number">10</span>, <span class="hljs-literal">null</span>);
+<span class="hljs-keyword">const</span> a3 = clipAngle(-<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span> * <span class="hljs-number">10</span>, <span class="hljs-literal">null</span>);
 <span class="hljs-built_in">console</span>.log(a3);
 <span class="hljs-comment">// -1.5707963267948966</span></pre>
     
