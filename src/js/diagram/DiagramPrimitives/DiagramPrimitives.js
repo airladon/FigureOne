@@ -53,7 +53,8 @@ import type { TypeSpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners, makeArrows } from '../DrawingObjects/Geometries/lines/lines';
 import { getPolygonPoints, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle';
-import { getTriangle, getTriangleDirection } from '../DrawingObjects/Geometries/triangle';
+import { getTriangle } from '../DrawingObjects/Geometries/triangle';
+import { getArrow } from '../DrawingObjects/Geometries/arrow';
 import getLine from '../DrawingObjects/Geometries/line';
 import type {
   OBJ_Copy,
@@ -2435,6 +2436,55 @@ export default class DiagramPrimitives {
     // return element;
   }
 
+  arrow(...options: Array<OBJ_Arrow & OBJ_Generic>) {
+    const defaultOptions = {
+      head: 'triangle',
+      length: 1,
+      width: 1,
+      sides: 20,
+      radius: 0.5,
+      start: [0, 0],
+      angle: 0,
+      transform: new Transform('line').standard(),
+      border: 'outline',
+      touchBorder: 'border',
+    };
+    const optionsToUse = processOptions(defaultOptions, ...options);
+    const processArrowOptions = (ao) => {
+      ao.start = getPoint(ao.start);
+      ao.end = new Point(
+        ao.start.x + ao.length * Math.cos(ao.angle),
+        ao.start.y + ao.length * Math.sin(ao.angle),
+      );
+      if (ao.head === 'barb' && ao.barb == null) {
+        ao.barb = ao.length / 3;
+      }
+      if (ao.head === 'line' && ao.lineWidth == null) {
+        ao.lineWidth = ao.width / 5;
+      }
+    };
+    processArrowOptions(optionsToUse);
+    // optionsToUse.start = getPoint(optionsToUse.start);
+    // optionsToUse.end = new Point(
+    //   optionsToUse.start.x + optionsToUse.length * Math.cos(optionsToUse.angle),
+    //   optionsToUse.start.y + optionsToUse.length * Math.sin(optionsToUse.angle),
+    // );
+    // console.log(optionsToUse.end)
+    const [points, border] = getArrow(optionsToUse);
+
+    const element = this.generic({}, { points, border }, optionsToUse);
+
+    element.custom.update = (updateOptions) => {
+      const o = joinObjects({}, optionsToUse, updateOptions);
+      processArrowOptions(o);
+      const [updatedPoints, updatedBorder, updatedTouchBorder] = getArrow(o);
+      element.drawingObject.change(
+        updatedPoints, updatedBorder, updatedTouchBorder, o.holeBorder,
+      );
+    };
+    return element;
+  }
+
   polygonSweep(...optionsIn: Array<{
     radius?: number,
     rotation?: number,
@@ -2657,7 +2707,7 @@ export default class DiagramPrimitives {
     return this.createPrimitive(to, options);
   }
 
-  arrow(...optionsIn: Array<{
+  arrowLegacy(...optionsIn: Array<{
     width?: number;
     legWidth?: number;
     height?: number;

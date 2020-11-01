@@ -80,7 +80,7 @@ export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polyg
  * @property {number} [scale] scale the default dimensions of the arrow
  * @property {number} [length] dimension of the arrow head along the line
  * @property {number} [width] dimension of the arrow head along the line width
- * @property {number} [rotation] rotation of the polygon
+ * @property {number} [rotation] rotation of the polygon when `head = 'polygon'`
  * @property {number} [reverse] reverse the direction of the triangle arrow head
  * @property {number} [sides] number of sides in polygon or circle arrow head
  * @property {number} [radius] radius of polygon or circle arrow head
@@ -260,7 +260,7 @@ function getTriangleArrow(options: {
     touchBorder = [
       new Point(-touchBorderBuffer, -width / 2 - touchBorderBuffer),
       new Point(length + touchBorderBuffer, -width / 2 - touchBorderBuffer),
-      new Point(length + touchBorderBuffer, -width / 2 - touchBorderBuffer),
+      // new Point(length + touchBorderBuffer, -width / 2 - touchBorderBuffer),
       new Point(length + touchBorderBuffer, width / 2 + touchBorderBuffer),
       new Point(-touchBorderBuffer, width / 2 + touchBorderBuffer),
     ];
