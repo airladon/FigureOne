@@ -127,6 +127,8 @@ diagram.addElements([
           forms: { base: ['a', 'b' ] }
         },
       },
+      dash: [0.1, 0.1],
+      maxLength: 2,
       arrows: {},
     },
   },
@@ -141,7 +143,7 @@ diagram.addElements([
   //   },
   // },
 ]);
-diagram.elements._line.grow(0, 1);
+diagram.elements._line.grow(0, 5);
 // diagram.elements._arrow.custom.update({
 //   head: 'barb',
 // });

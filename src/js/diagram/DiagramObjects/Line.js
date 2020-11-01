@@ -170,9 +170,11 @@ function makeStraightLine(
   width: number,
   position: Point,
   color: Array<number>,
-  dashStyle: {
-    style: Array<number>,
-    maxLength: number } | null,
+  // dashStyle: {
+  //   style: Array<number>,
+  //   maxLength: number } | null,
+  dash: Array<number>,
+  maxLength: number,
   largerTouchBorder: boolean | number | { width: number, start: number, end: number },
   isTouchDevice: boolean,
 ) {
@@ -186,28 +188,29 @@ function makeStraightLine(
     length,
     width,
     color,
+    dash,
     transform: new Transform().scale(1, 1).translate(0, 0),
   });
-  if (dashStyle) {
-    straightLine = shapes.dashedLine({
-      position,
-      length: dashStyle.maxLength,
-      width,
-      rotation: 0,
-      dashStyle: dashStyle.style,
-      color,
-      transform: new Transform().scale(1, 1).translate(0, 0),
-    });
-    //   position,
-    //   dashStyle.maxLength, width,
-    //   0, dashStyle.style, color, new Transform().scale(1, 1).translate(0, 0),
-    // );
-    // straightLine = shapes.dashedLine(
-    //   position,
-    //   dashStyle.maxLength, width,
-    //   0, dashStyle.style, color, new Transform().scale(1, 1).translate(0, 0),
-    // );
-  }
+  // if (dashStyle) {
+  //   straightLine = shapes.dashedLine({
+  //     position,
+  //     length: dashStyle.maxLength,
+  //     width,
+  //     rotation: 0,
+  //     dashStyle: dashStyle.style,
+  //     color,
+  //     transform: new Transform().scale(1, 1).translate(0, 0),
+  //   });
+  //   //   position,
+  //   //   dashStyle.maxLength, width,
+  //   //   0, dashStyle.style, color, new Transform().scale(1, 1).translate(0, 0),
+  //   // );
+  //   // straightLine = shapes.dashedLine(
+  //   //   position,
+  //   //   dashStyle.maxLength, width,
+  //   //   0, dashStyle.style, color, new Transform().scale(1, 1).translate(0, 0),
+  //   // );
+  // }
   if (largerTouchBorder) {
     const multiplier = isTouchDevice ? 16 : 8;
     let end = 0;
@@ -421,7 +424,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       largerTouchBorder: true,
       touchBorder: null,
       offset: 0,
-      dashStyle: null,
+      dash: [],
       mods: {},
       pulse: {
         line: 6,
@@ -431,18 +434,15 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       },
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
-    let { dashStyle } = optionsToUse;
-    if (dashStyle) {
+    const { dash } = optionsToUse;
+    if (Array.isArray(dash) && dash.length > 0 && optionsToUse.maxLength == null) {
       let defaultMaxLength = optionsToUse.length;
       if (optionsToUse.p1 != null && optionsToUse.p2 != null) {
         optionsToUse.p1 = getPoint(optionsToUse.p1);
         optionsToUse.p2 = getPoint(optionsToUse.p2);
         defaultMaxLength = distance(optionsToUse.p1, optionsToUse.p2);
       }
-      dashStyle = joinObjects({}, {
-        maxLength: defaultMaxLength,
-        dashStyle: [0.1],
-      }, options.dashStyle);
+      optionsToUse.maxLength = defaultMaxLength;
     }
     super(new Transform('Line')
       .scale(1, 1)
@@ -455,7 +455,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.largerTouchBorder = optionsToUse.largerTouchBorder;
     this.isTouchDevice = isTouchDevice;
     this.animateNextFrame = animateNextFrame;
-    this.dashStyle = dashStyle;
+    this.dash = dash;
+    this.maxLength = optionsToUse.maxLength;
 
     this.animateLengthToOptions = {
       initialLength: 0,
@@ -531,7 +532,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       const straightLine = makeStraightLine(
         this.shapes, this.vertexSpaceLength, this.width,
         this.vertexSpaceStart,
-        optionsToUse.color, this.dashStyle,
+        optionsToUse.color, this.dash, this.maxLength,
         optionsToUse.largerTouchBorder, isTouchDevice,
       );
       const scaleTransformMethod = s => new Transform().scale(1, s);
@@ -880,7 +881,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     );
     const midLine = makeStraightLine(
       this.shapes, this.multiMove.vertexSpaceMidLength, this.width,
-      start, this.color, null,
+      start, this.color, null, this.maxLength,
       this.largerTouchBorder, this.isTouchDevice,
     );
     // console.log(midLine)
@@ -1107,7 +1108,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
     const line = this._line;
     if (line) {
-      if (this.dashStyle) {
+      if (Array.isArray(this.dash) && this.dash.length > 0) {
         line.lengthToDraw = straightLineLength;
         // const newStart = this.vertexSpaceStart.x * straightLineLength;
         // const delta = lineStart + startOffset - newStart;
