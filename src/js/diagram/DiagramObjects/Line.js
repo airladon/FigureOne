@@ -176,11 +176,18 @@ function makeStraightLine(
   largerTouchBorder: boolean | number | { width: number, start: number, end: number },
   isTouchDevice: boolean,
 ) {
-  let straightLine = shapes.horizontalLine(
+  // let straightLine = shapes.horizontalLine(
+  //   position,
+  //   length, width,
+  //   0, color, new Transform().scale(1, 1).translate(0, 0),
+  // );
+  let straightLine = shapes.line({
     position,
-    length, width,
-    0, color, new Transform().scale(1, 1).translate(0, 0),
-  );
+    length,
+    width,
+    color,
+    transform: new Transform().scale(1, 1).translate(0, 0),
+  });
   if (dashStyle) {
     straightLine = shapes.dashedLine({
       position,
@@ -764,19 +771,22 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     height: number = this.width * 4,
     width: number = height,
   ) {
-    let r = Math.PI / 2;
-    if (index === 2) {
-      r = Math.PI / 2 * 3;
+    let r = 0;
+    let start = [-height, 0];
+    if (index === 1) {
+      r = Math.PI;
+      start = [height, 0];
     }
     const a = this.shapes.arrow({
       width,
       legWidth: 0,
-      height,
+      length: height,
       legHeight: 0,
       color: this.color,
       transform: new Transform().translate(this.vertexSpaceStart.x, 0),
-      tip: new Point(0, 0),
-      rotation: r,
+      start,
+
+      angle: r,
     });
     // const a = this.shapes.arrowLegacy(
     //   width, 0, height, 0,

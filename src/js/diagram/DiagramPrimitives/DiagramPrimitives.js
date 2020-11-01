@@ -2464,6 +2464,7 @@ export default class DiagramPrimitives {
       }
     };
     processArrowOptions(optionsToUse);
+    console.log(optionsToUse)
     // optionsToUse.start = getPoint(optionsToUse.start);
     // optionsToUse.end = new Point(
     //   optionsToUse.start.x + optionsToUse.length * Math.cos(optionsToUse.angle),

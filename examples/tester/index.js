@@ -130,20 +130,21 @@ diagram.addElements([
       arrows: {},
     },
   },
-  {
-    name: 'arrow',
-    method: 'shapes.arrowNew',
-    options: {
-      length: 1,
-      width: 0.4,
-      head: 'line',
-      lineWidth: 0.05,
-    },
-  },
+  // {
+  //   name: 'arrow',
+  //   method: 'shapes.arrow',
+  //   options: {
+  //     length: 1,
+  //     width: 0.4,
+  //     head: 'line',
+  //     lineWidth: 0.05,
+  //   },
+  // },
 ]);
-diagram.elements._arrow.custom.update({
-  head: 'barb',
-});
+diagram.elements._line.grow(0, 1);
+// diagram.elements._arrow.custom.update({
+//   head: 'barb',
+// });
 // // Progress to the next form when the equation is clicked on
 // const eqn = diagram.elements._eqn;
 // eqn.onClick = () => eqn.nextForm();
