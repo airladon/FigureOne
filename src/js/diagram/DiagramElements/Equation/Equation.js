@@ -1641,7 +1641,10 @@ export class Equation extends DiagramElementCollection {
   /**
    * Animate to previous form in the current form series
    */
-  prevForm(duration: number | null = null, delay: number = 0) {
+  prevForm(
+    durationOrOptions: number | null | TypeEquationGoToFormOptions = null,
+    delay: number = 0,
+  ) {
     const currentForm = this.getCurrentForm();
     if (currentForm == null) {
       return;
@@ -1652,16 +1655,29 @@ export class Equation extends DiagramElementCollection {
       if (index < 0) {
         index = this.eqn.currentFormSeries.length - 1;
       }
-      this.goToForm({
-        index, duration, delay, fromWhere: currentForm.name,
-      });
+      if (typeof durationOrOptions === 'number' || durationOrOptions == null) {
+        this.goToForm({
+          index,
+          duration: durationOrOptions,
+          delay,
+          fromWhere: currentForm.name,
+        });
+      } else {
+        this.goToForm(joinObjects({
+          index,
+          fromWhere: currentForm.name,
+        }, durationOrOptions));
+      }
     }
   }
 
   /**
    * Animate to next form in the current form series
    */
-  nextForm(duration: number | null = null, delay: number = 0) {
+  nextForm(
+    durationOrOptions: number | null | TypeEquationGoToFormOptions = null,
+    delay: number = 0,
+  ) {
     let animate = 'move';
 
     const currentForm = this.getCurrentForm();
@@ -1682,14 +1698,21 @@ export class Equation extends DiagramElementCollection {
           animate = 'dissolve';
         }
       }
-
-      this.goToForm({
-        index,
-        duration,
-        delay,
-        fromWhere: currentForm.name,
-        animate,
-      });
+      if (typeof durationOrOptions === 'number' || durationOrOptions == null) {
+        this.goToForm({
+          index,
+          duration: durationOrOptions,
+          delay,
+          fromWhere: currentForm.name,
+          animate,
+        });
+      } else {
+        this.goToForm(joinObjects({
+          index,
+          animate,
+          fromWhere: currentForm.name,
+        }, durationOrOptions));
+      }
     }
   }
 
