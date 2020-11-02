@@ -5,6 +5,7 @@ import {
   spaceToSpaceTransform, getBoundingRect,
   clipAngle, getPoint, getTransform, getScale,
   TransformBounds, RectBounds, RangeBounds, getBounds,
+  getBoundingBorder,
 } from '../tools/g2';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './state';
@@ -3356,6 +3357,69 @@ class DiagramElement {
   isAnyElementMoving() {
     return this.isMoving();
   }
+
+  isBeingTouched(glLocation: Point): boolean {
+    if (!this.isTouchable) {
+      return false;
+    }
+    // if (this.drawingObject.touchBorder == null) {
+    //   return false;
+    // }
+    const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
+    let borders = this.getBorder('draw', 'touchBorder');
+    // if (this.touchInBoundingRect !== false) {
+    //   let buffer = 0;
+    //   if (typeof this.touchInBoundingRect === 'number') {
+    //     buffer = this.touchInBoundingRect;
+    //   }
+    //   const boundingRect = getBoundingRect(borders, buffer);
+    //   const {
+    //     left, bottom, right, top,
+    //   } = boundingRect;
+    //   borders = [[
+    //     new Point(left, bottom),
+    //     new Point(right, bottom),
+    //     new Point(right, top),
+    //     new Point(left, top),
+    //   ]];
+    // }
+    const holeBorders = this.getBorder('draw', 'holeBorder');
+    for (let i = 0; i < borders.length; i += 1) {
+      const border = borders[i];
+      if (border.length > 2) {
+        if (vertexLocation.isInPolygon(border)) {
+          let isTouched = true;
+          if (this.cannotTouchHole) {
+            for (let j = 0; j < holeBorders.length; j += 1) {
+              const holeBorder = holeBorders[j];
+              if (holeBorder.length > 2) {
+                if (Array.isArray(holeBorder) && holeBorder.length > 2) {
+                  if (vertexLocation.isInPolygon(holeBorder)) {
+                    isTouched = false;
+                    j = holeBorders.length;
+                  }
+                }
+              }
+            }
+          }
+          if (isTouched) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  getTouched(glLocation: Point): Array<DiagramElementPrimitive> {
+    if (!this.isTouchable) {
+      return [];
+    }
+    if (this.isBeingTouched(glLocation)) {
+      return [this];
+    }
+    return [];
+  }
 }
 
 // ***************************************************************
@@ -3461,58 +3525,7 @@ class DiagramElementPrimitive extends DiagramElement {
   //   }
   // }
 
-  isBeingTouched(glLocation: Point): boolean {
-    if (!this.isTouchable) {
-      return false;
-    }
-    if (this.drawingObject.touchBorder == null) {
-      return false;
-    }
-    const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
-    let borders = this.getBorder('draw', 'touchBorder');
-    if (this.touchInBoundingRect !== false) {
-      let buffer = 0;
-      if (typeof this.touchInBoundingRect === 'number') {
-        buffer = this.touchInBoundingRect;
-      }
-      const boundingRect = getBoundingRect(borders, buffer);
-      const {
-        left, bottom, right, top,
-      } = boundingRect;
-      borders = [[
-        new Point(left, bottom),
-        new Point(right, bottom),
-        new Point(right, top),
-        new Point(left, top),
-      ]];
-    }
-    const holeBorders = this.getBorder('draw', 'holeBorder');
-    for (let i = 0; i < borders.length; i += 1) {
-      const border = borders[i];
-      if (border.length > 2) {
-        if (vertexLocation.isInPolygon(border)) {
-          let isTouched = true;
-          if (this.cannotTouchHole) {
-            for (let j = 0; j < holeBorders.length; j += 1) {
-              const holeBorder = holeBorders[j];
-              if (holeBorder.length > 2) {
-                if (Array.isArray(holeBorder) && holeBorder.length > 2) {
-                  if (vertexLocation.isInPolygon(holeBorder)) {
-                    isTouched = false;
-                    j = holeBorders.length;
-                  }
-                }
-              }
-            }
-          }
-          if (isTouched) {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
-  }
+  
 
   click(glPoint: Point) {
     super.click();
@@ -3670,15 +3683,7 @@ class DiagramElementPrimitive extends DiagramElement {
     return transformedBorders;
   }
 
-  getTouched(glLocation: Point): Array<DiagramElementPrimitive> {
-    if (!this.isTouchable) {
-      return [];
-    }
-    if (this.isBeingTouched(glLocation)) {
-      return [this];
-    }
-    return [];
-  }
+
 
   setFont(font: OBJ_Font, index: number = 0) {
     if (this.drawingObject instanceof TextObjectBase) {
@@ -3858,6 +3863,9 @@ class DiagramElementCollection extends DiagramElement {
   elements: Object;
   drawOrder: Array<string>;
   touchInBoundingRect: boolean;
+  border: Array<Array<Point>> | 'children' | 'rect' | number;
+  touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'children';
+  holeBorder: Array<Array<Point>> | 'children';
   eqns: Object;
   +pulse: (?({
       x?: 'left' | 'center' | 'right' | 'origin' | number,
@@ -3885,6 +3893,9 @@ class DiagramElementCollection extends DiagramElement {
     transform: Transform = new Transform(),
     diagramLimits: Rect = new Rect(-1, 1, 2, 2),
     parent: DiagramElement | null = null,
+    border: Array<Array<Point>> | 'children' | 'rect' | number = 'children',
+    touchBorder: Array<Array<Point>> | 'border' | number | 'rect' = 'border',
+    holeBorder: Array<Array<Point>> = [[]],
   ): void {
     super(transform, diagramLimits, parent);
     this.elements = {};
@@ -3892,6 +3903,9 @@ class DiagramElementCollection extends DiagramElement {
     this.touchInBoundingRect = false;
     this.eqns = {};
     this.type = 'collection';
+    this.border = border;
+    this.touchBorder = touchBorder;
+    this.holeBorder = holeBorder;
   }
 
   _getStateProperties(options: { ignoreShown?: boolean }) {
@@ -4455,39 +4469,39 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  // This will only search elements within the collection for a touch
-  // if the collection is touchable. Note, the elements can be queried
-  // directly still, and will return if they are touched if they themselves
-  // are touchable.
-  isBeingTouched(glLocation: Point) {
-    if (!this.isTouchable) {
-      return false;
-    }
-    const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
-    if (this.touchInBoundingRect !== false) {
-      let buffer = 0;
-      if (typeof this.touchInBoundingRect === 'number') {
-        buffer = this.touchInBoundingRect;
-      }
-      const boundingRect = this.getBoundingRect('draw');
-      if (vertexLocation.x >= boundingRect.left - buffer
-        && vertexLocation.x <= boundingRect.right + buffer
-        && vertexLocation.y <= boundingRect.top + buffer
-        && vertexLocation.y >= boundingRect.bottom - buffer
-      ) {
-        return true;
-      }
-    }
-    for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      if (element.isShown === true) {
-        if (element.isBeingTouched(glLocation)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
+  // // This will only search elements within the collection for a touch
+  // // if the collection is touchable. Note, the elements can be queried
+  // // directly still, and will return if they are touched if they themselves
+  // // are touchable.
+  // isBeingTouched(glLocation: Point) {
+  //   if (!this.isTouchable) {
+  //     return false;
+  //   }
+  //   const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
+  //   if (this.touchInBoundingRect !== false) {
+  //     let buffer = 0;
+  //     if (typeof this.touchInBoundingRect === 'number') {
+  //       buffer = this.touchInBoundingRect;
+  //     }
+  //     const boundingRect = this.getBoundingRect('draw');
+  //     if (vertexLocation.x >= boundingRect.left - buffer
+  //       && vertexLocation.x <= boundingRect.right + buffer
+  //       && vertexLocation.y <= boundingRect.top + buffer
+  //       && vertexLocation.y >= boundingRect.bottom - buffer
+  //     ) {
+  //       return true;
+  //     }
+  //   }
+  //   for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+  //     const element = this.elements[this.drawOrder[i]];
+  //     if (element.isShown === true) {
+  //       if (element.isBeingTouched(glLocation)) {
+  //         return true;
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
 
   resizeHtmlObject() {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -4529,37 +4543,107 @@ class DiagramElementCollection extends DiagramElement {
     children: ?Array<string | DiagramElement> = null,
     shownOnly: boolean = true,
   ) {
-    const bordersToUse: Array<Array<Point>> = [];
-    let childrenToUse = children;
-    if (childrenToUse == null) {
-      childrenToUse = Object.keys(this.elements);
-    }
-    if (childrenToUse.length === 0) {
+    if (shownOnly && this.isShown === false) {
       return [[]];
     }
-    let spaceToUse;
+    const bordersToUse: Array<Array<Point>> = [[]];
+    // const transformedBorders = [];
+    let matrix;
     if (Array.isArray(space)) {
-      spaceToUse = m2.mul(this.transform.matrix(), space);
-    } else if (space === 'local') {
-      spaceToUse = this.getTransform().matrix();
-    } else if (space === 'draw') {
-      spaceToUse = this.transform.identity().matrix();
+      matrix = m2.mul(space, this.getTransform().matrix());
     } else {
-      spaceToUse = space;
+      matrix = this.spaceTransformMatrix('draw', space);
     }
-    // console.log(spaceToUse)
-    childrenToUse.forEach((child) => {
-      const e = this.getElement(child);
-      if (
-        e == null
-        || (shownOnly && e.isShown === false)
-      ) {
-        return;
+    // bordersToUse.forEach((b) => {
+    //   transformedBorders.push(
+    //     b.map(p => p.transformBy(matrix)),
+    //   );
+    // });
+
+    // let spaceToUse;
+    // if (Array.isArray(space)) {
+    //   spaceToUse = m2.mul(this.transform.matrix(), space);
+    // } else if (space === 'local') {
+    //   spaceToUse = this.getTransform().matrix();
+    // } else if (space === 'draw') {
+    //   spaceToUse = this.transform.identity().matrix();
+    // } else {
+    //   spaceToUse = space;
+    // }
+
+    const getBorderFromChildren = (b) => {
+      const childrenBorder = [];
+      let childrenToUse = children;
+      if (childrenToUse == null) {
+        childrenToUse = Object.keys(this.elements);
       }
-      bordersToUse.push(...e.getBorder(spaceToUse, border, null, shownOnly));
-    });
-    // console.log(bordersToUse)
-    return bordersToUse;
+      if (childrenToUse.length === 0) {
+        return [[]];
+      }
+      childrenToUse.forEach((child) => {
+        const e = this.getElement(child);
+        if (
+          e == null
+          || (shownOnly && e.isShown === false)
+        ) {
+          return;
+        }
+        childrenBorder.push(...e.getBorder(matrix, b, null, shownOnly));
+      });
+      return childrenBorder;
+    }
+    if (
+      (border === 'border' && this.border === 'children')
+      || (border === 'touchBorder' && this.touchBorder === 'children')
+      || (border === 'holeBorder' && this.holeBorder === 'children')
+    ) {
+      return getBorderFromChildren(border);
+    }
+
+    if (border === 'border') {
+      if (this.border === 'rect') {
+        return [getBoundingBorder(getBorderFromChildren('border'))];
+      }
+      if (typeof this.border === 'number') {
+        return [getBoundingBorder(getBorderFromChildren('border'), this.border)];
+      }
+      return this.border.map(b => b.map(p => p.transformBy(matrix)));
+    }
+
+    if (border === 'touchBorder') {
+      if (this.touchBorder === 'rect') {
+        return [getBoundingBorder(getBorderFromChildren('border'))];
+      }
+      if (typeof this.touchBorder === 'number') {
+        return [getBoundingBorder(getBorderFromChildren('border'), this.touchBorder)];
+      }
+      if (this.touchBorder === 'border') {
+        return this.getBorder(space, 'border', children, shownOnly);
+      }
+      return this.touchBorder.map(b => b.map(p => p.transformBy(matrix)));
+    }
+
+    return this.holeBorder.map(b => b.map(p => p.transformBy(matrix)));
+
+
+    // if (
+    //   (border === 'border'
+    //     && (this.border === 'rect' || typeof this.border === 'number'))
+    //   || (border === 'touchBorder'
+    //     && (this.touchBorder === 'rect' || typeof this.touchBorder === 'number'))
+    // ) {
+    //   const borders = getBorderFromChildren('border');
+    //   let buffer = 0;
+    //   if (border === 'border' && typeof this.border === 'number') {
+    //     buffer = this.border;
+    //   }
+    //   if (border === 'touchBorder' && typeof this.touchBorder === 'number') {
+    //     buffer = this.touchBorder;
+    //   }
+    //   bordersToUse = getBoundingRect(borders, buffer);
+    //   return bordersToUse;
+    // }
+    // return bordersToUse;
   }
 
   getBoundingRect(
@@ -4662,10 +4746,13 @@ class DiagramElementCollection extends DiagramElement {
       return [];
     }
     let touched = [];
-    if (this.touchInBoundingRect !== false || this.isTouchable) {
-      if (this.isBeingTouched(glLocation)) {
-        touched.push(this);
-      }
+    // if (this.touchInBoundingRect !== false || this.isTouchable) {
+    //   if (this.isBeingTouched(glLocation)) {
+    //     touched.push(this);
+    //   }
+    // }
+    if (this.isTouchable) {
+      return super.getTouched(glLocation);
     }
     for (let i = this.drawOrder.length - 1; i >= 0; i -= 1) {
       const element = this.elements[this.drawOrder[i]];

@@ -116,20 +116,43 @@ diagram.addElements([
 
 // Add the equation with all it's forms
 diagram.addElements([
+  // {
+  //   name: 'line',
+  //   method: 'objects.annotatedLine',
+  //   options: {
+  //     p1: [0, 0],
+  //     p2: [1, 1],
+  //     label: {
+  //       text: {
+  //         forms: { base: ['a', 'b' ] }
+  //       },
+  //     },
+  //     dash: [0.1, 0.1],
+  //     maxLength: 2,
+  //     arrows: {},
+  //   },
+  // },
   {
-    name: 'line',
-    method: 'objects.line',
-    options: {
-      p1: [0, 0],
-      p2: [1, 1],
-      label: {
-        text: {
-          forms: { base: ['a', 'b' ] }
+    name: 'c',
+    method: 'shapes.collection',
+    addElements: [
+      {
+        name: 'p1',
+        method: 'polygon',
+        options: {
+          position: [-1, 0],
         },
       },
-      dash: [0.1, 0.1],
-      maxLength: 2,
-      arrows: {},
+      {
+        name: 'p2',
+        method: 'polygon',
+        options: {
+          position: [1, 0],
+        },
+      },
+    ],
+    options: {
+      touchBorder: 0.2,
     },
   },
   // {
@@ -143,7 +166,11 @@ diagram.addElements([
   //   },
   // },
 ]);
-diagram.elements._line.grow(0, 5);
+diagram.elements._c.setMovable();
+// diagram.elements.hasTouchableElements = true;
+console.log(diagram.elements._c)
+console.log(diagram.elements._c.getBorder('diagram', 'border'));
+// diagram.elements._line.grow(0, 5);
 // diagram.elements._arrow.custom.update({
 //   head: 'barb',
 // });

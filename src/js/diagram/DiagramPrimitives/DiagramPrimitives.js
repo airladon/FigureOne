@@ -1,6 +1,7 @@
 // @flow
 import {
   Rect, Point, Transform, getPoint, getRect, getTransform, getPoints,
+  parseBorder,
 } from '../../tools/g2';
 // import {
 //   round
@@ -1831,17 +1832,6 @@ export default class DiagramPrimitives {
       options.transform.updateTranslation(p);
     }
     const parsedPoints = options.points.map(p => getPoint(p));
-    const parseBorder = (borders) => {
-      if (!Array.isArray(borders)) {
-        return borders;
-      }
-      const borderOut = [];
-      borders.forEach((b) => {
-        borderOut.push(b.map(bElement => getPoint(bElement)));
-      });
-      return borderOut;
-    };
-
     const parsedBorder = parseBorder(options.border);
     const parsedBorderHoles = parseBorder(options.holeBorder);
     const parsedTouchBorder = parseBorder(options.touchBorder);
@@ -2464,7 +2454,6 @@ export default class DiagramPrimitives {
       }
     };
     processArrowOptions(optionsToUse);
-    console.log(optionsToUse)
     // optionsToUse.start = getPoint(optionsToUse.start);
     // optionsToUse.end = new Point(
     //   optionsToUse.start.x + optionsToUse.length * Math.cos(optionsToUse.angle),
@@ -3341,23 +3330,38 @@ export default class DiagramPrimitives {
       position?: Point,
       color?: Array<number>,
       pulse?: number,
+      border: Array<Array<Point>> | 'children' | 'rect' | number;
+      touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'children';
+      holeBorder: Array<Array<Point>> | 'children';
     } = {},
     ...moreOptions: Array<{
       transform?: Transform,
       position?: Point,
       color?: Array<number>,
       pulse?: number,
+      border: Array<Array<Point>> | 'children' | 'rect' | number;
+      touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'children';
+      holeBorder: Array<Array<Point>> | 'children';
     }>
   ) {
     let transform = new Transform('collection').scale(1, 1).rotate(0).translate(0, 0);
     let color = [1, 0, 0, 1];
     let pulse = null;
+    const defaultOptions = {
+      transform: new Transform('collection').scale(1, 1).rotate(0).translate(0, 0),
+      border: 'children',
+      touchBorder: 'children',
+      holeBorder: 'children',
+    };
+    let optionsToUse;
     if (transformOrPointOrOptions instanceof Point) {
       transform.updateTranslation(transformOrPointOrOptions);
+      optionsToUse = defaultOptions;
     } else if (transformOrPointOrOptions instanceof Transform) {
       transform = transformOrPointOrOptions._dup();
+      optionsToUse = defaultOptions;
     } else {
-      const optionsToUse = joinObjects(transformOrPointOrOptions, ...moreOptions);
+      optionsToUse = joinObjects(defaultOptions, transformOrPointOrOptions, ...moreOptions);
       if (optionsToUse.transform != null) {
         transform = getTransform(optionsToUse.transform);
       }
@@ -3371,7 +3375,15 @@ export default class DiagramPrimitives {
         ({ pulse } = optionsToUse);
       }
     }
-    const element = new DiagramElementCollection(transform, this.limits);
+
+    const element = new DiagramElementCollection(
+      transform, this.limits,
+      null,
+      parseBorder(optionsToUse.border),
+      parseBorder(optionsToUse.touchBorder),
+      parseBorder(optionsToUse.holeBorder),
+    );
+    // console.log(element)
     element.setColor(color);
     if (
       pulse != null

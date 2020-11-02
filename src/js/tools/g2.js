@@ -3863,9 +3863,22 @@ function getBoundingRect(
   return new Rect(
     result.min.x - buffer,
     result.min.y - buffer,
-    result.max.x - result.min.x + buffer,
-    result.max.y - result.min.y + buffer,
+    result.max.x - result.min.x + buffer * 2,
+    result.max.y - result.min.y + buffer * 2,
   );
+}
+
+function getBoundingBorder(
+  pointArrays: Array<Point> | Array<Array<Point>>,
+  buffer: number = 0,
+) {
+  const r = getBoundingRect(pointArrays, buffer);
+  return [
+    new Point(r.left, r.bottom),
+    new Point(r.right, r.bottom),
+    new Point(r.right, r.top),
+    new Point(r.left, r.top),
+  ];
 }
 
 // // Finds the min angle between three points
@@ -5824,6 +5837,17 @@ function getTriangleCenter(
   return new Point(Ox, Oy);
 }
 
+const parseBorder = (borders) => {
+  if (!Array.isArray(borders)) {
+    return borders;
+  }
+  const borderOut = [];
+  borders.forEach((b) => {
+    borderOut.push(b.map(bElement => getPoint(bElement)));
+  });
+  return borderOut;
+};
+
 export {
   // point,
   Point,
@@ -5876,4 +5900,6 @@ export {
   getBounds,
   Bounds,
   getTriangleCenter,
+  getBoundingBorder,
+  parseBorder,
 };
