@@ -822,7 +822,7 @@ function addArrows(
       {
         // start: startArrow[0],
         // end: startArrow[1],
-        align: 'start',
+        align: 'tail',
         drawPosition: startArrow[0],
         angle: new Line(startArrow[0], startArrow[1]).angle(),
         touchBorderBuffer,
@@ -844,7 +844,7 @@ function addArrows(
       {
         // start: endArrow[0],
         // end: endArrow[1],
-        align: 'start',
+        align: 'tail',
         drawPosition: endArrow[0],
         angle: new Line(endArrow[0], endArrow[1]).angle(),
         touchBorderBuffer,

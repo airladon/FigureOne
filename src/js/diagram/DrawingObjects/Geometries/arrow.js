@@ -234,7 +234,6 @@ function orientArrow(
   },
 ) {
   let matrix;
-  console.log(joinLength)
   if (options.align === 'start') {
     matrix = new Transform()
       .translate(length, 0)
@@ -446,41 +445,120 @@ function getTriangleArrow(options: {
 .......##....##..##.........##.##.........##....##....##...##.
 .......##.....##.########....###..........##....##.....##.####
 */
-function getTriangleWidth(o: {
-  width: number,
-  tailWidth: number,
-}) {
-  let w = o.width;
-  if (o.tailWidth > 0) {
-    w = Math.max(o.tailWidth, w);
-  }
-  return w;
-}
-
-function getReverseTriangleTail(o: {
+function getReverseTriTail(o: {
   length: number,
   width: number,
   tailWidth: number,
   tail: boolean,
 }) {
-  const w = getTriangleWidth(o);
-  const line1 = new Line([-o.length, o.tailWidth / 2], 1, 0);
-  const line2 = new Line([-o.length, 0], [0, w / 2]);
-  const i = line1.intersectsWith(line2).intersect;
-  return i;
+  const hLine = new Line([-o.length, o.tailWidth / 2], 1, 0);
+  let headTop = new Line([-o.length, 0], [0, o.width / 2]);
+  let i = hLine.intersectsWith(headTop).intersect;
+  let t = 0;
+  if (typeof o.tail === 'number') {
+    t = o.tail;
+  }
+  console.log(i)
+  t = Math.max(i.x, t);
+  let headX = -o.length;
+  if (t > 0) {
+    headX = -(o.length - t);
+    headTop = new Line([headX, 0], [0, o.width / 2]);
+    i = hLine.intersectsWith(headTop).intersect;
+  }
+  // const line1 = new Line([-o.length, o.tailWidth / 2], 1, 0);
+  // const top = new Line([headX, 0], [0, o.width / 2]);
+  // const topIntersect = line1.intersectsWith(top).intersect;
+  let tailX = -o.length;
+  if (t < 0) {
+    if (-o.length - t >= i.x) {
+      tailX = i.x;
+    } else {
+      tailX = -o.length - t;
+    }
+  }
+  console.log(i, headX, tailX)
+  return [i, headX, tailX];
 }
-function getReverseTriangleLength(o: {
+
+function getReverseTriLength(o: {
   length: number,
   width: number,
   tailWidth: number,
   tail: boolean,
 }) {
-  if (o.tail) {
-    return o.length;
-  }
-
-  return -getReverseTriangleTail(o).x;
+  const [, , tailX] = getReverseTriTail(o);
+  return [o.length, -tailX];
 }
+
+function getReverseTriDefaults(o: {
+  length?: number,
+  width?: number,
+  tailWidth?: number,
+  barb?: number,
+  scale?: number,
+  // tail?: number,
+}) {
+  let {
+    length, width, tailWidth, scale,
+  } = o;
+  scale = scale == null ? 1 : scale;
+
+  if (width == null) {
+    if (tailWidth != null) {
+      width = tailWidth * 6 * scale;
+    } else if (length != null) {
+      width = length;
+    } else {
+      width = 1;
+    }
+  }
+  if (length == null) {
+    length = width;
+  }
+  if (tailWidth == null) {
+    tailWidth = width / 6 / scale;
+  }
+  return {
+    width, length, tailWidth,
+  };
+}
+
+// function getTriangleWidth(o: {
+//   width: number,
+//   tailWidth: number,
+// }) {
+//   let w = o.width;
+//   if (o.tailWidth > 0) {
+//     w = Math.max(o.tailWidth, w);
+//   }
+//   return w;
+// }
+
+// function getReverseTriangleTail(o: {
+//   length: number,
+//   width: number,
+//   tailWidth: number,
+//   tail: boolean,
+// }) {
+//   const w = getTriangleWidth(o);
+//   const line1 = new Line([-o.length, o.tailWidth / 2], 1, 0);
+//   const line2 = new Line([-o.length, 0], [0, w / 2]);
+//   const i = line1.intersectsWith(line2).intersect;
+//   return i;
+// }
+// function getReverseTriangleLength(o: {
+//   length: number,
+//   width: number,
+//   tailWidth: number,
+//   tail: boolean,
+// }) {
+//   if (o.tail) {
+//     return o.length;
+//   }
+
+//   return -getReverseTriangleTail(o).x;
+// }
 
 function getReverseTriangleArrow(options: {
   length: number,
@@ -490,33 +568,48 @@ function getReverseTriangleArrow(options: {
   tail: boolean | number,
 }) {
   const {
-    width, length, touchBorderBuffer, tailWidth, tail,
+    length, touchBorderBuffer, tailWidth, width, tail,
   } = options;
-  const w = width;
-  const tailIntersect = getReverseTriangleTail(options);
+  const [intersect, headX, tailX] = getReverseTriTail(options);
   let arrowBorder;
   let points;
-  let joinTail;
-  let t = typeof tail === 'number' ? tail : 0;
-  if (tail === false) {
+  if (tail === false || tailX >= intersect.x) {
     arrowBorder = [
-      new Point(0, -w / 2),
+      new Point(0, -width / 2),
       new Point(-length, 0),
-      new Point(0, w / 2),
+      new Point(0, width / 2),
     ];
     points = arrowBorder.map(p => p._dup());
-    joinTail = [
-      new Point(tailIntersect.x, tailWidth / 2),
-      new Point(tailIntersect.x, -tailWidth / 2),
+  } else if (tailX > headX) {
+    const vLine = new Line([tailX, -tailWidth / 2], [tailX, 0]);
+    const topLine = new Line([-length, 0], [0, width / 2]);
+    const i = vLine.intersectsWith(topLine).intersect;
+    arrowBorder = [
+      new Point(0, -width / 2),
+      new Point(intersect.x, -tailWidth / 2),
+      new Point(tailX, -tailWidth / 2),
+      new Point(i.x, -i.y),
+      new Point(-length, 0),
+      new Point(i.x, i.y),
+      new Point(tailX, tailWidth / 2),
+      new Point(intersect.x, tailWidth / 2),
+      new Point(0, width / 2),
+    ];
+    points = [
+      arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[8]._dup(),
+      arrowBorder[1]._dup(), arrowBorder[7]._dup(), arrowBorder[8]._dup(),
+      arrowBorder[1]._dup(), arrowBorder[6]._dup(), arrowBorder[7]._dup(),
+      arrowBorder[1]._dup(), arrowBorder[2]._dup(), arrowBorder[6]._dup(),
+      arrowBorder[3]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
     ];
   } else {
     arrowBorder = [
-      new Point(0, -w / 2),
-      new Point(tailIntersect.x, -tailWidth / 2),
+      new Point(0, -width / 2),
+      new Point(intersect.x, -tailWidth / 2),
       new Point(-length, -tailWidth / 2),
       new Point(-length, tailWidth / 2),
-      new Point(tailIntersect.x, tailWidth / 2),
-      new Point(0, w / 2),
+      new Point(intersect.x, tailWidth / 2),
+      new Point(0, width / 2),
     ];
     points = [
       arrowBorder[0]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
@@ -524,17 +617,66 @@ function getReverseTriangleArrow(options: {
       arrowBorder[1]._dup(), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
       arrowBorder[1]._dup(), arrowBorder[2]._dup(), arrowBorder[3]._dup(),
     ];
-    joinTail = [
-      new Point(-length, tailWidth / 2),
-      new Point(-length, -tailWidth / 2),
-    ];
   }
-
+  const joinTail = [
+    new Point(tailX, tailWidth / 2),
+    new Point(tailX, -tailWidth / 2),
+  ];
   let touchBorder = arrowBorder;
   if (touchBorderBuffer > 0) {
-    touchBorder = getTouchBorder(length, w, touchBorderBuffer);
+    touchBorder = getTouchBorder(length, width, touchBorderBuffer);
   }
+  console.log(points)
   return [points, arrowBorder, touchBorder, joinTail];
+
+
+
+  // const {
+  //   width, length, touchBorderBuffer, tailWidth, tail,
+  // } = options;
+  // const w = width;
+  // const tailIntersect = getReverseTriangleTail(options);
+  // let arrowBorder;
+  // let points;
+  // let joinTail;
+  // let t = typeof tail === 'number' ? tail : 0;
+  // if (tail === false) {
+  //   arrowBorder = [
+  //     new Point(0, -w / 2),
+  //     new Point(-length, 0),
+  //     new Point(0, w / 2),
+  //   ];
+  //   points = arrowBorder.map(p => p._dup());
+  //   joinTail = [
+  //     new Point(tailIntersect.x, tailWidth / 2),
+  //     new Point(tailIntersect.x, -tailWidth / 2),
+  //   ];
+  // } else {
+  //   arrowBorder = [
+  //     new Point(0, -w / 2),
+  //     new Point(tailIntersect.x, -tailWidth / 2),
+  //     new Point(-length, -tailWidth / 2),
+  //     new Point(-length, tailWidth / 2),
+  //     new Point(tailIntersect.x, tailWidth / 2),
+  //     new Point(0, w / 2),
+  //   ];
+  //   points = [
+  //     arrowBorder[0]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
+  //     arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[4]._dup(),
+  //     arrowBorder[1]._dup(), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
+  //     arrowBorder[1]._dup(), arrowBorder[2]._dup(), arrowBorder[3]._dup(),
+  //   ];
+  //   joinTail = [
+  //     new Point(-length, tailWidth / 2),
+  //     new Point(-length, -tailWidth / 2),
+  //   ];
+  // }
+
+  // let touchBorder = arrowBorder;
+  // if (touchBorderBuffer > 0) {
+  //   touchBorder = getTouchBorder(length, w, touchBorderBuffer);
+  // }
+  // return [points, arrowBorder, touchBorder, joinTail];
 }
 
 /*
@@ -841,7 +983,7 @@ function getArrowLength(options: {
     return length - i.x;
   }
   if (head === 'reverseTriangle') {
-    return getReverseTriangleLength(options);
+    return getReverseTriLength(options);
   }
   if (head === 'triangle') {
     return getTriangleArrowLength(options);
@@ -935,11 +1077,9 @@ function defaultArrowOptions(
   }
   if (o.head === 'barb') {
     return getBarbDefaults(o);
-    // return joinObjects({}, defaults, {
-    //   width: o.tailWidth * scale,
-    //   length: o.tailWidth * scale,
-    //   barb: o.tailWidth,
-    // });
+  }
+  if (o.head === 'reverseTriangle') {
+    return getReverseTriDefaults(o);
   }
   if (o.head === 'bar') {
     return joinObjects({}, defaults, {
