@@ -304,6 +304,67 @@ function getTouchBorder(l, w, buffer) {
 //                    V..............|/<------------->
 //
 //
+function getTriangleArrowTail(o: {
+  length: number,
+  width: number,
+  tailWidth: number,
+  tail: boolean,
+}) {
+  let t = 0;
+  if (typeof o.tail === 'number') {
+    t = o.tail;
+  }
+  t = Math.max(0, t);
+  let headX = -o.length;
+  if (t > 0) {
+    headX = -(o.length - t);
+  }
+  const tailX = -o.length;
+  return [new Point(tailX, o.lineWidth / 2), headX, tailX];
+}
+
+
+function getTriangleArrowLength(o: {
+  length: number,
+  width: number,
+  tailWidth: number,
+  tail: boolean,
+}) {
+  return [o.length, o.length];
+}
+
+function getTriangleDefaults(o: {
+  length?: number,
+  width?: number,
+  tailWidth?: number,
+  scale?: number,
+  // tail?: number,
+}) {
+  let {
+    length, width, tailWidth, scale,
+  } = o;
+  scale = scale == null ? 1 : scale;
+
+  if (width == null) {
+    if (tailWidth != null) {
+      width = tailWidth * 6 * scale;
+    } else if (length != null) {
+      width = length;
+    } else {
+      width = 1;
+    }
+  }
+  if (length == null) {
+    length = width;
+  }
+  if (tailWidth == null) {
+    tailWidth = width / 6 / scale;
+  }
+  return {
+    width, length, tailWidth,
+  };
+}
+
 function getTriangleArrow(options: {
   length: number,
   width: number,
@@ -312,23 +373,64 @@ function getTriangleArrow(options: {
   tail: boolean,
 }) {
   const {
-    width, length, touchBorderBuffer, tailWidth,
+    length, touchBorderBuffer, tailWidth, width, tail,
   } = options;
-  const arrowBorder = [
-    new Point(-length, -width / 2),
-    new Point(0, 0),
-    new Point(-length, width / 2),
+  const [backIntersect, headX, tailX] = getTriangleArrowTail(options);
+  let arrowBorder;
+  let points;
+  if (tail === false || backIntersect.x >= headX) {
+    arrowBorder = [
+      new Point(-length, -width / 2),
+      new Point(0, 0),
+      new Point(-length, width / 2),
+    ];
+    points = arrowBorder.map(p => p._dup());
+  } else {
+    arrowBorder = [
+      new Point(tailX, -tailWidth / 2),
+      new Point(headX, -tailWidth / 2),
+      new Point(headX, -width / 2),
+      new Point(0, 0),
+      new Point(headX, width / 2),
+      new Point(headX, tailWidth / 2),
+      new Point(tailX, tailWidth / 2),
+    ];
+    points = [
+      arrowBorder[4]._dup(), arrowBorder[2]._dup(), arrowBorder[3]._dup(),
+      arrowBorder[6]._dup(), arrowBorder[0]._dup(), arrowBorder[1]._dup(),
+      arrowBorder[6]._dup(), arrowBorder[1]._dup(), arrowBorder[5]._dup(),
+    ];
+  }
+  const joinTail = [
+    new Point(tailX, tailWidth / 2),
+    new Point(tailX, -tailWidth / 2),
   ];
-  const points = arrowBorder.map(p => p._dup());
   let touchBorder = arrowBorder;
   if (touchBorderBuffer > 0) {
     touchBorder = getTouchBorder(length, width, touchBorderBuffer);
   }
-  const joinTail = [
-    new Point(-length, tailWidth / 2),
-    new Point(-length, -tailWidth / 2),
-  ];
   return [points, arrowBorder, touchBorder, joinTail];
+
+
+
+  // const {
+  //   width, length, touchBorderBuffer, tailWidth,
+  // } = options;
+  // const arrowBorder = [
+  //   new Point(-length, -width / 2),
+  //   new Point(0, 0),
+  //   new Point(-length, width / 2),
+  // ];
+  // const points = arrowBorder.map(p => p._dup());
+  // let touchBorder = arrowBorder;
+  // if (touchBorderBuffer > 0) {
+  //   touchBorder = getTouchBorder(length, width, touchBorderBuffer);
+  // }
+  // const joinTail = [
+  //   new Point(-length, tailWidth / 2),
+  //   new Point(-length, -tailWidth / 2),
+  // ];
+  // return [points, arrowBorder, touchBorder, joinTail];
   // return orientArrow(
   //   points, arrowBorder, touchBorder, tail, getArrowLength(options), options,
   // );
@@ -477,22 +579,6 @@ function getBarbTail(o: {
   if (backIntersect.withinLine === false) {
     i = new Point(headX + o.barb, o.tailWidth / 2);
   }
-  // let tailX = -0.length;
-
-  // if (t < 0) {
-  //   if (-t > barb) {
-  //     backIntersect = new Point(headX + barb, o.tailWidth / 2);
-  //     tailX = headX + barb;
-  //   } else {}
-  // }
-  // if (t < 0 && Math.abs(t) < o.barb) {
-  //   tailX = -(o.length + t);
-  //   // console.log('tailX', tailX)
-  // } else if (t >= 0) {
-  //   tailX = -o.length;
-  // }
-  // console.log(tailX)
-
   return [i, headX, tailX];
 }
 
@@ -503,7 +589,6 @@ function getBarbLength(o: {
   tail: boolean,
 }) {
   const [, , tailX] = getBarbTail(o);
-  console.log(tailX)
   return [o.length, -tailX];
 }
 
@@ -540,7 +625,6 @@ function getBarbDefaults(o: {
   if (barb == null) {
     barb = tailWidth * scale;
   }
-  // console.log(width, length, barb, tailWidth);
   return {
     width, length, barb, tailWidth,
   };
@@ -560,7 +644,6 @@ function getBarbArrow(options: {
   const [backIntersect, headX, tailX] = getBarbTail(options);
   let arrowBorder;
   let points;
-  let joinTail;
   if (tail === false || backIntersect.x >= headX + barb) {
     arrowBorder = [
       new Point(-length + barb, 0),
@@ -572,10 +655,6 @@ function getBarbArrow(options: {
       arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
       arrowBorder[0]._dup(), arrowBorder[2]._dup(), arrowBorder[3]._dup(),
     ];
-    // joinTail = [
-    //   new Point(tailX, tailWidth / 2),
-    //   new Point(tailX, -tailWidth / 2),
-    // ];
   } else {
     arrowBorder = [
       new Point(tailX, -tailWidth / 2),
@@ -592,11 +671,9 @@ function getBarbArrow(options: {
       arrowBorder[2]._dup(), arrowBorder[3]._dup(), arrowBorder[1]._dup(),
       arrowBorder[5]._dup(), arrowBorder[1]._dup(), arrowBorder[3]._dup(),
       arrowBorder[5]._dup(), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
-      // arrowBorder[2]._dup(), arrowBorder[3]._dup(), new Point(headX + barb, 0),
-      // new Point(headX + barb, 0), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
     ];
   }
-  joinTail = [
+  const joinTail = [
     new Point(tailX, tailWidth / 2),
     new Point(tailX, -tailWidth / 2),
   ];
@@ -606,6 +683,7 @@ function getBarbArrow(options: {
   }
   return [points, arrowBorder, touchBorder, joinTail];
 }
+
 
 function getRectangleArrow(options: {
   length: number,
@@ -765,6 +843,9 @@ function getArrowLength(options: {
   if (head === 'reverseTriangle') {
     return getReverseTriangleLength(options);
   }
+  if (head === 'triangle') {
+    return getTriangleArrowLength(options);
+  }
   if (head === 'barb') {
     return getBarbLength(options);
   }
@@ -830,11 +911,12 @@ function defaultArrowOptions(
     // tailWidth,
   };
   if (o.head === 'triangle' || o.head == null) {
-    return joinObjects({}, defaults, {
+    // return getTriangleDefaults(o);
+    return joinObjects({}, getTriangleDefaults(o), {
       head: 'triangle',
-      width: o.tailWidth * scale,
-      length: o.tailWidth * scale,
-      reverse: false,
+      // width: o.tailWidth * scale,
+      // length: o.tailWidth * scale,
+      // reverse: false,
     });
   }
   if (o.head === 'polygon') {

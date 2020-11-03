@@ -150,7 +150,7 @@ diagram.addElements([
           points: [[0, 0], [1, 1], [0.5, 0.7], [1, 1.5]],
           width: 0.01,
           arrow: {
-            head: 'barb',
+            head: 'triangle',
             // tail: 0,
             scale: 1,
             // barb: 0.05,
@@ -162,14 +162,16 @@ diagram.addElements([
         name: 'p2',
         method: 'arrow',
         options: {
-          head: 'barb',
-          align: 'mid',
+          head: 'triangle',
+          align: 'start',
           // angle: Math.PI / 4,
           position: [-1, 0],
-          // tail: -0.1,
+          tail: 0.1,
           length: 1,
-          barb: 0.15,
-          color: [1, 0, 0, 0.5]
+          tailWidth: 0.3,
+          width: 1, 
+          // barb: 0.15,
+          color: [1, 0, 0, 0.5],
           // tailWidth: 0.165,
           // width: 0.5,
           // tailWidth: 0.1,
@@ -212,3 +214,17 @@ console.log(diagram.elements._c.getBorder('diagram', 'border'));
 // eqn.onClick = () => eqn.nextForm();
 // eqn.setTouchableRect(0.5);
 
+
+
+
+// transparency
+// tail false
+// tail true
+// tail 0
+// tail 0.1
+// tail -0.1
+// -tail > barb
+// tip
+// start
+// tail
+// mid
