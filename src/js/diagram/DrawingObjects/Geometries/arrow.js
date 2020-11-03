@@ -745,6 +745,9 @@ function getRectLength(o: {
   tailWidth: number,
   tail: boolean,
 }) {
+  if (o.align === 'mid') {
+    return [o.length / 2, o.length / 2];
+  }
   return [o.length, o.length];
 }
 
@@ -1159,6 +1162,9 @@ function getPolygonLength(o: {
   radius: number,
   tail: boolean,
 }) {
+  if (o.align === 'mid') {
+    return [o.radius, o.radius];
+  }
   if (typeof o.tail === 'boolean') {
     return [o.radius * 2, o.radius];
   }
