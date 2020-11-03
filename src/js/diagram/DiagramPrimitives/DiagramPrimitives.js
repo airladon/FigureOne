@@ -55,7 +55,7 @@ import { makePolyLine, makePolyLineCorners, makeArrows } from '../DrawingObjects
 import { getPolygonPoints, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle';
 import { getTriangle } from '../DrawingObjects/Geometries/triangle';
-import { getArrow } from '../DrawingObjects/Geometries/arrow';
+import { getArrow, defaultArrowOptions } from '../DrawingObjects/Geometries/arrow';
 import getLine from '../DrawingObjects/Geometries/line';
 import type {
   OBJ_Copy,
@@ -2446,37 +2446,43 @@ export default class DiagramPrimitives {
     //   joinedOptions.lineWidth = joinedOptions.length
     // )
     // const defaultArrow = defaultArrowOptions()
-    const defaultOptions = {
-      head: 'triangle',
-      // length: 1,
-      width: 1,
-      sides: 20,
-      radius: 0.5,
-      rotation: 0,
-      // start: [0, 0],
-      angle: 0,
-      transform: new Transform('line').standard(),
-      border: 'outline',
-      touchBorder: 'border',
-      align: 'tip',
-      tail: false,
-      drawPosition: new Point(0, 0),
-    };
+    const defaultOptions = joinObjects(
+      {},
+      defaultArrowOptions(joinObjects({}, ...options)),
+      {
+        head: 'triangle',
+        // length: 1,
+        // width: 1,
+        sides: 20,
+        radius: 0.5,
+        rotation: 0,
+        // start: [0, 0],
+        angle: 0,
+        transform: new Transform('line').standard(),
+        border: 'outline',
+        touchBorder: 'border',
+        align: 'tip',
+        tail: false,
+        drawPosition: new Point(0, 0),
+      },
+    );
+
     const optionsToUse = processOptions(defaultOptions, ...options);
     const processArrowOptions = (ao) => {
-      // ao.start = getPoint(ao.start);
-      if (ao.lineWidth == null) {
-        ao.lineWidth = ao.width / 5;
-      }
-      if (ao.head === 'bar' && ao.length == null) {
-        ao.length = ao.lineWidth;
-      } else if (ao.length == null) {
-        ao.length = 1;
-      }
 
-      if (ao.head === 'barb' && ao.barb == null) {
-        ao.barb = ao.length / 3;
-      }
+      // ao.start = getPoint(ao.start);
+      // if (ao.tailWidth == null) {
+      //   ao.tailWidth = ao.width / 5;
+      // }
+      // if (ao.head === 'bar' && ao.length == null) {
+      //   ao.length = ao.tailWidth;
+      // } else if (ao.length == null) {
+      //   ao.length = 1;
+      // }
+
+      // if (ao.head === 'barb' && ao.barb == null) {
+      //   ao.barb = ao.length / 3;
+      // }
 
       if (ao.drawPosition != null) {
         ao.drawPosition = getPoint(ao.drawPosition);
@@ -2506,6 +2512,7 @@ export default class DiagramPrimitives {
       // );
     };
     processArrowOptions(optionsToUse);
+    // optionsToUse = joinObjects({}, defaultArrowOptions(optionsToUse), optionsToUse);
     // optionsToUse.start = getPoint(optionsToUse.start);
     // optionsToUse.end = new Point(
     //   optionsToUse.start.x + optionsToUse.length * Math.cos(optionsToUse.angle),
@@ -2513,7 +2520,7 @@ export default class DiagramPrimitives {
     // );
     // console.log(optionsToUse.end)
     const [points, border, touchBorder] = getArrow(optionsToUse);
-    console.log(optionsToUse)
+    // console.log(optionsToUse)
     let borderToUse = optionsToUse.border;
 
     if (optionsToUse.border === 'outline') {
