@@ -148,7 +148,7 @@ diagram.addElements([
         method: 'shapes.polyline',
         options: {
           points: [[0.1, 0.1], [1, 1], [0.5, 0.7], [1, 1.5]],
-          arrow: 'triangle',
+          arrow: 'reverseTriangle',
           dash: [0.1, 0.1],
         }
       },
@@ -156,10 +156,12 @@ diagram.addElements([
         name: 'p2',
         method: 'arrow',
         options: {
-          head: 'triangle',
+          head: 'reverseTriangle',
           align: 'start',
           angle: Math.PI / 4,
           position: [-1, 0],
+          tail: true,
+          lineWidth: 0.2,
           // position: [1, 0],
           // tip: [1, 0],
           // angle: Math.PI / 2 * 3,
