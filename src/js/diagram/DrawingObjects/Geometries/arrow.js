@@ -880,6 +880,30 @@ function getRectArrow(options: {
 ..........             ...##........##..##...###.##......
 ..........             ...########.####.##....##.########
 */
+//              |
+//              |           \      00000000000000
+//              |             \  00000000000000
+//              |              00000000000000
+//              |            00000000000000
+//              |          00000000000000
+//              |        00000000000000
+//              |      00000000000000  \
+//              |    00000000000000      \ LineWidth
+//              |  00000000000000   o
+//           -- |00000000000000       o   theta
+//           A  |  0000000000          o
+//         b |  |    000000             o
+//           V  |    g 00               o
+//           --- -------------------------------
+//              |       |
+//              |<----->|
+//                  a
+//
+// theta = atan(height / width)
+//
+// angle g = 180 - theta - 90
+// b = lineWidth * sin(g)
+// a = lineWidth * cos(g)
 function getLineTail(o: {
   length: number,
   width: number,
@@ -890,12 +914,17 @@ function getLineTail(o: {
   if (typeof o.tail === 'number') {
     t = o.tail;
   }
+
+  const theta = Math.atan(o.width / 2 / o.length);
+  const g = Math.PI - theta - Math.PI / 2;
+  const a = o.tailWidth * Math.cos(g);
+
   let headX = -o.length;
   let tailX = -o.length;
   if (t > 0) {
     headX = -(o.length - t);
   }
-  const topOutsideLine = new Line([headX, o.width / 2], [0, 0]);
+  const topOutsideLine = new Line([headX + a, o.width / 2], [0, 0]);
   const topInsideLine = topOutsideLine.offset('bottom', o.tailWidth);
   const line = new Line([headX, o.tailWidth / 2], 1, 0);
   const outsideIntersect = topOutsideLine.intersectsWith(line).intersect;
