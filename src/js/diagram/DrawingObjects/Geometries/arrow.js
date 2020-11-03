@@ -869,39 +869,109 @@ function getRectArrow(options: {
   }
 
   return [points, arrowBorder, touchBorder, joinTail];
-
-
-  // const {
-  //   width, length, start, end, touchBorderBuffer, tailWidth,
-  // } = options;
-  // const arrowBorder = [
-  //   new Point(0, -width / 2),
-  //   new Point(length, -width / 2),
-  //   new Point(length, width / 2),
-  //   new Point(0, width / 2),
-  // ];
-  // const points = [
-  //   arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
-  //   arrowBorder[0]._dup(), arrowBorder[2]._dup(), arrowBorder[3]._dup(),
-  // ];
-  // const borderToUse = arrowBorder;
-  // let touchBorder = borderToUse;
-  // if (touchBorderBuffer > 0) {
-  //   touchBorder = [
-  //     new Point(-touchBorderBuffer, -width / 2 - touchBorderBuffer),
-  //     new Point(length + touchBorderBuffer, -width / 2 - touchBorderBuffer),
-  //     new Point(length + touchBorderBuffer, width / 2 + touchBorderBuffer),
-  //     new Point(-touchBorderBuffer, width / 2 + touchBorderBuffer),
-  //   ];
-  // }
-  // const tail = [
-  //   new Point(0, tailWidth / 2),
-  //   new Point(0, -tailWidth / 2),
-  // ];
-  // return orientArrow(points, borderToUse, touchBorder, start, end, tail);
 }
 
+/*
+..........             ...##.......####.##....##.########
+..........             ...##........##..###...##.##......
+..........             ...##........##..####..##.##......
+..........             ...##........##..##.##.##.######..
+..........             ...##........##..##..####.##......
+..........             ...##........##..##...###.##......
+..........             ...########.####.##....##.########
+*/
+function getLineTail(o: {
+  length: number,
+  width: number,
+  tailWidth: number,
+  tail: boolean,
+}) {
+  let t = 0;
+  if (typeof o.tail === 'number') {
+    t = o.tail;
+  }
+  let headX = -o.length;
+  let tailX = -o.length;
+  if (t > 0) {
+    headX = -(o.length - t);
+  }
+  const topOutsideLine = new Line([headX, o.width / 2], [0, 0]);
+  const topInsideLine = topOutsideLine.offset('bottom', o.tailWidth);
+  const line = new Line([headX, o.tailWidth / 2], 1, 0);
+  const outsideIntersect = topOutsideLine.intersectsWith(line).intersect;
+  let insideIntersect = topInsideLine.intersectsWith(line).intersect;
+  if (insideIntersect.x < -o.length) {
+    insideIntersect = new Point(-o.length, o.tailWidth / 2);
+  }
+  let zeroPoint;
+  const insideIntersectWithZero = topInsideLine
+    .intersectsWith(new Line([-o.length, 0], 1, 0));
+  if (!insideIntersectWithZero) {
+    zeroPoint = -o.length;
+  } else {
+    zeroPoint = insideIntersectWithZero.intersect.x;
+  }
+  if (!insideIntersectWithZero.isWithinLine || o.tail === false) {
+    tailX = -o.length;
+  }
+  let stubTail = false;
+  if (t < 0) {
+    if (-t > insideIntersect.x) {
+      tailX = insideIntersect.x;
+      stubTail = true;
+    } else {
+      tailX = -o.length - t;
+    }
+  }
+  return [
+    new Point(outsideIntersect.x, o.tailWidth / 2),
+    headX, tailX, zeroPoint, topOutsideLine.p1, topInsideLine.p1,
+    stubTail, insideIntersect,
+  ];
+}
 
+function getLineLength(o: {
+  length: number,
+  width: number,
+  tailWidth: number,
+  tail: boolean,
+}) {
+  const [, , tailX] = getLineTail(o);
+  return [o.length, -tailX];
+}
+
+function getLineDefaults(o: {
+  length?: number,
+  width?: number,
+  tailWidth?: number,
+  barb?: number,
+  scale?: number,
+  // tail?: number,
+}) {
+  let {
+    length, width, tailWidth, scale,
+  } = o;
+  scale = scale == null ? 1 : scale;
+
+  if (width == null) {
+    if (tailWidth != null) {
+      width = tailWidth * 6 * scale;
+    } else if (length != null) {
+      width = length;
+    } else {
+      width = 1;
+    }
+  }
+  if (length == null) {
+    length = width;
+  }
+  if (tailWidth == null) {
+    tailWidth = width / 6 / scale;
+  }
+  return {
+    width, length, tailWidth,
+  };
+}
 function getLineArrow(options: {
   length: number,
   width: number,
@@ -911,44 +981,124 @@ function getLineArrow(options: {
   tailWidth: number,
 }) {
   const {
-    width, length, start, end, touchBorderBuffer, tailWidth,
+    length, touchBorderBuffer, tailWidth, width, tail,
   } = options;
-  const line = new Line([0, -width / 2], [length, 0]);
-  const offset = line.offset('positive', tailWidth);
-  const offsetTop = new Line([offset.p1.x, -offset.p1.y], [offset.p2.x, -offset.p2.y]);
-  const horizontal = new Line([-1, -tailWidth / 2], [0, -tailWidth / 2]);
-  const i = horizontal.intersectsWith(line).intersect;
-  const i2 = offset.intersectsWith(offsetTop).intersect;
 
-  const arrowBorder = [
-    new Point(-i.x, -width / 2),
-    new Point(length - i.x, 0),
-    new Point(-i.x, width / 2),
-    new Point(offset.p1.x - i.x, -offset.p1.y),
-    new Point(i2.x - i.x, 0),
-    new Point(offset.p1.x - i.x, offset.p1.y),
-  ];
-  const points = [
-    arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[4]._dup(),
-    arrowBorder[5]._dup(), arrowBorder[0]._dup(), arrowBorder[4]._dup(),
-    arrowBorder[4]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
-    arrowBorder[4]._dup(), arrowBorder[2]._dup(), arrowBorder[3]._dup(),
-  ];
-  const borderToUse = arrowBorder;
-  let touchBorder = borderToUse;
-  if (touchBorderBuffer > 0) {
-    touchBorder = [
-      new Point(-touchBorderBuffer + offset.x - i.x, -width / 2 - touchBorderBuffer),
-      new Point(length + touchBorderBuffer - i.x, -width / 2 - touchBorderBuffer),
-      new Point(length + touchBorderBuffer - i.x, width / 2 + touchBorderBuffer),
-      new Point(-touchBorderBuffer + offset.x - i.x, width / 2 + touchBorderBuffer),
+  const [
+    frontIntersect, headX, tailX, zeroPoint, outsideTop, insideTop, stubTail,
+    insideIntersect,
+  ] = getLineTail(options);
+  let arrowBorder;
+  let points;
+  console.log(frontIntersect, headX, tailX, zeroPoint, outsideTop, insideTop, stubTail, insideIntersect)
+  console.log(tail)
+  if (tail === false || frontIntersect.x <= tailX) {
+    console.log('asdf')
+    arrowBorder = [
+      new Point(outsideTop.x, -outsideTop.y),
+      new Point(insideTop.x, -insideTop.y),
+      new Point(zeroPoint, 0),
+      new Point(insideTop.x, insideTop.y),
+      new Point(outsideTop.x, outsideTop.y),
+      new Point(0, 0),
+    ];
+    points = [
+      arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[5]._dup(),
+      arrowBorder[1]._dup(), arrowBorder[2]._dup(), arrowBorder[5]._dup(),
+      arrowBorder[2]._dup(), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
+      arrowBorder[2]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
+    ];
+  } else if (stubTail) {
+    arrowBorder = [
+      new Point(outsideTop.x, -outsideTop.y),
+      new Point(insideTop.x, -insideTop.y),
+      new Point(insideIntersect.x, -insideIntersect.y),
+      new Point(insideIntersect.x, insideIntersect.y),
+      new Point(insideTop.x, insideTop.y),
+      new Point(outsideTop.x, outsideTop.y),
+      new Point(0, 0),
+    ];
+    points = [
+      arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[6]._dup(),
+      arrowBorder[1]._dup(), arrowBorder[2]._dup(), arrowBorder[6]._dup(),
+      arrowBorder[2]._dup(), arrowBorder[3]._dup(), arrowBorder[6]._dup(),
+      arrowBorder[3]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
+      arrowBorder[3]._dup(), arrowBorder[5]._dup(), arrowBorder[6]._dup(),
+    ];
+  } else {
+    arrowBorder = [
+      new Point(outsideTop.x, -outsideTop.y),
+      new Point(insideTop.x, -insideTop.y),
+      new Point(insideIntersect.x, -insideIntersect.y),
+      new Point(tailX, -tailWidth / 2),
+      new Point(tailX, tailWidth / 2),
+      new Point(insideIntersect.x, insideIntersect.y),
+      new Point(insideTop.x, insideTop.y),
+      new Point(outsideTop.x, outsideTop.y),
+      new Point(0, 0),
+    ];
+    points = [
+      arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
+      arrowBorder[0]._dup(), arrowBorder[2]._dup(), arrowBorder[8]._dup(),
+      arrowBorder[2]._dup(), arrowBorder[5]._dup(), arrowBorder[8]._dup(),
+      arrowBorder[2]._dup(), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
+      arrowBorder[2]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
+      arrowBorder[5]._dup(), arrowBorder[6]._dup(), arrowBorder[7]._dup(),
+      arrowBorder[5]._dup(), arrowBorder[7]._dup(), arrowBorder[8]._dup(),
     ];
   }
-  const tail = [
-    new Point(0, tailWidth / 2),
-    new Point(0, -tailWidth / 2),
+  console.log(arrowBorder)
+  const joinTail = [
+    new Point(tailX, tailWidth / 2),
+    new Point(tailX, -tailWidth / 2),
   ];
-  return orientArrow(points, borderToUse, touchBorder, start, end, tail);
+  let touchBorder = arrowBorder;
+  if (touchBorderBuffer > 0) {
+    touchBorder = getTouchBorder(length, width, touchBorderBuffer);
+  }
+  return [points, arrowBorder, touchBorder, joinTail];
+
+
+
+  // const {
+  //   width, length, start, end, touchBorderBuffer, tailWidth,
+  // } = options;
+  // const line = new Line([0, -width / 2], [length, 0]);
+  // const offset = line.offset('positive', tailWidth);
+  // const offsetTop = new Line([offset.p1.x, -offset.p1.y], [offset.p2.x, -offset.p2.y]);
+  // const horizontal = new Line([-1, -tailWidth / 2], [0, -tailWidth / 2]);
+  // const i = horizontal.intersectsWith(line).intersect;
+  // const i2 = offset.intersectsWith(offsetTop).intersect;
+
+  // const arrowBorder = [
+  //   new Point(-i.x, -width / 2),
+  //   new Point(length - i.x, 0),
+  //   new Point(-i.x, width / 2),
+  //   new Point(offset.p1.x - i.x, -offset.p1.y),
+  //   new Point(i2.x - i.x, 0),
+  //   new Point(offset.p1.x - i.x, offset.p1.y),
+  // ];
+  // const points = [
+  //   arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[4]._dup(),
+  //   arrowBorder[5]._dup(), arrowBorder[0]._dup(), arrowBorder[4]._dup(),
+  //   arrowBorder[4]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
+  //   arrowBorder[4]._dup(), arrowBorder[2]._dup(), arrowBorder[3]._dup(),
+  // ];
+  // const borderToUse = arrowBorder;
+  // let touchBorder = borderToUse;
+  // if (touchBorderBuffer > 0) {
+  //   touchBorder = [
+  //     new Point(-touchBorderBuffer + offset.x - i.x, -width / 2 - touchBorderBuffer),
+  //     new Point(length + touchBorderBuffer - i.x, -width / 2 - touchBorderBuffer),
+  //     new Point(length + touchBorderBuffer - i.x, width / 2 + touchBorderBuffer),
+  //     new Point(-touchBorderBuffer + offset.x - i.x, width / 2 + touchBorderBuffer),
+  //   ];
+  // }
+  // const tail = [
+  //   new Point(0, tailWidth / 2),
+  //   new Point(0, -tailWidth / 2),
+  // ];
+  // return orientArrow(points, borderToUse, touchBorder, start, end, tail);
 }
 
 
@@ -1013,10 +1163,11 @@ function getArrowLength(options: {
     return radius;
   }
   if (head === 'line') {
-    const line = new Line([0, -width / 2], [length, 0]);
-    const horizontal = new Line([0, -tailWidth], [length, -tailWidth]);
-    const i = horizontal.intersectsWith(line).intersect;
-    return length - i.x;
+    // const line = new Line([0, -width / 2], [length, 0]);
+    // const horizontal = new Line([0, -tailWidth], [length, -tailWidth]);
+    // const i = horizontal.intersectsWith(line).intersect;
+    // return length - i.x;
+    return getLineLength(options);
   }
   if (head === 'reverseTriangle') {
     return getReverseTriLength(options);
@@ -1130,10 +1281,11 @@ function defaultArrowOptions(
     });
   }
   if (o.head === 'line') {
-    return joinObjects({}, defaults, {
-      width: o.tailWidth * scale,
-      length: o.tailWidth * scale,
-    });
+    return getLineDefaults(o);
+    // return joinObjects({}, defaults, {
+    //   width: o.tailWidth * scale,
+    //   length: o.tailWidth * scale,
+    // });
   }
   // if (o.head === 'rectangle') {
   // otherwise head = 'rectangle'

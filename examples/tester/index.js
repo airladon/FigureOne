@@ -163,11 +163,15 @@ diagram.addElements([
         name: 'p2',
         method: 'arrow',
         options: {
-          head: 'bar',
+          head: 'line',
           align: 'tip',
           // angle: Math.PI / 4,
           position: [-1, 0],
-          tail: 0.05,
+          // tail: false,
+          length: 1,
+          width: 1,
+          tail: -0.1,
+          // tail: 0.05,
           // length: 0.4,
           // length: 1,
           tailWidth: 0.1,
@@ -184,7 +188,7 @@ diagram.addElements([
           // scale: 2,
           // position: [1, 0],
           // tip: [1, 0],
-          angle: Math.PI / 4,
+          // angle: Math.PI / 4,
         },
       },
     ],
@@ -205,8 +209,8 @@ diagram.addElements([
 ]);
 diagram.elements._c.setMovable();
 // diagram.elements.hasTouchableElements = true;
-console.log(diagram.elements._c)
-console.log(diagram.elements._c.getBorder('diagram', 'border'));
+// console.log(diagram.elements._c)
+// console.log(diagram.elements._c.getBorder('diagram', 'border'));
 // diagram.elements._line.grow(0, 5);
 // diagram.elements._arrow.custom.update({
 //   head: 'barb',
