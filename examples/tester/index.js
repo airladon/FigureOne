@@ -147,8 +147,12 @@ diagram.addElements([
         name: 'l',
         method: 'shapes.polyline',
         options: {
-          points: [[0.1, 0.1], [1, 1], [0.5, 0.7], [1, 1.5]],
-          arrow: 'reverseTriangle',
+          points: [[0, 0], [1, 1], [0.5, 0.7], [1, 1.5]],
+          width: 0.05,
+          arrow: {
+            head: 'barb',
+            tail: true,
+          },
           dash: [0.1, 0.1],
         }
       },
@@ -156,11 +160,11 @@ diagram.addElements([
         name: 'p2',
         method: 'arrow',
         options: {
-          head: 'reverseTriangle',
+          head: 'barb',
           align: 'start',
           angle: Math.PI / 4,
           position: [-1, 0],
-          tail: true,
+          tail: false,
           lineWidth: 0.2,
           // position: [1, 0],
           // tip: [1, 0],
