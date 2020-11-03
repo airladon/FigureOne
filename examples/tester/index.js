@@ -152,6 +152,7 @@ diagram.addElements([
           arrow: {
             head: 'barb',
             tail: true,
+            scale: 1,
           },
           dash: [0.1, 0.1],
         }
@@ -164,8 +165,10 @@ diagram.addElements([
           align: 'start',
           angle: Math.PI / 4,
           position: [-1, 0],
-          tail: false,
-          lineWidth: 0.2,
+          tail: 0,
+          barb: 0.3,
+          lineWidth: 0.1,
+          scale: 3,
           // position: [1, 0],
           // tip: [1, 0],
           // angle: Math.PI / 2 * 3,

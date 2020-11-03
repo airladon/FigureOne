@@ -444,8 +444,12 @@ function getBarbTail(o: {
 }) {
   // const w = getTriangleWidth(o);
   // back intersect
+  let t = 0;
+  if (typeof o.tail === 'number') {
+    t = o.tail;
+  }
   const line1 = new Line([-o.length, o.lineWidth / 2], 1, 0);
-  const back = new Line([-o.length + o.barb, 0], [-o.length, o.width / 2]);
+  const back = new Line([-o.length + t + o.barb, 0], [-o.length + t, o.width / 2]);
   const backIntersect = line1.intersectsWith(back).intersect;
   // const front = new Line([-o.length, o.width / 2], [0, 0]);
   // const frontIntersect = line1.intersectsWith(front).intersect;
@@ -459,7 +463,7 @@ function getBarbLength(o: {
   lineWidth: number,
   tail: boolean,
 }) {
-  if (o.tail) {
+  if (o.tail === true || typeof o.tail === 'number') {
     return o.length;
   }
 
@@ -473,7 +477,7 @@ function getBarbArrow(options: {
   barb: number,
   touchBorderBuffer: number,
   lineWidth: number,
-  tail: boolean,
+  tail: boolean | number,
 }) {
   const {
     length, touchBorderBuffer, lineWidth, barb, width, tail,
@@ -498,12 +502,16 @@ function getBarbArrow(options: {
       new Point(-barb, -lineWidth / 2),
     ];
   } else {
+    let t = tail;
+    if (t === true) {
+      t = 0;
+    }
     arrowBorder = [
       new Point(-length, -lineWidth / 2),
       new Point(backIntersect.x, -lineWidth / 2),
-      new Point(-length, -width / 2),
+      new Point(-length + t, -width / 2),
       new Point(0, 0),
-      new Point(-length, width / 2),
+      new Point(-length + t, width / 2),
       new Point(backIntersect.x, lineWidth / 2),
       new Point(-length, lineWidth / 2),
     ];
@@ -515,13 +523,13 @@ function getBarbArrow(options: {
       arrowBorder[5]._dup(), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
     ];
     joinTail = [
-      new Point(-length, lineWidth / 2),
-      new Point(-length, -lineWidth / 2),
+      new Point(-length - t, lineWidth / 2),
+      new Point(-length - t, -lineWidth / 2),
     ];
   }
   let touchBorder = arrowBorder;
   if (touchBorderBuffer > 0) {
-    touchBorder = getTouchBorder(length, w, touchBorderBuffer);
+    touchBorder = getTouchBorder(length, width, touchBorderBuffer);
   }
 
   return [points, arrowBorder, touchBorder, joinTail];

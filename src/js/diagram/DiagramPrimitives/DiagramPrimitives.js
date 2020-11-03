@@ -2430,6 +2430,22 @@ export default class DiagramPrimitives {
   }
 
   arrow(...options: Array<OBJ_Arrow & OBJ_Generic>) {
+    const joinedOptions = joinObjects({}, {
+      head: 'triangle',
+      scale: 1,
+    }, ...options);
+    // if (
+    //   joinedOptions.length == null
+    //   && joinedOptions.width == null
+    //   && joinedOptions.lineWidth == null
+    // ) {
+    //   joinedOptions.lineWidth = 0.1;
+    // } else if (
+    //   joinedOptions.width == null
+    //   && joinedOptions.lineWidth == null
+    //   joinedOptions.lineWidth = joinedOptions.length
+    // )
+    // const defaultArrow = defaultArrowOptions()
     const defaultOptions = {
       head: 'triangle',
       // length: 1,
@@ -2448,7 +2464,10 @@ export default class DiagramPrimitives {
     };
     const optionsToUse = processOptions(defaultOptions, ...options);
     const processArrowOptions = (ao) => {
-      // ao.start = getPoint(ao.start);      
+      // ao.start = getPoint(ao.start);
+      if (ao.lineWidth == null) {
+        ao.lineWidth = ao.width / 5;
+      }
       if (ao.head === 'bar' && ao.length == null) {
         ao.length = ao.lineWidth;
       } else if (ao.length == null) {
@@ -2458,13 +2477,10 @@ export default class DiagramPrimitives {
       if (ao.head === 'barb' && ao.barb == null) {
         ao.barb = ao.length / 3;
       }
-      if (ao.lineWidth == null) {
-        ao.lineWidth = ao.width / 5;
-      }
+
       if (ao.drawPosition != null) {
         ao.drawPosition = getPoint(ao.drawPosition);
       }
-      
       // if (ao.start == null && ao.tip != null) {
       //   ao.start = new Point(
       //     ao.tip.x + ao.length * Math.cos(ao.angle + Math.PI),
