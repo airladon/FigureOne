@@ -1017,15 +1017,12 @@ function getLineArrow(options: {
   } = options;
 
   const [
-    frontIntersect, headX, tailX, zeroPoint, outsideTop, insideTop, stubTail,
+    frontIntersect, , tailX, zeroPoint, outsideTop, insideTop, stubTail,
     insideIntersect,
   ] = getLineTail(options);
   let arrowBorder;
   let points;
-  console.log(frontIntersect, headX, tailX, zeroPoint, outsideTop, insideTop, stubTail, insideIntersect)
-  console.log(tail)
   if (tail === false || frontIntersect.x <= tailX) {
-    console.log('asdf')
     arrowBorder = [
       new Point(outsideTop.x, -outsideTop.y),
       new Point(insideTop.x, -insideTop.y),
@@ -1079,7 +1076,6 @@ function getLineArrow(options: {
       arrowBorder[5]._dup(), arrowBorder[7]._dup(), arrowBorder[8]._dup(),
     ];
   }
-  console.log(arrowBorder)
   const joinTail = [
     new Point(tailX, tailWidth / 2),
     new Point(tailX, -tailWidth / 2),
@@ -1089,51 +1085,116 @@ function getLineArrow(options: {
     touchBorder = getTouchBorder(length, width, touchBorderBuffer);
   }
   return [points, arrowBorder, touchBorder, joinTail];
-
-
-
-  // const {
-  //   width, length, start, end, touchBorderBuffer, tailWidth,
-  // } = options;
-  // const line = new Line([0, -width / 2], [length, 0]);
-  // const offset = line.offset('positive', tailWidth);
-  // const offsetTop = new Line([offset.p1.x, -offset.p1.y], [offset.p2.x, -offset.p2.y]);
-  // const horizontal = new Line([-1, -tailWidth / 2], [0, -tailWidth / 2]);
-  // const i = horizontal.intersectsWith(line).intersect;
-  // const i2 = offset.intersectsWith(offsetTop).intersect;
-
-  // const arrowBorder = [
-  //   new Point(-i.x, -width / 2),
-  //   new Point(length - i.x, 0),
-  //   new Point(-i.x, width / 2),
-  //   new Point(offset.p1.x - i.x, -offset.p1.y),
-  //   new Point(i2.x - i.x, 0),
-  //   new Point(offset.p1.x - i.x, offset.p1.y),
-  // ];
-  // const points = [
-  //   arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[4]._dup(),
-  //   arrowBorder[5]._dup(), arrowBorder[0]._dup(), arrowBorder[4]._dup(),
-  //   arrowBorder[4]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
-  //   arrowBorder[4]._dup(), arrowBorder[2]._dup(), arrowBorder[3]._dup(),
-  // ];
-  // const borderToUse = arrowBorder;
-  // let touchBorder = borderToUse;
-  // if (touchBorderBuffer > 0) {
-  //   touchBorder = [
-  //     new Point(-touchBorderBuffer + offset.x - i.x, -width / 2 - touchBorderBuffer),
-  //     new Point(length + touchBorderBuffer - i.x, -width / 2 - touchBorderBuffer),
-  //     new Point(length + touchBorderBuffer - i.x, width / 2 + touchBorderBuffer),
-  //     new Point(-touchBorderBuffer + offset.x - i.x, width / 2 + touchBorderBuffer),
-  //   ];
-  // }
-  // const tail = [
-  //   new Point(0, tailWidth / 2),
-  //   new Point(0, -tailWidth / 2),
-  // ];
-  // return orientArrow(points, borderToUse, touchBorder, start, end, tail);
 }
 
+/*
+.......########...#######..##.......##....##..######....#######..##....##
+.......##.....##.##.....##.##........##..##..##....##..##.....##.###...##
+.......##.....##.##.....##.##.........####...##........##.....##.####..##
+.......########..##.....##.##..........##....##...####.##.....##.##.##.##
+.......##........##.....##.##..........##....##....##..##.....##.##..####
+.......##........##.....##.##..........##....##....##..##.....##.##...###
+.......##.........#######..########....##.....######....#######..##....##
+*/
+function getPolygonTail(o: {
+  radius: number,
+  sides: number,
+  tailWidth: number,
+  rotation: number,
+  tail: boolean,
+}) {
+  if (o.tail === false) {
+    return getPolygonPoints({
+      radius: o.radius,
+      sides: o.sides,
+      sidesToDraw: o.sides,
+      rotation: 0,
+      offset: new Point(-o.radius, 0),
+      direction: 1,
+    });
+  }
+  let t = 0;
+  if (typeof o.tail === 'number') {
+    t = o.tail;
+  }
+  t = Math.max(0, t);
+  const topTheta = Math.PI - Math.asin(o.tailWidth / 2 / o.radius);
+  const bottomTheta = Math.PI + Math.asin(o.tailWidth / 2 / o.radius);
+  const sideAngle = Math.PI * 2 / o.sides;
 
+  const topSideNum = Math.floor(topTheta / sideAngle);
+  const bottomSideNum = Math.floor(bottomTheta / sideAngle);
+
+  const points = getPolygonPoints({
+    radius: o.radius,
+    sides: o.sides,
+    sidesToDraw: o.sides,
+    rotation: 0,
+    offset: new Point(-o.radius, 0),
+    direction: 1,
+  });
+  const topSide = new Line(
+    points[topSideNum], points[topSideNum + 1],
+  );
+  const bottomSide = new Line(
+    points[bottomSideNum], points[bottomSideNum + 1],
+  );
+  const hLineTop = new Line([-o.radius, o.tailWidth / 2], 1, 0);
+  const hLineBottom = new Line([-o.radius, -o.tailWidth / 2], 1, 0);
+
+  const topIntersect = hLineTop.intersectsWith(topSide).intersect;
+  const bottomIntersect = hLineBottom.intersectsWith(bottomSide).intersect;
+  const outline = [
+    ...points.slice(0, topSideNum + 1),
+    topIntersect,
+    new Point(-o.radius * 2 - t, o.tailWidth / 2),
+    new Point(-o.radius * 2 - t, -o.tailWidth / 2),
+    bottomIntersect,
+    ...points.slice(bottomSideNum + 1),
+  ];
+  return outline;
+}
+
+function getPolygonLength(o: {
+  radius: number,
+  tail: boolean,
+}) {
+  if (typeof o.tail === 'boolean') {
+    return [o.radius * 2, o.radius];
+  }
+  const l = o.radius * 2 + Math.max(o.tail, 0);
+  return [l, l];
+}
+
+function getPolygonDefaults(o: {
+  radius?: number,
+  sides?: number,
+  tailWidth?: number,
+  scale?: number,
+  // tail?: number,
+}) {
+  let {
+    radius, tailWidth, scale, sides,
+  } = o;
+  scale = scale == null ? 1 : scale;
+
+  if (radius == null) {
+    if (tailWidth != null) {
+      radius = tailWidth * 3 * scale;
+    } else {
+      radius = 1;
+    }
+  }
+  if (tailWidth == null) {
+    tailWidth = radius / 3 / scale;
+  }
+  if (sides == null) {
+    sides = 30;
+  }
+  return {
+    radius, tailWidth, sides,
+  };
+}
 function getPolygonArrow(options: {
   // length: number,
   // width: number,
@@ -1146,37 +1207,63 @@ function getPolygonArrow(options: {
   rotation: number,
 }) {
   const {
-    start, end, touchBorderBuffer, tailWidth, sides, radius, rotation,
+    touchBorderBuffer, tailWidth, radius, tail,
   } = options;
 
-  const r = radius;
-
-  const s = Math.max(sides, 3);
-  const arrowBorder = getPolygonPoints({
-    radius: r,
-    rotation,
-    offset: new Point(0, 0),
-    sides: s,
-    sidesToDraw: s,
-    direction: 1,
-  });
-
-  const points = getTrisFillPolygon(new Point(0, 0), arrowBorder, s, s);
-  const borderToUse = arrowBorder;
-  let touchBorder = borderToUse;
-  if (touchBorderBuffer > 0) {
-    touchBorder = [
-      new Point(-touchBorderBuffer, -r - touchBorderBuffer),
-      new Point(r + touchBorderBuffer, -r - touchBorderBuffer),
-      new Point(r + touchBorderBuffer, r + touchBorderBuffer),
-      new Point(-touchBorderBuffer, r + touchBorderBuffer),
-    ];
+  const outline = getPolygonTail(options);
+  const points = [];
+  for (let i = 1; i < outline.length; i += 1) {
+    points.push(new Point(-radius, 0));
+    points.push(outline[i - 1]);
+    points.push(outline[i]);
   }
-  const tail = [
-    new Point(0, tailWidth / 2),
-    new Point(0, -tailWidth / 2),
-  ];
-  return orientArrow(points, borderToUse, touchBorder, start, end, tail);
+  points.push(new Point(-radius, 0));
+  points.push(outline[outline.length - 1]);
+  points.push(outline[0]);
+  // console.log(outline)
+  // console.log(points)
+  // const r = radius;
+
+  // const s = Math.max(sides, 3);
+  // const arrowBorder = getPolygonPoints({
+  //   radius: r,
+  //   rotation,
+  //   offset: new Point(0, 0),
+  //   sides: s,
+  //   sidesToDraw: s,
+  //   direction: 1,
+  // });
+
+  // const points = getTrisFillPolygon(new Point(0, 0), outline, s, s);
+  // const borderToUse = arrowBorder;
+  // let touchBorder = outline;
+  // if (touchBorderBuffer > 0) {
+  //   touchBorder = [
+  //     new Point(-touchBorderBuffer, -r - touchBorderBuffer),
+  //     new Point(r + touchBorderBuffer, -r - touchBorderBuffer),
+  //     new Point(r + touchBorderBuffer, r + touchBorderBuffer),
+  //     new Point(-touchBorderBuffer, r + touchBorderBuffer),
+  //   ];
+  // }
+  let t = 0;
+  let tailJoin;
+  if (tail === false) {
+    tailJoin = [new Point(-radius, tailWidth / 2), new Point(-radius, -tailWidth / 2)];
+  } else {
+    if (typeof tail === 'number') {
+      t = Math.max(tail, 0);
+    }
+    tailJoin = [new Point(-radius - t, tailWidth / 2), new Point(-radius - t, -tailWidth / 2)];
+  }
+  // const tail = [
+  //   new Point(0, tailWidth / 2),
+  //   new Point(0, -tailWidth / 2),
+  // ];
+  let touchBorder = outline;
+  if (touchBorderBuffer > 0) {
+    touchBorder = getTouchBorder(radius * 2 + t, radius * 2, touchBorderBuffer);
+  }
+  return [points, outline, touchBorder, tailJoin];
 }
 
 
@@ -1192,7 +1279,7 @@ function getArrowLength(options: {
     head, width, length, tailWidth, radius, tail,
   } = options;
   if (head === 'circle' || head === 'polygon') {
-    return radius;
+    return getPolygonLength(options);
   }
   if (head === 'line') {
     // const line = new Line([0, -width / 2], [length, 0]);
@@ -1283,20 +1370,22 @@ function defaultArrowOptions(
       // reverse: false,
     });
   }
-  if (o.head === 'polygon') {
-    return joinObjects({}, defaults, {
-      radius: o.tailWidth * scale / 2,
-      sides: 4,
-      rotation: 0,
-    });
+  if (o.head === 'polygon' || o.head === 'circle') {
+    return getPolygonDefaults(o);
+    // return joinObjects({}, defaults, {
+    //   radius: o.tailWidth * scale / 2,
+    //   sides: 4,
+    //   rotation: 0,
+    // });
+
   }
-  if (o.head === 'circle') {
-    return joinObjects({}, defaults, {
-      radius: o.tailWidth * scale / 2,
-      sides: 30,
-      rotation: 0,
-    });
-  }
+  // if (o.head === 'circle') {
+  //   return joinObjects({}, defaults, {
+  //     radius: o.tailWidth * scale / 2,
+  //     sides: 30,
+  //     rotation: 0,
+  //   });
+  // }
   if (o.head === 'barb') {
     return getBarbDefaults(o);
   }
@@ -1306,12 +1395,12 @@ function defaultArrowOptions(
   if (o.head === 'bar') {
     return getBarDefaults(o);
   }
-  if (o.head === 'bar') {
-    return joinObjects({}, defaults, {
-      width: o.tailWidth * scale,
-      length: o.tailWidth,
-    });
-  }
+  // if (o.head === 'bar') {
+  //   return joinObjects({}, defaults, {
+  //     width: o.tailWidth * scale,
+  //     length: o.tailWidth,
+  //   });
+  // }
   if (o.head === 'line') {
     return getLineDefaults(o);
     // return joinObjects({}, defaults, {
