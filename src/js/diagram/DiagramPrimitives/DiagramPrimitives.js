@@ -1806,6 +1806,7 @@ export default class DiagramPrimitives {
    */
   generic(...optionsIn: Array<OBJ_Generic>) {
     const defaultOptions = {
+      name: '',
       points: [],
       border: 'rect',
       touchBorder: 'border',
@@ -1868,6 +1869,8 @@ export default class DiagramPrimitives {
     ) {
       element.drawingObject.change(points, b, tB, h, copy);
     };
+
+    element.name = options.name;
 
     setupPulse(element, options);
 
@@ -2429,29 +2432,62 @@ export default class DiagramPrimitives {
   arrow(...options: Array<OBJ_Arrow & OBJ_Generic>) {
     const defaultOptions = {
       head: 'triangle',
-      length: 1,
+      // length: 1,
       width: 1,
       sides: 20,
       radius: 0.5,
-      start: [0, 0],
+      rotation: 0,
+      // start: [0, 0],
       angle: 0,
       transform: new Transform('line').standard(),
       border: 'outline',
       touchBorder: 'border',
+      align: 'tip',
+      tail: false,
+      drawPosition: new Point(0, 0),
     };
     const optionsToUse = processOptions(defaultOptions, ...options);
     const processArrowOptions = (ao) => {
-      ao.start = getPoint(ao.start);
-      ao.end = new Point(
-        ao.start.x + ao.length * Math.cos(ao.angle),
-        ao.start.y + ao.length * Math.sin(ao.angle),
-      );
+      // ao.start = getPoint(ao.start);      
+      if (ao.head === 'bar' && ao.length == null) {
+        ao.length = ao.lineWidth;
+      } else if (ao.length == null) {
+        ao.length = 1;
+      }
+
       if (ao.head === 'barb' && ao.barb == null) {
         ao.barb = ao.length / 3;
       }
-      if (ao.head === 'line' && ao.lineWidth == null) {
+      if (ao.lineWidth == null) {
         ao.lineWidth = ao.width / 5;
       }
+      if (ao.drawPosition != null) {
+        ao.drawPosition = getPoint(ao.drawPosition);
+      }
+      
+      // if (ao.start == null && ao.tip != null) {
+      //   ao.start = new Point(
+      //     ao.tip.x + ao.length * Math.cos(ao.angle + Math.PI),
+      //     ao.tip.y + ao.length * Math.sin(ao.angle + Math.PI),
+      //   );
+      // }
+      // if (ao.start != null && ao.tip == null) {
+      //   ao.tip = new Point(
+      //     ao.start.x + ao.length * Math.cos(ao.angle + Math.PI),
+      //     ao.start.y + ao.length * Math.sin(ao.angle + Math.PI),
+      //   );
+      // }
+      // if (ao.start == null && ao.tip == null) {
+      //   ao.tip = new Point(0, 0);
+      //   ao.start = new Point(
+      //     ao.tip.x + ao.length * Math.cos(ao.angle + Math.PI),
+      //     ao.tip.y + ao.length * Math.sin(ao.angle + Math.PI),
+      //   );
+      // }
+      // ao.end = new Point(
+      //   ao.start.x + ao.length * Math.cos(ao.angle),
+      //   ao.start.y + ao.length * Math.sin(ao.angle),
+      // );
     };
     processArrowOptions(optionsToUse);
     // optionsToUse.start = getPoint(optionsToUse.start);
@@ -2460,9 +2496,23 @@ export default class DiagramPrimitives {
     //   optionsToUse.start.y + optionsToUse.length * Math.sin(optionsToUse.angle),
     // );
     // console.log(optionsToUse.end)
-    const [points, border] = getArrow(optionsToUse);
+    const [points, border, touchBorder] = getArrow(optionsToUse);
+    console.log(optionsToUse)
+    let borderToUse = optionsToUse.border;
 
-    const element = this.generic({}, { points, border }, optionsToUse);
+    if (optionsToUse.border === 'outline') {
+      borderToUse = [border];
+    }
+    // if (optionsToUse.touchBorder === 'outline') {
+    //   touchBorderToUse = border;
+    // }
+    // console.log(points)
+    // console.log(border)
+    // console.log(touchBorder)
+    const element = this.generic({}, optionsToUse, {
+      points,
+      border: borderToUse,
+    });
 
     element.custom.update = (updateOptions) => {
       const o = joinObjects({}, optionsToUse, updateOptions);

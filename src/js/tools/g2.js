@@ -1377,6 +1377,10 @@ class Line {
     return this.p1;
   }
 
+  reverse() {
+    return new Line(this.p2, this.p1, 0, this.ends);
+  }
+
   /**
    * Get the y coordinate of a point on the line with a given x coordinate
    * @return {number | null} where `null` is returned if the line is vertical

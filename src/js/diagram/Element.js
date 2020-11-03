@@ -3684,7 +3684,6 @@ class DiagramElementPrimitive extends DiagramElement {
   }
 
 
-
   setFont(font: OBJ_Font, index: number = 0) {
     if (this.drawingObject instanceof TextObjectBase) {
       this.drawingObject.setFont(font, index);

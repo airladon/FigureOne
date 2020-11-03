@@ -17,6 +17,8 @@ import type { TypeLabelEquationOptions } from './EquationLabel';
 import { joinObjects } from '../../tools/tools';
 import { Equation } from '../DiagramElements/Equation/Equation';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
+import type { OBJ_Arrow } from '../DrawingObjects/Geometries/arrow';
+import { simplifyArrowOptions } from '../DrawingObjects/Geometries/arrow';
 
 // top - text is on top of line (except when line is vertical)
 // bottom - text is on bottom of line (except when line is vertical)
@@ -286,6 +288,8 @@ class LineLabel extends EquationLabel {
 export default class DiagramObjectAnnotatedLine extends DiagramElementCollection {
   // Diagram elements
   _line: ?DiagramElementPrimitive;
+  _startArrow:? DiagramElementPrimitive;
+  _endArrow:? DiagramElementPrimitive;
   _label: null | {
     _base: DiagramElementPrimitive;
   } & DiagramElementCollection;
@@ -297,6 +301,11 @@ export default class DiagramObjectAnnotatedLine extends DiagramElementCollection
 
   // line properties - read only
   line: Line;
+  arrow: {
+    start?: OBJ_Arrow;
+    end?: OBJ_Arrow;
+  };
+
   dash: Array<number>;
   // length: number;
   // angle: number;
@@ -384,28 +393,68 @@ export default class DiagramObjectAnnotatedLine extends DiagramElementCollection
     alignment?: 'start' | 'end' | 'center' | number | string,
   }) {
     const defaultOptions = {
-      p1: this.p1,
-      length: this.length,
-      angle: this.angle,
+      p1: this.line.getPoint(1),
+      length: this.line.length(),
+      angle: this.line.angle(),
       alignment: this.alignment,
     };
     const o = joinObjects({}, defaultOptions, options);
+    let line;
     if (o.p2 != null) {
-      this.line = new Line(o.p1, o.p2);
-      return;
+      line =  new Line(o.p1, o.p2);
+    } else {
+      let p = getPoint(o.p1);   // o.alignment = 'start'
+      if (o.alignment === 'center') {
+        p = p.sub(this.length / 2, 0);
+      } else if (o.alingment === 'end') {
+        p = p.sub(this.length, 0);
+      } else if (typeof o.alingment === 'number') {
+        p = p.sub(this.length * o.alignment);
+      } else if (typeof o.alignment === 'string' && o.alignment[0] === 'o') {
+        p = p.sub(parseFloat(o.alignment.slice(1)));
+      }
+      p = p.rotate(o.angle + Math.PI);
+      line = new Line(p, o.length, o.angle);
     }
-    let p = getPoint(o.p1);
-    if (o.alignment === 'center') {
-      p = p.sub(this.length / 2, 0);
-    } else if (o.alingment === 'end') {
-      p = p.sub(this.length, 0);
-    } else if (typeof o.alingment === 'number') {
-      p = p.sub(this.length * o.alignment);
-    } else if (typeof o.alignment === 'string' && o.alignment[0] === 'o') {
-      p = p.sub(parseFloat(o.alignment.slice(1)));
+    let p1 = line.getPoint(1);
+    let p2 = line.getPoint(2);
+    if (this.arrow != null && this.arrow.start != null) {
+      p1 = line.pointAtLength(this.arrow.start.length);
     }
-    p = p.rotate(o.angle + Math.PI);
-    this.line = new Line(p, o.length, o.angle);
+    if (this.arrow != null && this.arrow.end != null) {
+      p2 = line.pointAtLength(line.length - this.arrow.end.lenth);
+    }
+    return [
+      line,
+      new Line(p1, p2),
+      this.arrow.start.length || 0,
+      this.arrow.end.length || 0,
+    ];
+  }
+
+  updateLine(options: {
+    p1?: TypeParsablePoint,
+    p2?: TypeParsablePoint,
+    length?: number,
+    angle?: number,
+    alignment?: 'start' | 'end' | 'center' | number | string,
+    dash?: Array<number>,
+    width?: number,
+  }) {
+    const [line, arrowedLine, startArrow, endArrow] = this.getLineFromDefinition(options);
+    this.line = line;
+    this.arrowedLine = arrowedLine;
+    const horizontalLine = this.shapes.line({
+      p1: [startArrow, 0],
+      length: arrowedLine.length,
+      dash: options.dash,
+      name: 'line',
+      width: options.width == null ? this.width : options.width,
+      widthIs: 'mid',
+    });
+    this._line = horizontalLine;
+    this.setPosition(line.p1);
+    this.setRotation(line.rotation);
   }
 
   // calculateFromP1LengthAngle(
@@ -431,6 +480,14 @@ export default class DiagramObjectAnnotatedLine extends DiagramElementCollection
   //   const position = p1.sub(startTransformed);
   //   return { length, angle, position };
   // }
+
+  updateArrows(options: OBJ_Arrow | ArrowHead) {
+    this.arrow = simplifyArrowOptions(optionsToUse.arrow, optionsToUse.width);
+    this.updateLine();
+    if (this.arrow.start != null) {
+      
+    }
+  }
 
   constructor(
     shapes: Object,
@@ -479,18 +536,21 @@ export default class DiagramObjectAnnotatedLine extends DiagramElementCollection
 
     this.shapes = shapes;
     this.equation = equation;
+
+    // Default line
+    this.line = new Line([0, 0], 1, 0);
+    this.width = optionsToUse.width;
+    this.dash = optionsToUse.dash;
+    this.arrow = simplifyArrowOptions(optionsToUse.arrow, optionsToUse.width);
     // this.largerTouchBorder = optionsToUse.largerTouchBorder;
     // this.isTouchDevice = isTouchDevice;
     // this.animateNextFrame = animateNextFrame;
-    this.dash = optionsToUse.dash;
-    this.arrow = optionsToUse.arrow;
-
-    this.p1 = optionsToUse.p1;
-    this.p2 = optionsToUse.p2;
-    this.length = optionsToUse.length;
-    this.p1 = optionsToUse.p1;
-    this.p1 = optionsToUse.p1;
-    this.p1 = optionsToUse.p1;
+    // this.p1 = optionsToUse.p1;
+    // this.p2 = optionsToUse.p2;
+    // this.length = optionsToUse.length;
+    // this.p1 = optionsToUse.p1;
+    // this.p1 = optionsToUse.p1;
+    // this.p1 = optionsToUse.p1;
     this.getLineFromDefinitions(optionsToUse);
     // this.maxLength = optionsToUse.maxLength;
 

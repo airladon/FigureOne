@@ -136,18 +136,33 @@ diagram.addElements([
     name: 'c',
     method: 'shapes.collection',
     addElements: [
+      // {
+      //   name: 'p1',
+      //   method: 'polygon',
+      //   options: {
+      //     position: [-1, 0],
+      //   },
+      // },
       {
-        name: 'p1',
-        method: 'polygon',
+        name: 'l',
+        method: 'shapes.polyline',
         options: {
-          position: [-1, 0],
-        },
+          points: [[0.1, 0.1], [1, 1], [0.5, 0.7], [1, 1.5]],
+          arrow: 'triangle',
+          dash: [0.1, 0.1],
+        }
       },
       {
         name: 'p2',
-        method: 'polygon',
+        method: 'arrow',
         options: {
-          position: [1, 0],
+          head: 'triangle',
+          align: 'start',
+          angle: Math.PI / 4,
+          position: [-1, 0],
+          // position: [1, 0],
+          // tip: [1, 0],
+          // angle: Math.PI / 2 * 3,
         },
       },
     ],
