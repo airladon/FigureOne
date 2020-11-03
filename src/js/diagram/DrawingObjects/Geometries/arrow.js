@@ -916,12 +916,15 @@ function getLineTail(o: {
   }
   let stubTail = false;
   if (t < 0) {
-    if (-t > insideIntersect.x) {
+    if (-o.length - t > insideIntersect.x) {
       tailX = insideIntersect.x;
       stubTail = true;
     } else {
       tailX = -o.length - t;
     }
+  }
+  if (o.tail === false) {
+    tailX = zeroPoint;
   }
   return [
     new Point(outsideIntersect.x, o.tailWidth / 2),
