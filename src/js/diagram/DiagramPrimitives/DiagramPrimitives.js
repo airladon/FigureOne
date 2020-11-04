@@ -44,18 +44,19 @@ import Text from '../DiagramElements/Text';
 // } from '../DrawingObjects/TextObject/TextObject';
 
 import {
-  TextObject, TextLineObject, TextLinesObject, DiagramFont,
+  TextObject, TextLineObject, TextLinesObject,
 } from '../DrawingObjects/TextObject/TextObject';
 import type {
   OBJ_Font,
 } from '../DrawingObjects/TextObject/TextObject';
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
-import { makePolyLine, makePolyLineCorners, makeArrows } from '../DrawingObjects/Geometries/lines/lines';
+import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
 import { getPolygonPoints, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle';
 import { getTriangle } from '../DrawingObjects/Geometries/triangle';
 import { getArrow, defaultArrowOptions } from '../DrawingObjects/Geometries/arrow';
+import type { OBJ_LineArrows } from '../DrawingObjects/Geometries/arrow';
 import getLine from '../DrawingObjects/Geometries/line';
 import type {
   OBJ_Copy,
@@ -354,7 +355,7 @@ export type OBJ_CurvedCorner = {
  * length of gap and then the pattern repeats - can use more than one dash length
  * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
  * short gap, short dash, short gap and then repeats.
- * @property {OBJ_Arrow | ArrowHead} [arrow] either an object defining custom
+ * @property {OBJ_LineArrows | ArrowHead} [arrow] either an object defining custom
  * arrows or a string representing the name of an arrow head style can be used.
  * If a string is used, then the line will have an arrow at both ends.
  * Arrows are only available for `close: false`,
@@ -466,7 +467,7 @@ export type OBJ_Polyline = {
   forceCornerLength?: boolean,
   minAutoCornerAngle?: number,
   dash?: Array<number>,
-  arrow?: OBJ_Arrow | ArrowHead,
+  arrow?: OBJ_LineArrows | ArrowHead,
   color?: Array<number>,
   texture?: OBJ_Texture,
   pulse?: number,
@@ -930,7 +931,7 @@ export type OBJ_Triangle = {
  * length of gap and then the pattern repeats - can use more than one dash length
  * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
  * short gap, short dash, short gap and then repeats.
- * @property {OBJ_Arrow | ArrowHead} [arrow] either an object defining custom
+ * @property {OBJ_LineArrows | ArrowHead} [arrow] either an object defining custom
  * arrows or a string representing the name of an arrow head style can be used.
  * If a string is used, then the line will have an arrow at both ends.
  * Arrows are only available for `widthIs: 'mid'` and `linePrimitives: false`
@@ -1013,7 +1014,7 @@ export type OBJ_Line = {
   width?: number,
   widthIs?: 'positive' | 'negative' | 'mid',
   dash?: Array<number>,
-  arrow?: OBJ_Arrow | ArrowHead,
+  arrow?: OBJ_LineArrows | ArrowHead,
   copy?: OBJ_Copy | Array<OBJ_Copy>,
   color?: Array<number>,
   texture?: OBJ_Texture,
@@ -1125,6 +1126,148 @@ export type OBJ_Grid = {
   transform?: Transform,
   pulse?: OBJ_PulseScale | number,
 }
+
+/**
+ * Arrow options object.
+ *
+ * ![](./assets1/arrow_heads.png)
+ *
+ * An arrow has a head, tail, length and width. The `head` defines the head
+ * style of the arrow. The `length`, `width` (or `radius` for polygon and circle
+ * head styles) define the size of the arrow and `tail` defines wether it has a
+ * tail and how long it is.
+ *
+ * All properties have default values that can be scaled with the `scale`
+ * property. So a `scale` of 2 will double the size of the default arrow.
+ *
+ * An arrow can be aligned and oriented with `align` and `angle`. `align`
+ * positions the tip, start, tail or middle part of the arrow at (0, 0) in
+ * draw space. This part of the arrow will therefore be at the `position`
+ * or translation of the `transform`. `angle` then gives the arrow some drawn
+ * rotation.
+ *
+ * Alignment definitions are:
+ * - `tip`: arrow tip
+ * - `start`: opposite side of `tip`
+ * - `mid`: mid points between `start` and `tip` - useful for polygon, circle
+ *   and bar arrows without tails when the head should be on a point, not next
+ *   to it
+ * - `tail`: the end of the tail when a tail exists, or where a tail would start
+ *   if it doesn't exist.
+ *
+ * Setting the `tail` property to `false` will draw only the arrow head,
+ * `true` will draw a tail of length 0, and a tail with a custom length
+ * can be defined with a `number`. A tail length of 0 will only extend a tail
+ * to the boundaries of the head. A positive tail, will extend it beyond the
+ * boundaries.
+ *
+ * For arrow heads that use `length` and `width` properties, the `length` is the
+ * dimension along the line. It includes both the head and the tail, so an arrow
+ * with length 1 and tailLength 0.4 will have a head length of 0.6.
+ *
+ * For `polygon` and `circle` arrows, only `radius` and `tail` are used to
+ * determine the dimension of the arrow (`length` and `width` are ignored).
+ *
+ * @property {ArrowHead} [head] head style (`'triangle'`)
+ * @property {number} [scale] scale the default dimensions of the arrow
+ * @property {number} [length] dimension of the arrow head along the line
+ * @property {number} [width] dimension of the arrow head along the line width
+ * @property {number} [rotation] rotation of the polygon when `head = 'polygon'`
+ * @property {number} [sides] number of sides in polygon or circle arrow head
+ * @property {number} [radius] radius of polygon or circle arrow head
+ * @property {number} [barb] barb length (along the length of the line) of the
+ * barb arrow head
+ * @property {number} [tailWidth] width of the line that joins the arrow - if
+ * defined this will create minimum dimensions for the arrow
+ * @property {boolean | number} [tail] `true` includes a tail in the arrow of
+ * with `tailWidth`. A `number` gives the tail a length where 0 will not
+ * extend the tail beyond the boundaries of the head
+ * @property {'tip' | 'start' | 'mid' | 'tail'} [align] define which part of
+ * the arrow is aligned at (0, 0) in draw space (`'tip'`)
+ * @property {number} [angle] angle the arrow is drawn at (`0`)
+ * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
+ * the arrow
+ * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {OBJ_Texture} [texture] Override color with a texture
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('arrow').standard()`)
+ * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ *
+ * @example
+ * // Triangle arrow with tail
+ * diagram.addElement({
+ *   name: 'a',
+ *   method: 'arrow',
+ *   options: {
+ *     head: 'triangle',
+ *     tail: 0.15,
+ *     length: 0.5,
+ *   },
+ * });
+ *
+ * @example
+ * // Barb arrow with 0 tail
+ * diagram.addElement({
+ *   name: 'a',
+ *   method: 'arrow',
+ *   options: {
+ *     head: 'barb',
+ *     angle: Math.PI / 2,
+ *     tail: 0,
+ *   },
+ * });
+ *
+ * @example
+ * // Create a vector map with arrows by copying an original arrow by a
+ * // transforms defining the position, rotation and scale of the arrows
+ *
+ * // Create transforms to apply to each arrow
+ * const r = Fig.range(0, Math.PI / 2, Math.PI / 18);
+ * const x = [0, 1, 2, 0, 1, 2, 0, 1, 2];
+ * const y = [0, 0, 0, 1, 1, 1, 2, 2, 2];
+ * const s = [0.5, 0.8, 0.4, 0.6, 0.8, 0.6, 0.5, 0.8, 0.6];
+ * const transforms = [];
+ * for (let i = 0; i < 9; i += 1) {
+ *   transforms.push(new Fig.Transform().scale(s[i], s[i]).rotate(r[i]).translate(x[i], y[i]));
+ * }
+ *
+ * // Create arrow and copy to transforms
+ * diagram.addElement({
+ *   name: 'a',
+ *   method: 'arrow',
+ *   options: {
+ *     head: 'barb',
+ *     align: 'mid',
+ *     length: 0.7,
+ *     copy: {
+ *       to: transforms,
+ *       original: false,
+ *     },
+ *   },
+ * });
+ */
+export type OBJ_Arrow = {
+  head?: ArrowHead,
+  scale?: number,
+  length?: number,
+  width?: number,
+  rotation?: number,
+  sides?: number,
+  radius?: number,
+  barb?: number,
+  tailWidth?: number,
+  tail?: boolean,
+  align?: 'tip' | 'start' | 'mid' | 'tail',
+  angle?: number,
+  // position: TypeParsablePoint,
+  copy?: OBJ_Copy | Array<OBJ_Copy>,
+  color?: Array<number>,
+  texture?: OBJ_Texture,
+  position?: TypeParsablePoint,
+  transform?: Transform,
+  pulse?: OBJ_PulseScale | number,
+}
+
 
 /**
  * Text Definition object
@@ -1606,6 +1749,7 @@ export type TypeRepeatPatternVertex = {
   position?: Point,
   transform?: Transform,
 };
+
 
 // export type TypePointTransforms = {
 //   offset?: TypeParsablePoint,
@@ -2390,73 +2534,22 @@ export default class DiagramPrimitives {
         holeBorder: o.holeBorder,
       }));
     };
-    // const { border } = optionsToUse;
-    // if (border != null) {
-    //   const borderPoints = getLineBorder({
-    //     p1,
-    //     p2,
-    //     width: border.width,
-    //     length: border.length,
-    //   });
-    //   element.drawingObject.border = [borderPoints];
-    // }
     return element;
-    // let element;
-    // if (optionsToUse.line == null) {
-    //   element = this.generic(optionsToUse, {
-    //     points: border,
-    //     border: [border.map(b => b._dup())],
-    //   });
-    //   element.custom.update = (updateOptions) => {
-    //     const o = joinObjects({}, optionsToUse, updateOptions);
-    //     const updatedBorder = getTriangle(o);
-    //     element.drawingObject.change(
-    //       updatedBorder, [updatedBorder.map(b => b._dup())], [],
-    //     );
-    //   };
-    // } else {
-    //   element = this.polyline(optionsToUse, optionsToUse.line, {
-    //     points: border,
-    //     close: true,
-    //     border: [border.map(b => b._dup())],
-    //   });
-    //   element.custom.update = (updateOptions) => {
-    //     const o = joinObjects({}, optionsToUse, updateOptions);
-    //     const updatedBorder = getRectangleBorder(o);
-    //     element.custom.updatePoints(updatedBorder);
-    //   };
-    // }
-    // return element;
   }
 
-  arrow(...options: Array<OBJ_Arrow & OBJ_Generic>) {
-    const joinedOptions = joinObjects({}, {
-      head: 'triangle',
-      scale: 1,
-    }, ...options);
-    // if (
-    //   joinedOptions.length == null
-    //   && joinedOptions.width == null
-    //   && joinedOptions.lineWidth == null
-    // ) {
-    //   joinedOptions.lineWidth = 0.1;
-    // } else if (
-    //   joinedOptions.width == null
-    //   && joinedOptions.lineWidth == null
-    //   joinedOptions.lineWidth = joinedOptions.length
-    // )
-    // const defaultArrow = defaultArrowOptions()
+  /**
+   * {@link DiagramElementPrimitive} that draws a line.
+   * @see {@link OBJ_Arrow} for options and examples.
+   */
+  arrow(...options: Array<OBJ_Arrow>) {
     const defaultOptions = joinObjects(
       {},
       defaultArrowOptions(joinObjects({}, ...options)),
       {
         head: 'triangle',
-        // length: 1,
-        // width: 1,
         sides: 20,
         radius: 0.5,
         rotation: 0,
-        // start: [0, 0],
         angle: 0,
         transform: new Transform('line').standard(),
         border: 'outline',
@@ -2468,70 +2561,15 @@ export default class DiagramPrimitives {
     );
 
     const optionsToUse = processOptions(defaultOptions, ...options);
-    const processArrowOptions = (ao) => {
-
-      // ao.start = getPoint(ao.start);
-      // if (ao.tailWidth == null) {
-      //   ao.tailWidth = ao.width / 5;
-      // }
-      // if (ao.head === 'bar' && ao.length == null) {
-      //   ao.length = ao.tailWidth;
-      // } else if (ao.length == null) {
-      //   ao.length = 1;
-      // }
-
-      // if (ao.head === 'barb' && ao.barb == null) {
-      //   ao.barb = ao.length / 3;
-      // }
-
-      if (ao.drawPosition != null) {
-        ao.drawPosition = getPoint(ao.drawPosition);
-      }
-      // if (ao.start == null && ao.tip != null) {
-      //   ao.start = new Point(
-      //     ao.tip.x + ao.length * Math.cos(ao.angle + Math.PI),
-      //     ao.tip.y + ao.length * Math.sin(ao.angle + Math.PI),
-      //   );
-      // }
-      // if (ao.start != null && ao.tip == null) {
-      //   ao.tip = new Point(
-      //     ao.start.x + ao.length * Math.cos(ao.angle + Math.PI),
-      //     ao.start.y + ao.length * Math.sin(ao.angle + Math.PI),
-      //   );
-      // }
-      // if (ao.start == null && ao.tip == null) {
-      //   ao.tip = new Point(0, 0);
-      //   ao.start = new Point(
-      //     ao.tip.x + ao.length * Math.cos(ao.angle + Math.PI),
-      //     ao.tip.y + ao.length * Math.sin(ao.angle + Math.PI),
-      //   );
-      // }
-      // ao.end = new Point(
-      //   ao.start.x + ao.length * Math.cos(ao.angle),
-      //   ao.start.y + ao.length * Math.sin(ao.angle),
-      // );
-    };
-    processArrowOptions(optionsToUse);
-    // optionsToUse = joinObjects({}, defaultArrowOptions(optionsToUse), optionsToUse);
-    // optionsToUse.start = getPoint(optionsToUse.start);
-    // optionsToUse.end = new Point(
-    //   optionsToUse.start.x + optionsToUse.length * Math.cos(optionsToUse.angle),
-    //   optionsToUse.start.y + optionsToUse.length * Math.sin(optionsToUse.angle),
-    // );
-    // console.log(optionsToUse.end)
-    const [points, border, touchBorder] = getArrow(optionsToUse);
-    // console.log(optionsToUse)
+    if (optionsToUse.drawPosition != null) {
+      optionsToUse.drawPosition = getPoint(optionsToUse.drawPosition);
+    }
+    const [points, border] = getArrow(optionsToUse);
     let borderToUse = optionsToUse.border;
 
     if (optionsToUse.border === 'outline') {
       borderToUse = [border];
     }
-    // if (optionsToUse.touchBorder === 'outline') {
-    //   touchBorderToUse = border;
-    // }
-    // console.log(points)
-    // console.log(border)
-    // console.log(touchBorder)
     const element = this.generic({}, optionsToUse, {
       points,
       border: borderToUse,
@@ -2539,7 +2577,9 @@ export default class DiagramPrimitives {
 
     element.custom.update = (updateOptions) => {
       const o = joinObjects({}, optionsToUse, updateOptions);
-      processArrowOptions(o);
+      if (o.drawPosition != null) {
+        o.drawPosition = getPoint(o.drawPosition);
+      }
       const [updatedPoints, updatedBorder, updatedTouchBorder] = getArrow(o);
       element.drawingObject.change(
         updatedPoints, updatedBorder, updatedTouchBorder, o.holeBorder,

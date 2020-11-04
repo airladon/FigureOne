@@ -1230,6 +1230,16 @@
               
                 
                 <li><a
+                  href='#obj_arrow'
+                  class="">
+                  OBJ_Arrow
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_triangle'
                   class="">
                   OBJ_Triangle
@@ -2527,6 +2537,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#diagramprimitivesarrow'
+                        class='regular pre-open'>
+                        #arrow
+                      </a></li>
+                      
+                      <li><a
                         href='#diagramprimitivestextline'
                         class='regular pre-open'>
                         #textLine
@@ -2820,9 +2836,9 @@
               
                 
                 <li><a
-                  href='#obj_arrow'
+                  href='#obj_linearrow'
                   class="">
-                  OBJ_Arrow
+                  OBJ_LineArrow
                   
                 </a>
                 
@@ -2830,9 +2846,9 @@
               
                 
                 <li><a
-                  href='#obj_arrows'
+                  href='#obj_linearrows'
                   class="">
-                  OBJ_Arrows
+                  OBJ_LineArrows
                   
                 </a>
                 
@@ -3441,6 +3457,16 @@
                   href='#typeequationtextelement'
                   class="">
                   TypeEquationTextElement
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_arrowlegacy'
+                  class="">
+                  OBJ_ArrowLegacy
                   
                 </a>
                 
@@ -6469,6 +6495,33 @@ primitives or collections.</p>
             = <code>null</code>)</code>
 	    parent element
 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>border</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)
+            = <code>&#39;children&#39;</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code>)
+            = <code>&#39;border&#39;</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>holeBorder</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>>
+            = <code>[[]]</code>)</code>
+	    
           </div>
           
         </div>
@@ -14872,7 +14925,7 @@ short gap, short dash, short gap and then repeats.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_arrow">OBJ_Arrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
+          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_linearrows">OBJ_LineArrows</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
           : either an object defining custom
 arrows or a string representing the name of an arrow head style can be used.
 If a string is used, then the line will have an arrow at both ends.
@@ -15294,7 +15347,7 @@ short gap, short dash, short gap and then repeats.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_arrow">OBJ_Arrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
+          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_linearrows">OBJ_LineArrows</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
           : either an object defining custom
 arrows or a string representing the name of an arrow head style can be used.
 If a string is used, then the line will have an arrow at both ends.
@@ -15534,6 +15587,296 @@ diagram.addElement({
         <span class="hljs-attr">reverse</span>: <span class="hljs-literal">true</span>,
       },
       <span class="hljs-attr">end</span>: <span class="hljs-string">'barb'</span>,
+    },
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_arrow'>
+      OBJ_Arrow
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Arrow options object.</p>
+<p><img src="./assets1/arrow_heads.png"></p>
+<p>An arrow has a head, tail, length and width. The <code>head</code> defines the head
+style of the arrow. The <code>length</code>, <code>width</code> (or <code>radius</code> for polygon and circle
+head styles) define the size of the arrow and <code>tail</code> defines wether it has a
+tail and how long it is.</p>
+<p>All properties have default values that can be scaled with the <code>scale</code>
+property. So a <code>scale</code> of 2 will double the size of the default arrow.</p>
+<p>An arrow can be aligned and oriented with <code>align</code> and <code>angle</code>. <code>align</code>
+positions the tip, start, tail or middle part of the arrow at (0, 0) in
+draw space. This part of the arrow will therefore be at the <code>position</code>
+or translation of the <code>transform</code>. <code>angle</code> then gives the arrow some drawn
+rotation.</p>
+<p>Alignment definitions are:</p>
+<ul>
+<li><code>tip</code>: arrow tip</li>
+<li><code>start</code>: opposite side of <code>tip</code></li>
+<li><code>mid</code>: mid points between <code>start</code> and <code>tip</code> - useful for polygon, circle
+and bar arrows without tails when the head should be on a point, not next
+to it</li>
+<li><code>tail</code>: the end of the tail when a tail exists, or where a tail would start
+if it doesn't exist.</li>
+</ul>
+<p>Setting the <code>tail</code> property to <code>false</code> will draw only the arrow head,
+<code>true</code> will draw a tail of length 0, and a tail with a custom length
+can be defined with a <code>number</code>. A tail length of 0 will only extend a tail
+to the boundaries of the head. A positive tail, will extend it beyond the
+boundaries.</p>
+<p>For arrow heads that use <code>length</code> and <code>width</code> properties, the <code>length</code> is the
+dimension along the line. It includes both the head and the tail, so an arrow
+with length 1 and tailLength 0.4 will have a head length of 0.6.</p>
+<p>For <code>polygon</code> and <code>circle</code> arrows, only <code>radius</code> and <code>tail</code> are used to
+determine the dimension of the arrow (<code>length</code> and <code>width</code> are ignored).</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>head</span> <code class='quiet'>(<a href="#arrowhead">ArrowHead</a>?)</code>
+          : head style (
+<code>'triangle'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale the default dimensions of the arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : dimension of the arrow head along the line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : dimension of the arrow head along the line width
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : rotation of the polygon when 
+<code>head = 'polygon'</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in polygon or circle arrow head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : radius of polygon or circle arrow head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>barb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : barb length (along the length of the line) of the
+barb arrow head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tailWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : width of the line that joins the arrow - if
+defined this will create minimum dimensions for the arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tail</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : <code>true</code>
+ includes a tail in the arrow of
+with 
+<code>tailWidth</code>
+. A 
+<code>number</code>
+ gives the tail a length where 0 will not
+extend the tail beyond the boundaries of the head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>align</span> <code class='quiet'>((<code>"tip"</code> | <code>"start"</code> | <code>"mid"</code> | <code>"tail"</code>)?)</code>
+          : define which part of
+the arrow is aligned at (0, 0) in draw space (
+<code>'tip'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : angle the arrow is drawn at (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
+          : make copies of
+the arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
+          : Override color with a texture
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : convenience to override Transform translation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
+          : (
+<code>Transform('arrow').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
+          : set the default pulse scale
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Triangle arrow with tail</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'arrow'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">head</span>: <span class="hljs-string">'triangle'</span>,
+    <span class="hljs-attr">tail</span>: <span class="hljs-number">0.15</span>,
+    <span class="hljs-attr">length</span>: <span class="hljs-number">0.5</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Barb arrow with 0 tail</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'arrow'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">head</span>: <span class="hljs-string">'barb'</span>,
+    <span class="hljs-attr">angle</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>,
+    <span class="hljs-attr">tail</span>: <span class="hljs-number">0</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create a vector map with arrows by copying an original arrow by a</span>
+<span class="hljs-comment">// transforms defining the position, rotation and scale of the arrows</span>
+
+<span class="hljs-comment">// Create transforms to apply to each arrow</span>
+<span class="hljs-keyword">const</span> r = Fig.range(<span class="hljs-number">0</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">18</span>);
+<span class="hljs-keyword">const</span> x = [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>];
+<span class="hljs-keyword">const</span> y = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>];
+<span class="hljs-keyword">const</span> s = [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.6</span>];
+<span class="hljs-keyword">const</span> transforms = [];
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">9</span>; i += <span class="hljs-number">1</span>) {
+  transforms.push(<span class="hljs-keyword">new</span> Fig.Transform().scale(s[i], s[i]).rotate(r[i]).translate(x[i], y[i]));
+}
+
+<span class="hljs-comment">// Create arrow and copy to transforms</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'arrow'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">head</span>: <span class="hljs-string">'barb'</span>,
+    <span class="hljs-attr">align</span>: <span class="hljs-string">'mid'</span>,
+    <span class="hljs-attr">length</span>: <span class="hljs-number">0.7</span>,
+    <span class="hljs-attr">copy</span>: {
+      <span class="hljs-attr">to</span>: transforms,
+      <span class="hljs-attr">original</span>: <span class="hljs-literal">false</span>,
     },
   },
 });</pre>
@@ -23912,7 +24255,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>prevForm(duration, delay)</span>
+            <span class='code strong strong truncate'>prevForm(durationOrOptions, delay)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -23938,7 +24281,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>duration</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null | <a href="#typeequationgotoformoptions">TypeEquationGoToFormOptions</a>)
             = <code>null</code>)</code>
 	    
           </div>
@@ -23983,7 +24326,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>nextForm(duration, delay)</span>
+            <span class='code strong strong truncate'>nextForm(durationOrOptions, delay)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -24009,7 +24352,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>duration</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null | <a href="#typeequationgotoformoptions">TypeEquationGoToFormOptions</a>)
             = <code>null</code>)</code>
 	    
           </div>
@@ -33820,6 +34163,76 @@ touched
       </div>
     </div>
   
+    <div class='border-bottom' id='diagramprimitivesarrow'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>arrow(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p><a href="#diagramelementprimitive">DiagramElementPrimitive</a> that draws a line.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_arrow">OBJ_Arrow</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#obj_arrow">OBJ_Arrow</a>
+ for options and examples.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='diagramprimitivestextline'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -34060,7 +34473,7 @@ touched
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>transformOrPointOrOptions</span> <code class='quiet'>((<a href="#transform">Transform</a> | <a href="#point">Point</a> | {transform: <a href="#transform">Transform</a>?, position: <a href="#point">Point</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?})
+            <span class='code bold'>transformOrPointOrOptions</span> <code class='quiet'>((<a href="#transform">Transform</a> | <a href="#point">Point</a> | {transform: <a href="#transform">Transform</a>?, position: <a href="#point">Point</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, border: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), touchBorder: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code> | <code>"children"</code>), holeBorder: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code>)})
             = <code>{}</code>)</code>
 	    
           </div>
@@ -34069,7 +34482,7 @@ touched
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>moreOptions</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;{transform: <a href="#transform">Transform</a>?, position: <a href="#point">Point</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}>)</code>
+            <span class='code bold'>moreOptions</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;{transform: <a href="#transform">Transform</a>?, position: <a href="#point">Point</a>?, color: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, border: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), touchBorder: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code> | <code>"children"</code>), holeBorder: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code>)}>)</code>
 	    
           </div>
           
@@ -36529,7 +36942,7 @@ diagram.addElement({
 
   
     <p style="display: none;">      Type:
-      (<code>"triangle"</code> | <code>"circle"</code> | <code>"line"</code> | <code>"barb"</code> | <code>"bar"</code> | <code>"polygon"</code> | <code>"rectangle"</code>)
+      (<code>"triangle"</code> | <code>"circle"</code> | <code>"line"</code> | <code>"barb"</code> | <code>"bar"</code> | <code>"polygon"</code> | <code>"reverseTriangle"</code>)
     </p>
   
   
@@ -36579,45 +36992,23 @@ diagram.addElement({
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_arrow'>
-      OBJ_Arrow
+    <h3 class='fl m0' id='obj_linearrow'>
+      OBJ_LineArrow
     </h3>
     
     
   </div>
   
 
-  <p>Arrow options object.</p>
-<p>Lines and polylines can be terminated with different styles of arrows. The
-<code>head</code> parameter is used to define the style of arrow head.</p>
-<h3><code>head: 'triangle'</code></h3>
-<p><img src="./assets1/arrow_triangle.png"></p>
-<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
-<p>Use <code>reverse</code> to reverse the triangle:</p>
-<p><img src="./assets1/arrow_reversetri.png"></p>
-<h3><code>head: 'barb'</code></h3>
-<p><img src="./assets1/arrow_barb.png"></p>
-<p>Use <code>length</code>, <code>width</code> and <code>barb</code> to customize head shape.</p>
-<h3><code>head: 'line'</code></h3>
+  <p>Arrow end for a line or polyline.</p>
 <p><img src="./assets1/arrow_line.png"></p>
-<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
-<h3><code>head: 'circle'</code></h3>
-<p><img src="./assets1/arrow_circle.png"></p>
-<p>Use <code>radius</code> and <code>sides</code> to customize head shape.</p>
-<h3><code>head: 'polygon'</code></h3>
-<p><img src="./assets1/arrow_polygon.png"></p>
-<p>Use <code>radius</code>, <code>sides</code> and <code>rotation</code> to customize head shape.</p>
-<h3><code>head: 'bar'</code></h3>
-<p><img src="./assets1/arrow_bar.png"></p>
-<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
-<h3><code>head: 'rectangle'</code></h3>
-<p><img src="./assets1/arrow_rectangle.png"></p>
-<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
-<h3>General</h3>
-<p>For arrow heads that use <code>length</code> and <code>width</code> properties, the <code>length</code> is the
-dimension along the line.</p>
-<p>All properties have default values that can be scaled with the <code>scale</code>
-property. So a <code>scale</code> of 2 will double the size of the default arrow.</p>
+<p>Arrows on the end of lines have many of the same properties as stand
+alone arrows <a href="#obj_arrow">OBJ_Arrow</a>.</p>
+<p>The <code>align</code> property descripes where the line stops relative to the arrow.
+<code>'start'</code> will be most useful for pointed arrows. When there is no tail, or
+a zero length tail, <code>'mid'</code> can be useful with '<code>polygon</code>', '<code>circle</code>' and
+'<code>bar</code>' as then the shapes will be centered on the end of the line. Note
+that in this case the shape will extend past the line.</p>
 
   
   
@@ -36637,7 +37028,10 @@ property. So a <code>scale</code> of 2 will double the size of the default arrow
       
         <div class='space-bottom0'>
           <span class='code bold'>head</span> <code class='quiet'>(<a href="#arrowhead">ArrowHead</a>?)</code>
-          
+          : head style (
+<code>'triangle'</code>
+)
+
           
         </div>
       
@@ -36664,14 +37058,8 @@ property. So a <code>scale</code> of 2 will double the size of the default arrow
       
         <div class='space-bottom0'>
           <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : rotation of the polygon
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>reverse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : reverse the direction of the triangle arrow head
+          : rotation of the polygon when 
+<code>head = 'polygon'</code>
 
           
         </div>
@@ -36694,6 +37082,30 @@ property. So a <code>scale</code> of 2 will double the size of the default arrow
           <span class='code bold'>barb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : barb length (along the length of the line) of the
 barb arrow head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tail</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : <code>true</code>
+ includes a tail in the arrow of
+with 
+<code>tailWidth</code>
+. A 
+<code>number</code>
+ gives the tail a length where 0 will not
+extend the tail beyond the boundaries of the head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>align</span> <code class='quiet'>((<code>"start"</code> | <code>"mid"</code>)?)</code>
+          : define which part of
+the arrow is aligned at (0, 0) in draw space (
+<code>'start'</code>
+)
 
           
         </div>
@@ -36726,9 +37138,10 @@ diagram.addElement({
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with customized barb arrow at end only</span>
 diagram.addElement({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.line'</span>,
   <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+    <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">p2</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
     <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
     <span class="hljs-attr">arrow</span>: {
       <span class="hljs-attr">end</span>: {
@@ -36736,29 +37149,48 @@ diagram.addElement({
         <span class="hljs-attr">width</span>: <span class="hljs-number">0.15</span>,
         <span class="hljs-attr">length</span>: <span class="hljs-number">0.25</span>,
         <span class="hljs-attr">barb</span>: <span class="hljs-number">0.05</span>,
+        <span class="hljs-attr">scale</span>: <span class="hljs-number">2</span>
       },
     },
+    <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.02</span>, <span class="hljs-number">0.02</span>],
   },
 });</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with two different arrow ends scaled by 0.7x</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
-    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
-    <span class="hljs-attr">arrow</span>: {
-      <span class="hljs-attr">scale</span>: <span class="hljs-number">1.2</span>,
-      <span class="hljs-attr">start</span>: <span class="hljs-string">'bar'</span>,
-      <span class="hljs-attr">end</span>: {
-        <span class="hljs-attr">head</span>: <span class="hljs-string">'polygon'</span>,
-        <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Three lines showing the difference between mid align and start align for</span>
+<span class="hljs-comment">// circle heads</span>
+diagram.addElements([
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'reference'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0.3</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.3</span>]],
+    },
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'start'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>]],
+      <span class="hljs-attr">arrow</span>: {
+        <span class="hljs-attr">head</span>: <span class="hljs-string">'circle'</span>,
+        <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
       },
     },
   },
-});</pre>
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'mid'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">-0.3</span>], [<span class="hljs-number">0.5</span>, <span class="hljs-number">-0.3</span>]],
+      <span class="hljs-attr">arrow</span>: {
+        <span class="hljs-attr">head</span>: <span class="hljs-string">'circle'</span>,
+        <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
+        <span class="hljs-attr">align</span>: <span class="hljs-string">'mid'</span>,     <span class="hljs-comment">// circle mid point is at line end</span>
+      },
+    },
+  },
+]);</pre>
     
   
 
@@ -36779,8 +37211,8 @@ diagram.addElement({
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_arrows'>
-      OBJ_Arrows
+    <h3 class='fl m0' id='obj_linearrows'>
+      OBJ_LineArrows
     </h3>
     
     
@@ -36789,7 +37221,7 @@ diagram.addElement({
 
   <p>Line end's arrow definition options object.</p>
 <p><code>start</code> and <code>end</code> define the properties of the arrows at the start and
-end of the line. Instead of defining <a href="#obj_arrow">OBJ_Arrow</a> objects for the
+end of the line. Instead of defining <a href="#obj_linearrow">OBJ_LineArrow</a> objects for the
 start and end, a string that is the arrow's <code>head</code> property can also be
 used and the size dimensions will be the default.</p>
 <p>All other properties will be used as the default for the <code>start</code> and
@@ -36816,14 +37248,14 @@ both a start and end arrow.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>start</span> <code class='quiet'>((<a href="#obj_arrow">OBJ_Arrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
+          <span class='code bold'>start</span> <code class='quiet'>((<a href="#obj_linearrow">OBJ_LineArrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
           : arrow at start of line
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>end</span> <code class='quiet'>((<a href="#obj_arrow">OBJ_Arrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
+          <span class='code bold'>end</span> <code class='quiet'>((<a href="#obj_linearrow">OBJ_LineArrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
           : arrow at end of line
 
           
@@ -36865,13 +37297,6 @@ both a start and end arrow.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>reverse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : default reverse to use for start and end arrow
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
           <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : default sides to use for start and end arrow
 
@@ -36888,6 +37313,38 @@ both a start and end arrow.</p>
         <div class='space-bottom0'>
           <span class='code bold'>barb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : default barb to use for start and end arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tailWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : width of the line that joins the arrow - if
+defined this will create minimum dimensions for the arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tail</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : <code>true</code>
+ includes a tail in the arrow of
+with 
+<code>tailWidth</code>
+. A 
+<code>number</code>
+ gives the tail a length where 0 will not
+extend the tail beyond the boundaries of the head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>align</span> <code class='quiet'>((<code>"start"</code> | <code>"mid"</code>)?)</code>
+          : define which part of
+the arrow is aligned at (0, 0) in draw space (
+<code>'start'</code>
+)
 
           
         </div>
@@ -43407,6 +43864,250 @@ will be ignored.</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_arrowlegacy'>
+      OBJ_ArrowLegacy
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Arrow options object.</p>
+<p>Lines and polylines can be terminated with different styles of arrows. The
+<code>head</code> parameter is used to define the style of arrow head.</p>
+<h3><code>head: 'triangle'</code></h3>
+<p><img src="./assets1/arrow_triangle.png"></p>
+<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
+<p>Use <code>reverse</code> to reverse the triangle:</p>
+<p><img src="./assets1/arrow_reversetri.png"></p>
+<h3><code>head: 'barb'</code></h3>
+<p><img src="./assets1/arrow_barb.png"></p>
+<p>Use <code>length</code>, <code>width</code> and <code>barb</code> to customize head shape.</p>
+<h3><code>head: 'line'</code></h3>
+<p><img src="./assets1/arrow_line.png"></p>
+<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
+<h3><code>head: 'circle'</code></h3>
+<p><img src="./assets1/arrow_circle.png"></p>
+<p>Use <code>radius</code> and <code>sides</code> to customize head shape.</p>
+<h3><code>head: 'polygon'</code></h3>
+<p><img src="./assets1/arrow_polygon.png"></p>
+<p>Use <code>radius</code>, <code>sides</code> and <code>rotation</code> to customize head shape.</p>
+<h3><code>head: 'bar'</code></h3>
+<p><img src="./assets1/arrow_bar.png"></p>
+<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
+<h3><code>head: 'rectangle'</code></h3>
+<p><img src="./assets1/arrow_rectangle.png"></p>
+<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
+<h3>General</h3>
+<p>For arrow heads that use <code>length</code> and <code>width</code> properties, the <code>length</code> is the
+dimension along the line.</p>
+<p>All properties have default values that can be scaled with the <code>scale</code>
+property. So a <code>scale</code> of 2 will double the size of the default arrow.</p>
+<p>An arrow can be defined in space with:</p>
+<ul>
+<li><code>'start'</code> and <code>angle</code> - the arrow start will be moved to <code>position</code> and
+rotated to <code>angle</code></li>
+<li><code>'tip'</code> and <code>angle</code> - the arrow tip will be moved to <code>position</code> and
+rotated to <code>angle</code></li>
+<li><code>'mid'</code> and <code>angle</code> - the arrow middle will be moved to <code>position</code> and
+rotated to <code>angle</code></li>
+</ul>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>head</span> <code class='quiet'>(<a href="#arrowhead">ArrowHead</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : scale the default dimensions of the arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : dimension of the arrow head along the line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : dimension of the arrow head along the line width
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : rotation of the polygon when 
+<code>head = 'polygon'</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides in polygon or circle arrow head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : radius of polygon or circle arrow head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>barb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : barb length (along the length of the line) of the
+barb arrow head
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tailWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : width of the line that joins the arrow - if
+defined this will create minimum dimensions for the arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>tail</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : <code>true</code>
+ includes a tail in the arrow of
+width 
+<code>tailWidth</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : position to draw the arrow
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>align</span> <code class='quiet'>((<code>"tip"</code> | <code>"start"</code> | <code>"mid"</code>)?)</code>
+          : define which part of the arrow is
+aligned with 
+<code>position</code>
+ (or the first translation transform of 'transform')
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with triangle arrows on both ends</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+    <span class="hljs-attr">arrow</span>: <span class="hljs-string">'triangle'</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with customized barb arrow at end only</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+    <span class="hljs-attr">arrow</span>: {
+      <span class="hljs-attr">end</span>: {
+        <span class="hljs-attr">head</span>: <span class="hljs-string">'barb'</span>,
+        <span class="hljs-attr">width</span>: <span class="hljs-number">0.15</span>,
+        <span class="hljs-attr">length</span>: <span class="hljs-number">0.25</span>,
+        <span class="hljs-attr">barb</span>: <span class="hljs-number">0.05</span>,
+      },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with two different arrow ends scaled by 0.7x</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+    <span class="hljs-attr">arrow</span>: {
+      <span class="hljs-attr">scale</span>: <span class="hljs-number">1.2</span>,
+      <span class="hljs-attr">start</span>: <span class="hljs-string">'bar'</span>,
+      <span class="hljs-attr">end</span>: {
+        <span class="hljs-attr">head</span>: <span class="hljs-string">'polygon'</span>,
+        <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
+      },
+    },
+  },
+});</pre>
+    
   
 
   

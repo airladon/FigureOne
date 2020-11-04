@@ -1,39 +1,39 @@
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
-diagram.addElements([
-  {
-    name: 'origin',
-    method: 'polygon',
-    options: {
-      radius: 0.01,
-      line: { width: 0.01 },
-      sides: 10,
-      color: [0.7, 0.7, 0.7, 1]
-    },
-  },
-  {
-    name: 'grid',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.1,
-      xStep: 0.1,
-      color: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.001 },
-    },
-  },
-  {
-    name: 'gridMajor',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.5,
-      xStep: 0.5,
-      color: [0.8, 0.8, 0.8, 1],
-      line: { width: 0.004 }
-    },
-  },
-]);
+// diagram.addElements([
+//   {
+//     name: 'origin',
+//     method: 'polygon',
+//     options: {
+//       radius: 0.01,
+//       line: { width: 0.01 },
+//       sides: 10,
+//       color: [0.7, 0.7, 0.7, 1]
+//     },
+//   },
+//   {
+//     name: 'grid',
+//     method: 'grid',
+//     options: {
+//       bounds: [-3, -3, 6, 6],
+//       yStep: 0.1,
+//       xStep: 0.1,
+//       color: [0.7, 0.7, 0.7, 1],
+//       line: { width: 0.001 },
+//     },
+//   },
+//   {
+//     name: 'gridMajor',
+//     method: 'grid',
+//     options: {
+//       bounds: [-3, -3, 6, 6],
+//       yStep: 0.5,
+//       xStep: 0.5,
+//       color: [0.8, 0.8, 0.8, 1],
+//       line: { width: 0.004 }
+//     },
+//   },
+// ]);
 
 
 // // Simple
@@ -143,61 +143,50 @@ diagram.addElements([
       //     position: [-1, 0],
       //   },
       // },
-      {
-        name: 'l',
-        method: 'shapes.polyline',
-        options: {
-          points: [[0, 0], [1, 1], [0.5, 0.7], [1, 1.5]],
-          width: 0.06,
-          arrow: {
-            head: 'barb',
-            tail: 0,
-            // length: 0.1,
-            scale: 1,
-            align: 'mid',
-            // tail: 0.05,
-            // length: 0.2,
-            // barb: 0.05,
-          },
-          dash: [0.1, 0.101],
-        }
-      },
-      {
-        name: 'p2',
-        method: 'arrow',
-        options: {
-          head: 'polygon',
-          align: 'start',
-          // angle: Math.PI / 4,
-          position: [-1, 0],
-          // tail: false,
-          radius: 0.5,
-          sides: 6,
-          tail: 0.2,
-          tailWidth: 0.2,
-          // length: 1,
-          // width: 0.9,
-          // tail: 0.2,
-          // tail: 0.05,
-          // length: 0.4,
-          // length: 1,
-          // tailWidth: 0.3,
-          // width: 1, 
-          // barb: 0.15,
-          color: [1, 0, 0, 0.5],
-          // tailWidth: 0.165,
-          // width: 0.5,
-          // tailWidth: 0.1,
-          // barb: 0.3 / 5,
-          // tailWidth: 0.3333 / 5,
-          // width: 1/5,
-          // length: 1/5,
-          // scale: 2,
-          // position: [1, 0],
-          // tip: [1, 0],
-          // angle: Math.PI / 4,
-        },
-      },
+      // {
+      //   name: 'l',
+      //   method: 'shapes.polyline',
+      //   options: {
+      //     points: [[0, 0], [1, 1], [0.5, 0.7], [1, 1.5]],
+      //     width: 0.06,
+      //     arrow: {
+      //       head: 'barb',
+      //       tail: 0,
+      //       // length: 0.1,
+      //       scale: 1,
+      //       align: 'mid',
+      //       // tail: 0.05,
+      //       // length: 0.2,
+      //       // barb: 0.05,
+      //     },
+      //     dash: [0.1, 0.101],
+      //   }
+      // },
+      // {
+      //   name: 'p2',
+      //   method: 'arrow',
+      //   options: {
+      //     head: 'barb',
+      //     align: 'tail',
+      //     // angle: Math.PI / 4,
+      //     position: [-1, 0],
+      //     length: 0.5,
+      //     width: 0.3,
+      //     color: [1, 0, 0, 0.5],
+      //     copy: [
+      //       {
+      //   to: [[0.6, 0], [1.05, 0], [1.5, 0], [2.2, 0]],
+      //   original: false,
+      // },
+      //       {
+      //         along: 'rotation',
+      //         num: 5,
+      //         step: Math.PI / 5,
+      //         start: 1,              // only copy last step, not original points
+      //       },
+      //     ]
+      //   },
+      // },
     ],
     options: {
       touchBorder: 0.2,
@@ -227,17 +216,90 @@ diagram.elements._c.setMovable();
 // eqn.onClick = () => eqn.nextForm();
 // eqn.setTouchableRect(0.5);
 
+// Line with triangle arrows on both ends
+diagram.addElement({
+  name: 'a',
+  method: 'shapes.line',
+  options: {
+    p1: [0, 0],
+    p2: [0, 1],
+    width: 0.02,
+    arrow: 'triangle',
+  },
+});
+
+// // Line with customized barb arrow at end only
+// diagram.addElement({
+//   name: 'a',
+//   method: 'shapes.line',
+//   options: {
+//     p1: [0, 0],
+//     p2: [0, 1],
+//     width: 0.02,
+//     arrow: {
+//       end: {
+//         head: 'barb',
+//         width: 0.15,
+//         length: 0.25,
+//         barb: 0.05,
+//         scale: 2
+//       },
+//     },
+//     dash: [0.02, 0.02],
+//   },
+// });
 
 
+// // Three lines showing the difference between mid align and start align for
+// // circle heads
+// diagram.addElements([
+//   {
+//     name: 'reference',
+//     method: 'polyline',
+//     options: {
+//       points: [[0, 0.3], [0.5, 0.3]],
+//     },
+//   },
+//   {
+//     name: 'start',
+//     method: 'polyline',
+//     options: {
+//       points: [[0, 0], [0.5, 0]],
+//       arrow: {
+//         head: 'circle',
+//         radius: 0.1,
+//       },
+//     },
+//   },
+//   {
+//     name: 'mid',
+//     method: 'polyline',
+//     options: {
+//       points: [[0, -0.3], [0.5, -0.3]],
+//       arrow: {
+//         head: 'circle',
+//         radius: 0.1,
+//         align: 'mid',     // circle mid point is at line end
+//       },
+//     },
+//   },
+// ]);
 
-// transparency
-// tail false
-// tail true
-// tail 0
-// tail 0.1
-// tail -0.1
-// -tail > barb
-// tip
-// start
-// tail
-// mid
+
+// // Line with two different arrow ends scaled by 0.7x
+// diagram.addElement({
+//   name: 'a',
+//   method: 'polyline',
+//   options: {
+//     points: [[0, 0], [1, 0]],
+//     width: 0.02,
+//     arrow: {
+//       scale: 1.2,
+//       start: 'bar',
+//       end: {
+//         head: 'polygon',
+//         sides: 6,
+//       },
+//     },
+//   },
+// });

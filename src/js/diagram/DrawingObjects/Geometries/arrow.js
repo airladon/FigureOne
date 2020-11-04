@@ -5,7 +5,7 @@ import {
 import {
   joinObjects, joinObjectsWithOptions,
 } from '../../../tools/tools';
-import { getPolygonPoints, getTrisFillPolygon } from './polygon/polygon';
+import { getPolygonPoints } from './polygon/polygon';
 
 /**
  * Arrow heads
@@ -14,77 +14,22 @@ import { getPolygonPoints, getTrisFillPolygon } from './polygon/polygon';
  *
  * @see {@link OBJ_Arrow} for properties related to each arrow head
  */
-export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'rectangle';
 
 /**
- * Arrow options object.
- *
- * Lines and polylines can be terminated with different styles of arrows. The
- * `head` parameter is used to define the style of arrow head.
- *
- * ### `head: 'triangle'`
- *
- * ![](./assets1/arrow_triangle.png)
- *
- * Use `length` and `width` to customize head shape.
- *
- * Use `reverse` to reverse the triangle:
- *
- * ![](./assets1/arrow_reversetri.png)
- *
- * ### `head: 'barb'`
- *
- * ![](./assets1/arrow_barb.png)
- *
- * Use `length`, `width` and `barb` to customize head shape.
- *
- * ### `head: 'line'`
+ * Arrow end for a line or polyline.
  *
  * ![](./assets1/arrow_line.png)
  *
- * Use `length` and `width` to customize head shape.
+ * Arrows on the end of lines have many of the same properties as stand
+ * alone arrows {@link OBJ_Arrow}.
  *
- * ### `head: 'circle'`
+ * The `align` property descripes where the line stops relative to the arrow.
+ * `'start'` will be most useful for pointed arrows. When there is no tail, or
+ * a zero length tail, `'mid'` can be useful with '`polygon`', '`circle`' and
+ * '`bar`' as then the shapes will be centered on the end of the line. Note
+ * that in this case the shape will extend past the line.
  *
- * ![](./assets1/arrow_circle.png)
- *
- * Use `radius` and `sides` to customize head shape.
- *
- * ### `head: 'polygon'`
- *
- * ![](./assets1/arrow_polygon.png)
- *
- * Use `radius`, `sides` and `rotation` to customize head shape.
- *
- * ### `head: 'bar'`
- *
- * ![](./assets1/arrow_bar.png)
- *
- * Use `length` and `width` to customize head shape.
- *
- * ### `head: 'rectangle'`
- *
- * ![](./assets1/arrow_rectangle.png)
- *
- * Use `length` and `width` to customize head shape.
- *
- * ### General
- *
- * For arrow heads that use `length` and `width` properties, the `length` is the
- * dimension along the line.
- *
- * All properties have default values that can be scaled with the `scale`
- * property. So a `scale` of 2 will double the size of the default arrow.
- *
- * An arrow can be defined in space with:
- * - `'start'` and `angle` - the arrow start will be moved to `position` and
- *   rotated to `angle`
- * - `'tip'` and `angle` - the arrow tip will be moved to `position` and
- *   rotated to `angle`
- * - `'mid'` and `angle` - the arrow middle will be moved to `position` and
- *   rotated to `angle`
- *
- * @property {ArrowHead} [head]
+ * @property {ArrowHead} [head] head style (`'triangle'`)
  * @property {number} [scale] scale the default dimensions of the arrow
  * @property {number} [length] dimension of the arrow head along the line
  * @property {number} [width] dimension of the arrow head along the line width
@@ -93,13 +38,11 @@ export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polyg
  * @property {number} [radius] radius of polygon or circle arrow head
  * @property {number} [barb] barb length (along the length of the line) of the
  * barb arrow head
- * @property {number} [tailWidth] width of the line that joins the arrow - if
- * defined this will create minimum dimensions for the arrow
- * @property {boolean} [tail] `true` includes a tail in the arrow of
- * width `tailWidth`
- * @property {'tip' | 'start' | 'mid'} [align]
- * @property {TypeParsablePoint} [position]
- * @property {number} [angle]
+ * @property {boolean | number} [tail] `true` includes a tail in the arrow of
+ * with `tailWidth`. A `number` gives the tail a length where 0 will not
+ * extend the tail beyond the boundaries of the head
+ * @property {'start' | 'mid'} [align] define which part of
+ * the arrow is aligned at (0, 0) in draw space (`'start'`)
  *
  * @example
  * // Line with triangle arrows on both ends
@@ -117,9 +60,10 @@ export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polyg
  * // Line with customized barb arrow at end only
  * diagram.addElement({
  *   name: 'a',
- *   method: 'polyline',
+ *   method: 'shapes.line',
  *   options: {
- *     points: [[0, 0], [1, 0]],
+ *     p1: [0, 0],
+ *     p2: [0, 1],
  *     width: 0.02,
  *     arrow: {
  *       end: {
@@ -127,52 +71,68 @@ export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polyg
  *         width: 0.15,
  *         length: 0.25,
  *         barb: 0.05,
+ *         scale: 2
  *       },
  *     },
+ *     dash: [0.02, 0.02],
  *   },
  * });
  *
  * @example
- * // Line with two different arrow ends scaled by 0.7x
- * diagram.addElement({
- *   name: 'a',
- *   method: 'polyline',
- *   options: {
- *     points: [[0, 0], [1, 0]],
- *     width: 0.02,
- *     arrow: {
- *       scale: 1.2,
- *       start: 'bar',
- *       end: {
- *         head: 'polygon',
- *         sides: 6,
+ * // Three lines showing the difference between mid align and start align for
+ * // circle heads
+ * diagram.addElements([
+ *   {
+ *     name: 'reference',
+ *     method: 'polyline',
+ *     options: {
+ *       points: [[0, 0.3], [0.5, 0.3]],
+ *     },
+ *   },
+ *   {
+ *     name: 'start',
+ *     method: 'polyline',
+ *     options: {
+ *       points: [[0, 0], [0.5, 0]],
+ *       arrow: {
+ *         head: 'circle',
+ *         radius: 0.1,
  *       },
  *     },
  *   },
- * });
+ *   {
+ *     name: 'mid',
+ *     method: 'polyline',
+ *     options: {
+ *       points: [[0, -0.3], [0.5, -0.3]],
+ *       arrow: {
+ *         head: 'circle',
+ *         radius: 0.1,
+ *         align: 'mid',     // circle mid point is at line end
+ *       },
+ *     },
+ *   },
+ * ]);
  */
-export type OBJ_Arrow = {
+export type OBJ_LineArrow = {
   head?: ArrowHead,
   scale?: number,
   length?: number,
   width?: number,
   rotation?: number,
-  // reverse?: number,
   sides?: number,
   radius?: number,
   barb?: number,
-  tailWidth?: number,
   tail?: boolean,
-  align?: 'tip' | 'start' | 'mid',
-  angle?: number,
-  position: TypeParsablePoint,
+  align?: 'start' | 'mid',
 }
+
 
 /**
  * Line end's arrow definition options object.
  *
  * `start` and `end` define the properties of the arrows at the start and
- * end of the line. Instead of defining {@link OBJ_Arrow} objects for the
+ * end of the line. Instead of defining {@link OBJ_LineArrow} objects for the
  * start and end, a string that is the arrow's `head` property can also be
  * used and the size dimensions will be the default.
  *
@@ -185,40 +145,41 @@ export type OBJ_Arrow = {
  * If only one end of the line is to have an arrow, then define only the
  * `start` or `end` properties and no others.
  *
- * @property {OBJ_Arrow | ArrowHead} [start] arrow at start of line
- * @property {OBJ_Arrow | ArrowHead} [end] arrow at end of line
+ * @property {OBJ_LineArrow | ArrowHead} [start] arrow at start of line
+ * @property {OBJ_LineArrow | ArrowHead} [end] arrow at end of line
  * @property {ArrowHead} [head] default head to use for start and end arrow
  * @property {number} [scale] default scale to use for start and end arrow
  * @property {number} [length] default length to use for start and end arrow
  * @property {number} [width] default width to use for start and end arrow
  * @property {number} [rotation] default rotation to use for start and end arrow
- * @property {number} [reverse] default reverse to use for start and end arrow
  * @property {number} [sides] default sides to use for start and end arrow
  * @property {number} [radius] default radius to use for start and end arrow
  * @property {number} [barb] default barb to use for start and end arrow
  * @property {number} [tailWidth] width of the line that joins the arrow - if
  * defined this will create minimum dimensions for the arrow
- * @property {boolean} [tail] `true` includes a tail in the arrow of
- * width `tailWidth`
- * @property {'tip' | 'start' | 'mid'} [align]
- * @property {number} angle
+ * @property {boolean | number} [tail] `true` includes a tail in the arrow of
+ * with `tailWidth`. A `number` gives the tail a length where 0 will not
+ * extend the tail beyond the boundaries of the head
+ * @property {'start' | 'mid'} [align] define which part of
+ * the arrow is aligned at (0, 0) in draw space (`'start'`)
  */
-export type OBJ_Arrows = {
-  start: OBJ_Arrow | ArrowHead,
-  end: OBJ_Arrow | ArrowHead,
+export type OBJ_LineArrows = {
+  start: OBJ_LineArrow | ArrowHead,
+  end: OBJ_LineArrow | ArrowHead,
   head?: ArrowHead,
   scale?: number,
   length?: number,
   width?: number,
   rotation?: number,
-  reverse?: number,
   sides?: number,
   radius?: number,
   barb?: number,
   tailWidth?: number,
-  align?: 'tip' | 'start' | 'mid',
+  tail?: boolean | number,
+  align?: 'start' | 'mid',
 };
 
+export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'reverseTriangle';
 
 function orientArrow(
   points: Array<Point>,
@@ -1163,10 +1124,13 @@ function getPolygonLength(o: {
   tail: boolean,
 }) {
   if (o.align === 'mid') {
+    if (o.tail === false) {
+      return [0, 0];
+    }
     return [o.radius, o.radius];
   }
   if (typeof o.tail === 'boolean') {
-    return [o.radius * 2, o.radius];
+    return [o.radius, o.radius];
   }
   const l = o.radius * 2 + Math.max(o.tail, 0);
   return [l, l];
@@ -1226,31 +1190,6 @@ function getPolygonArrow(options: {
   points.push(new Point(-radius, 0));
   points.push(outline[outline.length - 1]);
   points.push(outline[0]);
-  // console.log(outline)
-  // console.log(points)
-  // const r = radius;
-
-  // const s = Math.max(sides, 3);
-  // const arrowBorder = getPolygonPoints({
-  //   radius: r,
-  //   rotation,
-  //   offset: new Point(0, 0),
-  //   sides: s,
-  //   sidesToDraw: s,
-  //   direction: 1,
-  // });
-
-  // const points = getTrisFillPolygon(new Point(0, 0), outline, s, s);
-  // const borderToUse = arrowBorder;
-  // let touchBorder = outline;
-  // if (touchBorderBuffer > 0) {
-  //   touchBorder = [
-  //     new Point(-touchBorderBuffer, -r - touchBorderBuffer),
-  //     new Point(r + touchBorderBuffer, -r - touchBorderBuffer),
-  //     new Point(r + touchBorderBuffer, r + touchBorderBuffer),
-  //     new Point(-touchBorderBuffer, r + touchBorderBuffer),
-  //   ];
-  // }
   let t = 0;
   let tailJoin;
   if (tail === false) {
@@ -1261,10 +1200,6 @@ function getPolygonArrow(options: {
     }
     tailJoin = [new Point(-radius - t, tailWidth / 2), new Point(-radius - t, -tailWidth / 2)];
   }
-  // const tail = [
-  //   new Point(0, tailWidth / 2),
-  //   new Point(0, -tailWidth / 2),
-  // ];
   let touchBorder = outline;
   if (touchBorderBuffer > 0) {
     touchBorder = getTouchBorder(radius * 2 + t, radius * 2, touchBorderBuffer);
@@ -1359,17 +1294,18 @@ function defaultArrowOptions(
   // scaleIn: number = 1,
   o: Object,
 ) {
-  const scale = 6 * o.scale;
+  // const scale = 6 * o.scale;
   const defaults = {
     align: 'tip',
     tail: false,
     angle: 0,
-    position: new Point(0, 0),
+    drawPosition: new Point(0, 0),
+    scale: 1,
     // tailWidth,
   };
   if (o.head === 'triangle' || o.head == null) {
     // return getTriangleDefaults(o);
-    return joinObjects({}, getTriangleDefaults(o), {
+    return joinObjects({}, defaults, getTriangleDefaults(o), {
       head: 'triangle',
       // width: o.tailWidth * scale,
       // length: o.tailWidth * scale,
@@ -1377,53 +1313,21 @@ function defaultArrowOptions(
     });
   }
   if (o.head === 'polygon' || o.head === 'circle') {
-    return getPolygonDefaults(o);
-    // return joinObjects({}, defaults, {
-    //   radius: o.tailWidth * scale / 2,
-    //   sides: 4,
-    //   rotation: 0,
-    // });
-
+    return joinObjects({}, defaults, getPolygonDefaults(o));
   }
-  // if (o.head === 'circle') {
-  //   return joinObjects({}, defaults, {
-  //     radius: o.tailWidth * scale / 2,
-  //     sides: 30,
-  //     rotation: 0,
-  //   });
-  // }
   if (o.head === 'barb') {
-    return getBarbDefaults(o);
+    return joinObjects({}, defaults, getBarbDefaults(o));
   }
   if (o.head === 'reverseTriangle') {
-    return getReverseTriDefaults(o);
+    return joinObjects({}, defaults, getReverseTriDefaults(o));
   }
   if (o.head === 'bar') {
-    return getBarDefaults(o);
+    return joinObjects({}, defaults, getBarDefaults(o));
   }
-  // if (o.head === 'bar') {
-  //   return joinObjects({}, defaults, {
-  //     width: o.tailWidth * scale,
-  //     length: o.tailWidth,
-  //   });
-  // }
   if (o.head === 'line') {
-    return getLineDefaults(o);
-    // return joinObjects({}, defaults, {
-    //   width: o.tailWidth * scale,
-    //   length: o.tailWidth * scale,
-    // });
+    return joinObjects({}, defaults, getLineDefaults(o));
   }
-  // if (o.head === 'rectangle') {
-  // otherwise head = 'rectangle'
-  return getRectDefaults(o);
-  // }
-  // return joinObjects({}, defaults, {
-  //   head: 'triangle',
-  //   width: tailWidth * scale,
-  //   length: tailWidth * scale,
-  //   reverse: false,
-  // });
+  return joinObjects({}, defaults, getRectDefaults(o));
 }
 
 function simplifyArrowOptions(
@@ -1474,8 +1378,8 @@ function simplifyArrowOptions(
         defaultArrowOptions(o),
         o,
       );
+      out[startOrEnd].drawPosition = getPoint(out[startOrEnd].drawPosition);
     }
-    out[startOrEnd].drawPosition = getPoint(out[startOrEnd].drawPosition);
   };
   processEnd('start');
   processEnd('end');
@@ -1494,3 +1398,60 @@ export {
   simplifyArrowOptions,
   defaultArrowOptions,
 };
+
+// // Draw examples of arrows
+
+// const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
+
+// let y = 3;
+// let yStep = -0.7;
+// let xs = [-1, 0, 1];
+// let xStep = 1;
+// let index = 0;
+
+// const addArrow = (name, head, length, tail = false, align = 'tip', sides = 100) => {
+//   if (index % 3 === 0) {
+//     y += yStep;
+//   }
+//   x = xs[index % 3];
+//   index += 1;
+//   return {
+//     name,
+//     method: 'shapes.arrow',
+//     options: {
+//       head,
+//       length,
+//       radius: 0.25,
+//       tail,
+//       position: [x, y],
+//       width: 0.5,
+//       tailWidth: 0.1,
+//       sides,
+//       align,
+//     },
+//   };
+// }
+
+// diagram.addElements([
+//   addArrow('t1', 'triangle', 0.5, false, 'tip'),
+//   addArrow('t2', 'triangle', 0.5, 0),
+//   addArrow('t3', 'triangle', 0.7, 0.2),
+//   addArrow('b1', 'barb', 0.5, false, 'tip'),
+//   addArrow('b2', 'barb', 0.5, 0),
+//   addArrow('b3', 'barb', 0.7, 0.2),
+//   addArrow('l1', 'line', 0.5, false, 'tip'),
+//   addArrow('l2', 'line', 0.5, 0),
+//   addArrow('l3', 'line', 0.7, 0.2),
+//   addArrow('bar1', 'bar', 0.1, false, 'tip'),
+//   addArrow('bar2', 'bar', 0.1, 0),
+//   addArrow('bar3', 'bar', 0.7, 0.6),
+//   addArrow('c1', 'circle', 1, false, 'tip'),
+//   addArrow('c2,', 'circle', 1, 0),
+//   addArrow('c3', 'circle', 1, 0.2),
+//   addArrow('p1', 'polygon', 1, false, 'tip', 6),
+//   addArrow('p2', 'polygon', 1, 0, 'tip', 6),
+//   addArrow('p3', 'polygon', 1, 0.2, 'tip', 6),
+//   addArrow('rt1', 'reverseTriangle', 0.5, false, 'tip'),
+//   addArrow('rt2', 'reverseTriangle', 0.5, 0),
+//   addArrow('rt3', 'reverseTriangle', 0.7, 0.2),
+// ])

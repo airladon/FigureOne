@@ -39,14 +39,14 @@ function addElements(
     const methods = {
       collection: shapes.collection.bind(shapes),
       opolyline: objects.polyline.bind(objects),
-      polyline: shapes.polyline.bind(objects),
+      polyline: shapes.polyline.bind(shapes),
       polygon: shapes.polygon.bind(shapes),
       rectangle: shapes.rectangle.bind(shapes),
       triangle: shapes.triangle.bind(shapes),
       generic: shapes.generic.bind(shapes),
       grid: shapes.grid.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
-      line: shapes.line.bind(objects),
+      line: shapes.line.bind(shapes),
       //
       text: shapes.text.bind(shapes),
       textLine: shapes.textLine.bind(shapes),

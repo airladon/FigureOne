@@ -22,6 +22,7 @@ toc:
   - OBJ_Generic
   - OBJ_Line
   - OBJ_Polyline
+  - OBJ_Arrow
   - OBJ_Triangle
   - OBJ_Rectangle
   - OBJ_Polygon
@@ -142,8 +143,8 @@ toc:
   - OBJ_LineStyle
   - CPY_Step
   - ArrowHead
-  - OBJ_Arrow
-  - OBJ_Arrows
+  - OBJ_LineArrow
+  - OBJ_LineArrows
   - OBJ_Scenario
   - name: Misc Animation
   - AnimationStep
