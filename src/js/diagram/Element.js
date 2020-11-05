@@ -4606,7 +4606,7 @@ class DiagramElementCollection extends DiagramElement {
       if (typeof this.border === 'number') {
         return [getBoundingBorder(getBorderFromChildren('border'), this.border)];
       }
-      return this.border.map(b => b.map(p => p.transformBy(matrix)));
+      return this.border.map(b => b.map(p => getPoint(p).transformBy(matrix)));
     }
 
     if (border === 'touchBorder') {
@@ -4619,10 +4619,10 @@ class DiagramElementCollection extends DiagramElement {
       if (this.touchBorder === 'border') {
         return this.getBorder(space, 'border', children, shownOnly);
       }
-      return this.touchBorder.map(b => b.map(p => p.transformBy(matrix)));
+      return this.touchBorder.map(b => b.map(p => getPoint(p).transformBy(matrix)));
     }
 
-    return this.holeBorder.map(b => b.map(p => p.transformBy(matrix)));
+    return this.holeBorder.map(b => b.map(p => getPoint(p).transformBy(matrix)));
 
 
     // if (

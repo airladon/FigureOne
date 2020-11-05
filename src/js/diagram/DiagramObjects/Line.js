@@ -69,7 +69,7 @@ export type TypeLineOptions = {
   width?: number,
   // showLine?: boolean,
   color?: Array<number>,
-  touchBorder?: number | { width: number, start: number, end: number },
+  touchBorder?: Array<Array<Point>> | 'border' | number | 'rect',
   arrow: OBJ_ArrowLines;
   label?: TypeLineLabelOptions,
   dash: Array<number>,
@@ -159,8 +159,8 @@ function makeStraightLine(
   color: Array<number>,
   dash: Array<number>,
   maxLength: number,
-  touchBorder: number | { width: number, start: number, end: number },
-  isTouchDevice: boolean,
+  // touchBorder: number | { width: number, start: number, end: number },
+  // isTouchDevice: boolean,
 ) {
   let straightLine;
   if (dash.length < 2) {
@@ -185,42 +185,42 @@ function makeStraightLine(
     });
   }
 
-  // if (touchBorder) {
-    // const multiplier = isTouchDevice ? 16 : 8;
-  let end = 0;
-  let start = 0;
-  let w = 0;
-  // let padding = multiplier * width;
-  if (typeof touchBorder === 'number') {
-    start = touchBorder;
-    end = touchBorder;
-    w = touchBorder;
-  }
-  if (typeof touchBorder === 'object') {
-    w = touchBorder.width != null ? touchBorder.width : w;
-    start = touchBorder.start != null ? touchBorder.start : start;
-    end = touchBorder.end != null ? touchBorder.end : end;
-  }
-  //   if (touchBorder.width != null) {
-  //     padding = touchBorder.width;
-  //   }
-  //   if (touchBorder.end != null) {
-  //     end = touchBorder.end;
-  //   }
-  //   if (touchBorder.start != null) {
-  //     start = touchBorder.start;
-  //   }
+  // // if (touchBorder) {
+  //   // const multiplier = isTouchDevice ? 16 : 8;
+  // let end = 0;
+  // let start = 0;
+  // let w = 0;
+  // // let padding = multiplier * width;
+  // if (typeof touchBorder === 'number') {
+  //   start = touchBorder;
+  //   end = touchBorder;
+  //   w = touchBorder;
   // }
-  straightLine.drawingObject.touchBorder[0] = [
-    new Point(position.x - start, position.y - width / 2 - w),
-    new Point(position.x + length + end, position.y - width / 2 - w),
-    new Point(position.x + length + end, position.y + width / 2 + w),
-    new Point(position.x - start, position.y + width / 2 + w),
-    // straightLine.drawingObject.touchBorder[0][0].add(-start, -padding),
-    // straightLine.drawingObject.touchBorder[0][1].add(-start, padding),
-    // straightLine.drawingObject.touchBorder[0][2].add(end, padding),
-    // straightLine.drawingObject.touchBorder[0][3].add(end, -padding),
-  ];
+  // if (typeof touchBorder === 'object') {
+  //   w = touchBorder.width != null ? touchBorder.width : w;
+  //   start = touchBorder.start != null ? touchBorder.start : start;
+  //   end = touchBorder.end != null ? touchBorder.end : end;
+  // }
+  // //   if (touchBorder.width != null) {
+  // //     padding = touchBorder.width;
+  // //   }
+  // //   if (touchBorder.end != null) {
+  // //     end = touchBorder.end;
+  // //   }
+  // //   if (touchBorder.start != null) {
+  // //     start = touchBorder.start;
+  // //   }
+  // // }
+  // straightLine.drawingObject.touchBorder[0] = [
+  //   new Point(position.x - start, position.y - width / 2 - w),
+  //   new Point(position.x + length + end, position.y - width / 2 - w),
+  //   new Point(position.x + length + end, position.y + width / 2 + w),
+  //   new Point(position.x - start, position.y + width / 2 + w),
+  //   // straightLine.drawingObject.touchBorder[0][0].add(-start, -padding),
+  //   // straightLine.drawingObject.touchBorder[0][1].add(-start, padding),
+  //   // straightLine.drawingObject.touchBorder[0][2].add(end, padding),
+  //   // straightLine.drawingObject.touchBorder[0][3].add(end, -padding),
+  // ];
 
   return straightLine;
 }
@@ -484,7 +484,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         this.shapes, this.vertexSpaceLength, this.width,
         this.vertexSpaceStart,
         optionsToUse.color, this.dash, this.maxLength,
-        optionsToUse.touchBorder, isTouchDevice,
+        // optionsToUse.touchBorder, isTouchDevice,
       );
       const scaleTransformMethod = s => new Transform().scale(1, s);
       straightLine.fnMap.add(this.scaleTransformMethodName, scaleTransformMethod);
@@ -772,7 +772,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const midLine = makeStraightLine(
       this.shapes, this.multiMove.vertexSpaceMidLength, this.width || 0.01,
       start, this.color, null, this.maxLength,
-      this.touchBorder, this.isTouchDevice,
+      // this.touchBorder, this.isTouchDevice,
     );
     // console.log(midLine)
     midLine.isTouchable = true;

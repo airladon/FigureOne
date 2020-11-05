@@ -227,6 +227,7 @@ diagram.addElement({
     align: 'center',
     length: 2,
     width: 0.01,
+    touchBorder: 0.1,
     arrow: {
       head: 'triangle',
       // align: 'mid',
