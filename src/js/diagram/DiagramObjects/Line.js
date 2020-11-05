@@ -63,7 +63,7 @@ export type TypeLineOptions = {
   length?: number,
   angle?: number,
   width?: number,
-  vertexSpaceStart?: 'start' | 'end' | 'center' | number | Point,
+  align?: 'start' | 'end' | 'center' | number,
   color?: Array<number>,
   showLine?: boolean,
   largerTouchBorder?: boolean | number, // number is the size to grow
@@ -350,7 +350,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       length: 1,
       angle: 0,
       width: 0.01,
-      vertexSpaceStart: 'start',
+      align: 'start',
       color: [0, 0, 1, 1],
       showLine: true,
       largerTouchBorder: true,
@@ -430,14 +430,14 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     //    - percent: line extends from -length * % to length * (1 - %)
     this.vertexSpaceLength = 1;
     this.vertexSpaceStart = new Point(0, 0);
-    if (optionsToUse.vertexSpaceStart === 'end') {
+    if (optionsToUse.align === 'end') {
       this.vertexSpaceStart = new Point(-1, 0);
-    } else if (optionsToUse.vertexSpaceStart === 'center') {
+    } else if (optionsToUse.align === 'center') {
       this.vertexSpaceStart = new Point(-0.5, 0);
-    } else if (typeof optionsToUse.vertexSpaceStart === 'number') {
-      this.vertexSpaceStart = new Point(-optionsToUse.vertexSpaceStart, 0);
-    } else if (optionsToUse.vertexSpaceStart instanceof Point) {
-      this.vertexSpaceStart = optionsToUse.vertexSpaceStart;
+    } else if (typeof optionsToUse.align === 'number') {
+      this.vertexSpaceStart = new Point(-optionsToUse.align, 0);
+    } else if (optionsToUse.align instanceof Point) {
+      this.vertexSpaceStart = optionsToUse.align;
     }
     // this.vertexOrigin = vertexOrigin;
 

@@ -224,7 +224,7 @@ diagram.addElement({
     // p1: [0, 0],
     // p2: [3, 3],
     p1: [0, 0],
-    vertexSpaceStart: 'end',
+    align: 'center',
     length: 2,
     width: 0.01,
     arrow: {
