@@ -227,7 +227,7 @@ diagram.addElement({
     align: 'center',
     length: 2,
     width: 0.01,
-    touchBorder: 0.1,
+    // touchBorder: 0.1,
     arrow: {
       head: 'triangle',
       // align: 'mid',
@@ -236,12 +236,24 @@ diagram.addElement({
     },
     // dash: [0.02, 0.02],
     // offset: -0.1,
+    label: {
+      text: 'hello',
+      offset: 0.01,
+    },
+    move: {
+      type: 'centerTranslateEndRotation',
+    },
+    pulseWidth: {
+      duration: 5,
+      frequency: 0.5,
+    },
   },
 });
 console.log(diagram.elements)
 // diagram.elements._a.grow(0, 5);
 diagram.animateNextFrame();
-diagram.elements._a.pulseWidth();
+// diagram.elements._a.pulseWidth();
+// diagram.elements._a.pulse({ duration: 2, scale: 1.5 })
 // diagram.elements._a.setLength(1.5);
 
 diagram.addElement({
@@ -263,7 +275,7 @@ diagram.addElement({
   },
 });
 
-diagram.elements._a.setMovable();
+diagram.elements._a.setMultiMovable();
 console.log(diagram.elements._a._line.drawingObject.touchBorder)
 // // Line with customized barb arrow at end only
 // diagram.addElement({a

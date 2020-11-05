@@ -73,13 +73,15 @@ export type TypeLineOptions = {
   arrow: OBJ_ArrowLines;
   label?: TypeLineLabelOptions,
   dash: Array<number>,
-  pulse?: {
+  pulseWidth?: {
     line?: number,
     label?: number,
     arrow?: number,
-    collection?: number,
+    duration?: number,
+    frequency?: number,
   },
-  mods?: {},
+  pulse: OBJ_Pulse;
+  // mods?: {},
   move?: {
     type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale';
     middleLengthPercent?: number;
@@ -159,7 +161,7 @@ function makeStraightLine(
   color: Array<number>,
   dash: Array<number>,
   maxLength: number,
-  // touchBorder: number | { width: number, start: number, end: number },
+  touchBorder: number | { width: number, start: number, end: number },
   // isTouchDevice: boolean,
 ) {
   let straightLine;
@@ -172,6 +174,7 @@ function makeStraightLine(
       color,
       dash,
       transform: new Transform().scale(1, 1).translate(0, 0),
+      touchBorder,
     });
   } else {
     straightLine = shapes.line({
@@ -182,6 +185,7 @@ function makeStraightLine(
       width,
       color,
       transform: new Transform().scale(1, 1).translate(0, 0),
+      touchBorder,
     });
   }
 
@@ -294,11 +298,13 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     arrow?: number,
   }) => void;
 
-  pulseDefaultSettings: {
+  pulseWidthDefaults: {
     line: number,
     label: number,
     arrow: number,
-    collection: number,
+    duration: number,
+    frequency: number,
+    // collection: number,
   };
 
   updateLabel: (?number) => {};
@@ -370,11 +376,13 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       offset: 0,
       dash: [],
       mods: {},
-      pulse: {
+      pulseWidth: {
         line: 6,
         label: 2,
         arrow: 3,
-        collection: 1,
+        duration: 1,
+        frequency: 0,
+        // collection: 1,
       },
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -484,6 +492,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         this.shapes, this.vertexSpaceLength, this.width,
         this.vertexSpaceStart,
         optionsToUse.color, this.dash, this.maxLength,
+        optionsToUse.touchBorder,
         // optionsToUse.touchBorder, isTouchDevice,
       );
       const scaleTransformMethod = s => new Transform().scale(1, s);
@@ -560,24 +569,25 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       );
     }
 
-    this.pulseDefaultSettings = {
-      line: optionsToUse.pulse.line || 1,
-      label: optionsToUse.pulse.label || 1,
-      arrow: optionsToUse.pulse.arrow || 1,
-      collection: optionsToUse.pulse.collection || 1,
+    this.pulseWidthDefaults = {
+      line: optionsToUse.pulseWidth.line || 1,
+      label: optionsToUse.pulseWidth.label || 1,
+      arrow: optionsToUse.pulseWidth.arrow || 1,
+      duration: optionsToUse.pulseWidth.duration || 1,
+      frequency: optionsToUse.pulseWidth.frequency || 0,
     };
 
-    this.pulseDefault = (done) => {
-      this.pulseWidth({
-        line: this.pulseDefaultSettings.line,
-        label: this.pulseDefaultSettings.label,
-        arrow: this.pulseDefaultSettings.arrow,
-        done,
-      });
-      if (this.pulseDefaultSettings.collection !== 1) {
-        this.pulseScaleNow(1, this.pulseDefaultSettings.collection);
-      }
-    };
+    // this.pulseDefault = (done) => {
+    //   this.pulseWidth({
+    //     line: this.pulseWidthDefaults.line,
+    //     label: this.pulseWidthDefaults.label,
+    //     arrow: this.pulseWidthDefaults.arrow,
+    //     done,
+    //   });
+    //   if (this.pulseWidthDefaults.collection !== 1) {
+    //     this.pulseScaleNow(1, this.pulseWidthDefaults.collection);
+    //   }
+    // };
 
     if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
       this.setProperties(optionsToUse.mods);
@@ -619,13 +629,15 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       done?: ?() => void,
       duration?: number,
       when?: TypeWhen,
+      frequency?: number,
     } = {}) {
     const defaultOptions = {
-      line: 3,
-      label: 1.5,
-      arrow: 2,
+      line: this.pulseWidthDefaults.line,
+      label: this.pulseWidthDefaults.label,
+      arrow: this.pulseWidthDefaults.arrow,
       done: null,
-      duration: 1,
+      duration: this.pulseWidthDefaults.duration,
+      frequency: this.pulseWidthDefaults.frequency,
       when: 'nextFrame',
     };
     const options = joinObjects(defaultOptions, optionsIn);
@@ -639,10 +651,10 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       };
       line.pulseSettings.callback = this.pulseWidthDoneCallbackName;
       line.pulseSettings.transformMethod = this.scaleTransformMethodName;
-      line.pulseScale({
+      line.pulse({
         duration: options.duration,
         scale: options.line,
-        frequency: 0,
+        frequency: options.frequency,
         callback: done,
         when: options.when,
       });
@@ -654,20 +666,18 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       arrow1.pulse({
         duration: options.duration,
         scale: options.arrow,
-        frequency: 0,
+        frequency: options.frequency,
         callback: done,
         when: options.when,
         centerOn: arrow1.getPosition('diagram'),
       });
-      // arrow1.pulseScaleNow(options.duration, options.arrow, 0, done);
       done = null;
     }
     if (arrow2 != null) {
-      // arrow2.pulseScaleNow(options.duration, options.arrow, 0, done);
       arrow2.pulse({
         duration: options.duration,
         scale: options.arrow,
-        frequency: 0,
+        frequency: options.frequency,
         callback: done,
         when: options.when,
         centerOn: arrow2.getPosition('diagram'),
@@ -681,7 +691,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       label.pulse({
         duration: options.duration,
         scale: options.label,
-        frequency: 0,
+        frequency: options.frequency,
         callback: done,
         when: options.when,
       });
@@ -771,8 +781,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     );
     const midLine = makeStraightLine(
       this.shapes, this.multiMove.vertexSpaceMidLength, this.width || 0.01,
-      start, this.color, null, this.maxLength,
-      // this.touchBorder, this.isTouchDevice,
+      start, this.color, [], this.maxLength,
+      this.touchBorder,
+      // this.isTouchDevice,
     );
     // console.log(midLine)
     midLine.isTouchable = true;
