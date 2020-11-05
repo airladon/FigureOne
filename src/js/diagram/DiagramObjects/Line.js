@@ -68,6 +68,8 @@ export type TypeLineOptions = {
   offset?: number,
   width?: number,
   // showLine?: boolean,
+  // drawCenter?: 'start' | 'end' | 'center' | number,
+  //
   color?: Array<number>,
   touchBorder?: Array<Array<Point>> | 'border' | number | 'rect',
   arrow: OBJ_ArrowLines;
@@ -157,37 +159,37 @@ function makeStraightLine(
   shapes: Object,
   length: number,
   width: number,
-  position: Point,
+  // position: Point,
   color: Array<number>,
   dash: Array<number>,
   maxLength: number,
   touchBorder: number | { width: number, start: number, end: number },
   // isTouchDevice: boolean,
 ) {
-  let straightLine;
-  if (dash.length < 2) {
-    straightLine = shapes.line({
-      p1: position,
-      length,
-      angle: 0,
-      width,
-      color,
-      dash,
-      transform: new Transform().scale(1, 1).translate(0, 0),
-      touchBorder,
-    });
-  } else {
-    straightLine = shapes.line({
-      p1: position,
-      length: maxLength,
-      angle: 0,
-      dash,
-      width,
-      color,
-      transform: new Transform().scale(1, 1).translate(0, 0),
-      touchBorder,
-    });
-  }
+  // let straightLine;
+  // if (dash.length < 2) {
+  const straightLine = shapes.line({
+    p1: [0, 0],
+    length: dash.length < 2 ? 1 : length,
+    angle: 0,
+    width,
+    color,
+    dash,
+    transform: new Transform().scale(1, 1).translate(0, 0),
+    touchBorder,
+  });
+  // } // else {
+  //   straightLine = shapes.line({
+  //     p1: [0, 0],
+  //     length: maxLength,
+  //     angle: 0,
+  //     dash,
+  //     width,
+  //     color,
+  //     transform: new Transform().scale(1, 1).translate(0, 0),
+  //     touchBorder,
+  //   });
+  // }
 
   // // if (touchBorder) {
   //   // const multiplier = isTouchDevice ? 16 : 8;
@@ -227,6 +229,34 @@ function makeStraightLine(
   // ];
 
   return straightLine;
+}
+
+function getLineFromOptions(options: {
+  p1?: TypeParsablePoint,
+  p2?: TypeParsablePoint,
+  length?: number,
+  angle?: number,
+  // align?: 'start' | 'end' | 'center' | number,
+  offset?: number,
+}) {
+  const defaultOptions = {
+    p1: new Point(0, 0),
+    length: 1,
+    angle: 0,
+    align: 'start',
+    offset: 0,
+  };
+  let line;
+  const o = joinObjects({}, defaultOptions, options);
+  if (o.p1 != null && o.p2 != null) {
+    line = new Line(o.p1, o.p2);
+  } else {
+    line = new Line(o.p1, o.length, o.angle);
+  }
+  if (o.offset > 0) {
+    line = line.offset('positive', o.offset);
+  }
+  return line;
 }
 
 
@@ -366,15 +396,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   ) {
     const defaultOptions = {
       position: new Point(0, 0),
-      length: 1,
-      angle: 0,
+      // length: 1,
+      // angle: 0,
       width: 0.01,
       align: 'start',
-      color: [0, 0, 1, 1],
-      // showLine: true,
-      // touchBorder: true,
-      // touchBorder: null,
-      offset: 0,
+      color: [1, 0, 0, 1],
+      // offset: 0,
       dash: [],
       mods: {},
       pulseWidth: {
@@ -394,16 +421,26 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         optionsToUse.touchBorder = optionsToUse.width * 8;
       }
     }
-    const { dash } = optionsToUse;
-    if (Array.isArray(dash) && dash.length > 0 && optionsToUse.maxLength == null) {
-      let defaultMaxLength = optionsToUse.length;
-      if (optionsToUse.p1 != null && optionsToUse.p2 != null) {
-        optionsToUse.p1 = getPoint(optionsToUse.p1);
-        optionsToUse.p2 = getPoint(optionsToUse.p2);
-        defaultMaxLength = distance(optionsToUse.p1, optionsToUse.p2);
-      }
-      optionsToUse.maxLength = defaultMaxLength;
-    }
+    // let line;
+    // if (optionsToUse.p1 != null && optionsToUse.p2 != null) {
+    //   line = new Line(optionsToUse.p1, optionsToUse.p2);
+    // } else {
+    //   line = new Line(optionsToUse.p1, optionsToUse.length, optionsToUse.angle);
+    // }
+    // if (optionsToUse.offset > 0) {
+    //   line = line.offset('positive', optionsToUse.offset);
+    // }
+
+    // const { dash } = optionsToUse;
+    // if (Array.isArray(dash) && dash.length > 0 && optionsToUse.maxLength == null) {
+    //   let defaultMaxLength = optionsToUse.length;
+    //   if (optionsToUse.p1 != null && optionsToUse.p2 != null) {
+    //     optionsToUse.p1 = getPoint(optionsToUse.p1);
+    //     optionsToUse.p2 = getPoint(optionsToUse.p2);
+    //     defaultMaxLength = distance(optionsToUse.p1, optionsToUse.p2);
+    //   }
+    //   optionsToUse.maxLength = defaultMaxLength;
+    // }
     super(new Transform('Line')
       .scale(1, 1)
       .rotate(0)
@@ -414,9 +451,15 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.equation = equation;
     this.touchBorder = optionsToUse.touchBorder;
     this.isTouchDevice = isTouchDevice;
+    //deprecate
     this.animateNextFrame = animateNextFrame;
-    this.dash = dash;
-    this.maxLength = optionsToUse.maxLength;
+    this.dash = optionsToUse.dash;
+
+    this.line = getLineFromOptions(optionsToUse);
+    this.align = optionsToUse.align;
+    this.localXPosition = 0;
+    this.maxLength = optionsToUse.maxLength != null ? optionsToUse.maxLength : this.line.length();
+    // this.maxLength = optionsToUse.maxLength;
 
     this.animateLengthToOptions = {
       initialLength: 0,
@@ -441,14 +484,14 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     //    The length, angle, p1 and p2 properties also exist in this.line,
     //    but are at this level for convenience
 
-    this.offset = optionsToUse.offset;
+    // this.offset = optionsToUse.offset;
     this.width = optionsToUse.width;
-    this.position = getPoint(optionsToUse.position);
-    this.length = optionsToUse.length;
-    this.angle = optionsToUse.angle;
+    // this.position = getPoint(optionsToUse.position);
+    // this.length = optionsToUse.length;
+    // this.angle = optionsToUse.angle;
 
-    this.transform.updateTranslation(this.position);
-    this.transform.updateRotation(this.angle);
+    this.transform.updateTranslation(this.line.p1);
+    this.transform.updateRotation(this.line.angle);
 
     // Line is defined in vertex space as horiztonal along the x axis.
     // The reference will define how it is offset where:
@@ -458,15 +501,15 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     //    - percent: line extends from -length * % to length * (1 - %)
     this.vertexSpaceLength = 1;
     this.vertexSpaceStart = new Point(0, 0);
-    if (optionsToUse.align === 'end') {
-      this.vertexSpaceStart = new Point(-1, 0);
-    } else if (optionsToUse.align === 'center') {
-      this.vertexSpaceStart = new Point(-0.5, 0);
-    } else if (typeof optionsToUse.align === 'number') {
-      this.vertexSpaceStart = new Point(-optionsToUse.align, 0);
-    } else if (optionsToUse.align instanceof Point) {
-      this.vertexSpaceStart = optionsToUse.align;
-    }
+    // if (optionsToUse.align === 'end') {
+    //   this.vertexSpaceStart = new Point(-1, 0);
+    // } else if (optionsToUse.align === 'center') {
+    //   this.vertexSpaceStart = new Point(-0.5, 0);
+    // } else if (typeof optionsToUse.align === 'number') {
+    //   this.vertexSpaceStart = new Point(-optionsToUse.align, 0);
+    // } else if (optionsToUse.align instanceof Point) {
+    //   this.vertexSpaceStart = optionsToUse.align;
+    // }
     // this.vertexOrigin = vertexOrigin;
 
     // MultiMove means the line has a middle section that when touched
@@ -481,7 +524,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     };
     // this._movePad = null;
     // this._rotPad = null;
-
     this.scaleTransformMethodName = '_transformMethod';
     // If the line is to be shown (and not just a label) then make it
     this._line = null;
@@ -491,9 +533,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       //   dashStyleToUse = null;
       // }
       const straightLine = makeStraightLine(
-        this.shapes, this.vertexSpaceLength, this.width,
-        this.vertexSpaceStart,
-        optionsToUse.color, this.dash, this.maxLength,
+        this.shapes, this.maxLength, this.width,
+        // this.vertexSpaceStart,
+        optionsToUse.color, this.dash, // this.maxLength,
         // optionsToUse.touchBorder,
         // optionsToUse.touchBorder, isTouchDevice,
       );
@@ -503,8 +545,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
 
     // Arrow related properties
-    this.arrow1 = null;
-    this.arrow2 = null;
+    // this.arrow1 = null;
+    // this.arrow2 = null;
     this._arrow1 = null;
     this._arrow2 = null;
 
@@ -512,18 +554,19 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.label = null;
     this._label = null;
     this.showRealLength = false;
-    this.setLength(this.length);
+    // this.setLength(this.length);
 
-    if (optionsToUse.p1 != null && optionsToUse.p2 != null) {
-      this.setEndPoints(optionsToUse.p1, optionsToUse.p2);
-    }
-
+    // if (optionsToUse.p1 != null && optionsToUse.p2 != null) {
+    //   this.setEndPoints(optionsToUse.p1, optionsToUse.p2);
+    // }
     if (optionsToUse.arrow != null) {
       const arrowOptions = simplifyArrowOptions(optionsToUse.arrow, this.width || 0.01);
       this.arrow = arrowOptions;
       this.addArrow('start');
       this.addArrow('end');
     }
+
+    this.setupLine();
 
 
     const defaultLabelOptions = {
@@ -609,7 +652,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
   _fromState(state: Object) {
     joinObjects(this, state);
-    this.setLineDimensions();
+    this.setupLine();
+    // this.setLineDimensions();
     return this;
   }
 
@@ -734,7 +778,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
     this[`arrow${index}`] = { height: arrowLength };
     this.add(`arrow${index}`, a);
-    this.setLength(this.currentLength);
+    // this.setLength(this.currentLength);
   }
 
   setMovable(
@@ -841,7 +885,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.isTouchable = false;
     this.isMovable = false;
     this.multiMove.bounds = translationBounds;
-    this.setLength(this.currentLength);
+    this.setLength(this.line.length());
   }
 
   updateMoveTransform(t: Transform = this.transform._dup()) {
@@ -849,8 +893,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const { bounds } = this.multiMove;
     // console.log('qqwer')
     if (r != null) {
-      const w = Math.abs(this.currentLength / 2 * Math.cos(r));
-      const h = Math.abs(this.currentLength / 2 * Math.sin(r));
+      const w = Math.abs(this.line.length() / 2 * Math.cos(r));
+      const h = Math.abs(this.line.length() / 2 * Math.sin(r));
       if (this.move.bounds instanceof TransformBounds) {
         this.move.bounds.updateTranslation(new RectBounds({
           left: bounds.left + w,
@@ -939,24 +983,24 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     if (this.showRealLength && this._label) {
       // this._label._base.drawingObject.setText(roundNum(this.currentLength, 2)
       //   .toFixed(label.precision));
-      label.setText(roundNum(this.currentLength, 2)
+      label.setText(roundNum(this.line.length(), 2)
         .toFixed(label.precision));
       // label.eqn.reArrangeCurrentForm();
     }
     const labelPosition = new Point(
-      this.vertexSpaceStart.x * this.currentLength + label.linePosition * this.currentLength,
+      this.vertexSpaceStart.x * this.line.length() + label.linePosition * this.line.length(),
       0,
     );
     let labelOffsetAngle = Math.PI / 2;
     const labelOffsetMag = label.offset;
     if (label.location === 'end1' || label.location === 'end2') {
       if (label.location === 'end1') {
-        labelPosition.x = this.vertexSpaceStart.x * this.currentLength - label.offset;
+        labelPosition.x = this.vertexSpaceStart.x * this.line.length() - label.offset;
         labelOffsetAngle = -Math.PI;
       }
       if (label.location === 'end2') {
-        labelPosition.x = this.vertexSpaceStart.x * this.currentLength
-          + this.currentLength + label.offset;
+        labelPosition.x = this.vertexSpaceStart.x * this.line.length()
+          + this.line.length() + label.offset;
         labelOffsetAngle = 0;
       }
     } else {
@@ -1030,97 +1074,210 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     );
   }
 
-  setLength(newLength: number) {
-    const lineStart = this.vertexSpaceStart.x * newLength;
-    const lineLength = newLength;
-    let straightLineLength = lineLength;
+  setLength(newLength: number, align: 'start' | 'end' | 'center' | number = this.align) {
+    let newLen = newLength;
+    if (newLength === 0) {
+      newLen = 0.0000001;
+    }
+    if (align === 'start') {
+      this.line = new Line(this.line.p1, newLen, this.line.angle());
+    } else if (align === 'end') {
+      this.line = new Line(
+        this.line.pointAtLength(this.line.length() - newLen),
+        newLen, this.line.angle(),
+      );
+    } else if (align === 'center') {
+      this.line = new Line(
+        this.line.pointAtLength((this.line.length() - newLen) / 2),
+        newLen, this.line.angle(),
+      );
+    } else if (typeof align === 'number') {
+      // console.log(align)
+      this.line = new Line(
+        this.line.pointAtLength((this.line.length() - newLen) * align),
+        newLen, this.line.angle(),
+      );
+    }
+    this.setupLine();
+    // const lineStart = this.vertexSpaceStart.x * newLength;
+    // const lineLength = newLength;
+    // let straightLineLength = lineLength;
+    // let startOffset = 0;
+
+    // if (this.arrow1 && this._arrow1) {
+    //   straightLineLength -= this.arrow1.height;
+    //   startOffset = this.arrow1.height;
+    //   this._arrow1.setPosition(lineStart);
+    // }
+    // if (this.arrow2 && this._arrow2) {
+    //   straightLineLength -= this.arrow2.height;
+    //   this._arrow2.setPosition(lineStart + lineLength, 0);
+    // }
+    // const line = this._line;
+    // if (line) {
+    //   if (Array.isArray(this.dash) && this.dash.length > 0) {
+    //     line.lengthToDraw = straightLineLength;
+    //     // const newStart = this.vertexSpaceStart.x * straightLineLength;
+    //     // const delta = lineStart + startOffset - newStart;
+    //     line.setPosition(lineStart + startOffset - this.vertexSpaceStart.x, 0);
+    //   } else {
+    //     line.transform.updateScale(straightLineLength, 1);
+    //     const newStart = this.vertexSpaceStart.x * straightLineLength;
+    //     const delta = lineStart + startOffset - newStart;
+    //     line.setPosition(delta, 0);
+    //   }
+    // }
+
+    // const movePad = this._movePad;
+    // if (movePad) {
+    //   movePad.transform.updateScale(newLength, 1);
+    //   const p = movePad.getPosition();
+    //   movePad.setPosition(p.x * newLength, p.y);
+    // }
+    // const rotPad = this._rotPad;
+    // if (rotPad) {
+    //   rotPad.transform.updateScale(newLength, 1);
+    //   const p = rotPad.getPosition();
+    //   rotPad.setPosition(p.x * newLength, p.y);
+    // }
+
+    // // const movePad = this._movePad;
+    // // if (movePad) {
+    // //   movePad.transform.updateScale(newLength, 1);
+    // // }
+    // // const rotPad = this._rotPad;
+    // // if (rotPad) {
+    // //   rotPad.transform.updateScale(newLength, 1);
+    // // }
+
+    // this.length = newLength;
+    // this.updateLineGeometry();
+    // this.currentLength = newLength; // to deprecate?
+    this.updateLabel();
+  }
+
+  // updateLineGeometry() {
+  //   const t = this.transform.t();
+  //   const r = this.transform.r();
+  //   if (t != null && r != null) {
+  //     this.position = t;
+  //     this.angle = r;
+  //     const p1 = this.vertexSpaceStart.transformBy(new Transform()
+  //       .scale(this.length)
+  //       .rotate(this.angle)
+  //       .translate(this.position)
+  //       .m());
+  //     const line = new Line(p1, this.length, this.angle);
+  //     this.p1 = line.getPoint(1);
+  //     this.p2 = line.getPoint(2);
+  //     this.line = line;
+  //   }
+  // }
+
+  setupLine() {
+    const set = (key, x) => {
+      if (this[`_${key}`] != null) {
+        this[`_${key}`].transform.updateTranslation(x);
+      }
+    };
+    let xPosition = 0;
+    if (typeof this.align === 'number') {
+      xPosition = -this.line.length() * this.align;
+    } else if (this.align === 'end') {
+      xPosition = -this.line.length();
+    } else if (this.align === 'center') {
+      xPosition = -this.line.length() / 2;
+    }
+    this.localXPosition = xPosition;
+    // set('line', xPosition);
+    set('arrow1', xPosition);
+    set('arrow2', xPosition + this.line.length());
+    // set('movePad', xPosition);
+    // set('rotPad', xPosition);
+
+    // const lineStart = 0;
+    let straightLineLength = this.line.length();
     let startOffset = 0;
 
     if (this.arrow1 && this._arrow1) {
       straightLineLength -= this.arrow1.height;
       startOffset = this.arrow1.height;
-      this._arrow1.setPosition(lineStart);
+      // this._arrow1.setPosition(lineStart);
     }
     if (this.arrow2 && this._arrow2) {
       straightLineLength -= this.arrow2.height;
-      this._arrow2.setPosition(lineStart + lineLength, 0);
+      // this._arrow2.setPosition(lineStart + this.line.length(), 0);
     }
     const line = this._line;
-    if (line) {
+    if (this._line) {
+      this._line.transform.updateTranslation(xPosition + startOffset);
       if (Array.isArray(this.dash) && this.dash.length > 0) {
-        line.lengthToDraw = straightLineLength;
+        this._line.lengthToDraw = straightLineLength;
+        // this._line.transform.updateTranslation(xPosition + startOffset);
         // const newStart = this.vertexSpaceStart.x * straightLineLength;
         // const delta = lineStart + startOffset - newStart;
-        line.setPosition(lineStart + startOffset - this.vertexSpaceStart.x, 0);
+        // this._line.setPosition(lineStart + startOffset - this.vertexSpaceStart.x, 0);
       } else {
         line.transform.updateScale(straightLineLength, 1);
-        const newStart = this.vertexSpaceStart.x * straightLineLength;
-        const delta = lineStart + startOffset - newStart;
-        line.setPosition(delta, 0);
+        // const newStart = this.vertexSpaceStart.x * straightLineLength;
+        // const delta = lineStart + startOffset - newStart;
+        // line.setPosition(delta, 0);
       }
-    }
-
-    const movePad = this._movePad;
-    if (movePad) {
-      movePad.transform.updateScale(newLength, 1);
-      const p = movePad.getPosition();
-      movePad.setPosition(p.x * newLength, p.y);
-    }
-    const rotPad = this._rotPad;
-    if (rotPad) {
-      rotPad.transform.updateScale(newLength, 1);
-      const p = rotPad.getPosition();
-      rotPad.setPosition(p.x * newLength, p.y);
     }
 
     // const movePad = this._movePad;
     // if (movePad) {
     //   movePad.transform.updateScale(newLength, 1);
+    //   const p = movePad.getPosition();
+    //   movePad.setPosition(p.x * newLength, p.y);
     // }
     // const rotPad = this._rotPad;
     // if (rotPad) {
     //   rotPad.transform.updateScale(newLength, 1);
+    //   const p = rotPad.getPosition();
+    //   rotPad.setPosition(p.x * newLength, p.y);
     // }
-
-    this.length = newLength;
-    this.updateLineGeometry();
-    this.currentLength = newLength; // to deprecate?
-    this.updateLabel();
   }
 
-  updateLineGeometry() {
-    const t = this.transform.t();
-    const r = this.transform.r();
-    if (t != null && r != null) {
-      this.position = t;
-      this.angle = r;
-      const p1 = this.vertexSpaceStart.transformBy(new Transform()
-        .scale(this.length)
-        .rotate(this.angle)
-        .translate(this.position)
-        .m());
-      const line = new Line(p1, this.length, this.angle);
-      this.p1 = line.getPoint(1);
-      this.p2 = line.getPoint(2);
-      this.line = line;
-    }
-  }
+  // setLineDimensions() {
+  //   // const offset = polarToRect(this.offset, this.angle + Math.PI / 2);
+  //   // this.transform.updateTranslation(this.position.add(offset));
+  //   // this.transform.updateRotation(this.angle);
+  //   // this.setPosition(this.line.p1);
+  //   // this.setRotation(thi)
+  //   const setLine = (p) => {
+  //     if (this._line != null) {
+  //       this._line.transform.updateTranslation(p);
+  //     }
+  //   };
+  //   const setArrow = (index, p) => {
+  //     if (this[`_arrow${index}`] != null) {
+  //       this[`_arrow${index}`]._line.transform.updateTranslation(p);
+  //     }
+  //   }
+  //   const setLabel = (p) => {
+  //     if (this._line != null) {
+  //       this._line.transform.updateTranslation(p);
+  //     }
+  //   };
+  //   if (this.align === 'start') {
+  //     if (this._line != null) {}
+  //   }
+  //   this.transform.updateTranslation(this.line.p1);
+  //   this.transform.updateRotation(this.line.angle);
+  //   this.setLength(this.line.length);
+  //   this.updateLabel();
+  // }
 
-  setLineDimensions() {
-    const offset = polarToRect(this.offset, this.angle + Math.PI / 2);
-    this.transform.updateTranslation(this.position.add(offset));
-    this.transform.updateRotation(this.angle);
-    this.setLength(this.length);
-    this.updateLabel();
-  }
-
-  setEndPoints(p: TypeParsablePoint, q: TypeParsablePoint, offset: number = this.offset) {
-    this.offset = offset;
-    const { length, angle, position } = this.calculateFromP1P2(getPoint(p), getPoint(q));
-    this.angle = angle;
-    this.length = length;
-    this.position = position;
-    this.setLineDimensions();
+  setEndPoints(p: TypeParsablePoint, q: TypeParsablePoint, offset: number = 0) {
+    // this.offset = offset;
+    // const { length, angle, position } = this.calculateFromP1P2(getPoint(p), getPoint(q));
+    // this.angle = angle;
+    // this.length = length;
+    // this.position = position;
+    this.line = new Point(p, q).offset('positive', offset);
+    this.setupLine();
+    // this.setLineDimensions();
 
     // const pq = new Line(p, q);
     // this.angle = pq.angle();
@@ -1185,8 +1342,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       this.stop();
     }
     this.animateLengthToOptions = {
-      initialLength: this.currentLength,
-      deltaLength: toLength - this.currentLength,
+      initialLength: this.line.length(),
+      deltaLength: toLength - this.line.length(),
       callback,
       onStepCallback,
       finishOnCancel,
@@ -1232,7 +1389,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     onStepCallback: ?(number, number) => void = null,
   ) {
     this.stop();
-    const target = this.currentLength;
+    const target = this.line.length();
     this.setLength(fromLength);
     this.animateLengthTo(target, time, finishOnCancel, callback, onStepCallback);
   }
