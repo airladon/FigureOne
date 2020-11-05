@@ -221,19 +221,20 @@ diagram.addElement({
   name: 'a',
   method: 'objects.line',
   options: {
+    p1: [0, 1],
+    p2: [1, 1],
     // p1: [0, 0],
-    // p2: [3, 3],
-    p1: [0, 0],
     align: 'center',
     length: 2,
     width: 0.01,
     arrow: {
-      head: 'circle',
+      head: 'triangle',
       // align: 'mid',
       scale: 2,
       radius: 0.1,
     },
     // dash: [0.02, 0.02],
+    // offset: -0.1,
   },
 });
 console.log(diagram.elements)
@@ -260,6 +261,9 @@ diagram.addElement({
     // dash: [0.1, 0.1],
   },
 });
+
+diagram.elements._a.setMovable();
+console.log(diagram.elements._a._line.drawingObject.touchBorder)
 // // Line with customized barb arrow at end only
 // diagram.addElement({a
 //   name: 'a',
