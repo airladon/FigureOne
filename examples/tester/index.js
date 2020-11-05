@@ -222,9 +222,9 @@ diagram.addElement({
   method: 'objects.line',
   options: {
     p1: [0, 1],
-    p2: [1, 1],
+    // p2: [1, 1],
     // p1: [0, 0],
-    align: 'center',
+    align: 'mid',
     length: 2,
     width: 0.01,
     // touchBorder: 0.1,
@@ -234,15 +234,15 @@ diagram.addElement({
       scale: 2,
       radius: 0.1,
     },
-    // dash: [0.02, 0.02],
+    dash: [0.02, 0.02],
     // offset: -0.1,
     label: {
       text: 'hello',
       offset: 0.01,
     },
-    move: {
-      type: 'centerTranslateEndRotation',
-    },
+    // move: {
+    //   type: 'centerTranslateEndRotation',
+    // },
     pulseWidth: {
       duration: 5,
       frequency: 0.5,
@@ -275,7 +275,10 @@ diagram.addElement({
   },
 });
 
-diagram.elements._a.setMultiMovable();
+console.log('asdf')
+diagram.elements._a.setMovable(true, 'centerTranslateEndRotation', 0.5);
+console.log('qwer')
+// diagram.elements._a.setLength(2);
 console.log(diagram.elements._a._line.drawingObject.touchBorder)
 // // Line with customized barb arrow at end only
 // diagram.addElement({a

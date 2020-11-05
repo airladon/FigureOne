@@ -3,7 +3,7 @@
 // import Diagram from '../Diagram';
 import {
   Transform, Point, Line, polarToRect, normAngle, Rect, distance, getPoint,
-  TransformBounds, RectBounds,
+  TransformBounds, RectBounds, getBoundingBorder,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
 import {
@@ -237,7 +237,8 @@ function makeStraightLine(
 export default class DiagramObjectLine extends DiagramElementCollection {
   // Diagram elements
   _line: ?DiagramElementPrimitive;
-  _midLine: ?DiagramElementPrimitive;
+  _movePad: ?DiagramElementPrimitive;
+  _rotPad: ?DiagramElementPrimitive;
   _arrow1: ?DiagramElementPrimitive;
   _arrow2: ?DiagramElementPrimitive;
   _label: null | {
@@ -478,7 +479,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       // }),
       bounds: new Rect(-1, -1, 2, 2),
     };
-    this._midLine = null;
+    // this._movePad = null;
+    // this._rotPad = null;
 
     this.scaleTransformMethodName = '_transformMethod';
     // If the line is to be shown (and not just a label) then make it
@@ -492,7 +494,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         this.shapes, this.vertexSpaceLength, this.width,
         this.vertexSpaceStart,
         optionsToUse.color, this.dash, this.maxLength,
-        optionsToUse.touchBorder,
+        // optionsToUse.touchBorder,
         // optionsToUse.touchBorder, isTouchDevice,
       );
       const scaleTransformMethod = s => new Transform().scale(1, s);
@@ -755,8 +757,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
           this._line.isTouchable = true;
           this._line.isMovable = false;
         }
-        if (this._midLine) {
-          this._midLine.isMovable = false;
+        if (this._movePad) {
+          this._movePad.isMovable = false;
         }
         this.multiMove.bounds = translationBounds;
       } else {
@@ -779,26 +781,62 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       - this.multiMove.vertexSpaceMidLength / 2,
       0,
     );
-    const midLine = makeStraightLine(
-      this.shapes, this.multiMove.vertexSpaceMidLength, this.width || 0.01,
-      start, this.color, [], this.maxLength,
-      this.touchBorder,
-      // this.isTouchDevice,
-    );
-    // console.log(midLine)
-    midLine.isTouchable = true;
-    midLine.move.type = 'translation';
-    midLine.move.element = this;
-    midLine.isMovable = true;
-    midLine.move.canBeMovedAfterLosingTouch = true;
-    this.add('midLine', midLine);
-    if (this._line) {
-      this._line.isTouchable = true;
-      this._line.move.type = 'rotation';
-      this._line.move.element = this;
-      this._line.isMovable = true;
-      this._line.move.canBeMovedAfterLosingTouch = true;
+    const matrix = this._line.spaceTransformMatrix('diagram', 'draw');
+    const touchBorder = getBoundingBorder(this.getBorder('diagram', 'touchBorder')).map(p => p.transformBy(matrix));
+    const width = touchBorder[1].x - touchBorder[0].x;
+    const height = touchBorder[2].y - touchBorder[1].y;
+    if (this._rotPad == null) {
+      const rotPad = this.shapes.rectangle({
+        position: touchBorder[0]._dup(),
+        xAlign: 'left',
+        yAlign: 'bottom',
+        width,
+        height,
+        color: [0, 0, 1, 0.5],
+      });
+      this.add('rotPad', rotPad);
+      rotPad.setMovable();
+      rotPad.move.type = 'rotation';
+      rotPad.move.element = this;
     }
+    if (this._movePad == null) {
+      const movePad = this.shapes.rectangle({
+        position: new Point(start.x, touchBorder[0].y),
+        xAlign: 'left',
+        yAlign: 'bottom',
+        width: this.multiMove.vertexSpaceMidLength,
+        height,
+        color: [0, 1, 0, 0.5],
+      });
+
+      this.add('movePad', movePad);
+      movePad.setMovable();
+
+      movePad.move.type = 'translation';
+      movePad.move.element = this;
+    }
+    // rotPad.isMovable = true,
+
+    // const movePad = makeStraightLine(
+    //   this.shapes, this.multiMove.vertexSpaceMidLength, this.width || 0.01,
+    //   start, this.color, [], this.maxLength,
+    //   this.touchBorder,
+    //   // this.isTouchDevice,
+    // );
+    // // console.log(movePad)
+    // movePad.isTouchable = true;
+    // movePad.move.type = 'translation';
+    // movePad.move.element = this;
+    // movePad.isMovable = true;
+    // movePad.move.canBeMovedAfterLosingTouch = true;
+    // this.add('movePad', movePad);
+    // if (this._line) {
+    //   this._line.isTouchable = true;
+    //   this._line.move.type = 'rotation';
+    //   this._line.move.element = this;
+    //   this._line.isMovable = true;
+    //   this._line.move.canBeMovedAfterLosingTouch = true;
+    // }
     this.hasTouchableElements = true;
     this.isTouchable = false;
     this.isMovable = false;
@@ -1022,10 +1060,27 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       }
     }
 
-    const midLine = this._midLine;
-    if (midLine) {
-      midLine.transform.updateScale(newLength, 1);
+    const movePad = this._movePad;
+    if (movePad) {
+      movePad.transform.updateScale(newLength, 1);
+      const p = movePad.getPosition();
+      movePad.setPosition(p.x * newLength, p.y);
     }
+    const rotPad = this._rotPad;
+    if (rotPad) {
+      rotPad.transform.updateScale(newLength, 1);
+      const p = rotPad.getPosition();
+      rotPad.setPosition(p.x * newLength, p.y);
+    }
+
+    // const movePad = this._movePad;
+    // if (movePad) {
+    //   movePad.transform.updateScale(newLength, 1);
+    // }
+    // const rotPad = this._rotPad;
+    // if (rotPad) {
+    //   rotPad.transform.updateScale(newLength, 1);
+    // }
 
     this.length = newLength;
     this.updateLineGeometry();
