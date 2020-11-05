@@ -17,6 +17,7 @@ import type { TypeLabelEquationOptions } from './EquationLabel';
 import { joinObjects } from '../../tools/tools';
 import { Equation } from '../DiagramElements/Equation/Equation';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
+import { simplifyArrowOptions, getArrowLength } from '../DrawingObjects/Geometries/arrow';
 
 // top - text is on top of line (except when line is vertical)
 // bottom - text is on bottom of line (except when line is vertical)
@@ -69,20 +70,21 @@ export type TypeLineOptions = {
   offset?: number,
   p1?: Point,
   p2?: Point,
-  arrowStart?: {
-    width?: number,
-    height?: number,
-  },
-  arrowEnd?: {
-    width?: number,
-    height?: number,
-  },
-  arrows?: {
-    width?: number,
-    height?: number,
-  } | boolean,
+  arrow: OBJ_ArrowLines;
+  // arrowStart?: {
+  //   width?: number,
+  //   height?: number,
+  // },
+  // arrowEnd?: {
+  //   width?: number,
+  //   height?: number,
+  // },
+  // arrows?: {
+  //   width?: number,
+  //   height?: number,
+  // } | boolean,
   label?: TypeLineLabelOptions,
-  dashStyle?: {
+  dash?: {
     style: Array<number>,
     maxLength?: number,
   },
@@ -170,56 +172,39 @@ function makeStraightLine(
   width: number,
   position: Point,
   color: Array<number>,
-  // dashStyle: {
-  //   style: Array<number>,
-  //   maxLength: number } | null,
   dash: Array<number>,
   maxLength: number,
   largerTouchBorder: boolean | number | { width: number, start: number, end: number },
   isTouchDevice: boolean,
 ) {
-  // let straightLine = shapes.horizontalLine(
-  //   position,
-  //   length, width,
-  //   0, color, new Transform().scale(1, 1).translate(0, 0),
-  // );
-  let straightLine = shapes.line({
-    position,
-    length,
-    width,
-    color,
-    dash,
-    transform: new Transform().scale(1, 1).translate(0, 0),
-  });
-  // if (dashStyle) {
-  //   straightLine = shapes.dashedLine({
-  //     position,
-  //     length: dashStyle.maxLength,
-  //     width,
-  //     rotation: 0,
-  //     dashStyle: dashStyle.style,
-  //     color,
-  //     transform: new Transform().scale(1, 1).translate(0, 0),
-  //   });
-  //   //   position,
-  //   //   dashStyle.maxLength, width,
-  //   //   0, dashStyle.style, color, new Transform().scale(1, 1).translate(0, 0),
-  //   // );
-  //   // straightLine = shapes.dashedLine(
-  //   //   position,
-  //   //   dashStyle.maxLength, width,
-  //   //   0, dashStyle.style, color, new Transform().scale(1, 1).translate(0, 0),
-  //   // );
-  // }
+  let straightLine;
+  if (dash.length < 2) {
+    straightLine = shapes.line({
+      p1: position,
+      length,
+      angle: 0,
+      width,
+      color,
+      dash,
+      transform: new Transform().scale(1, 1).translate(0, 0),
+    });
+  } else {
+    straightLine = shapes.line({
+      p1: position,
+      length: maxLength,
+      angle: 0,
+      dash,
+      width,
+      color,
+      transform: new Transform().scale(1, 1).translate(0, 0),
+    });
+  }
   if (largerTouchBorder) {
     const multiplier = isTouchDevice ? 16 : 8;
     let end = 0;
     let start = 0;
     let padding = multiplier * width;
-    // let width = null;
-    // const lineWidth = Math.abs(element.drawingObject.border[0][i].y) * 2;
     if (typeof largerTouchBorder === 'number') {
-      // multiplier = largerTouchBorder;
       padding = largerTouchBorder;
     }
     if (typeof largerTouchBorder === 'object') {
@@ -233,54 +218,16 @@ function makeStraightLine(
         start = largerTouchBorder.start;
       }
     }
-    // console.log(padding, end, start)
-    straightLine.drawingObject.border[0] = [
-      straightLine.drawingObject.border[0][0].add(-start, -padding),
-      straightLine.drawingObject.border[0][1].add(-start, padding),
-      straightLine.drawingObject.border[0][2].add(end, padding),
-      straightLine.drawingObject.border[0][3].add(end, -padding),
+    straightLine.drawingObject.touchBorder[0] = [
+      straightLine.drawingObject.touchBorder[0][0].add(-start, -padding),
+      straightLine.drawingObject.touchBorder[0][1].add(-start, padding),
+      straightLine.drawingObject.touchBorder[0][2].add(end, padding),
+      straightLine.drawingObject.touchBorder[0][3].add(end, -padding),
     ];
-    // const increaseBorderSize = (element: DiagramElementPrimitive) => {
-    //   for (let i = 0; i < element.drawingObject.border[0].length; i += 1) {
-    //     // eslint-disable-next-line no-param-reassign
-    //     element.drawingObject.border[0][i].y *= multiplier;
-    //   }
-    // };
-    // increaseBorderSize(straightLine);
   }
   return straightLine;
 }
-// export type TypeLine = {
-//   _line: DiagramElementPrimitive;
-//   currentLength: number;
-//   setLength: (number) => void;
-//   setEndPoints: (Point, Point, number) => void;
-//   animateLengthTo: (number, number, boolean, ?() => void) => void;
-//   grow: (number, number, boolean, ?() => void) => void;
-//   reference: 'center' | 'end';
-//   showRealLength: boolean;
-//   label: ?LineLabel;
-//   _label: DiagramElementCollection;
-//   arrow1: null | {
-//     height: number;
-//   };
-//   arrow2: null | {
-//     height: number;
-//   };
-//   setMovable: (?boolean) => void;
 
-//   addArrow1: (number, number) => void;
-//   addArrow2: (number, number) => void;
-//   addLabel: (string, number, TypeLineLabelLocation,
-//              TypeLineLabelSubLocation, TypeLineLabelOrientation, number
-//             ) => void;
-//   setEndPoints: (Point, Point, ?number) => void;
-//   animateLengthTo: (number, number, boolean, ?() => void) => void;
-//   grow: (number, number, boolean, ?() => void) => void;
-//   pulseWidth: () => void;
-//   updateLabel: (?number) => {};
-//   offset: number;
-// } & DiagramElementCollection;
 
 // A line is always defined as horiztonal with length 1 in vertex space
 // The line's position and rotation is the line collection transform
@@ -556,29 +503,13 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       this.setEndPoints(optionsToUse.p1, optionsToUse.p2);
     }
 
-    const defaultArrowOptions = {
-      width: this.width * 4,
-      height: this.width * 4,
-    };
-    if (optionsToUse.arrowStart) {
-      const arrowOptions = joinObjects({}, defaultArrowOptions, optionsToUse.arrowStart);
-      this.addArrowStart(arrowOptions.height, arrowOptions.width);
+    if (optionsToUse.arrow != null) {
+      const arrowOptions = simplifyArrowOptions(optionsToUse.arrow, this.width);
+      this.arrow = arrowOptions;
+      this.addArrow('start');
+      this.addArrow('end');
     }
 
-    if (optionsToUse.arrowEnd) {
-      const arrowOptions = joinObjects({}, defaultArrowOptions, optionsToUse.arrowEnd);
-      this.addArrowEnd(arrowOptions.height, arrowOptions.width);
-    }
-
-    // Arrows overrides arrowStart or arrowEnd
-    if (optionsToUse.arrows) {
-      let arrows = {};
-      if (typeof optionsToUse.arrows === 'object') {
-        ({ arrows } = optionsToUse);
-      }
-      const arrowOptions = joinObjects({}, defaultArrowOptions, arrows);
-      this.addArrows(arrowOptions.height, arrowOptions.width);
-    }
 
     const defaultLabelOptions = {
       text: null,
@@ -702,18 +633,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         oldTransformMethod: line.pulseSettings.transformMethod,
         oldCallback: line.pulseSettings.callback,
       };
-      // const oldTransformMethod = line.pulseSettings.transformMethod;
-      // const oldPulseCallback = line.pulseSettings.callback;
-      // const finishPulsing = () => {
-      //   line.pulseSettings.transformMethod = oldTransformMethod;
-      //   line.pulseSettings.callback = oldPulseCallback;
-      // };
-      // const finishPulsingName = `${this.getPath()}_finishPulsing`;
-      // this.fnMap.add(finishPulsingName, finishPulsing);
       line.pulseSettings.callback = this.pulseWidthDoneCallbackName;
-      // const scaleTransformMethod = s => new Transform().scale(1, s);
-      // const scaleTransformMethodName = `${this.getPath()}_transformMethod`;
-      // this.fnMap.add(scaleTransformMethodName, scaleTransformMethod);
       line.pulseSettings.transformMethod = this.scaleTransformMethodName;
       line.pulseScale({
         duration: options.duration,
@@ -727,24 +647,26 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const arrow1 = this._arrow1;
     const arrow2 = this._arrow2;
     if (arrow1 != null) {
-      arrow1.pulseScale({
+      arrow1.pulse({
         duration: options.duration,
         scale: options.arrow,
         frequency: 0,
         callback: done,
         when: options.when,
+        centerOn: arrow1.getPosition('diagram'),
       });
       // arrow1.pulseScaleNow(options.duration, options.arrow, 0, done);
       done = null;
     }
     if (arrow2 != null) {
       // arrow2.pulseScaleNow(options.duration, options.arrow, 0, done);
-      arrow2.pulseScale({
+      arrow2.pulse({
         duration: options.duration,
         scale: options.arrow,
         frequency: 0,
         callback: done,
         when: options.when,
+        centerOn: arrow2.getPosition('diagram'),
       });
       done = null;
     }
@@ -752,7 +674,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const label = this._label;
     if (label != null) {
       // label.pulseScaleNow(options.duration, options.label, 0, done);
-      label.pulseScale({
+      label.pulse({
         duration: options.duration,
         scale: options.label,
         frequency: 0,
@@ -768,71 +690,35 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   }
 
   addArrow(
-    index: 1 | 2,
-    height: number = this.width * 4,
-    width: number = height,
+    lineEnd: 'start' | 'end',
   ) {
-    let r = 0;
-    let start = [-height, 0];
-    if (index === 1) {
-      r = Math.PI;
-      start = [height, 0];
+    if (this.arrow == null || this.arrow[lineEnd] == null) {
+      return;
     }
-    const a = this.shapes.arrow({
-      width,
-      legWidth: 0,
-      length: height,
-      legHeight: 0,
-      color: this.color,
-      transform: new Transform().translate(this.vertexSpaceStart.x, 0),
-      start,
-
-      angle: r,
-    });
-    // const a = this.shapes.arrowLegacy(
-    //   width, 0, height, 0,
-    //   this.color, new Transform().translate(this.vertexSpaceStart.x, 0), new Point(0, 0), r,
-    // );
-    // $FlowFixMe
-    this[`arrow${index}`] = { height };
+    const o = this.arrow[lineEnd];
+    let r = 0;
+    let position = this.vertextSpaceStart + this.vertexSpaceLength;
+    if (lineEnd === 'start') {
+      r = Math.PI;
+      position = this.vertexSpaceStart;
+    }
+    const a = this.shapes.arrow(joinObjects(
+      {},
+      o,
+      {
+        angle: r,
+        color: this.color,
+        transform: new Transform().translate(position),
+      },
+    ));
+    const arrowLength = getArrowLength(o)[0];
+    let index = 1;
+    if (lineEnd === 'end') {
+      index = 2;
+    }
+    this[`arrow${index}`] = { height: arrowLength };
     this.add(`arrow${index}`, a);
     this.setLength(this.currentLength);
-  }
-
-  addArrows(
-    arrowHeight: number = this.width * 4,
-    arrowWidth: number = arrowHeight,
-  ) {
-    this.addArrow1(arrowHeight, arrowWidth);
-    this.addArrow2(arrowHeight, arrowWidth);
-  }
-
-  addArrow1(
-    arrowHeight: number = this.width * 4,
-    arrowWidth: number = arrowHeight,
-  ) {
-    this.addArrow(1, arrowHeight, arrowWidth);
-  }
-
-  addArrow2(
-    arrowHeight: number = this.width * 4,
-    arrowWidth: number = arrowHeight,
-  ) {
-    this.addArrow(2, arrowHeight, arrowWidth);
-  }
-
-  addArrowStart(
-    arrowHeight: number = this.width * 4,
-    arrowWidth: number = arrowHeight,
-  ) {
-    this.addArrow1(arrowHeight, arrowWidth);
-  }
-
-  addArrowEnd(
-    arrowHeight: number = this.width * 4,
-    arrowWidth: number = arrowHeight,
-  ) {
-    this.addArrow2(arrowHeight, arrowWidth);
   }
 
   setMovable(

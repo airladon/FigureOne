@@ -1,39 +1,39 @@
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
-// diagram.addElements([
-//   {
-//     name: 'origin',
-//     method: 'polygon',
-//     options: {
-//       radius: 0.01,
-//       line: { width: 0.01 },
-//       sides: 10,
-//       color: [0.7, 0.7, 0.7, 1]
-//     },
-//   },
-//   {
-//     name: 'grid',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.1,
-//       xStep: 0.1,
-//       color: [0.7, 0.7, 0.7, 1],
-//       line: { width: 0.001 },
-//     },
-//   },
-//   {
-//     name: 'gridMajor',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.5,
-//       xStep: 0.5,
-//       color: [0.8, 0.8, 0.8, 1],
-//       line: { width: 0.004 }
-//     },
-//   },
-// ]);
+diagram.addElements([
+  {
+    name: 'origin',
+    method: 'polygon',
+    options: {
+      radius: 0.01,
+      line: { width: 0.01 },
+      sides: 10,
+      color: [0.7, 0.7, 0.7, 1]
+    },
+  },
+  {
+    name: 'grid',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.1,
+      xStep: 0.1,
+      color: [0.7, 0.7, 0.7, 1],
+      line: { width: 0.001 },
+    },
+  },
+  {
+    name: 'gridMajor',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.5,
+      xStep: 0.5,
+      color: [0.8, 0.8, 0.8, 1],
+      line: { width: 0.004 }
+    },
+  },
+]);
 
 
 // // Simple
@@ -219,17 +219,45 @@ diagram.elements._c.setMovable();
 // Line with triangle arrows on both ends
 diagram.addElement({
   name: 'a',
-  method: 'shapes.line',
+  method: 'objects.line',
   options: {
     p1: [0, 0],
-    p2: [0, 1],
-    width: 0.02,
-    arrow: 'triangle',
+    p2: [3, 3],
+    width: 0.01,
+    arrow: {
+      head: 'barb',
+      // align: 'mid',
+      radius: 0.1,
+    },
+    dash: [0.02, 0.02],
   },
 });
+console.log(diagram.elements)
+// diagram.elements._a.grow(0, 5);
+diagram.animateNextFrame();
+diagram.elements._a.pulseWidth();
+diagram.elements._a.setLength(2 * Math.sqrt(2));
 
+diagram.addElement({
+  name: 'asdf',
+  method: 'polyline',
+  options: {
+    points: [[0, 0], [1,0]],
+    // p1: [-1, 0],
+    // p2: [0, -1],
+    width: 0.02,
+    arrow: {
+      head: 'triangle',
+      align: 'mid',
+      sides: 7,
+      radius: 0.05,
+      tail: 0,
+    },
+    dash: [0.1, 0.1],
+  },
+});
 // // Line with customized barb arrow at end only
-// diagram.addElement({
+// diagram.addElement({a
 //   name: 'a',
 //   method: 'shapes.line',
 //   options: {

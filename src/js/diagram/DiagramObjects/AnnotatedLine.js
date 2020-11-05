@@ -295,25 +295,18 @@ export default class DiagramObjectAnnotatedLine extends DiagramElementCollection
   } & DiagramElementCollection;
 
   // label and arrow objects that exist if labels and arrows exist
-  label: ?LineLabel;
-  // arrow1: ?{ height: number; };
-  // arrow2: ?{ height: number; };
-
-  // line properties - read only
+  label: Object;
   line: Line;
   arrow: {
     start?: OBJ_Arrow;
     end?: OBJ_Arrow;
   };
 
+  // label?: {
+  //   realLength: boolean,
+  // };
   dash: Array<number>;
-  // length: number;
-  // angle: number;
-  // width: number;
-  // p1: Point;
-  // p2: Point;
-  // position: Point;
-  // alignment: 'start' | 'end' | 'center' | number | Point;
+  // alignment: 'start' | 'end' | 'center' | number;
 
   // line properties - read/write
   showRealLength: boolean;
@@ -396,7 +389,7 @@ export default class DiagramObjectAnnotatedLine extends DiagramElementCollection
       p1: this.line.getPoint(1),
       length: this.line.length(),
       angle: this.line.angle(),
-      alignment: this.alignment,
+      alignment: 'start',
     };
     const o = joinObjects({}, defaultOptions, options);
     let line;

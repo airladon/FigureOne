@@ -2524,9 +2524,30 @@ export default class DiagramPrimitives {
       touchBorder,
     });
 
+    element.custom.setupLine = (p, o) => {
+      const maxLength = p[0].distance(p[1]);
+      const dashCumLength = [];
+      let cumLength = 0;
+      if (o.dash) {
+        while (cumLength < maxLength) {
+          for (let i = 0; i < o.dash.length && cumLength < maxLength; i += 1) {
+            let length = o.dash[i];
+            if (length + cumLength > maxLength) {
+              length = maxLength - cumLength;
+            }
+            cumLength += length;
+            dashCumLength.push(cumLength);
+          }
+        }
+        element.custom.dashCumLength = dashCumLength;
+        element.custom.maxLength = maxLength;
+      }
+    };
+    element.custom.setupLine(points, optionsToUse);
     element.custom.update = (updateOptions) => {
       const o = joinObjects({}, optionsToUse, updateOptions);
       const [updatedPoints, updatedBorder, updatedTouchBorder] = getLine(o);
+      element.custom.setupLine(updatedPoints, o);
       element.custom.updatePoints(joinObjects({}, o, {
         points: updatedPoints,
         border: updatedBorder,
@@ -2534,6 +2555,23 @@ export default class DiagramPrimitives {
         holeBorder: o.holeBorder,
       }));
     };
+
+    element.drawingObject.getPointCountForLength = (drawLength: number = this.maxLength) => {
+      if (drawLength >= element.custom.maxLength) {
+        return element.drawingObject.numPoints;
+      }
+      if (drawLength < element.custom.dashCumLength[0]) {
+        return 0;
+      }
+      for (let i = 0; i < element.custom.dashCumLength.length; i += 1) {
+        const cumLength = element.custom.dashCumLength[i];
+        if (cumLength > drawLength) {
+          return (Math.floor((i - 1) / 2) + 1) * 6;
+        }
+      }
+      return element.drawingObject.numPoints;
+    };
+
     return element;
   }
 
@@ -2561,6 +2599,7 @@ export default class DiagramPrimitives {
     );
 
     const optionsToUse = processOptions(defaultOptions, ...options);
+
     if (optionsToUse.drawPosition != null) {
       optionsToUse.drawPosition = getPoint(optionsToUse.drawPosition);
     }

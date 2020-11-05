@@ -597,7 +597,8 @@ function shortenLineForArrows(
   if (start != null) {
     const startPoint = points[0];
     let index = 0;
-    const [arrowLength] = getArrowLength(start);
+    const [, arrowLength] = getArrowLength(start);
+    console.log(getArrowLength(start))
     let pointFound = false;
     while (index < points.length - 1 && pointFound === false) {
       index += 1;
@@ -623,7 +624,7 @@ function shortenLineForArrows(
   if (end != null) {
     const endPoint = points[points.length - 1];
     let index = points.length - 1;
-    const [arrowLength] = getArrowLength(end);
+    const [, arrowLength] = getArrowLength(end);
     let pointFound = false;
     while (index > 0 && pointFound === false) {
       index -= 1;
@@ -686,7 +687,7 @@ function makePolyLine(
   if (close === false && arrowIn != null) {
     orderedPoints = shortenLineForArrows(pointsIn, arrow);
   }
-
+  // console.log(orderedPoints)
   // Convert line to line with corners
   if (cornerStyle === 'auto') {
     points = orderedPoints.map(p => p._dup());

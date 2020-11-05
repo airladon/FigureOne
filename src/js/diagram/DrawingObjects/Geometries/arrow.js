@@ -205,6 +205,7 @@ function orientArrow(
       .rotate(options.angle)
       .translate(options.drawPosition).matrix();
   } else if (options.align === 'mid') {
+    console.log(length / 2)
     matrix = new Transform()
       .translate(length / 2, 0)
       .rotate(options.angle)
@@ -290,7 +291,7 @@ function getTriangleArrowLength(o: {
   tailWidth: number,
   tail: boolean,
 }) {
-  return [o.length, o.length];
+  return [o.length, o.length, o.length];
 }
 
 function getTriangleDefaults(o: {
@@ -419,7 +420,7 @@ function getReverseTriLength(o: {
   tail: boolean,
 }) {
   const [, , tailX] = getReverseTriTail(o);
-  return [o.length, -tailX];
+  return [o.length, -tailX, o.length];
 }
 
 function getReverseTriDefaults(o: {
@@ -576,7 +577,7 @@ function getBarbLength(o: {
   tail: boolean,
 }) {
   const [, , tailX] = getBarbTail(o);
-  return [o.length, -tailX];
+  return [o.length, -tailX, o.length];
 }
 
 function getBarbDefaults(o: {
@@ -707,9 +708,9 @@ function getRectLength(o: {
   tail: boolean,
 }) {
   if (o.align === 'mid') {
-    return [o.length / 2, o.length / 2];
+    return [o.length / 2, o.length / 2, o.length];
   }
-  return [o.length, o.length];
+  return [o.length, o.length, o.length];
 }
 
 function getRectDefaults(o: {
@@ -933,7 +934,7 @@ function getLineLength(o: {
   tail: boolean,
 }) {
   const [, , tailX] = getLineTail(o);
-  return [o.length, -tailX];
+  return [o.length, -tailX, o.length];
 }
 
 function getLineDefaults(o: {
@@ -1123,17 +1124,21 @@ function getPolygonLength(o: {
   radius: number,
   tail: boolean,
 }) {
+  let t = 0;
+  if (typeof o.tail === 'number') {
+    t = Math.max(0, o.tail);
+  }
   if (o.align === 'mid') {
     if (o.tail === false) {
-      return [0, 0];
+      return [0, 0, o.radius * 2 + t];
     }
-    return [o.radius, o.radius];
+    return [o.radius, o.radius, o.radius * 2 + t];
   }
   if (typeof o.tail === 'boolean') {
-    return [o.radius, o.radius];
+    return [o.radius, o.radius, o.radius];
   }
-  const l = o.radius * 2 + Math.max(o.tail, 0);
-  return [l, l];
+  const l = o.radius * 2 + t;
+  return [l, l, l];
 }
 
 function getPolygonDefaults(o: {
@@ -1216,9 +1221,7 @@ function getArrowLength(options: {
   radius: number,
   // reverse: boolean,
 }) {
-  const {
-    head, width, length, tailWidth, radius, tail,
-  } = options;
+  const { head, length } = options;
   if (head === 'circle' || head === 'polygon') {
     return getPolygonLength(options);
   }
@@ -1238,7 +1241,7 @@ function getArrowLength(options: {
   if (head === 'barb') {
     return getBarbLength(options);
   }
-  if (head === 'rectangle' || head ==='bar') {
+  if (head === 'rectangle' || head === 'bar') {
     return getRectLength(options);
   }
   // if (head === 'triangle' && reverse) {
@@ -1282,9 +1285,9 @@ function getArrow(options: {
   } else {
     [points, border, touchBorder, tail] = getTriangleArrow(options);
   }
-  const [length, joinLength] = getArrowLength(options);
+  const [, joinLength, fullLength] = getArrowLength(options);
   return orientArrow(
-    points, border, touchBorder, tail, length, joinLength, options,
+    points, border, touchBorder, tail, fullLength, joinLength, options,
   );
 }
 
