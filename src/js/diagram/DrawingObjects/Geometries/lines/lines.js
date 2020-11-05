@@ -598,7 +598,6 @@ function shortenLineForArrows(
     const startPoint = points[0];
     let index = 0;
     const [, arrowLength] = getArrowLength(start);
-    console.log(getArrowLength(start))
     let pointFound = false;
     while (index < points.length - 1 && pointFound === false) {
       index += 1;

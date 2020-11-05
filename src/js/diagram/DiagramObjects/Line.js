@@ -71,23 +71,8 @@ export type TypeLineOptions = {
   p1?: Point,
   p2?: Point,
   arrow: OBJ_ArrowLines;
-  // arrowStart?: {
-  //   width?: number,
-  //   height?: number,
-  // },
-  // arrowEnd?: {
-  //   width?: number,
-  //   height?: number,
-  // },
-  // arrows?: {
-  //   width?: number,
-  //   height?: number,
-  // } | boolean,
   label?: TypeLineLabelOptions,
-  dash?: {
-    style: Array<number>,
-    maxLength?: number,
-  },
+  dash: Array<number>,
   pulse?: {
     line?: number,
     label?: number,
@@ -711,7 +696,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         transform: new Transform().translate(position),
       },
     ));
-    const arrowLength = getArrowLength(o)[0];
+    const arrowLength = getArrowLength(o)[1];
     let index = 1;
     if (lineEnd === 'end') {
       index = 2;

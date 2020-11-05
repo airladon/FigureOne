@@ -221,39 +221,43 @@ diagram.addElement({
   name: 'a',
   method: 'objects.line',
   options: {
+    // p1: [0, 0],
+    // p2: [3, 3],
     p1: [0, 0],
-    p2: [3, 3],
+    vertexSpaceStart: 'end',
+    length: 2,
     width: 0.01,
     arrow: {
-      head: 'barb',
+      head: 'circle',
       // align: 'mid',
+      scale: 2,
       radius: 0.1,
     },
-    dash: [0.02, 0.02],
+    // dash: [0.02, 0.02],
   },
 });
 console.log(diagram.elements)
 // diagram.elements._a.grow(0, 5);
 diagram.animateNextFrame();
 diagram.elements._a.pulseWidth();
-diagram.elements._a.setLength(2 * Math.sqrt(2));
+// diagram.elements._a.setLength(1.5);
 
 diagram.addElement({
   name: 'asdf',
-  method: 'polyline',
+  method: 'line',
   options: {
     points: [[0, 0], [1,0]],
     // p1: [-1, 0],
     // p2: [0, -1],
     width: 0.02,
     arrow: {
-      head: 'triangle',
+      head: 'barb',
       align: 'mid',
       sides: 7,
       radius: 0.05,
       tail: 0,
     },
-    dash: [0.1, 0.1],
+    // dash: [0.1, 0.1],
   },
 });
 // // Line with customized barb arrow at end only

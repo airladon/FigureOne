@@ -2525,22 +2525,24 @@ export default class DiagramPrimitives {
     });
 
     element.custom.setupLine = (p, o) => {
-      const maxLength = p[0].distance(p[1]);
-      const dashCumLength = [];
-      let cumLength = 0;
-      if (o.dash) {
-        while (cumLength < maxLength) {
-          for (let i = 0; i < o.dash.length && cumLength < maxLength; i += 1) {
-            let length = o.dash[i];
-            if (length + cumLength > maxLength) {
-              length = maxLength - cumLength;
+      if (o.dash.length > 1) {
+        const maxLength = p[0].distance(p[1]);
+        const dashCumLength = [];
+        let cumLength = 0;
+        if (o.dash) {
+          while (cumLength < maxLength) {
+            for (let i = 0; i < o.dash.length && cumLength < maxLength; i += 1) {
+              let length = o.dash[i];
+              if (length + cumLength > maxLength) {
+                length = maxLength - cumLength;
+              }
+              cumLength += length;
+              dashCumLength.push(cumLength);
             }
-            cumLength += length;
-            dashCumLength.push(cumLength);
           }
+          element.custom.dashCumLength = dashCumLength;
+          element.custom.maxLength = maxLength;
         }
-        element.custom.dashCumLength = dashCumLength;
-        element.custom.maxLength = maxLength;
       }
     };
     element.custom.setupLine(points, optionsToUse);
