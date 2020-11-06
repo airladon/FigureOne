@@ -18,6 +18,8 @@ import { joinObjects } from '../../tools/tools';
 import { Equation } from '../DiagramElements/Equation/Equation';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
 import { simplifyArrowOptions, getArrowLength } from '../DrawingObjects/Geometries/arrow';
+import type { OBJ_LineArrows } from '../DrawingObjects/Geometries/arrow';
+import type { OBJ_Pulse } from '../Element';
 
 // top - text is on top of line (except when line is vertical)
 // bottom - text is on bottom of line (except when line is vertical)
@@ -72,7 +74,7 @@ export type TypeLineOptions = {
   //
   color?: Array<number>,
   touchBorder?: Array<Array<Point>> | 'border' | number | 'rect',
-  arrow: OBJ_ArrowLines;
+  arrow: OBJ_LineArrows;
   label?: TypeLineLabelOptions,
   dash: Array<number>,
   pulseWidth?: {
@@ -83,7 +85,7 @@ export type TypeLineOptions = {
     frequency?: number,
   },
   pulse: OBJ_Pulse;
-  // mods?: {},
+  
   move?: {
     type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale';
     middleLengthPercent?: number;
@@ -96,6 +98,14 @@ export type TypeLineOptions = {
 //   Arrows
 //   Label
 //   Future: Dimension posts
+//
+// In the straight line draw space, the line is defined from 0,0 to 1,0 if
+// solid, and 0,0 to maxLength,0 if dashed
+// The straight line position transform is then used to position the horiztonal
+// line to make its 'start', 'center', 'end' or number at (0, 0).
+//
+// Arrows are defined in draw space so their tip is at (0, 0). Their position
+// transform then places their tips at p1 and p2 of the line.
 //
 // In vertex space, a line is defined as:
 //   - horizontal
@@ -161,8 +171,8 @@ function makeStraightLine(
   width: number,
   color: Array<number>,
   dash: Array<number>,
-  maxLength: number,
-  touchBorder: number | { width: number, start: number, end: number },
+  // maxLength: number,
+  // touchBorder: number | { width: number, start: number, end: number },
 ) {
   const straightLine = shapes.line({
     p1: [0, 0],
@@ -172,7 +182,7 @@ function makeStraightLine(
     color,
     dash,
     transform: new Transform().scale(1, 1).translate(0, 0),
-    touchBorder,
+    // touchBorder,
   });
 
   return straightLine;
@@ -249,13 +259,10 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   shapes: Object;
   equation: Object;
   animateNextFrame: void => void;
-  // vertexSpaceLength: number;
-  // vertexSpaceStart: Point;
+
   // offset: number;
   isTouchDevice: boolean;
   dash: Array<number>;
-  // touchBorder: number | { width: number, start: number, end: number };
-  // dashStyle: { style: Array<number>, maxLength: number } | null;
 
   scaleTransformMethodName: string;
 
@@ -269,16 +276,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   pulseWidthDoneCallbackName: string;
   grow: (?number, ?number, ?boolean, ?(string | (() => void))) => void;
   setMovable: (?boolean, ?('translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale'), ?number, ?Rect) => void;
-  // addArrow1: (?number, ?number) => void;
-  // addArrow2: (?number, ?number) => void;
-  // addArrowStart: (?number, ?number) => void;
-  // addArrowEnd: (?number, ?number) => void;
-  // addArrow: (number, ?number, ?number) => void;
-  // pulseWidth: (?{
-  //   line?: number,
-  //   label?: number,
-  //   arrow?: number,
-  // }) => void;
 
   pulseWidthDefaults: {
     line: number,
@@ -297,7 +294,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   //           ) => void;
 
   multiMove: {
-    vertexSpaceMidLength: number;
+    midLength: number;
     bounds: Rect,
   };
 
@@ -394,15 +391,11 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     //    - middle: line extends from -length / 2 to length / 2
     //    - percent: line extends from -length * % to length * (1 - %)
 
-    // deprecate
-    this.vertexSpaceLength = 1;
-    this.vertexSpaceStart = new Point(0, 0);
-
     // MultiMove means the line has a middle section that when touched
     // translates the line collection, and when the rest of the line is
     // touched then the line collection is rotated.
     this.multiMove = {
-      vertexSpaceMidLength: 0,
+      midLength: 0,
       // bounds: new RectBounds({
       //   left: -1, bottom: -1, top: 1, right: 1
       // }),
@@ -619,10 +612,10 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
     const o = this.arrow[lineEnd];
     let r = 0;
-    let position = this.vertextSpaceStart + this.vertexSpaceLength;
+    let position = 1;
     if (lineEnd === 'start') {
       r = Math.PI;
-      position = this.vertexSpaceStart;
+      position = 0;
     }
     const a = this.shapes.arrow(joinObjects(
       {},
@@ -679,22 +672,26 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   }
 
   setMultiMovable(middleLengthPercent: number, translationBounds: Rect) {
-    this.multiMove.vertexSpaceMidLength = middleLengthPercent * this.vertexSpaceLength;
-    const start = new Point(
-      this.vertexSpaceStart.x + this.vertexSpaceLength / 2
-      - this.multiMove.vertexSpaceMidLength / 2,
-      0,
-    );
-    const matrix = this._line.spaceTransformMatrix('diagram', 'draw');
+    // this.multiMove.midLength = middleLengthPercent * this.line.length();
+    this.multiMove.midLengthPercent = middleLengthPercent;
+    // this.multiMove.start = new Point(
+    //   this.localXPosition + this.line.length() / 2 - this.multiMove.midLength / 2,
+    //   0,
+    // );
+    // if (this._line == null) {
+    //   return;
+    // }
+    const matrix = this.spaceTransformMatrix('diagram', 'draw');
     const touchBorder = getBoundingBorder(this.getBorder('diagram', 'touchBorder')).map(p => p.transformBy(matrix));
-    const width = touchBorder[1].x - touchBorder[0].x;
+    // const startBuffer = touchBorder[0].x - this.localXPosition;
+    // const width = touchBorder[1].x - touchBorder[0].x;
     const height = touchBorder[2].y - touchBorder[1].y;
     if (this._rotPad == null) {
       const rotPad = this.shapes.rectangle({
-        position: touchBorder[0]._dup(),
+        position: new Point(0, touchBorder[0].y),
         xAlign: 'left',
         yAlign: 'bottom',
-        width,
+        width: 1,
         height,
         color: [0, 0, 1, 0.5],
       });
@@ -705,10 +702,10 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
     if (this._movePad == null) {
       const movePad = this.shapes.rectangle({
-        position: new Point(start.x, touchBorder[0].y),
+        position: new Point(0, touchBorder[0].y),
         xAlign: 'left',
         yAlign: 'bottom',
-        width: this.multiMove.vertexSpaceMidLength,
+        width: 1,
         height,
         color: [0, 1, 0, 0.5],
       });
@@ -1003,51 +1000,67 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     };
     let xPosition = 0;
     let position = this.line.p1._dup();
-    if (typeof this.align === 'number') {
-      xPosition = -this.line.length() * this.align;
-      position = this.line.pointAtPercent(this.align);
-    } else if (this.align === 'end') {
+    const { align } = this;
+    if (typeof align === 'number') {
+      xPosition = -this.line.length() * align;
+      position = this.line.pointAtPercent(align);
+    } else if (align === 'end') {
       xPosition = -this.line.length();
       position = this.line.p2._dup();
-    } else if (this.align === 'center') {
+    } else if (align === 'center') {
       xPosition = -this.line.length() / 2;
       position = this.line.pointAtPercent(0.5);
     }
     this.localXPosition = xPosition;
-    // set('line', xPosition);
     set('arrow1', xPosition);
     set('arrow2', xPosition + this.line.length());
     // set('movePad', xPosition);
     // set('rotPad', xPosition);
 
-    // const lineStart = 0;
     let straightLineLength = this.line.length();
     let startOffset = 0;
 
     if (this.arrow1 && this._arrow1) {
       straightLineLength -= this.arrow1.height;
       startOffset = this.arrow1.height;
-      // this._arrow1.setPosition(lineStart);
     }
     if (this.arrow2 && this._arrow2) {
       straightLineLength -= this.arrow2.height;
-      // this._arrow2.setPosition(lineStart + this.line.length(), 0);
     }
     const line = this._line;
-    if (this._line) {
-      this._line.transform.updateTranslation(xPosition + startOffset);
+    if (line) {
+      line.transform.updateTranslation(xPosition + startOffset);
       if (Array.isArray(this.dash) && this.dash.length > 0) {
-        this._line.lengthToDraw = straightLineLength;
-        // this._line.transform.updateTranslation(xPosition + startOffset);
-        // const newStart = this.vertexSpaceStart.x * straightLineLength;
-        // const delta = lineStart + startOffset - newStart;
-        // this._line.setPosition(lineStart + startOffset - this.vertexSpaceStart.x, 0);
+        line.lengthToDraw = straightLineLength;
       } else {
         line.transform.updateScale(straightLineLength, 1);
-        // const newStart = this.vertexSpaceStart.x * straightLineLength;
-        // const delta = lineStart + startOffset - newStart;
-        // line.setPosition(delta, 0);
       }
+    }
+
+    const matrix = this.spaceTransformMatrix('diagram', 'draw');
+    const touchBorder = getBoundingBorder(this.getBorder('diagram', 'touchBorder', ['line', 'arrow1', 'arrow2', 'label'])).map(p => p.transformBy(matrix));
+    console.log(touchBorder)
+    console.log(this.getBorder('diagram', 'touchBorder'));
+    console.log(this._line.getBorder('diagram', 'touchBorder'));
+    console.log(this._line.getBorder('diagram', 'border'));
+    const startBuffer = touchBorder[0].x - this.localXPosition;
+    const width = touchBorder[1].x - touchBorder[0].x;
+    
+    const movePad = this._movePad;
+    if (movePad) {
+      const midWidth = this.multiMove.midLengthPercent * this.line.length();
+      movePad.transform.updateScale(midWidth, 1);
+      // const p = movePad.getPosition();
+      movePad.setPosition(
+        this.localXPosition + this.line.length() / 2 - midWidth / 2,
+        movePad.getPosition().y,
+      );
+    }
+    const rotPad = this._rotPad;
+    if (rotPad) {
+      rotPad.transform.updateScale(width, 1);
+      // const p = rotPad.getPosition();
+      rotPad.setPosition(touchBorder[0].x, rotPad.getPosition().y);
     }
     this.transform.updateRotation(this.line.angle());
     this.transform.updateTranslation(position);
@@ -1057,22 +1070,10 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     // }
     // set('label', xPosition);
 
-    // const movePad = this._movePad;
-    // if (movePad) {
-    //   movePad.transform.updateScale(newLength, 1);
-    //   const p = movePad.getPosition();
-    //   movePad.setPosition(p.x * newLength, p.y);
-    // }
-    // const rotPad = this._rotPad;
-    // if (rotPad) {
-    //   rotPad.transform.updateScale(newLength, 1);
-    //   const p = rotPad.getPosition();
-    //   rotPad.setPosition(p.x * newLength, p.y);
-    // }
   }
 
   setEndPoints(p: TypeParsablePoint, q: TypeParsablePoint, offset: number = 0) {
-    this.line = new Point(p, q).offset('positive', offset);
+    this.line = new Line(p, q).offset('positive', offset);
     this.setupLine();
   }
 

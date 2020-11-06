@@ -219,7 +219,7 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
  *   num: 7,
  * });
  */
-type OBJ_Pulse = {
+export type OBJ_Pulse = {
   duration?: number,
   frequency?: number,
   scale?: number,

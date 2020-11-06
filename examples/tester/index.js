@@ -222,13 +222,14 @@ diagram.addElement({
   method: 'objects.line',
   options: {
     p1: [-1, -1],
-    // p2: [0, 0],
+    p2: [1, -1],
     // p1: [0, 0],
-    align: 'start',
+    align: 'center',
     offset: -0.2,
     length: 2,
     width: 0.01,
-    angle: -Math.PI / 4,
+    touchBorder: 0.1,
+    // angle: -Math.PI / 4,
     // touchBorder: 0.1,
     arrow: {
       head: 'triangle',
@@ -253,7 +254,7 @@ diagram.addElement({
   },
 });
 console.log(diagram.elements)
-diagram.elements._a.setMovable();
+// diagram.elements._a.setMovable();
 // diagram.elements._a.setLength(1);
 // diagram.elements._a.grow(0, 5);
 diagram.animateNextFrame();
@@ -281,7 +282,7 @@ diagram.addElement({
 });
 
 // console.log('asdf')
-// diagram.elements._a.setMovable(true, 'centerTranslateEndRotation', 0.5);
+diagram.elements._a.setMovable(true, 'centerTranslateEndRotation', 0.5);
 // console.log('qwer')
 // diagram.elements._a.setLength(2);
 // console.log(diagram.elements._a._line.drawingObject.touchBorder)
