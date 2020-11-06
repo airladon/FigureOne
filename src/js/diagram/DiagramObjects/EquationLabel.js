@@ -9,6 +9,7 @@ import type {
   TypeVAlign, TypeHAlign,
 } from '../DiagramElements/Equation/EquationForm';
 import { joinObjects } from '../../tools/tools';
+import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
 // export type TypeEquationLabel = {
 //   eqn: Equation;
 //   updateRotation: (number, Point, number, number) => void;
@@ -17,17 +18,18 @@ import { joinObjects } from '../../tools/tools';
 //   // updateScale: (Point) => void;
 // };
 
-export type TypeLabelEquationOptions = {
-  eqn: 'fraction' | 'fractionPre',
-  denominator: string,
-  numerator: string,
-  main?: string,
-  scale?: number,
-  fracScale?: number,
-};
+// deprecate
+// export type TypeLabelEquationOptions = {
+//   eqn: 'fraction' | 'fractionPre',
+//   denominator: string,
+//   numerator: string,
+//   main?: string,
+//   scale?: number,
+//   fracScale?: number,
+// };
 
 export type TypeLabelOptions = {
-  label?: string | Equation | Array<string> | TypeLabelEquationOptions,
+  label?: string | Equation | Array<string> | EQN_Equation,
   color?: Array<number>,
   scale?: number,
   position?: Point,

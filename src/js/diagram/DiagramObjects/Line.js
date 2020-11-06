@@ -20,6 +20,7 @@ import type { TypeWhen } from '../webgl/GlobalAnimation';
 import { simplifyArrowOptions, getArrowLength } from '../DrawingObjects/Geometries/arrow';
 import type { OBJ_LineArrows, OBJ_LineArrow } from '../DrawingObjects/Geometries/arrow';
 import type { OBJ_Pulse } from '../Element';
+import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
 
 // top - text is on top of line (except when line is vertical)
 // bottom - text is on bottom of line (except when line is vertical)
@@ -31,25 +32,104 @@ import type { OBJ_Pulse } from '../Element';
 //           or, if a polygon is defined clockwise, outside will be outside.
 // inside - text is on right of line when line is vertical from 0 to 1
 //           or, if a polygon is defined anti-clockwise, outside will be outside.
+/**
+ * Label location relative to the line.
+ *
+ * `'top' | 'left' | 'bottom' | 'right' | 'start' | 'end' | 'positive' | 'negative'`
+ *
+ * '`top`' is in the positive y direction and `'right'` is in the positive
+ * x direction. '`bottom`' and '`left`' are the opposite sides respectively.
+ *
+ * `'positive'` is on the side of the line that the line rotates toward when
+ * rotating in the positive direction. `'negative'` is the opposite side.
+ *
+ * `'start'` is the start end of the line, while `'end'` is the opposide end
+ * of the line.
+ */
 export type TypeLineLabelLocation = 'top' | 'left' | 'bottom' | 'right'
-                                    | 'end1' | 'end2' | 'outside' | 'inside';
+                                    | 'end1' | 'end2' | 'outside' | 'inside'
+                                    | 'positive' | 'negative';
 // top - text is on top of line if line is horiztonal
 // bottom - text is on bottom of line if line is horiztonal
 // left - text is to left of line if line is vertical
 // right - text is to right of line if line is vertical
+/**
+ * Label sub location relative to line.
+ *
+ * `'top' | 'left' | 'bottom' | 'right'`
+ *
+ * The label sub location is a fallback for when an invalid case is encountered
+ * by the primary location. When the primary location is `'top'` or `'bottom'`
+ * and the line is perfectly vertical, then the sub location would be used.
+ *
+ * Similarly, if the primary location is `'left'` or `'right'` and the line is
+ * perfectly horizontal, then the sub location would be used.
+ */
 export type TypeLineLabelSubLocation = 'top' | 'left' | 'bottom' | 'right';
+
+
 // horizontal - text is always horizontal;
 // baseToLine - text angle is same as line, with baseline toward line
 // baseAway - text angle is same as line, with baseline away from line
 // baseUpright - text angle is same as line, with text upright
-export type TypeLineLabelOrientation = 'horizontal' | 'baseToLine' | 'baseAway'
-                                      | 'baseUpright';
 
-// export type TypeLineVertexOrigin = 'start' | 'end' | 'center' | number | Point;
-// export type TypeLineVertexSpaceStart = 'start' | 'end' | 'center' | number | Point;
+/**
+ * Orientation of the label.
+ *
+ * `'horizontal' | 'toLine' | 'awayLine' | 'upright'`
+ *
+ * Where:
+ * - `'horizontal'`: Label will be horizontal
+ * - `'baseToLine'`: Label will have same angle as line with text base toward
+ *   the line
+ * - `'baseAway'`: Label will have same angle as line with text base away from
+ *   the line
+ * - `'upright'`: Label will have same angle as line with text being more
+ *   upright than upside down.
+ */
+export type TypeLineLabelOrientation = 'horizontal' | 'baseAway' | 'baseToLine'
+                                      | 'upright';
 
+
+/**
+ * Collection line label options object.
+ *
+ * A line can be annotated with a label using the `text` property and can be:
+ * - text (`string`)
+ * - an equation (`Equation`, `EQN_Equation`)
+ * - real length of line (`null`)
+ *
+ *
+ * If the label text is the real lenght of the line, then the number of decimal
+ * places can be selected with `precision`.
+ *
+ * The space between the line and the label is defined with `offset`. An
+ * `offset` of 0 puts the center of the label on the line. Any
+ * positive or negative value of offset will move the label so no part of the
+ * label overlaps the line, and then the closest part of the label is separated
+ * from the line by `offset`.
+ *
+ * To situate the label on the line, use `linePosition`, `location` and
+ * `subLocation`. By default the label will be a percentage `linePosition`
+ * along the line. `location` then defines which side of the line the label is
+ * on, while `subLocation` defines the backup location for invalide cases of
+ * `location`. See {@link TypeLineLabelLocation} and
+ * {@link TypeLineLabelSubLocation}. `location` can additionaly place the
+ * labels off the ends of the line.
+ *
+ *
+ * @property {null | string | Equation | EQN_Equation } text
+ * @property {number} [precision]
+ * @property {number} [offset]
+ * @property {TypeLineLabelLocation} [location]
+ * @property {TypeLineLabelSubLocation} [subLocation]
+ * @property {TypeLineLabelOrientation} [orientation]
+ * @property {number} [linePosition]
+ * @property {number} [scale] size of the label
+ * @property {Array<number>} [color]
+ */
 export type TypeLineLabelOptions = {
-  text: null | string | Array<string> | Equation | TypeLabelEquationOptions,
+  text: null | string | Array<string> | Equation | EQN_Equation,
   precision?: number,
   offset?: number,
   location?: TypeLineLabelLocation,
@@ -60,22 +140,60 @@ export type TypeLineLabelOptions = {
   color?: Array<number>,
 };
 
+/**
+ * Line collection options object
+ *
+ *
+ * This object defines a convient and powerful line
+ * {@link DiagramElementCollection} that includes a label annotation and
+ * some methods to make it convient to use when it needs to change dynamically.
+ *
+ * A line can either be defined by its two end points (`p1`, `p2`), or a
+ * point (`p1`), `length` and `angle`.
+ *
+ * `offset` can be used to draw the line some offset away from the line
+ * definition where a positive offset is on the side of the line that the line
+ * rotates toward when rotating in the positive direction. This is especially
+ * useful for creating lines that show dimensions of shapes.
+ *
+ * The line also has a control point which is positioned on the line with the
+ * `align` property. The control point is the line's center of rotation, and
+ * fixes the point from which the line changes length.
+ *
+ * For instance, setting the control point at `align: 'start'` will mean that
+ * if the line can rotate, it will rotate around `p1`, and if the length is
+ * changed, then `p1` will remain fixed while `p2` changes.
+ *
+ * `width` sets the width of the line. Setting the width to 0 will hide the
+ * line itself, but if arrows or a label are defined they will still be
+ * displayed.
+ *
+ * Use the `label` property to define and position a label relative to the line.
+ * The label can be any string, equation or the actual length of the line and
+ * be oriented relative to the line or always be horizontal.
+ *
+ * Use the `arrow` and `dash` properties to define arrows and the line style.
+ *
+ * Pulsing this collection normally would pulse both the length and width of
+ * the line. If it often desirable to pulse a line without changing its length,
+ * and so this collection provides a method `pulseWidth` to allow this. This
+ * options object can define the default values for pulseWidth if desired.
+ *
+ * Default pulse values can then be specified with the `pulse` property.
+ */
 export type TypeLineOptions = {
   p1?: Point,
   p2?: Point,
   position?: Point,
   length?: number,
   angle?: number,
-  align?: 'start' | 'end' | 'center' | number,
   offset?: number,
+  align?: 'start' | 'end' | 'center' | number,
   width?: number,
-  // showLine?: boolean,
-  // drawCenter?: 'start' | 'end' | 'center' | number,
-  //
+  label?: TypeLineLabelOptions,
   color?: Array<number>,
   touchBorder?: Array<Array<Point>> | 'border' | number | 'rect',
   arrow: OBJ_LineArrows;
-  label?: TypeLineLabelOptions,
   dash: Array<number>,
   pulseWidth?: {
     line?: number,
@@ -669,6 +787,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       rotPad.setMovable();
       rotPad.move.type = 'rotation';
       rotPad.move.element = this;
+      rotPad.drawingObject.border = [[]];
     }
     if (this._movePad == null) {
       const movePad = this.shapes.rectangle({
@@ -685,6 +804,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
       movePad.move.type = 'translation';
       movePad.move.element = this;
+      movePad.drawingObject.border = [[]];
     }
     this.hasTouchableElements = true;
     this.isTouchable = false;
@@ -737,6 +857,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     if (this.label != null) {
       this.add('label', this.label.eqn);
     }
+    this.subscriptions.add('setTransform', () => { this.updateLabel(); });
     this.updateLabel();
   }
 
@@ -788,13 +909,13 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     );
     let labelOffsetAngle = Math.PI / 2;
     const labelOffsetMag = label.offset;
-    if (label.location === 'end1' || label.location === 'end2') {
-      if (label.location === 'end1') {
-        labelPosition.x = -label.offset;
+    if (label.location === 'start' || label.location === 'end') {
+      if (label.location === 'start') {
+        labelPosition.x = this.localXPosition - label.offset;
         labelOffsetAngle = -Math.PI;
       }
-      if (label.location === 'end2') {
-        labelPosition.x = this.line.length() + label.offset;
+      if (label.location === 'end') {
+        labelPosition.x = this.localXPosition + this.line.length() + label.offset;
         labelOffsetAngle = 0;
       }
     } else {
@@ -814,6 +935,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       }
       if (label.location === 'left') {
         labelOffsetAngle = offsetLeft;
+      }
+      if (label.location === 'positive') {
+        labelOffsetAngle = Math.PI / 2;
+      }
+      if (label.location === 'negative') {
+        labelOffsetAngle = -Math.PI / 2;
       }
       if (roundNum(Math.sin(lineAngle), 4) === 0
         && (label.location === 'left' || label.location === 'right')
@@ -847,16 +974,18 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       labelAngle = -lineAngle;
     }
     if (label.orientation === 'baseToLine') {
-      if (labelPosition.y < 0) {
+      labelAngle = 0;
+      if (labelOffsetAngle < 0) {
         labelAngle = Math.PI;
       }
     }
     if (label.orientation === 'baseAway') {
-      if (labelPosition.y > 0) {
-        labelAngle = Math.PI;
+      labelAngle = Math.PI;
+      if (labelOffsetAngle < 0) {
+        labelAngle = 0;
       }
     }
-    if (label.orientation === 'baseUpright') {
+    if (label.orientation === 'upright') {
       if (Math.cos(lineAngle) < 0) {
         labelAngle = Math.PI;
       }

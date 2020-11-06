@@ -1701,8 +1701,8 @@ class DiagramElement {
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
-    this.fnMap.exec(this.setTransformCallback, this.transform);
     this.subscriptions.publish('setTransform', [this.transform]);
+    this.fnMap.exec(this.setTransformCallback, this.transform);
     this.animateNextFrame();
   }
 

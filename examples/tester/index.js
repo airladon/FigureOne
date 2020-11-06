@@ -222,11 +222,12 @@ diagram.addElement({
   method: 'objects.line',
   options: {
     p1: [-1, -1],
-    p2: [-1, 1],
+    // p2: [1, 1],
     // p1: [0, 0],
     align: 'center',
     // offset: -0.2,
     length: 2,
+    angle: Math.PI / 3,
     width: 0.01,
     touchBorder: 0.1,
     maxLength: 4,
@@ -241,9 +242,11 @@ diagram.addElement({
     // dash: [0.02, 0.02],
     // offset: -0.1,
     label: {
-      text: 'hello',
+      text: 'asdf',
       offset: 0.1,
-      // orientation: 'baseAway',
+      location: 'top',
+      orientation: 'horizontal',
+      precision: 2,
     },
     move: {
       type: 'rotation',
@@ -252,6 +255,9 @@ diagram.addElement({
       duration: 5,
       frequency: 0.5,
     },
+  },
+  mods: {
+    move: { bounds: 'diagram' },
   },
 });
 console.log(diagram.elements)
