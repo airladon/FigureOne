@@ -372,12 +372,10 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     _base: DiagramElementPrimitive;
   } & DiagramElementCollection;
 
-  // label and arrow objects that exist if labels and arrows exist
   label: ?LineLabel;
   arrow1: ?{ height: number; };
   arrow2: ?{ height: number; };
 
-  // line properties - read only
   line: Line;
   width: number;
   localXPosition: number;
@@ -389,11 +387,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     end?: OBJ_LineArrow,
   };
 
-  // line properties - read/write
   showRealLength: boolean;
   autoUpdateSubscriptionId: number;
 
-  // line properties - private internal use only
   shapes: Object;
   equation: Object;
 
@@ -401,15 +397,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
   scaleTransformMethodName: string;
 
-  // line methods
-  // setLength: (number) => void;
-  // setEndPoints: (TypeParsablePoint, TypeParsablePoint, ?number) => void;
-  // eslint-disable-next-line max-len
-  // animateLengthTo: (?number, ?number, ?boolean, ?(string | (() => void)), ?(string | ((number, number) => void)), ?boolean) => void;
   animateLengthToStepFunctionName: string;
   animateLengthToDoneFunctionName: string;
   pulseWidthDoneCallbackName: string;
-  // grow: (?number, ?number, ?boolean, ?(string | (() => void))) => void;
 
   pulseWidthDefaults: {
     line: number,
