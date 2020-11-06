@@ -241,7 +241,7 @@ diagram.addElement({
     label: {
       text: 'hello',
       offset: 0.1,
-      orientation: 'horizontal',
+      orientation: 'baseAway',
     },
     move: {
       type: 'rotation',

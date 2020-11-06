@@ -159,15 +159,11 @@ function makeStraightLine(
   shapes: Object,
   length: number,
   width: number,
-  // position: Point,
   color: Array<number>,
   dash: Array<number>,
   maxLength: number,
   touchBorder: number | { width: number, start: number, end: number },
-  // isTouchDevice: boolean,
 ) {
-  // let straightLine;
-  // if (dash.length < 2) {
   const straightLine = shapes.line({
     p1: [0, 0],
     length: dash.length < 2 ? 1 : length,
@@ -178,55 +174,6 @@ function makeStraightLine(
     transform: new Transform().scale(1, 1).translate(0, 0),
     touchBorder,
   });
-  // } // else {
-  //   straightLine = shapes.line({
-  //     p1: [0, 0],
-  //     length: maxLength,
-  //     angle: 0,
-  //     dash,
-  //     width,
-  //     color,
-  //     transform: new Transform().scale(1, 1).translate(0, 0),
-  //     touchBorder,
-  //   });
-  // }
-
-  // // if (touchBorder) {
-  //   // const multiplier = isTouchDevice ? 16 : 8;
-  // let end = 0;
-  // let start = 0;
-  // let w = 0;
-  // // let padding = multiplier * width;
-  // if (typeof touchBorder === 'number') {
-  //   start = touchBorder;
-  //   end = touchBorder;
-  //   w = touchBorder;
-  // }
-  // if (typeof touchBorder === 'object') {
-  //   w = touchBorder.width != null ? touchBorder.width : w;
-  //   start = touchBorder.start != null ? touchBorder.start : start;
-  //   end = touchBorder.end != null ? touchBorder.end : end;
-  // }
-  // //   if (touchBorder.width != null) {
-  // //     padding = touchBorder.width;
-  // //   }
-  // //   if (touchBorder.end != null) {
-  // //     end = touchBorder.end;
-  // //   }
-  // //   if (touchBorder.start != null) {
-  // //     start = touchBorder.start;
-  // //   }
-  // // }
-  // straightLine.drawingObject.touchBorder[0] = [
-  //   new Point(position.x - start, position.y - width / 2 - w),
-  //   new Point(position.x + length + end, position.y - width / 2 - w),
-  //   new Point(position.x + length + end, position.y + width / 2 + w),
-  //   new Point(position.x - start, position.y + width / 2 + w),
-  //   // straightLine.drawingObject.touchBorder[0][0].add(-start, -padding),
-  //   // straightLine.drawingObject.touchBorder[0][1].add(-start, padding),
-  //   // straightLine.drawingObject.touchBorder[0][2].add(end, padding),
-  //   // straightLine.drawingObject.touchBorder[0][3].add(end, -padding),
-  // ];
 
   return straightLine;
 }
@@ -236,7 +183,6 @@ function getLineFromOptions(options: {
   p2?: TypeParsablePoint,
   length?: number,
   angle?: number,
-  // align?: 'start' | 'end' | 'center' | number,
   offset?: number,
 }) {
   const defaultOptions = {
@@ -282,29 +228,34 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
   // line properties - read only
   line: Line;
-  length: number;
-  angle: number;
   width: number;
-  p1: Point;
-  p2: Point;
-  position: Point;
-  currentLength: number;  // deprecate
-  vertexOrigin: 'start' | 'end' | 'center' | number | Point;
+  localXPosition: number;
+  maxLength: number;
+
+  // length: number;
+  // angle: number;
+  // width: number;
+  // p1: Point;
+  // p2: Point;
+  // position: Point;
+  // currentLength: number;  // deprecate
+  align: 'start' | 'end' | 'center' | number;
 
   // line properties - read/write
   showRealLength: boolean;
 
   // line properties - private internal use only
-  start: number;
+  // start: number;
   shapes: Object;
   equation: Object;
   animateNextFrame: void => void;
-  vertexSpaceLength: number;
-  vertexSpaceStart: Point;
-  offset: number;
+  // vertexSpaceLength: number;
+  // vertexSpaceStart: Point;
+  // offset: number;
   isTouchDevice: boolean;
-  touchBorder: number | { width: number, start: number, end: number };
-  dashStyle: { style: Array<number>, maxLength: number } | null;
+  dash: Array<number>;
+  // touchBorder: number | { width: number, start: number, end: number };
+  // dashStyle: { style: Array<number>, maxLength: number } | null;
 
   scaleTransformMethodName: string;
 
@@ -318,16 +269,16 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   pulseWidthDoneCallbackName: string;
   grow: (?number, ?number, ?boolean, ?(string | (() => void))) => void;
   setMovable: (?boolean, ?('translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale'), ?number, ?Rect) => void;
-  addArrow1: (?number, ?number) => void;
-  addArrow2: (?number, ?number) => void;
-  addArrowStart: (?number, ?number) => void;
-  addArrowEnd: (?number, ?number) => void;
-  addArrow: (number, ?number, ?number) => void;
-  pulseWidth: (?{
-    line?: number,
-    label?: number,
-    arrow?: number,
-  }) => void;
+  // addArrow1: (?number, ?number) => void;
+  // addArrow2: (?number, ?number) => void;
+  // addArrowStart: (?number, ?number) => void;
+  // addArrowEnd: (?number, ?number) => void;
+  // addArrow: (number, ?number, ?number) => void;
+  // pulseWidth: (?{
+  //   line?: number,
+  //   label?: number,
+  //   arrow?: number,
+  // }) => void;
 
   pulseWidthDefaults: {
     line: number,
@@ -338,12 +289,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     // collection: number,
   };
 
-  updateLabel: (?number) => {};
-  addLabel: (string | Equation | Array<string> | TypeLabelEquationOptions,
-             number, ?TypeLineLabelLocation,
-             ?TypeLineLabelSubLocation, ?TypeLineLabelOrientation, ?number,
-             ?number, ?Array<number>, ?number,
-            ) => void;
+  // updateLabel: (?number) => {};
+  // addLabel: (string | Equation | Array<string> | TypeLabelEquationOptions,
+  //            number, ?TypeLineLabelLocation,
+  //            ?TypeLineLabelSubLocation, ?TypeLineLabelOrientation, ?number,
+  //            ?number, ?Array<number>, ?number,
+  //           ) => void;
 
   multiMove: {
     vertexSpaceMidLength: number;
@@ -363,30 +314,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     oldTransformMethod: ?(string | ((number, ?Point) => Transform)),
   };
 
-  calculateFromP1LengthAngle(
-    p1: Point,
-    length: number,
-    angle: number,
-  ) {
-    const t = new Transform().scale(length, 1).rotate(angle);
-    const startTransformed = this.vertexSpaceStart.transformBy(t.matrix());
-    const position = p1.sub(startTransformed);
-    return { length, angle, position };
-  }
-
-  calculateFromP1P2(
-    p1: Point,
-    p2: Point,
-  ) {
-    const line = new Line(p1, p2);
-    const length = line.length();
-    const angle = line.angle();
-    const t = new Transform().scale(length, 1).rotate(angle);
-    const startTransformed = this.vertexSpaceStart.transformBy(t.matrix());
-    const position = p1.sub(startTransformed);
-    return { length, angle, position };
-  }
-
   constructor(
     shapes: Object,
     equation: Object,
@@ -395,13 +322,10 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     options: TypeLineOptions = {},
   ) {
     const defaultOptions = {
-      position: new Point(0, 0),
-      // length: 1,
-      // angle: 0,
+      // position: new Point(0, 0),
       width: 0.01,
       align: 'start',
       color: [1, 0, 0, 1],
-      // offset: 0,
       dash: [],
       mods: {},
       pulseWidth: {
@@ -410,7 +334,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         arrow: 3,
         duration: 1,
         frequency: 0,
-        // collection: 1,
       },
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -421,26 +344,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         optionsToUse.touchBorder = optionsToUse.width * 8;
       }
     }
-    // let line;
-    // if (optionsToUse.p1 != null && optionsToUse.p2 != null) {
-    //   line = new Line(optionsToUse.p1, optionsToUse.p2);
-    // } else {
-    //   line = new Line(optionsToUse.p1, optionsToUse.length, optionsToUse.angle);
-    // }
-    // if (optionsToUse.offset > 0) {
-    //   line = line.offset('positive', optionsToUse.offset);
-    // }
-
-    // const { dash } = optionsToUse;
-    // if (Array.isArray(dash) && dash.length > 0 && optionsToUse.maxLength == null) {
-    //   let defaultMaxLength = optionsToUse.length;
-    //   if (optionsToUse.p1 != null && optionsToUse.p2 != null) {
-    //     optionsToUse.p1 = getPoint(optionsToUse.p1);
-    //     optionsToUse.p2 = getPoint(optionsToUse.p2);
-    //     defaultMaxLength = distance(optionsToUse.p1, optionsToUse.p2);
-    //   }
-    //   optionsToUse.maxLength = defaultMaxLength;
-    // }
     super(new Transform('Line')
       .scale(1, 1)
       .rotate(0)
@@ -451,15 +354,15 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.equation = equation;
     this.touchBorder = optionsToUse.touchBorder;
     this.isTouchDevice = isTouchDevice;
-    //deprecate
+    // deprecate
     this.animateNextFrame = animateNextFrame;
     this.dash = optionsToUse.dash;
-
+    this.width = optionsToUse.width;
     this.line = getLineFromOptions(optionsToUse);
     this.align = optionsToUse.align;
     this.localXPosition = 0;
     this.maxLength = optionsToUse.maxLength != null ? optionsToUse.maxLength : this.line.length();
-    // this.maxLength = optionsToUse.maxLength;
+
 
     this.animateLengthToOptions = {
       initialLength: 0,
@@ -480,18 +383,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.fnMap.add(this.animateLengthToDoneFunctionName, this.animateLengthToDone.bind(this));
     this.pulseWidthDoneCallbackName = '_pulseWidthDone';
     this.fnMap.add(this.pulseWidthDoneCallbackName, this.pulseWidthDone.bind(this));
-    // Calculate and store the line geometry
-    //    The length, angle, p1 and p2 properties also exist in this.line,
-    //    but are at this level for convenience
 
-    // this.offset = optionsToUse.offset;
-    this.width = optionsToUse.width;
-    // this.position = getPoint(optionsToUse.position);
-    // this.length = optionsToUse.length;
-    // this.angle = optionsToUse.angle;
-
-    this.transform.updateTranslation(this.line.p1);
-    this.transform.updateRotation(this.line.angle);
+    // this.transform.updateTranslation(this.line.p1);
+    // this.transform.updateRotation(this.line.angle);
 
     // Line is defined in vertex space as horiztonal along the x axis.
     // The reference will define how it is offset where:
@@ -499,18 +393,10 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     //    - end: line extends from -length to 0 in length
     //    - middle: line extends from -length / 2 to length / 2
     //    - percent: line extends from -length * % to length * (1 - %)
+
+    // deprecate
     this.vertexSpaceLength = 1;
     this.vertexSpaceStart = new Point(0, 0);
-    // if (optionsToUse.align === 'end') {
-    //   this.vertexSpaceStart = new Point(-1, 0);
-    // } else if (optionsToUse.align === 'center') {
-    //   this.vertexSpaceStart = new Point(-0.5, 0);
-    // } else if (typeof optionsToUse.align === 'number') {
-    //   this.vertexSpaceStart = new Point(-optionsToUse.align, 0);
-    // } else if (optionsToUse.align instanceof Point) {
-    //   this.vertexSpaceStart = optionsToUse.align;
-    // }
-    // this.vertexOrigin = vertexOrigin;
 
     // MultiMove means the line has a middle section that when touched
     // translates the line collection, and when the rest of the line is
@@ -522,22 +408,14 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       // }),
       bounds: new Rect(-1, -1, 2, 2),
     };
-    // this._movePad = null;
-    // this._rotPad = null;
+
     this.scaleTransformMethodName = '_transformMethod';
     // If the line is to be shown (and not just a label) then make it
     this._line = null;
     if (this.width > 0) {
-      // let dashStyleToUse = optionsToUse.dashStyle;
-      // if (dashStyleToUse == null) {  // If undefined, make null
-      //   dashStyleToUse = null;
-      // }
       const straightLine = makeStraightLine(
         this.shapes, this.maxLength, this.width,
-        // this.vertexSpaceStart,
         optionsToUse.color, this.dash, // this.maxLength,
-        // optionsToUse.touchBorder,
-        // optionsToUse.touchBorder, isTouchDevice,
       );
       const scaleTransformMethod = s => new Transform().scale(1, s);
       straightLine.fnMap.add(this.scaleTransformMethodName, scaleTransformMethod);
@@ -545,8 +423,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
 
     // Arrow related properties
-    // this.arrow1 = null;
-    // this.arrow2 = null;
     this._arrow1 = null;
     this._arrow2 = null;
 
@@ -554,11 +430,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.label = null;
     this._label = null;
     this.showRealLength = false;
-    // this.setLength(this.length);
 
-    // if (optionsToUse.p1 != null && optionsToUse.p2 != null) {
-    //   this.setEndPoints(optionsToUse.p1, optionsToUse.p2);
-    // }
     if (optionsToUse.arrow != null) {
       const arrowOptions = simplifyArrowOptions(optionsToUse.arrow, this.width || 0.01);
       this.arrow = arrowOptions;
@@ -622,18 +494,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       frequency: optionsToUse.pulseWidth.frequency || 0,
     };
 
-    // this.pulseDefault = (done) => {
-    //   this.pulseWidth({
-    //     line: this.pulseWidthDefaults.line,
-    //     label: this.pulseWidthDefaults.label,
-    //     arrow: this.pulseWidthDefaults.arrow,
-    //     done,
-    //   });
-    //   if (this.pulseWidthDefaults.collection !== 1) {
-    //     this.pulseScaleNow(1, this.pulseWidthDefaults.collection);
-    //   }
-    // };
-
     if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
       this.setProperties(optionsToUse.mods);
     }
@@ -641,10 +501,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(options),
-      'offset',
-      'angle',
-      'length',
-      'position',
+      'line',
+      'align',
+      // 'length',
+      // 'position',
+      'width',
+      'dash',
       'animateLengthToOptions',
       'pulseWidthOptions',
     ];
@@ -794,8 +656,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       ) {
         this.move.type = moveType;
         super.setMovable(true);
-        // this.isTouchable = true;
-        // this.isMovable = true;
         this.hasTouchableElements = true;
         if (this._line != null) {
           this._line.isTouchable = true;
@@ -888,6 +748,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.setLength(this.line.length());
   }
 
+
   updateMoveTransform(t: Transform = this.transform._dup()) {
     const r = t.r();
     const { bounds } = this.multiMove;
@@ -903,14 +764,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
           top: bounds.top - h,
         }));
       }
-      // this.move.maxTransform.updateTranslation(
-      //   bounds.right - w,
-      //   bounds.top - h,
-      // );
-      // this.move.minTransform.updateTranslation(
-      //   bounds.left + w,
-      //   bounds.bottom + h,
-      // );
       if (r > 2 * Math.PI) {
         this.transform.updateRotation(r - 2 * Math.PI);
       }
@@ -943,14 +796,14 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   }
 
   getLength() {
-    return this.length;
+    return this.line.length();
   }
 
   getAngle(units: 'deg' | 'rad' = 'rad') {
     if (units === 'deg') {
-      return this.angle * 180 / Math.PI;
+      return this.line.angle() * 180 / Math.PI;
     }
-    return this.angle;
+    return this.line.angle();
   }
 
   setLabel(text: string) {
@@ -1095,34 +948,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       );
     }
     this.setupLine();
-    // const lineStart = this.vertexSpaceStart.x * newLength;
-    // const lineLength = newLength;
-    // let straightLineLength = lineLength;
-    // let startOffset = 0;
-
-    // if (this.arrow1 && this._arrow1) {
-    //   straightLineLength -= this.arrow1.height;
-    //   startOffset = this.arrow1.height;
-    //   this._arrow1.setPosition(lineStart);
-    // }
-    // if (this.arrow2 && this._arrow2) {
-    //   straightLineLength -= this.arrow2.height;
-    //   this._arrow2.setPosition(lineStart + lineLength, 0);
-    // }
-    // const line = this._line;
-    // if (line) {
-    //   if (Array.isArray(this.dash) && this.dash.length > 0) {
-    //     line.lengthToDraw = straightLineLength;
-    //     // const newStart = this.vertexSpaceStart.x * straightLineLength;
-    //     // const delta = lineStart + startOffset - newStart;
-    //     line.setPosition(lineStart + startOffset - this.vertexSpaceStart.x, 0);
-    //   } else {
-    //     line.transform.updateScale(straightLineLength, 1);
-    //     const newStart = this.vertexSpaceStart.x * straightLineLength;
-    //     const delta = lineStart + startOffset - newStart;
-    //     line.setPosition(delta, 0);
-    //   }
-    // }
 
     // const movePad = this._movePad;
     // if (movePad) {
@@ -1246,73 +1071,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     // }
   }
 
-  // setLineDimensions() {
-  //   // const offset = polarToRect(this.offset, this.angle + Math.PI / 2);
-  //   // this.transform.updateTranslation(this.position.add(offset));
-  //   // this.transform.updateRotation(this.angle);
-  //   // this.setPosition(this.line.p1);
-  //   // this.setRotation(thi)
-  //   const setLine = (p) => {
-  //     if (this._line != null) {
-  //       this._line.transform.updateTranslation(p);
-  //     }
-  //   };
-  //   const setArrow = (index, p) => {
-  //     if (this[`_arrow${index}`] != null) {
-  //       this[`_arrow${index}`]._line.transform.updateTranslation(p);
-  //     }
-  //   }
-  //   const setLabel = (p) => {
-  //     if (this._line != null) {
-  //       this._line.transform.updateTranslation(p);
-  //     }
-  //   };
-  //   if (this.align === 'start') {
-  //     if (this._line != null) {}
-  //   }
-  //   this.transform.updateTranslation(this.line.p1);
-  //   this.transform.updateRotation(this.line.angle);
-  //   this.setLength(this.line.length);
-  //   this.updateLabel();
-  // }
-
   setEndPoints(p: TypeParsablePoint, q: TypeParsablePoint, offset: number = 0) {
-    // this.offset = offset;
-    // const { length, angle, position } = this.calculateFromP1P2(getPoint(p), getPoint(q));
-    // this.angle = angle;
-    // this.length = length;
-    // this.position = position;
     this.line = new Point(p, q).offset('positive', offset);
     this.setupLine();
-    // this.setLineDimensions();
-
-    // const pq = new Line(p, q);
-    // this.angle = pq.angle();
-    // this.length = pq.length();
-
-    // this.position = p;
-    // if (this.vertexOrigin === 'center') {
-    //   this.position = pq.midpoint();
-    // } else if (this.vertexOrigin === 'end') {
-    //   this.position = q;
-    // } else if (typeof this.vertexOrigin === 'number') {
-    //   this.position = p.add(polarToRect(this.vertexOrigin * this.length, this.angle));
-    // } else if (this.vertexOrigin instanceof Point) {
-    //   this.position = p.add(this.vertexOrigin);
-    // }
-    // // this.updateLineGeometry();
-
-    // // const newLength = distance(q, p);
-    // // const pq = new Line(p, q);
-    // this.transform.updateRotation(pq.angle());
-    // const offsetdelta = polarToRect(offset, pq.angle() + Math.PI / 2);
-    // // if (this.reference === 'center') {
-    // this.transform.updateTranslation(this.position.add(offsetdelta));
-    // // } else {
-    // //   this.transform.updateTranslation(p.add(offsetdelta));
-    // // }
-    // this.setLength(this.length);
-    // this.updateLabel();
   }
 
   animateLengthToStep(percent: number) {
@@ -1320,7 +1081,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.setLength(initialLength + deltaLength * percent);
     if (onStepCallback != null) {
       this.fnMap.exec(onStepCallback, percent, initialLength + deltaLength * percent);
-      // onStepCallback(percent, initialLength + deltaLength * percent);
     }
   }
 
@@ -1332,9 +1092,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       this.setLength(initialLength + deltaLength);
     }
     this.fnMap.exec(callback);
-    // if (typeof callback === 'function' && callback) {
-    //   callback();
-    // }
   }
 
   animateLengthTo(
@@ -1355,26 +1112,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       onStepCallback,
       finishOnCancel,
     };
-    // const initialLength = this.currentLength;
-    // const deltaLength = toLength - this.currentLength;
-    // const func = (percent) => {
-    //   this.setLength(initialLength + deltaLength * percent);
-    //   if (onStepCallback != null) {
-    //     this.execFn(onStepCallback, percent, initialLength + deltaLength * percent);
-    //     // onStepCallback(percent, initialLength + deltaLength * percent);
-    //   }
-    // };
-    // this.fnMap.add('_DiagramObjectsLineAnimateLengthToFunc', func);
-    // const done = () => {
-    //   if (finishOnCancel) {
-    //     this.setLength(initialLength + deltaLength);
-    //   }
-    //   this.execFn(callback);
-    //   // if (typeof callback === 'function' && callback) {
-    //   //   callback();
-    //   // }
-    // };
-    // this.fnMap.add('_DiagramObjectsLineAnimateLengthToCallback', done);
     this.animations.new('Line Length')
       .custom({
         callback: this.animateLengthToStepFunctionName,
@@ -1382,10 +1119,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       })
       .whenFinished(this.animateLengthToDoneFunctionName)
       .start();
-    // this.animations.start();
     this.animateNextFrame();
-    // console.log(this)
-    // this.animateCustomTo(func, time, 0, done);
   }
 
   grow(
@@ -1418,13 +1152,15 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   }
 
   getP1() {
-    const m = this.transform.matrix();
-    return this.p1.transformBy(m);
+    // const m = this.transform.matrix();
+    // return this.line.p1.transformBy(m);
+    return this.line.p1._dup();
   }
 
   getP2() {
-    const m = this.transform.matrix();
-    return this.p2.transformBy(m);
+    // const m = this.transform.matrix();
+    // return this.p2.transformBy(m);
+    return this.line.p2._dup();
   }
 }
 
