@@ -981,14 +981,11 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const lineAngle = normAngle(this.transform.r() || 0);
     let labelAngle = 0;
     if (this.showRealLength && this._label) {
-      // this._label._base.drawingObject.setText(roundNum(this.currentLength, 2)
-      //   .toFixed(label.precision));
       label.setText(roundNum(this.line.length(), 2)
         .toFixed(label.precision));
-      // label.eqn.reArrangeCurrentForm();
     }
     const labelPosition = new Point(
-      this.line.p1.x + label.linePosition * this.line.length(),
+      this.localXPosition + label.linePosition * this.line.length(),
       0,
     );
     let labelOffsetAngle = Math.PI / 2;
@@ -1003,7 +1000,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         labelOffsetAngle = 0;
       }
     } else {
-      console.log(labelPosition, this.line, label.linePosition)
       const offsetTop = Math.cos(lineAngle) < 0 ? -Math.PI / 2 : Math.PI / 2;
       const offsetBottom = -offsetTop;
       const offsetLeft = Math.sin(lineAngle) > 0 ? Math.PI / 2 : -Math.PI / 2;
