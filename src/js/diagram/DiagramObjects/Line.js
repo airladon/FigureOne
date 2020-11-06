@@ -681,18 +681,18 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     // if (this._line == null) {
     //   return;
     // }
-    const matrix = this.spaceTransformMatrix('diagram', 'draw');
-    const touchBorder = getBoundingBorder(this.getBorder('diagram', 'touchBorder')).map(p => p.transformBy(matrix));
+    // const matrix = this.spaceTransformMatrix('diagram', 'draw');
+    // const touchBorder = getBoundingBorder(this.getBorder('diagram', 'touchBorder')).map(p => p.transformBy(matrix));
     // const startBuffer = touchBorder[0].x - this.localXPosition;
     // const width = touchBorder[1].x - touchBorder[0].x;
-    const height = touchBorder[2].y - touchBorder[1].y;
+    // const height = touchBorder[2].y - touchBorder[1].y;
     if (this._rotPad == null) {
       const rotPad = this.shapes.rectangle({
-        position: new Point(0, touchBorder[0].y),
+        position: new Point(0, 0),
         xAlign: 'left',
         yAlign: 'bottom',
         width: 1,
-        height,
+        height: 1,
         color: [0, 0, 1, 0.5],
       });
       this.add('rotPad', rotPad);
@@ -702,11 +702,11 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
     if (this._movePad == null) {
       const movePad = this.shapes.rectangle({
-        position: new Point(0, touchBorder[0].y),
+        position: new Point(0, 0),
         xAlign: 'left',
         yAlign: 'bottom',
         width: 1,
-        height,
+        height: 1,
         color: [0, 1, 0, 0.5],
       });
 
@@ -1032,44 +1032,41 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       line.transform.updateTranslation(xPosition + startOffset);
       if (Array.isArray(this.dash) && this.dash.length > 0) {
         line.lengthToDraw = straightLineLength;
+        line.drawingObject.border = [[
+          new Point(0, -this.width / 2),
+          new Point(straightLineLength, -this.width / 2),
+          new Point(straightLineLength, this.width / 2),
+          new Point(0, this.width / 2),
+        ]];
+        line.drawingObject.touchBorder = line.drawingObject.border;
       } else {
         line.transform.updateScale(straightLineLength, 1);
       }
     }
 
-    const matrix = this.spaceTransformMatrix('diagram', 'draw');
-    const touchBorder = getBoundingBorder(this.getBorder('diagram', 'touchBorder', ['line', 'arrow1', 'arrow2', 'label'])).map(p => p.transformBy(matrix));
-    console.log(touchBorder)
-    console.log(this.getBorder('diagram', 'touchBorder'));
-    console.log(this._line.getBorder('diagram', 'touchBorder'));
-    console.log(this._line.getBorder('diagram', 'border'));
-    const startBuffer = touchBorder[0].x - this.localXPosition;
-    const width = touchBorder[1].x - touchBorder[0].x;
-    
+    this.transform.updateRotation(this.line.angle());
+    this.transform.updateTranslation(position);
+    this.updateLabel();
+
+    const touchBorder = getBoundingBorder(this.getBorder('draw', 'touchBorder', ['line', 'arrow1', 'arrow2', 'label']));
+    const width = touchBorder[0].distance(touchBorder[1]);
+    const height = touchBorder[0].distance(touchBorder[3]);
     const movePad = this._movePad;
     if (movePad) {
       const midWidth = this.multiMove.midLengthPercent * this.line.length();
-      movePad.transform.updateScale(midWidth, 1);
+      movePad.transform.updateScale(midWidth, height);
       // const p = movePad.getPosition();
       movePad.setPosition(
         this.localXPosition + this.line.length() / 2 - midWidth / 2,
-        movePad.getPosition().y,
+        touchBorder[0].y,
       );
     }
     const rotPad = this._rotPad;
     if (rotPad) {
-      rotPad.transform.updateScale(width, 1);
+      rotPad.transform.updateScale(width, height);
       // const p = rotPad.getPosition();
-      rotPad.setPosition(touchBorder[0].x, rotPad.getPosition().y);
+      rotPad.setPosition(touchBorder[0].x, touchBorder[0].y);
     }
-    this.transform.updateRotation(this.line.angle());
-    this.transform.updateTranslation(position);
-    this.updateLabel();
-    // if (this._label) {
-    //   console.log(this._label.getPosition())
-    // }
-    // set('label', xPosition);
-
   }
 
   setEndPoints(p: TypeParsablePoint, q: TypeParsablePoint, offset: number = 0) {

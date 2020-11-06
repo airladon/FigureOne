@@ -222,13 +222,14 @@ diagram.addElement({
   method: 'objects.line',
   options: {
     p1: [-1, -1],
-    p2: [1, -1],
+    p2: [-1, 1],
     // p1: [0, 0],
     align: 'center',
-    offset: -0.2,
+    // offset: -0.2,
     length: 2,
     width: 0.01,
     touchBorder: 0.1,
+    maxLength: 4,
     // angle: -Math.PI / 4,
     // touchBorder: 0.1,
     arrow: {
@@ -242,7 +243,7 @@ diagram.addElement({
     label: {
       text: 'hello',
       offset: 0.1,
-      orientation: 'baseAway',
+      // orientation: 'baseAway',
     },
     move: {
       type: 'rotation',
