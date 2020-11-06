@@ -988,22 +988,22 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       // label.eqn.reArrangeCurrentForm();
     }
     const labelPosition = new Point(
-      this.vertexSpaceStart.x * this.line.length() + label.linePosition * this.line.length(),
+      this.line.p1.x + label.linePosition * this.line.length(),
       0,
     );
     let labelOffsetAngle = Math.PI / 2;
     const labelOffsetMag = label.offset;
     if (label.location === 'end1' || label.location === 'end2') {
       if (label.location === 'end1') {
-        labelPosition.x = this.vertexSpaceStart.x * this.line.length() - label.offset;
+        labelPosition.x = -label.offset;
         labelOffsetAngle = -Math.PI;
       }
       if (label.location === 'end2') {
-        labelPosition.x = this.vertexSpaceStart.x * this.line.length()
-          + this.line.length() + label.offset;
+        labelPosition.x = this.line.length() + label.offset;
         labelOffsetAngle = 0;
       }
     } else {
+      console.log(labelPosition, this.line, label.linePosition)
       const offsetTop = Math.cos(lineAngle) < 0 ? -Math.PI / 2 : Math.PI / 2;
       const offsetBottom = -offsetTop;
       const offsetLeft = Math.sin(lineAngle) > 0 ? Math.PI / 2 : -Math.PI / 2;
@@ -1153,7 +1153,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     // this.length = newLength;
     // this.updateLineGeometry();
     // this.currentLength = newLength; // to deprecate?
-    this.updateLabel();
+    // this.updateLabel();
   }
 
   // updateLineGeometry() {
@@ -1181,12 +1181,16 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       }
     };
     let xPosition = 0;
+    let position = this.line.p1._dup();
     if (typeof this.align === 'number') {
       xPosition = -this.line.length() * this.align;
+      position = this.line.pointAtPercent(this.align);
     } else if (this.align === 'end') {
       xPosition = -this.line.length();
+      position = this.line.p2._dup();
     } else if (this.align === 'center') {
       xPosition = -this.line.length() / 2;
+      position = this.line.pointAtPercent(0.5);
     }
     this.localXPosition = xPosition;
     // set('line', xPosition);
@@ -1224,6 +1228,13 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         // line.setPosition(delta, 0);
       }
     }
+    this.transform.updateRotation(this.line.angle());
+    this.transform.updateTranslation(position);
+    this.updateLabel();
+    // if (this._label) {
+    //   console.log(this._label.getPosition())
+    // }
+    // set('label', xPosition);
 
     // const movePad = this._movePad;
     // if (movePad) {

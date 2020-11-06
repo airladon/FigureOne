@@ -221,12 +221,13 @@ diagram.addElement({
   name: 'a',
   method: 'objects.line',
   options: {
-    p1: [0, 1],
-    // p2: [1, 1],
+    p1: [-1, -1],
+    p2: [0, 0],
     // p1: [0, 0],
-    align: 'start',
-    length: 2,
+    align: 'end',
+    // length: 2,
     width: 0.01,
+    // angle: Math.PI / 4,
     // touchBorder: 0.1,
     arrow: {
       head: 'triangle',
@@ -238,7 +239,8 @@ diagram.addElement({
     // offset: -0.1,
     label: {
       text: 'hello',
-      offset: 0.01,
+      offset: 0.1,
+      orientation: 'horizontal',
     },
     move: {
       type: 'rotation',
@@ -252,7 +254,7 @@ diagram.addElement({
 console.log(diagram.elements)
 diagram.elements._a.setMovable();
 // diagram.elements._a.setLength(1);
-diagram.elements._a.grow(0, 5);
+// diagram.elements._a.grow(0, 5);
 diagram.animateNextFrame();
 // diagram.elements._a.pulseWidth();
 // diagram.elements._a.pulse({ duration: 2, scale: 1.5 })
