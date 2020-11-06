@@ -225,6 +225,7 @@ diagram.addElement({
     // p2: [0, 0],
     // p1: [0, 0],
     align: 'start',
+    offset: -0.2,
     length: 2,
     width: 0.01,
     angle: -Math.PI / 4,

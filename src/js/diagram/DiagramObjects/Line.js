@@ -253,7 +253,7 @@ function getLineFromOptions(options: {
   } else {
     line = new Line(o.p1, o.length, o.angle);
   }
-  if (o.offset > 0) {
+  if (o.offset !== 0) {
     line = line.offset('positive', o.offset);
   }
   return line;
