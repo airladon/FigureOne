@@ -238,7 +238,7 @@ diagram.addElement({
       scale: 2,
       radius: 0.1,
     },
-    dash: [0.02, 0.02],
+    // dash: [0.02, 0.02],
     // offset: -0.1,
     label: {
       text: 'hello',

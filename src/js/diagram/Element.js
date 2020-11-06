@@ -3081,12 +3081,7 @@ class DiagramElement {
 
   setMoveBounds(
     boundaryIn: TransformBounds | TypeTransformBoundsDefinition | 'diagram' | 'none' = 'none',
-    // includeSize: boolean = true,
   ): void {
-      // if (!this.isMovable) {
-      //   return;
-      // }
-
     if (boundaryIn instanceof TransformBounds) {
       this.move.bounds = boundaryIn;
       return;
@@ -3446,7 +3441,7 @@ class DiagramElementPrimitive extends DiagramElement {
   cannotTouchHole: boolean;
   pointsDefinition: Object;
   setPointsFromDefinition: ?(() => void);
-  +pulse: (?(mixed) => void) => void;
+  // +pulse: (?(mixed) => void) => void;
 
   /**
    * Primitive diagram element.

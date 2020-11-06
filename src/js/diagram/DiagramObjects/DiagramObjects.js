@@ -50,7 +50,7 @@ export default class DiagramObjects {
     // console.log(Object.assign({}, ...options))
     const optionsToUse = joinObjects({}, ...options);
     return new DiagramObjectLine(
-      this.shapes, this.equation, this.isTouchDevice, this.animateNextFrame,
+      this.shapes, this.equation, this.isTouchDevice,
       optionsToUse,
     );
   }

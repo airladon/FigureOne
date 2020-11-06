@@ -2,7 +2,7 @@
 
 // import Diagram from '../Diagram';
 import {
-  Transform, Point, Line, polarToRect, normAngle, Rect, distance, getPoint,
+  Transform, Point, Line, normAngle, Rect,
   TransformBounds, RectBounds, getBoundingBorder,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
@@ -18,7 +18,7 @@ import { joinObjects } from '../../tools/tools';
 import { Equation } from '../DiagramElements/Equation/Equation';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
 import { simplifyArrowOptions, getArrowLength } from '../DrawingObjects/Geometries/arrow';
-import type { OBJ_LineArrows } from '../DrawingObjects/Geometries/arrow';
+import type { OBJ_LineArrows, OBJ_LineArrow } from '../DrawingObjects/Geometries/arrow';
 import type { OBJ_Pulse } from '../Element';
 
 // top - text is on top of line (except when line is vertical)
@@ -40,8 +40,8 @@ export type TypeLineLabelLocation = 'top' | 'left' | 'bottom' | 'right'
 export type TypeLineLabelSubLocation = 'top' | 'left' | 'bottom' | 'right';
 // horizontal - text is always horizontal;
 // baseToLine - text angle is same as line, with baseline toward line
-// baseToLine - text angle is same as line, with baseline away from line
-// baseToLine - text angle is same as line, with text upright
+// baseAway - text angle is same as line, with baseline away from line
+// baseUpright - text angle is same as line, with text upright
 export type TypeLineLabelOrientation = 'horizontal' | 'baseToLine' | 'baseAway'
                                       | 'baseUpright';
 
@@ -85,7 +85,7 @@ export type TypeLineOptions = {
     frequency?: number,
   },
   pulse: OBJ_Pulse;
-  
+
   move?: {
     type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale';
     middleLengthPercent?: number;
@@ -241,28 +241,21 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   width: number;
   localXPosition: number;
   maxLength: number;
-
-  // length: number;
-  // angle: number;
-  // width: number;
-  // p1: Point;
-  // p2: Point;
-  // position: Point;
-  // currentLength: number;  // deprecate
   align: 'start' | 'end' | 'center' | number;
+  dash: Array<number>;
+  arrow: ?{
+    start?: OBJ_LineArrow,
+    end?: OBJ_AOBJ_LineArrowrrow,
+  };
 
   // line properties - read/write
   showRealLength: boolean;
 
   // line properties - private internal use only
-  // start: number;
   shapes: Object;
   equation: Object;
-  animateNextFrame: void => void;
 
-  // offset: number;
   isTouchDevice: boolean;
-  dash: Array<number>;
 
   scaleTransformMethodName: string;
 
@@ -283,15 +276,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     arrow: number,
     duration: number,
     frequency: number,
-    // collection: number,
   };
-
-  // updateLabel: (?number) => {};
-  // addLabel: (string | Equation | Array<string> | TypeLabelEquationOptions,
-  //            number, ?TypeLineLabelLocation,
-  //            ?TypeLineLabelSubLocation, ?TypeLineLabelOrientation, ?number,
-  //            ?number, ?Array<number>, ?number,
-  //           ) => void;
 
   multiMove: {
     midLength: number;
@@ -315,7 +300,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     shapes: Object,
     equation: Object,
     isTouchDevice: boolean,
-    animateNextFrame: void => void,
+    // animateNextFrame: void => void,
     options: TypeLineOptions = {},
   ) {
     const defaultOptions = {
@@ -351,8 +336,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.equation = equation;
     this.touchBorder = optionsToUse.touchBorder;
     this.isTouchDevice = isTouchDevice;
-    // deprecate
-    this.animateNextFrame = animateNextFrame;
     this.dash = optionsToUse.dash;
     this.width = optionsToUse.width;
     this.line = getLineFromOptions(optionsToUse);
@@ -672,20 +655,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   }
 
   setMultiMovable(middleLengthPercent: number, translationBounds: Rect) {
-    // this.multiMove.midLength = middleLengthPercent * this.line.length();
-    this.multiMove.midLengthPercent = middleLengthPercent;
-    // this.multiMove.start = new Point(
-    //   this.localXPosition + this.line.length() / 2 - this.multiMove.midLength / 2,
-    //   0,
-    // );
-    // if (this._line == null) {
-    //   return;
-    // }
-    // const matrix = this.spaceTransformMatrix('diagram', 'draw');
-    // const touchBorder = getBoundingBorder(this.getBorder('diagram', 'touchBorder')).map(p => p.transformBy(matrix));
-    // const startBuffer = touchBorder[0].x - this.localXPosition;
-    // const width = touchBorder[1].x - touchBorder[0].x;
-    // const height = touchBorder[2].y - touchBorder[1].y;
+    this.multiMove.midLength = middleLengthPercent;
     if (this._rotPad == null) {
       const rotPad = this.shapes.rectangle({
         position: new Point(0, 0),
@@ -716,28 +686,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       movePad.move.type = 'translation';
       movePad.move.element = this;
     }
-    // rotPad.isMovable = true,
-
-    // const movePad = makeStraightLine(
-    //   this.shapes, this.multiMove.vertexSpaceMidLength, this.width || 0.01,
-    //   start, this.color, [], this.maxLength,
-    //   this.touchBorder,
-    //   // this.isTouchDevice,
-    // );
-    // // console.log(movePad)
-    // movePad.isTouchable = true;
-    // movePad.move.type = 'translation';
-    // movePad.move.element = this;
-    // movePad.isMovable = true;
-    // movePad.move.canBeMovedAfterLosingTouch = true;
-    // this.add('movePad', movePad);
-    // if (this._line) {
-    //   this._line.isTouchable = true;
-    //   this._line.move.type = 'rotation';
-    //   this._line.move.element = this;
-    //   this._line.isMovable = true;
-    //   this._line.move.canBeMovedAfterLosingTouch = true;
-    // }
     this.hasTouchableElements = true;
     this.isTouchable = false;
     this.isMovable = false;
@@ -945,52 +893,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       );
     }
     this.setupLine();
-
-    // const movePad = this._movePad;
-    // if (movePad) {
-    //   movePad.transform.updateScale(newLength, 1);
-    //   const p = movePad.getPosition();
-    //   movePad.setPosition(p.x * newLength, p.y);
-    // }
-    // const rotPad = this._rotPad;
-    // if (rotPad) {
-    //   rotPad.transform.updateScale(newLength, 1);
-    //   const p = rotPad.getPosition();
-    //   rotPad.setPosition(p.x * newLength, p.y);
-    // }
-
-    // // const movePad = this._movePad;
-    // // if (movePad) {
-    // //   movePad.transform.updateScale(newLength, 1);
-    // // }
-    // // const rotPad = this._rotPad;
-    // // if (rotPad) {
-    // //   rotPad.transform.updateScale(newLength, 1);
-    // // }
-
-    // this.length = newLength;
-    // this.updateLineGeometry();
-    // this.currentLength = newLength; // to deprecate?
-    // this.updateLabel();
   }
-
-  // updateLineGeometry() {
-  //   const t = this.transform.t();
-  //   const r = this.transform.r();
-  //   if (t != null && r != null) {
-  //     this.position = t;
-  //     this.angle = r;
-  //     const p1 = this.vertexSpaceStart.transformBy(new Transform()
-  //       .scale(this.length)
-  //       .rotate(this.angle)
-  //       .translate(this.position)
-  //       .m());
-  //     const line = new Line(p1, this.length, this.angle);
-  //     this.p1 = line.getPoint(1);
-  //     this.p2 = line.getPoint(2);
-  //     this.line = line;
-  //   }
-  // }
 
   setupLine() {
     const set = (key, x) => {
@@ -1014,8 +917,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.localXPosition = xPosition;
     set('arrow1', xPosition);
     set('arrow2', xPosition + this.line.length());
-    // set('movePad', xPosition);
-    // set('rotPad', xPosition);
 
     let straightLineLength = this.line.length();
     let startOffset = 0;
@@ -1053,7 +954,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const height = touchBorder[0].distance(touchBorder[3]);
     const movePad = this._movePad;
     if (movePad) {
-      const midWidth = this.multiMove.midLengthPercent * this.line.length();
+      const midWidth = this.multiMove.midLength * this.line.length();
       movePad.transform.updateScale(midWidth, height);
       // const p = movePad.getPosition();
       movePad.setPosition(
