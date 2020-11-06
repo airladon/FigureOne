@@ -213,6 +213,7 @@ class DiagramTextBase {
   setText(text: string) {
     this.text = text.slice();
     this.measureAndAlignText();
+    this.calcBorderAndBounds();
   }
 
   setFont(font: OBJ_Font) {
@@ -561,6 +562,8 @@ class TextObjectBase extends DrawingObject {
 
   setText(text: string, index: number = 0) {
     this.text[index].setText(text);
+    this.setBorder();
+    this.setTouchBorder();
   }
 
   _dup() {

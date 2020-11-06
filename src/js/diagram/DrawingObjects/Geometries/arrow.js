@@ -14,6 +14,8 @@ import { getPolygonPoints } from './polygon/polygon';
  *
  * @see {@link OBJ_Arrow} for properties related to each arrow head
  */
+export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'reverseTriangle';
+
 
 /**
  * Arrow end for a line or polyline.
@@ -179,7 +181,6 @@ export type OBJ_LineArrows = {
   align?: 'start' | 'mid',
 };
 
-export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'reverseTriangle';
 
 function orientArrow(
   points: Array<Point>,

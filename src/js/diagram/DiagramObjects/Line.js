@@ -2,8 +2,7 @@
 
 // import Diagram from '../Diagram';
 import {
-  Transform, Point, Line, normAngle, Rect,
-  TransformBounds, RectBounds, getBoundingBorder,
+  Transform, Point, Line, normAngle, getBoundingBorder,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
 import {
@@ -13,7 +12,7 @@ import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
 import EquationLabel from './EquationLabel';
-import type { TypeLabelEquationOptions } from './EquationLabel';
+// import type { TypeLabelEquationOptions } from './EquationLabel';
 import { joinObjects } from '../../tools/tools';
 import { Equation } from '../DiagramElements/Equation/Equation';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
@@ -117,6 +116,9 @@ export type TypeLineLabelOrientation = 'horizontal' | 'baseAway' | 'baseToLine'
  * {@link TypeLineLabelSubLocation}. `location` can additionaly place the
  * labels off the ends of the line.
  *
+ * To automatically update the label location and orientation as the line
+ * transform (translation, rotation or scale) changes then use `update: true`.
+ *
  *
  * @property {null | string | Equation | EQN_Equation } text
  * @property {number} [precision]
@@ -124,6 +126,7 @@ export type TypeLineLabelOrientation = 'horizontal' | 'baseAway' | 'baseToLine'
  * @property {TypeLineLabelLocation} [location]
  * @property {TypeLineLabelSubLocation} [subLocation]
  * @property {TypeLineLabelOrientation} [orientation]
+ * @property {boolean} [update] (`false`)
  * @property {number} [linePosition]
  * @property {number} [scale] size of the label
  * @property {Array<number>} [color]
@@ -135,6 +138,7 @@ export type TypeLineLabelOptions = {
   location?: TypeLineLabelLocation,
   subLocation?: TypeLineLabelSubLocation,
   orientation?: TypeLineLabelOrientation,
+  update?: boolean,
   linePosition?: number,
   scale?: number,
   color?: Array<number>,
@@ -205,12 +209,54 @@ export type TypeLineOptions = {
   pulse: OBJ_Pulse;
 
   move?: {
-    type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale';
-    middleLengthPercent?: number;
+    type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scale';
+    middleLength?: number;
     includeLabelInTouchBoundary?: boolean;
   }
 };
 
+/**
+ * Width pulse options object.
+ *
+ * @property {number} [line] width scale
+ * @property {number} [label] label pulse scale
+ * @property {number} [arrow] arrow pulse scale
+ * @property {function(): void} [done] execute when pulsing is finished
+ * @property {number} [duration] pulse duration in seconds
+ * @property {number} [frequency] pulse frequency in pulses per second
+ * @property {TypeWhen} [when] when to start the pulse (`'nextFrame'`)
+ */
+export type OBJ_PulseWidth = {
+  line?: number,
+  label?: number,
+  arrow?: number,
+  done?: ?() => void,
+  duration?: number,
+  when?: TypeWhen,
+  frequency?: number,
+}
+
+/**
+ * Line move options object.
+ *
+ * The `'centerTranslateEndRotation`' movement will move the line
+ * when touched within the `middleLength` percentage of the line
+ * and rotate it otherwise.
+ *
+ * @property {boolean} [movable] `true` to make movable (`true`)
+ * @property {'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scale'} [type]
+ * @property {number} [middleLength] length of the middle section of line that
+ * allows for translation movement in percent of total length (`0.333`)
+ * @property {boolean} [includeLabelInTouchBoundary] `true` to include the
+ * line's label in the touch boundary for `'centerTranslateEndRotation'`
+ * ('false`)
+ */
+export type OBJ_MovableLine = {
+  movable?: boolean,
+  type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scale',
+  middleLength?: number,
+  includeLabelInTouchBoundary?: boolean,
+}
 // Line is a class that manages:
 //   A straight line
 //   Arrows
@@ -218,40 +264,14 @@ export type TypeLineOptions = {
 //   Future: Dimension posts
 //
 // In the straight line draw space, the line is defined from 0,0 to 1,0 if
-// solid, and 0,0 to maxLength,0 if dashed
+// solid, and 0,0 to maxLength,0 if dashed. The length is changed by scaling
+// the solid line, and changing the number of points drawn for the dahsed line.
 // The straight line position transform is then used to position the horiztonal
-// line to make its 'start', 'center', 'end' or number at (0, 0).
+// line to make its 'start', 'center', 'end' or number align at (0, 0).
 //
 // Arrows are defined in draw space so their tip is at (0, 0). Their position
 // transform then places their tips at p1 and p2 of the line.
 //
-// In vertex space, a line is defined as:
-//   - horizontal
-//   - length 1
-//   - width defined by user
-//   - left side (start) of line defined at a point by user
-//
-// To give the line a custom position, length and angle, the main
-// class's transform is used:
-//   - Translation for vertex space origin position
-//   - Scale for line length
-//   - Rotation for line angle
-//
-// In vertex space, a line would normally be positioned along the x axis.
-//
-//
-// A line can be defined in three ways:
-//   - p1, p2, width, vertexSpaceStart
-//      - width and vertexSpaceStart used to calculate vertex line
-//      - p1, p2 used to calculate length, angle, position
-//      - length, angle, position used to modify transform
-//   - Length, angle, width, vertexSpaceStart, position of vertexSpaceOrigin
-//      - width and vertexSpaceStart used to calculate vertex line
-//      - Length, angle, position used to modify transform
-//   - p1, length, angle, width, vertexSpaceStart
-//      - width and vertexSpaceStart used to calculate vertex line
-//      - p1 used to calculate position
-//      - length, angle, position used to modify transform
 
 class LineLabel extends EquationLabel {
   offset: number;
@@ -263,7 +283,7 @@ class LineLabel extends EquationLabel {
 
   constructor(
     equation: Object,
-    labelText: string | Equation | Array<string> | TypeLabelEquationOptions,
+    labelText: string | Equation | EQN_Equation,
     color: Array<number>,
     offset: number,
     location: TypeLineLabelLocation = 'top',
@@ -338,6 +358,9 @@ function getLineFromOptions(options: {
 // The line's position and rotation is the line collection transform
 // translation and rotation respectively.
 // The line's length is the _line primative x scale.
+/**
+ * {@link DiagramElementCollection} representing a line.
+ */
 export default class DiagramObjectLine extends DiagramElementCollection {
   // Diagram elements
   _line: ?DiagramElementPrimitive;
@@ -363,11 +386,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   dash: Array<number>;
   arrow: ?{
     start?: OBJ_LineArrow,
-    end?: OBJ_AOBJ_LineArrowrrow,
+    end?: OBJ_LineArrow,
   };
 
   // line properties - read/write
   showRealLength: boolean;
+  autoUpdateSubscriptionId: number;
 
   // line properties - private internal use only
   shapes: Object;
@@ -378,15 +402,14 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   scaleTransformMethodName: string;
 
   // line methods
-  setLength: (number) => void;
-  setEndPoints: (TypeParsablePoint, TypeParsablePoint, ?number) => void;
+  // setLength: (number) => void;
+  // setEndPoints: (TypeParsablePoint, TypeParsablePoint, ?number) => void;
   // eslint-disable-next-line max-len
-  animateLengthTo: (?number, ?number, ?boolean, ?(string | (() => void)), ?(string | ((number, number) => void)), ?boolean) => void;
+  // animateLengthTo: (?number, ?number, ?boolean, ?(string | (() => void)), ?(string | ((number, number) => void)), ?boolean) => void;
   animateLengthToStepFunctionName: string;
   animateLengthToDoneFunctionName: string;
   pulseWidthDoneCallbackName: string;
-  grow: (?number, ?number, ?boolean, ?(string | (() => void))) => void;
-  setMovable: (?boolean, ?('translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale'), ?number, ?Rect) => void;
+  // grow: (?number, ?number, ?boolean, ?(string | (() => void))) => void;
 
   pulseWidthDefaults: {
     line: number,
@@ -414,6 +437,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     oldTransformMethod: ?(string | ((number, ?Point) => Transform)),
   };
 
+  /**
+   * @hideconstructor
+   */
   constructor(
     shapes: Object,
     equation: Object,
@@ -460,6 +486,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.align = optionsToUse.align;
     this.localXPosition = 0;
     this.maxLength = optionsToUse.maxLength != null ? optionsToUse.maxLength : this.line.length();
+    this.autoUpdateSubscriptionId = -1;
 
 
     this.animateLengthToOptions = {
@@ -546,6 +573,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       scale: 0.7,
       color: optionsToUse.color,
       precision: 1,
+      update: false,
     };
     if (optionsToUse.label) {
       const labelOptions = joinObjects({}, defaultLabelOptions, optionsToUse.label);
@@ -563,21 +591,22 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         labelOptions.scale,
         labelOptions.color,
         labelOptions.precision,
+        labelOptions.update,
       );
     }
 
     const defaultMoveOptions = {
       type: 'rotation',
-      middleLengthPercent: 0.22,
+      middleLength: 0.22,
       includeLabelInTouchBoundary: false,
     };
     if (optionsToUse.move) {
       const moveOptions = joinObjects({}, defaultMoveOptions, optionsToUse.move);
-      this.setMovable(
-        true,
-        moveOptions.type,
-        moveOptions.middleLengthPercent,
-      );
+      this.setMovable({
+        movable: true,
+        type: moveOptions.type,
+        middleLength: moveOptions.middleLength,
+      });
     }
 
     this.pulseWidthDefaults = {
@@ -624,15 +653,13 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     line.pulseSettings.callback = this.pulseWidthOptions.oldCallback;
   }
 
-  pulseWidth(optionsIn?: {
-      line?: number,
-      label?: number,
-      arrow?: number,
-      done?: ?() => void,
-      duration?: number,
-      when?: TypeWhen,
-      frequency?: number,
-    } = {}) {
+  /**
+   * Pulse the line so that it's width pulses and its length doesn't change.
+   *
+   * The pulse scales of the line, label and arrows can all be defined
+   * separately.
+   */
+  pulseWidth(options?: OBJ_PulseWidth = {}) {
     const defaultOptions = {
       line: this.pulseWidthDefaults.line,
       label: this.pulseWidthDefaults.label,
@@ -642,8 +669,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       frequency: this.pulseWidthDefaults.frequency,
       when: 'nextFrame',
     };
-    const options = joinObjects(defaultOptions, optionsIn);
-    let { done } = options;
+    const o = joinObjects(defaultOptions, options);
+    let { done } = o;
     const line = this._line;
     if (line != null) {
       line.stopPulsing();
@@ -654,11 +681,11 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       line.pulseSettings.callback = this.pulseWidthDoneCallbackName;
       line.pulseSettings.transformMethod = this.scaleTransformMethodName;
       line.pulse({
-        duration: options.duration,
-        scale: options.line,
-        frequency: options.frequency,
+        duration: o.duration,
+        scale: o.line,
+        frequency: o.frequency,
         callback: done,
-        when: options.when,
+        when: o.when,
       });
       done = null;
     }
@@ -666,22 +693,22 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const arrow2 = this._arrow2;
     if (arrow1 != null) {
       arrow1.pulse({
-        duration: options.duration,
-        scale: options.arrow,
-        frequency: options.frequency,
+        duration: o.duration,
+        scale: o.arrow,
+        frequency: o.frequency,
         callback: done,
-        when: options.when,
+        when: o.when,
         centerOn: arrow1.getPosition('diagram'),
       });
       done = null;
     }
     if (arrow2 != null) {
       arrow2.pulse({
-        duration: options.duration,
-        scale: options.arrow,
-        frequency: options.frequency,
+        duration: o.duration,
+        scale: o.arrow,
+        frequency: o.frequency,
         callback: done,
-        when: options.when,
+        when: o.when,
         centerOn: arrow2.getPosition('diagram'),
       });
       done = null;
@@ -689,13 +716,13 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
     const label = this._label;
     if (label != null) {
-      // label.pulseScaleNow(options.duration, options.label, 0, done);
+      // label.pulseScaleNow(o.duration, o.label, 0, done);
       label.pulse({
-        duration: options.duration,
-        scale: options.label,
-        frequency: options.frequency,
+        duration: o.duration,
+        scale: o.label,
+        frequency: o.frequency,
         callback: done,
-        when: options.when,
+        when: o.when,
       });
       done = null;
     }
@@ -736,19 +763,39 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.add(`arrow${index}`, a);
   }
 
-  setMovable(
-    movable: boolean = true,
-    moveType: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale' = this.move.type,
-    middleLengthPercent: number = 0.333,
-    includeLabelInTouchBoundary: boolean = false,
-  ) {
+  /**
+   * Use this method to enable or disable movability of the line.
+   *
+   * @param {OBJ_MovableLine | boolean} [movableOrOptions] `true` to
+   * make movable, `false` to make not movable or use options to
+   * set different kinds of movability.
+   */
+  // $FlowFixMe
+  setMovable(movableOrOptions: OBJ_MovableLine | boolean) {
+    const defaultOptions = {
+      movable: true,
+      type: this.move.type,
+      middleLength: 0.333,
+      includeLabelInTouchBoundary: false,
+    };
+    let options;
+    if (movableOrOptions === false) {
+      options = joinObjects({}, defaultOptions, { movable: false });
+    } else if (movableOrOptions === true) {
+      options = defaultOptions;
+    } else {
+      options = joinObjects({}, defaultOptions, movableOrOptions);
+    }
+    const { movable } = options;
     if (movable) {
+      const {
+        includeLabelInTouchBoundary, type, middleLength,
+      } = options;
       this.multiMove.includeLabelInTouchBoundary = includeLabelInTouchBoundary;
-      if (moveType === 'translation' || moveType === 'rotation'
-        || moveType === 'scale' || moveType === 'scaleX'
-        || moveType === 'scaleY'
+      if (type === 'translation' || type === 'rotation'
+        || type === 'scale'
       ) {
-        this.move.type = moveType;
+        this.move.type = type;
         super.setMovable(true);
         this.hasTouchableElements = true;
         if (this._line != null) {
@@ -758,8 +805,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         if (this._movePad) {
           this._movePad.isMovable = false;
         }
-      } else {
-        this.setMultiMovable(middleLengthPercent);
+      } else if (type === 'centerTranslateEndRotation') {
+        this.setMultiMovable(middleLength);
         this.updateMovePads();
       }
     } else {
@@ -771,6 +818,56 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       }
     }
   }
+
+  // getP1Position() {
+  //   const matrix = this.spaceTransformMatrix('draw', 'diagram');
+  //   return new Point(this.localXPosition, 0).transformBy(matrix);
+  // }
+
+  // setMovableLength() {
+  //   // const elements = ['line', 'arrow1', 'arrow2'];
+  //   // if (this.multiMove.includeLabelInTouchBoundary) {
+  //   //   elements.push('label');
+  //   // }
+  //   // const touchBorder = getBoundingBorder(this.getBorder('draw', 'touchBorder', elements));
+  //   // const width = touchBorder[0].distance(touchBorder[1]);
+  //   // const height = touchBorder[0].distance(touchBorder[3]);
+  //   const r = 0.1;
+  //   if (this._startPad == null) {
+  //     const startPad = this.shapes.polygon({
+  //       position: new Point(this.localXPosition, 0),
+  //       radius: r,
+  //       sides: 8,
+  //       color: [0, 0, 1, 0.5],
+  //     });
+  //     // console.log(width, height)
+  //     // startPad.transform.updateScale(width, height);
+  //     // startPad.transform.updateTranslation(touchBorder[0]);
+  //     this.add('startPad', startPad);
+  //     startPad.setMovable();
+  //     startPad.move.type = 'translation';
+  //     // startPad.move.element = this;
+  //     let flag = 5;
+  //     startPad.subscriptions.add('setTransform', () => {
+  //       if (flag === 0) {
+  //         flag = 5;
+  //         const matrix = this.spaceTransformMatrix('diagram', 'local');
+  //         const p = startPad.getPosition('diagram').transformBy(matrix);
+  //         // const p = startPad.getPosition('draw')
+  //         // console.log(Math.round(p.x * 100) / 100 , Math.round(p.y * 100) / 100)
+  //         this.setEndPoints(p, this.line.p2._dup());
+  //       } else {
+  //         flag -= 1;
+  //       }
+  //       // const p = startPad.getPosition('diagram');
+  //     });
+  //     startPad.drawingObject.border = [[]];
+  //   }
+  //   this.hasTouchableElements = true;
+  //   this.isTouchable = false;
+  //   this.isMovable = false;
+  //   // this.setLength(this.line.length());
+  // }
 
   // Private
   setMultiMovable(middleLengthPercent: number) {
@@ -814,21 +911,24 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   }
 
 
+  /**
+   * Use this to manually update the rotation of the line collection.
+   */
   updateMoveTransform(t: Transform = this.transform._dup()) {
     const r = t.r();
-    const { bounds } = this.multiMove;
+    const { bounds } = this.move;
     // console.log('qqwer')
     if (r != null) {
       const w = Math.abs(this.line.length() / 2 * Math.cos(r));
       const h = Math.abs(this.line.length() / 2 * Math.sin(r));
-      if (this.move.bounds instanceof TransformBounds) {
-        this.move.bounds.updateTranslation(new RectBounds({
-          left: bounds.left + w,
-          bottom: bounds.bottom + h,
-          right: bounds.right - w,
-          top: bounds.top - h,
-        }));
-      }
+      // if (bounds instanceof TransformBounds) {
+      //   bounds.updateTranslation(new RectBounds({
+      //     left: bounds.left + w,
+      //     bottom: bounds.bottom + h,
+      //     right: bounds.right - w,
+      //     top: bounds.top - h,
+      //   }));
+      // }
       if (r > 2 * Math.PI) {
         this.transform.updateRotation(r - 2 * Math.PI);
       }
@@ -839,7 +939,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   }
 
   addLabel(
-    labelText: string | Equation | Array<string> | TypeLabelEquationOptions,
+    labelText: string | Equation | EQN_Equation | null,
     offset: number,
     location: TypeLineLabelLocation = 'top',
     subLocation: TypeLineLabelSubLocation = 'left',
@@ -848,6 +948,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     scale: number = 0.7,
     color: Array<number> = this.color,
     precision: number = 1,
+    update: boolean = false,
   ) {
     this.label = new LineLabel(
       this.equation, labelText, color,
@@ -857,18 +958,47 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     if (this.label != null) {
       this.add('label', this.label.eqn);
     }
-    this.subscriptions.add('setTransform', () => {
-      this.updateLabel();
-      this.updateMovePads();
-    });
+    // if (update) {
+    //   this.subscriptions.add('setTransform', () => {
+    //     this.updateLabel();
+    //     this.updateMovePads();
+    //   });
+    // }
+    this.setAutoUpdate(update);
     this.updateLabel();
     this.updateMovePads();
   }
 
+  /**
+   * Turn on and off auto label location and orientation updates when line
+   * transform changes.
+   */
+  setAutoUpdate(update: boolean = true) {
+    if (update) {
+      this.autoUpdateSubscriptionId = this.subscriptions.add('setTransform', () => {
+        this.updateLabel();
+        this.updateMovePads();
+      });
+    } else {
+      // console.log(this.autoUpdateSubscriptionId)
+      this.subscriptions.remove('setTransform', this.autoUpdateSubscriptionId);
+      this.autoUpdateSubscriptionId = -1;
+    }
+  }
+
+  /**
+   * Get line length
+   * @return {number}
+   */
   getLength() {
     return this.line.length();
   }
 
+  /**
+   * Get line angle
+   * @param {'deg' | 'rad'} [units] ('rad')
+   * @return {number}
+   */
   getAngle(units: 'deg' | 'rad' = 'rad') {
     if (units === 'deg') {
       return this.line.angle() * 180 / Math.PI;
@@ -876,6 +1006,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     return this.line.angle();
   }
 
+  /**
+   * Change the text of the label
+   */
   setLabel(text: string) {
     this.showRealLength = false;
     if (this.label != null) {
@@ -885,6 +1018,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.updateMovePads();
   }
 
+  /**
+   * Get the text of the label
+   */
   getLabel() {
     if (this.label != null) {
       return this.label.getText();
@@ -892,6 +1028,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     return '';
   }
 
+  /**
+   * Set the label to be the real length of the line
+   */
   setLabelToRealLength() {
     this.showRealLength = true;
     this.updateLabel();
@@ -906,8 +1045,13 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const lineAngle = normAngle(this.transform.r() || 0);
     let labelAngle = 0;
     if (this.showRealLength && this._label) {
-      label.setText(roundNum(this.line.length(), 2)
-        .toFixed(label.precision));
+      const labelToUse = roundNum(this.line.length(), 2)
+        .toFixed(label.precision);
+      const current = label.getText();
+      if (current !== labelToUse) {
+        label.setText(roundNum(this.line.length(), 2)
+          .toFixed(label.precision));
+      }
     }
     const labelPosition = new Point(
       this.localXPosition + label.linePosition * this.line.length(),
@@ -1003,9 +1147,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     );
   }
 
-  setLength(newLength: number, align: 'start' | 'end' | 'center' | number = this.align) {
-    let newLen = newLength;
-    if (newLength === 0) {
+  /**
+   * Set the length of the line
+   */
+  setLength(length: number, align: 'start' | 'end' | 'center' | number = this.align) {
+    let newLen = length;
+    if (length === 0) {
       newLen = 0.0000001;
     }
     if (align === 'start') {
@@ -1113,10 +1260,15 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       // const p = rotPad.getPosition();
       rotPad.setPosition(touchBorder[0].x, touchBorder[0].y);
     }
+    const startPad = this._startPad;
+    if (startPad) {
+      startPad.transform.updateTranslation(this.localXPosition, 0);
+    }
   }
 
   setEndPoints(p: TypeParsablePoint, q: TypeParsablePoint, offset: number = 0) {
     this.line = new Line(p, q).offset('positive', offset);
+    // console.log(p, q)
     this.setupLine();
   }
 
@@ -1166,9 +1318,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.animateNextFrame();
   }
 
+  /**
+   * Grow the line from a length to the current length
+   */
   grow(
     fromLength: number = 0,
-    time: number = 1,
+    duration: number = 1,
     finishOnCancel: boolean = true,
     callback: ?(string | (() => void)) = null,
     onStepCallback: ?(number, number) => void = null,
@@ -1176,7 +1331,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.stop();
     const target = this.line.length();
     this.setLength(fromLength);
-    this.animateLengthTo(target, time, finishOnCancel, callback, onStepCallback);
+    this.animateLengthTo(target, duration, finishOnCancel, callback, onStepCallback);
   }
 
   showLineOnly() {
@@ -1195,12 +1350,20 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
   }
 
+  /**
+   * Return the start point of the line
+   * @return {Point}
+   */
   getP1() {
     // const m = this.transform.matrix();
     // return this.line.p1.transformBy(m);
     return this.line.p1._dup();
   }
 
+  /**
+   * Return the end point of the line
+   * @return {Point}
+   */
   getP2() {
     // const m = this.transform.matrix();
     // return this.p2.transformBy(m);

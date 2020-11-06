@@ -144,6 +144,7 @@ export default class EquationLabel {
       if (textObject != null) {
         textObject.setText(text);
       }
+      // console.log(form)
       form.arrange(
         this.eqn.eqn.scale,
         this.eqn.eqn.formDefaults.alignment.xAlign,

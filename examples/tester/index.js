@@ -221,13 +221,13 @@ diagram.addElement({
   name: 'a',
   method: 'objects.line',
   options: {
-    p1: [-1, -1],
+    p1: [0, -1],
     // p2: [1, 1],
     // p1: [0, 0],
     align: 'center',
     // offset: -0.2,
     length: 2,
-    angle: Math.PI / 3,
+    // angle: Math.PI / 3,
     width: 0.01,
     touchBorder: 0.1,
     maxLength: 4,
@@ -242,11 +242,12 @@ diagram.addElement({
     // dash: [0.02, 0.02],
     // offset: -0.1,
     label: {
-      text: 'asdf',
+      text: null,
       offset: 0.1,
       location: 'top',
       orientation: 'horizontal',
       precision: 2,
+      update: true,
     },
     move: {
       type: 'rotation',
@@ -289,7 +290,15 @@ diagram.addElement({
 });
 
 // console.log('asdf')
-diagram.elements._a.setMovable(true, 'centerTranslateEndRotation', 0.5, false);
+diagram.elements._a.setMovable({
+  type: 'centerTranslateEndRotation',
+});
+// diagram.elements._a.setLabelToRealLength();
+// diagram.elements._a._startPad.setPosition(-1, 0);
+// diagram.elements._a._startPad.setPosition(-1.5, 0);
+// diagram.elements._a.setEndPoints([2, 0], [1, 1])
+// console.log(diagram.elements._a.getP1Position())
+// diagram.elements._a.setAutoUpdate(false);
 // console.log('qwer')
 // diagram.elements._a.setLength(2);
 // console.log(diagram.elements._a._line.drawingObject.touchBorder)
