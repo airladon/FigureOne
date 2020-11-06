@@ -289,7 +289,7 @@ diagram.addElement({
 });
 
 // console.log('asdf')
-diagram.elements._a.setMovable(true, 'centerTranslateEndRotation', 0.5);
+diagram.elements._a.setMovable(true, 'centerTranslateEndRotation', 0.5, false);
 // console.log('qwer')
 // diagram.elements._a.setLength(2);
 // console.log(diagram.elements._a._line.drawingObject.touchBorder)

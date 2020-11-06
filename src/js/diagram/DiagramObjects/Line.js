@@ -207,7 +207,7 @@ export type TypeLineOptions = {
   move?: {
     type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale';
     middleLengthPercent?: number;
-    translationBounds?: Rect;
+    includeLabelInTouchBoundary?: boolean;
   }
 };
 
@@ -398,7 +398,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
   multiMove: {
     midLength: number;
-    bounds: Rect,
+    includeLabelInTouchBoundary: boolean;
   };
 
   animateLengthToOptions: {
@@ -497,10 +497,11 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     // touched then the line collection is rotated.
     this.multiMove = {
       midLength: 0,
+      includeLabelInTouchBoundary: false,
       // bounds: new RectBounds({
       //   left: -1, bottom: -1, top: 1, right: 1
       // }),
-      bounds: new Rect(-1, -1, 2, 2),
+      // bounds: new Rect(-1, -1, 2, 2),
     };
 
     this.scaleTransformMethodName = '_transformMethod';
@@ -568,7 +569,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     const defaultMoveOptions = {
       type: 'rotation',
       middleLengthPercent: 0.22,
-      translationBounds: this.diagramLimits,
+      includeLabelInTouchBoundary: false,
     };
     if (optionsToUse.move) {
       const moveOptions = joinObjects({}, defaultMoveOptions, optionsToUse.move);
@@ -576,7 +577,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         true,
         moveOptions.type,
         moveOptions.middleLengthPercent,
-        moveOptions.translationBounds,
       );
     }
 
@@ -734,16 +734,16 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
     this[`arrow${index}`] = { height: arrowLength };
     this.add(`arrow${index}`, a);
-    // this.setLength(this.currentLength);
   }
 
   setMovable(
     movable: boolean = true,
     moveType: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale' = this.move.type,
     middleLengthPercent: number = 0.333,
-    translationBounds: Rect = this.diagramLimits._dup(),
+    includeLabelInTouchBoundary: boolean = false,
   ) {
     if (movable) {
+      this.multiMove.includeLabelInTouchBoundary = includeLabelInTouchBoundary;
       if (moveType === 'translation' || moveType === 'rotation'
         || moveType === 'scale' || moveType === 'scaleX'
         || moveType === 'scaleY'
@@ -758,9 +758,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         if (this._movePad) {
           this._movePad.isMovable = false;
         }
-        this.multiMove.bounds = translationBounds;
       } else {
-        this.setMultiMovable(middleLengthPercent, translationBounds);
+        this.setMultiMovable(middleLengthPercent);
+        this.updateMovePads();
       }
     } else {
       this.isMovable = false;
@@ -772,7 +772,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
   }
 
-  setMultiMovable(middleLengthPercent: number, translationBounds: Rect) {
+  // Private
+  setMultiMovable(middleLengthPercent: number) {
     this.multiMove.midLength = middleLengthPercent;
     if (this._rotPad == null) {
       const rotPad = this.shapes.rectangle({
@@ -781,7 +782,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         yAlign: 'bottom',
         width: 1,
         height: 1,
-        color: [0, 0, 1, 0.5],
+        color: [0, 0, 1, 0.0005],
       });
       this.add('rotPad', rotPad);
       rotPad.setMovable();
@@ -796,7 +797,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
         yAlign: 'bottom',
         width: 1,
         height: 1,
-        color: [0, 1, 0, 0.5],
+        color: [0, 1, 0, 0.0005],
       });
 
       this.add('movePad', movePad);
@@ -809,7 +810,6 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.hasTouchableElements = true;
     this.isTouchable = false;
     this.isMovable = false;
-    this.multiMove.bounds = translationBounds;
     this.setLength(this.line.length());
   }
 
@@ -857,8 +857,12 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     if (this.label != null) {
       this.add('label', this.label.eqn);
     }
-    this.subscriptions.add('setTransform', () => { this.updateLabel(); });
+    this.subscriptions.add('setTransform', () => {
+      this.updateLabel();
+      this.updateMovePads();
+    });
     this.updateLabel();
+    this.updateMovePads();
   }
 
   getLength() {
@@ -878,6 +882,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
       this.label.setText(text);
     }
     this.updateLabel();
+    this.updateMovePads();
   }
 
   getLabel() {
@@ -890,6 +895,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   setLabelToRealLength() {
     this.showRealLength = true;
     this.updateLabel();
+    this.updateMovePads();
   }
 
   updateLabel(parentRotationOffset: number = 0) {
@@ -1077,8 +1083,18 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.transform.updateRotation(this.line.angle());
     this.transform.updateTranslation(position);
     this.updateLabel();
+    this.updateMovePads();
+  }
 
-    const touchBorder = getBoundingBorder(this.getBorder('draw', 'touchBorder', ['line', 'arrow1', 'arrow2', 'label']));
+  updateMovePads() {
+    if (this._movePad == null || this._rotPad == null) {
+      return;
+    }
+    const elements = ['line', 'arrow1', 'arrow2'];
+    if (this.multiMove.includeLabelInTouchBoundary) {
+      elements.push('label');
+    }
+    const touchBorder = getBoundingBorder(this.getBorder('draw', 'touchBorder', elements));
     const width = touchBorder[0].distance(touchBorder[1]);
     const height = touchBorder[0].distance(touchBorder[3]);
     const movePad = this._movePad;
