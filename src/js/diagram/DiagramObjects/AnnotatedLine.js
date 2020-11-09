@@ -59,7 +59,7 @@ export type TypeLineLabelOptions = {
   color?: Array<number>,
 };
 
-export type TypeLineOptions = {
+export type ADV_Line = {
   p1?: Point,
   p2?: Point,
   length?: number,
@@ -487,7 +487,7 @@ export default class DiagramObjectAnnotatedLine extends DiagramElementCollection
     equation: Object,
     isTouchDevice: boolean,
     animateNextFrame: void => void,
-    options: TypeLineOptions = {},
+    options: ADV_Line = {},
   ) {
     const defaultOptions = {
       position: new Point(0, 0),
@@ -1405,9 +1405,9 @@ export default class DiagramObjectAnnotatedLine extends DiagramElementCollection
   }
 }
 
-// export type TypeLine = DiagramObjectLine;
+// export type TypeLine = AdvancedLine;
 
-// export class MovableLine extends DiagramObjectLine {
+// export class MovableLine extends AdvancedLine {
 //   // constructor(
 //   //   fullLength: number,
 //   //   endLength: number,
@@ -1425,4 +1425,4 @@ export type TypeLabelledLine = {
   _label: {
     _base: DiagramElementPrimitive;
   } & Equation;
-} & DiagramObjectLine;
+} & AdvancedLine;

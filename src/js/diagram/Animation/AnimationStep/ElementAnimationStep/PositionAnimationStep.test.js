@@ -17,7 +17,7 @@ describe('Position Animation', () => {
   let element;
   beforeEach(() => {
     const diagram = makeDiagram();
-    element = diagram.objects.line();
+    element = diagram.advanced.line();
   });
   test('Instantiation', () => {
     const onFinish = () => {};

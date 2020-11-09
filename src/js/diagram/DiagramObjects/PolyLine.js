@@ -17,7 +17,7 @@ import {
 // } from '../DiagramElements/PolyLine';
 // import type { TypeParsablePoint } from '../../tools/g2';
 import type {
-  TypeLineLabelOptions, TypeLineOptions,
+  TypeLineLabelOptions, ADV_Line,
 } from './Line';
 import type {
   TypeAngleOptions, TypeAngleLabelOptions,
@@ -48,7 +48,7 @@ export type TypePolyLineOptions = {
   // borderToPoint?: TypePolyLineBorderToPoint,
   width?: number,
   angle?: TypeAngleOptions | Array<TypeAngleOptions>,
-  side?: TypeLineOptions | Array<TypeLineOptions>,
+  side?: ADV_Line | Array<ADV_Line>,
   pad?: TypePadOptions | Array<TypePadOptions>,
   transform?: Transform,
   makeValid?: ?{
@@ -175,7 +175,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         },
       };
     }
-    const defaultSideOptions: TypeLineOptions = {
+    const defaultSideOptions: ADV_Line = {
       showLine: false,
       offset: 0,
       width: 0.01,
@@ -401,7 +401,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
           p2: this.points[i],
           p3: this.points[j],
         }, angleArray[i - firstIndex]);
-        const angleAnnotation = this.objects.angle(angleOptions);
+        const angleAnnotation = this.advanced.angle(angleOptions);
         this.add(name, angleAnnotation);
       }
     }
@@ -452,7 +452,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
             p2: this.points[i],
           }, sideArray[i]);
         }
-        const sideLine = this.objects.line(sideOptions);
+        const sideLine = this.advanced.line(sideOptions);
         this.add(name, sideLine);
       }
     }

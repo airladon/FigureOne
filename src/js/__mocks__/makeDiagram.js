@@ -95,9 +95,9 @@ export default function makeDiagram(
   diagram.equationLow = diagram.getEquations(false);
   diagram.equationHigh = diagram.getEquations(true);
   diagram.equation = diagram.equationLow;
-  diagram.objectsLow = diagram.getObjects(false);
-  diagram.objectsHigh = diagram.getObjects(true);
-  diagram.objects = diagram.objectsLow;
+  diagram.advancedLow = diagram.getObjects(false);
+  diagram.advancedHigh = diagram.getObjects(true);
+  diagram.advanced = diagram.advancedLow;
   diagram.setSpaceTransforms();
   // needed as the first element needs to be set with the space Transforms
   diagram.initElements();

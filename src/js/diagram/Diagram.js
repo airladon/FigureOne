@@ -204,8 +204,8 @@ class Diagram {
   equation: Object;
   equationLow: Object;
   // equationHigh: Object;
-  objects: DiagramObjects;
-  objectsLow: DiagramObjects;
+  advanced: DiagramObjects;
+  advancedLow: DiagramObjects;
   // objectsHigh: DiagramObjects;
 
   backgroundColor: Array<number>;
@@ -410,9 +410,9 @@ class Diagram {
     this.equationLow = this.getEquations();
     // this.equationHigh = this.getEquations(true);
     this.equation = this.equationLow;
-    this.objectsLow = this.getObjects();
-    // this.objectsHigh = this.getObjects(true);
-    this.objects = this.objectsLow;
+    this.advancedLow = this.getObjects();
+    // this.advancedHigh = this.getObjects(true);
+    this.advanced = this.advancedLow;
     this.createDiagramElements();
     if (this.elements.name === '') {
       this.elements.name = 'diagramRoot';
@@ -467,9 +467,9 @@ class Diagram {
       html: this.shapes.html.bind(this.shapes),
       // htmlImage: this.shapes.htmlImage.bind(this.shapes),
       // htmlText: this.shapes.htmlText.bind(this.shapes),
-      line: this.objects.line.bind(this.objects),
-      angle: this.objects.angle.bind(this.objects),
-      smartPolyLine: this.objects.polyline.bind(this.objects),
+      line: this.advanced.line.bind(this.advanced),
+      angle: this.advanced.angle.bind(this.advanced),
+      smartPolyLine: this.advanced.polyline.bind(this.advanced),
       equation: this.equation.equation.bind(this.equation),
     };
   }
@@ -975,7 +975,7 @@ class Diagram {
     addElements(
       this.shapes,
       this.equation,
-      this.objects,
+      this.advanced,
       collection,
       elementsToAdd,
       addElementsKey,
@@ -1009,7 +1009,7 @@ class Diagram {
     addElements(
       this.shapes,
       this.equation,
-      this.objects,
+      this.advanced,
       rootCollection,
       [elementDefinition],
       addElementsKey,
@@ -1114,7 +1114,7 @@ class Diagram {
       shapes,
       equation,
       this.isTouchDevice,
-      this.animateNextFrame.bind(this, true, 'objects'),
+      this.animateNextFrame.bind(this, true, 'advanced'),
     );
   }
 
@@ -1555,6 +1555,7 @@ class Diagram {
     const pixelPoint = this.clientToPixel(clientPoint);
     // console.log(pixelPoint)
     const glPoint = pixelPoint.transformBy(this.spaceTransforms.pixelToGL.matrix());
+    console.log(glPoint)
     // console.log(glPoint, clientPoint)
 
     // console.log(glPoint.transformBy(this.glToDiagramSpaceTransform.matrix()))

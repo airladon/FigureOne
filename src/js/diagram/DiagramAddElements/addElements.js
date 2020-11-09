@@ -20,7 +20,7 @@ export type TypeAddElementObject = {
 function addElements(
   shapes: DiagramPrimitives,
   equation: DiagramEquation,
-  objects: DiagramObjects,
+  advanced: DiagramObjects,
   rootCollection: DiagramElementCollection,
   layout: Array<TypeAddElementObject | DiagramElement>,
   addElementsKey: string,
@@ -38,7 +38,7 @@ function addElements(
   const getMethod = (method: string) => {
     const methods = {
       collection: shapes.collection.bind(shapes),
-      opolyline: objects.polyline.bind(objects),
+      opolyline: advanced.polyline.bind(advanced),
       polyline: shapes.polyline.bind(shapes),
       polygon: shapes.polygon.bind(shapes),
       rectangle: shapes.rectangle.bind(shapes),
@@ -64,8 +64,8 @@ function addElements(
       marks: shapes.marks.bind(shapes),
       box: shapes.box.bind(shapes),
       //
-      oline: objects.line.bind(objects),
-      angle: objects.angle.bind(objects),
+      oline: advanced.line.bind(advanced),
+      angle: advanced.angle.bind(advanced),
       //
       addEquation: equation.addEquation.bind(equation),
       equation: equation.equation.bind(equation),
@@ -82,7 +82,7 @@ function addElements(
     }
     const diagram = {
       shapes,
-      objects,
+      advanced,
       equation,
     };
     const splitMethod = method.split('.');
@@ -180,7 +180,7 @@ function addElements(
         addElements(
           shapes,
           equation,
-          objects,                                            // $FlowFixMe
+          advanced,                                            // $FlowFixMe
           rootCollection[`_${nameToUse}`],
           addElementsToUse,
           addElementsKey,

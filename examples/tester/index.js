@@ -217,82 +217,82 @@ diagram.elements._c.setMovable();
 // eqn.setTouchableRect(0.5);
 
 // Line with triangle arrows on both ends
-diagram.addElement({
-  name: 'a',
-  method: 'objects.line',
-  options: {
-    p1: [0, -1],
-    // p2: [1, 1],
-    // p1: [0, 0],
-    align: 'center',
-    // offset: -0.2,
-    length: 2,
-    // angle: Math.PI / 3,
-    width: 0.01,
-    touchBorder: 0.1,
-    maxLength: 4,
-    // angle: -Math.PI / 4,
-    // touchBorder: 0.1,
-    arrow: {
-      head: 'triangle',
-      // align: 'mid',
-      scale: 2,
-      radius: 0.1,
-    },
-    // dash: [0.02, 0.02],
-    // offset: -0.1,
-    label: {
-      text: null,
-      offset: 0.1,
-      location: 'top',
-      orientation: 'horizontal',
-      precision: 2,
-      update: true,
-    },
-    move: {
-      type: 'rotation',
-    },
-    pulseWidth: {
-      duration: 5,
-      frequency: 0.5,
-    },
-  },
-  mods: {
-    move: { bounds: 'diagram' },
-  },
-});
-console.log(diagram.elements)
+// diagram.addElement({
+//   name: 'a',
+//   method: 'advanced.line',
+//   options: {
+//     p1: [0, -1],
+//     // p2: [1, 1],
+//     // p1: [0, 0],
+//     align: 'center',
+//     // offset: -0.2,
+//     length: 2,
+//     // angle: Math.PI / 3,
+//     width: 0.01,
+//     touchBorder: 0.1,
+//     maxLength: 4,
+//     // angle: -Math.PI / 4,
+//     // touchBorder: 0.1,
+//     arrow: {
+//       head: 'triangle',
+//       // align: 'mid',
+//       scale: 2,
+//       radius: 0.1,
+//     },
+//     // dash: [0.02, 0.02],
+//     // offset: -0.1,
+//     label: {
+//       text: null,
+//       offset: 0.1,
+//       location: 'top',
+//       orientation: 'horizontal',
+//       precision: 2,
+//       update: true,
+//     },
+//     move: {
+//       type: 'rotation',
+//     },
+//     pulseWidth: {
+//       duration: 5,
+//       frequency: 0.5,
+//     },
+//   },
+//   mods: {
+//     move: { bounds: 'diagram' },
+//   },
+// });
+// console.log(diagram.elements)
 // diagram.elements._a.setMovable();
 // diagram.elements._a.setLength(1);
 // diagram.elements._a.grow(0, 5);
-diagram.animateNextFrame();
-// diagram.elements._a.pulseWidth();
-// diagram.elements._a.pulse({ duration: 2, scale: 1.5 })
-// diagram.elements._a.setLength(1.5);
+// diagram.animateNextFrame();
+// // diagram.elements._a.pulseWidth();
+// // diagram.elements._a.pulse({ duration: 2, scale: 1.5 })
+// // diagram.elements._a.setLength(1.5);
 
-diagram.addElement({
-  name: 'asdf',
-  method: 'line',
-  options: {
-    points: [[0, 0], [1,0]],
-    // p1: [-1, 0],
-    // p2: [0, -1],
-    width: 0.02,
-    arrow: {
-      head: 'barb',
-      align: 'mid',
-      sides: 7,
-      radius: 0.05,
-      tail: 0,
-    },
-    // dash: [0.1, 0.1],
-  },
-});
+// diagram.addElement({
+//   name: 'asdf',
+//   method: 'line',
+//   options: {
+//     points: [[0, 0], [1,0]],
+//     // p1: [-1, 0],
+//     // p2: [0, -1],
+//     width: 0.02,
+//     arrow: {
+//       head: 'barb',
+//       align: 'mid',
+//       sides: 7,
+//       radius: 0.05,
+//       tail: 0,
+//     },
+//     // dash: [0.1, 0.1],
+//   },
+// });
 
-// console.log('asdf')
-diagram.elements._a.setMovable({
-  type: 'centerTranslateEndRotation',
-});
+// // console.log('asdf')
+// diagram.elements._a.setMovable({
+//   type: 'centerTranslateEndRotation',
+// });
 // diagram.elements._a.setLabelToRealLength();
 // diagram.elements._a._startPad.setPosition(-1, 0);
 // diagram.elements._a._startPad.setPosition(-1.5, 0);
@@ -377,3 +377,52 @@ diagram.elements._a.setMovable({
 //     },
 //   },
 // });
+
+diagram.addElement({
+  name: 'line1',
+  method: 'advanced.line',
+  options: {
+    p1: [-2, 0],
+    p2: [-1, 0],
+    arrow: 'triangle',
+    label: {
+      text: 'length',
+      offset: 0.01,
+    },
+  },
+});
+
+diagram.addElement({
+  name: 'line2',
+  method: 'advanced.line',
+  options: {
+    p1: [-0.5, -0.5],
+    p2: [0.5, 0.5],
+    align: 'end',
+    arrow: 'barb',
+    label: {
+      text: null,
+      offset: 0.01,
+    },
+  },
+});
+
+// setTimeout(() => {
+//   diagram.elements._line2.grow(0.5, 5);
+// }, 1000);
+
+const line = diagram.elements._line2;
+// line.animations.new()
+//   .then(line.animations.grow({ from: 0, target: 2, duration: 1, delay: 1 }))
+//   .start();
+// console.log(line.animations)
+line.animations.new()
+  .pulse({ duration: 1 })
+  .length({ start: 2, target: 0.5, duration: 5 })
+  .start();
+// line.grow({
+//   start: 0,
+//   target: 2,
+//   duration: 5,
+// });
+

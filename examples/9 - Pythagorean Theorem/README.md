@@ -93,7 +93,7 @@ eqn.setTouchableRect(0.5);
 // and rotation)
 const makeTriangle = (name, scenario) => ({
   name,
-  method: 'objects.polyline',
+  method: 'collections.polyline',
   options: {
     color: [1, 0, 0, 1],
     points: [[0, 0], [0, 1], [2, 0]],
@@ -292,7 +292,7 @@ This diagram requires four triangles that are all the same, just in different po
 
 **Scenarios** are a convenient way to imbed position, rotation, scale and color scenarios within a `DiagramElement`. When orchestrating many elements, it can make code more readable.
 
-Therefore, as all the triangles are the same except for their senarios, a helper function is used to create them. The method used to create the triangles is `objects.polyline` which creates a polyline which can be annotated with text and angles for each segment.
+Therefore, as all the triangles are the same except for their senarios, a helper function is used to create them. The method used to create the triangles is `collections.polyline` which creates a polyline which can be annotated with text and angles for each segment.
 
 ```js
 // Helper function to make the right angle triangles
@@ -300,7 +300,7 @@ Therefore, as all the triangles are the same except for their senarios, a helper
 // and rotation)
 const makeTriangle = (name, scenario) => ({
   name,
-  method: 'objects.polyline',
+  method: 'collections.polyline',
   options: {
     color: [1, 0, 0, 1],
     points: [[0, 0], [0, 1], [2, 0]],

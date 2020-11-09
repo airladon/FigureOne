@@ -11,6 +11,7 @@ import type {
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
   OBJ_PulseAnimationStep, OBJ_OpacityAnimationStep,
   TypePulseTransformAnimationStepInputOptions,
+  AnimationStep,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 // import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
@@ -27,6 +28,10 @@ import { joinObjects, duplicateFromTo } from '../../tools/tools';
  */
 export type OBJ_AnimationBuilder = {
   element?: DiagramElement;
+  customSteps?: Array<{
+    step: (Object) => AnimationStep,
+    name: string,
+  }>;
 } & OBJ_SerialAnimationStep;
 
 /**
@@ -56,7 +61,9 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     elementOrOptions: DiagramElement | OBJ_AnimationBuilder = {},
     ...options: Array<OBJ_AnimationBuilder>
   ) {
-    const defaultOptions = {};
+    const defaultOptions = {
+      customSteps: [],
+    };
     let optionsToUse;
     if (elementOrOptions instanceof DiagramElement) {
       optionsToUse = joinObjects({}, defaultOptions, ...options);
@@ -67,6 +74,14 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     super(optionsToUse);
     this.element = optionsToUse.element;
     this._stepType = 'builder';
+    optionsToUse.customSteps.forEach((customStep) => {
+      this[customStep.name] = (...optionsIn) => {
+        const defOptions = { element: this.element };
+        const o = joinObjects({}, defOptions, ...optionsIn);
+        this.then(customStep.step(o));
+        return this;
+      };
+    });
     return this;
   }
 
@@ -177,6 +192,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     }
     return this;
   }
+
 
   /**
    * Add a position animation step that uses this element by default

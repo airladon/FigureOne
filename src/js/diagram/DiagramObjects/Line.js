@@ -20,6 +20,8 @@ import { simplifyArrowOptions, getArrowLength } from '../DrawingObjects/Geometri
 import type { OBJ_LineArrows, OBJ_LineArrow } from '../DrawingObjects/Geometries/arrow';
 import type { OBJ_Pulse } from '../Element';
 import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
+import * as animation from '../Animation/Animation';
+import type { OBJ_CustomAnimationStep } from '../Animation/Animation';
 
 // top - text is on top of line (except when line is vertical)
 // bottom - text is on bottom of line (except when line is vertical)
@@ -145,12 +147,12 @@ export type TypeLineLabelOptions = {
 };
 
 /**
- * Line collection options object
+ * Advanced Line options object
  *
  *
- * This object defines a convient and powerful line
- * {@link DiagramElementCollection} that includes a label annotation and
- * some methods to make it convient to use when it needs to change dynamically.
+ * The Advanced Line is a convient and powerful line
+ * {@link DiagramElementCollection} that includes the line, arrows, a label
+ * annotation and some methods to make it convient to use dynamically.
  *
  * A line can either be defined by its two end points (`p1`, `p2`), or a
  * point (`p1`), `length` and `angle`.
@@ -185,7 +187,7 @@ export type TypeLineLabelOptions = {
  *
  * Default pulse values can then be specified with the `pulse` property.
  */
-export type TypeLineOptions = {
+export type ADV_Line = {
   p1?: Point,
   p2?: Point,
   position?: Point,
@@ -353,15 +355,58 @@ function getLineFromOptions(options: {
   return line;
 }
 
+/**
+ * Grow line animation step.
+ *
+ * @property {number} [start] line length to grow from (`0`)
+ * @property {number} [end] line length to grow to (`current length`)
+ * @extends OBJ_CustomAnimationStep
+ */
+export type OBJ_GrowAnimationStep = {
+  start?: number,
+  target?: number,
+} & OBJ_CustomAnimationStep;
 
+
+/*
+...................##.......####.##....##.########
+...................##........##..###...##.##......
+...................##........##..####..##.##......
+...................##........##..##.##.##.######..
+...................##........##..##..####.##......
+...................##........##..##...###.##......
+...................########.####.##....##.########
+*/
 // A line is always defined as horiztonal with length 1 in vertex space
 // The line's position and rotation is the line collection transform
 // translation and rotation respectively.
 // The line's length is the _line primative x scale.
 /**
  * {@link DiagramElementCollection} representing a line.
+ *
+ * This object defines a convient and powerful line
+ * {@link DiagramElementCollection} that includes a solid or dashed line,
+ * arrows, a label annotation that can self align with line orientation, and
+ * some methods to make it convient to use dynamically.
+ *
+ * See {@link ADV_Line} for the options that can be used when creating the line.
+ *
+ * The object contains an additional animation step `length` that can be used
+ * to animate changing the line length. The animation step is available in
+ * the animation manager (`animations` property), and in the animation builder
+ * (`animations.new()` and `animations.builder()`).
+ *
+ * Some of the useful methods included in an advanced line are:
+ * - <a href="#advancedlinepulsewidth">pulseWidth</a> - pulses the line without
+ *   changing its length
+ * - <a href="#advancedlinegrow">grow</a> - starts and animation that executes
+ *   a single `length` animation
+ *    step
+ * - <a href="#advancedlinesetmovable">grow</a> - overrisdes
+ *    <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
+ *    allowing for more complex move options.
  */
-export default class DiagramObjectLine extends DiagramElementCollection {
+export default class AdvancedLine extends DiagramElementCollection {
   // Diagram elements
   _line: ?DiagramElementPrimitive;
   _movePad: ?DiagramElementPrimitive;
@@ -427,6 +472,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     oldTransformMethod: ?(string | ((number, ?Point) => Transform)),
   };
 
+  // animations: { grow: (...OBJ_GrowAnimationStep) => CustomAnimationStep } & AnimationManager;
+
   /**
    * @hideconstructor
    */
@@ -435,7 +482,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     equation: Object,
     isTouchDevice: boolean,
     // animateNextFrame: void => void,
-    options: TypeLineOptions = {},
+    options: ADV_Line = {},
   ) {
     const defaultOptions = {
       // position: new Point(0, 0),
@@ -479,25 +526,25 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     this.autoUpdateSubscriptionId = -1;
 
 
-    this.animateLengthToOptions = {
-      initialLength: 0,
-      deltaLength: 1,
-      finishOnCancel: true,
-      callback: null,
-      onStepCallback: null,
-    };
+    // this.animateLengthToOptions = {
+    //   initialLength: 0,
+    //   deltaLength: 1,
+    //   finishOnCancel: true,
+    //   callback: null,
+    //   onStepCallback: null,
+    // };
 
     this.pulseWidthOptions = {
       oldCallback: null,
       oldTransformMethod: null,
     };
 
-    this.animateLengthToStepFunctionName = '_animateToLengthStep';
-    this.fnMap.add(this.animateLengthToStepFunctionName, this.animateLengthToStep.bind(this));
-    this.animateLengthToDoneFunctionName = '_animateToLengthDone';
-    this.fnMap.add(this.animateLengthToDoneFunctionName, this.animateLengthToDone.bind(this));
-    this.pulseWidthDoneCallbackName = '_pulseWidthDone';
-    this.fnMap.add(this.pulseWidthDoneCallbackName, this.pulseWidthDone.bind(this));
+    // this.animateLengthToStepFunctionName = '_animateToLengthStep';
+    // this.fnMap.add(this.animateLengthToStepFunctionName, this.animateLengthToStep.bind(this));
+    // this.animateLengthToDoneFunctionName = '_animateToLengthDone';
+    // this.fnMap.add(this.animateLengthToDoneFunctionName, this.animateLengthToDone.bind(this));
+    // this.pulseWidthDoneCallbackName = '_pulseWidthDone';
+    // this.fnMap.add(this.pulseWidthDoneCallbackName, this.pulseWidthDone.bind(this));
 
     // this.transform.updateTranslation(this.line.p1);
     // this.transform.updateRotation(this.line.angle);
@@ -610,6 +657,30 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
       this.setProperties(optionsToUse.mods);
     }
+
+    this.animations.length = (...options) => {
+      const o = joinObjects({}, {
+        element: this,
+        start: 0,
+        target: this.line.length(),
+      }, ...options);
+      o.callback = (percentage) => {
+        const l = (o.target - o.start) * percentage + o.start;
+        this.setLength(l);
+      };
+      return new animation.CustomAnimationStep(o);
+    };
+
+    this.animations.customSteps.push(
+      {
+        step: this.animations.length.bind(this),
+        name: 'length',
+      },
+    );
+    // trigger(...options: Array<OBJ_TriggerAnimationStep>) {
+    //   const optionsToUse = joinObjects({}, ...options);
+    //   return new anim.TriggerAnimationStep(optionsToUse);
+    // }
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
@@ -961,7 +1032,8 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
   /**
    * Turn on and off auto label location and orientation updates when line
-   * transform changes.
+   * transform changes. When a line is created with a label, auto update
+   * is turned on by default.
    */
   setAutoUpdate(update: boolean = true) {
     if (update) {
@@ -986,7 +1058,7 @@ export default class DiagramObjectLine extends DiagramElementCollection {
 
   /**
    * Get line angle
-   * @param {'deg' | 'rad'} [units] ('rad')
+   * @param {'deg' | 'rad'} [units]
    * @return {number}
    */
   getAngle(units: 'deg' | 'rad' = 'rad') {
@@ -1256,72 +1328,91 @@ export default class DiagramObjectLine extends DiagramElementCollection {
     }
   }
 
-  setEndPoints(p: TypeParsablePoint, q: TypeParsablePoint, offset: number = 0) {
-    this.line = new Line(p, q).offset('positive', offset);
+  /**
+   * Change the line position, length and angle using end points and an offset.
+   *
+   * For most lines, an offset of 0 will be desired, as this will position the
+   * line ends to be at `p1` and `p2`.
+   *
+   * A non-positive offset will position the line in parallel with `p1` and `p2`
+   * but some offset away. A positive offset will position the line on the side
+   * it will rotate toward with positive rotation.
+   */
+  setEndPoints(p1: TypeParsablePoint, p2: TypeParsablePoint, offset: number = 0) {
+    this.line = new Line(p1, p2).offset('positive', offset);
     // console.log(p, q)
     this.setupLine();
   }
 
-  animateLengthToStep(percent: number) {
-    const { initialLength, deltaLength, onStepCallback } = this.animateLengthToOptions;
-    this.setLength(initialLength + deltaLength * percent);
-    if (onStepCallback != null) {
-      this.fnMap.exec(onStepCallback, percent, initialLength + deltaLength * percent);
-    }
-  }
+  // animateLengthToStep(percent: number) {
+  //   const { initialLength, deltaLength, onStepCallback } = this.animateLengthToOptions;
+  //   this.setLength(initialLength + deltaLength * percent);
+  //   if (onStepCallback != null) {
+  //     this.fnMap.exec(onStepCallback, percent, initialLength + deltaLength * percent);
+  //   }
+  // }
 
-  animateLengthToDone() {
-    const {
-      initialLength, callback, deltaLength, finishOnCancel,
-    } = this.animateLengthToOptions;
-    if (finishOnCancel) {
-      this.setLength(initialLength + deltaLength);
-    }
-    this.fnMap.exec(callback);
-  }
+  // animateLengthToDone() {
+  //   const {
+  //     initialLength, callback, deltaLength, finishOnCancel,
+  //   } = this.animateLengthToOptions;
+  //   if (finishOnCancel) {
+  //     this.setLength(initialLength + deltaLength);
+  //   }
+  //   this.fnMap.exec(callback);
+  // }
 
-  animateLengthTo(
-    toLength: number = 1,
-    time: number = 1,
-    finishOnCancel: boolean = true,
-    callback: ?(string | (() => void)) = null,
-    onStepCallback: ?(string | ((number, number) => void)) = null,
-    stop: ?boolean = true,
-  ) {
-    if (stop) {
-      this.stop();
-    }
-    this.animateLengthToOptions = {
-      initialLength: this.line.length(),
-      deltaLength: toLength - this.line.length(),
-      callback,
-      onStepCallback,
-      finishOnCancel,
-    };
-    this.animations.new('Line Length')
-      .custom({
-        callback: this.animateLengthToStepFunctionName,
-        duration: time,
-      })
-      .whenFinished(this.animateLengthToDoneFunctionName)
-      .start();
-    this.animateNextFrame();
-  }
+  // animateLengthTo(
+  //   toLength: number = 1,
+  //   time: number = 1,
+  //   finishOnCancel: boolean = true,
+  //   callback: ?(string | (() => void)) = null,
+  //   onStepCallback: ?(string | ((number, number) => void)) = null,
+  //   stop: ?boolean = true,
+  // ) {
+  //   if (stop) {
+  //     this.stop();
+  //   }
+  //   this.animateLengthToOptions = {
+  //     initialLength: this.line.length(),
+  //     deltaLength: toLength - this.line.length(),
+  //     callback,
+  //     onStepCallback,
+  //     finishOnCancel,
+  //   };
+  //   this.animations.new('Line Length')
+  //     .custom({
+  //       callback: this.animateLengthToStepFunctionName,
+  //       duration: time,
+  //     })
+  //     .whenFinished(this.animateLengthToDoneFunctionName)
+  //     .start();
+  //   this.animateNextFrame();
+  // }
+
+  // /**
+  //  * Grow the line from a length to the current length
+  //  */
+  // growLegacy(
+  //   fromLength: number = 0,
+  //   duration: number = 1,
+  //   finishOnCancel: boolean = true,
+  //   callback: ?(string | (() => void)) = null,
+  //   onStepCallback: ?(number, number) => void = null,
+  // ) {
+  //   this.stop();
+  //   const target = this.line.length();
+  //   this.setLength(fromLength);
+  //   this.animateLengthTo(target, duration, finishOnCancel, callback, onStepCallback);
+  // }
 
   /**
-   * Grow the line from a length to the current length
+   * Create a new animation that executes a single grow animation step.
    */
-  grow(
-    fromLength: number = 0,
-    duration: number = 1,
-    finishOnCancel: boolean = true,
-    callback: ?(string | (() => void)) = null,
-    onStepCallback: ?(number, number) => void = null,
-  ) {
-    this.stop();
-    const target = this.line.length();
-    this.setLength(fromLength);
-    this.animateLengthTo(target, duration, finishOnCancel, callback, onStepCallback);
+  grow(options: OBJ_GrowAnimationStep) {
+    this.animations.new()
+      .then(this.animations.length(options))
+      .start();
   }
 
   showLineOnly() {
@@ -1361,9 +1452,9 @@ export default class DiagramObjectLine extends DiagramElementCollection {
   }
 }
 
-// export type TypeLine = DiagramObjectLine;
+// export type TypeLine = AdvancedLine;
 
-// export class MovableLine extends DiagramObjectLine {
+// export class MovableLine extends AdvancedLine {
 //   // constructor(
 //   //   fullLength: number,
 //   //   endLength: number,
@@ -1381,4 +1472,4 @@ export type TypeLabelledLine = {
   _label: {
     _base: DiagramElementPrimitive;
   } & Equation;
-} & DiagramObjectLine;
+} & AdvancedLine;

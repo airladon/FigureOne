@@ -84,7 +84,7 @@ eqn.setTouchableRect(0.5);
 // and rotation)
 const makeTriangle = (name, scenario) => ({
   name,
-  method: 'objects.polyline',
+  method: 'advanced.polyline',
   options: {
     color: [1, 0, 0, 1],
     points: [[0, 0], [0, 1], [2, 0]],

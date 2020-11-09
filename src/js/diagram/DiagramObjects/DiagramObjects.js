@@ -9,12 +9,12 @@ import { joinObjects } from '../../tools/tools';
 // } from '../Element';
 import DrawContext2D from '../DrawContext2D';
 // import EquationNavigator from './EquationNavigator';
-import DiagramObjectLine from './Line';
+import AdvancedLine from './Line';
 import DiagramObjectAngle from './Angle';
 import DiagramObjectAnnotatedLine from './AnnotatedLine';
 // eslint-disable-next-line import/no-cycle
 import DiagramObjectPolyLine from './PolyLine';
-import type { TypeLineOptions } from './Line';
+import type { ADV_Line } from './Line';
 import type { TypeAngleOptions } from './Angle';
 import type { TypeLabelOptions } from './EquationLabel';
 import type { TypePolyLineOptions } from './PolyLine';
@@ -45,11 +45,11 @@ export default class DiagramObjects {
   }
 
 
-  line(...options: Array<TypeLineOptions>) {
+  line(...options: Array<ADV_Line>) {
     // const optionsToUse = Object.assign({}, ...options);
     // console.log(Object.assign({}, ...options))
     const optionsToUse = joinObjects({}, ...options);
-    return new DiagramObjectLine(
+    return new AdvancedLine(
       this.shapes, this.equation, this.isTouchDevice,
       optionsToUse,
     );
@@ -80,11 +80,11 @@ export default class DiagramObjects {
     );
   }
 
-  annotatedLine(...options: Array<TypeLineOptions>) {
+  annotatedLine(...options: Array<ADV_Line>) {
     // const optionsToUse = Object.assign({}, ...options);
     // console.log(Object.assign({}, ...options))
     const optionsToUse = joinObjects({}, ...options);
-    return new DiagramObjectLine(
+    return new AdvancedLine(
       this.shapes, this.equation, this.isTouchDevice, this.animateNextFrame,
       optionsToUse,
     );

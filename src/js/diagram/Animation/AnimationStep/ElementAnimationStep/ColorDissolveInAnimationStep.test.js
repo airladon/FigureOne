@@ -16,7 +16,7 @@ describe('Disolve In Animation', () => {
   let diagram;
   beforeEach(() => {
     diagram = makeDiagram();
-    elem1 = diagram.objects.line();
+    elem1 = diagram.advanced.line();
     color = [0.5, 0.5, 0.5, 1];
     elem1.setColor(color);
     elem1.hide();

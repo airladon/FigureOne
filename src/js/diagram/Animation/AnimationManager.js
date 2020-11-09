@@ -10,6 +10,7 @@ import { DiagramElement } from '../Element';
 // } from './Animation';
 // eslint-disable-next-line import/no-cycle
 import * as anim from './Animation';
+import type { AnimationStep } from './Animation';
 // eslint-disable-next-line import/no-cycle
 // import {
 //   AnimationStep,
@@ -209,6 +210,11 @@ export default class AnimationManager {
     },
   };
 
+  customSteps: Array<{
+    step: (Object) => AnimationStep,
+    name: string,
+  }>;
+
   /* eslint-enable max-len */
 
   /**
@@ -235,6 +241,7 @@ export default class AnimationManager {
     this.fnMap = new FunctionMap();
     this.finishedCallback = options.finishedCallback;
     this.subscriptions = new SubscriptionManager();
+    this.customSteps = [];
     // this.setupAnimationSteps();
     return this;
   }
@@ -250,7 +257,9 @@ export default class AnimationManager {
    *
    */
   new(name: ?string) {
-    const options = {};
+    const options = {
+      customSteps: this.customSteps,
+    };
     if (this.element != null) {
       options.element = this.element;
     }
@@ -270,7 +279,9 @@ export default class AnimationManager {
    */
   // eslint-disable-next-line max-len
   builder(...options: Array<OBJ_AnimationBuilder>) {
-    return new anim.AnimationBuilder(this, ...options);
+    return new anim.AnimationBuilder(this, {
+      customSteps: this.customSteps,
+    }, ...options);
   }
 
   /**

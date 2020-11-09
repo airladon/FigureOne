@@ -15,7 +15,7 @@ describe('Dissolve Out Aniamtion', () => {
   let color;
   beforeEach(() => {
     const diagram = makeDiagram();
-    elem1 = diagram.objects.line();
+    elem1 = diagram.advanced.line();
     color = [0.5, 0.5, 0.5, 1];
     elem1.setColor(color);
     callback = jest.fn(() => {});

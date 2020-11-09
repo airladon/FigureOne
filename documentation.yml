@@ -17,7 +17,7 @@ toc:
   - Rotation
   - Scale
   - Transform
-  - name: Drawing Shapes
+  - name: Shapes
     file: ./docs/tutorials/draw/draw.md
   - OBJ_Generic
   - OBJ_Line
@@ -27,7 +27,11 @@ toc:
   - OBJ_Rectangle
   - OBJ_Polygon
   - OBJ_Grid
-  - name: Drawing Text
+  - name: Advanced Shapes
+    file: ./docs/tutorials/advanced_shapes/advanced_shapes.md
+  - AdvancedLine
+  - ADV_Line
+  - name: Text
     file: ./docs/tutorials/text/text.md
   - OBJ_Text
   - OBJ_TextLine

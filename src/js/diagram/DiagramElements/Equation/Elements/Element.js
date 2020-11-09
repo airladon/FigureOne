@@ -121,7 +121,6 @@ class Element implements ElementInterface {
       // Get the boundaries of element
       // const r = content.getRelativeVertexSpaceBoundingRect();
       const r = content.getRelativeBoundingRect('draw');
-      console.log(content.drawingObject.border.map(b => b.map(p => p._dup())))
       this.location = location._dup();
       this.scale = scale;
       this.ascent = r.top * scale;

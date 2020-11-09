@@ -114,20 +114,20 @@ describe('Diagram', () => {
       length = 2;
       angle = 5;
       width = 0.2;
-      makeLine = vertexOrigin => diagram.objects.line({
+      makeLine = vertexOrigin => diagram.advanced.line({
         position,
         length,
         angle,
         width,
         color: [1, 0, 0, 1],
-        vertexSpaceStart: vertexOrigin,
+        align: vertexOrigin,
         showLine: true,
         largerTouchBorder: true,
       });
     });
-    test('End', () => {
+    test.only('End', () => {
       const line = makeLine('end');
-      expect(line._line.drawingObject.points).toEqual([
+      expect(line._line.getBorder('local')).toEqual([
         -1, -0.1,
         -1, 0.1,
         0, -0.1,
@@ -178,7 +178,7 @@ describe('Diagram', () => {
       // const angle = 0;
       const width = 0.2;
       const vertexOrigin = 'start';
-      makeLine = (position, angle, length) => diagram.objects.line({
+      makeLine = (position, angle, length) => diagram.advanced.line({
         position,
         length,
         angle,
@@ -218,7 +218,7 @@ describe('Diagram', () => {
       const width = 0.2;
       // const vertexOrigin = 'start';
       setEndPoints = (px, py, qx, qy, vertexOrigin, offset = 0) => {
-        line = diagram.objects.line({
+        line = diagram.advanced.line({
           position,
           length,
           angle,
@@ -303,7 +303,7 @@ describe('Diagram', () => {
       const width = 0.2;
       // const vertexOrigin = 'start';
       setEndPoints = (px, py, qx, qy, vertexOrigin, offset = 0) => {
-        line = diagram.objects.line({
+        line = diagram.advanced.line({
           position,
           length,
           angle,

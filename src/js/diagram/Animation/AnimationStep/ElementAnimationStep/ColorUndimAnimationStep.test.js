@@ -17,7 +17,7 @@ describe('Dim Animation', () => {
   let dimColor;
   beforeEach(() => {
     diagram = makeDiagram();
-    elem1 = diagram.objects.line({
+    elem1 = diagram.advanced.line({
       label: {
         text: 'a',
       },

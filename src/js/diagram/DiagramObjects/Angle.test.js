@@ -21,13 +21,13 @@ describe('Angle', () => {
     diagram = makeDiagram();
   });
   test('Default Angle', () => {
-    const angle = diagram.objects.angle();
+    const angle = diagram.advanced.angle();
     expect(angle.angle).toBe(1);
     expect(angle.getRotation()).toBe(0);
     // expect(angle.rotation).toBe(0);
   });
   test('By Angle', () => {
-    const angle = diagram.objects.angle({
+    const angle = diagram.advanced.angle({
       angle: 2,
       rotation: 1,
     });
@@ -36,7 +36,7 @@ describe('Angle', () => {
     // expect(angle.rotation).toBe(1);
   });
   test('By Points', () => {
-    const angle = diagram.objects.angle({
+    const angle = diagram.advanced.angle({
       p1: [0, 1],
       p2: [0, 0],
       p3: [1, 0],
@@ -44,7 +44,7 @@ describe('Angle', () => {
     expect(round(angle.angle * 180 / Math.PI, 5)).toBe(270);
   });
   test('By Points reverse direction', () => {
-    const angle = diagram.objects.angle({
+    const angle = diagram.advanced.angle({
       p1: [0, 1],
       p2: [0, 0],
       p3: [1, 0],

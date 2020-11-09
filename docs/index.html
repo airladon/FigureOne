@@ -1190,9 +1190,9 @@
               
                 
                 <li><a
-                  href='#drawing-shapes'
+                  href='#shapes'
                   class="h5 bold black caps">
-                  Drawing Shapes
+                  Shapes
                   
                 </a>
                 
@@ -1280,9 +1280,135 @@
               
                 
                 <li><a
-                  href='#drawing-text'
+                  href='#advanced-shapes'
                   class="h5 bold black caps">
-                  Drawing Text
+                  Advanced Shapes
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#advancedline'
+                  class=" toggle-sibling">
+                  AdvancedLine
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#advancedlinepulsewidth'
+                        class='regular pre-open'>
+                        #pulseWidth
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlinesetmovable'
+                        class='regular pre-open'>
+                        #setMovable
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlineupdatemovetransform'
+                        class='regular pre-open'>
+                        #updateMoveTransform
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlinesetautoupdate'
+                        class='regular pre-open'>
+                        #setAutoUpdate
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlinegetlength'
+                        class='regular pre-open'>
+                        #getLength
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlinegetangle'
+                        class='regular pre-open'>
+                        #getAngle
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlinesetlabel'
+                        class='regular pre-open'>
+                        #setLabel
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlinegetlabel'
+                        class='regular pre-open'>
+                        #getLabel
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlinesetlabeltoreallength'
+                        class='regular pre-open'>
+                        #setLabelToRealLength
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlinesetlength'
+                        class='regular pre-open'>
+                        #setLength
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlinesetendpoints'
+                        class='regular pre-open'>
+                        #setEndPoints
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlinegrow'
+                        class='regular pre-open'>
+                        #grow
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlinegetp1'
+                        class='regular pre-open'>
+                        #getP1
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedlinegetp2'
+                        class='regular pre-open'>
+                        #getP2
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#adv_line'
+                  class="">
+                  ADV_Line
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#text'
+                  class="h5 bold black caps">
+                  Text
                   
                 </a>
                 
@@ -3464,9 +3590,69 @@
               
                 
                 <li><a
-                  href='#obj_arrowlegacy'
+                  href='#typelinelabellocation'
                   class="">
-                  OBJ_ArrowLegacy
+                  TypeLineLabelLocation
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typelinelabelsublocation'
+                  class="">
+                  TypeLineLabelSubLocation
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typelinelabelorientation'
+                  class="">
+                  TypeLineLabelOrientation
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typelinelabeloptions'
+                  class="">
+                  TypeLineLabelOptions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_pulsewidth'
+                  class="">
+                  OBJ_PulseWidth
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_movableline'
+                  class="">
+                  OBJ_MovableLine
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_growanimationstep'
+                  class="">
+                  OBJ_GrowAnimationStep
                   
                 </a>
                 
@@ -14428,8 +14614,8 @@ identity transforms.</p>
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='drawing-shapes' class='mt0'>
-    Drawing Shapes
+  <h2 id='shapes' class='mt0'>
+    Shapes
   </h2>
 
   
@@ -17002,8 +17188,1143 @@ diagram.addElement({
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='drawing-text' class='mt0'>
-    Drawing Text
+  <h2 id='advanced-shapes' class='mt0'>
+    Advanced Shapes
+  </h2>
+
+  
+    <p>FigureOne provides a number of advanced shapes that combine simple shapes into more interesting objects.</p>
+<p>Advanced shapes are usually <a href="#diagramelementcollection">DiagramElementCollection</a>s that orchestrate a number of <a href="DiagramElementPrimitives">DiagramElementPrimitives</a>, and provide methods to dynamically update and change the shapes.</p>
+
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='advancedline'>
+      AdvancedLine
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#diagramelementcollection">DiagramElementCollection</a> representing a line.</p>
+<p>This object defines a convient and powerful line
+<a href="#diagramelementcollection">DiagramElementCollection</a> that includes a solid or dashed line,
+arrows, a label annotation that can self align with line orientation, and
+some methods to make it convient to use dynamically.</p>
+<p>See <a href="#adv_line">ADV_Line</a> for the options that can be used when creating the line.</p>
+<p>The object contains an additional animation step <code>length</code> that can be used
+to animate changing the line length. The animation step is available in
+the animation manager (<code>animations</code> property), and in the animation builder
+(<code>animations.new()</code> and <code>animations.builder()</code>).</p>
+<p>Some of the useful methods included in an advanced line are:</p>
+<ul>
+<li><a href="#advancedlinepulsewidth">pulseWidth</a> - pulses the line without
+changing its length</li>
+<li><a href="#advancedlinegrow">grow</a> - starts and animation that executes
+a single <code>length</code> animation
+step</li>
+<li><code>setMovable</code> - overrisdes
+<a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
+allowing for more complex move options.</li>
+</ul>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#diagramelementcollection">DiagramElementCollection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='advancedlinepulsewidth'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>pulseWidth(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Pulse the line so that it's width pulses and its length doesn't change.</p>
+<p>The pulse scales of the line, label and arrows can all be defined
+separately.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_pulsewidth">OBJ_PulseWidth</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlinesetmovable'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setMovable(movableOrOptions?)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Use this method to enable or disable movability of the line.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>movableOrOptions</span> <code class='quiet'>((<a href="#obj_movableline">OBJ_MovableLine</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+	    <code>true</code>
+ to
+make movable, 
+<code>false</code>
+ to make not movable or use options to
+set different kinds of movability.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlineupdatemovetransform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>updateMoveTransform(t)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Use this to manually update the rotation of the line collection.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>t</span> <code class='quiet'>(<a href="#transform">Transform</a>
+            = <code>this.transform._dup()</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlinesetautoupdate'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setAutoUpdate(update)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Turn on and off auto label location and orientation updates when line
+transform changes.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>update</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>true</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlinegetlength'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getLength()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get line length</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlinegetangle'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getAngle(units = 'rad')</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get line angle</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>units</span> <code class='quiet'>((<code>"deg"</code> | <code>"rad"</code>)?
+            = <code>&#39;rad&#39;</code>)</code>
+	    ('rad')
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlinesetlabel'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setLabel(text)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Change the text of the label</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlinegetlabel'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getLabel()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get the text of the label</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlinesetlabeltoreallength'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setLabelToRealLength()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set the label to be the real length of the line</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlinesetlength'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setLength(length, align)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set the length of the line</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>align</span> <code class='quiet'>((<code>"start"</code> | <code>"end"</code> | <code>"center"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)
+            = <code>this.align</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlinesetendpoints'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setEndPoints(p1, p2, offset)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Change the line position, length and angle using end points.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>p1</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>p2</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>0</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlinegrow'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>grow(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a new animation that executes a single grow animation step.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_growanimationstep">OBJ_GrowAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlinegetp1'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getP1()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return the start point of the line</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#point">Point</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedlinegetp2'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getP2()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return the end point of the line</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#point">Point</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='adv_line'>
+      ADV_Line
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Advanced Line options object</p>
+<p>The Advanced Line is a convient and powerful line
+<a href="#diagramelementcollection">DiagramElementCollection</a> that includes the line, arrows, a label
+annotation and some methods to make it convient to use dynamically.</p>
+<p>A line can either be defined by its two end points (<code>p1</code>, <code>p2</code>), or a
+point (<code>p1</code>), <code>length</code> and <code>angle</code>.</p>
+<p><code>offset</code> can be used to draw the line some offset away from the line
+definition where a positive offset is on the side of the line that the line
+rotates toward when rotating in the positive direction. This is especially
+useful for creating lines that show dimensions of shapes.</p>
+<p>The line also has a control point which is positioned on the line with the
+<code>align</code> property. The control point is the line's center of rotation, and
+fixes the point from which the line changes length.</p>
+<p>For instance, setting the control point at <code>align: 'start'</code> will mean that
+if the line can rotate, it will rotate around <code>p1</code>, and if the length is
+changed, then <code>p1</code> will remain fixed while <code>p2</code> changes.</p>
+<p><code>width</code> sets the width of the line. Setting the width to 0 will hide the
+line itself, but if arrows or a label are defined they will still be
+displayed.</p>
+<p>Use the <code>label</code> property to define and position a label relative to the line.
+The label can be any string, equation or the actual length of the line and
+be oriented relative to the line or always be horizontal.</p>
+<p>Use the <code>arrow</code> and <code>dash</code> properties to define arrows and the line style.</p>
+<p>Pulsing this collection normally would pulse both the length and width of
+the line. If it often desirable to pulse a line without changing its length,
+and so this collection provides a method <code>pulseWidth</code> to allow this. This
+options object can define the default values for pulseWidth if desired.</p>
+<p>Default pulse values can then be specified with the <code>pulse</code> property.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>p1</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>p2</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>align</span> <code class='quiet'>((<code>"start"</code> | <code>"end"</code> | <code>"center"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>label</span> <code class='quiet'>(<a href="#typelinelabeloptions">TypeLineLabelOptions</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>arrow</span> <code class='quiet'>(<a href="#obj_linearrows">OBJ_LineArrows</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulseWidth</span> <code class='quiet'>({line: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, label: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, arrow: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, frequency: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="#obj_pulse">OBJ_Pulse</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>move</span> <code class='quiet'>({type: (<code>"translation"</code> | <code>"rotation"</code> | <code>"centerTranslateEndRotation"</code> | <code>"scale"</code>)?, middleLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, includeLabelInTouchBoundary: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='text' class='mt0'>
+    Text
   </h2>
 
   
@@ -43883,54 +45204,220 @@ will be ignored.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_arrowlegacy'>
-      OBJ_ArrowLegacy
+    <h3 class='fl m0' id='typelinelabellocation'>
+      TypeLineLabelLocation
     </h3>
     
     
   </div>
   
 
-  <p>Arrow options object.</p>
-<p>Lines and polylines can be terminated with different styles of arrows. The
-<code>head</code> parameter is used to define the style of arrow head.</p>
-<h3><code>head: 'triangle'</code></h3>
-<p><img src="./assets1/arrow_triangle.png"></p>
-<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
-<p>Use <code>reverse</code> to reverse the triangle:</p>
-<p><img src="./assets1/arrow_reversetri.png"></p>
-<h3><code>head: 'barb'</code></h3>
-<p><img src="./assets1/arrow_barb.png"></p>
-<p>Use <code>length</code>, <code>width</code> and <code>barb</code> to customize head shape.</p>
-<h3><code>head: 'line'</code></h3>
-<p><img src="./assets1/arrow_line.png"></p>
-<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
-<h3><code>head: 'circle'</code></h3>
-<p><img src="./assets1/arrow_circle.png"></p>
-<p>Use <code>radius</code> and <code>sides</code> to customize head shape.</p>
-<h3><code>head: 'polygon'</code></h3>
-<p><img src="./assets1/arrow_polygon.png"></p>
-<p>Use <code>radius</code>, <code>sides</code> and <code>rotation</code> to customize head shape.</p>
-<h3><code>head: 'bar'</code></h3>
-<p><img src="./assets1/arrow_bar.png"></p>
-<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
-<h3><code>head: 'rectangle'</code></h3>
-<p><img src="./assets1/arrow_rectangle.png"></p>
-<p>Use <code>length</code> and <code>width</code> to customize head shape.</p>
-<h3>General</h3>
-<p>For arrow heads that use <code>length</code> and <code>width</code> properties, the <code>length</code> is the
-dimension along the line.</p>
-<p>All properties have default values that can be scaled with the <code>scale</code>
-property. So a <code>scale</code> of 2 will double the size of the default arrow.</p>
-<p>An arrow can be defined in space with:</p>
+  <p>Label location relative to the line.</p>
+<p><code>'top' | 'left' | 'bottom' | 'right' | 'start' | 'end' | 'positive' | 'negative'</code></p>
+<p>'<code>top</code>' is in the positive y direction and <code>'right'</code> is in the positive
+x direction. '<code>bottom</code>' and '<code>left</code>' are the opposite sides respectively.</p>
+<p><code>'positive'</code> is on the side of the line that the line rotates toward when
+rotating in the positive direction. <code>'negative'</code> is the opposite side.</p>
+<p><code>'start'</code> is the start end of the line, while <code>'end'</code> is the opposide end
+of the line.</p>
+
+  
+    <p style="display: none;">      Type:
+      (<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code> | <code>"end1"</code> | <code>"end2"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typelinelabelsublocation'>
+      TypeLineLabelSubLocation
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Label sub location relative to line.</p>
+<p><code>'top' | 'left' | 'bottom' | 'right'</code></p>
+<p>The label sub location is a fallback for when an invalid case is encountered
+by the primary location. When the primary location is <code>'top'</code> or <code>'bottom'</code>
+and the line is perfectly vertical, then the sub location would be used.</p>
+<p>Similarly, if the primary location is <code>'left'</code> or <code>'right'</code> and the line is
+perfectly horizontal, then the sub location would be used.</p>
+
+  
+    <p style="display: none;">      Type:
+      (<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typelinelabelorientation'>
+      TypeLineLabelOrientation
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Orientation of the label.</p>
+<p><code>'horizontal' | 'toLine' | 'awayLine' | 'upright'</code></p>
+<p>Where:</p>
 <ul>
-<li><code>'start'</code> and <code>angle</code> - the arrow start will be moved to <code>position</code> and
-rotated to <code>angle</code></li>
-<li><code>'tip'</code> and <code>angle</code> - the arrow tip will be moved to <code>position</code> and
-rotated to <code>angle</code></li>
-<li><code>'mid'</code> and <code>angle</code> - the arrow middle will be moved to <code>position</code> and
-rotated to <code>angle</code></li>
+<li><code>'horizontal'</code>: Label will be horizontal</li>
+<li><code>'baseToLine'</code>: Label will have same angle as line with text base toward
+the line</li>
+<li><code>'baseAway'</code>: Label will have same angle as line with text base away from
+the line</li>
+<li><code>'upright'</code>: Label will have same angle as line with text being more
+upright than upside down.</li>
 </ul>
+
+  
+    <p style="display: none;">      Type:
+      (<code>"horizontal"</code> | <code>"baseAway"</code> | <code>"baseToLine"</code> | <code>"upright"</code>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typelinelabeloptions'>
+      TypeLineLabelOptions
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Collection line label options object.</p>
+<p>A line can be annotated with a label using the <code>text</code> property and can be:</p>
+<ul>
+<li>text (<code>string</code>)</li>
+<li>an equation (<code>Equation</code>, <code>EQN_Equation</code>)</li>
+<li>real length of line (<code>null</code>)</li>
+</ul>
+<p>If the label text is the real lenght of the line, then the number of decimal
+places can be selected with <code>precision</code>.</p>
+<p>The space between the line and the label is defined with <code>offset</code>. An
+<code>offset</code> of 0 puts the center of the label on the line. Any
+positive or negative value of offset will move the label so no part of the
+label overlaps the line, and then the closest part of the label is separated
+from the line by <code>offset</code>.</p>
+<p>To situate the label on the line, use <code>linePosition</code>, <code>location</code> and
+<code>subLocation</code>. By default the label will be a percentage <code>linePosition</code>
+along the line. <code>location</code> then defines which side of the line the label is
+on, while <code>subLocation</code> defines the backup location for invalide cases of
+<code>location</code>. See <a href="#typelinelabellocation">TypeLineLabelLocation</a> and
+<a href="#typelinelabelsublocation">TypeLineLabelSubLocation</a>. <code>location</code> can additionaly place the
+labels off the ends of the line.</p>
+<p>To automatically update the label location and orientation as the line
+transform (translation, rotation or scale) changes then use <code>update: true</code>.</p>
 
   
   
@@ -43949,99 +45436,65 @@ rotated to <code>angle</code></li>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>head</span> <code class='quiet'>(<a href="#arrowhead">ArrowHead</a>?)</code>
+          <span class='code bold'>text</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#equation">Equation</a> | <a href="#eqn_equation">EQN_Equation</a>))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>location</span> <code class='quiet'>(<a href="#typelinelabellocation">TypeLineLabelLocation</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>subLocation</span> <code class='quiet'>(<a href="#typelinelabelsublocation">TypeLineLabelSubLocation</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>orientation</span> <code class='quiet'>(<a href="#typelinelabelorientation">TypeLineLabelOrientation</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>update</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>linePosition</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>scale</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : scale the default dimensions of the arrow
+          : size of the label
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : dimension of the arrow head along the line
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : dimension of the arrow head along the line width
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : rotation of the polygon when 
-<code>head = 'polygon'</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : number of sides in polygon or circle arrow head
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : radius of polygon or circle arrow head
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>barb</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : barb length (along the length of the line) of the
-barb arrow head
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>tailWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : width of the line that joins the arrow - if
-defined this will create minimum dimensions for the arrow
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>tail</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : <code>true</code>
- includes a tail in the arrow of
-width 
-<code>tailWidth</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : position to draw the arrow
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>align</span> <code class='quiet'>((<code>"tip"</code> | <code>"start"</code> | <code>"mid"</code>)?)</code>
-          : define which part of the arrow is
-aligned with 
-<code>position</code>
- (or the first translation transform of 'transform')
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
           
           
         </div>
@@ -44056,58 +45509,288 @@ aligned with
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Example</div>
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_pulsewidth'>
+      OBJ_PulseWidth
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Width pulse options object.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with triangle arrows on both ends</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
-    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
-    <span class="hljs-attr">arrow</span>: <span class="hljs-string">'triangle'</span>,
-  },
-});</pre>
-    
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : width scale
+
+          
+        </div>
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with customized barb arrow at end only</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
-    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
-    <span class="hljs-attr">arrow</span>: {
-      <span class="hljs-attr">end</span>: {
-        <span class="hljs-attr">head</span>: <span class="hljs-string">'barb'</span>,
-        <span class="hljs-attr">width</span>: <span class="hljs-number">0.15</span>,
-        <span class="hljs-attr">length</span>: <span class="hljs-number">0.25</span>,
-        <span class="hljs-attr">barb</span>: <span class="hljs-number">0.05</span>,
-      },
-    },
-  },
-});</pre>
-    
+        <div class='space-bottom0'>
+          <span class='code bold'>label</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : label pulse scale
+
+          
+        </div>
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with two different arrow ends scaled by 0.7x</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]],
-    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
-    <span class="hljs-attr">arrow</span>: {
-      <span class="hljs-attr">scale</span>: <span class="hljs-number">1.2</span>,
-      <span class="hljs-attr">start</span>: <span class="hljs-string">'bar'</span>,
-      <span class="hljs-attr">end</span>: {
-        <span class="hljs-attr">head</span>: <span class="hljs-string">'polygon'</span>,
-        <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
-      },
-    },
-  },
-});</pre>
+        <div class='space-bottom0'>
+          <span class='code bold'>arrow</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : arrow pulse scale
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>done</span> <code class='quiet'>(function (): void?)</code>
+          : execute when pulsing is finished
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : pulse duration in seconds
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>frequency</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : pulse frequency in pulses per second
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>when</span> <code class='quiet'>(<a href="#typewhen">TypeWhen</a>?)</code>
+          : when to start the pulse (
+<code>'nextFrame'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_movableline'>
+      OBJ_MovableLine
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Line move options object.</p>
+<p>The <code>'centerTranslateEndRotation</code>' movement will move the line
+when touched within the <code>middleLength</code> percentage of the line
+and rotate it otherwise.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>movable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ to make movable (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>type</span> <code class='quiet'>((<code>"translation"</code> | <code>"rotation"</code> | <code>"centerTranslateEndRotation"</code> | <code>"scale"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>middleLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : length of the middle section of line that
+allows for translation movement in percent of total length (
+<code>0.333</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>includeLabelInTouchBoundary</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ to include the
+line's label in the touch boundary for 
+<code>'centerTranslateEndRotation'</code>
+
+('false`)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_growanimationstep'>
+      OBJ_GrowAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Grow line animation step.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_customanimationstep">OBJ_CustomAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : line length to grow from (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>end</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : line length to grow to (
+<code>current length</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
   
 
   

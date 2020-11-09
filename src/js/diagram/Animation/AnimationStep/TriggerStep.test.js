@@ -21,9 +21,9 @@ describe('Animation Trigger', () => {
   let triggerFlag2;
   beforeEach(() => {
     const diagram = makeDiagram();
-    elem1 = diagram.objects.line();
+    elem1 = diagram.advanced.line();
     elem1.setPosition(new Point(0, 0));
-    elem2 = diagram.objects.line();
+    elem2 = diagram.advanced.line();
     elem2.setPosition(new Point(0, 0));
     triggerFlag1 = 0;
     triggerFlag2 = 0;
