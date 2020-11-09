@@ -1,39 +1,39 @@
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
-diagram.addElements([
-  {
-    name: 'origin',
-    method: 'polygon',
-    options: {
-      radius: 0.01,
-      line: { width: 0.01 },
-      sides: 10,
-      color: [0.7, 0.7, 0.7, 1]
-    },
-  },
-  {
-    name: 'grid',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.1,
-      xStep: 0.1,
-      color: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.001 },
-    },
-  },
-  {
-    name: 'gridMajor',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.5,
-      xStep: 0.5,
-      color: [0.8, 0.8, 0.8, 1],
-      line: { width: 0.004 }
-    },
-  },
-]);
+// diagram.addElements([
+//   {
+//     name: 'origin',
+//     method: 'polygon',
+//     options: {
+//       radius: 0.01,
+//       line: { width: 0.01 },
+//       sides: 10,
+//       color: [0.7, 0.7, 0.7, 1]
+//     },
+//   },
+//   {
+//     name: 'grid',
+//     method: 'grid',
+//     options: {
+//       bounds: [-3, -3, 6, 6],
+//       yStep: 0.1,
+//       xStep: 0.1,
+//       color: [0.7, 0.7, 0.7, 1],
+//       line: { width: 0.001 },
+//     },
+//   },
+//   {
+//     name: 'gridMajor',
+//     method: 'grid',
+//     options: {
+//       bounds: [-3, -3, 6, 6],
+//       yStep: 0.5,
+//       xStep: 0.5,
+//       color: [0.8, 0.8, 0.8, 1],
+//       line: { width: 0.004 }
+//     },
+//   },
+// ]);
 
 
 // // Simple
@@ -378,51 +378,92 @@ diagram.elements._c.setMovable();
 //   },
 // });
 
+// diagram.addElement({
+//   name: 'l',
+//   method: 'advanced.line',
+//   options: {
+//     p1: [-1, 0],
+//     p2: [1, 0],
+//     arrow: 'triangle',
+//     label: {
+//       text: 'length',
+//       offset: 0.04,
+//     },
+//   },
+// });
+
+// setTimeout(() => {
+//   diagram.elements._l.pulseWidth({ duration: 2 });
+// }, 2000);
+
 diagram.addElement({
-  name: 'line1',
+  name: 'l',
   method: 'advanced.line',
   options: {
-    p1: [-2, 0],
-    p2: [-1, 0],
-    arrow: 'triangle',
+    p1: [-1, 0],
+    p2: [-0.5, 0],
+    align: 'start',
+    arrow: { end: { head: 'barb', scale: 2 } },
     label: {
-      text: 'length',
-      offset: 0.01,
+      text: null,
+      offset: 0.03,
+      precision: 2,
+      location: 'start'
     },
   },
 });
 
-diagram.addElement({
-  name: 'line2',
-  method: 'advanced.line',
-  options: {
-    p1: [-0.5, -0.5],
-    p2: [0.5, 0.5],
-    align: 'end',
-    arrow: 'barb',
-    label: {
-      text: null,
-      offset: 0.01,
-    },
-  },
-});
+const l = diagram.elements._l;
+l.animations.new()
+  .delay(2)
+  .length({ start: 0.5, target: 2, duration: 2 })
+  .start();
+
+// // Example showing dashed line with an equation label that stays horizontal
+// const l = diagram.advanced.line({
+//   p1: [0, 0],
+//   p2: [1.4, 0],
+//   align: 'start',
+//   label: {
+//     text: {                             // label text is an equation
+//       elements: {
+//         twopi: '2\u03C0',
+//       },
+//       forms: {
+//         base: ['twopi', ' ', { frac: ['a', 'vinculum', 'b'] } ]
+//       },
+//     },
+//     offset: 0.03,
+//     orientation: 'horizontal',          // keep label horizontal
+//     location: 'top',                    // keep label on top of line
+//   },
+//   dash: [0.08, 0.02, 0.02, 0.02],
+// });
+// diagram.add('l', l);
+// l.setMovable({ type: 'centerTranslateEndRotation'})
+// l.setAutoUpdate();
+
+// l.animations.new()
+//   .delay(2)
+//   .rotation
+//   .start();
 
 // setTimeout(() => {
 //   diagram.elements._line2.grow(0.5, 5);
 // }, 1000);
 
-const line = diagram.elements._line2;
+// const line = diagram.elements._line2;
+// // line.animations.new()
+// //   .then(line.animations.grow({ from: 0, target: 2, duration: 1, delay: 1 }))
+// //   .start();
+// // console.log(line.animations)
 // line.animations.new()
-//   .then(line.animations.grow({ from: 0, target: 2, duration: 1, delay: 1 }))
+//   .pulse({ duration: 1 })
+//   .length({ start: 2, target: 0.5, duration: 5 })
 //   .start();
-// console.log(line.animations)
-line.animations.new()
-  .pulse({ duration: 1 })
-  .length({ start: 2, target: 0.5, duration: 5 })
-  .start();
-// line.grow({
-//   start: 0,
-//   target: 2,
-//   duration: 5,
-// });
+// // line.grow({
+// //   start: 0,
+// //   target: 2,
+// //   duration: 5,
+// // });
 

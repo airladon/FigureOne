@@ -17215,6 +17215,9 @@ diagram.addElement({
   
 
   <p><a href="#diagramelementcollection">DiagramElementCollection</a> representing a line.</p>
+<p style="text-align: center" class="inline_gif"><img src="./assets1/advline_pulse.gif" class="inline_gif_image"></p>
+<p style="text-align: center" class="inline_gif"><img src="./assets1/advline_grow.gif" class="inline_gif_image"></p>
+<p style="text-align: center" class="inline_gif"><img src="./assets1/advline_multimove.gif" class="inline_gif_image"></p>
 <p>This object defines a convient and powerful line
 <a href="#diagramelementcollection">DiagramElementCollection</a> that includes a solid or dashed line,
 arrows, a label annotation that can self align with line orientation, and
@@ -17231,7 +17234,7 @@ changing its length</li>
 <li><a href="#advancedlinegrow">grow</a> - starts and animation that executes
 a single <code>length</code> animation
 step</li>
-<li><code>setMovable</code> - overrisdes
+<li><a href="#advancedlinesetmovable">grow</a> - overrisdes
 <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
 allowing for more complex move options.</li>
 </ul>
@@ -17260,9 +17263,91 @@ allowing for more complex move options.</li>
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Pulse an annotated line</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'l'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.line'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">p1</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">p2</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">arrow</span>: <span class="hljs-string">'triangle'</span>,
+    <span class="hljs-attr">label</span>: {
+      <span class="hljs-attr">text</span>: <span class="hljs-string">'length'</span>,
+      <span class="hljs-attr">offset</span>: <span class="hljs-number">0.04</span>,
+    },
+  },
+});
+
+diagram.elements._l.pulseWidth({ <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Animate growing a line while showing it's length</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'l'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.line'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">p1</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">p2</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0</span>],
+    <span class="hljs-attr">align</span>: <span class="hljs-string">'start'</span>,
+    <span class="hljs-attr">arrow</span>: { <span class="hljs-attr">end</span>: { <span class="hljs-attr">head</span>: <span class="hljs-string">'barb'</span>, <span class="hljs-attr">scale</span>: <span class="hljs-number">2</span> } },
+    <span class="hljs-attr">label</span>: {
+      <span class="hljs-attr">text</span>: <span class="hljs-literal">null</span>,
+      <span class="hljs-attr">offset</span>: <span class="hljs-number">0.03</span>,
+      <span class="hljs-attr">precision</span>: <span class="hljs-number">2</span>,
+      <span class="hljs-attr">location</span>: <span class="hljs-string">'start'</span>
+    },
+  },
+});
+
+<span class="hljs-keyword">const</span> l = diagram.elements._l;
+l.animations.new()
+  .length({ <span class="hljs-attr">start</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing dashed line with an equation label that stays horizontal</span>
+<span class="hljs-keyword">const</span> l = diagram.advanced.line({
+  <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">p2</span>: [<span class="hljs-number">1.4</span>, <span class="hljs-number">0</span>],
+  <span class="hljs-attr">align</span>: <span class="hljs-string">'start'</span>,
+  <span class="hljs-attr">label</span>: {
+    <span class="hljs-attr">text</span>: {                             <span class="hljs-comment">// label text is an equation</span>
+      <span class="hljs-attr">elements</span>: {
+        <span class="hljs-attr">twopi</span>: <span class="hljs-string">'2\u03C0'</span>,
+      },
+      <span class="hljs-attr">forms</span>: {
+        <span class="hljs-attr">base</span>: [<span class="hljs-string">'twopi'</span>, <span class="hljs-string">' '</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'b'</span>] } ]
+      },
+    },
+    <span class="hljs-attr">offset</span>: <span class="hljs-number">0.03</span>,
+    <span class="hljs-attr">orientation</span>: <span class="hljs-string">'horizontal'</span>,          <span class="hljs-comment">// keep label horizontal</span>
+    <span class="hljs-attr">location</span>: <span class="hljs-string">'top'</span>,                    <span class="hljs-comment">// keep label on top of line</span>
+  },
+  <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.08</span>, <span class="hljs-number">0.02</span>, <span class="hljs-number">0.02</span>, <span class="hljs-number">0.02</span>],
+});
+diagram.add(<span class="hljs-string">'l'</span>, l);
+l.setMovable({ <span class="hljs-attr">type</span>: <span class="hljs-string">'centerTranslateEndRotation'</span>})
+l.setAutoUpdate();</pre>
+    
   
 
   
@@ -17477,7 +17562,8 @@ set different kinds of movability.
   
 
   <p>Turn on and off auto label location and orientation updates when line
-transform changes.</p>
+transform changes. When a line is created with a label, auto update
+is turned off by default.</p>
 
   
   
@@ -17615,8 +17701,7 @@ transform changes.</p>
           <div>
             <span class='code bold'>units</span> <code class='quiet'>((<code>"deg"</code> | <code>"rad"</code>)?
             = <code>&#39;rad&#39;</code>)</code>
-	    ('rad')
-
+	    
           </div>
           
         </div>
@@ -17893,7 +17978,12 @@ transform changes.</p>
 
   
 
-  <p>Change the line position, length and angle using end points.</p>
+  <p>Change the line position, length and angle using end points and an offset.</p>
+<p>For most lines, an offset of 0 will be desired, as this will position the
+line ends to be at <code>p1</code> and <code>p2</code>.</p>
+<p>A non-positive offset will position the line in parallel with <code>p1</code> and <code>p2</code>
+but some offset away. A positive offset will position the line on the side
+it will rotate toward with positive rotation.</p>
 
   
   
@@ -45561,8 +45651,10 @@ transform (translation, rotation or scale) changes then use <code>update: true</
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>label</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : label pulse scale
+          <span class='code bold'>label</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulse">OBJ_Pulse</a>)?)</code>
+          : label pulse options or scale. Use
+the options object for more control of how the label is pulsed (for example
+if the label should be pulsed from its bottom rather than its center).
 
           
         </div>

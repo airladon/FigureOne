@@ -221,7 +221,9 @@ export type ADV_Line = {
  * Width pulse options object.
  *
  * @property {number} [line] width scale
- * @property {number} [label] label pulse scale
+ * @property {number | OBJ_Pulse} [label] label pulse options or scale. Use
+ * the options object for more control of how the label is pulsed (for example
+ * if the label should be pulsed from its bottom rather than its center).
  * @property {number} [arrow] arrow pulse scale
  * @property {function(): void} [done] execute when pulsing is finished
  * @property {number} [duration] pulse duration in seconds
@@ -230,7 +232,7 @@ export type ADV_Line = {
  */
 export type OBJ_PulseWidth = {
   line?: number,
-  label?: number,
+  label?: number | OBJ_Pulse,
   arrow?: number,
   done?: ?() => void,
   duration?: number,
@@ -384,6 +386,12 @@ export type OBJ_GrowAnimationStep = {
 /**
  * {@link DiagramElementCollection} representing a line.
  *
+ * <p class="inline_gif"><img src="./assets1/advline_pulse.gif" class="inline_gif_image"></p>
+ *
+ * <p class="inline_gif"><img src="./assets1/advline_grow.gif" class="inline_gif_image"></p>
+ *
+ * <p class="inline_gif"><img src="./assets1/advline_multimove.gif" class="inline_gif_image"></p>
+ *
  * This object defines a convient and powerful line
  * {@link DiagramElementCollection} that includes a solid or dashed line,
  * arrows, a label annotation that can self align with line orientation, and
@@ -405,6 +413,77 @@ export type OBJ_GrowAnimationStep = {
  * - <a href="#advancedlinesetmovable">grow</a> - overrisdes
  *    <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
  *    allowing for more complex move options.
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Pulse an annotated line
+ * diagram.addElement({
+ *   name: 'l',
+ *   method: 'advanced.line',
+ *   options: {
+ *     p1: [-1, 0],
+ *     p2: [1, 0],
+ *     arrow: 'triangle',
+ *     label: {
+ *       text: 'length',
+ *       offset: 0.04,
+ *     },
+ *   },
+ * });
+ *
+ * diagram.elements._l.pulseWidth({ duration: 2 });
+ *
+ * @example
+ * // Animate growing a line while showing it's length
+ * diagram.addElement({
+ *   name: 'l',
+ *   method: 'advanced.line',
+ *   options: {
+ *     p1: [-1, 0],
+ *     p2: [-0.5, 0],
+ *     align: 'start',
+ *     arrow: { end: { head: 'barb', scale: 2 } },
+ *     label: {
+ *       text: null,
+ *       offset: 0.03,
+ *       precision: 2,
+ *       location: 'start'
+ *     },
+ *   },
+ * });
+ *
+ * const l = diagram.elements._l;
+ * l.animations.new()
+ *   .length({ start: 0.5, target: 2, duration: 2 })
+ *   .start();
+ *
+ * @example
+ * // Example showing dashed line with an equation label that stays horizontal
+ * const l = diagram.advanced.line({
+ *   p1: [0, 0],
+ *   p2: [1.4, 0],
+ *   align: 'start',
+ *   label: {
+ *     text: {                             // label text is an equation
+ *       elements: {
+ *         twopi: '2\u03C0',
+ *       },
+ *       forms: {
+ *         base: ['twopi', ' ', { frac: ['a', 'vinculum', 'b'] } ]
+ *       },
+ *     },
+ *     offset: 0.03,
+ *     orientation: 'horizontal',          // keep label horizontal
+ *     location: 'top',                    // keep label on top of line
+ *   },
+ *   dash: [0.08, 0.02, 0.02, 0.02],
+ * });
+ * diagram.add('l', l);
+ * l.setMovable({ type: 'centerTranslateEndRotation'})
+ * l.setAutoUpdate();
+ *
  */
 export default class AdvancedLine extends DiagramElementCollection {
   // Diagram elements
@@ -778,13 +857,13 @@ export default class AdvancedLine extends DiagramElementCollection {
     const label = this._label;
     if (label != null) {
       // label.pulseScaleNow(o.duration, o.label, 0, done);
-      label.pulse({
-        duration: o.duration,
-        scale: o.label,
-        frequency: o.frequency,
-        callback: done,
-        when: o.when,
-      });
+      let labelOptions;
+      if (typeof label === 'number') {
+        labelOptions = joinObjects({}, o, { scale: o.label, callback: done });
+      } else {
+        labelOptions = joinObjects({}, o, o.label, { callback: done });
+      }
+      label.pulse(labelOptions);
       done = null;
     }
     if (done != null) {
@@ -1033,7 +1112,7 @@ export default class AdvancedLine extends DiagramElementCollection {
   /**
    * Turn on and off auto label location and orientation updates when line
    * transform changes. When a line is created with a label, auto update
-   * is turned on by default.
+   * is turned off by default.
    */
   setAutoUpdate(update: boolean = true) {
     if (update) {

@@ -154,3 +154,11 @@ table {
 .hljs {
   background: #e5e5e5 !important;
 }
+
+/* .inline_gif {
+  display: inline-block;
+} */
+
+.inline_gif_image {
+  max-width: 350px;
+}
