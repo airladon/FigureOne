@@ -437,7 +437,7 @@ const l = diagram.advanced.line({
     },
     offset: 0.0001,
     orientation: 'horizontal',          // keep label horizontal
-    location: 'bottom',                    // keep label on top of line
+    location: 'negative',                    // keep label on top of line
   },
   dash: [0.08, 0.02, 0.02, 0.02],
 });
@@ -457,6 +457,7 @@ diagram.addElement({
   },
 });
 
+l.updateLabel();
 // diagram.addElement({
 //   name: 'b',
 //   method: 'polygon',
