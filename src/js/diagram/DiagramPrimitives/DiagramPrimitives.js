@@ -54,6 +54,7 @@ import type { TypeSpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
 import { getPolygonPoints, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle';
+import { ellipseBorderToTris, getEllipseBorder } from '../DrawingObjects/Geometries/ellipse';
 import { getTriangle } from '../DrawingObjects/Geometries/triangle';
 import { getArrow, defaultArrowOptions } from '../DrawingObjects/Geometries/arrow';
 import type { OBJ_LineArrows } from '../DrawingObjects/Geometries/arrow';
@@ -2308,6 +2309,73 @@ export default class DiagramPrimitives {
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
         const [updatedPoints, updatedBorder, updatedTouchBorder] = getRectangleBorder(o);
+        // const updatedBorder = getRectangleBorder(o);
+        element.custom.updatePoints(joinObjects({}, o, {
+          points: updatedPoints,
+          border: updatedBorder,
+          touchBorder: updatedTouchBorder,
+          holeBorder: o.holeBorder,
+          dash: o.line.dash,
+          width: o.line.width,
+          widthIs: o.line.widthIs,
+        }));
+      };
+    }
+    return element;
+  }
+
+  /**
+   * {@link DiagramElementPrimitive} that draws a rectangle.
+   * @see {@link OBJ_Rectangle} for options and examples.
+   */
+  ellipse(...options: Array<OBJ_Ellipse>) {
+    const defaultOptions = {
+      width: 1,
+      height: 1,
+      xAlign: 'center',
+      yAlign: 'middle',
+      sides: 20,
+      transform: new Transform('rectangle').standard(),
+      border: 'outline',
+      touchBorder: 'border',
+      holeBorder: 'none',
+    };
+    const optionsToUse = processOptions(defaultOptions, ...options);
+
+    if (
+      optionsToUse.line != null && optionsToUse.line.widthIs == null
+    ) {
+      optionsToUse.line.widthIs = 'mid';
+    }
+
+    const [points, border, touchBorder] = getEllipseBorder(optionsToUse);
+    let element;
+    if (optionsToUse.line == null) {
+      element = this.generic(optionsToUse, {
+        points: ellipseBorderToTris(points),
+        border,
+        touchBorder,
+      });
+      element.custom.update = (updateOptions) => {
+        const o = joinObjects({}, optionsToUse, updateOptions);
+        const [updatedPoints, updatedBorder, updatedTouchBorder] = getEllipseBorder(o);
+        element.drawingObject.change(
+          ellipseBorderToTris(updatedPoints),
+          updatedBorder,
+          updatedTouchBorder,
+          o.holeBorder,
+        );
+      };
+    } else {
+      element = this.polyline(optionsToUse, optionsToUse.line, {
+        points,
+        border,
+        touchBorder,
+        close: true,
+      });
+      element.custom.update = (updateOptions) => {
+        const o = joinObjects({}, optionsToUse, updateOptions);
+        const [updatedPoints, updatedBorder, updatedTouchBorder] = getEllipseBorder(o);
         // const updatedBorder = getRectangleBorder(o);
         element.custom.updatePoints(joinObjects({}, o, {
           points: updatedPoints,

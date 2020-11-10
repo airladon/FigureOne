@@ -3717,11 +3717,11 @@ Advanced shapes are usually [DiagramElementCollection][73]s that orchestrate a n
 
 [DiagramElementCollection][73] representing a line.
 
-<p style="text-align: center" class="inline_gif"><img src="./assets1/advline_pulse.gif" class="inline_gif_image"></p>
+<p class="inline_gif"><img src="./assets1/advline_pulse.gif" class="inline_gif_image"></p>
 
-<p style="text-align: center" class="inline_gif"><img src="./assets1/advline_grow.gif" class="inline_gif_image"></p>
+<p class="inline_gif"><img src="./assets1/advline_grow.gif" class="inline_gif_image"></p>
 
-<p style="text-align: center" class="inline_gif"><img src="./assets1/advline_multimove.gif" class="inline_gif_image"></p>
+<p class="inline_gif"><img src="./assets1/advline_multimove.gif" class="inline_gif_image"></p>
 
 This object defines a convient and powerful line
 [DiagramElementCollection][73] that includes a solid or dashed line,

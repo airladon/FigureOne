@@ -1,39 +1,39 @@
 const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
 
-// diagram.addElements([
-//   {
-//     name: 'origin',
-//     method: 'polygon',
-//     options: {
-//       radius: 0.01,
-//       line: { width: 0.01 },
-//       sides: 10,
-//       color: [0.7, 0.7, 0.7, 1]
-//     },
-//   },
-//   {
-//     name: 'grid',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.1,
-//       xStep: 0.1,
-//       color: [0.7, 0.7, 0.7, 1],
-//       line: { width: 0.001 },
-//     },
-//   },
-//   {
-//     name: 'gridMajor',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.5,
-//       xStep: 0.5,
-//       color: [0.8, 0.8, 0.8, 1],
-//       line: { width: 0.004 }
-//     },
-//   },
-// ]);
+diagram.addElements([
+  {
+    name: 'origin',
+    method: 'polygon',
+    options: {
+      radius: 0.01,
+      line: { width: 0.01 },
+      sides: 10,
+      color: [0.7, 0.7, 0.7, 1]
+    },
+  },
+  {
+    name: 'grid',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.1,
+      xStep: 0.1,
+      color: [0.7, 0.7, 0.7, 1],
+      line: { width: 0.001 },
+    },
+  },
+  {
+    name: 'gridMajor',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.5,
+      xStep: 0.5,
+      color: [0.8, 0.8, 0.8, 1],
+      line: { width: 0.004 }
+    },
+  },
+]);
 
 
 // // Simple
@@ -396,53 +396,84 @@ diagram.elements._c.setMovable();
 //   diagram.elements._l.pulseWidth({ duration: 2 });
 // }, 2000);
 
-diagram.addElement({
-  name: 'l',
-  method: 'advanced.line',
-  options: {
-    p1: [-1, 0],
-    p2: [-0.5, 0],
-    align: 'start',
-    arrow: { end: { head: 'barb', scale: 2 } },
-    label: {
-      text: null,
-      offset: 0.03,
-      precision: 2,
-      location: 'start'
+// diagram.addElement({
+//   name: 'l',
+//   method: 'advanced.line',
+//   options: {
+//     p1: [-1, 0],
+//     p2: [-0.5, 0],
+//     align: 'start',
+//     arrow: { end: { head: 'barb', scale: 2 } },
+//     label: {
+//       text: null,
+//       offset: 0.03,
+//       precision: 2,
+//       location: 'start'
+//     },
+//   },
+// });
+
+// const l = diagram.elements._l;
+// l.animations.new()
+//   .delay(2)
+//   .length({ start: 0.5, target: 2, duration: 2 })
+//   .start();
+
+// Example showing dashed line with an equation label that stays horizontal
+const l = diagram.advanced.line({
+  p1: [-0.5, 0],
+  p2: [0.5, 0],
+  align: 'start',
+  label: {
+    text: {
+      elements: {
+        // d: 'dimension',
+        b: { symbol: 'box', lineWidth: 0.005, },
+      },
+      forms: {
+        // base: { box: ['d', 'b'] },
+        base: { frac: ['t', 'vinculum', 'h'] },
+      },
     },
+    offset: 0.01,
+    orientation: 'horizontal',          // keep label horizontal
+    location: 'top',                    // keep label on top of line
+  },
+  dash: [0.08, 0.02, 0.02, 0.02],
+});
+diagram.add('l', l);
+l.setMovable({ type: 'centerTranslateEndRotation'})
+l.setAutoUpdate();
+
+diagram.addElement({
+  name: 'ell',
+  method: 'ellipse',
+  options: {
+    width: 1,
+    height: 0.5,
+    // line: { width: 0.01 },
+    color: [0, 0, 1, 0.6],
+    sides: 50,
   },
 });
 
-const l = diagram.elements._l;
-l.animations.new()
-  .delay(2)
-  .length({ start: 0.5, target: 2, duration: 2 })
-  .start();
+// diagram.addElement({
+//   name: 'b',
+//   method: 'polygon',
+//   options: {
+    
+//   }
+// })
 
-// // Example showing dashed line with an equation label that stays horizontal
-// const l = diagram.advanced.line({
-//   p1: [0, 0],
-//   p2: [1.4, 0],
-//   align: 'start',
-//   label: {
-//     text: {                             // label text is an equation
-//       elements: {
-//         twopi: '2\u03C0',
-//       },
-//       forms: {
-//         base: ['twopi', ' ', { frac: ['a', 'vinculum', 'b'] } ]
-//       },
-//     },
-//     offset: 0.03,
-//     orientation: 'horizontal',          // keep label horizontal
-//     location: 'top',                    // keep label on top of line
-//   },
-//   dash: [0.08, 0.02, 0.02, 0.02],
-// });
-// diagram.add('l', l);
-// l.setMovable({ type: 'centerTranslateEndRotation'})
-// l.setAutoUpdate();
-
+// const e = diagram.elements._ell;
+// l._label.subscriptions.add('setTransform', () => {
+//   e.setPosition(l._label.getPosition('diagram'))
+//   r = l._label.getBoundingRect('diagram');
+//   e.custom.update({
+//     width: r.width,
+//     height: r.height,
+//   });
+// })
 // l.animations.new()
 //   .delay(2)
 //   .rotation
