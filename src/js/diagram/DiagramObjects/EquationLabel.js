@@ -70,6 +70,9 @@ export default class EquationLabel {
   updateRotation: (number, Point, ?number, ?number) => void;
   setText: (string) => void;
   getText: void => string;
+  height: number;
+  width: number;
+  aOffset: number;
 
   constructor(
     equations: Object,
@@ -153,6 +156,9 @@ export default class EquationLabel {
       ));
     }
     this.eqn = eqn;
+    this.width = 0;
+    this.height = 0;
+    this.aOffset = 0;
   }
 
   // TODO
@@ -208,87 +214,110 @@ export default class EquationLabel {
     oval: boolean = true,
   ) {
     if (offsetMag !== 0) {
-      let labelWidth = 0;
-      let labelHeight = 0;
       let h = 0;
       let w = 0;
       const currentForm = this.eqn.getCurrentForm();
+      let change = false;
       if (currentForm != null) {
-        labelWidth = currentForm.width / 2 + 0.04;
-        labelHeight = currentForm.height / 2 + 0.04;
+        if (this.height !== currentForm.height) {
+          this.height = currentForm.height;
+          change = true;
+        }
+        if (this.width !== currentForm.width) {
+          this.width = currentForm.width;
+          change = true;
+        }
         h = currentForm.height / 2 + offsetMag;
         w = currentForm.width / 2 + offsetMag;
       }
-      let r;
+      let r = 0; 
       if (oval) {
-        // const a = labelWidth + offsetMag;
-        // const b = labelHeight + offsetMag;
-        // r = a * b / Math.sqrt((b * Math.cos(labelAngle - offsetAngle)) ** 2
-        //   + (a * Math.sin(labelAngle - offsetAngle)) ** 2);
-        const topCornerAngle = Math.atan(h / w);
-        const topCornerR = h / Math.sin(topCornerAngle);
-        const r2 = topCornerR ** 2;
-        const cos2 = Math.cos(topCornerAngle) ** 2;
-        const sin2 = Math.sin(topCornerAngle) ** 2;
-        // debugger;
-        const aMin = w + offsetMag * (1 + w / h);
-        const bMax = Math.sqrt(r2 * aMin * aMin * sin2 / (aMin * aMin - r2 * cos2));
-
-        const bMin = h + offsetMag * (1 + h / w);
-        const aMax = Math.sqrt(r2 * bMin * bMin * cos2) / (bMin * bMin - r2 * sin2);
-
-        const aMidFromA = w + offsetMag * (2 + w / h);
-        const bMidFromA = Math.sqrt(r2 * aMidFromA * aMidFromA * sin2 / (aMidFromA * aMidFromA - r2 * cos2));
-
-        const bMidFromB = h + offsetMag * (2 + h / w);;
-        const aMidFromB = Math.sqrt(r2 * bMidFromB * bMidFromB * cos2) / (bMidFromB * bMidFromB - r2 * sin2);
-        // console.log(w, h, topCornerAngle * 180 / Math.PI)
-        // console.log(topCornerR)
-        // console.log(round(aMin, 2), round(aMax, 2));
-        // console.log(round(bMin, 2), round(bMax, 2));
-        // const a = (aMax - aMin) / 2;
-        let a = aMax;
-        let b = bMin;
-        if (Math.max(aMin - w, bMax - h) < Math.max(a - w, b - h)) {
-          a = aMin;
-          b = bMax;
+        // eslint-disable-next-line max-len
+        const getR = (a, b, angle = labelAngle - offsetAngle) => a * b / Math.sqrt((b * Math.cos(angle)) ** 2 + (a * Math.sin(angle)) ** 2);
+        if (change) {
+          let i = 2;
+          r = -1;
+          const topCornerAngle = Math.atan(h / w);
+          const topCornerR = h / Math.sin(topCornerAngle) + offsetMag;
+          const delta = topCornerR - getR(w + offsetMag, h + offsetMag, topCornerAngle);
+          let ovalOffset = 0;
+          while (i < 13 && r < topCornerR) {
+            ovalOffset = delta * i * 0.5;
+            r = getR(w + ovalOffset, h + ovalOffset, topCornerAngle);
+            i += 1;
+          }
+          this.aOffset = ovalOffset;
         }
-        if (Math.max(aMidFromA - w, bMidFromB - h) < Math.max(a - w, b - h)) {
-          a = aMidFromA;
-          b = bMidFromA;
-        }
-        if (Math.max(aMidFromB - w, bMidFromB - h) < Math.max(a - w, b - h)) {
-          a = aMidFromB;
-          b = bMidFromB;
-        }
-        // a = aMin;
-        // b = bMax;
-        // const a = aMin;
-        // const b = bMax;
-        // const b = Math.sqrt(r2 * a * a * sin2 / (a * a - r2 * cos2));
-        // console.log('final', round(a, 2), round(b, r));
-        // r = a * b / Math.sqrt((b * Math.cos(labelAngle - offsetAngle)) ** 2
-          // + (a * Math.sin(labelAngle - offsetAngle)) ** 2);
-        r = Math.sqrt(
-          (a * Math.cos(labelAngle - offsetAngle)) ** 2
-          + (b * Math.sin(labelAngle - offsetAngle)) ** 2,
-        )
-        console.log(
-          round(a, 3),
-          round(b, 3),
-          round(r, 3),
-          position,
-          round(clipAngle(labelAngle,'0to360') * 180 / Math.PI, 0),
-          round(clipAngle(offsetAngle,'0to360') * 180 / Math.PI, 0),
-          round(clipAngle(labelAngle - offsetAngle,'0to360') * 180 / Math.PI, 0),
-        );
+
+        r = getR(w + this.aOffset, h + this.aOffset);
+        // // const a = labelWidth + offsetMag;
+        // // const b = labelHeight + offsetMag;
+        // // r = a * b / Math.sqrt((b * Math.cos(labelAngle - offsetAngle)) ** 2
+        // //   + (a * Math.sin(labelAngle - offsetAngle)) ** 2);
+        // const topCornerAngle = Math.atan(h / w);
+        // const topCornerR = h / Math.sin(topCornerAngle);
+        // const r2 = topCornerR ** 2;
+        // const cos2 = Math.cos(topCornerAngle) ** 2;
+        // const sin2 = Math.sin(topCornerAngle) ** 2;
+        // // debugger;
+        // const aMin = w + offsetMag * (1 + w / h);
+        // const bMax = Math.sqrt(r2 * aMin * aMin * sin2 / (aMin * aMin - r2 * cos2));
+
+        // const bMin = h + offsetMag * (1 + h / w);
+        // const aMax = Math.sqrt(r2 * bMin * bMin * cos2) / (bMin * bMin - r2 * sin2);
+
+        // const aMidFromA = w + offsetMag * (2 + w / h);
+        // const bMidFromA = Math.sqrt(r2 * aMidFromA * aMidFromA * sin2 / (aMidFromA * aMidFromA - r2 * cos2));
+
+        // const bMidFromB = h + offsetMag * (2 + h / w);;
+        // const aMidFromB = Math.sqrt(r2 * bMidFromB * bMidFromB * cos2) / (bMidFromB * bMidFromB - r2 * sin2);
+        // // console.log(w, h, topCornerAngle * 180 / Math.PI)
+        // // console.log(topCornerR)
+        // // console.log(round(aMin, 2), round(aMax, 2));
+        // // console.log(round(bMin, 2), round(bMax, 2));
+        // // const a = (aMax - aMin) / 2;
+        // let a = aMax;
+        // let b = bMin;
+        // if (Math.max(aMin - w, bMax - h) < Math.max(a - w, b - h)) {
+        //   a = aMin;
+        //   b = bMax;
+        // }
+        // if (Math.max(aMidFromA - w, bMidFromB - h) < Math.max(a - w, b - h)) {
+        //   a = aMidFromA;
+        //   b = bMidFromA;
+        // }
+        // if (Math.max(aMidFromB - w, bMidFromB - h) < Math.max(a - w, b - h)) {
+        //   a = aMidFromB;
+        //   b = bMidFromB;
+        // }
+        // // a = aMin;
+        // // b = bMax;
+        // // const a = aMin;
+        // // const b = bMax;
+        // // const b = Math.sqrt(r2 * a * a * sin2 / (a * a - r2 * cos2));
+        // // console.log('final', round(a, 2), round(b, r));
+        // // r = a * b / Math.sqrt((b * Math.cos(labelAngle - offsetAngle)) ** 2
+        //   // + (a * Math.sin(labelAngle - offsetAngle)) ** 2);
+        // r = Math.sqrt(
+        //   (a * Math.cos(labelAngle - offsetAngle)) ** 2
+        //   + (b * Math.sin(labelAngle - offsetAngle)) ** 2,
+        // )
+        // console.log(
+        //   round(a, 3),
+        //   round(b, 3),
+        //   round(r, 3),
+        //   position,
+        //   round(clipAngle(labelAngle,'0to360') * 180 / Math.PI, 0),
+        //   round(clipAngle(offsetAngle,'0to360') * 180 / Math.PI, 0),
+        //   round(clipAngle(labelAngle - offsetAngle,'0to360') * 180 / Math.PI, 0),
+        // );
 
         if (this.eqn.parent != null && this.eqn.parent.parent != null && this.eqn.parent.parent._ell != null) {
           // console.log(this.eqn.parent.parent)
           const e = this.eqn.parent.parent._ell;
             e.custom.update({
-              width: a * 2,
-              height: b * 2,
+              width: (w + this.aOffset) * 2,
+              height: (h + this.aOffset) * 2,
             });
         }
       } else {
