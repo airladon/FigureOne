@@ -255,13 +255,16 @@ export default class EquationLabel {
         const phi = clipAngle(labelAngle, '0to360');
         const theta = clipAngle(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi))), '0to360');
         const R = getR(a, b, theta);
-        const sigma = phi + theta - Math.PI;
-        const xOffset = R * Math.cos(sigma);
+        let sigma = clipAngle(phi + theta - Math.PI, '-180to180');
+        if (sigma < 0) {
+          sigma = sigma + Math.PI;
+        }
+        let xOffset = R * Math.cos(sigma);
         let yOffset = R * Math.sin(sigma);
-        // if (offsetAngle === -Math.PI / 2) {
-        //   yOffset = -yOffset;
-        //   xOffset = -xOffset;
-        // }
+        if (offsetAngle < 0) {
+          yOffset = -yOffset;
+          xOffset = -xOffset;
+        }
         this.eqn.setPosition(position.add(xOffset, yOffset));
         console.log(
           round(phi * 180 / Math.PI, 0),
