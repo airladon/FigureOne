@@ -256,6 +256,7 @@ export default class EquationLabel {
         r = getR(w + this.aOffset, h + this.aOffset, angleAtTangent);
         const d = angleAtTangent - (-labelAngle - Math.PI / 2);
         const e = r * Math.cos(d);
+        const y = r * Math.sin(d);
         console.log(
           labelAngle * 180 / Math.PI,
           offsetAngle * 180 / Math.PI,
@@ -263,7 +264,8 @@ export default class EquationLabel {
           angleAtTangent * 180 / Math.PI,
           r, e,
         )
-        this.eqn.setPosition(position.add(polarToRect(r, offsetAngle)));
+        // this.eqn.setPosition(position.add(polarToRect(r, offsetAngle)));
+        this.eqn.setPosition(position.add(polarToRect(r, offsetAngle)).add(-y, 0));
         // // const a = labelWidth + offsetMag;
         // // const b = labelHeight + offsetMag;
         // // r = a * b / Math.sqrt((b * Math.cos(labelAngle - offsetAngle)) ** 2
