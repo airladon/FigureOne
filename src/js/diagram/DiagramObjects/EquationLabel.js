@@ -249,91 +249,68 @@ export default class EquationLabel {
           this.aOffset = ovalOffset;
         }
 
-        const tangentAngle = -labelAngle;
         const a = this.aOffset + w;
         const b = this.aOffset + h;
-        const angleAtTangent = Math.atan(-b / a / Math.tan(tangentAngle));
-        r = getR(w + this.aOffset, h + this.aOffset, angleAtTangent);
-        const d = angleAtTangent - (-labelAngle - Math.PI / 2);
-        const e = r * Math.cos(d);
-        const y = r * Math.sin(d);
+
+        const phi = clipAngle(labelAngle, '0to360');
+        const theta = clipAngle(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi))), '0to360');
+        const R = getR(a, b, theta);
+        const sigma = phi + theta - Math.PI;
+        const xOffset = R * Math.cos(sigma);
+        let yOffset = R * Math.sin(sigma);
+        // if (offsetAngle === -Math.PI / 2) {
+        //   yOffset = -yOffset;
+        //   xOffset = -xOffset;
+        // }
+        this.eqn.setPosition(position.add(xOffset, yOffset));
         console.log(
-          labelAngle * 180 / Math.PI,
-          offsetAngle * 180 / Math.PI,
-          tangentAngle * 180 / Math.PI,
-          angleAtTangent * 180 / Math.PI,
-          r, e,
+          round(phi * 180 / Math.PI, 0),
+          round(theta * 180 / Math.PI, 0),
+          round(sigma * 180 / Math.PI, 0),
+          round(offsetAngle * 180 / Math.PI, 0)
         )
-        // this.eqn.setPosition(position.add(polarToRect(r, offsetAngle)));
-        this.eqn.setPosition(position.add(polarToRect(r, offsetAngle)).add(-y, 0));
-        // // const a = labelWidth + offsetMag;
-        // // const b = labelHeight + offsetMag;
-        // // r = a * b / Math.sqrt((b * Math.cos(labelAngle - offsetAngle)) ** 2
-        // //   + (a * Math.sin(labelAngle - offsetAngle)) ** 2);
-        // const topCornerAngle = Math.atan(h / w);
-        // const topCornerR = h / Math.sin(topCornerAngle);
-        // const r2 = topCornerR ** 2;
-        // const cos2 = Math.cos(topCornerAngle) ** 2;
-        // const sin2 = Math.sin(topCornerAngle) ** 2;
-        // // debugger;
-        // const aMin = w + offsetMag * (1 + w / h);
-        // const bMax = Math.sqrt(r2 * aMin * aMin * sin2 / (aMin * aMin - r2 * cos2));
-
-        // const bMin = h + offsetMag * (1 + h / w);
-        // const aMax = Math.sqrt(r2 * bMin * bMin * cos2) / (bMin * bMin - r2 * sin2);
-
-        // const aMidFromA = w + offsetMag * (2 + w / h);
-        // const bMidFromA = Math.sqrt(r2 * aMidFromA * aMidFromA * sin2 / (aMidFromA * aMidFromA - r2 * cos2));
-
-        // const bMidFromB = h + offsetMag * (2 + h / w);;
-        // const aMidFromB = Math.sqrt(r2 * bMidFromB * bMidFromB * cos2) / (bMidFromB * bMidFromB - r2 * sin2);
-        // // console.log(w, h, topCornerAngle * 180 / Math.PI)
-        // // console.log(topCornerR)
-        // // console.log(round(aMin, 2), round(aMax, 2));
-        // // console.log(round(bMin, 2), round(bMax, 2));
-        // // const a = (aMax - aMin) / 2;
-        // let a = aMax;
-        // let b = bMin;
-        // if (Math.max(aMin - w, bMax - h) < Math.max(a - w, b - h)) {
-        //   a = aMin;
-        //   b = bMax;
+        // const labelAngleNorm = clipAngle(labelAngle, '0to360');
+        // let m = labelAngleNorm;
+        // if (labelAngleNorm > Math.PI / 2 && labelAngleNorm <= Math.PI) {
+        //   m = Math.PI - labelAngle;
+        // } else if (labelAngleNorm > Math.PI && labelAngleNorm < 3 * Math.PI / 2) {
+        //   m = labelAngleNorm - Math.PI;
+        // } else if (labelAngleNorm >= 3 * Math.PI / 2) {
+        //   m = 2 * Math.PI - labelAngleNorm;
         // }
-        // if (Math.max(aMidFromA - w, bMidFromB - h) < Math.max(a - w, b - h)) {
-        //   a = aMidFromA;
-        //   b = bMidFromA;
+        // const t = Math.abs(Math.atan(-b / (a * Math.tan(m))));
+        // const g = Math.PI / 2 - m;
+        // const k = g - t;
+        // const or = getR(a, b, t);
+        // let op = or * Math.cos(k);
+        // if (offsetAngle < 0) {
+        //   op = -op;
         // }
-        // if (Math.max(aMidFromB - w, bMidFromB - h) < Math.max(a - w, b - h)) {
-        //   a = aMidFromB;
-        //   b = bMidFromB;
+        // let pr = or * Math.sin(k);
+        // if (labelAngle < Math.PI / 2) {
+        //   pr = -pr;
+        // } else if (labelAngleNorm > 3 * Math.PI / 2) {
+        //   pr = -pr;
         // }
-        // // a = aMin;
-        // // b = bMax;
-        // // const a = aMin;
-        // // const b = bMax;
-        // // const b = Math.sqrt(r2 * a * a * sin2 / (a * a - r2 * cos2));
-        // // console.log('final', round(a, 2), round(b, r));
-        // // r = a * b / Math.sqrt((b * Math.cos(labelAngle - offsetAngle)) ** 2
-        //   // + (a * Math.sin(labelAngle - offsetAngle)) ** 2);
-        // r = Math.sqrt(
-        //   (a * Math.cos(labelAngle - offsetAngle)) ** 2
-        //   + (b * Math.sin(labelAngle - offsetAngle)) ** 2,
-        // )
         // console.log(
-        //   round(a, 3),
-        //   round(b, 3),
-        //   round(r, 3),
-        //   position,
-        //   round(clipAngle(labelAngle,'0to360') * 180 / Math.PI, 0),
-        //   round(clipAngle(offsetAngle,'0to360') * 180 / Math.PI, 0),
-        //   round(clipAngle(labelAngle - offsetAngle,'0to360') * 180 / Math.PI, 0),
-        // );
+        //   round(labelAngle * 180 / Math.PI, 0),
+        //   round(offsetAngle * 180 / Math.PI, 0),
+        //   round(m * 180 / Math.PI, 0),
+        //   round(t * 180 / Math.PI, 0),
+        //   round(g * 180 / Math.PI, 0),
+        //   round(k * 180 / Math.PI, 0),
+        //   round(or, 2),
+        //   round(op, 2),
+        //   round(pr, 2),
+        // )
+        // this.eqn.setPosition(position.add(pr, op));
 
         if (this.eqn.parent != null && this.eqn.parent.parent != null && this.eqn.parent.parent._ell != null) {
           // console.log(this.eqn.parent.parent)
           const e = this.eqn.parent.parent._ell;
             e.custom.update({
-              width: (w + this.aOffset) * 2,
-              height: (h + this.aOffset) * 2,
+              width: a * 2,
+              height: b * 2,
             });
         }
       } else {
