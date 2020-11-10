@@ -435,7 +435,7 @@ const l = diagram.advanced.line({
         // base: { box: [{ frac: ['t', 'vinculum', 'h'] }, 'b', false] },
       },
     },
-    offset: 0.01,
+    offset: 0.0001,
     orientation: 'horizontal',          // keep label horizontal
     location: 'top',                    // keep label on top of line
   },

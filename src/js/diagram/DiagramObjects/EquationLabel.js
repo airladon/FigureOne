@@ -2,7 +2,7 @@
 // import Diagram from '../Diagram';
 
 import {
-  Point, polarToRect, clipAngle,
+  Point, polarToRect, clipAngle, minAngleDiff,
 } from '../../tools/g2';
 import {
   round,
@@ -242,14 +242,28 @@ export default class EquationLabel {
           const delta = topCornerR - getR(w + offsetMag, h + offsetMag, topCornerAngle);
           let ovalOffset = 0;
           while (i < 13 && r < topCornerR) {
-            ovalOffset = delta * i * 0.5;
+            ovalOffset = delta * i * 0.2;
             r = getR(w + ovalOffset, h + ovalOffset, topCornerAngle);
             i += 1;
           }
           this.aOffset = ovalOffset;
         }
 
-        r = getR(w + this.aOffset, h + this.aOffset);
+        const tangentAngle = -labelAngle;
+        const a = this.aOffset + w;
+        const b = this.aOffset + h;
+        const angleAtTangent = Math.atan(-b / a / Math.tan(tangentAngle));
+        r = getR(w + this.aOffset, h + this.aOffset, angleAtTangent);
+        const d = minAngleDiff(angleAtTangent, -labelAngle - Math.PI / 2);
+        const e = r * Math.cos(d);
+        console.log(
+          labelAngle * 180 / Math.PI,
+          offsetAngle * 180 / Math.PI,
+          tangentAngle * 180 / Math.PI,
+          angleAtTangent * 180 / Math.PI,
+          r, e,
+        )
+        this.eqn.setPosition(position.add(polarToRect(e, offsetAngle)));
         // // const a = labelWidth + offsetMag;
         // // const b = labelHeight + offsetMag;
         // // r = a * b / Math.sqrt((b * Math.cos(labelAngle - offsetAngle)) ** 2
@@ -322,8 +336,8 @@ export default class EquationLabel {
         }
       } else {
         r = getRadiusOfRoundedRect(labelWidth, labelHeight, 0, labelAngle);
+        this.eqn.setPosition(position.add(polarToRect(r, offsetAngle)));
       }
-      this.eqn.setPosition(position.add(polarToRect(r, offsetAngle)));
     } else {
       this.eqn.setPosition(position);
     }
