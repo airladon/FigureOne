@@ -254,7 +254,7 @@ export default class EquationLabel {
         const b = this.aOffset + h;
         const angleAtTangent = Math.atan(-b / a / Math.tan(tangentAngle));
         r = getR(w + this.aOffset, h + this.aOffset, angleAtTangent);
-        const d = minAngleDiff(angleAtTangent, -labelAngle - Math.PI / 2);
+        const d = angleAtTangent - (-labelAngle - Math.PI / 2);
         const e = r * Math.cos(d);
         console.log(
           labelAngle * 180 / Math.PI,
@@ -263,7 +263,7 @@ export default class EquationLabel {
           angleAtTangent * 180 / Math.PI,
           r, e,
         )
-        this.eqn.setPosition(position.add(polarToRect(e, offsetAngle)));
+        this.eqn.setPosition(position.add(polarToRect(r, offsetAngle)));
         // // const a = labelWidth + offsetMag;
         // // const b = labelHeight + offsetMag;
         // // r = a * b / Math.sqrt((b * Math.cos(labelAngle - offsetAngle)) ** 2
