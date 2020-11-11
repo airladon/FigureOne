@@ -98,6 +98,51 @@ describe('Advanced line tests', () => {
         },
         touchBorder: 'rect',
       },
+      label: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        label: {
+          text: 'a',
+          offset: 0.1,
+          orientation: 'horizontal',
+          location: 'positive',
+        },
+        touchBorder: 'rect',
+      },
+      labelBaseToLine: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        label: {
+          text: 'a',
+          offset: 0.1,
+          orientation: 'baseToLine',
+          location: 'positive',
+        },
+      },
+      labelBaseAway: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        label: {
+          text: 'a',
+          offset: 0.1,
+          orientation: 'baseAway',
+          location: 'positive',
+        },
+      },
+      labelUpright: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        label: {
+          text: 'a',
+          offset: 0.1,
+          orientation: 'upright',
+          location: 'positive',
+        },
+      },
     };
     create = (option) => {
       diagram.addElement({
@@ -208,5 +253,36 @@ describe('Advanced line tests', () => {
     expect(l._line.getPosition().round(3)).toEqual(new Point(0.2, 0));
     expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(l._arrow2.getPosition().round(3)).toEqual(new Point(1, 0));
+  });
+  test('Label', () => {
+    create('label');
+    expect(l.getLabel()).toBe('a');
+    expect(l._label.getPosition().round(3)).toEqual(new Point(0.5, 0.151));
+    l.setLabel('b');
+    expect(l.getLabel()).toBe('b');
+    expect(round(l._label.getRotation(), 3)).toBe(0);
+    l.setEndPoints([0, 0], [0, 1]);
+    expect(round(l._label.getRotation(), 3)).toBe(-1.571);
+  });
+  test('Label BaseToLine', () => {
+    create('labelBaseToLine');
+    expect(l._label.getPosition().round(3)).toEqual(new Point(0.5, 0.151));
+    expect(round(l._label.getRotation(), 3)).toBe(0);
+    l.setEndPoints([0, 0], [0, 1]);
+    expect(round(l._label.getRotation(), 3)).toBe(0);
+  });
+  test('Label BaseAway', () => {
+    create('labelBaseAway');
+    expect(l._label.getPosition().round(3)).toEqual(new Point(0.5, 0.151));
+    expect(round(l._label.getRotation(), 3)).toBe(3.142);
+    l.setEndPoints([0, 0], [0, 1]);
+    expect(round(l._label.getRotation(), 3)).toBe(3.142);
+  });
+  test('Label Upright', () => {
+    create('labelUpright');
+    expect(l._label.getPosition().round(3)).toEqual(new Point(0.5, 0.151));
+    expect(round(l._label.getRotation(), 3)).toBe(0);
+    l.setEndPoints([0, 0], [-1, 0]);
+    expect(round(l._label.getRotation(), 3)).toBe(3.142);
   });
 });
