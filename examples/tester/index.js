@@ -427,17 +427,17 @@ const l = diagram.advanced.line({
   label: {
     text: {
       elements: {
-        d: 'dimension like this',
+        // d: 'dimension like this',
         b: { symbol: 'box', lineWidth: 0.005, },
       },
       forms: {
-        base: { box: ['d', 'b'] },
-        // base: { box: [{ frac: ['t', 'vinculum', 'h'] }, 'b', false] },
+        // base: { box: ['d', 'b'] },
+        base: { box: [{ frac: ['t', 'vinculum', 'h'] }, 'b', false] },
       },
     },
     offset: 0.1,
-    orientation: 'horizontal',          // keep label horizontal
-    location: 'negative',                    // keep label on top of line
+    orientation: 'upright',          // keep label horizontal
+    location: 'start',                    // keep label on top of line
   },
   dash: [0.08, 0.02, 0.02, 0.02],
 });

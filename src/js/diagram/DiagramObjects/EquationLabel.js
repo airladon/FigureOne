@@ -2,7 +2,7 @@
 // import Diagram from '../Diagram';
 
 import {
-  Point, polarToRect, clipAngle, minAngleDiff,
+  Point, polarToRect, clipAngle,
 } from '../../tools/g2';
 import {
   round,
@@ -31,29 +31,29 @@ import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
 //   fracScale?: number,
 // };
 
-function getRadiusOfRoundedRect(
-  halfWidth: number,
-  halfHeight: number,
-  cornerR: number,
-  angle: number,
-) {
-  const angleRadiusStart = Math.atan2(halfHeight - cornerR, halfWidth);
-  const angleRadiusEnd = Math.atan2(halfHeight, halfWidth - cornerR);
-  let normalizedAngle = angle;
-  if (angle > Math.PI / 2 && angle < Math.PI) {
-    normalizedAngle = Math.PI - angle;
-  } else if (angle > Math.PI && angle < 3 * Math.PI / 2) {
-    normalizedAngle = angle - Math.PI;
-  } else if (angle > 3 * Math.PI / 2 && angle < 2 * Math.PI) {
-    normalizedAngle = Math.PI * 2 - angle;
-  }
-  if (normalizedAngle <= angleRadiusStart) {
-    return halfWidth * Math.tan(normalizedAngle);
-  }
-  if (normalizedAngle >= angleRadiusEnd) {
-    return halfHeight * Math.tan(Math.PI / 2 - normalizedAngle);
-  }
-}
+// function getRadiusOfRoundedRect(
+//   halfWidth: number,
+//   halfHeight: number,
+//   cornerR: number,
+//   angle: number,
+// ) {
+//   const angleRadiusStart = Math.atan2(halfHeight - cornerR, halfWidth);
+//   const angleRadiusEnd = Math.atan2(halfHeight, halfWidth - cornerR);
+//   let normalizedAngle = angle;
+//   if (angle > Math.PI / 2 && angle < Math.PI) {
+//     normalizedAngle = Math.PI - angle;
+//   } else if (angle > Math.PI && angle < 3 * Math.PI / 2) {
+//     normalizedAngle = angle - Math.PI;
+//   } else if (angle > 3 * Math.PI / 2 && angle < 2 * Math.PI) {
+//     normalizedAngle = Math.PI * 2 - angle;
+//   }
+//   if (normalizedAngle <= angleRadiusStart) {
+//     return halfWidth * Math.tan(normalizedAngle);
+//   }
+//   if (normalizedAngle >= angleRadiusEnd) {
+//     return halfHeight * Math.tan(Math.PI / 2 - normalizedAngle);
+//   }
+// }
 export type TypeLabelOptions = {
   label?: string | Equation | Array<string> | EQN_Equation,
   color?: Array<number>,
@@ -318,13 +318,16 @@ export default class EquationLabel {
         this.width = currentForm.width;
         change = true;
       }
-      h = currentForm.height / 2 + offsetMag;
-      w = currentForm.width / 2 + offsetMag;
+      h = currentForm.height / 2;
+      w = currentForm.width / 2;
     }
     let positionOffset = new Point(0, 0);
     if (style === 'oval') {
-      positionOffset = this.getOvalOffset(labelAngle, h, w, offsetMag, offsetAngle, change, position);
+      positionOffset = this.getOvalOffset(
+        labelAngle, h, w, offsetMag, offsetAngle, change, position,
+      );
     }
+    console.log(offsetMag, offsetAngle, position)
     this.eqn.setPosition(position.add(positionOffset));
     this.eqn.transform.updateRotation(labelAngle);
   }
@@ -359,14 +362,10 @@ export default class EquationLabel {
       let i = 2;
       let testR = -1;
       let ovalOffset = 0;
-      console.log(round(topCornerAngle * 180 / Math.PI, 0))
-      console.log(round(topCornerR, 3))
-      console.log(round(w, 3), round(h, 3));
-      while (i < 103 && testR < topCornerR) {
-        ovalOffset = delta * i * 0.1;
+      while (i < 33 && testR < topCornerR) {
+        ovalOffset = delta * i * 0.1 + offsetMag;
         testR = getR(w + ovalOffset, h + ovalOffset, topCornerAngle);
         i += 1;
-        console.log(i, round(testR, 3))
       }
       this.aOffset = ovalOffset;
     }
@@ -389,20 +388,27 @@ export default class EquationLabel {
       yOffset = -yOffset;
       xOffset = -xOffset;
     }
+    console.log(
+      round(phi * 180 / Math.PI, 0),
+      round(theta * 180 / Math.PI, 0),
+      round(sigma * 180 / Math.PI, 0),
+      round(a, 3),
+      round(R, 3),
+    )
 
     // DEBUG ONLY
     const debug = true;
     if (debug) {
-      if (this.eqn.parent != null) {
+      if (this.eqn.parent != null) {  // $FlowFixMe
         if (this.eqn.parent._debugEllipse == null) {
           const e = this.eqn.shapes.ellipse({
             width: 1,
             height: 0.5,
             color: [0, 0, 1, 0.6],
             sides: 50,
-          });
+          }); // $FlowFixMe
           this.eqn.parent.add('debugEllipse', e);
-        }
+        } // $FlowFixMe
         const e = this.eqn.parent._debugEllipse;
         if (e != null) {
           e.custom.update({
@@ -416,7 +422,6 @@ export default class EquationLabel {
     }
 
     return new Point(xOffset, yOffset);
-    // this.eqn.setPosition(position.add(xOffset, yOffset));
   }
 
   updateRotation(
