@@ -2,7 +2,7 @@
 // import Diagram from '../Diagram';
 
 import {
-  Point, polarToRect, clipAngle,
+  Point, clipAngle,
 } from '../../tools/g2';
 import {
   round,
@@ -54,22 +54,22 @@ import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
 //     return halfHeight * Math.tan(Math.PI / 2 - normalizedAngle);
 //   }
 // }
+
 export type TypeLabelOptions = {
   label?: string | Equation | Array<string> | EQN_Equation,
   color?: Array<number>,
   scale?: number,
   position?: Point,
   form?: string,
-  formType?: string,
   yAlign?: TypeVAlign,
   xAlign?: TypeHAlign,
 };
 
+/**
+ * Equation label
+ */
 export default class EquationLabel {
   eqn: Equation;
-  updateRotation: (number, Point, ?number, ?number) => void;
-  setText: (string) => void;
-  getText: void => string;
   height: number;
   width: number;
   aOffset: number;
@@ -83,15 +83,13 @@ export default class EquationLabel {
       color: [0, 0, 1, 1],
       scale: 0.7,
       position: new Point(0, 0),
-      form: '0',
-      formType: 'base',
       xAlign: 'center',
       yAlign: 'middle',
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const labelTextOrEquation = optionsToUse.label;
     const { color, scale, position } = optionsToUse;
-    const { form, formType } = optionsToUse;
+    // const { form } = optionsToUse;
     const { yAlign, xAlign } = optionsToUse;
     let eqn;
     if (typeof labelTextOrEquation === 'string') {
@@ -111,9 +109,10 @@ export default class EquationLabel {
         },
         position,
       });
-      eqn.setCurrentForm('base');
+      eqn.showForm('base');
     } else if (labelTextOrEquation instanceof Equation) {
       eqn = labelTextOrEquation;
+      eqn.showForm(Object.keys(eqn.eqn.forms)[0]);
     } else if (Array.isArray(labelTextOrEquation)) {
       const elements = {};
       const forms = {};
@@ -136,7 +135,7 @@ export default class EquationLabel {
         },
         scale,
       });
-      eqn.setCurrentForm(form, formType);
+      eqn.showForm('0');
     } else {
       const defaultEqnOptions = {
         color,
@@ -148,12 +147,13 @@ export default class EquationLabel {
           },
         },
         scale,
-        form,
-        formType,
+        // form,
       };
       eqn = equations.equation(joinObjects(
         defaultEqnOptions, labelTextOrEquation,
       ));
+      // if (form == null) {
+      eqn.showForm(Object.keys(eqn.eqn.forms)[0]);
     }
     this.eqn = eqn;
     this.width = 0;

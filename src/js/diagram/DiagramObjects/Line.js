@@ -96,13 +96,27 @@ export type TypeLineLabelOrientation = 'horizontal' | 'baseAway' | 'baseToLine'
  * Collection line label options object.
  *
  * A line can be annotated with a label using the `text` property and can be:
- * - text (`string`)
+ * - text (`string`, or Array<`string`)
  * - an equation (`Equation`, `EQN_Equation`)
  * - real length of line (`null`)
  *
+ * In all cases, an actual {@link Equation} is created as the label. The
+ * equation can have multiple forms, which can be set using the `showForm`
+ * method.
  *
- * If the label text is the real lenght of the line, then the number of decimal
- * places can be selected with `precision`.
+ * If `text`: `string`, then an equation with a single form named `base` will
+ * be created with a single element being the string text.
+ *
+ * If `text`: `Array<string>`, then an equation with a form for each element
+ * of the array is created. Each form is named '0', '1', '2'... corresponding
+ * with the index of the array. Each form is has a single element, being the
+ * text at that index.
+ *
+ * Use `text`: `Equation` or `EQN_Equation` to create completely custom
+ * equations with any forms desirable.
+ *
+ * If the label text is the real length of the line (`null`), then the number
+ * of decimal places can be selected with `precision`.
  *
  * The space between the line and the label is defined with `offset`. An
  * `offset` of 0 puts the center of the label on the line. Any
@@ -113,7 +127,7 @@ export type TypeLineLabelOrientation = 'horizontal' | 'baseAway' | 'baseToLine'
  * To situate the label on the line, use `linePosition`, `location` and
  * `subLocation`. By default the label will be a percentage `linePosition`
  * along the line. `location` then defines which side of the line the label is
- * on, while `subLocation` defines the backup location for invalide cases of
+ * on, while `subLocation` defines the backup location for invalid cases of
  * `location`. See {@link TypeLineLabelLocation} and
  * {@link TypeLineLabelSubLocation}. `location` can additionaly place the
  * labels off the ends of the line.
@@ -121,8 +135,7 @@ export type TypeLineLabelOrientation = 'horizontal' | 'baseAway' | 'baseToLine'
  * To automatically update the label location and orientation as the line
  * transform (translation, rotation or scale) changes then use `update: true`.
  *
- *
- * @property {null | string | Equation | EQN_Equation } text
+ * @property {null | string | Array<string> | Equation | EQN_Equation } text
  * @property {number} [precision]
  * @property {number} [offset]
  * @property {TypeLineLabelLocation} [location]

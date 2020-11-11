@@ -427,14 +427,17 @@ const l = diagram.advanced.line({
   label: {
     text: {
       elements: {
-        // d: 'dimension like this',
+        d: 'dimension like this',
         b: { symbol: 'box', lineWidth: 0.005, },
       },
       forms: {
         // base: { box: ['d', 'b'] },
-        base: { box: [{ frac: ['t', 'vinculum', 'h'] }, 'b', false] },
+        0: { box: [{ frac: ['t', 'vinculum', 'h'] }, 'b', false] },
+        1: { box: ['d', 'b'] },
       },
     },
+    // text: ['hello', 'there'],
+    // xAlign
     offset: 0.1,
     orientation: 'horizontal',          // keep label horizontal
     location: 'start',                    // keep label on top of line
@@ -444,7 +447,7 @@ const l = diagram.advanced.line({
 diagram.add('l', l);
 l.setMovable({ type: 'centerTranslateEndRotation'})
 l.setAutoUpdate();
-
+// l._label.showForm('1');
 // diagram.addElement({
 //   name: 'ell',
 //   method: 'ellipse',
