@@ -48,7 +48,7 @@ import type { OBJ_CustomAnimationStep } from '../Animation/Animation';
  * of the line.
  */
 export type TypeLineLabelLocation = 'top' | 'left' | 'bottom' | 'right'
-                                    | 'end1' | 'end2' | 'outside' | 'inside'
+                                    | 'start' | 'end' | 'outside' | 'inside'
                                     | 'positive' | 'negative';
 // top - text is on top of line if line is horiztonal
 // bottom - text is on bottom of line if line is horiztonal
@@ -1197,131 +1197,129 @@ export default class AdvancedLine extends DiagramElementCollection {
       this.localXPosition + label.linePosition * this.line.length(),
       0,
     );
-    if (label.location === 'start' || label.location === 'end') {
-      if (label.location === 'start') {
-        labelPosition.x = this.localXPosition - label.offset;
-      }
-      if (label.location === 'end') {
-        labelPosition.x = this.localXPosition + this.line.length() + label.offset;
-      }
+    if (label.location === 'start') {
+      labelPosition.x = this.localXPosition;
+    }
+    if (label.location === 'end') {
+      labelPosition.x = this.localXPosition + this.line.length();
     }
 
-    label.updateRot(
+    label.updateRotation(
       labelPosition, lineAngle, label.offset,
       label.location, label.subLocation, label.orientation,
       parentRotationOffset, 'oval',
     );
   }
 
-  updateLabelLegacy(parentRotationOffset: number = 0) {
-    const { label } = this;
-    if (label == null) {
-      return;
-    }
-    const lineAngle = normAngle(this.transform.r() || 0);
-    let labelAngle = 0;
-    if (this.showRealLength && this._label) {
-      const labelToUse = roundNum(this.line.length(), 2)
-        .toFixed(label.precision);
-      const current = label.getText();
-      if (current !== labelToUse) {
-        label.setText(roundNum(this.line.length(), 2)
-          .toFixed(label.precision));
-      }
-    }
-    const labelPosition = new Point(
-      this.localXPosition + label.linePosition * this.line.length(),
-      0,
-    );
-    let labelOffsetAngle = Math.PI / 2;
-    const labelOffsetMag = label.offset;
-    if (label.location === 'start' || label.location === 'end') {
-      if (label.location === 'start') {
-        labelPosition.x = this.localXPosition - label.offset;
-        labelOffsetAngle = -Math.PI;
-      }
-      if (label.location === 'end') {
-        labelPosition.x = this.localXPosition + this.line.length() + label.offset;
-        labelOffsetAngle = 0;
-      }
-    } else {
-      const offsetTop = Math.cos(lineAngle) < 0 ? -Math.PI / 2 : Math.PI / 2;
-      const offsetBottom = -offsetTop;
-      const offsetLeft = Math.sin(lineAngle) > 0 ? Math.PI / 2 : -Math.PI / 2;
-      const offsetRight = -offsetLeft;
+  // updateLabelLegacy(parentRotationOffset: number = 0) {
+  //   const { label } = this;
+  //   if (label == null) {
+  //     return;
+  //   }
+  //   const lineAngle = normAngle(this.transform.r() || 0);
+  //   let labelAngle = 0;
+  //   if (this.showRealLength && this._label) {
+  //     const labelToUse = roundNum(this.line.length(), 2)
+  //       .toFixed(label.precision);
+  //     const current = label.getText();
+  //     if (current !== labelToUse) {
+  //       label.setText(roundNum(this.line.length(), 2)
+  //         .toFixed(label.precision));
+  //     }
+  //   }
+  //   const labelPosition = new Point(
+  //     this.localXPosition + label.linePosition * this.line.length(),
+  //     0,
+  //   );
+  //   let labelOffsetAngle = Math.PI / 2;
+  //   const labelOffsetMag = label.offset;
+  //   if (label.location === 'start' || label.location === 'end') {
+  //     if (label.location === 'start') {
+  //       labelPosition.x = this.localXPosition - label.offset;
+  //       labelOffsetAngle = -Math.PI;
+  //     }
+  //     if (label.location === 'end') {
+  //       labelPosition.x = this.localXPosition + this.line.length() + label.offset;
+  //       labelOffsetAngle = 0;
+  //     }
+  //   } else {
+  //     const offsetTop = Math.cos(lineAngle) < 0 ? -Math.PI / 2 : Math.PI / 2;
+  //     const offsetBottom = -offsetTop;
+  //     const offsetLeft = Math.sin(lineAngle) > 0 ? Math.PI / 2 : -Math.PI / 2;
+  //     const offsetRight = -offsetLeft;
 
-      if (label.location === 'top') {
-        labelOffsetAngle = offsetTop;
-      }
-      if (label.location === 'bottom') {
-        labelOffsetAngle = offsetBottom;
-      }
-      if (label.location === 'right') {
-        labelOffsetAngle = offsetRight;
-      }
-      if (label.location === 'left') {
-        labelOffsetAngle = offsetLeft;
-      }
-      if (label.location === 'positive') {
-        labelOffsetAngle = Math.PI / 2;
-      }
-      if (label.location === 'negative') {
-        labelOffsetAngle = -Math.PI / 2;
-      }
-      if (roundNum(Math.sin(lineAngle), 4) === 0
-        && (label.location === 'left' || label.location === 'right')
-      ) {
-        if (label.subLocation === 'top') {
-          labelOffsetAngle = offsetTop;
-        }
-        if (label.subLocation === 'bottom') {
-          labelOffsetAngle = offsetBottom;
-        }
-      }
-      if (roundNum(Math.cos(lineAngle), 4) === 0
-        && (label.location === 'top' || label.location === 'bottom')
-      ) {
-        if (label.subLocation === 'right') {
-          labelOffsetAngle = offsetRight;
-        }
-        if (label.subLocation === 'left') {
-          labelOffsetAngle = offsetLeft;
-        }
-      }
-      if (label.location === 'inside') {
-        labelOffsetAngle = -Math.PI / 2;
-      }
-      if (label.location === 'outside') {
-        labelOffsetAngle = Math.PI / 2;
-      }
-    }
+  //     if (label.location === 'top') {
+  //       labelOffsetAngle = offsetTop;
+  //     }
+  //     if (label.location === 'bottom') {
+  //       labelOffsetAngle = offsetBottom;
+  //     }
+  //     if (label.location === 'right') {
+  //       labelOffsetAngle = offsetRight;
+  //     }
+  //     if (label.location === 'left') {
+  //       labelOffsetAngle = offsetLeft;
+  //     }
+  //     if (label.location === 'positive') {
+  //       labelOffsetAngle = Math.PI / 2;
+  //     }
+  //     if (label.location === 'negative') {
+  //       labelOffsetAngle = -Math.PI / 2;
+  //     }
+  //     if (roundNum(Math.sin(lineAngle), 4) === 0
+  //       && (label.location === 'left' || label.location === 'right')
+  //     ) {
+  //       if (label.subLocation === 'top') {
+  //         labelOffsetAngle = offsetTop;
+  //       }
+  //       if (label.subLocation === 'bottom') {
+  //         labelOffsetAngle = offsetBottom;
+  //       }
+  //     }
+  //     if (roundNum(Math.cos(lineAngle), 4) === 0
+  //       && (label.location === 'top' || label.location === 'bottom')
+  //     ) {
+  //       if (label.subLocation === 'right') {
+  //         labelOffsetAngle = offsetRight;
+  //       }
+  //       if (label.subLocation === 'left') {
+  //         labelOffsetAngle = offsetLeft;
+  //       }
+  //     }
+  //     if (label.location === 'inside') {
+  //       labelOffsetAngle = -Math.PI / 2;
+  //     }
+  //     if (label.location === 'outside') {
+  //       labelOffsetAngle = Math.PI / 2;
+  //     }
+  //   }
 
-    if (label.orientation === 'horizontal') {
-      labelAngle = -lineAngle;
-    }
-    if (label.orientation === 'baseToLine') {
-      labelAngle = 0;
-      if (labelOffsetAngle < 0) {
-        labelAngle = Math.PI;
-      }
-    }
-    if (label.orientation === 'baseAway') {
-      labelAngle = Math.PI;
-      if (labelOffsetAngle < 0) {
-        labelAngle = 0;
-      }
-    }
-    if (label.orientation === 'upright') {
-      if (Math.cos(lineAngle) < 0) {
-        labelAngle = Math.PI;
-      }
-    }
+  //   if (label.orientation === 'horizontal') {
+  //     labelAngle = -lineAngle;
+  //   }
+  //   if (label.orientation === 'baseToLine') {
+  //     labelAngle = 0;
+  //     if (labelOffsetAngle < 0) {
+  //       labelAngle = Math.PI;
+  //     }
+  //   }
+  //   if (label.orientation === 'baseAway') {
+  //     labelAngle = Math.PI;
+  //     if (labelOffsetAngle < 0) {
+  //       labelAngle = 0;
+  //     }
+  //   }
+  //   if (label.orientation === 'upright') {
+  //     if (Math.cos(lineAngle) < 0) {
+  //       labelAngle = Math.PI;
+  //     }
+  //   }
 
-    label.updateRotation(
-      labelAngle - parentRotationOffset,
-      labelPosition, labelOffsetMag, labelOffsetAngle,
-    );
-  }
+  //   label.updateRotation(
+  //     labelAngle - parentRotationOffset,
+  //     labelPosition, labelOffsetMag, labelOffsetAngle,
+  //   );
+  // }
 
   /**
    * Set the length of the line

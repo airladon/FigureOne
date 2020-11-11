@@ -436,7 +436,7 @@ const l = diagram.advanced.line({
       },
     },
     offset: 0.1,
-    orientation: 'upright',          // keep label horizontal
+    orientation: 'horizontal',          // keep label horizontal
     location: 'start',                    // keep label on top of line
   },
   dash: [0.08, 0.02, 0.02, 0.02],

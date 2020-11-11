@@ -207,7 +207,7 @@ export default class EquationLabel {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  updateRot(
+  updateRotation(
     position: Point,
     lineAngle: number,
     offsetMag: number,
@@ -215,20 +215,15 @@ export default class EquationLabel {
     subLocation: 'top' | 'bottom' | 'left' | 'right',
     orientation: 'horizontal' | 'baseAway' | 'baseToLine' | 'upright',
     parentAngleOffset: number = 0,
-    style: 'oval' | 'rectangle',
+    style: 'oval' | 'rectangle' = 'oval',
   ) {
     // Calculate the offsetAngle and label angle
     let offsetAngle = Math.PI / 2;
     let labelAngle = 0;
-    if (location === 'start' || location === 'end') {
-      if (location === 'start') {
-        // labelPosition.x = this.localXPosition - offset;
-        offsetAngle = -Math.PI;
-      }
-      if (location === 'end') {
-        // labelPosition.x = this.localXPosition + this.line.length() + offset;
-        offsetAngle = 0;
-      }
+    if (location === 'start') {
+      offsetAngle = -Math.PI;
+    } else if (location === 'end') {
+      offsetAngle = 0;
     } else {
       const offsetTop = Math.cos(lineAngle) < 0 ? -Math.PI / 2 : Math.PI / 2;
       const offsetBottom = -offsetTop;
@@ -324,10 +319,10 @@ export default class EquationLabel {
     let positionOffset = new Point(0, 0);
     if (style === 'oval') {
       positionOffset = this.getOvalOffset(
-        labelAngle, h, w, offsetMag, offsetAngle, change, position,
+        labelAngle, h, w, offsetMag, offsetAngle, change, location, position,
       );
     }
-    console.log(offsetMag, offsetAngle, position)
+
     this.eqn.setPosition(position.add(positionOffset));
     this.eqn.transform.updateRotation(labelAngle);
   }
@@ -339,6 +334,7 @@ export default class EquationLabel {
     offsetMag: number,
     offsetAngle: number,
     change: boolean,
+    location: 'top' | 'bottom' | 'left' | 'right' | 'positive' | 'negative' | 'start' | 'end' | 'inside' | 'outside',
     position: Point,
   ) {
     // eslint-disable-next-line max-len
@@ -373,28 +369,44 @@ export default class EquationLabel {
     const a = this.aOffset + w;
     const b = this.aOffset + h;
 
-    // Calculate the position (refer to oval_math.pdf for why this is what
-    // it is)
     const phi = clipAngle(labelAngle, '0to360');
-    const theta = clipAngle(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi))), '0to360');
-    const R = getR(a, b, theta);
-    let sigma = clipAngle(phi + theta - Math.PI, '-180to180');
-    if (sigma < 0) {
-      sigma += Math.PI;
+    let theta;
+    let xOffset;
+    let yOffset;
+    let R;
+    if (location === 'start') {
+      theta = Math.PI * 2 - phi;
+      R = getR(a, b, theta);
+      xOffset = -R;
+      yOffset = 0;
+    } else if (location === 'end') {
+      theta = Math.PI - phi;
+      R = getR(a, b, theta);
+      xOffset = R;
+      yOffset = 0;
+    } else {
+      // Calculate the position
+      // Refer to oval_math.pdf for working
+      theta = clipAngle(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi))), '0to360');
+      R = getR(a, b, theta);
+      let sigma = clipAngle(phi + theta - Math.PI, '-180to180');
+      if (sigma < 0) {
+        sigma += Math.PI;
+      }
+      xOffset = R * Math.cos(sigma);
+      yOffset = R * Math.sin(sigma);
+      if (offsetAngle < 0) {
+        yOffset = -yOffset;
+        xOffset = -xOffset;
+      }
+      // console.log(
+      //   round(phi * 180 / Math.PI, 0),
+      //   round(theta * 180 / Math.PI, 0),
+      //   round(sigma * 180 / Math.PI, 0),
+      //   round(a, 3),
+      //   round(R, 3),
+      // )
     }
-    let xOffset = R * Math.cos(sigma);
-    let yOffset = R * Math.sin(sigma);
-    if (offsetAngle < 0) {
-      yOffset = -yOffset;
-      xOffset = -xOffset;
-    }
-    console.log(
-      round(phi * 180 / Math.PI, 0),
-      round(theta * 180 / Math.PI, 0),
-      round(sigma * 180 / Math.PI, 0),
-      round(a, 3),
-      round(R, 3),
-    )
 
     // DEBUG ONLY
     const debug = true;
@@ -424,88 +436,88 @@ export default class EquationLabel {
     return new Point(xOffset, yOffset);
   }
 
-  updateRotation(
-    labelAngle: number,
-    position: Point,
-    offsetMag: number = 0,
-    offsetAngle: number = 0,
-    oval: boolean = true,
-  ) {
-    if (offsetMag !== 0) {
-      let h = 0;
-      let w = 0;
-      const currentForm = this.eqn.getCurrentForm();
-      let change = false;
-      if (currentForm != null) {
-        if (this.height !== currentForm.height) {
-          this.height = currentForm.height;
-          change = true;
-        }
-        if (this.width !== currentForm.width) {
-          this.width = currentForm.width;
-          change = true;
-        }
-        h = currentForm.height / 2 + offsetMag;
-        w = currentForm.width / 2 + offsetMag;
-      }
-      let r = 0; 
-      if (oval) {
-        // eslint-disable-next-line max-len
-        const getR = (a, b, angle = labelAngle - offsetAngle) => a * b / Math.sqrt((b * Math.cos(angle)) ** 2 + (a * Math.sin(angle)) ** 2);
-        if (change) {
-          let i = 2;
-          r = -1;
-          const topCornerAngle = Math.atan(h / w);
-          const topCornerR = h / Math.sin(topCornerAngle) + offsetMag;
-          const delta = topCornerR - getR(w + offsetMag, h + offsetMag, topCornerAngle);
-          let ovalOffset = 0;
-          while (i < 13 && r < topCornerR) {
-            ovalOffset = delta * i * 0.2;
-            r = getR(w + ovalOffset, h + ovalOffset, topCornerAngle);
-            i += 1;
-          }
-          this.aOffset = ovalOffset;
-        }
+  // updateRotationLegacy(
+  //   labelAngle: number,
+  //   position: Point,
+  //   offsetMag: number = 0,
+  //   offsetAngle: number = 0,
+  //   oval: boolean = true,
+  // ) {
+  //   if (offsetMag !== 0) {
+  //     let h = 0;
+  //     let w = 0;
+  //     const currentForm = this.eqn.getCurrentForm();
+  //     let change = false;
+  //     if (currentForm != null) {
+  //       if (this.height !== currentForm.height) {
+  //         this.height = currentForm.height;
+  //         change = true;
+  //       }
+  //       if (this.width !== currentForm.width) {
+  //         this.width = currentForm.width;
+  //         change = true;
+  //       }
+  //       h = currentForm.height / 2 + offsetMag;
+  //       w = currentForm.width / 2 + offsetMag;
+  //     }
+  //     let r = 0; 
+  //     if (oval) {
+  //       // eslint-disable-next-line max-len
+  //       const getR = (a, b, angle = labelAngle - offsetAngle) => a * b / Math.sqrt((b * Math.cos(angle)) ** 2 + (a * Math.sin(angle)) ** 2);
+  //       if (change) {
+  //         let i = 2;
+  //         r = -1;
+  //         const topCornerAngle = Math.atan(h / w);
+  //         const topCornerR = h / Math.sin(topCornerAngle) + offsetMag;
+  //         const delta = topCornerR - getR(w + offsetMag, h + offsetMag, topCornerAngle);
+  //         let ovalOffset = 0;
+  //         while (i < 13 && r < topCornerR) {
+  //           ovalOffset = delta * i * 0.2;
+  //           r = getR(w + ovalOffset, h + ovalOffset, topCornerAngle);
+  //           i += 1;
+  //         }
+  //         this.aOffset = ovalOffset;
+  //       }
 
-        const a = this.aOffset + w;
-        const b = this.aOffset + h;
+  //       const a = this.aOffset + w;
+  //       const b = this.aOffset + h;
 
-        const phi = clipAngle(labelAngle, '0to360');
-        const theta = clipAngle(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi))), '0to360');
-        const R = getR(a, b, theta);
-        let sigma = clipAngle(phi + theta - Math.PI, '-180to180');
-        if (sigma < 0) {
-          sigma += Math.PI;
-        }
-        let xOffset = R * Math.cos(sigma);
-        let yOffset = R * Math.sin(sigma);
-        if (offsetAngle < 0) {
-          yOffset = -yOffset;
-          xOffset = -xOffset;
-        }
-        this.eqn.setPosition(position.add(xOffset, yOffset));
+  //       const phi = clipAngle(labelAngle, '0to360');
+  //       const theta = clipAngle(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi))), '0to360');
+  //       const R = getR(a, b, theta);
+  //       let sigma = clipAngle(phi + theta - Math.PI, '-180to180');
+  //       if (sigma < 0) {
+  //         sigma += Math.PI;
+  //       }
+  //       let xOffset = R * Math.cos(sigma);
+  //       let yOffset = R * Math.sin(sigma);
+  //       if (offsetAngle < 0) {
+  //         yOffset = -yOffset;
+  //         xOffset = -xOffset;
+  //       }
+  //       this.eqn.setPosition(position.add(xOffset, yOffset));
 
-        if (this.eqn.parent != null && this.eqn.parent.parent != null && this.eqn.parent.parent._ell != null) {
-          // console.log(this.eqn.parent.parent)
-          const e = this.eqn.parent.parent._ell;
-            e.custom.update({
-              width: a * 2,
-              height: b * 2,
-            });
-        }
-      } else {
-        r = getRadiusOfRoundedRect(labelWidth, labelHeight, 0, labelAngle);
-        this.eqn.setPosition(position.add(polarToRect(r, offsetAngle)));
-      }
-    } else {
-      this.eqn.setPosition(position);
-    }
-    this.eqn.transform.updateRotation(labelAngle);
-    if (this.eqn.parent != null && this.eqn.parent.parent != null && this.eqn.parent.parent._ell != null) {
-      const e = this.eqn.parent.parent._ell;
-      e.setPosition(this.eqn.getPosition('diagram'));
-    }
-  }
+  //       if (this.eqn.parent != null && this.eqn.parent.parent != null && this.eqn.parent.parent._ell != null) {
+  //         // console.log(this.eqn.parent.parent)
+  //         const e = this.eqn.parent.parent._ell;
+  //           e.custom.update({
+  //             width: a * 2,
+  //             height: b * 2,
+  //           });
+  //       }
+  //     } else {
+  //       r = getRadiusOfRoundedRect(labelWidth, labelHeight, 0, labelAngle);
+  //       this.eqn.setPosition(position.add(polarToRect(r, offsetAngle)));
+  //     }
+  //   } else {
+  //     this.eqn.setPosition(position);
+  //   }
+  //   this.eqn.transform.updateRotation(labelAngle);
+  //   if (this.eqn.parent != null && this.eqn.parent.parent != null && this.eqn.parent.parent._ell != null) {
+  //     const e = this.eqn.parent.parent._ell;
+  //     e.setPosition(this.eqn.getPosition('diagram'));
+  //   }
+  // }
 
   // const label = {
   //   eqn,
