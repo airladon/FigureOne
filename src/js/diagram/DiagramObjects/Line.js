@@ -513,7 +513,11 @@ export default class AdvancedLine extends DiagramElementCollection {
   arrow1: ?{ height: number; };
   arrow2: ?{ height: number; };
 
+  /**
+   * {@link Line} object that represents the line.
+   */
   line: Line;
+
   width: number;
   localXPosition: number;
   maxLength: number;

@@ -1,338 +1,212 @@
-// import {
-//   DiagramElementPrimitive,
-//   DiagramElementCollection,
-//   // AnimationPhase,
-// } from '../Element';
-// import Diagram from '../Diagram';
 import {
-  Point, Rect,
+  Point, Transform, Rect,
 } from '../../tools/g2';
 import {
   round,
 } from '../../tools/math';
-// import webgl from '../../__mocks__/WebGLInstanceMock';
-// import DrawContext2D from '../../__mocks__/DrawContext2DMock';
-// import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
 import * as tools from '../../tools/tools';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('../Gesture');
-jest.mock('../webgl/webgl');
-jest.mock('../DrawContext2D');
-// jest.mock('../../tools/tools');
+// jest.mock('./recorder.worker');
 
-describe('Diagram', () => {
+describe('Advanced line tests', () => {
   let diagram;
-
+  let create;
+  let l;
   beforeEach(() => {
     diagram = makeDiagram();
-    // document.body.innerHTML =
-    //   '<div id="c">'
-    //   + '  <canvas class="figureone__gl" id="id_figureone__gl__low">'
-    //   + '  </canvas>'
-    //   + '  <canvas class="figureone__text" id="id_figureone__text__low">'
-    //   + '  </canvas>'
-    //   + '  <div class="figureone__html">'
-    //   + '  </div>'
-    //   + '  <canvas class="figureone__gl" id="id_figureone__gl__high">'
-    //   + '  </canvas>'
-    //   + '  <canvas class="figureone__text" id="id_figureone__text__high">'
-    //   + '  </canvas>'
-    //   + '</div>';
-    // // canvas = document.getElementById('c');
-    // const definition = {
-    //   width: 1000,
-    //   height: 500,
-    //   limits: new Rect(-1, -1, 2, 2),
-    // };
-
-    // const canvasMock = {
-    //   width: definition.width,
-    //   height: definition.height,
-    //   // offsetLeft: 100,
-    //   left: 100,
-    //   // offsetTop: 200,
-    //   top: 200,
-    //   // width: definition.width,
-    //   // height: definition.height,
-    //   offsetWidth: definition.width,
-    //   offsetHeight: definition.height,
-    //   scrollLeft: 0,
-    //   scrollTop: 0,
-    //   // eslint-disable-next-line arrow-body-style
-    //   getBoundingClientRect: () => {
-    //     return {
-    //       left: 100,
-    //       top: 200,
-    //       width: definition.width,
-    //       height: definition.height,
-    //     };
-    //   },
-    // };
-    // const htmlCanvasMock = {
-    //   style: {
-    //     fontsize: 1,
-    //   },
-    //   offsetWidth: 100,
-    // };
-    // const { limits } = definition;
-    // diagram = new Diagram('c', limits);
-    // diagram.webglLow = webgl;
-    // diagram.webglHigh = webgl;
-    // diagram.webgl = webgl;
-    // diagram.canvasLow = canvasMock;
-    // diagram.canvasHigh = canvasMock;
-    // diagram.htmlCanvas = htmlCanvasMock;
-    // diagram.isTouchDevice = false;
-    // diagram.draw2DLow = new DrawContext2D(definition.width, definition.height);
-    // diagram.draw2DHigh = new DrawContext2D(definition.width, definition.height);
-    // diagram.draw2D = diagram.draw2DLow;
-    // diagram.shapesLow = diagram.getShapes(false);
-    // diagram.shapesHigh = diagram.getShapes(true);
-    // diagram.shapes = diagram.shapesLow;
-    // diagram.equationLow = diagram.getEquations(false);
-    // diagram.equationHigh = diagram.getEquations(true);
-    // diagram.equation = diagram.equationLow;
-    // diagram.objectsLow = diagram.getObjects(false);
-    // diagram.objectsHigh = diagram.getObjects(true);
-    // diagram.objects = diagram.objectsLow;
-    // diagram.setSpaceTransforms();
-  });
-  test('Diagram instantiation', () => {
-    expect(diagram.limits).toEqual(new Rect(-1, -1, 2, 2));
-  });
-  describe('Vertex Origin', () => {
-    let position;
-    let length;
-    let angle;
-    let width;
-    let makeLine;
-    beforeEach(() => {
-      position = new Point(1, 1);
-      length = 2;
-      angle = 5;
-      width = 0.2;
-      makeLine = vertexOrigin => diagram.advanced.line({
-        position,
-        length,
-        angle,
-        width,
-        color: [1, 0, 0, 1],
-        align: vertexOrigin,
-        showLine: true,
-        largerTouchBorder: true,
+    const diagramOptions = {
+      simple: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+      },
+      diagonal: {
+        p1: [-1, -1],
+        p2: [1, 1],
+        width: 0.1,
+      },
+      alignStart: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        align: 'start',
+      },
+      alignEnd: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        align: 'end',
+      },
+      alignCenter: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        align: 'center',
+      },
+      align25: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        align: 0.25,
+      },
+      lengthAngle: {
+        p1: [0, 0],
+        length: 1,
+        angle: Math.PI / 2,
+        width: 0.1,
+      },
+      touchBorderBorder: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        touchBorder: 'border',
+      },
+      touchBorderNumber: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        touchBorder: 0.1,
+      },
+      touchBorderRect: {
+        p1: [0, 0],
+        p2: [1, 1],
+        width: 0.1,
+        touchBorder: 'rect',
+      },
+      touchBorderCustom: {
+        p1: [0, 0],
+        p2: [1, 1],
+        width: 0.1,
+        touchBorder: [[
+          [-1, -1],
+          [2, -1],
+          [2, 1],
+          [-1, 1],
+        ]],
+      },
+      arrow: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        arrow: {
+          head: 'triangle',
+          width: 0.2,
+          length: 0.2,
+        },
+        touchBorder: 'rect',
+      },
+    };
+    create = (option) => {
+      diagram.addElement({
+        name: 'l',
+        method: 'advanced.line',
+        options: diagramOptions[option],
       });
-    });
-    test.only('End', () => {
-      const line = makeLine('end');
-      expect(line._line.getBorder('local')).toEqual([
-        -1, -0.1,
-        -1, 0.1,
-        0, -0.1,
-        0, 0.1,
-      ]);
-    });
-    test('start', () => {
-      const line = makeLine('start');
-      expect(line._line.drawingObject.points).toEqual([
-        0, -0.1,
-        0, 0.1,
-        1, -0.1,
-        1, 0.1,
-      ]);
-    });
-    test('center', () => {
-      const line = makeLine('center');
-      expect(line._line.drawingObject.points).toEqual([
-        -0.5, -0.1,
-        -0.5, 0.1,
-        0.5, -0.1,
-        0.5, 0.1,
-      ]);
-    });
-    test('40%', () => {
-      const line = makeLine(0.4);
-      expect(line._line.drawingObject.points).toEqual([
-        -0.4, -0.1,
-        -0.4, 0.1,
-        0.6, -0.1,
-        0.6, 0.1,
-      ]);
-    });
-    test('Point', () => {
-      const line = makeLine(new Point(-1, 2));
-      expect(line._line.drawingObject.points).toEqual([
-        -1, 1.9,
-        -1, 2.1,
-        0, 1.9,
-        0, 2.1,
-      ]);
-    });
+      l = diagram.getElement('l');
+    };
   });
-  describe('Position, angle and length', () => {
-    let makeLine;
-    beforeEach(() => {
-      // const length = 2;
-      // const angle = 0;
-      const width = 0.2;
-      const vertexOrigin = 'start';
-      makeLine = (position, angle, length) => diagram.advanced.line({
-        position,
-        length,
-        angle,
-        width,
-        color: [1, 0, 0, 1],
-        vertexSpaceStart: vertexOrigin,
-        showLine: true,
-        largerTouchBorder: true,
-      });
-    });
-    test('(0, 0)', () => {
-      const line = makeLine(new Point(0, 0), 0, 2);
-      expect(line._line.drawingObject.points).toEqual([
-        0, -0.1,
-        0, 0.1,
-        1, -0.1,
-        1, 0.1,
-      ]);
-      expect(line.transform.t().isEqualTo(new Point(0, 0))).toBe(true);
-      expect(line.transform.r()).toBe(0);
-      expect(line.length === 2).toBe(true);
-    });
-    test('(1, 1)', () => {
-      const line = makeLine(new Point(1, 1), 1, 1);
-      expect(line.transform.t().isEqualTo(new Point(1, 1))).toBe(true);
-      expect(line.transform.r()).toBe(1);
-      expect(line.length === 1).toBe(true);
-    });
+  test('Simple', () => {
+    create('simple');
+    expect(l.getLength()).toBe(1);
+    expect(l.getAngle()).toBe(0);
+    expect(l.getP1()).toEqual(new Point(0, 0));
+    expect(l.getP2()).toEqual(new Point(1, 0));
   });
-  describe('Set End Points', () => {
-    let line;
-    let setEndPoints;
-    beforeEach(() => {
-      const position = new Point(0, 0);
-      const length = 2;
-      const angle = 0;
-      const width = 0.2;
-      // const vertexOrigin = 'start';
-      setEndPoints = (px, py, qx, qy, vertexOrigin, offset = 0) => {
-        line = diagram.advanced.line({
-          position,
-          length,
-          angle,
-          width,
-          color: [1, 0, 0, 1],
-          vertexSpaceStart: vertexOrigin,
-          showLine: true,
-          largerTouchBorder: true,
-        });
-        line.setEndPoints(new Point(px, py), new Point(qx, qy), offset);
-      };
-    });
-    test('0,0 -> 0,2', () => {
-      setEndPoints(0, 0, 2, 0, 'start');
-      expect(line._line.drawingObject.points).toEqual([
-        0, -0.1,
-        0, 0.1,
-        1, -0.1,
-        1, 0.1,
-      ]);
-      expect(line._line.transform.t().isEqualTo(new Point(0, 0))).toBe(true);
-      expect(line._line.transform.s().isEqualTo(new Point(2, 1))).toBe(true);
-      expect(line.transform.r()).toBe(0);
-      expect(line.transform.t().isEqualTo(new Point(0, 0))).toBe(true);
-      expect(line.p1.isEqualTo(new Point(0, 0))).toBe(true);
-      expect(line.p2.isEqualTo(new Point(2, 0))).toBe(true);
-      expect(line.length === 2).toBe(true);
-      expect(round(line.angle, 6)).toBe(0);
-      expect(line.width).toBe(0.2);
-      expect(line.position.isEqualTo(new Point(0, 0))).toBe(true);
-      // expect(line.vertexOrigin).toBe('start');
-    });
-    test('-1.5,-1.5 -> -1,-1', () => {
-      setEndPoints(-1.5, -1.5, -1, -1, 'start');
-      expect(line._line.drawingObject.points).toEqual([
-        0, -0.1,
-        0, 0.1,
-        1, -0.1,
-        1, 0.1,
-      ]);
-      expect(line._line.transform.t().isEqualTo(new Point(0, 0))).toBe(true);
-      expect(line._line.transform.s()
-        .isEqualTo(new Point(Math.sqrt(0.5), 1), 6)).toBe(true);
-      expect(round(line.transform.r(), 6)).toBe(round(Math.PI / 4, 6));
-      expect(line.transform.t().isEqualTo(new Point(-1.5, -1.5))).toBe(true);
-      expect(line.p1.isEqualTo(new Point(-1.5, -1.5))).toBe(true);
-      expect(line.p2.isEqualTo(new Point(-1, -1), 6)).toBe(true);
-      expect(round(line.length, 6)).toBe(round(Math.sqrt(0.5), 6));
-      expect(round(line.angle, 6)).toBe(round(Math.PI / 4, 6));
-      expect(line.width).toBe(0.2);
-      expect(line.position.isEqualTo(new Point(-1.5, -1.5))).toBe(true);
-      // expect(line.vertexOrigin).toBe('start');
-    });
-    test('1,1 -> 3,3 with vertexOrigin = center', () => {
-      setEndPoints(1, 1, 3, 3, 'center');
-      expect(line._line.drawingObject.points).toEqual([
-        -0.5, -0.1,
-        -0.5, 0.1,
-        0.5, -0.1,
-        0.5, 0.1,
-      ]);
-      expect(line._line.transform.t().isEqualTo(new Point(0, 0))).toBe(true);
-      expect(line._line.transform.s()
-        .isEqualTo(new Point(Math.sqrt(2) * 2, 1), 6)).toBe(true);
-      expect(round(line.transform.r(), 6)).toBe(round(Math.PI / 4, 6));
-      expect(line.transform.t().isEqualTo(new Point(2, 2))).toBe(true);
-      expect(line.p1.isEqualTo(new Point(1, 1), 6)).toBe(true);
-      expect(line.p2.isEqualTo(new Point(3, 3), 6)).toBe(true);
-      expect(round(line.length, 6)).toBe(round(Math.sqrt(2) * 2, 6));
-      expect(round(line.angle, 6)).toBe(round(Math.PI / 4, 6));
-      expect(line.position.isEqualTo(new Point(2, 2))).toBe(true);
-      // expect(line.vertexOrigin).toBe('center');
-    });
+  test('Diagonal', () => {
+    create('diagonal');
+    expect(round(l.getLength(), 3)).toBe(round(2 * Math.sqrt(2), 3));
+    expect(round(l.getAngle(), 3)).toBe(round(Math.PI / 4, 3));
+    expect(l.getP1()).toEqual(new Point(-1, -1));
+    expect(l.getP2()).toEqual(new Point(1, 1));
   });
-  describe('Arrows', () => {
-    let line;
-    let setEndPoints;
-    beforeEach(() => {
-      const position = new Point(0, 0);
-      const length = 1;
-      const angle = 0;
-      const width = 0.2;
-      // const vertexOrigin = 'start';
-      setEndPoints = (px, py, qx, qy, vertexOrigin, offset = 0) => {
-        line = diagram.advanced.line({
-          position,
-          length,
-          angle,
-          width,
-          color: [1, 0, 0, 1],
-          vertexSpaceStart: vertexOrigin,
-          showLine: true,
-          largerTouchBorder: true,
-        });
-        line.setEndPoints(new Point(px, py), new Point(qx, qy), offset);
-      };
-    });
-    test('0,0 -> 1,0 start', () => {
-      setEndPoints(0, 0, 1, 0, 'start');
-      line.addArrows(0.2, 0.2);
-      expect(line._line.transform.t().isEqualTo(new Point(0.2, 0), 6)).toBe(true);
-      expect(line._line.transform.s().isEqualTo(new Point(0.6, 1), 6)).toBe(true);
-    });
-    test('0,0 -> 1,0 center', () => {
-      setEndPoints(0, 0, 1, 0, 'center');
-      line.addArrows(0.2, 0.2);
-      expect(line._line.transform.t().isEqualTo(new Point(0, 0), 6)).toBe(true);
-      expect(line._line.transform.s().isEqualTo(new Point(0.6, 1), 6)).toBe(true);
-    });
-    test('0,0 -> 1,0 40%', () => {
-      setEndPoints(0, 0, 2, 0, 0.4);
-      line.addArrows(0.2, 0.2);
-      expect(line._line.transform.t().isEqualTo(new Point(0.04, 0), 6)).toBe(true);
-      expect(line._line.transform.s().isEqualTo(new Point(1.6, 1), 6)).toBe(true);
-    });
+  test('Align Start', () => {
+    create('alignStart');
+    l.setLength(2);
+    expect(l.getP1().round(3)).toEqual(new Point(0, 0).round(3));
+    expect(l.getP2().round(3)).toEqual(new Point(2, 0).round(3));
+  });
+  test('Align Center', () => {
+    create('alignCenter');
+    l.setLength(2);
+    expect(l.getP1().round(3)).toEqual(new Point(-0.5, 0).round(3));
+    expect(l.getP2().round(3)).toEqual(new Point(1.5, 0).round(3));
+  });
+  test('Align End', () => {
+    create('alignEnd');
+    l.setLength(2);
+    expect(l.getP1().round(3)).toEqual(new Point(-1, 0).round(3));
+    expect(l.getP2().round(3)).toEqual(new Point(1, 0).round(3));
+  });
+  test('Align 25%', () => {
+    create('align25');
+    l.setLength(2);
+    expect(l.getP1().round(3)).toEqual(new Point(-0.25, 0).round(3));
+    expect(l.getP2().round(3)).toEqual(new Point(1.75, 0).round(3));
+  });
+  test('Define Length and Angle', () => {
+    create('lengthAngle');
+    expect(l.getP1().round(3)).toEqual(new Point(0, 0).round(3));
+    expect(l.getP2().round(3)).toEqual(new Point(0, 1).round(3));
+  });
+  test('Touch border is border', () => {
+    create('touchBorderBorder');
+    const c = jest.fn();
+    l.onClick = c;
+    l.setTouchable();
+    expect(c.mock.calls.length).toBe(0);
+    diagram.mock.touchDown([0.01, 0]);
+    expect(c.mock.calls.length).toBe(1);
+    diagram.mock.touchDown([0.01, 0.049]);
+    expect(c.mock.calls.length).toBe(2);
+    diagram.mock.touchDown([0.01, 0.051]);
+    expect(c.mock.calls.length).toBe(2);
+    diagram.mock.touchDown([0.01, -0.049]);
+    expect(c.mock.calls.length).toBe(3);
+    diagram.mock.touchDown([0.01, -0.051]);
+    expect(c.mock.calls.length).toBe(3);
+    const border = l.getBorder('draw', 'touchBorder');
+    expect(round(border, 3)).toEqual([[
+      new Point(0, -0.05),
+      new Point(1, -0.05),
+      new Point(1, 0.05),
+      new Point(0, 0.05),
+    ]]);
+  });
+  test('Touch border is number', () => {
+    create('touchBorderNumber');
+    const border = l.getBorder('draw', 'touchBorder');
+    expect(round(border, 3)).toEqual([[
+      new Point(-0.1, -0.15),
+      new Point(1.1, -0.15),
+      new Point(1.1, 0.15),
+      new Point(-0.1, 0.15),
+    ]]);
+  });
+  test('Touch border is custom', () => {
+    create('touchBorderCustom');
+    const border = l.getBorder('draw', 'touchBorder');
+    expect(round(border, 3)).toEqual([[
+      new Point(-1, -1),
+      new Point(2, -1),
+      new Point(2, 1),
+      new Point(-1, 1),
+    ]]);
+  });
+  test('Arrow', () => {
+    create('arrow');
+    const border = l.getBorder('draw', 'touchBorder');
+    expect(round(border, 3)).toEqual([[
+      new Point(0, -0.1),
+      new Point(1, -0.1),
+      new Point(1, 0.1),
+      new Point(0, 0.1),
+    ]]);
+    expect(l._line.getScale().round(3)).toEqual(new Point(0.6, 1));
+    expect(l._line.getPosition().round(3)).toEqual(new Point(0.2, 0));
+    expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(l._arrow2.getPosition().round(3)).toEqual(new Point(1, 0));
   });
 });
