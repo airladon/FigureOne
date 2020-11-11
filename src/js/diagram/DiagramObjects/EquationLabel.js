@@ -331,14 +331,15 @@ export default class EquationLabel {
       );
     }
 
-    this.eqn.setPosition(position.add(positionOffset));
-    this.eqn.transform.updateRotation(labelAngle - parentAngleOffset);
+    let p;
+    let r;
+    p = position.add(positionOffset);
+    r = labelAngle - parentAngleOffset;
+    
     if (relativeToLine === false) {
-      console.log(lineAngle)
-      // const p = position.add(positionOffset).rotate(Math.PI * 2 - (labelAngle - parentAngleOffset), position);
-      const p = position.add(positionOffset).rotate(Math.PI * 2 - (labelAngle) - parentAngleOffset, position);
-      this.eqn.setPosition(p);
-      this.eqn.transform.updateRotation(labelAngle - parentAngleOffset + lineAngle);
+      p = p.rotate(-labelAngle, position);
+      r = labelAngle - parentAngleOffset + lineAngle;
+      // console.log(position)
       if (true) {
         const e = this.eqn.parent._debugEllipse;
         if (e != null) {
@@ -347,6 +348,8 @@ export default class EquationLabel {
         }
       }
     }
+    this.eqn.setPosition(p);
+    this.eqn.transform.updateRotation(r);
     // } else {
     //   this.eqn.transform.updateRotation(-parentAngleOffset);
     // }
@@ -396,7 +399,7 @@ export default class EquationLabel {
     const a = this.aOffset + w;
     const b = this.aOffset + h;
 
-    let phi = clipAngle(labelAngle + parentAngleOffset, '0to360');
+    const phi = clipAngle(labelAngle + parentAngleOffset, '0to360');
     let theta;
     let xOffset;
     let yOffset;

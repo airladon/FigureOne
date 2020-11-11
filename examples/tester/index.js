@@ -496,7 +496,7 @@ diagram.addElement({
     options: {
       p1: [0, 0],
       p2: [1, 0],
-      label: 'hello',
+      label: 'hello there',
       width: 0.01,
     },
   }],
