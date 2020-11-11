@@ -421,32 +421,42 @@ diagram.elements._c.setMovable();
 
 // Example showing dashed line with an equation label that stays horizontal
 const l = diagram.advanced.line({
-  p1: [-0.5, 0],
-  p2: [0.5, 0],
+  p1: [0, 0],
+  p2: [1, 0],
   align: 'start',
-  label: {
-    text: {
-      elements: {
-        d: 'dimension like this',
-        b: { symbol: 'box', lineWidth: 0.005, },
-      },
-      forms: {
-        // base: { box: ['d', 'b'] },
-        0: { box: [{ frac: ['t', 'vinculum', 'h'] }, 'b', false] },
-        1: { box: ['d', 'b'] },
-      },
-    },
-    // text: ['hello', 'there'],
-    // xAlign
-    offset: 0.1,
-    orientation: 'horizontal',          // keep label horizontal
-    location: 'start',                    // keep label on top of line
-  },
-  dash: [0.08, 0.02, 0.02, 0.02],
+  // label: {
+  //   text: {
+  //     elements: {
+  //       d: 'dimension like this',
+  //       b: { symbol: 'box', lineWidth: 0.005, },
+  //     },
+  //     forms: {
+  //       // base: { box: ['d', 'b'] },
+  //       0: { box: [{ frac: ['t', 'vinculum', 'h'] }, 'b', false] },
+  //       1: { box: ['d', 'b'] },
+  //     },
+  //   },
+  //   // text: ['hello', 'there'],
+  //   // xAlign
+  //   offset: 0.1,
+  //   orientation: 'horizontal',          // keep label horizontal
+  //   location: 'start',                    // keep label on top of line
+  // },
+  label: 'a',
+  dash: [0.1, 0.1],
+  arrow: 'barb',
+  maxLength: 2,
 });
 diagram.add('l', l);
-l.setMovable({ type: 'centerTranslateEndRotation'})
-l.setAutoUpdate();
+// l.setMovable({ type: 'centerTranslateEndRotation'})
+// l.setAutoUpdate();
+// l.animations.new()
+//   .pulseWidth({ duration: 2, delay: 1, label: 5, arrow: 2, })
+//   .start();
+l.setLength(2);
+console.log(l._arrow1.transform._dup())
+console.log(l.getBorder())
+// l.pulseWidth({ duration: 2, label: 2, line: 3, arrow: 4, })
 // l._label.showForm('1');
 // diagram.addElement({
 //   name: 'ell',

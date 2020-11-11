@@ -412,8 +412,9 @@ export type OBJ_GrowAnimationStep = {
  *
  * See {@link ADV_Line} for the options that can be used when creating the line.
  *
- * The object contains an additional animation step `length` that can be used
- * to animate changing the line length. The animation step is available in
+ * The object contains a two additional animation steps. `length`
+ * animates changing the line length, and `pulseWidth` animates the
+ * `pulseWidth` method. The animation steps are available in
  * the animation manager (`animations` property), and in the animation builder
  * (`animations.new()` and `animations.builder()`).
  *
@@ -698,7 +699,7 @@ export default class AdvancedLine extends DiagramElementCollection {
 
     const defaultLabelOptions = {
       text: null,
-      offset: 0,
+      offset: 0.00001,
       location: 'top',
       subLocation: 'left',
       orientation: 'horizontal',
@@ -709,7 +710,12 @@ export default class AdvancedLine extends DiagramElementCollection {
       update: false,
     };
     if (optionsToUse.label) {
-      const labelOptions = joinObjects({}, defaultLabelOptions, optionsToUse.label);
+      let labelOptions;
+      if (typeof optionsToUse.label === 'string' || optionsToUse.label === null) {
+        labelOptions = joinObjects({}, defaultLabelOptions, { text: optionsToUse.label });
+      } else {
+        labelOptions = joinObjects({}, defaultLabelOptions, optionsToUse.label);
+      }
       if (labelOptions.text === null) {
         labelOptions.text = '';
         this.showRealLength = true;
@@ -767,12 +773,31 @@ export default class AdvancedLine extends DiagramElementCollection {
       return new animation.CustomAnimationStep(o);
     };
 
-    this.animations.customSteps.push(
-      {
-        step: this.animations.length.bind(this),
-        name: 'length',
-      },
-    );
+    this.animations.pulseWidth = (...options) => {
+      const o = joinObjects({}, {
+        element: this,
+        duration: 1,
+      }, ...options);
+      o.callback = () => {
+        this.pulseWidth({
+          line: o.line,
+          label: o.label,
+          arrow: o.arrow,
+          duration: o.duration,
+          frequency: o.frequency,
+        });
+      };
+      return new animation.TriggerAnimationStep(o);
+    };
+
+    this.animations.customSteps.push({
+      step: this.animations.length.bind(this),
+      name: 'length',
+    });
+    this.animations.customSteps.push({
+      step: this.animations.pulseWidth.bind(this),
+      name: 'pulseWidth',
+    });
     // trigger(...options: Array<OBJ_TriggerAnimationStep>) {
     //   const optionsToUse = joinObjects({}, ...options);
     //   return new anim.TriggerAnimationStep(optionsToUse);
@@ -1401,6 +1426,7 @@ export default class AdvancedLine extends DiagramElementCollection {
     if (this.arrow2 && this._arrow2) {
       straightLineLength -= this.arrow2.height;
     }
+    straightLineLength = Math.max(straightLineLength, 0);
     const line = this._line;
     if (line) {
       line.transform.updateTranslation(xPosition + startOffset);

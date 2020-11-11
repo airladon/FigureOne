@@ -1,5 +1,5 @@
 import {
-  Point, Transform, Rect,
+  Point,
 } from '../../tools/g2';
 import {
   round,
@@ -16,6 +16,7 @@ describe('Advanced line tests', () => {
   let create;
   let l;
   beforeEach(() => {
+    jest.useFakeTimers();
     diagram = makeDiagram();
     const diagramOptions = {
       simple: {
@@ -142,6 +143,88 @@ describe('Advanced line tests', () => {
           orientation: 'upright',
           location: 'positive',
         },
+      },
+      labelTop: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        label: {
+          text: 'a',
+          offset: 0.1,
+          location: 'top',
+          subLocation: 'left',
+        },
+      },
+      labelBottom: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        label: {
+          text: 'a',
+          offset: 0.1,
+          location: 'bottom',
+          subLocation: 'left',
+        },
+      },
+      labelLeft: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        label: {
+          text: 'a',
+          offset: 0.1,
+          location: 'left',
+          subLocation: 'top',
+        },
+      },
+      labelRight: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        label: {
+          text: 'a',
+          offset: 0.1,
+          location: 'right',
+          subLocation: 'top',
+        },
+      },
+      labelPositive: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        label: {
+          text: 'a',
+          offset: 0.1,
+          location: 'positive',
+        },
+      },
+      labelNegative: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        label: {
+          text: 'a',
+          offset: 0.1,
+          location: 'negative',
+        },
+      },
+      everything: {
+        p1: [0, 0],
+        p2: [1, 0],
+        arrow: {
+          head: 'triangle',
+          length: 0.2,
+          width: 0.2,
+        },
+        label: 'a',
+        width: 0.1,
+      },
+      dash: {
+        p1: [0, 0],
+        p2: [1, 0],
+        width: 0.1,
+        dash: [0.1, 0.1],
+        maxLength: 2,
       },
     };
     create = (option) => {
@@ -284,5 +367,251 @@ describe('Advanced line tests', () => {
     expect(round(l._label.getRotation(), 3)).toBe(0);
     l.setEndPoints([0, 0], [-1, 0]);
     expect(round(l._label.getRotation(), 3)).toBe(3.142);
+  });
+  test('Label Top', () => {
+    create('labelTop');
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [1, 1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [0, 1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, 1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, -1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [0, -1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [1, -1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+  });
+  test('Label Bottom', () => {
+    create('labelBottom');
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [1, 1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [0, 1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, 1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, 0]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, -1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [0, -1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [1, -1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+  });
+  test('Label Left', () => {
+    create('labelLeft');
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [1, 1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [0, 1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, 1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, 0]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, -1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [0, -1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [1, -1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+  });
+  test('Label Right', () => {
+    create('labelRight');
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [1, 1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [0, 1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, 1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, 0]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, -1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [0, -1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [1, -1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+  });
+  test('Label Positive', () => {
+    create('labelPositive');
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [1, 1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [0, 1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, 1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, 0]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, -1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [0, -1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+    l.setEndPoints([0, 0], [1, -1]);
+    expect(l._label.getPosition().y > 0).toBe(true);
+  });
+  test('Label Negative', () => {
+    create('labelNegative');
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [1, 1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [0, 1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, 1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, 0]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [-1, -1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [0, -1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+    l.setEndPoints([0, 0], [1, -1]);
+    expect(l._label.getPosition().y < 0).toBe(true);
+  });
+  test('pulse', () => {
+    create('everything');
+    diagram.mock.timeStep(0);
+    l.pulseWidth({
+      duration: 2, label: 2, line: 3, arrow: 4, when: 'nextFrame',
+    });
+    diagram.mock.timeStep(0);
+    expect(l._arrow1.pulseTransforms[0].s().round(3).x).toBe(1);
+    expect(l._arrow2.pulseTransforms[0].s().round(3).x).toBe(1);
+    expect(l._label.pulseTransforms[0].s().round(3).x).toBe(1);
+    expect(l._line.pulseTransforms[0].s().round(3).y).toBe(1);
+    diagram.mock.timeStep(1);
+    expect(l._arrow1.pulseTransforms[0].s().round(3).x).toBe(4);
+    expect(l._arrow2.pulseTransforms[0].s().round(3).x).toBe(4);
+    expect(l._label.pulseTransforms[0].s().round(3).x).toBe(2);
+    expect(l._line.pulseTransforms[0].s().round(3).y).toBe(3);
+  });
+  test('pulse animation', () => {
+    create('everything');
+    diagram.mock.timeStep(0);
+    l.animations.new()
+      .pulseWidth({
+        duration: 2, label: 2, line: 3, arrow: 4,
+      })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(l._arrow1.pulseTransforms[0].s().round(3).x).toBe(1);
+    expect(l._arrow2.pulseTransforms[0].s().round(3).x).toBe(1);
+    expect(l._label.pulseTransforms[0].s().round(3).x).toBe(1);
+    expect(l._line.pulseTransforms[0].s().round(3).y).toBe(1);
+    diagram.mock.timeStep(1);
+    expect(l._arrow1.pulseTransforms[0].s().round(3).x).toBe(4);
+    expect(l._arrow2.pulseTransforms[0].s().round(3).x).toBe(4);
+    expect(l._label.pulseTransforms[0].s().round(3).x).toBe(2);
+    expect(l._line.pulseTransforms[0].s().round(3).y).toBe(3);
+  });
+  test('pulse animation step', () => {
+    create('everything');
+    diagram.mock.timeStep(0);
+    l.animations.new()
+      .then(l.animations.pulseWidth({
+        duration: 2, label: 2, line: 3, arrow: 4,
+      }))
+      .start();
+    diagram.mock.timeStep(0);
+    expect(l._arrow1.pulseTransforms[0].s().round(3).x).toBe(1);
+    expect(l._arrow2.pulseTransforms[0].s().round(3).x).toBe(1);
+    expect(l._label.pulseTransforms[0].s().round(3).x).toBe(1);
+    expect(l._line.pulseTransforms[0].s().round(3).y).toBe(1);
+    diagram.mock.timeStep(1);
+    expect(l._arrow1.pulseTransforms[0].s().round(3).x).toBe(4);
+    expect(l._arrow2.pulseTransforms[0].s().round(3).x).toBe(4);
+    expect(l._label.pulseTransforms[0].s().round(3).x).toBe(2);
+    expect(l._line.pulseTransforms[0].s().round(3).y).toBe(3);
+  });
+  test('length animation step', () => {
+    create('everything');
+    diagram.mock.timeStep(0);
+    l.animations.new()
+      .then(l.animations.length({
+        duration: 2, start: 0, target: 1,
+      }))
+      .start();
+    diagram.mock.timeStep(0);
+    expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(l._arrow2.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(l._line.getScale().round(3).x).toBe(0);
+    diagram.mock.timeStep(1);
+    expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(l._arrow2.getPosition().round(3)).toEqual(new Point(0.5, 0));
+    expect(l._line.getScale().round(3).x).toBe(0.1);
+  });
+  test('length animation', () => {
+    create('everything');
+    diagram.mock.timeStep(0);
+    l.animations.new()
+      .length({
+        duration: 2, start: 0, target: 1,
+      })
+      .start();
+    diagram.mock.timeStep(0);
+    expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(l._arrow2.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(l._line.getScale().round(3).x).toBe(0);
+    diagram.mock.timeStep(1);
+    expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(l._arrow2.getPosition().round(3)).toEqual(new Point(0.5, 0));
+    expect(l._line.getScale().round(3).x).toBe(0.1);
+  });
+  test('length grow', () => {
+    create('everything');
+    diagram.mock.timeStep(0);
+    l.grow({ duration: 2, start: 0, target: 1 });
+    diagram.mock.timeStep(0);
+    expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(l._arrow2.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(l._line.getScale().round(3).x).toBe(0);
+    diagram.mock.timeStep(1);
+    expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
+    expect(l._arrow2.getPosition().round(3)).toEqual(new Point(0.5, 0));
+    expect(l._line.getScale().round(3).x).toBe(0.1);
+  });
+  test('dash', () => {
+    create('dash');
+    let border = l._line.getBorder();
+    expect(round(border, 3)).toEqual([[
+      new Point(0, -0.05),
+      new Point(1, -0.05),
+      new Point(1, 0.05),
+      new Point(0, 0.05),
+    ]]);
+    expect(l._line.lengthToDraw).toBe(1);
+    l.setLength(2);
+    border = l._line.getBorder();
+    expect(round(border, 3)).toEqual([[
+      new Point(0, -0.05),
+      new Point(2, -0.05),
+      new Point(2, 0.05),
+      new Point(0, 0.05),
+    ]]);
+    expect(l._line.lengthToDraw).toBe(2);
+    l.setLength(3);
+    border = l._line.getBorder();
+    expect(round(border, 3)).toEqual([[
+      new Point(0, -0.05),
+      new Point(3, -0.05),
+      new Point(3, 0.05),
+      new Point(0, 0.05),
+    ]]);
+    expect(l._line.lengthToDraw).toBe(3);
+    l.setLength(0);
+    border = l._line.getBorder();
+    expect(round(border, 3)).toEqual([[
+      new Point(0, -0.05),
+      new Point(0, -0.05),
+      new Point(0, 0.05),
+      new Point(0, 0.05),
+    ]]);
+    expect(round(l._line.lengthToDraw, 3)).toBe(0);
   });
 });
