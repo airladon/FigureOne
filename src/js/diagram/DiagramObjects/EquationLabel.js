@@ -278,9 +278,12 @@ export default class EquationLabel {
       }
     }
 
-    if (orientation === 'horizontal') {
+    if (orientation === 'horizontal' && relativeToLine) {
       labelAngle = -lineAngle;
+    } else {
+      labelAngle = lineAngle;
     }
+
     if (orientation === 'baseToLine') {
       labelAngle = 0;
       if (offsetAngle < 0) {
@@ -299,7 +302,12 @@ export default class EquationLabel {
       }
     }
 
-    labelAngle -= parentAngleOffset;
+    // if (relativeToLine) {
+    //   labelAngle -= parentAngleOffset;
+    // } else {
+    //   labelAngle += parentAngleOffset;
+    // }
+    // console.log('asdf',parentAngleOffset)
 
     // half height and width of text
     let h = 0;
@@ -321,13 +329,15 @@ export default class EquationLabel {
     let positionOffset = new Point(0, 0);
     if (style === 'oval') {
       positionOffset = this.getOvalOffset(
-        labelAngle, h, w, offsetMag, offsetAngle, change, location, relativeToLine, position,
+        labelAngle, h, w, offsetMag, offsetAngle, change, location, relativeToLine, parentAngleOffset, position,
       );
     }
 
     this.eqn.setPosition(position.add(positionOffset));
     if (relativeToLine) {
-      this.eqn.transform.updateRotation(labelAngle);
+      this.eqn.transform.updateRotation(labelAngle - parentAngleOffset);
+    } else {
+      this.eqn.transform.updateRotation(-parentAngleOffset);
     }
   }
 
@@ -340,6 +350,7 @@ export default class EquationLabel {
     change: boolean,
     location: 'top' | 'bottom' | 'left' | 'right' | 'positive' | 'negative' | 'start' | 'end' | 'inside' | 'outside',
     relativeToLine: boolean,
+    parentAngleOffset: number,
     position: Point,
   ) {
     // eslint-disable-next-line max-len
@@ -374,7 +385,7 @@ export default class EquationLabel {
     const a = this.aOffset + w;
     const b = this.aOffset + h;
 
-    let phi = clipAngle(labelAngle, '0to360');
+    let phi = clipAngle(labelAngle + parentAngleOffset, '0to360');
     let theta;
     let xOffset;
     let yOffset;
@@ -414,7 +425,7 @@ export default class EquationLabel {
         // )
       }
     } else {
-      phi = clipAngle(-labelAngle, '0to360');
+      phi = clipAngle(labelAngle + parentAngleOffset, '0to360');
       theta = clipAngle(-(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi)))), '0to360');
       if (
         offsetAngle > 0 && phi < Math.PI
@@ -434,15 +445,16 @@ export default class EquationLabel {
       R = getR(a, b, theta);
       // xOffset = R;
       // yOffset = 0;
-      xOffset = -R * Math.cos(theta);
-      yOffset = -R * Math.sin(theta);
+      xOffset = R * Math.cos(theta);
+      yOffset = R * Math.sin(theta);
       // if (offsetAngle < 0) {
       //   yOffset = -yOffset;
       //   xOffset = -xOffset;
       // }
       console.log(
         round(phi * 180 / Math.PI, 0),
-        // round(theta * 180 / Math.PI, 0),
+        round(labelAngle * 180 / Math.PI, 0),
+        round(parentAngleOffset * 180 / Math.PI, 0),
         round(theta * 180 / Math.PI, 0),
         round(offsetAngle * 180 / Math.PI, 0),
         round(xOffset, 2), round(yOffset, 2)
@@ -471,7 +483,9 @@ export default class EquationLabel {
           });
           e.setPosition(position.add(xOffset, yOffset));
           if (relativeToLine) {
-            e.setRotation(labelAngle);
+            e.setRotation(labelAngle - parentAngleOffset);
+          } else {
+            e.setRotation(-parentAngleOffset);
           }
         }
       }

@@ -433,7 +433,21 @@ diagram.addElement({
     move: { type: 'rotation' }
   },
 });
+diagram.addElement({
+  name: 'l2',
+  method: 'line',
+  options: {
+    p1: [0, 0],
+    p2: [1, 0],
+    touchBorder: 0.5,
+    width: 0.1,
+  },
+  mods: {
+    move: { type: 'rotation' }
+  },
+});
 diagram.elements._l.setMovable();
+diagram.elements._l2.setMovable();
 const a = diagram.advanced.angle({
   p1: [1, 0],
   p2: [0, 0],
@@ -444,8 +458,10 @@ const a = diagram.advanced.angle({
     num: 3,
     step: 0.02,
   },
+  // direction: -1,
   label: {
-    text: 'dimension'
+    text: 'dimension',
+    location: 'outside',
   },
   // sides: {
   //   length: 1,
@@ -459,3 +475,32 @@ diagram.elements._l.subscriptions.add('setTransform', () => {
   a.setAngle({ angle: diagram.elements._l.getRotation() });
 });
 diagram.elements._l.setRotation(1);
+
+diagram.elements._l2.subscriptions.add('setTransform', () => {
+  const r = diagram.elements._l2.getRotation();
+  // console.log(r)
+  // console.log(diagram.elements._l2)
+  // a.setRotation(diagram.elements._l2.getRotation());
+  a.setRotation(r)
+  a.updateLabel(r);
+  diagram.elements._c.setRotation(r);
+  diagram.elements._c._line.updateLabel(r);
+});
+
+diagram.addElement({
+  name: 'c',
+  method: 'collection',
+  addElements: [{
+    name: 'line',
+    method: 'advanced.line',
+    options: {
+      p1: [0, 0],
+      p2: [1, 0],
+      label: 'hello',
+      width: 0.01,
+    },
+  }],
+  options: {
+    position: [-2, 0],
+  },
+});

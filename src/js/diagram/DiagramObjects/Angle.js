@@ -150,6 +150,8 @@ class AngleLabel extends EquationLabel {
   units: 'degrees' | 'radians';
   autoHide: ?number;
   autoHideMax: ?number;
+  location: 'left' | 'right' | 'top' | 'bottom' | 'outside' | 'inside' | 'positive' | 'negative';
+  subLocation: 'left' | 'right' | 'bottom' | 'top';
 
   constructor(
     equation: Object,
@@ -164,6 +166,8 @@ class AngleLabel extends EquationLabel {
     autoHide: ?number = null,
     autoHideMax: ?number = null,
     orientation: TypeAngleLabelOrientation = 'horizontal',
+    location: 'left' | 'right' | 'top' | 'bottom' | 'outside' | 'inside' | 'positive' | 'negative',
+    subLocation: 'left' | 'right' | 'top' | 'bottom',
     scale: number = 0.7,
   ) {
     super(equation, { label: labelText, color, scale });
@@ -176,6 +180,8 @@ class AngleLabel extends EquationLabel {
     this.precision = precision;
     this.autoHide = autoHide;
     this.autoHideMax = autoHideMax;
+    this.location = location;
+    this.subLocation = subLocation;
   }
 }
 
@@ -671,6 +677,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       autoHideMax: null,
       scale: 0.7,
       color: this.color,
+      location: 'outside',
     };
     if (this.curve) {
       defaultLabelOptions.radius = this.curve.radius;
@@ -694,6 +701,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
       optionsToUse.autoHide,
       optionsToUse.autoHideMax,
       optionsToUse.orientation,
+      optionsToUse.location,
+      optionsToUse.subLocation,
       optionsToUse.scale,
     );
     if (this.label != null) {
@@ -1132,20 +1141,36 @@ class DiagramObjectAngle extends DiagramElementCollection {
         const labelPosition = polarToRect(
           label.radius, clipAngle(this.angle, '0to360') * label.curvePosition,
         );
-        let { orientation } = label;
+        let { orientation, location } = label;
         if (orientation === 'tangent') {
           orientation = 'baseToLine';
         }
-        const lineAngle = clipAngle(clipAngle(this.angle, '0to360') * label.curvePosition + Math.PI / 2 + this.getRotation(), '0to360');
-        console.log(
-          roundNum(lineAngle * 180 / Math.PI, 0),
-          roundNum (clipAngle(this.angle * label.curvePosition + Math.PI / 2, '0to360') * 180 / Math.PI, 0),
-          this.getRotation())
+        if (location === 'outside') {
+          location = 'negative';
+          if (this.direction === -1) {
+            location = 'positive';
+          }
+        }
+        if (location === 'inside') {
+          location = 'positive';
+          if (this.direction === -1) {
+            location = 'negative';
+          }
+        }
+        let lineAngle = clipAngle(clipAngle(this.angle, '0to360') * label.curvePosition + Math.PI / 2, '0to360');
+        if (this.direction === -1) {
+          lineAngle = clipAngle(clipAngle(this.angle, '0to360') * label.curvePosition - Math.PI / 2, '0to360');
+        }
+        // console.log(
+        //   roundNum(lineAngle * 180 / Math.PI, 0),
+        //   roundNum (clipAngle(this.angle * label.curvePosition + Math.PI / 2, '0to360') * 180 / Math.PI, 0),
+        //   this.getRotation())
         // console.log(roundNum(lineAngle * 180 / Math.PI, 0))
         // console.log(rotationOffset)
+        // console.log(rotationOffset)
         label.updateRotation(
-          labelPosition, lineAngle, label.curveOffset, 'top', 'top', orientation,
-          rotationOffset == null ? 0 : rotationOffset,
+          labelPosition, lineAngle, label.curveOffset, location, label.subLocation, orientation,
+          this.lastLabelRotationOffset == null ? 0 : this.lastLabelRotationOffset,
           // -lineAngle,
           'oval', false,
         );
