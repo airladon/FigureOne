@@ -11,7 +11,6 @@ import DrawContext2D from '../DrawContext2D';
 // import EquationNavigator from './EquationNavigator';
 import AdvancedLine from './Line';
 import DiagramObjectAngle from './Angle';
-import DiagramObjectAnnotatedLine from './AnnotatedLine';
 // eslint-disable-next-line import/no-cycle
 import DiagramObjectPolyLine from './PolyLine';
 import type { ADV_Line } from './Line';
@@ -76,16 +75,6 @@ export default class DiagramObjects {
     return new DiagramObjectPolyLine(
       this.shapes, this.equation, this,
       this.isTouchDevice, this.animateNextFrame,
-      optionsToUse,
-    );
-  }
-
-  annotatedLine(...options: Array<ADV_Line>) {
-    // const optionsToUse = Object.assign({}, ...options);
-    // console.log(Object.assign({}, ...options))
-    const optionsToUse = joinObjects({}, ...options);
-    return new AdvancedLine(
-      this.shapes, this.equation, this.isTouchDevice, this.animateNextFrame,
       optionsToUse,
     );
   }

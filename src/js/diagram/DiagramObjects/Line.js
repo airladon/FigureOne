@@ -300,7 +300,7 @@ class LineLabel extends EquationLabel {
 
   constructor(
     equation: Object,
-    labelText: string | Equation | EQN_Equation,
+    labelText: string | Equation | EQN_Equation | Array<string>,
     color: Array<number>,
     offset: number,
     location: TypeLineLabelLocation = 'top',
@@ -377,7 +377,7 @@ function getLineFromOptions(options: {
  * @property {number} [end] line length to grow to (`current length`)
  * @extends OBJ_CustomAnimationStep
  */
-export type OBJ_GrowAnimationStep = {
+export type OBJ_LengthAnimationStep = {
   start?: number,
   target?: number,
 } & OBJ_CustomAnimationStep;
@@ -499,11 +499,13 @@ export type OBJ_GrowAnimationStep = {
  * l.setAutoUpdate();
  *
  */
+// $FlowFixMe
 export default class AdvancedLine extends DiagramElementCollection {
   // Diagram elements
   _line: ?DiagramElementPrimitive;
   _movePad: ?DiagramElementPrimitive;
   _rotPad: ?DiagramElementPrimitive;
+  _startPad: ?DiagramElementPrimitive;
   _arrow1: ?DiagramElementPrimitive;
   _arrow2: ?DiagramElementPrimitive;
   _label: null | {
@@ -569,7 +571,10 @@ export default class AdvancedLine extends DiagramElementCollection {
     oldTransformMethod: ?(string | ((number, ?Point) => Transform)),
   };
 
-  // animations: { grow: (...OBJ_GrowAnimationStep) => CustomAnimationStep } & AnimationManager;
+  animations: {
+    length: (OBJ_LengthAnimationStep) => animation.CustomAnimationStep,
+    pulseWidth: (OBJ_PulseWidth) => animation.TriggerAnimationStep,
+  } & animation.AnimationManager;
 
   /**
    * @hideconstructor
@@ -760,12 +765,12 @@ export default class AdvancedLine extends DiagramElementCollection {
       this.setProperties(optionsToUse.mods);
     }
 
-    this.animations.length = (...options) => {
+    this.animations.length = (...opt) => {
       const o = joinObjects({}, {
         element: this,
         start: 0,
         target: this.line.length(),
-      }, ...options);
+      }, ...opt);
       o.callback = (percentage) => {
         const l = (o.target - o.start) * percentage + o.start;
         this.setLength(l);
@@ -773,11 +778,11 @@ export default class AdvancedLine extends DiagramElementCollection {
       return new animation.CustomAnimationStep(o);
     };
 
-    this.animations.pulseWidth = (...options) => {
+    this.animations.pulseWidth = (...opt) => {
       const o = joinObjects({}, {
         element: this,
         duration: 1,
-      }, ...options);
+      }, ...opt);
       o.callback = () => {
         this.pulseWidth({
           line: o.line,
@@ -936,11 +941,13 @@ export default class AdvancedLine extends DiagramElementCollection {
         transform: new Transform().translate(position),
       },
     ));
+    // $FlowFixMe
     const arrowLength = getArrowLength(o)[1];
     let index = 1;
     if (lineEnd === 'end') {
       index = 2;
     }
+    // $FlowFixMe
     this[`arrow${index}`] = { height: arrowLength };
     this.add(`arrow${index}`, a);
   }
@@ -1098,11 +1105,11 @@ export default class AdvancedLine extends DiagramElementCollection {
    */
   updateMoveTransform(t: Transform = this.transform._dup()) {
     const r = t.r();
-    const { bounds } = this.move;
+    // const { bounds } = this.move;
     // console.log('qqwer')
     if (r != null) {
-      const w = Math.abs(this.line.length() / 2 * Math.cos(r));
-      const h = Math.abs(this.line.length() / 2 * Math.sin(r));
+      // const w = Math.abs(this.line.length() / 2 * Math.cos(r));
+      // const h = Math.abs(this.line.length() / 2 * Math.sin(r));
       // if (bounds instanceof TransformBounds) {
       //   bounds.updateTranslation(new RectBounds({
       //     left: bounds.left + w,
@@ -1121,7 +1128,7 @@ export default class AdvancedLine extends DiagramElementCollection {
   }
 
   addLabel(
-    labelText: string | Equation | EQN_Equation | null,
+    labelText: string | Equation | EQN_Equation | Array<string>,
     offset: number,
     location: TypeLineLabelLocation = 'top',
     subLocation: TypeLineLabelSubLocation = 'left',
@@ -1395,7 +1402,8 @@ export default class AdvancedLine extends DiagramElementCollection {
 
   setupLine() {
     const set = (key, x) => {
-      if (this[`_${key}`] != null) {
+      // $FlowFixMe
+      if (this[`_${key}`] != null) {  // $FlowFixMe
         this[`_${key}`].transform.updateTranslation(x);
       }
     };
@@ -1564,7 +1572,7 @@ export default class AdvancedLine extends DiagramElementCollection {
   /**
    * Create a new animation that executes a single grow animation step.
    */
-  grow(options: OBJ_GrowAnimationStep) {
+  grow(options: OBJ_LengthAnimationStep) {
     this.animations.new()
       .then(this.animations.length(options))
       .start();
