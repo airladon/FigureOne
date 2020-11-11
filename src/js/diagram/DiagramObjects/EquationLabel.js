@@ -374,7 +374,7 @@ export default class EquationLabel {
     const a = this.aOffset + w;
     const b = this.aOffset + h;
 
-    const phi = clipAngle(labelAngle, '0to360');
+    let phi = clipAngle(labelAngle, '0to360');
     let theta;
     let xOffset;
     let yOffset;
@@ -414,21 +414,35 @@ export default class EquationLabel {
         // )
       }
     } else {
-      theta = clipAngle(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi))), '0to360');
+      phi = clipAngle(-labelAngle, '0to360');
+      theta = clipAngle(-(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi)))), '0to360');
+      if (
+        offsetAngle > 0 && phi < Math.PI
+      ) {
+        theta += Math.PI;
+      }
       // R = getR(a, b, theta);
       // xOffset = R * Math.cos(phi);
       // yOffset = R * Math.sin(phi);
       // theta = Math.PI - phi - Math.PI / 2;
-      console.log(
-        round(labelAngle * 180 / Math.PI, 0),
-        // round(theta * 180 / Math.PI, 0),
-        round(theta * 180 / Math.PI, 0),
-      );
+      
       R = getR(a, b, theta);
       // xOffset = R;
       // yOffset = 0;
-      xOffset = R * Math.cos(theta);
-      yOffset = R * Math.sin(theta);
+      xOffset = -R * Math.cos(theta);
+      yOffset = -R * Math.sin(theta);
+      if (offsetAngle < 0) {
+        yOffset = -yOffset;
+        xOffset = -xOffset;
+      }
+      console.log(
+        round(phi * 180 / Math.PI, 0),
+        // round(theta * 180 / Math.PI, 0),
+        round(theta * 180 / Math.PI, 0),
+        round(offsetAngle * 180 / Math.PI, 0),
+        round(xOffset, 2), round(yOffset, 2)
+
+      );
     }
 
     // DEBUG ONLY

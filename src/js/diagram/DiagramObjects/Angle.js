@@ -846,14 +846,14 @@ class DiagramObjectAngle extends DiagramElementCollection {
                 const numSides = Math.floor(roundNum(primaryCurveAngle / sideAngle));
                 delta = primaryCurveAngle - numSides * sideAngle;
               }
-              element.angleToDraw = primaryCurveAngle;
+              element.angleToDraw = clipAngle(primaryCurveAngle, '0to360');
               element.transform.updateRotation(rotation + delta / 2);
             } else {
               let delta = 0;
               if (this.curve) {
                 delta = angle % (2 * Math.PI / this.curve.sides);
               }
-              element.angleToDraw = angle;
+              element.angleToDraw = clipAngle(angle, '0to360');
               element.transform.updateRotation(delta / 2);
             }
           } else {
@@ -1130,17 +1130,21 @@ class DiagramObjectAngle extends DiagramElementCollection {
           // label.eqn.reArrangeCurrentForm();
         }
         const labelPosition = polarToRect(
-          label.radius, this.angle * label.curvePosition,
+          label.radius, clipAngle(this.angle, '0to360') * label.curvePosition,
         );
         let { orientation } = label;
         if (orientation === 'tangent') {
           orientation = 'baseToLine';
         }
-        const lineAngle = clipAngle(this.angle * label.curvePosition - Math.PI / 2 + this.getRotation(), '0to360');
+        const lineAngle = clipAngle(clipAngle(this.angle, '0to360') * label.curvePosition + Math.PI / 2 + this.getRotation(), '0to360');
+        console.log(
+          roundNum(lineAngle * 180 / Math.PI, 0),
+          roundNum (clipAngle(this.angle * label.curvePosition + Math.PI / 2, '0to360') * 180 / Math.PI, 0),
+          this.getRotation())
         // console.log(roundNum(lineAngle * 180 / Math.PI, 0))
         // console.log(rotationOffset)
         label.updateRotation(
-          labelPosition, lineAngle, label.curveOffset, 'positive', 'top', orientation,
+          labelPosition, lineAngle, label.curveOffset, 'negative', 'top', orientation,
           rotationOffset == null ? 0 : rotationOffset,
           // -lineAngle,
           'oval', false,
