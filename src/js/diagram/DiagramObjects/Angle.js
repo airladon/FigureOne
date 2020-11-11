@@ -315,7 +315,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       rotation: 0,
       angle: 1,
       // radius: 0.1,
-      color: [0, 1, 0, 1],
+      color: shapes.defaultColor,
       // clockwise: false,
       direction: 1,
       autoRightAngle: false,
@@ -593,7 +593,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     const { corner, _corner } = this;
     if (corner != null && _corner != null) {
       const points = this.getCornerPoints(corner.length);
-      _corner.custom.updatePoints(points);
+      _corner.custom.updatePoints({ points });
     }
     if (options.rotationOffset != null) {
       this.update(options.rotationOffset);
@@ -1130,24 +1130,37 @@ class DiagramObjectAngle extends DiagramElementCollection {
           // label.eqn.reArrangeCurrentForm();
         }
         const labelPosition = polarToRect(
-          label.radius, this.angle * label.curvePosition + label.curveOffset,
+          label.radius, this.angle * label.curvePosition,
         );
-        if (label.orientation === 'horizontal') {
-          label.updateRotation(
-            -this.getRotation() - this.lastLabelRotationOffset,
-            labelPosition,
-            label.radius / 5,
-            this.angle * label.curvePosition + label.curveOffset,
-          );
+        let { orientation } = label;
+        if (orientation === 'tangent') {
+          orientation = 'baseToLine';
         }
-        if (label.orientation === 'tangent') {
-          label.updateRotation(
-            this.angle * label.curvePosition + label.curveOffset - Math.PI / 2,
-            labelPosition,
-            label.radius / 50,
-            this.angle * label.curvePosition + label.curveOffset,
-          );
-        }
+        const lineAngle = clipAngle(this.angle * label.curvePosition - Math.PI / 2 + this.getRotation(), '0to360');
+        // console.log(roundNum(lineAngle * 180 / Math.PI, 0))
+        // console.log(rotationOffset)
+        label.updateRotation(
+          labelPosition, lineAngle, label.curveOffset, 'positive', 'top', orientation,
+          rotationOffset == null ? 0 : rotationOffset,
+          // -lineAngle,
+          'oval', false,
+        );
+        // if (label.orientation === 'horizontal') {
+        //   label.updateRotation(
+        //     -this.getRotation() - this.lastLabelRotationOffset,
+        //     labelPosition,
+        //     label.radius / 5,
+        //     this.angle * label.curvePosition + label.curveOffset,
+        //   );
+        // }
+        // if (label.orientation === 'tangent') {
+        //   label.updateRotation(
+        //     this.angle * label.curvePosition + label.curveOffset - Math.PI / 2,
+        //     labelPosition,
+        //     label.radius / 50,
+        //     this.angle * label.curvePosition + label.curveOffset,
+        //   );
+        // }
       }
     }
   }

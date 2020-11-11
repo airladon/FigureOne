@@ -3662,9 +3662,9 @@
               
                 
                 <li><a
-                  href='#obj_growanimationstep'
+                  href='#obj_lengthanimationstep'
                   class="">
-                  OBJ_GrowAnimationStep
+                  OBJ_LengthAnimationStep
                   
                 </a>
                 
@@ -17245,8 +17245,9 @@ diagram.addElement({
 arrows, a label annotation that can self align with line orientation, and
 some methods to make it convient to use dynamically.</p>
 <p>See <a href="#adv_line">ADV_Line</a> for the options that can be used when creating the line.</p>
-<p>The object contains an additional animation step <code>length</code> that can be used
-to animate changing the line length. The animation step is available in
+<p>The object contains a two additional animation steps. <code>length</code>
+animates changing the line length, and <code>pulseWidth</code> animates the
+<code>pulseWidth</code> method. The animation steps are available in
 the animation manager (<code>animations</code> property), and in the animation builder
 (<code>animations.new()</code> and <code>animations.builder()</code>).</p>
 <p>Some of the useful methods included in an advanced line are:</p>
@@ -18153,7 +18154,7 @@ it will rotate toward with positive rotation.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_growanimationstep">OBJ_GrowAnimationStep</a>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_lengthanimationstep">OBJ_LengthAnimationStep</a>)</code>
 	    
           </div>
           
@@ -45974,8 +45975,8 @@ line's label in the touch boundary for
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_growanimationstep'>
-      OBJ_GrowAnimationStep
+    <h3 class='fl m0' id='obj_lengthanimationstep'>
+      OBJ_LengthAnimationStep
     </h3>
     
     

@@ -1,4 +1,4 @@
-const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6]});
+const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [0, 0, 1, 1]});
 
 diagram.addElements([
   {
@@ -420,95 +420,42 @@ diagram.elements._c.setMovable();
 //   .start();
 
 // Example showing dashed line with an equation label that stays horizontal
-const l = diagram.advanced.line({
-  p1: [0, 0],
-  p2: [1, 0],
-  align: 'start',
-  // label: {
-  //   text: {
-  //     elements: {
-  //       d: 'dimension like this',
-  //       b: { symbol: 'box', lineWidth: 0.005, },
-  //     },
-  //     forms: {
-  //       // base: { box: ['d', 'b'] },
-  //       0: { box: [{ frac: ['t', 'vinculum', 'h'] }, 'b', false] },
-  //       1: { box: ['d', 'b'] },
-  //     },
-  //   },
-  //   // text: ['hello', 'there'],
-  //   // xAlign
-  //   offset: 0.1,
-  //   orientation: 'horizontal',          // keep label horizontal
-  //   location: 'start',                    // keep label on top of line
-  // },
-  label: 'a',
-  dash: [0.1, 0.1],
-  arrow: 'barb',
-  maxLength: 2,
+diagram.addElement({
+  name: 'l',
+  method: 'line',
+  options: {
+    p1: [0, 0],
+    p2: [1, 0],
+    touchBorder: 0.5,
+    width: 0.1,
+  },
+  mods: {
+    move: { type: 'rotation' }
+  },
 });
-diagram.add('l', l);
-// l.setMovable({ type: 'centerTranslateEndRotation'})
-// l.setAutoUpdate();
-// l.animations.new()
-//   .pulseWidth({ duration: 2, delay: 1, label: 5, arrow: 2, })
-//   .start();
-l.setLength(2);
-console.log(l._arrow1.transform._dup())
-console.log(l.getBorder())
-// l.pulseWidth({ duration: 2, label: 2, line: 3, arrow: 4, })
-// l._label.showForm('1');
-// diagram.addElement({
-//   name: 'ell',
-//   method: 'ellipse',
-//   options: {
-//     width: 1,
-//     height: 0.5,
-//     // line: { width: 0.01 },
-//     color: [0, 0, 1, 0.6],
-//     sides: 50,
-//   },
-// });
+diagram.elements._l.setMovable();
+const a = diagram.advanced.angle({
+  p1: [1, 0],
+  p2: [0, 0],
+  p3: [1, 0],
+  curve: {
+    width: 0.01,
+    radius: 0.5,
+    num: 3,
+    step: 0.02,
+  },
+  label: {
+    text: 'dimension'
+  },
+  // sides: {
+  //   length: 1,
+  //   width: 0.1,
+  // },
+  corner: { style: 'fill', length: 1, width: 0.1 },
+});
+diagram.add('a', a);
 
-l.updateLabel();
-// diagram.addElement({
-//   name: 'b',
-//   method: 'polygon',
-//   options: {
-    
-//   }
-// })
-
-// const e = diagram.elements._ell;
-// l._label.subscriptions.add('setTransform', () => {
-//   e.setPosition(l._label.getPosition('diagram'))
-//   r = l._label.getBoundingRect('diagram');
-//   e.custom.update({
-//     width: r.width,
-//     height: r.height,
-//   });
-// })
-// l.animations.new()
-//   .delay(2)
-//   .rotation
-//   .start();
-
-// setTimeout(() => {
-//   diagram.elements._line2.grow(0.5, 5);
-// }, 1000);
-
-// const line = diagram.elements._line2;
-// // line.animations.new()
-// //   .then(line.animations.grow({ from: 0, target: 2, duration: 1, delay: 1 }))
-// //   .start();
-// // console.log(line.animations)
-// line.animations.new()
-//   .pulse({ duration: 1 })
-//   .length({ start: 2, target: 0.5, duration: 5 })
-//   .start();
-// // line.grow({
-// //   start: 0,
-// //   target: 2,
-// //   duration: 5,
-// // });
-
+diagram.elements._l.subscriptions.add('setTransform', () => {
+  a.setAngle({ angle: diagram.elements._l.getRotation() });
+});
+diagram.elements._l.setRotation(1);

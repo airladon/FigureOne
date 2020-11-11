@@ -1393,7 +1393,7 @@ export type OBJ_TextDefinition = {
  *       xAlign: 'center',
  *       yAlign: 'middle',
  *       font: { size: 0.3 },
- *       color: [1, 0, 0, 1],
+ *       color: this.defaultColor,
  *     },
  *   },
  * );
@@ -1509,7 +1509,7 @@ export type OBJ_TextLineDefinition = {
  *         style: 'normal',
  *         size: 0.2,
  *       },
- *       color: [1, 0, 0, 1],
+ *       color: this.defaultColor,
  *     },
  *   },
  * );
@@ -1662,7 +1662,7 @@ export type OBJ_TextModifiersDefinition = {
  *         size: 0.2,
  *       },
  *       justify: 'center',
- *       color: [1, 0, 0, 1],
+ *       color: this.defaultColor,
  *     },
  *   },
  * );
@@ -1902,6 +1902,7 @@ export default class DiagramPrimitives {
   spaceTransforms: TypeSpaceTransforms;
   animateNextFrame: Function;
   draw2DFigures: Object;
+  defaultColor: Array<number>;
 
   /**
     * This is a big big test
@@ -1915,6 +1916,7 @@ export default class DiagramPrimitives {
     limits: Rect,
     spaceTransforms: TypeSpaceTransforms,
     animateNextFrame: Function,
+    defaultColor: Array<number>,
   ) {
     if (Array.isArray(webgl)) {
       this.webgl = webgl;
@@ -1934,6 +1936,7 @@ export default class DiagramPrimitives {
     this.limits = limits;
     this.animateNextFrame = animateNextFrame;
     this.spaceTransforms = spaceTransforms;
+    this.defaultColor = defaultColor;
     // this.draw2DFigures = draw2DFigures;
   }
 
@@ -1949,7 +1952,7 @@ export default class DiagramPrimitives {
       touchBorder: 'border',
       holeBorder: 'none',
       drawType: 'triangles',
-      color: [1, 0, 0, 1],
+      color: this.defaultColor,
       position: null,
       transform: new Transform('generic').standard(),
       texture: {
@@ -2021,7 +2024,7 @@ export default class DiagramPrimitives {
   polyline(...optionsIn: Array<OBJ_Polyline>) {
     const defaultOptions = {
       width: 0.01,
-      color: [1, 0, 0, 1],
+      color: this.defaultColor,
       close: false,
       widthIs: 'mid',
       cornerStyle: 'auto',
@@ -2747,7 +2750,7 @@ export default class DiagramPrimitives {
   }>) {
     const defaultOptions = {
       points: [],
-      color: [1, 0, 0, 1],
+      color: this.defaultColor,
       transform: new Transform('fan').standard(),
       position: null,
     };
@@ -2929,7 +2932,7 @@ export default class DiagramPrimitives {
       legWidth: 0,
       height: 0.5,
       legHeight: 0,
-      color: [1, 0, 0, 1],
+      color: this.defaultColor,
       transform: new Transform('arrow').standard(),
       tip: new Point(0, 0),
       rotation: 0,
@@ -3181,7 +3184,7 @@ export default class DiagramPrimitives {
       yAlign: 'middle',
       xAlign: 'left',
       src: '',
-      // color: [1, 0, 0, 1],
+      // color: this.defaultColor,
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
     const image = document.createElement('img');
@@ -3222,7 +3225,7 @@ export default class DiagramPrimitives {
       position: new Point(0, 0),
       yAlign: 'middle',
       xAlign: 'left',
-      // color: [1, 0, 0, 1],
+      // color: this.defaultColor,
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
     const inside = document.createElement('div');
@@ -3257,7 +3260,7 @@ export default class DiagramPrimitives {
   //     xOffset: 0,
   //     yOffset: 0,
   //     numLinesThick: 1,
-  //     color: [1, 0, 0, 1],
+  //     color: this.defaultColor,
   //     position: null,
   //     transform: new Transform('grid').standard(),
   //   };
@@ -3362,7 +3365,7 @@ export default class DiagramPrimitives {
         sides: 1,
       },
       fill: false,
-      color: [1, 0, 0, 1],
+      color: this.defaultColor,
       transform: new Transform('rectangle').scale(1, 1).rotate(0).translate(0, 0),
       position: null,
     };
@@ -3407,7 +3410,7 @@ export default class DiagramPrimitives {
       height: 1,
       fill: false,
       lineWidth: 0.01,
-      color: [1, 0, 0, 1],
+      color: this.defaultColor,
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       position: null,
     };
@@ -3516,7 +3519,7 @@ export default class DiagramPrimitives {
     },
   ) {
     const defaultOptions = {
-      color: [1, 1, 0, 0.5],
+      color: this.defaultColor,
       width: 0.01,
       radius: 0.05,
     };
@@ -3703,7 +3706,7 @@ export default class DiagramPrimitives {
       stepY: 0.1,
       fontSize: 0.13,
       showGrid: true,
-      color: [1, 1, 1, 0],
+      color: this.defaultColor,
       location: new Transform(),
       decimalPlaces: 1,
       lineWidth: 0.01,
@@ -3871,7 +3874,7 @@ export default class DiagramPrimitives {
       angle: Math.PI / 4,
       step: 0.04,
       rotation: 0,
-      color: [1, 0, 0, 1],
+      color: this.defaultColor,
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       position: null,
     };
@@ -3937,7 +3940,7 @@ export default class DiagramPrimitives {
       angle: Math.PI / 2,
       step: 0.04,
       rotation: 0,
-      color: [1, 0, 0, 1],
+      color: this.defaultColor,
       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
       position: null,
     };

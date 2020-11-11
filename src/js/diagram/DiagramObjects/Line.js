@@ -590,7 +590,7 @@ export default class AdvancedLine extends DiagramElementCollection {
       // position: new Point(0, 0),
       width: 0.01,
       align: 'start',
-      color: [1, 0, 0, 1],
+      color: shapes.defaultColor,
       dash: [],
       mods: {},
       pulseWidth: {
@@ -1256,7 +1256,7 @@ export default class AdvancedLine extends DiagramElementCollection {
     label.updateRotation(
       labelPosition, lineAngle, label.offset,
       label.location, label.subLocation, label.orientation,
-      parentRotationOffset, 'oval',
+      parentRotationOffset, 'oval', true,
     );
   }
 

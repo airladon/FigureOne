@@ -245,6 +245,7 @@ class Diagram {
   oldWidth: number;
 
   drawAnimationFrames: number;
+  defaultColor: Array<number>;
 
   animationFinishedCallback: ?(string | (() => void));
   // updateFontSize: string;
@@ -272,6 +273,7 @@ class Diagram {
       htmlId: 'figureOneContainer',
       limits: new Rect(-1, -1, 2, 2),
       fontScale: 1,
+      color: [0, 0, 0, 1],
     };
     this.fnMap = new FunctionMap();
     this.isPaused = false;
@@ -283,6 +285,7 @@ class Diagram {
     const {
       htmlId, limits,
     } = optionsToUse;
+    this.defaultColor = optionsToUse.color;
     this.htmlId = htmlId;
     this.animationFinishedCallback = null;
     // this.layout = layout;
@@ -1092,6 +1095,7 @@ class Diagram {
       this.limits,
       this.spaceTransforms,
       this.animateNextFrame.bind(this, true, 'getShapes'),
+      this.defaultColor,
     );
   }
 

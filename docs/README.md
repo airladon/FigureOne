@@ -431,7 +431,7 @@
 -   [TypeLineLabelOptions][881]
 -   [OBJ_PulseWidth][883]
 -   [OBJ_MovableLine][885]
--   [OBJ_GrowAnimationStep][887]
+-   [OBJ_LengthAnimationStep][887]
 -   [EquationLabel][889]
 
 ## Introduction
@@ -3733,8 +3733,9 @@ some methods to make it convient to use dynamically.
 
 See [ADV_Line][332] for the options that can be used when creating the line.
 
-The object contains an additional animation step `length` that can be used
-to animate changing the line length. The animation step is available in
+The object contains a two additional animation steps. `length`
+animates changing the line length, and `pulseWidth` animates the
+`pulseWidth` method. The animation steps are available in
 the animation manager (`animations` property), and in the animation builder
 (`animations.new()` and `animations.builder()`).
 
@@ -3930,7 +3931,7 @@ Create a new animation that executes a single grow animation step.
 
 #### Parameters
 
--   `options` **[OBJ_GrowAnimationStep][942]** 
+-   `options` **[OBJ_LengthAnimationStep][942]** 
 
 ### getP1
 
@@ -12731,7 +12732,7 @@ and rotate it otherwise.
     line's label in the touch boundary for `'centerTranslateEndRotation'`
     ('false\`)
 
-## OBJ_GrowAnimationStep
+## OBJ_LengthAnimationStep
 
 **Extends OBJ_CustomAnimationStep**
 
@@ -14525,7 +14526,7 @@ Equation label
 
 [886]: #properties-108
 
-[887]: #obj_growanimationstep
+[887]: #obj_lengthanimationstep
 
 [888]: #properties-109
 
@@ -14635,7 +14636,7 @@ Equation label
 
 [941]: #obj_movableline
 
-[942]: #obj_growanimationstep
+[942]: #obj_lengthanimationstep
 
 [943]: #typelinelabeloptions
 
