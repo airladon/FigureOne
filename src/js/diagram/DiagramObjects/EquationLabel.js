@@ -278,10 +278,8 @@ export default class EquationLabel {
       }
     }
 
-    if (orientation === 'horizontal' && relativeToLine) {
+    if (orientation === 'horizontal') {
       labelAngle = -lineAngle;
-    } else {
-      labelAngle = lineAngle;
     }
 
     if (orientation === 'baseToLine') {
@@ -303,7 +301,7 @@ export default class EquationLabel {
     }
 
     // if (relativeToLine) {
-    //   labelAngle -= parentAngleOffset;
+    // labelAngle -= parentAngleOffset;
     // } else {
     //   labelAngle += parentAngleOffset;
     // }
@@ -334,11 +332,24 @@ export default class EquationLabel {
     }
 
     this.eqn.setPosition(position.add(positionOffset));
-    if (relativeToLine) {
-      this.eqn.transform.updateRotation(labelAngle - parentAngleOffset);
-    } else {
-      this.eqn.transform.updateRotation(-parentAngleOffset);
+    this.eqn.transform.updateRotation(labelAngle - parentAngleOffset);
+    if (relativeToLine === false) {
+      console.log(lineAngle)
+      // const p = position.add(positionOffset).rotate(Math.PI * 2 - (labelAngle - parentAngleOffset), position);
+      const p = position.add(positionOffset).rotate(Math.PI * 2 - (labelAngle) - parentAngleOffset, position);
+      this.eqn.setPosition(p);
+      this.eqn.transform.updateRotation(labelAngle - parentAngleOffset + lineAngle);
+      if (true) {
+        const e = this.eqn.parent._debugEllipse;
+        if (e != null) {
+          e.setPosition(p);
+          e.setRotation(labelAngle - parentAngleOffset + lineAngle);
+        }
+      }
     }
+    // } else {
+    //   this.eqn.transform.updateRotation(-parentAngleOffset);
+    // }
   }
 
   getOvalOffset(
@@ -390,7 +401,7 @@ export default class EquationLabel {
     let xOffset;
     let yOffset;
     let R;
-    if (relativeToLine) {
+    if (true) {
       if (location === 'start') {
         theta = Math.PI * 2 - phi;
         R = getR(a, b, theta);
@@ -424,43 +435,44 @@ export default class EquationLabel {
         //   round(R, 3),
         // )
       }
-    } else {
-      phi = clipAngle(labelAngle + parentAngleOffset, '0to360');
-      theta = clipAngle(-(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi)))), '0to360');
-      if (
-        offsetAngle > 0 && phi < Math.PI
-      ) {
-        theta += Math.PI;
-      }
-      if (
-        offsetAngle < 0 && phi > Math.PI
-      ) {
-        theta += Math.PI;
-      }
-      // R = getR(a, b, theta);
-      // xOffset = R * Math.cos(phi);
-      // yOffset = R * Math.sin(phi);
-      // theta = Math.PI - phi - Math.PI / 2;
-      
-      R = getR(a, b, theta);
-      // xOffset = R;
-      // yOffset = 0;
-      xOffset = R * Math.cos(theta);
-      yOffset = R * Math.sin(theta);
-      // if (offsetAngle < 0) {
-      //   yOffset = -yOffset;
-      //   xOffset = -xOffset;
-      // }
-      console.log(
-        round(phi * 180 / Math.PI, 0),
-        round(labelAngle * 180 / Math.PI, 0),
-        round(parentAngleOffset * 180 / Math.PI, 0),
-        round(theta * 180 / Math.PI, 0),
-        round(offsetAngle * 180 / Math.PI, 0),
-        round(xOffset, 2), round(yOffset, 2)
-
-      );
     }
+    // else {
+    //   phi = clipAngle(labelAngle + parentAngleOffset, '0to360');
+    //   theta = clipAngle(-(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi)))), '0to360');
+    //   if (
+    //     offsetAngle > 0 && phi < Math.PI
+    //   ) {
+    //     theta += Math.PI;
+    //   }
+    //   if (
+    //     offsetAngle < 0 && phi > Math.PI
+    //   ) {
+    //     theta += Math.PI;
+    //   }
+    //   // R = getR(a, b, theta);
+    //   // xOffset = R * Math.cos(phi);
+    //   // yOffset = R * Math.sin(phi);
+    //   // theta = Math.PI - phi - Math.PI / 2;
+      
+    //   R = getR(a, b, theta);
+    //   // xOffset = R;
+    //   // yOffset = 0;
+    //   xOffset = R * Math.cos(theta);
+    //   yOffset = R * Math.sin(theta);
+    //   // if (offsetAngle < 0) {
+    //   //   yOffset = -yOffset;
+    //   //   xOffset = -xOffset;
+    //   // }
+    //   console.log(
+    //     round(phi * 180 / Math.PI, 0),
+    //     round(labelAngle * 180 / Math.PI, 0),
+    //     round(parentAngleOffset * 180 / Math.PI, 0),
+    //     round(theta * 180 / Math.PI, 0),
+    //     round(offsetAngle * 180 / Math.PI, 0),
+    //     round(xOffset, 2), round(yOffset, 2)
+
+    //   );
+    // }
 
     // DEBUG ONLY
     const debug = true;
