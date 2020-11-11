@@ -206,6 +206,219 @@ export default class EquationLabel {
     return textToReturn;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  updateRot(
+    position: Point,
+    lineAngle: number,
+    offsetMag: number,
+    location: 'top' | 'bottom' | 'left' | 'right' | 'positive' | 'negative' | 'start' | 'end' | 'inside' | 'outside',
+    subLocation: 'top' | 'bottom' | 'left' | 'right',
+    orientation: 'horizontal' | 'baseAway' | 'baseToLine' | 'upright',
+    parentAngleOffset: number = 0,
+    style: 'oval' | 'rectangle',
+  ) {
+    // Calculate the offsetAngle and label angle
+    let offsetAngle = Math.PI / 2;
+    let labelAngle = 0;
+    if (location === 'start' || location === 'end') {
+      if (location === 'start') {
+        // labelPosition.x = this.localXPosition - offset;
+        offsetAngle = -Math.PI;
+      }
+      if (location === 'end') {
+        // labelPosition.x = this.localXPosition + this.line.length() + offset;
+        offsetAngle = 0;
+      }
+    } else {
+      const offsetTop = Math.cos(lineAngle) < 0 ? -Math.PI / 2 : Math.PI / 2;
+      const offsetBottom = -offsetTop;
+      const offsetLeft = Math.sin(lineAngle) > 0 ? Math.PI / 2 : -Math.PI / 2;
+      const offsetRight = -offsetLeft;
+
+      if (location === 'top') {
+        offsetAngle = offsetTop;
+      }
+      if (location === 'bottom') {
+        offsetAngle = offsetBottom;
+      }
+      if (location === 'right') {
+        offsetAngle = offsetRight;
+      }
+      if (location === 'left') {
+        offsetAngle = offsetLeft;
+      }
+      if (location === 'positive') {
+        offsetAngle = Math.PI / 2;
+      }
+      if (location === 'negative') {
+        offsetAngle = -Math.PI / 2;
+      }
+      if (round(Math.sin(lineAngle), 4) === 0
+        && (location === 'left' || location === 'right')
+      ) {
+        if (subLocation === 'top') {
+          offsetAngle = offsetTop;
+        }
+        if (subLocation === 'bottom') {
+          offsetAngle = offsetBottom;
+        }
+      }
+      if (round(Math.cos(lineAngle), 4) === 0
+        && (location === 'top' || location === 'bottom')
+      ) {
+        if (subLocation === 'right') {
+          offsetAngle = offsetRight;
+        }
+        if (subLocation === 'left') {
+          offsetAngle = offsetLeft;
+        }
+      }
+      if (location === 'inside') {
+        offsetAngle = -Math.PI / 2;
+      }
+      if (location === 'outside') {
+        offsetAngle = Math.PI / 2;
+      }
+    }
+
+    if (orientation === 'horizontal') {
+      labelAngle = -lineAngle;
+    }
+    if (orientation === 'baseToLine') {
+      labelAngle = 0;
+      if (offsetAngle < 0) {
+        labelAngle = Math.PI;
+      }
+    }
+    if (orientation === 'baseAway') {
+      labelAngle = Math.PI;
+      if (offsetAngle < 0) {
+        labelAngle = 0;
+      }
+    }
+    if (orientation === 'upright') {
+      if (Math.cos(lineAngle) < 0) {
+        labelAngle = Math.PI;
+      }
+    }
+
+    labelAngle -= parentAngleOffset;
+
+    // half height and width of text
+    let h = 0;
+    let w = 0;
+    const currentForm = this.eqn.getCurrentForm();
+    let change = false;
+    if (currentForm != null) {
+      if (this.height !== currentForm.height) {
+        this.height = currentForm.height;
+        change = true;
+      }
+      if (this.width !== currentForm.width) {
+        this.width = currentForm.width;
+        change = true;
+      }
+      h = currentForm.height / 2 + offsetMag;
+      w = currentForm.width / 2 + offsetMag;
+    }
+    let positionOffset = new Point(0, 0);
+    if (style === 'oval') {
+      positionOffset = this.getOvalOffset(labelAngle, h, w, offsetMag, offsetAngle, change, position);
+    }
+    this.eqn.setPosition(position.add(positionOffset));
+    this.eqn.transform.updateRotation(labelAngle);
+  }
+
+  getOvalOffset(
+    labelAngle: number,
+    h: number,
+    w: number,
+    offsetMag: number,
+    offsetAngle: number,
+    change: boolean,
+    position: Point,
+  ) {
+    // eslint-disable-next-line max-len
+    const getR = (a, b, angle) => a * b / Math.sqrt((b * Math.cos(angle)) ** 2 + (a * Math.sin(angle)) ** 2);
+
+    // Create an oval around the label by:
+    // * Find top corner of label
+    // * Find distance (R) and angle to top corner
+    // * The oval must go through this top corner
+    // * Find 'a' and 'b' of the oval so that 'a' and 'b' are the width and
+    //   height with the same offset (a = w + o), (b = h + o)
+    // * To find 'o', make an oval with o = offsetMag and see how close
+    //   its topCorner R is to the reference.
+    // * If it doesn't reach the top corner reference, then step o in fifths
+    //   of the delta until either 10 steps have occured, or the top corner
+    //   is covered.
+    if (change) {
+      const topCornerAngle = Math.atan(h / w);
+      const topCornerR = h / Math.sin(topCornerAngle) + offsetMag;
+      const delta = topCornerR - getR(w + offsetMag, h + offsetMag, topCornerAngle);
+      let i = 2;
+      let testR = -1;
+      let ovalOffset = 0;
+      console.log(round(topCornerAngle * 180 / Math.PI, 0))
+      console.log(round(topCornerR, 3))
+      console.log(round(w, 3), round(h, 3));
+      while (i < 103 && testR < topCornerR) {
+        ovalOffset = delta * i * 0.1;
+        testR = getR(w + ovalOffset, h + ovalOffset, topCornerAngle);
+        i += 1;
+        console.log(i, round(testR, 3))
+      }
+      this.aOffset = ovalOffset;
+    }
+
+    const a = this.aOffset + w;
+    const b = this.aOffset + h;
+
+    // Calculate the position (refer to oval_math.pdf for why this is what
+    // it is)
+    const phi = clipAngle(labelAngle, '0to360');
+    const theta = clipAngle(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi))), '0to360');
+    const R = getR(a, b, theta);
+    let sigma = clipAngle(phi + theta - Math.PI, '-180to180');
+    if (sigma < 0) {
+      sigma += Math.PI;
+    }
+    let xOffset = R * Math.cos(sigma);
+    let yOffset = R * Math.sin(sigma);
+    if (offsetAngle < 0) {
+      yOffset = -yOffset;
+      xOffset = -xOffset;
+    }
+
+    // DEBUG ONLY
+    const debug = true;
+    if (debug) {
+      if (this.eqn.parent != null) {
+        if (this.eqn.parent._debugEllipse == null) {
+          const e = this.eqn.shapes.ellipse({
+            width: 1,
+            height: 0.5,
+            color: [0, 0, 1, 0.6],
+            sides: 50,
+          });
+          this.eqn.parent.add('debugEllipse', e);
+        }
+        const e = this.eqn.parent._debugEllipse;
+        if (e != null) {
+          e.custom.update({
+            width: a * 2,
+            height: b * 2,
+          });
+          e.setPosition(position.add(xOffset, yOffset));
+          e.setRotation(labelAngle);
+        }
+      }
+    }
+
+    return new Point(xOffset, yOffset);
+    // this.eqn.setPosition(position.add(xOffset, yOffset));
+  }
+
   updateRotation(
     labelAngle: number,
     position: Point,
@@ -266,47 +479,6 @@ export default class EquationLabel {
           xOffset = -xOffset;
         }
         this.eqn.setPosition(position.add(xOffset, yOffset));
-        // console.log(
-        //   round(phi * 180 / Math.PI, 0),
-        //   round(theta * 180 / Math.PI, 0),
-        //   round(sigma * 180 / Math.PI, 0),
-        //   round(offsetAngle * 180 / Math.PI, 0)
-        // )
-        // const labelAngleNorm = clipAngle(labelAngle, '0to360');
-        // let m = labelAngleNorm;
-        // if (labelAngleNorm > Math.PI / 2 && labelAngleNorm <= Math.PI) {
-        //   m = Math.PI - labelAngle;
-        // } else if (labelAngleNorm > Math.PI && labelAngleNorm < 3 * Math.PI / 2) {
-        //   m = labelAngleNorm - Math.PI;
-        // } else if (labelAngleNorm >= 3 * Math.PI / 2) {
-        //   m = 2 * Math.PI - labelAngleNorm;
-        // }
-        // const t = Math.abs(Math.atan(-b / (a * Math.tan(m))));
-        // const g = Math.PI / 2 - m;
-        // const k = g - t;
-        // const or = getR(a, b, t);
-        // let op = or * Math.cos(k);
-        // if (offsetAngle < 0) {
-        //   op = -op;
-        // }
-        // let pr = or * Math.sin(k);
-        // if (labelAngle < Math.PI / 2) {
-        //   pr = -pr;
-        // } else if (labelAngleNorm > 3 * Math.PI / 2) {
-        //   pr = -pr;
-        // }
-        // console.log(
-        //   round(labelAngle * 180 / Math.PI, 0),
-        //   round(offsetAngle * 180 / Math.PI, 0),
-        //   round(m * 180 / Math.PI, 0),
-        //   round(t * 180 / Math.PI, 0),
-        //   round(g * 180 / Math.PI, 0),
-        //   round(k * 180 / Math.PI, 0),
-        //   round(or, 2),
-        //   round(op, 2),
-        //   round(pr, 2),
-        // )
-        // this.eqn.setPosition(position.add(pr, op));
 
         if (this.eqn.parent != null && this.eqn.parent.parent != null && this.eqn.parent.parent._ell != null) {
           // console.log(this.eqn.parent.parent)

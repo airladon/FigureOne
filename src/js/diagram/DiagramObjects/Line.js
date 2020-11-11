@@ -1184,6 +1184,41 @@ export default class AdvancedLine extends DiagramElementCollection {
       return;
     }
     const lineAngle = normAngle(this.transform.r() || 0);
+    if (this.showRealLength && this._label) {
+      const labelToUse = roundNum(this.line.length(), 2)
+        .toFixed(label.precision);
+      const current = label.getText();
+      if (current !== labelToUse) {
+        label.setText(roundNum(this.line.length(), 2)
+          .toFixed(label.precision));
+      }
+    }
+    const labelPosition = new Point(
+      this.localXPosition + label.linePosition * this.line.length(),
+      0,
+    );
+    if (label.location === 'start' || label.location === 'end') {
+      if (label.location === 'start') {
+        labelPosition.x = this.localXPosition - label.offset;
+      }
+      if (label.location === 'end') {
+        labelPosition.x = this.localXPosition + this.line.length() + label.offset;
+      }
+    }
+
+    label.updateRot(
+      labelPosition, lineAngle, label.offset,
+      label.location, label.subLocation, label.orientation,
+      parentRotationOffset, 'oval',
+    )
+  }
+
+  updateLabelLegacy(parentRotationOffset: number = 0) {
+    const { label } = this;
+    if (label == null) {
+      return;
+    }
+    const lineAngle = normAngle(this.transform.r() || 0);
     let labelAngle = 0;
     if (this.showRealLength && this._label) {
       const labelToUse = roundNum(this.line.length(), 2)

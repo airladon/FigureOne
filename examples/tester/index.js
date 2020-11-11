@@ -435,7 +435,7 @@ const l = diagram.advanced.line({
         // base: { box: [{ frac: ['t', 'vinculum', 'h'] }, 'b', false] },
       },
     },
-    offset: 0.0001,
+    offset: 0.1,
     orientation: 'horizontal',          // keep label horizontal
     location: 'negative',                    // keep label on top of line
   },
@@ -445,17 +445,17 @@ diagram.add('l', l);
 l.setMovable({ type: 'centerTranslateEndRotation'})
 l.setAutoUpdate();
 
-diagram.addElement({
-  name: 'ell',
-  method: 'ellipse',
-  options: {
-    width: 1,
-    height: 0.5,
-    // line: { width: 0.01 },
-    color: [0, 0, 1, 0.6],
-    sides: 50,
-  },
-});
+// diagram.addElement({
+//   name: 'ell',
+//   method: 'ellipse',
+//   options: {
+//     width: 1,
+//     height: 0.5,
+//     // line: { width: 0.01 },
+//     color: [0, 0, 1, 0.6],
+//     sides: 50,
+//   },
+// });
 
 l.updateLabel();
 // diagram.addElement({
