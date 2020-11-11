@@ -421,6 +421,11 @@ export default class EquationLabel {
       ) {
         theta += Math.PI;
       }
+      if (
+        offsetAngle < 0 && phi > Math.PI
+      ) {
+        theta += Math.PI;
+      }
       // R = getR(a, b, theta);
       // xOffset = R * Math.cos(phi);
       // yOffset = R * Math.sin(phi);
@@ -431,10 +436,10 @@ export default class EquationLabel {
       // yOffset = 0;
       xOffset = -R * Math.cos(theta);
       yOffset = -R * Math.sin(theta);
-      if (offsetAngle < 0) {
-        yOffset = -yOffset;
-        xOffset = -xOffset;
-      }
+      // if (offsetAngle < 0) {
+      //   yOffset = -yOffset;
+      //   xOffset = -xOffset;
+      // }
       console.log(
         round(phi * 180 / Math.PI, 0),
         // round(theta * 180 / Math.PI, 0),

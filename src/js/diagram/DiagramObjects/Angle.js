@@ -1144,7 +1144,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
         // console.log(roundNum(lineAngle * 180 / Math.PI, 0))
         // console.log(rotationOffset)
         label.updateRotation(
-          labelPosition, lineAngle, label.curveOffset, 'negative', 'top', orientation,
+          labelPosition, lineAngle, label.curveOffset, 'top', 'top', orientation,
           rotationOffset == null ? 0 : rotationOffset,
           // -lineAngle,
           'oval', false,
