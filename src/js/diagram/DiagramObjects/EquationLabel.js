@@ -436,6 +436,7 @@ export default class EquationLabel {
     return new Point(xOffset, yOffset);
   }
 
+  /* eslint-disable max-len */
   // updateRotationLegacy(
   //   labelAngle: number,
   //   position: Point,
@@ -460,7 +461,7 @@ export default class EquationLabel {
   //       h = currentForm.height / 2 + offsetMag;
   //       w = currentForm.width / 2 + offsetMag;
   //     }
-  //     let r = 0; 
+  //     let r = 0;
   //     if (oval) {
   //       // eslint-disable-next-line max-len
   //       const getR = (a, b, angle = labelAngle - offsetAngle) => a * b / Math.sqrt((b * Math.cos(angle)) ** 2 + (a * Math.sin(angle)) ** 2);
@@ -518,6 +519,7 @@ export default class EquationLabel {
   //     e.setPosition(this.eqn.getPosition('diagram'));
   //   }
   // }
+  /* eslint-enable max-len */
 
   // const label = {
   //   eqn,

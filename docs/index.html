@@ -2645,6 +2645,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#diagramprimitivesellipse'
+                        class='regular pre-open'>
+                        #ellipse
+                      </a></li>
+                      
+                      <li><a
                         href='#diagramprimitivestriangle'
                         class='regular pre-open'>
                         #triangle
@@ -3653,6 +3659,16 @@
                   href='#obj_growanimationstep'
                   class="">
                   OBJ_GrowAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#equationlabel'
+                  class="">
+                  EquationLabel
                   
                 </a>
                 
@@ -35364,6 +35380,76 @@ touched
       </div>
     </div>
   
+    <div class='border-bottom' id='diagramprimitivesellipse'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>ellipse(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p><a href="#diagramelementprimitive">DiagramElementPrimitive</a> that draws a rectangle.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;OBJ_Ellipse>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#obj_rectangle">OBJ_Rectangle</a>
+ for options and examples.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='diagramprimitivestriangle'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -45313,7 +45399,7 @@ of the line.</p>
 
   
     <p style="display: none;">      Type:
-      (<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code> | <code>"end1"</code> | <code>"end2"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)
+      (<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code> | <code>"start"</code> | <code>"end"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)
     </p>
   
   
@@ -45488,12 +45574,23 @@ upright than upside down.</li>
   <p>Collection line label options object.</p>
 <p>A line can be annotated with a label using the <code>text</code> property and can be:</p>
 <ul>
-<li>text (<code>string</code>)</li>
+<li>text (<code>string</code>, or Array&#x3C;<code>string</code>)</li>
 <li>an equation (<code>Equation</code>, <code>EQN_Equation</code>)</li>
 <li>real length of line (<code>null</code>)</li>
 </ul>
-<p>If the label text is the real lenght of the line, then the number of decimal
-places can be selected with <code>precision</code>.</p>
+<p>In all cases, an actual <a href="#equation">Equation</a> is created as the label. The
+equation can have multiple forms, which can be set using the <code>showForm</code>
+method.</p>
+<p>If <code>text</code>: <code>string</code>, then an equation with a single form named <code>base</code> will
+be created with a single element being the string text.</p>
+<p>If <code>text</code>: <code>Array&#x3C;string></code>, then an equation with a form for each element
+of the array is created. Each form is named '0', '1', '2'... corresponding
+with the index of the array. Each form is has a single element, being the
+text at that index.</p>
+<p>Use <code>text</code>: <code>Equation</code> or <code>EQN_Equation</code> to create completely custom
+equations with any forms desirable.</p>
+<p>If the label text is the real length of the line (<code>null</code>), then the number
+of decimal places can be selected with <code>precision</code>.</p>
 <p>The space between the line and the label is defined with <code>offset</code>. An
 <code>offset</code> of 0 puts the center of the label on the line. Any
 positive or negative value of offset will move the label so no part of the
@@ -45502,7 +45599,7 @@ from the line by <code>offset</code>.</p>
 <p>To situate the label on the line, use <code>linePosition</code>, <code>location</code> and
 <code>subLocation</code>. By default the label will be a percentage <code>linePosition</code>
 along the line. <code>location</code> then defines which side of the line the label is
-on, while <code>subLocation</code> defines the backup location for invalide cases of
+on, while <code>subLocation</code> defines the backup location for invalid cases of
 <code>location</code>. See <a href="#typelinelabellocation">TypeLineLabelLocation</a> and
 <a href="#typelinelabelsublocation">TypeLineLabelSubLocation</a>. <code>location</code> can additionaly place the
 labels off the ends of the line.</p>
@@ -45526,7 +45623,7 @@ transform (translation, rotation or scale) changes then use <code>update: true</
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>text</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#equation">Equation</a> | <a href="#eqn_equation">EQN_Equation</a>))</code>
+          <span class='code bold'>text</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | <a href="#equation">Equation</a> | <a href="#eqn_equation">EQN_Equation</a>))</code>
           
           
         </div>
@@ -45875,6 +45972,77 @@ line's label in the touch boundary for
         </div>
       
     </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='equationlabel'>
+      EquationLabel
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation label</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>equations</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(TypeLabelOptions
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
   
 
   
