@@ -425,9 +425,9 @@
 -   [TypeFormRestart][872]
 -   [TypeEquationGoToFormOptions][874]
 -   [TypeEquationTextElement][876]
--   [TypeLineLabelLocation][878]
--   [TypeLineLabelSubLocation][879]
--   [TypeLineLabelOrientation][880]
+-   [TypeLabelLocation][878]
+-   [TypeLabelSubLocation][879]
+-   [TypeLabelOrientation][880]
 -   [TypeLineLabelOptions][881]
 -   [OBJ_PulseWidth][883]
 -   [OBJ_MovableLine][885]
@@ -12593,7 +12593,7 @@ will be ignored.
 -   `mods` **[object][1024]?** Properties to set on instantiated element
 -   `color` **[Array][899]&lt;[number][901]>?** Color to set the element
 
-## TypeLineLabelLocation
+## TypeLabelLocation
 
 Label location relative to the line.
 
@@ -12609,7 +12609,7 @@ rotating in the positive direction. `'negative'` is the opposite side.
 of the line.
 
 
-## TypeLineLabelSubLocation
+## TypeLabelSubLocation
 
 Label sub location relative to line.
 
@@ -12623,7 +12623,7 @@ Similarly, if the primary location is `'left'` or `'right'` and the line is
 perfectly horizontal, then the sub location would be used.
 
 
-## TypeLineLabelOrientation
+## TypeLabelOrientation
 
 Orientation of the label.
 
@@ -12678,8 +12678,8 @@ To situate the label on the line, use `linePosition`, `location` and
 `subLocation`. By default the label will be a percentage `linePosition`
 along the line. `location` then defines which side of the line the label is
 on, while `subLocation` defines the backup location for invalid cases of
-`location`. See [TypeLineLabelLocation][878] and
-[TypeLineLabelSubLocation][879]. `location` can additionaly place the
+`location`. See [TypeLabelLocation][878] and
+[TypeLabelSubLocation][879]. `location` can additionaly place the
 labels off the ends of the line.
 
 To automatically update the label location and orientation as the line
@@ -12690,9 +12690,9 @@ transform (translation, rotation or scale) changes then use `update: true`.
 -   `text` **(null | [string][896] \| [Array][899]&lt;[string][896]> | [Equation][1108] \| [EQN_Equation][1018])** 
 -   `precision` **[number][901]?** 
 -   `offset` **[number][901]?** 
--   `location` **[TypeLineLabelLocation][1109]?** 
--   `subLocation` **[TypeLineLabelSubLocation][1110]?** 
--   `orientation` **[TypeLineLabelOrientation][1111]?** 
+-   `location` **[TypeLabelLocation][1109]?** 
+-   `subLocation` **[TypeLabelSubLocation][1110]?** 
+-   `orientation` **[TypeLabelOrientation][1111]?** 
 -   `update` **[boolean][900]?** (`false`)
 -   `linePosition` **[number][901]?** 
 -   `scale` **[number][901]?** size of the label

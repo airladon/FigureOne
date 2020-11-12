@@ -14,34 +14,32 @@ import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
 import EquationLabel from './EquationLabel';
-import type { TypeLabelOptions } from './EquationLabel';
 import { Equation } from '../DiagramElements/Equation/Equation';
 import { simplifyArrowOptions, getArrowLength } from '../DrawingObjects/Geometries/arrow';
 import type { OBJ_LineArrows, OBJ_LineArrow } from '../DrawingObjects/Geometries/arrow';
 import type { OBJ_Pulse } from '../Element';
 import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
+import type {
+  TypeLabelOrientation, TypeLabelLocation, TypeLabelSubLocation,
+} from './EquationLabel';
 
-
-export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
+// export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
 export type TypeAngleLabelOptions = {
-  // String goes to eqn,
   text: null | string | Array<string> | Equation | EQN_Equation,
-                                  // Array<string> into eqn forms
   units?: 'degrees' | 'radians';  // Real angle units
-  precision?: number,         // Num decimal places if using angle label
+  precision?: number,             // Num decimal places if using angle label
   radius?: number,                // Label radius
+  offset?: number,                // Label position along curve in rad
   curvePosition?: number,         // Label position along curve in %
-  curveOffset?: number,           // Label position along curve in rad
+  location?: TypeLabelLocation,
+  subLocation?: TypeLabelSubLocation,
+  orientation?: TypeLabelOrientation,
   showRealAngle?: boolean,        // Use angle as label
-  orientation?: TypeAngleLabelOrientation,  // horiztonal or tangent
-  autoHide?: ?number,         // Auto hide label if angle is less than this
-  autoHideMax?: ?number,      // Auto hide label if angle is greater than this
-  scale?: number,             // Text scale
-  color?: Array<number>,      // Text color can be different to curve
-  location?: TypeLineLabelLocation,
-  subLocation?: TypeLineLabelSubLocation,
-  orientation?: TypeLineLabelOrientation,
+  autoHide?: ?number,             // Auto hide label if angle is less than this
+  autoHideMax?: ?number,          // Auto hide label if angle greater than this
+  scale?: number,                 // Text scale
+  color?: Array<number>,          // Text color can be different to curve
 };
 
 /**
@@ -151,9 +149,9 @@ export type ADV_Angle = {
 class AngleLabel extends EquationLabel {
   radius: number;
   curvePosition: number;
-  curveOffset: number;
+  offset: number;
   showRealAngle: boolean;
-  orientation: TypeAngleLabelOrientation;
+  orientation: TypeLabelOrientation;
   precision: number;
   units: 'degrees' | 'radians';
   autoHide: ?number;
@@ -167,13 +165,13 @@ class AngleLabel extends EquationLabel {
     color: Array<number>,
     radius: number,
     curvePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
-    curveOffset: number = 0,
+    offset: number = 0,
     showRealAngle: boolean = false,
     units: 'degrees' | 'radians' = 'degrees',
     precision: number = 0,
     autoHide: ?number = null,
     autoHideMax: ?number = null,
-    orientation: TypeAngleLabelOrientation = 'horizontal',
+    orientation: TypeLabelOrientation = 'horizontal',
     location: 'left' | 'right' | 'top' | 'bottom' | 'outside' | 'inside' | 'positive' | 'negative',
     subLocation: 'left' | 'right' | 'top' | 'bottom',
     scale: number = 0.7,
@@ -181,7 +179,7 @@ class AngleLabel extends EquationLabel {
     super(equation, { label: labelText, color, scale });
     this.radius = radius;
     this.curvePosition = curvePosition;
-    this.curveOffset = curveOffset;
+    this.offset = offset;
     this.showRealAngle = showRealAngle;
     this.units = units;
     this.orientation = orientation;
@@ -288,6 +286,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
     duration: number,
     frequency: number,
   }
+
+  autoUpdateSubscriptionId: number;
 
   // An angle can be defined by position, startAngle, angle, direction
   // position - where the corner is
@@ -406,7 +406,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     this.equation = equation;
     this.largerTouchBorder = optionsToUse.largerTouchBorder;
     this.isTouchDevice = isTouchDevice;
-    this.animateNextFrame = animateNextFrame;
+    this.autoUpdateSubscriptionId = 0;
 
     // Calculate and store the angle geometry
     // this.nextPosition = getPoint(optionsToUse.position);
@@ -465,17 +465,20 @@ class DiagramObjectAngle extends DiagramElementCollection {
       }
       const arrowOptions = simplifyArrowOptions(optionsToUse.arrow, width);
       this.arrow = arrowOptions;
+      if (this.arrow == null) {
+        return;
+      }
 
       const defaultO = {
         radius: defaultArrowRadius,
         autoHide,
         curveOverlap,
       };
-      // console.log(defaultO)
-      if (this.arrow != null && this.arrow.start != null) {
+
+      if (this.arrow.start != null) { // $FlowFixMe
         this.arrow.start = joinObjects({}, defaultO, this.arrow.start);
       }
-      if (this.arrow != null && this.arrow.end != null) {
+      if (this.arrow.end != null) { // $FlowFixMe
         this.arrow.end = joinObjects({}, defaultO, this.arrow.end);
       }
       this.addArrow('start');
@@ -561,6 +564,19 @@ class DiagramObjectAngle extends DiagramElementCollection {
     return this;
   }
 
+  setAutoUpdate(update: boolean = true) {
+    if (update) {
+      this.autoUpdateSubscriptionId = this.subscriptions.add('setTransform', () => {
+        this.updateLabel(this.getRotation());
+        // this.updateMovePads();
+      });
+    } else {
+      // console.log(this.autoUpdateSubscriptionId)
+      this.subscriptions.remove('setTransform', this.autoUpdateSubscriptionId);
+      this.autoUpdateSubscriptionId = -1;
+    }
+  }
+
   setNextPositionAndRotation() {
     if (this.nextPosition != null) {
       this.transform.updateTranslation(this.nextPosition);
@@ -637,23 +653,12 @@ class DiagramObjectAngle extends DiagramElementCollection {
     this.add(`side${index}`, line);
   }
 
-  addLabel(options: {
-    labelText?: string | Equation | Array<string> | TypeLabelOptions,
-    radius?: number,
-    curvePosition?: number,
-    curveOffset?: number,
-    showRealAngle?: boolean,
-    units?: 'degrees' | 'radians',
-    precision?: number,
-    orientation?: TypeAngleLabelOrientation,
-    autoHide?: number,
-    scale?: number,
-  } = {}) {
+  addLabel(options: TypeAngleLabelOptions = {}) {
     const defaultLabelOptions = {
       text: null,
       radius: 0.4,
       curvePosition: 0.5,
-      curveOffset: 0,
+      offset: 0,
       showRealAngle: false,
       units: 'degrees',
       precision: 0,
@@ -663,6 +668,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       scale: 0.7,
       color: this.color,
       location: 'outside',
+      update: false,
     };
     if (this.curve) {
       defaultLabelOptions.radius = Math.max(
@@ -682,7 +688,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       optionsToUse.color,
       optionsToUse.radius,
       optionsToUse.curvePosition,
-      optionsToUse.curveOffset,
+      optionsToUse.offset,
       optionsToUse.showRealAngle,
       optionsToUse.units,
       optionsToUse.precision,
@@ -696,7 +702,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
     if (this.label != null) {
       this.add('label', this.label.eqn);
     }
-    // this.updateLabel();
+    this.setAutoUpdate(optionsToUse.update);
+    this.updateLabel();
   }
 
   addCurve(curveOptions: {
@@ -763,7 +770,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     radius?: number,
     curveRadius?: number,
     curvePosition?: number,
-    curveOffset?: number,
+    offset?: number,
   }) {
     if (this._curve != null && options.radius != null) {
       this._curve.custom.update({ radius: options.radius });
@@ -775,8 +782,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
       if (options.curvePosition != null) {
         this.label.curvePosition = options.curvePosition;
       }
-      if (options.curveOffset != null) {
-        this.label.curveOffset = options.curveOffset;
+      if (options.offset != null) {
+        this.label.offset = options.offset;
       }
     }
   }
@@ -785,6 +792,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
   addArrow(
     lineEnd: 'start' | 'end',
   ) {
+    // $FlowFixMe
     if (this.arrow[lineEnd] == null) {
       return;
     }
@@ -807,7 +815,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     // $FlowFixMe
     this.arrow[lineEnd] = {
       height: arrowLength,
-      radius: o.radius,
+      radius: o.radius || 0,
       autoHide: o.autoHide,
       curveOverlap: o.curveOverlap,
     };
@@ -829,7 +837,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
         r *= -1;
       }
       if (this.angle < 0) {
-        r *=-1;
+        r *= -1;
       }
       for (let i = 0; i < curve.num; i += 1) {
         let name = '_curve';
@@ -891,15 +899,17 @@ class DiagramObjectAngle extends DiagramElementCollection {
     let arrow2Angle = 0;
     if (this.arrow != null && this.arrow.start != null) {
       const { start } = this.arrow;
-      arrow1Angle = start.height / start.radius * (1 - start.curveOverlap);
+      const radius = start.radius || 0;
+      arrow1Angle = start.height / radius * (1 - start.curveOverlap);
       curveAngle -= arrow1Angle;
-      trueCurveAngle -= start.height / start.radius;
+      trueCurveAngle -= start.height / radius;
     }
     if (this.arrow != null && this.arrow.end != null) {
       const { end } = this.arrow;
-      arrow2Angle = end.height / end.radius * (1 - end.curveOverlap);
+      const radius = end.radius || 0;
+      arrow2Angle = end.height / radius * (1 - end.curveOverlap);
       curveAngle -= arrow2Angle;
-      trueCurveAngle -= end.height / end.radius;
+      trueCurveAngle -= end.height / radius;
     }
 
     if (this.arrow != null && trueCurveAngle < 0) {
@@ -1161,7 +1171,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
           lineAngle = clipAngle(angle, '0to360');
         }
         label.updateRotation(
-          labelPosition, lineAngle, label.curveOffset, location, label.subLocation, orientation,
+          labelPosition, lineAngle, label.offset, location, label.subLocation, orientation,
           this.lastLabelRotationOffset == null ? 0 : this.lastLabelRotationOffset,
           'oval', false, Math.PI / 2, -Math.PI / 2,
         );

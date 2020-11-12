@@ -25,6 +25,56 @@ export type TypeLabelOptions = {
 };
 
 /**
+ * Orientation of the label.
+ *
+ * `'horizontal' | 'toLine' | 'awayLine' | 'upright'`
+ *
+ * Where:
+ * - `'horizontal'`: Label will be horizontal
+ * - `'baseToLine'`: Label will have same angle as line with text base toward
+ *   the line
+ * - `'baseAway'`: Label will have same angle as line with text base away from
+ *   the line
+ * - `'upright'`: Label will have same angle as line with text being more
+ *   upright than upside down.
+ */
+export type TypeLabelOrientation = 'horizontal' | 'baseAway' | 'baseToLine'
+                                      | 'upright';
+
+/**
+ * Label location relative to the line.
+ *
+ * `'top' | 'left' | 'bottom' | 'right' | 'start' | 'end' | 'positive' | 'negative'`
+ *
+ * '`top`' is in the positive y direction and `'right'` is in the positive
+ * x direction. '`bottom`' and '`left`' are the opposite sides respectively.
+ *
+ * `'positive'` is on the side of the line that the line rotates toward when
+ * rotating in the positive direction. `'negative'` is the opposite side.
+ *
+ * `'start'` is the start end of the line, while `'end'` is the opposide end
+ * of the line.
+ */
+export type TypeLabelLocation = 'top' | 'left' | 'bottom' | 'right'
+                                    | 'start' | 'end' | 'outside' | 'inside'
+                                    | 'positive' | 'negative';
+
+/**
+ * Label sub location relative to line.
+ *
+ * `'top' | 'left' | 'bottom' | 'right'`
+ *
+ * The label sub location is a fallback for when an invalid case is encountered
+ * by the primary location. When the primary location is `'top'` or `'bottom'`
+ * and the line is perfectly vertical, then the sub location would be used.
+ *
+ * Similarly, if the primary location is `'left'` or `'right'` and the line is
+ * perfectly horizontal, then the sub location would be used.
+ */
+export type TypeLabelSubLocation = 'top' | 'left' | 'bottom' | 'right';
+
+
+/**
  * Equation label
  */
 export default class EquationLabel {

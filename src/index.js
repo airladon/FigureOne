@@ -32,7 +32,7 @@ import EquationForm from './js/diagram/DiagramElements/Equation/EquationForm';
 
 import type { TypeRotationDirection, TypeParsablePoint } from './js/tools/g2';
 import type {
-  TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
+  TypeLabelLocation, TypeLabelSubLocation, TypeLabelOrientation,
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, ADV_Line,
   TypeLineLabelOptions, TypeLabelledLine,
 } from './js/diagram/DiagramObjects/Line';
@@ -48,7 +48,7 @@ import * as anim from './js/diagram/Animation/Animation';
 
 export type {
   TypeRotationDirection,
-  TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
+  TypeLabelLocation, TypeLabelSubLocation, TypeLabelOrientation,
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, ADV_Line,
   TypeAngleLabelOrientation, ADV_Angle, TypeDiagramOptions,
   TypeLineLabelOptions, TypeAngleLabelOptions,

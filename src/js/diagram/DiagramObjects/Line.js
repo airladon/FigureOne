@@ -12,6 +12,9 @@ import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
 import EquationLabel from './EquationLabel';
+import type {
+  TypeLabelOrientation, TypeLabelLocation, TypeLabelSubLocation,
+} from './EquationLabel';
 // import type { TypeLabelEquationOptions } from './EquationLabel';
 import { joinObjects } from '../../tools/tools';
 import { Equation } from '../DiagramElements/Equation/Equation';
@@ -22,75 +25,6 @@ import type { OBJ_Pulse } from '../Element';
 import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep } from '../Animation/Animation';
-
-// top - text is on top of line (except when line is vertical)
-// bottom - text is on bottom of line (except when line is vertical)
-// left - text is to left of line (except when line is horiztonal)
-// right - text is to right of line (except when line is horiztonal)
-// end1 - text is on first end of line
-// end2 - text is on second end of line
-// outside - text is on left of line when line is vertical from 0 to 1
-//           or, if a polygon is defined clockwise, outside will be outside.
-// inside - text is on right of line when line is vertical from 0 to 1
-//           or, if a polygon is defined anti-clockwise, outside will be outside.
-/**
- * Label location relative to the line.
- *
- * `'top' | 'left' | 'bottom' | 'right' | 'start' | 'end' | 'positive' | 'negative'`
- *
- * '`top`' is in the positive y direction and `'right'` is in the positive
- * x direction. '`bottom`' and '`left`' are the opposite sides respectively.
- *
- * `'positive'` is on the side of the line that the line rotates toward when
- * rotating in the positive direction. `'negative'` is the opposite side.
- *
- * `'start'` is the start end of the line, while `'end'` is the opposide end
- * of the line.
- */
-export type TypeLineLabelLocation = 'top' | 'left' | 'bottom' | 'right'
-                                    | 'start' | 'end' | 'outside' | 'inside'
-                                    | 'positive' | 'negative';
-// top - text is on top of line if line is horiztonal
-// bottom - text is on bottom of line if line is horiztonal
-// left - text is to left of line if line is vertical
-// right - text is to right of line if line is vertical
-/**
- * Label sub location relative to line.
- *
- * `'top' | 'left' | 'bottom' | 'right'`
- *
- * The label sub location is a fallback for when an invalid case is encountered
- * by the primary location. When the primary location is `'top'` or `'bottom'`
- * and the line is perfectly vertical, then the sub location would be used.
- *
- * Similarly, if the primary location is `'left'` or `'right'` and the line is
- * perfectly horizontal, then the sub location would be used.
- */
-export type TypeLineLabelSubLocation = 'top' | 'left' | 'bottom' | 'right';
-
-
-// horizontal - text is always horizontal;
-// baseToLine - text angle is same as line, with baseline toward line
-// baseAway - text angle is same as line, with baseline away from line
-// baseUpright - text angle is same as line, with text upright
-
-/**
- * Orientation of the label.
- *
- * `'horizontal' | 'toLine' | 'awayLine' | 'upright'`
- *
- * Where:
- * - `'horizontal'`: Label will be horizontal
- * - `'baseToLine'`: Label will have same angle as line with text base toward
- *   the line
- * - `'baseAway'`: Label will have same angle as line with text base away from
- *   the line
- * - `'upright'`: Label will have same angle as line with text being more
- *   upright than upside down.
- */
-export type TypeLineLabelOrientation = 'horizontal' | 'baseAway' | 'baseToLine'
-                                      | 'upright';
-
 
 /**
  * Collection line label options object.
@@ -128,8 +62,8 @@ export type TypeLineLabelOrientation = 'horizontal' | 'baseAway' | 'baseToLine'
  * `subLocation`. By default the label will be a percentage `linePosition`
  * along the line. `location` then defines which side of the line the label is
  * on, while `subLocation` defines the backup location for invalid cases of
- * `location`. See {@link TypeLineLabelLocation} and
- * {@link TypeLineLabelSubLocation}. `location` can additionaly place the
+ * `location`. See {@link TypeLabelLocation} and
+ * {@link TypeLabelSubLocation}. `location` can additionaly place the
  * labels off the ends of the line.
  *
  * To automatically update the label location and orientation as the line
@@ -138,11 +72,11 @@ export type TypeLineLabelOrientation = 'horizontal' | 'baseAway' | 'baseToLine'
  * @property {null | string | Array<string> | Equation | EQN_Equation } text
  * @property {number} [precision]
  * @property {number} [offset]
- * @property {TypeLineLabelLocation} [location]
- * @property {TypeLineLabelSubLocation} [subLocation]
- * @property {TypeLineLabelOrientation} [orientation]
- * @property {boolean} [update] (`false`)
  * @property {number} [linePosition]
+ * @property {TypeLabelLocation} [location]
+ * @property {TypeLabelSubLocation} [subLocation]
+ * @property {TypeLabelOrientation} [orientation]
+ * @property {boolean} [update] (`false`)
  * @property {number} [scale] size of the label
  * @property {Array<number>} [color]
  */
@@ -150,11 +84,11 @@ export type TypeLineLabelOptions = {
   text: null | string | Array<string> | Equation | EQN_Equation,
   precision?: number,
   offset?: number,
-  location?: TypeLineLabelLocation,
-  subLocation?: TypeLineLabelSubLocation,
-  orientation?: TypeLineLabelOrientation,
-  update?: boolean,
   linePosition?: number,
+  location?: TypeLabelLocation,
+  subLocation?: TypeLabelSubLocation,
+  orientation?: TypeLabelOrientation,
+  update?: boolean,
   scale?: number,
   color?: Array<number>,
 };
@@ -292,9 +226,9 @@ export type OBJ_MovableLine = {
 
 class LineLabel extends EquationLabel {
   offset: number;
-  location: TypeLineLabelLocation;
-  subLocation: TypeLineLabelSubLocation;
-  orientation: TypeLineLabelOrientation;
+  location: TypeLabelLocation;
+  subLocation: TypeLabelSubLocation;
+  orientation: TypeLabelOrientation;
   linePosition: number;
   precision: number;
 
@@ -303,9 +237,9 @@ class LineLabel extends EquationLabel {
     labelText: string | Equation | EQN_Equation | Array<string>,
     color: Array<number>,
     offset: number,
-    location: TypeLineLabelLocation = 'top',
-    subLocation: TypeLineLabelSubLocation = 'left',
-    orientation: TypeLineLabelOrientation = 'horizontal',
+    location: TypeLabelLocation = 'top',
+    subLocation: TypeLabelSubLocation = 'left',
+    orientation: TypeLabelOrientation = 'horizontal',
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
     scale: number = 0.7,
     precision: number = 1,
@@ -1132,9 +1066,9 @@ export default class AdvancedLine extends DiagramElementCollection {
   addLabel(
     labelText: string | Equation | EQN_Equation | Array<string>,
     offset: number,
-    location: TypeLineLabelLocation = 'top',
-    subLocation: TypeLineLabelSubLocation = 'left',
-    orientation: TypeLineLabelOrientation = 'horizontal',
+    location: TypeLabelLocation = 'top',
+    subLocation: TypeLabelSubLocation = 'left',
+    orientation: TypeLabelOrientation = 'horizontal',
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
     scale: number = 0.7,
     color: Array<number> = this.color,
