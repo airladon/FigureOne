@@ -273,7 +273,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
 
   // nextAngle: ?number;
   nextPosition: ?Point;
-  nextRotation: ?number;
+  // nextRotation: ?number;
+  nextStartAngle: ?number;
 
   pulseDefaultSettings: {
     curve: number | {
@@ -286,28 +287,109 @@ class DiagramObjectAngle extends DiagramElementCollection {
     collection: number,
   };
 
-  // eslint-disable-next-line class-methods-use-this
-  calculateFromP1P2P3(
-    p1: Point,
-    p2: Point,
-    p3: Point,
-    direction: 1 | -1 = 1,
-  ) {
-    const position = p2._dup();
-    const angle = threePointAngle(p1, p2, p3);
-    if (direction === 1) {
-      const L21 = new Line(p2, p1);
-      const rotation = L21.angle();
-      return { position, rotation, angle };
-    }
-    const L23 = new Line(p2, p1);
-    const rotation = L23.angle();
-    return {
-      position,
-      rotation,
-      angle: clipAngle(Math.PI * 2 - angle, '0to360'),
+  // direction: 'positive' | 'negative';
+  clip: '0to360' | '-180to180' | 'neg0to360' | '-360to360' | null;
+  startAngle: number;
+  angle: number;
+  position: Point;
+
+  // An angle can be defined by position, startAngle, angle, direction
+  // position - where the corner is
+  // startAngle - angle of first line
+  // angle - +ve or -ve will draw second line relative to first line
+  // direction: will determine where the curve is drawn:
+  //    +1 from start to angle in the direction of angle's sign
+  //    -1 from start to angle in the reverse direction of angle's sign
+  //
+  // An angle can also be defined with three points p1, p2, p3 where p2 is
+  // the corner point.
+  // position: p2
+  // first line: Line21
+  // secondLine: Line23
+  // direction: 1 - curve is from Line21 to Line23 in positive direction
+  // direction: -1 - curve is from Line21 to Line23 in negative direction
+
+  // position
+  // startAngle,
+  // angle
+  // curve ('positive' | 'negative')
+  // clip: 0to360 | -180to180 | neg0to360 | -360to360 | null
+
+  // position: p2
+  // startAngle: Line21
+  // angle: Line23
+  // curve: ('positive' | 'negative')
+  // clip: 0to360 | -180to180 | neg0to360 | -360to360 | null
+
+  calculateAngleRotationPosition(options: {
+    p1?: TypeParsablePoint,
+    p2?: TypeParsablePoint,
+    p3?: TypeParsablePoint,
+    position?: TypeParsablePoint,
+    startAngle?: number,
+    angle?: number,
+    direction?: 'positive' | 'negative' | 1 | -1,
+    clip?: '0to360' | '-180to180' | 'neg0to360' | '-360to360' | null
+  }) {
+    const defaultOptions = {
+      angle: 1,
+      direction: 1,
+      startAngle: 0,
+      position: new Point(0, 0),
+      clip: '-360to360',
     };
+    const o = joinObjects({}, defaultOptions, options);
+    if (o.direction === 'positive') {
+      o.direction = 1;
+    }
+    if (o.direction === 'negative') {
+      o.direction = -1;
+    }
+    let { angle, startAngle, position } = o;
+    const { direction, clip } = o;
+    position = getPoint(position);
+    if (o.p1 != null && o.p2 != null && o.p3 != null) {
+      const p1 = getPoint(o.p1);
+      const p2 = getPoint(o.p2);
+      const p3 = getPoint(o.p3);
+      position = p2._dup();
+      const line21 = new Line(p2, p1);
+      startAngle = line21.angle();
+      angle = threePointAngle(p1, p2, p3);
+    }
+    this.startAngle = startAngle;
+    this.position = getPoint(position);
+    this.nextStartAngle = this.startAngle;
+    this.nextPosition = this.position;
+    this.angle = angle;
+    this.startAngle = startAngle;
+    this.direction = direction;
+    this.clip = clip;
   }
+
+  // // deprecate
+  // // eslint-disable-next-line class-methods-use-this
+  // calculateFromP1P2P3(
+  //   p1: Point,
+  //   p2: Point,
+  //   p3: Point,
+  //   direction: 1 | -1 = 1,
+  // ) {
+  //   const position = p2._dup();
+  //   const angle = threePointAngle(p1, p2, p3);
+  //   if (direction === 1) {
+  //     const L21 = new Line(p2, p1);
+  //     const rotation = L21.angle();
+  //     return { position, rotation, angle };
+  //   }
+  //   const L23 = new Line(p2, p1);
+  //   const rotation = L23.angle();
+  //   return {
+  //     position,
+  //     rotation,
+  //     angle: clipAngle(Math.PI * 2 - angle, '0to360'),
+  //   };
+  // }
 
   constructor(
     shapes: Object,
@@ -362,30 +444,33 @@ class DiagramObjectAngle extends DiagramElementCollection {
     this.animateNextFrame = animateNextFrame;
 
     // Calculate and store the angle geometry
-    this.nextPosition = getPoint(optionsToUse.position);
-    this.nextRotation = optionsToUse.rotation;
-    this.direction = optionsToUse.direction;
-    this.angle = optionsToUse.angle;
+    // this.nextPosition = getPoint(optionsToUse.position);
+    // this.nextRotation = optionsToUse.rotation;
+    // this.direction = optionsToUse.direction;
+    // this.angle = optionsToUse.angle;
     this.lastLabelRotationOffset = 0;
     this.autoRightAngle = optionsToUse.autoRightAngle;
     this.rightAngleRange = optionsToUse.rightAngleRange;
 
-    // this.clockwise = optionsToUse.clockwise;
-    // this.radius = optionsToUse.radius;
-    if (optionsToUse.p1 != null
-      && optionsToUse.p2 != null
-      && optionsToUse.p3 != null
-    ) {
-      const { position, rotation, angle } = this.calculateFromP1P2P3(
-        getPoint(optionsToUse.p1),
-        getPoint(optionsToUse.p2),
-        getPoint(optionsToUse.p3),
-        this.direction,
-      );
-      this.angle = angle;
-      this.nextRotation = rotation;
-      this.nextPosition = getPoint(position);
-    }
+    this.calculateAngleRotationPosition(optionsToUse);
+
+
+    // // this.clockwise = optionsToUse.clockwise;
+    // // this.radius = optionsToUse.radius;
+    // if (optionsToUse.p1 != null
+    //   && optionsToUse.p2 != null
+    //   && optionsToUse.p3 != null
+    // ) {
+    //   const { position, rotation, angle } = this.calculateFromP1P2P3(
+    //     getPoint(optionsToUse.p1),
+    //     getPoint(optionsToUse.p2),
+    //     getPoint(optionsToUse.p3),
+    //     this.direction,
+    //   );
+    //   this.angle = angle;
+    //   this.nextRotation = rotation;
+    //   this.nextPosition = getPoint(position);
+    // }
     this.setNextPositionAndRotation();
     // if (this.nextPosition != null) {
     //   this.transform.updateTranslation(this.nextPosition);
@@ -556,11 +641,11 @@ class DiagramObjectAngle extends DiagramElementCollection {
     if (this.nextPosition != null) {
       this.transform.updateTranslation(this.nextPosition);
     }
-    if (this.nextRotation != null) {
-      this.transform.updateRotation(this.nextRotation);
+    if (this.nextStartAngle != null) {
+      this.transform.updateRotation(this.nextStartAngle);
     }
     this.nextPosition = null;
-    this.nextRotation = null;
+    this.nextStartAngle = null;
   }
 
   setAngle(options: {
@@ -730,6 +815,14 @@ class DiagramObjectAngle extends DiagramElementCollection {
     const optionsToUse = joinObjects(
       {}, defaultCurveOptions, curveOptions,
     );
+
+    let { direction } = this;
+    if (this.angle < 0 && this.direction === -1) {
+      direction = 1;
+    } else if (this.angle < 0 && this.direction === 1) {
+      direction = -1;
+    }
+
     for (let i = 0; i < optionsToUse.num; i += 1) {
       const curve = this.shapes.polygonSweep({
         sides: optionsToUse.sides,
@@ -737,9 +830,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
         width: optionsToUse.width,
         color: this.color,
         fill: false,
-        // line: {
-        //   widthIs: 'mid',
-        // },
+        direction,
         transform: new Transform('AngleCurve').rotate(0),
       });
       this.curve = optionsToUse;
@@ -840,6 +931,12 @@ class DiagramObjectAngle extends DiagramElementCollection {
   updateCurve(primaryCurveAngle: number, angle: number, rotation: number, show: boolean) {
     const { curve } = this;
     if (curve) {
+      let { direction } = this;
+      if (this.angle < 0 && this.direction === -1) {
+        direction = 1;
+      } else if (this.angle < 0 && this.direction === 1) {
+        direction = -1;
+      }
       for (let i = 0; i < curve.num; i += 1) {
         let name = '_curve';
         if (i > 0) {
@@ -859,14 +956,14 @@ class DiagramObjectAngle extends DiagramElementCollection {
                 delta = primaryCurveAngle - numSides * sideAngle;
               }
               element.angleToDraw = clipAngle(primaryCurveAngle, '0to360');
-              element.transform.updateRotation(rotation + delta / 2);
+              element.transform.updateRotation(rotation + direction * delta / 2);
             } else {
               let delta = 0;
               if (this.curve) {
                 delta = angle % (2 * Math.PI / this.curve.sides);
               }
               element.angleToDraw = clipAngle(angle, '0to360');
-              element.transform.updateRotation(delta / 2);
+              element.transform.updateRotation(direction * delta / 2);
             }
           } else {
             element.hide();
@@ -883,8 +980,16 @@ class DiagramObjectAngle extends DiagramElementCollection {
     let arrow2Hide = false;
 
     let rotationForArrow1 = 0;
-    let curveAngle = this.angle;
-    let trueCurveAngle = this.angle;
+    let fullCurveAngle = clipAngle(this.angle, '-360to360');
+    if (fullCurveAngle >= 0 && this.direction === -1) {
+      fullCurveAngle = Math.PI * 2 - fullCurveAngle;
+    } else if (fullCurveAngle < 0 && this.direction === 1) {
+      fullCurveAngle = Math.abs(fullCurveAngle);
+    } else if (fullCurveAngle < 0 && this.direction === -1) {
+      fullCurveAngle = Math.PI * 2 - Math.abs(fullCurveAngle);
+    }
+    let curveAngle = fullCurveAngle;
+    let trueCurveAngle = fullCurveAngle;
     // const arrow2LengthModifier = 0.5;
     // const arrowLengthMod = 0.9;
 
@@ -951,8 +1056,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
     const { _curve, curve, _curveRight } = this;
     if (_curve != null && curve != null) {
       if (
-        (curve.autoHideMin != null && this.angle < curve.autoHideMin)
-        || (curve.autoHideMax != null && this.angle > curve.autoHideMax)
+        (curve.autoHideMin != null && fullCurveAngle < curve.autoHideMin)
+        || (curve.autoHideMax != null && fullCurveAngle > curve.autoHideMax)
       ) {
         if (_curveRight != null) {
           _curveRight.hide();
@@ -965,8 +1070,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
           _arrow2.hide();
         }
       } else if (this.autoRightAngle
-        && this.angle >= Math.PI / 2 - this.rightAngleRange / 2
-        && this.angle <= Math.PI / 2 + this.rightAngleRange / 2
+        && fullCurveAngle >= Math.PI / 2 - this.rightAngleRange / 2
+        && fullCurveAngle <= Math.PI / 2 + this.rightAngleRange / 2
       ) {
         if (_curveRight != null) {
           _curveRight.showAll();
@@ -992,7 +1097,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
         curveAngle = Math.max(curveAngle, 0);
         // _curve.angleToDraw = curveAngle;
         // _curve.transform.updateRotation(rotationForArrow1);
-        this.updateCurve(curveAngle, this.angle, rotationForArrow1, true);
+        this.updateCurve(curveAngle, fullCurveAngle, rotationForArrow1, true);
       }
     }
 

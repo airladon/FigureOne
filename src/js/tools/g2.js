@@ -32,8 +32,12 @@ function quadraticBezier(P0: number, P1: number, P2: number, t: number) {
  */
 function clipAngle(
   angleToClip: number,
-  clipTo: '0to360' | '-180to180' | null,
+  clipTo: '0to360' | '-180to180' | null | '-360to360' | '-360to0',
 ) {
+  if (clipTo === null) {
+    return angleToClip;
+  }
+  // Modular 2π gives -360to360
   let angle = angleToClip % (Math.PI * 2);
   if (clipTo === '0to360') {
     if (angle < 0) {
@@ -49,6 +53,14 @@ function clipAngle(
     }
     if (angle >= Math.PI) {
       angle -= Math.PI * 2;
+    }
+  }
+  if (clipTo === '-360to0') {
+    if (angle > 0) {
+      angle -= Math.PI * 2;
+    }
+    if (angle <= -Math.PI * 2) {
+      angle += Math.PI * 2;
     }
   }
   return angle;

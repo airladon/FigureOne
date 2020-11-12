@@ -451,32 +451,38 @@ diagram.elements._l2.setMovable();
 const a = diagram.advanced.angle({
   // p1: [1, 0],
   // p2: [0, 0],
-  // p3: [1, 0],
-  angle: Math.PI / 4,
+  // p3: [0, 1],
+  angle: -Math.PI / 4,
+  direction: 'negative',
   curve: {
     width: 0.01,
     radius: 0.5,
     num: 3,
     step: -0.02,
+    sides: 100,
   },
-  direction: -1,
+  // arrows: {
+  //   width: 0.1,
+  //   height: 0.1,
+  // },
+  // direction: -1,
   label: {
     text: 'dimension',
     // radius: 1,
-    // location: 'outside',
+    // location: 'start',
   },
   // sides: {
   //   length: 1,
   //   width: 0.1,
   // },
-  corner: { style: 'fill', length: 1, width: 0.1 },
+  corner: { style: 'fill', length: 1, width: 0.01 },
 });
 diagram.add('a', a);
 
-diagram.elements._l.subscriptions.add('setTransform', () => {
-  a.setAngle({ angle: diagram.elements._l.getRotation() });
-});
-diagram.elements._l.setRotation(1);
+// diagram.elements._l.subscriptions.add('setTransform', () => {
+//   a.setAngle({ angle: diagram.elements._l.getRotation() });
+// });
+// diagram.elements._l.setRotation(1);
 
 diagram.elements._l2.subscriptions.add('setTransform', () => {
   const r = diagram.elements._l2.getRotation();
