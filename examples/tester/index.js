@@ -495,8 +495,12 @@ diagram.addElement({
     method: 'advanced.line',
     options: {
       p1: [0, 0],
-      p2: [1, 0],
-      label: 'hello there',
+      p2: [1, 1],
+      label: {
+        text: 'hello there',
+        location: 'positive',
+        orientation: 'horizontal',
+      },
       width: 0.01,
     },
   }],
@@ -504,3 +508,5 @@ diagram.addElement({
     position: [-2, 0],
   },
 });
+diagram.elements._c._line.setAutoUpdate();
+diagram.elements._c._line.setMovable({ type: 'rotation' });

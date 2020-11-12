@@ -327,7 +327,7 @@ export default class EquationLabel {
     let positionOffset = new Point(0, 0);
     if (style === 'oval') {
       positionOffset = this.getOvalOffset(
-        labelAngle, h, w, offsetMag, offsetAngle, change, location, relativeToLine, parentAngleOffset, position,
+        labelAngle - parentAngleOffset, h, w, offsetMag, offsetAngle, change, location, relativeToLine, parentAngleOffset, position,
       );
     }
 
@@ -399,10 +399,10 @@ export default class EquationLabel {
     const a = this.aOffset + w;
     const b = this.aOffset + h;
 
-    const phi = clipAngle(labelAngle + parentAngleOffset, '0to360');
+    const phi = clipAngle(labelAngle, '0to360');
     let theta;
-    let xOffset;
-    let yOffset;
+    let xOffset = 0;
+    let yOffset = 0;
     let R;
     if (true) {
       if (location === 'start') {
@@ -498,9 +498,9 @@ export default class EquationLabel {
           });
           e.setPosition(position.add(xOffset, yOffset));
           if (relativeToLine) {
-            e.setRotation(labelAngle - parentAngleOffset);
+            e.setRotation(labelAngle);
           } else {
-            e.setRotation(-parentAngleOffset);
+            e.setRotation(0);
           }
         }
       }
