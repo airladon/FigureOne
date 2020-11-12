@@ -522,17 +522,30 @@ class DiagramObjectAngle extends DiagramElementCollection {
       if (this.curve) {
         width = this.curve.width;
       }
-      const arrowOptions = simplifyArrowOptions(optionsToUse.arrow, width);
-      this.arrow = arrowOptions;
+      let autoHide = true;
+      if (typeof optionsToUse.arrow !== 'string' && optionsToUse.arrow.autoHide != null) {
+        autoHide = optionsToUse.arrow.autoHide;
+      }
       let defaultArrowRadius = 0.1;
       if (this.curve) {
         defaultArrowRadius = this.curve.radius;
       }
+      if (typeof optionsToUse.arrow !== 'string' && optionsToUse.arrow.radius != null) {
+        defaultArrowRadius = optionsToUse.arrow.radius;
+      }
+      let curveOverlap = 0.3;
+      if (typeof optionsToUse.arrow !== 'string' && optionsToUse.arrow.curveOverlap != null) {
+        curveOverlap = optionsToUse.arrow.curveOverlap;
+      }
+      const arrowOptions = simplifyArrowOptions(optionsToUse.arrow, width);
+      this.arrow = arrowOptions;
+
       const defaultO = {
         radius: defaultArrowRadius,
-        autoHide: true,
-        curveOverlap: 0.3,
+        autoHide,
+        curveOverlap,
       };
+      // console.log(defaultO)
       if (this.arrow.start != null) {
         this.arrow.start = joinObjects({}, defaultO, this.arrow.start);
       }
@@ -965,7 +978,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
     // if (this.angle < 0) {
     //   r += Math.PI;
     // }
-
+    if (this.arrow[lineEnd] == null) {
+      return;
+    }
     const o = this.arrow[lineEnd];
     const a = this.shapes.arrow(joinObjects(
       {},
@@ -986,9 +1001,10 @@ class DiagramObjectAngle extends DiagramElementCollection {
     this[`arrow${index}`] = {
       height: arrowLength,
       radius: o.radius,
-      autoHid: o.autoHide,
+      autoHide: o.autoHide,
       curveOverlap: o.curveOverlap,
     };
+    console.log(this[`arrow${index}`])
     this.add(`arrow${index}`, a);
 
 

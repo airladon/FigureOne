@@ -466,10 +466,15 @@ const a = diagram.advanced.angle({
     text: null,
   },
   arrow: {
-    head: 'triangle',
-    length: 0.05,
-    width: 0.05,
-    // tail: 0,
+    // start: {
+      head: 'line',
+      length: 0.05,
+      width: 0.05,
+      // radius: 0.3,
+      // autoHide: false,
+      // autoHide: true,
+    // },
+    tail: 0,
   },
   // arrows: {
   //   width: 0.1,
@@ -492,7 +497,7 @@ diagram.add('a', a);
 diagram.elements._l.subscriptions.add('setTransform', () => {
   a.setAngle({ angle: diagram.elements._l.getRotation() });
 });
-// diagram.elements._l.setRotation(1);
+diagram.elements._l.setRotation(1);
 
 diagram.elements._l2.subscriptions.add('setTransform', () => {
   const r = diagram.elements._l2.getRotation();
