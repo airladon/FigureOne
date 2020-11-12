@@ -288,7 +288,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
   };
 
   // direction: 'positive' | 'negative';
-  clip: '0to360' | '-180to180' | 'neg0to360' | '-360to360' | null;
+  // clip: '0to360' | '-180to180' | 'neg0to360' | '-360to360' | null;
   startAngle: number;
   angle: number;
   position: Point;
@@ -328,25 +328,25 @@ class DiagramObjectAngle extends DiagramElementCollection {
     position?: TypeParsablePoint,
     startAngle?: number,
     angle?: number,
-    direction?: 'positive' | 'negative' | 1 | -1,
-    clip?: '0to360' | '-180to180' | 'neg0to360' | '-360to360' | null
+    // direction?: 'positive' | 'negative' | 1 | -1,
+    // clip?: '0to360' | '-180to180' | 'neg0to360' | '-360to360' | null
   }) {
     const defaultOptions = {
       angle: 1,
-      direction: 1,
+      // direction: 1,
       startAngle: 0,
       position: new Point(0, 0),
-      clip: '-360to360',
+      // clip: '-360to360',
     };
     const o = joinObjects({}, defaultOptions, options);
-    if (o.direction === 'positive') {
-      o.direction = 1;
-    }
-    if (o.direction === 'negative') {
-      o.direction = -1;
-    }
+    // if (o.direction === 'positive') {
+    //   o.direction = 1;
+    // }
+    // if (o.direction === 'negative') {
+    //   o.direction = -1;
+    // }
     let { angle, startAngle, position } = o;
-    const { direction, clip } = o;
+    // const { direction } = this;
     position = getPoint(position);
     if (o.p1 != null && o.p2 != null && o.p3 != null) {
       const p1 = getPoint(o.p1);
@@ -363,8 +363,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
     this.nextPosition = this.position;
     this.angle = angle;
     this.startAngle = startAngle;
-    this.direction = direction;
-    this.clip = clip;
+    // this.direction = direction;
+    // this.clip = clip;
   }
 
   // // deprecate
@@ -400,12 +400,14 @@ class DiagramObjectAngle extends DiagramElementCollection {
   ) {
     const defaultOptions = {
       position: new Point(0, 0),
-      rotation: 0,
-      angle: 1,
+      // rotation: 0,
+      // angle: 1,
       // radius: 0.1,
       color: shapes.defaultColor,
       // clockwise: false,
+      // direction: 1,
       direction: 1,
+      // clip: null,
       autoRightAngle: false,
       rightAngleRange: 0.001,
       curve: null,
@@ -417,9 +419,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
       arrow1: null,
       arrow2: null,
       label: null,
-      p1: null,       // if p1, p2 and p3 are defined, position, angle and
-      p2: null,       // rotation will be overridden
-      p3: null,
+      // p1: null,       // if p1, p2 and p3 are defined, position, angle and
+      // p2: null,       // rotation will be overridden
+      // p3: null,
       pulse: {
         curve: 1,
         label: 1,
@@ -451,6 +453,14 @@ class DiagramObjectAngle extends DiagramElementCollection {
     this.lastLabelRotationOffset = 0;
     this.autoRightAngle = optionsToUse.autoRightAngle;
     this.rightAngleRange = optionsToUse.rightAngleRange;
+    if (optionsToUse.direction === 'positive') {
+      this.direction = 1;
+    } else if (optionsToUse.direction === 'negative') {
+      this.direction = -1;
+    } else {
+      this.direction = optionsToUse.direction;
+    }
+    // this.clip = optionsToUse.clip;
 
     this.calculateAngleRotationPosition(optionsToUse);
 
@@ -657,30 +667,31 @@ class DiagramObjectAngle extends DiagramElementCollection {
       p3?: TypeParsablePoint,
       rotationOffset?: number,
     } = {}) {
-    if (options.position != null) {
-      this.nextPosition = getPoint(options.position);
-    }
-    if (options.rotation != null) {
-      this.nextRotation = options.rotation;
-    }
-    if (options.angle != null) {
-      this.angle = options.angle;
-    }
-    const { p1, p2, p3 } = options;
-    if (p1 != null
-      && p2 != null
-      && p3 != null
-    ) {
-      const { position, rotation, angle } = this.calculateFromP1P2P3(
-        getPoint(p1),
-        getPoint(p2),
-        getPoint(p3),
-        this.direction,
-      );
-      this.angle = angle;
-      this.nextRotation = rotation;
-      this.nextPosition = getPoint(position);
-    }
+    // if (options.position != null) {
+    //   this.nextPosition = getPoint(options.position);
+    // }
+    // if (options.rotation != null) {
+    //   this.nextRotation = options.rotation;
+    // }
+    // if (options.angle != null) {
+    //   this.angle = options.angle;
+    // }
+    // const { p1, p2, p3 } = options;
+    // if (p1 != null
+    //   && p2 != null
+    //   && p3 != null
+    // ) {
+    //   const { position, rotation, angle } = this.calculateFromP1P2P3(
+    //     getPoint(p1),
+    //     getPoint(p2),
+    //     getPoint(p3),
+    //     this.direction,
+    //   );
+    //   this.angle = angle;
+    //   this.nextRotation = rotation;
+    //   this.nextPosition = getPoint(position);
+    // }
+    this.calculateAngleRotationPosition(options);
     const { corner, _corner } = this;
     if (corner != null && _corner != null) {
       const points = this.getCornerPoints(corner.length);
@@ -1238,7 +1249,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
           } else if (angle < 0 && this.direction === -1) {
             angle = Math.PI * 2 - Math.abs(angle);
           }
-          angle = clipAngle(angle, this.clip);
+          // angle = clipAngle(angle, this.clip);
+          angle = Math.abs(angle);
           let angleText = roundNum(angle, label.precision)
             .toFixed(label.precision);
           if (label.units === 'degrees') {
