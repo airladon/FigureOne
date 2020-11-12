@@ -459,7 +459,7 @@ const a = diagram.advanced.angle({
   // p2: [1, 1],
   // p3: [1, 2],
   position: [1, 1],
-  angle: Math.PI / 2,
+  angle: Math.PI / 4,
   direction: 'positive',
   autoRightAngle: true,
   // clip: '0to360',
@@ -497,15 +497,15 @@ diagram.elements._l.subscriptions.add('setTransform', () => {
   const r = diagram.elements._l2.getRotation();
   a.setAngle({ angle, startAngle: r });
 });
-diagram.elements._l.setRotation(Math.PI / 2);
-a.pulseAngle({
-  duration: 5,
-  corner: 1.05,
-  curve: 1.1,
-  arrow: 3,
-  label: 1.5,
-  thick: 10
-})
+diagram.elements._l.setRotation(Math.PI / 4);
+// a.pulseAngle({
+//   duration: 5,
+//   corner: 1.05,
+//   curve: 1.1,
+//   arrow: 3,
+//   label: 1.5,
+//   thick: 10
+// })
 // a.pulse({ scale: 2, duration: 5 })
 
 diagram.elements._l2.subscriptions.add('setTransform', () => {

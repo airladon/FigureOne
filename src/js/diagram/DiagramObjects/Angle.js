@@ -88,7 +88,11 @@ export type ADV_Angle = {
   //   autoHide?: boolean,
   //   curveOverlap?: number,    // Percentage height to overlap curve
   // } | boolean,
-  arrow: OBJ_LineArrows;
+  arrow: string | OBJ_LineArrows & {
+    curveOverlap?: number,
+    autoHide?: boolean,
+    radius?: number,
+  };
   // Label
   label?: TypeAngleLabelOptions,
   //
@@ -732,7 +736,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
 
     for (let i = 0; i < optionsToUse.num; i += 1) {
-      const curve = this.shapes.polygonSweep({
+      const curve = this.shapes.polygon({
         sides: optionsToUse.sides,
         radius: optionsToUse.radius + i * optionsToUse.step,
         width: optionsToUse.width,
@@ -753,16 +757,20 @@ class DiagramObjectAngle extends DiagramElementCollection {
     if (this.autoRightAngle) {
       const right = this.shapes.collection();
       const rightLength = optionsToUse.radius * 0.707; // / Math.sqrt(2);
-      right.add('line1', this.shapes.horizontalLine(
-        new Point(rightLength, 0),
-        rightLength + optionsToUse.width / 2, optionsToUse.width,
-        Math.PI / 2, this.color,
-      ));
-      right.add('line2', this.shapes.horizontalLine(
-        new Point(0, rightLength),
-        rightLength - optionsToUse.width / 2, optionsToUse.width,
-        0, this.color,
-      ));
+      right.add('line1', this.shapes.line({
+        p1: [rightLength, 0],
+        length: rightLength + optionsToUse.width / 2,
+        width: optionsToUse.width,
+        angle: Math.PI / 2 * direction,
+        color: this.color,
+      }));
+      right.add('line2', this.shapes.line({
+        p1: [0, rightLength * direction],
+        length: rightLength + optionsToUse.width / 2,
+        width: optionsToUse.width,
+        angle: 0,
+        color: this.color,
+      }));
       this.add('curveRight', right);
     }
   }

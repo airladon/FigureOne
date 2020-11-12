@@ -2252,6 +2252,19 @@ export default class DiagramPrimitives {
           widthIs: o.line.widthIs,
         }));
       };
+      // $FlowFixMe
+      element.drawingObject.getPointCountForAngle = (angle: number) => {
+        const sidesToDraw = Math.floor(
+          tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * optionsToUse.sides,
+        );
+        if (optionsToUse.fill) {
+          return sidesToDraw + 2;
+        }
+        if (optionsToUse.line && optionsToUse.line.linePrimitives) {
+          return sidesToDraw * optionsToUse.line.lineNum * 2;
+        }
+        return sidesToDraw * 6;
+      };
     }
     return element;
   }
