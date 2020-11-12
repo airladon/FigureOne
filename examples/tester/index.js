@@ -473,7 +473,7 @@ const a = diagram.advanced.angle({
   label: {
     text: null,
     curveOffset: 0.1,
-    location: 'top',
+    location: 'outside',
     orientation: 'baseToLine',
   },
   arrow: {
@@ -528,8 +528,8 @@ diagram.addElement({
       p2: [1, 1],
       label: {
         text: 'hello there',
-        location: 'positive',
-        orientation: 'horizontal',
+        location: 'bottom',
+        orientation: 'baseToLine',
       },
       width: 0.01,
     },

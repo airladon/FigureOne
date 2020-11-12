@@ -185,9 +185,9 @@ export default class EquationLabel {
     } else if (location === 'end') {
       offsetAngle = 0;
     } else {
-      const offsetTop = Math.cos(lineAngle) < 0 ? -Math.PI / 2 : Math.PI / 2;
+      const offsetTop = Math.cos(lineAngle + parentAngleOffset) < 0 ? -Math.PI / 2 : Math.PI / 2;
       const offsetBottom = -offsetTop;
-      const offsetLeft = Math.sin(lineAngle) > 0 ? Math.PI / 2 : -Math.PI / 2;
+      const offsetLeft = Math.sin(lineAngle + parentAngleOffset) > 0 ? Math.PI / 2 : -Math.PI / 2;
       const offsetRight = -offsetLeft;
 
       if (location === 'top') {
@@ -208,7 +208,7 @@ export default class EquationLabel {
       if (location === 'negative') {
         offsetAngle = -Math.PI / 2;
       }
-      if (round(Math.sin(lineAngle), 4) === 0
+      if (round(Math.sin(lineAngle + parentAngleOffset), 4) === 0
         && (location === 'left' || location === 'right')
       ) {
         if (subLocation === 'top') {
@@ -218,7 +218,7 @@ export default class EquationLabel {
           offsetAngle = offsetBottom;
         }
       }
-      if (round(Math.cos(lineAngle), 4) === 0
+      if (round(Math.cos(lineAngle + parentAngleOffset), 4) === 0
         && (location === 'top' || location === 'bottom')
       ) {
         if (subLocation === 'right') {
@@ -236,11 +236,13 @@ export default class EquationLabel {
       }
     }
 
+    let parentAngle = parentAngleOffset;
     if (orientation === 'horizontal') {
       labelAngle = -lineAngle;
     }
 
     if (orientation === 'baseToLine') {
+      parentAngle = 0;
       labelAngle = 0;
       if (offsetAngle < 0) {
         labelAngle = Math.PI;
@@ -278,7 +280,7 @@ export default class EquationLabel {
     let positionOffset = new Point(0, 0);
     if (style === 'oval') {
       positionOffset = this.getOvalOffset(
-        labelAngle - parentAngleOffset,
+        labelAngle - parentAngle,
         h, w, offsetMag, offsetAngle, change, location,
       );
     }
@@ -288,8 +290,12 @@ export default class EquationLabel {
     p = position.add(positionOffset);
     r = labelAngle - parentAngleOffset;
     if (relativeToLine === false) {
-      p = p.rotate(-labelAngle, position);
+      p = position.add(positionOffset).rotate(-labelAngle, position);
       r = labelAngle - parentAngleOffset + lineAngle;
+    }
+    if (relativeToLine && orientation === 'baseToLine') {
+      r = labelAngle;
+      // p = position.add(positionOffset).rotate(parentAngleOffset, position);
     }
     this.eqn.setPosition(p);
     this.eqn.transform.updateRotation(r);
