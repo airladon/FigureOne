@@ -1163,7 +1163,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
         label.updateRotation(
           labelPosition, lineAngle, label.curveOffset, location, label.subLocation, orientation,
           this.lastLabelRotationOffset == null ? 0 : this.lastLabelRotationOffset,
-          'oval', false, Math.PI / 2, Math.PI / 2,
+          'oval', false, Math.PI / 2, -Math.PI / 2,
         );
       }
     }

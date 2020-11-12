@@ -366,8 +366,8 @@ export default class EquationLabel {
     } else if (location === 'end') {
       theta = endThetaAngle - phi;
       R = getR(a, b, theta);
-      xOffset = R * Math.cos(endThetaAngle);
-      yOffset = R * Math.sin(endThetaAngle);
+      xOffset = -R * Math.cos(endThetaAngle);
+      yOffset = -R * Math.sin(endThetaAngle);
     } else {
       // Calculate the position
       // Refer to oval_math.pdf for working

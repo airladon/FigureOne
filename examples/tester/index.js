@@ -473,8 +473,8 @@ const a = diagram.advanced.angle({
   label: {
     text: null,
     curveOffset: 0.1,
-    location: 'start',
-    orientation: 'baseToLine',
+    location: 'end',
+    orientation: 'upright',
   },
   arrow: {
     // start: {
