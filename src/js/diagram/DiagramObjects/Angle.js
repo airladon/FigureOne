@@ -1130,7 +1130,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
         } else if (angle < 0 && this.direction === -1) {
           angle = Math.PI * 2 - Math.abs(angle);
         }
-        const labelPosition = polarToRect(
+        let labelPosition = polarToRect(
           label.radius, angle * label.curvePosition,
         );
         let { orientation, location } = label;
@@ -1149,11 +1149,21 @@ class DiagramObjectAngle extends DiagramElementCollection {
             location = 'negative';
           }
         }
-        const lineAngle = clipAngle(clipAngle(angle, '0to360') * label.curvePosition + lineOffsetAngle, '0to360');
+        let lineAngle = clipAngle(clipAngle(angle, '0to360') * label.curvePosition + lineOffsetAngle, '0to360');
+        if (location === 'start') {
+          labelPosition = new Point(label.radius, 0);
+          lineAngle = 0;
+        }
+        if (location === 'end') {
+          labelPosition = polarToRect(
+            label.radius, angle,
+          );
+          lineAngle = clipAngle(angle, '0to360');
+        }
         label.updateRotation(
           labelPosition, lineAngle, label.curveOffset, location, label.subLocation, orientation,
           this.lastLabelRotationOffset == null ? 0 : this.lastLabelRotationOffset,
-          'oval', false,
+          'oval', false, Math.PI / 2, Math.PI / 2,
         );
       }
     }
@@ -1175,7 +1185,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     let { done } = o;
     const pulse = (elementName, oName, oScale, oThick) => {
       const element = this.elements[elementName];
-      if (element != null) {
+      if (element != null && element.isShown) {
         let pulseOptions;
         const defaultThick = joinObjects({ num: o.thick }, o.thick > 1 ? oThick : oScale);
         if (typeof o[oName] === 'number') {

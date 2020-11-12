@@ -1263,6 +1263,7 @@ export default class AdvancedLine extends DiagramElementCollection {
       labelPosition, lineAngle, label.offset,
       label.location, label.subLocation, label.orientation,
       this.lastParentRotationOffset, 'oval', true,
+      Math.PI * 2, Math.PI,
     );
   }
 

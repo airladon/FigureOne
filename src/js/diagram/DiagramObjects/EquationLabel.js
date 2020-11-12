@@ -176,6 +176,8 @@ export default class EquationLabel {
     parentAngleOffset: number = 0,
     style: 'oval' | 'rectangle' = 'oval',
     relativeToLine: boolean = true,
+    startThetaAngle: number = Math.PI * 2,
+    endThetaAngle: number = Math.PI,
   ) {
     // Calculate the offsetAngle and label angle
     let offsetAngle = Math.PI / 2;
@@ -284,6 +286,7 @@ export default class EquationLabel {
       positionOffset = this.getOvalOffset(
         labelAngle - parentAngle,
         h, w, offsetMag, offsetAngle, change, location,
+        startThetaAngle, endThetaAngle,
       );
     }
 
@@ -294,26 +297,7 @@ export default class EquationLabel {
     if (relativeToLine === false) {
       p = position.add(positionOffset).rotate(lineAngle, position);
       r = labelAngle - parentAngle + lineAngle;
-      // if (orientation === 'horizontal') {
-      //   p = position.add(positionOffset).rotate(-labelAngle, position);
-      //   r = labelAngle - parentAngle + lineAngle;
-      // } else {
-      //   p = position.add(positionOffset).rotate(lineAngle, position);
-      //   r = labelAngle + lineAngle;
-      // }
     }
-    // if (relativeToLine === false && orientation === 'horizontal') {
-    //   p = position.add(positionOffset).rotate(-labelAngle, position);
-    //   r = labelAngle - parentAngle + lineAngle;
-    // }
-    // if (relativeToLine === false && orientation === 'baseToLine') {
-    //   p = position.add(positionOffset).rotate(lineAngle, position);
-    //   r = labelAngle + lineAngle;
-    // }
-    // if (relativeToLine === false && orientation === 'baseAway') {
-    //   p = position.add(positionOffset).rotate(lineAngle, position);
-    //   r = labelAngle + lineAngle;
-    // }
     this.eqn.setPosition(p);
     this.eqn.transform.updateRotation(r);
 
@@ -334,6 +318,8 @@ export default class EquationLabel {
     offsetAngle: number,
     change: boolean,
     location: 'top' | 'bottom' | 'left' | 'right' | 'positive' | 'negative' | 'start' | 'end' | 'inside' | 'outside',
+    startThetaAngle: number = Math.PI * 2,
+    endThetaAngle: number = Math.PI,
   ) {
     // eslint-disable-next-line max-len
     const getR = (a, b, angle) => a * b / Math.sqrt((b * Math.cos(angle)) ** 2 + (a * Math.sin(angle)) ** 2);
@@ -373,15 +359,15 @@ export default class EquationLabel {
     let yOffset = 0;
     let R;
     if (location === 'start') {
-      theta = Math.PI * 2 - phi;
+      theta = startThetaAngle - phi;
       R = getR(a, b, theta);
-      xOffset = -R;
-      yOffset = 0;
+      xOffset = -R * Math.cos(startThetaAngle);
+      yOffset = -R * Math.sin(startThetaAngle);
     } else if (location === 'end') {
-      theta = Math.PI - phi;
+      theta = endThetaAngle - phi;
       R = getR(a, b, theta);
-      xOffset = R;
-      yOffset = 0;
+      xOffset = R * Math.cos(endThetaAngle);
+      yOffset = R * Math.sin(endThetaAngle);
     } else {
       // Calculate the position
       // Refer to oval_math.pdf for working
