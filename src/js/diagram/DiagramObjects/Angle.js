@@ -279,10 +279,11 @@ class DiagramObjectAngle extends DiagramElementCollection {
   nextStartAngle: ?number;
 
   pulseAngleDefaults: {
-    line: number | OBJ_Pulse,
+    curve: number | OBJ_Pulse,
     corner: number | OBJ_Pulse,
     label: number | OBJ_Pulse,
-    arrow: number,
+    arrow: number | OBJ_Pulse,
+    thick: number,
     duration: number,
     frequency: number,
   }
@@ -533,7 +534,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
 
     this.pulseAngleDefaults = {
-      line: optionsToUse.pulseAngle.curve || 1.5,
+      curve: optionsToUse.pulseAngle.curve || 1.5,
       corner: optionsToUse.pulseAngle.corner || 1.5,
       label: optionsToUse.pulseAngle.label || 1.5,
       arrow: optionsToUse.pulseAngle.arrow || 1.5,
@@ -914,13 +915,15 @@ class DiagramObjectAngle extends DiagramElementCollection {
 
     if (this.arrow != null && trueCurveAngle < 0) {
       if (this.arrow.start != null && this.arrow.start.autoHide) {
+        const radius = this.arrow.start.radius || 0;
         arrow1Hide = true;
-        trueCurveAngle += this.arrow.start.height / this.arrow.start.radius;
+        trueCurveAngle += this.arrow.start.height / radius;
         curveAngle += arrow1Angle;
       }
       if (this.arrow.end != null && this.arrow.end.autoHide) {
+        const radius = this.arrow.end.radius || 0;
         arrow2Hide = true;
-        trueCurveAngle += this.arrow.end.height / this.arrow.end.radius;
+        trueCurveAngle += this.arrow.end.height / radius;
         curveAngle += arrow2Angle;
       }
     }
@@ -930,7 +933,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
         _arrow1.hide();
       } else {
         _arrow1.show();
+        // $FlowFixMe
         _arrow1.transform.updateTranslation(this.arrow.start.radius, 0);
+        // $FlowFixMe
         const arrowLengthAngle = this.arrow.start.height / this.arrow.start.radius;
         let r = Math.PI;
         if (this.direction === -1) {
@@ -949,7 +954,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
         _arrow2.hide();
       } else {
         _arrow2.show();
+        // $FlowFixMe
         _arrow2.transform.updateTranslation(polarToRect(this.arrow.end.radius, this.angle));
+        // $FlowFixMe
         const arrowLengthAngle = this.arrow.end.height / this.arrow.end.radius;
         let r = 0;
         if (this.direction === -1) {
@@ -1220,11 +1227,12 @@ class DiagramObjectAngle extends DiagramElementCollection {
     if (this._curveRight != null) {
       pulse('curveRight', 'curve', {}, {});
     }
-    if (this.corner != null) {
+    if (this.corner != null && this._corner != null) {
+      const cornerLength = this.corner.length || 0;
       pulse(
         'corner', 'corner',
         { centerOn: [0, 0] },
-        { centerOn: this._corner.getPosition('diagram').add(polarToRect(this.corner.length / 2, this.angle / 2)) },
+        { centerOn: this._corner.getPosition('diagram').add(polarToRect(cornerLength / 2, this.angle / 2)) },
       );
     }
     pulse('label', 'label', { centerOn: [0, 0] }, { num: 1 });
