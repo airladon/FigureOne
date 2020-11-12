@@ -257,7 +257,7 @@ export default class EquationLabel {
     }
     if (orientation === 'upright') {
       parentAngle = 0;
-      if (Math.cos(lineAngle) < 0) {
+      if (Math.cos(lineAngle + parentAngleOffset) < 0) {
         labelAngle = Math.PI;
       }
     }
@@ -291,18 +291,29 @@ export default class EquationLabel {
     let r;
     p = position.add(positionOffset);
     r = labelAngle - parentAngle;
-    if (relativeToLine === false && orientation === 'horizontal') {
-      p = position.add(positionOffset).rotate(-labelAngle, position);
+    if (relativeToLine === false) {
+      p = position.add(positionOffset).rotate(lineAngle, position);
       r = labelAngle - parentAngle + lineAngle;
+      // if (orientation === 'horizontal') {
+      //   p = position.add(positionOffset).rotate(-labelAngle, position);
+      //   r = labelAngle - parentAngle + lineAngle;
+      // } else {
+      //   p = position.add(positionOffset).rotate(lineAngle, position);
+      //   r = labelAngle + lineAngle;
+      // }
     }
-    if (relativeToLine === false && orientation === 'baseToLine') {
-      p = position.add(positionOffset).rotate(lineAngle, position);
-      r = labelAngle + lineAngle;
-    }
-    if (relativeToLine === false && orientation === 'baseAway') {
-      p = position.add(positionOffset).rotate(lineAngle, position);
-      r = labelAngle + lineAngle;
-    }
+    // if (relativeToLine === false && orientation === 'horizontal') {
+    //   p = position.add(positionOffset).rotate(-labelAngle, position);
+    //   r = labelAngle - parentAngle + lineAngle;
+    // }
+    // if (relativeToLine === false && orientation === 'baseToLine') {
+    //   p = position.add(positionOffset).rotate(lineAngle, position);
+    //   r = labelAngle + lineAngle;
+    // }
+    // if (relativeToLine === false && orientation === 'baseAway') {
+    //   p = position.add(positionOffset).rotate(lineAngle, position);
+    //   r = labelAngle + lineAngle;
+    // }
     this.eqn.setPosition(p);
     this.eqn.transform.updateRotation(r);
 
