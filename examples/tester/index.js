@@ -493,7 +493,9 @@ diagram.add('a', a);
 
 diagram.elements._l.subscriptions.add('setTransform', () => {
   const angle = Fig.tools.g2.clipAngle(diagram.elements._l.getRotation(), '0to360')
-  a.setAngle({ angle });
+  const r = diagram.elements._l2.getRotation();
+  a.updateLabel(r);
+  a.setAngle({ angle, startAngle: r  });
 });
 diagram.elements._l.setRotation(Math.PI / 2);
 a.pulseAngle({

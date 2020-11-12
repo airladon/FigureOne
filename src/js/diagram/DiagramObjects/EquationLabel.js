@@ -288,14 +288,14 @@ export default class EquationLabel {
     let p;
     let r;
     p = position.add(positionOffset);
-    r = labelAngle - parentAngleOffset;
-    if (relativeToLine === false) {
+    r = labelAngle - parentAngle;
+    if (relativeToLine === false && orientation === 'horizontal') {
       p = position.add(positionOffset).rotate(-labelAngle, position);
-      r = labelAngle - parentAngleOffset + lineAngle;
+      r = labelAngle - parentAngle + lineAngle;
     }
-    if (relativeToLine && orientation === 'baseToLine') {
-      r = labelAngle;
-      // p = position.add(positionOffset).rotate(parentAngleOffset, position);
+    if (relativeToLine === false && orientation === 'baseToLine') {
+      p = position.add(positionOffset).rotate(-labelAngle, position);
+      r = labelAngle + lineAngle;
     }
     this.eqn.setPosition(p);
     this.eqn.transform.updateRotation(r);

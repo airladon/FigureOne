@@ -28,17 +28,20 @@ export type TypeAngleLabelOptions = {
   // String goes to eqn,
   text: null | string | Array<string> | Equation | EQN_Equation,
                                   // Array<string> into eqn forms
+  units?: 'degrees' | 'radians';  // Real angle units
+  precision?: number,         // Num decimal places if using angle label
   radius?: number,                // Label radius
   curvePosition?: number,         // Label position along curve in %
   curveOffset?: number,           // Label position along curve in rad
   showRealAngle?: boolean,        // Use angle as label
-  units?: 'degrees' | 'radians';  // Real angle units
-  precision?: number,         // Num decimal places if using angle label
   orientation?: TypeAngleLabelOrientation,  // horiztonal or tangent
   autoHide?: ?number,         // Auto hide label if angle is less than this
   autoHideMax?: ?number,      // Auto hide label if angle is greater than this
   scale?: number,             // Text scale
   color?: Array<number>,      // Text color can be different to curve
+  location?: TypeLineLabelLocation,
+  subLocation?: TypeLineLabelSubLocation,
+  orientation?: TypeLineLabelOrientation,
 };
 
 /**
@@ -576,7 +579,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
       p1?: TypeParsablePoint,
       p2?: TypeParsablePoint,
       p3?: TypeParsablePoint,
-      rotationOffset?: number,
     } = {}) {
     this.calculateAngleRotationPosition(options);
     const { corner, _corner } = this;
@@ -584,11 +586,11 @@ class DiagramObjectAngle extends DiagramElementCollection {
       const points = this.getCornerPoints(corner.length);
       _corner.custom.updatePoints({ points });
     }
-    if (options.rotationOffset != null) {
-      this.update(options.rotationOffset);
-    } else {
-      this.update();
-    }
+    // if (options.rotationOffset != null) {
+    //   this.update(options.rotationOffset);
+    // } else {
+    this.update();
+    // }
   }
 
   getCornerPoints(length: number) {
