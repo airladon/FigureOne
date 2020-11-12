@@ -227,26 +227,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     _base: DiagramElementPrimitive;
   } & DiagramElementCollection;
 
-  // Objects that may or may not exist
   label: ?AngleLabel;
-  // arrow1: ?{
-  //   height: number;
-  //   width: number,
-  //   radius: number,
-  //   autoHide: boolean,
-  //   curveOverlap: number,
-  // };
-
-  // arrow2: ?{
-  //   height: number;
-  //   width: number,
-  //   radius: number,
-  //   autoHide: boolean,
-  //   curveOverlap: number,
-  // };
-
-  // arrow1: ?{ height: number; };
-  // arrow2: ?{ height: number; };
   arrow: ?{
     start?: OBJ_LineArrow & {
       radius: number, curveOverlap: number, autoHide: boolean, height: number,
@@ -275,14 +256,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
     autoHideMax: ?number,
   };
 
-  // angle properties - pulic read only
+  startAngle: number;
   angle: number;
-  // rotation: number;
-  // position: Point;
-  radius: number;
-  p1: Point;
-  p2: Point;
-  p3: Point;
   direction: -1 | 1;
   lastLabelRotationOffset: number;
   autoRightAngle: boolean;
@@ -293,38 +268,11 @@ class DiagramObjectAngle extends DiagramElementCollection {
   // angle properties - private internal use only
   shapes: Object;
   equation: Object;
-  animateNextFrame: void => void;
   isTouchDevice: boolean;
   largerTouchBorder: boolean;
 
-  // // Pulic Angle methods
-  // setAngle: (?{
-  //     position?: TypeParsablePoint,
-  //     rotation?: number,
-  //     angle?: number,
-  //     p1?: TypeParsablePoint,
-  //     p2?: TypeParsablePoint,
-  //     p3?: TypeParsablePoint,
-  //     rotationOffset?: number,
-  //   }) => void;
-
-  update: (?number) => void;
-
-  // nextAngle: ?number;
   nextPosition: ?Point;
-  // nextRotation: ?number;
   nextStartAngle: ?number;
-
-  // pulseDefaultSettings: {
-  //   curve: number | {
-  //     width?: number,
-  //     num?: number,
-  //   },
-  //   label: number,
-  //   arrow: number,
-  //   side: number,
-  //   collection: number,
-  // };
 
   pulseAngleDefaults: {
     line: number | OBJ_Pulse,
@@ -334,12 +282,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
     duration: number,
     frequency: number,
   }
-
-  // direction: 'positive' | 'negative';
-  // clip: '0to360' | '-180to180' | 'neg0to360' | '-360to360' | null;
-  startAngle: number;
-  angle: number;
-  position: Point;
 
   // An angle can be defined by position, startAngle, angle, direction
   // position - where the corner is
@@ -383,7 +325,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       angle: 1,
       // direction: 1,
       startAngle: 0,
-      position: new Point(0, 0),
+      // position: new Point(0, 0),
       // clip: '-360to360',
     };
     const o = joinObjects({}, defaultOptions, options);
@@ -395,7 +337,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
     // }
     let { angle, startAngle, position } = o;
     // const { direction } = this;
-    position = getPoint(position);
+    if (position != null) {
+      position = getPoint(position);
+    }
     if (o.p1 != null && o.p2 != null && o.p3 != null) {
       const p1 = getPoint(o.p1);
       const p2 = getPoint(o.p2);
@@ -406,38 +350,15 @@ class DiagramObjectAngle extends DiagramElementCollection {
       angle = threePointAngle(p1, p2, p3);
     }
     this.startAngle = startAngle;
-    this.position = getPoint(position);
     this.nextStartAngle = this.startAngle;
-    this.nextPosition = this.position;
+    if (position != null) {
+      this.nextPosition = position;
+    }
     this.angle = angle;
     this.startAngle = startAngle;
     // this.direction = direction;
     // this.clip = clip;
   }
-
-  // // deprecate
-  // // eslint-disable-next-line class-methods-use-this
-  // calculateFromP1P2P3(
-  //   p1: Point,
-  //   p2: Point,
-  //   p3: Point,
-  //   direction: 1 | -1 = 1,
-  // ) {
-  //   const position = p2._dup();
-  //   const angle = threePointAngle(p1, p2, p3);
-  //   if (direction === 1) {
-  //     const L21 = new Line(p2, p1);
-  //     const rotation = L21.angle();
-  //     return { position, rotation, angle };
-  //   }
-  //   const L23 = new Line(p2, p1);
-  //   const rotation = L23.angle();
-  //   return {
-  //     position,
-  //     rotation,
-  //     angle: clipAngle(Math.PI * 2 - angle, '0to360'),
-  //   };
-  // }
 
   constructor(
     shapes: Object,
@@ -448,14 +369,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
   ) {
     const defaultOptions = {
       position: new Point(0, 0),
-      // rotation: 0,
-      // angle: 1,
-      // radius: 0.1,
       color: shapes.defaultColor,
-      // clockwise: false,
-      // direction: 1,
       direction: 1,
-      // clip: null,
       autoRightAngle: false,
       rightAngleRange: 0.001,
       curve: null,
@@ -463,19 +378,12 @@ class DiagramObjectAngle extends DiagramElementCollection {
       sides: null,
       sideStart: null,
       sideStop: null,
-      // arrows: null,
-      // arrow1: null,
-      // arrow2: null,
       label: null,
-      // p1: null,       // if p1, p2 and p3 are defined, position, angle and
-      // p2: null,       // rotation will be overridden
-      // p3: null,
       pulseAngle: {
         curve: 1.5,
         label: 1.5,
         arrow: 1.5,
         side: 1.5,
-        // collection: 1.8,
         corner: 1.5,
       },
       mods: {},
@@ -615,27 +523,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
       this.addSide(2, sideOptions.length, sideOptions.width, sideOptions.color);
     }
 
-    // if (typeof optionsToUse.pulse === 'number') {
-    //   this.pulseDefaultSettings = {
-    //     curve: defaultOptions.pulse.curve,
-    //     label: defaultOptions.pulse.label,
-    //     arrow: defaultOptions.pulse.arrow,
-    //     side: defaultOptions.pulse.side,
-    //     collection: optionsToUse.pulse,
-    //   };
-    // } else {
-    //   this.pulseDefaultSettings = {
-    //     curve: optionsToUse.pulse.curve || 1,
-    //     label: optionsToUse.pulse.label || 1,
-    //     arrow: optionsToUse.pulse.arrow || 1,
-    //     side: optionsToUse.pulse.side || 1,
-    //     collection: optionsToUse.pulse.collection || 1,
-    //   };
-    // }
-
-    // this.pulseDefault = (done) => {
-    //   this.pulseScaleNow(1, 1.7, 0, done);
-    // };
     this.pulseAngleDefaults = {
       line: optionsToUse.pulseAngle.curve || 1.5,
       corner: optionsToUse.pulseAngle.corner || 1.5,
@@ -644,50 +531,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
       duration: optionsToUse.pulseAngle.duration || 1.5,
       frequency: optionsToUse.pulseAngle.frequency || 0,
       thick: optionsToUse.pulseAngle.thick || 1,
-    };
-
-    this.pulseDefault = (done) => {
-      let doneToUse = done;
-      const pulseSettings = this.pulseDefaultSettings;
-      if (typeof pulseSettings.curve === 'number') {
-        if (pulseSettings.curve !== 1 && this._curve != null) {
-          this._curve.pulseScaleNow(1, pulseSettings.curve, 0, doneToUse);
-          doneToUse = null;
-        }
-      } else if (this._curve != null && pulseSettings.curve != null) {
-        const defaultCurveThickOptions = { width: 2, num: 5 };
-        const curveOptions = joinObjects(defaultCurveThickOptions, pulseSettings.curve);
-        // $FlowFixMe
-        this._curve.pulseThickNow(1, curveOptions.width, curveOptions.num, doneToUse);
-        doneToUse = null;
-      }
-      if (pulseSettings.label !== 1 && this._label != null) {
-        this._label.pulseScaleNow(1, pulseSettings.label, 0, doneToUse);
-        doneToUse = null;
-      }
-      if (pulseSettings.arrow !== 1) {
-        if (this._arrow1 != null) {
-          this._arrow1.pulseScaleNow(1, pulseSettings.arrow, 0, doneToUse);
-          doneToUse = null;
-        }
-        if (this._arrow2 != null) {
-          this._arrow2.pulseScaleNow(1, pulseSettings.arrow, 0, doneToUse);
-          doneToUse = null;
-        }
-      }
-      if (pulseSettings.side !== 1) {
-        if (this._side1 != null) {
-          this._side1.pulseScaleNow(1, pulseSettings.side, 0, doneToUse);
-          doneToUse = null;
-        }
-        if (this._side2 != null) {
-          this._side2.pulseScaleNow(1, pulseSettings.side, 0, doneToUse);
-          doneToUse = null;
-        }
-      }
-      if (pulseSettings.collection !== 1) {
-        this.pulseScaleNow(1, pulseSettings.collection, 0, doneToUse);
-      }
     };
 
     this.update();
@@ -935,40 +778,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
 
 
   addArrow(
-    // index: 1 | 2,
-    // options: {
-    //   width?: number,
-    //   height?: number,
-    //   radius?: number,
-    //   autoHide?: number,
-    // } | null = {},
     lineEnd: 'start' | 'end',
   ) {
-    // let defaultArrowDimension = 0.04;
-    // if (this.curve) {
-    //   defaultArrowDimension = this.curve.width * 4;
-    // }
-    // let defaultArrowRadius = 0.1;
-    // if (this.curve) {
-    //   defaultArrowRadius = this.curve.radius;
-    // }
-    // const defaultArrowOptions = {
-    //   // width: defaultArrowDimension,
-    //   // height: defaultArrowDimension,
-    //   radius: defaultArrowRadius,
-    //   autoHide: true,
-    //   curveOverlap: 0.3,
-    // };
-    // let r = 0;
-    // if (lineEnd === 'start') {
-    //   r = Math.PI;
-    // }
-    // if (this.direction === -1) {
-    //   r += Math.PI;
-    // }
-    // if (this.angle < 0) {
-    //   r += Math.PI;
-    // }
     if (this.arrow[lineEnd] == null) {
       return;
     }
@@ -995,30 +806,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       autoHide: o.autoHide,
       curveOverlap: o.curveOverlap,
     };
-    // console.log(this[`arrow${index}`])
     this.add(`arrow${index}`, a);
-
-
-
-    // let optionsToUse = {};
-    // if (options != null) {
-    //   optionsToUse = options;
-    // }
-    // const arrowOptions = joinObjects({}, defaultArrowOptions, optionsToUse);
-    // const { width, height } = arrowOptions;
-
-    // let r = Math.PI / 2;
-    // if (index === 2) {
-    //   r = Math.PI / 2 * 3;
-    // }
-
-    // const a = this.shapes.arrowLegacy(
-    //   width, 0, height, 0,
-    //   this.color, new Transform().rotate(0).translate(0, 0), new Point(0, 0), r,
-    // );
-    // // $FlowFixMe
-    // this[`arrow${index}`] = arrowOptions;
-    // this.add(`arrow${index}`, a);
     this.update();
   }
 
@@ -1115,7 +903,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
         trueCurveAngle += this.arrow.start.height / this.arrow.start.radius;
         curveAngle += arrow1Angle;
       }
-      if (this.arrow.end != null && arthis.arrow.end.autoHide) {
+      if (this.arrow.end != null && this.arrow.end.autoHide) {
         arrow2Hide = true;
         trueCurveAngle += this.arrow.end.height / this.arrow.end.radius;
         curveAngle += arrow2Angle;
@@ -1217,46 +1005,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
         this.updateCurve(curveAngle, fullCurveAngle, rotationForArrow1, true);
       }
     }
-
-    // const { _label, label } = this;
-    // if (_label && label) {
-    //   if (label.autoHide > this.angle) {
-    //     _label.hide();
-    //   } else {
-    //     _label.show();
-    //     if (label.showRealAngle) {
-    //       let angleText = roundNum(this.angle, label.precision)
-    //         .toFixed(label.precision);
-    //       if (label.units === 'degrees') {
-    //         angleText = roundNum(
-    //           this.angle * 180 / Math.PI,
-    //           label.precision,
-    //         ).toFixed(label.precision);
-    //         angleText = `${angleText}º`;
-    //       }
-    //       label.setText(angleText);
-    //       // _label._base.drawingObject.setText(`${angleText}`);
-    //       // label.eqn.reArrangeCurrentForm();
-    //     }
-    //     const labelPosition = polarToRect(label.radius, this.angle * label.curvePosition);
-    //     if (label.orientation === 'horizontal') {
-    //       label.updateRotation(
-    //         -this.rotation - this.lastLabelRotationOffset,
-    //         labelPosition,
-    //         label.radius / 5,
-    //         this.angle * label.curvePosition,
-    //       );
-    //     }
-    //     if (label.orientation === 'tangent') {
-    //       label.updateRotation(
-    //         this.angle * label.curvePosition - Math.PI / 2,
-    //         labelPosition,
-    //         label.radius / 50,
-    //         this.angle * label.curvePosition,
-    //       );
-    //     }
-    //   }
-    // }
     this.updateLabel();
 
     const { _side1, side1 } = this;
@@ -1480,7 +1228,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       pulse(
         'corner', 'corner',
         { centerOn: [0, 0] },
-        { centerOn: polarToRect(this.corner.length / 2, this.angle / 2) },
+        { centerOn: this._corner.getPosition('diagram').add(polarToRect(this.corner.length / 2, this.angle / 2)) },
       );
     }
     pulse('label', 'label', { centerOn: [0, 0] }, { num: 1 });

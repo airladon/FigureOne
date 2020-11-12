@@ -422,12 +422,17 @@ diagram.elements._c.setMovable();
 // Example showing dashed line with an equation label that stays horizontal
 diagram.addElement({
   name: 'l',
-  method: 'line',
+  method: 'advanced.line',
   options: {
-    p1: [0, 0],
-    p2: [1, 0],
+    p1: [1, 1],
+    p2: [2, 1],
+    // p1: [1, 1],
+    length: 1,
+    angle: 1,
     touchBorder: 0.5,
     width: 0.01,
+    color: [1, 0, 0, 1],
+    // position: [1, 1],
   },
   mods: {
     move: { type: 'rotation' }
@@ -435,12 +440,13 @@ diagram.addElement({
 });
 diagram.addElement({
   name: 'l2',
-  method: 'line',
+  method: 'advanced.line',
   options: {
-    p1: [0, 0],
-    p2: [1, 0],
+    p1: [1, 1],
+    p2: [2, 1],
     touchBorder: 0.5,
     width: 0.01,
+    color: [1, 0, 0, 1],
   },
   mods: {
     move: { type: 'rotation' }
@@ -449,9 +455,10 @@ diagram.addElement({
 diagram.elements._l.setMovable();
 diagram.elements._l2.setMovable();
 const a = diagram.advanced.angle({
-  // p1: [1, 0],
-  // p2: [0, 0],
-  // p3: [0, 1],
+  // p1: [1, 1],
+  // p2: [1, 1],
+  // p3: [1, 2],
+  position: [1, 1],
   angle: Math.PI / 4,
   direction: 'positive',
   // clip: '0to360',
@@ -477,26 +484,13 @@ const a = diagram.advanced.angle({
     // },
     tail: 0,
   },
-  // arrows: {
-  //   width: 0.1,
-  //   height: 0.1,
-  // },
-  // direction: -1,
-  // label: {
-  //   text: 'dimension',
-  //   // radius: 1,
-  //   // location: 'start',
-  // },
-  // sides: {
-  //   length: 1,
-  //   width: 0.1,
-  // },
   corner: { style: 'fill', length: 1, width: 0.01 },
 });
 diagram.add('a', a);
 
 diagram.elements._l.subscriptions.add('setTransform', () => {
-  a.setAngle({ angle: diagram.elements._l.getRotation() });
+  const angle = Fig.tools.g2.clipAngle(diagram.elements._l.getRotation(), '0to360')
+  a.setAngle({ angle });
 });
 diagram.elements._l.setRotation(1);
 a.pulseAngle({
@@ -507,6 +501,7 @@ a.pulseAngle({
   label: 1.5,
   thick: 10
 })
+// a.pulse({ scale: 2, duration: 5 })
 
 diagram.elements._l2.subscriptions.add('setTransform', () => {
   const r = diagram.elements._l2.getRotation();
