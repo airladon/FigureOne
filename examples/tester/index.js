@@ -464,10 +464,11 @@ const a = diagram.advanced.angle({
   },
   label: {
     text: null,
+    curveOffset: 0.1,
   },
   arrow: {
     // start: {
-      head: 'line',
+      head: 'barb',
       length: 0.05,
       width: 0.05,
       // radius: 0.3,
@@ -498,6 +499,14 @@ diagram.elements._l.subscriptions.add('setTransform', () => {
   a.setAngle({ angle: diagram.elements._l.getRotation() });
 });
 diagram.elements._l.setRotation(1);
+a.pulseAngle({
+  duration: 5,
+  corner: 1.05,
+  curve: 1.03,
+  arrow: 3,
+  label: 1.5,
+  thick: 10
+})
 
 diagram.elements._l2.subscriptions.add('setTransform', () => {
   const r = diagram.elements._l2.getRotation();
