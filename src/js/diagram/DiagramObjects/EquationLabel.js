@@ -1,6 +1,4 @@
 // @flow
-// import Diagram from '../Diagram';
-
 import {
   Point, clipAngle,
 } from '../../tools/g2';
@@ -13,47 +11,8 @@ import type {
 } from '../DiagramElements/Equation/EquationForm';
 import { joinObjects } from '../../tools/tools';
 import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
-// export type TypeEquationLabel = {
-//   eqn: Equation;
-//   updateRotation: (number, Point, number, number) => void;
-//   setText: (string) => {};
-//   getText: void => string;
-//   // updateScale: (Point) => void;
-// };
 
-// deprecate
-// export type TypeLabelEquationOptions = {
-//   eqn: 'fraction' | 'fractionPre',
-//   denominator: string,
-//   numerator: string,
-//   main?: string,
-//   scale?: number,
-//   fracScale?: number,
-// };
-
-// function getRadiusOfRoundedRect(
-//   halfWidth: number,
-//   halfHeight: number,
-//   cornerR: number,
-//   angle: number,
-// ) {
-//   const angleRadiusStart = Math.atan2(halfHeight - cornerR, halfWidth);
-//   const angleRadiusEnd = Math.atan2(halfHeight, halfWidth - cornerR);
-//   let normalizedAngle = angle;
-//   if (angle > Math.PI / 2 && angle < Math.PI) {
-//     normalizedAngle = Math.PI - angle;
-//   } else if (angle > Math.PI && angle < 3 * Math.PI / 2) {
-//     normalizedAngle = angle - Math.PI;
-//   } else if (angle > 3 * Math.PI / 2 && angle < 2 * Math.PI) {
-//     normalizedAngle = Math.PI * 2 - angle;
-//   }
-//   if (normalizedAngle <= angleRadiusStart) {
-//     return halfWidth * Math.tan(normalizedAngle);
-//   }
-//   if (normalizedAngle >= angleRadiusEnd) {
-//     return halfHeight * Math.tan(Math.PI / 2 - normalizedAngle);
-//   }
-// }
+const DEBUG = true;
 
 export type TypeLabelOptions = {
   label?: string | Equation | Array<string> | EQN_Equation,
@@ -300,13 +259,6 @@ export default class EquationLabel {
       }
     }
 
-    // if (relativeToLine) {
-    // labelAngle -= parentAngleOffset;
-    // } else {
-    //   labelAngle += parentAngleOffset;
-    // }
-    // console.log('asdf',parentAngleOffset)
-
     // half height and width of text
     let h = 0;
     let w = 0;
@@ -327,7 +279,8 @@ export default class EquationLabel {
     let positionOffset = new Point(0, 0);
     if (style === 'oval') {
       positionOffset = this.getOvalOffset(
-        labelAngle - parentAngleOffset, h, w, offsetMag, offsetAngle, change, location, relativeToLine, parentAngleOffset, position,
+        labelAngle - parentAngleOffset,
+        h, w, offsetMag, offsetAngle, change, location,
       );
     }
 
@@ -335,24 +288,20 @@ export default class EquationLabel {
     let r;
     p = position.add(positionOffset);
     r = labelAngle - parentAngleOffset;
-    
     if (relativeToLine === false) {
       p = p.rotate(-labelAngle, position);
       r = labelAngle - parentAngleOffset + lineAngle;
-      // console.log(position)
-      if (true) {
-        const e = this.eqn.parent._debugEllipse;
-        if (e != null) {
-          e.setPosition(p);
-          e.setRotation(labelAngle - parentAngleOffset + lineAngle);
-        }
-      }
     }
     this.eqn.setPosition(p);
     this.eqn.transform.updateRotation(r);
-    // } else {
-    //   this.eqn.transform.updateRotation(-parentAngleOffset);
-    // }
+
+    if (DEBUG) {  // $FlowFixMe
+      const e = this.eqn.parent._debugEllipse;
+      if (e != null) {
+        e.setPosition(p);
+        e.setRotation(r);
+      }
+    }
   }
 
   getOvalOffset(
@@ -363,9 +312,9 @@ export default class EquationLabel {
     offsetAngle: number,
     change: boolean,
     location: 'top' | 'bottom' | 'left' | 'right' | 'positive' | 'negative' | 'start' | 'end' | 'inside' | 'outside',
-    relativeToLine: boolean,
-    parentAngleOffset: number,
-    position: Point,
+    // relativeToLine: boolean,
+    // parentAngleOffset: number,
+    // position: Point,
   ) {
     // eslint-disable-next-line max-len
     const getR = (a, b, angle) => a * b / Math.sqrt((b * Math.cos(angle)) ** 2 + (a * Math.sin(angle)) ** 2);
@@ -404,82 +353,35 @@ export default class EquationLabel {
     let xOffset = 0;
     let yOffset = 0;
     let R;
-    if (true) {
-      if (location === 'start') {
-        theta = Math.PI * 2 - phi;
-        R = getR(a, b, theta);
-        xOffset = -R;
-        yOffset = 0;
-      } else if (location === 'end') {
-        theta = Math.PI - phi;
-        R = getR(a, b, theta);
-        xOffset = R;
-        yOffset = 0;
-      } else {
-        // Calculate the position
-        // Refer to oval_math.pdf for working
-        theta = clipAngle(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi))), '0to360');
-        R = getR(a, b, theta);
-        let sigma = clipAngle(phi + theta - Math.PI, '-180to180');
-        if (sigma < 0) {
-          sigma += Math.PI;
-        }
-        xOffset = R * Math.cos(sigma);
-        yOffset = R * Math.sin(sigma);
-        if (offsetAngle < 0) {
-          yOffset = -yOffset;
-          xOffset = -xOffset;
-        }
-        // console.log(
-        //   round(phi * 180 / Math.PI, 0),
-        //   round(theta * 180 / Math.PI, 0),
-        //   round(sigma * 180 / Math.PI, 0),
-        //   round(a, 3),
-        //   round(R, 3),
-        // )
+    if (location === 'start') {
+      theta = Math.PI * 2 - phi;
+      R = getR(a, b, theta);
+      xOffset = -R;
+      yOffset = 0;
+    } else if (location === 'end') {
+      theta = Math.PI - phi;
+      R = getR(a, b, theta);
+      xOffset = R;
+      yOffset = 0;
+    } else {
+      // Calculate the position
+      // Refer to oval_math.pdf for working
+      theta = clipAngle(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi))), '0to360');
+      R = getR(a, b, theta);
+      let sigma = clipAngle(phi + theta - Math.PI, '-180to180');
+      if (sigma < 0) {
+        sigma += Math.PI;
+      }
+      xOffset = R * Math.cos(sigma);
+      yOffset = R * Math.sin(sigma);
+      if (offsetAngle < 0) {
+        yOffset = -yOffset;
+        xOffset = -xOffset;
       }
     }
-    // else {
-    //   phi = clipAngle(labelAngle + parentAngleOffset, '0to360');
-    //   theta = clipAngle(-(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi)))), '0to360');
-    //   if (
-    //     offsetAngle > 0 && phi < Math.PI
-    //   ) {
-    //     theta += Math.PI;
-    //   }
-    //   if (
-    //     offsetAngle < 0 && phi > Math.PI
-    //   ) {
-    //     theta += Math.PI;
-    //   }
-    //   // R = getR(a, b, theta);
-    //   // xOffset = R * Math.cos(phi);
-    //   // yOffset = R * Math.sin(phi);
-    //   // theta = Math.PI - phi - Math.PI / 2;
-      
-    //   R = getR(a, b, theta);
-    //   // xOffset = R;
-    //   // yOffset = 0;
-    //   xOffset = R * Math.cos(theta);
-    //   yOffset = R * Math.sin(theta);
-    //   // if (offsetAngle < 0) {
-    //   //   yOffset = -yOffset;
-    //   //   xOffset = -xOffset;
-    //   // }
-    //   console.log(
-    //     round(phi * 180 / Math.PI, 0),
-    //     round(labelAngle * 180 / Math.PI, 0),
-    //     round(parentAngleOffset * 180 / Math.PI, 0),
-    //     round(theta * 180 / Math.PI, 0),
-    //     round(offsetAngle * 180 / Math.PI, 0),
-    //     round(xOffset, 2), round(yOffset, 2)
-
-    //   );
-    // }
 
     // DEBUG ONLY
-    const debug = true;
-    if (debug) {
+    if (DEBUG) {
       if (this.eqn.parent != null) {  // $FlowFixMe
         if (this.eqn.parent._debugEllipse == null) {
           const e = this.eqn.shapes.ellipse({
@@ -496,12 +398,6 @@ export default class EquationLabel {
             width: a * 2,
             height: b * 2,
           });
-          e.setPosition(position.add(xOffset, yOffset));
-          if (relativeToLine) {
-            e.setRotation(labelAngle);
-          } else {
-            e.setRotation(0);
-          }
         }
       }
     }

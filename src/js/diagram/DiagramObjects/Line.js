@@ -576,6 +576,7 @@ export default class AdvancedLine extends DiagramElementCollection {
     pulseWidth: (OBJ_PulseWidth) => animation.TriggerAnimationStep,
   } & animation.AnimationManager;
 
+  lastParentRotationOffset: number;
   /**
    * @hideconstructor
    */
@@ -626,6 +627,7 @@ export default class AdvancedLine extends DiagramElementCollection {
     this.localXPosition = 0;
     this.maxLength = optionsToUse.maxLength != null ? optionsToUse.maxLength : this.line.length();
     this.autoUpdateSubscriptionId = -1;
+    this.lastParentRotationOffset = 0;
 
 
     // this.animateLengthToOptions = {
@@ -1227,7 +1229,11 @@ export default class AdvancedLine extends DiagramElementCollection {
     this.updateMovePads();
   }
 
-  updateLabel(parentRotationOffset: number = 0) {
+  updateLabel(parentRotationOffset: number | null = null) {
+    if (parentRotationOffset != null) {
+      this.lastParentRotationOffset = parentRotationOffset;
+    }
+
     const { label } = this;
     if (label == null) {
       return;
@@ -1256,7 +1262,7 @@ export default class AdvancedLine extends DiagramElementCollection {
     label.updateRotation(
       labelPosition, lineAngle, label.offset,
       label.location, label.subLocation, label.orientation,
-      parentRotationOffset, 'oval', true,
+      this.lastParentRotationOffset, 'oval', true,
     );
   }
 
