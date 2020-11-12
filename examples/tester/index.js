@@ -459,8 +459,9 @@ const a = diagram.advanced.angle({
   // p2: [1, 1],
   // p3: [1, 2],
   position: [1, 1],
-  angle: Math.PI / 4,
+  angle: Math.PI / 2,
   direction: 'positive',
+  autoRightAngle: true,
   // clip: '0to360',
   curve: {
     width: 0.01,
@@ -472,6 +473,8 @@ const a = diagram.advanced.angle({
   label: {
     text: null,
     curveOffset: 0.1,
+    location: 'top',
+    orientation: 'baseToLine',
   },
   arrow: {
     // start: {
@@ -492,11 +495,11 @@ diagram.elements._l.subscriptions.add('setTransform', () => {
   const angle = Fig.tools.g2.clipAngle(diagram.elements._l.getRotation(), '0to360')
   a.setAngle({ angle });
 });
-diagram.elements._l.setRotation(1);
+diagram.elements._l.setRotation(Math.PI / 2);
 a.pulseAngle({
   duration: 5,
   corner: 1.05,
-  curve: 1.03,
+  curve: 1.1,
   arrow: 3,
   label: 1.5,
   thick: 10

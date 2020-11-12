@@ -20,7 +20,7 @@ import type {
   TypeLineLabelOptions, ADV_Line,
 } from './Line';
 import type {
-  TypeAngleOptions, TypeAngleLabelOptions,
+  ADV_Angle, TypeAngleLabelOptions,
 } from './Angle';
 import DiagramPrimitives from '../DiagramPrimitives/DiagramPrimitives';
 // eslint-disable-next-line import/no-cycle
@@ -47,7 +47,7 @@ export type TypePolyLineOptions = {
   // line?: OBJ_PolyLine,
   // borderToPoint?: TypePolyLineBorderToPoint,
   width?: number,
-  angle?: TypeAngleOptions | Array<TypeAngleOptions>,
+  angle?: ADV_Angle | Array<ADV_Angle>,
   side?: ADV_Line | Array<ADV_Line>,
   pad?: TypePadOptions | Array<TypePadOptions>,
   transform?: Transform,
@@ -190,7 +190,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       linePosition: 0.5,
       scale: 0.7,
     };
-    const defaultAngleOptions: TypeAngleOptions = {
+    const defaultAngleOptions: ADV_Angle = {
       color: options.color == null ? [0, 1, 0, 1] : options.color,
       curve: {},
       autoRightAngle: true,

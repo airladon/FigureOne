@@ -37,7 +37,7 @@ import type {
   TypeLineLabelOptions, TypeLabelledLine,
 } from './js/diagram/DiagramObjects/Line';
 import type {
-  TypeAngleLabelOrientation, TypeAngleOptions, TypeAngleLabelOptions,
+  TypeAngleLabelOrientation, ADV_Angle, TypeAngleLabelOptions,
   TypeLabelledAngle,
 } from './js/diagram/DiagramObjects/Angle';
 import type { TypeDiagramOptions } from './js/diagram/Diagram';
@@ -50,7 +50,7 @@ export type {
   TypeRotationDirection,
   TypeLineLabelLocation, TypeLineLabelSubLocation, TypeLineLabelOrientation,
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, ADV_Line,
-  TypeAngleLabelOrientation, TypeAngleOptions, TypeDiagramOptions,
+  TypeAngleLabelOrientation, ADV_Angle, TypeDiagramOptions,
   TypeLineLabelOptions, TypeAngleLabelOptions,
   TypePolyLineOptions, TypePadOptions, TypeParsablePoint,
   TypeLabelledAngle, TypeLabelledLine,

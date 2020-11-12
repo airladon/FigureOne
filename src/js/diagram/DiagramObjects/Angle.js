@@ -41,7 +41,10 @@ export type TypeAngleLabelOptions = {
   color?: Array<number>,      // Text color can be different to curve
 };
 
-export type TypeAngleOptions = {
+/**
+ *
+ */
+export type ADV_Angle = {
   position?: Point,         // Position of angle vertex
   angle?: number,           // Angle measure
   rotation?: number,        // Start rotation of angle
@@ -365,7 +368,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     equation: Object,
     isTouchDevice: boolean,
     animateNextFrame: void => void,
-    options: TypeAngleOptions = {},
+    options: ADV_Angle = {},
   ) {
     const defaultOptions = {
       position: new Point(0, 0),
@@ -955,8 +958,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
 
     this.setNextPositionAndRotation();
-    // this.transform.updateTranslation(this.position);
-    // this.transform.updateRotation(this.rotation);
 
     const { _curve, curve, _curveRight } = this;
     if (_curve != null && curve != null) {
@@ -1116,8 +1117,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
             angleText = `${angleText}º`;
           }
           label.setText(angleText);
-          // _label._base.drawingObject.setText(`${angleText}`);
-          // label.eqn.reArrangeCurrentForm();
         }
         let angle = clipAngle(this.angle, '-360to360');
         let lineOffsetAngle = Math.PI / 2;
@@ -1148,42 +1147,12 @@ class DiagramObjectAngle extends DiagramElementCollection {
             location = 'negative';
           }
         }
-        // let lineAngle;
-        // if (this.angle >= 0 && this.direction === 1) {
         const lineAngle = clipAngle(clipAngle(angle, '0to360') * label.curvePosition + lineOffsetAngle, '0to360');
-        // } else if (this.angle >= 0 && this.direction === -1) {
-        //   lineAngle = clipAngle(-clipAngle(Math.PI * 2 - this.angle, '0to360') * label.curvePosition - Math.PI / 2, '0to360');
-        // }
-        // console.log(lineAngle * 180 / Math.PI)
-        // console.log(
-        //   roundNum(lineAngle * 180 / Math.PI, 0),
-        //   roundNum (clipAngle(this.angle * label.curvePosition + Math.PI / 2, '0to360') * 180 / Math.PI, 0),
-        //   this.getRotation())
-        // console.log(roundNum(lineAngle * 180 / Math.PI, 0))
-        // console.log(rotationOffset)
-        // console.log(rotationOffset)
         label.updateRotation(
           labelPosition, lineAngle, label.curveOffset, location, label.subLocation, orientation,
           this.lastLabelRotationOffset == null ? 0 : this.lastLabelRotationOffset,
-          // -lineAngle,
           'oval', false,
         );
-        // if (label.orientation === 'horizontal') {
-        //   label.updateRotation(
-        //     -this.getRotation() - this.lastLabelRotationOffset,
-        //     labelPosition,
-        //     label.radius / 5,
-        //     this.angle * label.curvePosition + label.curveOffset,
-        //   );
-        // }
-        // if (label.orientation === 'tangent') {
-        //   label.updateRotation(
-        //     this.angle * label.curvePosition + label.curveOffset - Math.PI / 2,
-        //     labelPosition,
-        //     label.radius / 50,
-        //     this.angle * label.curvePosition + label.curveOffset,
-        //   );
-        // }
       }
     }
   }
@@ -1223,7 +1192,12 @@ class DiagramObjectAngle extends DiagramElementCollection {
         done = null;
       }
     };
-    pulse('curve', 'curve', {}, {});
+    if (this._curve != null) {
+      pulse('curve', 'curve', {}, {});
+    }
+    if (this._curveRight != null) {
+      pulse('curveRight', 'curve', {}, {});
+    }
     if (this.corner != null) {
       pulse(
         'corner', 'corner',
@@ -1248,90 +1222,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
         );
       }
     }
-    // const curve = this._curve;
-    // if (curve != null) {
-    //   let curveOptions;
-    //   if (typeof curve === 'number') {
-    //     curveOptions = joinObjects({}, o, { scale: o.curve, callback: done });
-    //   } else {
-    //     curveOptions = joinObjects({}, o, o.curve, { callback: done });
-    //   }
-    //   curve.pulse(curveOptions);
-    //   done = null;
-    // }
-
-    // const corner = this._corner;
-    // if (corner != null) {
-    //   // corner.pulseScaleNow(o.duration, o.corner, 0, done);
-    //   let cornerOptions;
-    //   if (typeof corner === 'number') {
-    //     cornerOptions = joinObjects({}, o, { scale: o.corner, callback: done });
-    //   } else {
-    //     cornerOptions = joinObjects({}, o, o.corner, { callback: done });
-    //   }
-    //   corner.pulse(cornerOptions);
-    //   done = null;
-    // }
-
-    // const line = this._line;
-    // if (line != null) {
-    //   line.stopPulsing();
-    //   this.pulseWidthOptions = {
-    //     oldTransformMethod: line.pulseSettings.transformMethod,
-    //     oldCallback: line.pulseSettings.callback,
-    //   };
-    //   line.pulseSettings.callback = this.pulseWidthDoneCallbackName;
-    //   line.pulseSettings.transformMethod = this.scaleTransformMethodName;
-    //   line.pulse({
-    //     duration: o.duration,
-    //     scale: o.line,
-    //     frequency: o.frequency,
-    //     callback: done,
-    //     when: o.when,
-    //   });
-    //   done = null;
-    // }
-    // const arrow1 = this._arrow1;
-    // const arrow2 = this._arrow2;
-    // if (arrow1 != null) {
-    //   arrow1.pulse({
-    //     duration: o.duration,
-    //     scale: o.arrow,
-    //     frequency: o.frequency,
-    //     callback: done,
-    //     when: o.when,
-    //     // centerOn: arrow1.getPosition('diagram'),
-    //     centerOn: this.getPosition('diagram'),
-    //   });
-    //   done = null;
-    // }
-    // if (arrow2 != null) {
-    //   arrow2.pulse({
-    //     duration: o.duration,
-    //     scale: o.arrow,
-    //     frequency: o.frequency,
-    //     callback: done,
-    //     when: o.when,
-    //     centerOn: arrow2.getPosition('diagram'),
-    //   });
-    //   done = null;
-    // }
-
-    // const label = this._label;
-    // if (label != null) {
-    //   // label.pulseScaleNow(o.duration, o.label, 0, done);
-    //   let labelOptions;
-    //   if (typeof label === 'number') {
-    //     labelOptions = joinObjects({}, o, { scale: o.label, callback: done });
-    //   } else {
-    //     labelOptions = joinObjects({}, o, o.label, { callback: done });
-    //   }
-    //   label.pulse(labelOptions);
-    //   done = null;
-    // }
-    // if (done != null) {
-    //   done();
-    // }
     this.animateNextFrame();
   }
 
