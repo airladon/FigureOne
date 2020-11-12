@@ -1232,10 +1232,17 @@ class DiagramObjectAngle extends DiagramElementCollection {
       } else {
         _label.show();
         if (label.showRealAngle) {
-          let angleText = roundNum(this.angle, label.precision)
+          let { angle } = this;
+          if (angle >= 0 && this.direction === -1) {
+            angle = -(Math.PI * 2 - Math.abs(angle));
+          } else if (angle < 0 && this.direction === -1) {
+            angle = Math.PI * 2 - Math.abs(angle);
+          }
+          angle = clipAngle(angle, this.clip);
+          let angleText = roundNum(angle, label.precision)
             .toFixed(label.precision);
           if (label.units === 'degrees') {
-            let a = roundNum(this.angle * 180 / Math.PI, label.precision);
+            let a = roundNum(angle * 180 / Math.PI, label.precision);
             if (a === 360) {
               a = 0;
             }
@@ -1246,8 +1253,18 @@ class DiagramObjectAngle extends DiagramElementCollection {
           // _label._base.drawingObject.setText(`${angleText}`);
           // label.eqn.reArrangeCurrentForm();
         }
+        let angle = clipAngle(this.angle, '-360to360');
+        let lineOffsetAngle = Math.PI / 2;
+        if (angle < 0) {
+          lineOffsetAngle = -Math.PI / 2;
+        }
+        if (angle >= 0 && this.direction === -1) {
+          angle = -(Math.PI * 2 - angle);
+        } else if (angle < 0 && this.direction === -1) {
+          angle = Math.PI * 2 - Math.abs(angle);
+        }
         const labelPosition = polarToRect(
-          label.radius, clipAngle(this.angle, '0to360') * label.curvePosition,
+          label.radius, angle * label.curvePosition,
         );
         let { orientation, location } = label;
         if (orientation === 'tangent') {
@@ -1265,10 +1282,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
             location = 'negative';
           }
         }
-        let lineAngle = clipAngle(clipAngle(this.angle, '0to360') * label.curvePosition + Math.PI / 2, '0to360');
-        if (this.direction === -1) {
-          lineAngle = clipAngle(clipAngle(this.angle, '0to360') * label.curvePosition - Math.PI / 2, '0to360');
-        }
+        let lineAngle;
+        // if (this.angle >= 0 && this.direction === 1) {
+        lineAngle = clipAngle(clipAngle(angle, '0to360') * label.curvePosition + lineOffsetAngle, '0to360');
+        // } else if (this.angle >= 0 && this.direction === -1) {
+        //   lineAngle = clipAngle(-clipAngle(Math.PI * 2 - this.angle, '0to360') * label.curvePosition - Math.PI / 2, '0to360');
+        // }
+        console.log(lineAngle * 180 / Math.PI)
         // console.log(
         //   roundNum(lineAngle * 180 / Math.PI, 0),
         //   roundNum (clipAngle(this.angle * label.curvePosition + Math.PI / 2, '0to360') * 180 / Math.PI, 0),

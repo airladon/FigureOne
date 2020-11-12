@@ -454,6 +454,7 @@ const a = diagram.advanced.angle({
   // p3: [0, 1],
   angle: -Math.PI / 4,
   direction: 'negative',
+  clip: null,
   curve: {
     width: 0.01,
     radius: 0.5,
@@ -461,16 +462,19 @@ const a = diagram.advanced.angle({
     step: -0.02,
     sides: 100,
   },
+  label: {
+    text: null,
+  },
   // arrows: {
   //   width: 0.1,
   //   height: 0.1,
   // },
   // direction: -1,
-  label: {
-    text: 'dimension',
-    // radius: 1,
-    // location: 'start',
-  },
+  // label: {
+  //   text: 'dimension',
+  //   // radius: 1,
+  //   // location: 'start',
+  // },
   // sides: {
   //   length: 1,
   //   width: 0.1,
