@@ -27,7 +27,7 @@ import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep } from '../Animation/Animation';
 
 /**
- * Collection line label options object.
+ * Advanced line label options object.
  *
  * A line can be annotated with a label using the `text` property and can be:
  * - text (`string`, or Array<`string`)

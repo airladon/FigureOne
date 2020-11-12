@@ -25,6 +25,69 @@ import type {
 } from './EquationLabel';
 
 // export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
+
+/**
+ * Advanced angle label options object.
+ *
+ * An angle can be annotated with a label using the `text` property and can be:
+ * - text (`string`, or Array<`string`)
+ * - an equation (`Equation`, `EQN_Equation`)
+ * - real length of line (`null`)
+ *
+ * In all cases, an actual {@link Equation} is created as the label. The
+ * equation can have multiple forms, which can be set using the `showForm`
+ * method.
+ *
+ * If `text`: `string`, then an equation with a single form named `base` will
+ * be created with a single element being the string text.
+ *
+ * If `text`: `Array<string>`, then an equation with a form for each element
+ * of the array is created. Each form is named '0', '1', '2'... corresponding
+ * with the index of the array. Each form is has a single element, being the
+ * text at that index.
+ *
+ * Use `text`: `Equation` or `EQN_Equation` to create completely custom
+ * equations with any forms desirable.
+ *
+ * If the label text is the real angle (`null`), then the number
+ * of decimal places can be selected with `precision` and the units with
+ * `units`.
+ *
+ * By default, the label is placed at the same radius as the curve (if
+ * a curve exists). An independant radius can be selected with `radius`.
+ *
+ * The space between the radius and the label is defined with `offset`. An
+ * `offset` of 0 puts the center of the label on the radius. Any
+ * positive or negative value of offset will move the label so no part of the
+ * label overlaps the line, and then the closest part of the label is separated
+ * from the line by `offset`.
+ *
+ * To situate the label, use `curvePosition`, `location` and
+ * `subLocation`. By default the label will be a percentage `curvePosition`
+ * of the angle. `location` then defines which side of the radius the label is
+ * on, while `subLocation` defines the backup location for invalid cases of
+ * `location`. See {@link TypeLabelLocation} and
+ * {@link TypeLabelSubLocation}. `location` can additionaly place the
+ * labels off the ends of the angle.
+ *
+ * To automatically update the label location and orientation as the line
+ * transform (translation, rotation or scale) changes then use `update: true`.
+ *
+ * @property {null | string | Array<string> | Equation | EQN_Equation } text
+ * or equation to show. Use `null` to show real angle.
+ * @property {'degrees' | 'radians'} units (`'degrees'`)
+ * @property {number} [precision] (`0`)
+ * @property {number} [radius] overwrite default radius
+ * @property {number} [offset] space to radius (`0`)
+ * @property {number} [curvePosition] where the label is along the curve of the
+ * angle, in percent of curve from the start of the angle (`0.5`)
+ * @property {TypeLabelLocation} [location]
+ * @property {TypeLabelSubLocation} [subLocation]
+ * @property {TypeLabelOrientation} [orientation]
+ * @property {boolean} [update] (`false`)
+ * @property {number} [scale] size of the label
+ * @property {Array<number>} [color]
+ */
 export type TypeAngleLabelOptions = {
   text: null | string | Array<string> | Equation | EQN_Equation,
   units?: 'degrees' | 'radians';  // Real angle units
@@ -35,7 +98,6 @@ export type TypeAngleLabelOptions = {
   location?: TypeLabelLocation,
   subLocation?: TypeLabelSubLocation,
   orientation?: TypeLabelOrientation,
-  showRealAngle?: boolean,        // Use angle as label
   autoHide?: ?number,             // Auto hide label if angle is less than this
   autoHideMax?: ?number,          // Auto hide label if angle greater than this
   scale?: number,                 // Text scale
@@ -1118,8 +1180,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
     const { _label, label } = this;
     if (_label && label) {
       if (
-        (label.autoHide != null && label.autoHide > this.angle)
-        || (label.autoHideMax != null && this.angle > label.autoHideMax)
+        (label.autoHide != null && label.autoHide > Math.abs(this.angle))
+        || (label.autoHideMax != null && Math.abs(this.angle) > label.autoHideMax)
       ) {
         _label.hide();
       } else {

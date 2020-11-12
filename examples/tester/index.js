@@ -476,6 +476,8 @@ const a = diagram.advanced.angle({
     location: 'end',
     orientation: 'horizontal',
     update: true,
+    autoHide: 1,
+    autoHideMax: 4,
   },
   arrow: {
     // start: {
