@@ -680,7 +680,10 @@ class DiagramObjectAngle extends DiagramElementCollection {
       location: 'outside',
     };
     if (this.curve) {
-      defaultLabelOptions.radius = this.curve.radius;
+      defaultLabelOptions.radius = Math.max(
+        this.curve.radius,
+        this.curve.radius + (this.curve.num - 1) * this.curve.step,
+      );
     }
 
     const optionsToUse = joinObjects({}, defaultLabelOptions, options);

@@ -178,7 +178,6 @@ export default class EquationLabel {
     relativeToLine: boolean = true,
   ) {
     // Calculate the offsetAngle and label angle
-    // console.log(position, lineAngle, offsetMag, location, orientation)
     let offsetAngle = Math.PI / 2;
     let labelAngle = 0;
     if (location === 'start') {
@@ -312,9 +311,6 @@ export default class EquationLabel {
     offsetAngle: number,
     change: boolean,
     location: 'top' | 'bottom' | 'left' | 'right' | 'positive' | 'negative' | 'start' | 'end' | 'inside' | 'outside',
-    // relativeToLine: boolean,
-    // parentAngleOffset: number,
-    // position: Point,
   ) {
     // eslint-disable-next-line max-len
     const getR = (a, b, angle) => a * b / Math.sqrt((b * Math.cos(angle)) ** 2 + (a * Math.sin(angle)) ** 2);
@@ -404,101 +400,6 @@ export default class EquationLabel {
 
     return new Point(xOffset, yOffset);
   }
-
-  /* eslint-disable max-len */
-  // updateRotationLegacy(
-  //   labelAngle: number,
-  //   position: Point,
-  //   offsetMag: number = 0,
-  //   offsetAngle: number = 0,
-  //   oval: boolean = true,
-  // ) {
-  //   if (offsetMag !== 0) {
-  //     let h = 0;
-  //     let w = 0;
-  //     const currentForm = this.eqn.getCurrentForm();
-  //     let change = false;
-  //     if (currentForm != null) {
-  //       if (this.height !== currentForm.height) {
-  //         this.height = currentForm.height;
-  //         change = true;
-  //       }
-  //       if (this.width !== currentForm.width) {
-  //         this.width = currentForm.width;
-  //         change = true;
-  //       }
-  //       h = currentForm.height / 2 + offsetMag;
-  //       w = currentForm.width / 2 + offsetMag;
-  //     }
-  //     let r = 0;
-  //     if (oval) {
-  //       // eslint-disable-next-line max-len
-  //       const getR = (a, b, angle = labelAngle - offsetAngle) => a * b / Math.sqrt((b * Math.cos(angle)) ** 2 + (a * Math.sin(angle)) ** 2);
-  //       if (change) {
-  //         let i = 2;
-  //         r = -1;
-  //         const topCornerAngle = Math.atan(h / w);
-  //         const topCornerR = h / Math.sin(topCornerAngle) + offsetMag;
-  //         const delta = topCornerR - getR(w + offsetMag, h + offsetMag, topCornerAngle);
-  //         let ovalOffset = 0;
-  //         while (i < 13 && r < topCornerR) {
-  //           ovalOffset = delta * i * 0.2;
-  //           r = getR(w + ovalOffset, h + ovalOffset, topCornerAngle);
-  //           i += 1;
-  //         }
-  //         this.aOffset = ovalOffset;
-  //       }
-
-  //       const a = this.aOffset + w;
-  //       const b = this.aOffset + h;
-
-  //       const phi = clipAngle(labelAngle, '0to360');
-  //       const theta = clipAngle(Math.PI * 2 - Math.atan(-(b ** 2) / (a ** 2 * Math.tan(phi))), '0to360');
-  //       const R = getR(a, b, theta);
-  //       let sigma = clipAngle(phi + theta - Math.PI, '-180to180');
-  //       if (sigma < 0) {
-  //         sigma += Math.PI;
-  //       }
-  //       let xOffset = R * Math.cos(sigma);
-  //       let yOffset = R * Math.sin(sigma);
-  //       if (offsetAngle < 0) {
-  //         yOffset = -yOffset;
-  //         xOffset = -xOffset;
-  //       }
-  //       this.eqn.setPosition(position.add(xOffset, yOffset));
-
-  //       if (this.eqn.parent != null && this.eqn.parent.parent != null && this.eqn.parent.parent._ell != null) {
-  //         // console.log(this.eqn.parent.parent)
-  //         const e = this.eqn.parent.parent._ell;
-  //           e.custom.update({
-  //             width: a * 2,
-  //             height: b * 2,
-  //           });
-  //       }
-  //     } else {
-  //       r = getRadiusOfRoundedRect(labelWidth, labelHeight, 0, labelAngle);
-  //       this.eqn.setPosition(position.add(polarToRect(r, offsetAngle)));
-  //     }
-  //   } else {
-  //     this.eqn.setPosition(position);
-  //   }
-  //   this.eqn.transform.updateRotation(labelAngle);
-  //   if (this.eqn.parent != null && this.eqn.parent.parent != null && this.eqn.parent.parent._ell != null) {
-  //     const e = this.eqn.parent.parent._ell;
-  //     e.setPosition(this.eqn.getPosition('diagram'));
-  //   }
-  // }
-  /* eslint-enable max-len */
-
-  // const label = {
-  //   eqn,
-  //   updateRotation,
-  //   setText,
-  //   getText,
-  //   // updateScale,
-  // };
-
-  // return label;
 }
 
 export type TypeEquationLabel = EquationLabel;

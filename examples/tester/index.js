@@ -449,19 +449,21 @@ diagram.addElement({
 diagram.elements._l.setMovable();
 diagram.elements._l2.setMovable();
 const a = diagram.advanced.angle({
-  p1: [1, 0],
-  p2: [0, 0],
-  p3: [1, 0],
+  // p1: [1, 0],
+  // p2: [0, 0],
+  // p3: [1, 0],
+  angle: Math.PI / 4,
   curve: {
     width: 0.01,
     radius: 0.5,
     num: 3,
-    step: 0.02,
+    step: -0.02,
   },
-  // direction: -1,
+  direction: -1,
   label: {
     text: 'dimension',
-    location: 'outside',
+    // radius: 1,
+    // location: 'outside',
   },
   // sides: {
   //   length: 1,
