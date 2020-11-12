@@ -427,7 +427,7 @@ diagram.addElement({
     p1: [0, 0],
     p2: [1, 0],
     touchBorder: 0.5,
-    width: 0.1,
+    width: 0.01,
   },
   mods: {
     move: { type: 'rotation' }
@@ -440,7 +440,7 @@ diagram.addElement({
     p1: [0, 0],
     p2: [1, 0],
     touchBorder: 0.5,
-    width: 0.1,
+    width: 0.01,
   },
   mods: {
     move: { type: 'rotation' }
@@ -453,17 +453,23 @@ const a = diagram.advanced.angle({
   // p2: [0, 0],
   // p3: [0, 1],
   angle: Math.PI / 4,
-  direction: 'negative',
+  direction: 'positive',
   // clip: '0to360',
   curve: {
     width: 0.01,
     radius: 0.5,
-    num: 3,
-    step: -0.02,
+    // num: 3,
+    // step: -0.02,
     sides: 100,
   },
   label: {
     text: null,
+  },
+  arrow: {
+    head: 'triangle',
+    length: 0.05,
+    width: 0.05,
+    // tail: 0,
   },
   // arrows: {
   //   width: 0.1,
@@ -486,7 +492,7 @@ diagram.add('a', a);
 diagram.elements._l.subscriptions.add('setTransform', () => {
   a.setAngle({ angle: diagram.elements._l.getRotation() });
 });
-diagram.elements._l.setRotation(1);
+// diagram.elements._l.setRotation(1);
 
 diagram.elements._l2.subscriptions.add('setTransform', () => {
   const r = diagram.elements._l2.getRotation();

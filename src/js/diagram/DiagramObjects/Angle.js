@@ -16,6 +16,8 @@ import {
 import EquationLabel from './EquationLabel';
 import type { TypeLabelEquationOptions, TypeLabelOptions } from './EquationLabel';
 import { Equation } from '../DiagramElements/Equation/Equation';
+import { simplifyArrowOptions, getArrowLength } from '../DrawingObjects/Geometries/arrow';
+import type { OBJ_LineArrows, OBJ_LineArrow } from '../DrawingObjects/Geometries/arrow';
 
 
 export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
@@ -58,28 +60,28 @@ export type TypeAngleOptions = {
   rightAngleRange?: number, // Range around π/2 for right angle curve display
   //
   // Arrows
-  arrow1?: {                // Define arrow at start of curve
-    width?: number,           // Arrow width
-    height?: number,          // Arrow height
-    radius?: number,          // Arrow radius (can be different to curve rad)
-    autoHide?: boolean,       // Autohide arrow when arrow(s) height > angle
-    curveOverlap?: number,    // Percentage height to overlap curve
-  },
-  arrow2?: {                  // Define arrow at end of curve
-    width?: number,
-    height?: number,
-    radius?: number,
-    autoHide?: boolean,
-    curveOverlap?: number,    // Percentage height to overlap curve
-  },
-  arrows?: {                // Define both arrows - overwrites arrow1 and 2
-    width?: number,
-    height?: number,
-    radius?: number,
-    autoHide?: boolean,
-    curveOverlap?: number,    // Percentage height to overlap curve
-  } | boolean,
-  //
+  // arrow1?: {                // Define arrow at start of curve
+  //   width?: number,           // Arrow width
+  //   height?: number,          // Arrow height
+  //   radius?: number,          // Arrow radius (can be different to curve rad)
+  //   autoHide?: boolean,       // Autohide arrow when arrow(s) height > angle
+  //   curveOverlap?: number,    // Percentage height to overlap curve
+  // },
+  // arrow2?: {                  // Define arrow at end of curve
+  //   width?: number,
+  //   height?: number,
+  //   radius?: number,
+  //   autoHide?: boolean,
+  //   curveOverlap?: number,    // Percentage height to overlap curve
+  // },
+  // arrows?: {                // Define both arrows - overwrites arrow1 and 2
+  //   width?: number,
+  //   height?: number,
+  //   radius?: number,
+  //   autoHide?: boolean,
+  //   curveOverlap?: number,    // Percentage height to overlap curve
+  // } | boolean,
+  arrow: OBJ_LineArrows;
   // Label
   label?: TypeAngleLabelOptions,
   //
@@ -201,20 +203,27 @@ class DiagramObjectAngle extends DiagramElementCollection {
 
   // Objects that may or may not exist
   label: ?AngleLabel;
-  arrow1: ?{
-    height: number;
-    width: number,
-    radius: number,
-    autoHide: boolean,
-    curveOverlap: number,
-  };
+  // arrow1: ?{
+  //   height: number;
+  //   width: number,
+  //   radius: number,
+  //   autoHide: boolean,
+  //   curveOverlap: number,
+  // };
 
-  arrow2: ?{
-    height: number;
-    width: number,
-    radius: number,
-    autoHide: boolean,
-    curveOverlap: number,
+  // arrow2: ?{
+  //   height: number;
+  //   width: number,
+  //   radius: number,
+  //   autoHide: boolean,
+  //   curveOverlap: number,
+  // };
+
+  arrow1: ?{ height: number; };
+  arrow2: ?{ height: number; };
+  arrow: ?{
+    start?: OBJ_LineArrow,
+    end?: OBJ_LineArrow,
   };
 
   corner: ?{
@@ -415,9 +424,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
       sides: null,
       sideStart: null,
       sideStop: null,
-      arrows: null,
-      arrow1: null,
-      arrow2: null,
+      // arrows: null,
+      // arrow1: null,
+      // arrow2: null,
       label: null,
       // p1: null,       // if p1, p2 and p3 are defined, position, angle and
       // p2: null,       // rotation will be overridden
@@ -494,8 +503,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
     // Setup default values for sides, arrows, curve and label
     this.side1 = null;
     this.side2 = null;
-    this.arrow1 = null;
-    this.arrow2 = null;
+    // this.arrow1 = null;
+    // this.arrow2 = null;
     this.curve = null;
     this.label = null;
 
@@ -505,13 +514,41 @@ class DiagramObjectAngle extends DiagramElementCollection {
       this.addCurve(optionsToUse.curve);
     }
 
-    // Arrows
-    if (optionsToUse.arrow1 || optionsToUse.arrows) {
-      this.addArrow(1, joinObjects({}, optionsToUse.arrow1, optionsToUse.arrows));
+    // Arrow related properties
+    this._arrow1 = null;
+    this._arrow2 = null;
+    if (optionsToUse.arrow != null) {
+      let width = 0.01;
+      if (this.curve) {
+        width = this.curve.width;
+      }
+      const arrowOptions = simplifyArrowOptions(optionsToUse.arrow, width);
+      this.arrow = arrowOptions;
+      let defaultArrowRadius = 0.1;
+      if (this.curve) {
+        defaultArrowRadius = this.curve.radius;
+      }
+      const defaultO = {
+        radius: defaultArrowRadius,
+        autoHide: true,
+        curveOverlap: 0.3,
+      };
+      if (this.arrow.start != null) {
+        this.arrow.start = joinObjects({}, defaultO, this.arrow.start);
+      }
+      if (this.arrow.end != null) {
+        this.arrow.end = joinObjects({}, defaultO, this.arrow.end);
+      }
+      this.addArrow('start');
+      this.addArrow('end');
     }
-    if (optionsToUse.arrow2 || optionsToUse.arrows) {
-      this.addArrow(2, joinObjects({}, optionsToUse.arrow2, optionsToUse.arrows));
-    }
+    // // Arrows
+    // if (optionsToUse.arrow1 || optionsToUse.arrows) {
+    //   this.addArrow(1, joinObjects({}, optionsToUse.arrow1, optionsToUse.arrows));
+    // }
+    // if (optionsToUse.arrow2 || optionsToUse.arrows) {
+    //   this.addArrow(2, joinObjects({}, optionsToUse.arrow2, optionsToUse.arrows));
+    // }
 
     // Label
     if (optionsToUse.label) {
@@ -894,48 +931,87 @@ class DiagramObjectAngle extends DiagramElementCollection {
 
 
   addArrow(
-    index: 1 | 2,
-    options: {
-      width?: number,
-      height?: number,
-      radius?: number,
-      autoHide?: number,
-    } | null = {},
+    // index: 1 | 2,
+    // options: {
+    //   width?: number,
+    //   height?: number,
+    //   radius?: number,
+    //   autoHide?: number,
+    // } | null = {},
+    lineEnd: 'start' | 'end',
   ) {
-    let defaultArrowDimension = 0.04;
-    if (this.curve) {
-      defaultArrowDimension = this.curve.width * 4;
-    }
-    let defaultArrowRadius = 0.1;
-    if (this.curve) {
-      defaultArrowRadius = this.curve.radius;
-    }
-    const defaultArrowOptions = {
-      width: defaultArrowDimension,
-      height: defaultArrowDimension,
-      radius: defaultArrowRadius,
-      autoHide: true,
-      curveOverlap: 0.3,
-    };
-    let optionsToUse = {};
-    if (options != null) {
-      optionsToUse = options;
-    }
-    const arrowOptions = joinObjects({}, defaultArrowOptions, optionsToUse);
-    const { width, height } = arrowOptions;
+    // let defaultArrowDimension = 0.04;
+    // if (this.curve) {
+    //   defaultArrowDimension = this.curve.width * 4;
+    // }
+    // let defaultArrowRadius = 0.1;
+    // if (this.curve) {
+    //   defaultArrowRadius = this.curve.radius;
+    // }
+    // const defaultArrowOptions = {
+    //   // width: defaultArrowDimension,
+    //   // height: defaultArrowDimension,
+    //   radius: defaultArrowRadius,
+    //   autoHide: true,
+    //   curveOverlap: 0.3,
+    // };
+    // let r = 0;
+    // if (lineEnd === 'start') {
+    //   r = Math.PI;
+    // }
+    // if (this.direction === -1) {
+    //   r += Math.PI;
+    // }
+    // if (this.angle < 0) {
+    //   r += Math.PI;
+    // }
 
-    let r = Math.PI / 2;
-    if (index === 2) {
-      r = Math.PI / 2 * 3;
-    }
-
-    const a = this.shapes.arrowLegacy(
-      width, 0, height, 0,
-      this.color, new Transform().rotate(0).translate(0, 0), new Point(0, 0), r,
-    );
+    const o = this.arrow[lineEnd];
+    const a = this.shapes.arrow(joinObjects(
+      {},
+      o,
+      {
+        // angle: r,
+        color: this.color,
+        transform: new Transform().rotate(0).translate(0, 0),
+      },
+    ));
     // $FlowFixMe
-    this[`arrow${index}`] = arrowOptions;
+    const arrowLength = getArrowLength(o)[1];
+    let index = 1;
+    if (lineEnd === 'end') {
+      index = 2;
+    }
+    // $FlowFixMe
+    this[`arrow${index}`] = {
+      height: arrowLength,
+      radius: o.radius,
+      autoHid: o.autoHide,
+      curveOverlap: o.curveOverlap,
+    };
     this.add(`arrow${index}`, a);
+
+
+
+    // let optionsToUse = {};
+    // if (options != null) {
+    //   optionsToUse = options;
+    // }
+    // const arrowOptions = joinObjects({}, defaultArrowOptions, optionsToUse);
+    // const { width, height } = arrowOptions;
+
+    // let r = Math.PI / 2;
+    // if (index === 2) {
+    //   r = Math.PI / 2 * 3;
+    // }
+
+    // const a = this.shapes.arrowLegacy(
+    //   width, 0, height, 0,
+    //   this.color, new Transform().rotate(0).translate(0, 0), new Point(0, 0), r,
+    // );
+    // // $FlowFixMe
+    // this[`arrow${index}`] = arrowOptions;
+    // this.add(`arrow${index}`, a);
     this.update();
   }
 
@@ -947,6 +1023,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
         direction = 1;
       } else if (this.angle < 0 && this.direction === 1) {
         direction = -1;
+      }
+      let r = rotation;
+      if (this.direction === -1) {
+        r *= -1;
+      }
+      if (this.angle < 0) {
+        r *=-1;
       }
       for (let i = 0; i < curve.num; i += 1) {
         let name = '_curve';
@@ -967,7 +1050,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
                 delta = primaryCurveAngle - numSides * sideAngle;
               }
               element.angleToDraw = clipAngle(primaryCurveAngle, '0to360');
-              element.transform.updateRotation(rotation + direction * delta / 2);
+              element.transform.updateRotation(r + direction * delta / 2);
             } else {
               let delta = 0;
               if (this.curve) {
@@ -1037,7 +1120,14 @@ class DiagramObjectAngle extends DiagramElementCollection {
         _arrow1.show();
         _arrow1.transform.updateTranslation(arrow1.radius, 0);
         const arrowLengthAngle = arrow1.height / arrow1.radius;
-        _arrow1.transform.updateRotation(Math.PI / 2 + arrowLengthAngle);
+        let r = Math.PI;
+        if (this.direction === -1) {
+          r += Math.PI;
+        }
+        if (this.angle < 0) {
+          r += Math.PI;
+        }
+        _arrow1.transform.updateRotation(r + Math.PI / 2 + arrowLengthAngle);
         rotationForArrow1 = arrow1Angle;
       }
     }
@@ -1049,8 +1139,15 @@ class DiagramObjectAngle extends DiagramElementCollection {
         _arrow2.show();
         _arrow2.transform.updateTranslation(polarToRect(arrow2.radius, this.angle));
         const arrowLengthAngle = arrow2.height / arrow2.radius;
+        let r = 0;
+        if (this.direction === -1) {
+          r += Math.PI;
+        }
+        if (this.angle < 0) {
+          r += Math.PI;
+        }
         _arrow2.transform.updateRotation(
-          this.angle + Math.PI / 2 - arrowLengthAngle,
+          r + this.angle + Math.PI / 2 - arrowLengthAngle,
         );
         // curveAngle += arrowLengthAngle * (1 - arrow2LengthModifier);
       }
