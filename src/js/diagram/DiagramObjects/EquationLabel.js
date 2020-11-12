@@ -249,12 +249,14 @@ export default class EquationLabel {
       }
     }
     if (orientation === 'baseAway') {
+      parentAngle = 0;
       labelAngle = Math.PI;
       if (offsetAngle < 0) {
         labelAngle = 0;
       }
     }
     if (orientation === 'upright') {
+      parentAngle = 0;
       if (Math.cos(lineAngle) < 0) {
         labelAngle = Math.PI;
       }
@@ -294,6 +296,10 @@ export default class EquationLabel {
       r = labelAngle - parentAngle + lineAngle;
     }
     if (relativeToLine === false && orientation === 'baseToLine') {
+      p = position.add(positionOffset).rotate(lineAngle, position);
+      r = labelAngle + lineAngle;
+    }
+    if (relativeToLine === false && orientation === 'baseAway') {
       p = position.add(positionOffset).rotate(lineAngle, position);
       r = labelAngle + lineAngle;
     }

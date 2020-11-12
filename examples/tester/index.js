@@ -474,7 +474,7 @@ const a = diagram.advanced.angle({
     text: null,
     curveOffset: 0.1,
     location: 'outside',
-    orientation: 'baseToLine',
+    orientation: 'baseAway',
   },
   arrow: {
     // start: {
