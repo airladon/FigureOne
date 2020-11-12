@@ -294,7 +294,7 @@ export default class EquationLabel {
       r = labelAngle - parentAngle + lineAngle;
     }
     if (relativeToLine === false && orientation === 'baseToLine') {
-      p = position.add(positionOffset).rotate(-labelAngle, position);
+      p = position.add(positionOffset).rotate(lineAngle, position);
       r = labelAngle + lineAngle;
     }
     this.eqn.setPosition(p);
