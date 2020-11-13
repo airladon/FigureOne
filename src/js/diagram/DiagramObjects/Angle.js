@@ -146,6 +146,7 @@ export type TypeAngleLabelOptions = {
  * The curve annotation of an Advanced Angle shape.
  *
  * @property {number} [width] Curve line width (`0.01`)
+ * @property {boolean} [fill] Use a fill instead of a line (`false`)
  * @property {number} [sides] Number of sides in full circle curve (`100`)
  * @property {number} [radius] Curve radius (`0.5`)
  * @property {number} [num] Number of curves (`1`)
@@ -161,6 +162,7 @@ export type TypeAngleLabelOptions = {
  */
 export type OBJ_AngleCurve = {
   width?: number,           // Curve line width
+  fill?: boolean,
   sides?: number,           // Number of sides in 360º curve
   radius?: number,          // Curve radius
   num?: number,             // Number of curves
@@ -669,18 +671,20 @@ export type OBJ_PulseAngleAnimationStep = {
  *     angle: Math.PI / 4 * 3,
  *     label: {
  *       text: null,
- *       location: 'inside',
+ *       location: 'outside',
  *       orientation: 'horizontal',
  *       offset: 0.1,
  *       update: true,
+ *       sides: 200,
  *     },
  *     curve: {
- *       radius: 0.5,
- *       width: 0.01,
+ *       radius: 0.3,
+ *       fill: true,
  *     },
  *     corner: {
- *       width: 0.01,
+ *       width: 0.02,
  *       length: 1,
+ *       color: [0.4, 0.4, 0.4, 1],
  *     },
  *   }
  * });
@@ -1197,6 +1201,7 @@ class AdvancedAngle extends DiagramElementCollection {
       sides: 100,
       radius: 0.5,
       num: 1,
+      fill: false,
       step: 0,
       autoHide: null,
       autoHideMax: null,
@@ -1215,15 +1220,18 @@ class AdvancedAngle extends DiagramElementCollection {
     }
 
     for (let i = 0; i < optionsToUse.num; i += 1) {
-      const curve = this.shapes.polygon({
+      const o = {
         sides: optionsToUse.sides,
         radius: optionsToUse.radius + i * optionsToUse.step,
-        width: optionsToUse.width,
         color: this.color,
-        fill: false,
         direction,
         transform: new Transform('AngleCurve').rotate(0),
-      });
+      };
+      if (optionsToUse.fill === false) {
+        o.line = { width: optionsToUse.width };
+      }
+
+      const curve = this.shapes.polygon(o);
       this.curve = optionsToUse;
       let name = 'curve';
       if (i > 0) {

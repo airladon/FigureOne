@@ -16,7 +16,6 @@ function getRectPoints(
   y: number,
   offset: Point = new Point(0, 0),
 ) {
-  console.log(offset)
   if (radius < 0.000000001) {
     return [
       new Point(x + offset.x, y + offset.y),

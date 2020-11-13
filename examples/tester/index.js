@@ -41,14 +41,15 @@ diagram.addElement({
   options: {
     points: [[0, 0], [1, 0], [1, 1]],
     width: 0.03,
-    side: [{
+    // arrow: 'triangle',
+    side: {
       // color: [1, 0, 0, 1],
       offset: -0.25,
       showLine: true,
       arrows: true,
       width: 0.01,
       label: {
-        text: null,
+        text: [null, '', 'b'],
         location: 'inside',
         scale: 0.5,
         offset: 0.1,
@@ -59,11 +60,22 @@ diagram.addElement({
         isMovable: true,
         isTouchable: true,
       },
-    }, {}],
+    },
     angle: {
-      curve: { width: 0.01, radius: 0.2, },
+      curve: { width: 0.03, radius: 0.2, fill: true, },
       direction: 'negative',
+      0: {
+
+      },
+      only: [0, 2, 1],
+      not: [1, 2, 1]
     },
     close: true,
+    pad: {
+      radius: 0.2,
+      color: [1, 0, 0, 0.5],
+      isMovable: true,
+      line: { width: 0.01 }
+    },
   }
-})
+});

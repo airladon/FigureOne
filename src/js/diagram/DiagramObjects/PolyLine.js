@@ -7,8 +7,8 @@ import {
 import type {
   TypeRangeBoundsDefinition, TypeRectBoundsDefinition, TypeParsablePoint,
 } from '../../tools/g2';
-import { joinObjects } from '../../tools/tools';
-import { round } from '../../tools/math';
+import { joinObjects, joinObjectsWithOptions } from '../../tools/tools';
+import { round, range } from '../../tools/math';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
@@ -61,6 +61,73 @@ export type TypePolyLineOptions = {
   };
 } & OBJ_Polyline;
 
+function processArray(
+  toProcess: Object | Array<Object>,
+  defaultOptions: Object,
+  defaultLabelOptions: Object,
+  total: number,
+) {
+  if (Array.isArray(toProcess)) {
+    const out = [];
+    for (let i = 0; i < total; i += 1) {
+      const o = toProcess[i % toProcess.length];
+      if (o.label != null) {
+        out.push(joinObjects({}, defaultOptions, { label: defaultLabelOptions }, o));
+      }
+      out.push(joinObjects({}, defaultOptions, o));
+    }
+    return out;
+  }
+
+  const except = [];
+  for (let i = 0; i < total; i += 1) {
+    except.push(`${i}`);
+  }
+  const toProcessDefaults = joinObjectsWithOptions({ except }, {}, toProcess);
+  let labels = [];
+  if (
+    toProcessDefaults.label != null
+    && toProcessDefaults.label.text != null
+    && Array.isArray(toProcessDefaults)
+  ) {
+    labels = toProcessDefaults.label.text;
+  }
+
+  let only;
+  if (toProcessDefaults.only != null) {
+    [only] = toProcessDefaults;
+  } else {
+    only = range(0, total, 1);
+  }
+  if (toProcessDefaults.not != null) {
+    toProcessDefaults.not.forEach(index => {
+      const i = only.indexOf(index);
+      if (i !== -1) {
+        only.splice(i, 1);
+      }
+    });
+  }
+  const out = [];
+  for (let i = 0; i < only.length; i += 1) {
+    const index = only[i];
+    let indexOptions = {};
+    if (toProcess[`${index}`] != null) {
+      indexOptions = toProcess[`${index}`];
+    }
+    let labelDefaults = {};
+    if (labels.length > 0) {
+      const text = labels[i % labels.length];
+      labelDefaults = { label: { text } };
+    }
+    const o = joinObjects({}, toProcessDefaults, labelDefaults, indexOptions);
+    if (o.label != null) {
+      return joinObjects({}, { label: defaultLabelOptions }, o);
+    }
+    return o;
+  }
+  return out;
+}
+
 function makeArray<T>(
   possibleArray: T | Array<T>,
   count: number,
@@ -75,6 +142,31 @@ function makeArray<T>(
     }
     return outArray;
   }
+  if (possibleArray != null && typeof possibleArray === 'object') {
+    const keys = Object.keys(possibleArray);
+    let allNumbers = true;
+    let i = 0;
+    while (i < keys.length && allNumbers) {
+      if (isNaN(parseInt(keys[i], 10))) {
+        allNumbers = false;
+      }
+      i += 1;
+    }
+    console.log(allNumbers, possibleArray)
+    if (allNumbers) {
+      const outArray = [];
+      for (let m = 0; m < count; m += 1) {
+        outArray.push({});
+      }
+      keys.forEach((k, m) => {
+        outArray[m] = possibleArray[k];
+      });
+      console.log(outArray)
+      // $FlowFixMe
+      return outArray;
+    }
+  }
+
   const outArray = [];
   let labels = [];
 
@@ -125,7 +217,7 @@ function makeArray<T>(
 export default class DiagramObjectPolyLine extends DiagramElementCollection {
   shapes: DiagramPrimitives;
   equation: DiagramEquation;
-  objects: DiagramObjects;
+  advanced: DiagramObjects;
   animateNextFrame: void => void;
   isTouchDevice: boolean;
   largerTouchBorder: boolean;
@@ -155,7 +247,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   ) {
     const defaultOptions: TypePolyLineOptions = {
       position: null,
-      color: [0, 1, 0, 1],
+      color: shapes.defaultColor,
       points: [new Point(1, 0), new Point(0, 0), new Point(0, 1)],
       close: false,
       showLine: true,
@@ -424,6 +516,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         dash: options.dash,
         color: options.color,
         pulse: options.pulse,
+        arrow: options.arrow,
       });
       this.add('line', line);
     }
