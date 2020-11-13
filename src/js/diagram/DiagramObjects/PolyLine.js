@@ -179,7 +179,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       showLine: false,
       offset: 0,
       width: 0.01,
-      color: options.color == null ? [0, 1, 0, 1] : options.color,
+      color: options.color == null ? shapes.defaultColor : options.color,
     };
     const defaultSideLabelOptions: TypeLineLabelOptions = {
       offset: 0.1,
@@ -191,7 +191,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       scale: 0.7,
     };
     const defaultAngleOptions: ADV_Angle = {
-      color: options.color == null ? [0, 1, 0, 1] : options.color,
+      color: options.color == null ? shapes.defaultColor : options.color,
       curve: {},
       autoRightAngle: true,
     };
@@ -201,7 +201,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     const defaultPadOptions: TypePadOptions = {
       sides: 20,
       radius: 0.1,
-      color: options.color == null ? [0, 1, 0, 1] : options.color,
+      color: options.color == null ? shapes.defaultColor : options.color,
       fill: true,
       isMovable: false,
       boundary: 'diagram',
@@ -243,7 +243,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
 
     this.shapes = shapes;
     this.equation = equation;
-    this.objects = objects;
+    this.advanced = objects;
     this.largerTouchBorder = optionsToUse.largerTouchBorder;
     this.isTouchDevice = isTouchDevice;
     this.animateNextFrame = animateNextFrame;

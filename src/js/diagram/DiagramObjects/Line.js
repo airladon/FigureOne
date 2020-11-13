@@ -24,7 +24,7 @@ import type { OBJ_LineArrows, OBJ_LineArrow } from '../DrawingObjects/Geometries
 import type { OBJ_Pulse } from '../Element';
 import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
 import * as animation from '../Animation/Animation';
-import type { OBJ_CustomAnimationStep } from '../Animation/Animation';
+import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
 
 /**
  * Advanced line label options object.

@@ -1842,7 +1842,7 @@ class AdvancedAngle extends DiagramElementCollection {
         this.addAnglePad(1 - movePadRadius, width, endArm);
       }
       if (movePadRadius > 0) {
-        this.addMovePad(movePadRadius, width);
+        this.addMovePad(movePadRadius);
       }
     } else {
       this.isMovable = false;
@@ -1870,7 +1870,7 @@ class AdvancedAngle extends DiagramElementCollection {
     return 1;
   }
 
-  addAnglePad(percentLength: 1, width: 0.5, type: 'rotation' | 'angle') {
+  addAnglePad(percentLength: number = 1, width: number = 0.5, type: 'rotation' | 'angle') {
     if (this._anglePad == null) {
       const length = this.getLength();
       const anglePad = this.shapes.rectangle({
@@ -1908,7 +1908,7 @@ class AdvancedAngle extends DiagramElementCollection {
     }
   }
 
-  addRotPad(percentLength: 1, width: 0.5, type: 'rotation' | 'angle') {
+  addRotPad(percentLength: number = 1, width: number = 0.5, type: 'rotation' | 'angle') {
     if (this._rotPad == null) {
       const length = this.getLength();
       const rotPad = this.shapes.rectangle({
@@ -1926,6 +1926,7 @@ class AdvancedAngle extends DiagramElementCollection {
       if (type === 'angle') {
         rotPad.move.element = this;
         this.subscriptions.add('beforeSetTransform', (transformToSet) => {
+          // $FlowFixMe
           const nextR = transformToSet[0].r();
           const currentR = this.getRotation();
           const deltaR = nextR - currentR;
@@ -1943,7 +1944,7 @@ class AdvancedAngle extends DiagramElementCollection {
     }
   }
 
-  addMovePad(percentLength: 1) {
+  addMovePad(percentLength: number = 1) {
     if (this._movePad == null) {
       const length = this.getLength();
       const movePad = this.shapes.polygon({
