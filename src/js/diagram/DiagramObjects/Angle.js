@@ -29,6 +29,24 @@ import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Anima
 // export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
 
 /**
+ * Angle move options object.
+ *
+ * When a touch event moves a In addition to `'rotation'`, `'translation'` and `'scale'` movement options,
+ * 
+ *
+ * @property {'rotation' | 'translation' | 'scale' | 'angle' | 'angleRotation' | 'angleRotationMove' | 'angleMove' | 'rotationMove'} [type]
+ * @property {boolean} [movable]
+ * @property {number} [movePad]
+ * @property {number} [width]
+ */
+export type OBJ_MovableAngle = {
+  type?: 'rotation' | 'translation' | 'scale' | 'angle' | 'angleRotation' | 'angleRotationMove' | 'angleMove' | 'rotationMove',
+  movable?: boolean,
+  movePad?: number,
+  width?: number,
+}
+
+/**
  * Advanced angle label options object.
  *
  * An angle can be annotated with a label using the `text` property and can be:
@@ -506,7 +524,7 @@ export type OBJ_PulseAngleAnimationStep = {
  * Some of the useful methods included in an advanced line are:
  * - <a href="#advancedanglepulseangle">pulseangle</a> - customize pulsing the
  *   angle without
- * - <a href="#advancedlinesetmovable">grow</a> - overrisdes
+ * - <a href="#advancedanglesetmovable">grow</a> - overrisdes
  *    <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
  *    allowing for more complex move options.
  *
@@ -619,7 +637,7 @@ class AdvancedAngle extends DiagramElementCollection {
   }) {
     const defaultOptions = {
       angle: 1,
-      startAngle: 0,
+      startAngle: this.lastLabelRotationOffset,
     };
     const o = joinObjects({}, defaultOptions, options);
     let { angle, startAngle, position } = o;
@@ -1368,6 +1386,8 @@ class AdvancedAngle extends DiagramElementCollection {
       _side2.transform.updateRotation(this.angle);
       _side2.transform.updateScale(side2.length, 1);
     }
+
+    this.updateMovePads();
   }
 
   checkLabelForRightAngle() {
@@ -1617,6 +1637,147 @@ class AdvancedAngle extends DiagramElementCollection {
   showAll() {
     super.showAll();
     this.update();
+  }
+
+  /**
+   * 
+   */
+  // $FlowFixMe
+  setMovable(movableOrOptions: boolean | {
+    type: 'rotation' | 'translation' | 'scale' | 'angle' | 'angleRotation' | 'angleRotationMove' | 'angleMove' | 'rotationMove',
+    movable: boolean,
+    movePad: number,
+    width: number,
+  }) {
+    const defaultOptions = {
+      movable: true,
+      type: this.move.type,
+      width: 0.5,
+      movePad: 0.3,
+    };
+    let options;
+    if (movableOrOptions === false) {
+      options = joinObjects({}, defaultOptions, { movable: false });
+    } else if (movableOrOptions === true) {
+      options = defaultOptions;
+    } else {
+      options = joinObjects({}, defaultOptions, movableOrOptions);
+    }
+    const { movable } = options;
+    if (movable) {
+      const { type } = options;
+      if (type === 'translation' || type === 'rotation'
+        || type === 'scale'
+      ) {
+        this.move.type = type;
+        super.setMovable(true);
+      } else if (type === 'angle') {
+        this.addAnglePad(1, options.width);
+      } else if (type === 'angleRotation') {
+        this.addRotPad(1, options.width);
+        this.addAnglePad(1, options.width);
+      } else if (type === 'angleRotationMove') {
+        this.addRotPad(1 - options.movePad, options.width);
+        this.addAnglePad(1 - options.movePad, options.width);
+        this.addMovePad(options.movePad, options.width);
+      } else if (type === 'rotationMove') {
+        this.addRotPad(1 - options.movePad, options.width);
+        this.addMovePad(options.movePad, options.width);
+      }
+    } else {
+      this.isMovable = false;
+      this.isTouchable = false;
+      if (this._anglePad != null) {
+        this._anglePad.setMovable(false);
+      }
+      if (this._rotPad != null) {
+        this._rotPad.setMovable(false);
+      }
+    }
+    this.updateMovePads();
+  }
+
+  getLength() {
+    if (this.corner != null && this.corner.length != null) {
+      return this.corner.length;
+    }
+    if (this.curve != null && this.curve.radius != null) {
+      return this.curve.radius;
+    }
+    if (this.label != null && this.label.radius != null) {
+      return this.label.radius;
+    }
+    return 1;
+  }
+
+  addAnglePad(percentLength: 1, width: 0.5) {
+    if (this._anglePad == null) {
+      const length = this.getLength();
+      const anglePad = this.shapes.rectangle({
+        offset: [length * (1 - percentLength), 0],
+        xAlign: 'left',
+        yAlign: 'middle',
+        width: length * percentLength + width,
+        height: width,
+        color: [0, 0, 1, 0.5],
+      });
+      this.add('anglePad', anglePad);
+      anglePad.setMovable();
+      anglePad.move.type = 'rotation';
+      anglePad.drawingObject.border = [[]];
+      anglePad.subscriptions.add('setTransform', () => {
+        let angle = anglePad.getRotation();
+        if (this.angle > 0) {
+          angle = clipAngle(angle, '0to360');
+        } else {
+          angle = clipAngle(angle, '-360to0');
+        }
+        this.setAngle({ angle });
+      });
+    }
+  }
+
+  addRotPad(percentLength: 1, width: 0.5) {
+    if (this._rotPad == null) {
+      const length = this.getLength();
+      const rotPad = this.shapes.rectangle({
+        // position: new Point(length * (1 - percentLength), 0),
+        offset: [length * (1 - percentLength), 0],
+        xAlign: 'left',
+        yAlign: 'middle',
+        width: length * percentLength + width,
+        height: width,
+        color: [1, 0, 1, 0.5],
+      });
+      this.add('rotPad', rotPad);
+      rotPad.setMovable();
+      rotPad.move.type = 'rotation';
+      rotPad.drawingObject.border = [[]];
+      rotPad.move.element = this;
+    }
+  }
+
+  addMovePad(percentLength: 1) {
+    if (this._movePad == null) {
+      const length = this.getLength();
+      const movePad = this.shapes.polygon({
+        radius: length * percentLength,
+        sides: 8,
+        fill: true,
+        color: [1, 0, 0, 0.5],
+      });
+      this.add('movePad', movePad);
+      movePad.setMovable();
+      movePad.move.type = 'translation';
+      movePad.drawingObject.border = [[]];
+      movePad.move.element = this;
+    }
+  }
+
+  updateMovePads() {
+    if (this._anglePad != null) {
+      this._anglePad.transform.updateRotation(this.angle);
+    }
   }
 }
 

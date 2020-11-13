@@ -12,7 +12,7 @@ import type {
 import { joinObjects } from '../../tools/tools';
 import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
 
-const DEBUG = true;
+const DEBUG = false;
 
 export type TypeLabelOptions = {
   label?: string | Equation | Array<string> | EQN_Equation,

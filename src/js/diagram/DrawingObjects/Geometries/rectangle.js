@@ -14,13 +14,15 @@ function getRectPoints(
   radius: number,
   x: number,
   y: number,
+  offset: Point = new Point(0, 0),
 ) {
+  console.log(offset)
   if (radius < 0.000000001) {
     return [
-      new Point(x, y),
-      new Point(x + width, y),
-      new Point(x + width, y + height),
-      new Point(x, y + height),
+      new Point(x + offset.x, y + offset.y),
+      new Point(x + width + offset.x, y + offset.y),
+      new Point(x + width + offset.x, y + height + offset.y),
+      new Point(x + offset.x, y + height + offset.y),
     ];
   }
   const points = [];
@@ -38,7 +40,7 @@ function getRectPoints(
       points.push(new Point(
         cx + r * Math.cos(i * deltaAngle + angle),
         cy + r * Math.sin(i * deltaAngle + angle),
-      ));
+      ).add(offset));
     }
   });
   return points;
@@ -59,7 +61,8 @@ function getRectangleBorder(
       width: number,
     },
     border: 'rect' | 'outline' | Array<Array<Point>>,
-    touchBorder: number | 'rect' | 'border' | Array<Array<Point>>
+    touchBorder: number | 'rect' | 'border' | Array<Array<Point>>,
+    offset: Point,
   },
 ): Array<Point> {
   const {
@@ -82,7 +85,7 @@ function getRectangleBorder(
     y = -height * yAlign;
   }
   const { radius, sides } = options.corner;
-  const points = getRectPoints(width, height, sides, radius, x, y);
+  const points = getRectPoints(width, height, sides, radius, x, y, options.offset);
   let lineDelta = 0;
   if (line != null && line.widthIs === 'mid') {
     lineDelta = line.width / 2;
@@ -95,7 +98,7 @@ function getRectangleBorder(
     outline = getRectPoints(
       width + lineDelta * 2,
       height + lineDelta * 2,
-      sides, radius, x - lineDelta, y - lineDelta,
+      sides, radius, x - lineDelta, y - lineDelta, options.offset,
     );
   } else {
     outline = points.map(p => p._dup());
@@ -112,6 +115,7 @@ function getRectangleBorder(
       width + lineDelta * 2 + touchBorder * 2,
       height + lineDelta * 2 + touchBorder * 2,
       sides, radius, x - lineDelta - touchBorder, y - lineDelta - touchBorder,
+      options.offset,
     )];
   }
 

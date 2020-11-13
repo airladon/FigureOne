@@ -508,12 +508,13 @@ diagram.elements._l.subscriptions.add('setTransform', () => {
 // })
 // a.pulseAngle()
 // a.pulse()
-a.animations.new()
-  .delay(1)
-  .pulseAngle({ duration: 3, thick: 10, curve: 1.04 })
-  .angle({ target: 3, duration: 2 })
-  .pulse({ duration: 3 })
-  .start();
+a.setMovable({ type: 'angleRotationMove', width: 0.5, movePad: 0.2, });
+// a.animations.new()
+//   .delay(1)
+//   .pulseAngle({ duration: 3, thick: 10, curve: 1.04 })
+//   .angle({ target: 3, duration: 2 })
+//   .pulse({ duration: 3 })
+//   .start();
 
 diagram.elements._l2.subscriptions.add('setTransform', () => {
   const r = diagram.elements._l2.getRotation();

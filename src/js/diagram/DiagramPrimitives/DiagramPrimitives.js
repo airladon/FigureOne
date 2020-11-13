@@ -2287,9 +2287,10 @@ export default class DiagramPrimitives {
       border: 'outline',
       touchBorder: 'border',
       holeBorder: 'none',
+      offset: [0, 0],
     };
     const optionsToUse = processOptions(defaultOptions, ...options);
-
+    optionsToUse.offset = getPoint(optionsToUse.offset);
     if (
       optionsToUse.line != null && optionsToUse.line.widthIs == null
     ) {

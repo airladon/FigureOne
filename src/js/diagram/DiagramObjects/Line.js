@@ -308,7 +308,7 @@ function getLineFromOptions(options: {
  * Grow line animation step.
  *
  * @property {number} [start] line length to grow from (`current length`)
- * @property {number} [end] line length to grow to (`current length`)
+ * @property {number} [target] line length to grow to (`current length`)
  * @extends OBJ_CustomAnimationStep
  */
 export type OBJ_LengthAnimationStep = {
