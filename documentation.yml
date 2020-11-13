@@ -31,6 +31,8 @@ toc:
     file: ./docs/tutorials/advanced_shapes/advanced_shapes.md
   - AdvancedLine
   - ADV_Line
+  - AdvancedAngle
+  - ADV_Angle
   - name: Text
     file: ./docs/tutorials/text/text.md
   - OBJ_Text

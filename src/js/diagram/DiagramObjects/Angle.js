@@ -31,19 +31,32 @@ import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Anima
 /**
  * Angle move options object.
  *
- * When a touch event moves a In addition to `'rotation'`, `'translation'` and `'scale'` movement options,
- * 
+ * The angle corner has two arms. The `startArm` is the first arm of the angle
+ * (the one defined by <a href="adv_angle#startangle">startAngle</a>),
+ * while the `endArm` is the second arm of the corner defined by
+ * <a href="adv_angle#angle">angle</a>.
  *
- * @property {'rotation' | 'translation' | 'scale' | 'angle' | 'angleRotation' | 'angleRotationMove' | 'angleMove' | 'rotationMove'} [type]
- * @property {boolean} [movable]
- * @property {number} [movePad]
- * @property {number} [width]
+ * Both arms can be set to either rotate the angle (`'rotation'`) or change the
+ * size of the angle (`'angle'`). Invisible touch pads are overlaid on the arms
+ * with some `width`. When these pads are touched, the corresponding arm will
+ * move. The pads extend past the arm ends by `width` as well.
+ *
+ * If `movePadRadius` is greater than 0, then a pad with that radius will be
+ * placed at the corner vertex. When this pad is touched, the angle will
+ * translate.
+ *
+ * @property {'rotation' | 'angle' | null} [startArm]
+ * @property {'rotation' | 'angle' | null} [endArm]
+ * @property {boolean} [movable] `true` to make movable, `false` to not (`true`)
+ * @property {number} [movePadRadius] radius of move pad (`0`)
+ * @property {number} [width] width of pads over lines (`0.5`)
  */
 export type OBJ_MovableAngle = {
-  type?: 'rotation' | 'translation' | 'scale' | 'angle' | 'angleRotation' | 'angleRotationMove' | 'angleMove' | 'rotationMove',
-  movable?: boolean,
-  movePad?: number,
-  width?: number,
+  movable: boolean,
+  movePadRadius: number,
+  width: number,
+  startArm: 'angle' | 'rotation' | null,
+  endArm: 'angle' | 'rotation' | null,
 }
 
 /**
@@ -557,9 +570,11 @@ class AdvancedAngle extends DiagramElementCollection {
   _side1: ?DiagramElementPrimitive;
   _side2: ?DiagramElementPrimitive;
   _corner: ?DiagramElementPrimitive;
-  _label: null | {
-    _base: DiagramElementPrimitive;
-  } & DiagramElementCollection;
+  _label: ?Equation;
+
+  _anglePad: ?DiagramElementPrimitive;
+  _rotPad: ?DiagramElementPrimitive;
+  _movePad: ?DiagramElementPrimitive;
 
   label: ?AngleLabel;
   arrow: ?{
@@ -1080,7 +1095,7 @@ class AdvancedAngle extends DiagramElementCollection {
     }
 
     // Right Angle
-    if (this.curve.autoRightAngle) {
+    if (this.curve != null && this.curve.autoRightAngle) {
       const right = this.shapes.collection();
       const rightLength = optionsToUse.radius * 0.707; // / Math.sqrt(2);
       right.add('line1', this.shapes.line({
@@ -1342,9 +1357,11 @@ class AdvancedAngle extends DiagramElementCollection {
         if (_arrow2 != null) {
           _arrow2.hide();
         }
-      } else if (this.curve.autoRightAngle
-        && fullCurveAngle >= Math.PI / 2 - this.curve.rightAngleRange / 2
-        && fullCurveAngle <= Math.PI / 2 + this.curve.rightAngleRange / 2
+      } else if (
+        curve != null
+        && curve.autoRightAngle
+        && fullCurveAngle >= Math.PI / 2 - curve.rightAngleRange / 2
+        && fullCurveAngle <= Math.PI / 2 + curve.rightAngleRange / 2
       ) {
         if (_curveRight != null) {
           _curveRight.showAll();
@@ -1391,7 +1408,7 @@ class AdvancedAngle extends DiagramElementCollection {
   }
 
   checkLabelForRightAngle() {
-    if (this.curve.autoRightAngle === false) {
+    if (this.curve != null && this.curve.autoRightAngle === false) {
       return;
     }
     const { label } = this;
@@ -1479,7 +1496,7 @@ class AdvancedAngle extends DiagramElementCollection {
     const { _label, label } = this;
     if (_label && label) {
       if (
-        (label.autoHide != null && label.autoHide > Math.abs(this.angle))
+        (label.autoHide != null && label.autoHide > Math.abs(this.angle)) // $FlowFixMe
         || (label.autoHideMax != null && Math.abs(this.angle) > label.autoHideMax)
       ) {
         _label.hide();
@@ -1640,20 +1657,21 @@ class AdvancedAngle extends DiagramElementCollection {
   }
 
   /**
-   * 
+   * Use this method to enable or disable movability of the line.
+   *
+   * @param {OBJ_MovableAngle | boolean} [movableOrOptions] `true` to
+   * make movable, `false` to make not movable or use options to
+   * set different kinds of movability.
    */
   // $FlowFixMe
-  setMovable(movableOrOptions: boolean | {
-    type: 'rotation' | 'translation' | 'scale' | 'angle' | 'angleRotation' | 'angleRotationMove' | 'angleMove' | 'rotationMove',
-    movable: boolean,
-    movePad: number,
-    width: number,
-  }) {
+  setMovable(movableOrOptions: boolean | OBJ_MovableAngle) {
     const defaultOptions = {
       movable: true,
       type: this.move.type,
       width: 0.5,
-      movePad: 0.3,
+      movePadRadius: 0,
+      startArm: null,
+      endArm: null,
     };
     let options;
     if (movableOrOptions === false) {
@@ -1663,26 +1681,30 @@ class AdvancedAngle extends DiagramElementCollection {
     } else {
       options = joinObjects({}, defaultOptions, movableOrOptions);
     }
-    const { movable } = options;
+    const {
+      movable, startArm, endArm, movePadRadius, width,
+    } = options;
     if (movable) {
-      const { type } = options;
-      if (type === 'translation' || type === 'rotation'
-        || type === 'scale'
-      ) {
-        this.move.type = type;
-        super.setMovable(true);
-      } else if (type === 'angle') {
-        this.addAnglePad(1, options.width);
-      } else if (type === 'angleRotation') {
-        this.addRotPad(1, options.width);
-        this.addAnglePad(1, options.width);
-      } else if (type === 'angleRotationMove') {
-        this.addRotPad(1 - options.movePad, options.width);
-        this.addAnglePad(1 - options.movePad, options.width);
-        this.addMovePad(options.movePad, options.width);
-      } else if (type === 'rotationMove') {
-        this.addRotPad(1 - options.movePad, options.width);
-        this.addMovePad(options.movePad, options.width);
+      if (startArm != null && endArm != null) {
+        if (startArm === 'rotation') {
+          this.addRotPad(1 - movePadRadius, width, 'rotation');
+        }
+        if (endArm === 'rotation') {
+          this.addAnglePad(1 - movePadRadius, width, 'rotation');
+        }
+        if (startArm === 'angle') {
+          this.addRotPad(1 - movePadRadius, width, 'angle');
+        }
+        if (endArm === 'angle') {
+          this.addAnglePad(1 - movePadRadius, width, 'angle');
+        }
+      } else if (startArm != null) {
+        this.addRotPad(1 - movePadRadius, width, startArm);
+      } else if (endArm != null) {
+        this.addAnglePad(1 - movePadRadius, width, endArm);
+      }
+      if (movePadRadius > 0) {
+        this.addMovePad(movePadRadius, width);
       }
     } else {
       this.isMovable = false;
@@ -1710,7 +1732,7 @@ class AdvancedAngle extends DiagramElementCollection {
     return 1;
   }
 
-  addAnglePad(percentLength: 1, width: 0.5) {
+  addAnglePad(percentLength: 1, width: 0.5, type: 'rotation' | 'angle') {
     if (this._anglePad == null) {
       const length = this.getLength();
       const anglePad = this.shapes.rectangle({
@@ -1725,23 +1747,33 @@ class AdvancedAngle extends DiagramElementCollection {
       anglePad.setMovable();
       anglePad.move.type = 'rotation';
       anglePad.drawingObject.border = [[]];
-      anglePad.subscriptions.add('setTransform', () => {
-        let angle = anglePad.getRotation();
-        if (this.angle > 0) {
-          angle = clipAngle(angle, '0to360');
-        } else {
-          angle = clipAngle(angle, '-360to0');
-        }
-        this.setAngle({ angle });
-      });
+      if (type === 'rotation') {
+        // anglePad.move.element = this;
+        anglePad.subscriptions.add('beforeSetTransform', (transformToSet) => {
+          const nextR = transformToSet[0].r();
+          const currentR = anglePad.getRotation();
+          const deltaR = nextR - currentR;
+          this.transform.updateRotation(this.getRotation() + deltaR);
+          anglePad.cancelSetTransform = true;
+        });
+      } else {
+        anglePad.subscriptions.add('setTransform', () => {
+          let angle = anglePad.getRotation();
+          if (this.angle > 0) {
+            angle = clipAngle(angle, '0to360');
+          } else {
+            angle = clipAngle(angle, '-360to0');
+          }
+          this.setAngle({ angle });
+        });
+      }
     }
   }
 
-  addRotPad(percentLength: 1, width: 0.5) {
+  addRotPad(percentLength: 1, width: 0.5, type: 'rotation' | 'angle') {
     if (this._rotPad == null) {
       const length = this.getLength();
       const rotPad = this.shapes.rectangle({
-        // position: new Point(length * (1 - percentLength), 0),
         offset: [length * (1 - percentLength), 0],
         xAlign: 'left',
         yAlign: 'middle',
@@ -1753,7 +1785,23 @@ class AdvancedAngle extends DiagramElementCollection {
       rotPad.setMovable();
       rotPad.move.type = 'rotation';
       rotPad.drawingObject.border = [[]];
-      rotPad.move.element = this;
+      if (type === 'angle') {
+        rotPad.move.element = this;
+        this.subscriptions.add('beforeSetTransform', (transformToSet) => {
+          const nextR = transformToSet[0].r();
+          const currentR = this.getRotation();
+          const deltaR = nextR - currentR;
+          let angle = this.angle - deltaR;
+          if (this.angle > 0) {
+            angle = clipAngle(angle, '0to360');
+          } else {
+            angle = clipAngle(angle, '-360to0');
+          }
+          this.setAngle({ angle });
+        });
+      } else {
+        rotPad.move.element = this;
+      }
     }
   }
 

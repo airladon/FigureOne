@@ -448,6 +448,7 @@ class DiagramElement {
   touchInBoundingRect: boolean | number;
 
   drawPriority: number;
+  cancelSetTransform: boolean;
 
   // Callbacks
   onClick: string | (?(?mixed) => void);
@@ -664,6 +665,7 @@ class DiagramElement {
     this.stateProperties = [];
     // this.finishAnimationOnPause = false;
     this.lastDrawTime = 0;
+    this.cancelSetTransform = false;
     // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
     //   this.pulseScaleNow(1, 2, 0, callback);
@@ -1685,14 +1687,26 @@ class DiagramElement {
     if (this.move.transformClip != null) {
       const clip = this.fnMap.exec(this.move.transformClip, transform);
       if (clip instanceof Transform) {
-        this.transform = clip;
+        this.subscriptions.publish('beforeSetTransform', [clip]);
+        if (this.cancelSetTransform === false) {
+          this.transform = clip;
+        } else {
+          this.cancelSetTransform = false;
+        }
       }
     } else {
       // this.checkMoveBounds();
       const bounds = this.getMoveBounds();
       // console.log(bounds)
       // if (this.move.bounds instanceof TransformBounds) {
-      this.transform = bounds.clip(transform);
+      // this.subscriptions.publish('beforeSetTransform', [clip]);
+      const clip = bounds.clip(transform);
+      this.subscriptions.publish('beforeSetTransform', [clip]);
+      if (this.cancelSetTransform === false) {
+        this.transform = clip;
+      } else {
+        this.cancelSetTransform = false;
+      }
       // } else {
       //   this.transform = transform._dup();
       // }

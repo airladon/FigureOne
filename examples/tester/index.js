@@ -508,7 +508,7 @@ diagram.elements._l.subscriptions.add('setTransform', () => {
 // })
 // a.pulseAngle()
 // a.pulse()
-a.setMovable({ type: 'angleRotationMove', width: 0.5, movePad: 0.2, });
+a.setMovable({ startArm: 'angle', endArm: 'rotation', width: 0.5, movePadRadius: 0, });
 // a.animations.new()
 //   .delay(1)
 //   .pulseAngle({ duration: 3, thick: 10, curve: 1.04 })
