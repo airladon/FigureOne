@@ -10,7 +10,7 @@ import { joinObjects } from '../../tools/tools';
 import DrawContext2D from '../DrawContext2D';
 // import EquationNavigator from './EquationNavigator';
 import AdvancedLine from './Line';
-import DiagramObjectAngle from './Angle';
+import AdvancedAngle from './Angle';
 // eslint-disable-next-line import/no-cycle
 import DiagramObjectPolyLine from './PolyLine';
 import type { ADV_Line } from './Line';
@@ -56,7 +56,7 @@ export default class DiagramObjects {
 
   angle(...options: Array<ADV_Angle>) {
     const optionsToUse = joinObjects({}, ...options);
-    return new DiagramObjectAngle(
+    return new AdvancedAngle(
       this.shapes, this.equation, this.isTouchDevice, this.animateNextFrame,
       optionsToUse,
     );

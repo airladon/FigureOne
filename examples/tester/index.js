@@ -476,7 +476,7 @@ const a = diagram.advanced.angle({
   label: {
     text: null,
     offset: 0.1,
-    location: 'end',
+    location: 'outside',
     orientation: 'horizontal',
     update: true,
   },
@@ -507,7 +507,13 @@ diagram.elements._l.subscriptions.add('setTransform', () => {
 //   thick: 10,
 // })
 // a.pulseAngle()
-a.pulse()
+// a.pulse()
+a.animations.new()
+  .delay(1)
+  .pulseAngle({ duration: 3, thick: 10, curve: 1.04 })
+  .angle({ target: 3, duration: 2 })
+  .pulse({ duration: 3 })
+  .start();
 
 diagram.elements._l2.subscriptions.add('setTransform', () => {
   const r = diagram.elements._l2.getRotation();

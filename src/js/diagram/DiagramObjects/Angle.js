@@ -23,6 +23,8 @@ import type { TypeWhen } from '../webgl/GlobalAnimation';
 import type {
   TypeLabelOrientation, TypeLabelLocation, TypeLabelSubLocation,
 } from './EquationLabel';
+import * as animation from '../Animation/Animation';
+import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
 
 // export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
 
@@ -368,6 +370,7 @@ export type ADV_Angle = {
 //   - Angle, rotation, position
 //   - p1, p2, p3
 
+
 class AngleLabel extends EquationLabel {
   radius: number;
   curvePosition: number;
@@ -414,8 +417,120 @@ class AngleLabel extends EquationLabel {
 }
 
 
+/**
+ * These properties are the same as the ones with the same names in
+ * {@link ADV_Angle}.
+ * @property {TypeParsablePoint} [position]
+ * @property {number} [startAngle]
+ * @property {number} [angle]
+ * @property {TypeParsablePoint} [p1]
+ * @property {TypeParsablePoint} [p2]
+ * @property {TypeParsablePoint} [p3]
+ */
+export type OBJ_AngleSet = {
+  position?: TypeParsablePoint,
+  startAngle?: number,
+  angle?: number,
+  p1?: TypeParsablePoint,
+  p2?: TypeParsablePoint,
+  p3?: TypeParsablePoint,
+}
 
-class DiagramObjectAngle extends DiagramElementCollection {
+/**
+ * Angle animation step.
+ *
+ * @property {number} [start] start angle (`current angle`)
+ * @property {number} [target] angle to animate to (`current angle`)
+ * @extends OBJ_CustomAnimationStep
+ */
+export type OBJ_AngleAnimationStep = {
+  start?: number,
+  target?: number,
+} & OBJ_CustomAnimationStep;
+
+/**
+ * Pulse angle animation step - see {@link OBJ_PulseAngle} for desicription of
+ * properties.
+ * @property {number | OBJ_Pulse} [curve] (`1.5`)
+ * @property {number | OBJ_Pulse} [corner] (`1.5`)
+ * @property {number | OBJ_Pulse} [label] (`1.5`)
+ * @property {number | OBJ_Pulse} [arrow] (`1.5`)
+ * @property {number} [thick] (`1`)
+ * @property {number} [duration] in seconds
+ * @property {number} [frequency] in Hz
+ * @extends OBJ_CustomAnimationStep
+ */
+export type OBJ_PulseAngleAnimationStep = {
+  curve?: number | OBJ_Pulse,
+  corner?: number | OBJ_Pulse,
+  label?: number | OBJ_Pulse,
+  arrow?: number | OBJ_Pulse,
+  thick?: number,
+  duration?: number,
+  frequency?: number,
+} & OBJ_TriggerAnimationStep;
+
+/*
+................###....##....##..######...##.......########
+...............##.##...###...##.##....##..##.......##......
+..............##...##..####..##.##........##.......##......
+.............##.....##.##.##.##.##...####.##.......######..
+.............#########.##..####.##....##..##.......##......
+.............##.....##.##...###.##....##..##.......##......
+.............##.....##.##....##..######...########.########
+*/
+
+/**
+ * {@link DiagramElementCollection} representing an angle.
+ *
+ * <p class="inline_gif"><img src="./assets1/advline_pulse.gif" class="inline_gif_image"></p>
+ *
+ * <p class="inline_gif"><img src="./assets1/advline_grow.gif" class="inline_gif_image"></p>
+ *
+ * <p class="inline_gif"><img src="./assets1/advline_multimove.gif" class="inline_gif_image"></p>
+ *
+ * This object defines a convient and powerful angle
+ * {@link DiagramElementCollection} that includes one or more curve annotations,
+ * arrows, a label annotation that can self align and
+ * some methods to make it convient to use dynamically.
+ *
+ * See {@link ADV_Angle} for the options that can be used when creating the
+ * angle.
+ *
+ * The object contains a two additional animation steps. `angle`
+ * animates changing the angle, and `pulseAngle` animates the
+ * `pulseAngle` method. The animation steps are available in
+ * the animation manager (`animations` property), and in the animation builder
+ * (`animations.new()` and `animations.builder()`).
+ *
+ * Some of the useful methods included in an advanced line are:
+ * - <a href="#advancedanglepulseangle">pulseangle</a> - customize pulsing the
+ *   angle without
+ * - <a href="#advancedlinesetmovable">grow</a> - overrisdes
+ *    <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
+ *    allowing for more complex move options.
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Pulse an annotated line
+ * diagram.addElement({
+ *   name: 'l',
+ *   method: 'advanced.line',
+ *   options: {
+ *     p1: [-1, 0],
+ *     p2: [1, 0],
+ *     arrow: 'triangle',
+ *     label: {
+ *       text: 'length',
+ *       offset: 0.04,
+ *     },
+ *   },
+ * });
+ */
+// $FlowFixMe
+class AdvancedAngle extends DiagramElementCollection {
   // Diagram elements
   _curve: ?DiagramElementPrimitive;
   _curveRight: ?DiagramElementPrimitive;
@@ -489,33 +604,10 @@ class DiagramObjectAngle extends DiagramElementCollection {
 
   autoUpdateSubscriptionId: number;
 
-  // An angle can be defined by position, startAngle, angle, direction
-  // position - where the corner is
-  // startAngle - angle of first line
-  // angle - +ve or -ve will draw second line relative to first line
-  // direction: will determine where the curve is drawn:
-  //    +1 from start to angle in the direction of angle's sign
-  //    -1 from start to angle in the reverse direction of angle's sign
-  //
-  // An angle can also be defined with three points p1, p2, p3 where p2 is
-  // the corner point.
-  // position: p2
-  // first line: Line21
-  // secondLine: Line23
-  // direction: 1 - curve is from Line21 to Line23 in positive direction
-  // direction: -1 - curve is from Line21 to Line23 in negative direction
-
-  // position
-  // startAngle,
-  // angle
-  // curve ('positive' | 'negative')
-  // clip: 0to360 | -180to180 | neg0to360 | -360to360 | null
-
-  // position: p2
-  // startAngle: Line21
-  // angle: Line23
-  // curve: ('positive' | 'negative')
-  // clip: 0to360 | -180to180 | neg0to360 | -360to360 | null
+  animations: {
+    pulseAngle: (OBJ_PulseAngle) => animation.TriggerAnimationStep,
+    angle: (OBJ_AngleAnimationStep) => animation.CustomAnimationStep,
+  } & animation.AnimationManager;
 
   calculateAngleRotationPosition(options: {
     p1?: TypeParsablePoint,
@@ -524,25 +616,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
     position?: TypeParsablePoint,
     startAngle?: number,
     angle?: number,
-    // direction?: 'positive' | 'negative' | 1 | -1,
-    // clip?: '0to360' | '-180to180' | 'neg0to360' | '-360to360' | null
   }) {
     const defaultOptions = {
       angle: 1,
-      // direction: 1,
       startAngle: 0,
-      // position: new Point(0, 0),
-      // clip: '-360to360',
     };
     const o = joinObjects({}, defaultOptions, options);
-    // if (o.direction === 'positive') {
-    //   o.direction = 1;
-    // }
-    // if (o.direction === 'negative') {
-    //   o.direction = -1;
-    // }
     let { angle, startAngle, position } = o;
-    // const { direction } = this;
     if (position != null) {
       position = getPoint(position);
     }
@@ -562,8 +642,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
     this.angle = angle;
     this.startAngle = startAngle;
-    // this.direction = direction;
-    // this.clip = clip;
   }
 
   constructor(
@@ -577,8 +655,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
       position: new Point(0, 0),
       color: shapes.defaultColor,
       direction: 1,
-      // autoRightAngle: false,
-      // rightAngleRange: 0.001,
       curve: null,
       corner: null,
       sides: null,
@@ -591,6 +667,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
         arrow: 1.5,
         side: 1.5,
         corner: 1.5,
+        thick: 1,
       },
       mods: {},
     };
@@ -608,14 +685,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     this.isTouchDevice = isTouchDevice;
     this.autoUpdateSubscriptionId = 0;
 
-    // Calculate and store the angle geometry
-    // this.nextPosition = getPoint(optionsToUse.position);
-    // this.nextRotation = optionsToUse.rotation;
-    // this.direction = optionsToUse.direction;
-    // this.angle = optionsToUse.angle;
     this.lastLabelRotationOffset = 0;
-    // this.autoRightAngle = optionsToUse.autoRightAngle;
-    // this.rightAngleRange = optionsToUse.rightAngleRange;
     if (optionsToUse.direction === 'positive') {
       this.direction = 1;
     } else if (optionsToUse.direction === 'negative') {
@@ -623,7 +693,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
     } else {
       this.direction = optionsToUse.direction;
     }
-    // this.clip = optionsToUse.clip;
 
     this.calculateAngleRotationPosition(optionsToUse);
     this.setNextPositionAndRotation();
@@ -742,6 +811,48 @@ class DiagramObjectAngle extends DiagramElementCollection {
       thick: optionsToUse.pulseAngle.thick || 1,
     };
 
+    this.animations.angle = (...opt) => {
+      const o = joinObjects({}, {
+        element: this,
+        start: this.angle,
+        target: this.angle,
+      }, ...opt);
+      o.callback = (percentage) => {
+        const a = (o.target - o.start) * percentage + o.start;
+        this.setAngle({ angle: a });
+      };
+      return new animation.CustomAnimationStep(o);
+    };
+
+    this.animations.customSteps.push({
+      step: this.animations.angle.bind(this),
+      name: 'angle',
+    });
+
+    this.animations.pulseAngle = (...opt) => {
+      const o = joinObjects({}, {
+        element: this,
+        duration: 1,
+      }, ...opt);
+      o.callback = () => {
+        this.pulseAngle({
+          curve: o.curve,
+          label: o.label,
+          arrow: o.arrow,
+          corner: o.corner,
+          duration: o.duration,
+          frequency: o.frequency,
+          thick: o.thick,
+        });
+      };
+      return new animation.TriggerAnimationStep(o);
+    };
+
+    this.animations.customSteps.push({
+      step: this.animations.pulseAngle.bind(this),
+      name: 'pulseAngle',
+    });
+
     this.update();
     if (optionsToUse.mods != null && optionsToUse.mods !== {}) {
       this.setProperties(optionsToUse.mods);
@@ -764,6 +875,14 @@ class DiagramObjectAngle extends DiagramElementCollection {
     return this;
   }
 
+  /**
+   * Turn on and off auto label location and orientation updates when angle
+   * transform changes. When an angle is created with a label, auto update
+   * is turned off by default.
+   *
+   * Manual updates can be performed with
+   * <a href="advancedangle#udpatelabel">updateLabel</a>
+   */
   setAutoUpdate(update: boolean = true) {
     if (update) {
       this.autoUpdateSubscriptionId = this.subscriptions.add('setTransform', () => {
@@ -771,7 +890,6 @@ class DiagramObjectAngle extends DiagramElementCollection {
         // this.updateMovePads();
       });
     } else {
-      // console.log(this.autoUpdateSubscriptionId)
       this.subscriptions.remove('setTransform', this.autoUpdateSubscriptionId);
       this.autoUpdateSubscriptionId = -1;
     }
@@ -788,25 +906,18 @@ class DiagramObjectAngle extends DiagramElementCollection {
     this.nextStartAngle = null;
   }
 
-  setAngle(options: {
-      position?: TypeParsablePoint,
-      startAngle?: number,
-      angle?: number,
-      p1?: TypeParsablePoint,
-      p2?: TypeParsablePoint,
-      p3?: TypeParsablePoint,
-    } = {}) {
+  /**
+   * Set the angle. The same direction and angle sign must be used as when
+   * originally defined.
+   */
+  setAngle(options: OBJ_AngleSet = {}) {
     this.calculateAngleRotationPosition(options);
     const { corner, _corner } = this;
     if (corner != null && _corner != null) {
       const points = this.getCornerPoints(corner.length);
       _corner.custom.updatePoints({ points });
     }
-    // if (options.rotationOffset != null) {
-    //   this.update(options.rotationOffset);
-    // } else {
     this.update();
-    // }
   }
 
   getCornerPoints(length: number) {
@@ -1291,6 +1402,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
   }
 
+  /**
+   * Get the current angle in degrees or radians
+   */
   getAngle(units: 'deg' | 'rad' = 'rad') {
     if (units === 'deg') {
       return this.angle * 180 / Math.PI;
@@ -1298,6 +1412,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
     return this.angle;
   }
 
+  /**
+   * Set the label text
+   */
   setLabel(text: string) {
     const { label } = this;
     if (label != null) {
@@ -1307,6 +1424,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
     this.updateLabel();
   }
 
+  /**
+   * Get the label text
+   */
   getLabel() {
     if (this.label != null) {
       return this.label.getText();
@@ -1314,6 +1434,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
     return '';
   }
 
+  /**
+   * Set the label to be the real angle
+   */
   setLabelToRealAngle() {
     const { label } = this;
     if (label != null) {
@@ -1322,6 +1445,13 @@ class DiagramObjectAngle extends DiagramElementCollection {
     this.updateLabel();
   }
 
+  /**
+   * Manually update the label orientations with a custom rotation offset.
+   *
+   * Automatic updating can be done with
+   * <a href="advancedangle#setautoupdate">setAutoUpdate</a>
+   * @param {number | null} rotationOffset
+   */
   updateLabel(rotationOffset: ?number = null) {
     if (rotationOffset != null) {
       this.lastLabelRotationOffset = rotationOffset;
@@ -1405,6 +1535,12 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
   }
 
+  /**
+   * Pulse the angle where each element can be pulsed in a custom way.
+   *
+   * The pulse scales of the curve, label, corner and arrows can all be defined
+   * separately.
+   */
   pulseAngle(options?: OBJ_PulseAngle = {}) {
     const defaultOptions = {
       curve: this.pulseAngleDefaults.curve,
@@ -1484,12 +1620,12 @@ class DiagramObjectAngle extends DiagramElementCollection {
   }
 }
 
-export default DiagramObjectAngle;
+export default AdvancedAngle;
 
 export type TypeLabelledAngle = {
   _curve: DiagramElementPrimitive;
   _label: {
     _base: DiagramElementPrimitive;
   } & Equation;
-} & DiagramObjectAngle;
+} & AdvancedAngle;
 

@@ -307,7 +307,7 @@ function getLineFromOptions(options: {
 /**
  * Grow line animation step.
  *
- * @property {number} [start] line length to grow from (`0`)
+ * @property {number} [start] line length to grow from (`current length`)
  * @property {number} [end] line length to grow to (`current length`)
  * @extends OBJ_CustomAnimationStep
  */
@@ -704,7 +704,7 @@ export default class AdvancedLine extends DiagramElementCollection {
     this.animations.length = (...opt) => {
       const o = joinObjects({}, {
         element: this,
-        start: 0,
+        start: this.line.length(),
         target: this.line.length(),
       }, ...opt);
       o.callback = (percentage) => {
@@ -1163,9 +1163,16 @@ export default class AdvancedLine extends DiagramElementCollection {
     this.updateMovePads();
   }
 
-  updateLabel(parentRotationOffset: number | null = null) {
-    if (parentRotationOffset != null) {
-      this.lastParentRotationOffset = parentRotationOffset;
+  /**
+   * Manually update the label orientations with a custom rotation offset.
+   *
+   * Automatic updating can be done with
+   * <a href="advancedline#setautoupdate">setAutoUpdate</a>
+   * @param {number | null} rotationOffset
+   */
+  updateLabel(rotationOffset: number | null = null) {
+    if (rotationOffset != null) {
+      this.lastParentRotationOffset = rotationOffset;
     }
 
     const { label } = this;
@@ -1514,8 +1521,9 @@ export default class AdvancedLine extends DiagramElementCollection {
    * Create a new animation that executes a single grow animation step.
    */
   grow(options: OBJ_LengthAnimationStep) {
+    const o = joinObjects({}, { start: 0 }, options);
     this.animations.new()
-      .then(this.animations.length(options))
+      .then(this.animations.length(o))
       .start();
   }
 

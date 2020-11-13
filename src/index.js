@@ -22,7 +22,7 @@ import {
 } from './js/diagram/DrawingObjects/TextObject/TextObject';
 import HTMLObject from './js/diagram/DrawingObjects/HTMLObject/HTMLObject';
 import HTMLEquation from './js/diagram/DiagramElements/Equation/HTMLEquation';
-import DiagramObjectAngle from './js/diagram/DiagramObjects/Angle';
+import AdvancedAngle from './js/diagram/DiagramObjects/Angle';
 import AdvancedLine from './js/diagram/DiagramObjects/Line';
 import DiagramObjectPolyLine from './js/diagram/DiagramObjects/PolyLine';
 import EqnNavigator from './js/diagram/DiagramObjects/EqnNavigator';
@@ -100,7 +100,7 @@ const Fig = {
   DiagramFont,
   HTMLObject,
   //
-  DiagramObjectAngle,
+  AdvancedAngle,
   AdvancedLine,
   DiagramObjectPolyLine,
   EqnNavigator,
