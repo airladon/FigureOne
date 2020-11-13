@@ -1,39 +1,39 @@
-const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [0, 0, 1, 1]});
+const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1]});
 
-diagram.addElements([
-  {
-    name: 'origin',
-    method: 'polygon',
-    options: {
-      radius: 0.01,
-      line: { width: 0.01 },
-      sides: 10,
-      color: [0.7, 0.7, 0.7, 1]
-    },
-  },
-  {
-    name: 'grid',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.1,
-      xStep: 0.1,
-      color: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.001 },
-    },
-  },
-  {
-    name: 'gridMajor',
-    method: 'grid',
-    options: {
-      bounds: [-3, -3, 6, 6],
-      yStep: 0.5,
-      xStep: 0.5,
-      color: [0.8, 0.8, 0.8, 1],
-      line: { width: 0.004 }
-    },
-  },
-]);
+// diagram.addElements([
+//   {
+//     name: 'origin',
+//     method: 'polygon',
+//     options: {
+//       radius: 0.01,
+//       line: { width: 0.01 },
+//       sides: 10,
+//       color: [0.7, 0.7, 0.7, 1]
+//     },
+//   },
+//   {
+//     name: 'grid',
+//     method: 'grid',
+//     options: {
+//       bounds: [-3, -3, 6, 6],
+//       yStep: 0.1,
+//       xStep: 0.1,
+//       color: [0.7, 0.7, 0.7, 1],
+//       line: { width: 0.001 },
+//     },
+//   },
+//   {
+//     name: 'gridMajor',
+//     method: 'grid',
+//     options: {
+//       bounds: [-3, -3, 6, 6],
+//       yStep: 0.5,
+//       xStep: 0.5,
+//       color: [0.8, 0.8, 0.8, 1],
+//       line: { width: 0.004 }
+//     },
+//   },
+// ]);
 
 
 // // Simple
@@ -420,133 +420,264 @@ diagram.elements._c.setMovable();
 //   .start();
 
 // Example showing dashed line with an equation label that stays horizontal
-diagram.addElement({
-  name: 'l',
-  method: 'advanced.line',
-  options: {
-    p1: [1, 1],
-    p2: [2, 1],
-    // p1: [1, 1],
-    length: 1,
-    angle: 1,
-    touchBorder: 0.5,
-    width: 0.01,
-    color: [1, 0, 0, 1],
-    // position: [1, 1],
-  },
-  mods: {
-    move: { type: 'rotation' }
-  },
-});
-diagram.addElement({
-  name: 'l2',
-  method: 'advanced.line',
-  options: {
-    p1: [1, 1],
-    p2: [2, 1],
-    touchBorder: 0.5,
-    width: 0.01,
-    color: [1, 0, 0, 1],
-  },
-  mods: {
-    move: { type: 'rotation' }
-  },
-});
-diagram.elements._l.setMovable();
-diagram.elements._l2.setMovable();
-const a = diagram.advanced.angle({
-  // p1: [1, 2],
-  // p2: [1, 1],
-  // p3: [2, 1],
-  position: [-1, -1],
-  angle: Math.PI / 4,
-  direction: 'positive',
-  autoRightAngle: true,
-  // clip: '0to360',
-  color: [1, 0, 0, 0.9],
-  curve: {
-    width: 0.01,
-    radius: 1,
-    // num: 3,
-    // step: -0.02,
-    sides: 300,
-    // autoHide: 0.5,
-    // autoHideMax: 4.2,
-  },
-  label: {
-    text: null,
-    offset: 0.1,
-    location: 'outside',
-    orientation: 'horizontal',
-    update: true,
-  },
-  arrow: {
-    head: 'triangle',
-    length: 0.1,
-    width: 0.1,
-    autoHide: true,
-    tail: 0,
-    curveOverlap: 0.2,
-  },
-  corner: { style: 'fill', length: 1, width: 0.01 },
-});
-diagram.add('a', a);
+// diagram.addElement({
+//   name: 'l',
+//   method: 'advanced.line',
+//   options: {
+//     p1: [1, 1],
+//     p2: [2, 1],
+//     // p1: [1, 1],
+//     length: 1,
+//     angle: 1,
+//     touchBorder: 0.5,
+//     width: 0.01,
+//     color: [1, 0, 0, 1],
+//     // position: [1, 1],
+//   },
+//   mods: {
+//     move: { type: 'rotation' }
+//   },
+// });
+// diagram.addElement({
+//   name: 'l2',
+//   method: 'advanced.line',
+//   options: {
+//     p1: [1, 1],
+//     p2: [2, 1],
+//     touchBorder: 0.5,
+//     width: 0.01,
+//     color: [1, 0, 0, 1],
+//   },
+//   mods: {
+//     move: { type: 'rotation' }
+//   },
+// });
+// diagram.elements._l.setMovable();
+// diagram.elements._l2.setMovable();
+// const a = diagram.advanced.angle({
+//   // p1: [1, 2],
+//   // p2: [1, 1],
+//   // p3: [2, 1],
+//   position: [-1, -1],
+//   angle: Math.PI / 4,
+//   direction: 'positive',
+//   autoRightAngle: true,
+//   // clip: '0to360',
+//   color: [1, 0, 0, 0.9],
+//   curve: {
+//     width: 0.01,
+//     radius: 1,
+//     // num: 3,
+//     // step: -0.02,
+//     sides: 300,
+//     // autoHide: 0.5,
+//     // autoHideMax: 4.2,
+//   },
+//   label: {
+//     text: null,
+//     offset: 0.1,
+//     location: 'outside',
+//     orientation: 'horizontal',
+//     update: true,
+//   },
+//   arrow: {
+//     head: 'triangle',
+//     length: 0.1,
+//     width: 0.1,
+//     autoHide: true,
+//     tail: 0,
+//     curveOverlap: 0.2,
+//   },
+//   corner: { style: 'fill', length: 1, width: 0.01 },
+// });
+// diagram.add('a', a);
 
-diagram.elements._l.subscriptions.add('setTransform', () => {
-  const angle = Fig.tools.g2.clipAngle(diagram.elements._l.getRotation(), '0to360')
-  const r = diagram.elements._l2.getRotation();
-  a.setAngle({ angle, startAngle: r });
-});
-// diagram.elements._l.setRotation(Math.PI / 4);
-// a.pulseAngle({
-//   duration: 3,
-//   corner: 1.5,
-//   curve: 1.03,
-//   arrow: 3,
-//   label: 1.5,
-//   thick: 10,
-// })
-// a.pulseAngle()
-// a.pulse()
-a.setMovable({ startArm: 'angle', endArm: 'rotation', width: 0.5, movePadRadius: 0, });
-// a.animations.new()
-//   .delay(1)
-//   .pulseAngle({ duration: 3, thick: 10, curve: 1.04 })
-//   .angle({ target: 3, duration: 2 })
-//   .pulse({ duration: 3 })
+// diagram.elements._l.subscriptions.add('setTransform', () => {
+//   const angle = Fig.tools.g2.clipAngle(diagram.elements._l.getRotation(), '0to360')
+//   const r = diagram.elements._l2.getRotation();
+//   a.setAngle({ angle, startAngle: r });
+// });
+// // diagram.elements._l.setRotation(Math.PI / 4);
+// // a.pulseAngle({
+// //   duration: 3,
+// //   corner: 1.5,
+// //   curve: 1.03,
+// //   arrow: 3,
+// //   label: 1.5,
+// //   thick: 10,
+// // })
+// // a.pulseAngle()
+// // a.pulse()
+// a.setMovable({ startArm: 'angle', endArm: 'rotation', width: 0.5, movePadRadius: 0, });
+// // a.animations.new()
+// //   .delay(1)
+// //   .pulseAngle({ duration: 3, thick: 10, curve: 1.04 })
+// //   .angle({ target: 3, duration: 2 })
+// //   .pulse({ duration: 3 })
+// //   .start();
+
+// diagram.elements._l2.subscriptions.add('setTransform', () => {
+//   const r = diagram.elements._l2.getRotation();
+//   // console.log(r)
+//   // console.log(diagram.elements._l2)
+//   // a.setRotation(diagram.elements._l2.getRotation());
+//   a.setRotation(r)
+//   // a.updateLabel(r);
+//   diagram.elements._c.setRotation(r);
+//   diagram.elements._c._line.updateLabel(r);
+// });
+
+// diagram.addElement({
+//   name: 'c',
+//   method: 'collection',
+//   addElements: [{
+//     name: 'line',
+//     method: 'advanced.line',
+//     options: {
+//       p1: [0, 0],
+//       p2: [1, 1],
+//       label: {
+//         text: 'hello there',
+//         location: 'end',
+//         orientation: 'horizontal',
+//       },
+//       width: 0.01,
+//     },
+//   }],
+//   options: {
+//     position: [-2, 0],
+//   },
+// });
+// diagram.elements._c._line.setAutoUpdate();
+// diagram.elements._c._line.setMovable({ type: 'rotation' });
+
+
+// // Angle with size label
+// diagram.addElement({
+//   name: 'a',
+//   method: 'advanced.angle',
+//   options: {
+//     angle: Math.PI / 4,
+//     label: null,
+//     curve: {
+//       radius: 0.5,
+//       width: 0.01,
+//     },
+//     corner: {
+//       width: 0.01,
+//       length: 1,
+//     },
+//   }
+// });
+
+// // Right angle, created from diagram.advanced
+// const a = diagram.advanced.angle({
+//   angle: Math.PI / 2,
+//   curve: {
+//     autoRightAngle: true,
+//     width: 0.01,
+//   },
+//   corner: {
+//     width: 0.01,
+//     length: 1,
+//   },
+// });
+// diagram.add('a', a);
+
+// // Multi colored angle with arrows and an equation label
+// diagram.addElement({
+//   name: 'a',
+//   method: 'advanced.angle',
+//   options: {
+//     angle: Math.PI / 4 * 3,
+//     label: {
+//       text: {
+//         elements: {
+//           theta: { text: '\u03b8', color: [1, 0, 1, 1] },
+//         },
+//         forms: {
+//           0: { frac: ['theta', 'vinculum', '2']},
+//         },
+//       },
+//       offset: 0.05,
+//       location: 'inside',
+//       color: [0, 0, 1, 1],
+//     },
+//     curve: {
+//       radius: 0.5,
+//       width: 0.01,
+//     },
+//     arrow: 'barb',
+//     corner: {
+//       width: 0.01,
+//       length: 1,
+//       color: [0, 0.5, 0, 1],
+//     },
+//   }
+// });
+
+// // Multiple curve angle, without corner
+// const a = diagram.advanced.angle({
+//   angle: Math.PI / 4,
+//   curve: {
+//     num: 3,
+//     step: -0.03,
+//     radius: 0.5,
+//     width: 0.01,
+//   },
+//   label: {
+//     text: 'a',
+//     offset: 0.05,
+//   },
+// });
+// diagram.add('a', a);
+
+// // Change angle animation
+// diagram.addElement({
+//   name: 'a',
+//   method: 'advanced.angle',
+//   options: {
+//     angle: Math.PI / 4,
+//     label: null,
+//     curve: {
+//       radius: 0.5,
+//       width: 0.01,
+//     },
+//     corner: {
+//       width: 0.01,
+//       length: 1,
+//     },
+//   }
+// });
+// diagram.elements._a.animations.new()
+//   .angle({ start: Math.PI / 4, target: Math.PI / 4 * 3, duration: 3 })
 //   .start();
 
-diagram.elements._l2.subscriptions.add('setTransform', () => {
-  const r = diagram.elements._l2.getRotation();
-  // console.log(r)
-  // console.log(diagram.elements._l2)
-  // a.setRotation(diagram.elements._l2.getRotation());
-  a.setRotation(r)
-  // a.updateLabel(r);
-  diagram.elements._c.setRotation(r);
-  diagram.elements._c._line.updateLabel(r);
-});
-
+// Movable angle
 diagram.addElement({
-  name: 'c',
-  method: 'collection',
-  addElements: [{
-    name: 'line',
-    method: 'advanced.line',
-    options: {
-      p1: [0, 0],
-      p2: [1, 1],
-      label: {
-        text: 'hello there',
-        location: 'end',
-        orientation: 'horizontal',
-      },
+  name: 'a',
+  method: 'advanced.angle',
+  options: {
+    angle: Math.PI / 4 * 3,
+    label: {
+      text: null,
+      location: 'inside',
+      orientation: 'horizontal',
+      offset: 0.1,
+      update: true,
+    },
+    curve: {
+      radius: 0.5,
       width: 0.01,
     },
-  }],
-  options: {
-    position: [-2, 0],
-  },
+    corner: {
+      width: 0.01,
+      length: 1,
+    },
+  }
 });
-diagram.elements._c._line.setAutoUpdate();
-diagram.elements._c._line.setMovable({ type: 'rotation' });
+diagram.elements._a.setMovable({
+  startArm: 'rotation',
+  endArm: 'angle',
+  movePadRadius: 0.3,
+});

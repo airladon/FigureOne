@@ -316,6 +316,29 @@ export type OBJ_LengthAnimationStep = {
   target?: number,
 } & OBJ_CustomAnimationStep;
 
+/**
+ * Pulse Width animation step.
+ *
+ *
+ * @property {number} [line] width scale
+ * @property {number | OBJ_Pulse} [label] label pulse options or scale. Use
+ * the options object for more control of how the label is pulsed (for example
+ * if the label should be pulsed from its bottom rather than its center).
+ * @property {number} [arrow] arrow pulse scale
+ * @property {function(): void} [done] execute when pulsing is finished
+ * @property {number} [duration] pulse duration in seconds
+ * @property {number} [frequency] pulse frequency in pulses per second
+ * @extends OBJ_TriggerAnimationStep
+ */
+export type OBJ_PulseWidthAnimationStep = {
+  line?: number,
+  label?: number | OBJ_Pulse,
+  arrow?: number,
+  done?: ?() => void,
+  duration?: number,
+  frequency?: number,
+} & OBJ_TriggerAnimationStep;
+
 
 /*
 ...................##.......####.##....##.########
@@ -358,12 +381,18 @@ export type OBJ_LengthAnimationStep = {
  * - <a href="#advancedlinegrow">grow</a> - starts and animation that executes
  *   a single `length` animation
  *    step
- * - <a href="#advancedlinesetmovable">grow</a> - overrisdes
+ * - <a href="#advancedlinesetmovable">grow</a> - overrides
  *    <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
  *    allowing for more complex move options.
  *
- * @see To test examples, append them to the
- * <a href="#drawing-boilerplate">boilerplate</a>
+ * @see See {@link OBJ_LengthAnimationStep} for angle animation step options.
+ *
+ * See {@link OBJ_PulseWidthAnimationStep} for pulse angle animation step
+ * options.
+ *
+ * To test examples below, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>.
+ *
  *
  * @example
  * // Pulse an annotated line

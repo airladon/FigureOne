@@ -155,7 +155,7 @@ export type TypeAngleLabelOptions = {
  * @property {?number} [autoHideMax] if angle is less than this, hide curve
  * (`null`)
  * @property {boolean} [autoRightAngle] Right angle curve displayed when angle
- * = π/2 (`true`)
+ * = π/2 (`false`)
  * @property {number} [rightAngleRange] Range around π/2 for right angle curve
  * display (`0.01745329...` or 1 degree)
  */
@@ -207,7 +207,7 @@ export type OBJ_AngleArrows = {
 /**
  * Arrow definition for advaned angles.
  *
- * `string | (OBJ_LineArrows & OBJ_AngleArrows)`
+ * `string | (`{@link OBJ_LineArrows} ` & ` {@link OBJ_AngleArrows}`)`
  *
  * Use `single` string to specify head type of two arrows with default
  * dimensions. Otherwise use options object to select and/or customize one or
@@ -360,23 +360,23 @@ export type ADV_Angle = {
   pulseAngle?: OBJ_PulseAngle,
   //
   //
-  // Sides
-  side1?: {                 // Define side line at start of angle
-    length?: number,        // Side line length
-    width?: number,         // Side line width
-    color?: Array<number>,  // Side line color
-  },
-  side2?: {                 // Define side line at end of angle
-    length?: number,
-    width?: number,
-    color?: Array<number>,
-  },
-  sides?: {                 // Define both side lines - overrides side 1 & 2
-    length?: number,
-    width?: number,
-    color?: Array<number>,
-  },
-  mods?: {};
+  // Sides - deprecated
+  // side1?: {                 // Define side line at start of angle
+  //   length?: number,        // Side line length
+  //   width?: number,         // Side line width
+  //   color?: Array<number>,  // Side line color
+  // },
+  // side2?: {                 // Define side line at end of angle
+  //   length?: number,
+  //   width?: number,
+  //   color?: Array<number>,
+  // },
+  // sides?: {                 // Define both side lines - overrides side 1 & 2
+  //   length?: number,
+  //   width?: number,
+  //   color?: Array<number>,
+  // },
+  // mods?: {};
 };
 
 // Angle is a class that manages:
@@ -489,7 +489,7 @@ export type OBJ_AngleAnimationStep = {
  * @property {number} [thick] (`1`)
  * @property {number} [duration] in seconds
  * @property {number} [frequency] in Hz
- * @extends OBJ_CustomAnimationStep
+ * @extends OBJ_TriggerAnimationStep
  */
 export type OBJ_PulseAngleAnimationStep = {
   curve?: number | OBJ_Pulse,
@@ -501,6 +501,7 @@ export type OBJ_PulseAngleAnimationStep = {
   frequency?: number,
 } & OBJ_TriggerAnimationStep;
 
+// export type AdvancedAngleAnimationManager =
 /*
 ................###....##....##..######...##.......########
 ...............##.##...###...##.##....##..##.......##......
@@ -514,11 +515,11 @@ export type OBJ_PulseAngleAnimationStep = {
 /**
  * {@link DiagramElementCollection} representing an angle.
  *
- * <p class="inline_gif"><img src="./assets1/advline_pulse.gif" class="inline_gif_image"></p>
+ * ![](./assets1/advangle_examples.png)
  *
- * <p class="inline_gif"><img src="./assets1/advline_grow.gif" class="inline_gif_image"></p>
+ * <p class="inline_gif"><img src="./assets1/advangle_grow.gif" class="inline_gif_image"></p>
  *
- * <p class="inline_gif"><img src="./assets1/advline_multimove.gif" class="inline_gif_image"></p>
+ * <p class="inline_gif"><img src="./assets1/advangle_move.gif" class="inline_gif_image"></p>
  *
  * This object defines a convient and powerful angle
  * {@link DiagramElementCollection} that includes one or more curve annotations,
@@ -528,36 +529,165 @@ export type OBJ_PulseAngleAnimationStep = {
  * See {@link ADV_Angle} for the options that can be used when creating the
  * angle.
  *
- * The object contains a two additional animation steps. `angle`
- * animates changing the angle, and `pulseAngle` animates the
- * `pulseAngle` method. The animation steps are available in
- * the animation manager (`animations` property), and in the animation builder
- * (`animations.new()` and `animations.builder()`).
+ * The object contains two additional animation steps `angle` and `pulseAngle`
+ * that animate a change in angle, and animate a pulsing of the angle
+ * respectively. The animation steps are available in
+ * the animation manager (<a href="diagramelement#animations>animations</a>),
+ * and in the animation builder
+ * (<a href="animationmanager#new>animations.new</a>
+ * and <a href="animationmanager#builder>animations.builder</a>).
  *
- * Some of the useful methods included in an advanced line are:
+ * Some of the useful methods included in an advanced angle are:
  * - <a href="#advancedanglepulseangle">pulseangle</a> - customize pulsing the
  *   angle without
- * - <a href="#advancedanglesetmovable">grow</a> - overrisdes
+ * - <a href="#advancedanglesetmovable">setMovable</a> - overrides
  *    <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
  *    allowing for more complex move options.
  *
- * @see To test examples, append them to the
- * <a href="#drawing-boilerplate">boilerplate</a>
+ * @property {AdvancedAngleAnimationManager} animations element animation manager
+ *
+ * @see See {@link OBJ_AngleAnimationStep} for angle animation step options.
+ *
+ * See {@link OBJ_PulseAngleAnimationStep} for pulse angle animation step
+ * options.
+ *
+ * To test examples below, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>.
  *
  * @example
- * // Pulse an annotated line
+ * // Angle with size label
  * diagram.addElement({
- *   name: 'l',
- *   method: 'advanced.line',
+ *   name: 'a',
+ *   method: 'advanced.angle',
  *   options: {
- *     p1: [-1, 0],
- *     p2: [1, 0],
- *     arrow: 'triangle',
- *     label: {
- *       text: 'length',
- *       offset: 0.04,
+ *     angle: Math.PI / 4,
+ *     label: null,
+ *     curve: {
+ *       radius: 0.5,
+ *       width: 0.01,
  *     },
+ *     corner: {
+ *       width: 0.01,
+ *       length: 1,
+ *     },
+ *   }
+ * });
+ *
+ * @example
+ * // Right angle, created from diagram.advanced
+ * const a = diagram.advanced.angle({
+ *   angle: Math.PI / 2,
+ *   curve: {
+ *     autoRightAngle: true,
+ *     width: 0.01,
  *   },
+ *   corner: {
+ *     width: 0.01,
+ *     length: 1,
+ *   },
+ * });
+ * diagram.add('a', a);
+ *
+ * @example
+ * // Multi colored angle with arrows and an equation label
+ * diagram.addElement({
+ *   name: 'a',
+ *   method: 'advanced.angle',
+ *   options: {
+ *     angle: Math.PI / 4 * 3,
+ *     label: {
+ *       text: {
+ *         elements: {
+ *           theta: { text: '\u03b8', color: [1, 0, 1, 1] },
+ *         },
+ *         forms: {
+ *           0: { frac: ['theta', 'vinculum', '2']},
+ *         },
+ *       },
+ *       offset: 0.05,
+ *       location: 'inside',
+ *       color: [0, 0, 1, 1],
+ *     },
+ *     curve: {
+ *       radius: 0.5,
+ *       width: 0.01,
+ *     },
+ *     arrow: 'barb',
+ *     corner: {
+ *       width: 0.01,
+ *       length: 1,
+ *       color: [0, 0.5, 0, 1],
+ *     },
+ *   }
+ * });
+ *
+ * @example
+ * // Multiple curve angle, without corner
+ * const a = diagram.advanced.angle({
+ *   angle: Math.PI / 4,
+ *   curve: {
+ *     num: 3,
+ *     step: -0.03,
+ *     radius: 0.5,
+ *     width: 0.01,
+ *   },
+ *   label: {
+ *     text: 'a',
+ *     offset: 0.05,
+ *   },
+ * });
+ * diagram.add('a', a);
+ *
+ * @example
+ * // Change angle animation
+ * diagram.addElement({
+ *   name: 'a',
+ *   method: 'advanced.angle',
+ *   options: {
+ *     angle: Math.PI / 4,
+ *     label: null,
+ *     curve: {
+ *       radius: 0.5,
+ *       width: 0.01,
+ *     },
+ *     corner: {
+ *       width: 0.01,
+ *       length: 1,
+ *     },
+ *   }
+ * });
+ * diagram.elements._a.animations.new()
+ *   .angle({ start: Math.PI / 4, target: Math.PI / 4 * 3, duration: 3 })
+ *   .start();
+ *
+ * @example
+ * // Movable angle
+ * diagram.addElement({
+ *   name: 'a',
+ *   method: 'advanced.angle',
+ *   options: {
+ *     angle: Math.PI / 4 * 3,
+ *     label: {
+ *       text: null,
+ *       location: 'inside',
+ *       orientation: 'horizontal',
+ *       offset: 0.1,
+ *       update: true,
+ *     },
+ *     curve: {
+ *       radius: 0.5,
+ *       width: 0.01,
+ *     },
+ *     corner: {
+ *       width: 0.01,
+ *       length: 1,
+ *     },
+ *   }
+ * });
+ * diagram.elements._a.setMovable({
+ *   startArm: 'rotation',
+ *   endArm: 'angle',
+ *   movePadRadius: 0.3,
  * });
  */
 // $FlowFixMe
@@ -677,6 +807,9 @@ class AdvancedAngle extends DiagramElementCollection {
     this.startAngle = startAngle;
   }
 
+  /**
+   * @hideconstructor
+   */
   constructor(
     shapes: Object,
     equation: Object,
@@ -693,7 +826,6 @@ class AdvancedAngle extends DiagramElementCollection {
       sides: null,
       sideStart: null,
       sideStop: null,
-      label: null,
       pulseAngle: {
         curve: 1.5,
         label: 1.5,
@@ -788,7 +920,13 @@ class AdvancedAngle extends DiagramElementCollection {
     }
 
     // Label
-    if (optionsToUse.label) {
+    if (optionsToUse.label || optionsToUse.label === null) {
+      if (optionsToUse.label === null) {
+        optionsToUse.label = { text: null };
+      }
+      if (typeof optionsToUse.label === 'string') {
+        optionsToUse.label = { text: optionsToUse.label };
+      }
       this.addLabel(optionsToUse.label);
     }
 
@@ -1062,7 +1200,7 @@ class AdvancedAngle extends DiagramElementCollection {
       step: 0,
       autoHide: null,
       autoHideMax: null,
-      autoRightAngle: true,
+      autoRightAngle: false,
       rightAngleRange: 1 / 180 * Math.PI,
     };
     const optionsToUse = joinObjects(
@@ -1741,7 +1879,7 @@ class AdvancedAngle extends DiagramElementCollection {
         yAlign: 'middle',
         width: length * percentLength + width,
         height: width,
-        color: [0, 0, 1, 0.5],
+        color: [0, 0, 1, 0.005],
       });
       this.add('anglePad', anglePad);
       anglePad.setMovable();
@@ -1779,7 +1917,7 @@ class AdvancedAngle extends DiagramElementCollection {
         yAlign: 'middle',
         width: length * percentLength + width,
         height: width,
-        color: [1, 0, 1, 0.5],
+        color: [1, 0, 1, 0.005],
       });
       this.add('rotPad', rotPad);
       rotPad.setMovable();
@@ -1812,7 +1950,7 @@ class AdvancedAngle extends DiagramElementCollection {
         radius: length * percentLength,
         sides: 8,
         fill: true,
-        color: [1, 0, 0, 0.5],
+        color: [1, 0, 0, 0.005],
       });
       this.add('movePad', movePad);
       movePad.setMovable();
