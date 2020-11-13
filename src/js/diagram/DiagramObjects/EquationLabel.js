@@ -12,7 +12,7 @@ import type {
 import { joinObjects } from '../../tools/tools';
 import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
 
-const DEBUG = false;
+const DEBUG = true;
 
 export type TypeLabelOptions = {
   label?: string | Equation | Array<string> | EQN_Equation,
@@ -457,6 +457,9 @@ export default class EquationLabel {
       }
     }
 
+    if (offsetMag === 0) {
+      return new Point(0, 0);
+    }
     return new Point(xOffset, yOffset);
   }
 }

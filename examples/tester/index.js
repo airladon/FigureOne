@@ -527,29 +527,30 @@ diagram.elements._c.setMovable();
 //   diagram.elements._c._line.updateLabel(r);
 // });
 
-// diagram.addElement({
-//   name: 'c',
-//   method: 'collection',
-//   addElements: [{
-//     name: 'line',
-//     method: 'advanced.line',
-//     options: {
-//       p1: [0, 0],
-//       p2: [1, 1],
-//       label: {
-//         text: 'hello there',
-//         location: 'end',
-//         orientation: 'horizontal',
-//       },
-//       width: 0.01,
-//     },
-//   }],
-//   options: {
-//     position: [-2, 0],
-//   },
-// });
-// diagram.elements._c._line.setAutoUpdate();
-// diagram.elements._c._line.setMovable({ type: 'rotation' });
+diagram.addElement({
+  name: 'c',
+  method: 'collection',
+  addElements: [{
+    name: 'line',
+    method: 'advanced.line',
+    options: {
+      p1: [0, 0],
+      p2: [1, 1],
+      label: {
+        text: 'hello there',
+        location: 'positive',
+        orientation: 'horizontal',
+        offset: 0.001,
+      },
+      width: 0.01,
+    },
+  }],
+  options: {
+    position: [-2, 0],
+  },
+});
+diagram.elements._c._line.setAutoUpdate();
+diagram.elements._c._line.setMovable({ type: 'rotation' });
 
 
 // // Angle with size label
@@ -658,12 +659,15 @@ diagram.addElement({
   name: 'a',
   method: 'advanced.angle',
   options: {
-    angle: Math.PI / 4 * 3,
+    angle: Math.PI / 2,
+    startAngle: Math.PI / 4,
+    direction: 'positive',
     label: {
       text: null,
-      location: 'inside',
-      orientation: 'horizontal',
+      // radius: 1,
       offset: 0.1,
+      orientation: 'horizontal',
+      location: 'outside',
       update: true,
     },
     curve: {
@@ -676,6 +680,7 @@ diagram.addElement({
     },
   }
 });
+// diagram.elements._a.updateLabel(diagram.elements._a);
 diagram.elements._a.setMovable({
   startArm: 'rotation',
   endArm: 'angle',

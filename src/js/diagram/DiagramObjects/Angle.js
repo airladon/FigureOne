@@ -1627,7 +1627,7 @@ class AdvancedAngle extends DiagramElementCollection {
    * <a href="advancedangle#setautoupdate">setAutoUpdate</a>
    * @param {number | null} rotationOffset
    */
-  updateLabel(rotationOffset: ?number = null) {
+  updateLabel(rotationOffset: ?number = this.getRotation()) {
     if (rotationOffset != null) {
       this.lastLabelRotationOffset = rotationOffset;
     }
