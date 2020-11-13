@@ -108,6 +108,135 @@ export type TypeAngleLabelOptions = {
 };
 
 /**
+ * Angle Curve options object.
+ *
+ * The curve annotation of an Advanced Angle shape.
+ *
+ * @property {number} [width] Curve line width (`0.01`)
+ * @property {number} [sides] Number of sides in full circle curve (`100`)
+ * @property {number} [radius] Curve radius (`0.5`)
+ * @property {number} [num] Number of curves (`1`)
+ * @property {number} [step] Step radius of curves if curve num > 1 (`0`)
+ * @property {?number} [autoHideM] if angle is less than this, hide curve
+ * (`null`)
+ * @property {?number} [autoHideMax] if angle is less than this, hide curve
+ * (`null`)
+ * @property {boolean} [autoRightAngle] Right angle curve displayed when angle
+ * = π/2 (`true`)
+ * @property {number} [rightAngleRange] Range around π/2 for right angle curve
+ * display (`0.01745329...` or 1 degree)
+ */
+export type OBJ_AngleCurve = {
+  width?: number,           // Curve line width
+  sides?: number,           // Number of sides in 360º curve
+  radius?: number,          // Curve radius
+  num?: number,             // Number of curves
+  step?: number,            // Step radius of curves if curve num > 1
+  autoHide?: ?number,       // if angle is less than this, hide curve
+  autoHideMax?: ?number,    // if angle is less than this, hide curve
+  autoRightAngle?: boolean, // Right angle curve displayed when angle = π/2
+  rightAngleRange?: number, // Range around π/2 for right angle curve display
+};
+
+/**
+ * Additional arrow properties specific to advanced angle shapes.
+ *
+ * By default, the arrows are placed at the same radius as the curve, but
+ * the radius can be changed with `radius`.
+ *
+ * By default, the arrows will hide when the angle is small enough where
+ * the arrows will touch. To disable this, use `autoHide`.
+ *
+ * As the curve is a polygon with a finite amount of sides, its actual length
+ * can look like it changes when the angle changes and a smaller number of
+ * sides are used. This can result in a gap sometimes appearing between the
+ * curve and the arrow head. To eliminate this gap, allow the curve to overlap
+ * with the arrow head a little with `curveOverlap`. Beware however, if using
+ * transparency, a large overlap will be obvious as the semi opaque color will
+ * be darker in the overlap area. Also, if pulsing curve thickness, then for
+ * small arrow heads, large width pulse scales and large overlap, the curve
+ * may break through the pointy edge of the arrow head. Therefore selecting
+ * `curveOverlap` can be a delicate balance that depends on application.
+ *
+ * @property {number} [curveOverlap] the percent of the arrow that the curve
+ * overlaps with (`0.1`)
+ * @property {boolean} [autoHide] `true` will hide the arrows when the angle is
+ * small enough that the arrows start to touch (`true`)
+ * @property {number} [radius] location of the arrows, by default they will be
+ * at the radius of the curve.
+ */
+export type OBJ_AngleArrows = {
+  curveOverlap?: number,
+  autoHide?: boolean,
+  radius?: number,
+};
+
+/**
+ * Arrow definition for advaned angles.
+ *
+ * `string | (OBJ_LineArrows & OBJ_AngleArrows)`
+ *
+ * Use `single` string to specify head type of two arrows with default
+ * dimensions. Otherwise use options object to select and/or customize one or
+ * both arrows.
+ */
+export type TypeAngleArrows = string | OBJ_LineArrows & OBJ_AngleArrows;
+
+/**
+ * Advanced angle corner definition.
+ *
+ * @property {number} [length] length of corner's arms - by default it will be
+ * twice the length of the curve.
+ * @property {number} [width] line width of the corner - by default it will be
+ * the same as the curve
+ * @property {Array<number>} [color]
+ * @property {'fill' | 'auto' | 'none'} [style] style of the corner
+ */
+export type OBJ_AngleCorner = {
+  length?: number,
+  width?: number,
+  color?: Array<number>,
+  style?: 'fill' | 'auto' | 'none',
+};
+
+/**
+ * Options object for setting properties of `pulseAngle`.
+ *
+ * The `curve`, `corner`, `label` and `arrow` can all be
+ * pulsed with a simple scale number, or customization using
+ * the {@type OBJ_Pulse} object.
+ *
+ * The `thick` property can be used to change the default scale pulse.
+ * When a `1` is used, the angle will pulse from the vertex of the corner
+ * in scale. When `thick` is greater than 1, then the `curve` will pulse in
+ * thickness. Use a much smaller scale for curve when doing this.
+ *
+ * NB: When pulsing the curve with thick > 1, the curve may show through the arrow
+ *
+ * @property {number | OBJ_Pulse} [curve] (`1.5`)
+ * @property {number | OBJ_Pulse} [corner] (`1.5`)
+ * @property {number | OBJ_Pulse} [label] (`1.5`)
+ * @property {number | OBJ_Pulse} [arrow] (`1.5`)
+ * @property {number} [thick] (`1`)
+ * @property {number} [duration] in seconds
+ * @property {number} [frequency] in Hz
+ * @property {TypeWhen} [when] when to start the pulse (`'nextFrame'`)
+ * @property {function(): void} [done] execute when pulsing is finished
+ */
+export type OBJ_PulseAngle = {
+  curve?: number | OBJ_Pulse,
+  corner?: number | OBJ_Pulse,
+  label?: number | OBJ_Pulse,
+  arrow?: number | OBJ_Pulse,
+  thick?: number,
+  duration?: number,
+  frequency?: number,
+  when?: TypeWhen,
+  done?: ?() => void,
+};
+
+
+/**
  * Advanced Angle options object
  *
  *
@@ -125,16 +254,30 @@ export type TypeAngleLabelOptions = {
  * Two lines join to make a corner, from which an angle annotation can be
  * superimposed. The first line is defined with `startAngle` and the second
  * line defined by `angle` relative to the first line. `angle` can either be
- * positive or negative to define the second line. When `direction` is `1`,
- * the angle annotations will be on the side of the `startAngle` that is in
- * the same direction as `angle`. When `-1`, it will be explementary angle.
+ * positive or negative to define the second line.
  *
  * The second way to define an angle is with three points `p1`, `p2` and `p3`.
- * `p2` is the vertex position of the corner. Line p2p1 is first line of the
- * corner and Line p2p3 is the second.
- * A line can either be defined by its two end points (`p1`, `p2`), or a
- * point (`p1`), `length` and `angle`.
+ * `p2` is the vertex position of the corner. Line21 is first line of the
+ * corner and Line23 is the second.
  *
+ * An angle can be annotated with a `curve` (or many multiple curves) and a
+ * `label`. `direction` defines which side of the corner the annotations will
+ * be drawn. `direction` can either be positive or negative (`1` or `-1`).
+ *
+ * A positive direction will place the annotations:
+ * - on the angle formed between `startAngle` and `angle`
+ * - OR the angle formed between Line21 and Line23 in the positive rotation
+ * direction
+ *
+ * A negative direction will place the annotations on the other side of the
+ * corner.
+ *
+ * A curve with multiple lines and/or arrows can be defined with `curve`.
+ *
+ * A label that can be the real angle in degrees or radians, text or an
+ * equation can be defined with `label`.
+ *
+ * The annotations will be placed at some radius from the corner vertex.
  * `offset` can be used to draw the line some offset away from the line
  * definition where a positive offset is on the side of the line that the line
  * rotates toward when rotating in the positive direction. This is especially
@@ -170,34 +313,17 @@ export type ADV_Angle = {
   angle?: number,           // Angle measure
   startAngle?: number,      // Start rotation of angle
   color?: Array<number>,    // Default color
-  curve?: {                 // Angle annotation curve
-    width?: number,           // Curve line width
-    sides?: number,           // Number of sides in 360º curve
-    radius?: number,          // Curve radius
-    num?: number,             // Number of curves
-    step?: number,            // Step radius of curves if curve num > 1
-    autoHideM?: ?number,      // if angle is less than this, hide curve
-    autoHideMax?: ?number,    // if angle is less than this, hide curve
-  },
+  curve?: OBJ_AngleCurve,
   p1?: Point,               // Can define angle with p1, p2, p3
   p2?: Point,               // p2 is angle vertex
   p3?: Point,               // Curve goes from P21 to P23 anticlockwise
   direction?: 1 | -1;       // Direction (from P21 to P23, or for angle)
-  autoRightAngle?: boolean, // Right angle curve displayed when angle = π/2
-  rightAngleRange?: number, // Range around π/2 for right angle curve display
-  arrow: string | OBJ_LineArrows & {
-    curveOverlap?: number,
-    autoHide?: boolean,
-    radius?: number,
-  };
+  // autoRightAngle?: boolean, // Right angle curve displayed when angle = π/2
+  // rightAngleRange?: number, // Range around π/2 for right angle curve display
+  arrow: TypeAngleArrows;
   // Label
   label?: TypeAngleLabelOptions,
-  corner?: {
-    length?: number,
-    width?: number,
-    color?: Array<number>,
-    style?: 'fill' | 'auto' | 'none',
-  },
+  corner?: OBJ_AngleCorner,
   pulseAngle?: number | {
     curve?: number | OBJ_Pulse,
     label?: number | OBJ_Pulse,
@@ -293,32 +419,7 @@ class AngleLabel extends EquationLabel {
   }
 }
 
-/**
- * Angle pulse options object
- *
- * @property {number | OBJ_Pulse} [curve] curve scale or pulse options object
- * @property {number | OBJ_Pulse} [label] label scale or pulse options object
- * @property {number | OBJ_Pulse} [arrow] arrow scale or pulse options object
- * @property {number | OBJ_Pulse} [corner] corner scale or pulse options object
- * @property {number} [thick] if more than one, the the curve, arrow and corner
- * pulse defaults will be for thick pulses, otherwise they will default to
- * pulsing scale from the corner of the angle (`1`)
- * @property {function(): void} [done] execute when pulsing is finished
- * @property {number} [duration] pulse duration in seconds
- * @property {number} [frequency] pulse frequency in pulses per second
- * @property {TypeWhen} [when] when to start the pulse (`'nextFrame'`)
- */
-export type OBJ_PulseAngle = {
-  curve: number | OBJ_Pulse,
-  corner: number | OBJ_Pulse,
-  arrow: number | OBJ_Pulse,
-  label: number | OBJ_Pulse,
-  thick: number,
-  done?: ?() => void,
-  duration?: number,
-  when?: TypeWhen,
-  frequency?: number,
-}
+
 
 class DiagramObjectAngle extends DiagramElementCollection {
   // Diagram elements
@@ -360,14 +461,16 @@ class DiagramObjectAngle extends DiagramElementCollection {
     step: number,
     autoHide: ?number,
     autoHideMax: ?number,
+    autoRightAngle: boolean,
+    rightAngleRange: number,
   };
 
   startAngle: number;
   angle: number;
   direction: -1 | 1;
   lastLabelRotationOffset: number;
-  autoRightAngle: boolean;
-  rightAngleRange: number;
+  // autoRightAngle: boolean;
+  // rightAngleRange: number;
 
   // angle properties - pulic read/write
 
@@ -480,8 +583,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
       position: new Point(0, 0),
       color: shapes.defaultColor,
       direction: 1,
-      autoRightAngle: false,
-      rightAngleRange: 0.001,
+      // autoRightAngle: false,
+      // rightAngleRange: 0.001,
       curve: null,
       corner: null,
       sides: null,
@@ -517,8 +620,8 @@ class DiagramObjectAngle extends DiagramElementCollection {
     // this.direction = optionsToUse.direction;
     // this.angle = optionsToUse.angle;
     this.lastLabelRotationOffset = 0;
-    this.autoRightAngle = optionsToUse.autoRightAngle;
-    this.rightAngleRange = optionsToUse.rightAngleRange;
+    // this.autoRightAngle = optionsToUse.autoRightAngle;
+    // this.rightAngleRange = optionsToUse.rightAngleRange;
     if (optionsToUse.direction === 'positive') {
       this.direction = 1;
     } else if (optionsToUse.direction === 'negative') {
@@ -562,7 +665,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       if (typeof optionsToUse.arrow !== 'string' && optionsToUse.arrow.radius != null) {
         defaultArrowRadius = optionsToUse.arrow.radius;
       }
-      let curveOverlap = 0.3;
+      let curveOverlap = 0.2;
       if (typeof optionsToUse.arrow !== 'string' && optionsToUse.arrow.curveOverlap != null) {
         curveOverlap = optionsToUse.arrow.curveOverlap;
       }
@@ -815,12 +918,14 @@ class DiagramObjectAngle extends DiagramElementCollection {
   } = {}) {
     const defaultCurveOptions = {
       width: 0.01,
-      sides: 50,
+      sides: 100,
       radius: 0.5,
       num: 1,
       step: 0,
       autoHide: null,
       autoHideMax: null,
+      autoRightAngle: true,
+      rightAngleRange: 1 / 180 * Math.PI,
     };
     const optionsToUse = joinObjects(
       {}, defaultCurveOptions, curveOptions,
@@ -852,7 +957,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     }
 
     // Right Angle
-    if (this.autoRightAngle) {
+    if (this.curve.autoRightAngle) {
       const right = this.shapes.collection();
       const rightLength = optionsToUse.radius * 0.707; // / Math.sqrt(2);
       right.add('line1', this.shapes.line({
@@ -1043,14 +1148,21 @@ class DiagramObjectAngle extends DiagramElementCollection {
         _arrow1.transform.updateTranslation(this.arrow.start.radius, 0);
         // $FlowFixMe
         const arrowLengthAngle = this.arrow.start.height / this.arrow.start.radius;
-        let r = Math.PI;
-        if (this.direction === -1) {
-          r += Math.PI;
+        let curveToLine;    // $FlowFixMe
+        const radius = this.arrow.start.radius || 0;
+        if (
+          (this.angle > 0 && this.direction === 1)
+          || (this.angle < 0 && this.direction === -1)
+        ) {
+          curveToLine = new Line(
+            polarToRect(radius, arrowLengthAngle), [radius, 0],
+          ).angle();
+        } else {
+          curveToLine = new Line(
+            polarToRect(radius, -arrowLengthAngle), [radius, 0],
+          ).angle();
         }
-        if (this.angle < 0) {
-          r += Math.PI;
-        }
-        _arrow1.transform.updateRotation(r + Math.PI / 2 + arrowLengthAngle);
+        _arrow1.transform.updateRotation(curveToLine);
         rotationForArrow1 = arrow1Angle;
       }
     }
@@ -1064,17 +1176,24 @@ class DiagramObjectAngle extends DiagramElementCollection {
         _arrow2.transform.updateTranslation(polarToRect(this.arrow.end.radius, this.angle));
         // $FlowFixMe
         const arrowLengthAngle = this.arrow.end.height / this.arrow.end.radius;
-        let r = 0;
-        if (this.direction === -1) {
-          r += Math.PI;
+        let curveToLine;    // $FlowFixMe
+        const radius = this.arrow.start.radius || 0;
+        if (
+          (this.angle > 0 && this.direction === 1)
+          || (this.angle > 0 && this.direction === -1)
+        ) {
+          curveToLine = new Line(
+            polarToRect(radius, this.angle - this.direction * arrowLengthAngle),
+            polarToRect(radius, this.angle),
+          ).angle();
+        } else {
+          curveToLine = new Line(
+            polarToRect(radius, this.angle + this.direction * arrowLengthAngle),
+            polarToRect(radius, this.angle),
+          ).angle();
         }
-        if (this.angle < 0) {
-          r += Math.PI;
-        }
-        _arrow2.transform.updateRotation(
-          r + this.angle + Math.PI / 2 - arrowLengthAngle,
-        );
-        // curveAngle += arrowLengthAngle * (1 - arrow2LengthModifier);
+        _arrow2.transform.updateRotation(curveToLine);
+        rotationForArrow1 = arrow1Angle;
       }
     }
 
@@ -1100,9 +1219,9 @@ class DiagramObjectAngle extends DiagramElementCollection {
         if (_arrow2 != null) {
           _arrow2.hide();
         }
-      } else if (this.autoRightAngle
-        && fullCurveAngle >= Math.PI / 2 - this.rightAngleRange / 2
-        && fullCurveAngle <= Math.PI / 2 + this.rightAngleRange / 2
+      } else if (this.curve.autoRightAngle
+        && fullCurveAngle >= Math.PI / 2 - this.curve.rightAngleRange / 2
+        && fullCurveAngle <= Math.PI / 2 + this.curve.rightAngleRange / 2
       ) {
         if (_curveRight != null) {
           _curveRight.showAll();
@@ -1147,7 +1266,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
   }
 
   checkLabelForRightAngle() {
-    if (this.autoRightAngle === false) {
+    if (this.curve.autoRightAngle === false) {
       return;
     }
     const { label } = this;
@@ -1304,6 +1423,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       when: 'nextFrame',
       thick: this.pulseAngleDefaults.thick,
     };
+    const p = this.getPosition('diagram');
     const o = joinObjects(defaultOptions, options);
     let { done } = o;
     const pulse = (elementName, oName, oScale, oThick) => {
@@ -1334,27 +1454,30 @@ class DiagramObjectAngle extends DiagramElementCollection {
       pulse('curveRight', 'curve', {}, {});
     }
     if (this.corner != null && this._corner != null) {
-      const cornerLength = this.corner.length || 0;
+      // const cornerLength = this.corner.length || 0;
       pulse(
         'corner', 'corner',
-        { centerOn: [0, 0] },
-        { centerOn: this._corner.getPosition('diagram').add(polarToRect(cornerLength / 2, this.angle / 2)) },
+        { centerOn: p },
+        {
+          centerOn: p,
+          num: 1,
+        },
       );
     }
-    pulse('label', 'label', { centerOn: [0, 0] }, { num: 1 });
+    pulse('label', 'label', { centerOn: p }, { num: 1 });
     if (this.arrow != null) {
       if (this._arrow1 != null) {
         pulse(
           'arrow1', 'arrow',
-          { centerOn: [0, 0] },
-          { centerOn: this._arrow1.getPosition('diagram') },
+          { centerOn: p },
+          { centerOn: this._arrow1.getPosition('diagram'), num: 1 },
         );
       }
       if (this._arrow2 != null) {
         pulse(
           'arrow2', 'arrow',
-          { centerOn: [0, 0] },
-          { centerOn: this._arrow2.getPosition('diagram') },
+          { centerOn: p },
+          { centerOn: this._arrow2.getPosition('diagram'), num: 1 },
         );
       }
     }

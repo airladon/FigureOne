@@ -455,20 +455,21 @@ diagram.addElement({
 diagram.elements._l.setMovable();
 diagram.elements._l2.setMovable();
 const a = diagram.advanced.angle({
-  p1: [1, 2],
-  p2: [1, 1],
-  p3: [2, 1],
-  // position: [1, 1],
-  // angle: Math.PI / 4,
+  // p1: [1, 2],
+  // p2: [1, 1],
+  // p3: [2, 1],
+  position: [-1, -1],
+  angle: Math.PI / 4,
   direction: 'positive',
   autoRightAngle: true,
   // clip: '0to360',
+  color: [1, 0, 0, 0.9],
   curve: {
-    width: 0.01,
-    radius: 0.5,
+    width: 0.03,
+    radius: 1,
     // num: 3,
     // step: -0.02,
-    sides: 500,
+    sides: 100,
     // autoHide: 0.5,
     // autoHideMax: 4.2,
   },
@@ -478,15 +479,14 @@ const a = diagram.advanced.angle({
     location: 'end',
     orientation: 'horizontal',
     update: true,
-    // autoHide: 1,
-    // autoHideMax: 4,
   },
   arrow: {
-    head: 'barb',
-    length: 0.05,
-    width: 0.05,
+    head: 'triangle',
+    length: 0.3,
+    width: 0.3,
     autoHide: true,
     tail: 0,
+    curveOverlap: 0.1,
   },
   corner: { style: 'fill', length: 1, width: 0.01 },
 });
@@ -499,14 +499,15 @@ diagram.elements._l.subscriptions.add('setTransform', () => {
 });
 // diagram.elements._l.setRotation(Math.PI / 4);
 // a.pulseAngle({
-//   duration: 5,
-//   corner: 1.05,
-//   curve: 1.1,
+//   duration: 3,
+//   corner: 1.5,
+//   curve: 1.03,
 //   arrow: 3,
 //   label: 1.5,
-//   thick: 10
+//   thick: 10,
 // })
-// a.pulse({ scale: 2, duration: 5 })
+// a.pulseAngle()
+a.pulse({ scale: 2, duration: 5 })
 
 diagram.elements._l2.subscriptions.add('setTransform', () => {
   const r = diagram.elements._l2.getRotation();
