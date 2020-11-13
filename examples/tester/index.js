@@ -465,11 +465,11 @@ const a = diagram.advanced.angle({
   // clip: '0to360',
   color: [1, 0, 0, 0.9],
   curve: {
-    width: 0.03,
+    width: 0.01,
     radius: 1,
     // num: 3,
     // step: -0.02,
-    sides: 100,
+    sides: 300,
     // autoHide: 0.5,
     // autoHideMax: 4.2,
   },
@@ -482,11 +482,11 @@ const a = diagram.advanced.angle({
   },
   arrow: {
     head: 'triangle',
-    length: 0.3,
-    width: 0.3,
+    length: 0.1,
+    width: 0.1,
     autoHide: true,
     tail: 0,
-    curveOverlap: 0.1,
+    curveOverlap: 0.2,
   },
   corner: { style: 'fill', length: 1, width: 0.01 },
 });
@@ -507,7 +507,7 @@ diagram.elements._l.subscriptions.add('setTransform', () => {
 //   thick: 10,
 // })
 // a.pulseAngle()
-a.pulse({ scale: 2, duration: 5 })
+a.pulse()
 
 diagram.elements._l2.subscriptions.add('setTransform', () => {
   const r = diagram.elements._l2.getRotation();

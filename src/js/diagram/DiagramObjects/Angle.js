@@ -159,7 +159,7 @@ export type OBJ_AngleCurve = {
  * `curveOverlap` can be a delicate balance that depends on application.
  *
  * @property {number} [curveOverlap] the percent of the arrow that the curve
- * overlaps with (`0.1`)
+ * overlaps with (`0.3`)
  * @property {boolean} [autoHide] `true` will hide the arrows when the angle is
  * small enough that the arrows start to touch (`true`)
  * @property {number} [radius] location of the arrows, by default they will be
@@ -211,7 +211,11 @@ export type OBJ_AngleCorner = {
  * in scale. When `thick` is greater than 1, then the `curve` will pulse in
  * thickness. Use a much smaller scale for curve when doing this.
  *
- * NB: When pulsing the curve with thick > 1, the curve may show through the arrow
+ * NB: When pulsing the thickness of a curve, the end corners of the curve
+ * may break through when the arrow heads are small or there is a large curve
+ * overlap between curve and arrow head. Use {@link OBJ_AngleArrows} to
+ * adjust `curveOverlap` and arrow head size, reduce the thickness scale, or
+ * increase the arrow scale to compensate.
  *
  * @property {number | OBJ_Pulse} [curve] (`1.5`)
  * @property {number | OBJ_Pulse} [corner] (`1.5`)
@@ -266,7 +270,7 @@ export type OBJ_PulseAngle = {
  *
  * A positive direction will place the annotations:
  * - on the angle formed between `startAngle` and `angle`
- * - OR the angle formed between Line21 and Line23 in the positive rotation
+ * - *OR* the angle formed between Line21 and Line23 in the positive rotation
  * direction
  *
  * A negative direction will place the annotations on the other side of the
@@ -280,57 +284,47 @@ export type OBJ_PulseAngle = {
  * The annotations will be placed at some radius from the corner vertex.
  * `offset` can be used to draw the line some offset away from the line
  * definition where a positive offset is on the side of the line that the line
- * rotates toward when rotating in the positive direction. This is especially
- * useful for creating lines that show dimensions of shapes.
+ * rotates toward when rotating in the positive direction.
  *
- * The line also has a control point which is positioned on the line with the
- * `align` property. The control point is the line's center of rotation, and
- * fixes the point from which the line changes length.
+ * Pulsing this collection normally would pulse the scale of everything.
+ * If it often desirable to pulse only parts of the angle in special ways.
+ * Therefore this collection provides a method `pulseAngle` to allow this.
+ * This options object can define the default values for pulseAngle if desired.
  *
- * For instance, setting the control point at `align: 'start'` will mean that
- * if the line can rotate, it will rotate around `p1`, and if the length is
- * changed, then `p1` will remain fixed while `p2` changes.
- *
- * `width` sets the width of the line. Setting the width to 0 will hide the
- * line itself, but if arrows or a label are defined they will still be
- * displayed.
- *
- * Use the `label` property to define and position a label relative to the line.
- * The label can be any string, equation or the actual length of the line and
- * be oriented relative to the line or always be horizontal.
- *
- * Use the `arrow` and `dash` properties to define arrows and the line style.
- *
- * Pulsing this collection normally would pulse both the length and width of
- * the line. If it often desirable to pulse a line without changing its length,
- * and so this collection provides a method `pulseWidth` to allow this. This
- * options object can define the default values for pulseWidth if desired.
- *
- * Default pulse values can then be specified with the `pulse` property.
+ * @property {Point} [position] position of the angle vertex
+ * @property {number} [startAngle] rotation where the angle should start
+ * @property {number} [angle] size of the angle
+ * @property {Point} [p1] alternate way to define startAngle with `p2` and `p3`
+ * @property {Point} [p2] alternate way to define position of the angle vertex
+ * with `p2` and `p3`
+ * @property {Point} [p3] alternate way to define size of angle with `p2` and
+ * `p3`
+ * @property {1 | -1} [direction] side of the corner the angle annotations
+ * reside
+ * @property {OBJ_AngleCurve} [curve] options for a curve annotation
+ * @property {TypeAngleArrows} [arrow] options for arrow annotations
+ * @property {OBJ_AngleCorner} [corner] options for drawing a corner
+ * @property {TypeAngleLabelOptions} [label] options for label annotations
+ * @property {Array<number>} [color] default color
+ * @property {OBJ_PulseAngle} [pulseAngle] default pulseAngle options
  */
 export type ADV_Angle = {
   position?: Point,         // Position of angle vertex
-  angle?: number,           // Angle measure
   startAngle?: number,      // Start rotation of angle
-  color?: Array<number>,    // Default color
-  curve?: OBJ_AngleCurve,
+  angle?: number,           // Angle measure
   p1?: Point,               // Can define angle with p1, p2, p3
   p2?: Point,               // p2 is angle vertex
   p3?: Point,               // Curve goes from P21 to P23 anticlockwise
   direction?: 1 | -1;       // Direction (from P21 to P23, or for angle)
+  curve?: OBJ_AngleCurve,
   // autoRightAngle?: boolean, // Right angle curve displayed when angle = π/2
   // rightAngleRange?: number, // Range around π/2 for right angle curve display
   arrow: TypeAngleArrows;
   // Label
   label?: TypeAngleLabelOptions,
   corner?: OBJ_AngleCorner,
-  pulseAngle?: number | {
-    curve?: number | OBJ_Pulse,
-    label?: number | OBJ_Pulse,
-    arrow?: number,
-    side?: number,
-    corner?: number | OBJ_Pulse,
-  },
+  color?: Array<number>,    // Default color
+  pulseAngle?: OBJ_PulseAngle,
   //
   //
   // Sides
@@ -665,7 +659,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       if (typeof optionsToUse.arrow !== 'string' && optionsToUse.arrow.radius != null) {
         defaultArrowRadius = optionsToUse.arrow.radius;
       }
-      let curveOverlap = 0.2;
+      let curveOverlap = 0.3;
       if (typeof optionsToUse.arrow !== 'string' && optionsToUse.arrow.curveOverlap != null) {
         curveOverlap = optionsToUse.arrow.curveOverlap;
       }
