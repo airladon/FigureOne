@@ -81,9 +81,11 @@ import type {
  * @property {number} [offset] space to radius (`0`)
  * @property {number} [curvePosition] where the label is along the curve of the
  * angle, in percent of curve from the start of the angle (`0.5`)
- * @property {TypeLabelLocation} [location]
+ * @property {TypeLabelLocation} [location] (`'outside'`)
  * @property {TypeLabelSubLocation} [subLocation]
- * @property {TypeLabelOrientation} [orientation]
+ * @property {TypeLabelOrientation} [orientation] (`'horizontal'`)
+ * @property {number} [autoHide] hide label if angle is less than value (`null`)
+ * @property {number} [autoHideMax] hide label if angle is greater than value (`null`)
  * @property {boolean} [update] (`false`)
  * @property {number} [scale] size of the label
  * @property {Array<number>} [color]
@@ -100,17 +102,73 @@ export type TypeAngleLabelOptions = {
   orientation?: TypeLabelOrientation,
   autoHide?: ?number,             // Auto hide label if angle is less than this
   autoHideMax?: ?number,          // Auto hide label if angle greater than this
+  update?: boolean,
   scale?: number,                 // Text scale
   color?: Array<number>,          // Text color can be different to curve
 };
 
 /**
+ * Advanced Angle options object
  *
+ *
+ * The Advanced Angle is a convient and powerful angle
+ * {@link DiagramElementCollection} that can draw one or several arcs of an
+ * angle annotation, a label, arrows, and the corner of an angle. It also
+ * includes some methods to make it convient to use dynamically.
+ *
+ * There are two ways to define an angle. With a `position`, `startAngle` and
+ * `angle`, or with three points. The angle can then be annotated with a curve
+ * and a label on either side of the corner using the `direction` property.
+ *
+ * The first way to define an angle is with `position`, `startAngle` and
+ * `angle`. `position` is the location of the vertex of the corner.
+ * Two lines join to make a corner, from which an angle annotation can be
+ * superimposed. The first line is defined with `startAngle` and the second
+ * line defined by `angle` relative to the first line. `angle` can either be
+ * positive or negative to define the second line. When `direction` is `1`,
+ * the angle annotations will be on the side of the `startAngle` that is in
+ * the same direction as `angle`. When `-1`, it will be explementary angle.
+ *
+ * The second way to define an angle is with three points `p1`, `p2` and `p3`.
+ * `p2` is the vertex position of the corner. Line p2p1 is first line of the
+ * corner and Line p2p3 is the second.
+ * A line can either be defined by its two end points (`p1`, `p2`), or a
+ * point (`p1`), `length` and `angle`.
+ *
+ * `offset` can be used to draw the line some offset away from the line
+ * definition where a positive offset is on the side of the line that the line
+ * rotates toward when rotating in the positive direction. This is especially
+ * useful for creating lines that show dimensions of shapes.
+ *
+ * The line also has a control point which is positioned on the line with the
+ * `align` property. The control point is the line's center of rotation, and
+ * fixes the point from which the line changes length.
+ *
+ * For instance, setting the control point at `align: 'start'` will mean that
+ * if the line can rotate, it will rotate around `p1`, and if the length is
+ * changed, then `p1` will remain fixed while `p2` changes.
+ *
+ * `width` sets the width of the line. Setting the width to 0 will hide the
+ * line itself, but if arrows or a label are defined they will still be
+ * displayed.
+ *
+ * Use the `label` property to define and position a label relative to the line.
+ * The label can be any string, equation or the actual length of the line and
+ * be oriented relative to the line or always be horizontal.
+ *
+ * Use the `arrow` and `dash` properties to define arrows and the line style.
+ *
+ * Pulsing this collection normally would pulse both the length and width of
+ * the line. If it often desirable to pulse a line without changing its length,
+ * and so this collection provides a method `pulseWidth` to allow this. This
+ * options object can define the default values for pulseWidth if desired.
+ *
+ * Default pulse values can then be specified with the `pulse` property.
  */
 export type ADV_Angle = {
   position?: Point,         // Position of angle vertex
   angle?: number,           // Angle measure
-  rotation?: number,        // Start rotation of angle
+  startAngle?: number,      // Start rotation of angle
   color?: Array<number>,    // Default color
   curve?: {                 // Angle annotation curve
     width?: number,           // Curve line width
@@ -118,8 +176,8 @@ export type ADV_Angle = {
     radius?: number,          // Curve radius
     num?: number,             // Number of curves
     step?: number,            // Step radius of curves if curve num > 1
-    autoHideMin?: ?number,     // if angle is less than this, hide curve
-    autoHideMax?: ?number,     // if angle is less than this, hide curve
+    autoHideM?: ?number,      // if angle is less than this, hide curve
+    autoHideMax?: ?number,    // if angle is less than this, hide curve
   },
   p1?: Point,               // Can define angle with p1, p2, p3
   p2?: Point,               // p2 is angle vertex
@@ -127,29 +185,6 @@ export type ADV_Angle = {
   direction?: 1 | -1;       // Direction (from P21 to P23, or for angle)
   autoRightAngle?: boolean, // Right angle curve displayed when angle = π/2
   rightAngleRange?: number, // Range around π/2 for right angle curve display
-  //
-  // Arrows
-  // arrow1?: {                // Define arrow at start of curve
-  //   width?: number,           // Arrow width
-  //   height?: number,          // Arrow height
-  //   radius?: number,          // Arrow radius (can be different to curve rad)
-  //   autoHide?: boolean,       // Autohide arrow when arrow(s) height > angle
-  //   curveOverlap?: number,    // Percentage height to overlap curve
-  // },
-  // arrow2?: {                  // Define arrow at end of curve
-  //   width?: number,
-  //   height?: number,
-  //   radius?: number,
-  //   autoHide?: boolean,
-  //   curveOverlap?: number,    // Percentage height to overlap curve
-  // },
-  // arrows?: {                // Define both arrows - overwrites arrow1 and 2
-  //   width?: number,
-  //   height?: number,
-  //   radius?: number,
-  //   autoHide?: boolean,
-  //   curveOverlap?: number,    // Percentage height to overlap curve
-  // } | boolean,
   arrow: string | OBJ_LineArrows & {
     curveOverlap?: number,
     autoHide?: boolean,
@@ -157,6 +192,20 @@ export type ADV_Angle = {
   };
   // Label
   label?: TypeAngleLabelOptions,
+  corner?: {
+    length?: number,
+    width?: number,
+    color?: Array<number>,
+    style?: 'fill' | 'auto' | 'none',
+  },
+  pulseAngle?: number | {
+    curve?: number | OBJ_Pulse,
+    label?: number | OBJ_Pulse,
+    arrow?: number,
+    side?: number,
+    corner?: number | OBJ_Pulse,
+  },
+  //
   //
   // Sides
   side1?: {                 // Define side line at start of angle
@@ -173,19 +222,6 @@ export type ADV_Angle = {
     length?: number,
     width?: number,
     color?: Array<number>,
-  },
-  corner?: {
-    length?: number,
-    width?: number,
-    color?: Array<number>,
-    style?: 'fill' | 'auto' | 'none',
-  },
-  pulseAngle?: number | {
-    curve?: number | OBJ_Pulse,
-    label?: number | OBJ_Pulse,
-    arrow?: number,
-    side?: number,
-    corner?: number | OBJ_Pulse,
   },
   mods?: {};
 };
@@ -322,7 +358,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     radius: number,
     num: number,
     step: number,
-    autoHideMin: ?number,
+    autoHide: ?number,
     autoHideMax: ?number,
   };
 
@@ -783,7 +819,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
       radius: 0.5,
       num: 1,
       step: 0,
-      autoHideMin: null,
+      autoHide: null,
       autoHideMax: null,
     };
     const optionsToUse = joinObjects(
@@ -1051,7 +1087,7 @@ class DiagramObjectAngle extends DiagramElementCollection {
     const { _curve, curve, _curveRight } = this;
     if (_curve != null && curve != null) {
       if (
-        (curve.autoHideMin != null && fullCurveAngle < curve.autoHideMin)
+        (curve.autoHide != null && fullCurveAngle < curve.autoHide)
         || (curve.autoHideMax != null && fullCurveAngle > curve.autoHideMax)
       ) {
         if (_curveRight != null) {
