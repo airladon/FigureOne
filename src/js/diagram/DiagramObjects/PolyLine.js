@@ -88,14 +88,15 @@ function processArray(
   if (
     toProcessDefaults.label != null
     && toProcessDefaults.label.text != null
-    && Array.isArray(toProcessDefaults)
+    && Array.isArray(toProcessDefaults.label.text)
   ) {
     labels = toProcessDefaults.label.text;
   }
+  // console.log(toProcessDefaults, labels)
 
   let only;
   if (toProcessDefaults.only != null) {
-    [only] = toProcessDefaults;
+    ({ only } = toProcessDefaults);
   } else {
     only = range(0, total, 1);
   }
@@ -108,22 +109,29 @@ function processArray(
     });
   }
   const out = [];
-  for (let i = 0; i < only.length; i += 1) {
-    const index = only[i];
-    let indexOptions = {};
-    if (toProcess[`${index}`] != null) {
-      indexOptions = toProcess[`${index}`];
+  for (let i = 0; i < total; i += 1) {
+    if (only.indexOf(i) === -1) {
+      out.push(null);
+    } else {
+      const onlyIndex = only.indexOf(i);
+      const index = only[onlyIndex];
+      let indexOptions = {};
+      if (toProcess[`${index}`] != null) {
+        indexOptions = toProcess[`${index}`];
+      }
+      let labelDefaults = {};
+      if (labels.length > 0) {
+        const text = labels[onlyIndex % labels.length];
+        labelDefaults = { label: { text } };
+      }
+      // console.log(labelDefaults)
+      const o = joinObjects({}, toProcessDefaults, labelDefaults, indexOptions);
+      if (o.label != null) {
+        out.push(joinObjects({}, { label: defaultLabelOptions }, o));
+      } else {
+        out.push(o);
+      }
     }
-    let labelDefaults = {};
-    if (labels.length > 0) {
-      const text = labels[i % labels.length];
-      labelDefaults = { label: { text } };
-    }
-    const o = joinObjects({}, toProcessDefaults, labelDefaults, indexOptions);
-    if (o.label != null) {
-      return joinObjects({}, { label: defaultLabelOptions }, o);
-    }
-    return o;
   }
   return out;
 }
@@ -267,21 +275,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         },
       };
     }
-    const defaultSideOptions: ADV_Line = {
-      showLine: false,
-      offset: 0,
-      width: 0.01,
-      color: options.color == null ? shapes.defaultColor : options.color,
-    };
-    const defaultSideLabelOptions: TypeLineLabelOptions = {
-      offset: 0.1,
-      text: null,
-      location: 'outside',
-      subLocation: 'top',
-      orientation: 'horizontal',
-      linePosition: 0.5,
-      scale: 0.7,
-    };
+
     const defaultAngleOptions: ADV_Angle = {
       color: options.color == null ? shapes.defaultColor : options.color,
       curve: {},
@@ -300,13 +294,13 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       touchRadiusInBoundary: false,
     };
 
-    if (options.side != null) {
-      defaultOptions.side = defaultSideOptions;
-      // $FlowFixMe
-      if (options.side.label != null) {
-        defaultOptions.side.label = defaultSideLabelOptions;
-      }
-    }
+    // if (options.side != null) {
+    //   defaultOptions.side = defaultSideOptions;
+    //   // $FlowFixMe
+    //   if (options.side.label != null) {
+    //     defaultOptions.side.label = defaultSideLabelOptions;
+    //   }
+    // }
 
     if (options.angle != null) {
       defaultOptions.angle = defaultAngleOptions;
@@ -322,9 +316,9 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
 
     const optionsToUse = joinObjects({}, defaultOptions, options);
 
-    if (Array.isArray(options.side)) {      // $FlowFixMe
-      optionsToUse.side = options.side.map(side => joinObjects({}, defaultOptions.side, side));
-    }
+    // if (Array.isArray(options.side)) {      // $FlowFixMe
+    //   optionsToUse.side = options.side.map(side => joinObjects({}, defaultOptions.side, side));
+    // }
 
     if (Array.isArray(options.angle)) {      // $FlowFixMe
       optionsToUse.angle = options.angle.map(angle => joinObjects({}, defaultOptions.angle, angle));
@@ -502,10 +496,6 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     if (optionsToUse.showLine) {
       const line = this.shapes.polyline({
         points: this.points,
-        // color: optionsToUse.color,
-        // close: optionsToUse.close,
-        // // borderToPoint: optionsToUse.borderToPoint,
-        // width: optionsToUse.width,
         width: options.width,
         close: options.close,
         widthIs: options.widthIs,
@@ -521,19 +511,103 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       this.add('line', line);
     }
 
-    // Add Sides
     if (optionsToUse.side) {
-      const { side } = optionsToUse;
-      let pCount = this.points.length - 1;
-      if (optionsToUse.close) {
-        pCount += 1;
+      this.addSides(optionsToUse.side, optionsToUse.close);
+    }
+    // Add Sides
+    // if (optionsToUse.side) {
+    //   const defaultSideOptions = {
+    //     showLine: false,
+    //     offset: 0,
+    //     width: 0,
+    //     color: options.color == null ? shapes.defaultColor : options.color,
+    //   };
+    //   const defaultSideLabelOptions = {
+    //     offset: 0.1,
+    //     text: null,
+    //     location: 'outside',
+    //     subLocation: 'top',
+    //     orientation: 'horizontal',
+    //     linePosition: 0.5,
+    //     scale: 0.7,
+    //   };
+    //   const { side } = optionsToUse;
+    //   let pCount = this.points.length - 1;
+    //   if (optionsToUse.close) {
+    //     pCount += 1;
+    //   }
+    //   const sideArray = processArray(side, defaultSideOptions, defaultSideLabelOptions, pCount);
+    //   for (let i = 0; i < pCount; i += 1) {
+    //     let j = i + 1;
+    //     if (i === pCount - 1 && optionsToUse.close) {
+    //       j = 0;
+    //     }
+    //     if (sideArray[i] != null) {
+    //       const name = `side${i}${j}`;
+    //       let sideOptions = joinObjects({}, {
+    //         p1: this.points[i],
+    //         p2: this.points[j],
+    //       }, sideArray[i]);
+    //       if (this.reverse) {
+    //         sideOptions = joinObjects({}, {
+    //           p1: this.points[j],
+    //           p2: this.points[i],
+    //         }, sideArray[i]);
+    //       }
+    //       const sideLine = this.advanced.line(sideOptions);
+    //       this.add(name, sideLine);
+    //     }
+    //   }
+    //   // const sideArray = makeArray(side, pCount);
+    //   // for (let i = 0; i < pCount; i += 1) {
+    //   //   let j = i + 1;
+    //   //   if (i === pCount - 1 && optionsToUse.close) {
+    //   //     j = 0;
+    //   //   }
+    //   //   const name = `side${i}${j}`;
+    //   //   let sideOptions = joinObjects({}, {
+    //   //     p1: this.points[i],
+    //   //     p2: this.points[j],
+    //   //   }, sideArray[i]);
+    //   //   if (this.reverse) {
+    //   //     sideOptions = joinObjects({}, {
+    //   //       p1: this.points[j],
+    //   //       p2: this.points[i],
+    //   //     }, sideArray[i]);
+    //   //   }
+    //   //   const sideLine = this.advanced.line(sideOptions);
+    //   //   this.add(name, sideLine);
+    //   // }
+    // }
+  }
+
+  addSides(side: Object, close: boolean) {
+    const defaultSideOptions = {
+      showLine: false,
+      offset: 0,
+      width: 0,
+      color: this.color,
+    };
+    const defaultSideLabelOptions = {
+      offset: 0.1,
+      text: null,
+      location: 'outside',
+      subLocation: 'top',
+      orientation: 'horizontal',
+      linePosition: 0.5,
+      scale: 0.7,
+    };
+    let pCount = this.points.length - 1;
+    if (close) {
+      pCount += 1;
+    }
+    const sideArray = processArray(side, defaultSideOptions, defaultSideLabelOptions, pCount);
+    for (let i = 0; i < pCount; i += 1) {
+      let j = i + 1;
+      if (i === pCount - 1 && close) {
+        j = 0;
       }
-      const sideArray = makeArray(side, pCount);
-      for (let i = 0; i < pCount; i += 1) {
-        let j = i + 1;
-        if (i === pCount - 1 && optionsToUse.close) {
-          j = 0;
-        }
+      if (sideArray[i] != null) {
         const name = `side${i}${j}`;
         let sideOptions = joinObjects({}, {
           p1: this.points[i],
