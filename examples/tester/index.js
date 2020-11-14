@@ -39,7 +39,7 @@ diagram.addElement({
   name: 'p',
   method: 'advanced.polyline',
   options: {
-    points: [[0, 0], [1, 0], [1, 1]],
+    points: [[0, 0], [2, 0], [2, 2]],
     width: 0.03,
     widthIs: 'inside',
     // arrow: 'triangle',
@@ -68,11 +68,16 @@ diagram.addElement({
     angle: {
       curve: { width: 0.03, radius: 0.2, fill: true, },
       direction: 'negative',
-      0: {
-
+      label: {
+        text: null,
+        offset: 0.04,
       },
-      only: [0, 2, 1],
-      not: [1, 2, 1]
+      2: {
+        // curve: { radius: 0.25 },
+        label: { curvePosition: 0.53, offset: 0.05, },
+      },
+      // only: [0, 2, 1],
+      // not: [1]
     },
     close: true,
     pad: {

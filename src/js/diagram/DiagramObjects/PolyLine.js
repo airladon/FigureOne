@@ -276,14 +276,14 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       };
     }
 
-    const defaultAngleOptions: ADV_Angle = {
-      color: options.color == null ? shapes.defaultColor : options.color,
-      curve: {},
-      autoRightAngle: true,
-    };
-    const defaultAngleLabelOptions: TypeAngleLabelOptions = {
-      text: null,
-    };
+    // const defaultAngleOptions: ADV_Angle = {
+    //   color: options.color == null ? shapes.defaultColor : options.color,
+    //   curve: {},
+    //   autoRightAngle: true,
+    // };
+    // const defaultAngleLabelOptions: TypeAngleLabelOptions = {
+    //   text: null,
+    // };
     const defaultPadOptions: TypePadOptions = {
       sides: 20,
       radius: 0.1,
@@ -302,13 +302,13 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     //   }
     // }
 
-    if (options.angle != null) {
-      defaultOptions.angle = defaultAngleOptions;
-      // $FlowFixMe
-      if (options.angle.label != null) {
-        defaultOptions.angle.label = defaultAngleLabelOptions;
-      }
-    }
+    // if (options.angle != null) {
+    //   defaultOptions.angle = defaultAngleOptions;
+    //   // $FlowFixMe
+    //   if (options.angle.label != null) {
+    //     defaultOptions.angle.label = defaultAngleLabelOptions;
+    //   }
+    // }
 
     if (options.pad != null) {
       defaultOptions.pad = defaultPadOptions;
@@ -320,9 +320,9 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     //   optionsToUse.side = options.side.map(side => joinObjects({}, defaultOptions.side, side));
     // }
 
-    if (Array.isArray(options.angle)) {      // $FlowFixMe
-      optionsToUse.angle = options.angle.map(angle => joinObjects({}, defaultOptions.angle, angle));
-    }
+    // if (Array.isArray(options.angle)) {      // $FlowFixMe
+    //   optionsToUse.angle = options.angle.map(angle => joinObjects({}, defaultOptions.angle, angle));
+    // }
 
     super(optionsToUse.transform, shapes.limits);
     this.setColor(optionsToUse.color);
@@ -457,39 +457,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
 
     // Add Angles
     if (optionsToUse.angle) {
-      const { angle } = optionsToUse;
-      let pCount = this.points.length;
-      if (optionsToUse.close === false) {
-        pCount -= 2;
-      }
-      const angleArray = makeArray(angle, pCount);
-      let firstIndex = 0;
-      if (optionsToUse.close === false) {
-        firstIndex = 1;
-      }
-      for (let i = firstIndex; i < pCount + firstIndex; i += 1) {
-        let j = i + 1;
-        let k = i - 1;
-        if (i === pCount - 1 && optionsToUse.close) {
-          j = 0;
-        }
-        if (i === 0 && optionsToUse.close) {
-          k = pCount - 1;
-        }
-        const name = `angle${i}`;
-        if (this.reverse) {
-          const newJ = k;
-          k = j;
-          j = newJ;
-        }
-        const angleOptions = joinObjects({}, {
-          p1: this.points[k],
-          p2: this.points[i],
-          p3: this.points[j],
-        }, angleArray[i - firstIndex]);
-        const angleAnnotation = this.advanced.angle(angleOptions);
-        this.add(name, angleAnnotation);
-      }
+      this.addAngles(optionsToUse.angle, optionsToUse.close);
     }
 
     // Add Line
@@ -580,6 +548,53 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     //   // }
     // }
   }
+
+  addAngles(angle: Object, close: boolean) {
+    const defaultAngleOptions = {
+      color: this.color,
+      curve: {},
+      autoRightAngle: true,
+    };
+    const defaultAngleLabelOptions = {
+      text: null,
+    };
+    let pCount = this.points.length;
+    if (close === false) {
+      pCount -= 2;
+    }
+    // const angleArray = makeArray(angle, pCount);
+    const angleArray = processArray(angle, defaultAngleOptions, defaultAngleLabelOptions, pCount);
+    let firstIndex = 0;
+    if (close === false) {
+      firstIndex = 1;
+    }
+    for (let i = firstIndex; i < pCount + firstIndex; i += 1) {
+      let j = i + 1;
+      let k = i - 1;
+      if (i === pCount - 1 && close) {
+        j = 0;
+      }
+      if (i === 0 && close) {
+        k = pCount - 1;
+      }
+      if (angleArray[i] != null) {
+        const name = `angle${i}`;
+        if (this.reverse) {
+          const newJ = k;
+          k = j;
+          j = newJ;
+        }
+        const angleOptions = joinObjects({}, {
+          p1: this.points[k],
+          p2: this.points[i],
+          p3: this.points[j],
+        }, angleArray[i - firstIndex]);
+        const angleAnnotation = this.advanced.angle(angleOptions);
+        this.add(name, angleAnnotation);
+      }
+    }
+  }
+
 
   addSides(side: Object, close: boolean) {
     const defaultSideOptions = {
