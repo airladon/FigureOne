@@ -39,7 +39,7 @@ diagram.addElement({
   name: 'p',
   method: 'advanced.polyline',
   options: {
-    points: [[0, 0], [2, 0], [2, 2]],
+    points: [[0, 0], [2, 0], [2, 2], [-1, 2]],
     width: 0.03,
     widthIs: 'inside',
     // arrow: 'triangle',
@@ -56,10 +56,6 @@ diagram.addElement({
       },
       // dash: [0.01, 0.1],
       arrow: 'line',
-      mods: {
-        isMovable: true,
-        isTouchable: true,
-      },
       1: {
         color: [1, 0, 1, 1]
       },
@@ -72,19 +68,21 @@ diagram.addElement({
         text: null,
         offset: 0.04,
       },
-      2: {
-        // curve: { radius: 0.25 },
-        label: { curvePosition: 0.53, offset: 0.05, },
-      },
-      // only: [0, 2, 1],
+      // 2: {
+      //   curve: { radius: 0.25 },
+      //   label: { curvePosition: 0.53, offset: 0.05, },
+      // },
+      // only: [0, 1, 2],
       // not: [1]
     },
-    close: true,
+    // close: true,
     pad: {
       radius: 0.2,
       color: [1, 0, 0, 0.5],
       isMovable: true,
-      line: { width: 0.01 }
+      // line: { width: 0 },
+      touchBorder: 0.1,
     },
   }
 });
+diagram.elements._p._pad0.setMovable();
