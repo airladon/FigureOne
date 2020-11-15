@@ -455,7 +455,7 @@ class Diagram {
       generic: this.shapes.generic.bind(this.shapes),
       polyline: this.shapes.polyline.bind(this.shapes),
       polygon: this.shapes.polygon.bind(this.shapes),
-      polygonSweep: this.shapes.polygonSweep.bind(this.shapes),
+      polygonSweep: this.shapes.polygon.bind(this.shapes),
       grid: this.shapes.grid.bind(this.shapes),
       triangle: this.shapes.triangle.bind(this.shapes),
       rectangle: this.shapes.rectangle.bind(this.shapes),
@@ -938,15 +938,14 @@ class Diagram {
     this.elements.add(name, diagramElement);
   }
 
-  // addNew(
-  //   diagramElementOrDefinitionObjectOrArray: DiagramElement | Array<TypeAddElementObject | DiagramElement> | TypeAddElementObject,
-  //   DiagramElementOrCollectionToAddTo: DiagramElementPrimitive | DiagramElementCollection | string,
-  //   addElementsKey: string = 'elements',
-  // ) {
-  //   if (typeof nameOrDiagramElementOrArrayOrDefinitionObject === 'string') {
-  //     if ()
-  //   }
-  // }
+  addNew(options: {
+    element: DiagramElement | TypeAddElementObject | Array<DiagramElement> | Array<TypeAddElementObject>,
+    name: string,
+    to: string | DiagramElementCollection,
+    addElementsKey: string,
+  }) {
+    if ()
+  }
 
   /**
    * Add elements from element definitions to the diagram.

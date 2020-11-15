@@ -4065,6 +4065,32 @@ class DiagramElementCollection extends DiagramElement {
     this.animateNextFrame();
   }
 
+  addNew(options: {
+    element: DiagramElement | TypeAddElementObject | Array<DiagramElement> | Array<TypeAddElementObject>,
+    name: string,
+    to: string | DiagramElementCollection,
+    addElementsKey: string,
+  }) {
+    const {
+      element, name, to, addElementsKey
+    } = options;
+    if (element instanceof DiagramElement) {
+      if (name != null) {
+        this.add(name, element);
+      } else if (element.name != null) {
+        this.add(element.name, element);
+      } else {
+        throw new Error('Element must be named');
+      }
+    } else if (Array.isArray(element)) {
+      element.forEach((e) => {
+        this.addNew({ element: e, to, addElementsKey });
+      });
+    } else {
+
+    }
+  }
+
   setDiagram(diagram: Diagram) {
     super.setDiagram(diagram);
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
