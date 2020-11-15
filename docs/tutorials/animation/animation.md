@@ -100,7 +100,8 @@ p.animations.new()
 <p style="text-align: center"><img src="./tutorials/animation/ex1.gif"></p>
 
 
-A more convenient way to chain animation steps in series is to create them inline
+A more convenient way to chain animation steps in series is to create them inline. The <a href="#animationmanagernew">animations.new</a> method returns an {@link AnimationBuilder} that allows for inline step creation.
+
 ```javascript
 p.animations.new()
   .position({ target: [1, 0], duration: 2 })
@@ -109,7 +110,7 @@ p.animations.new()
 ```
 
 
-An animation manager is tied to one element, can be used to animate other elements too
+An animation manager is tied to one element, but can be used to animate other elements too
 ```javascript
 // add another element
 diagram.addElement({

@@ -24,7 +24,7 @@ import HTMLObject from './js/diagram/DrawingObjects/HTMLObject/HTMLObject';
 import HTMLEquation from './js/diagram/DiagramElements/Equation/HTMLEquation';
 import AdvancedAngle from './js/diagram/DiagramObjects/Angle';
 import AdvancedLine from './js/diagram/DiagramObjects/Line';
-import DiagramObjectPolyLine from './js/diagram/DiagramObjects/PolyLine';
+import AdvancedPolyline from './js/diagram/DiagramObjects/PolyLine';
 import EqnNavigator from './js/diagram/DiagramObjects/EqnNavigator';
 import EquationLabel from './js/diagram/DiagramObjects/EquationLabel';
 import { Equation } from './js/diagram/DiagramElements/Equation/Equation';
@@ -42,7 +42,7 @@ import type {
 } from './js/diagram/DiagramObjects/Angle';
 import type { TypeDiagramOptions } from './js/diagram/Diagram';
 import type {
-  TypePolyLineOptions, TypePadOptions,
+  ADV_Polyline, OBJ_PolylinePad,
 } from './js/diagram/DiagramObjects/PolyLine';
 import * as anim from './js/diagram/Animation/Animation';
 
@@ -52,7 +52,7 @@ export type {
   TypeLineVertexOrigin, TypeLineVertexSpaceStart, ADV_Line,
   TypeAngleLabelOrientation, ADV_Angle, TypeDiagramOptions,
   TypeLineLabelOptions, TypeAngleLabelOptions,
-  TypePolyLineOptions, TypePadOptions, TypeParsablePoint,
+  ADV_Polyline, OBJ_PolylinePad, TypeParsablePoint,
   TypeLabelledAngle, TypeLabelledLine,
 };
 
@@ -102,7 +102,7 @@ const Fig = {
   //
   AdvancedAngle,
   AdvancedLine,
-  DiagramObjectPolyLine,
+  AdvancedPolyline,
   EqnNavigator,
   EquationLabel,
   //

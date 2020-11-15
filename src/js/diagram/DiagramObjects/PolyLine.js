@@ -2,7 +2,7 @@
 
 import {
   Transform, Point, getPoint, clipAngle,
-  RangeBounds, RectBounds, getBounds, Bounds,
+  RangeBounds, RectBounds,
 } from '../../tools/g2';
 import type {
   TypeRangeBoundsDefinition, TypeRectBoundsDefinition, TypeParsablePoint,
@@ -12,53 +12,204 @@ import { round, range } from '../../tools/math';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
-// import type {
-//   TypePolyLineBorderToPoint,
-// } from '../DiagramElements/PolyLine';
-// import type { TypeParsablePoint } from '../../tools/g2';
 import type {
-  TypeLineLabelOptions, ADV_Line,
+  ADV_Line,
 } from './Line';
 import type {
-  ADV_Angle, TypeAngleLabelOptions,
+  ADV_Angle,
 } from './Angle';
 import DiagramPrimitives from '../DiagramPrimitives/DiagramPrimitives';
 // eslint-disable-next-line import/no-cycle
 import DiagramObjects from './DiagramObjects';
 import DiagramEquation from '../DiagramEquation/DiagramEquation';
-import type { OBJ_Polyline } from '../DiagramPrimitives/DiagramPrimitives';
+import type { OBJ_Polyline, OBJ_Polygon } from '../DiagramPrimitives/DiagramPrimitives';
 
-export type TypePadOptions = {
-  color?: Array<number>,
-  radius?: number,
-  sides?: number,
-  fill?: boolean,
+/**
+ * Advanced Polyline pad addition options.
+ *
+ * Each pad is associated with a point of the polyline.
+ *
+ * @property {boolean} [isMovable] `true` allows moving the pad and the
+ * associated polyline point (`false`)
+ * @property {TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | 'diagram'} [boundary]
+ * boundary the pad can move within
+ */
+export type OBJ_PolylinePad = {
   isMovable?: boolean,
-  touchRadius?: number,
   boundary?: TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | 'diagram',
-  touchRadiusInBoundary?: boolean,
+}
+
+/**
+ * Side annotations, angle annotations and movable pads in an
+ * Advanced polygon are defined with the options objects {@link ADV_Line},
+ * {@link ADV_Angle} and ({@link OBJ_Polygon} & {@link OBJ_PolylinePad})
+ * respectively.
+ *
+ * The properties in this object can be used in the side, angle and movable
+ * pad object definitions to allow for customization of specific sides,
+ * angles and movable pads.
+ *
+ * Each side, angle and movable pad has an 0 based index associated with it.
+ * The zero index pad is associated with the first point of the polyline. The
+ * zero index side is between the first and second point of the polyline, and
+ * the zero index angle is between the first, second and third point of the
+ * polyline.
+ *
+ * By default, any properties defined for <a href="adv_polyline#pad">pad</a>
+ * will be applied to all pads of the polyline. To customize the first pad in
+ * the polyline, an object property with name `'0'` can be used with a value
+ * that includes the options object properties that should be customized.
+ * Similary, for side and angle annotations, keys with the index name can be
+ * used in their options objects to customize specific sides and angles.
+ *
+ * The `show` and `hide` properties can be used to show and hide specific sides
+ * and angles.
+ *
+ * See {@link OBJ_PulseWidthAnimationStep} for pulse angle animation step
+ * options.
+ *
+ * @example
+ * // Hide pad 0, and make pad 2 blue and not filled
+ * diagram.addElement({
+ *   name: 'p',
+ *   method: 'advanced.polyline',
+ *   options: {
+ *     points: [[0, 0], [2, 0], [2, 2], [-2, 1]],
+ *     pad: {
+ *       radius: 0.2,            // OBJ_Polygon
+ *       color: [1, 0, 0, 1],    // OBJ_Polygon
+ *       touchBorder: 0.1,       // OBJ_Polygon
+ *       isMovable: true,
+ *       hide: [0],
+ *       2: {                    // Custom pad 2 properties
+ *         color: [0, 0, 1, 1],  // Make blue
+ *         line: { width: 0.01 } // Use an outline instead of a fill
+ *       },
+ *     },
+ *   }
+ * });
+ *
+ * @example
+ * // Customization of side and angle annotations
+ * diagram.addElement({
+ *   name: 'p',
+ *   method: 'advanced.polyline',
+ *   options: {
+ *     points: [[0, 0], [2, 0], [2, 2], [0, 2]],
+ *     close: true,
+ *     side: {
+ *       showLine: false,
+ *       label: {
+ *         text: null,                 // By default, sides are length values
+ *         location: 'negative',
+ *       },
+ *       0: { label: { text: 'a' } },  // Side 0 is 'a' instead of length
+ *     },
+ *     angle: {
+ *       label: {
+ *         text: '?',
+ *         offset: 0.05,
+ *       },
+ *       curve: {
+ *         radius: 0.4,
+ *       },
+ *       direction: 'negative',
+ *       show: [2],                   // Only show angle annotation for angle 2
+ *     },
+ *   }
+ * });
+ */
+export type OBJ_PolylineCustomization = {
+  show?: Array<number>,
+  hide?: Array<number>,
+  [padIndex: string]: OBJ_Polygon,
 };
-export type TypePolyLineOptions = {
-  position?: ?Point,
-  points: Array<TypeParsablePoint>,
-  close?: boolean,
+
+/**
+ * When shapes get too small, angle and side annotations can start to draw on
+ * each other. This object defines thresholds for when the angle and side
+ * annotations should be hidden.
+ *
+ * @property {null | number} [minAngle]
+ * @property {null | number} [maxAngle]
+ * @property {null | number} [minSide]
+ */
+export type OBJ_ValidShapeHideThresholds = {
+  minAngle?: ?number,
+  maxAngle?: ?number,
+  minSide?: ?number,
+}
+
+
+/**
+ * Makes the sides and angles of a closed polyline consistent. Also reverses
+ * the point order if angles are on outside of shape instead of inside.
+ *
+ * Floating point rounding errors will sometimes result in angles
+ * and side lengths being slightly larger or smaller than is possible.
+ * For instance, for a triangle, there may be a rare case where the three
+ * angles add up to 181ª instead of 180ª as a result of rounding the angle
+ * labels to no decimal places.
+ *
+ * Making a shape consistent will go through all the side and angle labels
+ * and correct them, displaying a value without rounding error.
+ *
+ * Currently, only `'triangle'` is supported.
+ *
+ * In addition, the angle and side annotations can be hidden if minimum
+ * or maximum thresholds of angle and side values are crossed. For example,
+ * for small triangles angle annotations may start to draw on top of each other
+ * being messy.
+ *
+ * @property {'triangle'} [shape]
+ * @property {OBJ_ValidShapeHideThresholds} [hide]
+ */
+export type OBJ_ValidShape = {
+  shape?: 'triangle',
+  hide?: OBJ_ValidShapeHideThresholds,
+};
+
+/**
+ * Advanced Polyline options object
+ *
+ * The Advanced Polyline is a convient and powerful polyline
+ * {@link DiagramElementCollection} that includes the polyline,
+ * angle annotations, side label and arrow annotations, and movable
+ * pads on each polyline point for the user to adjust dynamically.
+ *
+ * The polyline itself is defined with an {@link OBJ_Polyline} options Object.
+ *
+ * Angle and side annotations can be defined as {@link ADV_Angle} and
+ * {@link ADV_Line}, and movable pads defined with
+ * ({@link OBJ_Polygon} & {@link OBJ_PolylinePad}).
+ *
+ * Angles, sides and pads can all be defined either as an options object
+ * or an array of options objects. If an array, then each element in the
+ * array will correspond with a pad on the polyline. If there are less
+ * elements in the array than pads on the polyline, then the elements
+ * will recycle from the start.
+ *
+ * Using object definitions allows for a definition of all angles, sides and
+ * pads. To customize for specific side, angle or pad indexes use =
+ * {@link OBJ_PolylineCustomization}.
+ *
+ * @property {(ADV_Angle & OBJ_PolylineCustomization) | Array<ADV_Angle>} [angle]
+ * angle annotations - leave undefined for no angle annotations
+ * @property {(ADV_Line & OBJ_PolylineCustomization) | Array<ADV_Line>} [side]
+ * side annotations - leave undefined for no side annotations
+ * @property {(OBJ_Polygon & OBJ_PolylinePad & OBJ_PolylineCustomization) | Array<OBJ_Polygon & OBJ_PolylinePad>} [pad]
+ * move pad - leave undefined for no move pads
+ * @property {null | OBJ_ValidShapeHideThresholds} [makeValid] if defined, whenever
+ * points are updated the shape will be checked to ensure consistency with
+ * displayed labels of angles and sides.
+ */
+export type ADV_Polyline = {
   showLine?: boolean,
-  color?: Array<number>,
-  // line?: OBJ_PolyLine,
-  // borderToPoint?: TypePolyLineBorderToPoint,
-  width?: number,
-  angle?: ADV_Angle | Array<ADV_Angle>,
-  side?: ADV_Line | Array<ADV_Line>,
-  pad?: TypePadOptions | Array<TypePadOptions>,
-  transform?: Transform,
-  makeValid?: ?{
-    shape: 'triangle',
-    hide?: {
-      minAngle?: ?number,
-      maxAngle?: ?number,
-      minSide?: ?number,
-    },
-  };
+  angle?: (ADV_Angle & OBJ_PolylineCustomization) | Array<ADV_Angle>,
+  side?: (ADV_Line & OBJ_PolylineCustomization) | Array<ADV_Line>,
+  pad?: (OBJ_Polygon & OBJ_PolylinePad & OBJ_PolylineCustomization)
+       | Array<OBJ_Polygon & OBJ_PolylinePad>,
+  makeValid?: ?OBJ_ValidShapeHideThresholds,
 } & OBJ_Polyline;
 
 function processArray(
@@ -83,6 +234,7 @@ function processArray(
   for (let i = 0; i < total; i += 1) {
     except.push(`${i}`);
   }
+
   const toProcessDefaults = joinObjectsWithOptions({ except }, {}, toProcess);
   let labels = [];
   if (
@@ -92,40 +244,44 @@ function processArray(
   ) {
     labels = toProcessDefaults.label.text;
   }
+
+  if (toProcessDefaults.label === null) {
+    toProcessDefaults.label = { text: null };
+  }
   // console.log(toProcessDefaults, labels)
 
-  let only;
-  if (toProcessDefaults.only != null) {
-    ({ only } = toProcessDefaults);
+  let show;
+  if (toProcessDefaults.show != null) {
+    ({ show } = toProcessDefaults);
   } else {
-    only = range(0, total, 1);
+    show = range(0, total, 1);
   }
-  if (toProcessDefaults.not != null) {
-    toProcessDefaults.not.forEach(index => {
-      const i = only.indexOf(index);
+  if (toProcessDefaults.hide != null) {
+    toProcessDefaults.hide.forEach((index) => {
+      const i = show.indexOf(index);
       if (i !== -1) {
-        only.splice(i, 1);
+        show.splice(i, 1);
       }
     });
   }
   const out = [];
   for (let i = 0; i < total; i += 1) {
-    if (only.indexOf(i) === -1) {
+    if (show.indexOf(i) === -1) {
       out.push(null);
     } else {
-      const onlyIndex = only.indexOf(i);
-      const index = only[onlyIndex];
+      const showIndex = show.indexOf(i);
+      const index = show[showIndex];
       let indexOptions = {};
       if (toProcess[`${index}`] != null) {
         indexOptions = toProcess[`${index}`];
       }
       let labelDefaults = {};
       if (labels.length > 0) {
-        const text = labels[onlyIndex % labels.length];
+        const text = labels[showIndex % labels.length];
         labelDefaults = { label: { text } };
       }
       // console.log(labelDefaults)
-      const o = joinObjects({}, toProcessDefaults, labelDefaults, indexOptions);
+      const o = joinObjects({}, defaultOptions, toProcessDefaults, labelDefaults, indexOptions);
       if (o.label != null) {
         out.push(joinObjects({}, { label: defaultLabelOptions }, o));
       } else {
@@ -136,93 +292,191 @@ function processArray(
   return out;
 }
 
-function makeArray<T>(
-  possibleArray: T | Array<T>,
-  count: number,
-): Array<T> {
-  if (Array.isArray(possibleArray)) {
-    if (count === possibleArray.length) { // $FlowFixMe
-      return possibleArray;
-    }
-    const outArray = [];
-    for (let i = 0; i < count; i += 1) {
-      outArray.push(possibleArray[i % possibleArray.length]);
-    }
-    return outArray;
-  }
-  if (possibleArray != null && typeof possibleArray === 'object') {
-    const keys = Object.keys(possibleArray);
-    let allNumbers = true;
-    let i = 0;
-    while (i < keys.length && allNumbers) {
-      if (isNaN(parseInt(keys[i], 10))) {
-        allNumbers = false;
-      }
-      i += 1;
-    }
-    console.log(allNumbers, possibleArray)
-    if (allNumbers) {
-      const outArray = [];
-      for (let m = 0; m < count; m += 1) {
-        outArray.push({});
-      }
-      keys.forEach((k, m) => {
-        outArray[m] = possibleArray[k];
-      });
-      console.log(outArray)
-      // $FlowFixMe
-      return outArray;
-    }
-  }
+/**
+ * `'updatePoints'` subscription published whenever the Advanced Polyline
+ * points are updated. No payload is passed to subscriber.
+ *
+ * @typedef SUB_PolylineUpdatePoints
+ */
+ export type SUB_PolylineUpdatePoints = [];
 
-  const outArray = [];
-  let labels = [];
+/*
+..........########...#######..##.......##....##.##.......####.##....##.########
+..........##.....##.##.....##.##........##..##..##........##..###...##.##......
+..........##.....##.##.....##.##.........####...##........##..####..##.##......
+..........########..##.....##.##..........##....##........##..##.##.##.######..
+..........##........##.....##.##..........##....##........##..##..####.##......
+..........##........##.....##.##..........##....##........##..##...###.##......
+..........##.........#######..########....##....########.####.##....##.########
+*/
 
-  if (typeof possibleArray === 'object' && possibleArray != null) {
-    if (possibleArray.label != null
-      && possibleArray.label.text != null
-      && Array.isArray(possibleArray.label.text)
-    ) {
-      labels = possibleArray.label.text.slice();
-      // const obj = possibleArray;
-      for (let i = 0; i < count; i += 1) {
-        // $FlowFixMe
-        const obj = { label: { text: labels[i % labels.length] } };
-        // console.log(labels, labels[i % labels.length]);
-        outArray.push(joinObjects({}, possibleArray, obj));
-      }
-      // $FlowFixMe
-      return outArray;
-    }
-  }
-  for (let i = 0; i < count; i += 1) {
-    outArray.push(possibleArray);
-  }
-  return outArray;
-}
-
-// function makeColorArray(
-//   possibleArray: Array<Array<number> | number>,
-//   count: number,
-// ): Array<Array<number>> {
-//   if (Array.isArray(possibleArray[0])) {
-//     if (count === possibleArray.length) {                   // $FlowFixMe
-//       return possibleArray;
-//     }
-//     const outArray = [];
-//     for (let i = 0; i < count; i += 1) {                    // $FlowFixMe
-//       outArray.push(possibleArray[i % possibleArray.length].slice());
-//     }
-//     return outArray;
-//   }
-//   const outArray = [];
-//   for (let i = 0; i < count; i += 1) {
-//     outArray.push(possibleArray.slice());
-//   }                                                         // $FlowFixMe
-//   return outArray;
-// }
-
-export default class DiagramObjectPolyLine extends DiagramElementCollection {
+/**
+ * {@link DiagramElementCollection} representing a polyline.
+ *
+ * ![](./assets1/advpolyline_examples.png)
+ *
+ * <p class="inline_gif"><img src="./assets1/advpolyline_movepolyline.gif" class="inline_gif_image"></p>
+ *
+ * <p class="inline_gif"><img src="./assets1/advpolyline_movetri.gif" class="inline_gif_image"></p>
+ *
+ * This object defines a convient and powerful polyline
+ * {@link DiagramElementCollection} that includes a solid or dashed line,
+ * open or closed polyline, arrows, angle annotations for polyline corners,
+ * side annotations for straight lines between points and move pads at polyline
+ * points to dynamically adjust the polyline.
+ *
+ * See {@link ADV_Polyline} for the options that can be used when creating the
+ * line.
+ *
+ * The object contains a two additional animation steps. `length`
+ * animates changing the line length, and `pulseWidth` animates the
+ * `pulseWidth` method. The animation steps are available in
+ * the animation manager (`animations` property), and in the animation builder
+ * (`animations.new()` and `animations.builder()`).
+ *
+ * Some of the useful methods included in an advanced line are:
+ * - <a href="#advancedlinepulsewidth">pulseWidth</a> - pulses the line without
+ *   changing its length
+ * - <a href="#advancedlinegrow">grow</a> - starts and animation that executes
+ *   a single `length` animation
+ *    step
+ * - <a href="#advancedlinesetmovable">grow</a> - overrides
+ *    <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
+ *    allowing for more complex move options.
+ *
+ * Available subscriptions:
+ *   - `'updatePoints'`: {@link SUB_PolylineUpdatePoints}
+ *
+ * @see See {@link OBJ_LengthAnimationStep} for angle animation step options.
+ *
+ * See {@link OBJ_PulseWidthAnimationStep} for pulse angle animation step
+ * options.
+ *
+ * To test examples below, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>.
+ *
+ *
+ * @example
+ * // Polyline with angle annotations
+ * diagram.addElement({
+ *   name: 'p',
+ *   method: 'advanced.polyline',
+ *   options: {
+ *     points: [[1, 0], [0, 0], [0.5, 1], [1.5, 1]],
+ *     arrow: 'triangle',
+ *     angle: {
+ *       label: null,
+ *       curve: {
+ *         radius: 0.3,
+ *       },
+ *     },
+ *   }
+ * });
+ *
+ * @example
+ * // Triangle with unknown angle
+ * diagram.addElement({
+ *   name: 'p',
+ *   method: 'advanced.polyline',
+ *   options: {
+ *     points: [[1, 1], [1, 0], [0, 0]],
+ *     close: true,
+ *     side: {
+ *       label: null,
+ *     },
+ *     angle: {
+ *       label: {
+ *         text: '?',
+ *         offset: 0.05,
+ *       },
+ *       curve: {
+ *         radius: 0.4,
+ *       },
+ *       show: [1],
+ *     },
+ *   }
+ * });
+ *
+ * @example
+ * // Dimensioned square
+ * diagram.addElement({
+ *   name: 'p',
+ *   method: 'advanced.polyline',
+ *   options: {
+ *     points: [[0, 1], [1, 1], [1, 0], [0, 0]],
+ *     close: true,
+ *     side: {
+ *       showLine: true,
+ *       offset: 0.2,
+ *       color: [0, 0, 1, 1],
+ *       arrow: 'barb',
+ *       width: 0.01,
+ *       label: null,
+ *       dash: [0.05, 0.02],
+ *       0: { label: { text: 'a' } },    // Customize side 0
+ *     },
+ *     angle: {
+ *       curve: {
+ *         autoRightAngle: true,
+ *         radius: 0.3,
+ *       },
+ *     },
+ *   }
+ * });
+ *
+ * @example
+ * // User adjustable polyline
+ * diagram.addElement({
+ *   name: 'p',
+ *   method: 'advanced.polyline',
+ *   options: {
+ *     points: [[-0.5, 1], [1, 1], [0, 0], [1, -0.5]],
+ *     dash: [0.05, 0.02],
+ *     pad: {
+ *       radius: 0.2,
+ *       color: [1, 0, 0, 0.5],    // make alpha 0 to hide pad
+ *       isMovable: true,
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Annotations that automatically updates as user changes triangle
+ * diagram.addElement({
+ *   name: 'p',
+ *   method: 'advanced.polyline',
+ *   options: {
+ *     points: [[-1, 1], [1, 1], [0, 0]],
+ *     close: true,
+ *     makeValid: {
+ *       shape: 'triangle',
+ *       hide: {
+ *         minAngle: Math.PI / 8,
+ *       },
+ *     },
+ *     side: {
+ *       showLine: true,
+ *       offset: 0.2,
+ *       color: [0.3, 0.6, 1, 1],
+ *       arrow: 'barb',
+ *       width: 0.01,
+ *       label: {
+ *         text: null,
+ *       },
+ *     },
+ *     angle: {
+ *       label: null,
+ *       curve: { radius: 0.25 },
+ *     },
+ *     pad: {
+ *       radius: 0.4,
+ *       color: [1, 0, 0, 0.005],
+ *       isMovable: true,
+ *     },
+ *   },
+ * });
+ */
+export default class AdvancedPolyline extends DiagramElementCollection {
   shapes: DiagramPrimitives;
   equation: DiagramEquation;
   advanced: DiagramObjects;
@@ -233,7 +487,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
   points: Array<Point>;
   close: boolean;
   _line: ?DiagramElementPrimitive;
-  options: TypePolyLineOptions;
+  options: ADV_Polyline;
   updatePointsCallback: ?(string | (() => void));
   reverse: boolean;
   makeValid: ?{
@@ -251,15 +505,14 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     objects: DiagramObjects,
     isTouchDevice: boolean,
     animateNextFrame: void => void,
-    options: TypePolyLineOptions = {},
+    options: ADV_Polyline = {},
   ) {
-    const defaultOptions: TypePolyLineOptions = {
+    const defaultOptions: ADV_Polyline = {
       position: null,
       color: shapes.defaultColor,
       points: [new Point(1, 0), new Point(0, 0), new Point(0, 1)],
       close: false,
       showLine: true,
-      // borderToPoint: 'never',
       width: 0.01,
       reverse: false,
       transform: new Transform('PolyLine').scale(1, 1).rotate(0).translate(0, 0),
@@ -274,21 +527,6 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
           minSide: null,
         },
       };
-    }
-
-    const defaultPadOptions: TypePadOptions = {
-      sides: 20,
-      radius: 0.1,
-      color: options.color == null ? shapes.defaultColor : options.color,
-      fill: true,
-      isMovable: false,
-      boundary: 'diagram',
-      touchRadiusInBoundary: false,
-    };
-
-
-    if (options.pad != null) {
-      defaultOptions.pad = defaultPadOptions;
     }
 
     const optionsToUse = joinObjects({}, defaultOptions, options);
@@ -317,38 +555,7 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
 
     // Add Pads first as they should be on the bottom of the drawing
     if (optionsToUse.pad) {
-      const { pad } = optionsToUse;
-      const pCount = this.points.length;
-      const padArray = makeArray(pad, pCount);
-      for (let i = 0; i < pCount; i += 1) {
-        const name = `pad${i}`;
-        const padOptions = joinObjects({}, {
-          transform: new Transform().translate(this.points[i]),
-        }, padArray[i]);
-        const padShape = this.shapes.polygon(padOptions);
-        if (padArray[i].isMovable) {
-          padShape.isMovable = true;
-          padShape.isTouchable = true;
-          const { boundary } = padArray[i];
-          if (boundary != null) {
-            padShape.setMoveBounds(boundary);
-          }
-          const fnName = `_polyline_pad${i}`;
-          padShape.fnMap.add(
-            fnName,
-            (transform) => {
-              const index = parseInt(padShape.name.slice(3), 10);
-              const translation = transform.t();
-              if (translation != null) {
-                this.points[index] = translation._dup();
-                this.updatePoints(this.points);
-              }
-            },
-          );
-          padShape.setTransformCallback = fnName;
-        }
-        this.add(name, padShape);
-      }
+      this.addPads(optionsToUse.pad);
     }
 
     // Add Angles
@@ -371,12 +578,60 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         color: options.color,
         pulse: options.pulse,
         arrow: options.arrow,
+        touchBorder: options.touchBorder,
       });
       this.add('line', line);
     }
 
     if (optionsToUse.side) {
       this.addSides(optionsToUse.side, optionsToUse.close);
+    }
+  }
+
+  addPads(pad: Object) {
+    const defaultPadOptions = {
+      sides: 20,
+      radius: 0.1,
+      color: this.color,
+      isMovable: false,
+      boundary: 'diagram',
+    };
+    // const { pad } = optionsToUse;
+    const pCount = this.points.length;
+    // const padArray = makeArray(pad, pCount);
+    const padArray = processArray(pad, defaultPadOptions, {}, pCount);
+    for (let i = 0; i < pCount; i += 1) {
+      if (padArray[i] != null) {
+        const name = `pad${i}`;
+        const padOptions = joinObjects({}, {
+          transform: new Transform().translate(this.points[i]),
+        }, padArray[i]);
+        const padShape = this.shapes.polygon(padOptions);
+        // $FlowFixMe
+        const { isMovable, boundary } = padArray[i];
+        if (isMovable) {
+          padShape.onAdd = () => {
+            padShape.setMovable();
+          };
+          if (boundary != null) {
+            padShape.setMoveBounds(boundary);
+          }
+          const fnName = `_polyline_pad${i}`;
+          padShape.fnMap.add(
+            fnName,
+            (transform) => {
+              const index = parseInt(padShape.name.slice(3), 10);
+              const translation = transform.t();
+              if (translation != null) {
+                this.points[index] = translation._dup();
+                this.updatePoints(this.points);
+              }
+            },
+          );
+          padShape.setTransformCallback = fnName;
+        }
+        this.add(name, padShape);
+      }
     }
   }
 
@@ -388,40 +643,38 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     };
     const defaultAngleLabelOptions = {
       text: null,
+      offset: 0.05,
     };
     let pCount = this.points.length;
     if (close === false) {
       pCount -= 2;
     }
-    // const angleArray = makeArray(angle, pCount);
     const angleArray = processArray(angle, defaultAngleOptions, defaultAngleLabelOptions, pCount);
-    let firstIndex = 0;
-    if (close === false) {
-      firstIndex = 1;
-    }
-    for (let i = firstIndex; i < pCount + firstIndex; i += 1) {
-      let j = i + 1;
-      let k = i - 1;
-      if (i === pCount - 1 && close) {
-        j = 0;
+    for (let i = 0; i < pCount; i += 1) {
+      let p1 = i;
+      let p2 = i + 1;
+      let p3 = i + 2;
+      if (i === pCount - 2 && close) {
+        p3 = 0;
       }
-      if (i === 0 && close) {
-        k = pCount - 1;
+      if (i === pCount - 1 && close) {
+        p2 = 0;
+        p3 = 1;
       }
       if (angleArray[i] != null) {
         const name = `angle${i}`;
         if (this.reverse) {
-          const newJ = k;
-          k = j;
-          j = newJ;
+          const newP1 = p3;
+          p3 = p1;
+          p1 = newP1;
         }
         const angleOptions = joinObjects({}, {
-          p1: this.points[k],
-          p2: this.points[i],
-          p3: this.points[j],
-        }, angleArray[i - firstIndex]);
+          p1: this.points[p1],
+          p2: this.points[p2],
+          p3: this.points[p3],
+        }, angleArray[i]);
+        console.log(angleOptions)
         const angleAnnotation = this.advanced.angle(angleOptions);
-        console.log(name)
         this.add(name, angleAnnotation);
       }
     }
@@ -449,7 +702,6 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       pCount += 1;
     }
     const sideArray = processArray(side, defaultSideOptions, defaultSideLabelOptions, pCount);
-    console.log(sideArray)
     for (let i = 0; i < pCount; i += 1) {
       let j = i + 1;
       if (i === pCount - 1 && close) {
@@ -532,7 +784,13 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     }
   }
 
-  updatePoints(newPointsIn: Array<Point>, skipCallback: boolean = false) {
+  /**
+   * Update the polyline with new point locations.
+   *
+   * Will publish {@link SUB_PolylineUpdatePoints} unless
+   * `doNotPublishUpdatePoints` is `true`.
+   */
+  updatePoints(newPointsIn: Array<Point>, doNotPublishUpdatePoints: boolean = false) {
     const newPoints = newPointsIn.map(p => getPoint(p));
     if (this._line != null) {
       this._line.custom.updatePoints({ points: newPoints });
@@ -564,9 +822,13 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
         if (this.elements[name] != null) {
           const wasHidden = !this.elements[name].isShown;
           if (this.reverse) {
-            this.elements[name].setEndPoints(newPoints[j], newPoints[i], this.elements[name].custom.offset);
+            this.elements[name].setEndPoints(
+              newPoints[j], newPoints[i], this.elements[name].custom.offset,
+            );
           } else {
-            this.elements[name].setEndPoints(newPoints[i], newPoints[j], this.elements[name].custom.offset);
+            this.elements[name].setEndPoints(
+              newPoints[i], newPoints[j], this.elements[name].custom.offset,
+            );
           }
           if (wasHidden) {
             this.elements[name].hide();
@@ -575,51 +837,61 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
       }
     }
 
-    if (this.options.angle != null) {
-      pCount = this.points.length;
-      if (this.close === false) {
-        pCount -= 2;
-      }
-      let firstIndex = 0;
-      if (this.close === false) {
-        firstIndex = 1;
-      }
-      for (let i = firstIndex; i < pCount + firstIndex; i += 1) {
-        let j = i + 1;
-        let k = i - 1;
-        if (i === pCount - 1 && this.close) {
-          j = 0;
-        }
-        if (i === 0 && this.close) {
-          k = pCount - 1;
-        }
-        const name = `angle${i}`;
-        if (this.elements[name] != null) {
-          const wasHidden = !this.elements[name].isShown;
-          if (this.reverse) {
-            const newJ = k;
-            k = j;
-            j = newJ;
-          }
-          this.elements[name].setAngle({
-            p1: newPoints[k],
-            p2: newPoints[i],
-            p3: newPoints[j],
-          });
-          if (wasHidden) {
-            this.elements[name].hide();
-          }
-        }
-      }
-    }
     this.points = newPoints;
-    if (this.makeValid != null && this.makeValid.shape === 'triangle' && !skipCallback) {
+    this.updateAngles();
+    if (this.makeValid != null && this.makeValid.shape === 'triangle' && !doNotPublishUpdatePoints) {
       this.makeValidTriangle();
     }
-    if (this.updatePointsCallback != null && !skipCallback) {
+    if (this.updatePointsCallback != null && !doNotPublishUpdatePoints) {
       this.fnMap.exec(this.updatePointsCallback);
+      this.subscriptions.publish('updatePoints');
     }
   }
+
+  updateAngles() {
+    if (this.options.angle == null) {
+      return;
+    }
+    let pCount = this.points.length;
+    if (this.close === false) {
+      pCount -= 2;
+    }
+    for (let i = 0; i < pCount; i += 1) {
+      let p1 = i;
+      let p2 = i + 1;
+      let p3 = i + 2;
+      if (i === pCount - 2 && this.close) {
+        p3 = 0;
+      }
+      // let j = i + 1;
+      // let k = i - 1;
+      if (i === pCount - 1 && this.close) {
+        p2 = 0;
+        p3 = 1;
+      }
+      // if (i === 0 && this.close) {
+      //   k = pCount - 1;
+      // }
+      const name = `angle${i}`;
+      if (this.elements[name] != null) {
+        const wasHidden = !this.elements[name].isShown;
+        if (this.reverse) {
+          const newP1 = p3;
+          p3 = p1;
+          p1 = newP1;
+        }
+        this.elements[name].setAngle({
+          p1: this.points[p1],
+          p2: this.points[p2],
+          p3: this.points[p3],
+        });
+        if (wasHidden) {
+          this.elements[name].hide();
+        }
+      }
+    }
+  }
+
 
   updateRotation(rotationOffset: number = 0) {
     let i = 0;      // $FlowFixMe
@@ -643,14 +915,32 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     }
   }
 
-  reversePoints(skipCallback: boolean = true) {
+  /**
+   * Reverse points in the polyline.
+   *
+   * Will publish {@link SUBSCRIPTION_PolylineUpdatePoints} unless
+   * `doNotPublishUpdatePoints` is `true`.
+   *
+   * @param {boolean} doNotPublishUpdatePoints if `true` the `updatePoints`
+   * subscription will not be published.
+   */
+  reversePoints(doNotPublishUpdatePoints: boolean = true) {
     const newPoints = [];
     for (let i = 0; i < this.points.length; i += 1) {
       newPoints.push(this.points[this.points.length - 1 - i]);
     }
-    this.updatePoints(newPoints, skipCallback);
+    this.updatePoints(newPoints, doNotPublishUpdatePoints);
   }
 
+  /**
+   * The Advanced Polyline is a {@link DiagramElementCollection}, with a
+   * transform that includes a translation, or position, transform element.
+   *
+   * Changing the position element of the transform would normally move
+   * everything in the collection. This method instead changes the position
+   * without moving everything by updating the polyline points with an
+   * offset that is the opposite new position.
+   */
   setPositionWithoutMoving(
     newPositionPointOrX: Point | number,
     newPositionY: number = 0,
@@ -669,6 +959,15 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     this.updatePoints(newPoints);
   }
 
+  /**
+   * The Advanced Polyline is a {@link DiagramElementCollection}, with a
+   * transform that includes a rotation transform element.
+   *
+   * Changing the rotation element of the transform would normally rotate
+   * everything in the collection. This method instead changes the rotation
+   * without rotating everything by updating the polyline points with a
+   * rotation that is the negative of the `newRotation`.
+   */
   setRotationWithoutMoving(newRotation: number) {
     const currentRotation = this.getRotation();
     const delta = currentRotation - newRotation;
@@ -678,6 +977,15 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     this.updatePoints(newPoints);
   }
 
+  /**
+   * The Advanced Polyline is a {@link DiagramElementCollection}, with a
+   * transform that includes a scale transform element.
+   *
+   * Changing the scale element of the transform would normally scale
+   * everything in the collection. This method instead changes the scale
+   * without scaling everything by updating the polyline points with a
+   * scale that is the inverse of the new scale.
+   */
   setScaleWithoutMoving(
     newScalePointOrX: Point | number,
     newScaleY: number = 0,
@@ -713,18 +1021,30 @@ export default class DiagramObjectPolyLine extends DiagramElementCollection {
     }
   }
 
+  /**
+   * Hide all angle annotations.
+   */
   hideAngles() {
     this.setShow('angle', false);
   }
 
+  /**
+   * Hide all side annotations.
+   */
   hideSides() {
     this.setShow('side', false);
   }
 
+  /**
+   * Show all angle annotations.
+   */
   showAngles() {
     this.setShow('angle', true);
   }
 
+  /**
+   * Hide all side annotations.
+   */
   showSides() {
     this.setShow('side', true);
   }

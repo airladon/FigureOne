@@ -33,6 +33,8 @@ toc:
   - ADV_Line
   - AdvancedAngle
   - ADV_Angle
+  - AdvancedPolyline
+  - ADV_Polyline
   - name: Text
     file: ./docs/tutorials/text/text.md
   - OBJ_Text
@@ -136,7 +138,7 @@ toc:
   - getTransform
   - OBJ_QuadraticBezier
   - Intersect
-  - name: Misc Drawing
+  - name: Misc Shapes
   - OBJ_Texture
   - OBJ_TextDefinition
   - OBJ_Font
@@ -152,6 +154,29 @@ toc:
   - OBJ_LineArrow
   - OBJ_LineArrows
   - OBJ_Scenario
+  - OBJ_MovableAngle
+  - TypeAngleLabelOptions
+  - OBJ_AngleCurve
+  - OBJ_AngleArrows
+  - TypeAngleArrows
+  - OBJ_AngleCorner
+  - OBJ_PulseAngle
+  - OBJ_AngleSet
+  - OBJ_AngleAnimationStep
+  - OBJ_PulseAngleAnimationStep
+  - TypeLineLabelOptions
+  - OBJ_PulseWidth
+  - OBJ_MovableLine
+  - OBJ_LengthAnimationStep
+  - OBJ_PulseWidthAnimationStep
+  - OBJ_PolylinePad
+  - OBJ_PolylineCustomization
+  - TypeLabelOrientation
+  - TypeLabelLocation
+  - TypeLabelSubLocation
+  - OBJ_ValidShapeHideThresholds
+  - OBJ_ValidShape
+  - SUB_PolylineUpdatePoints
   - name: Misc Animation
   - AnimationStep
   - ElementAnimationStep

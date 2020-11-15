@@ -487,6 +487,7 @@ class DiagramElement {
   // };
   move: DiagramElementMove;
 
+  onAdd: null | 'string' | () => void;
   // scenarios: {
   //   [scenarioName: string]: OBJ_Scenario;
   // };
@@ -666,6 +667,7 @@ class DiagramElement {
     // this.finishAnimationOnPause = false;
     this.lastDrawTime = 0;
     this.cancelSetTransform = false;
+    this.onAdd = null;
     // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
     //   this.pulseScaleNow(1, 2, 0, callback);
@@ -3128,7 +3130,6 @@ class DiagramElement {
       }));
       return;
     }
-
     const bounds = getBounds(boundaryIn, 'transform', this.transform);
     if (bounds instanceof TransformBounds) {
       this.move.bounds = bounds;
@@ -4067,7 +4068,11 @@ class DiagramElementCollection extends DiagramElement {
   setDiagram(diagram: Diagram) {
     super.setDiagram(diagram);
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-      this.elements[this.drawOrder[i]].setDiagram(diagram);
+      const element = this.elements[this.drawOrder[i]];
+      element.setDiagram(diagram);
+      if (element.onAdd != null) {
+        this.fnMap.exec(element.onAdd);
+      }
     }
   }
 

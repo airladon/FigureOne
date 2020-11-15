@@ -30,7 +30,7 @@
             "exceptAfterSingleLine": true
           }
         ],
-        "camelcase": ["error", {"allow": ["EQN", "OBJ", "CPY", "ADV"]}],
+        "camelcase": ["error", {"allow": ["EQN", "OBJ", "CPY", "ADV", "SUB"]}],
         "class-methods-use-this": [
           "error",
           { 

@@ -12,11 +12,11 @@ import DrawContext2D from '../DrawContext2D';
 import AdvancedLine from './Line';
 import AdvancedAngle from './Angle';
 // eslint-disable-next-line import/no-cycle
-import DiagramObjectPolyLine from './PolyLine';
+import AdvancedPolyline from './PolyLine';
 import type { ADV_Line } from './Line';
 import type { ADV_Angle } from './Angle';
 import type { TypeLabelOptions } from './EquationLabel';
-import type { TypePolyLineOptions } from './PolyLine';
+import type { ADV_Polyline } from './PolyLine';
 import EquationLabel from './EquationLabel';
 
 export default class DiagramObjects {
@@ -70,9 +70,9 @@ export default class DiagramObjects {
     );
   }
 
-  polyline(...options: Array<TypePolyLineOptions>) {
+  polyline(...options: Array<ADV_Polyline>) {
     const optionsToUse = joinObjects({}, ...options);
-    return new DiagramObjectPolyLine(
+    return new AdvancedPolyline(
       this.shapes, this.equation, this,
       this.isTouchDevice, this.animateNextFrame,
       optionsToUse,

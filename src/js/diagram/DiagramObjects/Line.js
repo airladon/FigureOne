@@ -372,8 +372,10 @@ export type OBJ_PulseWidthAnimationStep = {
  * The object contains a two additional animation steps. `length`
  * animates changing the line length, and `pulseWidth` animates the
  * `pulseWidth` method. The animation steps are available in
- * the animation manager (`animations` property), and in the animation builder
- * (`animations.new()` and `animations.builder()`).
+ * the animation manager ({@link DiagramElement}.animations),
+ * and in the animation builder
+ * (<a href="#animationmanagernew">animations.new</a>
+ * and <a href="#animationmanagerbuilder">animations.builder</a>).
  *
  * Some of the useful methods included in an advanced line are:
  * - <a href="#advancedlinepulsewidth">pulseWidth</a> - pulses the line without
@@ -670,7 +672,7 @@ export default class AdvancedLine extends DiagramElementCollection {
     const defaultLabelOptions = {
       text: null,
       offset: 0.00001,
-      location: 'top',
+      location: 'positive',
       subLocation: 'left',
       orientation: 'horizontal',
       linePosition: 0.5,
@@ -679,7 +681,7 @@ export default class AdvancedLine extends DiagramElementCollection {
       precision: 1,
       update: false,
     };
-    if (optionsToUse.label) {
+    if (optionsToUse.label !== undefined) {
       let labelOptions;
       if (typeof optionsToUse.label === 'string' || optionsToUse.label === null) {
         labelOptions = joinObjects({}, defaultLabelOptions, { text: optionsToUse.label });

@@ -534,10 +534,10 @@ export type OBJ_PulseAngleAnimationStep = {
  * The object contains two additional animation steps `angle` and `pulseAngle`
  * that animate a change in angle, and animate a pulsing of the angle
  * respectively. The animation steps are available in
- * the animation manager (<a href="diagramelement#animations>animations</a>),
+ * the animation manager ({@link DiagramElement}.animations),
  * and in the animation builder
- * (<a href="animationmanager#new>animations.new</a>
- * and <a href="animationmanager#builder>animations.builder</a>).
+ * (<a href="#animationmanagernew">animations.new</a>
+ * and <a href="#animationmanagerbuilder">animations.builder</a>).
  *
  * Some of the useful methods included in an advanced angle are:
  * - <a href="#advancedanglepulseangle">pulseangle</a> - customize pulsing the
