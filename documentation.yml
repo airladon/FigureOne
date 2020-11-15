@@ -181,6 +181,7 @@ toc:
   - OBJ_PolylinePadCustomization
   - OBJ_PolylineAngle
   - OBJ_PolylineSide
+  - OBJ_PolylinePadSingle
   - name: Misc Animation
   - AnimationStep
   - ElementAnimationStep

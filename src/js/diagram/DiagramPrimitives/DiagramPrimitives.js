@@ -2804,52 +2804,52 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  polygonSweep(...optionsIn: Array<{
-    radius?: number,
-    rotation?: number,
-    sides?: number,
-    offset?: TypeParsablePoint,
-    width?: number,
-    direction?: -1 | 1,
-    fill?: boolean,
-    color?: Array<number>,
-    texture?: OBJ_Texture,
-    position?: TypeParsablePoint,
-    transform?: Transform,
-    pulse?: number,
-  }>) {
-    const defaultOptions = {
-      sides: 4,
-      fill: false,
-      transform: new Transform('polygonSweep').standard(),
-      line: {
-        linePrimitives: false,
-        lineNum: 2,
-      },
-    };
-    const forceOptions = {
-      line: {
-        cornerStyle: 'auto',
-        cornersOnly: false,
-      },
-    };
-    const options = processOptions(defaultOptions, ...optionsIn, forceOptions);
-    const element = this.polygon(options);
-    // $FlowFixMe
-    element.drawingObject.getPointCountForAngle = (angle: number) => {
-      const sidesToDraw = Math.floor(
-        tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * options.sides,
-      );
-      if (options.fill) {
-        return sidesToDraw + 2;
-      }
-      if (options.line && options.line.linePrimitives) {
-        return sidesToDraw * options.line.lineNum * 2;
-      }
-      return sidesToDraw * 6;
-    };
-    return element;
-  }
+  // polygonSweep(...optionsIn: Array<{
+  //   radius?: number,
+  //   rotation?: number,
+  //   sides?: number,
+  //   offset?: TypeParsablePoint,
+  //   width?: number,
+  //   direction?: -1 | 1,
+  //   fill?: boolean,
+  //   color?: Array<number>,
+  //   texture?: OBJ_Texture,
+  //   position?: TypeParsablePoint,
+  //   transform?: Transform,
+  //   pulse?: number,
+  // }>) {
+  //   const defaultOptions = {
+  //     sides: 4,
+  //     fill: false,
+  //     transform: new Transform('polygonSweep').standard(),
+  //     line: {
+  //       linePrimitives: false,
+  //       lineNum: 2,
+  //     },
+  //   };
+  //   const forceOptions = {
+  //     line: {
+  //       cornerStyle: 'auto',
+  //       cornersOnly: false,
+  //     },
+  //   };
+  //   const options = processOptions(defaultOptions, ...optionsIn, forceOptions);
+  //   const element = this.polygon(options);
+  //   // $FlowFixMe
+  //   element.drawingObject.getPointCountForAngle = (angle: number) => {
+  //     const sidesToDraw = Math.floor(
+  //       tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * options.sides,
+  //     );
+  //     if (options.fill) {
+  //       return sidesToDraw + 2;
+  //     }
+  //     if (options.line && options.line.linePrimitives) {
+  //       return sidesToDraw * options.line.lineNum * 2;
+  //     }
+  //     return sidesToDraw * 6;
+  //   };
+  //   return element;
+  // }
 
   // deprecated
   fan(...optionsIn: Array<{

@@ -405,76 +405,76 @@
 -   [OBJ_ValidShapeHideThresholds][824]
 -   [OBJ_ValidShape][826]
 -   [SUB_PolylineUpdatePoints][828]
--   [Misc Animation][829]
--   [AnimationStep][830]
-    -   [getRemainingTime][833]
-    -   [start][835]
--   [ElementAnimationStep][837]
--   [OBJ_PositionAnimationStep][839]
--   [OBJ_RotationAnimationStep][841]
--   [OBJ_ElementAnimationStep][843]
--   [OBJ_ScenarioVelocity][845]
--   [OBJ_AnimationBuilder][847]
--   [OBJ_AnimationStep][849]
--   [OBJ_AnimationStart][851]
--   [OBJ_SerialAnimationStep][853]
--   [OBJ_ParallelAnimationStep][855]
--   [OBJ_ScaleAnimationStep][857]
--   [OBJ_CustomAnimationStep][859]
--   [OBJ_TransformAnimationStep][861]
--   [OBJ_ScenarioAnimationStep][863]
--   [OBJ_TriggerAnimationStep][865]
--   [OBJ_Pulse][867]
--   [OBJ_PulseAnimationStep][870]
--   [OBJ_ColorAnimationStep][872]
--   [OBJ_OpacityAnimationStep][874]
--   [OBJ_ScenariosAnimationStep][876]
--   [AnimationProgression][878]
--   [TypeWhen][880]
--   [AnimationStartTime][881]
--   [Misc Equation][882]
--   [EquationFunctions][883]
-    -   [container][884]
-    -   [brac][886]
-    -   [bar][888]
-    -   [annotate][890]
-    -   [scale][892]
-    -   [frac][894]
-    -   [supSub][896]
-    -   [sup][898]
-    -   [sub][900]
-    -   [box][902]
-    -   [pad][904]
-    -   [topBar][906]
-    -   [bottomBar][908]
-    -   [matrix][910]
-    -   [int][912]
-    -   [sumOf][914]
-    -   [prodOf][916]
-    -   [topComment][918]
-    -   [bottomComment][920]
-    -   [strike][922]
-    -   [topStrike][924]
-    -   [bottomStrike][926]
--   [EQN_Annotation][928]
--   [EQN_EncompassGlyph][931]
--   [EQN_LeftRightGlyph][934]
--   [EQN_TopBottomGlyph][937]
--   [EQN_Glyphs][940]
--   [TypeEquationElements][942]
--   [TypeEquationPhrase][943]
--   [TypeFormAlignment][945]
--   [TypeFormAnimationProperties][947]
--   [TypeFormTranslationProperties][950]
--   [TypeEquationFormObject][952]
--   [TypeEquationForm][955]
--   [TypeEquationForms][956]
--   [TypeFormRestart][957]
--   [TypeEquationGoToFormOptions][959]
--   [TypeEquationTextElement][961]
--   [OBJ_PolylinePadSingle][963]
--   [OBJ_PolylineAngle][965]
--   [OBJ_PolylineSide][966]
+-   [OBJ_PolylineAngle][829]
+-   [OBJ_PolylineSide][830]
+-   [Misc Animation][831]
+-   [AnimationStep][832]
+    -   [getRemainingTime][835]
+    -   [start][837]
+-   [ElementAnimationStep][839]
+-   [OBJ_PositionAnimationStep][841]
+-   [OBJ_RotationAnimationStep][843]
+-   [OBJ_ElementAnimationStep][845]
+-   [OBJ_ScenarioVelocity][847]
+-   [OBJ_AnimationBuilder][849]
+-   [OBJ_AnimationStep][851]
+-   [OBJ_AnimationStart][853]
+-   [OBJ_SerialAnimationStep][855]
+-   [OBJ_ParallelAnimationStep][857]
+-   [OBJ_ScaleAnimationStep][859]
+-   [OBJ_CustomAnimationStep][861]
+-   [OBJ_TransformAnimationStep][863]
+-   [OBJ_ScenarioAnimationStep][865]
+-   [OBJ_TriggerAnimationStep][867]
+-   [OBJ_Pulse][869]
+-   [OBJ_PulseAnimationStep][872]
+-   [OBJ_ColorAnimationStep][874]
+-   [OBJ_OpacityAnimationStep][876]
+-   [OBJ_ScenariosAnimationStep][878]
+-   [AnimationProgression][880]
+-   [TypeWhen][882]
+-   [AnimationStartTime][883]
+-   [Misc Equation][884]
+-   [EquationFunctions][885]
+    -   [container][886]
+    -   [brac][888]
+    -   [bar][890]
+    -   [annotate][892]
+    -   [scale][894]
+    -   [frac][896]
+    -   [supSub][898]
+    -   [sup][900]
+    -   [sub][902]
+    -   [box][904]
+    -   [pad][906]
+    -   [topBar][908]
+    -   [bottomBar][910]
+    -   [matrix][912]
+    -   [int][914]
+    -   [sumOf][916]
+    -   [prodOf][918]
+    -   [topComment][920]
+    -   [bottomComment][922]
+    -   [strike][924]
+    -   [topStrike][926]
+    -   [bottomStrike][928]
+-   [EQN_Annotation][930]
+-   [EQN_EncompassGlyph][933]
+-   [EQN_LeftRightGlyph][936]
+-   [EQN_TopBottomGlyph][939]
+-   [EQN_Glyphs][942]
+-   [TypeEquationElements][944]
+-   [TypeEquationPhrase][945]
+-   [TypeFormAlignment][947]
+-   [TypeFormAnimationProperties][949]
+-   [TypeFormTranslationProperties][952]
+-   [TypeEquationFormObject][954]
+-   [TypeEquationForm][957]
+-   [TypeEquationForms][958]
+-   [TypeFormRestart][959]
+-   [TypeEquationGoToFormOptions][961]
+-   [TypeEquationTextElement][963]
+-   [OBJ_PolylinePadSingle][965]
 -   [EquationLabel][967]
 
 ## Introduction
@@ -5328,7 +5328,7 @@ Animations change diagram elements over time.
 
 Each diagram element has its own [AnimationManager][389] (`animations` property) that can coordinate animations for any element.
 
-An animation is a number of [AnimationStep][830]s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.
+An animation is a number of [AnimationStep][832]s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.
 
 ### <a id="animation-boilerplate"></a> Animation Boilerplate
 
@@ -5568,7 +5568,7 @@ tied to elements drawn later). `AnimationManager`s will only be processed
 on each animation frame if the element they are tied to is not hidden.
 
 The `animations` property within `AnimationManager` is simply an array that
-contains a number [AnimationStep][830]s that are executed in parallel.
+contains a number [AnimationStep][832]s that are executed in parallel.
 Typically, these steps would themselves be [SerialAnimationStep][514]s or a
 series of animations. This means the animation manager is running a number of
 animation series in parallel.
@@ -7000,7 +7000,7 @@ p.animations.new()
     <a href="#animation-boilerplate">boilerplate</a>
     **
 
-Execute an array of [AnimationStep][830]s in series.
+Execute an array of [AnimationStep][832]s in series.
 
 ![][1099]
 
@@ -9522,7 +9522,7 @@ to another equation phrase ('content'). For example:
 </pre>
 
 The options for defining how to annotate one equation phrase with another is
-[EQN_Annotation][928]
+[EQN_Annotation][930]
 
 Content can also be annotated with a glyph (that itself may also be
 annotated). The glyph can either encompass the content, or can be to the
@@ -12290,7 +12290,7 @@ Type: any
 
 Side annotations, angle annotations and movable pads in an
 [AdvancedPolyline][360] are defined with the options objects [ADV_Line][337],
-[ADV_Angle][358] and ([OBJ_Polygon][302] & [OBJ_PolylinePadSingle][963])
+[ADV_Angle][358] and ([OBJ_Polygon][302] & [OBJ_PolylinePadSingle][965])
 respectively.
 
 The properties in this object can be used in the side, angle and movable
@@ -12470,6 +12470,14 @@ points are updated. No payload is passed to subscriber.
 
 Type: \[]
 
+## OBJ_PolylineAngle
+
+**Extends ADV_Angle, OBJ_PolylineCustomization**
+
+## OBJ_PolylineSide
+
+**Extends ADV_Line, OBJ_PolylineCustomization**
+
 ## Misc Animation
 
 
@@ -12579,7 +12587,7 @@ Type: any
 
 **Extends OBJ_AnimationStep**
 
-[ElementAnimationStep][837] options object
+[ElementAnimationStep][839] options object
 
 Type: any
 
@@ -13017,7 +13025,7 @@ has been made after a reset.
 
 Animation start time options.
 
-[TypeWhen][880] | number | null
+[TypeWhen][882] | number | null
 
 When multiple animations need to be started, it is often
 desirable to synchronise their start times.
@@ -13579,7 +13587,7 @@ phrases.
 
 -   An object or array definition (e.g. [EQN_Fraction][553])
 -   A string that represents an equation element
--   An array of [TypeEquationPhrase][943]
+-   An array of [TypeEquationPhrase][945]
 
 
 ### Examples
@@ -13811,12 +13819,12 @@ forms: {
 
 A single form definition can either be:
 
--   an equation phrase [TypeEquationPhrase][943]
--   or an equation form object [TypeEquationFormObject][952]
+-   an equation phrase [TypeEquationPhrase][945]
+-   or an equation form object [TypeEquationFormObject][954]
 -   or an object of subforms:
 
      {
-        subform1: ([TypeEquationPhrase][943] \| [TypeEquationFormObject][952]),
+        subform1: ([TypeEquationPhrase][945] \| [TypeEquationFormObject][954]),
         subform2: ...
      },
 
@@ -13824,7 +13832,7 @@ A single form definition can either be:
 ## TypeEquationForms
 
 An object of equation forms where each key is the form name and each value
-is a form defintion [TypeEquationForm][955]
+is a form defintion [TypeEquationForm][957]
 
 
 ## TypeFormRestart
@@ -13898,9 +13906,9 @@ the behavior of the animation:
 -   `dissolveInTime` **[number][979]?** Default: 0.4 of duration, or 0.4s if
     no duration
 -   `prioritizeFormDuration` **[boolean][978]?** use duration from the form
-    definition [TypeEquationFormObject][952]. Default: `true`
+    definition [TypeEquationFormObject][954]. Default: `true`
 -   `fromWhere` **(`"fromPrev"` \| `"fromNext"`)?** prioritze _fromPrev_ or
-    _fromNext_ duration from the form definition. [TypeEquationFormObject][952]
+    _fromNext_ duration from the form definition. [TypeEquationFormObject][954]
     Default: `null`
 -   `ifAnimating` **{cancelGoTo: [boolean][978]?, skipToTarget: [boolean][978]?}?** 
 -   `callback` **([string][974] | function (): void)??** 
@@ -13935,14 +13943,6 @@ Each pad is associated with a point of the polyline.
 -   `isMovable` **[boolean][978]?** `true` allows moving the pad and the
     associated polyline point (`false`)
 -   `boundary` **(TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | `"diagram"`)?** boundary the pad can move within
-
-## OBJ_PolylineAngle
-
-**Extends ADV_Angle, OBJ_PolylineCustomization**
-
-## OBJ_PolylineSide
-
-**Extends ADV_Line, OBJ_PolylineCustomization**
 
 ## EquationLabel
 
@@ -15609,281 +15609,281 @@ Equation label
 
 [828]: #sub_polylineupdatepoints
 
-[829]: #misc-animation
+[829]: #obj_polylineangle
 
-[830]: #animationstep
+[830]: #obj_polylineside
 
-[831]: #parameters-225
+[831]: #misc-animation
 
-[832]: #properties-95
+[832]: #animationstep
 
-[833]: #getremainingtime-1
+[833]: #parameters-225
 
-[834]: #parameters-226
+[834]: #properties-95
 
-[835]: #start-1
+[835]: #getremainingtime-1
 
-[836]: #parameters-227
+[836]: #parameters-226
 
-[837]: #elementanimationstep
+[837]: #start-1
 
-[838]: #parameters-228
+[838]: #parameters-227
 
-[839]: #obj_positionanimationstep
+[839]: #elementanimationstep
 
-[840]: #properties-96
+[840]: #parameters-228
 
-[841]: #obj_rotationanimationstep
+[841]: #obj_positionanimationstep
 
-[842]: #properties-97
+[842]: #properties-96
 
-[843]: #obj_elementanimationstep
+[843]: #obj_rotationanimationstep
 
-[844]: #properties-98
+[844]: #properties-97
 
-[845]: #obj_scenariovelocity
+[845]: #obj_elementanimationstep
 
-[846]: #properties-99
+[846]: #properties-98
 
-[847]: #obj_animationbuilder
+[847]: #obj_scenariovelocity
 
-[848]: #properties-100
+[848]: #properties-99
 
-[849]: #obj_animationstep
+[849]: #obj_animationbuilder
 
-[850]: #properties-101
+[850]: #properties-100
 
-[851]: #obj_animationstart
+[851]: #obj_animationstep
 
-[852]: #properties-102
+[852]: #properties-101
 
-[853]: #obj_serialanimationstep
+[853]: #obj_animationstart
 
-[854]: #properties-103
+[854]: #properties-102
 
-[855]: #obj_parallelanimationstep
+[855]: #obj_serialanimationstep
 
-[856]: #properties-104
+[856]: #properties-103
 
-[857]: #obj_scaleanimationstep
+[857]: #obj_parallelanimationstep
 
-[858]: #properties-105
+[858]: #properties-104
 
-[859]: #obj_customanimationstep
+[859]: #obj_scaleanimationstep
 
-[860]: #properties-106
+[860]: #properties-105
 
-[861]: #obj_transformanimationstep
+[861]: #obj_customanimationstep
 
-[862]: #properties-107
+[862]: #properties-106
 
-[863]: #obj_scenarioanimationstep
+[863]: #obj_transformanimationstep
 
-[864]: #properties-108
+[864]: #properties-107
 
-[865]: #obj_triggeranimationstep
+[865]: #obj_scenarioanimationstep
 
-[866]: #properties-109
+[866]: #properties-108
 
-[867]: #obj_pulse
+[867]: #obj_triggeranimationstep
 
-[868]: #properties-110
+[868]: #properties-109
 
-[869]: #examples-105
+[869]: #obj_pulse
 
-[870]: #obj_pulseanimationstep
+[870]: #properties-110
 
-[871]: #properties-111
+[871]: #examples-105
 
-[872]: #obj_coloranimationstep
+[872]: #obj_pulseanimationstep
 
-[873]: #properties-112
+[873]: #properties-111
 
-[874]: #obj_opacityanimationstep
+[874]: #obj_coloranimationstep
 
-[875]: #properties-113
+[875]: #properties-112
 
-[876]: #obj_scenariosanimationstep
+[876]: #obj_opacityanimationstep
 
-[877]: #properties-114
+[877]: #properties-113
 
-[878]: #animationprogression
+[878]: #obj_scenariosanimationstep
 
-[879]: #parameters-229
+[879]: #properties-114
 
-[880]: #typewhen
+[880]: #animationprogression
 
-[881]: #animationstarttime
+[881]: #parameters-229
 
-[882]: #misc-equation
+[882]: #typewhen
 
-[883]: #equationfunctions
+[883]: #animationstarttime
 
-[884]: #container
+[884]: #misc-equation
 
-[885]: #parameters-230
+[885]: #equationfunctions
 
-[886]: #brac
+[886]: #container
 
-[887]: #parameters-231
+[887]: #parameters-230
 
-[888]: #bar
+[888]: #brac
 
-[889]: #parameters-232
+[889]: #parameters-231
 
-[890]: #annotate
+[890]: #bar
 
-[891]: #parameters-233
+[891]: #parameters-232
 
-[892]: #scale-5
+[892]: #annotate
 
-[893]: #parameters-234
+[893]: #parameters-233
 
-[894]: #frac
+[894]: #scale-5
 
-[895]: #parameters-235
+[895]: #parameters-234
 
-[896]: #supsub
+[896]: #frac
 
-[897]: #parameters-236
+[897]: #parameters-235
 
-[898]: #sup
+[898]: #supsub
 
-[899]: #parameters-237
+[899]: #parameters-236
 
-[900]: #sub-5
+[900]: #sup
 
-[901]: #parameters-238
+[901]: #parameters-237
 
-[902]: #box
+[902]: #sub-5
 
-[903]: #parameters-239
+[903]: #parameters-238
 
-[904]: #pad
+[904]: #box
 
-[905]: #parameters-240
+[905]: #parameters-239
 
-[906]: #topbar
+[906]: #pad
 
-[907]: #parameters-241
+[907]: #parameters-240
 
-[908]: #bottombar
+[908]: #topbar
 
-[909]: #parameters-242
+[909]: #parameters-241
 
-[910]: #matrix-4
+[910]: #bottombar
 
-[911]: #parameters-243
+[911]: #parameters-242
 
-[912]: #int
+[912]: #matrix-4
 
-[913]: #parameters-244
+[913]: #parameters-243
 
-[914]: #sumof
+[914]: #int
 
-[915]: #parameters-245
+[915]: #parameters-244
 
-[916]: #prodof
+[916]: #sumof
 
-[917]: #parameters-246
+[917]: #parameters-245
 
-[918]: #topcomment
+[918]: #prodof
 
-[919]: #parameters-247
+[919]: #parameters-246
 
-[920]: #bottomcomment
+[920]: #topcomment
 
-[921]: #parameters-248
+[921]: #parameters-247
 
-[922]: #strike
+[922]: #bottomcomment
 
-[923]: #parameters-249
+[923]: #parameters-248
 
-[924]: #topstrike
+[924]: #strike
 
-[925]: #parameters-250
+[925]: #parameters-249
 
-[926]: #bottomstrike
+[926]: #topstrike
 
-[927]: #parameters-251
+[927]: #parameters-250
 
-[928]: #eqn_annotation
+[928]: #bottomstrike
 
-[929]: #properties-115
+[929]: #parameters-251
 
-[930]: #examples-106
+[930]: #eqn_annotation
 
-[931]: #eqn_encompassglyph
+[931]: #properties-115
 
-[932]: #properties-116
+[932]: #examples-106
 
-[933]: #examples-107
+[933]: #eqn_encompassglyph
 
-[934]: #eqn_leftrightglyph
+[934]: #properties-116
 
-[935]: #properties-117
+[935]: #examples-107
 
-[936]: #examples-108
+[936]: #eqn_leftrightglyph
 
-[937]: #eqn_topbottomglyph
+[937]: #properties-117
 
-[938]: #properties-118
+[938]: #examples-108
 
-[939]: #examples-109
+[939]: #eqn_topbottomglyph
 
-[940]: #eqn_glyphs
+[940]: #properties-118
 
-[941]: #properties-119
+[941]: #examples-109
 
-[942]: #typeequationelements
+[942]: #eqn_glyphs
 
-[943]: #typeequationphrase
+[943]: #properties-119
 
-[944]: #examples-110
+[944]: #typeequationelements
 
-[945]: #typeformalignment
+[945]: #typeequationphrase
 
-[946]: #properties-120
+[946]: #examples-110
 
-[947]: #typeformanimationproperties
+[947]: #typeformalignment
 
-[948]: #properties-121
+[948]: #properties-120
 
-[949]: #examples-111
+[949]: #typeformanimationproperties
 
-[950]: #typeformtranslationproperties
+[950]: #properties-121
 
-[951]: #properties-122
+[951]: #examples-111
 
-[952]: #typeequationformobject
+[952]: #typeformtranslationproperties
 
-[953]: #properties-123
+[953]: #properties-122
 
-[954]: #examples-112
+[954]: #typeequationformobject
 
-[955]: #typeequationform
+[955]: #properties-123
 
-[956]: #typeequationforms
+[956]: #examples-112
 
-[957]: #typeformrestart
+[957]: #typeequationform
 
-[958]: #properties-124
+[958]: #typeequationforms
 
-[959]: #typeequationgotoformoptions
+[959]: #typeformrestart
 
-[960]: #properties-125
+[960]: #properties-124
 
-[961]: #typeequationtextelement
+[961]: #typeequationgotoformoptions
 
-[962]: #properties-126
+[962]: #properties-125
 
-[963]: #obj_polylinepadsingle
+[963]: #typeequationtextelement
 
-[964]: #properties-127
+[964]: #properties-126
 
-[965]: #obj_polylineangle
+[965]: #obj_polylinepadsingle
 
-[966]: #obj_polylineside
+[966]: #properties-127
 
 [967]: #equationlabel
 
