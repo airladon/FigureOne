@@ -724,7 +724,6 @@ export type OBJ_Rectangle = {
     radius: 0,
     sides: 1,
   },
-  fill?: boolean,
   line?: OBJ_LineStyle,
   color?: Array<number>,
   transform?: Transform,
@@ -732,6 +731,105 @@ export type OBJ_Rectangle = {
   texture?: OBJ_Texture,
   copy?: Array<CPY_Step | string> | CPY_Step,
   pulse?: number | OBJ_PulseScale,
+  border?: 'outline' | 'rect' | Array<Array<TypeParsablePoint>>,
+  touchBorder?: number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>,
+  holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
+}
+
+
+/**
+ * Ellipse shape options object
+ *
+ * ![](./assets1/ellipse.png)
+ *
+ * @property {number} [width] (`1`)
+ * @property {number} [height] (`1`)
+ * @property {'bottom' | 'middle' | 'top' | number} [yAlign] (`'middle'`)
+ * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
+ * @property {number} [sides] number of sides to draw ellipse with (`20`)
+ * @property {OBJ_LineStyle} [line] line style options - do not use any corner
+ * options
+ * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
+ * the rectangle
+ * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {OBJ_Texture} [texture] Override color with a texture
+ * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('rectangle').standard()`)
+ * @property {'outline' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
+ * the rectangle border can either be the outline of the rectangle
+ * (`'outline'`), an encompassing rect (`'rect'`) or a custom set of points
+ * `Array<Array<TypeParsablePoint>>` - (`'outline'`)
+ * @property {number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>} [touchBorder]
+ * the touch border can be the same as the border (`'border'`), can be the
+ * encompassing rect (`'rect'`), can be a buffer around the shape with
+ * some with `number`, or can be a custom set of points
+ * (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
+ * @property {'none' | Array<Array<TypeParsablePoint>>} [holeBorder]
+ * hole border of the rectangle can be the points custom points
+ *(`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Filled ellipse
+ * diagram.addElement({
+ *   name: 'e',
+ *   method: 'ellipse',
+ *   options: {
+ *     height: 1,
+ *     width: 0.5,
+ *     sides: 100,
+ *   },
+ * });
+ *
+ * @example
+ * // Dashed line circle
+ * diagram.addElement({
+ *   name: 'e',
+ *   method: 'ellipse',
+ *   options: {
+ *     height: 1,
+ *     width: 1,
+ *     sides: 100,
+ *     line: {
+ *       width: 0.02,
+ *       dash: [0.05, 0.02],
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Ellipse grid
+ * diagram.addElement({
+ *   name: 'e',
+ *   method: 'ellipse',
+ *   options: {
+ *     height: 0.08,
+ *     width: 0.2,
+ *     sides: 20,
+ *     copy: [
+ *       { along: 'x', step: 0.25, num: 5 },
+ *       { along: 'y', step: 0.15, num: 5 },
+ *     ]
+ *   },
+ * });
+ */
+export type OBJ_Ellipse = {
+  width?: number,
+  height?: number,
+  xAlign?: 'left' | 'center' | 'right' | number,
+  yAlign?: 'bottom' | 'middle' | 'top' | number,
+  sides?: number,
+  fill?: boolean,
+  line?: OBJ_LineStyle,
+  copy?: Array<CPY_Step | string> | CPY_Step,
+  color?: Array<number>,
+  texture?: OBJ_Texture,
+  pulse?: number | OBJ_PulseScale,
+  position?: TypeParsablePoint,
+  transform?: Transform,
   border?: 'outline' | 'rect' | Array<Array<TypeParsablePoint>>,
   touchBorder?: number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>,
   holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
@@ -2342,8 +2440,8 @@ export default class DiagramPrimitives {
   }
 
   /**
-   * {@link DiagramElementPrimitive} that draws a rectangle.
-   * @see {@link OBJ_Rectangle} for options and examples.
+   * {@link DiagramElementPrimitive} that draws an ellipse.
+   * @see {@link OBJ_Ellipse} for options and examples.
    */
   ellipse(...options: Array<OBJ_Ellipse>) {
     const defaultOptions = {

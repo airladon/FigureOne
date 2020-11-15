@@ -25,6 +25,7 @@ toc:
   - OBJ_Arrow
   - OBJ_Triangle
   - OBJ_Rectangle
+  - OBJ_Ellipse
   - OBJ_Polygon
   - OBJ_Grid
   - name: Advanced Shapes

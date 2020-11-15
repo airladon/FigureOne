@@ -152,3 +152,43 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1]});
 // });
 
 
+// Filled ellipse
+diagram.addElement({
+  name: 'e',
+  method: 'ellipse',
+  options: {
+    height: 1,
+    width: 0.5,
+    sides: 100,
+  },
+});
+
+// // Dashed line circle
+// diagram.addElement({
+//   name: 'e',
+//   method: 'ellipse',
+//   options: {
+//     height: 1,
+//     width: 1,
+//     sides: 100,
+//     line: {
+//       width: 0.02,
+//       dash: [0.05, 0.02],
+//     },
+//   },
+// });
+
+// // Ellipse grid
+// diagram.addElement({
+//   name: 'e',
+//   method: 'ellipse',
+//   options: {
+//     height: 0.08,
+//     width: 0.2,
+//     sides: 20,
+//     copy: [
+//       { along: 'x', step: 0.25, num: 5 },
+//       { along: 'y', step: 0.15, num: 5 },
+//     ]
+//   },
+// });
