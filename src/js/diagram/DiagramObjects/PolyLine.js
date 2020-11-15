@@ -30,21 +30,29 @@ import type { OBJ_Polyline, OBJ_Polygon } from '../DiagramPrimitives/DiagramPrim
  *
  * Each pad is associated with a point of the polyline.
  *
+ * @extends ADV_Polygon
+ *
  * @property {boolean} [isMovable] `true` allows moving the pad and the
  * associated polyline point (`false`)
  * @property {TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | 'diagram'} [boundary]
  * boundary the pad can move within
  */
 /* eslint-enable max-len */
-export type OBJ_PolylinePad = {
+export type OBJ_PolylinePadSingle = {
   isMovable?: boolean,
   boundary?: TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | 'diagram',
 }
 
 /**
+  * @extends OBJ_PolylinePadSingle
+  * @extends OBJ_PolylineCustomization
+ */
+export type OBJ_PolylinePad = {};
+
+/**
  * Side annotations, angle annotations and movable pads in an
  * {@link AdvancedPolyline} are defined with the options objects {@link ADV_Line},
- * {@link ADV_Angle} and ({@link OBJ_Polygon} & {@link OBJ_PolylinePad})
+ * {@link ADV_Angle} and ({@link OBJ_Polygon} & {@link OBJ_PolylinePadSingle})
  * respectively.
  *
  * The properties in this object can be used in the side, angle and movable
@@ -69,6 +77,12 @@ export type OBJ_PolylinePad = {
  *
  * See {@link OBJ_PulseWidthAnimationStep} for pulse angle animation step
  * options.
+ *
+ * @property {Array<number>} [show] list of indexes to show
+ * @property {Array<number>} [hide] list of indexes to hide
+ * @property {ADV_Angle | ADV_Line | OBJ_PolylinePadSingle} [_padIndex]
+ * Customizations of annotation or pad by index where `_padIndex` should be an
+ * object key name that is the index
  *
  * @example
  * // Hide pad 0, and make pad 2 blue and not filled
@@ -124,7 +138,7 @@ export type OBJ_PolylinePad = {
 export type OBJ_PolylineCustomization = {
   show?: Array<number>,
   hide?: Array<number>,
-  [padIndex: string]: OBJ_Polygon,
+  _padIndex: OBJ_Polygon,
 };
 
 /**
@@ -171,6 +185,24 @@ export type OBJ_ValidShape = {
   hide?: OBJ_ValidShapeHideThresholds,
 };
 
+/**
+ * @extends ADV_Angle
+ * @extends OBJ_PolylineCustomization
+ */
+export type OBJ_PolylineAngle = {}
+
+/**
+ * @extends ADV_Line
+ * @extends OBJ_PolylineCustomization
+ */
+export type OBJ_PolylineSide = {}
+
+// /**
+//  * @extends ADV_Polygon
+//  * @extends OBJ_PolylineCustomization
+//  */
+// export type ADV_PolylinePad = {}
+
 /* eslint-disable max-len */
 /**
  * Advanced Polyline options object
@@ -196,11 +228,13 @@ export type OBJ_ValidShape = {
  * pads. To customize for specific side, angle or pad indexes use =
  * {@link OBJ_PolylineCustomization}.
  *
- * @property {(ADV_Angle & OBJ_PolylineCustomization) | Array<ADV_Angle>} [angle]
- * angle annotations - leave undefined for no angle annotations
- * @property {(ADV_Line & OBJ_PolylineCustomization) | Array<ADV_Line>} [side]
+ * @extends OBJ_Polyline
+ *
+ * @property {boolean} [showLine] `false` will hide the polyline's line (`true`)
+ * @property {OBJ_PolylineAngle | Array<ADV_Angle>} [angle] angle annotations - leave undefined for no angle annotations
+ * @property {OBJ_PolylineSide | Array<ADV_Line>} [side]
  * side annotations - leave undefined for no side annotations
- * @property {(OBJ_Polygon & OBJ_PolylinePad & OBJ_PolylineCustomization) | Array<OBJ_Polygon & OBJ_PolylinePad>} [pad]
+ * @property {OBJ_PolylinePad | Array<OBJ_PolylinePadSingle>} [pad]
  * move pad - leave undefined for no move pads
  * @property {null | OBJ_ValidShapeHideThresholds} [makeValid] if defined, whenever
  * points are updated the shape will be checked to ensure consistency with
@@ -209,10 +243,9 @@ export type OBJ_ValidShape = {
 /* eslint-enable max-len */
 export type ADV_Polyline = {
   showLine?: boolean,
-  angle?: (ADV_Angle & OBJ_PolylineCustomization) | Array<ADV_Angle>,
-  side?: (ADV_Line & OBJ_PolylineCustomization) | Array<ADV_Line>,
-  pad?: (OBJ_Polygon & OBJ_PolylinePad & OBJ_PolylineCustomization)
-       | Array<OBJ_Polygon & OBJ_PolylinePad>,
+  angle?: OBJ_PolylineAngle | Array<ADV_Angle>,
+  side?: OBJ_PolylineSide | Array<ADV_Line>,
+  pad?: OBJ_PolylinePad | Array<OBJ_PolylinePadSingle>,
   makeValid?: ?OBJ_ValidShape,
 } & OBJ_Polyline;
 
@@ -325,7 +358,7 @@ export type SUB_PolylineUpdatePoints = [];
  * <p class="inline_gif"><img src="./assets1/advpolyline_movetri.gif" class="inline_gif_image"></p>
  *
  * This object defines a convient and powerful polyline
- * {@link DiagramElementCollection} that includes a solid or dashed line,
+ * {@link DiagramElementCollection} that includes a solid or dashed,
  * open or closed polyline, arrows, angle annotations for polyline corners,
  * side annotations for straight lines between points and move pads at polyline
  * points to dynamically adjust the polyline.
@@ -333,30 +366,10 @@ export type SUB_PolylineUpdatePoints = [];
  * See {@link ADV_Polyline} for the options that can be used when creating the
  * line.
  *
- * The object contains a two additional animation steps. `length`
- * animates changing the line length, and `pulseWidth` animates the
- * `pulseWidth` method. The animation steps are available in
- * the animation manager (`animations` property), and in the animation builder
- * (`animations.new()` and `animations.builder()`).
- *
- * Some of the useful methods included in an advanced line are:
- * - <a href="#advancedlinepulsewidth">pulseWidth</a> - pulses the line without
- *   changing its length
- * - <a href="#advancedlinegrow">grow</a> - starts and animation that executes
- *   a single `length` animation
- *    step
- * - <a href="#advancedlinesetmovable">grow</a> - overrides
- *    <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
- *    allowing for more complex move options.
- *
  * Available subscriptions:
  *   - `'updatePoints'`: {@link SUB_PolylineUpdatePoints}
  *
- * @see See {@link OBJ_LengthAnimationStep} for angle animation step options.
- *
- * See {@link OBJ_PulseWidthAnimationStep} for pulse angle animation step
- * options.
- *
+ * @see
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
  *
@@ -505,6 +518,9 @@ export default class AdvancedPolyline extends DiagramElementCollection {
     }
   };
 
+  /**
+   * @hideconstructor
+   */
   constructor(
     shapes: DiagramPrimitives,
     equation: DiagramEquation,

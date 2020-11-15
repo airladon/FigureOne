@@ -1260,6 +1260,16 @@
               
                 
                 <li><a
+                  href='#obj_ellipse'
+                  class="">
+                  OBJ_Ellipse
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_polygon'
                   class="">
                   OBJ_Polygon
@@ -4010,9 +4020,29 @@
               
                 
                 <li><a
-                  href='#obj_ellipse'
+                  href='#obj_polylinepadcustomization'
                   class="">
-                  OBJ_Ellipse
+                  OBJ_PolylinePadCustomization
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_polylineangle'
+                  class="">
+                  OBJ_PolylineAngle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_polylineside'
+                  class="">
+                  OBJ_PolylineSide
                   
                 </a>
                 
@@ -17044,6 +17074,277 @@ diagram.addElement({
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_ellipse'>
+      OBJ_Ellipse
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Ellipse shape options object</p>
+<p><img src="./assets1/ellipse.png"></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : (
+<code>'middle'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : (
+<code>'center'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : number of sides to draw ellipse with (
+<code>20</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
+          : line style options - do not use any corner
+options
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
+          : make copies of
+the rectangle
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
+          : Override color with a texture
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
+          : set the default pulse scale
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : convenience to override Transform translation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
+          : (
+<code>Transform('rectangle').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"outline"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : the rectangle border can either be the outline of the rectangle
+(
+<code>'outline'</code>
+), an encompassing rect (
+<code>'rect'</code>
+) or a custom set of points
+
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+ - (
+<code>'outline'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : the touch border can be the same as the border (
+<code>'border'</code>
+), can be the
+encompassing rect (
+<code>'rect'</code>
+), can be a buffer around the shape with
+some with 
+<code>number</code>
+, or can be a custom set of points
+(
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+) - (
+<code>'border'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : hole border of the rectangle can be the points custom points
+(
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+) or 
+<code>'none'</code>
+ - (
+<code>'none'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Filled ellipse</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'e'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'ellipse'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">height</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">100</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Dashed line circle</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'e'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'ellipse'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">height</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">width</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">100</span>,
+    <span class="hljs-attr">line</span>: {
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+      <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.05</span>, <span class="hljs-number">0.02</span>],
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Ellipse grid</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'e'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'ellipse'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">height</span>: <span class="hljs-number">0.08</span>,
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.2</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+    <span class="hljs-attr">copy</span>: [
+      { <span class="hljs-attr">along</span>: <span class="hljs-string">'x'</span>, <span class="hljs-attr">step</span>: <span class="hljs-number">0.25</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">5</span> },
+      { <span class="hljs-attr">along</span>: <span class="hljs-string">'y'</span>, <span class="hljs-attr">step</span>: <span class="hljs-number">0.15</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">5</span> },
+    ]
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='obj_polygon'>
       OBJ_Polygon
     </h3>
@@ -19905,28 +20206,12 @@ reside
 <p class="inline_gif"><img src="./assets1/advpolyline_movepolyline.gif" class="inline_gif_image"></p>
 <p class="inline_gif"><img src="./assets1/advpolyline_movetri.gif" class="inline_gif_image"></p>
 <p>This object defines a convient and powerful polyline
-<a href="#diagramelementcollection">DiagramElementCollection</a> that includes a solid or dashed line,
+<a href="#diagramelementcollection">DiagramElementCollection</a> that includes a solid or dashed,
 open or closed polyline, arrows, angle annotations for polyline corners,
 side annotations for straight lines between points and move pads at polyline
 points to dynamically adjust the polyline.</p>
 <p>See <a href="#adv_polyline">ADV_Polyline</a> for the options that can be used when creating the
 line.</p>
-<p>The object contains a two additional animation steps. <code>length</code>
-animates changing the line length, and <code>pulseWidth</code> animates the
-<code>pulseWidth</code> method. The animation steps are available in
-the animation manager (<code>animations</code> property), and in the animation builder
-(<code>animations.new()</code> and <code>animations.builder()</code>).</p>
-<p>Some of the useful methods included in an advanced line are:</p>
-<ul>
-<li><a href="#advancedlinepulsewidth">pulseWidth</a> - pulses the line without
-changing its length</li>
-<li><a href="#advancedlinegrow">grow</a> - starts and animation that executes
-a single <code>length</code> animation
-step</li>
-<li><a href="#advancedlinesetmovable">grow</a> - overrides
-<a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
-allowing for more complex move options.</li>
-</ul>
 <p>Available subscriptions:</p>
 <ul>
 <li><code>'updatePoints'</code>: <a href="#sub_polylineupdatepoints">SUB_PolylineUpdatePoints</a></li>
@@ -19950,60 +20235,6 @@ allowing for more complex move options.</li>
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>shapes</span> <code class='quiet'>(<a href="#diagramprimitives">DiagramPrimitives</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>equation</span> <code class='quiet'>(DiagramEquation)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>objects</span> <code class='quiet'>(DiagramObjects)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>isTouchDevice</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>animateNextFrame</span> <code class='quiet'>(function (void): void)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#adv_polyline">ADV_Polyline</a>
-            = <code>{}</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
 
   
 
@@ -20013,13 +20244,12 @@ allowing for more complex move options.</li>
     <div class='py1 quiet mt1 prose-big'>Related</div>
     
       
-        See 
-<a href="#obj_lengthanimationstep">OBJ_LengthAnimationStep</a>
- for angle animation step options.
-<p>See <a href="#obj_pulsewidthanimationstep">OBJ_PulseWidthAnimationStep</a> for pulse angle animation step
-options.</p>
-<p>To test examples below, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>.</p>
+        To test examples below, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+.
 
       
     
@@ -20757,6 +20987,13 @@ pads. To customize for specific side, angle or pad indexes use =
     </p>
   
   
+    <p>
+      Extends
+      
+        <a href="#obj_polyline">OBJ_Polyline</a>
+      
+    </p>
+  
 
   
   
@@ -20770,6 +21007,37 @@ pads. To customize for specific side, angle or pad indexes use =
   
     <div class='py1 quiet mt1 prose-big'>Properties</div>
     <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>showLine</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ will hide the polyline's line (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>angle</span> <code class='quiet'>((<a href="#obj_polylineangle">OBJ_PolylineAngle</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#adv_angle">ADV_Angle</a>>)?)</code>
+          : angle annotations - leave undefined for no angle annotations
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>side</span> <code class='quiet'>((<a href="#obj_polylineside">OBJ_PolylineSide</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#adv_line">ADV_Line</a>>)?)</code>
+          : side annotations - leave undefined for no side annotations
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pad</span> <code class='quiet'>((<a href="#obj_polylinepadcustomization">OBJ_PolylinePadCustomization</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_polylinepad">OBJ_PolylinePad</a>>)?)</code>
+          : move pad - leave undefined for no move pads
+
+          
+        </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>makeValid</span> <code class='quiet'>((null | <a href="#obj_validshapehidethresholds">OBJ_ValidShapeHideThresholds</a>)?)</code>
@@ -43052,6 +43320,13 @@ if the label should be pulsed from its bottom rather than its center).
 
   
   
+    <p>
+      Extends
+      
+        ADV_Polygon
+      
+    </p>
+  
 
   
   
@@ -43161,13 +43436,25 @@ options.</p>
       
         <div class='space-bottom0'>
           <span class='code bold'>show</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          
+          : list of indexes to show
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>hide</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : list of indexes to hide
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>_padIndex</span> <code class='quiet'>((<a href="#adv_angle">ADV_Angle</a> | <a href="#adv_line">ADV_Line</a> | <a href="#obj_polylinepad">OBJ_PolylinePad</a>)?)</code>
+          : Customizations of annotation or pad by index where 
+<code>_padIndex</code>
+ should be an
+object key name that is the index
+
           
         </div>
       
@@ -50051,258 +50338,152 @@ will be ignored.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_ellipse'>
-      OBJ_Ellipse
+    <h3 class='fl m0' id='obj_polylinepadcustomization'>
+      OBJ_PolylinePadCustomization
     </h3>
     
     
   </div>
   
 
-  <p>Ellipse shape options object</p>
-<p><img src="./assets1/ellipse.png"></p>
-
-  
-  
-
   
   
   
+    <p>
+      Extends
+      
+        <a href="#obj_polylinepad">OBJ_PolylinePad</a>, <a href="#obj_polylinecustomization">OBJ_PolylineCustomization</a>
+      
+    </p>
+  
+
   
   
   
-
   
-
   
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : (
-<code>1</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : (
-<code>'middle'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : (
-<code>'center'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : number of sides to draw ellipse with (
-<code>20</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
-          : line style options - do not use any corner
-options
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
-          : make copies of
-the rectangle
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          : (
-<code>[1, 0, 0, 1]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
-          : Override color with a texture
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
-          : (
-<code>Transform('rectangle').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"outline"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : the rectangle border can either be the outline of the rectangle
-(
-<code>'outline'</code>
-), an encompassing rect (
-<code>'rect'</code>
-) or a custom set of points
-
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
- - (
-<code>'outline'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : the touch border can be the same as the border (
-<code>'border'</code>
-), can be the
-encompassing rect (
-<code>'rect'</code>
-), can be a buffer around the shape with
-some with 
-<code>number</code>
-, or can be a custom set of points
-(
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-) - (
-<code>'border'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : hole border of the rectangle can be the points custom points
-(
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-) or 
-<code>'none'</code>
- - (
-<code>'none'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          
-          
-        </div>
-      
-    </div>
   
 
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Related</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
     
-      
-        To test examples, append them to the
-
-<a href="#drawing-boilerplate">
-boilerplate
-</a>
-
-      
+    <h3 class='fl m0' id='obj_polylineangle'>
+      OBJ_PolylineAngle
+    </h3>
     
+    
+  </div>
+  
+
+  
+  
+  
+    <p>
+      Extends
+      
+        <a href="#adv_angle">ADV_Angle</a>, <a href="#obj_polylinecustomization">OBJ_PolylineCustomization</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
   
 
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Example</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_polylineside'>
+      OBJ_PolylineSide
+    </h3>
+    
+    
+  </div>
+  
+
+  
+  
+  
+    <p>
+      Extends
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Filled ellipse</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'e'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'ellipse'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">height</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
-    <span class="hljs-attr">sides</span>: <span class="hljs-number">100</span>,
-  },
-});</pre>
-    
+        <a href="#adv_line">ADV_Line</a>, <a href="#obj_polylinecustomization">OBJ_PolylineCustomization</a>
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Dashed line circle</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'e'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'ellipse'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">height</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">width</span>: <span class="hljs-number">1</span>,
-    <span class="hljs-attr">sides</span>: <span class="hljs-number">100</span>,
-    <span class="hljs-attr">line</span>: {
-      <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
-      <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.05</span>, <span class="hljs-number">0.02</span>],
-    },
-  },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Ellipse grid</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'e'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'ellipse'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">height</span>: <span class="hljs-number">0.08</span>,
-    <span class="hljs-attr">width</span>: <span class="hljs-number">0.2</span>,
-    <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
-    <span class="hljs-attr">copy</span>: [
-      { <span class="hljs-attr">along</span>: <span class="hljs-string">'x'</span>, <span class="hljs-attr">step</span>: <span class="hljs-number">0.25</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">5</span> },
-      { <span class="hljs-attr">along</span>: <span class="hljs-string">'y'</span>, <span class="hljs-attr">step</span>: <span class="hljs-number">0.15</span>, <span class="hljs-attr">num</span>: <span class="hljs-number">5</span> },
-    ]
-  },
-});</pre>
-    
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
   
 
   
