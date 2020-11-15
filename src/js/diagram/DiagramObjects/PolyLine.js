@@ -5,7 +5,7 @@ import {
   RangeBounds, RectBounds,
 } from '../../tools/g2';
 import type {
-  TypeRangeBoundsDefinition, TypeRectBoundsDefinition, TypeParsablePoint,
+  TypeRangeBoundsDefinition, TypeRectBoundsDefinition,
 } from '../../tools/g2';
 import { joinObjects, joinObjectsWithOptions } from '../../tools/tools';
 import { round, range } from '../../tools/math';
@@ -24,6 +24,7 @@ import DiagramObjects from './DiagramObjects';
 import DiagramEquation from '../DiagramEquation/DiagramEquation';
 import type { OBJ_Polyline, OBJ_Polygon } from '../DiagramPrimitives/DiagramPrimitives';
 
+/* eslint-disable max-len */
 /**
  * Advanced Polyline pad addition options.
  *
@@ -34,6 +35,7 @@ import type { OBJ_Polyline, OBJ_Polygon } from '../DiagramPrimitives/DiagramPrim
  * @property {TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | 'diagram'} [boundary]
  * boundary the pad can move within
  */
+/* eslint-enable max-len */
 export type OBJ_PolylinePad = {
   isMovable?: boolean,
   boundary?: TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | 'diagram',
@@ -41,7 +43,7 @@ export type OBJ_PolylinePad = {
 
 /**
  * Side annotations, angle annotations and movable pads in an
- * Advanced polygon are defined with the options objects {@link ADV_Line},
+ * {@link AdvancedPolyline} are defined with the options objects {@link ADV_Line},
  * {@link ADV_Angle} and ({@link OBJ_Polygon} & {@link OBJ_PolylinePad})
  * respectively.
  *
@@ -169,6 +171,7 @@ export type OBJ_ValidShape = {
   hide?: OBJ_ValidShapeHideThresholds,
 };
 
+/* eslint-disable max-len */
 /**
  * Advanced Polyline options object
  *
@@ -203,13 +206,14 @@ export type OBJ_ValidShape = {
  * points are updated the shape will be checked to ensure consistency with
  * displayed labels of angles and sides.
  */
+/* eslint-enable max-len */
 export type ADV_Polyline = {
   showLine?: boolean,
   angle?: (ADV_Angle & OBJ_PolylineCustomization) | Array<ADV_Angle>,
   side?: (ADV_Line & OBJ_PolylineCustomization) | Array<ADV_Line>,
   pad?: (OBJ_Polygon & OBJ_PolylinePad & OBJ_PolylineCustomization)
        | Array<OBJ_Polygon & OBJ_PolylinePad>,
-  makeValid?: ?OBJ_ValidShapeHideThresholds,
+  makeValid?: ?OBJ_ValidShape,
 } & OBJ_Polyline;
 
 function processArray(
@@ -298,7 +302,7 @@ function processArray(
  *
  * @typedef SUB_PolylineUpdatePoints
  */
- export type SUB_PolylineUpdatePoints = [];
+export type SUB_PolylineUpdatePoints = [];
 
 /*
 ..........########...#######..##.......##....##.##.......####.##....##.########
@@ -310,6 +314,7 @@ function processArray(
 ..........##.........#######..########....##....########.####.##....##.########
 */
 
+/* eslint-disable max-len */
 /**
  * {@link DiagramElementCollection} representing a polyline.
  *
@@ -476,6 +481,7 @@ function processArray(
  *   },
  * });
  */
+/* eslint-enable max-len */
 export default class AdvancedPolyline extends DiagramElementCollection {
   shapes: DiagramPrimitives;
   equation: DiagramEquation;
@@ -509,7 +515,7 @@ export default class AdvancedPolyline extends DiagramElementCollection {
   ) {
     const defaultOptions: ADV_Polyline = {
       position: null,
-      color: shapes.defaultColor,
+      color: shapes.defaultColor, // $FlowFixMe
       points: [new Point(1, 0), new Point(0, 0), new Point(0, 1)],
       close: false,
       showLine: true,
@@ -673,7 +679,6 @@ export default class AdvancedPolyline extends DiagramElementCollection {
           p2: this.points[p2],
           p3: this.points[p3],
         }, angleArray[i]);
-        console.log(angleOptions)
         const angleAnnotation = this.advanced.angle(angleOptions);
         this.add(name, angleAnnotation);
       }
