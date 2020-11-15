@@ -178,6 +178,9 @@ toc:
   - OBJ_ValidShapeHideThresholds
   - OBJ_ValidShape
   - SUB_PolylineUpdatePoints
+  - OBJ_PolylinePadCustomization
+  - OBJ_PolylineAngle
+  - OBJ_PolylineSide
   - name: Misc Animation
   - AnimationStep
   - ElementAnimationStep

@@ -4020,9 +4020,9 @@
               
                 
                 <li><a
-                  href='#obj_polylinepadcustomization'
+                  href='#obj_polylinepadsingle'
                   class="">
-                  OBJ_PolylinePadCustomization
+                  OBJ_PolylinePadSingle
                   
                 </a>
                 
@@ -21033,7 +21033,7 @@ pads. To customize for specific side, angle or pad indexes use =
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>pad</span> <code class='quiet'>((<a href="#obj_polylinepadcustomization">OBJ_PolylinePadCustomization</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_polylinepad">OBJ_PolylinePad</a>>)?)</code>
+          <span class='code bold'>pad</span> <code class='quiet'>((<a href="#obj_polylinepad">OBJ_PolylinePad</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_polylinepadsingle">OBJ_PolylinePadSingle</a>>)?)</code>
           : move pad - leave undefined for no move pads
 
           
@@ -43315,15 +43315,13 @@ if the label should be pulsed from its bottom rather than its center).
   </div>
   
 
-  <p>Advanced Polyline pad addition options.</p>
-<p>Each pad is associated with a point of the polyline.</p>
-
+  
   
   
     <p>
       Extends
       
-        ADV_Polygon
+        <a href="#obj_polylinepadsingle">OBJ_PolylinePadSingle</a>, <a href="#obj_polylinecustomization">OBJ_PolylineCustomization</a>
       
     </p>
   
@@ -43337,29 +43335,6 @@ if the label should be pulsed from its bottom rather than its center).
 
   
 
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>isMovable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- allows moving the pad and the
-associated polyline point (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>boundary</span> <code class='quiet'>((TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | <code>"diagram"</code>)?)</code>
-          : boundary the pad can move within
-
-          
-        </div>
-      
-    </div>
   
 
   
@@ -43397,7 +43372,7 @@ associated polyline point (
 
   <p>Side annotations, angle annotations and movable pads in an
 <a href="#advancedpolyline">AdvancedPolyline</a> are defined with the options objects <a href="#adv_line">ADV_Line</a>,
-<a href="#adv_angle">ADV_Angle</a> and (<a href="#obj_polygon">OBJ_Polygon</a> &#x26; <a href="#obj_polylinepad">OBJ_PolylinePad</a>)
+<a href="#adv_angle">ADV_Angle</a> and (<a href="#obj_polygon">OBJ_Polygon</a> &#x26; <a href="#obj_polylinepadsingle">OBJ_PolylinePadSingle</a>)
 respectively.</p>
 <p>The properties in this object can be used in the side, angle and movable
 pad object definitions to allow for customization of specific sides,
@@ -43449,7 +43424,7 @@ options.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>_padIndex</span> <code class='quiet'>((<a href="#adv_angle">ADV_Angle</a> | <a href="#adv_line">ADV_Line</a> | <a href="#obj_polylinepad">OBJ_PolylinePad</a>)?)</code>
+          <span class='code bold'>_padIndex</span> <code class='quiet'>((<a href="#adv_angle">ADV_Angle</a> | <a href="#adv_line">ADV_Line</a> | <a href="#obj_polylinepadsingle">OBJ_PolylinePadSingle</a>)?)</code>
           : Customizations of annotation or pad by index where 
 <code>_padIndex</code>
  should be an
@@ -50338,21 +50313,23 @@ will be ignored.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_polylinepadcustomization'>
-      OBJ_PolylinePadCustomization
+    <h3 class='fl m0' id='obj_polylinepadsingle'>
+      OBJ_PolylinePadSingle
     </h3>
     
     
   </div>
   
 
-  
+  <p>Advanced Polyline pad addition options.</p>
+<p>Each pad is associated with a point of the polyline.</p>
+
   
   
     <p>
       Extends
       
-        <a href="#obj_polylinepad">OBJ_PolylinePad</a>, <a href="#obj_polylinecustomization">OBJ_PolylineCustomization</a>
+        ADV_Polygon
       
     </p>
   
@@ -50366,6 +50343,29 @@ will be ignored.</p>
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isMovable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ allows moving the pad and the
+associated polyline point (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>boundary</span> <code class='quiet'>((TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | <code>"diagram"</code>)?)</code>
+          : boundary the pad can move within
+
+          
+        </div>
+      
+    </div>
   
 
   
