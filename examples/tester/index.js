@@ -63,9 +63,11 @@ diagram.addElement({
       stop: 2,
     },
     labels: {
-      font: { size: 0.07 },
+      font: { size: 0.1 },
       precision: 2,
-      format: 'exponent',
+      // format: 'exponent',
+      // values: [0, 1, 2],
+      // text: ['0', 'a', 'b'],
     },
   },
 });

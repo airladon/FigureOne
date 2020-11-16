@@ -157,7 +157,6 @@ class AdvancedAxis extends DiagramElementCollection {
       width: this.line != null ? this.line.width : 0.01,
       length: 0.1,
       angle: this.angle + Math.PI / 2,
-      align: 'center',
     };
     const o = joinObjects({}, defaultOptions, options);
     o.start *= this.valueToDraw;
@@ -194,17 +193,25 @@ class AdvancedAxis extends DiagramElementCollection {
         opacity: 1,
       },
       xAlign: this.axis === 'x' ? 'center' : 'right',
-      yAlign: 'middle',
-      offset: this.axis === 'x' ? [0, -0.15] : [-0.15, 0],
+      yAlign: this.axis === 'x' ? 'baseline' : 'middle',
+      // offset: this.axis === 'x' ? [0, -0.15] : [-0.15, 0],
     };
     const o = joinObjects({}, defaultOptions, options);
-    o.offset = getPoint(o.offset);
+    if (o.offset == null) {
+      let offset = -o.font.size - 0.05;
+      if (this.ticks != null) {
+        offset += this.ticks.p1.y;
+      }
+      o.offset = this.axis === 'x' ? new Point(0, offset) : new Point(offset, 0);
+    } else {
+      o.offset = getPoint(o.offset);
+    }
     let values;
     if (o.values == null) {
       values = [];
       const { start, step, num } = this.ticks;
       for (let i = 0; i < num + 1; i += 1) {
-        values.push(start + i * step);
+        values.push((start + i * step) * this.drawToValue);
       }
     } else {
       values = o.values;
@@ -212,21 +219,21 @@ class AdvancedAxis extends DiagramElementCollection {
     if (o.text == null) {
       o.text = [];
       for (let i = 0; i < values.length; i += 1) {
-        const value = values[i] * this.drawToValue;
         if (o.format === 'decimal') {
-          o.text.push(`${round(value, o.precision).toFixed(o.precision)}`);
+          o.text.push(`${round(values[i], o.precision).toFixed(o.precision)}`);
         } else {
-          o.text.push(`${value.toExponential(o.precision)}`);
+          o.text.push(`${values[i].toExponential(o.precision)}`);
         }
       }
     }
     const text = [];
     for (let i = 0; i < values.length; i += 1) {
       let location;
+      const draw = values[i] * this.valueToDraw;
       if (this.axis === 'x') {
-        location = new Point(values[i] + o.offset.x, o.offset.y);
+        location = new Point(draw + o.offset.x, o.offset.y);
       } else {
-        location = new Point(o.offset.x, values[i] + o.offset.y);
+        location = new Point(o.offset.x, draw + o.offset.y);
       }
       text.push({
         text: o.text[i],
