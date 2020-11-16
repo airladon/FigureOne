@@ -13,7 +13,7 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
-
+import type { ADV_Axis } from './Axis';
 
 export type OBJ_Ticks = {
   start: number;
@@ -23,27 +23,13 @@ export type OBJ_Ticks = {
   descent: number;
 };
 
-export type ADV_Axis = {
+export type ADV_Plot = {
   length?: number,              // draw space length
+  width?: number,
   position?: TypeParsablePoint, // collection position
-  start?: number,               // value space start at draw space start
-  stop?: number,                // value space stop at draw space stop
-  axis?: 'x' | 'y',
-  ticks?: OBJ_Ticks,
-  minorTicks?: OBJ_Ticks,
-  line?: ADV_Line,
-  font?: OBJ_Font,              // Default font
-  labels?: {
-    font?: OBJ_Font,
-    precision?: number,
-    rotation?: number,
-    xAlign?: 'left' | 'right' | 'center',
-    yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-    offset?: TypeParsablePoint,
-    text?: null | Array<string>,
-    values?: null | Array<number>,
-  },
-  title?: OBJ_TextLines,
+  axes?: Array<ADV_Axis>,
+  title?: OBJ_Text,
+  traces?: Array<ADV_Trace>,
 };
 
 // $FlowFixMe
@@ -55,7 +41,6 @@ class AdvancedAxis extends DiagramElementCollection {
   _labels: ?DiagramElementPrimitive;
   _arrow1: ?DiagramElementPrimitive;
   _arrow2: ?DiagramElementPrimitive;
-  _title: ?DiagramElementPrimitive;
 
   shapes: Object;
   equation: Object;
@@ -79,7 +64,6 @@ class AdvancedAxis extends DiagramElementCollection {
 
   drawToValue: number;
   valueToDraw: number;
-  defaultFont: OBJ_Font;
 
   /**
    * @hideconstructor
@@ -87,7 +71,29 @@ class AdvancedAxis extends DiagramElementCollection {
   constructor(
     shapes: Object,
     equation: Object,
-    optionsIn: ADV_Axis,
+    optionsIn: {
+      length: number,
+      axis: 'x' | 'y',
+      line: OBJ_Line,
+      start: number,
+      stop: number,
+      ticks: {
+        start: number,
+        step: number,
+        stop: number,
+        line: OBJ_Line,
+      },
+      minorTicks: {
+        start: number,
+        step: number,
+        stop: number,
+        line: OBJ_Line,
+      },
+      labels: {
+        text: null | Array<string>,
+        precision: number,
+      } & OBJ_Text,
+    },
   ) {
     super(new Transform('Axis')
       .scale(1, 1)
@@ -101,20 +107,11 @@ class AdvancedAxis extends DiagramElementCollection {
       angle: 0,
       start: 0,
       color: shapes.defaultColor,
-      font: {
-        family: 'Times New Roman',
-        size: 0.1,
-        style: 'normal',
-        weight: 'normal',
-        color: shapes.defaultColor,
-        opacity: 1,
-      },
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.stop == null) {
       options.stop = options.start + 1;
     }
-    this.defaultFont = options.font;
     this.start = options.start;
     this.stop = options.stop;
     this.length = options.length;
@@ -144,9 +141,6 @@ class AdvancedAxis extends DiagramElementCollection {
     if (options.labels != null) {
       this.addLabels(options.labels);
     }
-    if (options.title != null) {
-      this.addTitle(options.title);
-    }
   }
 
   addLine(options: OBJ_Line) {
@@ -161,7 +155,7 @@ class AdvancedAxis extends DiagramElementCollection {
     this.add('line', line);
   }
 
-  addTicks(options: OBJ_Ticks, major: boolean = true) {
+  addTicks(options: Object, major: boolean = true) {
     const defaultOptions = {
       start: this.start,
       stop: this.stop,
@@ -193,36 +187,20 @@ class AdvancedAxis extends DiagramElementCollection {
     }
   }
 
-  addTitle(options: OBJ_Text & { rotation: number, offset: TypeParsablePoint }) {
-    const defaultOptions = {
-      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 2 }),
-      justify: 'center',
-      xAlign: 'center',
-      yAlign: this.axis === 'x' ? 'top' : 'bottom',
-      rotation: this.axis === 'x' ? 0 : Math.PI / 2,
-      offset: [0, 0],
-    };
-    const o = joinObjects({}, defaultOptions, options);
-    o.offset = getPoint(o.offset);
-    if (o.position == null) {
-      if (this.axis === 'x') {
-        o.position = new Point(this.length / 2, -0.3).add(o.offset);
-      } else {
-        o.position = new Point(-0.3, this.length / 2).add(o.offset);
-      }
-    }
-    const title = this.shapes.textLines(o);
-    title.transform.updateRotation(o.rotation);
-    this.add('title', title);
-  }
-
   addLabels(options: Object) {
     const defaultOptions = {
       text: null,
       precision: 1,
       values: null,
       format: 'decimal',  // or 'exponent'
-      font: this.defaultFont,
+      font: {
+        family: 'Times New Roman',
+        size: 0.1,
+        style: 'normal',
+        weight: 'normal',
+        color: this.color,
+        opacity: 1,
+      },
       xAlign: this.axis === 'x' ? 'center' : 'right',
       yAlign: this.axis === 'x' ? 'baseline' : 'middle',
       rotation: 0,

@@ -39,9 +39,9 @@ diagram.addElement({
   name: 'axis',
   method: 'advanced.axis',
   options: {
-    position: [-1, 0],
+    position: [-1, -1],
     length: 3,
-    axis: 'x',
+    axis: 'y',
     start: 0,
     stop: 2.1,
     line: {
@@ -67,10 +67,24 @@ diagram.addElement({
     labels: {
       font: { size: 0.1 },
       precision: 2,
-      rotation: Math.PI / 4,
-      yAlign: 'middle',
-      xAlign: 'right',
-      offset: [0, -0.1],
+      // rotation: Math.PI / 4,
+      // yAlign: 'middle',
+      // xAlign: 'right',
+      // offset: [0, -0.1],
+    },
+    title: {
+      lines: [
+        {
+          line: 'hello',
+          lineSpace: -0.1,
+        },
+        {
+          font: { size: 0.1 },
+          line: 'there',
+        },
+      ],
+      font: { color: [0, 1, 0, 1] },
+      offset: [-0.1, 0],
     },
   },
 });
