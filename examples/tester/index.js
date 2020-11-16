@@ -54,8 +54,10 @@ diagram.addElement({
         step: 0.5,
         length: 0.1,
         stop: 2,
+        // offset: -0.1,
       },
       {
+        // offset: -0.15,
         step: 0.05,
         width: 0.008,
         length: 0.06,
@@ -64,33 +66,33 @@ diagram.addElement({
     ],
     grid: [
       {
+        step: 0.5,
+        length: 1,
+        stop: 2,
+        width: 0.007,
+      },
+      {
         step: 0.1,
         length: 1,
         stop: 2,
-        width: 0.002,
+        width: 0.007,
         color: [0.5, 0.5, 0.5, 1],
+        dash: [0.01, 0.01],
       },
-      // {
-      //   step: 0.5,
-      //   length: 1,
-      //   stop: 2,
-      //   width: 0.007,
-      // },
     ],
-    // minorTicks: {
-    //   step: 0.04,
-    //   length: 0.05,
-    //   width: 0.005,
-    //   stop: 2,
-    // },
-    labels: {
-      font: { size: 0.1 },
-      precision: 2,
-      // rotation: Math.PI / 4,
-      // yAlign: 'middle',
-      // xAlign: 'right',
-      // offset: [0, -0.1],
-    },
+    labels: [
+      {
+        font: { size: 0.1 },
+        precision: 2,
+        hide: [0, 2],
+      },
+      {
+        values: [0],
+        font: { size: 0.2 },
+        offset: [-0.1, -0.2],
+        text: 'O',
+      },
+    ],
     title: {
       lines: [
         {
