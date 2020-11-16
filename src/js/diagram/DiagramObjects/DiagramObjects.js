@@ -14,10 +14,13 @@ import AdvancedAngle from './Angle';
 // eslint-disable-next-line import/no-cycle
 import AdvancedPolyline from './PolyLine';
 import AdvancedAxis from './Axis';
+import AdvancedTrace from './Trace';
 import type { ADV_Line } from './Line';
 import type { ADV_Angle } from './Angle';
 import type { TypeLabelOptions } from './EquationLabel';
 import type { ADV_Polyline } from './PolyLine';
+import type { ADV_Axis } from './Axis';
+import type { ADV_Trace } from './Trace';
 import EquationLabel from './EquationLabel';
 
 export default class DiagramObjects {
@@ -80,10 +83,18 @@ export default class DiagramObjects {
     );
   }
 
-  axis(...options: Array<Object>) {
+  axis(...options: Array<ADV_Axis>) {
     const optionsToUse = joinObjects({}, ...options);
     return new AdvancedAxis(
       this.shapes, this.equation, optionsToUse,
     );
   }
+
+  trace(...options: Array<ADV_Trace>) {
+    const optionsToUse = joinObjects({}, ...options);
+    return new AdvancedTrace(
+      this.shapes, this.equation, optionsToUse,
+    );
+  }
+
 }

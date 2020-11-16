@@ -9,7 +9,7 @@ import type { TypeParsablePoint } from '../../tools/g2';
 import {
   round, range,
 } from '../../tools/math';
-import { joinObjects, joinObjectsWithOptions } from '../../tools/tools';
+import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
@@ -71,19 +71,11 @@ class AdvancedAxis extends DiagramElementCollection {
   start: number;
   stop: number;
 
-  ticks: {
-    start: number;
-    step: number;
-    stop: number;
-  };
+  ticks: ?Array<OBJ_AxisTicks>;
+  grid: ?Array<OBJ_AxisTicks>;
+  labels: ?Array<OBJ_AxisLabels>;
 
-  minorTicks: {
-    start: number;
-    step: number;
-    stop: number;
-  }
-
-  drawToValue: number;
+  drawToValueRatio: number;
   valueToDraw: number;
   defaultFont: OBJ_Font;
 
@@ -126,8 +118,8 @@ class AdvancedAxis extends DiagramElementCollection {
     this.length = options.length;
     this.axis = options.axis;
     this.angle = this.axis === 'x' ? 0 : Math.PI / 2;
-    this.drawToValue = (options.stop - options.start) / options.length;
-    this.valueToDraw = 1 / this.drawToValue;
+    this.drawToValueRatio = (options.stop - options.start) / options.length;
+    this.valueToDrawRatio = 1 / this.drawToValueRatio;
     if (options.position != null) {
       this.transform.updateTranslation(getPoint(options.position));
     }
@@ -189,21 +181,22 @@ class AdvancedAxis extends DiagramElementCollection {
       const o = joinObjects({}, defaultOptions, options);
       o.length *= lengthSign;
       if (o.offset == null) {
-        o.offset = name === 'ticks' ? -o.length / 2 : 0;
+        o.offset = name === 'ticks' ? -o.length / 2 * lengthSign : 0;
       }
       const num = Math.floor((o.stop + o.step / 10000 - o.start) / o.step);
       o.num = num;
       if (o.values == null) {
         o.values = range(o.start, o.stop, o.step);
       }
+
       if (this.axis === 'x') {
-        o.copy = [{ to: o.values.map(v => new Point(v * this.valueToDraw, 0)) }];
+        o.copy = [{ to: o.values.map(v => new Point(this.valueToDraw(v), 0)) }];
       } else {
-        o.copy = [{ to: o.values.map(v => new Point(0, v * this.valueToDraw)) }];
+        o.copy = [{ to: o.values.map(v => new Point(0, this.valueToDraw(v))) }];
       }
 
       if (o.p1 == null) {
-        o.p1 = new Point(o.values[0], o.offset * lengthSign).rotate(this.angle);
+        o.p1 = new Point(this.valueToDraw(o.values[0]), o.offset * lengthSign).rotate(this.angle);
       }
 
       const ticks = this.shapes.line(o);
@@ -304,7 +297,7 @@ class AdvancedAxis extends DiagramElementCollection {
       const text = [];
       for (let i = 0; i < values.length; i += 1) {
         let location;
-        const draw = values[i] * this.valueToDraw;
+        const draw = this.valueToDraw(values[i]);
         if (this.axis === 'x') {
           location = new Point(draw + o.offset.x, o.offset.y).rotate(-o.rotation);
         } else {
@@ -320,11 +313,6 @@ class AdvancedAxis extends DiagramElementCollection {
           });
         }
       }
-      // if (o.hide != null && o.hide.length > 0) {
-      //   o.hide.forEach((hideIndex) => {
-      //     text.splice(hideIndex, 1);
-      //   });
-      // }
       o.text = text;
       const labels = this.shapes.text(o);
       labels.transform.updateRotation(o.rotation);
@@ -335,19 +323,37 @@ class AdvancedAxis extends DiagramElementCollection {
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
     return [...super._getStateProperties(options),
-      'angle',
-      'lastLabelRotationOffset',
+      'length', 'angle', 'start', 'stop',
+      'ticks', 'grid', 'labels', 'drawToValueRatio', 'valueToDraw',
     ];
   }
 
-  _fromState(state: Object) {
-    joinObjects(this, state);
-    this.setAngle({
-      angle: this.angle,
-      rotationOffset: this.lastLabelRotationOffset,
-    });
-    return this;
+  // _fromState(state: Object) {
+  //   joinObjects(this, state);
+  //   // this.setAngle({
+  //   //   angle: this.angle,
+  //   //   rotationOffset: this.lastLabelRotationOffset,
+  //   // });
+  //   return this;
+  // }
+
+  valueToDraw(value: number) {
+    return (value - this.start) * this.valueToDrawRatio;
   }
+
+  valuesToDraw(values: Array<number>) {
+    return values.map((v) => this.valueToDraw(v));
+  }
+
+  inAxis(value: number) {
+    if (value < this.start || value > this.end) {
+      return false;
+    }
+    return true;
+  }
+  // isInAxis(value: number) {
+  //   if (value )
+  // }
 }
 
 export default AdvancedAxis;
