@@ -52,9 +52,11 @@ diagram.addElement({
     ticks: {
       step: 0.2,
       length: 0.1,
+      // descent: 0.05,
       stop: 2,
       // start: 0.55,
       // stop: 0.7
+      // angle: Math.PI / 4,
     },
     minorTicks: {
       step: 0.04,

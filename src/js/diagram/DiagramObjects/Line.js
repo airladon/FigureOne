@@ -135,9 +135,9 @@ export type TypeLineLabelOptions = {
  * Default pulse values can then be specified with the `pulse` property.
  */
 export type ADV_Line = {
-  p1?: Point,
-  p2?: Point,
-  position?: Point,
+  p1?: TypeParsablePoint,
+  p2?: TypeParsablePoint,
+  position?: TypeParsablePoint,
   length?: number,
   angle?: number,
   offset?: number,
@@ -145,16 +145,10 @@ export type ADV_Line = {
   width?: number,
   label?: TypeLineLabelOptions,
   color?: Array<number>,
-  touchBorder?: Array<Array<Point>> | 'border' | number | 'rect',
+  touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | number | 'rect',
   arrow: OBJ_LineArrows;
   dash: Array<number>,
-  pulseWidth?: {
-    line?: number,
-    label?: number,
-    arrow?: number,
-    duration?: number,
-    frequency?: number,
-  },
+  pulseWidth?: OBJ_PulseWidth,
   pulse: OBJ_Pulse;
 
   move?: {

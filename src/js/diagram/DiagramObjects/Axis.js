@@ -2,8 +2,8 @@
 
 // import Diagram from '../Diagram';
 import {
-  Transform, Point, Line, polarToRect,
-  threePointAngle, getPoint, clipAngle, getTransform,
+  Transform, Point,
+  getPoint, getTransform,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
 import {
@@ -13,18 +13,36 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
-import EquationLabel from './EquationLabel';
-import { Equation } from '../DiagramElements/Equation/Equation';
-import { simplifyArrowOptions, getArrowLength } from '../DrawingObjects/Geometries/arrow';
-import type { OBJ_LineArrows, OBJ_LineArrow } from '../DrawingObjects/Geometries/arrow';
-import type { OBJ_Pulse } from '../Element';
-import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
-import type { TypeWhen } from '../webgl/GlobalAnimation';
-import type {
-  TypeLabelOrientation, TypeLabelLocation, TypeLabelSubLocation,
-} from './EquationLabel';
-import * as animation from '../Animation/Animation';
-import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
+
+
+export type OBJ_Ticks = {
+  start: number;
+  step: number;
+  stop: number;
+  length: number;
+  descent: number;
+};
+
+export type ADV_Axis = {
+  length?: number,              // draw space length
+  position?: TypeParsablePoint, // collection position
+  start?: number,               // value space start at draw space start
+  stop?: number,                // value space stop at draw space stop
+  axis?: 'x' | 'y',
+  ticks?: OBJ_Ticks,
+  minorTicks?: OBJ_Ticks,
+  line?: ADV_Line,
+  labels?: {
+    font?: OBJ_Font,
+    precision?: number,
+    rotation?: number,
+    xAlign?: 'left' | 'right' | 'center',
+    yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+    offset?: TypeParsablePoint,
+    text?: null | Array<string>,
+    values?: null | Array<number>,
+  }
+};
 
 // $FlowFixMe
 class AdvancedAxis extends DiagramElementCollection {
@@ -159,6 +177,9 @@ class AdvancedAxis extends DiagramElementCollection {
       angle: this.angle + Math.PI / 2,
     };
     const o = joinObjects({}, defaultOptions, options);
+    if (o.descent == null) {
+      o.descent = o.length / 2;
+    }
     o.start *= this.valueToDraw;
     o.stop *= this.valueToDraw;
     o.step *= this.valueToDraw;
@@ -166,7 +187,7 @@ class AdvancedAxis extends DiagramElementCollection {
     o.num = num;
     o.copy = [{ along: this.angle, step: o.step, num }];
     if (o.p1 == null) {
-      o.p1 = new Point(o.start, -o.length / 2).rotate(this.angle);
+      o.p1 = new Point(o.start, -o.descent).rotate(this.angle);
     }
     const ticks = this.shapes.line(o);
     if (major) {
