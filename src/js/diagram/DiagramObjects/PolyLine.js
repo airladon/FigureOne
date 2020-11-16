@@ -291,7 +291,7 @@ function processArray(
   if (toProcessDefaults.show != null) {
     ({ show } = toProcessDefaults);
   } else {
-    show = range(0, total, 1);
+    show = range(0, total - 1, 1);
   }
   if (toProcessDefaults.hide != null) {
     toProcessDefaults.hide.forEach((index) => {

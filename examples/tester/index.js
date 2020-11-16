@@ -41,7 +41,7 @@ diagram.addElement({
   options: {
     position: [-1, -1],
     length: 3,
-    axis: 'y',
+    axis: 'x',
     start: 0,
     stop: 2.1,
     line: {
@@ -49,21 +49,40 @@ diagram.addElement({
       arrow: { end: 'triangle' },
       // dash: [0.1, 0.1],
     },
-    ticks: {
-      step: 0.2,
-      length: 0.1,
-      // descent: 0.05,
-      stop: 2,
-      // start: 0.55,
-      // stop: 0.7
-      // angle: Math.PI / 4,
-    },
-    minorTicks: {
-      step: 0.04,
-      length: 0.05,
-      width: 0.005,
-      stop: 2,
-    },
+    ticks: [
+      {
+        step: 0.5,
+        length: 0.1,
+        stop: 2,
+      },
+      {
+        step: 0.05,
+        width: 0.008,
+        length: 0.06,
+        stop: 2,
+      }
+    ],
+    grid: [
+      {
+        step: 0.1,
+        length: 1,
+        stop: 2,
+        width: 0.002,
+        color: [0.5, 0.5, 0.5, 1],
+      },
+      // {
+      //   step: 0.5,
+      //   length: 1,
+      //   stop: 2,
+      //   width: 0.007,
+      // },
+    ],
+    // minorTicks: {
+    //   step: 0.04,
+    //   length: 0.05,
+    //   width: 0.005,
+    //   stop: 2,
+    // },
     labels: {
       font: { size: 0.1 },
       precision: 2,
