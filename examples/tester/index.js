@@ -65,9 +65,10 @@ diagram.addElement({
     labels: {
       font: { size: 0.1 },
       precision: 2,
-      // format: 'exponent',
-      // values: [0, 1, 2],
-      // text: ['0', 'a', 'b'],
+      rotation: Math.PI / 4,
+      yAlign: 'middle',
+      xAlign: 'right',
+      offset: [0, -0.1],
     },
   },
 });

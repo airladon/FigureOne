@@ -194,9 +194,12 @@ class AdvancedAxis extends DiagramElementCollection {
       },
       xAlign: this.axis === 'x' ? 'center' : 'right',
       yAlign: this.axis === 'x' ? 'baseline' : 'middle',
+      rotation: 0,
       // offset: this.axis === 'x' ? [0, -0.15] : [-0.15, 0],
     };
     const o = joinObjects({}, defaultOptions, options);
+
+    // Calculate auto offset
     if (o.offset == null) {
       let offset = -o.font.size - 0.05;
       if (this.ticks != null) {
@@ -206,6 +209,8 @@ class AdvancedAxis extends DiagramElementCollection {
     } else {
       o.offset = getPoint(o.offset);
     }
+
+    // Values where to put the labels - null is auto which is same as ticks
     let values;
     if (o.values == null) {
       values = [];
@@ -216,6 +221,8 @@ class AdvancedAxis extends DiagramElementCollection {
     } else {
       values = o.values;
     }
+
+    // Text for labels at each value - null is actual value
     if (o.text == null) {
       o.text = [];
       for (let i = 0; i < values.length; i += 1) {
@@ -226,14 +233,17 @@ class AdvancedAxis extends DiagramElementCollection {
         }
       }
     }
+
+    // Generate the text objects
     const text = [];
     for (let i = 0; i < values.length; i += 1) {
       let location;
       const draw = values[i] * this.valueToDraw;
       if (this.axis === 'x') {
-        location = new Point(draw + o.offset.x, o.offset.y);
+        location = new Point(draw + o.offset.x, o.offset.y).rotate(-o.rotation);
+        // location = new Point(draw, 0).rotate(-o.rotation).add(o.offset);
       } else {
-        location = new Point(o.offset.x, draw + o.offset.y);
+        location = new Point(o.offset.x, draw + o.offset.y).rotate(-o.rotation);
       }
       text.push({
         text: o.text[i],
@@ -242,6 +252,7 @@ class AdvancedAxis extends DiagramElementCollection {
     }
     o.text = text;
     const labels = this.shapes.text(o);
+    labels.transform.updateRotation(o.rotation);
     this.add('labels', labels);
     this.labels = o;
   }
