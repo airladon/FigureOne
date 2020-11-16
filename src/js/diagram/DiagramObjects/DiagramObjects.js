@@ -13,6 +13,7 @@ import AdvancedLine from './Line';
 import AdvancedAngle from './Angle';
 // eslint-disable-next-line import/no-cycle
 import AdvancedPolyline from './PolyLine';
+import AdvancedAxis from './Axis';
 import type { ADV_Line } from './Line';
 import type { ADV_Angle } from './Angle';
 import type { TypeLabelOptions } from './EquationLabel';
@@ -76,6 +77,13 @@ export default class DiagramObjects {
       this.shapes, this.equation, this,
       this.isTouchDevice, this.animateNextFrame,
       optionsToUse,
+    );
+  }
+
+  axis(...options: Array<Object>) {
+    const optionsToUse = joinObjects({}, ...options);
+    return new AdvancedAxis(
+      this.shapes, this.equation, optionsToUse,
     );
   }
 }

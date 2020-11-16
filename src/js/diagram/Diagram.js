@@ -938,14 +938,14 @@ class Diagram {
     this.elements.add(name, diagramElement);
   }
 
-  addNew(options: {
-    element: DiagramElement | TypeAddElementObject | Array<DiagramElement> | Array<TypeAddElementObject>,
-    name: string,
-    to: string | DiagramElementCollection,
-    addElementsKey: string,
-  }) {
-    if ()
-  }
+  // addNew(options: {
+  //   element: DiagramElement | TypeAddElementObject | Array<DiagramElement> | Array<TypeAddElementObject>,
+  //   name: string,
+  //   to: string | DiagramElementCollection,
+  //   addElementsKey: string,
+  // }) {
+  //   if ()
+  // }
 
   /**
    * Add elements from element definitions to the diagram.

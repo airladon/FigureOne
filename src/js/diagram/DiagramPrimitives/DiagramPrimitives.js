@@ -3417,38 +3417,38 @@ export default class DiagramPrimitives {
     );
   }
 
-  dashedLine(...optionsIn: Array<{
-    start?: Point,
-    length?: number,
-    width?: number,
-    rotation?: number,
-    dashStyle?: Array<number>,
-    color?: Array<number>,
-    transform?: Transform,
-    position?: Point,
-    pulse?: number,
-  }>) {
-    const defaultOptions = {
-      start: [0, 0],
-      length: 1,
-      width: 0.01,
-      rotation: 0,
-      dashStyle: [0.1, 0.1],
-      transform: new Transform('dashedLine').scale(1, 1).rotate(0).translate(0, 0),
-      position: null,
-    };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
-    if (options.position != null) {
-      options.transform.updateTranslation(getPoint(options.position));
-    }
-    const element = DashedLine(
-      this.webgl, getPoint(options.start), options.length, options.width,
-      options.rotation, options.dashStyle, options.color,
-      options.transform, this.limits,
-    );
-    setupPulse(element, options);
-    return element;
-  }
+  // dashedLine(...optionsIn: Array<{
+  //   start?: Point,
+  //   length?: number,
+  //   width?: number,
+  //   rotation?: number,
+  //   dashStyle?: Array<number>,
+  //   color?: Array<number>,
+  //   transform?: Transform,
+  //   position?: Point,
+  //   pulse?: number,
+  // }>) {
+  //   const defaultOptions = {
+  //     start: [0, 0],
+  //     length: 1,
+  //     width: 0.01,
+  //     rotation: 0,
+  //     dashStyle: [0.1, 0.1],
+  //     transform: new Transform('dashedLine').scale(1, 1).rotate(0).translate(0, 0),
+  //     position: null,
+  //   };
+  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+  //   if (options.position != null) {
+  //     options.transform.updateTranslation(getPoint(options.position));
+  //   }
+  //   const element = DashedLine(
+  //     this.webgl, getPoint(options.start), options.length, options.width,
+  //     options.rotation, options.dashStyle, options.color,
+  //     options.transform, this.limits,
+  //   );
+  //   setupPulse(element, options);
+  //   return element;
+  // }
 
   // dashedLine(
   //   start: Point,
@@ -3465,47 +3465,47 @@ export default class DiagramPrimitives {
   //   );
   // }
 
-  rectangleLegacy(...optionsIn: Array<OBJ_Rectangle>) {
-    const defaultOptions = {
-      yAlign: 'middle',
-      xAlign: 'center',
-      width: 1,
-      height: 1,
-      lineWidth: 0.01,
-      corner: {
-        radius: 0,
-        sides: 1,
-      },
-      fill: false,
-      color: this.defaultColor,
-      transform: new Transform('rectangle').scale(1, 1).rotate(0).translate(0, 0),
-      position: null,
-    };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
-    if (options.position != null) {
-      options.transform.updateTranslation(getPoint(options.position));
-    }
-    if (typeof options.reference !== 'string') {
-      options.reference = getPoint(options.reference);
-    }
-    let element;
-    if (options.fill) {
-      element = RectangleFilled(
-        this.webgl, options.xAlign, options.yAlign, options.width, options.height,
-        options.corner.radius, options.corner.sides, options.color, options.transform, this.limits,
-      );
-    } else {
-      element = Rectangle(
-        this.webgl, options.xAlign, options.yAlign, options.width,
-        options.height, options.lineWidth, options.corner.radius,
-        options.corner.sides, options.color, options.transform, this.limits,
-      );
-    }
+  // rectangleLegacy(...optionsIn: Array<OBJ_Rectangle>) {
+  //   const defaultOptions = {
+  //     yAlign: 'middle',
+  //     xAlign: 'center',
+  //     width: 1,
+  //     height: 1,
+  //     lineWidth: 0.01,
+  //     corner: {
+  //       radius: 0,
+  //       sides: 1,
+  //     },
+  //     fill: false,
+  //     color: this.defaultColor,
+  //     transform: new Transform('rectangle').scale(1, 1).rotate(0).translate(0, 0),
+  //     position: null,
+  //   };
+  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+  //   if (options.position != null) {
+  //     options.transform.updateTranslation(getPoint(options.position));
+  //   }
+  //   if (typeof options.reference !== 'string') {
+  //     options.reference = getPoint(options.reference);
+  //   }
+  //   let element;
+  //   if (options.fill) {
+  //     element = RectangleFilled(
+  //       this.webgl, options.xAlign, options.yAlign, options.width, options.height,
+  //       options.corner.radius, options.corner.sides, options.color, options.transform, this.limits,
+  //     );
+  //   } else {
+  //     element = Rectangle(
+  //       this.webgl, options.xAlign, options.yAlign, options.width,
+  //       options.height, options.lineWidth, options.corner.radius,
+  //       options.corner.sides, options.color, options.transform, this.limits,
+  //     );
+  //   }
 
-    setupPulse(element, options);
+  //   setupPulse(element, options);
 
-    return element;
-  }
+  //   return element;
+  // }
 
   box(...optionsIn: Array<{
     width?: number,
@@ -3724,38 +3724,38 @@ export default class DiagramPrimitives {
     return element;
   }
 
-  repeatPattern(
-    element: DiagramElementPrimitive,
-    xNum: number,
-    yNum: number,
-    xStep: number,
-    yStep: number,
-    transform: Transform | Point = new Transform(),
-  ) {
-    let group;
-    if (transform instanceof Transform) {
-      group = this.collection({ transform });
-    } else {
-      group = this.collection({ transform: new Transform().translate(transform) });
-    }
-    let t = element.transform.t();
-    let transformToUse = element.transform._dup();
-    if (t === null) {
-      t = new Point(0, 0);
-      transformToUse = transformToUse.translate(0, 0);
-    }
-    if (t) {
-      for (let x = 0; x < xNum; x += 1) {
-        for (let y = 0; y < yNum; y += 1) {
-          const copy = element._dup();
-          copy.transform = transformToUse._dup();
-          copy.transform.updateTranslation(t.x + xStep * x, t.y + yStep * y);
-          group.add(`xy${x}${y}`, copy);
-        }
-      }
-    }
-    return group;
-  }
+  // repeatPattern(
+  //   element: DiagramElementPrimitive,
+  //   xNum: number,
+  //   yNum: number,
+  //   xStep: number,
+  //   yStep: number,
+  //   transform: Transform | Point = new Transform(),
+  // ) {
+  //   let group;
+  //   if (transform instanceof Transform) {
+  //     group = this.collection({ transform });
+  //   } else {
+  //     group = this.collection({ transform: new Transform().translate(transform) });
+  //   }
+  //   let t = element.transform.t();
+  //   let transformToUse = element.transform._dup();
+  //   if (t === null) {
+  //     t = new Point(0, 0);
+  //     transformToUse = transformToUse.translate(0, 0);
+  //   }
+  //   if (t) {
+  //     for (let x = 0; x < xNum; x += 1) {
+  //       for (let y = 0; y < yNum; y += 1) {
+  //         const copy = element._dup();
+  //         copy.transform = transformToUse._dup();
+  //         copy.transform.updateTranslation(t.x + xStep * x, t.y + yStep * y);
+  //         group.add(`xy${x}${y}`, copy);
+  //       }
+  //     }
+  //   }
+  //   return group;
+  // }
 
   // eslint-disable-next-line class-methods-use-this
   // repeatPatternVertexLegacy(

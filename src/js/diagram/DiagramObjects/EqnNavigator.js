@@ -468,6 +468,13 @@ export type TypeNavigatorOptions = {
 //
 // Equation navigators
 
+// Extends equation
+// export type Navigator = {
+//   next: Element | TypeElementDefinition | TypeArrow,
+//   prev: Element | TypeElementDefinition | TypeArrow,
+//   description: Element | TypeTextLines,
+//   type: 'equationOnly' | 'description' | '1Line' | '2LIne' | '3Line',
+// }
 export default class EqnNavigator extends DiagramElementCollection {
   shapes: Object;
   // setEquation: (Equation) => void;
