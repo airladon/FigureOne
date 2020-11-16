@@ -35,10 +35,6 @@ class AdvancedTrace extends DiagramElementCollection {
   drawPoints: Array<Point>;
   polylines: Array<Array<Point>>;
 
-  // x: Array<number>;
-  // y: Array<number>;
-  // xDraw: Array<Point>;
-  // yDraw: Array<Point>;
   xAxis: AdvancedAxis;
   yAxis: AdvancedAxis;
 
@@ -80,8 +76,6 @@ class AdvancedTrace extends DiagramElementCollection {
     this.points = getPoints(options.points);
     this.xAxis = options.xAxis;
     this.yAxis = options.yAxis;
-    this.updatePoints();
-
     this.setColor(options.color);
 
 
@@ -187,6 +181,7 @@ class AdvancedTrace extends DiagramElementCollection {
       color: this.color,
       width: 0.01,
     };
+    this.updatePoints();
     this.line = joinObjects({}, defaultOptions, options);
     this.polylines.forEach((points, index) => {
       const line = this.shapes.polyline(joinObjects({}, this.line, { points }));
@@ -202,8 +197,15 @@ class AdvancedTrace extends DiagramElementCollection {
     if (markers.length === 0) {
       return;
     }
-    const o = joinObjects({}, defaultOptions, options, {
-      copy: { to: markers.map(p => this.pointToDraw(p)), original: false },
+    const o = joinObjects({}, defaultOptions, options);
+    if (o.copy == null) {
+      o.copy = [];
+    } else if (Array.isArray(o.copy) === false) {
+      o.copy = [o.copy];
+    }
+    o.copy.push({
+      to: markers.map(p => this.pointToDraw(p)),
+      original: false,
     });
     this.add('markers', this.shapes.polygon(o));
   }

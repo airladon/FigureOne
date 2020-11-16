@@ -33,9 +33,9 @@ export type ADV_Plot = {
 };
 
 // $FlowFixMe
-class AdvancedAxis extends DiagramElementCollection {
+class AdvancedPlot extends DiagramElementCollection {
   // Diagram elements
-  _line: ?DiagramElementPrimitive;
+  _axis: ?AdvancedAxis;
   _majorTicks: ?DiagramElementPrimitive;
   _minorTicks: ?DiagramElementPrimitive;
   _labels: ?DiagramElementPrimitive;
