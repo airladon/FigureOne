@@ -342,11 +342,11 @@ class AdvancedAxis extends DiagramElementCollection {
   }
 
   valuesToDraw(values: Array<number>) {
-    return values.map((v) => this.valueToDraw(v));
+    return values.map(v => this.valueToDraw(v));
   }
 
   inAxis(value: number) {
-    if (value < this.start || value > this.end) {
+    if (value < this.start || value > this.stop) {
       return false;
     }
     return true;
