@@ -27,6 +27,7 @@ toc:
   - OBJ_Rectangle
   - OBJ_Ellipse
   - OBJ_Polygon
+  - OBJ_Star
   - OBJ_Grid
   - name: Advanced Shapes
     file: ./docs/tutorials/advanced_shapes/advanced_shapes.md
@@ -178,7 +179,6 @@ toc:
   - OBJ_ValidShapeHideThresholds
   - OBJ_ValidShape
   - SUB_PolylineUpdatePoints
-  - OBJ_PolylinePadCustomization
   - OBJ_PolylineAngle
   - OBJ_PolylineSide
   - OBJ_PolylinePadSingle

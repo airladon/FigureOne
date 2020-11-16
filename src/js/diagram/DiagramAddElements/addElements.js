@@ -48,6 +48,7 @@ function addElements(
       grid: shapes.grid.bind(shapes),
       arrow: shapes.arrow.bind(shapes),
       line: shapes.line.bind(shapes),
+      star: shapes.star.bind(shapes),
       //
       text: shapes.text.bind(shapes),
       textLine: shapes.textLine.bind(shapes),

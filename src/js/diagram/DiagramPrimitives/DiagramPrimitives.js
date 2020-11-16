@@ -631,6 +631,118 @@ export type OBJ_Polygon = {
 };
 
 /**
+ * Star options object
+ *
+ * ![](./assets1/star.png)
+ *
+ * @property {number} [sides] (`4`)
+ * @property {number} [radius] (`1`)
+ * @property {number} [innerRadius] (`radius / 2`)
+ * @property {number} [rotation] shape rotation during vertex definition
+ * (different to a rotation step in a trasform) (`0`)
+ * @property {TypeParsablePoint} [offset] shape center offset from origin
+ * during vertex definition (different to a translation step in a transform)
+ * (`[0, 0]`)
+ * @property {OBJ_LineStyle} [line] line style options
+ * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
+ * the polygon if defined. If using fill and copying, use `fill`: `'tris'`
+ * @property {Array<number>} [color] (`[1, 0, 0, 1`])
+ * @property {OBJ_Texture} [texture] Override color with a texture
+ * @property {Point} [position] convenience to override Transform translation
+ * @property {Transform} [transform] (`Transform('polygon').standard()`)
+ * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ * @property {'outline' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
+ * the polygon border can either be the outline of the polygon (`'outline'`),
+ * the rectangle that encompasses the polygon (`'rect'`) or a custom set
+ * of points `Array<Array<TypeParsablePoint>>` - (`'outline'`)
+ * @property {number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>} [touchBorder]
+ * the touch border can be the same as the border (`'border'`), can be the
+ * encompassing rect (`'rect'`), can be a buffer around the shape with
+ * some with `number`, or can be a custom set of points
+ * (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
+ * @property {'none' | Array<Array<TypeParsablePoint>>} [holeBorder]
+ * hole border of the line can be the points custom points
+ *(`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Simple 5 pointed star
+ * diagram.addElement({
+ *   name: 's',
+ *   method: 'star',
+ *   options: {
+ *     radius: 0.5,
+ *     sides: 5,
+ *   },
+ * });
+ *
+ * @example
+ * // 7 pointed dashed line star
+ * diagram.addElement({
+ *   name: 's',
+ *   method: 'star',
+ *   options: {
+ *     radius: 0.5,
+ *     innerRadius: 0.3,
+ *     sides: 7,
+ *     line: {
+ *       width: 0.02,
+ *       dash: [0.05, 0.01],
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Star surrounded by stars
+ * diagram.addElement({
+ *   name: 's',
+ *   method: 'star',
+ *   options: {
+ *     radius: 0.1,
+ *     sides: 5,
+ *     rotation: -Math.PI / 2,
+ *     // line: { width: 0.01 },
+ *     copy: [
+ *       {
+ *         to: [0.6, 0],
+ *         original: false,
+ *       },
+ *       {
+ *         along: 'rotation',
+ *         num: 16,
+ *         step: Math.PI * 2 / 16,
+ *         start: 1,
+ *       },
+ *       {
+ *         to: new Fig.Transform().scale(3, 3).rotate(Math.PI / 2),
+ *         start: 0,
+ *         end: 1,
+ *       },
+ *     ],
+ *   },
+ * });
+ */
+export type OBJ_Star = {
+  sides?: number,
+  radius?: number,
+  innerRadius?: number,
+  rotation?: number,
+  offset?: TypeParsablePoint,
+  line?: OBJ_LineStyle,
+  copy?: Array<CPY_Step | string> | CPY_Step,
+  color?: Array<number>,
+  texture?: OBJ_Texture,
+  position?: TypeParsablePoint,
+  transform?: Transform,
+  pulse?: number | OBJ_PulseScale,
+  border?: 'outline' | 'rect' | Array<Array<TypeParsablePoint>>,
+  touchBorder?: number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>,
+  holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
+};
+
+/**
  * Rectangle shape options object
  *
  * ![](./assets1/rectangle.png)
@@ -2237,15 +2349,21 @@ export default class DiagramPrimitives {
         width: 0.01,
         widthIs: 'mid',
       }, optionsToUse.line);
+      if (optionsToUse.line.widthIs === 'inside') {
+        optionsToUse.line.widthIs = 'positive';
+      }
+      if (optionsToUse.line.widthIs === 'outside') {
+        optionsToUse.line.widthIs = 'negative';
+      }
     }
 
-    // deprecated - to help migration from old polygon
-    if (optionsToUse.line == null && optionsToUse.width != null) {
-      optionsToUse.line = {
-        width: optionsToUse.width,
-        widthIs: 'mid',
-      };
-    }
+    // // deprecated - to help migration from old polygon
+    // if (optionsToUse.line == null && optionsToUse.width != null) {
+    //   optionsToUse.line = {
+    //     width: optionsToUse.width,
+    //     widthIs: 'mid',
+    //   };
+    // }
 
     parsePoints(optionsToUse, ['offset']);
     let element;
@@ -2365,6 +2483,30 @@ export default class DiagramPrimitives {
       return sidesToDraw * 6;
     };
     return element;
+  }
+
+  /**
+   * {@link DiagramElementPrimitive} that draws a star.
+   * @see {@link OBJ_Star} for options and examples.
+   */
+  star(...options: Array<OBJ_Star>) {
+    const defaultOptions = {
+      radius: 1,
+      sides: 5,
+      rotation: 0,
+      offset: new Point(0, 0),
+      transform: new Transform('star').standard(),
+      touchableLineOnly: false,
+      border: 'outline',
+      touchBorder: 'border',
+    };
+    const optionsToUse = processOptions(defaultOptions, ...options);
+    optionsToUse.offset = getPoint(optionsToUse.offset);
+    if (optionsToUse.innerRadius == null) {
+      optionsToUse.innerRadius = optionsToUse.radius / 3;
+    }
+    optionsToUse.rotation += Math.PI / 2;
+    return this.polygon(optionsToUse);
   }
 
   /**

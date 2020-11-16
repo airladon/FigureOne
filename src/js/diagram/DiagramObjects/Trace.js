@@ -20,8 +20,9 @@ export type ADV_Trace = {
   x?: Array<TypeParsablePoint>,
   y?: Array<TypeParsablePoint>,
   line?: OBJ_Line,
-  markers?: OBJ_Polygon,
-  color: Array<number>
+  markers?: OBJ_Polygon | OBJ_Start,
+  color: Array<number>,
+  name: string,
 };
 
 // $FlowFixMe
@@ -40,7 +41,7 @@ class AdvancedTrace extends DiagramElementCollection {
 
   line: OBJ_Line;
 
-  defaultFont: OBJ_Font;
+  name: string;
 
   /**
    * @hideconstructor
@@ -67,6 +68,7 @@ class AdvancedTrace extends DiagramElementCollection {
         color: shapes.defaultColor,
         opacity: 1,
       },
+      name: '',
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.stop == null) {
@@ -76,6 +78,7 @@ class AdvancedTrace extends DiagramElementCollection {
     this.points = getPoints(options.points);
     this.xAxis = options.xAxis;
     this.yAxis = options.yAxis;
+    this.name = options.name;
     this.setColor(options.color);
 
 

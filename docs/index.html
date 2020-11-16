@@ -1280,6 +1280,16 @@
               
                 
                 <li><a
+                  href='#obj_star'
+                  class="">
+                  OBJ_Star
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_grid'
                   class="">
                   OBJ_Grid
@@ -2833,6 +2843,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#diagramprimitivesstar'
+                        class='regular pre-open'>
+                        #star
+                      </a></li>
+                      
+                      <li><a
                         href='#diagramprimitivesrectangle'
                         class='regular pre-open'>
                         #rectangle
@@ -3442,6 +3458,16 @@
               
                 
                 <li><a
+                  href='#obj_polylinepadsingle'
+                  class="">
+                  OBJ_PolylinePadSingle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#misc-animation'
                   class="h5 bold black caps">
                   Misc Animation
@@ -4033,16 +4059,6 @@
                   href='#typeequationtextelement'
                   class="">
                   TypeEquationTextElement
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_polylinepadsingle'
-                  class="">
-                  OBJ_PolylinePadSingle
                   
                 </a>
                 
@@ -17635,6 +17651,289 @@ diagram.addElement({
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_star'>
+      OBJ_Star
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Star options object</p>
+<p><img src="./assets1/star.png"></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>4</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>1</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>innerRadius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (
+<code>radius / 2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : shape rotation during vertex definition
+(different to a rotation step in a trasform) (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : shape center offset from origin
+during vertex definition (different to a translation step in a transform)
+(
+<code>[0, 0]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
+          : line style options
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
+          : make copies of
+the polygon if defined. If using fill and copying, use 
+<code>fill</code>
+: 
+<code>'tris'</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : (
+<code>[1, 0, 0, 1</code>
+])
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
+          : Override color with a texture
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          : convenience to override Transform translation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
+          : (
+<code>Transform('polygon').standard()</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
+          : set the default pulse scale
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"outline"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : the polygon border can either be the outline of the polygon (
+<code>'outline'</code>
+),
+the rectangle that encompasses the polygon (
+<code>'rect'</code>
+) or a custom set
+of points 
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+ - (
+<code>'outline'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : the touch border can be the same as the border (
+<code>'border'</code>
+), can be the
+encompassing rect (
+<code>'rect'</code>
+), can be a buffer around the shape with
+some with 
+<code>number</code>
+, or can be a custom set of points
+(
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+) - (
+<code>'border'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : hole border of the line can be the points custom points
+(
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
+) or 
+<code>'none'</code>
+ - (
+<code>'none'</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple 5 pointed star</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'s'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'star'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">5</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// 7 pointed dashed line star</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'s'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'star'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">innerRadius</span>: <span class="hljs-number">0.3</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">7</span>,
+    <span class="hljs-attr">line</span>: {
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+      <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.05</span>, <span class="hljs-number">0.01</span>],
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Star surrounded by stars</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'s'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'star'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">5</span>,
+    <span class="hljs-attr">rotation</span>: -<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>,
+    <span class="hljs-comment">// line: { width: 0.01 },</span>
+    <span class="hljs-attr">copy</span>: [
+      {
+        <span class="hljs-attr">to</span>: [<span class="hljs-number">0.6</span>, <span class="hljs-number">0</span>],
+        <span class="hljs-attr">original</span>: <span class="hljs-literal">false</span>,
+      },
+      {
+        <span class="hljs-attr">along</span>: <span class="hljs-string">'rotation'</span>,
+        <span class="hljs-attr">num</span>: <span class="hljs-number">16</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span> / <span class="hljs-number">16</span>,
+        <span class="hljs-attr">start</span>: <span class="hljs-number">1</span>,
+      },
+      {
+        <span class="hljs-attr">to</span>: <span class="hljs-keyword">new</span> Fig.Transform().scale(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>).rotate(<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>),
+        <span class="hljs-attr">start</span>: <span class="hljs-number">0</span>,
+        <span class="hljs-attr">end</span>: <span class="hljs-number">1</span>,
+      },
+    ],
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='obj_grid'>
       OBJ_Grid
     </h3>
@@ -19079,19 +19378,19 @@ options object can define the default values for pulseWidth if desired.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>p1</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          <span class='code bold'>p1</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>p2</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          <span class='code bold'>p2</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
           
           
         </div>
@@ -19139,7 +19438,7 @@ options object can define the default values for pulseWidth if desired.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code>)?)</code>
           
           
         </div>
@@ -19157,7 +19456,7 @@ options object can define the default values for pulseWidth if desired.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>pulseWidth</span> <code class='quiet'>({line: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, label: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, arrow: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, duration: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, frequency: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?}?)</code>
+          <span class='code bold'>pulseWidth</span> <code class='quiet'>(<a href="#obj_pulsewidth">OBJ_PulseWidth</a>?)</code>
           
           
         </div>
@@ -36639,6 +36938,14 @@ rotation direction and normalized from 0 to Math.PI * 2.</p>
           
         </div>
       
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>precision</span> <code class='quiet'>(<code>8</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
     </div>
   
 
@@ -37932,6 +38239,76 @@ touched
     
       
         <a href="#obj_polygon">OBJ_Polygon</a>
+ for options and examples.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='diagramprimitivesstar'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>star(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p><a href="#diagramelementprimitive">DiagramElementPrimitive</a> that draws a star.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_star">OBJ_Star</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#obj_star">OBJ_Star</a>
  for options and examples.
 
       
@@ -43988,6 +44365,86 @@ points are updated. No payload is passed to subscriber.</p>
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_polylinepadsingle'>
+      OBJ_PolylinePadSingle
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Advanced Polyline pad addition options.</p>
+<p>Each pad is associated with a point of the polyline.</p>
+
+  
+  
+    <p>
+      Extends
+      
+        ADV_Polygon
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isMovable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ allows moving the pad and the
+associated polyline point (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>boundary</span> <code class='quiet'>((TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | <code>"diagram"</code>)?)</code>
+          : boundary the pad can move within
+
+          
+        </div>
+      
+    </div>
   
 
   
@@ -50391,86 +50848,6 @@ will be ignored.</p>
         <div class='space-bottom0'>
           <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
           : Color to set the element
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_polylinepadsingle'>
-      OBJ_PolylinePadSingle
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Advanced Polyline pad addition options.</p>
-<p>Each pad is associated with a point of the polyline.</p>
-
-  
-  
-    <p>
-      Extends
-      
-        ADV_Polygon
-      
-    </p>
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>isMovable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- allows moving the pad and the
-associated polyline point (
-<code>false</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>boundary</span> <code class='quiet'>((TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | <code>"diagram"</code>)?)</code>
-          : boundary the pad can move within
 
           
         </div>

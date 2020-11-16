@@ -9,6 +9,7 @@ import {
 
 function getPolygonPoints(options: {
   radius: number,
+  innerRadius: number,
   rotation: number,
   offset: Point,
   sides: number,
@@ -16,24 +17,40 @@ function getPolygonPoints(options: {
   direction: 1 | -1,
 }): Array<Point> {
   const {
-    radius, rotation, offset, sides, sidesToDraw, direction,
+    radius, rotation, offset, sides, sidesToDraw, direction, innerRadius,
   } = options;
-  const deltaAngle = Math.PI * 2 / sides;
+  let deltaAngle = Math.PI * 2 / sides;
+
+  let sidesMultiplier = 1;
+  if (innerRadius != null) {
+    deltaAngle /= 2;
+    sidesMultiplier = 2;
+  }
   const points = [];
   if (sidesToDraw === 0) {
     return [];
   }
 
-  for (let i = 0; i < sidesToDraw; i += 1) {
+  for (let i = 0; i < sidesToDraw * sidesMultiplier; i += sidesMultiplier) {
     points.push(new Point(
       radius * Math.cos(deltaAngle * i * direction + rotation) + offset.x,
       radius * Math.sin(deltaAngle * i * direction + rotation) + offset.y,
     ));
+    if (innerRadius != null) {
+      points.push(new Point(
+        innerRadius * Math.cos(deltaAngle * (i + 1) * direction + rotation) + offset.x,
+        innerRadius * Math.sin(deltaAngle * (i + 1) * direction + rotation) + offset.y,
+      ));
+    }
   }
   if (sidesToDraw < sides) {
     points.push(new Point(
-      radius * Math.cos(deltaAngle * sidesToDraw * direction + rotation) + offset.x,
-      radius * Math.sin(deltaAngle * sidesToDraw * direction + rotation) + offset.y,
+      radius * Math.cos(
+        deltaAngle * sidesToDraw * sidesMultiplier * direction + rotation,
+      ) + offset.x,
+      radius * Math.sin(
+        deltaAngle * sidesToDraw * sidesMultiplier * direction + rotation,
+      ) + offset.y,
     ));
   }
   return points;
