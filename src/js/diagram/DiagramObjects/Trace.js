@@ -19,7 +19,8 @@ export type ADV_Trace = {
   yAxis?: ADV_Axis,
   x?: Array<TypeParsablePoint>,
   y?: Array<TypeParsablePoint>,
-  line: OBJ_Line,
+  line?: OBJ_Line,
+  markers?: OBJ_Polygon,
   color: Array<number>
 };
 
@@ -32,6 +33,8 @@ class AdvancedTrace extends DiagramElementCollection {
 
   points: Array<Point>;
   drawPoints: Array<Point>;
+  polylines: Array<Array<Point>>;
+
   // x: Array<number>;
   // y: Array<number>;
   // xDraw: Array<Point>;
@@ -85,16 +88,20 @@ class AdvancedTrace extends DiagramElementCollection {
     if (options.line != null) {
       this.addLine(options.line);
     }
-    // if (options.labels != null) {
-    //   this.addLabels(options.labels);
-    // }
-    // if (options.title != null) {
-    //   this.addTitle(options.title);
-    // }
+    if (options.markers != null) {
+      this.addMarkers(options.markers);
+    }
   }
 
   pointToDraw(p: Point) {
     return new Point(this.xAxis.valueToDraw(p.x), this.yAxis.valueToDraw(p.y));
+  }
+
+  inAxes(p: Point) {
+    if (this.xAxis.inAxis(p.x) && this.yAxis.inAxis(p.y)) {
+      return true;
+    }
+    return false;
   }
 
   intersect(p1: Point, p2: Point) {
@@ -111,80 +118,65 @@ class AdvancedTrace extends DiagramElementCollection {
       return { result: false };
     }
     const line = new Line(p1, p2);
-    const left = new Line([0, 0], [0, this.yAxis.length]);
-    let i = line.intersectsWith(left);
     let result = false;
     const intersect = [];
-    if (i.withinLine) {
-      // return { result: true, intersect: i.intersect };
-      result = true;
-      intersect.push(i.intersect)
-    }
-    const right = new Line([this.xAxis.length, 0], [this.xAxis.length, this.yAxis.length]);
-    i = line.intersectsWith(right);
-    if (i.withinLine) {
-      result = true;
-      intersect.push(i.intersect)
-      // return { result: true, intersect: i.intersect };
-    }
-    const bottom = new Line([0, 0], [this.xAxis.length, 0]);
-    i = line.intersectsWith(bottom);
-    if (i.withinLine) {
-      result = true;
-      intersect.push(i.intersect)
-      // return { result: true, intersect: i.intersect };
-    }
-    const top = new Line([0, this.yAxis.length], [this.xAxis.length, this.yAxis.length]);
-    i = line.intersectsWith(top);
-    if (i.withinLine) {
-      result = true;
-      intersect.push(i.intersect)
-      // return { result: true, intersect: i.intersect };
-    }
+    const bounds = [
+      new Line([0, 0], [0, this.yAxis.length]),
+      new Line([this.xAxis.length, 0], [this.xAxis.length, this.yAxis.length]),
+      new Line([0, 0], [this.xAxis.length, 0]),
+      new Line([0, this.yAxis.length], [this.xAxis.length, this.yAxis.length]),
+    ];
+    bounds.forEach((bound) => {
+      const i = line.intersectsWith(bound);
+      if (i.withinLine) {
+        result = true;
+        intersect.push(i.intersect);
+      }
+    });
     return { result, intersect };
   }
 
   updatePoints() {
-    this.drawPoints = [];
-    const drawPoints = this.points.map(p => this.pointToDraw(p));
+    this.polylines = [];
+    this.drawPoints = this.points.map(p => this.pointToDraw(p));
     const inX = this.points.map(p => this.xAxis.inAxis(p.x));
     const inY = this.points.map(p => this.yAxis.inAxis(p.y));
 
     let inLine = false;
     let polyline = [];
-    for (let i = 0; i < drawPoints.length; i += 1) {
+    for (let i = 0; i < this.drawPoints.length; i += 1) {
       if (inX[i] && inY[i]) {
         inLine = true;
-        polyline.push(drawPoints[i]);
+        polyline.push(this.drawPoints[i]);
       }
       // This point is the last point
-      if (inLine && i === drawPoints.length - 1) {
-        this.drawPoints.push(polyline);
+      if (inLine && i === this.drawPoints.length - 1) {
+        this.polylines.push(polyline);
         polyline = [];
       // Next point is within axes
       } else if (inLine && inX[i + 1] && inY[i + 1]) {
-        this.drawPoints.push(polyline);
+        this.polylines.push(polyline);
       // Next point leaving the axes
       } else if (inLine && (inX[i + 1] === false || inY[i + 1] === false)) {
-        const intersect = this.intersect(drawPoints[i], drawPoints[i + 1]);
+        const intersect = this.intersect(this.drawPoints[i], this.drawPoints[i + 1]);
         if (intersect.result) {
           polyline.push(...intersect.intersect);
         }
-        this.drawPoints.push(polyline);
+        this.polylines.push(polyline);
         polyline = [];
         inLine = false;
       // This point is out of axes, and next point is in axes
       } else if (inLine === false && inX[i + 1] && inY[i + 1]) {
-        const intersect = this.intersect(drawPoints[i], drawPoints[i + 1]);
+        const intersect = this.intersect(this.drawPoints[i], this.drawPoints[i + 1]);
         if (intersect.result) {
           polyline.push(...intersect.intersect);
         }
       // This point is out of axes, and next point is out of axes, but
       // the line between points may cross over into the axes
-      } else if (inLine === false && i < drawPoints.length - 1) {
-        const intersect = this.intersect(drawPoints[i], drawPoints[i + 1]);
+      } else if (inLine === false && i < this.drawPoints.length - 1) {
+        const intersect = this.intersect(this.drawPoints[i], this.drawPoints[i + 1]);
         if (intersect.result) {
-          this.drawPoints.push(intersect.intersect.map(p => p._dup()));
+          this.polylines.push(intersect.intersect.map(p => p._dup()));
         }
       }
     }
@@ -196,10 +188,24 @@ class AdvancedTrace extends DiagramElementCollection {
       width: 0.01,
     };
     this.line = joinObjects({}, defaultOptions, options);
-    this.drawPoints.forEach((points, index) => {
+    this.polylines.forEach((points, index) => {
       const line = this.shapes.polyline(joinObjects({}, this.line, { points }));
       this.add(`${line}${index}`, line);
     });
+  }
+
+  addMarkers(options: OBJ_Polygon) {
+    const defaultOptions = {
+      radius: 0.02,
+    };
+    const markers = this.points.filter(p => this.inAxes(p));
+    if (markers.length === 0) {
+      return;
+    }
+    const o = joinObjects({}, defaultOptions, options, {
+      copy: { to: markers.map(p => this.pointToDraw(p)), original: false },
+    });
+    this.add('markers', this.shapes.polygon(o));
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this

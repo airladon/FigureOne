@@ -64,7 +64,7 @@ diagram.add('xAxis', xAxis);
 diagram.add('yAxis', yAxis);
 
 const sin = () => {
-  const xValues = Fig.tools.math.range(-1, 1, 0.1);
+  const xValues = Fig.tools.math.range(-1, 1, 0.2);
   const points = [];
   xValues.forEach((x) => {
     points.push([x, 0.5 * Math.sin(x * Math.PI * 2)]);
@@ -73,15 +73,17 @@ const sin = () => {
 }
 const trace = diagram.advanced.trace({
   points: sin(),
-  line: { width: 0.01 },
+  line: { width: 0.01, dash: [0.1, 0.01]},
+  markers: { radius: 0.03, sides: 3, line: { width: 0.005 }, rotation: Math.PI / 6 + Math.PI },
   xAxis,
   yAxis,
 });
 diagram.add('trace', trace);
 
 const trace1 = diagram.advanced.trace({
-  points: [[-2, 0], [2, 2], [0, 0], [1, 0]],
+  points: [[-2, 0], [2, 2], [0.1, 0], [1, 0]],
   line: { width: 0.04 },
+  markers: { radius: 0.1, sides: 3, rotation: Math.PI / 6 + Math.PI, color: [0, 1, 0, 1] },
   color: [0, 0, 1, 1],
   xAxis,
   yAxis,
