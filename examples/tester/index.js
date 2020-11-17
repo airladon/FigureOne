@@ -67,10 +67,10 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1]});
 // diagram.add('yAxis', yAxis);
 
 const sin = () => {
-  const xValues = Fig.tools.math.range(-1.1, -1.09, 2 / 1000);
+  const xValues = Fig.tools.math.range(-90, 210, 1 / 10000);
   const points = [];
   xValues.forEach((x) => {
-    points.push([x, 0.5 * Math.sin(x * Math.PI * 2)]);
+    points.push([x, 0.5 * Math.sin(x / 10 * Math.PI * 2)]);
   })
   return points;
 }

@@ -108,8 +108,8 @@ class AdvancedPlot extends DiagramElementCollection {
 
     const points = [];
     options.traces.forEach((trace) => {
-      if (trace.points != null) {
-        points.push(...getPoints(trace.points));
+      for (let i = 0; i < trace.points.length; i += 1) {
+        points.push(getPoint(trace.points[i]));
       }
     });
     const bounds = getBoundingRect(points);

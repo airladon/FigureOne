@@ -109,10 +109,11 @@ class AdvancedAxis extends DiagramElementCollection {
       ticks: null,
     };
     if (optionsIn.auto != null) {
-      const { start, stop, step } = this.calcAuto(optionsIn.auto);
+      const { start, stop, step, precision } = this.calcAuto(optionsIn.auto);
       defaultOptions.start = start;
       defaultOptions.stop = stop;
       defaultOptions.ticks = { step };
+      defaultOptions.labels = { precision };
     }
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.stop == null) {
@@ -340,7 +341,7 @@ class AdvancedAxis extends DiagramElementCollection {
       order = 1;
     }
     const factor = 10 ** (order - 1);
-    const newRange = Math.ceil(r / order) + 1;
+    const newRange = Math.ceil(r / factor + 1) * factor;
     const newStart = Math.floor(min / factor) * factor;
     const newEnd = newStart + newRange;
     let step;
@@ -362,11 +363,17 @@ class AdvancedAxis extends DiagramElementCollection {
       default:
         step = newRange / 5;
     }
-    console.log(min, max, order, newStart, newEnd, step)
+    let precision = 0;
+    if (order === 1) {
+      precision = 1;
+    } else if (order < 0) {
+      precision = Math.abs(order) + 1;
+    }
     return {
       start: round(newStart),
       stop: round(newEnd),
       step: round(step),
+      precision: round(precision),
     };
     // return {
     //   start: min,
