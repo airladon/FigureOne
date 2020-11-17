@@ -129,7 +129,7 @@ class AdvancedPlot extends DiagramElementCollection {
     }
     if (this.getYAxis() == null) {
       this.addAxes([{
-        length: 1, axis: 'y', name: 'y', auto: [bounds.left, bounds.right],
+        length: 1, axis: 'y', name: 'y', auto: [bounds.bottom, bounds.top],
       }]);
     }
     if (options.traces != null) {

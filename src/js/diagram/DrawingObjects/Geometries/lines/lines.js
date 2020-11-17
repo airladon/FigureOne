@@ -354,7 +354,6 @@ function makeThickLine(
   // if (widthIsIn === 'mid') {
   //   widthToUse = width / 2;
   // }
-  console.log('makeThickLine')
   const widthIs = getWidthIs(points, close, widthIsIn);
   const [idealLines, lineSegments] = makeLineSegments(
     points, widthToUse, close, corner, widthIs, widthIsIn === 'inside', lineNum,

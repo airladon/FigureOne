@@ -23,6 +23,8 @@ export type ADV_Trace = {
   markers?: OBJ_Polygon | OBJ_Start,
   color: Array<number>,
   name: string,
+  xSampleDistance: number,
+  ySampleDistance: number,
 };
 
 // $FlowFixMe
@@ -71,9 +73,9 @@ class AdvancedTrace extends DiagramElementCollection {
       name: '',
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
-    if (options.stop == null) {
-      options.stop = options.start + 1;
-    }
+    // if (options.stop == null) {
+    //   options.stop = options.start + 1;
+    // }
     if (options.markers == null && options.line === undefined) {
       options.line = {};
     }
@@ -83,7 +85,14 @@ class AdvancedTrace extends DiagramElementCollection {
     this.yAxis = options.yAxis;
     this.name = options.name;
     this.setColor(options.color);
-
+    if (options.xSampleDistance == null) {
+      options.xSampleDistance = (this.xAxis.stop - this.xAxis.start) / 4000;
+    }
+    if (options.ySampleDistance == null) {
+      options.ySampleDistance = (this.yAxis.stop - this.yAxis.start) / 4000;
+    }
+    this.xSampleDistance = options.xSampleDistance;
+    this.ySampleDistance = options.ySampleDistance;
 
     if (options.line != null) {
       this.addLine(options.line);
@@ -139,8 +148,35 @@ class AdvancedTrace extends DiagramElementCollection {
   updatePoints() {
     this.polylines = [];
     this.drawPoints = this.points.map(p => this.pointToDraw(p));
-    const inX = this.points.map(p => this.xAxis.inAxis(p.x));
-    const inY = this.points.map(p => this.yAxis.inAxis(p.y));
+    this.drawPoints = [];
+    let sampling = false;
+    if (this.xSampleDistance != null && this.ySampleDistance != null) {
+      sampling = true;
+    }
+    let lastPoint;
+    const drawIndexes = [];
+    for (let i = 0; i < this.points.length; i += 1) {
+      if (sampling && lastPoint != null) {
+        if (
+          Math.abs(this.points[i].x - lastPoint.x) >= this.xSampleDistance
+          || Math.abs(this.points[i].y - lastPoint.y) >= this.ySampleDistance
+        ) {
+          this.drawPoints.push(this.pointToDraw(this.points[i]));
+          lastPoint = this.points[i];
+          drawIndexes.push(i);
+        }
+      } else {
+        this.drawPoints.push(this.pointToDraw(this.points[i]));
+        lastPoint = this.points[i];
+        drawIndexes.push(i);
+      }
+    }
+    const inX = [];
+    const inY = [];
+    for (let i = 0; i < drawIndexes.length; i += 1) {
+      inX.push(this.xAxis.inAxis(this.points[drawIndexes[i]].x));
+      inY.push(this.yAxis.inAxis(this.points[drawIndexes[i]].y));
+    }
 
     let inLine = false;
     let polyline = [];

@@ -235,6 +235,7 @@ function copyOffset(
   return out;
 }
 
+// TODO Speedup like copyOFfset
 function copyTransform(
   pointsToCopy: Array<Point>,
   // initialPoints: Array<Point>,
@@ -258,6 +259,7 @@ function copyTransform(
   return out;
 }
 
+// TODO Speedup like copyOFfset
 function copyLinear(
   pointsToCopy: Array<Point>,
   // initialPoints: Array<Point>,
@@ -294,6 +296,7 @@ function copyLinear(
   return out;
 }
 
+// TODO Speedup like copyOFfset
 function copyAngle(
   pointsToCopy: Array<Point>,
   // initialPoints: Array<Point>,

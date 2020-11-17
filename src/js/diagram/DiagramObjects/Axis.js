@@ -118,7 +118,7 @@ class AdvancedAxis extends DiagramElementCollection {
     if (options.stop == null) {
       options.stop = options.start + 1;
     }
-    console.log(options)
+    // console.log(options)
     this.name = options.name;
     this.defaultFont = options.font;
     this.start = options.start;
@@ -331,14 +331,48 @@ class AdvancedAxis extends DiagramElementCollection {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   calcAuto(auto: [number, number]) {
     const [min, max] = auto;
     const r = max - min;
+    let order = r >= 1 ? Math.ceil(Math.log10(r)) : Math.floor(Math.log10(r));
+    if (order === 0) {
+      order = 1;
+    }
+    const factor = 10 ** (order - 1);
+    const newRange = Math.ceil(r / order) + 1;
+    const newStart = Math.floor(min / factor) * factor;
+    const newEnd = newStart + newRange;
+    let step;
+    switch (newRange) {
+      case 3:
+      case 6:
+        step = newRange / 3;
+        break;
+      case 4:
+      case 8:
+        step = newRange / 4;
+        break;
+      case 7:
+        step = newRange / 7;
+        break;
+      case 9:
+        step = newRange / 3;
+        break;
+      default:
+        step = newRange / 5;
+    }
+    console.log(min, max, order, newStart, newEnd, step)
     return {
-      start: min,
-      stop: max,
-      step: r / 5,
+      start: round(newStart),
+      stop: round(newEnd),
+      step: round(step),
     };
+    // return {
+    //   start: min,
+    //   stop: max,
+    //   step: (max - min) / 5,
+    // };
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
