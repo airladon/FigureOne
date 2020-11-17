@@ -120,6 +120,9 @@ class AdvancedAxis extends DiagramElementCollection {
     this.angle = this.axis === 'x' ? 0 : Math.PI / 2;
     this.drawToValueRatio = (options.stop - options.start) / options.length;
     this.valueToDrawRatio = 1 / this.drawToValueRatio;
+    if (options.ticks != null && options.labels === undefined) {
+      options.labels = {};
+    }
     if (options.position != null) {
       this.transform.updateTranslation(getPoint(options.position));
     }

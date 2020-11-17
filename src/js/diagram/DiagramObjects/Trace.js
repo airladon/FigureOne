@@ -74,6 +74,9 @@ class AdvancedTrace extends DiagramElementCollection {
     if (options.stop == null) {
       options.stop = options.start + 1;
     }
+    if (options.markers == null && options.line === undefined) {
+      options.line = {};
+    }
     this.defaultFont = options.font;
     this.points = getPoints(options.points);
     this.xAxis = options.xAxis;

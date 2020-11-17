@@ -49,6 +49,9 @@ class AdvancedPlot extends DiagramElementCollection {
   equation: Object;
   advanced: Object;
 
+  axes: Array<AdvancedAxis>;
+  traces: Array<AdvancedTrace>;
+
   // length: number;
   // angle: number;
   // start: number;
@@ -101,6 +104,7 @@ class AdvancedPlot extends DiagramElementCollection {
     this.setColor(options.color);
 
     this.axes = [];
+    this.traces = [];
     if (options.xAxis != null) {
       this.addAxes([options.xAxis], 'x');
     }
@@ -108,12 +112,18 @@ class AdvancedPlot extends DiagramElementCollection {
       this.addAxes([options.yAxis], 'y');
     }
     if (options.axes != null) {
-      this.addAxes(options.axies);
+      this.addAxes(options.axes);
+    }
+    if (options.traces != null) {
+      this.addTraces(options.traces);
     }
   }
 
   addAxes(axes: Array<ADV_Axis>, type: 'x' | 'y' | null) {
-    const defaultOptions = {};
+    const defaultOptions = {
+      color: this.defaultColor,
+      font: this.defaultFont,
+    };
     if (type != null) {
       defaultOptions.axis = type;
       defaultOptions.name = type;
@@ -121,12 +131,42 @@ class AdvancedPlot extends DiagramElementCollection {
     axes.forEach((axisOptions) => {
       const o = joinObjects({}, defaultOptions, axisOptions);
       if (o.name == null) {
-        o.name = this.axes.length;
+        o.name = `axis_${this.axes.length}`;
       }
       const axis = this.advanced.axis(o);
-      this.add(`${axis}${this.axes.length}`, axis);
+      this.add(o.name, axis);
       this.axes.push(axis);
+    });
+  }
+
+  getAxis(name: string) {
+    for (let i = 0; i < this.axes.length; i += 1) {
+      if (this.axes[i].name === name) {
+        return this.axes[i];
+      }
+    }
+    return null;
+  }
+
+  addTraces(traces: Array<ADV_Trace>) {
+    const defaultOptions = {
+      xAxis: this.getAxis('x') != null ? 'x' : 0,
+      yAxis: this.getAxis('y') != null ? 'y' : 1,
+      color: this.defaultColor,
+    };
+    traces.forEach((traceOptions) => {
+      const o = joinObjects({}, defaultOptions, traceOptions);
+      if (o.name == null) {
+        o.name = `${this.traces.length}`;
+      }
+      o.xAxis = this.getAxis(o.xAxis);
+      o.yAxis = this.getAxis(o.yAxis);
+
       console.log(o)
+      const trace = this.advanced.trace(o);
+      this.add(`trace_${this.traces.length}`, trace);
+      this.traces.push(trace);
+      console.log(trace)
     });
   }
 
