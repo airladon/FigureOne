@@ -3143,8 +3143,13 @@ export default class DiagramPrimitives {
    * {@link DiagramElementPrimitive} that draws text lines.
    * @see {@link OBJ_TextLines} for options and examples.
    */
-  textLines(...optionsIn: Array<OBJ_TextLines>) {
-    const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsIn);
+  textLines(...optionsIn: Array<OBJ_TextLines | string>) {
+    let optionsToUse = optionsIn;
+    console.log(optionsIn)
+    if (optionsIn.length === 1 && typeof optionsIn[0] === 'string') {
+      optionsToUse = [{ lines: [optionsIn[0]] }];
+    }
+    const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsToUse);
     if (options.justify == null) {
       options.justify = 'left';
     }

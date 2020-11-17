@@ -99,6 +99,9 @@ diagram.addElement({
     width: 3,
     height: 2,
     position: [-1, -1],
+    // xAxis: { title: { lines: ['hello'] } },
+    xAxis: { title: { lines: ['these'], offset: [0, -0.2] } },
+    // xAxis: { color: [1, 0, 0, 1] },
     // xAxis: { length: 1, start: -10, stop: 0, ticks: { step: 2.5 }, grid: { length: 1, step: 2.5, width: 0.005 } },
     // yAxis: { length: 1, start: -10, stop: 0, ticks: { step: 2.5 } },
     // axes: [

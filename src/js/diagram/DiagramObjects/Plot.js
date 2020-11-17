@@ -150,40 +150,52 @@ class AdvancedPlot extends DiagramElementCollection {
       }
     });
     const bounds = getBoundingRect(points);
-    if (options.xAxis != null) {
-      this.addAxes([options.xAxis], 'x', bounds);
-    }
-    if (options.yAxis != null) {
-      this.addAxes([options.yAxis], 'y', bounds);
-    }
+    // if (options.xAxis != null) {
+    //   this.addAxes([options.xAxis], 'x', bounds);
+    // } else {
+    //   this.add
+    // }
+    this.addAxes([joinObjects(
+      {},
+      { axis: 'x', name: 'x', auto: [bounds.left, bounds.right] },
+      options.xAxis != null ? options.xAxis : {},
+    )]);
+    this.addAxes([joinObjects(
+      {},
+      { axis: 'y', name: 'y', auto: [bounds.bottom, bounds.top] },
+      options.yAxis != null ? options.yAxis : {},
+    )]);
+    // if (options.yAxis != null) {
+    //   this.addAxes([options.yAxis], 'y', bounds);
+    // }
     if (options.axes != null) {
-      this.addAxes(options.axes, null, bounds);
+      this.addAxes(options.axes);
     }
-    if (this.getXAxis() == null) {
-      this.addAxes([{
-        axis: 'x', name: 'x', auto: [bounds.left, bounds.right],
-      }]);
-    }
-    if (this.getYAxis() == null) {
-      this.addAxes([{
-        axis: 'y', name: 'y', auto: [bounds.bottom, bounds.top],
-      }]);
-    }
+    // if (this.getXAxis() == null) {
+    //   this.addAxes([{
+    //     axis: 'x', name: 'x', auto: [bounds.left, bounds.right],
+    //   }]);
+    // }
+    // if (this.getYAxis() == null) {
+    //   this.addAxes([{
+    //     axis: 'y', name: 'y', auto: [bounds.bottom, bounds.top],
+    //   }]);
+    // }
     if (options.traces != null) {
       this.addTraces(options.traces);
     }
   }
 
-  addAxes(axes: Array<ADV_Axis>, type: 'x' | 'y' | null) {
+  addAxes(axes: Array<ADV_Axis>) {
     const defaultOptions = {
       color: this.defaultColor,
       font: this.defaultFont,
       type: 'x',
     };
-    if (type != null) {
-      defaultOptions.axis = type;
-      defaultOptions.name = type;
-    }
+    // if (type != null) {
+    //   defaultOptions.axis = type;
+    //   defaultOptions.name = type;
+    // }
     axes.forEach((axisOptions) => {
       // let theme = {};
       let axisType;
@@ -192,19 +204,54 @@ class AdvancedPlot extends DiagramElementCollection {
       } else if (defaultOptions.axis != null) {
         axisType = defaultOptions.axis;
       }
+      if (axisType === 'x') {
+        defaultOptions.length = this.width;
+        // o.length = o.axis === 'x' ? this.width : this.height;
+      } else {
+        defaultOptions.length = this.height;
+      }
       const theme = this.getTheme(this.theme, axisType);
       const o = joinObjects({}, defaultOptions, theme.axis, axisOptions);
       if (o.name == null) {
         o.name = `axis_${this.axes.length}`;
-      }
-      if (axisOptions.length == null) {
-        o.length = o.axis === 'x' ? this.width : this.height;
       }
       const axis = this.advanced.axis(o);
       this.add(o.name, axis);
       this.axes.push(axis);
     });
   }
+
+  // addAxes(axes: Array<ADV_Axis>, type: 'x' | 'y' | null) {
+  //   const defaultOptions = {
+  //     color: this.defaultColor,
+  //     font: this.defaultFont,
+  //     type: 'x',
+  //   };
+  //   if (type != null) {
+  //     defaultOptions.axis = type;
+  //     defaultOptions.name = type;
+  //   }
+  //   axes.forEach((axisOptions) => {
+  //     // let theme = {};
+  //     let axisType;
+  //     if (axisOptions.axis != null) {
+  //       axisType = axisOptions.axis;
+  //     } else if (defaultOptions.axis != null) {
+  //       axisType = defaultOptions.axis;
+  //     }
+  //     const theme = this.getTheme(this.theme, axisType);
+  //     const o = joinObjects({}, defaultOptions, theme.axis, axisOptions);
+  //     if (o.name == null) {
+  //       o.name = `axis_${this.axes.length}`;
+  //     }
+  //     if (axisOptions.length == null) {
+  //       o.length = o.axis === 'x' ? this.width : this.height;
+  //     }
+  //     const axis = this.advanced.axis(o);
+  //     this.add(o.name, axis);
+  //     this.axes.push(axis);
+  //   });
+  // }
 
   getAxis(name: string) {
     for (let i = 0; i < this.axes.length; i += 1) {

@@ -47,7 +47,7 @@ export type ADV_Axis = {
   line?: null | ADV_Line,
   font?: OBJ_Font,              // Default font
   labels?: AxisLabels | Array<AxisLabels>,
-  title?: OBJ_TextLines,
+  title?: OBJ_TextLines | string,
   name?: string,
   auto?: [number, number],
 };
@@ -228,7 +228,7 @@ class AdvancedAxis extends DiagramElementCollection {
     });
   }
 
-  addTitle(options: OBJ_Text & { rotation: number, offset: TypeParsablePoint }) {
+  addTitle(optionsIn: OBJ_Text & { rotation: number, offset: TypeParsablePoint } | string) {
     const defaultOptions = {
       font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 2 }),
       justify: 'center',
@@ -237,7 +237,11 @@ class AdvancedAxis extends DiagramElementCollection {
       rotation: this.axis === 'x' ? 0 : Math.PI / 2,
       offset: [0, 0],
     };
-    const o = joinObjects({}, defaultOptions, options);
+    let optionsToUse = optionsIn;
+    if (typeof optionsIn === 'string') {
+      optionsToUse = { lines: [optionsIn] };
+    }
+    const o = joinObjects({}, defaultOptions, optionsToUse);
     o.offset = getPoint(o.offset);
     if (o.position == null) {
       if (this.axis === 'x') {
