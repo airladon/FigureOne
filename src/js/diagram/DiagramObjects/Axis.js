@@ -49,6 +49,7 @@ export type ADV_Axis = {
   labels?: AxisLabels | Array<AxisLabels>,
   title?: OBJ_TextLines,
   name?: string,
+  auto?: [number, number],
 };
 
 // $FlowFixMe
@@ -107,10 +108,17 @@ class AdvancedAxis extends DiagramElementCollection {
       grid: null,
       ticks: null,
     };
+    if (optionsIn.auto != null) {
+      const { start, stop, step } = this.calcAuto(optionsIn.auto);
+      defaultOptions.start = start;
+      defaultOptions.stop = stop;
+      defaultOptions.ticks = { step };
+    }
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.stop == null) {
       options.stop = options.start + 1;
     }
+    console.log(options)
     this.name = options.name;
     this.defaultFont = options.font;
     this.start = options.start;
@@ -321,6 +329,16 @@ class AdvancedAxis extends DiagramElementCollection {
       this.add(`${labels}${index}`, labels);
       this.labels.push(o);
     });
+  }
+
+  calcAuto(auto: [number, number]) {
+    const [min, max] = auto;
+    const r = max - min;
+    return {
+      start: min,
+      stop: max,
+      step: r / 5,
+    };
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this

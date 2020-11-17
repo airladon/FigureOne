@@ -155,7 +155,8 @@ class AdvancedTrace extends DiagramElementCollection {
         polyline = [];
       // Next point is within axes
       } else if (inLine && inX[i + 1] && inY[i + 1]) {
-        this.polylines.push(polyline);
+        // this.polylines.push(polyline);
+        // polyline
       // Next point leaving the axes
       } else if (inLine && (inX[i + 1] === false || inY[i + 1] === false)) {
         const intersect = this.intersect(this.drawPoints[i], this.drawPoints[i + 1]);

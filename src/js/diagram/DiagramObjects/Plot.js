@@ -3,7 +3,7 @@
 // import Diagram from '../Diagram';
 import {
   Transform, Point,
-  getPoint, getTransform,
+  getPoint, getTransform, getPoints, getBoundingRect,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
 import {
@@ -105,14 +105,32 @@ class AdvancedPlot extends DiagramElementCollection {
 
     this.axes = [];
     this.traces = [];
+
+    const points = [];
+    options.traces.forEach((trace) => {
+      if (trace.points != null) {
+        points.push(...getPoints(trace.points));
+      }
+    });
+    const bounds = getBoundingRect(points);
     if (options.xAxis != null) {
-      this.addAxes([options.xAxis], 'x');
+      this.addAxes([options.xAxis], 'x', bounds);
     }
     if (options.yAxis != null) {
-      this.addAxes([options.yAxis], 'y');
+      this.addAxes([options.yAxis], 'y', bounds);
     }
     if (options.axes != null) {
-      this.addAxes(options.axes);
+      this.addAxes(options.axes, null, bounds);
+    }
+    if (this.getXAxis() == null) {
+      this.addAxes([{
+        length: 1, axis: 'x', name: 'x', auto: [bounds.left, bounds.right],
+      }]);
+    }
+    if (this.getYAxis() == null) {
+      this.addAxes([{
+        length: 1, axis: 'y', name: 'y', auto: [bounds.left, bounds.right],
+      }]);
     }
     if (options.traces != null) {
       this.addTraces(options.traces);
@@ -148,6 +166,24 @@ class AdvancedPlot extends DiagramElementCollection {
     return null;
   }
 
+  getXAxis() {
+    for (let i = 0; i < this.axes.length; i += 1) {
+      if (this.axes[i].axis === 'x') {
+        return this.axes[i];
+      }
+    }
+    return null;
+  }
+
+  getYAxis() {
+    for (let i = 0; i < this.axes.length; i += 1) {
+      if (this.axes[i].axis === 'y') {
+        return this.axes[i];
+      }
+    }
+    return null;
+  }
+
   addTraces(traces: Array<ADV_Trace>) {
     const defaultOptions = {
       xAxis: this.getAxis('x') != null ? 'x' : 0,
@@ -162,11 +198,9 @@ class AdvancedPlot extends DiagramElementCollection {
       o.xAxis = this.getAxis(o.xAxis);
       o.yAxis = this.getAxis(o.yAxis);
 
-      console.log(o)
       const trace = this.advanced.trace(o);
       this.add(`trace_${this.traces.length}`, trace);
       this.traces.push(trace);
-      console.log(trace)
     });
   }
 

@@ -217,15 +217,20 @@ function copyOffset(
   // initialPoints: Array<Point>,
   optionsIn: CPY_Step,
 ) {
+  const t = performance.now()
   const defaultOptions = {
     to: [],
   };
   const options = joinObjects({}, defaultOptions, optionsIn);
   options.to = getPoints(options.to);
 
-  let out = [];
+  let k = 0;
+  const out = Array(options.to.length * pointsToCopy.length);
   for (let i = 0; i < options.to.length; i += 1) {
-    out = [...out, ...pointsToCopy.map(p => p.add(options.to[i]))];
+    for (let j = 0; j < pointsToCopy.length; j += 1) {
+      out[k] = new Point(pointsToCopy[j].x + options.to[i].x, pointsToCopy[j].y + options.to[i].y);
+      k += 1;
+    }
   }
   return out;
 }
