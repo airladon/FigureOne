@@ -36,55 +36,67 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1]});
 // ]);
 
 
-const xAxis = diagram.advanced.axis({
-  // position: [-1, -1],
-  length: 2,
-  axis: 'x',
-  start: -1,
-  stop: 1,
-  line: { width: 0.01 },
-  ticks: { step: 0.5, length: 0.1 },
-  grid: { step: 0.5, length: 2, width: 0.002 },
-  labels: { text: null, precision: 1, },
-})
-diagram.add('xAxis', xAxis);
 
-const yAxis = diagram.advanced.axis({
-  // position: [-1, -1],
-  length: 2,
-  axis: 'y',
-  start: -1,
-  stop: 1,
-  line: { width: 0.01 },
-  ticks: [ { step: 0.5, length: 0.1 }],
-  grid: [ { step: 0.5, length: 2, width: 0.002 }],
-  labels: { text: null, precision: 1, },
-})
-diagram.add('xAxis', xAxis);
-diagram.add('yAxis', yAxis);
 
-const sin = () => {
-  const xValues = Fig.tools.math.range(-1, 1, 0.2);
-  const points = [];
-  xValues.forEach((x) => {
-    points.push([x, 0.5 * Math.sin(x * Math.PI * 2)]);
-  })
-  return points;
-}
-const trace = diagram.advanced.trace({
-  points: sin(),
-  markers: { radius: 0.03, sides: 4, line: { width: 0.005 }, rotation: Math.PI / 6 + Math.PI,  copy: { along: 'rotation', num: 1, step: Math.PI / 4 } },
-  xAxis,
-  yAxis,
+// const xAxis = diagram.advanced.axis({
+//   // position: [-1, -1],
+//   length: 2,
+//   axis: 'x',
+//   start: -1,
+//   stop: 1,
+//   line: { width: 0.01 },
+//   ticks: { step: 0.5, length: 0.1 },
+//   grid: { step: 0.5, length: 2, width: 0.002 },
+//   labels: { text: null, precision: 1, },
+// })
+// diagram.add('xAxis', xAxis);
+
+// const yAxis = diagram.advanced.axis({
+//   // position: [-1, -1],
+//   length: 2,
+//   axis: 'y',
+//   start: -1,
+//   stop: 1,
+//   line: { width: 0.01 },
+//   ticks: [ { step: 0.5, length: 0.1 }],
+//   grid: [ { step: 0.5, length: 2, width: 0.002, offset: -1 }],
+//   labels: { text: null, precision: 1, },
+//   position: [1, 0],
+// })
+// diagram.add('xAxis', xAxis);
+// diagram.add('yAxis', yAxis);
+
+// const sin = () => {
+//   const xValues = Fig.tools.math.range(-1, 1, 0.05);
+//   const points = [];
+//   xValues.forEach((x) => {
+//     points.push([x, 0.5 * Math.sin(x * Math.PI * 2)]);
+//   })
+//   return points;
+// }
+// const trace = diagram.advanced.trace({
+//   points: sin(),
+//   markers: { radius: 0.03, sides: 4, line: { width: 0.005 }, rotation: Math.PI / 6 + Math.PI,  copy: { along: 'rotation', num: 1, step: Math.PI / 4 } },
+//   xAxis,
+//   yAxis,
+// });
+// diagram.add('trace', trace);
+
+// const trace1 = diagram.advanced.trace({
+//   points: [[-2, 0], [2, 2], [0.1, 0], [1, 0]],
+//   line: { width: 0.04 },
+//   markers: { radius: 0.1, sides: 5, innerRadius: 0.03, rotation: Math.PI / 2, color: [0, 1, 0, 1] },
+//   color: [0, 0, 1, 1],
+//   xAxis,
+//   yAxis,
+// })
+// diagram.add('trace1', trace1);
+
+diagram.addElement({
+  name: 'plot',
+  method: 'advanced.plot',
+  options: {
+    xAxis: { length: 2, start: -2, stop: 2, ticks: { step: 0.25 } },
+    yAxis: { length: 2, start: -2, stop: 2, ticks: { step: 0.25 } },
+  },
 });
-diagram.add('trace', trace);
-
-const trace1 = diagram.advanced.trace({
-  points: [[-2, 0], [2, 2], [0.1, 0], [1, 0]],
-  line: { width: 0.04 },
-  markers: { radius: 0.1, sides: 5, innerRadius: 0.03, rotation: Math.PI / 2, color: [0, 1, 0, 1] },
-  color: [0, 0, 1, 1],
-  xAxis,
-  yAxis,
-})
-diagram.add('trace1', trace1);

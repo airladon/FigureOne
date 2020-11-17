@@ -2113,6 +2113,7 @@ export default class DiagramPrimitives {
   animateNextFrame: Function;
   draw2DFigures: Object;
   defaultColor: Array<number>;
+  defaultFont: OBJ_Font;
 
   /**
     * This is a big big test
@@ -2127,6 +2128,7 @@ export default class DiagramPrimitives {
     spaceTransforms: TypeSpaceTransforms,
     animateNextFrame: Function,
     defaultColor: Array<number>,
+    defaultFont: OBJ_Font,
   ) {
     if (Array.isArray(webgl)) {
       this.webgl = webgl;
@@ -2147,6 +2149,7 @@ export default class DiagramPrimitives {
     this.animateNextFrame = animateNextFrame;
     this.spaceTransforms = spaceTransforms;
     this.defaultColor = defaultColor;
+    this.defaultFont = defaultFont;
     // this.draw2DFigures = draw2DFigures;
   }
 
@@ -3050,10 +3053,10 @@ export default class DiagramPrimitives {
     const defaultOptions = {
       text: '',
       font: {
-        family: 'Times New Roman',
-        style: 'normal',
-        size: 0.2,
-        weight: '200',
+        family: this.defaultFont.family,
+        style: this.defaultFont.style,
+        size: this.defaultFont.size,
+        weight: this.defaultFont.weight,
       },
       xAlign: 'left',
       yAlign: 'baseline',
@@ -3070,7 +3073,7 @@ export default class DiagramPrimitives {
       options.font.color = options.color;
     }
     if (options.color == null) {
-      options.color = [1, 0, 0, 1];
+      options.color = this.defaultFont.color;
     }
 
     // Define standard transform if no transform was input

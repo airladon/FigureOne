@@ -22,6 +22,7 @@ import type { ADV_Polyline } from './PolyLine';
 import type { ADV_Axis } from './Axis';
 import type { ADV_Trace } from './Trace';
 import EquationLabel from './EquationLabel';
+import AdvancedPlot from './Plot';
 
 export default class DiagramObjects {
   webgl: Array<WebGLInstance>;
@@ -97,4 +98,10 @@ export default class DiagramObjects {
     );
   }
 
+  plot(...options: Array<ADV_Plot>) {
+    const optionsToUse = joinObjects({}, ...options);
+    return new AdvancedPlot(
+      this.shapes, this.equation, this, optionsToUse,
+    );
+  }
 }

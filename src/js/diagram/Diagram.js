@@ -246,6 +246,7 @@ class Diagram {
 
   drawAnimationFrames: number;
   defaultColor: Array<number>;
+  defaultFont: OBJ_Font;
 
   animationFinishedCallback: ?(string | (() => void));
   // updateFontSize: string;
@@ -274,6 +275,13 @@ class Diagram {
       limits: new Rect(-1, -1, 2, 2),
       fontScale: 1,
       color: [0, 0, 0, 1],
+      font: {
+        family: 'Times New Roman',
+        size: 0.1,
+        style: 'normal',
+        weight: 'normal',
+        opacity: 1,
+      },
     };
     this.fnMap = new FunctionMap();
     this.isPaused = false;
@@ -286,6 +294,10 @@ class Diagram {
       htmlId, limits,
     } = optionsToUse;
     this.defaultColor = optionsToUse.color;
+    this.defaultFont = optionsToUse.font;
+    if (optionsToUse.font.color == null) {
+      optionsToUse.font.color = this.defaultColor.slice();
+    }
     this.htmlId = htmlId;
     this.animationFinishedCallback = null;
     // this.layout = layout;
@@ -1105,6 +1117,7 @@ class Diagram {
       this.spaceTransforms,
       this.animateNextFrame.bind(this, true, 'getShapes'),
       this.defaultColor,
+      this.defaultFont,
     );
   }
 

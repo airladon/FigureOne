@@ -44,10 +44,11 @@ export type ADV_Axis = {
   axis?: 'x' | 'y',
   ticks?: OBJ_AxisTicks | Array<OBJ_AxisTicks>,
   grid?: OBJ_AxisTicks | Array<OBJ_AxisTicks>,
-  line?: ADV_Line,
+  line?: null | ADV_Line,
   font?: OBJ_Font,              // Default font
   labels?: AxisLabels | Array<AxisLabels>,
   title?: OBJ_TextLines,
+  name?: string,
 };
 
 // $FlowFixMe
@@ -78,6 +79,7 @@ class AdvancedAxis extends DiagramElementCollection {
   drawToValueRatio: number;
   valueToDraw: number;
   defaultFont: OBJ_Font;
+  name: string;
 
   /**
    * @hideconstructor
@@ -99,19 +101,17 @@ class AdvancedAxis extends DiagramElementCollection {
       angle: 0,
       start: 0,
       color: shapes.defaultColor,
-      font: {
-        family: 'Times New Roman',
-        size: 0.1,
-        style: 'normal',
-        weight: 'normal',
-        color: shapes.defaultColor,
-        opacity: 1,
-      },
+      font: shapes.defaultFont,
+      name: '',
+      line: {},
+      grid: null,
+      ticks: null,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.stop == null) {
       options.stop = options.start + 1;
     }
+    this.name = options.name;
     this.defaultFont = options.font;
     this.start = options.start;
     this.stop = options.stop;
@@ -128,7 +128,6 @@ class AdvancedAxis extends DiagramElementCollection {
     }
 
     this.setColor(options.color);
-
 
     if (options.line != null) {
       this.addLine(options.line);
