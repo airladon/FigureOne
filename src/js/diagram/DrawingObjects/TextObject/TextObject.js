@@ -1137,8 +1137,8 @@ class TextLinesObject extends TextObjectBase {
   // $FlowFixMe
   loadText(
     options: {
-    lines: Array<string | {
-      line: string,
+    text: Array<string | {
+      text: string,
       font?: OBJ_Font,
       justify?: 'left' | 'center' | 'right',
       lineSpace?: number
@@ -1163,15 +1163,16 @@ class TextLinesObject extends TextObjectBase {
   },
   ) {
     // console.log('asdfasdf')
-    let { lines } = options;
-    if (typeof lines === 'string') {
-      lines = [lines];
+    // let { lines } = options;
+    let textLines = options.text;
+    if (typeof textLines === 'string') {
+      textLines = [textLines];
     }
     this.modifiers = options.modifiers || {};
     this.lines = [];
     const diagramTextArray = [];
 
-    lines.forEach((lineDefinition, lineIndex) => {
+    textLines.forEach((lineDefinition, lineIndex) => {
       let lineJustification = options.justify;
       let lineLineSpace = options.lineSpace;
       let lineToUse;

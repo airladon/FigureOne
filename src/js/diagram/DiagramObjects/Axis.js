@@ -239,15 +239,16 @@ class AdvancedAxis extends DiagramElementCollection {
     };
     let optionsToUse = optionsIn;
     if (typeof optionsIn === 'string') {
-      optionsToUse = { lines: [optionsIn] };
+      optionsToUse = { text: [optionsIn] };
     }
     const o = joinObjects({}, defaultOptions, optionsToUse);
     o.offset = getPoint(o.offset);
+    const bounds = this.getBoundingRect('draw');
     if (o.position == null) {
       if (this.axis === 'x') {
-        o.position = new Point(this.length / 2, -0.3).add(o.offset);
+        o.position = new Point(this.length / 2, bounds.bottom - o.font.size / 1.5).add(o.offset);
       } else {
-        o.position = new Point(-0.3, this.length / 2).add(o.offset);
+        o.position = new Point(bounds.left - o.font.size / 1.5, this.length / 2).add(o.offset);
       }
     }
     const title = this.shapes.textLines(o);
@@ -273,6 +274,7 @@ class AdvancedAxis extends DiagramElementCollection {
       optionsToUse = [optionsIn];
     }
     this.labels = [];
+    const bounds = this.getBoundingRect('draw');
     optionsToUse.forEach((options, index) => {
       const o = joinObjects({}, defaultOptions, options);
       if (typeof o.hide === 'number') {
@@ -282,30 +284,7 @@ class AdvancedAxis extends DiagramElementCollection {
         o.values = [o.values];
       }
 
-      // Calculate auto offset
-      if (o.offset == null) {
-        if (this.axis === 'x') {
-          o.offset = new Point(0, -o.font.size - 0.05);
-          if (this.ticks != null) {
-            o.offset.y += Math.min(0, this.ticks[index].p1.y);
-          }
-        } else {
-          o.offset = new Point(-o.font.size / 1.5, 0);
-          if (this.ticks != null) {
-            o.offset.x += Math.min(0, this.ticks[index].p1.y + this.ticks[index].length);
-          }
-        }
-        // let offset = -o.font.size - 0.05;
-        // if (this.ticks != null && this.axis === 'x') {
-        //   offset += this.ticks[index].p1.y;
-        // } else if (this.ticks != null && this.axis === 'y') {
-        //   offset += (this.ticks[index].p1.y + this.ticks[index].length);
-        // }
-        // // console.log(this.axis, this.ticks[index].p1.y, offset)
-        // o.offset = this.axis === 'x' ? new Point(0, offset) : new Point(offset, 0);
-      } else {
-        o.offset = getPoint(o.offset);
-      }
+      o.offset = getPoint(o.offset);
 
       // Values where to put the labels - null is auto which is same as ticks
       let values;
@@ -333,9 +312,15 @@ class AdvancedAxis extends DiagramElementCollection {
         let location;
         const draw = this.valueToDraw(values[i]);
         if (this.axis === 'x') {
-          location = new Point(draw + o.offset.x, o.offset.y).rotate(-o.rotation);
+          location = new Point(
+            draw + o.offset.x,
+            bounds.bottom - o.font.size * 1.5 + o.offset.y,
+          ).rotate(-o.rotation);
         } else {
-          location = new Point(o.offset.x, draw + o.offset.y).rotate(-o.rotation);
+          location = new Point(
+            bounds.left + o.offset.x - o.font.size / 1.5,
+            draw + o.offset.y,
+          ).rotate(-o.rotation);
         }
         if (
           o.hide == null
@@ -350,7 +335,7 @@ class AdvancedAxis extends DiagramElementCollection {
       o.text = text;
       const labels = this.shapes.text(o);
       labels.transform.updateRotation(o.rotation);
-      this.add(`${labels}${index}`, labels);
+      this.add(`labels${index}`, labels);
       this.labels.push(o);
     });
   }

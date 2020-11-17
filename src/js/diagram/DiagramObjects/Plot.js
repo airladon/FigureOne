@@ -150,11 +150,6 @@ class AdvancedPlot extends DiagramElementCollection {
       }
     });
     const bounds = getBoundingRect(points);
-    // if (options.xAxis != null) {
-    //   this.addAxes([options.xAxis], 'x', bounds);
-    // } else {
-    //   this.add
-    // }
     this.addAxes([joinObjects(
       {},
       { axis: 'x', name: 'x', auto: [bounds.left, bounds.right] },
@@ -165,25 +160,23 @@ class AdvancedPlot extends DiagramElementCollection {
       { axis: 'y', name: 'y', auto: [bounds.bottom, bounds.top] },
       options.yAxis != null ? options.yAxis : {},
     )]);
-    // if (options.yAxis != null) {
-    //   this.addAxes([options.yAxis], 'y', bounds);
-    // }
     if (options.axes != null) {
       this.addAxes(options.axes);
     }
-    // if (this.getXAxis() == null) {
-    //   this.addAxes([{
-    //     axis: 'x', name: 'x', auto: [bounds.left, bounds.right],
-    //   }]);
-    // }
-    // if (this.getYAxis() == null) {
-    //   this.addAxes([{
-    //     axis: 'y', name: 'y', auto: [bounds.bottom, bounds.top],
-    //   }]);
-    // }
     if (options.traces != null) {
       this.addTraces(options.traces);
     }
+  }
+
+  getNonTraceBoundingRect() {
+    const children = [];
+    Object.keys(this.elements).forEach((elementName) => {
+      if (!elementName.startsWith('trace')) {
+        children.push(elementName);
+      }
+    });
+    console.log(children)
+    return this.getBoundingRect('draw', 'border', children);
   }
 
   addAxes(axes: Array<ADV_Axis>) {

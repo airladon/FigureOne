@@ -1824,7 +1824,7 @@ export type OBJ_TextModifiersDefinition = {
  *
  * `"This line has a uses the special char: /|"`
  *
- * @property {Array<string | OBJ_TextLinesDefinition>} [lines] array of line
+ * @property {Array<string | OBJ_TextLinesDefinition>} [text] array of line
  * strings
  * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
  * @property {OBJ_Font} [font] Default font to use in lines
@@ -1863,7 +1863,7 @@ export type OBJ_TextModifiersDefinition = {
  *     name: 't',
  *     method: 'text.lines',
  *     options: {
- *       lines: [
+ *       text: [
  *         'First line',
  *         'This is the second line',
  *       ],
@@ -1884,7 +1884,7 @@ export type OBJ_TextModifiersDefinition = {
  *     name: 'lines',
  *     method: 'textLines',
  *     options: {
- *        lines: [
+ *        text: [
  *          'Lines justified to the left',
  *          'A |line| with a |modified_phrase|',
  *          {
@@ -1925,7 +1925,7 @@ export type OBJ_TextModifiersDefinition = {
  * );
  */
 export type OBJ_TextLines = {
-  lines: Array<string | OBJ_TextLinesDefinition>,
+  text: Array<string | OBJ_TextLinesDefinition>,
   modifiers: OBJ_TextModifiersDefinition,
   font?: OBJ_Font,
   justify?: 'left' | 'center' | 'right',
@@ -3145,9 +3145,8 @@ export default class DiagramPrimitives {
    */
   textLines(...optionsIn: Array<OBJ_TextLines | string>) {
     let optionsToUse = optionsIn;
-    console.log(optionsIn)
     if (optionsIn.length === 1 && typeof optionsIn[0] === 'string') {
-      optionsToUse = [{ lines: [optionsIn[0]] }];
+      optionsToUse = [{ text: [optionsIn[0]] }];
     }
     const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsToUse);
     if (options.justify == null) {
