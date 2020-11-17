@@ -104,7 +104,9 @@ diagram.addElement({
     // axes: [
     //   { axis: 'y', length: 2, start: -10, stop: -6, ticks: { step: 0.2 }, position: [1, 0] },
     // ],
-    grid: { dash: [0.01, 0.01] },
+    // grid: { dash: [0.01, 0.01] },
+    // font: { size: 0.2 },
+    grid: true,
     traces: [{
       points: sin(),
       // line: {linePrimitives: true, lineNum: 1},

@@ -103,8 +103,8 @@ class AdvancedPlot extends DiagramElementCollection {
       font: shapes.defaultFont,
       color: shapes.defaultColor,
       theme: 'classic',
-      width: 2,
-      height: 1,
+      width: shapes.limits.width / 2,
+      height: shapes.limits.width / 2,
       grid: false,
     };
     if (
@@ -126,6 +126,10 @@ class AdvancedPlot extends DiagramElementCollection {
     this.height = options.height;
     this.theme = options.theme;
     this.grid = options.grid;
+
+    if (optionsIn.font == null || optionsIn.font.size == null) {
+      this.defaultFont.size = Math.min(this.width, this.height) / 20;
+    }
 
     if (options.position != null) {
       this.transform.updateTranslation(getPoint(options.position));
@@ -253,10 +257,13 @@ class AdvancedPlot extends DiagramElementCollection {
     const length = axis === 'x' ? this.width : this.height;
     const gridLength = axis === 'x' ? this.height : this.width;
 
+    const minDimension = Math.min(this.shapes.limits.width, this.shapes.limits.height);
+
     let theme = {};
     if (name === 'classic') {
       const color = [0.35, 0.35, 0.35, 1];
-      const tickLength = Math.min(this.width, this.height) / 20;
+      const tickLength = Math.min(this.width, this.height) / 30;
+      const gridDash = minDimension / 500;
       theme = {
         axis: {
           color,
@@ -273,6 +280,7 @@ class AdvancedPlot extends DiagramElementCollection {
             color,
             width: 0.003,
             length: gridLength,
+            dash: [gridDash, gridDash],
           },
         },
       };
