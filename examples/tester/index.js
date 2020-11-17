@@ -67,10 +67,10 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1]});
 // diagram.add('yAxis', yAxis);
 
 const sin = () => {
-  const xValues = Fig.tools.math.range(-90, 210, 1 / 10000);
+  const xValues = Fig.tools.math.range(-1, 1, 1 / 100);
   const points = [];
   xValues.forEach((x) => {
-    points.push([x, 0.5 * Math.sin(x / 10 * Math.PI * 2)]);
+    points.push([x, 0.5 * Math.sin(x / 1 * Math.PI * 2)]);
   })
   return points;
 }
@@ -96,11 +96,15 @@ diagram.addElement({
   name: 'plot',
   method: 'advanced.plot',
   options: {
+    width: 3,
+    height: 2,
+    position: [-1, -1],
     // xAxis: { length: 1, start: -10, stop: 0, ticks: { step: 2.5 }, grid: { length: 1, step: 2.5, width: 0.005 } },
     // yAxis: { length: 1, start: -10, stop: 0, ticks: { step: 2.5 } },
     // axes: [
     //   { axis: 'y', length: 2, start: -10, stop: -6, ticks: { step: 0.2 }, position: [1, 0] },
     // ],
+    grid: { dash: [0.01, 0.01] },
     traces: [{
       points: sin(),
       // line: {linePrimitives: true, lineNum: 1},

@@ -17,8 +17,8 @@ import type { ADV_Axis } from './Axis';
 import type { ADV_Trace } from './Trace';
 
 export type ADV_Plot = {
-  length?: number,              // draw space length
   width?: number,
+  height?: number,
   position?: TypeParsablePoint, // collection position
   axes?: Array<ADV_Axis>,
   xAxis?: ADV_Axis,
@@ -34,6 +34,31 @@ export type ADV_Plot = {
     yAlgin?: 'bottom' | 'middle' | 'top',
   },
 };
+
+// function getTheme(name: string, length: number, axis: 'x' | 'y') {
+//   if (name === 'classic') {
+//     const color = [0.35, 0.35, 0.35, 1];
+//     const tLength = length / 20;
+//     return {
+//       axis: {
+//         color,
+//         ticks: {
+//           width: 0.005,
+//           length: tLength,
+//           offset: -tLength,
+//         },
+//         font: {
+//           color,
+//         },
+//       },
+//       grid: {
+//         color,
+//         width: 0.003,
+//       },
+//     };
+//   }
+//   return {};
+// }
 
 // $FlowFixMe
 class AdvancedPlot extends DiagramElementCollection {
@@ -77,6 +102,10 @@ class AdvancedPlot extends DiagramElementCollection {
     const defaultOptions = {
       font: shapes.defaultFont,
       color: shapes.defaultColor,
+      theme: 'classic',
+      width: 2,
+      height: 1,
+      grid: false,
     };
     if (
       optionsIn.color != null
@@ -93,6 +122,10 @@ class AdvancedPlot extends DiagramElementCollection {
     }
     this.defaultFont = options.font;
     this.defaultColor = options.color;
+    this.width = options.width;
+    this.height = options.height;
+    this.theme = options.theme;
+    this.grid = options.grid;
 
     if (options.position != null) {
       this.transform.updateTranslation(getPoint(options.position));
@@ -124,12 +157,12 @@ class AdvancedPlot extends DiagramElementCollection {
     }
     if (this.getXAxis() == null) {
       this.addAxes([{
-        length: 1, axis: 'x', name: 'x', auto: [bounds.left, bounds.right],
+        axis: 'x', name: 'x', auto: [bounds.left, bounds.right],
       }]);
     }
     if (this.getYAxis() == null) {
       this.addAxes([{
-        length: 1, axis: 'y', name: 'y', auto: [bounds.bottom, bounds.top],
+        axis: 'y', name: 'y', auto: [bounds.bottom, bounds.top],
       }]);
     }
     if (options.traces != null) {
@@ -141,15 +174,27 @@ class AdvancedPlot extends DiagramElementCollection {
     const defaultOptions = {
       color: this.defaultColor,
       font: this.defaultFont,
+      type: 'x',
     };
     if (type != null) {
       defaultOptions.axis = type;
       defaultOptions.name = type;
     }
     axes.forEach((axisOptions) => {
-      const o = joinObjects({}, defaultOptions, axisOptions);
+      // let theme = {};
+      let axisType;
+      if (axisOptions.axis != null) {
+        axisType = axisOptions.axis;
+      } else if (defaultOptions.axis != null) {
+        axisType = defaultOptions.axis;
+      }
+      const theme = this.getTheme(this.theme, axisType);
+      const o = joinObjects({}, defaultOptions, theme.axis, axisOptions);
       if (o.name == null) {
         o.name = `axis_${this.axes.length}`;
+      }
+      if (axisOptions.length == null) {
+        o.length = o.axis === 'x' ? this.width : this.height;
       }
       const axis = this.advanced.axis(o);
       this.add(o.name, axis);
@@ -202,6 +247,45 @@ class AdvancedPlot extends DiagramElementCollection {
       this.add(`trace_${this.traces.length}`, trace);
       this.traces.push(trace);
     });
+  }
+
+  getTheme(name: string, axis: 'x' | 'y') {
+    const length = axis === 'x' ? this.width : this.height;
+    const gridLength = axis === 'x' ? this.height : this.width;
+
+    let theme = {};
+    if (name === 'classic') {
+      const color = [0.35, 0.35, 0.35, 1];
+      const tickLength = Math.min(this.width, this.height) / 20;
+      theme = {
+        axis: {
+          color,
+          ticks: {
+            width: 0.005,
+            length: tickLength,
+            offset: -tickLength,
+          },
+          font: {
+            color,
+          },
+          length,
+          grid: {
+            color,
+            width: 0.003,
+            length: gridLength,
+          },
+        },
+      };
+    }
+
+    if (theme.axis != null && theme.axis.grid != null) {
+      if (this.grid === false) {
+        theme.axis.grid = undefined;
+      } else if (typeof this.grid === 'object') {
+        theme.axis.grid = joinObjects({}, theme.axis.grid, this.grid);
+      }
+    }
+    return theme;
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this

@@ -109,7 +109,9 @@ class AdvancedAxis extends DiagramElementCollection {
       ticks: null,
     };
     if (optionsIn.auto != null) {
-      const { start, stop, step, precision } = this.calcAuto(optionsIn.auto);
+      const {
+        start, stop, step, precision,
+      } = this.calcAuto(optionsIn.auto);
       defaultOptions.start = start;
       defaultOptions.stop = stop;
       defaultOptions.ticks = { step };
@@ -119,9 +121,11 @@ class AdvancedAxis extends DiagramElementCollection {
     if (options.stop == null) {
       options.stop = options.start + 1;
     }
-    // console.log(options)
     this.name = options.name;
     this.defaultFont = options.font;
+    if (optionsIn.font == null || optionsIn.font.color == null) {
+      this.defaultFont.color = options.color;
+    }
     this.start = options.start;
     this.stop = options.stop;
     this.length = options.length;
@@ -138,7 +142,6 @@ class AdvancedAxis extends DiagramElementCollection {
     if (options.transform != null) {
       this.transform = getTransform(options.transform);
     }
-
     this.setColor(options.color);
 
     if (options.line != null) {
@@ -163,6 +166,7 @@ class AdvancedAxis extends DiagramElementCollection {
       length: this.length,
       angle: this.angle,
       width: 0.01,
+      color: this.color,
     };
     const o = joinObjects({}, defaultOptions, options);
     const line = this.shapes.line(o);
@@ -178,6 +182,7 @@ class AdvancedAxis extends DiagramElementCollection {
       width: this.line != null ? this.line.width : 0.01,
       length: 0.1,
       angle: this.angle + Math.PI / 2,
+      color: this.color,
     };
     let optionsToUse;
     if (Array.isArray(optionsIn)) {
@@ -275,11 +280,25 @@ class AdvancedAxis extends DiagramElementCollection {
 
       // Calculate auto offset
       if (o.offset == null) {
-        let offset = -o.font.size - 0.05;
-        if (this.ticks != null) {
-          offset += this.ticks[index].p1.y;
+        if (this.axis === 'x') {
+          o.offset = new Point(0, -o.font.size - 0.05);
+          if (this.ticks != null) {
+            o.offset.y += Math.min(0, this.ticks[index].p1.y);
+          }
+        } else {
+          o.offset = new Point(-o.font.size / 1.5, 0);
+          if (this.ticks != null) {
+            o.offset.x += Math.min(0, this.ticks[index].p1.y + this.ticks[index].length);
+          }
         }
-        o.offset = this.axis === 'x' ? new Point(0, offset) : new Point(offset, 0);
+        // let offset = -o.font.size - 0.05;
+        // if (this.ticks != null && this.axis === 'x') {
+        //   offset += this.ticks[index].p1.y;
+        // } else if (this.ticks != null && this.axis === 'y') {
+        //   offset += (this.ticks[index].p1.y + this.ticks[index].length);
+        // }
+        // // console.log(this.axis, this.ticks[index].p1.y, offset)
+        // o.offset = this.axis === 'x' ? new Point(0, offset) : new Point(offset, 0);
       } else {
         o.offset = getPoint(o.offset);
       }
@@ -341,11 +360,13 @@ class AdvancedAxis extends DiagramElementCollection {
       order = 1;
     }
     const factor = 10 ** (order - 1);
-    const newRange = Math.ceil(r / factor + 1) * factor;
+    // const newRange = Math.ceil(r / factor + 1) * factor;
     const newStart = Math.floor(min / factor) * factor;
-    const newEnd = newStart + newRange;
+    const newEnd = Math.ceil(max / factor) * factor;
+    const newRange = newEnd - newStart;
+    // const newEnd = newStart + newRange;
     let step;
-    switch (newRange) {
+    switch (round(newRange / factor)) {
       case 3:
       case 6:
         step = newRange / 3;
@@ -375,11 +396,6 @@ class AdvancedAxis extends DiagramElementCollection {
       step: round(step),
       precision: round(precision),
     };
-    // return {
-    //   start: min,
-    //   stop: max,
-    //   step: (max - min) / 5,
-    // };
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
@@ -388,15 +404,6 @@ class AdvancedAxis extends DiagramElementCollection {
       'ticks', 'grid', 'labels', 'drawToValueRatio', 'valueToDraw',
     ];
   }
-
-  // _fromState(state: Object) {
-  //   joinObjects(this, state);
-  //   // this.setAngle({
-  //   //   angle: this.angle,
-  //   //   rotationOffset: this.lastLabelRotationOffset,
-  //   // });
-  //   return this;
-  // }
 
   valueToDraw(value: number) {
     return (value - this.start) * this.valueToDrawRatio;
