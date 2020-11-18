@@ -67,6 +67,23 @@ import type { CPY_Step } from '../DrawingObjects/Geometries/copy/copy';
 
 
 /**
+ * Defines whether a line is solid or dashed.
+ *
+ * `Array<number>`
+ *
+ * Leave empty for solid line.
+ *
+ * Use array of numbers for a dashed line where indexes 0, 2, 4... are line
+ * lengths and indexes 1, 3, 5... are gap lengths. If line is longer than
+ * cumulative length of line and gap lengths, then pattern will repeat.
+ *
+ * For example [0.1, 0.01, 0.02, 0.01] produces 0.1 length dash, then a 0.01
+ * length gap, then a 0.02 length dash, then a 0.01 length gap. This pattern
+ * will repeat for the length of the line.
+ */
+export type TypeDash = Array<number>
+
+/**
  * Texture definition object
  *
  * A texture file is an image file like a jpg, or png.
@@ -2114,6 +2131,7 @@ export default class DiagramPrimitives {
   draw2DFigures: Object;
   defaultColor: Array<number>;
   defaultFont: OBJ_Font;
+  defaultLineWidth: number;
 
   /**
     * This is a big big test
@@ -2129,6 +2147,7 @@ export default class DiagramPrimitives {
     animateNextFrame: Function,
     defaultColor: Array<number>,
     defaultFont: OBJ_Font,
+    defaultLineWidth: number,
   ) {
     if (Array.isArray(webgl)) {
       this.webgl = webgl;
@@ -2150,6 +2169,7 @@ export default class DiagramPrimitives {
     this.spaceTransforms = spaceTransforms;
     this.defaultColor = defaultColor;
     this.defaultFont = defaultFont;
+    this.defaultLineWidth = defaultLineWidth;
     // this.draw2DFigures = draw2DFigures;
   }
 
@@ -2236,7 +2256,7 @@ export default class DiagramPrimitives {
    */
   polyline(...optionsIn: Array<OBJ_Polyline>) {
     const defaultOptions = {
-      width: 0.01,
+      width: this.defaultLineWidth,
       color: this.defaultColor,
       close: false,
       widthIs: 'mid',
@@ -2349,7 +2369,7 @@ export default class DiagramPrimitives {
 
     if (optionsToUse.line != null) {
       optionsToUse.line = joinObjects({}, {
-        width: 0.01,
+        width: this.defaultLineWidth,
         widthIs: 'mid',
       }, optionsToUse.line);
       if (optionsToUse.line.widthIs === 'inside') {
@@ -2737,7 +2757,7 @@ export default class DiagramPrimitives {
       transform: new Transform('grid').standard(),
       line: {
         linePrimitives: false,
-        width: 0.005,
+        width: this.defaultLineWidth,
         lineNum: 2,
         dash: [],
       },
@@ -2836,7 +2856,7 @@ export default class DiagramPrimitives {
       p1: [0, 0],
       angle: 0,
       length: 1,
-      width: 0.001,
+      width: this.defaultLineWidth,
       widthIs: 'mid',
       dash: [],
       transform: new Transform('line').standard(),

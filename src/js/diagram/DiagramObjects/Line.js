@@ -210,7 +210,7 @@ export type OBJ_MovableLine = {
 //
 // In the straight line draw space, the line is defined from 0,0 to 1,0 if
 // solid, and 0,0 to maxLength,0 if dashed. The length is changed by scaling
-// the solid line, and changing the number of points drawn for the dahsed line.
+// the solid line, and changing the number of points drawn for the dashed line.
 // The straight line position transform is then used to position the horiztonal
 // line to make its 'start', 'center', 'end' or number align at (0, 0).
 //

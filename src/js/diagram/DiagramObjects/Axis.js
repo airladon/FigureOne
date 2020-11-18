@@ -15,6 +15,109 @@ import {
 } from '../Element';
 
 
+/**
+ * Axis Ticks and Grid options object for {@link ADV_Axis}.
+ *
+ * ![](./assets1/axisticks.png)
+ *
+ * Ticks and grid locations can specified programatically with `start`,
+ * `stop` and `step`, or manually using a `values` array where each value
+ * is a value on the axis.
+ *
+ * `length` and `offset` control the length of the ticks/grid and how much
+ * of the line is above or below the axis line. An offset of `0` will put
+ * the entire tick on the positive side of the axis.
+ *
+ * Different properties are defined in different spaces.
+ * - `start`, `step`, `stop` and `values` are all in axis space, or the values
+ *   along the axis.
+ * - `length`, `offset`, `width` and `dash` are all in draw space and relate
+ *   to dimensions in the space the axis is being drawn into.
+ *
+ * @property {number} [start] start value of the ticks/grid on the axis
+ * (`axis.start`)
+ * @property {number} [step] step between ticks/grid
+ * (`(axis.stop - axis.start) / 5`)
+ * @property {number} [stop] stop value of the ticks/grid on the axis
+ * (`axis.stop`)
+ * @property {Array<number>} [values] value locations of the ticks/grid on
+ * the axis (overrides `start`, `stop` and `step`)
+ * @property {number} [length] length of the ticks/grid (draw space)
+ * @property {number} [offset] offset of the ticks/grid (draw space) - use this
+ * to center ticks around the axis or not (`-length / 2`)
+ * @property {number} [width] width of ticks/grid (draw space)
+ * @property {TypeDash} [dash] line style is solid or dashed (`[]`)
+ *
+ * @extends OBJ_Line
+ *
+ * @see
+ *
+ * {@link ADV_Axis}
+ *
+ * To test examples below, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>.
+ *
+ * @example
+ * // Axis with no ticks
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     length: 2,
+ *   },
+ * });
+ *
+ * @example
+ * // Axis with default ticks
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     length: 2,
+ *     ticks: true,
+ *   },
+ * });
+ *
+ * @example
+ * // Axis ticks with custom step and color
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     length: 2,
+ *     ticks: { step: 0.5, color: [0, 0, 1, 1] },
+ *   },
+ * });
+ *
+ * @example
+ * // Axis with ticks between 0.2 and 0.8 below the line
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     length: 2,
+ *     ticks: {
+ *       start: 0.2,
+ *       stop: 0.8,
+ *       step: 0.2,
+ *       length: 0.15,
+ *       offset: -0.2,
+ *       dash: [0.01, 0.01]
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Axis with ticks at values
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     length: 2,
+ *     ticks: { values: [0, 0.2, 0.8, 1] },
+ *   },
+ * });
+ */
 export type OBJ_AxisTicks = {
   start?: number,
   step?: number,
@@ -22,8 +125,16 @@ export type OBJ_AxisTicks = {
   values?: Array<number>,
   length?: number,
   offset?: number,
+  width?: number,
+  dash?: Array<number>,
 } & OBJ_Line;
 
+
+/**
+ * Axis label options object.
+ *
+ * By default, labels are positioned with the first `ticks` defined in the axis.
+ */
 export type OBJ_AxisLabels = {
   font?: OBJ_Font,
   precision?: number,
@@ -36,6 +147,19 @@ export type OBJ_AxisLabels = {
   hide?: Array<number>,
 }
 
+/**
+ * Axis title
+ *
+ * ({@link OBJ_TextLines} `& { rotation?: number, offset?:` {@link TypeParsablePoint} `}) | string`
+ */
+export type TypeAxisTitle = OBJ_TextLines & {
+  rotation?: number,
+  offset?: TypeParsablePoint
+} | string;
+
+/**
+ *
+ */
 export type ADV_Axis = {
   length?: number,              // draw space length
   position?: TypeParsablePoint, // collection position
@@ -47,7 +171,7 @@ export type ADV_Axis = {
   line?: null | ADV_Line,
   font?: OBJ_Font,              // Default font
   labels?: AxisLabels | Array<AxisLabels>,
-  title?: OBJ_TextLines | string,
+  title?: TypeAxisTitle,
   name?: string,
   auto?: [number, number],
   show?: boolean,
@@ -109,6 +233,7 @@ class AdvancedAxis extends DiagramElementCollection {
       grid: null,
       ticks: null,
       show: true,
+      axis: 'x',
     };
     if (optionsIn.auto != null) {
       const {
@@ -147,43 +272,51 @@ class AdvancedAxis extends DiagramElementCollection {
     }
     this.setColor(options.color);
 
-    if (this.show && options.line != null) {
+    if (this.show && options.grid != null && options.grid !== false) {
+      this.addTicks(options.grid, 'grid');
+    }
+    if (this.show && options.line != null && options.line !== false) {
       this.addLine(options.line);
     }
-    if (this.show && options.ticks != null) {
+    if (this.show && options.ticks != null && options.ticks !== false) {
       this.addTicks(options.ticks, 'ticks');
     }
-    if (this.show && options.labels != null) {
+    if (this.show && options.labels != null && options.labels !== false) {
       this.addLabels(options.labels);
-    }
-    if (this.show && options.grid != null) {
-      this.addTicks(options.grid, 'grid');
     }
     if (this.show && options.title != null) {
       this.addTitle(options.title);
     }
   }
 
-  addLine(options: OBJ_Line) {
+  addLine(optionsInOrBool: OBJ_Line | boolean) {
+    let optionsIn = optionsInOrBool;
+    if (optionsInOrBool === true) {
+      optionsIn = {};
+    }
     const defaultOptions = {
       length: this.length,
       angle: this.angle,
-      width: 0.01,
+      width: this.shapes.defaultLineWidth,
       color: this.color,
     };
-    const o = joinObjects({}, defaultOptions, options);
+    const o = joinObjects({}, defaultOptions, optionsIn);
     const line = this.shapes.line(o);
     this.line = o;
     this.add('line', line);
   }
 
-  addTicks(optionsIn: OBJ_AxisTicks | Array<OBJ_AxisTicks>, name: 'ticks' | 'grid' = 'ticks') {
+  addTicks(optionsInOrBool: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean, name: 'ticks' | 'grid' = 'ticks') {
+    let optionsIn = optionsInOrBool;
+    if (optionsInOrBool === true) {
+      optionsIn = {};
+    }
     const defaultOptions = {
       start: this.start,
       stop: this.stop,
       step: (this.stop - this.start) / 5,
       width: this.line != null ? this.line.width : 0.01,
-      length: 0.1,
+      length: this.shapes.defaultLineWidth * 10,
       angle: this.angle + Math.PI / 2,
       color: this.color,
     };
@@ -200,7 +333,7 @@ class AdvancedAxis extends DiagramElementCollection {
       const o = joinObjects({}, defaultOptions, options);
       o.length *= lengthSign;
       if (o.offset == null && name === 'ticks') {
-        o.offset = -o.length / 2;
+        o.offset = this.axis === 'x' ? -o.length / 2 : o.length / 2;
       } else if (o.offset == null && name === 'grid') {
         if (this.axis === 'x') {
           o.offset = -this.transform.t().y;
@@ -219,9 +352,10 @@ class AdvancedAxis extends DiagramElementCollection {
       } else {
         o.copy = [{ to: o.values.map(v => new Point(0, this.valueToDraw(v))) }];
       }
+      o.copy[0].original = false;
 
       if (o.p1 == null) {
-        o.p1 = new Point(this.valueToDraw(o.values[0]), o.offset * lengthSign).rotate(this.angle);
+        o.p1 = new Point(0, o.offset * lengthSign).rotate(this.angle);
       }
 
       const ticks = this.shapes.line(o);
@@ -237,7 +371,7 @@ class AdvancedAxis extends DiagramElementCollection {
     });
   }
 
-  addTitle(optionsIn: OBJ_Text & { rotation: number, offset: TypeParsablePoint } | string) {
+  addTitle(optionsIn: OBJ_TextLines & { rotation?: number, offset?: TypeParsablePoint } | string) {
     const defaultOptions = {
       font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 1.5 }),
       justify: 'center',
@@ -265,7 +399,11 @@ class AdvancedAxis extends DiagramElementCollection {
     this.add('title', title);
   }
 
-  addLabels(optionsIn: Object) {
+  addLabels(optionsInOrBool: AxisLabels | Array<AxisLabels> | boolean) {
+    let optionsIn = optionsInOrBool;
+    if (optionsInOrBool === true) {
+      optionsIn = {};
+    }
     const defaultOptions = {
       text: null,
       precision: 1,
@@ -300,11 +438,14 @@ class AdvancedAxis extends DiagramElementCollection {
       }
 
       // Values where to put the labels - null is auto which is same as ticks
-      let values;
+      let values = [];
       if (o.values == null && this.ticks != null) {
         values = this.ticks[index].values;
       } else {
         values = o.values;
+      }
+      if (values == null) {
+        values = [];
       }
 
       // Text for labels at each value - null is actual value

@@ -37,6 +37,12 @@ toc:
   - ADV_Angle
   - AdvancedPolyline
   - ADV_Polyline
+  - AdvancedRectangle
+  - ADV_Rectangle
+  - AdvancedAxis
+  - ADV_Axis
+  - AdvancedPlot
+  - ADV_Plot
   - name: Text
     file: ./docs/tutorials/text/text.md
   - OBJ_Text
@@ -152,6 +158,7 @@ toc:
   - OBJ_CurvedCorner
   - OBJ_LineStyle
   - CPY_Step
+  - TypeDash
   - ArrowHead
   - OBJ_LineArrow
   - OBJ_LineArrows
@@ -182,6 +189,10 @@ toc:
   - OBJ_PolylineAngle
   - OBJ_PolylineSide
   - OBJ_PolylinePadSingle
+  - AdvancedTrace
+  - ADV_Trace
+  - AdvancedLegend
+  - ADV_Legend
   - name: Misc Animation
   - AnimationStep
   - ElementAnimationStep

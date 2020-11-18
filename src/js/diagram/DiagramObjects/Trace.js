@@ -222,7 +222,7 @@ class AdvancedTrace extends DiagramElementCollection {
   addLine(options: OBJ_PolyLine) {
     const defaultOptions = {
       color: this.color,
-      width: 0.01,
+      width: this.shapes.defaultLineWidth,
     };
     this.updatePoints();
     this.line = joinObjects({}, defaultOptions, options);

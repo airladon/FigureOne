@@ -535,7 +535,7 @@ export default class AdvancedPolyline extends DiagramElementCollection {
       points: [new Point(1, 0), new Point(0, 0), new Point(0, 1)],
       close: false,
       showLine: true,
-      width: 0.01,
+      width: shapes.defaultLineWidth,
       reverse: false,
       transform: new Transform('PolyLine').scale(1, 1).rotate(0).translate(0, 0),
       makeValid: null,

@@ -282,6 +282,7 @@ class Diagram {
         weight: 'normal',
         opacity: 1,
       },
+      lineWidth: 0.008,
     };
     this.fnMap = new FunctionMap();
     this.isPaused = false;
@@ -295,6 +296,7 @@ class Diagram {
     } = optionsToUse;
     this.defaultColor = optionsToUse.color;
     this.defaultFont = optionsToUse.font;
+    // this.defaultLineWidth = optionsToUse.lineWidth;
     if (optionsToUse.font.color == null) {
       optionsToUse.font.color = this.defaultColor.slice();
     }
@@ -406,6 +408,7 @@ class Diagram {
     this.fontScale = optionsToUse.fontScale;
     // console.log(this.canvasLow.getClientBoundingRect())
     this.updateLimits(limits);
+    this.setDefaultLineWidth(options.lineWidth);
     this.drawQueued = false;
     this.lastDrawTime = 0;
     this.inTransition = false;
@@ -610,6 +613,16 @@ class Diagram {
     this.recorder.addEventType('click', click);
     this.recorder.addEventType('elementClick', elementClick);
     this.recorder.addEventType('eqnNavClick', eqnNavClick);
+  }
+
+  setDefaultLineWidth(userInputLineWidth: number | undefined | null) {
+    if (userInputLineWidth != null) {
+      this.defaultLineWidth = userInputLineWidth;
+      return;
+    }
+
+    const matrix = this.spaceTransforms.pixelToDiagram.matrix();
+    this.defaultLineWidth = Math.abs(matrix[0]);
   }
 
   scrollEvent() {
@@ -1118,6 +1131,7 @@ class Diagram {
       this.animateNextFrame.bind(this, true, 'getShapes'),
       this.defaultColor,
       this.defaultFont,
+      this.defaultLineWidth,
     );
   }
 

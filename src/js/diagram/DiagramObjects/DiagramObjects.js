@@ -23,6 +23,7 @@ import type { ADV_Axis } from './Axis';
 import type { ADV_Trace } from './Trace';
 import EquationLabel from './EquationLabel';
 import AdvancedPlot from './Plot';
+import AdvancedPlotLegend from './Legend';
 import AdvancedRectangle from './Rectangle';
 
 export default class DiagramObjects {
@@ -102,6 +103,13 @@ export default class DiagramObjects {
   plot(...options: Array<ADV_Plot>) {
     const optionsToUse = joinObjects({}, ...options);
     return new AdvancedPlot(
+      this.shapes, this.equation, this, optionsToUse,
+    );
+  }
+
+  plotLegend(...options: Array<ADV_Plot>) {
+    const optionsToUse = joinObjects({}, ...options);
+    return new AdvancedPlotLegend(
       this.shapes, this.equation, this, optionsToUse,
     );
   }

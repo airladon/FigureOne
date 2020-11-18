@@ -3968,11 +3968,15 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   /**
-   * Move child elements to end of draw order - effectively moving to the back
-   * of the drawn collection. Later elements in the array will be further back.
-   * @param {Array<string | DiagramElement} elements
+   * Move child elements to end of draw order - effectively moving to the start
+   * of the drawn collection. Later elements in the array will be further forward.
+   * @param {Array<string | DiagramElement> | string | DiagramElement} elements
    */
-  toFront(elements: Array<string | DiagramElement>) {
+  toFront(elementsIn: Array<string | DiagramElement> | string | DiagramElement) {
+    let elements = elementsIn;
+    if (!Array.isArray(elementsIn)) {
+      elements = [elementsIn];
+    }
     const names = [];
     elements.forEach((element) => {
       if (typeof element === 'string') {
@@ -3991,12 +3995,16 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   /**
-   * Move child elements to end of draw order - effectively moving them to
-   * the front of the drawn collection. Later elements in the `elements` array
-   * will be drawn further forawrd.
-   * @param {Array<string | DiagramElement} elements
+   * Move child elements to start of draw order - effectively moving them to
+   * the back of the drawn collection. Later elements in the `elements` array
+   * will be drawn further back.
+   * @param {Array<string | DiagramElement> | string | DiagramElement} elements
    */
-  toBack(elements: Array<string | DiagramElement>) {
+  toBack(elementsIn: Array<string | DiagramElement> | string | DiagramElement) {
+    let elements = elementsIn;
+    if (!Array.isArray(elementsIn)) {
+      elements = [elementsIn];
+    }
     const names = [];
     elements.forEach((element) => {
       if (typeof element === 'string') {

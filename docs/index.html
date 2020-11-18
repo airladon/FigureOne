@@ -1610,6 +1610,16 @@
               
                 
                 <li><a
+                  href='#adv_axis'
+                  class="">
+                  ADV_Axis
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#text'
                   class="h5 bold black caps">
                   Text
@@ -3168,6 +3178,16 @@
               
                 
                 <li><a
+                  href='#typedash'
+                  class="">
+                  TypeDash
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#arrowhead'
                   class="">
                   ArrowHead
@@ -4059,6 +4079,46 @@
                   href='#typeequationtextelement'
                   class="">
                   TypeEquationTextElement
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_axisticks'
+                  class="">
+                  OBJ_AxisTicks
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_axislabels'
+                  class="">
+                  OBJ_AxisLabels
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeaxistitle'
+                  class="">
+                  TypeAxisTitle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_surroundanimationstep'
+                  class="">
+                  OBJ_SurroundAnimationStep
                   
                 </a>
                 
@@ -7151,7 +7211,7 @@ primitives or collections.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>toFront(elements)</span>
+            <span class='code strong strong truncate'>toFront(elementsIn, elements)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -7159,8 +7219,8 @@ primitives or collections.</p>
 
   
 
-  <p>Move child elements to end of draw order - effectively moving to the back
-of the drawn collection. Later elements in the array will be further back.</p>
+  <p>Move child elements to end of draw order - effectively moving to the start
+of the drawn collection. Later elements in the array will be further forward.</p>
 
   
   
@@ -7178,7 +7238,15 @@ of the drawn collection. Later elements in the array will be further back.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>elements</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#diagramelement">DiagramElement</a>)>)</code>
+            <span class='code bold'>elementsIn</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#diagramelement">DiagramElement</a>)> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#diagramelement">DiagramElement</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>elements</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#diagramelement">DiagramElement</a>)> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#diagramelement">DiagramElement</a>))</code>
 	    
           </div>
           
@@ -7213,7 +7281,7 @@ of the drawn collection. Later elements in the array will be further back.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>toBack(elements)</span>
+            <span class='code strong strong truncate'>toBack(elementsIn, elements)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -7221,9 +7289,9 @@ of the drawn collection. Later elements in the array will be further back.</p>
 
   
 
-  <p>Move child elements to end of draw order - effectively moving them to
-the front of the drawn collection. Later elements in the <code>elements</code> array
-will be drawn further forawrd.</p>
+  <p>Move child elements to start of draw order - effectively moving them to
+the back of the drawn collection. Later elements in the <code>elements</code> array
+will be drawn further back.</p>
 
   
   
@@ -7241,7 +7309,15 @@ will be drawn further forawrd.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>elements</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#diagramelement">DiagramElement</a>)>)</code>
+            <span class='code bold'>elementsIn</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#diagramelement">DiagramElement</a>)> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#diagramelement">DiagramElement</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>elements</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#diagramelement">DiagramElement</a>)> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#diagramelement">DiagramElement</a>))</code>
 	    
           </div>
           
@@ -21370,6 +21446,143 @@ displayed labels of angles and sides.
           
         
           
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='adv_axis'>
+      ADV_Axis
+    </h3>
+    
+    
+  </div>
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>stop</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>axis</span> <code class='quiet'>((<code>"x"</code> | <code>"y"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>ticks</span> <code class='quiet'>((<a href="#obj_axisticks">OBJ_AxisTicks</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_axisticks">OBJ_AxisTicks</a>>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>grid</span> <code class='quiet'>((<a href="#obj_axisticks">OBJ_AxisTicks</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_axisticks">OBJ_AxisTicks</a>>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>((null | <a href="#adv_line">ADV_Line</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>labels</span> <code class='quiet'>((AxisLabels | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;AxisLabels>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>title</span> <code class='quiet'>(<a href="#typeaxistitle">TypeAxisTitle</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>auto</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>show</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
   <h2 id='text' class='mt0'>
@@ -22069,7 +22282,7 @@ array.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>lines</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textlinesdefinition">OBJ_TextLinesDefinition</a>)>?)</code>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textlinesdefinition">OBJ_TextLinesDefinition</a>)>?)</code>
           : array of line
 strings
 
@@ -22224,7 +22437,7 @@ diagram.addElement(
     <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text.lines'</span>,
     <span class="hljs-attr">options</span>: {
-      <span class="hljs-attr">lines</span>: [
+      <span class="hljs-attr">text</span>: [
         <span class="hljs-string">'First line'</span>,
         <span class="hljs-string">'This is the second line'</span>,
       ],
@@ -22245,7 +22458,7 @@ diagram.addElement(
     <span class="hljs-attr">name</span>: <span class="hljs-string">'lines'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'textLines'</span>,
     <span class="hljs-attr">options</span>: {
-       <span class="hljs-attr">lines</span>: [
+       <span class="hljs-attr">text</span>: [
          <span class="hljs-string">'Lines justified to the left'</span>,
          <span class="hljs-string">'A |line| with a |modified_phrase|'</span>,
          {
@@ -38851,7 +39064,7 @@ touched
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_textlines">OBJ_TextLines</a>>)</code>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#obj_textlines">OBJ_TextLines</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)>)</code>
 	    
           </div>
           
@@ -41428,6 +41641,67 @@ diagram.addElement({
   },
 });</pre>
     
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typedash'>
+      TypeDash
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Defines whether a line is solid or dahsed.</p>
+<p><code>Array&#x3C;number></code></p>
+<p>Leave empty for solid line.</p>
+<p>Use array of numbers for a dashed line where indexes 0, 2, 4... are line
+lengths and indexes 1, 3, 5... are gap lengths. If line is longer than
+cumulative length of line and gap lengths, then pattern will repeat.</p>
+<p>For example [0.1, 0.01, 0.02, 0.01] produces 0.1 length dash, then a 0.01
+length gap, then a 0.02 length dash, then a 0.01 length gap. This pattern
+will repeat for the length of the line.</p>
+
+  
+    <p style="display: none;">      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
   
 
   
@@ -50848,6 +51122,490 @@ will be ignored.</p>
         <div class='space-bottom0'>
           <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
           : Color to set the element
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_axisticks'>
+      OBJ_AxisTicks
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Axis Ticks and Grid options object for <a href="#adv_axis">ADV_Axis</a>.</p>
+<p><img src="./assets1/axisticks.png"></p>
+<p>Ticks and grid locations can specified programatically with <code>start</code>,
+<code>stop</code> and <code>step</code>, or manually using a <code>values</code> array where each value
+is a value on the axis.</p>
+<p><code>length</code> and <code>offset</code> control the length of the ticks/grid and how much
+of the line is above or below the axis line. An offset of <code>0</code> will put
+the entire tick on the positive side of the axis.</p>
+<p>Different properties are defined in different spaces.</p>
+<ul>
+<li><code>start</code>, <code>step</code>, <code>stop</code> and <code>values</code> are all in axis space, or the values
+along the axis.</li>
+<li><code>length</code>, <code>offset</code>, <code>width</code> and <code>dash</code> are all in draw space and relate
+to dimensions in the space the axis is being drawn into.</li>
+</ul>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_line">OBJ_Line</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : start value of the ticks/grid on the axis
+(
+<code>axis.start</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>step</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : step between ticks/grid
+(
+<code>(axis.stop - axis.start) / 5</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>stop</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : stop value of the ticks/grid on the axis
+(
+<code>axis.stop</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>values</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : value locations of the ticks/grid on
+the axis (overrides 
+<code>start</code>
+, 
+<code>stop</code>
+ and 
+<code>step</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : length of the ticks (draw space)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : offset of the ticks (draw space) - use this
+to center ticks around the axis or not (
+<code>-length / 2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : width of ticks (draw space)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>?)</code>
+          : line style solid or dashed (
+<code>[]</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#adv_axis">ADV_Axis</a>
+<p>To test examples below, append them to the
+<a href="#drawing-boilerplate">boilerplate</a>.</p>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Axis with no ticks</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Axis with default ticks</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">ticks</span>: <span class="hljs-literal">true</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Axis ticks with custom step and color</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">ticks</span>: { <span class="hljs-attr">step</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Axis with ticks between 0.2 and 0.8 below the line</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">ticks</span>: {
+      <span class="hljs-attr">start</span>: <span class="hljs-number">0.2</span>,
+      <span class="hljs-attr">stop</span>: <span class="hljs-number">0.8</span>,
+      <span class="hljs-attr">step</span>: <span class="hljs-number">0.2</span>,
+      <span class="hljs-attr">length</span>: <span class="hljs-number">0.15</span>,
+      <span class="hljs-attr">offset</span>: <span class="hljs-number">-0.2</span>,
+      <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>]
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Axis with ticks at values</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">ticks</span>: { <span class="hljs-attr">values</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>] },
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_axislabels'>
+      OBJ_AxisLabels
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Axis label options object.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>values</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>hide</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeaxistitle'>
+      TypeAxisTitle
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Axis title</p>
+<p>(<a href="#obj_textlines">OBJ_TextLines</a> <code>&#x26; { rotation?: number, offset?:</code> <a href="#typeparsablepoint">TypeParsablePoint</a> <code>}) | string</code></p>
+
+  
+    <p style="display: none;">      Type:
+      (any | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_surroundanimationstep'>
+      OBJ_SurroundAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Surround animation step.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_customanimationstep">OBJ_CustomAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : start element to surround (
+<code>this</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : target element to surround (
+<code>this</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between rectangle and element (
+<code>0</code>
+)
 
           
         </div>
