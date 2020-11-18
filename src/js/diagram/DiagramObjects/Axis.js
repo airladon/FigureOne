@@ -134,6 +134,10 @@ export type OBJ_AxisTicks = {
  * Axis label options object.
  *
  * By default, labels are positioned with the first `ticks` defined in the axis.
+ *
+ * Labels can also be positioned at custom values with `values`.
+ *
+ *
  */
 export type OBJ_AxisLabels = {
   font?: OBJ_Font,
@@ -142,7 +146,8 @@ export type OBJ_AxisLabels = {
   xAlign?: 'left' | 'right' | 'center',
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
   offset?: TypeParsablePoint,
-  text?: null | Array<string>,
+  text?: null | Array<string | null | number>,
+  format?: 'decimal' | 'exp',
   values?: null | number | Array<number>,
   hide?: Array<number>,
 }
@@ -451,13 +456,7 @@ class AdvancedAxis extends DiagramElementCollection {
       // Text for labels at each value - null is actual value
       if (o.text == null) {
         o.text = [];
-        for (let i = 0; i < values.length; i += 1) {
-          if (o.format === 'decimal') {
-            o.text.push(`${round(values[i], o.precision).toFixed(o.precision)}`);
-          } else {
-            o.text.push(`${values[i].toExponential(o.precision)}`);
-          }
-        }
+        o.text = Array(values.length).map(() => null);
       }
 
       // Generate the text objects
@@ -480,13 +479,25 @@ class AdvancedAxis extends DiagramElementCollection {
           o.hide == null
           || (o.hide != null && o.hide.indexOf(i) === -1)
         ) {
+          let label = o.text[i];
+          if (label == null) {
+            label = values[i];
+          }
+          if (typeof label === 'number') {
+            if (o.format === 'decimal') {
+              label = `${round(label, o.precision).toFixed(o.precision)}`;
+            } else {
+              label = `${label.toExponential(o.precision)}`;
+            }
+          }
           text.push({
-            text: o.text[i],
+            text: label,
             location,
           });
         }
       }
       o.text = text;
+      console.log(text)
       const labels = this.shapes.text(o);
       labels.transform.updateRotation(o.rotation);
       this.add(`labels${index}`, labels);
