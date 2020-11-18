@@ -98,9 +98,14 @@ diagram.addElement({
   options: {
     width: 3,
     height: 2,
+    title: 'Hello',
     position: [-1, -1],
     // xAxis: { title: { lines: ['hello'] } },
     xAxis: { title: 'There' },
+    plotArea: [0.8, 0.8, 1, 1],
+    // xAxis: { labels: null, line: null, ticks: null },
+    // xAxis: { start: -2, stop: 2 },
+    // yAxis: { },
     yAxis: { title: 'Hello' },
     // xAxis: { color: [1, 0, 0, 1] },
     // xAxis: { length: 1, start: -10, stop: 0, ticks: { step: 2.5 }, grid: { length: 1, step: 2.5, width: 0.005 } },
@@ -111,6 +116,7 @@ diagram.addElement({
     // grid: { dash: [0.01, 0.01] },
     // font: { size: 0.2 },
     grid: true,
+    frame: { space: 0.2, line: { width: 0.004, dash: [0.1, 0.1] } },
     traces: [{
       points: sin(),
       // line: {linePrimitives: true, lineNum: 1},
@@ -124,3 +130,24 @@ diagram.addElement({
   },
 });
 
+// diagram.addElement({
+//   name: 'rect',
+//   method: 'advanced.rectangle',
+//   options: {
+//     width: 2,
+//     height: 1,
+//     position: [-1, -1],
+//     fill: [1, 0, 0, 0.5],
+//     corner: {
+//       radius: 0.2,
+//       sides: 10,
+//     },
+//     line: { width: 0.02, color: [0, 0, 0, 1], widthIs: 'outside', dash: [0.05, 0.01] },
+//   },
+// })
+
+// // diagram.elements._rect.surround(diagram.elements._plot, 0.1)
+// diagram.elements._rect.animations.new()
+//   .surround({ target: diagram.elements._plot, duration: 4 })
+//   .start();
+  

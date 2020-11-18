@@ -2539,7 +2539,15 @@ export default class DiagramPrimitives {
     ) {
       optionsToUse.line.widthIs = 'mid';
     }
-
+    if (optionsToUse.line != null) {
+      if (optionsToUse.line.widthIs === 'outside') {
+        optionsToUse.line.widthIs = 'negative';
+      }
+      if (optionsToUse.line.widthIs === 'inside') {
+        optionsToUse.line.widthIs = 'positive';
+      }
+    }
+    console.log(optionsToUse)
     const [points, border, touchBorder] = getRectangleBorder(optionsToUse);
 
     let element;

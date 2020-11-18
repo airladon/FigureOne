@@ -241,6 +241,7 @@ class AdvancedTrace extends DiagramElementCollection {
       return;
     }
     const o = joinObjects({}, defaultOptions, options);
+    this.markers = o;
     if (o.copy == null) {
       o.copy = [];
     } else if (Array.isArray(o.copy) === false) {

@@ -21,8 +21,9 @@ export type ADV_Plot = {
   height?: number,
   position?: TypeParsablePoint, // collection position
   axes?: Array<ADV_Axis>,
-  xAxis?: ADV_Axis,
-  yAxis?: ADV_Axis,
+  xAxis?: ADV_Axis | boolean,
+  yAxis?: ADV_Axis | boolean,
+  grid?: boolean,
   title?: OBJ_Text,
   traces?: Array<ADV_Trace>,
   font?: OBJ_Font,
@@ -33,32 +34,9 @@ export type ADV_Plot = {
     xAlign?: 'left' | 'center' | 'right',
     yAlgin?: 'bottom' | 'middle' | 'top',
   },
+  frame?: ADV_Rectangle | { space: number },
+  plotArea?: Array<number> | OBJ_Texture,
 };
-
-// function getTheme(name: string, length: number, axis: 'x' | 'y') {
-//   if (name === 'classic') {
-//     const color = [0.35, 0.35, 0.35, 1];
-//     const tLength = length / 20;
-//     return {
-//       axis: {
-//         color,
-//         ticks: {
-//           width: 0.005,
-//           length: tLength,
-//           offset: -tLength,
-//         },
-//         font: {
-//           color,
-//         },
-//       },
-//       grid: {
-//         color,
-//         width: 0.003,
-//       },
-//     };
-//   }
-//   return {};
-// }
 
 // $FlowFixMe
 class AdvancedPlot extends DiagramElementCollection {
@@ -126,6 +104,14 @@ class AdvancedPlot extends DiagramElementCollection {
     this.height = options.height;
     this.theme = options.theme;
     this.grid = options.grid;
+    this.xAxisShow = true;
+    if (options.xAxis === false) {
+      this.xAxisShow = false;
+    }
+    this.yAxisShow = true;
+    if (options.yAxis === false) {
+      this.yAxisShow = false;
+    }
 
     if (optionsIn.font == null || optionsIn.font.size == null) {
       this.defaultFont.size = Math.min(this.width, this.height) / 20;
@@ -150,6 +136,14 @@ class AdvancedPlot extends DiagramElementCollection {
       }
     });
     const bounds = getBoundingRect(points);
+
+    if (options.frame != null && options.frame !== false) {
+      this.addFrame(options.frame);
+    }
+    if (options.plotArea != null && options.plotArea !== false) {
+      this.addPlotArea(options.plotArea);
+    }
+
     this.addAxes([joinObjects(
       {},
       { axis: 'x', name: 'x', auto: [bounds.left, bounds.right] },
@@ -166,6 +160,17 @@ class AdvancedPlot extends DiagramElementCollection {
     if (options.traces != null) {
       this.addTraces(options.traces);
     }
+    if (options.title != null) {
+      this.addTitle(options.title);
+    }
+
+    if (options.border != null) {
+      this.addBorder(options.border);
+    }
+
+    if (this.__frame != null && this.frameSpace != null) {
+      this.__frame.surround(this, this.frameSpace); //this.frame.space);
+    }
   }
 
   getNonTraceBoundingRect() {
@@ -175,7 +180,6 @@ class AdvancedPlot extends DiagramElementCollection {
         children.push(elementName);
       }
     });
-    console.log(children)
     return this.getBoundingRect('draw', 'border', children);
   }
 
@@ -185,12 +189,7 @@ class AdvancedPlot extends DiagramElementCollection {
       font: this.defaultFont,
       type: 'x',
     };
-    // if (type != null) {
-    //   defaultOptions.axis = type;
-    //   defaultOptions.name = type;
-    // }
     axes.forEach((axisOptions) => {
-      // let theme = {};
       let axisType;
       if (axisOptions.axis != null) {
         axisType = axisOptions.axis;
@@ -199,11 +198,12 @@ class AdvancedPlot extends DiagramElementCollection {
       }
       if (axisType === 'x') {
         defaultOptions.length = this.width;
-        // o.length = o.axis === 'x' ? this.width : this.height;
       } else {
         defaultOptions.length = this.height;
       }
       const theme = this.getTheme(this.theme, axisType);
+      const show = axisType === 'x' ? this.xAxisShow : this.yAxisShow;
+      defaultOptions.show = show;
       const o = joinObjects({}, defaultOptions, theme.axis, axisOptions);
       if (o.name == null) {
         o.name = `axis_${this.axes.length}`;
@@ -214,36 +214,54 @@ class AdvancedPlot extends DiagramElementCollection {
     });
   }
 
-  // addAxes(axes: Array<ADV_Axis>, type: 'x' | 'y' | null) {
-  //   const defaultOptions = {
-  //     color: this.defaultColor,
-  //     font: this.defaultFont,
-  //     type: 'x',
-  //   };
-  //   if (type != null) {
-  //     defaultOptions.axis = type;
-  //     defaultOptions.name = type;
-  //   }
-  //   axes.forEach((axisOptions) => {
-  //     // let theme = {};
-  //     let axisType;
-  //     if (axisOptions.axis != null) {
-  //       axisType = axisOptions.axis;
-  //     } else if (defaultOptions.axis != null) {
-  //       axisType = defaultOptions.axis;
-  //     }
-  //     const theme = this.getTheme(this.theme, axisType);
-  //     const o = joinObjects({}, defaultOptions, theme.axis, axisOptions);
-  //     if (o.name == null) {
-  //       o.name = `axis_${this.axes.length}`;
-  //     }
-  //     if (axisOptions.length == null) {
-  //       o.length = o.axis === 'x' ? this.width : this.height;
-  //     }
-  //     const axis = this.advanced.axis(o);
-  //     this.add(o.name, axis);
-  //     this.axes.push(axis);
-  //   });
+  addPlotArea(plotArea: Array<number> | OBJ_Texture) {
+    const o = {
+      width: this.width,
+      height: this.height,
+      xAlign: 'left',
+      yAlign: 'bottom',
+      position: [0, 0],
+    };
+    if (Array.isArray(plotArea)) {
+      o.color = plotArea;
+    } else {
+      o.texture = plotArea;
+    }
+    this.add('_plotArea', this.shapes.rectangle(o));
+  }
+
+  addFrame(frame: ADV_Rectangle) {
+    const defaultOptions = {
+      width: this.width / 2,
+      height: this.height / 2,
+      xAlign: 'left',
+      yAlign: 'bottom',
+      position: [0, 0],
+      space: Math.min(this.width, this.height) / 20,
+    };
+    let optionsIn = frame;
+    if (optionsIn === true) {
+      optionsIn = { line: { width: 0.01 } };
+    }
+    const o = joinObjects({}, defaultOptions, optionsIn);
+    this.frameSpace = o.space;
+    this.add('_frame', this.advanced.rectangle(o));
+  }
+
+  // addLegend(legend: {
+  //   font: OBJ_Font,
+  //   textIsTraceColor: boolean,
+  //   textOnly: boolean,
+  //   position: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | TypeParsablePoint,
+  //   columns: boolean,
+  //   offset: TypeParsablePoint,
+  //   length: number,
+  //   box: ADV_Rectangle,
+  // }) {
+    
+  //   this.traces.forEach((trace) => {
+
+  //   })
   // }
 
   getAxis(name: string) {
@@ -293,7 +311,7 @@ class AdvancedPlot extends DiagramElementCollection {
     });
   }
 
-  getTheme(name: string, axis: 'x' | 'y') {
+  getTheme(name: string, axis: 'x' | 'y' = 'x') {
     const length = axis === 'x' ? this.width : this.height;
     const gridLength = axis === 'x' ? this.height : this.width;
 
@@ -307,6 +325,7 @@ class AdvancedPlot extends DiagramElementCollection {
       theme = {
         axis: {
           color,
+          line: { width: 0.01 },
           ticks: {
             width: 0.005,
             length: tickLength,
@@ -323,6 +342,9 @@ class AdvancedPlot extends DiagramElementCollection {
             dash: [gridDash, gridDash],
           },
         },
+        title: {
+          font: { color },
+        },
       };
     }
 
@@ -334,6 +356,29 @@ class AdvancedPlot extends DiagramElementCollection {
       }
     }
     return theme;
+  }
+
+  addTitle(optionsIn: OBJ_TextLines & { offset: TypeParsablePoint } | string) {
+    const defaultOptions = {
+      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 2 }),
+      justify: 'center',
+      xAlign: 'center',
+      yAlign: 'bottom',
+      offset: [0, 0],
+    };
+    let optionsToUse = optionsIn;
+    if (typeof optionsIn === 'string') {
+      optionsToUse = { text: [optionsIn] };
+    }
+    const theme = this.getTheme(this.theme).title;
+    const o = joinObjects({}, defaultOptions, theme, optionsToUse);
+    o.offset = getPoint(o.offset);
+    const bounds = this.getNonTraceBoundingRect();
+    if (o.position == null) {
+      o.position = new Point(this.width / 2, bounds.top + o.font.size * 1);
+    }
+    const title = this.shapes.textLines(o);
+    this.add('title', title);
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this

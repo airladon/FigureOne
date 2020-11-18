@@ -23,6 +23,7 @@ import type { ADV_Axis } from './Axis';
 import type { ADV_Trace } from './Trace';
 import EquationLabel from './EquationLabel';
 import AdvancedPlot from './Plot';
+import AdvancedRectangle from './Rectangle';
 
 export default class DiagramObjects {
   webgl: Array<WebGLInstance>;
@@ -102,6 +103,13 @@ export default class DiagramObjects {
     const optionsToUse = joinObjects({}, ...options);
     return new AdvancedPlot(
       this.shapes, this.equation, this, optionsToUse,
+    );
+  }
+
+  rectangle(...options: Array<ADV_Rectangle>) {
+    const optionsToUse = joinObjects({}, ...options);
+    return new AdvancedRectangle(
+      this.shapes, optionsToUse,
     );
   }
 }

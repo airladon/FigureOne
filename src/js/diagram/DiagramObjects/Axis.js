@@ -50,6 +50,7 @@ export type ADV_Axis = {
   title?: OBJ_TextLines | string,
   name?: string,
   auto?: [number, number],
+  show?: boolean,
 };
 
 // $FlowFixMe
@@ -107,6 +108,7 @@ class AdvancedAxis extends DiagramElementCollection {
       line: {},
       grid: null,
       ticks: null,
+      show: true,
     };
     if (optionsIn.auto != null) {
       const {
@@ -118,7 +120,7 @@ class AdvancedAxis extends DiagramElementCollection {
       defaultOptions.labels = { precision };
     }
     const options = joinObjects({}, defaultOptions, optionsIn);
-    if (options.stop == null) {
+    if (options.stop == null || options.stop <= options.start) {
       options.stop = options.start + 1;
     }
     this.name = options.name;
@@ -126,6 +128,7 @@ class AdvancedAxis extends DiagramElementCollection {
     if (optionsIn.font == null || optionsIn.font.color == null) {
       this.defaultFont.color = options.color;
     }
+    this.show = options.show;
     this.start = options.start;
     this.stop = options.stop;
     this.length = options.length;
@@ -144,19 +147,19 @@ class AdvancedAxis extends DiagramElementCollection {
     }
     this.setColor(options.color);
 
-    if (options.line != null) {
+    if (this.show && options.line != null) {
       this.addLine(options.line);
     }
-    if (options.ticks != null) {
+    if (this.show && options.ticks != null) {
       this.addTicks(options.ticks, 'ticks');
     }
-    if (options.grid != null) {
-      this.addTicks(options.grid, 'grid');
-    }
-    if (options.labels != null) {
+    if (this.show && options.labels != null) {
       this.addLabels(options.labels);
     }
-    if (options.title != null) {
+    if (this.show && options.grid != null) {
+      this.addTicks(options.grid, 'grid');
+    }
+    if (this.show && options.title != null) {
       this.addTitle(options.title);
     }
   }
@@ -196,8 +199,14 @@ class AdvancedAxis extends DiagramElementCollection {
     optionsToUse.forEach((options) => {
       const o = joinObjects({}, defaultOptions, options);
       o.length *= lengthSign;
-      if (o.offset == null) {
-        o.offset = name === 'ticks' ? -o.length / 2 * lengthSign : 0;
+      if (o.offset == null && name === 'ticks') {
+        o.offset = -o.length / 2;
+      } else if (o.offset == null && name === 'grid') {
+        if (this.axis === 'x') {
+          o.offset = -this.transform.t().y;
+        } else {
+          o.offset = -this.transform.t().x;
+        }
       }
       const num = Math.floor((o.stop + o.step / 10000 - o.start) / o.step);
       o.num = num;
@@ -230,7 +239,7 @@ class AdvancedAxis extends DiagramElementCollection {
 
   addTitle(optionsIn: OBJ_Text & { rotation: number, offset: TypeParsablePoint } | string) {
     const defaultOptions = {
-      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 2 }),
+      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 1.5 }),
       justify: 'center',
       xAlign: 'center',
       yAlign: this.axis === 'x' ? 'top' : 'bottom',
@@ -285,6 +294,10 @@ class AdvancedAxis extends DiagramElementCollection {
       }
 
       o.offset = getPoint(o.offset);
+
+      if (typeof o.text === 'string') {
+        o.text = [o.text];
+      }
 
       // Values where to put the labels - null is auto which is same as ticks
       let values;
