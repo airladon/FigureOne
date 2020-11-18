@@ -66,11 +66,11 @@ diagram.addElements([
 // diagram.add('xAxis', xAxis);
 // diagram.add('yAxis', yAxis);
 
-const sin = () => {
+const sin = (offset = 0) => {
   const xValues = Fig.tools.math.range(-1, 1, 1 / 100);
   const points = [];
   xValues.forEach((x) => {
-    points.push([x, 0.5 * Math.sin(x / 1 * Math.PI * 2)]);
+    points.push([x, 0.5 * Math.sin(x / 1 * Math.PI * 2 + offset)]);
   })
   return points;
 }
@@ -116,16 +116,42 @@ diagram.addElement({
     // grid: { dash: [0.01, 0.01] },
     // font: { size: 0.2 },
     grid: true,
-    frame: { space: 0.2, line: { width: 0.004, dash: [0.1, 0.1] } },
-    traces: [{
-      points: sin(),
-      // line: {linePrimitives: true, lineNum: 1},
-      line: { cornerStyle: 'none' },
-      // markers: { sides: 3 },
-      // line: null,
-      // xSampleDistance: 0.1,
-      // ySampleDistance: 0.1,
+    legend: {
+      fontColorIsLineColor: true,
+      // frame: { space: 0.1 },
+      // frame: {
+      //   fill: [1, 1, 1, 1],
+      // },
+      offset: [1, 0],
+      custom: {
+        a: {
+          font: { size: 0.1 },
+          position: [0, -0.5],
+        },
+      }
     },
+    frame: { space: 0.2, line: { width: 0.004, dash: [0.1, 0.1] } },
+    traces: [
+      {
+        points: sin(),
+        // line: {linePrimitives: true, lineNum: 1},
+        line: { cornerStyle: 'none' },
+        name: 'a',
+        markers: { sides: 3, radius: 0.05, rotation: Math.PI / 2, },
+        // line: null,
+        // xSampleDistance: 0.1,
+        // ySampleDistance: 0.1,
+      },
+      {
+        points: sin(1),
+        name: 'b',
+        color: [0, 0, 1, 1],
+      },
+      {
+        points: sin(2),
+        name: 'c',
+        color: [0, 0.7, 0, 1],
+      },
     ]
   },
 });

@@ -203,6 +203,7 @@ class AdvancedRectangle extends DiagramElementCollection {
 
   surround(element: DiagramElement, space: number = 0) {
     const [position, width, height] = this.getSurround(element, space);
+    console.log(this.xAlign, this.yAlign, position, width, height)
     this.setSurround(position, width, height);
   }
 

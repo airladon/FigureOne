@@ -5351,6 +5351,37 @@ class DiagramElementCollection extends DiagramElement {
     }
     return false;
   }
+
+  align(
+    xAlign: 'left' | 'center' | 'right' | number,
+    yAlign: 'bottom' | 'middle' | 'top' | number,
+  ) {
+    const bounds = this.getBoundingRect('draw');
+    const offset = new Point(0, 0);
+    if (xAlign === 'left') {
+      offset.x = -bounds.left;
+    } else if (xAlign === 'center') {
+      offset.x = -bounds.left + bounds.width / 2;
+    } else if (xAlign === 'right') {
+      offset.x = -bounds.right;
+    } else {
+      offset.x = -bounds.left + bounds.width * xAlign;
+    }
+    if (yAlign === 'bottom') {
+      offset.y = -bounds.bottom;
+    } else if (yAlign === 'middle') {
+      offset.y = -bounds.bottom + bounds.height / 2;
+    } else if (yAlign === 'top') {
+      offset.y = -bounds.top;
+    } else {
+      offset.y = -bounds.bottom + bounds.height * yAlign;
+    }
+    for (let i = 0; i < this.drawOrder.length; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      const p = element.transform.t();
+      element.transform.updateTranslation(p.add(offset));
+    }
+  }
 }
 
 export {
