@@ -15127,7 +15127,7 @@ identity transforms.</p>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>]});</pre>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span> });</pre>
 <h3>Quick Start</h3>
 <p>Let's start by creating a <a href="#diagramelementprimitive">DiagramElementPrimitive</a> element that draws a polygon and adding it to the diagram.</p>
 <pre class='hljs'><span class="hljs-comment">// create the `DiagramElementPrimitive`</span>
@@ -21459,7 +21459,8 @@ displayed labels of angles and sides.
   </div>
   
 
-  
+  <p>Advanced Axis options object.</p>
+
   
   
 
@@ -21606,7 +21607,7 @@ displayed labels of angles and sides.
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <p>A grid is included in this javascript file to make it obvious how text is aligned and justified</p>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>]});
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span> });
 diagram.addElements([
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'origin'</span>,
@@ -22537,7 +22538,7 @@ diagram.addElement(
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <p>A grid is included in this javascript file to make it obvious how shapes are animated</p>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>]});
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span> });
 
 <span class="hljs-comment">// grid</span>
 diagram.addElements([
@@ -27793,7 +27794,7 @@ more readable.</p>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>]});</pre>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span> });</pre>
 <h3>Quick Start</h3>
 <p>First let's create an equation, with red as the default color:</p>
 <pre class='hljs'><span class="hljs-keyword">const</span> equation = diagram.create.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });</pre>
@@ -41668,7 +41669,7 @@ diagram.addElement({
   </div>
   
 
-  <p>Defines whether a line is solid or dahsed.</p>
+  <p>Defines whether a line is solid or dashed.</p>
 <p><code>Array&#x3C;number></code></p>
 <p>Leave empty for solid line.</p>
 <p>Use array of numbers for a dashed line where indexes 0, 2, 4... are line
@@ -51251,14 +51252,14 @@ the axis (overrides
       
         <div class='space-bottom0'>
           <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : length of the ticks (draw space)
+          : length of the ticks/grid (draw space)
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : offset of the ticks (draw space) - use this
+          : offset of the ticks/grid (draw space) - use this
 to center ticks around the axis or not (
 <code>-length / 2</code>
 )
@@ -51268,14 +51269,14 @@ to center ticks around the axis or not (
       
         <div class='space-bottom0'>
           <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : width of ticks (draw space)
+          : width of ticks/grid (draw space)
 
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>?)</code>
-          : line style solid or dashed (
+          : line style is solid or dashed (
 <code>[]</code>
 )
 
@@ -51393,6 +51394,11 @@ diagram.addElement({
   
 
   <p>Axis label options object.</p>
+<p><img src="./assets1/axislabels.png"></p>
+<p>By default, labels are positioned with the first <code>ticks</code> defined in the
+axis. Labels can also be positioned at custom values with <code>values</code>.</p>
+<p>Labels will be values at the label positions, unless specified as a specific
+string or number in the <code>text</code> property.</p>
 
   
   
@@ -51411,56 +51417,132 @@ diagram.addElement({
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          <span class='code bold'>values</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)?)</code>
+          : the axis values to
+position labels at - by default (
+<code>null</code>
+) these values will be the same
+values as the first 
+<code>ticks</code>
+ values if 
+<code>ticks</code>
+ are defined (
+<code>null</code>
+)
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)>)?)</code>
+          : An array of text to
+be used for the labels. 
+<code>null</code>
+ will use the
+value the label is at, 
+<code>number</code>
+ and 
+<code>string</code>
+ can be used for label
+customization. If using an array that is shorter than the number of values
+for labels to be drawn at, then 
+<code>null</code>
+ will be used for undefined values.
+(
+<code>null</code>
+)
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
-          
+          : Number of decimal places to be shown when the
+label text is the axis value (
+<code>null</code>
+) or a 
+<code>number</code>
+ (
+<code>1</code>
+)
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
+          <span class='code bold'>format</span> <code class='quiet'>((<code>"decimal"</code> | <code>"exp"</code>)?)</code>
+          : <code>'exp'</code>
+ will present numbers in
+exponential form (
+<code>'decimal'</code>
+)
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between the ticks and the label
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>text</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?)</code>
-          
+          : additional offset for the labels
+(
+<code>[0, 0]</code>
+)
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>values</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)?)</code>
-          
+          <span class='code bold'>rotation</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : label rotation (
+<code>0</code>
+)
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>hide</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          : horizontal alignment of
+labels (
+<code>'center'</code>
+ for x axes, 
+<code>'right'</code>
+ for y axes)
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
+          : vertical
+alignment of labels (
+<code>'top'</code>
+ for x axes, 
+<code>'middle'</code>
+ for y axes)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : specific font changes for labels
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>hide</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : value indexes to hide (
+<code>[]</code>
+)
+
           
         </div>
       
@@ -51470,9 +51552,113 @@ diagram.addElement({
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#adv_axis">ADV_Axis</a>
+<p>To test examples below, append them to the
+<a href="#drawing-boilerplate">boilerplate</a>.</p>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// By default labels are displayed if there are ticks</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">ticks</span>: <span class="hljs-literal">true</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// If there are multiple ticks, then just the first are used to show labels</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">ticks</span>: [
+      { <span class="hljs-attr">step</span>: <span class="hljs-number">0.5</span> },
+      { <span class="hljs-attr">step</span>: <span class="hljs-number">0.1</span>, <span class="hljs-attr">length</span>: <span class="hljs-number">0.05</span>, <span class="hljs-attr">offset</span>: <span class="hljs-number">0</span> },
+    ],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Long labels can be displayed with a rotation. Set the</span>
+<span class="hljs-comment">// xAlign, yAlign and offset to make it look good.</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">axis</span>: <span class="hljs-string">'x'</span>,
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">start</span>: <span class="hljs-number">10000</span>,
+    <span class="hljs-attr">stop</span>: <span class="hljs-number">20000</span>,
+    <span class="hljs-attr">ticks</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">labels</span>: {
+      <span class="hljs-attr">precision</span>: <span class="hljs-number">0</span>,
+      <span class="hljs-attr">rotation</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span>,
+      <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+      <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
+      <span class="hljs-attr">space</span>: <span class="hljs-number">0.05</span>, 
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Specific labels can be hidden</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">ticks</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">labels</span>: { <span class="hljs-attr">hide</span>: <span class="hljs-number">0</span> },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Labels can be at specific values, and have a specific font</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">ticks</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">labels</span>: {
+      <span class="hljs-attr">values</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.6</span>],
+      <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">size</span>: <span class="hljs-number">0.15</span> }
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Labels can be strings, `null` for the actual value, or numbers. If numbers</span>
+<span class="hljs-comment">// then they will be drawn in the same format as the actual values.</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">ticks</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">labels</span>: {
+      <span class="hljs-attr">values</span>: <span class="hljs-literal">null</span>,
+      <span class="hljs-attr">text</span>: [<span class="hljs-string">'0'</span>, <span class="hljs-literal">null</span>, <span class="hljs-string">'AB'</span>, <span class="hljs-string">'0.6'</span>, <span class="hljs-number">0.8</span>, <span class="hljs-literal">null</span>],
+      <span class="hljs-attr">format</span>: <span class="hljs-string">'exp'</span>,
+    },
+  },
+});</pre>
+    
   
 
   

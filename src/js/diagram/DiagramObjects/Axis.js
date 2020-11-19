@@ -133,22 +133,152 @@ export type OBJ_AxisTicks = {
 /**
  * Axis label options object.
  *
- * By default, labels are positioned with the first `ticks` defined in the axis.
+ * ![](./assets1/axislabels.png)
  *
- * Labels can also be positioned at custom values with `values`.
+ * By default, labels are positioned with the first `ticks` defined in the
+ * axis. Labels can also be positioned at custom values with `values`.
  *
+ * Labels will be values at the label positions, unless specified as a specific
+ * string or number in the `text` property.
  *
+ * Different properties are defined in different spaces.
+ * - `values`, is defined in axis space, or the values along the axis.
+ * - `space` and `offset` are defined in draw space and relate
+ *   to dimensions in the space the axis is being drawn into.
+ *
+ * @property {null | number | Array<number>} [values] the axis values to
+ * position labels at - by default (`null`) these values will be the same
+ * values as the first `ticks` values if `ticks` are defined (`null`)
+ * @property {null | Array<string | null | number>} [text] An array of text to
+ * be used for the labels. `null` will use the
+ * value the label is at, `number` and `string` can be used for label
+ * customization. If using an array that is shorter than the number of values
+ * for labels to be drawn at, then `null` will be used for undefined values.
+ * (`null`)
+ * @property {number} [precision] Number of decimal places to be shown when the
+ * label text is the axis value (`null`) or a `number` (`1`)
+ * @property {'decimal' | 'exp'} [format] `'exp'` will present numbers in
+ * exponential form (`'decimal'`)
+ * @property {number} [space] space between the ticks and the label
+ * @property {TypeParsablePoint} [offset] additional offset for the labels
+ * (`[0, 0]`)
+ * @property {number} [rotation] label rotation (`0`)
+ * @property {'left' | 'right' | 'center'} [xAlign] horizontal alignment of
+ * labels (`'center'` for x axes, `'right'` for y axes)
+ * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] vertical
+ * alignment of labels (`'top'` for x axes, `'middle'` for y axes)
+ * @property {OBJ_Font} [font] specific font changes for labels
+ * @property {Array<number> | number} [hide] value indexes to hide (`[]`)
+ *
+ * @see
+ *
+ * {@link ADV_Axis}
+ *
+ * To test examples below, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>.
+ *
+ * @example
+ * // By default labels are displayed if there are ticks
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     length: 2,
+ *     ticks: true,
+ *   },
+ * });
+ *
+ * @example
+ * // If there are multiple ticks, then just the first are used to show labels
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     length: 2,
+ *     ticks: [
+ *       { step: 0.5 },
+ *       { step: 0.1, length: 0.05, offset: 0 },
+ *     ],
+ *   },
+ * });
+ *
+ * @example
+ * // Long labels can be displayed with a rotation. Set the
+ * // xAlign, yAlign and offset to make it look good.
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     axis: 'x',
+ *     length: 2,
+ *     start: 10000,
+ *     stop: 20000,
+ *     ticks: true,
+ *     labels: {
+ *       precision: 0,
+ *       rotation: Math.PI / 4,
+ *       yAlign: 'middle',
+ *       xAlign: 'right',
+ *       space: 0.05, 
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Specific labels can be hidden
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     length: 2,
+ *     ticks: true,
+ *     labels: { hide: 0 },
+ *   },
+ * });
+ *
+ * @example
+ * // Labels can be at specific values, and have a specific font
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     length: 2,
+ *     ticks: true,
+ *     labels: {
+ *       values: [0, 0.6],
+ *       font: { color: [0, 0, 1, 1], size: 0.15 }
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Labels can be strings, `null` for the actual value, or numbers. If numbers
+ * // then they will be drawn in the same format as the actual values.
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     length: 2,
+ *     ticks: true,
+ *     labels: {
+ *       values: null,
+ *       text: ['0', null, 'AB', '0.6', 0.8, null],
+ *       format: 'exp',
+ *     },
+ *   },
+ * });
  */
 export type OBJ_AxisLabels = {
-  font?: OBJ_Font,
+  values?: null | number | Array<number>,
+  text?: null | Array<string | null | number>,
   precision?: number,
+  format?: 'decimal' | 'exp',
+  space?: number,
+  offset?: TypeParsablePoint,
   rotation?: number,
   xAlign?: 'left' | 'right' | 'center',
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-  offset?: TypeParsablePoint,
-  text?: null | Array<string | null | number>,
-  format?: 'decimal' | 'exp',
-  values?: null | number | Array<number>,
+  font?: OBJ_Font,
   hide?: Array<number>,
 }
 
@@ -163,23 +293,62 @@ export type TypeAxisTitle = OBJ_TextLines & {
 } | string;
 
 /**
+ * Advanced Axis options object.
  *
+ * An axis can be used to create a number line, used as an axis in
+ * {@link ADV_Plot} and/or used to plot a {@link ADV_Trace} against.
+ *
+ * An axis is a line that may have
+ * - tick marks
+ * - labels
+ * - grid lines
+ * - a title
+ *
+ * An axis is drawn to a `length`. It will have values along its length
+ * from `start` to `stop`. Ticks, grid lines and labels are all drawn
+ * at axis value positions. All other dimensions, such as line lengths,
+ * widths, positions, spaces and offsets are defined in draw space, or in the
+ * same space as the `length` of the axis.
+ *
+ * @property {'x' | 'y'} [axis] `'x'` axes are horizontal, `'y'` axes are
+ * vertical (`'x'`)
+ * @property {number} [length] length of the axis
+ * @property {OBJ_Line | boolean} [line] line style of the axis - `null` will draw
+ * no line. By default, a solid line will be drawn if not defined.
+ * @property {number} [start] start value of axis (`0`)
+ * @property {number} [stop] stop value of axis. `stop` must be larger than
+ * `start` (`start + 1`)
+ * @property {OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean} [ticks] tick
+ * options. Use an Array to setup multiple sets/styles of ticks. Use a boolean
+ * value to turn ticks on or off. (`false`)
+ * @property {AxisLabels | Array<AxisLabels> | boolean} [labels] label options.
+ * Use an array to setup multiple sets of labels, and use a boolean to turn
+ * labels on and off (`true`)
+ * @property {OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean} [grid]
+ * @property {TypeAxisTitle} [title]
+ * @property {Array<number>} [color]
+ * @property {OBJ_Font} [font]
+ * @property {boolean} [show]
+ * @property {[number, number]} [auto]
+ * @property {string} [name]
+ * @property {TypeParsablePoint} [position]
  */
 export type ADV_Axis = {
+  axis?: 'x' | 'y',
   length?: number,              // draw space length
-  position?: TypeParsablePoint, // collection position
+  line?: boolean | OBJ_Line,
   start?: number,               // value space start at draw space start
   stop?: number,                // value space stop at draw space stop
-  axis?: 'x' | 'y',
-  ticks?: OBJ_AxisTicks | Array<OBJ_AxisTicks>,
-  grid?: OBJ_AxisTicks | Array<OBJ_AxisTicks>,
-  line?: null | ADV_Line,
-  font?: OBJ_Font,              // Default font
-  labels?: AxisLabels | Array<AxisLabels>,
+  ticks?: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean,
+  labels?: AxisLabels | Array<AxisLabels> | boolean,
+  grid?: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean,
   title?: TypeAxisTitle,
-  name?: string,
-  auto?: [number, number],
+  color?: Array<number>,
+  font?: OBJ_Font,              // Default font
   show?: boolean,
+  auto?: [number, number],
+  name?: string,
+  position?: TypeParsablePoint,
 };
 
 // $FlowFixMe
@@ -228,7 +397,7 @@ class AdvancedAxis extends DiagramElementCollection {
     this.equation = equation;
 
     const defaultOptions = {
-      length: 1,
+      length: shapes.defaultLength,
       angle: 0,
       start: 0,
       color: shapes.defaultColor,
@@ -261,6 +430,9 @@ class AdvancedAxis extends DiagramElementCollection {
     this.show = options.show;
     this.start = options.start;
     this.stop = options.stop;
+    if (this.start >= this.stop) {
+      this.start = this.stop - 1;
+    }
     this.length = options.length;
     this.axis = options.axis;
     this.angle = this.axis === 'x' ? 0 : Math.PI / 2;
@@ -320,8 +492,8 @@ class AdvancedAxis extends DiagramElementCollection {
       start: this.start,
       stop: this.stop,
       step: (this.stop - this.start) / 5,
-      width: this.line != null ? this.line.width : 0.01,
-      length: this.shapes.defaultLineWidth * 10,
+      width: this.line != null ? this.line.width : this.shapes.defaultLineWidth,
+      length: name === 'ticks' ? this.shapes.defaultLineWidth * 10 : this.shapes.defaultLineWidth * 50,
       angle: this.angle + Math.PI / 2,
       color: this.color,
     };
@@ -459,6 +631,10 @@ class AdvancedAxis extends DiagramElementCollection {
         o.text = Array(values.length).map(() => null);
       }
 
+      if (o.space == null) {
+        o.space = this.axis === 'x' ? o.font.size + this.shapes.defaultLineWidth * 5 : this.shapes.defaultLineWidth * 10;
+      }
+
       // Generate the text objects
       const text = [];
       for (let i = 0; i < values.length; i += 1) {
@@ -467,11 +643,11 @@ class AdvancedAxis extends DiagramElementCollection {
         if (this.axis === 'x') {
           location = new Point(
             draw + o.offset.x,
-            bounds.bottom - o.font.size * 1.5 + o.offset.y,
+            bounds.bottom - o.space + o.offset.y,
           ).rotate(-o.rotation);
         } else {
           location = new Point(
-            bounds.left + o.offset.x - o.font.size / 1.5,
+            bounds.left + o.offset.x - o.space,
             draw + o.offset.y,
           ).rotate(-o.rotation);
         }

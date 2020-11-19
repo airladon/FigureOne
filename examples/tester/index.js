@@ -187,84 +187,15 @@ const sin = (offset = 0) => {
 
 
 
-// // By default labels are displayed if there are ticks
-// diagram.addElement({
-//   name: 'x',
-//   method: 'advanced.axis',
-//   options: {
-//     length: 2,
-//     ticks: true,
-//   },
-// });
-
-// // If there are multiple ticks, then just the first are used to show labels
-// diagram.addElement({
-//   name: 'x',
-//   method: 'advanced.axis',
-//   options: {
-//     length: 2,
-//     ticks: [
-//       { step: 0.5 },
-//       { step: 0.1, length: 0.05, offset: 0 },
-//     ],
-//   },
-// });
-
-// // Long labels can be displayed with a rotation. Set the
-// // xAlign, yAlign and offset to make it look good.
-// diagram.addElement({
-//   name: 'x',
-//   method: 'advanced.axis',
-//   options: {
-//     axis: 'x',
-//     length: 2,
-//     start: 10000,
-//     stop: 20000,
-//     ticks: true,
-//     labels: {
-//       precision: 0,
-//       rotation: Math.PI / 4,
-//       yAlign: 'middle',
-//       xAlign: 'right',
-//       offset: [0, 0.1],
-//     },
-//   },
-// });
-
-// // Specific labels can be hidden
-// diagram.addElement({
-//   name: 'x',
-//   method: 'advanced.axis',
-//   options: {
-//     length: 2,
-//     ticks: true,
-//     labels: { hide: 0 },
-//   },
-// });
-
-// // Labels can be only at specific values
-// diagram.addElement({
-//   name: 'x',
-//   method: 'advanced.axis',
-//   options: {
-//     length: 2,
-//     ticks: true,
-//     labels: { values: [0, 0.6] },
-//   },
-// });
-
-
-// Labels can be strings, `null` for the actual value, or numbers. If numbers
-// then they will be drawn in the same format as the actual values.
+// By default an axis is an 'x' axis
 diagram.addElement({
   name: 'x',
   method: 'advanced.axis',
   options: {
     length: 2,
     ticks: true,
-    labels: {
-      text: [null, null, 'A', 0.6, null],
-      format: 'exp',
-    },
+    // line: false,
+    grid: true,
   },
 });
+

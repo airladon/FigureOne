@@ -2132,6 +2132,7 @@ export default class DiagramPrimitives {
   defaultColor: Array<number>;
   defaultFont: OBJ_Font;
   defaultLineWidth: number;
+  defaultLength: number;
 
   /**
     * This is a big big test
@@ -2148,6 +2149,7 @@ export default class DiagramPrimitives {
     defaultColor: Array<number>,
     defaultFont: OBJ_Font,
     defaultLineWidth: number,
+    defaultLength: number,
   ) {
     if (Array.isArray(webgl)) {
       this.webgl = webgl;
@@ -2170,6 +2172,7 @@ export default class DiagramPrimitives {
     this.defaultColor = defaultColor;
     this.defaultFont = defaultFont;
     this.defaultLineWidth = defaultLineWidth;
+    this.defaultLength = defaultLength;
     // this.draw2DFigures = draw2DFigures;
   }
 

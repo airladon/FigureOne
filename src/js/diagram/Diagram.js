@@ -247,6 +247,8 @@ class Diagram {
   drawAnimationFrames: number;
   defaultColor: Array<number>;
   defaultFont: OBJ_Font;
+  defaultLineWidth: number;
+  defaultLength: number;
 
   animationFinishedCallback: ?(string | (() => void));
   // updateFontSize: string;
@@ -282,7 +284,6 @@ class Diagram {
         weight: 'normal',
         opacity: 1,
       },
-      lineWidth: 0.008,
     };
     this.fnMap = new FunctionMap();
     this.isPaused = false;
@@ -409,6 +410,7 @@ class Diagram {
     // console.log(this.canvasLow.getClientBoundingRect())
     this.updateLimits(limits);
     this.setDefaultLineWidth(options.lineWidth);
+    this.setDefaultLength(options.length);
     this.drawQueued = false;
     this.lastDrawTime = 0;
     this.inTransition = false;
@@ -623,6 +625,15 @@ class Diagram {
 
     const matrix = this.spaceTransforms.pixelToDiagram.matrix();
     this.defaultLineWidth = Math.abs(matrix[0]);
+  }
+
+  setDefaultLength(userInputLength: number | undefined | null) {
+    if (userInputLength != null) {
+      this.defaultLength = userInputLength;
+      return;
+    }
+
+    this.defaultLineWidth = this.limits.width / 4;
   }
 
   scrollEvent() {
@@ -1132,6 +1143,7 @@ class Diagram {
       this.defaultColor,
       this.defaultFont,
       this.defaultLineWidth,
+      this.defaultLength,
     );
   }
 
