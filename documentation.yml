@@ -189,7 +189,6 @@ toc:
   - OBJ_PolylineAngle
   - OBJ_PolylineSide
   - OBJ_PolylinePadSingle
-  - AdvancedTrace
   - ADV_Trace
   - AdvancedLegend
   - ADV_Legend

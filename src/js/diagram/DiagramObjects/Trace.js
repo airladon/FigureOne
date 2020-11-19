@@ -17,6 +17,15 @@ import {
 /**
  * {@link AdvancedTrace} options object.
  *
+ * ![](./assets1/advtrace_ex1.png)
+ * ![](./assets1/advtrace_ex2.png)
+ *
+ * ![](./assets1/advtrace_ex3.png)
+ * ![](./assets1/advtrace_ex4.png)
+ *
+ * ![](./assets1/advtrace_ex5.png)
+ * ![](./assets1/advtrace_ex6.png)
+ *
  * A plot trace is a set of (x, y) points associated with an
  * x and y axis.
  *
@@ -42,22 +51,132 @@ import {
  * Even using these methods, it can take up to a second to render a trace with
  * hundreds of thousands of points (depending on the client device).
  *
- * @see
- * For examples on using traces, see {@link AdvancedPlot}
  *
- * @property {Array<TypeParsablePoint>} [points] the x points of the trace
- * @property {ADV_Axis} [xAxis] The x axis associated with the trace
- * @property {ADV_Axis} [yAxis]
- * @property {OBJ_Line} [line]
- * @property {OBJ_Polygon | OBJ_Start} [markers]
- * @property {Array<number>} [color]
- * @property {string} [name]
- * @property {number} [xSampleDistance]
- * @property {number} [ySampleDistance]
+ * @property {Array<TypeParsablePoint>} points the x points of the trace
+ * @property {ADV_Axis | string} [xAxis] The x axis associated with the trace,
+ * if this is a string, the trace must be part of a plot with an axis with the
+ * same name. In plots, this will default to the string `'x'`.
+ * @property {ADV_Axis | string} [yAxis] The y axis associated with the trace,
+ * if this is a string, the trace must be part of a plot with an axis with the
+ * same name. In plots, this will default to the string `'y'`.
+ * @property {OBJ_Line} [line] line style of the trace - if neither `line` nor
+ * `markers` is defined, then `line` will default to a solid line. If `line`
+ * is not defined, but `markers` is, then only markers will be used to represent
+ * the line
+ * @property {OBJ_Polygon | OBJ_Star} [markers] marker style of the trace
+ * @property {Array<number>} [color] color of the trace
+ * @property {string} [name] name of the trace used in plot legends
+ * @property {number} [xSampleDistance] If x distance between points is less
+ * than this value, then the later point will not be plotted. By default this is
+ * 1/4000th the range of the x axis
+ * @property {number} [ySampleDistance] If y distance between points is less
+ * than this value, then the later point will not be plotted. By default this is
+ * 1/4000th the range of the y axis
+ *
+ * @see
+ * For more examples on using traces, see {@link AdvancedPlot}
+ * // When plotting a single trace, just the points are required. By default
+ * // the line will be solid, and it will be plotted against the 'x' and 'y' axes.
+ *
+ * To test examples below, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>.
+ *
+ * @example
+ * diagram.addElement({
+ *   name: 'plot',
+ *   method: 'advanced.plot',
+ *   options: {
+ *     trace: pow(),
+ *   },
+ * });
+ *
+ * @example
+ * // Change the thickness and color of the line
+ * diagram.addElement({
+ *   name: 'plot',
+ *   method: 'advanced.plot',
+ *   options: {
+ *     trace: {
+ *       points: pow(),
+ *       line: {
+ *         width: 0.03,
+ *         color: [0, 0.8, 0.4, 1],
+ *       }
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Default Markers
+ * diagram.addElement({
+ *   name: 'plot',
+ *   method: 'advanced.plot',
+ *   options: {
+ *     trace: {
+ *       points: pow(2, 10, 1),
+ *       markers: true,
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Custom Markers
+ * diagram.addElement({
+ *   name: 'plot',
+ *   method: 'advanced.plot',
+ *   options: {
+ *     trace: {
+ *       points: pow(2, 10, 1),
+ *       markers: {
+ *         radius: 0.035,
+ *         sides: 20,
+ *         line: { width: 0.01 },
+ *       },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Line and markers
+ * diagram.addElement({
+ *   name: 'plot',
+ *   method: 'advanced.plot',
+ *   options: {
+ *     trace: {
+ *       points: pow(2, 10, 1),
+ *       line: { width: 0.01, dash: [0.02, 0.01] },
+ *       markers: {
+ *         radius: 0.035,
+ *         sides: 20,
+ *       },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Use names in trace definitions to customize legend
+ * diagram.addElement({
+ *   name: 'plot',
+ *   method: 'advanced.plot',
+ *   options: {
+ *     trace: [
+ *       pow(2),
+ *       { points: pow(2.5), name: 'Power 2.5' },
+ *       {
+ *         points: pow(3, 10, 1),
+ *         name: 'Power 3',
+ *         markers: { radius: 0.03 },
+ *         line: { width: 0.01 },
+ *       },
+ *     ],
+ *     legend: true,
+ *   },
+ * });
  */
 export type ADV_Trace = {
-  xAxis?: ADV_Axis,
-  yAxis?: ADV_Axis,
+  points: Array<TypeParsablePoint>,
+  xAxis?: ADV_Axis | string,
+  yAxis?: ADV_Axis | string,
   x?: Array<TypeParsablePoint>,
   y?: Array<TypeParsablePoint>,
   line?: OBJ_Line,

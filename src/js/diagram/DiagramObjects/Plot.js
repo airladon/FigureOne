@@ -182,7 +182,6 @@ function cleanTraces(
  *   method: 'advanced.plot',
  *   options: {
  *     trace: pow(),
- *     position: [-1, -1],
  *   },
  * });
  *
@@ -442,8 +441,8 @@ class AdvancedPlot extends DiagramElementCollection {
       font: shapes.defaultFont,
       color: shapes.defaultColor,
       theme: 'classic',
-      width: shapes.limits.width / 2,
-      height: shapes.limits.width / 2,
+      width: shapes.limits.width / 3,
+      height: shapes.limits.width / 3,
       grid: [],
       xAlign: 'plotAreaLeft',
       yAlign: 'plotAreaBottom',
@@ -685,8 +684,8 @@ class AdvancedPlot extends DiagramElementCollection {
     const theme = this.getTheme(this.theme);
     traces.forEach((traceOptions, index) => {
       const defaultOptions = {
-        xAxis: this.getAxis('x') != null ? 'x' : 0,
-        yAxis: this.getAxis('y') != null ? 'y' : 1,
+        xAxis: 'x',
+        yAxis: 'y',
         color: theme.traceColors[index % theme.traceColors.length],
       };
       const o = joinObjects({}, defaultOptions, traceOptions);
