@@ -549,6 +549,7 @@ class AdvancedAxis extends DiagramElementCollection {
   valueToDraw: number;
   defaultFont: OBJ_Font;
   name: string;
+  autoStep: null | number;
 
   /**
    * @hideconstructor
@@ -578,14 +579,16 @@ class AdvancedAxis extends DiagramElementCollection {
       show: true,
       axis: 'x',
     };
+    this.autoStep = null;
     if (optionsIn.auto != null) {
       const {
         start, stop, step, precision,
       } = this.calcAuto(optionsIn.auto);
       defaultOptions.start = start;
       defaultOptions.stop = stop;
-      defaultOptions.ticks = { step };
+      defaultOptions.ticks = {};
       defaultOptions.labels = { precision };
+      this.autoStep = step;
     }
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.stop == null || options.stop <= options.start) {
@@ -618,21 +621,26 @@ class AdvancedAxis extends DiagramElementCollection {
     }
     this.setColor(options.color);
 
-    if (this.show && options.grid != null && options.grid !== false) {
-      this.addTicks(options.grid, 'grid');
-    }
+    this.ticks = [];
+    this.grid = [];
+
     if (this.show && options.line != null && options.line !== false) {
       this.addLine(options.line);
     }
     if (this.show && options.ticks != null && options.ticks !== false) {
       this.addTicks(options.ticks, 'ticks');
     }
+
     if (this.show && options.labels != null && options.labels !== false) {
       this.addLabels(options.labels);
     }
     if (this.show && options.title != null) {
       this.addTitle(options.title);
     }
+    if (this.show && options.grid != null && options.grid !== false) {
+      this.addTicks(options.grid, 'grid');
+    }
+    this.reorder();
   }
 
   addLine(optionsInOrBool: OBJ_Line | boolean) {
@@ -652,15 +660,75 @@ class AdvancedAxis extends DiagramElementCollection {
     this.add('line', line);
   }
 
+  reorder() {
+    let grid = [];
+    let ticks = [];
+    const line = [];
+    this.drawOrder.forEach((elementName) => {
+      if (elementName.startsWith('grid')) {
+        grid.push(elementName);
+      }
+      if (elementName.startsWith('tick')) {
+        ticks.push(elementName);
+      }
+      if (elementName.startsWith('line')) {
+        line.push(elementName);
+      }
+    });
+    ticks = ticks.reverse();
+    grid = grid.reverse();
+    this.toBack(ticks);
+    this.toBack(line);
+    this.toBack(grid);
+  }
+
+  processTicks(
+    name: 'ticks' | 'grid',
+    o: { start?: number, stop?: number, step?: number},
+    index: number,
+  ) {
+    let { start, stop } = this;
+    let step;
+    if (o.start != null) {
+      start = o.start;
+    }
+    if (o.stop != null) {
+      stop = o.stop;
+    }
+    if (o.step != null) {
+      step = o.step;
+    }
+
+    if (name === 'grid' && this.ticks.length >= index + 1) {
+      if (o.start == null) {
+        start = this.ticks[index].start;
+      }
+      if (o.stop == null) {
+        stop = this.ticks[index].stop;
+      }
+      if (o.step == null) {
+        step = this.ticks[index].step;
+      }
+    }
+    if (step == null && this.autoStep != null) {
+      step = this.autoStep;
+    } else if (step == null && index === 0) {
+      step = (stop - start) / 5;
+    } else if (step == null && index > 0) {
+      step = this[name].step / 2;
+    }
+    return { start, stop, step };
+  }
+
   addTicks(optionsInOrBool: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean, name: 'ticks' | 'grid' = 'ticks') {
     let optionsIn = optionsInOrBool;
     if (optionsInOrBool === true) {
       optionsIn = {};
     }
     const defaultOptions = {
-      start: this.start,
-      stop: this.stop,
-      step: (this.stop - this.start) / 5,
+      // start: this.start,
+      // stop: this.stop,
+      // step: (this.stop - this.start) / 5,
       width: this.line != null ? this.line.width : this.shapes.defaultLineWidth,
       length: name === 'ticks' ? this.shapes.defaultLineWidth * 10 : this.shapes.defaultLineWidth * 50,
       angle: this.angle + Math.PI / 2,
@@ -675,8 +743,12 @@ class AdvancedAxis extends DiagramElementCollection {
     this[name] = [];
     const elements = [];
     const lengthSign = this.axis === 'x' ? 1 : -1;
-    optionsToUse.forEach((options) => {
+    optionsToUse.forEach((options, index) => {
       const o = joinObjects({}, defaultOptions, options);
+      const { start, stop, step } = this.processTicks(name, o, index);
+      o.start = start;
+      o.stop = stop;
+      o.step = step;
       o.length *= lengthSign;
       if (o.offset == null && name === 'ticks') {
         o.offset = this.axis === 'x' ? -o.length / 2 : o.length / 2;
@@ -719,7 +791,7 @@ class AdvancedAxis extends DiagramElementCollection {
 
   addTitle(optionsIn: OBJ_TextLines & { rotation?: number, offset?: TypeParsablePoint } | string) {
     const defaultOptions = {
-      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 1.5 }),
+      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 1.3 }),
       justify: 'center',
       xAlign: 'center',
       yAlign: this.axis === 'x' ? 'top' : 'bottom',
@@ -785,7 +857,7 @@ class AdvancedAxis extends DiagramElementCollection {
 
       // Values where to put the labels - null is auto which is same as ticks
       let values = [];
-      if (o.values == null && this.ticks != null) {
+      if (o.values == null && this.ticks.length > 0) {
         values = this.ticks[index].values;
       } else {
         values = o.values;
@@ -883,9 +955,7 @@ class AdvancedAxis extends DiagramElementCollection {
         step = newRange / 5;
     }
     let precision = 0;
-    if (order === 1) {
-      precision = 1;
-    } else if (order < 0) {
+    if (order < 0) {
       precision = Math.abs(order) + 1;
     }
     return {

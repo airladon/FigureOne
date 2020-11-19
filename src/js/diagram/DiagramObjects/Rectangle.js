@@ -106,7 +106,6 @@ class AdvancedRectangle extends DiagramElementCollection {
     if (options.fill != null) {
       this.addRect(options.fill, 'fill', true);
     }
-
     if (options.line != null) {
       this.addRect(options.line, 'line', false);
     }

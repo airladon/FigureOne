@@ -3,7 +3,8 @@
 // import Diagram from '../Diagram';
 import {
   Transform, Point,
-  getPoint, getTransform, getPoints, getBoundingRect,
+  getPoint, getTransform, getPoints, getBoundingRect, parsePoint,
+  comparePoints, Rect,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
 import {
@@ -32,15 +33,54 @@ export type ADV_Plot = {
   xAxis?: ADV_Axis | boolean,
   yAxis?: ADV_Axis | boolean,
   grid?: boolean,
-  title?: OBJ_Text,
-  traces?: Array<ADV_Trace> | ADV_Trace | Array<Point>,
+  title?: OBJ_Text & { offset: TypeParsablePoint },
+  trace?: Array<ADV_Trace> | ADV_Trace | Array<Point>,
   font?: OBJ_Font,
-  xAlign?: 'left' | 'center' | 'right',
-  yAlgin?: 'bottom' | 'middle' | 'top',
   legend?: ADV_PlotLegend,
-  frame?: ADV_Rectangle & { space: number },
-  plotArea?: Array<number> | OBJ_Texture,
+  frame?: boolean | Array<number> | ADV_Rectangle & { space: number },
+  plotArea?: Array<number> | ADV_Rectangle,
 };
+
+function cleanTraces(
+  tracesIn: Array<ADV_Trace | Array<TypeParsablePoint>> | ADV_Trace | Array<TypeParsablePoint>,
+) {
+  let traces = [];
+  // debugger;
+  if (!Array.isArray(tracesIn)) {
+    traces = [tracesIn];
+  } else if (tracesIn.length === 0) {
+    traces = [];
+  } else if (parsePoint(tracesIn[0]) instanceof Point) {
+    traces = [{ points: tracesIn }];
+  } else {
+    tracesIn.forEach((trace) => {
+      if (!Array.isArray(trace)) {
+        traces.push(trace);
+      } else {
+        traces.push({ points: trace });
+      }
+    });
+  }
+
+  let firstPoint = true;
+  let result = { min: new Point(0, 0), max: new Point(0, 0) };
+  traces.forEach((trace) => {
+    for (let i = 0; i < trace.points.length; i += 1) {
+      const p = getPoint(trace.points[i]);
+      // eslint-disable-next-line no-param-reassign
+      // trace.points[i] = p;
+      result = comparePoints(p, result.min, result.max, firstPoint);
+      firstPoint = false;
+    }
+  });
+  const bounds = new Rect(
+    result.min.x,
+    result.min.y,
+    result.max.x - result.min.x,
+    result.max.y - result.min.y,
+  );
+  return [traces, bounds];
+}
 
 // $FlowFixMe
 class AdvancedPlot extends DiagramElementCollection {
@@ -87,7 +127,9 @@ class AdvancedPlot extends DiagramElementCollection {
       theme: 'classic',
       width: shapes.limits.width / 2,
       height: shapes.limits.width / 2,
-      grid: false,
+      grid: [],
+      xAlign: 'plotAreaLeft',
+      yAlign: 'plotAreaBottom',
     };
     if (
       optionsIn.color != null
@@ -133,13 +175,7 @@ class AdvancedPlot extends DiagramElementCollection {
     this.axes = [];
     this.traces = [];
 
-    const points = [];
-    options.traces.forEach((trace) => {
-      for (let i = 0; i < trace.points.length; i += 1) {
-        points.push(getPoint(trace.points[i]));
-      }
-    });
-    const bounds = getBoundingRect(points);
+    const [traces, bounds] = cleanTraces(options.trace);
 
     if (options.frame != null && options.frame !== false) {
       this.addFrame(options.frame);
@@ -161,8 +197,8 @@ class AdvancedPlot extends DiagramElementCollection {
     if (options.axes != null) {
       this.addAxes(options.axes);
     }
-    if (options.traces != null) {
-      this.addTraces(options.traces);
+    if (options.trace != null) {
+      this.addTraces(traces);
     }
     if (options.title != null) {
       this.addTitle(options.title);
@@ -209,33 +245,46 @@ class AdvancedPlot extends DiagramElementCollection {
       } else {
         defaultOptions.length = this.height;
       }
-      const theme = this.getTheme(this.theme, axisType);
+      const theme = this.getTheme(this.theme, axisType, axisOptions.color);
       const show = axisType === 'x' ? this.xAxisShow : this.yAxisShow;
       defaultOptions.show = show;
       const o = joinObjects({}, defaultOptions, theme.axis, axisOptions);
+      if (Array.isArray(o.grid)) {
+        for (let i = 0; i < o.grid.length; i += 1) {
+          o.grid[i] = joinObjects({}, theme.axis.grid, o.grid[i]);
+        }
+      }
+      if (Array.isArray(o.ticks)) {
+        for (let i = 0; i < o.ticks.length; i += 1) {
+          o.ticks[i] = joinObjects({}, theme.axis.ticks, o.ticks[i]);
+        }
+      }
       if (o.name == null) {
         o.name = `axis_${this.axes.length}`;
       }
+      console.log(o)
       const axis = this.advanced.axis(o);
       this.add(o.name, axis);
       this.axes.push(axis);
     });
   }
 
-  addPlotArea(plotArea: Array<number> | OBJ_Texture) {
-    const o = {
+  addPlotArea(plotArea: Array<number> | ADV_Rectangle) {
+    const defaultOptions = {
       width: this.width,
       height: this.height,
       xAlign: 'left',
       yAlign: 'bottom',
       position: [0, 0],
     };
+    let o;
     if (Array.isArray(plotArea)) {
-      o.color = plotArea;
+      defaultOptions.fill = plotArea;
+      o = defaultOptions;
     } else {
-      o.texture = plotArea;
+      o = joinObjects({}, defaultOptions, plotArea);
     }
-    this.add('_plotArea', this.shapes.rectangle(o));
+    this.add('_plotArea', this.advanced.rectangle(o));
   }
 
   addFrame(frame: ADV_Rectangle) {
@@ -250,6 +299,8 @@ class AdvancedPlot extends DiagramElementCollection {
     let optionsIn = frame;
     if (optionsIn === true) {
       optionsIn = { line: { width: this.shapes.defaultLineWidth } };
+    } else if (Array.isArray(optionsIn)) {
+      optionsIn = { fill: optionsIn };
     }
     const o = joinObjects({}, defaultOptions, optionsIn);
     this.frameSpace = o.space;
@@ -287,159 +338,6 @@ class AdvancedPlot extends DiagramElementCollection {
     this.add('_legend', legend);
   }
 
-  // addLegend(legendOptions: {
-  //   length?: number, // 0 = text only
-  //   font?: OBJ_Font,
-  //   fontColorIsLineColor?: boolean,
-  //   lineTextSpace?: number,
-  //   offset?: Array<TypeParsablePoint> | TypeParsablePoint,
-  //   frame?: ADV_Rectangle & { space: number },
-  //   custom?: {
-  //     [arrayNumberOrName: string]: {
-  //       font?: OBJ_Font,
-  //       length?: number,
-  //       offset?: TypeParsablePoint,
-  //       lineTextSpace?: number,
-  //       fontColorIsLineColor?: boolean,
-  //       text?: OBJ_TextLines,
-  //       position?: TypeParsablePoint,
-  //     },
-  //   },
-  //   position?: TypeParsablePoint,
-  //   xAlign?: 'left' | 'center' | 'right' | number,
-  //   yAlgin?: 'bottom' | 'middle' | 'top' | number,
-  //   space?: number,
-  //   show?: Array<number | string>,
-  //   hide?: Array<number | string>,
-  // }) {
-  //   const defaultOptions = {
-  //     font: this.defaultFont,
-  //     xAlign: 'left',
-  //     yAlign: 'middle',
-  //     fontColorIsLineColor: false,
-  //     frame: false,
-  //     custom: {},
-  //     length: this.width / 15,
-  //     lineTextSpace: this.width / 50,
-  //     position: [this.width + this.width / 20, this.height],
-  //   };
-  //   const o = joinObjects({}, defaultOptions, legendOptions);
-  //   const legend = this.shapes.collection();
-  //   let toShow = [...Array(this.traces.length).keys()];
-  //   if (o.toShow) {
-  //     toShow = [];
-  //     o.toShow.forEach((index) => {
-  //       const traceIndex = this.getTraceIndex(index);
-  //       if (traceIndex !== -1) {
-  //         toShow.push(traceIndex);
-  //       }
-  //     });
-  //   }
-  //   if (o.toHide) {
-  //     o.toHide.forEach((index) => {
-  //       const traceIndex = this.getTraceIndex(index);
-  //       if (traceIndex !== -1 && toShow.indexOf(traceIndex) !== -1) {
-  //         toShow.splice(traceIndex, 1);
-  //       }
-  //     });
-  //   }
-  //   const offset = [];
-  //   if (o.offset == null) {
-  //     o.offset = [new Point(0, -o.font.size * 1.5)];
-  //   }
-  //   o.offset = getPoints(o.offset);
-  //   for (let i = 0; i < toShow.length; i += 1) {
-  //     offset.push(o.offset[i % o.offset.length]._dup());
-  //   }
-  //   let p = new Point(0, 0);
-  //   toShow.forEach((traceIndex, index) => {
-  //     const trace = this.traces[traceIndex];
-  //     let custom = {};
-  //     if (o.custom[`${index}`] != null) {
-  //       custom = o.custom[`${index}`];
-  //     } else if (o.custom[trace.name] != null) {
-  //       custom = o.custom[trace.name];
-  //     }
-  //     if (index === 0 && custom.position == null) {
-  //       custom.position = getPoint(o.position);
-  //     }
-  //     const oTrace = joinObjects({}, {
-  //       length: o.length,
-  //       font: o.font,
-  //       fontColorIsLineColor: o.fontColorIsLineColor,
-  //       offset: offset[index],
-  //       lineTextSpace: o.lineTextSpace,
-  //       text: trace.name,
-  //     }, custom);
-  //     if (oTrace.position != null) {
-  //       p = getPoint(oTrace.position);
-  //     } else {
-  //       p = p.add(getPoint(oTrace.offset));
-  //     }
-  //     if (oTrace.length > 0 && trace.line != null) {
-  //       const oLine = joinObjects({}, trace.line, {
-  //         p1: p,
-  //         length: oTrace.length,
-  //         angle: 0,
-  //       });
-  //       const line = this.shapes.line(oLine);
-  //       legend.add(`line${traceIndex}`, line);
-  //     }
-  //     // console.log(trace)
-  //     if (oTrace.length > 0 && trace.markers != null) {
-  //       const oMarker = joinObjects({}, trace.markers, {
-  //         position: new Point(p.x + oTrace.length / 2, p.y),
-  //         copy: trace.markers.copy.slice(0, -1),
-  //       });
-  //       const marker = this.shapes.polygon(oMarker);
-  //       legend.add(`marker${traceIndex}`, marker);
-  //     }
-  //     const textOptions = {
-  //       // font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 2 }),
-  //       font: this.defaultFont,
-  //       justify: 'center',
-  //       xAlign: 'left',
-  //       yAlign: 'middle',
-  //       position: new Point(p.x + oTrace.length + oTrace.lineTextSpace, p.y),
-  //     };
-  //     let textOptionsToUse = oTrace.text;
-  //     if (typeof oTrace.text === 'string') {
-  //       textOptionsToUse = { text: [oTrace.text] };
-  //     }
-  //     let colorOverride = {};
-  //     if (o.fontColorIsLineColor) {
-  //       colorOverride = { font: { color: trace.color.slice() } };
-  //     }
-  //     const theme = this.getTheme(this.theme).legend;
-  //     const oText = joinObjects({}, textOptions, theme, colorOverride, textOptionsToUse);
-  //     // o.offset = getPoint(o.offset);
-  //     const traceName = this.shapes.textLines(oText);
-  //     legend.add(`trace${traceIndex}`, traceName);
-  //   });
-  //   this.add('legend', legend);
-  //   if (o.frame != null && o.frame !== false) {
-  //     const bounds = legend.getBoundingRect('draw');
-  //     const frameOptions = {
-  //       space: Math.min(bounds.width, bounds.height) / 20,
-  //     };
-  //     let frameOptionsIn = o.frame;
-  //     if (o.frame === true) {
-  //       frameOptions.line = { width: this.width / 400 };
-  //       frameOptionsIn = {};
-  //     }
-  //     const oFrame = joinObjects({}, frameOptions, frameOptionsIn);
-  //     legend.frameSpace = oFrame.space;
-  //     const frame = this.advanced.rectangle(oFrame);
-  //     frame.surround(legend, oFrame.space);
-  //     legend.add('frame', frame);
-  //   }
-  //   // legend.align(o.xAlign, o.yAlign);
-  //   // console.log(getPoint(o.position))
-  //   // if (o.position != null) {
-  //   //   legend.setPosition(getPoint(o.position));
-  //   // }
-  // }
-
   getAxis(name: string) {
     for (let i = 0; i < this.axes.length; i += 1) {
       if (this.axes[i].name === name) {
@@ -468,15 +366,16 @@ class AdvancedPlot extends DiagramElementCollection {
   }
 
   addTraces(traces: Array<ADV_Trace>) {
-    const defaultOptions = {
-      xAxis: this.getAxis('x') != null ? 'x' : 0,
-      yAxis: this.getAxis('y') != null ? 'y' : 1,
-      color: this.defaultColor,
-    };
-    traces.forEach((traceOptions) => {
+    const theme = this.getTheme(this.theme);
+    traces.forEach((traceOptions, index) => {
+      const defaultOptions = {
+        xAxis: this.getAxis('x') != null ? 'x' : 0,
+        yAxis: this.getAxis('y') != null ? 'y' : 1,
+        color: theme.traceColors[index % theme.traceColors.length],
+      };
       const o = joinObjects({}, defaultOptions, traceOptions);
       if (o.name == null) {
-        o.name = `trace_${this.traces.length}`;
+        o.name = `trace_${index}`;
       }
       o.xAxis = this.getAxis(o.xAxis);
       o.yAxis = this.getAxis(o.yAxis);
@@ -487,21 +386,21 @@ class AdvancedPlot extends DiagramElementCollection {
     });
   }
 
-  getTheme(name: string, axis: 'x' | 'y' = 'x') {
+  getTheme(name: string, axis: 'x' | 'y' = 'x', defaultColor: Array<number> | null = null) {
     const length = axis === 'x' ? this.width : this.height;
     const gridLength = axis === 'x' ? this.height : this.width;
 
-    const minDimension = Math.min(this.shapes.limits.width, this.shapes.limits.height);
+    // const minDimension = Math.min(this.shapes.limits.width, this.shapes.limits.height);
 
     let theme = {};
     if (name === 'classic') {
-      const color = [0.35, 0.35, 0.35, 1];
+      const color = defaultColor == null ? [0.35, 0.35, 0.35, 1] : defaultColor;
       const tickLength = Math.min(this.width, this.height) / 30;
-      const gridDash = minDimension / 500;
+      const gridDash = this.shapes.defaultLineWidth;
       theme = {
         axis: {
           color,
-          line: { width: this.shapes.defaultLineWidth * 1.5 },
+          line: { width: this.shapes.defaultLineWidth },
           ticks: {
             width: this.shapes.defaultLineWidth,
             length: tickLength,
@@ -513,7 +412,7 @@ class AdvancedPlot extends DiagramElementCollection {
           length,
           grid: {
             color,
-            width: this.shapes.defaultLineWidth / 1.5,
+            width: this.shapes.defaultLineWidth / 2,
             length: gridLength,
             dash: [gridDash, gridDash],
           },
@@ -525,13 +424,21 @@ class AdvancedPlot extends DiagramElementCollection {
           color,
           font: { color },
         },
+        traceColors: [
+          [0, 0, 1, 1],
+          [1, 0, 0, 1],
+          [0, 0.7, 0, 1],
+          [0.8, 0.8, 0.2, 1],
+          [0.2, 0.8, 0.8, 1],
+          [0.8, 0.2, 0.8, 1],
+        ],
       };
     }
 
     if (theme.axis != null && theme.axis.grid != null) {
       if (this.grid === false) {
         theme.axis.grid = undefined;
-      } else if (typeof this.grid === 'object') {
+      } else if (typeof this.grid === 'object' || Array.isArray(this.grid)) {
         theme.axis.grid = joinObjects({}, theme.axis.grid, this.grid);
       }
     }
@@ -540,7 +447,7 @@ class AdvancedPlot extends DiagramElementCollection {
 
   addTitle(optionsIn: OBJ_TextLines & { offset: TypeParsablePoint } | string) {
     const defaultOptions = {
-      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 2 }),
+      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 1.5 }),
       justify: 'center',
       xAlign: 'center',
       yAlign: 'bottom',
@@ -555,7 +462,10 @@ class AdvancedPlot extends DiagramElementCollection {
     o.offset = getPoint(o.offset);
     const bounds = this.getNonTraceBoundingRect();
     if (o.position == null) {
-      o.position = new Point(this.width / 2, bounds.top + o.font.size * 1);
+      o.position = new Point(
+        this.width / 2 + o.offset.x,
+        bounds.top + o.font.size * 0.5 + o.offset.y,
+      );
     }
     const title = this.shapes.textLines(o);
     this.add('title', title);

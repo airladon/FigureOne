@@ -131,7 +131,7 @@ function parsePoint<T>(pIn: TypeParsablePoint, onFail: T): Point | T | null {
   }
 
   if (Array.isArray(p)) {
-    if (p.length === 2) {
+    if (p.length === 2 && typeof p[0] === 'number' && typeof p[1] === 'number') {
       return new Point(p[0], p[1]);
     }
     return onFailToUse;
@@ -5918,4 +5918,5 @@ export {
   getTriangleCenter,
   getBoundingBorder,
   parseBorder,
+  comparePoints,
 };

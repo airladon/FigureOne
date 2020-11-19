@@ -185,15 +185,227 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], l
 //   .start();
 
 
-const sin = (offset = 0, step = 0.1) => {
-  const xValues = Fig.tools.math.range(-1, 1, step);
+const sin = (offset = 0, step = 0.05, start = -1, stop = -1) => {
+  const xValues = Fig.tools.math.range(start, stop, step);
   return xValues.map(x => new Fig.Point(x, Math.sin(x * 2 * Math.PI + offset)))
 }
 
+const pow = (pow, stop = 10) => {
+  const xValues = Fig.tools.math.range(0, stop, 0.05);
+  return xValues.map(x => new Fig.Point(x, x ** pow));
+}
+
+// // Plot of single trace with auto axis scaling
+// diagram.addElement({
+//   name: 'plot',
+//   method: 'advanced.plot',
+//   options: {
+//     width: 2,       // draw space width of plot area
+//     height: 2,      // draw space height of plot area
+//     trace: sin(),
+//     grid: true,
+//   },
+// });
+
+// // Multiple traces with a legend
+// diagram.addElement({
+//   name: 'plot',
+//   method: 'advanced.plot',
+//   options: {
+//     width: 2,
+//     height: 2,
+//     yAxis: {
+//       start: 0,
+//       stop: 100,
+//     },
+//     trace: [
+//       { points: pow(1.5), name: 'Power 1.5' },
+//       { points: pow(2), name: 'Power 2' },
+//       { points: pow(2.5), name: 'Power 2.5' },
+//       { points: pow(3), name: 'Power 3' },
+//       { points: pow(3.5), name: 'Power 3.5' },
+//       { points: pow(4), name: 'Power 4' },
+//     ],
+//     grid: true,
+//     legend: { position: [2.2, 1.95] },
+//   },
+// });
+
+// // Multiple grids and simple titles
+// diagram.addElement({
+//   name: 'plot',
+//   method: 'advanced.plot',
+//   options: {
+//     width: 2,
+//     height: 2,
+//     yAxis: {
+//       start: 0,
+//       stop: 100,
+//       grid: [
+//         { step: 20, width: 0.005, dash: [], color: [0.7, 0.7, 1, 1] },
+//         { step: 5, width: 0.005, dash: [0.01, 0.01], color: [1, 0.7, 0.7, 1] },
+//       ],
+//       title: 'velocity (m/s)',
+//     },
+//     xAxis: {
+//       grid: [
+//         { step: 2, width: 0.005, dash: [], color: [0.7, 0.7, 1, 1] },
+//         { step: 0.5, width: 0.005, dash: [0.01, 0.01], color: [1, 0.7, 0.7, 1] },
+//       ],
+//       title: 'time (s)',
+//     },
+//     trace: pow(3),
+//     title: 'Velocity over Time'
+//   },
+// });
+
+// // Hide axes
+// // Use plot frame and plot area
+// // Title has a subtitle
+// diagram.addElement({
+//   name: 'plot',
+//   method: 'advanced.plot',
+//   options: {
+//     width: 2,
+//     height: 2,
+//     trace: pow(3),
+//     xAxis: { show: false },
+//     yAxis: { show: false },
+//     plotArea: [0.93, 0.93, 0.93, 1],
+//     frame: {
+//       line: { width: 0.005, color: [0.5, 0.5, 0.5, 1] },
+//       corner: { radius: 0.1, sides: 10 },
+//       space: 0.15,
+//     },
+//     title: {
+//       text: [
+//         'Velocity over Time',
+//         { text: 'For object A', lineSpace: 0.13, font: { size: 0.08 } },
+//       ],
+//       offset: [0, 0],
+//     }
+//   },
+// });
+
+// // Secondary y axis
+// diagram.addElement({
+//   name: 'plot',
+//   method: 'advanced.plot',
+//   options: {
+//     width: 2,
+//     height: 2,
+//     trace: pow(2),
+//     yAxis: {
+//       title: {
+//         text: 'velocity (m/s)',
+//         rotation: 0,
+//         xAlign: 'right',
+//       },
+//     },
+//     xAxis: { title: 'time (s)' },
+//     axes: [
+//       {
+//         axis: 'y',
+//         start: 0,
+//         stop: 900,
+//         color: [1, 0, 0, 1],
+//         position: [2, 0],
+//         ticks: {
+//           step: 300,
+//           offset: 0,
+//           length: 0.05,
+//         },
+//         labels: {
+//           offset: [0.2, 0],
+//           precision: 0,
+//           xAlign: 'left',
+//         },
+//         title: {
+//           offset: [0.4, 0],
+//           xAlign: 'left',
+//           text: 'displacment (m)',
+//           rotation: 0,
+//         }
+//       },
+//     ],
+//     position: [-1, -1],
+//   },
+// });
+
+// Cartesian axes crossing at the zero point
+// Automatic layout doesn't support this, but axes, ticks, labels and titles
+// can all be customized to create it.
 diagram.addElement({
   name: 'plot',
   method: 'advanced.plot',
   options: {
-    trace: sin(),
+    width: 3,
+    height: 3,
+    trace: pow(2, 20),
+    font: { size: 0.1 },
+    xAxis: {
+      start: -25,
+      stop: 25,
+      ticks: {
+        start: -20,
+        stop: 20,
+        step: 5,
+        length: 0.1,
+        offset: -0.05
+      },
+      line: { arrow: 'barb' },
+      position: [0, 1.5],
+      labels: [
+        {
+          hide: 4,
+          precision: 0,
+          space: 0.1,
+        },
+        {
+          values: 0,
+          text: 'O',
+          offset: [0, 0.165],
+        },
+      ],
+      title: {
+        text: 'x',
+        offset: [1.65, 0.3],
+        font: {
+          style: 'italic',
+          family: 'Times New Roman',
+          size: 0.15,
+        },
+      },
+    },
+    yAxis: {
+      start: -450,
+      stop: 450,
+      line: { arrow: 'barb' },
+      ticks: {
+        start: -400,
+        stop: 400,
+        step: 100,
+        length: 0.1,
+        offset: -0.05,
+      },
+      position: [1.5, 0],
+      labels: {
+        hide: 4,
+        precision: 0,
+        space: 0.03,
+      },
+      title: {
+        text: 'y',
+        offset: [0.35, 1.6],
+        font: {
+          style: 'italic',
+          family: 'Times New Roman',
+          size: 0.15,
+        },
+        rotation: 0,
+      },
+    },
+    grid: false,
+    position: [-1, -1],
   },
 })

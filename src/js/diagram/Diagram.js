@@ -278,7 +278,7 @@ class Diagram {
       fontScale: 1,
       color: [0, 0, 0, 1],
       font: {
-        family: 'Times New Roman',
+        family: 'Helvetica',
         size: 0.1,
         style: 'normal',
         weight: 'normal',
