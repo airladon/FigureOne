@@ -1660,6 +1660,26 @@
               
                 
                 <li><a
+                  href='#advancedplot'
+                  class="">
+                  AdvancedPlot
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#adv_plot'
+                  class="">
+                  ADV_Plot
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#text'
                   class="h5 bold black caps">
                   Text
@@ -3528,6 +3548,16 @@
               
                 
                 <li><a
+                  href='#adv_trace'
+                  class="">
+                  ADV_Trace
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#misc-animation'
                   class="h5 bold black caps">
                   Misc Animation
@@ -4149,6 +4179,36 @@
                   href='#typeaxistitle'
                   class="">
                   TypeAxisTitle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeplotframe'
+                  class="">
+                  TypePlotFrame
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeplottitle'
+                  class="">
+                  TypePlotTitle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#adv_plotlegend'
+                  class="">
+                  ADV_PlotLegend
                   
                 </a>
                 
@@ -21895,9 +21955,9 @@ diagram.addElement({
   </div>
   
 
-  <p>Advanced Axis options object.</p>
+  <p><a href="#advancedaxis">AdvancedAxis</a> options object.</p>
 <p>An axis can be used to create a number line, used as an axis in
-<a href="ADV_Plot">ADV_Plot</a> and/or used to plot a <a href="ADV_Trace">ADV_Trace</a> against.</p>
+<a href="#adv_plot">ADV_Plot</a> and/or used to plot a <a href="#adv_trace">ADV_Trace</a> against.</p>
 <p>An axis is a line that may have</p>
 <ul>
 <li>tick marks</li>
@@ -22046,7 +22106,7 @@ turn grids on and off (
 to plot an 
 <a href="AdvancedTrace">AdvancedTrace</a>
  on a 
-<a href="AdvancedPlot">AdvancedPlot</a>
+<a href="#advancedplot">AdvancedPlot</a>
 , but if either or
 both axes aren't to be drawn, then use 
 <code>false</code>
@@ -22076,7 +22136,7 @@ both axes aren't to be drawn, then use
           <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
           : axis name - used to define which axes a trace
 should be plotted against in an 
-<a href="AdvancedPlot">AdvancedPlot</a>
+<a href="#advancedplot">AdvancedPlot</a>
 .
 
           
@@ -22087,6 +22147,501 @@ should be plotted against in an
           : axis position (
 <code>[0, 0]</code>
 )
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='advancedplot'>
+      AdvancedPlot
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#diagramelementcollection">DiagramElementCollection</a> representing a plot including axes, traces,
+labels and titles.</p>
+<p><img src="./assets1/advplot_ex1.png">
+<img src="./assets1/advplot_ex2.png"></p>
+<p><img src="./assets1/advplot_ex3.png">
+<img src="./assets1/advplot_ex4.png"></p>
+<p><img src="./assets1/advplot_ex5.png">
+<img src="./assets1/advplot_ex6.png"></p>
+<p>This object provides convient and customizable plot functionality.</p>
+<p>At its simplist, just the points of the trace to be plotted need to be
+passed in to get a plot with automatically generated axes, tick marks,
+labels and grid lines.</p>
+<p>Additional options can be used to finely customize each of these, as well
+as add and customize plot and axis titles, a legend, and a frame around the
+entire plot.</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#diagramelementcollection">DiagramElementCollection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        See 
+<a href="#adv_axis">ADV_Axis</a>
+, 
+<a href="#obj_axislabels">OBJ_AxisLabels</a>
+, 
+<a href="#obj_axisticks">OBJ_AxisTicks</a>
+,
+
+<a href="#adv_trace">ADV_Trace</a>
+ and 
+<a href="ADV_Legend">ADV_Legend</a>
+ for more examples of customizing
+specific parts of the plot.
+<p>To test examples below, append them to the
+<a href="#drawing-boilerplate">boilerplate</a>.</p>
+<p>All plots below also use this power function to generate the traces:</p>
+<pre class='hljs'><span class="hljs-keyword">const</span> pow = <span class="hljs-function">(<span class="hljs-params">pow = <span class="hljs-number">2</span>, stop = <span class="hljs-number">10</span>, step = <span class="hljs-number">0.05</span></span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> xValues = Fig.tools.math.range(<span class="hljs-number">0</span>, stop, step);
+  <span class="hljs-keyword">return</span> xValues.map(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> <span class="hljs-keyword">new</span> Fig.Point(x, x ** pow));
+}</pre>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Plot of single trace with auto axis scaling</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: pow(),
+    <span class="hljs-attr">position</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Multiple traces with a legend</span>
+<span class="hljs-comment">// Some traces are customized beyond the defaul color to include dashes and</span>
+<span class="hljs-comment">// markers</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">width</span>: <span class="hljs-number">2</span>,                                    <span class="hljs-comment">// Plot width in diagram</span>
+    <span class="hljs-attr">height</span>: <span class="hljs-number">2</span>,                                   <span class="hljs-comment">// Plot height in diagram</span>
+    <span class="hljs-attr">yAxis</span>: { <span class="hljs-attr">start</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">stop</span>: <span class="hljs-number">100</span> },              <span class="hljs-comment">// Customize y axis limits</span>
+    <span class="hljs-attr">trace</span>: [
+      { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">1.5</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 1.5'</span> },   <span class="hljs-comment">// Trace names are for legend</span>
+      {                                          <span class="hljs-comment">// Trace with only markers</span>
+        <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">0.5</span>),
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2'</span>,
+        <span class="hljs-attr">markers</span>: { <span class="hljs-attr">sides</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">radius</span>: <span class="hljs-number">0.03</span> },
+      },
+      {                                          <span class="hljs-comment">// Trace with markers and</span>
+        <span class="hljs-attr">points</span>: pow(<span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">0.5</span>),                 <span class="hljs-comment">// dashed line</span>
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 3'</span>,
+        <span class="hljs-attr">markers</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.03</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span>, <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span> } },
+        <span class="hljs-attr">line</span>: { <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.04</span>, <span class="hljs-number">0.01</span>] },
+      },
+    ],
+    <span class="hljs-attr">legend</span>: <span class="hljs-literal">true</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Multiple grids and simple titles</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">width</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">yAxis</span>: {
+      <span class="hljs-attr">start</span>: <span class="hljs-number">0</span>,
+      <span class="hljs-attr">stop</span>: <span class="hljs-number">100</span>,
+      <span class="hljs-attr">grid</span>: [
+        { <span class="hljs-attr">step</span>: <span class="hljs-number">20</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span>, <span class="hljs-attr">dash</span>: [], <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
+        { <span class="hljs-attr">step</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span>, <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>] },
+      ],
+      <span class="hljs-attr">title</span>: <span class="hljs-string">'velocity (m/s)'</span>,
+    },
+    <span class="hljs-attr">xAxis</span>: {
+      <span class="hljs-attr">grid</span>: [
+        { <span class="hljs-attr">step</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span>, <span class="hljs-attr">dash</span>: [], <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
+        { <span class="hljs-attr">step</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span>, <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>] } * ,
+      ],
+      <span class="hljs-attr">title</span>: <span class="hljs-string">'time (s)'</span>,
+    },
+    <span class="hljs-attr">trace</span>: pow(<span class="hljs-number">3</span>),
+    <span class="hljs-attr">title</span>: <span class="hljs-string">'Velocity over Time'</span>
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Hide axes</span>
+<span class="hljs-comment">// Use plot frame and plot area</span>
+<span class="hljs-comment">// Title has a subtitle</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">width</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">trace</span>: pow(<span class="hljs-number">3</span>),
+    <span class="hljs-attr">xAxis</span>: { <span class="hljs-attr">show</span>: <span class="hljs-literal">false</span> },
+    <span class="hljs-attr">yAxis</span>: { <span class="hljs-attr">show</span>: <span class="hljs-literal">false</span> },
+    <span class="hljs-attr">plotArea</span>: [<span class="hljs-number">0.93</span>, <span class="hljs-number">0.93</span>, <span class="hljs-number">0.93</span>, <span class="hljs-number">1</span>],
+    <span class="hljs-attr">frame</span>: {
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>] },
+      <span class="hljs-attr">corner</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span> },
+      <span class="hljs-attr">space</span>: <span class="hljs-number">0.15</span>,
+    },
+    <span class="hljs-attr">title</span>: {
+      <span class="hljs-attr">text</span>: [
+        <span class="hljs-string">'Velocity over Time'</span>,
+        { <span class="hljs-attr">text</span>: <span class="hljs-string">'For object A'</span>, <span class="hljs-attr">lineSpace</span>: <span class="hljs-number">0.13</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.08</span> } },
+      ],
+      <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
+    }
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Secondary y axis</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">width</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">trace</span>: pow(<span class="hljs-number">2</span>),
+    <span class="hljs-attr">yAxis</span>: {
+      <span class="hljs-attr">title</span>: {
+        <span class="hljs-attr">text</span>: <span class="hljs-string">'velocity (m/s)'</span>,
+        <span class="hljs-attr">rotation</span>: <span class="hljs-number">0</span>,
+        <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
+      },
+    },
+    <span class="hljs-attr">xAxis</span>: { <span class="hljs-attr">title</span>: <span class="hljs-string">'time (s)'</span> },
+    <span class="hljs-attr">axes</span>: [
+      {
+        <span class="hljs-attr">axis</span>: <span class="hljs-string">'y'</span>,
+        <span class="hljs-attr">start</span>: <span class="hljs-number">0</span>,
+        <span class="hljs-attr">stop</span>: <span class="hljs-number">900</span>,
+        <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+        <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>],
+        <span class="hljs-attr">ticks</span>: {
+          <span class="hljs-attr">step</span>: <span class="hljs-number">300</span>,
+          <span class="hljs-attr">offset</span>: <span class="hljs-number">0</span>,
+          <span class="hljs-attr">length</span>: <span class="hljs-number">0.05</span>,
+        },
+        <span class="hljs-attr">labels</span>: {
+          <span class="hljs-attr">offset</span>: [<span class="hljs-number">0.2</span>, <span class="hljs-number">0</span>],
+          <span class="hljs-attr">precision</span>: <span class="hljs-number">0</span>,
+          <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
+        },
+        <span class="hljs-attr">title</span>: {
+          <span class="hljs-attr">offset</span>: [<span class="hljs-number">0.4</span>, <span class="hljs-number">0</span>],
+          <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'displacment (m)'</span>,
+          <span class="hljs-attr">rotation</span>: <span class="hljs-number">0</span>,
+        }
+      },
+    ],
+    <span class="hljs-attr">position</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>],
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Cartesian axes crossing at the zero point</span>
+<span class="hljs-comment">// Automatic layout doesn't support this, but axes, ticks, labels and titles</span>
+<span class="hljs-comment">// can all be customized to create it.</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">width</span>: <span class="hljs-number">3</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">3</span>,
+    <span class="hljs-attr">trace</span>: pow(<span class="hljs-number">2</span>, <span class="hljs-number">20</span>),
+    <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> },
+    <span class="hljs-attr">xAxis</span>: {
+      <span class="hljs-attr">start</span>: <span class="hljs-number">-25</span>,
+      <span class="hljs-attr">stop</span>: <span class="hljs-number">25</span>,
+      <span class="hljs-attr">ticks</span>: {
+        <span class="hljs-attr">start</span>: <span class="hljs-number">-20</span>,
+        <span class="hljs-attr">stop</span>: <span class="hljs-number">20</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-number">5</span>,
+        <span class="hljs-attr">length</span>: <span class="hljs-number">0.1</span>,
+        <span class="hljs-attr">offset</span>: <span class="hljs-number">-0.05</span>
+      },
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">arrow</span>: <span class="hljs-string">'barb'</span> },
+      <span class="hljs-attr">position</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1.5</span>],
+      <span class="hljs-attr">labels</span>: [
+        {
+          <span class="hljs-attr">hide</span>: <span class="hljs-number">4</span>,
+          <span class="hljs-attr">precision</span>: <span class="hljs-number">0</span>,
+          <span class="hljs-attr">space</span>: <span class="hljs-number">0.1</span>,
+        },
+        {
+          <span class="hljs-attr">values</span>: <span class="hljs-number">0</span>,
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'O'</span>,
+          <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.165</span>],
+        },
+      ],
+      <span class="hljs-attr">title</span>: {
+        <span class="hljs-attr">text</span>: <span class="hljs-string">'x'</span>,
+        <span class="hljs-attr">offset</span>: [<span class="hljs-number">1.65</span>, <span class="hljs-number">0.3</span>],
+        <span class="hljs-attr">font</span>: {
+          <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
+          <span class="hljs-attr">family</span>: <span class="hljs-string">'Times New Roman'</span>,
+          <span class="hljs-attr">size</span>: <span class="hljs-number">0.15</span>,
+        },
+      },
+    },
+    <span class="hljs-attr">yAxis</span>: {
+      <span class="hljs-attr">start</span>: <span class="hljs-number">-500</span>,
+      <span class="hljs-attr">stop</span>: <span class="hljs-number">500</span>,
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">arrow</span>: <span class="hljs-string">'barb'</span> },
+      <span class="hljs-attr">ticks</span>: {
+        <span class="hljs-attr">start</span>: <span class="hljs-number">-400</span>,
+        <span class="hljs-attr">stop</span>: <span class="hljs-number">400</span>,
+        <span class="hljs-attr">step</span>: <span class="hljs-number">100</span>,
+        <span class="hljs-attr">length</span>: <span class="hljs-number">0.1</span>,
+        <span class="hljs-attr">offset</span>: <span class="hljs-number">-0.05</span>,
+      },
+      <span class="hljs-attr">position</span>: [<span class="hljs-number">1.5</span>, <span class="hljs-number">0</span>],
+      <span class="hljs-attr">labels</span>: {
+        <span class="hljs-attr">hide</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">precision</span>: <span class="hljs-number">0</span>,
+        <span class="hljs-attr">space</span>: <span class="hljs-number">0.03</span>,
+      },
+      <span class="hljs-attr">title</span>: {
+        <span class="hljs-attr">text</span>: <span class="hljs-string">'y'</span>,
+        <span class="hljs-attr">offset</span>: [<span class="hljs-number">0.35</span>, <span class="hljs-number">1.6</span>],
+        <span class="hljs-attr">font</span>: {
+          <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
+          <span class="hljs-attr">family</span>: <span class="hljs-string">'Times New Roman'</span>,
+          <span class="hljs-attr">size</span>: <span class="hljs-number">0.15</span>,
+        },
+        <span class="hljs-attr">rotation</span>: <span class="hljs-number">0</span>,
+      },
+    },
+    <span class="hljs-attr">grid</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">position</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>],
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='adv_plot'>
+      ADV_Plot
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#advancedplot">AdvancedPlot</a> options object.</p>
+<p>A plot is a collection of axes and traces, and may include a title, legend
+and bounding frame.</p>
+<p>Use <code>width</code>, <code>height</code> and <code>position</code> to define the size of the plot area
+(area where the traces are drawn) and where it is in the diagram.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : width of the plot area
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : height of the plot area
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAxis</span> <code class='quiet'>((<a href="#adv_axis">ADV_Axis</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+          : customize the x axis, or use 
+<code>false</code>
+
+to hide it
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAxis</span> <code class='quiet'>((<a href="#adv_axis">ADV_Axis</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+          : customize the y axis, or use 
+<code>false</code>
+
+to hide it
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>axes</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#adv_axis">ADV_Axis</a>>?)</code>
+          : add additional axes
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>grid</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : turn on and off the grid - use the grid options
+in xAxis, yAxis or axes for finer customization
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>title</span> <code class='quiet'>((<a href="#typeplottitle">TypePlotTitle</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          : plot title can be simply a
+
+<code>string</code>
+ or fully customized with TypePlotTitle
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>trace</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#adv_trace">ADV_Trace</a> | <a href="#typeparsablepoint">TypeParsablePoint</a>)> | <a href="#adv_trace">ADV_Trace</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          : Use array if plotting more than one trace. Use ADV_Trace to customize the
+trace.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>legend</span> <code class='quiet'>((<a href="#adv_plotlegend">ADV_PlotLegend</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+          : <code>true</code>
+ to turn the legend on,
+or use ADV_PlotLegend to customize it's location and layout
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>frame</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="#typeplotframe">TypePlotFrame</a>)?)</code>
+          : frame around the
+plot can be turned on with 
+<code>true</code>
+, can be a simple color fill using
+
+<code>Array&#x3C;number></code>
+ as a color, or can be fully customized with TypePlotFrame
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>plotArea</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | ADV_Rectangle)?)</code>
+          : plot area can be a
+color fill with 
+<code>Array&#x3C;number</code>
+> as a color, or be fully customized with
+ADV_Rectangle
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : Default font for plot (title, axes, labels, etc.)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : Position of the plot
 
           
         </div>
@@ -45272,6 +45827,159 @@ associated polyline point (
           
         
           
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='adv_trace'>
+      ADV_Trace
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="AdvancedTrace">AdvancedTrace</a> options object.</p>
+<p>A plot trace is a set of (x, y) points associated with an
+x and y axis.</p>
+<p>The trace and can be drawn with either a set of
+<code>markers</code> at each point, or a <code>line</code> between each pair of adjacent points.</p>
+<p>The axes are used to plot the trace - the trace
+can only appear within the bounds of the axes, and the axes
+provide the mapping from axis value to draw space so the trace
+can be drawn. Points that lie outside the axis will not be draw,
+and lines between pairs of points where one is outside will be interpolated.</p>
+<p>While FigureOne isn't designed to process very large numbers of points,
+some steps can be taken to improve performance when large numbers of points
+are being used (tens of thousands or more):</p>
+<ul>
+<li>Turn off corner interpolation between line segments in <code>line</code>:
+<code>{ line: { corner: 'none</code> } }`</li>
+<li>Use <code>xSampleDistance</code> and <code>ySampleDistance</code> to not draw points that are
+too close to each other</li>
+<li>If using markers, use polygons with smaller numbers of sides, and use fills
+instead of outlines</li>
+</ul>
+<p>Even using these methods, it can take up to a second to render a trace with
+hundreds of thousands of points (depending on the client device).</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>?)</code>
+          : the x points of the trace
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAxis</span> <code class='quiet'>(<a href="#adv_axis">ADV_Axis</a>?)</code>
+          : The x axis associated with the trace
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAxis</span> <code class='quiet'>(<a href="#adv_axis">ADV_Axis</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_line">OBJ_Line</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>markers</span> <code class='quiet'>((<a href="#obj_polygon">OBJ_Polygon</a> | OBJ_Start)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xSampleDistance</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>ySampleDistance</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        For examples on using traces, see 
+<a href="#advancedplot">AdvancedPlot</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
   <h2 id='misc-animation' class='mt0'>
@@ -52250,6 +52958,249 @@ diagram.addElement({
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeplotframe'>
+      TypePlotFrame
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Plot frame.</p>
+<p><a href="ADV_Rectangle">ADV_Rectangle</a><code>&#x26; { space: number }</code></p>
+<p>Define how much larger the frame is than the plot, labels and
+titles with <code>space</code>.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeplottitle'>
+      TypePlotTitle
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Plot title.</p>
+<p><a href="#obj_textlines">OBJ_TextLines</a><code>&#x26; { offset:</code><a href="#typeparsablepoint">TypeParsablePoint</a><code>}</code></p>
+<p>Use <code>offset</code> to adjust the location of the title.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='adv_plotlegend'>
+      ADV_PlotLegend
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="AdvancedPlotLegend">AdvancedPlotLegend</a> options object.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>traces</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#adv_trace">ADV_Trace</a>>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fontColorIsLineColor</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>> | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>frame</span> <code class='quiet'>(any?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlgin</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>show</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>hide</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>custom</span> <code class='quiet'>({}?)</code>
+          
+          
+        </div>
+      
+    </div>
   
 
   
