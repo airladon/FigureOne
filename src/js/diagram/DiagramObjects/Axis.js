@@ -304,7 +304,7 @@ export type TypeAxisTitle = OBJ_TextLines & {
 } | string;
 
 /**
- * Advanced Axis options object.
+ * {@link AdvancedAxis} options object.
  *
  * An axis can be used to create a number line, used as an axis in
  * {@link ADV_Plot} and/or used to plot a {@link ADV_Trace} against.

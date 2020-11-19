@@ -18,6 +18,12 @@ import type { ADV_Trace } from './Trace';
 import type { ADV_PlotLegend } from './Legend';
 
 
+/**
+ * {@link AdvancedPlot} options object.
+ *
+ * A plot is a collection of axes and traces, and may include a title and
+ * legend.
+ */
 export type ADV_Plot = {
   width?: number,
   height?: number,
@@ -27,7 +33,7 @@ export type ADV_Plot = {
   yAxis?: ADV_Axis | boolean,
   grid?: boolean,
   title?: OBJ_Text,
-  traces?: Array<ADV_Trace>,
+  traces?: Array<ADV_Trace> | ADV_Trace | Array<Point>,
   font?: OBJ_Font,
   xAlign?: 'left' | 'center' | 'right',
   yAlgin?: 'bottom' | 'middle' | 'top',

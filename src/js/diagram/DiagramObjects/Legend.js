@@ -3,19 +3,21 @@
 // import Diagram from '../Diagram';
 import {
   Transform, Point,
-  getPoint, getTransform, getPoints, getBoundingRect,
+  getPoint, getPoints,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
-import {
-  round,
-} from '../../tools/math';
+// import {
+//   round,
+// } from '../../tools/math';
 import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
-import type { ADV_Axis } from './Axis';
 import type { ADV_Trace } from './Trace';
 
+/**
+ * {@link AdvancedPlotLegend} options object.
+ */
 export type ADV_PlotLegend = {
   traces: Array<ADV_Trace>,
   length?: number, // 0 = text only
@@ -116,7 +118,7 @@ class AdvancedPlotLegend extends DiagramElementCollection {
     return -1;
   }
 
-  getTracesToShow(o: { show?: number, hide?: number } ) {
+  getTracesToShow(o: { show?: number, hide?: number }) {
     let toShow = [...Array(this.traces.length).keys()];
     if (o.toShow) {
       toShow = [];

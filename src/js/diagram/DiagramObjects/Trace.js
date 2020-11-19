@@ -14,6 +14,47 @@ import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
 
+/**
+ * {@link AdvancedTrace} options object.
+ *
+ * A plot trace is a set of (x, y) points associated with an
+ * x and y axis.
+ *
+ * The trace and can be drawn with either a set of
+ * `markers` at each point, or a `line` between each pair of adjacent points.
+ *
+ * The axes are used to plot the trace - the trace
+ * can only appear within the bounds of the axes, and the axes
+ * provide the mapping from axis value to draw space so the trace
+ * can be drawn. Points that lie outside the axis will not be draw,
+ * and lines between pairs of points where one is outside will be interpolated.
+ *
+ * While FigureOne isn't designed to process very large numbers of points,
+ * some steps can be taken to improve performance when large numbers of points
+ * are being used (tens of thousands or more):
+ * - Turn off corner interpolation between line segments in `line`:
+ *   `{ line: { corner: 'none` } }`
+ * - Use `xSampleDistance` and `ySampleDistance` to not draw points that are
+ *   too close to each other
+ * - If using markers, use polygons with smaller numbers of sides, and use fills
+ *   instead of outlines
+ *
+ * Even using these methods, it can take up to a second to render a trace with
+ * hundreds of thousands of points (depending on the client device).
+ *
+ * @see
+ * For examples on using traces, see {@link AdvancedPlot}
+ *
+ * @property {Array<TypeParsablePoint>} [points] the x points of the trace
+ * @property {ADV_Axis} [xAxis] The x axis associated with the trace
+ * @property {ADV_Axis} [yAxis]
+ * @property {OBJ_Line} [line]
+ * @property {OBJ_Polygon | OBJ_Start} [markers]
+ * @property {Array<number>} [color]
+ * @property {string} [name]
+ * @property {number} [xSampleDistance]
+ * @property {number} [ySampleDistance]
+ */
 export type ADV_Trace = {
   xAxis?: ADV_Axis,
   yAxis?: ADV_Axis,
@@ -21,10 +62,10 @@ export type ADV_Trace = {
   y?: Array<TypeParsablePoint>,
   line?: OBJ_Line,
   markers?: OBJ_Polygon | OBJ_Start,
-  color: Array<number>,
-  name: string,
-  xSampleDistance: number,
-  ySampleDistance: number,
+  color?: Array<number>,
+  name?: string,
+  xSampleDistance?: number,
+  ySampleDistance?: number,
 };
 
 // $FlowFixMe
