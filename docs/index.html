@@ -1610,6 +1610,46 @@
               
                 
                 <li><a
+                  href='#advancedaxis'
+                  class=" toggle-sibling">
+                  AdvancedAxis
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#advancedaxisvaluetodraw'
+                        class='regular pre-open'>
+                        #valueToDraw
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedaxisdrawtovalue'
+                        class='regular pre-open'>
+                        #drawToValue
+                      </a></li>
+                      
+                      <li><a
+                        href='#advancedaxisinaxis'
+                        class='regular pre-open'>
+                        #inAxis
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
                   href='#adv_axis'
                   class="">
                   ADV_Axis
@@ -21451,6 +21491,402 @@ displayed labels of angles and sides.
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='advancedaxis'>
+      AdvancedAxis
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#diagramelementcollection">DiagramElementCollection</a> representing an Axis.</p>
+<p>This object defines an axis with an axis line, tick marks, labels,
+grid lines and a title.</p>
+<p>See <a href="#adv_axis">ADV_Axis</a> for the options that can be used when creating
+the axis.</p>
+<p>An axis is drawn to a <code>length</code>. It will have values along its length
+from <code>start</code> to <code>stop</code>. Ticks, grid lines and labels are all drawn
+at axis value positions. All other dimensions, such as line lengths,
+widths, positions, spaces and offsets are defined in draw space, or in the
+same space as the <code>length</code> of the axis.</p>
+<p>The object contains additional methods that convert between axis values
+and draw space positions, as well as a convenience method to report if a
+value is within an axis.</p>
+<ul>
+<li><a href="#advancedaxisvaluetodraw">valueToDraw</a></li>
+<li><a href="#advancedaxisdrawtovalue">drawToValue</a></li>
+<li><a href="#advancedaxisinaxis">inAxis</a></li>
+</ul>
+<p>To test examples below, append them to the
+<a href="#drawing-boilerplate">boilerplate</a>.</p>
+<p>For more examples of axis labels and axis ticks, see <a href="#obj_axislabels">OBJ_AxisLabels</a>
+and <a href="#obj_axisticks">OBJ_AxisTicks</a>.</p>
+<h4>Example</h4>
+<pre class='hljs'><span class="hljs-comment">// By default an axis is an 'x' axis</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">ticks</span>: <span class="hljs-literal">true</span>,
+  },
+});</pre>
+<p><img src="./assets1/advaxis_ex1.png"></p>
+<h4>Example</h4>
+<pre class='hljs'><span class="hljs-comment">// An axis can also be created and then added to a diagram</span>
+<span class="hljs-comment">// An axis can have specific start and stop values</span>
+<span class="hljs-comment">// An axis can be a y axis</span>
+<span class="hljs-keyword">const</span> axis = diagram.advanced.axis({
+  <span class="hljs-attr">axis</span>: <span class="hljs-string">'y'</span>,
+  <span class="hljs-attr">start</span>: <span class="hljs-number">-10</span>,
+  <span class="hljs-attr">stop</span>: <span class="hljs-number">10</span>,
+  <span class="hljs-attr">ticks</span>: { <span class="hljs-attr">step</span>: <span class="hljs-number">5</span> },
+})
+diagram.add(<span class="hljs-string">'axis'</span>, axis);</pre>
+<p><img src="./assets1/advaxis_ex2.png"></p>
+<h4>Example</h4>
+<pre class='hljs'><span class="hljs-comment">// An axis can have multiple sets of ticks and a title</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">ticks</span>: [
+      { <span class="hljs-attr">step</span>: <span class="hljs-number">0.2</span>, <span class="hljs-attr">length</span>: <span class="hljs-number">0.1</span> },
+      { <span class="hljs-attr">step</span>: <span class="hljs-number">0.05</span>, <span class="hljs-attr">length</span>: <span class="hljs-number">0.05</span>, <span class="hljs-attr">offset</span>: <span class="hljs-number">0</span> },
+    ],
+    <span class="hljs-attr">title</span>: <span class="hljs-string">'time (s)'</span>,
+  },
+});</pre>
+<p><img src="./assets1/advaxis_ex3.png"></p>
+<h4>Example</h4>
+<pre class='hljs'><span class="hljs-comment">// An axis line and ticks can be customized to be dashed</span>
+<span class="hljs-comment">// and have arrows</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">length</span>: <span class="hljs-number">2.5</span>,
+    <span class="hljs-attr">start</span>: <span class="hljs-number">-130</span>,
+    <span class="hljs-attr">stop</span>: <span class="hljs-number">130</span>,
+    <span class="hljs-attr">line</span>: {
+      <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>],
+      <span class="hljs-attr">arrow</span>: <span class="hljs-string">'barb'</span>,
+    },
+    <span class="hljs-attr">ticks</span>: {
+      <span class="hljs-attr">start</span>: <span class="hljs-number">-100</span>,
+      <span class="hljs-attr">stop</span>: <span class="hljs-number">100</span>,
+      <span class="hljs-attr">step</span>: <span class="hljs-number">25</span>,
+      <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>],
+    },
+    <span class="hljs-attr">labels</span>: { <span class="hljs-attr">precision</span>: <span class="hljs-number">0</span> },
+    <span class="hljs-attr">title</span>: {
+      <span class="hljs-attr">font</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span> },
+      <span class="hljs-attr">text</span>: <span class="hljs-string">'x'</span>,
+      <span class="hljs-attr">position</span>: [<span class="hljs-number">2.65</span>, <span class="hljs-number">0.03</span>],
+    },
+  },
+});</pre>
+<p><img src="./assets1/advaxis_ex4.png"></p>
+<h4>Example</h4>
+<pre class='hljs'><span class="hljs-comment">// An axis title can have grid lines extend from it, and titles with more</span>
+<span class="hljs-comment">// formatting</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.axis'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">stop</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">ticks</span>: { <span class="hljs-attr">step</span>: <span class="hljs-number">0.5</span> },
+    <span class="hljs-attr">grid</span>: [
+      { <span class="hljs-attr">step</span>: <span class="hljs-number">0.5</span>, <span class="hljs-attr">length</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>] },
+      { <span class="hljs-attr">step</span>: <span class="hljs-number">0.1</span>, <span class="hljs-attr">length</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>] },
+    ],
+    <span class="hljs-attr">title</span>: {
+      <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0.4</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">1</span>] },
+      <span class="hljs-attr">text</span>: [
+        <span class="hljs-string">'Total Time'</span>,
+        { 
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'in seconds'</span>,
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> },
+          <span class="hljs-attr">lineSpace</span>: <span class="hljs-number">0.12</span>,
+        },
+      ],
+    },
+  },
+});</pre>
+<p><img src="./assets1/advaxis_ex5.png"></p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#diagramelementcollection">DiagramElementCollection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#adv_axis">ADV_Axis</a>
+ for parameter descriptions
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='advancedaxisvaluetodraw'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>valueToDraw(value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convert an axis value or values to a draw space position or positions.</p>
+<p>'x' axes have a draw space position of 0 on the left end of the axis and
+'y' axes have a draw space position of 0 on the bottom end of the axis.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>))</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        draw space position
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedaxisdrawtovalue'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>drawToValue(value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Convert an axis draw space value or values to an axis value or values.</p>
+<p>'x' axes have a draw space position of 0 on the left end of the axis and
+'y' axes have a draw space position of 0 on the bottom end of the axis.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>))</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        draw space position
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='advancedaxisinaxis'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>inAxis(value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Check if a value is within the axis.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        <code>true</code>
+ if value is within length of axis.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='adv_axis'>
       ADV_Axis
     </h3>
@@ -21460,6 +21896,20 @@ displayed labels of angles and sides.
   
 
   <p>Advanced Axis options object.</p>
+<p>An axis can be used to create a number line, used as an axis in
+<a href="ADV_Plot">ADV_Plot</a> and/or used to plot a <a href="ADV_Trace">ADV_Trace</a> against.</p>
+<p>An axis is a line that may have</p>
+<ul>
+<li>tick marks</li>
+<li>labels</li>
+<li>grid lines</li>
+<li>a title</li>
+</ul>
+<p>An axis is drawn to a <code>length</code>. It will have values along its length
+from <code>start</code> to <code>stop</code>. Ticks, grid lines and labels are all drawn
+at axis value positions. All other dimensions, such as line lengths,
+widths, positions, spaces and offsets are defined in draw space, or in the
+same space as the <code>length</code> of the axis.</p>
 
   
   
@@ -21478,86 +21928,166 @@ displayed labels of angles and sides.
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
+          <span class='code bold'>axis</span> <code class='quiet'>((<code>"x"</code> | <code>"y"</code>)?)</code>
+          : <code>'x'</code>
+ axes are horizontal, 
+<code>'y'</code>
+ axes are
+vertical (
+<code>'x'</code>
+)
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : length of the axis
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>((<a href="#obj_line">OBJ_Line</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+          : line style of the axis - 
+<code>null</code>
+ will draw
+no line. By default, a solid line will be drawn if not defined.
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
+          : start value of axis (
+<code>0</code>
+)
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>stop</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>axis</span> <code class='quiet'>((<code>"x"</code> | <code>"y"</code>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>ticks</span> <code class='quiet'>((<a href="#obj_axisticks">OBJ_AxisTicks</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_axisticks">OBJ_AxisTicks</a>>)?)</code>
-          
+          : stop value of axis. 
+<code>stop</code>
+ must be larger than
+
+<code>start</code>
+ (
+<code>start + 1</code>
+)
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>grid</span> <code class='quiet'>((<a href="#obj_axisticks">OBJ_AxisTicks</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_axisticks">OBJ_AxisTicks</a>>)?)</code>
-          
+          <span class='code bold'>ticks</span> <code class='quiet'>((<a href="#obj_axisticks">OBJ_AxisTicks</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_axisticks">OBJ_AxisTicks</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+          : tick
+options. Use an Array to setup multiple sets/styles of ticks. Use a boolean
+value to turn ticks on or off. (
+<code>false</code>
+)
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>line</span> <code class='quiet'>((null | <a href="#adv_line">ADV_Line</a>)?)</code>
+          <span class='code bold'>labels</span> <code class='quiet'>((<a href="#obj_axislabels">OBJ_AxisLabels</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_axislabels">OBJ_AxisLabels</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+          : label
+options.
+Use an array to setup multiple sets of labels, and use a boolean to turn
+labels on and off (
+<code>true</code>
+ if ticks exits, 
+<code>false</code>
+ otherwise)
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>grid</span> <code class='quiet'>((<a href="#obj_axisticks">OBJ_AxisTicks</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_axisticks">OBJ_AxisTicks</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+          : grid
+options. Use an array for multiple sets of grids, and use a boolean to
+turn grids on and off (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>title</span> <code class='quiet'>((<a href="#typeaxistitle">TypeAxisTitle</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)?)</code>
+          : axis title (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : default color of axis
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>labels</span> <code class='quiet'>((AxisLabels | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;AxisLabels>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>title</span> <code class='quiet'>(<a href="#typeaxistitle">TypeAxisTitle</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>auto</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?)</code>
-          
+          : default font of axis (used by title and labels)
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>show</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>false</code>
+ hides the axis. Two axes are needed
+to plot an 
+<a href="AdvancedTrace">AdvancedTrace</a>
+ on a 
+<a href="AdvancedPlot">AdvancedPlot</a>
+, but if either or
+both axes aren't to be drawn, then use 
+<code>false</code>
+ to hide each axis (
+<code>true</code>
+)
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>auto</span> <code class='quiet'>([<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]?)</code>
+          : Will select automatic values for
+
+<code>start</code>
+, 
+<code>stop</code>
+, and 
+<code>step</code>
+ that cover the range 
+[min, max]
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : axis name - used to define which axes a trace
+should be plotted against in an 
+<a href="AdvancedPlot">AdvancedPlot</a>
+.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : axis position (
+<code>[0, 0]</code>
+)
+
           
         </div>
       
@@ -40812,7 +41342,7 @@ the rectangle (default:
         <div class='space-bottom0'>
           <span class='code bold'>lineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : line specific separation from baseline of
-this line to baseline of next line
+this line to baseline of previous line
 
           
         </div>
@@ -51393,12 +51923,23 @@ diagram.addElement({
   </div>
   
 
-  <p>Axis label options object.</p>
-<p><img src="./assets1/axislabels.png"></p>
+  <p>Axis label options object for the <a href="#adv_axis">ADV_Axis</a>.</p>
+<p><img src="./assets1/axislabels_ex1.png"></p>
+<p><img src="./assets1/axislabels_ex2.png"></p>
+<p><img src="./assets1/axislabels_ex3.png"></p>
+<p><img src="./assets1/axislabels_ex4.png"></p>
+<p><img src="./assets1/axislabels_ex5.png"></p>
+<p><img src="./assets1/axislabels_ex6.png"></p>
 <p>By default, labels are positioned with the first <code>ticks</code> defined in the
 axis. Labels can also be positioned at custom values with <code>values</code>.</p>
 <p>Labels will be values at the label positions, unless specified as a specific
 string or number in the <code>text</code> property.</p>
+<p>Different properties are defined in different spaces.</p>
+<ul>
+<li><code>values</code>, is defined in axis space, or the values along the axis.</li>
+<li><code>space</code> and <code>offset</code> are defined in draw space and relate
+to dimensions in the space the axis is being drawn into.</li>
+</ul>
 
   
   
@@ -51555,9 +52096,13 @@ alignment of labels (
     <div class='py1 quiet mt1 prose-big'>Related</div>
     
       
-        <a href="#adv_axis">ADV_Axis</a>
-<p>To test examples below, append them to the
-<a href="#drawing-boilerplate">boilerplate</a>.</p>
+        To test examples below, append them to the
+
+<a href="#drawing-boilerplate">
+boilerplate
+</a>
+.
+<p>For more examples see <a href="OBJ_Axis">OBJ_Axis</a>.</p>
 
       
     
@@ -51610,7 +52155,7 @@ diagram.addElement({
       <span class="hljs-attr">rotation</span>: <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">4</span>,
       <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
       <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
-      <span class="hljs-attr">space</span>: <span class="hljs-number">0.05</span>, 
+      <span class="hljs-attr">space</span>: <span class="hljs-number">0.05</span>,
     },
   },
 });</pre>
@@ -51637,7 +52182,7 @@ diagram.addElement({
     <span class="hljs-attr">ticks</span>: <span class="hljs-literal">true</span>,
     <span class="hljs-attr">labels</span>: {
       <span class="hljs-attr">values</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.6</span>],
-      <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">size</span>: <span class="hljs-number">0.15</span> }
+      <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">size</span>: <span class="hljs-number">0.15</span> },
     },
   },
 });</pre>

@@ -1181,7 +1181,7 @@ class TextLinesObject extends TextObjectBase {
         const {
           font, justify, lineSpace,
         } = lineDefinition;
-        lineToUse = lineDefinition.line;
+        lineToUse = lineDefinition.text;
         if (font != null) {
           lineFont = joinObjects({}, options.font, font);
         }
@@ -1276,9 +1276,11 @@ class TextLinesObject extends TextObjectBase {
     let minLinesY = 0;
     let maxLinesWidth = 0;
     let y = 0;
-    this.lines.forEach((line) => {
+    this.lines.forEach((line, index) => {
+      if (index > 0) {
+        y -= line.space;
+      }
       const { width, minY, maxY } = createLine(line.text, new Point(0, y));
-      y += line.space;
       minLinesY = minY < minLinesY ? minY : minLinesY;
       maxLinesY = maxY > maxLinesY ? maxY : maxLinesY;
       maxLinesWidth = width > maxLinesWidth ? width : maxLinesWidth;

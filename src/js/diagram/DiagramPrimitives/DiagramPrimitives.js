@@ -1762,7 +1762,7 @@ export type OBJ_TextLine = {
  * @property {OBJ_Font} [font] line specific default font
  * @property {'left' | 'right' | 'center'} [justify] line specific justification
  * @property {number} [lineSpace] line specific separation from baseline of
- * this line to baseline of next line
+ * this line to baseline of previous line
  */
 export type OBJ_TextLinesDefinition = {
   line: string,
@@ -3184,7 +3184,7 @@ export default class DiagramPrimitives {
       options.justify = 'left';
     }
     if (options.lineSpace == null) {
-      options.lineSpace = -options.font.size * 1.2;
+      options.lineSpace = options.font.size * 1.2;
     }
     // console.log('qwerty')
     const to = new TextLinesObject(this.draw2D);

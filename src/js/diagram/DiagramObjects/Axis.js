@@ -131,9 +131,20 @@ export type OBJ_AxisTicks = {
 
 
 /**
- * Axis label options object.
+ * Axis label options object for the {@link ADV_Axis}.
  *
- * ![](./assets1/axislabels.png)
+ * ![](./assets1/axislabels_ex1.png)
+ *
+ * ![](./assets1/axislabels_ex2.png)
+ *
+ * ![](./assets1/axislabels_ex3.png)
+ *
+ * ![](./assets1/axislabels_ex4.png)
+ *
+ * ![](./assets1/axislabels_ex5.png)
+ *
+ * ![](./assets1/axislabels_ex6.png)
+ *
  *
  * By default, labels are positioned with the first `ticks` defined in the
  * axis. Labels can also be positioned at custom values with `values`.
@@ -172,10 +183,10 @@ export type OBJ_AxisTicks = {
  *
  * @see
  *
- * {@link ADV_Axis}
- *
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
+ *
+ * For more examples see {@link OBJ_Axis}.
  *
  * @example
  * // By default labels are displayed if there are ticks
@@ -219,7 +230,7 @@ export type OBJ_AxisTicks = {
  *       rotation: Math.PI / 4,
  *       yAlign: 'middle',
  *       xAlign: 'right',
- *       space: 0.05, 
+ *       space: 0.05,
  *     },
  *   },
  * });
@@ -246,7 +257,7 @@ export type OBJ_AxisTicks = {
  *     ticks: true,
  *     labels: {
  *       values: [0, 0.6],
- *       font: { color: [0, 0, 1, 1], size: 0.15 }
+ *       font: { color: [0, 0, 1, 1], size: 0.15 },
  *     },
  *   },
  * });
@@ -321,17 +332,25 @@ export type TypeAxisTitle = OBJ_TextLines & {
  * @property {OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean} [ticks] tick
  * options. Use an Array to setup multiple sets/styles of ticks. Use a boolean
  * value to turn ticks on or off. (`false`)
- * @property {AxisLabels | Array<AxisLabels> | boolean} [labels] label options.
+ * @property {OBJ_AxisLabels | Array<OBJ_AxisLabels> | boolean} [labels] label
+ * options.
  * Use an array to setup multiple sets of labels, and use a boolean to turn
- * labels on and off (`true`)
- * @property {OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean} [grid]
- * @property {TypeAxisTitle} [title]
- * @property {Array<number>} [color]
- * @property {OBJ_Font} [font]
- * @property {boolean} [show]
- * @property {[number, number]} [auto]
- * @property {string} [name]
- * @property {TypeParsablePoint} [position]
+ * labels on and off (`true` if ticks exits, `false` otherwise)
+ * @property {OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean} [grid] grid
+ * options. Use an array for multiple sets of grids, and use a boolean to
+ * turn grids on and off (`false`)
+ * @property {TypeAxisTitle | boolean} [title] axis title (`false`)
+ * @property {Array<number>} [color] default color of axis
+ * @property {OBJ_Font} [font] default font of axis (used by title and labels)
+ * @property {boolean} [show] `false` hides the axis. Two axes are needed
+ * to plot an {@link AdvancedTrace} on a {@link AdvancedPlot}, but if either or
+ * both axes aren't to be drawn, then use `false` to hide each axis (`true`)
+ * @property {[number, number]} [auto] Will select automatic values for
+ * `start`, `stop`, and `step` that cover the range [min, max]
+ * @property {string} [name] axis name - used to define which axes a trace
+ * should be plotted against in an {@link AdvancedPlot}.
+ * @property {TypeParsablePoint} [position] axis position (`[0, 0]`)
+ *
  */
 export type ADV_Axis = {
   axis?: 'x' | 'y',
@@ -351,6 +370,156 @@ export type ADV_Axis = {
   position?: TypeParsablePoint,
 };
 
+
+/*
+...................###....##.....##.####..######.
+..................##.##....##...##...##..##....##
+.................##...##....##.##....##..##......
+................##.....##....###.....##...######.
+................#########...##.##....##........##
+................##.....##..##...##...##..##....##
+................##.....##.##.....##.####..######.
+*/
+
+/**
+ * {@link DiagramElementCollection} representing an Axis.
+ *
+ * This object defines an axis with an axis line, tick marks, labels,
+ * grid lines and a title.
+ *
+ * See {@link ADV_Axis} for the options that can be used when creating
+ * the axis.
+ *
+ * An axis is drawn to a `length`. It will have values along its length
+ * from `start` to `stop`. Ticks, grid lines and labels are all drawn
+ * at axis value positions. All other dimensions, such as line lengths,
+ * widths, positions, spaces and offsets are defined in draw space, or in the
+ * same space as the `length` of the axis.
+ *
+ * The object contains additional methods that convert between axis values
+ * and draw space positions, as well as a convenience method to report if a
+ * value is within an axis.
+ * - <a href="#advancedaxisvaluetodraw">valueToDraw</a>
+ * - <a href="#advancedaxisdrawtovalue">drawToValue</a>
+ * - <a href="#advancedaxisinaxis">inAxis</a>
+ *
+ * To test examples below, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>.
+ *
+ * For more examples of axis labels and axis ticks, see {@link OBJ_AxisLabels}
+ * and {@link OBJ_AxisTicks}.
+ *
+ * #### Example
+ * ```javascript
+ * // By default an axis is an 'x' axis
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     ticks: true,
+ *   },
+ * });
+ * ```
+ * ![](./assets1/advaxis_ex1.png)
+ *
+ * #### Example
+ * ```javascript
+ * // An axis can also be created and then added to a diagram
+ * // An axis can have specific start and stop values
+ * // An axis can be a y axis
+ * const axis = diagram.advanced.axis({
+ *   axis: 'y',
+ *   start: -10,
+ *   stop: 10,
+ *   ticks: { step: 5 },
+ * })
+ * diagram.add('axis', axis);
+ * ```
+ * ![](./assets1/advaxis_ex2.png)
+ *
+ * #### Example
+ * ```javascript
+ * // An axis can have multiple sets of ticks and a title
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     ticks: [
+ *       { step: 0.2, length: 0.1 },
+ *       { step: 0.05, length: 0.05, offset: 0 },
+ *     ],
+ *     title: 'time (s)',
+ *   },
+ * });
+ * ```
+ * ![](./assets1/advaxis_ex3.png)
+ *
+ * #### Example
+ * ```javascript
+ * // An axis line and ticks can be customized to be dashed
+ * // and have arrows
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     length: 2.5,
+ *     start: -130,
+ *     stop: 130,
+ *     line: {
+ *       dash: [0.01, 0.01],
+ *       arrow: 'barb',
+ *     },
+ *     ticks: {
+ *       start: -100,
+ *       stop: 100,
+ *       step: 25,
+ *       dash: [0.01, 0.01],
+ *     },
+ *     labels: { precision: 0 },
+ *     title: {
+ *       font: { style: 'italic' },
+ *       text: 'x',
+ *       position: [2.65, 0.03],
+ *     },
+ *   },
+ * });
+ * ```
+ * ![](./assets1/advaxis_ex4.png)
+ *
+ * #### Example
+ * ```javascript
+ * // An axis title can have grid lines extend from it, and titles with more
+ * // formatting
+ * diagram.addElement({
+ *   name: 'x',
+ *   method: 'advanced.axis',
+ *   options: {
+ *     stop: 2,
+ *     ticks: { step: 0.5 },
+ *     grid: [
+ *       { step: 0.5, length: 1, color: [0.5, 0.5, 0.5, 1] },
+ *       { step: 0.1, length: 1, dash: [0.01, 0.01], color: [0.7, 0.7, 0.7, 1] },
+ *     ],
+ *     title: {
+ *       font: { color: [0.4, 0.4, 0.4, 1] },
+ *       text: [
+ *         'Total Time',
+ *         { 
+ *           text: 'in seconds',
+ *           font: { size: 0.1 },
+ *           lineSpace: 0.12,
+ *         },
+ *       ],
+ *     },
+ *   },
+ * });
+ * ```
+ * ![](./assets1/advaxis_ex5.png)
+ *
+ *
+ * @see {@link ADV_Axis} for parameter descriptions
+ *
+ */
 // $FlowFixMe
 class AdvancedAxis extends DiagramElementCollection {
   // Diagram elements
@@ -673,7 +842,6 @@ class AdvancedAxis extends DiagramElementCollection {
         }
       }
       o.text = text;
-      console.log(text)
       const labels = this.shapes.text(o);
       labels.transform.updateRotation(o.rotation);
       this.add(`labels${index}`, labels);
@@ -728,21 +896,48 @@ class AdvancedAxis extends DiagramElementCollection {
     };
   }
 
-  _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
-    return [...super._getStateProperties(options),
-      'length', 'angle', 'start', 'stop',
-      'ticks', 'grid', 'labels', 'drawToValueRatio', 'valueToDraw',
-    ];
+  // _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
+  //   return [...super._getStateProperties(options),
+  //     'length', 'angle', 'start', 'stop',
+  //     'ticks', 'grid', 'labels', 'drawToValueRatio', 'valueToDraw',
+  //   ];
+  // }
+
+  /**
+   * Convert an axis value or values to a draw space position or positions.
+   *
+   * 'x' axes have a draw space position of 0 on the left end of the axis and
+   * 'y' axes have a draw space position of 0 on the bottom end of the axis.
+   *
+   * @return {number} draw space position
+   */
+  valueToDraw(value: number | Array<number>) {
+    if (typeof value === 'number') {
+      return (value - this.start) * this.valueToDrawRatio;
+    }
+    return value.map(v => (v - this.start) * this.valueToDrawRatio);
   }
 
-  valueToDraw(value: number) {
-    return (value - this.start) * this.valueToDrawRatio;
+  /**
+   * Convert an axis draw space value or values to an axis value or values.
+   *
+   * 'x' axes have a draw space position of 0 on the left end of the axis and
+   * 'y' axes have a draw space position of 0 on the bottom end of the axis.
+   *
+   * @return {number} draw space position
+   */
+  drawToValue(value: number | Array<number>) {
+    if (typeof value === 'number') {
+      return value * this.drawToValueRatio;
+    }
+    return value.map(v => v * this.drawToValueRatio);
   }
 
-  valuesToDraw(values: Array<number>) {
-    return values.map(v => this.valueToDraw(v));
-  }
-
+  /**
+   * Check if a value is within the axis.
+   *
+   * @return {boolean} `true` if value is within length of axis.
+   */
   inAxis(value: number) {
     if (value < this.start || value > this.stop) {
       return false;

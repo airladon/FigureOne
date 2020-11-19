@@ -633,7 +633,7 @@ class Diagram {
       return;
     }
 
-    this.defaultLineWidth = this.limits.width / 4;
+    this.defaultLength = this.limits.width / 4;
   }
 
   scrollEvent() {

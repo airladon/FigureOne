@@ -203,287 +203,296 @@
     -   [showAngles][377]
     -   [showSides][378]
 -   [ADV_Polyline][379]
--   [ADV_Axis][381]
--   [Text][383]
--   [OBJ_Text][384]
--   [OBJ_TextLine][387]
--   [OBJ_TextLines][390]
--   [Animation][393]
--   [AnimationManager][394]
-    -   [new][397]
-    -   [builder][400]
-    -   [rotation][402]
-    -   [scale][405]
-    -   [trigger][407]
-    -   [delay][409]
-    -   [translation][411]
-    -   [position][413]
-    -   [color][415]
-    -   [opacity][417]
-    -   [transform][419]
-    -   [dissolveIn][421]
-    -   [dissolveOut][423]
-    -   [dim][425]
-    -   [undim][427]
-    -   [scenario][429]
-    -   [scenarios][431]
-    -   [cancel][433]
-    -   [start][435]
-    -   [getRemainingTime][437]
--   [AnimationBuilder][439]
-    -   [custom][441]
-    -   [rotation][443]
-    -   [position][445]
-    -   [translation][447]
-    -   [scale][449]
-    -   [transform][451]
-    -   [scenario][453]
-    -   [scenarios][455]
-    -   [color][457]
-    -   [opacity][459]
-    -   [dissolveOut][461]
-    -   [dissolveIn][463]
-    -   [dim][465]
-    -   [undim][467]
-    -   [delay][469]
-    -   [trigger][471]
-    -   [inParallel][473]
-    -   [inSerial][475]
--   [PositionAnimationStep][477]
--   [RotationAnimationStep][480]
--   [ScaleAnimationStep][483]
--   [TransformAnimationStep][486]
--   [ScenarioAnimationStep][489]
--   [PulseAnimationStep][492]
--   [ColorAnimationStep][495]
--   [DimAnimationStep][498]
--   [UndimAnimationStep][501]
--   [OpacityAnimationStep][504]
--   [DissolveInAnimationStep][507]
--   [DissolveOutAnimationStep][510]
--   [TriggerAnimationStep][513]
--   [CustomAnimationStep][516]
--   [SerialAnimationStep][519]
--   [ParallelAnimationStep][522]
--   [DelayAnimationStep][525]
--   [Equations][527]
--   [Equation][528]
-    -   [eqn][531]
-    -   [setFormSeries][533]
-    -   [getFormSeries][535]
-    -   [addElements][536]
-    -   [addForms][538]
-    -   [getCurrentForm][540]
-    -   [setCurrentForm][541]
-    -   [showForm][543]
-    -   [getForm][545]
-    -   [goToForm][547]
-    -   [prevForm][549]
-    -   [nextForm][551]
-    -   [replayCurrentForm][553]
--   [EQN_Equation][555]
--   [Equation Layout][557]
--   [EQN_Fraction][558]
--   [EQN_Root][561]
--   [EQN_Subscript][564]
--   [EQN_Superscript][567]
--   [EQN_SuperscriptSubscript][570]
--   [EQN_Matrix][573]
--   [EQN_Integral][576]
--   [EQN_SumOf][579]
--   [EQN_ProdOf][582]
--   [EQN_Bar][585]
--   [EQN_Bracket][588]
--   [EQN_Box][591]
--   [EQN_Strike][594]
--   [EQN_StrikeComment][597]
--   [EQN_Comment][600]
--   [EQN_Pad][603]
--   [EQN_Scale][606]
--   [EQN_Container][609]
--   [EQN_Annotate][612]
--   [Equation Symbols][615]
--   [EQN_VinculumSymbol][616]
--   [EQN_BoxSymbol][619]
--   [EQN_ArrowSymbol][622]
--   [EQN_SumSymbol][625]
--   [EQN_ProdSymbol][628]
--   [EQN_IntegralSymbol][631]
--   [EQN_StrikeSymbol][634]
--   [EQN_BracketSymbol][637]
--   [EQN_AngleBracketSymbol][640]
--   [EQN_BraceSymbol][643]
--   [EQN_BarSymbol][646]
--   [EQN_SquareBracketSymbol][649]
--   [EQN_RadicalSymbol][652]
--   [2D Geometry Tools][655]
--   [minAngleDiff][656]
--   [getTriangleCenter][659]
--   [polarToRect][662]
--   [rectToPolar][665]
--   [threePointAngle][668]
--   [threePointAngleMin][671]
--   [clipAngle][674]
--   [Math tools][677]
--   [round][678]
--   [range][680]
--   [randSign][682]
--   [randInt][683]
--   [rand][685]
--   [randElement][687]
--   [randElements][689]
--   [removeRandElement][691]
--   [Misc Diagram Element][693]
--   [DiagramElementMoveFreely][694]
--   [DiagramElementMove][696]
--   [Scenarios][698]
--   [ElementMovementState][700]
--   [ElementPulseState][702]
--   [ElementState][704]
--   [DrawingObject][706]
--   [DiagramPrimitives][708]
-    -   [generic][709]
-    -   [polyline][711]
-    -   [polygon][713]
-    -   [star][715]
-    -   [rectangle][717]
-    -   [ellipse][719]
-    -   [triangle][721]
-    -   [grid][723]
-    -   [line][725]
-    -   [arrow][727]
-    -   [textLine][729]
-    -   [textLines][731]
-    -   [text][733]
-    -   [collection][735]
--   [Misc Geometry][737]
--   [TypeParsablePoint][738]
--   [TypeParsableLine][740]
--   [TypeParsableRect][742]
--   [TypeParsableTransform][744]
--   [getPoint][746]
--   [getPoints][748]
--   [getScale][750]
--   [getLine][752]
--   [getRect][754]
--   [getTransform][756]
--   [OBJ_QuadraticBezier][758]
--   [Intersect][760]
--   [Misc Shapes][762]
--   [OBJ_Texture][763]
--   [OBJ_TextDefinition][765]
--   [OBJ_Font][767]
--   [OBJ_TextLineDefinition][770]
--   [OBJ_TextLinesDefinition][772]
--   [OBJ_TextModifierDefinition][774]
--   [OBJ_TextModifiersDefinition][776]
--   [OBJ_PulseScale][778]
--   [OBJ_CurvedCorner][780]
--   [OBJ_LineStyle][782]
--   [CPY_Step][784]
--   [TypeDash][787]
--   [ArrowHead][788]
--   [OBJ_LineArrow][789]
--   [OBJ_LineArrows][792]
--   [OBJ_Scenario][794]
--   [OBJ_MovableAngle][796]
--   [TypeAngleLabelOptions][798]
--   [OBJ_AngleCurve][800]
--   [OBJ_AngleArrows][802]
--   [TypeAngleArrows][804]
--   [OBJ_AngleCorner][805]
--   [OBJ_PulseAngle][807]
--   [OBJ_AngleSet][809]
--   [OBJ_AngleAnimationStep][811]
--   [OBJ_PulseAngleAnimationStep][813]
--   [TypeLineLabelOptions][815]
--   [OBJ_PulseWidth][817]
--   [OBJ_MovableLine][819]
--   [OBJ_LengthAnimationStep][821]
--   [OBJ_PulseWidthAnimationStep][823]
--   [OBJ_PolylinePad][825]
--   [OBJ_PolylineCustomization][826]
--   [TypeLabelOrientation][829]
--   [TypeLabelLocation][830]
--   [TypeLabelSubLocation][831]
--   [OBJ_ValidShapeHideThresholds][832]
--   [OBJ_ValidShape][834]
--   [SUB_PolylineUpdatePoints][836]
--   [OBJ_PolylineAngle][837]
--   [OBJ_PolylineSide][838]
--   [OBJ_PolylinePadSingle][839]
--   [Misc Animation][841]
--   [AnimationStep][842]
-    -   [getRemainingTime][845]
-    -   [start][847]
--   [ElementAnimationStep][849]
--   [OBJ_PositionAnimationStep][851]
--   [OBJ_RotationAnimationStep][853]
--   [OBJ_ElementAnimationStep][855]
--   [OBJ_ScenarioVelocity][857]
--   [OBJ_AnimationBuilder][859]
--   [OBJ_AnimationStep][861]
--   [OBJ_AnimationStart][863]
--   [OBJ_SerialAnimationStep][865]
--   [OBJ_ParallelAnimationStep][867]
--   [OBJ_ScaleAnimationStep][869]
--   [OBJ_CustomAnimationStep][871]
--   [OBJ_TransformAnimationStep][873]
--   [OBJ_ScenarioAnimationStep][875]
--   [OBJ_TriggerAnimationStep][877]
--   [OBJ_Pulse][879]
--   [OBJ_PulseAnimationStep][882]
--   [OBJ_ColorAnimationStep][884]
--   [OBJ_OpacityAnimationStep][886]
--   [OBJ_ScenariosAnimationStep][888]
--   [AnimationProgression][890]
--   [TypeWhen][892]
--   [AnimationStartTime][893]
--   [Misc Equation][894]
--   [EquationFunctions][895]
-    -   [container][896]
-    -   [brac][898]
-    -   [bar][900]
-    -   [annotate][902]
-    -   [scale][904]
-    -   [frac][906]
-    -   [supSub][908]
-    -   [sup][910]
-    -   [sub][912]
-    -   [box][914]
-    -   [pad][916]
-    -   [topBar][918]
-    -   [bottomBar][920]
-    -   [matrix][922]
-    -   [int][924]
-    -   [sumOf][926]
-    -   [prodOf][928]
-    -   [topComment][930]
-    -   [bottomComment][932]
-    -   [strike][934]
-    -   [topStrike][936]
-    -   [bottomStrike][938]
--   [EQN_Annotation][940]
--   [EQN_EncompassGlyph][943]
--   [EQN_LeftRightGlyph][946]
--   [EQN_TopBottomGlyph][949]
--   [EQN_Glyphs][952]
--   [TypeEquationElements][954]
--   [TypeEquationPhrase][955]
--   [TypeFormAlignment][957]
--   [TypeFormAnimationProperties][959]
--   [TypeFormTranslationProperties][962]
--   [TypeEquationFormObject][964]
--   [TypeEquationForm][967]
--   [TypeEquationForms][968]
--   [TypeFormRestart][969]
--   [TypeEquationGoToFormOptions][971]
--   [TypeEquationTextElement][973]
--   [OBJ_AxisTicks][975]
--   [OBJ_AxisLabels][978]
--   [TypeAxisTitle][981]
--   [OBJ_SurroundAnimationStep][982]
--   [EquationLabel][984]
+-   [AdvancedAxis][381]
+    -   -   [Example][382]
+        -   [Example][383]
+        -   [Example][384]
+        -   [Example][385]
+        -   [Example][386]
+    -   [valueToDraw][387]
+    -   [drawToValue][389]
+    -   [inAxis][391]
+-   [ADV_Axis][393]
+-   [Text][395]
+-   [OBJ_Text][396]
+-   [OBJ_TextLine][399]
+-   [OBJ_TextLines][402]
+-   [Animation][405]
+-   [AnimationManager][406]
+    -   [new][409]
+    -   [builder][412]
+    -   [rotation][414]
+    -   [scale][417]
+    -   [trigger][419]
+    -   [delay][421]
+    -   [translation][423]
+    -   [position][425]
+    -   [color][427]
+    -   [opacity][429]
+    -   [transform][431]
+    -   [dissolveIn][433]
+    -   [dissolveOut][435]
+    -   [dim][437]
+    -   [undim][439]
+    -   [scenario][441]
+    -   [scenarios][443]
+    -   [cancel][445]
+    -   [start][447]
+    -   [getRemainingTime][449]
+-   [AnimationBuilder][451]
+    -   [custom][453]
+    -   [rotation][455]
+    -   [position][457]
+    -   [translation][459]
+    -   [scale][461]
+    -   [transform][463]
+    -   [scenario][465]
+    -   [scenarios][467]
+    -   [color][469]
+    -   [opacity][471]
+    -   [dissolveOut][473]
+    -   [dissolveIn][475]
+    -   [dim][477]
+    -   [undim][479]
+    -   [delay][481]
+    -   [trigger][483]
+    -   [inParallel][485]
+    -   [inSerial][487]
+-   [PositionAnimationStep][489]
+-   [RotationAnimationStep][492]
+-   [ScaleAnimationStep][495]
+-   [TransformAnimationStep][498]
+-   [ScenarioAnimationStep][501]
+-   [PulseAnimationStep][504]
+-   [ColorAnimationStep][507]
+-   [DimAnimationStep][510]
+-   [UndimAnimationStep][513]
+-   [OpacityAnimationStep][516]
+-   [DissolveInAnimationStep][519]
+-   [DissolveOutAnimationStep][522]
+-   [TriggerAnimationStep][525]
+-   [CustomAnimationStep][528]
+-   [SerialAnimationStep][531]
+-   [ParallelAnimationStep][534]
+-   [DelayAnimationStep][537]
+-   [Equations][539]
+-   [Equation][540]
+    -   [eqn][543]
+    -   [setFormSeries][545]
+    -   [getFormSeries][547]
+    -   [addElements][548]
+    -   [addForms][550]
+    -   [getCurrentForm][552]
+    -   [setCurrentForm][553]
+    -   [showForm][555]
+    -   [getForm][557]
+    -   [goToForm][559]
+    -   [prevForm][561]
+    -   [nextForm][563]
+    -   [replayCurrentForm][565]
+-   [EQN_Equation][567]
+-   [Equation Layout][569]
+-   [EQN_Fraction][570]
+-   [EQN_Root][573]
+-   [EQN_Subscript][576]
+-   [EQN_Superscript][579]
+-   [EQN_SuperscriptSubscript][582]
+-   [EQN_Matrix][585]
+-   [EQN_Integral][588]
+-   [EQN_SumOf][591]
+-   [EQN_ProdOf][594]
+-   [EQN_Bar][597]
+-   [EQN_Bracket][600]
+-   [EQN_Box][603]
+-   [EQN_Strike][606]
+-   [EQN_StrikeComment][609]
+-   [EQN_Comment][612]
+-   [EQN_Pad][615]
+-   [EQN_Scale][618]
+-   [EQN_Container][621]
+-   [EQN_Annotate][624]
+-   [Equation Symbols][627]
+-   [EQN_VinculumSymbol][628]
+-   [EQN_BoxSymbol][631]
+-   [EQN_ArrowSymbol][634]
+-   [EQN_SumSymbol][637]
+-   [EQN_ProdSymbol][640]
+-   [EQN_IntegralSymbol][643]
+-   [EQN_StrikeSymbol][646]
+-   [EQN_BracketSymbol][649]
+-   [EQN_AngleBracketSymbol][652]
+-   [EQN_BraceSymbol][655]
+-   [EQN_BarSymbol][658]
+-   [EQN_SquareBracketSymbol][661]
+-   [EQN_RadicalSymbol][664]
+-   [2D Geometry Tools][667]
+-   [minAngleDiff][668]
+-   [getTriangleCenter][671]
+-   [polarToRect][674]
+-   [rectToPolar][677]
+-   [threePointAngle][680]
+-   [threePointAngleMin][683]
+-   [clipAngle][686]
+-   [Math tools][689]
+-   [round][690]
+-   [range][692]
+-   [randSign][694]
+-   [randInt][695]
+-   [rand][697]
+-   [randElement][699]
+-   [randElements][701]
+-   [removeRandElement][703]
+-   [Misc Diagram Element][705]
+-   [DiagramElementMoveFreely][706]
+-   [DiagramElementMove][708]
+-   [Scenarios][710]
+-   [ElementMovementState][712]
+-   [ElementPulseState][714]
+-   [ElementState][716]
+-   [DrawingObject][718]
+-   [DiagramPrimitives][720]
+    -   [generic][721]
+    -   [polyline][723]
+    -   [polygon][725]
+    -   [star][727]
+    -   [rectangle][729]
+    -   [ellipse][731]
+    -   [triangle][733]
+    -   [grid][735]
+    -   [line][737]
+    -   [arrow][739]
+    -   [textLine][741]
+    -   [textLines][743]
+    -   [text][745]
+    -   [collection][747]
+-   [Misc Geometry][749]
+-   [TypeParsablePoint][750]
+-   [TypeParsableLine][752]
+-   [TypeParsableRect][754]
+-   [TypeParsableTransform][756]
+-   [getPoint][758]
+-   [getPoints][760]
+-   [getScale][762]
+-   [getLine][764]
+-   [getRect][766]
+-   [getTransform][768]
+-   [OBJ_QuadraticBezier][770]
+-   [Intersect][772]
+-   [Misc Shapes][774]
+-   [OBJ_Texture][775]
+-   [OBJ_TextDefinition][777]
+-   [OBJ_Font][779]
+-   [OBJ_TextLineDefinition][782]
+-   [OBJ_TextLinesDefinition][784]
+-   [OBJ_TextModifierDefinition][786]
+-   [OBJ_TextModifiersDefinition][788]
+-   [OBJ_PulseScale][790]
+-   [OBJ_CurvedCorner][792]
+-   [OBJ_LineStyle][794]
+-   [CPY_Step][796]
+-   [TypeDash][799]
+-   [ArrowHead][800]
+-   [OBJ_LineArrow][801]
+-   [OBJ_LineArrows][804]
+-   [OBJ_Scenario][806]
+-   [OBJ_MovableAngle][808]
+-   [TypeAngleLabelOptions][810]
+-   [OBJ_AngleCurve][812]
+-   [OBJ_AngleArrows][814]
+-   [TypeAngleArrows][816]
+-   [OBJ_AngleCorner][817]
+-   [OBJ_PulseAngle][819]
+-   [OBJ_AngleSet][821]
+-   [OBJ_AngleAnimationStep][823]
+-   [OBJ_PulseAngleAnimationStep][825]
+-   [TypeLineLabelOptions][827]
+-   [OBJ_PulseWidth][829]
+-   [OBJ_MovableLine][831]
+-   [OBJ_LengthAnimationStep][833]
+-   [OBJ_PulseWidthAnimationStep][835]
+-   [OBJ_PolylinePad][837]
+-   [OBJ_PolylineCustomization][838]
+-   [TypeLabelOrientation][841]
+-   [TypeLabelLocation][842]
+-   [TypeLabelSubLocation][843]
+-   [OBJ_ValidShapeHideThresholds][844]
+-   [OBJ_ValidShape][846]
+-   [SUB_PolylineUpdatePoints][848]
+-   [OBJ_PolylineAngle][849]
+-   [OBJ_PolylineSide][850]
+-   [OBJ_PolylinePadSingle][851]
+-   [Misc Animation][853]
+-   [AnimationStep][854]
+    -   [getRemainingTime][857]
+    -   [start][859]
+-   [ElementAnimationStep][861]
+-   [OBJ_PositionAnimationStep][863]
+-   [OBJ_RotationAnimationStep][865]
+-   [OBJ_ElementAnimationStep][867]
+-   [OBJ_ScenarioVelocity][869]
+-   [OBJ_AnimationBuilder][871]
+-   [OBJ_AnimationStep][873]
+-   [OBJ_AnimationStart][875]
+-   [OBJ_SerialAnimationStep][877]
+-   [OBJ_ParallelAnimationStep][879]
+-   [OBJ_ScaleAnimationStep][881]
+-   [OBJ_CustomAnimationStep][883]
+-   [OBJ_TransformAnimationStep][885]
+-   [OBJ_ScenarioAnimationStep][887]
+-   [OBJ_TriggerAnimationStep][889]
+-   [OBJ_Pulse][891]
+-   [OBJ_PulseAnimationStep][894]
+-   [OBJ_ColorAnimationStep][896]
+-   [OBJ_OpacityAnimationStep][898]
+-   [OBJ_ScenariosAnimationStep][900]
+-   [AnimationProgression][902]
+-   [TypeWhen][904]
+-   [AnimationStartTime][905]
+-   [Misc Equation][906]
+-   [EquationFunctions][907]
+    -   [container][908]
+    -   [brac][910]
+    -   [bar][912]
+    -   [annotate][914]
+    -   [scale][916]
+    -   [frac][918]
+    -   [supSub][920]
+    -   [sup][922]
+    -   [sub][924]
+    -   [box][926]
+    -   [pad][928]
+    -   [topBar][930]
+    -   [bottomBar][932]
+    -   [matrix][934]
+    -   [int][936]
+    -   [sumOf][938]
+    -   [prodOf][940]
+    -   [topComment][942]
+    -   [bottomComment][944]
+    -   [strike][946]
+    -   [topStrike][948]
+    -   [bottomStrike][950]
+-   [EQN_Annotation][952]
+-   [EQN_EncompassGlyph][955]
+-   [EQN_LeftRightGlyph][958]
+-   [EQN_TopBottomGlyph][961]
+-   [EQN_Glyphs][964]
+-   [TypeEquationElements][966]
+-   [TypeEquationPhrase][967]
+-   [TypeFormAlignment][969]
+-   [TypeFormAnimationProperties][971]
+-   [TypeFormTranslationProperties][974]
+-   [TypeEquationFormObject][976]
+-   [TypeEquationForm][979]
+-   [TypeEquationForms][980]
+-   [TypeFormRestart][981]
+-   [TypeEquationGoToFormOptions][983]
+-   [TypeEquationTextElement][985]
+-   [OBJ_AxisTicks][987]
+-   [OBJ_AxisLabels][990]
+-   [TypeAxisTitle][993]
+-   [OBJ_SurroundAnimationStep][994]
+-   [EquationLabel][996]
 
 ## Introduction
 
@@ -497,7 +506,7 @@ This is a work in progress and the entire API is not yet documented.
 
 A diagram has one or more _diagram elements_. A diagram element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
 
-In the language of **FigureOne**, there are two types of [DiagramElements][986]:
+In the language of **FigureOne**, there are two types of [DiagramElements][998]:
 
 -   [DiagramElementPrimitive][69] - an element that will draw something to the screen, such as a line, shape or text
 -   [DiagramElementCollection][73] - collections of primitives or other collections
@@ -532,9 +541,9 @@ There are several different ways to create the same diagram, but this way is use
 
 FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as diagram elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
 
-WebGL is rendered in a html [canvas][987] element.
+WebGL is rendered in a html [canvas][999] element.
 
-The [canvas][987] element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.
+The [canvas][999] element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.
 
 When the canvas aspect ratio is not a square, or it is more convenient to create a diagram in a coordinate space not mapped between -1 to +1, then it is useful to have a separate _diagram space_. In the example above, the diagram space re-maps the _GL space_ to 0 to 3 in the horizontal and 0 to 2 in the vertical.
 
@@ -701,11 +710,11 @@ converting between the different spaces (e.g. pixel, GL, diagram).
 
 ### Parameters
 
--   `options` **[OBJ_Diagram][988]** 
+-   `options` **[OBJ_Diagram][1000]** 
 
 ### Properties
 
--   `create` **[DiagramPrimitives][989]** create elements with this
+-   `create` **[DiagramPrimitives][1001]** create elements with this
 
 ### Examples
 
@@ -760,17 +769,17 @@ diagram.add('hexagon', hex);
 
 Useful transforms between spaces at the diagram level and above.
 
-Type: {glToDiagram: [Transform][990], diagramToGL: [Transform][990], pixelToDiagram: [Transform][990], diagramToPixel: [Transform][990], pixelToGL: [Transform][990], glToPixel: [Transform][990], diagramToCSSPercent: [Transform][990]}
+Type: {glToDiagram: [Transform][1002], diagramToGL: [Transform][1002], pixelToDiagram: [Transform][1002], diagramToPixel: [Transform][1002], pixelToGL: [Transform][1002], glToPixel: [Transform][1002], diagramToCSSPercent: [Transform][1002]}
 
 #### Properties
 
--   `glToDiagram` **[Transform][990]** 
--   `diagramToGL` **[Transform][990]** 
--   `pixelToDiagram` **[Transform][990]** 
--   `diagramToPixel` **[Transform][990]** 
--   `pixelToGL` **[Transform][990]** 
--   `glToPixel` **[Transform][990]** 
--   `diagramToCSSPercent` **[Transform][990]** 
+-   `glToDiagram` **[Transform][1002]** 
+-   `diagramToGL` **[Transform][1002]** 
+-   `pixelToDiagram` **[Transform][1002]** 
+-   `diagramToPixel` **[Transform][1002]** 
+-   `pixelToGL` **[Transform][1002]** 
+-   `glToPixel` **[Transform][1002]** 
+-   `diagramToCSSPercent` **[Transform][1002]** 
 
 ### add
 
@@ -778,8 +787,8 @@ Add a [DiagramElement][32] to the diagram with some `name`.
 
 #### Parameters
 
--   `name` **[string][991]** 
--   `diagramElement` **([DiagramElementPrimitive][992] \| [DiagramElementCollection][993])** 
+-   `name` **[string][1003]** 
+-   `diagramElement` **([DiagramElementPrimitive][1004] \| [DiagramElementCollection][1005])** 
 
 #### Examples
 
@@ -798,10 +807,10 @@ Add elements from element definitions to the diagram.
 
 #### Parameters
 
--   `elementsToAdd` **[Array][994]&lt;TypeAddElementObject>** array of element definitions
--   `collection` **[DiagramElementCollection][993]** the
+-   `elementsToAdd` **[Array][1006]&lt;TypeAddElementObject>** array of element definitions
+-   `collection` **[DiagramElementCollection][1005]** the
     collection to add elements to (optional, default `this.elements`)
--   `addElementsKey` **[string][991]** key to add elements (optional, default `'addElements'`)
+-   `addElementsKey` **[string][1003]** key to add elements (optional, default `'addElements'`)
 
 #### Examples
 
@@ -837,9 +846,9 @@ Add an element from an element definitions to the diagram.
 #### Parameters
 
 -   `elementDefinition` **TypeAddElementObject** array of element definitions
--   `rootCollection` **[DiagramElementCollection][993]**  (optional, default `this.elements`)
--   `addElementsKey` **[string][991]** key to add elements (optional, default `'addElements'`)
--   `collection` **[DiagramElementCollection][993]** the
+-   `rootCollection` **[DiagramElementCollection][1005]**  (optional, default `this.elements`)
+-   `addElementsKey` **[string][1003]** key to add elements (optional, default `'addElements'`)
+-   `collection` **[DiagramElementCollection][1005]** the
     collection to add elements to (optional, default `this.elements`)
 
 #### Examples
@@ -866,7 +875,7 @@ Get element from element name or path.
 
 #### Parameters
 
--   `elementName` **[string][991]** 
+-   `elementName` **[string][1003]** 
 
 #### Examples
 
@@ -910,7 +919,7 @@ automatically set this.
 
 #### Parameters
 
--   `touchable` **[boolean][995]**  (optional, default `true`)
+-   `touchable` **[boolean][1007]**  (optional, default `true`)
 
 ### getRemainingAnimationTime
 
@@ -918,7 +927,7 @@ Get remaining animation durations of running animations
 
 #### Parameters
 
--   `nowIn` **[number][996]**  (optional, default `this.globalAnimation.now()/1000`)
+-   `nowIn` **[number][1008]**  (optional, default `this.globalAnimation.now()/1000`)
 
 ### stop
 
@@ -934,8 +943,8 @@ Force diagram to draw on next available animation frame.
 
 #### Parameters
 
--   `draw` **[boolean][995]**  (optional, default `true`)
--   `fromWhere` **[string][991]**  (optional, default `''`)
+-   `draw` **[boolean][1007]**  (optional, default `true`)
+-   `fromWhere` **[string][1003]**  (optional, default `''`)
 
 ## OBJ_Diagram
 
@@ -943,8 +952,8 @@ Diagram options object
 
 ### Properties
 
--   `htmlId` **[string][991]?** HTML `div` tag `id` to tie diagram to (`"figureOneContainer"`)
--   `limits` **[TypeParsableRect][997]?** limits (bottom left
+-   `htmlId` **[string][1003]?** HTML `div` tag `id` to tie diagram to (`"figureOneContainer"`)
+-   `limits` **[TypeParsableRect][1009]?** limits (bottom left
      corner at (-1, -1), width 2, height 2)
 
 ## Diagram Elements
@@ -980,32 +989,32 @@ set directly as it will be overwritten by dissolve animations.
 
 ### Parameters
 
--   `transform` **[Transform][990]**  (optional, default `new Transform()`)
--   `diagramLimitsOrDiagram` **([Diagram][998] \| [Rect][999])**  (optional, default `new Rect(-1,-1,2,2)`)
--   `parent` **([DiagramElement][1000] | null)**  (optional, default `null`)
+-   `transform` **[Transform][1002]**  (optional, default `new Transform()`)
+-   `diagramLimitsOrDiagram` **([Diagram][1010] \| [Rect][1011])**  (optional, default `new Rect(-1,-1,2,2)`)
+-   `parent` **([DiagramElement][1012] | null)**  (optional, default `null`)
 
 ### Properties
 
--   `name` **[string][991]** reference name of element
--   `isShown` **[boolean][995]** if `false` then element will not be processed on
+-   `name` **[string][1003]** reference name of element
+-   `isShown` **[boolean][1007]** if `false` then element will not be processed on
     next draw
--   `transform` **[Transform][990]** transform to apply element
--   `lastDrawTransform` **[Transform][990]** transform last used for drawing -
+-   `transform` **[Transform][1002]** transform to apply element
+-   `lastDrawTransform` **[Transform][1002]** transform last used for drawing -
     includes cascade or all parent transforms
--   `parent` **([DiagramElement][1000] | null)** parent diagram element - `null` if
+-   `parent` **([DiagramElement][1012] | null)** parent diagram element - `null` if
     at top level of diagram
--   `diagram` **[Diagram][998]** diagram element is attached to
--   `isTouchable` **[boolean][995]** must be `true` to move or execute `onClick`
--   `isMovable` **[boolean][995]** must be `true` to move
--   `color` **\[[number][996], [number][996], [number][996], [number][996]]** element's current
+-   `diagram` **[Diagram][1010]** diagram element is attached to
+-   `isTouchable` **[boolean][1007]** must be `true` to move or execute `onClick`
+-   `isMovable` **[boolean][1007]** must be `true` to move
+-   `color` **\[[number][1008], [number][1008], [number][1008], [number][1008]]** element's current
     color defined as red, green, blue, alpha with range 0 to 1
--   `dimColor` **\[[number][996], [number][996], [number][996], [number][996]]** color to use when
+-   `dimColor` **\[[number][1008], [number][1008], [number][1008], [number][1008]]** color to use when
     dimming element
--   `opacity` **[number][996]** number between 0 and 1 that is multiplied with
+-   `opacity` **[number][1008]** number between 0 and 1 that is multiplied with
     `color` alpha channel to get final opacity
--   `move` **[DiagramElementMove][1001]** movement parameters
--   `scenarios` **[Scenarios][1002]** scenario presets
--   `animations` **[AnimationManager][1003]** element animation manager
+-   `move` **[DiagramElementMove][1013]** movement parameters
+-   `scenarios` **[Scenarios][1014]** scenario presets
+-   `animations` **[AnimationManager][1015]** element animation manager
 -   `subscriptions` **SubscriptionManager** subscription manager for
     element
 
@@ -1015,9 +1024,9 @@ Conveniently set the first `translation` of the element's `transform`.
 
 #### Parameters
 
--   `pointOrX` **([TypeParsablePoint][1004] \| [number][996])** x coordinate or full point
+-   `pointOrX` **([TypeParsablePoint][1016] \| [number][1008])** x coordinate or full point
     definition
--   `y` **[number][996]** y coordinate if `pointOrX` is just the x coordinate (`0`) (optional, default `0`)
+-   `y` **[number][1008]** y coordinate if `pointOrX` is just the x coordinate (`0`) (optional, default `0`)
 
 ### setRotation
 
@@ -1025,7 +1034,7 @@ Conveniently set the first `rotation` of the element's `transform`.
 
 #### Parameters
 
--   `rotation` **[number][996]** 
+-   `rotation` **[number][1008]** 
 
 ### setScale
 
@@ -1033,10 +1042,10 @@ Conveniently set the first `scale` of the element's `transform`.
 
 #### Parameters
 
--   `scaleOrX` **([TypeParsablePoint][1004] \| [number][996])** horizontal scale - either
+-   `scaleOrX` **([TypeParsablePoint][1016] \| [number][1008])** horizontal scale - either
     define as full x-y point, or as a number. If scaleOrX is a `number` and
     `y` is null, then both `x` and `y` will be equally scaled
--   `y` **([number][996] | null)** y coordinate if `scaleOrX` is a `number` (`null`) (optional, default `null`)
+-   `y` **([number][1008] | null)** y coordinate if `scaleOrX` is a `number` (`null`) (optional, default `null`)
 
 ### setTransform
 
@@ -1046,7 +1055,7 @@ appropriately clipped.
 
 #### Parameters
 
--   `transform` **[Transform][990]** 
+-   `transform` **[Transform][1002]** 
 
 Returns **void** 
 
@@ -1056,8 +1065,8 @@ Set element color.
 
 #### Parameters
 
--   `color` **\[[number][996], [number][996], [number][996], [number][996]]** RGBA color from 0 to 1
--   `setDefault` **[boolean][995]?** also set the default color to this color (optional, default `true`)
+-   `color` **\[[number][1008], [number][1008], [number][1008], [number][1008]]** RGBA color from 0 to 1
+-   `setDefault` **[boolean][1007]?** also set the default color to this color (optional, default `true`)
 
 ### dim
 
@@ -1069,7 +1078,7 @@ Set `dimColor` property
 
 #### Parameters
 
--   `color` **[Array][994]&lt;[number][996]>** 
+-   `color` **[Array][1006]&lt;[number][1008]>** 
 
 ### undim
 
@@ -1079,7 +1088,7 @@ Set element color to `defaultColor`
 
 Return diagram path of element
 
-Returns **[string][991]** path of element relative to diagram
+Returns **[string][1003]** path of element relative to diagram
 
 ### pulse
 
@@ -1095,14 +1104,14 @@ callback.
 
 #### Parameters
 
--   `optionsOrDone` **(null | [OBJ_Pulse][1005] | function (): void)**  (optional, default `null`)
+-   `optionsOrDone` **(null | [OBJ_Pulse][1017] | function (): void)**  (optional, default `null`)
 
 ### getScale
 
 Return the first scale in the element's transform. Will return
 `[1, 1]` if element's transform doesn't have a scale.
 
-Returns **[Point][1006]** scale
+Returns **[Point][1018]** scale
 
 ### getRotation
 
@@ -1114,7 +1123,7 @@ Return the first rotation in the element's transform. Will return
 -   `normalize` **(`"0to360"` \| `"-180to180"` \| `""`)** how to normalize the
     returned angle where `''` returns the raw angle (optional, default `''`)
 
-Returns **[Point][1006]** scale
+Returns **[Point][1018]** scale
 
 ### getPosition
 
@@ -1133,9 +1142,9 @@ element.
 
 -   `space` **(`"local"` \| `"diagram"` \| `"gl"` \| `"draw"`)** the space to return
     the position in (optional, default `'local'`)
--   `xAlign` **(`"center"` \| `"left"` \| `"right"` \| `"location"` \| [number][996])** horizontal alignment of position. Use a `number` to define the horizontal
+-   `xAlign` **(`"center"` \| `"left"` \| `"right"` \| `"location"` \| [number][1008])** horizontal alignment of position. Use a `number` to define the horizontal
     position in percentage width from the left. (optional, default `'location'`)
--   `yAlign` **(`"middle"` \| `"top"` \| `"bottom"` \| `"location"` \| [number][996])** vertical alignment of position. Use a `number` to define the vertical
+-   `yAlign` **(`"middle"` \| `"top"` \| `"bottom"` \| `"location"` \| [number][1008])** vertical alignment of position. Use a `number` to define the vertical
     position in percentage height from the bottom. (optional, default `'location'`)
 
 ### show
@@ -1151,7 +1160,7 @@ to accept touches for their children
 
 #### Parameters
 
--   `touchable` **[boolean][995]** 
+-   `touchable` **[boolean][1007]** 
 
 ### setTouchableRect
 
@@ -1160,7 +1169,7 @@ plus some `touchable` buffer on all sides.
 
 #### Parameters
 
--   `touchable` **[number][996]**  (optional, default `0`)
+-   `touchable` **[number][1008]**  (optional, default `0`)
 
 ### setMovable
 
@@ -1169,7 +1178,7 @@ make this element touchable and movable
 
 #### Parameters
 
--   `movable` **[boolean][995]** `true` to make movable, `false` to not (optional, default `true`)
+-   `movable` **[boolean][1007]** `true` to make movable, `false` to not (optional, default `true`)
 
 ### hide
 
@@ -1185,15 +1194,15 @@ Toggle hide/show of element
 
 Get current transform of element.
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### isMoving
 
-Returns **[boolean][995]** `true` if element is moving
+Returns **[boolean][1007]** `true` if element is moving
 
 ### isAnimating
 
-Returns **[boolean][995]** `true` if element is animating
+Returns **[boolean][1007]** `true` if element is animating
 
 ## DiagramElementPrimitive
 
@@ -1202,17 +1211,17 @@ Returns **[boolean][995]** `true` if element is animating
 Primitive diagram element
 
 A primitive diagram element is one that handles an object (`drawingObject`)
-that draws to the screen. This object may be a [VertexObject][1007], a
-[TextObject][1008] or a [{HTMLObject][1009]}.
+that draws to the screen. This object may be a [VertexObject][1019], a
+[TextObject][1020] or a [{HTMLObject][1021]}.
 
 ### Parameters
 
--   `drawingObject` **[DrawingObject][1010]** an object that handles drawing
+-   `drawingObject` **[DrawingObject][1022]** an object that handles drawing
     to the screen or manages a HTML element
--   `transform` **[Transform][990]** initial transform to set (optional, default `new Transform()`)
--   `color` **\[[number][996], [number][996], [number][996], [number][996]]** color to set (optional, default `[0.5,0.5,0.5,1]`)
--   `diagramLimits` **[Rect][999]** limits of diagram (optional, default `new Rect(-1,-1,2,2)`)
--   `parent` **([DiagramElement][1000] | null)** parent element (optional, default `null`)
+-   `transform` **[Transform][1002]** initial transform to set (optional, default `new Transform()`)
+-   `color` **\[[number][1008], [number][1008], [number][1008], [number][1008]]** color to set (optional, default `[0.5,0.5,0.5,1]`)
+-   `diagramLimits` **[Rect][1011]** limits of diagram (optional, default `new Rect(-1,-1,2,2)`)
+-   `parent` **([DiagramElement][1012] | null)** parent element (optional, default `null`)
 
 ### setAngleToDraw
 
@@ -1224,7 +1233,7 @@ An angle of -1 represents the maximum angle allowed by the primitive.
 
 #### Parameters
 
--   `angle` **[number][996]** Angle to draw (optional, default `-1`)
+-   `angle` **[number][1008]** Angle to draw (optional, default `-1`)
 
 ## DiagramElementCollection
 
@@ -1232,19 +1241,19 @@ An angle of -1 represents the maximum angle allowed by the primitive.
 
 Collection diagram element
 
-A collection manages a number of children [DiagramElements][986], be they
+A collection manages a number of children [DiagramElements][998], be they
 primitives or collections.
 
 A collection's transform will be passed onto all the children elements.
 
 ### Parameters
 
--   `transform` **[Transform][990]** initial transform to set (optional, default `new Transform()`)
--   `diagramLimits` **[Rect][999]** limits of diagram (optional, default `new Rect(-1,1,2,2)`)
--   `parent` **([DiagramElement][1000] | null)** parent element (optional, default `null`)
--   `border` **([Array][994]&lt;[Array][994]&lt;[Point][1006]>> | `"children"` \| `"rect"` \| [number][996])**  (optional, default `'children'`)
--   `touchBorder` **([Array][994]&lt;[Array][994]&lt;[Point][1006]>> | `"border"` \| [number][996] \| `"rect"`)**  (optional, default `'border'`)
--   `holeBorder` **[Array][994]&lt;[Array][994]&lt;[Point][1006]>>**  (optional, default `[[]]`)
+-   `transform` **[Transform][1002]** initial transform to set (optional, default `new Transform()`)
+-   `diagramLimits` **[Rect][1011]** limits of diagram (optional, default `new Rect(-1,1,2,2)`)
+-   `parent` **([DiagramElement][1012] | null)** parent element (optional, default `null`)
+-   `border` **([Array][1006]&lt;[Array][1006]&lt;[Point][1018]>> | `"children"` \| `"rect"` \| [number][1008])**  (optional, default `'children'`)
+-   `touchBorder` **([Array][1006]&lt;[Array][1006]&lt;[Point][1018]>> | `"border"` \| [number][1008] \| `"rect"`)**  (optional, default `'border'`)
+-   `holeBorder` **[Array][1006]&lt;[Array][1006]&lt;[Point][1018]>>**  (optional, default `[[]]`)
 
 ### toFront
 
@@ -1253,8 +1262,8 @@ of the drawn collection. Later elements in the array will be further forward.
 
 #### Parameters
 
--   `elementsIn` **([Array][994]&lt;([string][991] \| [DiagramElement][1000])> | [string][991] \| [DiagramElement][1000])** 
--   `elements` **([Array][994]&lt;([string][991] \| [DiagramElement][1000])> | [string][991] \| [DiagramElement][1000])** 
+-   `elementsIn` **([Array][1006]&lt;([string][1003] \| [DiagramElement][1012])> | [string][1003] \| [DiagramElement][1012])** 
+-   `elements` **([Array][1006]&lt;([string][1003] \| [DiagramElement][1012])> | [string][1003] \| [DiagramElement][1012])** 
 
 ### toBack
 
@@ -1264,8 +1273,8 @@ will be drawn further back.
 
 #### Parameters
 
--   `elementsIn` **([Array][994]&lt;([string][991] \| [DiagramElement][1000])> | [string][991] \| [DiagramElement][1000])** 
--   `elements` **([Array][994]&lt;([string][991] \| [DiagramElement][1000])> | [string][991] \| [DiagramElement][1000])** 
+-   `elementsIn` **([Array][1006]&lt;([string][1003] \| [DiagramElement][1012])> | [string][1003] \| [DiagramElement][1012])** 
+-   `elements` **([Array][1006]&lt;([string][1003] \| [DiagramElement][1012])> | [string][1003] \| [DiagramElement][1012])** 
 
 ### add
 
@@ -1273,9 +1282,9 @@ Add a diagram element to the collection.
 
 #### Parameters
 
--   `name` **[string][991]** reference name of element
--   `element` **[DiagramElement][1000]** element to add
--   `index` **[number][996]** index to add in the `drawOrder` where -1 appends the
+-   `name` **[string][1003]** reference name of element
+-   `element` **[DiagramElement][1012]** element to add
+-   `index` **[number][1008]** index to add in the `drawOrder` where -1 appends the
     element to the end of the draw order, (optional, default `-1`)
 
 ### getElement
@@ -1287,24 +1296,24 @@ has a child primitive 'b', then the path would be: 'a.b'.
 
 #### Parameters
 
--   `elementPath` **(null | [string][991] \| [DiagramElement][1000])**  (optional, default `null`)
+-   `elementPath` **(null | [string][1003] \| [DiagramElement][1012])**  (optional, default `null`)
 
-Returns **([DiagramElement][1000] | null)** element at path. If `elementPath`
+Returns **([DiagramElement][1012] | null)** element at path. If `elementPath`
 is `null`, then this element is returned. If `elementPath` is invalid
 then `null` is returned.
 
 ### getElements
 
 Returns an array of result from
-[getElement][1011] calls on an
+[getElement][1023] calls on an
 array of paths.
 
 #### Parameters
 
--   `children` **[Array][994]&lt;([string][991] \| [DiagramElement][1000])>** 
+-   `children` **[Array][1006]&lt;([string][1003] \| [DiagramElement][1012])>** 
 
-Returns **[Array][994]&lt;[DiagramElement][1000]>** Array of
-[getElement][1011] results
+Returns **[Array][1006]&lt;[DiagramElement][1012]>** Array of
+[getElement][1023] results
 
 ## Geometric Classes
 
@@ -1333,10 +1342,10 @@ There are many more methods in each class and it is recommended you quickly revi
 
 Many of these classes are used by each other. For instance, [Line][139] makes a lot of use of [Point][86]. Therefore instead of defining a point by creating a class each time, short hand, parsable equivalents for Points, Lines, Rectangles and Transforms are available. For more information refer to:
 
--   [TypeParsablePoint][738]
--   [TypeParsableLine][740]
--   [TypeParsableRect][742]
--   [TypeParsableTransform][744]
+-   [TypeParsablePoint][750]
+-   [TypeParsableLine][752]
+-   [TypeParsableRect][754]
+-   [TypeParsableTransform][756]
 
 
 ## Point
@@ -1348,8 +1357,8 @@ transform points.
 
 ### Parameters
 
--   `x` **[number][996]** x coordinate of point
--   `y` **[number][996]** y coordinate of point
+-   `x` **[number][1008]** x coordinate of point
+-   `y` **[number][1008]** y coordinate of point
 
 ### Examples
 
@@ -1371,19 +1380,19 @@ const q = p.add(3, 1);
 
 x value of point
 
-Type: [number][996]
+Type: [number][1008]
 
 ### y
 
 y value of point
 
-Type: [number][996]
+Type: [number][1008]
 
 ### \_dup
 
 Return a duplicate of the [Point][86] object
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### scale
 
@@ -1391,7 +1400,7 @@ Scale x and y values of point by scalar
 
 #### Parameters
 
--   `scalar` **[number][996]** 
+-   `scalar` **[number][1008]** 
 
 #### Examples
 
@@ -1401,7 +1410,7 @@ s = p.scale(3);
 // s = Point{x: 3, y: 3};
 ```
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### sub
 
@@ -1409,8 +1418,8 @@ Subtract (x, y) values or a [Point][86] and return the difference as a new [Poin
 
 #### Parameters
 
--   `pointOrX` **([Point][1006] \| [number][996])** 
--   `y` **[number][996]**  (optional, default `0`)
+-   `pointOrX` **([Point][1018] \| [number][1008])** 
+-   `y` **[number][1008]**  (optional, default `0`)
 
 #### Examples
 
@@ -1425,7 +1434,7 @@ d = p.sub(q)
 // d = Point{x: 2, y: 2}
 ```
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### add
 
@@ -1433,8 +1442,8 @@ Add (x, y) values or a [Point][86] and return the sum as a new [Point][86]
 
 #### Parameters
 
--   `pointOrX` **([Point][1006] \| [number][996])** 
--   `y` **[number][996]**  (optional, default `0`)
+-   `pointOrX` **([Point][1018] \| [number][1008])** 
+-   `y` **[number][1008]**  (optional, default `0`)
 
 #### Examples
 
@@ -1449,7 +1458,7 @@ d = p.add(q)
 // d = Point{x: 4, y: 4}
 ```
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### distance
 
@@ -1457,7 +1466,7 @@ Return the distance between the point and the origin
 
 #### Parameters
 
--   `toPointIn` **([TypeParsablePoint][1004] | null)**  (optional, default `null`)
+-   `toPointIn` **([TypeParsablePoint][1016] | null)**  (optional, default `null`)
 
 #### Examples
 
@@ -1467,7 +1476,7 @@ d = p.distance();
 // d = 1.4142135623730951
 ```
 
-Returns **[number][996]** 
+Returns **[number][1008]** 
 
 ### round
 
@@ -1475,7 +1484,7 @@ Return a new point with (x, y) values rounded to some precision
 
 #### Parameters
 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `precision` **[number][1008]**  (optional, default `8`)
 
 #### Examples
 
@@ -1485,7 +1494,7 @@ q = p.round(2);
 // q = Point{x: 1.23, y: 1.23}
 ```
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### clip
 
@@ -1497,8 +1506,8 @@ min/max values.
 
 #### Parameters
 
--   `min` **([Point][1006] \| [number][996] | null)** 
--   `max` **([Point][1006] \| [number][996] | null)** 
+-   `min` **([Point][1018] \| [number][1008] | null)** 
+-   `max` **([Point][1018] \| [number][1008] | null)** 
 
 #### Examples
 
@@ -1517,7 +1526,7 @@ q = p.clip(minClip, null);
 // q = Point{x: -1, y: -1.5}
 ```
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### transformBy
 
@@ -1525,7 +1534,7 @@ Transform the point with a 3x3 matrix (2 dimensional transform)
 
 #### Parameters
 
--   `matrix` **[Array][994]&lt;[number][996]>** 
+-   `matrix` **[Array][1006]&lt;[number][1008]>** 
 
 #### Examples
 
@@ -1538,7 +1547,7 @@ q = p.transformBy(m)
 // q = Point{x: -3, y: 3}
 ```
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### rotate
 
@@ -1546,8 +1555,8 @@ Rotate a point some angle around a center point
 
 #### Parameters
 
--   `angle` **[number][996]** in radians
--   `center` **[Point][1006]**  (optional, default `new Point(0,0)`)
+-   `angle` **[number][1008]** in radians
+-   `center` **[Point][1018]**  (optional, default `new Point(0,0)`)
 
 #### Examples
 
@@ -1563,7 +1572,7 @@ q = p.rotate(Math.PI, new Point(1, 1))
 // q = Point{x: 0, y: 1}
 ```
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### isEqualTo
 
@@ -1571,8 +1580,8 @@ Compare two points for equality to some precision
 
 #### Parameters
 
--   `p` **[Point][1006]** 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `p` **[Point][1018]** 
+-   `precision` **[number][1008]**  (optional, default `8`)
 
 #### Examples
 
@@ -1592,8 +1601,8 @@ Compare two points for unequality to some precision
 
 #### Parameters
 
--   `p` **[Point][1006]** 
--   `precision` **[number][996]?** 
+-   `p` **[Point][1018]** 
+-   `precision` **[number][1008]?** 
 
 #### Examples
 
@@ -1611,13 +1620,13 @@ p.isNotEqualTo(q, 2)
 
 Return a point at (0, 0)
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### Unity
 
 Return a point at (1, 1)
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ## Rect
 
@@ -1625,10 +1634,10 @@ An object representing a rectangle.
 
 ### Parameters
 
--   `left` **[number][996]** left location
--   `bottom` **[number][996]** bottom location
--   `width` **[number][996]** rectangle width
--   `height` **[number][996]** rectangle height
+-   `left` **[number][1008]** left location
+-   `bottom` **[number][1008]** bottom location
+-   `width` **[number][1008]** rectangle width
+-   `height` **[number][1008]** rectangle height
 
 ### Examples
 
@@ -1674,8 +1683,8 @@ Returns `true` if `point` is within on on the border of the rectangle
 
 #### Parameters
 
--   `point` **[TypeParsablePoint][1004]** point to test
--   `precision` **[number][996]** precision to test (optional, default `8`)
+-   `point` **[TypeParsablePoint][1016]** point to test
+-   `precision` **[number][1008]** precision to test (optional, default `8`)
 
 #### Examples
 
@@ -1692,7 +1701,7 @@ Returns a rectangle with coordinates rounded to `precision`
 
 #### Parameters
 
--   `precision` **[number][996]** precision to test (optional, default `8`)
+-   `precision` **[number][1008]** precision to test (optional, default `8`)
 
 ## Line
 
@@ -1709,9 +1718,9 @@ A line can also be defined as an infinite line by saying it extends beyond one
 
 ### Parameters
 
--   `p1` **[TypeParsablePoint][1004]** 
--   `p2OrMag` **([TypeParsablePoint][1004] \| [number][996] | null)** 
--   `angle` **[number][996]**  (optional, default `0`)
+-   `p1` **[TypeParsablePoint][1016]** 
+-   `p2OrMag` **([TypeParsablePoint][1016] \| [number][1008] | null)** 
+-   `angle` **[number][1008]**  (optional, default `0`)
 -   `ends` **(`0` \| `1` \| `2`)** number of ends the line has. `2` ends is a finite
     line. `1` end is an infinite line that terminates at the first point, and
     goes through the second point to infinity. `0` ends is an infinite line
@@ -1743,7 +1752,7 @@ Change p1 of the line
 
 #### Parameters
 
--   `p1` **[TypeParsablePoint][1004]** 
+-   `p1` **[TypeParsablePoint][1016]** 
 
 ### setP2
 
@@ -1751,7 +1760,7 @@ Change p2 of the line
 
 #### Parameters
 
--   `p2` **([Point][1006] | \[[number][996], [number][996]])** 
+-   `p2` **([Point][1018] | \[[number][1008], [number][1008]])** 
 
 ### getPoint
 
@@ -1761,7 +1770,7 @@ Get p1 or p2
 
 -   `index` **(`1` \| `2`)**  (optional, default `1`)
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### getYFromX
 
@@ -1769,9 +1778,9 @@ Get the y coordinate of a point on the line with a given x coordinate
 
 #### Parameters
 
--   `x` **[number][996]** 
+-   `x` **[number][1008]** 
 
-Returns **([number][996] | null)** where `null` is returned if the line is vertical
+Returns **([number][1008] | null)** where `null` is returned if the line is vertical
 
 ### getXFromY
 
@@ -1779,33 +1788,33 @@ Get the x coordinate of a point on the line with a given y coordinate
 
 #### Parameters
 
--   `y` **[number][996]** 
+-   `y` **[number][1008]** 
 
-Returns **([number][996] | null)** where `null` is returned if the line is horiztonal
+Returns **([number][1008] | null)** where `null` is returned if the line is horiztonal
 
 ### getYIntercept
 
 Get the y intercept (at x = 0) of line
 
-Returns **([number][996] | null)** where `null` is returned if the line is vertical
+Returns **([number][1008] | null)** where `null` is returned if the line is vertical
 
 ### getXIntercept
 
 Get the x intercept (at y = 0) of line
 
-Returns **([number][996] | null)** where `null` is returned if the line is horizontal
+Returns **([number][1008] | null)** where `null` is returned if the line is horizontal
 
 ### getGradient
 
 Get the gradient of the line
 
-Returns **[number][996]** 
+Returns **[number][1008]** 
 
 ### angle
 
 Get the angle of the line from p1 to p2
 
-Returns **[number][996]** 
+Returns **[number][1008]** 
 
 ### round
 
@@ -1813,9 +1822,9 @@ Return a duplicate line with values rounded to `precision`
 
 #### Parameters
 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[Line][1012]** 
+Returns **[Line][1024]** 
 
 ### length
 
@@ -1823,13 +1832,13 @@ Return the distance between p1 and p2. Note, for infinite lines
 this will still return the distance between p1 and p2 that defines
 the line.
 
-Returns **[number][996]** 
+Returns **[number][1008]** 
 
 ### midPoint
 
 Return the midpoint between p1 and p2.
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### pointAtPercent
 
@@ -1837,9 +1846,9 @@ Return the point along some percent of the distance between p1 and p2.
 
 #### Parameters
 
--   `percent` **[number][996]** 
+-   `percent` **[number][1008]** 
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### pointAtLength
 
@@ -1847,9 +1856,9 @@ Return the point along the line at some length from p1
 
 #### Parameters
 
--   `length` **[number][996]** 
+-   `length` **[number][1008]** 
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### hasPointAlong
 
@@ -1857,10 +1866,10 @@ Returns **[Point][1006]**
 
 #### Parameters
 
--   `point` **[TypeParsablePoint][1004]** 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `point` **[TypeParsablePoint][1016]** 
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[boolean][995]** 
+Returns **[boolean][1007]** 
 
 ### distanceToPoint
 
@@ -1868,10 +1877,10 @@ Perpendicular distance from `point` to line
 
 #### Parameters
 
--   `point` **[TypeParsablePoint][1004]** 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `point` **[TypeParsablePoint][1016]** 
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[number][996]** 
+Returns **[number][1008]** 
 
 ### hasPointOn
 
@@ -1882,10 +1891,10 @@ defined ends.
 
 #### Parameters
 
--   `point` **[TypeParsablePoint][1004]** 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `point` **[TypeParsablePoint][1016]** 
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[boolean][995]** 
+Returns **[boolean][1007]** 
 
 ### isEqualTo
 
@@ -1893,10 +1902,10 @@ Returns **[boolean][995]**
 
 #### Parameters
 
--   `line2` **[Line][1012]** 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `line2` **[Line][1024]** 
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[boolean][995]** 
+Returns **[boolean][1007]** 
 
 ### isWithinDelta
 
@@ -1907,10 +1916,10 @@ delta.
 
 #### Parameters
 
--   `line2` **[Line][1012]** 
--   `delta` **[number][996]**  (optional, default `0.00000001`)
+-   `line2` **[Line][1024]** 
+-   `delta` **[number][1008]**  (optional, default `0.00000001`)
 
-Returns **[boolean][995]** 
+Returns **[boolean][1007]** 
 
 ### hasLineWithin
 
@@ -1918,10 +1927,10 @@ Returns **[boolean][995]**
 
 #### Parameters
 
--   `line2` **[Line][1012]** 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `line2` **[Line][1024]** 
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[boolean][995]** 
+Returns **[boolean][1007]** 
 
 ### isAlongLine
 
@@ -1929,10 +1938,10 @@ Returns **[boolean][995]**
 
 #### Parameters
 
--   `line2` **[Line][1012]** 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `line2` **[Line][1024]** 
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[boolean][995]** 
+Returns **[boolean][1007]** 
 
 ### isWithinLine
 
@@ -1940,10 +1949,10 @@ Returns **[boolean][995]**
 
 #### Parameters
 
--   `line2` **[Line][1012]** 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `line2` **[Line][1024]** 
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[boolean][995]** 
+Returns **[boolean][1007]** 
 
 ### offset
 
@@ -1963,9 +1972,9 @@ polygon.
 #### Parameters
 
 -   `direction` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"` \| `"positive"` \| `"negative"`)** 
--   `dist` **[number][996]** 
+-   `dist` **[number][1008]** 
 
-Returns **[Line][1012]** 
+Returns **[Line][1024]** 
 
 ### isParallelWith
 
@@ -1973,16 +1982,16 @@ Returns **[Line][1012]**
 
 #### Parameters
 
--   `line2` **[Line][1012]** 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `line2` **[Line][1024]** 
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[boolean][995]** 
+Returns **[boolean][1007]** 
 
 ### intersectsWith
 
 The intersection between this line and `line2`.
 
-The returned result is an [Intersect][760] object with keys `intersect`,
+The returned result is an [Intersect][772] object with keys `intersect`,
 `alongLine` and `withinLine`. The `intersect` is found by extending both
 lines to infinity and recording where they cross. If the two lines never
 cross, and are not collinear, then the result will be `undefined`.
@@ -2038,10 +2047,10 @@ Lines are partially overlapping:
 
 #### Parameters
 
--   `line2` **[Line][1012]** 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `line2` **[Line][1024]** 
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[Intersect][1013]** 
+Returns **[Intersect][1025]** 
 
 ## Translation
 
@@ -2051,18 +2060,18 @@ Translation transform element
 
 ### Parameters
 
--   `txOrTranslation` **([Point][1006] \| [number][996])** translation or x value of
+-   `txOrTranslation` **([Point][1018] \| [number][1008])** translation or x value of
     translation
--   `ty` **[number][996]** y value of translation (only used if `txOrTranslation`
+-   `ty` **[number][1008]** y value of translation (only used if `txOrTranslation`
     is a `number`) (optional, default `0`)
--   `name` **[string][991]** name to identify translation when included in a more
+-   `name` **[string][1003]** name to identify translation when included in a more
     complex [Transform][222] (optional, default `''`)
 
 ### matrix
 
 Returns a translation matrix
 
-Returns **[Array][994]&lt;[number][996]>** 
+Returns **[Array][1006]&lt;[number][1008]>** 
 
 ### sub
 
@@ -2070,10 +2079,10 @@ Subtract `translationToSub` from this translation
 
 #### Parameters
 
--   `translationToSub` **([Translation][1014] \| [Point][1006] \| [number][996])**  (optional, default `new Translation(0,0)`)
--   `y` **[number][996]**  (optional, default `0`)
+-   `translationToSub` **([Translation][1026] \| [Point][1018] \| [number][1008])**  (optional, default `new Translation(0,0)`)
+-   `y` **[number][1008]**  (optional, default `0`)
 
-Returns **[Translation][1014]** 
+Returns **[Translation][1026]** 
 
 ### add
 
@@ -2081,10 +2090,10 @@ Add `translationToAdd` to this translation
 
 #### Parameters
 
--   `translationToAdd` **([Translation][1014] \| [Point][1006] \| [number][996])**  (optional, default `new Translation(0,0)`)
--   `y` **[number][996]**  (optional, default `0`)
+-   `translationToAdd` **([Translation][1026] \| [Point][1018] \| [number][1008])**  (optional, default `new Translation(0,0)`)
+-   `y` **[number][1008]**  (optional, default `0`)
 
-Returns **[Translation][1014]** 
+Returns **[Translation][1026]** 
 
 ### mul
 
@@ -2092,9 +2101,9 @@ Multiply `translationToMul` to this translation
 
 #### Parameters
 
--   `translationToMul` **[Translation][1014]**  (optional, default `new Translation(1,1)`)
+-   `translationToMul` **[Translation][1026]**  (optional, default `new Translation(1,1)`)
 
-Returns **[Translation][1014]** 
+Returns **[Translation][1026]** 
 
 ### round
 
@@ -2102,9 +2111,9 @@ Round this translation to some `precision`
 
 #### Parameters
 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[Translation][1014]** 
+Returns **[Translation][1026]** 
 
 ### \_dup
 
@@ -2116,15 +2125,15 @@ Rotation transform element
 
 ### Parameters
 
--   `rotationAngle` **([number][996] \| [string][991])** 
--   `name` **[string][991]** name to give to rotation to identify it in a more
+-   `rotationAngle` **([number][1008] \| [string][1003])** 
+-   `name` **[string][1003]** name to give to rotation to identify it in a more
     complex [Transform][222] (optional, default `''`)
 
 ### matrix
 
 Return a rotation matrix representing the rotation
 
-Returns **[Array][994]&lt;[number][996]>** 
+Returns **[Array][1006]&lt;[number][1008]>** 
 
 ### sub
 
@@ -2132,9 +2141,9 @@ Subtract `rotToSub` from this rotation
 
 #### Parameters
 
--   `rotToSub` **[Rotation][1015]**  (optional, default `new Rotation(0,this.name)`)
+-   `rotToSub` **[Rotation][1027]**  (optional, default `new Rotation(0,this.name)`)
 
-Returns **[Rotation][1015]** 
+Returns **[Rotation][1027]** 
 
 ### round
 
@@ -2142,9 +2151,9 @@ Round this rotation to some `precision`
 
 #### Parameters
 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[Rotation][1015]** 
+Returns **[Rotation][1027]** 
 
 ### add
 
@@ -2152,9 +2161,9 @@ Add `rotToAdd` to this rotation
 
 #### Parameters
 
--   `rotToAdd` **[Rotation][1015]**  (optional, default `new Rotation(0,this.name)`)
+-   `rotToAdd` **[Rotation][1027]**  (optional, default `new Rotation(0,this.name)`)
 
-Returns **[Rotation][1015]** 
+Returns **[Rotation][1027]** 
 
 ### mul
 
@@ -2162,15 +2171,15 @@ Multiply `rotToMul` to this rotation
 
 #### Parameters
 
--   `rotToMul` **[Rotation][1015]**  (optional, default `new Rotation(1,this.name)`)
+-   `rotToMul` **[Rotation][1027]**  (optional, default `new Rotation(1,this.name)`)
 
-Returns **[Rotation][1015]** 
+Returns **[Rotation][1027]** 
 
 ### \_dup
 
 Return a duplicate rotation
 
-Returns **[Rotation][1015]** 
+Returns **[Rotation][1027]** 
 
 ## Scale
 
@@ -2180,20 +2189,20 @@ Scale transform element
 
 ### Parameters
 
--   `sxOrScale` **([Point][1006] \| [number][996])** scale or x value of
+-   `sxOrScale` **([Point][1018] \| [number][1008])** scale or x value of
     scale
--   `sy` **[number][996]?** 
--   `nameIn` **[string][991]**  (optional, default `''`)
--   `ty` **[number][996]** y value of scale (only used if `sxOrScale`
+-   `sy` **[number][1008]?** 
+-   `nameIn` **[string][1003]**  (optional, default `''`)
+-   `ty` **[number][1008]** y value of scale (only used if `sxOrScale`
     is a `number`)
--   `name` **[string][991]** name to identify scale when included in a more
+-   `name` **[string][1003]** name to identify scale when included in a more
     complex [Transform][222]
 
 ### matrix
 
 Returns a scale matrix
 
-Returns **[Array][994]&lt;[number][996]>** 
+Returns **[Array][1006]&lt;[number][1008]>** 
 
 ### sub
 
@@ -2201,10 +2210,10 @@ Subtract `scaleToSub` from this scale
 
 #### Parameters
 
--   `scaleToSub` **([Scale][1016] \| [Point][1006] \| [number][996])**  (optional, default `new Scale(0,0)`)
--   `y` **[number][996]**  (optional, default `0`)
+-   `scaleToSub` **([Scale][1028] \| [Point][1018] \| [number][1008])**  (optional, default `new Scale(0,0)`)
+-   `y` **[number][1008]**  (optional, default `0`)
 
-Returns **[Scale][1016]** 
+Returns **[Scale][1028]** 
 
 ### round
 
@@ -2212,9 +2221,9 @@ Round this scale to some `precision`
 
 #### Parameters
 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[Scale][1016]** 
+Returns **[Scale][1028]** 
 
 ### add
 
@@ -2222,10 +2231,10 @@ Add `scaleToAdd` to this scale
 
 #### Parameters
 
--   `scaleToAdd` **([Scale][1016] \| [Point][1006] \| [number][996])**  (optional, default `new Scale(0,0)`)
--   `y` **[number][996]**  (optional, default `0`)
+-   `scaleToAdd` **([Scale][1028] \| [Point][1018] \| [number][1008])**  (optional, default `new Scale(0,0)`)
+-   `y` **[number][1008]**  (optional, default `0`)
 
-Returns **[Scale][1016]** 
+Returns **[Scale][1028]** 
 
 ### mul
 
@@ -2233,15 +2242,15 @@ Multiply `scaleToMul` to this scale
 
 #### Parameters
 
--   `scaleToMul` **([Scale][1016] \| [Point][1006] \| [number][996])**  (optional, default `new Scale(1,1)`)
+-   `scaleToMul` **([Scale][1028] \| [Point][1018] \| [number][1008])**  (optional, default `new Scale(1,1)`)
 
-Returns **[Scale][1016]** 
+Returns **[Scale][1028]** 
 
 ### \_dup
 
 Return a duplicate of this scale
 
-Returns **[Scale][1016]** 
+Returns **[Scale][1028]** 
 
 ## Transform
 
@@ -2252,10 +2261,10 @@ Use `translate`, `scale` and `rotate` methods to create chains (see example).
 
 ### Parameters
 
--   `chainOrName` **([Array][994]&lt;([Translation][1014] \| [Rotation][1015] \| [Scale][1016])> | [string][991])** chain
+-   `chainOrName` **([Array][1006]&lt;([Translation][1026] \| [Rotation][1027] \| [Scale][1028])> | [string][1003])** chain
     of transforms to initialize this Transform with, or name of transform if
     not initializing with transforms. (optional, default `[]`)
--   `name` **[string][991]** transform name if `chainOrName` defines initializing
+-   `name` **[string][1003]** transform name if `chainOrName` defines initializing
     transforms (optional, default `''`)
 
 ### Examples
@@ -2270,7 +2279,7 @@ const t1 = new Transform().scale(2, 2).rotate(Math.PI).translate(1, 1)
 Return a standard unity transform chain that includes scale, rotation and
 translation blocks
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### translate
 
@@ -2278,11 +2287,11 @@ Return a duplicate transform with an added [Translation][186] transform
 
 #### Parameters
 
--   `xOrTranslation` **([number][996] \| [Point][1006])** 
--   `y` **[number][996]**  (optional, default `0`)
--   `name` **[string][991]**  (optional, default `this.name`)
+-   `xOrTranslation` **([number][1008] \| [Point][1018])** 
+-   `y` **[number][1008]**  (optional, default `0`)
+-   `name` **[string][1003]**  (optional, default `this.name`)
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### rotate
 
@@ -2290,10 +2299,10 @@ Return a duplicate transform with an added [Rotation][198] transform
 
 #### Parameters
 
--   `r` **[number][996]** 
--   `name` **[string][991]**  (optional, default `this.name`)
+-   `r` **[number][1008]** 
+-   `name` **[string][1003]**  (optional, default `this.name`)
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### scale
 
@@ -2301,11 +2310,11 @@ Return a duplicate transform with an added [Scale][92] transform
 
 #### Parameters
 
--   `xOrScale` **([number][996] \| [Point][1006])** 
--   `y` **[number][996]**  (optional, default `0`)
--   `name` **[string][991]**  (optional, default `this.name`)
+-   `xOrScale` **([number][1008] \| [Point][1018])** 
+-   `y` **[number][1008]**  (optional, default `0`)
+-   `name` **[string][1003]**  (optional, default `this.name`)
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### remove
 
@@ -2313,9 +2322,9 @@ Remove some transforms from this transform chain
 
 #### Parameters
 
--   `transformNames` **([string][991] \| [Array][994]&lt;[string][991]>)** 
+-   `transformNames` **([string][1003] \| [Array][1006]&lt;[string][1003]>)** 
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### calcMatrix
 
@@ -2323,10 +2332,10 @@ Transform matrix of the transform chain
 
 #### Parameters
 
--   `orderStart` **[number][996]**  (optional, default `0`)
--   `orderEnd` **[number][996]**  (optional, default `this.order.length-1`)
+-   `orderStart` **[number][1008]**  (optional, default `0`)
+-   `orderEnd` **[number][1008]**  (optional, default `this.order.length-1`)
 
-Returns **[Array][994]&lt;[number][996]>** 
+Returns **[Array][1006]&lt;[number][1008]>** 
 
 ### t
 
@@ -2337,9 +2346,9 @@ then `null` will be returned.
 
 #### Parameters
 
--   `translationIndex` **[number][996]**  (optional, default `0`)
+-   `translationIndex` **[number][1008]**  (optional, default `0`)
 
-Returns **([Point][1006] | null)** 
+Returns **([Point][1018] | null)** 
 
 ### clipRotation
 
@@ -2357,11 +2366,11 @@ Return a duplicate transform chain with an updated the nth
 
 #### Parameters
 
--   `x` **([number][996] \| [Point][1006])** 
--   `yOrIndex` **[number][996]**  (optional, default `0`)
--   `index` **[number][996]**  (optional, default `0`)
+-   `x` **([number][1008] \| [Point][1018])** 
+-   `yOrIndex` **[number][1008]**  (optional, default `0`)
+-   `index` **[number][1008]**  (optional, default `0`)
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### s
 
@@ -2372,9 +2381,9 @@ then `null` will be returned.
 
 #### Parameters
 
--   `scaleIndex` **[number][996]**  (optional, default `0`)
+-   `scaleIndex` **[number][1008]**  (optional, default `0`)
 
-Returns **([Point][1006] | null)** 
+Returns **([Point][1018] | null)** 
 
 ### toDelta
 
@@ -2385,12 +2394,12 @@ Interpolation can either be `'linear'` or '`curved'`.
 
 #### Parameters
 
--   `delta` **[Transform][990]** 
--   `percent` **[number][996]** 
+-   `delta` **[Transform][1002]** 
+-   `percent` **[number][1008]** 
 -   `translationStyle` **(`"linear"` \| `"curved"`)** 
 -   `translationOptions` **pathOptionsType** 
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### updateScale
 
@@ -2399,11 +2408,11 @@ Return a duplicate transform chain with an updated the nth
 
 #### Parameters
 
--   `x` **([number][996] \| [Point][1006])** 
--   `yOrIndex` **[number][996]?**  (optional, default `null`)
--   `index` **[number][996]**  (optional, default `0`)
+-   `x` **([number][1008] \| [Point][1018])** 
+-   `yOrIndex` **[number][1008]?**  (optional, default `null`)
+-   `index` **[number][1008]**  (optional, default `0`)
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### r
 
@@ -2414,9 +2423,9 @@ then `null` will be returned.
 
 #### Parameters
 
--   `rotationIndex` **[number][996]**  (optional, default `0`)
+-   `rotationIndex` **[number][1008]**  (optional, default `0`)
 
-Returns **([Point][1006] | null)** 
+Returns **([Point][1018] | null)** 
 
 ### updateRotation
 
@@ -2425,22 +2434,22 @@ Return a duplicate transform chain with an updated the nth
 
 #### Parameters
 
--   `r` **[number][996]** 
--   `index` **[number][996]**  (optional, default `0`)
+-   `r` **[number][1008]** 
+-   `index` **[number][1008]**  (optional, default `0`)
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### m
 
 Return the matrix that respresents the cascaded transform chain
 
-Returns **[Array][994]&lt;[number][996]>** 
+Returns **[Array][1006]&lt;[number][1008]>** 
 
 ### matrix
 
 Return the matrix that respresents the cascaded transform chain
 
-Returns **[Array][994]&lt;[number][996]>** 
+Returns **[Array][1006]&lt;[number][1008]>** 
 
 ### isSimilarTo
 
@@ -2450,9 +2459,9 @@ chain.
 
 #### Parameters
 
--   `transformToCompare` **[Transform][990]** 
+-   `transformToCompare` **[Transform][1002]** 
 
-Returns **[boolean][995]** 
+Returns **[boolean][1007]** 
 
 ### isEqualTo
 
@@ -2461,10 +2470,10 @@ Returns **[boolean][995]**
 
 #### Parameters
 
--   `transformToCompare` **[Transform][990]** 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `transformToCompare` **[Transform][1002]** 
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[boolean][995]** 
+Returns **[boolean][1007]** 
 
 ### isWithinDelta
 
@@ -2475,10 +2484,10 @@ be more useful than rounding when values are close to rounding thresholds.
 
 #### Parameters
 
--   `transformToCompare` **[Transform][990]** 
--   `delta` **[number][996]**  (optional, default `0.00000001`)
+-   `transformToCompare` **[Transform][1002]** 
+-   `delta` **[number][1008]**  (optional, default `0.00000001`)
 
-Returns **[boolean][995]** 
+Returns **[boolean][1007]** 
 
 ### sub
 
@@ -2492,9 +2501,9 @@ chains must be similar and have the same order of [Rotation][198],
 
 #### Parameters
 
--   `transformToSubtract` **[Transform][990]**  (optional, default `new Transform()`)
+-   `transformToSubtract` **[Transform][1002]**  (optional, default `new Transform()`)
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### add
 
@@ -2508,9 +2517,9 @@ chains must be similar and have the same order of [Rotation][198],
 
 #### Parameters
 
--   `transformToAdd` **[Transform][990]**  (optional, default `new Transform()`)
+-   `transformToAdd` **[Transform][1002]**  (optional, default `new Transform()`)
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### mul
 
@@ -2524,9 +2533,9 @@ chains must be similar and have the same order of [Rotation][198],
 
 #### Parameters
 
--   `transformToMul` **[Transform][990]**  (optional, default `new Transform()`)
+-   `transformToMul` **[Transform][1002]**  (optional, default `new Transform()`)
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### transform
 
@@ -2535,7 +2544,7 @@ transform chain
 
 #### Parameters
 
--   `initialTransform` **[Transform][990]** 
+-   `initialTransform` **[Transform][1002]** 
 
 #### Examples
 
@@ -2546,7 +2555,7 @@ const translation = new Transform().translate(0.5, 0);
 const t = translation.transform(rotation)
 ```
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### transformBy
 
@@ -2555,7 +2564,7 @@ Return a transform chain whose order is this transform chain, then the
 
 #### Parameters
 
--   `t` **[Transform][990]** 
+-   `t` **[Transform][1002]** 
 
 #### Examples
 
@@ -2566,7 +2575,7 @@ const translation = new Transform().translate(0.5, 0);
 const t = rotation.transformBy(translation)
 ```
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### round
 
@@ -2574,9 +2583,9 @@ Return a duplicate transform with all values rounded
 
 #### Parameters
 
--   `precision` **[number][996]**  (optional, default `8`)
+-   `precision` **[number][1008]**  (optional, default `8`)
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### clip
 
@@ -2593,9 +2602,9 @@ chain to within a [Line][139].
 
 #### Parameters
 
--   `minTransform` **[Transform][990]** 
--   `maxTransform` **[Transform][990]** 
--   `limitLine` **(null | [Line][1012])** 
+-   `minTransform` **[Transform][1002]** 
+-   `maxTransform` **[Transform][1002]** 
+-   `limitLine` **(null | [Line][1024])** 
 
 ### isZero
 
@@ -2604,15 +2613,15 @@ chain to within a [Line][139].
 
 #### Parameters
 
--   `zeroThreshold` **[number][996]**  (optional, default `0`)
+-   `zeroThreshold` **[number][1008]**  (optional, default `0`)
 
-Returns **[boolean][995]** 
+Returns **[boolean][1007]** 
 
 ### \_dup
 
 Return a duplicate transform.
 
-Returns **[Transform][990]** 
+Returns **[Transform][1002]** 
 
 ### identity
 
@@ -2813,7 +2822,7 @@ diagram.addElement({
     <a href="#drawing-boilerplate">boilerplate</a>
     **
 
-![][1017]
+![][1029]
 
 Options object for a [DiagramElementPrimitive][69] of a generic shape
 
@@ -2821,7 +2830,7 @@ Options object for a [DiagramElementPrimitive][69] of a generic shape
 to make the shape.
 
 `drawType` defines what sort of triangles or lines the `points` make
-and is analagous to WebGL [drawing primitives][1018]
+and is analagous to WebGL [drawing primitives][1030]
 where the mapping between the two are:
 
 -   `'triangles'`: TRIANGLES
@@ -2842,23 +2851,23 @@ or areas where touching has no effect.
 
 ### Properties
 
--   `points` **[Array][994]&lt;[TypeParsablePoint][1004]>** 
+-   `points` **[Array][1006]&lt;[TypeParsablePoint][1016]>** 
 -   `drawType` **(`"triangles"` \| `"strip"` \| `"fan"` \| `"lines"`)?** (`'triangles'`)
--   `copy` **([Array][994]&lt;([CPY_Step][1019] \| [string][991])> | [CPY_Step][1019])?** use `drawType` as
+-   `copy` **([Array][1006]&lt;([CPY_Step][1031] \| [string][1003])> | [CPY_Step][1031])?** use `drawType` as
     `'triangles'` when using copy (`[]`)
--   `color` **[Array][994]&lt;[number][996]>?** (\`[1, 0, 0, 1])
--   `texture` **[OBJ_Texture][1020]?** override `color` with a texture if defined
--   `border` **([Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>> | null)?** border used for
+-   `color` **[Array][1006]&lt;[number][1008]>?** (\`[1, 0, 0, 1])
+-   `texture` **[OBJ_Texture][1032]?** override `color` with a texture if defined
+-   `border` **([Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>> | null)?** border used for
     keeping shape within limits
--   `touchBorder` **([Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>> | `"rect"` \| `"border"` | null)?** border used for touching
--   `hole` **([Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>> | null)?** borders where
+-   `touchBorder` **([Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>> | `"rect"` \| `"border"` | null)?** border used for touching
+-   `hole` **([Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>> | null)?** borders where
     touching will not work
--   `position` **[TypeParsablePoint][1004]?** will overwrite first translation
+-   `position` **[TypeParsablePoint][1016]?** will overwrite first translation
     transform of `transform` chain
--   `transform` **[Transform][990]?** 
--   `pulse` **([OBJ_PulseScale][1021] \| [number][996])?** set default scale pulse options
+-   `transform` **[Transform][1002]?** 
+-   `pulse` **([OBJ_PulseScale][1033] \| [number][1008])?** set default scale pulse options
     (`OBJ_PulseScale`) or pulse scale directly (`number`)
--   `holeBorder` **(`"none"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** 
+-   `holeBorder` **(`"none"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** 
 
 ### Examples
 
@@ -2927,7 +2936,7 @@ diagram.addElement({
 
 Line definition options object.
 
-![][1022]
+![][1034]
 
 A line can either be defined as two points `p1` and `p2`, or
 a single points `p1`, a `length` and an `angle`.
@@ -2947,43 +2956,43 @@ The line can have arrows at one or both ends using the `arrow` property.
 
 ### Properties
 
--   `p1` **[TypeParsablePoint][1004]?** start point of line
--   `p2` **[TypeParsablePoint][1004]?** end point of line
--   `length` **[number][996]?** length of line from `p1`
--   `angle` **[number][996]?** angle of line from `p1`
--   `width` **[number][996]?** (`0.01`)
+-   `p1` **[TypeParsablePoint][1016]?** start point of line
+-   `p2` **[TypeParsablePoint][1016]?** end point of line
+-   `length` **[number][1008]?** length of line from `p1`
+-   `angle` **[number][1008]?** angle of line from `p1`
+-   `width` **[number][1008]?** (`0.01`)
 -   `widthIs` **(`"mid"` \| `"outside"` \| `"inside"` \| `"positive"` \| `"negative"`)?** defines how the width is grown from the polyline's points.
     Only `"mid"` is fully compatible with all options in
     `arrow` and `dash`. (`"mid"`)
--   `dash` **[Array][994]&lt;[number][996]>?** leave empty for solid line - use array of
+-   `dash` **[Array][1006]&lt;[number][1008]>?** leave empty for solid line - use array of
     numbers for dash line where first number is length of line, second number is
     length of gap and then the pattern repeats - can use more than one dash length
     and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
     short gap, short dash, short gap and then repeats.
--   `arrow` **([OBJ_LineArrows][1023] \| [ArrowHead][1024])?** either an object defining custom
+-   `arrow` **([OBJ_LineArrows][1035] \| [ArrowHead][1036])?** either an object defining custom
     arrows or a string representing the name of an arrow head style can be used.
     If a string is used, then the line will have an arrow at both ends.
     Arrows are only available for `widthIs: 'mid'` and `linePrimitives: false`
--   `linePrimitives` **[boolean][995]?** Use WebGL line primitives instead of
+-   `linePrimitives` **[boolean][1007]?** Use WebGL line primitives instead of
     triangle primitives to draw the line (`false`)
--   `lineNum` **[boolean][995]?** Number of line primitives to use when
+-   `lineNum` **[boolean][1007]?** Number of line primitives to use when
     `linePrimitivs`: `true` (`2`)
--   `copy` **([Array][994]&lt;([CPY_Step][1019] \| [string][991])> | [CPY_Step][1019])?** make copies of
+-   `copy` **([Array][1006]&lt;([CPY_Step][1031] \| [string][1003])> | [CPY_Step][1031])?** make copies of
     the line
--   `color` **[Array][994]&lt;[number][996]>?** (`[1, 0, 0, 1]`)
--   `texture` **[OBJ_Texture][1020]?** Override color with a texture
--   `pulse` **[number][996]?** set the default pulse scale
--   `position` **[Point][1006]?** convenience to override Transform translation
--   `transform` **[Transform][990]?** (`Transform('line').standard()`)
--   `border` **(`"line"` \| `"positive"` \| `"negative"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>> | `"rect"`)?** border of the line can be the line itself (`'outline'`), can be the rect
+-   `color` **[Array][1006]&lt;[number][1008]>?** (`[1, 0, 0, 1]`)
+-   `texture` **[OBJ_Texture][1032]?** Override color with a texture
+-   `pulse` **[number][1008]?** set the default pulse scale
+-   `position` **[Point][1018]?** convenience to override Transform translation
+-   `transform` **[Transform][1002]?** (`Transform('line').standard()`)
+-   `border` **(`"line"` \| `"positive"` \| `"negative"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>> | `"rect"`)?** border of the line can be the line itself (`'outline'`), can be the rect
     encompassing the line (`'rect'`) or a custom set of points
     (`Array<Array<TypeParsablePoint>>`) (`'outline'`)
--   `touchBorder` **(`"border"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>> | [number][996])?** touch border of the line can be the same as the border (`'border'`),
+-   `touchBorder` **(`"border"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>> | [number][1008])?** touch border of the line can be the same as the border (`'border'`),
     completely custom (`Array<Array<TypeParsablePoint>>`), the enclosing
     rectangle (`rect`) or the same as the border with some buffer that
     effectively increases the width of the line on either side of it
     (`number`) - (`'border'`)
--   `holeBorder` **(`"none"` \| `"positive"` \| `"negative"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** hole border of the line can be the points on the `positive` or `negative`
+-   `holeBorder` **(`"none"` \| `"positive"` \| `"negative"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** hole border of the line can be the points on the `positive` or `negative`
     side of the line, completely custom (`Array<Array<TypeParsablePoint>>`)
     or `'none'` is the default (`'none'`)
 
@@ -3042,7 +3051,7 @@ diagram.addElement({
 
 Polyline shape options object
 
-![][1025]
+![][1037]
 
 A polyline is a series of lines that are connected end to end. It is defined
 by a series of points which are the ends and corners of the polyline.
@@ -3082,9 +3091,9 @@ of the line.
 
 ### Properties
 
--   `points` **[Array][994]&lt;[TypeParsablePoint][1004]>** 
--   `width` **[number][996]?** (`0.01`)
--   `close` **[boolean][995]?** close the polyline on itself (`false`)
+-   `points` **[Array][1006]&lt;[TypeParsablePoint][1016]>** 
+-   `width` **[number][1008]?** (`0.01`)
+-   `close` **[boolean][1007]?** close the polyline on itself (`false`)
 -   `widthIs` **(`"mid"` \| `"outside"` \| `"inside"` \| `"positive"` \| `"negative"`)?** defines how the width is grown from the polyline's points.
     Only `"mid"` is fully compatible with all options in
     `cornerStyle` and `dash`. (`"mid"`)
@@ -3092,47 +3101,47 @@ of the line.
     sharp corners sharp when angle is less than `minAutoCornerAngle`, `"none"`: no
     corners, `"radius"`: curved corners, `"fill"`: fills the gapes between the line
     ends, (`"auto"`)
--   `cornerSize` **[number][996]?** only used when `cornerStyle` = `radius` (`0.01`)
--   `cornerSides` **[number][996]?** number of sides in curve - only used when
+-   `cornerSize` **[number][1008]?** only used when `cornerStyle` = `radius` (`0.01`)
+-   `cornerSides` **[number][1008]?** number of sides in curve - only used when
      `cornerStyle` = `radius` (`10`)
--   `cornersOnly` **[boolean][995]?** draw only the corners with size `cornerSize` (`false`)
--   `cornerLength` **[number][996]?** use only with `cornersOnly` = `true` -
+-   `cornersOnly` **[boolean][1007]?** draw only the corners with size `cornerSize` (`false`)
+-   `cornerLength` **[number][1008]?** use only with `cornersOnly` = `true` -
     length of corner to draw (`0.1`)
--   `minAutoCornerAngle` **[number][996]?** see `cornerStyle` = `auto` (`π/7`)
--   `dash` **[Array][994]&lt;[number][996]>?** leave empty for solid line - use array of
+-   `minAutoCornerAngle` **[number][1008]?** see `cornerStyle` = `auto` (`π/7`)
+-   `dash` **[Array][1006]&lt;[number][1008]>?** leave empty for solid line - use array of
     numbers for dash line where first number is length of line, second number is
     length of gap and then the pattern repeats - can use more than one dash length
     and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
     short gap, short dash, short gap and then repeats.
--   `arrow` **([OBJ_LineArrows][1023] \| [ArrowHead][1024])?** either an object defining custom
+-   `arrow` **([OBJ_LineArrows][1035] \| [ArrowHead][1036])?** either an object defining custom
     arrows or a string representing the name of an arrow head style can be used.
     If a string is used, then the line will have an arrow at both ends.
     Arrows are only available for `close: false`,
     `widthIs: 'mid'` and `linePrimitives: false`
--   `linePrimitives` **[boolean][995]?** Use WebGL line primitives instead of
+-   `linePrimitives` **[boolean][1007]?** Use WebGL line primitives instead of
     triangle primitives to draw the line (`false`)
--   `lineNum` **[boolean][995]?** Number of line primitives to use when
+-   `lineNum` **[boolean][1007]?** Number of line primitives to use when
     `linePrimitivs`: `true` (`2`)
--   `copy` **([Array][994]&lt;([CPY_Step][1019] \| [string][991])> | [CPY_Step][1019])?** make copies of
+-   `copy` **([Array][1006]&lt;([CPY_Step][1031] \| [string][1003])> | [CPY_Step][1031])?** make copies of
     the polyline
--   `color` **[Array][994]&lt;[number][996]>?** (`[1, 0, 0, 1]`)
--   `texture` **[OBJ_Texture][1020]?** Override color with a texture
--   `pulse` **[number][996]?** set the default pulse scale
--   `position` **[Point][1006]?** convenience to override Transform translation
--   `transform` **[Transform][990]?** (`Transform('polyline').standard()`)
--   `border` **(`"line"` \| `"positive"` \| `"negative"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>> | `"rect"`)?** border of the line can be the points on the `'positive'`, `'negative'`
+-   `color` **[Array][1006]&lt;[number][1008]>?** (`[1, 0, 0, 1]`)
+-   `texture` **[OBJ_Texture][1032]?** Override color with a texture
+-   `pulse` **[number][1008]?** set the default pulse scale
+-   `position` **[Point][1018]?** convenience to override Transform translation
+-   `transform` **[Transform][1002]?** (`Transform('polyline').standard()`)
+-   `border` **(`"line"` \| `"positive"` \| `"negative"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>> | `"rect"`)?** border of the line can be the points on the `'positive'`, `'negative'`
     of the line, can be the line itself (`'line'`), can be the rect
     encompassing the line (`'rect'`) or a custom set of points
     (`Array<Array<TypeParsablePoint>>`) (`'line'`),
--   `touchBorder` **(`"border"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>> | [number][996])?** touch border of the line can be the same as the border (`'border'`),
+-   `touchBorder` **(`"border"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>> | [number][1008])?** touch border of the line can be the same as the border (`'border'`),
     completely custom (`Array<Array<TypeParsablePoint>>`), the enclosing
     rectangle (`rect`) or the same as the border with some buffer that
     effectively increases the width of the line on either side of it
     (`number`) - (`'border'`)
--   `holeBorder` **(`"none"` \| `"positive"` \| `"negative"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** hole border of the line can be the points on the `positive` or `negative`
+-   `holeBorder` **(`"none"` \| `"positive"` \| `"negative"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** hole border of the line can be the points on the `positive` or `negative`
     side of the line, completely custom (`Array<Array<TypeParsablePoint>>`)
     or `'none'` is the default (`'none'`)
--   `forceCornerLength` **[boolean][995]?** 
+-   `forceCornerLength` **[boolean][1007]?** 
 
 ### Examples
 
@@ -3210,7 +3219,7 @@ diagram.addElement({
 
 Arrow options object.
 
-![][1026]
+![][1038]
 
 An arrow has a head, tail, length and width. The `head` defines the head
 style of the arrow. The `length`, `width` (or `radius` for polygon and circle
@@ -3251,30 +3260,30 @@ determine the dimension of the arrow (`length` and `width` are ignored).
 
 ### Properties
 
--   `head` **[ArrowHead][1024]?** head style (`'triangle'`)
--   `scale` **[number][996]?** scale the default dimensions of the arrow
--   `length` **[number][996]?** dimension of the arrow head along the line
--   `width` **[number][996]?** dimension of the arrow head along the line width
--   `rotation` **[number][996]?** rotation of the polygon when `head = 'polygon'`
--   `sides` **[number][996]?** number of sides in polygon or circle arrow head
--   `radius` **[number][996]?** radius of polygon or circle arrow head
--   `barb` **[number][996]?** barb length (along the length of the line) of the
+-   `head` **[ArrowHead][1036]?** head style (`'triangle'`)
+-   `scale` **[number][1008]?** scale the default dimensions of the arrow
+-   `length` **[number][1008]?** dimension of the arrow head along the line
+-   `width` **[number][1008]?** dimension of the arrow head along the line width
+-   `rotation` **[number][1008]?** rotation of the polygon when `head = 'polygon'`
+-   `sides` **[number][1008]?** number of sides in polygon or circle arrow head
+-   `radius` **[number][1008]?** radius of polygon or circle arrow head
+-   `barb` **[number][1008]?** barb length (along the length of the line) of the
     barb arrow head
--   `tailWidth` **[number][996]?** width of the line that joins the arrow - if
+-   `tailWidth` **[number][1008]?** width of the line that joins the arrow - if
     defined this will create minimum dimensions for the arrow
--   `tail` **([boolean][995] \| [number][996])?** `true` includes a tail in the arrow of
+-   `tail` **([boolean][1007] \| [number][1008])?** `true` includes a tail in the arrow of
     with `tailWidth`. A `number` gives the tail a length where 0 will not
     extend the tail beyond the boundaries of the head
 -   `align` **(`"tip"` \| `"start"` \| `"mid"` \| `"tail"`)?** define which part of
     the arrow is aligned at (0, 0) in draw space (`'tip'`)
--   `angle` **[number][996]?** angle the arrow is drawn at (`0`)
--   `copy` **([Array][994]&lt;([CPY_Step][1019] \| [string][991])> | [CPY_Step][1019])?** make copies of
+-   `angle` **[number][1008]?** angle the arrow is drawn at (`0`)
+-   `copy` **([Array][1006]&lt;([CPY_Step][1031] \| [string][1003])> | [CPY_Step][1031])?** make copies of
     the arrow
--   `color` **[Array][994]&lt;[number][996]>?** (`[1, 0, 0, 1]`)
--   `texture` **[OBJ_Texture][1020]?** Override color with a texture
--   `position` **[Point][1006]?** convenience to override Transform translation
--   `transform` **[Transform][990]?** (`Transform('arrow').standard()`)
--   `pulse` **([number][996] \| [OBJ_PulseScale][1021])?** set the default pulse scale
+-   `color` **[Array][1006]&lt;[number][1008]>?** (`[1, 0, 0, 1]`)
+-   `texture` **[OBJ_Texture][1032]?** Override color with a texture
+-   `position` **[Point][1018]?** convenience to override Transform translation
+-   `transform` **[Transform][1002]?** (`Transform('arrow').standard()`)
+-   `pulse` **([number][1008] \| [OBJ_PulseScale][1033])?** set the default pulse scale
 
 ### Examples
 
@@ -3342,7 +3351,7 @@ diagram.addElement({
 
 Triangle shape options object
 
-![][1027]
+![][1039]
 
 The most generic way to define a triangle is with three points (`points`
 property). When using `points`, all the other properties that can also
@@ -3362,7 +3371,7 @@ All these methods also use `direction` to define the triangles, and
 `rotation`, `xAlign` and `yAlign` to position the triangles. Each corner
 and side of the triangle is indexed, and can be used for positioning.
 
-![][1028]
+![][1040]
 
 A triangle starts with an angle (a1) at (0, 0) and base side extending along
 the x axis to a second angle a2. The base side is side 1 (s1).
@@ -3409,29 +3418,29 @@ is not defined, the triangle will be filled.
 
 ### Properties
 
--   `points` **[Array][994]&lt;[Point][1006]>?** defining points will take precedence over
+-   `points` **[Array][1006]&lt;[Point][1018]>?** defining points will take precedence over
     all other ways to define a triangle.
--   `width` **[number][996]?** (`1`)
--   `height` **[number][996]?** (`1`)
+-   `width` **[number][1008]?** (`1`)
+-   `height` **[number][1008]?** (`1`)
 -   `top` **(`"left"` \| `"right"` \| `"center"`)?** (`center`)
--   `SSS` **\[[number][996], [number][996], [number][996]]?** 
--   `ASA` **\[[number][996], [number][996], [number][996]]?** 
--   `AAS` **\[[number][996], [number][996], [number][996]]?** 
--   `SAS` **\[[number][996], [number][996], [number][996]]?** 
+-   `SSS` **\[[number][1008], [number][1008], [number][1008]]?** 
+-   `ASA` **\[[number][1008], [number][1008], [number][1008]]?** 
+-   `AAS` **\[[number][1008], [number][1008], [number][1008]]?** 
+-   `SAS` **\[[number][1008], [number][1008], [number][1008]]?** 
 -   `direction` **(`1` \| `-1`)?** 
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][996] \| `"a1"` \| `"a2"` \| `"a3"` \| `"s1"` \| `"s2"` \| `"s3"` \| `"centroid"`)?** (`'centroid'`)
--   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| [number][996] \| `"a1"` \| `"a2"` \| `"a3"` \| `"s1"` \| `"s2"` \| `"s3"` \| `"centroid"`)?** (`'centroid'`)
--   `corner` **[OBJ_CurvedCorner][1029]?** define for rounded corners
--   `line` **[OBJ_LineStyle][1030]?** line style options - do not use any corner
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][1008] \| `"a1"` \| `"a2"` \| `"a3"` \| `"s1"` \| `"s2"` \| `"s3"` \| `"centroid"`)?** (`'centroid'`)
+-   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| [number][1008] \| `"a1"` \| `"a2"` \| `"a3"` \| `"s1"` \| `"s2"` \| `"s3"` \| `"centroid"`)?** (`'centroid'`)
+-   `corner` **[OBJ_CurvedCorner][1041]?** define for rounded corners
+-   `line` **[OBJ_LineStyle][1042]?** line style options - do not use any corner
     options
--   `copy` **([Array][994]&lt;([CPY_Step][1019] \| [string][991])> | [CPY_Step][1019])?** make copies of
+-   `copy` **([Array][1006]&lt;([CPY_Step][1031] \| [string][1003])> | [CPY_Step][1031])?** make copies of
     the rectangle
--   `color` **[Array][994]&lt;[number][996]>?** (`[1, 0, 0, 1]`)
--   `texture` **[OBJ_Texture][1020]?** Override color with a texture
--   `position` **[Point][1006]?** convenience to override Transform translation
--   `transform` **[Transform][990]?** (`Transform('rectangle').standard()`)
--   `pulse` **([number][996] \| [OBJ_PulseScale][1021])?** set the default pulse scale
--   `rotation` **([number][996] | {side: [number][996], angle: [number][996]})?** 
+-   `color` **[Array][1006]&lt;[number][1008]>?** (`[1, 0, 0, 1]`)
+-   `texture` **[OBJ_Texture][1032]?** Override color with a texture
+-   `position` **[Point][1018]?** convenience to override Transform translation
+-   `transform` **[Transform][1002]?** (`Transform('rectangle').standard()`)
+-   `pulse` **([number][1008] \| [OBJ_PulseScale][1033])?** set the default pulse scale
+-   `rotation` **([number][1008] | {side: [number][1008], angle: [number][1008]})?** 
 
 ### Examples
 
@@ -3488,33 +3497,33 @@ diagram.addElement({
 
 Rectangle shape options object
 
-![][1031]
+![][1043]
 
 ### Properties
 
--   `width` **[number][996]?** (`1`)
--   `height` **[number][996]?** (`1`)
--   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| [number][996])?** (`'middle'`)
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][996])?** (`'center'`)
--   `corner` **[OBJ_CurvedCorner][1029]?** define for rounded corners
--   `line` **[OBJ_LineStyle][1030]?** line style options - do not use any corner
+-   `width` **[number][1008]?** (`1`)
+-   `height` **[number][1008]?** (`1`)
+-   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| [number][1008])?** (`'middle'`)
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][1008])?** (`'center'`)
+-   `corner` **[OBJ_CurvedCorner][1041]?** define for rounded corners
+-   `line` **[OBJ_LineStyle][1042]?** line style options - do not use any corner
     options
--   `copy` **([Array][994]&lt;([CPY_Step][1019] \| [string][991])> | [CPY_Step][1019])?** make copies of
+-   `copy` **([Array][1006]&lt;([CPY_Step][1031] \| [string][1003])> | [CPY_Step][1031])?** make copies of
     the rectangle
--   `color` **[Array][994]&lt;[number][996]>?** (`[1, 0, 0, 1]`)
--   `texture` **[OBJ_Texture][1020]?** Override color with a texture
--   `pulse` **([number][996] \| [OBJ_PulseScale][1021])?** set the default pulse scale
--   `position` **[Point][1006]?** convenience to override Transform translation
--   `transform` **[Transform][990]?** (`Transform('rectangle').standard()`)
--   `pulse` **([number][996] \| [OBJ_PulseScale][1021])?** set the default pulse scale
--   `border` **(`"outline"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** the rectangle border can either be the outline of the rectangle
+-   `color` **[Array][1006]&lt;[number][1008]>?** (`[1, 0, 0, 1]`)
+-   `texture` **[OBJ_Texture][1032]?** Override color with a texture
+-   `pulse` **([number][1008] \| [OBJ_PulseScale][1033])?** set the default pulse scale
+-   `position` **[Point][1018]?** convenience to override Transform translation
+-   `transform` **[Transform][1002]?** (`Transform('rectangle').standard()`)
+-   `pulse` **([number][1008] \| [OBJ_PulseScale][1033])?** set the default pulse scale
+-   `border` **(`"outline"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** the rectangle border can either be the outline of the rectangle
     (`'outline'`), an encompassing rect (`'rect'`) or a custom set of points
     `Array<Array<TypeParsablePoint>>` - (`'outline'`)
--   `touchBorder` **([number][996] \| `"border"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** the touch border can be the same as the border (`'border'`), can be the
+-   `touchBorder` **([number][1008] \| `"border"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** the touch border can be the same as the border (`'border'`), can be the
     encompassing rect (`'rect'`), can be a buffer around the shape with
     some with `number`, or can be a custom set of points
     (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
--   `holeBorder` **(`"none"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** hole border of the rectangle can be the points custom points
+-   `holeBorder` **(`"none"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** hole border of the rectangle can be the points custom points
     (`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
 
 ### Examples
@@ -3579,34 +3588,34 @@ diagram.addElement({
 
 Ellipse shape options object
 
-![][1032]
+![][1044]
 
 ### Properties
 
--   `width` **[number][996]?** (`1`)
--   `height` **[number][996]?** (`1`)
--   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| [number][996])?** (`'middle'`)
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][996])?** (`'center'`)
--   `sides` **[number][996]?** number of sides to draw ellipse with (`20`)
--   `line` **[OBJ_LineStyle][1030]?** line style options - do not use any corner
+-   `width` **[number][1008]?** (`1`)
+-   `height` **[number][1008]?** (`1`)
+-   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| [number][1008])?** (`'middle'`)
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][1008])?** (`'center'`)
+-   `sides` **[number][1008]?** number of sides to draw ellipse with (`20`)
+-   `line` **[OBJ_LineStyle][1042]?** line style options - do not use any corner
     options
--   `copy` **([Array][994]&lt;([CPY_Step][1019] \| [string][991])> | [CPY_Step][1019])?** make copies of
+-   `copy` **([Array][1006]&lt;([CPY_Step][1031] \| [string][1003])> | [CPY_Step][1031])?** make copies of
     the rectangle
--   `color` **[Array][994]&lt;[number][996]>?** (`[1, 0, 0, 1]`)
--   `texture` **[OBJ_Texture][1020]?** Override color with a texture
--   `pulse` **([number][996] \| [OBJ_PulseScale][1021])?** set the default pulse scale
--   `position` **[Point][1006]?** convenience to override Transform translation
--   `transform` **[Transform][990]?** (`Transform('rectangle').standard()`)
--   `border` **(`"outline"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** the rectangle border can either be the outline of the rectangle
+-   `color` **[Array][1006]&lt;[number][1008]>?** (`[1, 0, 0, 1]`)
+-   `texture` **[OBJ_Texture][1032]?** Override color with a texture
+-   `pulse` **([number][1008] \| [OBJ_PulseScale][1033])?** set the default pulse scale
+-   `position` **[Point][1018]?** convenience to override Transform translation
+-   `transform` **[Transform][1002]?** (`Transform('rectangle').standard()`)
+-   `border` **(`"outline"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** the rectangle border can either be the outline of the rectangle
     (`'outline'`), an encompassing rect (`'rect'`) or a custom set of points
     `Array<Array<TypeParsablePoint>>` - (`'outline'`)
--   `touchBorder` **([number][996] \| `"border"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** the touch border can be the same as the border (`'border'`), can be the
+-   `touchBorder` **([number][1008] \| `"border"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** the touch border can be the same as the border (`'border'`), can be the
     encompassing rect (`'rect'`), can be a buffer around the shape with
     some with `number`, or can be a custom set of points
     (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
--   `holeBorder` **(`"none"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** hole border of the rectangle can be the points custom points
+-   `holeBorder` **(`"none"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** hole border of the rectangle can be the points custom points
     (`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
--   `fill` **[boolean][995]?** 
+-   `fill` **[boolean][1007]?** 
 
 ### Examples
 
@@ -3665,40 +3674,40 @@ diagram.addElement({
 
 Polygon or partial polygon shape options object
 
-![][1033]
+![][1045]
 
 ### Properties
 
--   `sides` **[number][996]?** (`4`)
--   `radius` **[number][996]?** (`1`)
--   `rotation` **[number][996]?** shape rotation during vertex definition
+-   `sides` **[number][1008]?** (`4`)
+-   `radius` **[number][1008]?** (`1`)
+-   `rotation` **[number][1008]?** shape rotation during vertex definition
     (different to a rotation step in a trasform) (`0`)
--   `offset` **[TypeParsablePoint][1004]?** shape center offset from origin
+-   `offset` **[TypeParsablePoint][1016]?** shape center offset from origin
     during vertex definition (different to a translation step in a transform)
     (`[0, 0]`)
--   `sidesToDraw` **[number][996]?** number of sides to draw (all sides)
--   `angleToDraw` **[number][996]?** same as `sidesToDraw` but using angle for
+-   `sidesToDraw` **[number][1008]?** number of sides to draw (all sides)
+-   `angleToDraw` **[number][1008]?** same as `sidesToDraw` but using angle for
     the definition (`2π`)
 -   `direction` **(`-1` \| `1`)?** direction to draw polygon where 1 is
     counter clockwise and -1 is clockwise (`1`)
     center. This is different to position or transform as these translate the
     vertices on each draw. (`[0, 0]`)
--   `line` **[OBJ_LineStyle][1030]?** line style options
--   `copy` **([Array][994]&lt;([CPY_Step][1019] \| [string][991])> | [CPY_Step][1019])?** make copies of
+-   `line` **[OBJ_LineStyle][1042]?** line style options
+-   `copy` **([Array][1006]&lt;([CPY_Step][1031] \| [string][1003])> | [CPY_Step][1031])?** make copies of
     the polygon if defined. If using fill and copying, use `fill`: `'tris'`
--   `color` **[Array][994]&lt;[number][996]>?** (`[1, 0, 0, 1`])
--   `texture` **[OBJ_Texture][1020]?** Override color with a texture
--   `position` **[Point][1006]?** convenience to override Transform translation
--   `transform` **[Transform][990]?** (`Transform('polygon').standard()`)
--   `pulse` **([number][996] \| [OBJ_PulseScale][1021])?** set the default pulse scale
--   `border` **(`"outline"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** the polygon border can either be the outline of the polygon (`'outline'`),
+-   `color` **[Array][1006]&lt;[number][1008]>?** (`[1, 0, 0, 1`])
+-   `texture` **[OBJ_Texture][1032]?** Override color with a texture
+-   `position` **[Point][1018]?** convenience to override Transform translation
+-   `transform` **[Transform][1002]?** (`Transform('polygon').standard()`)
+-   `pulse` **([number][1008] \| [OBJ_PulseScale][1033])?** set the default pulse scale
+-   `border` **(`"outline"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** the polygon border can either be the outline of the polygon (`'outline'`),
     the rectangle that encompasses the polygon (`'rect'`) or a custom set
     of points `Array<Array<TypeParsablePoint>>` - (`'outline'`)
--   `touchBorder` **([number][996] \| `"border"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** the touch border can be the same as the border (`'border'`), can be the
+-   `touchBorder` **([number][1008] \| `"border"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** the touch border can be the same as the border (`'border'`), can be the
     encompassing rect (`'rect'`), can be a buffer around the shape with
     some with `number`, or can be a custom set of points
     (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
--   `holeBorder` **(`"none"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** hole border of the line can be the points custom points
+-   `holeBorder` **(`"none"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** hole border of the line can be the points custom points
     (`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
 
 ### Examples
@@ -3754,34 +3763,34 @@ diagram.addElement({
 
 Star options object
 
-![][1034]
+![][1046]
 
 ### Properties
 
--   `sides` **[number][996]?** (`4`)
--   `radius` **[number][996]?** (`1`)
--   `innerRadius` **[number][996]?** (`radius / 2`)
--   `rotation` **[number][996]?** shape rotation during vertex definition
+-   `sides` **[number][1008]?** (`4`)
+-   `radius` **[number][1008]?** (`1`)
+-   `innerRadius` **[number][1008]?** (`radius / 2`)
+-   `rotation` **[number][1008]?** shape rotation during vertex definition
     (different to a rotation step in a trasform) (`0`)
--   `offset` **[TypeParsablePoint][1004]?** shape center offset from origin
+-   `offset` **[TypeParsablePoint][1016]?** shape center offset from origin
     during vertex definition (different to a translation step in a transform)
     (`[0, 0]`)
--   `line` **[OBJ_LineStyle][1030]?** line style options
--   `copy` **([Array][994]&lt;([CPY_Step][1019] \| [string][991])> | [CPY_Step][1019])?** make copies of
+-   `line` **[OBJ_LineStyle][1042]?** line style options
+-   `copy` **([Array][1006]&lt;([CPY_Step][1031] \| [string][1003])> | [CPY_Step][1031])?** make copies of
     the polygon if defined. If using fill and copying, use `fill`: `'tris'`
--   `color` **[Array][994]&lt;[number][996]>?** (`[1, 0, 0, 1`])
--   `texture` **[OBJ_Texture][1020]?** Override color with a texture
--   `position` **[Point][1006]?** convenience to override Transform translation
--   `transform` **[Transform][990]?** (`Transform('polygon').standard()`)
--   `pulse` **([number][996] \| [OBJ_PulseScale][1021])?** set the default pulse scale
--   `border` **(`"outline"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** the polygon border can either be the outline of the polygon (`'outline'`),
+-   `color` **[Array][1006]&lt;[number][1008]>?** (`[1, 0, 0, 1`])
+-   `texture` **[OBJ_Texture][1032]?** Override color with a texture
+-   `position` **[Point][1018]?** convenience to override Transform translation
+-   `transform` **[Transform][1002]?** (`Transform('polygon').standard()`)
+-   `pulse` **([number][1008] \| [OBJ_PulseScale][1033])?** set the default pulse scale
+-   `border` **(`"outline"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** the polygon border can either be the outline of the polygon (`'outline'`),
     the rectangle that encompasses the polygon (`'rect'`) or a custom set
     of points `Array<Array<TypeParsablePoint>>` - (`'outline'`)
--   `touchBorder` **([number][996] \| `"border"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** the touch border can be the same as the border (`'border'`), can be the
+-   `touchBorder` **([number][1008] \| `"border"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** the touch border can be the same as the border (`'border'`), can be the
     encompassing rect (`'rect'`), can be a buffer around the shape with
     some with `number`, or can be a custom set of points
     (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
--   `holeBorder` **(`"none"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** hole border of the line can be the points custom points
+-   `holeBorder` **(`"none"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** hole border of the line can be the points custom points
     (`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
 
 ### Examples
@@ -3854,7 +3863,7 @@ diagram.addElement({
 
 Grid shape options object
 
-![][1035]
+![][1047]
 
 A grid is a rectangle divided into a series of vertical and horizontal lines.
 
@@ -3870,24 +3879,24 @@ The line width and style is defined with `line`.
 
 ### Properties
 
--   `bounds` **[TypeParsableRect][997]?** rectangle definition
--   `xStep` **[number][996]?** distance between vertical lines in grid from
+-   `bounds` **[TypeParsableRect][1009]?** rectangle definition
+-   `xStep` **[number][1008]?** distance between vertical lines in grid from
     left - use this instead of `xNum`.
--   `yStep` **[number][996]?** distance between horizontal lines in grid from
+-   `yStep` **[number][1008]?** distance between horizontal lines in grid from
     bottom - use this instead of `yNum`
--   `xNum` **[number][996]?** number of vertical lines in grid including top and
+-   `xNum` **[number][1008]?** number of vertical lines in grid including top and
     bottom lines - overrides xStep
--   `yNum` **[number][996]?** number of horizontal lines in grid including left
+-   `yNum` **[number][1008]?** number of horizontal lines in grid including left
     and right lines - overrides yStep
--   `line` **[OBJ_LineStyle][1030]?** line style options - do not use any corner
+-   `line` **[OBJ_LineStyle][1042]?** line style options - do not use any corner
     options
--   `copy` **([Array][994]&lt;([CPY_Step][1019] \| [string][991])> | [CPY_Step][1019])?** make copies of
+-   `copy` **([Array][1006]&lt;([CPY_Step][1031] \| [string][1003])> | [CPY_Step][1031])?** make copies of
     the rectangle
--   `color` **[Array][994]&lt;[number][996]>?** (`[1, 0, 0, 1]`)
--   `texture` **[OBJ_Texture][1020]?** Override color with a texture
--   `position` **[Point][1006]?** convenience to override Transform translation
--   `transform` **[Transform][990]?** (`Transform('rectangle').standard()`)
--   `pulse` **([number][996] \| [OBJ_PulseScale][1021])?** set the default pulse scale
+-   `color` **[Array][1006]&lt;[number][1008]>?** (`[1, 0, 0, 1]`)
+-   `texture` **[OBJ_Texture][1032]?** Override color with a texture
+-   `position` **[Point][1018]?** convenience to override Transform translation
+-   `transform` **[Transform][1002]?** (`Transform('rectangle').standard()`)
+-   `pulse` **([number][1008] \| [OBJ_PulseScale][1033])?** set the default pulse scale
 
 ### Examples
 
@@ -3945,16 +3954,16 @@ diagram.addElement({
 
 FigureOne provides a number of advanced shapes that combine simple shapes into more interesting objects.
 
-Advanced shapes are usually [DiagramElementCollection][73]s that orchestrate a number of [DiagramElementPrimitives][1036], and provide methods to dynamically update and change the shapes.
+Advanced shapes are usually [DiagramElementCollection][73]s that orchestrate a number of [DiagramElementPrimitives][1048], and provide methods to dynamically update and change the shapes.
 
 
 ## AdvancedLine
 
 **Extends DiagramElementCollection**
 
--   **See: See [OBJ_LengthAnimationStep][821] for angle animation step options.
+-   **See: See [OBJ_LengthAnimationStep][833] for angle animation step options.
 
-    See [OBJ_PulseWidthAnimationStep][823] for pulse angle animation step
+    See [OBJ_PulseWidthAnimationStep][835] for pulse angle animation step
     options.
 
     To test examples below, append them to the
@@ -4071,7 +4080,7 @@ l.setAutoUpdate();
 
 [Line][139] object that represents the line.
 
-Type: [Line][1012]
+Type: [Line][1024]
 
 ### pulseWidth
 
@@ -4082,7 +4091,7 @@ separately.
 
 #### Parameters
 
--   `options` **[OBJ_PulseWidth][1037]**  (optional, default `{}`)
+-   `options` **[OBJ_PulseWidth][1049]**  (optional, default `{}`)
 
 ### setMovable
 
@@ -4090,7 +4099,7 @@ Use this method to enable or disable movability of the line.
 
 #### Parameters
 
--   `movableOrOptions` **([OBJ_MovableLine][1038] \| [boolean][995])?** `true` to
+-   `movableOrOptions` **([OBJ_MovableLine][1050] \| [boolean][1007])?** `true` to
     make movable, `false` to make not movable or use options to
     set different kinds of movability.
 
@@ -4100,7 +4109,7 @@ Use this to manually update the rotation of the line collection.
 
 #### Parameters
 
--   `t` **[Transform][990]**  (optional, default `this.transform._dup()`)
+-   `t` **[Transform][1002]**  (optional, default `this.transform._dup()`)
 
 ### setAutoUpdate
 
@@ -4110,13 +4119,13 @@ is turned off by default.
 
 #### Parameters
 
--   `update` **[boolean][995]**  (optional, default `true`)
+-   `update` **[boolean][1007]**  (optional, default `true`)
 
 ### getLength
 
 Get line length
 
-Returns **[number][996]** 
+Returns **[number][1008]** 
 
 ### getAngle
 
@@ -4126,7 +4135,7 @@ Get line angle
 
 -   `units` **(`"deg"` \| `"rad"`)?**  (optional, default `'rad'`)
 
-Returns **[number][996]** 
+Returns **[number][1008]** 
 
 ### setLabel
 
@@ -4134,7 +4143,7 @@ Change the text of the label
 
 #### Parameters
 
--   `text` **[string][991]** 
+-   `text` **[string][1003]** 
 
 ### getLabel
 
@@ -4153,7 +4162,7 @@ Automatic updating can be done with
 
 #### Parameters
 
--   `rotationOffset` **([number][996] | null)**  (optional, default `null`)
+-   `rotationOffset` **([number][1008] | null)**  (optional, default `null`)
 
 ### setLength
 
@@ -4161,8 +4170,8 @@ Set the length of the line
 
 #### Parameters
 
--   `length` **[number][996]** 
--   `align` **(`"start"` \| `"end"` \| `"center"` \| [number][996])**  (optional, default `this.align`)
+-   `length` **[number][1008]** 
+-   `align` **(`"start"` \| `"end"` \| `"center"` \| [number][1008])**  (optional, default `this.align`)
 
 ### setEndPoints
 
@@ -4177,9 +4186,9 @@ it will rotate toward with positive rotation.
 
 #### Parameters
 
--   `p1` **[TypeParsablePoint][1004]** 
--   `p2` **[TypeParsablePoint][1004]** 
--   `offset` **[number][996]**  (optional, default `0`)
+-   `p1` **[TypeParsablePoint][1016]** 
+-   `p2` **[TypeParsablePoint][1016]** 
+-   `offset` **[number][1008]**  (optional, default `0`)
 
 ### grow
 
@@ -4187,19 +4196,19 @@ Create a new animation that executes a single grow animation step.
 
 #### Parameters
 
--   `options` **[OBJ_LengthAnimationStep][1039]** 
+-   `options` **[OBJ_LengthAnimationStep][1051]** 
 
 ### getP1
 
 Return the start point of the line
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ### getP2
 
 Return the end point of the line
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ## ADV_Line
 
@@ -4244,30 +4253,30 @@ Default pulse values can then be specified with the `pulse` property.
 
 ### Properties
 
--   `p1` **[TypeParsablePoint][1004]?** 
--   `p2` **[TypeParsablePoint][1004]?** 
--   `position` **[TypeParsablePoint][1004]?** 
--   `length` **[number][996]?** 
--   `angle` **[number][996]?** 
--   `offset` **[number][996]?** 
--   `align` **(`"start"` \| `"end"` \| `"center"` \| [number][996])?** 
--   `width` **[number][996]?** 
--   `label` **[TypeLineLabelOptions][1040]?** 
--   `color` **[Array][994]&lt;[number][996]>?** 
--   `touchBorder` **([Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>> | `"border"` \| [number][996] \| `"rect"`)?** 
--   `arrow` **[OBJ_LineArrows][1023]** 
--   `dash` **[Array][994]&lt;[number][996]>** 
--   `pulseWidth` **[OBJ_PulseWidth][1037]?** 
--   `pulse` **[OBJ_Pulse][1005]** 
--   `move` **{type: (`"translation"` \| `"rotation"` \| `"centerTranslateEndRotation"` \| `"scale"`)?, middleLength: [number][996]?, includeLabelInTouchBoundary: [boolean][995]?}?** 
+-   `p1` **[TypeParsablePoint][1016]?** 
+-   `p2` **[TypeParsablePoint][1016]?** 
+-   `position` **[TypeParsablePoint][1016]?** 
+-   `length` **[number][1008]?** 
+-   `angle` **[number][1008]?** 
+-   `offset` **[number][1008]?** 
+-   `align` **(`"start"` \| `"end"` \| `"center"` \| [number][1008])?** 
+-   `width` **[number][1008]?** 
+-   `label` **[TypeLineLabelOptions][1052]?** 
+-   `color` **[Array][1006]&lt;[number][1008]>?** 
+-   `touchBorder` **([Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>> | `"border"` \| [number][1008] \| `"rect"`)?** 
+-   `arrow` **[OBJ_LineArrows][1035]** 
+-   `dash` **[Array][1006]&lt;[number][1008]>** 
+-   `pulseWidth` **[OBJ_PulseWidth][1049]?** 
+-   `pulse` **[OBJ_Pulse][1017]** 
+-   `move` **{type: (`"translation"` \| `"rotation"` \| `"centerTranslateEndRotation"` \| `"scale"`)?, middleLength: [number][1008]?, includeLabelInTouchBoundary: [boolean][1007]?}?** 
 
 ## AdvancedAngle
 
 **Extends DiagramElementCollection**
 
--   **See: See [OBJ_AngleAnimationStep][811] for angle animation step options.
+-   **See: See [OBJ_AngleAnimationStep][823] for angle animation step options.
 
-    See [OBJ_PulseAngleAnimationStep][813] for pulse angle animation step
+    See [OBJ_PulseAngleAnimationStep][825] for pulse angle animation step
     options.
 
     To test examples below, append them to the
@@ -4276,7 +4285,7 @@ Default pulse values can then be specified with the `pulse` property.
 
 [DiagramElementCollection][73] representing an angle.
 
-![][1041]
+![][1053]
 
 <p class="inline_gif"><img src="./assets1/advangle_grow.gif" class="inline_gif_image"></p>
 
@@ -4467,7 +4476,7 @@ Manual updates can be performed with
 
 #### Parameters
 
--   `update` **[boolean][995]**  (optional, default `true`)
+-   `update` **[boolean][1007]**  (optional, default `true`)
 
 ### setAngle
 
@@ -4476,7 +4485,7 @@ originally defined.
 
 #### Parameters
 
--   `options` **[OBJ_AngleSet][1042]**  (optional, default `{}`)
+-   `options` **[OBJ_AngleSet][1054]**  (optional, default `{}`)
 
 ### getAngle
 
@@ -4492,7 +4501,7 @@ Set the label text
 
 #### Parameters
 
--   `text` **[string][991]** 
+-   `text` **[string][1003]** 
 
 ### getLabel
 
@@ -4511,7 +4520,7 @@ Automatic updating can be done with
 
 #### Parameters
 
--   `rotationOffset` **([number][996] | null)**  (optional, default `this.getRotation()`)
+-   `rotationOffset` **([number][1008] | null)**  (optional, default `this.getRotation()`)
 
 ### pulseAngle
 
@@ -4522,7 +4531,7 @@ separately.
 
 #### Parameters
 
--   `options` **[OBJ_PulseAngle][1043]**  (optional, default `{}`)
+-   `options` **[OBJ_PulseAngle][1055]**  (optional, default `{}`)
 
 ### setMovable
 
@@ -4530,7 +4539,7 @@ Use this method to enable or disable movability of the line.
 
 #### Parameters
 
--   `movableOrOptions` **([OBJ_MovableAngle][1044] \| [boolean][995])?** `true` to
+-   `movableOrOptions` **([OBJ_MovableAngle][1056] \| [boolean][1007])?** `true` to
     make movable, `false` to make not movable or use options to
     set different kinds of movability.
 
@@ -4588,22 +4597,22 @@ This options object can define the default values for pulseAngle if desired.
 
 ### Properties
 
--   `position` **[Point][1006]?** position of the angle vertex
--   `startAngle` **[number][996]?** rotation where the angle should start
--   `angle` **[number][996]?** size of the angle
--   `p1` **[Point][1006]?** alternate way to define startAngle with `p2` and `p3`
--   `p2` **[Point][1006]?** alternate way to define position of the angle vertex
+-   `position` **[Point][1018]?** position of the angle vertex
+-   `startAngle` **[number][1008]?** rotation where the angle should start
+-   `angle` **[number][1008]?** size of the angle
+-   `p1` **[Point][1018]?** alternate way to define startAngle with `p2` and `p3`
+-   `p2` **[Point][1018]?** alternate way to define position of the angle vertex
     with `p2` and `p3`
--   `p3` **[Point][1006]?** alternate way to define size of angle with `p2` and
+-   `p3` **[Point][1018]?** alternate way to define size of angle with `p2` and
     `p3`
 -   `direction` **(`1` \| `-1`)?** side of the corner the angle annotations
     reside
--   `curve` **[OBJ_AngleCurve][1045]?** options for a curve annotation
--   `arrow` **[TypeAngleArrows][1046]?** options for arrow annotations
--   `corner` **[OBJ_AngleCorner][1047]?** options for drawing a corner
--   `label` **[TypeAngleLabelOptions][1048]?** options for label annotations
--   `color` **[Array][994]&lt;[number][996]>?** default color
--   `pulseAngle` **[OBJ_PulseAngle][1043]?** default pulseAngle options
+-   `curve` **[OBJ_AngleCurve][1057]?** options for a curve annotation
+-   `arrow` **[TypeAngleArrows][1058]?** options for arrow annotations
+-   `corner` **[OBJ_AngleCorner][1059]?** options for drawing a corner
+-   `label` **[TypeAngleLabelOptions][1060]?** options for label annotations
+-   `color` **[Array][1006]&lt;[number][1008]>?** default color
+-   `pulseAngle` **[OBJ_PulseAngle][1055]?** default pulseAngle options
 
 ## AdvancedPolyline
 
@@ -4615,7 +4624,7 @@ This options object can define the default values for pulseAngle if desired.
 
 [DiagramElementCollection][73] representing a polyline.
 
-![][1049]
+![][1061]
 
 <p class="inline_gif"><img src="./assets1/advpolyline_movepolyline.gif" class="inline_gif_image"></p>
 
@@ -4632,7 +4641,7 @@ line.
 
 Available subscriptions:
 
--   `'updatePoints'`: [SUB_PolylineUpdatePoints][836]
+-   `'updatePoints'`: [SUB_PolylineUpdatePoints][848]
 
 ### Examples
 
@@ -4765,24 +4774,24 @@ diagram.addElement({
 
 Update the polyline with new point locations.
 
-Will publish [SUB_PolylineUpdatePoints][836] unless
+Will publish [SUB_PolylineUpdatePoints][848] unless
 `doNotPublishUpdatePoints` is `true`.
 
 #### Parameters
 
--   `newPointsIn` **[Array][994]&lt;[Point][1006]>** 
--   `doNotPublishUpdatePoints` **[boolean][995]**  (optional, default `false`)
+-   `newPointsIn` **[Array][1006]&lt;[Point][1018]>** 
+-   `doNotPublishUpdatePoints` **[boolean][1007]**  (optional, default `false`)
 
 ### reversePoints
 
 Reverse points in the polyline.
 
-Will publish [SUBSCRIPTION_PolylineUpdatePoints][1050] unless
+Will publish [SUBSCRIPTION_PolylineUpdatePoints][1062] unless
 `doNotPublishUpdatePoints` is `true`.
 
 #### Parameters
 
--   `doNotPublishUpdatePoints` **[boolean][995]** if `true` the `updatePoints`
+-   `doNotPublishUpdatePoints` **[boolean][1007]** if `true` the `updatePoints`
     subscription will not be published. (optional, default `true`)
 
 ### setPositionWithoutMoving
@@ -4797,8 +4806,8 @@ offset that is the opposite new position.
 
 #### Parameters
 
--   `newPositionPointOrX` **([Point][1006] \| [number][996])** 
--   `newPositionY` **[number][996]**  (optional, default `0`)
+-   `newPositionPointOrX` **([Point][1018] \| [number][1008])** 
+-   `newPositionY` **[number][1008]**  (optional, default `0`)
 
 ### setRotationWithoutMoving
 
@@ -4812,7 +4821,7 @@ rotation that is the negative of the `newRotation`.
 
 #### Parameters
 
--   `newRotation` **[number][996]** 
+-   `newRotation` **[number][1008]** 
 
 ### setScaleWithoutMoving
 
@@ -4826,8 +4835,8 @@ scale that is the inverse of the new scale.
 
 #### Parameters
 
--   `newScalePointOrX` **([Point][1006] \| [number][996])** 
--   `newScaleY` **[number][996]**  (optional, default `0`)
+-   `newScalePointOrX` **([Point][1018] \| [number][1008])** 
+-   `newScaleY` **[number][1008]**  (optional, default `0`)
 
 ### hideAngles
 
@@ -4860,7 +4869,7 @@ The polyline itself is defined with an [OBJ_Polyline][287] options Object.
 
 Angle and side annotations can be defined as [ADV_Angle][361] and
 [ADV_Line][340], and movable pads defined with
-([OBJ_Polygon][302] & [OBJ_PolylinePad][825]).
+([OBJ_Polygon][302] & [OBJ_PolylinePad][837]).
 
 Angles, sides and pads can all be defined either as an options object
 or an array of options objects. If an array, then each element in the
@@ -4870,40 +4879,259 @@ will recycle from the start.
 
 Using object definitions allows for a definition of all angles, sides and
 pads. To customize for specific side, angle or pad indexes use =
-[OBJ_PolylineCustomization][826].
+[OBJ_PolylineCustomization][838].
 
 Type: any
 
 ### Properties
 
--   `showLine` **[boolean][995]?** `false` will hide the polyline's line (`true`)
--   `angle` **([OBJ_PolylineAngle][1051] \| [Array][994]&lt;[ADV_Angle][1052]>)?** angle annotations - leave undefined for no angle annotations
--   `side` **([OBJ_PolylineSide][1053] \| [Array][994]&lt;[ADV_Line][1054]>)?** side annotations - leave undefined for no side annotations
--   `pad` **([OBJ_PolylinePad][1055] \| [Array][994]&lt;[OBJ_PolylinePadSingle][1056]>)?** move pad - leave undefined for no move pads
--   `makeValid` **(null | [OBJ_ValidShapeHideThresholds][1057])?** if defined, whenever
+-   `showLine` **[boolean][1007]?** `false` will hide the polyline's line (`true`)
+-   `angle` **([OBJ_PolylineAngle][1063] \| [Array][1006]&lt;[ADV_Angle][1064]>)?** angle annotations - leave undefined for no angle annotations
+-   `side` **([OBJ_PolylineSide][1065] \| [Array][1006]&lt;[ADV_Line][1066]>)?** side annotations - leave undefined for no side annotations
+-   `pad` **([OBJ_PolylinePad][1067] \| [Array][1006]&lt;[OBJ_PolylinePadSingle][1068]>)?** move pad - leave undefined for no move pads
+-   `makeValid` **(null | [OBJ_ValidShapeHideThresholds][1069])?** if defined, whenever
     points are updated the shape will be checked to ensure consistency with
     displayed labels of angles and sides.
+
+## AdvancedAxis
+
+**Extends DiagramElementCollection**
+
+-   **See: [ADV_Axis][393] for parameter descriptions
+    **
+
+[DiagramElementCollection][73] representing an Axis.
+
+This object defines an axis with an axis line, tick marks, labels,
+grid lines and a title.
+
+See [ADV_Axis][393] for the options that can be used when creating
+the axis.
+
+An axis is drawn to a `length`. It will have values along its length
+from `start` to `stop`. Ticks, grid lines and labels are all drawn
+at axis value positions. All other dimensions, such as line lengths,
+widths, positions, spaces and offsets are defined in draw space, or in the
+same space as the `length` of the axis.
+
+The object contains additional methods that convert between axis values
+and draw space positions, as well as a convenience method to report if a
+value is within an axis.
+
+-   <a href="#advancedaxisvaluetodraw">valueToDraw</a>
+-   <a href="#advancedaxisdrawtovalue">drawToValue</a>
+-   <a href="#advancedaxisinaxis">inAxis</a>
+
+To test examples below, append them to the
+<a href="#drawing-boilerplate">boilerplate</a>.
+
+For more examples of axis labels and axis ticks, see [OBJ_AxisLabels][990]
+and [OBJ_AxisTicks][987].
+
+#### Example
+
+```javascript
+// By default an axis is an 'x' axis
+diagram.addElement({
+  name: 'x',
+  method: 'advanced.axis',
+  options: {
+    ticks: true,
+  },
+});
+```
+
+![][1070]
+
+#### Example
+
+```javascript
+// An axis can also be created and then added to a diagram
+// An axis can have specific start and stop values
+// An axis can be a y axis
+const axis = diagram.advanced.axis({
+  axis: 'y',
+  start: -10,
+  stop: 10,
+  ticks: { step: 5 },
+})
+diagram.add('axis', axis);
+```
+
+![][1071]
+
+#### Example
+
+```javascript
+// An axis can have multiple sets of ticks and a title
+diagram.addElement({
+  name: 'x',
+  method: 'advanced.axis',
+  options: {
+    ticks: [
+      { step: 0.2, length: 0.1 },
+      { step: 0.05, length: 0.05, offset: 0 },
+    ],
+    title: 'time (s)',
+  },
+});
+```
+
+![][1072]
+
+#### Example
+
+```javascript
+// An axis line and ticks can be customized to be dashed
+// and have arrows
+diagram.addElement({
+  name: 'x',
+  method: 'advanced.axis',
+  options: {
+    length: 2.5,
+    start: -130,
+    stop: 130,
+    line: {
+      dash: [0.01, 0.01],
+      arrow: 'barb',
+    },
+    ticks: {
+      start: -100,
+      stop: 100,
+      step: 25,
+      dash: [0.01, 0.01],
+    },
+    labels: { precision: 0 },
+    title: {
+      font: { style: 'italic' },
+      text: 'x',
+      position: [2.65, 0.03],
+    },
+  },
+});
+```
+
+![][1073]
+
+#### Example
+
+```javascript
+// An axis title can have grid lines extend from it, and titles with more
+// formatting
+diagram.addElement({
+  name: 'x',
+  method: 'advanced.axis',
+  options: {
+    stop: 2,
+    ticks: { step: 0.5 },
+    grid: [
+      { step: 0.5, length: 1, color: [0.5, 0.5, 0.5, 1] },
+      { step: 0.1, length: 1, dash: [0.01, 0.01], color: [0.7, 0.7, 0.7, 1] },
+    ],
+    title: {
+      font: { color: [0.4, 0.4, 0.4, 1] },
+      text: [
+        'Total Time',
+        { 
+          text: 'in seconds',
+          font: { size: 0.1 },
+          lineSpace: 0.12,
+        },
+      ],
+    },
+  },
+});
+```
+
+![][1074]
+
+### valueToDraw
+
+Convert an axis value or values to a draw space position or positions.
+
+'x' axes have a draw space position of 0 on the left end of the axis and
+'y' axes have a draw space position of 0 on the bottom end of the axis.
+
+#### Parameters
+
+-   `value` **([number][1008] \| [Array][1006]&lt;[number][1008]>)** 
+
+Returns **[number][1008]** draw space position
+
+### drawToValue
+
+Convert an axis draw space value or values to an axis value or values.
+
+'x' axes have a draw space position of 0 on the left end of the axis and
+'y' axes have a draw space position of 0 on the bottom end of the axis.
+
+#### Parameters
+
+-   `value` **([number][1008] \| [Array][1006]&lt;[number][1008]>)** 
+
+Returns **[number][1008]** draw space position
+
+### inAxis
+
+Check if a value is within the axis.
+
+#### Parameters
+
+-   `value` **[number][1008]** 
+
+Returns **[boolean][1007]** `true` if value is within length of axis.
 
 ## ADV_Axis
 
 Advanced Axis options object.
 
+An axis can be used to create a number line, used as an axis in
+[ADV_Plot][1075] and/or used to plot a [ADV_Trace][1076] against.
+
+An axis is a line that may have
+
+-   tick marks
+-   labels
+-   grid lines
+-   a title
+
+An axis is drawn to a `length`. It will have values along its length
+from `start` to `stop`. Ticks, grid lines and labels are all drawn
+at axis value positions. All other dimensions, such as line lengths,
+widths, positions, spaces and offsets are defined in draw space, or in the
+same space as the `length` of the axis.
+
 ### Properties
 
--   `length` **[number][996]?** 
--   `position` **[TypeParsablePoint][1004]?** 
--   `start` **[number][996]?** 
--   `stop` **[number][996]?** 
--   `axis` **(`"x"` \| `"y"`)?** 
--   `ticks` **([OBJ_AxisTicks][1058] \| [Array][994]&lt;[OBJ_AxisTicks][1058]>)?** 
--   `grid` **([OBJ_AxisTicks][1058] \| [Array][994]&lt;[OBJ_AxisTicks][1058]>)?** 
--   `line` **(null | [ADV_Line][1054])?** 
--   `font` **[OBJ_Font][1059]?** 
--   `labels` **(AxisLabels | [Array][994]&lt;AxisLabels>)?** 
--   `title` **[TypeAxisTitle][1060]?** 
--   `name` **[string][991]?** 
--   `auto` **\[[number][996], [number][996]]?** 
--   `show` **[boolean][995]?** 
+-   `axis` **(`"x"` \| `"y"`)?** `'x'` axes are horizontal, `'y'` axes are
+    vertical (`'x'`)
+-   `length` **[number][1008]?** length of the axis
+-   `line` **([OBJ_Line][1077] \| [boolean][1007])?** line style of the axis - `null` will draw
+    no line. By default, a solid line will be drawn if not defined.
+-   `start` **[number][1008]?** start value of axis (`0`)
+-   `stop` **[number][1008]?** stop value of axis. `stop` must be larger than
+    `start` (`start + 1`)
+-   `ticks` **([OBJ_AxisTicks][1078] \| [Array][1006]&lt;[OBJ_AxisTicks][1078]> | [boolean][1007])?** tick
+    options. Use an Array to setup multiple sets/styles of ticks. Use a boolean
+    value to turn ticks on or off. (`false`)
+-   `labels` **([OBJ_AxisLabels][1079] \| [Array][1006]&lt;[OBJ_AxisLabels][1079]> | [boolean][1007])?** label
+    options.
+    Use an array to setup multiple sets of labels, and use a boolean to turn
+    labels on and off (`true` if ticks exits, `false` otherwise)
+-   `grid` **([OBJ_AxisTicks][1078] \| [Array][1006]&lt;[OBJ_AxisTicks][1078]> | [boolean][1007])?** grid
+    options. Use an array for multiple sets of grids, and use a boolean to
+    turn grids on and off (`false`)
+-   `title` **([TypeAxisTitle][1080] \| [boolean][1007])?** axis title (`false`)
+-   `color` **[Array][1006]&lt;[number][1008]>?** default color of axis
+-   `font` **[OBJ_Font][1081]?** default font of axis (used by title and labels)
+-   `show` **[boolean][1007]?** `false` hides the axis. Two axes are needed
+    to plot an [AdvancedTrace][1082] on a [AdvancedPlot][1083], but if either or
+    both axes aren't to be drawn, then use `false` to hide each axis (`true`)
+-   `auto` **\[[number][1008], [number][1008]]?** Will select automatic values for
+    `start`, `stop`, and `step` that cover the range [min, max]
+-   `name` **[string][1003]?** axis name - used to define which axes a trace
+    should be plotted against in an [AdvancedPlot][1083].
+-   `position` **[TypeParsablePoint][1016]?** axis position (`[0, 0]`)
 
 ## Text
 
@@ -5049,7 +5277,7 @@ diagram.addElement(
 );
 ```
 
-See [OBJ_Text][384] to apply custom formatting to each element in the `text`, but note that all the text in a sinle element will have the same formatting.
+See [OBJ_Text][396] to apply custom formatting to each element in the `text`, but note that all the text in a sinle element will have the same formatting.
 
 ### Arranging text in a line - `text.line`
 
@@ -5082,7 +5310,7 @@ diagram.addElement(
 );
 ```
 
-See [OBJ_TextLine][387] for more options including how to superscript and subscript text, or move it out of the line layout completely.
+See [OBJ_TextLine][399] for more options including how to superscript and subscript text, or move it out of the line layout completely.
 
 ### Rich lines - `text.lines`
 
@@ -5150,7 +5378,7 @@ diagram.addElement(
 );
 ```
 
-For more properties of `text.lines` see [OBJ_TextLines][390].
+For more properties of `text.lines` see [OBJ_TextLines][402].
 
 
 ## OBJ_Text
@@ -5161,22 +5389,22 @@ For more properties of `text.lines` see [OBJ_TextLines][390].
 
 One or more text strings.
 
-![][1061]
+![][1084]
 
-![][1062]
+![][1085]
 
 Simple text options object.
 
 Use this to make a [DiagramElementPrimitive][69] that renders text.
 
 `text` can either be a single string, or an array of
-[OBJ_TextDefinition][765] objects to define multiple strings. Each string
+[OBJ_TextDefinition][777] objects to define multiple strings. Each string
 can have a different location, alignment (`xAlign`, `yAlign`) and formatting.
 
 [DiagramElementPrimitive][69] objects allow for a callback to be defined
 when they are touched by a user. In text [DiagramElementPrimitive][69],
 each string can have its own callback assigned using the `onClick` property
-of [OBJ_TextDefinition][765]. In addition custom touch borders to make it
+of [OBJ_TextDefinition][777]. In addition custom touch borders to make it
 easier to click the strings can be defined.
 
 Note: there is a slight performance improvement in including multiple
@@ -5185,20 +5413,20 @@ rather than creating a [DiagramElementPrimitive][69] for each string.
 
 ### Properties
 
--   `text` **([string][991] \| [OBJ_TextDefinition][1063] \| [Array][994]&lt;([string][991] \| [OBJ_TextDefinition][1063])>)** text to draw, either as a single string or multiple strings in an array
--   `font` **[OBJ_Font][1059]?** default font to apply to all text
+-   `text` **([string][1003] \| [OBJ_TextDefinition][1086] \| [Array][1006]&lt;([string][1003] \| [OBJ_TextDefinition][1086])>)** text to draw, either as a single string or multiple strings in an array
+-   `font` **[OBJ_Font][1081]?** default font to apply to all text
 -   `xAlign` **(`"left"` \| `"right"` \| `"center"`)?** default horizontal text
     alignment for `text` relative to `location` (default: `"left"`)
 -   `yAlign` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"`)?** default
     vertical text alignment for `text` relative to `location` (default: `"baseline"`)
--   `color` **[Array][994]&lt;[number][996]>?** (default: `[1, 0, 0, 1`])
--   `position` **[TypeParsablePoint][1004]?** if defined, overrides translation
+-   `color` **[Array][1006]&lt;[number][1008]>?** (default: `[1, 0, 0, 1`])
+-   `position` **[TypeParsablePoint][1016]?** if defined, overrides translation
     in transform
--   `transform` **[TypeParsableTransform][1064]?** (default: `Transform('text').standard()`)
--   `border` **(`"text"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
+-   `transform` **[TypeParsableTransform][1087]?** (default: `Transform('text').standard()`)
+-   `border` **(`"text"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
     encompassing rectangle around all text borders combined,
     or set to `'text'` for the individual text borders (default: `'text'`)
--   `touchBorder` **(`"text"` \| `"rect"` \| [number][996] \| `"border"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
+-   `touchBorder` **(`"text"` \| `"rect"` \| [number][1008] \| `"border"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
     the encompassing rectangle around all text touch borders, set to `'text'`
     for the individual text touch borders (`'text'`), set to `'border'` to be the
     same as the element border or a (`number`) for a rectangle with some buffer
@@ -5258,30 +5486,30 @@ diagram.addElement(
 
 Text Line
 
-![][1065]
+![][1088]
 
 Array of strings that are arranged into a line. Each string is arranged so
 that it is to the right of the previous string.
 
 Strings can be arranged out of the line flow by using the `inLine` property
-in [OBJ_TextLineDefinition][770].
+in [OBJ_TextLineDefinition][782].
 
 ### Properties
 
--   `line` **[Array][994]&lt;([string][991] \| [OBJ_TextLineDefinition][1066])>?** array of strings,
+-   `line` **[Array][1006]&lt;([string][1003] \| [OBJ_TextLineDefinition][1089])>?** array of strings,
     to layout into a line
--   `font` **[OBJ_Font][1059]?** Default font for strings in line
--   `color` **[Array][994]&lt;[number][996]>?** Default color for strings in line
+-   `font` **[OBJ_Font][1081]?** Default font for strings in line
+-   `color` **[Array][1006]&lt;[number][1008]>?** Default color for strings in line
     (`[1, 0, 0, 1`])
 -   `yAlign` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"`)?** vertical
     alignment of line with `position` (`baseline`)
--   `position` **[TypeParsablePoint][1004]?** if defined, overrides translation
+-   `position` **[TypeParsablePoint][1016]?** if defined, overrides translation
     in transform
--   `transform` **[TypeParsableTransform][1064]?** (`Transform('text').standard()`)
--   `border` **(`"text"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
+-   `transform` **[TypeParsableTransform][1087]?** (`Transform('text').standard()`)
+-   `border` **(`"text"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
     encompassing rectangle around all text borders combined,
     or set to `'text'` for the individual text borders (`'rect'`)
--   `touchBorder` **(`"text"` \| `"rect"` \| [number][996] \| `"border"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
+-   `touchBorder` **(`"text"` \| `"rect"` \| [number][1008] \| `"border"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
     the encompassing rectangle around all text touch borders, set to `'text'`
     for the individual text touch borders (`'text'`), set to `'border'` to be the
     same as the element border or a (`number`) for a rectangle with some buffer
@@ -5333,9 +5561,9 @@ diagram.addElement(
 
 Text Lines
 
-![][1067]
+![][1090]
 
-![][1068]
+![][1091]
 
 Layout multiple lines of text, justified to the `left`,
 `center` or `right`.
@@ -5348,7 +5576,7 @@ in the modifiers object to define the formatting and replacement text. By
 default, the unique id will be used as the replacement text.
 
 Each line can have custom formatting or justification by defining a
-[OBJ_TextLinesDefinition][772] object instead or a string in the lines
+[OBJ_TextLinesDefinition][784] object instead or a string in the lines
 array.
 
 To escape the modifier special character "|", use a forward slash. e.g.
@@ -5357,23 +5585,23 @@ To escape the modifier special character "|", use a forward slash. e.g.
 
 ### Properties
 
--   `text` **[Array][994]&lt;([string][991] \| [OBJ_TextLinesDefinition][1069])>?** array of line
+-   `text` **[Array][1006]&lt;([string][1003] \| [OBJ_TextLinesDefinition][1092])>?** array of line
     strings
--   `modifiers` **[OBJ_TextModifiersDefinition][1070]?** modifier definitions
--   `font` **[OBJ_Font][1059]?** Default font to use in lines
--   `color` **[Array][994]&lt;[number][996]>?** Default color to use in lines
+-   `modifiers` **[OBJ_TextModifiersDefinition][1093]?** modifier definitions
+-   `font` **[OBJ_Font][1081]?** Default font to use in lines
+-   `color` **[Array][1006]&lt;[number][1008]>?** Default color to use in lines
     (`[1, 0, 0, 1`])
--   `lineSpace` **[number][996]?** Space between baselines of lines
+-   `lineSpace` **[number][1008]?** Space between baselines of lines
     (`font.size * 1.2`)
 -   `yAlign` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"`)?** vertical
     alignment of lines with `position` (`baseline`)
--   `position` **[TypeParsablePoint][1004]?** if defined, overrides translation
+-   `position` **[TypeParsablePoint][1016]?** if defined, overrides translation
     in transform
--   `transform` **[TypeParsableTransform][1064]?** (`Transform('text').standard()`)
--   `border` **(`"text"` \| `"rect"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
+-   `transform` **[TypeParsableTransform][1087]?** (`Transform('text').standard()`)
+-   `border` **(`"text"` \| `"rect"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
     encompassing rectangle around all text borders combined,
     or set to `'text'` for the individual text borders (`'rect'`)
--   `touchBorder` **(`"text"` \| `"rect"` \| [number][996] \| `"border"` \| [Array][994]&lt;[Array][994]&lt;[TypeParsablePoint][1004]>>)?** touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
+-   `touchBorder` **(`"text"` \| `"rect"` \| [number][1008] \| `"border"` \| [Array][1006]&lt;[Array][1006]&lt;[TypeParsablePoint][1016]>>)?** touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
     the encompassing rectangle around all text touch borders, set to `'text'`
     for the individual text touch borders (`'text'`), set to `'border'` to be the
     same as the element border or a (`number`) for a rectangle with some buffer
@@ -5457,9 +5685,9 @@ diagram.addElement(
 
 Animations change diagram elements over time.
 
-Each diagram element has its own [AnimationManager][394] (`animations` property) that can coordinate animations for any element.
+Each diagram element has its own [AnimationManager][406] (`animations` property) that can coordinate animations for any element.
 
-An animation is a number of [AnimationStep][842]s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.
+An animation is a number of [AnimationStep][854]s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.
 
 ### <a id="animation-boilerplate"></a> Animation Boilerplate
 
@@ -5540,9 +5768,9 @@ const p = diagram.getElement('p');
 
 ### Animation Examples
 
-Let's create a simple animation. Start by defining a diagram and retrieving the element to animate by creating the boilerplate files [above][1071].
+Let's create a simple animation. Start by defining a diagram and retrieving the element to animate by creating the boilerplate files [above][1094].
 
-A [PositionAnimationStep][477] can be created to translate the shape, and a [RotationAnimationStep][480] to rotate it
+A [PositionAnimationStep][489] can be created to translate the shape, and a [RotationAnimationStep][492] to rotate it
 
 ```javascript
 const translate = p.animations.position({ target: [1, 0], duration: 2 });
@@ -5560,7 +5788,7 @@ p.animations.new()
 
 <p style="text-align: center"><img src="./tutorials/animation/ex1.gif"></p>
 
-A more convenient way to chain animation steps in series is to create them inline. The <a href="#animationmanagernew">animations.new</a> method returns an [AnimationBuilder][439] that allows for inline step creation.
+A more convenient way to chain animation steps in series is to create them inline. The <a href="#animationmanagernew">animations.new</a> method returns an [AnimationBuilder][451] that allows for inline step creation.
 
 ```javascript
 p.animations.new()
@@ -5678,7 +5906,7 @@ setTimeout(() => {
 
 -   **See: [DiagramElement][32]
     **
--   **See: [AnimationBuilder][439]
+-   **See: [AnimationBuilder][451]
     **
 
 Animation Manager
@@ -5699,8 +5927,8 @@ tied to elements drawn later). `AnimationManager`s will only be processed
 on each animation frame if the element they are tied to is not hidden.
 
 The `animations` property within `AnimationManager` is simply an array that
-contains a number [AnimationStep][842]s that are executed in parallel.
-Typically, these steps would themselves be [SerialAnimationStep][519]s or a
+contains a number [AnimationStep][854]s that are executed in parallel.
+Typically, these steps would themselves be [SerialAnimationStep][531]s or a
 series of animations. This means the animation manager is running a number of
 animation series in parallel.
 
@@ -5711,7 +5939,7 @@ be automatically processed every animation frame.
 ### Properties
 
 -   `state` **(`"animating"` \| `"idle"` \| `"waitingToStart"`)** 
--   `animations` **[Array][994]&lt;[AnimationStep][1072]>** 
+-   `animations` **[Array][1006]&lt;[AnimationStep][1095]>** 
 -   `subscriptions` **SubscriptionManager** 
 
 ### Examples
@@ -5800,7 +6028,7 @@ New animation builder attached to this animation manager
 
 #### Parameters
 
--   `name` **[string][991]?** 
+-   `name` **[string][1003]?** 
 
 #### Examples
 
@@ -5819,9 +6047,9 @@ Animation builder object
 
 #### Parameters
 
--   `options` **[OBJ_AnimationBuilder][1073]** 
+-   `options` **[OBJ_AnimationBuilder][1096]** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### rotation
 
@@ -5829,7 +6057,7 @@ Create a Rotation animation step that uses this element by default
 
 #### Parameters
 
--   `options` **[OBJ_RotationAnimationStep][1075]** 
+-   `options` **[OBJ_RotationAnimationStep][1098]** 
 
 #### Examples
 
@@ -5840,7 +6068,7 @@ p.animations.new()
   .start();
 ```
 
-Returns **[RotationAnimationStep][1076]** 
+Returns **[RotationAnimationStep][1099]** 
 
 ### scale
 
@@ -5848,9 +6076,9 @@ Create a Scale animation step tied to this element
 
 #### Parameters
 
--   `options` **[OBJ_ScaleAnimationStep][1077]** 
+-   `options` **[OBJ_ScaleAnimationStep][1100]** 
 
-Returns **[ScaleAnimationStep][1078]** 
+Returns **[ScaleAnimationStep][1101]** 
 
 ### trigger
 
@@ -5858,9 +6086,9 @@ Create a Trigger animation step
 
 #### Parameters
 
--   `options` **[OBJ_TriggerAnimationStep][1079]** 
+-   `options` **[OBJ_TriggerAnimationStep][1102]** 
 
-Returns **[TriggerAnimationStep][1080]** 
+Returns **[TriggerAnimationStep][1103]** 
 
 ### delay
 
@@ -5869,9 +6097,9 @@ Use the `duration` value in `options` to define delay duration
 
 #### Parameters
 
--   `delayOrOptions` **([number][996] \| [OBJ_AnimationStep][1081])**  (optional, default `{}`)
+-   `delayOrOptions` **([number][1008] \| [OBJ_AnimationStep][1104])**  (optional, default `{}`)
 
-Returns **[DelayAnimationStep][1082]** 
+Returns **[DelayAnimationStep][1105]** 
 
 ### translation
 
@@ -5879,9 +6107,9 @@ Create a Translation or Position animation step tied to this element
 
 #### Parameters
 
--   `options` **[OBJ_PositionAnimationStep][1083]** 
+-   `options` **[OBJ_PositionAnimationStep][1106]** 
 
-Returns **[PositionAnimationStep][1084]** 
+Returns **[PositionAnimationStep][1107]** 
 
 ### position
 
@@ -5889,9 +6117,9 @@ Create a Translation or Position animation step tied to this element
 
 #### Parameters
 
--   `options` **[OBJ_PositionAnimationStep][1083]** 
+-   `options` **[OBJ_PositionAnimationStep][1106]** 
 
-Returns **[PositionAnimationStep][1084]** 
+Returns **[PositionAnimationStep][1107]** 
 
 ### color
 
@@ -5899,9 +6127,9 @@ Create a Color animation step tied to this element
 
 #### Parameters
 
--   `options` **[OBJ_ColorAnimationStep][1085]** 
+-   `options` **[OBJ_ColorAnimationStep][1108]** 
 
-Returns **[ColorAnimationStep][1086]** 
+Returns **[ColorAnimationStep][1109]** 
 
 ### opacity
 
@@ -5909,9 +6137,9 @@ Create a Opacity animation step tied to this element
 
 #### Parameters
 
--   `options` **[OBJ_OpacityAnimationStep][1087]** 
+-   `options` **[OBJ_OpacityAnimationStep][1110]** 
 
-Returns **[OpacityAnimationStep][1088]** 
+Returns **[OpacityAnimationStep][1111]** 
 
 ### transform
 
@@ -5919,9 +6147,9 @@ Create a Transform animation step tied to this element
 
 #### Parameters
 
--   `options` **[OBJ_TransformAnimationStep][1089]** 
+-   `options` **[OBJ_TransformAnimationStep][1112]** 
 
-Returns **[TransformAnimationStep][1090]** 
+Returns **[TransformAnimationStep][1113]** 
 
 ### dissolveIn
 
@@ -5930,10 +6158,10 @@ Use the `duration` value in `options` to define dissolving duration
 
 #### Parameters
 
--   `durationOrOptions` **([number][996] \| [OBJ_ElementAnimationStep][1091])**  (optional, default `{}`)
--   `timeOrOptions` **([number][996] \| [OBJ_ElementAnimationStep][1091])** 
+-   `durationOrOptions` **([number][1008] \| [OBJ_ElementAnimationStep][1114])**  (optional, default `{}`)
+-   `timeOrOptions` **([number][1008] \| [OBJ_ElementAnimationStep][1114])** 
 
-Returns **[DissolveInAnimationStep][1092]** 
+Returns **[DissolveInAnimationStep][1115]** 
 
 ### dissolveOut
 
@@ -5942,9 +6170,9 @@ Use the `duration` value in `options` to define dissolving duration
 
 #### Parameters
 
--   `durationOrOptions` **([number][996] \| [OBJ_ElementAnimationStep][1091])**  (optional, default `{}`)
+-   `durationOrOptions` **([number][1008] \| [OBJ_ElementAnimationStep][1114])**  (optional, default `{}`)
 
-Returns **[DissolveOutAnimationStep][1093]** 
+Returns **[DissolveOutAnimationStep][1116]** 
 
 ### dim
 
@@ -5953,9 +6181,9 @@ Use the `duration` value in `options` to define dimming duration
 
 #### Parameters
 
--   `durationOrOptions` **([number][996] \| [OBJ_ElementAnimationStep][1091])**  (optional, default `{}`)
+-   `durationOrOptions` **([number][1008] \| [OBJ_ElementAnimationStep][1114])**  (optional, default `{}`)
 
-Returns **[DimAnimationStep][1094]** 
+Returns **[DimAnimationStep][1117]** 
 
 ### undim
 
@@ -5964,9 +6192,9 @@ Use the `duration` value in `options` to define undimming duration
 
 #### Parameters
 
--   `durationOrOptions` **([number][996] \| [OBJ_ElementAnimationStep][1091])**  (optional, default `{}`)
+-   `durationOrOptions` **([number][1008] \| [OBJ_ElementAnimationStep][1114])**  (optional, default `{}`)
 
-Returns **[UndimAnimationStep][1095]** 
+Returns **[UndimAnimationStep][1118]** 
 
 ### scenario
 
@@ -5974,9 +6202,9 @@ Create a Scenario animation step tied to this element
 
 #### Parameters
 
--   `options` **[OBJ_ScenarioAnimationStep][1096]** 
+-   `options` **[OBJ_ScenarioAnimationStep][1119]** 
 
-Returns **[ScenarioAnimationStep][1097]** 
+Returns **[ScenarioAnimationStep][1120]** 
 
 ### scenarios
 
@@ -5985,9 +6213,9 @@ all child elements with the target scenario name
 
 #### Parameters
 
--   `options` **[OBJ_ScenariosAnimationStep][1098]** 
+-   `options` **[OBJ_ScenariosAnimationStep][1121]** 
 
-Returns **[ParallelAnimationStep][1099]** 
+Returns **[ParallelAnimationStep][1122]** 
 
 ### cancel
 
@@ -5996,7 +6224,7 @@ array).
 
 #### Parameters
 
--   `name` **(null | [string][991])** name of animation or `null` to cancel all
+-   `name` **(null | [string][1003])** name of animation or `null` to cancel all
     (`null`)
 -   `force` **(null | `"complete"` \| `"freeze"`)** force the animation to complete
     or freeze - `null` will perform the default operation (`null`) (optional, default `null`)
@@ -6008,7 +6236,7 @@ array).
 
 #### Parameters
 
--   `options` **[OBJ_AnimationStart][1100]?** 
+-   `options` **[OBJ_AnimationStart][1123]?** 
 
 ### getRemainingTime
 
@@ -6016,7 +6244,7 @@ Get remaining duration of all animations
 
 #### Parameters
 
--   `now` **[number][996]** define this if you want remaining duration from a
+-   `now` **[number][1008]** define this if you want remaining duration from a
     custom time (optional, default `new GlobalAnimation().now()/1000`)
 
 ## AnimationBuilder
@@ -6048,10 +6276,10 @@ Add a custom animation step that uses this element by default
 
 #### Parameters
 
--   `optionsIn` **...[Array][994]&lt;[OBJ_CustomAnimationStep][1101]>** 
--   `options` **[OBJ_CustomAnimationStep][1101]** 
+-   `optionsIn` **...[Array][1006]&lt;[OBJ_CustomAnimationStep][1124]>** 
+-   `options` **[OBJ_CustomAnimationStep][1124]** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### rotation
 
@@ -6059,9 +6287,9 @@ Add a rotation animation step that uses this element by default
 
 #### Parameters
 
--   `options` **[OBJ_RotationAnimationStep][1075]** 
+-   `options` **[OBJ_RotationAnimationStep][1098]** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### position
 
@@ -6069,9 +6297,9 @@ Add a position animation step that uses this element by default
 
 #### Parameters
 
--   `options` **[OBJ_PositionAnimationStep][1083]** 
+-   `options` **[OBJ_PositionAnimationStep][1106]** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### translation
 
@@ -6079,9 +6307,9 @@ Add a translation animation step that uses this element by default
 
 #### Parameters
 
--   `options` **[OBJ_PositionAnimationStep][1083]** 
+-   `options` **[OBJ_PositionAnimationStep][1106]** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### scale
 
@@ -6089,9 +6317,9 @@ Add a scale animation step that uses this element by default
 
 #### Parameters
 
--   `options` **[OBJ_ScaleAnimationStep][1077]** 
+-   `options` **[OBJ_ScaleAnimationStep][1100]** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### transform
 
@@ -6101,7 +6329,7 @@ Add a transform animation step that uses this element by default
 
 -   `options` **OBJ_ScaleAnimaOBJ_TransformAnimationStepionStep** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### scenario
 
@@ -6109,9 +6337,9 @@ Add a scenario animation step that uses this element by default
 
 #### Parameters
 
--   `options` **[OBJ_ScenarioAnimationStep][1096]** 
+-   `options` **[OBJ_ScenarioAnimationStep][1119]** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### scenarios
 
@@ -6119,9 +6347,9 @@ Add a scenarios animation step that uses this element by default
 
 #### Parameters
 
--   `options` **[OBJ_ScenariosAnimationStep][1098]** 
+-   `options` **[OBJ_ScenariosAnimationStep][1121]** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### color
 
@@ -6129,9 +6357,9 @@ Add a color animation step that uses this element by default
 
 #### Parameters
 
--   `options` **[OBJ_ColorAnimationStep][1085]** 
+-   `options` **[OBJ_ColorAnimationStep][1108]** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### opacity
 
@@ -6139,9 +6367,9 @@ Add an opacity animation step that uses this element by default
 
 #### Parameters
 
--   `options` **[OBJ_OpacityAnimationStep][1087]** 
+-   `options` **[OBJ_OpacityAnimationStep][1110]** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### dissolveOut
 
@@ -6149,10 +6377,10 @@ Add an dissolve out animation step that uses this element by default
 
 #### Parameters
 
--   `durationOrOptions` **[OBJ_ElementAnimationStep][1091]**  (optional, default `{}`)
--   `args` **...[Array][994]&lt;[OBJ_ElementAnimationStep][1091]>** 
+-   `durationOrOptions` **[OBJ_ElementAnimationStep][1114]**  (optional, default `{}`)
+-   `args` **...[Array][1006]&lt;[OBJ_ElementAnimationStep][1114]>** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### dissolveIn
 
@@ -6160,10 +6388,10 @@ Add an dissolve in animation step that uses this element by default
 
 #### Parameters
 
--   `durationOrOptions` **[OBJ_ElementAnimationStep][1091]**  (optional, default `{}`)
--   `args` **...[Array][994]&lt;[OBJ_ElementAnimationStep][1091]>** 
+-   `durationOrOptions` **[OBJ_ElementAnimationStep][1114]**  (optional, default `{}`)
+-   `args` **...[Array][1006]&lt;[OBJ_ElementAnimationStep][1114]>** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### dim
 
@@ -6171,10 +6399,10 @@ Add an dim animation step that uses this element by default
 
 #### Parameters
 
--   `durationOrOptions` **[OBJ_ElementAnimationStep][1091]**  (optional, default `{}`)
--   `args` **...[Array][994]&lt;[OBJ_ElementAnimationStep][1091]>** 
+-   `durationOrOptions` **[OBJ_ElementAnimationStep][1114]**  (optional, default `{}`)
+-   `args` **...[Array][1006]&lt;[OBJ_ElementAnimationStep][1114]>** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### undim
 
@@ -6182,10 +6410,10 @@ Add an undim animation step that uses this element by default
 
 #### Parameters
 
--   `durationOrOptions` **[OBJ_ElementAnimationStep][1091]**  (optional, default `{}`)
--   `args` **...[Array][994]&lt;[OBJ_ElementAnimationStep][1091]>** 
+-   `durationOrOptions` **[OBJ_ElementAnimationStep][1114]**  (optional, default `{}`)
+-   `args` **...[Array][1006]&lt;[OBJ_ElementAnimationStep][1114]>** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### delay
 
@@ -6193,11 +6421,11 @@ Add a delay animation step
 
 #### Parameters
 
--   `delayOrOptions` **([number][996] \| [OBJ_AnimationStep][1081])**  (optional, default `{}`)
--   `args` **...[Array][994]&lt;[OBJ_AnimationStep][1081]>** 
--   `durationOrOptions` **[OBJ_AnimationStep][1081]** 
+-   `delayOrOptions` **([number][1008] \| [OBJ_AnimationStep][1104])**  (optional, default `{}`)
+-   `args` **...[Array][1006]&lt;[OBJ_AnimationStep][1104]>** 
+-   `durationOrOptions` **[OBJ_AnimationStep][1104]** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### trigger
 
@@ -6205,10 +6433,10 @@ Add a trigger animation step
 
 #### Parameters
 
--   `triggerOrOptions` **[OBJ_TriggerAnimationStep][1079]**  (optional, default `{}`)
--   `args` **...[Array][994]&lt;[OBJ_TriggerAnimationStep][1079]>** 
+-   `triggerOrOptions` **[OBJ_TriggerAnimationStep][1102]**  (optional, default `{}`)
+-   `args` **...[Array][1006]&lt;[OBJ_TriggerAnimationStep][1102]>** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### inParallel
 
@@ -6216,10 +6444,10 @@ Add a parallel animation step
 
 #### Parameters
 
--   `stepsOrOptions` **([Array][994]&lt;([AnimationStep][1072] | null)> | [OBJ_ParallelAnimationStep][1102])**  (optional, default `{}`)
--   `options` **...[Array][994]&lt;[OBJ_ParallelAnimationStep][1102]>** 
+-   `stepsOrOptions` **([Array][1006]&lt;([AnimationStep][1095] | null)> | [OBJ_ParallelAnimationStep][1125])**  (optional, default `{}`)
+-   `options` **...[Array][1006]&lt;[OBJ_ParallelAnimationStep][1125]>** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ### inSerial
 
@@ -6227,10 +6455,10 @@ Add a serial animation step
 
 #### Parameters
 
--   `stepsOrOptions` **([Array][994]&lt;([AnimationStep][1072] | null)> | [OBJ_SerialAnimationStep][1103])**  (optional, default `{}`)
--   `options` **...[Array][994]&lt;[OBJ_SerialAnimationStep][1103]>** 
+-   `stepsOrOptions` **([Array][1006]&lt;([AnimationStep][1095] | null)> | [OBJ_SerialAnimationStep][1126])**  (optional, default `{}`)
+-   `options` **...[Array][1006]&lt;[OBJ_SerialAnimationStep][1126]>** 
 
-Returns **[AnimationBuilder][1074]** 
+Returns **[AnimationBuilder][1097]** 
 
 ## PositionAnimationStep
 
@@ -6242,7 +6470,7 @@ Returns **[AnimationBuilder][1074]**
 
 Position animation step
 
-![][1104]
+![][1127]
 
 The position animation step animates the first [Translation][186] transform
 in the [DiagramElement][32]'s [Transform][222].
@@ -6254,11 +6482,11 @@ Use either `delta` or `target` to define it's end point.
 The path of travel between `start` and `target` can either be a straight
 line (`'linear'`) or a quadratic bezier curve (`'curve'`)
 
-For custom paths, the [CustomAnimationStep][516] can be used.
+For custom paths, the [CustomAnimationStep][528] can be used.
 
 ### Parameters
 
--   `options` **[OBJ_PositionAnimationStep][1083]** 
+-   `options` **[OBJ_PositionAnimationStep][1106]** 
 
 ### Examples
 
@@ -6318,7 +6546,7 @@ p.animations.new()
 
 Rotation animation step
 
-![][1105]
+![][1128]
 
 The rotation animation step animates the first [Rotation][198] transform
 in the [DiagramElement][32]'s [Transform][222].
@@ -6331,7 +6559,7 @@ Use either `delta` or `target` to define it's end point
 
 ### Parameters
 
--   `options` **[OBJ_RotationAnimationStep][1075]** 
+-   `options` **[OBJ_RotationAnimationStep][1098]** 
 
 ### Examples
 
@@ -6375,7 +6603,7 @@ p.animations.new()
 
 Scale Animation Step
 
-![][1106]
+![][1129]
 
 The scale animation step animates the first [Scale][92] transform
 in the [DiagramElement][32]'s [Transform][222].
@@ -6389,7 +6617,7 @@ both x and y scale terms will be the same.
 
 ### Parameters
 
--   `options` **[OBJ_ScaleAnimationStep][1077]** 
+-   `options` **[OBJ_ScaleAnimationStep][1100]** 
 
 ### Examples
 
@@ -6432,7 +6660,7 @@ p.animations.new()
 
 Transform Animation Step
 
-![][1107]
+![][1130]
 
 By default, the transform will start with the element's current transform.
 
@@ -6442,7 +6670,7 @@ a [Rotation][198], [Scale][92] or [Translation][186] transform.
 `start`, `target` and `delta` should have the same order of transform links
 as the `element`'s transform.
 
-The [TransformAnimationStep][486] will animate each of these links with the
+The [TransformAnimationStep][498] will animate each of these links with the
 same duration. If `velocity` is used to calculate the duration, then the link
 with the longest duration will define the duration of the animation.
 `velocity` can either be a transform with the same order of transform links
@@ -6453,7 +6681,7 @@ Use either `delta` or `target` to define it's end point of the animation.
 
 ### Parameters
 
--   `options` **[OBJ_TransformAnimationStep][1089]** 
+-   `options` **[OBJ_TransformAnimationStep][1112]** 
 
 ### Examples
 
@@ -6525,7 +6753,7 @@ p.animations.new()
 
 Scenario Animation Step
 
-![][1108]
+![][1131]
 
 A scenario defines an element's transform and color and can be used to make
 code more readable and reusable.
@@ -6535,7 +6763,7 @@ color.
 
 ### Parameters
 
--   `options` **[OBJ_ScenarioAnimationStep][1096]** 
+-   `options` **[OBJ_ScenarioAnimationStep][1119]** 
 
 ### Examples
 
@@ -6595,7 +6823,7 @@ p.animations.new()
 
 Pulse animation step
 
-![][1109]
+![][1132]
 
 The pulse animation step animates a pulse.
 
@@ -6603,8 +6831,8 @@ The options are the same as those in the \* <a href="#diagramelementpulse">pulse
 
 ### Parameters
 
--   `optionsIn` **...[Array][994]&lt;[OBJ_PulseAnimationStep][1110]>** 
--   `options` **[OBJ_RotationAnimationStep][1075]** 
+-   `optionsIn` **...[Array][1006]&lt;[OBJ_PulseAnimationStep][1133]>** 
+-   `options` **[OBJ_RotationAnimationStep][1098]** 
 
 ### Examples
 
@@ -6656,7 +6884,7 @@ p.animations.new()
 
 Color animation Step
 
-![][1111]
+![][1134]
 
 By default, the color will start with the element's current color.
 
@@ -6673,13 +6901,13 @@ interest. As such, a [DiagramElement][32] has several color attributes:
 The `target` property can accept `'dim'` and `'undim'` as shortcuts to dim
 or undim the element.
 
-In addition, the [DimAnimationStep][498] and [UndimAnimationStep][501] can
+In addition, the [DimAnimationStep][510] and [UndimAnimationStep][513] can
 be used to do the same, which is especially useful when trying to build
 easy to read code in a complex animation.
 
 ### Parameters
 
--   `options` **[OBJ_ColorAnimationStep][1085]** 
+-   `options` **[OBJ_ColorAnimationStep][1108]** 
 
 ### Examples
 
@@ -6729,13 +6957,13 @@ p.animations.new()
 
 Dim color animation step
 
-![][1112]
+![][1135]
 
 Animates color of element to the `dimColor` property of [DiagramElement][32]
 
 ### Parameters
 
--   `durationOrOptions` **([number][996] \| [OBJ_ElementAnimationStep][1091])** 
+-   `durationOrOptions` **([number][1008] \| [OBJ_ElementAnimationStep][1114])** 
 
 ### Examples
 
@@ -6778,13 +7006,13 @@ p.animations.new()
 
 Undim color animation step
 
-![][1113]
+![][1136]
 
 Animates color of element to the `defaultColor` property of [DiagramElement][32]
 
 ### Parameters
 
--   `durationOrOptions` **([number][996] \| [OBJ_ElementAnimationStep][1091])** 
+-   `durationOrOptions` **([number][1008] \| [OBJ_ElementAnimationStep][1114])** 
 
 ### Examples
 
@@ -6830,7 +7058,7 @@ p.animations.new()
 
 Opacity Animation Step
 
-![][1114]
+![][1137]
 
 A [DiagramElement][32] has `color` and `opacity` properties. The `color`
 property has an alpha channel that defines opacity, but it should be used
@@ -6847,13 +7075,13 @@ opacity unless dissolving. If dissolving, the opacity will start at `0` if
 dissolving in, or `1` if dissolving out unless `dissolveFromCurrent` is
 `true` in which case the opacity will start from the current opacity.
 
-The [DissolveInAnimationStep][507] and [DissolveOutAnimationStep][510]
+The [DissolveInAnimationStep][519] and [DissolveOutAnimationStep][522]
 extend the `OpacityAnimationStep` to make it even more convenient to
 dissolve.
 
 ### Parameters
 
--   `options` **[OBJ_OpacityAnimationStep][1087]** 
+-   `options` **[OBJ_OpacityAnimationStep][1110]** 
 
 ### Examples
 
@@ -6918,13 +7146,13 @@ p.animations.new()
 
 Dissolve in animation step
 
-![][1115]
+![][1138]
 
 Animates opacity of element to dissolve in.
 
 ### Parameters
 
--   `durationOrOptions` **([number][996] \| [OBJ_ElementAnimationStep][1091])** 
+-   `durationOrOptions` **([number][1008] \| [OBJ_ElementAnimationStep][1114])** 
 
 ### Examples
 
@@ -6970,13 +7198,13 @@ p.animations.new()
 
 Dissolve out animation step
 
-![][1116]
+![][1139]
 
 Animates opacity of element to dissolve out.
 
 ### Parameters
 
--   `durationOrOptions` **([number][996] \| [OBJ_ElementAnimationStep][1091])** 
+-   `durationOrOptions` **([number][1008] \| [OBJ_ElementAnimationStep][1114])** 
 
 ### Examples
 
@@ -7019,7 +7247,7 @@ p.animations.new()
 
 Trigger Animation Step
 
-![][1117]
+![][1140]
 
 A trigger step executes a custom function
 
@@ -7029,7 +7257,7 @@ the animation step finishes.
 
 ### Parameters
 
--   `options` **([OBJ_TriggerAnimationStep][1079] | function (): void)** 
+-   `options` **([OBJ_TriggerAnimationStep][1102] | function (): void)** 
 
 ### Examples
 
@@ -7089,7 +7317,7 @@ p.animations.new()
 
 Custom animation step
 
-![][1118]
+![][1141]
 
 Custom animation steps are useful for orchestrating complex animations, or
 performing non-linear animations.
@@ -7105,7 +7333,7 @@ A function to create a custom non-linear progressor can also be used.
 
 ### Parameters
 
--   `options` **[OBJ_CustomAnimationStep][1101]** 
+-   `options` **[OBJ_CustomAnimationStep][1124]** 
 
 ### Examples
 
@@ -7131,17 +7359,17 @@ p.animations.new()
     <a href="#animation-boilerplate">boilerplate</a>
     **
 
-Execute an array of [AnimationStep][842]s in series.
+Execute an array of [AnimationStep][854]s in series.
 
-![][1119]
+![][1142]
 
-Often the [AnimationBuilder][439] class which extends
+Often the [AnimationBuilder][451] class which extends
 `SerialAnimationStep` can be used to create serial animations
 in a more clean way.
 
 ### Parameters
 
--   `steps` **([Array][994]&lt;[AnimationStep][1072]> | [OBJ_SerialAnimationStep][1103])** animation steps to perform in serial
+-   `steps` **([Array][1006]&lt;[AnimationStep][1095]> | [OBJ_SerialAnimationStep][1126])** animation steps to perform in serial
 
 ### Examples
 
@@ -7188,13 +7416,13 @@ p.animations.new()
 
 Execute an array of `{@link AnimationStep}`s in parallel.
 
-![][1120]
+![][1143]
 
 The parallel animation step will not complete till all steps are finished.
 
 ### Parameters
 
--   `steps` **([Array][994]&lt;[AnimationStep][1072]> | [OBJ_SerialAnimationStep][1103])** animation steps to perform in serial
+-   `steps` **([Array][1006]&lt;[AnimationStep][1095]> | [OBJ_SerialAnimationStep][1126])** animation steps to perform in serial
 
 ### Examples
 
@@ -7234,7 +7462,7 @@ more readable.
 
 ### Parameters
 
--   `delayOrOptions` **([number][996] \| [OBJ_AnimationStep][1081])** 
+-   `delayOrOptions` **([number][1008] \| [OBJ_AnimationStep][1104])** 
 
 ## Equations
 
@@ -7318,7 +7546,7 @@ diagram.add('equation', equation);
 equation.showForm('b');
 ```
 
-![][1121]
+![][1144]
 
 ### Symbols and Equation Functions
 
@@ -7351,7 +7579,7 @@ Finally, we can display the form:
 equation.showForm('b');
 ```
 
-![][1122]
+![][1145]
 
 Combine all the steps above gives:
 
@@ -7389,7 +7617,7 @@ equation.goToForm({
 });
 ```
 
-![][1123]
+![][1146]
 
 The animation can be improved by moving the terms of the equation in curves instead of linearly. To do this we can use the object definition of a form that also defines translation animation properties:
 
@@ -7415,7 +7643,7 @@ equation.goToForm({
 });
 ```
 
-![][1124]
+![][1147]
 
 ### Object Definition
 
@@ -7469,7 +7697,7 @@ equation.showForm('b')
 equation._c.pulse({ scale: 2, yAlign: 'top' });
 ```
 
-![][1125]
+![][1148]
 
 An element can be touched:
 
@@ -7479,7 +7707,7 @@ equation._c.setTouchable();
 equation._c.onClick = () => { console.log('c was touched') }
 ```
 
-![][1126]
+![][1149]
 
 And the equation can be moved:
 
@@ -7489,7 +7717,7 @@ equation.setTouchableRect(0.5);
 equation.setMovable();
 ```
 
-![][1127]
+![][1150]
 
 Here we are putting a buffer of 0.5 around the bounding rect of the equation to make it easy to touch and drag around.
 
@@ -7523,7 +7751,7 @@ diagram.addElement({
 diagram.elements._eqn.showForm('1');
 ```
 
-![][1128]
+![][1151]
 
 Elements defined inline can be used in other forms:
 
@@ -7551,7 +7779,7 @@ diagram.elements._eqn.goToForm({
 });
 ```
 
-![][1129]
+![][1152]
 
 Even symbols can be defined inline:
 
@@ -7590,7 +7818,7 @@ diagram.addElement({
 diagram.elements._eqn.showForm('1');
 ```
 
-![][1130]
+![][1153]
 
 Underscores can also be used to give inline symbol definitions unqiue identifiers. In this case, the text before the underscore is the unique identifier, and the text after defines the symbol.
 
@@ -7613,7 +7841,7 @@ diagram.elements._eqn.goToForm({
 });
 ```
 
-![][1131]
+![][1154]
 
 #### Function Definitions
 
@@ -7671,7 +7899,7 @@ eqn.setTouchableRect(0.5);
 eqn.showForm('1');
 ```
 
-![][1132]
+![][1155]
 
 #### Phrases
 
@@ -7709,7 +7937,7 @@ eqn.setTouchableRect(0.5);
 eqn.showForm('1');
 ```
 
-![][1133]
+![][1156]
 
 ### Form Series
 
@@ -7729,7 +7957,7 @@ the `diagram.create.equation` method.
 
 ### Parameters
 
--   `options` **[EQN_Equation][1134]** 
+-   `options` **[EQN_Equation][1157]** 
 
 ### Examples
 
@@ -7777,11 +8005,11 @@ eqn.showForm('1');
 
 Equation parameters and functions
 
-Type: {forms: {}, functions: [EquationFunctions][1135], symbols: EquationSymbols, currentForm: [string][991], font: DiagramFont, scale: [number][996], formSeries: {}, currentFormSeries: [Array][994]&lt;[string][991]>, currentFormSeriesName: [string][991], formDefaults: any, isAnimating: [boolean][995], descriptionElement: ([DiagramElementPrimitive][992] | null), descriptionPosition: [Point][1006], formRestart: {moveFrom: ([Point][1006] \| [DiagramElementCollection][993])?, pulse: {duration: [number][996], scale: [number][996], element: [DiagramElement][1000]}?}?}
+Type: {forms: {}, functions: [EquationFunctions][1158], symbols: EquationSymbols, currentForm: [string][1003], font: DiagramFont, scale: [number][1008], formSeries: {}, currentFormSeries: [Array][1006]&lt;[string][1003]>, currentFormSeriesName: [string][1003], formDefaults: any, isAnimating: [boolean][1007], descriptionElement: ([DiagramElementPrimitive][1004] | null), descriptionPosition: [Point][1018], formRestart: {moveFrom: ([Point][1018] \| [DiagramElementCollection][1005])?, pulse: {duration: [number][1008], scale: [number][1008], element: [DiagramElement][1012]}?}?}
 
 #### Properties
 
--   `functions` **[EquationFunctions][1135]** equation functions
+-   `functions` **[EquationFunctions][1158]** equation functions
 
 ### setFormSeries
 
@@ -7789,13 +8017,13 @@ Set the current form series to 'name'
 
 #### Parameters
 
--   `name` **[string][991]** 
+-   `name` **[string][1003]** 
 
 ### getFormSeries
 
 Get the current form series name
 
-Returns **[string][991]** 
+Returns **[string][1003]** 
 
 ### addElements
 
@@ -7803,7 +8031,7 @@ Add elements to equation.
 
 #### Parameters
 
--   `elems` **[TypeEquationElements][1136]** 
+-   `elems` **[TypeEquationElements][1159]** 
 
 ### addForms
 
@@ -7811,7 +8039,7 @@ Add forms to equation.
 
 #### Parameters
 
--   `forms` **[TypeEquationForms][1137]** 
+-   `forms` **[TypeEquationForms][1160]** 
 
 ### getCurrentForm
 
@@ -7825,7 +8053,7 @@ Set current equation form - Note, this does not show the form.
 
 #### Parameters
 
--   `formOrName` **(EquationForm | [string][991])** 
+-   `formOrName` **(EquationForm | [string][1003])** 
 
 ### showForm
 
@@ -7833,8 +8061,8 @@ Show equation form
 
 #### Parameters
 
--   `formOrName` **(EquationForm | [string][991])** 
--   `animationStop` **[boolean][995]**  (optional, default `true`)
+-   `formOrName` **(EquationForm | [string][1003])** 
+-   `animationStop` **[boolean][1007]**  (optional, default `true`)
 
 ### getForm
 
@@ -7842,7 +8070,7 @@ Get an equation form object from a form name
 
 #### Parameters
 
--   `formOrName` **([string][991] | EquationForm)** 
+-   `formOrName` **([string][1003] | EquationForm)** 
 
 Returns **(null | EquationForm)** 
 
@@ -7852,7 +8080,7 @@ Start an animation to an equation form
 
 #### Parameters
 
--   `optionsIn` **[TypeEquationGoToFormOptions][1138]**  (optional, default `{}`)
+-   `optionsIn` **[TypeEquationGoToFormOptions][1161]**  (optional, default `{}`)
 
 ### prevForm
 
@@ -7860,8 +8088,8 @@ Animate to previous form in the current form series
 
 #### Parameters
 
--   `durationOrOptions` **([number][996] | null | [TypeEquationGoToFormOptions][1138])**  (optional, default `null`)
--   `delay` **[number][996]**  (optional, default `0`)
+-   `durationOrOptions` **([number][1008] | null | [TypeEquationGoToFormOptions][1161])**  (optional, default `null`)
+-   `delay` **[number][1008]**  (optional, default `0`)
 
 ### nextForm
 
@@ -7869,8 +8097,8 @@ Animate to next form in the current form series
 
 #### Parameters
 
--   `durationOrOptions` **([number][996] | null | [TypeEquationGoToFormOptions][1138])**  (optional, default `null`)
--   `delay` **[number][996]**  (optional, default `0`)
+-   `durationOrOptions` **([number][1008] | null | [TypeEquationGoToFormOptions][1161])**  (optional, default `null`)
+-   `delay` **[number][1008]**  (optional, default `0`)
 
 ### replayCurrentForm
 
@@ -7878,33 +8106,33 @@ Start from previous form and animate to current form
 
 #### Parameters
 
--   `duration` **[number][996]** 
+-   `duration` **[number][1008]** 
 
 ## EQN_Equation
 
-Options objects to construct an [Equation][528] class. All properties are optional.
+Options objects to construct an [Equation][540] class. All properties are optional.
 
 ### Properties
 
--   `color` **[Array][994]&lt;[number][996]>?** default: [0.5, 0.5, 0.5, 1]
--   `scale` **[number][996]?** default: 0.7
--   `elements` **[TypeEquationElements][1136]?** default: {}
--   `defaultFormAlignment` **[TypeFormAlignment][1139]?** default:
+-   `color` **[Array][1006]&lt;[number][1008]>?** default: [0.5, 0.5, 0.5, 1]
+-   `scale` **[number][1008]?** default: 0.7
+-   `elements` **[TypeEquationElements][1159]?** default: {}
+-   `defaultFormAlignment` **[TypeFormAlignment][1162]?** default:
     { fixTo: new [Point][86](0, 0), xAlign: 'left', yAlign: 'baseline}
--   `forms` **[TypeEquationForms][1137]?** default: {}
--   `formSeries` **([Array][994]&lt;[string][991]> | [Object][1140]&lt;[Array][994]&lt;[string][991]>>)?** an object
+-   `forms` **[TypeEquationForms][1160]?** default: {}
+-   `formSeries` **([Array][1006]&lt;[string][1003]> | [Object][1163]&lt;[Array][1006]&lt;[string][1003]>>)?** an object
     with each key being a form series name, and each value an array for form
     names. If defined as an array, then a form series object is created where
     the form series name is 'base'. Default: {}
--   `defaultFormSeries` **[string][991]?** If more than one form series is
+-   `defaultFormSeries` **[string][1003]?** If more than one form series is
     defined, then a default must be chosen to be the first current one. Default:
     first form defined
--   `formRestart` **[TypeFormRestart][1141]?** default: null
--   `font` **DiagramFont?** default [DiagramFont][1142]('Times
+-   `formRestart` **[TypeFormRestart][1164]?** default: null
+-   `font` **DiagramFont?** default [DiagramFont][1165]('Times
     New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
--   `position` **[Point][1006]?** default: new [Point][86](0, 0)
--   `formDefaults` **{alignment: [TypeFormAlignment][1139]?, elementMods: {}, animation: [TypeFormAnimationProperties][1143]}** 
--   `transform` **[Transform][990]?** 
+-   `position` **[Point][1018]?** default: new [Point][86](0, 0)
+-   `formDefaults` **{alignment: [TypeFormAlignment][1162]?, elementMods: {}, animation: [TypeFormAnimationProperties][1166]}** 
+-   `transform` **[Transform][1002]?** 
 
 ## Equation Layout
 
@@ -7919,7 +8147,7 @@ Options objects to construct an [Equation][528] class. All properties are option
 
 Equation fraction options
 
-![][1144]
+![][1167]
 
 A fraction has a numerator, denominator and vinculum symbol (line).
 
@@ -7928,16 +8156,16 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
--   `numerator` **[TypeEquationPhrase][1145]** 
--   `symbol` **[string][991]** Vinculum symbol
--   `denominator` **[TypeEquationPhrase][1145]** 
--   `scale` **[number][996]?** (`1`)
--   `numeratorSpace` **[number][996]?** (`0.05`)
--   `denominatorSpace` **[number][996]?** (`0.05`)
--   `overhang` **[number][996]?** Vinculum extends beyond the content
+-   `numerator` **[TypeEquationPhrase][1168]** 
+-   `symbol` **[string][1003]** Vinculum symbol
+-   `denominator` **[TypeEquationPhrase][1168]** 
+-   `scale` **[number][1008]?** (`1`)
+-   `numeratorSpace` **[number][1008]?** (`0.05`)
+-   `denominatorSpace` **[number][1008]?** (`0.05`)
+-   `overhang` **[number][1008]?** Vinculum extends beyond the content
     horizontally by the this amount (`0.05`)
--   `offsetY` **[number][996]?** Offset fraction in y (`0.07`)
--   `fullContentBounds` **[boolean][995]?** Use full bounds with content (`false`)
+-   `offsetY` **[number][1008]?** Offset fraction in y (`0.07`)
+-   `fullContentBounds` **[boolean][1007]?** Use full bounds with content (`false`)
 
 ### Examples
 
@@ -8036,7 +8264,7 @@ eqn.showForm('1');
 
 Equation root
 
-![][1146]
+![][1169]
 
 Surround an equation phrase with a radical symbol and add a custom root if
 needed
@@ -8046,26 +8274,26 @@ Options can be an object, or an array in the property order below.
 
 ### Properties
 
--   `symbol` **[string][991]** radical symbol
--   `content` **[TypeEquationPhrase][1145]** 
--   `inSize` **[boolean][995]?** `false` excludes radical symbol and root (if
+-   `symbol` **[string][1003]** radical symbol
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `inSize` **[boolean][1007]?** `false` excludes radical symbol and root (if
     defined) from size of resulting phrase (`true`)
--   `space` **[number][996]?** (`0.02`) default space between content and
+-   `space` **[number][1008]?** (`0.02`) default space between content and
     radical symbol in left, right, top and bottom directions.
--   `topSpace` **[number][996]?** space between content top and radical symbol
+-   `topSpace` **[number][1008]?** space between content top and radical symbol
     horiztonal line (`space`)
--   `rightSpace` **[number][996]?** radical symbol overhang of content on right
+-   `rightSpace` **[number][1008]?** radical symbol overhang of content on right
     (`space`)
--   `bottomSpace` **[number][996]?** radical symbol descent below content
+-   `bottomSpace` **[number][1008]?** radical symbol descent below content
     (`space`)
--   `leftSpace` **[number][996]?** space between radical symbol up stroke and
+-   `leftSpace` **[number][1008]?** space between radical symbol up stroke and
     content (`space`)
--   `root` **[TypeEquationPhrase][1145]?** custom root
--   `rootOffset` **[number][996]?** custom root offset (`[0, 0.06]`)
--   `rootScale` **[number][996]?** custom root scale (`0.6`)
--   `fullContentBounds` **[boolean][995]?** use full bounds of content,
+-   `root` **[TypeEquationPhrase][1168]?** custom root
+-   `rootOffset` **[number][1008]?** custom root offset (`[0, 0.06]`)
+-   `rootScale` **[number][1008]?** custom root scale (`0.6`)
+-   `fullContentBounds` **[boolean][1007]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][995]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][1007]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -8154,18 +8382,18 @@ eqn.showForm('1');
 
 Equation subscript
 
-![][1147]
+![][1170]
 
 Options can be an object, or an array in the property order below
 
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `subscript` **[TypeEquationPhrase][1145]** 
--   `scale` **[number][996]?** scale of subscript (`0.5`)
--   `offset` **[TypeParsablePoint][1004]?** offset of subscript (`[0, 0]`)
--   `inSize` **[boolean][995]?** `true` excludes subscript from size of
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `subscript` **[TypeEquationPhrase][1168]** 
+-   `scale` **[number][1008]?** scale of subscript (`0.5`)
+-   `offset` **[TypeParsablePoint][1016]?** offset of subscript (`[0, 0]`)
+-   `inSize` **[boolean][1007]?** `true` excludes subscript from size of
     resulting phrase (`true`)
 
 ### Examples
@@ -8227,18 +8455,18 @@ eqn.showForm('1');
 
 Equation superscript
 
-![][1148]
+![][1171]
 
 Options can be an object, or an array in the property order below
 
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `superscript` **[TypeEquationPhrase][1145]** 
--   `scale` **[number][996]?** scale of superscript (`0.5`)
--   `offset` **[TypeParsablePoint][1004]?** offset of superscript (`[0, 0]`)
--   `inSize` **[boolean][995]?** `true` excludes superscript from size of
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `superscript` **[TypeEquationPhrase][1168]** 
+-   `scale` **[number][1008]?** scale of superscript (`0.5`)
+-   `offset` **[TypeParsablePoint][1016]?** offset of superscript (`[0, 0]`)
+-   `inSize` **[boolean][1007]?** `true` excludes superscript from size of
     resulting phrase (`true`)
 
 ### Examples
@@ -8292,20 +8520,20 @@ eqn.showForm('1');
 
 Equation superscript and subscript
 
-![][1149]
+![][1172]
 
 Options can be an object, or an array in the property order below
 
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `superscript` **[TypeEquationPhrase][1145]** 
--   `subscript` **[TypeEquationPhrase][1145]** 
--   `scale` **[number][996]?** scale of superscript (`0.5`)
--   `superscriptOffset` **[TypeParsablePoint][1004]?** offset of superscript (`[0, 0]`)
--   `subscriptOffset` **[TypeParsablePoint][1004]?** offset of subscript (`[0, 0]`)
--   `inSize` **[boolean][995]?** `true` excludes superscript from size of
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `superscript` **[TypeEquationPhrase][1168]** 
+-   `subscript` **[TypeEquationPhrase][1168]** 
+-   `scale` **[number][1008]?** scale of superscript (`0.5`)
+-   `superscriptOffset` **[TypeParsablePoint][1016]?** offset of superscript (`[0, 0]`)
+-   `subscriptOffset` **[TypeParsablePoint][1016]?** offset of subscript (`[0, 0]`)
+-   `inSize` **[boolean][1007]?** `true` excludes superscript from size of
     resulting phrase (`true`)
 
 ### Examples
@@ -8360,33 +8588,33 @@ eqn.showForm('1');
 
 Equation matrix
 
-![][1150]
+![][1173]
 
 Options can be an object, or an array in the property order below
 
 
 ### Properties
 
--   `order` **\[[number][996], [number][996]]?** (`[1, length-of-content]`)
--   `left` **[string][991]?** left bracket symbol
--   `content` **[Array][994]&lt;[TypeEquationPhrase][1145]>?** Array of equation phrases
+-   `order` **\[[number][1008], [number][1008]]?** (`[1, length-of-content]`)
+-   `left` **[string][1003]?** left bracket symbol
+-   `content` **[Array][1006]&lt;[TypeEquationPhrase][1168]>?** Array of equation phrases
     where each element is a matrix element
--   `right` **[string][991]?** right bracket symbol
--   `scale` **[number][996]?** scale of matrix elements (`0.7`)
--   `fit` **(`"max"` \| `"min"` \| [TypeParsablePoint][1004])?** cell size -
+-   `right` **[string][1003]?** right bracket symbol
+-   `scale` **[number][1008]?** scale of matrix elements (`0.7`)
+-   `fit` **(`"max"` \| `"min"` \| [TypeParsablePoint][1016])?** cell size -
     `min` each cell is a rectangle with width equal to largest width in its
     column, and height equal to largest height in its row - `max`
     all cells are a square with dimension equal to the largest dimension of the
     largest cell - `point` all cells are a rectangle with width as point.x and
     height as point.y - note - `max` and `point` only work with
     `yAlign`=`'middle'` (`'min'`)
--   `space` **[TypeParsablePoint][1004]?** space between each cell
+-   `space` **[TypeParsablePoint][1016]?** space between each cell
     (`[0.05, 0.05]`)
 -   `yAlign` **(`"baseline"` \| `"middle"`)?** align cells in a row with the
     text baseline, or middle of the cell (`baseline`)
--   `brac` **[EQN_Bracket][1151]?** bracket options not including
+-   `brac` **[EQN_Bracket][1174]?** bracket options not including
     the symbols (`{}`)
--   `fullContentBounds` **[boolean][995]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][1007]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
 
 ### Examples
@@ -8475,7 +8703,7 @@ eqn.showForm('1');
 
 Equation integral
 
-![][1152]
+![][1175]
 
 Place an integral (with optional limits) before an equation phrase
 
@@ -8484,52 +8712,52 @@ Options can be an object, or an array in the property order below.
 
 ### Properties
 
--   `symbol` **[string][991]** 
--   `content` **[TypeEquationPhrase][1145]** 
--   `from` **[TypeEquationPhrase][1145]?** bottom limit
--   `to` **[TypeEquationPhrase][1145]?** top limit
--   `inSize` **[boolean][995]?** `false` excludes box symbol from size of
+-   `symbol` **[string][1003]** 
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `from` **[TypeEquationPhrase][1168]?** bottom limit
+-   `to` **[TypeEquationPhrase][1168]?** top limit
+-   `inSize` **[boolean][1007]?** `false` excludes box symbol from size of
     resulting phrase (`true`)
--   `space` **[number][996]?** horizontal space between symbol and content (`0.05`)
--   `topSpace` **[number][996]?** space between content top and symbol top (`0.1`)
--   `bottomSpace` **[number][996]?** space between content bottom and symbol bottom (`0.1`)
--   `height` **[number][996]?** force height of symbol
--   `yOffset` **[number][996]?** y offset of symbol (`0`)
--   `scale` **[number][996]?** content scale (`1`)
--   `fromScale` **[number][996]?** scale of _from_ (bottom) limit (`0.5`)
--   `toScale` **[number][996]?** scale of _to_ (top) limit (`0.5`)
--   `fromOffset` **[TypeParsablePoint][1004]?** from limit offest ( `side`:
+-   `space` **[number][1008]?** horizontal space between symbol and content (`0.05`)
+-   `topSpace` **[number][1008]?** space between content top and symbol top (`0.1`)
+-   `bottomSpace` **[number][1008]?** space between content bottom and symbol bottom (`0.1`)
+-   `height` **[number][1008]?** force height of symbol
+-   `yOffset` **[number][1008]?** y offset of symbol (`0`)
+-   `scale` **[number][1008]?** content scale (`1`)
+-   `fromScale` **[number][1008]?** scale of _from_ (bottom) limit (`0.5`)
+-   `toScale` **[number][1008]?** scale of _to_ (top) limit (`0.5`)
+-   `fromOffset` **[TypeParsablePoint][1016]?** from limit offest ( `side`:
     `[0, 0]`, `topBottom`: `[0, -0.04]`, `topBottomCenter`: `[0, -0.04]`)
--   `toOffset` **[TypeParsablePoint][1004]?** to limit offest (`side`: `[0, 0]`
+-   `toOffset` **[TypeParsablePoint][1016]?** to limit offest (`side`: `[0, 0]`
     `topBottom`: `[0, 0.04]`, `topBottomCenter`: `[0, 0.04]`)
 -   `limitsPosition` **(`"side"` \| `"topBottom"` \| `"topBottomCenter"`)?** limits
     relative to symbol. `side` is to the right of the symbol ends, `topBottom`
     is above and below the symbol ends and `topBottomCenter` is above and below
     the integral mid point (`'side'`)
--   `limitsAroundContent` **[boolean][995]?** `false` means content left is
+-   `limitsAroundContent` **[boolean][1007]?** `false` means content left is
     aligned with furthest right of limits
--   `fromXPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][996])?** x position
+-   `fromXPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][1008])?** x position
     of limit relative to the symbol (`side`: `0.5`, `topBottom`: `0.1`,
     `topBottomCenter`: `'center'`)
--   `fromYPositio` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][996])?** y position of the limit relavite to the symbol (`'bottom'`)
--   `fromXAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][996])?** limit x
+-   `fromYPositio` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][1008])?** y position of the limit relavite to the symbol (`'bottom'`)
+-   `fromXAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][1008])?** limit x
     alignment (`side`: `'left'`, `topBottom`: `center`,
     `topBottomCenter`: `'center'`)
--   `fromYAlign` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][996])?** limit y alignment (`side`: `'middle'`, `topBottom`: `'top'`,
+-   `fromYAlign` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][1008])?** limit y alignment (`side`: `'middle'`, `topBottom`: `'top'`,
     `topBottomCenter`: `'top'`)
--   `toXPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][996])?** x position
+-   `toXPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][1008])?** x position
     of limit relative to the symbol (`side`: `'right'`, `topBottom`: `0.9`,
     `topBottomCenter`: `'center'`)
--   `toYPosition` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][996])?** y position of the limit relavite to the symbol (`side`: `'top'`,
+-   `toYPosition` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][1008])?** y position of the limit relavite to the symbol (`side`: `'top'`,
     `topBottom`: `top`, `topBottomCenter`: `'top'`)
--   `toXAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][996])?** limit x
+-   `toXAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][1008])?** limit x
     alignment (`side`: `'left'`, `topBottom`: `center`,
     `topBottomCenter`: `'center'`)
--   `toYAlign` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][996])?** limit y alignment (`side`: `'middle'`, `topBottom`: `bottom`,
+-   `toYAlign` **(`"bottom"` \| `"top"` \| `"middle"` \| `"baseline"` \| [number][1008])?** limit y alignment (`side`: `'middle'`, `topBottom`: `bottom`,
     `topBottomCenter`: `'bottom'`)
--   `fullContentBounds` **[boolean][995]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][1007]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][995]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][1007]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -8604,7 +8832,7 @@ eqn.showForm('1');
 
 Equation sum of
 
-![][1153]
+![][1176]
 
 Place an equation phrase in a sum of operation
 
@@ -8613,28 +8841,28 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
--   `symbol` **[string][991]** 
--   `content` **[TypeEquationPhrase][1145]** 
--   `from` **[TypeEquationPhrase][1145]?** 
--   `to` **[TypeEquationPhrase][1145]?** 
--   `inSize` **[boolean][995]?** `false` excludes sum of operator from size of
+-   `symbol` **[string][1003]** 
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `from` **[TypeEquationPhrase][1168]?** 
+-   `to` **[TypeEquationPhrase][1168]?** 
+-   `inSize` **[boolean][1007]?** `false` excludes sum of operator from size of
     resulting phrase (`true`)
--   `space` **[number][996]?** horiztonaly space between symbol and content (`0.1`)
--   `topSpace` **[number][996]?** space symbol extends above content top (`0.07`)
--   `bottomSpace` **[number][996]?** space symbol extends below content bottom (`0.07`)
--   `height` **[number][996]?** force height of symbol overwriting `topSpace`
--   `yOffset` **[number][996]?** offset of symbol in y (`0`)
--   `scale` **[number][996]?** content scale (`1`)
--   `fromScale` **[number][996]?** scale of _from_ phrase (`0.5`)
--   `toScale` **[number][996]?** scale of _to_ phrase (`0.5`)
--   `fromSpace` **[number][996]?** space between symbol and `from` phrase
+-   `space` **[number][1008]?** horiztonaly space between symbol and content (`0.1`)
+-   `topSpace` **[number][1008]?** space symbol extends above content top (`0.07`)
+-   `bottomSpace` **[number][1008]?** space symbol extends below content bottom (`0.07`)
+-   `height` **[number][1008]?** force height of symbol overwriting `topSpace`
+-   `yOffset` **[number][1008]?** offset of symbol in y (`0`)
+-   `scale` **[number][1008]?** content scale (`1`)
+-   `fromScale` **[number][1008]?** scale of _from_ phrase (`0.5`)
+-   `toScale` **[number][1008]?** scale of _to_ phrase (`0.5`)
+-   `fromSpace` **[number][1008]?** space between symbol and `from` phrase
     (`0.04`)
--   `toSpace` **[number][996]?** space between symbol and `to` phrase (`0.04`)
--   `fromOffset` **[TypeParsablePoint][1004]?** offset of `from` phrase (`[0, 0]`)
--   `toOffset` **[TypeParsablePoint][1004]?** offset of `to` phrase (`[0, 0]`)
--   `fullContentBounds` **[boolean][995]?** use full bounds of content,
+-   `toSpace` **[number][1008]?** space between symbol and `to` phrase (`0.04`)
+-   `fromOffset` **[TypeParsablePoint][1016]?** offset of `from` phrase (`[0, 0]`)
+-   `toOffset` **[TypeParsablePoint][1016]?** offset of `to` phrase (`[0, 0]`)
+-   `fullContentBounds` **[boolean][1007]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][995]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][1007]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -8705,7 +8933,7 @@ eqn.showForm('1');
 
 Equation product of
 
-![][1154]
+![][1177]
 
 Place an equation phrase in a product of operation
 
@@ -8714,28 +8942,28 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
--   `symbol` **[string][991]** 
--   `content` **[TypeEquationPhrase][1145]** 
--   `from` **[TypeEquationPhrase][1145]?** 
--   `to` **[TypeEquationPhrase][1145]?** 
--   `inSize` **[boolean][995]?** `false` excludes product of operator from size of
+-   `symbol` **[string][1003]** 
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `from` **[TypeEquationPhrase][1168]?** 
+-   `to` **[TypeEquationPhrase][1168]?** 
+-   `inSize` **[boolean][1007]?** `false` excludes product of operator from size of
     resulting phrase (`true`)
--   `space` **[number][996]?** horiztonaly space between symbol and content (`0.1`)
--   `topSpace` **[number][996]?** space symbol extends above content top (`0.07`)
--   `bottomSpace` **[number][996]?** space symbol extends below content bottom (`0.07`)
--   `height` **[number][996]?** force height of symbol overwriting `topSpace`
--   `yOffset` **[number][996]?** offset of symbol in y (`0`)
--   `scale` **[number][996]?** content scale (`1`)
--   `fromScale` **[number][996]?** scale of _from_ phrase (`0.5`)
--   `toScale` **[number][996]?** scale of _to_ phrase (`0.5`)
--   `fromSpace` **[number][996]?** space between symbol and `from` phrase
+-   `space` **[number][1008]?** horiztonaly space between symbol and content (`0.1`)
+-   `topSpace` **[number][1008]?** space symbol extends above content top (`0.07`)
+-   `bottomSpace` **[number][1008]?** space symbol extends below content bottom (`0.07`)
+-   `height` **[number][1008]?** force height of symbol overwriting `topSpace`
+-   `yOffset` **[number][1008]?** offset of symbol in y (`0`)
+-   `scale` **[number][1008]?** content scale (`1`)
+-   `fromScale` **[number][1008]?** scale of _from_ phrase (`0.5`)
+-   `toScale` **[number][1008]?** scale of _to_ phrase (`0.5`)
+-   `fromSpace` **[number][1008]?** space between symbol and `from` phrase
     (`0.04`)
--   `toSpace` **[number][996]?** space between symbol and `to` phrase (`0.04`)
--   `fromOffset` **[TypeParsablePoint][1004]?** offset of `from` phrase (`[0, 0]`)
--   `toOffset` **[TypeParsablePoint][1004]?** offset of `to` phrase (`[0, 0]`)
--   `fullContentBounds` **[boolean][995]?** use full bounds of content,
+-   `toSpace` **[number][1008]?** space between symbol and `to` phrase (`0.04`)
+-   `fromOffset` **[TypeParsablePoint][1016]?** offset of `from` phrase (`[0, 0]`)
+-   `toOffset` **[TypeParsablePoint][1016]?** offset of `to` phrase (`[0, 0]`)
+-   `fullContentBounds` **[boolean][1007]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][995]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][1007]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -8806,7 +9034,7 @@ eqn.showForm('1');
 
 Equation bar
 
-![][1155]
+![][1178]
 
 Place a bar (or bracket) symbol to the side of an equation phrase
 
@@ -8815,33 +9043,33 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `symbol` **[string][991]** 
--   `inSize` **[boolean][995]?** `false` excludes box symbol from size of
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `symbol` **[string][1003]** 
+-   `inSize` **[boolean][1007]?** `false` excludes box symbol from size of
     resulting phrase (`true`)
--   `space` **[number][996]?** space between content and the symbol (`0.03`)
--   `overhang` **[number][996]?** amount symbol extends beyond content (`0`)
--   `length` **[number][996]?** total length of symbol (overrides `overhang`)
--   `left` **[number][996]?** amount symbol extends beyond content to the left
+-   `space` **[number][1008]?** space between content and the symbol (`0.03`)
+-   `overhang` **[number][1008]?** amount symbol extends beyond content (`0`)
+-   `length` **[number][1008]?** total length of symbol (overrides `overhang`)
+-   `left` **[number][1008]?** amount symbol extends beyond content to the left
     (overrides `overhang` and `length`, and only for side `'top'` or `'bottom'`)
--   `left` **[number][996]?** amount symbol extends beyond content to the right
+-   `left` **[number][1008]?** amount symbol extends beyond content to the right
     (overrides `overhang` and `length`, and only for side `'top'` or `'bottom'`)
--   `top` **[number][996]?** amount symbol extends beyond content to the top
+-   `top` **[number][1008]?** amount symbol extends beyond content to the top
     (overrides `overhang` and `length`, and only for side `'left'` or `'right'`)
--   `top` **[number][996]?** amount symbol extends beyond content to the bottom
+-   `top` **[number][1008]?** amount symbol extends beyond content to the bottom
     (overrides `overhang` and `length`, and only for side `'left'` or `'right'`)
 -   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** (`top`)
--   `minContentHeight` **[number][996]?** custom min content height for auto
+-   `minContentHeight` **[number][1008]?** custom min content height for auto
     symbol sizing when side is `'top'` or `'bottom'`
--   `minContentDescent` **[number][996]?** custom min content descent for auto
+-   `minContentDescent` **[number][1008]?** custom min content descent for auto
     symbol sizing when side is `'top'` or `'bottom'`
--   `minContentAscent` **[number][996]?** custom min content ascent for auto
+-   `minContentAscent` **[number][1008]?** custom min content ascent for auto
     symbol sizing when side is `'top'` or `'bottom'`
--   `descent` **[number][996]?** force descent of symbol when side is `'top'` or
+-   `descent` **[number][1008]?** force descent of symbol when side is `'top'` or
     `'bottom'` - height is forced with `length` property
--   `fullContentBounds` **[boolean][995]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][1007]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][995]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][1007]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -8921,7 +9149,7 @@ eqn.showForm('1');
 
 Equation bracket
 
-![][1156]
+![][1179]
 
 Surround an equation phrase with brackets
 
@@ -8930,29 +9158,29 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
--   `left` **[string][991]?** left bracket symbol
--   `content` **[TypeEquationPhrase][1145]?** 
--   `right` **[string][991]?** right bracket symbol
--   `inSize` **[boolean][995]?** `false` excludes bracket symbols from
+-   `left` **[string][1003]?** left bracket symbol
+-   `content` **[TypeEquationPhrase][1168]?** 
+-   `right` **[string][1003]?** right bracket symbol
+-   `inSize` **[boolean][1007]?** `false` excludes bracket symbols from
     size of resulting phrase (`true`)
--   `insideSpace` **[number][996]?** space between brackets and content (`0.03`)
--   `outsideSpace` **[number][996]?** space between brackets and neighboring
+-   `insideSpace` **[number][1008]?** space between brackets and content (`0.03`)
+-   `outsideSpace` **[number][1008]?** space between brackets and neighboring
     phrases(`0.03`)
--   `topSpace` **[number][996]?** how far the brackets extend above the content
+-   `topSpace` **[number][1008]?** how far the brackets extend above the content
     (`0.05`)
--   `bottomSpace` **[number][996]?** how far the brackets extend below the
+-   `bottomSpace` **[number][1008]?** how far the brackets extend below the
     content (`0.05`)
--   `minContentHeight` **[number][996]?** if content height is less than this,
+-   `minContentHeight` **[number][1008]?** if content height is less than this,
     then this number will be used when sizing the brackets (unless it is `null`)
     (`null`)
--   `minContentDescent` **[number][996]?** if content descent is less than this,
+-   `minContentDescent` **[number][1008]?** if content descent is less than this,
     then this number will be used when sizing the brackets (unless it is `null`)
     (`null`)
--   `height` **[number][996]?** force height of brackets (`null`)
--   `descent` **[number][996]?** force descent of brackets (`null`)
--   `fullContentBounds` **[boolean][995]?** use full bounds of content,
+-   `height` **[number][1008]?** force height of brackets (`null`)
+-   `descent` **[number][1008]?** force descent of brackets (`null`)
+-   `fullContentBounds` **[boolean][1007]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][995]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][1007]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -9028,7 +9256,7 @@ eqn.showForm('1');
 
 Equation box
 
-![][1157]
+![][1180]
 
 Place a box symbol around an equation phrase
 
@@ -9037,23 +9265,23 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `symbol` **[string][991]** 
--   `inSize` **[boolean][995]?** `false` excludes box symbol from size of
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `symbol` **[string][1003]** 
+-   `inSize` **[boolean][1007]?** `false` excludes box symbol from size of
     resulting phrase (`false`)
--   `space` **[number][996]?** space between box symbol and content on
+-   `space` **[number][1008]?** space between box symbol and content on
     the left, right, bottom and top sides (`0`)
--   `topSpace` **[number][996]?** use when top space between content and
+-   `topSpace` **[number][1008]?** use when top space between content and
      box should be different thant `space` property (`space`)
--   `rightSpace` **[number][996]?** use when right space between content and
+-   `rightSpace` **[number][1008]?** use when right space between content and
      box should be different thant `space` property (`space`)
--   `bottomSpace` **[number][996]?** use when bottom space between content and
+-   `bottomSpace` **[number][1008]?** use when bottom space between content and
      box should be different thant `space` property (`space`)
--   `leftSpace` **[number][996]?** use when left space between content and
+-   `leftSpace` **[number][1008]?** use when left space between content and
      box should be different thant `space` property (`space`)
--   `fullContentBounds` **[boolean][995]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][1007]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][995]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][1007]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -9131,7 +9359,7 @@ eqn.showForm('1');
 
 Equation strike-through
 
-![][1158]
+![][1181]
 
 Overlay a strike symbol on an equation phrase
 
@@ -9140,23 +9368,23 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `symbol` **[string][991]** 
--   `inSize` **[boolean][995]?** `false` excludes strike symbol from size of
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `symbol` **[string][1003]** 
+-   `inSize` **[boolean][1007]?** `false` excludes strike symbol from size of
     resulting phrase (`false`)
--   `space` **[number][996]?** amount the strike symbol overhangs the content on
+-   `space` **[number][1008]?** amount the strike symbol overhangs the content on
     the left, right, bottom and top sides (`0.02`)
--   `topSpace` **[number][996]?** use when top overhang between content and
+-   `topSpace` **[number][1008]?** use when top overhang between content and
      strike should be different thant `space` property (`space`)
--   `rightSpace` **[number][996]?** use when right overhang between content and
+-   `rightSpace` **[number][1008]?** use when right overhang between content and
      strike should be different thant `space` property (`space`)
--   `bottomSpace` **[number][996]?** use when bottom overhang between content and
+-   `bottomSpace` **[number][1008]?** use when bottom overhang between content and
      strike should be different thant `space` property (`space`)
--   `leftSpace` **[number][996]?** use when left overhang between content and
+-   `leftSpace` **[number][1008]?** use when left overhang between content and
      strike should be different thant `space` property (`space`)
--   `fullContentBounds` **[boolean][995]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][1007]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][995]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][1007]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -9231,22 +9459,22 @@ eqn.showForm('1');
 Equation strike with comment options used with `topStrike` and `bottomStrike`
 functions.
 
-![][1159]
+![][1182]
 
 Options can be an object, or an array in the property order below
 
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `symbol` **[string][991]** strike symbol
--   `comment` **[TypeEquationPhrase][1145]** 
--   `inSize` **[boolean][995]?** `false` excludes the symbol and comment from
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `symbol` **[string][1003]** strike symbol
+-   `comment` **[TypeEquationPhrase][1168]** 
+-   `inSize` **[boolean][1007]?** `false` excludes the symbol and comment from
     thre resulting size of the equation phrase (`true`)
--   `space` **[number][996]?** top, right, bottom and left extension of symbol
+-   `space` **[number][1008]?** top, right, bottom and left extension of symbol
     beyond content (`0.03`)
--   `scale` **[number][996]?** comment scale (`0.6`)
--   `commentSpace` **[number][996]?** space from symbol to comment (`0.03`)
+-   `scale` **[number][1008]?** comment scale (`0.6`)
+-   `commentSpace` **[number][1008]?** space from symbol to comment (`0.03`)
 
 ### Examples
 
@@ -9317,7 +9545,7 @@ eqn.showForm('1');
 Equation comment options used with `topComment` and `bottomComment`
 functions.
 
-![][1160]
+![][1183]
 
 A symbol between the content and comment is optional.
 
@@ -9326,17 +9554,17 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `comment` **[TypeEquationPhrase][1145]** 
--   `symbol` **[string][991]?** optional symbol between content and comment
--   `contentSpace` **[number][996]?** space from content to symbol (`0.03`)
--   `commentSpace` **[number][996]?** space from symbol to comment (`0.03`)
--   `scale` **[number][996]?** comment scale (`0.6`)
--   `inSize` **[boolean][995]?** `false` excludes the symbol and comment from
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `comment` **[TypeEquationPhrase][1168]** 
+-   `symbol` **[string][1003]?** optional symbol between content and comment
+-   `contentSpace` **[number][1008]?** space from content to symbol (`0.03`)
+-   `commentSpace` **[number][1008]?** space from symbol to comment (`0.03`)
+-   `scale` **[number][1008]?** comment scale (`0.6`)
+-   `inSize` **[boolean][1007]?** `false` excludes the symbol and comment from
     thre resulting size of the equation phrase (`true`)
--   `fullContentBounds` **[boolean][995]?** use full bounds of content,
+-   `fullContentBounds` **[boolean][1007]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][995]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][1007]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -9414,7 +9642,7 @@ eqn.showForm('1');
 
 Equation padding options.
 
-![][1161]
+![][1184]
 
 Pads the size of the equation phrase with space.
 
@@ -9423,11 +9651,11 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `top` **[number][996]?** (`0`)
--   `right` **[number][996]?** (`0`)
--   `bottom` **[number][996]?** (`0`)
--   `left` **[number][996]?** (`0`)
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `top` **[number][1008]?** (`0`)
+-   `right` **[number][1008]?** (`0`)
+-   `bottom` **[number][1008]?** (`0`)
+-   `left` **[number][1008]?** (`0`)
 
 ### Examples
 
@@ -9486,7 +9714,7 @@ eqn.showForm('1');
 
 Equation scale
 
-![][1162]
+![][1185]
 
 Scale an equation phrase
 
@@ -9495,9 +9723,9 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `scale` **[number][996]?** (`1`)
--   `fullContentBounds` **[boolean][995]?** Use full bounds with content (`false`)
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `scale` **[number][1008]?** (`1`)
+-   `fullContentBounds` **[boolean][1007]?** Use full bounds with content (`false`)
 
 ### Examples
 
@@ -9555,7 +9783,7 @@ eqn.showForm('1');
 
 Equation container options
 
-![][1163]
+![][1186]
 
 A container is useful to fix spacing around content as it changes between
 equation forms.
@@ -9565,16 +9793,16 @@ Options can be an object, or an array in the property order below
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `width` **[number][996]?** (`null`)
--   `descent` **[number][996]?** (`null`)
--   `ascent` **[number][996]?** (`null`)
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][996])?** (`'center'`)
--   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"baseline"` \| [number][996])?** (`'baseline'`)
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `width` **[number][1008]?** (`null`)
+-   `descent` **[number][1008]?** (`null`)
+-   `ascent` **[number][1008]?** (`null`)
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][1008])?** (`'center'`)
+-   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"baseline"` \| [number][1008])?** (`'baseline'`)
 -   `fit` **(`"width"` \| `"height"` \| `"contain"`)?** fit width,
     ascent and descent to either match width, height or fully contain the content (`null`)
--   `scale` **[number][996]?** (`1`)
--   `fullContentBounds` **[boolean][995]?** (`false`)
+-   `scale` **[number][1008]?** (`1`)
+-   `fullContentBounds` **[boolean][1007]?** (`false`)
 
 ### Examples
 
@@ -9638,7 +9866,7 @@ eqn.showForm('1');
 
 Equation annotation
 
-![][1164]
+![][1187]
 
 An annotation is an equation phrase ('annotation') which is laid out relative
 to another equation phrase ('content'). For example:
@@ -9653,7 +9881,7 @@ to another equation phrase ('content'). For example:
 </pre>
 
 The options for defining how to annotate one equation phrase with another is
-[EQN_Annotation][940]
+[EQN_Annotation][952]
 
 Content can also be annotated with a glyph (that itself may also be
 annotated). The glyph can either encompass the content, or can be to the
@@ -9692,26 +9920,26 @@ Options can _only_ be an object.
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `annotation` **[EQN_Annotation][1165]?** use for just one annotation
--   `annotations` **[Array][994]&lt;[EQN_Annotation][1165]>?** use for multiple annotations
--   `inSize` **[boolean][995]?** `true` means resulting size includes
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `annotation` **[EQN_Annotation][1188]?** use for just one annotation
+-   `annotations` **[Array][1006]&lt;[EQN_Annotation][1188]>?** use for multiple annotations
+-   `inSize` **[boolean][1007]?** `true` means resulting size includes
     annotations (`true`)
--   `space` **[number][996]?** extend resulting equation phrase size by space on
+-   `space` **[number][1008]?** extend resulting equation phrase size by space on
     top, right, bottom and left sides (`0`)
--   `topSpace` **[number][996]?** extend resulting equation phrase size by space
+-   `topSpace` **[number][1008]?** extend resulting equation phrase size by space
     on top
--   `bottomSpace` **[number][996]?** extend resulting equation phrase size by
+-   `bottomSpace` **[number][1008]?** extend resulting equation phrase size by
     space on bottom
--   `leftSpace` **[number][996]?** extend resulting equation phrase size by space
+-   `leftSpace` **[number][1008]?** extend resulting equation phrase size by space
     on left
--   `rightSpace` **[number][996]?** extend resulting equation phrase size by
+-   `rightSpace` **[number][1008]?** extend resulting equation phrase size by
     space on right
--   `contentScale` **[number][996]?** scale content (`1`)
--   `glyphs` **[EQN_Glyphs][1166]?** glyphs to annotate content with
--   `fullContentBounds` **[boolean][995]?** use full bounds of content,
+-   `contentScale` **[number][1008]?** scale content (`1`)
+-   `glyphs` **[EQN_Glyphs][1189]?** glyphs to annotate content with
+-   `fullContentBounds` **[boolean][1007]?** use full bounds of content,
     overriding any `inSize=false` properties in the content (`false`)
--   `useFullBounds` **[boolean][995]?** make the bounds of this phrase equal to
+-   `useFullBounds` **[boolean][1007]?** make the bounds of this phrase equal to
     the full bounds of the content even if `fullContentBounds=false` and the
     brackets only surround a portion of the content (`false`)
 
@@ -9819,14 +10047,14 @@ Vinculum equation symbol
 ### Properties
 
 -   `symbol` **`"vinculum"`** 
--   `color` **[Array][994]&lt;[number][996]>?** (equation color)
--   `lineWidth` **[number][996]?** (`0.01`)
+-   `color` **[Array][1006]&lt;[number][1008]>?** (equation color)
+-   `lineWidth` **[number][1008]?** (`0.01`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'dynamic'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticWidth` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticWidth` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets width of static symbol - `'first'` calculates and sets width
     based on first use (`'first'`)
--   `staticHeight` **([number][996] \| `"first"`)?** 
+-   `staticHeight` **([number][1008] \| `"first"`)?** 
 
 ### Examples
 
@@ -9868,17 +10096,17 @@ Box equation symbol
 ### Properties
 
 -   `symbol` **`"box"`** 
--   `color` **[Array][994]&lt;[number][996]>?** (equation color)
--   `lineWidth` **[number][996]?** (`0.01`)
--   `fill` **[boolean][995]?** (`false`)
--   `width` **[number][996]?** force width instead of auto calculation
--   `height` **[number][996]?** force height instead of auto calculation
+-   `color` **[Array][1006]&lt;[number][1008]>?** (equation color)
+-   `lineWidth` **[number][1008]?** (`0.01`)
+-   `fill` **[boolean][1007]?** (`false`)
+-   `width` **[number][1008]?** force width instead of auto calculation
+-   `height` **[number][1008]?** force height instead of auto calculation
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'dynamic'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticWidth` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticWidth` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets width of static symbol - `'first'` calculates and sets width
     based on first use
--   `staticHeight` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use
 
@@ -9935,15 +10163,15 @@ Arrow equation symbol
 ### Properties
 
 -   `symbol` **`"arrow"`** 
--   `color` **[Array][994]&lt;[number][996]>?** (equation color)
+-   `color` **[Array][1006]&lt;[number][1008]>?** (equation color)
 -   `direction` **(`"up"` \| `"down"` \| `"left"` \| `"right"`)?** (`'right'`)
--   `lineWidth` **[number][996]?** (`0.01`)
--   `arrowWidth` **[number][996]?** (`0.01`)
--   `arrowHeight` **[number][996]?** (`0.04`)
--   `lineWidth` **[number][996]?** (`0.01`)
+-   `lineWidth` **[number][1008]?** (`0.01`)
+-   `arrowWidth` **[number][1008]?** (`0.01`)
+-   `arrowHeight` **[number][1008]?** (`0.04`)
+-   `lineWidth` **[number][1008]?** (`0.01`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'dynamic'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -10002,12 +10230,12 @@ Sum equation symbol
 ### Properties
 
 -   `symbol` **`"sum"`** 
--   `color` **[Array][994]&lt;[number][996]>?** (equation color)
--   `lineWidth` **[number][996]?** (`height * 0.88 / (25 * height + 15)`)
--   `sides` **[number][996]?** number of sides that make up serif curve (`5`)
+-   `color` **[Array][1006]&lt;[number][1008]>?** (equation color)
+-   `lineWidth` **[number][1008]?** (`height * 0.88 / (25 * height + 15)`)
+-   `sides` **[number][1008]?** number of sides that make up serif curve (`5`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -10026,7 +10254,7 @@ eqn.addElements({
 
 ## EQN_ProdSymbol
 
-Product equation symbol used in [EQN_ProdOf][582]
+Product equation symbol used in [EQN_ProdOf][594]
 
 <pre>
                                          width
@@ -10069,12 +10297,12 @@ Product equation symbol used in [EQN_ProdOf][582]
 ### Properties
 
 -   `symbol` **`"prod"`** 
--   `color` **[Array][994]&lt;[number][996]>?** (equation color)
--   `lineWidth` **[number][996]?** (related to height)
--   `sides` **[number][996]?** number of sides that make up serif curve (`5`)
+-   `color` **[Array][1006]&lt;[number][1008]>?** (equation color)
+-   `lineWidth` **[number][1008]?** (related to height)
+-   `sides` **[number][1008]?** number of sides that make up serif curve (`5`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -10093,7 +10321,7 @@ eqn.addElements({
 
 ## EQN_IntegralSymbol
 
-Integral equation symbol used in [EQN_Integral][576]
+Integral equation symbol used in [EQN_Integral][588]
 
 <pre>
      --------------------------------------------------   0000000
@@ -10135,19 +10363,19 @@ Integral equation symbol used in [EQN_Integral][576]
 ### Properties
 
 -   `symbol` **`"int"`** 
--   `color` **[Array][994]&lt;[number][996]>?** (equation color)
--   `lineWidth` **[number][996]?** (related to height)
--   `sides` **[number][996]?** number of sides that make up s curve (`30`)
--   `num` **[number][996]?** number of integral symbols (`1`)
+-   `color` **[Array][1006]&lt;[number][1008]>?** (equation color)
+-   `lineWidth` **[number][1008]?** (related to height)
+-   `sides` **[number][1008]?** number of sides that make up s curve (`30`)
+-   `num` **[number][1008]?** number of integral symbols (`1`)
 -   `type` **(`"line"` \| `"generic"`)?** `line` draws a circle through the
      symbols denoting a line integral (`generic`)
--   `tipWidth` **[number][996]?** width of s curve tip (related to lineWidth)
--   `serif` **[boolean][995]?** `false` to remove serifs (`true`)
--   `serifSides` **[number][996]?** number of sides in serif circles (`10`)
--   `lineIntegralSides` **[number][996]?** number of sides in line integral circle (`20`)
+-   `tipWidth` **[number][1008]?** width of s curve tip (related to lineWidth)
+-   `serif` **[boolean][1007]?** `false` to remove serifs (`true`)
+-   `serifSides` **[number][1008]?** number of sides in serif circles (`10`)
+-   `lineIntegralSides` **[number][1008]?** number of sides in line integral circle (`20`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -10173,7 +10401,7 @@ int: {
 
 ## EQN_StrikeSymbol
 
-Strike equation symbol used in [EQN_Strike][594].
+Strike equation symbol used in [EQN_Strike][606].
 
 Four styles of strike symbol are available:
 
@@ -10204,19 +10432,19 @@ Four styles of strike symbol are available:
 ### Properties
 
 -   `symbol` **`"strike"`** 
--   `color` **[Array][994]&lt;[number][996]>?** (equation default)
+-   `color` **[Array][1006]&lt;[number][1008]>?** (equation default)
 -   `style` **(`"cross"` \| `"forward"` \| `"back"` \| `"horizontal"`)?** (`'cross'`)
--   `lineWidth` **[number][996]?** (`0.015`)
--   `width` **[number][996]?** force width of strike (normally defined by
+-   `lineWidth` **[number][1008]?** (`0.015`)
+-   `width` **[number][1008]?** force width of strike (normally defined by
     content size)
--   `height` **[number][996]?** force height of strike (normally defined by
+-   `height` **[number][1008]?** force height of strike (normally defined by
     content size)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
--   `staticWidth` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticWidth` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets width of static symbol - `'first'` calculates and sets width
     based on first use (`'first'`)
 
@@ -10278,16 +10506,16 @@ Bracket equation symbol
 ### Properties
 
 -   `symbol` **`"bracket"`** 
--   `color` **[Array][994]&lt;[number][996]>?** (equation default)
+-   `color` **[Array][1006]&lt;[number][1008]>?** (equation default)
 -   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
     bracket ('left')
--   `sides` **[number][996]?** number of sides in bracket curve (`10`)
--   `lineWidth` **[number][996]?** (depends on height)
--   `tipWidth` **[number][996]?** (depends on lineWidth)
--   `width` **[number][996]?** force width bracket (normally depends on height)
+-   `sides` **[number][1008]?** number of sides in bracket curve (`10`)
+-   `lineWidth` **[number][1008]?** (depends on height)
+-   `tipWidth` **[number][1008]?** (depends on lineWidth)
+-   `width` **[number][1008]?** force width bracket (normally depends on height)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -10344,14 +10572,14 @@ Angle bracket equation symbol
 ### Properties
 
 -   `symbol` **`"angleBracket"`** 
--   `color` **[Array][994]&lt;[number][996]>?** (equation default)
+-   `color` **[Array][1006]&lt;[number][1008]>?** (equation default)
 -   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
     angle bracket ('left')
--   `lineWidth` **[number][996]?** (depends on height)
--   `width` **[number][996]?** force width bracket (normally depends on height)
+-   `lineWidth` **[number][1008]?** (depends on height)
+-   `width` **[number][1008]?** force width bracket (normally depends on height)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -10428,16 +10656,16 @@ Brace equation symbol
 ### Properties
 
 -   `symbol` **`"brace"`** 
--   `color` **[Array][994]&lt;[number][996]>?** (equation default)
+-   `color` **[Array][1006]&lt;[number][1008]>?** (equation default)
 -   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
     brace ('left')
--   `lineWidth` **[number][996]?** (depends on height)
--   `tipWidth` **[number][996]?** (depends on lineWidth)
--   `width` **[number][996]?** force width bracket (normally depends on height)
--   `sides` **[number][996]?** number of sides in curved sections (`10`)
+-   `lineWidth` **[number][1008]?** (depends on height)
+-   `tipWidth` **[number][1008]?** (depends on lineWidth)
+-   `width` **[number][1008]?** force width bracket (normally depends on height)
+-   `sides` **[number][1008]?** number of sides in curved sections (`10`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -10491,13 +10719,13 @@ Bar equation symbol
 ### Properties
 
 -   `symbol` **`"bar"`** 
--   `color` **[Array][994]&lt;[number][996]>?** (equation default)
+-   `color` **[Array][1006]&lt;[number][1008]>?** (equation default)
 -   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
     bar ('left')
--   `lineWidth` **[number][996]?** (`0.01`)
+-   `lineWidth` **[number][1008]?** (`0.01`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -10560,17 +10788,17 @@ Square bracket equation symbol
 ### Properties
 
 -   `symbol` **`"squareBracket"`** 
--   `color` **[Array][994]&lt;[number][996]>?** (equation default)
+-   `color` **[Array][1006]&lt;[number][1008]>?** (equation default)
 -   `side` **(`"left"` \| `"right"` \| `"top"` \| `"bottom"`)?** how to orient the
     square bracket ('left')
--   `lineWidth` **[number][996]?** (`0.01`)
--   `tipWidth` **[number][996]?** (`0.01`)
--   `width` **[number][996]?** (depends on lineWidth)
--   `radius` **[number][996]?** optional curved corner radius (`0`)
--   `sides` **[number][996]?** number of sides in curve (`5`)
+-   `lineWidth` **[number][1008]?** (`0.01`)
+-   `tipWidth` **[number][1008]?** (`0.01`)
+-   `width` **[number][1008]?** (depends on lineWidth)
+-   `radius` **[number][1008]?** optional curved corner radius (`0`)
+-   `sides` **[number][1008]?** number of sides in curve (`5`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
 
@@ -10602,7 +10830,7 @@ eqn.addElements({
 
 ## EQN_RadicalSymbol
 
-Radical equation symbol used in [EQN_Root][561].
+Radical equation symbol used in [EQN_Root][573].
 
 The radical symbol allows customization on how to draw the radical. Mostly
 it will not be needed, but for edge case equation layouts it may be useful.
@@ -10638,27 +10866,27 @@ it will not be needed, but for edge case equation layouts it may be useful.
 ### Properties
 
 -   `symbol` **`"radical"`** 
--   `color` **[Array][994]&lt;[number][996]>?** 
--   `lineWidth` **[number][996]?** (`0.01`)
--   `width` **[number][996]?** force width of content area (normally defined by content size)
--   `height` **[number][996]?** force height of content area (normally defined by content size)
--   `startWidth` **[number][996]?** (`0.5`)
--   `startHeight` **[number][996]?** (`0.5`)
--   `maxStartWidth` **[number][996]??** (`0.15`)
--   `maxStartHeight` **[number][996]??** (`0.15`)
--   `tickHeight` **[number][996]?** 
--   `tickWidth` **[number][996]?** 
--   `downWidth` **[number][996]?** 
--   `proportionalToHeight` **[boolean][995]?** `true` makes `startHeight`,
+-   `color` **[Array][1006]&lt;[number][1008]>?** 
+-   `lineWidth` **[number][1008]?** (`0.01`)
+-   `width` **[number][1008]?** force width of content area (normally defined by content size)
+-   `height` **[number][1008]?** force height of content area (normally defined by content size)
+-   `startWidth` **[number][1008]?** (`0.5`)
+-   `startHeight` **[number][1008]?** (`0.5`)
+-   `maxStartWidth` **[number][1008]??** (`0.15`)
+-   `maxStartHeight` **[number][1008]??** (`0.15`)
+-   `tickHeight` **[number][1008]?** 
+-   `tickWidth` **[number][1008]?** 
+-   `downWidth` **[number][1008]?** 
+-   `proportionalToHeight` **[boolean][1007]?** `true` makes `startHeight`,
     `startWidth`, `tickHeight`, `tickWidth`, and `downWidth` a percentage of
     height instead of absolute (`true`)
--   `lineWidth2` **[number][996]?** lineWidth of down stroke (`2 x lineWidth`)
+-   `lineWidth2` **[number][1008]?** lineWidth of down stroke (`2 x lineWidth`)
 -   `draw` **(`"static"` \| `"dynamic"`)?** `'static'` updates vertices on
     resize, `'static'` only changes scale transform (`dynamic`)
--   `staticHeight` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticHeight` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets height of static symbol - `'first'` calculates and sets height
     based on first use (`'first'`)
--   `staticWidth` **([number][996] \| `"first"`)?** used when `draw`=`static`.
+-   `staticWidth` **([number][1008] \| `"first"`)?** used when `draw`=`static`.
     `number` sets width of static symbol - `'first'` calculates and sets width
     based on first use (`'first'`)
 
@@ -10708,8 +10936,8 @@ Get the minimum absolute angle difference between two angles
 
 ### Parameters
 
--   `angle1` **[number][996]** 
--   `angle2` **[number][996]** 
+-   `angle1` **[number][1008]** 
+-   `angle2` **[number][1008]** 
 
 ### Examples
 
@@ -10734,9 +10962,9 @@ Get center of a triangle
 
 ### Parameters
 
--   `p1` **[TypeParsablePoint][1004]** 
--   `p2` **[TypeParsablePoint][1004]** 
--   `p3` **[TypeParsablePoint][1004]** 
+-   `p1` **[TypeParsablePoint][1016]** 
+-   `p2` **[TypeParsablePoint][1016]** 
+-   `p3` **[TypeParsablePoint][1016]** 
 
 ### Examples
 
@@ -10754,8 +10982,8 @@ Polar coordinates to cartesian coordinates conversion
 
 ### Parameters
 
--   `mag` **[number][996]** 
--   `angle` **[number][996]** 
+-   `mag` **[number][1008]** 
+-   `angle` **[number][1008]** 
 
 ### Examples
 
@@ -10772,8 +11000,8 @@ Cartesian coordinates to polar coordinates conversion
 
 ### Parameters
 
--   `x` **([number][996] \| [Point][1006])** 
--   `y` **[number][996]**  (optional, default `0`)
+-   `x` **([number][1008] \| [Point][1018])** 
+-   `y` **[number][1008]**  (optional, default `0`)
 
 ### Examples
 
@@ -10791,9 +11019,9 @@ rotation direction and normalized from 0 to Math.PI \* 2.
 
 ### Parameters
 
--   `p2` **[Point][1006]** 
--   `p1` **[Point][1006]** 
--   `p3` **[Point][1006]** 
+-   `p2` **[Point][1018]** 
+-   `p1` **[Point][1018]** 
+-   `p3` **[Point][1018]** 
 
 ### Examples
 
@@ -10816,9 +11044,9 @@ Returns the minimum angle from the line (p1, p2) to the line (p1, p3).
 
 ### Parameters
 
--   `p2` **[Point][1006]** 
--   `p1` **[Point][1006]** 
--   `p3` **[Point][1006]** 
+-   `p2` **[Point][1018]** 
+-   `p1` **[Point][1018]** 
+-   `p3` **[Point][1018]** 
 
 ### Examples
 
@@ -10842,7 +11070,7 @@ Clip and angle between 0 and 2π (`'0to360'`) or -π to π (`'-180to180'`).
 
 ### Parameters
 
--   `angleToClip` **[number][996]** 
+-   `angleToClip` **[number][1008]** 
 -   `clipTo` **(`"0to360"` \| `"-180to180"` | null | `"-360to360"` \| `"-360to0"`)** 
 
 ### Examples
@@ -10874,10 +11102,10 @@ Rounds a number or numbers in an array
 
 ### Parameters
 
--   `arrayOrValue` **([number][996] \| [Array][994]&lt;[number][996]>)** Value or array of values to be rounded
--   `precision` **[number][996]** Number of decimal places to round to (optional, default `5`)
+-   `arrayOrValue` **([number][1008] \| [Array][1006]&lt;[number][1008]>)** Value or array of values to be rounded
+-   `precision` **[number][1008]** Number of decimal places to round to (optional, default `5`)
 
-Returns **([number][996] \| [Array][994]&lt;[number][996]>)** Rounded value or array of values
+Returns **([number][1008] \| [Array][1006]&lt;[number][1008]>)** Rounded value or array of values
 
 ## range
 
@@ -10885,18 +11113,18 @@ Creates an array with a range of numbers
 
 ### Parameters
 
--   `start` **[number][996]** Range start
--   `stop` **[number][996]** Range stop
--   `step` **[number][996]** Range step (optional, default `1`)
+-   `start` **[number][1008]** Range start
+-   `stop` **[number][1008]** Range stop
+-   `step` **[number][1008]** Range step (optional, default `1`)
 -   `precision` **`8`** 
 
-Returns **[Array][994]&lt;[number][996]>** Range of numbers in an array
+Returns **[Array][1006]&lt;[number][1008]>** Range of numbers in an array
 
 ## randSign
 
 Return a -1 or 1 randomly
 
-Returns **[number][996]** \-1 or 1
+Returns **[number][1008]** \-1 or 1
 
 ## randInt
 
@@ -10911,11 +11139,11 @@ Use `sign` to also return a random sign (negative or positive);
 
 ### Parameters
 
--   `minOrMax` **[number][996]** 
--   `max` **[number][996]?**  (optional, default `null`)
--   `sign` **[boolean][995]**  (optional, default `false`)
+-   `minOrMax` **[number][1008]** 
+-   `max` **[number][1008]?**  (optional, default `null`)
+-   `sign` **[boolean][1007]**  (optional, default `false`)
 
-Returns **[number][996]** random integer
+Returns **[number][1008]** random integer
 
 ## rand
 
@@ -10930,11 +11158,11 @@ Use `sign` to also return a random sign (negative or positive);
 
 ### Parameters
 
--   `minOrMax` **[number][996]** 
--   `max` **[number][996]?**  (optional, default `null`)
--   `plusOrMinus` **[boolean][995]**  (optional, default `false`)
+-   `minOrMax` **[number][1008]** 
+-   `max` **[number][1008]?**  (optional, default `null`)
+-   `plusOrMinus` **[boolean][1007]**  (optional, default `false`)
 
-Returns **[number][996]** random number
+Returns **[number][1008]** random number
 
 ## randElement
 
@@ -10942,7 +11170,7 @@ Get a random element from an array.
 
 ### Parameters
 
--   `inputArray` **[Array][994]&lt;T>** 
+-   `inputArray` **[Array][1006]&lt;T>** 
 
 Returns **T** 
 
@@ -10952,10 +11180,10 @@ Get a number of random elements from an array.
 
 ### Parameters
 
--   `num` **[number][996]** 
--   `inputArray` **[Array][994]&lt;T>** 
+-   `num` **[number][1008]** 
+-   `inputArray` **[Array][1006]&lt;T>** 
 
-Returns **[Array][994]&lt;T>** 
+Returns **[Array][1006]&lt;T>** 
 
 ## removeRandElement
 
@@ -10963,7 +11191,7 @@ Remove and return random element from an array.
 
 ### Parameters
 
--   `inputArray` **[Array][994]&lt;T>** 
+-   `inputArray` **[Array][1006]&lt;T>** 
 
 Returns **T** 
 
@@ -10987,7 +11215,7 @@ then these parameters will define how it continues to move freely
     space units per second squared
 -   `bounceLoss` **TypeTransformValue** 0.5 results in 50% velocity loss
     if bouncing of boundary
--   `callback` **([string][991] | function ([boolean][995]): void)?** 
+-   `callback` **([string][1003] | function ([boolean][1007]): void)?** 
 
 ## DiagramElementMove
 
@@ -10997,13 +11225,13 @@ Diagram element move parameters
 
 -   `bounds` **TransformBounds** rectangle to limit movement within
 -   `maxVelocity` **TypeTransformValue** maximum velocity allowed (5)
--   `freely` **[DiagramElementMoveFreely][1167]** free movement parameters
--   `canBeMovedAfterLosingTouch` **[boolean][995]** touch or mouse dragging will
+-   `freely` **[DiagramElementMoveFreely][1190]** free movement parameters
+-   `canBeMovedAfterLosingTouch` **[boolean][1007]** touch or mouse dragging will
     continue to move element even after the touch/cursor position is outside
     the element boundary
--   `element` **([DiagramElement][1000] | null)** 
--   `sizeInBounds` **[boolean][995]** 
--   `transformClip` **([string][991] | function ([Transform][990]): [Transform][990]?)** 
+-   `element` **([DiagramElement][1012] | null)** 
+-   `sizeInBounds` **[boolean][1007]** 
+-   `transformClip` **([string][1003] | function ([Transform][1002]): [Transform][1002]?)** 
 -   `type` **(`"rotation"` \| `"translation"` \| `"scaleX"` \| `"scaleY"` \| `"scale"`)** 
 
 ## Scenarios
@@ -11014,11 +11242,11 @@ Scenarios are preset transforms, color and visibility settings that can be
 easily animated to.
 
 This is an object where the keys are scenario names and values are
-[OBJ_Scenario][794] objects defining the scenario.
+[OBJ_Scenario][806] objects defining the scenario.
 
 ### Properties
 
--   `scenarioName` **[OBJ_Scenario][1168]** where scenarioName can be any
+-   `scenarioName` **[OBJ_Scenario][1191]** where scenarioName can be any
     string that names the scenario
 
 ## ElementMovementState
@@ -11027,9 +11255,9 @@ Element movement state
 
 ### Properties
 
--   `previousTime` **[number][996]?** 
--   `previousTransform` **[Transform][990]** 
--   `velocity` **[Transform][990]** 
+-   `previousTime` **[number][1008]?** 
+-   `previousTransform` **[Transform][1002]** 
+-   `velocity` **[Transform][1002]** 
 
 ## ElementPulseState
 
@@ -11037,7 +11265,7 @@ Element pulse state
 
 ### Properties
 
--   `startTime` **[number][996]?** 
+-   `startTime` **[number][1008]?** 
 
 ## ElementState
 
@@ -11045,12 +11273,12 @@ Element state
 
 ### Properties
 
--   `isBeingMoved` **[boolean][995]** 
--   `isMovingFreely` **[boolean][995]** 
--   `movement` **[ElementMovementState][1169]** 
--   `isPulsing` **[boolean][995]** 
--   `pulse` **[ElementPulseState][1170]** 
--   `preparingToStop` **[boolean][995]** 
+-   `isBeingMoved` **[boolean][1007]** 
+-   `isMovingFreely` **[boolean][1007]** 
+-   `movement` **[ElementMovementState][1192]** 
+-   `isPulsing` **[boolean][1007]** 
+-   `pulse` **[ElementPulseState][1193]** 
+-   `preparingToStop` **[boolean][1007]** 
 
 ## DrawingObject
 
@@ -11064,11 +11292,11 @@ be used to manage a HTML element on the screen.
 
 ### Properties
 
--   `border` **[Array][994]&lt;[Array][994]&lt;[Point][1006]>>** each array of points defines a
+-   `border` **[Array][1006]&lt;[Array][1006]&lt;[Point][1018]>>** each array of points defines a
     closed boundary or border of the element. An element may have multiple
     closed borders. A border defines where a shape can be touched, or how it
     bounces of diagram boundaries
--   `holeBorder` **[Array][994]&lt;[Array][994]&lt;[Point][1006]>>** areas where a shape cannot be
+-   `holeBorder` **[Array][1006]&lt;[Array][1006]&lt;[Point][1018]>>** areas where a shape cannot be
     touched
 
 ## DiagramPrimitives
@@ -11086,7 +11314,7 @@ Including simple shapes, grid and text.
 
 #### Parameters
 
--   `optionsIn` **...[Array][994]&lt;[OBJ_Generic][1171]>** 
+-   `optionsIn` **...[Array][1006]&lt;[OBJ_Generic][1194]>** 
 
 ### polyline
 
@@ -11097,7 +11325,7 @@ Including simple shapes, grid and text.
 
 #### Parameters
 
--   `optionsIn` **...[Array][994]&lt;[OBJ_Polyline][1172]>** 
+-   `optionsIn` **...[Array][1006]&lt;[OBJ_Polyline][1195]>** 
 
 ### polygon
 
@@ -11108,7 +11336,7 @@ Including simple shapes, grid and text.
 
 #### Parameters
 
--   `options` **...[Array][994]&lt;[OBJ_Polygon][1173]>** 
+-   `options` **...[Array][1006]&lt;[OBJ_Polygon][1196]>** 
 
 ### star
 
@@ -11119,7 +11347,7 @@ Including simple shapes, grid and text.
 
 #### Parameters
 
--   `options` **...[Array][994]&lt;[OBJ_Star][1174]>** 
+-   `options` **...[Array][1006]&lt;[OBJ_Star][1197]>** 
 
 ### rectangle
 
@@ -11130,7 +11358,7 @@ Including simple shapes, grid and text.
 
 #### Parameters
 
--   `options` **...[Array][994]&lt;[OBJ_Rectangle][1175]>** 
+-   `options` **...[Array][1006]&lt;[OBJ_Rectangle][1198]>** 
 
 ### ellipse
 
@@ -11141,7 +11369,7 @@ Including simple shapes, grid and text.
 
 #### Parameters
 
--   `options` **...[Array][994]&lt;[OBJ_Ellipse][1176]>** 
+-   `options` **...[Array][1006]&lt;[OBJ_Ellipse][1199]>** 
 
 ### triangle
 
@@ -11152,7 +11380,7 @@ Including simple shapes, grid and text.
 
 #### Parameters
 
--   `options` **...[Array][994]&lt;[OBJ_Triangle][1177]>** 
+-   `options` **...[Array][1006]&lt;[OBJ_Triangle][1200]>** 
 
 ### grid
 
@@ -11163,7 +11391,7 @@ Including simple shapes, grid and text.
 
 #### Parameters
 
--   `optionsIn` **...[Array][994]&lt;[OBJ_Grid][1178]>** 
+-   `optionsIn` **...[Array][1006]&lt;[OBJ_Grid][1201]>** 
 
 ### line
 
@@ -11174,7 +11402,7 @@ Including simple shapes, grid and text.
 
 #### Parameters
 
--   `options` **...[OBJ_Line][1179]** 
+-   `options` **...[OBJ_Line][1077]** 
 
 ### arrow
 
@@ -11185,40 +11413,40 @@ Including simple shapes, grid and text.
 
 #### Parameters
 
--   `options` **...[Array][994]&lt;[OBJ_Arrow][1180]>** 
+-   `options` **...[Array][1006]&lt;[OBJ_Arrow][1202]>** 
 
 ### textLine
 
--   **See: [OBJ_TextLine][387] for options and examples.
+-   **See: [OBJ_TextLine][399] for options and examples.
     **
 
 [DiagramElementPrimitive][69] that draws a line of text.
 
 #### Parameters
 
--   `optionsIn` **...[Array][994]&lt;[OBJ_TextLine][1181]>** 
+-   `optionsIn` **...[Array][1006]&lt;[OBJ_TextLine][1203]>** 
 
 ### textLines
 
--   **See: [OBJ_TextLines][390] for options and examples.
+-   **See: [OBJ_TextLines][402] for options and examples.
     **
 
 [DiagramElementPrimitive][69] that draws text lines.
 
 #### Parameters
 
--   `optionsIn` **...[Array][994]&lt;([OBJ_TextLines][1182] \| [string][991])>** 
+-   `optionsIn` **...[Array][1006]&lt;([OBJ_TextLines][1204] \| [string][1003])>** 
 
 ### text
 
--   **See: [OBJ_Text][384] for options and examples.
+-   **See: [OBJ_Text][396] for options and examples.
     **
 
 [DiagramElementPrimitive][69] that draws text.
 
 #### Parameters
 
--   `optionsIn` **...[Array][994]&lt;[OBJ_Text][1183]>** 
+-   `optionsIn` **...[Array][1006]&lt;[OBJ_Text][1205]>** 
 
 ### collection
 
@@ -11226,8 +11454,8 @@ Create a [DiagramElementCollection][73].
 
 #### Parameters
 
--   `transformOrPointOrOptions` **([Transform][990] \| [Point][1006] | {transform: [Transform][990]?, position: [Point][1006]?, color: [Array][994]&lt;[number][996]>?, pulse: [number][996]?, border: ([Array][994]&lt;[Array][994]&lt;[Point][1006]>> | `"children"` \| `"rect"` \| [number][996]), touchBorder: ([Array][994]&lt;[Array][994]&lt;[Point][1006]>> | `"border"` \| [number][996] \| `"rect"` \| `"children"`), holeBorder: ([Array][994]&lt;[Array][994]&lt;[Point][1006]>> | `"children"`)})**  (optional, default `{}`)
--   `moreOptions` **...[Array][994]&lt;{transform: [Transform][990]?, position: [Point][1006]?, color: [Array][994]&lt;[number][996]>?, pulse: [number][996]?, border: ([Array][994]&lt;[Array][994]&lt;[Point][1006]>> | `"children"` \| `"rect"` \| [number][996]), touchBorder: ([Array][994]&lt;[Array][994]&lt;[Point][1006]>> | `"border"` \| [number][996] \| `"rect"` \| `"children"`), holeBorder: ([Array][994]&lt;[Array][994]&lt;[Point][1006]>> | `"children"`)}>** 
+-   `transformOrPointOrOptions` **([Transform][1002] \| [Point][1018] | {transform: [Transform][1002]?, position: [Point][1018]?, color: [Array][1006]&lt;[number][1008]>?, pulse: [number][1008]?, border: ([Array][1006]&lt;[Array][1006]&lt;[Point][1018]>> | `"children"` \| `"rect"` \| [number][1008]), touchBorder: ([Array][1006]&lt;[Array][1006]&lt;[Point][1018]>> | `"border"` \| [number][1008] \| `"rect"` \| `"children"`), holeBorder: ([Array][1006]&lt;[Array][1006]&lt;[Point][1018]>> | `"children"`)})**  (optional, default `{}`)
+-   `moreOptions` **...[Array][1006]&lt;{transform: [Transform][1002]?, position: [Point][1018]?, color: [Array][1006]&lt;[number][1008]>?, pulse: [number][1008]?, border: ([Array][1006]&lt;[Array][1006]&lt;[Point][1018]>> | `"children"` \| `"rect"` \| [number][1008]), touchBorder: ([Array][1006]&lt;[Array][1006]&lt;[Point][1018]>> | `"border"` \| [number][1008] \| `"rect"` \| `"children"`), holeBorder: ([Array][1006]&lt;[Array][1006]&lt;[Point][1018]>> | `"children"`)}>** 
 
 ## Misc Geometry
 
@@ -11297,7 +11525,7 @@ A [Rectangle][Rect][124] can be defined as either as an
 -   Array (left, bottom, width, height)
 -   a [Rect][124] class
 -   a string representing the json definition of the
-    array form, or a [TypeF1DefRect][1184].
+    array form, or a [TypeF1DefRect][1206].
 
 
 ### Examples
@@ -11334,37 +11562,37 @@ t3 = '[['s', 1, 1], ['r', 0], ['t', 2, 2]]';
 
 ## getPoint
 
-Parse a [TypeParsablePoint][738] and return a [Point][86].
+Parse a [TypeParsablePoint][750] and return a [Point][86].
 
 ### Parameters
 
--   `p` **[TypeParsablePoint][1004]** 
+-   `p` **[TypeParsablePoint][1016]** 
 
-Returns **[Point][1006]** 
+Returns **[Point][1018]** 
 
 ## getPoints
 
-Parse an array of parsable point definitions ([TypeParsablePoint][738])
+Parse an array of parsable point definitions ([TypeParsablePoint][750])
 returning an array of points.
 
 ### Parameters
 
--   `points` **([TypeParsablePoint][1004] \| [Array][994]&lt;[TypeParsablePoint][1004]>)** 
+-   `points` **([TypeParsablePoint][1016] \| [Array][1006]&lt;[TypeParsablePoint][1016]>)** 
 
-Returns **[Array][994]&lt;[Point][1006]>** 
+Returns **[Array][1006]&lt;[Point][1018]>** 
 
 ## getScale
 
 Parse a scale definition and return a [Point][86] representing the scale
 in x and y.
-Scale can either be defined as a [TypeParsablePoint][738] or a `number` if
+Scale can either be defined as a [TypeParsablePoint][750] or a `number` if
 the x and y scale is equal.
 
 ### Parameters
 
--   `s` **([TypeParsablePoint][1004] \| [number][996])** 
+-   `s` **([TypeParsablePoint][1016] \| [number][1008])** 
 
-Returns **[Point][1006]** x and y scale
+Returns **[Point][1018]** x and y scale
 
 ## getLine
 
@@ -11372,9 +11600,9 @@ Convert a parsable line definition to a [Line][139].
 
 ### Parameters
 
--   `l` **[TypeParsableLine][1185]** parsable line definition
+-   `l` **[TypeParsableLine][1207]** parsable line definition
 
-Returns **[Line][1012]** `Line` object
+Returns **[Line][1024]** `Line` object
 
 ## getRect
 
@@ -11382,9 +11610,9 @@ Convert a parsable rectangle definition to a [Rect][124].
 
 ### Parameters
 
--   `r` **[TypeParsableRect][997]** parsable rectangle definition
+-   `r` **[TypeParsableRect][1009]** parsable rectangle definition
 
-Returns **[Rect][999]** rectangle object
+Returns **[Rect][1011]** rectangle object
 
 ## getTransform
 
@@ -11392,9 +11620,9 @@ Convert a parsable transform definition to a [Transform][222].
 
 ### Parameters
 
--   `t` **[TypeParsableTransform][1064]** parsable transform definition
+-   `t` **[TypeParsableTransform][1087]** parsable transform definition
 
-Returns **[Transform][990]** transform object
+Returns **[Transform][1002]** transform object
 
 ## OBJ_QuadraticBezier
 
@@ -11435,10 +11663,10 @@ These directions only work when the `angle` is between `0` and `Math.PI`.
 
 ### Properties
 
--   `controlPoint` **([TypeParsablePoint][1004] | null)** 
--   `magnitude` **[number][996]** 
--   `offset` **[number][996]** 
--   `angle` **[number][996]** (`Math.PI / 2`)
+-   `controlPoint` **([TypeParsablePoint][1016] | null)** 
+-   `magnitude` **[number][1008]** 
+-   `offset` **[number][1008]** 
+-   `angle` **[number][1008]** (`Math.PI / 2`)
 -   `direction` **(`"positive"` \| `"negative"` \| `"up"` \| `"left"` \| `"down"` \| `"right"`)** 
 
 ## Intersect
@@ -11447,10 +11675,10 @@ Line intersection result object with keys:
 
 ### Properties
 
--   `intersect` **([undefined][1186] \| [Point][1006])** 
--   `alongLine` **[boolean][995]** `true` if `intersect` is along line calling
+-   `intersect` **([undefined][1208] \| [Point][1018])** 
+-   `alongLine` **[boolean][1007]** `true` if `intersect` is along line calling
     `intersectsWith`
--   `withinLine` **[boolean][995]** `true` if `intersect` is within line calling
+-   `withinLine` **[boolean][1007]** `true` if `intersect` is within line calling
     `intersectsWith`
 
 ## Misc Shapes
@@ -11512,10 +11740,10 @@ and then the rectangle repeated throughout the diagram.
 
 ### Properties
 
--   `src` **[string][991]** The url or location of the image
--   `mapTo` **[Rect][999]?** vertex space window (`new Rect(-1, -1, 2, 2)`)
--   `mapFrom` **[Rect][999]?** image space window (`new Rect(0, 0, 1, 1)`)
--   `repeat` **[boolean][995]?** `true` will tile the image. Only works with
+-   `src` **[string][1003]** The url or location of the image
+-   `mapTo` **[Rect][1011]?** vertex space window (`new Rect(-1, -1, 2, 2)`)
+-   `mapFrom` **[Rect][1011]?** image space window (`new Rect(0, 0, 1, 1)`)
+-   `repeat` **[boolean][1007]?** `true` will tile the image. Only works with
     images that are square whose number of side pixels is a power of 2 (`false`)
 -   `onLoad` **function (): void?** 
 
@@ -11523,24 +11751,24 @@ and then the rectangle repeated throughout the diagram.
 
 Text Definition object
 
-Used within [OBJ_Text][384] to define a single string
+Used within [OBJ_Text][396] to define a single string
 
 ### Properties
 
--   `text` **[string][991]** string to show
--   `font` **[OBJ_Font][1059]?** font to apply to string
--   `location` **[TypeParsablePoint][1004]?** vertex space location to draw text
+-   `text` **[string][1003]** string to show
+-   `font` **[OBJ_Font][1081]?** font to apply to string
+-   `location` **[TypeParsablePoint][1016]?** vertex space location to draw text
     (default: `[0, 0]`)
 -   `xAlign` **(`"left"` \| `"right"` \| `"center"`)?** how to align text
-    horizontally relative to `location` (default: from [OBJ_Text][384])
+    horizontally relative to `location` (default: from [OBJ_Text][396])
 -   `yAlign` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"`)?** how to align
-    text vertically relative to `location` (default: from [OBJ_Text][384])
--   `onClick` **([string][991] | function (): void)?** function to execute on click
+    text vertically relative to `location` (default: from [OBJ_Text][396])
+-   `onClick` **([string][1003] | function (): void)?** function to execute on click
     within the `touchBorder`
--   `border` **(`"rect"` \| [Array][994]&lt;[TypeParsablePoint][1004]>)?** border can be custom
+-   `border` **(`"rect"` \| [Array][1006]&lt;[TypeParsablePoint][1016]>)?** border can be custom
     points (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
     rectangle of the text (default: `"rect"`)
--   `touchBorder` **(`"rect"` \| [number][996] \| `"border"` \| [Array][994]&lt;[TypeParsablePoint][1004]>)?** touch border can be custom points (`Array<TypeParsablePoint>`), set to
+-   `touchBorder` **(`"rect"` \| [number][1008] \| `"border"` \| [Array][1006]&lt;[TypeParsablePoint][1016]>)?** touch border can be custom points (`Array<TypeParsablePoint>`), set to
     `'rect'` for the encompassing rectangle of the text, set to `'border'` to be
     the same as the border of the text, or set to some buffer (`number`) around
     the rectangle (default: `"rect"`)
@@ -11549,19 +11777,19 @@ Used within [OBJ_Text][384] to define a single string
 
 Font definition object.
 
-Text is drawn in a [Context2D canvas][1187] and so `family`, `style` and `weight` are any valid [options][1188].
+Text is drawn in a [Context2D canvas][1209] and so `family`, `style` and `weight` are any valid [options][1210].
 
 `size` is the vertex space size of the font.
 
 ### Properties
 
--   `family` **[string][991]?** The font family (`Times New Roman`)
+-   `family` **[string][1003]?** The font family (`Times New Roman`)
 -   `style` **(\`normal\` | \`italic\`)?** (`normal`)
--   `size` **[number][996]?** size of font in vertex space (`0.2`)
+-   `size` **[number][1008]?** size of font in vertex space (`0.2`)
 -   `weight` **(`"normal"` \| `"bold"` \| `"lighter"` \| `"bolder"` \| `"100"` \| `"200"` \| `"300"` \| `"400"` \| `"500"` \| `"600"` \| `"700"` \| `"800"` \| `"900"`)?** font weight (`200`)
--   `color` **\[[number][996], [number][996], [number][996], [number][996]]?** Font color
+-   `color` **\[[number][1008], [number][1008], [number][1008], [number][1008]]?** Font color
     [red, green, blue, alpha] between 0 and 1 - (`[1, 0, 0, 1]`)
--   `opacity` **[number][996]?** opacity multiplier (final opacity will be
+-   `opacity` **[number][1008]?** opacity multiplier (final opacity will be
     `opacity` \* `color` alpha) [`1`]
 
 ### Examples
@@ -11588,21 +11816,21 @@ const font = new DiagramFont({
 
 Line Text Definition object
 
-Used to define a string within a text line primitive [OBJ_TextLine][387].
+Used to define a string within a text line primitive [OBJ_TextLine][399].
 
 ### Properties
 
--   `text` **[string][991]?** string to show
--   `font` **[OBJ_Font][1059]?** font to apply to string
--   `offset` **[TypeParsablePoint][1004]?** offset to draw text (default: `[0, 0]`)
--   `inLine` **[boolean][995]?** `false` means next text will follow previous
+-   `text` **[string][1003]?** string to show
+-   `font` **[OBJ_Font][1081]?** font to apply to string
+-   `offset` **[TypeParsablePoint][1016]?** offset to draw text (default: `[0, 0]`)
+-   `inLine` **[boolean][1007]?** `false` means next text will follow previous
     and not this (default: `true`)
--   `onClick` **([string][991] | function (): void)?** function to execute on click
+-   `onClick` **([string][1003] | function (): void)?** function to execute on click
     within the `touchBorder` of string
--   `border` **(`"rect"` \| [Array][994]&lt;[TypeParsablePoint][1004]>)?** border can be custom
+-   `border` **(`"rect"` \| [Array][1006]&lt;[TypeParsablePoint][1016]>)?** border can be custom
     (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
     rectangle of the text (default: `'rect'`)
--   `touchBorder` **(`"rect"` \| [number][996] \| `"border"` \| [Array][994]&lt;[TypeParsablePoint][1004]>)?** touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
+-   `touchBorder` **(`"rect"` \| [number][1008] \| `"border"` \| [Array][1006]&lt;[TypeParsablePoint][1016]>)?** touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
     the encompassing rectangle of the text, set to `'border'` to be the same as
     the border of the text, or set to some buffer (`number`) around
     the rectangle (default: `'rect'`)
@@ -11611,51 +11839,51 @@ Used to define a string within a text line primitive [OBJ_TextLine][387].
 
 Lines Text Definition object.
 
-Used to define a string within a text lines primitive [OBJ_TextLines][390].
+Used to define a string within a text lines primitive [OBJ_TextLines][402].
 
 ### Properties
 
--   `line` **[string][991]?** string representing a line of text
--   `font` **[OBJ_Font][1059]?** line specific default font
+-   `line` **[string][1003]?** string representing a line of text
+-   `font` **[OBJ_Font][1081]?** line specific default font
 -   `justify` **(`"left"` \| `"right"` \| `"center"`)?** line specific justification
--   `lineSpace` **[number][996]?** line specific separation from baseline of
-    this line to baseline of next line
+-   `lineSpace` **[number][1008]?** line specific separation from baseline of
+    this line to baseline of previous line
 
 ## OBJ_TextModifierDefinition
 
 Modifier Text Definition object.
 
 Used to define the modifiers of a string within a text lines primitive
-[OBJ_TextLines][390].
+[OBJ_TextLines][402].
 
 ### Properties
 
--   `text` **[string][991]?** text to replace `modifierId` with - if `undefined`
+-   `text` **[string][1003]?** text to replace `modifierId` with - if `undefined`
     then `modifierId` is used
--   `font` **[OBJ_Font][1059]?** font changes for modified text
--   `inLine` **[boolean][995]?** `false` if modified text should not contribute
+-   `font` **[OBJ_Font][1081]?** font changes for modified text
+-   `inLine` **[boolean][1007]?** `false` if modified text should not contribute
     to line layout (defqult: `true`)
--   `onClick` **([string][991] | function (): void)?** function to execute on click
+-   `onClick` **([string][1003] | function (): void)?** function to execute on click
     within the `touchBorder` of the modified text
--   `border` **(`"rect"` \| [Array][994]&lt;[TypeParsablePoint][1004]>)?** border of modified
+-   `border` **(`"rect"` \| [Array][1006]&lt;[TypeParsablePoint][1016]>)?** border of modified
     text can be custom (`Array<TypeParsablePoint>`) or set to `'rect'` for the
     encompassing rectangle of the text (default: `'rect'`)
--   `touchBorder` **(`"rect"` \| [number][996] \| `"border"` \| [Array][994]&lt;[TypeParsablePoint][1004]>)?** touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
+-   `touchBorder` **(`"rect"` \| [number][1008] \| `"border"` \| [Array][1006]&lt;[TypeParsablePoint][1016]>)?** touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
     the encompassing rectangle of the text, set to `'border'` to be the same as
     the border of the text, or set to some buffer (`number`) around
     the rectangle (default: `'rect'`)
--   `offset` **[TypeParsablePoint][1004]?** 
+-   `offset` **[TypeParsablePoint][1016]?** 
 
 ## OBJ_TextModifiersDefinition
 
 Modifier object.
 
 Used to define the modifiers of a string within a text lines primitive
-[OBJ_TextLines][390].
+[OBJ_TextLines][402].
 
 ### Properties
 
--   `modifierId` **[OBJ_TextModifiersDefinition][1070]?** modifierId can be any
+-   `modifierId` **[OBJ_TextModifiersDefinition][1093]?** modifierId can be any
     key
 
 ## OBJ_PulseScale
@@ -11664,9 +11892,9 @@ Pulse options object
 
 ### Properties
 
--   `scale` **[number][996]?** scale to pulse
--   `duration` **[number][996]?** duration to pulse
--   `frequency` **[number][996]?** frequency to pulse where 0
+-   `scale` **[number][1008]?** scale to pulse
+-   `duration` **[number][1008]?** duration to pulse
+-   `frequency` **[number][1008]?** frequency to pulse where 0
 
 ## OBJ_CurvedCorner
 
@@ -11674,8 +11902,8 @@ Curved Corner Definition
 
 ### Properties
 
--   `radius` **[number][996]?** 
--   `sides` **[number][996]?** 
+-   `radius` **[number][1008]?** 
+-   `sides` **[number][1008]?** 
 
 ## OBJ_LineStyle
 
@@ -11693,27 +11921,27 @@ on how a line is defined.
     sharp corners sharp when angle is less than `minAutoCornerAngle`, `"none"`: no
     corners, `"radius"`: curved corners, `"fill"`: fills the gapes between the line
     ends, (`"auto"`)
--   `cornerSize` **[number][996]?** only used when `cornerStyle` = `radius` (`0.01`)
--   `cornerSides` **[number][996]?** number of sides in curve - only used when
+-   `cornerSize` **[number][1008]?** only used when `cornerStyle` = `radius` (`0.01`)
+-   `cornerSides` **[number][1008]?** number of sides in curve - only used when
      `cornerStyle` = `radius` (`10`)
--   `cornersOnly` **[boolean][995]?** draw only the corners with size `cornerSize` (`false`)
--   `cornerLength` **[number][996]?** use only with `cornersOnly` = `true` -
+-   `cornersOnly` **[boolean][1007]?** draw only the corners with size `cornerSize` (`false`)
+-   `cornerLength` **[number][1008]?** use only with `cornersOnly` = `true` -
     length of corner to draw (`0.1`)
--   `minAutoCornerAngle` **[number][996]?** see `cornerStyle` = `auto` (`π/7`)
--   `dash` **[Array][994]&lt;[number][996]>?** leave empty for solid line - use array of
+-   `minAutoCornerAngle` **[number][1008]?** see `cornerStyle` = `auto` (`π/7`)
+-   `dash` **[Array][1006]&lt;[number][1008]>?** leave empty for solid line - use array of
     numbers for dash line where first number is length of line, second number is
     length of gap and then the pattern repeats - can use more than one dash length
     and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
     short gap, short dash, short gap and then repeats.
--   `linePrimitives` **[boolean][995]?** Use WebGL line primitives instead of
+-   `linePrimitives` **[boolean][1007]?** Use WebGL line primitives instead of
     triangle primitives to draw the line (`false`)
--   `lineNum` **[boolean][995]?** Number of line primitives to use when
+-   `lineNum` **[boolean][1007]?** Number of line primitives to use when
     `linePrimitivs`: `true` (`2`)
--   `forceCornerLength` **[boolean][995]?** 
+-   `forceCornerLength` **[boolean][1007]?** 
 
 ## CPY_Step
 
-![][1189]
+![][1211]
 
 Copy Step options object
 
@@ -11771,21 +11999,21 @@ that copy step will not be included in the returned Point array.
 
 ### Properties
 
--   `to` **([TypeParsablePoint][1004] \| [TypeParsableTransform][1064] \| [Array][994]&lt;([TypeParsablePoint][1004] \| [TypeParsableTransform][1064])>)?** copy points to
+-   `to` **([TypeParsablePoint][1016] \| [TypeParsableTransform][1087] \| [Array][1006]&lt;([TypeParsablePoint][1016] \| [TypeParsableTransform][1087])>)?** copy points to
     a location or locations or transform a copy of the points
--   `along` **(`"x"` \| `"y"` \| [number][996] \| `"rotation"` \| `"moveOnly"`)?** copy points
+-   `along` **(`"x"` \| `"y"` \| [number][1008] \| `"rotation"` \| `"moveOnly"`)?** copy points
     along a linear path where `number` is a path at an angle in radians
--   `num` **[number][996]?** the number of copies to make when copying `along` a
+-   `num` **[number][1008]?** the number of copies to make when copying `along` a
     path
--   `step` **[number][996]?** distance between copies if `along` is `'x'` or
+-   `step` **[number][1008]?** distance between copies if `along` is `'x'` or
     `'y'` or a `number`, delta angle between copies if `along` is `'rotation'`
--   `center` **[TypeParsablePoint][1004]?** the center point about which to rotate
+-   `center` **[TypeParsablePoint][1016]?** the center point about which to rotate
     the copies when using `along` = `'rotation'`
--   `start` **([number][996] \| [string][991])?** copy step index or marker defining the
+-   `start` **([number][1008] \| [string][1003])?** copy step index or marker defining the
     start of the points to copy
--   `end` **([number][996] \| [string][991])?** copy step index or marker defining the end
+-   `end` **([number][1008] \| [string][1003])?** copy step index or marker defining the end
     of the points to copy
--   `original` **[boolean][995]?** `false` excludes all points before this step
+-   `original` **[boolean][1007]?** `false` excludes all points before this step
     in the final result (`true`)
 
 ### Examples
@@ -11911,7 +12139,7 @@ Type: (`"triangle"` \| `"circle"` \| `"line"` \| `"barb"` \| `"bar"` \| `"polygo
 
 Arrow end for a line or polyline.
 
-![][1190]
+![][1212]
 
 Arrows on the end of lines have many of the same properties as stand
 alone arrows [OBJ_Arrow][290].
@@ -11924,16 +12152,16 @@ that in this case the shape will extend past the line.
 
 ### Properties
 
--   `head` **[ArrowHead][1024]?** head style (`'triangle'`)
--   `scale` **[number][996]?** scale the default dimensions of the arrow
--   `length` **[number][996]?** dimension of the arrow head along the line
--   `width` **[number][996]?** dimension of the arrow head along the line width
--   `rotation` **[number][996]?** rotation of the polygon when `head = 'polygon'`
--   `sides` **[number][996]?** number of sides in polygon or circle arrow head
--   `radius` **[number][996]?** radius of polygon or circle arrow head
--   `barb` **[number][996]?** barb length (along the length of the line) of the
+-   `head` **[ArrowHead][1036]?** head style (`'triangle'`)
+-   `scale` **[number][1008]?** scale the default dimensions of the arrow
+-   `length` **[number][1008]?** dimension of the arrow head along the line
+-   `width` **[number][1008]?** dimension of the arrow head along the line width
+-   `rotation` **[number][1008]?** rotation of the polygon when `head = 'polygon'`
+-   `sides` **[number][1008]?** number of sides in polygon or circle arrow head
+-   `radius` **[number][1008]?** radius of polygon or circle arrow head
+-   `barb` **[number][1008]?** barb length (along the length of the line) of the
     barb arrow head
--   `tail` **([boolean][995] \| [number][996])?** `true` includes a tail in the arrow of
+-   `tail` **([boolean][1007] \| [number][1008])?** `true` includes a tail in the arrow of
     with `tailWidth`. A `number` gives the tail a length where 0 will not
     extend the tail beyond the boundaries of the head
 -   `align` **(`"start"` \| `"mid"`)?** define which part of
@@ -12019,7 +12247,7 @@ diagram.addElements([
 Line end's arrow definition options object.
 
 `start` and `end` define the properties of the arrows at the start and
-end of the line. Instead of defining [OBJ_LineArrow][789] objects for the
+end of the line. Instead of defining [OBJ_LineArrow][801] objects for the
 start and end, a string that is the arrow's `head` property can also be
 used and the size dimensions will be the default.
 
@@ -12034,19 +12262,19 @@ If only one end of the line is to have an arrow, then define only the
 
 ### Properties
 
--   `start` **([OBJ_LineArrow][1191] \| [ArrowHead][1024])?** arrow at start of line
--   `end` **([OBJ_LineArrow][1191] \| [ArrowHead][1024])?** arrow at end of line
--   `head` **[ArrowHead][1024]?** default head to use for start and end arrow
--   `scale` **[number][996]?** default scale to use for start and end arrow
--   `length` **[number][996]?** default length to use for start and end arrow
--   `width` **[number][996]?** default width to use for start and end arrow
--   `rotation` **[number][996]?** default rotation to use for start and end arrow
--   `sides` **[number][996]?** default sides to use for start and end arrow
--   `radius` **[number][996]?** default radius to use for start and end arrow
--   `barb` **[number][996]?** default barb to use for start and end arrow
--   `tailWidth` **[number][996]?** width of the line that joins the arrow - if
+-   `start` **([OBJ_LineArrow][1213] \| [ArrowHead][1036])?** arrow at start of line
+-   `end` **([OBJ_LineArrow][1213] \| [ArrowHead][1036])?** arrow at end of line
+-   `head` **[ArrowHead][1036]?** default head to use for start and end arrow
+-   `scale` **[number][1008]?** default scale to use for start and end arrow
+-   `length` **[number][1008]?** default length to use for start and end arrow
+-   `width` **[number][1008]?** default width to use for start and end arrow
+-   `rotation` **[number][1008]?** default rotation to use for start and end arrow
+-   `sides` **[number][1008]?** default sides to use for start and end arrow
+-   `radius` **[number][1008]?** default radius to use for start and end arrow
+-   `barb` **[number][1008]?** default barb to use for start and end arrow
+-   `tailWidth` **[number][1008]?** width of the line that joins the arrow - if
     defined this will create minimum dimensions for the arrow
--   `tail` **([boolean][995] \| [number][996])?** `true` includes a tail in the arrow of
+-   `tail` **([boolean][1007] \| [number][1008])?** `true` includes a tail in the arrow of
     with `tailWidth`. A `number` gives the tail a length where 0 will not
     extend the tail beyond the boundaries of the head
 -   `align` **(`"start"` \| `"mid"`)?** define which part of
@@ -12062,13 +12290,13 @@ rotation` and `scale` overwrite the first equivalent transforms in
 
 ### Properties
 
--   `position` **[TypeParsablePoint][1004]** 
--   `translation` **[TypeParsablePoint][1004]** 
--   `scale` **([TypeParsablePoint][1004] \| [number][996])** 
--   `rotation` **[number][996]** 
--   `transform` **[TypeParsableTransform][1064]** 
--   `color` **[Array][994]&lt;[number][996]>** 
--   `isShown` **[boolean][995]** 
+-   `position` **[TypeParsablePoint][1016]** 
+-   `translation` **[TypeParsablePoint][1016]** 
+-   `scale` **([TypeParsablePoint][1016] \| [number][1008])** 
+-   `rotation` **[number][1008]** 
+-   `transform` **[TypeParsableTransform][1087]** 
+-   `color` **[Array][1006]&lt;[number][1008]>** 
+-   `isShown` **[boolean][1007]** 
 
 ## OBJ_MovableAngle
 
@@ -12092,9 +12320,9 @@ translate.
 
 -   `startArm` **(`"rotation"` \| `"angle"` | null)?** 
 -   `endArm` **(`"rotation"` \| `"angle"` | null)?** 
--   `movable` **[boolean][995]?** `true` to make movable, `false` to not (`true`)
--   `movePadRadius` **[number][996]?** radius of move pad (`0`)
--   `width` **[number][996]?** width of pads over lines (`0.5`)
+-   `movable` **[boolean][1007]?** `true` to make movable, `false` to not (`true`)
+-   `movePadRadius` **[number][1008]?** radius of move pad (`0`)
+-   `width` **[number][1008]?** width of pads over lines (`0.5`)
 
 ## TypeAngleLabelOptions
 
@@ -12106,7 +12334,7 @@ An angle can be annotated with a label using the `text` property and can be:
 -   an equation (`Equation`, `EQN_Equation`)
 -   real length of line (`null`)
 
-In all cases, an actual [Equation][528] is created as the label. The
+In all cases, an actual [Equation][540] is created as the label. The
 equation can have multiple forms, which can be set using the `showForm`
 method.
 
@@ -12138,8 +12366,8 @@ To situate the label, use `curvePosition`, `location` and
 `subLocation`. By default the label will be a percentage `curvePosition`
 of the angle. `location` then defines which side of the radius the label is
 on, while `subLocation` defines the backup location for invalid cases of
-`location`. See [TypeLabelLocation][830] and
-[TypeLabelSubLocation][831]. `location` can additionaly place the
+`location`. See [TypeLabelLocation][842] and
+[TypeLabelSubLocation][843]. `location` can additionaly place the
 labels off the ends of the angle.
 
 To automatically update the label location and orientation as the line
@@ -12147,21 +12375,21 @@ transform (translation, rotation or scale) changes then use `update: true`.
 
 ### Properties
 
--   `text` **(null | [string][991] \| [Array][994]&lt;[string][991]> | [Equation][1192] \| [EQN_Equation][1134])** or equation to show. Use `null` to show real angle.
+-   `text` **(null | [string][1003] \| [Array][1006]&lt;[string][1003]> | [Equation][1214] \| [EQN_Equation][1157])** or equation to show. Use `null` to show real angle.
 -   `units` **(`"degrees"` \| `"radians"`)** (`'degrees'`)
--   `precision` **[number][996]?** (`0`)
--   `radius` **[number][996]?** overwrite default radius
--   `offset` **[number][996]?** space to radius (`0`)
--   `curvePosition` **[number][996]?** where the label is along the curve of the
+-   `precision` **[number][1008]?** (`0`)
+-   `radius` **[number][1008]?** overwrite default radius
+-   `offset` **[number][1008]?** space to radius (`0`)
+-   `curvePosition` **[number][1008]?** where the label is along the curve of the
     angle, in percent of curve from the start of the angle (`0.5`)
--   `location` **[TypeLabelLocation][1193]?** (`'outside'`)
--   `subLocation` **[TypeLabelSubLocation][1194]?** 
--   `orientation` **[TypeLabelOrientation][1195]?** (`'horizontal'`)
--   `autoHide` **[number][996]?** hide label if angle is less than value (`null`)
--   `autoHideMax` **[number][996]?** hide label if angle is greater than value (`null`)
--   `update` **[boolean][995]?** (`false`)
--   `scale` **[number][996]?** size of the label
--   `color` **[Array][994]&lt;[number][996]>?** 
+-   `location` **[TypeLabelLocation][1215]?** (`'outside'`)
+-   `subLocation` **[TypeLabelSubLocation][1216]?** 
+-   `orientation` **[TypeLabelOrientation][1217]?** (`'horizontal'`)
+-   `autoHide` **[number][1008]?** hide label if angle is less than value (`null`)
+-   `autoHideMax` **[number][1008]?** hide label if angle is greater than value (`null`)
+-   `update` **[boolean][1007]?** (`false`)
+-   `scale` **[number][1008]?** size of the label
+-   `color` **[Array][1006]&lt;[number][1008]>?** 
 
 ## OBJ_AngleCurve
 
@@ -12171,21 +12399,21 @@ The curve annotation of an Advanced Angle shape.
 
 ### Properties
 
--   `width` **[number][996]?** Curve line width (`0.01`)
--   `fill` **[boolean][995]?** Use a fill instead of a line (`false`)
--   `sides` **[number][996]?** Number of sides in full circle curve (`100`)
--   `radius` **[number][996]?** Curve radius (`0.5`)
--   `num` **[number][996]?** Number of curves (`1`)
--   `step` **[number][996]?** Step radius of curves if curve num > 1 (`0`)
--   `autoHideM` **[number][996]??** if angle is less than this, hide curve
+-   `width` **[number][1008]?** Curve line width (`0.01`)
+-   `fill` **[boolean][1007]?** Use a fill instead of a line (`false`)
+-   `sides` **[number][1008]?** Number of sides in full circle curve (`100`)
+-   `radius` **[number][1008]?** Curve radius (`0.5`)
+-   `num` **[number][1008]?** Number of curves (`1`)
+-   `step` **[number][1008]?** Step radius of curves if curve num > 1 (`0`)
+-   `autoHideM` **[number][1008]??** if angle is less than this, hide curve
     (`null`)
--   `autoHideMax` **[number][996]??** if angle is less than this, hide curve
+-   `autoHideMax` **[number][1008]??** if angle is less than this, hide curve
     (`null`)
--   `autoRightAngle` **[boolean][995]?** Right angle curve displayed when angle
+-   `autoRightAngle` **[boolean][1007]?** Right angle curve displayed when angle
     = π/2 (`false`)
--   `rightAngleRange` **[number][996]?** Range around π/2 for right angle curve
+-   `rightAngleRange` **[number][1008]?** Range around π/2 for right angle curve
     display (`0.01745329...` or 1 degree)
--   `autoHide` **[number][996]??** 
+-   `autoHide` **[number][1008]??** 
 
 ## OBJ_AngleArrows
 
@@ -12210,18 +12438,18 @@ may break through the pointy edge of the arrow head. Therefore selecting
 
 ### Properties
 
--   `curveOverlap` **[number][996]?** the percent of the arrow that the curve
+-   `curveOverlap` **[number][1008]?** the percent of the arrow that the curve
     overlaps with (`0.3`)
--   `autoHide` **[boolean][995]?** `true` will hide the arrows when the angle is
+-   `autoHide` **[boolean][1007]?** `true` will hide the arrows when the angle is
     small enough that the arrows start to touch (`true`)
--   `radius` **[number][996]?** location of the arrows, by default they will be
+-   `radius` **[number][1008]?** location of the arrows, by default they will be
     at the radius of the curve.
 
 ## TypeAngleArrows
 
 Arrow definition for advaned angles.
 
-`string | (`[OBJ_LineArrows][792] `&` [OBJ_AngleArrows][802]`)`
+`string | (`[OBJ_LineArrows][804] `&` [OBJ_AngleArrows][814]`)`
 
 Use `single` string to specify head type of two arrows with default
 dimensions. Otherwise use options object to select and/or customize one or
@@ -12234,11 +12462,11 @@ Advanced angle corner definition.
 
 ### Properties
 
--   `length` **[number][996]?** length of corner's arms - by default it will be
+-   `length` **[number][1008]?** length of corner's arms - by default it will be
     twice the length of the curve.
--   `width` **[number][996]?** line width of the corner - by default it will be
+-   `width` **[number][1008]?** line width of the corner - by default it will be
     the same as the curve
--   `color` **[Array][994]&lt;[number][996]>?** 
+-   `color` **[Array][1006]&lt;[number][1008]>?** 
 -   `style` **(`"fill"` \| `"auto"` \| `"none"`)?** style of the corner
 
 ## OBJ_PulseAngle
@@ -12256,20 +12484,20 @@ thickness. Use a much smaller scale for curve when doing this.
 
 NB: When pulsing the thickness of a curve, the end corners of the curve
 may break through when the arrow heads are small or there is a large curve
-overlap between curve and arrow head. Use [OBJ_AngleArrows][802] to
+overlap between curve and arrow head. Use [OBJ_AngleArrows][814] to
 adjust `curveOverlap` and arrow head size, reduce the thickness scale, or
 increase the arrow scale to compensate.
 
 ### Properties
 
--   `curve` **([number][996] \| [OBJ_Pulse][1005])?** (`1.5`)
--   `corner` **([number][996] \| [OBJ_Pulse][1005])?** (`1.5`)
--   `label` **([number][996] \| [OBJ_Pulse][1005])?** (`1.5`)
--   `arrow` **([number][996] \| [OBJ_Pulse][1005])?** (`1.5`)
--   `thick` **[number][996]?** (`1`)
--   `duration` **[number][996]?** in seconds
--   `frequency` **[number][996]?** in Hz
--   `when` **[TypeWhen][1196]?** when to start the pulse (`'nextFrame'`)
+-   `curve` **([number][1008] \| [OBJ_Pulse][1017])?** (`1.5`)
+-   `corner` **([number][1008] \| [OBJ_Pulse][1017])?** (`1.5`)
+-   `label` **([number][1008] \| [OBJ_Pulse][1017])?** (`1.5`)
+-   `arrow` **([number][1008] \| [OBJ_Pulse][1017])?** (`1.5`)
+-   `thick` **[number][1008]?** (`1`)
+-   `duration` **[number][1008]?** in seconds
+-   `frequency` **[number][1008]?** in Hz
+-   `when` **[TypeWhen][1218]?** when to start the pulse (`'nextFrame'`)
 -   `done` **function (): void?** execute when pulsing is finished
 
 ## OBJ_AngleSet
@@ -12279,12 +12507,12 @@ These properties are the same as the ones with the same names in
 
 ### Properties
 
--   `position` **[TypeParsablePoint][1004]?** 
--   `startAngle` **[number][996]?** 
--   `angle` **[number][996]?** 
--   `p1` **[TypeParsablePoint][1004]?** 
--   `p2` **[TypeParsablePoint][1004]?** 
--   `p3` **[TypeParsablePoint][1004]?** 
+-   `position` **[TypeParsablePoint][1016]?** 
+-   `startAngle` **[number][1008]?** 
+-   `angle` **[number][1008]?** 
+-   `p1` **[TypeParsablePoint][1016]?** 
+-   `p2` **[TypeParsablePoint][1016]?** 
+-   `p3` **[TypeParsablePoint][1016]?** 
 
 ## OBJ_AngleAnimationStep
 
@@ -12296,27 +12524,27 @@ Type: any
 
 ### Properties
 
--   `start` **[number][996]?** start angle (`current angle`)
--   `target` **[number][996]?** angle to animate to (`current angle`)
+-   `start` **[number][1008]?** start angle (`current angle`)
+-   `target` **[number][1008]?** angle to animate to (`current angle`)
 
 ## OBJ_PulseAngleAnimationStep
 
 **Extends OBJ_TriggerAnimationStep**
 
-Pulse angle animation step - see [OBJ_PulseAngle][807] for desicription of
+Pulse angle animation step - see [OBJ_PulseAngle][819] for desicription of
 properties.
 
 Type: any
 
 ### Properties
 
--   `curve` **([number][996] \| [OBJ_Pulse][1005])?** (`1.5`)
--   `corner` **([number][996] \| [OBJ_Pulse][1005])?** (`1.5`)
--   `label` **([number][996] \| [OBJ_Pulse][1005])?** (`1.5`)
--   `arrow` **([number][996] \| [OBJ_Pulse][1005])?** (`1.5`)
--   `thick` **[number][996]?** (`1`)
--   `duration` **[number][996]?** in seconds
--   `frequency` **[number][996]?** in Hz
+-   `curve` **([number][1008] \| [OBJ_Pulse][1017])?** (`1.5`)
+-   `corner` **([number][1008] \| [OBJ_Pulse][1017])?** (`1.5`)
+-   `label` **([number][1008] \| [OBJ_Pulse][1017])?** (`1.5`)
+-   `arrow` **([number][1008] \| [OBJ_Pulse][1017])?** (`1.5`)
+-   `thick` **[number][1008]?** (`1`)
+-   `duration` **[number][1008]?** in seconds
+-   `frequency` **[number][1008]?** in Hz
 
 ## TypeLineLabelOptions
 
@@ -12328,7 +12556,7 @@ A line can be annotated with a label using the `text` property and can be:
 -   an equation (`Equation`, `EQN_Equation`)
 -   real length of line (`null`)
 
-In all cases, an actual [Equation][528] is created as the label. The
+In all cases, an actual [Equation][540] is created as the label. The
 equation can have multiple forms, which can be set using the `showForm`
 method.
 
@@ -12356,8 +12584,8 @@ To situate the label on the line, use `linePosition`, `location` and
 `subLocation`. By default the label will be a percentage `linePosition`
 along the line. `location` then defines which side of the line the label is
 on, while `subLocation` defines the backup location for invalid cases of
-`location`. See [TypeLabelLocation][830] and
-[TypeLabelSubLocation][831]. `location` can additionaly place the
+`location`. See [TypeLabelLocation][842] and
+[TypeLabelSubLocation][843]. `location` can additionaly place the
 labels off the ends of the line.
 
 To automatically update the label location and orientation as the line
@@ -12365,16 +12593,16 @@ transform (translation, rotation or scale) changes then use `update: true`.
 
 ### Properties
 
--   `text` **(null | [string][991] \| [Array][994]&lt;[string][991]> | [Equation][1192] \| [EQN_Equation][1134])** 
--   `precision` **[number][996]?** 
--   `offset` **[number][996]?** 
--   `linePosition` **[number][996]?** 
--   `location` **[TypeLabelLocation][1193]?** 
--   `subLocation` **[TypeLabelSubLocation][1194]?** 
--   `orientation` **[TypeLabelOrientation][1195]?** 
--   `update` **[boolean][995]?** (`false`)
--   `scale` **[number][996]?** size of the label
--   `color` **[Array][994]&lt;[number][996]>?** 
+-   `text` **(null | [string][1003] \| [Array][1006]&lt;[string][1003]> | [Equation][1214] \| [EQN_Equation][1157])** 
+-   `precision` **[number][1008]?** 
+-   `offset` **[number][1008]?** 
+-   `linePosition` **[number][1008]?** 
+-   `location` **[TypeLabelLocation][1215]?** 
+-   `subLocation` **[TypeLabelSubLocation][1216]?** 
+-   `orientation` **[TypeLabelOrientation][1217]?** 
+-   `update` **[boolean][1007]?** (`false`)
+-   `scale` **[number][1008]?** size of the label
+-   `color` **[Array][1006]&lt;[number][1008]>?** 
 
 ## OBJ_PulseWidth
 
@@ -12382,15 +12610,15 @@ Width pulse options object.
 
 ### Properties
 
--   `line` **[number][996]?** width scale
--   `label` **([number][996] \| [OBJ_Pulse][1005])?** label pulse options or scale. Use
+-   `line` **[number][1008]?** width scale
+-   `label` **([number][1008] \| [OBJ_Pulse][1017])?** label pulse options or scale. Use
     the options object for more control of how the label is pulsed (for example
     if the label should be pulsed from its bottom rather than its center).
--   `arrow` **[number][996]?** arrow pulse scale
+-   `arrow` **[number][1008]?** arrow pulse scale
 -   `done` **function (): void?** execute when pulsing is finished
--   `duration` **[number][996]?** pulse duration in seconds
--   `frequency` **[number][996]?** pulse frequency in pulses per second
--   `when` **[TypeWhen][1196]?** when to start the pulse (`'nextFrame'`)
+-   `duration` **[number][1008]?** pulse duration in seconds
+-   `frequency` **[number][1008]?** pulse frequency in pulses per second
+-   `when` **[TypeWhen][1218]?** when to start the pulse (`'nextFrame'`)
 
 ## OBJ_MovableLine
 
@@ -12402,11 +12630,11 @@ and rotate it otherwise.
 
 ### Properties
 
--   `movable` **[boolean][995]?** `true` to make movable (`true`)
+-   `movable` **[boolean][1007]?** `true` to make movable (`true`)
 -   `type` **(`"translation"` \| `"rotation"` \| `"centerTranslateEndRotation"` \| `"scale"`)?** 
--   `middleLength` **[number][996]?** length of the middle section of line that
+-   `middleLength` **[number][1008]?** length of the middle section of line that
     allows for translation movement in percent of total length (`0.333`)
--   `includeLabelInTouchBoundary` **[boolean][995]?** `true` to include the
+-   `includeLabelInTouchBoundary` **[boolean][1007]?** `true` to include the
     line's label in the touch boundary for `'centerTranslateEndRotation'`
     ('false\`)
 
@@ -12420,8 +12648,8 @@ Type: any
 
 ### Properties
 
--   `start` **[number][996]?** line length to grow from (`current length`)
--   `target` **[number][996]?** line length to grow to (`current length`)
+-   `start` **[number][1008]?** line length to grow from (`current length`)
+-   `target` **[number][1008]?** line length to grow to (`current length`)
 
 ## OBJ_PulseWidthAnimationStep
 
@@ -12433,14 +12661,14 @@ Type: any
 
 ### Properties
 
--   `line` **[number][996]?** width scale
--   `label` **([number][996] \| [OBJ_Pulse][1005])?** label pulse options or scale. Use
+-   `line` **[number][1008]?** width scale
+-   `label` **([number][1008] \| [OBJ_Pulse][1017])?** label pulse options or scale. Use
     the options object for more control of how the label is pulsed (for example
     if the label should be pulsed from its bottom rather than its center).
--   `arrow` **[number][996]?** arrow pulse scale
+-   `arrow` **[number][1008]?** arrow pulse scale
 -   `done` **function (): void?** execute when pulsing is finished
--   `duration` **[number][996]?** pulse duration in seconds
--   `frequency` **[number][996]?** pulse frequency in pulses per second
+-   `duration` **[number][1008]?** pulse duration in seconds
+-   `frequency` **[number][1008]?** pulse frequency in pulses per second
 
 ## OBJ_PolylinePad
 
@@ -12450,7 +12678,7 @@ Type: any
 
 Side annotations, angle annotations and movable pads in an
 [AdvancedPolyline][363] are defined with the options objects [ADV_Line][340],
-[ADV_Angle][361] and ([OBJ_Polygon][302] & [OBJ_PolylinePadSingle][839])
+[ADV_Angle][361] and ([OBJ_Polygon][302] & [OBJ_PolylinePadSingle][851])
 respectively.
 
 The properties in this object can be used in the side, angle and movable
@@ -12473,14 +12701,14 @@ used in their options objects to customize specific sides and angles.
 The `show` and `hide` properties can be used to show and hide specific sides
 and angles.
 
-See [OBJ_PulseWidthAnimationStep][823] for pulse angle animation step
+See [OBJ_PulseWidthAnimationStep][835] for pulse angle animation step
 options.
 
 ### Properties
 
--   `show` **[Array][994]&lt;[number][996]>?** list of indexes to show
--   `hide` **[Array][994]&lt;[number][996]>?** list of indexes to hide
--   `_padIndex` **([ADV_Angle][1052] \| [ADV_Line][1054] \| [OBJ_PolylinePadSingle][1056])?** Customizations of annotation or pad by index where `_padIndex` should be an
+-   `show` **[Array][1006]&lt;[number][1008]>?** list of indexes to show
+-   `hide` **[Array][1006]&lt;[number][1008]>?** list of indexes to hide
+-   `_padIndex` **([ADV_Angle][1064] \| [ADV_Line][1066] \| [OBJ_PolylinePadSingle][1068])?** Customizations of annotation or pad by index where `_padIndex` should be an
     object key name that is the index
 
 ### Examples
@@ -12593,9 +12821,9 @@ annotations should be hidden.
 
 ### Properties
 
--   `minAngle` **(null | [number][996])?** 
--   `maxAngle` **(null | [number][996])?** 
--   `minSide` **(null | [number][996])?** 
+-   `minAngle` **(null | [number][1008])?** 
+-   `maxAngle` **(null | [number][1008])?** 
+-   `minSide` **(null | [number][1008])?** 
 
 ## OBJ_ValidShape
 
@@ -12621,7 +12849,7 @@ being messy.
 ### Properties
 
 -   `shape` **`"triangle"`?** 
--   `hide` **[OBJ_ValidShapeHideThresholds][1057]?** 
+-   `hide` **[OBJ_ValidShapeHideThresholds][1069]?** 
 
 ## SUB_PolylineUpdatePoints
 
@@ -12648,7 +12876,7 @@ Each pad is associated with a point of the polyline.
 
 ### Properties
 
--   `isMovable` **[boolean][995]?** `true` allows moving the pad and the
+-   `isMovable` **[boolean][1007]?** `true` allows moving the pad and the
     associated polyline point (`false`)
 -   `boundary` **(TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | `"diagram"`)?** boundary the pad can move within
 
@@ -12663,18 +12891,18 @@ Animation step base class. All animation steps extend this class.
 
 ### Parameters
 
--   `optionsIn` **[OBJ_AnimationStep][1081]**  (optional, default `{}`)
+-   `optionsIn` **[OBJ_AnimationStep][1104]**  (optional, default `{}`)
 
 ### Properties
 
--   `duration` **[number][996]** in seconds
--   `startDelay` **[number][996]** delay before animation starts in seconds
--   `name` **[string][991]** animation name identifier
--   `completeOnCancel` **(null | [boolean][995])?** `true` to skip to end of
+-   `duration` **[number][1008]** in seconds
+-   `startDelay` **[number][1008]** delay before animation starts in seconds
+-   `name` **[string][1003]** animation name identifier
+-   `completeOnCancel` **(null | [boolean][1007])?** `true` to skip to end of
     animation on cancel
--   `removeOnFinish` **[boolean][995]?** `true` to remove the animation from the
+-   `removeOnFinish` **[boolean][1007]?** `true` to remove the animation from the
     animation manager when it is finished (`true`)
--   `precision` **[number][996]?** precision to do calculations to (`8`)
+-   `precision` **[number][1008]?** precision to do calculations to (`8`)
 -   `state` **(`"animating"` \| `"waitingToStart"` \| `"idle"` \| `"finished"`)** 
 
 ### getRemainingTime
@@ -12683,7 +12911,7 @@ Get remaining duration of the animation.
 
 #### Parameters
 
--   `now` **[number][996]** define this if you want remaining duration from a
+-   `now` **[number][1008]** define this if you want remaining duration from a
     custom time (optional, default `new GlobalAnimation().now()/1000`)
 
 ### start
@@ -12692,7 +12920,7 @@ Start animation
 
 #### Parameters
 
--   `startTime` **[AnimationStartTime][1197]**  (optional, default `null`)
+-   `startTime` **[AnimationStartTime][1219]**  (optional, default `null`)
 
 ## ElementAnimationStep
 
@@ -12704,71 +12932,71 @@ Default values for the animation step will then come from this element.
 
 ### Parameters
 
--   `optionsIn` **[OBJ_ElementAnimationStep][1091]**  (optional, default `{}`)
+-   `optionsIn` **[OBJ_ElementAnimationStep][1114]**  (optional, default `{}`)
 
 ## OBJ_PositionAnimationStep
 
 **Extends OBJ_ElementAnimationStep**
 
--   **See: [PositionAnimationStep][477] for description and examples
+-   **See: [PositionAnimationStep][489] for description and examples
     **
 
-[PositionAnimationStep][477] options object
+[PositionAnimationStep][489] options object
 
 Type: any
 
 ### Properties
 
--   `start` **[TypeParsablePoint][1004]?** start position - if undefined then
+-   `start` **[TypeParsablePoint][1016]?** start position - if undefined then
     current position is used
--   `target` **[TypeParsablePoint][1004]?** target position - if undefined then
+-   `target` **[TypeParsablePoint][1016]?** target position - if undefined then
     `delta` is used
--   `delta` **[TypeParsablePoint][1004]?** target delta - only used if `target`
+-   `delta` **[TypeParsablePoint][1016]?** target delta - only used if `target`
     is undefined
--   `velocity` **(null | [TypeParsablePoint][1004])?** velocity of
+-   `velocity` **(null | [TypeParsablePoint][1016])?** velocity of
     position overrides `duration` - `null` to use `duration` (`null`)
 -   `path` **OBJ_TranslationPath?** (`{ style: 'linear' }`)
--   `maxDuration` **([number][996] | null)?** maximum duration to clip animation
+-   `maxDuration` **([number][1008] | null)?** maximum duration to clip animation
     to where `null` is unlimited (`null`)
 
 ## OBJ_RotationAnimationStep
 
 **Extends OBJ_ElementAnimationStep**
 
--   **See: [RotationAnimationStep][480] for description and examples
+-   **See: [RotationAnimationStep][492] for description and examples
     **
 
-[RotationAnimationStep][480] step options object
+[RotationAnimationStep][492] step options object
 
 Type: any
 
 ### Properties
 
--   `start` **[number][996]?** start rotation - current rotation used if
+-   `start` **[number][1008]?** start rotation - current rotation used if
     undefined
--   `target` **[number][996]?** target rotation - will overwrite `delta` rotation
--   `delta` **[number][996]?** delta rotation that can be used instead of `target`
--   `velocity` **(null | [number][996])?** velocity of rotation overrides
+-   `target` **[number][1008]?** target rotation - will overwrite `delta` rotation
+-   `delta` **[number][1008]?** delta rotation that can be used instead of `target`
+-   `velocity` **(null | [number][1008])?** velocity of rotation overrides
     `duration` - `null` to use `duration` (`null`)
 -   `direction` **(`0` \| `1` \| `-1` \| `2`)?** where `0` is quickest direction, `1`
     is positive of CCW direction, `-1` is negative of CW direction and `2` is
     whichever direction doesn't pass through angle 0 (`0`).
 -   `clipTo` **(`"0to360"` \| `"-180to180"` | null)?** (`null`)
--   `maxDuration` **([number][996] | null)?** maximum duration to clip animation
+-   `maxDuration` **([number][1008] | null)?** maximum duration to clip animation
     to where `null` is unlimited (`null`)
 
 ## OBJ_ElementAnimationStep
 
 **Extends OBJ_AnimationStep**
 
-[ElementAnimationStep][849] options object
+[ElementAnimationStep][861] options object
 
 Type: any
 
 ### Properties
 
--   `element` **[DiagramElement][1000]?** 
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1198])?** how the animation progresses - defaults to `linear` for color, opacity and
+-   `element` **[DiagramElement][1012]?** 
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1220])?** how the animation progresses - defaults to `linear` for color, opacity and
     custom animations and `easeinout` for others
 
 ## OBJ_ScenarioVelocity
@@ -12781,13 +13009,13 @@ rotation` and `scale` overwrite the first equivalent transforms in
 
 ### Properties
 
--   `position` **[TypeParsablePoint][1004]?** 
--   `translation` **[TypeParsablePoint][1004]?** 
--   `scale` **([TypeParsablePoint][1004] \| [number][996])?** 
--   `rotation` **[number][996]?** 
--   `transform` **[TypeParsableTransform][1064]?** 
--   `color` **[Array][994]&lt;[number][996]>?** 
--   `opacity` **[number][996]?** 
+-   `position` **[TypeParsablePoint][1016]?** 
+-   `translation` **[TypeParsablePoint][1016]?** 
+-   `scale` **([TypeParsablePoint][1016] \| [number][1008])?** 
+-   `rotation` **[number][1008]?** 
+-   `transform` **[TypeParsableTransform][1087]?** 
+-   `color` **[Array][1006]&lt;[number][1008]>?** 
+-   `opacity` **[number][1008]?** 
 
 ## OBJ_AnimationBuilder
 
@@ -12799,7 +13027,7 @@ Type: any
 
 ### Properties
 
--   `element` **[DiagramElement][1000]?** 
+-   `element` **[DiagramElement][1012]?** 
 
 ## OBJ_AnimationStep
 
@@ -12807,15 +13035,15 @@ Animation Step options object
 
 ### Properties
 
--   `duration` **[number][996]?** in seconds (`0`)
--   `delay` **[number][996]?** delay before animation starts in seconds (`0`)
--   `name` **[string][991]?** animation name identifier (a random string)
--   `removeOnFinish` **[boolean][995]?** `true` to remove the animation from the
+-   `duration` **[number][1008]?** in seconds (`0`)
+-   `delay` **[number][1008]?** delay before animation starts in seconds (`0`)
+-   `name` **[string][1003]?** animation name identifier (a random string)
+-   `removeOnFinish` **[boolean][1007]?** `true` to remove the animation from the
     animation manager when it is finished (`true`)
--   `completeOnCancel` **(null | [boolean][995])?** `true` to skip to end of
+-   `completeOnCancel` **(null | [boolean][1007])?** `true` to skip to end of
     animation on cancel (`null`)
--   `precision` **[number][996]?** precision to do calculations to (`8`)
--   `onFinish` **function ([boolean][995]): void??** 
+-   `precision` **[number][1008]?** precision to do calculations to (`8`)
+-   `onFinish` **function ([boolean][1007]): void??** 
 
 ## OBJ_AnimationStart
 
@@ -12823,9 +13051,9 @@ Start animation options object.
 
 ### Properties
 
--   `name` **(null | [string][991])?** name of animation to start - f null, then
+-   `name` **(null | [string][1003])?** name of animation to start - f null, then
     all animations associated with this animation manager will start (`null`)
--   `startTime` **[AnimationStartTime][1197]** when to
+-   `startTime` **[AnimationStartTime][1219]** when to
     start the animation
 
 ## OBJ_SerialAnimationStep
@@ -12838,7 +13066,7 @@ Type: any
 
 ### Properties
 
--   `steps` **[Array][994]&lt;[AnimationStep][1072]>?** animation steps to execute in series
+-   `steps` **[Array][1006]&lt;[AnimationStep][1095]>?** animation steps to execute in series
 
 ## OBJ_ParallelAnimationStep
 
@@ -12850,55 +13078,55 @@ Type: any
 
 ### Properties
 
--   `steps` **[Array][994]&lt;[AnimationStep][1072]>** animation steps to perform in parallel
+-   `steps` **[Array][1006]&lt;[AnimationStep][1095]>** animation steps to perform in parallel
 
 ## OBJ_ScaleAnimationStep
 
 **Extends OBJ_ElementAnimationStep**
 
-[ScaleAnimationStep][483] options object
+[ScaleAnimationStep][495] options object
 
 Type: any
 
 ### Properties
 
--   `start` **([TypeParsablePoint][1004] \| [number][996])?** 
--   `target` **([TypeParsablePoint][1004] \| [number][996])?** 
--   `delta` **([TypeParsablePoint][1004] \| [number][996])?** 
--   `velocity` **(null | [TypeParsablePoint][1004] \| [number][996])?** velocity of scale
+-   `start` **([TypeParsablePoint][1016] \| [number][1008])?** 
+-   `target` **([TypeParsablePoint][1016] \| [number][1008])?** 
+-   `delta` **([TypeParsablePoint][1016] \| [number][1008])?** 
+-   `velocity` **(null | [TypeParsablePoint][1016] \| [number][1008])?** velocity of scale
     overrides `duration` - `null` to use `duration` (`null`)
--   `maxDuration` **([number][996] | null)?** maximum duration to clip animation
+-   `maxDuration` **([number][1008] | null)?** maximum duration to clip animation
     to where `null` is unlimited (`null`)
 
 ## OBJ_CustomAnimationStep
 
 **Extends OBJ_AnimationStep**
 
-[CustomAnimationStep][516] options object
+[CustomAnimationStep][528] options object
 
 Type: any
 
 ### Properties
 
--   `callback` **([string][991] | function (int): void)** function to run each
+-   `callback` **([string][1003] | function (int): void)** function to run each
     animation frame
--   `startPercent` **[number][996]?** percent to start animation at (`0`)
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1198])?** 
+-   `startPercent` **[number][1008]?** percent to start animation at (`0`)
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1220])?** 
 
 ## OBJ_TransformAnimationStep
 
 **Extends OBJ_ElementAnimationStep**
 
-[TransformAnimationStep][486] options object
+[TransformAnimationStep][498] options object
 
 Type: any
 
 ### Properties
 
--   `start` **[TypeParsableTransform][1064]?** 
--   `target` **[TypeParsableTransform][1064]?** 
--   `delta` **[TypeParsableTransform][1064]?** 
--   `velocity` **(null | [TypeParsableTransform][1064])?** velocity of
+-   `start` **[TypeParsableTransform][1087]?** 
+-   `target` **[TypeParsableTransform][1087]?** 
+-   `delta` **[TypeParsableTransform][1087]?** 
+-   `velocity` **(null | [TypeParsableTransform][1087])?** velocity of
     transform overrides `duration` - `null` to use `duration` (`null`)
 -   `path` **OBJ_TranslationPath?** translation path style and options
     (`{ style: 'linear' }`)
@@ -12906,29 +13134,29 @@ Type: any
     `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
     whichever direction doesn't pass through angle 0 (`0`).
 -   `clipRotationTo` **(`"0to360"` \| `"-180to180"` | null)?** 
--   `maxDuration` **([number][996] | null)?** maximum duration to clip animation
+-   `maxDuration` **([number][1008] | null)?** maximum duration to clip animation
     to where `null` is unlimited (`null`)
 
 ## OBJ_ScenarioAnimationStep
 
 **Extends OBJ_ElementAnimationStep**
 
-[ScenarioAnimationStep][489] options object
+[ScenarioAnimationStep][501] options object
 
 Type: any
 
 ### Properties
 
--   `start` **([string][991] \| [OBJ_Scenario][1168])?** 
--   `target` **([string][991] \| [OBJ_Scenario][1168])?** 
--   `velocity` **(null | [string][991] \| [OBJ_ScenarioVelocity][1199])?** velocity
+-   `start` **([string][1003] \| [OBJ_Scenario][1191])?** 
+-   `target` **([string][1003] \| [OBJ_Scenario][1191])?** 
+-   `velocity` **(null | [string][1003] \| [OBJ_ScenarioVelocity][1221])?** velocity
     will override duration with a calculated duration based on
     the `start`, `target` and `velocity`. If `null` is used
     then `duration` will not be overriden. Any scenario velocity elements that
     are undefined will default to 1 (`null`)
--   `maxDuration` **([number][996] | null)?** maximum duration to clip animation
+-   `maxDuration` **([number][1008] | null)?** maximum duration to clip animation
     to where `null` is unlimited (`null`)
--   `zeroDurationThreshold` **[number][996]?** value considered 0 to stop
+-   `zeroDurationThreshold` **[number][1008]?** value considered 0 to stop
     animation - this is useful when numbers get very small and rounding problems
     with javascripts floating point implementation arise
 -   `path` **OBJ_TranslationPath?** translation path style and options
@@ -12937,28 +13165,28 @@ Type: any
     `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
     whichever direction doesn't pass through angle 0.
 -   `clipRotationTo` **(`"0to360"` \| `"-180to180"` | null)?** 
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1198])?** (`'easeinout'`)
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1220])?** (`'easeinout'`)
 
 ## OBJ_TriggerAnimationStep
 
 **Extends OBJ_AnimationStep**
 
-[TriggernAnimationStep][1200] options object
+[TriggernAnimationStep][1222] options object
 
 Type: any
 
 ### Properties
 
 -   `payload` **any?** payload to pass to callback (`null`)
--   `element` **[DiagramElement][1000]** [DiagramElement][32] to associate with
+-   `element` **[DiagramElement][1012]** [DiagramElement][32] to associate with
     callback - if the `callback` is a string then this element's
-    [FunctionMap][1201] will be searched for the corresponding function
+    [FunctionMap][1223] will be searched for the corresponding function
 
 ## OBJ_Pulse
 
 Pulse options object
 
-![][1202]
+![][1224]
 
 Pulsing can be useful to highlight a diagram element to a user, without
 changing its underlying properties.
@@ -12988,38 +13216,38 @@ outlines are becomming thicker.
 
 ### Properties
 
--   `duration` **[number][996]?** pulse duration in seconds (`1`)
--   `frequency` **[number][996]?** pulse frequency in Hz - a frequency of zero
+-   `duration` **[number][1008]?** pulse duration in seconds (`1`)
+-   `frequency` **[number][1008]?** pulse frequency in Hz - a frequency of zero
     will set the frequency so just one cycle will be performed in the duration
     (`0`)
--   `scale` **[number][996]?** maximum scale value to pulse to (`1.5`)
--   `rotation` **[number][996]?** maximum rotation value to pulse to
--   `translation` **[number][996]?** maximum translation displacment value to
+-   `scale` **[number][1008]?** maximum scale value to pulse to (`1.5`)
+-   `rotation` **[number][1008]?** maximum rotation value to pulse to
+-   `translation` **[number][1008]?** maximum translation displacment value to
     pulse to (`1.5`)
--   `angle` **[number][996]?** translation angle (`0`)
--   `min` **[number][996]?** minimum value to pulse to
--   `centerOn` **(null | [DiagramElement][1000] \| [TypeParsablePoint][1004])?** center
+-   `angle` **[number][1008]?** translation angle (`0`)
+-   `min` **[number][1008]?** minimum value to pulse to
+-   `centerOn` **(null | [DiagramElement][1012] \| [TypeParsablePoint][1016])?** center
     of scale or rotation pulse. By default, the element calling the pulse
     will be the default `centerOn`.
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| `"location"` \| [number][996])?** if `centerOn` is a [DiagramElement][32] then this property can be used to
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| `"location"` \| [number][1008])?** if `centerOn` is a [DiagramElement][32] then this property can be used to
     horizontally align the pulse center with the element. `'location'` is the
     (0, 0) draw space coordinate of the element. `number` defines the percent
     width from the left of the element (`'center'`)
--   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"location"` \| [number][996])?** if `centerOn` is a [DiagramElement][32] then this property can be used to
+-   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"location"` \| [number][1008])?** if `centerOn` is a [DiagramElement][32] then this property can be used to
     vertically align the pulse center with the element. `'location'` is the
     (0, 0) draw space coordinate of the element. `number` defines the percent
     width from the left of the element (`'center'`)
 -   `space` **(`"diagram"` \| `"gl"` \| `"local"` \| `"draw"` \| `"pixel"`)?** if `centerOn` is a point, use this to define the space the point is in
     (`'diagram'`)
--   `num` **[number][996]?** the number of draw copies of the pulse to make (`1`)
--   `done` **(null | [string][991] | function (): void)?** callback when pulse is
-    finished. If `string` then the element's [FunctionMap][1201] `fnMap` will be
+-   `num` **[number][1008]?** the number of draw copies of the pulse to make (`1`)
+-   `done` **(null | [string][1003] | function (): void)?** callback when pulse is
+    finished. If `string` then the element's [FunctionMap][1223] `fnMap` will be
     used (`null`)
--   `when` **[TypeWhen][1196]?** when to start the pulse (`'syncNow'`)
+-   `when` **[TypeWhen][1218]?** when to start the pulse (`'syncNow'`)
 -   `progression` **(`"sinusoid"` \| `"triangle"`)?** function that defines
     how the scale should progress over time (`sinusoid`)
--   `x` **(`"left"` \| `"center"` \| `"right"` \| `"origin"` \| [number][996])?** 
--   `y` **(`"bottom"` \| `"middle"` \| `"top"` \| `"origin"` \| [number][996])?** 
+-   `x` **(`"left"` \| `"center"` \| `"right"` \| `"origin"` \| [number][1008])?** 
+-   `y` **(`"bottom"` \| `"middle"` \| `"top"` \| `"origin"` \| [number][1008])?** 
 
 ### Examples
 
@@ -13078,71 +13306,71 @@ p.pulse({
 
 **Extends OBJ_ElementAnimationStep**
 
-[PulseAnimationStep][492] options object
+[PulseAnimationStep][504] options object
 
 Type: any
 
 ### Properties
 
--   `frequency` **[number][996]?** pulse frequency in Hz - a frequency of zero
+-   `frequency` **[number][1008]?** pulse frequency in Hz - a frequency of zero
     will set the frequency so just one cycle will be performed in the duration
     (`0`)
--   `scale` **[number][996]?** maximum scale value to pulse to (`1.5`)
--   `rotation` **[number][996]?** maximum rotation value to pulse to
--   `translation` **[number][996]?** maximum translation displacment value to
+-   `scale` **[number][1008]?** maximum scale value to pulse to (`1.5`)
+-   `rotation` **[number][1008]?** maximum rotation value to pulse to
+-   `translation` **[number][1008]?** maximum translation displacment value to
     pulse to (`1.5`)
--   `angle` **[number][996]?** translation angle (`0`)
--   `min` **[number][996]?** minimum value to pulse to
--   `centerOn` **(null | [DiagramElement][1000] \| [TypeParsablePoint][1004])?** center
+-   `angle` **[number][1008]?** translation angle (`0`)
+-   `min` **[number][1008]?** minimum value to pulse to
+-   `centerOn` **(null | [DiagramElement][1012] \| [TypeParsablePoint][1016])?** center
     of scale or rotation pulse. By default, the element calling the pulse
     will be the default `centerOn`.
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| `"location"` \| [number][996])?** if `centerOn` is a [DiagramElement][32] then this property can be used to
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| `"location"` \| [number][1008])?** if `centerOn` is a [DiagramElement][32] then this property can be used to
     horizontally align the pulse center with the element. `'location'` is the
     (0, 0) draw space coordinate of the element. `number` defines the percent
     width from the left of the element (`'center'`)
--   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"location"` \| [number][996])?** if `centerOn` is a [DiagramElement][32] then this property can be used to
+-   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"location"` \| [number][1008])?** if `centerOn` is a [DiagramElement][32] then this property can be used to
     vertically align the pulse center with the element. `'location'` is the
     (0, 0) draw space coordinate of the element. `number` defines the percent
     width from the left of the element (`'center'`)
 -   `space` **(`"diagram"` \| `"gl"` \| `"local"` \| `"draw"` \| `"pixel"`)?** if `centerOn` is a point, use this to define the space the point is in
     (`'diagram'`)
--   `num` **[number][996]?** the number of draw copies of the pulse to make (`1`)
--   `done` **(null | [string][991] | function (): void)?** callback when pulse is
-    finished. If `string` then the element's [FunctionMap][1201] `fnMap` will be
+-   `num` **[number][1008]?** the number of draw copies of the pulse to make (`1`)
+-   `done` **(null | [string][1003] | function (): void)?** callback when pulse is
+    finished. If `string` then the element's [FunctionMap][1223] `fnMap` will be
     used (`null`)
--   `when` **[TypeWhen][1196]?** when to start the pulse (`'syncNow'`)
+-   `when` **[TypeWhen][1218]?** when to start the pulse (`'syncNow'`)
 
 ## OBJ_ColorAnimationStep
 
 **Extends OBJ_ElementAnimationStep**
 
-[ColorAnimationStep][495] options object
+[ColorAnimationStep][507] options object
 
 Type: any
 
 ### Properties
 
--   `start` **[Array][994]&lt;[number][996]>?** 
--   `target` **([Array][994]&lt;[number][996]> | `"dim"` \| `"undim"`)?** use `dim` to animate to
+-   `start` **[Array][1006]&lt;[number][1008]>?** 
+-   `target` **([Array][1006]&lt;[number][1008]> | `"dim"` \| `"undim"`)?** use `dim` to animate to
     element's `dimColor`, and `undim` to animate to element's `defaultColor`
--   `delta` **[Array][994]&lt;[number][996]>?** 
+-   `delta` **[Array][1006]&lt;[number][1008]>?** 
 
 ## OBJ_OpacityAnimationStep
 
 **Extends OBJ_ElementAnimationStep**
 
-[OpacityAnimationStep][504] options object
+[OpacityAnimationStep][516] options object
 
 Type: any
 
 ### Properties
 
--   `start` **[number][996]?** 
--   `target` **[number][996]?** 
--   `delta` **[number][996]?** 
+-   `start` **[number][1008]?** 
+-   `target` **[number][1008]?** 
+-   `delta` **[number][1008]?** 
 -   `dissolve` **(null | `"in"` \| `"out"`)** will override target opacity if not
     `null` (`null`)
--   `dissolveFromCurrent` **[boolean][995]** (`false`)
+-   `dissolveFromCurrent` **[boolean][1007]** (`false`)
 
 ## OBJ_ScenariosAnimationStep
 
@@ -13154,7 +13382,7 @@ Type: any
 
 ### Properties
 
--   `target` **[string][991]** name of scenario
+-   `target` **[string][1003]** name of scenario
 
 ## AnimationProgression
 
@@ -13170,13 +13398,13 @@ This function can be used to make non-linear progressions of an animation.
 For instance, it could be used to create a progression that is slowed
 at the start or end of the animation.
 
-Type: function ([number][996]): [number][996]
+Type: function ([number][1008]): [number][1008]
 
 ### Parameters
 
--   `percent` **[number][996]** percentage of duration
+-   `percent` **[number][1008]** percentage of duration
 
-Returns **[number][996]** percent of animation complete
+Returns **[number][1008]** percent of animation complete
 
 ## TypeWhen
 
@@ -13199,7 +13427,7 @@ has been made after a reset.
 
 Animation start time options.
 
-[TypeWhen][892] | number | null
+[TypeWhen][904] | number | null
 
 When multiple animations need to be started, it is often
 desirable to synchronise their start times.
@@ -13225,7 +13453,7 @@ A custom time can be used if a `number` is defined.
 
 `null` will result in `'nextFrame'` being used
 
-Type: ([TypeWhen][1196] \| [number][996] | null)
+Type: ([TypeWhen][1218] \| [number][1008] | null)
 
 ## Misc Equation
 
@@ -13240,195 +13468,195 @@ Contains methods for all equation functions.
 
 ### container
 
--   **See: [EQN_Container][609] for description and examples
+-   **See: [EQN_Container][621] for description and examples
     **
 
 Equation container function
 
 #### Parameters
 
--   `options` **[EQN_Container][1203]** 
+-   `options` **[EQN_Container][1225]** 
 
 ### brac
 
--   **See: [EQN_Bracket][588] for description and examples
+-   **See: [EQN_Bracket][600] for description and examples
     **
 
 Equation bracket function
 
 #### Parameters
 
--   `options` **[EQN_Bracket][1151]** 
+-   `options` **[EQN_Bracket][1174]** 
 
 ### bar
 
--   **See: [EQN_Bar][585] for description and examples
+-   **See: [EQN_Bar][597] for description and examples
     **
 
 Equation bar function
 
 #### Parameters
 
--   `options` **[EQN_Bar][1204]** 
--   `forceOptions` **[Object][1140]**  (optional, default `{}`)
+-   `options` **[EQN_Bar][1226]** 
+-   `forceOptions` **[Object][1163]**  (optional, default `{}`)
 
 ### annotate
 
--   **See: [EQN_Annotate][612] for description and examples
+-   **See: [EQN_Annotate][624] for description and examples
     **
 
 Equation annotate function
 
 #### Parameters
 
--   `options` **[EQN_Annotate][1205]** 
+-   `options` **[EQN_Annotate][1227]** 
 
 ### scale
 
--   **See: [EQN_Scale][606] for description and examples
+-   **See: [EQN_Scale][618] for description and examples
     **
 
 Equation annotate function
 
 #### Parameters
 
--   `options` **[EQN_Scale][1206]** 
+-   `options` **[EQN_Scale][1228]** 
 
 ### frac
 
--   **See: [EQN_Fraction][558] for description and examples
+-   **See: [EQN_Fraction][570] for description and examples
     **
 
 Equation fraction function
 
 #### Parameters
 
--   `options` **[EQN_Fraction][1207]** 
+-   `options` **[EQN_Fraction][1229]** 
 
 ### supSub
 
--   **See: [EQN_SuperscriptSubscript][570] for description and examples
+-   **See: [EQN_SuperscriptSubscript][582] for description and examples
     **
 
 Equation super-sub script function
 
 #### Parameters
 
--   `options` **[EQN_SuperscriptSubscript][1208]** 
+-   `options` **[EQN_SuperscriptSubscript][1230]** 
 
 ### sup
 
--   **See: [EQN_Superscript][567] for description and examples
+-   **See: [EQN_Superscript][579] for description and examples
     **
 
 Equation superscript function
 
 #### Parameters
 
--   `options` **[EQN_Superscript][1209]** 
+-   `options` **[EQN_Superscript][1231]** 
 
 ### sub
 
--   **See: [EQN_Subscript][564] for description and examples
+-   **See: [EQN_Subscript][576] for description and examples
     **
 
 Equation subscript function
 
 #### Parameters
 
--   `options` **[EQN_Subscript][1210]** 
+-   `options` **[EQN_Subscript][1232]** 
 
 ### box
 
--   **See: [EQN_Box][591] for description and examples
+-   **See: [EQN_Box][603] for description and examples
     **
 
 Equation box function
 
 #### Parameters
 
--   `options` **[EQN_Box][1211]** 
+-   `options` **[EQN_Box][1233]** 
 
 ### pad
 
--   **See: [EQN_Pad][603] for description and examples
+-   **See: [EQN_Pad][615] for description and examples
     **
 
 Equation pad function
 
 #### Parameters
 
--   `options` **[EQN_Pad][1212]** 
+-   `options` **[EQN_Pad][1234]** 
 
 ### topBar
 
--   **See: [EQN_Bar][585] for description and examples
+-   **See: [EQN_Bar][597] for description and examples
     **
 
 Equation top bar function
 
 #### Parameters
 
--   `options` **[EQN_Bar][1204]** 
+-   `options` **[EQN_Bar][1226]** 
 
 ### bottomBar
 
--   **See: [EQN_Bar][585] for description and examples
+-   **See: [EQN_Bar][597] for description and examples
     **
 
 Equation bottom bar function
 
 #### Parameters
 
--   `options` **[EQN_Bar][1204]** 
+-   `options` **[EQN_Bar][1226]** 
 
 ### matrix
 
--   **See: [EQN_Matrix][573] for description and examples
+-   **See: [EQN_Matrix][585] for description and examples
     **
 
 Equation matrix function
 
 #### Parameters
 
--   `options` **[EQN_Matrix][1213]** 
+-   `options` **[EQN_Matrix][1235]** 
 
 ### int
 
--   **See: [EQN_Integral][576] for description and examples
+-   **See: [EQN_Integral][588] for description and examples
     **
 
 Equation integral function
 
 #### Parameters
 
--   `options` **[EQN_Integral][1214]** 
+-   `options` **[EQN_Integral][1236]** 
 
 ### sumOf
 
--   **See: [EQN_SumOf][579] for description and examples
+-   **See: [EQN_SumOf][591] for description and examples
     **
 
 Equation sum of function
 
 #### Parameters
 
--   `options` **[EQN_SumOf][1215]** 
+-   `options` **[EQN_SumOf][1237]** 
 
 ### prodOf
 
--   **See: [EQN_ProdOf][582] for description and examples
+-   **See: [EQN_ProdOf][594] for description and examples
     **
 
 Equation product of function
 
 #### Parameters
 
--   `options` **[EQN_ProdOf][1216]** 
+-   `options` **[EQN_ProdOf][1238]** 
 
 ### topComment
 
--   **See: [EQN_Comment][600] for description and examples
+-   **See: [EQN_Comment][612] for description and examples
     **
 
 Equation top comment of function
@@ -13436,11 +13664,11 @@ Equation top comment of function
 #### Parameters
 
 -   `args` **...any** 
--   `options` **[EQN_Comment][1217]** 
+-   `options` **[EQN_Comment][1239]** 
 
 ### bottomComment
 
--   **See: [EQN_Comment][600] for description and examples
+-   **See: [EQN_Comment][612] for description and examples
     **
 
 Equation bottom comment of function
@@ -13448,22 +13676,22 @@ Equation bottom comment of function
 #### Parameters
 
 -   `args` **...any** 
--   `options` **[EQN_Comment][1217]** 
+-   `options` **[EQN_Comment][1239]** 
 
 ### strike
 
--   **See: [EQN_Strike][594] for description and examples
+-   **See: [EQN_Strike][606] for description and examples
     **
 
 Equation strike of function
 
 #### Parameters
 
--   `options` **[EQN_Strike][1218]** 
+-   `options` **[EQN_Strike][1240]** 
 
 ### topStrike
 
--   **See: [EQN_Strike][594] for description and examples
+-   **See: [EQN_Strike][606] for description and examples
     **
 
 Equation top strike of function
@@ -13471,11 +13699,11 @@ Equation top strike of function
 #### Parameters
 
 -   `args` **...any** 
--   `options` **[EQN_Strike][1218]** 
+-   `options` **[EQN_Strike][1240]** 
 
 ### bottomStrike
 
--   **See: [EQN_Strike][594] for description and examples
+-   **See: [EQN_Strike][606] for description and examples
     **
 
 Equation bottom strike of function
@@ -13483,7 +13711,7 @@ Equation bottom strike of function
 #### Parameters
 
 -   `args` **...any** 
--   `options` **[EQN_Strike][1218]** 
+-   `options` **[EQN_Strike][1240]** 
 
 ## EQN_Annotation
 
@@ -13520,19 +13748,19 @@ In comparison, if `yAlign` were equal to `'top'`, then it would result in:
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** 
--   `xPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][996])?** where number is
+-   `content` **[TypeEquationPhrase][1168]** 
+-   `xPosition` **(`"left"` \| `"center"` \| `"right"` \| [number][1008])?** where number is
      the percentage width of the content (`'center'`)
--   `yPosition` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"` \| [number][996])?** where number is the percentage height of the content (`'top'`)
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][996])?** where number is
+-   `yPosition` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"` \| [number][1008])?** where number is the percentage height of the content (`'top'`)
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| [number][1008])?** where number is
     the percentage width of the annotation (`'center'`)
--   `yAlign` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"` \| [number][996])?** where
+-   `yAlign` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"` \| [number][1008])?** where
     number is the percentage width of the annotation (`'bottom'`)
--   `offset` **[Point][1006]?** annotation offset (`[0, 0]`)
--   `scale` **[number][996]?** annotation scale (`1`)
--   `inSize` **[boolean][995]?** (`true`)
--   `fullContentBounds` **[boolean][995]?** (`false`)
--   `reference` **[string][991]?** calling getBounds on a glyph can return a
+-   `offset` **[Point][1018]?** annotation offset (`[0, 0]`)
+-   `scale` **[number][1008]?** annotation scale (`1`)
+-   `inSize` **[boolean][1007]?** (`true`)
+-   `fullContentBounds` **[boolean][1007]?** (`false`)
+-   `reference` **[string][1003]?** calling getBounds on a glyph can return a
     suggested position, alignment and offset of an annotation with some name. If
     this name is defined here, then `xPosition`, `yPosition`, `xAlign`, `yAlign`
     and `offset` will be overwritten with the glyph's suggestion.
@@ -13575,19 +13803,19 @@ can also be annotated.
 
 ### Properties
 
--   `symbol` **[string][991]** 
--   `annotation` **[EQN_Annotation][1165]?** use for one annotation only instead
+-   `symbol` **[string][1003]** 
+-   `annotation` **[EQN_Annotation][1188]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][994]&lt;[EQN_Annotation][1165]>?** use for one or more
+-   `annotations` **[Array][1006]&lt;[EQN_Annotation][1188]>?** use for one or more
     annotations
--   `space` **[number][996]?** default space the glyph should extend beyond the
+-   `space` **[number][1008]?** default space the glyph should extend beyond the
     top, right, left and bottom sides of the content (`0`)
--   `topSpace` **[number][996]?** space the glyph extends beyond the content top
--   `rightSpace` **[number][996]?** space the glyph extends beyond the content
+-   `topSpace` **[number][1008]?** space the glyph extends beyond the content top
+-   `rightSpace` **[number][1008]?** space the glyph extends beyond the content
     right
--   `bottomSpace` **[number][996]?** space the glyph extends beyond the content
+-   `bottomSpace` **[number][1008]?** space the glyph extends beyond the content
     bottom
--   `leftSpace` **[number][996]?** space the glyph extends beyond the content
+-   `leftSpace` **[number][1008]?** space the glyph extends beyond the content
     left
 
 ### Examples
@@ -13625,26 +13853,26 @@ The glyph can also be annotated.
 
 ### Properties
 
--   `symbol` **[string][991]** 
--   `annotation` **[EQN_Annotation][1165]?** use for one annotation only instead
+-   `symbol` **[string][1003]** 
+-   `annotation` **[EQN_Annotation][1188]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][994]&lt;[EQN_Annotation][1165]>?** use for one or more
+-   `annotations` **[Array][1006]&lt;[EQN_Annotation][1188]>?** use for one or more
     annotations
--   `space` **[number][996]?** horizontal space between glyph and content (`0`)
--   `overhang` **[number][996]?** amount glyph extends above content top and
+-   `space` **[number][1008]?** horizontal space between glyph and content (`0`)
+-   `overhang` **[number][1008]?** amount glyph extends above content top and
     below content bottom (`0`)
--   `topSpace` **[number][996]?** amount glyph extends above content top
--   `bottomSpace` **[number][996]?** amount glyph extends below content bottom
--   `minContentHeight` **[number][996]?** force min content height for auto
+-   `topSpace` **[number][1008]?** amount glyph extends above content top
+-   `bottomSpace` **[number][1008]?** amount glyph extends below content bottom
+-   `minContentHeight` **[number][1008]?** force min content height for auto
     glyph scaling
--   `minContentDescent` **[number][996]?** force min content descent for auto
+-   `minContentDescent` **[number][1008]?** force min content descent for auto
     glyph scaling
--   `minContentAscent` **[number][996]?** force min content ascent for auto
+-   `minContentAscent` **[number][1008]?** force min content ascent for auto
     scaling
--   `descent` **[number][996]?** force descent of glyph
--   `height` **[number][996]?** force height of glyph
--   `yOffset` **[number][996]?** offset glyph in y (`0`)
--   `annotationsOverContent` **[boolean][995]?** `true` means only glyph is
+-   `descent` **[number][1008]?** force descent of glyph
+-   `height` **[number][1008]?** force height of glyph
+-   `yOffset` **[number][1008]?** offset glyph in y (`0`)
+-   `annotationsOverContent` **[boolean][1007]?** `true` means only glyph is
     separated from content by `space` and not annotations (false\`)
 
 ### Examples
@@ -13696,19 +13924,19 @@ The glyph can also be annotated.
 
 ### Properties
 
--   `symbol` **[string][991]** 
--   `annotation` **[EQN_Annotation][1165]?** use for one annotation only instead
+-   `symbol` **[string][1003]** 
+-   `annotation` **[EQN_Annotation][1188]?** use for one annotation only instead
     of property `annotations`
--   `annotations` **[Array][994]&lt;[EQN_Annotation][1165]>?** use for one or more
+-   `annotations` **[Array][1006]&lt;[EQN_Annotation][1188]>?** use for one or more
     annotations
--   `space` **[number][996]?** vertical space between glyph and content (`0`)
--   `overhang` **[number][996]?** amount glyph extends above content top and
+-   `space` **[number][1008]?** vertical space between glyph and content (`0`)
+-   `overhang` **[number][1008]?** amount glyph extends above content top and
     below content bottom (`0`)
--   `width` **[number][996]?** force width of glyph
--   `leftSpace` **[number][996]?** amount glyph extends beyond content left
--   `rightSpace` **[number][996]?** amount glyph extends beyond content right
--   `xOffset` **[number][996]?** offset glyph in x (`0`)
--   `annotationsOverContent` **[boolean][995]?** `true` means only glyph is
+-   `width` **[number][1008]?** force width of glyph
+-   `leftSpace` **[number][1008]?** amount glyph extends beyond content left
+-   `rightSpace` **[number][1008]?** amount glyph extends beyond content right
+-   `xOffset` **[number][1008]?** offset glyph in x (`0`)
+-   `annotationsOverContent` **[boolean][1007]?** `true` means only glyph is
     separated from content by `space` and not annotations (false\`)
 
 ### Examples
@@ -13743,11 +13971,11 @@ Multiple glyphs are ok, but only one per position.
 
 ### Properties
 
--   `encompass` **[EQN_EncompassGlyph][1219]?** 
--   `top` **[EQN_TopBottomGlyph][1220]?** 
--   `right` **[EQN_LeftRightGlyph][1221]?** 
--   `bottom` **[EQN_TopBottomGlyph][1220]?** 
--   `left` **[EQN_LeftRightGlyph][1221]?** 
+-   `encompass` **[EQN_EncompassGlyph][1241]?** 
+-   `top` **[EQN_TopBottomGlyph][1242]?** 
+-   `right` **[EQN_LeftRightGlyph][1243]?** 
+-   `bottom` **[EQN_TopBottomGlyph][1242]?** 
+-   `left` **[EQN_LeftRightGlyph][1243]?** 
 
 ## TypeEquationElements
 
@@ -13759,9 +13987,9 @@ An equation phrase is used to define an equation form. An equation phrase
 can either be the entirety of the form definition, or a series of nested
 phrases.
 
--   An object or array definition (e.g. [EQN_Fraction][558])
+-   An object or array definition (e.g. [EQN_Fraction][570])
 -   A string that represents an equation element
--   An array of [TypeEquationPhrase][955]
+-   An array of [TypeEquationPhrase][967]
 
 
 ### Examples
@@ -13788,7 +14016,7 @@ Defines how to align a form
 
 ### Properties
 
--   `fixTo` **([DiagramElementPrimitive][992] \| [DiagramElementCollection][993] \| [Point][1006])** 
+-   `fixTo` **([DiagramElementPrimitive][1004] \| [DiagramElementCollection][1005] \| [Point][1018])** 
 -   `xAlign` **TypeHAlign** 
 -   `yAlign` **TypeVAlign** 
 
@@ -13798,8 +14026,8 @@ Duration and translation options for form animation
 
 ### Properties
 
--   `duration` **[number][996]?** in seconds
--   `translation` **[Object][1140]&lt;[TypeFormTranslationProperties][1225]>?** 
+-   `duration` **[number][1008]?** in seconds
+-   `translation` **[Object][1163]&lt;[TypeFormTranslationProperties][1247]>?** 
 
 ### Examples
 
@@ -13834,7 +14062,7 @@ Form translation properties
     line, or through a curve. Default: `"linear"`
 -   `direction` **(`"up"` \| `"down"`)?** curve only - element should move
     through an up or down curve
--   `mag` **[number][996]?** the magnitude of the curve
+-   `mag` **[number][1008]?** the magnitude of the curve
 
 ## TypeEquationFormObject
 
@@ -13857,7 +14085,7 @@ elements.
 This object defines a how the elements are laid out, what properties the
 elements have, and some animation properties for when animating to this form.
 
-In the [Equation][528] object, forms are defined with form names, and
+In the [Equation][540] object, forms are defined with form names, and
 subForm names. Most of the time, the subForm name can be ignored.
 However, it is useful when dealing with units. Sometimes you will have a
 series of forms you want to animate through, that will be slightly different
@@ -13867,30 +14095,30 @@ complicating the overall equation navigation logic.
 
 See the examples below for how to define subForms.
 
-[Equation#addForms][1226].
+[Equation#addForms][1248].
 
 ### Properties
 
--   `content` **[TypeEquationPhrase][1145]** the equation phrase of the form
+-   `content` **[TypeEquationPhrase][1168]** the equation phrase of the form
     defines how the elements are laid out
--   `scale` **[number][996]?** a scaling factor for this form
--   `alignment` **[TypeFormAlignment][1139]?** how the Equation's position is aligned with
+-   `scale` **[number][1008]?** a scaling factor for this form
+-   `alignment` **[TypeFormAlignment][1162]?** how the Equation's position is aligned with
     this form
--   `subForm` **[string][991]?** subForm name - default: `"base"`
--   `description` **[string][991]?** a description associated with this form -
+-   `subForm` **[string][1003]?** subForm name - default: `"base"`
+-   `description` **[string][1003]?** a description associated with this form -
     used in equation navigator elements (@EquationNavigator)
--   `modifiers` **[object][1140]?** string modifiers for the description
--   `fromPrev` **[TypeFormAnimationProperties][1143]?** form animation
+-   `modifiers` **[object][1163]?** string modifiers for the description
+-   `fromPrev` **[TypeFormAnimationProperties][1166]?** form animation
     properties if animating forward from the previous form in a formSeries
--   `fromNext` **[TypeFormAnimationProperties][1143]?** form animation
+-   `fromNext` **[TypeFormAnimationProperties][1166]?** form animation
     properties if animating backward from the next form in a formSeries
--   `duration` **[TypeFormAnimationProperties][1143]?** animation move duration
+-   `duration` **[TypeFormAnimationProperties][1166]?** animation move duration
      (fromNext and fromPrev are prioritized over this)
--   `translation` **[TypeFormTranslationProperties][1225]?** animation move
+-   `translation` **[TypeFormTranslationProperties][1247]?** animation move
     style (fromNext and fromPrev are prioritized over this)
--   `elementMods` **[object][1140]?** properties to set in the equation element
+-   `elementMods` **[object][1163]?** properties to set in the equation element
     (@DiagramElementPrimitive) when this form is shown
--   `animation` **{duration: [number][996]??, translation: [TypeFormTranslationProperties][1225]?}?** 
+-   `animation` **{duration: [number][1008]??, translation: [TypeFormTranslationProperties][1247]?}?** 
 
 ### Examples
 
@@ -13993,12 +14221,12 @@ forms: {
 
 A single form definition can either be:
 
--   an equation phrase [TypeEquationPhrase][955]
--   or an equation form object [TypeEquationFormObject][964]
+-   an equation phrase [TypeEquationPhrase][967]
+-   or an equation form object [TypeEquationFormObject][976]
 -   or an object of subforms:
 
      {
-        subform1: ([TypeEquationPhrase][955] \| [TypeEquationFormObject][964]),
+        subform1: ([TypeEquationPhrase][967] \| [TypeEquationFormObject][976]),
         subform2: ...
      },
 
@@ -14006,7 +14234,7 @@ A single form definition can either be:
 ## TypeEquationForms
 
 An object of equation forms where each key is the form name and each value
-is a form defintion [TypeEquationForm][967]
+is a form defintion [TypeEquationForm][979]
 
 
 ## TypeFormRestart
@@ -14024,11 +14252,11 @@ The default values in the pulse object are are:
 
 ### Properties
 
--   `formRestart` **{moveFrom: ([Point][1006]? | [DiagramElementCollection][993])?, pulse: {duration: [number][996]?, scale: [number][996]?, element: [DiagramElement][1000]??}?}?** 
+-   `formRestart` **{moveFrom: ([Point][1018]? | [DiagramElementCollection][1005])?, pulse: {duration: [number][1008]?, scale: [number][1008]?, element: [DiagramElement][1012]??}?}?** 
 
 ## TypeEquationGoToFormOptions
 
-Options object for [Equation#goToForm][1229].
+Options object for [Equation#goToForm][1251].
 
 Often, `goToForm` is called to animate from a shown form to a desired form.
 Therefore there will be some equation elements that:
@@ -14048,10 +14276,10 @@ The order that elements are shown, hidden and moved is defined by the
     move existing elements to their correct locations
 -   `'dissolve'`: Dissolve out the entire current form, and then dissolve in the entire new form
 -   `'moveFrom'`: Shows the desired form at the position defined in the
-    formRestart property of [EQN_Equation][555], then moves it to the
+    formRestart property of [EQN_Equation][567], then moves it to the
     current location
 -   `'pulse'`: Same as `'dissolve'`, but once finished will pulse the element
-    defined in the pulse object in the formRestart property of [EQN_Equation][555]
+    defined in the pulse object in the formRestart property of [EQN_Equation][567]
 
 If a form is already animating, then the `ifAnimating` property will define
 the behavior of the animation:
@@ -14067,25 +14295,25 @@ the behavior of the animation:
 
 ### Properties
 
--   `name` **[string][991]?** form name to goto
--   `index` **[number][996]?** form index to goto (can be used instead of name)
+-   `name` **[string][1003]?** form name to goto
+-   `index` **[number][1008]?** form index to goto (can be used instead of name)
 -   `animate` **(`"move"` \| `"dissolve"` \| `"moveFrom"` \| `"pulse"` \| `"dissolveInThenMove"`)?** default: `"dissolve"`
--   `delay` **[number][996]?** delay before goto start. Default: `0`
--   `dissolveOutTime` **[number][996]?** Default: 0.4 of duration, or 0.4s if
+-   `delay` **[number][1008]?** delay before goto start. Default: `0`
+-   `dissolveOutTime` **[number][1008]?** Default: 0.4 of duration, or 0.4s if
     no duration
--   `duration` **[number][996]?** animation duration. Default: `null`
--   `blankTime` **[number][996]?** time between dissolve out and dissolve in
+-   `duration` **[number][1008]?** animation duration. Default: `null`
+-   `blankTime` **[number][1008]?** time between dissolve out and dissolve in
     when animating with `dissolve` or `pulse`. Default: 0.2 of duration, or 0.2s
     if no duration
--   `dissolveInTime` **[number][996]?** Default: 0.4 of duration, or 0.4s if
+-   `dissolveInTime` **[number][1008]?** Default: 0.4 of duration, or 0.4s if
     no duration
--   `prioritizeFormDuration` **[boolean][995]?** use duration from the form
-    definition [TypeEquationFormObject][964]. Default: `true`
+-   `prioritizeFormDuration` **[boolean][1007]?** use duration from the form
+    definition [TypeEquationFormObject][976]. Default: `true`
 -   `fromWhere` **(`"fromPrev"` \| `"fromNext"`)?** prioritze _fromPrev_ or
-    _fromNext_ duration from the form definition. [TypeEquationFormObject][964]
+    _fromNext_ duration from the form definition. [TypeEquationFormObject][976]
     Default: `null`
--   `ifAnimating` **{cancelGoTo: [boolean][995]?, skipToTarget: [boolean][995]?}?** 
--   `callback` **([string][991] | function (): void)??** 
+-   `ifAnimating` **{cancelGoTo: [boolean][1007]?, skipToTarget: [boolean][1007]?}?** 
+-   `callback` **([string][1003] | function (): void)??** 
 
 ## TypeEquationTextElement
 
@@ -14096,27 +14324,27 @@ will be ignored.
 
 ### Properties
 
--   `text` **[string][991]?** Text element only
+-   `text` **[string][1003]?** Text element only
 -   `font` **DiagramFont?** Text element only
 -   `style` **(`"italic"` \| `"normal"`)?** Text element only
--   `symbol` **[string][991]?** Symbol element only
+-   `symbol` **[string][1003]?** Symbol element only
 -   `side` **(`"top"` \| `"left"` \| `"bottom"` \| `"right"`)?** Symbol element only
--   `mods` **[object][1140]?** Properties to set on instantiated element
--   `color` **[Array][994]&lt;[number][996]>?** Color to set the element
+-   `mods` **[object][1163]?** Properties to set on instantiated element
+-   `color` **[Array][1006]&lt;[number][1008]>?** Color to set the element
 
 ## OBJ_AxisTicks
 
 **Extends OBJ_Line**
 
--   **See: [ADV_Axis][381]
+-   **See: [ADV_Axis][393]
 
     To test examples below, append them to the
     <a href="#drawing-boilerplate">boilerplate</a>.
     **
 
-Axis Ticks and Grid options object for [ADV_Axis][381].
+Axis Ticks and Grid options object for [ADV_Axis][393].
 
-![][1230]
+![][1252]
 
 Ticks and grid locations can specified programatically with `start`,
 `stop` and `step`, or manually using a `values` array where each value
@@ -14137,19 +14365,19 @@ Type: any
 
 ### Properties
 
--   `start` **[number][996]?** start value of the ticks/grid on the axis
+-   `start` **[number][1008]?** start value of the ticks/grid on the axis
     (`axis.start`)
--   `step` **[number][996]?** step between ticks/grid
+-   `step` **[number][1008]?** step between ticks/grid
     (`(axis.stop - axis.start) / 5`)
--   `stop` **[number][996]?** stop value of the ticks/grid on the axis
+-   `stop` **[number][1008]?** stop value of the ticks/grid on the axis
     (`axis.stop`)
--   `values` **[Array][994]&lt;[number][996]>?** value locations of the ticks/grid on
+-   `values` **[Array][1006]&lt;[number][1008]>?** value locations of the ticks/grid on
     the axis (overrides `start`, `stop` and `step`)
--   `length` **[number][996]?** length of the ticks/grid (draw space)
--   `offset` **[number][996]?** offset of the ticks/grid (draw space) - use this
+-   `length` **[number][1008]?** length of the ticks/grid (draw space)
+-   `offset` **[number][1008]?** offset of the ticks/grid (draw space) - use this
     to center ticks around the axis or not (`-length / 2`)
--   `width` **[number][996]?** width of ticks/grid (draw space)
--   `dash` **[TypeDash][1231]?** line style is solid or dashed (`[]`)
+-   `width` **[number][1008]?** width of ticks/grid (draw space)
+-   `dash` **[TypeDash][1253]?** line style is solid or dashed (`[]`)
 
 ### Examples
 
@@ -14221,15 +14449,25 @@ diagram.addElement({
 
 ## OBJ_AxisLabels
 
--   **See: [ADV_Axis][381]
-
-    To test examples below, append them to the
+-   **See: To test examples below, append them to the
     <a href="#drawing-boilerplate">boilerplate</a>.
+
+    For more examples see [OBJ_Axis][1254].
     **
 
-Axis label options object.
+Axis label options object for the [ADV_Axis][393].
 
-![][1232]
+![][1255]
+
+![][1256]
+
+![][1257]
+
+![][1258]
+
+![][1259]
+
+![][1260]
 
 By default, labels are positioned with the first `ticks` defined in the
 axis. Labels can also be positioned at custom values with `values`.
@@ -14237,31 +14475,37 @@ axis. Labels can also be positioned at custom values with `values`.
 Labels will be values at the label positions, unless specified as a specific
 string or number in the `text` property.
 
+Different properties are defined in different spaces.
+
+-   `values`, is defined in axis space, or the values along the axis.
+-   `space` and `offset` are defined in draw space and relate
+    to dimensions in the space the axis is being drawn into.
+
 ### Properties
 
--   `values` **(null | [number][996] \| [Array][994]&lt;[number][996]>)?** the axis values to
+-   `values` **(null | [number][1008] \| [Array][1006]&lt;[number][1008]>)?** the axis values to
     position labels at - by default (`null`) these values will be the same
     values as the first `ticks` values if `ticks` are defined (`null`)
--   `text` **(null | [Array][994]&lt;([string][991] | null | [number][996])>)?** An array of text to
+-   `text` **(null | [Array][1006]&lt;([string][1003] | null | [number][1008])>)?** An array of text to
     be used for the labels. `null` will use the
     value the label is at, `number` and `string` can be used for label
     customization. If using an array that is shorter than the number of values
     for labels to be drawn at, then `null` will be used for undefined values.
     (`null`)
--   `precision` **[number][996]?** Number of decimal places to be shown when the
+-   `precision` **[number][1008]?** Number of decimal places to be shown when the
     label text is the axis value (`null`) or a `number` (`1`)
 -   `format` **(`"decimal"` \| `"exp"`)?** `'exp'` will present numbers in
     exponential form (`'decimal'`)
--   `space` **[number][996]?** space between the ticks and the label
--   `offset` **[TypeParsablePoint][1004]?** additional offset for the labels
+-   `space` **[number][1008]?** space between the ticks and the label
+-   `offset` **[TypeParsablePoint][1016]?** additional offset for the labels
     (`[0, 0]`)
--   `rotation` **[number][996]?** label rotation (`0`)
+-   `rotation` **[number][1008]?** label rotation (`0`)
 -   `xAlign` **(`"left"` \| `"right"` \| `"center"`)?** horizontal alignment of
     labels (`'center'` for x axes, `'right'` for y axes)
 -   `yAlign` **(`"bottom"` \| `"baseline"` \| `"middle"` \| `"top"`)?** vertical
     alignment of labels (`'top'` for x axes, `'middle'` for y axes)
--   `font` **[OBJ_Font][1059]?** specific font changes for labels
--   `hide` **([Array][994]&lt;[number][996]> | [number][996])?** value indexes to hide (`[]`)
+-   `font` **[OBJ_Font][1081]?** specific font changes for labels
+-   `hide` **([Array][1006]&lt;[number][1008]> | [number][1008])?** value indexes to hide (`[]`)
 
 ### Examples
 
@@ -14309,7 +14553,7 @@ diagram.addElement({
       rotation: Math.PI / 4,
       yAlign: 'middle',
       xAlign: 'right',
-      space: 0.05, 
+      space: 0.05,
     },
   },
 });
@@ -14338,7 +14582,7 @@ diagram.addElement({
     ticks: true,
     labels: {
       values: [0, 0.6],
-      font: { color: [0, 0, 1, 1], size: 0.15 }
+      font: { color: [0, 0, 1, 1], size: 0.15 },
     },
   },
 });
@@ -14366,7 +14610,7 @@ diagram.addElement({
 
 Axis title
 
-([OBJ_TextLines][390] `& { rotation?: number, offset?:` [TypeParsablePoint][738] `}) | string`
+([OBJ_TextLines][402] `& { rotation?: number, offset?:` [TypeParsablePoint][750] `}) | string`
 
 
 ## OBJ_SurroundAnimationStep
@@ -14379,9 +14623,9 @@ Type: any
 
 ### Properties
 
--   `start` **[number][996]?** start element to surround (`this`)
--   `target` **[number][996]?** target element to surround (`this`)
--   `space` **[number][996]?** space between rectangle and element (`0`)
+-   `start` **[number][1008]?** start element to surround (`this`)
+-   `target` **[number][1008]?** target element to surround (`this`)
+-   `space` **[number][1008]?** space between rectangle and element (`0`)
 
 ## EquationLabel
 
@@ -14389,7 +14633,7 @@ Equation label
 
 ### Parameters
 
--   `equations` **[Object][1140]** 
+-   `equations` **[Object][1163]** 
 -   `options` **TypeLabelOptions**  (optional, default `{}`)
 
 [1]: #introduction
@@ -15152,1706 +15396,1762 @@ Equation label
 
 [380]: #properties-17
 
-[381]: #adv_axis
+[381]: #advancedaxis
 
-[382]: #properties-18
+[382]: #example
 
-[383]: #text
+[383]: #example-1
 
-[384]: #obj_text
+[384]: #example-2
 
-[385]: #properties-19
+[385]: #example-3
 
-[386]: #examples-35
+[386]: #example-4
 
-[387]: #obj_textline
+[387]: #valuetodraw
 
-[388]: #properties-20
+[388]: #parameters-126
 
-[389]: #examples-36
+[389]: #drawtovalue
 
-[390]: #obj_textlines
+[390]: #parameters-127
 
-[391]: #properties-21
+[391]: #inaxis
 
-[392]: #examples-37
+[392]: #parameters-128
 
-[393]: #animation
+[393]: #adv_axis
 
-[394]: #animationmanager
+[394]: #properties-18
 
-[395]: #properties-22
+[395]: #text
 
-[396]: #examples-38
+[396]: #obj_text
 
-[397]: #new
+[397]: #properties-19
 
-[398]: #parameters-126
+[398]: #examples-35
 
-[399]: #examples-39
+[399]: #obj_textline
 
-[400]: #builder
+[400]: #properties-20
 
-[401]: #parameters-127
+[401]: #examples-36
 
-[402]: #rotation-1
+[402]: #obj_textlines
 
-[403]: #parameters-128
+[403]: #properties-21
 
-[404]: #examples-40
+[404]: #examples-37
 
-[405]: #scale-3
+[405]: #animation
 
-[406]: #parameters-129
+[406]: #animationmanager
 
-[407]: #trigger
+[407]: #properties-22
 
-[408]: #parameters-130
+[408]: #examples-38
 
-[409]: #delay
+[409]: #new
 
-[410]: #parameters-131
+[410]: #parameters-129
 
-[411]: #translation-1
+[411]: #examples-39
 
-[412]: #parameters-132
+[412]: #builder
 
-[413]: #position
+[413]: #parameters-130
 
-[414]: #parameters-133
+[414]: #rotation-1
 
-[415]: #color
+[415]: #parameters-131
 
-[416]: #parameters-134
+[416]: #examples-40
 
-[417]: #opacity
+[417]: #scale-3
 
-[418]: #parameters-135
+[418]: #parameters-132
 
-[419]: #transform-2
+[419]: #trigger
 
-[420]: #parameters-136
+[420]: #parameters-133
 
-[421]: #dissolvein
+[421]: #delay
 
-[422]: #parameters-137
+[422]: #parameters-134
 
-[423]: #dissolveout
+[423]: #translation-1
 
-[424]: #parameters-138
+[424]: #parameters-135
 
-[425]: #dim-1
+[425]: #position
 
-[426]: #parameters-139
+[426]: #parameters-136
 
-[427]: #undim-1
+[427]: #color
 
-[428]: #parameters-140
+[428]: #parameters-137
 
-[429]: #scenario
+[429]: #opacity
 
-[430]: #parameters-141
+[430]: #parameters-138
 
-[431]: #scenarios
+[431]: #transform-2
 
-[432]: #parameters-142
+[432]: #parameters-139
 
-[433]: #cancel
+[433]: #dissolvein
 
-[434]: #parameters-143
+[434]: #parameters-140
 
-[435]: #start
+[435]: #dissolveout
 
-[436]: #parameters-144
+[436]: #parameters-141
 
-[437]: #getremainingtime
+[437]: #dim-1
 
-[438]: #parameters-145
+[438]: #parameters-142
 
-[439]: #animationbuilder
+[439]: #undim-1
 
-[440]: #examples-41
+[440]: #parameters-143
 
-[441]: #custom
+[441]: #scenario
 
-[442]: #parameters-146
+[442]: #parameters-144
 
-[443]: #rotation-2
+[443]: #scenarios
 
-[444]: #parameters-147
+[444]: #parameters-145
 
-[445]: #position-1
+[445]: #cancel
 
-[446]: #parameters-148
+[446]: #parameters-146
 
-[447]: #translation-2
+[447]: #start
 
-[448]: #parameters-149
+[448]: #parameters-147
 
-[449]: #scale-4
+[449]: #getremainingtime
 
-[450]: #parameters-150
+[450]: #parameters-148
 
-[451]: #transform-3
+[451]: #animationbuilder
 
-[452]: #parameters-151
+[452]: #examples-41
 
-[453]: #scenario-1
+[453]: #custom
 
-[454]: #parameters-152
+[454]: #parameters-149
 
-[455]: #scenarios-1
+[455]: #rotation-2
 
-[456]: #parameters-153
+[456]: #parameters-150
 
-[457]: #color-1
+[457]: #position-1
 
-[458]: #parameters-154
+[458]: #parameters-151
 
-[459]: #opacity-1
+[459]: #translation-2
 
-[460]: #parameters-155
+[460]: #parameters-152
 
-[461]: #dissolveout-1
+[461]: #scale-4
 
-[462]: #parameters-156
+[462]: #parameters-153
 
-[463]: #dissolvein-1
+[463]: #transform-3
 
-[464]: #parameters-157
+[464]: #parameters-154
 
-[465]: #dim-2
+[465]: #scenario-1
 
-[466]: #parameters-158
+[466]: #parameters-155
 
-[467]: #undim-2
+[467]: #scenarios-1
 
-[468]: #parameters-159
+[468]: #parameters-156
 
-[469]: #delay-1
+[469]: #color-1
 
-[470]: #parameters-160
+[470]: #parameters-157
 
-[471]: #trigger-1
+[471]: #opacity-1
 
-[472]: #parameters-161
+[472]: #parameters-158
 
-[473]: #inparallel
+[473]: #dissolveout-1
 
-[474]: #parameters-162
+[474]: #parameters-159
 
-[475]: #inserial
+[475]: #dissolvein-1
 
-[476]: #parameters-163
+[476]: #parameters-160
 
-[477]: #positionanimationstep
+[477]: #dim-2
 
-[478]: #parameters-164
+[478]: #parameters-161
 
-[479]: #examples-42
+[479]: #undim-2
 
-[480]: #rotationanimationstep
+[480]: #parameters-162
 
-[481]: #parameters-165
+[481]: #delay-1
 
-[482]: #examples-43
+[482]: #parameters-163
 
-[483]: #scaleanimationstep
+[483]: #trigger-1
 
-[484]: #parameters-166
+[484]: #parameters-164
 
-[485]: #examples-44
+[485]: #inparallel
 
-[486]: #transformanimationstep
+[486]: #parameters-165
 
-[487]: #parameters-167
+[487]: #inserial
 
-[488]: #examples-45
+[488]: #parameters-166
 
-[489]: #scenarioanimationstep
+[489]: #positionanimationstep
 
-[490]: #parameters-168
+[490]: #parameters-167
 
-[491]: #examples-46
+[491]: #examples-42
 
-[492]: #pulseanimationstep
+[492]: #rotationanimationstep
 
-[493]: #parameters-169
+[493]: #parameters-168
 
-[494]: #examples-47
+[494]: #examples-43
 
-[495]: #coloranimationstep
+[495]: #scaleanimationstep
 
-[496]: #parameters-170
+[496]: #parameters-169
 
-[497]: #examples-48
+[497]: #examples-44
 
-[498]: #dimanimationstep
+[498]: #transformanimationstep
 
-[499]: #parameters-171
+[499]: #parameters-170
 
-[500]: #examples-49
+[500]: #examples-45
 
-[501]: #undimanimationstep
+[501]: #scenarioanimationstep
 
-[502]: #parameters-172
+[502]: #parameters-171
 
-[503]: #examples-50
+[503]: #examples-46
 
-[504]: #opacityanimationstep
+[504]: #pulseanimationstep
 
-[505]: #parameters-173
+[505]: #parameters-172
 
-[506]: #examples-51
+[506]: #examples-47
 
-[507]: #dissolveinanimationstep
+[507]: #coloranimationstep
 
-[508]: #parameters-174
+[508]: #parameters-173
 
-[509]: #examples-52
+[509]: #examples-48
 
-[510]: #dissolveoutanimationstep
+[510]: #dimanimationstep
 
-[511]: #parameters-175
+[511]: #parameters-174
 
-[512]: #examples-53
+[512]: #examples-49
 
-[513]: #triggeranimationstep
+[513]: #undimanimationstep
 
-[514]: #parameters-176
+[514]: #parameters-175
 
-[515]: #examples-54
+[515]: #examples-50
 
-[516]: #customanimationstep
+[516]: #opacityanimationstep
 
-[517]: #parameters-177
+[517]: #parameters-176
 
-[518]: #examples-55
+[518]: #examples-51
 
-[519]: #serialanimationstep
+[519]: #dissolveinanimationstep
 
-[520]: #parameters-178
+[520]: #parameters-177
 
-[521]: #examples-56
+[521]: #examples-52
 
-[522]: #parallelanimationstep
+[522]: #dissolveoutanimationstep
 
-[523]: #parameters-179
+[523]: #parameters-178
 
-[524]: #examples-57
+[524]: #examples-53
 
-[525]: #delayanimationstep
+[525]: #triggeranimationstep
 
-[526]: #parameters-180
+[526]: #parameters-179
 
-[527]: #equations
+[527]: #examples-54
 
-[528]: #equation
+[528]: #customanimationstep
 
-[529]: #parameters-181
+[529]: #parameters-180
 
-[530]: #examples-58
+[530]: #examples-55
 
-[531]: #eqn
+[531]: #serialanimationstep
 
-[532]: #properties-23
+[532]: #parameters-181
 
-[533]: #setformseries
+[533]: #examples-56
 
-[534]: #parameters-182
+[534]: #parallelanimationstep
 
-[535]: #getformseries
+[535]: #parameters-182
 
-[536]: #addelements-1
+[536]: #examples-57
 
-[537]: #parameters-183
+[537]: #delayanimationstep
 
-[538]: #addforms
+[538]: #parameters-183
 
-[539]: #parameters-184
+[539]: #equations
 
-[540]: #getcurrentform
+[540]: #equation
 
-[541]: #setcurrentform
+[541]: #parameters-184
 
-[542]: #parameters-185
+[542]: #examples-58
 
-[543]: #showform
+[543]: #eqn
 
-[544]: #parameters-186
+[544]: #properties-23
 
-[545]: #getform
+[545]: #setformseries
 
-[546]: #parameters-187
+[546]: #parameters-185
 
-[547]: #gotoform
+[547]: #getformseries
 
-[548]: #parameters-188
+[548]: #addelements-1
 
-[549]: #prevform
+[549]: #parameters-186
 
-[550]: #parameters-189
+[550]: #addforms
 
-[551]: #nextform
+[551]: #parameters-187
 
-[552]: #parameters-190
+[552]: #getcurrentform
 
-[553]: #replaycurrentform
+[553]: #setcurrentform
 
-[554]: #parameters-191
+[554]: #parameters-188
 
-[555]: #eqn_equation
+[555]: #showform
 
-[556]: #properties-24
+[556]: #parameters-189
 
-[557]: #equation-layout
+[557]: #getform
 
-[558]: #eqn_fraction
+[558]: #parameters-190
 
-[559]: #properties-25
+[559]: #gotoform
 
-[560]: #examples-59
+[560]: #parameters-191
 
-[561]: #eqn_root
+[561]: #prevform
 
-[562]: #properties-26
+[562]: #parameters-192
 
-[563]: #examples-60
+[563]: #nextform
 
-[564]: #eqn_subscript
+[564]: #parameters-193
 
-[565]: #properties-27
+[565]: #replaycurrentform
 
-[566]: #examples-61
+[566]: #parameters-194
 
-[567]: #eqn_superscript
+[567]: #eqn_equation
 
-[568]: #properties-28
+[568]: #properties-24
 
-[569]: #examples-62
+[569]: #equation-layout
 
-[570]: #eqn_superscriptsubscript
+[570]: #eqn_fraction
 
-[571]: #properties-29
+[571]: #properties-25
 
-[572]: #examples-63
+[572]: #examples-59
 
-[573]: #eqn_matrix
+[573]: #eqn_root
 
-[574]: #properties-30
+[574]: #properties-26
 
-[575]: #examples-64
+[575]: #examples-60
 
-[576]: #eqn_integral
+[576]: #eqn_subscript
 
-[577]: #properties-31
+[577]: #properties-27
 
-[578]: #examples-65
+[578]: #examples-61
 
-[579]: #eqn_sumof
+[579]: #eqn_superscript
 
-[580]: #properties-32
+[580]: #properties-28
 
-[581]: #examples-66
+[581]: #examples-62
 
-[582]: #eqn_prodof
+[582]: #eqn_superscriptsubscript
 
-[583]: #properties-33
+[583]: #properties-29
 
-[584]: #examples-67
+[584]: #examples-63
 
-[585]: #eqn_bar
+[585]: #eqn_matrix
 
-[586]: #properties-34
+[586]: #properties-30
 
-[587]: #examples-68
+[587]: #examples-64
 
-[588]: #eqn_bracket
+[588]: #eqn_integral
 
-[589]: #properties-35
+[589]: #properties-31
 
-[590]: #examples-69
+[590]: #examples-65
 
-[591]: #eqn_box
+[591]: #eqn_sumof
 
-[592]: #properties-36
+[592]: #properties-32
 
-[593]: #examples-70
+[593]: #examples-66
 
-[594]: #eqn_strike
+[594]: #eqn_prodof
 
-[595]: #properties-37
+[595]: #properties-33
 
-[596]: #examples-71
+[596]: #examples-67
 
-[597]: #eqn_strikecomment
+[597]: #eqn_bar
 
-[598]: #properties-38
+[598]: #properties-34
 
-[599]: #examples-72
+[599]: #examples-68
 
-[600]: #eqn_comment
+[600]: #eqn_bracket
 
-[601]: #properties-39
+[601]: #properties-35
 
-[602]: #examples-73
+[602]: #examples-69
 
-[603]: #eqn_pad
+[603]: #eqn_box
 
-[604]: #properties-40
+[604]: #properties-36
 
-[605]: #examples-74
+[605]: #examples-70
 
-[606]: #eqn_scale
+[606]: #eqn_strike
 
-[607]: #properties-41
+[607]: #properties-37
 
-[608]: #examples-75
+[608]: #examples-71
 
-[609]: #eqn_container
+[609]: #eqn_strikecomment
 
-[610]: #properties-42
+[610]: #properties-38
 
-[611]: #examples-76
+[611]: #examples-72
 
-[612]: #eqn_annotate
+[612]: #eqn_comment
 
-[613]: #properties-43
+[613]: #properties-39
 
-[614]: #examples-77
+[614]: #examples-73
 
-[615]: #equation-symbols
+[615]: #eqn_pad
 
-[616]: #eqn_vinculumsymbol
+[616]: #properties-40
 
-[617]: #properties-44
+[617]: #examples-74
 
-[618]: #examples-78
+[618]: #eqn_scale
 
-[619]: #eqn_boxsymbol
+[619]: #properties-41
 
-[620]: #properties-45
+[620]: #examples-75
 
-[621]: #examples-79
+[621]: #eqn_container
 
-[622]: #eqn_arrowsymbol
+[622]: #properties-42
 
-[623]: #properties-46
+[623]: #examples-76
 
-[624]: #examples-80
+[624]: #eqn_annotate
 
-[625]: #eqn_sumsymbol
+[625]: #properties-43
 
-[626]: #properties-47
+[626]: #examples-77
 
-[627]: #examples-81
+[627]: #equation-symbols
 
-[628]: #eqn_prodsymbol
+[628]: #eqn_vinculumsymbol
 
-[629]: #properties-48
+[629]: #properties-44
 
-[630]: #examples-82
+[630]: #examples-78
 
-[631]: #eqn_integralsymbol
+[631]: #eqn_boxsymbol
 
-[632]: #properties-49
+[632]: #properties-45
 
-[633]: #examples-83
+[633]: #examples-79
 
-[634]: #eqn_strikesymbol
+[634]: #eqn_arrowsymbol
 
-[635]: #properties-50
+[635]: #properties-46
 
-[636]: #examples-84
+[636]: #examples-80
 
-[637]: #eqn_bracketsymbol
+[637]: #eqn_sumsymbol
 
-[638]: #properties-51
+[638]: #properties-47
 
-[639]: #examples-85
+[639]: #examples-81
 
-[640]: #eqn_anglebracketsymbol
+[640]: #eqn_prodsymbol
 
-[641]: #properties-52
+[641]: #properties-48
 
-[642]: #examples-86
+[642]: #examples-82
 
-[643]: #eqn_bracesymbol
+[643]: #eqn_integralsymbol
 
-[644]: #properties-53
+[644]: #properties-49
 
-[645]: #examples-87
+[645]: #examples-83
 
-[646]: #eqn_barsymbol
+[646]: #eqn_strikesymbol
 
-[647]: #properties-54
+[647]: #properties-50
 
-[648]: #examples-88
+[648]: #examples-84
 
-[649]: #eqn_squarebracketsymbol
+[649]: #eqn_bracketsymbol
 
-[650]: #properties-55
+[650]: #properties-51
 
-[651]: #examples-89
+[651]: #examples-85
 
-[652]: #eqn_radicalsymbol
+[652]: #eqn_anglebracketsymbol
 
-[653]: #properties-56
+[653]: #properties-52
 
-[654]: #examples-90
+[654]: #examples-86
 
-[655]: #2d-geometry-tools
+[655]: #eqn_bracesymbol
 
-[656]: #minanglediff
+[656]: #properties-53
 
-[657]: #parameters-192
+[657]: #examples-87
 
-[658]: #examples-91
+[658]: #eqn_barsymbol
 
-[659]: #gettrianglecenter
+[659]: #properties-54
 
-[660]: #parameters-193
+[660]: #examples-88
 
-[661]: #examples-92
+[661]: #eqn_squarebracketsymbol
 
-[662]: #polartorect
+[662]: #properties-55
 
-[663]: #parameters-194
+[663]: #examples-89
 
-[664]: #examples-93
+[664]: #eqn_radicalsymbol
 
-[665]: #recttopolar
+[665]: #properties-56
 
-[666]: #parameters-195
+[666]: #examples-90
 
-[667]: #examples-94
+[667]: #2d-geometry-tools
 
-[668]: #threepointangle
+[668]: #minanglediff
 
-[669]: #parameters-196
+[669]: #parameters-195
 
-[670]: #examples-95
+[670]: #examples-91
 
-[671]: #threepointanglemin
+[671]: #gettrianglecenter
 
-[672]: #parameters-197
+[672]: #parameters-196
 
-[673]: #examples-96
+[673]: #examples-92
 
-[674]: #clipangle
+[674]: #polartorect
 
-[675]: #parameters-198
+[675]: #parameters-197
 
-[676]: #examples-97
+[676]: #examples-93
 
-[677]: #math-tools
+[677]: #recttopolar
 
-[678]: #round-7
+[678]: #parameters-198
 
-[679]: #parameters-199
+[679]: #examples-94
 
-[680]: #range
+[680]: #threepointangle
 
-[681]: #parameters-200
+[681]: #parameters-199
 
-[682]: #randsign
+[682]: #examples-95
 
-[683]: #randint
+[683]: #threepointanglemin
 
-[684]: #parameters-201
+[684]: #parameters-200
 
-[685]: #rand
+[685]: #examples-96
 
-[686]: #parameters-202
+[686]: #clipangle
 
-[687]: #randelement
+[687]: #parameters-201
 
-[688]: #parameters-203
+[688]: #examples-97
 
-[689]: #randelements
+[689]: #math-tools
 
-[690]: #parameters-204
+[690]: #round-7
 
-[691]: #removerandelement
+[691]: #parameters-202
 
-[692]: #parameters-205
+[692]: #range
 
-[693]: #misc-diagram-element
+[693]: #parameters-203
 
-[694]: #diagramelementmovefreely
+[694]: #randsign
 
-[695]: #properties-57
+[695]: #randint
 
-[696]: #diagramelementmove
+[696]: #parameters-204
 
-[697]: #properties-58
+[697]: #rand
 
-[698]: #scenarios-2
+[698]: #parameters-205
 
-[699]: #properties-59
+[699]: #randelement
 
-[700]: #elementmovementstate
+[700]: #parameters-206
 
-[701]: #properties-60
+[701]: #randelements
 
-[702]: #elementpulsestate
+[702]: #parameters-207
 
-[703]: #properties-61
+[703]: #removerandelement
 
-[704]: #elementstate
+[704]: #parameters-208
 
-[705]: #properties-62
+[705]: #misc-diagram-element
 
-[706]: #drawingobject
+[706]: #diagramelementmovefreely
 
-[707]: #properties-63
+[707]: #properties-57
 
-[708]: #diagramprimitives
+[708]: #diagramelementmove
 
-[709]: #generic
+[709]: #properties-58
 
-[710]: #parameters-206
+[710]: #scenarios-2
 
-[711]: #polyline
+[711]: #properties-59
 
-[712]: #parameters-207
+[712]: #elementmovementstate
 
-[713]: #polygon
+[713]: #properties-60
 
-[714]: #parameters-208
+[714]: #elementpulsestate
 
-[715]: #star
+[715]: #properties-61
 
-[716]: #parameters-209
+[716]: #elementstate
 
-[717]: #rectangle
+[717]: #properties-62
 
-[718]: #parameters-210
+[718]: #drawingobject
 
-[719]: #ellipse
+[719]: #properties-63
 
-[720]: #parameters-211
+[720]: #diagramprimitives
 
-[721]: #triangle
+[721]: #generic
 
-[722]: #parameters-212
+[722]: #parameters-209
 
-[723]: #grid
+[723]: #polyline
 
-[724]: #parameters-213
+[724]: #parameters-210
 
-[725]: #line-2
+[725]: #polygon
 
-[726]: #parameters-214
+[726]: #parameters-211
 
-[727]: #arrow
+[727]: #star
 
-[728]: #parameters-215
+[728]: #parameters-212
 
-[729]: #textline
+[729]: #rectangle
 
-[730]: #parameters-216
+[730]: #parameters-213
 
-[731]: #textlines
+[731]: #ellipse
 
-[732]: #parameters-217
+[732]: #parameters-214
 
-[733]: #text-1
+[733]: #triangle
 
-[734]: #parameters-218
+[734]: #parameters-215
 
-[735]: #collection
+[735]: #grid
 
-[736]: #parameters-219
+[736]: #parameters-216
 
-[737]: #misc-geometry
+[737]: #line-2
 
-[738]: #typeparsablepoint
+[738]: #parameters-217
 
-[739]: #examples-98
+[739]: #arrow
 
-[740]: #typeparsableline
+[740]: #parameters-218
 
-[741]: #examples-99
+[741]: #textline
 
-[742]: #typeparsablerect
+[742]: #parameters-219
 
-[743]: #examples-100
+[743]: #textlines
 
-[744]: #typeparsabletransform
+[744]: #parameters-220
 
-[745]: #examples-101
+[745]: #text-1
 
-[746]: #getpoint-1
+[746]: #parameters-221
 
-[747]: #parameters-220
+[747]: #collection
 
-[748]: #getpoints
+[748]: #parameters-222
 
-[749]: #parameters-221
+[749]: #misc-geometry
 
-[750]: #getscale-1
+[750]: #typeparsablepoint
 
-[751]: #parameters-222
+[751]: #examples-98
 
-[752]: #getline
+[752]: #typeparsableline
 
-[753]: #parameters-223
+[753]: #examples-99
 
-[754]: #getrect
+[754]: #typeparsablerect
 
-[755]: #parameters-224
+[755]: #examples-100
 
-[756]: #gettransform-1
+[756]: #typeparsabletransform
 
-[757]: #parameters-225
+[757]: #examples-101
 
-[758]: #obj_quadraticbezier
+[758]: #getpoint-1
 
-[759]: #properties-64
+[759]: #parameters-223
 
-[760]: #intersect
+[760]: #getpoints
 
-[761]: #properties-65
+[761]: #parameters-224
 
-[762]: #misc-shapes
+[762]: #getscale-1
 
-[763]: #obj_texture
+[763]: #parameters-225
 
-[764]: #properties-66
+[764]: #getline
 
-[765]: #obj_textdefinition
+[765]: #parameters-226
 
-[766]: #properties-67
+[766]: #getrect
 
-[767]: #obj_font
+[767]: #parameters-227
 
-[768]: #properties-68
+[768]: #gettransform-1
 
-[769]: #examples-102
+[769]: #parameters-228
 
-[770]: #obj_textlinedefinition
+[770]: #obj_quadraticbezier
 
-[771]: #properties-69
+[771]: #properties-64
 
-[772]: #obj_textlinesdefinition
+[772]: #intersect
 
-[773]: #properties-70
+[773]: #properties-65
 
-[774]: #obj_textmodifierdefinition
+[774]: #misc-shapes
 
-[775]: #properties-71
+[775]: #obj_texture
 
-[776]: #obj_textmodifiersdefinition
+[776]: #properties-66
 
-[777]: #properties-72
+[777]: #obj_textdefinition
 
-[778]: #obj_pulsescale
+[778]: #properties-67
 
-[779]: #properties-73
+[779]: #obj_font
 
-[780]: #obj_curvedcorner
+[780]: #properties-68
 
-[781]: #properties-74
+[781]: #examples-102
 
-[782]: #obj_linestyle
+[782]: #obj_textlinedefinition
 
-[783]: #properties-75
+[783]: #properties-69
 
-[784]: #cpy_step
+[784]: #obj_textlinesdefinition
 
-[785]: #properties-76
+[785]: #properties-70
 
-[786]: #examples-103
+[786]: #obj_textmodifierdefinition
 
-[787]: #typedash
+[787]: #properties-71
 
-[788]: #arrowhead
+[788]: #obj_textmodifiersdefinition
 
-[789]: #obj_linearrow
+[789]: #properties-72
 
-[790]: #properties-77
+[790]: #obj_pulsescale
 
-[791]: #examples-104
+[791]: #properties-73
 
-[792]: #obj_linearrows
+[792]: #obj_curvedcorner
 
-[793]: #properties-78
+[793]: #properties-74
 
-[794]: #obj_scenario
+[794]: #obj_linestyle
 
-[795]: #properties-79
+[795]: #properties-75
 
-[796]: #obj_movableangle
+[796]: #cpy_step
 
-[797]: #properties-80
+[797]: #properties-76
 
-[798]: #typeanglelabeloptions
+[798]: #examples-103
 
-[799]: #properties-81
+[799]: #typedash
 
-[800]: #obj_anglecurve
+[800]: #arrowhead
 
-[801]: #properties-82
+[801]: #obj_linearrow
 
-[802]: #obj_anglearrows
+[802]: #properties-77
 
-[803]: #properties-83
+[803]: #examples-104
 
-[804]: #typeanglearrows
+[804]: #obj_linearrows
 
-[805]: #obj_anglecorner
+[805]: #properties-78
 
-[806]: #properties-84
+[806]: #obj_scenario
 
-[807]: #obj_pulseangle
+[807]: #properties-79
 
-[808]: #properties-85
+[808]: #obj_movableangle
 
-[809]: #obj_angleset
+[809]: #properties-80
 
-[810]: #properties-86
+[810]: #typeanglelabeloptions
 
-[811]: #obj_angleanimationstep
+[811]: #properties-81
 
-[812]: #properties-87
+[812]: #obj_anglecurve
 
-[813]: #obj_pulseangleanimationstep
+[813]: #properties-82
 
-[814]: #properties-88
+[814]: #obj_anglearrows
 
-[815]: #typelinelabeloptions
+[815]: #properties-83
 
-[816]: #properties-89
+[816]: #typeanglearrows
 
-[817]: #obj_pulsewidth
+[817]: #obj_anglecorner
 
-[818]: #properties-90
+[818]: #properties-84
 
-[819]: #obj_movableline
+[819]: #obj_pulseangle
 
-[820]: #properties-91
+[820]: #properties-85
 
-[821]: #obj_lengthanimationstep
+[821]: #obj_angleset
 
-[822]: #properties-92
+[822]: #properties-86
 
-[823]: #obj_pulsewidthanimationstep
+[823]: #obj_angleanimationstep
 
-[824]: #properties-93
+[824]: #properties-87
 
-[825]: #obj_polylinepad
+[825]: #obj_pulseangleanimationstep
 
-[826]: #obj_polylinecustomization
+[826]: #properties-88
 
-[827]: #properties-94
+[827]: #typelinelabeloptions
 
-[828]: #examples-105
+[828]: #properties-89
 
-[829]: #typelabelorientation
+[829]: #obj_pulsewidth
 
-[830]: #typelabellocation
+[830]: #properties-90
 
-[831]: #typelabelsublocation
+[831]: #obj_movableline
 
-[832]: #obj_validshapehidethresholds
+[832]: #properties-91
 
-[833]: #properties-95
+[833]: #obj_lengthanimationstep
 
-[834]: #obj_validshape
+[834]: #properties-92
 
-[835]: #properties-96
+[835]: #obj_pulsewidthanimationstep
 
-[836]: #sub_polylineupdatepoints
+[836]: #properties-93
 
-[837]: #obj_polylineangle
+[837]: #obj_polylinepad
 
-[838]: #obj_polylineside
+[838]: #obj_polylinecustomization
 
-[839]: #obj_polylinepadsingle
+[839]: #properties-94
 
-[840]: #properties-97
+[840]: #examples-105
 
-[841]: #misc-animation
+[841]: #typelabelorientation
 
-[842]: #animationstep
+[842]: #typelabellocation
 
-[843]: #parameters-226
+[843]: #typelabelsublocation
 
-[844]: #properties-98
+[844]: #obj_validshapehidethresholds
 
-[845]: #getremainingtime-1
+[845]: #properties-95
 
-[846]: #parameters-227
+[846]: #obj_validshape
 
-[847]: #start-1
+[847]: #properties-96
 
-[848]: #parameters-228
+[848]: #sub_polylineupdatepoints
 
-[849]: #elementanimationstep
+[849]: #obj_polylineangle
 
-[850]: #parameters-229
+[850]: #obj_polylineside
 
-[851]: #obj_positionanimationstep
+[851]: #obj_polylinepadsingle
 
-[852]: #properties-99
+[852]: #properties-97
 
-[853]: #obj_rotationanimationstep
+[853]: #misc-animation
 
-[854]: #properties-100
+[854]: #animationstep
 
-[855]: #obj_elementanimationstep
+[855]: #parameters-229
 
-[856]: #properties-101
+[856]: #properties-98
 
-[857]: #obj_scenariovelocity
+[857]: #getremainingtime-1
 
-[858]: #properties-102
+[858]: #parameters-230
 
-[859]: #obj_animationbuilder
+[859]: #start-1
 
-[860]: #properties-103
+[860]: #parameters-231
 
-[861]: #obj_animationstep
+[861]: #elementanimationstep
 
-[862]: #properties-104
+[862]: #parameters-232
 
-[863]: #obj_animationstart
+[863]: #obj_positionanimationstep
 
-[864]: #properties-105
+[864]: #properties-99
 
-[865]: #obj_serialanimationstep
+[865]: #obj_rotationanimationstep
 
-[866]: #properties-106
+[866]: #properties-100
 
-[867]: #obj_parallelanimationstep
+[867]: #obj_elementanimationstep
 
-[868]: #properties-107
+[868]: #properties-101
 
-[869]: #obj_scaleanimationstep
+[869]: #obj_scenariovelocity
 
-[870]: #properties-108
+[870]: #properties-102
 
-[871]: #obj_customanimationstep
+[871]: #obj_animationbuilder
 
-[872]: #properties-109
+[872]: #properties-103
 
-[873]: #obj_transformanimationstep
+[873]: #obj_animationstep
 
-[874]: #properties-110
+[874]: #properties-104
 
-[875]: #obj_scenarioanimationstep
+[875]: #obj_animationstart
 
-[876]: #properties-111
+[876]: #properties-105
 
-[877]: #obj_triggeranimationstep
+[877]: #obj_serialanimationstep
 
-[878]: #properties-112
+[878]: #properties-106
 
-[879]: #obj_pulse
+[879]: #obj_parallelanimationstep
 
-[880]: #properties-113
+[880]: #properties-107
 
-[881]: #examples-106
+[881]: #obj_scaleanimationstep
 
-[882]: #obj_pulseanimationstep
+[882]: #properties-108
 
-[883]: #properties-114
+[883]: #obj_customanimationstep
 
-[884]: #obj_coloranimationstep
+[884]: #properties-109
 
-[885]: #properties-115
+[885]: #obj_transformanimationstep
 
-[886]: #obj_opacityanimationstep
+[886]: #properties-110
 
-[887]: #properties-116
+[887]: #obj_scenarioanimationstep
 
-[888]: #obj_scenariosanimationstep
+[888]: #properties-111
 
-[889]: #properties-117
+[889]: #obj_triggeranimationstep
 
-[890]: #animationprogression
+[890]: #properties-112
 
-[891]: #parameters-230
+[891]: #obj_pulse
 
-[892]: #typewhen
+[892]: #properties-113
 
-[893]: #animationstarttime
+[893]: #examples-106
 
-[894]: #misc-equation
+[894]: #obj_pulseanimationstep
 
-[895]: #equationfunctions
+[895]: #properties-114
 
-[896]: #container
+[896]: #obj_coloranimationstep
 
-[897]: #parameters-231
+[897]: #properties-115
 
-[898]: #brac
+[898]: #obj_opacityanimationstep
 
-[899]: #parameters-232
+[899]: #properties-116
 
-[900]: #bar
+[900]: #obj_scenariosanimationstep
 
-[901]: #parameters-233
+[901]: #properties-117
 
-[902]: #annotate
+[902]: #animationprogression
 
-[903]: #parameters-234
+[903]: #parameters-233
 
-[904]: #scale-5
+[904]: #typewhen
 
-[905]: #parameters-235
+[905]: #animationstarttime
 
-[906]: #frac
+[906]: #misc-equation
 
-[907]: #parameters-236
+[907]: #equationfunctions
 
-[908]: #supsub
+[908]: #container
 
-[909]: #parameters-237
+[909]: #parameters-234
 
-[910]: #sup
+[910]: #brac
 
-[911]: #parameters-238
+[911]: #parameters-235
 
-[912]: #sub-5
+[912]: #bar
 
-[913]: #parameters-239
+[913]: #parameters-236
 
-[914]: #box
+[914]: #annotate
 
-[915]: #parameters-240
+[915]: #parameters-237
 
-[916]: #pad
+[916]: #scale-5
 
-[917]: #parameters-241
+[917]: #parameters-238
 
-[918]: #topbar
+[918]: #frac
 
-[919]: #parameters-242
+[919]: #parameters-239
 
-[920]: #bottombar
+[920]: #supsub
 
-[921]: #parameters-243
+[921]: #parameters-240
 
-[922]: #matrix-4
+[922]: #sup
 
-[923]: #parameters-244
+[923]: #parameters-241
 
-[924]: #int
+[924]: #sub-5
 
-[925]: #parameters-245
+[925]: #parameters-242
 
-[926]: #sumof
+[926]: #box
 
-[927]: #parameters-246
+[927]: #parameters-243
 
-[928]: #prodof
+[928]: #pad
 
-[929]: #parameters-247
+[929]: #parameters-244
 
-[930]: #topcomment
+[930]: #topbar
 
-[931]: #parameters-248
+[931]: #parameters-245
 
-[932]: #bottomcomment
+[932]: #bottombar
 
-[933]: #parameters-249
+[933]: #parameters-246
 
-[934]: #strike
+[934]: #matrix-4
 
-[935]: #parameters-250
+[935]: #parameters-247
 
-[936]: #topstrike
+[936]: #int
 
-[937]: #parameters-251
+[937]: #parameters-248
 
-[938]: #bottomstrike
+[938]: #sumof
 
-[939]: #parameters-252
+[939]: #parameters-249
 
-[940]: #eqn_annotation
+[940]: #prodof
 
-[941]: #properties-118
+[941]: #parameters-250
 
-[942]: #examples-107
+[942]: #topcomment
 
-[943]: #eqn_encompassglyph
+[943]: #parameters-251
 
-[944]: #properties-119
+[944]: #bottomcomment
 
-[945]: #examples-108
+[945]: #parameters-252
 
-[946]: #eqn_leftrightglyph
+[946]: #strike
 
-[947]: #properties-120
+[947]: #parameters-253
 
-[948]: #examples-109
+[948]: #topstrike
 
-[949]: #eqn_topbottomglyph
+[949]: #parameters-254
 
-[950]: #properties-121
+[950]: #bottomstrike
 
-[951]: #examples-110
+[951]: #parameters-255
 
-[952]: #eqn_glyphs
+[952]: #eqn_annotation
 
-[953]: #properties-122
+[953]: #properties-118
 
-[954]: #typeequationelements
+[954]: #examples-107
 
-[955]: #typeequationphrase
+[955]: #eqn_encompassglyph
 
-[956]: #examples-111
+[956]: #properties-119
 
-[957]: #typeformalignment
+[957]: #examples-108
 
-[958]: #properties-123
+[958]: #eqn_leftrightglyph
 
-[959]: #typeformanimationproperties
+[959]: #properties-120
 
-[960]: #properties-124
+[960]: #examples-109
 
-[961]: #examples-112
+[961]: #eqn_topbottomglyph
 
-[962]: #typeformtranslationproperties
+[962]: #properties-121
 
-[963]: #properties-125
+[963]: #examples-110
 
-[964]: #typeequationformobject
+[964]: #eqn_glyphs
 
-[965]: #properties-126
+[965]: #properties-122
 
-[966]: #examples-113
+[966]: #typeequationelements
 
-[967]: #typeequationform
+[967]: #typeequationphrase
 
-[968]: #typeequationforms
+[968]: #examples-111
 
-[969]: #typeformrestart
+[969]: #typeformalignment
 
-[970]: #properties-127
+[970]: #properties-123
 
-[971]: #typeequationgotoformoptions
+[971]: #typeformanimationproperties
 
-[972]: #properties-128
+[972]: #properties-124
 
-[973]: #typeequationtextelement
+[973]: #examples-112
 
-[974]: #properties-129
+[974]: #typeformtranslationproperties
 
-[975]: #obj_axisticks
+[975]: #properties-125
 
-[976]: #properties-130
+[976]: #typeequationformobject
 
-[977]: #examples-114
+[977]: #properties-126
 
-[978]: #obj_axislabels
+[978]: #examples-113
 
-[979]: #properties-131
+[979]: #typeequationform
 
-[980]: #examples-115
+[980]: #typeequationforms
 
-[981]: #typeaxistitle
+[981]: #typeformrestart
 
-[982]: #obj_surroundanimationstep
+[982]: #properties-127
 
-[983]: #properties-132
+[983]: #typeequationgotoformoptions
 
-[984]: #equationlabel
+[984]: #properties-128
 
-[985]: #parameters-253
+[985]: #typeequationtextelement
 
-[986]: DiagramElements
+[986]: #properties-129
 
-[987]: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
+[987]: #obj_axisticks
 
-[988]: #obj_diagram
+[988]: #properties-130
 
-[989]: #diagramprimitives
+[989]: #examples-114
 
-[990]: #transform
+[990]: #obj_axislabels
 
-[991]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[991]: #properties-131
 
-[992]: #diagramelementprimitive
+[992]: #examples-115
 
-[993]: #diagramelementcollection
+[993]: #typeaxistitle
 
-[994]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[994]: #obj_surroundanimationstep
 
-[995]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[995]: #properties-132
 
-[996]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[996]: #equationlabel
 
-[997]: #typeparsablerect
+[997]: #parameters-256
 
-[998]: #diagram
+[998]: DiagramElements
 
-[999]: #rect
+[999]: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
 
-[1000]: #diagramelement
+[1000]: #obj_diagram
 
-[1001]: #diagramelementmove
+[1001]: #diagramprimitives
 
-[1002]: #scenarios
+[1002]: #transform
 
-[1003]: #animationmanager
+[1003]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[1004]: #typeparsablepoint
+[1004]: #diagramelementprimitive
 
-[1005]: #obj_pulse
+[1005]: #diagramelementcollection
 
-[1006]: #point
+[1006]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[1007]: VertexObject
+[1007]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[1008]: TextObject
+[1008]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[1009]: {HTMLObject
+[1009]: #typeparsablerect
 
-[1010]: #drawingobject
+[1010]: #diagram
 
-[1011]: #diagramelementcollectiongetelement
+[1011]: #rect
 
-[1012]: #line
+[1012]: #diagramelement
 
-[1013]: #intersect
+[1013]: #diagramelementmove
 
-[1014]: #translation
+[1014]: #scenarios
 
-[1015]: #rotation
+[1015]: #animationmanager
 
-[1016]: #scale
+[1016]: #typeparsablepoint
 
-[1017]: ./assets1/generic.png
+[1017]: #obj_pulse
 
-[1018]: https://webglfundamentals.org/webgl/lessons/webgl-points-lines-triangles.html
+[1018]: #point
 
-[1019]: #cpy_step
+[1019]: VertexObject
 
-[1020]: #obj_texture
+[1020]: TextObject
 
-[1021]: #obj_pulsescale
+[1021]: {HTMLObject
 
-[1022]: ./assets1/line.png
+[1022]: #drawingobject
 
-[1023]: #obj_linearrows
+[1023]: #diagramelementcollectiongetelement
 
-[1024]: #arrowhead
+[1024]: #line
 
-[1025]: ./assets1/polyline.png
+[1025]: #intersect
 
-[1026]: ./assets1/arrow_heads.png
+[1026]: #translation
 
-[1027]: ./assets1/triangle.png
+[1027]: #rotation
 
-[1028]: ./assets1/triangle_definition.png
+[1028]: #scale
 
-[1029]: #obj_curvedcorner
+[1029]: ./assets1/generic.png
 
-[1030]: #obj_linestyle
+[1030]: https://webglfundamentals.org/webgl/lessons/webgl-points-lines-triangles.html
 
-[1031]: ./assets1/rectangle.png
+[1031]: #cpy_step
 
-[1032]: ./assets1/ellipse.png
+[1032]: #obj_texture
 
-[1033]: ./assets1/polygon.png
+[1033]: #obj_pulsescale
 
-[1034]: ./assets1/star.png
+[1034]: ./assets1/line.png
 
-[1035]: ./assets1/grid.png
+[1035]: #obj_linearrows
 
-[1036]: DiagramElementPrimitives
+[1036]: #arrowhead
 
-[1037]: #obj_pulsewidth
+[1037]: ./assets1/polyline.png
 
-[1038]: #obj_movableline
+[1038]: ./assets1/arrow_heads.png
 
-[1039]: #obj_lengthanimationstep
+[1039]: ./assets1/triangle.png
 
-[1040]: #typelinelabeloptions
+[1040]: ./assets1/triangle_definition.png
 
-[1041]: ./assets1/advangle_examples.png
+[1041]: #obj_curvedcorner
 
-[1042]: #obj_angleset
+[1042]: #obj_linestyle
 
-[1043]: #obj_pulseangle
+[1043]: ./assets1/rectangle.png
 
-[1044]: #obj_movableangle
+[1044]: ./assets1/ellipse.png
 
-[1045]: #obj_anglecurve
+[1045]: ./assets1/polygon.png
 
-[1046]: #typeanglearrows
+[1046]: ./assets1/star.png
 
-[1047]: #obj_anglecorner
+[1047]: ./assets1/grid.png
 
-[1048]: #typeanglelabeloptions
+[1048]: DiagramElementPrimitives
 
-[1049]: ./assets1/advpolyline_examples.png
+[1049]: #obj_pulsewidth
 
-[1050]: SUBSCRIPTION_PolylineUpdatePoints
+[1050]: #obj_movableline
 
-[1051]: #obj_polylineangle
+[1051]: #obj_lengthanimationstep
 
-[1052]: #adv_angle
+[1052]: #typelinelabeloptions
 
-[1053]: #obj_polylineside
+[1053]: ./assets1/advangle_examples.png
 
-[1054]: #adv_line
+[1054]: #obj_angleset
 
-[1055]: #obj_polylinepad
+[1055]: #obj_pulseangle
 
-[1056]: #obj_polylinepadsingle
+[1056]: #obj_movableangle
 
-[1057]: #obj_validshapehidethresholds
+[1057]: #obj_anglecurve
 
-[1058]: #obj_axisticks
+[1058]: #typeanglearrows
 
-[1059]: #obj_font
+[1059]: #obj_anglecorner
 
-[1060]: #typeaxistitle
+[1060]: #typeanglelabeloptions
 
-[1061]: ./assets1/text_ex1.png
+[1061]: ./assets1/advpolyline_examples.png
 
-[1062]: ./assets1/text_ex2.png
+[1062]: SUBSCRIPTION_PolylineUpdatePoints
 
-[1063]: #obj_textdefinition
+[1063]: #obj_polylineangle
 
-[1064]: #typeparsabletransform
+[1064]: #adv_angle
 
-[1065]: ./assets1/textLine.png
+[1065]: #obj_polylineside
 
-[1066]: #obj_textlinedefinition
+[1066]: #adv_line
 
-[1067]: ./assets1/textLines_ex1.png
+[1067]: #obj_polylinepad
 
-[1068]: ./assets1/textLines_ex2.png
+[1068]: #obj_polylinepadsingle
 
-[1069]: #obj_textlinesdefinition
+[1069]: #obj_validshapehidethresholds
 
-[1070]: #obj_textmodifiersdefinition
+[1070]: ./assets1/advaxis_ex1.png
 
-[1071]: #animation-boilerplate
+[1071]: ./assets1/advaxis_ex2.png
 
-[1072]: #animationstep
+[1072]: ./assets1/advaxis_ex3.png
 
-[1073]: #obj_animationbuilder
+[1073]: ./assets1/advaxis_ex4.png
 
-[1074]: #animationbuilder
+[1074]: ./assets1/advaxis_ex5.png
 
-[1075]: #obj_rotationanimationstep
+[1075]: ADV_Plot
 
-[1076]: #rotationanimationstep
+[1076]: ADV_Trace
 
-[1077]: #obj_scaleanimationstep
+[1077]: #obj_line
 
-[1078]: #scaleanimationstep
+[1078]: #obj_axisticks
 
-[1079]: #obj_triggeranimationstep
+[1079]: #obj_axislabels
 
-[1080]: #triggeranimationstep
+[1080]: #typeaxistitle
 
-[1081]: #obj_animationstep
+[1081]: #obj_font
 
-[1082]: #delayanimationstep
+[1082]: AdvancedTrace
 
-[1083]: #obj_positionanimationstep
+[1083]: AdvancedPlot
 
-[1084]: #positionanimationstep
+[1084]: ./assets1/text_ex1.png
 
-[1085]: #obj_coloranimationstep
+[1085]: ./assets1/text_ex2.png
 
-[1086]: #coloranimationstep
+[1086]: #obj_textdefinition
 
-[1087]: #obj_opacityanimationstep
+[1087]: #typeparsabletransform
 
-[1088]: #opacityanimationstep
+[1088]: ./assets1/textLine.png
 
-[1089]: #obj_transformanimationstep
+[1089]: #obj_textlinedefinition
 
-[1090]: #transformanimationstep
+[1090]: ./assets1/textLines_ex1.png
 
-[1091]: #obj_elementanimationstep
+[1091]: ./assets1/textLines_ex2.png
 
-[1092]: #dissolveinanimationstep
+[1092]: #obj_textlinesdefinition
 
-[1093]: #dissolveoutanimationstep
+[1093]: #obj_textmodifiersdefinition
 
-[1094]: #dimanimationstep
+[1094]: #animation-boilerplate
 
-[1095]: #undimanimationstep
+[1095]: #animationstep
 
-[1096]: #obj_scenarioanimationstep
+[1096]: #obj_animationbuilder
 
-[1097]: #scenarioanimationstep
+[1097]: #animationbuilder
 
-[1098]: #obj_scenariosanimationstep
+[1098]: #obj_rotationanimationstep
 
-[1099]: #parallelanimationstep
+[1099]: #rotationanimationstep
 
-[1100]: #obj_animationstart
+[1100]: #obj_scaleanimationstep
 
-[1101]: #obj_customanimationstep
+[1101]: #scaleanimationstep
 
-[1102]: #obj_parallelanimationstep
+[1102]: #obj_triggeranimationstep
 
-[1103]: #obj_serialanimationstep
+[1103]: #triggeranimationstep
 
-[1104]: ./assets1/position_animation.gif
+[1104]: #obj_animationstep
 
-[1105]: ./assets1/rotation_animation.gif
+[1105]: #delayanimationstep
 
-[1106]: ./assets1/scale_animation.gif
+[1106]: #obj_positionanimationstep
 
-[1107]: ./assets1/transform_animation.gif
+[1107]: #positionanimationstep
 
-[1108]: ./assets1/scenario_animation.gif
+[1108]: #obj_coloranimationstep
 
-[1109]: ./assets1/pulse_animation.gif
+[1109]: #coloranimationstep
 
-[1110]: #obj_pulseanimationstep
+[1110]: #obj_opacityanimationstep
 
-[1111]: ./assets1/color_animation.gif
+[1111]: #opacityanimationstep
 
-[1112]: ./assets1/dim_animation.gif
+[1112]: #obj_transformanimationstep
 
-[1113]: ./assets1/undim_animation.gif
+[1113]: #transformanimationstep
 
-[1114]: ./assets1/opacity_animation.gif
+[1114]: #obj_elementanimationstep
 
-[1115]: ./assets1/dissolvein_animation.gif
+[1115]: #dissolveinanimationstep
 
-[1116]: ./assets1/dissolveout_animation.gif
+[1116]: #dissolveoutanimationstep
 
-[1117]: ./assets1/trigger_animation.gif
+[1117]: #dimanimationstep
 
-[1118]: ./assets1/custom_animation.gif
+[1118]: #undimanimationstep
 
-[1119]: ./assets1/serial_animation.gif
+[1119]: #obj_scenarioanimationstep
 
-[1120]: ./assets1/parallel_animation.gif
+[1120]: #scenarioanimationstep
 
-[1121]: ./tutorials/equation/simple.png
+[1121]: #obj_scenariosanimationstep
 
-[1122]: ./tutorials/equation/fraction.png
+[1122]: #parallelanimationstep
 
-[1123]: ./tutorials/equation/linear.gif
+[1123]: #obj_animationstart
 
-[1124]: ./tutorials/equation/curved.gif
+[1124]: #obj_customanimationstep
 
-[1125]: ./tutorials/equation/pulse.gif
+[1125]: #obj_parallelanimationstep
 
-[1126]: ./tutorials/equation/touch.gif
+[1126]: #obj_serialanimationstep
 
-[1127]: ./tutorials/equation/move.gif
+[1127]: ./assets1/position_animation.gif
 
-[1128]: ./tutorials/equation/inline.png
+[1128]: ./assets1/rotation_animation.gif
 
-[1129]: ./tutorials/equation/inline_same.gif
+[1129]: ./assets1/scale_animation.gif
 
-[1130]: ./tutorials/equation/valid_key.png
+[1130]: ./assets1/transform_animation.gif
 
-[1131]: ./tutorials/equation/reuse_symbol.gif
+[1131]: ./assets1/scenario_animation.gif
 
-[1132]: ./tutorials/equation/readability.gif
+[1132]: ./assets1/pulse_animation.gif
 
-[1133]: ./tutorials/equation/phrases.gif
+[1133]: #obj_pulseanimationstep
 
-[1134]: #eqn_equation
+[1134]: ./assets1/color_animation.gif
 
-[1135]: #equationfunctions
+[1135]: ./assets1/dim_animation.gif
 
-[1136]: #typeequationelements
+[1136]: ./assets1/undim_animation.gif
 
-[1137]: #typeequationforms
+[1137]: ./assets1/opacity_animation.gif
 
-[1138]: #typeequationgotoformoptions
+[1138]: ./assets1/dissolvein_animation.gif
 
-[1139]: #typeformalignment
+[1139]: ./assets1/dissolveout_animation.gif
 
-[1140]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[1140]: ./assets1/trigger_animation.gif
 
-[1141]: #typeformrestart
+[1141]: ./assets1/custom_animation.gif
 
-[1142]: DiagramFont
+[1142]: ./assets1/serial_animation.gif
 
-[1143]: #typeformanimationproperties
+[1143]: ./assets1/parallel_animation.gif
 
-[1144]: ./assets1/eqn_fraction.gif
+[1144]: ./tutorials/equation/simple.png
 
-[1145]: #typeequationphrase
+[1145]: ./tutorials/equation/fraction.png
 
-[1146]: ./assets1/eqn_root.gif
+[1146]: ./tutorials/equation/linear.gif
 
-[1147]: ./assets1/eqn_subscript.gif
+[1147]: ./tutorials/equation/curved.gif
 
-[1148]: ./assets1/eqn_superscript.gif
+[1148]: ./tutorials/equation/pulse.gif
 
-[1149]: ./assets1/eqn_supsub.gif
+[1149]: ./tutorials/equation/touch.gif
 
-[1150]: ./assets1/eqn_matrix.gif
+[1150]: ./tutorials/equation/move.gif
 
-[1151]: #eqn_bracket
+[1151]: ./tutorials/equation/inline.png
 
-[1152]: ./assets1/eqn_integral.gif
+[1152]: ./tutorials/equation/inline_same.gif
 
-[1153]: ./assets1/eqn_sumof.gif
+[1153]: ./tutorials/equation/valid_key.png
 
-[1154]: ./assets1/eqn_prodof.gif
+[1154]: ./tutorials/equation/reuse_symbol.gif
 
-[1155]: ./assets1/eqn_bar.gif
+[1155]: ./tutorials/equation/readability.gif
 
-[1156]: ./assets1/eqn_bracket.gif
+[1156]: ./tutorials/equation/phrases.gif
 
-[1157]: ./assets1/eqn_box.gif
+[1157]: #eqn_equation
 
-[1158]: ./assets1/eqn_strike.gif
+[1158]: #equationfunctions
 
-[1159]: ./assets1/eqn_strikecomment.gif
+[1159]: #typeequationelements
 
-[1160]: ./assets1/eqn_comment.gif
+[1160]: #typeequationforms
 
-[1161]: ./assets1/eqn_pad.gif
+[1161]: #typeequationgotoformoptions
 
-[1162]: ./assets1/eqn_scale.gif
+[1162]: #typeformalignment
 
-[1163]: ./assets1/eqn_container.gif
+[1163]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[1164]: ./assets1/eqn_annotate.gif
+[1164]: #typeformrestart
 
-[1165]: #eqn_annotation
+[1165]: DiagramFont
 
-[1166]: #eqn_glyphs
+[1166]: #typeformanimationproperties
 
-[1167]: #diagramelementmovefreely
+[1167]: ./assets1/eqn_fraction.gif
 
-[1168]: #obj_scenario
+[1168]: #typeequationphrase
 
-[1169]: #elementmovementstate
+[1169]: ./assets1/eqn_root.gif
 
-[1170]: #elementpulsestate
+[1170]: ./assets1/eqn_subscript.gif
 
-[1171]: #obj_generic
+[1171]: ./assets1/eqn_superscript.gif
 
-[1172]: #obj_polyline
+[1172]: ./assets1/eqn_supsub.gif
 
-[1173]: #obj_polygon
+[1173]: ./assets1/eqn_matrix.gif
 
-[1174]: #obj_star
+[1174]: #eqn_bracket
 
-[1175]: #obj_rectangle
+[1175]: ./assets1/eqn_integral.gif
 
-[1176]: #obj_ellipse
+[1176]: ./assets1/eqn_sumof.gif
 
-[1177]: #obj_triangle
+[1177]: ./assets1/eqn_prodof.gif
 
-[1178]: #obj_grid
+[1178]: ./assets1/eqn_bar.gif
 
-[1179]: #obj_line
+[1179]: ./assets1/eqn_bracket.gif
 
-[1180]: #obj_arrow
+[1180]: ./assets1/eqn_box.gif
 
-[1181]: #obj_textline
+[1181]: ./assets1/eqn_strike.gif
 
-[1182]: #obj_textlines
+[1182]: ./assets1/eqn_strikecomment.gif
 
-[1183]: #obj_text
+[1183]: ./assets1/eqn_comment.gif
 
-[1184]: TypeF1DefRect
+[1184]: ./assets1/eqn_pad.gif
 
-[1185]: #typeparsableline
+[1185]: ./assets1/eqn_scale.gif
 
-[1186]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
+[1186]: ./assets1/eqn_container.gif
 
-[1187]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+[1187]: ./assets1/eqn_annotate.gif
 
-[1188]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
+[1188]: #eqn_annotation
 
-[1189]: ./assets1/copy.png
+[1189]: #eqn_glyphs
 
-[1190]: ./assets1/arrow_line.png
+[1190]: #diagramelementmovefreely
 
-[1191]: #obj_linearrow
+[1191]: #obj_scenario
 
-[1192]: #equation
+[1192]: #elementmovementstate
 
-[1193]: #typelabellocation
+[1193]: #elementpulsestate
 
-[1194]: #typelabelsublocation
+[1194]: #obj_generic
 
-[1195]: #typelabelorientation
+[1195]: #obj_polyline
 
-[1196]: #typewhen
+[1196]: #obj_polygon
 
-[1197]: #animationstarttime
+[1197]: #obj_star
 
-[1198]: #animationprogression
+[1198]: #obj_rectangle
 
-[1199]: #obj_scenariovelocity
+[1199]: #obj_ellipse
 
-[1200]: TriggernAnimationStep
+[1200]: #obj_triangle
 
-[1201]: FunctionMap
+[1201]: #obj_grid
 
-[1202]: ./assets1/pulse.gif
+[1202]: #obj_arrow
 
-[1203]: #eqn_container
+[1203]: #obj_textline
 
-[1204]: #eqn_bar
+[1204]: #obj_textlines
 
-[1205]: #eqn_annotate
+[1205]: #obj_text
 
-[1206]: #eqn_scale
+[1206]: TypeF1DefRect
 
-[1207]: #eqn_fraction
+[1207]: #typeparsableline
 
-[1208]: #eqn_superscriptsubscript
+[1208]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
 
-[1209]: #eqn_superscript
+[1209]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
 
-[1210]: #eqn_subscript
+[1210]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
 
-[1211]: #eqn_box
+[1211]: ./assets1/copy.png
 
-[1212]: #eqn_pad
+[1212]: ./assets1/arrow_line.png
 
-[1213]: #eqn_matrix
+[1213]: #obj_linearrow
 
-[1214]: #eqn_integral
+[1214]: #equation
 
-[1215]: #eqn_sumof
+[1215]: #typelabellocation
 
-[1216]: #eqn_prodof
+[1216]: #typelabelsublocation
 
-[1217]: #eqn_comment
+[1217]: #typelabelorientation
 
-[1218]: #eqn_strike
+[1218]: #typewhen
 
-[1219]: #eqn_encompassglyph
+[1219]: #animationstarttime
 
-[1220]: #eqn_topbottomglyph
+[1220]: #animationprogression
 
-[1221]: #eqn_leftrightglyph
+[1221]: #obj_scenariovelocity
 
-[1222]: #eqn_root
+[1222]: TriggernAnimationStep
 
-[1223]: #eqn_strikecomment
+[1223]: FunctionMap
 
-[1224]: https://developer.mozilla.org/docs/Web/API/Element
+[1224]: ./assets1/pulse.gif
 
-[1225]: #typeformtranslationproperties
+[1225]: #eqn_container
 
-[1226]: #equationaddforms
+[1226]: #eqn_bar
 
-[1227]: #typeequationformobject
+[1227]: #eqn_annotate
 
-[1228]: #typeequationform
+[1228]: #eqn_scale
 
-[1229]: #equationgotoform
+[1229]: #eqn_fraction
 
-[1230]: ./assets1/axisticks.png
+[1230]: #eqn_superscriptsubscript
 
-[1231]: #typedash
+[1231]: #eqn_superscript
 
-[1232]: ./assets1/axislabels.png
+[1232]: #eqn_subscript
+
+[1233]: #eqn_box
+
+[1234]: #eqn_pad
+
+[1235]: #eqn_matrix
+
+[1236]: #eqn_integral
+
+[1237]: #eqn_sumof
+
+[1238]: #eqn_prodof
+
+[1239]: #eqn_comment
+
+[1240]: #eqn_strike
+
+[1241]: #eqn_encompassglyph
+
+[1242]: #eqn_topbottomglyph
+
+[1243]: #eqn_leftrightglyph
+
+[1244]: #eqn_root
+
+[1245]: #eqn_strikecomment
+
+[1246]: https://developer.mozilla.org/docs/Web/API/Element
+
+[1247]: #typeformtranslationproperties
+
+[1248]: #equationaddforms
+
+[1249]: #typeequationformobject
+
+[1250]: #typeequationform
+
+[1251]: #equationgotoform
+
+[1252]: ./assets1/axisticks.png
+
+[1253]: #typedash
+
+[1254]: OBJ_Axis
+
+[1255]: ./assets1/axislabels_ex1.png
+
+[1256]: ./assets1/axislabels_ex2.png
+
+[1257]: ./assets1/axislabels_ex3.png
+
+[1258]: ./assets1/axislabels_ex4.png
+
+[1259]: ./assets1/axislabels_ex5.png
+
+[1260]: ./assets1/axislabels_ex6.png
