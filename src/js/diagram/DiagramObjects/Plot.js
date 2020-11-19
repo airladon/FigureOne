@@ -262,7 +262,6 @@ class AdvancedPlot extends DiagramElementCollection {
       if (o.name == null) {
         o.name = `axis_${this.axes.length}`;
       }
-      console.log(o)
       const axis = this.advanced.axis(o);
       this.add(o.name, axis);
       this.axes.push(axis);
@@ -329,7 +328,7 @@ class AdvancedPlot extends DiagramElementCollection {
     const defaultOptions = {
       traces: this.traces,
       lineTextSpace: this.width / 50,
-      length: this.width / 15,
+      length: this.width / 10,
       position: [this.width + this.width / 20, this.height],
     };
     const theme = this.getTheme(this.theme).legend;

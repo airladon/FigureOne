@@ -710,7 +710,7 @@ class AdvancedAxis extends DiagramElementCollection {
         step = this.ticks[index].step;
       }
     }
-    if (step == null && this.autoStep != null) {
+    if (step == null && this.autoStep != null && this.autoStep < (stop - start) / 2) {
       step = this.autoStep;
     } else if (step == null && index === 0) {
       step = (stop - start) / 5;

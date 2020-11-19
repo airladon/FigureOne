@@ -88,11 +88,12 @@ class AdvancedPlotLegend extends DiagramElementCollection {
       fontColorIsLineColor: false,
       frame: false,
       custom: {},
-      length: 0.1,
+      length: shapes.defaultLength / 10,
       space: 0.05,
       position: new Point(0, 0),
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
+
     this.defaultFont = options.font;
     this.defaultColor = options.color;
     this.traces = options.traces;

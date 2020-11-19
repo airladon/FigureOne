@@ -185,13 +185,13 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], l
 //   .start();
 
 
-const sin = (offset = 0, step = 0.05, start = -1, stop = -1) => {
+const sin = (offset = 0, step = 0.01, start = -1, stop = 1) => {
   const xValues = Fig.tools.math.range(start, stop, step);
   return xValues.map(x => new Fig.Point(x, Math.sin(x * 2 * Math.PI + offset)))
 }
 
-const pow = (pow, stop = 10) => {
-  const xValues = Fig.tools.math.range(0, stop, 0.05);
+const pow = (pow, stop = 10, step = 0.05) => {
+  const xValues = Fig.tools.math.range(0, stop, step);
   return xValues.map(x => new Fig.Point(x, x ** pow));
 }
 
@@ -208,6 +208,8 @@ const pow = (pow, stop = 10) => {
 // });
 
 // // Multiple traces with a legend
+// // Some traces are customized beyond the defaul color to include dashes and
+// // markers
 // diagram.addElement({
 //   name: 'plot',
 //   method: 'advanced.plot',
@@ -219,14 +221,28 @@ const pow = (pow, stop = 10) => {
 //       stop: 100,
 //     },
 //     trace: [
+//       // First three traces are solid with default colors
+//       // Trace names are used in the legend
 //       { points: pow(1.5), name: 'Power 1.5' },
-//       { points: pow(2), name: 'Power 2' },
+//       { points: pow(2),   name: 'Power 2' },
 //       { points: pow(2.5), name: 'Power 2.5' },
-//       { points: pow(3), name: 'Power 3' },
-//       { points: pow(3.5), name: 'Power 3.5' },
-//       { points: pow(4), name: 'Power 4' },
+//       {  // Trace with dashed line
+//         points: pow(3),
+//         name: 'Power 3',
+//         line: { dash: [0.02, 0.01] },
+//       },
+//       {  // Trace with only markers
+//         points: pow(3.5, 10, 0.5),
+//         name: 'Power 3.5',
+//         markers: { sides: 4, radius: 0.03 },
+//       },
+//       {  // Trace with markers and dashed line
+//         points: pow(4, 10, 0.5),
+//         name: 'Power 4',
+//         markers: { radius: 0.03, sides: 10, line: { width: 0.005 } },
+//         line: { dash: [0.04, 0.01] },
+//       },
 //     ],
-//     grid: true,
 //     legend: { position: [2.2, 1.95] },
 //   },
 // });
@@ -287,50 +303,50 @@ const pow = (pow, stop = 10) => {
 //   },
 // });
 
-// // Secondary y axis
-// diagram.addElement({
-//   name: 'plot',
-//   method: 'advanced.plot',
-//   options: {
-//     width: 2,
-//     height: 2,
-//     trace: pow(2),
-//     yAxis: {
-//       title: {
-//         text: 'velocity (m/s)',
-//         rotation: 0,
-//         xAlign: 'right',
-//       },
-//     },
-//     xAxis: { title: 'time (s)' },
-//     axes: [
-//       {
-//         axis: 'y',
-//         start: 0,
-//         stop: 900,
-//         color: [1, 0, 0, 1],
-//         position: [2, 0],
-//         ticks: {
-//           step: 300,
-//           offset: 0,
-//           length: 0.05,
-//         },
-//         labels: {
-//           offset: [0.2, 0],
-//           precision: 0,
-//           xAlign: 'left',
-//         },
-//         title: {
-//           offset: [0.4, 0],
-//           xAlign: 'left',
-//           text: 'displacment (m)',
-//           rotation: 0,
-//         }
-//       },
-//     ],
-//     position: [-1, -1],
-//   },
-// });
+// Secondary y axis
+diagram.addElement({
+  name: 'plot',
+  method: 'advanced.plot',
+  options: {
+    width: 2,
+    height: 2,
+    trace: pow(2),
+    yAxis: {
+      title: {
+        text: 'velocity (m/s)',
+        rotation: 0,
+        xAlign: 'right',
+      },
+    },
+    xAxis: { title: 'time (s)' },
+    axes: [
+      {
+        axis: 'y',
+        start: 0,
+        stop: 900,
+        color: [1, 0, 0, 1],
+        position: [2, 0],
+        ticks: {
+          step: 300,
+          offset: 0,
+          length: 0.05,
+        },
+        labels: {
+          offset: [0.2, 0],
+          precision: 0,
+          xAlign: 'left',
+        },
+        title: {
+          offset: [0.4, 0],
+          xAlign: 'left',
+          text: 'displacment (m)',
+          rotation: 0,
+        }
+      },
+    ],
+    position: [-1, -1],
+  },
+});
 
 // Cartesian axes crossing at the zero point
 // Automatic layout doesn't support this, but axes, ticks, labels and titles

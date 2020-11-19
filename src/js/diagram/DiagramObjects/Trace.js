@@ -276,6 +276,7 @@ class AdvancedTrace extends DiagramElementCollection {
   addMarkers(options: OBJ_Polygon) {
     const defaultOptions = {
       radius: 0.02,
+      color: this.color,
     };
     const markers = this.points.filter(p => this.inAxes(p));
     if (markers.length === 0) {
