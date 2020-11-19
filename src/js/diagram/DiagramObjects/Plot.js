@@ -168,7 +168,7 @@ function cleanTraces(
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
  *
- * All plots below also use this power function to generate the traces:
+ * All examples below also use this power function to generate the traces:
  * ```javascript
  * const pow = (pow = 2, stop = 10, step = 0.05) => {
  *   const xValues = Fig.tools.math.range(0, stop, step);

@@ -75,13 +75,21 @@ import {
  *
  * @see
  * For more examples on using traces, see {@link AdvancedPlot}
- * // When plotting a single trace, just the points are required. By default
- * // the line will be solid, and it will be plotted against the 'x' and 'y' axes.
  *
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
  *
+ * All examples below also use this power function to generate the traces:
+ * ```javascript
+ * const pow = (pow = 2, stop = 10, step = 0.05) => {
+ *   const xValues = Fig.tools.math.range(0, stop, step);
+ *   return xValues.map(x => new Fig.Point(x, x ** pow));
+ * }
+ * ```
+ *
  * @example
+ * // When plotting a single trace, just the points are required. By default
+ * // the line will be solid, and it will be plotted against the 'x' and 'y' axes.
  * diagram.addElement({
  *   name: 'plot',
  *   method: 'advanced.plot',

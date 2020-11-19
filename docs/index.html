@@ -22267,7 +22267,6 @@ diagram.addElement({
   <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
   <span class="hljs-attr">options</span>: {
     <span class="hljs-attr">trace</span>: pow(),
-    <span class="hljs-attr">position</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>],
   },
 });</pre>
     
@@ -45841,6 +45840,12 @@ associated polyline point (
   
 
   <p><a href="AdvancedTrace">AdvancedTrace</a> options object.</p>
+<p><img src="./assets1/advtrace_ex1.png">
+<img src="./assets1/advtrace_ex2.png"></p>
+<p><img src="./assets1/advtrace_ex3.png">
+<img src="./assets1/advtrace_ex4.png"></p>
+<p><img src="./assets1/advtrace_ex5.png">
+<img src="./assets1/advtrace_ex6.png"></p>
 <p>A plot trace is a set of (x, y) points associated with an
 x and y axis.</p>
 <p>The trace and can be drawn with either a set of
@@ -45881,58 +45886,90 @@ hundreds of thousands of points (depending on the client device).</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>?)</code>
+          <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)</code>
           : the x points of the trace
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>xAxis</span> <code class='quiet'>(<a href="#adv_axis">ADV_Axis</a>?)</code>
-          : The x axis associated with the trace
+          <span class='code bold'>xAxis</span> <code class='quiet'>((<a href="#adv_axis">ADV_Axis</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          : The x axis associated with the trace,
+if this is a string, the trace must be part of a plot with an axis with the
+same name. In plots, this will default to the string 
+<code>'x'</code>
+.
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>yAxis</span> <code class='quiet'>(<a href="#adv_axis">ADV_Axis</a>?)</code>
-          
+          <span class='code bold'>yAxis</span> <code class='quiet'>((<a href="#adv_axis">ADV_Axis</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          : The y axis associated with the trace,
+if this is a string, the trace must be part of a plot with an axis with the
+same name. In plots, this will default to the string 
+<code>'y'</code>
+.
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_line">OBJ_Line</a>?)</code>
-          
+          : line style of the trace - if neither 
+<code>line</code>
+ nor
+
+<code>markers</code>
+ is defined, then 
+<code>line</code>
+ will default to a solid line. If 
+<code>line</code>
+
+is not defined, but 
+<code>markers</code>
+ is, then only markers will be used to represent
+the line
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>markers</span> <code class='quiet'>((<a href="#obj_polygon">OBJ_Polygon</a> | OBJ_Start)?)</code>
-          
+          <span class='code bold'>markers</span> <code class='quiet'>((<a href="#obj_polygon">OBJ_Polygon</a> | <a href="#obj_star">OBJ_Star</a>)?)</code>
+          : marker style of the trace
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>color</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          
+          : color of the trace
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          
+          : name of the trace used in plot legends
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>xSampleDistance</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
+          : If x distance between points is less
+than this value, then the later point will not be plotted. By default this is
+1/4000th the range of the x axis
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>ySampleDistance</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
+          : If y distance between points is less
+than this value, then the later point will not be plotted. By default this is
+1/4000th the range of the y axis
+
           
         </div>
       
@@ -45957,8 +45994,13 @@ hundreds of thousands of points (depending on the client device).</p>
     <div class='py1 quiet mt1 prose-big'>Related</div>
     
       
-        For examples on using traces, see 
+        For more examples on using traces, see 
 <a href="#advancedplot">AdvancedPlot</a>
+
+// When plotting a single trace, just the points are required. By default
+// the line will be solid, and it will be plotted against the 'x' and 'y' axes.
+<p>To test examples below, append them to the
+<a href="#drawing-boilerplate">boilerplate</a>.</p>
 
       
     
@@ -45966,6 +46008,101 @@ hundreds of thousands of points (depending on the client device).</p>
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: pow(),
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Change the thickness and color of the line</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: {
+      <span class="hljs-attr">points</span>: pow(),
+      <span class="hljs-attr">line</span>: {
+        <span class="hljs-attr">width</span>: <span class="hljs-number">0.03</span>,
+        <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">1</span>],
+      }
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Default Markers</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: {
+      <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1</span>),
+      <span class="hljs-attr">markers</span>: <span class="hljs-literal">true</span>,
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Custom Markers</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: {
+      <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1</span>),
+      <span class="hljs-attr">markers</span>: {
+        <span class="hljs-attr">radius</span>: <span class="hljs-number">0.035</span>,
+        <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+        <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span> },
+      },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line and markers</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: {
+      <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1</span>),
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.02</span>, <span class="hljs-number">0.01</span>] },
+      <span class="hljs-attr">markers</span>: {
+        <span class="hljs-attr">radius</span>: <span class="hljs-number">0.035</span>,
+        <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+      },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Use names in trace definitions to customize legend</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: [
+      pow(<span class="hljs-number">2</span>),
+      { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2.5</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2.5'</span> },
+      {
+        <span class="hljs-attr">points</span>: pow(<span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1</span>),
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 3'</span>,
+        <span class="hljs-attr">markers</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.03</span> },
+        <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span> },
+      },
+    ],
+    <span class="hljs-attr">legend</span>: <span class="hljs-literal">true</span>,
+  },
+});</pre>
+    
   
 
   
