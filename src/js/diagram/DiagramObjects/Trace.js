@@ -17,15 +17,6 @@ import {
 /**
  * {@link AdvancedTrace} options object.
  *
- * ![](./assets1/advtrace_ex1.png)
- * ![](./assets1/advtrace_ex2.png)
- *
- * ![](./assets1/advtrace_ex3.png)
- * ![](./assets1/advtrace_ex4.png)
- *
- * ![](./assets1/advtrace_ex5.png)
- * ![](./assets1/advtrace_ex6.png)
- *
  * A plot trace is a set of (x, y) points associated with an
  * x and y axis.
  *
@@ -75,6 +66,42 @@ import {
  *
  * @see
  * For more examples on using traces, see {@link AdvancedPlot}
+ *
+ * To test examples below, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>.
+ *
+ */
+export type ADV_Trace = {
+  points: Array<TypeParsablePoint>,
+  xAxis?: ADV_Axis | string,
+  yAxis?: ADV_Axis | string,
+  x?: Array<TypeParsablePoint>,
+  y?: Array<TypeParsablePoint>,
+  line?: OBJ_Line,
+  markers?: OBJ_Polygon | OBJ_Start,
+  color?: Array<number>,
+  name?: string,
+  xSampleDistance?: number,
+  ySampleDistance?: number,
+};
+
+/**
+ * {@link DiagramElementCollection} representing a trace.
+ *
+ * ![](./assets1/advtrace_ex1.png)
+ * ![](./assets1/advtrace_ex2.png)
+ *
+ * ![](./assets1/advtrace_ex3.png)
+ * ![](./assets1/advtrace_ex4.png)
+ *
+ * ![](./assets1/advtrace_ex5.png)
+ * ![](./assets1/advtrace_ex6.png)
+ *
+ * This object defines a trace in an {@link AdvancedPlot}.
+ *
+ * The trace includes all the points of the trace, and the axes that it
+ * should be drawn against and is defined using the {@link ADV_PlotTrace}
+ * options object.
  *
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
@@ -181,20 +208,6 @@ import {
  *   },
  * });
  */
-export type ADV_Trace = {
-  points: Array<TypeParsablePoint>,
-  xAxis?: ADV_Axis | string,
-  yAxis?: ADV_Axis | string,
-  x?: Array<TypeParsablePoint>,
-  y?: Array<TypeParsablePoint>,
-  line?: OBJ_Line,
-  markers?: OBJ_Polygon | OBJ_Start,
-  color?: Array<number>,
-  name?: string,
-  xSampleDistance?: number,
-  ySampleDistance?: number,
-};
-
 // $FlowFixMe
 class AdvancedTrace extends DiagramElementCollection {
   // Diagram elements

@@ -1195,6 +1195,7 @@ class TextLinesObject extends TextObjectBase {
         lineToUse = lineDefinition;
       }
       const line = [];
+
       const split = splitString(lineToUse, '|', '/');
       split.forEach((s) => {
         let text = s;

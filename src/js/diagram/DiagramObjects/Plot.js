@@ -162,7 +162,7 @@ function cleanTraces(
  *
  * @see
  * See {@link ADV_Axis}, {@link OBJ_AxisLabels}, {@link OBJ_AxisTicks},
- * {@link ADV_Trace} and {@link ADV_Legend} for more examples of customizing
+ * {@link ADV_Trace} and {@link ADV_PlotLegend} for more examples of customizing
  * specific parts of the plot.
  *
  * To test examples below, append them to the

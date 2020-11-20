@@ -190,8 +190,8 @@ toc:
   - OBJ_PolylineSide
   - OBJ_PolylinePadSingle
   - ADV_Trace
-  - AdvancedLegend
-  - ADV_Legend
+  - AdvancedPlotLegend
+  - ADV_PlotLegend
   - name: Misc Animation
   - AnimationStep
   - ElementAnimationStep

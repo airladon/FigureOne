@@ -190,95 +190,136 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], l
 //   return xValues.map(x => new Fig.Point(x, Math.sin(x * 2 * Math.PI + offset)))
 // }
 
-const pow = (pow = 2, stop = 10, step = 0.05, precision = 10) => {
-  const xValues = Fig.tools.math.range(0, stop, step, precision);
+
+
+const pow = (pow = 2, stop = 10, step = 0.05) => {
+  const xValues = Fig.tools.math.range(0, stop, step);
   return xValues.map(x => new Fig.Point(x, x ** pow));
 }
 
-// When plotting a single trace, just the points are required. By default
-// the line will be solid, and it will be plotted against the 'x' and 'y' axes.
-diagram.addElement({
-  name: 'plot',
-  method: 'advanced.plot',
-  options: {
-    trace: pow(),
-  },
-});
-
-// Change the thickness and color of the line
-diagram.addElement({
-  name: 'plot',
-  method: 'advanced.plot',
-  options: {
-    trace: {
-      points: pow(),
-      line: {
-        width: 0.03,
-        color: [0, 0.8, 0.4, 1],
-      }
-    },
-  },
-});
-
-// Default Markers
-diagram.addElement({
-  name: 'plot',
-  method: 'advanced.plot',
-  options: {
-    trace: {
-      points: pow(2, 10, 1),
-      markers: true,
-    },
-  },
-});
-
-// Custom Markers
-diagram.addElement({
-  name: 'plot',
-  method: 'advanced.plot',
-  options: {
-    trace: {
-      points: pow(2, 10, 1),
-      markers: {
-        radius: 0.035,
-        sides: 20,
-        line: { width: 0.01 },
-      },
-    },
-  },
-});
-
-// Line and markers
-diagram.addElement({
-  name: 'plot',
-  method: 'advanced.plot',
-  options: {
-    trace: {
-      points: pow(2, 10, 1),
-      line: { width: 0.01, dash: [0.02, 0.01] },
-      markers: {
-        radius: 0.035,
-        sides: 20,
-      },
-    },
-  },
-});
-
-// Use names in trace definitions to customize legend
+// By default, the legend will appear in the top right corner
 diagram.addElement({
   name: 'plot',
   method: 'advanced.plot',
   options: {
     trace: [
-      pow(2),
+      { points: pow(2), name: 'Power 2' },
       { points: pow(2.5), name: 'Power 2.5' },
       {
-        points: pow(3, 10, 1),
+        points: pow(3, 10, 0.5),
         name: 'Power 3',
-        markers: { radius: 0.03 },
-        line: { width: 0.01 },
+        markers: { radius: 0.03, sides: 10 },
       },
     ],
     legend: true,
+  },
+});
+
+// Change the line length, position and use a frame on the legend
+diagram.addElement({
+  name: 'plot',
+  method: 'advanced.plot',
+  options: {
+    trace: [
+      { points: pow(2), name: 'Power 2' },
+      { points: pow(2.5), name: 'Power 2.5' },
+      {
+        points: pow(3, 10, 0.5),
+        name: 'Power 3',
+        markers: { radius: 0.03, sides: 10 },
+      },
+    ],
+    legend: {
+      length: 0.5,
+      frame: [0.95, 0.95, 0.95, 1],
+      position: [0.2, 1.8],
+    },
+  },
+});
+
+// Make a horizontal legend
+diagram.addElement({
+  name: 'plot',
+  method: 'advanced.plot',
+  options: {
+    trace: [
+      { points: pow(2), name: 'Power 2' },
+      { points: pow(2.5), name: 'Power 2.5' },
+      {
+        points: pow(3, 10, 0.5),
+        name: 'Power 3',
+        markers: { radius: 0.03, sides: 10 },
+      },
+    ],
+    legend: {
+      offset: [0.9, 0],
+      position: [-0.3, -0.5],
+      frame: {
+        line: { width: 0.005 },
+        corner: { radius: 0.05, sides: 10 },
+      },
+    },
+  },
+});
+
+// Customize legend trace text
+diagram.addElement({
+  name: 'plot',
+  method: 'advanced.plot',
+  options: {
+    trace: [
+      { points: pow(2), name: 'Power 2' },
+      { points: pow(2.5), name: 'Power 2.5' },
+      {
+        points: pow(3, 10, 0.5),
+        name: 'Power 3',
+        markers: { radius: 0.03, sides: 10 },
+      },
+    ],
+    legend: {
+      offset: [0, -0.2],
+      custom: {
+        1: {
+          font: { size: 0.1, style: 'italic', color: [1, 0, 0, 1] },
+          text: {
+            text: [
+              'Power 2.5',
+              { 
+                text: 'Reference Trace',
+                font: { size: 0.06 },
+                lineSpace: 0.06,
+              },
+            ],
+            justify: 'left',
+          },
+        },
+      },
+    },
+  },
+});
+
+// Customize legend
+diagram.addElement({
+  name: 'plot',
+  method: 'advanced.plot',
+  options: {
+    trace: [
+      { points: pow(2), name: 'Power 2' },
+      { points: pow(2.5), name: 'Power 2.5' },
+      {
+        points: pow(3, 10, 0.5),
+        name: 'Power 3',
+        markers: { radius: 0.03, sides: 10 },
+      },
+    ],
+    legend: {
+      fontColorIsLineColor: true,
+      length: 0,
+      custom: {
+        0: { position: [2, 0.2] },
+        1: { position: [2, 0.7] },
+        'Power 3': { position: [2, 2] },
+      }
+    },
   },
 });
