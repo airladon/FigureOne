@@ -72,11 +72,11 @@ describe('Diagram Text Object', () => {
       const [t0] = t.text;
       expect(t0.text).toBe('a');
       expect(t0.font).toEqual({
-        family: 'Times New Roman',
+        family: 'Helvetica',
         size: 0.2,
         color: null,
         style: 'normal',
-        weight: '200',
+        weight: 'normal',
         opacity: 1,
       });
       expect(t0.location).toEqual(new Point(0, 0));

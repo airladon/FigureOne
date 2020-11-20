@@ -347,6 +347,7 @@ describe('Animation Step State', () => {
     diagram.mock.timeStep(10);
     diagram.setState(state);
     // diagram.draw(now);
+    // debugger;
     diagram.mock.timeStep(0);
     expect(math.round(elem1.lastDrawPulseTransform.s().x)).toEqual(1.5);
 

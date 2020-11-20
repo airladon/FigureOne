@@ -20,7 +20,7 @@ describe('Grow Line', () => {
         options: {
           length: 2,
           width: 0.1,
-          vertexSpaceStart: 'left',
+          // vertexSpaceStart: 'left',
         },
       },
     ]);
@@ -29,7 +29,7 @@ describe('Grow Line', () => {
   });
   test('Grow', () => {
     expect(round(a._line.transform.s().x)).toBe(2);
-    a.grow(0, 1, true);
+    a.grow({ start: 0, duration: 1 });
     diagram.mock.timeStep(0);
     diagram.mock.timeStep(0.1);
     expect(round(a._line.transform.s().x)).toBe(0.2);
@@ -43,7 +43,8 @@ describe('Grow Line', () => {
   describe('On Cancel - defined by animation', () => {
     beforeEach(() => {
       expect(round(a._line.transform.s().x)).toBe(2);
-      a.grow(0, 1, false);
+      // a.grow(0, 1, false);
+      a.grow({ start: 0, duration: 1 });
       diagram.mock.timeStep(0);
       diagram.mock.timeStep(0.5);
       expect(round(a._line.transform.s().x)).toBe(1);
@@ -78,7 +79,7 @@ describe('Grow Line', () => {
   describe('On Cancel - Force from grow', () => {
     beforeEach(() => {
       expect(round(a._line.transform.s().x)).toBe(2);
-      a.grow(0, 1, true);
+      a.grow({ start: 0, duration: 1, completeOnCancel: true });
       diagram.mock.timeStep(0);
       diagram.mock.timeStep(0.5);
       expect(round(a._line.transform.s().x)).toBe(1);
@@ -97,9 +98,9 @@ describe('Grow Line', () => {
     });
     test('Freeze', () => {
       diagram.stop('freeze');
-      expect(round(a._line.transform.s().x)).toBe(2);
+      expect(round(a._line.transform.s().x)).toBe(1);
       diagram.mock.timeStep(0.5);
-      expect(round(a._line.transform.s().x)).toBe(2);
+      expect(round(a._line.transform.s().x)).toBe(1);
     });
     test('AnimateToComplete', () => {
       diagram.stop('animateToComplete');
@@ -112,7 +113,7 @@ describe('Grow Line', () => {
   });
   test('Force complete on cancel', () => {
     expect(round(a._line.transform.s().x)).toBe(2);
-    a.grow(0, 1, true);
+    a.grow({ start: 0, duration: 1, completeOnCancel: true });
     diagram.mock.timeStep(0);
     diagram.mock.timeStep(0.1);
     expect(round(a._line.transform.s().x)).toBe(0.2);

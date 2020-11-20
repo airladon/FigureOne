@@ -28,7 +28,7 @@ describe('Diagram Primitives TextLine', () => {
               size: 0.15,
               color: [1, 1, 0, 1],
             },
-            lineSpace: -0.3,
+            lineSpace: 0.3,
             justify: 'center',
             text: 'A line with new defaults',
           },
@@ -64,47 +64,47 @@ describe('Diagram Primitives TextLine', () => {
           size: 0.1,
         },
         justify: 'left',
-        lineSpace: -0.2,
+        lineSpace: 0.2,
         color: [1, 0, 0, 1],
         position: [-0.8, 0],
         transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
       },
       defaultLineSpace: {
-        lines: ['a', 'b'],
+        text: ['a', 'b'],
         font: {
           size: 0.5,
         },
       },
       abLeftBaseline: {
-        lines: ['a', 'b'],
-        lineSpace: -0.2,
+        text: ['a', 'b'],
+        lineSpace: 0.2,
       },
       centerJustification: {
-        lines: ['aaaaa', 'b'],
-        lineSpace: -0.2,
+        text: ['aaaaa', 'b'],
+        lineSpace: 0.2,
         justify: 'center',
       },
       rightJustification: {
-        lines: ['aaaaa', 'b'],
-        lineSpace: -0.2,
+        text: ['aaaaa', 'b'],
+        lineSpace: 0.2,
         justify: 'right',
       },
       alignCenterMiddle: {
-        lines: ['aaaaa', 'b'],
-        lineSpace: -0.2,
+        text: ['aaaaa', 'b'],
+        lineSpace: 0.2,
         justify: 'center',
         xAlign: 'center',
         yAlign: 'middle',
       },
       alignRightTop: {
-        lines: ['aaaaa', 'b'],
-        lineSpace: -0.2,
+        text: ['aaaaa', 'b'],
+        lineSpace: 0.2,
         justify: 'right',
         xAlign: 'right',
         yAlign: 'top',
       },
       basicModifier: {
-        lines: ['a |b|'],
+        text: ['a |b|'],
         modifiers: {
           b: {
             text: 'gg',
@@ -112,11 +112,11 @@ describe('Diagram Primitives TextLine', () => {
         },
       },
       transform: {
-        lines: ['a', 'b'],
+        text: ['a', 'b'],
         transform: [['s', 2, 3], ['r', 4], ['t', 5, 6]],
       },
       positionOverride: {
-        lines: ['a', 'b'],
+        text: ['a', 'b'],
         position: [9, 10],
         transform: [['s', 1, 1], ['r', 0], ['t', 5, 6]],
       },
@@ -379,7 +379,7 @@ describe('Diagram Primitives TextLine', () => {
       expect(round(line.width))
         .toBe(round(text[4].text.length * a.width * 0.15 / 0.2));
       expect(round(line.left)).toBe(round(totalW / 2 - line.width / 2));
-      expect(round(line.bottom)).toBe(round(lineSpace * 2 - g.descent * 0.15 / 0.2));
+      expect(round(line.bottom)).toBe(round(lineSpace * 1 - 0.3 - g.descent * 0.15 / 0.2));
       expect(round(line.top)).toBe(round(line.bottom + (g.descent + b.ascent) * 0.15 / 0.2));
     });
     test('bounds line 4', () => {
@@ -437,18 +437,18 @@ describe('Text Borders', () => {
     callback = jest.fn();
     const options = {
       simple: {
-        lines: [
+        text: [
           't',
           't',
         ],
         xAlign: 'left',
         yAlign: 'baseline',
-        lineSpace: -l,
+        lineSpace: l,
         // border: 'rect',  // default
         // touchBorder: 'rect',  // default
       },
       customBorder: {
-        lines: [
+        text: [
           't',
           't',
         ],
@@ -458,7 +458,7 @@ describe('Text Borders', () => {
         touchBorder: 'rect',
       },
       customTouchBorder: {
-        lines: [
+        text: [
           't',
           't',
         ],
@@ -468,7 +468,7 @@ describe('Text Borders', () => {
         touchBorder: [[[-1, -1], [1, -1], [1, 1], [-1, 1]]],
       },
       buffer: {
-        lines: [
+        text: [
           't',
           't',
         ],
@@ -478,7 +478,7 @@ describe('Text Borders', () => {
         touchBorder: 0.5,
       },
       bufferText: {
-        lines: [
+        text: [
           't',
           '|test|',
         ],
@@ -494,7 +494,7 @@ describe('Text Borders', () => {
         touchBorder: 'rect',
       },
       customBorderText: {
-        lines: [
+        text: [
           't',
           '|test|',
         ],
@@ -510,7 +510,7 @@ describe('Text Borders', () => {
         touchBorder: 'rect',
       },
       customTouchBorderText: {
-        lines: [
+        text: [
           't',
           '|test|',
         ],
@@ -526,7 +526,7 @@ describe('Text Borders', () => {
         touchBorder: 'rect',
       },
       textBorders: {
-        lines: [
+        text: [
           't',
           't',
         ],
@@ -536,7 +536,7 @@ describe('Text Borders', () => {
         touchBorder: 'text',
       },
       click: {
-        lines: [
+        text: [
           't',
           '|test|',
         ],

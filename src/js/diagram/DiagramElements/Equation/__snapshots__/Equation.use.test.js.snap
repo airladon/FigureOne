@@ -27,6 +27,7 @@ DiagramElementPrimitive {
   "animationFinishedCallback": null,
   "animations": AnimationManager {
     "animations": Array [],
+    "customSteps": Array [],
     "element": [Circular],
     "finishedCallback": [Function],
     "fnMap": FunctionMap {
@@ -50,6 +51,7 @@ DiagramElementPrimitive {
     },
   },
   "beforeDrawCallback": null,
+  "cancelSetTransform": false,
   "cannotTouchHole": false,
   "color": Array [
     0.95,
@@ -499,6 +501,7 @@ DiagramElementPrimitive {
     "type": "translation",
   },
   "name": "a",
+  "onAdd": null,
   "onClick": null,
   "opacity": 1,
   "parent": null,
