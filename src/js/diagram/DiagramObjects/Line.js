@@ -729,11 +729,27 @@ export default class AdvancedLine extends DiagramElementCollection {
     this.animations.length = (...opt) => {
       const o = joinObjects({}, {
         element: this,
-        start: this.line.length(),
-        target: this.line.length(),
+        // start: this.line.length(),
+        // target: this.line.length(),
       }, ...opt);
+      let target;
+      let start;
+      let toSetup = true;
       o.callback = (percentage) => {
-        const l = (o.target - o.start) * percentage + o.start;
+        if (toSetup) {
+          if (o.start == null) {
+            start = this.line.length();
+          } else {
+            ({ start } = o);
+          }
+          if (o.target == null) {
+            target = this.line.length();
+          } else {
+            ({ target } = o);
+          }
+          toSetup = false;
+        }
+        const l = (target - start) * percentage + start;
         this.setLength(l);
       };
       return new animation.CustomAnimationStep(o);

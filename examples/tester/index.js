@@ -228,18 +228,17 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], l
 
 diagram.addElement({
   name: 'asdf',
-  method: 'advanced.angle',
+  method: 'advanced.line',
   options: {
     angle: 1,
-    curve: { line: { width: 0.01 }, radius: 0.5 },
-    sides: true,
+    length: 2,
   },
 });
 
 diagram.elements._asdf.animations.new()
-  .angle({ target: 2, duration: 1 })
-  .angle({ target: 0.5, duration: 1 })
-  .angle({ target: 3, duration: 1 })
+  .length({ target: 1, duration: 1 })
+  .length({ target: 2, duration: 1 })
+  .length({ target: 1, duration: 1 })
   .start();
 
 
