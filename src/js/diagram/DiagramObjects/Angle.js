@@ -1144,10 +1144,13 @@ class AdvancedAngle extends DiagramElementCollection {
     width: number | null = null,
     color: TypeColor = this.color,
   ) {
-    const line = this.shapes.horizontalLine(
-      new Point(0, 0),
-      1, width, 0, color, new Transform().scale(1, 1).rotate(0),
-    );
+    const line = this.shapes.line({
+      length: 1,
+      width,
+      angle: 0,
+      color,
+      transform: new Transform().scale(1, 1).rotate(0),
+    });
     // $FlowFixMe
     this[`side${index}`] = { length, width };
     this.add(`side${index}`, line);
