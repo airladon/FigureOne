@@ -7,7 +7,7 @@ import {
   Point, Transform,
 } from '../tools/g2';
 import webgl from '../__mocks__/WebGLInstanceMock';
-import VertexPolygon from './DrawingObjects/VertexObject/VertexPolygon';
+// import VertexPolygon from './DrawingObjects/VertexObject/VertexPolygon';
 import {
   linear, round,
 } from '../tools/math';
@@ -22,31 +22,25 @@ jest.useFakeTimers();
 
 
 describe('Animationa and Movement', () => {
+  let diagram;
+  beforeEach(() => {
+    diagram = makeDiagram();  // this is just initializing the global 
+  })
   describe('DiagramElementPrimitive', () => {
-    describe('Setup', () => {
-      test('Instantiation', () => {
-        const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
-        const element = new DiagramElementPrimitive(
-          square,
-          new Transform(),
-          [0, 0, 1, 1],
-        );
-        expect(element instanceof DiagramElementPrimitive).toBe(true);
-      });
-    });
     describe('Animation', () => {
       let element;
       // let identity;
-      let diagram;
+      // let diagram;
       // let diagram;
       beforeEach(() => {
-        diagram = makeDiagram();  // this is just initializing the global functions
-        const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
-        element = new DiagramElementPrimitive(
-          square,
-          new Transform().scale(1, 1).rotate(0).translate(0, 0),
-          [0, 0, 1, 1],
-        );
+        // diagram = makeDiagram();  // this is just initializing the global functions
+        // const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
+        element = diagram.shapes.polygon({ sides: 4, radius: 1, line: { width: 0.01 } });
+        // element = new DiagramElementPrimitive(
+        //   square,
+        //   new Transform().scale(1, 1).rotate(0).translate(0, 0),
+        //   [0, 0, 1, 1],
+        // );
         // identity = new Transform();
         // element.move.maxTransform = element.transform.constant(100);
         // element.move.minTransform = element.transform.constant(-100);
@@ -67,7 +61,7 @@ describe('Animationa and Movement', () => {
             })
             .start();
           const t = element.transform;
-          expect(t).toEqual(new Transform().scale(1, 1).rotate(0).translate(0, 0));
+          expect(t).toEqual(new Transform('polygon').scale(1, 1).rotate(0).translate(0, 0));
 
           expect(element.animations.state).toBe('idle');
           expect(element.isAnimating()).toBe(true);
@@ -97,7 +91,7 @@ describe('Animationa and Movement', () => {
             .position({ target: new Point(1, 0), duration: 1, progression: 'linear' })
             .start();
           const t = element.transform;
-          expect(t).toEqual(new Transform().scale(1, 1).rotate(0).translate(0, 0));
+          expect(t).toEqual(new Transform('polygon').scale(1, 1).rotate(0).translate(0, 0));
 
           expect(element.animations.state).toBe('idle');
           expect(element.isAnimating()).toBe(true);
@@ -234,15 +228,16 @@ describe('Animationa and Movement', () => {
     describe('Moving Freely', () => {
       let element;
       // let identity;
-      let diagram;
+      // let diagram;
       beforeEach(() => {
-        diagram = makeDiagram();
-        const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
-        element = new DiagramElementPrimitive(
-          square,
-          new Transform().scale(1, 1).rotate(0).translate(0, 0),
-          [0, 0, 1, 1],
-        );
+        // diagram = makeDiagram();
+        // const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
+        element = diagram.shapes.polygon({ sides: 4, radius: 1, line: { width: 0.01 } });
+        // element = new DiagramElementPrimitive(
+        //   square,
+        //   new Transform().scale(1, 1).rotate(0).translate(0, 0),
+        //   [0, 0, 1, 1],
+        // );
         element.move.maxVelocity = 100; // new TransformLimit(100, 100, 100);
         element.move.freely.zeroVelocityThreshold = {
           scale: 0.01, rotation: 0.01, translation: 0.01,
@@ -354,12 +349,13 @@ describe('Animationa and Movement', () => {
       let element;
       const RealDate = global.performance.now;
       beforeEach(() => {
-        const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
-        element = new DiagramElementPrimitive(
-          square,
-          new Transform().scale(1, 1).rotate(0).translate(0, 0),
-          [0, 0, 1, 1],
-        );
+        // const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
+        element = diagram.shapes.polygon({ sides: 4, radius: 1, line: { width: 0.01 } });
+        // element = new DiagramElementPrimitive(
+        //   square,
+        //   new Transform().scale(1, 1).rotate(0).translate(0, 0),
+        //   [0, 0, 1, 1],
+        // );
         // element.move.freely.zeroVelocityThreshold =
         // new TransformLimit(0.0001, 0.0001, 0.0001);
         element.move.freely.zeroVelocityThreshold = 0.0001;
@@ -384,15 +380,16 @@ describe('Animationa and Movement', () => {
     describe('Pulse', () => {
       let element;
       // let identity;
-      let diagram;
+      // let diagram;
       beforeEach(() => {
         diagram = makeDiagram();
-        const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
-        element = new DiagramElementPrimitive(
-          square,
-          new Transform().scale(1, 1).rotate(0).translate(0, 0),
-          [0, 0, 1, 1],
-        );
+        // const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
+        element = diagram.shapes.polygon({ sides: 4, radius: 1, line: { width: 0.01 } });
+        // element = new DiagramElementPrimitive(
+        //   square,
+        //   new Transform().scale(1, 1).rotate(0).translate(0, 0),
+        //   [0, 0, 1, 1],
+        // );
         // identity = new Transform();
         diagram.elements.add('e', element);
       });
@@ -458,7 +455,7 @@ describe('Animationa and Movement', () => {
       let square;
       let glPoint;
       beforeEach(() => {
-        const diagram = makeDiagram();
+        // const diagram = makeDiagram();
         square = diagram.shapes.polygon({
           sides: 4,
           radius: Math.sqrt(2),
@@ -497,10 +494,10 @@ describe('Animationa and Movement', () => {
     });
     describe('Get bounding box', () => {
       let square;
-      let diagram;
+      // let diagram;
       let createSquare;
       beforeEach(() => {
-        diagram = makeDiagram();
+        // diagram = makeDiagram();
         createSquare = (offset) => {
           square = diagram.shapes.polygon({
             sides: 4,
@@ -552,16 +549,22 @@ describe('Animationa and Movement', () => {
     });
     describe('Default move max/min transforms', () => {
       test('setMoveBounds no transform', () => {
-        const sq = new VertexPolygon(
-          [webgl],
-          4,
-          Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
-          Math.PI / 4, new Point(0, 0),
-        );
-        const square = new DiagramElementPrimitive(
-          sq,
-          new Transform().scale(1, 1).rotate(0).translate(0, 0),
-        );
+        const square = diagram.shapes.polygon({
+          sides: 4,
+          radius: Math.sqrt(2) * 0.105,
+          line: { width: Math.sqrt(2) * 0.01 },
+          rotation: Math.PI / 4,
+        });
+        // const sq = new VertexPolygon(
+        //   [webgl],
+        //   4,
+        //   Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
+        //   Math.PI / 4, new Point(0, 0),
+        // );
+        // const square = new DiagramElementPrimitive(
+        //   sq,
+        //   new Transform().scale(1, 1).rotate(0).translate(0, 0),
+        // );
         square.isMovable = true;
         // square.move.bounds = 'diagram';
         square.setMoveBounds('diagram', true);
@@ -620,16 +623,23 @@ describe('Animationa and Movement', () => {
         // expect(round(boundary.top, 3)).toBe(1.895);
       });
       test('setMoveBounds with transform', () => {
-        const sq = new VertexPolygon(
-          [webgl],
-          4,
-          Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
-          Math.PI / 4, new Point(0, 0),
-        );
-        const square = new DiagramElementPrimitive(
-          sq,
-          new Transform().scale(2, 2).rotate(0).translate(0, 0),
-        );
+        const square = diagram.shapes.polygon({
+          sides: 4,
+          radius: Math.sqrt(2) * 0.105,
+          line: { width: Math.sqrt(2) * 0.01 },
+          rotation: Math.PI / 4,
+          transform: new Transform().scale(2, 2).rotate(0).translate(0, 0),
+        });
+        // const sq = new VertexPolygon(
+        //   [webgl],
+        //   4,
+        //   Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
+        //   Math.PI / 4, new Point(0, 0),
+        // );
+        // const square = new DiagramElementPrimitive(
+        //   sq,
+        //   new Transform().scale(2, 2).rotate(0).translate(0, 0),
+        // );
         square.isMovable = true;
         // square.move.bounds = 'diagram';
 
@@ -662,16 +672,23 @@ describe('Animationa and Movement', () => {
     });
     describe('Copy', () => {
       test('Vertex Object', () => {
-        const sq = new VertexPolygon(
-          [webgl],
-          4,
-          Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
-          Math.PI / 4, new Point(0, 0),
-        );
-        const square = new DiagramElementPrimitive(
-          sq,
-          new Transform().scale(1, 1).rotate(0).translate(0, 0),
-        );
+        const square = diagram.shapes.polygon({
+          sides: 4,
+          radius: Math.sqrt(2) * 0.105,
+          line: { width: Math.sqrt(2) * 0.01 },
+          rotation: Math.PI / 4,
+          transform: new Transform().scale(2, 2).rotate(0).translate(0, 0),
+        });
+        // const sq = new VertexPolygon(
+        //   [webgl],
+        //   4,
+        //   Math.sqrt(2) * 0.105, Math.sqrt(2) * 0.01,
+        //   Math.PI / 4, new Point(0, 0),
+        // );
+        // const square = new DiagramElementPrimitive(
+        //   sq,
+        //   new Transform().scale(1, 1).rotate(0).translate(0, 0),
+        // );
         // change a default value DiagramElement base class
         square.isShown = true;
         // change a default value in DiagramElementPrimitive class
@@ -699,27 +716,39 @@ describe('Animationa and Movement', () => {
     let collection;
     const RealDate = Date.now;
     // let identity;
-    let diagram;
+    // let diagram;
     beforeEach(() => {
-      diagram = makeDiagram();
+      // diagram = makeDiagram();
       // identity = new Transform();
-      const square = new VertexPolygon([webgl], 4, 1005, 0.01, 0, Point.zero());
-      const tri = new VertexPolygon([webgl], 3, 0.1005, 0.01, 0, new Point(0.1, 0.1));
-      squareElement = new DiagramElementPrimitive(
-        square,
-        new Transform().scale(1, 1).rotate(0).translate(0, 0),
-        [0, 0, 1, 1],
-      );
+      squareElement = diagram.shapes.polygon({
+        sides: 4,
+        radius: 1005,
+        line: { width: 0.01 },
+      });
+      triElement = diagram.shapes.polygon({
+        sides: 3,
+        radius: 0.1005,
+        line: { width: 0.001 },
+        offset: [0.1, 0.1],
+        transform: new Transform().scale(2, 2).rotate(Math.PI / 2).translate(0.1, 0),
+      });
+      // const square = new VertexPolygon([webgl], 4, 1005, 0.01, 0, Point.zero());
+      // const tri = new VertexPolygon([webgl], 3, 0.1005, 0.01, 0, new Point(0.1, 0.1));
+      // squareElement = new DiagramElementPrimitive(
+      //   square,
+      //   new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      //   [0, 0, 1, 1],
+      // );
       // Transform the triangle by 0.1 in x, rotate by 90 deg, scale by 2
       // This means, the outside point (0.105, 0) will transform:
       //    - tranlation x by 0.1: (0.205, 0)
       //    - rotation by 90 degrees: (0, 0.205)
       //    - scale by 2: (0, 0.41)
-      triElement = new DiagramElementPrimitive(
-        tri,
-        new Transform().scale(2, 2).rotate(Math.PI / 2).translate(0.1, 0),
-        [0, 0, 1, 1],
-      );
+      // triElement = new DiagramElementPrimitive(
+      //   tri,
+      //   new Transform().scale(2, 2).rotate(Math.PI / 2).translate(0.1, 0),
+      //   [0, 0, 1, 1],
+      // );
       collection = new DiagramElementCollection(new Transform()
         .scale(1, 1).rotate(0).translate(0, 0));
       collection.add('square', squareElement);
@@ -877,15 +906,21 @@ describe('Animationa and Movement', () => {
       // let collection2;
       beforeEach(() => {
         // identity = new Transform();
-        square = new VertexPolygon(
-          [webgl],
-          4,
-          Math.sqrt(2) * (1.05),
-          Math.sqrt(2) * 0.1,
-          Math.PI / 4,
-          Point.zero(),
-        );
-        squareElement = new DiagramElementPrimitive(square);
+        // square = new VertexPolygon(
+        //   [webgl],
+        //   4,
+        //   Math.sqrt(2) * (1.05),
+        //   Math.sqrt(2) * 0.1,
+        //   Math.PI / 4,
+        //   Point.zero(),
+        // );
+        squareElement = diagram.shapes.polygon({
+          sides: 4,
+          radius: Math.sqrt(2) * (1.05),
+          line: { width: Math.sqrt(2) * 0.1 },
+          rotation: Math.PI / 4,
+        });
+        // squareElement = new DiagramElementPrimitive(square);
         collection = new DiagramElementCollection();
         collection.add('square', squareElement);
         collection.isTouchable = true;

@@ -479,7 +479,7 @@ class Diagram {
       grid: this.shapes.grid.bind(this.shapes),
       triangle: this.shapes.triangle.bind(this.shapes),
       rectangle: this.shapes.rectangle.bind(this.shapes),
-      radialLines: this.shapes.radialLines.bind(this.shapes),
+      // radialLines: this.shapes.radialLines.bind(this.shapes),
       text: this.shapes.text.bind(this.shapes),
       textLine: this.shapes.textLine.bind(this.shapes),
       textLines: this.shapes.textLines.bind(this.shapes),
