@@ -226,17 +226,20 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], l
 //   .start();
 
 
+// Hide pad 0, and make pad 2 blue and not filled
 diagram.addElement({
-  name: 'asdf',
-  method: 'advanced.angle',
+  name: 'p',
+  method: 'advanced.polyline',
   options: {
-    curve: { radius: 0.5 },
-    // sides: true,
-    corner: {
-      width: 0.07,
-    },
+    points: [[0, 0], [0.7, 0], [0.7, 0.7], [1.4, 0.7]],
+    side: [
+      { label: { text: 'a' } },
+      { label: { text: 'b' } },
+      { label: { text: 'c' } },
+    ],
   },
 });
+console.log(diagram.elements._p)
 
 // diagram.elements._asdf.animations.new()
 //   .length({ target: 1, duration: 1 })

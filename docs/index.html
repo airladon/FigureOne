@@ -13940,7 +13940,7 @@ some <code>percent</code> between the two.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>translationStyle</span> <code class='quiet'>((<code>"linear"</code> | <code>"curved"</code>))</code>
+            <span class='code bold'>translationStyle</span> <code class='quiet'>((<code>"linear"</code> | <code>"curved"</code> | <code>"curve"</code>))</code>
 	    
           </div>
           
@@ -38585,7 +38585,8 @@ rotation direction and normalized from 0 to Math.PI * 2.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>precision</span> <code class='quiet'>(<code>8</code>)</code>
+            <span class='code bold'>precision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>8</code>)</code>
 	    
           </div>
           
@@ -45453,7 +45454,10 @@ if the label should be pulsed from its bottom rather than its center).
   </div>
   
 
-  <p>Side annotations, angle annotations and movable pads in an
+  <p>Polyline side, angle and pad customization options object</p>
+<p><img src="./assets1/polylinecustomization_ex1.png"></p>
+<p><img src="./assets1/polylinecustomization_ex1.png"></p>
+<p>Side annotations, angle annotations and movable pads in an
 <a href="#advancedpolyline">AdvancedPolyline</a> are defined with the options objects <a href="#adv_line">ADV_Line</a>,
 <a href="#adv_angle">ADV_Angle</a> and (<a href="#obj_polygon">OBJ_Polygon</a> &#x26; <a href="#obj_polylinepadsingle">OBJ_PolylinePadSingle</a>)
 respectively.</p>
@@ -45555,7 +45559,7 @@ diagram.addElement({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.polyline'</span>,
   <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">2</span>]],
+    <span class="hljs-attr">points</span>: [[<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]],
     <span class="hljs-attr">close</span>: <span class="hljs-literal">true</span>,
     <span class="hljs-attr">side</span>: {
       <span class="hljs-attr">showLine</span>: <span class="hljs-literal">false</span>,
@@ -45571,7 +45575,7 @@ diagram.addElement({
         <span class="hljs-attr">offset</span>: <span class="hljs-number">0.05</span>,
       },
       <span class="hljs-attr">curve</span>: {
-        <span class="hljs-attr">radius</span>: <span class="hljs-number">0.4</span>,
+        <span class="hljs-attr">radius</span>: <span class="hljs-number">0.25</span>,
       },
       <span class="hljs-attr">direction</span>: <span class="hljs-string">'negative'</span>,
       <span class="hljs-attr">show</span>: [<span class="hljs-number">2</span>],                   <span class="hljs-comment">// Only show angle annotation for angle 2</span>

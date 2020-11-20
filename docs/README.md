@@ -2414,7 +2414,7 @@ Interpolation can either be `'linear'` or '`curved'`.
 
 -   `delta` **[Transform][1026]** 
 -   `percent` **[number][1032]** 
--   `translationStyle` **(`"linear"` \| `"curved"`)** 
+-   `translationStyle` **(`"linear"` \| `"curved"` \| `"curve"`)** 
 -   `translationOptions` **pathOptionsType** 
 
 Returns **[Transform][1026]** 
@@ -11555,7 +11555,7 @@ Creates an array with a range of numbers
 -   `start` **[number][1032]** Range start
 -   `stop` **[number][1032]** Range stop
 -   `step` **[number][1032]** Range step (optional, default `1`)
--   `precision` **`8`** 
+-   `precision` **[number][1032]**  (optional, default `8`)
 
 Returns **[Array][1030]&lt;[number][1032]>** Range of numbers in an array
 
@@ -13115,6 +13115,12 @@ Type: any
 
 ## OBJ_PolylineCustomization
 
+Polyline side, angle and pad customization options object
+
+![][1255]
+
+![][1255]
+
 Side annotations, angle annotations and movable pads in an
 [AdvancedPolyline][362] are defined with the options objects [ADV_Line][340],
 [ADV_Angle][360] and ([OBJ_Polygon][302] & [OBJ_PolylinePadSingle][858])
@@ -13180,7 +13186,7 @@ diagram.addElement({
   name: 'p',
   method: 'advanced.polyline',
   options: {
-    points: [[0, 0], [2, 0], [2, 2], [0, 2]],
+    points: [[0, 0], [1, 0], [1, 1], [0, 1]],
     close: true,
     side: {
       showLine: false,
@@ -13196,7 +13202,7 @@ diagram.addElement({
         offset: 0.05,
       },
       curve: {
-        radius: 0.4,
+        radius: 0.25,
       },
       direction: 'negative',
       show: [2],                   // Only show angle annotation for angle 2
@@ -13386,13 +13392,13 @@ hundreds of thousands of points (depending on the client device).
 
 [DiagramElementCollection][73] representing an legend.
 
-![][1255]
 ![][1256]
-
 ![][1257]
-![][1258]
 
+![][1258]
 ![][1259]
+
+![][1260]
 
 This object defines a legend in an [AdvancedPlot][398].
 
@@ -13575,7 +13581,7 @@ and may have an encompassing frame with a border and fill.
     some should be shown
 -   `hide` **[Array][1030]&lt;[number][1032]>?** array of which trace indeces to hide if some
     should be hidden
--   `custom` **[OBJ_PlotLegendCustom][1260]?** customizations to specific trace
+-   `custom` **[OBJ_PlotLegendCustom][1261]?** customizations to specific trace
     samples
 -   `traces` **[Array][1030]&lt;[ADV_Trace][1116]>?** the traces from the plot that this
     legend will display. This is used by [AdvancedPlot][398] and should not be
@@ -13621,7 +13627,7 @@ Start animation
 
 #### Parameters
 
--   `startTime` **[AnimationStartTime][1261]**  (optional, default `null`)
+-   `startTime` **[AnimationStartTime][1262]**  (optional, default `null`)
 
 ## ElementAnimationStep
 
@@ -13697,7 +13703,7 @@ Type: any
 ### Properties
 
 -   `element` **[DiagramElement][1038]?** 
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1262])?** how the animation progresses - defaults to `linear` for color, opacity and
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1263])?** how the animation progresses - defaults to `linear` for color, opacity and
     custom animations and `easeinout` for others
 
 ## OBJ_ScenarioVelocity
@@ -13754,7 +13760,7 @@ Start animation options object.
 
 -   `name` **(null | [string][1027])?** name of animation to start - f null, then
     all animations associated with this animation manager will start (`null`)
--   `startTime` **[AnimationStartTime][1261]** when to
+-   `startTime` **[AnimationStartTime][1262]** when to
     start the animation
 
 ## OBJ_SerialAnimationStep
@@ -13812,7 +13818,7 @@ Type: any
 -   `callback` **([string][1027] | function (int): void)** function to run each
     animation frame
 -   `startPercent` **[number][1032]?** percent to start animation at (`0`)
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1262])?** 
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1263])?** 
 
 ## OBJ_TransformAnimationStep
 
@@ -13850,7 +13856,7 @@ Type: any
 
 -   `start` **([string][1027] \| [OBJ_Scenario][1227])?** 
 -   `target` **([string][1027] \| [OBJ_Scenario][1227])?** 
--   `velocity` **(null | [string][1027] \| [OBJ_ScenarioVelocity][1263])?** velocity
+-   `velocity` **(null | [string][1027] \| [OBJ_ScenarioVelocity][1264])?** velocity
     will override duration with a calculated duration based on
     the `start`, `target` and `velocity`. If `null` is used
     then `duration` will not be overriden. Any scenario velocity elements that
@@ -13866,13 +13872,13 @@ Type: any
     `1` is positive of CCW direction, `-1` is negative of CW direction and `2` is
     whichever direction doesn't pass through angle 0.
 -   `clipRotationTo` **(`"0to360"` \| `"-180to180"` | null)?** 
--   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1262])?** (`'easeinout'`)
+-   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1263])?** (`'easeinout'`)
 
 ## OBJ_TriggerAnimationStep
 
 **Extends OBJ_AnimationStep**
 
-[TriggernAnimationStep][1264] options object
+[TriggernAnimationStep][1265] options object
 
 Type: any
 
@@ -13881,13 +13887,13 @@ Type: any
 -   `payload` **any?** payload to pass to callback (`null`)
 -   `element` **[DiagramElement][1038]** [DiagramElement][32] to associate with
     callback - if the `callback` is a string then this element's
-    [FunctionMap][1265] will be searched for the corresponding function
+    [FunctionMap][1266] will be searched for the corresponding function
 
 ## OBJ_Pulse
 
 Pulse options object
 
-![][1266]
+![][1267]
 
 Pulsing can be useful to highlight a diagram element to a user, without
 changing its underlying properties.
@@ -13942,7 +13948,7 @@ outlines are becomming thicker.
     (`'diagram'`)
 -   `num` **[number][1032]?** the number of draw copies of the pulse to make (`1`)
 -   `done` **(null | [string][1027] | function (): void)?** callback when pulse is
-    finished. If `string` then the element's [FunctionMap][1265] `fnMap` will be
+    finished. If `string` then the element's [FunctionMap][1266] `fnMap` will be
     used (`null`)
 -   `when` **[TypeWhen][1254]?** when to start the pulse (`'syncNow'`)
 -   `progression` **(`"sinusoid"` \| `"triangle"`)?** function that defines
@@ -14037,7 +14043,7 @@ Type: any
     (`'diagram'`)
 -   `num` **[number][1032]?** the number of draw copies of the pulse to make (`1`)
 -   `done` **(null | [string][1027] | function (): void)?** callback when pulse is
-    finished. If `string` then the element's [FunctionMap][1265] `fnMap` will be
+    finished. If `string` then the element's [FunctionMap][1266] `fnMap` will be
     used (`null`)
 -   `when` **[TypeWhen][1254]?** when to start the pulse (`'syncNow'`)
 
@@ -14176,7 +14182,7 @@ Equation container function
 
 #### Parameters
 
--   `options` **[EQN_Container][1267]** 
+-   `options` **[EQN_Container][1268]** 
 
 ### brac
 
@@ -14198,7 +14204,7 @@ Equation bar function
 
 #### Parameters
 
--   `options` **[EQN_Bar][1268]** 
+-   `options` **[EQN_Bar][1269]** 
 -   `forceOptions` **[Object][1199]**  (optional, default `{}`)
 
 ### annotate
@@ -14210,7 +14216,7 @@ Equation annotate function
 
 #### Parameters
 
--   `options` **[EQN_Annotate][1269]** 
+-   `options` **[EQN_Annotate][1270]** 
 
 ### scale
 
@@ -14221,7 +14227,7 @@ Equation annotate function
 
 #### Parameters
 
--   `options` **[EQN_Scale][1270]** 
+-   `options` **[EQN_Scale][1271]** 
 
 ### frac
 
@@ -14232,7 +14238,7 @@ Equation fraction function
 
 #### Parameters
 
--   `options` **[EQN_Fraction][1271]** 
+-   `options` **[EQN_Fraction][1272]** 
 
 ### supSub
 
@@ -14243,7 +14249,7 @@ Equation super-sub script function
 
 #### Parameters
 
--   `options` **[EQN_SuperscriptSubscript][1272]** 
+-   `options` **[EQN_SuperscriptSubscript][1273]** 
 
 ### sup
 
@@ -14254,7 +14260,7 @@ Equation superscript function
 
 #### Parameters
 
--   `options` **[EQN_Superscript][1273]** 
+-   `options` **[EQN_Superscript][1274]** 
 
 ### sub
 
@@ -14265,7 +14271,7 @@ Equation subscript function
 
 #### Parameters
 
--   `options` **[EQN_Subscript][1274]** 
+-   `options` **[EQN_Subscript][1275]** 
 
 ### box
 
@@ -14276,7 +14282,7 @@ Equation box function
 
 #### Parameters
 
--   `options` **[EQN_Box][1275]** 
+-   `options` **[EQN_Box][1276]** 
 
 ### pad
 
@@ -14287,7 +14293,7 @@ Equation pad function
 
 #### Parameters
 
--   `options` **[EQN_Pad][1276]** 
+-   `options` **[EQN_Pad][1277]** 
 
 ### topBar
 
@@ -14298,7 +14304,7 @@ Equation top bar function
 
 #### Parameters
 
--   `options` **[EQN_Bar][1268]** 
+-   `options` **[EQN_Bar][1269]** 
 
 ### bottomBar
 
@@ -14309,7 +14315,7 @@ Equation bottom bar function
 
 #### Parameters
 
--   `options` **[EQN_Bar][1268]** 
+-   `options` **[EQN_Bar][1269]** 
 
 ### matrix
 
@@ -14320,7 +14326,7 @@ Equation matrix function
 
 #### Parameters
 
--   `options` **[EQN_Matrix][1277]** 
+-   `options` **[EQN_Matrix][1278]** 
 
 ### int
 
@@ -14331,7 +14337,7 @@ Equation integral function
 
 #### Parameters
 
--   `options` **[EQN_Integral][1278]** 
+-   `options` **[EQN_Integral][1279]** 
 
 ### sumOf
 
@@ -14342,7 +14348,7 @@ Equation sum of function
 
 #### Parameters
 
--   `options` **[EQN_SumOf][1279]** 
+-   `options` **[EQN_SumOf][1280]** 
 
 ### prodOf
 
@@ -14353,7 +14359,7 @@ Equation product of function
 
 #### Parameters
 
--   `options` **[EQN_ProdOf][1280]** 
+-   `options` **[EQN_ProdOf][1281]** 
 
 ### topComment
 
@@ -14365,7 +14371,7 @@ Equation top comment of function
 #### Parameters
 
 -   `args` **...any** 
--   `options` **[EQN_Comment][1281]** 
+-   `options` **[EQN_Comment][1282]** 
 
 ### bottomComment
 
@@ -14377,7 +14383,7 @@ Equation bottom comment of function
 #### Parameters
 
 -   `args` **...any** 
--   `options` **[EQN_Comment][1281]** 
+-   `options` **[EQN_Comment][1282]** 
 
 ### strike
 
@@ -14388,7 +14394,7 @@ Equation strike of function
 
 #### Parameters
 
--   `options` **[EQN_Strike][1282]** 
+-   `options` **[EQN_Strike][1283]** 
 
 ### topStrike
 
@@ -14400,7 +14406,7 @@ Equation top strike of function
 #### Parameters
 
 -   `args` **...any** 
--   `options` **[EQN_Strike][1282]** 
+-   `options` **[EQN_Strike][1283]** 
 
 ### bottomStrike
 
@@ -14412,7 +14418,7 @@ Equation bottom strike of function
 #### Parameters
 
 -   `args` **...any** 
--   `options` **[EQN_Strike][1282]** 
+-   `options` **[EQN_Strike][1283]** 
 
 ## EQN_Annotation
 
@@ -14672,11 +14678,11 @@ Multiple glyphs are ok, but only one per position.
 
 ### Properties
 
--   `encompass` **[EQN_EncompassGlyph][1283]?** 
--   `top` **[EQN_TopBottomGlyph][1284]?** 
--   `right` **[EQN_LeftRightGlyph][1285]?** 
--   `bottom` **[EQN_TopBottomGlyph][1284]?** 
--   `left` **[EQN_LeftRightGlyph][1285]?** 
+-   `encompass` **[EQN_EncompassGlyph][1284]?** 
+-   `top` **[EQN_TopBottomGlyph][1285]?** 
+-   `right` **[EQN_LeftRightGlyph][1286]?** 
+-   `bottom` **[EQN_TopBottomGlyph][1285]?** 
+-   `left` **[EQN_LeftRightGlyph][1286]?** 
 
 ## TypeEquationElements
 
@@ -14728,7 +14734,7 @@ Duration and translation options for form animation
 ### Properties
 
 -   `duration` **[number][1032]?** in seconds
--   `translation` **[Object][1199]&lt;[TypeFormTranslationProperties][1289]>?** 
+-   `translation` **[Object][1199]&lt;[TypeFormTranslationProperties][1290]>?** 
 
 ### Examples
 
@@ -14796,7 +14802,7 @@ complicating the overall equation navigation logic.
 
 See the examples below for how to define subForms.
 
-[Equation#addForms][1290].
+[Equation#addForms][1291].
 
 ### Properties
 
@@ -14815,11 +14821,11 @@ See the examples below for how to define subForms.
     properties if animating backward from the next form in a formSeries
 -   `duration` **[TypeFormAnimationProperties][1202]?** animation move duration
      (fromNext and fromPrev are prioritized over this)
--   `translation` **[TypeFormTranslationProperties][1289]?** animation move
+-   `translation` **[TypeFormTranslationProperties][1290]?** animation move
     style (fromNext and fromPrev are prioritized over this)
 -   `elementMods` **[object][1199]?** properties to set in the equation element
     (@DiagramElementPrimitive) when this form is shown
--   `animation` **{duration: [number][1032]??, translation: [TypeFormTranslationProperties][1289]?}?** 
+-   `animation` **{duration: [number][1032]??, translation: [TypeFormTranslationProperties][1290]?}?** 
 
 ### Examples
 
@@ -14957,7 +14963,7 @@ The default values in the pulse object are are:
 
 ## TypeEquationGoToFormOptions
 
-Options object for [Equation#goToForm][1293].
+Options object for [Equation#goToForm][1294].
 
 Often, `goToForm` is called to animate from a shown form to a desired form.
 Therefore there will be some equation elements that:
@@ -15041,7 +15047,7 @@ Line style definition object.
 
 -   `widthIs` **(`"mid"` \| `"outside"` \| `"inside"` \| `"positive"` \| `"negative"`)?** defines how the width is grown from the polyline's points.
 -   `width` **[number][1032]?** line width
--   `dash` **[TypeDash][1294]?** select solid or dashed line
+-   `dash` **[TypeDash][1295]?** select solid or dashed line
 -   `color` **[TypeColor][1034]?** line color
 
 ## OBJ_AxisTicks
@@ -15056,7 +15062,7 @@ Line style definition object.
 
 Axis Ticks and Grid options object for [ADV_Axis][396].
 
-![][1295]
+![][1296]
 
 Ticks and grid locations can specified programatically with `start`,
 `stop` and `step`, or manually using a `values` array where each value
@@ -15089,7 +15095,7 @@ Type: any
 -   `offset` **[number][1032]?** offset of the ticks/grid (draw space) - use this
     to center ticks around the axis or not (`-length / 2`)
 -   `width` **[number][1032]?** width of ticks/grid (draw space)
--   `dash` **[TypeDash][1294]?** line style is solid or dashed (`[]`)
+-   `dash` **[TypeDash][1295]?** line style is solid or dashed (`[]`)
 
 ### Examples
 
@@ -15164,12 +15170,10 @@ diagram.addElement({
 -   **See: To test examples below, append them to the
     <a href="#drawing-boilerplate">boilerplate</a>.
 
-    For more examples see [OBJ_Axis][1296].
+    For more examples see [OBJ_Axis][1297].
     **
 
 Axis label options object for the [ADV_Axis][396].
-
-![][1297]
 
 ![][1298]
 
@@ -15180,6 +15184,8 @@ Axis label options object for the [ADV_Axis][396].
 ![][1301]
 
 ![][1302]
+
+![][1303]
 
 By default, labels are positioned with the first `ticks` defined in the
 axis. Labels can also be positioned at custom values with `values`.
@@ -15331,19 +15337,19 @@ Axis title
 
 [DiagramElementCollection][73] representing a trace.
 
-![][1303]
 ![][1304]
-
 ![][1305]
-![][1306]
 
+![][1306]
 ![][1307]
+
 ![][1308]
+![][1309]
 
 This object defines a trace in an [AdvancedPlot][398].
 
 The trace includes all the points of the trace, and the axes that it
-should be drawn against and is defined using the [ADV_PlotTrace][1309]
+should be drawn against and is defined using the [ADV_PlotTrace][1310]
 options object.
 
 To test examples below, append them to the
@@ -15505,7 +15511,7 @@ or the name of the trace. See examples in [AdvancedPlotLegend][862] for use.
 
 ### Properties
 
--   `_arrayIndexOrName` **[OBJ_PlotLegendCustomTrace][1310]?** 
+-   `_arrayIndexOrName` **[OBJ_PlotLegendCustomTrace][1311]?** 
 
 ## OBJ_SurroundAnimationStep
 
@@ -18049,114 +18055,116 @@ channel defines the transparency or opacity of the color where
 
 [1254]: #typewhen
 
-[1255]: ./assets1/advlegend_ex1.png
+[1255]: ./assets1/polylinecustomization_ex1.png
 
-[1256]: ./assets1/advlegend_ex2.png
+[1256]: ./assets1/advlegend_ex1.png
 
-[1257]: ./assets1/advlegend_ex3.png
+[1257]: ./assets1/advlegend_ex2.png
 
-[1258]: ./assets1/advlegend_ex4.png
+[1258]: ./assets1/advlegend_ex3.png
 
-[1259]: ./assets1/advlegend_ex5.png
+[1259]: ./assets1/advlegend_ex4.png
 
-[1260]: #obj_plotlegendcustom
+[1260]: ./assets1/advlegend_ex5.png
 
-[1261]: #animationstarttime
+[1261]: #obj_plotlegendcustom
 
-[1262]: #animationprogression
+[1262]: #animationstarttime
 
-[1263]: #obj_scenariovelocity
+[1263]: #animationprogression
 
-[1264]: TriggernAnimationStep
+[1264]: #obj_scenariovelocity
 
-[1265]: FunctionMap
+[1265]: TriggernAnimationStep
 
-[1266]: ./assets1/pulse.gif
+[1266]: FunctionMap
 
-[1267]: #eqn_container
+[1267]: ./assets1/pulse.gif
 
-[1268]: #eqn_bar
+[1268]: #eqn_container
 
-[1269]: #eqn_annotate
+[1269]: #eqn_bar
 
-[1270]: #eqn_scale
+[1270]: #eqn_annotate
 
-[1271]: #eqn_fraction
+[1271]: #eqn_scale
 
-[1272]: #eqn_superscriptsubscript
+[1272]: #eqn_fraction
 
-[1273]: #eqn_superscript
+[1273]: #eqn_superscriptsubscript
 
-[1274]: #eqn_subscript
+[1274]: #eqn_superscript
 
-[1275]: #eqn_box
+[1275]: #eqn_subscript
 
-[1276]: #eqn_pad
+[1276]: #eqn_box
 
-[1277]: #eqn_matrix
+[1277]: #eqn_pad
 
-[1278]: #eqn_integral
+[1278]: #eqn_matrix
 
-[1279]: #eqn_sumof
+[1279]: #eqn_integral
 
-[1280]: #eqn_prodof
+[1280]: #eqn_sumof
 
-[1281]: #eqn_comment
+[1281]: #eqn_prodof
 
-[1282]: #eqn_strike
+[1282]: #eqn_comment
 
-[1283]: #eqn_encompassglyph
+[1283]: #eqn_strike
 
-[1284]: #eqn_topbottomglyph
+[1284]: #eqn_encompassglyph
 
-[1285]: #eqn_leftrightglyph
+[1285]: #eqn_topbottomglyph
 
-[1286]: #eqn_root
+[1286]: #eqn_leftrightglyph
 
-[1287]: #eqn_strikecomment
+[1287]: #eqn_root
 
-[1288]: https://developer.mozilla.org/docs/Web/API/Element
+[1288]: #eqn_strikecomment
 
-[1289]: #typeformtranslationproperties
+[1289]: https://developer.mozilla.org/docs/Web/API/Element
 
-[1290]: #equationaddforms
+[1290]: #typeformtranslationproperties
 
-[1291]: #typeequationformobject
+[1291]: #equationaddforms
 
-[1292]: #typeequationform
+[1292]: #typeequationformobject
 
-[1293]: #equationgotoform
+[1293]: #typeequationform
 
-[1294]: #typedash
+[1294]: #equationgotoform
 
-[1295]: ./assets1/axisticks.png
+[1295]: #typedash
 
-[1296]: OBJ_Axis
+[1296]: ./assets1/axisticks.png
 
-[1297]: ./assets1/axislabels_ex1.png
+[1297]: OBJ_Axis
 
-[1298]: ./assets1/axislabels_ex2.png
+[1298]: ./assets1/axislabels_ex1.png
 
-[1299]: ./assets1/axislabels_ex3.png
+[1299]: ./assets1/axislabels_ex2.png
 
-[1300]: ./assets1/axislabels_ex4.png
+[1300]: ./assets1/axislabels_ex3.png
 
-[1301]: ./assets1/axislabels_ex5.png
+[1301]: ./assets1/axislabels_ex4.png
 
-[1302]: ./assets1/axislabels_ex6.png
+[1302]: ./assets1/axislabels_ex5.png
 
-[1303]: ./assets1/advtrace_ex1.png
+[1303]: ./assets1/axislabels_ex6.png
 
-[1304]: ./assets1/advtrace_ex2.png
+[1304]: ./assets1/advtrace_ex1.png
 
-[1305]: ./assets1/advtrace_ex3.png
+[1305]: ./assets1/advtrace_ex2.png
 
-[1306]: ./assets1/advtrace_ex4.png
+[1306]: ./assets1/advtrace_ex3.png
 
-[1307]: ./assets1/advtrace_ex5.png
+[1307]: ./assets1/advtrace_ex4.png
 
-[1308]: ./assets1/advtrace_ex6.png
+[1308]: ./assets1/advtrace_ex5.png
 
-[1309]: ADV_PlotTrace
+[1309]: ./assets1/advtrace_ex6.png
 
-[1310]: #obj_plotlegendcustomtrace
+[1310]: ADV_PlotTrace
+
+[1311]: #obj_plotlegendcustomtrace

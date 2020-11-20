@@ -9,7 +9,6 @@ import {
 } from '../tools/g2';
 import webgl from './WebGLInstanceMock';
 import DrawContext2D from './DrawContext2DMock';
-// import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
 import * as tools from '../tools/tools';
 import { round } from '../tools/math';
 
@@ -70,6 +69,7 @@ export default function makeDiagram(
       };
     },
   };
+  // console.log(canvasMock.top, canvasMock.left, inputCanvas)
   const htmlCanvasMock = {
     style: {
       fontsize: 1,

@@ -12,7 +12,6 @@ import {
 } from '../../tools/math';
 // import webgl from '../../__mocks__/WebGLInstanceMock';
 // import DrawContext2D from '../../__mocks__/DrawContext2DMock';
-// import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
 import * as tools from '../../tools/tools';
 import makeDiagram from '../../__mocks__/makeDiagram';
 

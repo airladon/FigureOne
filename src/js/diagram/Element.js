@@ -3376,7 +3376,7 @@ class DiagramElement {
     //   return false;
     // }
     const vertexLocation = glLocation.transformBy(this.spaceTransformMatrix('gl', 'draw'));
-    let borders = this.getBorder('draw', 'touchBorder');
+    const borders = this.getBorder('draw', 'touchBorder');
     // if (this.touchInBoundingRect !== false) {
     //   let buffer = 0;
     //   if (typeof this.touchInBoundingRect === 'number') {
@@ -3393,6 +3393,9 @@ class DiagramElement {
     //     new Point(left, top),
     //   ]];
     // }
+    // console.log(this.name, this.parent)
+    // console.log(vertexLocation)
+    // console.log(borders)
     const holeBorders = this.getBorder('draw', 'holeBorder');
     for (let i = 0; i < borders.length; i += 1) {
       const border = borders[i];
@@ -4638,7 +4641,7 @@ class DiagramElementCollection extends DiagramElement {
         childrenBorder.push(...e.getBorder(matrix, b, null, shownOnly));
       });
       return childrenBorder;
-    }
+    };
     if (
       (border === 'border' && this.border === 'children')
       || (border === 'touchBorder' && this.touchBorder === 'children')

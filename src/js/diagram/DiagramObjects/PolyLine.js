@@ -50,6 +50,12 @@ export type OBJ_PolylinePadSingle = {
 export type OBJ_PolylinePad = {};
 
 /**
+ * Polyline side, angle and pad customization options object
+ *
+ * ![](./assets1/polylinecustomization_ex1.png)
+ *
+ * ![](./assets1/polylinecustomization_ex2.png)
+ *
  * Side annotations, angle annotations and movable pads in an
  * {@link AdvancedPolyline} are defined with the options objects {@link ADV_Line},
  * {@link ADV_Angle} and ({@link OBJ_Polygon} & {@link OBJ_PolylinePadSingle})
@@ -111,7 +117,7 @@ export type OBJ_PolylinePad = {};
  *   name: 'p',
  *   method: 'advanced.polyline',
  *   options: {
- *     points: [[0, 0], [2, 0], [2, 2], [0, 2]],
+ *     points: [[0, 0], [1, 0], [1, 1], [0, 1]],
  *     close: true,
  *     side: {
  *       showLine: false,
@@ -127,7 +133,7 @@ export type OBJ_PolylinePad = {};
  *         offset: 0.05,
  *       },
  *       curve: {
- *         radius: 0.4,
+ *         radius: 0.25,
  *       },
  *       direction: 'negative',
  *       show: [2],                   // Only show angle annotation for angle 2
@@ -261,8 +267,9 @@ function processArray(
       const o = toProcess[i % toProcess.length];
       if (o.label != null) {
         out.push(joinObjects({}, defaultOptions, { label: defaultLabelOptions }, o));
+      } else {
+        out.push(joinObjects({}, defaultOptions, o));
       }
-      out.push(joinObjects({}, defaultOptions, o));
     }
     return out;
   }
@@ -636,6 +643,7 @@ export default class AdvancedPolyline extends DiagramElementCollection {
             padShape.setMovable();
           };
           if (boundary != null) {
+            padShape.move.sizeInBounds = true;
             padShape.setMoveBounds(boundary);
           }
           const fnName = `_polyline_pad${i}`;

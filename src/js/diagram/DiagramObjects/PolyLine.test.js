@@ -13,7 +13,6 @@ import {
 import * as tools from '../../tools/tools';
 // import webgl from '../../__mocks__/WebGLInstanceMock';
 // import DrawContext2D from '../../__mocks__/DrawContext2DMock';
-// import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
 // tools.isTouchDevice = jest.fn();
@@ -139,29 +138,12 @@ describe('Diagram Objects PolyLine', () => {
         close: true,
         pad: {
           radius: 0.2,
-          boundary: [-3, -2, 3, 2],
+          boundary: {
+            translation: {
+              left: -3, bottom: -2, right: 3, top: 2,
+            },
+          },
           isMovable: true,
-        },
-      }),
-      PadBoundaryWithoutTouchRadius: () => diagram.advanced.polyline({
-        points,
-        close: true,
-        pad: {
-          radius: 0.2,
-          boundary: [-3, -2, 3, 2],
-          isMovable: true,
-          touchRadius: 0.4,
-        },
-      }),
-      PadBoundaryWithTouchRadius: () => diagram.advanced.polyline({
-        points,
-        close: true,
-        pad: {
-          radius: 0.2,
-          boundary: [-3, -2, 3, 2],
-          isMovable: true,
-          touchRadius: 0.4,
-          touchRadiusInBoundary: true,
         },
       }),
       Misc: () => diagram.advanced.polyline({
@@ -234,33 +216,11 @@ describe('Diagram Objects PolyLine', () => {
     test('Boundary', () => {
       const poly = ways.PadBoundary();
       expect(poly).toHaveProperty('_pad0');
-      const { boundary } = poly._pad0.move.bounds.getTranslation();
+      const { boundary } = poly._pad0.getMoveBounds().boundary[0];
       expect(round(boundary.left, 3)).toBe(-2.8);
       expect(round(boundary.right, 3)).toBe(2.8);
       expect(round(boundary.bottom, 3)).toBe(-1.8);
       expect(round(boundary.top, 3)).toBe(1.8);
-    });
-    test('Boundary not including touch radius', () => {
-      const poly = ways.PadBoundaryWithoutTouchRadius();
-      expect(poly).toHaveProperty('_pad0');
-      const { boundary } = poly._pad0.move.bounds.getTranslation();
-      expect(round(boundary.left, 3)).toBe(-2.8);
-      expect(round(boundary.right, 3)).toBe(2.8);
-      expect(round(boundary.bottom, 3)).toBe(-1.8);
-      expect(round(boundary.top, 3)).toBe(1.8);
-      // expect(poly._pad0.move.maxTransform.t().round()).toEqual(new Point(2.8, 1.8));
-      // expect(poly._pad0.move.minTransform.t().round()).toEqual(new Point(-2.8, -1.8));
-    });
-    test('Boundary including touch radius', () => {
-      const poly = ways.PadBoundaryWithTouchRadius();
-      expect(poly).toHaveProperty('_pad0');
-      const { boundary } = poly._pad0.move.bounds.getTranslation();
-      expect(round(boundary.left, 3)).toBe(-2.6);
-      expect(round(boundary.right, 3)).toBe(2.6);
-      expect(round(boundary.bottom, 3)).toBe(-1.6);
-      expect(round(boundary.top, 3)).toBe(1.6);
-      // expect(poly._pad0.move.maxTransform.t().round()).toEqual(new Point(2.6, 1.6));
-      // expect(poly._pad0.move.minTransform.t().round()).toEqual(new Point(-2.6, -1.6));
     });
   });
   describe('Side Labels', () => {
@@ -269,22 +229,23 @@ describe('Diagram Objects PolyLine', () => {
       expect(Object.keys(poly.elements)).toHaveLength(4);
       expect(Object.keys(poly.elements))
         .toEqual(['line', 'side01', 'side12', 'side20']);
-      expect(poly.elements.side01.p1).toEqual(points[0]);
-      expect(poly.elements.side01.p2).toEqual(points[1]);
-      expect(poly.elements.side12.p1).toEqual(points[1]);
-      expect(poly.elements.side12.p2).toEqual(points[2]);
-      expect(poly.elements.side20.p1).toEqual(points[2]);
-      expect(poly.elements.side20.p2.round()).toEqual(points[0]);
+      // console.log(poly.elements.side01.line.p1)
+      expect(poly.elements.side01.line.p1).toEqual(points[0]);
+      expect(poly.elements.side01.line.p2).toEqual(points[1]);
+      expect(poly.elements.side12.line.p1).toEqual(points[1]);
+      expect(poly.elements.side12.line.p2).toEqual(points[2]);
+      expect(poly.elements.side20.line.p1).toEqual(points[2]);
+      expect(poly.elements.side20.line.p2.round()).toEqual(points[0]);
     });
     test('Open', () => {
       const poly = ways.SideLabelsOpen();
       expect(Object.keys(poly.elements)).toHaveLength(3);
       expect(Object.keys(poly.elements))
         .toEqual(['line', 'side01', 'side12']);
-      expect(poly.elements.side01.p1).toEqual(points[0]);
-      expect(poly.elements.side01.p2).toEqual(points[1]);
-      expect(poly.elements.side12.p1).toEqual(points[1]);
-      expect(poly.elements.side12.p2).toEqual(points[2]);
+      expect(poly.elements.side01.line.p1).toEqual(points[0]);
+      expect(poly.elements.side01.line.p2).toEqual(points[1]);
+      expect(poly.elements.side12.line.p1).toEqual(points[1]);
+      expect(poly.elements.side12.line.p2).toEqual(points[2]);
     });
     test('Full Define', () => {
       const poly = ways.SideLabelsFullDefine();
@@ -351,7 +312,7 @@ describe('Diagram Objects PolyLine', () => {
       const poly = ways.AngleLabelsOpen();
       expect(Object.keys(poly.elements)).toHaveLength(2);
       expect(Object.keys(poly.elements))
-        .toEqual(['angle1', 'line']);
+        .toEqual(['angle0', 'line']);
       // expect(poly.elements.side01.p1).toEqual(points[0]);
       // expect(poly.elements.side01.p2).toEqual(points[1]);
       // expect(poly.elements.side12.p1).toEqual(points[1]);
@@ -370,14 +331,18 @@ describe('Diagram Objects PolyLine', () => {
   describe('Diagram Level', () => {
     test('Pad change shape', () => {
       diagram.addElement({
-        method: 'opolyline',
+        method: 'advanced.polyline',
         name: 'a',
         options: {
           points,
           close: true,
           pad: {
             radius: 0.2,
-            boundary: [-3, -2, 3, 2],
+            boundary: {
+              translation: {
+                left: -3, bottom: -2, right: 3, top: 2,
+              },
+            },
             isMovable: true,
           },
         },
@@ -406,7 +371,11 @@ describe('Diagram Objects PolyLine', () => {
           close: true,
           pad: {
             radius: 0.2,
-            boundary: [-3, -2, 3, 2],
+            boundary: {
+              translation: {
+                left: -3, bottom: -2, right: 3, top: 2,
+              },
+            },
             isMovable: true,
             // move: {
             //   bounds: {

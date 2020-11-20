@@ -1,8 +1,6 @@
 // @flow
 
-// import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
 import VertexText from '../DrawingObjects/VertexObject/VertexText';
-// import VertexPolygonLine from '../DrawingObjects/VertexObject/VertexPolygonLine';
 import { DiagramElementPrimitive } from '../Element';
 import {
   Point, Transform, Rect,

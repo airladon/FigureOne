@@ -1,13 +1,13 @@
 import {
-  DiagramElementPrimitive,
+  // DiagramElementPrimitive,
   DiagramElementCollection,
 } from '../Element';
 // import { AnimationPhase } from './AnimationPhase';
-import {
-  Point, Transform,
-} from '../../tools/g2';
-import webgl from '../../__mocks__/WebGLInstanceMock';
-import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
+// import {
+//   Point, Transform,
+// } from '../../tools/g2';
+// import webgl from '../../__mocks__/WebGLInstanceMock';
+// import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
 jest.mock('../Gesture');
@@ -23,13 +23,11 @@ jest.useFakeTimers();
 
 const mockDone = jest.fn(() => {});
 
+
+
 const makeSquare = () => {
-  const square = new VertexPolygon([webgl], 4, 1, 0.01, 0, Point.zero());
-  const element = new DiagramElementPrimitive(
-    square,
-    new Transform(),
-    [0, 0, 1, 1],
-  );
+  const diagram = makeDiagram();
+  const element = diagram.shapes.polygon({ sides: 4, radius: 1, color: [0, 0, 1, 1] });
   return element;
 };
 

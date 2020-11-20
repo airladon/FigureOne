@@ -1,22 +1,21 @@
 import {
-  DiagramElementPrimitive,
+  // DiagramElementPrimitive,
   DiagramElementCollection,
   // AnimationPhase,
 } from './Element';
 
 import * as tools from '../tools/tools';
-import Diagram from './Diagram';
+// import Diagram from './Diagram';
 import {
   Point, Transform, Rect,
 } from '../tools/g2';
-import webgl from '../__mocks__/WebGLInstanceMock';
-import DrawContext2D from '../__mocks__/DrawContext2DMock';
-import VertexPolygon from './DrawingObjects/VertexObject/VertexPolygon';
+// import webgl from '../__mocks__/WebGLInstanceMock';
+// import DrawContext2D from '../__mocks__/DrawContext2DMock';
+import makeDiagram from '../__mocks__/makeDiagram';
 
 jest.mock('./Gesture');
 jest.mock('./webgl/webgl');
 jest.mock('./DrawContext2D');
-jest.unmock('../tools/tools');
 tools.isTouchDevice = jest.fn();
 
 describe('Diagram', () => {
@@ -93,51 +92,11 @@ describe('Diagram', () => {
 
     Object.keys(diagramDefinitions).forEach((key) => {
       const definition = diagramDefinitions[key];
-      const canvasMock = {
-        width: definition.width,
-        height: definition.height,
-        // offsetLeft: 100,
-        left: 100,
-        // offsetTop: 200,
-        top: 200,
-        // width: definition.width,
-        // height: definition.height,
-        offsetWidth: definition.width,
-        offsetHeight: definition.height,
-        scrollLeft: 0,
-        scrollTop: 0,
-        // eslint-disable-next-line arrow-body-style
-        getBoundingClientRect: () => {
-          return {
-            left: 100,
-            top: 200,
-            width: definition.width,
-            height: definition.height,
-          };
-        },
-      };
-      const htmlCanvasMock = {
-        style: {
-          fontsize: 1,
-        },
-        offsetWidth: 100,
-      };
       const { limits } = definition;
-      const diagram = new Diagram({ htmlId: 'c', limits });
-      diagram.webglLow = webgl;
-      diagram.webglHigh = webgl;
-      diagram.webgl = webgl;
-      diagram.shapesLow = diagram.getShapes(false);
-      diagram.shapesHigh = diagram.getShapes(true);
-      diagram.shapes = diagram.shapesLow;
-      diagram.canvasLow = canvasMock;
-      diagram.canvasHigh = canvasMock;
-      diagram.htmlCanvas = htmlCanvasMock;
-      diagram.isTouchDevice = false;
-      diagram.draw2DLow = new DrawContext2D(definition.width, definition.height);
-      diagram.draw2DHigh = new DrawContext2D(definition.width, definition.height);
-      diagram.setSpaceTransforms();
-      // create squares:
+      const diagram = makeDiagram(
+        new Rect(100, -(definition.height - 200), definition.width, definition.height),
+        limits,
+      );
       const squares = {};
       const collection = new DiagramElementCollection(
         new Transform().scale(1, 1).rotate(0).translate(0, 0),
@@ -146,50 +105,31 @@ describe('Diagram', () => {
       );
       Object.keys(squareDefinitions).forEach((sKey) => {
         const def = squareDefinitions[sKey];
-        const square = new VertexPolygon(
-          [diagram.webglLow],
-          4,
-          (def.sideLength / 2) * Math.sqrt(2), 0.05 * Math.sqrt(2),
-          def.rotation, def.center,
-        );
-        const squareElement = new DiagramElementPrimitive(
-          square, def.transform,
-          [0, 0, 1, 1], diagram.limits,
-        );
+        const squareElement = diagram.shapes.polygon({
+          sides: 4,
+          radius: (def.sideLength / 2) * Math.sqrt(2),
+          // line: { width: 0.05 * Math.sqrt(2) },
+          rotation: def.rotation,
+          offset: def.center,
+          transform: def.transform,
+          color: [0, 0, 1, 1],
+        });
         squareElement.isMovable = true;
         squareElement.isTouchable = true;
         squareElement.move.bounds = 'diagram';
         squares[sKey] = squareElement;
         collection.add(sKey, squareElement);
-        collection.isTouchable = true;
-        // const squareElement = diagram.shapes.polygon({
-        //   offset: def.center,
-        //   rotation: def.rotation,
-        //   radius: (def.sideLength / 2) * Math.sqrt(2),
-        //   line: { width: 0.05 * Math.sqrt(2) },
-        //   transform: def.transform,
-        // });
-        // collection.add(sKey, squareElement);
-        // collection.isTouchable = true;
-        // squareElement.isMovable = true;
-        // squareElement.isTouchable = true;
-        // squareElement.move.bounds = 'diagram';
-        // squares[sKey] = squareElement;
-        // collection.isTouchable = true;
+        collection.hasTouchableElements = true;
       });
       diagram.moveTopElementOnly = false;
       diagram.elements = collection;
       diagram.dToGL = (x, y) => new Point(x, y)
         .transformBy(diagram.spaceTransforms.diagramToGL.matrix());
-      // diagram.dToP = (x, y) => new Point(x, y)
-      //   .transformBy(diagram.diagramToPixelSpaceTransform.matrix());
       diagram.dToP = (p) => {
         const pixel = p
           .transformBy(diagram.spaceTransforms.diagramToPixel.matrix());
         return pixel.add(new Point(diagram.canvasLow.left, diagram.canvasLow.top));
       };
-      diagram.initialize();
-      // diagram.setFirstTransform();
       diagrams[key] = diagram;
     });
   });
@@ -199,18 +139,15 @@ describe('Diagram', () => {
     expect(d.limits).toEqual(new Rect(-1, -1, 2, 2));
   });
   test('Diagram API', () => {
-    const d = new Diagram({ htmlId: 'c', limits: new Rect(0, 0, 4, 4) });
-    d.webglLow = webgl;      // needed for mocking only
-    const squareVertices = new VertexPolygon(
-      [d.webglLow],            // gl instance
-      4,                  // number of sides in polygon
-      1,                  // radius to center of corner
-      0.05,               // thickness of polygon border
-      Math.PI / 4,        // rotation
-      new Point(0, 0),    // offset
-      4,                  // number of sides to draw
-    );
-    const square = new DiagramElementPrimitive(squareVertices);
+    const d = makeDiagram();
+    // d.webglLow = webgl;      // needed for mocking only
+    const square = d.shapes.polygon({
+      sides: 4,
+      radius: Math.sqrt(2),
+      // line: { width: 0.05 },
+      rotation: Math.PI / 4,
+      offset: [0, 0],
+    });
     d.add('square', square);
     expect(d.elements.drawOrder).toHaveLength(1);
   });
@@ -240,12 +177,13 @@ describe('Diagram', () => {
     test('A Landscape Origin', () => {
       // canvasW=1000, canvasH=500, clipL=-1, clipW=2, clipT=1, clipH=2
       const d = diagrams.landscapeCenter;
-      d.draw(0);
+      // d.draw(0);
       const a = d.elements._a;
       expect(a.isBeingTouched(d.dToGL(-0.249, -0.249))).toBe(true);
       expect(a.isBeingTouched(d.dToGL(0.249, 0.249))).toBe(true);
       expect(a.isBeingTouched(d.dToGL(-0.251, -0.251))).toBe(false);
       expect(a.isBeingTouched(d.dToGL(0.251, 0.251))).toBe(false);
+      // expect(a.isBei)
     });
     test('B Landscape Origin', () => {
       // canvasW=1000, canvasH=500, clipL=-1, clipW=2, clipT=1, clipH=2
@@ -333,7 +271,9 @@ describe('Diagram', () => {
       const d = diagrams.landscapeCenter;
       d.draw(0);
       expect(d.beingMovedElements).toHaveLength(0);
+      // d.touchDownHandler(new Point(600, 450));          // Touch -0.01, -0.01
       d.touchDownHandler(new Point(599, 451));          // Touch -0.01, -0.01
+      // d.mock.touchDown()
       expect(d.beingMovedElements).toHaveLength(1);
       expect(d.beingMovedElements[0]).toBe(d.elements._a);
     });
