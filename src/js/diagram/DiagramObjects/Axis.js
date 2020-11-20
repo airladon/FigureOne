@@ -340,7 +340,7 @@ export type TypeAxisTitle = OBJ_TextLines & {
  * options. Use an array for multiple sets of grids, and use a boolean to
  * turn grids on and off (`false`)
  * @property {TypeAxisTitle | boolean} [title] axis title (`false`)
- * @property {Array<number>} [color] default color of axis
+ * @property {TypeColor} [color] default color of axis
  * @property {OBJ_Font} [font] default font of axis (used by title and labels)
  * @property {boolean} [show] `false` hides the axis. Two axes are needed
  * to plot an {@link AdvancedTrace} on a {@link AdvancedPlot}, but if either or
@@ -362,7 +362,7 @@ export type ADV_Axis = {
   labels?: AxisLabels | Array<AxisLabels> | boolean,
   grid?: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean,
   title?: TypeAxisTitle,
-  color?: Array<number>,
+  color?: TypeColor,
   font?: OBJ_Font,              // Default font
   show?: boolean,
   auto?: [number, number],
@@ -504,7 +504,7 @@ export type ADV_Axis = {
  *       font: { color: [0.4, 0.4, 0.4, 1] },
  *       text: [
  *         'Total Time',
- *         { 
+ *         {
  *           text: 'in seconds',
  *           font: { size: 0.1 },
  *           lineSpace: 0.12,

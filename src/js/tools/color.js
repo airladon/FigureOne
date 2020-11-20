@@ -75,7 +75,7 @@ function cssColorToArray(cssColorString: string): Array<number> | null {
   return null;
 }
 
-function colorArrayToRGBA(color: Array<number>) {
+function colorArrayToRGBA(color: TypeColor) {
   return `rgba(${
     Math.floor(color[0] * 255)},${
     Math.floor(color[1] * 255)},${
@@ -83,7 +83,7 @@ function colorArrayToRGBA(color: Array<number>) {
     color[3]})`;
 }
 
-function colorArrayToRGB(color: Array<number>) {
+function colorArrayToRGB(color: TypeColor) {
   return `rgb(${
     Math.floor(color[0] * 255)},${
     Math.floor(color[1] * 255)},${

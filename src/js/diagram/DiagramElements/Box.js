@@ -13,7 +13,7 @@ export default function Box(
   height: number,
   lineWidth: number,
   fill: boolean,
-  color: Array<number>,
+  color: TypeColor,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
 ) {

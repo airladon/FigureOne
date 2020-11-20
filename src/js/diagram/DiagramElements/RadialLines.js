@@ -14,7 +14,7 @@ function RadialLines(
   width: number = 0.05,
   dAngle: number = Math.PI / 4,
   maxAngle: number = Math.PI * 2,
-  color: Array<number>,
+  color: TypeColor,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
 ) {

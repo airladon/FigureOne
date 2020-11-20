@@ -47,7 +47,7 @@ export type OBJ_Font = {
   style?: 'normal' | 'italic',
   size?: number,
   weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
-  color?: Array<number> | null,
+  color?: TypeColor | null,
   opacity?: number,
 };
 /* eslint-enable max-len */
@@ -58,7 +58,7 @@ class DiagramFont {
   weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
   style: 'normal' | 'italic';
   family: string;
-  color: Array<number> | null;
+  color: TypeColor | null;
   opacity: number;
 
   constructor(optionsIn: OBJ_Font | DiagramFont = {}) {
@@ -88,7 +88,7 @@ class DiagramFont {
     this.setColor(options.color);
   }
 
-  setColor(color: Array<number> | null = null) {
+  setColor(color: TypeColor | null = null) {
     if (color == null) {
       this.color = color;
     } else {
@@ -118,7 +118,7 @@ class DiagramFont {
     ctx.font = `${this.style} ${this.weight} ${this.size * scalingFactor}px ${this.family}`;
   }
 
-  setColorInContext(ctx: CanvasRenderingContext2D, color: Array<number> | null) {
+  setColorInContext(ctx: CanvasRenderingContext2D, color: TypeColor | null) {
     const thisColor = this.color;
     let { opacity } = this;
     if (color != null) {
@@ -592,7 +592,7 @@ class TextObjectBase extends DrawingObject {
     }
   }
 
-  setColor(color: Array<number>, index: null | number = null) {
+  setColor(color: TypeColor, index: null | number = null) {
     if (index === null) {
       for (let i = 0; i < this.text.length; i += 1) {
         this.text[i].setFont({ color });
@@ -710,7 +710,7 @@ class TextObjectBase extends DrawingObject {
   //
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
-    color: Array<number> = [1, 1, 1, 1],
+    color: TypeColor = [1, 1, 1, 1],
     contextIndex: number = 0,
   ) {
     const drawContext2D = this.drawContext2D[contextIndex];
@@ -879,7 +879,7 @@ class TextObject extends TextObjectBase {
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
       border?: 'text' | 'rect' | Array<Point>,
       touchBorder?: 'text' | 'rect' | number | 'border' | Array<Point>,
-      color: Array<number>
+      color: TypeColor
     },
   ) {
     let textArray = options.text;
@@ -1027,7 +1027,7 @@ class TextLineObject extends TextObjectBase {
       font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-      color: Array<number>,
+      color: TypeColor,
       border?: 'rect' | Array<Point>,
       touchBorder?: 'rect' | number | 'border' | Array<Point>,
       onClick?: string | () => void,
@@ -1159,7 +1159,7 @@ class TextLinesObject extends TextObjectBase {
     lineSpace: number,
     xAlign: 'left' | 'right' | 'center',
     yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-    color: Array<number>
+    color: TypeColor
   },
   ) {
     // console.log('asdfasdf')

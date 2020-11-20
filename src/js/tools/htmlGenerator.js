@@ -62,7 +62,7 @@ function style(
     right?: number,
     size?: number,
     className?: string,
-    color?: Array<number>,
+    color?: TypeColor,
     centerV?: boolean,
     centerH?: boolean,
     list?: ?'ordered' | 'unordered',
@@ -173,7 +173,7 @@ function toHTML(
   text: string = '',
   id: string = '',
   classes: string = '',
-  color: Array<number> | null = null,
+  color: TypeColor | null = null,
 ) {
   let idStr = '';
   if (id) {
@@ -336,7 +336,7 @@ function clickW(
   textToUse: string,
   actionMethod: Function,
   bind: Array<mixed>,
-  color: Array<number> | null = null,
+  color: TypeColor | null = null,
 ) {
   return click(actionMethod, bind, {
     color,

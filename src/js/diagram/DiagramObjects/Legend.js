@@ -221,7 +221,7 @@ export type ADV_PlotLegend = {
  *           text: {
  *             text: [
  *               'Power 2.5',
- *               { 
+ *               {
  *                 text: 'Reference Trace',
  *                 font: { size: 0.06 },
  *                 lineSpace: 0.06,

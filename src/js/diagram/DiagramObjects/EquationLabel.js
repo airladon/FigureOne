@@ -16,7 +16,7 @@ const DEBUG = false;
 
 export type TypeLabelOptions = {
   label?: string | Equation | Array<string> | EQN_Equation,
-  color?: Array<number>,
+  color?: TypeColor,
   scale?: number,
   position?: Point,
   form?: string,

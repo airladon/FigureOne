@@ -64,24 +64,7 @@ import type {
 } from './DiagramPrimitiveTypes';
 import { copyPoints } from '../DrawingObjects/Geometries/copy/copy';
 import type { CPY_Step } from '../DrawingObjects/Geometries/copy/copy';
-
-
-/**
- * Defines whether a line is solid or dashed.
- *
- * `Array<number>`
- *
- * Leave empty for solid line.
- *
- * Use array of numbers for a dashed line where indexes 0, 2, 4... are line
- * lengths and indexes 1, 3, 5... are gap lengths. If line is longer than
- * cumulative length of line and gap lengths, then pattern will repeat.
- *
- * For example [0.1, 0.01, 0.02, 0.01] produces 0.1 length dash, then a 0.01
- * length gap, then a 0.02 length dash, then a 0.01 length gap. This pattern
- * will repeat for the length of the line.
- */
-export type TypeDash = Array<number>
+import type { TypeColor, TypeDash, OBJ_CurvedCorner } from '../../tools/types';
 
 /**
  * Texture definition object
@@ -203,7 +186,7 @@ export type OBJ_PulseScale = {
  * (`'triangles'`)
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] use `drawType` as
  * `'triangles'` when using copy (`[]`)
- * @property {Array<number>} [color] (`[1, 0, 0, 1])
+ * @property {TypeColor} [color] (`[1, 0, 0, 1])
  * @property {OBJ_Texture} [texture] override `color` with a texture if defined
  * @property {Array<Array<TypeParsablePoint>> | null} [border] border used for
  * keeping shape within limits
@@ -277,7 +260,7 @@ export type OBJ_Generic = {
   points?: Array<TypeParsablePoint> | Array<Point>,
   drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
   copy?: Array<CPY_Step | string> | CPY_Step,
-  color?: Array<number>,
+  color?: TypeColor,
   texture?: OBJ_Texture,
   border?: 'points' | Array<Array<TypeParsablePoint>> | 'rect',
   touchBorder?: Array<Array<TypeParsablePoint>> | 'rect' | 'border' | 'none',
@@ -286,15 +269,6 @@ export type OBJ_Generic = {
   transform?: Transform,
   pulse?: number,
 }
-
-/**
-  Curved Corner Definition
- */
-export type OBJ_CurvedCorner = {
-  radius?: number,
-  sides?: number,
-};
-
 
 // generic
 // polyline
@@ -384,7 +358,7 @@ export type OBJ_CurvedCorner = {
  * `linePrimitivs`: `true` (`2`)
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the polyline
- * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {number} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
@@ -486,7 +460,7 @@ export type OBJ_Polyline = {
   minAutoCornerAngle?: number,
   dash?: Array<number>,
   arrow?: OBJ_LineArrows | ArrowHead,
-  color?: Array<number>,
+  color?: TypeColor,
   texture?: OBJ_Texture,
   pulse?: number,
   position?: ?Point,
@@ -563,10 +537,10 @@ export type OBJ_LineStyle = {
  * counter clockwise and -1 is clockwise (`1`)
  * center. This is different to position or transform as these translate the
  * vertices on each draw. (`[0, 0]`)
- * @property {OBJ_LineStyle} [line] line style options
+ * @property {OBJ_LineStyleSimple} [line] line style options
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the polygon if defined. If using fill and copying, use `fill`: `'tris'`
- * @property {Array<number>} [color] (`[1, 0, 0, 1`])
+ * @property {TypeColor} [color] (`[1, 0, 0, 1`])
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polygon').standard()`)
@@ -635,9 +609,9 @@ export type OBJ_Polygon = {
   sidesToDraw?: number,
   angleToDraw?: number,
   direction?: -1 | 1,
-  line?: OBJ_LineStyle,
+  line?: OBJ_LineStyleSimple,
   copy?: Array<CPY_Step | string> | CPY_Step,
-  color?: Array<number>,
+  color?: TypeColor,
   texture?: OBJ_Texture,
   position?: TypeParsablePoint,
   transform?: Transform,
@@ -663,7 +637,7 @@ export type OBJ_Polygon = {
  * @property {OBJ_LineStyle} [line] line style options
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the polygon if defined. If using fill and copying, use `fill`: `'tris'`
- * @property {Array<number>} [color] (`[1, 0, 0, 1`])
+ * @property {TypeColor} [color] (`[1, 0, 0, 1`])
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('polygon').standard()`)
@@ -749,7 +723,7 @@ export type OBJ_Star = {
   offset?: TypeParsablePoint,
   line?: OBJ_LineStyle,
   copy?: Array<CPY_Step | string> | CPY_Step,
-  color?: Array<number>,
+  color?: TypeColor,
   texture?: OBJ_Texture,
   position?: TypeParsablePoint,
   transform?: Transform,
@@ -758,6 +732,21 @@ export type OBJ_Star = {
   touchBorder?: number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>,
   holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
 };
+
+/**
+ * Line style definition object.
+ * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative'} [widthIs]
+ * defines how the width is grown from the polyline's points.
+ * @property {number} [width] line width
+ * @property {TypeDash} [dash] select solid or dashed line
+ * @property {TypeColor} [color] line color
+ */
+export type OBJ_LineStyleSimple = {
+  widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
+  width?: number,
+  dash?: TypeDash,
+  color?: TypeColor,
+}
 
 /**
  * Rectangle shape options object
@@ -769,11 +758,10 @@ export type OBJ_Star = {
  * @property {'bottom' | 'middle' | 'top' | number} [yAlign] (`'middle'`)
  * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
  * @property {OBJ_CurvedCorner} [corner] define for rounded corners
- * @property {OBJ_LineStyle} [line] line style options - do not use any corner
- * options
+ * @property {OBJ_LineStyleSimple} [line] line style options
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the rectangle
- * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
@@ -849,12 +837,9 @@ export type OBJ_Rectangle = {
   height?: number,
   xAlign?: 'left' | 'center' | 'right' | number,
   yAlign?: 'bottom' | 'middle' | 'top' | number,
-  corner?: {
-    radius: 0,
-    sides: 1,
-  },
-  line?: OBJ_LineStyle,
-  color?: Array<number>,
+  corner?: OBJ_CurvedCorner,
+  line?: OBJ_LineStyleSimple,
+  color?: TypeColor,
   transform?: Transform,
   position?: TypeParsablePoint,
   texture?: OBJ_Texture,
@@ -880,7 +865,7 @@ export type OBJ_Rectangle = {
  * options
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the rectangle
- * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
@@ -954,7 +939,7 @@ export type OBJ_Ellipse = {
   fill?: boolean,
   line?: OBJ_LineStyle,
   copy?: Array<CPY_Step | string> | CPY_Step,
-  color?: Array<number>,
+  color?: TypeColor,
   texture?: OBJ_Texture,
   pulse?: number | OBJ_PulseScale,
   position?: TypeParsablePoint,
@@ -1050,7 +1035,7 @@ export type OBJ_Ellipse = {
  * options
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the rectangle
- * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('rectangle').standard()`)
@@ -1116,7 +1101,7 @@ export type OBJ_Triangle = {
   yAlign: 'bottom' | 'middle' | 'top' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
   line?: OBJ_LineStyle,
   copy?: Array<CPY_Step | string> | CPY_Step,
-  color?: Array<number>,
+  color?: TypeColor,
   texture?: OBJ_Texture,
   position?: TypeParsablePoint,
   transform?: Transform,
@@ -1169,7 +1154,7 @@ export type OBJ_Triangle = {
  * `linePrimitivs`: `true` (`2`)
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the line
- * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {number} [pulse] set the default pulse scale
  * @property {Point} [position] convenience to override Transform translation
@@ -1244,7 +1229,7 @@ export type OBJ_Line = {
   dash?: Array<number>,
   arrow?: OBJ_LineArrows | ArrowHead,
   copy?: OBJ_Copy | Array<OBJ_Copy>,
-  color?: Array<number>,
+  color?: TypeColor,
   texture?: OBJ_Texture,
   position?: TypeParsablePoint,
   transform?: Transform,
@@ -1284,7 +1269,7 @@ export type OBJ_Line = {
  * options
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the rectangle
- * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('rectangle').standard()`)
@@ -1348,7 +1333,7 @@ export type OBJ_Grid = {
   yNum?: number,
   line?: OBJ_LineStyle,
   copy?: OBJ_Copy | Array<OBJ_Copy>,
-  color?: Array<number>,
+  color?: TypeColor,
   texture?: OBJ_Texture,
   position?: TypeParsablePoint,
   transform?: Transform,
@@ -1415,7 +1400,7 @@ export type OBJ_Grid = {
  * @property {number} [angle] angle the arrow is drawn at (`0`)
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the arrow
- * @property {Array<number>} [color] (`[1, 0, 0, 1]`)
+ * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
  * @property {OBJ_Texture} [texture] Override color with a texture
  * @property {Point} [position] convenience to override Transform translation
  * @property {Transform} [transform] (`Transform('arrow').standard()`)
@@ -1489,7 +1474,7 @@ export type OBJ_Arrow = {
   angle?: number,
   // position: TypeParsablePoint,
   copy?: OBJ_Copy | Array<OBJ_Copy>,
-  color?: Array<number>,
+  color?: TypeColor,
   texture?: OBJ_Texture,
   position?: TypeParsablePoint,
   transform?: Transform,
@@ -1564,7 +1549,7 @@ export type OBJ_TextDefinition = {
  * alignment for `text` relative to `location` (default: `"left"`)
  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] default
  * vertical text alignment for `text` relative to `location` (default: `"baseline"`)
- * @property {Array<number>} [color] (default: `[1, 0, 0, 1`])
+ * @property {TypeColor} [color] (default: `[1, 0, 0, 1`])
  * @property {TypeParsablePoint} [position] if defined, overrides translation
  * in transform
  * @property {TypeParsableTransform} [transform]
@@ -1630,7 +1615,7 @@ export type OBJ_Text = {
   font?: OBJ_Font,                    // default font
   xAlign?: 'left' | 'right' | 'center',                // default xAlign
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-  color?: Array<number>,
+  color?: TypeColor,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
   border?: 'text' | 'rect' | Array<Array<TypeParsablePoint>>,
@@ -1683,7 +1668,7 @@ export type OBJ_TextLineDefinition = {
  * @property {Array<string | OBJ_TextLineDefinition>} [line] array of strings,
  * to layout into a line
  * @property {OBJ_Font} [font] Default font for strings in line
- * @property {Array<number>} [color] Default color for strings in line
+ * @property {TypeColor} [color] Default color for strings in line
  * (`[1, 0, 0, 1`])
  * @property {'left' | 'right' | 'center} [xAlign] horizontal alignment of
  * line with `position` (`left`)
@@ -1744,7 +1729,7 @@ export type OBJ_TextLineDefinition = {
 export type OBJ_TextLine = {
   line: Array<string | OBJ_TextLineDefinition>;
   font: OBJ_Font,
-  color: Array<number>,
+  color: TypeColor,
   xAlign: 'left' | 'right' | 'center',
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
   position: TypeParsablePoint,
@@ -1845,7 +1830,7 @@ export type OBJ_TextModifiersDefinition = {
  * strings
  * @property {OBJ_TextModifiersDefinition} [modifiers] modifier definitions
  * @property {OBJ_Font} [font] Default font to use in lines
- * @property {Array<number>} [color] Default color to use in lines
+ * @property {TypeColor} [color] Default color to use in lines
  * (`[1, 0, 0, 1`])
  * @property {'left' | 'right' | 'center} [justify] justification of lines
  * (`left`)
@@ -1951,7 +1936,7 @@ export type OBJ_TextLines = {
   transform: TypeParsableTransform,
   xAlign: 'left' | 'right' | 'center',
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
-  color: Array<number>,
+  color: TypeColor,
   border?: 'rect' | 'text' | Array<TypeParsablePoint>,
   touchBorder?: 'rect' | number | 'border' | 'text' | Array<TypeParsablePoint>,
 };
@@ -1961,7 +1946,7 @@ export type OBJ_TextLines = {
 //   xStep?: number,
 //   yStep?: number,
 //   numLinesThick?: number,
-//   color?: Array<number>,
+//   color?: TypeColor,
 //   position?: Point,
 //   transform?: Transform,
 //   pulse?: number,
@@ -2570,7 +2555,7 @@ export default class DiagramPrimitives {
         optionsToUse.line.widthIs = 'positive';
       }
     }
-    console.log(optionsToUse)
+
     const [points, border, touchBorder] = getRectangleBorder(optionsToUse);
 
     let element;
@@ -2988,7 +2973,7 @@ export default class DiagramPrimitives {
   //   width?: number,
   //   direction?: -1 | 1,
   //   fill?: boolean,
-  //   color?: Array<number>,
+  //   color?: TypeColor,
   //   texture?: OBJ_Texture,
   //   position?: TypeParsablePoint,
   //   transform?: Transform,
@@ -3030,7 +3015,7 @@ export default class DiagramPrimitives {
   // deprecated
   fan(...optionsIn: Array<{
     points?: Array<Point>,
-    color?: Array<number>,
+    color?: TypeColor,
     transform?: Transform,
     position?: Point,
     pulse?: number,
@@ -3211,7 +3196,7 @@ export default class DiagramPrimitives {
     legWidth?: number;
     height?: number;
     legHeight?: number;
-    color?: Array<number>;
+    color?: TypeColor;
     transform?: Transform;
     position?: Point;
     tip?: Point;
@@ -3299,7 +3284,7 @@ export default class DiagramPrimitives {
                                       | 'baseUpright';
       linePosition?: number,
       scale?: number,
-      color?: Array<number>,
+      color?: TypeColor,
       precision?: number,
     },
   }>) {
@@ -3311,7 +3296,7 @@ export default class DiagramPrimitives {
   //   legWidth: number = 0.5,
   //   height: number = 1,
   //   legHeight: number = 0.5,
-  //   color: Array<number>,
+  //   color: TypeColor,
   //   transform: Transform | Point = new Transform(),
   //   tip: Point = new Point(0, 0),
   //   rotation: number = 0,
@@ -3325,7 +3310,7 @@ export default class DiagramPrimitives {
   // textLegacy(
   //   textInput: string,
   //   location: Point,
-  //   color: Array<number>,
+  //   color: TypeColor,
   //   fontInput: DiagramFont | null = null,
   // ) {
   //   let font = new DiagramFont(
@@ -3466,7 +3451,7 @@ export default class DiagramPrimitives {
     yAlign?: 'top' | 'bottom' | 'middle',
     xAlign?: 'left' | 'right' | 'center',
     src?: string,
-    color?: Array<number>,
+    color?: TypeColor,
     pulse?: number,
   }>) {
     const defaultOptions = {
@@ -3507,7 +3492,7 @@ export default class DiagramPrimitives {
     yAlign?: 'top' | 'bottom' | 'middle',
     xAlign?: 'left' | 'right' | 'center',
     modifiers: Object;
-    color?: Array<number>,
+    color?: TypeColor,
     pulse?: number,
   }>) {
     const defaultOptions = {
@@ -3538,7 +3523,7 @@ export default class DiagramPrimitives {
   lines(
     linePairs: Array<Array<Point>>,
     numLinesThick: number = 1,
-    color: Array<number>,
+    color: TypeColor,
     transform: Transform | Point = new Transform(),
   ) {
     return Lines(this.webgl, linePairs, numLinesThick, color, transform, this.limits);
@@ -3588,7 +3573,7 @@ export default class DiagramPrimitives {
     length: number,
     width: number,
     rotation: number,
-    color: Array<number>,
+    color: TypeColor,
     transform: Transform | Point = new Transform(),
   ) {
     return HorizontalLine(
@@ -3603,7 +3588,7 @@ export default class DiagramPrimitives {
   //   width?: number,
   //   rotation?: number,
   //   dashStyle?: Array<number>,
-  //   color?: Array<number>,
+  //   color?: TypeColor,
   //   transform?: Transform,
   //   position?: Point,
   //   pulse?: number,
@@ -3636,7 +3621,7 @@ export default class DiagramPrimitives {
   //   width: number,
   //   rotation: number,
   //   dashStyle: Array<number>,
-  //   color: Array<number>,
+  //   color: TypeColor,
   //   transform: Transform | Point = new Transform(),
   // ) {
   //   return DashedLine(
@@ -3728,7 +3713,7 @@ export default class DiagramPrimitives {
     width?: number,
     dAngle?: number,
     angle?: number,
-    color?: Array<number>,
+    color?: TypeColor,
     transform?: Transform,
     position?: Point,
     pulse?: number,
@@ -3805,7 +3790,7 @@ export default class DiagramPrimitives {
 
   cursor(
     optionsIn: {
-      color: Array<number>,
+      color: TypeColor,
       width: number,
       radius: number,
     },
@@ -3837,7 +3822,7 @@ export default class DiagramPrimitives {
     transformOrPointOrOptions: Transform | Point | {
       transform?: Transform,
       position?: Point,
-      color?: Array<number>,
+      color?: TypeColor,
       pulse?: number,
       border: Array<Array<Point>> | 'children' | 'rect' | number;
       touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'children';
@@ -3846,7 +3831,7 @@ export default class DiagramPrimitives {
     ...moreOptions: Array<{
       transform?: Transform,
       position?: Point,
-      color?: Array<number>,
+      color?: TypeColor,
       pulse?: number,
       border: Array<Array<Point>> | 'children' | 'rect' | number;
       touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'children';
@@ -3980,7 +3965,7 @@ export default class DiagramPrimitives {
     stepY?: number,
     fontSize?: number,
     showGrid?: boolean,
-    color?: Array<number>,
+    color?: TypeColor,
     fontColor?: Array<number>,
     gridColor?: Array<number>,
     location?: Transform | Point,
@@ -4154,7 +4139,7 @@ export default class DiagramPrimitives {
     angle?: number,
     step?: number,
     rotation?: number,
-    color?: Array<number>,
+    color?: TypeColor,
     pulse?: number,
     transform?: Transform,
     position?: Point,
@@ -4220,7 +4205,7 @@ export default class DiagramPrimitives {
     angle?: number,
     step?: number,
     rotation?: number,
-    color?: Array<number>,
+    color?: TypeColor,
     pulse?: number,
     transform?: Transform,
     position?: Point,

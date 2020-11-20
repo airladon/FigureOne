@@ -55,7 +55,7 @@ import {
  * is not defined, but `markers` is, then only markers will be used to represent
  * the line
  * @property {OBJ_Polygon | OBJ_Star} [markers] marker style of the trace
- * @property {Array<number>} [color] color of the trace
+ * @property {TypeColor} [color] color of the trace
  * @property {string} [name] name of the trace used in plot legends
  * @property {number} [xSampleDistance] If x distance between points is less
  * than this value, then the later point will not be plotted. By default this is
@@ -79,7 +79,7 @@ export type ADV_Trace = {
   y?: Array<TypeParsablePoint>,
   line?: OBJ_Line,
   markers?: OBJ_Polygon | OBJ_Start,
-  color?: Array<number>,
+  color?: TypeColor,
   name?: string,
   xSampleDistance?: number,
   ySampleDistance?: number,

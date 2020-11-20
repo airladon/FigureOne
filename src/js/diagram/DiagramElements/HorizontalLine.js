@@ -13,7 +13,7 @@ function HorizontalLine(
   length: number,
   width: number,
   rotation: number,
-  color: Array<number>,
+  color: TypeColor,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
 ) {

@@ -201,7 +201,7 @@ class VertexPolygon extends VertexObject {
     rotate: number,
     scale: Object,
     drawAngle: number,
-    color: Array<number>,
+    color: TypeColor,
   ) {
     const dAngle = Math.PI * 2.0 / this.options.sides;
     let count = Math.floor(drawAngle / dAngle) * 2.0 + 2;

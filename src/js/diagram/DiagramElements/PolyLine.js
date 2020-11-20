@@ -16,7 +16,7 @@ function PolyLine(
   points: Array<Point>,
   close: boolean,
   lineWidth: number,
-  color: Array<number>,
+  color: TypeColor,
   borderToPoint: TypeVertexPolyLineBorderToPoint,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
@@ -37,7 +37,7 @@ function PolyLineCorners(
   close: boolean,
   cornerLength: number,
   lineWidth: number,
-  color: Array<number>,
+  color: TypeColor,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
 ) {

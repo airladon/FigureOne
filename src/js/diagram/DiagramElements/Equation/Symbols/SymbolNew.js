@@ -14,7 +14,7 @@ import Bounds from '../Elements/Bounds';
 export default class Symbol extends DiagramElementPrimitive {
   constructor(
     webgl: Array<WebGLInstance>,
-    color: Array<number>,
+    color: TypeColor,
     transformOrLocation: Transform | Point,
     diagramLimits: Rect,
     symbolOptions: Object,

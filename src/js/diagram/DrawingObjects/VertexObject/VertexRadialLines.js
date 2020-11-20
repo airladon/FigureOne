@@ -63,7 +63,7 @@ class VertexRadialLines extends VertexObject {
     rotate: number,
     scale: Point,
     drawAngle: number,
-    color: Array<number>,
+    color: TypeColor,
   ): void {
     let count = Math.floor(drawAngle / this.dAngle) * 6.0 + 6.0;
     if (drawAngle >= this.maxAngle) {

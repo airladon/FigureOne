@@ -15,7 +15,7 @@ export default function Arrow(
   legHeight: number = 0.5,
   tip: Point = new Point(0, 0),
   rotation: number = 0,
-  color: Array<number> = [1, 1, 1, 1],
+  color: TypeColor = [1, 1, 1, 1],
   transformOrLocation: Transform | Point = new Point(0, 0),
   diagramLimits: Rect = new Rect(-1, -1, 2, 2),
 ) {

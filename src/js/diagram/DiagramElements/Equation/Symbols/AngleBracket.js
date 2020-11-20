@@ -11,7 +11,7 @@ export type TypeEquationSymbolAngleBracket = {
   width?: number,
   draw?: 'static' | 'dynamic',
   staticHeight?: 'first' | number,
-  color?: Array<number>;
+  color?: TypeColor;
   mods?: {};
 };
 export default class Bar extends Bracket {

@@ -163,163 +163,93 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], l
 //   },
 // });
 
+// // Simple rectangle
 // diagram.addElement({
 //   name: 'rect',
 //   method: 'advanced.rectangle',
 //   options: {
 //     width: 2,
 //     height: 1,
-//     position: [-1, -1],
-//     fill: [1, 0, 0, 0.5],
-//     corner: {
-//       radius: 0.2,
-//       sides: 10,
-//     },
-//     line: { width: 0.02, color: [0, 0, 0, 1], widthIs: 'outside', dash: [0.05, 0.01] },
 //   },
-// })
+// });
 
-// // diagram.elements._rect.surround(diagram.elements._plot, 0.1)
-// diagram.elements._rect.animations.new()
-//   .surround({ target: diagram.elements._plot, duration: 4 })
+
+// // Round corner rectangle with fill and outside line
+// const rect = diagram.advanced.rectangle({
+//   width: 2,
+//   height: 1,
+//   line: {
+//     width: 0.02,
+//     widthIs: 'outside',
+//     dash: [0.1, 0.02],
+//   },
+//   corner: {
+//     radius: 0.2,
+//     sides: 10,
+//   },
+//   fill: [0.7, 0.7, 1, 1],
+// });
+// diagram.add('rect', rect);
+
+
+// // Rectangle surrounds elements of an equation
+// diagram.addElements([
+//   {
+//     name: 'rect',
+//     method: 'advanced.rectangle',
+//     options: {
+//       color: [0.3, 0.3, 1, 1],
+//       line: { width: 0.01 },
+//     },
+//   },
+//   {
+//     name: 'eqn',
+//     method: 'equation',
+//     options: {
+//       forms: { 0: [{ frac: ['a', 'vinculum', 'b'] }, ' ', 'c'] },
+//       position: [1, 0],
+//       scale: 1.5,
+//     },
+//   }
+// ]);
+
+// const rect = diagram.getElement('rect');
+// const eqn = diagram.getElement('eqn');
+
+// rect.surround(eqn._a, 0.03);
+// rect.animations.new()
+//   .pulse({ delay: 1, scale: 1.5 })
+//   .surround({ target: eqn._b, space: 0.03, duration: 1 })
+//   .pulse({ delay: 1, scale: 1.5 })
+//   .surround({ target: eqn._c, space: 0.03, duration: 1 })
+//   .pulse({ delay: 1, scale: 1.5 })
 //   .start();
 
 
-// const sin = (offset = 0, step = 0.01, start = -1, stop = 1) => {
-//   const xValues = Fig.tools.math.range(start, stop, step);
-//   return xValues.map(x => new Fig.Point(x, Math.sin(x * 2 * Math.PI + offset)))
-// }
-
-
-
-const pow = (pow = 2, stop = 10, step = 0.05) => {
-  const xValues = Fig.tools.math.range(0, stop, step);
-  return xValues.map(x => new Fig.Point(x, x ** pow));
-}
-
-// By default, the legend will appear in the top right corner
 diagram.addElement({
-  name: 'plot',
-  method: 'advanced.plot',
+  name: 'asdf',
+  method: 'advanced.angle',
   options: {
-    trace: [
-      { points: pow(2), name: 'Power 2' },
-      { points: pow(2.5), name: 'Power 2.5' },
-      {
-        points: pow(3, 10, 0.5),
-        name: 'Power 3',
-        markers: { radius: 0.03, sides: 10 },
-      },
-    ],
-    legend: true,
+    angle: 1,
+    curve: { line: { width: 0.01 }, radius: 0.5 },
+    sides: true,
   },
 });
 
-// Change the line length, position and use a frame on the legend
-diagram.addElement({
-  name: 'plot',
-  method: 'advanced.plot',
-  options: {
-    trace: [
-      { points: pow(2), name: 'Power 2' },
-      { points: pow(2.5), name: 'Power 2.5' },
-      {
-        points: pow(3, 10, 0.5),
-        name: 'Power 3',
-        markers: { radius: 0.03, sides: 10 },
-      },
-    ],
-    legend: {
-      length: 0.5,
-      frame: [0.95, 0.95, 0.95, 1],
-      position: [0.2, 1.8],
-    },
-  },
-});
+diagram.elements._asdf.animations.new()
+  .angle({ target: 2, duration: 1 })
+  .angle({ target: 0.5, duration: 1 })
+  .angle({ target: 3, duration: 1 })
+  .start();
 
-// Make a horizontal legend
-diagram.addElement({
-  name: 'plot',
-  method: 'advanced.plot',
-  options: {
-    trace: [
-      { points: pow(2), name: 'Power 2' },
-      { points: pow(2.5), name: 'Power 2.5' },
-      {
-        points: pow(3, 10, 0.5),
-        name: 'Power 3',
-        markers: { radius: 0.03, sides: 10 },
-      },
-    ],
-    legend: {
-      offset: [0.9, 0],
-      position: [-0.3, -0.5],
-      frame: {
-        line: { width: 0.005 },
-        corner: { radius: 0.05, sides: 10 },
-      },
-    },
-  },
-});
 
-// Customize legend trace text
-diagram.addElement({
-  name: 'plot',
-  method: 'advanced.plot',
-  options: {
-    trace: [
-      { points: pow(2), name: 'Power 2' },
-      { points: pow(2.5), name: 'Power 2.5' },
-      {
-        points: pow(3, 10, 0.5),
-        name: 'Power 3',
-        markers: { radius: 0.03, sides: 10 },
-      },
-    ],
-    legend: {
-      offset: [0, -0.2],
-      custom: {
-        1: {
-          font: { size: 0.1, style: 'italic', color: [1, 0, 0, 1] },
-          text: {
-            text: [
-              'Power 2.5',
-              { 
-                text: 'Reference Trace',
-                font: { size: 0.06 },
-                lineSpace: 0.06,
-              },
-            ],
-            justify: 'left',
-          },
-        },
-      },
-    },
-  },
-});
 
-// Customize legend
-diagram.addElement({
-  name: 'plot',
-  method: 'advanced.plot',
-  options: {
-    trace: [
-      { points: pow(2), name: 'Power 2' },
-      { points: pow(2.5), name: 'Power 2.5' },
-      {
-        points: pow(3, 10, 0.5),
-        name: 'Power 3',
-        markers: { radius: 0.03, sides: 10 },
-      },
-    ],
-    legend: {
-      fontColorIsLineColor: true,
-      length: 0,
-      custom: {
-        0: { position: [2, 0.2] },
-        1: { position: [2, 0.7] },
-        'Power 3': { position: [2, 2] },
-      }
-    },
-  },
-});
+
+
+// const gl = document.getElementById('figureOneContainer').getElementsByClassName('figureone__gl')[0]
+// console.log(gl)
+
+// const png = gl.toDataURL('image/png', 0.5);
+// // console.log(png)
+// var w=window.open('about:blank','image from canvas');
+// w.document.write("<img src='"+png+"' alt='from canvas'/>");

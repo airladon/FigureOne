@@ -120,7 +120,7 @@ class DrawingObject {
   /* eslint-disable class-methods-use-this, no-unused-vars */
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
-    color: Array<number>,
+    color: TypeColor,
     canvasIndex: number,
     numPoints: number,
   ) {

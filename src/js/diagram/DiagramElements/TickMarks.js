@@ -19,7 +19,7 @@ class TickMarks extends DiagramElementPrimitive {
     start: g2.Point = new g2.Point(0, 0),
     length: number = 0.5,
     width: number = 0.01,
-    color: Array<number> = [1, 0, 0, 1],
+    color: TypeColor = [1, 0, 0, 1],
     limits: g2.Rect = new g2.Rect(-1, -1, 2, 2),
     rotation: number = 0,
   ) {

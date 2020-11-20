@@ -32,7 +32,7 @@ import type { AnimationStartTime } from '../../AnimationManager';
  * @property {TypeParsablePoint | number} [scale]
  * @property {number} [rotation]
  * @property {TypeParsableTransform} [transform]
- * @property {Array<number>} [color]
+ * @property {TypeColor} [color]
  * @property {number} [opacity]
  */
 export type OBJ_ScenarioVelocity = {
@@ -221,8 +221,8 @@ export default class ScenarioAnimationStep extends ParallelAnimationStep {
   }
 
   getDuration(
-    start: { transform?: Transform, color?: Array<number>, isShown?: boolean, opacity?: number },
-    target: { transform?: Transform, color?: Array<number>, isShown?: boolean },
+    start: { transform?: Transform, color?: TypeColor, isShown?: boolean, opacity?: number },
+    target: { transform?: Transform, color?: TypeColor, isShown?: boolean },
   ) {
     const { element } = this;
     const { velocity } = this.scenario;

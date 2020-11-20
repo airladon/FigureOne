@@ -18,7 +18,7 @@ export default function RectangleFilled(
   height: number,
   cornerRadius: number,
   cornerSides: number,
-  color: Array<number>,
+  color: TypeColor,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
 ) {

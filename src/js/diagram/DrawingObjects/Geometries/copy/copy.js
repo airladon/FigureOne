@@ -217,7 +217,6 @@ function copyOffset(
   // initialPoints: Array<Point>,
   optionsIn: CPY_Step,
 ) {
-  const t = performance.now()
   const defaultOptions = {
     to: [],
   };

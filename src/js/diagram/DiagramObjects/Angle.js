@@ -121,7 +121,7 @@ export type OBJ_MovableAngle = {
  * @property {number} [autoHideMax] hide label if angle is greater than value (`null`)
  * @property {boolean} [update] (`false`)
  * @property {number} [scale] size of the label
- * @property {Array<number>} [color]
+ * @property {TypeColor} [color]
  */
 export type TypeAngleLabelOptions = {
   text: null | string | Array<string> | Equation | EQN_Equation,
@@ -137,7 +137,7 @@ export type TypeAngleLabelOptions = {
   autoHideMax?: ?number,          // Auto hide label if angle greater than this
   update?: boolean,
   scale?: number,                 // Text scale
-  color?: Array<number>,          // Text color can be different to curve
+  color?: TypeColor,          // Text color can be different to curve
 };
 
 /**
@@ -224,13 +224,13 @@ export type TypeAngleArrows = string | OBJ_LineArrows & OBJ_AngleArrows;
  * twice the length of the curve.
  * @property {number} [width] line width of the corner - by default it will be
  * the same as the curve
- * @property {Array<number>} [color]
+ * @property {TypeColor} [color]
  * @property {'fill' | 'auto' | 'none'} [style] style of the corner
  */
 export type OBJ_AngleCorner = {
   length?: number,
   width?: number,
-  color?: Array<number>,
+  color?: TypeColor,
   style?: 'fill' | 'auto' | 'none',
 };
 
@@ -340,7 +340,7 @@ export type OBJ_PulseAngle = {
  * @property {TypeAngleArrows} [arrow] options for arrow annotations
  * @property {OBJ_AngleCorner} [corner] options for drawing a corner
  * @property {TypeAngleLabelOptions} [label] options for label annotations
- * @property {Array<number>} [color] default color
+ * @property {TypeColor} [color] default color
  * @property {OBJ_PulseAngle} [pulseAngle] default pulseAngle options
  */
 export type ADV_Angle = {
@@ -358,7 +358,7 @@ export type ADV_Angle = {
   // Label
   label?: TypeAngleLabelOptions,
   corner?: OBJ_AngleCorner,
-  color?: Array<number>,    // Default color
+  color?: TypeColor,    // Default color
   pulseAngle?: OBJ_PulseAngle,
   //
   //
@@ -366,17 +366,17 @@ export type ADV_Angle = {
   // side1?: {                 // Define side line at start of angle
   //   length?: number,        // Side line length
   //   width?: number,         // Side line width
-  //   color?: Array<number>,  // Side line color
+  //   color?: TypeColor,  // Side line color
   // },
   // side2?: {                 // Define side line at end of angle
   //   length?: number,
   //   width?: number,
-  //   color?: Array<number>,
+  //   color?: TypeColor,
   // },
   // sides?: {                 // Define both side lines - overrides side 1 & 2
   //   length?: number,
   //   width?: number,
-  //   color?: Array<number>,
+  //   color?: TypeColor,
   // },
   // mods?: {};
 };
@@ -420,7 +420,7 @@ class AngleLabel extends EquationLabel {
   constructor(
     equation: Object,
     labelText: string | Equation | Array<string>,
-    color: Array<number>,
+    color: TypeColor,
     radius: number,
     curvePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
     offset: number = 0,
@@ -546,7 +546,6 @@ export type OBJ_PulseAngleAnimationStep = {
  *    <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
  *    allowing for more complex move options.
  *
- * @property {AdvancedAngleAnimationManager} animations element animation manager
  *
  * @see See {@link OBJ_AngleAnimationStep} for angle animation step options.
  *
@@ -723,7 +722,7 @@ class AdvancedAngle extends DiagramElementCollection {
   corner: ?{
     width: number,
     length: number,
-    color: Array<number>,
+    color: TypeColor,
     style: 'fill' | 'auto' | 'none',
   };
 
@@ -989,11 +988,27 @@ class AdvancedAngle extends DiagramElementCollection {
     this.animations.angle = (...opt) => {
       const o = joinObjects({}, {
         element: this,
-        start: this.angle,
-        target: this.angle,
+        // start: this.angle,
+        // target: this.angle,
       }, ...opt);
+      let target;
+      let start;
+      let toSetup = true;
       o.callback = (percentage) => {
-        const a = (o.target - o.start) * percentage + o.start;
+        if (toSetup) {
+          if (o.start == null) {
+            start = this.angle;
+          } else {
+            ({ start } = o);
+          }
+          if (o.target == null) {
+            target = this.angle;
+          } else {
+            ({ target } = o);
+          }
+          toSetup = false;
+        }
+        const a = (target - start) * percentage + start;
         this.setAngle({ angle: a });
       };
       return new animation.CustomAnimationStep(o);
@@ -1106,7 +1121,7 @@ class AdvancedAngle extends DiagramElementCollection {
   addCorner(options: {
     length: number,
     width: number,
-    color: Array<number>,
+    color: TypeColor,
     style: 'fill' | 'auto' | 'none',
   }) {
     const {
@@ -1128,7 +1143,7 @@ class AdvancedAngle extends DiagramElementCollection {
     index: 1 | 2,
     length: number | null = null,
     width: number | null = null,
-    color: Array<number> = this.color,
+    color: TypeColor = this.color,
   ) {
     const line = this.shapes.horizontalLine(
       new Point(0, 0),

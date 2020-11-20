@@ -84,7 +84,7 @@ export type OBJ_Scenario = {
   rotation?: number,
   scale?: TypeParsablePoint | number,
   transform?: TypeParsableTransform,
-  color?: Array<number>,
+  color?: TypeColor,
   isShown?: boolean,
 };
 
@@ -458,7 +458,7 @@ class DiagramElement {
   afterDrawCallback: string | (?(number) => void);
   // redrawElements: Array<DiagramElement>;
 
-  color: Array<number>;           // For the future when collections use color
+  color: TypeColor;           // For the future when collections use color
   defaultColor: Array<number>;
   dimColor: Array<number>;
   opacity: number;
@@ -1781,7 +1781,7 @@ class DiagramElement {
    @param {[number, number, number, number]} color RGBA color from 0 to 1
    @param {boolean} [setDefault] also set the default color to this color
    */
-  setColor(color: Array<number>, setDefault: boolean = true) {
+  setColor(color: TypeColor, setDefault: boolean = true) {
     this.color = color != null ? color.slice() : [0, 0, 0, 0];
     if (setDefault) {
       this.defaultColor = this.color.slice();
@@ -1799,7 +1799,7 @@ class DiagramElement {
   /**
    * Set `dimColor` property
    */
-  setDimColor(color: Array<number>) {
+  setDimColor(color: TypeColor) {
     this.dimColor = color != null ? color.slice() : [0, 0, 0, 0];
   }
 
@@ -1842,7 +1842,7 @@ class DiagramElement {
   // retrieve a scenario
   getScenarioTarget(
     scenarioIn: ?string | OBJ_Scenario,
-  ): { transform?: Transform, color?: Array<number>, isShown?: boolean } {
+  ): { transform?: Transform, color?: TypeColor, isShown?: boolean } {
     let transform;
     let color;
     let isShown;
@@ -3448,7 +3448,7 @@ class DiagramElement {
  */
 class DiagramElementPrimitive extends DiagramElement {
   drawingObject: DrawingObject;
-  // color: Array<number>;
+  // color: TypeColor;
   // opacity: number;
   pointsToDraw: number;
   angleToDraw: number;
@@ -3475,7 +3475,7 @@ class DiagramElementPrimitive extends DiagramElement {
   constructor(
     drawingObject: DrawingObject,
     transform: Transform = new Transform(),
-    color: Array<number> = [0.5, 0.5, 0.5, 1],
+    color: TypeColor = [0.5, 0.5, 0.5, 1],
     diagramLimits: Rect = new Rect(-1, -1, 2, 2),
     parent: DiagramElement | null = null,
   ) {
@@ -3599,7 +3599,7 @@ class DiagramElementPrimitive extends DiagramElement {
     }
   }
 
-  setColor(color: Array<number>, setDefault: boolean = true) {
+  setColor(color: TypeColor, setDefault: boolean = true) {
     this.color = color != null ? color.slice() : [0, 0, 0, 0];
     if (setDefault) {
       this.defaultColor = this.color.slice();
@@ -4838,7 +4838,7 @@ class DiagramElementCollection extends DiagramElement {
     }
   }
 
-  setColor(color: Array<number> = [0, 0, 0, 1], setDefault: boolean = true) {
+  setColor(color: TypeColor = [0, 0, 0, 1], setDefault: boolean = true) {
     const nonNullColor = color != null ? color : [0, 0, 0, 0];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
@@ -4851,7 +4851,7 @@ class DiagramElementCollection extends DiagramElement {
     // this.color = [color[0], color[1], color[2], color[3]];
   }
 
-  setDimColor(color: Array<number> = [0, 0, 0, 1]) {
+  setDimColor(color: TypeColor = [0, 0, 0, 1]) {
     const nonNullColor = color != null ? color : [0, 0, 0, 0];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];

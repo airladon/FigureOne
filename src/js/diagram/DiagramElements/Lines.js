@@ -11,7 +11,7 @@ function Lines(
   webgl: Array<WebGLInstance>,
   linePairs: Array<Array<Point>>,
   numLinesThick: number,
-  color: Array<number>,
+  color: TypeColor,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
 ) {

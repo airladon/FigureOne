@@ -15,7 +15,7 @@ export default function Generic(
   touchBorder: Array<Array<Point>> | 'rect' | 'border' | 'none',
   holeBorder: Array<Array<Point>> | 'none',
   drawType: 'triangles' | 'strip' | 'fan' | 'lines',
-  color: Array<number>,
+  color: TypeColor,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
   textureLocation: string = '',

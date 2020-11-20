@@ -169,7 +169,7 @@ class HTMLObject extends DrawingObject {
     }
   }
 
-  drawWithTransformMatrix(transformMatrix: Array<number>, color: Array<number>) {
+  drawWithTransformMatrix(transformMatrix: Array<number>, color: TypeColor) {
     let isDifferent = false;
     for (let i = 0; i < transformMatrix.length; i += 1) {
       if (round(transformMatrix[i], 8) !== this.lastMatrix[i]) {

@@ -120,7 +120,7 @@ export default class Radical extends Symbol {
   /* eslint-disable class-methods-use-this */
   getBounds(
     options: {
-      color?: Array<number>,
+      color?: TypeColor,
       lineWidth?: number,
       startHeight?: number,
       startWidth?: number,

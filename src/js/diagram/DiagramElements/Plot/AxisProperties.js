@@ -12,7 +12,7 @@ class GridProperties {
   offset: number;
 
   // General
-  color: Array<number>;
+  color: TypeColor;
   mode: 'on' | 'off' | 'auto';
 
   constructor() {
@@ -35,7 +35,7 @@ class TickProperties extends GridProperties {
   labelOffset: Point;
 
   // General
-  color: Array<number>;
+  color: TypeColor;
   labelMode: 'on' | 'off' | 'auto';
   labels: Array<string>;
   labelsHAlign: 'left' | 'center' | 'right';
@@ -76,7 +76,7 @@ class AxisProperties {
   length: number;
   width: number;
   rotation: number;
-  color: Array<number>;
+  color: TypeColor;
   title: string;
   titleOffset: Point;
   titleRotation: number;

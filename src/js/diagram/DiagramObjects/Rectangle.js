@@ -15,12 +15,16 @@ import {
 } from '../Element';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep } from '../Animation/Animation';
+import type { OBJ_LineStyleSimple } from '../DiagramPrimitives/DiagramPrimitives';
+import type {
+  TypeColor, OBJ_CurvedCorner,
+} from '../../tools/types';
 
 /**
  * Surround animation step.
  *
- * @property {number} [start] start element to surround (`this`)
- * @property {number} [target] target element to surround (`this`)
+ * @property {DiagramElement} [start] start element to surround (`this`)
+ * @property {DiagramElement} [target] target element to surround (`this`)
  * @property {number} [space] space between rectangle and element (`0`)
  * @extends OBJ_CustomAnimationStep
  */
@@ -29,22 +33,133 @@ export type OBJ_SurroundAnimationStep = {
   target?: number,
 } & OBJ_CustomAnimationStep;
 
-
+/**
+ * {@link AdvancedRectangle} options object.
+ *
+ * This rectangle is similar to {@link OBJ_Rectangle}, except it can accomodate
+ * both a fill and a border or line simultaneously with different colors.
+ *
+ * @property {number} [width] rectangle width
+ * @property {number} [height] rectangle height
+ * @property {'left' | 'center' | 'right' | number} [xAlign] horiztonal
+ * alignment of the rectangle
+ * @property {'bottom' | 'middle' | 'top' | number} [yAlign] vertical alignment
+* of the rectangle
+ * @property {OBJ_LineStyleSimple} [line] lines style - leave empty if only
+ * want fill
+ * @property {TypeColor | OBJ_Texture} [fill] fill color or texture
+ * @property {OBJ_CurvedCorner} [corner] corner style of rectangle
+ */
 export type ADV_Rectangle = {
-  width: number,
-  height: number,
-  yAlign: 'bottom' | 'middle' | 'top' | number,
-  xAlign: 'left' | 'center' | 'right' | number,
-  line: {
-    widthIs: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
-    width: number,
-    dash: Array<number>,
-    color: Array<number>,
-  },
-  fill: Array<number> | OBJ_Texture,
-  corner: OBJ_CurvedCorner,
+  width?: number,
+  height?: number,
+  xAlign?: 'left' | 'center' | 'right' | number,
+  yAlign?: 'bottom' | 'middle' | 'top' | number,
+  line?: OBJ_LineStyleSimple,
+  fill?: TypeColor | OBJ_Texture,
+  corner?: OBJ_CurvedCorner,
 };
 
+/*
+..........########..########..######..########
+..........##.....##.##.......##....##....##...
+..........##.....##.##.......##..........##...
+..........########..######...##..........##...
+..........##...##...##.......##..........##...
+..........##....##..##.......##....##....##...
+..........##.....##.########..######.....##...
+*/
+/**
+ * {@link DiagramElementCollection} representing a rectangle.
+ *
+ * ![](./assets1/advrectangle_ex1.png)
+ * ![](./assets1/advrectangle_ex2.png)
+ *
+ * <p class="inline_gif"><img src="./assets1/advrectangle.gif" class="inline_gif_image"></p>
+ *
+ * This object defines a rectangle
+ * {@link DiagramElementCollection} that includes a border (line), fill and
+ * the ability to surround another {@link DiagramElement} with some spacing
+ * through either the <a href="#advancedrectanglesurround">surround</a> method
+ * or the {@link OBJ_SurroundAnimationStep} found in the in
+ * the animation manager ({@link DiagramElement}.animations),
+ * and in the animation builder
+ * (<a href="#animationmanagernew">animations.new</a>
+ * and <a href="#animationmanagerbuilder">animations.builder</a>).
+ *
+ *
+ * @see
+ *
+ * See {@link ADV_Rectangle} for setup options.
+ *
+ * See {@link OBJ_SurroundAnimationStep} for surround animation step options.
+ *
+ * To test examples below, append them to the
+ * <a href="#drawing-boilerplate">boilerplate</a>.
+ *
+ * @example
+ * // Simple rectangle
+ * diagram.addElement({
+ *   name: 'rect',
+ *   method: 'advanced.rectangle',
+ *   options: {
+ *     width: 2,
+ *     height: 1,
+ *   },
+ * });
+ *
+ * @example
+ * // Round corner rectangle with fill and outside line
+ * const rect = diagram.advanced.rectangle({
+ *   width: 2,
+ *   height: 1,
+ *   line: {
+ *     width: 0.02,
+ *     widthIs: 'outside',
+ *     dash: [0.1, 0.02],
+ *   },
+ *   corner: {
+ *     radius: 0.2,
+ *     sides: 10,
+ *   },
+ *   fill: [0.7, 0.7, 1, 1],
+ * });
+ * diagram.add('rect', rect);
+ *
+ * @example
+ * // Rectangle surrounds elements of an equation
+ * diagram.addElements([
+ *   {
+ *     name: 'rect',
+ *     method: 'advanced.rectangle',
+ *     options: {
+ *       color: [0.3, 0.3, 1, 1],
+ *       line: { width: 0.01 },
+ *     },
+ *   },
+ *   {
+ *     name: 'eqn',
+ *     method: 'equation',
+ *     options: {
+ *       forms: { 0: [{ frac: ['a', 'vinculum', 'b'] }, ' ', 'c'] },
+ *       position: [1, 0],
+ *       scale: 1.5,
+ *     },
+ *   }
+ * ]);
+ *
+ * const rect = diagram.getElement('rect');
+ * const eqn = diagram.getElement('eqn');
+ *
+ * rect.surround(eqn._a, 0.03);
+ * rect.animations.new()
+ *   .pulse({ delay: 1, scale: 1.5 })
+ *   .surround({ target: eqn._b, space: 0.03, duration: 1 })
+ *   .pulse({ delay: 1, scale: 1.5 })
+ *   .surround({ target: eqn._c, space: 0.03, duration: 1 })
+ *   .pulse({ delay: 1, scale: 1.5 })
+ *   .start();
+ */
 // $FlowFixMe
 class AdvancedRectangle extends DiagramElementCollection {
   shapes: Object;
@@ -67,11 +182,11 @@ class AdvancedRectangle extends DiagramElementCollection {
     this._fill = null;
 
     const defaultOptions = {
-      width: 2,
-      height: 1,
+      width: shapes.defaultLength,
+      height: shapes.defaultLength / 2,
       xAlign: 'center',
       yAlign: 'middle',
-      color: shapes.color,
+      color: shapes.defaultColor,
       border: 'children',
       touchBorder: 'border',
       holeBorder: [[]],
@@ -82,7 +197,8 @@ class AdvancedRectangle extends DiagramElementCollection {
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.fill == null && options.line == null) {
-      options.line = { width: 0.01 };
+      // options.line = { width: shapes.defaultLineWidth };
+      options.fill = shapes.defaultColor.slice();
     }
 
     this.width = options.width;
@@ -112,18 +228,37 @@ class AdvancedRectangle extends DiagramElementCollection {
 
     this.animations.surround = (...opt) => {
       const o = joinObjects({}, { element: this, space: 0 }, ...opt);
-      if (o.start == null) {
-        o.start = this;
-      }
-      if (o.target == null) {
-        o.target = this;
-      }
-      const [startPosition, startWidth, startHeight] = this.getSurround(o.start, o.space);
-      const [targetPosition, targetWidth, targetHeight] = this.getSurround(o.target, o.space);
-      const deltaPosition = targetPosition.sub(startPosition);
-      const deltaWidth = targetWidth - startWidth;
-      const deltaHeight = targetHeight - startHeight;
+      let startPosition;
+      let startWidth;
+      let startHeight;
+      let targetPosition;
+      let targetWidth;
+      let targetHeight;
+      let deltaPosition;
+      let deltaWidth;
+      let deltaHeight;
+      let toSetup = true;
       o.callback = (percentage) => {
+        if (toSetup) {
+          if (o.start == null) {
+            startPosition = this.getPosition('local');
+            startWidth = this.width;
+            startHeight = this.height;
+          } else {
+            [startPosition, startWidth, startHeight] = this.getSurround(o.start, o.space);
+          }
+          if (o.target == null) {
+            targetPosition = this.getPosition('local');
+            targetWidth = this.width;
+            targetHeight = this.height;
+          } else {
+            [targetPosition, targetWidth, targetHeight] = this.getSurround(o.target, o.space);
+          }
+          deltaPosition = targetPosition.sub(startPosition);
+          deltaWidth = targetWidth - startWidth;
+          deltaHeight = targetHeight - startHeight;
+          toSetup = false;
+        }
         const newWidth = startWidth + deltaWidth * percentage;
         const newHeight = startHeight + deltaHeight * percentage;
         const newPosition = startPosition.add(deltaPosition.scale(percentage));
@@ -150,7 +285,7 @@ class AdvancedRectangle extends DiagramElementCollection {
       defaultOptions.line = {
         widthIs: 'inside',
         cornerStyle: 'auto',
-        width: Math.max(Math.min(this.width, this.height) / 100, 0.005),
+        width: Math.max(Math.min(this.width, this.height) / 100, this.shapes.defaultLineWidth),
       };
       if (defaultOptions.line.width > this.width || defaultOptions.line.width > this.height) {
         defaultOptions.line.widthIs = 'mid';
@@ -202,7 +337,6 @@ class AdvancedRectangle extends DiagramElementCollection {
 
   surround(element: DiagramElement, space: number = 0) {
     const [position, width, height] = this.getSurround(element, space);
-    console.log(this.xAlign, this.yAlign, position, width, height)
     this.setSurround(position, width, height);
   }
 
@@ -213,6 +347,8 @@ class AdvancedRectangle extends DiagramElementCollection {
     if (this._fill) {
       this._fill.custom.update({ width, height });
     }
+    this.width = width;
+    this.height = height;
     this.setPosition(position);
   }
 }

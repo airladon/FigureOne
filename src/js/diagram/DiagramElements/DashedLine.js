@@ -14,7 +14,7 @@ function DashedLine(
   width: number,
   rotation: number,
   dashStyle: Array<number>,
-  color: Array<number>,
+  color: TypeColor,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
 ) {

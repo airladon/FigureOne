@@ -6,11 +6,11 @@ import { AxisProperties } from './AxisProperties';
 class TraceProperties {
   points: Array<Point>;
   name: string;
-  color: Array<number>;
+  color: TypeColor;
 
   constructor(
     name: string = '',
-    color: Array<number> = [1, 0, 0, 1],
+    color: TypeColor = [1, 0, 0, 1],
     points: Array<Point> = [],
   ) {
     this.points = points;

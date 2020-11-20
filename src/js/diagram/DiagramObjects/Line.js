@@ -78,7 +78,7 @@ import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Anima
  * @property {TypeLabelOrientation} [orientation]
  * @property {boolean} [update] (`false`)
  * @property {number} [scale] size of the label
- * @property {Array<number>} [color]
+ * @property {TypeColor} [color]
  */
 export type TypeLineLabelOptions = {
   text: null | string | Array<string> | Equation | EQN_Equation,
@@ -90,7 +90,7 @@ export type TypeLineLabelOptions = {
   orientation?: TypeLabelOrientation,
   update?: boolean,
   scale?: number,
-  color?: Array<number>,
+  color?: TypeColor,
 };
 
 /**
@@ -144,7 +144,7 @@ export type ADV_Line = {
   align?: 'start' | 'end' | 'center' | number,
   width?: number,
   label?: TypeLineLabelOptions,
-  color?: Array<number>,
+  color?: TypeColor,
   touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | number | 'rect',
   arrow: OBJ_LineArrows;
   dash: Array<number>,
@@ -229,7 +229,7 @@ class LineLabel extends EquationLabel {
   constructor(
     equation: Object,
     labelText: string | Equation | EQN_Equation | Array<string>,
-    color: Array<number>,
+    color: TypeColor,
     offset: number,
     location: TypeLabelLocation = 'top',
     subLocation: TypeLabelSubLocation = 'left',
@@ -252,7 +252,7 @@ function makeStraightLine(
   shapes: Object,
   length: number,
   width: number,
-  color: Array<number>,
+  color: TypeColor,
   dash: Array<number>,
   // maxLength: number,
   // touchBorder: number | { width: number, start: number, end: number },
@@ -1096,7 +1096,7 @@ export default class AdvancedLine extends DiagramElementCollection {
     orientation: TypeLabelOrientation = 'horizontal',
     linePosition: number = 0.5,     // number where 0 is end1, and 1 is end2
     scale: number = 0.7,
-    color: Array<number> = this.color,
+    color: TypeColor = this.color,
     precision: number = 1,
     update: boolean = false,
   ) {

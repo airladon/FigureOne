@@ -316,7 +316,7 @@ class VertexObject extends DrawingObject {
     rotation: number,
     scale: g2.Point,
     count: number,
-    color: Array<number>,
+    color: TypeColor,
     glIndex: number = 0,
     // webGLInstance: WebGLInstance = this.webgl,
   ) {
@@ -329,7 +329,7 @@ class VertexObject extends DrawingObject {
 
   drawWithTransformMatrix(
     transformMatrix: Array<number>,
-    color: Array<number>,
+    color: TypeColor,
     glIndex: number,
     count: number,
     // webglInstance: WebGLInstance = this.webgl,

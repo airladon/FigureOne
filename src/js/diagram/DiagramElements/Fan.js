@@ -10,7 +10,7 @@ import WebGLInstance from '../webgl/webgl';
 function Fan(
   webgl: Array<WebGLInstance>,
   points: Array<Point>,
-  color: Array<number>,
+  color: TypeColor,
   transformOrLocation: Transform | Point,
   diagramLimits: Rect,
 ) {

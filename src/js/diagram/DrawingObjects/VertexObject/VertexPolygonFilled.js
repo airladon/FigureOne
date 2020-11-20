@@ -100,7 +100,7 @@ class PolygonFilled extends VertexObject {
     rotate: number,
     scale: Point,
     drawAngle: number,
-    color: Array<number>,
+    color: TypeColor,
   ) {
     let count = Math.floor(drawAngle / this.dAngle) * 2.0 + 2;
     if (drawAngle >= Math.PI * 2.0) {

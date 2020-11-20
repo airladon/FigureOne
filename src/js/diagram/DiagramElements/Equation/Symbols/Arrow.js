@@ -12,7 +12,7 @@ export type TypeEquationSymbolArrowBracket = {
   arrowWidth?: number,
   arrowHeight?: number,
   draw?: 'static' | 'dynamic',
-  color?: Array<number>;
+  color?: TypeColor;
   mods?: Object;
 };
 

@@ -30,7 +30,7 @@ import Radical from './Symbols/Radical';
 
 // import { Annotation, AnnotationInformation } from './Elements/Annotation';
 // export type TypeSymbolOptions = {
-//   color?: Array<number>,
+//   color?: TypeColor,
 //   numLines?: number,
 //   side?: 'left' | 'right' | 'bottom' | 'top',
 //   width?: number,
@@ -64,7 +64,7 @@ import Radical from './Symbols/Radical';
  *
  * </pre>
  * @property {'vinculum'} symbol
- * @property {Array<number>} [color] (equation color)
+ * @property {TypeColor} [color] (equation color)
  * @property {number} [lineWidth] (`0.01`)
  * @property {'static' | 'dynamic'} [draw] `'dynamic'` updates vertices on
  * resize, `'static'` only changes scale transform (`dynamic`)
@@ -82,7 +82,7 @@ import Radical from './Symbols/Radical';
  * })
  */
 type EQN_VinculumSymbol = {
-  color?: Array<number>,
+  color?: TypeColor,
   lineWidth?: number,
   draw?: 'static' | 'dynamic',
   staticWidth?: number | 'first',
@@ -114,7 +114,7 @@ type EQN_VinculumSymbol = {
  * </pre>
  *
  * @property {'box'} symbol
- * @property {Array<number>} [color] (equation color)
+ * @property {TypeColor} [color] (equation color)
  * @property {number} [lineWidth] (`0.01`)
  * @property {boolean} [fill] (`false`)
  * @property {number} [width] force width instead of auto calculation
@@ -139,7 +139,7 @@ type EQN_VinculumSymbol = {
  * })
  */
 type EQN_BoxSymbol = {
-  color?: Array<number>,
+  color?: TypeColor,
   fill?: boolean,
   width?: number,
   height?: number,
@@ -184,7 +184,7 @@ type EQN_BoxSymbol = {
  *                              lineWidth
  * </pre>
  * @property {'arrow'} symbol
- * @property {Array<number>} [color] (equation color)
+ * @property {TypeColor} [color] (equation color)
  * @property {'up' | 'down' | 'left' | 'right'} [direction] (`'right'`)
  * @property {number} [lineWidth] (`0.01`)
  * @property {number} [arrowWidth] (`0.01`)
@@ -209,7 +209,7 @@ type EQN_BoxSymbol = {
  * })
  */
 type EQN_ArrowSymbol = {
-  color?: Array<number>,
+  color?: TypeColor,
   direction?: 'up' | 'down' | 'left' | 'right',
   lineWidth?: number,
   arrowHeight?: number,
@@ -253,7 +253,7 @@ type EQN_ArrowSymbol = {
  *                   |<------------------------------------>|
  * </pre>
  * @property {'sum'} symbol
- * @property {Array<number>} [color] (equation color)
+ * @property {TypeColor} [color] (equation color)
  * @property {number} [lineWidth] (`height * 0.88 / (25 * height + 15)`)
  * @property {number} [sides] number of sides that make up serif curve (`5`)
  * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
@@ -273,7 +273,7 @@ type EQN_ArrowSymbol = {
  * })
  */
 type EQN_SumSymbol ={
-  color?: Array<number>,
+  color?: TypeColor,
   lineWidth?: number,
   sides?: number,
   draw?: 'static' | 'dynamic',
@@ -320,7 +320,7 @@ type EQN_SumSymbol ={
  *          ----- 0000000000000000000000000           00000000000000000000000000
  * </pre>
  * @property {'prod'} symbol
- * @property {Array<number>} [color] (equation color)
+ * @property {TypeColor} [color] (equation color)
  * @property {number} [lineWidth] (related to height)
  * @property {number} [sides] number of sides that make up serif curve (`5`)
  * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
@@ -340,7 +340,7 @@ type EQN_SumSymbol ={
  * })
  */
 type EQN_ProdSymbol = {
-  color?: Array<number>,
+  color?: TypeColor,
   lineWidth?: number,
   sides?: number,
   draw?: 'static' | 'dynamic',
@@ -386,7 +386,7 @@ type EQN_ProdSymbol = {
  *     -------  0000000
 * </pre>
  * @property {'int'} symbol
- * @property {Array<number>} [color] (equation color)
+ * @property {TypeColor} [color] (equation color)
  * @property {number} [lineWidth] (related to height)
  * @property {number} [sides] number of sides that make up s curve (`30`)
  * @property {number} [num] number of integral symbols (`1`)
@@ -421,7 +421,7 @@ type EQN_ProdSymbol = {
  * },
  */
 type EQN_IntegralSymbol = {
-  color?: Array<number>,
+  color?: TypeColor,
   lineWidth?: number,
   sides?: number,
   // width?: ?number,
@@ -470,7 +470,7 @@ type EQN_IntegralSymbol = {
 * </pre>
 
  * @property {'radical'} symbol
- * @property {Array<number>} [color]
+ * @property {TypeColor} [color]
  * @property {number} [lineWidth] (`0.01`)
  * @property {number} [width] force width of content area (normally defined by content size)
  * @property {number} [height] force height of content area (normally defined by content size)
@@ -524,7 +524,7 @@ type EQN_IntegralSymbol = {
  *  });
  */
 type EQN_RadicalSymbol = {
-  color?: Array<number>,
+  color?: TypeColor,
   lineWidth?: number,
   width?: number,
   height?: number,
@@ -571,7 +571,7 @@ type EQN_RadicalSymbol = {
  * </pre>
  *
  * @property {'strike'} symbol
- * @property {Array<number>} [color] (equation default)
+ * @property {TypeColor} [color] (equation default)
  * @property {'cross' | 'forward' | 'back' | 'horizontal'} [style] (`'cross'`)
  * @property {number} [lineWidth] (`0.015`)
  * @property {number} [width] force width of strike (normally defined by
@@ -607,7 +607,7 @@ type EQN_RadicalSymbol = {
  *  });
  */
 type EQN_StrikeSymbol = {
-  color?: Array<number>,
+  color?: TypeColor,
   style?: 'cross' | 'forward' | 'back' | 'horizontal',
   lineWidth?: number,
   width?: number,
@@ -646,7 +646,7 @@ type EQN_StrikeSymbol = {
  * </pre>
  *
  * @property {'bracket'} symbol
- * @property {Array<number>} [color] (equation default)
+ * @property {TypeColor} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
  * bracket ('left')
  * @property {number} [sides] number of sides in bracket curve (`10`)
@@ -680,7 +680,7 @@ type EQN_StrikeSymbol = {
  */
 type EQN_BracketSymbol = {
   side?: 'left' | 'right' | 'top' | 'bottom',
-  color?: Array<number>,
+  color?: TypeColor,
   lineWidth?: number,
   sides?: number,
   width?: number,
@@ -714,7 +714,7 @@ type EQN_BracketSymbol = {
  * </pre>
  *
  * @property {'angleBracket'} symbol
- * @property {Array<number>} [color] (equation default)
+ * @property {TypeColor} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
  * angle bracket ('left')
  * @property {number} [lineWidth] (depends on height)
@@ -744,7 +744,7 @@ type EQN_BracketSymbol = {
  */
  type EQN_AngleBracketSymbol = {
   side?: 'left' | 'right' | 'top' | 'bottom',
-  color?: Array<number>,
+  color?: TypeColor,
   lineWidth?: number,
   width?: number,
   draw?: 'dynamic' | 'static',
@@ -798,7 +798,7 @@ type EQN_BracketSymbol = {
  * </pre>
  *
  * @property {'brace'} symbol
- * @property {Array<number>} [color] (equation default)
+ * @property {TypeColor} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
  * brace ('left')
  * @property {number} [lineWidth] (depends on height)
@@ -831,7 +831,7 @@ type EQN_BracketSymbol = {
  */
 type EQN_BraceSymbol = {
   side?: 'left' | 'right' | 'top' | 'bottom',
-  color?: Array<number>,
+  color?: TypeColor,
   lineWidth?: number,
   sides?: number,
   width?: number,
@@ -863,7 +863,7 @@ type EQN_BraceSymbol = {
  * </pre>
  *
  * @property {'bar'} symbol
- * @property {Array<number>} [color] (equation default)
+ * @property {TypeColor} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
  * bar ('left')
  * @property {number} [lineWidth] (`0.01`)
@@ -891,7 +891,7 @@ type EQN_BraceSymbol = {
  */
 type EQN_BarSymbol = {
   side?: 'left' | 'right' | 'top' | 'bottom',
-  color?: Array<number>,
+  color?: TypeColor,
   lineWidth?: number,
   draw?: 'dynamic' | 'static',
   staticHeight?: number | 'first',
@@ -932,7 +932,7 @@ type EQN_BarSymbol = {
  * </pre>
  *
  * @property {'squareBracket'} symbol
- * @property {Array<number>} [color] (equation default)
+ * @property {TypeColor} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
  * square bracket ('left')
  * @property {number} [lineWidth] (`0.01`)
@@ -967,7 +967,7 @@ type EQN_BarSymbol = {
  *  });
  */
 type EQN_SquareBracketSymbol = {
-  color?: Array<number>,
+  color?: TypeColor,
   side?: 'left' | 'right' | 'top' | 'bottom',
   lineWidth?: number,
   width?: number,
@@ -1051,7 +1051,7 @@ export default class EquationSymbols {
     return null;
   }
 
-  // vinculumOld(options: { color?: Array<number> } = {}) {
+  // vinculumOld(options: { color?: TypeColor } = {}) {
   //   let { color } = options;
   //   if (color == null) {
   //     color = this.defaultColor;
@@ -1216,7 +1216,7 @@ export default class EquationSymbols {
 
   radical(optionsIn: EQN_RadicalSymbol) {
     const defaultOptions: {
-      color: Array<number>,
+      color: TypeColor,
       lineWidth: number,
       startHeight: number,
       startWidth: number,
@@ -1291,7 +1291,7 @@ export default class EquationSymbols {
     // );
   }
 
-  // xStrike(options: { color?: Array<number> } = {}) {
+  // xStrike(options: { color?: TypeColor } = {}) {
   //   let { color } = options;
   //   if (color == null) {
   //     color = this.defaultColor;

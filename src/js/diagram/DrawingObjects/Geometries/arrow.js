@@ -206,7 +206,6 @@ function orientArrow(
       .rotate(options.angle)
       .translate(options.drawPosition).matrix();
   } else if (options.align === 'mid') {
-    console.log(length / 2)
     matrix = new Transform()
       .translate(length / 2, 0)
       .rotate(options.angle)

@@ -42,7 +42,7 @@ import type { TypeEquationSymbolArrowBracket } from './Symbols/Arrow';
  * @property {string} [symbol] - Symbol element only
  * @property {'top' | 'left' | 'bottom' | 'right'} [side] - Symbol element only
  * @property {object} [mods] - Properties to set on instantiated element
- * @property {Array<number>} [color] - Color to set the element
+ * @property {TypeColor} [color] - Color to set the element
  */
 
 export type TypeEquationTextElement = string | {
@@ -51,7 +51,7 @@ export type TypeEquationTextElement = string | {
     style?: 'italic' | 'normal' | null;
     weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
     size?: number,
-    color?: Array<number>;
+    color?: TypeColor;
     mods?: Object;
   } | DiagramElementPrimitive | DiagramElementCollection;
 
@@ -358,7 +358,7 @@ type TypeFormRestart = {
 /**
  * Options objects to construct an {@link Equation} class. All properties are optional.
  *
- * @property {Array<number>} [color] - default: [0.5, 0.5, 0.5, 1]
+ * @property {TypeColor} [color] - default: [0.5, 0.5, 0.5, 1]
  * @property {number} [scale] - default: 0.7
  * @property {TypeEquationElements} [elements] - default: {}
  * @property {TypeFormAlignment} [defaultFormAlignment] - default:
@@ -377,7 +377,7 @@ type TypeFormRestart = {
  * @property {Point} [position] - default: new {@link Point}(0, 0)
  */
 export type EQN_Equation = {
-  color?: Array<number>;
+  color?: TypeColor;
   scale?: number,
   elements?: TypeEquationElements;
   // defaultFormAlignment?: TypeFormAlignment;
@@ -790,7 +790,7 @@ export class Equation extends DiagramElementCollection {
       weight?: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
       size?: number,
       family?: string,
-      color?: Array<number>,
+      color?: TypeColor,
       touchBorder?: number,
     },
     defaultText: string = '',
