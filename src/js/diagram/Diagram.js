@@ -31,13 +31,17 @@ import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnim
   * @property {string} [htmlId] HTML `div` tag `id` to tie diagram to (`"figureOneContainer"`)
   * @property {TypeParsableRect} [limits] - limits (bottom left
   *  corner at (-1, -1), width 2, height 2)
+  * @property {TypeColor} [color] default color (`[0, 0, 0, 1]`)
+  * @property {OBJ_Font} [font] default font (`{ family: 'Helvetica, 
+  * size: 0.2, style: 'normal', weight: 'normal' }`)
+  * @property {number} [lineWidth] default line width
  */
 export type OBJ_Diagram = {
   htmlId?: string,
   limits?: TypeParsableRect,
-  // backgroundColor?: Array<number>,
-  // fontScale?: number,
-  // elements?: DiagramElementCollection;
+  color?: TypeColor,
+  font?: OBJ_Font,
+  lineWidth?: number,
 };
 
 export type TypeSpaceTransforms = {
@@ -279,7 +283,7 @@ class Diagram {
       color: [0, 0, 0, 1],
       font: {
         family: 'Helvetica',
-        size: 0.1,
+        size: 0.2,
         style: 'normal',
         weight: 'normal',
         opacity: 1,
@@ -472,14 +476,10 @@ class Diagram {
       generic: this.shapes.generic.bind(this.shapes),
       polyline: this.shapes.polyline.bind(this.shapes),
       polygon: this.shapes.polygon.bind(this.shapes),
-      polygonSweep: this.shapes.polygon.bind(this.shapes),
       grid: this.shapes.grid.bind(this.shapes),
       triangle: this.shapes.triangle.bind(this.shapes),
       rectangle: this.shapes.rectangle.bind(this.shapes),
-      // fan: this.shapes.fan.bind(this.shapes),
       radialLines: this.shapes.radialLines.bind(this.shapes),
-      // box: this.shapes.box.bind(this.shapes),
-      // rectangle: this.shapes.rectangle.bind(this.shapes),
       text: this.shapes.text.bind(this.shapes),
       textLine: this.shapes.textLine.bind(this.shapes),
       textLines: this.shapes.textLines.bind(this.shapes),

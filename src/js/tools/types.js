@@ -35,3 +35,6 @@ export type OBJ_CurvedCorner = {
   radius?: number,
   sides?: number,
 };
+
+const doNothing = 1;
+export default doNothing;

@@ -3228,6 +3228,16 @@
               
                 
                 <li><a
+                  href='#obj_curvedcorner'
+                  class="">
+                  OBJ_CurvedCorner
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_linestyle'
                   class="">
                   OBJ_LineStyle
@@ -3241,6 +3251,16 @@
                   href='#cpy_step'
                   class="">
                   CPY_Step
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typedash'
+                  class="">
+                  TypeDash
                   
                 </a>
                 
@@ -4279,6 +4299,16 @@
                   href='#equationlabel'
                   class="">
                   EquationLabel
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typecolor'
+                  class="">
+                  TypeColor
                   
                 </a>
                 
@@ -5403,6 +5433,31 @@ corner at (-1, -1), width 2, height 2)
           
         </div>
       
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : default color (
+<code>[0, 0, 0, 1]</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : default font (
+<code>{ family: 'Helvetica, size: 0.2, style: 'normal', weight: 'normal' }</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default line width
+
+          
+        </div>
+      
     </div>
   
 
@@ -6104,7 +6159,7 @@ appropriately clipped.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>color</span> <code class='quiet'>(TypeColor)</code>
+            <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>)</code>
 	    
           </div>
           
@@ -15263,8 +15318,8 @@ identity transforms.</p>
   
     <p>Each <a href="#diagramelementprimitive">DiagramElementPrimitive</a> element manages drawing a shape, drawing text, or manipulating a HTML element.</p>
 <p>FigureOne's built-in shapes are drawn using WebGL, which uses triangles to create different shapes. To draw a shape, you define the verticies of the triangles. Every drawing frame (animation or screen refresh), the color of the vertices and the transform that moves them around is used to render the final shape to the screen.</p>
-<h3><a id="drawing-boilerplate"></a> Drawing Boilerplate</h3>
-<p>To test examples within the 'Drawing Shapes' sections of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
+<h3><a id="drawing-boilerplate"></a> Shapes Boilerplate</h3>
+<p>To test examples within the 'Shapes' sections of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
 <p>All examples are snippets which can be appended to the end of the <code>index.js</code> file.</p>
 <pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
 <span class="hljs-meta">&lt;!doctype <span class="hljs-meta-keyword">html</span>&gt;</span>
@@ -15277,7 +15332,7 @@ identity transforms.</p>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span> });</pre>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });</pre>
 <h3>Quick Start</h3>
 <p>Let's start by creating a <a href="#diagramelementprimitive">DiagramElementPrimitive</a> element that draws a polygon and adding it to the diagram.</p>
 <pre class='hljs'><span class="hljs-comment">// create the `DiagramElementPrimitive`</span>
@@ -15473,7 +15528,7 @@ or areas where touching has no effect.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (`
 [1, 0, 0, 1]
 )
@@ -15798,7 +15853,7 @@ the line
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (
 <code>[1, 0, 0, 1]</code>
 )
@@ -16223,7 +16278,7 @@ the polyline
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (
 <code>[1, 0, 0, 1]</code>
 )
@@ -16606,7 +16661,7 @@ the arrow
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (
 <code>[1, 0, 0, 1]</code>
 )
@@ -16889,7 +16944,7 @@ all other ways to define a triangle.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>corner</span> <code class='quiet'>(OBJ_CurvedCorner?)</code>
+          <span class='code bold'>corner</span> <code class='quiet'>(<a href="#obj_curvedcorner">OBJ_CurvedCorner</a>?)</code>
           : define for rounded corners
 
           
@@ -16912,7 +16967,7 @@ the rectangle
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (
 <code>[1, 0, 0, 1]</code>
 )
@@ -17105,7 +17160,7 @@ diagram.addElement({
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>corner</span> <code class='quiet'>(OBJ_CurvedCorner?)</code>
+          <span class='code bold'>corner</span> <code class='quiet'>(<a href="#obj_curvedcorner">OBJ_CurvedCorner</a>?)</code>
           : define for rounded corners
 
           
@@ -17127,7 +17182,7 @@ the rectangle
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (
 <code>[1, 0, 0, 1]</code>
 )
@@ -17404,7 +17459,7 @@ the rectangle
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (
 <code>[1, 0, 0, 1]</code>
 )
@@ -17704,7 +17759,7 @@ the polygon if defined. If using fill and copying, use
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (
 <code>[1, 0, 0, 1</code>
 ])
@@ -17970,7 +18025,7 @@ the polygon if defined. If using fill and copying, use
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (
 <code>[1, 0, 0, 1</code>
 ])
@@ -18252,7 +18307,7 @@ the rectangle
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (
 <code>[1, 0, 0, 1]</code>
 )
@@ -19657,7 +19712,7 @@ options object can define the default values for pulseWidth if desired.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           
           
         </div>
@@ -20664,7 +20719,7 @@ reside
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : default color
 
           
@@ -21802,14 +21857,14 @@ want fill
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>fill</span> <code class='quiet'>((TypeColor | <a href="#obj_texture">OBJ_Texture</a>)?)</code>
+          <span class='code bold'>fill</span> <code class='quiet'>((<a href="#typecolor">TypeColor</a> | <a href="#obj_texture">OBJ_Texture</a>)?)</code>
           : fill color or texture
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>corner</span> <code class='quiet'>(OBJ_CurvedCorner?)</code>
+          <span class='code bold'>corner</span> <code class='quiet'>(<a href="#obj_curvedcorner">OBJ_CurvedCorner</a>?)</code>
           : corner style of rectangle
 
           
@@ -22378,7 +22433,7 @@ turn grids on and off (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : default color of axis
 
           
@@ -22983,7 +23038,7 @@ ADV_Rectangle
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <p>A grid is included in this javascript file to make it obvious how text is aligned and justified</p>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span> });
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });
 diagram.addElements([
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'origin'</span>,
@@ -23256,7 +23311,7 @@ vertical text alignment for
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (default: 
 <code>[1, 0, 0, 1</code>
 ])
@@ -23455,7 +23510,7 @@ to layout into a line
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : Default color for strings in line
 (
 <code>[1, 0, 0, 1</code>
@@ -23681,7 +23736,7 @@ strings
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : Default color to use in lines
 (
 <code>[1, 0, 0, 1</code>
@@ -23914,7 +23969,7 @@ diagram.addElement(
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <p>A grid is included in this javascript file to make it obvious how shapes are animated</p>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span> });
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });
 
 <span class="hljs-comment">// grid</span>
 diagram.addElements([
@@ -29170,7 +29225,7 @@ more readable.</p>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
-<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span> });</pre>
+<span class="hljs-keyword">const</span> diagram = <span class="hljs-keyword">new</span> Fig.Diagram({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });</pre>
 <h3>Quick Start</h3>
 <p>First let's create an equation, with red as the default color:</p>
 <pre class='hljs'><span class="hljs-keyword">const</span> equation = diagram.create.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });</pre>
@@ -30458,7 +30513,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : default: 
 [0.5, 0.5, 0.5, 1]
 
@@ -35343,7 +35398,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (equation color)
 
           
@@ -35489,7 +35544,7 @@ based on first use (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (equation color)
 
           
@@ -35680,7 +35735,7 @@ based on first use
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (equation color)
 
           
@@ -35871,7 +35926,7 @@ based on first use (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (equation color)
 
           
@@ -36038,7 +36093,7 @@ based on first use (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (equation color)
 
           
@@ -36202,7 +36257,7 @@ based on first use (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (equation color)
 
           
@@ -36416,7 +36471,7 @@ based on first use (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (equation default)
 
           
@@ -36617,7 +36672,7 @@ eqn.addElements({
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (equation default)
 
           
@@ -36798,7 +36853,7 @@ eqn.addElements({
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (equation default)
 
           
@@ -36983,7 +37038,7 @@ eqn.addElements({
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (equation default)
 
           
@@ -37161,7 +37216,7 @@ eqn.addElements({
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (equation default)
 
           
@@ -37327,7 +37382,7 @@ eqn.addElements({
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (equation default)
 
           
@@ -37531,7 +37586,7 @@ it will not be needed, but for edge case equation layouts it may be useful.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           
           
         </div>
@@ -40581,7 +40636,7 @@ touched
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>transformOrPointOrOptions</span> <code class='quiet'>((<a href="#transform">Transform</a> | <a href="#point">Point</a> | {transform: <a href="#transform">Transform</a>?, position: <a href="#point">Point</a>?, color: TypeColor?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, border: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), touchBorder: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code> | <code>"children"</code>), holeBorder: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code>)})
+            <span class='code bold'>transformOrPointOrOptions</span> <code class='quiet'>((<a href="#transform">Transform</a> | <a href="#point">Point</a> | {transform: <a href="#transform">Transform</a>?, position: <a href="#point">Point</a>?, color: <a href="#typecolor">TypeColor</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, border: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), touchBorder: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code> | <code>"children"</code>), holeBorder: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code>)})
             = <code>{}</code>)</code>
 	    
           </div>
@@ -40590,7 +40645,7 @@ touched
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>moreOptions</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;{transform: <a href="#transform">Transform</a>?, position: <a href="#point">Point</a>?, color: TypeColor?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, border: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), touchBorder: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code> | <code>"children"</code>), holeBorder: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code>)}>)</code>
+            <span class='code bold'>moreOptions</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;{transform: <a href="#transform">Transform</a>?, position: <a href="#point">Point</a>?, color: <a href="#typecolor">TypeColor</a>?, pulse: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, border: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>), touchBorder: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code> | <code>"children"</code>), holeBorder: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code>)}>)</code>
 	    
           </div>
           
@@ -42499,6 +42554,72 @@ key
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_curvedcorner'>
+      OBJ_CurvedCorner
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Curved Corner Definition</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>radius</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>sides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='obj_linestyle'>
       OBJ_LineStyle
     </h3>
@@ -42952,6 +43073,67 @@ diagram.addElement({
   },
 });</pre>
     
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typedash'>
+      TypeDash
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Defines whether a line is solid or dashed.</p>
+<p><code>Array&#x3C;number></code></p>
+<p>Leave empty for solid line.</p>
+<p>Use array of numbers for a dashed line where indexes 0, 2, 4... are line
+lengths and indexes 1, 3, 5... are gap lengths. If line is longer than
+cumulative length of line and gap lengths, then pattern will repeat.</p>
+<p>For example [0.1, 0.01, 0.02, 0.01] produces 0.1 length dash, then a 0.01
+length gap, then a 0.02 length dash, then a 0.01 length gap. This pattern
+will repeat for the length of the line.</p>
+
+  
+    <p style="display: none;">      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
   
 
   
@@ -43798,7 +43980,7 @@ angle, in percent of curve from the start of the angle (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           
           
         </div>
@@ -44183,7 +44365,7 @@ the same as the curve
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           
           
         </div>
@@ -44781,7 +44963,7 @@ transform (translation, rotation or scale) changes then use <code>update: true</
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           
           
         </div>
@@ -46101,7 +46283,7 @@ the line
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : color of the trace
 
           
@@ -47311,7 +47493,7 @@ custom animations and
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           
           
         </div>
@@ -52847,7 +53029,7 @@ will be ignored.</p>
 
   
     <p style="display: none;">      Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, font: (DiagramFont | <a href="#obj_font">OBJ_Font</a>)?, style: (<code>"italic"</code> | <code>"normal"</code> | null)?, weight: (<code>"normal"</code> | <code>"bold"</code> | <code>"lighter"</code> | <code>"bolder"</code> | <code>"100"</code> | <code>"200"</code> | <code>"300"</code> | <code>"400"</code> | <code>"500"</code> | <code>"600"</code> | <code>"700"</code> | <code>"800"</code> | <code>"900"</code>)?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: TypeColor?, mods: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?} | <a href="#diagramelementprimitive">DiagramElementPrimitive</a> | <a href="#diagramelementcollection">DiagramElementCollection</a>)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, font: (DiagramFont | <a href="#obj_font">OBJ_Font</a>)?, style: (<code>"italic"</code> | <code>"normal"</code> | null)?, weight: (<code>"normal"</code> | <code>"bold"</code> | <code>"lighter"</code> | <code>"bolder"</code> | <code>"100"</code> | <code>"200"</code> | <code>"300"</code> | <code>"400"</code> | <code>"500"</code> | <code>"600"</code> | <code>"700"</code> | <code>"800"</code> | <code>"900"</code>)?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="#typecolor">TypeColor</a>?, mods: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?} | <a href="#diagramelementprimitive">DiagramElementPrimitive</a> | <a href="#diagramelementcollection">DiagramElementCollection</a>)
     </p>
   
   
@@ -52908,7 +53090,7 @@ will be ignored.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : Color to set the element
 
           
@@ -52983,14 +53165,14 @@ will be ignored.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>dash</span> <code class='quiet'>(TypeDash?)</code>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>?)</code>
           : select solid or dashed line
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(TypeColor?)</code>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : line color
 
           
@@ -53144,7 +53326,7 @@ to center ticks around the axis or not (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>dash</span> <code class='quiet'>(TypeDash?)</code>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>?)</code>
           : line style is solid or dashed (
 <code>[]</code>
 )
@@ -54103,7 +54285,7 @@ or the name of the trace. See examples in <a href="#advancedplotlegend">Advanced
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>?)</code>
           : start element to surround (
 <code>this</code>
 )
@@ -54112,7 +54294,7 @@ or the name of the trace. See examples in <a href="#advancedplotlegend">Advanced
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          <span class='code bold'>target</span> <code class='quiet'>(<a href="#diagramelement">DiagramElement</a>?)</code>
           : target element to surround (
 <code>this</code>
 )
@@ -54199,6 +54381,63 @@ or the name of the trace. See examples in <a href="#advancedplotlegend">Advanced
         </div>
       
     </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typecolor'>
+      TypeColor
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Defines a color</p>
+<p><code>[number, number, number, number]</code></p>
+<p>Color is defined as an RGBA array with values between 0 and 1. The alpha
+channel defines the transparency or opacity of the color where
+1 is fully opaque and 0 is fully transparent.</p>
+
+  
+    <p style="display: none;">      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
   
 
   

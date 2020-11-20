@@ -46,6 +46,10 @@ import type {
 } from './js/diagram/DiagramObjects/PolyLine';
 import * as anim from './js/diagram/Animation/Animation';
 
+// This helps the docgen find the types file
+// eslint-disable-next-line
+import doNothing from './js/tools/types';
+
 export type {
   TypeRotationDirection,
   TypeLabelLocation, TypeLabelSubLocation, TypeLabelOrientation,
@@ -55,6 +59,7 @@ export type {
   ADV_Polyline, OBJ_PolylinePad, TypeParsablePoint,
   TypeLabelledAngle, TypeLabelledLine,
 };
+
 
 // /** Tools object that is so great
 // * @namespace tools

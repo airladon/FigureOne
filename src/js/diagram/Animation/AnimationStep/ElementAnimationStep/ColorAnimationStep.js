@@ -9,8 +9,9 @@ import {
 import type { OBJ_ElementAnimationStep } from '../ElementAnimationStep';
 import type { OBJ_OpacityAnimationStep } from './OpacityAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
+import type { TypeColor } from '../../../../tools/types';
 
-type TypeColor = Array<number>;
+// type TypeColor = Array<number>;
 
 /**
  * {@link ColorAnimationStep} options object
@@ -157,7 +158,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
+  start(startTime: ?AnimationStartTime = null) {
     const { element } = this;
     // console.log('starting', element)
     if (element != null) {

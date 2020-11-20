@@ -1,7 +1,7 @@
 // @flow
 
 import {
-  DiagramElementCollection, DiagramElement,
+  DiagramElementCollection,
 } from '../Element';
 import DiagramPrimitives from '../DiagramPrimitives/DiagramPrimitives';
 import DiagramObjects from '../DiagramObjects/DiagramObjects';
@@ -22,7 +22,7 @@ function addElements(
   equation: DiagramEquation,
   advanced: DiagramObjects,
   rootCollection: DiagramElementCollection,
-  layout: Array<TypeAddElementObject | DiagramElement>,
+  layout: Array<TypeAddElementObject>,
   addElementsKey: string,
 ) {
   const getPath = (e: {}, remainingPath: Array<string>) => {

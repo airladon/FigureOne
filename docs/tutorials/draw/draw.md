@@ -3,8 +3,8 @@ Each {@link DiagramElementPrimitive} element manages drawing a shape, drawing te
 FigureOne's built-in shapes are drawn using WebGL, which uses triangles to create different shapes. To draw a shape, you define the verticies of the triangles. Every drawing frame (animation or screen refresh), the color of the vertices and the transform that moves them around is used to render the final shape to the screen.
 
 
-### <a id="drawing-boilerplate"></a> Drawing Boilerplate
-To test examples within the 'Drawing Shapes' sections of the API reference create an `index.html` file and `index.js` file.
+### <a id="drawing-boilerplate"></a> Shapes Boilerplate
+To test examples within the 'Shapes' sections of the API reference create an `index.html` file and `index.js` file.
 
 All examples are snippets which can be appended to the end of the `index.js` file.
 
@@ -23,7 +23,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01 });
+const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 ```
 
 ### Quick Start

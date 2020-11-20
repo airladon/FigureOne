@@ -12,7 +12,7 @@ import type {
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 import type { AnimationStartTime } from '../../AnimationManager';
-// import type { OBJ_QuadraticBezier } from 
+// import type { OBJ_QuadraticBezier } from
 // import type { DiagramElement } from '../../../Element';
 
 /**
@@ -114,7 +114,7 @@ export type OBJ_PositionAnimationStep = {
  *   .then(step2)
  *   .start();
  */
- export default class PositionAnimationStep extends ElementAnimationStep {
+export default class PositionAnimationStep extends ElementAnimationStep {
   position: {
     start: ?Point;  // null means use element transform when unit is started
     delta: ?Point;
