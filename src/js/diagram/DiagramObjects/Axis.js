@@ -13,9 +13,9 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
-import type { TypeColor } from '../../tools/types';
+import type { TypeColor, OBJ_Font, OBJ_Font_Fixed } from '../../tools/types';
 import type {
-  OBJ_Line,
+  OBJ_Line, OBJ_TextLines,
 } from '../DiagramPrimitives/DiagramPrimitives';
 
 
@@ -131,6 +131,18 @@ export type OBJ_AxisTicks = {
   offset?: number,
   width?: number,
   dash?: Array<number>,
+} & OBJ_Line;
+
+
+export type OBJ_AxisTicks_Fixed = {
+  start: number,
+  step: number,
+  stop: number,
+  values: Array<number>,
+  length: number,
+  offset: number,
+  width: number,
+  dash: Array<number>,
 } & OBJ_Line;
 
 
@@ -363,7 +375,7 @@ export type ADV_Axis = {
   start?: number,               // value space start at draw space start
   stop?: number,                // value space stop at draw space stop
   ticks?: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean,
-  labels?: AxisLabels | Array<AxisLabels> | boolean,
+  labels?: OBJ_AxisLabels | Array<OBJ_AxisLabels> | boolean,
   grid?: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean,
   title?: TypeAxisTitle,
   color?: TypeColor,
@@ -542,18 +554,22 @@ class AdvancedAxis extends DiagramElementCollection {
 
   length: number;
   angle: number;
-  start: number;
-  stop: number;
+  startValue: number;
+  stopValue: number;
+  showAxis: boolean;
 
-  ticks: ?Array<OBJ_AxisTicks>;
-  grid: ?Array<OBJ_AxisTicks>;
-  labels: ?Array<OBJ_AxisLabels>;
+  ticks: Array<OBJ_AxisTicks_Fixed>;
+  grid: Array<OBJ_AxisTicks_Fixed>;
+
+  labels: Array<OBJ_AxisLabels>;
 
   drawToValueRatio: number;
-  valueToDraw: number;
-  defaultFont: OBJ_Font;
+  valueToDrawRatio: number;
+  defaultFont: OBJ_Font_Fixed;
   name: string;
   autoStep: null | number;
+  axis: 'x' | 'y';
+  line: OBJ_Line;
 
   /**
    * @hideconstructor
@@ -570,7 +586,7 @@ class AdvancedAxis extends DiagramElementCollection {
     this.shapes = shapes;
     this.equation = equation;
 
-    const defaultOptions = {
+    const defaultOptions: ADV_Axis = {
       length: shapes.defaultLength,
       angle: 0,
       start: 0,
@@ -578,8 +594,8 @@ class AdvancedAxis extends DiagramElementCollection {
       font: shapes.defaultFont,
       name: '',
       line: {},
-      grid: null,
-      ticks: null,
+      // grid: null,
+      // ticks: null,
       show: true,
       axis: 'x',
     };
@@ -603,11 +619,11 @@ class AdvancedAxis extends DiagramElementCollection {
     if (optionsIn.font == null || optionsIn.font.color == null) {
       this.defaultFont.color = options.color;
     }
-    this.show = options.show;
-    this.start = options.start;
-    this.stop = options.stop;
-    if (this.start >= this.stop) {
-      this.start = this.stop - 1;
+    this.showAxis = options.show;
+    this.startValue = options.start;
+    this.stopValue = options.stop;
+    if (this.startValue >= this.stopValue) {
+      this.startValue = this.stopValue - 1;
     }
     this.length = options.length;
     this.axis = options.axis;
@@ -627,21 +643,22 @@ class AdvancedAxis extends DiagramElementCollection {
 
     this.ticks = [];
     this.grid = [];
+    this.labels = [];
 
-    if (this.show && options.line != null && options.line !== false) {
+    if (this.showAxis && options.line != null && options.line !== false) {
       this.addLine(options.line);
     }
-    if (this.show && options.ticks != null && options.ticks !== false) {
+    if (this.showAxis && options.ticks != null && options.ticks !== false) {
       this.addTicks(options.ticks, 'ticks');
     }
 
-    if (this.show && options.labels != null && options.labels !== false) {
+    if (this.showAxis && options.labels != null && options.labels !== false) {
       this.addLabels(options.labels);
     }
-    if (this.show && options.title != null) {
+    if (this.showAxis && options.title != null) {
       this.addTitle(options.title);
     }
-    if (this.show && options.grid != null && options.grid !== false) {
+    if (this.showAxis && options.grid != null && options.grid !== false) {
       this.addTicks(options.grid, 'grid');
     }
     this.reorder();
@@ -691,7 +708,9 @@ class AdvancedAxis extends DiagramElementCollection {
     o: { start?: number, stop?: number, step?: number},
     index: number,
   ) {
-    let { start, stop } = this;
+    // let { start, stop } = this;
+    let start = this.startValue;
+    let stop = this.stopValue;
     let step;
     if (o.start != null) {
       start = o.start;
@@ -718,7 +737,7 @@ class AdvancedAxis extends DiagramElementCollection {
       step = this.autoStep;
     } else if (step == null && index === 0) {
       step = (stop - start) / 5;
-    } else if (step == null && index > 0) {
+    } else if (step == null) { // $FlowFixMe
       step = this[name].step / 2;
     }
     return { start, stop, step };
@@ -730,9 +749,9 @@ class AdvancedAxis extends DiagramElementCollection {
       optionsIn = {};
     }
     const defaultOptions = {
-      // start: this.start,
-      // stop: this.stop,
-      // step: (this.stop - this.start) / 5,
+      // start: this.startValue,
+      // stop: this.stopValue,
+      // step: (this.stopValue - this.startValue) / 5,
       width: this.line != null ? this.line.width : this.shapes.defaultLineWidth,
       length: name === 'ticks' ? this.shapes.defaultLineWidth * 10 : this.shapes.defaultLineWidth * 50,
       angle: this.angle + Math.PI / 2,
@@ -743,7 +762,7 @@ class AdvancedAxis extends DiagramElementCollection {
       optionsToUse = optionsIn;
     } else {
       optionsToUse = [optionsIn];
-    }
+    } // $FlowFixMe
     this[name] = [];
     const elements = [];
     const lengthSign = this.axis === 'x' ? 1 : -1;
@@ -757,10 +776,11 @@ class AdvancedAxis extends DiagramElementCollection {
       if (o.offset == null && name === 'ticks') {
         o.offset = this.axis === 'x' ? -o.length / 2 : o.length / 2;
       } else if (o.offset == null && name === 'grid') {
+        const t = this.transform.t() || new Point(0, 0);
         if (this.axis === 'x') {
-          o.offset = -this.transform.t().y;
+          o.offset = -t.y;
         } else {
-          o.offset = -this.transform.t().x;
+          o.offset = -t.x;
         }
       }
       const num = Math.floor((o.stop + o.step / 10000 - o.start) / o.step);
@@ -773,7 +793,7 @@ class AdvancedAxis extends DiagramElementCollection {
         o.copy = [{ to: o.values.map(v => new Point(this.valueToDraw(v), 0)) }];
       } else {
         o.copy = [{ to: o.values.map(v => new Point(0, this.valueToDraw(v))) }];
-      }
+      } // $FlowFixMe
       o.copy[0].original = false;
 
       if (o.p1 == null) {
@@ -781,7 +801,7 @@ class AdvancedAxis extends DiagramElementCollection {
       }
 
       const ticks = this.shapes.line(o);
-      elements.push(ticks);
+      elements.push(ticks); // $FlowFixMe
       this[name].push(o);
     });
 
@@ -795,7 +815,7 @@ class AdvancedAxis extends DiagramElementCollection {
 
   addTitle(optionsIn: OBJ_TextLines & { rotation?: number, offset?: TypeParsablePoint } | string) {
     const defaultOptions = {
-      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size * 1.3 }),
+      font: joinObjects({}, this.defaultFont, { size: this.defaultFont.size || 0.1 * 1.3 }),
       justify: 'center',
       xAlign: 'center',
       yAlign: this.axis === 'x' ? 'top' : 'bottom',
@@ -821,7 +841,7 @@ class AdvancedAxis extends DiagramElementCollection {
     this.add('title', title);
   }
 
-  addLabels(optionsInOrBool: AxisLabels | Array<AxisLabels> | boolean) {
+  addLabels(optionsInOrBool: OBJ_AxisLabels | Array<OBJ_AxisLabels> | boolean) {
     let optionsIn = optionsInOrBool;
     if (optionsInOrBool === true) {
       optionsIn = {};
@@ -985,11 +1005,11 @@ class AdvancedAxis extends DiagramElementCollection {
    *
    * @return {number} draw space position
    */
-  valueToDraw(value: number | Array<number>) {
-    if (typeof value === 'number') {
-      return (value - this.start) * this.valueToDrawRatio;
+  valueToDraw<T: (number | Array<number>)>(value: T): T {
+    if (typeof value === 'number') { // $FlowFixMe
+      return (value - this.startValue) * this.valueToDrawRatio;
     }
-    return value.map(v => (v - this.start) * this.valueToDrawRatio);
+    return value.map(v => (v - this.startValue) * this.valueToDrawRatio);
   }
 
   /**
@@ -1000,8 +1020,8 @@ class AdvancedAxis extends DiagramElementCollection {
    *
    * @return {number} draw space position
    */
-  drawToValue(value: number | Array<number>) {
-    if (typeof value === 'number') {
+  drawToValue<T: (number | Array<number>)>(value: T): T {
+    if (typeof value === 'number') { // $FlowFixMe
       return value * this.drawToValueRatio;
     }
     return value.map(v => v * this.drawToValueRatio);
@@ -1013,7 +1033,7 @@ class AdvancedAxis extends DiagramElementCollection {
    * @return {boolean} `true` if value is within length of axis.
    */
   inAxis(value: number) {
-    if (value < this.start || value > this.stop) {
+    if (value < this.startValue || value > this.stopValue) {
       return false;
     }
     return true;

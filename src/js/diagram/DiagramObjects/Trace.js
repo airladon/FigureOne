@@ -3,16 +3,25 @@
 // import Diagram from '../Diagram';
 import {
   Transform, Point, Line,
-  getPoint, getPoints,
+  getPoints,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
-import {
-  round, range,
-} from '../../tools/math';
+// import {
+//   round, range,
+// } from '../../tools/math';
 import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
+// eslint-disable-next-line import/no-duplicates
+import type { ADV_Axis } from './Axis';
+// eslint-disable-next-line import/no-duplicates
+import type AdvancedAxis from './Axis';
+import type {
+  OBJ_Line, OBJ_Polygon, OBJ_Star, OBJ_Polyline,
+} from '../DiagramPrimitives/DiagramPrimitives';
+import type { TypeColor, OBJ_Font_Fixed } from '../../tools/types';
+import type { CPY_Steps } from '../DrawingObjects/Geometries/copy/copy';
 
 /**
  * {@link AdvancedTrace} options object.
@@ -78,7 +87,7 @@ export type ADV_Trace = {
   x?: Array<TypeParsablePoint>,
   y?: Array<TypeParsablePoint>,
   line?: OBJ_Line,
-  markers?: OBJ_Polygon | OBJ_Start,
+  markers?: OBJ_Polygon | OBJ_Star,
   color?: TypeColor,
   name?: string,
   xSampleDistance?: number,
@@ -223,6 +232,10 @@ class AdvancedTrace extends DiagramElementCollection {
   yAxis: AdvancedAxis;
 
   line: OBJ_Line;
+  defaultFont: OBJ_Font_Fixed;
+  xSampleDistance: number;
+  ySampleDistance: number;
+  markers: (OBJ_Polygon | OBJ_Star) & { copy: CPY_Steps };
 
   name: string;
 
@@ -267,10 +280,10 @@ class AdvancedTrace extends DiagramElementCollection {
     this.name = options.name;
     this.setColor(options.color);
     if (options.xSampleDistance == null) {
-      options.xSampleDistance = (this.xAxis.stop - this.xAxis.start) / 4000;
+      options.xSampleDistance = (this.xAxis.stopValue - this.xAxis.startValue) / 4000;
     }
     if (options.ySampleDistance == null) {
-      options.ySampleDistance = (this.yAxis.stop - this.yAxis.start) / 4000;
+      options.ySampleDistance = (this.yAxis.stopValue - this.yAxis.startValue) / 4000;
     }
     this.xSampleDistance = options.xSampleDistance;
     this.ySampleDistance = options.ySampleDistance;
@@ -400,7 +413,7 @@ class AdvancedTrace extends DiagramElementCollection {
     }
   }
 
-  addLine(options: OBJ_PolyLine) {
+  addLine(options: OBJ_Polyline) {
     const defaultOptions = {
       color: this.color,
       width: this.shapes.defaultLineWidth,

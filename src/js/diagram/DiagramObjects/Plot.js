@@ -14,9 +14,21 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection,
 } from '../Element';
+// eslint-disable-next-line import/no-duplicates
 import type { ADV_Axis } from './Axis';
+// eslint-disable-next-line import/no-duplicates
 import type { ADV_Trace } from './Trace';
 import type { ADV_PlotLegend } from './Legend';
+// eslint-disable-next-line import/no-duplicates
+import type { ADV_Rectangle } from './Rectangle';
+import type { OBJ_TextLines } from '../DiagramPrimitives/DiagramPrimitives';
+import type { OBJ_Font, TypeColor, OBJ_Font_Fixed } from '../../tools/types';
+// eslint-disable-next-line import/no-duplicates
+import type AdvancedAxis from './Axis';
+// eslint-disable-next-line import/no-duplicates
+import type AdvancedTrace from './Trace';
+// eslint-disable-next-line import/no-duplicates
+import type AdvancedRectangle from './Rectangle';
 
 /**
  * Plot frame.
@@ -62,13 +74,14 @@ export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
  *  trace.
  * @property {ADV_PlotLegend | boolean} [legend] `true` to turn the legend on,
  * or use ADV_PlotLegend to customize it's location and layout
- * @property {boolean | Array<number> | TypePlotFrame} [frame] frame around the
+ * @property {boolean | TypeColor | TypePlotFrame} [frame] frame around the
  * plot can be turned on with `true`, can be a simple color fill using
  * `Array<number>` as a color, or can be fully customized with TypePlotFrame
- * @property {Array<number> | ADV_Rectangle} [plotArea] plot area can be a
+ * @property {TypeColor | ADV_Rectangle} [plotArea] plot area can be a
  * color fill with `Array<number`> as a color, or be fully customized with
  * ADV_Rectangle
  * @property {OBJ_Font} [font] Default font for plot (title, axes, labels, etc.)
+ * @property {TypeColor} [color] Default color
  * @property {TypeParsablePoint} [position] Position of the plot
  */
 export type ADV_Plot = {
@@ -81,20 +94,21 @@ export type ADV_Plot = {
   title?: string | TypePlotTitle,
   trace?: Array<ADV_Trace | TypeParsablePoint> | ADV_Trace | Array<TypeParsablePoint>,
   legend?: ADV_PlotLegend,
-  frame?: boolean | Array<number> | TypePlotFrame,
-  plotArea?: Array<number> | ADV_Rectangle,
+  frame?: boolean | TypeColor | TypePlotFrame,
+  plotArea?: TypeColor | ADV_Rectangle,
   font?: OBJ_Font,
+  color?: TypeColor,
   position?: TypeParsablePoint,
 };
 
 function cleanTraces(
   tracesIn: Array<ADV_Trace | Array<TypeParsablePoint>> | ADV_Trace | Array<TypeParsablePoint>,
-) {
+): [Array<ADV_Trace>, Rect] {
   let traces = [];
   if (!Array.isArray(tracesIn)) {
     traces = [tracesIn];
   } else if (tracesIn.length === 0) {
-    traces = [];
+    traces = []; // $FlowFixMe
   } else if (parsePoint(tracesIn[0]) instanceof Point) {
     traces = [{ points: tracesIn }];
   } else {
@@ -109,8 +123,8 @@ function cleanTraces(
 
   let firstPoint = true;
   let result = { min: new Point(0, 0), max: new Point(0, 0) };
-  traces.forEach((trace) => {
-    for (let i = 0; i < trace.points.length; i += 1) {
+  traces.forEach((trace) => { // $FlowFixMe
+    for (let i = 0; i < trace.points.length; i += 1) { // $FlowFixMe
       const p = getPoint(trace.points[i]);
       // eslint-disable-next-line no-param-reassign
       // trace.points[i] = p;
@@ -123,7 +137,7 @@ function cleanTraces(
     result.min.y,
     result.max.x - result.min.x,
     result.max.y - result.min.y,
-  );
+  );  // $FlowFixMe
   return [traces, bounds];
 }
 
@@ -407,6 +421,7 @@ class AdvancedPlot extends DiagramElementCollection {
   // _labels: ?DiagramElementPrimitive;
   // _arrow1: ?DiagramElementPrimitive;
   // _arrow2: ?DiagramElementPrimitive;
+  __frame: ?AdvancedRectangle;
 
   shapes: Object;
   equation: Object;
@@ -414,6 +429,15 @@ class AdvancedPlot extends DiagramElementCollection {
 
   axes: Array<AdvancedAxis>;
   traces: Array<AdvancedTrace>;
+
+  defaultFont: OBJ_Font_Fixed;
+  width: number;
+  height: number;
+  theme: string;
+  grid: boolean;
+  xAxisShow: boolean;
+  yAxisShow: boolean;
+  frameSpace: ?number;
 
   // length: number;
   // angle: number;
@@ -524,9 +548,9 @@ class AdvancedPlot extends DiagramElementCollection {
       this.addLegend(options.legend);
     }
 
-    if (options.border != null) {
-      this.addBorder(options.border);
-    }
+    // if (options.border != null) {
+    //   this.addBorder(options.border);
+    // }
 
     if (this.__frame != null && this.frameSpace != null) {
       this.__frame.surround(this, this.frameSpace);
@@ -552,17 +576,18 @@ class AdvancedPlot extends DiagramElementCollection {
     axes.forEach((axisOptions) => {
       let axisType;
       if (axisOptions.axis != null) {
-        axisType = axisOptions.axis;
+        axisType = axisOptions.axis;  // $FlowFixMe
       } else if (defaultOptions.axis != null) {
         axisType = defaultOptions.axis;
       }
-      if (axisType === 'x') {
+      if (axisType === 'x') {     // $FlowFixMe
         defaultOptions.length = this.width;
-      } else {
+      } else {                    // $FlowFixMe
         defaultOptions.length = this.height;
       }
       const theme = this.getTheme(this.theme, axisType, axisOptions.color);
       const show = axisType === 'x' ? this.xAxisShow : this.yAxisShow;
+      // $FlowFixMe
       defaultOptions.show = show;
       const o = joinObjects({}, defaultOptions, theme.axis, axisOptions);
       if (Array.isArray(o.grid)) {
@@ -593,7 +618,7 @@ class AdvancedPlot extends DiagramElementCollection {
       position: [0, 0],
     };
     let o;
-    if (Array.isArray(plotArea)) {
+    if (Array.isArray(plotArea)) {    // $FlowFixMe
       defaultOptions.fill = plotArea;
       o = defaultOptions;
     } else {
@@ -602,7 +627,7 @@ class AdvancedPlot extends DiagramElementCollection {
     this.add('_plotArea', this.advanced.rectangle(o));
   }
 
-  addFrame(frame: ADV_Rectangle) {
+  addFrame(frame: ADV_Rectangle | boolean | TypeColor) {
     const defaultOptions = {
       width: this.width / 2,
       height: this.height / 2,
@@ -751,8 +776,9 @@ class AdvancedPlot extends DiagramElementCollection {
     }
 
     if (theme.axis != null && theme.axis.grid != null) {
-      if (this.grid === false) {
-        theme.axis.grid = undefined;
+      if (this.grid === false) {  // $FlowFixMe
+        delete theme.axis.grid;
+        // theme.axis.grid = undefined;
       } else if (typeof this.grid === 'object' || Array.isArray(this.grid)) {
         theme.axis.grid = joinObjects({}, theme.axis.grid, this.grid);
       }
@@ -786,21 +812,21 @@ class AdvancedPlot extends DiagramElementCollection {
     this.add('title', title);
   }
 
-  _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
-    return [...super._getStateProperties(options),
-      'angle',
-      'lastLabelRotationOffset',
-    ];
-  }
+  // _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
+  //   return [...super._getStateProperties(options),
+  //     'angle',
+  //     'lastLabelRotationOffset',
+  //   ];
+  // }
 
-  _fromState(state: Object) {
-    joinObjects(this, state);
-    this.setAngle({
-      angle: this.angle,
-      rotationOffset: this.lastLabelRotationOffset,
-    });
-    return this;
-  }
+  // _fromState(state: Object) {
+  //   joinObjects(this, state);
+  //   this.setAngle({
+  //     angle: this.angle,
+  //     rotationOffset: this.lastLabelRotationOffset,
+  //   });
+  //   return this;
+  // }
 }
 
 export default AdvancedPlot;

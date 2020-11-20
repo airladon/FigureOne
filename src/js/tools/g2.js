@@ -841,7 +841,7 @@ class Point {
   toDelta(
     delta: Point,
     percent: number,
-    translationStyle: 'linear' | 'curved' = 'linear',
+    translationStyle: 'linear' | 'curved' | 'curve' = 'linear',
     translationOptions: OBJ_TranslationPath = {
       magnitude: 0.5,
       offset: 0.5,

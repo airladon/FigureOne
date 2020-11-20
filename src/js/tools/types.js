@@ -77,5 +77,14 @@ export type OBJ_Font = {
   opacity?: number,
 };
 
+export type OBJ_Font_Fixed = {
+  family: string,
+  style: 'normal' | 'italic',
+  size: number,
+  weight: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
+  color: TypeColor | null,
+  opacity: number,
+};
+
 const doNothing = 1;
 export default doNothing;

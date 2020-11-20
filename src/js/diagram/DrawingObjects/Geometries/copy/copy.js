@@ -184,7 +184,7 @@ export type CPY_Step = {
 };
 /* eslint-enable max-len */
 
-type CPY_Steps = Array<CPY_Step>;
+export type CPY_Steps = Array<CPY_Step>;
 
 type CPY_Marks = { [markName: string]: number };
 

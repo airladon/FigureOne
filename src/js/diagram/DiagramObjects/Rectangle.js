@@ -15,10 +15,13 @@ import {
 } from '../Element';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep } from '../Animation/Animation';
-import type { OBJ_LineStyleSimple } from '../DiagramPrimitives/DiagramPrimitives';
+import type {
+  OBJ_LineStyleSimple, OBJ_Texture,
+} from '../DiagramPrimitives/DiagramPrimitives';
 import type {
   TypeColor, OBJ_CurvedCorner,
 } from '../../tools/types';
+import type { DiagramElement } from '../Element';
 
 /**
  * Surround animation step.
@@ -166,6 +169,16 @@ class AdvancedRectangle extends DiagramElementCollection {
   _line: DiagramElementPrimitive | null;
   _fill: DiagramElementPrimitive | null;
 
+  width: number;
+  height: number;
+  xAlign: 'left' | 'center' | 'right' | number;
+  yAlign: 'bottom' | 'middle' | 'top' | number;
+  corner: OBJ_CurvedCorner;
+
+  animations: {
+    surround: (OBJ_SurroundAnimationStep) => animation.CustomAnimationStep,
+  } & animation.AnimationManager;
+
   /**
    * @hideconstructor
    */
@@ -262,7 +275,7 @@ class AdvancedRectangle extends DiagramElementCollection {
         const newWidth = startWidth + deltaWidth * percentage;
         const newHeight = startHeight + deltaHeight * percentage;
         const newPosition = startPosition.add(deltaPosition.scale(percentage));
-        this.setSurround(newPosition, newWidth, newHeight, o.space);
+        this.setSurround(newPosition, newWidth, newHeight);
       };
       return new animation.CustomAnimationStep(o);
     };
@@ -272,7 +285,7 @@ class AdvancedRectangle extends DiagramElementCollection {
     });
   }
 
-  addRect(rectOptions: OBJ_LineStyle, name: string, fill: boolean) {
+  addRect(rectOptions: OBJ_LineStyleSimple, name: string, fill: boolean) {
     const defaultOptions = {
       width: this.width,
       height: this.height,
@@ -281,7 +294,7 @@ class AdvancedRectangle extends DiagramElementCollection {
       color: this.color,
       corner: this.corner,
     };
-    if (!fill) {
+    if (!fill) {  // $FlowFixMe
       defaultOptions.line = {
         widthIs: 'inside',
         cornerStyle: 'auto',
@@ -301,7 +314,7 @@ class AdvancedRectangle extends DiagramElementCollection {
     } else {
       optionsIn = { line: rectOptions };
     }
-    const o = joinObjects({}, defaultOptions, optionsIn);
+    const o = joinObjects({}, defaultOptions, optionsIn); // $FlowFixMe
     this[name] = o;
     const rect = this.shapes.rectangle(o);
     this.add(name, rect);

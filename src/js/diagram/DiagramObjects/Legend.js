@@ -13,8 +13,15 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
+// eslint-disable-next-line import/no-duplicates
 import type { ADV_Trace } from './Trace';
-import type { OBJ_Font } from '../../tools/types';
+// eslint-disable-next-line import/no-duplicates
+import type AdvancedTrace from './Trace';
+import type { OBJ_Font, OBJ_Font_Fixed } from '../../tools/types';
+import type {
+  OBJ_TextLines,
+} from '../DiagramPrimitives/DiagramPrimitives';
+import type { TypePlotFrame } from './Plot';
 
 /**
  * Legend customization for a single trace sample in the legend.
@@ -277,8 +284,10 @@ class AdvancedPlotLegend extends DiagramElementCollection {
   shapes: Object;
   equation: Object;
   advanced: Object;
+  defaultFont: OBJ_Font_Fixed;
 
   traces: Array<AdvancedTrace>;
+  offset: Array<Point>;
 
   toShow: Array<number>;
 
@@ -338,17 +347,25 @@ class AdvancedPlotLegend extends DiagramElementCollection {
 
   getTracesToShow(o: { show?: number, hide?: number }) {
     let toShow = [...Array(this.traces.length).keys()];
-    if (o.toShow) {
+    if (o.show) {
       toShow = [];
-      o.toShow.forEach((index) => {
+      let showToUse = o.show;
+      if (typeof showToUse === 'number') {
+        showToUse = [showToUse];
+      }
+      showToUse.forEach((index) => {
         const traceIndex = this.getTraceIndex(index);
         if (traceIndex !== -1) {
           toShow.push(traceIndex);
         }
       });
     }
-    if (o.toHide) {
-      o.toHide.forEach((index) => {
+    if (o.hide) {
+      let hideToUse = o.hide;
+      if (typeof hideToUse === 'number') {
+        hideToUse = [hideToUse];
+      }
+      hideToUse.forEach((index) => {
         const traceIndex = this.getTraceIndex(index);
         if (traceIndex !== -1 && toShow.indexOf(traceIndex) !== -1) {
           toShow.splice(traceIndex, 1);
@@ -362,7 +379,7 @@ class AdvancedPlotLegend extends DiagramElementCollection {
     const offsetArray = [];
     let { offset } = o;
     if (offset == null) {
-      offset = [new Point(0, -o.font.size * 1.5)];
+      offset = [new Point(0, -this.defaultFont.size * 1.5)];
     }
     offset = getPoints(offset);
     for (let i = 0; i < this.toShow.length; i += 1) {
@@ -377,14 +394,14 @@ class AdvancedPlotLegend extends DiagramElementCollection {
       const trace = this.traces[traceIndex];
 
       // Get any trace specific customizations
-      let custom = {};
-      if (o.custom[`${index}`] != null) {
-        custom = o.custom[`${index}`];
+      let custom = {};                              // $FlowFixMe
+      if (o.custom[`${index}`] != null) {           // $FlowFixMe
+        custom = o.custom[`${index}`];              // $FlowFixMe
       } else if (o.custom[trace.name] != null) {
         custom = o.custom[trace.name];
       }
       if (index === 0 && custom.position == null) {
-        custom.position = getPoint(o.position);
+        custom.position = getPoint(o.position || [0, 0]);
       }
 
       // Trace specific options
@@ -418,7 +435,7 @@ class AdvancedPlotLegend extends DiagramElementCollection {
       // Add trace marker (if exists)
       if (oTrace.length > 0 && trace.markers != null) {
         const oMarker = joinObjects({}, trace.markers, {
-          position: new Point(p.x + oTrace.length / 2, p.y),
+          position: new Point(p.x + oTrace.length / 2, p.y),  // $FlowFixMe
           copy: trace.markers.copy.slice(0, -1),
         });
         const marker = this.shapes.polygon(oMarker);
@@ -440,7 +457,7 @@ class AdvancedPlotLegend extends DiagramElementCollection {
       if (typeof oTrace.text === 'string') {
         textOptionsToUse = { text: [oTrace.text] };
       }
-      if (typeof custom.text === 'string') {
+      if (typeof custom.text === 'string') { // $FlowFixMe
         custom.text = { text: [custom.text] };
       }
       let colorOverride = {};
@@ -467,7 +484,7 @@ class AdvancedPlotLegend extends DiagramElementCollection {
       space: this.defaultFont.size,
       // line: { width: 0.01 },
     };
-    if (optionsIn.line == null && optionsIn.fill == null) {
+    if (optionsIn.line == null && optionsIn.fill == null) { // $FlowFixMe
       defaultFrameOptions.line = { width: 0.01 };
     }
 
@@ -480,21 +497,21 @@ class AdvancedPlotLegend extends DiagramElementCollection {
     this.add('frame', frame);
   }
 
-  _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
-    return [...super._getStateProperties(options),
-      'angle',
-      'lastLabelRotationOffset',
-    ];
-  }
+  // _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
+  //   return [...super._getStateProperties(options),
+  //     'angle',
+  //     'lastLabelRotationOffset',
+  //   ];
+  // }
 
-  _fromState(state: Object) {
-    joinObjects(this, state);
-    this.setAngle({
-      angle: this.angle,
-      rotationOffset: this.lastLabelRotationOffset,
-    });
-    return this;
-  }
+  // _fromState(state: Object) {
+  //   joinObjects(this, state);
+  //   this.setAngle({
+  //     angle: this.angle,
+  //     rotationOffset: this.lastLabelRotationOffset,
+  //   });
+  //   return this;
+  // }
 }
 
 export default AdvancedPlotLegend;
