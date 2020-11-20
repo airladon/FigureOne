@@ -988,8 +988,6 @@ class AdvancedAngle extends DiagramElementCollection {
     this.animations.angle = (...opt) => {
       const o = joinObjects({}, {
         element: this,
-        // start: this.angle,
-        // target: this.angle,
       }, ...opt);
       let target;
       let start;
