@@ -25,6 +25,31 @@ import type { OBJ_Pulse } from '../Element';
 import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
+import type { TypeColor } from '../../tools/types';
+
+
+/**
+ * Width pulse options object.
+ *
+ * @property {number} [line] width scale
+ * @property {number | OBJ_Pulse} [label] label pulse options or scale. Use
+ * the options object for more control of how the label is pulsed (for example
+ * if the label should be pulsed from its bottom rather than its center).
+ * @property {number} [arrow] arrow pulse scale
+ * @property {function(): void} [done] execute when pulsing is finished
+ * @property {number} [duration] pulse duration in seconds
+ * @property {number} [frequency] pulse frequency in pulses per second
+ * @property {TypeWhen} [when] when to start the pulse (`'nextFrame'`)
+ */
+export type OBJ_PulseWidth = {
+  line?: number,
+  label?: number | OBJ_Pulse,
+  arrow?: number,
+  done?: ?() => void,
+  duration?: number,
+  when?: TypeWhen,
+  frequency?: number,
+}
 
 /**
  * Advanced line label options object.
@@ -158,28 +183,6 @@ export type ADV_Line = {
   }
 };
 
-/**
- * Width pulse options object.
- *
- * @property {number} [line] width scale
- * @property {number | OBJ_Pulse} [label] label pulse options or scale. Use
- * the options object for more control of how the label is pulsed (for example
- * if the label should be pulsed from its bottom rather than its center).
- * @property {number} [arrow] arrow pulse scale
- * @property {function(): void} [done] execute when pulsing is finished
- * @property {number} [duration] pulse duration in seconds
- * @property {number} [frequency] pulse frequency in pulses per second
- * @property {TypeWhen} [when] when to start the pulse (`'nextFrame'`)
- */
-export type OBJ_PulseWidth = {
-  line?: number,
-  label?: number | OBJ_Pulse,
-  arrow?: number,
-  done?: ?() => void,
-  duration?: number,
-  when?: TypeWhen,
-  frequency?: number,
-}
 
 /**
  * Line move options object.
@@ -483,7 +486,7 @@ export default class AdvancedLine extends DiagramElementCollection {
   width: number;
   localXPosition: number;
   maxLength: number;
-  align: 'start' | 'end' | 'center' | number;
+  alignDraw: 'start' | 'end' | 'center' | number;
   dash: Array<number>;
   arrow: ?{
     start?: OBJ_LineArrow,
@@ -582,7 +585,7 @@ export default class AdvancedLine extends DiagramElementCollection {
     this.dash = optionsToUse.dash;
     this.width = optionsToUse.width;
     this.line = getLineFromOptions(optionsToUse);
-    this.align = optionsToUse.align;
+    this.alignDraw = optionsToUse.align;
     this.localXPosition = 0;
     this.maxLength = optionsToUse.maxLength != null ? optionsToUse.maxLength : this.line.length();
     this.autoUpdateSubscriptionId = -1;
@@ -1362,7 +1365,7 @@ export default class AdvancedLine extends DiagramElementCollection {
   /**
    * Set the length of the line
    */
-  setLength(length: number, align: 'start' | 'end' | 'center' | number = this.align) {
+  setLength(length: number, align: 'start' | 'end' | 'center' | number = this.alignDraw) {
     let newLen = length;
     if (length === 0) {
       newLen = 0.0000001;

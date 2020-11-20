@@ -200,28 +200,32 @@ function orientArrow(
     matrix = new Transform()
       .translate(length, 0)
       .rotate(options.angle)
-      .translate(options.drawPosition).matrix();
+      .translate(options.drawPosition)
+      .matrix();
   } else if (options.align === 'tip') {
     matrix = new Transform()
       .rotate(options.angle)
-      .translate(options.drawPosition).matrix();
+      .translate(options.drawPosition)
+      .matrix();
   } else if (options.align === 'mid') {
     matrix = new Transform()
       .translate(length / 2, 0)
       .rotate(options.angle)
-      .translate(options.drawPosition).matrix();
+      .translate(options.drawPosition)
+      .matrix();
   } else {
     matrix = new Transform()
       .translate(joinLength, 0)
       .rotate(options.angle)
-      .translate(options.drawPosition).matrix();
+      .translate(options.drawPosition)
+      .matrix();
   }
   // const line = new Line(start, end);
   // const matrix = new Transform().rotate(line.angle()).translate(start).matrix();
-  const newPoints = points.map(p => p.transformBy(matrix));
-  const newBorder = border.map(p => p.transformBy(matrix));
-  const newTouchBorder = touchBorder.map(p => p.transformBy(matrix));
-  const newTail = tail.map(p => p.transformBy(matrix));
+  const newPoints: Array<Point> = points.map(p => p.transformBy(matrix));
+  const newBorder: Array<Point> = border.map(p => p.transformBy(matrix));
+  const newTouchBorder: Array<Point> = touchBorder.map(p => p.transformBy(matrix));
+  const newTail: Array<Point> = tail.map(p => p.transformBy(matrix));
   return [
     newPoints, newBorder, newTouchBorder, newTail,
     // points.length,
@@ -230,7 +234,7 @@ function orientArrow(
 
 function getTouchBorder(l, w, buffer) {
   return [
-    new Point(-l -buffer, -w / 2 - buffer),
+    new Point(-l - buffer, -w / 2 - buffer),
     new Point(buffer, -w / 2 - buffer),
     new Point(buffer, w / 2 + buffer),
     new Point(-l - buffer, w / 2 + buffer),
@@ -254,7 +258,7 @@ function getTouchBorder(l, w, buffer) {
 //            width   :              |          \
 //                    :              |            \
 //                    :              |              \  (0, 0)
-//    . . . . . . . . : . . . . . . .| . . . . . . . * . . . . . . . . . . . . 
+//    . . . . . . . . : . . . . . . .| . . . . . . . * . . . . . . . . . . . .
 //                    :         end  |              / tip
 //                    :              |            /
 //                    :              |          /
@@ -281,7 +285,7 @@ function getTriangleArrowTail(o: {
     headX = -(o.length - t);
   }
   const tailX = -o.length;
-  return [new Point(tailX, o.lineWidth / 2), headX, tailX];
+  return [new Point(tailX, o.tailWidth / 2), headX, tailX];
 }
 
 
@@ -331,19 +335,20 @@ function getTriangleArrow(options: {
   tailWidth: number,
   touchBorderBuffer: number,
   tail: boolean,
+  lineWidth: number,
 }) {
   const {
     length, touchBorderBuffer, tailWidth, width, tail,
   } = options;
   const [backIntersect, headX, tailX] = getTriangleArrowTail(options);
   let arrowBorder;
-  let points;
+  let points: Array<Point>;
   if (tail === false || backIntersect.x >= headX) {
     arrowBorder = [
       new Point(-length, -width / 2),
       new Point(0, 0),
       new Point(-length, width / 2),
-    ];
+    ];  // $FlowFixMe
     points = arrowBorder.map(p => p._dup());
   } else {
     arrowBorder = [

@@ -32,15 +32,18 @@ import EquationForm from './js/diagram/DiagramElements/Equation/EquationForm';
 
 import type { TypeRotationDirection, TypeParsablePoint } from './js/tools/g2';
 import type {
-  TypeLabelLocation, TypeLabelSubLocation, TypeLabelOrientation,
-  TypeLineVertexOrigin, TypeLineVertexSpaceStart, ADV_Line,
+  ADV_Line,
   TypeLineLabelOptions, TypeLabelledLine,
 } from './js/diagram/DiagramObjects/Line';
 import type {
-  TypeAngleLabelOrientation, ADV_Angle, TypeAngleLabelOptions,
+  TypeLabelLocation, TypeLabelSubLocation, TypeLabelOrientation,
+} from './js/diagram/DiagramObjects/EquationLabel';
+
+import type {
+  ADV_Angle, TypeAngleLabelOptions,
   TypeLabelledAngle,
 } from './js/diagram/DiagramObjects/Angle';
-import type { TypeDiagramOptions } from './js/diagram/Diagram';
+import type { OBJ_Diagram } from './js/diagram/Diagram';
 import type {
   ADV_Polyline, OBJ_PolylinePad,
 } from './js/diagram/DiagramObjects/PolyLine';
@@ -53,8 +56,8 @@ import doNothing from './js/tools/types';
 export type {
   TypeRotationDirection,
   TypeLabelLocation, TypeLabelSubLocation, TypeLabelOrientation,
-  TypeLineVertexOrigin, TypeLineVertexSpaceStart, ADV_Line,
-  TypeAngleLabelOrientation, ADV_Angle, TypeDiagramOptions,
+  ADV_Line,
+  ADV_Angle, OBJ_Diagram,
   TypeLineLabelOptions, TypeAngleLabelOptions,
   ADV_Polyline, OBJ_PolylinePad, TypeParsablePoint,
   TypeLabelledAngle, TypeLabelledLine,

@@ -2,6 +2,7 @@
 import { colorArrayToRGBA } from './color';
 import { generateUniqueId, joinObjects } from './tools';
 import { Recorder } from '../diagram/Recorder';
+import type { TypeColor } from './types';
 
 function convertTextArrayToParagraphs(
   text: string | Array<string>,

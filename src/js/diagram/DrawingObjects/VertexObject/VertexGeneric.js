@@ -1,7 +1,8 @@
 // @flow
 import {
-  Point, getBoundingRect, Rect, getPoint, getPoints,
+  Point, getBoundingRect, Rect, getPoints,
 } from '../../../tools/g2';
+import type { TypeParsablePoint } from '../../../tools/g2';
 // import { joinObjects } from '../../../tools/tools';
 import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
@@ -25,7 +26,7 @@ class VertexGeneric extends VertexObject {
     textureVertexSpace: Rect = new Rect(-1, -1, 2, 2),
     textureCoords: Rect = new Rect(0, 0, 1, 1),
     textureRepeat: boolean = false,
-    copy: ?Array<CPY_Step>,
+    copy: Array<CPY_Step> = [],
   ): void {
     if (textureLocation !== '') {
       super(webgl, 'withTexture', 'withTexture');
@@ -46,7 +47,8 @@ class VertexGeneric extends VertexObject {
     this.setupBuffer();
   }
 
-  change(
+  // $FlowFixMe
+  change( // $FlowFixMe
     vertices: Array<TypeParsablePoint>,
     border: Array<Array<TypeParsablePoint>> | 'points' | 'rect' = 'rect',
     touchBorder: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none' = 'border',
@@ -54,17 +56,24 @@ class VertexGeneric extends VertexObject {
     copy: Array<CPY_Step> = [],
   ) {
     const parsedVertices = getPoints(vertices);
-    let parsedBorder = border;
+    let parsedBorder: Array<Array<Point>> | 'points' | 'rect';
     if (Array.isArray(border)) {
       parsedBorder = border.map(b => getPoints(b));
+    } else {
+      parsedBorder = border;
     }
-    let parsedTouchBorder = touchBorder;
+
+    let parsedTouchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none';
     if (Array.isArray(touchBorder)) {
       parsedTouchBorder = touchBorder.map(b => getPoints(b));
+    } else {
+      parsedTouchBorder = touchBorder;
     }
-    let parsedHoleBorder = holeBorder;
+    let parsedHoleBorder: Array<Array<Point>> | 'none';
     if (Array.isArray(holeBorder)) {
       parsedHoleBorder = holeBorder.map(b => getPoints(b));
+    } else {
+      parsedHoleBorder = holeBorder;
     }
 
     this.setupPoints(parsedVertices, parsedBorder, parsedTouchBorder, parsedHoleBorder, copy);
@@ -119,7 +128,7 @@ class VertexGeneric extends VertexObject {
         new Point(boundingRect.left, boundingRect.top),
       ];
     }
-    if (border === 'rect') {
+    if (border === 'rect') {  // $FlowFixMe
       this.border = [bounds];
     } else if (border === 'points') {
       this.border = [newVerts];
@@ -128,9 +137,9 @@ class VertexGeneric extends VertexObject {
     }
     if (touchBorder === 'none') {
       this.touchBorder = [];
-    } else if (touchBorder === 'rect') {
+    } else if (touchBorder === 'rect') {   // $FlowFixMe
       this.touchBorder = [bounds];
-    } else if (touchBorder === 'border') {
+    } else if (touchBorder === 'border') {  // $FlowFixMe
       this.touchBorder = this.border;
     } else {
       this.touchBorder = touchBorder;

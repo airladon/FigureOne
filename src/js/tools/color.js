@@ -4,6 +4,8 @@ import colorNames from './colorNames';  // official css color names
 // eslint-disable-next-line import/no-cycle
 import getCSSColors from './getCssColors';
 import { round } from './math';
+import type { TypeColor } from './types';
+
 // Function that converts any rgb or rgba string to an array of rgba numbers
 // between 0 and 1
 function RGBToArray(color: string): Array<number> {
@@ -90,7 +92,7 @@ function colorArrayToRGB(color: TypeColor) {
     Math.floor(color[2] * 255)})`;
 }
 
-function areColorsSame(color1: Array<number>, color2: Array<number>, precision: number = 5) {
+function areColorsSame(color1: TypeColor, color2: TypeColor, precision: number = 5) {
   if (color1.length !== color2.length) {
     return false;
   }
@@ -102,7 +104,7 @@ function areColorsSame(color1: Array<number>, color2: Array<number>, precision: 
   return true;
 }
 
-function areColorsWithinDelta(color1: Array<number>, color2: Array<number>, delta: number = 0.001) {
+function areColorsWithinDelta(color1: TypeColor, color2: TypeColor, delta: number = 0.001) {
   if (color1.length !== color2.length) {
     return false;
   }

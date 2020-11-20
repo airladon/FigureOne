@@ -6,6 +6,7 @@ import WebGLInstance from '../../webgl/webgl';
 import * as g2 from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 import type { CPY_Step } from '../Geometries/copy/copy';
+import type { TypeColor } from '../../../tools/types';
 
 // Base clase of all shape objects made from verteces for webgl.
 // The job of a VertexObject is to:
@@ -38,8 +39,9 @@ class VertexObject extends DrawingObject {
 
   state: 'loading' | 'loaded';
 
-  +change: (Array<g2.Point>) => void;
+  // +change: (Array<g2.Point>) => void;
   programIndex: Array<number>;
+  onLoad: ?(() => void);
 
   constructor(
     webgl: Array<WebGLInstance> | WebGLInstance,
@@ -241,10 +243,10 @@ class VertexObject extends DrawingObject {
   /* eslint-disable no-unused-vars */
   change(
     coords: Array<g2.Point>,
-    border: Array<Array<g2.Point>>,
+    border: Array<Array<g2.Point>>, // $FlowFixMe
     touchBorder: Array<Array<g2.Point>>,
     holes: Array<Array<g2.Point>>,
-    copy: Array<CPY_Step>,
+    copy: Array<CPY_Step> = [],
   ) {
     this.resetBuffer();
   }

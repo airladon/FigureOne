@@ -11,6 +11,7 @@ import type {
 } from '../DiagramElements/Equation/EquationForm';
 import { joinObjects } from '../../tools/tools';
 import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
+import type { TypeColor } from '../../tools/types';
 
 const DEBUG = false;
 

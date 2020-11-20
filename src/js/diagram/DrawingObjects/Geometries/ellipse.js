@@ -39,7 +39,7 @@ function getEllipseBorder(
     border: 'rect' | 'outline' | Array<Array<Point>>,
     touchBorder: number | 'rect' | 'border' | Array<Array<Point>>
   },
-): Array<Point> {
+) {
   const {
     width, height, xAlign, yAlign, border, touchBorder, line, sides,
   } = options;
@@ -68,14 +68,14 @@ function getEllipseBorder(
   if (line != null && (line.widthIs === 'outside' || line.widthIs === 'negative')) {
     lineDelta = line.width;
   }
-  let outline;
+  let outline: Array<Point>;
   if (lineDelta > 0) {
     outline = getEllipsePoints(
       width + lineDelta * 2,
       height + lineDelta * 2,
       sides, x - lineDelta, y - lineDelta,
     );
-  } else {
+  } else {  // $FlowFixMe
     outline = points.map(p => p._dup());
   }
 

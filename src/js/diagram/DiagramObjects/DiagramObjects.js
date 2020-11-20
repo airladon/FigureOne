@@ -21,6 +21,8 @@ import type { TypeLabelOptions } from './EquationLabel';
 import type { ADV_Polyline } from './PolyLine';
 import type { ADV_Axis } from './Axis';
 import type { ADV_Trace } from './Trace';
+import type { ADV_Plot } from './Plot';
+import type { ADV_Rectangle } from './Rectangle';
 import EquationLabel from './EquationLabel';
 import AdvancedPlot from './Plot';
 import AdvancedPlotLegend from './Legend';

@@ -63,7 +63,7 @@ function getRectangleBorder(
     touchBorder: number | 'rect' | 'border' | Array<Array<Point>>,
     offset: Point,
   },
-): Array<Point> {
+) {
   const {
     width, height, xAlign, yAlign, border, touchBorder, line,
   } = options;
@@ -92,14 +92,14 @@ function getRectangleBorder(
   if (line != null && (line.widthIs === 'outside' || line.widthIs === 'negative')) {
     lineDelta = line.width;
   }
-  let outline;
+  let outline: Array<Point>;
   if (lineDelta > 0) {
     outline = getRectPoints(
       width + lineDelta * 2,
       height + lineDelta * 2,
       sides, radius, x - lineDelta, y - lineDelta, options.offset,
     );
-  } else {
+  } else {  // $FlowFixMe
     outline = points.map(p => p._dup());
   }
 

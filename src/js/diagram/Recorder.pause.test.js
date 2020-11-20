@@ -2332,7 +2332,7 @@ describe('Animate To State', () => {
         beforeEach(() => {
           diagram.unpause();
           a.setPosition(4, 4);
-            // a.pulseScale({ duration: 2, scale: 4, when: 'syncNow' });
+          // a.pulseScale({ duration: 2, scale: 4, when: 'syncNow' });
           diagram.elements._l.pulseWidth({ duration: 2, line: 4, when: 'syncNow' });
           // This is ok as it kicks off the pulse
           diagram.mock.timeStep(0);  // Ok

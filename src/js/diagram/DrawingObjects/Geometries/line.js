@@ -2,6 +2,7 @@
 import {
   Point, Line, getPoint,
 } from '../../../tools/g2';
+import type { TypeParsablePoint } from '../../../tools/g2';
 
 // import {
 //   round,
@@ -89,14 +90,14 @@ function getLine(options: {
     let negOffset;
     let posOffset;
     if (widthIs === 'positive') {
-      negOffset = extendedLine.offset('negative', touchBorder);
-      posOffset = extendedLine.offset('positive', width + touchBorder);
+      negOffset = extendedLine.offset('negative', touchBorderToUse);
+      posOffset = extendedLine.offset('positive', width + touchBorderToUse);
     } else if (widthIs === 'negative') {
-      negOffset = extendedLine.offset('negative', width + touchBorder);
-      posOffset = extendedLine.offset('positive', touchBorder);
+      negOffset = extendedLine.offset('negative', width + touchBorderToUse);
+      posOffset = extendedLine.offset('positive', touchBorderToUse);
     } else {
-      negOffset = extendedLine.offset('negative', width / 2 + touchBorder);
-      posOffset = extendedLine.offset('positive', width / 2 + touchBorder);
+      negOffset = extendedLine.offset('negative', width / 2 + touchBorderToUse);
+      posOffset = extendedLine.offset('positive', width / 2 + touchBorderToUse);
     }
     touchBorderToUse = [[negOffset.p1, negOffset.p2, posOffset.p2, posOffset.p1]];
   }

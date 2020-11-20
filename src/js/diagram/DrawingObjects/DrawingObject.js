@@ -4,6 +4,7 @@ import {
   Point, // Rect, getBoundingRect,
 } from '../../tools/g2';
 import { getState } from '../state';
+import type { TypeColor } from '../../tools/types';
 
 // A Drawing object can be:
 //  - GL primitive vertices
@@ -65,7 +66,7 @@ class DrawingObject {
   border: Array<Array<Point>>; // Border vertices
   touchBorder: Array<Array<Point>>;
   hole: Array<Array<Point>>;  // Border of any holes inside of main border
-  +change: (any, any, any) => void;
+  // +change: (any, any, any) => void;
   // onLoad: Function | null;   // Only used for drawing objects with asynchronous
   //                            loading (like textures)
   type: string;

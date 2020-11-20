@@ -14,6 +14,7 @@ import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
 import type { ADV_Trace } from './Trace';
+import type { OBJ_Font } from '../../tools/types';
 
 /**
  * Legend customization for a single trace sample in the legend.

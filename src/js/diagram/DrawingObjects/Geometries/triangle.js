@@ -5,6 +5,7 @@ import {
 import {
   makePolyLine,
 } from './lines/lines';
+import type { TypeParsablePoint } from '../../../tools/g2';
 
 
 function getTriangleDirection(points: Array<Point>) {
@@ -31,7 +32,7 @@ function alignTriangle(
   xAlign: 'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid',
   yAlign: 'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid',
   rotation: number | { side: number, angle: number },
-) {
+): Array<Point> {
   let rotationMatrix;
   if (typeof rotation === 'number') {
     rotationMatrix = new Transform().rotate(rotation).matrix();
@@ -236,7 +237,7 @@ function getTriangle(
     xAlign: 'left' | 'center' | 'right' | number,
     yAlign: 'bottom' | 'middle' | 'top' | number,
     top: 'left' | 'right' | 'center',
-    points?: Array<Point>,
+    points?: Array<TypeParsablePoint>,
     SSS?: [number, number, number],
     ASA?: [number, number, number],
     AAS?: [number, number, number],
@@ -247,10 +248,10 @@ function getTriangle(
       widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
       width: number,
     },
-    border: 'rect' | 'outline' | Array<Array<Point>>,
-    touchBorder: number | 'rect' | 'border' | Array<Array<Point>>
+    border: 'rect' | 'outline' | Array<Array<TypeParsablePoint>>,
+    touchBorder: number | 'rect' | 'border' | Array<Array<TypeParsablePoint>>
   },
-): Array<Point> {
+) {
   // if (options.points != null) {
   //   return options.points;
   // }
@@ -303,7 +304,7 @@ function getTriangle(
 
   if (lineWidthDelta > 0 && border === 'outline') {
     borderToUse = increaseTriangleByOffset(alignedTriangle, lineWidthDelta);
-  } else if (border === 'outline') {
+  } else if (border === 'outline') {  // $FlowFixMe
     borderToUse = [alignedTriangle.map(p => p._dup())];
   }
 

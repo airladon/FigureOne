@@ -24,7 +24,7 @@ export default function Generic(
   textureCoords: Rect = new Rect(0, 0, 1, 1),
   textureRepeat: boolean = false,
   onLoad: ?() => void = null,
-  copy: ?Array<CPY_Step>,
+  copy: Array<CPY_Step>,
 ) {
   const generic = new VertexGeneric(
     webgl,

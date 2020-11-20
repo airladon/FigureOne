@@ -842,12 +842,11 @@ class Point {
     delta: Point,
     percent: number,
     translationStyle: 'linear' | 'curved' = 'linear',
-    translationOptions: pathOptionsType = {
-      // rot: 1,
+    translationOptions: OBJ_TranslationPath = {
       magnitude: 0.5,
       offset: 0.5,
       controlPoint: null,
-      direction: '',
+      // direction: '',
     },
   ) {
     const pathPoint = translationPath(
@@ -920,14 +919,17 @@ export type OBJ_QuadraticBezier = {
   direction: 'up' | 'left' | 'down' | 'right' | 'positive' | 'negative';
 };
 
+/**
+ * Translation path options object
+ */
 export type OBJ_TranslationPath = {
-  style: 'curve' | 'linear' | 'curved',
+  style?: 'curve' | 'linear' | 'curved',
   // curve options
-  angle: number,
-  magnitude: number,
-  offset: number,
-  controlPoint: TypeParsablePoint | null,
-  direction: 'positive' | 'negative' | 'up' | 'down' | 'left' | 'right',
+  angle?: number,
+  magnitude?: number,
+  offset?: number,
+  controlPoint?: TypeParsablePoint | null,
+  direction?: 'positive' | 'negative' | 'up' | 'down' | 'left' | 'right',
 }
 
 
@@ -990,6 +992,15 @@ function curvedPath(
     let angleDelta = Math.PI / 2;
     if (o.angle != null) {
       angleDelta = o.angle;
+    }
+    if (o.offset == null) {
+      o.offset = 0;
+    }
+    if (o.direction == null) {
+      o.direction = 'positive';
+    }
+    if (o.magnitude == null) {
+      o.magnitude = 1;
     }
     const displacementLine = new Line(start, start.add(delta));
     const lineAngle = clipAngle(displacementLine.angle(), '0to360');
@@ -1060,7 +1071,7 @@ function translationPath(
   start: Point,
   delta: Point,
   percent: number,
-  options: pathOptionsType,
+  options: OBJ_TranslationPath,
 ) {
   if (pathType === 'linear') {
     return linearPath(start, delta, percent);
@@ -1256,14 +1267,15 @@ function getDeltaAngle(
 
 /**
  * Line intersection result object with keys:
- * @property {undefined | Point} intersect
+ * @property {undefined | Point} intersect will be `undefined` if there is
+ * no intersect
  * @property {boolean} alongLine `true` if `intersect` is along line calling
  * `intersectsWith`
  * @property {boolean} withinLine `true` if `intersect` is within line calling
  * `intersectsWith`
  */
 type Intersect = {
-  intersect: undefined | Point,
+  intersect?: Point,
   alongLine: boolean,
   withinLine: boolean,
 }
@@ -2150,7 +2162,7 @@ class Line {
     }
 
     // One 1 end, one 2 end is the only remaining possibility
-    let withinLine;
+    let withinLine = false;
     const checkOverlap = (li1: Line, li2: Line) => {
       // partial overlap
       if (li1.p1.isWithinLine(li2)) {
@@ -3561,7 +3573,7 @@ class Transform {
     let bounds;
     if (boundsIn instanceof TransformBounds) {
       bounds = boundsIn;
-    } else if (boundsIn === 'none'){
+    } else if (boundsIn === 'none') {
       bounds = new TransformBounds(this);
     } else {
       bounds = new TransformBounds(this, boundsIn);
@@ -5851,7 +5863,7 @@ function getTriangleCenter(
   return new Point(Ox, Oy);
 }
 
-const parseBorder = (borders) => {
+const parseBorder = (borders: Array<Array<TypeParsablePoint>>) => {
   if (!Array.isArray(borders)) {
     return borders;
   }

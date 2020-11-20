@@ -26,6 +26,7 @@ import DiagramObjects from './DiagramObjects/DiagramObjects';
 import addElements from './DiagramAddElements/addElements';
 import type { TypeAddElementObject } from './DiagramAddElements/addElements';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
+import type { TypeColor, OBJ_Font } from '../tools/types';
 /**
   * Diagram options object
   * @property {string} [htmlId] HTML `div` tag `id` to tie diagram to (`"figureOneContainer"`)
