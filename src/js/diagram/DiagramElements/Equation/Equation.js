@@ -10,7 +10,6 @@ import {
 import {
   DiagramFont,
 } from '../../DrawingObjects/TextObject/TextObject';
-import type { OBJ_Font } from '../../DrawingObjects/TextObject/TextObject';
 import type { ElementInterface } from './Elements/Element';
 import { Elements } from './Elements/Element';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
@@ -27,7 +26,7 @@ import type { TypeEquationPhrase } from './EquationFunctions';
 import type { TypeEquationSymbolAngleBracket } from './Symbols/AngleBracket';
 import type { TypeEquationSymbolArrowBracket } from './Symbols/Arrow';
 import type {
-  TypeColor,
+  TypeColor, OBJ_Font,
 } from '../../../tools/types';
 import type {
   TypeParsablePoint,

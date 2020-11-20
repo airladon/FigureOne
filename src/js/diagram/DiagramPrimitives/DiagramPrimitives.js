@@ -1,6 +1,6 @@
 // @flow
 import {
-  Rect, Point, Transform, getPoint, getRect, getTransform, getPoints,
+  Rect, Point, Transform, getPoint, getRect, getTransform,
   parseBorder,
 } from '../../tools/g2';
 // import {
@@ -18,26 +18,26 @@ import DrawContext2D from '../DrawContext2D';
 import * as tools from '../../tools/math';
 import { generateUniqueId, joinObjects } from '../../tools/tools';
 import DrawingObject from '../DrawingObjects/DrawingObject';
-import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
+// import VertexObject from '../DrawingObjects/VertexObject/VertexObject';
 // import {
 //   PolyLine, PolyLineCorners,
 // } from '../DiagramElements/PolyLine';
-import Fan from '../DiagramElements/Fan';
+// import Fan from '../DiagramElements/Fan';
 // import {
 //   Polygon, PolygonFilled, PolygonLine,
 // } from '../DiagramElements/Polygon';
-import RadialLines from '../DiagramElements/RadialLines';
-import HorizontalLine from '../DiagramElements/HorizontalLine';
-import DashedLine from '../DiagramElements/DashedLine';
-import RectangleFilled from '../DiagramElements/RectangleFilled';
-import Rectangle from '../DiagramElements/Rectangle';
+// import RadialLines from '../DiagramElements/RadialLines';
+// import HorizontalLine from '../DiagramElements/HorizontalLine';
+// import DashedLine from '../DiagramElements/DashedLine';
+// import RectangleFilled from '../DiagramElements/RectangleFilled';
+// import Rectangle from '../DiagramElements/Rectangle';
 import Generic from '../DiagramElements/Generic';
-import Box from '../DiagramElements/Box';
+// import Box from '../DiagramElements/Box';
 // import type { TypeRectangleFilledReference } from '../DiagramElements/RectangleFilled';
-import Lines from '../DiagramElements/Lines';
-import Arrow from '../DiagramElements/Arrow';
-import { AxisProperties } from '../DiagramElements/Plot/AxisProperties';
-import Axis from '../DiagramElements/Plot/Axis';
+// import Lines from '../DiagramElements/Lines';
+// import Arrow from '../DiagramElements/Arrow';
+// import { AxisProperties } from '../DiagramElements/Plot/AxisProperties';
+// import Axis from '../DiagramElements/Plot/Axis';
 import Text from '../DiagramElements/Text';
 // import {
 //   DiagramText, DiagramFont, TextObject, LinesObject,
@@ -3012,49 +3012,49 @@ export default class DiagramPrimitives {
   //   return element;
   // }
 
-  // deprecated
-  fan(...optionsIn: Array<{
-    points?: Array<Point>,
-    color?: TypeColor,
-    transform?: Transform,
-    position?: Point,
-    pulse?: number,
-    mods?: {},
-  }>) {
-    const defaultOptions = {
-      points: [],
-      color: this.defaultColor,
-      transform: new Transform('fan').standard(),
-      position: null,
-    };
-    const options = Object.assign({}, defaultOptions, ...optionsIn);
+  // // deprecated
+  // fan(...optionsIn: Array<{
+  //   points?: Array<Point>,
+  //   color?: TypeColor,
+  //   transform?: Transform,
+  //   position?: Point,
+  //   pulse?: number,
+  //   mods?: {},
+  // }>) {
+  //   const defaultOptions = {
+  //     points: [],
+  //     color: this.defaultColor,
+  //     transform: new Transform('fan').standard(),
+  //     position: null,
+  //   };
+  //   const options = Object.assign({}, defaultOptions, ...optionsIn);
 
-    if (options.position != null) {
-      const p = getPoint(options.position);
-      options.transform.updateTranslation(p);
-    }
+  //   if (options.position != null) {
+  //     const p = getPoint(options.position);
+  //     options.transform.updateTranslation(p);
+  //   }
 
-    const element = Fan(
-      this.webgl,
-      options.points.map(p => getPoint(p)),
-      options.color,
-      options.transform,
-      this.limits,
-    );
+  //   const element = Fan(
+  //     this.webgl,
+  //     options.points.map(p => getPoint(p)),
+  //     options.color,
+  //     options.transform,
+  //     this.limits,
+  //   );
 
-    // if (options.pulse != null) {
-    //   if (typeof element.pulseDefault !== 'function') {
-    //     element.pulseDefault.scale = options.pulse;
-    //   }
-    // }
-    setupPulse(element, options);
+  //   // if (options.pulse != null) {
+  //   //   if (typeof element.pulseDefault !== 'function') {
+  //   //     element.pulseDefault.scale = options.pulse;
+  //   //   }
+  //   // }
+  //   setupPulse(element, options);
 
-    if (options.mods != null && options.mods !== {}) {
-      element.setProperties(options.mods);
-    }
+  //   if (options.mods != null && options.mods !== {}) {
+  //     element.setProperties(options.mods);
+  //   }
 
-    return element;
-  }
+  //   return element;
+  // }
 
   textGL(options: Object) {
     return Text(
@@ -3247,49 +3247,6 @@ export default class DiagramPrimitives {
   //   return element;
   // }
 
-  // // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  // lineNew(...optionsIn: Array<{
-  //   length?: number,
-  //   angle?: number,
-  //   p1?: TypeParsablePoint,
-  //   p2?: TypeParsablePoint,
-  //   line?: OBJ_LineStyle,
-  //   maxLength?: number,
-  //   move?: {
-  //     type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scaleX' | 'scaleY' | 'scale';
-  //     middleLengthPercent?: number;
-  //     translationBounds?: Rect;
-  //   },
-  //   arrow?: {
-  //     1: {},
-  //     2: {},
-  //     tri?: { width?: number, length?: number },
-  //     lines?: { width?: number, length?: number },
-  //     circle?: { radius?: number },
-  //     flat?: { width?: number },
-  //     triTail?: { width?: number, length?: number, tail?: number },
-  //   },
-  //   border?: {
-  //     width?: number,
-  //     length?: number,
-  //     align?: 'p1' | 'p2' | 'center' | number,
-  //   },
-  //   label?: {
-  //     text?: string | Equation | TypeLabelEquationOptions,
-  //     offset?: number | TypeParsablePoint,
-  //     location?: 'top' | 'left' | 'bottom' | 'right'
-  //                                   | 'end1' | 'end2' | 'positive' | 'negative' | 'inside' | 'outside';
-  //     subLocation?: 'top' | 'left' | 'bottom' | 'right';
-  //     orientation?: 'horizontal' | 'baseToLine' | 'baseAway'
-  //                                     | 'baseUpright';
-  //     linePosition?: number,
-  //     scale?: number,
-  //     color?: TypeColor,
-  //     precision?: number,
-  //   },
-  // }>) {
-
-  // }
 
   // arrowLegacy(
   //   width: number = 1,
@@ -3630,20 +3587,23 @@ export default class DiagramPrimitives {
   //   );
   // }
 
-  // rectangleLegacy(...optionsIn: Array<OBJ_Rectangle>) {
+  // box(...optionsIn: Array<{
+  //   width?: number,
+  //   height?: number,
+  //   fill?: boolean,
+  //   lineWidth?: number,
+  //   colors?: Array<number>,
+  //   transform?: Transform,
+  //   position?: TypeParsablePoint,
+  //   pulse?: number,
+  // }>) {
   //   const defaultOptions = {
-  //     yAlign: 'middle',
-  //     xAlign: 'center',
   //     width: 1,
   //     height: 1,
-  //     lineWidth: 0.01,
-  //     corner: {
-  //       radius: 0,
-  //       sides: 1,
-  //     },
   //     fill: false,
+  //     lineWidth: 0.01,
   //     color: this.defaultColor,
-  //     transform: new Transform('rectangle').scale(1, 1).rotate(0).translate(0, 0),
+  //     transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
   //     position: null,
   //   };
   //   const options = joinObjects({}, defaultOptions, ...optionsIn);
@@ -3653,94 +3613,49 @@ export default class DiagramPrimitives {
   //   if (typeof options.reference !== 'string') {
   //     options.reference = getPoint(options.reference);
   //   }
-  //   let element;
-  //   if (options.fill) {
-  //     element = RectangleFilled(
-  //       this.webgl, options.xAlign, options.yAlign, options.width, options.height,
-  //       options.corner.radius, options.corner.sides, options.color, options.transform, this.limits,
-  //     );
-  //   } else {
-  //     element = Rectangle(
-  //       this.webgl, options.xAlign, options.yAlign, options.width,
-  //       options.height, options.lineWidth, options.corner.radius,
-  //       options.corner.sides, options.color, options.transform, this.limits,
-  //     );
-  //   }
-
+  //   const element = Box(
+  //     this.webgl, options.width, options.height, options.lineWidth,
+  //     options.fill, options.color, options.transform, this.limits,
+  //   );
   //   setupPulse(element, options);
 
   //   return element;
   // }
 
-  box(...optionsIn: Array<{
-    width?: number,
-    height?: number,
-    fill?: boolean,
-    lineWidth?: number,
-    colors?: Array<number>,
-    transform?: Transform,
-    position?: TypeParsablePoint,
-    pulse?: number,
-  }>) {
-    const defaultOptions = {
-      width: 1,
-      height: 1,
-      fill: false,
-      lineWidth: 0.01,
-      color: this.defaultColor,
-      transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
-      position: null,
-    };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
-    if (options.position != null) {
-      options.transform.updateTranslation(getPoint(options.position));
-    }
-    if (typeof options.reference !== 'string') {
-      options.reference = getPoint(options.reference);
-    }
-    const element = Box(
-      this.webgl, options.width, options.height, options.lineWidth,
-      options.fill, options.color, options.transform, this.limits,
-    );
-    setupPulse(element, options);
+  // radialLines(...optionsIn: Array<{
+  //   innerRadius?: number,
+  //   outerRadius?: number,
+  //   width?: number,
+  //   dAngle?: number,
+  //   angle?: number,
+  //   color?: TypeColor,
+  //   transform?: Transform,
+  //   position?: Point,
+  //   pulse?: number,
+  // }>) {
+  //   const defaultOptions = {
+  //     innerRadius: 0,
+  //     outerRadius: 1,
+  //     width: 0.05,
+  //     dAngle: Math.PI / 4,
+  //     angle: Math.PI * 2,
+  //     transform: new Transform().standard(),
+  //   };
+  //   const options = joinObjects({}, defaultOptions, ...optionsIn);
+  //   if (options.position != null) {
+  //     options.transform.updateTranslation(getPoint(options.position));
+  //   }
+  //   const element = RadialLines(
+  //     this.webgl, options.innerRadius, options.outerRadius,
+  //     options.width, options.dAngle, options.angle, options.color,
+  //     options.transform, this.limits,
+  //   );
 
-    return element;
-  }
-
-  radialLines(...optionsIn: Array<{
-    innerRadius?: number,
-    outerRadius?: number,
-    width?: number,
-    dAngle?: number,
-    angle?: number,
-    color?: TypeColor,
-    transform?: Transform,
-    position?: Point,
-    pulse?: number,
-  }>) {
-    const defaultOptions = {
-      innerRadius: 0,
-      outerRadius: 1,
-      width: 0.05,
-      dAngle: Math.PI / 4,
-      angle: Math.PI * 2,
-      transform: new Transform().standard(),
-    };
-    const options = joinObjects({}, defaultOptions, ...optionsIn);
-    if (options.position != null) {
-      options.transform.updateTranslation(getPoint(options.position));
-    }
-    const element = RadialLines(
-      this.webgl, options.innerRadius, options.outerRadius,
-      options.width, options.dAngle, options.angle, options.color,
-      options.transform, this.limits,
-    );
-
-    setupPulse(element, options);
+  //   setupPulse(element, options);
 
 
-    return element;
-  }
+  //   return element;
+  // }
 
   // repeatPatternVertex(...optionsIn: Array<TypeRepeatPatternVertex>) {
   //   const defaultOptions = {
@@ -3955,313 +3870,313 @@ export default class DiagramPrimitives {
   //   return copy;
   // }
 
-//   axes(...optionsIn: Array<{
-//     width?: number,
-//     height?: number,
-//     limits?: Rect,
-//     yAxisLocation?: number,
-//     xAxisLocation?: number,
-//     stepX?: number,
-//     stepY?: number,
-//     fontSize?: number,
-//     showGrid?: boolean,
-//     color?: TypeColor,
-//     fontColor?: Array<number>,
-//     gridColor?: Array<number>,
-//     location?: Transform | Point,
-//     decimalPlaces?: number,
-//     lineWidth?: number,
-//     pulse?: number,
-//   }>) {
-//     const defaultOptions = {
-//       width: 1,
-//       height: 1,
-//       limits: new Rect(-1, -1, 2, 2),
-//       yAxisLocation: 0,
-//       xAxisLocation: 0,
-//       stepX: 0.1,
-//       stepY: 0.1,
-//       fontSize: 0.13,
-//       showGrid: true,
-//       color: this.defaultColor,
-//       location: new Transform(),
-//       decimalPlaces: 1,
-//       lineWidth: 0.01,
-//     };
-//     const options = joinObjects({}, defaultOptions, ...optionsIn);
+  //   axes(...optionsIn: Array<{
+  //     width?: number,
+  //     height?: number,
+  //     limits?: Rect,
+  //     yAxisLocation?: number,
+  //     xAxisLocation?: number,
+  //     stepX?: number,
+  //     stepY?: number,
+  //     fontSize?: number,
+  //     showGrid?: boolean,
+  //     color?: TypeColor,
+  //     fontColor?: Array<number>,
+  //     gridColor?: Array<number>,
+  //     location?: Transform | Point,
+  //     decimalPlaces?: number,
+  //     lineWidth?: number,
+  //     pulse?: number,
+  //   }>) {
+  //     const defaultOptions = {
+  //       width: 1,
+  //       height: 1,
+  //       limits: new Rect(-1, -1, 2, 2),
+  //       yAxisLocation: 0,
+  //       xAxisLocation: 0,
+  //       stepX: 0.1,
+  //       stepY: 0.1,
+  //       fontSize: 0.13,
+  //       showGrid: true,
+  //       color: this.defaultColor,
+  //       location: new Transform(),
+  //       decimalPlaces: 1,
+  //       lineWidth: 0.01,
+  //     };
+  //     const options = joinObjects({}, defaultOptions, ...optionsIn);
 
-//     if (options.fontColor == null) {
-//       options.fontColor = options.color.slice();
-//     }
-//     if (options.gridColor == null) {
-//       options.gridColor = options.color.slice();
-//     }
+  //     if (options.fontColor == null) {
+  //       options.fontColor = options.color.slice();
+  //     }
+  //     if (options.gridColor == null) {
+  //       options.gridColor = options.color.slice();
+  //     }
 
-//     const {
-//       width, lineWidth, limits, color, stepX, decimalPlaces,
-//       yAxisLocation, xAxisLocation, fontSize, height, stepY,
-//       location, showGrid, gridColor, fontColor,
-//     } = options;
+  //     const {
+  //       width, lineWidth, limits, color, stepX, decimalPlaces,
+  //       yAxisLocation, xAxisLocation, fontSize, height, stepY,
+  //       location, showGrid, gridColor, fontColor,
+  //     } = options;
 
-//     const xProps = new AxisProperties('x', 0);
+  //     const xProps = new AxisProperties('x', 0);
 
-//     xProps.minorTicks.mode = 'off';
-//     xProps.minorGrid.mode = 'off';
-//     xProps.majorGrid.mode = 'off';
+  //     xProps.minorTicks.mode = 'off';
+  //     xProps.minorGrid.mode = 'off';
+  //     xProps.majorGrid.mode = 'off';
 
-//     xProps.length = width;
-//     xProps.width = lineWidth;
-//     xProps.limits = { min: limits.left, max: limits.right };
-//     xProps.color = color.slice();
-//     xProps.title = '';
+  //     xProps.length = width;
+  //     xProps.width = lineWidth;
+  //     xProps.limits = { min: limits.left, max: limits.right };
+  //     xProps.color = color.slice();
+  //     xProps.title = '';
 
-//     xProps.majorTicks.start = limits.left;
-//     xProps.majorTicks.step = stepX;
-//     xProps.majorTicks.length = lineWidth * 5;
-//     xProps.majorTicks.offset = -xProps.majorTicks.length / 2;
-//     xProps.majorTicks.width = lineWidth * 2;
-//     xProps.majorTicks.labelMode = 'off';
-//     xProps.majorTicks.color = color.slice();
-//     xProps.majorTicks.labels = tools.range(
-//       xProps.limits.min,
-//       xProps.limits.max,
-//       stepX,
-//     ).map(v => v.toFixed(decimalPlaces)).map((v) => {
-//       if (v === yAxisLocation.toString() && yAxisLocation === xAxisLocation) {
-//         return `${v}     `;
-//       }
-//       return v;
-//     });
+  //     xProps.majorTicks.start = limits.left;
+  //     xProps.majorTicks.step = stepX;
+  //     xProps.majorTicks.length = lineWidth * 5;
+  //     xProps.majorTicks.offset = -xProps.majorTicks.length / 2;
+  //     xProps.majorTicks.width = lineWidth * 2;
+  //     xProps.majorTicks.labelMode = 'off';
+  //     xProps.majorTicks.color = color.slice();
+  //     xProps.majorTicks.labels = tools.range(
+  //       xProps.limits.min,
+  //       xProps.limits.max,
+  //       stepX,
+  //     ).map(v => v.toFixed(decimalPlaces)).map((v) => {
+  //       if (v === yAxisLocation.toString() && yAxisLocation === xAxisLocation) {
+  //         return `${v}     `;
+  //       }
+  //       return v;
+  //     });
 
-//     // xProps.majorTicks.labels[xProps.majorTicks.labels / 2] = '   0';
-//     xProps.majorTicks.labelOffset = new Point(
-//       0,
-//       xProps.majorTicks.offset - fontSize * 0.1,
-//     );
-//     xProps.majorTicks.labelsHAlign = 'center';
-//     xProps.majorTicks.labelsVAlign = 'top';
-//     xProps.majorTicks.fontColor = fontColor.slice();
-//     xProps.majorTicks.fontSize = fontSize;
-//     xProps.majorTicks.fontWeight = '400';
+  //     // xProps.majorTicks.labels[xProps.majorTicks.labels / 2] = '   0';
+  //     xProps.majorTicks.labelOffset = new Point(
+  //       0,
+  //       xProps.majorTicks.offset - fontSize * 0.1,
+  //     );
+  //     xProps.majorTicks.labelsHAlign = 'center';
+  //     xProps.majorTicks.labelsVAlign = 'top';
+  //     xProps.majorTicks.fontColor = fontColor.slice();
+  //     xProps.majorTicks.fontSize = fontSize;
+  //     xProps.majorTicks.fontWeight = '400';
 
-//     const xAxis = new Axis(
-//       this.webgl, this.draw2D, xProps,
-//       new Transform().scale(1, 1).rotate(0)
-//         .translate(0, xAxisLocation - limits.bottom * height / 2),
-//       this.limits,
-//     );
+  //     const xAxis = new Axis(
+  //       this.webgl, this.draw2D, xProps,
+  //       new Transform().scale(1, 1).rotate(0)
+  //         .translate(0, xAxisLocation - limits.bottom * height / 2),
+  //       this.limits,
+  //     );
 
-//     const yProps = new AxisProperties('x', 0);
-//     yProps.minorTicks.mode = 'off';
-//     yProps.minorGrid.mode = 'off';
-//     yProps.majorGrid.mode = 'off';
+  //     const yProps = new AxisProperties('x', 0);
+  //     yProps.minorTicks.mode = 'off';
+  //     yProps.minorGrid.mode = 'off';
+  //     yProps.majorGrid.mode = 'off';
 
-//     yProps.length = height;
-//     yProps.width = xProps.width;
-//     yProps.limits = { min: limits.bottom, max: limits.top };
-//     yProps.color = xProps.color;
-//     yProps.title = '';
-//     yProps.rotation = Math.PI / 2;
+  //     yProps.length = height;
+  //     yProps.width = xProps.width;
+  //     yProps.limits = { min: limits.bottom, max: limits.top };
+  //     yProps.color = xProps.color;
+  //     yProps.title = '';
+  //     yProps.rotation = Math.PI / 2;
 
-//     yProps.majorTicks.step = stepY;
-//     yProps.majorTicks.start = limits.bottom;
-//     yProps.majorTicks.length = xProps.majorTicks.length;
-//     yProps.majorTicks.offset = -yProps.majorTicks.length / 2;
-//     yProps.majorTicks.width = xProps.majorTicks.width;
-//     yProps.majorTicks.labelMode = 'off';
-//     yProps.majorTicks.color = color.slice();
-//     yProps.majorTicks.labels = tools.range(
-//       yProps.limits.min,
-//       yProps.limits.max,
-//       stepY,
-//     ).map(v => v.toFixed(decimalPlaces)).map((v) => {
-//       if (v === xAxisLocation.toString() && yAxisLocation === xAxisLocation) {
-//         return '';
-//       }
-//       return v;
-//     });
+  //     yProps.majorTicks.step = stepY;
+  //     yProps.majorTicks.start = limits.bottom;
+  //     yProps.majorTicks.length = xProps.majorTicks.length;
+  //     yProps.majorTicks.offset = -yProps.majorTicks.length / 2;
+  //     yProps.majorTicks.width = xProps.majorTicks.width;
+  //     yProps.majorTicks.labelMode = 'off';
+  //     yProps.majorTicks.color = color.slice();
+  //     yProps.majorTicks.labels = tools.range(
+  //       yProps.limits.min,
+  //       yProps.limits.max,
+  //       stepY,
+  //     ).map(v => v.toFixed(decimalPlaces)).map((v) => {
+  //       if (v === xAxisLocation.toString() && yAxisLocation === xAxisLocation) {
+  //         return '';
+  //       }
+  //       return v;
+  //     });
 
-//     // yProps.majorTicks.labels[3] = '';
-//     yProps.majorTicks.labelOffset = new Point(
-//       yProps.majorTicks.offset - fontSize * 0.2,
-//       0,
-//     );
-//     yProps.majorTicks.labelsHAlign = 'right';
-//     yProps.majorTicks.labelsVAlign = 'middle';
-//     yProps.majorTicks.fontColor = xProps.majorTicks.fontColor;
-//     yProps.majorTicks.fontSize = fontSize;
-//     yProps.majorTicks.fontWeight = xProps.majorTicks.fontWeight;
+  //     // yProps.majorTicks.labels[3] = '';
+  //     yProps.majorTicks.labelOffset = new Point(
+  //       yProps.majorTicks.offset - fontSize * 0.2,
+  //       0,
+  //     );
+  //     yProps.majorTicks.labelsHAlign = 'right';
+  //     yProps.majorTicks.labelsVAlign = 'middle';
+  //     yProps.majorTicks.fontColor = xProps.majorTicks.fontColor;
+  //     yProps.majorTicks.fontSize = fontSize;
+  //     yProps.majorTicks.fontWeight = xProps.majorTicks.fontWeight;
 
-//     const yAxis = new Axis(
-//       this.webgl, this.draw2D, yProps,
-//       new Transform().scale(1, 1).rotate(0)
-//         .translate(yAxisLocation - limits.left * width / 2, 0),
-//       this.limits,
-//     );
+  //     const yAxis = new Axis(
+  //       this.webgl, this.draw2D, yProps,
+  //       new Transform().scale(1, 1).rotate(0)
+  //         .translate(yAxisLocation - limits.left * width / 2, 0),
+  //       this.limits,
+  //     );
 
-//     let transform = new Transform();
-//     if (location instanceof Point) {
-//       transform = transform.translate(location.x, location.y);
-//     } else {
-//       transform = location._dup();
-//     }
-//     const xy = this.collection(transform);
-//     if (showGrid) {
-//       const gridLines = this.grid({
-//         bounds: new Rect(0, 0, width, height),
-//         xStep: tools.roundNum(stepX * width / limits.width, 8),
-//         yStep: tools.roundNum(stepY * height / limits.height, 8),
-//         numThickLines: 1,
-//         // linePrimitives: true,
-//         // lineNum: 2,
-//         width: options.lineWidth * 0.6,
-//         color: gridColor,
-//         transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
-//       });
-//       xy.add('grid', gridLines);
-//     }
-//     xy.add('y', yAxis);
-//     xy.add('x', xAxis);
-//     if (
-//       options.pulse != null
-//       && typeof xy.pulseDefault !== 'function'
-//       && typeof xy.pulseDefault !== 'string'
-//     ) {
-//       xy.pulseDefault.scale = options.pulse;
-//     }
-//     return xy;
-//   }
+  //     let transform = new Transform();
+  //     if (location instanceof Point) {
+  //       transform = transform.translate(location.x, location.y);
+  //     } else {
+  //       transform = location._dup();
+  //     }
+  //     const xy = this.collection(transform);
+  //     if (showGrid) {
+  //       const gridLines = this.grid({
+  //         bounds: new Rect(0, 0, width, height),
+  //         xStep: tools.roundNum(stepX * width / limits.width, 8),
+  //         yStep: tools.roundNum(stepY * height / limits.height, 8),
+  //         numThickLines: 1,
+  //         // linePrimitives: true,
+  //         // lineNum: 2,
+  //         width: options.lineWidth * 0.6,
+  //         color: gridColor,
+  //         transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+  //       });
+  //       xy.add('grid', gridLines);
+  //     }
+  //     xy.add('y', yAxis);
+  //     xy.add('x', xAxis);
+  //     if (
+  //       options.pulse != null
+  //       && typeof xy.pulseDefault !== 'function'
+  //       && typeof xy.pulseDefault !== 'string'
+  //     ) {
+  //       xy.pulseDefault.scale = options.pulse;
+  //     }
+  //     return xy;
+  //   }
 
-//   parallelMarks(...optionsIn: Array<{
-//     num?: number,
-//     width?: number,
-//     length?: number,
-//     angle?: number,
-//     step?: number,
-//     rotation?: number,
-//     color?: TypeColor,
-//     pulse?: number,
-//     transform?: Transform,
-//     position?: Point,
-//   }>) {
-//     const defaultOptions = {
-//       width: 0.01,
-//       num: 1,
-//       length: 0.1,
-//       angle: Math.PI / 4,
-//       step: 0.04,
-//       rotation: 0,
-//       color: this.defaultColor,
-//       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
-//       position: null,
-//     };
-//     const options = joinObjects({}, defaultOptions, ...optionsIn);
-//     if (options.position != null) {
-//       options.transform.updateTranslation(getPoint(options.position));
-//     }
+  //   parallelMarks(...optionsIn: Array<{
+  //     num?: number,
+  //     width?: number,
+  //     length?: number,
+  //     angle?: number,
+  //     step?: number,
+  //     rotation?: number,
+  //     color?: TypeColor,
+  //     pulse?: number,
+  //     transform?: Transform,
+  //     position?: Point,
+  //   }>) {
+  //     const defaultOptions = {
+  //       width: 0.01,
+  //       num: 1,
+  //       length: 0.1,
+  //       angle: Math.PI / 4,
+  //       step: 0.04,
+  //       rotation: 0,
+  //       color: this.defaultColor,
+  //       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+  //       position: null,
+  //     };
+  //     const options = joinObjects({}, defaultOptions, ...optionsIn);
+  //     if (options.position != null) {
+  //       options.transform.updateTranslation(getPoint(options.position));
+  //     }
 
-//     const x = options.length * Math.cos(options.angle);
-//     const y = options.length * Math.sin(options.angle);
-//     const wx = Math.abs(options.width * Math.cos(options.angle + Math.PI / 2));
-//     const wy = options.width * Math.sin(options.angle + Math.PI / 2);
-//     const single = [
-//       new Point(0, 0),
-//       new Point(0 - x, 0 - y),
-//       new Point(-x - wx, -y + wy),
-//       new Point(-Math.abs(options.width / Math.cos(options.angle + Math.PI / 2)), 0),
-//       new Point(-x - wx, y - wy),
-//       new Point(0 - x, 0 + y),
-//     ];
+  //     const x = options.length * Math.cos(options.angle);
+  //     const y = options.length * Math.sin(options.angle);
+  //     const wx = Math.abs(options.width * Math.cos(options.angle + Math.PI / 2));
+  //     const wy = options.width * Math.sin(options.angle + Math.PI / 2);
+  //     const single = [
+  //       new Point(0, 0),
+  //       new Point(0 - x, 0 - y),
+  //       new Point(-x - wx, -y + wy),
+  //       new Point(-Math.abs(options.width / Math.cos(options.angle + Math.PI / 2)), 0),
+  //       new Point(-x - wx, y - wy),
+  //       new Point(0 - x, 0 + y),
+  //     ];
 
-//     const collection = this.collection(
-//       options.transform,
-//     );
-//     collection.setColor(options.color);
-//     if (
-//       options.pulse != null
-//       && typeof collection.pulseDefault !== 'function'
-//       && typeof collection.pulseDefault !== 'string'
-//     ) {
-//       collection.pulseDefault.scale = options.pulse;
-//     }
+  //     const collection = this.collection(
+  //       options.transform,
+  //     );
+  //     collection.setColor(options.color);
+  //     if (
+  //       options.pulse != null
+  //       && typeof collection.pulseDefault !== 'function'
+  //       && typeof collection.pulseDefault !== 'string'
+  //     ) {
+  //       collection.pulseDefault.scale = options.pulse;
+  //     }
 
-//     const start = -((options.num - 1) / 2) * options.step;
-//     for (let i = 0; i < options.num; i += 1) {
-//       const points = single.map(
-//         p => (new Point(p.x + start + i * options.step, p.y)).rotate(options.rotation),
-//       );
-//       collection.add(`${i}`, this.fan({
-//         points,
-//         color: options.color,
-//       }));
-//     }
-//     return collection;
-//   }
+  //     const start = -((options.num - 1) / 2) * options.step;
+  //     for (let i = 0; i < options.num; i += 1) {
+  //       const points = single.map(
+  //         p => (new Point(p.x + start + i * options.step, p.y)).rotate(options.rotation),
+  //       );
+  //       collection.add(`${i}`, this.fan({
+  //         points,
+  //         color: options.color,
+  //       }));
+  //     }
+  //     return collection;
+  //   }
 
-//   marks(...optionsIn: Array<{
-//     num?: number,
-//     width?: number,
-//     length?: number,
-//     angle?: number,
-//     step?: number,
-//     rotation?: number,
-//     color?: TypeColor,
-//     pulse?: number,
-//     transform?: Transform,
-//     position?: Point,
-//   }>) {
-//     const defaultOptions = {
-//       width: 0.01,
-//       num: 1,
-//       length: 0.2,
-//       angle: Math.PI / 2,
-//       step: 0.04,
-//       rotation: 0,
-//       color: this.defaultColor,
-//       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
-//       position: null,
-//     };
-//     const options = joinObjects({}, defaultOptions, ...optionsIn);
-//     if (options.position != null) {
-//       options.transform.updateTranslation(getPoint(options.position));
-//     }
+  //   marks(...optionsIn: Array<{
+  //     num?: number,
+  //     width?: number,
+  //     length?: number,
+  //     angle?: number,
+  //     step?: number,
+  //     rotation?: number,
+  //     color?: TypeColor,
+  //     pulse?: number,
+  //     transform?: Transform,
+  //     position?: Point,
+  //   }>) {
+  //     const defaultOptions = {
+  //       width: 0.01,
+  //       num: 1,
+  //       length: 0.2,
+  //       angle: Math.PI / 2,
+  //       step: 0.04,
+  //       rotation: 0,
+  //       color: this.defaultColor,
+  //       transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+  //       position: null,
+  //     };
+  //     const options = joinObjects({}, defaultOptions, ...optionsIn);
+  //     if (options.position != null) {
+  //       options.transform.updateTranslation(getPoint(options.position));
+  //     }
 
-//     const single = [
-//       new Point(options.length / 2, options.width / 2),
-//       new Point(options.length / 2, -options.width / 2),
-//       new Point(-options.length / 2, -options.width / 2),
-//       new Point(-options.length / 2, options.width / 2),
-//     ];
+  //     const single = [
+  //       new Point(options.length / 2, options.width / 2),
+  //       new Point(options.length / 2, -options.width / 2),
+  //       new Point(-options.length / 2, -options.width / 2),
+  //       new Point(-options.length / 2, options.width / 2),
+  //     ];
 
-//     const collection = this.collection(
-//       options.transform,
-//     );
-//     collection.setColor(options.color);
-//     if (
-//       options.pulse != null
-//       && typeof collection.pulseDefault !== 'function'
-//       && typeof collection.pulseDefault !== 'string'
-//     ) {
-//       collection.pulseDefault.scale = options.pulse;
-//     }
+  //     const collection = this.collection(
+  //       options.transform,
+  //     );
+  //     collection.setColor(options.color);
+  //     if (
+  //       options.pulse != null
+  //       && typeof collection.pulseDefault !== 'function'
+  //       && typeof collection.pulseDefault !== 'string'
+  //     ) {
+  //       collection.pulseDefault.scale = options.pulse;
+  //     }
 
-//     const start = -((options.num - 1) / 2) * options.step;
-//     for (let i = 0; i < options.num; i += 1) {
-//       const t = new Transform()
-//         .rotate(options.angle)
-//         .translate(start + i * options.step, 0)
-//         .rotate(options.rotation);
+  //     const start = -((options.num - 1) / 2) * options.step;
+  //     for (let i = 0; i < options.num; i += 1) {
+  //       const t = new Transform()
+  //         .rotate(options.angle)
+  //         .translate(start + i * options.step, 0)
+  //         .rotate(options.rotation);
 
-//       const points = single.map(
-//         p => (p._dup().transformBy(t.matrix())),
-//       );
-//       collection.add(`${i}`, this.fan({
-//         points,
-//         color: options.color,
-//       }));
-//     }
-//     return collection;
-//   }
-// }
+  //       const points = single.map(
+  //         p => (p._dup().transformBy(t.matrix())),
+  //       );
+  //       collection.add(`${i}`, this.fan({
+  //         points,
+  //         color: options.color,
+  //       }));
+  //     }
+  //     return collection;
+  //   }
+}
 
 export type TypeDiagramPrimitives = DiagramPrimitives;
