@@ -17,7 +17,7 @@ describe('Diagram Primitives TextLine', () => {
     diagram = makeDiagram();
     textOptions = {
       allOptions: {
-        lines: [
+        text: [
           'This is the first line',
           'Second line has a |superscript| modifier that isn\'t inline',
           {
@@ -30,7 +30,7 @@ describe('Diagram Primitives TextLine', () => {
             },
             lineSpace: -0.3,
             justify: 'center',
-            line: 'A line with new defaults',
+            text: 'A line with new defaults',
           },
           'A spaced |line| with two |line| mods',
           'An escaped special char: /|',

@@ -10,7 +10,6 @@ import { Equation } from './Equation';
 import {
   DiagramFont,
 } from '../../DrawingObjects/TextObject/TextObject';
-import VertexHorizontalLine from '../../DrawingObjects/VertexObject/VertexHorizontalLine';
 // import {
 //   DiagramElementPrimitive,
 // } from '../../Element';
@@ -97,7 +96,13 @@ describe('Diagram Equations From Object', () => {
         a: 'a',
         v: { symbol: 'vinculum' },
         v1: eqn.eqn.symbols.vinculum(),
-        v2: diagram.shapes.horizontalLine(new Point(0, 0), 1, 0.1, 0, defaultColor),
+        v2: diagram.shapes.line({
+          p1: new Point(0, 0),
+          length: 1,
+          width: 0.1,
+          angle: 0,
+          color: defaultColor,
+        }),
       },
       // Elements all become DiagramElementPrimitives/Collections and their
       // properties can be overwritten with elementOptions
@@ -190,7 +195,7 @@ describe('Diagram Equations From Object', () => {
     expect(eqn._a.drawingObject.text[0].text).toBe('a');
     expect(eqn._v.drawingObject).toBeInstanceOf(VertexSymbol);
     expect(eqn._v1.drawingObject).toBeInstanceOf(VertexSymbol);
-    expect(eqn._v2.drawingObject).toBeInstanceOf(VertexHorizontalLine);
+    // expect(eqn._v2.drawingObject).toBeInstanceOf(VertexHorizontalLine);
   });
   test('ElementOptions', () => {
     eqn.addElements(addElements.elementOptions);

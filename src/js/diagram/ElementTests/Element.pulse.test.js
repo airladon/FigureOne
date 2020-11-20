@@ -1,13 +1,10 @@
 import {
-  // DiagramElementPrimitive,
   DiagramElementCollection,
 } from '../Element';
 // import { AnimationPhase } from './AnimationPhase';
 // import {
 //   Point, Transform,
 // } from '../../tools/g2';
-// import webgl from '../../__mocks__/WebGLInstanceMock';
-// import VertexPolygon from '../DrawingObjects/VertexObject/VertexPolygon';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
 jest.mock('../Gesture');
@@ -22,8 +19,6 @@ jest.useFakeTimers();
 // import * as m2 from '../tools/m2';
 
 const mockDone = jest.fn(() => {});
-
-
 
 const makeSquare = () => {
   const diagram = makeDiagram();
