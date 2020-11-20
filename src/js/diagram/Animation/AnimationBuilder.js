@@ -11,7 +11,7 @@ import type {
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
   OBJ_PulseAnimationStep, OBJ_OpacityAnimationStep,
   TypePulseTransformAnimationStepInputOptions,
-  AnimationStep,
+  AnimationStep, OBJ_ScenarioAnimationStep, OBJ_ElementAnimationStep,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
 // import SerialAnimationStep from './AnimationStep/SerialAnimationStep';
@@ -74,7 +74,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     super(optionsToUse);
     this.element = optionsToUse.element;
     this._stepType = 'builder';
-    optionsToUse.customSteps.forEach((customStep) => {
+    optionsToUse.customSteps.forEach((customStep) => {  // $FlowFixMe
       this[customStep.name] = (...optionsIn) => {
         const defOptions = { element: this.element };
         const o = joinObjects({}, defOptions, ...optionsIn);

@@ -6,7 +6,9 @@ import {
 import Symbol from './SymbolNew';
 import Bounds from '../Elements/Bounds';
 // import WebGLInstance from '../../../webgl/webgl';
-
+import type {
+  TypeColor,
+} from '../../../../tools/types';
 
 export default class Radical extends Symbol {
   symbol: DiagramElementPrimitive;

@@ -67,6 +67,10 @@ import {
   CustomAnimationStep, custom,
 } from './AnimationStep/CustomStep';
 
+import type {
+  OBJ_ElementAnimationStep,
+} from './AnimationStep/ElementAnimationStep';
+
 
 import type {
   OBJ_ParallelAnimationStep,
@@ -115,7 +119,7 @@ export type {
   TypeAnimationManagerInputOptions, OBJ_RotationAnimationStep,
   OBJ_ScaleAnimationStep, OBJ_PulseAnimationStep,
   OBJ_OpacityAnimationStep, OBJ_ScenarioAnimationStep,
-  TypePulseTransformAnimationStepInputOptions,
+  TypePulseTransformAnimationStepInputOptions, OBJ_ElementAnimationStep,
 };
 export {
   PositionAnimationStep, AnimationBuilder, ParallelAnimationStep, SerialAnimationStep,

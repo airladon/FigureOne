@@ -10,7 +10,7 @@ import type { OBJ_ElementAnimationStep } from '../ElementAnimationStep';
 import type { OBJ_OpacityAnimationStep } from './OpacityAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
 import type { TypeColor } from '../../../../tools/types';
-
+import type { AnimationStartTime } from '../../AnimationManager';
 // type TypeColor = Array<number>;
 
 /**
@@ -165,7 +165,6 @@ export class ColorAnimationStep extends ElementAnimationStep {
       super.start(startTime);
       if (this.color.start == null) {
         this.color.start = element.color.slice();
-      } else if (startTime === 'now' || startTime === 'prev') {
       }
       if (this.color.delta == null && this.color.target == null) {
         this.color.target = this.color.start.slice();

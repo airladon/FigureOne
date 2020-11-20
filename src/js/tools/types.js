@@ -36,5 +36,46 @@ export type OBJ_CurvedCorner = {
   sides?: number,
 };
 
+/* eslint-disable max-len */
+/**
+ * Font definition object.
+ *
+ * Text is drawn in a [Context2D canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) and so `family`, `style` and `weight` are any valid [options](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font).
+ *
+ * `size` is the vertex space size of the font.
+ *
+ * @property {string} [family] The font family (`Times New Roman`)
+ * @property {`normal` | `italic`} [style] (`normal`)
+ * @property {number} [size] size of font in vertex space (`0.2`)
+ * @property {'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'} [weight]
+ * font weight (`200`)
+ * @property {[number, number, number, number]} [color] Font color
+ * [red, green, blue, alpha] between 0 and 1 - (`[1, 0, 0, 1]`)
+ * @property {number} [opacity] opacity multiplier (final opacity will be
+ * `opacity` * `color` alpha) [`1`]
+ * @example
+ * // Full font definition
+ * const font = new DiagramFont({
+ *   family: 'Helvetica',
+ *   style: 'italic',
+ *   weight: 'bold',
+ *   color: [1, 1, 0, 1],
+ *   opacity: 1,
+ * });
+ * @example
+ * // Define style only, remaining properties are defaults
+ * const font = new DiagramFont({
+ *   style: 'italic',
+ * });
+ */
+export type OBJ_Font = {
+  family?: string,
+  style?: 'normal' | 'italic',
+  size?: number,
+  weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
+  color?: TypeColor | null,
+  opacity?: number,
+};
+
 const doNothing = 1;
 export default doNothing;

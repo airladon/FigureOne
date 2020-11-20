@@ -12,6 +12,7 @@ import type {
   OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
+import type { AnimationStartTime } from '../../AnimationManager';
 
 /**
  * {@link TransformAnimationStep} options object
@@ -262,7 +263,7 @@ export default class TransformAnimationStep extends ElementAnimationStep {
         this.duration = this.transform.maxDuration;
       }
     }
-    if (startTime === 'now' || startTime === 'prev') {
+    if (startTime === 'now' || startTime === 'prevFrame') {
       this.setFrame(0);
     }
   }

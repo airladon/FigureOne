@@ -3,6 +3,7 @@ import {
   Point, Line,
 } from '../../../../tools/g2';
 import Bracket from './Bracket';
+import type { TypeColor } from '../../../../tools/types';
 
 export type TypeEquationSymbolAngleBracket = {
   symbol: 'angleBracket',

@@ -183,7 +183,7 @@ export default class Box extends Symbol {
     const space = (typeof spaceIn === 'number') ? getPoint([spaceIn, spaceIn]) : getPoint(spaceIn);
     let maxBounds;
     if (parent instanceof DiagramElementCollection) {
-      maxBounds = parent.getBoundingRect(drawingSpace, children);
+      maxBounds = parent.getBoundingRect(drawingSpace, 'border', children);
     } else {
       maxBounds = parent.getBoundingRect(drawingSpace);
     }

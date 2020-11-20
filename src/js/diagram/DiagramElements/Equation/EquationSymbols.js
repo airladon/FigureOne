@@ -24,6 +24,9 @@ import Arrow from './Symbols/Arrow';
 import VinculumNew from './Symbols/Vinculum';
 import Strike from './Symbols/Strike';
 import Radical from './Symbols/Radical';
+import type {
+  TypeColor,
+} from '../../../tools/types';
 
 // import BracketNew from './Symbols/BracketNew';
 // import BraceNew from './Symbols/BraceNew';

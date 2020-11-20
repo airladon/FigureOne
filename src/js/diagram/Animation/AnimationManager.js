@@ -10,7 +10,14 @@ import { DiagramElement } from '../Element';
 // } from './Animation';
 // eslint-disable-next-line import/no-cycle
 import * as anim from './Animation';
-import type { AnimationStep } from './Animation';
+import type {
+  AnimationStep, OBJ_AnimationBuilder, OBJ_AnimationStep,
+  OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep, OBJ_TriggerAnimationStep,
+  OBJ_PositionAnimationStep, OBJ_ColorAnimationStep, OBJ_OpacityAnimationStep,
+  OBJ_TransformAnimationStep, TypePulseTransformAnimationStepInputOptions,
+  OBJ_PulseAnimationStep, OBJ_ElementAnimationStep,
+  OBJ_ScenarioAnimationStep, OBJ_ParallelAnimationStep,
+} from './Animation';
 // eslint-disable-next-line import/no-cycle
 // import {
 //   AnimationStep,
@@ -20,6 +27,8 @@ import { joinObjects, duplicateFromTo, SubscriptionManager } from '../../tools/t
 import { getState } from '../state';
 import { FunctionMap } from '../../tools/FunctionMap';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
+// import type { OBJ_AnimationStep } from './AnimationStep';
+import type { TypeParsablePoint } from '../../tools/g2';
 // import type Diagram from '../Diagram';
 
 /**
@@ -260,10 +269,10 @@ export default class AnimationManager {
     const options = {
       customSteps: this.customSteps,
     };
-    if (this.element != null) {
+    if (this.element != null) { // $FlowFixMe
       options.element = this.element;
     }
-    if (name != null) {
+    if (name != null) { // $FlowFixMe
       options.name = name;
     }
     const animation = new anim.AnimationBuilder(options);
@@ -278,7 +287,7 @@ export default class AnimationManager {
    * @return {AnimationBuilder}
    */
   // eslint-disable-next-line max-len
-  builder(...options: Array<OBJ_AnimationBuilder>) {
+  builder(...options: Array<OBJ_AnimationBuilder>) {  // $FlowFixMe
     return new anim.AnimationBuilder(this, {
       customSteps: this.customSteps,
     }, ...options);
@@ -473,7 +482,7 @@ export default class AnimationManager {
    * @param {OBJ_ScenarioAnimationStep} options
    * @return {ScenarioAnimationStep}
    */
-  scenario(...options: Array<OBJ_ScenarioAnimationStepInputOptions>) {
+  scenario(...options: Array<OBJ_ScenarioAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
     return new anim.ScenarioAnimationStep(optionsToUse);
   }

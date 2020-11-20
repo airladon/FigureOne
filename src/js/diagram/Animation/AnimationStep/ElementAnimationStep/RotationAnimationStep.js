@@ -9,6 +9,7 @@ import type {
   OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
+import type { AnimationStartTime } from '../../AnimationManager';
 
 /**
  * {@link RotationAnimationStep} step options object
@@ -30,7 +31,7 @@ import ElementAnimationStep from '../ElementAnimationStep';
  *
  * @see {@link RotationAnimationStep} for description and examples
  */
- export type OBJ_RotationAnimationStep = {
+export type OBJ_RotationAnimationStep = {
   start?: number;      // default is element transform
   target?: number;     // Either target or delta must be defined
   delta?: number;      // delta overrides target if both are defined
@@ -155,7 +156,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
+  start(startTime: ?AnimationStartTime = null) {
     super.start(startTime);
     if (this.rotation.start === null) {
       if (this.element != null) {
@@ -196,7 +197,7 @@ export default class RotationAnimationStep extends ElementAnimationStep {
         this.duration = this.rotation.maxDuration;
       }
     }
-    if (startTime === 'now' || startTime === 'prev') {
+    if (startTime === 'now' || startTime === 'prevFrame') {
       this.setFrame(0);
     }
   }

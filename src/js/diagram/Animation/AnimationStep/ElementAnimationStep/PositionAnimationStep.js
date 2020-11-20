@@ -198,7 +198,7 @@ export default class PositionAnimationStep extends ElementAnimationStep {
         this.duration = 0;
         return;
       }
-    } else if (startTime === 'now' || startTime === 'prev') {
+    } else if (startTime === 'now' || startTime === 'prevFrame') {
       if (this.element != null) {
         this.element.setPosition(getPoint(this.position.start));
       }

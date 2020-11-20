@@ -25,6 +25,7 @@ import type {
 } from './EquationLabel';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
+import type { TypeColor } from '../../tools/types';
 
 // export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
 
@@ -1240,7 +1241,7 @@ class AdvancedAngle extends DiagramElementCollection {
         direction,
         transform: new Transform('AngleCurve').rotate(0),
       };
-      if (optionsToUse.fill === false) {
+      if (optionsToUse.fill === false) {  // $FlowFixMe
         o.line = { width: optionsToUse.width };
       }
 

@@ -4,6 +4,7 @@ import {
   Point, Transform,
 } from '../../../../tools/g2';
 import Bracket from './Bracket';
+import type { TypeColor } from '../../../../tools/types';
 
 export type TypeEquationSymbolArrowBracket = {
   symbol: 'arrow',
@@ -93,6 +94,7 @@ export default class Arrow extends Bracket {
     //   side = 'top';
     // }
     // return [points, widthIn, height];
+    // $FlowFixMe
     return [leftPoints, rightPoints, arrowWidth, height];
   }
 
@@ -121,6 +123,7 @@ export default class Arrow extends Bracket {
       out.arrowHeight = options.arrowHeight;
     }
     out.width = out.arrowWidth;
+    // $FlowFixMe
     return out;
   }
 }

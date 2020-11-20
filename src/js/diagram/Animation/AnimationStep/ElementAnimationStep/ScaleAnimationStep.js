@@ -9,6 +9,7 @@ import type {
   OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
+import type { AnimationStartTime } from '../../AnimationManager';
 
 /**
  * {@link ScaleAnimationStep} options object
@@ -137,7 +138,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
+  start(startTime: ?AnimationStartTime = null) {
     super.start(startTime);
     if (this.scale.start === null) {
       if (this.element != null) {
@@ -181,7 +182,7 @@ export default class ScaleAnimationStep extends ElementAnimationStep {
         this.duration = this.scale.maxDuration;
       }
     }
-    if (startTime === 'now' || startTime === 'prev') {
+    if (startTime === 'now' || startTime === 'prevFrame') {
       this.setFrame(0);
     }
   }

@@ -320,7 +320,7 @@ function sinusoidAbs(
  * @param step - Range step
  * @returns {Array<number>} Range of numbers in an array
  */
-function range(start: number, stop: number, step: number = 1, precision: 8) {
+function range(start: number, stop: number, step: number = 1, precision: number = 8) {
   const out = [];
   for (let i = start; i <= stop; i = round(i + step, precision)) {
     out.push(i);

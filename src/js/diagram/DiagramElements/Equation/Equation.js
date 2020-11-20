@@ -26,6 +26,12 @@ import { getDiagramElement, EquationFunctions } from './EquationFunctions';
 import type { TypeEquationPhrase } from './EquationFunctions';
 import type { TypeEquationSymbolAngleBracket } from './Symbols/AngleBracket';
 import type { TypeEquationSymbolArrowBracket } from './Symbols/Arrow';
+import type {
+  TypeColor,
+} from '../../../tools/types';
+import type {
+  TypeParsablePoint,
+} from '../../../tools/g2';
 
 
 // Priority:
@@ -1011,7 +1017,7 @@ export class Equation extends DiagramElementCollection {
     }
   }
 
-  setPosition(pointOrX: Point | number, y: number = 0) {
+  setPosition(pointOrX: TypeParsablePoint | number, y: number = 0) {
     super.setPosition(pointOrX, y);
     const position = this.getPosition('diagram');
     // console.log(this.eqn, this.eqn.descriptionElement)

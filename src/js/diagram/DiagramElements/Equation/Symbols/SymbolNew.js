@@ -9,6 +9,9 @@ import {
 import VertexSymbol from './VertexSymbol';
 import WebGLInstance from '../../../webgl/webgl';
 import Bounds from '../Elements/Bounds';
+import type {
+  TypeColor,
+} from '../../../../tools/types';
 
 
 export default class Symbol extends DiagramElementPrimitive {

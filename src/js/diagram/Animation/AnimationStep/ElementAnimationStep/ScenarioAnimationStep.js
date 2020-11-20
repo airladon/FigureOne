@@ -19,6 +19,7 @@ import { areColorsSame } from '../../../../tools/color';
 import { ParallelAnimationStep } from '../ParallelAnimationStep';
 import type { DiagramElement, OBJ_Scenario } from '../../../Element';
 import type { AnimationStartTime } from '../../AnimationManager';
+import type { TypeColor } from '../../../../tools/types';
 
 /**
  * Transform, color and visbility scenario definition

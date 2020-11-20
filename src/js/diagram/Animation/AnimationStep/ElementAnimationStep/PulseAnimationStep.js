@@ -3,9 +3,14 @@ import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
 import type {
+  TypeParsablePoint,
+} from '../../../../tools/g2';
+import type {
   OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
+import type { TypeWhen } from '../../../webgl/GlobalAnimation';
+import type { DiagramElement } from '../../../Element';
 
 /**
  * {@link PulseAnimationStep} options object
@@ -135,8 +140,9 @@ export default class PulseAnimationStep extends ElementAnimationStep {
     num: number;
     when: TypeWhen;
     stopAfterDuration: boolean;
-    toStart: boolean;
-  }
+  };
+
+  toStart: boolean;
 
   constructor(...optionsIn: Array<OBJ_PulseAnimationStep>) {
     const ElementAnimationStepOptionsIn =
@@ -213,7 +219,7 @@ export default class PulseAnimationStep extends ElementAnimationStep {
 
   setToEnd() {
     if (this.element != null) {
-      if (this.stopAfterDuration) {
+      if (this.pulse.stopAfterDuration) {
         this.element.stopPulsing();
       }
     }

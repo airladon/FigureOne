@@ -4,7 +4,9 @@ import {
   Rotation, getDeltaAngle, getMaxTimeFromVelocity,
   Scale, Translation,
 } from '../../../../tools/g2';
-import type { pathOptionsType, TypeParsablePoint, TypeParsableTransform } from '../../../../tools/g2';
+import type {
+  TypeParsablePoint, TypeParsableTransform, OBJ_TranslationPath,
+} from '../../../../tools/g2';
 import {
   joinObjects, duplicateFromTo, deleteKeys, copyKeysFromTo,
 } from '../../../../tools/tools';
@@ -15,6 +17,7 @@ import type {
   OBJ_ElementAnimationStep,
 } from '../ElementAnimationStep';
 import ElementAnimationStep from '../ElementAnimationStep';
+import type { AnimationStartTime } from '../../AnimationManager';
 
 export type TypePulseTransformAnimationStepInputOptions = {
   start?: Array<Transform>;      // default is element transform
@@ -260,7 +263,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
   // This is done here in case the start is defined as null meaning it is
   // going to start from present transform.
   // Setting a duration to 0 will effectively skip this animation step
-  start(startTime: ?number | 'next' | 'prev' | 'now' = null) {
+  start(startTime: ?AnimationStartTime = null) {
     super.start(startTime);
     // console.log(this.element.name, this.transform.start[0].order)
     // console.log(this.transform.target[0].order)
@@ -322,7 +325,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     //   this.duration = this.transform.minDuration;
     // }
     this.duration = round(this.duration, this.precision);
-    if (startTime === 'now' || startTime === 'prev') {
+    if (startTime === 'now' || startTime === 'prevFrame') {
       this.setFrame(0);
     }
   }

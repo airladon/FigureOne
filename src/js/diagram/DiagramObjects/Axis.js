@@ -13,6 +13,10 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
+import type { TypeColor } from '../../tools/types';
+import type {
+  OBJ_Line,
+} from '../DiagramPrimitives/DiagramPrimitives';
 
 
 /**

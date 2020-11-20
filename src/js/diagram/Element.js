@@ -4593,7 +4593,7 @@ class DiagramElementCollection extends DiagramElement {
     if (shownOnly && this.isShown === false) {
       return [[]];
     }
-    const bordersToUse: Array<Array<Point>> = [[]];
+    // const bordersToUse: Array<Array<Point>> = [[]];
     // const transformedBorders = [];
     let matrix;
     if (Array.isArray(space)) {

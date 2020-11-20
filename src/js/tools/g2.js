@@ -868,8 +868,8 @@ function linearPath(
   return start.add(delta.x * percent, delta.y * percent);
 }
 
-type linearPathOptionsType = {
-};
+// type linearPathOptionsType = {
+// };
 
 /**
  * Curved translation path options, that defineds the control
@@ -921,7 +921,7 @@ export type OBJ_QuadraticBezier = {
 };
 
 export type OBJ_TranslationPath = {
-  style: 'curve' | 'linear',
+  style: 'curve' | 'linear' | 'curved',
   // curve options
   angle: number,
   magnitude: number,
@@ -1056,7 +1056,7 @@ function curvedPath(
 
 
 function translationPath(
-  pathType: 'linear' | 'curved' = 'linear',
+  pathType: 'linear' | 'curved' | 'curve' = 'linear',
   start: Point,
   delta: Point,
   percent: number,
@@ -2963,8 +2963,6 @@ class Transform {
   // }
 
 
-
-
   update(index: number) {
     if (index < this.order.length) {
       this.index = index;
@@ -3062,7 +3060,7 @@ class Transform {
   toDelta(
     delta: Transform,
     percent: number,
-    translationStyle: 'linear' | 'curved',
+    translationStyle: 'linear' | 'curved' | 'curve',
     translationOptions: pathOptionsType,
     // translationPath: (Point, Point, number, ?number, ?number) => Point,
     // direction: number = 1,
