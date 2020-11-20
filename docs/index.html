@@ -3558,6 +3558,26 @@
               
                 
                 <li><a
+                  href='#advancedplotlegend'
+                  class="">
+                  AdvancedPlotLegend
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#adv_plotlegend'
+                  class="">
+                  ADV_PlotLegend
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#misc-animation'
                   class="h5 bold black caps">
                   Misc Animation
@@ -4186,6 +4206,16 @@
               
                 
                 <li><a
+                  href='#advancedtrace'
+                  class="">
+                  AdvancedTrace
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#typeplotframe'
                   class="">
                   TypePlotFrame
@@ -4206,9 +4236,19 @@
               
                 
                 <li><a
-                  href='#adv_plotlegend'
+                  href='#obj_plotlegendcustomtrace'
                   class="">
-                  ADV_PlotLegend
+                  OBJ_PlotLegendCustomTrace
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_plotlegendcustom'
+                  class="">
+                  OBJ_PlotLegendCustom
                   
                 </a>
                 
@@ -22104,7 +22144,7 @@ turn grids on and off (
           : <code>false</code>
  hides the axis. Two axes are needed
 to plot an 
-<a href="AdvancedTrace">AdvancedTrace</a>
+<a href="#advancedtrace">AdvancedTrace</a>
  on a 
 <a href="#advancedplot">AdvancedPlot</a>
 , but if either or
@@ -22240,12 +22280,12 @@ entire plot.</p>
 
 <a href="#adv_trace">ADV_Trace</a>
  and 
-<a href="ADV_Legend">ADV_Legend</a>
+<a href="#adv_plotlegend">ADV_PlotLegend</a>
  for more examples of customizing
 specific parts of the plot.
 <p>To test examples below, append them to the
 <a href="#drawing-boilerplate">boilerplate</a>.</p>
-<p>All plots below also use this power function to generate the traces:</p>
+<p>All examples below also use this power function to generate the traces:</p>
 <pre class='hljs'><span class="hljs-keyword">const</span> pow = <span class="hljs-function">(<span class="hljs-params">pow = <span class="hljs-number">2</span>, stop = <span class="hljs-number">10</span>, step = <span class="hljs-number">0.05</span></span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> xValues = Fig.tools.math.range(<span class="hljs-number">0</span>, stop, step);
   <span class="hljs-keyword">return</span> xValues.map(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> <span class="hljs-keyword">new</span> Fig.Point(x, x ** pow));
@@ -45839,13 +45879,7 @@ associated polyline point (
   </div>
   
 
-  <p><a href="AdvancedTrace">AdvancedTrace</a> options object.</p>
-<p><img src="./assets1/advtrace_ex1.png">
-<img src="./assets1/advtrace_ex2.png"></p>
-<p><img src="./assets1/advtrace_ex3.png">
-<img src="./assets1/advtrace_ex4.png"></p>
-<p><img src="./assets1/advtrace_ex5.png">
-<img src="./assets1/advtrace_ex6.png"></p>
+  <p><a href="#advancedtrace">AdvancedTrace</a> options object.</p>
 <p>A plot trace is a set of (x, y) points associated with an
 x and y axis.</p>
 <p>The trace and can be drawn with either a set of
@@ -45996,9 +46030,6 @@ than this value, then the later point will not be plotted. By default this is
       
         For more examples on using traces, see 
 <a href="#advancedplot">AdvancedPlot</a>
-
-// When plotting a single trace, just the points are required. By default
-// the line will be solid, and it will be plotted against the 'x' and 'y' axes.
 <p>To test examples below, append them to the
 <a href="#drawing-boilerplate">boilerplate</a>.</p>
 
@@ -46009,100 +46040,356 @@ than this value, then the later point will not be plotted. By default this is
   
 
   
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='advancedplotlegend'>
+      AdvancedPlotLegend
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#diagramelementcollection">DiagramElementCollection</a> representing an legend.</p>
+<p><img src="./assets1/advlegend_ex1.png">
+<img src="./assets1/advlegend_ex2.png"></p>
+<p><img src="./assets1/advlegend_ex3.png">
+<img src="./assets1/advlegend_ex4.png"></p>
+<p><img src="./assets1/advlegend_ex5.png"></p>
+<p>This object defines a legend in an <a href="#advancedplot">AdvancedPlot</a>.</p>
+<p>The legend includes traces, trace names and a frame. Each can be customized
+using the <a href="#adv_plotlegend">ADV_PlotLegend</a> options object.</p>
+<p>To test examples below, append them to the
+<a href="#drawing-boilerplate">boilerplate</a>.</p>
+<p>All examples below also use this power function to generate the traces:</p>
+<pre class='hljs'><span class="hljs-keyword">const</span> pow = <span class="hljs-function">(<span class="hljs-params">pow = <span class="hljs-number">2</span>, stop = <span class="hljs-number">10</span>, step = <span class="hljs-number">0.05</span></span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> xValues = Fig.tools.math.range(<span class="hljs-number">0</span>, stop, step);
+  <span class="hljs-keyword">return</span> xValues.map(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> <span class="hljs-keyword">new</span> Fig.Point(x, x ** pow));
+}</pre>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#diagramelementcollection">DiagramElementCollection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">trace</span>: pow(),
-  },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Change the thickness and color of the line</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">trace</span>: {
-      <span class="hljs-attr">points</span>: pow(),
-      <span class="hljs-attr">line</span>: {
-        <span class="hljs-attr">width</span>: <span class="hljs-number">0.03</span>,
-        <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">1</span>],
-      }
-    },
-  },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Default Markers</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">trace</span>: {
-      <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1</span>),
-      <span class="hljs-attr">markers</span>: <span class="hljs-literal">true</span>,
-    },
-  },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Custom Markers</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">trace</span>: {
-      <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1</span>),
-      <span class="hljs-attr">markers</span>: {
-        <span class="hljs-attr">radius</span>: <span class="hljs-number">0.035</span>,
-        <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
-        <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span> },
-      },
-    },
-  },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line and markers</span>
-diagram.addElement({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">trace</span>: {
-      <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1</span>),
-      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.02</span>, <span class="hljs-number">0.01</span>] },
-      <span class="hljs-attr">markers</span>: {
-        <span class="hljs-attr">radius</span>: <span class="hljs-number">0.035</span>,
-        <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
-      },
-    },
-  },
-});</pre>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Use names in trace definitions to customize legend</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// By default, the legend will appear in the top right corner</span>
 diagram.addElement({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
   <span class="hljs-attr">options</span>: {
     <span class="hljs-attr">trace</span>: [
-      pow(<span class="hljs-number">2</span>),
+      { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2'</span> },
       { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2.5</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2.5'</span> },
       {
-        <span class="hljs-attr">points</span>: pow(<span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1</span>),
+        <span class="hljs-attr">points</span>: pow(<span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">0.5</span>),
         <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 3'</span>,
-        <span class="hljs-attr">markers</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.03</span> },
-        <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span> },
+        <span class="hljs-attr">markers</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.03</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span> },
       },
     ],
     <span class="hljs-attr">legend</span>: <span class="hljs-literal">true</span>,
   },
 });</pre>
     
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Change the line length, position and use a frame on the legend</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: [
+      { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2'</span> },
+      { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2.5</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2.5'</span> },
+      {
+        <span class="hljs-attr">points</span>: pow(<span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">0.5</span>),
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 3'</span>,
+        <span class="hljs-attr">markers</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.03</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span> },
+      },
+    ],
+    <span class="hljs-attr">legend</span>: {
+      <span class="hljs-attr">length</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">frame</span>: [<span class="hljs-number">0.95</span>, <span class="hljs-number">0.95</span>, <span class="hljs-number">0.95</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">position</span>: [<span class="hljs-number">0.2</span>, <span class="hljs-number">1.8</span>],
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Make a horizontal legend</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: [
+      { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2'</span> },
+      { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2.5</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2.5'</span> },
+      {
+        <span class="hljs-attr">points</span>: pow(<span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">0.5</span>),
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 3'</span>,
+        <span class="hljs-attr">markers</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.03</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span> },
+      },
+    ],
+    <span class="hljs-attr">legend</span>: {
+      <span class="hljs-attr">offset</span>: [<span class="hljs-number">0.9</span>, <span class="hljs-number">0</span>],
+      <span class="hljs-attr">position</span>: [<span class="hljs-number">-0.3</span>, <span class="hljs-number">-0.5</span>],
+      <span class="hljs-attr">frame</span>: {
+        <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span> },
+        <span class="hljs-attr">corner</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.05</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span> },
+      },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Customize legend trace text</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: [
+      { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2'</span> },
+      { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2.5</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2.5'</span> },
+      {
+        <span class="hljs-attr">points</span>: pow(<span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">0.5</span>),
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 3'</span>,
+        <span class="hljs-attr">markers</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.03</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span> },
+      },
+    ],
+    <span class="hljs-attr">legend</span>: {
+      <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">-0.2</span>],
+      <span class="hljs-attr">custom</span>: {
+        <span class="hljs-number">1</span>: {
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span>, <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] },
+          <span class="hljs-attr">text</span>: {
+            <span class="hljs-attr">text</span>: [
+              <span class="hljs-string">'Power 2.5'</span>,
+              { 
+                <span class="hljs-attr">text</span>: <span class="hljs-string">'Reference Trace'</span>,
+                <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.06</span> },
+                <span class="hljs-attr">lineSpace</span>: <span class="hljs-number">0.06</span>,
+              },
+            ],
+            <span class="hljs-attr">justify</span>: <span class="hljs-string">'left'</span>,
+          },
+        },
+      },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Customize legend</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: [
+      { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2'</span> },
+      { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2.5</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2.5'</span> },
+      {
+        <span class="hljs-attr">points</span>: pow(<span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">0.5</span>),
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 3'</span>,
+        <span class="hljs-attr">markers</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.03</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span> },
+      },
+    ],
+    <span class="hljs-attr">legend</span>: {
+      <span class="hljs-attr">fontColorIsLineColor</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">length</span>: <span class="hljs-number">0</span>,
+      <span class="hljs-attr">custom</span>: {
+        <span class="hljs-number">0</span>: { <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">0.2</span>] },
+        <span class="hljs-number">1</span>: { <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">0.7</span>] },
+        <span class="hljs-string">'Power 3'</span>: { <span class="hljs-attr">position</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>] },
+      }
+    },
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='adv_plotlegend'>
+      ADV_PlotLegend
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#advancedplotlegend">AdvancedPlotLegend</a> options object.</p>
+<p>A legend consists of a number of trace samples and their corresponding names,
+and may have an encompassing frame with a border and fill.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : position of the first trace in the
+legend
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : length of the line sample
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between the line and the text
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>> | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
+          : offset
+between trace samples - can be used to space out a legend, or make it
+horizontal
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : default font for trace sample text
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fontColorIsLineColor</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : set the trace sample text color to
+the same as the line sample
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>frame</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="#typeplotframe">TypePlotFrame</a>)?)</code>
+          : frame around the legend -
+specifying just a color will create a solid fill rectangle of that color
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>show</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : array of which trace indeces to show if only
+some should be shown
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>hide</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          : array of which trace indeces to hide if some
+should be hidden
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>custom</span> <code class='quiet'>(<a href="#obj_plotlegendcustom">OBJ_PlotLegendCustom</a>?)</code>
+          : customizations to specific trace
+samples
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>traces</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#adv_trace">ADV_Trace</a>>?)</code>
+          : the traces from the plot that this
+legend will display. This is used by 
+<a href="#advancedplot">AdvancedPlot</a>
+ and should not be
+used by the user.
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
   
 
   
@@ -53122,6 +53409,176 @@ diagram.addElement({
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='advancedtrace'>
+      AdvancedTrace
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#diagramelementcollection">DiagramElementCollection</a> representing a trace.</p>
+<p><img src="./assets1/advtrace_ex1.png">
+<img src="./assets1/advtrace_ex2.png"></p>
+<p><img src="./assets1/advtrace_ex3.png">
+<img src="./assets1/advtrace_ex4.png"></p>
+<p><img src="./assets1/advtrace_ex5.png">
+<img src="./assets1/advtrace_ex6.png"></p>
+<p>This object defines a trace in an <a href="#advancedplot">AdvancedPlot</a>.</p>
+<p>The trace includes all the points of the trace, and the axes that it
+should be drawn against and is defined using the <a href="ADV_PlotTrace">ADV_PlotTrace</a>
+options object.</p>
+<p>To test examples below, append them to the
+<a href="#drawing-boilerplate">boilerplate</a>.</p>
+<p>All examples below also use this power function to generate the traces:</p>
+<pre class='hljs'><span class="hljs-keyword">const</span> pow = <span class="hljs-function">(<span class="hljs-params">pow = <span class="hljs-number">2</span>, stop = <span class="hljs-number">10</span>, step = <span class="hljs-number">0.05</span></span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> xValues = Fig.tools.math.range(<span class="hljs-number">0</span>, stop, step);
+  <span class="hljs-keyword">return</span> xValues.map(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> <span class="hljs-keyword">new</span> Fig.Point(x, x ** pow));
+}</pre>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#diagramelementcollection">DiagramElementCollection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// When plotting a single trace, just the points are required. By default</span>
+<span class="hljs-comment">// the line will be solid, and it will be plotted against the 'x' and 'y' axes.</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: pow(),
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Change the thickness and color of the line</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: {
+      <span class="hljs-attr">points</span>: pow(),
+      <span class="hljs-attr">line</span>: {
+        <span class="hljs-attr">width</span>: <span class="hljs-number">0.03</span>,
+        <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">1</span>],
+      }
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Default Markers</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: {
+      <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1</span>),
+      <span class="hljs-attr">markers</span>: <span class="hljs-literal">true</span>,
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Custom Markers</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: {
+      <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1</span>),
+      <span class="hljs-attr">markers</span>: {
+        <span class="hljs-attr">radius</span>: <span class="hljs-number">0.035</span>,
+        <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+        <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span> },
+      },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line and markers</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: {
+      <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1</span>),
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.02</span>, <span class="hljs-number">0.01</span>] },
+      <span class="hljs-attr">markers</span>: {
+        <span class="hljs-attr">radius</span>: <span class="hljs-number">0.035</span>,
+        <span class="hljs-attr">sides</span>: <span class="hljs-number">20</span>,
+      },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Use names in trace definitions to customize legend</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'advanced.plot'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">trace</span>: [
+      pow(<span class="hljs-number">2</span>),
+      { <span class="hljs-attr">points</span>: pow(<span class="hljs-number">2.5</span>), <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 2.5'</span> },
+      {
+        <span class="hljs-attr">points</span>: pow(<span class="hljs-number">3</span>, <span class="hljs-number">10</span>, <span class="hljs-number">1</span>),
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'Power 3'</span>,
+        <span class="hljs-attr">markers</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.03</span> },
+        <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span> },
+      },
+    ],
+    <span class="hljs-attr">legend</span>: <span class="hljs-literal">true</span>,
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='typeplotframe'>
       TypePlotFrame
     </h3>
@@ -53233,15 +53690,15 @@ titles with <code>space</code>.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='adv_plotlegend'>
-      ADV_PlotLegend
+    <h3 class='fl m0' id='obj_plotlegendcustomtrace'>
+      OBJ_PlotLegendCustomTrace
     </h3>
     
     
   </div>
   
 
-  <p><a href="AdvancedPlotLegend">AdvancedPlotLegend</a> options object.</p>
+  <p>Legend customization for a single trace sample in the legend.</p>
 
   
   
@@ -53260,79 +53717,115 @@ titles with <code>space</code>.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>traces</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#adv_trace">ADV_Trace</a>>)</code>
-          
+          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
+          : default font
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
-          
+          : length of the line sample
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>fontColorIsLineColor</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>offset</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>> | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>frame</span> <code class='quiet'>(any?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>yAlgin</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>show</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>hide</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
-          
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : offset of this trace sample from
+the last trace sample
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
+          : space between line sample and text
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>custom</span> <code class='quiet'>({}?)</code>
+          <span class='code bold'>fontColorIsLineColor</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : use line color as font color
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>((<a href="#obj_textlines">OBJ_TextLines</a> | <code>"string"</code>)?)</code>
+          : custom text
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : position of the trace sample
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_plotlegendcustom'>
+      OBJ_PlotLegendCustom
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Legend customization options object</p>
+<p>Allows customization of specific trace samples in the legend.
+<code>_arrayIndexOrName</code> represents a generic key that should actually
+be the array index of the specific trace defined in <a href="#adv_plotlegend">ADV_PlotLegend</a>
+or the name of the trace. See examples in <a href="#advancedplotlegend">AdvancedPlotLegend</a> for use.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>_arrayIndexOrName</span> <code class='quiet'>(<a href="#obj_plotlegendcustomtrace">OBJ_PlotLegendCustomTrace</a>?)</code>
           
           
         </div>
