@@ -658,6 +658,7 @@ export default class AdvancedLine extends DiagramElementCollection {
 
     if (optionsToUse.arrow != null) {
       const arrowOptions = simplifyArrowOptions(optionsToUse.arrow, this.width || 0.01);
+      // $FlowFixMe
       this.arrow = arrowOptions;
       this.addArrow('start');
       this.addArrow('end');

@@ -1312,27 +1312,18 @@ function getArrow(options: {
 }
 
 function defaultArrowOptions(
-  // head: TypeArrowHead,
-  // tailWidth: number,
-  // scaleIn: number = 1,
   o: Object,
 ) {
-  // const scale = 6 * o.scale;
   const defaults = {
     align: 'tip',
     tail: false,
     angle: 0,
     drawPosition: new Point(0, 0),
     scale: 1,
-    // tailWidth,
   };
   if (o.head === 'triangle' || o.head == null) {
-    // return getTriangleDefaults(o);
     return joinObjects({}, defaults, getTriangleDefaults(o), {
       head: 'triangle',
-      // width: o.tailWidth * scale,
-      // length: o.tailWidth * scale,
-      // reverse: false,
     });
   }
   if (o.head === 'polygon' || o.head === 'circle') {
@@ -1363,38 +1354,40 @@ function simplifyArrowOptions(
   if (arrowIn == null) {
     return undefined;
   }
-  let arrow = arrowIn;
+  let arrow;
   if (typeof arrowIn === 'string') {
     arrow = {
       start: arrowIn,
       end: arrowIn,
     };
+  } else {
+    arrow = arrowIn;
   }
   const optionsForBoth = joinObjectsWithOptions({ except: ['end', 'start'] }, {}, arrow);
 
   const out = {};
-  const processEnd = (startOrEnd) => {              // $FlowFixMe
-    if (typeof arrow[startOrEnd] === 'string') {    // $FlowFixMe
-      arrow[startOrEnd] = {
+  const processEnd = (startOrEnd: 'start' | 'end') => {
+    if (typeof arrow[startOrEnd] === 'string') {
+      arrow[startOrEnd] = { // $FlowFixMe
         head: arrow[startOrEnd],
       };
     }
-    if (Object.keys(optionsForBoth).length > 0) {   // $FlowFixMe
-      if (arrow[startOrEnd] == null) {              // $FlowFixMe
+    if (Object.keys(optionsForBoth).length > 0) {
+      if (arrow[startOrEnd] == null) {
         arrow[startOrEnd] = joinObjects({}, optionsForBoth);
-      } else {                                      // $FlowFixMe
+      } else {
         arrow[startOrEnd] = joinObjects({}, optionsForBoth, arrow[startOrEnd]);
       }
     }
-    if (   // $FlowFixMe
-      arrow[startOrEnd] != null   // $FlowFixMe
+    if (
+      arrow[startOrEnd] != null
       || (arrow.start == null && arrow.end == null)
     ) {
       let defaultTailWidth = {};
       if (tailWidth != null) {
         defaultTailWidth = { tailWidth };
       }
-      const o = joinObjectsWithOptions(   // $FlowFixMe
+      const o = joinObjectsWithOptions(
         { except: ['end', 'start'] }, defaultTailWidth, arrow[startOrEnd],
       );
       out[startOrEnd] = joinObjects(

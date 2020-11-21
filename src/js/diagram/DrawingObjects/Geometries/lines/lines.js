@@ -683,7 +683,7 @@ function makePolyLine(
 
   const arrow = simplifyArrowOptions(arrowIn, width);
 
-  if (close === false && arrowIn != null) {
+  if (close === false && arrowIn != null) { // $FlowFixMe
     orderedPoints = shortenLineForArrows(pointsIn, arrow);
   }
   // console.log(orderedPoints)
@@ -741,6 +741,7 @@ function makePolyLine(
   //   return [dashedTris, border, touchBorder, hole];
   // }
   if (arrowIn != null && close === false) {
+    // eslint-disable-next-line no-use-before-define
     return addArrows(
       arrow,
       [orderedPoints[0], pointsIn[0]],
@@ -785,25 +786,25 @@ function makePolyLineCorners(
 }
 
 function addArrows(
-  arrow: {
+  arrowIn: ?{
     start?: {
-      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
+      head: TypeArrowHead,
       length: number,
       width: number,
       barb: number,
-      lineWidth: number,
+      tailWidth: number,
     },
     end?: {
-      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
+      head: TypeArrowHead,
       length: number,
       width: number,
       barb: number,
-      lineWidth: number,
+      tailWidth: number,
     },
   },
   startArrow: [Point, Point],
   endArrow: [Point, Point],
-  existingTriangles: Array<Points>,
+  existingTriangles: Array<Point>,
   existingBorder: Array<Array<Point>>,
   existingTouchBorder: Array<Array<Point>>,
   holeBorder: Array<Array<Point>>,
@@ -811,6 +812,10 @@ function addArrows(
   lineWidth: number,
   onLine: boolean,
 ) {
+  let arrow = {};
+  if (arrowIn != null) {
+    arrow = arrowIn;
+  }
   let updatedTriangles = existingTriangles;
   let updatedBorder = existingBorder;
   let updatedTouchBorder = existingTouchBorder;
