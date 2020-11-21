@@ -841,12 +841,8 @@ class Point {
   toDelta(
     delta: Point,
     percent: number,
-    translationStyle: 'linear' | 'curved' | 'curve' = 'linear',
-    translationOptions: {
-      magnitude: number,
-      offset: number,
-      controlPoint: Point | null,
-    } = {
+    translationStyle: 'linear' | 'curved' | 'curve' = 'linear',  // $FlowFixMe
+    translationOptions: OBJ_TranslationPath = {
       magnitude: 0.5,
       offset: 0.5,
       controlPoint: null,
