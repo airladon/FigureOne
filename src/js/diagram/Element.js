@@ -38,14 +38,14 @@ import type {
   OBJ_PulseAnimationStep, OBJ_OpacityAnimationStep,
   OBJ_ParallelAnimationStep, OBJ_TriggerAnimationStep,
   OBJ_AnimationStep, OBJ_PulseTransformAnimationStep,
-  OBJ_ScenarioAnimationStepInputOptions,
+  OBJ_ScenarioAnimationStep,
 } from './Animation/Animation';
 // eslint-disable-next-line import/no-cycle
 import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
 // import type Diagram from './Diagram';
 import { FunctionMap } from '../tools/FunctionMap';
-import {
+import type {
   OBJ_Font, TypeColor,
 } from '../tools/types';
 // import type Diagram from './Diagram';
@@ -510,6 +510,7 @@ class DiagramElement {
     transformMethod: string | ((number, ?Point) => Transform),
     callback: ?(string | ((mixed) => void));
     allowFreezeOnStop: boolean,
+    type: 'scale' | 'rotation' | number,
     // clearFrozenTransforms: boolean,
   };
 
@@ -788,7 +789,7 @@ class DiagramElement {
       },
       // eslint-disable-next-line max-len
       builder: (...optionsIn: Array<OBJ_AnimationBuilder>) => new animations.AnimationBuilder(this, ...optionsIn),
-      scenario: (...optionsIn: Array<OBJ_ScenarioAnimationStepInputOptions>) => {
+      scenario: (...optionsIn: Array<OBJ_ScenarioAnimationStep>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.ScenarioAnimationStep(options);
       },
@@ -1004,7 +1005,7 @@ class DiagramElement {
       transformMethod: '_elementPulseSettingsTransformMethod',
       callback: () => {},
       allowFreezeOnStop: false,
-      // clearFrozenTransforms: false,
+      type: 'scale',
     };
 
     this.state = {
@@ -2294,7 +2295,6 @@ class DiagramElement {
           this.pulseSettings.B instanceof Array ? this.pulseSettings.B[i] : this.pulseSettings.B,
           this.pulseSettings.C instanceof Array ? this.pulseSettings.C[i] : this.pulseSettings.C,
         );
-        // console.log(this.pulseSettings.num, this.pulseSettings.B instanceof Array ? this.pulseSettings.B[i] : this.pulseSettings.B)
 
         // Use the pulse magnitude to get the current pulse transform
         const pTransform = this.fnMap.exec(
@@ -2342,7 +2342,7 @@ class DiagramElement {
       let done = null;
       if (typeof optionsOrDone === 'function') {
         done = optionsOrDone;
-      } else if (optionsOrDone.done != null) {
+      } else if (optionsOrDone != null && optionsOrDone.done != null) {
         ({ done } = optionsOrDone);
       }
       this.fnMap.exec(this.pulseDefault, done);
@@ -2864,8 +2864,8 @@ class DiagramElement {
 
   pointFromSpaceToSpace(
     point: TypeParsablePoint,
-    fromSpace: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel',
-    toSpace: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel',
+    fromSpace: TypeSpace,
+    toSpace: TypeSpace,
   ) {
     return getPoint(point).transformBy(this.spaceTransformMatrix(fromSpace, toSpace));
   }
@@ -2882,7 +2882,7 @@ class DiagramElement {
   // * BoundingRectBorder: The perimeter of the boundingRect
   /* eslint-disable class-methods-use-this, no-unused-vars */
   getBorder(
-    space: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel' = 'local',
+    space: TypeSpace = 'local',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
     return [[]];
@@ -2890,7 +2890,7 @@ class DiagramElement {
   /* eslint-enable class-methods-use-this, no-unused-vars */
 
   getBoundingRect(
-    space: 'draw' | 'local' | 'diagram' | 'gl' | 'pixel' = 'local',
+    space: TypeSpace = 'local',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
     const transformedBorder = this.getBorder(space, border);
@@ -2901,7 +2901,7 @@ class DiagramElement {
   // Size
   // ***************************************************************
   getRelativeBoundingRect(
-    space: 'local' | 'diagram' | 'draw' | 'gl' | 'pixel' = 'local',
+    space: TypeSpace = 'local',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
     const rect = this.getBoundingRect(space, border);
@@ -2964,7 +2964,7 @@ class DiagramElement {
   //  * @return {Point} position
   //  */
   getPositionInBounds(
-    space: 'local' | 'diagram' | 'gl' | 'draw' = 'local',
+    space: TypeSpace = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
@@ -3014,7 +3014,7 @@ class DiagramElement {
    * position in percentage height from the bottom.
    */
   getPosition(
-    space: 'local' | 'diagram' | 'gl' | 'draw' | 'pixel' = 'local',
+    space: TypeSpace = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
     yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
   ) {
@@ -3883,7 +3883,7 @@ class DiagramElementCollection extends DiagramElement {
   +pulse: (?({
       x?: 'left' | 'center' | 'right' | 'origin' | number,
       y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
-      space?: 'diagram' | 'gl' | 'local' | 'draw',
+      space?: TypeSpace,
       centerOn?: null | DiagramElement | TypeParsablePoint,
       frequency?: number,
       time?: number,

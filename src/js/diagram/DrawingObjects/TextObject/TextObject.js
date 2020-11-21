@@ -2,7 +2,7 @@
 
 import * as m2 from '../../../tools/m2';
 import {
-  Point, getPoint, Rect, getBoundingRect, // getPoints,
+  Point, getPoint, Rect, getBoundingRect, getPoints,
 } from '../../../tools/g2';
 import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
@@ -845,12 +845,12 @@ class TextObject extends TextObjectBase {
           font, location, xAlign, yAlign, touchBorder, border, onClick,
         } = textDefinition);
         textToUse = textDefinition.text;
-        // if (Array.isArray(border)) {
-        //   border = getPoints(border);
-        // }
-        // if (Array.isArray(touchBorder)) {
-        //   touchBorder = getPoints(touchBorder);
-        // }
+        if (Array.isArray(border)) {  // $FlowFixMe
+          border = getPoints(border);
+        }
+        if (Array.isArray(touchBorder)) {  // $FlowFixMe
+          touchBorder = getPoints(touchBorder);
+        }
       }
       let locationToUse;
       if (location == null) {
@@ -995,12 +995,12 @@ class TextLineObject extends TextObjectBase {
           font, offset, inLine, border, touchBorder, onClick,
         } = textDefinition);
         textToUse = textDefinition.text;
-        // if (Array.isArray(border)) {
-        //   border = getPoints(border);
-        // }
-        // if (Array.isArray(touchBorder)) {
-        //   touchBorder = getPoints(touchBorder);
-        // }
+        if (Array.isArray(border)) {  // $FlowFixMe
+          border = getPoints(border);
+        }
+        if (Array.isArray(touchBorder)) {  // $FlowFixMe
+          touchBorder = getPoints(touchBorder);
+        }
       }
       let offsetToUse;
       if (offset == null) {
@@ -1174,12 +1174,12 @@ class TextLinesObject extends TextObjectBase {
           if (mod.onClick != null) {
             onClick = mod.onClick;
           }
-          // if (Array.isArray(border)) {
-          //   border = getPoints(border);
-          // }
-          // if (Array.isArray(touchBorder)) {
-          //   touchBorder = getPoints(touchBorder);
-          // }
+          if (Array.isArray(border)) {  // $FlowFixMe
+            border = getPoints(border);
+          }
+          if (Array.isArray(touchBorder)) {  // $FlowFixMe
+            touchBorder = getPoints(touchBorder);
+          }
         }
         const t = new DiagramTextLines(
           this.drawContext2D,
