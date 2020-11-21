@@ -5,6 +5,7 @@ import {
 import {
   roundNum,
 } from '../../../../tools/math';
+import type { TypeDash } from '../../../../tools/types';
 
 
 function makeDashDefinition(dashes: Array<number>) {
@@ -102,7 +103,7 @@ function makeDashes(
 
 function lineToDash(
   points: Array<Point>,
-  dash: Array<number>,
+  dash: TypeDash,
   close: boolean = false,
   offset: number = 0,
   precision: number = 8,

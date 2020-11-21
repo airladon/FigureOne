@@ -159,7 +159,7 @@ toc:
   - OBJ_LineStyle
   - CPY_Step
   - TypeDash
-  - ArrowHead
+  - TypeArrowHead
   - OBJ_LineArrow
   - OBJ_LineArrows
   - OBJ_Scenario

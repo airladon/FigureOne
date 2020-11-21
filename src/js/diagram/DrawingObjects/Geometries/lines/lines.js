@@ -10,6 +10,7 @@ import {
 import {
   getArrow, getArrowLength, simplifyArrowOptions,
 } from '../arrow';
+import type { TypeDash } from '../../../../tools/types';
 
 /* eslint-disable yoda */
 
@@ -654,7 +655,7 @@ function makePolyLine(
   cornerSize: number = 0.1,
   cornerSides: number = 10,
   minAutoCornerAngle: number = Math.PI / 7,
-  dash: Array<number> = [],
+  dash: TypeDash = [],
   linePrimitives: boolean = false,
   lineNum: number = 2,
   borderIs: 'positive' | 'negative' | 'line' | Array<Array<Point>>,

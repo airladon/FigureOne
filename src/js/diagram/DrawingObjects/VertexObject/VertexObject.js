@@ -3,7 +3,8 @@
 // import * as g2 from '../g2';
 import * as m2 from '../../../tools/m2';
 import WebGLInstance from '../../webgl/webgl';
-import * as g2 from '../../../tools/g2';
+import { Point } from '../../../tools/g2';
+import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 import type { CPY_Step } from '../Geometries/copy/copy';
 import type { TypeColor } from '../../../tools/types';
@@ -24,7 +25,7 @@ class VertexObject extends DrawingObject {
 
   points: Array<number>;        // Primitive vertices of shape
   numPoints: number;            // Number of primative vertices
-  // border: Array<Array<g2.Point>>; // Border vertices
+  // border: Array<Array<Point>>; // Border vertices
 
   z: number;
   texture: ?{
@@ -39,7 +40,7 @@ class VertexObject extends DrawingObject {
 
   state: 'loading' | 'loaded';
 
-  // +change: (Array<g2.Point>) => void;
+  // +change: (Array<Point>) => void;
   programIndex: Array<number>;
   onLoad: ?(() => void);
 
@@ -242,10 +243,10 @@ class VertexObject extends DrawingObject {
 
   /* eslint-disable no-unused-vars */
   change(
-    coords: Array<g2.Point>,
-    border: Array<Array<g2.Point>>, // $FlowFixMe
-    touchBorder: Array<Array<g2.Point>>,
-    holes: Array<Array<g2.Point>>,
+    coords: Array<TypeParsablePoint>,
+    border: Array<Array<TypeParsablePoint>> | 'points' | 'rect',
+    touchBorder: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none',
+    holes: Array<Array<TypeParsablePoint>> | 'none',
     copy: Array<CPY_Step> = [],
   ) {
     this.resetBuffer();
@@ -314,9 +315,9 @@ class VertexObject extends DrawingObject {
   }
 
   draw(
-    translation: g2.Point,
+    translation: Point,
     rotation: number,
-    scale: g2.Point,
+    scale: Point,
     count: number,
     color: TypeColor,
     glIndex: number = 0,
@@ -426,7 +427,7 @@ class VertexObject extends DrawingObject {
 
   transform(transformMatrix: Array<number>) {
     for (let i = 0; i < this.points.length; i += 2) {
-      let p = new g2.Point(this.points[i], this.points[i + 1]);
+      let p = new Point(this.points[i], this.points[i + 1]);
       p = p.transformBy(transformMatrix);
       this.points[i] = p.x;
       this.points[i + 1] = p.y;

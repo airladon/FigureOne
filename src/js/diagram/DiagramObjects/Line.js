@@ -25,7 +25,7 @@ import type { OBJ_Pulse } from '../Element';
 import type { EQN_Equation } from '../DiagramElements/Equation/Equation';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
-import type { TypeColor } from '../../tools/types';
+import type { TypeColor, TypeDash } from '../../tools/types';
 
 
 /**
@@ -172,7 +172,7 @@ export type ADV_Line = {
   color?: TypeColor,
   touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | number | 'rect',
   arrow: OBJ_LineArrows;
-  dash: Array<number>,
+  dash: TypeDash,
   pulseWidth?: OBJ_PulseWidth,
   pulse: OBJ_Pulse;
 
@@ -256,7 +256,7 @@ function makeStraightLine(
   length: number,
   width: number,
   color: TypeColor,
-  dash: Array<number>,
+  dash: TypeDash,
   // maxLength: number,
   // touchBorder: number | { width: number, start: number, end: number },
 ) {
@@ -487,7 +487,7 @@ export default class AdvancedLine extends DiagramElementCollection {
   localXPosition: number;
   maxLength: number;
   alignDraw: 'start' | 'end' | 'center' | number;
-  dash: Array<number>;
+  dash: TypeDash;
   arrow: ?{
     start?: OBJ_LineArrow,
     end?: OBJ_LineArrow,

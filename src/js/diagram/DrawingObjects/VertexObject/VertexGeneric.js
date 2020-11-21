@@ -47,8 +47,7 @@ class VertexGeneric extends VertexObject {
     this.setupBuffer();
   }
 
-  // $FlowFixMe
-  change( // $FlowFixMe
+  change(
     vertices: Array<TypeParsablePoint>,
     border: Array<Array<TypeParsablePoint>> | 'points' | 'rect' = 'rect',
     touchBorder: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none' = 'border',

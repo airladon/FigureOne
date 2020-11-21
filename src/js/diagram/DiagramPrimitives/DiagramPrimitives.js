@@ -46,9 +46,6 @@ import Text from '../DiagramElements/Text';
 import {
   TextObject, TextLineObject, TextLinesObject,
 } from '../DrawingObjects/TextObject/TextObject';
-import type {
-  OBJ_Font,
-} from '../DrawingObjects/TextObject/TextObject';
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { TypeSpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
@@ -57,14 +54,31 @@ import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geo
 import { ellipseBorderToTris, getEllipseBorder } from '../DrawingObjects/Geometries/ellipse';
 import { getTriangle } from '../DrawingObjects/Geometries/triangle';
 import { getArrow, defaultArrowOptions } from '../DrawingObjects/Geometries/arrow';
-import type { OBJ_LineArrows } from '../DrawingObjects/Geometries/arrow';
+import type { OBJ_LineArrows, TypeArrowHead } from '../DrawingObjects/Geometries/arrow';
 import getLine from '../DrawingObjects/Geometries/line';
 import type {
   OBJ_Copy,
 } from './DiagramPrimitiveTypes';
 import { copyPoints } from '../DrawingObjects/Geometries/copy/copy';
 import type { CPY_Step } from '../DrawingObjects/Geometries/copy/copy';
-import type { TypeColor, TypeDash, OBJ_CurvedCorner } from '../../tools/types';
+import type {
+  TypeColor, TypeDash, OBJ_CurvedCorner, OBJ_Font,
+} from '../../tools/types';
+
+/**
+ * Line style definition object.
+ * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative'} [widthIs]
+ * defines how the width is grown from the polyline's points.
+ * @property {number} [width] line width
+ * @property {TypeDash} [dash] select solid or dashed line
+ * @property {TypeColor} [color] line color
+ */
+export type OBJ_LineStyleSimple = {
+  widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
+  width?: number,
+  dash?: TypeDash,
+  color?: TypeColor,
+}
 
 /**
  * Texture definition object
@@ -347,7 +361,7 @@ export type OBJ_Generic = {
  * length of gap and then the pattern repeats - can use more than one dash length
  * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
  * short gap, short dash, short gap and then repeats.
- * @property {OBJ_LineArrows | ArrowHead} [arrow] either an object defining custom
+ * @property {OBJ_LineArrows | TypeArrowHead} [arrow] either an object defining custom
  * arrows or a string representing the name of an arrow head style can be used.
  * If a string is used, then the line will have an arrow at both ends.
  * Arrows are only available for `close: false`,
@@ -459,7 +473,7 @@ export type OBJ_Polyline = {
   forceCornerLength?: boolean,
   minAutoCornerAngle?: number,
   dash?: Array<number>,
-  arrow?: OBJ_LineArrows | ArrowHead,
+  arrow?: OBJ_LineArrows | TypeArrowHead,
   color?: TypeColor,
   texture?: OBJ_Texture,
   pulse?: number,
@@ -732,21 +746,6 @@ export type OBJ_Star = {
   touchBorder?: number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>,
   holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
 };
-
-/**
- * Line style definition object.
- * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative'} [widthIs]
- * defines how the width is grown from the polyline's points.
- * @property {number} [width] line width
- * @property {TypeDash} [dash] select solid or dashed line
- * @property {TypeColor} [color] line color
- */
-export type OBJ_LineStyleSimple = {
-  widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
-  width?: number,
-  dash?: TypeDash,
-  color?: TypeColor,
-}
 
 /**
  * Rectangle shape options object
@@ -1144,7 +1143,7 @@ export type OBJ_Triangle = {
  * length of gap and then the pattern repeats - can use more than one dash length
  * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
  * short gap, short dash, short gap and then repeats.
- * @property {OBJ_LineArrows | ArrowHead} [arrow] either an object defining custom
+ * @property {OBJ_LineArrows | TypeArrowHead} [arrow] either an object defining custom
  * arrows or a string representing the name of an arrow head style can be used.
  * If a string is used, then the line will have an arrow at both ends.
  * Arrows are only available for `widthIs: 'mid'` and `linePrimitives: false`
@@ -1227,7 +1226,7 @@ export type OBJ_Line = {
   width?: number,
   widthIs?: 'positive' | 'negative' | 'mid',
   dash?: Array<number>,
-  arrow?: OBJ_LineArrows | ArrowHead,
+  arrow?: OBJ_LineArrows | TypeArrowHead,
   copy?: OBJ_Copy | Array<OBJ_Copy>,
   color?: TypeColor,
   texture?: OBJ_Texture,
@@ -1381,7 +1380,7 @@ export type OBJ_Grid = {
  * For `polygon` and `circle` arrows, only `radius` and `tail` are used to
  * determine the dimension of the arrow (`length` and `width` are ignored).
  *
- * @property {ArrowHead} [head] head style (`'triangle'`)
+ * @property {TypeArrowHead} [head] head style (`'triangle'`)
  * @property {number} [scale] scale the default dimensions of the arrow
  * @property {number} [length] dimension of the arrow head along the line
  * @property {number} [width] dimension of the arrow head along the line width
@@ -1460,7 +1459,7 @@ export type OBJ_Grid = {
  * });
  */
 export type OBJ_Arrow = {
-  head?: ArrowHead,
+  head?: TypeArrowHead,
   scale?: number,
   length?: number,
   width?: number,
@@ -2227,7 +2226,7 @@ export default class DiagramPrimitives {
       tB: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none' = 'border',
       h: Array<Array<TypeParsablePoint>> | 'none' = 'none',
       copy: Array<CPY_Step> = [],
-    ) {
+    ) { // $FlowFixMe
       element.drawingObject.change(points, b, tB, h, copy);
     };
 

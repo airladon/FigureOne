@@ -9,7 +9,7 @@ import {
 
 function getPolygonPoints(options: {
   radius: number,
-  innerRadius: number,
+  innerRadius?: number,
   rotation: number,
   offset: Point,
   sides: number,

@@ -13,7 +13,9 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
-import type { TypeColor, OBJ_Font, OBJ_Font_Fixed } from '../../tools/types';
+import type {
+  TypeColor, OBJ_Font, OBJ_Font_Fixed, TypeDash,
+} from '../../tools/types';
 import type {
   OBJ_Line, OBJ_TextLines,
 } from '../DiagramPrimitives/DiagramPrimitives';
@@ -142,7 +144,7 @@ export type OBJ_AxisTicks_Fixed = {
   length: number,
   offset: number,
   width: number,
-  dash: Array<number>,
+  dash: TypeDash,
 } & OBJ_Line;
 
 

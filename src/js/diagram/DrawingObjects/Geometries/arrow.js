@@ -6,6 +6,7 @@ import {
   joinObjects, joinObjectsWithOptions,
 } from '../../../tools/tools';
 import { getPolygonPoints } from './polygon/polygon';
+import type { OBJ_Arrow } from '../../DiagramPrimitives/DiagramPrimitives';
 
 /**
  * Arrow heads
@@ -14,7 +15,7 @@ import { getPolygonPoints } from './polygon/polygon';
  *
  * @see {@link OBJ_Arrow} for properties related to each arrow head
  */
-export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'reverseTriangle';
+export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polygon' | 'reverseTriangle' | 'rectangle';
 
 
 /**
@@ -31,7 +32,7 @@ export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polyg
  * '`bar`' as then the shapes will be centered on the end of the line. Note
  * that in this case the shape will extend past the line.
  *
- * @property {ArrowHead} [head] head style (`'triangle'`)
+ * @property {TypeArrowHead} [head] head style (`'triangle'`)
  * @property {number} [scale] scale the default dimensions of the arrow
  * @property {number} [length] dimension of the arrow head along the line
  * @property {number} [width] dimension of the arrow head along the line width
@@ -117,7 +118,7 @@ export type ArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'polyg
  * ]);
  */
 export type OBJ_LineArrow = {
-  head?: ArrowHead,
+  head?: TypeArrowHead,
   scale?: number,
   length?: number,
   width?: number,
@@ -147,9 +148,9 @@ export type OBJ_LineArrow = {
  * If only one end of the line is to have an arrow, then define only the
  * `start` or `end` properties and no others.
  *
- * @property {OBJ_LineArrow | ArrowHead} [start] arrow at start of line
- * @property {OBJ_LineArrow | ArrowHead} [end] arrow at end of line
- * @property {ArrowHead} [head] default head to use for start and end arrow
+ * @property {OBJ_LineArrow | TypeArrowHead} [start] arrow at start of line
+ * @property {OBJ_LineArrow | TypeArrowHead} [end] arrow at end of line
+ * @property {TypeArrowHead} [head] default head to use for start and end arrow
  * @property {number} [scale] default scale to use for start and end arrow
  * @property {number} [length] default length to use for start and end arrow
  * @property {number} [width] default width to use for start and end arrow
@@ -166,9 +167,9 @@ export type OBJ_LineArrow = {
  * the arrow is aligned at (0, 0) in draw space (`'start'`)
  */
 export type OBJ_LineArrows = {
-  start: OBJ_LineArrow | ArrowHead,
-  end: OBJ_LineArrow | ArrowHead,
-  head?: ArrowHead,
+  start: OBJ_LineArrow | TypeArrowHead,
+  end: OBJ_LineArrow | TypeArrowHead,
+  head?: TypeArrowHead,
   scale?: number,
   length?: number,
   width?: number,
@@ -273,7 +274,7 @@ function getTriangleArrowTail(o: {
   length: number,
   width: number,
   tailWidth: number,
-  tail: boolean,
+  tail: boolean | number,
 }) {
   let t = 0;
   if (typeof o.tail === 'number') {
@@ -293,7 +294,7 @@ function getTriangleArrowLength(o: {
   length: number,
   width: number,
   tailWidth: number,
-  tail: boolean,
+  tail: boolean | number,
 }) {
   return [o.length, o.length, o.length];
 }
@@ -334,7 +335,7 @@ function getTriangleArrow(options: {
   width: number,
   tailWidth: number,
   touchBorderBuffer: number,
-  tail: boolean,
+  tail: boolean | number,
   lineWidth: number,
 }) {
   const {
@@ -391,11 +392,11 @@ function getReverseTriTail(o: {
   length: number,
   width: number,
   tailWidth: number,
-  tail: boolean,
+  tail: boolean | number,
 }) {
   const hLine = new Line([-o.length, o.tailWidth / 2], 1, 0);
   let headTop = new Line([-o.length, 0], [0, o.width / 2]);
-  let i = hLine.intersectsWith(headTop).intersect;
+  let i = hLine.intersectsWith(headTop).intersect || new Point(-o.length, o.tailWidth / 2);
   let t = 0;
   if (typeof o.tail === 'number') {
     t = o.tail;
@@ -405,7 +406,7 @@ function getReverseTriTail(o: {
   if (t > 0) {
     headX = -(o.length - t);
     headTop = new Line([headX, 0], [0, o.width / 2]);
-    i = hLine.intersectsWith(headTop).intersect;
+    i = hLine.intersectsWith(headTop).intersect || new Point(-o.length + t, o.tailWidth / 2);
   }
   let tailX = -o.length;
   if (t < 0) {
@@ -422,7 +423,7 @@ function getReverseTriLength(o: {
   length: number,
   width: number,
   tailWidth: number,
-  tail: boolean,
+  tail: boolean | number,
 }) {
   const [, , tailX] = getReverseTriTail(o);
   return [o.length, -tailX, o.length];
@@ -484,7 +485,7 @@ function getReverseTriangleArrow(options: {
   } else if (tailX > headX) {
     const vLine = new Line([tailX, -tailWidth / 2], [tailX, 0]);
     const topLine = new Line([-length, 0], [0, width / 2]);
-    const i = vLine.intersectsWith(topLine).intersect;
+    const i = vLine.intersectsWith(topLine).intersect || new Point(tailX, -tailWidth / 2);
     arrowBorder = [
       new Point(0, -width / 2),
       new Point(intersect.x, -tailWidth / 2),
@@ -543,7 +544,8 @@ function getBarbTail(o: {
   length: number,
   width: number,
   tailWidth: number,
-  tail: boolean,
+  tail: boolean | number,
+  barb: number,
 }) {
   let t = 0;
   if (typeof o.tail === 'number') {
@@ -568,7 +570,7 @@ function getBarbTail(o: {
   const line1 = new Line([tailX, o.tailWidth / 2], 1, 0);
   const back = new Line([headX + o.barb, 0], [headX, o.width / 2]);
   const backIntersect = line1.intersectsWith(back);
-  let i = backIntersect.intersect;
+  let i = backIntersect.intersect || new Point(tailX, o.tailWidth / 2);
   if (backIntersect.withinLine === false) {
     i = new Point(headX + o.barb, o.tailWidth / 2);
   }
@@ -579,7 +581,8 @@ function getBarbLength(o: {
   length: number,
   width: number,
   tailWidth: number,
-  tail: boolean,
+  tail: boolean | number,
+  barb: number,
 }) {
   const [, , tailX] = getBarbTail(o);
   return [o.length, -tailX, o.length];
@@ -691,7 +694,7 @@ function getRectTail(o: {
   length: number,
   width: number,
   tailWidth: number,
-  tail: boolean,
+  tail: boolean | number,
 }) {
   let t = 0;
   if (typeof o.tail === 'number') {
@@ -703,14 +706,15 @@ function getRectTail(o: {
     headX = -(o.length - t);
   }
   const tailX = -o.length;
-  return [new Point(tailX, o.lineWidth / 2), headX, tailX];
+  return [new Point(tailX, o.tailWidth / 2), headX, tailX];
 }
 
 function getRectLength(o: {
   length: number,
   width: number,
   tailWidth: number,
-  tail: boolean,
+  tail: boolean | number,
+  align: 'start' | 'mid',
 }) {
   if (o.align === 'mid') {
     return [o.length / 2, o.length / 2, o.length];
@@ -722,7 +726,7 @@ function getRectDefaults(o: {
   length?: number,
   width?: number,
   tailWidth?: number,
-  barb?: number,
+  // barb?: number,
   scale?: number,
   // tail?: number,
 }) {
@@ -736,8 +740,6 @@ function getRectDefaults(o: {
       width = tailWidth * 6 * scale;
     } else if (length != null) {
       width = length;
-    } else if (barb != null) {
-      width = barb * 6 * scale;
     } else {
       width = 1;
     }
@@ -793,6 +795,7 @@ function getRectArrow(options: {
   end: Point,
   touchBorderBuffer: number,
   tailWidth: number,
+  tail: number | boolean;
 }) {
   const {
     length, touchBorderBuffer, tailWidth, width, tail,
@@ -878,7 +881,7 @@ function getLineTail(o: {
   length: number,
   width: number,
   tailWidth: number,
-  tail: boolean,
+  tail: boolean | number,
 }) {
   let t = 0;
   if (typeof o.tail === 'number') {
@@ -897,8 +900,10 @@ function getLineTail(o: {
   const topOutsideLine = new Line([headX + a, o.width / 2], [0, 0]);
   const topInsideLine = topOutsideLine.offset('bottom', o.tailWidth);
   const line = new Line([headX, o.tailWidth / 2], 1, 0);
-  const outsideIntersect = topOutsideLine.intersectsWith(line).intersect;
-  let insideIntersect = topInsideLine.intersectsWith(line).intersect;
+  const outsideIntersect = topOutsideLine.intersectsWith(line).intersect
+    || new Point(headX, o.tailWidth / 2);
+  let insideIntersect = topInsideLine.intersectsWith(line).intersect
+    || new Point(headX, o.tailWidth / 2);
   if (insideIntersect.x < -o.length) {
     insideIntersect = new Point(-o.length, o.tailWidth / 2);
   }
@@ -936,7 +941,7 @@ function getLineLength(o: {
   length: number,
   width: number,
   tailWidth: number,
-  tail: boolean,
+  tail: boolean | number,
 }) {
   const [, , tailX] = getLineTail(o);
   return [o.length, -tailX, o.length];
@@ -981,6 +986,7 @@ function getLineArrow(options: {
   end: Point,
   touchBorderBuffer: number,
   tailWidth: number,
+  tail: number | boolean,
 }) {
   const {
     length, touchBorderBuffer, tailWidth, width, tail,
@@ -1071,7 +1077,7 @@ function getPolygonTail(o: {
   sides: number,
   tailWidth: number,
   rotation: number,
-  tail: boolean,
+  tail: boolean | number,
 }) {
   if (o.tail === false) {
     return getPolygonPoints({
@@ -1112,8 +1118,10 @@ function getPolygonTail(o: {
   const hLineTop = new Line([-o.radius, o.tailWidth / 2], 1, 0);
   const hLineBottom = new Line([-o.radius, -o.tailWidth / 2], 1, 0);
 
-  const topIntersect = hLineTop.intersectsWith(topSide).intersect;
-  const bottomIntersect = hLineBottom.intersectsWith(bottomSide).intersect;
+  const topIntersect = hLineTop.intersectsWith(topSide).intersect
+    || new Point(-o.radius, o.tailWidth / 2);
+  const bottomIntersect = hLineBottom.intersectsWith(bottomSide).intersect
+    || new Point(-o.radius, -o.tailWidth / 2);
   const outline = [
     ...points.slice(0, topSideNum + 1),
     topIntersect,
@@ -1127,7 +1135,8 @@ function getPolygonTail(o: {
 
 function getPolygonLength(o: {
   radius: number,
-  tail: boolean,
+  tail: boolean | number,
+  align: 'mid' | 'start',
 }) {
   let t = 0;
   if (typeof o.tail === 'number') {
@@ -1185,13 +1194,14 @@ function getPolygonArrow(options: {
   tailWidth: number,
   sides: number,
   rotation: number,
+  tail: number | boolean,
 }) {
   const {
     touchBorderBuffer, tailWidth, radius, tail,
   } = options;
 
   const outline = getPolygonTail(options);
-  const points = [];
+  const points: Array<Point> = [];
   for (let i = 1; i < outline.length; i += 1) {
     points.push(new Point(-radius, 0));
     points.push(outline[i - 1]);
@@ -1219,11 +1229,14 @@ function getPolygonArrow(options: {
 
 
 function getArrowLength(options: {
-  head: ArrowHead,
+  head: TypeArrowHead,
   length: number,
   tailWidth: number,
   width: number,
   radius: number,
+  align: 'mid' | 'start',
+  tail: number | boolean,
+  barb: number,
   // reverse: boolean,
 }) {
   const { head, length } = options;
@@ -1252,12 +1265,12 @@ function getArrowLength(options: {
   // if (head === 'triangle' && reverse) {
   //   return 0;
   // }
-  return length;
+  return [length, length, length];
 }
 
 
 function getArrow(options: {
-  head: ArrowHead,
+  head: TypeArrowHead,
   length: number,
   width: number,
   barb: number,
@@ -1269,35 +1282,37 @@ function getArrow(options: {
   rotation: number,
   sides: number,
   reverse: boolean,
+  tail: number | boolean,
 }) {
   let points;
   let border;
   let touchBorder;
   let tail;
-  if (options.tailWidth > 0 && options.width < options.tailWidth) {
-    options.width = options.tailWidth * 0.001;
+  const o = joinObjects({}, options);
+  if (o.tailWidth > 0 && o.width < o.tailWidth) {
+    o.width = o.tailWidth * 0.001;
   }
-  if (options.head === 'barb') {
-    [points, border, touchBorder, tail] = getBarbArrow(options);
-  } else if (options.head === 'rectangle' || options.head === 'bar') {
-    [points, border, touchBorder, tail] = getRectArrow(options);
-  } else if (options.head === 'line') {
-    [points, border, touchBorder, tail] = getLineArrow(options);
-  } else if (options.head === 'polygon' || options.head === 'circle') {
-    [points, border, touchBorder, tail] = getPolygonArrow(options);
-  } else if (options.head === 'reverseTriangle') {
-    [points, border, touchBorder, tail] = getReverseTriangleArrow(options);
+  if (o.head === 'barb') {
+    [points, border, touchBorder, tail] = getBarbArrow(o);
+  } else if (o.head === 'rectangle' || o.head === 'bar') {
+    [points, border, touchBorder, tail] = getRectArrow(o);
+  } else if (o.head === 'line') {
+    [points, border, touchBorder, tail] = getLineArrow(o);
+  } else if (o.head === 'polygon' || o.head === 'circle') {
+    [points, border, touchBorder, tail] = getPolygonArrow(o);
+  } else if (o.head === 'reverseTriangle') {
+    [points, border, touchBorder, tail] = getReverseTriangleArrow(o);
   } else {
-    [points, border, touchBorder, tail] = getTriangleArrow(options);
+    [points, border, touchBorder, tail] = getTriangleArrow(o);
   }
-  const [, joinLength, fullLength] = getArrowLength(options);
+  const [, joinLength, fullLength] = getArrowLength(o);
   return orientArrow(
-    points, border, touchBorder, tail, fullLength, joinLength, options,
+    points, border, touchBorder, tail, fullLength, joinLength, o,
   );
 }
 
 function defaultArrowOptions(
-  // head: ArrowHead,
+  // head: TypeArrowHead,
   // tailWidth: number,
   // scaleIn: number = 1,
   o: Object,
@@ -1340,9 +1355,9 @@ function defaultArrowOptions(
 
 function simplifyArrowOptions(
   arrowIn: ?{
-    start: OBJ_Arrow | ArrowHead,
-    end: OBJ_Arrow | ArrowHead,
-  } & OBJ_Arrow | ArrowHead,
+    start: OBJ_Arrow | TypeArrowHead,
+    end: OBJ_Arrow | TypeArrowHead,
+  } & OBJ_Arrow | TypeArrowHead,
   tailWidth: number | null,
 ) {
   if (arrowIn == null) {
@@ -1358,28 +1373,28 @@ function simplifyArrowOptions(
   const optionsForBoth = joinObjectsWithOptions({ except: ['end', 'start'] }, {}, arrow);
 
   const out = {};
-  const processEnd = (startOrEnd) => {
-    if (typeof arrow[startOrEnd] === 'string') {
+  const processEnd = (startOrEnd) => {              // $FlowFixMe
+    if (typeof arrow[startOrEnd] === 'string') {    // $FlowFixMe
       arrow[startOrEnd] = {
         head: arrow[startOrEnd],
       };
     }
-    if (Object.keys(optionsForBoth).length > 0) {
-      if (arrow[startOrEnd] == null) {
+    if (Object.keys(optionsForBoth).length > 0) {   // $FlowFixMe
+      if (arrow[startOrEnd] == null) {              // $FlowFixMe
         arrow[startOrEnd] = joinObjects({}, optionsForBoth);
-      } else {
+      } else {                                      // $FlowFixMe
         arrow[startOrEnd] = joinObjects({}, optionsForBoth, arrow[startOrEnd]);
       }
     }
-    if (
-      arrow[startOrEnd] != null
+    if (   // $FlowFixMe
+      arrow[startOrEnd] != null   // $FlowFixMe
       || (arrow.start == null && arrow.end == null)
     ) {
       let defaultTailWidth = {};
       if (tailWidth != null) {
         defaultTailWidth = { tailWidth };
       }
-      const o = joinObjectsWithOptions(
+      const o = joinObjectsWithOptions(   // $FlowFixMe
         { except: ['end', 'start'] }, defaultTailWidth, arrow[startOrEnd],
       );
       out[startOrEnd] = joinObjects(

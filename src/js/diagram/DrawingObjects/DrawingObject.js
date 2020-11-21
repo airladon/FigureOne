@@ -3,6 +3,9 @@
 import {
   Point, // Rect, getBoundingRect,
 } from '../../tools/g2';
+import type {
+  TypeParsablePoint
+} from '../../tools/g2';
 import { getState } from '../state';
 import type { TypeColor } from '../../tools/types';
 
@@ -165,9 +168,15 @@ class DrawingObject {
   //   return relativeBoundaries;
   // }
 
-  // eslint-disable-next-line no-unused-vars, class-methods-use-this, max-len
-  change(drawingPrimitive: any, border: Array<Array<Point>>, touchBorder: Array<Array<Point>> | 'border' | 'rect', holes: Array<Array<Point>>) {
+  /* eslint-disable no-unused-vars, class-methods-use-this */
+  change(
+    drawingPrimitive: any,
+    border: Array<Array<TypeParsablePoint>> | 'points' | 'rect',
+    touchBorder: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none',
+    holes: Array<Array<TypeParsablePoint>> | 'none',
+  ) {
   }
+  /* eslint-enable no-unused-vars, class-methods-use-this */
 
   _getStateProperties() {  // eslint-disable-line class-methods-use-this
     return [];
