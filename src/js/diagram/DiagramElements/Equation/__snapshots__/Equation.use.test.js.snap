@@ -271,7 +271,7 @@ DiagramElementPrimitive {
           "descent": 0.008,
           "width": 0.1,
         },
-        "onClick": undefined,
+        "onClick": null,
         "text": "a",
         "touchBorder": Array [
           Point {
@@ -556,6 +556,7 @@ DiagramElementPrimitive {
     "progression": "tools.math.sinusoid",
     "time": 1,
     "transformMethod": "_elementPulseSettingsTransformMethod",
+    "type": "scale",
   },
   "pulseTransforms": Array [],
   "recorder": Recorder {
