@@ -30,7 +30,7 @@ import GlobalAnimation from './webgl/GlobalAnimation';
 import type { TypeWhen } from './webgl/GlobalAnimation';
 // import DrawContext2D from './DrawContext2D';
 
-import type Diagram, { TypeSpaceTransforms } from './Diagram';
+import type Diagram, { OBJ_SpaceTransforms, OBJ_DiagramForElement } from './Diagram';
 import type {
   OBJ_PositionAnimationStep, OBJ_AnimationBuilder,
   OBJ_ColorAnimationStep, OBJ_TransformAnimationStep,
@@ -469,7 +469,7 @@ class DiagramElement {
 
   interactiveLocation: Point;   // this is in vertex space
   // recorder: Recorder;
-  diagram: Diagram;
+  diagram: OBJ_DiagramForElement;
   // move: {
   //   bounds: TransformBounds,
   //   transformClip: string | (?(Transform) => Transform);
@@ -539,7 +539,7 @@ class DiagramElement {
 
 
   diagramLimits: Rect;
-  diagramTransforms: TypeSpaceTransforms;
+  diagramTransforms: OBJ_SpaceTransforms;
 
   // Current animation/movement state of element
   state: ElementState;
@@ -1173,7 +1173,7 @@ class DiagramElement {
   //   return fn(...args);
   // }
 
-  setDiagram(diagram: Diagram) {
+  setDiagram(diagram: OBJ_DiagramForElement) {
     this.diagram = diagram;
     if (diagram != null) {
       this.recorder = diagram.recorder;
@@ -2746,7 +2746,7 @@ class DiagramElement {
 
   updateLimits(
     limits: Rect,
-    transforms: TypeSpaceTransforms = this.diagramTransforms,
+    transforms: OBJ_SpaceTransforms = this.diagramTransforms,
   ) {
     this.diagramLimits = limits;
     this.diagramTransforms = transforms;
@@ -2914,8 +2914,8 @@ class DiagramElement {
     );
   }
 
-  getCenterDiagramPosition(border: Array<Array<Point>> = this.border) {
-    const rect = this.getBoundingRect('diagram', border);
+  getCenterDiagramPosition() {
+    const rect = this.getBoundingRect('diagram', 'border');
     // const rect = this.getDiagramBoundingRect();
     return new Point(
       rect.left + rect.width / 2,
@@ -3298,7 +3298,8 @@ class DiagramElement {
     }
   }
 
-  click() {
+  // eslint-disable-next-line no-unused-vars
+  click(glPoint: Point) {
     if (this.onClick != null) {
       if (this.recorder.state === 'recording') {
         this.recorder.recordEvent('elementClick', [this.getPath()]);
@@ -3542,7 +3543,7 @@ class DiagramElementPrimitive extends DiagramElement {
   // }
 
   click(glPoint: Point) {
-    super.click();
+    super.click(glPoint);
     if (this.drawingObject instanceof TextObjectBase) {
       this.drawingObject.click(
         glPoint.transformBy(this.spaceTransformMatrix('gl', 'draw')),
@@ -4077,33 +4078,33 @@ class DiagramElementCollection extends DiagramElement {
     this.animateNextFrame();
   }
 
-  addNew(options: {
-    element: DiagramElement | TypeAddElementObject | Array<DiagramElement> | Array<TypeAddElementObject>,
-    name: string,
-    to: string | DiagramElementCollection,
-    addElementsKey: string,
-  }) {
-    const {
-      element, name, to, addElementsKey
-    } = options;
-    if (element instanceof DiagramElement) {
-      if (name != null) {
-        this.add(name, element);
-      } else if (element.name != null) {
-        this.add(element.name, element);
-      } else {
-        throw new Error('Element must be named');
-      }
-    } else if (Array.isArray(element)) {
-      element.forEach((e) => {
-        this.addNew({ element: e, to, addElementsKey });
-      });
-    } else {
+  // addNew(options: {
+  //   element: DiagramElement | TypeAddElementObject | Array<DiagramElement> | Array<TypeAddElementObject>,
+  //   name: string,
+  //   to: string | DiagramElementCollection,
+  //   addElementsKey: string,
+  // }) {
+  //   const {
+  //     element, name, to, addElementsKey
+  //   } = options;
+  //   if (element instanceof DiagramElement) {
+  //     if (name != null) {
+  //       this.add(name, element);
+  //     } else if (element.name != null) {
+  //       this.add(element.name, element);
+  //     } else {
+  //       throw new Error('Element must be named');
+  //     }
+  //   } else if (Array.isArray(element)) {
+  //     element.forEach((e) => {
+  //       this.addNew({ element: e, to, addElementsKey });
+  //     });
+  //   } else {
 
-    }
-  }
+  //   }
+  // }
 
-  setDiagram(diagram: Diagram) {
+  setDiagram(diagram: OBJ_DiagramForElement) {
     super.setDiagram(diagram);
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
       const element = this.elements[this.drawOrder[i]];
@@ -4758,7 +4759,7 @@ class DiagramElementCollection extends DiagramElement {
 
   updateLimits(
     limits: Rect,
-    transforms: TypeSpaceTransforms = this.diagramTransforms,
+    transforms: OBJ_SpaceTransforms = this.diagramTransforms,
   ) {
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];

@@ -13,10 +13,7 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
-// eslint-disable-next-line import/no-duplicates
-import type { ADV_Trace } from './Trace';
-// eslint-disable-next-line import/no-duplicates
-import type AdvancedTrace from './Trace';
+import type AdvancedTrace, { ADV_Trace } from './Trace';
 import type { OBJ_Font, OBJ_Font_Fixed } from '../../tools/types';
 import type {
   OBJ_TextLines,

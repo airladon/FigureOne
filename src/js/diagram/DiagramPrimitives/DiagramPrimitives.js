@@ -47,7 +47,7 @@ import {
   TextObject, TextLineObject, TextLinesObject,
 } from '../DrawingObjects/TextObject/TextObject';
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
-import type { TypeSpaceTransforms } from '../Diagram';
+import type { OBJ_SpaceTransforms } from '../Diagram';
 import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
 import { getPolygonPoints, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle';
@@ -2110,7 +2110,7 @@ export default class DiagramPrimitives {
   draw2D: Array<DrawContext2D>;
   htmlCanvas: HTMLElement;
   limits: Rect;
-  spaceTransforms: TypeSpaceTransforms;
+  spaceTransforms: OBJ_SpaceTransforms;
   animateNextFrame: Function;
   draw2DFigures: Object;
   defaultColor: Array<number>;
@@ -2128,7 +2128,7 @@ export default class DiagramPrimitives {
     // draw2DFigures: Object,
     htmlCanvas: HTMLElement,
     limits: Rect,
-    spaceTransforms: TypeSpaceTransforms,
+    spaceTransforms: OBJ_SpaceTransforms,
     animateNextFrame: Function,
     defaultColor: Array<number>,
     defaultFont: OBJ_Font,

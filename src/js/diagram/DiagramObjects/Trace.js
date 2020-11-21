@@ -13,10 +13,7 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
-// eslint-disable-next-line import/no-duplicates
-import type { ADV_Axis } from './Axis';
-// eslint-disable-next-line import/no-duplicates
-import type AdvancedAxis from './Axis';
+import type AdvancedAxis, { ADV_Axis } from './Axis';
 import type {
   OBJ_Line, OBJ_Polygon, OBJ_Star, OBJ_Polyline,
 } from '../DiagramPrimitives/DiagramPrimitives';

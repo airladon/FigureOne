@@ -14,21 +14,12 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection,
 } from '../Element';
-// eslint-disable-next-line import/no-duplicates
-import type { ADV_Axis } from './Axis';
-// eslint-disable-next-line import/no-duplicates
-import type { ADV_Trace } from './Trace';
+import type AdvancedAxis, { ADV_Axis } from './Axis';
+import type AdvancedTrace, { ADV_Trace } from './Trace';
 import type { ADV_PlotLegend } from './Legend';
-// eslint-disable-next-line import/no-duplicates
-import type { ADV_Rectangle } from './Rectangle';
+import type AdvancedRectangle, { ADV_Rectangle } from './Rectangle';
 import type { OBJ_TextLines } from '../DiagramPrimitives/DiagramPrimitives';
 import type { OBJ_Font, TypeColor, OBJ_Font_Fixed } from '../../tools/types';
-// eslint-disable-next-line import/no-duplicates
-import type AdvancedAxis from './Axis';
-// eslint-disable-next-line import/no-duplicates
-import type AdvancedTrace from './Trace';
-// eslint-disable-next-line import/no-duplicates
-import type AdvancedRectangle from './Rectangle';
 
 /**
  * Plot frame.

@@ -13,7 +13,7 @@ import { setState, getState } from './state';
 import parseState from './parseState';
 import { isTouchDevice, joinObjects, SubscriptionManager } from '../tools/tools';
 import {
-  DiagramElementCollection, DiagramElementPrimitive,
+  DiagramElementCollection, DiagramElementPrimitive, DiagramElement,
 } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
 import { Recorder } from './Recorder';
@@ -27,25 +27,19 @@ import addElements from './DiagramAddElements/addElements';
 import type { TypeAddElementObject } from './DiagramAddElements/addElements';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import type { TypeColor, OBJ_Font } from '../tools/types';
-/**
-  * Diagram options object
-  * @property {string} [htmlId] HTML `div` tag `id` to tie diagram to (`"figureOneContainer"`)
-  * @property {TypeParsableRect} [limits] - limits (bottom left
-  *  corner at (-1, -1), width 2, height 2)
-  * @property {TypeColor} [color] default color (`[0, 0, 0, 1]`)
-  * @property {OBJ_Font} [font] default font (`{ family: 'Helvetica, 
-  * size: 0.2, style: 'normal', weight: 'normal' }`)
-  * @property {number} [lineWidth] default line width
- */
-export type OBJ_Diagram = {
-  htmlId?: string,
-  limits?: TypeParsableRect,
-  color?: TypeColor,
-  font?: OBJ_Font,
-  lineWidth?: number,
-};
 
-export type TypeSpaceTransforms = {
+/**
+ * Space Transforms
+ *
+ * @property {Transform} glToDiagram
+ * @property {Transform} diagramToGL
+ * @property {Transform} pixelToDiagram
+ * @property {Transform} diagramToPixel
+ * @property {Transform} pixelToGL
+ * @property {Transform} glToPixel
+ * @property {Transform} diagramToCSSPercent
+ */
+export type OBJ_SpaceTransforms = {
   glToDiagram: Transform;
   diagramToGL: Transform;
   pixelToDiagram: Transform;
@@ -53,7 +47,38 @@ export type TypeSpaceTransforms = {
   pixelToGL: Transform;
   glToPixel: Transform;
   diagramToCSSPercent: Transform;
+}
+
+
+export type OBJ_DiagramForElement = {
+  limits: Rect,
+  spaceTransforms: OBJ_SpaceTransforms,
+  animateNextFrame: (boolean) => void,
+  animationFinished: () => void,
+  recorder: Recorder,
+}
+
+/**
+  * Diagram options object
+  * @property {string} [htmlId] HTML `div` tag `id` to tie diagram to (`"figureOneContainer"`)
+  * @property {TypeParsableRect} [limits] - limits (bottom left
+  *  corner at (-1, -1), width 2, height 2)
+  * @property {TypeColor} [color] default color (`[0, 0, 0, 1]`)
+  * @property {OBJ_Font} [font] default font (`{ family: 'Helvetica,
+  * size: 0.2, style: 'normal', weight: 'normal' }`)
+  * @property {number} [lineWidth] default line width
+  * @property {number} [length] default length to use for shapes
+ */
+export type OBJ_Diagram = {
+  htmlId?: string,
+  limits?: TypeParsableRect,
+  color?: TypeColor,
+  font?: OBJ_Font,
+  lineWidth?: number,
+  length?: number,
 };
+
+
 // There are several coordinate spaces that need to be considered for a
 // diagram.
 //
@@ -189,8 +214,7 @@ class Diagram {
   recorder: Recorder;
   gesture: Gesture;
   inTransition: boolean;
-  beingMovedElements: Array<DiagramElementPrimitive |
-                      DiagramElementCollection>;
+  beingMovedElements: Array<DiagramElement>;
 
   beingTouchedElements: Array<DiagramElementPrimitive |
                         DiagramElementCollection>;
@@ -219,23 +243,9 @@ class Diagram {
 
   /**
    * Useful transforms between spaces at the diagram level and above.
-  * @property {Transform} glToDiagram
-  * @property {Transform} diagramToGL
-  * @property {Transform} pixelToDiagram
-  * @property {Transform} diagramToPixel
-  * @property {Transform} pixelToGL
-  * @property {Transform} glToPixel
-  * @property {Transform} diagramToCSSPercent
+   * @property {OBJ_SpaceTransforms} spaceTransforms
    */
-  spaceTransforms: {
-    glToDiagram: Transform;
-    diagramToGL: Transform;
-    pixelToDiagram: Transform;
-    diagramToPixel: Transform;
-    pixelToGL: Transform;
-    glToPixel: Transform;
-    diagramToCSSPercent: Transform;
-  };
+  spaceTransforms: OBJ_SpaceTransforms;
 
   // oldScrollY: number;
   lastDrawTime: number;
@@ -414,8 +424,8 @@ class Diagram {
     this.fontScale = optionsToUse.fontScale;
     // console.log(this.canvasLow.getClientBoundingRect())
     this.updateLimits(limits);
-    this.setDefaultLineWidth(options.lineWidth);
-    this.setDefaultLength(options.length);
+    this.setDefaultLineWidth(options.lineWidth || null);
+    this.setDefaultLength(options.length || null);
     this.drawQueued = false;
     this.lastDrawTime = 0;
     this.inTransition = false;
@@ -472,6 +482,8 @@ class Diagram {
     //  * Create built in {@link DiagramElement}s
     //  * @property {function(OBJ_Polygon): DiagramElementPrimitive} polygon
     //  */
+    // deprecate
+    // $FlowFixMe
     this.create = {
       collection: this.shapes.collection.bind(this.shapes),
       generic: this.shapes.generic.bind(this.shapes),
@@ -585,7 +597,7 @@ class Diagram {
       const [elementPath] = payload;
       const element = this.getElement(elementPath);
       if (element != null) {
-        element.click();
+        element.click(payload);
       }
     };
     const eqnNavClick = (payload) => {
@@ -618,7 +630,7 @@ class Diagram {
     this.recorder.addEventType('eqnNavClick', eqnNavClick);
   }
 
-  setDefaultLineWidth(userInputLineWidth: number | undefined | null) {
+  setDefaultLineWidth(userInputLineWidth: number | null) {
     if (userInputLineWidth != null) {
       this.defaultLineWidth = userInputLineWidth;
       return;
@@ -628,7 +640,7 @@ class Diagram {
     this.defaultLineWidth = Math.abs(matrix[0]);
   }
 
-  setDefaultLength(userInputLength: number | undefined | null) {
+  setDefaultLength(userInputLength: number | null) {
     if (userInputLength != null) {
       this.defaultLength = userInputLength;
       return;
@@ -975,14 +987,6 @@ class Diagram {
     this.elements.add(name, diagramElement);
   }
 
-  // addNew(options: {
-  //   element: DiagramElement | TypeAddElementObject | Array<DiagramElement> | Array<TypeAddElementObject>,
-  //   name: string,
-  //   to: string | DiagramElementCollection,
-  //   addElementsKey: string,
-  // }) {
-  //   if ()
-  // }
 
   /**
    * Add elements from element definitions to the diagram.
@@ -1236,6 +1240,8 @@ class Diagram {
   //   this.isRecording = false;
   // }
 
+  // deprecate
+  // eslint-disable-next-line class-methods-use-this
   initialize() {
     // const elements = this.elements.getAllElements();
     // /* eslint-disable no-param-reassign */
@@ -1244,7 +1250,6 @@ class Diagram {
     //   element.recorder = this.recorder;
     //   element.animationFinishedCallback = this.animationFinished.bind(this, element);
     // });
-    
     // this.elements.setDiagram(this);
     // // /* eslint-enable no-param-reassign */
     // this.setFirstTransform();
@@ -1268,7 +1273,6 @@ class Diagram {
     //   element.recorder = this.recorder;
     //   element.animationFinishedCallback = this.animationFinished.bind(this, element);
     // });
-    
     // this.elements.setDiagram(this);
     // // /* eslint-enable no-param-reassign */
     // this.setFirstTransform();
@@ -1716,7 +1720,7 @@ class Diagram {
   }
 
   rotateElement(
-    element: DiagramElementPrimitive | DiagramElementCollection,
+    element: DiagramElement,
     previousClientPoint: Point,
     currentClientPoint: Point,
   ) {
@@ -1767,7 +1771,7 @@ class Diagram {
   }
 
   translateElement(
-    element: DiagramElementPrimitive | DiagramElementCollection,
+    element: DiagramElement,
     previousClientPoint: Point,
     currentClientPoint: Point,
   ) {
@@ -1795,7 +1799,7 @@ class Diagram {
   }
 
   scaleElement(
-    element: DiagramElementPrimitive | DiagramElementCollection,
+    element: DiagramElement,
     previousClientPoint: Point,
     currentClientPoint: Point,
     type: 'x' | 'y' | '' = '',
@@ -2027,8 +2031,9 @@ class Diagram {
 
   setElementsToCollection(collection: DiagramElementCollection) {
     this.elements = collection;
-    this.elements.setDigram(this);
-    this.setFirstTransform();
+    // this.elements.setDigram(this);
+    // this.setFirstTransform();
+    this.initElements();
   }
 
   clearContext(canvasIndex: number = 0) {
