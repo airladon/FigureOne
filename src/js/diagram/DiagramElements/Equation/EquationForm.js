@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, getMoveTime, Transform, getBoundingRect,
+  Point, getMoveTime, Transform,
 } from '../../../tools/g2';
 // import { roundNum } from '../../../tools/math';
 import { duplicateFromTo, joinObjects } from '../../../tools/tools';

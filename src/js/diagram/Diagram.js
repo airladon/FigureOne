@@ -53,7 +53,7 @@ export type OBJ_SpaceTransforms = {
 export type OBJ_DiagramForElement = {
   limits: Rect,
   spaceTransforms: OBJ_SpaceTransforms,
-  animateNextFrame: (boolean) => void,
+  animateNextFrame: () => void,
   animationFinished: () => void,
   recorder: Recorder,
 }

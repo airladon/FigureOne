@@ -4,7 +4,7 @@ import {
 import {
   round,
 } from '../../tools/math';
-import * as tools from '../../tools/tools';
+// import * as tools from '../../tools/tools';
 import makeDiagram from '../../__mocks__/makeDiagram';
 
 describe('Diagram Primitives - Grid', () => {
@@ -49,7 +49,7 @@ describe('Diagram Primitives - Grid', () => {
       },
       touchBorderCustom: {
         touchBorder: customBorder,
-      }
+      },
     };
     makeCollection = (option) => {
       diagram.addElement({
@@ -107,9 +107,8 @@ describe('Diagram Primitives - Grid', () => {
         new Point(-2.2, 1.2),
       ],
     ];
-    offset = (borders, offsetPoint = [0, 0]) => {
-      return borders.map(b => b.map(p => round(p.add(getPoint(offsetPoint)))));
-    }
+    offset = (borders, offsetPoint = [0, 0]) => borders
+      .map(b => b.map(p => round(p.add(getPoint(offsetPoint)))));
   });
   test('Default borders', () => {
     makeCollection('default');

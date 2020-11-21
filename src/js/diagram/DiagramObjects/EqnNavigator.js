@@ -601,7 +601,7 @@ export default class EqnNavigator extends DiagramElementCollection {
       this.eqn.onClick = this.clickNext.bind(this);
       this.eqn.hasTouchableElements = true;
       this.eqn.isTouchable = true;
-      this.eqn.touchInBoundingRect = true;
+      // this.eqn.touchInBoundingRect = true;
     }
     // this.setTransformCallback = () => {
     //   const p = this.getPosition();

@@ -3,7 +3,7 @@ import {
   spaceToSpaceTransform,
   getBoundingRect, polarToRect, rectToPolar, getDeltaAngle,
   normAngleTo90, deg, curvedPath, threePointAngle,
-  threePointAngleMin, Vector, getPoint, 
+  threePointAngleMin, Vector, getPoint,
 } from './g2';
 import { round } from './math';
 

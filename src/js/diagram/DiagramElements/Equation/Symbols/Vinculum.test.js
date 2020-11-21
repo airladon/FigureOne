@@ -52,5 +52,5 @@ describe('Equation Symbols - Vinculum', () => {
     expect(b).toEqual(new Rect(0.035, -0.09, 0.07, 0.104).round(3));
     expect(v).toEqual(new Rect(0, 0.049, 0.14, 0.01).round(3));
     expect(e).toEqual(new Rect(0, -0.09, 0.14, 0.256).round(3));
-  })
+  });
 });

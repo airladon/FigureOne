@@ -484,7 +484,7 @@ export type EQN_Scale = {
  *       2: ['a', {
  *         brac: {
  *           left: 'lb',
- *           content: { frac: ['b', 'vinculum', 'c'] }, 
+ *           content: { frac: ['b', 'vinculum', 'c'] },
  *           right: 'rb',
  *         },
  *       }],
@@ -1675,7 +1675,7 @@ export type EQN_Superscript = {
  *     },
  *   },
  * });
- * diagram.elements._eqn.showForm('1'); * 
+ * diagram.elements._eqn.showForm('1'); *
  *
  * @example
  * // Example showing different super-sub script options

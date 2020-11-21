@@ -6,6 +6,7 @@ import {
 } from '../../../tools/g2';
 import { round } from '../../../tools/math';
 import DrawingObject from '../DrawingObject';
+import { TypeColor } from '../../../tools/types';
 
 
 class HTMLObject extends DrawingObject {
@@ -22,7 +23,7 @@ class HTMLObject extends DrawingObject {
   lastColor: Array<number>;
 
   copy: () => HTMLObject;
-  +change: (string | HTMLElement, Array<number>) => void;
+  // +change: (string | HTMLElement, Array<number>) => void;
 
   constructor(
     parentDiv: HTMLElement,

@@ -1,5 +1,5 @@
 import {
-  Point, Line, Rect, RectBounds,
+  Point, Line, // Rect, RectBounds,
 } from '../../tools/g2';
 // import {
 //   round,

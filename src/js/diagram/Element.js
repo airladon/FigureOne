@@ -448,7 +448,7 @@ class DiagramElement {
   isTouchable: boolean;           // Element can be touched
   isInteractive: ?boolean;         // Touch event is not processed by Diagram
   hasTouchableElements: boolean;
-  touchInBoundingRect: boolean | number;
+  // touchInBoundingRect: boolean | number;
 
   drawPriority: number;
   cancelSetTransform: boolean;
@@ -641,7 +641,7 @@ class DiagramElement {
     this.subscriptions = new SubscriptionManager(this.fnMap);
     this.isMovable = false;
     this.isTouchable = false;
-    this.touchInBoundingRect = false;
+    // this.touchInBoundingRect = false;
     this.isInteractive = undefined;
     this.hasTouchableElements = false;
     this.color = [1, 1, 1, 1];
@@ -1177,7 +1177,7 @@ class DiagramElement {
     this.diagram = diagram;
     if (diagram != null) {
       this.recorder = diagram.recorder;
-      this.animationFinishedCallback = diagram.animationFinished.bind(diagram, this);
+      this.animationFinishedCallback = diagram.animationFinished;
     }
   }
 
@@ -1706,6 +1706,7 @@ class DiagramElement {
       // console.log(bounds)
       // if (this.move.bounds instanceof TransformBounds) {
       // this.subscriptions.publish('beforeSetTransform', [clip]);
+      // $FlowFixMe
       const clip = bounds.clip(transform);
       this.subscriptions.publish('beforeSetTransform', [clip]);
       if (this.cancelSetTransform === false) {
@@ -2023,7 +2024,7 @@ class DiagramElement {
     const next = this.transform.decelerate(
       this.state.movement.velocity,
       this.move.freely.deceleration,
-      deltaTime,
+      deltaTime,  // $FlowFixMe
       bounds,
       this.move.freely.bounceLoss,
       this.move.freely.zeroVelocityThreshold,
@@ -2095,7 +2096,7 @@ class DiagramElement {
     const prevTransform = this.transform._dup();
     this.setTransform(newTransform._dup());
     let tBounds;
-    if (this.move.bounds != null) {
+    if (this.move.bounds != null) {  // $FlowFixMe
       tBounds = this.move.bounds.getTranslation();
     }
     // In a finite rect bounds, if we calculate the velocity from the clipped
@@ -2571,7 +2572,7 @@ class DiagramElement {
     progression: string | (number) => number = 'tools.math.sinusoid',
   ) {
     if (e == null || e instanceof DiagramElement) {
-      this.pulseScaleRelativeToElement(
+      this.pulseScaleRelativeToElement(  // $FlowFixMe
         e, x, y, space, time, scale, frequency, callback, progression,
       );
     } else {
@@ -2762,7 +2763,7 @@ class DiagramElement {
 
   getPixelToVertexSpaceScale() {
     const pixelToDiagram = this.diagramTransforms.pixelToDiagram.matrix();
-    const diagramToVertex = this.spaceTransformMatrix(diagram, 'draw');
+    const diagramToVertex = this.spaceTransformMatrix('diagram', 'draw');
     const scaleX = pixelToDiagram[0] * diagramToVertex[0];
     const scaleY = pixelToDiagram[4] * diagramToVertex[4];
     return new Point(scaleX, scaleY);
@@ -2893,7 +2894,7 @@ class DiagramElement {
     space: TypeSpace = 'local',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
-    const transformedBorder = this.getBorder(space, border);
+    const transformedBorder = this.getBorder(space, border);  // $FlowFixMe
     return getBoundingRect(transformedBorder);
   }
 
@@ -3121,6 +3122,7 @@ class DiagramElement {
       const p0 = new Point(this.diagramLimits.left, this.diagramLimits.bottom).transformBy(m);
       // const p1 = new Point(this.diagramLimits.right, p0.y).transformBy(m);
       const p1 = new Point(this.diagramLimits.right, this.diagramLimits.top).transformBy(m);
+      // $FlowFixMe
       this.move.bounds.updateTranslation(new RectBounds({
         // left: this.diagramLimits.left,
         // bottom: this.diagramLimits.bottom,
@@ -3151,14 +3153,14 @@ class DiagramElement {
   }
 
   getMoveBounds() {
-    this.checkMoveBounds();
+    this.checkMoveBounds();  // $FlowFixMe
     if (this.move.bounds.isUnbounded()) {
       return this.move.bounds;
     }
 
     if (this.move.sizeInBounds) {
       const rect = this.getRelativeBoundingRect('local');
-      // const p = this.getPosition('local');
+      // $FlowFixMe
       const dup = this.move.bounds._dup();
       const b = dup.getTranslation();
       // console.log(rect)
@@ -3205,8 +3207,9 @@ class DiagramElement {
    * Make the touchable border of this element a rect encompassing it
    * plus some `touchable` buffer on all sides.
    */
+  // eslint-disable-next-line no-unused-vars
   setTouchableRect(touchable: number = 0) {
-    this.touchInBoundingRect = touchable;
+    // this.touchInBoundingRect = touchable;
     this.makeTouchable();
   }
 
@@ -3406,6 +3409,7 @@ class DiagramElement {
       if (border.length > 2) {
         if (vertexLocation.isInPolygon(border)) {
           let isTouched = true;
+          // $FlowFixMe
           if (this.cannotTouchHole) {
             for (let j = 0; j < holeBorders.length; j += 1) {
               const holeBorder = holeBorders[j];
@@ -3428,7 +3432,7 @@ class DiagramElement {
     return false;
   }
 
-  getTouched(glLocation: Point): Array<DiagramElementPrimitive> {
+  getTouched(glLocation: Point): Array<DiagramElement> {
     if (!this.isTouchable) {
       return [];
     }
@@ -3580,13 +3584,19 @@ class DiagramElementPrimitive extends DiagramElement {
     }
     // primitive.pulseDefault = {};
     // duplicateFromTo(primitive.pulseDefault, this.pulseDefault, ['centerOn']);
-    primitive.pulseDefault.centerOn = this.pulseDefault.centerOn;
+    if (
+      typeof this.pulseDefault !== 'string'
+      && typeof this.pulseDefault !== 'function'
+    ) {
+      primitive.pulseDefault.centerOn = this.pulseDefault.centerOn;
+    }
     primitive.recorder = this.recorder;
     return primitive;
   }
 
   clear(canvasIndex: number = 0) {
     if (this.drawingObject instanceof TextObjectBase) {
+      // $FlowFixMe
       this.drawingObject.clear(canvasIndex, this.pulseTransforms);
     }
   }
@@ -3876,22 +3886,22 @@ class DiagramElementPrimitive extends DiagramElement {
 class DiagramElementCollection extends DiagramElement {
   elements: Object;
   drawOrder: Array<string>;
-  touchInBoundingRect: boolean;
+  // touchInBoundingRect: boolean;
   border: Array<Array<Point>> | 'children' | 'rect' | number;
   touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'children';
   holeBorder: Array<Array<Point>> | 'children';
   eqns: Object;
-  +pulse: (?({
-      x?: 'left' | 'center' | 'right' | 'origin' | number,
-      y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
-      space?: TypeSpace,
-      centerOn?: null | DiagramElement | TypeParsablePoint,
-      frequency?: number,
-      time?: number,
-      scale?: number,
-      done?: ?(mixed) => void,
-      elements?: Array<string | DiagramElement>
-    } | Array<string | DiagramElement> | ((mixed) => void)), ?(mixed) => void) => void;
+  // +pulse: (?({
+  //     x?: 'left' | 'center' | 'right' | 'origin' | number,
+  //     y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
+  //     space?: TypeSpace,
+  //     centerOn?: null | DiagramElement | TypeParsablePoint,
+  //     frequency?: number,
+  //     time?: number,
+  //     scale?: number,
+  //     done?: ?(mixed) => void,
+  //     elements?: Array<string | DiagramElement>
+  //   } | Array<string | DiagramElement> | ((mixed) => void)), ?(mixed) => void) => void;
 
   +getElement: (?(string | DiagramElement)) => ?DiagramElement;
   +getElements: (Array<string | DiagramElement>) => Array<DiagramElement>;
@@ -3914,7 +3924,7 @@ class DiagramElementCollection extends DiagramElement {
     super(transform, diagramLimits, parent);
     this.elements = {};
     this.drawOrder = [];
-    this.touchInBoundingRect = false;
+    // this.touchInBoundingRect = false;
     this.eqns = {};
     this.type = 'collection';
     this.border = border;
@@ -3929,7 +3939,7 @@ class DiagramElementCollection extends DiagramElement {
     }
     if (this.isShown || ignoreShown) {
       return [...super._getStateProperties(options),
-        'touchInBoundingRect',
+        // 'touchInBoundingRect',
         'elements',
         'hasTouchableElements',
       ];
@@ -4079,7 +4089,8 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   // addNew(options: {
-  //   element: DiagramElement | TypeAddElementObject | Array<DiagramElement> | Array<TypeAddElementObject>,
+  //  element: DiagramElement | TypeAddElementObject | Array<DiagramElement>
+  //    | Array<TypeAddElementObject>,
   //   name: string,
   //   to: string | DiagramElementCollection,
   //   addElementsKey: string,
@@ -4278,7 +4289,7 @@ class DiagramElementCollection extends DiagramElement {
       | Array<string | DiagramElement>
       | ((mixed) => void)
     ) = null,
-    done: ?(mixed) => void = null,
+    done: ?((mixed) => void) = null,
   ) {
     if (optionsOrElementsOrDone == null
       || typeof optionsOrElementsOrDone === 'function'
@@ -4606,22 +4617,6 @@ class DiagramElementCollection extends DiagramElement {
     } else {
       matrix = this.spaceTransformMatrix('draw', space);
     }
-    // bordersToUse.forEach((b) => {
-    //   transformedBorders.push(
-    //     b.map(p => p.transformBy(matrix)),
-    //   );
-    // });
-
-    // let spaceToUse;
-    // if (Array.isArray(space)) {
-    //   spaceToUse = m2.mul(this.transform.matrix(), space);
-    // } else if (space === 'local') {
-    //   spaceToUse = this.getTransform().matrix();
-    // } else if (space === 'draw') {
-    //   spaceToUse = this.transform.identity().matrix();
-    // } else {
-    //   spaceToUse = space;
-    // }
 
     const getBorderFromChildren = (b) => {
       const childrenBorder = [];
@@ -4676,26 +4671,6 @@ class DiagramElementCollection extends DiagramElement {
     }
 
     return this.holeBorder.map(b => b.map(p => getPoint(p).transformBy(matrix)));
-
-
-    // if (
-    //   (border === 'border'
-    //     && (this.border === 'rect' || typeof this.border === 'number'))
-    //   || (border === 'touchBorder'
-    //     && (this.touchBorder === 'rect' || typeof this.touchBorder === 'number'))
-    // ) {
-    //   const borders = getBorderFromChildren('border');
-    //   let buffer = 0;
-    //   if (border === 'border' && typeof this.border === 'number') {
-    //     buffer = this.border;
-    //   }
-    //   if (border === 'touchBorder' && typeof this.touchBorder === 'number') {
-    //     buffer = this.touchBorder;
-    //   }
-    //   bordersToUse = getBoundingRect(borders, buffer);
-    //   return bordersToUse;
-    // }
-    // return bordersToUse;
   }
 
   getBoundingRect(

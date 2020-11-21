@@ -1,9 +1,9 @@
 import {
-  Point, Transform, Rect,
+  Point, Rect,
 } from '../tools/g2';
-import {
-  round,
-} from '../tools/math';
+// import {
+//   round,
+// } from '../tools/math';
 import * as tools from '../tools/tools';
 import makeDiagram from '../__mocks__/makeDiagram';
 
@@ -111,7 +111,7 @@ describe('Element Space Transforms', () => {
     create = (option) => {
       diagramOptions[option]();
       diagram.initialize();
-      c = diagram.getElement('c');
+      // c = diagram.getElement('c');
       a = diagram.getElement('c.a');
     };
     get = (element, p, from, to) => element.pointFromSpaceToSpace(p, from, to).round(3);
@@ -205,7 +205,7 @@ describe('Element Space Transforms', () => {
     });
   });
   describe('Collection in collection', () => {
-    let c;
+    // let c;
     let cc;
     let p;
     beforeEach(() => {
