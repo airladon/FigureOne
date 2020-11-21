@@ -3073,7 +3073,7 @@ class Transform {
     delta: Transform,
     percent: number,
     translationStyle: 'linear' | 'curved' | 'curve',
-    translationOptions: pathOptionsType,
+    translationOptions: OBJ_TranslationPath,
     // translationPath: (Point, Point, number, ?number, ?number) => Point,
     // direction: number = 1,
     // mag: number = 0.5,
@@ -5863,7 +5863,7 @@ function getTriangleCenter(
   return new Point(Ox, Oy);
 }
 
-const parseBorder = (borders: Array<Array<TypeParsablePoint>>) => {
+function parseBorder(borders: Array<Array<TypeParsablePoint>>) {
   if (!Array.isArray(borders)) {
     return borders;
   }
@@ -5872,7 +5872,7 @@ const parseBorder = (borders: Array<Array<TypeParsablePoint>>) => {
     borderOut.push(b.map(bElement => getPoint(bElement)));
   });
   return borderOut;
-};
+}
 
 export {
   // point,

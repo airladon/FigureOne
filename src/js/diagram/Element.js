@@ -3538,8 +3538,6 @@ class DiagramElementPrimitive extends DiagramElement {
   //   }
   // }
 
-  
-
   click(glPoint: Point) {
     super.click();
     if (this.drawingObject instanceof TextObjectBase) {

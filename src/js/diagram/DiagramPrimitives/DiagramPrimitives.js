@@ -1,7 +1,7 @@
 // @flow
 import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
-  parseBorder,
+  parseBorder, getPoints,
 } from '../../tools/g2';
 // import {
 //   round
@@ -1784,7 +1784,7 @@ export type OBJ_TextModifierDefinition = {
   font?: OBJ_Font,
   border?: 'rect' | Array<TypeParsablePoint>,
   touchBorder?: 'rect' | number | 'border' | Array<TypeParsablePoint>,
-  onClick?: string | () => {},
+  onClick?: string | () => void,
 }
 
 /**
@@ -2222,12 +2222,18 @@ export default class DiagramPrimitives {
 
     element.custom.update = function update(
       points: Array<TypeParsablePoint>,
-      b: Array<Array<TypeParsablePoint>> | 'points' | 'rect' = 'rect',
-      tB: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none' = 'border',
-      h: Array<Array<TypeParsablePoint>> | 'none' = 'none',
+      borderIn: Array<Array<TypeParsablePoint>> | 'points' | 'rect' = 'rect',
+      touchBorderIn: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none' = 'border',
+      holeBorderIn: Array<Array<TypeParsablePoint>> | 'none' = 'none',
       copy: Array<CPY_Step> = [],
-    ) { // $FlowFixMe
-      element.drawingObject.change(points, b, tB, h, copy);
+    ) {
+      const pp = getPoints(points);
+      const b = Array.isArray(borderIn) ? parseBorder(borderIn) : borderIn;
+      const tB = Array.isArray(touchBorderIn) ? parseBorder(touchBorderIn) : touchBorderIn;
+      const hB = Array.isArray(holeBorderIn) ? parseBorder(holeBorderIn) : holeBorderIn;
+      element.drawingObject.change(
+        pp, b, tB, hB, copy,
+      );
     };
 
     element.name = options.name;
@@ -2439,7 +2445,7 @@ export default class DiagramPrimitives {
 
       element = this.generic(optionsToUse, {
         points: tris, // $FlowFixMe
-        border,
+        border,       // $FlowFixMe
         touchBorder,
       });
       element.custom.update = (updateOptions) => {
@@ -2459,8 +2465,8 @@ export default class DiagramPrimitives {
 
       element = this.polyline(optionsToUse, optionsToUse.line, {
         points: outline,
-        close: optionsToUse.sides === optionsToUse.sidesToDraw,
-        border,
+        close: optionsToUse.sides === optionsToUse.sidesToDraw, // $FlowFixMe
+        border, // $FlowFixMe
         touchBorder,
         holeBorder: optionsToUse.holeBorder,
       });
@@ -2478,8 +2484,7 @@ export default class DiagramPrimitives {
           widthIs: o.line.widthIs,
         }));
       };
-      // $FlowFixMe
-    }
+    } // $FlowFixMe
     element.drawingObject.getPointCountForAngle = (angle: number) => {
       const sidesToDraw = Math.floor(
         tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * optionsToUse.sides,
@@ -2560,24 +2565,24 @@ export default class DiagramPrimitives {
     let element;
     if (optionsToUse.line == null) {
       element = this.generic(optionsToUse, {
-        points: rectangleBorderToTris(points),
-        border,
+        points: rectangleBorderToTris(points), // $FlowFixMe
+        border, // $FlowFixMe
         touchBorder,
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
         const [updatedPoints, updatedBorder, updatedTouchBorder] = getRectangleBorder(o);
         element.drawingObject.change(
-          rectangleBorderToTris(updatedPoints),
-          updatedBorder,
+          rectangleBorderToTris(updatedPoints), // $FlowFixMe
+          updatedBorder, // $FlowFixMe
           updatedTouchBorder,
           o.holeBorder,
         );
       };
     } else {
       element = this.polyline(optionsToUse, optionsToUse.line, {
-        points,
-        border,
+        points, // $FlowFixMe
+        border, // $FlowFixMe
         touchBorder,
         close: true,
       });
@@ -2627,24 +2632,24 @@ export default class DiagramPrimitives {
     let element;
     if (optionsToUse.line == null) {
       element = this.generic(optionsToUse, {
-        points: ellipseBorderToTris(points),
-        border,
+        points: ellipseBorderToTris(points), // $FlowFixMe
+        border, // $FlowFixMe
         touchBorder,
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
         const [updatedPoints, updatedBorder, updatedTouchBorder] = getEllipseBorder(o);
         element.drawingObject.change(
-          ellipseBorderToTris(updatedPoints),
-          updatedBorder,
+          ellipseBorderToTris(updatedPoints), // $FlowFixMe
+          updatedBorder, // $FlowFixMe
           updatedTouchBorder,
           o.holeBorder,
         );
       };
     } else {
       element = this.polyline(optionsToUse, optionsToUse.line, {
-        points,
-        border,
+        points, // $FlowFixMe
+        border, // $FlowFixMe
         touchBorder,
         close: true,
       });
@@ -2699,21 +2704,21 @@ export default class DiagramPrimitives {
 
     let element;
     if (optionsToUse.line == null) {
-      element = this.generic(optionsToUse, {
+      element = this.generic(optionsToUse, { // $FlowFixMe
         points, border, touchBorder,
       });
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
         const [updatedPoints, updatedBorder, updatedTouchBorder] = getTriangle(o);
-        element.drawingObject.change(
+        element.drawingObject.change( // $FlowFixMe
           updatedPoints, updatedBorder, updatedTouchBorder, o.holeBorder,
         );
       };
     } else {
       element = this.polyline(optionsToUse, optionsToUse.line, {
         points,
-        close: true,
-        border,
+        close: true, // $FlowFixMe
+        border, // $FlowFixMe
         touchBorder,
       });
       element.custom.update = (updateOptions) => {
@@ -2751,7 +2756,7 @@ export default class DiagramPrimitives {
     };
     const options = processOptions(defaultOptions, ...optionsIn);
     parsePoints(options, []);
-    options.bounds = getRect(options.bounds);
+    options.bounds = getRect(options.bounds); // $FlowFixMe
     const getTris = points => makePolyLine(
       points,
       options.line.width,
@@ -2765,7 +2770,7 @@ export default class DiagramPrimitives {
       options.line.linePrimitives,
       options.line.lineNum,
       [[]],
-      [[]],
+      0,
     );
 
     // Prioritize Num over Step. Only define Num from Step if Num is undefined.
@@ -2849,12 +2854,12 @@ export default class DiagramPrimitives {
       transform: new Transform('line').standard(),
       border: 'outline',
       touchBorder: 'border',
-    };
+    };  // $FlowFixMe
     const optionsToUse = processOptions(defaultOptions, ...options);
     const [points, border, touchBorder] = getLine(optionsToUse);
 
     const element = this.polyline(optionsToUse, {
-      points,
+      points, // $FlowFixMe
       border,
       touchBorder,
     });
@@ -2893,8 +2898,9 @@ export default class DiagramPrimitives {
       }));
     };
 
+    // $FlowFixMe
     element.drawingObject.getPointCountForLength = (drawLength: number = this.maxLength) => {
-      if (drawLength >= element.custom.maxLength) {
+      if (drawLength >= element.custom.maxLength) { // $FlowFixMe
         return element.drawingObject.numPoints;
       }
       if (drawLength < element.custom.dashCumLength[0]) {
@@ -2905,7 +2911,7 @@ export default class DiagramPrimitives {
         if (cumLength > drawLength) {
           return (Math.floor((i - 1) / 2) + 1) * 6;
         }
-      }
+      } // $FlowFixMe
       return element.drawingObject.numPoints;
     };
 
@@ -2947,7 +2953,7 @@ export default class DiagramPrimitives {
       borderToUse = [border];
     }
     const element = this.generic({}, optionsToUse, {
-      points,
+      points, // $FlowFixMe
       border: borderToUse,
     });
 
@@ -2957,7 +2963,7 @@ export default class DiagramPrimitives {
         o.drawPosition = getPoint(o.drawPosition);
       }
       const [updatedPoints, updatedBorder, updatedTouchBorder] = getArrow(o);
-      element.drawingObject.change(
+      element.drawingObject.change( // $FlowFixMe
         updatedPoints, updatedBorder, updatedTouchBorder, o.holeBorder,
       );
     };
@@ -3786,9 +3792,9 @@ export default class DiagramPrimitives {
 
     const element = new DiagramElementCollection(
       transform, this.limits,
-      null,
-      parseBorder(optionsToUse.border),
-      parseBorder(optionsToUse.touchBorder),
+      null, // $FlowFixMe
+      parseBorder(optionsToUse.border), // $FlowFixMe
+      parseBorder(optionsToUse.touchBorder), // $FlowFixMe
       parseBorder(optionsToUse.holeBorder),
     );
     // console.log(element)

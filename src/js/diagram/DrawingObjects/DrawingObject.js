@@ -3,9 +3,9 @@
 import {
   Point, // Rect, getBoundingRect,
 } from '../../tools/g2';
-import type {
-  TypeParsablePoint
-} from '../../tools/g2';
+// import type {
+//   TypeParsablePoint
+// } from '../../tools/g2';
 import { getState } from '../state';
 import type { TypeColor } from '../../tools/types';
 
@@ -143,6 +143,11 @@ class DrawingObject {
     return this.getLocation().transformBy(transformMatrix);
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getPointCountForAngle() {
+    return 0;
+  }
+
   // getRelativeBoundingRect(transformMatrix: Array<number> | null = null): Rect {
   //   const location = this.getLocation(transformMatrix);
   //   const absoluteBoundaries =
@@ -171,9 +176,10 @@ class DrawingObject {
   /* eslint-disable no-unused-vars, class-methods-use-this */
   change(
     drawingPrimitive: any,
-    border: Array<Array<TypeParsablePoint>> | 'points' | 'rect',
-    touchBorder: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none',
-    holes: Array<Array<TypeParsablePoint>> | 'none',
+    border: Array<Array<Point>> | 'points' | 'rect',
+    touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none',
+    holes: Array<Array<Point>> | 'none',
+    copy: Object | Array<Object>,
   ) {
   }
   /* eslint-enable no-unused-vars, class-methods-use-this */

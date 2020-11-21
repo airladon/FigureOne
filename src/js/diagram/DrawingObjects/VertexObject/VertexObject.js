@@ -4,7 +4,7 @@
 import * as m2 from '../../../tools/m2';
 import WebGLInstance from '../../webgl/webgl';
 import { Point } from '../../../tools/g2';
-import type { TypeParsablePoint } from '../../../tools/g2';
+// import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 import type { CPY_Step } from '../Geometries/copy/copy';
 import type { TypeColor } from '../../../tools/types';
@@ -243,10 +243,10 @@ class VertexObject extends DrawingObject {
 
   /* eslint-disable no-unused-vars */
   change(
-    coords: Array<TypeParsablePoint>,
-    border: Array<Array<TypeParsablePoint>> | 'points' | 'rect',
-    touchBorder: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none',
-    holes: Array<Array<TypeParsablePoint>> | 'none',
+    coords: Array<Point>,
+    border: Array<Array<Point>> | 'points' | 'rect',
+    touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none',
+    holes: Array<Array<Point>> | 'none',
     copy: Array<CPY_Step> = [],
   ) {
     this.resetBuffer();

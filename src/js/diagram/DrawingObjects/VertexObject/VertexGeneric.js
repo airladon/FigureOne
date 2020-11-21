@@ -1,8 +1,8 @@
 // @flow
 import {
-  Point, getBoundingRect, Rect, getPoints,
+  Point, getBoundingRect, Rect, // getPoints,
 } from '../../../tools/g2';
-import type { TypeParsablePoint } from '../../../tools/g2';
+// import type { TypeParsablePoint } from '../../../tools/g2';
 // import { joinObjects } from '../../../tools/tools';
 import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
@@ -48,34 +48,13 @@ class VertexGeneric extends VertexObject {
   }
 
   change(
-    vertices: Array<TypeParsablePoint>,
-    border: Array<Array<TypeParsablePoint>> | 'points' | 'rect' = 'rect',
-    touchBorder: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none' = 'border',
-    holeBorder: Array<Array<TypeParsablePoint>> | 'none' = 'none',
+    vertices: Array<Point>,
+    border: Array<Array<Point>> | 'points' | 'rect' = 'rect',
+    touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none' = 'border',
+    holeBorder: Array<Array<Point>> | 'none' = 'none',
     copy: Array<CPY_Step> = [],
   ) {
-    const parsedVertices = getPoints(vertices);
-    let parsedBorder: Array<Array<Point>> | 'points' | 'rect';
-    if (Array.isArray(border)) {
-      parsedBorder = border.map(b => getPoints(b));
-    } else {
-      parsedBorder = border;
-    }
-
-    let parsedTouchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none';
-    if (Array.isArray(touchBorder)) {
-      parsedTouchBorder = touchBorder.map(b => getPoints(b));
-    } else {
-      parsedTouchBorder = touchBorder;
-    }
-    let parsedHoleBorder: Array<Array<Point>> | 'none';
-    if (Array.isArray(holeBorder)) {
-      parsedHoleBorder = holeBorder.map(b => getPoints(b));
-    } else {
-      parsedHoleBorder = holeBorder;
-    }
-
-    this.setupPoints(parsedVertices, parsedBorder, parsedTouchBorder, parsedHoleBorder, copy);
+    this.setupPoints(vertices, border, touchBorder, holeBorder, copy);
     this.resetBuffer();
   }
 
