@@ -50,6 +50,7 @@
     "flow-copy-source": "^2.0.9",
     "http-server": "^0.12.3",
     "jest": "^26.4.0",
+    "playwright": "^1.6.2",
     "regenerator-runtime": "^0.13.7",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.44.1",

@@ -216,8 +216,7 @@ class Diagram {
   inTransition: boolean;
   beingMovedElements: Array<DiagramElement>;
 
-  beingTouchedElements: Array<DiagramElementPrimitive |
-                        DiagramElementCollection>;
+  beingTouchedElements: Array<DiagramElement>;
 
   moveTopElementOnly: boolean;
   previousCursorPoint: Point;

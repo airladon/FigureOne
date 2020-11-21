@@ -1609,7 +1609,7 @@ export class Equation extends DiagramElementCollection {
           if (pulse.element != null
             && pulse.element instanceof Equation  // $FlowFixMe
             && pulse.element.getCurrentForm().name === form.name
-          ) {
+          ) { // $FlowFixMe
             pulse.element.pulse({ duration: pulse.duration, scale: pulse.scale });
           }
         };

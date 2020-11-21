@@ -6,7 +6,7 @@ import {
 } from '../../../tools/g2';
 import { round } from '../../../tools/math';
 import DrawingObject from '../DrawingObject';
-import { TypeColor } from '../../../tools/types';
+import type { TypeColor } from '../../../tools/types';
 
 
 class HTMLObject extends DrawingObject {
@@ -108,6 +108,7 @@ class HTMLObject extends DrawingObject {
     return new Point(x, y);
   }
 
+  // $FlowFixMe
   change(newHtml: string | HTMLElement, lastDrawTransformMatrix: Array<number>) {
     let element = newHtml;
     if (typeof newHtml === 'string') {

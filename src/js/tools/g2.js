@@ -842,11 +842,14 @@ class Point {
     delta: Point,
     percent: number,
     translationStyle: 'linear' | 'curved' | 'curve' = 'linear',
-    translationOptions: OBJ_TranslationPath = {
+    translationOptions: {
+      magnitude: number,
+      offset: number,
+      controlPoint: Point | null,
+    } = {
       magnitude: 0.5,
       offset: 0.5,
       controlPoint: null,
-      // direction: '',
     },
   ) {
     const pathPoint = translationPath(
@@ -923,7 +926,7 @@ export type OBJ_QuadraticBezier = {
  * Translation path options object
  */
 export type OBJ_TranslationPath = {
-  style?: 'curve' | 'linear' | 'curved',
+  style: 'curve' | 'linear' | 'curved',
   // curve options
   angle?: number,
   magnitude?: number,

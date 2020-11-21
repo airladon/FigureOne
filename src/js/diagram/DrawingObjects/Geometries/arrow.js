@@ -1355,9 +1355,9 @@ function simplifyArrowOptions(
     return undefined;
   }
   let arrow;
-  if (typeof arrowIn === 'string') {
-    arrow = {
-      start: arrowIn,
+  if (typeof arrowIn === 'string') {  // $FlowFixMe
+    arrow = { // $FlowFixMe
+      start: arrowIn, // $FlowFixMe
       end: arrowIn,
     };
   } else {
@@ -1367,7 +1367,7 @@ function simplifyArrowOptions(
 
   const out = {};
   const processEnd = (startOrEnd: 'start' | 'end') => {
-    if (typeof arrow[startOrEnd] === 'string') {
+    if (typeof arrow[startOrEnd] === 'string') {  // $FlowFixMe
       arrow[startOrEnd] = { // $FlowFixMe
         head: arrow[startOrEnd],
       };

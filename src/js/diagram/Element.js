@@ -3587,8 +3587,10 @@ class DiagramElementPrimitive extends DiagramElement {
     if (
       typeof this.pulseDefault !== 'string'
       && typeof this.pulseDefault !== 'function'
-    ) {
+    ) { // $FlowFixMe
       primitive.pulseDefault.centerOn = this.pulseDefault.centerOn;
+    } else {
+      primitive.pulseDefault = this.pulseDefault;
     }
     primitive.recorder = this.recorder;
     return primitive;
@@ -3977,7 +3979,14 @@ class DiagramElementCollection extends DiagramElement {
     collection.recorder = this.recorder;
     // collection.pulseDefault = {};
     // duplicateFromTo(collection.pulseDefault, this.pulseDefault, ['centerOn']);
-    collection.pulseDefault.centerOn = this.pulseDefault.centerOn;
+    if (
+      typeof this.pulseDefault !== 'string'
+      && typeof this.pulseDefault !== 'function'
+    ) { // $FlowFixMe
+      collection.pulseDefault.centerOn = this.pulseDefault.centerOn;
+    } else {
+      collection.pulseDefault = this.pulseDefault;
+    }
 
     return collection;
   }
@@ -3989,10 +3998,11 @@ class DiagramElementCollection extends DiagramElement {
    */
   toFront(elementsIn: Array<string | DiagramElement> | string | DiagramElement) {
     let elements = elementsIn;
-    if (!Array.isArray(elementsIn)) {
+    if (!Array.isArray(elementsIn) || typeof elementsIn === 'string') {
       elements = [elementsIn];
     }
     const names = [];
+    // $FlowFixMe
     elements.forEach((element) => {
       if (typeof element === 'string') {
         names.push(element);
@@ -4017,10 +4027,11 @@ class DiagramElementCollection extends DiagramElement {
    */
   toBack(elementsIn: Array<string | DiagramElement> | string | DiagramElement) {
     let elements = elementsIn;
-    if (!Array.isArray(elementsIn)) {
+    if (typeof elementsIn === 'string' || !Array.isArray(elementsIn)) {
       elements = [elementsIn];
     }
     const names = [];
+    // $FlowFixMe
     elements.forEach((element) => {
       if (typeof element === 'string') {
         names.push(element);
@@ -4601,7 +4612,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   getBorder(
-    space: TypeSpace = 'local',
+    space: TypeSpace | Array<number> = 'local',
     border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
     children: ?Array<string | DiagramElement> = null,
     shownOnly: boolean = true,
@@ -4635,6 +4646,7 @@ class DiagramElementCollection extends DiagramElement {
         ) {
           return;
         }
+        // $FlowFixMe
         childrenBorder.push(...e.getBorder(matrix, b, null, shownOnly));
       });
       return childrenBorder;
@@ -4648,28 +4660,28 @@ class DiagramElementCollection extends DiagramElement {
     }
 
     if (border === 'border') {
-      if (this.border === 'rect') {
+      if (this.border === 'rect') { // $FlowFixMe
         return [getBoundingBorder(getBorderFromChildren('border'))];
       }
-      if (typeof this.border === 'number') {
+      if (typeof this.border === 'number') { // $FlowFixMe
         return [getBoundingBorder(getBorderFromChildren('border'), this.border)];
-      }
+      } // $FlowFixMe
       return this.border.map(b => b.map(p => getPoint(p).transformBy(matrix)));
     }
 
     if (border === 'touchBorder') {
-      if (this.touchBorder === 'rect') {
+      if (this.touchBorder === 'rect') { // $FlowFixMe
         return [getBoundingBorder(getBorderFromChildren('border'))];
       }
-      if (typeof this.touchBorder === 'number') {
+      if (typeof this.touchBorder === 'number') { // $FlowFixMe
         return [getBoundingBorder(getBorderFromChildren('border'), this.touchBorder)];
       }
       if (this.touchBorder === 'border') {
         return this.getBorder(space, 'border', children, shownOnly);
-      }
+      } // $FlowFixMe
       return this.touchBorder.map(b => b.map(p => getPoint(p).transformBy(matrix)));
     }
-
+    // $FlowFixMe
     return this.holeBorder.map(b => b.map(p => getPoint(p).transformBy(matrix)));
   }
 
@@ -4682,6 +4694,7 @@ class DiagramElementCollection extends DiagramElement {
     const transformedBorder = this.getBorder(space, border, children, shownOnly);
     // console.log(space, border, children, shownOnly)
     // console.log(transformedBorder)
+    // $FlowFixMe
     return getBoundingRect(transformedBorder);
   }
 
@@ -4704,7 +4717,7 @@ class DiagramElementCollection extends DiagramElement {
   getPositionInBounds(
     space: TypeSpace = 'local',
     xAlign: 'center' | 'left' | 'right' | 'location' | number = 'location',
-    yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location',
+    yAlign: 'middle' | 'top' | 'bottom' | 'location' | number = 'location', // $FlowFixMe
     children: ?Array<string | DiagramElement> = null,
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
     shownOnly: boolean = true,
@@ -4768,7 +4781,7 @@ class DiagramElementCollection extends DiagramElement {
   //  1 to n: n top elements in collection
   //  n+1: second top collection
   //  n+2 to m: top elements in second top colleciton.
-  getTouched(glLocation: Point): Array<DiagramElementPrimitive | DiagramElementCollection> {
+  getTouched(glLocation: Point): Array<DiagramElement> {
     if (!this.isTouchable && !this.hasTouchableElements) {
       return [];
     }

@@ -2715,7 +2715,7 @@ export default class DiagramPrimitives {
         );
       };
     } else {
-      element = this.polyline(optionsToUse, optionsToUse.line, {
+      element = this.polyline(optionsToUse, optionsToUse.line, { // $FlowFixMe
         points,
         close: true, // $FlowFixMe
         border, // $FlowFixMe
