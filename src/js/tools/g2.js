@@ -993,18 +993,20 @@ function curvedPath(
     if (o.angle != null) {
       angleDelta = o.angle;
     }
-    if (o.offset == null) {
-      o.offset = 0;
+    let offsetToUse = 0;
+    if (o.offset != null) {
+      offsetToUse = o.offset;
     }
     if (o.direction == null) {
       o.direction = 'positive';
     }
-    if (o.magnitude == null) {
-      o.magnitude = 1;
+    let magToUse = 1;
+    if (o.magnitude != null) {
+      magToUse = o.magnitude;
     }
     const displacementLine = new Line(start, start.add(delta));
     const lineAngle = clipAngle(displacementLine.angle(), '0to360');
-    const linePoint = start.add(new Point(delta.x * o.offset, delta.y * o.offset));
+    const linePoint = start.add(new Point(delta.x * offsetToUse, delta.y * offsetToUse));
 
     // norm line angle is between 0 and 180
     let normLineAngle = lineAngle; // clipAngle(lineAngle, '0to360');
@@ -1047,7 +1049,7 @@ function curvedPath(
       }
     }
 
-    const dist = o.magnitude * displacementLine.length();
+    const dist = magToUse * displacementLine.length();
     controlPoint = new Point(
       linePoint.x + dist * Math.cos(controlAngle),
       linePoint.y + dist * Math.sin(controlAngle),
@@ -5867,9 +5869,9 @@ function parseBorder(borders: Array<Array<TypeParsablePoint>>) {
   if (!Array.isArray(borders)) {
     return borders;
   }
-  const borderOut = [];
+  const borderOut: Array<Array<Point>> = [];
   borders.forEach((b) => {
-    borderOut.push(b.map(bElement => getPoint(bElement)));
+    borderOut.push(b.map((bElement: TypeParsablePoint) => getPoint(bElement)));
   });
   return borderOut;
 }

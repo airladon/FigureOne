@@ -21,7 +21,7 @@ import HTMLObject from './DrawingObjects/HTMLObject/HTMLObject';
 import DrawingObject from './DrawingObjects/DrawingObject';
 import VertexObject from './DrawingObjects/VertexObject/VertexObject';
 import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
-import type { OBJ_Font } from './DrawingObjects/TextObject/TextObject';
+// import type { OBJ_Font } from './DrawingObjects/TextObject/TextObject';
 import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, SubscriptionManager,
 } from '../tools/tools';
@@ -37,7 +37,7 @@ import type {
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
   OBJ_PulseAnimationStep, OBJ_OpacityAnimationStep,
   OBJ_ParallelAnimationStep, OBJ_TriggerAnimationStep,
-  OBJ_AnimationStep, TypePulseTransformAnimationStepInputOptions,
+  OBJ_AnimationStep, OBJ_PulseTransformAnimationStep,
   OBJ_ScenarioAnimationStepInputOptions,
 } from './Animation/Animation';
 // eslint-disable-next-line import/no-cycle
@@ -45,6 +45,9 @@ import * as animations from './Animation/Animation';
 import WebGLInstance from './webgl/webgl';
 // import type Diagram from './Diagram';
 import { FunctionMap } from '../tools/FunctionMap';
+import {
+  OBJ_Font, TypeColor,
+} from '../tools/types';
 // import type Diagram from './Diagram';
 // import type { TypePauseSettings, TypeOnPause } from './Recorder';
 
@@ -731,7 +734,7 @@ class DiagramElement {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.TransformAnimationStep(options);
       },
-      pulseTransform: (...optionsIn: Array<TypePulseTransformAnimationStepInputOptions>) => {
+      pulseTransform: (...optionsIn: Array<OBJ_PulseTransformAnimationStep>) => {
         const options = joinObjects({}, { element: this }, ...optionsIn);
         return new animations.PulseTransformAnimationStep(options);
       },

@@ -34,7 +34,7 @@ import type {
 import TransformAnimationStep from './AnimationStep/ElementAnimationStep/TransformAnimationStep';
 
 import type {
-  TypePulseTransformAnimationStepInputOptions,
+  OBJ_PulseTransformAnimationStep,
 } from './AnimationStep/ElementAnimationStep/PulseTransformAnimationStep';
 import PulseTransformAnimationStep from './AnimationStep/ElementAnimationStep/PulseTransformAnimationStep';
 
@@ -119,7 +119,7 @@ export type {
   TypeAnimationManagerInputOptions, OBJ_RotationAnimationStep,
   OBJ_ScaleAnimationStep, OBJ_PulseAnimationStep,
   OBJ_OpacityAnimationStep, OBJ_ScenarioAnimationStep,
-  TypePulseTransformAnimationStepInputOptions, OBJ_ElementAnimationStep,
+  OBJ_PulseTransformAnimationStep, OBJ_ElementAnimationStep,
 };
 export {
   PositionAnimationStep, AnimationBuilder, ParallelAnimationStep, SerialAnimationStep,

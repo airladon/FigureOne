@@ -14,7 +14,7 @@ import type {
   AnimationStep, OBJ_AnimationBuilder, OBJ_AnimationStep,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep, OBJ_TriggerAnimationStep,
   OBJ_PositionAnimationStep, OBJ_ColorAnimationStep, OBJ_OpacityAnimationStep,
-  OBJ_TransformAnimationStep, TypePulseTransformAnimationStepInputOptions,
+  OBJ_TransformAnimationStep, OBJ_PulseTransformAnimationStep,
   OBJ_PulseAnimationStep, OBJ_ElementAnimationStep,
   OBJ_ScenarioAnimationStep, OBJ_ParallelAnimationStep,
 } from './Animation';
@@ -399,7 +399,7 @@ export default class AnimationManager {
     return new anim.TransformAnimationStep(optionsToUse);
   }
 
-  pulseTransform(...options: Array<TypePulseTransformAnimationStepInputOptions>) {
+  pulseTransform(...options: Array<OBJ_PulseTransformAnimationStep>) {
     const optionsToUse = joinObjects({}, { element: this.element }, ...options);
     return new anim.PulseTransformAnimationStep(optionsToUse);
   }

@@ -19,7 +19,7 @@ import type {
 import ElementAnimationStep from '../ElementAnimationStep';
 import type { AnimationStartTime } from '../../AnimationManager';
 
-export type TypePulseTransformAnimationStepInputOptions = {
+export type OBJ_PulseTransformAnimationStep = {
   start?: Array<Transform>;      // default is element transform
   target?: Array<Transform>;     // Either target or delta must be defined
   // delta?: Transform;      // delta overrides target if both are defined
@@ -68,7 +68,7 @@ export default class PulseTransformAnimationStep extends ElementAnimationStep {
     zeroDurationThreshold: number;
   };
 
-  constructor(...optionsIn: Array<TypePulseTransformAnimationStepInputOptions>) {
+  constructor(...optionsIn: Array<OBJ_PulseTransformAnimationStep>) {
     const ElementAnimationStepOptionsIn =
       joinObjects({}, { type: 'transform' }, ...optionsIn);
     deleteKeys(ElementAnimationStepOptionsIn, [

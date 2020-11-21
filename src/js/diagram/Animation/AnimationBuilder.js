@@ -10,7 +10,7 @@ import type {
   OBJ_TransformAnimationStep,
   OBJ_RotationAnimationStep, OBJ_ScaleAnimationStep,
   OBJ_PulseAnimationStep, OBJ_OpacityAnimationStep,
-  TypePulseTransformAnimationStepInputOptions,
+  OBJ_PulseTransformAnimationStep,
   AnimationStep, OBJ_ScenarioAnimationStep, OBJ_ElementAnimationStep,
 } from './Animation';
 // import PositionAnimationStep from './AnimationStep/ElementAnimationStep/PositionAnimationStep';
@@ -253,7 +253,7 @@ export default class AnimationBuilder extends animation.SerialAnimationStep {
     return this;
   }
 
-  pulseTransforms(...options: Array<TypePulseTransformAnimationStepInputOptions>) {
+  pulseTransforms(...options: Array<OBJ_PulseTransformAnimationStep>) {
     if (this.element != null) {
       const defaultOptions = { element: this.element };
       const optionsToUse = joinObjects({}, defaultOptions, ...options);
