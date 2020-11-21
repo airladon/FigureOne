@@ -11,6 +11,8 @@ import {
   getArrow, getArrowLength, simplifyArrowOptions,
 } from '../arrow';
 import type { TypeDash } from '../../../../tools/types';
+import type { TypeArrowHead } from '../arrow';
+import type { OBJ_Arrow } from '../../../DiagramPrimitives/DiagramPrimitives';
 
 /* eslint-disable yoda */
 
@@ -101,7 +103,7 @@ function lineSegmentsToPoints(
 function joinLinesInPoint(line1: Line, lineNext: Line) {
   const intersect = line1.intersectsWith(lineNext);
   if (intersect.intersect != null) {
-    line1.setP2(intersect.intersect._dup());
+    line1.setP2(intersect.intersect._dup());  // $FlowFixMe
     lineNext.setP1(intersect.intersect._dup());
   }
 }
@@ -549,12 +551,14 @@ function circleLineIntersection(
   const i2y = (-D * dx - Math.abs(dy) * Math.sqrt(r * r * dr * dr - D * D)) / (dr * dr);
 
   const intersections = [];
+  // eslint-disable-next-line no-restricted-globals
   if (!isNaN(i1x) && !isNaN(i1y)) {
     const i = new Point(i1x, i1y).sub(offsetToZero);
     if (lineIn.hasPointOn(i)) {
       intersections.push(i);
     }
   }
+  // eslint-disable-next-line no-restricted-globals
   if (!isNaN(i2x) && !isNaN(i2y)) {
     const i = new Point(i2x, i2y).sub(offsetToZero);
     if (lineIn.hasPointOn(i)) {
@@ -575,24 +579,30 @@ function shortenLineForArrows(
   points: Array<Point>,
   arrow: {
     start?: {
-      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
+      head: TypeArrowHead,
       length: number,
       width: number,
       barb: number,
-      lineWidth: number,
+      tailWidth: number,
+      align: 'mid' | 'start',
+      tail: number | boolean,
+      radius: number,
     },
     end?: {
-      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
+      head: TypeArrowHead,
       length: number,
       width: number,
       barb: number,
-      lineWidth: number,
+      tailWidth: number,
+      align: 'mid' | 'start',
+      tail: number | boolean,
+      radius: number,
     },
   },
 ) {
   const { start, end } = arrow;
 
-  let shortenedPoints;
+  let shortenedPoints = [];
 
   // let addStartArrow = false;
   if (start != null) {
@@ -609,7 +619,7 @@ function shortenLineForArrows(
     }
 
     if (pointFound) {
-      const line = new Line(points[index - 1], points[index])
+      const line = new Line(points[index - 1], points[index]);
       const [intersect] = circleLineIntersection(startPoint, arrowLength, line);
       if (intersect != null) {
         shortenedPoints = [intersect, ...points.slice(index)];
@@ -634,7 +644,7 @@ function shortenLineForArrows(
       }
     }
     if (pointFound) {
-      const line = new Line(points[index + 1], points[index])
+      const line = new Line(points[index + 1], points[index]);
       const [intersect] = circleLineIntersection(endPoint, arrowLength, line);
       if (intersect != null) {
         shortenedPoints = [...shortenedPoints.slice(0, index + 1), intersect];
@@ -661,21 +671,10 @@ function makePolyLine(
   borderIs: 'positive' | 'negative' | 'line' | Array<Array<Point>>,
   touchBorderBuffer: number = 0,
   holeIs: 'positive' | 'negative' | 'none' | Array<Array<Point>>,
-  arrowIn: null | {
-    head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
-    length: number,
-    width: number,
-    start: {
-      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
-      length: number,
-      width: number,
-    },
-    end: {
-      head: 'triangle' | 'circle' | 'line' | 'barb' | 'bar',
-      length: number,
-      width: number,
-    },
-  } = null,
+  arrowIn: null | TypeArrowHead | {
+    start: OBJ_Arrow | TypeArrowHead,
+    end: OBJ_Arrow | TypeArrowHead,
+  } & OBJ_Arrow = null,
   precision: number = 8,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>, Array<Array<Point>>] {
   let points = [];

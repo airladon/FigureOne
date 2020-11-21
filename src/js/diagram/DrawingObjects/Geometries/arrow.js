@@ -1354,10 +1354,10 @@ function defaultArrowOptions(
 }
 
 function simplifyArrowOptions(
-  arrowIn: ?{
+  arrowIn: null | TypeArrowHead | {
     start: OBJ_Arrow | TypeArrowHead,
     end: OBJ_Arrow | TypeArrowHead,
-  } & OBJ_Arrow | TypeArrowHead,
+  } & OBJ_Arrow,
   tailWidth: number | null,
 ) {
   if (arrowIn == null) {
