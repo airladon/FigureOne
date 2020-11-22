@@ -95,9 +95,9 @@ const makeTriangle = (name, scenario) => ({
       { label: { text: 'A' }, offset: 0.1 },
     ],
     angle: [
-      { curve: { num: 1, sides: 70, radius: 0.25, step: 0.03 } },
+      { curve: { num: 1, sides: 70, radius: 0.25, step: 0.03 }, color: [0.5, 0.8, 0.5, 1] },
       { curve: { num: 2, sides: 70, radius: 0.25, step: 0.03 }, color: [0.5, 0.5, 1, 1] },
-      { curve: { num: 3, sides: 70, radius: 0.25, step: 0.03 }, color: [0.5, 0.8, 0.5, 1] },
+      { curve: { autoRightAngle: true, radius: 0.25, step: 0.03 } },
     ],
   },
   mods: {
@@ -195,7 +195,7 @@ diagram.elements._prev.setTouchable();
 // Set starting positions
 // ////////////////////////////////////////////////////////////////////////
 
-// Start by hiding the equation and pre text, and setting all triangles
+// Start by hiding the equation and prev text, and setting all triangles
 // to the same initial position
 eqn.hide()
 diagram.elements._prev.hide();
