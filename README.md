@@ -8,6 +8,7 @@ It can:
 * Animate diagram elements
 * Allow users to interact with diagram elements (like touching and moving elements)
 * Render equations, animate and make them interactive
+* Plot graphs
 
 One API creates and operates on WebGL shapes, Canvas 2D text, and custom HTML elements, making them all similarly behaving diagram elements.
 
