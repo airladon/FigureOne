@@ -285,7 +285,7 @@ class Diagram {
   };
   // pauseAfterNextDrawFlag: boolean;
 
-  constructor(options: OBJ_Diagram) {
+  constructor(options: OBJ_Diagram = {}) {
     const defaultOptions = {
       htmlId: 'figureOneContainer',
       limits: new Rect(-1, -1, 2, 2),

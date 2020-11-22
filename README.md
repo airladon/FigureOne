@@ -1,20 +1,14 @@
 # FigureOne
 
+Draw, animate and make interactive shapes, text, plots and equations.
+
 The library used to draw interactive diagrams at <a href="https://www.thisiget.com">thisiget.com</a>.
 
-It can:
-
-* Create diagram elements including shapes, textures and text
-* Animate diagram elements
-* Allow users to interact with diagram elements (like touching and moving elements)
-* Render equations, animate and make them interactive
-* Plot graphs
-
-One API creates and operates on WebGL shapes, Canvas 2D text, and custom HTML elements, making them all similarly behaving diagram elements.
+This library draws shapes in WebGL, and text with Canvas 2D - and therefore requires HTML5 support.
 
 ## Getting Started
 
-Load the Figureone library into your HTML:
+Load the FigureOne library into your HTML file:
 
 ```html
 <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.0/figureone.min.js'></script>
@@ -37,13 +31,10 @@ diagram.addElement(
     options: {
       sides: 100,
       radius: 0.2,
-      fill: true,
       color: [1, 0, 0, 1],
     },
   },
 );
-
-diagram.initialize();
 ```
 
 Source code of this and other examples is provided:
@@ -93,53 +84,4 @@ const diagram = new Fig.Diagram();
 ```
 
 Flow typed files are included in the package for type checking in the editor.
-
-# Development
-
-Docker containers are used to create dev and build environments for FigureOne development.
-
-All linting, testing and building can be performed in containers.
-
-After installing docker on the host system, from the repository root start a dev enviroment:
-
-`./start_env dev`
-
-Inside this container, you can:
-
-* `npm run lint` - to run lint checking
-* `flow` - to run type checking
-* `jest` - to run unit tests
-* `webpack` - to build dev packaging
-* `webpack --env.mode=prod` - to build production packaging
-
-When it is time to deploy the build to NPM, exit the container and from the repository root run:
-
-`./build.sh deploy`
-
-This will start a container, run all linting and tests, and then build and deploy the package.
-
-## Update Packages
-
-To update all packages
-
-```
-npx npm-check-updates -u
-npm install
-```
-
-## Jest debugger
-
-```
-npm run jest-debug <jest options>
-```
-
-In chrome go to:
-```
-chrome://inspect
-```
-
-and click on link
-```
-Open dedicated DevTools for Node
-```
 
