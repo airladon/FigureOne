@@ -3268,9 +3268,9 @@
               
                 
                 <li><a
-                  href='#arrowhead'
+                  href='#typearrowhead'
                   class="">
-                  ArrowHead
+                  TypeArrowHead
                   
                 </a>
                 
@@ -4196,6 +4196,26 @@
               
                 
                 <li><a
+                  href='#obj_translationpath'
+                  class="">
+                  OBJ_TranslationPath
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_spacetransforms'
+                  class="">
+                  OBJ_SpaceTransforms
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_linestylesimple'
                   class="">
                   OBJ_LineStyleSimple
@@ -4626,7 +4646,7 @@ diagram.add(<span class="hljs-string">'hexagon'</span>, hex);</pre>
 
   
     <p style="display: none;">      Type:
-      {glToDiagram: <a href="#transform">Transform</a>, diagramToGL: <a href="#transform">Transform</a>, pixelToDiagram: <a href="#transform">Transform</a>, diagramToPixel: <a href="#transform">Transform</a>, pixelToGL: <a href="#transform">Transform</a>, glToPixel: <a href="#transform">Transform</a>, diagramToCSSPercent: <a href="#transform">Transform</a>}
+      <a href="#obj_spacetransforms">OBJ_SpaceTransforms</a>
     </p>
   
   
@@ -4645,43 +4665,7 @@ diagram.add(<span class="hljs-string">'hexagon'</span>, hex);</pre>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>glToDiagram</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>diagramToGL</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pixelToDiagram</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>diagramToPixel</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pixelToGL</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>glToPixel</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>diagramToCSSPercent</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          <span class='code bold'>spaceTransforms</span> <code class='quiet'>(<a href="#obj_spacetransforms">OBJ_SpaceTransforms</a>)</code>
           
           
         </div>
@@ -5454,6 +5438,13 @@ corner at (-1, -1), width 2, height 2)
         <div class='space-bottom0'>
           <span class='code bold'>lineWidth</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : default line width
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default length to use for shapes
 
           
         </div>
@@ -13948,7 +13939,7 @@ some <code>percent</code> between the two.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>translationOptions</span> <code class='quiet'>(pathOptionsType)</code>
+            <span class='code bold'>translationOptions</span> <code class='quiet'>(<a href="#obj_translationpath">OBJ_TranslationPath</a>)</code>
 	    
           </div>
           
@@ -15808,7 +15799,7 @@ short gap, short dash, short gap and then repeats.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_linearrows">OBJ_LineArrows</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
+          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_linearrows">OBJ_LineArrows</a> | <a href="#typearrowhead">TypeArrowHead</a>)?)</code>
           : either an object defining custom
 arrows or a string representing the name of an arrow head style can be used.
 If a string is used, then the line will have an arrow at both ends.
@@ -16230,7 +16221,7 @@ short gap, short dash, short gap and then repeats.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_linearrows">OBJ_LineArrows</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
+          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_linearrows">OBJ_LineArrows</a> | <a href="#typearrowhead">TypeArrowHead</a>)?)</code>
           : either an object defining custom
 arrows or a string representing the name of an arrow head style can be used.
 If a string is used, then the line will have an arrow at both ends.
@@ -16552,7 +16543,7 @@ determine the dimension of the arrow (<code>length</code> and <code>width</code>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>head</span> <code class='quiet'>(<a href="#arrowhead">ArrowHead</a>?)</code>
+          <span class='code bold'>head</span> <code class='quiet'>(<a href="#typearrowhead">TypeArrowHead</a>?)</code>
           : head style (
 <code>'triangle'</code>
 )
@@ -19300,7 +19291,7 @@ is turned off by default.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>align</span> <code class='quiet'>((<code>"start"</code> | <code>"end"</code> | <code>"center"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)
-            = <code>this.align</code>)</code>
+            = <code>this.alignDraw</code>)</code>
 	    
           </div>
           
@@ -19730,7 +19721,7 @@ options object can define the default values for pulseWidth if desired.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>dash</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>)</code>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>)</code>
           
           
         </div>
@@ -22097,7 +22088,7 @@ diagram.addElement({
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>value</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>))</code>
+            <span class='code bold'>value</span> <code class='quiet'>(T)</code>
 	    
           </div>
           
@@ -22168,7 +22159,7 @@ diagram.addElement({
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>value</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>))</code>
+            <span class='code bold'>value</span> <code class='quiet'>(T)</code>
 	    
           </div>
           
@@ -22955,7 +22946,7 @@ or use ADV_PlotLegend to customize it's location and layout
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>frame</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="#typeplotframe">TypePlotFrame</a>)?)</code>
+          <span class='code bold'>frame</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="#typecolor">TypeColor</a> | <a href="#typeplotframe">TypePlotFrame</a>)?)</code>
           : frame around the
 plot can be turned on with 
 <code>true</code>
@@ -22968,7 +22959,7 @@ plot can be turned on with
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>plotArea</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="#adv_rectangle">ADV_Rectangle</a>)?)</code>
+          <span class='code bold'>plotArea</span> <code class='quiet'>((<a href="#typecolor">TypeColor</a> | <a href="#adv_rectangle">ADV_Rectangle</a>)?)</code>
           : plot area can be a
 color fill with 
 <code>Array&#x3C;number</code>
@@ -22981,6 +22972,13 @@ ADV_Rectangle
         <div class='space-bottom0'>
           <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
           : Default font for plot (title, axes, labels, etc.)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : Default color
 
           
         </div>
@@ -33594,7 +33592,7 @@ diagram.addElement({
       <span class="hljs-number">2</span>: [<span class="hljs-string">'a'</span>, {
         <span class="hljs-attr">brac</span>: {
           <span class="hljs-attr">left</span>: <span class="hljs-string">'lb'</span>,
-          <span class="hljs-attr">content</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'c'</span>] }, 
+          <span class="hljs-attr">content</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'c'</span>] },
           <span class="hljs-attr">right</span>: <span class="hljs-string">'rb'</span>,
         },
       }],
@@ -41571,7 +41569,11 @@ rotated in the positive direction around the start point. The
       
         <div class='space-bottom0'>
           <span class='code bold'>intersect</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a> | <a href="#point">Point</a>))</code>
-          
+          : will be 
+<code>undefined</code>
+ if there is
+no intersect
+
           
         </div>
       
@@ -43154,8 +43156,8 @@ will repeat for the length of the line.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='arrowhead'>
-      ArrowHead
+    <h3 class='fl m0' id='typearrowhead'>
+      TypeArrowHead
     </h3>
     
     
@@ -43167,7 +43169,7 @@ will repeat for the length of the line.</p>
 
   
     <p style="display: none;">      Type:
-      (<code>"triangle"</code> | <code>"circle"</code> | <code>"line"</code> | <code>"barb"</code> | <code>"bar"</code> | <code>"polygon"</code> | <code>"reverseTriangle"</code>)
+      (<code>"triangle"</code> | <code>"circle"</code> | <code>"line"</code> | <code>"barb"</code> | <code>"bar"</code> | <code>"polygon"</code> | <code>"reverseTriangle"</code> | <code>"rectangle"</code>)
     </p>
   
   
@@ -43252,7 +43254,7 @@ that in this case the shape will extend past the line.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>head</span> <code class='quiet'>(<a href="#arrowhead">ArrowHead</a>?)</code>
+          <span class='code bold'>head</span> <code class='quiet'>(<a href="#typearrowhead">TypeArrowHead</a>?)</code>
           : head style (
 <code>'triangle'</code>
 )
@@ -43473,21 +43475,21 @@ both a start and end arrow.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>start</span> <code class='quiet'>((<a href="#obj_linearrow">OBJ_LineArrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
+          <span class='code bold'>start</span> <code class='quiet'>((<a href="#obj_linearrow">OBJ_LineArrow</a> | <a href="#typearrowhead">TypeArrowHead</a>)?)</code>
           : arrow at start of line
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>end</span> <code class='quiet'>((<a href="#obj_linearrow">OBJ_LineArrow</a> | <a href="#arrowhead">ArrowHead</a>)?)</code>
+          <span class='code bold'>end</span> <code class='quiet'>((<a href="#obj_linearrow">OBJ_LineArrow</a> | <a href="#typearrowhead">TypeArrowHead</a>)?)</code>
           : arrow at end of line
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>head</span> <code class='quiet'>(<a href="#arrowhead">ArrowHead</a>?)</code>
+          <span class='code bold'>head</span> <code class='quiet'>(<a href="#typearrowhead">TypeArrowHead</a>?)</code>
           : default head to use for start and end arrow
 
           
@@ -45456,7 +45458,7 @@ if the label should be pulsed from its bottom rather than its center).
 
   <p>Polyline side, angle and pad customization options object</p>
 <p><img src="./assets1/polylinecustomization_ex1.png"></p>
-<p><img src="./assets1/polylinecustomization_ex1.png"></p>
+<p><img src="./assets1/polylinecustomization_ex2.png"></p>
 <p>Side annotations, angle annotations and movable pads in an
 <a href="#advancedpolyline">AdvancedPolyline</a> are defined with the options objects <a href="#adv_line">ADV_Line</a>,
 <a href="#adv_angle">ADV_Angle</a> and (<a href="#obj_polygon">OBJ_Polygon</a> &#x26; <a href="#obj_polylinepadsingle">OBJ_PolylinePadSingle</a>)
@@ -47143,7 +47145,7 @@ position overrides
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>path</span> <code class='quiet'>(OBJ_TranslationPath?)</code>
+          <span class='code bold'>path</span> <code class='quiet'>(<a href="#obj_translationpath">OBJ_TranslationPath</a>?)</code>
           : (
 <code>{ style: 'linear' }</code>
 )
@@ -48210,7 +48212,7 @@ transform overrides
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>path</span> <code class='quiet'>(OBJ_TranslationPath?)</code>
+          <span class='code bold'>path</span> <code class='quiet'>(<a href="#obj_translationpath">OBJ_TranslationPath</a>?)</code>
           : translation path style and options
 (
 <code>{ style: 'linear' }</code>
@@ -48378,7 +48380,7 @@ with javascripts floating point implementation arise
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>path</span> <code class='quiet'>(OBJ_TranslationPath?)</code>
+          <span class='code bold'>path</span> <code class='quiet'>(<a href="#obj_translationpath">OBJ_TranslationPath</a>?)</code>
           : translation path style and options
 (
 <code>{ style: 'linear' }</code>
@@ -53097,6 +53099,192 @@ will be ignored.</p>
           <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : Color to set the element
 
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_translationpath'>
+      OBJ_TranslationPath
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Translation path options object</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>style</span> <code class='quiet'>((<code>"curve"</code> | <code>"linear"</code> | <code>"curved"</code>))</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>magnitude</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>controlPoint</span> <code class='quiet'>((<a href="#typeparsablepoint">TypeParsablePoint</a> | null)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>direction</span> <code class='quiet'>((<code>"positive"</code> | <code>"negative"</code> | <code>"up"</code> | <code>"down"</code> | <code>"left"</code> | <code>"right"</code>)?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_spacetransforms'>
+      OBJ_SpaceTransforms
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Space Transforms</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>glToDiagram</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>diagramToGL</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pixelToDiagram</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>diagramToPixel</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pixelToGL</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>glToPixel</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>diagramToCSSPercent</span> <code class='quiet'>(<a href="#transform">Transform</a>)</code>
+          
           
         </div>
       

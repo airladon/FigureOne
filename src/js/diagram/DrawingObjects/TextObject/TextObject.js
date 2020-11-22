@@ -954,7 +954,7 @@ class TextLineObject extends TextObjectBase {
   // $FlowFixMe
   loadText(
     options: {
-      line: Array<string | {
+      text: Array<string | {
         text: string,
         font?: OBJ_Font,
         offset?: TypeParsablePoint,
@@ -975,7 +975,7 @@ class TextLineObject extends TextObjectBase {
       onClick?: string | () => void,
     },
   ) {
-    let textArray = options.line;
+    let textArray = options.text;
     if (!Array.isArray(textArray)) {
       textArray = [textArray];
     }

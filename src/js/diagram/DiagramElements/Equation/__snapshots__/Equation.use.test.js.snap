@@ -735,7 +735,6 @@ DiagramElementPrimitive {
       "width": 2,
     },
   },
-  "touchInBoundingRect": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,

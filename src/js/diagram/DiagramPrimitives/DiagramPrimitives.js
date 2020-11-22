@@ -1664,7 +1664,7 @@ export type OBJ_TextLineDefinition = {
  * Strings can be arranged out of the line flow by using the `inLine` property
  * in {@link OBJ_TextLineDefinition}.
  *
- * @property {Array<string | OBJ_TextLineDefinition>} [line] array of strings,
+ * @property {Array<string | OBJ_TextLineDefinition>} [text] array of strings,
  * to layout into a line
  * @property {OBJ_Font} [font] Default font for strings in line
  * @property {TypeColor} [color] Default color for strings in line
@@ -1698,7 +1698,7 @@ export type OBJ_TextLineDefinition = {
  *     name: 'line',
  *     method: 'text.line',
  *     options: {
- *       line: [
+ *       text: [
  *         'Hello ',
  *         {
  *           text: 'to the',
@@ -1726,7 +1726,7 @@ export type OBJ_TextLineDefinition = {
  * );
  */
 export type OBJ_TextLine = {
-  line: Array<string | OBJ_TextLineDefinition>;
+  text: Array<string | OBJ_TextLineDefinition>;
   font: OBJ_Font,
   color: TypeColor,
   xAlign: 'left' | 'right' | 'center',
@@ -1889,7 +1889,7 @@ export type OBJ_TextModifiersDefinition = {
  *          'Lines justified to the left',
  *          'A |line| with a |modified_phrase|',
  *          {
- *            line: 'A |line| with custom defaults',
+ *            text: 'A |line| with custom defaults',
  *            font: {
  *              style: 'italic',
  *              color: [0, 0.5, 1, 1],

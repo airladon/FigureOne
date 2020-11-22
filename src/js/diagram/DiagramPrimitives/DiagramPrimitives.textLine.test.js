@@ -17,7 +17,7 @@ describe('Diagram Primitives TextLine', () => {
     diagram = makeDiagram();
     textOptions = {
       allOptions: {
-        line: [
+        text: [
           'b',
           {
             offset: [0.2, 0.2],
@@ -46,24 +46,24 @@ describe('Diagram Primitives TextLine', () => {
         transform: [['s', 1, 1], ['r', 0], ['t', 0, 0]],
       },
       abLeftBaseline: {
-        line: ['a', 'b'],
+        text: ['a', 'b'],
       },
       abCenterMiddle: {
-        line: ['a', 'b'],
+        text: ['a', 'b'],
         xAlign: 'center',
         yAlign: 'middle',
       },
       abRightTop: {
-        line: ['a', 'b'],
+        text: ['a', 'b'],
         xAlign: 'right',
         yAlign: 'top',
       },
       transform: {
-        line: ['a', 'b'],
+        text: ['a', 'b'],
         transform: [['s', 2, 3], ['r', 4], ['t', 5, 6]],
       },
       positionOverride: {
-        line: ['a', 'b'],
+        text: ['a', 'b'],
         position: [9, 10],
         transform: [['s', 1, 1], ['r', 0], ['t', 5, 6]],
       },
@@ -244,7 +244,7 @@ describe('Text Borders', () => {
     callback = jest.fn();
     const options = {
       simple: {
-        line: [
+        text: [
           't',
           't',
           't',
@@ -255,7 +255,7 @@ describe('Text Borders', () => {
         // touchBorder: 'rect',  // default
       },
       touchBuffer: {
-        line: [
+        text: [
           't',
           {
             text: 't',
@@ -269,7 +269,7 @@ describe('Text Borders', () => {
         // touchBorder: 'rect',  // default
       },
       highMiddle: {
-        line: [
+        text: [
           't',
           {
             text: 't',
@@ -284,7 +284,7 @@ describe('Text Borders', () => {
         // touchBorder: 'rect',  // default
       },
       highMiddleText: {
-        line: [
+        text: [
           't',
           {
             text: 't',
@@ -299,7 +299,7 @@ describe('Text Borders', () => {
         touchBorder: 'text',
       },
       customDiagramObjectBorder: {
-        line: [
+        text: [
           't',
           't',
           't',
@@ -310,7 +310,7 @@ describe('Text Borders', () => {
         touchBorder: 'border',
       },
       customDiagramObjectTouchBorder: {
-        line: [
+        text: [
           't',
           't',
           't',
@@ -321,7 +321,7 @@ describe('Text Borders', () => {
         touchBorder: [[[-2, -2], [2, -2], [2, 2], [-2, 2]]],
       },
       customTextBorder: {
-        line: [
+        text: [
           't',
           {
             text: 't',
@@ -339,7 +339,7 @@ describe('Text Borders', () => {
         touchBorder: 'rect',
       },
       click: {
-        line: [
+        text: [
           't',
           {
             text: 't',
