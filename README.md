@@ -41,7 +41,7 @@ And you will see:
 
 ![](tutorials/1%20-%20Shape/example.png)
 
-Check out the **[Tutorials](https://github.com/airladon/FigureOne/tree/docs1/tutorials** for a quick primer on how FigureOne works, and the API reference and before you know it:
+Check out the **[Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials** for a quick primer on how FigureOne works, and the API reference and before you know it:
 
 Animated proof of the pythagorean theorm:
 
