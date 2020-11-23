@@ -192,6 +192,19 @@ toc:
   - ADV_Trace
   - AdvancedPlotLegend
   - ADV_PlotLegend
+  - OBJ_TranslationPath
+  - OBJ_SpaceTransforms
+  - OBJ_LineStyleSimple
+  - OBJ_AxisTicks
+  - OBJ_AxisLabels
+  - TypeAxisTitle
+  - AdvancedTrace
+  - TypePlotFrame
+  - TypePlotTitle
+  - OBJ_PlotLegendCustomTrace
+  - OBJ_PlotLegendCustom
+  - OBJ_SurroundAnimationStep
+  - TypeColor
   - name: Misc Animation
   - AnimationStep
   - ElementAnimationStep
@@ -235,6 +248,11 @@ toc:
   - TypeFormRestart
   - OBJ_EquationGoToForm
   - TypeEquationTextElement
+  - EquationLabel
+  - OBJ_NextFormAnimationStep
+  - OBJ_GoToFormAnimationStep
+  - NextFormAnimationStep
+  - GoToFormAnimationStep
 
 
   # - name: tools
