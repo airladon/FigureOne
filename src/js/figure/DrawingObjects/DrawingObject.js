@@ -6,7 +6,7 @@ import {
 // import type {
 //   TypeParsablePoint
 // } from '../../tools/g2';
-import { getState } from '../state';
+import { getState } from '../Recorder/state';
 import type { TypeColor } from '../../tools/types';
 
 // A Drawing object can be:

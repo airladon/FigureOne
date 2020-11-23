@@ -12,7 +12,7 @@
 
 import {
   joinObjects,
-} from '../tools/tools';
+} from '../../tools/tools';
 
 // import parseState from './parseState';
 

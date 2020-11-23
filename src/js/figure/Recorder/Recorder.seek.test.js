@@ -3,10 +3,10 @@
 // } from '../tools/g2';
 import {
   round,
-} from '../tools/math';
+} from '../../tools/math';
 // import * as tools from '../tools/tools';
-import makeFigure from '../__mocks__/makeFigure';
-import Worker from '../__mocks__/recorder.worker.mock';
+import makeFigure from '../../__mocks__/makeFigure';
+import Worker from '../../__mocks__/recorder.worker.mock';
 
 // tools.isTouchDevice = jest.fn();
 

@@ -5,7 +5,7 @@ import {
 
 import type {
   Recorder,
-} from '../figure/Recorder';
+} from '../figure/Recorder/Recorder';
 
 export default class Worker {
   cache: ObjectTracker;

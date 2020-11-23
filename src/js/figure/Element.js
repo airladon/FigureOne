@@ -8,12 +8,12 @@ import {
   getBoundingBorder,
 } from '../tools/g2';
 // import { areColorsSame } from '../tools/color';
-import { getState } from './state';
+import { getState } from './Recorder/state';
 import type {
   TypeParsablePoint, TypeParsableTransform,
   TypeTransformValue, TypeTransformBoundsDefinition,
 } from '../tools/g2';
-import { Recorder } from './Recorder';
+import { Recorder } from './Recorder/Recorder';
 import * as m2 from '../tools/m2';
 // import type { pathOptionsType, TypeRotationDirection } from '../tools/g2';
 import * as math from '../tools/math';

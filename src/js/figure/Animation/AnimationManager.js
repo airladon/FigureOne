@@ -24,7 +24,7 @@ import type {
 // } from './Animation';
 import GlobalAnimation from '../webgl/GlobalAnimation';
 import { joinObjects, duplicateFromTo, SubscriptionManager } from '../../tools/tools';
-import { getState } from '../state';
+import { getState } from '../Recorder/state';
 import { FunctionMap } from '../../tools/FunctionMap';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
 // import type { OBJ_AnimationStep } from './AnimationStep';

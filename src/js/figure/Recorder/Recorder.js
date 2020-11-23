@@ -1,16 +1,16 @@
 // @flow
 // import type { Transform } from '../tools/g2';
-import { Point } from '../tools/g2';
-import { round } from '../tools/math';
+import { Point } from '../../tools/g2';
+import { round } from '../../tools/math';
 import {
   duplicate, minify, unminify, joinObjects,
   ObjectTracker, download, SubscriptionManager,
-} from '../tools/tools';
-import GlobalAnimation from './webgl/GlobalAnimation';
+} from '../../tools/tools';
+import GlobalAnimation from '../webgl/GlobalAnimation';
 // import type { FigureElement } from './Element';
 import Worker from './recorder.worker';
-import type Figure from './Figure';
-import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
+import type Figure from '../Figure';
+import type { OBJ_ScenarioVelocity } from '../Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 // import GlobalAnimation from './webgl/GlobalAnimation';
 // Singleton class that contains projects global variables
 

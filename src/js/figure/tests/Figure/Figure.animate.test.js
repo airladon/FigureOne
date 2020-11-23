@@ -6,7 +6,7 @@ import makeFigure from '../../../__mocks__/makeFigure';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('../../recorder.worker');
+// jest.mock('../../recorder.worker');
 jest.useFakeTimers();
 
 describe('Animate To State', () => {

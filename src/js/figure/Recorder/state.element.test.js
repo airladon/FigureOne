@@ -1,13 +1,13 @@
-import * as tools from '../tools/tools';
+import * as tools from '../../tools/tools';
 // import { Transform } from '../tools/g2';
-import makeFigure from '../__mocks__/makeFigure';
-import * as math from '../tools/math';
+import makeFigure from '../../__mocks__/makeFigure';
+import * as math from '../../tools/math';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('./Gesture');
-jest.mock('./webgl/webgl');
-jest.mock('./DrawContext2D');
+jest.mock('../Gesture');
+jest.mock('../webgl/webgl');
+jest.mock('../DrawContext2D');
 
 describe('Figure Element State', () => {
   let elem1;

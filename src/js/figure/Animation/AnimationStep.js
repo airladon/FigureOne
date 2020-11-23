@@ -11,7 +11,7 @@ import {
   joinObjects, duplicateFromTo, generateRandomString,
 } from '../../tools/tools';
 import * as math from '../../tools/math';
-import { getState } from '../state';
+import { getState } from '../Recorder/state';
 import type { FigureElement } from '../Element';
 import { FunctionMap } from '../../tools/FunctionMap';
 import GlobalAnimation from '../webgl/GlobalAnimation';

@@ -1,6 +1,6 @@
 import {
   ObjectTracker,
-} from '../tools/tools';
+} from '../../tools/tools';
 
 let cache = new ObjectTracker();
 

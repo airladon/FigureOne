@@ -1,7 +1,7 @@
 // @flow
 import { colorArrayToRGBA } from './color';
 import { generateUniqueId, joinObjects } from './tools';
-import { Recorder } from '../figure/Recorder';
+import { Recorder } from '../figure/Recorder/Recorder';
 import type { TypeColor } from './types';
 
 function convertTextArrayToParagraphs(

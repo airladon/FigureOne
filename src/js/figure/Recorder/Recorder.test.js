@@ -1,18 +1,18 @@
 import {
   Point, Transform,
-} from '../tools/g2';
+} from '../../tools/g2';
 import {
   round,
-} from '../tools/math';
-import * as tools from '../tools/tools';
-import makeFigure from '../__mocks__/makeFigure';
+} from '../../tools/math';
+import * as tools from '../../tools/tools';
+import makeFigure from '../../__mocks__/makeFigure';
 import {
   getNextIndexForTime,
   getPrevIndexForTime,
   getIndexOfEarliestTime,
   getIndexOfLatestTime,
 } from './Recorder';
-import Worker from '../__mocks__/recorder.worker.mock';
+import Worker from '../../__mocks__/recorder.worker.mock';
 
 tools.isTouchDevice = jest.fn();
 

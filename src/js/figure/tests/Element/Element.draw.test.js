@@ -12,7 +12,7 @@ import makeFigure from '../../../__mocks__/makeFigure';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('../../recorder.worker');
+// jest.mock('../../Recorder/recorder.worker');
 jest.useFakeTimers();
 
 describe('Element Drawing', () => {

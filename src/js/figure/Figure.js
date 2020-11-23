@@ -9,14 +9,14 @@ import {
 import type { TypeParsableRect } from '../tools/g2';
 // import * as math from '../tools/math';
 import { FunctionMap } from '../tools/FunctionMap';
-import { setState, getState } from './state';
-import parseState from './parseState';
+import { setState, getState } from './Recorder/state';
+import parseState from './Recorder/parseState';
 import { isTouchDevice, joinObjects, SubscriptionManager } from '../tools/tools';
 import {
   FigureElementCollection, FigureElementPrimitive, FigureElement,
 } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
-import { Recorder } from './Recorder';
+import { Recorder } from './Recorder/Recorder';
 // eslint-disable-next-line import/no-cycle
 import Gesture from './Gesture';
 import DrawContext2D from './DrawContext2D';

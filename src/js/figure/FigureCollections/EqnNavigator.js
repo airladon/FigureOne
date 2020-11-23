@@ -9,7 +9,7 @@ import EquationForm from '../Equation/EquationForm';
 import * as html from '../../tools/htmlGenerator';
 import { generateUniqueId, joinObjects } from '../../tools/tools';
 import { Equation } from '../Equation/Equation';
-import { Recorder } from '../Recorder';
+import { Recorder } from '../Recorder/Recorder';
 
 // eslint-disable-next-line no-use-before-define
 // export type TypeEquationNavigator = EquationNavigator;

@@ -1,7 +1,7 @@
 import {
   Point, Rect, Transform, Line, RangeBounds, RectBounds, LineBounds,
   TransformBounds,
-} from '../tools/g2';
+} from '../../tools/g2';
 import {
   getState, setState,
 } from './state';
@@ -10,9 +10,9 @@ import parseState from './parseState';
 // import { round } from '../tools/math';
 
 
-jest.mock('./Gesture');
-jest.mock('./webgl/webgl');
-jest.mock('./DrawContext2D');
+jest.mock('../Gesture');
+jest.mock('../webgl/webgl');
+jest.mock('../DrawContext2D');
 
 describe('state', () => {
   describe('getDef', () => {

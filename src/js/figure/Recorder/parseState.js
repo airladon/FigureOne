@@ -5,14 +5,14 @@ import {
   OpacityAnimationStep, PulseAnimationStep, CustomAnimationStep,
   DelayAnimationStep, ParallelAnimationStep, SerialAnimationStep,
   TriggerAnimationStep, ScenarioAnimationStep,
-} from './Animation/Animation';
+} from '../Animation/Animation';
 
-import type Figure from './Figure';
+import type Figure from '../Figure';
 
 import {
   getPoint, getTransform, getRect, getLine, Translation, Rotation, Scale,
   getBounds,
-} from '../tools/g2';
+} from '../../tools/g2';
 
 function assignAsLinkOnly(obj: Object) {
   if (obj != null) {
