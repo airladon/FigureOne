@@ -1,8 +1,8 @@
-// Create a diagram
-const diagram = new Fig.Diagram();
+// Create a figure
+const figure = new Fig.Figure();
 
-// Add red circle to diagram
-diagram.addElement(
+// Add red circle to figure
+figure.addElement(
   {
     name: 'circle',
     method: 'polygon',

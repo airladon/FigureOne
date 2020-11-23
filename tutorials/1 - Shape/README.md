@@ -22,11 +22,11 @@ Download `index.html` and `index.js` into the same folder and open `index.html` 
 
 `index.js`
 ```js
-// Create a diagram
-const diagram = new Fig.Diagram();
+// Create a figure
+const figure = new Fig.Figure();
 
-// Add circle to diagram
-diagram.addElement(
+// Add circle to figure
+figure.addElement(
   {
     name: 'tri',
     method: 'polygon',
@@ -43,7 +43,7 @@ diagram.addElement(
 ## Explanation
 
 ### HTML
-In the HTML, a `div` is created that will house the diagram.
+In the HTML, a `div` is created that will house the figure.
 ```html
  <div id="figureOneContainer" style="width: 500px; height: 500px; background-color: black;">
  ```
@@ -57,7 +57,7 @@ In this case, the library is loaded from a CDN, but you could also run it from a
 <script type="text/javascript" src='../../package/figureone.min.js'></script>
 ```
 
-Finally, the javascript file which will use the FigureOne library to create the diagram is executed.
+Finally, the javascript file which will use the FigureOne library to create the figure is executed.
 
 ```html
 <script type="text/javascript" src='./index.js'></script>
@@ -67,22 +67,22 @@ All other examples have the same, or very similar HTML index file.
 
 ### Javascript
 
-First a diagram is created. `Fig` is the FigureOne library that is globally available to the script.
+First a figure is created. `Fig` is the FigureOne library that is globally available to the script.
 
 ```js
-const diagram = new Fig.Diagram();
+const figure = new Fig.Figure();
 ```
 
-A *diagram* is an object that manages diagram elements (class `DiagramElement`). By default it attaches to a HTML `div` element with id `figureOneContainer`. A custom id can also be used by using a `htmlId` parameter when creating the diagram:
+A *figure* is an object that manages figure elements (class `FigureElement`). By default it attaches to a HTML `div` element with id `figureOneContainer`. A custom id can also be used by using a `htmlId` parameter when creating the figure:
 
 ```js
-const diagram = new Fig.Diagram({ htmlId: 'customId' });
+const figure = new Fig.Figure({ htmlId: 'customId' });
 ```
 
-Next, a diagram element in the shape of a circle is added.
+Next, a figure element in the shape of a circle is added.
 
 ```js
-diagram.addElement(
+figure.addElement(
   {
     name: 'circle',
     method: 'polygon',
@@ -96,13 +96,13 @@ diagram.addElement(
 );
 ```
 
-We are defining a *circle* diagram element using the `polygon` method with the parameters of `sides`, `radius`, `fill`, and `color`.
+We are defining a *circle* figure element using the `polygon` method with the parameters of `sides`, `radius`, `fill`, and `color`.
 
 
 If the digram is changed in the future and drawing needs to be drawing needs to be queued again, then use:
 
 ```js
-diagram.animateNextFrame()
+figure.animateNextFrame()
 ```
 
 <!-- [link here](../../docs/README.md#TypeEquationPhrase) -->

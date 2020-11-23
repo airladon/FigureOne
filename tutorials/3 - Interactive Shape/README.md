@@ -11,12 +11,12 @@ Open `index.html` in a browser to view example.
 ## Code
 `index.js`
 ```js
-// Create diagram and make it able to be touched
-const diagram = new Fig.Diagram();
-diagram.setTouchable();
+// Create figure and make it able to be touched
+const figure = new Fig.Figure();
+figure.setTouchable();
 
-// Add circle to diagram
-diagram.addElement(
+// Add circle to figure
+figure.addElement(
   {
     name: 'circle',
     method: 'polygon',
@@ -31,20 +31,20 @@ diagram.addElement(
       isMovable: true,
       move: {
         canBeMovedAfterLosingTouch: true,
-        boundary: 'diagram',
+        boundary: 'figure',
       },
     },
   },
 );
 
-// Initialize diagram
-diagram.initialize();
+// Initialize figure
+figure.initialize();
 ```
 
 ## Explanation
-Diagram elements can be touched, moved, released (to move freely) and animated.
+Figure elements can be touched, moved, released (to move freely) and animated.
 
-This example shows how an element can be setup to be moved and bounce of the diagram walls so it stays within the diagrams limits. By default, the object will move freely when released.
+This example shows how an element can be setup to be moved and bounce of the figure walls so it stays within the figures limits. By default, the object will move freely when released.
 
 ```js
     options: {
@@ -63,11 +63,11 @@ The `options` key in the circle definition defines parameters specific to the `p
       isMovable: true,
       move: {
         canBeMovedAfterLosingTouch: true,
-        boundary: 'diagram',
+        boundary: 'figure',
       },
     },
 ```
 
-The `mods` key in the circle definition can be used to set properties that belong to every `DiagramElement`. For instance, all diagram elements (`DiagramElementCollection` and `DiagramElementPrimitive` objects) have a `isTouchable` property that by default is `false`. In this case, we are setting it to `true`.
+The `mods` key in the circle definition can be used to set properties that belong to every `FigureElement`. For instance, all figure elements (`FigureElementCollection` and `FigureElementPrimitive` objects) have a `isTouchable` property that by default is `false`. In this case, we are setting it to `true`.
 
-Properties of diagram elements may also be *objects*. For example, all diagram elements have a `move` object property that includes the properties `canBeMovedAfterLosingTouch` and `boundary`, as well as a number of others. Only the properties defined in `mods` will overwrite those in the diagram element. Other properties that are not defined (including those within the `move` object) will retian their default values.
+Properties of figure elements may also be *objects*. For example, all figure elements have a `move` object property that includes the properties `canBeMovedAfterLosingTouch` and `boundary`, as well as a number of others. Only the properties defined in `mods` will overwrite those in the figure element. Other properties that are not defined (including those within the `move` object) will retian their default values.

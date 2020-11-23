@@ -1,8 +1,8 @@
-// Create diagram
-const diagram = new Fig.Diagram();
+// Create figure
+const figure = new Fig.Figure();
 
-// Add elements to the diagram
-diagram.addElement(
+// Add elements to the figure
+figure.addElement(
   // Add equation element
   {
     name: 'eqn',
@@ -27,5 +27,5 @@ diagram.addElement(
 );
 
 // Show the equation form
-diagram.getElement('eqn').showForm('base');
-diagram.initialize();
+figure.getElement('eqn').showForm('base');
+figure.initialize();

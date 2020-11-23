@@ -1,6 +1,6 @@
-Animations change diagram elements over time.
+Animations change figure elements over time.
 
-Each diagram element has its own {@link AnimationManager} (`animations` property) that can coordinate animations for any element.
+Each figure element has its own {@link AnimationManager} (`animations` property) that can coordinate animations for any element.
 
 An animation is a number of {@link AnimationStep}s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.
 
@@ -25,10 +25,10 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 A grid is included in this javascript file to make it obvious how shapes are animated
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 
 // grid
-diagram.addElements([
+figure.addElements([
   {
     name: 'origin',
     method: 'polygon',
@@ -64,7 +64,7 @@ diagram.addElements([
 ]);
 
 // shape to animate
-diagram.addElement(
+figure.addElement(
   {
     name: 'p',
     method: 'polygon',
@@ -76,12 +76,12 @@ diagram.addElement(
     },
   },
 );
-const p = diagram.getElement('p');
+const p = figure.getElement('p');
 ```
 
 ### Animation Examples
 
-Let's create a simple animation. Start by defining a diagram and retrieving the element to animate by creating the boilerplate files [above](#animation-boilerplate).
+Let's create a simple animation. Start by defining a figure and retrieving the element to animate by creating the boilerplate files [above](#animation-boilerplate).
 
 A {@link PositionAnimationStep} can be created to translate the shape, and a {@link RotationAnimationStep} to rotate it
 ```javascript
@@ -113,7 +113,7 @@ p.animations.new()
 An animation manager is tied to one element, but can be used to animate other elements too
 ```javascript
 // add another element
-diagram.addElement({
+figure.addElement({
   name: 'q',
   method: 'polygon',
   options: {
@@ -121,7 +121,7 @@ diagram.addElement({
   },
 });
 
-const q = diagram.getElement('q');
+const q = figure.getElement('q');
 
 // Use p animation manager to animate q
 p.animations.new()
@@ -178,7 +178,7 @@ p.animations.new()
 
 ### Stopping animations
 
-Animations can be stopped from the animation, element and diagram levels.
+Animations can be stopped from the animation, element and figure levels.
 
 ```javascript
 p.animations.new('mover')
@@ -208,8 +208,8 @@ p.animations.new()
   .position({ target: [1, 0], duration: 4})
   .start();
 
-// after 1 second, cancel all diagram animations by freezing them
+// after 1 second, cancel all figure animations by freezing them
 setTimeout(() => {
-  diagram.stop('freeze');
+  figure.stop('freeze');
 }, 1000);
 ```

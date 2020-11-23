@@ -1,6 +1,6 @@
-// const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
-const diagram = new Fig.Diagram({ limits: [-4.5, -4.5, 9, 9]});
-// diagram.addElements([
+// const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ limits: [-4.5, -4.5, 9, 9]});
+// figure.addElements([
 //   {
 //     name: 'origin',
 //     method: 'polygon',
@@ -49,7 +49,7 @@ const bc = (content, comment, symbol = null, scale = 0.6, inSize = false) => ({
 });
 
 // Add the equation with all it's forms
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -107,7 +107,7 @@ diagram.addElement({
   },
 });
 // Progress to the next form when the equation is clicked on
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.makeTouchable();
 
@@ -146,8 +146,8 @@ const makeTriangle = (name, scenario) => ({
   },
 });
 
-// Add the right angle triangles to the diagram
-diagram.addElements([
+// Add the right angle triangles to the figure
+figure.addElements([
   makeTriangle('tri4', { position: [-1.5, 2], rotation: 3 * Math.PI / 2 }),
   makeTriangle('tri3', { position: [1.5, 2], rotation: Math.PI }),
   makeTriangle('tri2', { position: [1.5, -1], rotation: Math.PI / 2 }),
@@ -163,9 +163,9 @@ const setUpdate = (element) => {
   element.dim();
 };
 
-const tri2 = diagram.elements._tri2;
-const tri3 = diagram.elements._tri3;
-const tri4 = diagram.elements._tri4;
+const tri2 = figure.elements._tri2;
+const tri3 = figure.elements._tri3;
+const tri4 = figure.elements._tri4;
 setUpdate(tri2);
 setUpdate(tri3);
 setUpdate(tri4);
@@ -176,7 +176,7 @@ setUpdate(tri4);
 // ////////////////////////////////////////////////////////////////////////
 
 // Add some text to help the user start and navigate the equation
-diagram.addElements([
+figure.addElements([
   {
     name: 'start',
     method: 'text',
@@ -202,23 +202,23 @@ diagram.addElements([
 
 // The start text kicks off an animation converting the right angle triangle
 // into a square
-diagram.elements._start.setTouchable();
-diagram.elements._start.onClick = () => {
-  diagram.elements._start.hide();
-  diagram.elements.animations.new()
+figure.elements._start.setTouchable();
+figure.elements._start.onClick = () => {
+  figure.elements._start.hide();
+  figure.elements.animations.new()
     .scenarios({ target: 'lowerLeft', duration: 1 })
     .scenario({ element: tri2, target: 'square', duration: 2 })
     .scenario({ element: tri3, target: 'square', duration: 2 })
     .scenario({ element: tri4, target: 'square', duration: 2 })
     .trigger(() => { eqn.showForm('1'); })
     .opacity({ element: eqn, start: 0.01, target: 1, duration: 1 })
-    .dissolveIn({ element: diagram.elements._prev, duration: 0.5 })
+    .dissolveIn({ element: figure.elements._prev, duration: 0.5 })
     .start();
 }
 
 // The prev text tells the user how to proceed. If it is touched, then
 // the equation will go to the previous form
-diagram.elements._prev.onClick = () => {
+figure.elements._prev.onClick = () => {
   if (eqn.getCurrentForm().name !== '1') {
     eqn.prevForm({
       duration: 1,
@@ -226,7 +226,7 @@ diagram.elements._prev.onClick = () => {
     });
   }
 };
-diagram.elements._prev.setTouchable();
+figure.elements._prev.setTouchable();
 
 
 // ////////////////////////////////////////////////////////////////////////
@@ -236,6 +236,6 @@ diagram.elements._prev.setTouchable();
 // Start by hiding the equation and prev text, and setting all triangles
 // to the same initial position
 eqn.hide()
-diagram.elements._prev.hide();
-diagram.elements.setScenarios('initial');
+figure.elements._prev.hide();
+figure.elements.setScenarios('initial');
 

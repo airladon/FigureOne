@@ -2,7 +2,7 @@
 // import type { Transform } from '../tools/g2';
 // import { Point, getTransform, Transform } from '../tools/g2';
 // import { round } from '../tools/math';
-// import type { DiagramElement } from './Element';
+// import type { FigureElement } from './Element';
 // import GlobalAnimation from './webgl/GlobalAnimation';
 
 // Singleton class that contains projects global functions

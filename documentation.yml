@@ -1,13 +1,13 @@
 toc:
   - name: Introduction
     file: ./docs/tutorials/intro.md
-  - name: Diagram
-  - Diagram
-  - OBJ_Diagram
-  - name: Diagram Elements
-  - DiagramElement
-  - DiagramElementPrimitive
-  - DiagramElementCollection
+  - name: Figure
+  - Figure
+  - OBJ_Figure
+  - name: Figure Elements
+  - FigureElement
+  - FigureElementPrimitive
+  - FigureElementCollection
   - name: Geometric Classes
     file: ./docs/tutorials/geometric/geometric.md
   - Point
@@ -124,15 +124,15 @@ toc:
   - randElement
   - randElements
   - removeRandElement
-  - name: Misc Diagram Element
-  - DiagramElementMoveFreely
-  - DiagramElementMove
+  - name: Misc Figure Element
+  - FigureElementMoveFreely
+  - FigureElementMove
   - Scenarios
   - ElementMovementState
   - ElementPulseState
   - ElementState
   - DrawingObject
-  - DiagramPrimitives
+  - FigurePrimitives
   - name: Misc Geometry
   - TypeParsablePoint
   - TypeParsableLine

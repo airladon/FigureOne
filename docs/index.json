@@ -8,7 +8,7 @@
           "children": [
             {
               "type": "text",
-              "value": "Diagram Class",
+              "value": "Figure Class",
               "position": {
                 "start": {
                   "line": 1,
@@ -59,7 +59,7 @@
         "lineNumber": 2,
         "type": {
           "type": "NameExpression",
-          "name": "TypeDiagramOptions"
+          "name": "TypeFigureOptions"
         },
         "name": "options"
       }
@@ -85,7 +85,7 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/Diagram.js"
+      "file": "/opt/app/src/js/figure/Figure.js"
     },
     "augments": [],
     "examples": [],
@@ -97,7 +97,7 @@
         "lineNumber": 2,
         "type": {
           "type": "NameExpression",
-          "name": "TypeDiagramOptions"
+          "name": "TypeFigureOptions"
         }
       }
     ],
@@ -107,11 +107,11 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "Diagram",
+    "name": "Figure",
     "kind": "class",
     "path": [
       {
-        "name": "Diagram",
+        "name": "Figure",
         "kind": "class"
       }
     ],
@@ -128,7 +128,7 @@
                 "children": [
                   {
                     "type": "text",
-                    "value": "id of DIV that diagram is tied to",
+                    "value": "id of DIV that figure is tied to",
                     "position": {
                       "start": {
                         "line": 1,
@@ -194,7 +194,7 @@
                 "column": 17
               }
             },
-            "file": "/opt/app/src/js/diagram/Diagram.js"
+            "file": "/opt/app/src/js/figure/Figure.js"
           },
           "augments": [],
           "examples": [],
@@ -208,7 +208,7 @@
           "yields": [],
           "name": "htmlId",
           "kind": "member",
-          "memberof": "Diagram",
+          "memberof": "Figure",
           "scope": "instance",
           "type": {
             "type": "NameExpression",
@@ -223,7 +223,7 @@
           },
           "path": [
             {
-              "name": "Diagram",
+              "name": "Figure",
               "kind": "class"
             },
             {
@@ -232,7 +232,7 @@
               "scope": "instance"
             }
           ],
-          "namespace": "Diagram#htmlId"
+          "namespace": "Figure#htmlId"
         },
         {
           "description": {
@@ -243,7 +243,7 @@
                 "children": [
                   {
                     "type": "text",
-                    "value": "Add elements to diagram",
+                    "value": "Add elements to figure",
                     "position": {
                       "start": {
                         "line": 1,
@@ -315,7 +315,7 @@
                 "type": "OptionalType",
                 "expression": {
                   "type": "NameExpression",
-                  "name": "DiagramElementCollection"
+                  "name": "FigureElementCollection"
                 }
               },
               "name": "collection",
@@ -337,7 +337,7 @@
             },
             {
               "title": "example",
-              "description": "diagram.addElements([\n  { name: 'shape1', method: 'polygon', options: { position: [0, 0] } },\n  { name: 'shape2', method: 'polygon', options: { position: [1, 1] } },\n]);",
+              "description": "figure.addElements([\n  { name: 'shape1', method: 'polygon', options: { position: [0, 0] } },\n  { name: 'shape2', method: 'polygon', options: { position: [1, 1] } },\n]);",
               "lineNumber": 7
             }
           ],
@@ -362,12 +362,12 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/Diagram.js"
+            "file": "/opt/app/src/js/figure/Figure.js"
           },
           "augments": [],
           "examples": [
             {
-              "description": "diagram.addElements([\n  { name: 'shape1', method: 'polygon', options: { position: [0, 0] } },\n  { name: 'shape2', method: 'polygon', options: { position: [1, 1] } },\n]);"
+              "description": "figure.addElements([\n  { name: 'shape1', method: 'polygon', options: { position: [0, 0] } },\n  { name: 'shape2', method: 'polygon', options: { position: [1, 1] } },\n]);"
             }
           ],
           "implements": [],
@@ -504,7 +504,7 @@
               },
               "type": {
                 "type": "NameExpression",
-                "name": "DiagramElementCollection"
+                "name": "FigureElementCollection"
               },
               "default": "this.elements"
             },
@@ -579,7 +579,7 @@
           "yields": [],
           "name": "addElements",
           "kind": "function",
-          "memberof": "Diagram",
+          "memberof": "Figure",
           "scope": "instance",
           "members": {
             "global": [],
@@ -590,7 +590,7 @@
           },
           "path": [
             {
-              "name": "Diagram",
+              "name": "Figure",
               "kind": "class"
             },
             {
@@ -599,13 +599,13 @@
               "scope": "instance"
             }
           ],
-          "namespace": "Diagram#addElements"
+          "namespace": "Figure#addElements"
         }
       ],
       "events": [],
       "static": []
     },
-    "namespace": "Diagram"
+    "namespace": "Figure"
   },
   {
     "name": "Equation Elements Types",
@@ -722,7 +722,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "DiagramFont"
+            "name": "FigureFont"
           }
         },
         "name": "font"
@@ -849,7 +849,7 @@
           "column": 57
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
     },
     "augments": [],
     "examples": [],
@@ -980,7 +980,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "DiagramFont"
+            "name": "FigureFont"
           }
         }
       },
@@ -1375,7 +1375,7 @@
                 "type": "OptionalType",
                 "expression": {
                   "type": "NameExpression",
-                  "name": "DiagramFont"
+                  "name": "FigureFont"
                 }
               }
             },
@@ -1487,11 +1487,11 @@
         },
         {
           "type": "NameExpression",
-          "name": "DiagramElementPrimitive"
+          "name": "FigureElementPrimitive"
         },
         {
           "type": "NameExpression",
-          "name": "DiagramElementCollection"
+          "name": "FigureElementCollection"
         }
       ]
     },
@@ -1585,7 +1585,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
     },
     "augments": [],
     "examples": [],
@@ -1942,7 +1942,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -3299,7 +3299,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -4326,7 +4326,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -4939,7 +4939,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -6935,7 +6935,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -8693,7 +8693,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -10224,7 +10224,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -11868,7 +11868,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -15060,7 +15060,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -20710,7 +20710,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -23323,7 +23323,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -25714,7 +25714,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -26319,7 +26319,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -26947,7 +26947,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -27861,7 +27861,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -29086,7 +29086,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -29914,7 +29914,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -30712,7 +30712,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -32698,7 +32698,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -35087,7 +35087,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -36683,7 +36683,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -37707,7 +37707,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -39261,7 +39261,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -40375,7 +40375,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [],
@@ -40998,7 +40998,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -43230,7 +43230,7 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -44241,7 +44241,7 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -45692,7 +45692,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -47085,7 +47085,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -48158,7 +48158,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -49283,7 +49283,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -51106,7 +51106,7 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -52665,7 +52665,7 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -53963,7 +53963,7 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -55125,7 +55125,7 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -56408,7 +56408,7 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -57529,7 +57529,7 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationSymbols.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationSymbols.js"
     },
     "augments": [],
     "examples": [
@@ -59126,7 +59126,7 @@
           "column": 27
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -59469,11 +59469,11 @@
         },
         {
           "type": "NameExpression",
-          "name": "DiagramElementPrimitive"
+          "name": "FigureElementPrimitive"
         },
         {
           "type": "NameExpression",
-          "name": "DiagramElementCollection"
+          "name": "FigureElementCollection"
         },
         {
           "type": "NameExpression",
@@ -59579,7 +59579,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
     },
     "augments": [],
     "examples": [],
@@ -59595,11 +59595,11 @@
           "elements": [
             {
               "type": "NameExpression",
-              "name": "DiagramElementPrimitive"
+              "name": "FigureElementPrimitive"
             },
             {
               "type": "NameExpression",
-              "name": "DiagramElementCollection"
+              "name": "FigureElementCollection"
             },
             {
               "type": "NameExpression",
@@ -59645,11 +59645,11 @@
             "elements": [
               {
                 "type": "NameExpression",
-                "name": "DiagramElementPrimitive"
+                "name": "FigureElementPrimitive"
               },
               {
                 "type": "NameExpression",
-                "name": "DiagramElementCollection"
+                "name": "FigureElementCollection"
               },
               {
                 "type": "NameExpression",
@@ -59807,7 +59807,7 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
     },
     "augments": [],
     "examples": [
@@ -60086,7 +60086,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
     },
     "augments": [],
     "examples": [],
@@ -60590,7 +60590,7 @@
           "children": [
             {
               "type": "text",
-              "value": "From the diagram's perspective, a form is a specific layout of equation\nelements.",
+              "value": "From the figure's perspective, a form is a specific layout of equation\nelements.",
               "position": {
                 "start": {
                   "line": 14,
@@ -60993,7 +60993,7 @@
       },
       {
         "title": "property",
-        "description": "properties to set in the equation element\n(@DiagramElementPrimitive) when this form is shown",
+        "description": "properties to set in the equation element\n(@FigureElementPrimitive) when this form is shown",
         "lineNumber": 49,
         "type": {
           "type": "OptionalType",
@@ -61046,7 +61046,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
     },
     "augments": [],
     "examples": [
@@ -61760,7 +61760,7 @@
               "children": [
                 {
                   "type": "text",
-                  "value": "properties to set in the equation element\n(@DiagramElementPrimitive) when this form is shown",
+                  "value": "properties to set in the equation element\n(@FigureElementPrimitive) when this form is shown",
                   "position": {
                     "start": {
                       "line": 1,
@@ -62459,7 +62459,7 @@
           "column": 26
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
     },
     "augments": [],
     "examples": [],
@@ -62646,7 +62646,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
     },
     "augments": [],
     "examples": [],
@@ -63136,7 +63136,7 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
     },
     "augments": [],
     "examples": [],
@@ -63169,7 +63169,7 @@
                       },
                       {
                         "type": "NameExpression",
-                        "name": "DiagramElementCollection"
+                        "name": "FigureElementCollection"
                       }
                     ]
                   }
@@ -63214,7 +63214,7 @@
                             "type": "NullableType",
                             "expression": {
                               "type": "NameExpression",
-                              "name": "DiagramElement"
+                              "name": "FigureElement"
                             }
                           }
                         }
@@ -63263,7 +63263,7 @@
                         },
                         {
                           "type": "NameExpression",
-                          "name": "DiagramElementCollection"
+                          "name": "FigureElementCollection"
                         }
                       ]
                     }
@@ -63308,7 +63308,7 @@
                               "type": "NullableType",
                               "expression": {
                                 "type": "NameExpression",
-                                "name": "DiagramElement"
+                                "name": "FigureElement"
                               }
                             }
                           }
@@ -63619,13 +63619,13 @@
       },
       {
         "title": "property",
-        "description": "default {@link DiagramFont}('Times\nNew Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)",
+        "description": "default {@link FigureFont}('Times\nNew Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)",
         "lineNumber": 17,
         "type": {
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "DiagramFont"
+            "name": "FigureFont"
           }
         },
         "name": "fontMath"
@@ -63665,7 +63665,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
     },
     "augments": [],
     "examples": [],
@@ -64355,13 +64355,13 @@
                 },
                 {
                   "type": "link",
-                  "url": "DiagramFont",
+                  "url": "FigureFont",
                   "title": null,
                   "jsdoc": true,
                   "children": [
                     {
                       "type": "text",
-                      "value": "DiagramFont"
+                      "value": "FigureFont"
                     }
                   ],
                   "position": {
@@ -64432,7 +64432,7 @@
           "type": "OptionalType",
           "expression": {
             "type": "NameExpression",
-            "name": "DiagramFont"
+            "name": "FigureFont"
           }
         }
       },
@@ -64675,7 +64675,7 @@
             "type": "OptionalType",
             "expression": {
               "type": "NameExpression",
-              "name": "DiagramFont"
+              "name": "FigureFont"
             }
           }
         },
@@ -66421,7 +66421,7 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
     },
     "augments": [],
     "examples": [],
@@ -67877,12 +67877,12 @@
           "column": 1
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
     },
     "augments": [
       {
         "title": "augments",
-        "name": "DiagramElementCollection"
+        "name": "FigureElementCollection"
       }
     ],
     "examples": [
@@ -68019,7 +68019,7 @@
                 "column": 4
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -68145,7 +68145,7 @@
                 "key": "fontMath",
                 "value": {
                   "type": "NameExpression",
-                  "name": "DiagramFont"
+                  "name": "FigureFont"
                 }
               },
               {
@@ -68220,11 +68220,11 @@
                         "elements": [
                           {
                             "type": "NameExpression",
-                            "name": "DiagramElementPrimitive"
+                            "name": "FigureElementPrimitive"
                           },
                           {
                             "type": "NameExpression",
-                            "name": "DiagramElementCollection"
+                            "name": "FigureElementCollection"
                           },
                           {
                             "type": "NameExpression",
@@ -68268,7 +68268,7 @@
                   "elements": [
                     {
                       "type": "NameExpression",
-                      "name": "DiagramElementPrimitive"
+                      "name": "FigureElementPrimitive"
                     },
                     {
                       "type": "NullLiteral"
@@ -68306,7 +68306,7 @@
                               },
                               {
                                 "type": "NameExpression",
-                                "name": "DiagramElementCollection"
+                                "name": "FigureElementCollection"
                               }
                             ]
                           }
@@ -68341,7 +68341,7 @@
                                 "key": "element",
                                 "value": {
                                   "type": "NameExpression",
-                                  "name": "DiagramElement"
+                                  "name": "FigureElement"
                                 }
                               }
                             ]
@@ -68449,7 +68449,7 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -68570,7 +68570,7 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -68689,7 +68689,7 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -68810,7 +68810,7 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -68931,7 +68931,7 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -69053,7 +69053,7 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -69193,7 +69193,7 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -69346,7 +69346,7 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -69504,7 +69504,7 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -69626,7 +69626,7 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -69766,7 +69766,7 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -69906,7 +69906,7 @@
                 "column": 3
               }
             },
-            "file": "/opt/app/src/js/diagram/DiagramElements/Equation/Equation.js"
+            "file": "/opt/app/src/js/figure/FigureElements/Equation/Equation.js"
           },
           "augments": [],
           "examples": [],
@@ -78389,7 +78389,7 @@
           "children": [
             {
               "type": "text",
-              "value": "Diagram Input Options",
+              "value": "Figure Input Options",
               "position": {
                 "start": {
                   "line": 1,
@@ -78449,7 +78449,7 @@
       },
       {
         "title": "property",
-        "description": "Diagram coordinate limits - default: bottom left\n corner at (-1, -1), width 1, height 1",
+        "description": "Figure coordinate limits - default: bottom left\n corner at (-1, -1), width 1, height 1",
         "lineNumber": 3,
         "type": {
           "type": "NameExpression",
@@ -78479,7 +78479,7 @@
           "column": 2
         }
       },
-      "file": "/opt/app/src/js/diagram/Diagram.js"
+      "file": "/opt/app/src/js/figure/Figure.js"
     },
     "augments": [],
     "examples": [],
@@ -78562,7 +78562,7 @@
               "children": [
                 {
                   "type": "text",
-                  "value": "Diagram coordinate limits - default: bottom left\n corner at (-1, -1), width 1, height 1",
+                  "value": "Figure coordinate limits - default: bottom left\n corner at (-1, -1), width 1, height 1",
                   "position": {
                     "start": {
                       "line": 1,
@@ -78621,7 +78621,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeDiagramOptions",
+    "name": "TypeFigureOptions",
     "kind": "typedef",
     "type": {
       "type": "RecordType",
@@ -78659,11 +78659,11 @@
     },
     "path": [
       {
-        "name": "TypeDiagramOptions",
+        "name": "TypeFigureOptions",
         "kind": "typedef"
       }
     ],
-    "namespace": "TypeDiagramOptions"
+    "namespace": "TypeFigureOptions"
   },
   {
     "description": {
@@ -78746,7 +78746,7 @@
           "column": 3
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [
@@ -78873,7 +78873,7 @@
           "column": 3
         }
       },
-      "file": "/opt/app/src/js/diagram/DiagramElements/Equation/EquationFunctions.js"
+      "file": "/opt/app/src/js/figure/FigureElements/Equation/EquationFunctions.js"
     },
     "augments": [],
     "examples": [

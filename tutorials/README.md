@@ -2,11 +2,11 @@
 
 Follow these tutorials in sequence to learn about FigureOne and how to use it.
 
-**[Simple shape](https://github.com/airladon/FigureOne/tree/master/tutorials/1%20-%20Shape)** - Simple creation and drawing of diagram element
+**[Simple shape](https://github.com/airladon/FigureOne/tree/master/tutorials/1%20-%20Shape)** - Simple creation and drawing of figure element
 
 ![](./1%20-%20Shape/example.png)
 
-**[Collections](https://github.com/airladon/FigureOne/tree/master/tutorials/2%20-%20Collections)** - Example showing collections of diagram elements
+**[Collections](https://github.com/airladon/FigureOne/tree/master/tutorials/2%20-%20Collections)** - Example showing collections of figure elements
 
 ![](./2%20-%20Collections/example.png)
 

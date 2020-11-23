@@ -55,7 +55,7 @@ export type OBJ_CurvedCorner = {
  * `opacity` * `color` alpha) [`1`]
  * @example
  * // Full font definition
- * const font = new DiagramFont({
+ * const font = new FigureFont({
  *   family: 'Helvetica',
  *   style: 'italic',
  *   weight: 'bold',
@@ -64,7 +64,7 @@ export type OBJ_CurvedCorner = {
  * });
  * @example
  * // Define style only, remaining properties are defaults
- * const font = new DiagramFont({
+ * const font = new FigureFont({
  *   style: 'italic',
  * });
  */

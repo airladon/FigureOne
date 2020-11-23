@@ -9,10 +9,10 @@ Open `index.html` in a browser to view example.
 ## Code
 `index.js`
 ```js
-const diagram = new Fig.Diagram();
+const figure = new Fig.Figure();
 
-// Add a collection with a circle and triangle in it to the diagram
-diagram.addElement(
+// Add a collection with a circle and triangle in it to the figure
+figure.addElement(
   {
     name: 'shapes',
     method: 'collection',
@@ -45,18 +45,18 @@ diagram.addElement(
 
 // Scale the shapes collection
 // This will reduce the size of both the circle and triangle
-diagram.getElement('shapes').setScale(0.5),
+figure.getElement('shapes').setScale(0.5),
 
-diagram.initialize();
+figure.initialize();
 
 ```
 
 ## Explanation
 
-There are two types of diagram elements (subclasses of `DiagramElement`):
+There are two types of figure elements (subclasses of `FigureElement`):
 
-* `DiagramElementPrimitive` - An object that manages a drawing primitive like a set of vertices, some text or a html element
-* `DiagramElementCollection` - An object that manages a group of drawing elements (could be both primitives and collections)
+* `FigureElementPrimitive` - An object that manages a drawing primitive like a set of vertices, some text or a html element
+* `FigureElementCollection` - An object that manages a group of drawing elements (could be both primitives and collections)
 
 All drawing elements have their own `transform` that *translates*, *rotates* and/or *scales* the element.
 

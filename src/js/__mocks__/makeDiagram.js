@@ -1,9 +1,9 @@
 // import {
-//   DiagramElementPrimitive,
-//   DiagramElementCollection,
+//   FigureElementPrimitive,
+//   FigureElementCollection,
 //   // AnimationPhase,
 // } from '../Element';
-import Diagram from '../diagram/Diagram';
+import Figure from '../figure/Figure';
 import {
   Rect, getPoint, Point,
 } from '../tools/g2';
@@ -14,15 +14,15 @@ import { round } from '../tools/math';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('../diagram/Gesture');
-jest.mock('../diagram/webgl/webgl');
-jest.mock('../diagram/DrawContext2D');
-jest.mock('../diagram/DrawingObjects/HTMLObject/HTMLObject');
+jest.mock('../figure/Gesture');
+jest.mock('../figure/webgl/webgl');
+jest.mock('../figure/DrawContext2D');
+jest.mock('../figure/DrawingObjects/HTMLObject/HTMLObject');
 
 const generateRandomStringMock = jest.spyOn(tools, 'generateRandomString');
 generateRandomStringMock.mockImplementation(() => '000000');
 
-export default function makeDiagram(
+export default function makeFigure(
   inputCanvas = new Rect(100, -300, 1000, 500),
   inputLimits = new Rect(-1, -1, 2, 2),
 ) {
@@ -78,36 +78,36 @@ export default function makeDiagram(
     appendChild: () => {},
   };
   const { limits } = definition;
-  const diagram = new Diagram({ htmlId: 'c', limits, color: [1, 0, 0, 1] });
-  diagram.webglLow = webgl;
-  diagram.webglHigh = webgl;
-  diagram.webgl = webgl;
-  diagram.canvasLow = canvasMock;
-  diagram.canvasHigh = canvasMock;
-  diagram.htmlCanvas = htmlCanvasMock;
-  diagram.isTouchDevice = false;
-  diagram.draw2DLow = new DrawContext2D(definition.width, definition.height);
-  diagram.draw2DHigh = new DrawContext2D(definition.width, definition.height);
-  diagram.draw2D = diagram.draw2DLow;
-  diagram.shapesLow = diagram.getShapes(false);
-  diagram.shapesHigh = diagram.getShapes(true);
-  diagram.shapes = diagram.shapesLow;
-  diagram.equationLow = diagram.getEquations(false);
-  diagram.equationHigh = diagram.getEquations(true);
-  diagram.equation = diagram.equationLow;
-  diagram.collectionsLow = diagram.getObjects(false);
-  diagram.collectionsHigh = diagram.getObjects(true);
-  diagram.collections = diagram.collectionsLow;
-  diagram.setSpaceTransforms();
+  const figure = new Figure({ htmlId: 'c', limits, color: [1, 0, 0, 1] });
+  figure.webglLow = webgl;
+  figure.webglHigh = webgl;
+  figure.webgl = webgl;
+  figure.canvasLow = canvasMock;
+  figure.canvasHigh = canvasMock;
+  figure.htmlCanvas = htmlCanvasMock;
+  figure.isTouchDevice = false;
+  figure.draw2DLow = new DrawContext2D(definition.width, definition.height);
+  figure.draw2DHigh = new DrawContext2D(definition.width, definition.height);
+  figure.draw2D = figure.draw2DLow;
+  figure.shapesLow = figure.getShapes(false);
+  figure.shapesHigh = figure.getShapes(true);
+  figure.shapes = figure.shapesLow;
+  figure.equationLow = figure.getEquations(false);
+  figure.equationHigh = figure.getEquations(true);
+  figure.equation = figure.equationLow;
+  figure.collectionsLow = figure.getObjects(false);
+  figure.collectionsHigh = figure.getObjects(true);
+  figure.collections = figure.collectionsLow;
+  figure.setSpaceTransforms();
   // needed as the first element needs to be set with the space Transforms
-  diagram.initElements();
-  diagram.mock = {
+  figure.initElements();
+  figure.mock = {
     initialTime: 0,
     duration: 0,
     previousTouchPoint: new Point(0, 0),
     timersBeforeDraw: true,
     timeStep: (deltaTimeInSecondsIn, frameTimeIn = null) => {
-      const { duration, initialTime } = diagram.mock;
+      const { duration, initialTime } = figure.mock;
       const deltaTimeInSeconds = round(deltaTimeInSecondsIn, 8);
       let frameTime = deltaTimeInSeconds;
       // let deltaTime = 0;
@@ -126,12 +126,12 @@ export default function makeDiagram(
         // }
         const newNow = round((duration + deltaTime + initialTime) * 1000, 8);
         global.performance.now = () => newNow;
-        if (diagram.mock.timersBeforeDraw) {
+        if (figure.mock.timersBeforeDraw) {
           jest.advanceTimersByTime(round((deltaTime - lastTime) * 1000, 8));
         }
-        diagram.animateNextFrame();
-        diagram.draw(round(newNow / 1000, 8));
-        if (!diagram.mock.timersBeforeDraw) {
+        figure.animateNextFrame();
+        figure.draw(round(newNow / 1000, 8));
+        if (!figure.mock.timersBeforeDraw) {
           jest.advanceTimersByTime(round((deltaTime - lastTime) * 1000, 8));
         }
         lastTime = deltaTime;
@@ -144,27 +144,27 @@ export default function makeDiagram(
         }
         deltaTime = round(deltaTime, 8);
       }
-      diagram.mock.duration += deltaTimeInSeconds;
+      figure.mock.duration += deltaTimeInSeconds;
     },
-    touchDown: (diagramPosition) => {
-      const p = getPoint(diagramPosition);
-      const pixelPoint = p.transformBy(diagram.spaceTransforms.diagramToPixel.m());
-      const clientPoint = diagram.pixelToClient(pixelPoint);
-      diagram.touchDownHandler(clientPoint);
-      diagram.mock.previousTouchPoint = clientPoint;
+    touchDown: (figurePosition) => {
+      const p = getPoint(figurePosition);
+      const pixelPoint = p.transformBy(figure.spaceTransforms.figureToPixel.m());
+      const clientPoint = figure.pixelToClient(pixelPoint);
+      figure.touchDownHandler(clientPoint);
+      figure.mock.previousTouchPoint = clientPoint;
     },
     touchUp: () => {
-      diagram.touchUpHandler();
+      figure.touchUpHandler();
     },
-    touchMove: (diagramPosition) => {
-      const p = getPoint(diagramPosition);
-      const pixelPoint = p.transformBy(diagram.spaceTransforms.diagramToPixel.m());
-      const clientPoint = diagram.pixelToClient(pixelPoint);
-      diagram.touchMoveHandler(diagram.mock.previousTouchPoint, clientPoint);
-      diagram.mock.previousTouchPoint = clientPoint;
+    touchMove: (figurePosition) => {
+      const p = getPoint(figurePosition);
+      const pixelPoint = p.transformBy(figure.spaceTransforms.figureToPixel.m());
+      const clientPoint = figure.pixelToClient(pixelPoint);
+      figure.touchMoveHandler(figure.mock.previousTouchPoint, clientPoint);
+      figure.mock.previousTouchPoint = clientPoint;
     },
   };
-  diagram.globalAnimation.reset();
-  return diagram;
+  figure.globalAnimation.reset();
+  return figure;
 }
 

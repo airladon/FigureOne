@@ -1,4 +1,4 @@
-// const diagram = new Fig.Diagram({
+// const figure = new Fig.Figure({
 //   limits: [-3, -3, 6, 6],
 //   color: [1, 0, 0, 1],
 //   lineWidth: 0.01,
@@ -6,7 +6,7 @@
 // });
 
 // // Hide pad 0, and make pad 2 blue and not filled
-// diagram.addElement({
+// figure.addElement({
 //   name: 'p',
 //   method: 'collections.polyline',
 //   options: {

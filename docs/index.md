@@ -2,7 +2,7 @@
 
 ### Table of Contents
 
--   [Diagram][1]
+-   [Figure][1]
     -   [Parameters][2]
     -   [htmlId][3]
     -   [addElements][4]
@@ -220,7 +220,7 @@
     -   [Properties][216]
 -   [round][217]
     -   [Parameters][218]
--   [TypeDiagramOptions][219]
+-   [TypeFigureOptions][219]
     -   [Properties][220]
 -   [container][221]
     -   [Parameters][222]
@@ -229,35 +229,35 @@
     -   [Parameters][225]
     -   [Examples][226]
 
-## Diagram
+## Figure
 
-Diagram Class
+Figure Class
 
 ### Parameters
 
--   `options` **[TypeDiagramOptions][227]** 
+-   `options` **[TypeFigureOptions][227]** 
 
 ### htmlId
 
-id of DIV that diagram is tied to
+id of DIV that figure is tied to
 
 Type: [string][228]
 
 ### addElements
 
-Add elements to diagram
+Add elements to figure
 
 #### Parameters
 
 -   `elementsToAdd` **[Array][229]&lt;TypeAddElementObject>** array of element definitions
--   `collection` **DiagramElementCollection** the
+-   `collection` **FigureElementCollection** the
     collection to add elements to (optional, default `this.elements`)
 -   `addElementsKey` **[string][228]** key to add elements (optional, default `'addElements'`)
 
 #### Examples
 
 ```javascript
-diagram.addElements([
+figure.addElements([
   { name: 'shape1', method: 'polygon', options: { position: [0, 0] } },
   { name: 'shape2', method: 'polygon', options: { position: [1, 1] } },
 ]);
@@ -274,12 +274,12 @@ Definition of a text or symbol equation element. Symbol properties take
 receive priority over text properties, so if 'symbol' is defined, then 'text'
 will be ignored.
 
-Type: ([string][228] | {text: [string][228]?, font: DiagramFont?, style: (`"italic"` \| `"normal"` | null)?, symbol: [string][228]?, numLines: [number][230]?, side: (`"top"` \| `"left"` \| `"bottom"` \| `"right"`)?, color: [Array][229]&lt;[number][230]>?, mods: {}?} | DiagramElementPrimitive | DiagramElementCollection)
+Type: ([string][228] | {text: [string][228]?, font: FigureFont?, style: (`"italic"` \| `"normal"` | null)?, symbol: [string][228]?, numLines: [number][230]?, side: (`"top"` \| `"left"` \| `"bottom"` \| `"right"`)?, color: [Array][229]&lt;[number][230]>?, mods: {}?} | FigureElementPrimitive | FigureElementCollection)
 
 ### Properties
 
 -   `text` **[string][228]?** Text element only
--   `font` **DiagramFont?** Text element only
+-   `font` **FigureFont?** Text element only
 -   `style` **(`"italic"` \| `"normal"`)?** Text element only
 -   `symbol` **[string][228]?** Symbol element only
 -   `side` **(`"top"` \| `"left"` \| `"bottom"` \| `"right"`)?** Symbol element only
@@ -2726,7 +2726,7 @@ phrases.
 -   A string that represents an equation element
 -   An array of [TypeEquationPhrase][124]
 
-Type: ([string][228] \| [number][230] | {frac: [EQN_Fraction][241]} | {strike: [EQN_Strike][242]} | {box: [EQN_Box][243]} | {root: [EQN_Root][244]} | {brac: [EQN_Bracket][234]} | {sub: [EQN_Subcript][245]} | {sup: [EQN_Superscript][246]} | {supSub: [EQN_SuperscriptSubscript][247]} | {topBar: [EQN_Bar][248]} | {bottomBar: [EQN_Bar][248]} | {annotate: [EQN_Annotate][249]} | {topComment: [EQN_Comment][250]} | {bottomComment: [EQN_Comment][250]} | {pad: [EQN_Pad][251]} | {bar: [EQN_Bar][248]} | {scale: [EQN_Scale][252]} | {container: [EQN_Container][253]} | {matrix: [EQN_Matrix][254]} | {int: [EQN_Integral][255]} | {sumOf: [EQN_SumOf][256]} | {prodOf: [EQN_ProdOf][257]} | {topStrike: [EQN_StrikeComment][258]} | {bottomStrike: [EQN_StrikeComment][258]} | [Array][229]&lt;[TypeEquationPhrase][232]> | DiagramElementPrimitive | DiagramElementCollection | Elements | [Element][259] | BaseAnnotationFunction)
+Type: ([string][228] \| [number][230] | {frac: [EQN_Fraction][241]} | {strike: [EQN_Strike][242]} | {box: [EQN_Box][243]} | {root: [EQN_Root][244]} | {brac: [EQN_Bracket][234]} | {sub: [EQN_Subcript][245]} | {sup: [EQN_Superscript][246]} | {supSub: [EQN_SuperscriptSubscript][247]} | {topBar: [EQN_Bar][248]} | {bottomBar: [EQN_Bar][248]} | {annotate: [EQN_Annotate][249]} | {topComment: [EQN_Comment][250]} | {bottomComment: [EQN_Comment][250]} | {pad: [EQN_Pad][251]} | {bar: [EQN_Bar][248]} | {scale: [EQN_Scale][252]} | {container: [EQN_Container][253]} | {matrix: [EQN_Matrix][254]} | {int: [EQN_Integral][255]} | {sumOf: [EQN_SumOf][256]} | {prodOf: [EQN_ProdOf][257]} | {topStrike: [EQN_StrikeComment][258]} | {bottomStrike: [EQN_StrikeComment][258]} | [Array][229]&lt;[TypeEquationPhrase][232]> | FigureElementPrimitive | FigureElementCollection | Elements | [Element][259] | BaseAnnotationFunction)
 
 ### Examples
 
@@ -2750,11 +2750,11 @@ forms: {
 
 Defines how to align a form
 
-Type: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | [Point][237]), xAlign: TypeHAlign, yAlign: TypeVAlign}
+Type: {fixTo: (FigureElementPrimitive | FigureElementCollection | [Point][237]), xAlign: TypeHAlign, yAlign: TypeVAlign}
 
 ### Properties
 
--   `fixTo` **(DiagramElementPrimitive | DiagramElementCollection | [Point][237])** 
+-   `fixTo` **(FigureElementPrimitive | FigureElementCollection | [Point][237])** 
 -   `xAlign` **TypeHAlign** 
 -   `yAlign` **TypeVAlign** 
 
@@ -2821,7 +2821,7 @@ can be rearranged to a different form:
 
 a = c - b
 
-From the diagram's perspective, a form is a specific layout of equation
+From the figure's perspective, a form is a specific layout of equation
 elements.
 
 This object defines a how the elements are laid out, what properties the
@@ -2861,7 +2861,7 @@ Type: {content: [TypeEquationPhrase][232], scale: [number][230]?, alignment: [Ty
 -   `translation` **[TypeFormTranslationProperties][260]?** animation move
     style (fromNext and fromPrev are prioritized over this)
 -   `elementMods` **[object][231]?** properties to set in the equation element
-    (@DiagramElementPrimitive) when this form is shown
+    (@FigureElementPrimitive) when this form is shown
 
 ### Examples
 
@@ -2995,11 +2995,11 @@ The default values in the pulse object are are:
 -   `duration`: 1s
 -   `scale`: 1.1
 
-Type: {formRestart: {moveFrom: ([Point][237]? | DiagramElementCollection)?, pulse: {duration: [number][230]?, scale: [number][230]?, element: DiagramElement??}?}?}
+Type: {formRestart: {moveFrom: ([Point][237]? | FigureElementCollection)?, pulse: {duration: [number][230]?, scale: [number][230]?, element: FigureElement??}?}?}
 
 ### Properties
 
--   `formRestart` **{moveFrom: ([Point][237]? | DiagramElementCollection)?, pulse: {duration: [number][230]?, scale: [number][230]?, element: DiagramElement??}?}?** 
+-   `formRestart` **{moveFrom: ([Point][237]? | FigureElementCollection)?, pulse: {duration: [number][230]?, scale: [number][230]?, element: FigureElement??}?}?** 
 
 ## Equation Option Types
 
@@ -3010,7 +3010,7 @@ Type: {formRestart: {moveFrom: ([Point][237]? | DiagramElementCollection)?, puls
 
 Options objects to construct an [Equation][146] class. All properties are optional.
 
-Type: {color: [Array][229]&lt;[number][230]>?, scale: [number][230]?, elements: [TypeEquationElements][266]?, defaultFormAlignment: [TypeFormAlignment][262]?, forms: [TypeEquationForms][267]?, formSeries: ([Array][229]&lt;[string][228]> | {})?, defaultFormSeries: [string][228]?, formRestart: [TypeFormRestart][268]?, fontMath: DiagramFont?, position: [Point][237]?}
+Type: {color: [Array][229]&lt;[number][230]>?, scale: [number][230]?, elements: [TypeEquationElements][266]?, defaultFormAlignment: [TypeFormAlignment][262]?, forms: [TypeEquationForms][267]?, formSeries: ([Array][229]&lt;[string][228]> | {})?, defaultFormSeries: [string][228]?, formRestart: [TypeFormRestart][268]?, fontMath: FigureFont?, position: [Point][237]?}
 
 ### Properties
 
@@ -3028,7 +3028,7 @@ Type: {color: [Array][229]&lt;[number][230]>?, scale: [number][230]?, elements: 
     defined, then a default must be chosen to be the first current one. Default:
     first form defined
 -   `formRestart` **[TypeFormRestart][268]?** default: null
--   `fontMath` **DiagramFont?** default [DiagramFont][269]('Times
+-   `fontMath` **FigureFont?** default [FigureFont][269]('Times
     New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
 -   `position` **[Point][237]?** default: new [Point][175](0, 0)
 
@@ -3102,7 +3102,7 @@ Type: {name: [string][228]?, index: [number][230]?, animate: (`"move"` \| `"diss
 
 ## Equation
 
-**Extends DiagramElementCollection**
+**Extends FigureElementCollection**
 
 An Equation is a collection of elements that can be arranged into different
 forms.
@@ -3149,7 +3149,7 @@ eqn.addElements({
 
 Equation parameters and functions
 
-Type: {forms: {}, functions: EquationFunctions, symbols: EquationSymbols, currentForm: [string][228], currentSubForm: [string][228], fontMath: DiagramFont, scale: [number][230], subFormPriority: [Array][229]&lt;[string][228]>, formSeries: {}, currentFormSeries: [Array][229]&lt;[string][228]>, currentFormSeriesName: [string][228], defaultFormAlignment: {fixTo: (DiagramElementPrimitive | DiagramElementCollection | [Point][237]), xAlign: TypeHAlign, yAlign: TypeVAlign}, isAnimating: [boolean][233], descriptionElement: (DiagramElementPrimitive | null), descriptionPosition: [Point][237], formRestart: {moveFrom: ([Point][237] | DiagramElementCollection)?, pulse: {duration: [number][230], scale: [number][230], element: DiagramElement}?}?}
+Type: {forms: {}, functions: EquationFunctions, symbols: EquationSymbols, currentForm: [string][228], currentSubForm: [string][228], fontMath: FigureFont, scale: [number][230], subFormPriority: [Array][229]&lt;[string][228]>, formSeries: {}, currentFormSeries: [Array][229]&lt;[string][228]>, currentFormSeriesName: [string][228], defaultFormAlignment: {fixTo: (FigureElementPrimitive | FigureElementCollection | [Point][237]), xAlign: TypeHAlign, yAlign: TypeVAlign}, isAnimating: [boolean][233], descriptionElement: (FigureElementPrimitive | null), descriptionPosition: [Point][237], formRestart: {moveFrom: ([Point][237] | FigureElementCollection)?, pulse: {duration: [number][230], scale: [number][230], element: FigureElement}?}?}
 
 #### Properties
 
@@ -3567,16 +3567,16 @@ Rounds a number or numbers in an array
 
 Returns **([number][230] \| [Array][229]&lt;[number][230]>)** Rounded value or array of values
 
-## TypeDiagramOptions
+## TypeFigureOptions
 
-Diagram Input Options
+Figure Input Options
 
 Type: {htmlId: [string][228]?, limits: [Rect][273]?}
 
 ### Properties
 
 -   `htmlId` **[string][228]?** HTML div tag id - default: 'figureOneId'
--   `limits` **[Rect][273]** Diagram coordinate limits - default: bottom left
+-   `limits` **[Rect][273]** Figure coordinate limits - default: bottom left
      corner at (-1, -1), width 1, height 1
 
 ## container
@@ -3621,7 +3621,7 @@ eqn.addForms({
 });
 ```
 
-[1]: #diagram
+[1]: #figure
 
 [2]: #parameters
 
@@ -4057,7 +4057,7 @@ eqn.addForms({
 
 [218]: #parameters-25
 
-[219]: #typediagramoptions
+[219]: #typefigureoptions
 
 [220]: #properties-47
 
@@ -4073,7 +4073,7 @@ eqn.addForms({
 
 [226]: #examples-52
 
-[227]: #typediagramoptions
+[227]: #typefigureoptions
 
 [228]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
@@ -4157,7 +4157,7 @@ eqn.addForms({
 
 [268]: #typeformrestart
 
-[269]: DiagramFont
+[269]: FigureFont
 
 [270]: #equationgotoform
 

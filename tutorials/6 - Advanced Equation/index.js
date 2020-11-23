@@ -1,6 +1,6 @@
-const diagram = new Fig.Diagram();
+const figure = new Fig.Figure();
 
-diagram.addElement(
+figure.addElement(
   {
     name: 'eqn',
     method: 'equation',
@@ -96,5 +96,5 @@ diagram.addElement(
 );
 
 // Show the equation form
-diagram.getElement('eqn').showForm('base');
-diagram.initialize();
+figure.getElement('eqn').showForm('base');
+figure.initialize();

@@ -1,9 +1,9 @@
-// Create diagram and make it able to be touched
-const diagram = new Fig.Diagram();
-diagram.setTouchable();
+// Create figure and make it able to be touched
+const figure = new Fig.Figure();
+figure.setTouchable();
 
-// Add circle to diagram
-diagram.addElement(
+// Add circle to figure
+figure.addElement(
   {
     name: 'circle',
     method: 'polygon',
@@ -17,11 +17,11 @@ diagram.addElement(
       isTouchable: true,
       isMovable: true,
       move: {
-        bounds: 'diagram',
+        bounds: 'figure',
       },
     },
   },
 );
 
-// Initialize diagram
-diagram.initialize();
+// Initialize figure
+figure.initialize();

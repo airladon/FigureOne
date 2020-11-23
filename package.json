@@ -1,7 +1,7 @@
 {
   "name": "figureone",
   "version": "0.3.3",
-  "description": "Interactive Diagram Builder",
+  "description": "Interactive Figure Builder",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   },
   "keywords": [
     "interactive",
-    "diagram",
+    "figure",
     "webgl",
     "equations"
   ],

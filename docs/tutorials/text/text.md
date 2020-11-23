@@ -22,8 +22,8 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 A grid is included in this javascript file to make it obvious how text is aligned and justified
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
-diagram.addElements([
+const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+figure.addElements([
   {
     name: 'origin',
     method: 'polygon',
@@ -61,12 +61,12 @@ diagram.addElements([
 
 ### Quick Start - `text`
 
-Let's start by creating a {@link DiagramElementPrimitive} element that writes 'hello world' to the diagram.
+Let's start by creating a {@link FigureElementPrimitive} element that writes 'hello world' to the figure.
 
 <p style="text-align: center"><img src="./tutorials/text/text.png"></p>
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 'simpleText',
     method: 'text',
@@ -81,10 +81,10 @@ diagram.addElement(
 
 The text has been horizontally aligned to its center, and vertically aligned to its middle around its default location of `(0, 0)`.
 
-As this is a {@link DiagramElementPrimitive}, transforms can be applied to it, and it can be touched and moved. For instance, the example below will rotate the text when it is dragged with a touch from the user.
+As this is a {@link FigureElementPrimitive}, transforms can be applied to it, and it can be touched and moved. For instance, the example below will rotate the text when it is dragged with a touch from the user.
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 'spinner',
     method: 'text',
@@ -101,7 +101,7 @@ diagram.addElement(
     }
   },
 );
-diagram.setTouchable();
+figure.setTouchable();
 ```
 
 The same `text` method can be used to create text at different locations.
@@ -109,7 +109,7 @@ The same `text` method can be used to create text at different locations.
 <p style="text-align: center"><img src="./tutorials/text/compass.png"></p>
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 'compass',
     method: 'text',
@@ -152,7 +152,7 @@ Alternately, `text.line` can be used as it will automatically layout the text el
 <p style="text-align: center"><img src="./tutorials/text/text-line.png"></p>
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 'formattedLine',
     method: 'text.line',
@@ -186,7 +186,7 @@ When using more text, it is sometimes useful to split these in the API to make i
 The same example above can be done with `text.lines`:
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 'formattedLine',
     method: 'text.lines',
@@ -204,7 +204,7 @@ diagram.addElement(
     },
   },
 );
-diagram.setTouchable();
+figure.setTouchable();
 ```
 
 `text.lines` also allows for multiple lines of text to be laid out and justified.
@@ -212,7 +212,7 @@ diagram.setTouchable();
 <p style="text-align: center"><img src="./tutorials/text/text-lines.png"></p>
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 't',
     method: 'text.lines',

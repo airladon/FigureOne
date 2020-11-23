@@ -1,7 +1,7 @@
-const diagram = new Fig.Diagram();
+const figure = new Fig.Figure();
 
-// Add a collection with a circle and triangle in it to the diagram
-diagram.addElement(
+// Add a collection with a circle and triangle in it to the figure
+figure.addElement(
   {
     name: 'shapes',
     method: 'collection',
@@ -34,6 +34,6 @@ diagram.addElement(
 
 // Scale the shapes collection
 // This will reduce the size of both the circle and triangle
-diagram.getElement('shapes').setScale(0.5),
+figure.getElement('shapes').setScale(0.5),
 
-diagram.initialize();
+figure.initialize();

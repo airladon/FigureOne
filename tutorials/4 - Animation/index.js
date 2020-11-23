@@ -1,7 +1,7 @@
-const diagram = new Fig.Diagram();
+const figure = new Fig.Figure();
 
-// Add a simple shape to the diagram
-diagram.addElements([
+// Add a simple shape to the figure
+figure.addElements([
   {
     name: 'hexagon',
     method: 'polygon',
@@ -15,7 +15,7 @@ diagram.addElements([
 ]);
 
 // Start a new animation
-diagram.getElement('hexagon').animations.new()
+figure.getElement('hexagon').animations.new()
   .position({ target: [-0.4, -0.4], velocity: 0.3 })
   .rotation({ delta: Math.PI / 2, duration: 1 })
   .position({ target: [0, 0], velocity: 0.3 })
@@ -27,4 +27,4 @@ diagram.getElement('hexagon').animations.new()
   .position({ target: [0, 0], velocity: 0.3 })
   .start();
 
-diagram.initialize();
+figure.initialize();

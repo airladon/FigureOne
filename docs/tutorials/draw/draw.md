@@ -1,4 +1,4 @@
-Each {@link DiagramElementPrimitive} element manages drawing a shape, drawing text, or manipulating a HTML element.
+Each {@link FigureElementPrimitive} element manages drawing a shape, drawing text, or manipulating a HTML element.
 
 FigureOne's built-in shapes are drawn using WebGL, which uses triangles to create different shapes. To draw a shape, you define the verticies of the triangles. Every drawing frame (animation or screen refresh), the color of the vertices and the transform that moves them around is used to render the final shape to the screen.
 
@@ -23,29 +23,29 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 ```
 
 ### Quick Start
 
-Let's start by creating a {@link DiagramElementPrimitive} element that draws a polygon and adding it to the diagram.
+Let's start by creating a {@link FigureElementPrimitive} element that draws a polygon and adding it to the figure.
 
 ```javascript
-// create the `DiagramElementPrimitive`
-const p = diagram.create.polygon({
+// create the `FigureElementPrimitive`
+const p = figure.create.polygon({
   radius: 0.2,
   fill: true,
   color: [0, 0, 1, 1],
   sides: 6,
 });
-// add it to the diagram
-diagram.elements.add('p', p);
+// add it to the figure
+figure.elements.add('p', p);
 ```
 
-Another way to create and add the same shape to the diagram is to use the `Diagram.addElement` or `Diagram.addElements` method:
+Another way to create and add the same shape to the figure is to use the `Figure.addElement` or `Figure.addElements` method:
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'p',
   method: 'polygon',
   options: {
@@ -57,13 +57,13 @@ diagram.addElement({
 });
 ```
 
-Both ways create the same element. The first way is more programatic and especially useful when extending shape creation classes. In comparison, the second way can allow you to layout an entire diagram in a single object that is compatible with JSON. This means it is relatively straight forward to share diagram elements between projects. When using code folding in an IDE, the second way also makes it easy to work with diagrams with many elements.
+Both ways create the same element. The first way is more programatic and especially useful when extending shape creation classes. In comparison, the second way can allow you to layout an entire figure in a single object that is compatible with JSON. This means it is relatively straight forward to share figure elements between projects. When using code folding in an IDE, the second way also makes it easy to work with figures with many elements.
 
 For most of the API reference, the second way will be used.
 
 ### Built-in Shapes
 
-There are several built in shape methods that can be used to create complex diagrams:
+There are several built in shape methods that can be used to create complex figures:
 * <a href="#obj_line">line</a>
 * <a href="#obj_polyline">polyline</a>
 * <a href="#obj_triangle">triangle</a>
@@ -85,7 +85,7 @@ To draw this shape, you would need to draw the two triangles, which means drawin
 * 1, 3, 4
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'rectangle',
   method: 'generic',
   options: {
@@ -109,7 +109,7 @@ A strip starts with one triangle, and then every subsequent vertex will create a
 Therefore, to draw the same rectangle we would draw the first triangle with the vertices 2, 1 and then 3. Then 1 and 3 could be used with 4 to create the second triangle.
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'rectangle',
   method: 'generic',
   options: {
@@ -135,7 +135,7 @@ A fan starts with one point. The next two points create the first triangle, and 
 Therefore, to draw the same rectangle we would draw the first point 1, then complete the first triangle with 2 and 3. Then we would draw point 4 to make the second triangle with points 1 and 3.
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'rectangle',
   method: 'generic',
   options: {
@@ -165,7 +165,7 @@ This is not useful for drawing filled shapes, but is useful for drawing thin out
 
 For instance, to draw a rectangle outline:
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'rectangle',
   method: 'generic',
   options: {

@@ -37,9 +37,9 @@ You can then open a browser and go to http://localhost:8080.
 ## Code
 `index.js`
 ```js
-const diagram = new Fig.Diagram();
+const figure = new Fig.Figure();
 
-diagram.addElement(
+figure.addElement(
   {
     name: 'flower',
     method: 'polygon',
@@ -55,7 +55,7 @@ diagram.addElement(
   },
 );
 
-diagram.initialize();
+figure.initialize();
 ```
 
 ## Explanation

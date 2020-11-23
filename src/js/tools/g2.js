@@ -4036,7 +4036,7 @@ function getMoveTime(
   startTransform: Transform | Array<Transform>,
   stopTransform: Transform | Array<Transform>,
   rotDirection: 0 | 1 | -1 | 2 = 0,
-  translationVelocity: Point = new Point(0.25, 0.25),   // 0.5 diagram units/s
+  translationVelocity: Point = new Point(0.25, 0.25),   // 0.5 figure units/s
   rotationVelocity: number = 2 * Math.PI / 6,    // 60º/s
   scaleVelocity: Point = new Point(1, 1),   // 100%/s
 ) {
@@ -5209,11 +5209,11 @@ function transformValueToArray(
 
 // bounds: null
 // bounds: { translation: [-1, -1, 2, 2], scale: [-1, 1], rotation: [-1, 1] }
-// bounds: 'diagram',
+// bounds: 'figure',
 // bounds: new TransformBounds(transform, [null, null] | { translation: null })
 // bounds: [null, [-1, -1, 2, 2], null]
 // bounds: [null, [null, -1, null, 2], null]
-// bounds: TransformBounds | Rect | Array<number> | 'diagram',
+// bounds: TransformBounds | Rect | Array<number> | 'figure',
 
 // type TypeBoundsDefinition = null | ;
 

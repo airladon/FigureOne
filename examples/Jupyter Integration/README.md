@@ -89,7 +89,7 @@ window.addToggleLink(element, this, 'Load FigureOne');
 
 ### Cell 4
 
-Create a `div` element with id `dynamic_equation_1` that we will attach a FigureOne diagram to.
+Create a `div` element with id `dynamic_equation_1` that we will attach a FigureOne figure to.
 
 ```md
 # Dynamic Equation
@@ -104,18 +104,18 @@ Press on the elements of the equation to rearrange its form.
 
 
 ### Cell 5
-Now we create a `Diagram`, and define the equation to be shown.
+Now we create a `Figure`, and define the equation to be shown.
 
 ```js
 %%javascript
 require(['Fig'], function(Fig) {  
-    // Create a diagram with limits that are proportional to the html div style size 
-    const diagram = new Fig.Diagram({
+    // Create a figure with limits that are proportional to the html div style size 
+    const figure = new Fig.Figure({
       limits: new Fig.Rect(-2, -1, 4, 2),
       htmlId: 'dynamic_equation_1',
     });
 
-    diagram.addElement({
+    figure.addElement({
       name: 'eqn',
       method: 'equation',
       options: {
@@ -168,15 +168,15 @@ require(['Fig'], function(Fig) {
       },
     });
 
-    const eqn = diagram.getElement('eqn');
-    const a = diagram.getElement('eqn.a');
-    const b = diagram.getElement('eqn.b');
-    const c = diagram.getElement('eqn.c');
+    const eqn = figure.getElement('eqn');
+    const a = figure.getElement('eqn.a');
+    const b = figure.getElement('eqn.b');
+    const c = figure.getElement('eqn.c');
     function goto(form) {
       eqn.goToForm({
         name: form, delay: 0, duration: 1.5, animate: 'move',
       });
-      diagram.animateNextFrame();
+      figure.animateNextFrame();
     }
     a.onClick = goto.bind(this, 'a');
     b.onClick = goto.bind(this, 'b');
@@ -185,7 +185,7 @@ require(['Fig'], function(Fig) {
     b.makeTouchable();
     c.makeTouchable();
     eqn.showForm('a');
-    diagram.animateNextFrame();
+    figure.animateNextFrame();
 });
 // Hide the javascript code
 window.addToggleLink(element, this, 'Dynamic Equation');

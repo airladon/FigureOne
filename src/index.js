@@ -2,52 +2,52 @@
 
 import * as g2 from './js/tools/g2';
 import * as math from './js/tools/math';
-import Diagram from './js/diagram/Diagram';
-import { Recorder } from './js/diagram/Recorder';
+import Figure from './js/figure/Figure';
+import { Recorder } from './js/figure/Recorder';
 import { FunctionMap, GlobalFunctionMap } from './js/tools/FunctionMap';
 import * as color from './js/tools/color';
 import * as html from './js/tools/htmlGenerator';
 import * as misc from './js/tools/tools';
 import * as css from './js/tools/styleSheets';
-import * as lines from './js/diagram/DrawingObjects/Geometries/lines/lines';
+import * as lines from './js/figure/DrawingObjects/Geometries/lines/lines';
 import {
-  DiagramElement, DiagramElementPrimitive, DiagramElementCollection,
-} from './js/diagram/Element';
-import DrawContext2D from './js/diagram/DrawContext2D';
-import WebGLInstance from './js/diagram/webgl/webgl';
-import DrawingObject from './js/diagram/DrawingObjects/DrawingObject';
-import VertexObject from './js/diagram/DrawingObjects/VertexObject/VertexObject';
+  FigureElement, FigureElementPrimitive, FigureElementCollection,
+} from './js/figure/Element';
+import DrawContext2D from './js/figure/DrawContext2D';
+import WebGLInstance from './js/figure/webgl/webgl';
+import DrawingObject from './js/figure/DrawingObjects/DrawingObject';
+import VertexObject from './js/figure/DrawingObjects/VertexObject/VertexObject';
 import {
-  TextObject, DiagramText, DiagramFont,
-} from './js/diagram/DrawingObjects/TextObject/TextObject';
-import HTMLObject from './js/diagram/DrawingObjects/HTMLObject/HTMLObject';
-import HTMLEquation from './js/diagram/DiagramElements/Equation/HTMLEquation';
-import CollectionsAngle from './js/diagram/DiagramObjects/Angle';
-import CollectionsLine from './js/diagram/DiagramObjects/Line';
-import CollectionsPolyline from './js/diagram/DiagramObjects/PolyLine';
-import EqnNavigator from './js/diagram/DiagramObjects/EqnNavigator';
-import EquationLabel from './js/diagram/DiagramObjects/EquationLabel';
-import { Equation } from './js/diagram/DiagramElements/Equation/Equation';
-import EquationForm from './js/diagram/DiagramElements/Equation/EquationForm';
+  TextObject, FigureText, FigureFont,
+} from './js/figure/DrawingObjects/TextObject/TextObject';
+import HTMLObject from './js/figure/DrawingObjects/HTMLObject/HTMLObject';
+import HTMLEquation from './js/figure/FigureElements/Equation/HTMLEquation';
+import CollectionsAngle from './js/figure/FigureObjects/Angle';
+import CollectionsLine from './js/figure/FigureObjects/Line';
+import CollectionsPolyline from './js/figure/FigureObjects/PolyLine';
+import EqnNavigator from './js/figure/FigureObjects/EqnNavigator';
+import EquationLabel from './js/figure/FigureObjects/EquationLabel';
+import { Equation } from './js/figure/FigureElements/Equation/Equation';
+import EquationForm from './js/figure/FigureElements/Equation/EquationForm';
 
 import type { TypeRotationDirection, TypeParsablePoint } from './js/tools/g2';
 import type {
   COL_Line,
   TypeLineLabelOptions, TypeLabelledLine,
-} from './js/diagram/DiagramObjects/Line';
+} from './js/figure/FigureObjects/Line';
 import type {
   TypeLabelLocation, TypeLabelSubLocation, TypeLabelOrientation,
-} from './js/diagram/DiagramObjects/EquationLabel';
+} from './js/figure/FigureObjects/EquationLabel';
 
 import type {
   COL_Angle, TypeAngleLabelOptions,
   TypeLabelledAngle,
-} from './js/diagram/DiagramObjects/Angle';
-import type { OBJ_Diagram } from './js/diagram/Diagram';
+} from './js/figure/FigureObjects/Angle';
+import type { OBJ_Figure } from './js/figure/Figure';
 import type {
   COL_Polyline, OBJ_PolylinePad,
-} from './js/diagram/DiagramObjects/PolyLine';
-import * as anim from './js/diagram/Animation/Animation';
+} from './js/figure/FigureObjects/PolyLine';
+import * as anim from './js/figure/Animation/Animation';
 
 // This helps the docgen find the types file
 // eslint-disable-next-line
@@ -57,7 +57,7 @@ export type {
   TypeRotationDirection,
   TypeLabelLocation, TypeLabelSubLocation, TypeLabelOrientation,
   COL_Line,
-  COL_Angle, OBJ_Diagram,
+  COL_Angle, OBJ_Figure,
   TypeLineLabelOptions, TypeAngleLabelOptions,
   COL_Polyline, OBJ_PolylinePad, TypeParsablePoint,
   TypeLabelledAngle, TypeLabelledLine,
@@ -86,26 +86,26 @@ const tools = {
  * FigureOne entry point
  * @module Fig
  * @global
- * @property {class} {@link Diagram}      - Diagram Class
+ * @property {class} {@link Figure}      - Figure Class
  */
 const Fig = {
   tools,
-  Diagram,
+  Figure,
   Recorder,
   FunctionMap,
   GlobalFunctionMap,
   //
-  DiagramElement,
-  DiagramElementCollection,
-  DiagramElementPrimitive,
+  FigureElement,
+  FigureElementCollection,
+  FigureElementPrimitive,
   DrawContext2D,
   WebGLInstance,
   //
   DrawingObject,
   VertexObject,
   TextObject,
-  DiagramText,
-  DiagramFont,
+  FigureText,
+  FigureFont,
   HTMLObject,
   //
   CollectionsAngle,

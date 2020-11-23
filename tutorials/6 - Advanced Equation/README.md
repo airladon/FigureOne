@@ -9,9 +9,9 @@ Open `index.html` in a browser to view example.
 ## Code
 `index.js`
 ```js
-const diagram = new Fig.Diagram();
+const figure = new Fig.Figure();
 
-diagram.addElement(
+figure.addElement(
   {
     name: 'eqn',
     method: 'equation',
@@ -107,8 +107,8 @@ diagram.addElement(
 );
 
 // Show the equation form
-diagram.getElement('eqn').showForm('base');
-diagram.initialize();
+figure.getElement('eqn').showForm('base');
+figure.initialize();
 ```
 
 ## Explanation
@@ -118,7 +118,7 @@ An equation with a more collections layout shows more features of equations in F
 ### Element Definition
 Equations are defined with two main keys, `elements` and `forms`.
 
-Each equation element is a `DiagramElementPrimitive` with a unique name. Therefore, if you have an equation with several *x* elements, you will need to give them each unique names. This is so when equations are animated between forms, it is clear which *x* in the first form moves to which *x* in the second form.
+Each equation element is a `FigureElementPrimitive` with a unique name. Therefore, if you have an equation with several *x* elements, you will need to give them each unique names. This is so when equations are animated between forms, it is clear which *x* in the first form moves to which *x* in the second form.
 
 Therefore, one way to define multiple *x* elements would be:
 ```js

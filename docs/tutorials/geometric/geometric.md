@@ -1,4 +1,4 @@
-To define many shapes, geometric primitives (not to be confused with diagram element primitives) such as points and lines need to be used.
+To define many shapes, geometric primitives (not to be confused with figure element primitives) such as points and lines need to be used.
 
 FigureOne includes classes that define a:
 * {@link Point}

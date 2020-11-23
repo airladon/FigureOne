@@ -22,7 +22,7 @@ const bc = (content, comment, symbol = null, scale = 0.6, inSize = false) => ({
 });
 
 // Add the equation with all it's forms
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -80,7 +80,7 @@ diagram.addElement({
   },
 });
 // Progress to the next form when the equation is clicked on
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.makeTouchable();
 
@@ -118,8 +118,8 @@ const makeTriangle = (name, scenario) => ({
   },
 });
 
-// Add the right angle triangles to the diagram
-diagram.addElements([
+// Add the right angle triangles to the figure
+figure.addElements([
   makeTriangle('tri4', { position: [-1.5, 2], rotation: 3 * Math.PI / 2 }),
   makeTriangle('tri3', { position: [1.5, 2], rotation: Math.PI }),
   makeTriangle('tri2', { position: [1.5, -1], rotation: Math.PI / 2 }),
@@ -135,9 +135,9 @@ const setUpdate = (element) => {
   element.dim();
 };
 
-const tri2 = diagram.elements._tri2;
-const tri3 = diagram.elements._tri3;
-const tri4 = diagram.elements._tri4;
+const tri2 = figure.elements._tri2;
+const tri3 = figure.elements._tri3;
+const tri4 = figure.elements._tri4;
 setUpdate(tri2);
 setUpdate(tri3);
 setUpdate(tri4);
@@ -149,7 +149,7 @@ setUpdate(tri4);
 // ////////////////////////////////////////////////////////////////////////
 
 // Add some text to help the user start and navigate the equation
-diagram.addElements([
+figure.addElements([
   {
     name: 'start',
     method: 'text',
@@ -175,23 +175,23 @@ diagram.addElements([
 
 // The start text kicks off an animation converting the right angle triangle
 // into a square
-diagram.elements._start.setTouchable();
-diagram.elements._start.onClick = () => {
-  diagram.elements._start.hide();
-  diagram.elements.animations.new()
+figure.elements._start.setTouchable();
+figure.elements._start.onClick = () => {
+  figure.elements._start.hide();
+  figure.elements.animations.new()
     .scenarios({ target: 'lowerLeft', duration: 1 })
     .scenario({ element: tri2, target: 'square', duration: 2 })
     .scenario({ element: tri3, target: 'square', duration: 2 })
     .scenario({ element: tri4, target: 'square', duration: 2 })
     .trigger(() => { eqn.showForm('1'); })
     .opacity({ element: eqn, start: 0.01, target: 1, duration: 1 })
-    .dissolveIn({ element: diagram.elements._prev, duration: 0.5 })
+    .dissolveIn({ element: figure.elements._prev, duration: 0.5 })
     .start();
 }
 
 // The prev text tells the user how to proceed. If it is touched, then
 // the equation will go to the previous form
-diagram.elements._prev.onClick = () => {
+figure.elements._prev.onClick = () => {
   if (eqn.getCurrentForm().name !== '1') {
     eqn.prevForm({
       duration: 1,
@@ -199,7 +199,7 @@ diagram.elements._prev.onClick = () => {
     });
   }
 };
-diagram.elements._prev.setTouchable();
+figure.elements._prev.setTouchable();
 
 
 // ////////////////////////////////////////////////////////////////////////
@@ -209,8 +209,8 @@ diagram.elements._prev.setTouchable();
 // Start by hiding the equation and prev text, and setting all triangles
 // to the same initial position
 eqn.hide()
-diagram.elements._prev.hide();
-diagram.elements.setScenarios('initial');
+figure.elements._prev.hide();
+figure.elements.setScenarios('initial');
 ```
 
 ## Explanation
@@ -283,16 +283,16 @@ A form series defines how an equation progresses through forms when the `nextFor
 
 ```js
 // Progress to the next form when the equation is clicked on
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.stMovable();
 ```
 
 ### Triangles
 
-This diagram requires four triangles that are all the same, just in different positions and with different rotations.
+This figure requires four triangles that are all the same, just in different positions and with different rotations.
 
-**Scenarios** are a convenient way to imbed position, rotation, scale and color scenarios within a `DiagramElement`. When orchestrating many elements, it can make code more readable.
+**Scenarios** are a convenient way to imbed position, rotation, scale and color scenarios within a `FigureElement`. When orchestrating many elements, it can make code more readable.
 
 Therefore, as all the triangles are the same except for their senarios, a helper function is used to create them. The method used to create the triangles is `collections.polyline` which creates a polyline which can be annotated with text and angles for each segment.
 
@@ -327,8 +327,8 @@ const makeTriangle = (name, scenario) => ({
   },
 });
 
-// Add the right angle triangles to the diagram
-diagram.addElements([
+// Add the right angle triangles to the figure
+figure.addElements([
   makeTriangle('tri1', { position: [-1.5, -1], rotation: 0 }),
   makeTriangle('tri2', { position: [1.5, -1], rotation: Math.PI / 2 }),
   makeTriangle('tri3', { position: [1.5, 2], rotation: Math.PI }),
@@ -336,7 +336,7 @@ diagram.addElements([
 ]);
 ```
 
-As the triangles rotate into their final position, it is desirable to have their annotations remain horizontal. The rotation is part of the element's transform, so the `setTransformCallback` property on a `DiagramElement` can be used to update the label annotations. The `updateLabels` method is part of the `object.polyline` object that extends a `DiagramElement`.
+As the triangles rotate into their final position, it is desirable to have their annotations remain horizontal. The rotation is part of the element's transform, so the `setTransformCallback` property on a `FigureElement` can be used to update the label annotations. The `updateLabels` method is part of the `object.polyline` object that extends a `FigureElement`.
 
 ```js
 // When the triangles rotate, the text needs to stay horizontal
@@ -348,9 +348,9 @@ const setUpdate = (element) => {
   element.dim();
 };
 
-const tri2 = diagram.elements._tri2;
-const tri3 = diagram.elements._tri3;
-const tri4 = diagram.elements._tri4;
+const tri2 = figure.elements._tri2;
+const tri3 = figure.elements._tri3;
+const tri4 = figure.elements._tri4;
 setUpdate(tri2);
 setUpdate(tri3);
 setUpdate(tri4);
@@ -358,11 +358,11 @@ setUpdate(tri4);
 
 ### Text
 
-Finally the text that helps the user navigate through the diagram is created.
+Finally the text that helps the user navigate through the figure is created.
 
 ```js
 // Add some text to help the user start and navigate the equation
-diagram.addElements([
+figure.addElements([
   {
     name: 'start',
     method: 'text',
@@ -392,17 +392,17 @@ When the user presses the **start** text, an animation starts that moves all the
 ```js
 // The start text kicks off an animation converting the right angle triangle
 // into a square
-diagram.elements._start.setTouchable();
-diagram.elements._start.onClick = () => {
-  diagram.elements._start.hide();
-  diagram.elements.animations.new()
+figure.elements._start.setTouchable();
+figure.elements._start.onClick = () => {
+  figure.elements._start.hide();
+  figure.elements.animations.new()
     .scenarios({ target: 'lowerLeft', duration: 1 })
     .scenario({ element: tri2, target: 'square', duration: 2 })
     .scenario({ element: tri3, target: 'square', duration: 2 })
     .scenario({ element: tri4, target: 'square', duration: 2 })
     .trigger(() => { eqn.showForm('1'); })
     .opacity({ element: eqn, start: 0.01, target: 1, duration: 1 })
-    .dissolveIn({ element: diagram.elements._prev, duration: 0.5 })
+    .dissolveIn({ element: figure.elements._prev, duration: 0.5 })
     .start();
 }
 ```
@@ -412,7 +412,7 @@ The **prev** text can be used to navigate backwards through the equation forms
 ```js
 // The prev text tells the user how to proceed. If it is touched, then
 // the equation will go to the previous form
-diagram.elements._prev.onClick = () => {
+figure.elements._prev.onClick = () => {
   if (eqn.getCurrentForm().name !== '1') {
     eqn.prevForm({
       duration: 1,
@@ -420,15 +420,15 @@ diagram.elements._prev.onClick = () => {
     });
   }
 };
-diagram.elements._prev.setTouchable();
+figure.elements._prev.setTouchable();
 ```
 
 ### Final Positions
 
-Finally, the equation and **prev** text is hidden when the diagram starts.
+Finally, the equation and **prev** text is hidden when the figure starts.
 
 ```js
 eqn.hide()
-diagram.elements._prev.hide();
-diagram.elements.setScenarios('initial');
+figure.elements._prev.hide();
+figure.elements.setScenarios('initial');
 ```

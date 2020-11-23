@@ -8,10 +8,10 @@ Open `index.html` in a browser to view example.
 
 ## Code
 ```js
-const diagram = new Fig.Diagram();
+const figure = new Fig.Figure();
 
-// Add a simple shape to the diagram
-diagram.addElements([
+// Add a simple shape to the figure
+figure.addElements([
   {
     name: 'hexagon',
     method: 'polygon',
@@ -25,7 +25,7 @@ diagram.addElements([
 ]);
 
 // Start a new animation
-diagram.getElement('hexagon').animations.new()
+figure.getElement('hexagon').animations.new()
   .position({ target: [-0.4, -0.4], velocity: 0.3 })
   .rotation({ delta: Math.PI / 2, duration: 1 })
   .position({ target: [0, 0], velocity: 0.3 })
@@ -37,12 +37,12 @@ diagram.getElement('hexagon').animations.new()
   .position({ target: [0, 0], velocity: 0.3 })
   .start();
 
-diagram.initialize();
+figure.initialize();
 ```
 
 ## Explanation
 
-Each `DiagramElement` can manage its own animation, or another element's animation.
+Each `FigureElement` can manage its own animation, or another element's animation.
 
 A set of animation steps can be created using a fluid api (builder pattern). For instance the below code will animate an element to position (1, 1) over 1s, and then to (0, 0) over the next second.
 

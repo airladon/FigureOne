@@ -2,7 +2,7 @@
 
 Draw, animate and make interactive shapes, text, plots and equations.
 
-The library used to draw interactive diagrams at <a href="https://www.thisiget.com">thisiget.com</a>.
+The library used to draw interactive figures at <a href="https://www.thisiget.com">thisiget.com</a>.
 
 This library draws shapes in WebGL, and text with Canvas 2D - and therefore requires HTML5 support.
 
@@ -14,17 +14,17 @@ Load the FigureOne library into your HTML file:
 <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.3/figureone.min.js'></script>
 ```
 
-Create a `div` element to attach the diagram to:
+Create a `div` element to attach the figure to:
 ```html
 <div id="figureOneContainer" style="width: 500px; height: 500px; background-color: white;"></div>
 ```
 
-Then in javascript, create a diagram and a shape within it:
+Then in javascript, create a figure and a shape within it:
 
 ```js
-const diagram = new Fig.Diagram();
+const figure = new Fig.Figure();
 
-diagram.addElement(
+figure.addElement(
   {
     name: 'tri',
     method: 'triangle',
@@ -59,7 +59,7 @@ Then within your project you can:
 ```js
 import Fig from 'figureone';
 
-const diagram = new Fig.Diagram();
+const figure = new Fig.Figure();
 ```
 
 Flow typed files are included in the package for type checking in the editor.

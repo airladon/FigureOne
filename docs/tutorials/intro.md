@@ -2,20 +2,20 @@ This will introduce some key terms and concepts that are found frequently throug
 
 This is a work in progress and the entire API is not yet documented.
 
-#### Diagrams, Primitives and Collections
+#### Figures, Primitives and Collections
 
-**FigureOne** allows you to create a *figure*, or *diagram* that can be both interactive and animated.
+**FigureOne** allows you to create a *figure*, or *figure* that can be both interactive and animated.
 
-A diagram has one or more *diagram elements*. A diagram element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
+A figure has one or more *figure elements*. A figure element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
 
-In the language of **FigureOne**, there are two types of {@link DiagramElements}:
+In the language of **FigureOne**, there are two types of {@link FigureElements}:
 
-* {@link DiagramElementPrimitive} - an element that will draw something to the screen, such as a line, shape or text
-* {@link DiagramElementCollection} - collections of primitives or other collections
+* {@link FigureElementPrimitive} - an element that will draw something to the screen, such as a line, shape or text
+* {@link FigureElementCollection} - collections of primitives or other collections
 
-Each {@link DiagramElement} has a {@link Transform} that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a {@link DiagramElementPrimitive}, the shape or text will be transformed. In the case of a {@link DiagramElementCollection}, all the diagram elements it contains will have the transform applied to them.
+Each {@link FigureElement} has a {@link Transform} that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a {@link FigureElementPrimitive}, the shape or text will be transformed. In the case of a {@link FigureElementCollection}, all the figure elements it contains will have the transform applied to them.
 
-This means there is a heierachy of {@link DiagramElement} objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.
+This means there is a heierachy of {@link FigureElement} objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.
 
 Changing an element's transform moves the element through space. Changing the element's transform over time animates the element.
 
@@ -24,7 +24,7 @@ Let's say we want to create a rotating labeled line. As the line is rotated, the
 
 <p style="text-align: center"><img src="./tutorials/ex1.png"></p>
 
-To create this diagram, we might use a diagram element hierarchy like:
+To create this figure, we might use a figure element hierarchy like:
 
 <p style="text-align: center"><img src="./tutorials/ex1-hierarchy.png"></p>
 
@@ -32,49 +32,49 @@ The drawn elements, the line and text, are primitives. They are created in the s
 
 <p style="text-align: center"><img src="./tutorials/ex1-collection.png"></p>
 
-The diagram itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 3 wide and 2 high. We want the collection to be rotated, with the center of rotation at the center of the diagram. Therefore we apply a rotation and translation transform to the collection.
+The figure itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 3 wide and 2 high. We want the collection to be rotated, with the center of rotation at the center of the figure. Therefore we apply a rotation and translation transform to the collection.
 
-<p style="text-align: center"><img src="./tutorials/ex1-diagram.png"></p>
+<p style="text-align: center"><img src="./tutorials/ex1-figure.png"></p>
 
-There are several different ways to create the same diagram, but this way is used as it highlights how a collection can be used to transform a group of primitive elements.
+There are several different ways to create the same figure, but this way is used as it highlights how a collection can be used to transform a group of primitive elements.
 
 #### Coordinate spaces
 
-FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as diagram elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
+FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
 
 WebGL is rendered in a html [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element.
 
 The [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.
 
-When the canvas aspect ratio is not a square, or it is more convenient to create a diagram in a coordinate space not mapped between -1 to +1, then it is useful to have a separate *diagram space*. In the example above, the diagram space re-maps the *GL space* to 0 to 3 in the horizontal and 0 to 2 in the vertical.
+When the canvas aspect ratio is not a square, or it is more convenient to create a figure in a coordinate space not mapped between -1 to +1, then it is useful to have a separate *figure space*. In the example above, the figure space re-maps the *GL space* to 0 to 3 in the horizontal and 0 to 2 in the vertical.
 
-These are three examples of different coordinate spaces - *pixel space*, *GL space* and *diagram space*.
+These are three examples of different coordinate spaces - *pixel space*, *GL space* and *figure space*.
 
-If you want to move or modify an element, you need to think about what you want to modify it *relative* to. Do you want to move it relative to other elements in the diagram? In other words, do you want to move it in *diagram space*? Or do you want to move it relative to other elements within the parent, or local collection - *local space*. Alternately, you might want to modify the vertices of the shape, in *vertex space*.
+If you want to move or modify an element, you need to think about what you want to modify it *relative* to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in *figure space*? Or do you want to move it relative to other elements within the parent, or local collection - *local space*. Alternately, you might want to modify the vertices of the shape, in *vertex space*.
 
-In simple diagrams, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. Diagram space will be the same as local space and vertex space. You won't care about the higher level GL or pixel spaces.
+In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. Figure space will be the same as local space and vertex space. You won't care about the higher level GL or pixel spaces.
 
 But if you have transformed collections, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.
 
 One way to think about what space you are modifying is:
-* Elements that are direct children of the diagram: element transforms are in diagram space
+* Elements that are direct children of the figure: element transforms are in figure space
 * Elements that are direct children of a collection: element transforms are in local space (the space of the parent colleciton)
 * Vertex definitions in element primitives: vertex space
 
 For example, a square might be defined in vertex space as a square with length 1, centered around the origin.
 
-The transform of the diagram element primitive that controls the square will move the square in *local space* - the space relative to all other elements that are the children of the same parent collection.
+The transform of the figure element primitive that controls the square will move the square in *local space* - the space relative to all other elements that are the children of the same parent collection.
 
-If the parent collection's parent is the diagram itself, then its transform will move the colleciton in diagram space.
+If the parent collection's parent is the figure itself, then its transform will move the colleciton in figure space.
 
-Converting between spaces is relatively straight forward. All diagram elements have methods to find their position or bounds in *diagram*, *local* or *vertex* space. The diagram has transforms that allow conversion between *diagram*, *GL* and *pixel* spaces.
+Converting between spaces is relatively straight forward. All figure elements have methods to find their position or bounds in *figure*, *local* or *vertex* space. The figure has transforms that allow conversion between *figure*, *GL* and *pixel* spaces.
 
-Where this is useful is if two primitives have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target element position to *diagram space*, and then to the *local space* of the element to move.
+Where this is useful is if two primitives have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target element position to *figure space*, and then to the *local space* of the element to move.
 
 
 #### Drawing
 
-When it is time to draw the scene, the diagram will pass an initial transform to the first element in the hierarchy. In the example above, the "Labeled Line" collection. This transform will include any translations and scaling needed to convert from *diagram* space to *GL* space for actual rendering.
+When it is time to draw the scene, the figure will pass an initial transform to the first element in the hierarchy. In the example above, the "Labeled Line" collection. This transform will include any translations and scaling needed to convert from *figure* space to *GL* space for actual rendering.
 
 The "Labeled Line" collection will then cascade this transform with it's own rotation and translation transform, and pass this to its children, the "Label" and "Line" primitives.
 
@@ -103,8 +103,8 @@ Finally, let's see the code for the example above. Two files, `index.html` and `
 
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [0, 0, 6, 4 ]});
-diagram.addElement(
+const figure = new Fig.Figure({ limits: [0, 0, 6, 4 ]});
+figure.addElement(
   {
     name: 'labeledLine',
     method: 'collection',
@@ -143,35 +143,35 @@ diagram.addElement(
     },
   },
 );
-diagram.elements.isTouchable = true;
+figure.elements.isTouchable = true;
 ```
 
 #### Using FigureOne
 
 The example above shows how a figure can be defined with simple javascript objects, able to be encoded simply in JSON. This means complex figures or modules can be shared and reused easily.
 
-For many uses, it is fine to fully define a diagram and all its elements before a user interacts with it.
+For many uses, it is fine to fully define a figure and all its elements before a user interacts with it.
 
-Diagrams can also be defined more dynamically, such as in the example below which has exactly the same function as the example above.
+Figures can also be defined more dynamically, such as in the example below which has exactly the same function as the example above.
 
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [0, 0, 6, 4 ]});
+const figure = new Fig.Figure({ limits: [0, 0, 6, 4 ]});
 
-const label = diagram.create.text({
+const label = figure.create.text({
   text: 'Line 1',
   position: [1, 0.1],
   font: { color: [0, 0, 1, 1] },
   xAlign: 'center',
 });
-const line = diagram.create.line({
+const line = figure.create.line({
   p1: [0, 0],
   p2: [2, 0],
   width: 0.01,
   color: [0, 0, 1, 1],
 });
-const labeledLine = diagram.create.collection({});
-diagram.elements.add('labeledLine', labeledLine);
+const labeledLine = figure.create.collection({});
+figure.elements.add('labeledLine', labeledLine);
 labeledLine.add('line', line);
 labeledLine.add('label', label);
 labeledLine.setPosition(3, 2);

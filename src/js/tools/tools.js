@@ -1,7 +1,7 @@
 // @flow
 import { roundNum } from './math';
 import { FunctionMap } from './FunctionMap';
-// import Worker from '../diagram/recorder.worker.js';
+// import Worker from '../figure/recorder.worker.js';
 
 const Console = (text: string) => {
   console.log(text); // eslint-disable-line no-console

@@ -12,9 +12,9 @@ An equation can have different **forms**. One form is above, but it can be rearr
 
 `a - b = c`
 
-If FigureOne, an equation is a collection ({@link DiagramElementCollection}) of **terms** and **operators** (which are {@link DiagramElementPrimitive}s). A **form** defines the layout of terms and operators to create an equation. An equation can have many forms, and animation can be used to move between forms.
+If FigureOne, an equation is a collection ({@link FigureElementCollection}) of **terms** and **operators** (which are {@link FigureElementPrimitive}s). A **form** defines the layout of terms and operators to create an equation. An equation can have many forms, and animation can be used to move between forms.
 
-As the equation, terms and operators are all {@link DiagramElement}s, then they have all the same interactivety and animation abilities as shapes and text.
+As the equation, terms and operators are all {@link FigureElement}s, then they have all the same interactivety and animation abilities as shapes and text.
 
 
 ### <a id="equation-boilerplate"></a> Equation Boilerplate
@@ -37,14 +37,14 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 ```
 
 ### Quick Start
 
 First let's create an equation, with red as the default color:
 ```javascript
-const equation = diagram.create.equation({ color: [1, 0, 0, 1] });
+const equation = figure.create.equation({ color: [1, 0, 0, 1] });
 ```
 
 Next lets add the definitions for the terms and operators, or the equation elements. The keys of the object are unique identifiers that will be used in the equation forms to layout the elements appropriately. The values of the object are the text to display in the equation, or objects that define the text with additional options including formatting.
@@ -68,10 +68,10 @@ equation.addForms({
 
 An array of elements is called an *equation phrase*. In the example above, the form is a simple phrase, but in more complicated examples there may be several nested phrases.
 
-Finally, we can add the equation to the diagram and show the form:
+Finally, we can add the equation to the figure and show the form:
 
 ```javascript
-diagram.add('equation', equation);
+figure.add('equation', equation);
 equation.showForm('b');
 ```
 
@@ -81,7 +81,7 @@ equation.showForm('b');
 
 Mathematics has many special symbols that operate on terms, or annotate an equation. These symbols usually have a special layout relative to the terms they operate on.
 
-FigureOne treats symbols like any other equation element, and uses {@link DiagramElementPrimitive}s to draw them. FigureOne then provides a series of functions that can layout terms around these symbols.
+FigureOne treats symbols like any other equation element, and uses {@link FigureElementPrimitive}s to draw them. FigureOne then provides a series of functions that can layout terms around these symbols.
 
 Let's take the equation from the last example, and show the form as a fraction.
 
@@ -93,7 +93,7 @@ equation.addElements({
 });
 ```
 
-The `equation` is a {@link DiagramElementCollection} with an `eqn` property that contains equation specific information, such as forms and special layout functions, such as `frac`. Let's use this to add the form:
+The `equation` is a {@link FigureElementCollection} with an `eqn` property that contains equation specific information, such as forms and special layout functions, such as `frac`. Let's use this to add the form:
 
 ```javascript
 const e = equation.eqn.functions;
@@ -111,7 +111,7 @@ equation.showForm('b');
 
 Combine all the steps above gives:
 ```javascript
-const equation = diagram.create.equation({ color: [1, 0, 0, 1] });
+const equation = figure.create.equation({ color: [1, 0, 0, 1] });
 equation.addElements({
   a: 'a',
   b: 'b',
@@ -127,7 +127,7 @@ equation.addForms({
   b: ['b', 'equals', e.frac(['a', 'v', 'c'])],
 });
 
-diagram.add('equation', equation);
+figure.add('equation', equation);
 equation.showForm('a');
 ```
 
@@ -177,7 +177,7 @@ equation.goToForm({
 Similar to shapes and text, the same equation above can be defined with an options object. For complicated equations, options objects can be used with code folding in an IDE to more easily read and navigate an equation definition. Also, because object form is JSON compatible, complex equations can be easily shared.
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 'equation',
     method: 'equation',
@@ -208,13 +208,13 @@ diagram.addElement(
     },
   },
 );
-const equation = diagram.getElement('equation')
+const equation = figure.getElement('equation')
 equation.showForm('a');
 ```
 
 ### Equation highlighting and interactivity
 
-Just like any {@link DiagramElement}, an equation or its elements can be pulsed, touched or moved.
+Just like any {@link FigureElement}, an equation or its elements can be pulsed, touched or moved.
 
 For example, an element can be pulsed:
 ```javascript
@@ -257,7 +257,7 @@ Equation elements can all be defined in the `elements` property. However, simple
 
 For instance, we can recreate an example above as:
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -271,7 +271,7 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ![](./tutorials/equation/inline.png)
@@ -279,7 +279,7 @@ diagram.elements._eqn.showForm('1');
 Elements defined inline can be used in other forms:
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -294,8 +294,8 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
-diagram.elements._eqn.goToForm({
+figure.elements._eqn.showForm('1');
+figure.elements._eqn.goToForm({
   form: 2,
   animate: 'move',
   delay: 1,
@@ -306,7 +306,7 @@ diagram.elements._eqn.goToForm({
 
 Even symbols can be defined inline:
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -318,7 +318,7 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 Underscores have a special meaning for inline definitions.
@@ -328,7 +328,7 @@ Underscores before text will be hidden when rendered, but can make unique ids th
 Underscores after text can be used to create unique identifiers and therefore used to make multiple elements with the same text. The underscore, and all text after it will not be rendered.
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -337,14 +337,14 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ![](./tutorials/equation/valid_key.png)
 
 Underscores can also be used to give inline symbol definitions unqiue identifiers. In this case, the text before the underscore is the unique identifier, and the text after defines the symbol.
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -354,8 +354,8 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
-diagram.elements._eqn.goToForm({
+figure.elements._eqn.showForm('1');
+figure.elements._eqn.goToForm({
   form: 2,
   animate: 'move',
   delay: 1,
@@ -371,7 +371,7 @@ Function definitions can either be array definitions (an equation phrase) or obj
 Array definitions, or equation phrases, can also be spread over several lines to increase readability.
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -413,8 +413,8 @@ diagram.addElement({
     formSeries: ['1', '2', '3', '4'],
   },
 });
-diagram.elements._eqn.showForm('1');
-const eqn = diagram.elements._eqn;
+figure.elements._eqn.showForm('1');
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -427,7 +427,7 @@ eqn.showForm('1');
 Often different forms of an equation reuse equation phrases, like fractions. To make equation forms more readable, it can be useful to define a phrase once, and then refer to its identifier throughout the forms.
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -451,8 +451,8 @@ diagram.addElement({
     formSeries: ['1', '2', '3'],
   },
 });
-diagram.elements._eqn.showForm('1');
-const eqn = diagram.elements._eqn;
+figure.elements._eqn.showForm('1');
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');

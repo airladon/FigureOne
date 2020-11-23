@@ -1,6 +1,6 @@
-const diagram = new Fig.Diagram();
+const figure = new Fig.Figure();
 
-diagram.addElement(
+figure.addElement(
   {
     name: 'eqn',
     method: 'equation',
@@ -14,7 +14,7 @@ diagram.addElement(
         c: { color: [1, 0, 0, 1] },
       },
 
-      // Align all forms to the 'equals' diagram element
+      // Align all forms to the 'equals' figure element
       formDefaults: { alignment: { fixTo: 'equals' } },
 
       // Define two different forms of the equation
@@ -31,9 +31,9 @@ diagram.addElement(
     },
   },
 );
-diagram.initialize();
+figure.initialize();
 
-const eqn = diagram.getElement('eqn');
+const eqn = figure.getElement('eqn');
 
 // Show the equation form
 eqn.showForm('1');
@@ -47,4 +47,4 @@ eqn.goToForm({
 });
 
 // Queue drawing on the next animation frame
-diagram.animateNextFrame();
+figure.animateNextFrame();

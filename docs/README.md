@@ -3,8 +3,8 @@
 ### Table of Contents
 
 -   [Introduction][1]
--   [Diagram][2]
--   [Diagram][3]
+-   [Figure][2]
+-   [Figure][3]
     -   [spaceTransforms][7]
     -   [add][9]
     -   [addElements][12]
@@ -14,9 +14,9 @@
     -   [getRemainingAnimationTime][23]
     -   [stop][25]
     -   [animateNextFrame][27]
--   [OBJ_Diagram][29]
--   [Diagram Elements][31]
--   [DiagramElement][32]
+-   [OBJ_Figure][29]
+-   [Figure Elements][31]
+-   [FigureElement][32]
     -   [setPosition][35]
     -   [setRotation][37]
     -   [setScale][39]
@@ -39,9 +39,9 @@
     -   [getTransform][66]
     -   [isMoving][67]
     -   [isAnimating][68]
--   [DiagramElementPrimitive][69]
+-   [FigureElementPrimitive][69]
     -   [setAngleToDraw][71]
--   [DiagramElementCollection][73]
+-   [FigureElementCollection][73]
     -   [toFront][75]
     -   [toBack][77]
     -   [add][79]
@@ -347,15 +347,15 @@
 -   [randElement][708]
 -   [randElements][710]
 -   [removeRandElement][712]
--   [Misc Diagram Element][714]
--   [DiagramElementMoveFreely][715]
--   [DiagramElementMove][717]
+-   [Misc Figure Element][714]
+-   [FigureElementMoveFreely][715]
+-   [FigureElementMove][717]
 -   [Scenarios][719]
 -   [ElementMovementState][721]
 -   [ElementPulseState][723]
 -   [ElementState][725]
 -   [DrawingObject][727]
--   [DiagramPrimitives][729]
+-   [FigurePrimitives][729]
     -   [generic][730]
     -   [polyline][732]
     -   [polygon][734]
@@ -514,7 +514,7 @@
 -   [OBJ_GoToFormAnimationStep][1029]
 -   [NextFormAnimationStep][1031]
 -   [GoToFormAnimationStep][1034]
--   [OBJ_DiagramElementCollection][1037]
+-   [OBJ_FigureElementCollection][1037]
 -   [OBJ_Collection][1039]
 
 ## Introduction
@@ -523,20 +523,20 @@ This will introduce some key terms and concepts that are found frequently throug
 
 This is a work in progress and the entire API is not yet documented.
 
-#### Diagrams, Primitives and Collections
+#### Figures, Primitives and Collections
 
-**FigureOne** allows you to create a _figure_, or _diagram_ that can be both interactive and animated.
+**FigureOne** allows you to create a _figure_, or _figure_ that can be both interactive and animated.
 
-A diagram has one or more _diagram elements_. A diagram element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
+A figure has one or more _figure elements_. A figure element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
 
-In the language of **FigureOne**, there are two types of [DiagramElements][1041]:
+In the language of **FigureOne**, there are two types of [FigureElements][1041]:
 
--   [DiagramElementPrimitive][69] - an element that will draw something to the screen, such as a line, shape or text
--   [DiagramElementCollection][73] - collections of primitives or other collections
+-   [FigureElementPrimitive][69] - an element that will draw something to the screen, such as a line, shape or text
+-   [FigureElementCollection][73] - collections of primitives or other collections
 
-Each [DiagramElement][32] has a [Transform][222] that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a [DiagramElementPrimitive][69], the shape or text will be transformed. In the case of a [DiagramElementCollection][73], all the diagram elements it contains will have the transform applied to them.
+Each [FigureElement][32] has a [Transform][222] that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a [FigureElementPrimitive][69], the shape or text will be transformed. In the case of a [FigureElementCollection][73], all the figure elements it contains will have the transform applied to them.
 
-This means there is a heierachy of [DiagramElement][32] objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.
+This means there is a heierachy of [FigureElement][32] objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.
 
 Changing an element's transform moves the element through space. Changing the element's transform over time animates the element.
 
@@ -546,7 +546,7 @@ Let's say we want to create a rotating labeled line. As the line is rotated, the
 
 <p style="text-align: center"><img src="./tutorials/ex1.png"></p>
 
-To create this diagram, we might use a diagram element hierarchy like:
+To create this figure, we might use a figure element hierarchy like:
 
 <p style="text-align: center"><img src="./tutorials/ex1-hierarchy.png"></p>
 
@@ -554,49 +554,49 @@ The drawn elements, the line and text, are primitives. They are created in the s
 
 <p style="text-align: center"><img src="./tutorials/ex1-collection.png"></p>
 
-The diagram itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 3 wide and 2 high. We want the collection to be rotated, with the center of rotation at the center of the diagram. Therefore we apply a rotation and translation transform to the collection.
+The figure itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 3 wide and 2 high. We want the collection to be rotated, with the center of rotation at the center of the figure. Therefore we apply a rotation and translation transform to the collection.
 
-<p style="text-align: center"><img src="./tutorials/ex1-diagram.png"></p>
+<p style="text-align: center"><img src="./tutorials/ex1-figure.png"></p>
 
-There are several different ways to create the same diagram, but this way is used as it highlights how a collection can be used to transform a group of primitive elements.
+There are several different ways to create the same figure, but this way is used as it highlights how a collection can be used to transform a group of primitive elements.
 
 #### Coordinate spaces
 
-FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as diagram elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
+FigureOne renders shapes in WebGL, text in Context2D and can even manipulate html elements as figure elements. As WebGL is used most in FigureOne, it will be used as an example to introduce coorindate spaces and why they matter.
 
 WebGL is rendered in a html [canvas][1042] element.
 
 The [canvas][1042] element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.
 
-When the canvas aspect ratio is not a square, or it is more convenient to create a diagram in a coordinate space not mapped between -1 to +1, then it is useful to have a separate _diagram space_. In the example above, the diagram space re-maps the _GL space_ to 0 to 3 in the horizontal and 0 to 2 in the vertical.
+When the canvas aspect ratio is not a square, or it is more convenient to create a figure in a coordinate space not mapped between -1 to +1, then it is useful to have a separate _figure space_. In the example above, the figure space re-maps the _GL space_ to 0 to 3 in the horizontal and 0 to 2 in the vertical.
 
-These are three examples of different coordinate spaces - _pixel space_, _GL space_ and _diagram space_.
+These are three examples of different coordinate spaces - _pixel space_, _GL space_ and _figure space_.
 
-If you want to move or modify an element, you need to think about what you want to modify it _relative_ to. Do you want to move it relative to other elements in the diagram? In other words, do you want to move it in _diagram space_? Or do you want to move it relative to other elements within the parent, or local collection - _local space_. Alternately, you might want to modify the vertices of the shape, in _vertex space_.
+If you want to move or modify an element, you need to think about what you want to modify it _relative_ to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in _figure space_? Or do you want to move it relative to other elements within the parent, or local collection - _local space_. Alternately, you might want to modify the vertices of the shape, in _vertex space_.
 
-In simple diagrams, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. Diagram space will be the same as local space and vertex space. You won't care about the higher level GL or pixel spaces.
+In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. Figure space will be the same as local space and vertex space. You won't care about the higher level GL or pixel spaces.
 
 But if you have transformed collections, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.
 
 One way to think about what space you are modifying is:
 
--   Elements that are direct children of the diagram: element transforms are in diagram space
+-   Elements that are direct children of the figure: element transforms are in figure space
 -   Elements that are direct children of a collection: element transforms are in local space (the space of the parent colleciton)
 -   Vertex definitions in element primitives: vertex space
 
 For example, a square might be defined in vertex space as a square with length 1, centered around the origin.
 
-The transform of the diagram element primitive that controls the square will move the square in _local space_ - the space relative to all other elements that are the children of the same parent collection.
+The transform of the figure element primitive that controls the square will move the square in _local space_ - the space relative to all other elements that are the children of the same parent collection.
 
-If the parent collection's parent is the diagram itself, then its transform will move the colleciton in diagram space.
+If the parent collection's parent is the figure itself, then its transform will move the colleciton in figure space.
 
-Converting between spaces is relatively straight forward. All diagram elements have methods to find their position or bounds in _diagram_, _local_ or _vertex_ space. The diagram has transforms that allow conversion between _diagram_, _GL_ and _pixel_ spaces.
+Converting between spaces is relatively straight forward. All figure elements have methods to find their position or bounds in _figure_, _local_ or _vertex_ space. The figure has transforms that allow conversion between _figure_, _GL_ and _pixel_ spaces.
 
-Where this is useful is if two primitives have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target element position to _diagram space_, and then to the _local space_ of the element to move.
+Where this is useful is if two primitives have different parents, and you want to move one to be in the same position as the other. To do this you would convert the target element position to _figure space_, and then to the _local space_ of the element to move.
 
 #### Drawing
 
-When it is time to draw the scene, the diagram will pass an initial transform to the first element in the hierarchy. In the example above, the "Labeled Line" collection. This transform will include any translations and scaling needed to convert from _diagram_ space to _GL_ space for actual rendering.
+When it is time to draw the scene, the figure will pass an initial transform to the first element in the hierarchy. In the example above, the "Labeled Line" collection. This transform will include any translations and scaling needed to convert from _figure_ space to _GL_ space for actual rendering.
 
 The "Labeled Line" collection will then cascade this transform with it's own rotation and translation transform, and pass this to its children, the "Label" and "Line" primitives.
 
@@ -625,8 +625,8 @@ Finally, let's see the code for the example above. Two files, `index.html` and `
 
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [0, 0, 6, 4 ]});
-diagram.addElement(
+const figure = new Fig.Figure({ limits: [0, 0, 6, 4 ]});
+figure.addElement(
   {
     name: 'labeledLine',
     method: 'collection',
@@ -665,35 +665,35 @@ diagram.addElement(
     },
   },
 );
-diagram.elements.isTouchable = true;
+figure.elements.isTouchable = true;
 ```
 
 #### Using FigureOne
 
 The example above shows how a figure can be defined with simple javascript objects, able to be encoded simply in JSON. This means complex figures or modules can be shared and reused easily.
 
-For many uses, it is fine to fully define a diagram and all its elements before a user interacts with it.
+For many uses, it is fine to fully define a figure and all its elements before a user interacts with it.
 
-Diagrams can also be defined more dynamically, such as in the example below which has exactly the same function as the example above.
+Figures can also be defined more dynamically, such as in the example below which has exactly the same function as the example above.
 
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [0, 0, 6, 4 ]});
+const figure = new Fig.Figure({ limits: [0, 0, 6, 4 ]});
 
-const label = diagram.create.text({
+const label = figure.create.text({
   text: 'Line 1',
   position: [1, 0.1],
   font: { color: [0, 0, 1, 1] },
   xAlign: 'center',
 });
-const line = diagram.create.line({
+const line = figure.create.line({
   p1: [0, 0],
   p2: [2, 0],
   width: 0.01,
   color: [0, 0, 1, 1],
 });
-const labeledLine = diagram.create.collection({});
-diagram.elements.add('labeledLine', labeledLine);
+const labeledLine = figure.create.collection({});
+figure.elements.add('labeledLine', labeledLine);
 labeledLine.add('line', line);
 labeledLine.add('label', label);
 labeledLine.setPosition(3, 2);
@@ -703,46 +703,46 @@ labeledLine.setMovable();
 ```
 
 
-## Diagram
+## Figure
 
 
 
 
-## Diagram
+## Figure
 
-Class to create a diagram.
+Class to create a figure.
 
-By default, a diagram will attach a WebGL canvas and Context2D
+By default, a figure will attach a WebGL canvas and Context2D
 canvas to the html `div` element with id `"figureOneContainer"`.
 
 To attach to a different `div`, use the `htmlId` property in the class
 constructor.
 
-The diagram manages all drawing elements, rendering the drawing elements
+The figure manages all drawing elements, rendering the drawing elements
 on browser animation frames and listens for guestures from the user.
 
-The diagram also has a recorder, allowing to record and playback states,
+The figure also has a recorder, allowing to record and playback states,
 and gestures.
 
-If a diagram is paused, then all drawing element animations will
+If a figure is paused, then all drawing element animations will
 also be paused.
 
 It also has a number of convenience functions for create drawing elements
 already attached to the drawing canvases, and useful transforms for
-converting between the different spaces (e.g. pixel, GL, diagram).
+converting between the different spaces (e.g. pixel, GL, figure).
 
 ### Parameters
 
--   `options` **[OBJ_Diagram][1043]**  (optional, default `{}`)
+-   `options` **[OBJ_Figure][1043]**  (optional, default `{}`)
 
 ### Properties
 
--   `create` **[DiagramPrimitives][1044]** create elements with this
+-   `create` **[FigurePrimitives][1044]** create elements with this
 
 ### Examples
 
 ```javascript
-// Simple html and javascript example to create a diagram, and add a
+// Simple html and javascript example to create a figure, and add a
 // hexagon.
 //
 // For additional examples, see https://github.com/airladon/FigureOne
@@ -761,8 +761,8 @@ converting between the different spaces (e.g. pixel, GL, diagram).
 </html>
 
 // index.js
-const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
-diagram.addElement(
+const figure = new Fig.Figure({ limits: [-1, -1, 2, 2 ]});
+figure.addElement(
   {
     name: 'p',
     method: 'polygon',
@@ -773,24 +773,24 @@ diagram.addElement(
     },
   },
 );
-diagram.initialize();
+figure.initialize();
 ```
 
 ```javascript
 // Alternately, an element can be added programatically
 // index.js
-const diagram = new Fig.Diagram({ limits: [-1, -1, 2, 2 ]});
-const hex = diagram.create.polygon({
+const figure = new Fig.Figure({ limits: [-1, -1, 2, 2 ]});
+const hex = figure.create.polygon({
   radius: 0.5,
   fill: true,
   sides: 6,
 });
-diagram.add('hexagon', hex);
+figure.add('hexagon', hex);
 ```
 
 ### spaceTransforms
 
-Useful transforms between spaces at the diagram level and above.
+Useful transforms between spaces at the figure level and above.
 
 Type: [OBJ_SpaceTransforms][1045]
 
@@ -800,39 +800,39 @@ Type: [OBJ_SpaceTransforms][1045]
 
 ### add
 
-Add a [DiagramElement][32] to the diagram with some `name`.
+Add a [FigureElement][32] to the figure with some `name`.
 
 #### Parameters
 
 -   `name` **[string][1046]** 
--   `diagramElement` **([DiagramElementPrimitive][1047] \| [DiagramElementCollection][1048])** 
+-   `figureElement` **([FigureElementPrimitive][1047] \| [FigureElementCollection][1048])** 
 
 #### Examples
 
 ```javascript
-const hex = diagram.create.polygon({
+const hex = figure.create.polygon({
   radius: 0.5,
   fill: true,
   sides: 6,
 });
-diagram.add('hexagon', hex);
+figure.add('hexagon', hex);
 ```
 
 ### addElements
 
-Add elements from element definitions to the diagram.
+Add elements from element definitions to the figure.
 
 #### Parameters
 
 -   `elementsToAdd` **[Array][1049]&lt;TypeAddElementObject>** array of element definitions
--   `collection` **[DiagramElementCollection][1048]** the
+-   `collection` **[FigureElementCollection][1048]** the
     collection to add elements to (optional, default `this.elements`)
 -   `addElementsKey` **[string][1046]** key to add elements (optional, default `'addElements'`)
 
 #### Examples
 
 ```javascript
-diagram.addElements([
+figure.addElements([
   {
     name: 'hex',
     method: 'polygon',
@@ -858,20 +858,20 @@ diagram.addElements([
 
 ### addElement
 
-Add an element from an element definitions to the diagram.
+Add an element from an element definitions to the figure.
 
 #### Parameters
 
 -   `elementDefinition` **TypeAddElementObject** array of element definitions
--   `rootCollection` **[DiagramElementCollection][1048]**  (optional, default `this.elements`)
+-   `rootCollection` **[FigureElementCollection][1048]**  (optional, default `this.elements`)
 -   `addElementsKey` **[string][1046]** key to add elements (optional, default `'addElements'`)
--   `collection` **[DiagramElementCollection][1048]** the
+-   `collection` **[FigureElementCollection][1048]** the
     collection to add elements to (optional, default `this.elements`)
 
 #### Examples
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'hex',
   method: 'polygon',
   options: {
@@ -885,7 +885,7 @@ diagram.addElement({
 
 ### getElement
 
--   **See: <a href="#diagramelementcollectiongetelement">element.getElement</a>
+-   **See: <a href="#figureelementcollectiongetelement">element.getElement</a>
     **
 
 Get element from element name or path.
@@ -897,8 +897,8 @@ Get element from element name or path.
 #### Examples
 
 ```javascript
-// Get a diagram element and rotate it
-diagram.addElements([
+// Get a figure element and rotate it
+figure.addElements([
   {
     name: 'hex',
     method: 'polygon',
@@ -921,7 +921,7 @@ diagram.addElements([
   },
 ]);
 
-const hex = diagram.getElement('hex');
+const hex = figure.getElement('hex');
 hex.animations.new()
   .rotation({ target: Math.PI, duration: 2, delay: 1 })
   .start();
@@ -929,9 +929,9 @@ hex.animations.new()
 
 ### setTouchable
 
-Set the diagram to be touchable.
+Set the figure to be touchable.
 
-Using <a href="#diagramelementsettouchable">element.setTouchable</a> will
+Using <a href="#figureelementsettouchable">element.setTouchable</a> will
 automatically set this.
 
 #### Parameters
@@ -948,7 +948,7 @@ Get remaining animation durations of running animations
 
 ### stop
 
-Stop all animations, movement and pulses in diagram.
+Stop all animations, movement and pulses in figure.
 
 #### Parameters
 
@@ -956,20 +956,20 @@ Stop all animations, movement and pulses in diagram.
 
 ### animateNextFrame
 
-Force diagram to draw on next available animation frame.
+Force figure to draw on next available animation frame.
 
 #### Parameters
 
 -   `draw` **[boolean][1050]**  (optional, default `true`)
 -   `fromWhere` **[string][1046]**  (optional, default `''`)
 
-## OBJ_Diagram
+## OBJ_Figure
 
-Diagram options object
+Figure options object
 
 ### Properties
 
--   `htmlId` **[string][1046]?** HTML `div` tag `id` to tie diagram to (`"figureOneContainer"`)
+-   `htmlId` **[string][1046]?** HTML `div` tag `id` to tie figure to (`"figureOneContainer"`)
 -   `limits` **[TypeParsableRect][1052]?** limits (bottom left
      corner at (-1, -1), width 2, height 2)
 -   `color` **[TypeColor][1053]?** default color (`[0, 0, 0, 1]`)
@@ -978,18 +978,18 @@ Diagram options object
 -   `lineWidth` **[number][1051]?** default line width
 -   `length` **[number][1051]?** default length to use for shapes
 
-## Diagram Elements
+## Figure Elements
 
 
 
 
-## DiagramElement
+## FigureElement
 
-Diagram Element base class
+Figure Element base class
 
-The set of properties and methods shared by all diagram elements
+The set of properties and methods shared by all figure elements
 
-A diagram element has several color related properties. Color is
+A figure element has several color related properties. Color is
 defined as an RGBA array with values between 0 and 1. The alpha
 channel defines the transparency or opacity of the color where
 1 is fully opaque and 0 is fully transparent.
@@ -1012,8 +1012,8 @@ set directly as it will be overwritten by dissolve animations.
 ### Parameters
 
 -   `transform` **[Transform][1055]**  (optional, default `new Transform()`)
--   `diagramLimitsOrDiagram` **([Diagram][1056] \| [Rect][1057])**  (optional, default `new Rect(-1,-1,2,2)`)
--   `parent` **([DiagramElement][1058] | null)**  (optional, default `null`)
+-   `figureLimitsOrFigure` **([Figure][1056] \| [Rect][1057])**  (optional, default `new Rect(-1,-1,2,2)`)
+-   `parent` **([FigureElement][1058] | null)**  (optional, default `null`)
 
 ### Properties
 
@@ -1023,9 +1023,9 @@ set directly as it will be overwritten by dissolve animations.
 -   `transform` **[Transform][1055]** transform to apply element
 -   `lastDrawTransform` **[Transform][1055]** transform last used for drawing -
     includes cascade or all parent transforms
--   `parent` **([DiagramElement][1058] | null)** parent diagram element - `null` if
-    at top level of diagram
--   `diagram` **[Diagram][1056]** diagram element is attached to
+-   `parent` **([FigureElement][1058] | null)** parent figure element - `null` if
+    at top level of figure
+-   `figure` **[Figure][1056]** figure element is attached to
 -   `isTouchable` **[boolean][1050]** must be `true` to move or execute `onClick`
 -   `isMovable` **[boolean][1050]** must be `true` to move
 -   `color` **\[[number][1051], [number][1051], [number][1051], [number][1051]]** element's current
@@ -1034,7 +1034,7 @@ set directly as it will be overwritten by dissolve animations.
     dimming element
 -   `opacity` **[number][1051]** number between 0 and 1 that is multiplied with
     `color` alpha channel to get final opacity
--   `move` **[DiagramElementMove][1059]** movement parameters
+-   `move` **[FigureElementMove][1059]** movement parameters
 -   `scenarios` **[Scenarios][1060]** scenario presets
 -   `animations` **[AnimationManager][1061]** element animation manager
 -   `subscriptions` **SubscriptionManager** subscription manager for
@@ -1108,9 +1108,9 @@ Set element color to `defaultColor`
 
 ### getPath
 
-Return diagram path of element
+Return figure path of element
 
-Returns **[string][1046]** path of element relative to diagram
+Returns **[string][1046]** path of element relative to figure
 
 ### pulse
 
@@ -1162,7 +1162,7 @@ element.
 
 #### Parameters
 
--   `space` **(`"local"` \| `"diagram"` \| `"gl"` \| `"draw"`)** the space to return
+-   `space` **(`"local"` \| `"figure"` \| `"gl"` \| `"draw"`)** the space to return
     the position in (optional, default `'local'`)
 -   `xAlign` **(`"center"` \| `"left"` \| `"right"` \| `"location"` \| [number][1051])** horizontal alignment of position. Use a `number` to define the horizontal
     position in percentage width from the left. (optional, default `'location'`)
@@ -1226,13 +1226,13 @@ Returns **[boolean][1050]** `true` if element is moving
 
 Returns **[boolean][1050]** `true` if element is animating
 
-## DiagramElementPrimitive
+## FigureElementPrimitive
 
-**Extends DiagramElement**
+**Extends FigureElement**
 
-Primitive diagram element
+Primitive figure element
 
-A primitive diagram element is one that handles an object (`drawingObject`)
+A primitive figure element is one that handles an object (`drawingObject`)
 that draws to the screen. This object may be a [VertexObject][1065], a
 [TextObject][1066] or a [{HTMLObject][1067]}.
 
@@ -1242,8 +1242,8 @@ that draws to the screen. This object may be a [VertexObject][1065], a
     to the screen or manages a HTML element
 -   `transform` **[Transform][1055]** initial transform to set (optional, default `new Transform()`)
 -   `color` **\[[number][1051], [number][1051], [number][1051], [number][1051]]** color to set (optional, default `[0.5,0.5,0.5,1]`)
--   `diagramLimits` **[Rect][1057]** limits of diagram (optional, default `new Rect(-1,-1,2,2)`)
--   `parent` **([DiagramElement][1058] | null)** parent element (optional, default `null`)
+-   `figureLimits` **[Rect][1057]** limits of figure (optional, default `new Rect(-1,-1,2,2)`)
+-   `parent` **([FigureElement][1058] | null)** parent element (optional, default `null`)
 
 ### setAngleToDraw
 
@@ -1257,20 +1257,20 @@ An angle of -1 represents the maximum angle allowed by the primitive.
 
 -   `angle` **[number][1051]** Angle to draw (optional, default `-1`)
 
-## DiagramElementCollection
+## FigureElementCollection
 
-**Extends DiagramElement**
+**Extends FigureElement**
 
-Collection diagram element
+Collection figure element
 
-A collection manages a number of children [DiagramElements][1041], be they
+A collection manages a number of children [FigureElements][1041], be they
 primitives or collections.
 
 A collection's transform will be passed onto all the children elements.
 
 ### Parameters
 
--   `options` **[OBJ_DiagramElementCollection][1069]**  (optional, default `{}`)
+-   `options` **[OBJ_FigureElementCollection][1069]**  (optional, default `{}`)
 
 ### toFront
 
@@ -1279,8 +1279,8 @@ of the drawn collection. Later elements in the array will be further forward.
 
 #### Parameters
 
--   `elementsIn` **([Array][1049]&lt;([string][1046] \| [DiagramElement][1058])> | [string][1046] \| [DiagramElement][1058])** 
--   `elements` **([Array][1049]&lt;([string][1046] \| [DiagramElement][1058])> | [string][1046] \| [DiagramElement][1058])** 
+-   `elementsIn` **([Array][1049]&lt;([string][1046] \| [FigureElement][1058])> | [string][1046] \| [FigureElement][1058])** 
+-   `elements` **([Array][1049]&lt;([string][1046] \| [FigureElement][1058])> | [string][1046] \| [FigureElement][1058])** 
 
 ### toBack
 
@@ -1290,17 +1290,17 @@ will be drawn further back.
 
 #### Parameters
 
--   `elementsIn` **([Array][1049]&lt;([string][1046] \| [DiagramElement][1058])> | [string][1046] \| [DiagramElement][1058])** 
--   `elements` **([Array][1049]&lt;([string][1046] \| [DiagramElement][1058])> | [string][1046] \| [DiagramElement][1058])** 
+-   `elementsIn` **([Array][1049]&lt;([string][1046] \| [FigureElement][1058])> | [string][1046] \| [FigureElement][1058])** 
+-   `elements` **([Array][1049]&lt;([string][1046] \| [FigureElement][1058])> | [string][1046] \| [FigureElement][1058])** 
 
 ### add
 
-Add a diagram element to the collection.
+Add a figure element to the collection.
 
 #### Parameters
 
 -   `name` **[string][1046]** reference name of element
--   `element` **[DiagramElement][1058]** element to add
+-   `element` **[FigureElement][1058]** element to add
 -   `index` **[number][1051]** index to add in the `drawOrder` where -1 appends the
     element to the end of the draw order, (optional, default `-1`)
 
@@ -1313,9 +1313,9 @@ has a child primitive 'b', then the path would be: 'a.b'.
 
 #### Parameters
 
--   `elementPath` **(null | [string][1046] \| [DiagramElement][1058])**  (optional, default `null`)
+-   `elementPath` **(null | [string][1046] \| [FigureElement][1058])**  (optional, default `null`)
 
-Returns **([DiagramElement][1058] | null)** element at path. If `elementPath`
+Returns **([FigureElement][1058] | null)** element at path. If `elementPath`
 is `null`, then this element is returned. If `elementPath` is invalid
 then `null` is returned.
 
@@ -1327,14 +1327,14 @@ array of paths.
 
 #### Parameters
 
--   `children` **[Array][1049]&lt;([string][1046] \| [DiagramElement][1058])>** 
+-   `children` **[Array][1049]&lt;([string][1046] \| [FigureElement][1058])>** 
 
-Returns **[Array][1049]&lt;[DiagramElement][1058]>** Array of
+Returns **[Array][1049]&lt;[FigureElement][1058]>** Array of
 [getElement][1070] results
 
 ## Geometric Classes
 
-To define many shapes, geometric primitives (not to be confused with diagram element primitives) such as points and lines need to be used.
+To define many shapes, geometric primitives (not to be confused with figure element primitives) such as points and lines need to be used.
 
 FigureOne includes classes that define a:
 
@@ -2647,7 +2647,7 @@ identity transforms.
 
 ## Shapes
 
-Each [DiagramElementPrimitive][69] element manages drawing a shape, drawing text, or manipulating a HTML element.
+Each [FigureElementPrimitive][69] element manages drawing a shape, drawing text, or manipulating a HTML element.
 
 FigureOne's built-in shapes are drawn using WebGL, which uses triangles to create different shapes. To draw a shape, you define the verticies of the triangles. Every drawing frame (animation or screen refresh), the color of the vertices and the transform that moves them around is used to render the final shape to the screen.
 
@@ -2672,29 +2672,29 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 ```
 
 ### Quick Start
 
-Let's start by creating a [DiagramElementPrimitive][69] element that draws a polygon and adding it to the diagram.
+Let's start by creating a [FigureElementPrimitive][69] element that draws a polygon and adding it to the figure.
 
 ```javascript
-// create the `DiagramElementPrimitive`
-const p = diagram.create.polygon({
+// create the `FigureElementPrimitive`
+const p = figure.create.polygon({
   radius: 0.2,
   fill: true,
   color: [0, 0, 1, 1],
   sides: 6,
 });
-// add it to the diagram
-diagram.elements.add('p', p);
+// add it to the figure
+figure.elements.add('p', p);
 ```
 
-Another way to create and add the same shape to the diagram is to use the `Diagram.addElement` or `Diagram.addElements` method:
+Another way to create and add the same shape to the figure is to use the `Figure.addElement` or `Figure.addElements` method:
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'p',
   method: 'polygon',
   options: {
@@ -2706,13 +2706,13 @@ diagram.addElement({
 });
 ```
 
-Both ways create the same element. The first way is more programatic and especially useful when extending shape creation classes. In comparison, the second way can allow you to layout an entire diagram in a single object that is compatible with JSON. This means it is relatively straight forward to share diagram elements between projects. When using code folding in an IDE, the second way also makes it easy to work with diagrams with many elements.
+Both ways create the same element. The first way is more programatic and especially useful when extending shape creation classes. In comparison, the second way can allow you to layout an entire figure in a single object that is compatible with JSON. This means it is relatively straight forward to share figure elements between projects. When using code folding in an IDE, the second way also makes it easy to work with figures with many elements.
 
 For most of the API reference, the second way will be used.
 
 ### Built-in Shapes
 
-There are several built in shape methods that can be used to create complex diagrams:
+There are several built in shape methods that can be used to create complex figures:
 
 -   <a href="#obj_line">line</a>
 -   <a href="#obj_polyline">polyline</a>
@@ -2736,7 +2736,7 @@ To draw this shape, you would need to draw the two triangles, which means drawin
 -   1, 3, 4
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'rectangle',
   method: 'generic',
   options: {
@@ -2760,7 +2760,7 @@ A strip starts with one triangle, and then every subsequent vertex will create a
 Therefore, to draw the same rectangle we would draw the first triangle with the vertices 2, 1 and then 3. Then 1 and 3 could be used with 4 to create the second triangle.
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'rectangle',
   method: 'generic',
   options: {
@@ -2786,7 +2786,7 @@ A fan starts with one point. The next two points create the first triangle, and 
 Therefore, to draw the same rectangle we would draw the first point 1, then complete the first triangle with 2 and 3. Then we would draw point 4 to make the second triangle with points 1 and 3.
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'rectangle',
   method: 'generic',
   options: {
@@ -2817,7 +2817,7 @@ This is not useful for drawing filled shapes, but is useful for drawing thin out
 For instance, to draw a rectangle outline:
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'rectangle',
   method: 'generic',
   options: {
@@ -2841,7 +2841,7 @@ diagram.addElement({
 
 ![][1077]
 
-Options object for a [DiagramElementPrimitive][69] of a generic shape
+Options object for a [FigureElementPrimitive][69] of a generic shape
 
 `points` will define either triangles or lines which combine
 to make the shape.
@@ -2890,7 +2890,7 @@ or areas where touching has no effect.
 
 ```javascript
 // Square and triangle
-diagram.addElement({
+figure.addElement({
   name: 'squareAndTri',
   method: 'generic',
   options: {
@@ -2905,7 +2905,7 @@ diagram.addElement({
 
 ```javascript
 // rhombus with larger touch borders
-diagram.addElement({
+figure.addElement({
   name: 'rhombus',
   method: 'generic',
   options: {
@@ -2921,16 +2921,16 @@ diagram.addElement({
     isTouchable: true,
     isMovable: true,
     move: {
-      bounds: 'diagram',
+      bounds: 'figure',
     },
   },
 });
-diagram.setTouchable();
+figure.setTouchable();
 ```
 
 ```javascript
 // Grid of triangles
-diagram.addElement({
+figure.addElement({
   name: 'gridOfTris',
   method: 'generic',
   options: {
@@ -3017,7 +3017,7 @@ The line can have arrows at one or both ends using the `arrow` property.
 
 ```javascript
 // Simple line defined by two points
-diagram.addElement({
+figure.addElement({
   name: 'l',
   method: 'line',
   options: {
@@ -3030,7 +3030,7 @@ diagram.addElement({
 
 ```javascript
 // Dashed line defined by a point, a length and an angle
-diagram.addElement({
+figure.addElement({
   name: 'l',
   method: 'line',
   options: {
@@ -3045,7 +3045,7 @@ diagram.addElement({
 
 ```javascript
 // Line with two different arrows on ends
-diagram.addElement({
+figure.addElement({
   name: 'l',
   method: 'line',
   options: {
@@ -3164,7 +3164,7 @@ of the line.
 
 ```javascript
 // Line
-diagram.addElement(
+figure.addElement(
   {
     name: 'p',
     method: 'polyline',
@@ -3178,7 +3178,7 @@ diagram.addElement(
 
 ```javascript
 // Square with rounded corners and dot-dash line
-diagram.addElement(
+figure.addElement(
   {
     name: 'p',
     method: 'polyline',
@@ -3196,7 +3196,7 @@ diagram.addElement(
 
 ```javascript
 // Corners only of a triangle
-diagram.addElement(
+figure.addElement(
  {
    name: 'p',
    method: 'polyline',
@@ -3213,7 +3213,7 @@ diagram.addElement(
 
 ```javascript
 // Zig zag with arrows
-diagram.addElement({
+figure.addElement({
   name: 'arrowedLine',
   method: 'polyline',
   options: {
@@ -3306,7 +3306,7 @@ determine the dimension of the arrow (`length` and `width` are ignored).
 
 ```javascript
 // Triangle arrow with tail
-diagram.addElement({
+figure.addElement({
   name: 'a',
   method: 'arrow',
   options: {
@@ -3319,7 +3319,7 @@ diagram.addElement({
 
 ```javascript
 // Barb arrow with 0 tail
-diagram.addElement({
+figure.addElement({
   name: 'a',
   method: 'arrow',
   options: {
@@ -3345,7 +3345,7 @@ for (let i = 0; i < 9; i += 1) {
 }
 
 // Create arrow and copy to transforms
-diagram.addElement({
+figure.addElement({
   name: 'a',
   method: 'arrow',
   options: {
@@ -3428,7 +3428,7 @@ Once a triangle is defined and positioned in vertex space, it can then be
 copied (`copy`) if more than one triangle is desired.
 
 The triangle(s) can then be positioned (`position`) or transformed
-(`transform`) in the DiagramElementPrimitive local space.
+(`transform`) in the FigureElementPrimitive local space.
 
 Triangles can either be a solid fill, texture fill or outline. When `line`
 is not defined, the triangle will be filled.
@@ -3463,7 +3463,7 @@ is not defined, the triangle will be filled.
 
 ```javascript
 // Right angle triangle
-diagram.addElement({
+figure.addElement({
   name: 't',
   method: 'triangle',
   options: {
@@ -3476,7 +3476,7 @@ diagram.addElement({
 
 ```javascript
 // 30-60-90 triangle with dashed line
-const t = diagram.create.triangle({
+const t = figure.create.triangle({
   options: {
     ASA: [Math.PI / 2, 1, Math.PI / 6],
     line: {
@@ -3485,12 +3485,12 @@ const t = diagram.create.triangle({
     },
   },
 });
-diagram.elements.add('t', t);
+figure.elements.add('t', t);
 ```
 
 ```javascript
 // Star from 4 equilateral triangles
-diagram.addElement({
+figure.addElement({
   name: 'star',
   method: 'triangle',
   options: {
@@ -3546,7 +3546,7 @@ Rectangle shape options object
 
 ```javascript
 // Filled rectangle
-diagram.addElement({
+figure.addElement({
   name: 'r',
   method: 'rectangle',
   options: {
@@ -3558,7 +3558,7 @@ diagram.addElement({
 
 ```javascript
 // Corners with radius and dashed line
-diagram.addElement({
+figure.addElement({
   name: 'r',
   method: 'rectangle',
   options: {
@@ -3578,7 +3578,7 @@ diagram.addElement({
 
 ```javascript
 // Rectangle copies rotated
-diagram.addElement({
+figure.addElement({
   name: 'r',
   method: 'rectangle',
   options: {
@@ -3637,7 +3637,7 @@ Ellipse shape options object
 
 ```javascript
 // Filled ellipse
-diagram.addElement({
+figure.addElement({
   name: 'e',
   method: 'ellipse',
   options: {
@@ -3650,7 +3650,7 @@ diagram.addElement({
 
 ```javascript
 // Dashed line circle
-diagram.addElement({
+figure.addElement({
   name: 'e',
   method: 'ellipse',
   options: {
@@ -3667,7 +3667,7 @@ diagram.addElement({
 
 ```javascript
 // Ellipse grid
-diagram.addElement({
+figure.addElement({
   name: 'e',
   method: 'ellipse',
   options: {
@@ -3730,7 +3730,7 @@ Polygon or partial polygon shape options object
 
 ```javascript
 // Simple filled hexagon
-diagram.addElement({
+figure.addElement({
   name: 'hexagon',
   method: 'polygon',
   options: {
@@ -3742,7 +3742,7 @@ diagram.addElement({
 
 ```javascript
 // Circle from dashed line
-const circ = diagram.create.polygon({
+const circ = figure.create.polygon({
   sides: 100,
   radius: 0.5,
   line: {
@@ -3750,12 +3750,12 @@ const circ = diagram.create.polygon({
     dash: [0.1, 0.03 ],
   },
 });
-diagram.elements.add('circle', circ);
+figure.elements.add('circle', circ);
 ```
 
 ```javascript
 // Half octagon rotated
-diagram.addElement({
+figure.addElement({
   name: 'halfOctagon',
   method: 'polygon',
   options: {
@@ -3813,7 +3813,7 @@ Star options object
 
 ```javascript
 // Simple 5 pointed star
-diagram.addElement({
+figure.addElement({
   name: 's',
   method: 'star',
   options: {
@@ -3825,7 +3825,7 @@ diagram.addElement({
 
 ```javascript
 // 7 pointed dashed line star
-diagram.addElement({
+figure.addElement({
   name: 's',
   method: 'star',
   options: {
@@ -3842,7 +3842,7 @@ diagram.addElement({
 
 ```javascript
 // Star surrounded by stars
-diagram.addElement({
+figure.addElement({
   name: 's',
   method: 'star',
   options: {
@@ -3918,7 +3918,7 @@ The line width and style is defined with `line`.
 
 ```javascript
 // Grid defined by xStep and yStep
-diagram.addElement({
+figure.addElement({
   name: 'g',
   method: 'grid',
   options: {
@@ -3934,7 +3934,7 @@ diagram.addElement({
 
 ```javascript
 // Grid defined by xNum and yNum with dashed lines
-const grid = diagram.create.grid({
+const grid = figure.create.grid({
   bounds: [-0.5, -0.5, 1, 1],
   xNum: 4,
   yNum: 4,
@@ -3943,12 +3943,12 @@ const grid = diagram.create.grid({
     dash: [0.1, 0.02],
   },
 });
-diagram.elements.add('g', grid);
+figure.elements.add('g', grid);
 ```
 
 ```javascript
 // Grid of grids
-diagram.addElement({
+figure.addElement({
   name: 'g',
   method: 'grid',
   options: {
@@ -3970,12 +3970,12 @@ diagram.addElement({
 
 FigureOne provides a number of collections shapes that combine simple shapes into more interesting objects.
 
-Collections shapes are [DiagramElementCollection][73]s that manage a number of [DiagramElementPrimitives][1097], and may provide methods to dynamically update and change the shapes, additional animation steps specific to
+Collections shapes are [FigureElementCollection][73]s that manage a number of [FigureElementPrimitives][1097], and may provide methods to dynamically update and change the shapes, additional animation steps specific to
 
 
 ## CollectionsLine
 
-**Extends DiagramElementCollection**
+**Extends FigureElementCollection**
 
 -   **See: See [OBJ_LengthAnimationStep][842] for angle animation step options.
 
@@ -3986,7 +3986,7 @@ Collections shapes are [DiagramElementCollection][73]s that manage a number of [
     <a href="#drawing-boilerplate">boilerplate</a>.
     **
 
-[DiagramElementCollection][73] representing a line.
+[FigureElementCollection][73] representing a line.
 
 <p class="inline_gif"><img src="./assets1/advline_pulse.gif" class="inline_gif_image"></p>
 
@@ -3995,7 +3995,7 @@ Collections shapes are [DiagramElementCollection][73]s that manage a number of [
 <p class="inline_gif"><img src="./assets1/advline_multimove.gif" class="inline_gif_image"></p>
 
 This object defines a convient and powerful line
-[DiagramElementCollection][73] that includes a solid or dashed line,
+[FigureElementCollection][73] that includes a solid or dashed line,
 arrows, a label annotation that can self align with line orientation, and
 some methods to make it convient to use dynamically.
 
@@ -4004,7 +4004,7 @@ See [COL_Line][340] for the options that can be used when creating the line.
 The object contains a two additional animation steps. `length`
 animates changing the line length, and `pulseWidth` animates the
 `pulseWidth` method. The animation steps are available in
-the animation manager ([DiagramElement][32].animations),
+the animation manager ([FigureElement][32].animations),
 and in the animation builder
 (<a href="#animationmanagernew">animations.new</a>
 and <a href="#animationmanagerbuilder">animations.builder</a>).
@@ -4017,14 +4017,14 @@ Some of the useful methods included in an collections line are:
     a single `length` animation
      step
 -   <a href="#collectionslinesetmovable">grow</a> - overrides
-     <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
+     <a href="#figureelementsetmovable">FigureElement.setMovable</a> and
      allowing for more complex move options.
 
 ### Examples
 
 ```javascript
 // Pulse an annotated line
-diagram.addElement({
+figure.addElement({
   name: 'l',
   method: 'collections.line',
   options: {
@@ -4038,12 +4038,12 @@ diagram.addElement({
   },
 });
 
-diagram.elements._l.pulseWidth({ duration: 2 });
+figure.elements._l.pulseWidth({ duration: 2 });
 ```
 
 ```javascript
 // Animate growing a line while showing it's length
-diagram.addElement({
+figure.addElement({
   name: 'l',
   method: 'collections.line',
   options: {
@@ -4060,7 +4060,7 @@ diagram.addElement({
   },
 });
 
-const l = diagram.elements._l;
+const l = figure.elements._l;
 l.animations.new()
   .length({ start: 0.5, target: 2, duration: 2 })
   .start();
@@ -4068,7 +4068,7 @@ l.animations.new()
 
 ```javascript
 // Example showing dashed line with an equation label that stays horizontal
-const l = diagram.collections.line({
+const l = figure.collections.line({
   p1: [0, 0],
   p2: [1.4, 0],
   align: 'start',
@@ -4087,7 +4087,7 @@ const l = diagram.collections.line({
   },
   dash: [0.08, 0.02, 0.02, 0.02],
 });
-diagram.add('l', l);
+figure.add('l', l);
 l.setMovable({ type: 'centerTranslateEndRotation'})
 l.setAutoUpdate();
 ```
@@ -4231,7 +4231,7 @@ Returns **[Point][1064]**
 Collections Line options object
 
 The Collections Line is a convient and powerful line
-[DiagramElementCollection][73] that includes the line, arrows, a label
+[FigureElementCollection][73] that includes the line, arrows, a label
 annotation and some methods to make it convient to use dynamically.
 
 A line can either be defined by its two end points (`p1`, `p2`), or a
@@ -4288,7 +4288,7 @@ Default pulse values can then be specified with the `pulse` property.
 
 ## CollectionsAngle
 
-**Extends DiagramElementCollection**
+**Extends FigureElementCollection**
 
 -   **See: See [OBJ_AngleAnimationStep][832] for angle animation step options.
 
@@ -4299,7 +4299,7 @@ Default pulse values can then be specified with the `pulse` property.
     <a href="#drawing-boilerplate">boilerplate</a>.
     **
 
-[DiagramElementCollection][73] representing an angle.
+[FigureElementCollection][73] representing an angle.
 
 ![][1103]
 
@@ -4308,7 +4308,7 @@ Default pulse values can then be specified with the `pulse` property.
 <p class="inline_gif"><img src="./assets1/advangle_move.gif" class="inline_gif_image"></p>
 
 This object defines a convient and powerful angle
-[DiagramElementCollection][73] that includes one or more curve annotations,
+[FigureElementCollection][73] that includes one or more curve annotations,
 arrows, a label annotation that can self align and
 some methods to make it convient to use dynamically.
 
@@ -4318,7 +4318,7 @@ angle.
 The object contains two additional animation steps `angle` and `pulseAngle`
 that animate a change in angle, and animate a pulsing of the angle
 respectively. The animation steps are available in
-the animation manager ([DiagramElement][32].animations),
+the animation manager ([FigureElement][32].animations),
 and in the animation builder
 (<a href="#animationmanagernew">animations.new</a>
 and <a href="#animationmanagerbuilder">animations.builder</a>).
@@ -4328,14 +4328,14 @@ Some of the useful methods included in an collections angle are:
 -   <a href="#collectionsanglepulseangle">pulseangle</a> - customize pulsing the
     angle without
 -   <a href="#collectionsanglesetmovable">setMovable</a> - overrides
-     <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
+     <a href="#figureelementsetmovable">FigureElement.setMovable</a> and
      allowing for more complex move options.
 
 ### Examples
 
 ```javascript
 // Angle with size label
-diagram.addElement({
+figure.addElement({
   name: 'a',
   method: 'collections.angle',
   options: {
@@ -4354,8 +4354,8 @@ diagram.addElement({
 ```
 
 ```javascript
-// Right angle, created from diagram.collections
-const a = diagram.collections.angle({
+// Right angle, created from figure.collections
+const a = figure.collections.angle({
   angle: Math.PI / 2,
   curve: {
     autoRightAngle: true,
@@ -4366,12 +4366,12 @@ const a = diagram.collections.angle({
     length: 1,
   },
 });
-diagram.add('a', a);
+figure.add('a', a);
 ```
 
 ```javascript
 // Multi colored angle with arrows and an equation label
-diagram.addElement({
+figure.addElement({
   name: 'a',
   method: 'collections.angle',
   options: {
@@ -4405,7 +4405,7 @@ diagram.addElement({
 
 ```javascript
 // Multiple curve angle, without corner
-const a = diagram.collections.angle({
+const a = figure.collections.angle({
   angle: Math.PI / 4,
   curve: {
     num: 3,
@@ -4418,12 +4418,12 @@ const a = diagram.collections.angle({
     offset: 0.05,
   },
 });
-diagram.add('a', a);
+figure.add('a', a);
 ```
 
 ```javascript
 // Change angle animation
-diagram.addElement({
+figure.addElement({
   name: 'a',
   method: 'collections.angle',
   options: {
@@ -4439,14 +4439,14 @@ diagram.addElement({
     },
   }
 });
-diagram.elements._a.animations.new()
+figure.elements._a.animations.new()
   .angle({ start: Math.PI / 4, target: Math.PI / 4 * 3, duration: 3 })
   .start();
 ```
 
 ```javascript
 // Movable angle
-diagram.addElement({
+figure.addElement({
   name: 'a',
   method: 'collections.angle',
   options: {
@@ -4470,7 +4470,7 @@ diagram.addElement({
     },
   }
 });
-diagram.elements._a.setMovable({
+figure.elements._a.setMovable({
   startArm: 'rotation',
   endArm: 'angle',
   movePadRadius: 0.3,
@@ -4560,7 +4560,7 @@ Use this method to enable or disable movability of the line.
 Collections Angle options object
 
 The Collections Angle is a convient and powerful angle
-[DiagramElementCollection][73] that can draw one or several arcs of an
+[FigureElementCollection][73] that can draw one or several arcs of an
 angle annotation, a label, arrows, and the corner of an angle. It also
 includes some methods to make it convient to use dynamically.
 
@@ -4628,13 +4628,13 @@ This options object can define the default values for pulseAngle if desired.
 
 ## CollectionsPolyline
 
-**Extends DiagramElementCollection**
+**Extends FigureElementCollection**
 
 -   **See: To test examples below, append them to the
     <a href="#drawing-boilerplate">boilerplate</a>.
     **
 
-[DiagramElementCollection][73] representing a polyline.
+[FigureElementCollection][73] representing a polyline.
 
 ![][1111]
 
@@ -4643,7 +4643,7 @@ This options object can define the default values for pulseAngle if desired.
 <p class="inline_gif"><img src="./assets1/advpolyline_movetri.gif" class="inline_gif_image"></p>
 
 This object defines a convient and powerful polyline
-[DiagramElementCollection][73] that includes a solid or dashed,
+[FigureElementCollection][73] that includes a solid or dashed,
 open or closed polyline, arrows, angle annotations for polyline corners,
 side annotations for straight lines between points and move pads at polyline
 points to dynamically adjust the polyline.
@@ -4659,7 +4659,7 @@ Available subscriptions:
 
 ```javascript
 // Polyline with angle annotations
-diagram.addElement({
+figure.addElement({
   name: 'p',
   method: 'collections.polyline',
   options: {
@@ -4677,7 +4677,7 @@ diagram.addElement({
 
 ```javascript
 // Triangle with unknown angle
-diagram.addElement({
+figure.addElement({
   name: 'p',
   method: 'collections.polyline',
   options: {
@@ -4702,7 +4702,7 @@ diagram.addElement({
 
 ```javascript
 // Dimensioned square
-diagram.addElement({
+figure.addElement({
   name: 'p',
   method: 'collections.polyline',
   options: {
@@ -4730,7 +4730,7 @@ diagram.addElement({
 
 ```javascript
 // User adjustable polyline
-diagram.addElement({
+figure.addElement({
   name: 'p',
   method: 'collections.polyline',
   options: {
@@ -4747,7 +4747,7 @@ diagram.addElement({
 
 ```javascript
 // Annotations that automatically updates as user changes triangle
-diagram.addElement({
+figure.addElement({
   name: 'p',
   method: 'collections.polyline',
   options: {
@@ -4808,7 +4808,7 @@ Will publish [SUBSCRIPTION_PolylineUpdatePoints][1112] unless
 
 ### setPositionWithoutMoving
 
-The Collections Polyline is a [DiagramElementCollection][73], with a
+The Collections Polyline is a [FigureElementCollection][73], with a
 transform that includes a translation, or position, transform element.
 
 Changing the position element of the transform would normally move
@@ -4823,7 +4823,7 @@ offset that is the opposite new position.
 
 ### setRotationWithoutMoving
 
-The Collections Polyline is a [DiagramElementCollection][73], with a
+The Collections Polyline is a [FigureElementCollection][73], with a
 transform that includes a rotation transform element.
 
 Changing the rotation element of the transform would normally rotate
@@ -4837,7 +4837,7 @@ rotation that is the negative of the `newRotation`.
 
 ### setScaleWithoutMoving
 
-The Collections Polyline is a [DiagramElementCollection][73], with a
+The Collections Polyline is a [FigureElementCollection][73], with a
 transform that includes a scale transform element.
 
 Changing the scale element of the transform would normally scale
@@ -4873,7 +4873,7 @@ Hide all side annotations.
 Collections Polyline options object
 
 The Collections Polyline is a convient and powerful polyline
-[DiagramElementCollection][73] that includes the polyline,
+[FigureElementCollection][73] that includes the polyline,
 angle annotations, side label and arrow annotations, and movable
 pads on each polyline point for the user to adjust dynamically.
 
@@ -4907,7 +4907,7 @@ Type: any
 
 ## CollectionsRectangle
 
-**Extends DiagramElementCollection**
+**Extends FigureElementCollection**
 
 -   **See: See [COL_Rectangle][382] for setup options.
 
@@ -4917,7 +4917,7 @@ Type: any
     <a href="#drawing-boilerplate">boilerplate</a>.
     **
 
-[DiagramElementCollection][73] representing a rectangle.
+[FigureElementCollection][73] representing a rectangle.
 
 ![][1120]
 ![][1121]
@@ -4925,11 +4925,11 @@ Type: any
 <p class="inline_gif"><img src="./assets1/advrectangle.gif" class="inline_gif_image"></p>
 
 This object defines a rectangle
-[DiagramElementCollection][73] that includes a border (line), fill and
-the ability to surround another [DiagramElement][32] with some spacing
+[FigureElementCollection][73] that includes a border (line), fill and
+the ability to surround another [FigureElement][32] with some spacing
 through either the <a href="#collectionsrectanglesurround">surround</a> method
 or the [OBJ_SurroundAnimationStep][889] found in the in
-the animation manager ([DiagramElement][32].animations),
+the animation manager ([FigureElement][32].animations),
 and in the animation builder
 (<a href="#animationmanagernew">animations.new</a>
 and <a href="#animationmanagerbuilder">animations.builder</a>).
@@ -4938,7 +4938,7 @@ and <a href="#animationmanagerbuilder">animations.builder</a>).
 
 ```javascript
 // Simple rectangle
-diagram.addElement({
+figure.addElement({
   name: 'rect',
   method: 'collections.rectangle',
   options: {
@@ -4950,7 +4950,7 @@ diagram.addElement({
 
 ```javascript
 // Round corner rectangle with fill and outside line
-const rect = diagram.collections.rectangle({
+const rect = figure.collections.rectangle({
   width: 2,
   height: 1,
   line: {
@@ -4964,12 +4964,12 @@ const rect = diagram.collections.rectangle({
   },
   fill: [0.7, 0.7, 1, 1],
 });
-diagram.add('rect', rect);
+figure.add('rect', rect);
 ```
 
 ```javascript
 // Rectangle surrounds elements of an equation
-diagram.addElements([
+figure.addElements([
   {
     name: 'rect',
     method: 'collections.rectangle',
@@ -4989,8 +4989,8 @@ diagram.addElements([
   }
 ]);
 
-const rect = diagram.getElement('rect');
-const eqn = diagram.getElement('eqn');
+const rect = figure.getElement('rect');
+const eqn = figure.getElement('eqn');
 
 rect.surround(eqn._a, 0.03);
 rect.animations.new()
@@ -5024,12 +5024,12 @@ both a fill and a border or line simultaneously with different colors.
 
 ## CollectionsAxis
 
-**Extends DiagramElementCollection**
+**Extends FigureElementCollection**
 
 -   **See: [COL_Axis][396] for parameter descriptions
     **
 
-[DiagramElementCollection][73] representing an Axis.
+[FigureElementCollection][73] representing an Axis.
 
 This object defines an axis with an axis line, tick marks, labels,
 grid lines and a title.
@@ -5061,7 +5061,7 @@ and [OBJ_AxisTicks][874].
 
 ```javascript
 // By default an axis is an 'x' axis
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -5075,16 +5075,16 @@ diagram.addElement({
 #### Example
 
 ```javascript
-// An axis can also be created and then added to a diagram
+// An axis can also be created and then added to a figure
 // An axis can have specific start and stop values
 // An axis can be a y axis
-const axis = diagram.collections.axis({
+const axis = figure.collections.axis({
   axis: 'y',
   start: -10,
   stop: 10,
   ticks: { step: 5 },
 })
-diagram.add('axis', axis);
+figure.add('axis', axis);
 ```
 
 ![][1123]
@@ -5093,7 +5093,7 @@ diagram.add('axis', axis);
 
 ```javascript
 // An axis can have multiple sets of ticks and a title
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -5113,7 +5113,7 @@ diagram.addElement({
 ```javascript
 // An axis line and ticks can be customized to be dashed
 // and have arrows
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -5147,7 +5147,7 @@ diagram.addElement({
 ```javascript
 // An axis title can have grid lines extend from it, and titles with more
 // formatting
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -5264,7 +5264,7 @@ same space as the `length` of the axis.
 
 ## CollectionsPlot
 
-**Extends DiagramElementCollection**
+**Extends FigureElementCollection**
 
 -   **See: See [COL_Axis][396], [OBJ_AxisLabels][877], [OBJ_AxisTicks][874],
     [COL_Trace][862] and [COL_PlotLegend][866] for more examples of customizing
@@ -5283,7 +5283,7 @@ same space as the `length` of the axis.
     ```
     **
 
-[DiagramElementCollection][73] representing a plot including axes, traces,
+[FigureElementCollection][73] representing a plot including axes, traces,
 labels and titles.
 
 ![][1131]
@@ -5309,7 +5309,7 @@ entire plot.
 
 ```javascript
 // Plot of single trace with auto axis scaling
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -5322,12 +5322,12 @@ diagram.addElement({
 // Multiple traces with a legend
 // Some traces are customized beyond the defaul color to include dashes and
 // markers
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
-    width: 2,                                    // Plot width in diagram
-    height: 2,                                   // Plot height in diagram
+    width: 2,                                    // Plot width in figure
+    height: 2,                                   // Plot height in figure
     yAxis: { start: 0, stop: 100 },              // Customize y axis limits
     trace: [
       { points: pow(1.5), name: 'Power 1.5' },   // Trace names are for legend
@@ -5350,7 +5350,7 @@ diagram.addElement({
 
 ```javascript
 // Multiple grids and simple titles
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -5382,7 +5382,7 @@ diagram.addElement({
 // Hide axes
 // Use plot frame and plot area
 // Title has a subtitle
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -5410,7 +5410,7 @@ diagram.addElement({
 
 ```javascript
 // Secondary y axis
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -5459,7 +5459,7 @@ diagram.addElement({
 // Cartesian axes crossing at the zero point
 // Automatic layout doesn't support this, but axes, ticks, labels and titles
 // can all be customized to create it.
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -5543,7 +5543,7 @@ A plot is a collection of axes and traces, and may include a title, legend
 and bounding frame.
 
 Use `width`, `height` and `position` to define the size of the plot area
-(area where the traces are drawn) and where it is in the diagram.
+(area where the traces are drawn) and where it is in the figure.
 
 ### Properties
 
@@ -5599,8 +5599,8 @@ A grid is included in this javascript file to make it obvious how text is aligne
 
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
-diagram.addElements([
+const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+figure.addElements([
   {
     name: 'origin',
     method: 'polygon',
@@ -5638,12 +5638,12 @@ diagram.addElements([
 
 ### Quick Start - `text`
 
-Let's start by creating a [DiagramElementPrimitive][69] element that writes 'hello world' to the diagram.
+Let's start by creating a [FigureElementPrimitive][69] element that writes 'hello world' to the figure.
 
 <p style="text-align: center"><img src="./tutorials/text/text.png"></p>
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 'simpleText',
     method: 'text',
@@ -5658,10 +5658,10 @@ diagram.addElement(
 
 The text has been horizontally aligned to its center, and vertically aligned to its middle around its default location of `(0, 0)`.
 
-As this is a [DiagramElementPrimitive][69], transforms can be applied to it, and it can be touched and moved. For instance, the example below will rotate the text when it is dragged with a touch from the user.
+As this is a [FigureElementPrimitive][69], transforms can be applied to it, and it can be touched and moved. For instance, the example below will rotate the text when it is dragged with a touch from the user.
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 'spinner',
     method: 'text',
@@ -5678,7 +5678,7 @@ diagram.addElement(
     }
   },
 );
-diagram.setTouchable();
+figure.setTouchable();
 ```
 
 The same `text` method can be used to create text at different locations.
@@ -5686,7 +5686,7 @@ The same `text` method can be used to create text at different locations.
 <p style="text-align: center"><img src="./tutorials/text/compass.png"></p>
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 'compass',
     method: 'text',
@@ -5729,7 +5729,7 @@ Alternately, `text.line` can be used as it will automatically layout the text el
 <p style="text-align: center"><img src="./tutorials/text/text-line.png"></p>
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 'formattedLine',
     method: 'text.line',
@@ -5762,7 +5762,7 @@ When using more text, it is sometimes useful to split these in the API to make i
 The same example above can be done with `text.lines`:
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 'formattedLine',
     method: 'text.lines',
@@ -5780,7 +5780,7 @@ diagram.addElement(
     },
   },
 );
-diagram.setTouchable();
+figure.setTouchable();
 ```
 
 `text.lines` also allows for multiple lines of text to be laid out and justified.
@@ -5788,7 +5788,7 @@ diagram.setTouchable();
 <p style="text-align: center"><img src="./tutorials/text/text-lines.png"></p>
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 't',
     method: 'text.lines',
@@ -5834,21 +5834,21 @@ One or more text strings.
 
 Simple text options object.
 
-Use this to make a [DiagramElementPrimitive][69] that renders text.
+Use this to make a [FigureElementPrimitive][69] that renders text.
 
 `text` can either be a single string, or an array of
 [OBJ_TextDefinition][786] objects to define multiple strings. Each string
 can have a different location, alignment (`xAlign`, `yAlign`) and formatting.
 
-[DiagramElementPrimitive][69] objects allow for a callback to be defined
-when they are touched by a user. In text [DiagramElementPrimitive][69],
+[FigureElementPrimitive][69] objects allow for a callback to be defined
+when they are touched by a user. In text [FigureElementPrimitive][69],
 each string can have its own callback assigned using the `onClick` property
 of [OBJ_TextDefinition][786]. In addition custom touch borders to make it
 easier to click the strings can be defined.
 
 Note: there is a slight performance improvement in including multiple
-strings at different locations in the same [DiagramElementPrimitive][69],
-rather than creating a [DiagramElementPrimitive][69] for each string.
+strings at different locations in the same [FigureElementPrimitive][69],
+rather than creating a [FigureElementPrimitive][69] for each string.
 
 ### Properties
 
@@ -5875,7 +5875,7 @@ rather than creating a [DiagramElementPrimitive][69] for each string.
 
 ```javascript
 // Single string
-diagram.addElement(
+figure.addElement(
   {
     name: 't',
     method: 'text',
@@ -5890,7 +5890,7 @@ diagram.addElement(
 
 ```javascript
 // Multi string
-diagram.addElement(
+figure.addElement(
   {
     name: 't',
     method: 'text',
@@ -5959,7 +5959,7 @@ in [OBJ_TextLineDefinition][791].
 
 ```javascript
 // "Hello to the world1" with highlighted "to the" and superscript "1"
-diagram.addElement(
+figure.addElement(
   {
     name: 'line',
     method: 'text.line',
@@ -6052,7 +6052,7 @@ To escape the modifier special character "|", use a forward slash. e.g.
 
 ```javascript
 // "Two justified lines"
-diagram.addElement(
+figure.addElement(
   {
     name: 't',
     method: 'text.lines',
@@ -6074,7 +6074,7 @@ diagram.addElement(
 
 ```javascript
 // "Example showing many features of textLines"
-diagram.addElement(
+figure.addElement(
   {
     name: 'lines',
     method: 'textLines',
@@ -6122,9 +6122,9 @@ diagram.addElement(
 
 ## Animation
 
-Animations change diagram elements over time.
+Animations change figure elements over time.
 
-Each diagram element has its own [AnimationManager][413] (`animations` property) that can coordinate animations for any element.
+Each figure element has its own [AnimationManager][413] (`animations` property) that can coordinate animations for any element.
 
 An animation is a number of [AnimationStep][893]s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.
 
@@ -6151,10 +6151,10 @@ A grid is included in this javascript file to make it obvious how shapes are ani
 
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 
 // grid
-diagram.addElements([
+figure.addElements([
   {
     name: 'origin',
     method: 'polygon',
@@ -6190,7 +6190,7 @@ diagram.addElements([
 ]);
 
 // shape to animate
-diagram.addElement(
+figure.addElement(
   {
     name: 'p',
     method: 'polygon',
@@ -6202,12 +6202,12 @@ diagram.addElement(
     },
   },
 );
-const p = diagram.getElement('p');
+const p = figure.getElement('p');
 ```
 
 ### Animation Examples
 
-Let's create a simple animation. Start by defining a diagram and retrieving the element to animate by creating the boilerplate files [above][1153].
+Let's create a simple animation. Start by defining a figure and retrieving the element to animate by creating the boilerplate files [above][1153].
 
 A [PositionAnimationStep][496] can be created to translate the shape, and a [RotationAnimationStep][499] to rotate it
 
@@ -6240,7 +6240,7 @@ An animation manager is tied to one element, but can be used to animate other el
 
 ```javascript
 // add another element
-diagram.addElement({
+figure.addElement({
   name: 'q',
   method: 'polygon',
   options: {
@@ -6248,7 +6248,7 @@ diagram.addElement({
   },
 });
 
-const q = diagram.getElement('q');
+const q = figure.getElement('q');
 
 // Use p animation manager to animate q
 p.animations.new()
@@ -6305,7 +6305,7 @@ p.animations.new()
 
 ### Stopping animations
 
-Animations can be stopped from the animation, element and diagram levels.
+Animations can be stopped from the animation, element and figure levels.
 
 ```javascript
 p.animations.new('mover')
@@ -6334,16 +6334,16 @@ p.animations.new()
   .position({ target: [1, 0], duration: 4})
   .start();
 
-// after 1 second, cancel all diagram animations by freezing them
+// after 1 second, cancel all figure animations by freezing them
 setTimeout(() => {
-  diagram.stop('freeze');
+  figure.stop('freeze');
 }, 1000);
 ```
 
 
 ## AnimationManager
 
--   **See: [DiagramElement][32]
+-   **See: [FigureElement][32]
     **
 -   **See: [AnimationBuilder][458]
     **
@@ -6353,7 +6353,7 @@ Animation Manager
 This class manages animations and creates animation steps for use in
 animations.
 
-Each [DiagramElement][32] has its own `AnimationManager` in the
+Each [FigureElement][32] has its own `AnimationManager` in the
 `animations` property, though any
 animation manager can animate any other element. Therefore all parallel
 animations can go through the same manager, or be spread throughout
@@ -6371,8 +6371,8 @@ Typically, these steps would themselves be [SerialAnimationStep][538]s or a
 series of animations. This means the animation manager is running a number of
 animation series in parallel.
 
-The `AnimationManager`s on [DiagramElement][32]s should be used instead
-of instantiating this class separately, as those on `DiagramElements` will
+The `AnimationManager`s on [FigureElement][32]s should be used instead
+of instantiating this class separately, as those on `FigureElements` will
 be automatically processed every animation frame.
 
 ### Properties
@@ -6436,7 +6436,7 @@ p.animations.new()
 
 ```javascript
 // `AnimationStep`s can also be created from the `AnimationManager`
-// with the added convenience that the `DiagramElement` that
+// with the added convenience that the `FigureElement` that
 // has the `AnimationManager` will be used as the default
 // `element` property. This combined with the `AnimationBuilder`
 // makes defining most animations clean and readable code
@@ -6913,7 +6913,7 @@ Position animation step
 ![][1186]
 
 The position animation step animates the first [Translation][186] transform
-in the [DiagramElement][32]'s [Transform][222].
+in the [FigureElement][32]'s [Transform][222].
 
 By default, the position will start with the element's current position.
 
@@ -6989,7 +6989,7 @@ Rotation animation step
 ![][1187]
 
 The rotation animation step animates the first [Rotation][198] transform
-in the [DiagramElement][32]'s [Transform][222].
+in the [FigureElement][32]'s [Transform][222].
 
 By default, the rotation will start with the element's current rotation.
 
@@ -7046,7 +7046,7 @@ Scale Animation Step
 ![][1188]
 
 The scale animation step animates the first [Scale][92] transform
-in the [DiagramElement][32]'s [Transform][222].
+in the [FigureElement][32]'s [Transform][222].
 
 By default, the scale will start with the element's current scale.
 
@@ -7267,7 +7267,7 @@ Pulse animation step
 
 The pulse animation step animates a pulse.
 
-The options are the same as those in the \* <a href="#diagramelementpulse">pulse</a> method.
+The options are the same as those in the \* <a href="#figureelementpulse">pulse</a> method.
 
 ### Parameters
 
@@ -7330,9 +7330,9 @@ By default, the color will start with the element's current color.
 
 Use either `delta` or `target` to define the end color
 
-In an interactive diagram, it is often useful to highlight elements of the
-diagram by coloring them and greying out, or dimming the elements not of
-interest. As such, a [DiagramElement][32] has several color attributes:
+In an interactive figure, it is often useful to highlight elements of the
+figure by coloring them and greying out, or dimming the elements not of
+interest. As such, a [FigureElement][32] has several color attributes:
 
 -   color - current color
 -   dimColor - color to dim to
@@ -7399,7 +7399,7 @@ Dim color animation step
 
 ![][1194]
 
-Animates color of element to the `dimColor` property of [DiagramElement][32]
+Animates color of element to the `dimColor` property of [FigureElement][32]
 
 ### Parameters
 
@@ -7448,7 +7448,7 @@ Undim color animation step
 
 ![][1195]
 
-Animates color of element to the `defaultColor` property of [DiagramElement][32]
+Animates color of element to the `defaultColor` property of [FigureElement][32]
 
 ### Parameters
 
@@ -7500,7 +7500,7 @@ Opacity Animation Step
 
 ![][1196]
 
-A [DiagramElement][32] has `color` and `opacity` properties. The `color`
+A [FigureElement][32] has `color` and `opacity` properties. The `color`
 property has an alpha channel that defines opacity, but it should be used
 as a base color definition, and not used to dissolve an element in and out.
 
@@ -7510,7 +7510,7 @@ an element, use an opacity animation step.
 The `opacity` is multiplied by the
 `color` alpha channel to get the final opacity of the element.
 
-By default, the opacity will start with the [DiagramElement][32]'s current
+By default, the opacity will start with the [FigureElement][32]'s current
 opacity unless dissolving. If dissolving, the opacity will start at `0` if
 dissolving in, or `1` if dissolving out unless `dissolveFromCurrent` is
 `true` in which case the opacity will start from the current opacity.
@@ -7921,9 +7921,9 @@ An equation can have different **forms**. One form is above, but it can be rearr
 
 `a - b = c`
 
-If FigureOne, an equation is a collection ([DiagramElementCollection][73]) of **terms** and **operators** (which are [DiagramElementPrimitive][69]s). A **form** defines the layout of terms and operators to create an equation. An equation can have many forms, and animation can be used to move between forms.
+If FigureOne, an equation is a collection ([FigureElementCollection][73]) of **terms** and **operators** (which are [FigureElementPrimitive][69]s). A **form** defines the layout of terms and operators to create an equation. An equation can have many forms, and animation can be used to move between forms.
 
-As the equation, terms and operators are all [DiagramElement][32]s, then they have all the same interactivety and animation abilities as shapes and text.
+As the equation, terms and operators are all [FigureElement][32]s, then they have all the same interactivety and animation abilities as shapes and text.
 
 ### <a id="equation-boilerplate"></a> Equation Boilerplate
 
@@ -7946,7 +7946,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 
 ```javascript
 // index.js
-const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 ```
 
 ### Quick Start
@@ -7954,7 +7954,7 @@ const diagram = new Fig.Diagram({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], l
 First let's create an equation, with red as the default color:
 
 ```javascript
-const equation = diagram.create.equation({ color: [1, 0, 0, 1] });
+const equation = figure.create.equation({ color: [1, 0, 0, 1] });
 ```
 
 Next lets add the definitions for the terms and operators, or the equation elements. The keys of the object are unique identifiers that will be used in the equation forms to layout the elements appropriately. The values of the object are the text to display in the equation, or objects that define the text with additional options including formatting.
@@ -7979,10 +7979,10 @@ equation.addForms({
 
 An array of elements is called an _equation phrase_. In the example above, the form is a simple phrase, but in more complicated examples there may be several nested phrases.
 
-Finally, we can add the equation to the diagram and show the form:
+Finally, we can add the equation to the figure and show the form:
 
 ```javascript
-diagram.add('equation', equation);
+figure.add('equation', equation);
 equation.showForm('b');
 ```
 
@@ -7992,7 +7992,7 @@ equation.showForm('b');
 
 Mathematics has many special symbols that operate on terms, or annotate an equation. These symbols usually have a special layout relative to the terms they operate on.
 
-FigureOne treats symbols like any other equation element, and uses [DiagramElementPrimitive][69]s to draw them. FigureOne then provides a series of functions that can layout terms around these symbols.
+FigureOne treats symbols like any other equation element, and uses [FigureElementPrimitive][69]s to draw them. FigureOne then provides a series of functions that can layout terms around these symbols.
 
 Let's take the equation from the last example, and show the form as a fraction.
 
@@ -8004,7 +8004,7 @@ equation.addElements({
 });
 ```
 
-The `equation` is a [DiagramElementCollection][73] with an `eqn` property that contains equation specific information, such as forms and special layout functions, such as `frac`. Let's use this to add the form:
+The `equation` is a [FigureElementCollection][73] with an `eqn` property that contains equation specific information, such as forms and special layout functions, such as `frac`. Let's use this to add the form:
 
 ```javascript
 const e = equation.eqn.functions;
@@ -8024,7 +8024,7 @@ equation.showForm('b');
 Combine all the steps above gives:
 
 ```javascript
-const equation = diagram.create.equation({ color: [1, 0, 0, 1] });
+const equation = figure.create.equation({ color: [1, 0, 0, 1] });
 equation.addElements({
   a: 'a',
   b: 'b',
@@ -8040,7 +8040,7 @@ equation.addForms({
   b: ['b', 'equals', e.frac(['a', 'v', 'c'])],
 });
 
-diagram.add('equation', equation);
+figure.add('equation', equation);
 equation.showForm('a');
 ```
 
@@ -8090,7 +8090,7 @@ equation.goToForm({
 Similar to shapes and text, the same equation above can be defined with an options object. For complicated equations, options objects can be used with code folding in an IDE to more easily read and navigate an equation definition. Also, because object form is JSON compatible, complex equations can be easily shared.
 
 ```javascript
-diagram.addElement(
+figure.addElement(
   {
     name: 'equation',
     method: 'equation',
@@ -8121,13 +8121,13 @@ diagram.addElement(
     },
   },
 );
-const equation = diagram.getElement('equation')
+const equation = figure.getElement('equation')
 equation.showForm('a');
 ```
 
 ### Equation highlighting and interactivity
 
-Just like any [DiagramElement][32], an equation or its elements can be pulsed, touched or moved.
+Just like any [FigureElement][32], an equation or its elements can be pulsed, touched or moved.
 
 For example, an element can be pulsed:
 
@@ -8174,7 +8174,7 @@ Equation elements can all be defined in the `elements` property. However, simple
 For instance, we can recreate an example above as:
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8188,7 +8188,7 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ![][1210]
@@ -8196,7 +8196,7 @@ diagram.elements._eqn.showForm('1');
 Elements defined inline can be used in other forms:
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8211,8 +8211,8 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
-diagram.elements._eqn.goToForm({
+figure.elements._eqn.showForm('1');
+figure.elements._eqn.goToForm({
   form: 2,
   animate: 'move',
   delay: 1,
@@ -8224,7 +8224,7 @@ diagram.elements._eqn.goToForm({
 Even symbols can be defined inline:
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8236,7 +8236,7 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 Underscores have a special meaning for inline definitions.
@@ -8246,7 +8246,7 @@ Underscores before text will be hidden when rendered, but can make unique ids th
 Underscores after text can be used to create unique identifiers and therefore used to make multiple elements with the same text. The underscore, and all text after it will not be rendered.
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8255,7 +8255,7 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ![][1212]
@@ -8263,7 +8263,7 @@ diagram.elements._eqn.showForm('1');
 Underscores can also be used to give inline symbol definitions unqiue identifiers. In this case, the text before the underscore is the unique identifier, and the text after defines the symbol.
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8273,8 +8273,8 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
-diagram.elements._eqn.goToForm({
+figure.elements._eqn.showForm('1');
+figure.elements._eqn.goToForm({
   form: 2,
   animate: 'move',
   delay: 1,
@@ -8290,7 +8290,7 @@ Function definitions can either be array definitions (an equation phrase) or obj
 Array definitions, or equation phrases, can also be spread over several lines to increase readability.
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8332,8 +8332,8 @@ diagram.addElement({
     formSeries: ['1', '2', '3', '4'],
   },
 });
-diagram.elements._eqn.showForm('1');
-const eqn = diagram.elements._eqn;
+figure.elements._eqn.showForm('1');
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -8346,7 +8346,7 @@ eqn.showForm('1');
 Often different forms of an equation reuse equation phrases, like fractions. To make equation forms more readable, it can be useful to define a phrase once, and then refer to its identifier throughout the forms.
 
 ```javascript
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8370,8 +8370,8 @@ diagram.addElement({
     formSeries: ['1', '2', '3'],
   },
 });
-diagram.elements._eqn.showForm('1');
-const eqn = diagram.elements._eqn;
+figure.elements._eqn.showForm('1');
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -8387,7 +8387,7 @@ The above example uses a _form series_. A form series allows animation between e
 
 ## Equation
 
-**Extends DiagramElementCollection**
+**Extends FigureElementCollection**
 
 -   **See: To test examples, append them to the
     <a href="#equation-boilerplate">boilerplate</a>
@@ -8397,7 +8397,7 @@ An Equation is a collection of elements that can be arranged into different
 forms.
 
 `Equation` should be instantiated from an _object definition_, or from
-the `diagram.create.equation` method.
+the `figure.create.equation` method.
 
 Equation includes two additional animation steps in [Equation.animations][1216]:
 
@@ -8412,7 +8412,7 @@ Equation includes two additional animation steps in [Equation.animations][1216]:
 
 ```javascript
 // Create with options definition
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8429,13 +8429,13 @@ diagram.addElement({
   },
 });
 // `eqn` is the instance of `Equation`
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.showForm('1');
 ```
 
 ```javascript
 // Create with methods
-const eqn = diagram.create.equation();
+const eqn = figure.create.equation();
 eqn.addElements({
   a: 'a',
   b: { color: [0, 0, 1, 1] },
@@ -8446,7 +8446,7 @@ eqn.addElements({
 eqn.addForms({
   1: ['a', 'equals', 'b', 'plus', 'c'],
 });
-diagram.add('eqn', eqn);
+figure.add('eqn', eqn);
 eqn.showForm('1');
 ```
 
@@ -8454,7 +8454,7 @@ eqn.showForm('1');
 
 Equation parameters and functions
 
-Type: {forms: {}, functions: [EquationFunctions][1218], symbols: EquationSymbols, currentForm: [string][1046], font: DiagramFont, scale: [number][1051], formSeries: {}, currentFormSeries: [Array][1049]&lt;[string][1046]>, currentFormSeriesName: [string][1046], formDefaults: any, isAnimating: [boolean][1050], descriptionElement: ([DiagramElementPrimitive][1047] | null), descriptionPosition: [Point][1064], formRestart: {moveFrom: ([Point][1064] \| [DiagramElementCollection][1048])?, pulse: {duration: [number][1051], scale: [number][1051], element: [DiagramElement][1058]}?}?}
+Type: {forms: {}, functions: [EquationFunctions][1218], symbols: EquationSymbols, currentForm: [string][1046], font: FigureFont, scale: [number][1051], formSeries: {}, currentFormSeries: [Array][1049]&lt;[string][1046]>, currentFormSeriesName: [string][1046], formDefaults: any, isAnimating: [boolean][1050], descriptionElement: ([FigureElementPrimitive][1047] | null), descriptionPosition: [Point][1064], formRestart: {moveFrom: ([Point][1064] \| [FigureElementCollection][1048])?, pulse: {duration: [number][1051], scale: [number][1051], element: [FigureElement][1058]}?}?}
 
 #### Properties
 
@@ -8591,7 +8591,7 @@ Options objects to construct an [Equation][547] class. All properties are option
     defined, then a default must be chosen to be the first current one. Default:
     first form defined
 -   `formRestart` **[TypeFormRestart][1226]?** default: null
--   `font` **DiagramFont?** default [DiagramFont][1227]('Times
+-   `font` **FigureFont?** default [FigureFont][1227]('Times
     New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
 -   `position` **[Point][1064]?** default: new [Point][86](0, 0)
 -   `formDefaults` **{alignment: [TypeFormAlignment][1224]?, elementMods: {}, animation: [TypeFormAnimationProperties][1228]}** 
@@ -8634,7 +8634,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8643,12 +8643,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Example showing object and array fraction definitions, and nesting
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8680,15 +8680,15 @@ diagram.addElement({
     formSeries: ['1', '2', '3'],
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
 ```
 
 ```javascript
-// Create equation object then add to diagram
-const eqn = diagram.create.equation({
+// Create equation object then add to figure
+const eqn = figure.create.equation({
   elements: {
       v1: { symbol: 'vinculum' },
       v2: { symbol: 'vinculum' },
@@ -8713,7 +8713,7 @@ const eqn = diagram.create.equation({
     },
     formSeries: ['1', '2', '3'],
 });
-diagram.add('eqn', eqn);
+figure.add('eqn', eqn);
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -8764,7 +8764,7 @@ Options can be an object, or an array in the property order below.
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8773,12 +8773,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Example showing object and array root definitions, and custom roots
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8803,15 +8803,15 @@ diagram.addElement({
     formSeries: ['1', '2', '3'],
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
 ```
 
 ```javascript
-// Create equation object then add to diagram
-const eqn = diagram.create.equation({
+// Create equation object then add to figure
+const eqn = figure.create.equation({
   elements: {
     r: { symbol: 'radical' },
     plus: '  +  ',
@@ -8831,7 +8831,7 @@ const eqn = diagram.create.equation({
   },
   formSeries: ['1', '2', '3'],
 });
-diagram.add('eqn', eqn);
+figure.add('eqn', eqn);
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -8863,7 +8863,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 //Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8872,12 +8872,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Example showing different subscript options
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8904,7 +8904,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3', '4'],
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -8936,7 +8936,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8945,12 +8945,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Examples of superscript animations
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -8969,7 +8969,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3'],
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -9003,7 +9003,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9012,12 +9012,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1'); *
+figure.elements._eqn.showForm('1'); *
 ```
 
 ```javascript
 // Example showing different super-sub script options
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9037,7 +9037,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3'],
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -9084,7 +9084,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9097,12 +9097,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Some different bar examples
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9152,7 +9152,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3', '4']
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -9228,7 +9228,7 @@ Options can be an object, or an array in the property order below.
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9237,12 +9237,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Example showing different integral options
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9281,7 +9281,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3', '4'],
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -9333,7 +9333,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9342,12 +9342,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Example showing different options
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9382,7 +9382,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3'],
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -9434,7 +9434,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9443,12 +9443,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Example showing different options
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9483,7 +9483,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3'],
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -9540,7 +9540,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9552,12 +9552,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Some different bar examples
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9598,7 +9598,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3', '4']
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -9659,7 +9659,7 @@ eqn.addElements({
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9672,12 +9672,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Some different bracket examples
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9705,7 +9705,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3']
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -9752,7 +9752,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9761,12 +9761,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Some different box examples
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9808,7 +9808,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3', '4']
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -9855,7 +9855,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9867,12 +9867,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Some different strike examples
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9907,7 +9907,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3', '4']
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -9943,7 +9943,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9955,12 +9955,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Some different strike examples
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -9993,7 +9993,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3']
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -10035,7 +10035,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -10044,12 +10044,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Some different comment examples
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -10091,7 +10091,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3', '4']
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -10124,7 +10124,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -10133,12 +10133,12 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 ```
 
 ```javascript
 // Some different padding examples
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -10163,7 +10163,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3'],
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -10194,7 +10194,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Simple
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -10203,10 +10203,10 @@ diagram.addElement({
     },
   },
 });
-diagram.elements._eqn.showForm('1');
+figure.elements._eqn.showForm('1');
 
 // Some different bracket examples
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -10232,7 +10232,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3']
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -10271,7 +10271,7 @@ Options can be an object, or an array in the property order below
 
 ```javascript
 // Example showing the difference between with and without container
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -10295,15 +10295,15 @@ diagram.addElement({
     formSeries: ['1', '2', '3'],
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
 ```
 
 ```javascript
-// Create equation object then add to diagram
-const eqn = diagram.create.equation({
+// Create equation object then add to figure
+const eqn = figure.create.equation({
   forms: {
     1: [
       'length',
@@ -10315,7 +10315,7 @@ const eqn = diagram.create.equation({
   },
   formSeries: ['1', '2', '3'],
 });
-diagram.add('eqn', eqn);
+figure.add('eqn', eqn);
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -10410,7 +10410,7 @@ Options can _only_ be an object.
 
 ```javascript
 // Some different annotation examples
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -10481,7 +10481,7 @@ diagram.addElement({
     formSeries: ['1', '2', '3'],
   },
 });
-const eqn = diagram.elements._eqn;
+const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
 eqn.setTouchableRect(0.5);
 eqn.showForm('1');
@@ -11658,16 +11658,16 @@ Remove and return random element from an array.
 
 Returns **T** 
 
-## Misc Diagram Element
+## Misc Figure Element
 
 
 
 
-## DiagramElementMoveFreely
+## FigureElementMoveFreely
 
-Diagram element move freely parameters
+Figure element move freely parameters
 
-If a diagram element is released from moving with some velocity
+If a figure element is released from moving with some velocity
 then these parameters will define how it continues to move freely
 
 ### Properties
@@ -11680,19 +11680,19 @@ then these parameters will define how it continues to move freely
     if bouncing of boundary
 -   `callback` **([string][1046] | function ([boolean][1050]): void)?** 
 
-## DiagramElementMove
+## FigureElementMove
 
-Diagram element move parameters
+Figure element move parameters
 
 ### Properties
 
 -   `bounds` **TransformBounds** rectangle to limit movement within
 -   `maxVelocity` **TypeTransformValue** maximum velocity allowed (5)
--   `freely` **[DiagramElementMoveFreely][1252]** free movement parameters
+-   `freely` **[FigureElementMoveFreely][1252]** free movement parameters
 -   `canBeMovedAfterLosingTouch` **[boolean][1050]** touch or mouse dragging will
     continue to move element even after the touch/cursor position is outside
     the element boundary
--   `element` **([DiagramElement][1058] | null)** 
+-   `element` **([FigureElement][1058] | null)** 
 -   `sizeInBounds` **[boolean][1050]** 
 -   `transformClip` **([string][1046] | function ([Transform][1055]): [Transform][1055]?)** 
 -   `type` **(`"rotation"` \| `"translation"` \| `"scaleX"` \| `"scaleY"` \| `"scale"`)** 
@@ -11745,7 +11745,7 @@ Element state
 
 ## DrawingObject
 
--   **See: [DiagramElementPrimitive][69]
+-   **See: [FigureElementPrimitive][69]
     **
 
 Drawing Object
@@ -11758,11 +11758,11 @@ be used to manage a HTML element on the screen.
 -   `border` **[Array][1049]&lt;[Array][1049]&lt;[Point][1064]>>** each array of points defines a
     closed boundary or border of the element. An element may have multiple
     closed borders. A border defines where a shape can be touched, or how it
-    bounces of diagram boundaries
+    bounces of figure boundaries
 -   `holeBorder` **[Array][1049]&lt;[Array][1049]&lt;[Point][1064]>>** areas where a shape cannot be
     touched
 
-## DiagramPrimitives
+## FigurePrimitives
 
 Built in dagiagram primitives.
 
@@ -11773,7 +11773,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_Generic][281] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws a generic shape.
+[FigureElementPrimitive][69] that draws a generic shape.
 
 #### Parameters
 
@@ -11784,7 +11784,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_Polyline][287] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws a polyline.
+[FigureElementPrimitive][69] that draws a polyline.
 
 #### Parameters
 
@@ -11795,7 +11795,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_Polygon][302] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws a regular polygon.
+[FigureElementPrimitive][69] that draws a regular polygon.
 
 #### Parameters
 
@@ -11806,7 +11806,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_Star][305] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws a star.
+[FigureElementPrimitive][69] that draws a star.
 
 #### Parameters
 
@@ -11817,7 +11817,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_Rectangle][296] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws a rectangle.
+[FigureElementPrimitive][69] that draws a rectangle.
 
 #### Parameters
 
@@ -11828,7 +11828,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_Ellipse][299] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws an ellipse.
+[FigureElementPrimitive][69] that draws an ellipse.
 
 #### Parameters
 
@@ -11839,7 +11839,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_Triangle][293] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws a triangle.
+[FigureElementPrimitive][69] that draws a triangle.
 
 #### Parameters
 
@@ -11850,7 +11850,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_Grid][308] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws a grid.
+[FigureElementPrimitive][69] that draws a grid.
 
 #### Parameters
 
@@ -11861,7 +11861,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_Line][284] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws a line.
+[FigureElementPrimitive][69] that draws a line.
 
 #### Parameters
 
@@ -11872,7 +11872,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_Arrow][290] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws a line.
+[FigureElementPrimitive][69] that draws a line.
 
 #### Parameters
 
@@ -11883,7 +11883,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_TextLine][406] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws a line of text.
+[FigureElementPrimitive][69] that draws a line of text.
 
 #### Parameters
 
@@ -11894,7 +11894,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_TextLines][409] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws text lines.
+[FigureElementPrimitive][69] that draws text lines.
 
 #### Parameters
 
@@ -11905,7 +11905,7 @@ Including simple shapes, grid and text.
 -   **See: [OBJ_Text][403] for options and examples.
     **
 
-[DiagramElementPrimitive][69] that draws text.
+[FigureElementPrimitive][69] that draws text.
 
 #### Parameters
 
@@ -11913,7 +11913,7 @@ Including simple shapes, grid and text.
 
 ### collection
 
-Create a [DiagramElementCollection][73].
+Create a [FigureElementCollection][73].
 
 #### Parameters
 
@@ -12200,7 +12200,7 @@ power of 2 (such as 16, 32, 64, 128 etc) to be repeated. All other images
 can only be clamped to their edge.
 
 To repeat all other image resolutions, a texture can be mapped to a rectangle
-and then the rectangle repeated throughout the diagram.
+and then the rectangle repeated throughout the figure.
 
 ### Properties
 
@@ -12260,7 +12260,7 @@ Text is drawn in a [Context2D canvas][1272] and so `family`, `style` and `weight
 
 ```javascript
 // Full font definition
-const font = new DiagramFont({
+const font = new FigureFont({
   family: 'Helvetica',
   style: 'italic',
   weight: 'bold',
@@ -12271,7 +12271,7 @@ const font = new DiagramFont({
 
 ```javascript
 // Define style only, remaining properties are defaults
-const font = new DiagramFont({
+const font = new FigureFont({
   style: 'italic',
 });
 ```
@@ -12484,7 +12484,7 @@ that copy step will not be included in the returned Point array.
 
 ```javascript
 // Grid copy
-diagram.addElement({
+figure.addElement({
   name: 'triGrid',
   method: 'polygon',
   options: {
@@ -12510,7 +12510,7 @@ diagram.addElement({
 
 ```javascript
 // Radial lines copy
-diagram.addElement({
+figure.addElement({
   name: 'radialLines',
   method: 'generic',
   options: {
@@ -12535,7 +12535,7 @@ diagram.addElement({
 
 ```javascript
 // Ring copy (without original shape)
-diagram.addElement({
+figure.addElement({
   name: 'halfRings',
   method: 'polygon',
   options: {
@@ -12634,7 +12634,7 @@ that in this case the shape will extend past the line.
 
 ```javascript
 // Line with triangle arrows on both ends
-diagram.addElement({
+figure.addElement({
   name: 'a',
   method: 'polyline',
   options: {
@@ -12647,7 +12647,7 @@ diagram.addElement({
 
 ```javascript
 // Line with customized barb arrow at end only
-diagram.addElement({
+figure.addElement({
   name: 'a',
   method: 'shapes.line',
   options: {
@@ -12671,7 +12671,7 @@ diagram.addElement({
 ```javascript
 // Three lines showing the difference between mid align and start align for
 // circle heads
-diagram.addElements([
+figure.addElements([
   {
     name: 'reference',
     method: 'polyline',
@@ -13184,7 +13184,7 @@ options.
 
 ```javascript
 // Hide pad 0, and make pad 2 blue and not filled
-diagram.addElement({
+figure.addElement({
   name: 'p',
   method: 'collections.polyline',
   options: {
@@ -13206,7 +13206,7 @@ diagram.addElement({
 
 ```javascript
 // Customization of side and angle annotations
-diagram.addElement({
+figure.addElement({
   name: 'p',
   method: 'collections.polyline',
   options: {
@@ -13347,7 +13347,7 @@ Each pad is associated with a point of the polyline.
 
 -   `isMovable` **[boolean][1050]?** `true` allows moving the pad and the
     associated polyline point (`false`)
--   `boundary` **(TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | `"diagram"`)?** boundary the pad can move within
+-   `boundary` **(TypeRangeBoundsDefinition | TypeRectBoundsDefinition | RangeBounds | RectBounds | `"figure"`)?** boundary the pad can move within
 
 ## COL_Trace
 
@@ -13412,9 +13412,9 @@ hundreds of thousands of points (depending on the client device).
 
 ## CollectionsPlotLegend
 
-**Extends DiagramElementCollection**
+**Extends FigureElementCollection**
 
-[DiagramElementCollection][73] representing an legend.
+[FigureElementCollection][73] representing an legend.
 
 ![][1284]
 ![][1285]
@@ -13445,7 +13445,7 @@ const pow = (pow = 2, stop = 10, step = 0.05) => {
 
 ```javascript
 // By default, the legend will appear in the top right corner
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -13465,7 +13465,7 @@ diagram.addElement({
 
 ```javascript
 // Change the line length, position and use a frame on the legend
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -13489,7 +13489,7 @@ diagram.addElement({
 
 ```javascript
 // Make a horizontal legend
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -13516,7 +13516,7 @@ diagram.addElement({
 
 ```javascript
 // Customize legend trace text
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -13554,7 +13554,7 @@ diagram.addElement({
 
 ```javascript
 // Customize legend
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -13630,13 +13630,13 @@ Space Transforms
 
 ### Properties
 
--   `glToDiagram` **[Transform][1055]** 
--   `diagramToGL` **[Transform][1055]** 
--   `pixelToDiagram` **[Transform][1055]** 
--   `diagramToPixel` **[Transform][1055]** 
+-   `glToFigure` **[Transform][1055]** 
+-   `figureToGL` **[Transform][1055]** 
+-   `pixelToFigure` **[Transform][1055]** 
+-   `figureToPixel` **[Transform][1055]** 
 -   `pixelToGL` **[Transform][1055]** 
 -   `glToPixel` **[Transform][1055]** 
--   `diagramToCSSPercent` **[Transform][1055]** 
+-   `figureToCSSPercent` **[Transform][1055]** 
 
 ## OBJ_LineStyleSimple
 
@@ -13700,7 +13700,7 @@ Type: any
 
 ```javascript
 // Axis with no ticks
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -13711,7 +13711,7 @@ diagram.addElement({
 
 ```javascript
 // Axis with default ticks
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -13723,7 +13723,7 @@ diagram.addElement({
 
 ```javascript
 // Axis ticks with custom step and color
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -13735,7 +13735,7 @@ diagram.addElement({
 
 ```javascript
 // Axis with ticks between 0.2 and 0.8 below the line
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -13754,7 +13754,7 @@ diagram.addElement({
 
 ```javascript
 // Axis with ticks at values
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -13828,7 +13828,7 @@ Different properties are defined in different spaces.
 
 ```javascript
 // By default labels are displayed if there are ticks
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -13840,7 +13840,7 @@ diagram.addElement({
 
 ```javascript
 // If there are multiple ticks, then just the first are used to show labels
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -13856,7 +13856,7 @@ diagram.addElement({
 ```javascript
 // Long labels can be displayed with a rotation. Set the
 // xAlign, yAlign and offset to make it look good.
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -13878,7 +13878,7 @@ diagram.addElement({
 
 ```javascript
 // Specific labels can be hidden
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -13891,7 +13891,7 @@ diagram.addElement({
 
 ```javascript
 // Labels can be at specific values, and have a specific font
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -13908,7 +13908,7 @@ diagram.addElement({
 ```javascript
 // Labels can be strings, `null` for the actual value, or numbers. If numbers
 // then they will be drawn in the same format as the actual values.
-diagram.addElement({
+figure.addElement({
   name: 'x',
   method: 'collections.axis',
   options: {
@@ -13932,9 +13932,9 @@ Axis title
 
 ## CollectionsTrace
 
-**Extends DiagramElementCollection**
+**Extends FigureElementCollection**
 
-[DiagramElementCollection][73] representing a trace.
+[FigureElementCollection][73] representing a trace.
 
 ![][1298]
 ![][1299]
@@ -13968,7 +13968,7 @@ const pow = (pow = 2, stop = 10, step = 0.05) => {
 ```javascript
 // When plotting a single trace, just the points are required. By default
 // the line will be solid, and it will be plotted against the 'x' and 'y' axes.
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -13979,7 +13979,7 @@ diagram.addElement({
 
 ```javascript
 // Change the thickness and color of the line
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -13996,7 +13996,7 @@ diagram.addElement({
 
 ```javascript
 // Default Markers
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -14010,7 +14010,7 @@ diagram.addElement({
 
 ```javascript
 // Custom Markers
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -14028,7 +14028,7 @@ diagram.addElement({
 
 ```javascript
 // Line and markers
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -14046,7 +14046,7 @@ diagram.addElement({
 
 ```javascript
 // Use names in trace definitions to customize legend
-diagram.addElement({
+figure.addElement({
   name: 'plot',
   method: 'collections.plot',
   options: {
@@ -14122,8 +14122,8 @@ Type: any
 
 ### Properties
 
--   `start` **[DiagramElement][1058]?** start element to surround (`this`)
--   `target` **[DiagramElement][1058]?** target element to surround (`this`)
+-   `start` **[FigureElement][1058]?** start element to surround (`this`)
+-   `target` **[FigureElement][1058]?** target element to surround (`this`)
 -   `space` **[number][1051]?** space between rectangle and element (`0`)
 
 ## TypeColor
@@ -14252,7 +14252,7 @@ Type: any
 
 ### Properties
 
--   `element` **[DiagramElement][1058]?** 
+-   `element` **[FigureElement][1058]?** 
 -   `progression` **(`"linear"` \| `"easeinout"` \| `"easein"` \| `"easeout"` \| [AnimationProgression][1307])?** how the animation progresses - defaults to `linear` for color, opacity and
     custom animations and `easeinout` for others
 
@@ -14284,7 +14284,7 @@ Type: any
 
 ### Properties
 
--   `element` **[DiagramElement][1058]?** 
+-   `element` **[FigureElement][1058]?** 
 
 ## OBJ_AnimationStep
 
@@ -14440,7 +14440,7 @@ Type: any
     time incorrect. Make sure to initialize this step with a non-zero duration
     for this to work.
 -   `payload` **any?** payload to pass to callback (`null`)
--   `element` **[DiagramElement][1058]** [DiagramElement][32] to associate with
+-   `element` **[FigureElement][1058]** [FigureElement][32] to associate with
     callback - if the `callback` is a string then this element's
     [FunctionMap][1310] will be searched for the corresponding function
 
@@ -14450,7 +14450,7 @@ Pulse options object
 
 ![][1311]
 
-Pulsing can be useful to highlight a diagram element to a user, without
+Pulsing can be useful to highlight a figure element to a user, without
 changing its underlying properties.
 
 When an element is pulsed, it will be scaled, translated or rotated from
@@ -14460,15 +14460,15 @@ to a `min` value, and then back to the `start` value. An element can
 be pulsed through this cycle `frequency` times per second, over some
 `duration`.
 
-The pulse does not change the [DiagramElement][32].transform property, and
+The pulse does not change the [FigureElement][32].transform property, and
 only changes the draw transform.
 
 By default, a scale or rotation pulse will scale or rotate around the the
 center of the rectangle encompassing the border of the element. `centerOn`
-can be used to define a different [DiagramElement][32] or point to center
-on. If centering on a [DiagramElement][32], `xAlign` and `yAlign` can be
+can be used to define a different [FigureElement][32] or point to center
+on. If centering on a [FigureElement][32], `xAlign` and `yAlign` can be
 used to center on a point aligned within it. For instance, `xAlign: 'left'`
-will center on a point on the left edte of the [DiagramElement][32].
+will center on a point on the left edte of the [FigureElement][32].
 
 The pulse can also draw multiple copies of the element with pulse transforms
 distributed between the `min` and maximum pulse values. This is particularly
@@ -14488,19 +14488,19 @@ outlines are becomming thicker.
     pulse to (`1.5`)
 -   `angle` **[number][1051]?** translation angle (`0`)
 -   `min` **[number][1051]?** minimum value to pulse to
--   `centerOn` **(null | [DiagramElement][1058] \| [TypeParsablePoint][1062])?** center
+-   `centerOn` **(null | [FigureElement][1058] \| [TypeParsablePoint][1062])?** center
     of scale or rotation pulse. By default, the element calling the pulse
     will be the default `centerOn`.
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| `"location"` \| [number][1051])?** if `centerOn` is a [DiagramElement][32] then this property can be used to
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| `"location"` \| [number][1051])?** if `centerOn` is a [FigureElement][32] then this property can be used to
     horizontally align the pulse center with the element. `'location'` is the
     (0, 0) draw space coordinate of the element. `number` defines the percent
     width from the left of the element (`'center'`)
--   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"location"` \| [number][1051])?** if `centerOn` is a [DiagramElement][32] then this property can be used to
+-   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"location"` \| [number][1051])?** if `centerOn` is a [FigureElement][32] then this property can be used to
     vertically align the pulse center with the element. `'location'` is the
     (0, 0) draw space coordinate of the element. `number` defines the percent
     width from the left of the element (`'center'`)
--   `space` **(`"diagram"` \| `"gl"` \| `"local"` \| `"draw"` \| `"pixel"`)?** if `centerOn` is a point, use this to define the space the point is in
-    (`'diagram'`)
+-   `space` **(`"figure"` \| `"gl"` \| `"local"` \| `"draw"` \| `"pixel"`)?** if `centerOn` is a point, use this to define the space the point is in
+    (`'figure'`)
 -   `num` **[number][1051]?** the number of draw copies of the pulse to make (`1`)
 -   `done` **(null | [string][1046] | function (): void)?** callback when pulse is
     finished. If `string` then the element's [FunctionMap][1310] `fnMap` will be
@@ -14514,8 +14514,8 @@ outlines are becomming thicker.
 ### Examples
 
 ```javascript
-// For all examples below, use this to add an element to the diagram
-diagram.addElement({
+// For all examples below, use this to add an element to the figure
+figure.addElement({
   name: 'p',
   method: 'polygon',
   options: {
@@ -14524,7 +14524,7 @@ diagram.addElement({
   },
 });
 
-const p = diagram.getElement('p');
+const p = figure.getElement('p');
 ```
 
 ```javascript
@@ -14583,19 +14583,19 @@ Type: any
     pulse to (`1.5`)
 -   `angle` **[number][1051]?** translation angle (`0`)
 -   `min` **[number][1051]?** minimum value to pulse to
--   `centerOn` **(null | [DiagramElement][1058] \| [TypeParsablePoint][1062])?** center
+-   `centerOn` **(null | [FigureElement][1058] \| [TypeParsablePoint][1062])?** center
     of scale or rotation pulse. By default, the element calling the pulse
     will be the default `centerOn`.
--   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| `"location"` \| [number][1051])?** if `centerOn` is a [DiagramElement][32] then this property can be used to
+-   `xAlign` **(`"left"` \| `"center"` \| `"right"` \| `"location"` \| [number][1051])?** if `centerOn` is a [FigureElement][32] then this property can be used to
     horizontally align the pulse center with the element. `'location'` is the
     (0, 0) draw space coordinate of the element. `number` defines the percent
     width from the left of the element (`'center'`)
--   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"location"` \| [number][1051])?** if `centerOn` is a [DiagramElement][32] then this property can be used to
+-   `yAlign` **(`"bottom"` \| `"middle"` \| `"top"` \| `"location"` \| [number][1051])?** if `centerOn` is a [FigureElement][32] then this property can be used to
     vertically align the pulse center with the element. `'location'` is the
     (0, 0) draw space coordinate of the element. `number` defines the percent
     width from the left of the element (`'center'`)
--   `space` **(`"diagram"` \| `"gl"` \| `"local"` \| `"draw"` \| `"pixel"`)?** if `centerOn` is a point, use this to define the space the point is in
-    (`'diagram'`)
+-   `space` **(`"figure"` \| `"gl"` \| `"local"` \| `"draw"` \| `"pixel"`)?** if `centerOn` is a point, use this to define the space the point is in
+    (`'figure'`)
 -   `num` **[number][1051]?** the number of draw copies of the pulse to make (`1`)
 -   `done` **(null | [string][1046] | function (): void)?** callback when pulse is
     finished. If `string` then the element's [FunctionMap][1310] `fnMap` will be
@@ -15278,7 +15278,7 @@ Defines how to align a form
 
 ### Properties
 
--   `fixTo` **([DiagramElementPrimitive][1047] \| [DiagramElementCollection][1048] \| [Point][1064])** 
+-   `fixTo` **([FigureElementPrimitive][1047] \| [FigureElementCollection][1048] \| [Point][1064])** 
 -   `xAlign` **TypeHAlign** 
 -   `yAlign` **TypeVAlign** 
 
@@ -15341,7 +15341,7 @@ can be rearranged to a different form:
 
 a = c - b
 
-From the diagram's perspective, a form is a specific layout of equation
+From the figure's perspective, a form is a specific layout of equation
 elements.
 
 This object defines a how the elements are laid out, what properties the
@@ -15379,7 +15379,7 @@ See the examples below for how to define subForms.
 -   `translation` **[TypeFormTranslationProperties][1334]?** animation move
     style (fromNext and fromPrev are prioritized over this)
 -   `elementMods` **[object][1225]?** properties to set in the equation element
-    (@DiagramElementPrimitive) when this form is shown
+    (@FigureElementPrimitive) when this form is shown
 -   `animation` **{duration: [number][1051]??, translation: [TypeFormTranslationProperties][1334]?}?** 
 
 ### Examples
@@ -15514,7 +15514,7 @@ The default values in the pulse object are are:
 
 ### Properties
 
--   `formRestart` **{moveFrom: ([Point][1064]? | [DiagramElementCollection][1048])?, pulse: {duration: [number][1051]?, scale: [number][1051]?, element: [DiagramElement][1058]??}?}?** 
+-   `formRestart` **{moveFrom: ([Point][1064]? | [FigureElementCollection][1048])?, pulse: {duration: [number][1051]?, scale: [number][1051]?, element: [FigureElement][1058]??}?}?** 
 
 ## OBJ_EquationGoToForm
 
@@ -15587,7 +15587,7 @@ will be ignored.
 ### Properties
 
 -   `text` **[string][1046]?** Text element only
--   `font` **DiagramFont?** Text element only
+-   `font` **FigureFont?** Text element only
 -   `style` **(`"italic"` \| `"normal"`)?** Text element only
 -   `symbol` **[string][1046]?** Symbol element only
 -   `side` **(`"top"` \| `"left"` \| `"bottom"` \| `"right"`)?** Symbol element only
@@ -15675,7 +15675,7 @@ This animation step is only available in [Equation][547].
 
 ```javascript
 // Example showing both ways to access GoToForm animation step
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -15688,7 +15688,7 @@ diagram.addElement({
     formSeries: ['0', '1', '2'],
   },
 });
-const e = diagram.getElement('eqn');
+const e = figure.getElement('eqn');
 e.showForm('0');
 e.animations.new()
   .delay(2)
@@ -15727,7 +15727,7 @@ This animation step is only available in [Equation][547].
 
 ```javascript
 // Example showing both ways to access GoToForm animation step
-diagram.addElement({
+figure.addElement({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -15739,7 +15739,7 @@ diagram.addElement({
     }
   },
 });
-const e = diagram.getElement('eqn');
+const e = figure.getElement('eqn');
 e.showForm('0');
 e.animations.new()
   .delay(2)
@@ -15753,25 +15753,25 @@ e.animations.new()
   .start();
 ```
 
-## OBJ_DiagramElementCollection
+## OBJ_FigureElementCollection
 
-[DiagramElementCollection][73] options object.
+[FigureElementCollection][73] options object.
 
 ### Properties
 
 -   `transform` **[TypeParsableTransform][1146]?** 
 -   `position` **[TypeParsablePoint][1062]?** if defined, will overwrite first
     translation of `transform`
--   `limits` **[Rect][1057]?** diagram limits
+-   `limits` **[Rect][1057]?** figure limits
 -   `color` **[TypeColor][1053]?** default color
--   `parent` **([DiagramElement][1058] | null)?** parent of collection
+-   `parent` **([FigureElement][1058] | null)?** parent of collection
 -   `border` **([Array][1049]&lt;[Array][1049]&lt;[Point][1064]>> | `"children"` \| `"rect"` \| [number][1051])?** 
 -   `touchBorder` **([Array][1049]&lt;[Array][1049]&lt;[Point][1064]>> | `"border"` \| [number][1051] \| `"rect"`)?** 
 -   `holeBorder` **[Array][1049]&lt;[Array][1049]&lt;[Point][1064]>>?** 
 
 ## OBJ_Collection
 
-Diagram collection options object.
+Figure collection options object.
 
 ### Properties
 
@@ -15779,7 +15779,7 @@ Diagram collection options object.
 -   `position` **[TypeParsablePoint][1062]?** if defined, will overwrite first
     translation of `transform`
 -   `color` **[TypeColor][1053]?** default color
--   `parent` **([DiagramElement][1058] | null)?** parent of collection
+-   `parent` **([FigureElement][1058] | null)?** parent of collection
 -   `border` **([Array][1049]&lt;[Array][1049]&lt;[TypeParsablePoint][1062]>> | `"children"` \| `"rect"` \| [number][1051])?** defines border of collection. Use `'children'` for the borders of the
     children. Use 'rect' for bounding rectangle of children. Use `number`
     for the bounding rectangle with some buffer. Use
@@ -15797,9 +15797,9 @@ Diagram collection options object.
 
 [1]: #introduction
 
-[2]: #diagram
+[2]: #figure
 
-[3]: #diagram-1
+[3]: #figure-1
 
 [4]: #parameters
 
@@ -15851,13 +15851,13 @@ Diagram collection options object.
 
 [28]: #parameters-8
 
-[29]: #obj_diagram
+[29]: #obj_figure
 
 [30]: #properties-2
 
-[31]: #diagram-elements
+[31]: #figure-elements
 
-[32]: #diagramelement
+[32]: #figureelement
 
 [33]: #parameters-9
 
@@ -15931,7 +15931,7 @@ Diagram collection options object.
 
 [68]: #isanimating
 
-[69]: #diagramelementprimitive
+[69]: #figureelementprimitive
 
 [70]: #parameters-22
 
@@ -15939,7 +15939,7 @@ Diagram collection options object.
 
 [72]: #parameters-23
 
-[73]: #diagramelementcollection
+[73]: #figureelementcollection
 
 [74]: #parameters-24
 
@@ -17221,13 +17221,13 @@ Diagram collection options object.
 
 [713]: #parameters-208
 
-[714]: #misc-diagram-element
+[714]: #misc-figure-element
 
-[715]: #diagramelementmovefreely
+[715]: #figureelementmovefreely
 
 [716]: #properties-59
 
-[717]: #diagramelementmove
+[717]: #figureelementmove
 
 [718]: #properties-60
 
@@ -17251,7 +17251,7 @@ Diagram collection options object.
 
 [728]: #properties-65
 
-[729]: #diagramprimitives
+[729]: #figureprimitives
 
 [730]: #generic
 
@@ -17867,7 +17867,7 @@ Diagram collection options object.
 
 [1036]: #examples-121
 
-[1037]: #obj_diagramelementcollection
+[1037]: #obj_figureelementcollection
 
 [1038]: #properties-143
 
@@ -17875,21 +17875,21 @@ Diagram collection options object.
 
 [1040]: #properties-144
 
-[1041]: DiagramElements
+[1041]: FigureElements
 
 [1042]: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
 
-[1043]: #obj_diagram
+[1043]: #obj_figure
 
-[1044]: #diagramprimitives
+[1044]: #figureprimitives
 
 [1045]: #obj_spacetransforms
 
 [1046]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[1047]: #diagramelementprimitive
+[1047]: #figureelementprimitive
 
-[1048]: #diagramelementcollection
+[1048]: #figureelementcollection
 
 [1049]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
@@ -17905,13 +17905,13 @@ Diagram collection options object.
 
 [1055]: #transform
 
-[1056]: #diagram
+[1056]: #figure
 
 [1057]: #rect
 
-[1058]: #diagramelement
+[1058]: #figureelement
 
-[1059]: #diagramelementmove
+[1059]: #figureelementmove
 
 [1060]: #scenarios
 
@@ -17931,9 +17931,9 @@ Diagram collection options object.
 
 [1068]: #drawingobject
 
-[1069]: #obj_diagramelementcollection
+[1069]: #obj_figureelementcollection
 
-[1070]: #diagramelementcollectiongetelement
+[1070]: #figureelementcollectiongetelement
 
 [1071]: #line
 
@@ -17987,7 +17987,7 @@ Diagram collection options object.
 
 [1096]: ./assets1/grid.png
 
-[1097]: DiagramElementPrimitives
+[1097]: FigureElementPrimitives
 
 [1098]: #obj_pulsewidth
 
@@ -18247,7 +18247,7 @@ Diagram collection options object.
 
 [1226]: #typeformrestart
 
-[1227]: DiagramFont
+[1227]: FigureFont
 
 [1228]: #typeformanimationproperties
 
@@ -18297,7 +18297,7 @@ Diagram collection options object.
 
 [1251]: #eqn_glyphs
 
-[1252]: #diagramelementmovefreely
+[1252]: #figureelementmovefreely
 
 [1253]: #obj_scenario
 

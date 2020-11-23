@@ -9,11 +9,11 @@ Open `index.html` in a browser to view example.
 ## Code
 `index.js`
 ```js
-// Create diagram
-const diagram = new Fig.Diagram();
+// Create figure
+const figure = new Fig.Figure();
 
-// Add elements to the diagram
-diagram.addElement(
+// Add elements to the figure
+figure.addElement(
   // Add equation element
   {
     name: 'eqn',
@@ -37,8 +37,8 @@ diagram.addElement(
   },
 );
 // Show the equation form
-diagram.getElement('eqn').showForm('base');
-diagram.initialize();
+figure.getElement('eqn').showForm('base');
+figure.initialize();
 ```
 
 ## Explanation
@@ -57,9 +57,9 @@ a - b = c
 
 These equations have a number of TERMS (a, b, c), an OPERATOR (+) and an equals sign (which we will call an OPERATOR).
 
-Each of these TERMS and OPERATORS are diagram elements - specifically `DiagramElementPrimitive` objects that can behave in any way a normal `DiagramElement` can.
+Each of these TERMS and OPERATORS are figure elements - specifically `FigureElementPrimitive` objects that can behave in any way a normal `FigureElement` can.
 
-An `Equation` object is a `DiagramElementCollection` that groups all the equation's elements and can arrange them into different equation FORMS.
+An `Equation` object is a `FigureElementCollection` that groups all the equation's elements and can arrange them into different equation FORMS.
 
 In this example, the *equation elements* (TERMS and OPERATORS) are first defined in `options.elements`, then a *form* is defined in `options.forms.base` .
 

@@ -36,43 +36,43 @@ baseColors.forEach((color) => {
   });
 });
 
-const diagramColorNames = [
-  '--diagram-background',
-  '--diagram-primary',
-  '--diagram-warning',
-  '--diagram-safe',
-  '--diagram-passive',
-  '--diagram-construction1',
-  '--diagram-construction2',
-  '--diagram-construction3',
-  '--diagram-construction4',
-  '--diagram-construction5',
-  '--diagram-construction6',
-  '--diagram-construction7',
-  '--diagram-construction8',
-  '--diagram-construction9',
-  '--diagram-disabled',
-  '--diagram-disabledDark',
-  '--diagram-disabledDarker',
-  '--diagram-disabledDarkest',
-  '--diagram-push',
-  '--diagram-action',
-  '--diagram-text-base',
-  '--diagram-text-warning',
-  '--diagram-text-plot',
-  '--diagram-text-keyword',
-  '--diagram-text-keyword2',
-  '--diagram-text-latin',
-  '--diagram-text-greek',
-  '--diagram-text-english',
-  '--diagram-text-note',
-  '--diagram-qr-background',
+const figureColorNames = [
+  '--figure-background',
+  '--figure-primary',
+  '--figure-warning',
+  '--figure-safe',
+  '--figure-passive',
+  '--figure-construction1',
+  '--figure-construction2',
+  '--figure-construction3',
+  '--figure-construction4',
+  '--figure-construction5',
+  '--figure-construction6',
+  '--figure-construction7',
+  '--figure-construction8',
+  '--figure-construction9',
+  '--figure-disabled',
+  '--figure-disabledDark',
+  '--figure-disabledDarker',
+  '--figure-disabledDarkest',
+  '--figure-push',
+  '--figure-action',
+  '--figure-text-base',
+  '--figure-text-warning',
+  '--figure-text-plot',
+  '--figure-text-keyword',
+  '--figure-text-keyword2',
+  '--figure-text-latin',
+  '--figure-text-greek',
+  '--figure-text-english',
+  '--figure-text-note',
+  '--figure-qr-background',
 ];
 
 export default function getCSSColors(customColorNames: Array<string> = []): Object {
   let colors: Object = {};
   let paletteColors: Object = {};
-  let diagramColors: Object = {};
+  let figureColors: Object = {};
   const colorNames = customColorNames.map(name => `--colors-${name}`);
 
   const { body } = document;
@@ -89,15 +89,15 @@ export default function getCSSColors(customColorNames: Array<string> = []): Obje
       cssColorToArray,
     );
 
-    diagramColors = getDefinedCSSVariables(
-      body, diagramColorNames, '--diagram-', false,
+    figureColors = getDefinedCSSVariables(
+      body, figureColorNames, '--figure-', false,
       // $FlowFixMe
       cssColorToArray,
     );
   }
 
   colors.palette = paletteColors;
-  colors.diagram = diagramColors;
+  colors.figure = figureColors;
   return colors;
 }
 

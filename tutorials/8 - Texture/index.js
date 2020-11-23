@@ -1,6 +1,6 @@
-const diagram = new Fig.Diagram();
+const figure = new Fig.Figure();
 
-diagram.addElement(
+figure.addElement(
   {
     name: 'flower',
     method: 'polygon',
@@ -16,4 +16,4 @@ diagram.addElement(
   },
 );
 
-diagram.initialize();
+figure.initialize();
