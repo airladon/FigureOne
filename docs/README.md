@@ -514,8 +514,8 @@
 -   [OBJ_GoToFormAnimationStep][1029]
 -   [NextFormAnimationStep][1031]
 -   [GoToFormAnimationStep][1034]
--   [OBJ_Collection][1037]
--   [OBJ_DiagramElementCollection][1039]
+-   [OBJ_DiagramElementCollection][1037]
+-   [OBJ_Collection][1039]
 
 ## Introduction
 
@@ -617,7 +617,7 @@ Finally, let's see the code for the example above. Two files, `index.html` and `
 <body>
     <div id="figureOneContainer" style="width: 1200px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.2/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.3/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -755,7 +755,7 @@ converting between the different spaces (e.g. pixel, GL, diagram).
 <body>
     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.3.2/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.3.3/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -2664,7 +2664,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 <body>
     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.2/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.3/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -5589,7 +5589,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 <body>
     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.2/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.3/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -6141,7 +6141,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 <body>
     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.2/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.3/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -7938,7 +7938,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 <body>
     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.2/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.3/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -15753,6 +15753,22 @@ e.animations.new()
   .start();
 ```
 
+## OBJ_DiagramElementCollection
+
+[DiagramElementCollection][73] options object.
+
+### Properties
+
+-   `transform` **[TypeParsableTransform][1146]?** 
+-   `position` **[TypeParsablePoint][1062]?** if defined, will overwrite first
+    translation of `transform`
+-   `limits` **[Rect][1057]?** diagram limits
+-   `color` **[TypeColor][1053]?** default color
+-   `parent` **([DiagramElement][1058] | null)?** parent of collection
+-   `border` **([Array][1049]&lt;[Array][1049]&lt;[Point][1064]>> | `"children"` \| `"rect"` \| [number][1051])?** 
+-   `touchBorder` **([Array][1049]&lt;[Array][1049]&lt;[Point][1064]>> | `"border"` \| [number][1051] \| `"rect"`)?** 
+-   `holeBorder` **[Array][1049]&lt;[Array][1049]&lt;[Point][1064]>>?** 
+
 ## OBJ_Collection
 
 Diagram collection options object.
@@ -15778,22 +15794,6 @@ Diagram collection options object.
     borders, otherwise use `Array<Array<TypeParsablePoint>` for a customizable
     border.
 -   `limits` **[Rect][1057]?** 
-
-## OBJ_DiagramElementCollection
-
-[DiagramElementCollection][73] options object.
-
-### Properties
-
--   `transform` **[TypeParsableTransform][1146]?** 
--   `position` **[TypeParsablePoint][1062]?** if defined, will overwrite first
-    translation of `transform`
--   `limits` **[Rect][1057]?** diagram limits
--   `color` **[TypeColor][1053]?** default color
--   `parent` **([DiagramElement][1058] | null)?** parent of collection
--   `border` **([Array][1049]&lt;[Array][1049]&lt;[Point][1064]>> | `"children"` \| `"rect"` \| [number][1051])?** 
--   `touchBorder` **([Array][1049]&lt;[Array][1049]&lt;[Point][1064]>> | `"border"` \| [number][1051] \| `"rect"`)?** 
--   `holeBorder` **[Array][1049]&lt;[Array][1049]&lt;[Point][1064]>>?** 
 
 [1]: #introduction
 
@@ -17867,11 +17867,11 @@ Diagram collection options object.
 
 [1036]: #examples-121
 
-[1037]: #obj_collection
+[1037]: #obj_diagramelementcollection
 
 [1038]: #properties-143
 
-[1039]: #obj_diagramelementcollection
+[1039]: #obj_collection
 
 [1040]: #properties-144
 

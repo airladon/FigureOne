@@ -11,7 +11,7 @@ This library draws shapes in WebGL, and text with Canvas 2D - and therefore requ
 Load the FigureOne library into your HTML file:
 
 ```html
-<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.2/figureone.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.3/figureone.min.js'></script>
 ```
 
 Create a `div` element to attach the diagram to:
