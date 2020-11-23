@@ -187,13 +187,10 @@ class AdvancedRectangle extends DiagramElementCollection {
     shapes: Object,
     optionsIn: ADV_Rectangle,
   ) {
-    super(new Transform('Plot')
-      .scale(1, 1)
-      .rotate(0)
-      .translate(0, 0), shapes.limits);
-    this.shapes = shapes;
-    this._line = null;
-    this._fill = null;
+    // super(new Transform('Plot')
+    //   .scale(1, 1)
+    //   .rotate(0)
+    //   .translate(0, 0), shapes.limits);
 
     const defaultOptions = {
       width: shapes.defaultLength,
@@ -208,12 +205,17 @@ class AdvancedRectangle extends DiagramElementCollection {
         radius: 0,
         sides: 1,
       },
+      transform: new Transform('Rectangle').scale(1, 1).rotate(0).translate(0, 0),
+      limits: shapes.limits,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.fill == null && options.line == null) {
-      // options.line = { width: shapes.defaultLineWidth };
       options.fill = shapes.defaultColor.slice();
     }
+    super(options);
+    this.shapes = shapes;
+    this._line = null;
+    this._fill = null;
 
     this.width = options.width;
     this.height = options.height;

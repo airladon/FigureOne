@@ -98,11 +98,11 @@ describe('Diagram', () => {
         limits,
       );
       const squares = {};
-      const collection = new DiagramElementCollection(
-        new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      const collection = new DiagramElementCollection({
+        trasform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
         // 'c',
-        diagram.limits,
-      );
+        limits: diagram.limits,
+      });
       Object.keys(squareDefinitions).forEach((sKey) => {
         const def = squareDefinitions[sKey];
         const squareElement = diagram.shapes.polygon({

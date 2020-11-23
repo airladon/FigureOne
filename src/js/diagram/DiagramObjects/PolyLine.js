@@ -546,6 +546,7 @@ export default class AdvancedPolyline extends DiagramElementCollection {
       reverse: false,
       transform: new Transform('PolyLine').scale(1, 1).rotate(0).translate(0, 0),
       makeValid: null,
+      limits: shapes.limits,
     };
     if (options.makeValid != null && options.makeValid.shape != null && options.makeValid.shape === 'triangle') {
       defaultOptions.makeValid = {
@@ -559,8 +560,7 @@ export default class AdvancedPolyline extends DiagramElementCollection {
     }
 
     const optionsToUse = joinObjects({}, defaultOptions, options);
-
-    super(optionsToUse.transform, shapes.limits);
+    super(optionsToUse);
     this.setColor(optionsToUse.color);
 
     this.shapes = shapes;
@@ -571,9 +571,6 @@ export default class AdvancedPolyline extends DiagramElementCollection {
     this.animateNextFrame = animateNextFrame;
     this.updatePointsCallback = null;
 
-    if (optionsToUse.position != null) {
-      this.transform.updateTranslation(getPoint(optionsToUse.position));
-    }
     this.position = this.getPosition();
     this.close = optionsToUse.close;
     this.options = optionsToUse;

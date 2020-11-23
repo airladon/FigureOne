@@ -3884,6 +3884,29 @@ class DiagramElementPrimitive extends DiagramElement {
 // ***************************************************************
 
 /**
+ * {@link DiagramElementCollection} options object.
+ * @property {TypeParsableTransform} [transform]
+ * @property {TypeParsablePoint} [position] if defined, will overwrite first
+ * translation of `transform`
+ * @property {Rect} [limits] diagram limits
+ * @property {TypeColor} [color] default color
+ * @property {DiagramElement | null} [parent] parent of collection
+ * @property {Array<Array<Point>> | 'children' | 'rect' | number} [border]
+ * @property {Array<Array<Point>> | 'border' | number | 'rect'} [touchBorder]
+ * @property {Array<Array<Point>>} [holeBorder]
+ */
+export type OBJ_DiagramElementCollection = {
+  transform?: TypeParsableTransform,
+  position?: TypeParsablePoint,
+  limits?: Rect,
+  color?: TypeColor,
+  parent?: DiagramElement | null,
+  border?: Array<Array<Point>> | 'children' | 'rect' | number,
+  touchBorder?: Array<Array<Point>> | 'border' | number | 'rect',
+  holeBorder?: Array<Array<Point>>,
+};
+
+/**
  * Collection diagram element
  *
  * A collection manages a number of children {@link DiagramElements}, be they
@@ -3920,27 +3943,34 @@ class DiagramElementCollection extends DiagramElement {
   +highlight: (elementsToDim: ?Array<string | DiagramElement>) => void;
 
   /**
-   * @param {Transform} transform initial transform to set
-   * @param {Rect} diagramLimits limits of diagram
-   * @param {DiagramElement | null} parent  parent element
+   * @param {OBJ_DiagramElementCollection} options
    */
-  constructor(
-    transform: Transform = new Transform(),
-    diagramLimits: Rect = new Rect(-1, 1, 2, 2),
-    parent: DiagramElement | null = null,
-    border: Array<Array<Point>> | 'children' | 'rect' | number = 'children',
-    touchBorder: Array<Array<Point>> | 'border' | number | 'rect' = 'border',
-    holeBorder: Array<Array<Point>> = [[]],
-  ): void {
-    super(transform, diagramLimits, parent);
+  constructor(options: OBJ_DiagramElementCollection = {}): void {
+    const defaultOptions = {
+      transform: new Transform(),
+      // position: [0, 0],
+      limits: new Rect(-1, 1, 2, 2),
+      parent: null,
+      border: 'children',
+      touchBorder: 'border',
+      holeBorder: [[]],
+      color: [0, 0, 0, 1],
+    };
+    const o = joinObjects({}, defaultOptions, options);
+    console.log(o)
+    super(getTransform(o.transform), o.limits, o.parent);
+    if (o.position != null) {
+      this.transform.updateTranslation(getPoint(o.position));
+    }
     this.elements = {};
     this.drawOrder = [];
     // this.touchInBoundingRect = false;
     this.eqns = {};
     this.type = 'collection';
-    this.border = border;
-    this.touchBorder = touchBorder;
-    this.holeBorder = holeBorder;
+    this.border = o.border;
+    this.touchBorder = o.touchBorder;
+    this.holeBorder = o.holeBorder;
+    this.setColor(o.color);
   }
 
   _getStateProperties(options: { ignoreShown?: boolean }) {
@@ -3969,7 +3999,7 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   _dup(exceptions: Array<string> = []) {
-    const collection = new DiagramElementCollection(
+    const collection = new DiagramElementCollection({}
       // transform,
       // diagramLimits,
     );

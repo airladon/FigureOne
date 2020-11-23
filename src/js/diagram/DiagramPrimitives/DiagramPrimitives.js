@@ -3758,53 +3758,47 @@ export default class DiagramPrimitives {
       holeBorder: Array<Array<Point>> | 'children';
     }>
   ) {
-    let transform = new Transform('collection').scale(1, 1).rotate(0).translate(0, 0);
-    let color = [1, 0, 0, 1];
-    let pulse = null;
+    // let transform = new Transform('collection').scale(1, 1).rotate(0).translate(0, 0);
+    // let color = this.defaultColor;
+    // let pulse = null;
     const defaultOptions = {
       transform: new Transform('collection').scale(1, 1).rotate(0).translate(0, 0),
       border: 'children',
       touchBorder: 'children',
       holeBorder: 'children',
+      color: this.defaultColor,
+      parent: null,
+      limits: this.limits,
     };
     let optionsToUse;
     if (transformOrPointOrOptions instanceof Point) {
-      transform.updateTranslation(transformOrPointOrOptions);
-      optionsToUse = defaultOptions;
+      defaultOptions.transform.updateTranslation(transformOrPointOrOptions);
+      optionsToUse = joinObjects({}, defaultOptions, ...moreOptions);
     } else if (transformOrPointOrOptions instanceof Transform) {
-      transform = transformOrPointOrOptions._dup();
-      optionsToUse = defaultOptions;
+      defaultOptions.transform = transformOrPointOrOptions._dup();
+      optionsToUse = joinObjects({}, defaultOptions, ...moreOptions);
     } else {
-      optionsToUse = joinObjects(defaultOptions, transformOrPointOrOptions, ...moreOptions);
-      if (optionsToUse.transform != null) {
-        transform = getTransform(optionsToUse.transform);
-      }
-      if (optionsToUse.position != null) {
-        transform.updateTranslation(getPoint(optionsToUse.position));
-      }
-      if (optionsToUse.color != null) {
-        ({ color } = optionsToUse);
-      }
-      if (optionsToUse.pulse != null) {
-        ({ pulse } = optionsToUse);
-      }
+      optionsToUse = joinObjects({}, defaultOptions, transformOrPointOrOptions, ...moreOptions);
     }
-
-    const element = new DiagramElementCollection(
-      transform, this.limits,
-      null, // $FlowFixMe
-      parseBorder(optionsToUse.border), // $FlowFixMe
-      parseBorder(optionsToUse.touchBorder), // $FlowFixMe
-      parseBorder(optionsToUse.holeBorder),
-    );
+    if (optionsToUse.border != null) {
+      optionsToUse.border = parseBorder(optionsToUse.border);
+    }
+    if (optionsToUse.touchBorder != null) {
+      optionsToUse.touchBorder = parseBorder(optionsToUse.touchBorder);
+    }
+    if (optionsToUse.holeBorder != null) {
+      optionsToUse.holeBorder = parseBorder(optionsToUse.holeBorder);
+    }
+    // console.log(optionsToUse.transform, transformOrPointOrOptions)
+    const element = new DiagramElementCollection(optionsToUse);
     // console.log(element)
-    element.setColor(color);
+    // element.setColor(color);
     if (
-      pulse != null
-      && typeof element.pulseDefault !== 'function'
+      optionsToUse.pulse != null
+      && typeof element.optionsToUse.pulseDefault !== 'function'
       && typeof element.pulseDefault !== 'string'
     ) {
-      element.pulseDefault.scale = pulse;
+      element.pulseDefault.scale = optionsToUse.pulse;
     }
     return element;
   }

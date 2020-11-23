@@ -680,8 +680,9 @@ describe('Animationa and Movement', () => {
       //   new Transform().scale(2, 2).rotate(Math.PI / 2).translate(0.1, 0),
       //   [0, 0, 1, 1],
       // );
-      collection = new DiagramElementCollection(new Transform()
-        .scale(1, 1).rotate(0).translate(0, 0));
+      collection = new DiagramElementCollection({
+        transform: new Transform().scale(1, 1).rotate(0).translate(0, 0),
+      });
       collection.add('square', squareElement);
       collection.add('tri', triElement);
       diagram.elements.add('c', collection);
@@ -1004,7 +1005,6 @@ describe('Animationa and Movement', () => {
         .rotate(0)
         .translate(0.5, 0));
       // collection.setFirstTransform(new Transform());
-
       const box = collection.getBoundingRect('diagram');
       expect(round(box.left, 3)).toEqual(-0.105 + 0.5);
       expect(round(box.bottom, 3)).toEqual(-0.105);

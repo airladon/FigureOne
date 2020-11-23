@@ -563,6 +563,8 @@ export default class AdvancedLine extends DiagramElementCollection {
         duration: 1,
         frequency: 0,
       },
+      transform: new Transform('Line').scale(1, 1).rotate(0).translate(0, 0),
+      limits: shapes.limits,
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
     if (optionsToUse.touchBorder == null) {
@@ -572,10 +574,7 @@ export default class AdvancedLine extends DiagramElementCollection {
         optionsToUse.touchBorder = optionsToUse.width * 8;
       }
     }
-    super(new Transform('Line')
-      .scale(1, 1)
-      .rotate(0)
-      .translate(0, 0), shapes.limits);
+    super(optionsToUse);
     this.setColor(optionsToUse.color);
 
     this.shapes = shapes;

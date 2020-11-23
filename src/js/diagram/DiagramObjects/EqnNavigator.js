@@ -502,9 +502,22 @@ export default class EqnNavigator extends DiagramElementCollection {
     animateNextFrame: () => void,
     options: TypeNavigatorOptions = {},
   ) {
-    super(new Transform('Eqn Nav')
-      .scale(1, 1)
-      .translate(0, 0), shapes.limits);
+    const defaultOptions = {
+      offset: new Point(0, 0),
+      navType: 'twoLine',
+      navTypeOptions: {
+        forceTwoLines: false,
+        arrows: false,
+      },
+      xAlign: 'center',
+      yAlign: 'middle',
+      interactive: true,
+      id: generateUniqueId('id_figureone__equation_navigator_'),
+      transform: new Transform('Eqn Nav').scale(1, 1).translate(0, 0),
+      limits: shapes.limits,
+    };
+    const optionsToUse = joinObjects({}, defaultOptions, options);
+    super(optionsToUse);
     // super(shapes, eqnOptions);
     this.shapes = shapes;
     // this.setEquation(equation);
@@ -521,19 +534,6 @@ export default class EqnNavigator extends DiagramElementCollection {
     this.animateNextFrame = animateNextFrame;
     this.recorder = new Recorder();
 
-    const defaultOptions = {
-      offset: new Point(0, 0),
-      navType: 'twoLine',
-      navTypeOptions: {
-        forceTwoLines: false,
-        arrows: false,
-      },
-      xAlign: 'center',
-      yAlign: 'middle',
-      interactive: true,
-      id: generateUniqueId('id_figureone__equation_navigator_'),
-    };
-    const optionsToUse = joinObjects({}, defaultOptions, options);
     this.options = optionsToUse;
     if (optionsToUse.equation != null) {
       // this.eqn = optionsToUse.equation;

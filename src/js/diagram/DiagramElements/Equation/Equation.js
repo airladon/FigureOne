@@ -800,6 +800,8 @@ export class Equation extends DiagramElementCollection {
       forms: {},
       formSeries: {},
       formRestart: null,
+      limits: shapes.limits,
+      transform: new Transform('Equation').scale(1, 1).rotate(0).translate(0, 0),
     };
 
     const optionsToUse = joinObjectsWithOptions({ except: ['font'] }, {}, defaultOptions, options);
@@ -812,10 +814,10 @@ export class Equation extends DiagramElementCollection {
     } else {
       optionsToUse.font = new DiagramFont(defaultFont);
     }
-    // debugger;
-    optionsToUse.position = parsePoint(
-      optionsToUse.position, new Point(0, 0),
-    );
+    if (optionsToUse.transform != null) {
+      optionsToUse.transform = getTransform(optionsToUse.transform);
+    }
+
     optionsToUse.formDefaults.alignment.fixTo = parsePoint(
       optionsToUse.formDefaults.alignment.fixTo,
       optionsToUse.formDefaults.alignment.fixTo,
@@ -832,13 +834,10 @@ export class Equation extends DiagramElementCollection {
       }, optionsToUse.formRestart.pulse);
     }
 
-    super(new Transform('Equation')
-      .scale(1, 1)
-      .rotate(0)
-      .translate(0, 0), shapes.limits);
-    if (optionsToUse.transform != null) {
-      this.setTransform(getTransform(optionsToUse.transform));
-    }
+    super(optionsToUse);
+    // if (optionsToUse.transform != null) {
+    //   this.setTransform(getTransform(optionsToUse.transform));
+    // }
     this.shapes = shapes;
     this.setColor(optionsToUse.color);
     // this.isTouchDevice = isTouchDevice;
@@ -873,8 +872,6 @@ export class Equation extends DiagramElementCollection {
       descriptionPosition: new Point(0, 0),
       formRestart: optionsToUse.formRestart,
     };
-
-    this.setPosition(optionsToUse.position);
 
     if (optionsToUse.elements != null) {
       this.addElements(optionsToUse.elements);

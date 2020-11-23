@@ -839,13 +839,12 @@ class AdvancedAngle extends DiagramElementCollection {
         thick: 1,
       },
       mods: {},
+      transform: new Transform('Angle').scale(1, 1).rotate(0).translate(0, 0),
+      limits: shapes.limits,
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
 
-    super(new Transform('Line')
-      .scale(1, 1)
-      .rotate(0)
-      .translate(0, 0), shapes.limits);
+    super(optionsToUse);
     this.setColor(optionsToUse.color);
 
     this.shapes = shapes;

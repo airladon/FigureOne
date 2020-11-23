@@ -297,14 +297,6 @@ class AdvancedPlotLegend extends DiagramElementCollection {
     advanced: Object,
     optionsIn: ADV_PlotLegend,
   ) {
-    super(new Transform('PlotLegend')
-      .scale(1, 1)
-      .rotate(0)
-      .translate(0, 0), shapes.limits);
-    this.shapes = shapes;
-    this.equation = equation;
-    this.advanced = advanced;
-
     const defaultOptions = {
       font: shapes.defaultFont,
       color: shapes.defaultColor,
@@ -314,8 +306,15 @@ class AdvancedPlotLegend extends DiagramElementCollection {
       length: shapes.defaultLength / 10,
       space: 0.05,
       position: new Point(0, 0),
+      transform: new Transform('PlotLegend').scale(1, 1).rotate(0).translate(0, 0),
+      limits: shapes.limits,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
+
+    super(options);
+    this.shapes = shapes;
+    this.equation = equation;
+    this.advanced = advanced;
 
     this.defaultFont = options.font;
     this.defaultColor = options.color;

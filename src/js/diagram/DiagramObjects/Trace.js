@@ -244,13 +244,6 @@ class AdvancedTrace extends DiagramElementCollection {
     equation: Object,
     optionsIn: ADV_Trace,
   ) {
-    super(new Transform('Axis')
-      .scale(1, 1)
-      .rotate(0)
-      .translate(0, 0), shapes.limits);
-    this.shapes = shapes;
-    this.equation = equation;
-
     const defaultOptions = {
       color: shapes.defaultColor,
       font: {
@@ -262,14 +255,16 @@ class AdvancedTrace extends DiagramElementCollection {
         opacity: 1,
       },
       name: '',
+      transform: new Transform('Trace').scale(1, 1).rotate(0).translate(0, 0),
+      limits: shapes.limits,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
-    // if (options.stop == null) {
-    //   options.stop = options.start + 1;
-    // }
     if (options.markers == null && options.line === undefined) {
       options.line = {};
     }
+    super(options);
+    this.shapes = shapes;
+    this.equation = equation;
     this.defaultFont = options.font;
     this.points = getPoints(options.points);
     this.xAxis = options.xAxis;

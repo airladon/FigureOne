@@ -581,13 +581,6 @@ class AdvancedAxis extends DiagramElementCollection {
     equation: Object,
     optionsIn: ADV_Axis,
   ) {
-    super(new Transform('Axis')
-      .scale(1, 1)
-      .rotate(0)
-      .translate(0, 0), shapes.limits);
-    this.shapes = shapes;
-    this.equation = equation;
-
     const defaultOptions: ADV_Axis = {
       length: shapes.defaultLength,
       angle: 0,
@@ -600,7 +593,13 @@ class AdvancedAxis extends DiagramElementCollection {
       // ticks: null,
       show: true,
       axis: 'x',
+      transform: new Transform('Axis').scale(1, 1).rotate(0).translate(0, 0),
+      limits: shapes.limits,
     };
+    let options = joinObjects({}, defaultOptions, optionsIn);
+    super(options);
+    this.shapes = shapes;
+    this.equation = equation;
     this.autoStep = null;
     if (optionsIn.auto != null) {
       const {
@@ -612,7 +611,7 @@ class AdvancedAxis extends DiagramElementCollection {
       defaultOptions.labels = { precision };
       this.autoStep = step;
     }
-    const options = joinObjects({}, defaultOptions, optionsIn);
+    options = joinObjects({}, defaultOptions, optionsIn);
     if (options.stop == null || options.stop <= options.start) {
       options.stop = options.start + 1;
     }

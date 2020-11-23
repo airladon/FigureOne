@@ -3,7 +3,7 @@
 // import Diagram from '../Diagram';
 import {
   Transform, Point,
-  getPoint, getTransform, parsePoint,
+  getPoint, parsePoint,
   comparePoints, Rect,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
@@ -444,14 +444,6 @@ class AdvancedPlot extends DiagramElementCollection {
     advanced: Object,
     optionsIn: ADV_Plot,
   ) {
-    super(new Transform('Plot')
-      .scale(1, 1)
-      .rotate(0)
-      .translate(0, 0), shapes.limits);
-    this.shapes = shapes;
-    this.equation = equation;
-    this.advanced = advanced;
-
     const defaultOptions = {
       font: shapes.defaultFont,
       color: shapes.defaultColor,
@@ -461,6 +453,8 @@ class AdvancedPlot extends DiagramElementCollection {
       grid: [],
       xAlign: 'plotAreaLeft',
       yAlign: 'plotAreaBottom',
+      limits: shapes.limits,
+      transform: new Transform('Plot').scale(1, 1).rotate(0).translate(0, 0),
     };
     if (
       optionsIn.color != null
@@ -472,9 +466,21 @@ class AdvancedPlot extends DiagramElementCollection {
       defaultOptions.font.color = optionsIn.color;
     }
     const options = joinObjects({}, defaultOptions, optionsIn);
+    // if (options.transform != null) {
+    //   options.transform = getTransform(options.transform);
+    // }
+    // if (options.position != null) {
+    //   options.transform.updateTranslation(getPoint(options.position));
+    // }
     if (options.stop == null) {
       options.stop = options.start + 1;
     }
+
+    super(options);
+    this.shapes = shapes;
+    this.equation = equation;
+    this.advanced = advanced;
+
     this.defaultFont = options.font;
     this.defaultColor = options.color;
     this.width = options.width;
@@ -492,13 +498,6 @@ class AdvancedPlot extends DiagramElementCollection {
 
     if (optionsIn.font == null || optionsIn.font.size == null) {
       this.defaultFont.size = Math.min(this.width, this.height) / 20;
-    }
-
-    if (options.position != null) {
-      this.transform.updateTranslation(getPoint(options.position));
-    }
-    if (options.transform != null) {
-      this.transform = getTransform(options.transform);
     }
 
     this.setColor(options.color);
