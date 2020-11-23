@@ -31,7 +31,8 @@ import type {
 import type {
   TypeParsablePoint,
 } from '../../../tools/g2';
-import * as animation from '../../Animation/Animation';
+import type { OBJ_TriggerAnimationStep } from '../../Animation/Animation';
+import { AnimationManager, TriggerAnimationStep } from '../../Animation/Animation';
 
 
 // Priority:
@@ -377,7 +378,7 @@ type TypeFormRestart = {
  * @see {@link Equation}, {@link NextFormAnimationStep}
  */
 export type OBJ_NextFormAnimationStep = {
-} & animation.OBJ_TriggerAnimationStep;
+} & OBJ_TriggerAnimationStep;
 
 /**
  * {@link GoToFormAnimationStep} options object.
@@ -405,7 +406,7 @@ export type OBJ_NextFormAnimationStep = {
 export type OBJ_GoToFormAnimationStep = {
   start?: string,
   target?: string,
-} & animation.OBJ_TriggerAnimationStep;
+} & OBJ_TriggerAnimationStep;
 
 
 /**
@@ -573,7 +574,7 @@ type OBJ_EquationGoToForm = {
  *   .start();
  */
 // eslint-disable-next-line no-unused-vars
-class NextFormAnimationStep extends animation.TriggerAnimationStep {
+class NextFormAnimationStep extends TriggerAnimationStep {
 }
 
 /**
@@ -620,7 +621,7 @@ class NextFormAnimationStep extends animation.TriggerAnimationStep {
  *   .start();
  */
 // eslint-disable-next-line no-unused-vars
-class GoToFormAnimationStep extends animation.TriggerAnimationStep {
+class GoToFormAnimationStep extends TriggerAnimationStep {
 }
 
 // export const foo = () => {};
@@ -755,9 +756,9 @@ export class Equation extends DiagramElementCollection {
    * @extends AnimationManager
    */
   animations: {
-    nextForm: (OBJ_NextFormAnimationStep) => animation.TriggerAnimationStep,
-    goToForm: (OBJ_GoToFormAnimationStep) => animation.TriggerAnimationStep,
-  } & animation.AnimationManager;
+    nextForm: (OBJ_NextFormAnimationStep) => TriggerAnimationStep,
+    goToForm: (OBJ_GoToFormAnimationStep) => TriggerAnimationStep,
+  } & AnimationManager;
 
   // isTouchDevice: boolean;
   // animateNextFrame: void => void;
@@ -928,7 +929,7 @@ export class Equation extends DiagramElementCollection {
         }));
         return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
       };
-      return new animation.TriggerAnimationStep(o);
+      return new TriggerAnimationStep(o);
     };
     this.animations.customSteps.push({
       step: this.animations.goToForm.bind(this),
@@ -950,7 +951,7 @@ export class Equation extends DiagramElementCollection {
         }));
         return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
       };
-      return new animation.TriggerAnimationStep(o);
+      return new TriggerAnimationStep(o);
     };
     this.animations.customSteps.push({
       step: this.animations.nextForm.bind(this),

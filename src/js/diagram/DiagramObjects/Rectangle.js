@@ -36,6 +36,7 @@ export type OBJ_SurroundAnimationStep = {
   target?: number,
 } & OBJ_CustomAnimationStep;
 
+
 /**
  * {@link AdvancedRectangle} options object.
  *
