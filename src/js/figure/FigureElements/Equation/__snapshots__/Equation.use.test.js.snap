@@ -68,14 +68,6 @@ FigureElementPrimitive {
     1,
   ],
   "dependantTransform": false,
-  "figureLimits": Rect {
-    "bottom": -1,
-    "height": 2,
-    "left": -1,
-    "right": 1,
-    "top": 1,
-    "width": 2,
-  },
   "dimColor": Array [
     0.5,
     0.5,
@@ -326,6 +318,14 @@ FigureElementPrimitive {
     ],
     "touchBorderSetup": "text",
     "type": "drawingObject",
+  },
+  "figureLimits": Rect {
+    "bottom": -1,
+    "height": 2,
+    "left": -1,
+    "right": 1,
+    "top": 1,
+    "width": 2,
   },
   "fnMap": FunctionMap {
     "global": GlobalFunctionMap {
