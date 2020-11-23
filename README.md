@@ -41,49 +41,12 @@ And you will see:
 
 ![](tutorials/1%20-%20Shape/example.png)
 
-Next, check out the **[Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials** for a quick primer on how FigureOne works
+Check out the **[Tutorials](https://github.com/airladon/FigureOne/tree/docs1/tutorials** for a quick primer on how FigureOne works, and the API reference and before you know it:
 
-And before you know it:
+Animated proof of the pythagorean theorm:
 
-![](examples/3%20-%20Interactive%20Shape/example.gif)
+![](examples/Pythagorean%20Theorem/example.gif)
 
-**[Simple shape](https://github.com/airladon/FigureOne/tree/master/examples/1%20-%20Getting%20Started)**
-
-And you will see:
-
-
-
-Source code of this and other examples is provided:
-
-**[Simple shape](https://github.com/airladon/FigureOne/tree/master/examples/1%20-%20Shape)** - Simple creation and drawing of diagram element
-
-![](examples/1%20-%20Shape/example.png)
-
-**[Collections](https://github.com/airladon/FigureOne/tree/master/examples/2%20-%20Collections)** - Example showing collections of diagram elements
-
-![](examples/2%20-%20Collections/example.png)
-
-**[Interactive Shape](https://github.com/airladon/FigureOne/tree/master/examples/3%20-%20Interactive%20Shape)** - A shape that can be moved by the user
-
-![](examples/3%20-%20Interactive%20Shape/example.gif)
-
-**[Animation](https://github.com/airladon/FigureOne/tree/master/examples/4%20-%20Animation)** - Animating a shape
-
-![](examples/4%20-%20Animation/example.gif)
-
-**[Simple Equation](https://github.com/airladon/FigureOne/tree/master/examples/5%20-%20Simple%20Equation)** - Render a simple fraction
-
-![](examples/5%20-%20Simple%20Equation/example.png)
-
-**[Advanced Equation](https://github.com/airladon/FigureOne/tree/master/examples/6%20-%20Advanced%20Equation)** - Render an equation with an integral, sum operator, subscripts and color
-
-![](examples/6%20-%20Advanced%20Equation/example.png)
-
-**[Equation Animation](https://github.com/airladon/FigureOne/tree/master/examples/7%20-%20Animation%20between%20Equation%20Forms)** - Animation between two forms of an equation
-
-![](examples/7%20-%20Animation%20between%20Equation%20Forms/example.gif)
-
-Documentation is a work in progress.
 
 ## NPM Package
 
