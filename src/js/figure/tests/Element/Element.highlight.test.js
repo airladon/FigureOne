@@ -1,11 +1,11 @@
 import {
   // FigureElementPrimitive,
   FigureElementCollection,
-} from '../Element';
+} from '../../Element';
 // import {
 //   Point, Transform,
 // } from '../../tools/g2';
-import makeFigure from '../../__mocks__/makeFigure';
+import makeFigure from '../../../__mocks__/makeFigure';
 
 const makeSquare = () => {
   const figure = makeFigure();

@@ -1,11 +1,11 @@
 import {
   round,
-} from '../tools/math';
-import makeFigure from '../__mocks__/makeFigure';
+} from '../../../tools/math';
+import makeFigure from '../../../__mocks__/makeFigure';
 
 // tools.isTouchDevice = jest.fn();
 
-jest.mock('./recorder.worker');
+jest.mock('../../recorder.worker');
 
 describe('Figure Stop', () => {
   let figure;

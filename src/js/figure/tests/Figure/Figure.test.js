@@ -2,20 +2,20 @@ import {
   // FigureElementPrimitive,
   FigureElementCollection,
   // AnimationPhase,
-} from './Element';
+} from '../../Element';
 
-import * as tools from '../tools/tools';
+import * as tools from '../../../tools/tools';
 // import Figure from './Figure';
 import {
   Point, Transform, Rect,
-} from '../tools/g2';
+} from '../../../tools/g2';
 // import webgl from '../__mocks__/WebGLInstanceMock';
 // import DrawContext2D from '../__mocks__/DrawContext2DMock';
-import makeFigure from '../__mocks__/makeFigure';
+import makeFigure from '../../../__mocks__/makeFigure';
 
-jest.mock('./Gesture');
-jest.mock('./webgl/webgl');
-jest.mock('./DrawContext2D');
+jest.mock('../../Gesture');
+jest.mock('../../webgl/webgl');
+jest.mock('../../DrawContext2D');
 tools.isTouchDevice = jest.fn();
 
 describe('Figure', () => {

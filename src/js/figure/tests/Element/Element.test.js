@@ -1,22 +1,22 @@
 import {
   // FigureElementPrimitive,
   FigureElementCollection,
-} from './Element';
+} from '../../Element';
 // import { AnimationPhase } from './AnimationPhase';
 import {
   Point, Transform,
-} from '../tools/g2';
-import webgl from '../__mocks__/WebGLInstanceMock';
+} from '../../../tools/g2';
+import webgl from '../../../__mocks__/WebGLInstanceMock';
 import {
   linear, round,
-} from '../tools/math';
-import * as m2 from '../tools/m2';
-import makeFigure from '../__mocks__/makeFigure';
+} from '../../../tools/math';
+import * as m2 from '../../../tools/m2';
+import makeFigure from '../../../__mocks__/makeFigure';
 // import Figure from './Figure';
 
-jest.mock('./Gesture');
-jest.mock('./webgl/webgl');
-jest.mock('./DrawContext2D');
+jest.mock('../../Gesture');
+jest.mock('../../webgl/webgl');
+jest.mock('../../DrawContext2D');
 jest.useFakeTimers();
 
 

@@ -1,12 +1,12 @@
 import {
   Point,
-} from '../tools/g2';
-import * as tools from '../tools/tools';
-import makeFigure from '../__mocks__/makeFigure';
+} from '../../../tools/g2';
+import * as tools from '../../../tools/tools';
+import makeFigure from '../../../__mocks__/makeFigure';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('./recorder.worker');
+jest.mock('../../recorder.worker');
 jest.useFakeTimers();
 
 describe('Animate To State', () => {

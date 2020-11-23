@@ -1,14 +1,14 @@
 import {
   Point,
-} from '../tools/g2';
+} from '../../../tools/g2';
 import {
   round,
-} from '../tools/math';
-import makeFigure from '../__mocks__/makeFigure';
+} from '../../../tools/math';
+import makeFigure from '../../../__mocks__/makeFigure';
 
 // tools.isTouchDevice = jest.fn();
 
-jest.mock('./recorder.worker');
+jest.mock('../../recorder.worker');
 jest.useFakeTimers();
 
 describe('Move Freely', () => {

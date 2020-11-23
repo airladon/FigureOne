@@ -1,11 +1,11 @@
 import {
   FigureElementCollection,
-} from '../Element';
+} from '../../Element';
 // import { AnimationPhase } from './AnimationPhase';
 // import {
 //   Point, Transform,
 // } from '../../tools/g2';
-import makeFigure from '../../__mocks__/makeFigure';
+import makeFigure from '../../../__mocks__/makeFigure';
 
 const mockDone = jest.fn(() => {});
 

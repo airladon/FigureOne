@@ -4,7 +4,7 @@
 // import {
 //   round,
 // } from '../../tools/math';
-import makeFigure from '../../__mocks__/makeFigure';
+import makeFigure from '../../../__mocks__/makeFigure';
 
 jest.useFakeTimers();
 

@@ -1,15 +1,15 @@
 import {
   Point, Transform,
-} from '../tools/g2';
+} from '../../../tools/g2';
 // import {
 //   round,
 // } from '../tools/math';
-import * as tools from '../tools/tools';
-import makeFigure from '../__mocks__/makeFigure';
+import * as tools from '../../../tools/tools';
+import makeFigure from '../../../__mocks__/makeFigure';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('./recorder.worker');
+jest.mock('../../recorder.worker');
 
 describe('Figure Recorder', () => {
   let figure;
