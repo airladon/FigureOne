@@ -1029,7 +1029,7 @@ describe('Diagram Recorder', () => {
           p1: [0, 0],
           p2: [0, 1],
           transform: new Transform('lineT')
-            .translate(0, 0).rotate(0).scale(1, 1),
+            .scale(1, 1).rotate(0).translate(0, 0),
         },
       });
       diagram.initialize();
@@ -1419,6 +1419,8 @@ describe('Diagram Recorder', () => {
 
       line.setPosition(10, 10);
       recorder.setState(0);
+      // console.log(recorder)
+      // console.log(line.transform)
       expect(line.getPosition().y).toBe(0);
       recorder.setState(1);
       expect(line.getPosition().y).toBe(1);

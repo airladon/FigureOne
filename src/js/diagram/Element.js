@@ -3957,7 +3957,7 @@ class DiagramElementCollection extends DiagramElement {
       color: [0, 0, 0, 1],
     };
     const o = joinObjects({}, defaultOptions, options);
-    console.log(o)
+    // console.log(o)
     super(getTransform(o.transform), o.limits, o.parent);
     if (o.position != null) {
       this.transform.updateTranslation(getPoint(o.position));
@@ -3999,10 +3999,8 @@ class DiagramElementCollection extends DiagramElement {
   }
 
   _dup(exceptions: Array<string> = []) {
-    const collection = new DiagramElementCollection({}
-      // transform,
-      // diagramLimits,
-    );
+    const collection = new DiagramElementCollection({
+    });
     // collection.touchInBoundingRect = this.touchInBoundingRect;
     // collection.copyFrom(this);
     const doNotDuplicate = this.drawOrder.map(e => `_${e}`);
