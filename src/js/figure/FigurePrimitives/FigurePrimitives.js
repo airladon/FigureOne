@@ -31,14 +31,14 @@ import DrawingObject from '../DrawingObjects/DrawingObject';
 // import DashedLine from '../FigureElements/DashedLine';
 // import RectangleFilled from '../FigureElements/RectangleFilled';
 // import Rectangle from '../FigureElements/Rectangle';
-import Generic from '../FigureElements/Generic';
+import Generic from './Generic';
 // import Box from '../FigureElements/Box';
 // import type { TypeRectangleFilledReference } from '../FigureElements/RectangleFilled';
 // import Lines from '../FigureElements/Lines';
 // import Arrow from '../FigureElements/Arrow';
 // import { AxisProperties } from '../FigureElements/Plot/AxisProperties';
 // import Axis from '../FigureElements/Plot/Axis';
-import Text from '../FigureElements/Text';
+import Text from './Text';
 // import {
 //   FigureText, FigureFont, TextObject, LinesObject,
 // } from '../DrawingObjects/TextObject/TextObject';

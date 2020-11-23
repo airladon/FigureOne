@@ -21,7 +21,7 @@ import type {
 import FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
 // eslint-disable-next-line import/no-cycle
 import FigureCollections from './FigureCollections';
-import FigureEquation from '../FigureEquation/FigureEquation';
+import FigureEquation from '../Equation/FigureEquation';
 import type { OBJ_Polyline, OBJ_Polygon } from '../FigurePrimitives/FigurePrimitives';
 
 /* eslint-disable max-len */

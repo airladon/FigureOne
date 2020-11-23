@@ -14,11 +14,11 @@ import {
   FigureElementCollection, FigureElementPrimitive,
 } from '../Element';
 import EquationLabel from './EquationLabel';
-import { Equation } from '../FigureElements/Equation/Equation';
+import { Equation } from '../Equation/Equation';
 import { simplifyArrowOptions, getArrowLength } from '../geometries/arrow';
 import type { OBJ_LineArrows, OBJ_LineArrow } from '../geometries/arrow';
 import type { OBJ_Pulse } from '../Element';
-import type { EQN_Equation } from '../FigureElements/Equation/Equation';
+import type { EQN_Equation } from '../Equation/Equation';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
 import type {
   TypeLabelOrientation, TypeLabelLocation, TypeLabelSubLocation,

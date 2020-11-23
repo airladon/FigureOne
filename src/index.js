@@ -21,14 +21,14 @@ import {
   TextObject, FigureText, FigureFont,
 } from './js/figure/DrawingObjects/TextObject/TextObject';
 import HTMLObject from './js/figure/DrawingObjects/HTMLObject/HTMLObject';
-import HTMLEquation from './js/figure/FigureElements/Equation/HTMLEquation';
+import HTMLEquation from './js/figure/Equation/HTMLEquation';
 import CollectionsAngle from './js/figure/FigureCollections/Angle';
 import CollectionsLine from './js/figure/FigureCollections/Line';
 import CollectionsPolyline from './js/figure/FigureCollections/PolyLine';
 import EqnNavigator from './js/figure/FigureCollections/EqnNavigator';
 import EquationLabel from './js/figure/FigureCollections/EquationLabel';
-import { Equation } from './js/figure/FigureElements/Equation/Equation';
-import EquationForm from './js/figure/FigureElements/Equation/EquationForm';
+import { Equation } from './js/figure/Equation/Equation';
+import EquationForm from './js/figure/Equation/EquationForm';
 
 import type { TypeRotationDirection, TypeParsablePoint } from './js/tools/g2';
 import type {

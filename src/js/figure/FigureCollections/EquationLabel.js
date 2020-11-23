@@ -5,12 +5,12 @@ import {
 import {
   round,
 } from '../../tools/math';
-import { Equation } from '../FigureElements/Equation/Equation';
+import { Equation } from '../Equation/Equation';
 import type {
   TypeVAlign, TypeHAlign,
-} from '../FigureElements/Equation/EquationForm';
+} from '../Equation/EquationForm';
 import { joinObjects } from '../../tools/tools';
-import type { EQN_Equation } from '../FigureElements/Equation/Equation';
+import type { EQN_Equation } from '../Equation/Equation';
 import type { TypeColor } from '../../tools/types';
 
 const DEBUG = false;

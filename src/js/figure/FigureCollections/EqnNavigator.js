@@ -5,10 +5,10 @@ import {
 import {
   FigureElementCollection, FigureElementPrimitive,
 } from '../Element';
-import EquationForm from '../FigureElements/Equation/EquationForm';
+import EquationForm from '../Equation/EquationForm';
 import * as html from '../../tools/htmlGenerator';
 import { generateUniqueId, joinObjects } from '../../tools/tools';
-import { Equation } from '../FigureElements/Equation/Equation';
+import { Equation } from '../Equation/Equation';
 import { Recorder } from '../Recorder';
 
 // eslint-disable-next-line no-use-before-define

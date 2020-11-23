@@ -5,7 +5,7 @@ import {
 } from '../Element';
 import FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
 import FigureCollections from '../FigureCollections/FigureCollections';
-import FigureEquation from '../FigureEquation/FigureEquation';
+import FigureEquation from '../Equation/FigureEquation';
 
 export type TypeAddElementObject = {
   path?: string,

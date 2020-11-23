@@ -17,12 +17,12 @@ import type {
 } from './EquationLabel';
 // import type { TypeLabelEquationOptions } from './EquationLabel';
 import { joinObjects } from '../../tools/tools';
-import { Equation } from '../FigureElements/Equation/Equation';
+import { Equation } from '../Equation/Equation';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
 import { simplifyArrowOptions, getArrowLength } from '../geometries/arrow';
 import type { OBJ_LineArrows, OBJ_LineArrow } from '../geometries/arrow';
 import type { OBJ_Pulse } from '../Element';
-import type { EQN_Equation } from '../FigureElements/Equation/Equation';
+import type { EQN_Equation } from '../Equation/Equation';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
 import type { TypeColor, TypeDash } from '../../tools/types';

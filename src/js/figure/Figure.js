@@ -21,7 +21,7 @@ import { Recorder } from './Recorder';
 import Gesture from './Gesture';
 import DrawContext2D from './DrawContext2D';
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
-import FigureEquation from './FigureEquation/FigureEquation';
+import FigureEquation from './Equation/FigureEquation';
 import FigureCollections from './FigureCollections/FigureCollections';
 import addElements from './FigureAddElements/addElements';
 import type { TypeAddElementObject } from './FigureAddElements/addElements';
