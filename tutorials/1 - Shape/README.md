@@ -1,6 +1,6 @@
-# Example 1 - Shape
+# Example 1 - Getting Started
 
-Draws a circle.
+Draw a circle.
 
 Download `index.html` and `index.js` into the same folder and open `index.html` in a browser to view example.
 
@@ -28,10 +28,10 @@ const diagram = new Fig.Diagram();
 // Add circle to diagram
 diagram.addElement(
   {
-    name: 'circle',
+    name: 'tri',
     method: 'polygon',
     options: {
-      sides: 100,
+      sides: 3,
       radius: 0.2,
       fill: true,
       color: [1, 0, 0, 1],

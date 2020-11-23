@@ -16,7 +16,7 @@ Load the FigureOne library into your HTML file:
 
 Create a `div` element to attach the diagram to:
 ```html
-<div id="figureOneContainer" style="width: 500px; height: 500px; background-color: black;"></div>
+<div id="figureOneContainer" style="width: 500px; height: 500px; background-color: white;"></div>
 ```
 
 Then in javascript, create a diagram and a shape within it:
@@ -26,16 +26,32 @@ const diagram = new Fig.Diagram();
 
 diagram.addElement(
   {
-    name: 'circle',
-    method: 'polygon',
+    name: 'tri',
+    method: 'triangle',
     options: {
-      sides: 100,
-      radius: 0.2,
+      width: 1,
+      height: 1,
       color: [1, 0, 0, 1],
     },
   },
 );
 ```
+
+And you will see:
+
+![](tutorials/1%20-%20Shape/example.png)
+
+Next, check out the **[Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials** for a quick primer on how FigureOne works
+
+And before you know it:
+
+![](examples/3%20-%20Interactive%20Shape/example.gif)
+
+**[Simple shape](https://github.com/airladon/FigureOne/tree/master/examples/1%20-%20Getting%20Started)**
+
+And you will see:
+
+
 
 Source code of this and other examples is provided:
 
