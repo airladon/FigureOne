@@ -1,11 +1,11 @@
 import {
   Point,
-} from '../../../../tools/g2';
+} from '../../../tools/g2';
 import {
   getDashElementAndRemainder, makeDashDefinition, makeDashes,
   lineToDash,
 } from './dashes';
-import { round } from '../../../../tools/math';
+import { round } from '../../../tools/math';
 
 describe('Dash tests', () => {
   describe('makeDashDefinition', () => {

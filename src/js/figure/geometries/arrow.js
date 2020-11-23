@@ -1,12 +1,12 @@
 // @flow
 import {
   Point, Line, Transform, getPoint,
-} from '../../../tools/g2';
+} from '../../tools/g2';
 import {
   joinObjects, joinObjectsWithOptions,
-} from '../../../tools/tools';
+} from '../../tools/tools';
 import { getPolygonPoints } from './polygon/polygon';
-import type { OBJ_Arrow } from '../../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Arrow } from '../FigurePrimitives/FigurePrimitives';
 
 /**
  * Arrow heads

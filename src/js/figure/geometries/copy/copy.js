@@ -3,13 +3,13 @@
 /* eslint-disable camelcase */
 import {
   Transform, Point, polarToRect, getBoundingRect, getPoints, getPoint,
-} from '../../../../tools/g2';
+} from '../../../tools/g2';
 
-import type { TypeParsablePoint } from '../../../../tools/g2';
+import type { TypeParsablePoint } from '../../../tools/g2';
 
 import {
   joinObjects,
-} from '../../../../tools/tools';
+} from '../../../tools/tools';
 
 /* eslint-disable max-len */
 /**

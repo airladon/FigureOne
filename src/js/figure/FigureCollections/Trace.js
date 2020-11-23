@@ -18,7 +18,7 @@ import type {
   OBJ_Line, OBJ_Polygon, OBJ_Star, OBJ_Polyline,
 } from '../FigurePrimitives/FigurePrimitives';
 import type { TypeColor, OBJ_Font_Fixed } from '../../tools/types';
-import type { CPY_Steps } from '../DrawingObjects/Geometries/copy/copy';
+import type { CPY_Steps } from '../geometries/copy/copy';
 
 /**
  * {@link CollectionsTrace} options object.

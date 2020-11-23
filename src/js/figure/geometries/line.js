@@ -1,8 +1,8 @@
 // @flow
 import {
   Point, Line, getPoint,
-} from '../../../tools/g2';
-import type { TypeParsablePoint } from '../../../tools/g2';
+} from '../../tools/g2';
+import type { TypeParsablePoint } from '../../tools/g2';
 
 // import {
 //   round,

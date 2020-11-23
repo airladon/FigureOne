@@ -6,8 +6,8 @@ import {
 // import { joinObjects } from '../../../tools/tools';
 import WebGLInstance from '../../webgl/webgl';
 import VertexObject from './VertexObject';
-import { copyPoints } from '../Geometries/copy/copy';
-import type { CPY_Step } from '../Geometries/copy/copy';
+import { copyPoints } from '../../geometries/copy/copy';
+import type { CPY_Step } from '../../geometries/copy/copy';
 
 
 class VertexGeneric extends VertexObject {

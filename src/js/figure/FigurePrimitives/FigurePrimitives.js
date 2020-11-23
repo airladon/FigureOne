@@ -48,19 +48,19 @@ import {
 } from '../DrawingObjects/TextObject/TextObject';
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { OBJ_SpaceTransforms } from '../Figure';
-import { makePolyLine, makePolyLineCorners } from '../DrawingObjects/Geometries/lines/lines';
-import { getPolygonPoints, getTrisFillPolygon } from '../DrawingObjects/Geometries/polygon/polygon';
-import { rectangleBorderToTris, getRectangleBorder } from '../DrawingObjects/Geometries/rectangle';
-import { ellipseBorderToTris, getEllipseBorder } from '../DrawingObjects/Geometries/ellipse';
-import { getTriangle } from '../DrawingObjects/Geometries/triangle';
-import { getArrow, defaultArrowOptions } from '../DrawingObjects/Geometries/arrow';
-import type { OBJ_LineArrows, TypeArrowHead } from '../DrawingObjects/Geometries/arrow';
-import getLine from '../DrawingObjects/Geometries/line';
+import { makePolyLine, makePolyLineCorners } from '../geometries/lines/lines';
+import { getPolygonPoints, getTrisFillPolygon } from '../geometries/polygon/polygon';
+import { rectangleBorderToTris, getRectangleBorder } from '../geometries/rectangle';
+import { ellipseBorderToTris, getEllipseBorder } from '../geometries/ellipse';
+import { getTriangle } from '../geometries/triangle';
+import { getArrow, defaultArrowOptions } from '../geometries/arrow';
+import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
+import getLine from '../geometries/line';
 import type {
   OBJ_Copy,
 } from './FigurePrimitiveTypes';
-import { copyPoints } from '../DrawingObjects/Geometries/copy/copy';
-import type { CPY_Step } from '../DrawingObjects/Geometries/copy/copy';
+import { copyPoints } from '../geometries/copy/copy';
+import type { CPY_Step } from '../geometries/copy/copy';
 import type {
   TypeColor, TypeDash, OBJ_CurvedCorner, OBJ_Font,
 } from '../../tools/types';

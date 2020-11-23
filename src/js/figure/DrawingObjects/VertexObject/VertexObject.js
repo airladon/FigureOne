@@ -6,7 +6,7 @@ import WebGLInstance from '../../webgl/webgl';
 import { Point } from '../../../tools/g2';
 // import type { TypeParsablePoint } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
-import type { CPY_Step } from '../Geometries/copy/copy';
+import type { CPY_Step } from '../../geometries/copy/copy';
 import type { TypeColor } from '../../../tools/types';
 
 // Base clase of all shape objects made from verteces for webgl.

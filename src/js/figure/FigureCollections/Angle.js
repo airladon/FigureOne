@@ -15,8 +15,8 @@ import {
 } from '../Element';
 import EquationLabel from './EquationLabel';
 import { Equation } from '../FigureElements/Equation/Equation';
-import { simplifyArrowOptions, getArrowLength } from '../DrawingObjects/Geometries/arrow';
-import type { OBJ_LineArrows, OBJ_LineArrow } from '../DrawingObjects/Geometries/arrow';
+import { simplifyArrowOptions, getArrowLength } from '../geometries/arrow';
+import type { OBJ_LineArrows, OBJ_LineArrow } from '../geometries/arrow';
 import type { OBJ_Pulse } from '../Element';
 import type { EQN_Equation } from '../FigureElements/Equation/Equation';
 import type { TypeWhen } from '../webgl/GlobalAnimation';

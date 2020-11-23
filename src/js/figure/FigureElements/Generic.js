@@ -6,7 +6,7 @@ import {
   Point, Transform, Rect,
 } from '../../tools/g2';
 import WebGLInstance from '../webgl/webgl';
-import type { CPY_Step } from '../DrawingObjects/Geometries/copy/copy';
+import type { CPY_Step } from '../geometries/copy/copy';
 import type { TypeColor } from '../../tools/types';
 
 export default function Generic(

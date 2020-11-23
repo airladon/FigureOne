@@ -1,10 +1,10 @@
 import {
   Point, Transform,
-} from '../../../../tools/g2';
+} from '../../../tools/g2';
 import {
   copyPoints,
 } from './copy';
-import { round } from '../../../../tools/math';
+import { round } from '../../../tools/math';
 
 describe('Copy tests', () => {
   describe('Copy Offset', () => {

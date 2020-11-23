@@ -3,16 +3,16 @@ import { cornerLine, lineToCorners } from './corners';
 import { lineToDash } from './dashes';
 import {
   Line, Point, threePointAngleMin, threePointAngle,
-} from '../../../../tools/g2';
+} from '../../../tools/g2';
 import {
   joinObjects,
-} from '../../../../tools/tools';
+} from '../../../tools/tools';
 import {
   getArrow, getArrowLength, simplifyArrowOptions,
 } from '../arrow';
-import type { TypeDash } from '../../../../tools/types';
+import type { TypeDash } from '../../../tools/types';
 import type { TypeArrowHead } from '../arrow';
-import type { OBJ_Arrow } from '../../../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Arrow } from '../../FigurePrimitives/FigurePrimitives';
 
 /* eslint-disable yoda */
 

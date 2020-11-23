@@ -1,11 +1,11 @@
 // @flow
 import {
   Point, Transform, Line, minAngleDiff, threePointAngle, getPoints, getTriangleCenter,
-} from '../../../tools/g2';
+} from '../../tools/g2';
 import {
   makePolyLine,
 } from './lines/lines';
-import type { TypeParsablePoint } from '../../../tools/g2';
+import type { TypeParsablePoint } from '../../tools/g2';
 
 
 function getTriangleDirection(points: Array<Point>) {

@@ -1,11 +1,11 @@
 // @flow
 import {
   Point, Line, distance,
-} from '../../../../tools/g2';
+} from '../../../tools/g2';
 import {
   roundNum,
-} from '../../../../tools/math';
-import type { TypeDash } from '../../../../tools/types';
+} from '../../../tools/math';
+import type { TypeDash } from '../../../tools/types';
 
 
 function makeDashDefinition(dashes: Array<number>) {
