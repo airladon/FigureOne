@@ -816,7 +816,7 @@ class Figure {
     state: Object,
     optionsIn: Object = {},
     done: ?(string | (() => void)),
-    startTime: ?number | 'now' | 'prev' | 'next' = null,
+    startTime: ?number | 'now' | 'prevFrame' | 'nextFrame' = null,
   ) {
     // const defaultOptions = {
     //   // delay: 0,

@@ -1373,7 +1373,7 @@ class FigureElement {
     state: Object,
     options: Object,
     independentOnly: boolean = false,
-    startTime: ?number | 'now' | 'prev' | 'next' = null,
+    startTime: ?number | 'now' | 'prevFrame' | 'nextFrame' = null,
   ) {
     // if (this.name === 'a') {
     //   console.log(this.frozenPulseTransforms)
@@ -1460,7 +1460,7 @@ class FigureElement {
   dissolveInToState(
     state: Object,
     duration: number = 0.8,
-    startTime: ?number | 'now' | 'prev' | 'next' = null,
+    startTime: ?number | 'now' | 'prevFrame' | 'nextFrame' = null,
   ) {
     if (state.isShown === false) {
       return 0;
@@ -5268,7 +5268,7 @@ class FigureElementCollection extends FigureElement {
     state: Object,
     options: Object,
     independentOnly: boolean = false,
-    startTime: ?number | 'now' | 'prev' | 'next' = null,
+    startTime: ?number | 'now' | 'prevFrame' | 'nextFrame' = null,
     // lastDrawTime: number,
     // countStart: () => void,
     // countEnd: () => void,
@@ -5301,7 +5301,7 @@ class FigureElementCollection extends FigureElement {
   dissolveInToState(
     state: Object,
     durationIn: number = 0.8,
-    startTime: ?number | 'now' | 'prev' | 'next' = null,
+    startTime: ?number | 'now' | 'prevFrame' | 'nextFrame' = null,
   ) {
     let duration = 0;
     duration = super.dissolveInToState(state, durationIn, startTime);
