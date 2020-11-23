@@ -11,7 +11,11 @@ import type { DiagramElement } from '../../Element';
  *
  * @extends OBJ_AnimationStep
  *
- * @property {string | () => {}} callback
+ * @property {string | function(): number | void} callback if desired, return
+ * a number from `callback` to update the duration of the trigger animation
+ * step. Doing so will make any previous calculations of remaining animation
+ * time incorrect. Make sure to initialize this step with a non-zero duration
+ * for this to work.
  * @property {any} [payload] payload to pass to callback (`null`)
  * @property {DiagramElement} element {@link DiagramElement} to associate with
  * callback - if the `callback` is a string then this element's
@@ -171,7 +175,10 @@ export class TriggerAnimationStep extends AnimationStep {
     // if (this.callback != null && this.payload != null) {
     //   console.log(this.payload)
     // }
-    this.fnExec(this.callback, this.payload);
+    const remainingTime = this.fnExec(this.callback, this.payload);
+    if (remainingTime != null && typeof remainingTime === 'number') {
+      this.duration = remainingTime;
+    }
     this.callback = null;
     // if (this.callback != null) {
     //   this.callback(this.payload);

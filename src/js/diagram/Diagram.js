@@ -1309,7 +1309,7 @@ class Diagram {
     let remainingTime = 0;
 
     elements.forEach((element) => {
-      const elementRemainingTime = element.animations.getRemainingTime(now);
+      const elementRemainingTime = element.animations.getRemainingTime([], now);
       if (elementRemainingTime > remainingTime) {
         remainingTime = elementRemainingTime;
       }

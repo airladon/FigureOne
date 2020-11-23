@@ -90,7 +90,7 @@ const makeTriangle = (name, scenario) => ({
     points: [[0, 0], [0, 1], [2, 0]],
     close: true,
     side: [
-      { label: { text: 'B' }, offset: 0.1 },
+      { label: { text: 'B', update: true }, offset: 0.1 },
       { label: { text: 'C' }, offset: 0.1 },
       { label: { text: 'A' }, offset: 0.1 },
     ],
@@ -111,18 +111,18 @@ const makeTriangle = (name, scenario) => ({
 
 // Add the right angle triangles to the diagram
 diagram.addElements([
-  makeTriangle('tri1', { position: [-1.5, -1], rotation: 0 }),
-  makeTriangle('tri2', { position: [1.5, -1], rotation: Math.PI / 2 }),
-  makeTriangle('tri3', { position: [1.5, 2], rotation: Math.PI }),
   makeTriangle('tri4', { position: [-1.5, 2], rotation: 3 * Math.PI / 2 }),
+  makeTriangle('tri3', { position: [1.5, 2], rotation: Math.PI }),
+  makeTriangle('tri2', { position: [1.5, -1], rotation: Math.PI / 2 }),
+  makeTriangle('tri1', { position: [-1.5, -1], rotation: 0 }),
 ]);
 
 // When the triangles rotate, the text needs to stay horizontal
 const setUpdate = (element) => {
-  element.setTransformCallback = () => {
-    const rot = element.getRotation();
-    element.updateLabels(rot);
-  }
+  // element.setTransformCallback = () => {
+  //   const rot = element.getRotation();
+  //   element.updateLabels(rot);
+  // }
 };
 
 const tri2 = diagram.elements._tri2;

@@ -2734,14 +2734,23 @@ class DiagramElement {
   }
 
 
-  stopAnimating(how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel') {
+  stopAnimating(
+    how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
+    name: string | null = null,
+  ) {
     if (how === 'freeze') {
-      this.animations.cancelAll('freeze');
+      this.animations.cancel(name, 'freeze');
     } else if (how === 'cancel') {
-      this.animations.cancelAll(null);
+      this.animations.cancel(name, null);
     } else if (how === 'complete') {
-      this.animations.cancelAll('complete');
+      this.animations.cancel(name, 'complete');
     }
+  }
+
+  getRemainingAnimationTime(
+    animationNames: Array<string> | string = [],
+  ) {
+    return this.animations.getRemainingTime(animationNames);
   }
 
 
@@ -4943,6 +4952,7 @@ class DiagramElementCollection extends DiagramElement {
     delay: number = 0,
     rotDirection: number = 0,
     callback: ?(string | ((?mixed) => void)) = null,
+    name: string = '',
     easeFunction: string | ((number) => number) = 'tools.math.easeinout',
     // translationPath: (Point, Point, number) => Point = linearPath,
   ) {
@@ -4953,7 +4963,7 @@ class DiagramElementCollection extends DiagramElement {
       if (element.name in elementTransforms) {
         if (element.isShown) {
           if (!elementTransforms[element.name].isEqualTo(element.transform)) {
-            element.animations.new()
+            element.animations.new(name)
               .delay(delay)
               .transform({
                 target: elementTransforms[element.name],
@@ -5030,6 +5040,20 @@ class DiagramElementCollection extends DiagramElement {
       }
     }
     return elements;
+  }
+
+  getRemainingAnimationTime(
+    animationNames: Array<string> | string = [],
+  ) {
+    const elements = this.getAllElements();
+    let remainingTime = super.getRemainingAnimationTime(animationNames);
+    elements.forEach((element) => {
+      const duration = element.animations.getRemainingTime(animationNames);
+      if (duration > remainingTime) {
+        remainingTime = duration;
+      }
+    });
+    return remainingTime;
   }
 
   // // Get all ineractive elemnts, but only go as deep as a
@@ -5351,6 +5375,20 @@ class DiagramElementCollection extends DiagramElement {
       }
     }
     return false;
+  }
+
+  stopAnimating(
+    how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
+    name: string | null = null,
+    includeChildren: boolean = true,
+  ) {
+    super.stopAnimating(how, name);
+    if (includeChildren) {
+      for (let i = 0; i < this.drawOrder.length; i += 1) {
+        const element = this.elements[this.drawOrder[i]];
+        element.stopAnimating(how, name, includeChildren);
+      }
+    }
   }
 
   align(

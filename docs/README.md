@@ -493,7 +493,7 @@
 -   [TypeEquationForm][992]
 -   [TypeEquationForms][993]
 -   [TypeFormRestart][994]
--   [TypeEquationGoToFormOptions][996]
+-   [OBJ_EquationGoToForm][996]
 -   [TypeEquationTextElement][998]
 -   [OBJ_TranslationPath][1000]
 -   [OBJ_SpaceTransforms][1002]
@@ -8517,7 +8517,7 @@ Start an animation to an equation form
 
 #### Parameters
 
--   `optionsIn` **[TypeEquationGoToFormOptions][1204]**  (optional, default `{}`)
+-   `optionsIn` **[OBJ_EquationGoToForm][1204]**  (optional, default `{}`)
 
 ### prevForm
 
@@ -8525,7 +8525,7 @@ Animate to previous form in the current form series
 
 #### Parameters
 
--   `durationOrOptions` **([number][1036] | null | [TypeEquationGoToFormOptions][1204])**  (optional, default `null`)
+-   `durationOrOptions` **([number][1036] | null | [OBJ_EquationGoToForm][1204])**  (optional, default `null`)
 -   `delay` **[number][1036]**  (optional, default `0`)
 
 ### nextForm
@@ -8534,7 +8534,7 @@ Animate to next form in the current form series
 
 #### Parameters
 
--   `durationOrOptions` **([number][1036] | null | [TypeEquationGoToFormOptions][1204])**  (optional, default `null`)
+-   `durationOrOptions` **([number][1036] | null | [OBJ_EquationGoToForm][1204])**  (optional, default `null`)
 -   `delay` **[number][1036]**  (optional, default `0`)
 
 ### replayCurrentForm
@@ -14959,7 +14959,7 @@ The default values in the pulse object are are:
 
 -   `formRestart` **{moveFrom: ([Point][1049]? | [DiagramElementCollection][1033])?, pulse: {duration: [number][1036]?, scale: [number][1036]?, element: [DiagramElement][1043]??}?}?** 
 
-## TypeEquationGoToFormOptions
+## OBJ_EquationGoToForm
 
 Options object for [Equation#goToForm][1302].
 
@@ -17562,7 +17562,7 @@ channel defines the transparency or opacity of the color where
 
 [995]: #properties-130
 
-[996]: #typeequationgotoformoptions
+[996]: #OBJ_EquationGoToForm
 
 [997]: #properties-131
 
@@ -17978,7 +17978,7 @@ channel defines the transparency or opacity of the color where
 
 [1203]: #typeequationforms
 
-[1204]: #typeequationgotoformoptions
+[1204]: #OBJ_EquationGoToForm
 
 [1205]: #typeformalignment
 

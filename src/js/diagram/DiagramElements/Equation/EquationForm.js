@@ -59,7 +59,8 @@ export type TypeCollectionMethods = {
     delay?: number,
     rotDirection?: number,
     callback?: ?(string | ((?mixed) => void)),
-    easeFunction?: (number) => number): number,
+    name?: string,
+    easeFunction?: string | ((number) => number)): number,
 };
 
 export type TypeElements = {
@@ -344,7 +345,7 @@ export default class EquationForm extends Elements {
       }
     };
     elements.forEach((e) => {
-      e.animations.addTo('Equation Color')
+      e.animations.addTo('_EquationColor')
         .opacity({
           dissolve, onFinish, duration: time, delay, completeOnCancel: true,
         })
@@ -482,14 +483,14 @@ export default class EquationForm extends Elements {
       }
     };
     elementsToDelayShowing.forEach((e) => {
-      e.animations.addTo('Equation Color')
+      e.animations.addTo('_EquationColor')
         .dissolveIn({
           duration: showTime, onFinish, delay: cumTime + blankTime,
         })
         .start();
     });
     elementsToShowAfterDissolve.forEach((e) => {
-      e.animations.addTo('Equation Color')
+      e.animations.addTo('_EquationColor')
         .dissolveIn({
           duration: showTime, onFinish, delay: blankTime,
         })
@@ -666,6 +667,7 @@ export default class EquationForm extends Elements {
       cumTime,
       0,
       moveCallback,
+      '_Equation',
     );
     if (t > 0) {
       cumTime = t;

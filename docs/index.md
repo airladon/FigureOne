@@ -144,7 +144,7 @@
 -   [Equation Option Types][140]
 -   [EQN_Equation][141]
     -   [Properties][142]
--   [TypeEquationGoToFormOptions][143]
+-   [OBJ_EquationGoToForm][143]
     -   [Properties][144]
 -   [Equations][145]
 -   [Equation][146]
@@ -3032,7 +3032,7 @@ Type: {color: [Array][229]&lt;[number][230]>?, scale: [number][230]?, elements: 
     New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
 -   `position` **[Point][237]?** default: new [Point][175](0, 0)
 
-## TypeEquationGoToFormOptions
+## OBJ_EquationGoToForm
 
 Options object for [Equation#goToForm][270].
 
@@ -3227,7 +3227,7 @@ Start an animation to an equation form
 
 #### Parameters
 
--   `optionsIn` **[TypeEquationGoToFormOptions][272]**  (optional, default `{}`)
+-   `optionsIn` **[OBJ_EquationGoToForm][272]**  (optional, default `{}`)
 
 ### prevForm
 
@@ -3905,7 +3905,7 @@ eqn.addForms({
 
 [142]: #properties-43
 
-[143]: #typeequationgotoformoptions
+[143]: #OBJ_EquationGoToForm
 
 [144]: #properties-44
 
@@ -4163,6 +4163,6 @@ eqn.addForms({
 
 [271]: #typeequationoptions
 
-[272]: #typeequationgotoformoptions
+[272]: #OBJ_EquationGoToForm
 
 [273]: #rect

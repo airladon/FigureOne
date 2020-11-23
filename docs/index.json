@@ -67524,7 +67524,7 @@
     "throws": [],
     "todos": [],
     "yields": [],
-    "name": "TypeEquationGoToFormOptions",
+    "name": "OBJ_EquationGoToForm",
     "kind": "typedef",
     "type": {
       "type": "RecordType",
@@ -67730,7 +67730,7 @@
     },
     "path": [
       {
-        "name": "TypeEquationGoToFormOptions",
+        "name": "OBJ_EquationGoToForm",
         "kind": "typedef"
       }
     ],
@@ -67741,7 +67741,7 @@
       "events": [],
       "static": []
     },
-    "namespace": "TypeEquationGoToFormOptions"
+    "namespace": "OBJ_EquationGoToForm"
   },
   {
     "name": "Equations",
@@ -69516,7 +69516,7 @@
               "lineNumber": 1351,
               "type": {
                 "type": "NameExpression",
-                "name": "TypeEquationGoToFormOptions"
+                "name": "OBJ_EquationGoToForm"
               },
               "default": "{}"
             }

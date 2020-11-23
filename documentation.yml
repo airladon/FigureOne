@@ -233,7 +233,7 @@ toc:
   - TypeEquationForm
   - TypeEquationForms
   - TypeFormRestart
-  - TypeEquationGoToFormOptions
+  - OBJ_EquationGoToForm
   - TypeEquationTextElement
 
 

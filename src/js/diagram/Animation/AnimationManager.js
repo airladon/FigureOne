@@ -769,9 +769,21 @@ export default class AnimationManager {
    * @param {number} now define this if you want remaining duration from a
    * custom time
    */
-  getRemainingTime(now: number = new GlobalAnimation().now() / 1000) {
+  getRemainingTime(
+    animationNames: Array<string> | string = [],
+    now: number = new GlobalAnimation().now() / 1000,
+  ) {
     let remainingTime = 0;
+    let names: Array<string> = [];
+    if (typeof animationNames === 'string') {
+      names = [animationNames];
+    } else {
+      names = animationNames;
+    }
     this.animations.forEach((animation) => {
+      if (names.length > 0 && names.indexOf(animation.name) === -1) {
+        return;
+      }
       const animationRemainingTime = animation.getRemainingTime(now);
       if (animationRemainingTime > remainingTime) {
         remainingTime = animationRemainingTime;

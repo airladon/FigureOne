@@ -31,6 +31,7 @@ import type {
 import type {
   TypeParsablePoint,
 } from '../../../tools/g2';
+import * as animation from '../../Animation/Animation';
 
 
 // Priority:
@@ -361,6 +362,47 @@ type TypeFormRestart = {
 }
 
 /**
+ * NextForm animation step.
+ *
+ * `OBJ_TriggerAnimationStep & OBJ_EquationGoToForm`
+ *
+ * The next form animation step triggers a next form animation.
+ *
+ * Duration will be automatically calculated. To specify it exactly, the
+ * `duration`, `dissolveOutTime`, `dissolveInTime` and `blankTime` must all
+ * be specified (or at least the ones that will be used in the form change).
+ * @extends OBJ_TriggerAnimationStep OBJ_EquationGoToForm
+ * @see {@link Equation}
+ */
+export type OBJ_NextFormAnimationStep = {
+} & animation.OBJ_TriggerAnimationStep;
+
+/**
+ * NextForm animation step.
+ *
+ * `OBJ_TriggerAnimationStep & OBJ_EquationGoToForm & { start?: 'string', target?: 'string'}`
+ *
+ * The go to form animation step triggers a next form animation.
+ *
+ * Duration will be automatically calculated. To specify it exactly, the
+ * `duration`, `dissolveOutTime`, `dissolveInTime` and `blankTime` must all
+ * be specified (or at least the ones that will be used in the form change).
+ * @extends OBJ_TriggerAnimationStep OBJ_EquationGoToForm
+ *
+ * @property {string} [start] form to start from. If undefined, then current
+ * form will be used
+ * @property {string} [target] form to go to. If undefined, then current
+ * form will be used
+ *
+ * @see {@link Equation}
+ */
+export type OBJ_GoToFormAnimationStep = {
+  start?: string,
+  target?: string,
+} & animation.OBJ_TriggerAnimationStep;
+
+
+/**
  * Options objects to construct an {@link Equation} class. All properties are optional.
  *
  * @property {TypeColor} [color] - default: [0.5, 0.5, 0.5, 1]
@@ -460,7 +502,7 @@ export type EQN_Equation = {
  * `skipToTarget: true`, `cancelGoTo: true`
  * @property {?() => void} [callback] - call when goto finished
  */
-type TypeEquationGoToFormOptions = {
+type OBJ_EquationGoToForm = {
   name?: string,
   index?: number,
   animate?: 'move' | 'dissolve' | 'moveFrom' | 'pulse' | 'dissolveInThenMove',
@@ -532,6 +574,7 @@ type TypeEquationGoToFormOptions = {
  * diagram.add('eqn', eqn);
  * eqn.showForm('1');
  */
+ // $FlowFixMe
 export class Equation extends DiagramElementCollection {
   /**
    * Equation parameters and functions
@@ -593,6 +636,11 @@ export class Equation extends DiagramElementCollection {
     // formRestartPosition: ?Point | DiagramElementCollection;
     // formRestartAnimation: 'dissolve' | 'moveFrom' | 'pulse';
   };
+
+  animations: {
+    nextForm: (OBJ_NextFormAnimationStep) => animation.TriggerAnimationStep,
+    goToForm: (OBJ_GoToFormAnimationStep) => animation.TriggerAnimationStep,
+  } & animation.AnimationManager;
 
   // isTouchDevice: boolean;
   // animateNextFrame: void => void;
@@ -736,6 +784,61 @@ export class Equation extends DiagramElementCollection {
         }
       }
     }
+
+    this.animations.goToForm = (...opt) => {
+      const o = joinObjects({}, {
+        element: this,
+        duration: 1,
+      }, ...opt);
+      if (o.callback != null) {
+        o.done = o.callback;
+      }
+      o.callback = () => {
+        const currentForm = this.getCurrentForm();
+        if (currentForm != null) {
+          if (o.start == null) {
+            o.start = currentForm.name;
+          }
+          if (o.target == null) {
+            o.target = currentForm.name;
+          }
+        }
+        this.showForm(o.start);
+        this.goToForm(joinObjects({}, o, {
+          form: o.target,
+          callback: null,
+          delay: 0,
+        }));
+        return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
+      };
+      return new animation.TriggerAnimationStep(o);
+    };
+    this.animations.customSteps.push({
+      step: this.animations.goToForm.bind(this),
+      name: 'goToForm',
+    });
+
+    this.animations.nextForm = (...opt) => {
+      const o = joinObjects({}, {
+        element: this,
+        duration: 1,  // need a non zero duration so trigger can incorporate the new duration
+      }, ...opt);
+      if (o.callback != null) {
+        o.done = o.callback;
+      }
+      o.callback = () => {
+        this.nextForm(joinObjects({}, o, {
+          callback: null,
+          delay: 0,
+        }));
+        return this.getRemainingAnimationTime(['_Equation', '_EquationColor'])
+      };
+      return new animation.TriggerAnimationStep(o);
+    };
+    this.animations.customSteps.push({
+      step: this.animations.nextForm.bind(this),
+      name: 'nextForm',
+    });
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
@@ -1180,12 +1283,18 @@ export class Equation extends DiagramElementCollection {
         hideAll: this.hideAll.bind(this),
         show: this.show.bind(this),
         showOnly: this.showOnly.bind(this),
-        stop: this.stop.bind(this),
+        stop: this.stopEquationAnimating.bind(this),
         getElementTransforms: this.getElementTransforms.bind(this),
         setElementTransforms: this.setElementTransforms.bind(this),
         animateToTransforms: this.animateToTransforms.bind(this),
       },
     );
+  }
+
+  stopEquationAnimating(how: 'complete' | 'cancel' = 'cancel') {
+    this.stopAnimating(how, '_Equation', true);
+    this.stopAnimating(how, '_EquationColor', true);
+    this.stopPulsing(how);
   }
 
   addForm(
@@ -1424,7 +1533,7 @@ export class Equation extends DiagramElementCollection {
   /**
    Start an animation to an equation form
    */
-  goToForm(optionsIn: TypeEquationGoToFormOptions = {}) {
+  goToForm(optionsIn: OBJ_EquationGoToForm = {}) {
     const defaultOptions = {
       duration: null,
       prioritizeFormDuration: true,
@@ -1438,23 +1547,30 @@ export class Equation extends DiagramElementCollection {
       },
     };
     const options = joinObjects(defaultOptions, optionsIn);
-
     if (this.eqn.isAnimating) {
       if (options.ifAnimating.skipToTarget) {
-        this.stop('complete');
+        // this.stopEquationAnimating('complete', '_Equation', true);
+        // this.stopEquationAnimating('complete', '_EquationColor', true);
+        // this.stopEquationAnimatingPulsing();
+        this.stopEquationAnimating('complete');
+        // this.stopEquationAnimating('complete');
         const currentForm = this.getCurrentForm();
         if (currentForm != null) {
           this.showForm(currentForm);
         }
       } else {
-        this.stop('cancel');
+        // this.stopEquationAnimating('cancel');
+        // this.stopEquationAnimating('cancel', '_Equation', true);
+        // this.stopEquationAnimating('cancel', '_EquationColor', true);
+        // this.stopEquationAnimatingPulsing();
+        this.stopEquationAnimating('cancel');
       }
       this.eqn.isAnimating = false;
       if (options.ifAnimating.cancelGoTo) {
         return;
       }
     }
-    // this.stop(true, true);
+    // this.stopEquationAnimating(true, true);
     // this.eqn.isAnimating = false;
     // Get the desired form - preference is name, then series index,
     // then next form in the current series
@@ -1583,7 +1699,7 @@ export class Equation extends DiagramElementCollection {
           this.showForm(form.name, false);
         };
         this.fnMap.add('_equationShowFormCallback', showFormCallback);
-        this.animations.new()
+        this.animations.new('_Equation')
           .dissolveOut({ duration: options.dissolveOutTime })
           .position({ target: start, duration: 0 })
           .trigger({
@@ -1647,7 +1763,7 @@ export class Equation extends DiagramElementCollection {
    * Animate to previous form in the current form series
    */
   prevForm(
-    durationOrOptions: number | null | TypeEquationGoToFormOptions = null,
+    durationOrOptions: number | null | OBJ_EquationGoToForm = null,
     delay: number = 0,
   ) {
     const currentForm = this.getCurrentForm();
@@ -1680,7 +1796,7 @@ export class Equation extends DiagramElementCollection {
    * Animate to next form in the current form series
    */
   nextForm(
-    durationOrOptions: number | null | TypeEquationGoToFormOptions = null,
+    durationOrOptions: number | null | OBJ_EquationGoToForm = null,
     delay: number = 0,
   ) {
     let animate = 'move';
@@ -1726,8 +1842,8 @@ export class Equation extends DiagramElementCollection {
    */
   replayCurrentForm(duration: number) {
     if (this.eqn.isAnimating) {
-      // this.stop(true, true);
-      this.stop('complete');
+      // this.stopEquationAnimating(true, true);
+      this.stopEquationAnimating('complete');
       // this.animations.cancel('complete');
       // this.animations.cancel('complete');
       this.eqn.isAnimating = false;
@@ -1739,8 +1855,8 @@ export class Equation extends DiagramElementCollection {
     }
     // this.animations.cancel();
     // this.animations.cancel();
-    // this.stop();
-    this.stop();
+    // this.stopEquationAnimating();
+    this.stopEquationAnimating();
     this.eqn.isAnimating = false;
     this.prevForm(0);
     this.nextForm(duration, 0.5);
@@ -1752,10 +1868,10 @@ export class Equation extends DiagramElementCollection {
     delay: number = 0,
     callback: null | string | (() => void) = null,
   ) {
-    // this.stopAnimatingColor(true, true);
-    // this.stopAnimatingColor(true, true);
-    // this.stop();
-    this.stop();
+    // this.stopEquationAnimatingColor(true, true);
+    // this.stopEquationAnimatingColor(true, true);
+    // this.stopEquationAnimating();
+    this.stopEquationAnimating();
     // this.animations.cancel();
     // this.animations.cancel();
     const form = this.getForm(name);
