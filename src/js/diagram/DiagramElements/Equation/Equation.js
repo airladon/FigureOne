@@ -362,32 +362,38 @@ type TypeFormRestart = {
 }
 
 /**
- * NextForm animation step.
+ * {@link NextFormAnimationStep} options object.
  *
  * `OBJ_TriggerAnimationStep & OBJ_EquationGoToForm`
  *
- * The next form animation step triggers a next form animation.
+ * Duration will be automatically calculated (unless duration is set to 0).
+ * To specify it exactly, the `duration`, `dissolveOutTime`, `dissolveInTime`
+ * and `blankTime` must all be specified (or at least the ones that will be used
+ * in the form change).
  *
- * Duration will be automatically calculated. To specify it exactly, the
- * `duration`, `dissolveOutTime`, `dissolveInTime` and `blankTime` must all
- * be specified (or at least the ones that will be used in the form change).
- * @extends OBJ_TriggerAnimationStep OBJ_EquationGoToForm
- * @see {@link Equation}
+ * @extends OBJ_TriggerAnimationStep
+ * @extends OBJ_EquationGoToForm
+ *
+ * @see {@link Equation}, {@link NextFormAnimationStep}
  */
 export type OBJ_NextFormAnimationStep = {
 } & animation.OBJ_TriggerAnimationStep;
 
 /**
- * NextForm animation step.
+ * {@link GoToFormAnimationStep} options object.
  *
  * `OBJ_TriggerAnimationStep & OBJ_EquationGoToForm & { start?: 'string', target?: 'string'}`
  *
- * The go to form animation step triggers a next form animation.
+ * Duration will be automatically calculated (unless duration is set to 0).
+ * To specify it exactly, the `duration`, `dissolveOutTime`, `dissolveInTime`
+ * and `blankTime` must all be specified (or at least the ones that will be used
+ * in the form change).
  *
- * Duration will be automatically calculated. To specify it exactly, the
- * `duration`, `dissolveOutTime`, `dissolveInTime` and `blankTime` must all
- * be specified (or at least the ones that will be used in the form change).
- * @extends OBJ_TriggerAnimationStep OBJ_EquationGoToForm
+ * The `form` property of OBJ_EquationGoToForm is not used. Use `target`
+ * instead.
+ *
+ * @extends OBJ_TriggerAnimationStep
+ * @extends OBJ_EquationGoToForm
  *
  * @property {string} [start] form to start from. If undefined, then current
  * form will be used
@@ -520,6 +526,103 @@ type OBJ_EquationGoToForm = {
   callback?: ?(string | (() => void)),
 }
 
+
+/**
+ * Next form animation step
+ *
+ * ![](./assets1/nextformanimationstep.gif)
+ *
+ * Animation step that animates to the next equation form in a formSeries.
+ * Equivalent to a triggering a
+ * <a href="#equationnextform">Equation.nextForm</a> call.
+ *
+ * This animation step is only available in {@link Equation}.
+ *
+ * @extends TriggerAnimationStep
+ * @param {OBJ_NextFormAnimationStep} options
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Example showing both ways to access GoToForm animation step
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: { times: ' \u00D7', equals: ' = ' },
+ *     forms: {
+ *       0: ['a', 'equals', 'b', 'times', ' ', '_1'],
+ *       1: ['a', 'equals', 'b', 'times', { strike: [[' ', '_1'], 'strike'] }],
+ *       2: ['a', 'equals', 'b'],
+ *     },
+ *     formSeries: ['0', '1', '2'],
+ *   },
+ * });
+ * const e = diagram.getElement('eqn');
+ * e.showForm('0');
+ * e.animations.new()
+ *   .delay(2)
+ *   .inParallel([
+ *     e.animations.nextForm({ animate: 'move', duration: 1 }),
+ *     e._times.animations.dim({ duration: 1 }),
+ *     e.__1.animations.dim({ duration: 1 }),
+ *   ])
+ *   .delay(1)
+ *   .nextForm({ animate: 'move', duration: 1 })
+ *   .start();
+ */
+// eslint-disable-next-line no-unused-vars
+class NextFormAnimationStep extends animation.TriggerAnimationStep {
+}
+
+/**
+ * GoToForm form animation step
+ *
+ * ![](./assets1/gotoformanimationstep.gif)
+ *
+ * Animation step that animates moving between equation forms. Equivalent to
+ * a triggering a <a href="#equationgotoform">Equation.goToForm</a> call.
+ *
+ * This animation step is only available in {@link Equation}.
+ *
+ * @extends TriggerAnimationStep
+ * @param {OBJ_GoToFormAnimationStep} options
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Example showing both ways to access GoToForm animation step
+ * diagram.addElement({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: { times: ' \u00D7', equals: ' = ' },
+ *     forms: {
+ *       0: ['a', 'equals', 'b', 'times', ' ', '_1'],
+ *       1: ['a', 'equals', 'b', 'times', { strike: [[' ', '_1'], 'strike'] }],
+ *       2: ['a', 'equals', 'b'],
+ *     }
+ *   },
+ * });
+ * const e = diagram.getElement('eqn');
+ * e.showForm('0');
+ * e.animations.new()
+ *   .delay(2)
+ *   .inParallel([
+ *     e.animations.goToForm({ target: '1', animate: 'move' }),
+ *     e._times.animations.dim({ duration: 1 }),
+ *     e.__1.animations.dim({ duration: 1 }),
+ *   ])
+ *   .delay(1)
+ *   .goToForm({ target: '2', animate: 'move' })
+ *   .start();
+ */
+// eslint-disable-next-line no-unused-vars
+class GoToFormAnimationStep extends animation.TriggerAnimationStep {
+}
+
 // export const foo = () => {};
 // An Equation is a collection of elements that can be arranged into different
 // forms.
@@ -533,7 +636,14 @@ type OBJ_EquationGoToForm = {
  * `Equation` should be instantiated from an *object definition*, or from
  * the `diagram.create.equation` method.
  *
+ * Equation includes two additional animation steps in {@link Equation.animations}:
+ * * {@link GoToFormAnimationStep}
+ * * {@link NextFormAnimationStep}
+ *
  * @extends DiagramElementCollection
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
  *
  * @param {EQN_Equation} options
  * @example
@@ -574,7 +684,7 @@ type OBJ_EquationGoToForm = {
  * diagram.add('eqn', eqn);
  * eqn.showForm('1');
  */
- // $FlowFixMe
+// $FlowFixMe
 export class Equation extends DiagramElementCollection {
   /**
    * Equation parameters and functions
@@ -637,6 +747,13 @@ export class Equation extends DiagramElementCollection {
     // formRestartAnimation: 'dissolve' | 'moveFrom' | 'pulse';
   };
 
+  /**
+   * {@link AnimationManager} extended to include additional animation steps
+   * specific to equations
+   * @property {NextFormAnimationStep} nextForm
+   * @property {GoToFormAnimationStep} goToForm
+   * @extends AnimationManager
+   */
   animations: {
     nextForm: (OBJ_NextFormAnimationStep) => animation.TriggerAnimationStep,
     goToForm: (OBJ_GoToFormAnimationStep) => animation.TriggerAnimationStep,
@@ -831,7 +948,7 @@ export class Equation extends DiagramElementCollection {
           callback: null,
           delay: 0,
         }));
-        return this.getRemainingAnimationTime(['_Equation', '_EquationColor'])
+        return this.getRemainingAnimationTime(['_Equation', '_EquationColor']);
       };
       return new animation.TriggerAnimationStep(o);
     };
@@ -1531,7 +1648,8 @@ export class Equation extends DiagramElementCollection {
   }
 
   /**
-   Start an animation to an equation form
+   * Start an animation to an equation form
+   * @memberof Equation
    */
   goToForm(optionsIn: OBJ_EquationGoToForm = {}) {
     const defaultOptions = {

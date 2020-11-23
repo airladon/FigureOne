@@ -2210,6 +2210,17 @@
                 
                 <div class='toggle-target display-none'>
                   
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#equationgotoform'
+                        class='regular pre-open'>
+                        .goToForm
+                      </a></li>
+                    
+                    </ul>
+                  
                   
                     <ul class='list-reset py1-ul pl1'>
                       <li class='h5'><span>Instance members</span></li>
@@ -2218,6 +2229,12 @@
                         href='#equationeqn'
                         class='regular pre-open'>
                         #eqn
+                      </a></li>
+                      
+                      <li><a
+                        href='#equationanimations'
+                        class='regular pre-open'>
+                        #animations
                       </a></li>
                       
                       <li><a
@@ -2266,12 +2283,6 @@
                         href='#equationgetform'
                         class='regular pre-open'>
                         #getForm
-                      </a></li>
-                      
-                      <li><a
-                        href='#equationgotoform'
-                        class='regular pre-open'>
-                        #goToForm
                       </a></li>
                       
                       <li><a
@@ -4176,7 +4187,7 @@
               
                 
                 <li><a
-                  href='#OBJ_EquationGoToForm'
+                  href='#obj_equationgotoform'
                   class="">
                   OBJ_EquationGoToForm
                   
@@ -4319,6 +4330,46 @@
                   href='#equationlabel'
                   class="">
                   EquationLabel
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_nextformanimationstep'
+                  class="">
+                  OBJ_NextFormAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_gotoformanimationstep'
+                  class="">
+                  OBJ_GoToFormAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#nextformanimationstep'
+                  class="">
+                  NextFormAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#gotoformanimationstep'
+                  class="">
+                  GoToFormAnimationStep
                   
                 </a>
                 
@@ -4545,7 +4596,8 @@ converting between the different spaces (e.g. pixel, GL, diagram).</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_diagram">OBJ_Diagram</a>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_diagram">OBJ_Diagram</a>
+            = <code>{}</code>)</code>
 	    
           </div>
           
@@ -23493,7 +23545,7 @@ in <a href="#obj_textlinedefinition">OBJ_TextLineDefinition</a>.</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>line</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textlinedefinition">OBJ_TextLineDefinition</a>)>?)</code>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_textlinedefinition">OBJ_TextLineDefinition</a>)>?)</code>
           : array of strings,
 to layout into a line
 
@@ -23625,7 +23677,7 @@ diagram.addElement(
     <span class="hljs-attr">name</span>: <span class="hljs-string">'line'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text.line'</span>,
     <span class="hljs-attr">options</span>: {
-      <span class="hljs-attr">line</span>: [
+      <span class="hljs-attr">text</span>: [
         <span class="hljs-string">'Hello '</span>,
         {
           <span class="hljs-attr">text</span>: <span class="hljs-string">'to the'</span>,
@@ -23892,7 +23944,7 @@ diagram.addElement(
          <span class="hljs-string">'Lines justified to the left'</span>,
          <span class="hljs-string">'A |line| with a |modified_phrase|'</span>,
          {
-           <span class="hljs-attr">line</span>: <span class="hljs-string">'A |line| with custom defaults'</span>,
+           <span class="hljs-attr">text</span>: <span class="hljs-string">'A |line| with custom defaults'</span>,
            <span class="hljs-attr">font</span>: {
              <span class="hljs-attr">style</span>: <span class="hljs-string">'italic'</span>,
              <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
@@ -25650,7 +25702,7 @@ array).</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getRemainingTime(now)</span>
+            <span class='code strong strong truncate'>getRemainingTime(animationNames, now)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -25673,6 +25725,15 @@ array).</p>
   
     <div class='py1 quiet mt1 prose-big'>Parameters</div>
     <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>animationNames</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)
+            = <code>[]</code>)</code>
+	    
+          </div>
+          
+        </div>
       
         <div class='space-bottom0'>
           <div>
@@ -29562,6 +29623,11 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 forms.</p>
 <p><code>Equation</code> should be instantiated from an <em>object definition</em>, or from
 the <code>diagram.create.equation</code> method.</p>
+<p>Equation includes two additional animation steps in <a href="Equation.animations">Equation.animations</a>:</p>
+<ul>
+<li><a href="#gotoformanimationstep">GoToFormAnimationStep</a></li>
+<li><a href="#nextformanimationstep">NextFormAnimationStep</a></li>
+</ul>
 
   
   
@@ -29599,6 +29665,18 @@ the <code>diagram.create.equation</code> method.</p>
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
   
 
   
@@ -29647,6 +29725,74 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='equationgotoform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>goToForm(optionsIn)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Start an animation to an equation form</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>optionsIn</span> <code class='quiet'>(<a href="#obj_equationgotoform">OBJ_EquationGoToForm</a>
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
 
   
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
@@ -29690,6 +29836,83 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
           <span class='code bold'>functions</span> <code class='quiet'>(<a href="#equationfunctions">EquationFunctions</a>)</code>
           : equation functions
 
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='equationanimations'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>animations</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p><a href="#animationmanager">AnimationManager</a> extended to include additional animation steps
+specific to equations</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#animationmanager">AnimationManager</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>nextForm</span> <code class='quiet'>(<a href="#nextformanimationstep">NextFormAnimationStep</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>goToForm</span> <code class='quiet'>(<a href="#gotoformanimationstep">GoToFormAnimationStep</a>)</code>
+          
           
         </div>
       
@@ -30202,68 +30425,6 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
       </div>
     </div>
   
-    <div class='border-bottom' id='equationgotoform'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>goToForm(optionsIn)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Start an animation to an equation form</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>optionsIn</span> <code class='quiet'>(<a href="#OBJ_EquationGoToForm">OBJ_EquationGoToForm</a>
-            = <code>{}</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='equationprevform'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -30294,7 +30455,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null | <a href="#OBJ_EquationGoToForm">OBJ_EquationGoToForm</a>)
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null | <a href="#obj_equationgotoform">OBJ_EquationGoToForm</a>)
             = <code>null</code>)</code>
 	    
           </div>
@@ -30365,7 +30526,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null | <a href="#OBJ_EquationGoToForm">OBJ_EquationGoToForm</a>)
+            <span class='code bold'>durationOrOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null | <a href="#obj_equationgotoform">OBJ_EquationGoToForm</a>)
             = <code>null</code>)</code>
 	    
           </div>
@@ -48487,6 +48648,19 @@ whichever direction doesn't pass through angle 0.
     <div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>callback</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | void))</code>
+          : if desired, return
+a number from 
+<code>callback</code>
+ to update the duration of the trigger animation
+step. Doing so will make any previous calculations of remaining animation
+time incorrect. Make sure to initialize this step with a non-zero duration
+for this to work.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>payload</span> <code class='quiet'>(any?)</code>
           : payload to pass to callback (
 <code>null</code>
@@ -52826,7 +53000,7 @@ in the series, then two special animations can be defined with this object:</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='OBJ_EquationGoToForm'>
+    <h3 class='fl m0' id='obj_equationgotoform'>
       OBJ_EquationGoToForm
     </h3>
     
@@ -52834,7 +53008,7 @@ in the series, then two special animations can be defined with this object:</p>
   </div>
   
 
-  <p>Options object for <a href="#equationgotoform">Equation#goToForm</a>.</p>
+  <p>Options object for <a href="Equation#goToForm">Equation#goToForm</a>.</p>
 <p>Often, <code>goToForm</code> is called to animate from a shown form to a desired form.
 Therefore there will be some equation elements that:</p>
 <ul>
@@ -54583,6 +54757,409 @@ or the name of the trace. See examples in <a href="#advancedplotlegend">Advanced
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_nextformanimationstep'>
+      OBJ_NextFormAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#nextformanimationstep">NextFormAnimationStep</a> options object.</p>
+<p><code>OBJ_TriggerAnimationStep &#x26; OBJ_EquationGoToForm</code></p>
+<p>Duration will be automatically calculated (unless duration is set to 0).
+To specify it exactly, the <code>duration</code>, <code>dissolveOutTime</code>, <code>dissolveInTime</code>
+and <code>blankTime</code> must all be specified (or at least the ones that will be used
+in the form change).</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a>, <a href="#obj_equationgotoform">OBJ_EquationGoToForm</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#equation">Equation</a>
+, 
+<a href="#nextformanimationstep">NextFormAnimationStep</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_gotoformanimationstep'>
+      OBJ_GoToFormAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#gotoformanimationstep">GoToFormAnimationStep</a> options object.</p>
+<p><code>OBJ_TriggerAnimationStep &#x26; OBJ_EquationGoToForm &#x26; { start?: 'string', target?: 'string'}</code></p>
+<p>Duration will be automatically calculated (unless duration is set to 0).
+To specify it exactly, the <code>duration</code>, <code>dissolveOutTime</code>, <code>dissolveInTime</code>
+and <code>blankTime</code> must all be specified (or at least the ones that will be used
+in the form change).</p>
+<p>The <code>form</code> property of OBJ_EquationGoToForm is not used. Use <code>target</code>
+instead.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a>, <a href="#obj_equationgotoform">OBJ_EquationGoToForm</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>start</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : form to start from. If undefined, then current
+form will be used
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>target</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : form to go to. If undefined, then current
+form will be used
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#equation">Equation</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='nextformanimationstep'>
+      NextFormAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Next form animation step</p>
+<p><img src="./assets1/nextformanimationstep.gif"></p>
+<p>Animation step that animates to the next equation form in a formSeries.
+Equivalent to a triggering a
+<a href="#equationnextform">Equation.nextForm</a> call.</p>
+<p>This animation step is only available in <a href="#equation">Equation</a>.</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#triggeranimationstep">TriggerAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_nextformanimationstep">OBJ_NextFormAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing both ways to access GoToForm animation step</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: { <span class="hljs-attr">times</span>: <span class="hljs-string">' \u00D7'</span>, <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span> },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">0</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'_1'</span>],
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, { <span class="hljs-attr">strike</span>: [[<span class="hljs-string">' '</span>, <span class="hljs-string">'_1'</span>], <span class="hljs-string">'strike'</span>] }],
+      <span class="hljs-number">2</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>],
+    },
+    <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'0'</span>, <span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>],
+  },
+});
+<span class="hljs-keyword">const</span> e = diagram.getElement(<span class="hljs-string">'eqn'</span>);
+e.showForm(<span class="hljs-string">'0'</span>);
+e.animations.new()
+  .delay(<span class="hljs-number">2</span>)
+  .inParallel([
+    e.animations.nextForm({ <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> }),
+    e._times.animations.dim({ <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> }),
+    e.__1.animations.dim({ <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> }),
+  ])
+  .delay(<span class="hljs-number">1</span>)
+  .nextForm({ <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> })
+  .start();</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='gotoformanimationstep'>
+      GoToFormAnimationStep
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>GoToForm form animation step</p>
+<p><img src="./assets1/gotoformanimationstep.gif"></p>
+<p>Animation step that animates moving between equation forms. Equivalent to
+a triggering a <a href="#equationgotoform">Equation.goToForm</a> call.</p>
+<p>This animation step is only available in <a href="#equation">Equation</a>.</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#triggeranimationstep">TriggerAnimationStep</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_gotoformanimationstep">OBJ_GoToFormAnimationStep</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing both ways to access GoToForm animation step</span>
+diagram.addElement({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: { <span class="hljs-attr">times</span>: <span class="hljs-string">' \u00D7'</span>, <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span> },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">0</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, <span class="hljs-string">' '</span>, <span class="hljs-string">'_1'</span>],
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, { <span class="hljs-attr">strike</span>: [[<span class="hljs-string">' '</span>, <span class="hljs-string">'_1'</span>], <span class="hljs-string">'strike'</span>] }],
+      <span class="hljs-number">2</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>],
+    }
+  },
+});
+<span class="hljs-keyword">const</span> e = diagram.getElement(<span class="hljs-string">'eqn'</span>);
+e.showForm(<span class="hljs-string">'0'</span>);
+e.animations.new()
+  .delay(<span class="hljs-number">2</span>)
+  .inParallel([
+    e.animations.goToForm({ <span class="hljs-attr">target</span>: <span class="hljs-string">'1'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> }),
+    e._times.animations.dim({ <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> }),
+    e.__1.animations.dim({ <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> }),
+  ])
+  .delay(<span class="hljs-number">1</span>)
+  .goToForm({ <span class="hljs-attr">target</span>: <span class="hljs-string">'2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
+  .start();</pre>
+    
   
 
   
