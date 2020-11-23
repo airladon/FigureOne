@@ -15,7 +15,7 @@ describe('Color Animation', () => {
   let color;
   beforeEach(() => {
     const diagram = makeDiagram();
-    elem1 = diagram.advanced.line();
+    elem1 = diagram.collections.line();
     color = [0.1, 0.1, 0.1, 0.1];
     elem1.setColor(color);
     callback = jest.fn(() => {});

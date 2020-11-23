@@ -17,12 +17,12 @@ describe('Angle', () => {
     diagram = makeDiagram();
   });
   test('Default Angle', () => {
-    const angle = diagram.advanced.angle();
+    const angle = diagram.collections.angle();
     expect(angle.angle).toBe(1);
     expect(angle.getRotation()).toBe(0);
   });
   test('By Angle', () => {
-    const angle = diagram.advanced.angle({
+    const angle = diagram.collections.angle({
       angle: 2,
       startAngle: 1,
     });
@@ -30,7 +30,7 @@ describe('Angle', () => {
     expect(angle.getRotation()).toBe(1);
   });
   test('By Points', () => {
-    const angle = diagram.advanced.angle({
+    const angle = diagram.collections.angle({
       p1: [0, 1],
       p2: [0, 0],
       p3: [1, 0],
@@ -38,7 +38,7 @@ describe('Angle', () => {
     expect(round(angle.angle * 180 / Math.PI, 5)).toBe(270);
   });
   test('By Points reverse direction', () => {
-    const angle = diagram.advanced.angle({
+    const angle = diagram.collections.angle({
       p1: [0, 1],
       p2: [0, 0],
       p3: [1, 0],
@@ -157,7 +157,7 @@ describe('Angle', () => {
       create = (option) => {
         diagram.addElement({
           name: 'a',
-          method: 'advanced.angle',
+          method: 'collections.angle',
           options: diagramOptions[option],
         });
         a = diagram.getElement('a');

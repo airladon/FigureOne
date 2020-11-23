@@ -41,8 +41,8 @@ describe('Animation Examples', () => {
     t2 = new Transform().scale(s2).rotate(r2).translate(p2);
     customFunction = () => {};
     diagram = makeDiagram();
-    elem1 = diagram.advanced.line();
-    elem2 = diagram.advanced.line();
+    elem1 = diagram.collections.line();
+    elem2 = diagram.collections.line();
     diagram.elements.add('elem1', elem1);
     diagram.elements.add('elem2', elem2);
     elem1.transform = elem1.transform.zero();

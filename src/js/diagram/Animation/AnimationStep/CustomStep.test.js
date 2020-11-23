@@ -20,7 +20,7 @@ describe('Transfrom Animation Unit', () => {
   let diagram;
   beforeEach(() => {
     diagram = makeDiagram();
-    elem1 = diagram.advanced.line();
+    elem1 = diagram.collections.line();
     diagram.elements.add('elem1', elem1);
     elem1.setPosition(new Point(0, 0));
     percentComplete = 0;

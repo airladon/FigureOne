@@ -9,24 +9,24 @@ import { joinObjects } from '../../tools/tools';
 // } from '../Element';
 import DrawContext2D from '../DrawContext2D';
 // import EquationNavigator from './EquationNavigator';
-import AdvancedLine from './Line';
-import AdvancedAngle from './Angle';
+import CollectionsLine from './Line';
+import CollectionsAngle from './Angle';
 // eslint-disable-next-line import/no-cycle
-import AdvancedPolyline from './PolyLine';
-import AdvancedAxis from './Axis';
-import AdvancedTrace from './Trace';
-import type { ADV_Line } from './Line';
-import type { ADV_Angle } from './Angle';
+import CollectionsPolyline from './PolyLine';
+import CollectionsAxis from './Axis';
+import CollectionsTrace from './Trace';
+import type { COL_Line } from './Line';
+import type { COL_Angle } from './Angle';
 import type { TypeLabelOptions } from './EquationLabel';
-import type { ADV_Polyline } from './PolyLine';
-import type { ADV_Axis } from './Axis';
-import type { ADV_Trace } from './Trace';
-import type { ADV_Plot } from './Plot';
-import type { ADV_Rectangle } from './Rectangle';
+import type { COL_Polyline } from './PolyLine';
+import type { COL_Axis } from './Axis';
+import type { COL_Trace } from './Trace';
+import type { COL_Plot } from './Plot';
+import type { COL_Rectangle } from './Rectangle';
 import EquationLabel from './EquationLabel';
-import AdvancedPlot from './Plot';
-import AdvancedPlotLegend from './Legend';
-import AdvancedRectangle from './Rectangle';
+import CollectionsPlot from './Plot';
+import CollectionsPlotLegend from './Legend';
+import CollectionsRectangle from './Rectangle';
 
 export default class DiagramObjects {
   webgl: Array<WebGLInstance>;
@@ -53,19 +53,19 @@ export default class DiagramObjects {
   }
 
 
-  line(...options: Array<ADV_Line>) {
+  line(...options: Array<COL_Line>) {
     // const optionsToUse = Object.assign({}, ...options);
     // console.log(Object.assign({}, ...options))
     const optionsToUse = joinObjects({}, ...options);
-    return new AdvancedLine(
+    return new CollectionsLine(
       this.shapes, this.equation, this.isTouchDevice,
       optionsToUse,
     );
   }
 
-  angle(...options: Array<ADV_Angle>) {
+  angle(...options: Array<COL_Angle>) {
     const optionsToUse = joinObjects({}, ...options);
-    return new AdvancedAngle(
+    return new CollectionsAngle(
       this.shapes, this.equation, this.isTouchDevice, this.animateNextFrame,
       optionsToUse,
     );
@@ -79,46 +79,46 @@ export default class DiagramObjects {
     );
   }
 
-  polyline(...options: Array<ADV_Polyline>) {
+  polyline(...options: Array<COL_Polyline>) {
     const optionsToUse = joinObjects({}, ...options);
-    return new AdvancedPolyline(
+    return new CollectionsPolyline(
       this.shapes, this.equation, this,
       this.isTouchDevice, this.animateNextFrame,
       optionsToUse,
     );
   }
 
-  axis(...options: Array<ADV_Axis>) {
+  axis(...options: Array<COL_Axis>) {
     const optionsToUse = joinObjects({}, ...options);
-    return new AdvancedAxis(
+    return new CollectionsAxis(
       this.shapes, this.equation, optionsToUse,
     );
   }
 
-  trace(...options: Array<ADV_Trace>) {
+  trace(...options: Array<COL_Trace>) {
     const optionsToUse = joinObjects({}, ...options);
-    return new AdvancedTrace(
+    return new CollectionsTrace(
       this.shapes, this.equation, optionsToUse,
     );
   }
 
-  plot(...options: Array<ADV_Plot>) {
+  plot(...options: Array<COL_Plot>) {
     const optionsToUse = joinObjects({}, ...options);
-    return new AdvancedPlot(
+    return new CollectionsPlot(
       this.shapes, this.equation, this, optionsToUse,
     );
   }
 
-  plotLegend(...options: Array<ADV_Plot>) {
+  plotLegend(...options: Array<COL_Plot>) {
     const optionsToUse = joinObjects({}, ...options);
-    return new AdvancedPlotLegend(
+    return new CollectionsPlotLegend(
       this.shapes, this.equation, this, optionsToUse,
     );
   }
 
-  rectangle(...options: Array<ADV_Rectangle>) {
+  rectangle(...options: Array<COL_Rectangle>) {
     const optionsToUse = joinObjects({}, ...options);
-    return new AdvancedRectangle(
+    return new CollectionsRectangle(
       this.shapes, optionsToUse,
     );
   }

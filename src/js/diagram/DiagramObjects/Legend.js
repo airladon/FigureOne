@@ -13,7 +13,7 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
-import type AdvancedTrace, { ADV_Trace } from './Trace';
+import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { OBJ_Font, OBJ_Font_Fixed } from '../../tools/types';
 import type {
   OBJ_TextLines,
@@ -47,8 +47,8 @@ export type OBJ_PlotLegendCustomTrace = {
  *
  * Allows customization of specific trace samples in the legend.
  * `_arrayIndexOrName` represents a generic key that should actually
- * be the array index of the specific trace defined in {@link ADV_PlotLegend}
- * or the name of the trace. See examples in {@link AdvancedPlotLegend} for use.
+ * be the array index of the specific trace defined in {@link COL_PlotLegend}
+ * or the name of the trace. See examples in {@link CollectionsPlotLegend} for use.
  *
  * @property {OBJ_PlotLegendCustomTrace} [_arrayIndexOrName]
  */
@@ -57,7 +57,7 @@ export type OBJ_PlotLegendCustom = {
 };
 
 /**
- * {@link AdvancedPlotLegend} options object.
+ * {@link CollectionsPlotLegend} options object.
  *
  * A legend consists of a number of trace samples and their corresponding names,
  * and may have an encompassing frame with a border and fill.
@@ -80,11 +80,11 @@ export type OBJ_PlotLegendCustom = {
  * should be hidden
  * @property {OBJ_PlotLegendCustom} [custom] customizations to specific trace
  * samples
- * @property {Array<ADV_Trace>} [traces] the traces from the plot that this
- * legend will display. This is used by {@link AdvancedPlot} and should not be
+ * @property {Array<COL_Trace>} [traces] the traces from the plot that this
+ * legend will display. This is used by {@link CollectionsPlot} and should not be
  * used by the user.
  */
-export type ADV_PlotLegend = {
+export type COL_PlotLegend = {
   position?: TypeParsablePoint,
   length?: number, // 0 = text only
   space?: number,
@@ -95,7 +95,7 @@ export type ADV_PlotLegend = {
   show?: Array<number>,
   hide?: Array<number>,
   custom?: OBJ_PlotLegendCustom,
-  traces: Array<ADV_Trace>,
+  traces: Array<COL_Trace>,
 };
 
 
@@ -119,10 +119,10 @@ export type ADV_PlotLegend = {
  *
  * ![](./assets1/advlegend_ex5.png)
  *
- * This object defines a legend in an {@link AdvancedPlot}.
+ * This object defines a legend in an {@link CollectionsPlot}.
  *
  * The legend includes traces, trace names and a frame. Each can be customized
- * using the {@link ADV_PlotLegend} options object.
+ * using the {@link COL_PlotLegend} options object.
  *
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
@@ -139,7 +139,7 @@ export type ADV_PlotLegend = {
  * // By default, the legend will appear in the top right corner
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     trace: [
  *       { points: pow(2), name: 'Power 2' },
@@ -158,7 +158,7 @@ export type ADV_PlotLegend = {
  * // Change the line length, position and use a frame on the legend
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     trace: [
  *       { points: pow(2), name: 'Power 2' },
@@ -181,7 +181,7 @@ export type ADV_PlotLegend = {
  * // Make a horizontal legend
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     trace: [
  *       { points: pow(2), name: 'Power 2' },
@@ -207,7 +207,7 @@ export type ADV_PlotLegend = {
  * // Customize legend trace text
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     trace: [
  *       { points: pow(2), name: 'Power 2' },
@@ -244,7 +244,7 @@ export type ADV_PlotLegend = {
  * // Customize legend
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     trace: [
  *       { points: pow(2), name: 'Power 2' },
@@ -268,10 +268,10 @@ export type ADV_PlotLegend = {
  * });
  */
 // $FlowFixMe
-class AdvancedPlotLegend extends DiagramElementCollection {
+class CollectionsPlotLegend extends DiagramElementCollection {
   // Diagram elements
   _frame: ?DiagramElementPrimitive;
-  // _axis: ?AdvancedAxis;
+  // _axis: ?CollectionsAxis;
   // _majorTicks: ?DiagramElementPrimitive;
   // _minorTicks: ?DiagramElementPrimitive;
   // _labels: ?DiagramElementPrimitive;
@@ -280,10 +280,10 @@ class AdvancedPlotLegend extends DiagramElementCollection {
 
   shapes: Object;
   equation: Object;
-  advanced: Object;
+  collections: Object;
   defaultFont: OBJ_Font_Fixed;
 
-  traces: Array<AdvancedTrace>;
+  traces: Array<CollectionsTrace>;
   offset: Array<Point>;
 
   toShow: Array<number>;
@@ -294,8 +294,8 @@ class AdvancedPlotLegend extends DiagramElementCollection {
   constructor(
     shapes: Object,
     equation: Object,
-    advanced: Object,
-    optionsIn: ADV_PlotLegend,
+    collections: Object,
+    optionsIn: COL_PlotLegend,
   ) {
     const defaultOptions = {
       font: shapes.defaultFont,
@@ -314,7 +314,7 @@ class AdvancedPlotLegend extends DiagramElementCollection {
     super(options);
     this.shapes = shapes;
     this.equation = equation;
-    this.advanced = advanced;
+    this.collections = collections;
 
     this.defaultFont = options.font;
     this.defaultColor = options.color;
@@ -384,7 +384,7 @@ class AdvancedPlotLegend extends DiagramElementCollection {
     return offsetArray;
   }
 
-  addTraces(o: ADV_PlotLegend) {
+  addTraces(o: COL_PlotLegend) {
     let p = new Point(0, 0);
     this.toShow.forEach((traceIndex, index) => {
       const trace = this.traces[traceIndex];
@@ -488,7 +488,7 @@ class AdvancedPlotLegend extends DiagramElementCollection {
     if (oFrame.line != null && oFrame.line.color == null) {
       oFrame.line.color = this.defaultColor.slice();
     }
-    const frame = this.advanced.rectangle(oFrame);
+    const frame = this.collections.rectangle(oFrame);
     frame.surround(this, oFrame.space);
     this.add('frame', frame);
   }
@@ -510,4 +510,4 @@ class AdvancedPlotLegend extends DiagramElementCollection {
   // }
 }
 
-export default AdvancedPlotLegend;
+export default CollectionsPlotLegend;

@@ -52,7 +52,7 @@ export type OBJ_PulseWidth = {
 }
 
 /**
- * Advanced line label options object.
+ * Collections line label options object.
  *
  * A line can be annotated with a label using the `text` property and can be:
  * - text (`string`, or Array<`string`)
@@ -119,10 +119,10 @@ export type TypeLineLabelOptions = {
 };
 
 /**
- * Advanced Line options object
+ * Collections Line options object
  *
  *
- * The Advanced Line is a convient and powerful line
+ * The Collections Line is a convient and powerful line
  * {@link DiagramElementCollection} that includes the line, arrows, a label
  * annotation and some methods to make it convient to use dynamically.
  *
@@ -159,7 +159,7 @@ export type TypeLineLabelOptions = {
  *
  * Default pulse values can then be specified with the `pulse` property.
  */
-export type ADV_Line = {
+export type COL_Line = {
   p1?: TypeParsablePoint,
   p2?: TypeParsablePoint,
   position?: TypeParsablePoint,
@@ -364,7 +364,7 @@ export type OBJ_PulseWidthAnimationStep = {
  * arrows, a label annotation that can self align with line orientation, and
  * some methods to make it convient to use dynamically.
  *
- * See {@link ADV_Line} for the options that can be used when creating the line.
+ * See {@link COL_Line} for the options that can be used when creating the line.
  *
  * The object contains a two additional animation steps. `length`
  * animates changing the line length, and `pulseWidth` animates the
@@ -374,13 +374,13 @@ export type OBJ_PulseWidthAnimationStep = {
  * (<a href="#animationmanagernew">animations.new</a>
  * and <a href="#animationmanagerbuilder">animations.builder</a>).
  *
- * Some of the useful methods included in an advanced line are:
- * - <a href="#advancedlinepulsewidth">pulseWidth</a> - pulses the line without
+ * Some of the useful methods included in an collections line are:
+ * - <a href="#collectionslinepulsewidth">pulseWidth</a> - pulses the line without
  *   changing its length
- * - <a href="#advancedlinegrow">grow</a> - starts and animation that executes
+ * - <a href="#collectionslinegrow">grow</a> - starts and animation that executes
  *   a single `length` animation
  *    step
- * - <a href="#advancedlinesetmovable">grow</a> - overrides
+ * - <a href="#collectionslinesetmovable">grow</a> - overrides
  *    <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
  *    allowing for more complex move options.
  *
@@ -397,7 +397,7 @@ export type OBJ_PulseWidthAnimationStep = {
  * // Pulse an annotated line
  * diagram.addElement({
  *   name: 'l',
- *   method: 'advanced.line',
+ *   method: 'collections.line',
  *   options: {
  *     p1: [-1, 0],
  *     p2: [1, 0],
@@ -415,7 +415,7 @@ export type OBJ_PulseWidthAnimationStep = {
  * // Animate growing a line while showing it's length
  * diagram.addElement({
  *   name: 'l',
- *   method: 'advanced.line',
+ *   method: 'collections.line',
  *   options: {
  *     p1: [-1, 0],
  *     p2: [-0.5, 0],
@@ -437,7 +437,7 @@ export type OBJ_PulseWidthAnimationStep = {
  *
  * @example
  * // Example showing dashed line with an equation label that stays horizontal
- * const l = diagram.advanced.line({
+ * const l = diagram.collections.line({
  *   p1: [0, 0],
  *   p2: [1.4, 0],
  *   align: 'start',
@@ -462,7 +462,7 @@ export type OBJ_PulseWidthAnimationStep = {
  *
  */
 // $FlowFixMe
-export default class AdvancedLine extends DiagramElementCollection {
+export default class CollectionsLine extends DiagramElementCollection {
   // Diagram elements
   _line: ?DiagramElementPrimitive;
   _movePad: ?DiagramElementPrimitive;
@@ -547,7 +547,7 @@ export default class AdvancedLine extends DiagramElementCollection {
     equation: Object,
     isTouchDevice: boolean,
     // animateNextFrame: void => void,
-    options: ADV_Line = {},
+    options: COL_Line = {},
   ) {
     const defaultOptions = {
       // position: new Point(0, 0),
@@ -1211,7 +1211,7 @@ export default class AdvancedLine extends DiagramElementCollection {
    * Manually update the label orientations with a custom rotation offset.
    *
    * Automatic updating can be done with
-   * <a href="advancedline#setautoupdate">setAutoUpdate</a>
+   * <a href="collectionsline#setautoupdate">setAutoUpdate</a>
    * @param {number | null} rotationOffset
    */
   updateLabel(rotationOffset: number | null = null) {
@@ -1608,9 +1608,9 @@ export default class AdvancedLine extends DiagramElementCollection {
   }
 }
 
-// export type TypeLine = AdvancedLine;
+// export type TypeLine = CollectionsLine;
 
-// export class MovableLine extends AdvancedLine {
+// export class MovableLine extends CollectionsLine {
 //   // constructor(
 //   //   fullLength: number,
 //   //   endLength: number,
@@ -1628,4 +1628,4 @@ export type TypeLabelledLine = {
   _label: {
     _base: DiagramElementPrimitive;
   } & Equation;
-} & AdvancedLine;
+} & CollectionsLine;

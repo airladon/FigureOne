@@ -1,6 +1,6 @@
-# Example 5 - Advanced Equation
+# Example 5 - Collections Equation
 
-A more advanced equation with an integral, sum operator, brackets, annotations, subscripts and color.
+A more collections equation with an integral, sum operator, brackets, annotations, subscripts and color.
 
 Open `index.html` in a browser to view example.
 
@@ -113,7 +113,7 @@ diagram.initialize();
 
 ## Explanation
 
-An equation with a more advanced layout shows more features of equations in FigureOne.
+An equation with a more collections layout shows more features of equations in FigureOne.
 
 ### Element Definition
 Equations are defined with two main keys, `elements` and `forms`.

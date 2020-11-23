@@ -36,15 +36,15 @@ describe('Diagram Objects PolyLine', () => {
       new Point(1, 1),
     ];
     ways = {
-      numPointsClose: () => diagram.advanced.polyline({
+      numPointsClose: () => diagram.collections.polyline({
         points,
         close: true,
       }),
-      numPointsOpen: () => diagram.advanced.polyline({
+      numPointsOpen: () => diagram.collections.polyline({
         points,
         close: false,
       }),
-      SideLabelsClose: () => diagram.advanced.polyline({
+      SideLabelsClose: () => diagram.collections.polyline({
         points,
         close: true,
         side: {
@@ -53,7 +53,7 @@ describe('Diagram Objects PolyLine', () => {
           },
         },
       }),
-      SideLabelsOpen: () => diagram.advanced.polyline({
+      SideLabelsOpen: () => diagram.collections.polyline({
         points,
         close: false,
         side: {
@@ -62,7 +62,7 @@ describe('Diagram Objects PolyLine', () => {
           },
         },
       }),
-      SideLabelsFullDefine: () => diagram.advanced.polyline({
+      SideLabelsFullDefine: () => diagram.collections.polyline({
         points,
         close: true,
         side: [
@@ -71,7 +71,7 @@ describe('Diagram Objects PolyLine', () => {
           { label: { text: null } },
         ],
       }),
-      SideLabelsUnderDefine: () => diagram.advanced.polyline({
+      SideLabelsUnderDefine: () => diagram.collections.polyline({
         points,
         close: true,
         side: [
@@ -79,7 +79,7 @@ describe('Diagram Objects PolyLine', () => {
           { label: { text: 'b' } },
         ],
       }),
-      SideLabelsOverDefine: () => diagram.advanced.polyline({
+      SideLabelsOverDefine: () => diagram.collections.polyline({
         points,
         close: true,
         side: [
@@ -89,17 +89,17 @@ describe('Diagram Objects PolyLine', () => {
           { label: { text: 'd' } },
         ],
       }),
-      SideLabelsSingleDefine: () => diagram.advanced.polyline({
+      SideLabelsSingleDefine: () => diagram.collections.polyline({
         points,
         close: true,
         side: { label: { text: 'a' } },
       }),
-      SideLabelsActualLength: () => diagram.advanced.polyline({
+      SideLabelsActualLength: () => diagram.collections.polyline({
         points,
         close: true,
         side: { label: { text: null } },
       }),
-      AngleLabelsClose: () => diagram.advanced.polyline({
+      AngleLabelsClose: () => diagram.collections.polyline({
         points,
         close: true,
         angle: {
@@ -108,7 +108,7 @@ describe('Diagram Objects PolyLine', () => {
           },
         },
       }),
-      AngleLabelsOpen: () => diagram.advanced.polyline({
+      AngleLabelsOpen: () => diagram.collections.polyline({
         points,
         close: false,
         angle: {
@@ -117,7 +117,7 @@ describe('Diagram Objects PolyLine', () => {
           },
         },
       }),
-      AngleLabelsFullDefine: () => diagram.advanced.polyline({
+      AngleLabelsFullDefine: () => diagram.collections.polyline({
         points,
         close: true,
         angle: [
@@ -126,14 +126,14 @@ describe('Diagram Objects PolyLine', () => {
           { label: { text: null } },
         ],
       }),
-      PadSimple: () => diagram.advanced.polyline({
+      PadSimple: () => diagram.collections.polyline({
         points,
         close: true,
         pad: {
           radius: 0.2,
         },
       }),
-      PadBoundary: () => diagram.advanced.polyline({
+      PadBoundary: () => diagram.collections.polyline({
         points,
         close: true,
         pad: {
@@ -146,7 +146,7 @@ describe('Diagram Objects PolyLine', () => {
           isMovable: true,
         },
       }),
-      Misc: () => diagram.advanced.polyline({
+      Misc: () => diagram.collections.polyline({
         points,
         close: true,
         color: [1, 0, 0, 1],
@@ -331,7 +331,7 @@ describe('Diagram Objects PolyLine', () => {
   describe('Diagram Level', () => {
     test('Pad change shape', () => {
       diagram.addElement({
-        method: 'advanced.polyline',
+        method: 'collections.polyline',
         name: 'a',
         options: {
           points,

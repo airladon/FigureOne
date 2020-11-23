@@ -14,22 +14,22 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection,
 } from '../Element';
-import type AdvancedAxis, { ADV_Axis } from './Axis';
-import type AdvancedTrace, { ADV_Trace } from './Trace';
-import type { ADV_PlotLegend } from './Legend';
-import type AdvancedRectangle, { ADV_Rectangle } from './Rectangle';
+import type CollectionsAxis, { COL_Axis } from './Axis';
+import type CollectionsTrace, { COL_Trace } from './Trace';
+import type { COL_PlotLegend } from './Legend';
+import type CollectionsRectangle, { COL_Rectangle } from './Rectangle';
 import type { OBJ_TextLines } from '../DiagramPrimitives/DiagramPrimitives';
 import type { OBJ_Font, TypeColor, OBJ_Font_Fixed } from '../../tools/types';
 
 /**
  * Plot frame.
  *
- * {@link ADV_Rectangle}` & { space: number }`
+ * {@link COL_Rectangle}` & { space: number }`
  *
  * Define how much larger the frame is than the plot, labels and
  * titles with `space`.
  */
-export type TypePlotFrame = ADV_Rectangle & { space: number };
+export type TypePlotFrame = COL_Rectangle & { space: number };
 
 /**
  * Plot title.
@@ -41,7 +41,7 @@ export type TypePlotFrame = ADV_Rectangle & { space: number };
 export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
 
 /**
- * {@link AdvancedPlot} options object.
+ * {@link CollectionsPlot} options object.
  *
  * A plot is a collection of axes and traces, and may include a title, legend
  * and bounding frame.
@@ -51,50 +51,50 @@ export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
  *
  * @property {number} [width] width of the plot area
  * @property {number} [height] height of the plot area
- * @property {ADV_Axis | boolean} [xAxis] customize the x axis, or use `false`
+ * @property {COL_Axis | boolean} [xAxis] customize the x axis, or use `false`
  * to hide it
- * @property {ADV_Axis | boolean} [yAxis] customize the y axis, or use `false`
+ * @property {COL_Axis | boolean} [yAxis] customize the y axis, or use `false`
  * to hide it
- * @property {Array<ADV_Axis>} [axes] add additional axes
+ * @property {Array<COL_Axis>} [axes] add additional axes
  * @property {boolean} [grid] turn on and off the grid - use the grid options
  * in xAxis, yAxis or axes for finer customization
  * @property {TypePlotTitle | string} [title] plot title can be simply a
  * `string` or fully customized with TypePlotTitle
- * @property {Array<ADV_Trace | TypeParsablePoint> | ADV_Trace | Array<TypeParsablePoint>} [trace]
- *  Use array if plotting more than one trace. Use ADV_Trace to customize the
+ * @property {Array<COL_Trace | TypeParsablePoint> | COL_Trace | Array<TypeParsablePoint>} [trace]
+ *  Use array if plotting more than one trace. Use COL_Trace to customize the
  *  trace.
- * @property {ADV_PlotLegend | boolean} [legend] `true` to turn the legend on,
- * or use ADV_PlotLegend to customize it's location and layout
+ * @property {COL_PlotLegend | boolean} [legend] `true` to turn the legend on,
+ * or use COL_PlotLegend to customize it's location and layout
  * @property {boolean | TypeColor | TypePlotFrame} [frame] frame around the
  * plot can be turned on with `true`, can be a simple color fill using
  * `Array<number>` as a color, or can be fully customized with TypePlotFrame
- * @property {TypeColor | ADV_Rectangle} [plotArea] plot area can be a
+ * @property {TypeColor | COL_Rectangle} [plotArea] plot area can be a
  * color fill with `Array<number`> as a color, or be fully customized with
- * ADV_Rectangle
+ * COL_Rectangle
  * @property {OBJ_Font} [font] Default font for plot (title, axes, labels, etc.)
  * @property {TypeColor} [color] Default color
  * @property {TypeParsablePoint} [position] Position of the plot
  */
-export type ADV_Plot = {
+export type COL_Plot = {
   width?: number,
   height?: number,
-  xAxis?: ADV_Axis | boolean,
-  yAxis?: ADV_Axis | boolean,
-  axes?: Array<ADV_Axis>,
+  xAxis?: COL_Axis | boolean,
+  yAxis?: COL_Axis | boolean,
+  axes?: Array<COL_Axis>,
   grid?: boolean,
   title?: string | TypePlotTitle,
-  trace?: Array<ADV_Trace | TypeParsablePoint> | ADV_Trace | Array<TypeParsablePoint>,
-  legend?: ADV_PlotLegend,
+  trace?: Array<COL_Trace | TypeParsablePoint> | COL_Trace | Array<TypeParsablePoint>,
+  legend?: COL_PlotLegend,
   frame?: boolean | TypeColor | TypePlotFrame,
-  plotArea?: TypeColor | ADV_Rectangle,
+  plotArea?: TypeColor | COL_Rectangle,
   font?: OBJ_Font,
   color?: TypeColor,
   position?: TypeParsablePoint,
 };
 
 function cleanTraces(
-  tracesIn: Array<ADV_Trace | Array<TypeParsablePoint>> | ADV_Trace | Array<TypeParsablePoint>,
-): [Array<ADV_Trace>, Rect] {
+  tracesIn: Array<COL_Trace | Array<TypeParsablePoint>> | COL_Trace | Array<TypeParsablePoint>,
+): [Array<COL_Trace>, Rect] {
   let traces = [];
   if (!Array.isArray(tracesIn)) {
     traces = [tracesIn];
@@ -166,8 +166,8 @@ function cleanTraces(
  * entire plot.
  *
  * @see
- * See {@link ADV_Axis}, {@link OBJ_AxisLabels}, {@link OBJ_AxisTicks},
- * {@link ADV_Trace} and {@link ADV_PlotLegend} for more examples of customizing
+ * See {@link COL_Axis}, {@link OBJ_AxisLabels}, {@link OBJ_AxisTicks},
+ * {@link COL_Trace} and {@link COL_PlotLegend} for more examples of customizing
  * specific parts of the plot.
  *
  * To test examples below, append them to the
@@ -184,7 +184,7 @@ function cleanTraces(
  * // Plot of single trace with auto axis scaling
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     trace: pow(),
  *   },
@@ -196,7 +196,7 @@ function cleanTraces(
  * // markers
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     width: 2,                                    // Plot width in diagram
  *     height: 2,                                   // Plot height in diagram
@@ -223,7 +223,7 @@ function cleanTraces(
  * // Multiple grids and simple titles
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     width: 2,
  *     height: 2,
@@ -254,7 +254,7 @@ function cleanTraces(
  * // Title has a subtitle
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     width: 2,
  *     height: 2,
@@ -281,7 +281,7 @@ function cleanTraces(
  * // Secondary y axis
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     width: 2,
  *     height: 2,
@@ -329,7 +329,7 @@ function cleanTraces(
  * // can all be customized to create it.
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     width: 3,
  *     height: 3,
@@ -404,22 +404,22 @@ function cleanTraces(
  *
  */
 // $FlowFixMe
-class AdvancedPlot extends DiagramElementCollection {
+class CollectionsPlot extends DiagramElementCollection {
   // Diagram elements
-  // _axis: ?AdvancedAxis;
+  // _axis: ?CollectionsAxis;
   // _majorTicks: ?DiagramElementPrimitive;
   // _minorTicks: ?DiagramElementPrimitive;
   // _labels: ?DiagramElementPrimitive;
   // _arrow1: ?DiagramElementPrimitive;
   // _arrow2: ?DiagramElementPrimitive;
-  __frame: ?AdvancedRectangle;
+  __frame: ?CollectionsRectangle;
 
   shapes: Object;
   equation: Object;
-  advanced: Object;
+  collections: Object;
 
-  axes: Array<AdvancedAxis>;
-  traces: Array<AdvancedTrace>;
+  axes: Array<CollectionsAxis>;
+  traces: Array<CollectionsTrace>;
 
   defaultFont: OBJ_Font_Fixed;
   width: number;
@@ -441,8 +441,8 @@ class AdvancedPlot extends DiagramElementCollection {
   constructor(
     shapes: Object,
     equation: Object,
-    advanced: Object,
-    optionsIn: ADV_Plot,
+    collections: Object,
+    optionsIn: COL_Plot,
   ) {
     const defaultOptions = {
       font: shapes.defaultFont,
@@ -479,7 +479,7 @@ class AdvancedPlot extends DiagramElementCollection {
     super(options);
     this.shapes = shapes;
     this.equation = equation;
-    this.advanced = advanced;
+    this.collections = collections;
 
     this.defaultFont = options.font;
     this.defaultColor = options.color;
@@ -557,7 +557,7 @@ class AdvancedPlot extends DiagramElementCollection {
     return this.getBoundingRect('draw', 'border', children);
   }
 
-  addAxes(axes: Array<ADV_Axis>) {
+  addAxes(axes: Array<COL_Axis>) {
     const defaultOptions = {
       color: this.defaultColor,
       font: this.defaultFont,
@@ -593,13 +593,13 @@ class AdvancedPlot extends DiagramElementCollection {
       if (o.name == null) {
         o.name = `axis_${this.axes.length}`;
       }
-      const axis = this.advanced.axis(o);
+      const axis = this.collections.axis(o);
       this.add(o.name, axis);
       this.axes.push(axis);
     });
   }
 
-  addPlotArea(plotArea: Array<number> | ADV_Rectangle) {
+  addPlotArea(plotArea: Array<number> | COL_Rectangle) {
     const defaultOptions = {
       width: this.width,
       height: this.height,
@@ -614,10 +614,10 @@ class AdvancedPlot extends DiagramElementCollection {
     } else {
       o = joinObjects({}, defaultOptions, plotArea);
     }
-    this.add('_plotArea', this.advanced.rectangle(o));
+    this.add('_plotArea', this.collections.rectangle(o));
   }
 
-  addFrame(frame: ADV_Rectangle | boolean | TypeColor) {
+  addFrame(frame: COL_Rectangle | boolean | TypeColor) {
     const defaultOptions = {
       width: this.width / 2,
       height: this.height / 2,
@@ -634,7 +634,7 @@ class AdvancedPlot extends DiagramElementCollection {
     }
     const o = joinObjects({}, defaultOptions, optionsIn);
     this.frameSpace = o.space;
-    this.add('_frame', this.advanced.rectangle(o));
+    this.add('_frame', this.collections.rectangle(o));
   }
 
   getTraceIndex(name: string | number) {
@@ -649,7 +649,7 @@ class AdvancedPlot extends DiagramElementCollection {
     return -1;
   }
 
-  addLegend(legendOptions: ADV_PlotLegend | boolean) {
+  addLegend(legendOptions: COL_PlotLegend | boolean) {
     let optionsIn;
     if (legendOptions === true) {
       optionsIn = {};
@@ -664,7 +664,7 @@ class AdvancedPlot extends DiagramElementCollection {
     };
     const theme = this.getTheme(this.theme).legend;
     const o = joinObjects({}, defaultOptions, theme, optionsIn);
-    const legend = this.advanced.plotLegend(o);
+    const legend = this.collections.plotLegend(o);
     this.add('_legend', legend);
   }
 
@@ -695,7 +695,7 @@ class AdvancedPlot extends DiagramElementCollection {
     return null;
   }
 
-  addTraces(traces: Array<ADV_Trace>) {
+  addTraces(traces: Array<COL_Trace>) {
     const theme = this.getTheme(this.theme);
     traces.forEach((traceOptions, index) => {
       const defaultOptions = {
@@ -710,7 +710,7 @@ class AdvancedPlot extends DiagramElementCollection {
       o.xAxis = this.getAxis(o.xAxis);
       o.yAxis = this.getAxis(o.yAxis);
 
-      const trace = this.advanced.trace(o);
+      const trace = this.collections.trace(o);
       this.add(o.name, trace);
       this.traces.push(trace);
     });
@@ -819,4 +819,4 @@ class AdvancedPlot extends DiagramElementCollection {
   // }
 }
 
-export default AdvancedPlot;
+export default CollectionsPlot;

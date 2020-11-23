@@ -61,7 +61,7 @@ export type OBJ_MovableAngle = {
 }
 
 /**
- * Advanced angle label options object.
+ * Collections angle label options object.
  *
  * An angle can be annotated with a label using the `text` property and can be:
  * - text (`string`, or Array<`string`)
@@ -144,7 +144,7 @@ export type TypeAngleLabelOptions = {
 /**
  * Angle Curve options object.
  *
- * The curve annotation of an Advanced Angle shape.
+ * The curve annotation of an Collections Angle shape.
  *
  * @property {number} [width] Curve line width (`0.01`)
  * @property {boolean} [fill] Use a fill instead of a line (`false`)
@@ -175,7 +175,7 @@ export type OBJ_AngleCurve = {
 };
 
 /**
- * Additional arrow properties specific to advanced angle shapes.
+ * Additional arrow properties specific to collections angle shapes.
  *
  * By default, the arrows are placed at the same radius as the curve, but
  * the radius can be changed with `radius`.
@@ -219,7 +219,7 @@ export type OBJ_AngleArrows = {
 export type TypeAngleArrows = string | OBJ_LineArrows & OBJ_AngleArrows;
 
 /**
- * Advanced angle corner definition.
+ * Collections angle corner definition.
  *
  * @property {number} [length] length of corner's arms - by default it will be
  * twice the length of the curve.
@@ -277,10 +277,10 @@ export type OBJ_PulseAngle = {
 
 
 /**
- * Advanced Angle options object
+ * Collections Angle options object
  *
  *
- * The Advanced Angle is a convient and powerful angle
+ * The Collections Angle is a convient and powerful angle
  * {@link DiagramElementCollection} that can draw one or several arcs of an
  * angle annotation, a label, arrows, and the corner of an angle. It also
  * includes some methods to make it convient to use dynamically.
@@ -344,7 +344,7 @@ export type OBJ_PulseAngle = {
  * @property {TypeColor} [color] default color
  * @property {OBJ_PulseAngle} [pulseAngle] default pulseAngle options
  */
-export type ADV_Angle = {
+export type COL_Angle = {
   position?: Point,         // Position of angle vertex
   startAngle?: number,      // Start rotation of angle
   angle?: number,           // Angle measure
@@ -453,7 +453,7 @@ class AngleLabel extends EquationLabel {
 
 /**
  * These properties are the same as the ones with the same names in
- * {@link ADV_Angle}.
+ * {@link COL_Angle}.
  * @property {TypeParsablePoint} [position]
  * @property {number} [startAngle]
  * @property {number} [angle]
@@ -504,7 +504,7 @@ export type OBJ_PulseAngleAnimationStep = {
   frequency?: number,
 } & OBJ_TriggerAnimationStep;
 
-// export type AdvancedAngleAnimationManager =
+// export type CollectionsAngleAnimationManager =
 /*
 ................###....##....##..######...##.......########
 ...............##.##...###...##.##....##..##.......##......
@@ -529,7 +529,7 @@ export type OBJ_PulseAngleAnimationStep = {
  * arrows, a label annotation that can self align and
  * some methods to make it convient to use dynamically.
  *
- * See {@link ADV_Angle} for the options that can be used when creating the
+ * See {@link COL_Angle} for the options that can be used when creating the
  * angle.
  *
  * The object contains two additional animation steps `angle` and `pulseAngle`
@@ -540,10 +540,10 @@ export type OBJ_PulseAngleAnimationStep = {
  * (<a href="#animationmanagernew">animations.new</a>
  * and <a href="#animationmanagerbuilder">animations.builder</a>).
  *
- * Some of the useful methods included in an advanced angle are:
- * - <a href="#advancedanglepulseangle">pulseangle</a> - customize pulsing the
+ * Some of the useful methods included in an collections angle are:
+ * - <a href="#collectionsanglepulseangle">pulseangle</a> - customize pulsing the
  *   angle without
- * - <a href="#advancedanglesetmovable">setMovable</a> - overrides
+ * - <a href="#collectionsanglesetmovable">setMovable</a> - overrides
  *    <a href="#diagramelementsetmovable">DiagramElement.setMovable</a> and
  *    allowing for more complex move options.
  *
@@ -560,7 +560,7 @@ export type OBJ_PulseAngleAnimationStep = {
  * // Angle with size label
  * diagram.addElement({
  *   name: 'a',
- *   method: 'advanced.angle',
+ *   method: 'collections.angle',
  *   options: {
  *     angle: Math.PI / 4,
  *     label: null,
@@ -576,8 +576,8 @@ export type OBJ_PulseAngleAnimationStep = {
  * });
  *
  * @example
- * // Right angle, created from diagram.advanced
- * const a = diagram.advanced.angle({
+ * // Right angle, created from diagram.collections
+ * const a = diagram.collections.angle({
  *   angle: Math.PI / 2,
  *   curve: {
  *     autoRightAngle: true,
@@ -594,7 +594,7 @@ export type OBJ_PulseAngleAnimationStep = {
  * // Multi colored angle with arrows and an equation label
  * diagram.addElement({
  *   name: 'a',
- *   method: 'advanced.angle',
+ *   method: 'collections.angle',
  *   options: {
  *     angle: Math.PI / 4 * 3,
  *     label: {
@@ -625,7 +625,7 @@ export type OBJ_PulseAngleAnimationStep = {
  *
  * @example
  * // Multiple curve angle, without corner
- * const a = diagram.advanced.angle({
+ * const a = diagram.collections.angle({
  *   angle: Math.PI / 4,
  *   curve: {
  *     num: 3,
@@ -644,7 +644,7 @@ export type OBJ_PulseAngleAnimationStep = {
  * // Change angle animation
  * diagram.addElement({
  *   name: 'a',
- *   method: 'advanced.angle',
+ *   method: 'collections.angle',
  *   options: {
  *     angle: Math.PI / 4,
  *     label: null,
@@ -666,7 +666,7 @@ export type OBJ_PulseAngleAnimationStep = {
  * // Movable angle
  * diagram.addElement({
  *   name: 'a',
- *   method: 'advanced.angle',
+ *   method: 'collections.angle',
  *   options: {
  *     angle: Math.PI / 4 * 3,
  *     label: {
@@ -695,7 +695,7 @@ export type OBJ_PulseAngleAnimationStep = {
  * });
  */
 // $FlowFixMe
-class AdvancedAngle extends DiagramElementCollection {
+class CollectionsAngle extends DiagramElementCollection {
   // Diagram elements
   _curve: ?DiagramElementPrimitive;
   _curveRight: ?DiagramElementPrimitive;
@@ -819,7 +819,7 @@ class AdvancedAngle extends DiagramElementCollection {
     equation: Object,
     isTouchDevice: boolean,
     animateNextFrame: void => void,
-    options: ADV_Angle = {},
+    options: COL_Angle = {},
   ) {
     const defaultOptions = {
       position: new Point(0, 0),
@@ -1069,7 +1069,7 @@ class AdvancedAngle extends DiagramElementCollection {
    * is turned off by default.
    *
    * Manual updates can be performed with
-   * <a href="advancedangle#udpatelabel">updateLabel</a>
+   * <a href="collectionsangle#udpatelabel">updateLabel</a>
    */
   setAutoUpdate(update: boolean = true) {
     if (update) {
@@ -1648,7 +1648,7 @@ class AdvancedAngle extends DiagramElementCollection {
    * Manually update the label orientations with a custom rotation offset.
    *
    * Automatic updating can be done with
-   * <a href="advancedangle#setautoupdate">setAutoUpdate</a>
+   * <a href="collectionsangle#setautoupdate">setAutoUpdate</a>
    * @param {number | null} rotationOffset
    */
   updateLabel(rotationOffset: ?number = this.getRotation()) {
@@ -1992,12 +1992,12 @@ class AdvancedAngle extends DiagramElementCollection {
   }
 }
 
-export default AdvancedAngle;
+export default CollectionsAngle;
 
 export type TypeLabelledAngle = {
   _curve: DiagramElementPrimitive;
   _label: {
     _base: DiagramElementPrimitive;
   } & Equation;
-} & AdvancedAngle;
+} & CollectionsAngle;
 

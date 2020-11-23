@@ -26,8 +26,8 @@ describe('Two Element Animation Examples', () => {
   let animationCallback;
   beforeEach(() => {
     const diagram = makeDiagram();
-    elem1 = diagram.advanced.line();
-    elem2 = diagram.advanced.line();
+    elem1 = diagram.collections.line();
+    elem2 = diagram.collections.line();
     elem1.setPosition(p0);
     elem2.setPosition(p0);
     animationCallback = jest.fn(() => {});

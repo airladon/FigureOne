@@ -19,7 +19,7 @@ describe('Animation Manager', () => {
   let diagram;
   beforeEach(() => {
     diagram = makeDiagram();
-    elem = diagram.advanced.line();
+    elem = diagram.collections.line();
     diagram.elements.add('elem', elem);
     diagram.elements.show();
     elem.setPosition(new Point(0, 0));

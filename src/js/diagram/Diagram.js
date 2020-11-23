@@ -232,8 +232,8 @@ class Diagram {
   equation: Object;
   equationLow: Object;
   // equationHigh: Object;
-  advanced: DiagramObjects;
-  advancedLow: DiagramObjects;
+  collections: DiagramObjects;
+  collectionsLow: DiagramObjects;
   // objectsHigh: DiagramObjects;
 
   backgroundColor: Array<number>;
@@ -444,9 +444,9 @@ class Diagram {
     this.equationLow = this.getEquations();
     // this.equationHigh = this.getEquations(true);
     this.equation = this.equationLow;
-    this.advancedLow = this.getObjects();
-    // this.advancedHigh = this.getObjects(true);
-    this.advanced = this.advancedLow;
+    this.collectionsLow = this.getObjects();
+    // this.collectionsHigh = this.getObjects(true);
+    this.collections = this.collectionsLow;
     this.createDiagramElements();
     if (this.elements.name === '') {
       this.elements.name = 'diagramRoot';
@@ -499,9 +499,9 @@ class Diagram {
       html: this.shapes.html.bind(this.shapes),
       // htmlImage: this.shapes.htmlImage.bind(this.shapes),
       // htmlText: this.shapes.htmlText.bind(this.shapes),
-      line: this.advanced.line.bind(this.advanced),
-      angle: this.advanced.angle.bind(this.advanced),
-      smartPolyLine: this.advanced.polyline.bind(this.advanced),
+      line: this.collections.line.bind(this.collections),
+      angle: this.collections.angle.bind(this.collections),
+      smartPolyLine: this.collections.polyline.bind(this.collections),
       equation: this.equation.equation.bind(this.equation),
     };
   }
@@ -1027,7 +1027,7 @@ class Diagram {
     addElements(
       this.shapes,
       this.equation,
-      this.advanced,
+      this.collections,
       collection,
       elementsToAdd,
       addElementsKey,
@@ -1061,7 +1061,7 @@ class Diagram {
     addElements(
       this.shapes,
       this.equation,
-      this.advanced,
+      this.collections,
       rootCollection,
       [elementDefinition],
       addElementsKey,
@@ -1170,7 +1170,7 @@ class Diagram {
       shapes,
       equation,
       this.isTouchDevice,
-      this.animateNextFrame.bind(this, true, 'advanced'),
+      this.animateNextFrame.bind(this, true, 'collections'),
     );
   }
 

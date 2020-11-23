@@ -15,7 +15,7 @@ describe('Scale Animation Step', () => {
   let tester;
   beforeEach(() => {
     const diagram = makeDiagram();
-    elem1 = diagram.advanced.line();
+    elem1 = diagram.collections.line();
     elem1.setScale(1, 1);
     tester = () => {
       elem1.animations.nextFrame(0);

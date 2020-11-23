@@ -28,6 +28,7 @@ diagram.addElement({
   options: {
     position: [0, -2],
     scale: 1.4,
+    touchBorder: 0.1,
     elements: {
       equals: '  =  ',
       plus_1: '  +  ',
@@ -81,8 +82,7 @@ diagram.addElement({
 // Progress to the next form when the equation is clicked on
 const eqn = diagram.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
-eqn.setTouchableRect(0.5);
-
+eqn.makeTouchable();
 
 // ////////////////////////////////////////////////////////////////////////
 // Setup Triangles
@@ -104,9 +104,9 @@ const makeTriangle = (name, scenario) => ({
       { label: { text: 'A' }, offset: 0.1 },
     ],
     angle: [
-      { curve: { num: 1, sides: 70, radius: 0.25, step: 0.03 } },
+      { curve: { num: 1, sides: 70, radius: 0.25, step: 0.03 }, color: [0.5, 0.8, 0.5, 1] },
       { curve: { num: 2, sides: 70, radius: 0.25, step: 0.03 }, color: [0.5, 0.5, 1, 1] },
-      { curve: { num: 3, sides: 70, radius: 0.25, step: 0.03 }, color: [0.5, 0.8, 0.5, 1] },
+      { curve: { autoRightAngle: true, radius: 0.25, step: 0.03 } },
     ],
   },
   mods: {
@@ -120,10 +120,10 @@ const makeTriangle = (name, scenario) => ({
 
 // Add the right angle triangles to the diagram
 diagram.addElements([
-  makeTriangle('tri1', { position: [-1.5, -1], rotation: 0 }),
-  makeTriangle('tri2', { position: [1.5, -1], rotation: Math.PI / 2 }),
-  makeTriangle('tri3', { position: [1.5, 2], rotation: Math.PI }),
   makeTriangle('tri4', { position: [-1.5, 2], rotation: 3 * Math.PI / 2 }),
+  makeTriangle('tri3', { position: [1.5, 2], rotation: Math.PI }),
+  makeTriangle('tri2', { position: [1.5, -1], rotation: Math.PI / 2 }),
+  makeTriangle('tri1', { position: [-1.5, -1], rotation: 0 }),
 ]);
 
 // When the triangles rotate, the text needs to stay horizontal
@@ -132,6 +132,7 @@ const setUpdate = (element) => {
     const rot = element.getRotation();
     element.updateLabels(rot);
   }
+  element.dim();
 };
 
 const tri2 = diagram.elements._tri2;
@@ -140,6 +141,7 @@ const tri4 = diagram.elements._tri4;
 setUpdate(tri2);
 setUpdate(tri3);
 setUpdate(tri4);
+
 
 
 // ////////////////////////////////////////////////////////////////////////
@@ -204,7 +206,7 @@ diagram.elements._prev.setTouchable();
 // Set starting positions
 // ////////////////////////////////////////////////////////////////////////
 
-// Start by hiding the equation and pre text, and setting all triangles
+// Start by hiding the equation and prev text, and setting all triangles
 // to the same initial position
 eqn.hide()
 diagram.elements._prev.hide();
@@ -283,7 +285,7 @@ A form series defines how an equation progresses through forms when the `nextFor
 // Progress to the next form when the equation is clicked on
 const eqn = diagram.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
-eqn.setTouchableRect(0.5);
+eqn.stMovable();
 ```
 
 ### Triangles
@@ -343,6 +345,7 @@ const setUpdate = (element) => {
     const rot = element.getRotation();
     element.updateLabels(rot);
   }
+  element.dim();
 };
 
 const tri2 = diagram.elements._tri2;

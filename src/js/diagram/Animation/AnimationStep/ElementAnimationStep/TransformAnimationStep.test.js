@@ -14,7 +14,7 @@ describe('Transfrom Animation Unit', () => {
   let element;
   beforeEach(() => {
     const diagram = makeDiagram();
-    element = diagram.advanced.line();
+    element = diagram.collections.line();
   });
   test('Instantiation', () => {
     const onFinish = () => {};

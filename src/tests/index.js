@@ -8,7 +8,7 @@
 // // Hide pad 0, and make pad 2 blue and not filled
 // diagram.addElement({
 //   name: 'p',
-//   method: 'advanced.polyline',
+//   method: 'collections.polyline',
 //   options: {
 //     points: [[0, 0], [0.7, 0], [0.7, 0.7], [1.4, 0.7]],
 //     side: [

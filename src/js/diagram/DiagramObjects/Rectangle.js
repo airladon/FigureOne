@@ -38,7 +38,7 @@ export type OBJ_SurroundAnimationStep = {
 
 
 /**
- * {@link AdvancedRectangle} options object.
+ * {@link CollectionsRectangle} options object.
  *
  * This rectangle is similar to {@link OBJ_Rectangle}, except it can accomodate
  * both a fill and a border or line simultaneously with different colors.
@@ -54,7 +54,7 @@ export type OBJ_SurroundAnimationStep = {
  * @property {TypeColor | OBJ_Texture} [fill] fill color or texture
  * @property {OBJ_CurvedCorner} [corner] corner style of rectangle
  */
-export type ADV_Rectangle = {
+export type COL_Rectangle = {
   width?: number,
   height?: number,
   xAlign?: 'left' | 'center' | 'right' | number,
@@ -84,7 +84,7 @@ export type ADV_Rectangle = {
  * This object defines a rectangle
  * {@link DiagramElementCollection} that includes a border (line), fill and
  * the ability to surround another {@link DiagramElement} with some spacing
- * through either the <a href="#advancedrectanglesurround">surround</a> method
+ * through either the <a href="#collectionsrectanglesurround">surround</a> method
  * or the {@link OBJ_SurroundAnimationStep} found in the in
  * the animation manager ({@link DiagramElement}.animations),
  * and in the animation builder
@@ -94,7 +94,7 @@ export type ADV_Rectangle = {
  *
  * @see
  *
- * See {@link ADV_Rectangle} for setup options.
+ * See {@link COL_Rectangle} for setup options.
  *
  * See {@link OBJ_SurroundAnimationStep} for surround animation step options.
  *
@@ -105,7 +105,7 @@ export type ADV_Rectangle = {
  * // Simple rectangle
  * diagram.addElement({
  *   name: 'rect',
- *   method: 'advanced.rectangle',
+ *   method: 'collections.rectangle',
  *   options: {
  *     width: 2,
  *     height: 1,
@@ -114,7 +114,7 @@ export type ADV_Rectangle = {
  *
  * @example
  * // Round corner rectangle with fill and outside line
- * const rect = diagram.advanced.rectangle({
+ * const rect = diagram.collections.rectangle({
  *   width: 2,
  *   height: 1,
  *   line: {
@@ -135,7 +135,7 @@ export type ADV_Rectangle = {
  * diagram.addElements([
  *   {
  *     name: 'rect',
- *     method: 'advanced.rectangle',
+ *     method: 'collections.rectangle',
  *     options: {
  *       color: [0.3, 0.3, 1, 1],
  *       line: { width: 0.01 },
@@ -165,7 +165,7 @@ export type ADV_Rectangle = {
  *   .start();
  */
 // $FlowFixMe
-class AdvancedRectangle extends DiagramElementCollection {
+class CollectionsRectangle extends DiagramElementCollection {
   shapes: Object;
   _line: DiagramElementPrimitive | null;
   _fill: DiagramElementPrimitive | null;
@@ -185,7 +185,7 @@ class AdvancedRectangle extends DiagramElementCollection {
    */
   constructor(
     shapes: Object,
-    optionsIn: ADV_Rectangle,
+    optionsIn: COL_Rectangle,
   ) {
     // super(new Transform('Plot')
     //   .scale(1, 1)
@@ -369,4 +369,4 @@ class AdvancedRectangle extends DiagramElementCollection {
   }
 }
 
-export default AdvancedRectangle;
+export default CollectionsRectangle;

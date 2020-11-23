@@ -19,13 +19,13 @@ describe('Transfrom Animation Unit', () => {
   let diagram;
   beforeEach(() => {
     diagram = makeDiagram();
-    elem1 = diagram.advanced.line();
+    elem1 = diagram.collections.line();
     elem1.setPosition(new Point(0, 0));
     elem1.scenarios = {
       1: { position: new Point(1, 0) },
       2: { position: new Point(2, 0) },
     };
-    elem2 = diagram.advanced.line();
+    elem2 = diagram.collections.line();
     elem2.setPosition(new Point(0, 0));
     elem2.scenarios = {
       1: { position: new Point(0, 1) },

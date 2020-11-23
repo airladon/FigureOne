@@ -11,7 +11,7 @@ tools.isTouchDevice = jest.fn();
 
 // jest.mock('./recorder.worker');
 
-describe('Advanced line tests', () => {
+describe('Collections line tests', () => {
   let diagram;
   let create;
   let l;
@@ -230,7 +230,7 @@ describe('Advanced line tests', () => {
     create = (option) => {
       diagram.addElement({
         name: 'l',
-        method: 'advanced.line',
+        method: 'collections.line',
         options: diagramOptions[option],
       });
       l = diagram.getElement('l');

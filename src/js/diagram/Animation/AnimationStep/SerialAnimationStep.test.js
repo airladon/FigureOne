@@ -34,7 +34,7 @@ describe('Serial Animation', () => {
       step2CallbackFlag = 0;
       step3CallbackFlag = 0;
       serialCallbackFlag = 0;
-      element = diagram.advanced.line();
+      element = diagram.collections.line();
       target1 = element.transform.constant(1);
       target2 = element.transform.constant(2);
       target3 = element.transform.constant(3);
@@ -291,8 +291,8 @@ describe('Serial Animation', () => {
     let diagram;
     beforeEach(() => {
       diagram = makeDiagram();
-      elem1 = diagram.advanced.line();
-      elem2 = diagram.advanced.line();
+      elem1 = diagram.collections.line();
+      elem2 = diagram.collections.line();
       diagram.elements.add('elem1', elem1);
       diagram.elements.add('elem2', elem2);
     });

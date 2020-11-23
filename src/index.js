@@ -22,9 +22,9 @@ import {
 } from './js/diagram/DrawingObjects/TextObject/TextObject';
 import HTMLObject from './js/diagram/DrawingObjects/HTMLObject/HTMLObject';
 import HTMLEquation from './js/diagram/DiagramElements/Equation/HTMLEquation';
-import AdvancedAngle from './js/diagram/DiagramObjects/Angle';
-import AdvancedLine from './js/diagram/DiagramObjects/Line';
-import AdvancedPolyline from './js/diagram/DiagramObjects/PolyLine';
+import CollectionsAngle from './js/diagram/DiagramObjects/Angle';
+import CollectionsLine from './js/diagram/DiagramObjects/Line';
+import CollectionsPolyline from './js/diagram/DiagramObjects/PolyLine';
 import EqnNavigator from './js/diagram/DiagramObjects/EqnNavigator';
 import EquationLabel from './js/diagram/DiagramObjects/EquationLabel';
 import { Equation } from './js/diagram/DiagramElements/Equation/Equation';
@@ -32,7 +32,7 @@ import EquationForm from './js/diagram/DiagramElements/Equation/EquationForm';
 
 import type { TypeRotationDirection, TypeParsablePoint } from './js/tools/g2';
 import type {
-  ADV_Line,
+  COL_Line,
   TypeLineLabelOptions, TypeLabelledLine,
 } from './js/diagram/DiagramObjects/Line';
 import type {
@@ -40,12 +40,12 @@ import type {
 } from './js/diagram/DiagramObjects/EquationLabel';
 
 import type {
-  ADV_Angle, TypeAngleLabelOptions,
+  COL_Angle, TypeAngleLabelOptions,
   TypeLabelledAngle,
 } from './js/diagram/DiagramObjects/Angle';
 import type { OBJ_Diagram } from './js/diagram/Diagram';
 import type {
-  ADV_Polyline, OBJ_PolylinePad,
+  COL_Polyline, OBJ_PolylinePad,
 } from './js/diagram/DiagramObjects/PolyLine';
 import * as anim from './js/diagram/Animation/Animation';
 
@@ -56,10 +56,10 @@ import doNothing from './js/tools/types';
 export type {
   TypeRotationDirection,
   TypeLabelLocation, TypeLabelSubLocation, TypeLabelOrientation,
-  ADV_Line,
-  ADV_Angle, OBJ_Diagram,
+  COL_Line,
+  COL_Angle, OBJ_Diagram,
   TypeLineLabelOptions, TypeAngleLabelOptions,
-  ADV_Polyline, OBJ_PolylinePad, TypeParsablePoint,
+  COL_Polyline, OBJ_PolylinePad, TypeParsablePoint,
   TypeLabelledAngle, TypeLabelledLine,
 };
 
@@ -108,9 +108,9 @@ const Fig = {
   DiagramFont,
   HTMLObject,
   //
-  AdvancedAngle,
-  AdvancedLine,
-  AdvancedPolyline,
+  CollectionsAngle,
+  CollectionsLine,
+  CollectionsPolyline,
   EqnNavigator,
   EquationLabel,
   //

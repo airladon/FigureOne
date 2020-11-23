@@ -39,9 +39,9 @@ describe('Parallel Animation', () => {
       step3CallbackFlag = 0;
       parallelCallbackFlag = 0;
       const diagram = makeDiagram();
-      element1 = diagram.advanced.line();
-      element2 = diagram.advanced.line();
-      element3 = diagram.advanced.line();
+      element1 = diagram.collections.line();
+      element2 = diagram.collections.line();
+      element3 = diagram.collections.line();
       element1.transform = element1.transform.zero();
       element2.transform = element2.transform.zero();
       element3.transform = element3.transform.zero();
@@ -287,8 +287,8 @@ describe('Parallel Animation', () => {
     let diagram;
     beforeEach(() => {
       diagram = makeDiagram();
-      elem1 = diagram.advanced.line();
-      elem2 = diagram.advanced.line();
+      elem1 = diagram.collections.line();
+      elem2 = diagram.collections.line();
     });
     test('Zero duration two steps', () => {
       diagram.elements.animations.new()

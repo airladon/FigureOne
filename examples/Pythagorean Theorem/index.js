@@ -19,6 +19,7 @@ diagram.addElement({
   options: {
     position: [0, -2],
     scale: 1.4,
+    touchBorder: 0.1,
     elements: {
       equals: '  =  ',
       plus_1: '  +  ',
@@ -72,7 +73,7 @@ diagram.addElement({
 // Progress to the next form when the equation is clicked on
 const eqn = diagram.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
-eqn.setTouchableRect(0.5);
+eqn.makeTouchable();
 
 
 // ////////////////////////////////////////////////////////////////////////
@@ -84,13 +85,13 @@ eqn.setTouchableRect(0.5);
 // and rotation)
 const makeTriangle = (name, scenario) => ({
   name,
-  method: 'advanced.polyline',
+  method: 'collections.polyline',
   options: {
     color: [1, 0, 0, 1],
     points: [[0, 0], [0, 1], [2, 0]],
     close: true,
     side: [
-      { label: { text: 'B', update: true }, offset: 0.1 },
+      { label: { text: 'B' }, offset: 0.1 },
       { label: { text: 'C' }, offset: 0.1 },
       { label: { text: 'A' }, offset: 0.1 },
     ],
@@ -119,10 +120,11 @@ diagram.addElements([
 
 // When the triangles rotate, the text needs to stay horizontal
 const setUpdate = (element) => {
-  // element.setTransformCallback = () => {
-  //   const rot = element.getRotation();
-  //   element.updateLabels(rot);
-  // }
+  element.setTransformCallback = () => {
+    const rot = element.getRotation();
+    element.updateLabels(rot);
+  }
+  element.dim();
 };
 
 const tri2 = diagram.elements._tri2;
@@ -200,3 +202,4 @@ diagram.elements._prev.setTouchable();
 eqn.hide()
 diagram.elements._prev.hide();
 diagram.elements.setScenarios('initial');
+

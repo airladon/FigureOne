@@ -22,7 +22,7 @@ import type {
 
 
 /**
- * Axis Ticks and Grid options object for {@link ADV_Axis}.
+ * Axis Ticks and Grid options object for {@link COL_Axis}.
  *
  * ![](./assets1/axisticks.png)
  *
@@ -58,7 +58,7 @@ import type {
  *
  * @see
  *
- * {@link ADV_Axis}
+ * {@link COL_Axis}
  *
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
@@ -67,7 +67,7 @@ import type {
  * // Axis with no ticks
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     length: 2,
  *   },
@@ -77,7 +77,7 @@ import type {
  * // Axis with default ticks
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: true,
@@ -88,7 +88,7 @@ import type {
  * // Axis ticks with custom step and color
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: { step: 0.5, color: [0, 0, 1, 1] },
@@ -99,7 +99,7 @@ import type {
  * // Axis with ticks between 0.2 and 0.8 below the line
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: {
@@ -117,7 +117,7 @@ import type {
  * // Axis with ticks at values
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: { values: [0, 0.2, 0.8, 1] },
@@ -149,7 +149,7 @@ export type OBJ_AxisTicks_Fixed = {
 
 
 /**
- * Axis label options object for the {@link ADV_Axis}.
+ * Axis label options object for the {@link COL_Axis}.
  *
  * ![](./assets1/axislabels_ex1.png)
  *
@@ -210,7 +210,7 @@ export type OBJ_AxisTicks_Fixed = {
  * // By default labels are displayed if there are ticks
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: true,
@@ -221,7 +221,7 @@ export type OBJ_AxisTicks_Fixed = {
  * // If there are multiple ticks, then just the first are used to show labels
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: [
@@ -236,7 +236,7 @@ export type OBJ_AxisTicks_Fixed = {
  * // xAlign, yAlign and offset to make it look good.
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     axis: 'x',
  *     length: 2,
@@ -257,7 +257,7 @@ export type OBJ_AxisTicks_Fixed = {
  * // Specific labels can be hidden
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: true,
@@ -269,7 +269,7 @@ export type OBJ_AxisTicks_Fixed = {
  * // Labels can be at specific values, and have a specific font
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: true,
@@ -285,7 +285,7 @@ export type OBJ_AxisTicks_Fixed = {
  * // then they will be drawn in the same format as the actual values.
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     length: 2,
  *     ticks: true,
@@ -322,10 +322,10 @@ export type TypeAxisTitle = OBJ_TextLines & {
 } | string;
 
 /**
- * {@link AdvancedAxis} options object.
+ * {@link CollectionsAxis} options object.
  *
  * An axis can be used to create a number line, used as an axis in
- * {@link ADV_Plot} and/or used to plot a {@link ADV_Trace} against.
+ * {@link COL_Plot} and/or used to plot a {@link COL_Trace} against.
  *
  * An axis is a line that may have
  * - tick marks
@@ -361,16 +361,16 @@ export type TypeAxisTitle = OBJ_TextLines & {
  * @property {TypeColor} [color] default color of axis
  * @property {OBJ_Font} [font] default font of axis (used by title and labels)
  * @property {boolean} [show] `false` hides the axis. Two axes are needed
- * to plot an {@link AdvancedTrace} on a {@link AdvancedPlot}, but if either or
+ * to plot an {@link CollectionsTrace} on a {@link CollectionsPlot}, but if either or
  * both axes aren't to be drawn, then use `false` to hide each axis (`true`)
  * @property {[number, number]} [auto] Will select automatic values for
  * `start`, `stop`, and `step` that cover the range [min, max]
  * @property {string} [name] axis name - used to define which axes a trace
- * should be plotted against in an {@link AdvancedPlot}.
+ * should be plotted against in an {@link CollectionsPlot}.
  * @property {TypeParsablePoint} [position] axis position (`[0, 0]`)
  *
  */
-export type ADV_Axis = {
+export type COL_Axis = {
   axis?: 'x' | 'y',
   length?: number,              // draw space length
   line?: boolean | OBJ_Line,
@@ -405,7 +405,7 @@ export type ADV_Axis = {
  * This object defines an axis with an axis line, tick marks, labels,
  * grid lines and a title.
  *
- * See {@link ADV_Axis} for the options that can be used when creating
+ * See {@link COL_Axis} for the options that can be used when creating
  * the axis.
  *
  * An axis is drawn to a `length`. It will have values along its length
@@ -417,9 +417,9 @@ export type ADV_Axis = {
  * The object contains additional methods that convert between axis values
  * and draw space positions, as well as a convenience method to report if a
  * value is within an axis.
- * - <a href="#advancedaxisvaluetodraw">valueToDraw</a>
- * - <a href="#advancedaxisdrawtovalue">drawToValue</a>
- * - <a href="#advancedaxisinaxis">inAxis</a>
+ * - <a href="#collectionsaxisvaluetodraw">valueToDraw</a>
+ * - <a href="#collectionsaxisdrawtovalue">drawToValue</a>
+ * - <a href="#collectionsaxisinaxis">inAxis</a>
  *
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
@@ -432,7 +432,7 @@ export type ADV_Axis = {
  * // By default an axis is an 'x' axis
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     ticks: true,
  *   },
@@ -445,7 +445,7 @@ export type ADV_Axis = {
  * // An axis can also be created and then added to a diagram
  * // An axis can have specific start and stop values
  * // An axis can be a y axis
- * const axis = diagram.advanced.axis({
+ * const axis = diagram.collections.axis({
  *   axis: 'y',
  *   start: -10,
  *   stop: 10,
@@ -460,7 +460,7 @@ export type ADV_Axis = {
  * // An axis can have multiple sets of ticks and a title
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     ticks: [
  *       { step: 0.2, length: 0.1 },
@@ -478,7 +478,7 @@ export type ADV_Axis = {
  * // and have arrows
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     length: 2.5,
  *     start: -130,
@@ -510,7 +510,7 @@ export type ADV_Axis = {
  * // formatting
  * diagram.addElement({
  *   name: 'x',
- *   method: 'advanced.axis',
+ *   method: 'collections.axis',
  *   options: {
  *     stop: 2,
  *     ticks: { step: 0.5 },
@@ -535,11 +535,11 @@ export type ADV_Axis = {
  * ![](./assets1/advaxis_ex5.png)
  *
  *
- * @see {@link ADV_Axis} for parameter descriptions
+ * @see {@link COL_Axis} for parameter descriptions
  *
  */
 // $FlowFixMe
-class AdvancedAxis extends DiagramElementCollection {
+class CollectionsAxis extends DiagramElementCollection {
   // Diagram elements
   _line: ?DiagramElementPrimitive;
   _majorTicks: ?DiagramElementPrimitive;
@@ -579,9 +579,9 @@ class AdvancedAxis extends DiagramElementCollection {
   constructor(
     shapes: Object,
     equation: Object,
-    optionsIn: ADV_Axis,
+    optionsIn: COL_Axis,
   ) {
-    const defaultOptions: ADV_Axis = {
+    const defaultOptions: COL_Axis = {
       length: shapes.defaultLength,
       angle: 0,
       start: 0,
@@ -1044,4 +1044,4 @@ class AdvancedAxis extends DiagramElementCollection {
   // }
 }
 
-export default AdvancedAxis;
+export default CollectionsAxis;

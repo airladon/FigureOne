@@ -217,7 +217,7 @@ class DiagramTextBase {
   }
 
   // This method is used instead of the actual ctx.measureText because
-  // Firefox and Chrome don't yet support it's advanced features.
+  // Firefox and Chrome don't yet support it's collections features.
   // Estimates are made for height based on width.
   // eslint-disable-next-line class-methods-use-this
   measureText(

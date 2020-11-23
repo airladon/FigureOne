@@ -27,9 +27,9 @@ describe('Animation Corners', () => {
   // let callback;
   beforeEach(() => {
     const diagram = makeDiagram();
-    elem1 = diagram.advanced.line();
-    elem2 = diagram.advanced.line();
-    elem3 = diagram.advanced.line();
+    elem1 = diagram.collections.line();
+    elem2 = diagram.collections.line();
+    elem3 = diagram.collections.line();
     elem1.transform = elem1.transform.zero();
     elem2.transform = elem2.transform.zero();
     elem3.transform = elem3.transform.zero();

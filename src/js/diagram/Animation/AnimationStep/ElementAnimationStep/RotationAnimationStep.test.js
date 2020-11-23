@@ -14,7 +14,7 @@ describe('Rotation Animation Step', () => {
   let diagram;
   beforeEach(() => {
     diagram = makeDiagram();
-    elem1 = diagram.advanced.line();
+    elem1 = diagram.collections.line();
     elem1.setRotation(0);
     diagram.elements.add('elem1', elem1);
   });

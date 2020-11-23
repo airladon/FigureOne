@@ -13,10 +13,10 @@ import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
 import type {
-  ADV_Line,
+  COL_Line,
 } from './Line';
 import type {
-  ADV_Angle,
+  COL_Angle,
 } from './Angle';
 import DiagramPrimitives from '../DiagramPrimitives/DiagramPrimitives';
 // eslint-disable-next-line import/no-cycle
@@ -26,11 +26,11 @@ import type { OBJ_Polyline, OBJ_Polygon } from '../DiagramPrimitives/DiagramPrim
 
 /* eslint-disable max-len */
 /**
- * Advanced Polyline pad addition options.
+ * Collections Polyline pad addition options.
  *
  * Each pad is associated with a point of the polyline.
  *
- * @extends ADV_Polygon
+ * @extends COL_Polygon
  *
  * @property {boolean} [isMovable] `true` allows moving the pad and the
  * associated polyline point (`false`)
@@ -57,8 +57,8 @@ export type OBJ_PolylinePad = {};
  * ![](./assets1/polylinecustomization_ex2.png)
  *
  * Side annotations, angle annotations and movable pads in an
- * {@link AdvancedPolyline} are defined with the options objects {@link ADV_Line},
- * {@link ADV_Angle} and ({@link OBJ_Polygon} & {@link OBJ_PolylinePadSingle})
+ * {@link CollectionsPolyline} are defined with the options objects {@link COL_Line},
+ * {@link COL_Angle} and ({@link OBJ_Polygon} & {@link OBJ_PolylinePadSingle})
  * respectively.
  *
  * The properties in this object can be used in the side, angle and movable
@@ -86,7 +86,7 @@ export type OBJ_PolylinePad = {};
  *
  * @property {Array<number>} [show] list of indexes to show
  * @property {Array<number>} [hide] list of indexes to hide
- * @property {ADV_Angle | ADV_Line | OBJ_PolylinePadSingle} [_padIndex]
+ * @property {COL_Angle | COL_Line | OBJ_PolylinePadSingle} [_padIndex]
  * Customizations of annotation or pad by index where `_padIndex` should be an
  * object key name that is the index
  *
@@ -94,7 +94,7 @@ export type OBJ_PolylinePad = {};
  * // Hide pad 0, and make pad 2 blue and not filled
  * diagram.addElement({
  *   name: 'p',
- *   method: 'advanced.polyline',
+ *   method: 'collections.polyline',
  *   options: {
  *     points: [[0, 0], [2, 0], [2, 2], [-2, 1]],
  *     pad: {
@@ -115,7 +115,7 @@ export type OBJ_PolylinePad = {};
  * // Customization of side and angle annotations
  * diagram.addElement({
  *   name: 'p',
- *   method: 'advanced.polyline',
+ *   method: 'collections.polyline',
  *   options: {
  *     points: [[0, 0], [1, 0], [1, 1], [0, 1]],
  *     close: true,
@@ -192,36 +192,36 @@ export type OBJ_ValidShape = {
 };
 
 /**
- * @extends ADV_Angle
+ * @extends COL_Angle
  * @extends OBJ_PolylineCustomization
  */
 export type OBJ_PolylineAngle = {}
 
 /**
- * @extends ADV_Line
+ * @extends COL_Line
  * @extends OBJ_PolylineCustomization
  */
 export type OBJ_PolylineSide = {}
 
 // /**
-//  * @extends ADV_Polygon
+//  * @extends COL_Polygon
 //  * @extends OBJ_PolylineCustomization
 //  */
-// export type ADV_PolylinePad = {}
+// export type COL_PolylinePad = {}
 
 /* eslint-disable max-len */
 /**
- * Advanced Polyline options object
+ * Collections Polyline options object
  *
- * The Advanced Polyline is a convient and powerful polyline
+ * The Collections Polyline is a convient and powerful polyline
  * {@link DiagramElementCollection} that includes the polyline,
  * angle annotations, side label and arrow annotations, and movable
  * pads on each polyline point for the user to adjust dynamically.
  *
  * The polyline itself is defined with an {@link OBJ_Polyline} options Object.
  *
- * Angle and side annotations can be defined as {@link ADV_Angle} and
- * {@link ADV_Line}, and movable pads defined with
+ * Angle and side annotations can be defined as {@link COL_Angle} and
+ * {@link COL_Line}, and movable pads defined with
  * ({@link OBJ_Polygon} & {@link OBJ_PolylinePad}).
  *
  * Angles, sides and pads can all be defined either as an options object
@@ -237,8 +237,8 @@ export type OBJ_PolylineSide = {}
  * @extends OBJ_Polyline
  *
  * @property {boolean} [showLine] `false` will hide the polyline's line (`true`)
- * @property {OBJ_PolylineAngle | Array<ADV_Angle>} [angle] angle annotations - leave undefined for no angle annotations
- * @property {OBJ_PolylineSide | Array<ADV_Line>} [side]
+ * @property {OBJ_PolylineAngle | Array<COL_Angle>} [angle] angle annotations - leave undefined for no angle annotations
+ * @property {OBJ_PolylineSide | Array<COL_Line>} [side]
  * side annotations - leave undefined for no side annotations
  * @property {OBJ_PolylinePad | Array<OBJ_PolylinePadSingle>} [pad]
  * move pad - leave undefined for no move pads
@@ -247,10 +247,10 @@ export type OBJ_PolylineSide = {}
  * displayed labels of angles and sides.
  */
 /* eslint-enable max-len */
-export type ADV_Polyline = {
+export type COL_Polyline = {
   showLine?: boolean,
-  angle?: OBJ_PolylineAngle | Array<ADV_Angle>,
-  side?: OBJ_PolylineSide | Array<ADV_Line>,
+  angle?: OBJ_PolylineAngle | Array<COL_Angle>,
+  side?: OBJ_PolylineSide | Array<COL_Line>,
   pad?: OBJ_PolylinePad | Array<OBJ_PolylinePadSingle>,
   makeValid?: ?OBJ_ValidShape,
 } & OBJ_Polyline;
@@ -337,7 +337,7 @@ function processArray(
 }
 
 /**
- * `'updatePoints'` subscription published whenever the Advanced Polyline
+ * `'updatePoints'` subscription published whenever the Collections Polyline
  * points are updated. No payload is passed to subscriber.
  *
  * @typedef SUB_PolylineUpdatePoints
@@ -370,7 +370,7 @@ export type SUB_PolylineUpdatePoints = [];
  * side annotations for straight lines between points and move pads at polyline
  * points to dynamically adjust the polyline.
  *
- * See {@link ADV_Polyline} for the options that can be used when creating the
+ * See {@link COL_Polyline} for the options that can be used when creating the
  * line.
  *
  * Available subscriptions:
@@ -385,7 +385,7 @@ export type SUB_PolylineUpdatePoints = [];
  * // Polyline with angle annotations
  * diagram.addElement({
  *   name: 'p',
- *   method: 'advanced.polyline',
+ *   method: 'collections.polyline',
  *   options: {
  *     points: [[1, 0], [0, 0], [0.5, 1], [1.5, 1]],
  *     arrow: 'triangle',
@@ -402,7 +402,7 @@ export type SUB_PolylineUpdatePoints = [];
  * // Triangle with unknown angle
  * diagram.addElement({
  *   name: 'p',
- *   method: 'advanced.polyline',
+ *   method: 'collections.polyline',
  *   options: {
  *     points: [[1, 1], [1, 0], [0, 0]],
  *     close: true,
@@ -426,7 +426,7 @@ export type SUB_PolylineUpdatePoints = [];
  * // Dimensioned square
  * diagram.addElement({
  *   name: 'p',
- *   method: 'advanced.polyline',
+ *   method: 'collections.polyline',
  *   options: {
  *     points: [[0, 1], [1, 1], [1, 0], [0, 0]],
  *     close: true,
@@ -453,7 +453,7 @@ export type SUB_PolylineUpdatePoints = [];
  * // User adjustable polyline
  * diagram.addElement({
  *   name: 'p',
- *   method: 'advanced.polyline',
+ *   method: 'collections.polyline',
  *   options: {
  *     points: [[-0.5, 1], [1, 1], [0, 0], [1, -0.5]],
  *     dash: [0.05, 0.02],
@@ -469,7 +469,7 @@ export type SUB_PolylineUpdatePoints = [];
  * // Annotations that automatically updates as user changes triangle
  * diagram.addElement({
  *   name: 'p',
- *   method: 'advanced.polyline',
+ *   method: 'collections.polyline',
  *   options: {
  *     points: [[-1, 1], [1, 1], [0, 0]],
  *     close: true,
@@ -502,10 +502,10 @@ export type SUB_PolylineUpdatePoints = [];
  * });
  */
 /* eslint-enable max-len */
-export default class AdvancedPolyline extends DiagramElementCollection {
+export default class CollectionsPolyline extends DiagramElementCollection {
   shapes: DiagramPrimitives;
   equation: DiagramEquation;
-  advanced: DiagramObjects;
+  collections: DiagramObjects;
   animateNextFrame: void => void;
   isTouchDevice: boolean;
   largerTouchBorder: boolean;
@@ -513,7 +513,7 @@ export default class AdvancedPolyline extends DiagramElementCollection {
   points: Array<Point>;
   close: boolean;
   _line: ?DiagramElementPrimitive;
-  options: ADV_Polyline;
+  options: COL_Polyline;
   updatePointsCallback: ?(string | (() => void));
   reverse: boolean;
   makeValid: ?{
@@ -534,9 +534,9 @@ export default class AdvancedPolyline extends DiagramElementCollection {
     objects: DiagramObjects,
     isTouchDevice: boolean,
     animateNextFrame: void => void,
-    options: ADV_Polyline = {},
+    options: COL_Polyline = {},
   ) {
-    const defaultOptions: ADV_Polyline = {
+    const defaultOptions: COL_Polyline = {
       position: null,
       color: shapes.defaultColor, // $FlowFixMe
       points: [new Point(1, 0), new Point(0, 0), new Point(0, 1)],
@@ -565,7 +565,7 @@ export default class AdvancedPolyline extends DiagramElementCollection {
 
     this.shapes = shapes;
     this.equation = equation;
-    this.advanced = objects;
+    this.collections = objects;
     this.largerTouchBorder = optionsToUse.largerTouchBorder;
     this.isTouchDevice = isTouchDevice;
     this.animateNextFrame = animateNextFrame;
@@ -700,7 +700,7 @@ export default class AdvancedPolyline extends DiagramElementCollection {
           p2: this.points[p2],
           p3: this.points[p3],
         }, angleArray[i]);
-        const angleAnnotation = this.advanced.angle(angleOptions);
+        const angleAnnotation = this.collections.angle(angleOptions);
         this.add(name, angleAnnotation);
       }
     }
@@ -745,7 +745,7 @@ export default class AdvancedPolyline extends DiagramElementCollection {
             p2: this.points[i],
           }, sideArray[i]);
         }
-        const sideLine = this.advanced.line(sideOptions);
+        const sideLine = this.collections.line(sideOptions);
         sideLine.custom.offset = sideOptions.offset;
         this.add(name, sideLine);
       }
@@ -959,7 +959,7 @@ export default class AdvancedPolyline extends DiagramElementCollection {
   }
 
   /**
-   * The Advanced Polyline is a {@link DiagramElementCollection}, with a
+   * The Collections Polyline is a {@link DiagramElementCollection}, with a
    * transform that includes a translation, or position, transform element.
    *
    * Changing the position element of the transform would normally move
@@ -986,7 +986,7 @@ export default class AdvancedPolyline extends DiagramElementCollection {
   }
 
   /**
-   * The Advanced Polyline is a {@link DiagramElementCollection}, with a
+   * The Collections Polyline is a {@link DiagramElementCollection}, with a
    * transform that includes a rotation transform element.
    *
    * Changing the rotation element of the transform would normally rotate
@@ -1004,7 +1004,7 @@ export default class AdvancedPolyline extends DiagramElementCollection {
   }
 
   /**
-   * The Advanced Polyline is a {@link DiagramElementCollection}, with a
+   * The Collections Polyline is a {@link DiagramElementCollection}, with a
    * transform that includes a scale transform element.
    *
    * Changing the scale element of the transform would normally scale

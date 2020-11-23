@@ -29,20 +29,20 @@ toc:
   - OBJ_Polygon
   - OBJ_Star
   - OBJ_Grid
-  - name: Advanced Shapes
-    file: ./docs/tutorials/advanced_shapes/advanced_shapes.md
-  - AdvancedLine
-  - ADV_Line
-  - AdvancedAngle
-  - ADV_Angle
-  - AdvancedPolyline
-  - ADV_Polyline
-  - AdvancedRectangle
-  - ADV_Rectangle
-  - AdvancedAxis
-  - ADV_Axis
-  - AdvancedPlot
-  - ADV_Plot
+  - name: Collections Shapes
+    file: ./docs/tutorials/collections/collections.md
+  - CollectionsLine
+  - COL_Line
+  - CollectionsAngle
+  - COL_Angle
+  - CollectionsPolyline
+  - COL_Polyline
+  - CollectionsRectangle
+  - COL_Rectangle
+  - CollectionsAxis
+  - COL_Axis
+  - CollectionsPlot
+  - COL_Plot
   - name: Text
     file: ./docs/tutorials/text/text.md
   - OBJ_Text
@@ -189,16 +189,16 @@ toc:
   - OBJ_PolylineAngle
   - OBJ_PolylineSide
   - OBJ_PolylinePadSingle
-  - ADV_Trace
-  - AdvancedPlotLegend
-  - ADV_PlotLegend
+  - COL_Trace
+  - CollectionsPlotLegend
+  - COL_PlotLegend
   - OBJ_TranslationPath
   - OBJ_SpaceTransforms
   - OBJ_LineStyleSimple
   - OBJ_AxisTicks
   - OBJ_AxisLabels
   - TypeAxisTitle
-  - AdvancedTrace
+  - CollectionsTrace
   - TypePlotFrame
   - TypePlotTitle
   - OBJ_PlotLegendCustomTrace

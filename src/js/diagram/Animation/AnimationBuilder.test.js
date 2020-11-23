@@ -19,7 +19,7 @@ describe('AnimationBuilder API', () => {
   let diagram;
   beforeEach(() => {
     diagram = makeDiagram();
-    element = diagram.advanced.line();
+    element = diagram.collections.line();
     element.transform = element.transform.zero();
   });
   test('Basic', () => {

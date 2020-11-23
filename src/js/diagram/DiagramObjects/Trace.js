@@ -13,7 +13,7 @@ import { joinObjects } from '../../tools/tools';
 import {
   DiagramElementCollection, DiagramElementPrimitive,
 } from '../Element';
-import type AdvancedAxis, { ADV_Axis } from './Axis';
+import type CollectionsAxis, { COL_Axis } from './Axis';
 import type {
   OBJ_Line, OBJ_Polygon, OBJ_Star, OBJ_Polyline,
 } from '../DiagramPrimitives/DiagramPrimitives';
@@ -21,7 +21,7 @@ import type { TypeColor, OBJ_Font_Fixed } from '../../tools/types';
 import type { CPY_Steps } from '../DrawingObjects/Geometries/copy/copy';
 
 /**
- * {@link AdvancedTrace} options object.
+ * {@link CollectionsTrace} options object.
  *
  * A plot trace is a set of (x, y) points associated with an
  * x and y axis.
@@ -50,10 +50,10 @@ import type { CPY_Steps } from '../DrawingObjects/Geometries/copy/copy';
  *
  *
  * @property {Array<TypeParsablePoint>} points the x points of the trace
- * @property {ADV_Axis | string} [xAxis] The x axis associated with the trace,
+ * @property {COL_Axis | string} [xAxis] The x axis associated with the trace,
  * if this is a string, the trace must be part of a plot with an axis with the
  * same name. In plots, this will default to the string `'x'`.
- * @property {ADV_Axis | string} [yAxis] The y axis associated with the trace,
+ * @property {COL_Axis | string} [yAxis] The y axis associated with the trace,
  * if this is a string, the trace must be part of a plot with an axis with the
  * same name. In plots, this will default to the string `'y'`.
  * @property {OBJ_Line} [line] line style of the trace - if neither `line` nor
@@ -71,16 +71,16 @@ import type { CPY_Steps } from '../DrawingObjects/Geometries/copy/copy';
  * 1/4000th the range of the y axis
  *
  * @see
- * For more examples on using traces, see {@link AdvancedPlot}
+ * For more examples on using traces, see {@link CollectionsPlot}
  *
  * To test examples below, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>.
  *
  */
-export type ADV_Trace = {
+export type COL_Trace = {
   points: Array<TypeParsablePoint>,
-  xAxis?: ADV_Axis | string,
-  yAxis?: ADV_Axis | string,
+  xAxis?: COL_Axis | string,
+  yAxis?: COL_Axis | string,
   x?: Array<TypeParsablePoint>,
   y?: Array<TypeParsablePoint>,
   line?: OBJ_Line,
@@ -103,10 +103,10 @@ export type ADV_Trace = {
  * ![](./assets1/advtrace_ex5.png)
  * ![](./assets1/advtrace_ex6.png)
  *
- * This object defines a trace in an {@link AdvancedPlot}.
+ * This object defines a trace in an {@link CollectionsPlot}.
  *
  * The trace includes all the points of the trace, and the axes that it
- * should be drawn against and is defined using the {@link ADV_PlotTrace}
+ * should be drawn against and is defined using the {@link COL_PlotTrace}
  * options object.
  *
  * To test examples below, append them to the
@@ -125,7 +125,7 @@ export type ADV_Trace = {
  * // the line will be solid, and it will be plotted against the 'x' and 'y' axes.
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     trace: pow(),
  *   },
@@ -135,7 +135,7 @@ export type ADV_Trace = {
  * // Change the thickness and color of the line
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     trace: {
  *       points: pow(),
@@ -151,7 +151,7 @@ export type ADV_Trace = {
  * // Default Markers
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     trace: {
  *       points: pow(2, 10, 1),
@@ -164,7 +164,7 @@ export type ADV_Trace = {
  * // Custom Markers
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     trace: {
  *       points: pow(2, 10, 1),
@@ -181,7 +181,7 @@ export type ADV_Trace = {
  * // Line and markers
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     trace: {
  *       points: pow(2, 10, 1),
@@ -198,7 +198,7 @@ export type ADV_Trace = {
  * // Use names in trace definitions to customize legend
  * diagram.addElement({
  *   name: 'plot',
- *   method: 'advanced.plot',
+ *   method: 'collections.plot',
  *   options: {
  *     trace: [
  *       pow(2),
@@ -215,7 +215,7 @@ export type ADV_Trace = {
  * });
  */
 // $FlowFixMe
-class AdvancedTrace extends DiagramElementCollection {
+class CollectionsTrace extends DiagramElementCollection {
   // Diagram elements
   _line: ?DiagramElementPrimitive;
   shapes: Object;
@@ -225,8 +225,8 @@ class AdvancedTrace extends DiagramElementCollection {
   drawPoints: Array<Point>;
   polylines: Array<Array<Point>>;
 
-  xAxis: AdvancedAxis;
-  yAxis: AdvancedAxis;
+  xAxis: CollectionsAxis;
+  yAxis: CollectionsAxis;
 
   line: OBJ_Line;
   defaultFont: OBJ_Font_Fixed;
@@ -242,7 +242,7 @@ class AdvancedTrace extends DiagramElementCollection {
   constructor(
     shapes: Object,
     equation: Object,
-    optionsIn: ADV_Trace,
+    optionsIn: COL_Trace,
   ) {
     const defaultOptions = {
       color: shapes.defaultColor,
@@ -458,4 +458,4 @@ class AdvancedTrace extends DiagramElementCollection {
   // }
 }
 
-export default AdvancedTrace;
+export default CollectionsTrace;

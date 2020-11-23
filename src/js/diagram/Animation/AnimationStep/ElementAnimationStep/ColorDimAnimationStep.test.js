@@ -17,7 +17,7 @@ describe('Dim Animation', () => {
   let dimColor;
   beforeEach(() => {
     diagram = makeDiagram();
-    elem1 = diagram.advanced.line();
+    elem1 = diagram.collections.line();
     color = [1, 1, 1, 1];
     dimColor = [0.5, 0.5, 0.5, 1];
     elem1.setColor(color);
