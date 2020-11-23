@@ -81,6 +81,41 @@ export type OBJ_LineStyleSimple = {
 }
 
 /**
+ * Diagram collection options object.
+ *
+ * @property {TypeParsableTransform} [transform]
+ * @property {TypeParsablePoint} [position] if defined, will overwrite first
+ * translation of `transform`
+ * @property {TypeColor} [color] default color
+ * @property {DiagramElement | null} [parent] parent of collection
+ * @property {Array<Array<TypeParsablePoint>> | 'children' | 'rect' | number} [border]
+ * defines border of collection. Use `'children'` for the borders of the
+ * children. Use 'rect' for bounding rectangle of children. Use `number`
+ * for the bounding rectangle with some buffer. Use
+ * `Array<Array<TypeParsablePoint>` for a custom border. (`'children'`)
+ * @property {Array<Array<TypeParsablePoint>> | 'border' | number | 'rect'} [touchBorder]
+ * defines the touch border of the collection. Use `'border'` to use the same
+ * as the border of the collection. Use `'rect'` for the bounding rectangle
+ * of the border. Use `number` for the bounding rectangle of the border plus
+ * some buffer. Use `Array<Array<TypeParsablePoint>` for a custom touch
+ * border (`'border'`).
+ * @property {Array<Array<TypeParsablePoint>> | 'children'} [holeBorder] Hole
+ * border of the collection. Use `'children'` to use the children element hole
+ * borders, otherwise use `Array<Array<TypeParsablePoint>` for a customizable
+ * border.
+ */
+export type OBJ_Collection = {
+  transform?: TypeParsableTransform,
+  position?: TypeParsablePoint,
+  limits?: Rect,
+  color?: TypeColor,
+  parent?: DiagramElement | null,
+  border?: Array<Array<Point>> | 'children' | 'rect' | number,
+  touchBorder?: Array<Array<Point>> | 'border' | number | 'rect',
+  holeBorder?: Array<Array<Point>> | 'children',
+};
+
+/**
  * Texture definition object
  *
  * A texture file is an image file like a jpg, or png.
@@ -3739,24 +3774,8 @@ export default class DiagramPrimitives {
    * Create a {@link DiagramElementCollection}.
    */
   collection(
-    transformOrPointOrOptions: Transform | Point | {
-      transform?: Transform,
-      position?: Point,
-      color?: TypeColor,
-      pulse?: number,
-      border: Array<Array<Point>> | 'children' | 'rect' | number;
-      touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'children';
-      holeBorder: Array<Array<Point>> | 'children';
-    } = {},
-    ...moreOptions: Array<{
-      transform?: Transform,
-      position?: Point,
-      color?: TypeColor,
-      pulse?: number,
-      border: Array<Array<Point>> | 'children' | 'rect' | number;
-      touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'children';
-      holeBorder: Array<Array<Point>> | 'children';
-    }>
+    transformOrPointOrOptions: Transform | Point | OBJ_Collection = {},
+    ...moreOptions: Array<OBJ_Collection>
   ) {
     // let transform = new Transform('collection').scale(1, 1).rotate(0).translate(0, 0);
     // let color = this.defaultColor;
@@ -3795,7 +3814,7 @@ export default class DiagramPrimitives {
     // element.setColor(color);
     if (
       optionsToUse.pulse != null
-      && typeof element.optionsToUse.pulseDefault !== 'function'
+      && typeof element.pulseDefault !== 'function'
       && typeof element.pulseDefault !== 'string'
     ) {
       element.pulseDefault.scale = optionsToUse.pulse;
