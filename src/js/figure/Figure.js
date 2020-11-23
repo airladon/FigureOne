@@ -22,7 +22,7 @@ import Gesture from './Gesture';
 import DrawContext2D from './DrawContext2D';
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
 import FigureEquation from './FigureEquation/FigureEquation';
-import FigureObjects from './FigureObjects/FigureObjects';
+import FigureCollections from './FigureCollections/FigureCollections';
 import addElements from './FigureAddElements/addElements';
 import type { TypeAddElementObject } from './FigureAddElements/addElements';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
@@ -232,9 +232,9 @@ class Figure {
   equation: Object;
   equationLow: Object;
   // equationHigh: Object;
-  collections: FigureObjects;
-  collectionsLow: FigureObjects;
-  // objectsHigh: FigureObjects;
+  collections: FigureCollections;
+  collectionsLow: FigureCollections;
+  // objectsHigh: FigureCollections;
 
   backgroundColor: Array<number>;
   fontScale: number;
@@ -1166,7 +1166,7 @@ class Figure {
     //   shapes = this.shapesHigh;
     //   equation = this.equationHigh;
     // }
-    return new FigureObjects(
+    return new FigureCollections(
       shapes,
       equation,
       this.isTouchDevice,

@@ -20,7 +20,7 @@ import type {
 } from './Angle';
 import FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
 // eslint-disable-next-line import/no-cycle
-import FigureObjects from './FigureObjects';
+import FigureCollections from './FigureCollections';
 import FigureEquation from '../FigureEquation/FigureEquation';
 import type { OBJ_Polyline, OBJ_Polygon } from '../FigurePrimitives/FigurePrimitives';
 
@@ -505,7 +505,7 @@ export type SUB_PolylineUpdatePoints = [];
 export default class CollectionsPolyline extends FigureElementCollection {
   shapes: FigurePrimitives;
   equation: FigureEquation;
-  collections: FigureObjects;
+  collections: FigureCollections;
   animateNextFrame: void => void;
   isTouchDevice: boolean;
   largerTouchBorder: boolean;
@@ -531,7 +531,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
   constructor(
     shapes: FigurePrimitives,
     equation: FigureEquation,
-    objects: FigureObjects,
+    objects: FigureCollections,
     isTouchDevice: boolean,
     animateNextFrame: void => void,
     options: COL_Polyline = {},

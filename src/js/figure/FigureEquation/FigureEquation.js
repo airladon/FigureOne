@@ -10,8 +10,8 @@ import { joinObjects } from '../../tools/tools';
 import DrawContext2D from '../DrawContext2D';
 import { Equation } from '../FigureElements/Equation/Equation';
 import type { EQN_Equation } from '../FigureElements/Equation/Equation';
-import type { TypeNavigatorOptions } from '../FigureObjects/EqnNavigator';
-import EqnNavigator from '../FigureObjects/EqnNavigator';
+import type { TypeNavigatorOptions } from '../FigureCollections/EqnNavigator';
+import EqnNavigator from '../FigureCollections/EqnNavigator';
 
 export type TypeEquationPhrase =
   string

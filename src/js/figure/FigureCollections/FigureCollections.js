@@ -28,7 +28,7 @@ import CollectionsPlot from './Plot';
 import CollectionsPlotLegend from './Legend';
 import CollectionsRectangle from './Rectangle';
 
-export default class FigureObjects {
+export default class FigureCollections {
   webgl: Array<WebGLInstance>;
   draw2D: DrawContext2D;
   limits: Rect;

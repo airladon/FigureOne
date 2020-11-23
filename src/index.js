@@ -22,11 +22,11 @@ import {
 } from './js/figure/DrawingObjects/TextObject/TextObject';
 import HTMLObject from './js/figure/DrawingObjects/HTMLObject/HTMLObject';
 import HTMLEquation from './js/figure/FigureElements/Equation/HTMLEquation';
-import CollectionsAngle from './js/figure/FigureObjects/Angle';
-import CollectionsLine from './js/figure/FigureObjects/Line';
-import CollectionsPolyline from './js/figure/FigureObjects/PolyLine';
-import EqnNavigator from './js/figure/FigureObjects/EqnNavigator';
-import EquationLabel from './js/figure/FigureObjects/EquationLabel';
+import CollectionsAngle from './js/figure/FigureCollections/Angle';
+import CollectionsLine from './js/figure/FigureCollections/Line';
+import CollectionsPolyline from './js/figure/FigureCollections/PolyLine';
+import EqnNavigator from './js/figure/FigureCollections/EqnNavigator';
+import EquationLabel from './js/figure/FigureCollections/EquationLabel';
 import { Equation } from './js/figure/FigureElements/Equation/Equation';
 import EquationForm from './js/figure/FigureElements/Equation/EquationForm';
 
@@ -34,19 +34,19 @@ import type { TypeRotationDirection, TypeParsablePoint } from './js/tools/g2';
 import type {
   COL_Line,
   TypeLineLabelOptions, TypeLabelledLine,
-} from './js/figure/FigureObjects/Line';
+} from './js/figure/FigureCollections/Line';
 import type {
   TypeLabelLocation, TypeLabelSubLocation, TypeLabelOrientation,
-} from './js/figure/FigureObjects/EquationLabel';
+} from './js/figure/FigureCollections/EquationLabel';
 
 import type {
   COL_Angle, TypeAngleLabelOptions,
   TypeLabelledAngle,
-} from './js/figure/FigureObjects/Angle';
+} from './js/figure/FigureCollections/Angle';
 import type { OBJ_Figure } from './js/figure/Figure';
 import type {
   COL_Polyline, OBJ_PolylinePad,
-} from './js/figure/FigureObjects/PolyLine';
+} from './js/figure/FigureCollections/PolyLine';
 import * as anim from './js/figure/Animation/Animation';
 
 // This helps the docgen find the types file

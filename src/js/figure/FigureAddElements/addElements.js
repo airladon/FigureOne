@@ -4,7 +4,7 @@ import {
   FigureElementCollection,
 } from '../Element';
 import FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
-import FigureObjects from '../FigureObjects/FigureObjects';
+import FigureCollections from '../FigureCollections/FigureCollections';
 import FigureEquation from '../FigureEquation/FigureEquation';
 
 export type TypeAddElementObject = {
@@ -20,7 +20,7 @@ export type TypeAddElementObject = {
 function addElements(
   shapes: FigurePrimitives,
   equation: FigureEquation,
-  collections: FigureObjects,
+  collections: FigureCollections,
   rootCollection: FigureElementCollection,
   layout: Array<TypeAddElementObject>,
   addElementsKey: string,
