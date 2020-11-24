@@ -1,4 +1,4 @@
-To define many shapes, geometric primitives (not to be confused with figure element primitives) such as points and lines need to be used.
+To define many shapes, geometric concepts such as points and lines need to be used.
 
 FigureOne includes classes that define a:
 * {@link Point}
@@ -12,7 +12,7 @@ FigureOne includes classes that define a:
 Each of these classes have convenience methods that make it easy to to work with them such as
 * Checking if two points are equal or within some delta
 * Adding, subtracting and multiplying points
-* Checking if a point is on a line
+* Checking if a point is on a line, or inside a rectangle
 * Finding the intersection between two lines
 * Transforming a point with a transform
 * Chaining transforms together

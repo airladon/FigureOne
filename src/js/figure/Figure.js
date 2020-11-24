@@ -122,24 +122,24 @@ export type OBJ_Figure = {
 //   */
 
 /**
- * Class to create a figure.
+ * Primary Figure class.
  *
- * By default, a figure will attach a WebGL canvas and Context2D
+ * A figure will attach a WebGL canvas and Context2D
  * canvas to the html `div` element with id `"figureOneContainer"`.
+ *
+ * The figure manages all drawing elements, renders the drawing elements
+ * on a browser's animation frames and listens for guestures from the user.
+ *
+ * The figure also has a recorder, allowing to record and playback states,
+ * and gestures - though this is not yet documented.
  *
  * To attach to a different `div`, use the `htmlId` property in the class
  * constructor.
  *
- * The figure manages all drawing elements, rendering the drawing elements
- * on browser animation frames and listens for guestures from the user.
- *
- * The figure also has a recorder, allowing to record and playback states,
- * and gestures.
- *
  * If a figure is paused, then all drawing element animations will
  * also be paused.
  *
- * It also has a number of convenience functions for create drawing elements
+ * `Figure` has a number of convenience methods for create drawing elements
  * already attached to the drawing canvases, and useful transforms for
  * converting between the different spaces (e.g. pixel, GL, figure).
  *

@@ -29,9 +29,9 @@
               
                 
                 <li><a
-                  href='#introduction'
+                  href='#figureon-api-reference'
                   class="h5 bold black caps">
-                  Introduction
+                  FigureOn API Reference
                   
                 </a>
                 
@@ -4417,15 +4417,15 @@
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='introduction' class='mt0'>
-    Introduction
+  <h2 id='figureon-api-reference' class='mt0'>
+    FigureOn API Reference
   </h2>
 
   
-    <p>This will introduce some key terms and concepts that are found frequently throughout the documentation.</p>
-<p>This is a work in progress and the entire API is not yet documented.</p>
+    <p>This is the <a href="https://github.com/airladon/FigureOne">FigureOne</a> API refence. This is a work in progress and the entire API is not yet documented.</p>
+<p>First, it is useful to introduce some key terms and concepts that are found frequently throughout the documentation.</p>
 <h4>Figures, Primitives and Collections</h4>
-<p><strong>FigureOne</strong> allows you to create a <em>figure</em>, or <em>figure</em> that can be both interactive and animated.</p>
+<p><strong>FigureOne</strong> allows you to create a <em>figure</em> that can be both interactive and animated.</p>
 <p>A figure has one or more <em>figure elements</em>. A figure element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.</p>
 <p>In the language of <strong>FigureOne</strong>, there are two types of <a href="FigureElements">FigureElements</a>:</p>
 <ul>
@@ -4585,18 +4585,18 @@ labeledLine.setMovable();</pre>
   </div>
   
 
-  <p>Class to create a figure.</p>
-<p>By default, a figure will attach a WebGL canvas and Context2D
+  <p>Primary Figure class.</p>
+<p>A figure will attach a WebGL canvas and Context2D
 canvas to the html <code>div</code> element with id <code>"figureOneContainer"</code>.</p>
+<p>The figure manages all drawing elements, renders the drawing elements
+on a browser's animation frames and listens for guestures from the user.</p>
+<p>The figure also has a recorder, allowing to record and playback states,
+and gestures - though this is not yet documented.</p>
 <p>To attach to a different <code>div</code>, use the <code>htmlId</code> property in the class
 constructor.</p>
-<p>The figure manages all drawing elements, rendering the drawing elements
-on browser animation frames and listens for guestures from the user.</p>
-<p>The figure also has a recorder, allowing to record and playback states,
-and gestures.</p>
 <p>If a figure is paused, then all drawing element animations will
 also be paused.</p>
-<p>It also has a number of convenience functions for create drawing elements
+<p><code>Figure</code> has a number of convenience methods for create drawing elements
 already attached to the drawing canvases, and useful transforms for
 converting between the different spaces (e.g. pixel, GL, figure).</p>
 
@@ -7827,7 +7827,7 @@ array of paths.</p>
   </h2>
 
   
-    <p>To define many shapes, geometric primitives (not to be confused with figure element primitives) such as points and lines need to be used.</p>
+    <p>To define many shapes, geometric concepts such as points and lines need to be used.</p>
 <p>FigureOne includes classes that define a:</p>
 <ul>
 <li><a href="#point">Point</a></li>
@@ -7842,7 +7842,7 @@ array of paths.</p>
 <ul>
 <li>Checking if two points are equal or within some delta</li>
 <li>Adding, subtracting and multiplying points</li>
-<li>Checking if a point is on a line</li>
+<li>Checking if a point is on a line, or inside a rectangle</li>
 <li>Finding the intersection between two lines</li>
 <li>Transforming a point with a transform</li>
 <li>Chaining transforms together</li>
@@ -42966,7 +42966,7 @@ triangle primitives to draw the line (
   </div>
   
 
-  <p><img src="./assets1/copy.png"></p>
+  <p><img src="./apiassets/copy.png"></p>
 <p>Copy Step options object</p>
 <p>A copy step defines how to copy existing points.</p>
 <p>An array of copy steps will cumulatively copy points from an original set of
@@ -43361,7 +43361,7 @@ will repeat for the length of the line.</p>
   
 
   <p>Arrow end for a line or polyline.</p>
-<p><img src="./assets1/arrow_line.png"></p>
+<p><img src="./apiassets/arrow_line.png"></p>
 <p>Arrows on the end of lines have many of the same properties as stand
 alone arrows <a href="#obj_arrow">OBJ_Arrow</a>.</p>
 <p>The <code>align</code> property descripes where the line stops relative to the arrow.

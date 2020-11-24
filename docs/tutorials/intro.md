@@ -1,6 +1,7 @@
-This will introduce some key terms and concepts that are found frequently throughout the documentation.
 
-This is a work in progress and the entire API is not yet documented.
+This is the [FigureOne](https://github.com/airladon/FigureOne) API refence. This is a work in progress and the entire API is not yet documented.
+
+First, it is useful to introduce some key terms and concepts that are found frequently throughout the documentation.
 
 #### Figures, Primitives and Collections
 
