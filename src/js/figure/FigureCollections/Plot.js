@@ -146,14 +146,14 @@ function cleanTraces(
  * {@link FigureElementCollection} representing a plot including axes, traces,
  * labels and titles.
  *
- * ![](./assets1/advplot_ex1.png)
- * ![](./assets1/advplot_ex2.png)
+ * ![](./apiassets/advplot_ex1.png)
+ * ![](./apiassets/advplot_ex2.png)
  *
- * ![](./assets1/advplot_ex3.png)
- * ![](./assets1/advplot_ex4.png)
+ * ![](./apiassets/advplot_ex3.png)
+ * ![](./apiassets/advplot_ex4.png)
  *
- * ![](./assets1/advplot_ex5.png)
- * ![](./assets1/advplot_ex6.png)
+ * ![](./apiassets/advplot_ex5.png)
+ * ![](./apiassets/advplot_ex6.png)
  *
  * This object provides convient and customizable plot functionality.
  *

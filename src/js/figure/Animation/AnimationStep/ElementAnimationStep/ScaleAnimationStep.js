@@ -35,7 +35,7 @@ export type OBJ_ScaleAnimationStep = {
 /**
  * Scale Animation Step
  *
- * ![](./assets1/scale_animation.gif)
+ * ![](./apiassets/scale_animation.gif)
  *
  * The scale animation step animates the first {@link Scale} transform
  * in the {@link FigureElement}'s {@link Transform}.

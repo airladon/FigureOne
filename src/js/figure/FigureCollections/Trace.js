@@ -94,14 +94,14 @@ export type COL_Trace = {
 /**
  * {@link FigureElementCollection} representing a trace.
  *
- * ![](./assets1/advtrace_ex1.png)
- * ![](./assets1/advtrace_ex2.png)
+ * ![](./apiassets/advtrace_ex1.png)
+ * ![](./apiassets/advtrace_ex2.png)
  *
- * ![](./assets1/advtrace_ex3.png)
- * ![](./assets1/advtrace_ex4.png)
+ * ![](./apiassets/advtrace_ex3.png)
+ * ![](./apiassets/advtrace_ex4.png)
  *
- * ![](./assets1/advtrace_ex5.png)
- * ![](./assets1/advtrace_ex6.png)
+ * ![](./apiassets/advtrace_ex5.png)
+ * ![](./apiassets/advtrace_ex6.png)
  *
  * This object defines a trace in an {@link CollectionsPlot}.
  *

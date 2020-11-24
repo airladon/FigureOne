@@ -518,11 +518,11 @@ export type OBJ_PulseAngleAnimationStep = {
 /**
  * {@link FigureElementCollection} representing an angle.
  *
- * ![](./assets1/advangle_examples.png)
+ * ![](./apiassets/advangle_examples.png)
  *
- * <p class="inline_gif"><img src="./assets1/advangle_grow.gif" class="inline_gif_image"></p>
+ * <p class="inline_gif"><img src="./apiassets/advangle_grow.gif" class="inline_gif_image"></p>
  *
- * <p class="inline_gif"><img src="./assets1/advangle_move.gif" class="inline_gif_image"></p>
+ * <p class="inline_gif"><img src="./apiassets/advangle_move.gif" class="inline_gif_image"></p>
  *
  * This object defines a convient and powerful angle
  * {@link FigureElementCollection} that includes one or more curve annotations,

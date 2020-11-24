@@ -58,7 +58,7 @@ export type OBJ_TransformAnimationStep = {
 /**
  * Transform Animation Step
  *
- * ![](./assets1/transform_animation.gif)
+ * ![](./apiassets/transform_animation.gif)
  *
  * By default, the transform will start with the element's current transform.
  *

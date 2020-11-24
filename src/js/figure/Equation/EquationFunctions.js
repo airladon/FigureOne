@@ -108,7 +108,7 @@ export type TypeEquationPhrase =
 /**
  * Equation container options
  *
- * ![](./assets1/eqn_container.gif)
+ * ![](./apiassets/eqn_container.gif)
  *
  * A container is useful to fix spacing around content as it changes between
  * equation forms.
@@ -204,7 +204,7 @@ export type EQN_Container = {
 /**
  * Equation fraction options
  *
- * ![](./assets1/eqn_fraction.gif)
+ * ![](./apiassets/eqn_fraction.gif)
  *
  * A fraction has a numerator, denominator and vinculum symbol (line).
  *
@@ -335,7 +335,7 @@ export type EQN_Fraction = {
 /**
  * Equation scale
  *
- * ![](./assets1/eqn_scale.gif)
+ * ![](./apiassets/eqn_scale.gif)
  *
  * Scale an equation phrase
  *
@@ -406,7 +406,7 @@ export type EQN_Scale = {
 /**
  * Equation bracket
  *
- * ![](./assets1/eqn_bracket.gif)
+ * ![](./apiassets/eqn_bracket.gif)
  *
  * Surround an equation phrase with brackets
  *
@@ -534,7 +534,7 @@ export type EQN_Bracket = {
 /**
  * Equation root
  *
- * ![](./assets1/eqn_root.gif)
+ * ![](./apiassets/eqn_root.gif)
  *
  * Surround an equation phrase with a radical symbol and add a custom root if
  * needed
@@ -673,7 +673,7 @@ export type EQN_Root = {
 /**
  * Equation strike-through
  *
- * ![](./assets1/eqn_strike.gif)
+ * ![](./apiassets/eqn_strike.gif)
  *
  * Overlay a strike symbol on an equation phrase
  *
@@ -787,7 +787,7 @@ export type EQN_Strike = {
 /**
  * Equation box
  *
- * ![](./assets1/eqn_box.gif)
+ * ![](./apiassets/eqn_box.gif)
  *
  * Place a box symbol around an equation phrase
  *
@@ -906,7 +906,7 @@ export type EQN_Box = {
 /**
  * Equation bar
  *
- * ![](./assets1/eqn_bar.gif)
+ * ![](./apiassets/eqn_bar.gif)
  *
  * Place a bar (or bracket) symbol to the side of an equation phrase
  *
@@ -1050,7 +1050,7 @@ export type EQN_Bar = {
 /**
  * Equation integral
  *
- * ![](./assets1/eqn_integral.gif)
+ * ![](./apiassets/eqn_integral.gif)
  *
  * Place an integral (with optional limits) before an equation phrase
  *
@@ -1232,7 +1232,7 @@ export type EQN_Integral = {
 /**
  * Equation sum of
  *
- * ![](./assets1/eqn_sumof.gif)
+ * ![](./apiassets/eqn_sumof.gif)
  *
  * Place an equation phrase in a sum of operation
  *
@@ -1366,7 +1366,7 @@ export type EQN_SumOf = {
 /**
  * Equation product of
  *
- * ![](./assets1/eqn_prodof.gif)
+ * ![](./apiassets/eqn_prodof.gif)
  *
  * Place an equation phrase in a product of operation
  *
@@ -1500,7 +1500,7 @@ export type EQN_ProdOf = {
 /**
  * Equation subscript
  *
- * ![](./assets1/eqn_subscript.gif)
+ * ![](./apiassets/eqn_subscript.gif)
  *
  * Options can be an object, or an array in the property order below
  *
@@ -1578,7 +1578,7 @@ export type EQN_Subscript = {
 /**
  * Equation superscript
  *
- * ![](./assets1/eqn_superscript.gif)
+ * ![](./apiassets/eqn_superscript.gif)
  *
  * Options can be an object, or an array in the property order below
  *
@@ -1648,7 +1648,7 @@ export type EQN_Superscript = {
 /**
  * Equation superscript and subscript
  *
- * ![](./assets1/eqn_supsub.gif)
+ * ![](./apiassets/eqn_supsub.gif)
  *
  * Options can be an object, or an array in the property order below
  *
@@ -1726,7 +1726,7 @@ export type EQN_SuperscriptSubscript = {
  * Equation comment options used with `topComment` and `bottomComment`
  * functions.
  *
- * ![](./assets1/eqn_comment.gif)
+ * ![](./apiassets/eqn_comment.gif)
  *
  * A symbol between the content and comment is optional.
  *
@@ -1837,7 +1837,7 @@ export type EQN_Comment = {
  * Equation strike with comment options used with `topStrike` and `bottomStrike`
  * functions.
  *
- * ![](./assets1/eqn_strikecomment.gif)
+ * ![](./apiassets/eqn_strikecomment.gif)
  *
  * Options can be an object, or an array in the property order below
  *
@@ -1932,7 +1932,7 @@ export type EQN_StrikeComment = {
 /**
  * Equation padding options.
  *
- * ![](./assets1/eqn_pad.gif)
+ * ![](./apiassets/eqn_pad.gif)
  *
  * Pads the size of the equation phrase with space.
  *
@@ -2009,7 +2009,7 @@ export type EQN_Pad = {
 /**
  * Equation matrix
  *
- * ![](./assets1/eqn_matrix.gif)
+ * ![](./apiassets/eqn_matrix.gif)
  *
  * Options can be an object, or an array in the property order below
  *
@@ -2426,7 +2426,7 @@ export type EQN_Glyphs = {
 /**
  * Equation annotation
  *
- * ![](./assets1/eqn_annotate.gif)
+ * ![](./apiassets/eqn_annotate.gif)
  *
  * An annotation is an equation phrase ('annotation') which is laid out relative
  * to another equation phrase ('content'). For example:

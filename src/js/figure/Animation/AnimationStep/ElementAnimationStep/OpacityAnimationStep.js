@@ -35,7 +35,7 @@ export type OBJ_OpacityAnimationStep = {
 /**
  * Opacity Animation Step
  *
- * ![](./assets1/opacity_animation.gif)
+ * ![](./apiassets/opacity_animation.gif)
  *
  * A {@link FigureElement} has `color` and `opacity` properties. The `color`
  * property has an alpha channel that defines opacity, but it should be used
@@ -269,7 +269,7 @@ export class OpacityAnimationStep extends ElementAnimationStep {
 /**
  * Dissolve in animation step
  *
- * ![](./assets1/dissolvein_animation.gif)
+ * ![](./apiassets/dissolvein_animation.gif)
  *
  * Animates opacity of element to dissolve in.
  *
@@ -337,7 +337,7 @@ export function dissolveIn(
 /**
  * Dissolve out animation step
  *
- * ![](./assets1/dissolveout_animation.gif)
+ * ![](./apiassets/dissolveout_animation.gif)
  *
  * Animates opacity of element to dissolve out.
  *

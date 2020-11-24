@@ -353,11 +353,11 @@ export type OBJ_PulseWidthAnimationStep = {
 /**
  * {@link FigureElementCollection} representing a line.
  *
- * <p class="inline_gif"><img src="./assets1/advline_pulse.gif" class="inline_gif_image"></p>
+ * <p class="inline_gif"><img src="./apiassets/advline_pulse.gif" class="inline_gif_image"></p>
  *
- * <p class="inline_gif"><img src="./assets1/advline_grow.gif" class="inline_gif_image"></p>
+ * <p class="inline_gif"><img src="./apiassets/advline_grow.gif" class="inline_gif_image"></p>
  *
- * <p class="inline_gif"><img src="./assets1/advline_multimove.gif" class="inline_gif_image"></p>
+ * <p class="inline_gif"><img src="./apiassets/advline_multimove.gif" class="inline_gif_image"></p>
  *
  * This object defines a convient and powerful line
  * {@link FigureElementCollection} that includes a solid or dashed line,

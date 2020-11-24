@@ -37,7 +37,7 @@ const subtractColors = (color1, color2) => color1.map((c, index) => c - color2[i
 /**
  * Color animation Step
  *
- * ![](./assets1/color_animation.gif)
+ * ![](./apiassets/color_animation.gif)
  *
  * By default, the color will start with the element's current color.
  *
@@ -230,7 +230,7 @@ export class ColorAnimationStep extends ElementAnimationStep {
 /**
  * Dim color animation step
  *
- * ![](./assets1/dim_animation.gif)
+ * ![](./apiassets/dim_animation.gif)
  *
  * Animates color of element to the `dimColor` property of {@link FigureElement}
  *
@@ -295,7 +295,7 @@ export function dim(
 /**
  * Undim color animation step
  *
- * ![](./assets1/undim_animation.gif)
+ * ![](./apiassets/undim_animation.gif)
  *
  * Animates color of element to the `defaultColor` property of {@link FigureElement}
  *

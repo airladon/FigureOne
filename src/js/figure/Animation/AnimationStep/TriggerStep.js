@@ -30,7 +30,7 @@ export type OBJ_TriggerAnimationStep = {
 /**
  * Trigger Animation Step
  *
- * ![](./assets1/trigger_animation.gif)
+ * ![](./apiassets/trigger_animation.gif)
  *
  * A trigger step executes a custom function
  *

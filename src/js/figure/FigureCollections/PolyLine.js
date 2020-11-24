@@ -52,9 +52,9 @@ export type OBJ_PolylinePad = {};
 /**
  * Polyline side, angle and pad customization options object
  *
- * ![](./assets1/polylinecustomization_ex1.png)
+ * ![](./apiassets/polylinecustomization_ex1.png)
  *
- * ![](./assets1/polylinecustomization_ex2.png)
+ * ![](./apiassets/polylinecustomization_ex2.png)
  *
  * Side annotations, angle annotations and movable pads in an
  * {@link CollectionsPolyline} are defined with the options objects {@link COL_Line},
@@ -358,11 +358,11 @@ export type SUB_PolylineUpdatePoints = [];
 /**
  * {@link FigureElementCollection} representing a polyline.
  *
- * ![](./assets1/advpolyline_examples.png)
+ * ![](./apiassets/advpolyline_examples.png)
  *
- * <p class="inline_gif"><img src="./assets1/advpolyline_movepolyline.gif" class="inline_gif_image"></p>
+ * <p class="inline_gif"><img src="./apiassets/advpolyline_movepolyline.gif" class="inline_gif_image"></p>
  *
- * <p class="inline_gif"><img src="./assets1/advpolyline_movetri.gif" class="inline_gif_image"></p>
+ * <p class="inline_gif"><img src="./apiassets/advpolyline_movetri.gif" class="inline_gif_image"></p>
  *
  * This object defines a convient and powerful polyline
  * {@link FigureElementCollection} that includes a solid or dashed,

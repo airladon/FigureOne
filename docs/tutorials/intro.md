@@ -4,7 +4,7 @@ This is a work in progress and the entire API is not yet documented.
 
 #### Figures, Primitives and Collections
 
-**FigureOne** allows you to create a *figure*, or *figure* that can be both interactive and animated.
+**FigureOne** allows you to create a *figure* that can be both interactive and animated.
 
 A figure has one or more *figure elements*. A figure element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
 

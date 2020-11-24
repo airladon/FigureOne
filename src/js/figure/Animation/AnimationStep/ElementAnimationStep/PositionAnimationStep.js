@@ -50,7 +50,7 @@ export type OBJ_PositionAnimationStep = {
 /**
  * Position animation step
  *
- * ![](./assets1/position_animation.gif)
+ * ![](./apiassets/position_animation.gif)
  *
  * The position animation step animates the first {@link Translation} transform
  * in the {@link FigureElement}'s {@link Transform}.

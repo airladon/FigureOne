@@ -20,7 +20,7 @@ export type OBJ_ParallelAnimationStep = {
 /**
  * Execute an array of `{@link AnimationStep}`s in parallel.
  *
- * ![](./assets1/parallel_animation.gif)
+ * ![](./apiassets/parallel_animation.gif)
  *
  * The parallel animation step will not complete till all steps are finished.
  *

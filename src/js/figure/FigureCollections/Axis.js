@@ -24,7 +24,7 @@ import type {
 /**
  * Axis Ticks and Grid options object for {@link COL_Axis}.
  *
- * ![](./assets1/axisticks.png)
+ * ![](./apiassets/axisticks.png)
  *
  * Ticks and grid locations can specified programatically with `start`,
  * `stop` and `step`, or manually using a `values` array where each value
@@ -151,17 +151,17 @@ export type OBJ_AxisTicks_Fixed = {
 /**
  * Axis label options object for the {@link COL_Axis}.
  *
- * ![](./assets1/axislabels_ex1.png)
+ * ![](./apiassets/axislabels_ex1.png)
  *
- * ![](./assets1/axislabels_ex2.png)
+ * ![](./apiassets/axislabels_ex2.png)
  *
- * ![](./assets1/axislabels_ex3.png)
+ * ![](./apiassets/axislabels_ex3.png)
  *
- * ![](./assets1/axislabels_ex4.png)
+ * ![](./apiassets/axislabels_ex4.png)
  *
- * ![](./assets1/axislabels_ex5.png)
+ * ![](./apiassets/axislabels_ex5.png)
  *
- * ![](./assets1/axislabels_ex6.png)
+ * ![](./apiassets/axislabels_ex6.png)
  *
  *
  * By default, labels are positioned with the first `ticks` defined in the
@@ -438,7 +438,7 @@ export type COL_Axis = {
  *   },
  * });
  * ```
- * ![](./assets1/advaxis_ex1.png)
+ * ![](./apiassets/advaxis_ex1.png)
  *
  * #### Example
  * ```javascript
@@ -453,7 +453,7 @@ export type COL_Axis = {
  * })
  * figure.add('axis', axis);
  * ```
- * ![](./assets1/advaxis_ex2.png)
+ * ![](./apiassets/advaxis_ex2.png)
  *
  * #### Example
  * ```javascript
@@ -470,7 +470,7 @@ export type COL_Axis = {
  *   },
  * });
  * ```
- * ![](./assets1/advaxis_ex3.png)
+ * ![](./apiassets/advaxis_ex3.png)
  *
  * #### Example
  * ```javascript
@@ -502,7 +502,7 @@ export type COL_Axis = {
  *   },
  * });
  * ```
- * ![](./assets1/advaxis_ex4.png)
+ * ![](./apiassets/advaxis_ex4.png)
  *
  * #### Example
  * ```javascript
@@ -532,7 +532,7 @@ export type COL_Axis = {
  *   },
  * });
  * ```
- * ![](./assets1/advaxis_ex5.png)
+ * ![](./apiassets/advaxis_ex5.png)
  *
  *
  * @see {@link COL_Axis} for parameter descriptions

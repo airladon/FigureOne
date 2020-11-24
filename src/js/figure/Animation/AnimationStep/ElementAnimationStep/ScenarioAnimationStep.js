@@ -89,7 +89,7 @@ export type OBJ_ScenarioAnimationStep = {
 /**
  * Scenario Animation Step
  *
- * ![](./assets1/scenario_animation.gif)
+ * ![](./apiassets/scenario_animation.gif)
  *
  * A scenario defines an element's transform and color and can be used to make
  * code more readable and reusable.

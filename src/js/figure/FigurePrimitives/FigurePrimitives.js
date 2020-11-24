@@ -204,7 +204,7 @@ export type OBJ_PulseScale = {
 };
 
 /**
- * ![](./assets1/generic.png)
+ * ![](./apiassets/generic.png)
  *
  * Options object for a {@link FigureElementPrimitive} of a generic shape
  *
@@ -335,7 +335,7 @@ export type OBJ_Generic = {
 /**
  * Polyline shape options object
  *
- * ![](./assets1/polyline.png)
+ * ![](./apiassets/polyline.png)
  *
  * A polyline is a series of lines that are connected end to end. It is defined
  * by a series of points which are the ends and corners of the polyline.
@@ -570,7 +570,7 @@ export type OBJ_LineStyle = {
 /**
  * Polygon or partial polygon shape options object
  *
- * ![](./assets1/polygon.png)
+ * ![](./apiassets/polygon.png)
  *
  * @property {number} [sides] (`4`)
  * @property {number} [radius] (`1`)
@@ -673,7 +673,7 @@ export type OBJ_Polygon = {
 /**
  * Star options object
  *
- * ![](./assets1/star.png)
+ * ![](./apiassets/star.png)
  *
  * @property {number} [sides] (`4`)
  * @property {number} [radius] (`1`)
@@ -785,7 +785,7 @@ export type OBJ_Star = {
 /**
  * Rectangle shape options object
  *
- * ![](./assets1/rectangle.png)
+ * ![](./apiassets/rectangle.png)
  *
  * @property {number} [width] (`1`)
  * @property {number} [height] (`1`)
@@ -888,7 +888,7 @@ export type OBJ_Rectangle = {
 /**
  * Ellipse shape options object
  *
- * ![](./assets1/ellipse.png)
+ * ![](./apiassets/ellipse.png)
  *
  * @property {number} [width] (`1`)
  * @property {number} [height] (`1`)
@@ -987,7 +987,7 @@ export type OBJ_Ellipse = {
 /**
  * Triangle shape options object
  *
- * ![](./assets1/triangle.png)
+ * ![](./apiassets/triangle.png)
  *
  * The most generic way to define a triangle is with three points (`points`
  * property). When using `points`, all the other properties that can also
@@ -1006,7 +1006,7 @@ export type OBJ_Ellipse = {
  * `rotation`, `xAlign` and `yAlign` to position the triangles. Each corner
  * and side of the triangle is indexed, and can be used for positioning.
  *
- * ![](./assets1/triangle_definition.png)
+ * ![](./apiassets/triangle_definition.png)
  *
  * A triangle starts with an angle (a1) at (0, 0) and base side extending along
  * the x axis to a second angle a2. The base side is side 1 (s1).
@@ -1146,7 +1146,7 @@ export type OBJ_Triangle = {
 /**
  * Line definition options object.
  *
- * ![](./assets1/line.png)
+ * ![](./apiassets/line.png)
  *
  * A line can either be defined as two points `p1` and `p2`, or
  * a single points `p1`, a `length` and an `angle`.
@@ -1276,7 +1276,7 @@ export type OBJ_Line = {
 /**
  * Grid shape options object
  *
- * ![](./assets1/grid.png)
+ * ![](./apiassets/grid.png)
  *
  * A grid is a rectangle divided into a series of vertical and horizontal lines.
  *
@@ -1377,7 +1377,7 @@ export type OBJ_Grid = {
 /**
  * Arrow options object.
  *
- * ![](./assets1/arrow_heads.png)
+ * ![](./apiassets/arrow_heads.png)
  *
  * An arrow has a head, tail, length and width. The `head` defines the head
  * style of the arrow. The `length`, `width` (or `radius` for polygon and circle
@@ -1554,9 +1554,9 @@ export type OBJ_TextDefinition = {
 /**
  * One or more text strings.
  *
- * ![](./assets1/text_ex1.png)
+ * ![](./apiassets/text_ex1.png)
  *
- * ![](./assets1/text_ex2.png)
+ * ![](./apiassets/text_ex2.png)
  *
  * Simple text options object.
  *
@@ -1691,7 +1691,7 @@ export type OBJ_TextLineDefinition = {
 /**
  * Text Line
  *
- * ![](./assets1/textLine.png)
+ * ![](./apiassets/textLine.png)
  *
  * Array of strings that are arranged into a line. Each string is arranged so
  * that it is to the right of the previous string.
@@ -1838,9 +1838,9 @@ export type OBJ_TextModifiersDefinition = {
 /**
  * Text Lines
  *
- * ![](./assets1/textLines_ex1.png)
+ * ![](./apiassets/textLines_ex1.png)
  *
- * ![](./assets1/textLines_ex2.png)
+ * ![](./apiassets/textLines_ex2.png)
  *
  * Layout multiple lines of text, justified to the `left`,
  * `center` or `right`.

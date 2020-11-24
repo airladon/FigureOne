@@ -114,7 +114,7 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
 /**
  * Pulse options object
  *
- * ![](./assets1/pulse.gif)
+ * ![](./apiassets/pulse.gif)
  *
  * Pulsing can be useful to highlight a figure element to a user, without
  * changing its underlying properties.

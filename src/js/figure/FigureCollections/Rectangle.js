@@ -76,10 +76,10 @@ export type COL_Rectangle = {
 /**
  * {@link FigureElementCollection} representing a rectangle.
  *
- * ![](./assets1/advrectangle_ex1.png)
- * ![](./assets1/advrectangle_ex2.png)
+ * ![](./apiassets/advrectangle_ex1.png)
+ * ![](./apiassets/advrectangle_ex2.png)
  *
- * <p class="inline_gif"><img src="./assets1/advrectangle.gif" class="inline_gif_image"></p>
+ * <p class="inline_gif"><img src="./apiassets/advrectangle.gif" class="inline_gif_image"></p>
  *
  * This object defines a rectangle
  * {@link FigureElementCollection} that includes a border (line), fill and

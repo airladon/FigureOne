@@ -28,7 +28,7 @@ export type OBJ_CustomAnimationStep = {
 /**
  * Custom animation step
  *
- * ![](./assets1/custom_animation.gif)
+ * ![](./apiassets/custom_animation.gif)
  *
  * Custom animation steps are useful for orchestrating complex animations, or
  * performing non-linear animations.

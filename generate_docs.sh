@@ -10,9 +10,9 @@ then
   exit
 fi
 
-documentation build src/index.js -f md -o ./docs/temp.md --config documentation.yml
+# documentation build src/index.js -f md -o ./docs/temp.md --config documentation.yml
 
-python ./docs/tools/markdown_cleaner.py
+# python ./docs/tools/markdown_cleaner.py
 
-rm ./docs/temp.md
+# rm ./docs/temp.md
 

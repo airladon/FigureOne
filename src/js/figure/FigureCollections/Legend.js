@@ -111,13 +111,13 @@ export type COL_PlotLegend = {
 /**
  * {@link FigureElementCollection} representing an legend.
  *
- * ![](./assets1/advlegend_ex1.png)
- * ![](./assets1/advlegend_ex2.png)
+ * ![](./apiassets/advlegend_ex1.png)
+ * ![](./apiassets/advlegend_ex2.png)
  *
- * ![](./assets1/advlegend_ex3.png)
- * ![](./assets1/advlegend_ex4.png)
+ * ![](./apiassets/advlegend_ex3.png)
+ * ![](./apiassets/advlegend_ex4.png)
  *
- * ![](./assets1/advlegend_ex5.png)
+ * ![](./apiassets/advlegend_ex5.png)
  *
  * This object defines a legend in an {@link CollectionsPlot}.
  *

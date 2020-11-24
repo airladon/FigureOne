@@ -4,7 +4,7 @@ Draw, animate and interact with shapes, text, plots and equations.
 
 The library used to draw interactive figures at <a href="https://www.thisiget.com">thisiget.com</a>.
 
-This library draws shapes in WebGL, and text with Canvas 2D - and therefore requires HTML5 support.
+This library uses WebGL and therefore requires HTML5 support.
 
 ## Getting Started
 
@@ -41,9 +41,9 @@ And you will see:
 
 ![](tutorials/1%20-%20Shape/example.png)
 
-Examples source files for this can be found in the **[first tutorial](https://github.com/airladon/FigureOne/tree/master/tutorials/1%20-%20Shape)**.
+Source files for this can be found in the **[first tutorial](https://github.com/airladon/FigureOne/tree/master/tutorials/1%20-%20Shape)**.
 
-Then, checkout the remaining **[Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials)**, **[API Reference](https://airladon.github.io/FigureOne/.)** and **[Examples](https://github.com/airladon/FigureOne/tree/master/tutorials)** and you'll be making beautiful, interactive figures in no time.
+Then, check out the remaining **[Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials)**, **[API Reference](https://airladon.github.io/FigureOne/.)** and **[Examples](https://github.com/airladon/FigureOne/tree/master/tutorials)** and you'll be making beautiful, interactive figures in no time.
 
 ## Selection of Examples
 **[Pythagorean Equation Animation](https://github.com/airladon/FigureOne/tree/master/examples/Pythagorean%20Theorem)**

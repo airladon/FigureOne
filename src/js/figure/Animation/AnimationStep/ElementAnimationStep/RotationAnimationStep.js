@@ -56,7 +56,7 @@ export type OBJ_RotationAnimationStep = {
 /**
  * Rotation animation step
  *
- * ![](./assets1/rotation_animation.gif)
+ * ![](./apiassets/rotation_animation.gif)
  *
  * The rotation animation step animates the first {@link Rotation} transform
  * in the {@link FigureElement}'s {@link Transform}.

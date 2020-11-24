@@ -72,7 +72,7 @@ export type OBJ_PulseAnimationStep = {
 /**
  * Pulse animation step
  *
- * ![](./assets1/pulse_animation.gif)
+ * ![](./apiassets/pulse_animation.gif)
  *
  * The pulse animation step animates a pulse.
  *

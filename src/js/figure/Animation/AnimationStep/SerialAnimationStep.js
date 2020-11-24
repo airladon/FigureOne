@@ -20,7 +20,7 @@ export type OBJ_SerialAnimationStep = {
 /**
  * Execute an array of {@link AnimationStep}s in series.
  *
- * ![](./assets1/serial_animation.gif)
+ * ![](./apiassets/serial_animation.gif)
  *
  * Often the {@link AnimationBuilder} class which extends
  * `SerialAnimationStep` can be used to create serial animations

@@ -531,7 +531,7 @@ type OBJ_EquationGoToForm = {
 /**
  * Next form animation step
  *
- * ![](./assets1/nextformanimationstep.gif)
+ * ![](./apiassets/nextformanimationstep.gif)
  *
  * Animation step that animates to the next equation form in a formSeries.
  * Equivalent to a triggering a
@@ -580,7 +580,7 @@ class NextFormAnimationStep extends TriggerAnimationStep {
 /**
  * GoToForm form animation step
  *
- * ![](./assets1/gotoformanimationstep.gif)
+ * ![](./apiassets/gotoformanimationstep.gif)
  *
  * Animation step that animates moving between equation forms. Equivalent to
  * a triggering a <a href="#equationgotoform">Equation.goToForm</a> call.
