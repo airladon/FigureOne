@@ -1,5 +1,5 @@
 // Create figure and make it able to be touched
-const figure = new Fig.Figure();
+const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 figure.setTouchable();
 
 // Add circle to figure
@@ -10,11 +10,10 @@ figure.addElement(
     options: {
       sides: 100,
       radius: 0.2,
-      fill: true,
-      color: [1, 0, 0, 1],
+      touchBorder: 0.2,
     },
     mods: {
-      isTouchable: true,
+      // isTouchable: true,
       isMovable: true,
       move: {
         bounds: 'figure',
@@ -22,6 +21,3 @@ figure.addElement(
     },
   },
 );
-
-// Initialize figure
-figure.initialize();

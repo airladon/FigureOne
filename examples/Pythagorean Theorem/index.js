@@ -73,7 +73,7 @@ figure.addElement({
 // Progress to the next form when the equation is clicked on
 const eqn = figure.elements._eqn;
 eqn.onClick = () => eqn.nextForm();
-eqn.makeTouchable();
+eqn.setTouchable();
 
 
 // ////////////////////////////////////////////////////////////////////////

@@ -109,7 +109,7 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 // // Progress to the next form when the equation is clicked on
 // const eqn = figure.elements._eqn;
 // eqn.onClick = () => eqn.nextForm();
-// eqn.makeTouchable();
+// eqn.setTouchable();
 
 
 // // ////////////////////////////////////////////////////////////////////////
@@ -266,24 +266,26 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 //     ],
 //   },
 // );
+// Create figure and make it able to be touched
+// const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
+figure.setTouchable();
 
-const c = figure.collections.collection();
-const hex = figure.primitives.polygon({
-  sides: 6,
-  radius: 0.5,
-});
-const text = figure.primitives.text({
-  text: 'hexagon',
-  position: [0, -0.8],
-  xAlign: 'center',
-  font: { size: 0.3 },
-});
-c.add('hex', hex);
-c.add('text', text);
-figure.add('c', c);
+// Add circle to figure
+figure.addElement(
+  {
+    name: 'circle',
+    method: 'polygon',
+    options: {
+      sides: 100,
+      radius: 0.2,
+      touchBorder: 0.2,
+    },
+    mods: {
+      isMovable: true,
+      move: {
+        bounds: 'figure',
+      },
+    },
+  },
+);
 
-// When a collection rotates, then so does all its elements
-c.animations.new()
-  .delay(1)
-  .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
-  .start();

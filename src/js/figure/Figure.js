@@ -234,8 +234,8 @@ class Figure {
 
   primitives: FigurePrimitives;
   // shapesHigh: Object;
-  equation: Object;
-  equationLow: Object;
+  // equation: Object;
+  // equationLow: Object;
   // equationHigh: Object;
 
   collections: FigureCollections;
@@ -447,9 +447,9 @@ class Figure {
     // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
     this.primitives = this.shapes;
-    this.equationLow = this.getEquations();
+    // this.equationLow = this.getEquations();
     // this.equationHigh = this.getEquations(true);
-    this.equation = this.equationLow;
+    // this.equation = this.equationLow;
     this.collectionsLow = this.getObjects();
     // this.collectionsHigh = this.getObjects(true);
     this.collections = this.collectionsLow;
@@ -1031,8 +1031,8 @@ class Figure {
     addElementsKey: string = 'addElements',
   ) {
     addElements(
-      this.shapes,
-      this.equation,
+      // this.shapes,
+      // this.equation,
       this.collections,
       collection,
       elementsToAdd,
@@ -1065,8 +1065,8 @@ class Figure {
     addElementsKey: string = 'addElements',
   ) {
     addElements(
-      this.shapes,
-      this.equation,
+      // this.shapes,
+      // this.equation,
       this.collections,
       rootCollection,
       [elementDefinition],
@@ -1167,14 +1167,14 @@ class Figure {
 
   getObjects() {
     const shapes = this.shapesLow;
-    const equation = this.equationLow;
+    // const equation = this.equationLow;
     // if (high) {
     //   shapes = this.shapesHigh;
     //   equation = this.equationHigh;
     // }
     return new FigureCollections(
       shapes,
-      equation,
+      // equation,
       this.isTouchDevice,
       this.animateNextFrame.bind(this, true, 'collections'),
     );
@@ -2020,7 +2020,7 @@ class Figure {
   // or the `add` method can be used.
   createFigureElements() {
     // this.elements = new FigureElementCollection();
-    this.elements = this.primitives.collection();
+    this.elements = this.collections.collection();
     this.initElements();
     // this.elements.setFigure({
     //   limits: this.limits,

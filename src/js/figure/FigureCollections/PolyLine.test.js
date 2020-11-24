@@ -394,7 +394,7 @@ describe('Figure Objects PolyLine', () => {
       expect(a.points[2]).toEqual(new Point(10, 10));
       const p0 = a._pad0;
       p0.move.bounds.updateTranslation({ line: [[0, 0], [9, 9]] });
-      p0.makeTouchable();
+      p0.setTouchable();
       p0.move.freely.bounceLoss = 0;
       p0.move.freely.deceleration = 1;
       figure.mock.timeStep(0);

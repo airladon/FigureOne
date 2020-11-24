@@ -864,7 +864,7 @@ describe('Animationa and Movement', () => {
           .translate(new Point(10, 0))
           .rotate(Math.PI / 2));
         figure.mock.timeStep(0);
-        collection.makeTouchable();
+        collection.setTouchable();
         // collection.setupDraw(0);
         // collection.draw(0, [identity]);
         // figure.mock.timeStep(0);

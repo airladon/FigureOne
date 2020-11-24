@@ -516,7 +516,7 @@ describe('Text Borders', () => {
   });
   test('Click', () => {
     addElement('click');
-    t.makeTouchable();
+    t.setTouchable();
     expect(callback.mock.calls.length).toBe(0);
     figure.mock.touchDown([-2, -2]);
     figure.mock.touchUp();

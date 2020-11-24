@@ -1,6 +1,6 @@
 # Example 2 - Collections
 
-This example shows a triangle and text in a collection. The collection is rotated, so both the triangle and text are also rotated..
+This example shows a triangle and text in a collection. The collection is rotated, so both the triangle and text are also rotated.
 
 Open `index.html` in a browser to view example.
 
@@ -47,7 +47,7 @@ figure.getElement('c').animations.new()
 
 ## Explanation
 
-There are two types of figure elements (subclasses of [FigureElement](https://airladon.github.io/FigureOne/#figureElement)):
+There are two types of figure elements (subclasses of [FigureElement](https://airladon.github.io/FigureOne/#figureelement)):
 
 * [FigureElementPrimitive](https://airladon.github.io/FigureOne/#figureelementprimitive) - An object that manages a drawing primitive like a set of vertices, some text or a html element
 * [FigureElementCollection](https://airladon.github.io/FigureOne/#figureelementcollection) - An object that manages a group of drawing elements (can be both primitives and collections)

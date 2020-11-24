@@ -3649,55 +3649,6 @@ export default class FigurePrimitives {
     return cursor;
   }
 
-  collection(
-    transformOrPointOrOptions: Transform | Point | OBJ_Collection = {},
-    ...moreOptions: Array<OBJ_Collection>
-  ) {
-    // let transform = new Transform('collection').scale(1, 1).rotate(0).translate(0, 0);
-    // let color = this.defaultColor;
-    // let pulse = null;
-    const defaultOptions = {
-      transform: new Transform('collection').scale(1, 1).rotate(0).translate(0, 0),
-      border: 'children',
-      touchBorder: 'children',
-      holeBorder: 'children',
-      color: this.defaultColor,
-      parent: null,
-      limits: this.limits,
-    };
-    let optionsToUse;
-    if (transformOrPointOrOptions instanceof Point) {
-      defaultOptions.transform.updateTranslation(transformOrPointOrOptions);
-      optionsToUse = joinObjects({}, defaultOptions, ...moreOptions);
-    } else if (transformOrPointOrOptions instanceof Transform) {
-      defaultOptions.transform = transformOrPointOrOptions._dup();
-      optionsToUse = joinObjects({}, defaultOptions, ...moreOptions);
-    } else {
-      optionsToUse = joinObjects({}, defaultOptions, transformOrPointOrOptions, ...moreOptions);
-    }
-    if (optionsToUse.border != null) {
-      optionsToUse.border = parseBorder(optionsToUse.border);
-    }
-    if (optionsToUse.touchBorder != null) {
-      optionsToUse.touchBorder = parseBorder(optionsToUse.touchBorder);
-    }
-    if (optionsToUse.holeBorder != null) {
-      optionsToUse.holeBorder = parseBorder(optionsToUse.holeBorder);
-    }
-    // console.log(optionsToUse.transform, transformOrPointOrOptions)
-    const element = new FigureElementCollection(optionsToUse);
-    // console.log(element)
-    // element.setColor(color);
-    if (
-      optionsToUse.pulse != null
-      && typeof element.pulseDefault !== 'function'
-      && typeof element.pulseDefault !== 'string'
-    ) {
-      element.pulseDefault.scale = optionsToUse.pulse;
-    }
-    return element;
-  }
-
   // repeatPattern(
   //   element: FigureElementPrimitive,
   //   xNum: number,

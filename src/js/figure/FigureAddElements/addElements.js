@@ -18,8 +18,8 @@ export type TypeAddElementObject = {
 };
 
 function addElements(
-  shapes: FigurePrimitives,
-  equation: FigureEquation,
+  // shapes: FigurePrimitives,
+  // equation: FigureEquation,
   collections: FigureCollections,
   rootCollection: FigureElementCollection,
   layout: Array<TypeAddElementObject>,
@@ -34,10 +34,10 @@ function addElements(
     }                                          // $FlowFixMe
     return getPath(e[remainingPath[0]], remainingPath.slice(1));
   };
-
+  const shapes = collections.primitives;
   const getMethod = (method: string) => {
     const methods = {
-      collection: shapes.collection.bind(shapes),
+      collection: collections.collection.bind(shapes),
       polyline: shapes.polyline.bind(shapes),
       polygon: shapes.polygon.bind(shapes),
       rectangle: shapes.rectangle.bind(shapes),
@@ -53,25 +53,17 @@ function addElements(
       textLine: shapes.textLine.bind(shapes),
       textLines: shapes.textLines.bind(shapes),
       //
-      // fan: shapes.fan.bind(shapes),
       textGL: shapes.textGL.bind(shapes),
       textHTML: shapes.htmlText.bind(shapes),
       htmlImage: shapes.htmlImage.bind(shapes),
-      // axes: shapes.axes.bind(shapes),
-      // radialLines: shapes.radialLines.bind(shapes),
-      // rectangle: shapes.rectangle.bind(shapes),
-      // dashedLine: shapes.dashedLine.bind(shapes),
-      // parallelMarks: shapes.parallelMarks.bind(shapes),
-      // marks: shapes.marks.bind(shapes),
-      // box: shapes.box.bind(shapes),
       //
       opolyline: collections.polyline.bind(collections),
       oline: collections.line.bind(collections),
       angle: collections.angle.bind(collections),
       //
-      addEquation: equation.addEquation.bind(equation),
-      equation: equation.equation.bind(equation),
-      addNavigator: equation.addNavigator.bind(equation),
+      addEquation: collections.addEquation.bind(collections),
+      equation: collections.equation.bind(collections),
+      addNavigator: collections.addNavigator.bind(collections),
     };
     if (method in methods) {
       return methods[method];
@@ -86,7 +78,7 @@ function addElements(
       primitives: shapes,
       shapes,
       collections,
-      equation,
+      // equation,
     };
     const splitMethod = method.split('.');
     let methodToUse = getPath(figure, splitMethod);
@@ -153,6 +145,9 @@ function addElements(
         if (element == null) {
           return;
         }
+        if (elementModsToUse != null && elementModsToUse !== {}) {
+          element.setProperties(elementModsToUse);
+        }
       } else {
         if (Array.isArray(optionsToUse)) {
           element = method(...optionsToUse);
@@ -162,14 +157,14 @@ function addElements(
         if (element == null) {
           return;
         }
+        if (elementModsToUse != null && elementModsToUse !== {}) {
+          element.setProperties(elementModsToUse);
+        }
         if (collectionPath instanceof FigureElementCollection) {
           collectionPath.add(nameToUse, element);
         }
       }
 
-      if (elementModsToUse != null && elementModsToUse !== {}) {
-        element.setProperties(elementModsToUse);
-      }
       // element.setProperties(elementDefinition, [
       //   'mods', 'name', 'method', 'scenario', 'addElementsKey', 'options', 'path',
       // ]);
@@ -181,8 +176,8 @@ function addElements(
           && (addElementsToUse != null && addElementsToUse !== {})
       ) {
         addElements(
-          shapes,
-          equation,
+          // shapes,
+          // equation,
           collections,                                            // $FlowFixMe
           rootCollection[`_${nameToUse}`],
           addElementsToUse,

@@ -48,8 +48,8 @@ import { FunctionMap } from '../tools/FunctionMap';
 import type {
   OBJ_Font, TypeColor,
 } from '../tools/types';
-// import type Figure from './Figure';
-// import type { TypePauseSettings, TypeOnPause } from './Recorder';
+import type FigurePrimitives from './FigurePrimitives/FigurePrimitives';
+import type FigureCollections from './FigureCollections/FigureCollections';
 
 // eslint-disable-next-line import/no-cycle
 // import {
@@ -406,7 +406,6 @@ type ElementState = {
  * includes cascade or all parent transforms
  * @property {FigureElement | null} parent parent figure element - `null` if
  * at top level of figure
- * @property {Figure} figure figure element is attached to
  * @property {boolean} isTouchable must be `true` to move or execute `onClick`
  * @property {boolean} isMovable must be `true` to move
  * @property {string | () => void} onClick callback if touched or clicked
@@ -625,7 +624,7 @@ class FigureElement {
   //
 
   /**
-   * @private
+   * @hideconstructor
    */
   constructor(
     transform: Transform = new Transform(),
@@ -1178,6 +1177,12 @@ class FigureElement {
     if (figure != null) {
       this.recorder = figure.recorder;
       this.animationFinishedCallback = figure.animationFinished;
+    }
+    if (this.isTouchable) {
+      this.setTouchable();
+    }
+    if (this.isMovable) {
+      this.setMovable();
     }
   }
 
@@ -3198,38 +3203,44 @@ class FigureElement {
     }
   }
 
+  // /**
+  //  * `true` set this element as touchable and configures all parent elements
+  //  * to accept touches for their children
+  //  *
+  //  * `false` makes this element not touchable.
+  //  */
+  // setTouchable(touchable: boolean) {
+  //   if (touchable === false) {
+  //     this.isTouchable = false;
+  //     return;
+  //   }
+  //   this.setTouchable();
+  // }
+
+  // /**
+  //  * Make the touchable border of this element a rect encompassing it
+  //  * plus some `touchable` buffer on all sides.
+  //  */
+  // // eslint-disable-next-line no-unused-vars
+  // setTouchableRect(touchable: number = 0) {
+  //   // this.touchInBoundingRect = touchable;
+  //   this.setTouchable();
+  // }
+
   /**
    * `true` set this element as touchable and configures all parent elements
    * to accept touches for their children
    *
    * `false` makes this element not touchable.
    */
-  setTouchable(touchable: boolean) {
-    if (touchable === false) {
-      this.isTouchable = false;
-      return;
-    }
-    this.makeTouchable();
-  }
-
-  /**
-   * Make the touchable border of this element a rect encompassing it
-   * plus some `touchable` buffer on all sides.
-   */
-  // eslint-disable-next-line no-unused-vars
-  setTouchableRect(touchable: number = 0) {
-    // this.touchInBoundingRect = touchable;
-    this.makeTouchable();
-  }
-
-  makeTouchable(makeThisElementTouchable: boolean = true) {
+  setTouchable(makeThisElementTouchable: boolean = true) {
     if (makeThisElementTouchable) {
       this.isTouchable = true;
     } else {
       this.hasTouchableElements = true;
     }
     if (this.parent != null) {
-      this.parent.makeTouchable(false);
+      this.parent.setTouchable(false);
     }
   }
 
@@ -3241,7 +3252,7 @@ class FigureElement {
   setMovable(movable: boolean = true) {
     if (movable) {
       this.isMovable = true;
-      this.makeTouchable(true);
+      this.setTouchable(true);
     } else {
       this.isMovable = false;
       this.isTouchable = false;
@@ -3936,6 +3947,8 @@ class FigureElementCollection extends FigureElement {
   //     done?: ?(mixed) => void,
   //     elements?: Array<string | FigureElement>
   //   } | Array<string | FigureElement> | ((mixed) => void)), ?(mixed) => void) => void;
+  // primitives: FigurePrimitives;
+  collections: FigureCollections;
 
   +getElement: (?(string | FigureElement)) => ?FigureElement;
   +getElements: (Array<string | FigureElement>) => Array<FigureElement>;
@@ -4136,32 +4149,32 @@ class FigureElementCollection extends FigureElement {
     this.animateNextFrame();
   }
 
-  // addNew(options: {
-  //  element: FigureElement | TypeAddElementObject | Array<FigureElement>
-  //    | Array<TypeAddElementObject>,
-  //   name: string,
-  //   to: string | FigureElementCollection,
-  //   addElementsKey: string,
-  // }) {
-  //   const {
-  //     element, name, to, addElementsKey
-  //   } = options;
-  //   if (element instanceof FigureElement) {
-  //     if (name != null) {
-  //       this.add(name, element);
-  //     } else if (element.name != null) {
-  //       this.add(element.name, element);
-  //     } else {
-  //       throw new Error('Element must be named');
-  //     }
-  //   } else if (Array.isArray(element)) {
-  //     element.forEach((e) => {
-  //       this.addNew({ element: e, to, addElementsKey });
-  //     });
-  //   } else {
+  addNew(options: {
+   element: FigureElement | TypeAddElementObject
+     | Array<TypeAddElementObject | FigureElement>,
+    name: string,
+    to: string | FigureElementCollection,
+    addElementsKey: string,
+  }) {
+    const {
+      element, name, to, addElementsKey
+    } = options;
+    if (element instanceof FigureElement) {
+      if (name != null) {
+        this.add(name, element);
+      } else if (element.name != null) {
+        this.add(element.name, element);
+      } else {
+        throw new Error('Element must be named');
+      }
+    } else if (Array.isArray(element)) {
+      element.forEach((e) => {
+        this.addNew({ element: e, to, addElementsKey });
+      });
+    } else {
 
-  //   }
-  // }
+    }
+  }
 
   setFigure(figure: OBJ_FigureForElement) {
     super.setFigure(figure);

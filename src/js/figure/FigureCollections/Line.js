@@ -26,7 +26,8 @@ import type { EQN_Equation } from '../Equation/Equation';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
 import type { TypeColor, TypeDash } from '../../tools/types';
-import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
+import type FigurePrimitives, { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
+import type FigureCollections from './FigureCollections';
 
 
 /**
@@ -232,7 +233,7 @@ class LineLabel extends EquationLabel {
   precision: number;
 
   constructor(
-    equation: Object,
+    collections: FigureCollections,
     labelText: string | Equation | EQN_Equation | Array<string>,
     color: TypeColor,
     offset: number,
@@ -243,7 +244,7 @@ class LineLabel extends EquationLabel {
     scale: number = 0.7,
     precision: number = 1,
   ) {
-    super(equation, { label: labelText, color, scale });
+    super(collections, { label: labelText, color, scale });
     this.offset = offset;
     this.location = location;
     this.subLocation = subLocation;
@@ -254,7 +255,7 @@ class LineLabel extends EquationLabel {
 }
 
 function makeStraightLine(
-  shapes: Object,
+  primitives: FigurePrimitives,
   length: number,
   width: number,
   color: TypeColor,
@@ -262,7 +263,7 @@ function makeStraightLine(
   // maxLength: number,
   // touchBorder: number | { width: number, start: number, end: number },
 ) {
-  const straightLine = shapes.line({
+  const straightLine = primitives.line({
     p1: [0, 0],
     length: dash.length < 2 ? 1 : length,
     angle: 0,
@@ -545,8 +546,9 @@ export default class CollectionsLine extends FigureElementCollection {
    * @hideconstructor
    */
   constructor(
-    shapes: Object,
-    equation: Object,
+    // shapes: Object,
+    // equation: Object,
+    collections: FigureCollections,
     isTouchDevice: boolean,
     // animateNextFrame: void => void,
     options: COL_Line = {},
@@ -555,7 +557,7 @@ export default class CollectionsLine extends FigureElementCollection {
       // position: new Point(0, 0),
       width: 0.01,
       align: 'start',
-      color: shapes.defaultColor,
+      color: collections.primitives.defaultColor,
       dash: [],
       mods: {},
       pulseWidth: {
@@ -566,7 +568,7 @@ export default class CollectionsLine extends FigureElementCollection {
         frequency: 0,
       },
       transform: new Transform('Line').scale(1, 1).rotate(0).translate(0, 0),
-      limits: shapes.limits,
+      limits: collections.primitives.limits,
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
     if (optionsToUse.touchBorder == null) {
@@ -579,8 +581,9 @@ export default class CollectionsLine extends FigureElementCollection {
     super(optionsToUse);
     this.setColor(optionsToUse.color);
 
-    this.shapes = shapes;
-    this.equation = equation;
+    // this.shapes = shapes;
+    // this.equation = equation;
+    this.collections = collections;
     this.touchBorder = optionsToUse.touchBorder;
     this.isTouchDevice = isTouchDevice;
     this.dash = optionsToUse.dash;
@@ -640,7 +643,7 @@ export default class CollectionsLine extends FigureElementCollection {
     this._line = null;
     if (this.width > 0) {
       const straightLine = makeStraightLine(
-        this.shapes, this.maxLength, this.width,
+        this.collections.primitives, this.maxLength, this.width,
         optionsToUse.color, this.dash, // this.maxLength,
       );
       const scaleTransformMethod = s => new Transform().scale(1, s);
@@ -1122,7 +1125,7 @@ export default class CollectionsLine extends FigureElementCollection {
     update: boolean = false,
   ) {
     this.label = new LineLabel(
-      this.equation, labelText, color,
+      this.collections, labelText, color,
       offset, location, subLocation, orientation, linePosition, scale,
       precision,
     );

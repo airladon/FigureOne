@@ -181,9 +181,9 @@ require(['Fig'], function(Fig) {
     a.onClick = goto.bind(this, 'a');
     b.onClick = goto.bind(this, 'b');
     c.onClick = goto.bind(this, 'c');
-    a.makeTouchable();
-    b.makeTouchable();
-    c.makeTouchable();
+    a.setTouchable();
+    b.setTouchable();
+    c.setTouchable();
     eqn.showForm('a');
     figure.animateNextFrame();
 });

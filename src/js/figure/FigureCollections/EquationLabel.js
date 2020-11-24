@@ -12,6 +12,7 @@ import type {
 import { joinObjects } from '../../tools/tools';
 import type { EQN_Equation } from '../Equation/Equation';
 import type { TypeColor } from '../../tools/types';
+import type FigureCollections from './FigureCollections';
 
 const DEBUG = false;
 
@@ -85,7 +86,7 @@ export default class EquationLabel {
   aOffset: number;
 
   constructor(
-    equations: Object,
+    collections: FigureCollections,
     options: TypeLabelOptions = {},
   ) {
     const defaultOptions = {
@@ -103,7 +104,7 @@ export default class EquationLabel {
     const { yAlign, xAlign } = optionsToUse;
     let eqn;
     if (typeof labelTextOrEquation === 'string') {
-      eqn = equations.equation({
+      eqn = collections.equation({
         elements: { base: labelTextOrEquation },
         color,
         formDefaults: {
@@ -131,7 +132,7 @@ export default class EquationLabel {
         forms[index] = [labelText];
       });
 
-      eqn = equations.equation({
+      eqn = collections.equation({
         elements,
         forms,
         color,
