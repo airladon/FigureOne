@@ -45,16 +45,16 @@ figure.addElement(
 ## Explanation
 
 ### HTML
-In the HTML, a `div` is created that will house the figure.
+In the HTML file, a `div` is created the figure will attach to.
 ```html
  <div id="figureOneContainer" style="width: 500px; height: 500px; background-color: black;">
  ```
 
-Then the FigureOne library is loaded
+Then the FigureOne library is loaded.
 ```html
 <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.4/figureone.min.js'></script>
 ```
-In this case, the library is loaded from a CDN, but you could also run it from a local copy of the figureone library as well. For instance, if you cloned this repository, and wanted to run the local version you could use the line:
+In this case, the library is loaded from a CDN, but you could also run it from a local copy of the FigureOne library as well. For instance, if you cloned this repository, and wanted to run the local version you could use the line:
 ```html
 <script type="text/javascript" src='../../package/figureone.min.js'></script>
 ```
@@ -69,13 +69,13 @@ All other examples have the same, or very similar HTML index file, and so it wil
 
 ### Javascript
 
-First a figure is created. `Fig` is the FigureOne library globally available after loading the script.
+First a figure is created. `Fig` is the FigureOne library and is globally available after loading the script.
 
 ```js
 const figure = new Fig.Figure();
 ```
 
-A *figure* is an object that manages figure elements (class `FigureElement`). By default it attaches to a HTML `div` element with id `figureOneContainer`. A custom id can also be used by using a `htmlId` parameter when creating the figure:
+A [Figure](https://airladon.github.io/FigureOne/#figure) is an object that manages figure elements (class `FigureElement`). By default it attaches to a HTML `div` element with id `figureOneContainer`. A custom id can also be used by using a `htmlId` parameter when creating the figure:
 
 ```js
 const figure = new Fig.Figure({ htmlId: 'customId' });
