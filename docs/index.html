@@ -15738,6 +15738,17 @@ the length of the next solid line, and so on. The dash pattern will repeat.</p>
 <p>The line can have arrows at one or both ends using the <code>arrow</code> property.</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_generic">OBJ_Generic</a>
+      
+    </p>
   
 
   
@@ -15846,7 +15857,7 @@ triangle primitives to draw the line (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>lineNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          <span class='code bold'>lineNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : Number of line primitives to use when
 
 <code>linePrimitivs</code>
@@ -15854,110 +15865,6 @@ triangle primitives to draw the line (
 <code>true</code>
  (
 <code>2</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
-          : make copies of
-the line
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (
-<code>[1, 0, 0, 1]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
-          : Override color with a texture
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
-          : (
-<code>Transform('line').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"line"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"rect"</code>)?)</code>
-          : border of the line can be the line itself (
-<code>'outline'</code>
-), can be the rect
-encompassing the line (
-<code>'rect'</code>
-) or a custom set of points
-(
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-) (
-<code>'outline'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : touch border of the line can be the same as the border (
-<code>'border'</code>
-),
-completely custom (
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-), the enclosing
-rectangle (
-<code>rect</code>
-) or the same as the border with some buffer that
-effectively increases the width of the line on either side of it
-(
-<code>number</code>
-) - (
-<code>'border'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : hole border of the line can be the points on the 
-<code>positive</code>
- or 
-<code>negative</code>
-
-side of the line, completely custom (
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-)
-or 
-<code>'none'</code>
- is the default (
-<code>'none'</code>
 )
 
           
@@ -16089,6 +15996,17 @@ line but with some buffer that effectively increases the width on both sides
 of the line.</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_generic">OBJ_Generic</a>
+      
+    </p>
   
 
   
@@ -16271,7 +16189,7 @@ triangle primitives to draw the line (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>lineNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          <span class='code bold'>lineNum</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : Number of line primitives to use when
 
 <code>linePrimitivs</code>
@@ -16281,121 +16199,6 @@ triangle primitives to draw the line (
 <code>2</code>
 )
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
-          : make copies of
-the polyline
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (
-<code>[1, 0, 0, 1]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
-          : Override color with a texture
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
-          : (
-<code>Transform('polyline').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"line"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"rect"</code>)?)</code>
-          : border of the line can be the points on the 
-<code>'positive'</code>
-, 
-<code>'negative'</code>
-
-of the line, can be the line itself (
-<code>'line'</code>
-), can be the rect
-encompassing the line (
-<code>'rect'</code>
-) or a custom set of points
-(
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-) (
-<code>'line'</code>
-),
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : touch border of the line can be the same as the border (
-<code>'border'</code>
-),
-completely custom (
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-), the enclosing
-rectangle (
-<code>rect</code>
-) or the same as the border with some buffer that
-effectively increases the width of the line on either side of it
-(
-<code>number</code>
-) - (
-<code>'border'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : hole border of the line can be the points on the 
-<code>positive</code>
- or 
-<code>negative</code>
-
-side of the line, completely custom (
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-)
-or 
-<code>'none'</code>
- is the default (
-<code>'none'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>forceCornerLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          
           
         </div>
       
@@ -16827,7 +16630,7 @@ and side of the triangle is indexed, and can be used for positioning.</p>
 <p><img src="./apiassets/triangle_definition.png"></p>
 <p>A triangle starts with an angle (a1) at (0, 0) and base side extending along
 the x axis to a second angle a2. The base side is side 1 (s1).</p>
-<p>Angles a1 and a2 exten the triangle above s1 if <code>direction</code> is <code>1</code>, and
+<p>Angles a1 and a2 extend the triangle above s1 if <code>direction</code> is <code>1</code>, and
 below s1 when <code>direction</code> is <code>-1</code>.</p>
 <p>s2, a3, and s3 are then the consecutive sides and angles.</p>
 <p>Triangles can be defined with a combination of side length and angle using
@@ -16860,6 +16663,17 @@ copied (<code>copy</code>) if more than one triangle is desired.</p>
 is not defined, the triangle will be filled.</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_generic">OBJ_Generic</a>
+      
+    </p>
   
 
   
@@ -16959,70 +16773,10 @@ all other ways to define a triangle.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>corner</span> <code class='quiet'>(<a href="#obj_curvedcorner">OBJ_CurvedCorner</a>?)</code>
-          : define for rounded corners
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestylesimple">OBJ_LineStyleSimple</a>?)</code>
           : line style options - do not use any corner
 options
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
-          : make copies of
-the rectangle
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (
-<code>[1, 0, 0, 1]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
-          : Override color with a texture
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
-          : (
-<code>Transform('rectangle').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rotation</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {side: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>})?)</code>
-          
           
         </div>
       

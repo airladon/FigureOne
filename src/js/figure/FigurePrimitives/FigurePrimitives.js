@@ -241,7 +241,7 @@ export type OBJ_PulseScale = {
  * keeping shape within limits
  * @property {Array<Array<TypeParsablePoint>> | 'rect' | 'border' | null} [touchBorder]
  * border used for touching
- * @property {Array<Array<TypeParsablePoint>> | null} [hole] borders where
+ * @property {Array<Array<TypeParsablePoint>> | null} [holeBorder] borders where
  * touching will not work
  * @property {TypeParsablePoint} [position] will overwrite first translation
  * transform of `transform` chain
@@ -333,7 +333,8 @@ export type OBJ_Generic = {
 
 
 /**
- * Polyline shape options object
+ * Polyline shape options object that extends {@link OBJ_Generic} (without
+ * `drawType)
  *
  * ![](./apiassets/polyline.png)
  *
@@ -403,30 +404,10 @@ export type OBJ_Generic = {
  * `widthIs: 'mid'` and `linePrimitives: false`
  * @property {boolean} [linePrimitives] Use WebGL line primitives instead of
  * triangle primitives to draw the line (`false`)
- * @property {boolean} [lineNum] Number of line primitives to use when
+ * @property {number} [lineNum] Number of line primitives to use when
  * `linePrimitivs`: `true` (`2`)
- * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
- * the polyline
- * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
- * @property {OBJ_Texture} [texture] Override color with a texture
- * @property {number} [pulse] set the default pulse scale
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('polyline').standard()`)
- * @property {'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>> | 'rect'} [border]
- * border of the line can be the points on the `'positive'`, `'negative'`
- * of the line, can be the line itself (`'line'`), can be the rect
- * encompassing the line (`'rect'`) or a custom set of points
- * (`Array<Array<TypeParsablePoint>>`) (`'line'`),
- * @property {'border' | 'rect' | Array<Array<TypeParsablePoint>> | number} [touchBorder]
- * touch border of the line can be the same as the border (`'border'`),
- * completely custom (`Array<Array<TypeParsablePoint>>`), the enclosing
- * rectangle (`rect`) or the same as the border with some buffer that
- * effectively increases the width of the line on either side of it
- * (`number`) - (`'border'`)
- * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [holeBorder]
- * hole border of the line can be the points on the `positive` or `negative`
- * side of the line, completely custom (`Array<Array<TypeParsablePoint>>`)
- * or `'none'` is the default (`'none'`)
+ *
+ * @extends OBJ_Generic
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -509,18 +490,9 @@ export type OBJ_Polyline = {
   minAutoCornerAngle?: number,
   dash?: Array<number>,
   arrow?: OBJ_LineArrows | TypeArrowHead,
-  color?: TypeColor,
-  texture?: OBJ_Texture,
-  pulse?: number,
-  position?: ?Point,
-  transform?: Transform,
-  border?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>> | 'rect',
-  touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | number,
-  holeBorder?: 'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
   linePrimitives?: boolean,
   lineNum?: number,
-  copy?: Array<CPY_Step | string> | CPY_Step,
-};
+} & OBJ_Generic;
 
 /**
  * Line style object
@@ -985,7 +957,8 @@ export type OBJ_Ellipse = {
 
 /* eslint-disable max-len */
 /**
- * Triangle shape options object
+ * Triangle shape options object that extends {@link OBJ_Generic} (without
+ * `drawType)
  *
  * ![](./apiassets/triangle.png)
  *
@@ -1011,7 +984,7 @@ export type OBJ_Ellipse = {
  * A triangle starts with an angle (a1) at (0, 0) and base side extending along
  * the x axis to a second angle a2. The base side is side 1 (s1).
  *
- * Angles a1 and a2 exten the triangle above s1 if `direction` is `1`, and
+ * Angles a1 and a2 extend the triangle above s1 if `direction` is `1`, and
  * below s1 when `direction` is `-1`.
  *
  * s2, a3, and s3 are then the consecutive sides and angles.
@@ -1064,16 +1037,10 @@ export type OBJ_Ellipse = {
  * @property {number | { side: 's1' | 's2' | 's3', angle: number }} [rotation]
  * @property {'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid'} [xAlign] (`'centroid'`)
  * @property {'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1'| 's2' | 's3' | 'centroid'} [yAlign] (`'centroid'`)
- * @property {OBJ_CurvedCorner} [corner] define for rounded corners
- * @property {OBJ_LineStyle} [line] line style options - do not use any corner
+ * @property {OBJ_LineStyleSimple} [line] line style options - do not use any corner
  * options
- * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
- * the rectangle
- * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
- * @property {OBJ_Texture} [texture] Override color with a texture
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('rectangle').standard()`)
- * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ *
+ * @extends OBJ_Generic
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -1133,18 +1100,13 @@ export type OBJ_Triangle = {
   rotation?: number | { side: number, angle: number },
   xAlign: 'left' | 'center' | 'right' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
   yAlign: 'bottom' | 'middle' | 'top' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
-  line?: OBJ_LineStyle,
-  copy?: Array<CPY_Step | string> | CPY_Step,
-  color?: TypeColor,
-  texture?: OBJ_Texture,
-  position?: TypeParsablePoint,
-  transform?: Transform,
-  pulse?: number | OBJ_PulseScale,
-}
+  line?: OBJ_LineStyleSimple,
+} & OBJ_Generic;
 /* eslint-enable max-len */
 
 /**
- * Line definition options object.
+ * Line definition options object that extends {@link OBJ_Generic} (without
+ * `drawType)
  *
  * ![](./apiassets/line.png)
  *
@@ -1184,29 +1146,10 @@ export type OBJ_Triangle = {
  * Arrows are only available for `widthIs: 'mid'` and `linePrimitives: false`
  * @property {boolean} [linePrimitives] Use WebGL line primitives instead of
  * triangle primitives to draw the line (`false`)
- * @property {boolean} [lineNum] Number of line primitives to use when
+ * @property {number} [lineNum] Number of line primitives to use when
  * `linePrimitivs`: `true` (`2`)
- * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
- * the line
- * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
- * @property {OBJ_Texture} [texture] Override color with a texture
- * @property {number} [pulse] set the default pulse scale
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('line').standard()`)
- * @property {'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>> | 'rect'} [border]
- * border of the line can be the line itself (`'outline'`), can be the rect
- * encompassing the line (`'rect'`) or a custom set of points
- * (`Array<Array<TypeParsablePoint>>`) (`'outline'`)
- * @property {'border' | 'rect' | Array<Array<TypeParsablePoint>> | number} [touchBorder]
- * touch border of the line can be the same as the border (`'border'`),
- * completely custom (`Array<Array<TypeParsablePoint>>`), the enclosing
- * rectangle (`rect`) or the same as the border with some buffer that
- * effectively increases the width of the line on either side of it
- * (`number`) - (`'border'`)
- * @property {'none' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [holeBorder]
- * hole border of the line can be the points on the `positive` or `negative`
- * side of the line, completely custom (`Array<Array<TypeParsablePoint>>`)
- * or `'none'` is the default (`'none'`)
+ *
+ * @extends OBJ_Generic
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -1262,16 +1205,9 @@ export type OBJ_Line = {
   widthIs?: 'positive' | 'negative' | 'mid',
   dash?: Array<number>,
   arrow?: OBJ_LineArrows | TypeArrowHead,
-  copy?: OBJ_Copy | Array<OBJ_Copy>,
-  color?: TypeColor,
-  texture?: OBJ_Texture,
-  position?: TypeParsablePoint,
-  transform?: Transform,
-  pulse?: OBJ_PulseScale | number,
-  border?: Array<Array<Point>> | 'outline' | 'rect',
-  touchBorder?: number | Array<Array<Point>> | 'border' | 'rect',
-  holeBorder?: Array<Array<Point>> | 'none',
-}
+  linePrimitives?: boolean,
+  lineNum?: number,
+} & OBJ_Generic;
 
 /**
  * Grid shape options object
