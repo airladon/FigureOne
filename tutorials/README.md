@@ -6,9 +6,9 @@ Follow these tutorials in sequence to learn about FigureOne and how to use it.
 
 ![](./1%20-%20Shape/example.png)
 
-**[Collections](https://github.com/airladon/FigureOne/tree/master/tutorials/2%20-%20Collections)** - Example showing collections of figure elements
+**[Collections](https://github.com/airladon/FigureOne/tree/master/tutorials/2%20-%20Collections)** - Collections of figure elements all move together
 
-![](./2%20-%20Collections/example.png)
+![](./2%20-%20Collections/example.gif)
 
 **[Interactive Shape](https://github.com/airladon/FigureOne/tree/master/tutorials/3%20-%20Interactive%20Shape)** - A shape that can be moved by the user
 
