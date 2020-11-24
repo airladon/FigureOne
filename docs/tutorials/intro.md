@@ -159,19 +159,19 @@ Figures can also be defined more dynamically, such as in the example below which
 // index.js
 const figure = new Fig.Figure({ limits: [0, 0, 6, 4 ]});
 
-const label = figure.create.text({
+const label = figure.primitives.text({
   text: 'Line 1',
   position: [1, 0.1],
   font: { color: [0, 0, 1, 1] },
   xAlign: 'center',
 });
-const line = figure.create.line({
+const line = figure.primitives.line({
   p1: [0, 0],
   p2: [2, 0],
   width: 0.01,
   color: [0, 0, 1, 1],
 });
-const labeledLine = figure.create.collection({});
+const labeledLine = figure.primitives.collection({});
 figure.elements.add('labeledLine', labeledLine);
 labeledLine.add('line', line);
 labeledLine.add('label', label);

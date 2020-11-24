@@ -37,9 +37,9 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 
 
 
-// // ////////////////////////////////////////////////////////////////////////
-// // Setup Equation
-// // ////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////
+// Setup Equation
+// ////////////////////////////////////////////////////////////////////////
 
 // // Helper function for equation bottom comments to make forms look clearner
 // const bc = (content, comment, symbol = null, scale = 0.6, inSize = false) => ({
@@ -51,7 +51,7 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 // // Add the equation with all it's forms
 // figure.addElement({
 //   name: 'eqn',
-//   method: 'equation',
+//   method: 'collections.equation',
 //   options: {
 //     position: [0, -2],
 //     scale: 1.4,
@@ -240,35 +240,50 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 // figure.elements.setScenarios('initial');
 
 
-figure.addElement(
-  {
-    name: 'c',
-    method: 'collection',
-    addElements: [
-      {
-        name: 'hex',
-        method: 'polygon',
-        options: {
-          sides: 6,
-          radius: 0.5,
-        },
-      },
-      {
-        name: 'text',
-        method: 'text',
-        options: {
-          text: 'hexagon',
-          position: [0, -0.8],
-          xAlign: 'center',
-          font: { size: 0.3 },
-        },
-      },
-    ],
-  },
-);
+// figure.addElement(
+//   {
+//     name: 'c',
+//     method: 'collections.collection',
+//     addElements: [
+//       {
+//         name: 'hex',
+//         method: 'primitives.polygon',
+//         options: {
+//           sides: 6,
+//           radius: 0.5,
+//         },
+//       },
+//       {
+//         name: 'text',
+//         method: 'primitives.text',
+//         options: {
+//           text: 'hexagon',
+//           position: [0, -0.8],
+//           xAlign: 'center',
+//           font: { size: 0.3 },
+//         },
+//       },
+//     ],
+//   },
+// );
+
+const c = figure.collections.collection();
+const hex = figure.primitives.polygon({
+  sides: 6,
+  radius: 0.5,
+});
+const text = figure.primitives.text({
+  text: 'hexagon',
+  position: [0, -0.8],
+  xAlign: 'center',
+  font: { size: 0.3 },
+});
+c.add('hex', hex);
+c.add('text', text);
+figure.add('c', c);
 
 // When a collection rotates, then so does all its elements
-figure.getElement('c').animations.new()
-  .delay(2)
+c.animations.new()
+  .delay(1)
   .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
   .start();

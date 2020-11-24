@@ -32,7 +32,7 @@ Let's start by creating a {@link FigureElementPrimitive} element that draws a po
 
 ```javascript
 // create the `FigureElementPrimitive`
-const p = figure.create.polygon({
+const p = figure.primitives.polygon({
   radius: 0.2,
   fill: true,
   color: [0, 0, 1, 1],

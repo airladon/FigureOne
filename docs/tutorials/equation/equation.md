@@ -44,7 +44,7 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 
 First let's create an equation, with red as the default color:
 ```javascript
-const equation = figure.create.equation({ color: [1, 0, 0, 1] });
+const equation = figure.primitives.equation({ color: [1, 0, 0, 1] });
 ```
 
 Next lets add the definitions for the terms and operators, or the equation elements. The keys of the object are unique identifiers that will be used in the equation forms to layout the elements appropriately. The values of the object are the text to display in the equation, or objects that define the text with additional options including formatting.
@@ -111,7 +111,7 @@ equation.showForm('b');
 
 Combine all the steps above gives:
 ```javascript
-const equation = figure.create.equation({ color: [1, 0, 0, 1] });
+const equation = figure.primitives.equation({ color: [1, 0, 0, 1] });
 equation.addElements({
   a: 'a',
   b: 'b',

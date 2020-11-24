@@ -38,7 +38,6 @@ function addElements(
   const getMethod = (method: string) => {
     const methods = {
       collection: shapes.collection.bind(shapes),
-      opolyline: collections.polyline.bind(collections),
       polyline: shapes.polyline.bind(shapes),
       polygon: shapes.polygon.bind(shapes),
       rectangle: shapes.rectangle.bind(shapes),
@@ -66,6 +65,7 @@ function addElements(
       // marks: shapes.marks.bind(shapes),
       // box: shapes.box.bind(shapes),
       //
+      opolyline: collections.polyline.bind(collections),
       oline: collections.line.bind(collections),
       angle: collections.angle.bind(collections),
       //
@@ -83,6 +83,7 @@ function addElements(
       return shapes.textLines.bind(shapes);
     }
     const figure = {
+      primitives: shapes,
       shapes,
       collections,
       equation,

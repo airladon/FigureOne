@@ -162,7 +162,7 @@ export type TypeEquationPhrase =
  *
  * @example
  * // Create equation object then add to figure
- * const eqn = figure.create.equation({
+ * const eqn = figure.primitives.equation({
  *   forms: {
  *     1: [
  *       'length',
@@ -278,7 +278,7 @@ export type EQN_Container = {
  *
  * @example
  * // Create equation object then add to figure
- * const eqn = figure.create.equation({
+ * const eqn = figure.primitives.equation({
  *   elements: {
  *       v1: { symbol: 'vinculum' },
  *       v2: { symbol: 'vinculum' },
@@ -614,7 +614,7 @@ export type EQN_Bracket = {
  *
  * @example
  * // Create equation object then add to figure
- * const eqn = figure.create.equation({
+ * const eqn = figure.primitives.equation({
  *   elements: {
  *     r: { symbol: 'radical' },
  *     plus: '  +  ',

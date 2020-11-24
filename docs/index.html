@@ -3013,12 +3013,6 @@
                         #text
                       </a></li>
                       
-                      <li><a
-                        href='#figureprimitivescollection'
-                        class='regular pre-open'>
-                        #collection
-                      </a></li>
-                      
                     </ul>
                   
                   
@@ -4397,6 +4391,88 @@
               
                 
                 <li><a
+                  href='#figurecollections'
+                  class=" toggle-sibling">
+                  FigureCollections
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#figurecollectionscollection'
+                        class='regular pre-open'>
+                        #collection
+                      </a></li>
+                      
+                      <li><a
+                        href='#figurecollectionsequation'
+                        class='regular pre-open'>
+                        #equation
+                      </a></li>
+                      
+                      <li><a
+                        href='#figurecollectionsline'
+                        class='regular pre-open'>
+                        #line
+                      </a></li>
+                      
+                      <li><a
+                        href='#figurecollectionsangle'
+                        class='regular pre-open'>
+                        #angle
+                      </a></li>
+                      
+                      <li><a
+                        href='#figurecollectionspolyline'
+                        class='regular pre-open'>
+                        #polyline
+                      </a></li>
+                      
+                      <li><a
+                        href='#figurecollectionsrectangle'
+                        class='regular pre-open'>
+                        #rectangle
+                      </a></li>
+                      
+                      <li><a
+                        href='#figurecollectionsaxis'
+                        class='regular pre-open'>
+                        #axis
+                      </a></li>
+                      
+                      <li><a
+                        href='#figurecollectionstrace'
+                        class='regular pre-open'>
+                        #trace
+                      </a></li>
+                      
+                      <li><a
+                        href='#figurecollectionsplot'
+                        class='regular pre-open'>
+                        #plot
+                      </a></li>
+                      
+                      <li><a
+                        href='#figurecollectionsplotlegend'
+                        class='regular pre-open'>
+                        #plotLegend
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_figureelementcollection'
                   class="">
                   OBJ_FigureElementCollection
@@ -4532,19 +4608,19 @@ figure.elements.isTouchable = <span class="hljs-literal">true</span>;</pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span> ]});
 
-<span class="hljs-keyword">const</span> label = figure.create.text({
+<span class="hljs-keyword">const</span> label = figure.primitives.text({
   <span class="hljs-attr">text</span>: <span class="hljs-string">'Line 1'</span>,
   <span class="hljs-attr">position</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0.1</span>],
   <span class="hljs-attr">font</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
   <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
 });
-<span class="hljs-keyword">const</span> line = figure.create.line({
+<span class="hljs-keyword">const</span> line = figure.primitives.line({
   <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
   <span class="hljs-attr">p2</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>],
   <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
   <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
 });
-<span class="hljs-keyword">const</span> labeledLine = figure.create.collection({});
+<span class="hljs-keyword">const</span> labeledLine = figure.primitives.collection({});
 figure.elements.add(<span class="hljs-string">'labeledLine'</span>, labeledLine);
 labeledLine.add(<span class="hljs-string">'line'</span>, line);
 labeledLine.add(<span class="hljs-string">'label'</span>, label);
@@ -4631,8 +4707,17 @@ converting between the different spaces (e.g. pixel, GL, figure).</p>
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>create</span> <code class='quiet'>(<a href="#figureprimitives">FigurePrimitives</a>)</code>
-          : create elements with this
+          <span class='code bold'>primitives</span> <code class='quiet'>(<a href="#figureprimitives">FigurePrimitives</a>)</code>
+          : create figure primitives such
+as shapes, lines and grids
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>collections</span> <code class='quiet'>(<a href="#figurecollections">FigureCollections</a>)</code>
+          : create figure collections such
+as advanced lines, shapes, equations and plots
 
           
         </div>
@@ -15351,7 +15436,7 @@ identity transforms.</p>
 <h3>Quick Start</h3>
 <p>Let's start by creating a <a href="#figureelementprimitive">FigureElementPrimitive</a> element that draws a polygon and adding it to the figure.</p>
 <pre class='hljs'><span class="hljs-comment">// create the `FigureElementPrimitive`</span>
-<span class="hljs-keyword">const</span> p = figure.create.polygon({
+<span class="hljs-keyword">const</span> p = figure.primitives.polygon({
   <span class="hljs-attr">radius</span>: <span class="hljs-number">0.2</span>,
   <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
@@ -19144,8 +19229,8 @@ it will rotate toward with positive rotation.</p>
   </div>
   
 
-  <p>Collections Line options object that extends <a href="#obj_collection">OBJ_Collection</a> options
-object (without <code>parent</code>).</p>
+  <p><a href="#collectionsline">CollectionsLine</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
 <p>The Collections Line is a convient and powerful line
 <a href="#figureelementcollection">FigureElementCollection</a> that includes the line, arrows, a label
 annotation and some methods to make it convient to use dynamically.</p>
@@ -28723,7 +28808,7 @@ more readable.</p>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });</pre>
 <h3>Quick Start</h3>
 <p>First let's create an equation, with red as the default color:</p>
-<pre class='hljs'><span class="hljs-keyword">const</span> equation = figure.create.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });</pre>
+<pre class='hljs'><span class="hljs-keyword">const</span> equation = figure.primitives.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });</pre>
 <p>Next lets add the definitions for the terms and operators, or the equation elements. The keys of the object are unique identifiers that will be used in the equation forms to layout the elements appropriately. The values of the object are the text to display in the equation, or objects that define the text with additional options including formatting.</p>
 <pre class='hljs'>equation.addElements({
   <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
@@ -28758,7 +28843,7 @@ equation.addForms({
 <pre class='hljs'>equation.showForm(<span class="hljs-string">'b'</span>);</pre>
 <p><img src="./tutorials/equation/fraction.png"></p>
 <p>Combine all the steps above gives:</p>
-<pre class='hljs'><span class="hljs-keyword">const</span> equation = figure.create.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });
+<pre class='hljs'><span class="hljs-keyword">const</span> equation = figure.primitives.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });
 equation.addElements({
   <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">b</span>: <span class="hljs-string">'b'</span>,
@@ -29058,7 +29143,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   <p>An Equation is a collection of elements that can be arranged into different
 forms.</p>
 <p><code>Equation</code> should be instantiated from an <em>object definition</em>, or from
-the <code>figure.create.equation</code> method.</p>
+the <code>figure.primitives.equation</code> method.</p>
 <p>Equation includes two additional animation steps in <a href="Equation.animations">Equation.animations</a>:</p>
 <ul>
 <li><a href="#gotoformanimationstep">GoToFormAnimationStep</a></li>
@@ -29144,7 +29229,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create with methods</span>
-<span class="hljs-keyword">const</span> eqn = figure.create.equation();
+<span class="hljs-keyword">const</span> eqn = figure.primitives.equation();
 eqn.addElements({
   <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">b</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
@@ -30430,7 +30515,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to figure</span>
-<span class="hljs-keyword">const</span> eqn = figure.create.equation({
+<span class="hljs-keyword">const</span> eqn = figure.primitives.equation({
   <span class="hljs-attr">elements</span>: {
       <span class="hljs-attr">v1</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
       <span class="hljs-attr">v2</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
@@ -30708,7 +30793,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to figure</span>
-<span class="hljs-keyword">const</span> eqn = figure.create.equation({
+<span class="hljs-keyword">const</span> eqn = figure.primitives.equation({
   <span class="hljs-attr">elements</span>: {
     <span class="hljs-attr">r</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'radical'</span> },
     <span class="hljs-attr">plus</span>: <span class="hljs-string">'  +  '</span>,
@@ -34596,7 +34681,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to figure</span>
-<span class="hljs-keyword">const</span> eqn = figure.create.equation({
+<span class="hljs-keyword">const</span> eqn = figure.primitives.equation({
   <span class="hljs-attr">forms</span>: {
     <span class="hljs-number">1</span>: [
       <span class="hljs-string">'length'</span>,
@@ -39261,7 +39346,7 @@ touched
   </div>
   
 
-  <p>Built in dagiagram primitives.</p>
+  <p>Built in figure primitives.</p>
 <p>Including simple shapes, grid and text.</p>
 
   
@@ -40184,76 +40269,6 @@ touched
 
       
     
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='figureprimitivescollection'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>collection(transformOrPointOrOptions, moreOptions)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Create a <a href="#figureelementcollection">FigureElementCollection</a>.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>transformOrPointOrOptions</span> <code class='quiet'>((<a href="#transform">Transform</a> | <a href="#point">Point</a> | <a href="#obj_collection">OBJ_Collection</a>)
-            = <code>{}</code>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>moreOptions</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_collection">OBJ_Collection</a>>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
   
 
   
@@ -54668,6 +54683,672 @@ e.animations.new()
   
 
   
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='figurecollections'>
+      FigureCollections
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Built in figure collections.</p>
+<p>Provides advanced shapes the specific methods, animations and interactivity.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='figurecollectionscollection'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>collection(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="#figureelementcollection">FigureElementCollection</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_collection">OBJ_Collection</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figurecollectionsequation'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>equation(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="#equation">Equation</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#eqn_equation">EQN_Equation</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figurecollectionsline'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>line(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="#collectionsline">CollectionsLine</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#col_line">COL_Line</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figurecollectionsangle'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>angle(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="#collectionsangle">CollectionsAngle</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#col_angle">COL_Angle</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figurecollectionspolyline'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>polyline(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="#collectionspolyline">CollectionsPolyline</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#col_polyline">COL_Polyline</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figurecollectionsrectangle'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rectangle(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="#collectionsrectangle">CollectionsRectangle</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#col_rectangle">COL_Rectangle</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figurecollectionsaxis'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>axis(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="CollectionsAixs">CollectionsAixs</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#col_axis">COL_Axis</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figurecollectionstrace'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>trace(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="#collectionstrace">CollectionsTrace</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#col_trace">COL_Trace</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figurecollectionsplot'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>plot(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="#collectionsplot">CollectionsPlot</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#col_plot">COL_Plot</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figurecollectionsplotlegend'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>plotLegend(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="CollectionsLegend">CollectionsLegend</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#col_plot">COL_Plot</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 

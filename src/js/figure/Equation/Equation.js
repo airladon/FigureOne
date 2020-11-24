@@ -635,7 +635,7 @@ class GoToFormAnimationStep extends TriggerAnimationStep {
  * forms.
  *
  * `Equation` should be instantiated from an *object definition*, or from
- * the `figure.create.equation` method.
+ * the `figure.primitives.equation` method.
  *
  * Equation includes two additional animation steps in {@link Equation.animations}:
  * * {@link GoToFormAnimationStep}
@@ -671,7 +671,7 @@ class GoToFormAnimationStep extends TriggerAnimationStep {
  *
  * @example
  * // Create with methods
- * const eqn = figure.create.equation();
+ * const eqn = figure.primitives.equation();
  * eqn.addElements({
  *   a: 'a',
  *   b: { color: [0, 0, 1, 1] },

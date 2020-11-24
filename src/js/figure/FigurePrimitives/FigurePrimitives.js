@@ -141,6 +141,30 @@ export type OBJ_LineStyleSimple = {
  * figure.getElement('c').animations.new()
  *   .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
  *   .start();
+ *
+ * @example
+ * // Collections and primitives can also be created from `figure.collections`
+ * // and `figure.primitives`.
+ * const c = figure.collections.collection();
+ * const hex = figure.primitives.polygon({
+ *   sides: 6,
+ *   radius: 0.5,
+ * });
+ * const text = figure.primitives.text({
+ *   text: 'hexagon',
+ *   position: [0, -0.8],
+ *   xAlign: 'center',
+ *   font: { size: 0.3 },
+ * });
+ * c.add('hex', hex);
+ * c.add('text', text);
+ * figure.add('c', c);
+ * 
+ * // When a collection rotates, then so does all its elements
+ * c.animations.new()
+ *   .delay(1)
+ *   .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
+ *   .start();
  */
 export type OBJ_Collection = {
   transform?: TypeParsableTransform,
@@ -1991,7 +2015,7 @@ function setupPulse(element: FigureElement, options: Object) {
 }
 
 /**
- * Built in dagiagram primitives.
+ * Built in figure primitives.
  *
  * Including simple shapes, grid and text.
  */
@@ -2009,7 +2033,6 @@ export default class FigurePrimitives {
   defaultLength: number;
 
   /**
-    * This is a big big test
     * @hideconstructor
     */
   constructor(
@@ -3626,9 +3649,6 @@ export default class FigurePrimitives {
     return cursor;
   }
 
-  /**
-   * Create a {@link FigureElementCollection}.
-   */
   collection(
     transformOrPointOrOptions: Transform | Point | OBJ_Collection = {},
     ...moreOptions: Array<OBJ_Collection>

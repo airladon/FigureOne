@@ -145,7 +145,11 @@ export type OBJ_Figure = {
  *
  * @class
  * @param {OBJ_Figure} options
- * @property {FigurePrimitives} create create elements with this
+ * @property {FigurePrimitives} primitives create figure primitives such
+ * as shapes, lines and grids
+ * @property {FigureCollections} collections create figure collections such
+ * as advanced lines, shapes, equations and plots
+ *
  * @example
  * // Simple html and javascript example to create a figure, and add a
  * // hexagon.
@@ -227,11 +231,13 @@ class Figure {
   // gestureElement: HTMLElement;
   shapes: FigurePrimitives;
   shapesLow: Object;
-  primitive: Object;
+
+  primitives: FigurePrimitives;
   // shapesHigh: Object;
   equation: Object;
   equationLow: Object;
   // equationHigh: Object;
+
   collections: FigureCollections;
   collectionsLow: FigureCollections;
   // objectsHigh: FigureCollections;
@@ -440,7 +446,7 @@ class Figure {
     this.shapesLow = this.getShapes();
     // this.shapesHigh = this.getShapes(true);
     this.shapes = this.shapesLow;
-    this.primitive = this.shapes;
+    this.primitives = this.shapes;
     this.equationLow = this.getEquations();
     // this.equationHigh = this.getEquations(true);
     this.equation = this.equationLow;
@@ -483,27 +489,27 @@ class Figure {
     //  */
     // deprecate
     // $FlowFixMe
-    this.create = {
-      collection: this.shapes.collection.bind(this.shapes),
-      generic: this.shapes.generic.bind(this.shapes),
-      polyline: this.shapes.polyline.bind(this.shapes),
-      polygon: this.shapes.polygon.bind(this.shapes),
-      grid: this.shapes.grid.bind(this.shapes),
-      triangle: this.shapes.triangle.bind(this.shapes),
-      rectangle: this.shapes.rectangle.bind(this.shapes),
-      // radialLines: this.shapes.radialLines.bind(this.shapes),
-      text: this.shapes.text.bind(this.shapes),
-      textLine: this.shapes.textLine.bind(this.shapes),
-      textLines: this.shapes.textLines.bind(this.shapes),
-      // arrow: this.shapes.arrow.bind(this.shapes),
-      html: this.shapes.html.bind(this.shapes),
-      // htmlImage: this.shapes.htmlImage.bind(this.shapes),
-      // htmlText: this.shapes.htmlText.bind(this.shapes),
-      line: this.collections.line.bind(this.collections),
-      angle: this.collections.angle.bind(this.collections),
-      smartPolyLine: this.collections.polyline.bind(this.collections),
-      equation: this.equation.equation.bind(this.equation),
-    };
+    // this.create = {
+    //   collection: this.shapes.collection.bind(this.shapes),
+    //   generic: this.shapes.generic.bind(this.shapes),
+    //   polyline: this.shapes.polyline.bind(this.shapes),
+    //   polygon: this.shapes.polygon.bind(this.shapes),
+    //   grid: this.shapes.grid.bind(this.shapes),
+    //   triangle: this.shapes.triangle.bind(this.shapes),
+    //   rectangle: this.shapes.rectangle.bind(this.shapes),
+    //   // radialLines: this.shapes.radialLines.bind(this.shapes),
+    //   text: this.shapes.text.bind(this.shapes),
+    //   textLine: this.shapes.textLine.bind(this.shapes),
+    //   textLines: this.shapes.textLines.bind(this.shapes),
+    //   // arrow: this.shapes.arrow.bind(this.shapes),
+    //   html: this.shapes.html.bind(this.shapes),
+    //   // htmlImage: this.shapes.htmlImage.bind(this.shapes),
+    //   // htmlText: this.shapes.htmlText.bind(this.shapes),
+    //   line: this.collections.line.bind(this.collections),
+    //   angle: this.collections.angle.bind(this.collections),
+    //   smartPolyLine: this.collections.polyline.bind(this.collections),
+    //   equation: this.equation.equation.bind(this.equation),
+    // };
   }
 
   bindRecorder() {
@@ -2014,7 +2020,7 @@ class Figure {
   // or the `add` method can be used.
   createFigureElements() {
     // this.elements = new FigureElementCollection();
-    this.elements = this.primitive.collection();
+    this.elements = this.primitives.collection();
     this.initElements();
     // this.elements.setFigure({
     //   limits: this.limits,
