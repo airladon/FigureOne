@@ -24,6 +24,7 @@ import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
 // import type { OBJ_Font } from './DrawingObjects/TextObject/TextObject';
 import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, SubscriptionManager,
+  generateUniqueId,
 } from '../tools/tools';
 import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
 import GlobalAnimation from './webgl/GlobalAnimation';
@@ -630,8 +631,11 @@ class FigureElement {
     transform: Transform = new Transform(),
     figureLimitsOrFigure: Figure | Rect = new Rect(-1, -1, 2, 2),
     parent: FigureElement | null = null,
+    name: string = generateUniqueId('element_'),
   ) {
-    this.name = ''; // This is updated when an element is added to a collection
+    // This may be updated if element is added to a collection with a different
+    // name
+    this.name = name; 
     this.uid = (Math.random() * 1e18).toString(36);
     this.isShown = true;
     this.transform = transform._dup();
@@ -3509,8 +3513,9 @@ class FigureElementPrimitive extends FigureElement {
     color: TypeColor = [0.5, 0.5, 0.5, 1],
     figureLimits: Rect = new Rect(-1, -1, 2, 2),
     parent: FigureElement | null = null,
+    name: string = generateUniqueId('element_'),
   ) {
-    super(transform, figureLimits, parent);
+    super(transform, figureLimits, parent, name);
     this.drawingObject = drawingObject;
     this.color = color != null ? color.slice() : [0, 0, 0, 0];
     this.defaultColor = this.color.slice();
@@ -3968,10 +3973,11 @@ class FigureElementCollection extends FigureElement {
       touchBorder: 'border',
       holeBorder: [[]],
       color: [0, 0, 0, 1],
+      name: generateUniqueId('collection_'),
     };
     const o = joinObjects({}, defaultOptions, options);
     // console.log(o)
-    super(getTransform(o.transform), o.limits, o.parent);
+    super(getTransform(o.transform), o.limits, o.parent, o.name);
     if (o.position != null) {
       this.transform.updateTranslation(getPoint(o.position));
     }
@@ -4176,11 +4182,6 @@ class FigureElementCollection extends FigureElement {
     this.animateNextFrame();
   }
 
-  add1(
-    nameOrElementOrElementDefinition: string | FigureElement | TypeAddElementObject | Array<FigureElement | TypeAddElementObject>,
-    element: FigureElement
-  ) {
-  }
 
   addNew(
     nameOrElementOrElementDefinition: string
@@ -4190,6 +4191,7 @@ class FigureElementCollection extends FigureElement {
   ) {
     if (typeof nameOrElementOrElementDefinition === 'string') {
       this.addElementWithName(nameOrElementOrElementDefinition, elementToAdd);
+      return;
     }
     let elements;
     if (!Array.isArray(nameOrElementOrElementDefinition)) {
@@ -4201,9 +4203,8 @@ class FigureElementCollection extends FigureElement {
     const rootCollection = this;
     elements.forEach((elementDefinition, index) => {
       if (elementDefinition instanceof FigureElement) {
-        this.addNew({
-          element: elementDefinition,
-        });
+        this.addNew(elementDefinition.name, elementDefinition);
+        return;
       }
       // Extract the parameters from the layout object
       if (elementDefinition == null) {
@@ -4272,7 +4273,7 @@ class FigureElementCollection extends FigureElement {
           newElement.setProperties(elementModsToUse);
         }
         if (collectionPath instanceof FigureElementCollection) {
-          collectionPath.add(nameToUse, newElement);
+          collectionPath.addNew(nameToUse, newElement);
         }
       }
 
@@ -4286,19 +4287,7 @@ class FigureElementCollection extends FigureElement {
       if (`_${nameToUse}` in rootCollection
           && (addElementsToUse != null && addElementsToUse !== {})
       ) {
-        this.addNew({
-          element: addElementsToUse,
-          to: rootCollection[`_${nameToUse}`],
-          addElementsKey,
-        });
-        //   addElements(
-        //   // shapes,
-        //   // equation,
-        //   collections,                                            // $FlowFixMe
-        //   rootCollection[`_${nameToUse}`],
-        //   addElementsToUse,
-        //   addElementsKey,
-        // );
+        this.addNew(addElementsToUse);
       }
     });
   }
@@ -4316,7 +4305,7 @@ class FigureElementCollection extends FigureElement {
     const { collections } = this;
     const shapes = collections.primitives;
     const methods = {
-      collection: collections.collection.bind(shapes),
+      collection: collections.collection.bind(collections),
       polyline: shapes.polyline.bind(shapes),
       polygon: shapes.polygon.bind(shapes),
       rectangle: shapes.rectangle.bind(shapes),

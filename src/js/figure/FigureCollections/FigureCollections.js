@@ -3,6 +3,7 @@ import WebGLInstance from '../webgl/webgl';
 import {
   Rect, parseBorder, Transform, Point,
 } from '../../tools/g2';
+
 import { joinObjects } from '../../tools/tools';
 // import {
 //   FigureElementCollection,

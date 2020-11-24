@@ -11,7 +11,7 @@ import type {
 } from '../../tools/g2';
 import { setHTML } from '../../tools/htmlGenerator';
 import {
-  FigureElementCollection, FigureElementPrimitive, FigureElement,
+  FigureElementPrimitive, FigureElement,
 } from '../Element';
 import WebGLInstance from '../webgl/webgl';
 import DrawContext2D from '../DrawContext2D';
@@ -2079,7 +2079,7 @@ export default class FigurePrimitives {
    */
   generic(...optionsIn: Array<OBJ_Generic>) {
     const defaultOptions = {
-      name: '',
+      name: generateUniqueId('primitive_'),
       points: [],
       border: 'rect',
       touchBorder: 'border',
@@ -2148,8 +2148,6 @@ export default class FigurePrimitives {
         pp, b, tB, hB, copy,
       );
     };
-
-    element.name = options.name;
 
     setupPulse(element, options);
 

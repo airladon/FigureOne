@@ -268,31 +268,27 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 // );
 // Create figure and make it able to be touched
 // const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
-figure.setTouchable();
+// figure.setTouchable();
 
-// Add circle to figure
-figure.addElement(
-  {
-    name: 'circle',
-    method: 'polygon',
-    options: {
-      sides: 100,
-      radius: 0.2,
-      touchBorder: 0.2,
-    },
-    mods: {
-      isMovable: true,
-      move: {
-        bounds: 'figure',
-      },
-    },
-  },
-);
+// // Add circle to figure
+// figure.addElement(
+//   {
+//     name: 'circle',
+//     method: 'polygon',
+//     options: {
+//       sides: 100,
+//       radius: 0.2,
+//       touchBorder: 0.2,
+//     },
+//     mods: {
+//       isMovable: true,
+//       move: {
+//         bounds: 'figure',
+//       },
+//     },
+//   },
+// );
 
-const pow = (pow = 2, stop = 10, step = 0.05) => {
-  const xValues = Fig.tools.math.range(0, stop, step);
-  return xValues.map(x => new Fig.Point(x, x ** pow));
-}
 
 // Multiple traces with a legend
 // Some traces are customized beyond the defaul color to include dashes and
@@ -304,3 +300,42 @@ figure.addNew({
     radius: 0.5,
   },
 });
+
+figure.addNew(
+  {
+    name: 'c',
+    method: 'collection',
+    elements: [         // add two elements to the collection
+      {
+        name: 'hex',
+        method: 'polygon',
+        options: {
+          sides: 6,
+          radius: 0.5,
+        },
+      },
+      {
+        name: 'text',
+        method: 'text',
+        options: {
+          text: 'hexagon',
+          position: [0, -0.8],
+          xAlign: 'center',
+          font: { size: 0.3 },
+        },
+      },
+    ],
+  },
+);
+
+const c1 = figure.collections.collection();
+const h1 = figure.primitives.polygon({
+  name: 'h1',
+  color: [0, 0.4, 1, 1],
+});
+console.log(h1)
+
+c1.addNew('j1', h1);
+
+figure.addNew(c1)
+console.log(figure.elements)
