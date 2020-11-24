@@ -11,7 +11,7 @@ tools.isTouchDevice = jest.fn();
 
 // jest.mock('../../recorder.worker');
 
-describe.only('Element Space Transforms', () => {
+describe('Element Space Transforms', () => {
   let figure;
   let a;
   let c;

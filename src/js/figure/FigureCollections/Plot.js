@@ -720,7 +720,8 @@ class CollectionsPlot extends FigureElementCollection {
     const length = axis === 'x' ? this.width : this.height;
     const gridLength = axis === 'x' ? this.height : this.width;
 
-    // const minDimension = Math.min(this.collections.primitives.limits.width, this.collections.primitives.limits.height);
+    // const minDimension = Math.min(
+    //   this.collections.primitives.limits.width, this.collections.primitives.limits.height);
 
     let theme = {};
     if (name === 'classic') {

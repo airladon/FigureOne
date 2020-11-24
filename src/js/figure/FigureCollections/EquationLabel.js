@@ -160,7 +160,7 @@ export default class EquationLabel {
         scale,
         // form,
       };
-      eqn = equations.equation(joinObjects(
+      eqn = collections.equation(joinObjects(
         defaultEqnOptions, labelTextOrEquation,
       ));
       // if (form == null) {

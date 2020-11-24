@@ -36,6 +36,7 @@ import type { TypeNavigatorOptions } from './EqnNavigator';
 import {
   FigureElementCollection,
 } from '../Element';
+import type { TypeColor } from '../../tools/types';
 // import { Equation } from '../Equation/Equation';
 
 /**

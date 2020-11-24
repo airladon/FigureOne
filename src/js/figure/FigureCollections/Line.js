@@ -21,7 +21,7 @@ import { Equation } from '../Equation/Equation';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
 import { simplifyArrowOptions, getArrowLength } from '../geometries/arrow';
 import type { OBJ_LineArrows, OBJ_LineArrow } from '../geometries/arrow';
-import type { OBJ_Pulse } from '../Element';
+import type { OBJ_Pulse, FigureElement } from '../Element';
 import type { EQN_Equation } from '../Equation/Equation';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
@@ -262,7 +262,7 @@ function makeStraightLine(
   dash: TypeDash,
   // maxLength: number,
   // touchBorder: number | { width: number, start: number, end: number },
-) {
+): FigureElement {
   const straightLine = primitives.line({
     p1: [0, 0],
     length: dash.length < 2 ? 1 : length,

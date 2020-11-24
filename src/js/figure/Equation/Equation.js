@@ -437,10 +437,10 @@ export type EQN_Equation = {
   // defaultFormAlignment?: TypeFormAlignment;
   formDefaults: {
     alignment?: TypeFormAlignment,
-    elementMods: {
+    elementMods?: {
       [elementName: string]: Object,
     },
-    animation: TypeFormAnimationProperties;
+    animation?: TypeFormAnimationProperties;
   };
   forms?: TypeEquationForms;
   formSeries?: Array<string> | {};
@@ -839,7 +839,6 @@ export class Equation extends FigureElementCollection {
     //   this.setTransform(getTransform(optionsToUse.transform));
     // }
     this.shapes = shapes;
-    debugger;
     this.setColor(optionsToUse.color);
     // this.isTouchDevice = isTouchDevice;
     // this.animateNextFrame = animateNextFrame;

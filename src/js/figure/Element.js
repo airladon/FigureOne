@@ -49,7 +49,7 @@ import { FunctionMap } from '../tools/FunctionMap';
 import type {
   OBJ_Font, TypeColor,
 } from '../tools/types';
-import type FigurePrimitives from './FigurePrimitives/FigurePrimitives';
+// import type FigurePrimitives from './FigurePrimitives/FigurePrimitives';
 import type FigureCollections from './FigureCollections/FigureCollections';
 
 // eslint-disable-next-line import/no-cycle
@@ -66,6 +66,19 @@ import type FigureCollections from './FigureCollections/FigureCollections';
 // }
 
 export type TypeSpace = 'draw' | 'local' | 'figure' | 'gl' | 'pixel';
+
+/**
+ * Add element Object
+ */
+export type OBJ_AddElement = {
+  path?: string,
+  name?: string,
+  method?: string,
+  options?: {},   // eslint-disable-next-line no-use-before-define
+  elements?: Array<OBJ_AddElement | FigureElement>,
+  mods?: {},
+  scenario?: string,
+};
 
 /**
  * Transform, color and visbility scenario definition
@@ -635,7 +648,7 @@ class FigureElement {
   ) {
     // This may be updated if element is added to a collection with a different
     // name
-    this.name = name; 
+    this.name = name;
     this.uid = (Math.random() * 1e18).toString(36);
     this.isShown = true;
     this.transform = transform._dup();
@@ -4157,7 +4170,7 @@ class FigureElementCollection extends FigureElement {
 
   addElementWithName(
     name: string,
-    element: FigureElementPrimitive | FigureElementCollection,
+    element: FigureElement,
     index: number = -1,
   ) {
     // eslint-disable-next-line no-param-reassign
@@ -4193,8 +4206,8 @@ class FigureElementCollection extends FigureElement {
    */
   add(
     nameOrElementOrElementDefinition: string
-        | FigureElement | TypeAddElementObject
-        | Array<FigureElement | TypeAddElementObject>,
+        | FigureElement | OBJ_AddElement
+        | Array<FigureElement | OBJ_AddElement>,
     elementToAdd: FigureElement,
   ) {
     if (typeof nameOrElementOrElementDefinition === 'string') {

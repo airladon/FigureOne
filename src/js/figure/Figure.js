@@ -15,6 +15,9 @@ import { isTouchDevice, joinObjects, SubscriptionManager } from '../tools/tools'
 import {
   FigureElementCollection, FigureElementPrimitive, FigureElement,
 } from './Element';
+import type {
+  OBJ_AddElement,
+} from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
 import { Recorder } from './Recorder/Recorder';
 // eslint-disable-next-line import/no-cycle
@@ -23,8 +26,8 @@ import DrawContext2D from './DrawContext2D';
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
 import FigureEquation from './Equation/FigureEquation';
 import FigureCollections from './FigureCollections/FigureCollections';
-import addElements from './FigureAddElements/addElements';
-import type { TypeAddElementObject } from './FigureAddElements/addElements';
+// import addElements from './FigureAddElements/addElements';
+// import type { TypeAddElementObject } from './FigureAddElements/addElements';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import type { TypeColor, OBJ_Font } from '../tools/types';
 
@@ -994,8 +997,8 @@ class Figure {
 
   add(
     nameOrElementOrElementDefinition: string
-        | FigureElement | TypeAddElementObject
-        | Array<FigureElement | TypeAddElementObject>,
+        | FigureElement | OBJ_AddElement
+        | Array<FigureElement | OBJ_AddElement>,
     elementToAdd: FigureElement,
   ) {
     this.elements.add(nameOrElementOrElementDefinition, elementToAdd);
