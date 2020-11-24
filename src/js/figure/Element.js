@@ -4182,38 +4182,23 @@ class FigureElementCollection extends FigureElement {
   ) {
   }
 
-  addNew(options: {
-   element: FigureElement | TypeAddElementObject
-     | Array<TypeAddElementObject | FigureElement>,
-    name: string,
-    to: string | FigureElementCollection,
-    addElementsKey: string,
-  }) {
-    const {
-      element, name, to, addElementsKey
-    } = options;
-    if (element instanceof FigureElement) {
-      if (name != null) {
-        this.addElementWithName(name, element);
-      } else if (element.name != null) {
-        this.addElementWithName(element.name, element);
-      } else {
-        throw new Error('Element must be named');
-      }
-      return;
+  addNew(
+    nameOrElementOrElementDefinition: string
+        | FigureElement | TypeAddElementObject
+        | Array<FigureElement | TypeAddElementObject>,
+    elementToAdd: FigureElement
+  ) {
+    if (typeof nameOrElementOrElementDefinition === 'string') {
+      this.addElementWithName(nameOrElementOrElementDefinition, elementToAdd);
     }
     let elements;
-    if (!Array.isArray(element)) {
-      elements = [element];
+    if (!Array.isArray(nameOrElementOrElementDefinition)) {
+      elements = [nameOrElementOrElementDefinition];
     } else {
-      elements = element;
+      elements = nameOrElementOrElementDefinition;
     }
-    let rootCollection: FigureElementCollection;
-    if (typeof to === 'string') {
-      rootCollection = this.getElement(to);
-    } else {
-      rootCollection = to;
-    }
+
+    const rootCollection = this;
     elements.forEach((elementDefinition, index) => {
       if (elementDefinition instanceof FigureElement) {
         this.addNew({
@@ -4224,6 +4209,7 @@ class FigureElementCollection extends FigureElement {
       if (elementDefinition == null) {
         throw Error(`Add elements index ${index} does not exist in layout`);
       }
+      const addElementsKey = 'elements';
       const nameToUse = elementDefinition.name;
       const pathToUse = elementDefinition.path;
       const optionsToUse = elementDefinition.options;
