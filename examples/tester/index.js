@@ -288,4 +288,37 @@ figure.addElement(
     },
   },
 );
-
+// Annotations that automatically updates as user changes triangle
+figure.addElement({
+  name: 'p',
+  method: 'collections.polyline',
+  options: {
+    points: [[-1, 1], [1, 1], [0, 0]],
+    close: true,
+    makeValid: {
+      shape: 'triangle',
+      hide: {
+        minAngle: Math.PI / 8,
+      },
+    },
+    side: {
+      showLine: true,
+      offset: 0.2,
+      color: [0.3, 0.6, 1, 1],
+      arrow: 'barb',
+      width: 0.01,
+      label: {
+        text: null,
+      },
+    },
+    angle: {
+      label: null,
+      curve: { radius: 0.25 },
+    },
+    pad: {
+      radius: 0.4,
+      color: [1, 0, 0, 0.005],
+      isMovable: true,
+    },
+  },
+});

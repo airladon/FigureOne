@@ -119,26 +119,6 @@ export default class FigureCollections {
     element.collections = this;
     return element;
   }
-  // collection(
-  //   options: OBJ_Collection,
-  // ) {
-  //   return this.primitives.collection(options);
-  // }
-
-  /**
-   * Create a {@link Equation}.
-   */
-  // equation(
-  //   options: EQN_Equation,
-  // ) {
-  //   return this.equationFromFig.equation(this.primitives, options);
-  // }
-  // equation(
-  //   options: EQN_Equation,
-  // ) {
-  //   const equation = new Equation(this.primitives, options);
-  //   return equation;
-  // }
 
   /**
    * Create a {@link CollectionsLine}.
@@ -159,7 +139,7 @@ export default class FigureCollections {
   angle(...options: Array<COL_Angle>) {
     const optionsToUse = joinObjects({}, ...options);
     return new CollectionsAngle(
-      this.primitives, this.equationFromFig, this.isTouchDevice, this.animateNextFrame,
+      this, this.isTouchDevice, this.animateNextFrame,
       optionsToUse,
     );
   }
@@ -168,7 +148,7 @@ export default class FigureCollections {
     // const optionsToUse = Object.assign({}, ...options);
     const optionsToUse = joinObjects({}, ...options);
     return new EquationLabel(
-      this.equationFromFig, optionsToUse,
+      this, optionsToUse,
     );
   }
 
@@ -178,7 +158,7 @@ export default class FigureCollections {
   polyline(...options: Array<COL_Polyline>) {
     const optionsToUse = joinObjects({}, ...options);
     return new CollectionsPolyline(
-      this.primitives, this.equationFromFig, this,
+      this,
       this.isTouchDevice, this.animateNextFrame,
       optionsToUse,
     );

@@ -18,10 +18,10 @@ import type {
 import type {
   COL_Angle,
 } from './Angle';
-import FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
+// import FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
 // eslint-disable-next-line import/no-cycle
 import FigureCollections from './FigureCollections';
-import FigureEquation from '../Equation/FigureEquation';
+// import FigureEquation from '../Equation/FigureEquation';
 import type { OBJ_Polyline, OBJ_Polygon, OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
 
 /* eslint-disable max-len */
@@ -506,8 +506,6 @@ export type SUB_PolylineUpdatePoints = [];
  */
 /* eslint-enable max-len */
 export default class CollectionsPolyline extends FigureElementCollection {
-  shapes: FigurePrimitives;
-  equation: FigureEquation;
   collections: FigureCollections;
   animateNextFrame: void => void;
   isTouchDevice: boolean;
@@ -532,23 +530,21 @@ export default class CollectionsPolyline extends FigureElementCollection {
    * @hideconstructor
    */
   constructor(
-    shapes: FigurePrimitives,
-    equation: FigureEquation,
-    objects: FigureCollections,
+    collections: FigureCollections,
     isTouchDevice: boolean,
     animateNextFrame: void => void, // $FlowFixMe
     options: COL_Polyline = {},
   ) { // $FlowFixMe
     const defaultOptions: COL_Polyline = {
-      color: shapes.defaultColor, // $FlowFixMe
+      color: collections.primitives.defaultColor, // $FlowFixMe
       points: [new Point(1, 0), new Point(0, 0), new Point(0, 1)],
       close: false,
       showLine: true,
-      width: shapes.defaultLineWidth,
+      width: collections.primitives.defaultLineWidth,
       reverse: false,
       transform: new Transform('PolyLine').scale(1, 1).rotate(0).translate(0, 0),
       makeValid: null,
-      limits: shapes.limits,
+      limits: collections.primitives.limits,
     };
     if (options.makeValid != null && options.makeValid.shape != null && options.makeValid.shape === 'triangle') {
       defaultOptions.makeValid = {
@@ -565,9 +561,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
     super(optionsToUse);
     this.setColor(optionsToUse.color);
 
-    this.shapes = shapes;
-    this.equation = equation;
-    this.collections = objects;
+    this.collections = collections;
     this.largerTouchBorder = optionsToUse.largerTouchBorder;
     this.isTouchDevice = isTouchDevice;
     this.animateNextFrame = animateNextFrame;
@@ -593,7 +587,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
 
     // Add Line
     if (optionsToUse.showLine) {
-      const line = this.shapes.polyline({
+      const line = this.collections.primitives.polyline({
         points: this.points,
         width: options.width,
         close: options.close,
@@ -634,7 +628,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
         const padOptions = joinObjects({}, {
           transform: new Transform().translate(this.points[i]),
         }, padArray[i]);
-        const padShape = this.shapes.polygon(padOptions);
+        const padShape = this.collections.primitives.polygon(padOptions);
         // $FlowFixMe
         const { isMovable, boundary } = padArray[i];
         if (isMovable) {
@@ -1263,7 +1257,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
     // }
   }
 
-  _dup(exceptions: Array<string> = []) {
-    return super._dup([...exceptions, ...['shapes', 'objects', 'equation']]);
-  }
+  // _dup(exceptions: Array<string> = []) {
+  //   return super._dup([...exceptions, ...['collections']]);
+  // }
 }

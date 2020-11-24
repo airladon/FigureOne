@@ -4019,7 +4019,7 @@ class FigureElementCollection extends FigureElement {
     const doNotDuplicate = this.drawOrder.map(e => `_${e}`);
     duplicateFromTo(this, collection, [
       'elements', 'drawOrder', 'parent', 'recorder', 'figure',
-      'shapes', 'objects', 'equation', 'pulseDefault.centerOn',
+      'collections', 'pulseDefault.centerOn',
       ...doNotDuplicate, ...exceptions,
     ]);
     for (let i = 0; i < this.drawOrder.length; i += 1) {

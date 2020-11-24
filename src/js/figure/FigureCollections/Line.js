@@ -917,7 +917,7 @@ export default class CollectionsLine extends FigureElementCollection {
       r = Math.PI;
       position = 0;
     }
-    const a = this.shapes.arrow(joinObjects(
+    const a = this.collections.primitives.arrow(joinObjects(
       {},
       o,
       {
@@ -1047,7 +1047,7 @@ export default class CollectionsLine extends FigureElementCollection {
   setMultiMovable(middleLengthPercent: number) {
     this.multiMove.midLength = middleLengthPercent;
     if (this._rotPad == null) {
-      const rotPad = this.shapes.rectangle({
+      const rotPad = this.collections.primitives.rectangle({
         position: new Point(0, 0),
         xAlign: 'left',
         yAlign: 'bottom',
@@ -1062,7 +1062,7 @@ export default class CollectionsLine extends FigureElementCollection {
       rotPad.drawingObject.border = [[]];
     }
     if (this._movePad == null) {
-      const movePad = this.shapes.rectangle({
+      const movePad = this.collections.primitives.rectangle({
         position: new Point(0, 0),
         xAlign: 'left',
         yAlign: 'bottom',

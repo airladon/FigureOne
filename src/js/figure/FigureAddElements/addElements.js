@@ -3,9 +3,9 @@
 import {
   FigureElementCollection,
 } from '../Element';
-import FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
+// import FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
 import FigureCollections from '../FigureCollections/FigureCollections';
-import FigureEquation from '../Equation/FigureEquation';
+// import FigureEquation from '../Equation/FigureEquation';
 
 export type TypeAddElementObject = {
   path?: string,

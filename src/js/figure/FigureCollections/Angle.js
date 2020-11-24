@@ -27,6 +27,7 @@ import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
 import type { TypeColor } from '../../tools/types';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
+import type FigureCollections from './FigureCollections';
 
 // export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
 
@@ -420,7 +421,7 @@ class AngleLabel extends EquationLabel {
   subLocation: 'left' | 'right' | 'bottom' | 'top';
 
   constructor(
-    equation: Object,
+    equation: FigureCollections,
     labelText: string | Equation | Array<string>,
     color: TypeColor,
     radius: number,
@@ -752,8 +753,8 @@ class CollectionsAngle extends FigureElementCollection {
   // angle properties - pulic read/write
 
   // angle properties - private internal use only
-  shapes: Object;
-  equation: Object;
+  collections: FigureCollections;
+  // equation: Object;
   isTouchDevice: boolean;
   largerTouchBorder: boolean;
 
@@ -816,15 +817,14 @@ class CollectionsAngle extends FigureElementCollection {
    * @hideconstructor
    */
   constructor(
-    shapes: Object,
-    equation: Object,
+    collections: FigureCollections,
     isTouchDevice: boolean,
     animateNextFrame: void => void,
     options: COL_Angle = {},
   ) {
     const defaultOptions = {
       position: new Point(0, 0),
-      color: shapes.defaultColor,
+      color: collections.primitives.defaultColor,
       direction: 1,
       curve: null,
       corner: null,
@@ -841,15 +841,14 @@ class CollectionsAngle extends FigureElementCollection {
       },
       mods: {},
       transform: new Transform('Angle').scale(1, 1).rotate(0).translate(0, 0),
-      limits: shapes.limits,
+      limits: collections.primitives.limits,
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
 
     super(optionsToUse);
     this.setColor(optionsToUse.color);
 
-    this.shapes = shapes;
-    this.equation = equation;
+    this.collections = collections;
     this.largerTouchBorder = optionsToUse.largerTouchBorder;
     this.isTouchDevice = isTouchDevice;
     this.autoUpdateSubscriptionId = 0;
@@ -1126,7 +1125,7 @@ class CollectionsAngle extends FigureElementCollection {
     const {
       width, color, length, style,
     } = options;
-    const corner = this.shapes.polyline({
+    const corner = this.collections.primitives.polyline({
       width,
       color,
       points: this.getCornerPoints(length),
@@ -1144,7 +1143,7 @@ class CollectionsAngle extends FigureElementCollection {
     width: number | null = null,
     color: TypeColor = this.color,
   ) {
-    const line = this.shapes.line({
+    const line = this.collections.primitives.line({
       length: 1,
       width,
       angle: 0,
@@ -1186,7 +1185,7 @@ class CollectionsAngle extends FigureElementCollection {
       optionsToUse.showRealAngle = true;
     }
     this.label = new AngleLabel(
-      this.equation,
+      this.collections,
       optionsToUse.text,
       optionsToUse.color,
       optionsToUse.radius,
@@ -1248,7 +1247,7 @@ class CollectionsAngle extends FigureElementCollection {
         o.line = { width: optionsToUse.width };
       }
 
-      const curve = this.shapes.polygon(o);
+      const curve = this.collections.primitives.polygon(o);
       this.curve = optionsToUse;
       let name = 'curve';
       if (i > 0) {
@@ -1259,16 +1258,16 @@ class CollectionsAngle extends FigureElementCollection {
 
     // Right Angle
     if (this.curve != null && this.curve.autoRightAngle) {
-      const right = this.shapes.collection();
+      const right = this.collections.primitives.collection();
       const rightLength = optionsToUse.radius * 0.707; // / Math.sqrt(2);
-      right.add('line1', this.shapes.line({
+      right.add('line1', this.collections.primitives.line({
         p1: [rightLength, 0],
         length: rightLength + optionsToUse.width / 2,
         width: optionsToUse.width,
         angle: Math.PI / 2 * direction,
         color: this.color,
       }));
-      right.add('line2', this.shapes.line({
+      right.add('line2', this.collections.primitives.line({
         p1: [0, rightLength * direction],
         length: rightLength + optionsToUse.width / 2,
         width: optionsToUse.width,
@@ -1310,7 +1309,7 @@ class CollectionsAngle extends FigureElementCollection {
       return;
     }
     const o = this.arrow[lineEnd];
-    const a = this.shapes.arrow(joinObjects(
+    const a = this.collections.primitives.arrow(joinObjects(
       {},
       o,
       {
@@ -1898,7 +1897,7 @@ class CollectionsAngle extends FigureElementCollection {
   addAnglePad(percentLength: number = 1, width: number = 0.5, type: 'rotation' | 'angle') {
     if (this._anglePad == null) {
       const length = this.getLength();
-      const anglePad = this.shapes.rectangle({
+      const anglePad = this.collections.primitives.rectangle({
         offset: [length * (1 - percentLength), 0],
         xAlign: 'left',
         yAlign: 'middle',
@@ -1936,7 +1935,7 @@ class CollectionsAngle extends FigureElementCollection {
   addRotPad(percentLength: number = 1, width: number = 0.5, type: 'rotation' | 'angle') {
     if (this._rotPad == null) {
       const length = this.getLength();
-      const rotPad = this.shapes.rectangle({
+      const rotPad = this.collections.primitives.rectangle({
         offset: [length * (1 - percentLength), 0],
         xAlign: 'left',
         yAlign: 'middle',
@@ -1972,7 +1971,7 @@ class CollectionsAngle extends FigureElementCollection {
   addMovePad(percentLength: number = 1) {
     if (this._movePad == null) {
       const length = this.getLength();
-      const movePad = this.shapes.polygon({
+      const movePad = this.collections.primitives.polygon({
         radius: length * percentLength,
         sides: 8,
         fill: true,
