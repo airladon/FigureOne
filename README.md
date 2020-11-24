@@ -1,6 +1,6 @@
 # FigureOne
 
-Draw, animate and make interactive shapes, text, plots and equations.
+Draw, animate and interact with shapes, text, plots and equations.
 
 The library used to draw interactive figures at <a href="https://www.thisiget.com">thisiget.com</a>.
 
@@ -41,9 +41,12 @@ And you will see:
 
 ![](tutorials/1%20-%20Shape/example.png)
 
-Check out the **[Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials** for a quick primer on how FigureOne works, and the API reference and before you know it:
+Examples source files for this can be found in the **[first tutorial](https://github.com/airladon/FigureOne/tree/master/tutorials/1%20-%20Shape)**.
 
-Animated proof of the pythagorean theorm:
+Then, checkout the remaining **[Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials)**, **[API Reference](https://airladon.github.io/FigureOne/.)** and **[Examples](https://github.com/airladon/FigureOne/tree/master/tutorials)** and you'll be making beautiful, interactive figures in no time.
+
+## Selection of Examples
+**[Pythagorean Equation Animation](https://github.com/airladon/FigureOne/tree/master/examples/Pythagorean%20Theorem)**
 
 ![](examples/Pythagorean%20Theorem/example.gif)
 
