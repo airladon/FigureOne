@@ -18048,6 +18048,30 @@ figure.getElement(<span class="hljs-string">'c'</span>).animations.new()
   .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">1.999</span>, <span class="hljs-attr">direction</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">5</span> })
   .start();</pre>
     
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Collections and primitives can also be created from `figure.collections`</span>
+<span class="hljs-comment">// and `figure.primitives`.</span>
+<span class="hljs-keyword">const</span> c = figure.collections.collection();
+<span class="hljs-keyword">const</span> hex = figure.primitives.polygon({
+  <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
+  <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
+});
+<span class="hljs-keyword">const</span> text = figure.primitives.text({
+  <span class="hljs-attr">text</span>: <span class="hljs-string">'hexagon'</span>,
+  <span class="hljs-attr">position</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">-0.8</span>],
+  <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+  <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.3</span> },
+});
+c.add(<span class="hljs-string">'hex'</span>, hex);
+c.add(<span class="hljs-string">'text'</span>, text);
+figure.add(<span class="hljs-string">'c'</span>, c);
+
+<span class="hljs-comment">// When a collection rotates, then so does all its elements</span>
+c.animations.new()
+  .delay(<span class="hljs-number">1</span>)
+  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">1.999</span>, <span class="hljs-attr">direction</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">5</span> })
+  .start();</pre>
+    
   
 
   
