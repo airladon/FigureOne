@@ -56,9 +56,9 @@ import { getTriangle } from '../geometries/triangle';
 import { getArrow, defaultArrowOptions } from '../geometries/arrow';
 import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
 import getLine from '../geometries/line';
-import type {
-  OBJ_Copy,
-} from './FigurePrimitiveTypes';
+// import type {
+//   OBJ_Copy,
+// } from './FigurePrimitiveTypes';
 import { copyPoints } from '../geometries/copy/copy';
 import type { CPY_Step } from '../geometries/copy/copy';
 import type {
@@ -148,9 +148,9 @@ export type OBJ_Collection = {
   limits?: Rect,
   color?: TypeColor,
   parent?: FigureElement | null,
-  border?: Array<Array<Point>> | 'children' | 'rect' | number,
-  touchBorder?: Array<Array<Point>> | 'border' | number | 'rect',
-  holeBorder?: Array<Array<Point>> | 'children',
+  border?: Array<Array<TypeParsablePoint>> | 'children' | 'rect' | number,
+  touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | number | 'rect',
+  holeBorder?: Array<Array<TypeParsablePoint>> | 'children',
 };
 
 /**
@@ -353,7 +353,7 @@ export type OBJ_Generic = {
   touchBorder?: Array<Array<TypeParsablePoint>> | 'rect' | 'border' | 'none',
   holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
   position?: TypeParsablePoint,
-  transform?: Transform,
+  transform?: TypeParsableTransform,
   pulse?: number,
 }
 
@@ -515,7 +515,7 @@ export type OBJ_Generic = {
  * });
  */
 export type OBJ_Polyline = {
-  points: Array<TypeParsablePoint> | Array<Point>,
+  points?: Array<TypeParsablePoint> | Array<Point>,
   width?: number,
   close?: boolean,
   widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
@@ -2139,6 +2139,7 @@ export default class FigurePrimitives {
    */
   polyline(...optionsIn: Array<OBJ_Polyline>) {
     const defaultOptions = {
+      points: [[0, 0], [1, 0]],
       width: this.defaultLineWidth,
       color: this.defaultColor,
       close: false,

@@ -120,8 +120,8 @@ export type TypeLineLabelOptions = {
 };
 
 /**
- * Collections Line options object that extends {@link OBJ_Collection} options
- * object (without `parent`).
+ * {@link CollectionsLine} options object that extends {@link OBJ_Collection}
+ * options object (without `parent`).
  *
  *
  * The Collections Line is a convient and powerful line

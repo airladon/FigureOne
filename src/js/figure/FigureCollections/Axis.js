@@ -14,12 +14,11 @@ import {
   FigureElementCollection, FigureElementPrimitive,
 } from '../Element';
 import type {
-  TypeColor, OBJ_Font, OBJ_Font_Fixed, TypeDash,
+  OBJ_Font, OBJ_Font_Fixed, TypeDash,
 } from '../../tools/types';
 import type {
   OBJ_Line, OBJ_TextLines, OBJ_Collection,
 } from '../FigurePrimitives/FigurePrimitives';
-
 
 
 /**

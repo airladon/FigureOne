@@ -536,11 +536,10 @@ export default class CollectionsPolyline extends FigureElementCollection {
     equation: FigureEquation,
     objects: FigureCollections,
     isTouchDevice: boolean,
-    animateNextFrame: void => void,
+    animateNextFrame: void => void, // $FlowFixMe
     options: COL_Polyline = {},
-  ) {
+  ) { // $FlowFixMe
     const defaultOptions: COL_Polyline = {
-      position: null,
       color: shapes.defaultColor, // $FlowFixMe
       points: [new Point(1, 0), new Point(0, 0), new Point(0, 1)],
       close: false,
