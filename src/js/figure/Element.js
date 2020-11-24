@@ -4149,6 +4149,39 @@ class FigureElementCollection extends FigureElement {
     this.animateNextFrame();
   }
 
+  addElementWithName(
+    name: string,
+    element: FigureElementPrimitive | FigureElementCollection,
+    index: number = -1,
+  ) {
+    // eslint-disable-next-line no-param-reassign
+    element.parent = this;
+    this.elements[name] = element;
+    this.elements[name].name = name;
+    // $FlowFixMe
+    this[`_${name}`] = this.elements[name];
+    if (index !== -1) {
+      this.drawOrder = [
+        ...this.drawOrder.slice(0, index),
+        name,
+        ...this.drawOrder.slice(index),
+      ];
+    } else {
+      this.drawOrder.push(name);
+    }
+    if (this.figure != null) {
+      element.setFigure(this.figure);
+    }
+    element.setFirstTransform(this.lastDrawTransform);
+    this.animateNextFrame();
+  }
+
+  add1(
+    nameOrElementOrElementDefinition: string | FigureElement | TypeAddElementObject | Array<FigureElement | TypeAddElementObject>,
+    element: FigureElement
+  ) {
+  }
+
   addNew(options: {
    element: FigureElement | TypeAddElementObject
      | Array<TypeAddElementObject | FigureElement>,
@@ -4161,19 +4194,187 @@ class FigureElementCollection extends FigureElement {
     } = options;
     if (element instanceof FigureElement) {
       if (name != null) {
-        this.add(name, element);
+        this.addElementWithName(name, element);
       } else if (element.name != null) {
-        this.add(element.name, element);
+        this.addElementWithName(element.name, element);
       } else {
         throw new Error('Element must be named');
       }
-    } else if (Array.isArray(element)) {
-      element.forEach((e) => {
-        this.addNew({ element: e, to, addElementsKey });
-      });
-    } else {
-
+      return;
     }
+    let elements;
+    if (!Array.isArray(element)) {
+      elements = [element];
+    } else {
+      elements = element;
+    }
+    let rootCollection: FigureElementCollection;
+    if (typeof to === 'string') {
+      rootCollection = this.getElement(to);
+    } else {
+      rootCollection = to;
+    }
+    elements.forEach((elementDefinition, index) => {
+      if (elementDefinition instanceof FigureElement) {
+        this.addNew({
+          element: elementDefinition,
+        });
+      }
+      // Extract the parameters from the layout object
+      if (elementDefinition == null) {
+        throw Error(`Add elements index ${index} does not exist in layout`);
+      }
+      const nameToUse = elementDefinition.name;
+      const pathToUse = elementDefinition.path;
+      const optionsToUse = elementDefinition.options;
+      const addElementsToUse = elementDefinition[addElementsKey];
+      const methodPathToUse = elementDefinition.method;
+      const elementModsToUse = elementDefinition.mods;
+      const firstScenario = elementDefinition.scenario;
+
+      let collectionPath;
+      if (pathToUse == null || pathToUse === '') {
+        collectionPath = rootCollection;
+      } else {
+        collectionPath = rootCollection.getElement(pathToUse);
+      }
+      // Check for critical errors
+      if (nameToUse == null || nameToUse === '') {
+        // $FlowFixMe
+        throw new Error(`Figure addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing name property in ${elementDefinition}`);
+      }
+      if (methodPathToUse == null || methodPathToUse === '') {
+        // $FlowFixMe
+        throw new Error(`Figure addElement ERROR  at index ${index} in collection ${rootCollection.name}: missing method property in ${elementDefinition}`);
+      }
+      if (!(collectionPath instanceof FigureElementCollection)) {
+        // $FlowFixMe
+        throw new Error(`Figure addElement ERROR at index ${index} in collection ${rootCollection.name}: missing or incorrect path property in ${elementDefinition}`);
+      }
+
+      const methodPath = methodPathToUse.split('/');
+
+      const method = this.getMethod(methodPathToUse);
+
+      if (typeof method !== 'function') {
+        return;
+      }
+
+      if (typeof method !== 'function') {
+        throw new Error(`Layout addElement at index ${index} in collection ${rootCollection.name}: incorrect method property`);
+      }
+
+      let newElement;
+      if (methodPath.slice(-1)[0].startsWith('add')) {
+        newElement = method(collectionPath, nameToUse, optionsToUse);
+        if (newElement == null) {
+          return;
+        }
+        if (elementModsToUse != null && elementModsToUse !== {}) {
+          newElement.setProperties(elementModsToUse);
+        }
+      } else {
+        if (Array.isArray(optionsToUse)) {
+          newElement = method(...optionsToUse);
+        } else {
+          newElement = method(optionsToUse);
+        }
+        if (newElement == null) {
+          return;
+        }
+        if (elementModsToUse != null && elementModsToUse !== {}) {
+          newElement.setProperties(elementModsToUse);
+        }
+        if (collectionPath instanceof FigureElementCollection) {
+          collectionPath.add(nameToUse, newElement);
+        }
+      }
+
+      // element.setProperties(elementDefinition, [
+      //   'mods', 'name', 'method', 'scenario', 'addElementsKey', 'options', 'path',
+      // ]);
+      if (firstScenario != null && firstScenario in newElement.scenarios) {
+        newElement.setScenario(firstScenario);
+      }
+
+      if (`_${nameToUse}` in rootCollection
+          && (addElementsToUse != null && addElementsToUse !== {})
+      ) {
+        this.addNew({
+          element: addElementsToUse,
+          to: rootCollection[`_${nameToUse}`],
+          addElementsKey,
+        });
+        //   addElements(
+        //   // shapes,
+        //   // equation,
+        //   collections,                                            // $FlowFixMe
+        //   rootCollection[`_${nameToUse}`],
+        //   addElementsToUse,
+        //   addElementsKey,
+        // );
+      }
+    });
+  }
+
+  getMethod(method: string) {
+    const getPath = (e: {}, remainingPath: Array<string>) => {
+      if (!(remainingPath[0] in e)) {
+        return null;
+      }
+      if (remainingPath.length === 1) {          // $FlowFixMe
+        return e[remainingPath[0]];
+      }                                          // $FlowFixMe
+      return getPath(e[remainingPath[0]], remainingPath.slice(1));
+    };
+    const { collections } = this;
+    const shapes = collections.primitives;
+    const methods = {
+      collection: collections.collection.bind(shapes),
+      polyline: shapes.polyline.bind(shapes),
+      polygon: shapes.polygon.bind(shapes),
+      rectangle: shapes.rectangle.bind(shapes),
+      ellipse: shapes.ellipse.bind(shapes),
+      triangle: shapes.triangle.bind(shapes),
+      generic: shapes.generic.bind(shapes),
+      grid: shapes.grid.bind(shapes),
+      arrow: shapes.arrow.bind(shapes),
+      line: shapes.line.bind(shapes),
+      star: shapes.star.bind(shapes),
+      //
+      text: shapes.text.bind(shapes),
+      textLine: shapes.textLine.bind(shapes),
+      textLines: shapes.textLines.bind(shapes),
+      'text.line': shapes.textLine.bind(shapes),
+      'text.lines': shapes.textLines.bind(shapes),
+      //
+      textGL: shapes.textGL.bind(shapes),
+      textHTML: shapes.htmlText.bind(shapes),
+      htmlImage: shapes.htmlImage.bind(shapes),
+      //
+      opolyline: collections.polyline.bind(collections),
+      oline: collections.line.bind(collections),
+      angle: collections.angle.bind(collections),
+      //
+      addEquation: collections.addEquation.bind(collections),
+      equation: collections.equation.bind(collections),
+      addNavigator: collections.addNavigator.bind(collections),
+    };
+    if (method in methods) {
+      return methods[method];
+    }
+    const figure = {
+      primitives: shapes,
+      shapes,
+      collections,
+    };
+    const splitMethod = method.split('.');
+    let methodToUse = getPath(figure, splitMethod);
+    if (methodToUse == null) {
+      return null;
+    }
+    methodToUse = methodToUse.bind(getPath(figure, splitMethod.slice(0, -1)));
+    return methodToUse;
   }
 
   setFigure(figure: OBJ_FigureForElement) {

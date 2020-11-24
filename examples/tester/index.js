@@ -297,27 +297,10 @@ const pow = (pow = 2, stop = 10, step = 0.05) => {
 // Multiple traces with a legend
 // Some traces are customized beyond the defaul color to include dashes and
 // markers
-figure.addElement({
+figure.addNew({
   name: 'plot',
-  method: 'collections.plot',
+  method: 'polygon',
   options: {
-    width: 2,                                    // Plot width in figure
-    height: 2,                                   // Plot height in figure
-    yAxis: { start: 0, stop: 100 },              // Customize y axis limits
-    trace: [
-      { points: pow(1.5), name: 'Power 1.5' },   // Trace names are for legend
-      {                                          // Trace with only markers
-        points: pow(2, 10, 0.5),
-        name: 'Power 2',
-        markers: { sides: 4, radius: 0.03 },
-      },
-      {                                          // Trace with markers and
-        points: pow(3, 10, 0.5),                 // dashed line
-        name: 'Power 3',
-        markers: { radius: 0.03, sides: 10, line: { width: 0.005 } },
-        line: { dash: [0.04, 0.01] },
-      },
-    ],
-    legend: true,
+    radius: 0.5,
   },
 });

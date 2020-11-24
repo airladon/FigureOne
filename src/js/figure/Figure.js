@@ -992,6 +992,16 @@ class Figure {
     this.elements.add(name, figureElement);
   }
 
+  addNew(options: {
+   element: FigureElement | TypeAddElementObject
+     | Array<TypeAddElementObject | FigureElement>,
+    name: string,
+    to: string | FigureElementCollection,
+    addElementsKey: string,
+  }) {
+    this.elements.addNew(options)
+  }
+
 
   /**
    * Add elements from element definitions to the figure.
