@@ -159,7 +159,7 @@ export type OBJ_LineStyleSimple = {
  * c.add('hex', hex);
  * c.add('text', text);
  * figure.add('c', c);
- * 
+ *
  * // When a collection rotates, then so does all its elements
  * c.animations.new()
  *   .delay(1)

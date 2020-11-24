@@ -1,62 +1,56 @@
 # Example 2 - Collections
 
-This example shows a triangle and a circle in a collection. The collection is scaled and so both the triangle and circle are scaled by the collection.
+This example shows a triangle and text in a collection. The collection is rotated, so both the triangle and text are also rotated..
 
 Open `index.html` in a browser to view example.
 
-![example](./example.png)
+![example](./example.gif)
 
 ## Code
-`index.js`
 ```js
-const figure = new Fig.Figure();
+// index.js
 
-// Add a collection with a circle and triangle in it to the figure
+// Initialize the figure with a default color
+const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
+
 figure.addElement(
   {
-    name: 'shapes',
+    name: 'c',
     method: 'collection',
-    addElements: [
+    addElements: [        // Add two elements to the collection
       {
-        name: 'circle',
-        method: 'polygon',
+        name: 'tri',
+        method: 'triangle',
         options: {
-          sides: 100,
-          radius: 0.2,
-          fill: true,
-          color: [1, 0, 0, 1],
-          position: [-0.5, 0],
+          height: 0.4,
+          width: 0.4,
         },
       },
       {
-        name: 'triangle',
-        method: 'polygon',
+        name: 'text',
+        method: 'text',
         options: {
-          sides: 3,
-          radius: 0.2,
-          fill: true,
-          color: [1, 0, 0, 1],
-          position: [0.5, 0],
+          text: 'triangle',
+          position: [0, -0.4],
+          xAlign: 'center',
         },
-      }
+      },
     ],
   },
 );
 
-// Scale the shapes collection
-// This will reduce the size of both the circle and triangle
-figure.getElement('shapes').setScale(0.5),
-
-figure.initialize();
-
+// When a collection rotates, then so does all its elements
+figure.getElement('c').animations.new()
+  .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
+  .start();
 ```
 
 ## Explanation
 
-There are two types of figure elements (subclasses of `FigureElement`):
+There are two types of figure elements (subclasses of [FigureElement](https://airladon.github.io/FigureOne/#figureElement)):
 
-* `FigureElementPrimitive` - An object that manages a drawing primitive like a set of vertices, some text or a html element
-* `FigureElementCollection` - An object that manages a group of drawing elements (could be both primitives and collections)
+* [FigureElementPrimitive](https://airladon.github.io/FigureOne/#figureelementprimitive) - An object that manages a drawing primitive like a set of vertices, some text or a html element
+* [FigureElementCollection](https://airladon.github.io/FigureOne/#figureelementcollection) - An object that manages a group of drawing elements (can be both primitives and collections)
 
 All drawing elements have their own `transform` that *translates*, *rotates* and/or *scales* the element.
 

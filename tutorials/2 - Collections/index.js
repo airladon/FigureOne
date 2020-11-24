@@ -1,39 +1,33 @@
-const figure = new Fig.Figure();
+// Initialize the figure with a default color
+const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
-// Add a collection with a circle and triangle in it to the figure
 figure.addElement(
   {
-    name: 'shapes',
+    name: 'c',
     method: 'collection',
-    addElements: [
+    addElements: [        // Add two elements to the collection
       {
-        name: 'circle',
-        method: 'polygon',
+        name: 'tri',
+        method: 'triangle',
         options: {
-          sides: 100,
-          radius: 0.2,
-          fill: true,
-          color: [1, 0, 0, 1],
-          position: [-0.5, 0],
+          height: 0.4,
+          width: 0.4,
         },
       },
       {
-        name: 'triangle',
-        method: 'polygon',
+        name: 'text',
+        method: 'text',
         options: {
-          sides: 3,
-          radius: 0.2,
-          fill: true,
-          color: [1, 0, 0, 1],
-          position: [0.5, 0],
+          text: 'triangle',
+          position: [0, -0.4],
+          xAlign: 'center',
         },
-      }
+      },
     ],
   },
 );
 
-// Scale the shapes collection
-// This will reduce the size of both the circle and triangle
-figure.getElement('shapes').setScale(0.5),
-
-figure.initialize();
+// When a collection rotates, then so does all its elements
+figure.getElement('c').animations.new()
+  .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
+  .start();
