@@ -22,6 +22,7 @@ import type {
   TypeColor, OBJ_CurvedCorner,
 } from '../../tools/types';
 import type { FigureElement } from '../Element';
+import type FigureCollections from './FigureCollections';
 
 /**
  * Surround animation step.
@@ -169,7 +170,6 @@ export type COL_Rectangle = {
  */
 // $FlowFixMe
 class CollectionsRectangle extends FigureElementCollection {
-  shapes: Object;
   _line: FigureElementPrimitive | null;
   _fill: FigureElementPrimitive | null;
 
@@ -187,7 +187,7 @@ class CollectionsRectangle extends FigureElementCollection {
    * @hideconstructor
    */
   constructor(
-    shapes: Object,
+    collections: FigureCollections,
     optionsIn: COL_Rectangle,
   ) {
     // super(new Transform('Plot')
@@ -196,11 +196,11 @@ class CollectionsRectangle extends FigureElementCollection {
     //   .translate(0, 0), shapes.limits);
 
     const defaultOptions = {
-      width: shapes.defaultLength,
-      height: shapes.defaultLength / 2,
+      width: collections.primitives.defaultLength,
+      height: collections.primitives.defaultLength / 2,
       xAlign: 'center',
       yAlign: 'middle',
-      color: shapes.defaultColor,
+      color: collections.primitives.defaultColor,
       border: 'children',
       touchBorder: 'border',
       holeBorder: [[]],
@@ -209,14 +209,14 @@ class CollectionsRectangle extends FigureElementCollection {
         sides: 1,
       },
       transform: new Transform('Rectangle').scale(1, 1).rotate(0).translate(0, 0),
-      limits: shapes.limits,
+      limits: collections.primitives.limits,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.fill == null && options.line == null) {
-      options.fill = shapes.defaultColor.slice();
+      options.fill = collections.primitives.defaultColor.slice();
     }
     super(options);
-    this.shapes = shapes;
+    this.collections = collections;
     this._line = null;
     this._fill = null;
 
@@ -304,7 +304,10 @@ class CollectionsRectangle extends FigureElementCollection {
       defaultOptions.line = {
         widthIs: 'inside',
         cornerStyle: 'auto',
-        width: Math.max(Math.min(this.width, this.height) / 100, this.shapes.defaultLineWidth),
+        width: Math.max(
+          Math.min(this.width, this.height) / 100,
+          this.collections.primitives.defaultLineWidth,
+        ),
       };
       if (defaultOptions.line.width > this.width || defaultOptions.line.width > this.height) {
         defaultOptions.line.widthIs = 'mid';
@@ -322,7 +325,7 @@ class CollectionsRectangle extends FigureElementCollection {
     }
     const o = joinObjects({}, defaultOptions, optionsIn); // $FlowFixMe
     this[name] = o;
-    const rect = this.shapes.rectangle(o);
+    const rect = this.collections.primitives.rectangle(o);
     this.add(name, rect);
   }
 

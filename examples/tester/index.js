@@ -288,37 +288,36 @@ figure.addElement(
     },
   },
 );
-// Annotations that automatically updates as user changes triangle
+
+const pow = (pow = 2, stop = 10, step = 0.05) => {
+  const xValues = Fig.tools.math.range(0, stop, step);
+  return xValues.map(x => new Fig.Point(x, x ** pow));
+}
+
+// Multiple traces with a legend
+// Some traces are customized beyond the defaul color to include dashes and
+// markers
 figure.addElement({
-  name: 'p',
-  method: 'collections.polyline',
+  name: 'plot',
+  method: 'collections.plot',
   options: {
-    points: [[-1, 1], [1, 1], [0, 0]],
-    close: true,
-    makeValid: {
-      shape: 'triangle',
-      hide: {
-        minAngle: Math.PI / 8,
+    width: 2,                                    // Plot width in figure
+    height: 2,                                   // Plot height in figure
+    yAxis: { start: 0, stop: 100 },              // Customize y axis limits
+    trace: [
+      { points: pow(1.5), name: 'Power 1.5' },   // Trace names are for legend
+      {                                          // Trace with only markers
+        points: pow(2, 10, 0.5),
+        name: 'Power 2',
+        markers: { sides: 4, radius: 0.03 },
       },
-    },
-    side: {
-      showLine: true,
-      offset: 0.2,
-      color: [0.3, 0.6, 1, 1],
-      arrow: 'barb',
-      width: 0.01,
-      label: {
-        text: null,
+      {                                          // Trace with markers and
+        points: pow(3, 10, 0.5),                 // dashed line
+        name: 'Power 3',
+        markers: { radius: 0.03, sides: 10, line: { width: 0.005 } },
+        line: { dash: [0.04, 0.01] },
       },
-    },
-    angle: {
-      label: null,
-      curve: { radius: 0.25 },
-    },
-    pad: {
-      radius: 0.4,
-      color: [1, 0, 0, 0.005],
-      isMovable: true,
-    },
+    ],
+    legend: true,
   },
 });

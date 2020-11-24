@@ -170,7 +170,7 @@ export default class FigureCollections {
   rectangle(...options: Array<COL_Rectangle>) {
     const optionsToUse = joinObjects({}, ...options);
     return new CollectionsRectangle(
-      this.primitives, optionsToUse,
+      this, optionsToUse,
     );
   }
 
@@ -180,7 +180,7 @@ export default class FigureCollections {
   axis(...options: Array<COL_Axis>) {
     const optionsToUse = joinObjects({}, ...options);
     return new CollectionsAxis(
-      this.primitives, this.equationFromFig, optionsToUse,
+      this, optionsToUse,
     );
   }
 
@@ -190,7 +190,7 @@ export default class FigureCollections {
   trace(...options: Array<COL_Trace>) {
     const optionsToUse = joinObjects({}, ...options);
     return new CollectionsTrace(
-      this.primitives, this.equationFromFig, optionsToUse,
+      this, optionsToUse,
     );
   }
 
@@ -200,7 +200,7 @@ export default class FigureCollections {
   plot(...options: Array<COL_Plot>) {
     const optionsToUse = joinObjects({}, ...options);
     return new CollectionsPlot(
-      this.primitives, this.equationFromFig, this, optionsToUse,
+      this, optionsToUse,
     );
   }
 
@@ -210,7 +210,7 @@ export default class FigureCollections {
   plotLegend(...options: Array<COL_Plot>) {
     const optionsToUse = joinObjects({}, ...options);
     return new CollectionsPlotLegend(
-      this.primitives, this.equationFromFig, this, optionsToUse,
+      this, optionsToUse,
     );
   }
 

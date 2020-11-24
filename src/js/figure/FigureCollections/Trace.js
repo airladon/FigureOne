@@ -19,6 +19,7 @@ import type {
 } from '../FigurePrimitives/FigurePrimitives';
 import type { TypeColor, OBJ_Font_Fixed } from '../../tools/types';
 import type { CPY_Steps } from '../geometries/copy/copy';
+import type FigureCollections from './FigureCollections';
 
 /**
  * {@link CollectionsTrace} options object that extends {@link OBJ_Collection}
@@ -220,8 +221,6 @@ export type COL_Trace = {
 class CollectionsTrace extends FigureElementCollection {
   // Figure elements
   _line: ?FigureElementPrimitive;
-  shapes: Object;
-  equation: Object;
 
   points: Array<Point>;
   drawPoints: Array<Point>;
@@ -242,31 +241,29 @@ class CollectionsTrace extends FigureElementCollection {
    * @hideconstructor
    */
   constructor(
-    shapes: Object,
-    equation: Object,
+    collections: FigureCollections,
     optionsIn: COL_Trace,
   ) {
     const defaultOptions = {
-      color: shapes.defaultColor,
+      color: collections.primitives.defaultColor,
       font: {
         family: 'Times New Roman',
         size: 0.1,
         style: 'normal',
         weight: 'normal',
-        color: shapes.defaultColor,
+        color: collections.primitives.defaultColor,
         opacity: 1,
       },
       name: '',
       transform: new Transform('Trace').scale(1, 1).rotate(0).translate(0, 0),
-      limits: shapes.limits,
+      limits: collections.primitives.limits,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.markers == null && options.line === undefined) {
       options.line = {};
     }
     super(options);
-    this.shapes = shapes;
-    this.equation = equation;
+    this.collections = collections;
     this.defaultFont = options.font;
     this.points = getPoints(options.points);
     this.xAxis = options.xAxis;
@@ -410,12 +407,12 @@ class CollectionsTrace extends FigureElementCollection {
   addLine(options: OBJ_Polyline) {
     const defaultOptions = {
       color: this.color,
-      width: this.shapes.defaultLineWidth,
+      width: this.collections.primitives.defaultLineWidth,
     };
     this.updatePoints();
     this.line = joinObjects({}, defaultOptions, options);
     this.polylines.forEach((points, index) => {
-      const line = this.shapes.polyline(joinObjects({}, this.line, { points }));
+      const line = this.collections.primitives.polyline(joinObjects({}, this.line, { points }));
       this.add(`${line}${index}`, line);
     });
   }
@@ -440,7 +437,7 @@ class CollectionsTrace extends FigureElementCollection {
       to: markers.map(p => this.pointToDraw(p)),
       original: false,
     });
-    this.add('markers', this.shapes.polygon(o));
+    this.add('markers', this.collections.primitives.polygon(o));
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this

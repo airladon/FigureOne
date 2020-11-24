@@ -19,7 +19,7 @@ import type {
 import type {
   OBJ_Line, OBJ_TextLines, OBJ_Collection,
 } from '../FigurePrimitives/FigurePrimitives';
-
+import type FigureCollections from './FigureCollections';
 
 /**
  * Axis Ticks and Grid options object for {@link COL_Axis}.
@@ -551,9 +551,6 @@ class CollectionsAxis extends FigureElementCollection {
   _arrow2: ?FigureElementPrimitive;
   _title: ?FigureElementPrimitive;
 
-  shapes: Object;
-  equation: Object;
-
   length: number;
   angle: number;
   startValue: number;
@@ -577,16 +574,15 @@ class CollectionsAxis extends FigureElementCollection {
    * @hideconstructor
    */
   constructor(
-    shapes: Object,
-    equation: Object,
+    collections: FigureCollections,
     optionsIn: COL_Axis,
   ) {
     const defaultOptions: COL_Axis = {
-      length: shapes.defaultLength,
+      length: collections.primitives.defaultLength,
       angle: 0,
       start: 0,
-      color: shapes.defaultColor,
-      font: shapes.defaultFont,
+      color: collections.primitives.defaultColor,
+      font: collections.primitives.defaultFont,
       name: '',
       line: {},
       // grid: null,
@@ -594,12 +590,11 @@ class CollectionsAxis extends FigureElementCollection {
       show: true,
       axis: 'x',
       transform: new Transform('Axis').scale(1, 1).rotate(0).translate(0, 0),
-      limits: shapes.limits,
+      limits: collections.primitives.limits,
     };
     let options = joinObjects({}, defaultOptions, optionsIn);
     super(options);
-    this.shapes = shapes;
-    this.equation = equation;
+    this.collections = collections;
     this.autoStep = null;
     if (optionsIn.auto != null) {
       const {
@@ -673,11 +668,11 @@ class CollectionsAxis extends FigureElementCollection {
     const defaultOptions = {
       length: this.length,
       angle: this.angle,
-      width: this.shapes.defaultLineWidth,
+      width: this.collections.primitives.defaultLineWidth,
       color: this.color,
     };
     const o = joinObjects({}, defaultOptions, optionsIn);
-    const line = this.shapes.line(o);
+    const line = this.collections.primitives.line(o);
     this.line = o;
     this.add('line', line);
   }
@@ -753,8 +748,8 @@ class CollectionsAxis extends FigureElementCollection {
       // start: this.startValue,
       // stop: this.stopValue,
       // step: (this.stopValue - this.startValue) / 5,
-      width: this.line != null ? this.line.width : this.shapes.defaultLineWidth,
-      length: name === 'ticks' ? this.shapes.defaultLineWidth * 10 : this.shapes.defaultLineWidth * 50,
+      width: this.line != null ? this.line.width : this.collections.primitives.defaultLineWidth,
+      length: name === 'ticks' ? this.collections.primitives.defaultLineWidth * 10 : this.collections.primitives.defaultLineWidth * 50,
       angle: this.angle + Math.PI / 2,
       color: this.color,
     };
@@ -801,7 +796,7 @@ class CollectionsAxis extends FigureElementCollection {
         o.p1 = new Point(0, o.offset * lengthSign).rotate(this.angle);
       }
 
-      const ticks = this.shapes.line(o);
+      const ticks = this.collections.primitives.line(o);
       elements.push(ticks); // $FlowFixMe
       this[name].push(o);
     });
@@ -837,7 +832,7 @@ class CollectionsAxis extends FigureElementCollection {
         o.position = new Point(bounds.left - o.font.size / 1.5, this.length / 2).add(o.offset);
       }
     }
-    const title = this.shapes.textLines(o);
+    const title = this.collections.primitives.textLines(o);
     title.transform.updateRotation(o.rotation);
     this.add('title', title);
   }
@@ -898,7 +893,7 @@ class CollectionsAxis extends FigureElementCollection {
       }
 
       if (o.space == null) {
-        o.space = this.axis === 'x' ? o.font.size + this.shapes.defaultLineWidth * 5 : this.shapes.defaultLineWidth * 10;
+        o.space = this.axis === 'x' ? o.font.size + this.collections.primitives.defaultLineWidth * 5 : this.collections.primitives.defaultLineWidth * 10;
       }
 
       // Generate the text objects
@@ -939,7 +934,7 @@ class CollectionsAxis extends FigureElementCollection {
         }
       }
       o.text = text;
-      const labels = this.shapes.text(o);
+      const labels = this.collections.primitives.text(o);
       labels.transform.updateRotation(o.rotation);
       this.add(`labels${index}`, labels);
       this.labels.push(o);

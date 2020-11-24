@@ -20,6 +20,7 @@ import type { COL_PlotLegend } from './Legend';
 import type CollectionsRectangle, { COL_Rectangle } from './Rectangle';
 import type { OBJ_TextLines, OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
 import type { OBJ_Font, TypeColor, OBJ_Font_Fixed } from '../../tools/types';
+import type FigureCollections from './FigureCollections';
 
 /**
  * Plot frame.
@@ -442,21 +443,19 @@ class CollectionsPlot extends FigureElementCollection {
    * @hideconstructor
    */
   constructor(
-    shapes: Object,
-    equation: Object,
-    collections: Object,
+    collections: FigureCollections,
     optionsIn: COL_Plot,
   ) {
     const defaultOptions = {
-      font: shapes.defaultFont,
-      color: shapes.defaultColor,
+      font: collections.primitives.defaultFont,
+      color: collections.primitives.defaultColor,
       theme: 'classic',
-      width: shapes.limits.width / 3,
-      height: shapes.limits.width / 3,
+      width: collections.primitives.limits.width / 3,
+      height: collections.primitives.limits.width / 3,
       grid: [],
       xAlign: 'plotAreaLeft',
       yAlign: 'plotAreaBottom',
-      limits: shapes.limits,
+      limits: collections.primitives.limits,
       transform: new Transform('Plot').scale(1, 1).rotate(0).translate(0, 0),
     };
     if (
@@ -480,8 +479,6 @@ class CollectionsPlot extends FigureElementCollection {
     }
 
     super(options);
-    this.shapes = shapes;
-    this.equation = equation;
     this.collections = collections;
 
     this.defaultFont = options.font;
@@ -631,7 +628,7 @@ class CollectionsPlot extends FigureElementCollection {
     };
     let optionsIn = frame;
     if (optionsIn === true) {
-      optionsIn = { line: { width: this.shapes.defaultLineWidth } };
+      optionsIn = { line: { width: this.collections.primitives.defaultLineWidth } };
     } else if (Array.isArray(optionsIn)) {
       optionsIn = { fill: optionsIn };
     }
@@ -723,19 +720,19 @@ class CollectionsPlot extends FigureElementCollection {
     const length = axis === 'x' ? this.width : this.height;
     const gridLength = axis === 'x' ? this.height : this.width;
 
-    // const minDimension = Math.min(this.shapes.limits.width, this.shapes.limits.height);
+    // const minDimension = Math.min(this.collections.primitives.limits.width, this.collections.primitives.limits.height);
 
     let theme = {};
     if (name === 'classic') {
       const color = defaultColor == null ? [0.35, 0.35, 0.35, 1] : defaultColor;
       const tickLength = Math.min(this.width, this.height) / 30;
-      const gridDash = this.shapes.defaultLineWidth;
+      const gridDash = this.collections.primitives.defaultLineWidth;
       theme = {
         axis: {
           color,
-          line: { width: this.shapes.defaultLineWidth },
+          line: { width: this.collections.primitives.defaultLineWidth },
           ticks: {
-            width: this.shapes.defaultLineWidth,
+            width: this.collections.primitives.defaultLineWidth,
             length: tickLength,
             offset: -tickLength,
           },
@@ -745,7 +742,7 @@ class CollectionsPlot extends FigureElementCollection {
           length,
           grid: {
             color,
-            width: this.shapes.defaultLineWidth / 2,
+            width: this.collections.primitives.defaultLineWidth / 2,
             length: gridLength,
             dash: [gridDash, gridDash],
           },
@@ -801,7 +798,7 @@ class CollectionsPlot extends FigureElementCollection {
         bounds.top + o.font.size * 0.5 + o.offset.y,
       );
     }
-    const title = this.shapes.textLines(o);
+    const title = this.collections.primitives.textLines(o);
     this.add('title', title);
   }
 

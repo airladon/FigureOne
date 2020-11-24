@@ -19,6 +19,7 @@ import type {
   OBJ_TextLines, OBJ_Collection,
 } from '../FigurePrimitives/FigurePrimitives';
 import type { TypePlotFrame } from './Plot';
+import type FigureCollections from './FigureCollections';
 
 /**
  * Legend customization for a single trace sample in the legend.
@@ -281,9 +282,6 @@ class CollectionsPlotLegend extends FigureElementCollection {
   // _arrow1: ?FigureElementPrimitive;
   // _arrow2: ?FigureElementPrimitive;
 
-  shapes: Object;
-  equation: Object;
-  collections: Object;
   defaultFont: OBJ_Font_Fixed;
 
   traces: Array<CollectionsTrace>;
@@ -295,28 +293,25 @@ class CollectionsPlotLegend extends FigureElementCollection {
    * @hideconstructor
    */
   constructor(
-    shapes: Object,
-    equation: Object,
-    collections: Object,
+    collections: FigureCollections,
     optionsIn: COL_PlotLegend,
   ) {
     const defaultOptions = {
-      font: shapes.defaultFont,
-      color: shapes.defaultColor,
+      font: collections.primitives.defaultFont,
+      color: collections.primitives.defaultColor,
       fontColorIsLineColor: false,
       frame: false,
       custom: {},
-      length: shapes.defaultLength / 10,
+      length: collections.primitives.defaultLength / 10,
       space: 0.05,
       position: new Point(0, 0),
       transform: new Transform('PlotLegend').scale(1, 1).rotate(0).translate(0, 0),
-      limits: shapes.limits,
+      limits: collections.primitives.limits,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
 
     super(options);
-    this.shapes = shapes;
-    this.equation = equation;
+    this.setPosition(0, 0);
     this.collections = collections;
 
     this.defaultFont = options.font;
@@ -427,7 +422,7 @@ class CollectionsPlotLegend extends FigureElementCollection {
           length: oTrace.length,
           angle: 0,
         });
-        const line = this.shapes.line(oLine);
+        const line = this.collections.primitives.line(oLine);
         this.add(`line${traceIndex}`, line);
       }
 
@@ -437,7 +432,7 @@ class CollectionsPlotLegend extends FigureElementCollection {
           position: new Point(p.x + oTrace.length / 2, p.y),  // $FlowFixMe
           copy: trace.markers.copy.slice(0, -1),
         });
-        const marker = this.shapes.polygon(oMarker);
+        const marker = this.collections.primitives.polygon(oMarker);
         this.add(`marker${traceIndex}`, marker);
       }
 
@@ -465,7 +460,7 @@ class CollectionsPlotLegend extends FigureElementCollection {
       }
       const oText = joinObjects({}, textOptions, colorOverride, textOptionsToUse, custom.text);
       // o.offset = getPoint(o.offset);
-      const traceName = this.shapes.textLines(oText);
+      const traceName = this.collections.primitives.textLines(oText);
       this.add(`trace${traceIndex}`, traceName);
     });
   }
