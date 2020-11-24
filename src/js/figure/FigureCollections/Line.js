@@ -262,7 +262,7 @@ function makeStraightLine(
   dash: TypeDash,
   // maxLength: number,
   // touchBorder: number | { width: number, start: number, end: number },
-): FigureElement {
+): FigureElement {  // $FlowFixMe
   const straightLine = primitives.line({
     p1: [0, 0],
     length: dash.length < 2 ? 1 : length,
