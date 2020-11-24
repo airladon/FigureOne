@@ -14,7 +14,7 @@ import {
 /* eslint-disable max-len */
 /**
  *
- * ![](./assets1/copy.png)
+ * ![](./apiassets/copy.png)
  *
  * Copy Step options object
  *

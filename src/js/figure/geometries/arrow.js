@@ -21,7 +21,7 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
 /**
  * Arrow end for a line or polyline.
  *
- * ![](./assets1/arrow_line.png)
+ * ![](./apiassets/arrow_line.png)
  *
  * Arrows on the end of lines have many of the same properties as stand
  * alone arrows {@link OBJ_Arrow}.
