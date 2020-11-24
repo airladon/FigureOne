@@ -20016,7 +20016,8 @@ set different kinds of movability.
   </div>
   
 
-  <p>Collections Angle options object</p>
+  <p><a href="#collectionsangle">CollectionsAngle</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
 <p>The Collections Angle is a convient and powerful angle
 <a href="#figureelementcollection">FigureElementCollection</a> that can draw one or several arcs of an
 angle annotation, a label, arrows, and the corner of an angle. It also
@@ -20057,6 +20058,17 @@ Therefore this collection provides a method <code>pulseAngle</code> to allow thi
 This options object can define the default values for pulseAngle if desired.</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
   
 
   
@@ -20157,13 +20169,6 @@ reside
         <div class='space-bottom0'>
           <span class='code bold'>label</span> <code class='quiet'>(<a href="#typeanglelabeloptions">TypeAngleLabelOptions</a>?)</code>
           : options for label annotations
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : default color
 
           
         </div>
@@ -20973,7 +20978,9 @@ scale that is the inverse of the new scale.</p>
   </div>
   
 
-  <p>Collections Polyline options object</p>
+  <p><a href="#collectionspolyline">CollectionsPolyline</a> options object that extends
+<a href="#obj_polyline">OBJ_Polyline</a> and <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
 <p>The Collections Polyline is a convient and powerful polyline
 <a href="#figureelementcollection">FigureElementCollection</a> that includes the polyline,
 angle annotations, side label and arrow annotations, and movable
@@ -21000,7 +21007,7 @@ pads. To customize for specific side, angle or pad indexes use =
     <p>
       Extends
       
-        <a href="#obj_polyline">OBJ_Polyline</a>
+        <a href="#obj_polyline">OBJ_Polyline</a>, <a href="#obj_collection">OBJ_Collection</a>
       
     </p>
   
@@ -21241,11 +21248,23 @@ rect.animations.new()
   </div>
   
 
-  <p><a href="#collectionsrectangle">CollectionsRectangle</a> options object.</p>
+  <p><a href="#collectionsrectangle">CollectionsRectangle</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
 <p>This rectangle is similar to <a href="#obj_rectangle">OBJ_Rectangle</a>, except it can accomodate
 both a fill and a border or line simultaneously with different colors.</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
   
 
   
@@ -21745,7 +21764,8 @@ figure.addElement({
   </div>
   
 
-  <p><a href="#collectionsaxis">CollectionsAxis</a> options object.</p>
+  <p><a href="#collectionsaxis">CollectionsAxis</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
 <p>An axis can be used to create a number line, used as an axis in
 <a href="#col_plot">COL_Plot</a> and/or used to plot a <a href="#col_trace">COL_Trace</a> against.</p>
 <p>An axis is a line that may have</p>
@@ -21762,6 +21782,17 @@ widths, positions, spaces and offsets are defined in draw space, or in the
 same space as the <code>length</code> of the axis.</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
   
 
   
@@ -21871,13 +21902,6 @@ turn grids on and off (
           : axis title (
 <code>false</code>
 )
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : default color of axis
 
           
         </div>
@@ -22299,13 +22323,25 @@ figure.addElement({
   </div>
   
 
-  <p><a href="#collectionsplot">CollectionsPlot</a> options object.</p>
+  <p><a href="#collectionsplot">CollectionsPlot</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
 <p>A plot is a collection of axes and traces, and may include a title, legend
 and bounding frame.</p>
 <p>Use <code>width</code>, <code>height</code> and <code>position</code> to define the size of the plot area
 (area where the traces are drawn) and where it is in the figure.</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
   
 
   
@@ -45753,7 +45789,8 @@ associated polyline point (
   </div>
   
 
-  <p><a href="#collectionstrace">CollectionsTrace</a> options object.</p>
+  <p><a href="#collectionstrace">CollectionsTrace</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
 <p>A plot trace is a set of (x, y) points associated with an
 x and y axis.</p>
 <p>The trace and can be drawn with either a set of
@@ -45778,6 +45815,17 @@ instead of outlines</li>
 hundreds of thousands of points (depending on the client device).</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
   
 
   
@@ -45878,18 +45926,6 @@ than this value, then the later point will not be plotted. By default this is
 than this value, then the later point will not be plotted. By default this is
 1/4000th the range of the y axis
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>?)</code>
-          
           
         </div>
       
@@ -46146,11 +46182,23 @@ figure.addElement({
   </div>
   
 
-  <p><a href="#collectionsplotlegend">CollectionsPlotLegend</a> options object.</p>
+  <p><a href="#collectionsplotlegend">CollectionsPlotLegend</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
 <p>A legend consists of a number of trace samples and their corresponding names,
 and may have an encompassing frame with a border and fill.</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
   
 
   
