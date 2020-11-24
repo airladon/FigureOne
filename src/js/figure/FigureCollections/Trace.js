@@ -15,13 +15,14 @@ import {
 } from '../Element';
 import type CollectionsAxis, { COL_Axis } from './Axis';
 import type {
-  OBJ_Line, OBJ_Polygon, OBJ_Star, OBJ_Polyline,
+  OBJ_Line, OBJ_Polygon, OBJ_Star, OBJ_Polyline, OBJ_Collection,
 } from '../FigurePrimitives/FigurePrimitives';
 import type { TypeColor, OBJ_Font_Fixed } from '../../tools/types';
 import type { CPY_Steps } from '../geometries/copy/copy';
 
 /**
- * {@link CollectionsTrace} options object.
+ * {@link CollectionsTrace} options object that extends {@link OBJ_Collection}
+ * options object (without `parent`).
  *
  * A plot trace is a set of (x, y) points associated with an
  * x and y axis.
@@ -48,6 +49,7 @@ import type { CPY_Steps } from '../geometries/copy/copy';
  * Even using these methods, it can take up to a second to render a trace with
  * hundreds of thousands of points (depending on the client device).
  *
+ * @extends OBJ_Collection
  *
  * @property {Array<TypeParsablePoint>} points the x points of the trace
  * @property {COL_Axis | string} [xAxis] The x axis associated with the trace,
@@ -89,7 +91,7 @@ export type COL_Trace = {
   name?: string,
   xSampleDistance?: number,
   ySampleDistance?: number,
-};
+} & OBJ_Collection;
 
 /**
  * {@link FigureElementCollection} representing a trace.

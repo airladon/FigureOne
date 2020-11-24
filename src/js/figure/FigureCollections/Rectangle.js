@@ -16,7 +16,7 @@ import {
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep } from '../Animation/Animation';
 import type {
-  OBJ_LineStyleSimple, OBJ_Texture,
+  OBJ_LineStyleSimple, OBJ_Texture, OBJ_Collection,
 } from '../FigurePrimitives/FigurePrimitives';
 import type {
   TypeColor, OBJ_CurvedCorner,
@@ -38,10 +38,13 @@ export type OBJ_SurroundAnimationStep = {
 
 
 /**
- * {@link CollectionsRectangle} options object.
+ * {@link CollectionsRectangle} options object that extends {@link OBJ_Collection}
+ * options object (without `parent`).
  *
  * This rectangle is similar to {@link OBJ_Rectangle}, except it can accomodate
  * both a fill and a border or line simultaneously with different colors.
+ *
+ * @extends OBJ_Collection
  *
  * @property {number} [width] rectangle width
  * @property {number} [height] rectangle height
@@ -62,7 +65,7 @@ export type COL_Rectangle = {
   line?: OBJ_LineStyleSimple,
   fill?: TypeColor | OBJ_Texture,
   corner?: OBJ_CurvedCorner,
-};
+} & OBJ_Collection;
 
 /*
 ..........########..########..######..########

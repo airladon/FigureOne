@@ -17,8 +17,9 @@ import type {
   TypeColor, OBJ_Font, OBJ_Font_Fixed, TypeDash,
 } from '../../tools/types';
 import type {
-  OBJ_Line, OBJ_TextLines,
+  OBJ_Line, OBJ_TextLines, OBJ_Collection,
 } from '../FigurePrimitives/FigurePrimitives';
+
 
 
 /**
@@ -322,7 +323,8 @@ export type TypeAxisTitle = OBJ_TextLines & {
 } | string;
 
 /**
- * {@link CollectionsAxis} options object.
+ * {@link CollectionsAxis} options object that extends {@link OBJ_Collection}
+ * options object (without `parent`).
  *
  * An axis can be used to create a number line, used as an axis in
  * {@link COL_Plot} and/or used to plot a {@link COL_Trace} against.
@@ -358,7 +360,6 @@ export type TypeAxisTitle = OBJ_TextLines & {
  * options. Use an array for multiple sets of grids, and use a boolean to
  * turn grids on and off (`false`)
  * @property {TypeAxisTitle | boolean} [title] axis title (`false`)
- * @property {TypeColor} [color] default color of axis
  * @property {OBJ_Font} [font] default font of axis (used by title and labels)
  * @property {boolean} [show] `false` hides the axis. Two axes are needed
  * to plot an {@link CollectionsTrace} on a {@link CollectionsPlot}, but if either or
@@ -369,6 +370,7 @@ export type TypeAxisTitle = OBJ_TextLines & {
  * should be plotted against in an {@link CollectionsPlot}.
  * @property {TypeParsablePoint} [position] axis position (`[0, 0]`)
  *
+ * @extends OBJ_Collection
  */
 export type COL_Axis = {
   axis?: 'x' | 'y',
@@ -380,13 +382,12 @@ export type COL_Axis = {
   labels?: OBJ_AxisLabels | Array<OBJ_AxisLabels> | boolean,
   grid?: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean,
   title?: TypeAxisTitle,
-  color?: TypeColor,
   font?: OBJ_Font,              // Default font
   show?: boolean,
   auto?: [number, number],
   name?: string,
   position?: TypeParsablePoint,
-};
+} & OBJ_Collection;
 
 
 /*

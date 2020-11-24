@@ -98,7 +98,9 @@ figure.addElement(
 
 ```
 
-We are defining a *triangle* figure element using the `triangle` method with the parameters of `width`, `height`, and `color`. Options objects are used to define elements within a figure. Options objects have extensive customization options, but only the properties that need to be customized need to be defined in the object. The triangle's options object is [here](https://airladon.github.io/FigureOne/#obj_triangle).
+We are defining a *triangle* figure element using the `triangle` method with the parameters of `width`, `height`, and `color`.
+
+Options objects are used to define elements within a figure. Options objects have extensive customization options, but only the properties that need to be customized need to be defined in the object. The triangle's options object is [here](https://airladon.github.io/FigureOne/#obj_triangle).
 
 
 

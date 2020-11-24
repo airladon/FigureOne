@@ -26,6 +26,7 @@ import type {
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
 import type { TypeColor } from '../../tools/types';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
 
 // export type TypeAngleLabelOrientation = 'horizontal' | 'tangent';
 
@@ -277,8 +278,8 @@ export type OBJ_PulseAngle = {
 
 
 /**
- * Collections Angle options object
- *
+ * {@link CollectionsAngle} options object that extends {@link OBJ_Collection}
+ * options object (without `parent`).
  *
  * The Collections Angle is a convient and powerful angle
  * {@link FigureElementCollection} that can draw one or several arcs of an
@@ -327,6 +328,8 @@ export type OBJ_PulseAngle = {
  * Therefore this collection provides a method `pulseAngle` to allow this.
  * This options object can define the default values for pulseAngle if desired.
  *
+ * @extends OBJ_Collection
+ *
  * @property {Point} [position] position of the angle vertex
  * @property {number} [startAngle] rotation where the angle should start
  * @property {number} [angle] size of the angle
@@ -341,7 +344,6 @@ export type OBJ_PulseAngle = {
  * @property {TypeAngleArrows} [arrow] options for arrow annotations
  * @property {OBJ_AngleCorner} [corner] options for drawing a corner
  * @property {TypeAngleLabelOptions} [label] options for label annotations
- * @property {TypeColor} [color] default color
  * @property {OBJ_PulseAngle} [pulseAngle] default pulseAngle options
  */
 export type COL_Angle = {
@@ -359,7 +361,6 @@ export type COL_Angle = {
   // Label
   label?: TypeAngleLabelOptions,
   corner?: OBJ_AngleCorner,
-  color?: TypeColor,    // Default color
   pulseAngle?: OBJ_PulseAngle,
   //
   //
@@ -380,7 +381,7 @@ export type COL_Angle = {
   //   color?: TypeColor,
   // },
   // mods?: {};
-};
+} & OBJ_Collection;
 
 // Angle is a class that manages:
 //   A angle curve

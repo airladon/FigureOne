@@ -242,14 +242,33 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 
 figure.addElement(
   {
-    name: 'tri',
-    method: 'line',
-    options: {
-      p1: [0, 0],
-      p2: [1, 0],
-      linePrimitives: true,
-      lineNum: 10,
-      width: 0.4,
-    },
+    name: 'c',
+    method: 'collection',
+    addElements: [
+      {
+        name: 'hex',
+        method: 'polygon',
+        options: {
+          sides: 6,
+          radius: 0.5,
+        },
+      },
+      {
+        name: 'text',
+        method: 'text',
+        options: {
+          text: 'hexagon',
+          position: [0, -0.8],
+          xAlign: 'center',
+          font: { size: 0.3 },
+        },
+      },
+    ],
   },
 );
+
+// When a collection rotates, then so does all its elements
+figure.getElement('c').animations.new()
+  .delay(2)
+  .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
+  .start();

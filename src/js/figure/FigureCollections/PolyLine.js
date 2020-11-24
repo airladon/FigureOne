@@ -22,7 +22,7 @@ import FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
 // eslint-disable-next-line import/no-cycle
 import FigureCollections from './FigureCollections';
 import FigureEquation from '../Equation/FigureEquation';
-import type { OBJ_Polyline, OBJ_Polygon } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_Polyline, OBJ_Polygon, OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
 
 /* eslint-disable max-len */
 /**
@@ -211,7 +211,9 @@ export type OBJ_PolylineSide = {}
 
 /* eslint-disable max-len */
 /**
- * Collections Polyline options object
+ * {@link CollectionsPolyline} options object that extends
+ * {@link OBJ_Polyline} and {@link OBJ_Collection}
+ * options object (without `parent`).
  *
  * The Collections Polyline is a convient and powerful polyline
  * {@link FigureElementCollection} that includes the polyline,
@@ -235,6 +237,7 @@ export type OBJ_PolylineSide = {}
  * {@link OBJ_PolylineCustomization}.
  *
  * @extends OBJ_Polyline
+ * @extends OBJ_Collection
  *
  * @property {boolean} [showLine] `false` will hide the polyline's line (`true`)
  * @property {OBJ_PolylineAngle | Array<COL_Angle>} [angle] angle annotations - leave undefined for no angle annotations
@@ -253,7 +256,7 @@ export type COL_Polyline = {
   side?: OBJ_PolylineSide | Array<COL_Line>,
   pad?: OBJ_PolylinePad | Array<OBJ_PolylinePadSingle>,
   makeValid?: ?OBJ_ValidShape,
-} & OBJ_Polyline;
+} & OBJ_Polyline & OBJ_Collection;
 
 function processArray(
   toProcess: Object | Array<Object>,

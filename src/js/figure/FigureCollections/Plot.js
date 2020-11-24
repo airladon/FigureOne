@@ -18,7 +18,7 @@ import type CollectionsAxis, { COL_Axis } from './Axis';
 import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { COL_PlotLegend } from './Legend';
 import type CollectionsRectangle, { COL_Rectangle } from './Rectangle';
-import type { OBJ_TextLines } from '../FigurePrimitives/FigurePrimitives';
+import type { OBJ_TextLines, OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
 import type { OBJ_Font, TypeColor, OBJ_Font_Fixed } from '../../tools/types';
 
 /**
@@ -41,13 +41,16 @@ export type TypePlotFrame = COL_Rectangle & { space: number };
 export type TypePlotTitle = OBJ_TextLines & { offset: TypeParsablePoint };
 
 /**
- * {@link CollectionsPlot} options object.
+ * {@link CollectionsPlot} options object that extends {@link OBJ_Collection}
+ * options object (without `parent`).
  *
  * A plot is a collection of axes and traces, and may include a title, legend
  * and bounding frame.
  *
  * Use `width`, `height` and `position` to define the size of the plot area
  * (area where the traces are drawn) and where it is in the figure.
+ *
+ * @extends OBJ_Collection
  *
  * @property {number} [width] width of the plot area
  * @property {number} [height] height of the plot area
@@ -90,7 +93,7 @@ export type COL_Plot = {
   font?: OBJ_Font,
   color?: TypeColor,
   position?: TypeParsablePoint,
-};
+} & OBJ_Collection;
 
 function cleanTraces(
   tracesIn: Array<COL_Trace | Array<TypeParsablePoint>> | COL_Trace | Array<TypeParsablePoint>,

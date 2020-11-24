@@ -1190,9 +1190,9 @@
               
                 
                 <li><a
-                  href='#shapes'
+                  href='#shape-primitives'
                   class="h5 bold black caps">
-                  Shapes
+                  Shape Primitives
                   
                 </a>
                 
@@ -1300,9 +1300,19 @@
               
                 
                 <li><a
-                  href='#collections-shapes'
+                  href='#collections'
                   class="h5 bold black caps">
-                  Collections Shapes
+                  Collections
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_collection'
+                  class="">
+                  OBJ_Collection
                   
                 </a>
                 
@@ -4387,16 +4397,6 @@
               
                 
                 <li><a
-                  href='#obj_collection'
-                  class="">
-                  OBJ_Collection
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#obj_figureelementcollection'
                   class="">
                   OBJ_FigureElementCollection
@@ -4687,7 +4687,7 @@ figure.initialize();</pre>
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Alternately, an element can be added programatically</span>
 <span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span> ]});
-<span class="hljs-keyword">const</span> hex = figure.create.polygon({
+<span class="hljs-keyword">const</span> hex = figure.shapes.polygon({
   <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
   <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
@@ -4824,7 +4824,7 @@ figure.add(<span class="hljs-string">'hexagon'</span>, hex);</pre>
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> hex = figure.create.polygon({
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">const</span> hex = figure.shapes.polygon({
   <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
   <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
@@ -15326,8 +15326,8 @@ identity transforms.</p>
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='shapes' class='mt0'>
-    Shapes
+  <h2 id='shape-primitives' class='mt0'>
+    Shape Primitives
   </h2>
 
   
@@ -15576,7 +15576,7 @@ keeping shape within limits
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>hole</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | null)?)</code>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | null)?)</code>
           : borders where
 touching will not work
 
@@ -15608,12 +15608,6 @@ transform of
 <code>number</code>
 )
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          
           
         </div>
       
@@ -15722,7 +15716,8 @@ figure.addElement({
   </div>
   
 
-  <p>Line definition options object.</p>
+  <p>Line definition options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
+<code>drawType</code>)</p>
 <p><img src="./apiassets/line.png"></p>
 <p>A line can either be defined as two points <code>p1</code> and <code>p2</code>, or
 a single points <code>p1</code>, a <code>length</code> and an <code>angle</code>.</p>
@@ -15963,7 +15958,8 @@ figure.addElement({
   </div>
   
 
-  <p>Polyline shape options object</p>
+  <p>Polyline shape options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
+<code>drawType</code>)</p>
 <p><img src="./apiassets/polyline.png"></p>
 <p>A polyline is a series of lines that are connected end to end. It is defined
 by a series of points which are the ends and corners of the polyline.</p>
@@ -16319,7 +16315,8 @@ figure.addElement({
   </div>
   
 
-  <p>Arrow options object.</p>
+  <p>Arrow options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
+<code>drawType</code>)</p>
 <p><img src="./apiassets/arrow_heads.png"></p>
 <p>An arrow has a head, tail, length and width. The <code>head</code> defines the head
 style of the arrow. The <code>length</code>, <code>width</code> (or <code>radius</code> for polygon and circle
@@ -16354,6 +16351,17 @@ with length 1 and tailLength 0.4 will have a head length of 0.6.</p>
 determine the dimension of the arrow (<code>length</code> and <code>width</code> are ignored).</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_generic">OBJ_Generic</a>
+      
+    </p>
   
 
   
@@ -16470,53 +16478,6 @@ the arrow is aligned at (0, 0) in draw space (
           
         </div>
       
-        <div class='space-bottom0'>
-          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
-          : make copies of
-the arrow
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (
-<code>[1, 0, 0, 1]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
-          : Override color with a texture
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
-          : (
-<code>Transform('arrow').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
     </div>
   
 
@@ -16609,7 +16570,8 @@ figure.addElement({
   </div>
   
 
-  <p>Triangle shape options object</p>
+  <p>Triangle shape options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
+<code>drawType</code>)</p>
 <p><img src="./apiassets/triangle.png"></p>
 <p>The most generic way to define a triangle is with three points (<code>points</code>
 property). When using <code>points</code>, all the other properties that can also
@@ -16818,7 +16780,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// 30-60-90 triangle with dashed line</span>
-<span class="hljs-keyword">const</span> t = figure.create.triangle({
+<span class="hljs-keyword">const</span> t = figure.shapes.triangle({
   <span class="hljs-attr">options</span>: {
     <span class="hljs-attr">ASA</span>: [<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">6</span>],
     <span class="hljs-attr">line</span>: {
@@ -16873,10 +16835,22 @@ figure.addElement({
   </div>
   
 
-  <p>Rectangle shape options object</p>
+  <p>Rectangle shape options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
+`drawType)</p>
 <p><img src="./apiassets/rectangle.png"></p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_generic">OBJ_Generic</a>
+      
+    </p>
   
 
   
@@ -16946,103 +16920,6 @@ figure.addElement({
           <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
           : make copies of
 the rectangle
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (
-<code>[1, 0, 0, 1]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
-          : Override color with a texture
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
-          : (
-<code>Transform('rectangle').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"outline"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : the rectangle border can either be the outline of the rectangle
-(
-<code>'outline'</code>
-), an encompassing rect (
-<code>'rect'</code>
-) or a custom set of points
-
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
- - (
-<code>'outline'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : the touch border can be the same as the border (
-<code>'border'</code>
-), can be the
-encompassing rect (
-<code>'rect'</code>
-), can be a buffer around the shape with
-some with 
-<code>number</code>
-, or can be a custom set of points
-(
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-) - (
-<code>'border'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : hole border of the rectangle can be the points custom points
-(
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-) or 
-<code>'none'</code>
- - (
-<code>'none'</code>
-)
 
           
         </div>
@@ -17147,10 +17024,22 @@ figure.addElement({
   </div>
   
 
-  <p>Ellipse shape options object</p>
+  <p>Ellipse shape options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
+<code>drawType</code>)</p>
 <p><img src="./apiassets/ellipse.png"></p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_generic">OBJ_Generic</a>
+      
+    </p>
   
 
   
@@ -17212,114 +17101,9 @@ figure.addElement({
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
-          : line style options - do not use any corner
-options
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestylesimple">OBJ_LineStyleSimple</a>?)</code>
+          : line style options
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
-          : make copies of
-the rectangle
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (
-<code>[1, 0, 0, 1]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
-          : Override color with a texture
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
-          : (
-<code>Transform('rectangle').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"outline"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : the rectangle border can either be the outline of the rectangle
-(
-<code>'outline'</code>
-), an encompassing rect (
-<code>'rect'</code>
-) or a custom set of points
-
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
- - (
-<code>'outline'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : the touch border can be the same as the border (
-<code>'border'</code>
-), can be the
-encompassing rect (
-<code>'rect'</code>
-), can be a buffer around the shape with
-some with 
-<code>number</code>
-, or can be a custom set of points
-(
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-) - (
-<code>'border'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : hole border of the rectangle can be the points custom points
-(
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-) or 
-<code>'none'</code>
- - (
-<code>'none'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>fill</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          
           
         </div>
       
@@ -17418,10 +17202,22 @@ figure.addElement({
   </div>
   
 
-  <p>Polygon or partial polygon shape options object</p>
+  <p>Polygon or partial polygon shape options object that extends
+<a href="#obj_generic">OBJ_Generic</a> (without <code>drawType</code>)</p>
 <p><img src="./apiassets/polygon.png"></p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_generic">OBJ_Generic</a>
+      
+    </p>
   
 
   
@@ -17516,107 +17312,6 @@ vertices on each draw. (
           
         </div>
       
-        <div class='space-bottom0'>
-          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
-          : make copies of
-the polygon if defined. If using fill and copying, use 
-<code>fill</code>
-: 
-<code>'tris'</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (
-<code>[1, 0, 0, 1</code>
-])
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
-          : Override color with a texture
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
-          : (
-<code>Transform('polygon').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"outline"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : the polygon border can either be the outline of the polygon (
-<code>'outline'</code>
-),
-the rectangle that encompasses the polygon (
-<code>'rect'</code>
-) or a custom set
-of points 
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
- - (
-<code>'outline'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : the touch border can be the same as the border (
-<code>'border'</code>
-), can be the
-encompassing rect (
-<code>'rect'</code>
-), can be a buffer around the shape with
-some with 
-<code>number</code>
-, or can be a custom set of points
-(
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-) - (
-<code>'border'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : hole border of the line can be the points custom points
-(
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-) or 
-<code>'none'</code>
- - (
-<code>'none'</code>
-)
-
-          
-        </div>
-      
     </div>
   
 
@@ -17654,7 +17349,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Circle from dashed line</span>
-<span class="hljs-keyword">const</span> circ = figure.create.polygon({
+<span class="hljs-keyword">const</span> circ = figure.shapes.polygon({
   <span class="hljs-attr">sides</span>: <span class="hljs-number">100</span>,
   <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
   <span class="hljs-attr">line</span>: {
@@ -17708,10 +17403,22 @@ figure.addElement({
   </div>
   
 
-  <p>Star options object</p>
+  <p>Star options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
+<code>drawType</code>)</p>
 <p><img src="./apiassets/star.png"></p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_generic">OBJ_Generic</a>
+      
+    </p>
   
 
   
@@ -17776,7 +17483,7 @@ during vertex definition (different to a translation step in a transform)
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestylesimple">OBJ_LineStyleSimple</a>?)</code>
           : line style options
 
           
@@ -17789,96 +17496,6 @@ the polygon if defined. If using fill and copying, use
 <code>fill</code>
 : 
 <code>'tris'</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (
-<code>[1, 0, 0, 1</code>
-])
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
-          : Override color with a texture
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
-          : (
-<code>Transform('polygon').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"outline"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : the polygon border can either be the outline of the polygon (
-<code>'outline'</code>
-),
-the rectangle that encompasses the polygon (
-<code>'rect'</code>
-) or a custom set
-of points 
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
- - (
-<code>'outline'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : the touch border can be the same as the border (
-<code>'border'</code>
-), can be the
-encompassing rect (
-<code>'rect'</code>
-), can be a buffer around the shape with
-some with 
-<code>number</code>
-, or can be a custom set of points
-(
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-) - (
-<code>'border'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"none"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : hole border of the line can be the points custom points
-(
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>
-) or 
-<code>'none'</code>
- - (
-<code>'none'</code>
-)
 
           
         </div>
@@ -17991,7 +17608,8 @@ figure.addElement({
   </div>
   
 
-  <p>Grid shape options object</p>
+  <p>Grid shape options object that extends <a href="#obj_generic">OBJ_Generic</a> (without
+<code>drawType</code>)</p>
 <p><img src="./apiassets/grid.png"></p>
 <p>A grid is a rectangle divided into a series of vertical and horizontal lines.</p>
 <p>The rectangle is defined by <code>bounds</code>.</p>
@@ -18002,6 +17620,17 @@ lines from the bottom left corner.</p>
 <p>The line width and style is defined with <code>line</code>.</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_generic">OBJ_Generic</a>
+      
+    </p>
   
 
   
@@ -18067,53 +17696,6 @@ options
           
         </div>
       
-        <div class='space-bottom0'>
-          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
-          : make copies of
-the rectangle
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (
-<code>[1, 0, 0, 1]</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>texture</span> <code class='quiet'>(<a href="#obj_texture">OBJ_Texture</a>?)</code>
-          : Override color with a texture
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#point">Point</a>?)</code>
-          : convenience to override Transform translation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#transform">Transform</a>?)</code>
-          : (
-<code>Transform('rectangle').standard()</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#obj_pulsescale">OBJ_PulseScale</a>)?)</code>
-          : set the default pulse scale
-
-          
-        </div>
-      
     </div>
   
 
@@ -18155,7 +17737,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid defined by xNum and yNum with dashed lines</span>
-<span class="hljs-keyword">const</span> grid = figure.create.grid({
+<span class="hljs-keyword">const</span> grid = figure.shapes.grid({
   <span class="hljs-attr">bounds</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">-0.5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
   <span class="hljs-attr">xNum</span>: <span class="hljs-number">4</span>,
   <span class="hljs-attr">yNum</span>: <span class="hljs-number">4</span>,
@@ -18201,8 +17783,8 @@ figure.addElement({
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='collections-shapes' class='mt0'>
-    Collections Shapes
+  <h2 id='collections' class='mt0'>
+    Collections
   </h2>
 
   
@@ -18211,6 +17793,187 @@ figure.addElement({
 
   
 </section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_collection'>
+      OBJ_Collection
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#figureelementcollection">FigureElementCollection</a> options object.</p>
+<p class="inline_gif"><img src="./apiassets/collection.gif" class="inline_gif_image"></p>
+<p>A collection is a group of other <a href="#figureelement">FigureElement</a>s that will all
+inherit the parent collections transform.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : if defined, will overwrite first
+translation of 
+<code>transform</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : default color
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>parent</span> <code class='quiet'>((<a href="#figureelement">FigureElement</a> | null)?)</code>
+          : parent of collection
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : defines border of collection. Use 
+<code>'children'</code>
+ for the borders of the
+children. Use 'rect' for bounding rectangle of children. Use 
+<code>number</code>
+
+for the bounding rectangle with some buffer. Use
+
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint></code>
+ for a custom border. (
+<code>'children'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code>)?)</code>
+          : defines the touch border of the collection. Use 
+<code>'border'</code>
+ to use the same
+as the border of the collection. Use 
+<code>'rect'</code>
+ for the bounding rectangle
+of the border. Use 
+<code>number</code>
+ for the bounding rectangle of the border plus
+some buffer. Use 
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint></code>
+ for a custom touch
+border (
+<code>'border'</code>
+).
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"children"</code>)?)</code>
+          : Hole
+border of the collection. Use 
+<code>'children'</code>
+ to use the children element hole
+borders, otherwise use 
+<code>Array&#x3C;Array&#x3C;TypeParsablePoint></code>
+ for a customizable
+border.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>limits</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>figure.addElement(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'c'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'collection'</span>,
+    <span class="hljs-attr">addElements</span>: [         <span class="hljs-comment">// add two elements to the collection</span>
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'hex'</span>,
+        <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
+        <span class="hljs-attr">options</span>: {
+          <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
+          <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
+        },
+      },
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'text'</span>,
+        <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
+        <span class="hljs-attr">options</span>: {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'hexagon'</span>,
+          <span class="hljs-attr">position</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">-0.8</span>],
+          <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+          <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.3</span> },
+        },
+      },
+    ],
+  },
+);
+
+<span class="hljs-comment">// When a collection rotates, then so does all its elements</span>
+figure.getElement(<span class="hljs-string">'c'</span>).animations.new()
+  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">1.999</span>, <span class="hljs-attr">direction</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">5</span> })
+  .start();</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
           
         
           
@@ -19381,7 +19144,8 @@ it will rotate toward with positive rotation.</p>
   </div>
   
 
-  <p>Collections Line options object</p>
+  <p>Collections Line options object that extends <a href="#obj_collection">OBJ_Collection</a> options
+object (without <code>parent</code>).</p>
 <p>The Collections Line is a convient and powerful line
 <a href="#figureelementcollection">FigureElementCollection</a> that includes the line, arrows, a label
 annotation and some methods to make it convient to use dynamically.</p>
@@ -19411,6 +19175,17 @@ options object can define the default values for pulseWidth if desired.</p>
 <p>Default pulse values can then be specified with the <code>pulse</code> property.</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
   
 
   
@@ -19422,107 +19197,6 @@ options object can define the default values for pulseWidth if desired.</p>
 
   
 
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>p1</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>p2</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>align</span> <code class='quiet'>((<code>"start"</code> | <code>"end"</code> | <code>"center"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>label</span> <code class='quiet'>(<a href="#typelinelabeloptions">TypeLineLabelOptions</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>arrow</span> <code class='quiet'>(<a href="#obj_linearrows">OBJ_LineArrows</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulseWidth</span> <code class='quiet'>(<a href="#obj_pulsewidth">OBJ_PulseWidth</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="#obj_pulse">OBJ_Pulse</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>move</span> <code class='quiet'>({type: (<code>"translation"</code> | <code>"rotation"</code> | <code>"centerTranslateEndRotation"</code> | <code>"scale"</code>)?, middleLength: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, includeLabelInTouchBoundary: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?}?)</code>
-          
-          
-        </div>
-      
-    </div>
   
 
   
@@ -54943,148 +54617,6 @@ e.animations.new()
   .goToForm({ <span class="hljs-attr">target</span>: <span class="hljs-string">'2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
   .start();</pre>
     
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_collection'>
-      OBJ_Collection
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Figure collection options object.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : if defined, will overwrite first
-translation of 
-<code>transform</code>
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : default color
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>parent</span> <code class='quiet'>((<a href="#figureelement">FigureElement</a> | null)?)</code>
-          : parent of collection
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          : defines border of collection. Use 
-<code>'children'</code>
- for the borders of the
-children. Use 'rect' for bounding rectangle of children. Use 
-<code>number</code>
-
-for the bounding rectangle with some buffer. Use
-
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint></code>
- for a custom border. (
-<code>'children'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code>)?)</code>
-          : defines the touch border of the collection. Use 
-<code>'border'</code>
- to use the same
-as the border of the collection. Use 
-<code>'rect'</code>
- for the bounding rectangle
-of the border. Use 
-<code>number</code>
- for the bounding rectangle of the border plus
-some buffer. Use 
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint></code>
- for a custom touch
-border (
-<code>'border'</code>
-).
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"children"</code>)?)</code>
-          : Hole
-border of the collection. Use 
-<code>'children'</code>
- to use the children element hole
-borders, otherwise use 
-<code>Array&#x3C;Array&#x3C;TypeParsablePoint></code>
- for a customizable
-border.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>limits</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
   
 
   

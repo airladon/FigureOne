@@ -81,7 +81,12 @@ export type OBJ_LineStyleSimple = {
 }
 
 /**
- * Figure collection options object.
+ * {@link FigureElementCollection} options object.
+ *
+ * <p class="inline_gif"><img src="./apiassets/collection.gif" class="inline_gif_image"></p>
+ *
+ * A collection is a group of other {@link FigureElement}s that will all
+ * inherit the parent collections transform.
  *
  * @property {TypeParsableTransform} [transform]
  * @property {TypeParsablePoint} [position] if defined, will overwrite first
@@ -103,6 +108,39 @@ export type OBJ_LineStyleSimple = {
  * border of the collection. Use `'children'` to use the children element hole
  * borders, otherwise use `Array<Array<TypeParsablePoint>` for a customizable
  * border.
+ *
+ * @example
+ * figure.addElement(
+ *   {
+ *     name: 'c',
+ *     method: 'collection',
+ *     addElements: [         // add two elements to the collection
+ *       {
+ *         name: 'hex',
+ *         method: 'polygon',
+ *         options: {
+ *           sides: 6,
+ *           radius: 0.5,
+ *         },
+ *       },
+ *       {
+ *         name: 'text',
+ *         method: 'text',
+ *         options: {
+ *           text: 'hexagon',
+ *           position: [0, -0.8],
+ *           xAlign: 'center',
+ *           font: { size: 0.3 },
+ *         },
+ *       },
+ *     ],
+ *   },
+ * );
+ *
+ * // When a collection rotates, then so does all its elements
+ * figure.getElement('c').animations.new()
+ *   .rotation({ target: Math.PI * 1.999, direction: 1, duration: 5 })
+ *   .start();
  */
 export type OBJ_Collection = {
   transform?: TypeParsableTransform,
@@ -334,7 +372,7 @@ export type OBJ_Generic = {
 
 /**
  * Polyline shape options object that extends {@link OBJ_Generic} (without
- * `drawType)
+ * `drawType`)
  *
  * ![](./apiassets/polyline.png)
  *
@@ -540,7 +578,8 @@ export type OBJ_LineStyle = {
 };
 
 /**
- * Polygon or partial polygon shape options object
+ * Polygon or partial polygon shape options object that extends
+ * {@link OBJ_Generic} (without `drawType`)
  *
  * ![](./apiassets/polygon.png)
  *
@@ -559,25 +598,8 @@ export type OBJ_LineStyle = {
  * center. This is different to position or transform as these translate the
  * vertices on each draw. (`[0, 0]`)
  * @property {OBJ_LineStyleSimple} [line] line style options
- * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
- * the polygon if defined. If using fill and copying, use `fill`: `'tris'`
- * @property {TypeColor} [color] (`[1, 0, 0, 1`])
- * @property {OBJ_Texture} [texture] Override color with a texture
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('polygon').standard()`)
- * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
- * @property {'outline' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
- * the polygon border can either be the outline of the polygon (`'outline'`),
- * the rectangle that encompasses the polygon (`'rect'`) or a custom set
- * of points `Array<Array<TypeParsablePoint>>` - (`'outline'`)
- * @property {number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>} [touchBorder]
- * the touch border can be the same as the border (`'border'`), can be the
- * encompassing rect (`'rect'`), can be a buffer around the shape with
- * some with `number`, or can be a custom set of points
- * (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
- * @property {'none' | Array<Array<TypeParsablePoint>>} [holeBorder]
- * hole border of the line can be the points custom points
- *(`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
+ *
+ * @extends OBJ_Generic
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -595,7 +617,7 @@ export type OBJ_LineStyle = {
  *
  * @example
  * // Circle from dashed line
- * const circ = figure.create.polygon({
+ * const circ = figure.shapes.polygon({
  *   sides: 100,
  *   radius: 0.5,
  *   line: {
@@ -631,19 +653,11 @@ export type OBJ_Polygon = {
   angleToDraw?: number,
   direction?: -1 | 1,
   line?: OBJ_LineStyleSimple,
-  copy?: Array<CPY_Step | string> | CPY_Step,
-  color?: TypeColor,
-  texture?: OBJ_Texture,
-  position?: TypeParsablePoint,
-  transform?: Transform,
-  pulse?: number | OBJ_PulseScale,
-  border?: 'outline' | 'rect' | Array<Array<TypeParsablePoint>>,
-  touchBorder?: number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>,
-  holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
-};
+} & OBJ_Generic;
 
 /**
- * Star options object
+ * Star options object that extends {@link OBJ_Generic} (without
+ * `drawType`)
  *
  * ![](./apiassets/star.png)
  *
@@ -655,26 +669,11 @@ export type OBJ_Polygon = {
  * @property {TypeParsablePoint} [offset] shape center offset from origin
  * during vertex definition (different to a translation step in a transform)
  * (`[0, 0]`)
- * @property {OBJ_LineStyle} [line] line style options
+ * @property {OBJ_LineStyleSimple} [line] line style options
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the polygon if defined. If using fill and copying, use `fill`: `'tris'`
- * @property {TypeColor} [color] (`[1, 0, 0, 1`])
- * @property {OBJ_Texture} [texture] Override color with a texture
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('polygon').standard()`)
- * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
- * @property {'outline' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
- * the polygon border can either be the outline of the polygon (`'outline'`),
- * the rectangle that encompasses the polygon (`'rect'`) or a custom set
- * of points `Array<Array<TypeParsablePoint>>` - (`'outline'`)
- * @property {number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>} [touchBorder]
- * the touch border can be the same as the border (`'border'`), can be the
- * encompassing rect (`'rect'`), can be a buffer around the shape with
- * some with `number`, or can be a custom set of points
- * (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
- * @property {'none' | Array<Array<TypeParsablePoint>>} [holeBorder]
- * hole border of the line can be the points custom points
- *(`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
+ *
+ * @extends OBJ_Generic
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -742,20 +741,12 @@ export type OBJ_Star = {
   innerRadius?: number,
   rotation?: number,
   offset?: TypeParsablePoint,
-  line?: OBJ_LineStyle,
-  copy?: Array<CPY_Step | string> | CPY_Step,
-  color?: TypeColor,
-  texture?: OBJ_Texture,
-  position?: TypeParsablePoint,
-  transform?: Transform,
-  pulse?: number | OBJ_PulseScale,
-  border?: 'outline' | 'rect' | Array<Array<TypeParsablePoint>>,
-  touchBorder?: number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>,
-  holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
-};
+  line?: OBJ_LineStyleSimple,
+} & OBJ_Generic;
 
 /**
- * Rectangle shape options object
+ * Rectangle shape options object that extends {@link OBJ_Generic} (without
+ * `drawType)
  *
  * ![](./apiassets/rectangle.png)
  *
@@ -767,24 +758,8 @@ export type OBJ_Star = {
  * @property {OBJ_LineStyleSimple} [line] line style options
  * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
  * the rectangle
- * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
- * @property {OBJ_Texture} [texture] Override color with a texture
- * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('rectangle').standard()`)
- * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
- * @property {'outline' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
- * the rectangle border can either be the outline of the rectangle
- * (`'outline'`), an encompassing rect (`'rect'`) or a custom set of points
- * `Array<Array<TypeParsablePoint>>` - (`'outline'`)
- * @property {number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>} [touchBorder]
- * the touch border can be the same as the border (`'border'`), can be the
- * encompassing rect (`'rect'`), can be a buffer around the shape with
- * some with `number`, or can be a custom set of points
- * (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
- * @property {'none' | Array<Array<TypeParsablePoint>>} [holeBorder]
- * hole border of the rectangle can be the points custom points
- *(`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
+ *
+ * @extends OBJ_Generic
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -845,20 +820,12 @@ export type OBJ_Rectangle = {
   yAlign?: 'bottom' | 'middle' | 'top' | number,
   corner?: OBJ_CurvedCorner,
   line?: OBJ_LineStyleSimple,
-  color?: TypeColor,
-  transform?: Transform,
-  position?: TypeParsablePoint,
-  texture?: OBJ_Texture,
-  copy?: Array<CPY_Step | string> | CPY_Step,
-  pulse?: number | OBJ_PulseScale,
-  border?: 'outline' | 'rect' | Array<Array<TypeParsablePoint>>,
-  touchBorder?: number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>,
-  holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
-}
+} & OBJ_Generic;
 
 
 /**
- * Ellipse shape options object
+ * Ellipse shape options object that extends {@link OBJ_Generic} (without
+ * `drawType`)
  *
  * ![](./apiassets/ellipse.png)
  *
@@ -867,27 +834,9 @@ export type OBJ_Rectangle = {
  * @property {'bottom' | 'middle' | 'top' | number} [yAlign] (`'middle'`)
  * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
  * @property {number} [sides] number of sides to draw ellipse with (`20`)
- * @property {OBJ_LineStyle} [line] line style options - do not use any corner
- * options
- * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
- * the rectangle
- * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
- * @property {OBJ_Texture} [texture] Override color with a texture
- * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('rectangle').standard()`)
- * @property {'outline' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
- * the rectangle border can either be the outline of the rectangle
- * (`'outline'`), an encompassing rect (`'rect'`) or a custom set of points
- * `Array<Array<TypeParsablePoint>>` - (`'outline'`)
- * @property {number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>} [touchBorder]
- * the touch border can be the same as the border (`'border'`), can be the
- * encompassing rect (`'rect'`), can be a buffer around the shape with
- * some with `number`, or can be a custom set of points
- * (`Array<Array<TypeParsablePoint>>`) - (`'border'`)
- * @property {'none' | Array<Array<TypeParsablePoint>>} [holeBorder]
- * hole border of the rectangle can be the points custom points
- *(`Array<Array<TypeParsablePoint>>`) or `'none'` - (`'none'`)
+ * @property {OBJ_LineStyleSimple} [line] line style options
+ *
+ * @extends OBJ_Generic
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -943,22 +892,13 @@ export type OBJ_Ellipse = {
   yAlign?: 'bottom' | 'middle' | 'top' | number,
   sides?: number,
   fill?: boolean,
-  line?: OBJ_LineStyle,
-  copy?: Array<CPY_Step | string> | CPY_Step,
-  color?: TypeColor,
-  texture?: OBJ_Texture,
-  pulse?: number | OBJ_PulseScale,
-  position?: TypeParsablePoint,
-  transform?: Transform,
-  border?: 'outline' | 'rect' | Array<Array<TypeParsablePoint>>,
-  touchBorder?: number | 'border' | 'rect' | Array<Array<TypeParsablePoint>>,
-  holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
-}
+  line?: OBJ_LineStyleSimple,
+} & OBJ_Generic;
 
 /* eslint-disable max-len */
 /**
  * Triangle shape options object that extends {@link OBJ_Generic} (without
- * `drawType)
+ * `drawType`)
  *
  * ![](./apiassets/triangle.png)
  *
@@ -1059,7 +999,7 @@ export type OBJ_Ellipse = {
  *
  * @example
  * // 30-60-90 triangle with dashed line
- * const t = figure.create.triangle({
+ * const t = figure.shapes.triangle({
  *   options: {
  *     ASA: [Math.PI / 2, 1, Math.PI / 6],
  *     line: {
@@ -1106,7 +1046,7 @@ export type OBJ_Triangle = {
 
 /**
  * Line definition options object that extends {@link OBJ_Generic} (without
- * `drawType)
+ * `drawType`)
  *
  * ![](./apiassets/line.png)
  *
@@ -1210,7 +1150,8 @@ export type OBJ_Line = {
 } & OBJ_Generic;
 
 /**
- * Grid shape options object
+ * Grid shape options object that extends {@link OBJ_Generic} (without
+ * `drawType`)
  *
  * ![](./apiassets/grid.png)
  *
@@ -1237,13 +1178,8 @@ export type OBJ_Line = {
  * and right lines - overrides yStep
  * @property {OBJ_LineStyle} [line] line style options - do not use any corner
  * options
- * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
- * the rectangle
- * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
- * @property {OBJ_Texture} [texture] Override color with a texture
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('rectangle').standard()`)
- * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ *
+ * @extends OBJ_Generic
  *
  * @see To test examples, append them to the
  * <a href="#drawing-boilerplate">boilerplate</a>
@@ -1265,7 +1201,7 @@ export type OBJ_Line = {
  *
  * @example
  * // Grid defined by xNum and yNum with dashed lines
- * const grid = figure.create.grid({
+ * const grid = figure.shapes.grid({
  *   bounds: [-0.5, -0.5, 1, 1],
  *   xNum: 4,
  *   yNum: 4,
@@ -1301,17 +1237,12 @@ export type OBJ_Grid = {
   yStep?: number,
   xNum?: number,
   yNum?: number,
-  line?: OBJ_LineStyle,
-  copy?: OBJ_Copy | Array<OBJ_Copy>,
-  color?: TypeColor,
-  texture?: OBJ_Texture,
-  position?: TypeParsablePoint,
-  transform?: Transform,
-  pulse?: OBJ_PulseScale | number,
-}
+  line?: OBJ_LineStyleSimple,
+} & OBJ_Generic;
 
 /**
- * Arrow options object.
+ * Arrow options object that extends {@link OBJ_Generic} (without
+ * `drawType`)
  *
  * ![](./apiassets/arrow_heads.png)
  *
@@ -1368,13 +1299,8 @@ export type OBJ_Grid = {
  * @property {'tip' | 'start' | 'mid' | 'tail'} [align] define which part of
  * the arrow is aligned at (0, 0) in draw space (`'tip'`)
  * @property {number} [angle] angle the arrow is drawn at (`0`)
- * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
- * the arrow
- * @property {TypeColor} [color] (`[1, 0, 0, 1]`)
- * @property {OBJ_Texture} [texture] Override color with a texture
- * @property {Point} [position] convenience to override Transform translation
- * @property {Transform} [transform] (`Transform('arrow').standard()`)
- * @property {number | OBJ_PulseScale} [pulse] set the default pulse scale
+ *
+ * @extends OBJ_Generic
  *
  * @example
  * // Triangle arrow with tail
@@ -1442,14 +1368,7 @@ export type OBJ_Arrow = {
   tail?: boolean,
   align?: 'tip' | 'start' | 'mid' | 'tail',
   angle?: number,
-  // position: TypeParsablePoint,
-  copy?: OBJ_Copy | Array<OBJ_Copy>,
-  color?: TypeColor,
-  texture?: OBJ_Texture,
-  position?: TypeParsablePoint,
-  transform?: Transform,
-  pulse?: OBJ_PulseScale | number,
-}
+} & OBJ_Generic;
 
 
 /**

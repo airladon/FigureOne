@@ -26,6 +26,7 @@ import type { EQN_Equation } from '../Equation/Equation';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
 import type { TypeColor, TypeDash } from '../../tools/types';
+import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
 
 
 /**
@@ -119,7 +120,8 @@ export type TypeLineLabelOptions = {
 };
 
 /**
- * Collections Line options object
+ * Collections Line options object that extends {@link OBJ_Collection} options
+ * object (without `parent`).
  *
  *
  * The Collections Line is a convient and powerful line
@@ -158,6 +160,8 @@ export type TypeLineLabelOptions = {
  * options object can define the default values for pulseWidth if desired.
  *
  * Default pulse values can then be specified with the `pulse` property.
+ *
+ * @extends OBJ_Collection
  */
 export type COL_Line = {
   p1?: TypeParsablePoint,
@@ -169,8 +173,6 @@ export type COL_Line = {
   align?: 'start' | 'end' | 'center' | number,
   width?: number,
   label?: TypeLineLabelOptions,
-  color?: TypeColor,
-  touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | number | 'rect',
   arrow: OBJ_LineArrows;
   dash: TypeDash,
   pulseWidth?: OBJ_PulseWidth,
@@ -181,7 +183,7 @@ export type COL_Line = {
     middleLength?: number;
     includeLabelInTouchBoundary?: boolean;
   }
-};
+} & OBJ_Collection;
 
 
 /**

@@ -42,7 +42,6 @@ describe('Equation Functions - Bar', () => {
     functions = {
       topComment: () => {
         eqn = new Equation(figure.shapes, { color: color1 });
-        // eqn = figure.create.equation({ color: color1 });
         figure.add('eqn', eqn);
         const e = eqn.eqn.functions;
         const topComment = e.topComment.bind(e);

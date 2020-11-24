@@ -16,7 +16,7 @@ import {
 import type CollectionsTrace, { COL_Trace } from './Trace';
 import type { OBJ_Font, OBJ_Font_Fixed } from '../../tools/types';
 import type {
-  OBJ_TextLines,
+  OBJ_TextLines, OBJ_Collection,
 } from '../FigurePrimitives/FigurePrimitives';
 import type { TypePlotFrame } from './Plot';
 
@@ -57,10 +57,13 @@ export type OBJ_PlotLegendCustom = {
 };
 
 /**
- * {@link CollectionsPlotLegend} options object.
+ * {@link CollectionsPlotLegend} options object that extends {@link OBJ_Collection}
+ * options object (without `parent`).
  *
  * A legend consists of a number of trace samples and their corresponding names,
  * and may have an encompassing frame with a border and fill.
+ *
+ * @extends OBJ_Collection
  *
  * @property {TypeParsablePoint} [position] position of the first trace in the
  * legend
@@ -96,7 +99,7 @@ export type COL_PlotLegend = {
   hide?: Array<number>,
   custom?: OBJ_PlotLegendCustom,
   traces: Array<COL_Trace>,
-};
+} & OBJ_Collection;
 
 
 /*

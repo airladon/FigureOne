@@ -17,7 +17,7 @@ toc:
   - Rotation
   - Scale
   - Transform
-  - name: Shapes
+  - name: Shape Primitives
     file: ./docs/tutorials/draw/draw.md
   - OBJ_Generic
   - OBJ_Line
@@ -29,8 +29,9 @@ toc:
   - OBJ_Polygon
   - OBJ_Star
   - OBJ_Grid
-  - name: Collections Shapes
+  - name: Collections
     file: ./docs/tutorials/collections/collections.md
+  - OBJ_Collection
   - CollectionsLine
   - COL_Line
   - CollectionsAngle

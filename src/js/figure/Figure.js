@@ -184,7 +184,7 @@ export type OBJ_Figure = {
  * // Alternately, an element can be added programatically
  * // index.js
  * const figure = new Fig.Figure({ limits: [-1, -1, 2, 2 ]});
- * const hex = figure.create.polygon({
+ * const hex = figure.shapes.polygon({
  *   radius: 0.5,
  *   fill: true,
  *   sides: 6,
@@ -972,7 +972,7 @@ class Figure {
   /**
    * Add a {@link FigureElement} to the figure with some `name`.
    * @example
-   * const hex = figure.create.polygon({
+   * const hex = figure.shapes.polygon({
    *   radius: 0.5,
    *   fill: true,
    *   sides: 6,
