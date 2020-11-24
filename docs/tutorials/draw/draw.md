@@ -76,7 +76,7 @@ While there are several built-in shapes such as polygons, rectangles and polylin
 
 To use the generic method however, it is important to understand how WebGL uses triangles to create shapes.
 
-Any shape can be quantized into triangles. For instance, the digram below shows a rectangle broken into two triangles with vertices labeled.
+Any shape can be quantized into triangles. For instance, the figure below shows a rectangle broken into two triangles with vertices labeled.
 
 <p style="text-align: center"><img src="./tutorials/draw/rect.png"></p>
 

@@ -1,14 +1,14 @@
 // Create a figure
 const figure = new Fig.Figure();
 
-// Add red circle to figure
+// Add a triangle
 figure.addElement(
   {
-    name: 'circle',
-    method: 'polygon',
+    name: 'tri',
+    method: 'triangle',
     options: {
-      sides: 100,
-      radius: 0.2,
+      width: 1,
+      height: 1,
       color: [1, 0, 0, 1],
     },
   },

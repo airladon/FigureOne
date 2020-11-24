@@ -514,8 +514,8 @@
 -   [OBJ_GoToFormAnimationStep][1029]
 -   [NextFormAnimationStep][1031]
 -   [GoToFormAnimationStep][1034]
--   [OBJ_FigureElementCollection][1037]
--   [OBJ_Collection][1039]
+-   [OBJ_Collection][1037]
+-   [OBJ_FigureElementCollection][1039]
 
 ## Introduction
 
@@ -2726,7 +2726,7 @@ While there are several built-in shapes such as polygons, rectangles and polylin
 
 To use the generic method however, it is important to understand how WebGL uses triangles to create shapes.
 
-Any shape can be quantized into triangles. For instance, the digram below shows a rectangle broken into two triangles with vertices labeled.
+Any shape can be quantized into triangles. For instance, the figure below shows a rectangle broken into two triangles with vertices labeled.
 
 <p style="text-align: center"><img src="./tutorials/draw/rect.png"></p>
 
@@ -15753,22 +15753,6 @@ e.animations.new()
   .start();
 ```
 
-## OBJ_FigureElementCollection
-
-[FigureElementCollection][73] options object.
-
-### Properties
-
--   `transform` **[TypeParsableTransform][1146]?** 
--   `position` **[TypeParsablePoint][1062]?** if defined, will overwrite first
-    translation of `transform`
--   `limits` **[Rect][1057]?** figure limits
--   `color` **[TypeColor][1053]?** default color
--   `parent` **([FigureElement][1058] | null)?** parent of collection
--   `border` **([Array][1049]&lt;[Array][1049]&lt;[Point][1064]>> | `"children"` \| `"rect"` \| [number][1051])?** 
--   `touchBorder` **([Array][1049]&lt;[Array][1049]&lt;[Point][1064]>> | `"border"` \| [number][1051] \| `"rect"`)?** 
--   `holeBorder` **[Array][1049]&lt;[Array][1049]&lt;[Point][1064]>>?** 
-
 ## OBJ_Collection
 
 Figure collection options object.
@@ -15794,6 +15778,22 @@ Figure collection options object.
     borders, otherwise use `Array<Array<TypeParsablePoint>` for a customizable
     border.
 -   `limits` **[Rect][1057]?** 
+
+## OBJ_FigureElementCollection
+
+[FigureElementCollection][73] options object.
+
+### Properties
+
+-   `transform` **[TypeParsableTransform][1146]?** 
+-   `position` **[TypeParsablePoint][1062]?** if defined, will overwrite first
+    translation of `transform`
+-   `limits` **[Rect][1057]?** figure limits
+-   `color` **[TypeColor][1053]?** default color
+-   `parent` **([FigureElement][1058] | null)?** parent of collection
+-   `border` **([Array][1049]&lt;[Array][1049]&lt;[Point][1064]>> | `"children"` \| `"rect"` \| [number][1051])?** 
+-   `touchBorder` **([Array][1049]&lt;[Array][1049]&lt;[Point][1064]>> | `"border"` \| [number][1051] \| `"rect"`)?** 
+-   `holeBorder` **[Array][1049]&lt;[Array][1049]&lt;[Point][1064]>>?** 
 
 [1]: #introduction
 
@@ -17867,11 +17867,11 @@ Figure collection options object.
 
 [1036]: #examples-121
 
-[1037]: #obj_figureelementcollection
+[1037]: #obj_collection
 
 [1038]: #properties-143
 
-[1039]: #obj_collection
+[1039]: #obj_figureelementcollection
 
 [1040]: #properties-144
 

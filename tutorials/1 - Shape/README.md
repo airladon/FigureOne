@@ -1,14 +1,15 @@
 # Example 1 - Getting Started
 
-Draw a circle.
+Draw a triangle.
 
 Download `index.html` and `index.js` into the same folder and open `index.html` in a browser to view example.
 
 ![](./example.png)
 
 ## Code
-`index.html`
+
 ```html
+<!-- index.html -->
 <!doctype html>
 <html>
 <body>
@@ -20,24 +21,25 @@ Download `index.html` and `index.js` into the same folder and open `index.html` 
 </html>
 ```
 
-`index.js`
 ```js
+// index.js
+
 // Create a figure
 const figure = new Fig.Figure();
 
-// Add circle to figure
+// Add a triangle
 figure.addElement(
   {
     name: 'tri',
-    method: 'polygon',
+    method: 'triangle',
     options: {
-      sides: 3,
-      radius: 0.2,
-      fill: true,
+      width: 1,
+      height: 1,
       color: [1, 0, 0, 1],
     },
   },
 );
+
 
 ```
 ## Explanation
@@ -63,11 +65,11 @@ Finally, the javascript file which will use the FigureOne library to create the 
 <script type="text/javascript" src='./index.js'></script>
 ```
 
-All other examples have the same, or very similar HTML index file.
+All other examples have the same, or very similar HTML index file, and so it will only be mentioned again if it changes.
 
 ### Javascript
 
-First a figure is created. `Fig` is the FigureOne library that is globally available to the script.
+First a figure is created. `Fig` is the FigureOne library globally available after loading the script.
 
 ```js
 const figure = new Fig.Figure();
@@ -79,30 +81,25 @@ A *figure* is an object that manages figure elements (class `FigureElement`). By
 const figure = new Fig.Figure({ htmlId: 'customId' });
 ```
 
-Next, a figure element in the shape of a circle is added.
+Next, a figure element in the shape of a triangle is added.
 
 ```js
 figure.addElement(
   {
-    name: 'circle',
-    method: 'polygon',
+    name: 'tri',
+    method: 'triangle',
     options: {
-      sides: 100,
-      radius: 0.2,
-      fill: true,
+      width: 1,
+      height: 1,
       color: [1, 0, 0, 1],
     },
   },
 );
+
 ```
 
-We are defining a *circle* figure element using the `polygon` method with the parameters of `sides`, `radius`, `fill`, and `color`.
+We are defining a *triangle* figure element using the `triangle` method with the parameters of `width`, `height`, and `color`.
 
 
-If the digram is changed in the future and drawing needs to be drawing needs to be queued again, then use:
-
-```js
-figure.animateNextFrame()
-```
 
 <!-- [link here](../../docs/README.md#TypeEquationPhrase) -->
