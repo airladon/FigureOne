@@ -24,7 +24,7 @@ Then in javascript, create a figure and a shape within it:
 ```js
 const figure = new Fig.Figure();
 
-figure.addElement(
+figure.add(
   {
     name: 'tri',
     method: 'triangle',

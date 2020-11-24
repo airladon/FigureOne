@@ -23,7 +23,7 @@ A grid is included in this javascript file to make it obvious how text is aligne
 ```javascript
 // index.js
 const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
-figure.addElements([
+figure.add([
   {
     name: 'origin',
     method: 'polygon',
@@ -66,7 +66,7 @@ Let's start by creating a {@link FigureElementPrimitive} element that writes 'he
 <p style="text-align: center"><img src="./tutorials/text/text.png"></p>
 
 ```javascript
-figure.addElement(
+figure.add(
   {
     name: 'simpleText',
     method: 'text',
@@ -84,7 +84,7 @@ The text has been horizontally aligned to its center, and vertically aligned to 
 As this is a {@link FigureElementPrimitive}, transforms can be applied to it, and it can be touched and moved. For instance, the example below will rotate the text when it is dragged with a touch from the user.
 
 ```javascript
-figure.addElement(
+figure.add(
   {
     name: 'spinner',
     method: 'text',
@@ -109,7 +109,7 @@ The same `text` method can be used to create text at different locations.
 <p style="text-align: center"><img src="./tutorials/text/compass.png"></p>
 
 ```javascript
-figure.addElement(
+figure.add(
   {
     name: 'compass',
     method: 'text',
@@ -152,7 +152,7 @@ Alternately, `text.line` can be used as it will automatically layout the text el
 <p style="text-align: center"><img src="./tutorials/text/text-line.png"></p>
 
 ```javascript
-figure.addElement(
+figure.add(
   {
     name: 'formattedLine',
     method: 'text.line',
@@ -186,7 +186,7 @@ When using more text, it is sometimes useful to split these in the API to make i
 The same example above can be done with `text.lines`:
 
 ```javascript
-figure.addElement(
+figure.add(
   {
     name: 'formattedLine',
     method: 'text.lines',
@@ -212,7 +212,7 @@ figure.setTouchable();
 <p style="text-align: center"><img src="./tutorials/text/text-lines.png"></p>
 
 ```javascript
-figure.addElement(
+figure.add(
   {
     name: 't',
     method: 'text.lines',

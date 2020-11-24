@@ -11,7 +11,7 @@ Open `index.html` in a browser to view example.
 const figure = new Fig.Figure();
 
 // Add a simple shape to the figure
-figure.addElements([
+figure.add([
   {
     name: 'hexagon',
     method: 'polygon',

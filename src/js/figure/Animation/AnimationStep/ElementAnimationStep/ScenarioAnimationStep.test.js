@@ -12,7 +12,7 @@ describe('Figure Recorder', () => {
   let a;
   beforeEach(() => {
     figure = makeFigure();
-    figure.addElements([
+    figure.add([
       {
         name: 'a',
         method: 'polygon',

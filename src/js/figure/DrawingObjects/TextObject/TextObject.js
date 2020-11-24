@@ -863,7 +863,6 @@ class TextObject extends TextObjectBase {
         fontToUse = font;
       }
       const fontDefinition = joinObjects({}, options.font, fontToUse);
-
       figureTextArray.push(new FigureText(
         this.drawContext2D,
         locationToUse,  // $FlowFixMe

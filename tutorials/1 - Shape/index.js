@@ -2,7 +2,7 @@
 const figure = new Fig.Figure();
 
 // Add a triangle
-figure.addElement(
+figure.add(
   {
     name: 'tri',
     method: 'triangle',

@@ -87,7 +87,7 @@ import {
  * in the final result (`true`)
  * @example
  * // Grid copy
- * figure.addElement({
+ * figure.add({
  *   name: 'triGrid',
  *   method: 'polygon',
  *   options: {
@@ -112,7 +112,7 @@ import {
  *
  * @example
  * // Radial lines copy
- * figure.addElement({
+ * figure.add({
  *   name: 'radialLines',
  *   method: 'generic',
  *   options: {
@@ -136,7 +136,7 @@ import {
  *
  * @example
  * // Ring copy (without original shape)
- * figure.addElement({
+ * figure.add({
  *   name: 'halfRings',
  *   method: 'polygon',
  *   options: {

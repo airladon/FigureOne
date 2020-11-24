@@ -39,7 +39,7 @@ You can then open a browser and go to http://localhost:8080.
 ```js
 const figure = new Fig.Figure();
 
-figure.addElement(
+figure.add(
   {
     name: 'flower',
     method: 'polygon',

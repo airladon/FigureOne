@@ -131,7 +131,7 @@ export type TypeEquationPhrase =
  *
  * @example
  * // Example showing the difference between with and without container
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -226,7 +226,7 @@ export type EQN_Container = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -239,7 +239,7 @@ export type EQN_Container = {
  *
  * @example
  * // Example showing object and array fraction definitions, and nesting
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -350,7 +350,7 @@ export type EQN_Fraction = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -362,7 +362,7 @@ export type EQN_Fraction = {
  * figure.elements._eqn.showForm('1');
  *
  * // Some different bracket examples
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -449,7 +449,7 @@ export type EQN_Scale = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -466,7 +466,7 @@ export type EQN_Scale = {
  *
  * @example
  * // Some different bracket examples
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -569,7 +569,7 @@ export type EQN_Bracket = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -582,7 +582,7 @@ export type EQN_Bracket = {
  *
  * @example
  * // Example showing object and array root definitions, and custom roots
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -704,7 +704,7 @@ export type EQN_Root = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -720,7 +720,7 @@ export type EQN_Root = {
  *
  * @example
  * // Some different strike examples
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -819,7 +819,7 @@ export type EQN_Strike = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -832,7 +832,7 @@ export type EQN_Strike = {
  *
  * @example
  * // Some different box examples
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -947,7 +947,7 @@ export type EQN_Box = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -963,7 +963,7 @@ export type EQN_Box = {
  *
  * @example
  * // Some different bar examples
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1114,7 +1114,7 @@ export type EQN_Bar = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1127,7 +1127,7 @@ export type EQN_Bar = {
  *
  * @example
  * // Example showing different integral options
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1268,7 +1268,7 @@ export type EQN_Integral = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1281,7 +1281,7 @@ export type EQN_Integral = {
  *
  * @example
  * // Example showing different options
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1402,7 +1402,7 @@ export type EQN_SumOf = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1415,7 +1415,7 @@ export type EQN_SumOf = {
  *
  * @example
  * // Example showing different options
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1516,7 +1516,7 @@ export type EQN_ProdOf = {
  *
  * @example
  * //Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1529,7 +1529,7 @@ export type EQN_ProdOf = {
  *
  * @example
  * // Example showing different subscript options
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1594,7 +1594,7 @@ export type EQN_Subscript = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1607,7 +1607,7 @@ export type EQN_Subscript = {
  *
  * @example
  * // Examples of superscript animations
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1666,7 +1666,7 @@ export type EQN_Superscript = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1679,7 +1679,7 @@ export type EQN_Superscript = {
  *
  * @example
  * // Example showing different super-sub script options
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1751,7 +1751,7 @@ export type EQN_SuperscriptSubscript = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1764,7 +1764,7 @@ export type EQN_SuperscriptSubscript = {
  *
  * @example
  * // Some different comment examples
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1856,7 +1856,7 @@ export type EQN_Comment = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1872,7 +1872,7 @@ export type EQN_Comment = {
  *
  * @example
  * // Some different strike examples
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1949,7 +1949,7 @@ export type EQN_StrikeComment = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -1962,7 +1962,7 @@ export type EQN_StrikeComment = {
  *
  * @example
  * // Some different padding examples
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -2040,7 +2040,7 @@ export type EQN_Pad = {
  *
  * @example
  * // Simple
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -2057,7 +2057,7 @@ export type EQN_Pad = {
  *
  * @example
  * // Some different bar examples
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -2505,7 +2505,7 @@ export type EQN_Glyphs = {
  *
  * @example
  * // Some different annotation examples
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {

@@ -16,7 +16,7 @@ const figure = new Fig.Figure();
 figure.setTouchable();
 
 // Add circle to figure
-figure.addElement(
+figure.add(
   {
     name: 'circle',
     method: 'polygon',

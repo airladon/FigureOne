@@ -14,7 +14,7 @@ describe('Equation Functions - Integral', () => {
     figure = makeFigure();
     functions = {
       symbols: () => {
-        figure.addElement({
+        figure.add({
           name: 'eqn',
           method: 'equation',
           options: {

@@ -186,7 +186,7 @@ function cleanTraces(
  * ```
  * @example
  * // Plot of single trace with auto axis scaling
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -198,7 +198,7 @@ function cleanTraces(
  * // Multiple traces with a legend
  * // Some traces are customized beyond the defaul color to include dashes and
  * // markers
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -225,7 +225,7 @@ function cleanTraces(
  *
  * @example
  * // Multiple grids and simple titles
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -256,7 +256,7 @@ function cleanTraces(
  * // Hide axes
  * // Use plot frame and plot area
  * // Title has a subtitle
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -283,7 +283,7 @@ function cleanTraces(
  *
  * @example
  * // Secondary y axis
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -331,7 +331,7 @@ function cleanTraces(
  * // Cartesian axes crossing at the zero point
  * // Automatic layout doesn't support this, but axes, ticks, labels and titles
  * // can all be customized to create it.
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {

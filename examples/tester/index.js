@@ -1,6 +1,6 @@
 const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 // const figure = new Fig.Figure({ limits: [-4.5, -4.5, 9, 9]});
-// figure.addElements([
+// figure.add([
 //   {
 //     name: 'origin',
 //     method: 'polygon',
@@ -49,7 +49,7 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 // });
 
 // // Add the equation with all it's forms
-// figure.addElement({
+// figure.add({
 //   name: 'eqn',
 //   method: 'collections.equation',
 //   options: {
@@ -147,7 +147,7 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 // });
 
 // // Add the right angle triangles to the figure
-// figure.addElements([
+// figure.add([
 //   makeTriangle('tri4', { position: [-1.5, 2], rotation: 3 * Math.PI / 2 }),
 //   makeTriangle('tri3', { position: [1.5, 2], rotation: Math.PI }),
 //   makeTriangle('tri2', { position: [1.5, -1], rotation: Math.PI / 2 }),
@@ -176,7 +176,7 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 // // ////////////////////////////////////////////////////////////////////////
 
 // // Add some text to help the user start and navigate the equation
-// figure.addElements([
+// figure.add([
 //   {
 //     name: 'start',
 //     method: 'text',
@@ -240,11 +240,11 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 // figure.elements.setScenarios('initial');
 
 
-// figure.addElement(
+// figure.add(
 //   {
 //     name: 'c',
 //     method: 'collections.collection',
-//     addElements: [
+//     elements: [
 //       {
 //         name: 'hex',
 //         method: 'primitives.polygon',
@@ -271,7 +271,7 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 // figure.setTouchable();
 
 // // Add circle to figure
-// figure.addElement(
+// figure.add(
 //   {
 //     name: 'circle',
 //     method: 'polygon',
@@ -293,7 +293,7 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 // Multiple traces with a legend
 // Some traces are customized beyond the defaul color to include dashes and
 // markers
-figure.addNew({
+figure.add({
   name: 'plot',
   method: 'polygon',
   options: {
@@ -301,7 +301,7 @@ figure.addNew({
   },
 });
 
-figure.addNew(
+figure.add(
   {
     name: 'c',
     method: 'collection',
@@ -335,7 +335,16 @@ const h1 = figure.primitives.polygon({
 });
 console.log(h1)
 
-c1.addNew('j1', h1);
+c1.add('j1', h1);
 
-figure.addNew(c1)
+figure.add(c1)
 console.log(figure.elements)
+
+figure.add({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    forms: { 0: ['a', 'b'] },
+  },
+});
+figure.getElement('eqn').showForm('0');

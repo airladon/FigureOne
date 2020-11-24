@@ -228,7 +228,7 @@ describe('Collections line tests', () => {
       },
     };
     create = (option) => {
-      figure.addElement({
+      figure.add({
         name: 'l',
         method: 'collections.line',
         options: figureOptions[option],

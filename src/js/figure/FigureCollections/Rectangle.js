@@ -107,7 +107,7 @@ export type COL_Rectangle = {
  *
  * @example
  * // Simple rectangle
- * figure.addElement({
+ * figure.add({
  *   name: 'rect',
  *   method: 'collections.rectangle',
  *   options: {
@@ -136,7 +136,7 @@ export type COL_Rectangle = {
  *
  * @example
  * // Rectangle surrounds elements of an equation
- * figure.addElements([
+ * figure.add([
  *   {
  *     name: 'rect',
  *     method: 'collections.rectangle',

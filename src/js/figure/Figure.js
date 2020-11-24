@@ -171,7 +171,7 @@ export type OBJ_Figure = {
  *
  * // index.js
  * const figure = new Fig.Figure({ limits: [-1, -1, 2, 2 ]});
- * figure.addElement(
+ * figure.add(
  *   {
  *     name: 'p',
  *     method: 'polygon',
@@ -490,7 +490,7 @@ class Figure {
     // deprecate
     // $FlowFixMe
     // this.create = {
-    //   collection: this.shapes.collection.bind(this.shapes),
+    //   collection: this.collections.collection.bind(this.shapes),
     //   generic: this.shapes.generic.bind(this.shapes),
     //   polyline: this.shapes.polyline.bind(this.shapes),
     //   polygon: this.shapes.polygon.bind(this.shapes),
@@ -985,104 +985,103 @@ class Figure {
    * });
    * figure.add('hexagon', hex);
    */
-  add(
+  addLegacy(
     name: string,
     figureElement: FigureElementPrimitive | FigureElementCollection,
   ) {
     this.elements.add(name, figureElement);
   }
 
-  addNew(options: {
-   element: FigureElement | TypeAddElementObject
-     | Array<TypeAddElementObject | FigureElement>,
-    name: string,
-    to: string | FigureElementCollection,
-    addElementsKey: string,
-  }) {
-    this.elements.addNew(options)
-  }
-
-
-  /**
-   * Add elements from element definitions to the figure.
-   *
-   * @param {Array<TypeAddElementObject>} elementsToAdd - array of element definitions
-   * @param {FigureElementCollection} [collection = this.elements] - the
-   * collection to add elements to
-   * @param {string} [addElementsKey = 'addElements'] - key to add elements
-   *
-   * @example
-   * figure.addElements([
-   *   {
-   *     name: 'hex',
-   *     method: 'polygon',
-   *     options: {
-   *       radius: 0.5,
-   *       fill: true,
-   *       sides: 6,
-   *       position: [-0.5, 0],
-   *     },
-   *   },
-   *   {
-   *     name: 'tri',
-   *     method: 'polygon',
-   *     options: {
-   *       radius: 0.5,
-   *       fill: true,
-   *       sides: 3,
-   *       position: [0.5, 0],
-   *     },
-   *   },
-   * ]);
-   */
-  addElements(
-    elementsToAdd: Array<TypeAddElementObject>,
-    collection: FigureElementCollection = this.elements,
-    addElementsKey: string = 'addElements',
+  add(
+    nameOrElementOrElementDefinition: string
+        | FigureElement | TypeAddElementObject
+        | Array<FigureElement | TypeAddElementObject>,
+    elementToAdd: FigureElement,
   ) {
-    addElements(
-      // this.shapes,
-      // this.equation,
-      this.collections,
-      collection,
-      elementsToAdd,
-      addElementsKey,
-    );
+    this.elements.add(nameOrElementOrElementDefinition, elementToAdd);
   }
 
-  /**
-   * Add an element from an element definitions to the figure.
-   * @param {TypeAddElementObject} elementDefinition - array of element definitions
-   * @param {FigureElementCollection} [collection = this.elements] - the
-   * collection to add elements to
-   * @param {string} [addElementsKey = 'addElements'] - key to add elements
-   *
-   * @example
-   * figure.addElement({
-   *   name: 'hex',
-   *   method: 'polygon',
-   *   options: {
-   *     radius: 0.5,
-   *     fill: true,
-   *     sides: 6,
-   *     position: [-0.5, 0],
-   *   },
-   * });
-   */
-  addElement(
-    elementDefinition: TypeAddElementObject,
-    rootCollection: FigureElementCollection = this.elements,
-    addElementsKey: string = 'addElements',
-  ) {
-    addElements(
-      // this.shapes,
-      // this.equation,
-      this.collections,
-      rootCollection,
-      [elementDefinition],
-      addElementsKey,
-    );
-  }
+
+  // /**
+  //  * Add elements from element definitions to the figure.
+  //  *
+  //  * @param {Array<TypeAddElementObject>} elementsToAdd - array of element definitions
+  //  * @param {FigureElementCollection} [collection = this.elements] - the
+  //  * collection to add elements to
+  //  * @param {string} [addElementsKey = 'addElements'] - key to add elements
+  //  *
+  //  * @example
+  //  * figure.add([
+  //  *   {
+  //  *     name: 'hex',
+  //  *     method: 'polygon',
+  //  *     options: {
+  //  *       radius: 0.5,
+  //  *       fill: true,
+  //  *       sides: 6,
+  //  *       position: [-0.5, 0],
+  //  *     },
+  //  *   },
+  //  *   {
+  //  *     name: 'tri',
+  //  *     method: 'polygon',
+  //  *     options: {
+  //  *       radius: 0.5,
+  //  *       fill: true,
+  //  *       sides: 3,
+  //  *       position: [0.5, 0],
+  //  *     },
+  //  *   },
+  //  * ]);
+  //  */
+  // addElements(
+  //   elementsToAdd: Array<TypeAddElementObject>,
+  //   collection: FigureElementCollection = this.elements,
+  //   addElementsKey: string = 'addElements',
+  // ) {
+  //   addElements(
+  //     // this.shapes,
+  //     // this.equation,
+  //     this.collections,
+  //     collection,
+  //     elementsToAdd,
+  //     addElementsKey,
+  //   );
+  // }
+
+  // /**
+  //  * Add an element from an element definitions to the figure.
+  //  * @param {TypeAddElementObject} elementDefinition - array of element definitions
+  //  * @param {FigureElementCollection} [collection = this.elements] - the
+  //  * collection to add elements to
+  //  * @param {string} [addElementsKey = 'addElements'] - key to add elements
+  //  *
+  //  * @example
+  //  * figure.add({
+  //  *   name: 'hex',
+  //  *   method: 'polygon',
+  //  *   options: {
+  //  *     radius: 0.5,
+  //  *     fill: true,
+  //  *     sides: 6,
+  //  *     position: [-0.5, 0],
+  //  *   },
+  //  * });
+  //  */
+  // addElement(
+  //   elementDefinition: TypeAddElementObject,
+  //   rootCollection: FigureElementCollection = this.elements,
+  //   addElementsKey: string = 'addElements',
+  // ) {
+  //   addElements(
+  //     // this.shapes,
+  //     // this.equation,
+  //     this.collections,
+  //     rootCollection,
+  //     [elementDefinition],
+  //     addElementsKey,
+  //   );
+  // }
 
   /**
    * Get element from element name or path.
@@ -1091,7 +1090,7 @@ class Figure {
    *
    * @example
    * // Get a figure element and rotate it
-   * figure.addElements([
+   * figure.add([
    *   {
    *     name: 'hex',
    *     method: 'polygon',

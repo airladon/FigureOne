@@ -4561,7 +4561,7 @@
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span> ]});
-figure.addElement(
+figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'labeledLine'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'collection'</span>,
@@ -4755,7 +4755,7 @@ as advanced lines, shapes, equations and plots
 
 <span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span> ]});
-figure.addElement(
+figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
@@ -5003,7 +5003,7 @@ collection to add elements to
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>figure.addElements([
+      <pre class='p1 overflow-auto round fill-light'>figure.add([
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'hex'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
@@ -5122,7 +5122,7 @@ collection to add elements to
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>figure.addElement({
+      <pre class='p1 overflow-auto round fill-light'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'hex'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
   <span class="hljs-attr">options</span>: {
@@ -5209,7 +5209,7 @@ element.getElement
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Get a figure element and rotate it</span>
-figure.addElements([
+figure.add([
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'hex'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
@@ -15445,7 +15445,7 @@ identity transforms.</p>
 <span class="hljs-comment">// add it to the figure</span>
 figure.elements.add(<span class="hljs-string">'p'</span>, p);</pre>
 <p>Another way to create and add the same shape to the figure is to use the <code>Figure.addElement</code> or <code>Figure.addElements</code> method:</p>
-<pre class='hljs'>figure.addElement({
+<pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
   <span class="hljs-attr">options</span>: {
@@ -15476,7 +15476,7 @@ figure.elements.add(<span class="hljs-string">'p'</span>, p);</pre>
 <li>1, 2, 3</li>
 <li>1, 3, 4</li>
 </ul>
-<pre class='hljs'>figure.addElement({
+<pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'rectangle'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
   <span class="hljs-attr">options</span>: {
@@ -15492,7 +15492,7 @@ figure.elements.add(<span class="hljs-string">'p'</span>, p);</pre>
 <h4>drawType: 'strip'</h4>
 <p>A strip starts with one triangle, and then every subsequent vertex will create a triangle with the last two vertices.</p>
 <p>Therefore, to draw the same rectangle we would draw the first triangle with the vertices 2, 1 and then 3. Then 1 and 3 could be used with 4 to create the second triangle.</p>
-<pre class='hljs'>figure.addElement({
+<pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'rectangle'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
   <span class="hljs-attr">options</span>: {
@@ -15509,7 +15509,7 @@ figure.elements.add(<span class="hljs-string">'p'</span>, p);</pre>
 <h4>drawType: 'fan'</h4>
 <p>A fan starts with one point. The next two points create the first triangle, and then every subsequent point uses the first and last point to create the next triangle.</p>
 <p>Therefore, to draw the same rectangle we would draw the first point 1, then complete the first triangle with 2 and 3. Then we would draw point 4 to make the second triangle with points 1 and 3.</p>
-<pre class='hljs'>figure.addElement({
+<pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'rectangle'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
   <span class="hljs-attr">options</span>: {
@@ -15529,7 +15529,7 @@ figure.elements.add(<span class="hljs-string">'p'</span>, p);</pre>
 <p><code>'lines'</code> is the final style that WebGL accepts for drawing primitives. In this case vertex pairs are used to create lines.</p>
 <p>This is not useful for drawing filled shapes, but is useful for drawing thin outlines.</p>
 <p>For instance, to draw a rectangle outline:</p>
-<pre class='hljs'>figure.addElement({
+<pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'rectangle'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
   <span class="hljs-attr">options</span>: {
@@ -15722,7 +15722,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Square and triangle</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'squareAndTri'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
   <span class="hljs-attr">options</span>: {
@@ -15736,7 +15736,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// rhombus with larger touch borders</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'rhombus'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
   <span class="hljs-attr">options</span>: {
@@ -15760,7 +15760,7 @@ figure.setTouchable();</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid of triangles</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'gridOfTris'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
   <span class="hljs-attr">options</span>: {
@@ -15976,7 +15976,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple line defined by two points</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'l'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'line'</span>,
   <span class="hljs-attr">options</span>: {
@@ -15988,7 +15988,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Dashed line defined by a point, a length and an angle</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'l'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'line'</span>,
   <span class="hljs-attr">options</span>: {
@@ -16002,7 +16002,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with two different arrows on ends</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'l'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'line'</span>,
   <span class="hljs-attr">options</span>: {
@@ -16309,7 +16309,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line</span>
-figure.addElement(
+figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
@@ -16322,7 +16322,7 @@ figure.addElement(
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Square with rounded corners and dot-dash line</span>
-figure.addElement(
+figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
@@ -16339,7 +16339,7 @@ figure.addElement(
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Corners only of a triangle</span>
-figure.addElement(
+figure.add(
  {
    <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
    <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
@@ -16355,7 +16355,7 @@ figure.addElement(
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Zig zag with arrows</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'arrowedLine'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
   <span class="hljs-attr">options</span>: {
@@ -16577,7 +16577,7 @@ the arrow is aligned at (0, 0) in draw space (
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Triangle arrow with tail</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'arrow'</span>,
   <span class="hljs-attr">options</span>: {
@@ -16589,7 +16589,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Barb arrow with 0 tail</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'arrow'</span>,
   <span class="hljs-attr">options</span>: {
@@ -16614,7 +16614,7 @@ figure.addElement({
 }
 
 <span class="hljs-comment">// Create arrow and copy to transforms</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'arrow'</span>,
   <span class="hljs-attr">options</span>: {
@@ -16853,7 +16853,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Right angle triangle</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'triangle'</span>,
   <span class="hljs-attr">options</span>: {
@@ -16878,7 +16878,7 @@ figure.elements.add(<span class="hljs-string">'t'</span>, t);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Star from 4 equilateral triangles</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'star'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'triangle'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17035,7 +17035,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Filled rectangle</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'r'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'rectangle'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17046,7 +17046,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Corners with radius and dashed line</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'r'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'rectangle'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17065,7 +17065,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Rectangle copies rotated</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'r'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'rectangle'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17218,7 +17218,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Filled ellipse</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'e'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'ellipse'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17230,7 +17230,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Dashed line circle</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'e'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'ellipse'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17246,7 +17246,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Ellipse grid</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'e'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'ellipse'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17423,7 +17423,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple filled hexagon</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'hexagon'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17446,7 +17446,7 @@ figure.elements.add(<span class="hljs-string">'circle'</span>, circ);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Half octagon rotated</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'halfOctagon'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17611,7 +17611,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple 5 pointed star</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'s'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'star'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17622,7 +17622,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// 7 pointed dashed line star</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'s'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'star'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17638,7 +17638,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Star surrounded by stars</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'s'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'star'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17807,7 +17807,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid defined by xStep and yStep</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'g'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'grid'</span>,
   <span class="hljs-attr">options</span>: {
@@ -17835,7 +17835,7 @@ figure.elements.add(<span class="hljs-string">'g'</span>, grid);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid of grids</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'g'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'grid'</span>,
   <span class="hljs-attr">options</span>: {
@@ -18016,7 +18016,7 @@ border.
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>figure.addElement(
+      <pre class='p1 overflow-auto round fill-light'>figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'c'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'collection'</span>,
@@ -18173,7 +18173,7 @@ options.</p>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Pulse an annotated line</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'l'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.line'</span>,
   <span class="hljs-attr">options</span>: {
@@ -18191,7 +18191,7 @@ figure.elements._l.pulseWidth({ <span class="hljs-attr">duration</span>: <span c
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Animate growing a line while showing it's length</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'l'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.line'</span>,
   <span class="hljs-attr">options</span>: {
@@ -19413,7 +19413,7 @@ options.</p>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Angle with size label</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.angle'</span>,
   <span class="hljs-attr">options</span>: {
@@ -19447,7 +19447,7 @@ figure.add(<span class="hljs-string">'a'</span>, a);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Multi colored angle with arrows and an equation label</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.angle'</span>,
   <span class="hljs-attr">options</span>: {
@@ -19497,7 +19497,7 @@ figure.add(<span class="hljs-string">'a'</span>, a);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Change angle animation</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.angle'</span>,
   <span class="hljs-attr">options</span>: {
@@ -19519,7 +19519,7 @@ figure.elements._a.animations.new()
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Movable angle</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.angle'</span>,
   <span class="hljs-attr">options</span>: {
@@ -20386,7 +20386,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Polyline with angle annotations</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.polyline'</span>,
   <span class="hljs-attr">options</span>: {
@@ -20403,7 +20403,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Triangle with unknown angle</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.polyline'</span>,
   <span class="hljs-attr">options</span>: {
@@ -20427,7 +20427,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Dimensioned square</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.polyline'</span>,
   <span class="hljs-attr">options</span>: {
@@ -20454,7 +20454,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// User adjustable polyline</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.polyline'</span>,
   <span class="hljs-attr">options</span>: {
@@ -20470,7 +20470,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Annotations that automatically updates as user changes triangle</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.polyline'</span>,
   <span class="hljs-attr">options</span>: {
@@ -21269,7 +21269,7 @@ and <a href="#animationmanagerbuilder">animations.builder</a>).</p>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple rectangle</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'rect'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.rectangle'</span>,
   <span class="hljs-attr">options</span>: {
@@ -21298,7 +21298,7 @@ figure.add(<span class="hljs-string">'rect'</span>, rect);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Rectangle surrounds elements of an equation</span>
-figure.addElements([
+figure.add([
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'rect'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.rectangle'</span>,
@@ -21501,7 +21501,7 @@ value is within an axis.</p>
 and <a href="#obj_axisticks">OBJ_AxisTicks</a>.</p>
 <h4>Example</h4>
 <pre class='hljs'><span class="hljs-comment">// By default an axis is an 'x' axis</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -21523,7 +21523,7 @@ figure.add(<span class="hljs-string">'axis'</span>, axis);</pre>
 <p><img src="./apiassets/advaxis_ex2.png"></p>
 <h4>Example</h4>
 <pre class='hljs'><span class="hljs-comment">// An axis can have multiple sets of ticks and a title</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -21538,7 +21538,7 @@ figure.addElement({
 <h4>Example</h4>
 <pre class='hljs'><span class="hljs-comment">// An axis line and ticks can be customized to be dashed</span>
 <span class="hljs-comment">// and have arrows</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -21567,7 +21567,7 @@ figure.addElement({
 <h4>Example</h4>
 <pre class='hljs'><span class="hljs-comment">// An axis title can have grid lines extend from it, and titles with more</span>
 <span class="hljs-comment">// formatting</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -22185,7 +22185,7 @@ specific parts of the plot.
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Plot of single trace with auto axis scaling</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -22197,7 +22197,7 @@ figure.addElement({
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Multiple traces with a legend</span>
 <span class="hljs-comment">// Some traces are customized beyond the defaul color to include dashes and</span>
 <span class="hljs-comment">// markers</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -22224,7 +22224,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Multiple grids and simple titles</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -22255,7 +22255,7 @@ figure.addElement({
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Hide axes</span>
 <span class="hljs-comment">// Use plot frame and plot area</span>
 <span class="hljs-comment">// Title has a subtitle</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -22282,7 +22282,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Secondary y axis</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -22330,7 +22330,7 @@ figure.addElement({
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Cartesian axes crossing at the zero point</span>
 <span class="hljs-comment">// Automatic layout doesn't support this, but axes, ticks, labels and titles</span>
 <span class="hljs-comment">// can all be customized to create it.</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -22634,7 +22634,7 @@ COL_Rectangle
 <p>A grid is included in this javascript file to make it obvious how text is aligned and justified</p>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });
-figure.addElements([
+figure.add([
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'origin'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
@@ -22671,7 +22671,7 @@ figure.addElements([
 <h3>Quick Start - <code>text</code></h3>
 <p>Let's start by creating a <a href="#figureelementprimitive">FigureElementPrimitive</a> element that writes 'hello world' to the figure.</p>
 <p style="text-align: center"><img src="./tutorials/text/text.png"></p>
-<pre class='hljs'>figure.addElement(
+<pre class='hljs'>figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'simpleText'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
@@ -22684,7 +22684,7 @@ figure.addElements([
 );</pre>
 <p>The text has been horizontally aligned to its center, and vertically aligned to its middle around its default location of <code>(0, 0)</code>.</p>
 <p>As this is a <a href="#figureelementprimitive">FigureElementPrimitive</a>, transforms can be applied to it, and it can be touched and moved. For instance, the example below will rotate the text when it is dragged with a touch from the user.</p>
-<pre class='hljs'>figure.addElement(
+<pre class='hljs'>figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'spinner'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
@@ -22704,7 +22704,7 @@ figure.addElements([
 figure.setTouchable();</pre>
 <p>The same <code>text</code> method can be used to create text at different locations.</p>
 <p style="text-align: center"><img src="./tutorials/text/compass.png"></p>
-<pre class='hljs'>figure.addElement(
+<pre class='hljs'>figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'compass'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
@@ -22738,7 +22738,7 @@ figure.setTouchable();</pre>
 <p>The above example can be used to do this, but it is cumbersome as the locations of part of the phrase with different formatting will need to be experimented with.</p>
 <p>Alternately, <code>text.line</code> can be used as it will automatically layout the text elements from left to right based on their calculated widths.</p>
 <p style="text-align: center"><img src="./tutorials/text/text-line.png"></p>
-<pre class='hljs'>figure.addElement(
+<pre class='hljs'>figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'formattedLine'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text.line'</span>,
@@ -22762,7 +22762,7 @@ figure.setTouchable();</pre>
 <p>When using more text, it is sometimes useful to split these in the API to make it easier to read the text.</p>
 <p><code>text.lines</code> uses the special character <code>'|'</code> to surround parts of a phrase that needs to me modified with custom formating. The modifier definitions are then provided later in the interface.</p>
 <p>The same example above can be done with <code>text.lines</code>:</p>
-<pre class='hljs'>figure.addElement(
+<pre class='hljs'>figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'formattedLine'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text.lines'</span>,
@@ -22783,7 +22783,7 @@ figure.setTouchable();</pre>
 figure.setTouchable();</pre>
 <p><code>text.lines</code> also allows for multiple lines of text to be laid out and justified.</p>
 <p style="text-align: center"><img src="./tutorials/text/text-lines.png"></p>
-<pre class='hljs'>figure.addElement(
+<pre class='hljs'>figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text.lines'</span>,
@@ -22999,7 +22999,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Single string</span>
-figure.addElement(
+figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
@@ -23013,7 +23013,7 @@ figure.addElement(
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Multi string</span>
-figure.addElement(
+figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
@@ -23217,7 +23217,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// "Hello to the world1" with highlighted "to the" and superscript "1"</span>
-figure.addElement(
+figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'line'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text.line'</span>,
@@ -23459,7 +23459,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// "Two justified lines"</span>
-figure.addElement(
+figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'t'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'text.lines'</span>,
@@ -23480,7 +23480,7 @@ figure.addElement(
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// "Example showing many features of textLines"</span>
-figure.addElement(
+figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'lines'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'textLines'</span>,
@@ -23567,7 +23567,7 @@ figure.addElement(
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });
 
 <span class="hljs-comment">// grid</span>
-figure.addElements([
+figure.add([
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'origin'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
@@ -23603,7 +23603,7 @@ figure.addElements([
 ]);
 
 <span class="hljs-comment">// shape to animate</span>
-figure.addElement(
+figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
@@ -23634,7 +23634,7 @@ figure.addElement(
   .start();</pre>
 <p>An animation manager is tied to one element, but can be used to animate other elements too</p>
 <pre class='hljs'><span class="hljs-comment">// add another element</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'q'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
   <span class="hljs-attr">options</span>: {
@@ -28917,7 +28917,7 @@ equation.goToForm({
 <p><img src="./tutorials/equation/curved.gif"></p>
 <h3>Object Definition</h3>
 <p>Similar to shapes and text, the same equation above can be defined with an options object. For complicated equations, options objects can be used with code folding in an IDE to more easily read and navigate an equation definition. Also, because object form is JSON compatible, complex equations can be easily shared.</p>
-<pre class='hljs'>figure.addElement(
+<pre class='hljs'>figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'equation'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
@@ -28974,7 +28974,7 @@ equation.setMovable();</pre>
 <h4>Inline element definitions</h4>
 <p>Equation elements can all be defined in the <code>elements</code> property. However, simple elements that have the same text as the unique id that would be used to identify it can be defined inline.</p>
 <p>For instance, we can recreate an example above as:</p>
-<pre class='hljs'>figure.addElement({
+<pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -28991,7 +28991,7 @@ equation.setMovable();</pre>
 figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 <p><img src="./tutorials/equation/inline.png"></p>
 <p>Elements defined inline can be used in other forms:</p>
-<pre class='hljs'>figure.addElement({
+<pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -29014,7 +29014,7 @@ figure.elements._eqn.goToForm({
 });</pre>
 <p><img src="./tutorials/equation/inline_same.gif"></p>
 <p>Even symbols can be defined inline:</p>
-<pre class='hljs'>figure.addElement({
+<pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -29030,7 +29030,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 <p>Underscores have a special meaning for inline definitions.</p>
 <p>Underscores before text will be hidden when rendered, but can make unique ids that are valid javascript object keys (a requirement for a unique id). In javascript, a space cannot be the first character of an object key, but it can be after the first character.</p>
 <p>Underscores after text can be used to create unique identifiers and therefore used to make multiple elements with the same text. The underscore, and all text after it will not be rendered.</p>
-<pre class='hljs'>figure.addElement({
+<pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -29042,7 +29042,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 <p><img src="./tutorials/equation/valid_key.png"></p>
 <p>Underscores can also be used to give inline symbol definitions unqiue identifiers. In this case, the text before the underscore is the unique identifier, and the text after defines the symbol.</p>
-<pre class='hljs'>figure.addElement({
+<pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -29062,7 +29062,7 @@ figure.elements._eqn.goToForm({
 <h4>Function Definitions</h4>
 <p>Function definitions can either be array definitions (an equation phrase) or object definitions. Array definitions are useful in simple definitions with minimal layout customizations. Object definitions are more readable when many options are required to customize a layout, or the input to the functions are more complicated equation phrases.</p>
 <p>Array definitions, or equation phrases, can also be spread over several lines to increase readability.</p>
-<pre class='hljs'>figure.addElement({
+<pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -29112,7 +29112,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 <p><img src="./tutorials/equation/readability.gif"></p>
 <h4>Phrases</h4>
 <p>Often different forms of an equation reuse equation phrases, like fractions. To make equation forms more readable, it can be useful to define a phrase once, and then refer to its identifier throughout the forms.</p>
-<pre class='hljs'>figure.addElement({
+<pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -29231,7 +29231,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create with options definition</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -30487,7 +30487,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -30500,7 +30500,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing object and array fraction definitions, and nesting</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -30772,7 +30772,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -30785,7 +30785,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing object and array root definitions, and custom roots</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -30960,7 +30960,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">//Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -30973,7 +30973,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing different subscript options</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -31123,7 +31123,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -31136,7 +31136,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Examples of superscript animations</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -31293,7 +31293,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -31306,7 +31306,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>); *</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing different super-sub script options</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -31519,7 +31519,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -31536,7 +31536,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different bar examples</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -32025,7 +32025,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -32038,7 +32038,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing different integral options</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -32340,7 +32340,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -32353,7 +32353,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing different options</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -32651,7 +32651,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -32664,7 +32664,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing different options</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -32977,7 +32977,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -32993,7 +32993,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different bar examples</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -33263,7 +33263,7 @@ eqn.addElements({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -33280,7 +33280,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different bracket examples</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -33497,7 +33497,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -33510,7 +33510,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different box examples</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -33741,7 +33741,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -33757,7 +33757,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different strike examples</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -33933,7 +33933,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -33949,7 +33949,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different strike examples</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -34148,7 +34148,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -34161,7 +34161,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different comment examples</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -34328,7 +34328,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -34341,7 +34341,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different padding examples</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -34473,7 +34473,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -34485,7 +34485,7 @@ figure.addElement({
 figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);
 
 <span class="hljs-comment">// Some different bracket examples</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -34674,7 +34674,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing the difference between with and without container</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -34950,7 +34950,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different annotation examples</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -42628,7 +42628,7 @@ in the final result (
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid copy</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'triGrid'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
   <span class="hljs-attr">options</span>: {
@@ -42653,7 +42653,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Radial lines copy</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'radialLines'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'generic'</span>,
   <span class="hljs-attr">options</span>: {
@@ -42677,7 +42677,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Ring copy (without original shape)</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'halfRings'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
   <span class="hljs-attr">options</span>: {
@@ -42987,7 +42987,7 @@ the arrow is aligned at (0, 0) in draw space (
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with triangle arrows on both ends</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
   <span class="hljs-attr">options</span>: {
@@ -42999,7 +42999,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line with customized barb arrow at end only</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'shapes.line'</span>,
   <span class="hljs-attr">options</span>: {
@@ -43022,7 +43022,7 @@ figure.addElement({
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Three lines showing the difference between mid align and start align for</span>
 <span class="hljs-comment">// circle heads</span>
-figure.addElements([
+figure.add([
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'reference'</span>,
     <span class="hljs-attr">method</span>: <span class="hljs-string">'polyline'</span>,
@@ -45172,7 +45172,7 @@ object key name that is the index
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Hide pad 0, and make pad 2 blue and not filled</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.polyline'</span>,
   <span class="hljs-attr">options</span>: {
@@ -45193,7 +45193,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Customization of side and angle annotations</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.polyline'</span>,
   <span class="hljs-attr">options</span>: {
@@ -46064,7 +46064,7 @@ using the <a href="#col_plotlegend">COL_PlotLegend</a> options object.</p>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// By default, the legend will appear in the top right corner</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -46083,7 +46083,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Change the line length, position and use a frame on the legend</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -46106,7 +46106,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Make a horizontal legend</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -46132,7 +46132,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Customize legend trace text</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -46169,7 +46169,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Customize legend</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -46790,7 +46790,7 @@ to center ticks around the axis or not (
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Axis with no ticks</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -46800,7 +46800,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Axis with default ticks</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -46811,7 +46811,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Axis ticks with custom step and color</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -46822,7 +46822,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Axis with ticks between 0.2 and 0.8 below the line</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -46840,7 +46840,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Axis with ticks at values</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -47068,7 +47068,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// By default labels are displayed if there are ticks</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -47079,7 +47079,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// If there are multiple ticks, then just the first are used to show labels</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -47094,7 +47094,7 @@ figure.addElement({
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Long labels can be displayed with a rotation. Set the</span>
 <span class="hljs-comment">// xAlign, yAlign and offset to make it look good.</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -47115,7 +47115,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Specific labels can be hidden</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -47127,7 +47127,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Labels can be at specific values, and have a specific font</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -47143,7 +47143,7 @@ figure.addElement({
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Labels can be strings, `null` for the actual value, or numbers. If numbers</span>
 <span class="hljs-comment">// then they will be drawn in the same format as the actual values.</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'x'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.axis'</span>,
   <span class="hljs-attr">options</span>: {
@@ -47290,7 +47290,7 @@ options object.</p>
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// When plotting a single trace, just the points are required. By default</span>
 <span class="hljs-comment">// the line will be solid, and it will be plotted against the 'x' and 'y' axes.</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -47300,7 +47300,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Change the thickness and color of the line</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -47316,7 +47316,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Default Markers</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -47329,7 +47329,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Custom Markers</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -47346,7 +47346,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Line and markers</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -47363,7 +47363,7 @@ figure.addElement({
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Use names in trace definitions to customize legend</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
   <span class="hljs-attr">options</span>: {
@@ -49900,7 +49900,7 @@ how the scale should progress over time (
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For all examples below, use this to add an element to the figure</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
   <span class="hljs-attr">options</span>: {
@@ -54563,7 +54563,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing both ways to access GoToForm animation step</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -54679,7 +54679,7 @@ boilerplate
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing both ways to access GoToForm animation step</span>
-figure.addElement({
+figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {

@@ -952,13 +952,13 @@ describe('Animationa and Movement', () => {
         //   offset,
         //   transform: sTransform,
         // });
-        collection = figure.addElement({
+        collection = figure.add({
           name: 'c',
           method: 'collection',
           options: {
             transform: cTransform,
           },
-          addElements: [
+          elements: [
             {
               name: 'square',
               method: 'polygon',
@@ -1036,13 +1036,13 @@ describe('Animationa and Movement', () => {
       expect(round(box.top, 3)).toEqual(0.105 * 2);
     });
     test('two squares', () => {
-      figure.addElement({
+      figure.add({
         name: 'coll',
         method: 'collection',
         options: {
           transform: new Transform().scale(2, 2).rotate(0).translate(0.5, 0.5),
         },
-        addElements: ([
+        elements: [
           {
             name: 'square1',
             method: 'polygon',
@@ -1065,7 +1065,7 @@ describe('Animationa and Movement', () => {
               transform: new Transform().scale(1, 1).rotate(0).translate(0, -0.5),
             },
           },
-        ]),
+        ],
       });
       figure.setFirstTransform();
       collection = figure.elements._coll;

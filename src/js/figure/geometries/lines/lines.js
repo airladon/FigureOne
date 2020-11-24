@@ -906,7 +906,7 @@ export {
 //     // new Point(0, 1),
 // ];
 
-// figure.addElements([
+// figure.add([
 //   {
 //     name: 'pad',
 //     method: 'polygon',

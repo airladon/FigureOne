@@ -25,7 +25,7 @@ describe('Animate To State', () => {
     jest.useFakeTimers();
     figure = makeFigure();
     figure.globalAnimation.reset();
-    figure.addElements([
+    figure.add([
       {
         name: 'a',
         method: 'polygon',
@@ -1984,7 +1984,7 @@ describe('Animate To State', () => {
     let states;
     let callbacks;
     beforeEach(() => {
-      figure.addElements([{
+      figure.add([{
         name: 'l',
         method: 'oline',
         options: {

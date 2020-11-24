@@ -3,7 +3,7 @@ const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 figure.setTouchable();
 
 // Add circle to figure
-figure.addElement(
+figure.add(
   {
     name: 'circle',
     method: 'polygon',

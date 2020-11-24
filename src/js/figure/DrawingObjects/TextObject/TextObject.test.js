@@ -62,7 +62,7 @@ describe('Figure Text Object', () => {
         },
       };
       addText = (way) => {
-        figure.addElement({ name: 'text', method: 'text', options: ways[way] });
+        figure.add({ name: 'text', method: 'text', options: ways[way] });
         figure.initialize();
         t = figure.elements._text.drawingObject;
       };

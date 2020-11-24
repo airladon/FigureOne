@@ -1,6 +1,6 @@
 const figure = new Fig.Figure();
 
-figure.addElement(
+figure.add(
   {
     name: 'flower',
     method: 'polygon',

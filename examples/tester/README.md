@@ -13,7 +13,7 @@ Open `index.html` in a browser to view example.
 const figure = new Fig.Figure();
 
 // Add elements to the figure
-figure.addElement(
+figure.add(
   // Add equation element
   {
     name: 'eqn',

@@ -141,7 +141,7 @@ export type COL_PlotLegend = {
  *
  * @example
  * // By default, the legend will appear in the top right corner
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -160,7 +160,7 @@ export type COL_PlotLegend = {
  *
  * @example
  * // Change the line length, position and use a frame on the legend
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -183,7 +183,7 @@ export type COL_PlotLegend = {
  *
  * @example
  * // Make a horizontal legend
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -209,7 +209,7 @@ export type COL_PlotLegend = {
  *
  * @example
  * // Customize legend trace text
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -246,7 +246,7 @@ export type COL_PlotLegend = {
  *
  * @example
  * // Customize legend
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {

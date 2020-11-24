@@ -17,11 +17,11 @@ describe('Animate To State', () => {
   let c;
   beforeEach(() => {
     figure = makeFigure();
-    figure.addElements([
+    figure.add([
       {
         name: 'c',
         method: 'collection',
-        addElements: [
+        elements: [
           {
             name: 'p2',
             method: 'polygon',

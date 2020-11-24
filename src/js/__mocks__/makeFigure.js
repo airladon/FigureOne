@@ -92,6 +92,7 @@ export default function makeFigure(
   figure.shapesLow = figure.getShapes(false);
   figure.shapesHigh = figure.getShapes(true);
   figure.shapes = figure.shapesLow;
+  figure.primitives = figure.shapes;
   figure.equationLow = figure.getEquations(false);
   figure.equationHigh = figure.getEquations(true);
   figure.equation = figure.equationLow;
@@ -99,6 +100,7 @@ export default function makeFigure(
   figure.collectionsHigh = figure.getObjects(true);
   figure.collections = figure.collectionsLow;
   figure.setSpaceTransforms();
+  figure.createFigureElements();
   // needed as the first element needs to be set with the space Transforms
   figure.initElements();
   figure.mock = {

@@ -292,4 +292,31 @@ export default class FigureCollections {
     parent.add(navNameToUse, navigator);
     return navigator;
   }
+
+  cursor(
+    optionsIn: {
+      color: TypeColor,
+      width: number,
+      radius: number,
+    },
+  ) {
+    const defaultOptions = {
+      color: this.primitives.defaultColor,
+      width: 0.01,
+      radius: 0.05,
+    };
+    const options = joinObjects(defaultOptions, optionsIn);
+    const cursor = this.collection();
+    const polygon = {
+      width: options.width,
+      color: options.color,
+      radius: options.radius,
+      sides: 50,
+    };
+    const up = this.primitives.polygon(polygon);
+    const down = this.primitives.polygon(joinObjects({}, polygon, { fill: true }));
+    cursor.add('up', up);
+    cursor.add('down', down);
+    return cursor;
+  }
 }

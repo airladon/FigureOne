@@ -177,7 +177,7 @@ equation.goToForm({
 Similar to shapes and text, the same equation above can be defined with an options object. For complicated equations, options objects can be used with code folding in an IDE to more easily read and navigate an equation definition. Also, because object form is JSON compatible, complex equations can be easily shared.
 
 ```javascript
-figure.addElement(
+figure.add(
   {
     name: 'equation',
     method: 'equation',
@@ -257,7 +257,7 @@ Equation elements can all be defined in the `elements` property. However, simple
 
 For instance, we can recreate an example above as:
 ```javascript
-figure.addElement({
+figure.add({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -279,7 +279,7 @@ figure.elements._eqn.showForm('1');
 Elements defined inline can be used in other forms:
 
 ```javascript
-figure.addElement({
+figure.add({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -306,7 +306,7 @@ figure.elements._eqn.goToForm({
 
 Even symbols can be defined inline:
 ```javascript
-figure.addElement({
+figure.add({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -328,7 +328,7 @@ Underscores before text will be hidden when rendered, but can make unique ids th
 Underscores after text can be used to create unique identifiers and therefore used to make multiple elements with the same text. The underscore, and all text after it will not be rendered.
 
 ```javascript
-figure.addElement({
+figure.add({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -344,7 +344,7 @@ figure.elements._eqn.showForm('1');
 
 Underscores can also be used to give inline symbol definitions unqiue identifiers. In this case, the text before the underscore is the unique identifier, and the text after defines the symbol.
 ```javascript
-figure.addElement({
+figure.add({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -371,7 +371,7 @@ Function definitions can either be array definitions (an equation phrase) or obj
 Array definitions, or equation phrases, can also be spread over several lines to increase readability.
 
 ```javascript
-figure.addElement({
+figure.add({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -427,7 +427,7 @@ eqn.showForm('1');
 Often different forms of an equation reuse equation phrases, like fractions. To make equation forms more readable, it can be useful to define a phrase once, and then refer to its identifier throughout the forms.
 
 ```javascript
-figure.addElement({
+figure.add({
   name: 'eqn',
   method: 'equation',
   options: {

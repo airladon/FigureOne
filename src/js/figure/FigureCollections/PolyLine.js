@@ -92,7 +92,7 @@ export type OBJ_PolylinePad = {};
  *
  * @example
  * // Hide pad 0, and make pad 2 blue and not filled
- * figure.addElement({
+ * figure.add({
  *   name: 'p',
  *   method: 'collections.polyline',
  *   options: {
@@ -113,7 +113,7 @@ export type OBJ_PolylinePad = {};
  *
  * @example
  * // Customization of side and angle annotations
- * figure.addElement({
+ * figure.add({
  *   name: 'p',
  *   method: 'collections.polyline',
  *   options: {
@@ -386,7 +386,7 @@ export type SUB_PolylineUpdatePoints = [];
  *
  * @example
  * // Polyline with angle annotations
- * figure.addElement({
+ * figure.add({
  *   name: 'p',
  *   method: 'collections.polyline',
  *   options: {
@@ -403,7 +403,7 @@ export type SUB_PolylineUpdatePoints = [];
  *
  * @example
  * // Triangle with unknown angle
- * figure.addElement({
+ * figure.add({
  *   name: 'p',
  *   method: 'collections.polyline',
  *   options: {
@@ -427,7 +427,7 @@ export type SUB_PolylineUpdatePoints = [];
  *
  * @example
  * // Dimensioned square
- * figure.addElement({
+ * figure.add({
  *   name: 'p',
  *   method: 'collections.polyline',
  *   options: {
@@ -454,7 +454,7 @@ export type SUB_PolylineUpdatePoints = [];
  *
  * @example
  * // User adjustable polyline
- * figure.addElement({
+ * figure.add({
  *   name: 'p',
  *   method: 'collections.polyline',
  *   options: {
@@ -470,7 +470,7 @@ export type SUB_PolylineUpdatePoints = [];
  *
  * @example
  * // Annotations that automatically updates as user changes triangle
- * figure.addElement({
+ * figure.add({
  *   name: 'p',
  *   method: 'collections.polyline',
  *   options: {

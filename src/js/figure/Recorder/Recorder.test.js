@@ -37,7 +37,7 @@ describe('Figure Recorder', () => {
     recorder.worker.recorder = recorder;
     recorder.stateTimeStep = 1;
     events = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10]];
-    figure.addElements([
+    figure.add([
       {
         name: 'a',
         method: 'polygon',
@@ -49,7 +49,7 @@ describe('Figure Recorder', () => {
       },
       {
         name: 'cursor',
-        method: 'shapes.cursor',
+        method: 'collections.cursor',
         options: {
           width: 0.01,
           color: [0, 1, 0, 1],
@@ -1021,7 +1021,7 @@ describe('Figure Recorder', () => {
     // let recorder;
     beforeEach(() => {
       recorder.reset();
-      figure.addElement({
+      figure.add({
         name: 'line',
         method: 'oline',
         options: {

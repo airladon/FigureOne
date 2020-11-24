@@ -30,7 +30,7 @@ describe('Figure Equations From Object', () => {
 
   beforeEach(() => {
     figure = makeFigure();
-    collection = figure.shapes.collection();
+    collection = figure.collections.collection();
     color1 = [0.95, 0, 0, 1];
     ways = {
       simple: () => {

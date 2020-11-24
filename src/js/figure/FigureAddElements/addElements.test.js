@@ -36,12 +36,12 @@ describe('Figure Equations From Object', () => {
     // }
     ways = {
       simple: () => {
-        figure.addElements([
+        figure.add([
           // Full object definition
           {
             path: '',
             name: 'group1',
-            method: 'shapes.collection',
+            method: 'collections.collection',
             options: {
               transform: new Transform('group'),
             },
@@ -64,16 +64,16 @@ describe('Figure Equations From Object', () => {
         ], figure.elements);
       },
       nesting: () => {
-        figure.addElements([
+        figure.add([
           // Start with a collection
           {
             name: 'group',
-            method: 'shapes.collection',
+            method: 'collections.collection',
             options: {
               transform: new Transform('group'),
             },
             // The collection can be added to by nesting
-            addElements: [
+            elements: [
               {
                 name: 'group1',
                 method: 'collection',
@@ -84,44 +84,45 @@ describe('Figure Equations From Object', () => {
           {
             path: '_group',
             name: 'group2',
-            method: 'shapes.collection',
+            method: 'collections.collection',
           },
         ], figure.elements);
         // The collection can be added to in secondary addElements
-        figure.addElements([
+        figure.add([
           {
             path: '_group',
             name: 'group3',
-            method: 'shapes.collection',
+            method: 'collections.collection',
           },
         ], figure.elements);
         // The collection can be added with relative path to the root collection
-        figure.addElements([
+        figure.add([
           {
+            path: 'group',
             name: 'group4',
-            method: 'shapes.collection',
+            method: 'collections.collection',
           },
         ], figure.elements._group);
 
         // A sub collection can be added with path
-        figure.addElements([
+        figure.add([
           {
             path: 'group.group1',
             name: 'group11',
-            method: 'shapes.collection',
+            method: 'collections.collection',
           },
         ], figure.elements);
       },
       deepNest: () => {
-        figure.addElements([
+        figure.add([
           {
             name: 'group',
             method: 'collection',
-            addElements: [
+            elements: [
               {
                 name: 'group1',
                 method: 'collection',
-                addElements: [
+                elements: [
                   {
                     name: 'group2',
                     method: 'collection',
@@ -165,7 +166,7 @@ describe('Figure Equations From Object', () => {
           p1: triPoints[2],
           p2: triPoints[1],
         };
-        figure.addElements([
+        figure.add([
           {
             name: 'testEqn',
             method: 'addEquation',
@@ -182,11 +183,11 @@ describe('Figure Equations From Object', () => {
           },
           {
             name: 'tri',
-            method: 'shapes.collection',
+            method: 'collections.collection',
             options: {
               transform: new Transform('iso').translate(0, 0),
             },
-            addElements: [
+            elements: [
               {
                 name: 'line',
                 method: 'opolyline',

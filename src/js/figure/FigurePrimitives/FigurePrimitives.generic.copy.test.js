@@ -31,7 +31,7 @@ describe('Figure Primitive Generic Copy', () => {
   beforeEach(() => {
     figure = makeFigure();
     addElement = (copyOption) => {
-      figure.addElement({
+      figure.add({
         name: 'a',
         method: 'shapes.generic',
         options: {

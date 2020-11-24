@@ -110,11 +110,11 @@ export type OBJ_LineStyleSimple = {
  * border.
  *
  * @example
- * figure.addElement(
+ * figure.add(
  *   {
  *     name: 'c',
  *     method: 'collection',
- *     addElements: [         // add two elements to the collection
+ *     elements: [         // add two elements to the collection
  *       {
  *         name: 'hex',
  *         method: 'polygon',
@@ -316,7 +316,7 @@ export type OBJ_PulseScale = {
  *
  * @example
  * // Square and triangle
- * figure.addElement({
+ * figure.add({
  *   name: 'squareAndTri',
  *   method: 'generic',
  *   options: {
@@ -329,7 +329,7 @@ export type OBJ_PulseScale = {
  * });
  * @example
  * // rhombus with larger touch borders
- * figure.addElement({
+ * figure.add({
  *   name: 'rhombus',
  *   method: 'generic',
  *   options: {
@@ -353,7 +353,7 @@ export type OBJ_PulseScale = {
  *
  * @example
  * // Grid of triangles
- * figure.addElement({
+ * figure.add({
  *   name: 'gridOfTris',
  *   method: 'generic',
  *   options: {
@@ -476,7 +476,7 @@ export type OBJ_Generic = {
  *
  * @example
  * // Line
- * figure.addElement(
+ * figure.add(
  *   {
  *     name: 'p',
  *     method: 'polyline',
@@ -489,7 +489,7 @@ export type OBJ_Generic = {
  *
  * @example
  * // Square with rounded corners and dot-dash line
- * figure.addElement(
+ * figure.add(
  *   {
  *     name: 'p',
  *     method: 'polyline',
@@ -505,7 +505,7 @@ export type OBJ_Generic = {
  * );
  * @example
  * // Corners only of a triangle
- * figure.addElement(
+ * figure.add(
  *  {
  *    name: 'p',
  *    method: 'polyline',
@@ -520,7 +520,7 @@ export type OBJ_Generic = {
  *);
  * @example
  * // Zig zag with arrows
- * figure.addElement({
+ * figure.add({
  *   name: 'arrowedLine',
  *   method: 'polyline',
  *   options: {
@@ -630,7 +630,7 @@ export type OBJ_LineStyle = {
  *
  * @example
  * // Simple filled hexagon
- * figure.addElement({
+ * figure.add({
  *   name: 'hexagon',
  *   method: 'polygon',
  *   options: {
@@ -641,7 +641,7 @@ export type OBJ_LineStyle = {
  *
  * @example
  * // Circle from dashed line
- * const circ = figure.shapes.polygon({
+ * const circ = figure.primitives.polygon({
  *   sides: 100,
  *   radius: 0.5,
  *   line: {
@@ -653,7 +653,7 @@ export type OBJ_LineStyle = {
  *
  * @example
  * // Half octagon rotated
- * figure.addElement({
+ * figure.add({
  *   name: 'halfOctagon',
  *   method: 'polygon',
  *   options: {
@@ -704,7 +704,7 @@ export type OBJ_Polygon = {
  *
  * @example
  * // Simple 5 pointed star
- * figure.addElement({
+ * figure.add({
  *   name: 's',
  *   method: 'star',
  *   options: {
@@ -715,7 +715,7 @@ export type OBJ_Polygon = {
  *
  * @example
  * // 7 pointed dashed line star
- * figure.addElement({
+ * figure.add({
  *   name: 's',
  *   method: 'star',
  *   options: {
@@ -731,7 +731,7 @@ export type OBJ_Polygon = {
  *
  * @example
  * // Star surrounded by stars
- * figure.addElement({
+ * figure.add({
  *   name: 's',
  *   method: 'star',
  *   options: {
@@ -790,7 +790,7 @@ export type OBJ_Star = {
  *
  * @example
  * // Filled rectangle
- * figure.addElement({
+ * figure.add({
  *   name: 'r',
  *   method: 'rectangle',
  *   options: {
@@ -801,7 +801,7 @@ export type OBJ_Star = {
  *
  * @example
  * // Corners with radius and dashed line
- * figure.addElement({
+ * figure.add({
  *   name: 'r',
  *   method: 'rectangle',
  *   options: {
@@ -820,7 +820,7 @@ export type OBJ_Star = {
  *
  * @example
  * // Rectangle copies rotated
- * figure.addElement({
+ * figure.add({
  *   name: 'r',
  *   method: 'rectangle',
  *   options: {
@@ -867,7 +867,7 @@ export type OBJ_Rectangle = {
  *
  * @example
  * // Filled ellipse
- * figure.addElement({
+ * figure.add({
  *   name: 'e',
  *   method: 'ellipse',
  *   options: {
@@ -879,7 +879,7 @@ export type OBJ_Rectangle = {
  *
  * @example
  * // Dashed line circle
- * figure.addElement({
+ * figure.add({
  *   name: 'e',
  *   method: 'ellipse',
  *   options: {
@@ -895,7 +895,7 @@ export type OBJ_Rectangle = {
  *
  * @example
  * // Ellipse grid
- * figure.addElement({
+ * figure.add({
  *   name: 'e',
  *   method: 'ellipse',
  *   options: {
@@ -1011,7 +1011,7 @@ export type OBJ_Ellipse = {
  *
  * @example
  * // Right angle triangle
- * figure.addElement({
+ * figure.add({
  *   name: 't',
  *   method: 'triangle',
  *   options: {
@@ -1023,7 +1023,7 @@ export type OBJ_Ellipse = {
  *
  * @example
  * // 30-60-90 triangle with dashed line
- * const t = figure.shapes.triangle({
+ * const t = figure.primitives.triangle({
  *   options: {
  *     ASA: [Math.PI / 2, 1, Math.PI / 6],
  *     line: {
@@ -1036,7 +1036,7 @@ export type OBJ_Ellipse = {
  *
  * @example
  * // Star from 4 equilateral triangles
- * figure.addElement({
+ * figure.add({
  *   name: 'star',
  *   method: 'triangle',
  *   options: {
@@ -1120,7 +1120,7 @@ export type OBJ_Triangle = {
  *
  * @example
  * // Simple line defined by two points
- * figure.addElement({
+ * figure.add({
  *   name: 'l',
  *   method: 'line',
  *   options: {
@@ -1132,7 +1132,7 @@ export type OBJ_Triangle = {
  *
  * @example
  * // Dashed line defined by a point, a length and an angle
- * figure.addElement({
+ * figure.add({
  *   name: 'l',
  *   method: 'line',
  *   options: {
@@ -1146,7 +1146,7 @@ export type OBJ_Triangle = {
  *
  * @example
  * // Line with two different arrows on ends
- * figure.addElement({
+ * figure.add({
  *   name: 'l',
  *   method: 'line',
  *   options: {
@@ -1210,7 +1210,7 @@ export type OBJ_Line = {
  *
  * @example
  * // Grid defined by xStep and yStep
- * figure.addElement({
+ * figure.add({
  *   name: 'g',
  *   method: 'grid',
  *   options: {
@@ -1225,7 +1225,7 @@ export type OBJ_Line = {
  *
  * @example
  * // Grid defined by xNum and yNum with dashed lines
- * const grid = figure.shapes.grid({
+ * const grid = figure.primitives.grid({
  *   bounds: [-0.5, -0.5, 1, 1],
  *   xNum: 4,
  *   yNum: 4,
@@ -1238,7 +1238,7 @@ export type OBJ_Line = {
  *
  * @example
  * // Grid of grids
- * figure.addElement({
+ * figure.add({
  *   name: 'g',
  *   method: 'grid',
  *   options: {
@@ -1328,7 +1328,7 @@ export type OBJ_Grid = {
  *
  * @example
  * // Triangle arrow with tail
- * figure.addElement({
+ * figure.add({
  *   name: 'a',
  *   method: 'arrow',
  *   options: {
@@ -1340,7 +1340,7 @@ export type OBJ_Grid = {
  *
  * @example
  * // Barb arrow with 0 tail
- * figure.addElement({
+ * figure.add({
  *   name: 'a',
  *   method: 'arrow',
  *   options: {
@@ -1365,7 +1365,7 @@ export type OBJ_Grid = {
  * }
  *
  * // Create arrow and copy to transforms
- * figure.addElement({
+ * figure.add({
  *   name: 'a',
  *   method: 'arrow',
  *   options: {
@@ -1483,7 +1483,7 @@ export type OBJ_TextDefinition = {
  *
  * @example
  * // Single string
- * figure.addElement(
+ * figure.add(
  *   {
  *     name: 't',
  *     method: 'text',
@@ -1497,7 +1497,7 @@ export type OBJ_TextDefinition = {
  *
  * @example
  * // Multi string
- * figure.addElement(
+ * figure.add(
  *   {
  *     name: 't',
  *     method: 'text',
@@ -1607,7 +1607,7 @@ export type OBJ_TextLineDefinition = {
  *
  * @example
  * // "Hello to the world1" with highlighted "to the" and superscript "1"
- * figure.addElement(
+ * figure.add(
  *   {
  *     name: 'line',
  *     method: 'text.line',
@@ -1773,7 +1773,7 @@ export type OBJ_TextModifiersDefinition = {
  *
  * @example
  * // "Two justified lines"
- * figure.addElement(
+ * figure.add(
  *   {
  *     name: 't',
  *     method: 'text.lines',
@@ -1794,7 +1794,7 @@ export type OBJ_TextModifiersDefinition = {
  *
  * @example
  * // "Example showing many features of textLines"
- * figure.addElement(
+ * figure.add(
  *   {
  *     name: 'lines',
  *     method: 'textLines',
@@ -2131,6 +2131,7 @@ export default class FigurePrimitives {
       options.texture.repeat,
       options.texture.onLoad,
       copyToUse,
+      options.name,
     );
 
     element.custom.update = function update(
@@ -3619,33 +3620,6 @@ export default class FigurePrimitives {
   //   }
   //   return copy;
   // }
-
-  cursor(
-    optionsIn: {
-      color: TypeColor,
-      width: number,
-      radius: number,
-    },
-  ) {
-    const defaultOptions = {
-      color: this.defaultColor,
-      width: 0.01,
-      radius: 0.05,
-    };
-    const options = joinObjects(defaultOptions, optionsIn);
-    const cursor = this.collection();
-    const polygon = {
-      width: options.width,
-      color: options.color,
-      radius: options.radius,
-      sides: 50,
-    };
-    const up = this.polygon(polygon);
-    const down = this.polygon(joinObjects({}, polygon, { fill: true }));
-    cursor.add('up', up);
-    cursor.add('down', down);
-    return cursor;
-  }
 
   // repeatPattern(
   //   element: FigureElementPrimitive,

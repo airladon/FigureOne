@@ -42,7 +42,7 @@ describe('Figure html element tie', () => {
       htmlElement.id = 'htmlElementId';
       figure = makeFigure(figureRect, figureLimits);
       document.body.appendChild(htmlElement);
-      square = figure.shapes.polygon({
+      square = figure.primitives.polygon({
         sides: 4,
         radius: 1,
         transform: new Transform().scale(1, 1).translate(0, 0),

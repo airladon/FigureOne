@@ -6,7 +6,7 @@
 // });
 
 // // Hide pad 0, and make pad 2 blue and not filled
-// figure.addElement({
+// figure.add({
 //   name: 'p',
 //   method: 'collections.polyline',
 //   options: {

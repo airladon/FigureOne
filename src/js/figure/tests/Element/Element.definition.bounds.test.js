@@ -59,7 +59,7 @@ describe('Move Freely', () => {
     };
     figure = makeFigure();
     add = (name) => {
-      figure.addElements([
+      figure.add([
         {
           name: 'a',
           method: 'polygon',
@@ -71,7 +71,7 @@ describe('Move Freely', () => {
       ]);
       a = figure.elements._a;
       a.setMovable(true);
-      figure.initialize();
+      // figure.initialize();
     };
     check = (left, bottom, right, top) => {
       const b = a.move.bounds.getTranslation().boundary;
@@ -95,8 +95,8 @@ describe('Move Freely', () => {
   });
   test('Figure', () => {
     add('figure');
-    expect(a.move.bounds).toEqual('figure');
-    a.checkMoveBounds();
+    // expect(a.move.bounds).toEqual('figure');
+    // a.checkMoveBounds();
     expect(a.move.bounds).toBeInstanceOf(TransformBounds);
     check(-1, -1, 1, 1);
   });

@@ -45,7 +45,7 @@ figure.elements.add('p', p);
 Another way to create and add the same shape to the figure is to use the `Figure.addElement` or `Figure.addElements` method:
 
 ```javascript
-figure.addElement({
+figure.add({
   name: 'p',
   method: 'polygon',
   options: {
@@ -85,7 +85,7 @@ To draw this shape, you would need to draw the two triangles, which means drawin
 * 1, 3, 4
 
 ```javascript
-figure.addElement({
+figure.add({
   name: 'rectangle',
   method: 'generic',
   options: {
@@ -109,7 +109,7 @@ A strip starts with one triangle, and then every subsequent vertex will create a
 Therefore, to draw the same rectangle we would draw the first triangle with the vertices 2, 1 and then 3. Then 1 and 3 could be used with 4 to create the second triangle.
 
 ```javascript
-figure.addElement({
+figure.add({
   name: 'rectangle',
   method: 'generic',
   options: {
@@ -135,7 +135,7 @@ A fan starts with one point. The next two points create the first triangle, and 
 Therefore, to draw the same rectangle we would draw the first point 1, then complete the first triangle with 2 and 3. Then we would draw point 4 to make the second triangle with points 1 and 3.
 
 ```javascript
-figure.addElement({
+figure.add({
   name: 'rectangle',
   method: 'generic',
   options: {
@@ -165,7 +165,7 @@ This is not useful for drawing filled shapes, but is useful for drawing thin out
 
 For instance, to draw a rectangle outline:
 ```javascript
-figure.addElement({
+figure.add({
   name: 'rectangle',
   method: 'generic',
   options: {

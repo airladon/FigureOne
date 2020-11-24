@@ -25,6 +25,7 @@ export default function Generic(
   textureRepeat: boolean = false,
   onLoad: ?() => void = null,
   copy: Array<CPY_Step>,
+  name: string = '',
 ) {
   const generic = new VertexGeneric(
     webgl,
@@ -49,5 +50,5 @@ export default function Generic(
     transform = transformOrLocation._dup();
   }
   // $FlowFixMe
-  return new FigureElementPrimitive(generic, transform, color, figureLimits);
+  return new FigureElementPrimitive(generic, transform, color, figureLimits, null, name);
 }

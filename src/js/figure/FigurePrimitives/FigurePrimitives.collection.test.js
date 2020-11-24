@@ -52,10 +52,10 @@ describe('Figure Primitives - Grid', () => {
       },
     };
     makeCollection = (option) => {
-      figure.addElement({
+      figure.add({
         name: 'c',
-        method: 'shapes.collection',
-        addElements: [
+        method: 'collections.collection',
+        elements: [
           {
             name: 'p1',
             method: 'polygon',

@@ -310,7 +310,7 @@ describe('Tools Lines', () => {
 //   line, 0.01, true, 'inside', 'auto', 0.015, 10, Math.PI / 7, [0.2, 0.08],
 // );
 
-// figure.addElements([
+// figure.add([
 //   {
 //     name: 'r',
 //     method: 'shapes.generic',

@@ -609,7 +609,7 @@ export default class EqnNavigator extends FigureElementCollection {
     // }
   }
 
-  // const navigator = shapes.collection(;
+  // const navigator = collections.collection(;
   // setEquation(eqn: Equation) {
   //   this.eqn = eqn;
   //   // this._eqn = [];

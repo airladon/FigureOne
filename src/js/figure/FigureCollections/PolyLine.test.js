@@ -330,7 +330,7 @@ describe('Figure Objects PolyLine', () => {
   });
   describe('Figure Level', () => {
     test('Pad change shape', () => {
-      figure.addElement({
+      figure.add({
         method: 'collections.polyline',
         name: 'a',
         options: {
@@ -359,7 +359,7 @@ describe('Figure Objects PolyLine', () => {
       expect(a.points[2]).toEqual(new Point(1, 1));
     });
     test('Pad Move freely along line shape', () => {
-      figure.addElement({
+      figure.add({
         method: 'opolyline',
         name: 'a',
         options: {

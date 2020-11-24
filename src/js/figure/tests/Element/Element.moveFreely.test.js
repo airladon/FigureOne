@@ -17,7 +17,7 @@ describe('Move Freely', () => {
   let click;
   beforeEach(() => {
     figure = makeFigure();
-    figure.addElements([
+    figure.add([
       {
         name: 'a',
         method: 'polygon',

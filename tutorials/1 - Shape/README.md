@@ -28,7 +28,7 @@ Download `index.html` and `index.js` into the same folder and open `index.html` 
 const figure = new Fig.Figure();
 
 // Add a triangle
-figure.addElement(
+figure.add(
   {
     name: 'tri',
     method: 'triangle',
@@ -84,7 +84,7 @@ const figure = new Fig.Figure({ htmlId: 'customId' });
 Next, a figure element in the shape of a triangle is added.
 
 ```js
-figure.addElement(
+figure.add(
   {
     name: 'tri',
     method: 'triangle',

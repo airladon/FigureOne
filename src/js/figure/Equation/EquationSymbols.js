@@ -1299,7 +1299,7 @@ export default class EquationSymbols {
   //   if (color == null) {
   //     color = this.defaultColor;
   //   }
-  //   const cross = this.shapes.collection(new Transform('xStrike')
+  //   const cross = this.collections.collection(new Transform('xStrike')
   //     .scale(1, 1).rotate(0).translate(0, 0));
   //   cross.color = color;
   //   const strike1 = this.shapes.horizontalLine(

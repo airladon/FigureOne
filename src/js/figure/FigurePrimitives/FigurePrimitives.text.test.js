@@ -17,7 +17,7 @@ describe('Text', () => {
   let figure;
   beforeEach(() => {
     figure = makeFigure();
-    figure.addElements([
+    figure.add([
       {
         name: 'a',
         method: 'text',
@@ -40,7 +40,7 @@ describe('Text', () => {
       {
         name: 'container',
         method: 'collection',
-        addElements: [
+        elements: [
           {
             name: 'a',
             method: 'text',
@@ -251,7 +251,7 @@ describe('Text Borders', () => {
       },
     };
     addElement = (option) => {
-      figure.addElement({
+      figure.add({
         name: 't',
         method: 'text',
         options: options[option],

@@ -13,7 +13,7 @@ const bc = (content, comment, symbol = null, scale = 0.6, inSize = false) => ({
 });
 
 // Add the equation with all it's forms
-figure.addElement({
+figure.add({
   name: 'eqn',
   method: 'equation',
   options: {
@@ -111,7 +111,7 @@ const makeTriangle = (name, scenario) => ({
 });
 
 // Add the right angle triangles to the figure
-figure.addElements([
+figure.add([
   makeTriangle('tri4', { position: [-1.5, 2], rotation: 3 * Math.PI / 2 }),
   makeTriangle('tri3', { position: [1.5, 2], rotation: Math.PI }),
   makeTriangle('tri2', { position: [1.5, -1], rotation: Math.PI / 2 }),
@@ -140,7 +140,7 @@ setUpdate(tri4);
 // ////////////////////////////////////////////////////////////////////////
 
 // Add some text to help the user start and navigate the equation
-figure.addElements([
+figure.add([
   {
     name: 'start',
     method: 'text',

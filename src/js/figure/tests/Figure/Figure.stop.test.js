@@ -17,7 +17,7 @@ describe('Figure Stop', () => {
     jest.useFakeTimers();
     figure = makeFigure();
     figure.globalAnimation.reset();
-    figure.addElements([
+    figure.add([
       {
         name: 'a',
         method: 'polygon',

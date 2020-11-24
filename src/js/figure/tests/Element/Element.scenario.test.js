@@ -21,7 +21,7 @@ describe('Figure Recorder', () => {
   // let c;
   beforeEach(() => {
     figure = makeFigure();
-    figure.addElements([
+    figure.add([
       {
         name: 'a',
         method: 'polygon',
@@ -34,7 +34,7 @@ describe('Figure Recorder', () => {
       {
         name: 'c',
         method: 'collection',
-        addElements: [
+        elements: [
           {
             name: 'b',
             method: 'polygon',

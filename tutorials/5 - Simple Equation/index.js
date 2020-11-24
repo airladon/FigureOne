@@ -2,7 +2,7 @@
 const figure = new Fig.Figure();
 
 // Add elements to the figure
-figure.addElement(
+figure.add(
   // Add equation element
   {
     name: 'eqn',

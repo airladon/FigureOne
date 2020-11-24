@@ -25,7 +25,7 @@ describe('Seek', () => {
     figure = makeFigure();
     figure.globalAnimation.reset();
     jest.useFakeTimers();
-    figure.addElements([
+    figure.add([
       {
         name: 'a',
         method: 'polygon',

@@ -20,7 +20,7 @@ describe('Polyline', () => {
   beforeEach(() => {
     figure = makeFigure();
     addElement = (optionsName) => {
-      figure.addElement(joinObjects({
+      figure.add(joinObjects({
         name: 'r',
         method: 'shapes.rectangle',
       }, options[optionsName]));

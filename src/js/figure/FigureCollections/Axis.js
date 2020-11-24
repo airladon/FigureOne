@@ -65,7 +65,7 @@ import type FigureCollections from './FigureCollections';
  *
  * @example
  * // Axis with no ticks
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -75,7 +75,7 @@ import type FigureCollections from './FigureCollections';
  *
  * @example
  * // Axis with default ticks
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -86,7 +86,7 @@ import type FigureCollections from './FigureCollections';
  *
  * @example
  * // Axis ticks with custom step and color
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -97,7 +97,7 @@ import type FigureCollections from './FigureCollections';
  *
  * @example
  * // Axis with ticks between 0.2 and 0.8 below the line
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -115,7 +115,7 @@ import type FigureCollections from './FigureCollections';
  *
  * @example
  * // Axis with ticks at values
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -208,7 +208,7 @@ export type OBJ_AxisTicks_Fixed = {
  *
  * @example
  * // By default labels are displayed if there are ticks
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -219,7 +219,7 @@ export type OBJ_AxisTicks_Fixed = {
  *
  * @example
  * // If there are multiple ticks, then just the first are used to show labels
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -234,7 +234,7 @@ export type OBJ_AxisTicks_Fixed = {
  * @example
  * // Long labels can be displayed with a rotation. Set the
  * // xAlign, yAlign and offset to make it look good.
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -255,7 +255,7 @@ export type OBJ_AxisTicks_Fixed = {
  *
  * @example
  * // Specific labels can be hidden
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -267,7 +267,7 @@ export type OBJ_AxisTicks_Fixed = {
  *
  * @example
  * // Labels can be at specific values, and have a specific font
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -283,7 +283,7 @@ export type OBJ_AxisTicks_Fixed = {
  * @example
  * // Labels can be strings, `null` for the actual value, or numbers. If numbers
  * // then they will be drawn in the same format as the actual values.
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -430,7 +430,7 @@ export type COL_Axis = {
  * #### Example
  * ```javascript
  * // By default an axis is an 'x' axis
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -458,7 +458,7 @@ export type COL_Axis = {
  * #### Example
  * ```javascript
  * // An axis can have multiple sets of ticks and a title
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -476,7 +476,7 @@ export type COL_Axis = {
  * ```javascript
  * // An axis line and ticks can be customized to be dashed
  * // and have arrows
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {
@@ -508,7 +508,7 @@ export type COL_Axis = {
  * ```javascript
  * // An axis title can have grid lines extend from it, and titles with more
  * // formatting
- * figure.addElement({
+ * figure.add({
  *   name: 'x',
  *   method: 'collections.axis',
  *   options: {

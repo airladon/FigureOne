@@ -190,7 +190,7 @@ describe('Figure Primitives - Grid', () => {
       },
     };
     makeGrid = (type) => {
-      figure.addElement(gridType[type]);
+      figure.add(gridType[type]);
       figure.setFirstTransform();
     };
   });

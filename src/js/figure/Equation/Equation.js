@@ -547,7 +547,7 @@ type OBJ_EquationGoToForm = {
  *
  * @example
  * // Example showing both ways to access GoToForm animation step
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -595,7 +595,7 @@ class NextFormAnimationStep extends TriggerAnimationStep {
  *
  * @example
  * // Example showing both ways to access GoToForm animation step
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -649,7 +649,7 @@ class GoToFormAnimationStep extends TriggerAnimationStep {
  * @param {EQN_Equation} options
  * @example
  * // Create with options definition
- * figure.addElement({
+ * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
  *   options: {
@@ -839,6 +839,7 @@ export class Equation extends FigureElementCollection {
     //   this.setTransform(getTransform(optionsToUse.transform));
     // }
     this.shapes = shapes;
+    debugger;
     this.setColor(optionsToUse.color);
     // this.isTouchDevice = isTouchDevice;
     // this.animateNextFrame = animateNextFrame;

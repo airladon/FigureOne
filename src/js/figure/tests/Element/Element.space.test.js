@@ -11,7 +11,7 @@ tools.isTouchDevice = jest.fn();
 
 // jest.mock('../../recorder.worker');
 
-describe('Element Space Transforms', () => {
+describe.only('Element Space Transforms', () => {
   let figure;
   let a;
   let c;
@@ -25,11 +25,11 @@ describe('Element Space Transforms', () => {
           new Rect(0, 0, 1000, 1000),
           new Rect(-3, -3, 6, 6),
         );
-        figure.addElements([
+        figure.add([
           {
             name: 'c',
             method: 'collection',
-            addElements: [
+            elements: [
               {
                 name: 'a',
                 method: 'polygon',
@@ -51,11 +51,11 @@ describe('Element Space Transforms', () => {
           new Rect(100, 200, 1000, 500),
           new Rect(1, 1, 4, 2),
         );
-        figure.addElements([
+        figure.add([
           {
             name: 'c',
             method: 'collection',
-            addElements: [
+            elements: [
               {
                 name: 'a',
                 method: 'polygon',
@@ -77,21 +77,21 @@ describe('Element Space Transforms', () => {
           new Rect(0, 0, 1000, 1000),
           new Rect(-3, -3, 6, 6),
         );
-        figure.addElements([
+        figure.add([
           {
             name: 'c',
             method: 'collection',
             options: {
               position: [0.5, 0],
             },
-            addElements: [
+            elements: [
               {
                 name: 'c',
                 method: 'collection',
                 options: {
                   position: [0.5, 0],
                 },
-                addElements: [
+                elements: [
                   {
                     name: 'p',
                     method: 'shapes.rectangle',

@@ -126,7 +126,7 @@ export type COL_Trace = {
  * @example
  * // When plotting a single trace, just the points are required. By default
  * // the line will be solid, and it will be plotted against the 'x' and 'y' axes.
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -136,7 +136,7 @@ export type COL_Trace = {
  *
  * @example
  * // Change the thickness and color of the line
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -152,7 +152,7 @@ export type COL_Trace = {
  *
  * @example
  * // Default Markers
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -165,7 +165,7 @@ export type COL_Trace = {
  *
  * @example
  * // Custom Markers
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -182,7 +182,7 @@ export type COL_Trace = {
  *
  * @example
  * // Line and markers
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {
@@ -199,7 +199,7 @@ export type COL_Trace = {
  *
  * @example
  * // Use names in trace definitions to customize legend
- * figure.addElement({
+ * figure.add({
  *   name: 'plot',
  *   method: 'collections.plot',
  *   options: {

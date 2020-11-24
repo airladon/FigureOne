@@ -105,11 +105,11 @@ Finally, let's see the code for the example above. Two files, `index.html` and `
 ```javascript
 // index.js
 const figure = new Fig.Figure({ limits: [0, 0, 6, 4 ]});
-figure.addElement(
+figure.add(
   {
     name: 'labeledLine',
     method: 'collection',
-    addElements: [
+    elements: [
       {
         name: 'line',
         method: 'line',

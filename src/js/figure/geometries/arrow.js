@@ -49,7 +49,7 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  *
  * @example
  * // Line with triangle arrows on both ends
- * figure.addElement({
+ * figure.add({
  *   name: 'a',
  *   method: 'polyline',
  *   options: {
@@ -61,7 +61,7 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  *
  * @example
  * // Line with customized barb arrow at end only
- * figure.addElement({
+ * figure.add({
  *   name: 'a',
  *   method: 'shapes.line',
  *   options: {
@@ -84,7 +84,7 @@ export type TypeArrowHead = 'triangle' | 'circle' | 'line' | 'barb' | 'bar' | 'p
  * @example
  * // Three lines showing the difference between mid align and start align for
  * // circle heads
- * figure.addElements([
+ * figure.add([
  *   {
  *     name: 'reference',
  *     method: 'polyline',
@@ -1448,7 +1448,7 @@ export {
 //   };
 // }
 
-// figure.addElements([
+// figure.add([
 //   addArrow('t1', 'triangle', 0.5, false, 'tip'),
 //   addArrow('t2', 'triangle', 0.5, 0),
 //   addArrow('t3', 'triangle', 0.7, 0.2),

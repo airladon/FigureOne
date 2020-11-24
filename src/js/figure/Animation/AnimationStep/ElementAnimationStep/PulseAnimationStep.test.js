@@ -16,7 +16,7 @@ describe('Scale Animation Step', () => {
   beforeEach(() => {
     jest.useFakeTimers();
     figure = makeFigure();
-    elem1 = figure.shapes.polygon();
+    elem1 = figure.primitives.polygon();
     figure.elements.add('elem1', elem1);
     elem1.setScale(1, 1);
   });

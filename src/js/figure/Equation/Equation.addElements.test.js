@@ -30,7 +30,7 @@ describe('Figure Equations From Object', () => {
   let defaultColor;
   beforeEach(() => {
     figure = makeFigure();
-    eqn = new Equation(figure.shapes);
+    eqn = new Equation(figure.primitives);
     color1 = [0.95, 0, 0, 1];
     color2 = [0, 0.95, 0, 1];
     defaultColor = [1, 0, 0, 1];
@@ -96,7 +96,7 @@ describe('Figure Equations From Object', () => {
         a: 'a',
         v: { symbol: 'vinculum' },
         v1: eqn.eqn.symbols.vinculum(),
-        v2: figure.shapes.line({
+        v2: figure.primitives.line({
           p1: new Point(0, 0),
           length: 1,
           width: 0.1,

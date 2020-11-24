@@ -28,7 +28,7 @@ A grid is included in this javascript file to make it obvious how shapes are ani
 const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 
 // grid
-figure.addElements([
+figure.add([
   {
     name: 'origin',
     method: 'polygon',
@@ -64,7 +64,7 @@ figure.addElements([
 ]);
 
 // shape to animate
-figure.addElement(
+figure.add(
   {
     name: 'p',
     method: 'polygon',
@@ -113,7 +113,7 @@ p.animations.new()
 An animation manager is tied to one element, but can be used to animate other elements too
 ```javascript
 // add another element
-figure.addElement({
+figure.add({
   name: 'q',
   method: 'polygon',
   options: {

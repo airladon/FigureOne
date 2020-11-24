@@ -179,7 +179,7 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
  *
  * @example
  * // For all examples below, use this to add an element to the figure
- * figure.addElement({
+ * figure.add({
  *   name: 'p',
  *   method: 'polygon',
  *   options: {
@@ -4128,7 +4128,7 @@ class FigureElementCollection extends FigureElement {
    * @param {number} index index to add in the `drawOrder` where -1 appends the
    * element to the end of the draw order,
    */
-  add(
+  addLegacy(
     name: string,
     element: FigureElementPrimitive | FigureElementCollection,
     index: number = -1,
@@ -4183,11 +4183,19 @@ class FigureElementCollection extends FigureElement {
   }
 
 
-  addNew(
+  /**
+   * Add a figure element to the collection.
+   *
+   * @param {string} name reference name of element
+   * @param {FigureElement} element element to add
+   * @param {number} index index to add in the `drawOrder` where -1 appends the
+   * element to the end of the draw order,
+   */
+  add(
     nameOrElementOrElementDefinition: string
         | FigureElement | TypeAddElementObject
         | Array<FigureElement | TypeAddElementObject>,
-    elementToAdd: FigureElement
+    elementToAdd: FigureElement,
   ) {
     if (typeof nameOrElementOrElementDefinition === 'string') {
       this.addElementWithName(nameOrElementOrElementDefinition, elementToAdd);
@@ -4203,7 +4211,7 @@ class FigureElementCollection extends FigureElement {
     const rootCollection = this;
     elements.forEach((elementDefinition, index) => {
       if (elementDefinition instanceof FigureElement) {
-        this.addNew(elementDefinition.name, elementDefinition);
+        this.add(elementDefinition.name, elementDefinition);
         return;
       }
       // Extract the parameters from the layout object
@@ -4273,7 +4281,7 @@ class FigureElementCollection extends FigureElement {
           newElement.setProperties(elementModsToUse);
         }
         if (collectionPath instanceof FigureElementCollection) {
-          collectionPath.addNew(nameToUse, newElement);
+          collectionPath.add(nameToUse, newElement);
         }
       }
 
@@ -4287,7 +4295,7 @@ class FigureElementCollection extends FigureElement {
       if (`_${nameToUse}` in rootCollection
           && (addElementsToUse != null && addElementsToUse !== {})
       ) {
-        this.addNew(addElementsToUse);
+        newElement.add(addElementsToUse);
       }
     });
   }

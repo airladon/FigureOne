@@ -31,7 +31,7 @@ describe('Transfrom Animation Unit', () => {
       1: { position: new Point(0, 1) },
       2: { position: new Point(0, 2) },
     };
-    figure.elements = figure.shapes.collection();
+    figure.elements = figure.collections.collection();
     figure.elements.add('elem1', elem1);
     figure.elements.add('elem2', elem2);
   });

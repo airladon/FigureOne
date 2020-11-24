@@ -16,7 +16,7 @@ describe('Animation Step State', () => {
   beforeEach(() => {
     jest.useFakeTimers();
     figure = makeFigure();
-    elem1 = figure.shapes.polygon();
+    elem1 = figure.primitives.polygon();
     figure.elements.add('elem1', elem1);
     global.performance.now = () => now * 1000;
   });

@@ -16,11 +16,11 @@ describe('Figure Recorder', () => {
   beforeEach(() => {
     jest.useFakeTimers();
     figure = makeFigure();
-    figure.addElements([
+    figure.add([
       {
         name: 'a',
         method: 'collection',
-        addElements: [
+        elements: [
           {
             name: 'a',
             method: 'polygon',
@@ -30,7 +30,7 @@ describe('Figure Recorder', () => {
       {
         name: 'b',
         method: 'collection',
-        addElements: [
+        elements: [
           {
             name: 'b',
             method: 'polygon',

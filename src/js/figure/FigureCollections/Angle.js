@@ -560,7 +560,7 @@ export type OBJ_PulseAngleAnimationStep = {
  *
  * @example
  * // Angle with size label
- * figure.addElement({
+ * figure.add({
  *   name: 'a',
  *   method: 'collections.angle',
  *   options: {
@@ -594,7 +594,7 @@ export type OBJ_PulseAngleAnimationStep = {
  *
  * @example
  * // Multi colored angle with arrows and an equation label
- * figure.addElement({
+ * figure.add({
  *   name: 'a',
  *   method: 'collections.angle',
  *   options: {
@@ -644,7 +644,7 @@ export type OBJ_PulseAngleAnimationStep = {
  *
  * @example
  * // Change angle animation
- * figure.addElement({
+ * figure.add({
  *   name: 'a',
  *   method: 'collections.angle',
  *   options: {
@@ -666,7 +666,7 @@ export type OBJ_PulseAngleAnimationStep = {
  *
  * @example
  * // Movable angle
- * figure.addElement({
+ * figure.add({
  *   name: 'a',
  *   method: 'collections.angle',
  *   options: {

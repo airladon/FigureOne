@@ -115,7 +115,7 @@ require(['Fig'], function(Fig) {
       htmlId: 'dynamic_equation_1',
     });
 
-    figure.addElement({
+    figure.add({
       name: 'eqn',
       method: 'equation',
       options: {

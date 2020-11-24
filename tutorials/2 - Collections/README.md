@@ -13,11 +13,11 @@ Open `index.html` in a browser to view example.
 // Initialize the figure with a default color
 const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
-figure.addElement(
+figure.add(
   {
     name: 'c',
     method: 'collection',
-    addElements: [        // Add two elements to the collection
+    elements: [        // Add two elements to the collection
       {
         name: 'tri',
         method: 'triangle',

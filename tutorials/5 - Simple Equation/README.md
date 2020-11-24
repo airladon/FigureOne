@@ -11,7 +11,7 @@ Open `index.html` in a browser to view example.
 ```js
 const figure = new Fig.Figure();
 
-figure.addElement(
+figure.add(
   // Add equation element
   {
     name: 'eqn',
