@@ -206,6 +206,8 @@ toc:
   - OBJ_PlotLegendCustom
   - OBJ_SurroundAnimationStep
   - TypeColor
+  - OBJ_AddElement
+  - OBJ_FigureElementCollection
   - name: Misc Animation
   - AnimationStep
   - ElementAnimationStep
