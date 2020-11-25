@@ -34,6 +34,10 @@ Follow these tutorials in sequence to learn about FigureOne and how to use it.
 
 ![](./8%20-%20Texture/example.png)
 
-**[Plot](https://github.com/airladon/FigureOne/tree/master/tutorials/9%20-%20Plot)** - Simple plot of a trace
+**[Plot](https://github.com/airladon/FigureOne/tree/master/tutorials/9%20-%20Plot)** - Automatically generated plot
 
 ![](./9%20-%20Plot/example.png)
+
+**[Customized Plot](https://github.com/airladon/FigureOne/tree/master/tutorials/10%20-%20Customized%20Plot)** - Plot with title, axis, trace and legend customizations
+
+![](./10%20-%20Customized%20Plot/example.png)

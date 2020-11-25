@@ -1,6 +1,6 @@
 # Tutorial 9 - Plot
 
-A simple equation including a fraction.
+A simple automatically generated plot
 
 Open `index.html` in a browser to view example.
 
@@ -55,3 +55,9 @@ figure.add({
   },
 });
 ```
+
+Note, the method used to generate the plot is `'collections.plot'`. All of the figure elements in previous tutorials have been [FigureElementPrimitive](https://airladon.github.io/FigureOne/#figureelementprimitive)s. These are relatively simple shapes.
+
+FigureOne also makes available a suite of more complex shapes that are [FigureElementCollection](https://airladon.github.io/FigureOne/#figureelementcollection)s. These manage a number of other figure elements to create more rich and detailed shapes. Often additional methods and animations are included in the collections to make interactivity and animation more convenient.
+
+A list of available collections is [here](https://airladon.github.io/FigureOne/#collections).

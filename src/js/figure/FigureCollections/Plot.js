@@ -196,7 +196,7 @@ function cleanTraces(
  *
  * @example
  * // Multiple traces with a legend
- * // Some traces are customized beyond the defaul color to include dashes and
+ * // Some traces are customized beyond the default color to include dashes and
  * // markers
  * figure.add({
  *   name: 'plot',
