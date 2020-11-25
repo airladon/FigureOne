@@ -1,5 +1,5 @@
 // Create figure
-const figure = new Fig.Figure();
+const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
 figure.add(
   // Add equation element

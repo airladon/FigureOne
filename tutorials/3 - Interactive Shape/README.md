@@ -12,7 +12,7 @@ Open `index.html` in a browser to view example.
 `index.js`
 ```js
 // Create figure and make it able to be touched
-const figure = new Fig.Figure();
+const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 figure.add(
   {
     name: 'circle',
