@@ -322,6 +322,7 @@ figure.add(
       isMovable: true,
       move: {
         bounds: 'figure',
+        deceleration: 0.1,
       },
     },
   },
