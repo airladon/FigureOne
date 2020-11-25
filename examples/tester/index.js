@@ -1,5 +1,5 @@
-const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
-// const figure = new Fig.Figure({ limits: [-4.5, -4.5, 9, 9]});
+// const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], color: [1, 0, 0, 1]});
 // figure.add([
 //   {
 //     name: 'origin',

@@ -13,9 +13,6 @@ Open `index.html` in a browser to view example.
 ```js
 // Create figure and make it able to be touched
 const figure = new Fig.Figure();
-figure.setTouchable();
-
-// Add circle to figure
 figure.add(
   {
     name: 'circle',
@@ -23,22 +20,16 @@ figure.add(
     options: {
       sides: 100,
       radius: 0.2,
-      fill: true,
-      color: [1, 0, 0, 1],
+      touchBorder: 0.2,
     },
     mods: {
-      isTouchable: true,
       isMovable: true,
       move: {
-        canBeMovedAfterLosingTouch: true,
-        boundary: 'figure',
+        bounds: 'figure',
       },
     },
   },
 );
-
-// Initialize figure
-figure.initialize();
 ```
 
 ## Explanation
@@ -50,24 +41,21 @@ This example shows how an element can be setup to be moved and bounce of the fig
     options: {
       sides: 100,
       radius: 0.2,
-      fill: true,
-      color: [1, 0, 0, 1],
+      touchBorder: 0.2,
     },
 ```
 
-The `options` key in the circle definition defines parameters specific to the `polygon` shape creator method.
+The `options` key in the circle definition defines parameters specific to the `polygon` shape creator method. Of note, the `touchBorder` property defines the size of the buffer around the shape in which a touch event will touch the shape. If this is undefined, then the border of the shape is the touch border. More options for this can be seen at [OBJ_Generic.touchBorder](https://airladon.github.io/FigureOne/#obj_generic)
 
 ```js
     mods: {
-      isTouchable: true,
       isMovable: true,
       move: {
-        canBeMovedAfterLosingTouch: true,
-        boundary: 'figure',
+        bounds: 'figure',
       },
     },
 ```
 
-The `mods` key in the circle definition can be used to set properties that belong to every `FigureElement`. For instance, all figure elements (`FigureElementCollection` and `FigureElementPrimitive` objects) have a `isTouchable` property that by default is `false`. In this case, we are setting it to `true`.
+The `mods` key in the circle definition can be used to set properties that belong to every [FigureElement](https://airladon.github.io/FigureOne/#figurelement). For instance, all figure elements have `isTouchable` and `isMovable` properties that are `false` by default. In this case, we are setting the `isMovable` property to `true`, which will also set the `isTouchable` property. To turn touchability or movability on or off at a later stage with the element, use the [setTouchable](https://airladon.github.io/FigureOne/#figurelementsettouchable) and [setMovable](https://airladon.github.io/FigureOne/#figurelementsetmovable) methods instead of directly changing the properties. This is because the methods will navigate up the element's parent chain setting all parents to allow touch events to propagate through to the element.
 
-Properties of figure elements may also be *objects*. For example, all figure elements have a `move` object property that includes the properties `canBeMovedAfterLosingTouch` and `boundary`, as well as a number of others. Only the properties defined in `mods` will overwrite those in the figure element. Other properties that are not defined (including those within the `move` object) will retian their default values.
+Properties of [FigureElement](https://airladon.github.io/FigureOne/#figurelement) may also be *objects*. For example, all figure elements have a `move` object property that includes the properties `canBeMovedAfterLosingTouch` and `boundary`, as well as a number of others. Only the properties defined in `mods` will overwrite those in the figure element. Other properties that are not defined (including those within the `move` object) will retian their default values.
