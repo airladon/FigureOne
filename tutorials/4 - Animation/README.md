@@ -1,4 +1,4 @@
-# Example 4 - Animation
+# Tutorial 4 - Animation
 
 A pentagon shape goes through a series of animation steps including translations, rotations, pulses, and dissolves.
 

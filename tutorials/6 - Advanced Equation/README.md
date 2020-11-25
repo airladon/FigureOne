@@ -1,4 +1,4 @@
-# Example 5 - Collections Equation
+# Tutorial 5 - Advanced Equation
 
 A more complex equation with an integral, sum operator, brackets, annotations, subscripts and color.
 

@@ -1,4 +1,4 @@
-# Example 2 - Collections
+# Tutorial 2 - Collections
 
 This example shows a triangle and text in a collection. The collection is rotated, so both the triangle and text are also rotated.
 

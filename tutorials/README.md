@@ -22,7 +22,7 @@ Follow these tutorials in sequence to learn about FigureOne and how to use it.
 
 ![](./5%20-%20Simple%20Equation/example.png)
 
-**[Collections Equation](https://github.com/airladon/FigureOne/tree/master/tutorials/6%20-%20Collections%20Equation)** - Render an equation with an integral, sum operator, subscripts and color
+**[Advanced Equation](https://github.com/airladon/FigureOne/tree/master/tutorials/6%20-%Advanced%20Equation)** - Render an equation with an integral, sum operator, subscripts and color
 
 ![](./6%20-%20Collections%20Equation/example.png)
 

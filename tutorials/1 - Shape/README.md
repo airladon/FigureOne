@@ -1,4 +1,4 @@
-# Example 1 - Getting Started
+# Tutorial 1 - Getting Started
 
 Draw a triangle.
 

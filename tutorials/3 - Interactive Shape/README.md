@@ -1,4 +1,4 @@
-# Example 3 - Interactive Shape
+# Tutorial 3 - Interactive Shape
 
 This example shows a circle that can be moved in the container.
 
