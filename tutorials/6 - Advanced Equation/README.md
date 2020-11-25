@@ -1,4 +1,4 @@
-# Tutorial 5 - Advanced Equation
+# Tutorial 6 - Advanced Equation
 
 A more complex equation with an integral, sum operator, brackets, annotations, subscripts and color.
 
