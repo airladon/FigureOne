@@ -38,6 +38,7 @@ const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], l
 
 
 const r = 0.8;
+const space = 0.2;
 
 // THis class will hold a time vs value data points (signal trace)
 class DynamicSignal {
@@ -49,10 +50,10 @@ class DynamicSignal {
     const time = Fig.range(0, this.duration, this.timeStep);
     
     // The time range will be plotted over an x range of 1.8 figure units
-    const xRange = 1.8;
+    const xRange = 2 - space;
 
     // Get the x values of the signal
-    this.x = time.map(t => t * xRange / this.duration + r + 0.2);
+    this.x = time.map(t => t * xRange / this.duration + r + space);
 
     // initial signal data
     this.data = Array(this.duration / this.timeStep).fill(initialValue);
@@ -101,6 +102,22 @@ class DynamicSignal {
   }
 }
 
+// Helper method to create text buttons
+const button = (name, text, position) => ({
+  name,
+  method: 'text',
+  options: {
+    text,
+    touchBorder: 0.3,
+    position,
+    xAlign: 'center',
+    color: [0.4, 0.4, 0.4, 1],
+  },
+  mods: {
+    isTouchable: true,
+  },
+});
+
 figure.add([
   {
     name: 'diagram',
@@ -136,7 +153,8 @@ figure.add([
         options: {
           maxLength: 3,
           width: 0.005,
-          dash: [0.007, 0.02],
+          dash: [0.01, 0.02],
+          color: [0.7, 0.7, 0.7, 1],
         },
       },
       {
@@ -145,7 +163,7 @@ figure.add([
         options: {
           length: r,
           width: 0.015,
-          touchBorder: 0.5,
+          touchBorder: 0.3,
         },
         mods: {
           isMovable: true,
@@ -161,45 +179,9 @@ figure.add([
       },
     ],
   },
-  {
-    name: 'slow',
-    method: 'text',
-    options: {
-      text: 'Rotate Slower',
-      touchBorder: 0.3,
-      position: [-1.2, -1.3],
-      xAlign: 'center',
-    },
-    mods: {
-      isTouchable: true,
-    },
-  },
-  {
-    name: 'fast',
-    method: 'text',
-    options: {
-      text: 'Rotate Faster',
-      touchBorder: 0.3,
-      position: [0, -1.3],
-      xAlign: 'center',
-    },
-    mods: {
-      isTouchable: true,
-    },
-  },
-  {
-    name: 'stop',
-    method: 'text',
-    options: {
-      text: 'Stop Rotate',
-      touchBorder: 0.3,
-      position: [1.2, -1.3],
-      xAlign: 'center',
-    },
-    mods: {
-      isTouchable: true,
-    },
-  },
+  button('slow', 'Rotate Slower', [-1.2, -1.3]),
+  button('fast', 'Rotate Faster', [0, -1.3]),
+  button('stop', 'Stop Rotate', [1.2, -1.3]),
 ]);
 
 // Get the rotator, sine line and signal line figure elements
@@ -214,7 +196,7 @@ const signal = new DynamicSignal(r * Math.sin(Math.PI / 4), 10);
 function update() {
   const angle = rotator.getRotation();
   const endPoint = Fig.polarToRect(r, angle);
-  sine.setEndPoints(endPoint, [r + 0.2, endPoint.y]);
+  sine.setEndPoints(endPoint, [r + space, endPoint.y]);
   signal.update(endPoint.y);
   signalLine.custom.updatePoints({
     points: signal.getPoints(),
@@ -257,6 +239,6 @@ function startSpinning(frequency) {
     .start();
 }
 
-figure.getElement('fast').onClick = () => startSpinning(0.5);
-figure.getElement('slow').onClick = () => startSpinning(0.2);
+figure.getElement('fast').onClick = () => startSpinning(0.7);
+figure.getElement('slow').onClick = () => startSpinning(0.3);
 figure.getElement('stop').onClick = () => { rotator.stop(); };
