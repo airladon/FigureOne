@@ -6,21 +6,21 @@
 // import Figure from '../Figure';
 import {
   Point, Rect, Transform,
-} from '../../tools/g2';
+} from '../../../tools/g2';
 // import {
 //   round,
 // } from '../../tools/math';
 // import webgl from '../../__mocks__/WebGLInstanceMock';
 // import DrawContext2D from '../../__mocks__/DrawContext2DMock';
-import * as tools from '../../tools/tools';
-import makeFigure from '../../__mocks__/makeFigure';
+import * as tools from '../../../tools/tools';
+import makeFigure from '../../../__mocks__/makeFigure';
 // import CommonFigureCollection from './FigureCollection';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('..//Gesture');
-jest.mock('../webgl/webgl');
-jest.mock('../DrawContext2D');
+jest.mock('../../Gesture');
+jest.mock('../../webgl/webgl');
+jest.mock('../../DrawContext2D');
 // jest.mock('../../tools/tools');
 
 describe('Figure Equations From Object', () => {

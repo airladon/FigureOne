@@ -2,7 +2,7 @@
 
 Follow these tutorials in sequence to learn about FigureOne and how to use it.
 
-**[Simple shape](https://github.com/airladon/FigureOne/tree/master/tutorials/01%20-%20Shape)** - Simple creation and drawing of figure element
+## **[Simple shape](https://github.com/airladon/FigureOne/tree/master/tutorials/01%20-%20Shape)** - Simple creation and drawing of figure element
 
 ![](./01%20-%20Shape/example.png)
 
