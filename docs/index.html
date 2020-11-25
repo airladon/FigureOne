@@ -4492,9 +4492,9 @@
 <p>In the language of <strong>FigureOne</strong>, there are two types of <a href="FigureElements">FigureElements</a>:</p>
 <ul>
 <li><a href="#figureelementprimitive">FigureElementPrimitive</a> - an element that will draw something to the screen, such as a line, shape or text</li>
-<li><a href="#figureelementcollection">FigureElementCollection</a> - collections of primitives or other collections</li>
+<li><a href="#figureelementcollection">FigureElementCollection</a> - collections of elements that will move or be operated on together</li>
 </ul>
-<p>Each <a href="#figureelement">FigureElement</a> has a <a href="#transform">Transform</a> that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a <a href="#figureelementprimitive">FigureElementPrimitive</a>, the shape or text will be transformed. In the case of a <a href="#figureelementcollection">FigureElementCollection</a>, all the figure elements it contains will have the transform applied to them.</p>
+<p>Each <a href="#figureelement">FigureElement</a> has a <a href="#transform">Transform</a> that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a <a href="#figureelementprimitive">FigureElementPrimitive</a>, the shape or text will be transformed. In the case of a <a href="#figureelementcollection">FigureElementCollection</a>, all the figure elements it contains will have their transforms further transformed by the collection transform.</p>
 <p>This means there is a heierachy of <a href="#figureelement">FigureElement</a> objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.</p>
 <p>Changing an element's transform moves the element through space. Changing the element's transform over time animates the element.</p>
 <h4>An Example</h4>
@@ -4502,7 +4502,7 @@
 <p style="text-align: center"><img src="./tutorials/ex1.png"></p>
 <p>To create this figure, we might use a figure element hierarchy like:</p>
 <p style="text-align: center"><img src="./tutorials/ex1-hierarchy.png"></p>
-<p>The drawn elements, the line and text, are primitives. They are created in the simple no rotation case. If the line is 0.8 long, and it starts at (0, 0), then the text might be at (0.4, 0.1)</p>
+<p>The drawn elements, the line and label, are primitives. They are created in the simple no rotation case. If the line is 0.8 long, and it starts at (0, 0), then the text might be at (0.4, 0.1)</p>
 <p style="text-align: center"><img src="./tutorials/ex1-collection.png"></p>
 <p>The figure itself has limits that define the coordinate window that can be shown, in this case its bottom left is the origin, and it is 3 wide and 2 high. We want the collection to be rotated, with the center of rotation at the center of the figure. Therefore we apply a rotation and translation transform to the collection.</p>
 <p style="text-align: center"><img src="./tutorials/ex1-figure.png"></p>
@@ -4513,7 +4513,7 @@
 <p>The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">canvas</a> element is defined in screen pixels. The WebGL view re-maps the canvas pixels to -1 to +1 coordinates in both the vertical and horizontal directions, independent on the aspect ratio of the canvas.</p>
 <p>When the canvas aspect ratio is not a square, or it is more convenient to create a figure in a coordinate space not mapped between -1 to +1, then it is useful to have a separate <em>figure space</em>. In the example above, the figure space re-maps the <em>GL space</em> to 0 to 3 in the horizontal and 0 to 2 in the vertical.</p>
 <p>These are three examples of different coordinate spaces - <em>pixel space</em>, <em>GL space</em> and <em>figure space</em>.</p>
-<p>If you want to move or modify an element, you need to think about what you want to modify it <em>relative</em> to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in <em>figure space</em>? Or do you want to move it relative to other elements within the parent, or local collection - <em>local space</em>. Alternately, you might want to modify the vertices of the shape, in <em>vertex space</em>.</p>
+<p>If you want to move or modify an element, you need to think about what you want to modify it <em>relative</em> to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in <em>figure space</em>? Or do you want to move it relative to other elements within the parent, or local collection - <em>local space</em>. Alternately, you might want to modify the vertices of the shape, in <em>draw space</em>.</p>
 <p>In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. Figure space will be the same as local space and vertex space. You won't care about the higher level GL or pixel spaces.</p>
 <p>But if you have transformed collections, or if you are tying an element to a location on the screen you will need to convert points between the different spaces. In addition, it is useful to know about these different spaces as sometimes they are referred to in the documentation.</p>
 <p>One way to think about what space you are modifying is:</p>
@@ -4920,7 +4920,7 @@ figure.add(<span class="hljs-string">'hexagon'</span>, hex);</pre>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getElement(elementName)</span>
+            <span class='code strong strong truncate'>getElement(elementName, elementPath)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4928,7 +4928,9 @@ figure.add(<span class="hljs-string">'hexagon'</span>, hex);</pre>
 
   
 
-  <p>Get element from element name or path.</p>
+  <p>Get element from an element path with '.' separators.</p>
+<p>For instance, if a collection has a child collection 'a', which
+has a child primitive 'b', then the path would be: 'a.b'.</p>
 
   
   
@@ -4952,11 +4954,37 @@ figure.add(<span class="hljs-string">'hexagon'</span>, hex);</pre>
           
         </div>
       
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>elementPath</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
     </div>
   
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>(<a href="#figureelement">FigureElement</a> | null)</code>:
+        element at path. If 
+<code>elementPath</code>
+
+is 
+<code>null</code>
+, then the figure's base collection is returned. If 
+<code>elementPath</code>
+
+is invalid then 
+<code>null</code>
+ is returned.
+
+      
+    
   
 
   
@@ -4977,34 +5005,38 @@ element.getElement
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Get a figure element and rotate it</span>
-figure.add([
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Get all the elements from a figure</span>
+figure.add(
   {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">'hex'</span>,
-    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
-    <span class="hljs-attr">options</span>: {
-      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
-      <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
-      <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
-      <span class="hljs-attr">position</span>: [<span class="hljs-number">-0.5</span>, <span class="hljs-number">0</span>],
-    },
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'c'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'collection'</span>,
+    <span class="hljs-attr">elements</span>: [
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'tri'</span>,
+        <span class="hljs-attr">method</span>: <span class="hljs-string">'triangle'</span>,
+        <span class="hljs-attr">options</span>: {
+          <span class="hljs-attr">height</span>: <span class="hljs-number">0.4</span>,
+          <span class="hljs-attr">width</span>: <span class="hljs-number">0.4</span>,
+        },
+      },
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'text'</span>,
+        <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
+        <span class="hljs-attr">options</span>: {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'triangle'</span>,
+          <span class="hljs-attr">position</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">-0.4</span>],
+          <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+        },
+      },
+    ],
   },
-  {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">'tri'</span>,
-    <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
-    <span class="hljs-attr">options</span>: {
-      <span class="hljs-attr">radius</span>: <span class="hljs-number">0.5</span>,
-      <span class="hljs-attr">fill</span>: <span class="hljs-literal">true</span>,
-      <span class="hljs-attr">sides</span>: <span class="hljs-number">3</span>,
-      <span class="hljs-attr">position</span>: [<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>],
-    },
-  },
-]);
+);
 
-<span class="hljs-keyword">const</span> hex = figure.getElement(<span class="hljs-string">'hex'</span>);
-hex.animations.new()
-  .rotation({ <span class="hljs-attr">target</span>: <span class="hljs-built_in">Math</span>.PI, <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span> })
-  .start();</pre>
+<span class="hljs-keyword">const</span> c = figure.getElement(<span class="hljs-string">'c'</span>);
+<span class="hljs-comment">// Elements within collections can be found with dot notation</span>
+<span class="hljs-keyword">const</span> tri = figure.getElement(<span class="hljs-string">'c.tri'</span>);
+<span class="hljs-comment">// Or the collection can be queried directly</span>
+<span class="hljs-keyword">const</span> text = c.getElement(<span class="hljs-string">'text'</span>);</pre>
     
   
 
@@ -7545,7 +7577,7 @@ has a child primitive 'b', then the path would be: 'a.b'.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>elementPath</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#figureelement">FigureElement</a>)
+            <span class='code bold'>elementPath</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)
             = <code>null</code>)</code>
 	    
           </div>
@@ -7578,9 +7610,56 @@ then
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#figureelementcollectiongetelement">
+element.getElement
+</a>
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Get all the elements from a figure</span>
+figure.add(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'c'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'collection'</span>,
+    <span class="hljs-attr">elements</span>: [
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'tri'</span>,
+        <span class="hljs-attr">method</span>: <span class="hljs-string">'triangle'</span>,
+        <span class="hljs-attr">options</span>: {
+          <span class="hljs-attr">height</span>: <span class="hljs-number">0.4</span>,
+          <span class="hljs-attr">width</span>: <span class="hljs-number">0.4</span>,
+        },
+      },
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'text'</span>,
+        <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
+        <span class="hljs-attr">options</span>: {
+          <span class="hljs-attr">text</span>: <span class="hljs-string">'triangle'</span>,
+          <span class="hljs-attr">position</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">-0.4</span>],
+          <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+        },
+      },
+    ],
+  },
+);
+
+<span class="hljs-keyword">const</span> c = figure.getElement(<span class="hljs-string">'c'</span>);
+<span class="hljs-comment">// Elements within collections can be found with dot notation</span>
+<span class="hljs-keyword">const</span> tri = figure.getElement(<span class="hljs-string">'c.tri'</span>);
+<span class="hljs-comment">// Or the collection can be queried directly</span>
+<span class="hljs-keyword">const</span> text = c.getElement(<span class="hljs-string">'text'</span>);</pre>
+    
   
 
   

@@ -29,3 +29,7 @@ Follow these tutorials in sequence to learn about FigureOne and how to use it.
 **[Equation Animation](https://github.com/airladon/FigureOne/tree/master/tutorials/7%20-%20Animation%20between%20Equation%20Forms)** - Animation between two forms of an equation
 
 ![](./7%20-%20Animation%20between%20Equation%20Forms/example.gif)
+
+**[Texture](https://github.com/airladon/FigureOne/tree/master/tutorials/8%20-%20Texture)** - Using a texture instead of a color
+
+![](./8%20-%20Texture/example.png)
