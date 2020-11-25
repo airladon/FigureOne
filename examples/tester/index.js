@@ -311,30 +311,18 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 
 figure.add(
   {
-    name: 'c',
-    method: 'collection',
-    elements: [
-      {
-        name: 'tri',
-        method: 'triangle',
-        options: {
-          height: 0.4,
-          width: 0.4,
-        },
+    name: 'circle',
+    method: 'polygon',
+    options: {
+      sides: 100,
+      radius: 0.2,
+      touchBorder: 0.2,
+    },
+    mods: {
+      isMovable: true,
+      move: {
+        bounds: 'figure',
       },
-      {
-        name: 'text',
-        method: 'text',
-        options: {
-          text: 'triangle',
-          position: [0, -0.4],
-          xAlign: 'center',
-        },
-      },
-    ],
+    },
   },
 );
-
-const c = figure.getElement('c');
-const tri = figure.getElement('c.tri');
-const text = figure.getElement('c.text');

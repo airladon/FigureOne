@@ -34,7 +34,7 @@ describe('Figure Equations From Object', () => {
     color1 = [0.95, 0, 0, 1];
     ways = {
       simple: () => {
-        figure.equation.addEquation(collection, 'eqn', {
+        figure.collections.addEquation(collection, 'eqn', {
           color: color1,
           elements: {
             a: 'a',
@@ -52,7 +52,7 @@ describe('Figure Equations From Object', () => {
         collection._eqn.showForm('1');
       },
       allOptions: () => {
-        figure.equation.addEquation(collection, 'eqn', {
+        figure.collections.addEquation(collection, 'eqn', {
           color: color1,
           position: [1, 1],           // Points can be defined as arrays
           scale: 0.85,
@@ -79,7 +79,7 @@ describe('Figure Equations From Object', () => {
         collection._eqn.showForm('1');
       },
       navigator: () => {
-        figure.equation.addEquation(collection, 'eqn', {
+        figure.collections.addEquation(collection, 'eqn', {
           color: color1,
           elements: {
             a: 'a',
@@ -94,7 +94,7 @@ describe('Figure Equations From Object', () => {
           },
           formSeries: ['0', '1'],
         });
-        figure.equation.addNavigator(collection, 'nav', {
+        figure.collections.addNavigator(collection, 'nav', {
           equation: collection._eqn,
           offset: new Point(0.2, -0.5),
           navType: '2Line',
@@ -107,7 +107,7 @@ describe('Figure Equations From Object', () => {
         collection._nav.showForm('1');
       },
       navigatorWithoutEquationSplit: () => {
-        figure.equation.addNavigator(collection, 'test', {
+        figure.collections.addNavigator(collection, 'test', {
           equation: collection._eqn,
           offset: [0.2, -0.5],
           navType: '2Line',
@@ -131,7 +131,7 @@ describe('Figure Equations From Object', () => {
         collection._testNav.showForm('1');
       },
       navigatorWithoutEquationAllInOne: () => {
-        figure.equation.addNavigator(collection, 'test', {
+        figure.collections.addNavigator(collection, 'test', {
           color: color1,
           elements: {
             a: 'a',

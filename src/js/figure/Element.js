@@ -4667,7 +4667,7 @@ class FigureElementCollection extends FigureElement {
     // }
   }
 
-   /**
+  /**
    * Get element from an element path with '.' separators.
    *
    * For instance, if a collection has a child collection 'a', which
