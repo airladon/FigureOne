@@ -11,7 +11,7 @@ This library uses WebGL and therefore requires HTML5 support.
 Load the FigureOne library into your HTML file:
 
 ```html
-<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.5/figureone.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.6/figureone.min.js'></script>
 ```
 
 Create a `div` element to attach the figure to:

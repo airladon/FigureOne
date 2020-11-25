@@ -2115,6 +2115,9 @@ export default class FigurePrimitives {
       copyToUse = [options.copy];
     }
 
+    options.texture.mapTo = getRect(options.texture.mapTo);
+    options.texture.mapFrom = getRect(options.texture.mapFrom);
+
     const element = Generic(
       this.webgl,
       parsedPoints,

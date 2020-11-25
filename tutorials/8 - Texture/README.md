@@ -42,20 +42,19 @@ const figure = new Fig.Figure();
 figure.add(
   {
     name: 'flower',
-    method: 'polygon',
+    method: 'rectangle',
     options: {
-      radius: 0.8,
-      sides: 6,
-      fill: true,
+      width: 1.8,
+      height: 1.333,
+      corner: { radius: 0.1, sides: 10 },
       texture: {
         src: 'texture-rect.jpg',
-        mapTo: new Fig.Rect(-1, -0.667, 2, 1.333),
+        mapTo: [-1, -0.667, 2, 1.333],
       },
     },
   },
 );
 
-figure.initialize();
 ```
 
 ## Explanation
