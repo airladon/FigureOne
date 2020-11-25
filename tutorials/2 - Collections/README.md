@@ -59,3 +59,43 @@ A drawing element in a collection will be transformed by both its own transform,
 That way, if drawing elements should be moved or scaled together, they can be added to a collection and that collection can collectively move/scale them.
 
 Thus, a drawing element in a hierarchy of collections will be transformed by the chain of all its hierarchical parents.
+
+This example also shows how a figure element can be accessed. The main [Figure](https://airladon.github.io/FigureOne/#figure) and all [FigureElementCollection](https://airladon.github.io/FigureOne/#figureelementcollection)s have a `getElement` method, to which a string can be passed with the elements name. In the example above, the collection element is retrieved by:
+
+```js
+figure.getElement('c')
+```
+
+`'.'` characters can be used to get elements within nested collections. So, if we wanted to retrieve the `'tri'`  element, we could use:
+
+```js
+figure.getElement('c.tri');
+```
+
+## Alternative element creation
+
+The above example uses an object hierarchy to define the figure elements. It is sometimes more useful to instantiate the elements separately. All figure elements can be created using methods within [figure.primitives](https://airladon.github.io/FigureOne/#figureprimitives) or [figure.collections](https://airladon.github.io/FigureOne/#figureprimitives).
+
+The above example can be rewritten as:
+
+```js
+const tri = figure.primitives.triangle({
+  name: 'tri',
+  height: 0.4,
+  width: 0.4,
+});
+
+const text = figure.primitives.text({
+  name: 'text',
+  text: 'triangle',
+  position: [0, -0.4],
+  xAlign: 'center',
+});
+
+const c = figure.collections.collection({
+  name: 'c',
+});
+c.add([tri, text]);
+
+figure.add(c);
+```

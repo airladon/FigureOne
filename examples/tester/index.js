@@ -290,61 +290,67 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 // );
 
 
-// Multiple traces with a legend
-// Some traces are customized beyond the defaul color to include dashes and
-// markers
-figure.add({
-  name: 'plot',
-  method: 'polygon',
-  options: {
-    radius: 0.5,
-  },
+// // Add a triangle
+// figure.add(
+//   {
+//     name: 'tri',
+//     method: 'triangle',
+//     options: {
+//       width: 1,
+//       height: 1,
+//       color: [1, 0, 0, 1],
+//     },
+//   },
+// );
+
+// const tri = figure.primitives.triangle({
+//   width: 1,
+//   height: 1,
+//   color: [1, 0, 0, 1],
+// });
+
+// figure.add(
+//   {
+//     name: 'c',
+//     method: 'collection',
+//     elements: [        // Add two elements to the collection
+//       {
+//         name: 'tri',
+//         method: 'triangle',
+//         options: {
+//           height: 0.4,
+//           width: 0.4,
+//         },
+//       },
+//       {
+//         name: 'text',
+//         method: 'text',
+//         options: {
+//           text: 'triangle',
+//           position: [0, -0.4],
+//           xAlign: 'center',
+//         },
+//       },
+//     ],
+//   },
+// );
+const tri = figure.primitives.triangle({
+  name: 'tri',
+  height: 0.4,
+  width: 0.4,
 });
 
-figure.add(
-  {
-    name: 'c',
-    method: 'collection',
-    elements: [         // add two elements to the collection
-      {
-        name: 'hex',
-        method: 'polygon',
-        options: {
-          sides: 6,
-          radius: 0.5,
-        },
-      },
-      {
-        name: 'text',
-        method: 'text',
-        options: {
-          text: 'hexagon',
-          position: [0, -0.8],
-          xAlign: 'center',
-          font: { size: 0.3 },
-        },
-      },
-    ],
-  },
-);
-
-const c1 = figure.collections.collection();
-const h1 = figure.primitives.polygon({
-  name: 'h1',
-  color: [0, 0.4, 1, 1],
+const text = figure.primitives.text({
+  name: 'text',
+  text: 'triangle',
+  position: [0, -0.4],
+  xAlign: 'center',
 });
-console.log(h1)
 
-c1.add('j1', h1);
-
-figure.add(c1)
-console.log(figure.elements)
-
-figure.add({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    forms: { 0: ['a', 'b'] },
-  },
+const c = figure.collections.collection({
+  name: 'c',
 });
-figure.getElement('eqn').showForm('0');
+c.add([tri, text]);
+
+figure.add(c);
+// console.log(figure.getElement('c.tri'))
