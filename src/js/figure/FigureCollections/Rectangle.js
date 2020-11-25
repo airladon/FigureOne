@@ -16,7 +16,7 @@ import {
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep } from '../Animation/Animation';
 import type {
-  OBJ_LineStyleSimple, OBJ_Texture, OBJ_Collection,
+  OBJ_LineStyleSimple, OBJ_Texture, OBJ_Collection, OBJ_TextLines,
 } from '../FigurePrimitives/FigurePrimitives';
 import type {
   TypeColor, OBJ_CurvedCorner,
@@ -57,6 +57,8 @@ export type OBJ_SurroundAnimationStep = {
  * want fill
  * @property {TypeColor | OBJ_Texture} [fill] fill color or texture
  * @property {OBJ_CurvedCorner} [corner] corner style of rectangle
+ * @property {OBJ_TextLines} [label] Rectangle label
+ * @property {boolean} [button] Add button animation when clicked
  */
 export type COL_Rectangle = {
   width?: number,
@@ -66,7 +68,8 @@ export type COL_Rectangle = {
   line?: OBJ_LineStyleSimple,
   fill?: TypeColor | OBJ_Texture,
   corner?: OBJ_CurvedCorner,
-  text?: OBJ_TextLines,
+  label?: OBJ_TextLines,
+  button?: boolean,
 } & OBJ_Collection;
 
 /*
@@ -212,6 +215,7 @@ class CollectionsRectangle extends FigureElementCollection {
       },
       transform: new Transform('Rectangle').scale(1, 1).rotate(0).translate(0, 0),
       limits: collections.primitives.limits,
+      button: false,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.fill == null && options.line == null) {
@@ -251,7 +255,7 @@ class CollectionsRectangle extends FigureElementCollection {
       this.addlabel(options.label);
     }
     if (options.button) {
-      this.addButtonBehavior(options.button);
+      this.addButtonBehavior();
     }
 
     this.animations.surround = (...opt) => {
@@ -302,9 +306,10 @@ class CollectionsRectangle extends FigureElementCollection {
 
   addButtonBehavior() {
     this.subscriptions.add('onClick', () => {
+      const currentOpacity = this.opacity;
       this.animations.new()
-        .trigger({ callback: () => { this.setOpacity(0.8); }, duration: 0.1 })
-        .trigger({ callback: () => { this.setOpacity(1); } })
+        .trigger({ callback: () => { this.setOpacity(currentOpacity - 0.2); }, duration: 0.1 })
+        .trigger({ callback: () => { this.setOpacity(currentOpacity); } })
         .start();
     });
   }
