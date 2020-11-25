@@ -24,6 +24,7 @@ Then in javascript, create a figure and a shape within it:
 ```js
 const figure = new Fig.Figure();
 
+// Create the shape
 figure.add(
   {
     name: 'tri',
@@ -35,15 +36,20 @@ figure.add(
     },
   },
 );
+
+// Animate the shape
+figure.getElement('tri').animations.new()
+  .position({ target: [1, 0 ], duration: 1 })
+  .rotation({ target: Math.PI, duration: 2 })
+  .position({ target: [0, 0 ], duration: 1 })
+  .start();
 ```
 
 And you will see:
 
-![](tutorials/1%20-%20Shape/example.png)
+![](./docs/example.gif)
 
-Source files for this can be found in the **[first tutorial](https://github.com/airladon/FigureOne/tree/master/tutorials/1%20-%20Shape)**.
-
-Then, check out the remaining **[Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials)**, **[API Reference](https://airladon.github.io/FigureOne/.)** and **[Examples](https://github.com/airladon/FigureOne/tree/master/tutorials)** and you'll be making beautiful, interactive figures in no time.
+Then, check out the **[Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials)**, **[API Reference](https://airladon.github.io/FigureOne/.)** and **[Examples](https://github.com/airladon/FigureOne/tree/master/tutorials)** and you'll be making beautiful, interactive figures in no time.
 
 ## Selection of Examples
 **[Pythagorean Equation Animation](https://github.com/airladon/FigureOne/tree/master/examples/Pythagorean%20Theorem)**

@@ -1,5 +1,5 @@
 // const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
-const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], color: [1, 0, 0, 1]});
+const figure = new Fig.Figure({ limits: [-8, -8, 16, 16], color: [1, 0, 0, 1]});
 // figure.add([
 //   {
 //     name: 'origin',
@@ -310,54 +310,21 @@ const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], color: [1, 0, 0, 1]});
 // });
 
 // const figure = new Fig.Figure();
-
 figure.add(
   {
-    name: 'eqn',
-    method: 'equation',
+    name: 'tri',
+    method: 'triangle',
     options: {
-      elements: {
-        v: { symbol: 'vinculum'},
-        equals: ' = ',
-        times: ' \u00D7 ',
-        c: { color: [0, 0, 1, 1] },
-      },
-
-      // Align all forms to the 'equals' figure element
-      formDefaults: { alignment: { fixTo: 'equals' } },
-
-      // Define two different forms of the equation
-      forms: {
-        1: ['a', 'equals', { frac: ['b', 'v', 'c'] }],
-        2: {
-          content: ['c', 'times', 'a', 'equals', 'b'],
-          // Define how the 'c' element will move to this form
-          animation: {
-            translation: {
-              c: { style: 'curved', direction: 'down', mag: 0.5 },
-            },
-          },
-        },
-      },
+      width: 1,
+      height: 1,
+      color: [1, 0, 0, 1],
     },
   },
 );
 
-const eqn = figure.getElement('eqn');
-
-// Show the equation form
-eqn.showForm('1');
-
-// // // Animate to the next form
-// eqn.goToForm({
-//   form: '2',
-//   delay: 2,
-//   duration: 1.5,
-//   animate: 'move',
-// });
-
-eqn.animations.new()
-  .delay(2)
-  .pulse({ element: eqn.getElement('c'), duration: 1 })
-  .goToForm({ target: '2', duration: 1, animate: 'move' })
+figure.getElement('tri').animations.new()
+  .delay(1)
+  .position({ target: [1, 0 ], duration: 1 })
+  .rotation({ target: Math.PI, duration: 2 })
+  .position({ target: [0, 0 ], duration: 1 })
   .start();

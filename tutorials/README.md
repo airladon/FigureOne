@@ -33,3 +33,7 @@ Follow these tutorials in sequence to learn about FigureOne and how to use it.
 **[Texture](https://github.com/airladon/FigureOne/tree/master/tutorials/8%20-%20Texture)** - Using a texture instead of a color
 
 ![](./8%20-%20Texture/example.png)
+
+**[Plot](https://github.com/airladon/FigureOne/tree/master/tutorials/9%20-%20Plot)** - Simple plot of a trace
+
+![](./9%20-%20Plot/example.png)
