@@ -37,8 +37,6 @@ const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], l
 // ]);
 
 
-
-
 const r = 0.8;
 
 // THis class will hold a time vs value data points (signal trace)
@@ -47,7 +45,7 @@ class DynamicSignal {
     // This data class will hold signal data for the most recent 10s at a
     // resolution of 0.02s.
     this.duration = 10;
-    this.timeStep = 0.02;
+    this.timeStep = 0.01;
     const time = Fig.range(0, this.duration, this.timeStep);
     
     // The time range will be plotted over an x range of 1.8 figure units
@@ -163,6 +161,45 @@ figure.add([
       },
     ],
   },
+  {
+    name: 'slow',
+    method: 'text',
+    options: {
+      text: 'Rotate Slower',
+      touchBorder: 0.3,
+      position: [-1.2, -1.3],
+      xAlign: 'center',
+    },
+    mods: {
+      isTouchable: true,
+    },
+  },
+  {
+    name: 'fast',
+    method: 'text',
+    options: {
+      text: 'Rotate Faster',
+      touchBorder: 0.3,
+      position: [0, -1.3],
+      xAlign: 'center',
+    },
+    mods: {
+      isTouchable: true,
+    },
+  },
+  {
+    name: 'stop',
+    method: 'text',
+    options: {
+      text: 'Stop Rotate',
+      touchBorder: 0.3,
+      position: [1.2, -1.3],
+      xAlign: 'center',
+    },
+    mods: {
+      isTouchable: true,
+    },
+  },
 ]);
 
 // Get the rotator, sine line and signal line figure elements
@@ -201,3 +238,25 @@ rotator.setRotation(Math.PI / 4);
 
 // Start updating
 updateNext();
+
+
+// Setup the buttons
+function spinner(initialAngle, duration, frequency, percent) {
+  const angle = initialAngle + 2 * Math.PI * frequency * percent * duration;
+  rotator.setRotation(angle);
+}
+
+function startSpinning(frequency) {
+  rotator.stop();
+  const angle = rotator.getRotation();
+  rotator.animations.new()
+    .custom({
+      callback: this.spinner.bind(this, angle, 100, frequency),
+      duration: 100,
+      })
+    .start();
+}
+
+figure.getElement('fast').onClick = () => startSpinning(0.5);
+figure.getElement('slow').onClick = () => startSpinning(0.2);
+figure.getElement('stop').onClick = () => { rotator.stop(); };
