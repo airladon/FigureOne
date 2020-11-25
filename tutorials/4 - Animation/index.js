@@ -1,4 +1,4 @@
-const figure = new Fig.Figure();
+const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
 // Add a simple shape to the figure
 figure.add([
@@ -9,7 +9,6 @@ figure.add([
       sides: 6,
       radius: 0.2,
       fill: true,
-      color: [1, 0, 0, 1],
     },
   },
 ]);
@@ -26,5 +25,3 @@ figure.getElement('hexagon').animations.new()
   .position({ target: [-0.5, 0.5], velocity: 0.3 })
   .position({ target: [0, 0], velocity: 0.3 })
   .start();
-
-figure.initialize();

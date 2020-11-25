@@ -309,21 +309,29 @@ const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], color: [1, 0, 0, 1]});
 //   color: [1, 0, 0, 1],
 // });
 
-figure.add(
+// Add a simple shape to the figure
+figure.add([
   {
-    name: 'circle',
+    name: 'hexagon',
     method: 'polygon',
     options: {
-      sides: 100,
+      sides: 6,
       radius: 0.2,
-      touchBorder: 0.2,
-    },
-    mods: {
-      isMovable: true,
-      move: {
-        bounds: 'figure',
-        deceleration: 0.1,
-      },
+      fill: true,
     },
   },
-);
+]);
+
+// Start a new animation
+figure.getElement('hexagon').animations.new()
+  .delay(2)
+  .position({ target: [-0.4, -0.4], velocity: 0.3 })
+  .rotation({ delta: Math.PI / 2, duration: 1 })
+  .position({ target: [0, 0], velocity: 0.3 })
+  .pulse({ duration: 1 })
+  .rotation({ delta: Math.PI / 2, duration: 1 })
+  .dissolveOut({ duration: 1 })
+  .dissolveIn({ duration: 1 })
+  .position({ target: [-0.5, 0.5], velocity: 0.3 })
+  .position({ target: [0, 0], velocity: 0.3 })
+  .start();
