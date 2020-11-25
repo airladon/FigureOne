@@ -309,29 +309,39 @@ const figure = new Fig.Figure({ limits: [-1, -1, 2, 2], color: [1, 0, 0, 1]});
 //   color: [1, 0, 0, 1],
 // });
 
-// Add a simple shape to the figure
-figure.add([
-  {
-    name: 'hexagon',
-    method: 'polygon',
-    options: {
-      sides: 6,
-      radius: 0.2,
-      fill: true,
+// const figure = new Fig.Figure();
+
+// figure.add(
+//   // Add equation element
+//   {
+//     name: 'eqn',
+//     method: 'equation',
+//     options: {
+//       // Equation elements are the individual terms in the equation
+//       elements: {
+//         a: 'a',
+//         b: 'b',
+//         c: 'c',
+//         v: { symbol: 'vinculum'},
+//         equals: ' = ',
+//       },
+//       // An equation form is how those terms are arranged
+//       forms: {
+//         base: ['a', 'equals', { frac: ['b', 'v', 'c'] }],
+//       },
+//     },
+//   },
+// );
+
+figure.add({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    forms: {
+      base: ['a', '_ = ', { frac: ['b', 'vinculum', 'c'] }],
     },
   },
-]);
+});
 
-// Start a new animation
-figure.getElement('hexagon').animations.new()
-  .delay(2)
-  .position({ target: [-0.4, -0.4], velocity: 0.3 })
-  .rotation({ delta: Math.PI / 2, duration: 1 })
-  .position({ target: [0, 0], velocity: 0.3 })
-  .pulse({ duration: 1 })
-  .rotation({ delta: Math.PI / 2, duration: 1 })
-  .dissolveOut({ duration: 1 })
-  .dissolveIn({ duration: 1 })
-  .position({ target: [-0.5, 0.5], velocity: 0.3 })
-  .position({ target: [0, 0], velocity: 0.3 })
-  .start();
+// Show the equation form
+// figure.getElement('eqn').showForm('base');
