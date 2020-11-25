@@ -3345,6 +3345,7 @@ class FigureElement {
         this.recorder.recordEvent('elementClick', [this.getPath()]);
       }
       this.fnMap.exec(this.onClick, this);
+      this.subscriptions.publish('onClick');
     }
   }
 

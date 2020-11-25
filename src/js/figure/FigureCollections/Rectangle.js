@@ -66,6 +66,7 @@ export type COL_Rectangle = {
   line?: OBJ_LineStyleSimple,
   fill?: TypeColor | OBJ_Texture,
   corner?: OBJ_CurvedCorner,
+  text?: OBJ_TextLines,
 } & OBJ_Collection;
 
 /*
@@ -172,6 +173,7 @@ export type COL_Rectangle = {
 class CollectionsRectangle extends FigureElementCollection {
   _line: FigureElementPrimitive | null;
   _fill: FigureElementPrimitive | null;
+  _text: FigureElementPrimitive | null;
 
   width: number;
   height: number;
@@ -219,6 +221,7 @@ class CollectionsRectangle extends FigureElementCollection {
     this.collections = collections;
     this._line = null;
     this._fill = null;
+    this._text = null;
 
     this.width = options.width;
     this.height = options.height;
@@ -229,12 +232,12 @@ class CollectionsRectangle extends FigureElementCollection {
     this.holeBorder = options.holeBorder;
     this.corner = options.corner;
 
-    if (options.position != null) {
-      this.transform.updateTranslation(getPoint(options.position));
-    }
-    if (options.transform != null) {
-      this.transform = getTransform(options.transform);
-    }
+    // if (options.position != null) {
+    //   this.transform.updateTranslation(getPoint(options.position));
+    // }
+    // if (options.transform != null) {
+    //   this.transform = getTransform(options.transform);
+    // }
 
     this.setColor(options.color);
 
@@ -243,6 +246,12 @@ class CollectionsRectangle extends FigureElementCollection {
     }
     if (options.line != null) {
       this.addRect(options.line, 'line', false);
+    }
+    if (options.label != null) {
+      this.addlabel(options.label);
+    }
+    if (options.button) {
+      this.addButtonBehavior(options.button);
     }
 
     this.animations.surround = (...opt) => {
@@ -291,6 +300,15 @@ class CollectionsRectangle extends FigureElementCollection {
     });
   }
 
+  addButtonBehavior() {
+    this.subscriptions.add('onClick', () => {
+      this.animations.new()
+        .trigger({ callback: () => { this.setOpacity(0.8); }, duration: 0.1 })
+        .trigger({ callback: () => { this.setOpacity(1); } })
+        .start();
+    });
+  }
+
   addRect(rectOptions: OBJ_LineStyleSimple, name: string, fill: boolean) {
     const defaultOptions = {
       width: this.width,
@@ -327,6 +345,31 @@ class CollectionsRectangle extends FigureElementCollection {
     this[name] = o;
     const rect = this.collections.primitives.rectangle(o);
     this.add(name, rect);
+  }
+
+  addlabel(textOptions: OBJ_TextLines | string) {
+    const defaultOptions = {
+      font: this.collections.primitives.defaultFont,
+      xAlign: 'center',
+      yAlign: 'baseline',
+      justify: 'center',
+      color: this.color,
+    };
+    defaultOptions.font.size = this.height * 0.4;
+    defaultOptions.font.color = this.color;
+
+    let optionsIn;
+    if (typeof textOptions === 'string') {
+      optionsIn = { text: textOptions };
+    } else {
+      optionsIn = textOptions;
+    }
+    const o = joinObjects({}, defaultOptions, optionsIn);
+    if (o.position == null) {
+      o.position = [0, -o.font.size / 2.5];
+    }
+    const label = this.collections.primitives.textLines(o);
+    this.add('label', label);
   }
 
   getSurround(element: FigureElement, space: number = 0) {

@@ -103,15 +103,23 @@ class DynamicSignal {
 }
 
 // Helper method to create text buttons
-const button = (name, text, position) => ({
+const button = (name, label, position) => ({
   name,
-  method: 'text',
+  method: 'collections.rectangle',
   options: {
-    text,
-    touchBorder: 0.3,
+    label: {
+      text: label,
+      font: { size: 0.1 },
+    },
+    touchBorder: 0.1,
     position,
     xAlign: 'center',
     color: [0.4, 0.4, 0.4, 1],
+    width: 0.8,
+    height: 0.3,
+    line: { width: 0.005, color: [0.6, 0.6, 0.6, 1] },
+    corner: { radius: 0.05, sides: 10 },
+    button: true,
   },
   mods: {
     isTouchable: true,
