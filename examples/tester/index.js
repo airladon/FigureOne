@@ -147,10 +147,19 @@ const signal = new Queue(Array(time.length).fill(0));
 let stationaryTime = 0;
 let lastTime = new Date().getTime();
 
-rotator.subscriptions.add('setTransform', () => {
+function getEndPoint() {
   const angle = rotator.getRotation();
-  const endPoint = Fig.polarToRect(r, angle);
+  return Fig.polarToRect(r, angle);
+}
+
+function updateSine() {
+  const endPoint = getEndPoint();
   sine.setEndPoints(endPoint, [r + 0.2, endPoint.y]);
+}
+
+function updateSignal() {
+  const endPoint = getEndPoint();
+  stationaryTime = 0;
   const slowDown = 4;
   if (stationaryTime < timeDuration) {
     const currentTime = new Date().getTime();
@@ -167,7 +176,22 @@ rotator.subscriptions.add('setTransform', () => {
     stationaryTime += delta / 1000;
     figure.animateNextFrame();
   }
+}
+
+rotator.subscriptions.add('setTransform', () => {
+  stationaryTime = 0;
+  updateSine();
+  updateSignal();
 });
+
+function update() {
+  setTimeout(() => {
+    updateSignal();
+    update();
+  }, 20);
+}
+
+update();
 
 rotator.setRotation(Math.PI / 4);
 
