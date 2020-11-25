@@ -29,7 +29,7 @@ To create this figure, we might use a figure element hierarchy like:
 
 <p style="text-align: center"><img src="./tutorials/ex1-hierarchy.png"></p>
 
-The drawn elements, the line and text, are primitives. They are created in the simple no rotation case. If the line is 0.8 long, and it starts at (0, 0), then the text might be at (0.4, 0.1)
+The drawn elements, the line and label, are primitives. They are created in the simple no rotation case. If the line is 0.8 long, and it starts at (0, 0), then the text might be at (0.4, 0.1)
 
 <p style="text-align: center"><img src="./tutorials/ex1-collection.png"></p>
 
@@ -51,7 +51,7 @@ When the canvas aspect ratio is not a square, or it is more convenient to create
 
 These are three examples of different coordinate spaces - *pixel space*, *GL space* and *figure space*.
 
-If you want to move or modify an element, you need to think about what you want to modify it *relative* to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in *figure space*? Or do you want to move it relative to other elements within the parent, or local collection - *local space*. Alternately, you might want to modify the vertices of the shape, in *vertex space*.
+If you want to move or modify an element, you need to think about what you want to modify it *relative* to. Do you want to move it relative to other elements in the figure? In other words, do you want to move it in *figure space*? Or do you want to move it relative to other elements within the parent, or local collection - *local space*. Alternately, you might want to modify the vertices of the shape, in *draw space*.
 
 In simple figures, where no collections are used, or collections don't transform their child elements you don't really need to think about what space you are working in. Figure space will be the same as local space and vertex space. You won't care about the higher level GL or pixel spaces.
 
