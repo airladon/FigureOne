@@ -40,41 +40,66 @@ const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], l
 
 
 const r = 0.8;
-const timeDuration = 10;
-const xRange = 2;
-const timeStep = 0.02;
-const time = Fig.range(0, timeDuration, timeStep);
-// const points = time.map(t => new Fig.Point(t / 10 + r + 0.2, 0));
 
+// THis class will hold a time vs value data points (signal trace)
 class DynamicSignal {
-  constructor(initialValue, maxDuration) {
+  constructor(initialValue) {
+    // This data class will hold signal data for the most recent 10s at a
+    // resolution of 0.02s.
+    this.duration = 10;
     this.timeStep = 0.02;
-    this.data = Array(maxDuration / this.timeStep).fill(initialValue);
+    const time = Fig.range(0, this.duration, this.timeStep);
+    
+    // The time range will be plotted over an x range of 1.8 figure units
+    const xRange = 1.8;
+
+    // Get the x values of the signal
+    this.x = time.map(t => t * xRange / this.duration + r + 0.2);
+
+    // initial signal data
+    this.data = Array(this.duration / this.timeStep).fill(initialValue);
+
+    // record the current time
     this.lastTime = new Date().getTime();
   }
 
+  // Update the signal data with the new value. Signal data is has a resolution
+  // of 0.02s, so if this value comes in more than 0.04s after the last value
+  // was recorder, then use interpolation to fill in the missing samples.
   update(value) {
     const currentTime = new Date().getTime();
-    const deltaTime = currentTime - this.lastTime;
-    const count = Math.ceil(deltaTime / 1000 / this.timeStep);
+    const deltaTime = (currentTime - this.lastTime) / 1000;
 
-    if (count === 0) {
+    // If the value has come in faster than the time resolution, then
+    // do nothing
+    if (deltaTime < this.timeStep) {
       return;
     }
+
     this.lastTime = currentTime;
-    // console.log(deltaTime, count)
-    if (count >= this.data.length) {
+
+    // If more than 10s has passed, since the last value update, then
+    // udpate all values to the latest value
+    if (deltaTime > this.duration) {
       this.data = Array(this.data.length).fill(value);
       return;
     }
 
-    // Interpolate the points so we don't have steps in the output
+    // Count the number of samples that need to be added to the signal
+    const count = Math.floor(deltaTime / this.timeStep);
+
+    // Interpolate between the last recorded value and the new value
     const newValues = [];
     const deltaValue = (this.data[0] - value) / (count);
     for (let i = 0; i < count; i += 1) {
       newValues.push(value + deltaValue * i);
     }
     this.data = [...newValues, ...this.data.slice(0, this.data.length - count)];
+  }
+
+  // Make an array of points where this.data is plotted against this.x
+  getPoints() {
+    return this.data.map((value, index) => new Fig.Point(this.x[index], value));
   }
 }
 
@@ -140,34 +165,39 @@ figure.add([
   },
 ]);
 
-
+// Get the rotator, sine line and signal line figure elements
 const rotator = figure.getElement('diagram.rotator');
 const sine = figure.getElement('diagram.sine');
 const signalLine = figure.getElement('diagram.signalLine');
 
+// Make a new signal
 const signal = new DynamicSignal(r * Math.sin(Math.PI / 4), 10);
 
+// Update function for everytime we want to update the signal
 function update() {
   const angle = rotator.getRotation();
   const endPoint = Fig.polarToRect(r, angle);
   sine.setEndPoints(endPoint, [r + 0.2, endPoint.y]);
   signal.update(endPoint.y);
-  const newPoints = signal.data.map(
-    (y, index) => new Fig.Point(time[index] / 7 + r + 0.2, y),
-  );
-  signalLine.custom.updatePoints({ points: newPoints });
+  signalLine.custom.updatePoints({
+    points: signal.getPoints(),
+  })
   figure.animateNextFrame();
 };
 
+// Whenever the rotator line changes, call update
 rotator.subscriptions.add('setTransform', () => {
   update();
 });
 
+// Also call update every 20ms
 function updateNext() {
   update();
   setTimeout(updateNext, 20);
 };
 
+// Initial rotator position
 rotator.setRotation(Math.PI / 4);
 
+// Start updating
 updateNext();
