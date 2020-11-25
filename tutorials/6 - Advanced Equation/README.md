@@ -1,6 +1,6 @@
 # Example 5 - Collections Equation
 
-A more collections equation with an integral, sum operator, brackets, annotations, subscripts and color.
+A more complex equation with an integral, sum operator, brackets, annotations, subscripts and color.
 
 Open `index.html` in a browser to view example.
 
@@ -16,8 +16,6 @@ figure.add(
     name: 'eqn',
     method: 'equation',
     options: {
-      color: [0.95, 0.95, 0.6, 1],
-      position: [0, 0],
       // Not all elements need to be defined. Some can be inferred from the
       // form definition.
       // Typically, if the element needs properties (like color), or it has
@@ -34,8 +32,8 @@ figure.add(
         rb1: { symbol: 'bracket', side: 'right' },
         equals: ' = ',
         sigma: { symbol: 'sum', lineWidth: 0.006 },
-        delta: { text: '\u0394', color: [1, 0, 0, 1] },
-        x_1: { text: 'x', color: [1, 0, 0, 1]},
+        delta: { text: '\u0394', color: [0, 0, 1, 1] },
+        x_1: { text: 'x', color: [0, 0, 1, 1] },
       },
       // An equation form is how those terms are arranged
       formDefaults: { alignment: { xAlign: 'center', yAlign: 'center' } },
@@ -56,7 +54,7 @@ figure.add(
                     content: 'x',
                     right: 'rb',
                     outsideSpace: 0.05,
-                  }
+                  },
                 }, 'dx'],
               from: 'a',
               to: 'b',
@@ -73,8 +71,8 @@ figure.add(
                 yPosition: 'bottom',
                 yAlign: 'top',
                 scale: 0.7,
-              }
-            }
+              },
+            },
           },
           ' ',
           {
@@ -95,7 +93,7 @@ figure.add(
                     right: 'rb1',
                     outsideSpace: 0.05,
                     bottomSpace: 0.02,
-                  }
+                  },
                 },
               ],
             },
@@ -105,20 +103,14 @@ figure.add(
     },
   },
 );
-
-// Show the equation form
-figure.getElement('eqn').showForm('base');
-figure.initialize();
 ```
 
 ## Explanation
 
-An equation with a more collections layout shows more features of equations in FigureOne.
-
 ### Element Definition
 Equations are defined with two main keys, `elements` and `forms`.
 
-Each equation element is a `FigureElementPrimitive` with a unique name. Therefore, if you have an equation with several *x* elements, you will need to give them each unique names. This is so when equations are animated between forms, it is clear which *x* in the first form moves to which *x* in the second form.
+Each equation element is a [FigureElementPrimitive](https://airladon.github.io/FigureOne/#figureelementprimitive) with a unique name. Therefore, if you have an equation with several *x* elements, you will need to give them each unique names. This is so when equations are animated between forms, it is clear which *x* in the first form moves to which *x* in the second form.
 
 Therefore, one way to define multiple *x* elements would be:
 ```js
@@ -137,11 +129,9 @@ Therefore, one way to define multiple *x* elements would be:
 
 But simple elements don't necessarily need to be defined in the `elements`. They can be defined inline in `forms`.
 
-The form lists a series of strings that refer to element names. If a string isn't already associated with an element name, then the `Equation` will make a new element with that name.
+The form lists a series of strings that refer to element names. If a string isn't already associated with an element name, then `Equation` will automatically make a new element with that name. The text associated with that element is then the name of the element without a first character underscore (if it exists) and without any underscore and subsequent text after the first character.
 
-The text of the element will be all the text before the first underscore after the first character.
-
-For example, the string `'x_1'` will create an element with name `'x_1'` and text `'x'`.
+For example, the strings `'x'`, `'x_1'`, `'_x'` and `'_x_1'` will create four different elements (identified by `'x'`, `'x_1'`, `'_x'` and `'_x_1'`) that have the same text `'x'`.
 
 As it is not a good idea to make object propery names start with a number, a number can be defined with a leading underscore. For example `'_2'` would create and element with name `'_2'` and text `'2'`. If there were multiple `2` elements in the equation, the second one might be defined with the string `'_2_1'`.
 
@@ -158,7 +148,7 @@ Therefore, you could also use the below code to achieve the same result as the a
 
 Especially in larger, more complicated equations, doing inline form definition of elements for simple elements is useful for readability.
 
-In the example code then, we have several elements including `f`, `x`, `dx`, `a` and `b` to name just a few that are defined in the form itself.
+In the example code then, we have several elements including `f`, `x`, `dx`, `a` and `b` that are defined in the form itself.
 
 ### Equation Layout Functions
 
@@ -195,7 +185,7 @@ This can also be defined in short hand *array* form where the order of elements 
 
 Most of the time, either *object* form or *array* form can be used interchangably for whichever form or combination of forms offers the best code readability.
 
-However, if parameters (such as spacing) need to be defined, then only Object form can be used.
+However, if parameters (such as spacing) need to be defined, then only Object form should be used (as array form will become unnecessarily complex).
 
 ```js
       elements: {

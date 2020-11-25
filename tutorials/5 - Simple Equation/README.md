@@ -62,3 +62,21 @@ Some operators are either not in unicode, or are more convient to draw directly.
 Available *symbols* are in the [API Reference](https://airladon.github.io/FigureOne/#equation-symbols). They include symbols like radicals, integral symbols, brackets, arrows and more.
 
 The fraction is a *layout function*. The available layout functions are also in the [API Reference](https://airladon.github.io/FigureOne/#equation-layout) and include functions like fractions, roots, subscript, matrix, annotations and more.
+
+## Additional Note
+
+The above definition of the equation is the most verbose (but also the most readable) way to define an equation. In subsequent tutorials, in some examples and in the API reference there is more information on how to further make equation definition more succinct.
+
+As an example, the above example can be recreated by only defining the form - all the equation elements are auto generated:
+
+```js
+figure.add({
+  name: 'eqn',
+  method: 'equation',
+  options: {
+    forms: {
+      base: ['a', '_ = ', { frac: ['b', 'vinculum', 'c'] }],
+    },
+  },
+});
+```

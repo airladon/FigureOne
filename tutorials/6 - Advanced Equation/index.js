@@ -1,12 +1,10 @@
-const figure = new Fig.Figure();
+const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
 figure.add(
   {
     name: 'eqn',
     method: 'equation',
     options: {
-      color: [0.95, 0.95, 0.6, 1],
-      position: [0, 0],
       // Not all elements need to be defined. Some can be inferred from the
       // form definition.
       // Typically, if the element needs properties (like color), or it has
@@ -23,8 +21,8 @@ figure.add(
         rb1: { symbol: 'bracket', side: 'right' },
         equals: ' = ',
         sigma: { symbol: 'sum', lineWidth: 0.006 },
-        delta: { text: '\u0394', color: [1, 0, 0, 1] },
-        x_1: { text: 'x', color: [1, 0, 0, 1]},
+        delta: { text: '\u0394', color: [0, 0, 1, 1] },
+        x_1: { text: 'x', color: [0, 0, 1, 1] },
       },
       // An equation form is how those terms are arranged
       formDefaults: { alignment: { xAlign: 'center', yAlign: 'center' } },
@@ -45,7 +43,7 @@ figure.add(
                     content: 'x',
                     right: 'rb',
                     outsideSpace: 0.05,
-                  }
+                  },
                 }, 'dx'],
               from: 'a',
               to: 'b',
@@ -62,8 +60,8 @@ figure.add(
                 yPosition: 'bottom',
                 yAlign: 'top',
                 scale: 0.7,
-              }
-            }
+              },
+            },
           },
           ' ',
           {
@@ -95,6 +93,3 @@ figure.add(
   },
 );
 
-// Show the equation form
-figure.getElement('eqn').showForm('base');
-figure.initialize();
