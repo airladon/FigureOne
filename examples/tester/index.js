@@ -309,48 +309,32 @@ const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lin
 //   color: [1, 0, 0, 1],
 // });
 
-// figure.add(
-//   {
-//     name: 'c',
-//     method: 'collection',
-//     elements: [        // Add two elements to the collection
-//       {
-//         name: 'tri',
-//         method: 'triangle',
-//         options: {
-//           height: 0.4,
-//           width: 0.4,
-//         },
-//       },
-//       {
-//         name: 'text',
-//         method: 'text',
-//         options: {
-//           text: 'triangle',
-//           position: [0, -0.4],
-//           xAlign: 'center',
-//         },
-//       },
-//     ],
-//   },
-// );
-const tri = figure.primitives.triangle({
-  name: 'tri',
-  height: 0.4,
-  width: 0.4,
-});
+figure.add(
+  {
+    name: 'c',
+    method: 'collection',
+    elements: [
+      {
+        name: 'tri',
+        method: 'triangle',
+        options: {
+          height: 0.4,
+          width: 0.4,
+        },
+      },
+      {
+        name: 'text',
+        method: 'text',
+        options: {
+          text: 'triangle',
+          position: [0, -0.4],
+          xAlign: 'center',
+        },
+      },
+    ],
+  },
+);
 
-const text = figure.primitives.text({
-  name: 'text',
-  text: 'triangle',
-  position: [0, -0.4],
-  xAlign: 'center',
-});
-
-const c = figure.collections.collection({
-  name: 'c',
-});
-c.add([tri, text]);
-
-figure.add(c);
-// console.log(figure.getElement('c.tri'))
+const c = figure.getElement('c');
+const tri = figure.getElement('c.tri');
+const text = figure.getElement('c.text');

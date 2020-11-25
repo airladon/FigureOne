@@ -93,8 +93,8 @@ export default function makeFigure(
   figure.shapesHigh = figure.getShapes(true);
   figure.shapes = figure.shapesLow;
   figure.primitives = figure.shapes;
-  figure.equationLow = figure.getEquations(false);
-  figure.equationHigh = figure.getEquations(true);
+  // figure.equationLow = figure.getEquations(false);
+  // figure.equationHigh = figure.getEquations(true);
   figure.equation = figure.equationLow;
   figure.collectionsLow = figure.getObjects(false);
   figure.collectionsHigh = figure.getObjects(true);

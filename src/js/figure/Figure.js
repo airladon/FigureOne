@@ -1087,39 +1087,51 @@ class Figure {
   // }
 
   /**
-   * Get element from element name or path.
-
+   * Get element from an element path with '.' separators.
+   *
+   * For instance, if a collection has a child collection 'a', which
+   * has a child primitive 'b', then the path would be: 'a.b'.
+   *
    * @see <a href="#figureelementcollectiongetelement">element.getElement</a>
    *
-   * @example
-   * // Get a figure element and rotate it
-   * figure.add([
-   *   {
-   *     name: 'hex',
-   *     method: 'polygon',
-   *     options: {
-   *       radius: 0.5,
-   *       fill: true,
-   *       sides: 6,
-   *       position: [-0.5, 0],
-   *     },
-   *   },
-   *   {
-   *     name: 'tri',
-   *     method: 'polygon',
-   *     options: {
-   *       radius: 0.5,
-   *       fill: true,
-   *       sides: 3,
-   *       position: [0.5, 0],
-   *     },
-   *   },
-   * ]);
+   * @param {null | string} elementPath
+   * @return {FigureElement | null } element at path. If `elementPath`
+   * is `null`, then the figure's base collection is returned. If `elementPath`
+   * is invalid then `null` is returned.
    *
-   * const hex = figure.getElement('hex');
-   * hex.animations.new()
-   *   .rotation({ target: Math.PI, duration: 2, delay: 1 })
-   *   .start();
+   * @example
+   * // Get all the elements from a figure
+   * figure.add(
+   *   {
+   *     name: 'c',
+   *     method: 'collection',
+   *     elements: [
+   *       {
+   *         name: 'tri',
+   *         method: 'triangle',
+   *         options: {
+   *           height: 0.4,
+   *           width: 0.4,
+   *         },
+   *       },
+   *       {
+   *         name: 'text',
+   *         method: 'text',
+   *         options: {
+   *           text: 'triangle',
+   *           position: [0, -0.4],
+   *           xAlign: 'center',
+   *         },
+   *       },
+   *     ],
+   *   },
+   * );
+   *
+   * const c = figure.getElement('c');
+   * // Elements within collections can be found with dot notation
+   * const tri = figure.getElement('c.tri');
+   * // Or the collection can be queried directly
+   * const text = c.getElement('text');
    */
   getElement(elementName: string) {
     if (elementName === this.elements.name) {
@@ -1169,13 +1181,13 @@ class Figure {
     );
   }
 
-  getEquations() {
-    const shapes = this.shapesLow;
-    // if (high) {
-    //   shapes = this.shapesHigh;
-    // }
-    return new FigureEquation(shapes, this.animateNextFrame.bind(this, true, 'equations'));
-  }
+  // getEquations() {
+  //   const shapes = this.shapesLow;
+  //   // if (high) {
+  //   //   shapes = this.shapesHigh;
+  //   // }
+  //   return new FigureEquation(shapes, this.animateNextFrame.bind(this, true, 'equations'));
+  // }
 
   getObjects() {
     const shapes = this.shapesLow;

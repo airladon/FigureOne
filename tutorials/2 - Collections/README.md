@@ -60,7 +60,7 @@ That way, if drawing elements should be moved or scaled together, they can be ad
 
 Thus, a drawing element in a hierarchy of collections will be transformed by the chain of all its hierarchical parents.
 
-This example also shows how a figure element can be accessed. The main [Figure](https://airladon.github.io/FigureOne/#figure) and all [FigureElementCollection](https://airladon.github.io/FigureOne/#figureelementcollection)s have a `getElement` method, to which a string can be passed with the elements name. In the example above, the collection element is retrieved by:
+This example also shows how a figure element can be accessed. The main [Figure](https://airladon.github.io/FigureOne/#figure) and all [FigureElementCollection](https://airladon.github.io/FigureOne/#figureelementcollection)s have a `getElement` method, to which a string can be passed with the element's name. In the example above, the collection element is retrieved by:
 
 ```js
 figure.getElement('c')

@@ -4667,15 +4667,52 @@ class FigureElementCollection extends FigureElement {
     // }
   }
 
-  /**
+   /**
    * Get element from an element path with '.' separators.
    *
    * For instance, if a collection has a child collection 'a', which
    * has a child primitive 'b', then the path would be: 'a.b'.
-   * @param {null | string | FigureElement} elementPath
+   *
+   * @see <a href="#figureelementcollectiongetelement">element.getElement</a>
+   *
+   * @param {null | string} elementPath
    * @return {FigureElement | null } element at path. If `elementPath`
    * is `null`, then this element is returned. If `elementPath` is invalid
    * then `null` is returned.
+   *
+   * @example
+   * // Get all the elements from a figure
+   * figure.add(
+   *   {
+   *     name: 'c',
+   *     method: 'collection',
+   *     elements: [
+   *       {
+   *         name: 'tri',
+   *         method: 'triangle',
+   *         options: {
+   *           height: 0.4,
+   *           width: 0.4,
+   *         },
+   *       },
+   *       {
+   *         name: 'text',
+   *         method: 'text',
+   *         options: {
+   *           text: 'triangle',
+   *           position: [0, -0.4],
+   *           xAlign: 'center',
+   *         },
+   *       },
+   *     ],
+   *   },
+   * );
+   *
+   * const c = figure.getElement('c');
+   * // Elements within collections can be found with dot notation
+   * const tri = figure.getElement('c.tri');
+   * // Or the collection can be queried directly
+   * const text = c.getElement('text');
    */
   getElement(elementPath: ?(string | FigureElement) = null) {
     if (elementPath == null) {
