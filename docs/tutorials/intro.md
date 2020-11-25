@@ -12,9 +12,9 @@ A figure has one or more *figure elements*. A figure element is a simple shape, 
 In the language of **FigureOne**, there are two types of {@link FigureElements}:
 
 * {@link FigureElementPrimitive} - an element that will draw something to the screen, such as a line, shape or text
-* {@link FigureElementCollection} - collections of primitives or other collections
+* {@link FigureElementCollection} - collections of elements that will move or be operated on together
 
-Each {@link FigureElement} has a {@link Transform} that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a {@link FigureElementPrimitive}, the shape or text will be transformed. In the case of a {@link FigureElementCollection}, all the figure elements it contains will have the transform applied to them.
+Each {@link FigureElement} has a {@link Transform} that may contain one or more translations, rotations and scaling factors. When the element is rendered to the screen, the transform will be applied. In the case of a {@link FigureElementPrimitive}, the shape or text will be transformed. In the case of a {@link FigureElementCollection}, all the figure elements it contains will have their transforms further transformed by the collection transform.
 
 This means there is a heierachy of {@link FigureElement} objects, where the parent transform is applied to (cascaded with) the child transform. Therefore collections can be thought of as modular building blocks of a more complex figure.
 
