@@ -70,7 +70,6 @@ figure.add(
     method: 'polygon',
     options: {
       sides: 4,
-      fill: true,
       radius: 0.5,
       position: [0, 0],
     },
@@ -117,7 +116,7 @@ figure.add({
   name: 'q',
   method: 'polygon',
   options: {
-    fill: true, radius: 0.5, sides: 3, position: [-1, 0]
+    radius: 0.5, sides: 3, position: [-1, 0]
   },
 });
 

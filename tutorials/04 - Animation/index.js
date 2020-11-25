@@ -8,7 +8,6 @@ figure.add([
     options: {
       sides: 6,
       radius: 0.2,
-      fill: true,
     },
   },
 ]);

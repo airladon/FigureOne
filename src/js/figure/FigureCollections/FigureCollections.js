@@ -315,7 +315,7 @@ export default class FigureCollections {
       sides: 50,
     };
     const up = this.primitives.polygon(polygon);
-    const down = this.primitives.polygon(joinObjects({}, polygon, { fill: true }));
+    const down = this.primitives.polygon(joinObjects({}, polygon));
     cursor.add('up', up);
     cursor.add('down', down);
     return cursor;

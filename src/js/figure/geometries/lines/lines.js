@@ -914,7 +914,6 @@ export {
 //       radius: 0.2,
 //       color: [0.5, 0.5, 0.5, 0.5],
 //       sides: 100,
-//       fill: true,
 //     },
 //   },
 //   {

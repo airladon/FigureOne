@@ -34,7 +34,6 @@ Let's start by creating a {@link FigureElementPrimitive} element that draws a po
 // create the `FigureElementPrimitive`
 const p = figure.primitives.polygon({
   radius: 0.2,
-  fill: true,
   color: [0, 0, 1, 1],
   sides: 6,
 });
@@ -50,7 +49,6 @@ figure.add({
   method: 'polygon',
   options: {
     radius: 0.2,
-    fill: true,
     color: [0, 0, 1, 1],
     sides: 6,
   },
