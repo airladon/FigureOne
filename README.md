@@ -39,9 +39,9 @@ figure.add(
 
 // Animate the shape
 figure.getElement('tri').animations.new()
-  .position({ target: [1, 0 ], duration: 1 })
+  .position({ target: [1, 0], duration: 1 })
   .rotation({ target: Math.PI, duration: 2 })
-  .position({ target: [0, 0 ], duration: 1 })
+  .position({ target: [0, 0], duration: 1 })
   .start();
 ```
 
