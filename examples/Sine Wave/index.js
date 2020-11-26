@@ -1,4 +1,4 @@
-const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] });
+const figure = new Fig.Figure({ limits: [-3, -2.25, 6, 4.5], color: [1, 0, 0, 1] });
 
 // ////////////////////////////////////////////////////////////////////////
 // Radius and Space between radius and recorded signal
@@ -136,6 +136,16 @@ figure.add([
           position: [0, -r],
           width: 0.005,
           angle: Math.PI / 2,
+          color: [0.7, 0.7, 0.7, 1],
+        },
+      },
+      {
+        name: 'circle',
+        method: 'polygon',
+        options: {
+          radius: r,
+          sides: 200,
+          line: { width: 0.005 },
           color: [0.7, 0.7, 0.7, 1],
         },
       },
