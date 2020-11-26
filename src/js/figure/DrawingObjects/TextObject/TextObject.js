@@ -565,7 +565,7 @@ class TextObjectBase extends DrawingObject {
         this.text[i].font.color = color.slice();
       }
     } else {
-      this.text[index].font.color = color.slice()
+      this.text[index].font.color = color.slice();
     }
   }
 

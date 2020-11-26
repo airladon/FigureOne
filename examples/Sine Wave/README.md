@@ -254,7 +254,7 @@ rotator.animations.new()
 
 ## Explanation
 
-Most of the complexity in this example is in creating the dynamic signal data class. This logic doesn't use FigureOne, but it is convenitent to create a time dependent, interpolated data signal.
+Most of the complexity in this example is in creating the dynamic signal data class. This logic doesn't use FigureOne, but it is convenient to create a time dependent, interpolated data signal.
 
 The remainder is creating the figure elemnts, creating some update logic and enabling the buttons.
 

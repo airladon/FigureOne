@@ -1569,7 +1569,7 @@ class Figure {
 
     if (this.moveTopElementOnly && this.beingTouchedElements.length > 0) {
       // if () {
-        this.beingTouchedElements[0].click(glPoint);
+      this.beingTouchedElements[0].click(glPoint);
       // }
     } else {
       this.beingTouchedElements.forEach(e => e.click(glPoint));

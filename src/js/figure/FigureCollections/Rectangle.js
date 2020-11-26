@@ -370,7 +370,7 @@ class CollectionsRectangle extends FigureElementCollection {
       const currentColor = element.color.slice();
       let targetColor;
       if (Array.isArray(onClickColors)) {
-        targetColor = onClickColors.slice();
+        targetColor = onClickColors.slice();  // $FlowFixMe
       } else if (onClickColors !== true && onClickColors[name] != null) {
         targetColor = onClickColors[name].slice();
       }
