@@ -4467,6 +4467,16 @@
                 
                 </li>
               
+                
+                <li><a
+                  href='#obj_buttoncolor'
+                  class="">
+                  OBJ_ButtonColor
+                  
+                </a>
+                
+                </li>
+              
             </ul>
           </div>
           <div class='mt1 h6 quiet'>
@@ -21064,15 +21074,27 @@ displayed labels of angles and sides.
 <p><img src="./apiassets/advrectangle_ex1.png">
 <img src="./apiassets/advrectangle_ex2.png"></p>
 <p class="inline_gif"><img src="./apiassets/advrectangle.gif" class="inline_gif_image"></p>
+<p class="inline_gif"><img src="./apiassets/advrectangle_button.gif" class="inline_gif_image"></p>
 <p>This object defines a rectangle
-<a href="#figureelementcollection">FigureElementCollection</a> that includes a border (line), fill and
-the ability to surround another <a href="#figureelement">FigureElement</a> with some spacing
-through either the <a href="#collectionsrectanglesurround">surround</a> method
+<a href="#figureelementcollection">FigureElementCollection</a> that may include:</p>
+<ul>
+<li>border (line)</li>
+<li>fill</li>
+<li>label</li>
+<li>ability to surround another <a href="#figureelement">FigureElement</a> with some space</li>
+<li>button behavior when clicked</li>
+</ul>
+<p>Surrounding another element can be executed through either the
+<a href="#collectionsrectanglesurround">surround</a> method
 or the <a href="#obj_surroundanimationstep">OBJ_SurroundAnimationStep</a> found in the in
 the animation manager (<a href="#figureelement">FigureElement</a>.animations),
 and in the animation builder
 (<a href="#animationmanagernew">animations.new</a>
 and <a href="#animationmanagerbuilder">animations.builder</a>).</p>
+<p>Button behavior means the button will temporarily change a different color
+when it is clicked. By default, the button will become a little more
+transparent, but colors for the fill, label and border can also be
+specified.</p>
 
   
   
@@ -21179,6 +21201,30 @@ rect.animations.new()
   .surround({ <span class="hljs-attr">target</span>: eqn._c, <span class="hljs-attr">space</span>: <span class="hljs-number">0.03</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> })
   .pulse({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">scale</span>: <span class="hljs-number">1.5</span> })
   .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Make a rectangle that behaves like a button</span>
+figure.add([
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'rect'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.rectangle'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">height</span>: <span class="hljs-number">0.3</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0.3</span>, <span class="hljs-number">0.3</span>, <span class="hljs-number">0.3</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">label</span>: <span class="hljs-string">'Save'</span>,
+      <span class="hljs-attr">corner</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.05</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span> },
+      <span class="hljs-attr">fill</span>: [<span class="hljs-number">0.9</span>, <span class="hljs-number">0.9</span>, <span class="hljs-number">0.9</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">button</span>: {
+        <span class="hljs-attr">fill</span>: [<span class="hljs-number">0.95</span>, <span class="hljs-number">0.95</span>, <span class="hljs-number">0.95</span>, <span class="hljs-number">1</span>],
+      },
+    },
+    <span class="hljs-attr">mods</span>: {
+      <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'clicked'</span>),
+    },
+  },
+]);</pre>
     
   
 
@@ -21287,6 +21333,30 @@ want fill
         <div class='space-bottom0'>
           <span class='code bold'>corner</span> <code class='quiet'>(<a href="#obj_curvedcorner">OBJ_CurvedCorner</a>?)</code>
           : corner style of rectangle
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>label</span> <code class='quiet'>(<a href="#obj_textlines">OBJ_TextLines</a>?)</code>
+          : Rectangle label
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>button</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="#typecolor">TypeColor</a> | <a href="#obj_buttoncolor">OBJ_ButtonColor</a>)?)</code>
+          : <code>true</code>
+ to
+make the rectangle behave like a button when clicked. 
+<code>TypeColor</code>
+ to
+make fill, line and label the same color when clicked or 
+<code>OBJ_ButtonColor</code>
+
+to specify click colors for each (
+<code>false</code>
+)
 
           
         </div>
@@ -55435,6 +55505,78 @@ e.animations.new()
     </div>
   
 </div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_buttoncolor'>
+      OBJ_ButtonColor
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>OnClick colors when clicked.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fill</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>label</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 
