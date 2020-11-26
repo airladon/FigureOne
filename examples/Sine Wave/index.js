@@ -1,13 +1,20 @@
 const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] });
 
-
+// ////////////////////////////////////////////////////////////////////////
+// Radius and Space between radius and recorded signal
+// ////////////////////////////////////////////////////////////////////////
 
 const r = 0.8;
 const space = 0.2;
 
 
+// ////////////////////////////////////////////////////////////////////////
+// Data Class Setup
+// ////////////////////////////////////////////////////////////////////////
+
 // This class holds a time signal - when data is added slower than the sampling
 // rate, then interpolated data for missing samples in time will be added.
+// This class does not use FigureOne.
 class DynamicSignal {
   constructor(initialValue) {
     // This data class will hold signal data for the most recent 10s at a
@@ -69,6 +76,14 @@ class DynamicSignal {
     return this.data.map((value, index) => new Fig.Point(this.x[index], value));
   }
 }
+
+// Make a new signal
+const signal = new DynamicSignal(0, 10);
+
+
+// ////////////////////////////////////////////////////////////////////////
+// Setup the figure
+// ////////////////////////////////////////////////////////////////////////
 
 // Helper method to create text buttons
 const button = (name, label, position) => ({
@@ -166,9 +181,6 @@ const rotator = figure.getElement('diagram.rotator');
 const sine = figure.getElement('diagram.sine');
 const signalLine = figure.getElement('diagram.signalLine');
 
-// Make a new signal
-const signal = new DynamicSignal(0, 10);
-
 // Update function for everytime we want to update the signal
 function update() {
   const angle = rotator.getRotation();
@@ -192,7 +204,11 @@ function updateNext() {
   setTimeout(updateNext, 20);
 };
 
-// Setup the buttons
+
+// ////////////////////////////////////////////////////////////////////////
+// Button Logic
+// ////////////////////////////////////////////////////////////////////////
+
 function spinner(initialAngle, duration, frequency, percent) {
   const angle = initialAngle + 2 * Math.PI * frequency * percent * duration;
   rotator.setRotation(angle);
@@ -213,7 +229,11 @@ figure.getElement('fast').onClick = () => startSpinning(0.7);
 figure.getElement('slow').onClick = () => startSpinning(0.2);
 figure.getElement('stop').onClick = () => { rotator.stop(); };
 
+
+// ////////////////////////////////////////////////////////////////////////
 // Initialize
+// ////////////////////////////////////////////////////////////////////////
+
 rotator.animations.new()
   .rotation({ target: Math.PI / 4, duration: 1.5 })
   .trigger({ callback: updateNext })
