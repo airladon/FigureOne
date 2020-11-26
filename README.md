@@ -101,6 +101,7 @@ The tutorials introduce how to use FigureOne and many of the main concepts.
 ### **[Interactive Angle](https://github.com/airladon/FigureOne/tree/master/examples/Interactive%20Angle)**
 
 ![](examples/Interactive%20Angle/example.gif)
+
 ### **[Pythagorean Equation Animation](https://github.com/airladon/FigureOne/tree/master/examples/Pythagorean%20Theorem)**
 
 ![](examples/Pythagorean%20Theorem/example.gif)
