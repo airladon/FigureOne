@@ -33,15 +33,16 @@ Let's start by creating a {@link FigureElementPrimitive} element that draws a po
 ```javascript
 // create the `FigureElementPrimitive`
 const p = figure.primitives.polygon({
+  name: 'p',
   radius: 0.2,
   color: [0, 0, 1, 1],
   sides: 6,
 });
 // add it to the figure
-figure.elements.add('p', p);
+figure.add(p);
 ```
 
-Another way to create and add the same shape to the figure is to use the `Figure.addElement` or `Figure.addElements` method:
+Another way to create and add the same shape to the figure is to use the `Figure.add` method with an options definition of a polygon:
 
 ```javascript
 figure.add({
@@ -55,26 +56,30 @@ figure.add({
 });
 ```
 
-Both ways create the same element. The first way is more programatic and especially useful when extending shape creation classes. In comparison, the second way can allow you to layout an entire figure in a single object that is compatible with JSON. This means it is relatively straight forward to share figure elements between projects. When using code folding in an IDE, the second way also makes it easy to work with figures with many elements.
+Both ways create the same element. The first way is especially useful when extending shape creation classes, or creating elements dynamically. The second way can allow you to layout an entire figure in a single object that is compatible with JSON. This means it is relatively straight forward to share figure elements between projects. When using code folding in an IDE, the second way also makes it easy to work with a figure's with many elements by hiding elements that aren't being worked on.
 
 For most of the API reference, the second way will be used.
 
 ### Built-in Shapes
 
-There are several built in shape methods that can be used to create complex figures:
+There are several built in primitive shape methods that can be used to create complex figures:
 * <a href="#obj_line">line</a>
 * <a href="#obj_polyline">polyline</a>
+* <a href="#obj_arrow">arrow</a>
 * <a href="#obj_triangle">triangle</a>
 * <a href="#obj_rectangle">rectangle</a>
+* <a href="#obj_ellipse">ellipse</a>
 * <a href="#obj_polygon">polygon</a>
+* <a href="#obj_star">star</a>
+* <a href="#obj_grid">grid</a>
 
 ### Drawing a generic shape
 
-While there are several built-in shapes such as polygons, rectangles and polylines in FigureOne, there is also a 'generic' method that will allow creation of any shape.
+While there are several built-in shapes such as polygons, rectangles and polylines in FigureOne, there is also a 'generic' method that will allow creation of any shape. In fact, all the built in shapes use this generic method themselves.
 
 To use the generic method however, it is important to understand how WebGL uses triangles to create shapes.
 
-Any shape can be quantized into triangles. For instance, the figure below shows a rectangle broken into two triangles with vertices labeled.
+Any shape approximated with triangles. For instance, the figure below shows a rectangle broken into two triangles with vertices labeled.
 
 <p style="text-align: center"><img src="./tutorials/draw/rect.png"></p>
 

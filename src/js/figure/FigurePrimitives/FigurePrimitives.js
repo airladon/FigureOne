@@ -342,14 +342,12 @@ export type OBJ_PulseScale = {
  *     ]],
  *   },
  *   mods: {
- *     isTouchable: true,
  *     isMovable: true,
  *     move: {
  *       bounds: 'figure',
  *     },
  *   },
  * });
- * figure.setTouchable();
  *
  * @example
  * // Grid of triangles
@@ -454,7 +452,7 @@ export type OBJ_Generic = {
  * @property {number} [cornerLength] use only with `cornersOnly` = `true` -
  * length of corner to draw (`0.1`)
  * @property {number} [minAutoCornerAngle] see `cornerStyle` = `auto` (`π/7`)
- * @property {Array<number>} [dash] leave empty for solid line - use array of
+ * @property {TypeDash} [dash] leave empty for solid line - use array of
  * numbers for dash line where first number is length of line, second number is
  * length of gap and then the pattern repeats - can use more than one dash length
  * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
@@ -550,7 +548,7 @@ export type OBJ_Polyline = {
   cornerLength?: number,
   forceCornerLength?: boolean,
   minAutoCornerAngle?: number,
-  dash?: Array<number>,
+  dash?: TypeDash,
   arrow?: OBJ_LineArrows | TypeArrowHead,
   linePrimitives?: boolean,
   lineNum?: number,
@@ -1099,7 +1097,7 @@ export type OBJ_Triangle = {
  * defines how the width is grown from the polyline's points.
  * Only `"mid"` is fully compatible with all options in
  * `arrow` and `dash`. (`"mid"`)
- * @property {Array<number>} [dash] leave empty for solid line - use array of
+ * @property {TypeDash} [dash] leave empty for solid line - use array of
  * numbers for dash line where first number is length of line, second number is
  * length of gap and then the pattern repeats - can use more than one dash length
  * and gap  - e.g. [0.1, 0.01, 0.02, 0.01] produces a lines with a long dash,
@@ -1167,7 +1165,7 @@ export type OBJ_Line = {
   angle?: number,
   width?: number,
   widthIs?: 'positive' | 'negative' | 'mid',
-  dash?: Array<number>,
+  dash?: TypeDash,
   arrow?: OBJ_LineArrows | TypeArrowHead,
   linePrimitives?: boolean,
   lineNum?: number,
