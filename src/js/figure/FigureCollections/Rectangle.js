@@ -38,7 +38,7 @@ export type OBJ_SurroundAnimationStep = {
 } & OBJ_CustomAnimationStep;
 
 /**
- * OnClick colors when clicked.
+ * Button colors when clicked.
  */
 export type OBJ_ButtonColor = {
   line?: TypeColor,

@@ -1,26 +1,30 @@
 const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] });
 
 
+
 const r = 0.8;
 const space = 0.2;
 
-// This class will hold a time vs value data points (signal trace)
+
+// This class holds a time signal - when data is added slower than the sampling
+// rate, then interpolated data for missing samples in time will be added.
 class DynamicSignal {
   constructor(initialValue) {
     // This data class will hold signal data for the most recent 10s at a
-    // resolution of 0.02s.
+    // resolution (sampling rade) of 0.02s.
     this.duration = 10;
     this.timeStep = 0.01;
     const time = Fig.range(0, this.duration, this.timeStep);
     
-    // The time range will be plotted over an x range of 1.8 figure units
+    // The xRange is the x distance the duration will be plotted over
     const xRange = 2 - space;
 
     // Get the x values of the signal
     this.x = time.map(t => t * xRange / this.duration + r + space);
 
     // initial signal data
-    this.data = Array(this.duration / this.timeStep).fill(initialValue);
+    // this.data = Array(this.duration / this.timeStep).fill(initialValue);
+    this.data = [initialValue];
 
     // record the current time
     this.lastTime = new Date().getTime();
@@ -44,7 +48,7 @@ class DynamicSignal {
     // If more than 10s has passed, since the last value update, then
     // udpate all values to the latest value
     if (deltaTime > this.duration) {
-      this.data = Array(this.data.length).fill(value);
+      this.data = Array(this.x.length).fill(value);
       return;
     }
 
@@ -57,7 +61,7 @@ class DynamicSignal {
     for (let i = 0; i < count; i += 1) {
       newValues.push(value + deltaValue * i);
     }
-    this.data = [...newValues, ...this.data.slice(0, this.data.length - count)];
+    this.data = [...newValues, ...this.data.slice(0, this.x.length - count)];
   }
 
   // Make an array of points where this.data is plotted against this.x
@@ -77,8 +81,6 @@ const button = (name, label, position) => ({
     },
     touchBorder: 0.1,
     position,
-    xAlign: 'center',
-    yAlign: 'middle',
     color: [0.4, 0.4, 0.4, 1],
     width: 0.7,
     height: 0.25,
@@ -165,7 +167,7 @@ const sine = figure.getElement('diagram.sine');
 const signalLine = figure.getElement('diagram.signalLine');
 
 // Make a new signal
-const signal = new DynamicSignal(r * Math.sin(Math.PI / 4), 10);
+const signal = new DynamicSignal(0, 10);
 
 // Update function for everytime we want to update the signal
 function update() {
@@ -190,12 +192,6 @@ function updateNext() {
   setTimeout(updateNext, 20);
 };
 
-// Initial rotator position
-rotator.setRotation(Math.PI / 4);
-
-// Start updating
-updateNext();
-
 // Setup the buttons
 function spinner(initialAngle, duration, frequency, percent) {
   const angle = initialAngle + 2 * Math.PI * frequency * percent * duration;
@@ -216,3 +212,9 @@ function startSpinning(frequency) {
 figure.getElement('fast').onClick = () => startSpinning(0.7);
 figure.getElement('slow').onClick = () => startSpinning(0.2);
 figure.getElement('stop').onClick = () => { rotator.stop(); };
+
+// Initialize
+rotator.animations.new()
+  .rotation({ target: Math.PI / 4, duration: 1.5 })
+  .trigger({ callback: updateNext })
+  .start();

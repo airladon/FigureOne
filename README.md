@@ -56,6 +56,8 @@ Then, check out the **[Tutorials](https://github.com/airladon/FigureOne/tree/mas
 
 ![](examples/Pythagorean%20Theorem/example.gif)
 
+![](examples/Sine%20Wave/example.gif)
+
 
 ## NPM Package
 

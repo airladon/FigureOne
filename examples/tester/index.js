@@ -1,4 +1,5 @@
-const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+// const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ limits: [-4 * 0.8, -3 * 0.8, 8 * 0.8, 6 * 0.8], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 
 // // const figure = new Fig.Figure({ limits: [-8, -8, 16, 16], color: [1, 0, 0, 1]});
 // // figure.add([
@@ -58,7 +59,8 @@ class DynamicSignal {
     this.x = time.map(t => t * xRange / this.duration + r + space);
 
     // initial signal data
-    this.data = Array(this.duration / this.timeStep).fill(initialValue);
+    // this.data = Array(this.duration / this.timeStep).fill(initialValue);
+    this.data = [initialValue];
 
     // record the current time
     this.lastTime = new Date().getTime();
@@ -82,7 +84,7 @@ class DynamicSignal {
     // If more than 10s has passed, since the last value update, then
     // udpate all values to the latest value
     if (deltaTime > this.duration) {
-      this.data = Array(this.data.length).fill(value);
+      this.data = Array(this.x.length).fill(value);
       return;
     }
 
@@ -95,7 +97,7 @@ class DynamicSignal {
     for (let i = 0; i < count; i += 1) {
       newValues.push(value + deltaValue * i);
     }
-    this.data = [...newValues, ...this.data.slice(0, this.data.length - count)];
+    this.data = [...newValues, ...this.data.slice(0, this.x.length - count)];
   }
 
   // Make an array of points where this.data is plotted against this.x
@@ -226,16 +228,6 @@ function updateNext() {
   setTimeout(updateNext, 20);
 };
 
-// Initial rotator position
-rotator.animations.new()
-  .delay(0.5)
-  .rotation({ target: Math.PI / 4, duration: 1.5 })
-  .start();
-
-// Start updating
-updateNext();
-
-
 // Setup the buttons
 function spinner(initialAngle, duration, frequency, percent) {
   const angle = initialAngle + 2 * Math.PI * frequency * percent * duration;
@@ -257,4 +249,8 @@ figure.getElement('fast').onClick = () => startSpinning(0.7);
 figure.getElement('slow').onClick = () => startSpinning(0.2);
 figure.getElement('stop').onClick = () => { rotator.stop(); };
 
-// figure.getElement('fast').surround(figure.getElement('diagram'))
+// Initialize
+rotator.animations.new()
+  .rotation({ target: Math.PI / 4, duration: 1.5 })
+  .trigger({ callback: updateNext })
+  .start();
