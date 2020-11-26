@@ -562,10 +562,10 @@ class TextObjectBase extends DrawingObject {
   setColor(color: TypeColor, index: null | number = null) {
     if (index === null) {
       for (let i = 0; i < this.text.length; i += 1) {
-        this.text[i].setFont({ color });
+        this.text[i].font.color = color.slice();
       }
     } else {
-      this.text[index].setFont({ color });
+      this.text[index].font.color = color.slice()
     }
   }
 

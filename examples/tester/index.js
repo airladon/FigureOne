@@ -1,40 +1,40 @@
 const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 
 // const figure = new Fig.Figure({ limits: [-8, -8, 16, 16], color: [1, 0, 0, 1]});
-// figure.add([
-//   {
-//     name: 'origin',
-//     method: 'polygon',
-//     options: {
-//       radius: 0.01,
-//       line: { width: 0.01 },
-//       sides: 10,
-//       color: [0.7, 0.7, 0.7, 1]
-//     },
-//   },
-//   {
-//     name: 'grid',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.1,
-//       xStep: 0.1,
-//       color: [0.9, 0.9, 0.9, 1],
-//       line: { width: 0.004 },
-//     },
-//   },
-//   {
-//     name: 'gridMajor',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.5,
-//       xStep: 0.5,
-//       color: [0.7, 0.7, 0.7, 1],
-//       line: { width: 0.004 }
-//     },
-//   },
-// ]);
+figure.add([
+  {
+    name: 'origin',
+    method: 'polygon',
+    options: {
+      radius: 0.01,
+      line: { width: 0.01 },
+      sides: 10,
+      color: [0.7, 0.7, 0.7, 1]
+    },
+  },
+  {
+    name: 'grid',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.1,
+      xStep: 0.1,
+      color: [0.9, 0.9, 0.9, 1],
+      line: { width: 0.004 },
+    },
+  },
+  {
+    name: 'gridMajor',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.5,
+      xStep: 0.5,
+      color: [0.7, 0.7, 0.7, 1],
+      line: { width: 0.004 }
+    },
+  },
+]);
 
 
 const r = 0.8;
@@ -114,12 +114,13 @@ const button = (name, label, position) => ({
     touchBorder: 0.1,
     position,
     xAlign: 'center',
+    yAlign: 'middle',
     color: [0.4, 0.4, 0.4, 1],
     width: 0.8,
     height: 0.3,
     line: { width: 0.005, color: [0.6, 0.6, 0.6, 1] },
     corner: { radius: 0.05, sides: 10 },
-    button: true,
+    button: {},
   },
   mods: {
     isTouchable: true,
@@ -250,3 +251,7 @@ function startSpinning(frequency) {
 figure.getElement('fast').onClick = () => startSpinning(0.7);
 figure.getElement('slow').onClick = () => startSpinning(0.3);
 figure.getElement('stop').onClick = () => { rotator.stop(); };
+
+figure.getElement('fast').surround(figure.getElement('diagram'))
+
+console.log(figure.getElement('fast'))

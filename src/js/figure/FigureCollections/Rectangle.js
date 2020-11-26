@@ -176,13 +176,14 @@ export type COL_Rectangle = {
 class CollectionsRectangle extends FigureElementCollection {
   _line: FigureElementPrimitive | null;
   _fill: FigureElementPrimitive | null;
-  _text: FigureElementPrimitive | null;
+  _label: FigureElementPrimitive | null;
 
   width: number;
   height: number;
   xAlign: 'left' | 'center' | 'right' | number;
   yAlign: 'bottom' | 'middle' | 'top' | number;
   corner: OBJ_CurvedCorner;
+  labelOffset: Point;
 
   animations: {
     surround: (OBJ_SurroundAnimationStep) => animation.CustomAnimationStep,
@@ -215,7 +216,7 @@ class CollectionsRectangle extends FigureElementCollection {
       },
       transform: new Transform('Rectangle').scale(1, 1).rotate(0).translate(0, 0),
       limits: collections.primitives.limits,
-      button: false,
+      button: {},
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.fill == null && options.line == null) {
@@ -225,7 +226,7 @@ class CollectionsRectangle extends FigureElementCollection {
     this.collections = collections;
     this._line = null;
     this._fill = null;
-    this._text = null;
+    this._label = null;
 
     this.width = options.width;
     this.height = options.height;
@@ -235,6 +236,7 @@ class CollectionsRectangle extends FigureElementCollection {
     this.touchBorder = options.touchBorder;
     this.holeBorder = options.holeBorder;
     this.corner = options.corner;
+    this.labelOffset = new Point(0, 0);
 
     // if (options.position != null) {
     //   this.transform.updateTranslation(getPoint(options.position));
@@ -255,8 +257,10 @@ class CollectionsRectangle extends FigureElementCollection {
       this.addlabel(options.label);
     }
     if (options.button) {
-      this.addButtonBehavior();
+      this.addButtonBehavior(options.button);
     }
+
+    this.setPositions();
 
     this.animations.surround = (...opt) => {
       const o = joinObjects({}, { element: this, space: 0 }, ...opt);
@@ -304,22 +308,98 @@ class CollectionsRectangle extends FigureElementCollection {
     });
   }
 
-  addButtonBehavior() {
+  addButtonBehavior(onClickColors: {
+    line?: TypeColor,
+    fill?: TypeColor,
+    label?: TypeColor,
+  }) {
     this.subscriptions.add('onClick', () => {
-      const currentOpacity = this.opacity;
+      let currentLineColor = this.color.slice();
+      let currentFillColor = this.color.slice();
+      let currentLabelColor = this.color.slice();
+      if (this._line) {
+        currentLineColor = this._line.color.slice();
+      }
+      if (this._fill) {
+        currentFillColor = this._fill.color.slice();
+      }
+      if (this._label) {
+        currentLabelColor = this._label.color.slice();
+      }
+      let targetLineColor = currentLineColor.slice();
+      let targetFillColor = currentFillColor.slice();
+      let targetLabelColor = currentLabelColor.slice();
+      targetLineColor[3] = targetLineColor[3] > 0.2 ? targetLineColor[3] - 0.2 : 0;
+      targetLabelColor[3] = targetLabelColor[3] > 0.2 ? targetLabelColor[3] - 0.2 : 0;
+      targetFillColor[3] = targetFillColor[3] > 0.2 ? targetFillColor[3] - 0.2 : 0;
+      if (onClickColors.label != null) {
+        targetLabelColor = onClickColors.label;
+      }
+      if (onClickColors.line != null) {
+        targetLineColor = onClickColors.line;
+      }
+      if (onClickColors.fill != null) {
+        targetFillColor = onClickColors.fill;
+      }
       this.animations.new()
-        .trigger({ callback: () => { this.setOpacity(currentOpacity - 0.2); }, duration: 0.1 })
-        .trigger({ callback: () => { this.setOpacity(currentOpacity); } })
+        .trigger({
+          callback: () => {
+            if (this._line) {
+              this._line.setColor(targetLineColor);
+            }
+            if (this._fill) {
+              this._fill.setColor(targetFillColor);
+            }
+            if (this._label) {
+              this._label.setColor(targetLabelColor);
+            }
+          },
+          duration: 0.1,
+        })
+        .trigger({
+          callback: () => {
+            if (this._line) {
+              this._line.setColor(currentLineColor);
+            }
+            if (this._fill) {
+              this._fill.setColor(currentFillColor);
+            }
+            if (this._label) {
+              this._label.setColor(currentLabelColor);
+            }
+          },
+        })
+        .ifCanceledThenComplete()
         .start();
     });
   }
+
+  // getAlignmentPosition() {
+  //   const bounds = { width: this.width, height: this.height };
+  //   const position = new Point(0, 0);
+  //   if (this.xAlign === 'left') {
+  //     position.x += bounds.width / 2;
+  //   } else if (this.xAlign === 'right') {
+  //     position.x -= bounds.width / 2;
+  //   } else if (typeof this.xAlign === 'number') {
+  //     position.x = position.x + bounds.width / 2 - this.xAlign * bounds.width;
+  //   }
+  //   if (this.yAlign === 'bottom') {
+  //     position.y += bounds.height / 2;
+  //   } else if (this.yAlign === 'top') {
+  //     position.y -= bounds.height / 2;
+  //   } else if (typeof this.yAlign === 'number') {
+  //     position.y = position.y + bounds.height / 2 - bounds.height * this.yAlign;
+  //   }
+  //   return position;
+  // }
 
   addRect(rectOptions: OBJ_LineStyleSimple, name: string, fill: boolean) {
     const defaultOptions = {
       width: this.width,
       height: this.height,
-      xAlign: this.xAlign,
-      yAlign: this.yAlign,
+      xAlign: 'center',
+      yAlign: 'middle',
       color: this.color,
       corner: this.corner,
     };
@@ -352,6 +432,42 @@ class CollectionsRectangle extends FigureElementCollection {
     this.add(name, rect);
   }
 
+  setPositions() {
+    const bounds = { width: this.width, height: this.height };
+    const position = new Point(0, 0);
+    if (this.xAlign === 'left') {
+      position.x += bounds.width / 2;
+    } else if (this.xAlign === 'right') {
+      position.x -= bounds.width / 2;
+    } else if (typeof this.xAlign === 'number') {
+      position.x = position.x + bounds.width / 2 - this.xAlign * bounds.width;
+    }
+    if (this.yAlign === 'bottom') {
+      position.y += bounds.height / 2;
+    } else if (this.yAlign === 'top') {
+      position.y -= bounds.height / 2;
+    } else if (typeof this.yAlign === 'number') {
+      position.y = position.y + bounds.height / 2 - bounds.height * this.yAlign;
+    }
+    const { _line, _fill, _label } = this;
+    if (_line) {
+      _line.setPosition(position);
+    }
+    if (_fill) {
+      _fill.setPosition(position);
+    }
+    if (_label) {
+      // const delta = _label.getPosition('local');
+      _label.setPosition(position.add(this.labelOffset));
+      // const numLines = this._label.drawingObject.lines.length;
+      // const numText = this._label.drawingObject.text.length;
+      // if (numLines === 1 )
+      // if (numLines === 1) {}
+      // this._label.setPosition(position);
+    }
+    // return position;
+  }
+
   addlabel(textOptions: OBJ_TextLines | string) {
     const defaultOptions = {
       font: this.collections.primitives.defaultFont,
@@ -370,9 +486,11 @@ class CollectionsRectangle extends FigureElementCollection {
       optionsIn = textOptions;
     }
     const o = joinObjects({}, defaultOptions, optionsIn);
-    if (o.position == null) {
-      o.position = [0, -o.font.size / 2.5];
-    }
+    this.labelOffset = new Point(0, -o.font.size / 2.5);
+    // if (o.position == null) {
+    //   o.position = new Point(0, -o.font.size / 2.5);
+    // }
+    // o.position = o.position.add(this.getAlignmentPosition());
     const label = this.collections.primitives.textLines(o);
     this.add('label', label);
   }
@@ -411,14 +529,18 @@ class CollectionsRectangle extends FigureElementCollection {
   }
 
   setSurround(position: Point, width: number, height: number) {
+    this.width = width;
+    this.height = height;
     if (this._line) {
       this._line.custom.update({ width, height });
     }
     if (this._fill) {
       this._fill.custom.update({ width, height });
     }
-    this.width = width;
-    this.height = height;
+    // if (this._label) {
+    //   this._label.
+    // }
+    this.setPositions();
     this.setPosition(position);
   }
 }
