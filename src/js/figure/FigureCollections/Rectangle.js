@@ -3,7 +3,7 @@
 // import Figure from '../Figure';
 import {
   Transform, Point,
-  getPoint, getTransform,
+  // getPoint, getTransform,
 } from '../../tools/g2';
 // import type { TypeParsablePoint } from '../../tools/g2';
 // import {
@@ -37,6 +37,14 @@ export type OBJ_SurroundAnimationStep = {
   target?: number,
 } & OBJ_CustomAnimationStep;
 
+/**
+ * OnClick colors when clicked.
+ */
+export type OBJ_ButtonColor = {
+  line?: TypeColor,
+  fill?: TypeColor,
+  label?: TypeColor,
+}
 
 /**
  * {@link CollectionsRectangle} options object that extends {@link OBJ_Collection}
@@ -58,7 +66,10 @@ export type OBJ_SurroundAnimationStep = {
  * @property {TypeColor | OBJ_Texture} [fill] fill color or texture
  * @property {OBJ_CurvedCorner} [corner] corner style of rectangle
  * @property {OBJ_TextLines} [label] Rectangle label
- * @property {boolean} [button] Add button animation when clicked
+ * @property {boolean | TypeColor | OBJ_ButtonColor} [button] `true` to
+ * make the rectangle behave like a button when clicked. `TypeColor` to
+ * make fill, line and label the same color when clicked or `OBJ_ButtonColor`
+ * to specify click colors for each (`false`)
  */
 export type COL_Rectangle = {
   width?: number,
@@ -69,7 +80,7 @@ export type COL_Rectangle = {
   fill?: TypeColor | OBJ_Texture,
   corner?: OBJ_CurvedCorner,
   label?: OBJ_TextLines,
-  button?: boolean,
+  button?: boolean | TypeColor | OBJ_ButtonColor,
 } & OBJ_Collection;
 
 /*
@@ -81,6 +92,7 @@ export type COL_Rectangle = {
 ..........##....##..##.......##....##....##...
 ..........##.....##.########..######.....##...
 */
+/* eslint-disable max-len */
 /**
  * {@link FigureElementCollection} representing a rectangle.
  *
@@ -89,16 +101,28 @@ export type COL_Rectangle = {
  *
  * <p class="inline_gif"><img src="./apiassets/advrectangle.gif" class="inline_gif_image"></p>
  *
+ * <p class="inline_gif"><img src="./apiassets/advrectangle_button.gif" class="inline_gif_image"></p>
+ *
  * This object defines a rectangle
- * {@link FigureElementCollection} that includes a border (line), fill and
- * the ability to surround another {@link FigureElement} with some spacing
- * through either the <a href="#collectionsrectanglesurround">surround</a> method
+ * {@link FigureElementCollection} that may include:
+ * - border (line)
+ * - fill
+ * - label
+ * - ability to surround another {@link FigureElement} with some space
+ * - button behavior when clicked
+ *
+ * Surrounding another element can be executed through either the
+ * <a href="#collectionsrectanglesurround">surround</a> method
  * or the {@link OBJ_SurroundAnimationStep} found in the in
  * the animation manager ({@link FigureElement}.animations),
  * and in the animation builder
  * (<a href="#animationmanagernew">animations.new</a>
  * and <a href="#animationmanagerbuilder">animations.builder</a>).
  *
+ * Button behavior means the button will temporarily change a different color
+ * when it is clicked. By default, the button will become a little more
+ * transparent, but colors for the fill, label and border can also be
+ * specified.
  *
  * @see
  *
@@ -171,7 +195,32 @@ export type COL_Rectangle = {
  *   .surround({ target: eqn._c, space: 0.03, duration: 1 })
  *   .pulse({ delay: 1, scale: 1.5 })
  *   .start();
+ *
+ * @example
+ * // Make a rectangle that behaves like a button
+ * figure.add([
+ *   {
+ *     name: 'rect',
+ *     method: 'collections.rectangle',
+ *     options: {
+ *       width: 0.5,
+ *       height: 0.3,
+ *       color: [0.3, 0.3, 0.3, 1],
+ *       label: 'Save',
+ *       corner: { radius: 0.05, sides: 10 },
+ *       fill: [0.9, 0.9, 0.9, 1],
+ *       button: {
+ *         fill: [0.95, 0.95, 0.95, 1],
+ *       },
+ *     },
+ *     mods: {
+ *       isTouchable: true,
+ *       onClick: () => console.log('clicked'),
+ *     },
+ *   },
+ * ]);
  */
+/* eslint-enable max-len */
 // $FlowFixMe
 class CollectionsRectangle extends FigureElementCollection {
   _line: FigureElementPrimitive | null;
@@ -312,87 +361,49 @@ class CollectionsRectangle extends FigureElementCollection {
     line?: TypeColor,
     fill?: TypeColor,
     label?: TypeColor,
-  }) {
-    this.subscriptions.add('onClick', () => {
-      let currentLineColor = this.color.slice();
-      let currentFillColor = this.color.slice();
-      let currentLabelColor = this.color.slice();
-      if (this._line) {
-        currentLineColor = this._line.color.slice();
+  } | TypeColor | boolean) {
+    const click = (name) => {
+      const element = this.elements[name];
+      if (element == null) {
+        return;
       }
-      if (this._fill) {
-        currentFillColor = this._fill.color.slice();
+      const currentColor = element.color.slice();
+      let targetColor;
+      if (Array.isArray(onClickColors)) {
+        targetColor = onClickColors.slice();
+      } else if (onClickColors !== true && onClickColors[name] != null) {
+        targetColor = onClickColors[name].slice();
       }
-      if (this._label) {
-        currentLabelColor = this._label.color.slice();
-      }
-      let targetLineColor = currentLineColor.slice();
-      let targetFillColor = currentFillColor.slice();
-      let targetLabelColor = currentLabelColor.slice();
-      targetLineColor[3] = targetLineColor[3] > 0.2 ? targetLineColor[3] - 0.2 : 0;
-      targetLabelColor[3] = targetLabelColor[3] > 0.2 ? targetLabelColor[3] - 0.2 : 0;
-      targetFillColor[3] = targetFillColor[3] > 0.2 ? targetFillColor[3] - 0.2 : 0;
-      if (onClickColors.label != null) {
-        targetLabelColor = onClickColors.label;
-      }
-      if (onClickColors.line != null) {
-        targetLineColor = onClickColors.line;
-      }
-      if (onClickColors.fill != null) {
-        targetFillColor = onClickColors.fill;
-      }
-      this.animations.new()
+      element.animations.new()
         .trigger({
           callback: () => {
-            if (this._line) {
-              this._line.setColor(targetLineColor);
-            }
-            if (this._fill) {
-              this._fill.setColor(targetFillColor);
-            }
-            if (this._label) {
-              this._label.setColor(targetLabelColor);
+            if (targetColor == null) {
+              element.opacity = 0.8;
+            } else {
+              element.setColor(targetColor);
             }
           },
           duration: 0.1,
         })
         .trigger({
           callback: () => {
-            if (this._line) {
-              this._line.setColor(currentLineColor);
-            }
-            if (this._fill) {
-              this._fill.setColor(currentFillColor);
-            }
-            if (this._label) {
-              this._label.setColor(currentLabelColor);
+            if (targetColor == null) {
+              element.opacity = 1;
+            } else {
+              element.setColor(currentColor);
             }
           },
         })
         .ifCanceledThenComplete()
         .start();
+      // this.animateNextFrame();
+    };
+    this.subscriptions.add('onClick', () => {
+      click('line');
+      click('fill');
+      click('label');
     });
   }
-
-  // getAlignmentPosition() {
-  //   const bounds = { width: this.width, height: this.height };
-  //   const position = new Point(0, 0);
-  //   if (this.xAlign === 'left') {
-  //     position.x += bounds.width / 2;
-  //   } else if (this.xAlign === 'right') {
-  //     position.x -= bounds.width / 2;
-  //   } else if (typeof this.xAlign === 'number') {
-  //     position.x = position.x + bounds.width / 2 - this.xAlign * bounds.width;
-  //   }
-  //   if (this.yAlign === 'bottom') {
-  //     position.y += bounds.height / 2;
-  //   } else if (this.yAlign === 'top') {
-  //     position.y -= bounds.height / 2;
-  //   } else if (typeof this.yAlign === 'number') {
-  //     position.y = position.y + bounds.height / 2 - bounds.height * this.yAlign;
-  //   }
-  //   return position;
-  // }
 
   addRect(rectOptions: OBJ_LineStyleSimple, name: string, fill: boolean) {
     const defaultOptions = {

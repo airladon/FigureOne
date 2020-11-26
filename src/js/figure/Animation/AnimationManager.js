@@ -277,6 +277,7 @@ export default class AnimationManager {
     }
     const animation = new anim.AnimationBuilder(options);
     this.animations.push(animation);
+    this.element.animateNextFrame();
     return animation;
   }
 

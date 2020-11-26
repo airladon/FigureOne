@@ -1566,11 +1566,11 @@ class Figure {
     // Get all the figure elements that were touched at this point (element
     // must have isTouchable = true to be considered)
     this.beingTouchedElements = this.elements.getTouched(glPoint);
-    // console.log(this.beingTouchedElements)
-    if (this.moveTopElementOnly) {
-      if (this.beingTouchedElements.length > 0) {
+
+    if (this.moveTopElementOnly && this.beingTouchedElements.length > 0) {
+      // if () {
         this.beingTouchedElements[0].click(glPoint);
-      }
+      // }
     } else {
       this.beingTouchedElements.forEach(e => e.click(glPoint));
     }
