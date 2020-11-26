@@ -152,6 +152,16 @@ figure.add([
         },
       },
       {
+        name: 'circle',
+        method: 'polygon',
+        options: {
+          radius: r,
+          sides: 200,
+          line: { width: 0.005 },
+          color: [0.7, 0.7, 0.7, 1],
+        },
+      },
+      {
         name: 'sine',
         method: 'collections.line',
         options: {
@@ -394,6 +404,16 @@ figure.add([
           position: [0, -r],
           width: 0.005,
           angle: Math.PI / 2,
+          color: [0.7, 0.7, 0.7, 1],
+        },
+      },
+      {
+        name: 'circle',
+        method: 'polygon',
+        options: {
+          radius: r,
+          sides: 200,
+          line: { width: 0.005 },
           color: [0.7, 0.7, 0.7, 1],
         },
       },
