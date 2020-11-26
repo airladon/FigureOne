@@ -52,9 +52,11 @@ And you will see:
 Then, check out the **[Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials)**, **[API Reference](https://airladon.github.io/FigureOne/.)** and **[Examples](https://github.com/airladon/FigureOne/tree/master/tutorials)** and you'll be making beautiful, interactive figures in no time.
 
 ## Selection of Examples
-**[Pythagorean Equation Animation](https://github.com/airladon/FigureOne/tree/master/examples/Pythagorean%20Theorem)**
+### **[Pythagorean Equation Animation](https://github.com/airladon/FigureOne/tree/master/examples/Pythagorean%20Theorem)**
 
 ![](examples/Pythagorean%20Theorem/example.gif)
+
+### **[Create a Sine Wave](https://github.com/airladon/FigureOne/tree/master/examples/Sine%Wave)**
 
 ![](examples/Sine%20Wave/example.gif)
 
