@@ -1,5 +1,5 @@
 // const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
-const figure = new Fig.Figure({ limits: [-4.5, -3.5, 9, 7], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+// const figure = new Fig.Figure({ limits: [-4.5, -3.5, 9, 7], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 
 // // const figure = new Fig.Figure({ limits: [-8, -8, 16, 16], color: [1, 0, 0, 1]});
 // // figure.add([
@@ -37,24 +37,27 @@ const figure = new Fig.Figure({ limits: [-4.5, -3.5, 9, 7], color: [1, 0, 0, 1],
 // //   },
 // // ]);
 // const figure = new Fig.Figure();
+const figure = new Fig.Figure({ limits: [0, 0, 6, 4 ]});
 
-// Create the shape
-figure.add(
-  {
-    name: 'tri',
-    method: 'triangle',
-    options: {
-      width: 1,
-      height: 1,
-      color: [1, 0, 0, 1],
-    },
-  },
-);
+const label = figure.primitives.text({
+  text: 'Line 1',
+  position: [1, 0.1],
+  font: { color: [0, 0, 1, 1] },
+  xAlign: 'center',
+});
+const line = figure.primitives.line({
+  p1: [0, 0],
+  p2: [2, 0],
+  width: 0.01,
+  color: [0, 0, 1, 1],
+});
 
-// Animate the shape
-figure.getElement('tri').animations.new()
-  .delay(2)
-  .position({ target: [1, 0], duration: 1 })
-  .rotation({ target: Math.PI, duration: 2 })
-  .position({ target: [0, 0], duration: 1 })
-  .start();
+const labeledLine = figure.collections.collection({
+  position: [3, 2],
+  touchBorder: 0.3,
+});
+figure.elements.add('labeledLine', labeledLine);
+labeledLine.add('line', line);
+labeledLine.add('label', label);
+labeledLine.move.type = 'rotation';
+labeledLine.setMovable();

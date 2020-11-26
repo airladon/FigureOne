@@ -81,9 +81,9 @@ The "Labeled Line" collection will then cascade this transform with it's own rot
 
 The "Label" primitive has it's own transform that translates it to the middle of the horizontal line in *local* space. The transform will be combined with the one from its parent, creating a final transform to draw the label with.
 
-The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of memory that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and each frame just a transform is passed informs the graphics processor how to orient the vertices.
+The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of data that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and each frame just a transform is passed to inform the graphics processor how to orient the vertices.
 
-If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change.
+If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change. That said, for shapes of **reasonable** size, this will not be a problem.
 
 #### Code
 
@@ -108,11 +108,11 @@ const figure = new Fig.Figure({ limits: [0, 0, 6, 4 ]});
 figure.add(
   {
     name: 'labeledLine',
-    method: 'collection',
+    method: 'collections.collection',
     elements: [
       {
         name: 'line',
-        method: 'line',
+        method: 'primitives.line',
         options: {
           p1: [0, 0],
           p2: [2, 0],
@@ -122,7 +122,7 @@ figure.add(
       },
       {
         name: 'label',
-        method: 'text',
+        method: 'primitives.text',
         options: {
           text: 'Line 1',
           position: [1, 0.1],
@@ -133,18 +133,16 @@ figure.add(
     ],
     options: {
       position: [3, 2],
+      touchBorder: 0.3,
     },
     mods: {
-      isTouchable: true,
       isMovable: true,
-      touchInBoundingRect: true,
       move: {
         type: 'rotation',
       },
     },
   },
 );
-figure.elements.isTouchable = true;
 ```
 
 #### Using FigureOne
@@ -171,12 +169,14 @@ const line = figure.primitives.line({
   width: 0.01,
   color: [0, 0, 1, 1],
 });
-const labeledLine = figure.primitives.collection({});
+
+const labeledLine = figure.collections.collection({
+  position: [3, 2],
+  touchBorder: 0.3,
+});
 figure.elements.add('labeledLine', labeledLine);
 labeledLine.add('line', line);
 labeledLine.add('label', label);
-labeledLine.setPosition(3, 2);
 labeledLine.move.type = 'rotation';
-labeledLine.touchInBoundingRect = true;
 labeledLine.setMovable();
 ```
