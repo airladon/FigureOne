@@ -4541,8 +4541,8 @@
 <p>When it is time to draw the scene, the figure will pass an initial transform to the first element in the hierarchy. In the example above, the "Labeled Line" collection. This transform will include any translations and scaling needed to convert from <em>figure</em> space to <em>GL</em> space for actual rendering.</p>
 <p>The "Labeled Line" collection will then cascade this transform with it's own rotation and translation transform, and pass this to its children, the "Label" and "Line" primitives.</p>
 <p>The "Label" primitive has it's own transform that translates it to the middle of the horizontal line in <em>local</em> space. The transform will be combined with the one from its parent, creating a final transform to draw the label with.</p>
-<p>The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of memory that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and each frame just a transform is passed informs the graphics processor how to orient the vertices.</p>
-<p>If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change.</p>
+<p>The primitive's shape or text definition never needs to change. At draw time, it is simply transformed by it's own transform and all the ancestors directly above it in the hierarchy. This is the same method used by WebGL as it reduces the amount of data that needs to be loaded into the graphics memory each draw frame. All the vertices of a shape are loaded into the graphics memory just once, and each frame just a transform is passed to inform the graphics processor how to orient the vertices.</p>
+<p>If you have a dynamic shape whose vertices do change every frame (like a morphing animation), you can choose to load the vertices every frame. However, depending on the performance of the browser's host machine, and the number of vertices being adjusted, you might see a performance impact compared to a shape with a similar amount of vertices that do not change. That said, for shapes of <strong>reasonable</strong> size, this will not be a problem.</p>
 <h4>Code</h4>
 <p>Finally, let's see the code for the example above. Two files, <code>index.html</code> and <code>index.js</code> should be in the same folder.</p>
 <pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
@@ -4560,11 +4560,11 @@
 figure.add(
   {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'labeledLine'</span>,
-    <span class="hljs-attr">method</span>: <span class="hljs-string">'collection'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.collection'</span>,
     <span class="hljs-attr">elements</span>: [
       {
         <span class="hljs-attr">name</span>: <span class="hljs-string">'line'</span>,
-        <span class="hljs-attr">method</span>: <span class="hljs-string">'line'</span>,
+        <span class="hljs-attr">method</span>: <span class="hljs-string">'primitives.line'</span>,
         <span class="hljs-attr">options</span>: {
           <span class="hljs-attr">p1</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
           <span class="hljs-attr">p2</span>: [<span class="hljs-number">2</span>, <span class="hljs-number">0</span>],
@@ -4574,7 +4574,7 @@ figure.add(
       },
       {
         <span class="hljs-attr">name</span>: <span class="hljs-string">'label'</span>,
-        <span class="hljs-attr">method</span>: <span class="hljs-string">'text'</span>,
+        <span class="hljs-attr">method</span>: <span class="hljs-string">'primitives.text'</span>,
         <span class="hljs-attr">options</span>: {
           <span class="hljs-attr">text</span>: <span class="hljs-string">'Line 1'</span>,
           <span class="hljs-attr">position</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0.1</span>],
@@ -4585,18 +4585,16 @@ figure.add(
     ],
     <span class="hljs-attr">options</span>: {
       <span class="hljs-attr">position</span>: [<span class="hljs-number">3</span>, <span class="hljs-number">2</span>],
+      <span class="hljs-attr">touchBorder</span>: <span class="hljs-number">0.3</span>,
     },
     <span class="hljs-attr">mods</span>: {
-      <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>,
       <span class="hljs-attr">isMovable</span>: <span class="hljs-literal">true</span>,
-      <span class="hljs-attr">touchInBoundingRect</span>: <span class="hljs-literal">true</span>,
       <span class="hljs-attr">move</span>: {
         <span class="hljs-attr">type</span>: <span class="hljs-string">'rotation'</span>,
       },
     },
   },
-);
-figure.elements.isTouchable = <span class="hljs-literal">true</span>;</pre>
+);</pre>
 <h4>Using FigureOne</h4>
 <p>The example above shows how a figure can be defined with simple javascript objects, able to be encoded simply in JSON. This means complex figures or modules can be shared and reused easily.</p>
 <p>For many uses, it is fine to fully define a figure and all its elements before a user interacts with it.</p>
@@ -4616,13 +4614,15 @@ figure.elements.isTouchable = <span class="hljs-literal">true</span>;</pre>
   <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span>,
   <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
 });
-<span class="hljs-keyword">const</span> labeledLine = figure.primitives.collection({});
+
+<span class="hljs-keyword">const</span> labeledLine = figure.collections.collection({
+  <span class="hljs-attr">position</span>: [<span class="hljs-number">3</span>, <span class="hljs-number">2</span>],
+  <span class="hljs-attr">touchBorder</span>: <span class="hljs-number">0.3</span>,
+});
 figure.elements.add(<span class="hljs-string">'labeledLine'</span>, labeledLine);
 labeledLine.add(<span class="hljs-string">'line'</span>, line);
 labeledLine.add(<span class="hljs-string">'label'</span>, label);
-labeledLine.setPosition(<span class="hljs-number">3</span>, <span class="hljs-number">2</span>);
 labeledLine.move.type = <span class="hljs-string">'rotation'</span>;
-labeledLine.touchInBoundingRect = <span class="hljs-literal">true</span>;
 labeledLine.setMovable();</pre>
 
   
@@ -15299,13 +15299,14 @@ identity transforms.</p>
 <p>Let's start by creating a <a href="#figureelementprimitive">FigureElementPrimitive</a> element that draws a polygon and adding it to the figure.</p>
 <pre class='hljs'><span class="hljs-comment">// create the `FigureElementPrimitive`</span>
 <span class="hljs-keyword">const</span> p = figure.primitives.polygon({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">radius</span>: <span class="hljs-number">0.2</span>,
   <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
   <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
 });
 <span class="hljs-comment">// add it to the figure</span>
-figure.elements.add(<span class="hljs-string">'p'</span>, p);</pre>
-<p>Another way to create and add the same shape to the figure is to use the <code>Figure.addElement</code> or <code>Figure.addElements</code> method:</p>
+figure.add(p);</pre>
+<p>Another way to create and add the same shape to the figure is to use the <code>Figure.add</code> method with an options definition of a polygon:</p>
 <pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'p'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'polygon'</span>,
@@ -15315,21 +15316,25 @@ figure.elements.add(<span class="hljs-string">'p'</span>, p);</pre>
     <span class="hljs-attr">sides</span>: <span class="hljs-number">6</span>,
   },
 });</pre>
-<p>Both ways create the same element. The first way is more programatic and especially useful when extending shape creation classes. In comparison, the second way can allow you to layout an entire figure in a single object that is compatible with JSON. This means it is relatively straight forward to share figure elements between projects. When using code folding in an IDE, the second way also makes it easy to work with figures with many elements.</p>
+<p>Both ways create the same element. The first way is especially useful when extending shape creation classes, or creating elements dynamically. The second way can allow you to layout an entire figure in a single object that is compatible with JSON. This means it is relatively straight forward to share figure elements between projects. When using code folding in an IDE, the second way also makes it easy to work with a figure's with many elements by hiding elements that aren't being worked on.</p>
 <p>For most of the API reference, the second way will be used.</p>
 <h3>Built-in Shapes</h3>
-<p>There are several built in shape methods that can be used to create complex figures:</p>
+<p>There are several built in primitive shape methods that can be used to create complex figures:</p>
 <ul>
 <li><a href="#obj_line">line</a></li>
 <li><a href="#obj_polyline">polyline</a></li>
+<li><a href="#obj_arrow">arrow</a></li>
 <li><a href="#obj_triangle">triangle</a></li>
 <li><a href="#obj_rectangle">rectangle</a></li>
+<li><a href="#obj_ellipse">ellipse</a></li>
 <li><a href="#obj_polygon">polygon</a></li>
+<li><a href="#obj_star">star</a></li>
+<li><a href="#obj_grid">grid</a></li>
 </ul>
 <h3>Drawing a generic shape</h3>
-<p>While there are several built-in shapes such as polygons, rectangles and polylines in FigureOne, there is also a 'generic' method that will allow creation of any shape.</p>
+<p>While there are several built-in shapes such as polygons, rectangles and polylines in FigureOne, there is also a 'generic' method that will allow creation of any shape. In fact, all the built in shapes use this generic method themselves.</p>
 <p>To use the generic method however, it is important to understand how WebGL uses triangles to create shapes.</p>
-<p>Any shape can be quantized into triangles. For instance, the figure below shows a rectangle broken into two triangles with vertices labeled.</p>
+<p>Any shape approximated with triangles. For instance, the figure below shows a rectangle broken into two triangles with vertices labeled.</p>
 <p style="text-align: center"><img src="./tutorials/draw/rect.png"></p>
 <p>To draw this shape, you would need to draw the two triangles, which means drawing 6 vertices:</p>
 <ul>
@@ -15609,14 +15614,12 @@ figure.add({
     ]],
   },
   <span class="hljs-attr">mods</span>: {
-    <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>,
     <span class="hljs-attr">isMovable</span>: <span class="hljs-literal">true</span>,
     <span class="hljs-attr">move</span>: {
       <span class="hljs-attr">bounds</span>: <span class="hljs-string">'figure'</span>,
     },
   },
-});
-figure.setTouchable();</pre>
+});</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Grid of triangles</span>
@@ -15761,7 +15764,7 @@ Only
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>dash</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>?)</code>
           : leave empty for solid line - use array of
 numbers for dash line where first number is length of line, second number is
 length of gap and then the pattern repeats - can use more than one dash length
@@ -16091,7 +16094,7 @@ length of corner to draw (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>dash</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>?)</code>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>?)</code>
           : leave empty for solid line - use array of
 numbers for dash line where first number is length of line, second number is
 length of gap and then the pattern repeats - can use more than one dash length
@@ -17733,8 +17736,8 @@ figure.add({
   </h2>
 
   
-    <p>FigureOne provides a number of collections shapes that combine simple shapes into more interesting objects.</p>
-<p>Collections shapes are <a href="#figureelementcollection">FigureElementCollection</a>s that manage a number of <a href="FigureElementPrimitives">FigureElementPrimitives</a>, and may provide methods to dynamically update and change the shapes, additional animation steps specific to</p>
+    <p>FigureOne provides a number of collections shapes that combine simple shapes into more complex objects.</p>
+<p>Collections shapes are <a href="#figureelementcollection">FigureElementCollection</a>s that manage a number of <a href="#figureelement">FigureElement</a>s, and may provide methods to dynamically update and change the shapes, additional animation steps specific to to shape, and additional ways to interact with the shape.</p>
 
   
 </section></div>
