@@ -2078,13 +2078,14 @@ export default class FigurePrimitives {
   generic(...optionsIn: Array<OBJ_Generic>) {
     const defaultOptions = {
       name: generateUniqueId('primitive_'),
-      points: [],
-      border: 'rect',
-      touchBorder: 'border',
-      holeBorder: [[]],
-      drawType: 'triangles',
+      // points: [],
+      // drawBorder: [[]],
+      // border: 'rect',
+      // touchBorder: 'border',
+      // holeBorder: [[]],
+      // drawType: 'triangles',
       color: this.defaultColor,
-      position: null,
+      // position: null,
       transform: new Transform('generic').standard(),
       texture: {
         src: '',
@@ -2094,35 +2095,15 @@ export default class FigurePrimitives {
         onLoad: this.animateNextFrame,
       },
     };
-
-    const options = joinObjects(defaultOptions, ...optionsIn);
-
+    const options = joinObjects({}, defaultOptions, ...optionsIn);
     options.transform = getTransform(options.transform);
-
     if (options.position != null) {
-      const p = getPoint(options.position);
-      options.transform.updateTranslation(p);
+      options.position = getPoint(options.position);
+      options.transform.updateTranslation(options.position);
     }
-    const parsedPoints = options.points.map(p => getPoint(p));
-    // const parsedBorder = parseBorder(options.border);
-    // const parsedHoleBorder = parseBorder(options.holeBorder);
-    // const parsedTouchBorder = parseBorder(options.touchBorder);
-
-    let copyToUse = options.copy;
-    if (options.copy != null && !Array.isArray(options.copy)) {
-      copyToUse = [options.copy];
-    }
-
-    options.texture.mapTo = getRect(options.texture.mapTo);
-    options.texture.mapFrom = getRect(options.texture.mapFrom);
 
     const element = Generic(
       this.webgl,
-      parsedPoints,
-      // parsedBorder,
-      // parsedTouchBorder,
-      // parsedBorderHoles,
-      options.drawType,
       options.color,
       options.transform,
       this.limits,
@@ -2131,34 +2112,76 @@ export default class FigurePrimitives {
       options.texture.mapFrom,
       options.texture.repeat,
       options.texture.onLoad,
-      copyToUse,
       options.name,
     );
-    element.border = parseBorder(options.border);
-    element.touchBorder = parseBorder(options.holeBorder);
-    element.holeBorder = parseBorder(options.touchBorder);
+    // const options = joinObjects(defaultOptions, ...optionsIn);
 
-    element.custom.update = function update(
-      points: Array<TypeParsablePoint>,
-      borderIn: Array<Array<TypeParsablePoint>> | 'rect' = 'rect',
-      touchBorderIn: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none' = 'border',
-      holeBorderIn: Array<Array<TypeParsablePoint>> | 'none' = 'none',
-      copy: Array<CPY_Step> = [],
-    ) {
-      const pp = getPoints(points);
-      const b = Array.isArray(borderIn) ? parseBorder(borderIn) : borderIn;
-      const tB = Array.isArray(touchBorderIn) ? parseBorder(touchBorderIn) : touchBorderIn;
-      const hB = Array.isArray(holeBorderIn) ? parseBorder(holeBorderIn) : holeBorderIn;
-      element.drawingObject.change(
-        pp, copy,
-      );
-      element.border = parseBorder(borderIn);
-      element.touchBorder = parseBorder(touchBorderIn);
-      element.holeBorder = parseBorder(holeBorderIn);
+    // options.transform = getTransform(options.transform);
+
+    // if (options.position != null) {
+    //   const p = getPoint(options.position);
+    //   options.transform.updateTranslation(p);
+    // // }
+    // const parsedPoints = options.points.map(p => getPoint(p));
+    // // const parsedBorder = parseBorder(options.border);
+    // // const parsedHoleBorder = parseBorder(options.holeBorder);
+    // // const parsedTouchBorder = parseBorder(options.touchBorder);
+
+    // let copyToUse = options.copy;
+    // if (options.copy != null && !Array.isArray(options.copy)) {
+    //   copyToUse = [options.copy];
+    // }
+
+    // options.texture.mapTo = getRect(options.texture.mapTo);
+    // options.texture.mapFrom = getRect(options.texture.mapFrom);
+
+    // element.drawBorder = parseBorder(options.drawBorder);
+    // element.border = parseBorder(options.border);
+    // element.touchBorder = parseBorder(options.holeBorder);
+    // element.holeBorder = parseBorder(options.touchBorder);
+
+    element.custom.updateGeneric = function update(updateOptions: {
+      points?: Array<TypeParsablePoint>,
+      drawBorder?: Array<Array<TypeParsablePoint>>,
+      border?: Array<Array<TypeParsablePoint>> | 'rect',
+      touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | 'rect',
+      holeBorder?: Array<Array<TypeParsablePoint>>,
+      copy?: Array<CPY_Step>,
+      drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
+    }) {
+      const defaultUpdateOptions = {
+        // points: element.drawingObject.vertices,
+        border: element.border,
+        touchBorder: element.touchBorder,
+        holdBorder: element.holeBorder,
+        // copy: element.drawingObject.copy,
+        // drawType: element.drawingObject.drawType,
+      };
+      const o = joinObjects(defaultUpdateOptions, updateOptions);
+      if (o.copy != null && !Array.isArray(o.copy)) {
+        o.copy = [o.copy];
+      }
+      if (o.points != null) {
+        o.points = getPoints(o.points);
+      }
+      if (o.border != null) {
+        element.border = parseBorder(o.border);
+      }
+      if (o.touchBorder != null) {
+        element.touchBorder = parseBorder(o.touchBorder);
+      }
+      if (o.holeBorder != null) {
+        element.holeBorder = parseBorder(o.holeBorder);
+      }
+      if (o.drawBorder != null) {
+        element.drawBorder = parseBorder(o.drawBorder)
+      }
+      console.log(o)
+      element.drawingObject.change(o);
     };
-
+    element.custom.updateGeneric(options);
+    element.custom.updatePoints = element.custom.updateGeneric;
     setupPulse(element, options);
-
     return element;
   }
 
@@ -2167,7 +2190,14 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Polyline} for options and examples.
    */
   polyline(...optionsIn: Array<OBJ_Polyline>) {
-    const defaultOptions = {
+    const element = this.generic(...optionsIn, {
+      transform: new Transform('polyline').standard(),
+      border: 'drawBorder',
+      touchBorder: 'border',
+      holeBorder: [[]],
+    });
+
+    element.custom.options = {
       points: [[0, 0], [1, 0]],
       width: this.defaultLineWidth,
       color: this.defaultColor,
@@ -2182,30 +2212,21 @@ export default class FigurePrimitives {
       dash: [],
       linePrimitives: false,
       lineNum: 1,
-      transform: new Transform('polyline').standard(),
-      border: 'line',
-      touchBorder: 'border',
-      holeBorder: 'none',
-      // arrow: {
-      //   type: 'triangle' | 'circle' | 'line' | 'bar',
-      //   width: number,
-      //   length: number,
-      // },
-    };
-    const options = processOptions(defaultOptions, ...optionsIn);
-    parsePoints(options, ['points', 'border', 'holeBorder', 'touchBorder']);
-    if (typeof options.touchBorder !== 'number') {
-      parsePoints(options, ['touchBorder']);
     }
-    if (options.linePrimitives === false) {
-      options.lineNum = 2;
-    }
-
-    let border;
-    let triangles;
-    let touchBorder;
-    let holeBorder;
+    // let border;
+    // let triangles;
+    // let touchBorder;
+    // let holeBorder;
     const getTris = (o) => {
+      const defaultOptions = element.custom.options;
+      const options = processOptions(defaultOptions, ...optionsIn);
+      // parsePoints(options, ['points', 'border', 'holeBorder', 'touchBorder']);
+      // if (typeof options.touchBorder !== 'number') {
+      //   parsePoints(options, ['touchBorder']);
+      // }
+      if (options.linePrimitives === false) {
+        options.lineNum = 2;
+      }
       parsePoints(o, ['points', 'border', 'holeBorder', 'touchBorder']);
       let touchBorderBuffer = 0;
       if (typeof o.touchBorder === 'number') {
@@ -2236,23 +2257,20 @@ export default class FigurePrimitives {
       if (Array.isArray(o.holeBorder) || o.holeBorder === 'none') {
         holeBorder = o.holeBorder;
       }
-      // if (o.close === false || o.arrow != null) {
-      //   [triangles, border, touchBorder] = makeArrows(triangles, border, touchBorder, o);
-      // }
     };
 
     getTris(options);
-    const element = this.generic(options, {
-      drawType: options.linePrimitives ? 'lines' : 'triangles',
-      points: triangles,
-      border,
-      touchBorder,
-      holeBorder,
-    });
+    // const element = this.generic(options, {
+    //   drawType: options.linePrimitives ? 'lines' : 'triangles',
+    //   points: triangles,
+    //   border,
+    //   touchBorder,
+    //   holeBorder,
+    // });
 
     element.custom.updatePoints = (updatedOptions) => {
       getTris(joinObjects({}, options, updatedOptions));
-      element.drawingObject.change(triangles, border, touchBorder, holeBorder);
+      // element.drawingObject.change(triangles, border, touchBorder, holeBorder);
     };
     element.custom.update = element.custom.updatePoints;
 
@@ -2266,119 +2284,124 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Polygon} for options and examples.
    */
   polygon(...options: Array<OBJ_Polygon>) {
-    const defaultOptions = {
-      radius: 1,
-      sides: 4,
-      direction: 1,
-      rotation: 0,
-      offset: new Point(0, 0),
-      transform: new Transform('polygon').standard(),
-      touchableLineOnly: false,
-      border: 'outline',
-      touchBorder: 'border',
-    };
-    // let radiusMod = 0;
-    const optionsToUse = processOptions(defaultOptions, ...options);
-
-    if (optionsToUse.line != null) {
-      optionsToUse.line = joinObjects({}, {
-        width: this.defaultLineWidth,
-        widthIs: 'mid',
-      }, optionsToUse.line);
-      if (optionsToUse.line.widthIs === 'inside') {
-        optionsToUse.line.widthIs = 'positive';
-      }
-      if (optionsToUse.line.widthIs === 'outside') {
-        optionsToUse.line.widthIs = 'negative';
-      }
-    }
-
-    // // deprecated - to help migration from old polygon
-    // if (optionsToUse.line == null && optionsToUse.width != null) {
-    //   optionsToUse.line = {
-    //     width: optionsToUse.width,
-    //     widthIs: 'mid',
-    //   };
-    // }
-
-    parsePoints(optionsToUse, ['offset']);
-    let element;
-    if (optionsToUse.angleToDraw != null) {
-      optionsToUse.sidesToDraw = Math.floor(
-        optionsToUse.angleToDraw / (Math.PI * 2 / optionsToUse.sides),
-      );
-    }
-    if (optionsToUse.sidesToDraw == null) {
-      optionsToUse.sidesToDraw = optionsToUse.sides;
-    }
-
     const getBorder = (o) => {
+      const defaultOptions = {
+        radius: 1,
+        sides: 4,
+        direction: 1,
+        rotation: 0,
+        offset: new Point(0, 0),
+        transform: new Transform('polygon').standard(),
+        touchableLineOnly: false,
+        border: 'drawBorder',
+        touchBorder: 'border',
+      };
+      // let radiusMod = 0;
+      const optionsToUse = processOptions(defaultOptions, ...options);
+
+      if (optionsToUse.line != null) {
+        optionsToUse.line = joinObjects({}, {
+          width: this.defaultLineWidth,
+          widthIs: 'mid',
+        }, optionsToUse.line);
+        if (optionsToUse.line.widthIs === 'inside') {
+          optionsToUse.line.widthIs = 'positive';
+        }
+        if (optionsToUse.line.widthIs === 'outside') {
+          optionsToUse.line.widthIs = 'negative';
+        }
+      }
+      parsePoints(optionsToUse, ['offset']);
+      if (optionsToUse.angleToDraw != null) {
+        optionsToUse.sidesToDraw = Math.floor(
+          optionsToUse.angleToDraw / (Math.PI * 2 / optionsToUse.sides),
+        );
+      }
+      if (optionsToUse.sidesToDraw == null) {
+        optionsToUse.sidesToDraw = optionsToUse.sides;
+      }
       const points = getPolygonPoints(o);
       let { touchBorder } = o;
       let { border } = o;
-      let borderOffset = 0;
-
-      if (o.border === 'outline' && o.line != null) {
+      let drawBorderOffset = 0;
+      let drawBorder;
+      if (o.line != null) {
         const { width, widthIs } = o.line;
         const dir = o.direction;
         if (
           (dir === 1 && (widthIs === 'negative' || widthIs === 'outside'))
           || (dir === -1 && (widthIs === 'positive' || widthIs === 'inside'))
         ) {
-          borderOffset = width;
+          drawBorderOffset = width;
         } else if (widthIs === 'mid') {
-          borderOffset = width / 2;
+          drawBorderOffset = width / 2;
         }
-        if (borderOffset > 0) {
+        if (drawBorderOffset > 0) {
           const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
-          borderOffset /= Math.sin(cornerAngle / 2);
+          drawBorderOffset /= Math.sin(cornerAngle / 2);
         }
       }
+      if (drawBorderOffset === 0) {
+        drawBorder = [points];
+      } else {
+        drawBorder = [getPolygonPoints(joinObjects(
+          {}, o, { radius: o.radius + drawBorderOffset },
+        ))];
+      }
 
-      if (o.border === 'outline') {
-        if (borderOffset === 0) {
-          border = [points];
-        } else {
-          border = [getPolygonPoints(joinObjects({}, o, { radius: o.radius + borderOffset }))];
-        }
+      let borderOffset = 0;
+      if (typeof o.border === 'number') {
+        borderOffset = o.border;
+        border = [getPolygonPoints(joinObjects(
+          {}, o, { radius: o.radius + drawBorderOffset + borderOffset },
+        ))];
+      }
+
+      if (typeof o.touchBorder === 'number') {
+        touchBorder = [getPolygonPoints(joinObjects(
+          {}, o, { radius: o.radius + drawBorderOffset + borderOffset + o.touchBorder },
+        ))];
       }
 
       // let { touchBorder } = o;
-      if (typeof o.touchBorder === 'number') {
-        const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
-        const cornerWidth = o.touchBorder / Math.sin(cornerAngle / 2);
-        touchBorder = [getPolygonPoints(
-          joinObjects({}, o, {
-            radius: cornerWidth + o.radius + borderOffset,
-          }),
-        )];
-      }
-      return [points, border, touchBorder];
+      // if (typeof o.touchBorder === 'number') {
+      //   const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
+      //   const cornerWidth = o.touchBorder / Math.sin(cornerAngle / 2);
+      //   touchBorder = [getPolygonPoints(
+      //     joinObjects({}, o, {
+      //       radius: cornerWidth + o.radius + borderOffset,
+      //     }),
+      //   )];
+      // }
+      return [points, drawBorder, border, touchBorder];
     };
 
     if (optionsToUse.line == null) {
-      const [outline, border, touchBorder] = getBorder(optionsToUse);
-      const tris = getTrisFillPolygon(
-        optionsToUse.offset, outline, optionsToUse.sides,
-        optionsToUse.sidesToDraw,
-      );
+      // const [outline, drawBorder, border, touchBorder] = getBorder(optionsToUse);
+      // const tris = getTrisFillPolygon(
+      //   optionsToUse.offset, outline, optionsToUse.sides,
+      //   optionsToUse.sidesToDraw,
+      // );
 
-      element = this.generic(optionsToUse, {
-        points: tris, // $FlowFixMe
-        border,       // $FlowFixMe
-        touchBorder,
-      });
+      element = this.generic(optionsToUse, {});
       element.custom.update = (updateOptions) => {
         const o = joinObjects({}, optionsToUse, updateOptions);
-        const [updatedOutline, updatedBorder, updatedTouchBorder] = getBorder(o);
+        const [updatedPoints, updatedDrawBorder, updatedBorder, updatedTouchBorder] = getBorder(o);
 
         const updatedTris = getTrisFillPolygon(
-          o.offset, updatedOutline,
+          o.offset, updatedPoints,
           o.sides, o.sidesToDraw,
         );
-        element.drawingObject.change(
-          updatedTris, updatedBorder, updatedTouchBorder, updateOptions.holeBorder,
-        );
+        element.custom.updatePoints({
+          points: updatedTris,
+          copy: o.copy,
+        });
+        element.border = updatedBorder;
+        element.drawBorder = updatedDrawBorder;
+        element.touchBorder = updatedTouchBorder;
+        if (o.holeBorder != null) {
+          element.holeBorder = o.holeBorder;
+        }
       };
     } else {
       const [outline, border, touchBorder] = getBorder(optionsToUse);

@@ -11,11 +11,11 @@ import type { TypeColor } from '../../tools/types';
 
 export default function Generic(
   webgl: Array<WebGLInstance>,
-  vertices: Array<Point>,
+  // vertices: Array<Point>,
   // border: Array<Array<Point>> | 'points' | 'rect',
   // touchBorder: Array<Array<Point>> | 'rect' | 'border' | 'none',
   // holeBorder: Array<Array<Point>> | 'none',
-  drawType: 'triangles' | 'strip' | 'fan' | 'lines',
+  // drawType: 'triangles' | 'strip' | 'fan' | 'lines',
   color: TypeColor,
   transformOrLocation: Transform | Point,
   figureLimits: Rect,
@@ -24,21 +24,21 @@ export default function Generic(
   textureCoords: Rect = new Rect(0, 0, 1, 1),
   textureRepeat: boolean = false,
   onLoad: ?() => void = null,
-  copy: Array<CPY_Step>,
+  // copy: Array<CPY_Step>,
   name: string = '',
 ) {
   const generic = new VertexGeneric(
     webgl,
-    vertices,
+    // vertices,
     // border,
     // touchBorder,
     // holeBorder,
-    drawType,
+    // drawType,
     textureLocation,
     textureVertexSpace,
     textureCoords,
     textureRepeat,
-    copy,
+    // copy,
   );
   if (textureLocation) {
     generic.onLoad = onLoad;

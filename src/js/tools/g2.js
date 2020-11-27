@@ -5893,7 +5893,7 @@ function parseBorder(
   border: Array<TypeParsablePoint> | Array<Array<TypeParsablePoint>>
           | string | number,
 ) {
-  if (typeof parseBorder === 'string' || typeof parseBorder === 'number') {
+  if (typeof border === 'string' || typeof border === 'number') {
     return border;
   }
   if (isParsablePoint(border[0])) {
