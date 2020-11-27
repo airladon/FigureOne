@@ -619,7 +619,11 @@ class FigureElement {
 
   recorder: Recorder;
 
-
+  drawBorder: Array<Array<Point>>;
+  drawRect: Array<Point>;
+  border: Array<Array<Point>> | 'rect' | 'drawBorder' | number;
+  touchBorder: Array<Array<Point>> | 'border' | 'rect' | number;
+  holeBorder: Array<Array<Point>>;
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -688,6 +692,11 @@ class FigureElement {
     this.lastDrawTime = 0;
     this.cancelSetTransform = false;
     this.onAdd = null;
+    this.border = 'drawBorder';
+    this.touchBorder = 'border';
+    this.holdBorder = [[]];
+    this.drawBorder = [[]];
+    this.drawRect = [[]];
     // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
     //   this.pulseScaleNow(1, 2, 0, callback);
@@ -2902,6 +2911,39 @@ class FigureElement {
     return getPoint(point).transformBy(this.spaceTransformMatrix(fromSpace, toSpace));
   }
 
+
+  getBorderPoints(
+    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+  ) {
+    if (border === 'border') {
+      if (this.border === 'drawBorder') {
+        return this.drawBorder;
+      }
+      if (this.border === 'rect') {
+        return this.drawRect;
+      }
+      if (typeof this.border === 'number') {
+        return getBoundingRect(this.drawRect, this.border);
+      }
+      return this.border;
+    }
+    if (border === 'touchBorder') {
+      if (this.touchBorder === 'border') {
+        return this.getBorderPoints('border');
+      }
+      if (this.touchBorder === 'rect') {
+        const b = this.getBorderPoints('border');
+        return getBoundingRect(b);
+      }
+      if (typeof this.touchBorder === 'number') {
+        const b = this.getBorderPoints('border');
+        return getBoundingRect(b, this.touchBorder);
+      }
+      return this.touchBorder;
+    }
+    return this.holeBorder;
+  }
+
   // A DrawingObject has borders, touchBorders and and holeBorders
   //
   // A FigureElement's border is then the DrawingObject's border transformed by
@@ -2917,7 +2959,23 @@ class FigureElement {
     space: TypeSpace = 'local',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
-    return [[]];
+    const borderPoints = this.getBorderPoints(border);
+    if (space === 'draw') {
+      return borderPoints;
+    }
+    const transformedBorders = [];
+    let matrix;
+    if (Array.isArray(space)) {
+      matrix = m2.mul(space, this.getTransform().matrix());
+    } else {
+      matrix = this.spaceTransformMatrix('draw', space);
+    }
+    borderPoints.forEach((b) => {
+      transformedBorders.push(
+        b.map(p => p.transformBy(matrix)),
+      );
+    });
+    return transformedBorders;
   }
   /* eslint-enable class-methods-use-this, no-unused-vars */
 
@@ -3505,6 +3563,9 @@ class FigureElementPrimitive extends FigureElement {
   cannotTouchHole: boolean;
   pointsDefinition: Object;
   setPointsFromDefinition: ?(() => void);
+  border: Array<Array<Point>> | 'draw' | 'rect' | number;
+  touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'draw';
+  holeBorder: Array<Array<Point>> | 'draw';
   // +pulse: (?(mixed) => void) => void;
 
   /**
@@ -3541,6 +3602,9 @@ class FigureElementPrimitive extends FigureElement {
     this.type = 'primitive';
     this.pointsDefinition = {};
     this.setPointsFromDefinition = null;
+    this.border = 'draw';
+    this.touchBorder = 'draw';
+    this.holeBorder = 'draw';
     // this.setMoveBounds();
   }
 
@@ -3720,34 +3784,40 @@ class FigureElementPrimitive extends FigureElement {
   //   this.hide();
   // }
 
-  getBorder(
-    space: TypeSpace | Array<number> = 'local',
-    border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
-  ) {
-    let bordersToUse = this.drawingObject.border;
-    if (border === 'touchBorder') {
-      bordersToUse = this.drawingObject.touchBorder;
-    }
-    if (border === 'holeBorder') {
-      bordersToUse = this.drawingObject.hole;
-    }
-    if (space === 'draw') {
-      return bordersToUse;
-    }
-    const transformedBorders = [];
-    let matrix;
-    if (Array.isArray(space)) {
-      matrix = m2.mul(space, this.getTransform().matrix());
-    } else {
-      matrix = this.spaceTransformMatrix('draw', space);
-    }
-    bordersToUse.forEach((b) => {
-      transformedBorders.push(
-        b.map(p => p.transformBy(matrix)),
-      );
-    });
-    return transformedBorders;
-  }
+  // getBorder(
+  //   space: TypeSpace | Array<number> = 'local',
+  //   border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
+  // ) {
+  //   let bordersToUse = this.drawingObject.border;
+  //   // if (border === 'border') {
+  //   //   if (this.border !== 'draw') {
+  //   //     bordersToUse = this.border;
+  //   // } else if (border === 'touchBorder') {
+
+  //   // }
+  //   if (border === 'touchBorder') {
+  //     bordersToUse = this.drawingObject.touchBorder;
+  //   }
+  //   if (border === 'holeBorder') {
+  //     bordersToUse = this.drawingObject.hole;
+  //   }
+  //   if (space === 'draw') {
+  //     return bordersToUse;
+  //   }
+  //   const transformedBorders = [];
+  //   let matrix;
+  //   if (Array.isArray(space)) {
+  //     matrix = m2.mul(space, this.getTransform().matrix());
+  //   } else {
+  //     matrix = this.spaceTransformMatrix('draw', space);
+  //   }
+  //   bordersToUse.forEach((b) => {
+  //     transformedBorders.push(
+  //       b.map(p => p.transformBy(matrix)),
+  //     );
+  //   });
+  //   return transformedBorders;
+  // }
 
 
   setFont(font: OBJ_Font, index: number = 0) {

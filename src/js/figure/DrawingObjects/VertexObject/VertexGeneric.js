@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, getBoundingRect, Rect, // getPoints,
+  Point, Rect, // getPoints,
 } from '../../../tools/g2';
 // import type { TypeParsablePoint } from '../../../tools/g2';
 // import { joinObjects } from '../../../tools/tools';
@@ -18,9 +18,9 @@ class VertexGeneric extends VertexObject {
   constructor(
     webgl: Array<WebGLInstance>,
     vertices: Array<Point>,
-    border: Array<Array<Point>> | 'points' | 'rect',
-    touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none',
-    holeBorder: Array<Array<Point>> | 'none',
+    // border: Array<Array<Point>>,
+    // touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none',
+    // holeBorder: Array<Array<Point>> | 'none',
     drawType: 'triangles' | 'strip' | 'fan' | 'lines',
     textureLocation: string = '',
     textureVertexSpace: Rect = new Rect(-1, -1, 2, 2),
@@ -42,19 +42,19 @@ class VertexGeneric extends VertexObject {
       this.glPrimitive = this.gl[0].TRIANGLE_FAN;
     }
 
-    this.setupPoints(vertices, border, touchBorder, holeBorder, copy);
+    this.setupPoints(vertices, copy);
     this.setupTexture(textureLocation, textureVertexSpace, textureCoords, textureRepeat);
     this.setupBuffer();
   }
 
   change(
     vertices: Array<Point>,
-    border: Array<Array<Point>> | 'points' | 'rect' = 'rect',
-    touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none' = 'border',
-    holeBorder: Array<Array<Point>> | 'none' = 'none',
+    // border: Array<Array<Point>> | 'points' | 'rect' = 'rect',
+    // touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none' = 'border',
+    // holeBorder: Array<Array<Point>> | 'none' = 'none',
     copy: Array<CPY_Step> = [],
   ) {
-    this.setupPoints(vertices, border, touchBorder, holeBorder, copy);
+    this.setupPoints(vertices, copy);
     this.resetBuffer();
   }
 
@@ -84,9 +84,9 @@ class VertexGeneric extends VertexObject {
 
   setupPoints(
     vertices: Array<Point>,
-    border: Array<Array<Point>> | 'points' | 'rect' = 'rect',
-    touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none' = 'border',
-    holeBorder: Array<Array<Point>> | 'none' = 'none',
+    // border: Array<Array<Point>> | 'points' | 'rect' = 'rect',
+    // touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none' = 'border',
+    // holeBorder: Array<Array<Point>> | 'none' = 'none',
     copy: Array<CPY_Step> = [],
   ) {
     this.points = [];
@@ -96,37 +96,37 @@ class VertexGeneric extends VertexObject {
       this.points.push(v.x);
       this.points.push(v.y);
     });
-    let bounds;
-    if (border === 'rect' || touchBorder === 'rect') {
-      const boundingRect = getBoundingRect(newVerts);
-      bounds = [
-        new Point(boundingRect.left, boundingRect.bottom),
-        new Point(boundingRect.right, boundingRect.bottom),
-        new Point(boundingRect.right, boundingRect.top),
-        new Point(boundingRect.left, boundingRect.top),
-      ];
-    }
-    if (border === 'rect') {  // $FlowFixMe
-      this.border = [bounds];
-    } else if (border === 'points') {
-      this.border = [newVerts];
-    } else {
-      this.border = border;
-    }
-    if (touchBorder === 'none') {
-      this.touchBorder = [];
-    } else if (touchBorder === 'rect') {   // $FlowFixMe
-      this.touchBorder = [bounds];
-    } else if (touchBorder === 'border') {  // $FlowFixMe
-      this.touchBorder = this.border;
-    } else {
-      this.touchBorder = touchBorder;
-    }
-    if (holeBorder === 'none') {
-      this.hole = [];
-    } else {
-      this.hole = holeBorder;
-    }
+    // let bounds;
+    // if (border === 'rect' || touchBorder === 'rect') {
+    //   const boundingRect = getBoundingRect(newVerts);
+    //   bounds = [
+    //     new Point(boundingRect.left, boundingRect.bottom),
+    //     new Point(boundingRect.right, boundingRect.bottom),
+    //     new Point(boundingRect.right, boundingRect.top),
+    //     new Point(boundingRect.left, boundingRect.top),
+    //   ];
+    // }
+    // if (border === 'rect') {  // $FlowFixMe
+    //   this.border = [bounds];
+    // } else if (border === 'points') {
+    //   this.border = [newVerts];
+    // } else {
+    //   this.border = border;
+    // }
+    // if (touchBorder === 'none') {
+    //   this.touchBorder = [];
+    // } else if (touchBorder === 'rect') {   // $FlowFixMe
+    //   this.touchBorder = [bounds];
+    // } else if (touchBorder === 'border') {  // $FlowFixMe
+    //   this.touchBorder = this.border;
+    // } else {
+    //   this.touchBorder = touchBorder;
+    // }
+    // if (holeBorder === 'none') {
+    //   this.hole = [];
+    // } else {
+    //   this.hole = holeBorder;
+    // }
   }
 }
 

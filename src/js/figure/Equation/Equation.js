@@ -62,6 +62,8 @@ export type TypeEquationTextElement = string | {
     mods?: Object;
   } | FigureElementPrimitive | FigureElementCollection;
 
+/**
+ */
 export type TypeEquationElement = string
   | FigureElementPrimitive
   | FigureElementCollection
@@ -72,6 +74,8 @@ export type TypeEquationElement = string
 
 /**
  * Object with multiple equation elements.
+ *
+ * @property {TypeEquationElement} [_elementName]
  */
 export type TypeEquationElements = {
   [elementName: string]: TypeEquationElement;

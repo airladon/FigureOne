@@ -5864,16 +5864,54 @@ function getTriangleCenter(
   return new Point(Ox, Oy);
 }
 
-function parseBorder(borders: Array<Array<TypeParsablePoint>>) {
-  if (!Array.isArray(borders)) {
-    return borders;
+function isParsablePoint(value: any) {
+  if (
+    Array.isArray(value) && value.length === 2
+    && typeof value[0] === 'number'
+    && typeof value[1] === 'number'
+  ) {
+    return true;
   }
-  const borderOut: Array<Array<Point>> = [];
-  borders.forEach((b) => {
-    borderOut.push(b.map((bElement: TypeParsablePoint) => getPoint(bElement)));
-  });
-  return borderOut;
+  if (value instanceof Point) {
+    return true;
+  }
+  if (value.f1Type != null && value.f1Type === 'p') {
+    return true;
+  }
+  if (typeof value === 'string' && value.charAt(0) === '[') {
+    try {
+      newValue = JSON.parse(value);
+    } catch {
+      return false
+    }
+    return isParsablePoint(newValue);
+  }
+  return false;
 }
+
+function parseBorder(
+  border: Array<TypeParsablePoint> | Array<Array<TypeParsablePoint>>
+          | string | number,
+) {
+  if (typeof parseBorder === 'string' || typeof parseBorder === 'number') {
+    return border;
+  }
+  if (isParsablePoint(border[0])) {
+    return [border.map(p => getPoint(p))];
+  }
+  return border.map(p => getPoint(p));
+}
+
+// function parseBorder(borders: Array<Array<TypeParsablePoint>>) {
+//   if (!Array.isArray(borders)) {
+//     return borders;
+//   }
+//   const borderOut: Array<Array<Point>> = [];
+//   borders.forEach((b) => {
+//     borderOut.push(b.map((bElement: TypeParsablePoint) => getPoint(bElement)));
+//   });
+//   return borderOut;
+// }
 
 export {
   // point,

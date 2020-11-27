@@ -371,9 +371,9 @@ export type OBJ_Generic = {
   copy?: Array<CPY_Step | string> | CPY_Step,
   color?: TypeColor,
   texture?: OBJ_Texture,
-  border?: 'points' | Array<Array<TypeParsablePoint>> | 'rect',
-  touchBorder?: Array<Array<TypeParsablePoint>> | 'rect' | 'border' | 'none',
-  holeBorder?: 'none' | Array<Array<TypeParsablePoint>>,
+  border?: Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'rect',
+  touchBorder?: Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'rect' | 'border',
+  holeBorder?: Array<Array<TypeParsablePoint>>,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
   pulse?: number,
@@ -2081,7 +2081,7 @@ export default class FigurePrimitives {
       points: [],
       border: 'rect',
       touchBorder: 'border',
-      holeBorder: 'none',
+      holeBorder: [[]],
       drawType: 'triangles',
       color: this.defaultColor,
       position: null,
@@ -2104,9 +2104,9 @@ export default class FigurePrimitives {
       options.transform.updateTranslation(p);
     }
     const parsedPoints = options.points.map(p => getPoint(p));
-    const parsedBorder = parseBorder(options.border);
-    const parsedBorderHoles = parseBorder(options.holeBorder);
-    const parsedTouchBorder = parseBorder(options.touchBorder);
+    // const parsedBorder = parseBorder(options.border);
+    // const parsedHoleBorder = parseBorder(options.holeBorder);
+    // const parsedTouchBorder = parseBorder(options.touchBorder);
 
     let copyToUse = options.copy;
     if (options.copy != null && !Array.isArray(options.copy)) {
@@ -2119,9 +2119,9 @@ export default class FigurePrimitives {
     const element = Generic(
       this.webgl,
       parsedPoints,
-      parsedBorder,
-      parsedTouchBorder,
-      parsedBorderHoles,
+      // parsedBorder,
+      // parsedTouchBorder,
+      // parsedBorderHoles,
       options.drawType,
       options.color,
       options.transform,
@@ -2134,10 +2134,13 @@ export default class FigurePrimitives {
       copyToUse,
       options.name,
     );
+    element.border = parseBorder(options.border);
+    element.touchBorder = parseBorder(options.holeBorder);
+    element.holeBorder = parseBorder(options.touchBorder);
 
     element.custom.update = function update(
       points: Array<TypeParsablePoint>,
-      borderIn: Array<Array<TypeParsablePoint>> | 'points' | 'rect' = 'rect',
+      borderIn: Array<Array<TypeParsablePoint>> | 'rect' = 'rect',
       touchBorderIn: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | 'none' = 'border',
       holeBorderIn: Array<Array<TypeParsablePoint>> | 'none' = 'none',
       copy: Array<CPY_Step> = [],
@@ -2147,8 +2150,11 @@ export default class FigurePrimitives {
       const tB = Array.isArray(touchBorderIn) ? parseBorder(touchBorderIn) : touchBorderIn;
       const hB = Array.isArray(holeBorderIn) ? parseBorder(holeBorderIn) : holeBorderIn;
       element.drawingObject.change(
-        pp, b, tB, hB, copy,
+        pp, copy,
       );
+      element.border = parseBorder(borderIn);
+      element.touchBorder = parseBorder(touchBorderIn);
+      element.holeBorder = parseBorder(holeBorderIn);
     };
 
     setupPulse(element, options);

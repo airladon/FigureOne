@@ -1,5 +1,5 @@
-// const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
-const figure = new Fig.Figure({ limits: [-3, -2.25, 6, 4.5], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+// const figure = new Fig.Figure({ limits: [-3, -2.25, 6, 4.5], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 
 // // const figure = new Fig.Figure({ limits: [-8, -8, 16, 16], color: [1, 0, 0, 1]});
 // // figure.add([
@@ -38,36 +38,139 @@ const figure = new Fig.Figure({ limits: [-3, -2.25, 6, 4.5], color: [1, 0, 0, 1]
 // // ]);
 // const figure = new Fig.Figure();
 
-
-
-// Movable angle
-figure.add({
-  name: 'a',
+const p = [[1.2, 0.3], [1, 1], [0.2, 1], [0.6, 0.5], [0, 0], [1, 0]];
+const angleCurve = (p1, p2, p3, name, label, alpha = 1, fill = false) => ({
+  name,
   method: 'collections.angle',
   options: {
-    angle: Math.PI / 4 * 3,
+    p1,
+    p2,
+    p3,
     label: {
-      location: 'outside',
-      orientation: 'horizontal',  // Label should be horizontal
-      offset: 0.1,    // Offset of label from curve
-      update: true,   // Auto update angle to be horizontal as rotation changes
-      sides: 200,     // Curve is a polygon with 200 sides, so looks circular
+      offset: 0.01,
+      text: label,
     },
-    curve: {          // Curve of angle
-      radius: 0.3,
+    curve: {
+      width: 0.01,
+      radius: 0.2,
+      fill,
     },
-    corner: {         // Straight lines of angle
-      width: 0.02,
-      length: 1,
-      color: [0, 0.5, 1, 1],
-    },
-  }
+    color: [1, 0, 0, alpha],
+  },
 });
+// const angleFill = (p1, p2, p3, name, label) => ({
+//   name,
+//   method: 'collections.angle',
+//   options: {
+//     p1,
+//     p2,
+//     p3,
+//     label: {
+//       offset: 0.01,
+//       text: label,
+//     },
+//     curve: {
+//       width: 0.01,
+//       radius: 0.2,
+//     },
+//   },
+// })
+figure.add([
+  {
+    name: 'shape',
+    method: 'collections.collection',
+    elements: [
+      {
+        name: 'newShapeFill',
+        method: 'generic',
+        options: {
+          points: p,
+          drawType: 'fan',
+          color: [1, 0, 0, 0.5],
+        },
+        mods: { isShown: false },
+      },
+      {
+        name: 'oldShapeFill',
+        method: 'generic',
+        options: {
+          points: [p[0], p[1], p[2], p[4], p[5]],
+          drawType: 'fan',
+          color: [0, 0, 1, 0.5],
+        },
+        mods: { isShown: false },
+      },
+      angleCurve(p[4], p[2], p[1], 'angleAf', '', 0.7, true),
+      angleCurve(p[5], p[4], p[2], 'angleBf', '', 0.7, true),
+      angleCurve(p[4], p[3], p[2], 'angleCf', '', 0.7, true),
+      angleCurve(p[4], p[2], p[3], 'angleA', 'a'),
+      angleCurve(p[3], p[4], p[2], 'angleB', 'b'),
+      angleCurve(p[2], p[3], p[4], 'angleC', 'c'),
+      {
+        name: 'newShape',
+        method: 'primitives.polyline',
+        options: {
+          points: p,
+          close: true,
+          width: 0.015,
+          cornerStyle: 'fill',
+        },
+      },
+      {
+        name: 'line',
+        method: 'primitives.line',
+        options: {
+          p1: p[2],
+          p2: p[4],
+          dash: [0.05, 0.02],
+        },
+      },
+    ],
+    options: {
+      position: [-0.5, -0.5],
+    },
+  },
+  {
+    name: 'eqn',
+    method: 'collections.equation',
+    options: {
+      elements: {
+        // old: 'old shape',
+        // new: 'new shape',
+        // totAngle_1: 'total angle',
+        // totAngle_2: 'total angle',
+        a: { mods: { touchBorder: 0.2, isTouchable: true } },
+        b: { mods: { touchBorder: 0.2, isTouchable: true } },
+        c: { mods: { touchBorder: 0.2, isTouchable: true } },
+        equals: '  =  ',
+        _360: '360\u00b0',
+        minus1: '  \u2212  ',
+        minus2: '  \u2212  ',
+        minus3: '  \u2212  ',
+        plus: '  +  ',
+        box1: {
+          symbol: 'box',
+          fill: true,
+          color: [0.5, 0.5, 0.5, 0.7],
+          mods: { isTouchable: true },
+        },
+        box2: { symbol: 'box', fill: true, color: [0.5, 0.5, 0.5, 0.7] },
+      },
+      phrases: {
+        ta_old: { box: [{ bottomComment: ['total angle_1', 'old shape'] }, 'box1', false, 0.1] },
+        ta_new: { box: [{ bottomComment: ['total angle_2', 'new shape'] }, 'box2', false, 0.1] },
+      },
+      forms: {
+        0: ['ta_new', 'equals', 'ta_old', 'minus1', 'a', 'minus2', 'b', 'minus3', 'c', 'plus', '_360'],
+      },
+      position: [-1, -1],
+    },
+  },
+]);
 
-// Angle collection has a specific setMovable function that allows for
-// customizing how each arm of the angle changes the angle
-figure.elements._a.setMovable({
-  startArm: 'rotation',
-  endArm: 'angle',
-  movePadRadius: 0.3,
-});
+figure.getElement('eqn').showForm('0');
+figure.getElement('eqn.a').onClick = () => console.log('a');
+figure.getElement('eqn.b').onClick = () => console.log('b');
+figure.getElement('eqn.c').onClick = () => console.log('c');
+figure.getElement('eqn.box1').onClick = () => console.log('box1');
+console.log(figure.getElement('eqn.box1'))

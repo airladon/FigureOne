@@ -67,8 +67,8 @@ class DrawingObject {
   // numPoints: number;           // Number of primative vertices
   location: Point;
   border: Array<Array<Point>>; // Border vertices
-  touchBorder: Array<Array<Point>>;
-  hole: Array<Array<Point>>;  // Border of any holes inside of main border
+  // touchBorder: Array<Array<Point>>;
+  // hole: Array<Array<Point>>;  // Border of any holes inside of main border
   // +change: (any, any, any) => void;
   // onLoad: Function | null;   // Only used for drawing objects with asynchronous
   //                            loading (like textures)
@@ -78,9 +78,9 @@ class DrawingObject {
   constructor() {
     // this.numPoints = 0;
     this.location = new Point(0, 0);
-    this.border = [[]];
-    this.touchBorder = [[]];
-    this.hole = [[]];
+    // this.border = [[]];
+    // this.touchBorder = [[]];
+    // this.hole = [[]];
     // this.onLoad = null;
     this.type = 'drawingObject';
     // this.state = 'loading';
@@ -176,9 +176,9 @@ class DrawingObject {
   /* eslint-disable no-unused-vars, class-methods-use-this */
   change(
     drawingPrimitive: any,
-    border: Array<Array<Point>> | 'points' | 'rect',
-    touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none',
-    holes: Array<Array<Point>> | 'none',
+    // border: Array<Array<Point>> | 'points' | 'rect',
+    // touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none',
+    // holes: Array<Array<Point>> | 'none',
     copy: Object | Array<Object>,
   ) {
   }
