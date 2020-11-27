@@ -188,3 +188,14 @@ figure.getElement('g').custom.updatePoints({
   // copy: { along: 'x', num: 2, step: 0.5 },
   drawType: 'strip',
 });
+
+figure.add({
+  name: 'pl',
+  method: 'polyline',
+  options: {
+    points: [[0, 0], [-1, -1], [0, -1]],
+  },
+});
+figure.getElement('pl').custom.updatePoints({
+  points: [[0, 0], [-1, -1], [0, -2]],
+})

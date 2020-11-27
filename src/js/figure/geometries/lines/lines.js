@@ -39,7 +39,7 @@ function lineSegmentsToPoints(
   lineSegments: Array<Array<Line>>,
   linePrimitives: boolean,
   borderIs: 'negative' | 'positive' | 'line' | Array<Array<Point>> = 'line',
-  holeIs: 'negative' | 'positive' | 'none' | Array<Array<Point>> = 'none',
+  holeIs: 'negative' | 'positive' | Array<Array<Point>> = [[]],
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   const tris = [];
   let border = [];
@@ -351,7 +351,7 @@ function makeThickLine(
   linePrimitives: boolean = false,
   lineNum: number = 2,
   borderIs: 'negative' | 'positive' | 'line' | Array<Array<Point>> = 'line',
-  holeIs: 'negative' | 'positive' | 'none' | Array<Array<Point>> = 'none',
+  holeIs: 'negative' | 'positive' | Array<Array<Point>> = [[]],
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   const widthToUse = width;
   // if (widthIsIn === 'mid') {
@@ -668,9 +668,9 @@ function makePolyLine(
   dash: TypeDash = [],
   linePrimitives: boolean = false,
   lineNum: number = 2,
-  borderIs: 'positive' | 'negative' | 'line' | Array<Array<Point>>,
+  borderIs: 'positive' | 'negative' | 'line' | Array<Array<Point>> = 'line',
   touchBorderBuffer: number = 0,
-  holeIs: 'positive' | 'negative' | 'none' | Array<Array<Point>>,
+  holeIs: 'positive' | 'negative' | Array<Array<Point>> = [[]],
   arrowIn: null | TypeArrowHead | {
     start: OBJ_Arrow | TypeArrowHead,
     end: OBJ_Arrow | TypeArrowHead,

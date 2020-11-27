@@ -620,9 +620,12 @@ class FigureElement {
   recorder: Recorder;
 
   drawBorder: Array<Array<Point>>;
+  drawBorderBuffer: Array<Array<Point>>;
   drawRect: Array<Point>;
-  border: Array<Array<Point>> | 'rect' | 'drawBorder' | number;
-  touchBorder: Array<Array<Point>> | 'border' | 'rect' | number;
+  // drawBorder is the points in drawBorder
+  // 'rect'
+  border: Array<Array<Point>> | 'draw' | 'buffer';
+  touchBorder: Array<Array<Point>> | 'border' | 'rect' | number | 'buffer';
   holeBorder: Array<Array<Point>>;
   // scenarioSet: {
   //   quiz1: [
@@ -692,11 +695,12 @@ class FigureElement {
     this.lastDrawTime = 0;
     this.cancelSetTransform = false;
     this.onAdd = null;
-    this.border = 'drawBorder';
+    this.border = 'draw';
     this.touchBorder = 'border';
-    this.holdBorder = [[]];
+    this.holeBorder = [[]];
     this.drawBorder = [[]];
-    this.drawRect = [[]];
+    this.drawBorderBuffer = [[]];
+    this.drawRect = [];
     // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
     //   this.pulseScaleNow(1, 2, 0, callback);
@@ -2916,7 +2920,13 @@ class FigureElement {
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
     if (border === 'border') {
-      if (this.border === 'drawBorder') {
+      if (this.border === 'draw') {
+        return this.drawBorder;
+      }
+      if (this.border === 'buffer') {
+        if (Array.isArray(this.drawBorderBuffer)) {
+          return this.drawBorderBuffer;
+        }
         return this.drawBorder;
       }
       if (this.border === 'rect') {
@@ -2929,6 +2939,12 @@ class FigureElement {
     }
     if (border === 'touchBorder') {
       if (this.touchBorder === 'border') {
+        return this.getBorderPoints('border');
+      }
+      if (this.touchBorder === 'buffer') {
+        if (Array.isArray(this.drawBorderBuffer)) {
+          return this.drawBorderBuffer;
+        }
         return this.getBorderPoints('border');
       }
       if (this.touchBorder === 'rect') {
