@@ -26,44 +26,6 @@ describe('Generic', () => {
           drawBorderBuffer: [[-0.1, -0.1], [1.1, -0.1], [-0.1, 1.1]],
         },
       },
-      // customBorder: {
-      //   options: {
-      //     points: [[0, 0], [1, 0], [1, 1], [1, 0]],
-      //   },
-      // },
-      // pointsBorder: {
-      //   options: {
-      //     points: [[0, 0], [1, 0], [0, 1]],
-      //     border: 'points',
-      //   },
-      // },
-      // pointsBorderRectTouchBorder: {
-      //   options: {
-      //     points: [[0, 0], [1, 0], [0, 1]],
-      //     border: 'points',
-      //     touchBorder: 'rect',
-      //   },
-      // },
-      // noTouchBorder: {
-      //   options: {
-      //     points: [[0, 0], [1, 0], [0, 1]],
-      //     border: 'points',
-      //     touchBorder: 'none',
-      //   },
-      // },
-      // customBorder: {
-      //   options: {
-      //     points: [[0, 0], [1, 0], [0, 1]],
-      //     border: [[[0, 0], [0.5, 0], [0, 0.5]]],
-      //   },
-      // },
-      // hole: {
-      //   options: {
-      //     points: [[0, 0], [1, 0], [0, 1]],
-      //     border: 'points',
-      //     holeBorder: [[[0, 0], [0.5, 0], [0, 0.5]]],
-      //   },
-      // },
       color: {
         options: {
           points: [[0, 0], [1, 0], [0, 1]],
@@ -121,7 +83,7 @@ describe('Generic', () => {
     ]]);
     expect(g.getBorder('draw', 'holeBorder')).toEqual([[]]);
   });
-  describe.only('Different Borders', () => {
+  describe('Different Borders', () => {
     let tri;
     let rect;
     let buffer;
@@ -206,102 +168,6 @@ describe('Generic', () => {
       expect(round(g.getBorder('draw', 'holeBorder')[0])).toEqual([new Point(0, 0)]);
     });
   });
-  // test('Points Border', () => {
-  //   addElement('pointsBorder');
-  //   expect(gd.points).toEqual([
-  //     0, 0,
-  //     1, 0,
-  //     0, 1,
-  //   ]);
-  //   expect(gd.border).toEqual([[
-  //     new Point(0, 0),
-  //     new Point(1, 0),
-  //     new Point(0, 1),
-  //   ]]);
-  //   expect(gd.touchBorder).toEqual([[
-  //     new Point(0, 0),
-  //     new Point(1, 0),
-  //     new Point(0, 1),
-  //   ]]);
-  //   expect(gd.hole).toEqual([]);
-  // });
-  // test('Points border, rect touch border', () => {
-  //   addElement('pointsBorderRectTouchBorder');
-  //   expect(gd.points).toEqual([
-  //     0, 0,
-  //     1, 0,
-  //     0, 1,
-  //   ]);
-  //   expect(gd.border).toEqual([[
-  //     new Point(0, 0),
-  //     new Point(1, 0),
-  //     new Point(0, 1),
-  //   ]]);
-  //   expect(gd.touchBorder).toEqual([[
-  //     new Point(0, 0),
-  //     new Point(1, 0),
-  //     new Point(1, 1),
-  //     new Point(0, 1),
-  //   ]]);
-  //   expect(gd.hole).toEqual([]);
-  // });
-  // test('No touch border', () => {
-  //   addElement('noTouchBorder');
-  //   expect(gd.points).toEqual([
-  //     0, 0,
-  //     1, 0,
-  //     0, 1,
-  //   ]);
-  //   expect(gd.border).toEqual([[
-  //     new Point(0, 0),
-  //     new Point(1, 0),
-  //     new Point(0, 1),
-  //   ]]);
-  //   expect(gd.touchBorder).toEqual([]);
-  //   expect(gd.hole).toEqual([]);
-  // });
-  // test('Custom touch border', () => {
-  //   addElement('customBorder');
-  //   expect(gd.points).toEqual([
-  //     0, 0,
-  //     1, 0,
-  //     0, 1,
-  //   ]);
-  //   expect(gd.border).toEqual([[
-  //     new Point(0, 0),
-  //     new Point(0.5, 0),
-  //     new Point(0, 0.5),
-  //   ]]);
-  //   expect(gd.touchBorder).toEqual([[
-  //     new Point(0, 0),
-  //     new Point(0.5, 0),
-  //     new Point(0, 0.5),
-  //   ]]);
-  //   expect(gd.hole).toEqual([]);
-  // });
-  // test('Hole border', () => {
-  //   addElement('hole');
-  //   expect(gd.points).toEqual([
-  //     0, 0,
-  //     1, 0,
-  //     0, 1,
-  //   ]);
-  //   expect(gd.border).toEqual([[
-  //     new Point(0, 0),
-  //     new Point(1, 0),
-  //     new Point(0, 1),
-  //   ]]);
-  //   expect(gd.touchBorder).toEqual([[
-  //     new Point(0, 0),
-  //     new Point(1, 0),
-  //     new Point(0, 1),
-  //   ]]);
-  //   expect(gd.hole).toEqual([[
-  //     new Point(0, 0),
-  //     new Point(0.5, 0),
-  //     new Point(0, 0.5),
-  //   ]]);
-  // });
   test('Color', () => {
     addElement('color');
     expect(g.color).toEqual([0, 0, 1, 1]);
@@ -314,48 +180,4 @@ describe('Generic', () => {
     addElement('position');
     expect(g.transform.t()).toEqual(new Point(2, 3));
   });
-  // test('Update', () => {
-  //   addElement('update');
-  //   expect(gd.points).toEqual([
-  //     0, 0,
-  //     1, 0,
-  //     0, 1,
-  //   ]);
-  //   expect(gd.border).toEqual([[
-  //     new Point(0, 0),
-  //     new Point(1, 0),
-  //     new Point(0, 1),
-  //   ]]);
-  //   expect(gd.touchBorder).toEqual([[
-  //     new Point(0, 0),
-  //     new Point(1, 0),
-  //     new Point(0, 1),
-  //   ]]);
-  //   expect(gd.hole).toEqual([]);
-
-  //   g.custom.update(
-  //     [[1, 1], [2, 1], [1, 2]],
-  //     'points',
-  //     'rect',
-  //     'none',
-  //   );
-
-  //   expect(gd.points).toEqual([
-  //     1, 1,
-  //     2, 1,
-  //     1, 2,
-  //   ]);
-  //   expect(gd.border).toEqual([[
-  //     new Point(1, 1),
-  //     new Point(2, 1),
-  //     new Point(1, 2),
-  //   ]]);
-  //   expect(gd.touchBorder).toEqual([[
-  //     new Point(1, 1),
-  //     new Point(2, 1),
-  //     new Point(2, 2),
-  //     new Point(1, 2),
-  //   ]]);
-  //   expect(gd.hole).toEqual([]);
-  // });
 });
