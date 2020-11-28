@@ -175,12 +175,37 @@ const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], l
 // figure.getElement('eqn.box1').onClick = () => console.log('box1');
 // console.log(figure.getElement('eqn.box1'))
 
+// figure.add({
+//   name: 'g',
+//   method: 'generic',
+//   options: {
+//     points: [[0, 0], [1, 0], [1, 1]],
+//     drawBorder: [[0, 0], [1, 0], [1, 1]],
+//   },
+//   mods: {
+//     isTouchable: true,
+//     onClick: () => console.log('touched'),
+//     touchBorder: 'buffer',
+//   },
+// });
+// const g = figure.getElement('g');
+// console.log(g)
+// console.log(figure.getElement('g'))
+// figure.getElement('g').custom.updatePoints({
+//   points: [[0, -1], [1, -1], [1, 0], [2, 0]],
+//   drawBorder: [[0, -1], [1, -1], [2, 0], [1, 0]],
+//   // copy: { along: 'x', num: 2, step: 0.5 },
+//   drawType: 'strip',
+// });
+
 figure.add({
-  name: 'g',
-  method: 'generic',
+  name: 'pl',
+  method: 'polyline',
   options: {
-    points: [[0, 0], [1, 0], [1, 1]],
-    drawBorder: [[0, 0], [1, 0], [1, 1]],
+    points: [[0, 0], [-1, -1], [0, -1]],
+    color: [0, 0, 1, 0.5],
+    width: 0.1,
+    drawBorderBuffer: 0.1,
   },
   mods: {
     isTouchable: true,
@@ -188,25 +213,9 @@ figure.add({
     touchBorder: 'buffer',
   },
 });
-const g = figure.getElement('g');
-console.log(g)
-console.log(figure.getElement('g'))
-figure.getElement('g').custom.updatePoints({
-  points: [[0, -1], [1, -1], [1, 0], [2, 0]],
-  drawBorder: [[0, -1], [1, -1], [2, 0], [1, 0]],
-  // copy: { along: 'x', num: 2, step: 0.5 },
-  drawType: 'strip',
+console.log(figure.getElement('pl'))
+figure.getElement('pl').custom.updatePoints({
+  points: [[0, 0], [1, 1], [0, 1]],
+  width: 0.1,
+  drawBorderBuffer: 0,
 });
-
-// figure.add({
-//   name: 'pl',
-//   method: 'polyline',
-//   options: {
-//     points: [[0, 0], [-1, -1], [0, -1]],
-//     color: [0, 0, 1, 0.5],
-//   },
-// });
-// figure.getElement('pl').custom.updatePoints({
-//   points: [[0, 0], [-1, -1], [0, -2]],
-//   width: 0.1,
-// });

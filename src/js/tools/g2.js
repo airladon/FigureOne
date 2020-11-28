@@ -5899,7 +5899,7 @@ function parseBorder(
   if (isParsablePoint(border[0])) {
     return [border.map(p => getPoint(p))];
   }
-  return border.map(p => getPoint(p));
+  return border.map(b => b.map(p => getPoint(p)));
 }
 
 // function parseBorder(borders: Array<Array<TypeParsablePoint>>) {
