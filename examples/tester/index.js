@@ -185,6 +185,7 @@ figure.add({
   mods: {
     isTouchable: true,
     onClick: () => console.log('touched'),
+    touchBorder: 'buffer',
   },
 });
 const g = figure.getElement('g');
@@ -192,6 +193,7 @@ console.log(g)
 console.log(figure.getElement('g'))
 figure.getElement('g').custom.updatePoints({
   points: [[0, -1], [1, -1], [1, 0], [2, 0]],
+  drawBorder: [[0, -1], [1, -1], [2, 0], [1, 0]],
   // copy: { along: 'x', num: 2, step: 0.5 },
   drawType: 'strip',
 });

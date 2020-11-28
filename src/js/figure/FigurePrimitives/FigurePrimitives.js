@@ -373,8 +373,8 @@ export type OBJ_Generic = {
   texture?: OBJ_Texture,
   drawBorder?: Array<Array<TypeParsablePoint>>,
   drawBorderBuffer?: Array<Array<TypeParsablePoint>>,
-  border?: Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'buffer' | 'draw',
-  touchBorder?: Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'rect' | 'border' | 'buffer' | number,
+  border?: Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'buffer' | 'draw' | 'rect' | number,
+  touchBorder?: Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'rect' | 'border' | 'buffer' | number | 'draw',
   holeBorder?: Array<Array<TypeParsablePoint>>,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
@@ -2135,7 +2135,7 @@ export default class FigurePrimitives {
       }
       if (o.drawBorderBuffer != null) {
         element.drawBorderBuffer = parseBorder(o.drawBorderBuffer);
-      }
+      } else element.drawBorderBuffer = element.drawBorder;
       if (o.border != null) {
         element.border = parseBorder(o.border);
       }
@@ -2161,7 +2161,7 @@ export default class FigurePrimitives {
     const options = joinObjects({}, ...optionsIn);
     const element = this.generic({
       transform: new Transform('polyline').standard(),
-      border: 'drawBorder',
+      border: 'draw',
       touchBorder: 'border',
       holeBorder: [[]],
     }, ...optionsIn);

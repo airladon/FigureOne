@@ -618,22 +618,6 @@ class FigureElement {
   dependantTransform: boolean;
 
   recorder: Recorder;
-
-  drawBorder: Array<Array<Point>>;
-  drawBorderBuffer: Array<Array<Point>>;
-  drawRect: Array<Point>;
-  // drawBorder is the points in drawBorder
-  // 'rect'
-
-  // draw: use drawBorder points
-  // buffer: use drawBorderBuffer points
-  border: Array<Array<Point>> | 'draw' | 'buffer' | 'rect' | number;
-  // border: use whatever border uses
-  // buffer: use drawBorderBuffer points
-  // rect: take border, make it a rect
-  // number: take border, make it a rect, add a buffer
-  touchBorder: Array<Array<Point>> | 'border' | 'draw' | 'buffer' | 'rect' | number;
-  holeBorder: Array<Array<Point>>;
   // scenarioSet: {
   //   quiz1: [
   //     { element: xyz, position: (), scale: (), rotation: (), length: () }
@@ -2922,46 +2906,11 @@ class FigureElement {
     return getPoint(point).transformBy(this.spaceTransformMatrix(fromSpace, toSpace));
   }
 
-
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
   getBorderPoints(
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ): Array<Array<Point>> {
-    if (border === 'border') {
-      if (this.border === 'draw') {
-        return this.drawBorder;
-      }
-      if (this.border === 'buffer') {
-        return this.drawBorderBuffer;
-      }
-      if (this.border === 'rect') {
-        return getBoundingBorder(this.drawBorder);
-      }
-      if (typeof this.border === 'number') {
-        return getBoundingBorder(this.drawBorder, this.border);
-      }
-      return this.border;
-    }
-    if (border === 'touchBorder') {
-      if (this.touchBorder === 'draw') {
-        return this.drawBorder;
-      }
-      if (this.touchBorder === 'buffer') {
-        return this.drawBorderBuffer;
-      }
-      if (this.touchBorder === 'border') {
-        return this.getBorderPoints('border');
-      }
-      if (this.touchBorder === 'rect') {
-        const b = this.getBorderPoints('border');
-        return getBoundingBorder(b);
-      }
-      if (typeof this.touchBorder === 'number') {
-        const b = this.getBorderPoints('border');
-        return getBoundingBorder(b, this.touchBorder);
-      }
-      return this.touchBorder;
-    }
-    return this.holeBorder;
+    return [[]];
   }
 
   // A DrawingObject has borders, touchBorders and and holeBorders
@@ -3559,6 +3508,16 @@ class FigureElement {
   }
 }
 
+
+/*
+..........########..########..####.##.....##
+..........##.....##.##.....##..##..###...###
+..........##.....##.##.....##..##..####.####
+..........########..########...##..##.###.##
+..........##........##...##....##..##.....##
+..........##........##....##...##..##.....##
+..........##........##.....##.####.##.....##
+*/
 // ***************************************************************
 // Geometry Object
 // ***************************************************************
@@ -3586,6 +3545,8 @@ class FigureElementPrimitive extends FigureElement {
   border: Array<Array<Point>> | 'draw' | 'buffer' | 'rect' | number;
   touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'draw' | 'buffer';
   holeBorder: Array<Array<Point>>;
+  drawBorder: Array<Array<Point>>;
+  drawBorderBuffer: Array<Array<Point>>;
   // +pulse: (?(mixed) => void) => void;
 
   /**
@@ -3852,6 +3813,47 @@ class FigureElementPrimitive extends FigureElement {
     }
   }
 
+  getBorderPoints(
+    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+  ): Array<Array<Point>> {
+    if (border === 'border') {
+      if (this.border === 'draw') {
+        return this.drawBorder;
+      }
+      if (this.border === 'buffer') {
+        return this.drawBorderBuffer;
+      }
+      if (this.border === 'rect') {
+        return [getBoundingBorder(this.drawBorder)];
+      }
+      if (typeof this.border === 'number') {
+        return [getBoundingBorder(this.drawBorder, this.border)];
+      }
+      return this.border;
+    }
+    if (border === 'touchBorder') {
+      if (this.touchBorder === 'draw') {
+        return this.drawBorder;
+      }
+      if (this.touchBorder === 'buffer') {
+        return this.drawBorderBuffer;
+      }
+      if (this.touchBorder === 'border') {
+        return this.getBorderPoints('border');
+      }
+      if (this.touchBorder === 'rect') {
+        const b = this.getBorderPoints('border');
+        return [getBoundingBorder(b)];
+      }
+      if (typeof this.touchBorder === 'number') {
+        const b = this.getBorderPoints('border');
+        return [getBoundingBorder(b, this.touchBorder)];
+      }
+      return this.touchBorder;
+    }
+    return this.holeBorder;
+  }
+
   setupDraw(now: number = 0) {
     if (this.isShown) {
       this.lastDrawTime = now;
@@ -3999,6 +4001,15 @@ class FigureElementPrimitive extends FigureElement {
   }
 }
 
+/*
+...........######...#######..##.......##......
+..........##....##.##.....##.##.......##......
+..........##.......##.....##.##.......##......
+..........##.......##.....##.##.......##......
+..........##.......##.....##.##.......##......
+..........##....##.##.....##.##.......##......
+...........######...#######..########.########
+*/
 // ***************************************************************
 // Collection of Geometry Objects or Collections
 // ***************************************************************
@@ -4992,24 +5003,11 @@ class FigureElementCollection extends FigureElement {
     this.checkMoveBounds();
   }
 
-  getBorder(
-    space: TypeSpace | Array<number> = 'local',
-    border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
-    children: ?Array<string | FigureElement> = null,
+  getBorderPoints(
+    border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
+    children: Array<string | FigureElement> | null = null,
     shownOnly: boolean = true,
-  ) {
-    if (shownOnly && this.isShown === false) {
-      return [[]];
-    }
-    // const bordersToUse: Array<Array<Point>> = [[]];
-    // const transformedBorders = [];
-    let matrix;
-    if (Array.isArray(space)) {
-      matrix = m2.mul(space, this.getTransform().matrix());
-    } else {
-      matrix = this.spaceTransformMatrix('draw', space);
-    }
-
+  ): Array<Array<Point>> {
     const getBorderFromChildren = (b) => {
       const childrenBorder = [];
       let childrenToUse = children;
@@ -5032,38 +5030,60 @@ class FigureElementCollection extends FigureElement {
       });
       return childrenBorder;
     };
-    if (
-      (border === 'border' && this.border === 'children')
-      || (border === 'touchBorder' && this.touchBorder === 'children')
-      || (border === 'holeBorder' && this.holeBorder === 'children')
-    ) {
-      return getBorderFromChildren(border);
-    }
 
     if (border === 'border') {
-      if (this.border === 'rect') { // $FlowFixMe
+      if (this.border === 'children') {
+        return getBorderFromChildren('border');
+      }
+      if (this.border === 'rect') {
         return [getBoundingBorder(getBorderFromChildren('border'))];
       }
-      if (typeof this.border === 'number') { // $FlowFixMe
+      if (typeof this.border === 'number') {
         return [getBoundingBorder(getBorderFromChildren('border'), this.border)];
-      } // $FlowFixMe
-      return this.border.map(b => b.map(p => getPoint(p).transformBy(matrix)));
+      }
+      return this.border;
+    }
+    if (border === 'touchBorder') {
+      if (this.touchBorder === 'border') {
+        return this.getBorderPoints('border', children, shownOnly);
+      }
+      if (this.touchBorder === 'children') {
+        return getBorderFromChildren('touchBorder');
+      }
+      if (this.touchBorder === 'rect') {
+        return [getBoundingBorder(getBorderFromChildren('touchBorder'))];
+      }
+      if (typeof this.touchBorder === 'number') {
+        return [getBoundingBorder(getBorderFromChildren('touchBorder'), this.touchBorder)];
+      }
+      return this.touchBorder;
+    }
+    if (this.holeBorder === 'children') {
+      return getBorderFromChildren('holeBorder');
+    }
+    return this.holeBorder;
+  }
+
+  getBorder(
+    space: TypeSpace | Array<number> = 'local',
+    border: 'touchBorder' | 'border' | 'holeBorder' = 'border',
+    children: ?Array<string | FigureElement> = null,
+    shownOnly: boolean = true,
+  ) {
+    if (shownOnly && this.isShown === false) {
+      return [[]];
+    }
+    // const bordersToUse: Array<Array<Point>> = [[]];
+    // const transformedBorders = [];
+    let matrix;
+    if (Array.isArray(space)) {
+      matrix = m2.mul(space, this.getTransform().matrix());
+    } else {
+      matrix = this.spaceTransformMatrix('draw', space);
     }
 
-    if (border === 'touchBorder') {
-      if (this.touchBorder === 'rect') { // $FlowFixMe
-        return [getBoundingBorder(getBorderFromChildren('border'))];
-      }
-      if (typeof this.touchBorder === 'number') { // $FlowFixMe
-        return [getBoundingBorder(getBorderFromChildren('border'), this.touchBorder)];
-      }
-      if (this.touchBorder === 'border') {
-        return this.getBorder(space, 'border', children, shownOnly);
-      } // $FlowFixMe
-      return this.touchBorder.map(b => b.map(p => getPoint(p).transformBy(matrix)));
-    }
-    // $FlowFixMe
-    return this.holeBorder.map(b => b.map(p => getPoint(p).transformBy(matrix)));
+    const borderPoints = this.getBorderPoints(border, children, shownOnly);
+    return borderPoints.map(b => b.map(p => getPoint(p).transformBy(matrix)));
   }
 
   getBoundingRect(
