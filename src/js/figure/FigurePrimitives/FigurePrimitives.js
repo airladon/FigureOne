@@ -2132,6 +2132,8 @@ export default class FigurePrimitives {
       }
       if (o.drawBorder != null) {
         element.drawBorder = parseBorder(o.drawBorder)
+      } else if (o.points != null) {
+        element.drawBorder = [o.points];
       }
       if (o.drawBorderBuffer != null) {
         element.drawBorderBuffer = parseBorder(o.drawBorderBuffer);
@@ -2224,8 +2226,6 @@ export default class FigurePrimitives {
       if (o.linePrimitives) {
         drawType = 'lines';
       }
-      console.log(drawBorder)
-      console.log(drawBorderBuffer)
       element.custom.updateGeneric(joinObjects({}, o, {
         points: triangles,
         drawBorder,
