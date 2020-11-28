@@ -180,8 +180,15 @@ figure.add({
   method: 'generic',
   options: {
     points: [[0, 0], [1, 0], [1, 1]],
+    drawBorder: [[0, 0], [1, 0], [1, 1]],
+  },
+  mods: {
+    isTouchable: true,
+    onClick: () => console.log('touched'),
   },
 });
+const g = figure.getElement('g');
+console.log(g)
 console.log(figure.getElement('g'))
 figure.getElement('g').custom.updatePoints({
   points: [[0, -1], [1, -1], [1, 0], [2, 0]],
@@ -189,13 +196,15 @@ figure.getElement('g').custom.updatePoints({
   drawType: 'strip',
 });
 
-figure.add({
-  name: 'pl',
-  method: 'polyline',
-  options: {
-    points: [[0, 0], [-1, -1], [0, -1]],
-  },
-});
-figure.getElement('pl').custom.updatePoints({
-  points: [[0, 0], [-1, -1], [0, -2]],
-})
+// figure.add({
+//   name: 'pl',
+//   method: 'polyline',
+//   options: {
+//     points: [[0, 0], [-1, -1], [0, -1]],
+//     color: [0, 0, 1, 0.5],
+//   },
+// });
+// figure.getElement('pl').custom.updatePoints({
+//   points: [[0, 0], [-1, -1], [0, -2]],
+//   width: 0.1,
+// });

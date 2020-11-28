@@ -624,8 +624,15 @@ class FigureElement {
   drawRect: Array<Point>;
   // drawBorder is the points in drawBorder
   // 'rect'
-  border: Array<Array<Point>> | 'draw' | 'buffer';
-  touchBorder: Array<Array<Point>> | 'border' | 'rect' | number | 'buffer';
+
+  // draw: use drawBorder points
+  // buffer: use drawBorderBuffer points
+  border: Array<Array<Point>> | 'draw' | 'buffer' | 'rect' | number;
+  // border: use whatever border uses
+  // buffer: use drawBorderBuffer points
+  // rect: take border, make it a rect
+  // number: take border, make it a rect, add a buffer
+  touchBorder: Array<Array<Point>> | 'border' | 'draw' | 'buffer' | 'rect' | number;
   holeBorder: Array<Array<Point>>;
   // scenarioSet: {
   //   quiz1: [
@@ -2918,42 +2925,39 @@ class FigureElement {
 
   getBorderPoints(
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
-  ) {
+  ): Array<Array<Point>> {
     if (border === 'border') {
       if (this.border === 'draw') {
         return this.drawBorder;
       }
       if (this.border === 'buffer') {
-        if (Array.isArray(this.drawBorderBuffer)) {
-          return this.drawBorderBuffer;
-        }
-        return this.drawBorder;
+        return this.drawBorderBuffer;
       }
       if (this.border === 'rect') {
-        return this.drawRect;
+        return getBoundingBorder(this.drawBorder);
       }
       if (typeof this.border === 'number') {
-        return getBoundingRect(this.drawRect, this.border);
+        return getBoundingBorder(this.drawBorder, this.border);
       }
       return this.border;
     }
     if (border === 'touchBorder') {
-      if (this.touchBorder === 'border') {
-        return this.getBorderPoints('border');
+      if (this.touchBorder === 'draw') {
+        return this.drawBorder;
       }
       if (this.touchBorder === 'buffer') {
-        if (Array.isArray(this.drawBorderBuffer)) {
-          return this.drawBorderBuffer;
-        }
+        return this.drawBorderBuffer;
+      }
+      if (this.touchBorder === 'border') {
         return this.getBorderPoints('border');
       }
       if (this.touchBorder === 'rect') {
         const b = this.getBorderPoints('border');
-        return getBoundingRect(b);
+        return getBoundingBorder(b);
       }
       if (typeof this.touchBorder === 'number') {
         const b = this.getBorderPoints('border');
-        return getBoundingRect(b, this.touchBorder);
+        return getBoundingBorder(b, this.touchBorder);
       }
       return this.touchBorder;
     }
@@ -3579,9 +3583,9 @@ class FigureElementPrimitive extends FigureElement {
   cannotTouchHole: boolean;
   pointsDefinition: Object;
   setPointsFromDefinition: ?(() => void);
-  border: Array<Array<Point>> | 'draw' | 'rect' | number;
-  touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'draw';
-  holeBorder: Array<Array<Point>> | 'draw';
+  border: Array<Array<Point>> | 'draw' | 'buffer' | 'rect' | number;
+  touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'draw' | 'buffer';
+  holeBorder: Array<Array<Point>>;
   // +pulse: (?(mixed) => void) => void;
 
   /**
@@ -3620,7 +3624,7 @@ class FigureElementPrimitive extends FigureElement {
     this.setPointsFromDefinition = null;
     this.border = 'draw';
     this.touchBorder = 'draw';
-    this.holeBorder = 'draw';
+    this.holeBorder = [[]];
     // this.setMoveBounds();
   }
 
@@ -4037,9 +4041,15 @@ class FigureElementCollection extends FigureElement {
   elements: Object;
   drawOrder: Array<string>;
   // touchInBoundingRect: boolean;
+  // $FlowFixMe
   border: Array<Array<Point>> | 'children' | 'rect' | number;
-  touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'children';
+  // $FlowFixMe
+  touchBorder: Array<Array<Point>> | 'border' | 'children' | 'rect' | number;
+  // $FlowFixMe
   holeBorder: Array<Array<Point>> | 'children';
+  // border: Array<Array<Point>> | 'draw' | 'rect' | 'buffer' | number;
+  // touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'draw' | 'buffer';
+  // holeBorder: Array<Array<Point>>;
   eqns: Object;
   // +pulse: (?({
   //     x?: 'left' | 'center' | 'right' | 'origin' | number,

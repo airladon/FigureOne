@@ -371,6 +371,8 @@ export type OBJ_Generic = {
   copy?: Array<CPY_Step | string> | CPY_Step,
   color?: TypeColor,
   texture?: OBJ_Texture,
+  drawBorder?: Array<Array<TypeParsablePoint>>,
+  drawBorderBuffer?: Array<Array<TypeParsablePoint>>,
   border?: Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'buffer' | 'draw',
   touchBorder?: Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'rect' | 'border' | 'buffer' | number,
   holeBorder?: Array<Array<TypeParsablePoint>>,
@@ -2195,10 +2197,6 @@ export default class FigurePrimitives {
       element.custom.options = o;
       parsePoints(o, ['points', 'border', 'holeBorder', 'touchBorder']);
 
-      // let touchBorderBuffer = 0;
-      // if (typeof o.touchBorder === 'number') {
-      //   touchBorderBuffer = o.touchBorder;
-      // }
       let triangles;
       let drawBorder;
       let holeBorder;
@@ -2223,7 +2221,7 @@ export default class FigurePrimitives {
         o.holeBorder = holeBorder;
       }
       let drawType = 'triangles';
-      if (o.linePrimitves) {
+      if (o.linePrimitives) {
         drawType = 'lines';
       }
       element.custom.updateGeneric(joinObjects({}, o, {
