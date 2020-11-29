@@ -199,13 +199,14 @@ const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], l
 // });
 
 figure.add({
-  name: 'pl',
-  method: 'polyline',
+  name: 'p',
+  method: 'polygon',
   options: {
-    points: [[0, 0], [-1, -1], [0, -1]],
     color: [0, 0, 1, 0.5],
-    width: 0.1,
+    line: { width: 0.1, widthIs: 'inside' },
     drawBorderBuffer: 0.1,
+    radius: 0.4,
+    sides: 400,
   },
   mods: {
     isTouchable: true,
@@ -213,9 +214,8 @@ figure.add({
     touchBorder: 'buffer',
   },
 });
-console.log(figure.getElement('pl'))
-figure.getElement('pl').custom.updatePoints({
-  points: [[0, 0], [1, 1], [0, 1]],
-  width: 0.1,
-  drawBorderBuffer: 0,
-});
+figure.getElement('p').angleToDraw = Math.PI * 2;
+figure.getElement('p').angleToDraw = Math.PI * 1;
+// figure.getElement('p').custom.updatePoints({
+//   line: null,
+// })

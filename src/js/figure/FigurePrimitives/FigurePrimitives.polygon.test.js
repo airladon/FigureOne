@@ -97,7 +97,7 @@ describe('Polyline', () => {
           options: {
             radius: 1 * Math.sqrt(2),
             rotation: Math.PI / 4,
-            touchBorder: 0.1,
+            drawBorderBuffer: 0.1,
           },
         },
       };
