@@ -2337,10 +2337,18 @@ export default class FigurePrimitives {
         ))];
       }
 
-      if (typeof o.drawBorderBuffer === 'number') {
-        drawBorderBuffer = [getPolygonPoints(joinObjects(
-          {}, o, { radius: o.radius + drawBorderOffset + o.drawBorderBuffer },
-        ))];
+      if (typeof drawBorderBuffer === 'number') {
+        if (drawBorderBuffer !== 0) {
+          if (drawBorderBuffer > 0) {
+            const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
+            drawBorderBuffer /= Math.sin(cornerAngle / 2);
+          }
+          drawBorderBuffer = [getPolygonPoints(joinObjects(
+            {}, o, { radius: o.radius + drawBorderOffset + drawBorderBuffer },
+          ))];
+        } else {
+          drawBorderBuffer = drawBorder;
+        }
       }
       return [o, points, drawBorder, drawBorderBuffer];
     };

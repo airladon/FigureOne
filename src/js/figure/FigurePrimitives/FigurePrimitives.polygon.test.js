@@ -99,78 +99,81 @@ describe('Polyline', () => {
             rotation: Math.PI / 4,
             drawBorderBuffer: 0.1,
           },
+          mods: {
+            touchBorder: 'buffer',
+          },
         },
       };
     });
     test('Default', () => {
       addElement('default');
       expect(round(pd.points, 3)).toEqual(square);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1, 1], [-1, 1], [-1, -1], [1, -1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [1, 1], [-1, 1], [-1, -1], [1, -1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Border Rect', () => {
       addElement('borderRect');
       expect(round(pd.points, 3)).toEqual(diamond);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [-1, -1], [1, -1], [1, 1], [-1, 1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-1, -1], [1, -1], [1, 1], [-1, 1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Touch Border Rect', () => {
       addElement('touchBorderRect');
       expect(round(pd.points, 3)).toEqual(diamond);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1, 0], [0, 1], [-1, 0], [0, -1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-1, -1], [1, -1], [1, 1], [-1, 1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Touch Border Buffer', () => {
       addElement('touchBorderBuffer');
       expect(round(pd.points, 3)).toEqual(square);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1, 1], [-1, 1], [-1, -1], [1, -1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [1.1, 1.1], [-1.1, 1.1], [-1.1, -1.1], [1.1, -1.1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Update', () => {
       addElement('default');
       expect(round(pd.points, 3)).toEqual(square);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1, 1], [-1, 1], [-1, -1], [1, -1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [1, 1], [-1, 1], [-1, -1], [1, -1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
 
-      p.custom.update({ radius: 2 * Math.sqrt(2) });
+      p.custom.updatePoints({ radius: 2 * Math.sqrt(2) });
       expect(round(pd.points, 3)).toEqual([
         0, 0, -2, 2, 2, 2,
         0, 0, -2, -2, -2, 2,
         0, 0, 2, -2, -2, -2,
         0, 0, 2, 2, 2, -2,
       ]);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [2, 2], [-2, 2], [-2, -2], [2, -2],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [2, 2], [-2, 2], [-2, -2], [2, -2],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
   });
   describe('Line', () => {
@@ -189,7 +192,7 @@ describe('Polyline', () => {
             radius: 1 * Math.sqrt(2),
             rotation: Math.PI / 4,
             line: { width: 0.1, widthIs: 'inside' },
-            border: 'outline',
+            // border: 'outline',
           },
         },
         linePositiveBorderOutline: {
@@ -197,7 +200,7 @@ describe('Polyline', () => {
             radius: 1 * Math.sqrt(2),
             rotation: Math.PI / 4,
             line: { width: 0.1, widthIs: 'positive' },
-            border: 'outline',
+            // border: 'outline',
           },
         },
         lineOutsideBorderOutline: {
@@ -205,7 +208,7 @@ describe('Polyline', () => {
             radius: 1 * Math.sqrt(2),
             rotation: Math.PI / 4,
             line: { width: 0.1, widthIs: 'outside' },
-            border: 'outline',
+            // border: 'outline',
           },
         },
         lineNegativeBorderOutline: {
@@ -213,7 +216,7 @@ describe('Polyline', () => {
             radius: 1 * Math.sqrt(2),
             rotation: Math.PI / 4,
             line: { width: 0.1, widthIs: 'negative' },
-            border: 'outline',
+            // border: 'outline',
           },
         },
         midLineTouchBuffer: {
@@ -221,8 +224,11 @@ describe('Polyline', () => {
             radius: 1 * Math.sqrt(2),
             rotation: Math.PI / 4,
             line: { width: 0.1, widthIs: 'mid' },
-            border: 'outline',
-            touchBorder: 0.1,
+            // border: 'outline',
+            drawBorderBuffer: 0.1,
+          },
+          mods: {
+            touchBorder: 'buffer',
           },
         },
         insideLineTouchBuffer: {
@@ -230,8 +236,11 @@ describe('Polyline', () => {
             radius: 1 * Math.sqrt(2),
             rotation: Math.PI / 4,
             line: { width: 0.1, widthIs: 'inside' },
-            border: 'outline',
-            touchBorder: 0.1,
+            // border: 'outline',
+            drawBorderBuffer: 0.1,
+          },
+          mods: {
+            touchBorder: 'buffer',
           },
         },
         outsideLineTouchBuffer: {
@@ -239,8 +248,11 @@ describe('Polyline', () => {
             radius: 1 * Math.sqrt(2),
             rotation: Math.PI / 4,
             line: { width: 0.1, widthIs: 'outside' },
-            border: 'outline',
-            touchBorder: 0.1,
+            // border: 'outline',
+            drawBorderBuffer: 0.1,
+          },
+          mods: {
+            touchBorder: 'buffer',
           },
         },
         midLineBorderRect: {
@@ -290,163 +302,163 @@ describe('Polyline', () => {
     test('Default', () => {
       addElement('default');
       expect(round(pd.points, 3)).toEqual(midLineSquare);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1.05, 1.05], [-1.05, 1.05], [-1.05, -1.05], [1.05, -1.05],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [1.05, 1.05], [-1.05, 1.05], [-1.05, -1.05], [1.05, -1.05],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Line inside, border outline', () => {
       addElement('lineInsideBorderOutline');
       expect(round(pd.points, 3)).toEqual(insideLineSquare);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1, 1], [-1, 1], [-1, -1], [1, -1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [1, 1], [-1, 1], [-1, -1], [1, -1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Line positive, border outline', () => {
       addElement('linePositiveBorderOutline');
       expect(round(pd.points, 3)).toEqual(insideLineSquare);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1, 1], [-1, 1], [-1, -1], [1, -1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [1, 1], [-1, 1], [-1, -1], [1, -1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Line outside, border outline', () => {
       addElement('lineOutsideBorderOutline');
       expect(round(pd.points, 3)).toEqual(outsideLineSquare);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1.1, 1.1], [-1.1, 1.1], [-1.1, -1.1], [1.1, -1.1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [1.1, 1.1], [-1.1, 1.1], [-1.1, -1.1], [1.1, -1.1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Line negative, border outline', () => {
       addElement('lineNegativeBorderOutline');
       expect(round(pd.points, 3)).toEqual(outsideLineSquare);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1.1, 1.1], [-1.1, 1.1], [-1.1, -1.1], [1.1, -1.1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [1.1, 1.1], [-1.1, 1.1], [-1.1, -1.1], [1.1, -1.1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Line mid, touch buffer', () => {
       addElement('midLineTouchBuffer');
       expect(round(pd.points, 3)).toEqual(midLineSquare);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1.05, 1.05], [-1.05, 1.05], [-1.05, -1.05], [1.05, -1.05],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [1.15, 1.15], [-1.15, 1.15], [-1.15, -1.15], [1.15, -1.15],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Line outside, touch buffer', () => {
       addElement('outsideLineTouchBuffer');
       expect(round(pd.points, 3)).toEqual(outsideLineSquare);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1.1, 1.1], [-1.1, 1.1], [-1.1, -1.1], [1.1, -1.1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [1.2, 1.2], [-1.2, 1.2], [-1.2, -1.2], [1.2, -1.2],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Line inside, touch buffer', () => {
       addElement('insideLineTouchBuffer');
       expect(round(pd.points, 3)).toEqual(insideLineSquare);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1, 1], [-1, 1], [-1, -1], [1, -1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [1.1, 1.1], [-1.1, 1.1], [-1.1, -1.1], [1.1, -1.1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Mid line border rect', () => {
       addElement('midLineBorderRect');
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [-1.071, -1.071], [1.071, -1.071], [1.071, 1.071], [-1.071, 1.071],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-1.071, -1.071], [1.071, -1.071], [1.071, 1.071], [-1.071, 1.071],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Outside line border rect', () => {
       addElement('outsideLineBorderRect');
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [-1.141, -1.141], [1.141, -1.141], [1.141, 1.141], [-1.141, 1.141],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-1.141, -1.141], [1.141, -1.141], [1.141, 1.141], [-1.141, 1.141],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Inside line border rect', () => {
       addElement('insideLineBorderRect');
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [-1, -1], [1, -1], [1, 1], [-1, 1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-1, -1], [1, -1], [1, 1], [-1, 1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Mid line touch border rect', () => {
       addElement('midLineTouchBorderRect');
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1.071, 0], [0, 1.071], [-1.071, 0], [0, -1.071],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-1.071, -1.071], [1.071, -1.071], [1.071, 1.071], [-1.071, 1.071],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Outside line touch border rect', () => {
       addElement('outsideLineTouchBorderRect');
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1.141, 0], [0, 1.141], [-1.141, 0], [0, -1.141],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-1.141, -1.141], [1.141, -1.141], [1.141, 1.141], [-1.141, 1.141],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Inside line touch border rect', () => {
       addElement('insideLineTouchBorderRect');
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1, 0], [0, 1], [-1, 0], [0, -1],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-1, -1], [1, -1], [1, 1], [-1, 1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Update', () => {
       addElement('default');
       expect(round(pd.points, 3)).toEqual(midLineSquare);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [1.05, 1.05], [-1.05, 1.05], [-1.05, -1.05], [1.05, -1.05],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [1.05, 1.05], [-1.05, 1.05], [-1.05, -1.05], [1.05, -1.05],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
 
-      p.custom.update({ radius: 2 * Math.sqrt(2) });
+      p.custom.updatePoints({ radius: 2 * Math.sqrt(2) });
 
       expect(round(pd.points, 3)).toEqual([
         1.95, 1.95, -1.95, 1.95, 2.05, 2.05,
@@ -458,13 +470,13 @@ describe('Polyline', () => {
         1.95, -1.95, 1.95, 1.95, 2.05, -2.05,
         2.05, -2.05, 1.95, 1.95, 2.05, 2.05,
       ]);
-      expect(round(pd.border, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [2.05, 2.05], [-2.05, 2.05], [-2.05, -2.05], [2.05, -2.05],
       ])]);
-      expect(round(pd.touchBorder, 3)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [2.05, 2.05], [-2.05, 2.05], [-2.05, -2.05], [2.05, -2.05],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
   });
 });

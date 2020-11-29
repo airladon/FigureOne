@@ -203,10 +203,10 @@ figure.add({
   method: 'polygon',
   options: {
     color: [0, 0, 1, 0.5],
-    line: { width: 0.1, widthIs: 'inside' },
+    line: { width: 0.1, widthIs: 'outside', cornerStyle: 'fill' },
     drawBorderBuffer: 0.1,
     radius: 0.4,
-    sides: 400,
+    sides: 10,
   },
   mods: {
     isTouchable: true,
@@ -214,8 +214,19 @@ figure.add({
     touchBorder: 'buffer',
   },
 });
-figure.getElement('p').angleToDraw = Math.PI * 2;
-figure.getElement('p').angleToDraw = Math.PI * 1;
+// figure.getElement('p').angleToDraw = Math.PI * 2;
+// figure.getElement('p').angleToDraw = Math.PI * 1;
 // figure.getElement('p').custom.updatePoints({
 //   line: null,
+// })
+
+// figure.add({
+//   name: 'pp',
+//   method: 'polyline',
+//   options: {
+//     points: [[-1, -1], [0, -1], [-0.5, -0.5]],
+//     width: 0.1,
+//     color: [1, 0, 0, 0.5],
+//     cornerStyle: 'fill',
+//   },
 // })
