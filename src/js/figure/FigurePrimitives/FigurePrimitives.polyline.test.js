@@ -51,7 +51,7 @@ describe('Polyline', () => {
         },
       };
     });
-    test('Default Border', () => {
+    test.only('Default Border', () => {
       addElement('lineBorder');
       expect(round(pd.points)).toEqual([
         0, 0.1,
@@ -61,13 +61,13 @@ describe('Polyline', () => {
         1, 0.1,
         1, -0.1,
       ]);
-      expect(round(pd.border)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'border'))).toEqual([getPoints([
         [0, -0.1], [1, -0.1], [1, 0.1], [0, 0.1],
       ])]);
-      expect(round(pd.touchBorder)).toEqual([getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'))).toEqual([getPoints([
         [0, -0.1], [1, -0.1], [1, 0.1], [0, 0.1],
       ])]);
-      expect(pd.hole).toEqual([]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([]);
     });
     test('Buffer Border', () => {
       addElement('lineBorderWithBuffer');
