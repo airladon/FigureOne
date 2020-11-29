@@ -2213,7 +2213,7 @@ export default class FigurePrimitives {
         [triangles, drawBorder, drawBorderBuffer, holeBorder] = makePolyLine(
           o.points, o.width, o.close, o.widthIs, o.cornerStyle, o.cornerSize,
           o.cornerSides, o.minAutoCornerAngle, o.dash, o.linePrimitives,
-          o.lineNum, o.border, o.drawBorderBuffer, o.hole, o.arrow,
+          o.lineNum, o.drawBorder, o.drawBorderBuffer, o.hole, o.arrow,
         );
       }
       if (drawBorderBuffer == null) {
