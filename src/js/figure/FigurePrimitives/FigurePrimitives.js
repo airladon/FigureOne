@@ -2483,7 +2483,15 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Rectangle} for options and examples.
    */
   rectangle(...options: Array<OBJ_Rectangle>) {
-    const defaultOptions = {
+    const joinedOptions = joinObjects({}, ...options);
+    const element = this.generic({
+      transform: new Transform('rectangle').standard(),
+      border: 'draw',
+      touchBorder: 'border',
+      holeBorder: [[]],
+    }, ...options);
+
+    element.custom.options = {
       width: 1,
       height: 1,
       xAlign: 'center',
@@ -2492,69 +2500,123 @@ export default class FigurePrimitives {
         radius: 0,
         sides: 1,
       },
-      transform: new Transform('rectangle').standard(),
-      border: 'outline',
-      touchBorder: 'border',
-      holeBorder: 'none',
-      offset: [0, 0],
     };
-    const optionsToUse = processOptions(defaultOptions, ...options);
-    optionsToUse.offset = getPoint(optionsToUse.offset);
-    if (
-      optionsToUse.line != null && optionsToUse.line.widthIs == null
-    ) {
-      optionsToUse.line.widthIs = 'mid';
-    }
-    if (optionsToUse.line != null) {
-      if (optionsToUse.line.widthIs === 'outside') {
-        optionsToUse.line.widthIs = 'negative';
+    element.custom.updatePoints = (updateOptions: OBJ_Rectangle) => {
+      const o = joinObjects({}, element.custom.options, updateOptions);
+      o.offset = getPoint(o.offset);
+      if (
+        o.line != null && o.line.widthIs == null
+      ) {
+        o.line.widthIs = 'mid';
       }
-      if (optionsToUse.line.widthIs === 'inside') {
-        optionsToUse.line.widthIs = 'positive';
+      if (o.line != null) {
+        if (o.line.widthIs === 'outside') {
+          o.line.widthIs = 'negative';
+        }
+        if (o.line.widthIs === 'inside') {
+          o.line.widthIs = 'positive';
+        }
+        o.line.close = true;
       }
-    }
-
-    const [points, border, touchBorder] = getRectangleBorder(optionsToUse);
-
-    let element;
-    if (optionsToUse.line == null) {
-      element = this.generic(optionsToUse, {
-        points: rectangleBorderToTris(points), // $FlowFixMe
-        border, // $FlowFixMe
-        touchBorder,
-      });
-      element.custom.update = (updateOptions) => {
-        const o = joinObjects({}, optionsToUse, updateOptions);
-        const [updatedPoints, updatedBorder, updatedTouchBorder] = getRectangleBorder(o);
-        element.drawingObject.change(
-          rectangleBorderToTris(updatedPoints), // $FlowFixMe
-          updatedBorder, // $FlowFixMe
-          updatedTouchBorder,
-          o.holeBorder,
+      const [borderPoints, drawBorder, drawBorderBuffer] = getRectangleBorder(o);
+      element.custom.options = o;
+      if (o.line == null) {
+        const updatedTris = getTrisFillPolygon(
+          o.offset, borderPoints,
+          o.sides, o.sidesToDraw,
         );
-      };
-    } else {
-      element = this.polyline(optionsToUse, optionsToUse.line, {
-        points, // $FlowFixMe
-        border, // $FlowFixMe
-        touchBorder,
-        close: true,
-      });
-      element.custom.update = (updateOptions) => {
-        const o = joinObjects({}, optionsToUse, updateOptions);
-        const [updatedPoints, updatedBorder, updatedTouchBorder] = getRectangleBorder(o);
-        // const updatedBorder = getRectangleBorder(o);
-        element.custom.updatePoints(joinObjects({}, o, {
-          points: updatedPoints,
-          border: updatedBorder,
-          touchBorder: updatedTouchBorder,
-          holeBorder: o.holeBorder,
-          dash: o.line.dash,
-          width: o.line.width,
-          widthIs: o.line.widthIs,
+        element.custom.updateGeneric(joinObjects({}, o, {
+          points: updatedTris,
+          drawBorder,
+          drawBorderBuffer,
+          drawType: 'triangles',
         }));
-      };
-    }
+      } else {
+        // console.log(borderPoints);
+        const [polylineOptions, points,,, drawType] = this.getPolylineTris(
+          joinObjects({}, o.line, { points: borderPoints }),
+        );
+        element.custom.updateGeneric(joinObjects({}, o, {
+          points, drawBorder, drawBorderBuffer, drawType,
+        }));
+        element.custom.options.line = polylineOptions;
+      }
+    };
+    element.custom.updatePoints(joinedOptions);
+    return element;
+
+    // const defaultOptions = {
+    //   width: 1,
+    //   height: 1,
+    //   xAlign: 'center',
+    //   yAlign: 'middle',
+    //   corner: {
+    //     radius: 0,
+    //     sides: 1,
+    //   },
+    //   transform: new Transform('rectangle').standard(),
+    //   border: 'outline',
+    //   touchBorder: 'border',
+    //   holeBorder: 'none',
+    //   offset: [0, 0],
+    // };
+    // const optionsToUse = processOptions(defaultOptions, ...options);
+    // optionsToUse.offset = getPoint(optionsToUse.offset);
+    // if (
+    //   optionsToUse.line != null && optionsToUse.line.widthIs == null
+    // ) {
+    //   optionsToUse.line.widthIs = 'mid';
+    // }
+    // if (optionsToUse.line != null) {
+    //   if (optionsToUse.line.widthIs === 'outside') {
+    //     optionsToUse.line.widthIs = 'negative';
+    //   }
+    //   if (optionsToUse.line.widthIs === 'inside') {
+    //     optionsToUse.line.widthIs = 'positive';
+    //   }
+    // }
+
+    // const [points, border, touchBorder] = getRectangleBorder(optionsToUse);
+
+    // let element;
+    // if (optionsToUse.line == null) {
+    //   element = this.generic(optionsToUse, {
+    //     points: rectangleBorderToTris(points), // $FlowFixMe
+    //     border, // $FlowFixMe
+    //     touchBorder,
+    //   });
+    //   element.custom.update = (updateOptions) => {
+    //     const o = joinObjects({}, optionsToUse, updateOptions);
+    //     const [updatedPoints, updatedBorder, updatedTouchBorder] = getRectangleBorder(o);
+    //     element.drawingObject.change(
+    //       rectangleBorderToTris(updatedPoints), // $FlowFixMe
+    //       updatedBorder, // $FlowFixMe
+    //       updatedTouchBorder,
+    //       o.holeBorder,
+    //     );
+    //   };
+    // } else {
+    //   element = this.polyline(optionsToUse, optionsToUse.line, {
+    //     points, // $FlowFixMe
+    //     border, // $FlowFixMe
+    //     touchBorder,
+    //     close: true,
+    //   });
+    //   element.custom.update = (updateOptions) => {
+    //     const o = joinObjects({}, optionsToUse, updateOptions);
+    //     const [updatedPoints, updatedBorder, updatedTouchBorder] = getRectangleBorder(o);
+    //     // const updatedBorder = getRectangleBorder(o);
+    //     element.custom.updatePoints(joinObjects({}, o, {
+    //       points: updatedPoints,
+    //       border: updatedBorder,
+    //       touchBorder: updatedTouchBorder,
+    //       holeBorder: o.holeBorder,
+    //       dash: o.line.dash,
+    //       width: o.line.width,
+    //       widthIs: o.line.widthIs,
+    //     }));
+    //   };
+    // }
     return element;
   }
 

@@ -1,5 +1,5 @@
 import {
-  getPoints, Point,
+  Point,
 } from '../../tools/g2';
 import {
   round,

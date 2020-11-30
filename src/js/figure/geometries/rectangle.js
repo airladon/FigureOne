@@ -59,14 +59,15 @@ function getRectangleBorder(
       widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
       width: number,
     },
-    border: 'rect' | 'outline' | Array<Array<Point>>,
-    touchBorder: number | 'rect' | 'border' | Array<Array<Point>>,
+    // border: 'rect' | 'outline' | Array<Array<Point>>,
+    drawBorderBuffer: number | Array<Array<Point>>,
     offset: Point,
   },
 ) {
   const {
-    width, height, xAlign, yAlign, border, touchBorder, line,
+    width, height, xAlign, yAlign, line,
   } = options;
+  const { drawBorderBuffer } = options;
   let x = 0;
   let y = 0;
   if (xAlign === 'center') {
@@ -103,22 +104,21 @@ function getRectangleBorder(
     outline = points.map(p => p._dup());
   }
 
-  let borderToUse = border;
-  if (border === 'outline') {
-    borderToUse = [outline];
-  }
+  const border = [outline];
 
-  let touchBorderToUse = touchBorder;
-  if (typeof touchBorder === 'number') {
-    touchBorderToUse = [getRectPoints(
-      width + lineDelta * 2 + touchBorder * 2,
-      height + lineDelta * 2 + touchBorder * 2,
-      sides, radius, x - lineDelta - touchBorder, y - lineDelta - touchBorder,
+  let bufferBorder = border;
+  if (typeof drawBorderBuffer === 'number') {
+    bufferBorder = [getRectPoints(
+      width + lineDelta * 2 + drawBorderBuffer * 2,
+      height + lineDelta * 2 + drawBorderBuffer * 2,
+      sides, radius, x - lineDelta - drawBorderBuffer, y - lineDelta - drawBorderBuffer,
       options.offset,
     )];
+  } else {
+    bufferBorder = drawBorderBuffer;
   }
 
-  return [points, borderToUse, touchBorderToUse];
+  return [points, border, bufferBorder];
 }
 
 function rectangleBorderToTris(border: Array<Point>) {

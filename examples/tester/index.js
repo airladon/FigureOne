@@ -199,15 +199,13 @@ figure.add([
 // });
 
 figure.add({
-  name: 'star',
-  method: 'star',
+  name: 'r',
+  method: 'rectangle',
   options: {
-    color: [0, 0, 1, 0.5],
-    // line: { width: 0.01, widthIs: 'inside' },
-    drawBorderBuffer: 0.1 / Math.sqrt(2),
-    radius: 1,
-    sides: 4,
-    innerRadius: 0.5 * Math.sqrt(2) - 0.1 * Math.sqrt(2),
+    width: 1,
+    height: 0.5,
+    // line: { width: 0.01 },
+    drawBorderBuffer: 0.1,
   },
   mods: {
     isTouchable: true,
@@ -215,9 +213,9 @@ figure.add({
     touchBorder: 'buffer',
   },
 });
-console.log(Fig.round(figure.getElement('star').drawBorder))
-figure.getElement('star').custom.updatePoints({ radius: 1.2, rotation: 0 });
-console.log(Fig.round(figure.getElement('star').drawBorder))
+// console.log(Fig.round(figure.getElement('star').drawBorder))
+// figure.getElement('r').custom.updatePoints({ width: 1.5, line: { width: 0.01 },height: 0.5, xAlign: 'left' });
+// console.log(Fig.round(figure.getElement('star').drawBorder))
 
 // const points = figure.getElement('star').drawBorderBuffer;
 // console.log(points[0])
