@@ -2,40 +2,40 @@ const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], l
 // const figure = new Fig.Figure({ limits: [-3, -2.25, 6, 4.5], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 
 // // const figure = new Fig.Figure({ limits: [-8, -8, 16, 16], color: [1, 0, 0, 1]});
-// figure.add([
-//   {
-//     name: 'origin',
-//     method: 'polygon',
-//     options: {
-//       radius: 0.01,
-//       line: { width: 0.01 },
-//       sides: 10,
-//       color: [0.7, 0.7, 0.7, 1]
-//     },
-//   },
-//   {
-//     name: 'grid',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.1,
-//       xStep: 0.1,
-//       color: [0.9, 0.9, 0.9, 1],
-//       line: { width: 0.004 },
-//     },
-//   },
-//   {
-//     name: 'gridMajor',
-//     method: 'grid',
-//     options: {
-//       bounds: [-3, -3, 6, 6],
-//       yStep: 0.5,
-//       xStep: 0.5,
-//       color: [0.7, 0.7, 0.7, 1],
-//       line: { width: 0.004 }
-//     },
-//   },
-// ]);
+figure.add([
+  {
+    name: 'origin',
+    method: 'polygon',
+    options: {
+      radius: 0.01,
+      line: { width: 0.01 },
+      sides: 10,
+      color: [0.7, 0.7, 0.7, 1]
+    },
+  },
+  {
+    name: 'grid',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.1,
+      xStep: 0.1,
+      color: [0.9, 0.9, 0.9, 1],
+      line: { width: 0.004 },
+    },
+  },
+  {
+    name: 'gridMajor',
+    method: 'grid',
+    options: {
+      bounds: [-3, -3, 6, 6],
+      yStep: 0.5,
+      xStep: 0.5,
+      color: [0.7, 0.7, 0.7, 1],
+      line: { width: 0.004 }
+    },
+  },
+]);
 // const figure = new Fig.Figure();
 
 // const p = [[1.2, 0.3], [1, 1], [0.2, 1], [0.6, 0.5], [0, 0], [1, 0]];
@@ -199,19 +199,33 @@ const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], l
 // });
 
 figure.add({
-  name: 'p',
-  method: 'polygon',
+  name: 'star',
+  method: 'star',
   options: {
     color: [0, 0, 1, 0.5],
-    line: { width: 0.1, widthIs: 'outside', cornerStyle: 'fill' },
-    drawBorderBuffer: 0.1,
-    radius: 0.4,
-    sides: 10,
+    // line: { width: 0.01, widthIs: 'inside' },
+    drawBorderBuffer: 0.001,
+    radius: 1,
+    sides: 5,
+    innerRadius: 0.1,
   },
   mods: {
     isTouchable: true,
     onClick: () => console.log('touched'),
     touchBorder: 'buffer',
+  },
+});
+console.log(figure.getElement('star'))
+const points = figure.getElement('star').drawBorderBuffer;
+console.log(points[0])
+figure.add({
+  name: 'asdf',
+  method: 'polyline',
+  options: {
+    points: points[0],
+    width: 0.01,
+    color: [1, 0, 0, 1],
+    close: true,
   },
 });
 // figure.getElement('p').angleToDraw = Math.PI * 2;

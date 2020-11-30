@@ -443,6 +443,19 @@ export type OBJ_Generic = {
  * defines how the width is grown from the polyline's points.
  * Only `"mid"` is fully compatible with all options in
  * `cornerStyle` and `dash`. (`"mid"`)
+ * @property {'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [drawBorder]
+ * override OBJ_Generic `drawBorder` with `'line'` to make the drawBorder just
+ * the line itself, `'positive'` to make the drawBorder the positive side
+ * of the line, and `'negative'` to make the drawBorder the negative side
+ * of the line. Use array definition for custom drawBorder (`'line'`)
+ * @property {number | Array<Array<TypeParsablePoint>>} [drawBorderBuffer]
+ * override OBJ_Generic `drawBorderBuffer` with `number` to make the
+ * drawBorderBuffer the same as the line with additional `number` thickness
+ * on either side (`0`)
+ * @property {'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [holeBorder]
+ * override OBJ_Generic `holeBorder` with `'positive'` to make holeBorder the
+ * points on the positive side of the line, and with `'negative'` to make
+ * the holdBorder with points on the negative side of the line.
  * @property {'auto' | 'none' | 'radius' | 'fill'} [cornerStyle] - `"auto"`:
  * sharp corners sharp when angle is less than `minAutoCornerAngle`, `"none"`: no
  * corners, `"radius"`: curved corners, `"fill"`: fills the gapes between the line
@@ -543,8 +556,8 @@ export type OBJ_Polyline = {
   width?: number,
   close?: boolean,
   widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
-  drawBorder?: 'line' | 'positive' | 'negative',
-  drawBorderBuffer?: number,
+  drawBorder?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
+  drawBorderBuffer?: number | Array<Array<TypeParsablePoint>>,
   holeBorder?: 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
   cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize?: number,
@@ -625,6 +638,9 @@ export type OBJ_LineStyle = {
  * center. This is different to position or transform as these translate the
  * vertices on each draw. (`[0, 0]`)
  * @property {OBJ_LineStyleSimple} [line] line style options
+ * @property {number | Array<Array<TypeParsablePoint>>} [drawBorderBuffer]
+ * override the OBJ_Generic `drawBorderBuffer` with `number` to make the
+ * drawBorderBuffer a polygon that is wider by `number` (`0`)
  *
  * @extends OBJ_Generic
  *
@@ -680,6 +696,20 @@ export type OBJ_Polygon = {
   angleToDraw?: number,
   direction?: -1 | 1,
   line?: OBJ_LineStyleSimple,
+  drawBorderBuffer?: number | Array<Array<TypeParsablePoint>>,
+} & OBJ_Generic;
+
+type OBJ_Polygon_Defined = {
+  sides: number,
+  radius: number,
+  rotation: number,
+  offset: Point,
+  sidesToDraw: number,
+  angleToDraw: number,
+  direction: -1 | 1,
+  line?: OBJ_LineStyleSimple,
+  innerRadius?: number,
+  drawBorderBuffer: number | Array<Array<TypeParsablePoint>>,
 } & OBJ_Generic;
 
 /**
@@ -697,8 +727,9 @@ export type OBJ_Polygon = {
  * during vertex definition (different to a translation step in a transform)
  * (`[0, 0]`)
  * @property {OBJ_LineStyleSimple} [line] line style options
- * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
- * the polygon if defined. If using fill and copying, use `fill`: `'tris'`
+ * @property {number | Array<Array<TypeParsablePoint>>} [drawBorderBuffer]
+ * override the OBJ_Generic `drawBorderBuffer` with `number` to make the
+ * drawBorderBuffer a polygon that is `number` thicker than the radius (`0`)
  *
  * @extends OBJ_Generic
  *
@@ -769,6 +800,17 @@ export type OBJ_Star = {
   rotation?: number,
   offset?: TypeParsablePoint,
   line?: OBJ_LineStyleSimple,
+  drawBorderBuffer?: Array<Array<TypeParsablePoint>> | number,
+} & OBJ_Generic;
+
+type OBJ_Star_Defined = {
+  sides: number,
+  radius: number,
+  innerRadius: number,
+  rotation: number,
+  offset: Point,
+  line?: OBJ_LineStyleSimple,
+  drawBorderBuffer: Array<Array<TypeParsablePoint>> | number,
 } & OBJ_Generic;
 
 /**
@@ -783,8 +825,6 @@ export type OBJ_Star = {
  * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
  * @property {OBJ_CurvedCorner} [corner] define for rounded corners
  * @property {OBJ_LineStyleSimple} [line] line style options
- * @property {Array<CPY_Step | string> | CPY_Step} [copy] make copies of
- * the rectangle
  *
  * @extends OBJ_Generic
  *
@@ -2260,6 +2300,87 @@ export default class FigurePrimitives {
     return element;
   }
 
+  getPolygonBorder(optionsIn: OBJ_Polygon_Defined) {
+    // const defaultOptions = {
+    //   radius: 1,
+    //   sides: 4,
+    //   direction: 1,
+    //   rotation: 0,
+    //   offset: new Point(0, 0),
+    // };
+    // const o = joinObjects({}, defaultOptions, getBorderOptionsIn);
+    const o = optionsIn;
+    parsePoints(o, ['offset']);
+    if (o.angleToDraw != null) {
+      o.sidesToDraw = Math.floor(
+        o.angleToDraw / (Math.PI * 2 / o.sides),
+      );
+    }
+    if (o.sidesToDraw == null) {
+      o.sidesToDraw = o.sides;
+    }
+    const points = getPolygonPoints(o);
+    let { drawBorderBuffer } = o;
+    let drawBorderOffset = 0;
+    let drawBorder;
+    if (o.line != null) {
+      o.line = joinObjects({}, {
+        width: this.defaultLineWidth,
+        widthIs: 'mid',
+      }, o.line);
+      if (o.line.widthIs === 'inside') {
+        o.line.widthIs = 'positive';
+      }
+      if (o.line.widthIs === 'outside') {
+        o.line.widthIs = 'negative';
+      }
+      const { width, widthIs } = o.line;
+      const dir = o.direction;
+      if (
+        (dir === 1 && (widthIs === 'negative' || widthIs === 'outside'))
+        || (dir === -1 && (widthIs === 'positive' || widthIs === 'inside'))
+      ) {
+        drawBorderOffset = width;
+      } else if (widthIs === 'mid') {
+        drawBorderOffset = width / 2;
+      }
+      if (drawBorderOffset > 0) {
+        const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
+        drawBorderOffset /= Math.sin(cornerAngle / 2);
+      }
+      if (o.sidesToDraw === o.sides) {
+        o.line.close = true;
+      } else {
+        o.line.close = false;
+      }
+    }
+    if (drawBorderOffset === 0) {
+      drawBorder = [points];
+    } else {
+      drawBorder = [getPolygonPoints(joinObjects(
+        {}, o, { radius: o.radius + drawBorderOffset },
+      ))];
+    }
+
+    if (typeof drawBorderBuffer === 'number') {
+      if (drawBorderBuffer !== 0) {
+        if (drawBorderBuffer > 0) {
+          const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
+          drawBorderBuffer /= Math.sin(cornerAngle / 2);
+        }
+        drawBorderBuffer = [getPolygonPoints(joinObjects(
+          {}, o, {
+            radius: o.radius + drawBorderOffset + drawBorderBuffer,
+            innerRadius: null,
+          },
+        ))];
+      } else {
+        drawBorderBuffer = drawBorder;
+      }
+    }
+    return [o, points, drawBorder, drawBorderBuffer];
+  }
+
   /**
    * {@link FigureElementPrimitive} that draws a regular polygon.
    * @see {@link OBJ_Polygon} for options and examples.
@@ -2273,89 +2394,18 @@ export default class FigurePrimitives {
       holeBorder: [[]],
     }, ...options);
 
-    element.custom.options = {};
-
-    const getBorder = (getBorderOptionsIn: OBJ_Polygon) => {
-      const defaultOptions = {
-        radius: 1,
-        sides: 4,
-        direction: 1,
-        rotation: 0,
-        offset: new Point(0, 0),
-      };
-      const o = joinObjects({}, defaultOptions, getBorderOptionsIn);
-
-      parsePoints(o, ['offset']);
-      if (o.angleToDraw != null) {
-        o.sidesToDraw = Math.floor(
-          o.angleToDraw / (Math.PI * 2 / o.sides),
-        );
-      }
-      if (o.sidesToDraw == null) {
-        o.sidesToDraw = o.sides;
-      }
-      const points = getPolygonPoints(o);
-      let { drawBorderBuffer } = o;
-      let drawBorderOffset = 0;
-      let drawBorder;
-      if (o.line != null) {
-        o.line = joinObjects({}, {
-          width: this.defaultLineWidth,
-          widthIs: 'mid',
-        }, o.line);
-        if (o.line.widthIs === 'inside') {
-          o.line.widthIs = 'positive';
-        }
-        if (o.line.widthIs === 'outside') {
-          o.line.widthIs = 'negative';
-        }
-        const { width, widthIs } = o.line;
-        const dir = o.direction;
-        if (
-          (dir === 1 && (widthIs === 'negative' || widthIs === 'outside'))
-          || (dir === -1 && (widthIs === 'positive' || widthIs === 'inside'))
-        ) {
-          drawBorderOffset = width;
-        } else if (widthIs === 'mid') {
-          drawBorderOffset = width / 2;
-        }
-        if (drawBorderOffset > 0) {
-          const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
-          drawBorderOffset /= Math.sin(cornerAngle / 2);
-        }
-        if (o.sidesToDraw === o.sides) {
-          o.line.close = true;
-        } else {
-          o.line.close = false;
-        }
-      }
-      if (drawBorderOffset === 0) {
-        drawBorder = [points];
-      } else {
-        drawBorder = [getPolygonPoints(joinObjects(
-          {}, o, { radius: o.radius + drawBorderOffset },
-        ))];
-      }
-
-      if (typeof drawBorderBuffer === 'number') {
-        if (drawBorderBuffer !== 0) {
-          if (drawBorderBuffer > 0) {
-            const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
-            drawBorderBuffer /= Math.sin(cornerAngle / 2);
-          }
-          drawBorderBuffer = [getPolygonPoints(joinObjects(
-            {}, o, { radius: o.radius + drawBorderOffset + drawBorderBuffer },
-          ))];
-        } else {
-          drawBorderBuffer = drawBorder;
-        }
-      }
-      return [o, points, drawBorder, drawBorderBuffer];
+    element.custom.options = {
+      radius: 1,
+      sides: 4,
+      direction: 1,
+      rotation: 0,
+      offset: new Point(0, 0),
     };
 
     element.custom.updatePoints = (updateOptions: OBJ_Polygon) => {
       const getBorderOptions = joinObjects({}, element.custom.options, updateOptions);
-      const [o, polygonPoints, drawBorder, drawBorderBuffer] = getBorder(getBorderOptions);
+      const [o, polygonPoints, drawBorder, drawBorderBuffer] =
+        this.getPolygonBorder(getBorderOptions);
       element.custom.options = o;
       if (o.line == null) {
         const updatedTris = getTrisFillPolygon(
@@ -2378,6 +2428,7 @@ export default class FigurePrimitives {
         element.custom.options.line = polylineOptions;
       }
     };
+    // element.updatePoints = element.updatePolygonPoints;
     // $FlowFixMe
     element.drawingObject.getPointCountForAngle = (angle: number) => {
       const optionsToUse = element.custom.options;
@@ -2401,23 +2452,29 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Star} for options and examples.
    */
   star(...options: Array<OBJ_Star>) {
-    const defaultOptions = {
+    const element = this.polygon({});
+    element.custom.options = {
       radius: 1,
       sides: 5,
+      direction: 1,
       rotation: 0,
       offset: new Point(0, 0),
       transform: new Transform('star').standard(),
-      touchableLineOnly: false,
-      border: 'outline',
-      touchBorder: 'border',
     };
-    const optionsToUse = processOptions(defaultOptions, ...options);
-    optionsToUse.offset = getPoint(optionsToUse.offset);
-    if (optionsToUse.innerRadius == null) {
-      optionsToUse.innerRadius = optionsToUse.radius / 3;
-    }
-    optionsToUse.rotation += Math.PI / 2;
-    return this.polygon(optionsToUse);
+
+    element.custom.updatePolygonPoints = element.custom.updatePoints;
+    element.custom.updatePoints = (optionsIn: OBJ_Star_Defined) => {
+      const o = joinObjects({}, element.custom.options, optionsIn);
+      o.offset = getPoint(o.offset);
+      if (o.innerRadius == null) {
+        o.innerRadius = o.radius / 3;
+      }
+      o.rotation += Math.PI / 2;
+      o.sidesToDraw = o.sides;
+      element.custom.updatePolygonPoints(o);
+    };
+    element.custom.updatePoints(joinObjects({}, ...options));
+    return element;
   }
 
   /**
