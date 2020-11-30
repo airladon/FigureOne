@@ -202,10 +202,12 @@ figure.add({
   name: 'r',
   method: 'rectangle',
   options: {
-    width: 1,
-    height: 0.5,
-    // line: { width: 0.01 },
-    drawBorderBuffer: 0.1,
+    width: 2,
+    height: 1,
+    corner: {
+      radius: 0.3,
+      sides: 1,
+    },
   },
   mods: {
     isTouchable: true,
@@ -213,7 +215,7 @@ figure.add({
     touchBorder: 'buffer',
   },
 });
-// console.log(Fig.round(figure.getElement('star').drawBorder))
+console.log(Fig.round(figure.getElement('r').drawingObject.points))
 // figure.getElement('r').custom.updatePoints({ width: 1.5, line: { width: 0.01 },height: 0.5, xAlign: 'left' });
 // console.log(Fig.round(figure.getElement('star').drawBorder))
 
