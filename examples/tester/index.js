@@ -204,10 +204,10 @@ figure.add({
   options: {
     color: [0, 0, 1, 0.5],
     // line: { width: 0.01, widthIs: 'inside' },
-    drawBorderBuffer: 0.001,
+    drawBorderBuffer: 0.1 / Math.sqrt(2),
     radius: 1,
-    sides: 5,
-    innerRadius: 0.1,
+    sides: 4,
+    innerRadius: 0.5 * Math.sqrt(2) - 0.1 * Math.sqrt(2),
   },
   mods: {
     isTouchable: true,
@@ -215,32 +215,35 @@ figure.add({
     touchBorder: 'buffer',
   },
 });
-console.log(figure.getElement('star'))
-const points = figure.getElement('star').drawBorderBuffer;
-console.log(points[0])
-figure.add({
-  name: 'asdf',
-  method: 'polyline',
-  options: {
-    points: points[0],
-    width: 0.01,
-    color: [1, 0, 0, 1],
-    close: true,
-  },
-});
-// figure.getElement('p').angleToDraw = Math.PI * 2;
-// figure.getElement('p').angleToDraw = Math.PI * 1;
-// figure.getElement('p').custom.updatePoints({
-//   line: null,
-// })
+console.log(Fig.round(figure.getElement('star').drawBorder))
+figure.getElement('star').custom.updatePoints({ radius: 1.2, rotation: 0 });
+console.log(Fig.round(figure.getElement('star').drawBorder))
 
+// const points = figure.getElement('star').drawBorderBuffer;
+// console.log(points[0])
 // figure.add({
-//   name: 'pp',
+//   name: 'asdf',
 //   method: 'polyline',
 //   options: {
-//     points: [[-1, -1], [0, -1], [-0.5, -0.5]],
-//     width: 0.1,
-//     color: [1, 0, 0, 0.5],
-//     cornerStyle: 'fill',
+//     points: points[0],
+//     width: 0.01,
+//     color: [1, 0, 0, 1],
+//     close: true,
 //   },
-// })
+// });
+// // figure.getElement('p').angleToDraw = Math.PI * 2;
+// // figure.getElement('p').angleToDraw = Math.PI * 1;
+// // figure.getElement('p').custom.updatePoints({
+// //   line: null,
+// // })
+
+// // figure.add({
+// //   name: 'pp',
+// //   method: 'polyline',
+// //   options: {
+// //     points: [[-1, -1], [0, -1], [-0.5, -0.5]],
+// //     width: 0.1,
+// //     color: [1, 0, 0, 0.5],
+// //     cornerStyle: 'fill',
+// //   },
+// // })

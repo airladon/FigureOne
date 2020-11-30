@@ -2474,6 +2474,7 @@ export default class FigurePrimitives {
       element.custom.updatePolygonPoints(o);
     };
     element.custom.updatePoints(joinObjects({}, ...options));
+    element.custom.options.rotation -= Math.PI / 2;
     return element;
   }
 
