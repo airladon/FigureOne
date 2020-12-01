@@ -2492,8 +2492,8 @@ export default class FigurePrimitives {
     }, ...options);
 
     element.custom.options = {
-      width: 1,
-      height: 1,
+      width: this.defaultLength,
+      height: this.defaultLength / 2,
       xAlign: 'center',
       yAlign: 'middle',
       corner: {
@@ -2510,12 +2510,6 @@ export default class FigurePrimitives {
         o.line.widthIs = 'mid';
       }
       if (o.line != null) {
-        if (o.line.widthIs === 'outside') {
-          o.line.widthIs = 'negative';
-        }
-        if (o.line.widthIs === 'inside') {
-          o.line.widthIs = 'positive';
-        }
         o.line.close = true;
       }
       const [borderPoints, drawBorder, drawBorderBuffer] = getRectangleBorder(o);
@@ -2531,7 +2525,6 @@ export default class FigurePrimitives {
           drawType: 'triangles',
         }));
       } else {
-        // console.log(borderPoints);
         const [polylineOptions, points,,, drawType] = this.getPolylineTris(
           joinObjects({}, o.line, { points: borderPoints }),
         );
@@ -2550,66 +2543,121 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Ellipse} for options and examples.
    */
   ellipse(...options: Array<OBJ_Ellipse>) {
-    const defaultOptions = {
-      width: 1,
-      height: 1,
+    const joinedOptions = joinObjects({}, ...options);
+    const element = this.generic({
+      transform: new Transform('ellipse').standard(),
+      border: 'draw',
+      touchBorder: 'border',
+      holeBorder: [[]],
+    }, ...options);
+
+    element.custom.options = {
+      width: this.defaultLength,
+      height: this.defaultLength / 2,
       xAlign: 'center',
       yAlign: 'middle',
       sides: 20,
-      transform: new Transform('rectangle').standard(),
-      border: 'outline',
-      touchBorder: 'border',
-      holeBorder: 'none',
     };
-    const optionsToUse = processOptions(defaultOptions, ...options);
-
-    if (
-      optionsToUse.line != null && optionsToUse.line.widthIs == null
-    ) {
-      optionsToUse.line.widthIs = 'mid';
-    }
-
-    const [points, border, touchBorder] = getEllipseBorder(optionsToUse);
-    let element;
-    if (optionsToUse.line == null) {
-      element = this.generic(optionsToUse, {
-        points: ellipseBorderToTris(points), // $FlowFixMe
-        border, // $FlowFixMe
-        touchBorder,
-      });
-      element.custom.update = (updateOptions) => {
-        const o = joinObjects({}, optionsToUse, updateOptions);
-        const [updatedPoints, updatedBorder, updatedTouchBorder] = getEllipseBorder(o);
-        element.drawingObject.change(
-          ellipseBorderToTris(updatedPoints), // $FlowFixMe
-          updatedBorder, // $FlowFixMe
-          updatedTouchBorder,
-          o.holeBorder,
+    element.custom.updatePoints = (updateOptions: OBJ_Rectangle) => {
+      const o = joinObjects({}, element.custom.options, updateOptions);
+      o.offset = getPoint(o.offset);
+      if (
+        o.line != null && o.line.widthIs == null
+      ) {
+        o.line.widthIs = 'mid';
+      }
+      if (o.line != null) {
+        o.line.close = true;
+      }
+      let [borderPoints, drawBorder, drawBorderBuffer] = getEllipseBorder(o);
+      element.custom.options = o;
+      if (o.line == null) {
+        const updatedTris = ellipseBorderToTris(
+          borderPoints,
         );
-      };
-    } else {
-      element = this.polyline(optionsToUse, optionsToUse.line, {
-        points, // $FlowFixMe
-        border, // $FlowFixMe
-        touchBorder,
-        close: true,
-      });
-      element.custom.update = (updateOptions) => {
-        const o = joinObjects({}, optionsToUse, updateOptions);
-        const [updatedPoints, updatedBorder, updatedTouchBorder] = getEllipseBorder(o);
-        // const updatedBorder = getRectangleBorder(o);
-        element.custom.updatePoints(joinObjects({}, o, {
-          points: updatedPoints,
-          border: updatedBorder,
-          touchBorder: updatedTouchBorder,
-          holeBorder: o.holeBorder,
-          dash: o.line.dash,
-          width: o.line.width,
-          widthIs: o.line.widthIs,
+        element.custom.updateGeneric(joinObjects({}, o, {
+          points: updatedTris,
+          drawBorder,
+          drawBorderBuffer,
+          drawType: 'triangles',
         }));
-      };
-    }
+      } else {
+        // console.log(borderPoints);
+        let [polylineOptions, points, newDrawBorder, newDrawBorderBuffer, drawType] = this.getPolylineTris(
+          joinObjects({}, o.line, { points: borderPoints, drawBorderBuffer: o.drawBorderBuffer }),
+        );
+        drawBorder = [[newDrawBorder[0][0], ...newDrawBorder.map(b => b[1])]];
+        drawBorderBuffer = [[newDrawBorderBuffer[0][0], ...newDrawBorderBuffer.map(b => b[1])]];
+        element.custom.updateGeneric(joinObjects({}, o, {
+          points, drawBorder, drawBorderBuffer, drawType,
+        }));
+        element.custom.options.line = polylineOptions;
+      }
+    };
+    element.custom.updatePoints(joinedOptions);
     return element;
+
+
+    // const defaultOptions = {
+    //   width: 1,
+    //   height: 1,
+    //   xAlign: 'center',
+    //   yAlign: 'middle',
+    //   sides: 20,
+    //   transform: new Transform('rectangle').standard(),
+    //   border: 'outline',
+    //   touchBorder: 'border',
+    //   holeBorder: 'none',
+    // };
+    // const optionsToUse = processOptions(defaultOptions, ...options);
+
+    // if (
+    //   optionsToUse.line != null && optionsToUse.line.widthIs == null
+    // ) {
+    //   optionsToUse.line.widthIs = 'mid';
+    // }
+
+    // const [points, border, touchBorder] = getEllipseBorder(optionsToUse);
+    // let element;
+    // if (optionsToUse.line == null) {
+    //   element = this.generic(optionsToUse, {
+    //     points: ellipseBorderToTris(points), // $FlowFixMe
+    //     border, // $FlowFixMe
+    //     touchBorder,
+    //   });
+    //   element.custom.update = (updateOptions) => {
+    //     const o = joinObjects({}, optionsToUse, updateOptions);
+    //     const [updatedPoints, updatedBorder, updatedTouchBorder] = getEllipseBorder(o);
+    //     element.drawingObject.change(
+    //       ellipseBorderToTris(updatedPoints), // $FlowFixMe
+    //       updatedBorder, // $FlowFixMe
+    //       updatedTouchBorder,
+    //       o.holeBorder,
+    //     );
+    //   };
+    // } else {
+    //   element = this.polyline(optionsToUse, optionsToUse.line, {
+    //     points, // $FlowFixMe
+    //     border, // $FlowFixMe
+    //     touchBorder,
+    //     close: true,
+    //   });
+    //   element.custom.update = (updateOptions) => {
+    //     const o = joinObjects({}, optionsToUse, updateOptions);
+    //     const [updatedPoints, updatedBorder, updatedTouchBorder] = getEllipseBorder(o);
+    //     // const updatedBorder = getRectangleBorder(o);
+    //     element.custom.updatePoints(joinObjects({}, o, {
+    //       points: updatedPoints,
+    //       border: updatedBorder,
+    //       touchBorder: updatedTouchBorder,
+    //       holeBorder: o.holeBorder,
+    //       dash: o.line.dash,
+    //       width: o.line.width,
+    //       widthIs: o.line.widthIs,
+    //     }));
+    //   };
+    // }
+    // return element;
   }
 
   /**

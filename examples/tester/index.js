@@ -200,14 +200,20 @@ figure.add([
 
 figure.add({
   name: 'r',
-  method: 'rectangle',
+  method: 'ellipse',
   options: {
-    width: 2,
+    // points: [[0, 0], [1, 0], [0.2, 0.4]],
+    width: 0.3,
     height: 1,
-    corner: {
-      radius: 0.3,
-      sides: 1,
-    },
+    // xAlign: 'left',
+    // corner: {
+    //   radius: 0.3,
+    //   sides: 1,
+    // },
+    // dash: [0.1, 0.1],
+    sides: 4,
+    line: { width: 0.05, widthIs: 'outside' },
+    drawBorderBuffer: 0.1,
   },
   mods: {
     isTouchable: true,
@@ -215,35 +221,36 @@ figure.add({
     touchBorder: 'buffer',
   },
 });
-console.log(Fig.round(figure.getElement('r').drawingObject.points))
+console.log(Fig.round(figure.getElement('r').drawBorder))
 // figure.getElement('r').custom.updatePoints({ width: 1.5, line: { width: 0.01 },height: 0.5, xAlign: 'left' });
 // console.log(Fig.round(figure.getElement('star').drawBorder))
 
-// const points = figure.getElement('star').drawBorderBuffer;
+const points = figure.getElement('r').drawBorder;
+console.log(points)
 // console.log(points[0])
-// figure.add({
-//   name: 'asdf',
-//   method: 'polyline',
-//   options: {
-//     points: points[0],
-//     width: 0.01,
-//     color: [1, 0, 0, 1],
-//     close: true,
-//   },
-// });
+figure.add({
+  name: 'asdf',
+  method: 'polyline',
+  options: {
+    points: points[0],
+    width: 0.01,
+    color: [0, 0, 1, 1],
+    close: true,
+  },
+});
 // // figure.getElement('p').angleToDraw = Math.PI * 2;
 // // figure.getElement('p').angleToDraw = Math.PI * 1;
 // // figure.getElement('p').custom.updatePoints({
 // //   line: null,
 // // })
 
-// // figure.add({
-// //   name: 'pp',
-// //   method: 'polyline',
-// //   options: {
-// //     points: [[-1, -1], [0, -1], [-0.5, -0.5]],
-// //     width: 0.1,
-// //     color: [1, 0, 0, 0.5],
-// //     cornerStyle: 'fill',
-// //   },
-// // })
+// figure.add({
+//   name: 'pp',
+//   method: 'polyline',
+//   options: {
+//     points: points[0],
+//     width: 0.1,
+//     color: [1, 0, 0, 0.5],
+//     cornerStyle: 'fill',
+//   },
+// })

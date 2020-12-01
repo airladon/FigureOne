@@ -22,6 +22,7 @@ function getEllipsePoints(
       height / 2 * Math.sin(deltaAngle * i) + y,
     ));
   }
+  console.log(points)
   return points;
 }
 
@@ -36,12 +37,12 @@ function getEllipseBorder(
       widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
       width: number,
     },
-    border: 'rect' | 'outline' | Array<Array<Point>>,
-    touchBorder: number | 'rect' | 'border' | Array<Array<Point>>
+    // border: 'rect' | 'outline' | Array<Array<Point>>,
+    drawBorderBuffer: number | Array<Array<Point>>
   },
 ) {
   const {
-    width, height, xAlign, yAlign, border, touchBorder, line, sides,
+    width, height, xAlign, yAlign, line, sides,
   } = options;
   let x = 0;
   let y = 0;
@@ -73,27 +74,24 @@ function getEllipseBorder(
     outline = getEllipsePoints(
       width + lineDelta * 2,
       height + lineDelta * 2,
-      sides, x - lineDelta, y - lineDelta,
+      sides, x, y,
     );
   } else {  // $FlowFixMe
     outline = points.map(p => p._dup());
   }
 
-  let borderToUse = border;
-  if (border === 'outline') {
-    borderToUse = [outline];
-  }
-
-  let touchBorderToUse = touchBorder;
-  if (typeof touchBorder === 'number') {
-    touchBorderToUse = [getEllipsePoints(
-      width + lineDelta * 2 + touchBorder * 2,
-      height + lineDelta * 2 + touchBorder * 2,
-      sides, x - lineDelta - touchBorder, y - lineDelta - touchBorder,
+  const border = [outline];
+  const { drawBorderBuffer } = options;
+  let borderBuffer = drawBorderBuffer;
+  if (typeof drawBorderBuffer === 'number') {
+    borderBuffer = [getEllipsePoints(
+      width + lineDelta * 2 + drawBorderBuffer * 2,
+      height + lineDelta * 2 + drawBorderBuffer * 2,
+      sides, x, y,
     )];
   }
 
-  return [points, borderToUse, touchBorderToUse];
+  return [points, border, borderBuffer];
 }
 
 function ellipseBorderToTris(border: Array<Point>) {
