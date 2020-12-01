@@ -2582,8 +2582,9 @@ export default class FigurePrimitives {
           drawType: 'triangles',
         }));
       } else {
-        // console.log(borderPoints);
-        let [polylineOptions, points, newDrawBorder, newDrawBorderBuffer, drawType] = this.getPolylineTris(
+        const [
+          polylineOptions, points, newDrawBorder, newDrawBorderBuffer, drawType,
+        ] = this.getPolylineTris(
           joinObjects({}, o.line, { points: borderPoints, drawBorderBuffer: o.drawBorderBuffer }),
         );
         drawBorder = [[newDrawBorder[0][0], ...newDrawBorder.map(b => b[1])]];

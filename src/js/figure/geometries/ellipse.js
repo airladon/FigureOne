@@ -22,7 +22,6 @@ function getEllipsePoints(
       height / 2 * Math.sin(deltaAngle * i) + y,
     ));
   }
-  console.log(points)
   return points;
 }
 
@@ -84,6 +83,16 @@ function getEllipseBorder(
   const { drawBorderBuffer } = options;
   let borderBuffer = drawBorderBuffer;
   if (typeof drawBorderBuffer === 'number') {
+    // let bufferLineDelta = 0;
+    // if (line != null) {
+    //   bufferLineDelta = line.width;
+    //   if ((line.widthIs === 'outside' || line.widthIs === 'negative')) {
+    //     bufferLineDelta = 0;
+    //   } else if (line.widthIs === 'mid') {
+    //     bufferLineDelta = line.width / 2;
+    //   }
+    // }
+    // console.log(width, bufferLineDelta, line.widthIs)
     borderBuffer = [getEllipsePoints(
       width + lineDelta * 2 + drawBorderBuffer * 2,
       height + lineDelta * 2 + drawBorderBuffer * 2,
