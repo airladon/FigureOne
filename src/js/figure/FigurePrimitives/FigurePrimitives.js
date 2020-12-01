@@ -825,6 +825,10 @@ type OBJ_Star_Defined = {
  * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
  * @property {OBJ_CurvedCorner} [corner] define for rounded corners
  * @property {OBJ_LineStyleSimple} [line] line style options
+ * @property {number | Array<Array<TypeParsablePoint>>} [drawBorderBuffer]
+ * override the OBJ_Generic `drawBorderBuffer` with `number` to make the
+ * drawBorderBuffer a rectangle that is `number` wider and higher on each side
+ * (`0`)
  *
  * @extends OBJ_Generic
  *
@@ -887,6 +891,7 @@ export type OBJ_Rectangle = {
   yAlign?: 'bottom' | 'middle' | 'top' | number,
   corner?: OBJ_CurvedCorner,
   line?: OBJ_LineStyleSimple,
+  drawBorderBuffer?: Array<Array<TypeParsablePoint>> | number,
 } & OBJ_Generic;
 
 
@@ -902,6 +907,9 @@ export type OBJ_Rectangle = {
  * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
  * @property {number} [sides] number of sides to draw ellipse with (`20`)
  * @property {OBJ_LineStyleSimple} [line] line style options
+ * @property {number | Array<Array<TypeParsablePoint>>} [drawBorderBuffer]
+ * override the OBJ_Generic `drawBorderBuffer` with `number` to make the
+ * drawBorderBuffer a ellipse that is `number` thicker around its border (`0`)
  *
  * @extends OBJ_Generic
  *
@@ -960,6 +968,7 @@ export type OBJ_Ellipse = {
   sides?: number,
   fill?: boolean,
   line?: OBJ_LineStyleSimple,
+  drawBorderBuffer?: Array<Array<TypeParsablePoint>> | number,
 } & OBJ_Generic;
 
 /* eslint-disable max-len */
