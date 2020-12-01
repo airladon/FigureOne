@@ -2598,6 +2598,8 @@ export default class FigurePrimitives {
         );
         drawBorder = [[newDrawBorder[0][0], ...newDrawBorder.map(b => b[1])]];
         drawBorderBuffer = [[newDrawBorderBuffer[0][0], ...newDrawBorderBuffer.map(b => b[1])]];
+        drawBorder[0].splice(-1, 1);
+        drawBorderBuffer[0].splice(-1, 1);
         element.custom.updateGeneric(joinObjects({}, o, {
           points, drawBorder, drawBorderBuffer, drawType,
         }));

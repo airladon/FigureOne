@@ -101,4 +101,46 @@ describe('Polyline', () => {
       expect(round(p.getBorder('draw', 'border'), 3)).toEqual([update]);
     });
   });
+  describe('line', () => {
+    beforeEach(() => {
+      options = {
+        buffer: {
+          options: {
+            width: 2,
+            height: 1,
+            sides: 4,
+            drawBorderBuffer: 0.1,
+            line: { width: 0.1, widthIs: 'inside' },
+          },
+          mods: {
+            // border: 'rect',
+            touchBorder: 'buffer',
+          },
+        },
+      };
+    });
+    test('Buffer', () => {
+      addElement('buffer');
+      // expect(round(pd.points, 3)).toEqual(points);
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([border]);
+      expect(round(p.getBorder('draw', 'touchBorder'), 5)).toEqual([[
+        new Point(1.22361, 0),
+        new Point(0, 0.6118),
+        new Point(-1.22361, 0),
+        new Point(0, -0.6118),
+      ]]);
+      expect(round(p.drawBorderBuffer)).toEqual([[
+        new Point(1.22361, 0),
+        new Point(0, 0.6118),
+        new Point(-1.22361, 0),
+        new Point(0, -0.6118),
+      ]]);
+      expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
+    });
+    test('Update', () => {
+      addElement('buffer');
+      p.custom.updatePoints({ width: 2.4 });
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([update]);
+    });
+  });
 });
