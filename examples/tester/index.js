@@ -200,19 +200,20 @@ figure.add([
 
 figure.add({
   name: 'r',
-  method: 'rectangle',
+  method: 'ellipse',
   options: {
     // points: [[0, 0], [1, 0], [0.2, 0.4]],
     width: 2,
-    height: 0.3,
+    height: 1,
     // xAlign: 'left',
     // corner: {
     //   radius: 0.3,
     //   sides: 1,
     // },
     // dash: [0.1, 0.1],
-    sides: 3,
-    line: { width: 0.1, widthIs: 'inside' },
+    sides: 4,
+    // radius: 0.5,
+    // line: { width: 0.1, widthIs: 'inside' },
     drawBorderBuffer: 0.1,
     // color: [1, 0, 0, 0.5],
   },
@@ -223,6 +224,8 @@ figure.add({
   },
 });
 console.log(Fig.round(figure.getElement('r').drawBorderBuffer))
+console.log(Fig.round(figure.getElement('r').drawBorder))
+console.log(Fig.round(figure.getElement('r').drawingObject.points))
 // figure.getElement('r').custom.updatePoints({ width: 1.5, line: { width: 0.01 },height: 0.5, xAlign: 'left' });
 // console.log(Fig.round(figure.getElement('star').drawBorder))
 
