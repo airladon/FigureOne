@@ -200,20 +200,15 @@ figure.add([
 
 figure.add({
   name: 'r',
-  method: 'rectangle',
+  method: 'ellipse',
   options: {
-            width: 1.8,
-            height: 0.8,
-            corner: {
-              radius: 0.2,
-              sides: 1,
-            },
-            line: {
-              width: 0.1,
-              widthIs: 'outside',
-            },
-            // border: 'outline',
-            touchBorder: 'rect',
+    width: 2,
+    height: 1,
+    line: {
+      width: 0.1,
+      widthIs: 0.9,
+    },
+    drawBorderBuffer: 0.1,
   },
   mods: {
     isTouchable: true,

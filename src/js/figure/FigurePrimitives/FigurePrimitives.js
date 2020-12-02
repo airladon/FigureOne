@@ -991,9 +991,21 @@ export type OBJ_Ellipse = {
   xAlign?: 'left' | 'center' | 'right' | number,
   yAlign?: 'bottom' | 'middle' | 'top' | number,
   sides?: number,
-  fill?: boolean,
   line?: OBJ_LineStyleSimple,
   drawBorderBuffer?: Array<Array<TypeParsablePoint>> | number,
+} & OBJ_Generic;
+
+type OBJ_Ellipse_Defined = {
+  width: number,
+  height: number,
+  xAlign: 'left' | 'center' | 'right' | number,
+  yAlign: 'bottom' | 'middle' | 'top' | number,
+  sides: number,
+  line?: {
+    widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
+    width: number,
+  },
+  drawBorderBuffer: number | Array<Array<Point>>
 } & OBJ_Generic;
 
 /* eslint-disable max-len */
@@ -2434,7 +2446,8 @@ export default class FigurePrimitives {
     element.custom.options = defaultOptions;
 
     element.custom.getFill = () => [];
-    element.custom.getLine = () => [];
+    // element.custom.getLine = () => [];
+    element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
     element.custom.getBorder = () => [];
     element.custom.close = true;
     element.custom.updatePoints = (updateOptions: Object) => {
@@ -2498,15 +2511,16 @@ export default class FigurePrimitives {
       offset: new Point(0, 0),
     }, joinObjects({}, ...options));
     element.custom.getBorder = (o: OBJ_Polygon_Defined) => this.getPolygonBorder(o);
-    element.custom.getFill = (borderPoints: Array<Point>, fillOptions: OBJ_Polygon_Defined) => [
+    element.custom.getFill = (border: Array<Point>, fillOptions: OBJ_Polygon_Defined) => [
       getTrisFillPolygon(
-        fillOptions.offset, borderPoints,
+        fillOptions.offset, border,
         fillOptions.sides, fillOptions.sidesToDraw,
       ),
       'triangles',
     ];
-    element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
+    // element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
 
+    // $FlowFixMe
     element.drawingObject.getPointCountForAngle = (angle: number) => {
       const optionsToUse = element.custom.options;
       const sidesToDraw = Math.floor(
@@ -2574,12 +2588,11 @@ export default class FigurePrimitives {
     element.custom.getBorder = (o: OBJ_Rectangle_Defined) => [
       o, ...getRectangleBorder(o),
     ];
-    element.custom.getFill = (borderPoints: Array<Point>) => [
-      rectangleBorderToTris(borderPoints),
+    element.custom.getFill = (border: Array<Point>) => [
+      rectangleBorderToTris(border),
       'triangles',
     ];
-    // eslint-disable-next-line max-len
-    element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
+    // element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
     element.custom.updatePoints(joinObjects({}, ...options));
     return element;
   }
@@ -2589,62 +2602,23 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Ellipse} for options and examples.
    */
   ellipse(...options: Array<OBJ_Ellipse>) {
-    const joinedOptions = joinObjects({}, ...options);
-    const element = this.generic({
-      transform: new Transform('ellipse').standard(),
-      border: 'draw',
-      touchBorder: 'border',
-      holeBorder: [[]],
-    }, ...options);
-
-    element.custom.options = {
+    const element = this.genericBase('ellipse', {
       width: this.defaultLength,
       height: this.defaultLength / 2,
       xAlign: 'center',
       yAlign: 'middle',
       sides: 20,
-    };
-    element.custom.updatePoints = (updateOptions: OBJ_Rectangle) => {
-      const o = joinObjects({}, element.custom.options, updateOptions);
-      o.offset = getPoint(o.offset);
-      if (
-        o.line != null && o.line.widthIs == null
-      ) {
-        o.line.widthIs = 'mid';
-      }
-      if (o.line != null) {
-        o.line.close = true;
-      }
-      const [borderPoints, db, dbb] = getEllipseBorder(o);
-      let [drawBorder, drawBorderBuffer] = [db, dbb];
-      element.custom.options = o;
-      if (o.line == null) {
-        const updatedTris = ellipseBorderToTris(
-          borderPoints,
-        );
-        element.custom.updateGeneric(joinObjects({}, o, {
-          points: updatedTris,
-          drawBorder,
-          drawBorderBuffer,
-          drawType: 'triangles',
-        }));
-      } else {
-        const [
-          polylineOptions, points, newDrawBorder, newDrawBorderBuffer, drawType,
-        ] = this.getPolylineTris(
-          joinObjects({}, o.line, { points: borderPoints, drawBorderBuffer: o.drawBorderBuffer }),
-        );
-        drawBorder = [[newDrawBorder[0][0], ...newDrawBorder.map(b => b[1])]];
-        drawBorderBuffer = [[newDrawBorderBuffer[0][0], ...newDrawBorderBuffer.map(b => b[1])]];
-        drawBorder[0].splice(-1, 1);
-        drawBorderBuffer[0].splice(-1, 1);
-        element.custom.updateGeneric(joinObjects({}, o, {
-          points, drawBorder, drawBorderBuffer, drawType,
-        }));
-        element.custom.options.line = polylineOptions;
-      }
-    };
-    element.custom.updatePoints(joinedOptions);
+    }, joinObjects({}, ...options));
+
+    element.custom.getBorder = (o: OBJ_Ellipse_Defined) => [
+      o, ...getEllipseBorder(o),
+    ];
+    element.custom.getFill = (border: Array<Point>) => [
+      ellipseBorderToTris(border),
+      'triangles',
+    ];
+    // element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
+    element.custom.updatePoints(joinObjects({}, ...options));
     return element;
   }
 
