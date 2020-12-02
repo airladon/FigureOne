@@ -2640,6 +2640,79 @@ export default class FigurePrimitives {
   }
 
   /**
+   * {@link FigureElementPrimitive} that draws a line.
+   * @see {@link OBJ_Arrow} for options and examples.
+   */
+  arrow(...options: Array<OBJ_Arrow>) {
+    const element = this.genericBase('arrow', {
+      length: this.defaultLength / 2,
+      width: this.defaultLength / 2,
+      head: 'triangle',
+      sides: 20,
+      radius: this.defaultLength / 4,
+      rotation: 0,
+      angle: 0,
+      tail: false,
+      // drawPosition: new Point(0, 0),
+    }, joinObjects({}, ...options));
+
+    element.custom.getBorder = (o: OBJ_Triangle_Defined) => [
+      o, ...getArrow(o),
+    ];
+    element.custom.getFill = (border: Array<Point>) => [
+      border,
+      'triangles',
+    ];
+    element.custom.updatePoints(joinObjects({}, ...options));
+
+    // const defaultOptions = joinObjects(
+    //   {},
+    //   defaultArrowOptions(joinObjects({}, ...options)),
+    //   {
+    //     head: 'triangle',
+    //     sides: 20,
+    //     radius: 0.5,
+    //     rotation: 0,
+    //     angle: 0,
+    //     transform: new Transform('line').standard(),
+    //     border: 'outline',
+    //     touchBorder: 'border',
+    //     align: 'tip',
+    //     tail: false,
+    //     drawPosition: new Point(0, 0),
+    //   },
+    // );
+
+    // const optionsToUse = processOptions(defaultOptions, ...options);
+
+    // if (optionsToUse.drawPosition != null) {
+    //   optionsToUse.drawPosition = getPoint(optionsToUse.drawPosition);
+    // }
+    // const [points, border] = getArrow(optionsToUse);
+    // let borderToUse = optionsToUse.border;
+
+    // if (optionsToUse.border === 'outline') {
+    //   borderToUse = [border];
+    // }
+    // const element = this.generic({}, optionsToUse, {
+    //   points, // $FlowFixMe
+    //   border: borderToUse,
+    // });
+
+    // element.custom.update = (updateOptions) => {
+    //   const o = joinObjects({}, optionsToUse, updateOptions);
+    //   if (o.drawPosition != null) {
+    //     o.drawPosition = getPoint(o.drawPosition);
+    //   }
+    //   const [updatedPoints, updatedBorder, updatedTouchBorder] = getArrow(o);
+    //   element.drawingObject.change( // $FlowFixMe
+    //     updatedPoints, updatedBorder, updatedTouchBorder, o.holeBorder,
+    //   );
+    // };
+    // return element;
+  }
+
+  /**
    * {@link FigureElementPrimitive} that draws a grid.
    * @see {@link OBJ_Grid} for options and examples.
    */
@@ -2818,57 +2891,7 @@ export default class FigurePrimitives {
     return element;
   }
 
-  /**
-   * {@link FigureElementPrimitive} that draws a line.
-   * @see {@link OBJ_Arrow} for options and examples.
-   */
-  arrow(...options: Array<OBJ_Arrow>) {
-    const defaultOptions = joinObjects(
-      {},
-      defaultArrowOptions(joinObjects({}, ...options)),
-      {
-        head: 'triangle',
-        sides: 20,
-        radius: 0.5,
-        rotation: 0,
-        angle: 0,
-        transform: new Transform('line').standard(),
-        border: 'outline',
-        touchBorder: 'border',
-        align: 'tip',
-        tail: false,
-        drawPosition: new Point(0, 0),
-      },
-    );
-
-    const optionsToUse = processOptions(defaultOptions, ...options);
-
-    if (optionsToUse.drawPosition != null) {
-      optionsToUse.drawPosition = getPoint(optionsToUse.drawPosition);
-    }
-    const [points, border] = getArrow(optionsToUse);
-    let borderToUse = optionsToUse.border;
-
-    if (optionsToUse.border === 'outline') {
-      borderToUse = [border];
-    }
-    const element = this.generic({}, optionsToUse, {
-      points, // $FlowFixMe
-      border: borderToUse,
-    });
-
-    element.custom.update = (updateOptions) => {
-      const o = joinObjects({}, optionsToUse, updateOptions);
-      if (o.drawPosition != null) {
-        o.drawPosition = getPoint(o.drawPosition);
-      }
-      const [updatedPoints, updatedBorder, updatedTouchBorder] = getArrow(o);
-      element.drawingObject.change( // $FlowFixMe
-        updatedPoints, updatedBorder, updatedTouchBorder, o.holeBorder,
-      );
-    };
-    return element;
-  }
+ 
 
   // polygonSweep(...optionsIn: Array<{
   //   radius?: number,

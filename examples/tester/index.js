@@ -200,10 +200,10 @@ figure.add([
 
 figure.add({
   name: 'r',
-  method: 'triangle',
+  method: 'arrow',
   options: {
-    width: 1,
-    height: 1,
+    width: 0.5,
+    height: 0.5,
     line: {
       width: 0.1,
       widthIs: 0.9,
