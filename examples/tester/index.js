@@ -204,10 +204,12 @@ figure.add({
   options: {
     width: 1,
     height: 1,
-    // line: {
-    //   width: 0.1,
-    //   widthIs: 0.9,
-    // },
+    line: {
+      width: 0.1,
+      widthIs: 0.9,
+    },
+    // xAlign: 'left',
+    // yAlign: 'bottom',
     drawBorderBuffer: 0.1,
   },
   mods: {
@@ -219,6 +221,8 @@ figure.add({
 console.log(Fig.round(figure.getElement('r').drawBorderBuffer, 3))
 console.log(Fig.round(figure.getElement('r').drawBorder, 3))
 console.log(Fig.round(figure.getElement('r').drawingObject.points))
+console.log(Fig.round(figure.getElement('r').getBorder('draw', 'border')))
+console.log(figure.getElement('r'))
 // figure.getElement('r').custom.updatePoints({ width: 1.5, line: { width: 0.01 },height: 0.5, xAlign: 'left' });
 // console.log(Fig.round(figure.getElement('star').drawBorder))
 

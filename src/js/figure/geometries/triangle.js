@@ -24,7 +24,7 @@ function increaseTriangleByOffset(points: Array<Point>, delta) {
     10, Math.PI / 7, [], false,
     2, direction === -1 ? 'negative' : 'positive', 0, [],
   );
-  return outline;
+  return [outline[0][0], outline[0][1], outline[0][3]];
 }
 
 function alignTriangle(
@@ -229,29 +229,27 @@ function getSSSPoints(
   return points;
 }
 
-
-function getTriangleBorder(
-  options: {
+export type OBJ_Triangle_Defined = {
+  width: number,
+  height: number,
+  xAlign: 'left' | 'center' | 'right' | number,
+  yAlign: 'bottom' | 'middle' | 'top' | number,
+  top: 'left' | 'right' | 'center',
+  points?: Array<TypeParsablePoint>,
+  SSS?: [number, number, number],
+  ASA?: [number, number, number],
+  AAS?: [number, number, number],
+  SAS?: [number, number, number],
+  direction: 1 | -1,
+  rotation: number | { side: number, angle: number },
+  line?: {
+    widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
     width: number,
-    height: number,
-    xAlign: 'left' | 'center' | 'right' | number,
-    yAlign: 'bottom' | 'middle' | 'top' | number,
-    top: 'left' | 'right' | 'center',
-    points?: Array<TypeParsablePoint>,
-    SSS?: [number, number, number],
-    ASA?: [number, number, number],
-    AAS?: [number, number, number],
-    SAS?: [number, number, number],
-    direction: 1 | -1,
-    rotation: number | { side: number, angle: number },
-    line?: {
-      widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
-      width: number,
-    },
-    // border: 'rect' | 'outline' | Array<Array<TypeParsablePoint>>,
-    drawBorderBuffer: number | Array<Array<TypeParsablePoint>>
   },
-) {
+  drawBorderBuffer: number | Array<Array<TypeParsablePoint>>
+};
+
+function getTriangleBorder(options: OBJ_Triangle_Defined) {
   // if (options.points != null) {
   //   return options.points;
   // }
@@ -311,38 +309,13 @@ function getTriangleBorder(
   let borderBuffer = drawBorderBuffer;
   if (typeof drawBorderBuffer === 'number') {
     borderBuffer = [increaseTriangleByOffset(alignedTriangle, lineDelta + drawBorderBuffer)];
-    console.log(borderBuffer)
   }
 
   return [alignedTriangle, border, borderBuffer];
-
-  // // let touchBorderDelta = 0;
-  // if (line != null && (line.widthIs === 'outside' || line.widthIs === 'negative')) {
-  //   lineWidthDelta = line.width;
-  // } else if (line != null && (line.widthIs === 'mid')) {
-  //   lineWidthDelta = line.width / 2;
-  // }
-
-  // if (lineWidthDelta > 0 && border === 'outline') {
-  //   border = increaseTriangleByOffset(alignedTriangle, lineWidthDelta);
-  // } else if (border === 'outline') {  // $FlowFixMe
-  //   border = [alignedTriangle.map(p => p._dup())];
-  // }
-
-  // if (typeof touchBorder === 'number') {
-  //   touchBorderDelta = touchBorder;
-  // }
-
-  // if (touchBorderDelta > 0) {
-  //   touchBorderToUse = increaseTriangleByOffset(alignedTriangle, lineWidthDelta + touchBorderDelta);
-  // }
-
-  // return [alignedTriangle, border, touchBorderToUse];
 }
 
 
 export {
   getTriangleBorder,
-  // getTriangleCenter,
   getTriangleDirection,
 };
