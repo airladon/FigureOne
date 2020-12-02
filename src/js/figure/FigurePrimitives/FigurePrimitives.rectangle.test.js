@@ -1,5 +1,5 @@
 import {
-  getPoints,
+  getPoints, Point,
 } from '../../tools/g2';
 import {
   round,
@@ -388,14 +388,24 @@ describe('Polyline', () => {
       addElement('mid');
       expect(round(rd.points, 3)).toEqual(corneredRectLineMid);
       expect(round(r.getBorder('draw', 'border'), 3)).toEqual([getPoints([
-        [-1.1, -0.3], [-0.8, -0.6], [0.8, -0.6],
-        [1.1, -0.3], [1.1, 0.3], [0.8, 0.6],
-        [-0.8, 0.6], [-1.1, 0.3],
+        new Point(-1.1, -0.241),
+        new Point(-0.741, -0.6),
+        new Point(0.741, -0.6),
+        new Point(1.1, -0.241),
+        new Point(1.1, 0.241),
+        new Point(0.741, 0.6),
+        new Point(-0.741, 0.6),
+        new Point(-1.1, 0.241),
       ])]);
       expect(round(r.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
-        [-1.1, -0.3], [-0.8, -0.6], [0.8, -0.6],
-        [1.1, -0.3], [1.1, 0.3], [0.8, 0.6],
-        [-0.8, 0.6], [-1.1, 0.3],
+        new Point(-1.1, -0.241),
+        new Point(-0.741, -0.6),
+        new Point(0.741, -0.6),
+        new Point(1.1, -0.241),
+        new Point(1.1, 0.241),
+        new Point(0.741, 0.6),
+        new Point(-0.741, 0.6),
+        new Point(-1.1, 0.241),
       ])]);
       expect(r.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
@@ -449,9 +459,14 @@ describe('Polyline', () => {
         [-0.7, 0.5], [-1, 0.2],
       ])]);
       expect(round(r.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
-        [-1.1, -0.3], [-0.8, -0.6], [0.8, -0.6],
-        [1.1, -0.3], [1.1, 0.3], [0.8, 0.6],
-        [-0.8, 0.6], [-1.1, 0.3],
+        new Point(-1.1, -0.241),
+        new Point(-0.741, -0.6),
+        new Point(0.741, -0.6),
+        new Point(1.1, -0.241),
+        new Point(1.1, 0.241),
+        new Point(0.741, 0.6),
+        new Point(-0.741, 0.6),
+        new Point(-1.1, 0.241),
       ])]);
       expect(r.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
@@ -472,14 +487,24 @@ describe('Polyline', () => {
       addElement('outside');
       expect(round(rd.points, 3)).toEqual(corneredRectLineOutside);
       expect(round(r.getBorder('draw', 'border'), 3)).toEqual([getPoints([
-        [-1, -0.3], [-0.8, -0.5], [0.8, -0.5],
-        [1, -0.3], [1, 0.3], [0.8, 0.5],
-        [-0.8, 0.5], [-1, 0.3],
+        new Point(-1, -0.241),
+        new Point(-0.741, -0.5),
+        new Point(0.741, -0.5),
+        new Point(1, -0.241),
+        new Point(1, 0.241),
+        new Point(0.741, 0.5),
+        new Point(-0.741, 0.5),
+        new Point(-1, 0.241),
       ])]);
       expect(round(r.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
-        [-1, -0.3], [-0.8, -0.5], [0.8, -0.5],
-        [1, -0.3], [1, 0.3], [0.8, 0.5],
-        [-0.8, 0.5], [-1, 0.3],
+        new Point(-1, -0.241),
+        new Point(-0.741, -0.5),
+        new Point(0.741, -0.5),
+        new Point(1, -0.241),
+        new Point(1, 0.241),
+        new Point(0.741, 0.5),
+        new Point(-0.741, 0.5),
+        new Point(-1, 0.241),
       ])]);
       expect(r.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
@@ -487,14 +512,24 @@ describe('Polyline', () => {
       addElement('negative');
       expect(round(rd.points, 3)).toEqual(corneredRectLineOutside);
       expect(round(r.getBorder('draw', 'border'), 3)).toEqual([getPoints([
-        [-1, -0.3], [-0.8, -0.5], [0.8, -0.5],
-        [1, -0.3], [1, 0.3], [0.8, 0.5],
-        [-0.8, 0.5], [-1, 0.3],
+        new Point(-1, -0.241),
+        new Point(-0.741, -0.5),
+        new Point(0.741, -0.5),
+        new Point(1, -0.241),
+        new Point(1, 0.241),
+        new Point(0.741, 0.5),
+        new Point(-0.741, 0.5),
+        new Point(-1, 0.241),
       ])]);
       expect(round(r.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
-        [-1, -0.3], [-0.8, -0.5], [0.8, -0.5],
-        [1, -0.3], [1, 0.3], [0.8, 0.5],
-        [-0.8, 0.5], [-1, 0.3],
+        new Point(-1, -0.241),
+        new Point(-0.741, -0.5),
+        new Point(0.741, -0.5),
+        new Point(1, -0.241),
+        new Point(1, 0.241),
+        new Point(0.741, 0.5),
+        new Point(-0.741, 0.5),
+        new Point(-1, 0.241),
       ])]);
       expect(r.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
@@ -502,14 +537,24 @@ describe('Polyline', () => {
       addElement('outsideTouchBuffer');
       expect(round(rd.points, 3)).toEqual(corneredRectLineOutside);
       expect(round(r.getBorder('draw', 'border'), 3)).toEqual([getPoints([
-        [-1, -0.3], [-0.8, -0.5], [0.8, -0.5],
-        [1, -0.3], [1, 0.3], [0.8, 0.5],
-        [-0.8, 0.5], [-1, 0.3],
+        new Point(-1, -0.241),
+        new Point(-0.741, -0.5),
+        new Point(0.741, -0.5),
+        new Point(1, -0.241),
+        new Point(1, 0.241),
+        new Point(0.741, 0.5),
+        new Point(-0.741, 0.5),
+        new Point(-1, 0.241),
       ])]);
       expect(round(r.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
-        [-1.1, -0.4], [-0.9, -0.6], [0.9, -0.6],
-        [1.1, -0.4], [1.1, 0.4], [0.9, 0.6],
-        [-0.9, 0.6], [-1.1, 0.4],
+        new Point(-1.1, -0.283),
+        new Point(-0.783, -0.6),
+        new Point(0.783, -0.6),
+        new Point(1.1, -0.283),
+        new Point(1.1, 0.283),
+        new Point(0.783, 0.6),
+        new Point(-0.783, 0.6),
+        new Point(-1.1, 0.283),
       ])]);
       expect(r.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
@@ -517,9 +562,14 @@ describe('Polyline', () => {
       addElement('outsideTouchRect');
       expect(round(rd.points, 3)).toEqual(corneredRectLineOutside);
       expect(round(r.getBorder('draw', 'border'), 3)).toEqual([getPoints([
-        [-1, -0.3], [-0.8, -0.5], [0.8, -0.5],
-        [1, -0.3], [1, 0.3], [0.8, 0.5],
-        [-0.8, 0.5], [-1, 0.3],
+        new Point(-1, -0.241),
+        new Point(-0.741, -0.5),
+        new Point(0.741, -0.5),
+        new Point(1, -0.241),
+        new Point(1, 0.241),
+        new Point(0.741, 0.5),
+        new Point(-0.741, 0.5),
+        new Point(-1, 0.241),
       ])]);
       expect(round(r.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-1, -0.5], [1, -0.5], [1, 0.5], [-1, 0.5],

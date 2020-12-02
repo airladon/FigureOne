@@ -52,11 +52,11 @@ function getRectangleBorder(
     xAlign: 'left' | 'center' | 'right' | number,
     yAlign: 'bottom' | 'middle' | 'top' | number,
     corner: {
-      radius: 0,
-      sides: 1,
+      radius: number,
+      sides: number,
     },
     line?: {
-      widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
+      widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid' | number,
       width: number,
     },
     // border: 'rect' | 'outline' | Array<Array<Point>>,

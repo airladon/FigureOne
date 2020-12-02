@@ -200,14 +200,20 @@ figure.add([
 
 figure.add({
   name: 'r',
-  method: 'polygon',
+  method: 'rectangle',
   options: {
-    // width: 2,
-    // height: 1,
-    sides: 7,
-    radius: 0.5,
-    drawBorderBuffer: 0.1,
-    line: { width: 0.1, widthIs: 'outside' },
+            width: 1.8,
+            height: 0.8,
+            corner: {
+              radius: 0.2,
+              sides: 1,
+            },
+            line: {
+              width: 0.1,
+              widthIs: 'outside',
+            },
+            // border: 'outline',
+            touchBorder: 'rect',
   },
   mods: {
     isTouchable: true,
@@ -215,8 +221,8 @@ figure.add({
     touchBorder: 'buffer',
   },
 });
-console.log(Fig.round(figure.getElement('r').drawBorderBuffer))
-console.log(Fig.round(figure.getElement('r').drawBorder))
+console.log(Fig.round(figure.getElement('r').drawBorderBuffer, 3))
+console.log(Fig.round(figure.getElement('r').drawBorder, 3))
 console.log(Fig.round(figure.getElement('r').drawingObject.points))
 // figure.getElement('r').custom.updatePoints({ width: 1.5, line: { width: 0.01 },height: 0.5, xAlign: 'left' });
 // console.log(Fig.round(figure.getElement('star').drawBorder))

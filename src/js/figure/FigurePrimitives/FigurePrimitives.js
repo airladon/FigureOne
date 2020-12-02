@@ -74,8 +74,15 @@ import type {
  * @property {TypeColor} [color] line color
  */
 export type OBJ_LineStyleSimple = {
-  widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
+  widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,
   width?: number,
+  dash?: TypeDash,
+  color?: TypeColor,
+}
+
+type OBJ_LineStyleSimple_Defined = {
+  widthIs: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,
+  width: number,
   dash?: TypeDash,
   color?: TypeColor,
 }
@@ -892,6 +899,24 @@ export type OBJ_Rectangle = {
   corner?: OBJ_CurvedCorner,
   line?: OBJ_LineStyleSimple,
   drawBorderBuffer?: Array<Array<TypeParsablePoint>> | number,
+} & OBJ_Generic;
+
+type OBJ_Rectangle_Defined = {
+  width: number,
+  height: number,
+  xAlign: 'left' | 'center' | 'right' | number,
+  yAlign: 'bottom' | 'middle' | 'top' | number,
+  corner: {
+    radius: number,
+    sides: number,
+  },
+  line?: {
+    widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid' | number,
+    width: number,
+  },
+  // border: 'rect' | 'outline' | Array<Array<Point>>,
+  drawBorderBuffer: number | Array<Array<Point>>,
+  offset: Point,
 } & OBJ_Generic;
 
 
@@ -1993,6 +2018,8 @@ export type TypeRepeatPatternVertex = {
 //   copy: TypeCopy | Array<TypeCopy>,
 // };
 
+type OBJ_PolyLineTris = OBJ_LineStyleSimple & { drawBorderBuffer: number | Array<Array<Point>> };
+
 
 function parsePoints(
   options: Object,
@@ -2204,7 +2231,9 @@ export default class FigurePrimitives {
     return element;
   }
 
-  getPolylineTris(optionsIn: OBJ_Polyline) {
+  getPolylineTris(
+    optionsIn: OBJ_PolyLineTris,
+  ) {
     const defaultOptions = {
       points: [[0, 0], [1, 0]],
       width: this.defaultLineWidth,
@@ -2410,8 +2439,10 @@ export default class FigurePrimitives {
     element.custom.close = true;
     element.custom.updatePoints = (updateOptions: Object) => {
       const borderOptions = joinObjects({}, element.custom.options, updateOptions);
-      const [o, borderPoints, drawBorder, drawBorderBuffer] =
+      const [o, borderPoints, db, dbb] =
         element.custom.getBorder(borderOptions);
+      let drawBorder = db;
+      let drawBorderBuffer = dbb;
       if (o.line == null) {
         const [
           points, drawType,
@@ -2430,10 +2461,21 @@ export default class FigurePrimitives {
           o.line.close = true;
         }
         const [
-          polylineOptions, points, drawBorderNew, drawBorderBufferNew, drawType,
-        ] = element.custom.getLine(joinObjects({}, o.line, { points: borderPoints }));
+          polylineOptions, points, newDrawBorder, newDrawBorderBuffer, drawType,
+        ] = element.custom.getLine(joinObjects(
+          {},
+          o.line,
+          {
+            points: borderPoints,
+            drawBorderBuffer: o.drawBorderBuffer,
+          },
+        ));
         element.custom.options = o;
         element.custom.options.line = polylineOptions;
+        drawBorder = [[newDrawBorder[0][0], ...newDrawBorder.map(b => b[1])]];
+        drawBorderBuffer = [[newDrawBorderBuffer[0][0], ...newDrawBorderBuffer.map(b => b[1])]];
+        drawBorder[0].splice(-1, 1);
+        drawBorderBuffer[0].splice(-1, 1);
         element.custom.updateGeneric(joinObjects({}, o, {
           points, drawBorder, drawBorderBuffer, drawType,
         }));
@@ -2455,17 +2497,16 @@ export default class FigurePrimitives {
       rotation: 0,
       offset: new Point(0, 0),
     }, joinObjects({}, ...options));
-    element.custom.getBorder = (borderOptions: OBJ_Polygon_Defined) => this.getPolygonBorder(borderOptions);
-    element.custom.getFill = (borderPoints: Array<Point>, fillOptions: OBJ_Polygon) => [
+    element.custom.getBorder = (o: OBJ_Polygon_Defined) => this.getPolygonBorder(o);
+    element.custom.getFill = (borderPoints: Array<Point>, fillOptions: OBJ_Polygon_Defined) => [
       getTrisFillPolygon(
         fillOptions.offset, borderPoints,
         fillOptions.sides, fillOptions.sidesToDraw,
       ),
       'triangles',
     ];
-    element.custom.getLine = (lineOptions: OBJ_Polygon) => {
-      return this.getPolylineTris(lineOptions);
-    }
+    element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
+
     element.drawingObject.getPointCountForAngle = (angle: number) => {
       const optionsToUse = element.custom.options;
       const sidesToDraw = Math.floor(
@@ -2481,66 +2522,6 @@ export default class FigurePrimitives {
     };
     element.custom.updatePoints(joinObjects({}, ...options));
     return element;
-
-    // const joinedOptions = joinObjects({}, ...options);
-    // const element = this.generic({
-    //   transform: new Transform('polygon').standard(),
-    //   border: 'draw',
-    //   touchBorder: 'border',
-    //   holeBorder: [[]],
-    // }, ...options);
-
-    // element.custom.options = {
-    //   radius: 1,
-    //   sides: 4,
-    //   direction: 1,
-    //   rotation: 0,
-    //   offset: new Point(0, 0),
-    // };
-
-    // element.custom.updatePoints = (updateOptions: OBJ_Polygon) => {
-    //   const getBorderOptions = joinObjects({}, element.custom.options, updateOptions);
-    //   const [o, polygonPoints, drawBorder, drawBorderBuffer] =
-    //     this.getPolygonBorder(getBorderOptions);
-    //   element.custom.options = o;
-    //   if (o.line == null) {
-    //     const updatedTris = getTrisFillPolygon(
-    //       o.offset, polygonPoints,
-    //       o.sides, o.sidesToDraw,
-    //     );
-    //     element.custom.updateGeneric(joinObjects({}, o, {
-    //       points: updatedTris,
-    //       drawBorder,
-    //       drawBorderBuffer,
-    //       drawType: 'triangles',
-    //     }));
-    //   } else {
-    //     const [polylineOptions, points,,, drawType] = this.getPolylineTris(
-    //       joinObjects({}, o.line, { points: polygonPoints }),
-    //     );
-    //     element.custom.updateGeneric(joinObjects({}, o, {
-    //       points, drawBorder, drawBorderBuffer, drawType,
-    //     }));
-    //     element.custom.options.line = polylineOptions;
-    //   }
-    // };
-    // // element.updatePoints = element.updatePolygonPoints;
-    // // $FlowFixMe
-    // element.drawingObject.getPointCountForAngle = (angle: number) => {
-    //   const optionsToUse = element.custom.options;
-    //   const sidesToDraw = Math.floor(
-    //     tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * optionsToUse.sides,
-    //   );
-    //   if (optionsToUse.line == null) {
-    //     return sidesToDraw * 3;
-    //   }
-    //   if (optionsToUse.line && optionsToUse.line.linePrimitives) {
-    //     return sidesToDraw * optionsToUse.line.lineNum * 2;
-    //   }
-    //   return sidesToDraw * 6;
-    // };
-    // element.custom.updatePoints(joinedOptions);
-    // return element;
   }
 
   /**
@@ -2579,15 +2560,7 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Rectangle} for options and examples.
    */
   rectangle(...options: Array<OBJ_Rectangle>) {
-    const joinedOptions = joinObjects({}, ...options);
-    const element = this.generic({
-      transform: new Transform('rectangle').standard(),
-      border: 'draw',
-      touchBorder: 'border',
-      holeBorder: [[]],
-    }, ...options);
-
-    element.custom.options = {
+    const element = this.genericBase('rectangle', {
       width: this.defaultLength,
       height: this.defaultLength / 2,
       xAlign: 'center',
@@ -2596,41 +2569,18 @@ export default class FigurePrimitives {
         radius: 0,
         sides: 1,
       },
-    };
-    element.custom.updatePoints = (updateOptions: OBJ_Rectangle) => {
-      const o = joinObjects({}, element.custom.options, updateOptions);
-      o.offset = getPoint(o.offset);
-      if (
-        o.line != null && o.line.widthIs == null
-      ) {
-        o.line.widthIs = 'mid';
-      }
-      if (o.line != null) {
-        o.line.close = true;
-      }
-      const [borderPoints, drawBorder, drawBorderBuffer] = getRectangleBorder(o);
-      element.custom.options = o;
-      if (o.line == null) {
-        const updatedTris = rectangleBorderToTris(
-          borderPoints,
-        );
-        element.custom.updateGeneric(joinObjects({}, o, {
-          points: updatedTris,
-          drawBorder,
-          drawBorderBuffer,
-          drawType: 'triangles',
-        }));
-      } else {
-        const [polylineOptions, points,,, drawType] = this.getPolylineTris(
-          joinObjects({}, o.line, { points: borderPoints }),
-        );
-        element.custom.updateGeneric(joinObjects({}, o, {
-          points, drawBorder, drawBorderBuffer, drawType,
-        }));
-        element.custom.options.line = polylineOptions;
-      }
-    };
-    element.custom.updatePoints(joinedOptions);
+    }, joinObjects({}, ...options));
+
+    element.custom.getBorder = (o: OBJ_Rectangle_Defined) => [
+      o, ...getRectangleBorder(o),
+    ];
+    element.custom.getFill = (borderPoints: Array<Point>) => [
+      rectangleBorderToTris(borderPoints),
+      'triangles',
+    ];
+    // eslint-disable-next-line max-len
+    element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
+    element.custom.updatePoints(joinObjects({}, ...options));
     return element;
   }
 
