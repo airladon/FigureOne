@@ -52,7 +52,8 @@ import { makePolyLine, makePolyLineCorners } from '../geometries/lines/lines';
 import { getPolygonPoints, getTrisFillPolygon } from '../geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../geometries/rectangle';
 import { ellipseBorderToTris, getEllipseBorder } from '../geometries/ellipse';
-import { getTriangle } from '../geometries/triangle';
+import type { OBJ_Ellipse_Defined } from '../geometries/ellipse';
+import { getTriangleBorder } from '../geometries/triangle';
 import { getArrow, defaultArrowOptions } from '../geometries/arrow';
 import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
 import getLine from '../geometries/line';
@@ -995,18 +996,7 @@ export type OBJ_Ellipse = {
   drawBorderBuffer?: Array<Array<TypeParsablePoint>> | number,
 } & OBJ_Generic;
 
-type OBJ_Ellipse_Defined = {
-  width: number,
-  height: number,
-  xAlign: 'left' | 'center' | 'right' | number,
-  yAlign: 'bottom' | 'middle' | 'top' | number,
-  sides: number,
-  line?: {
-    widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
-    width: number,
-  },
-  drawBorderBuffer: number | Array<Array<Point>>
-} & OBJ_Generic;
+
 
 /* eslint-disable max-len */
 /**
@@ -2627,9 +2617,9 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Triangle} for options and examples.
    */
   triangle(...options: Array<OBJ_Triangle>) {
-    const defaultOptions = {
-      width: 1,
-      height: 1,
+    const element = this.genericBase('ellipse', {
+      width: this.defaultLength,
+      height: this.defaultLength,
       xAlign: 'centroid',
       yAlign: 'centroid',
       top: 'center',
@@ -2639,55 +2629,81 @@ export default class FigurePrimitives {
       border: 'outline',
       touchBorder: 'border',
       holeBorder: 'none',
-    };
-    const optionsToUse = processOptions(defaultOptions, ...options);
-    // if (optionsToUse.points != null) {
-    //   optionsToUse.points = getPoints(optionsToUse.points);
+    }, joinObjects({}, ...options));
+
+    element.custom.getBorder = (o: OBJ_Ellipse_Defined) => [
+      o, ...getTriangleBorder(o),
+    ];
+    element.custom.getFill = (border: Array<Point>) => [
+      border,
+      'triangles',
+    ];
+    // element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
+    element.custom.updatePoints(joinObjects({}, ...options));
+    return element;
+
+
+    // const defaultOptions = {
+    //   width: 1,
+    //   height: 1,
+    //   xAlign: 'centroid',
+    //   yAlign: 'centroid',
+    //   top: 'center',
+    //   transform: new Transform('triangle').standard(),
+    //   direction: 1,
+    //   rotation: 0,
+    //   border: 'outline',
+    //   touchBorder: 'border',
+    //   holeBorder: 'none',
+    // };
+    // const optionsToUse = processOptions(defaultOptions, ...options);
+    // // if (optionsToUse.points != null) {
+    // //   optionsToUse.points = getPoints(optionsToUse.points);
+    // // }
+
+    // if (
+    //   optionsToUse.line != null && optionsToUse.line.widthIs == null
+    // ) {
+    //   optionsToUse.line.widthIs = 'mid';
     // }
 
-    if (
-      optionsToUse.line != null && optionsToUse.line.widthIs == null
-    ) {
-      optionsToUse.line.widthIs = 'mid';
-    }
+    // const [points, border, touchBorder] = getTriangle(optionsToUse);
 
-    const [points, border, touchBorder] = getTriangle(optionsToUse);
+    // let element;
+    // if (optionsToUse.line == null) {
+    //   element = this.generic(optionsToUse, { // $FlowFixMe
+    //     points, border, touchBorder,
+    //   });
+    //   element.custom.update = (updateOptions) => {
+    //     const o = joinObjects({}, optionsToUse, updateOptions);
+    //     const [updatedPoints, updatedBorder, updatedTouchBorder] = getTriangle(o);
+    //     element.drawingObject.change( // $FlowFixMe
+    //       updatedPoints, updatedBorder, updatedTouchBorder, o.holeBorder,
+    //     );
+    //   };
+    // } else {
+    //   element = this.polyline(optionsToUse, optionsToUse.line, { // $FlowFixMe
+    //     points,
+    //     close: true, // $FlowFixMe
+    //     border, // $FlowFixMe
+    //     touchBorder,
+    //   });
+    //   element.custom.update = (updateOptions) => {
+    //     const o = joinObjects({}, optionsToUse, updateOptions);
+    //     const [updatedPoints, updatedBorder, updatedTouchBorder] = getTriangle(o);
 
-    let element;
-    if (optionsToUse.line == null) {
-      element = this.generic(optionsToUse, { // $FlowFixMe
-        points, border, touchBorder,
-      });
-      element.custom.update = (updateOptions) => {
-        const o = joinObjects({}, optionsToUse, updateOptions);
-        const [updatedPoints, updatedBorder, updatedTouchBorder] = getTriangle(o);
-        element.drawingObject.change( // $FlowFixMe
-          updatedPoints, updatedBorder, updatedTouchBorder, o.holeBorder,
-        );
-      };
-    } else {
-      element = this.polyline(optionsToUse, optionsToUse.line, { // $FlowFixMe
-        points,
-        close: true, // $FlowFixMe
-        border, // $FlowFixMe
-        touchBorder,
-      });
-      element.custom.update = (updateOptions) => {
-        const o = joinObjects({}, optionsToUse, updateOptions);
-        const [updatedPoints, updatedBorder, updatedTouchBorder] = getTriangle(o);
-
-        element.custom.updatePoints(joinObjects({}, o, {
-          points: updatedPoints,
-          border: updatedBorder,
-          touchBorder: updatedTouchBorder,
-          holeBorder: o.holeBorder,
-          dash: o.line.dash,
-          width: o.line.width,
-          widthIs: o.line.widthIs,
-        }));
-      };
-    }
-    return element;
+    //     element.custom.updatePoints(joinObjects({}, o, {
+    //       points: updatedPoints,
+    //       border: updatedBorder,
+    //       touchBorder: updatedTouchBorder,
+    //       holeBorder: o.holeBorder,
+    //       dash: o.line.dash,
+    //       width: o.line.width,
+    //       widthIs: o.line.widthIs,
+    //     }));
+    //   };
+    // }
+    // return element;
   }
 
   /**

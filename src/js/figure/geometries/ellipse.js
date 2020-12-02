@@ -2,6 +2,22 @@
 import {
   Point,
 } from '../../tools/g2';
+import type {
+  OBJ_Generic,
+} from '../FigurePrimitives/FigurePrimitives';
+
+export type OBJ_Ellipse_Defined = {
+  width: number,
+  height: number,
+  xAlign: 'left' | 'center' | 'right' | number,
+  yAlign: 'bottom' | 'middle' | 'top' | number,
+  sides: number,
+  line?: {
+    widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
+    width: number,
+  },
+  drawBorderBuffer: number | Array<Array<Point>>
+} & OBJ_Generic;
 
 // import {
 //   round,
@@ -25,21 +41,7 @@ function getEllipsePoints(
   return points;
 }
 
-function getEllipseBorder(
-  options: {
-    width: number,
-    height: number,
-    xAlign: 'left' | 'center' | 'right' | number,
-    yAlign: 'bottom' | 'middle' | 'top' | number,
-    sides: number,
-    line?: {
-      widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
-      width: number,
-    },
-    // border: 'rect' | 'outline' | Array<Array<Point>>,
-    drawBorderBuffer: number | Array<Array<Point>>
-  },
-) {
+function getEllipseBorder(options: OBJ_Ellipse_Defined) {
   const {
     width, height, xAlign, yAlign, line, sides,
   } = options;
@@ -83,16 +85,6 @@ function getEllipseBorder(
   const { drawBorderBuffer } = options;
   let borderBuffer = drawBorderBuffer;
   if (typeof drawBorderBuffer === 'number') {
-    // let bufferLineDelta = 0;
-    // if (line != null) {
-    //   bufferLineDelta = line.width;
-    //   if ((line.widthIs === 'outside' || line.widthIs === 'negative')) {
-    //     bufferLineDelta = 0;
-    //   } else if (line.widthIs === 'mid') {
-    //     bufferLineDelta = line.width / 2;
-    //   }
-    // }
-    // console.log(width, bufferLineDelta, line.widthIs)
     borderBuffer = [getEllipsePoints(
       width + lineDelta * 2 + drawBorderBuffer * 2,
       height + lineDelta * 2 + drawBorderBuffer * 2,

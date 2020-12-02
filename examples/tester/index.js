@@ -200,14 +200,14 @@ figure.add([
 
 figure.add({
   name: 'r',
-  method: 'ellipse',
+  method: 'triangle',
   options: {
-    width: 2,
+    width: 1,
     height: 1,
-    line: {
-      width: 0.1,
-      widthIs: 0.9,
-    },
+    // line: {
+    //   width: 0.1,
+    //   widthIs: 0.9,
+    // },
     drawBorderBuffer: 0.1,
   },
   mods: {

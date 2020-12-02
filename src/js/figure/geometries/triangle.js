@@ -19,7 +19,7 @@ function getTriangleDirection(points: Array<Point>) {
 
 function increaseTriangleByOffset(points: Array<Point>, delta) {
   const direction = getTriangleDirection(points);
-  const [, outline] = makePolyLine(
+  const [, , outline] = makePolyLine(
     points, delta, true, direction === -1 ? 'negative' : 'positive', 'auto', 0.1,
     10, Math.PI / 7, [], false,
     2, direction === -1 ? 'negative' : 'positive', 0, [],
@@ -230,7 +230,7 @@ function getSSSPoints(
 }
 
 
-function getTriangle(
+function getTriangleBorder(
   options: {
     width: number,
     height: number,
@@ -248,8 +248,8 @@ function getTriangle(
       widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
       width: number,
     },
-    border: 'rect' | 'outline' | Array<Array<TypeParsablePoint>>,
-    touchBorder: number | 'rect' | 'border' | Array<Array<TypeParsablePoint>>
+    // border: 'rect' | 'outline' | Array<Array<TypeParsablePoint>>,
+    drawBorderBuffer: number | Array<Array<TypeParsablePoint>>
   },
 ) {
   // if (options.points != null) {
@@ -288,40 +288,61 @@ function getTriangle(
   } else {
     alignedTriangle = alignTriangle(points, options.xAlign, options.yAlign, options.rotation);
   }
+  // console.log(alignedTriangle, points)
 
+  const { line } = options;
 
-  const { border, line, touchBorder } = options;
-  let borderToUse = border;
-  let touchBorderToUse = touchBorder;
-
-  let lineWidthDelta = 0;
-  let touchBorderDelta = 0;
+  let lineDelta = 0;
+  if (line != null && line.widthIs === 'mid') {
+    lineDelta = line.width / 2;
+  }
   if (line != null && (line.widthIs === 'outside' || line.widthIs === 'negative')) {
-    lineWidthDelta = line.width;
-  } else if (line != null && (line.widthIs === 'mid')) {
-    lineWidthDelta = line.width / 2;
+    lineDelta = line.width;
+  }
+  let outline: Array<Point>;
+  if (lineDelta > 0) {
+    outline = increaseTriangleByOffset(alignedTriangle, lineDelta);
+  } else {  // $FlowFixMe
+    outline = alignedTriangle.map(p => p._dup());
+  }
+  const border = [outline];
+
+  const { drawBorderBuffer } = options;
+  let borderBuffer = drawBorderBuffer;
+  if (typeof drawBorderBuffer === 'number') {
+    borderBuffer = [increaseTriangleByOffset(alignedTriangle, lineDelta + drawBorderBuffer)];
+    console.log(borderBuffer)
   }
 
-  if (lineWidthDelta > 0 && border === 'outline') {
-    borderToUse = increaseTriangleByOffset(alignedTriangle, lineWidthDelta);
-  } else if (border === 'outline') {  // $FlowFixMe
-    borderToUse = [alignedTriangle.map(p => p._dup())];
-  }
+  return [alignedTriangle, border, borderBuffer];
 
-  if (typeof touchBorder === 'number') {
-    touchBorderDelta = touchBorder;
-  }
+  // // let touchBorderDelta = 0;
+  // if (line != null && (line.widthIs === 'outside' || line.widthIs === 'negative')) {
+  //   lineWidthDelta = line.width;
+  // } else if (line != null && (line.widthIs === 'mid')) {
+  //   lineWidthDelta = line.width / 2;
+  // }
 
-  if (touchBorderDelta > 0) {
-    touchBorderToUse = increaseTriangleByOffset(alignedTriangle, lineWidthDelta + touchBorderDelta);
-  }
+  // if (lineWidthDelta > 0 && border === 'outline') {
+  //   border = increaseTriangleByOffset(alignedTriangle, lineWidthDelta);
+  // } else if (border === 'outline') {  // $FlowFixMe
+  //   border = [alignedTriangle.map(p => p._dup())];
+  // }
 
-  return [alignedTriangle, borderToUse, touchBorderToUse];
+  // if (typeof touchBorder === 'number') {
+  //   touchBorderDelta = touchBorder;
+  // }
+
+  // if (touchBorderDelta > 0) {
+  //   touchBorderToUse = increaseTriangleByOffset(alignedTriangle, lineWidthDelta + touchBorderDelta);
+  // }
+
+  // return [alignedTriangle, border, touchBorderToUse];
 }
 
 
 export {
-  getTriangle,
+  getTriangleBorder,
   // getTriangleCenter,
   getTriangleDirection,
 };
