@@ -200,13 +200,14 @@ figure.add([
 
 figure.add({
   name: 'r',
-  method: 'ellipse',
+  method: 'polygon',
   options: {
-    width: 2,
-    height: 1,
-    sides: 4,
+    // width: 2,
+    // height: 1,
+    sides: 7,
+    radius: 0.5,
     drawBorderBuffer: 0.1,
-    line: { width: 0.1, widthIs: 'inside' },
+    line: { width: 0.1, widthIs: 'outside' },
   },
   mods: {
     isTouchable: true,
@@ -217,7 +218,7 @@ figure.add({
 console.log(Fig.round(figure.getElement('r').drawBorderBuffer))
 console.log(Fig.round(figure.getElement('r').drawBorder))
 console.log(Fig.round(figure.getElement('r').drawingObject.points))
-figure.getElement('r').custom.updatePoints({ width: 1.5, line: { width: 0.01 },height: 0.5, xAlign: 'left' });
+// figure.getElement('r').custom.updatePoints({ width: 1.5, line: { width: 0.01 },height: 0.5, xAlign: 'left' });
 // console.log(Fig.round(figure.getElement('star').drawBorder))
 
 const points = figure.getElement('r').drawBorderBuffer;

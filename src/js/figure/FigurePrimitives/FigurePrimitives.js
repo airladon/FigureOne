@@ -2390,55 +2390,82 @@ export default class FigurePrimitives {
     return [o, points, drawBorder, drawBorderBuffer];
   }
 
+  genericBase(
+    name: string,
+    defaultOptions: Object,
+    optionsIn: Object,
+  ) {
+    const element = this.generic({
+      transform: new Transform(name).standard(),
+      border: 'draw',
+      touchBorder: 'border',
+      holeBorder: [[]],
+    }, optionsIn);
+
+    element.custom.options = defaultOptions;
+
+    element.custom.getFill = () => [];
+    element.custom.getLine = () => [];
+    element.custom.getBorder = () => [];
+    element.custom.close = true;
+    element.custom.updatePoints = (updateOptions: Object) => {
+      const borderOptions = joinObjects({}, element.custom.options, updateOptions);
+      const [o, borderPoints, drawBorder, drawBorderBuffer] =
+        element.custom.getBorder(borderOptions);
+      if (o.line == null) {
+        const [
+          points, drawType,
+        ] = element.custom.getFill(borderPoints, o);
+        element.custom.options = o;
+        element.custom.updateGeneric(joinObjects({}, o, {
+          points, drawBorder, drawBorderBuffer, drawType,
+        }));
+      } else {
+        if (
+          o.line.widthIs == null
+        ) {
+          o.line.widthIs = 'mid';
+        }
+        if (element.custom.close) {
+          o.line.close = true;
+        }
+        const [
+          polylineOptions, points, drawBorderNew, drawBorderBufferNew, drawType,
+        ] = element.custom.getLine(joinObjects({}, o.line, { points: borderPoints }));
+        element.custom.options = o;
+        element.custom.options.line = polylineOptions;
+        element.custom.updateGeneric(joinObjects({}, o, {
+          points, drawBorder, drawBorderBuffer, drawType,
+        }));
+      }
+    };
+    // element.custom.updatePoints(joinObjects({}, ...optionsIn));
+    return element;
+  }
+
   /**
    * {@link FigureElementPrimitive} that draws a regular polygon.
    * @see {@link OBJ_Polygon} for options and examples.
    */
   polygon(...options: Array<OBJ_Polygon>) {
-    const joinedOptions = joinObjects({}, ...options);
-    const element = this.generic({
-      transform: new Transform('polygon').standard(),
-      border: 'draw',
-      touchBorder: 'border',
-      holeBorder: [[]],
-    }, ...options);
-
-    element.custom.options = {
+    const element = this.genericBase('polygon', {
       radius: 1,
       sides: 4,
       direction: 1,
       rotation: 0,
       offset: new Point(0, 0),
-    };
-
-    element.custom.updatePoints = (updateOptions: OBJ_Polygon) => {
-      const getBorderOptions = joinObjects({}, element.custom.options, updateOptions);
-      const [o, polygonPoints, drawBorder, drawBorderBuffer] =
-        this.getPolygonBorder(getBorderOptions);
-      element.custom.options = o;
-      if (o.line == null) {
-        const updatedTris = getTrisFillPolygon(
-          o.offset, polygonPoints,
-          o.sides, o.sidesToDraw,
-        );
-        element.custom.updateGeneric(joinObjects({}, o, {
-          points: updatedTris,
-          drawBorder,
-          drawBorderBuffer,
-          drawType: 'triangles',
-        }));
-      } else {
-        const [polylineOptions, points,,, drawType] = this.getPolylineTris(
-          joinObjects({}, o.line, { points: polygonPoints }),
-        );
-        element.custom.updateGeneric(joinObjects({}, o, {
-          points, drawBorder, drawBorderBuffer, drawType,
-        }));
-        element.custom.options.line = polylineOptions;
-      }
-    };
-    // element.updatePoints = element.updatePolygonPoints;
-    // $FlowFixMe
+    }, joinObjects({}, ...options));
+    element.custom.getBorder = (borderOptions: OBJ_Polygon_Defined) => this.getPolygonBorder(borderOptions);
+    element.custom.getFill = (borderPoints: Array<Point>, fillOptions: OBJ_Polygon) => [
+      getTrisFillPolygon(
+        fillOptions.offset, borderPoints,
+        fillOptions.sides, fillOptions.sidesToDraw,
+      ),
+      'triangles',
+    ];
+    element.custom.getLine = (lineOptions: OBJ_Polygon) => {
+      return this.getPolylineTris(lineOptions);
+    }
     element.drawingObject.getPointCountForAngle = (angle: number) => {
       const optionsToUse = element.custom.options;
       const sidesToDraw = Math.floor(
@@ -2452,8 +2479,68 @@ export default class FigurePrimitives {
       }
       return sidesToDraw * 6;
     };
-    element.custom.updatePoints(joinedOptions);
+    element.custom.updatePoints(joinObjects({}, ...options));
     return element;
+
+    // const joinedOptions = joinObjects({}, ...options);
+    // const element = this.generic({
+    //   transform: new Transform('polygon').standard(),
+    //   border: 'draw',
+    //   touchBorder: 'border',
+    //   holeBorder: [[]],
+    // }, ...options);
+
+    // element.custom.options = {
+    //   radius: 1,
+    //   sides: 4,
+    //   direction: 1,
+    //   rotation: 0,
+    //   offset: new Point(0, 0),
+    // };
+
+    // element.custom.updatePoints = (updateOptions: OBJ_Polygon) => {
+    //   const getBorderOptions = joinObjects({}, element.custom.options, updateOptions);
+    //   const [o, polygonPoints, drawBorder, drawBorderBuffer] =
+    //     this.getPolygonBorder(getBorderOptions);
+    //   element.custom.options = o;
+    //   if (o.line == null) {
+    //     const updatedTris = getTrisFillPolygon(
+    //       o.offset, polygonPoints,
+    //       o.sides, o.sidesToDraw,
+    //     );
+    //     element.custom.updateGeneric(joinObjects({}, o, {
+    //       points: updatedTris,
+    //       drawBorder,
+    //       drawBorderBuffer,
+    //       drawType: 'triangles',
+    //     }));
+    //   } else {
+    //     const [polylineOptions, points,,, drawType] = this.getPolylineTris(
+    //       joinObjects({}, o.line, { points: polygonPoints }),
+    //     );
+    //     element.custom.updateGeneric(joinObjects({}, o, {
+    //       points, drawBorder, drawBorderBuffer, drawType,
+    //     }));
+    //     element.custom.options.line = polylineOptions;
+    //   }
+    // };
+    // // element.updatePoints = element.updatePolygonPoints;
+    // // $FlowFixMe
+    // element.drawingObject.getPointCountForAngle = (angle: number) => {
+    //   const optionsToUse = element.custom.options;
+    //   const sidesToDraw = Math.floor(
+    //     tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * optionsToUse.sides,
+    //   );
+    //   if (optionsToUse.line == null) {
+    //     return sidesToDraw * 3;
+    //   }
+    //   if (optionsToUse.line && optionsToUse.line.linePrimitives) {
+    //     return sidesToDraw * optionsToUse.line.lineNum * 2;
+    //   }
+    //   return sidesToDraw * 6;
+    // };
+    // element.custom.updatePoints(joinedOptions);
+    // return element;
   }
 
   /**
@@ -2578,7 +2665,8 @@ export default class FigurePrimitives {
       if (o.line != null) {
         o.line.close = true;
       }
-      let [borderPoints, drawBorder, drawBorderBuffer] = getEllipseBorder(o);
+      const [borderPoints, db, dbb] = getEllipseBorder(o);
+      let [drawBorder, drawBorderBuffer] = [db, dbb];
       element.custom.options = o;
       if (o.line == null) {
         const updatedTris = ellipseBorderToTris(
@@ -2608,68 +2696,6 @@ export default class FigurePrimitives {
     };
     element.custom.updatePoints(joinedOptions);
     return element;
-
-
-    // const defaultOptions = {
-    //   width: 1,
-    //   height: 1,
-    //   xAlign: 'center',
-    //   yAlign: 'middle',
-    //   sides: 20,
-    //   transform: new Transform('rectangle').standard(),
-    //   border: 'outline',
-    //   touchBorder: 'border',
-    //   holeBorder: 'none',
-    // };
-    // const optionsToUse = processOptions(defaultOptions, ...options);
-
-    // if (
-    //   optionsToUse.line != null && optionsToUse.line.widthIs == null
-    // ) {
-    //   optionsToUse.line.widthIs = 'mid';
-    // }
-
-    // const [points, border, touchBorder] = getEllipseBorder(optionsToUse);
-    // let element;
-    // if (optionsToUse.line == null) {
-    //   element = this.generic(optionsToUse, {
-    //     points: ellipseBorderToTris(points), // $FlowFixMe
-    //     border, // $FlowFixMe
-    //     touchBorder,
-    //   });
-    //   element.custom.update = (updateOptions) => {
-    //     const o = joinObjects({}, optionsToUse, updateOptions);
-    //     const [updatedPoints, updatedBorder, updatedTouchBorder] = getEllipseBorder(o);
-    //     element.drawingObject.change(
-    //       ellipseBorderToTris(updatedPoints), // $FlowFixMe
-    //       updatedBorder, // $FlowFixMe
-    //       updatedTouchBorder,
-    //       o.holeBorder,
-    //     );
-    //   };
-    // } else {
-    //   element = this.polyline(optionsToUse, optionsToUse.line, {
-    //     points, // $FlowFixMe
-    //     border, // $FlowFixMe
-    //     touchBorder,
-    //     close: true,
-    //   });
-    //   element.custom.update = (updateOptions) => {
-    //     const o = joinObjects({}, optionsToUse, updateOptions);
-    //     const [updatedPoints, updatedBorder, updatedTouchBorder] = getEllipseBorder(o);
-    //     // const updatedBorder = getRectangleBorder(o);
-    //     element.custom.updatePoints(joinObjects({}, o, {
-    //       points: updatedPoints,
-    //       border: updatedBorder,
-    //       touchBorder: updatedTouchBorder,
-    //       holeBorder: o.holeBorder,
-    //       dash: o.line.dash,
-    //       width: o.line.width,
-    //       widthIs: o.line.widthIs,
-    //     }));
-    //   };
-    // }
-    // return element;
   }
 
   /**
