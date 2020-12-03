@@ -203,14 +203,14 @@ figure.add({
   method: 'arrow',
   options: {
     width: 0.5,
-    height: 0.5,
-    // line: {
-    //   width: 0.05,
-    //   widthIs: 0.5,
-    // },
-    tail: 0.1,
+    // height: 0.5,
+    line: {
+      width: 0.05,
+      widthIs: 0.5,
+    },
+    // tail: 0.1,
     head: 'reverseTriangle',
-    tailWidth: 0.1,
+    tailWidth: 0.3,
     // xAlign: 'left',
     // yAlign: 'bottom',
     drawBorderBuffer: 0.1,

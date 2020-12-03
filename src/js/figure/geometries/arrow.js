@@ -490,36 +490,36 @@ function getReverseTriangleArrow(options: {
     const i = vLine.intersectsWith(topLine).intersect || new Point(tailX, -tailWidth / 2);
     arrowBorder = [
       new Point(0, -width / 2),
-      new Point(intersect.x, -tailWidth / 2),
-      new Point(tailX, -tailWidth / 2),
-      new Point(i.x, -i.y),
-      new Point(-length, 0),
-      new Point(i.x, i.y),
-      new Point(tailX, tailWidth / 2),
-      new Point(intersect.x, tailWidth / 2),
       new Point(0, width / 2),
+      new Point(intersect.x, tailWidth / 2),
+      new Point(tailX, tailWidth / 2),
+      new Point(i.x, i.y),
+      new Point(-length, 0),
+      new Point(i.x, -i.y),
+      new Point(tailX, -tailWidth / 2),
+      new Point(intersect.x, -tailWidth / 2),
     ];
     points = [
-      arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[8]._dup(),
-      arrowBorder[1]._dup(), arrowBorder[7]._dup(), arrowBorder[8]._dup(),
-      arrowBorder[1]._dup(), arrowBorder[6]._dup(), arrowBorder[7]._dup(),
-      arrowBorder[1]._dup(), arrowBorder[2]._dup(), arrowBorder[6]._dup(),
-      arrowBorder[3]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
+      arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
+      arrowBorder[0]._dup(), arrowBorder[2]._dup(), arrowBorder[8]._dup(),
+      arrowBorder[8]._dup(), arrowBorder[2]._dup(), arrowBorder[3]._dup(),
+      arrowBorder[8]._dup(), arrowBorder[3]._dup(), arrowBorder[7]._dup(),
+      arrowBorder[6]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
     ];
   } else {
     arrowBorder = [
       new Point(0, -width / 2),
-      new Point(intersect.x, -tailWidth / 2),
-      new Point(-length, -tailWidth / 2),
-      new Point(-length, tailWidth / 2),
-      new Point(intersect.x, tailWidth / 2),
       new Point(0, width / 2),
+      new Point(intersect.x, tailWidth / 2),
+      new Point(-length, tailWidth / 2),
+      new Point(-length, -tailWidth / 2),
+      new Point(intersect.x, -tailWidth / 2),
     ];
     points = [
-      arrowBorder[0]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
-      arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[4]._dup(),
-      arrowBorder[1]._dup(), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
-      arrowBorder[1]._dup(), arrowBorder[2]._dup(), arrowBorder[3]._dup(),
+      arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
+      arrowBorder[0]._dup(), arrowBorder[2]._dup(), arrowBorder[5]._dup(),
+      arrowBorder[2]._dup(), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
+      arrowBorder[5]._dup(), arrowBorder[2]._dup(), arrowBorder[4]._dup(),
     ];
   }
   const joinTail = [
