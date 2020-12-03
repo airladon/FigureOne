@@ -2473,14 +2473,29 @@ export default class FigurePrimitives {
           {
             points: borderPoints,
             drawBorderBuffer: o.drawBorderBuffer,
+            // close: true,
           },
         ));
+        console.log(borderPoints, newDrawBorder, newDrawBorderBuffer)
         element.custom.options = o;
         element.custom.options.line = polylineOptions;
         drawBorder = [[newDrawBorder[0][0], ...newDrawBorder.map(b => b[1])]];
-        drawBorderBuffer = [[newDrawBorderBuffer[0][0], ...newDrawBorderBuffer.map(b => b[1])]];
+        // drawBorderBuffer = [[newDrawBorderBuffer[0][0], ...newDrawBorderBuffer.map(b => b[1])]];
+        drawBorderBuffer = [];
+        for (let i = 0; i < newDrawBorderBuffer.length; i += 1) {
+          if (i === 0) {
+            drawBorderBuffer.push(newDrawBorderBuffer[i][0]);
+            drawBorderBuffer.push(newDrawBorderBuffer[i][1]);
+          } else {
+            if (i > 0 && drawBorderBuffer.slice(-1)[0] !== newDrawBorderBuffer[i][0]) {
+              drawBorderBuffer.push(newDrawBorderBuffer[i][0]);
+            }
+            drawBorderBuffer.push(newDrawBorderBuffer[i][1]);
+          }
+        }
+        // drawBorderBuffer = [[...newDrawBorderBuffer.map(b => [b[1], b[2]])]];
         drawBorder[0].splice(-1, 1);
-        drawBorderBuffer[0].splice(-1, 1);
+        // drawBorderBuffer[0].splice(-1, 1);
         element.custom.updateGeneric(joinObjects({}, o, {
           points, drawBorder, drawBorderBuffer, drawType,
         }));

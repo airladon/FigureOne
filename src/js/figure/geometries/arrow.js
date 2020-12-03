@@ -1314,7 +1314,6 @@ function getArrow(options: {
   const [newPoints, newBorder, newTouchBorder, newTail] = orientArrow(
     points, border, touchBorder, tail, fullLength, joinLength, o,
   );
-
   const { line } = o;
 
   let lineDelta = 0;
@@ -1325,19 +1324,21 @@ function getArrow(options: {
     lineDelta = line.width;
   }
 
-  const increaseArrowByOffset = (points: Array<Point>, delta) => {
-    const [, , outline] = makePolyLine(
-      points, delta, true, 'negative', 'auto', 0.1,
+  const increaseArrowByOffset = (pnts: Array<Point>, delta) => {
+    // if (delta > 0.01) {
+    //   debugger;
+    // }
+    const [, outline] = makePolyLine(
+      pnts, delta, true, 'negative', 'auto', 0.1,
       10, Math.PI / 7, [], false,
       2, 'negative', 0, [],
     );
     // return [outline[0][0], outline[0][1], outline[0][3]];
-    return outline;
-  }
+    return outline[0];
+  };
 
   let outline: Array<Point>;
   if (lineDelta > 0) {
-    console.log(lineDelta);
     outline = increaseArrowByOffset(newBorder, lineDelta);
   } else {  // $FlowFixMe
     outline = newBorder.map(p => p._dup());
@@ -1347,7 +1348,7 @@ function getArrow(options: {
   const { drawBorderBuffer } = o;
   let borderBuffer = drawBorderBuffer;
   if (typeof drawBorderBuffer === 'number') {
-    borderBuffer = increaseArrowByOffset(newBorder, lineDelta + drawBorderBuffer);
+    borderBuffer = [increaseArrowByOffset(newBorder, lineDelta + drawBorderBuffer)];
   }
 
   let pointsToUse = newPoints;
