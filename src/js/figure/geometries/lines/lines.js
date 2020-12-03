@@ -827,7 +827,7 @@ function addArrows(
   existingBorder: Array<Array<Point>>,
   existingTouchBorder: Array<Array<Point>>,
   holeBorder: Array<Array<Point>>,
-  touchBorderBuffer: number,
+  drawBorderBuffer: number,
   lineWidth: number,
   onLine: boolean,
 ) {
@@ -849,7 +849,7 @@ function addArrows(
         align: 'tail',
         drawPosition: startArrow[0],
         angle: new Line(startArrow[0], startArrow[1]).angle(),
-        touchBorderBuffer,
+        drawBorderBuffer,
         tailWidth: lineWidth,
       },
     ));
@@ -871,7 +871,7 @@ function addArrows(
         align: 'tail',
         drawPosition: endArrow[0],
         angle: new Line(endArrow[0], endArrow[1]).angle(),
-        touchBorderBuffer,
+        drawBorderBuffer,
         tailWidth: lineWidth,
       },
     ));

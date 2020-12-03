@@ -261,3 +261,15 @@ console.log(Fig.tools.misc.joinObjects({}, { a: false }, { a: 1 }));
 //     cornerStyle: 'fill',
 //   },
 // })
+
+figure.add({
+  name: 'line',
+  method: 'line',
+  options: {
+    p1: [0, -1],
+    length: 1,
+    angle: 0,
+    width: 0.05,
+    arrow: 'triangle'
+  },
+});

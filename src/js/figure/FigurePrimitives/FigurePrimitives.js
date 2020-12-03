@@ -2329,6 +2329,7 @@ export default class FigurePrimitives {
       const [o, points, drawBorder, drawBorderBuffer, drawType] =
         this.getPolylineTris(joinObjects({}, element.custom.options, updateOptions));
       element.custom.options = o;
+
       element.custom.updateGeneric(joinObjects({}, o, {
         points, drawBorder, drawBorderBuffer, drawType,
       }));
