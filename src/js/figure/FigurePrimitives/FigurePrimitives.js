@@ -2653,18 +2653,23 @@ export default class FigurePrimitives {
       rotation: 0,
       angle: 0,
       tail: false,
-      // drawPosition: new Point(0, 0),
+      drawPosition: new Point(0, 0),
+      // barb: this.defaultLength / 8,
     }, joinObjects({}, ...options));
 
-    element.custom.getBorder = (o: OBJ_Triangle_Defined) => [
-      o, ...getArrow(o),
-    ];
+    element.custom.getBorder = (o: OBJ_Triangle_Defined) => {
+      const optionsWithDefaultArrow = defaultArrowOptions(o);
+      const [points, border, borderBuffer] = getArrow(optionsWithDefaultArrow);
+      return [
+        optionsWithDefaultArrow, points, border, borderBuffer,
+      ];
+    };
     element.custom.getFill = (border: Array<Point>) => [
       border,
       'triangles',
     ];
     element.custom.updatePoints(joinObjects({}, ...options));
-
+    return element;
     // const defaultOptions = joinObjects(
     //   {},
     //   defaultArrowOptions(joinObjects({}, ...options)),

@@ -7,6 +7,7 @@ import {
 } from '../../tools/tools';
 import { getPolygonPoints } from './polygon/polygon';
 import type { OBJ_Arrow } from '../FigurePrimitives/FigurePrimitives';
+import { makePolyLine } from './lines/lines';
 
 /**
  * Arrow heads
@@ -197,6 +198,7 @@ function orientArrow(
   },
 ) {
   let matrix;
+  // console.log(options.drawPosition)
   if (options.align === 'start') {
     matrix = new Transform()
       .translate(length, 0)
@@ -334,12 +336,12 @@ function getTriangleArrow(options: {
   length: number,
   width: number,
   tailWidth: number,
-  touchBorderBuffer: number,
+  drawBorderBuffer: number,
   tail: boolean | number,
   lineWidth: number,
 }) {
   const {
-    length, touchBorderBuffer, tailWidth, width, tail,
+    length, drawBorderBuffer, tailWidth, width, tail,
   } = options;
   const [backIntersect, headX, tailX] = getTriangleArrowTail(options);
   let arrowBorder;
@@ -372,8 +374,8 @@ function getTriangleArrow(options: {
     new Point(tailX, -tailWidth / 2),
   ];
   let touchBorder = arrowBorder;
-  if (touchBorderBuffer > 0) {
-    touchBorder = getTouchBorder(length, width, touchBorderBuffer);
+  if (drawBorderBuffer > 0) {
+    touchBorder = getTouchBorder(length, width, drawBorderBuffer);
   }
   return [points, arrowBorder, touchBorder, joinTail];
 }
@@ -466,11 +468,11 @@ function getReverseTriangleArrow(options: {
   length: number,
   width: number,
   tailWidth: number,
-  touchBorderBuffer: number,
+  drawBorderBuffer: number,
   tail: boolean | number,
 }) {
   const {
-    length, touchBorderBuffer, tailWidth, width, tail,
+    length, drawBorderBuffer, tailWidth, width, tail,
   } = options;
   const [intersect, headX, tailX] = getReverseTriTail(options);
   let arrowBorder;
@@ -478,8 +480,8 @@ function getReverseTriangleArrow(options: {
   if (tail === false || tailX >= intersect.x) {
     arrowBorder = [
       new Point(0, -width / 2),
-      new Point(-length, 0),
       new Point(0, width / 2),
+      new Point(-length, 0),
     ];
     points = arrowBorder.map(p => p._dup());
   } else if (tailX > headX) {
@@ -525,8 +527,8 @@ function getReverseTriangleArrow(options: {
     new Point(tailX, -tailWidth / 2),
   ];
   let touchBorder = arrowBorder;
-  if (touchBorderBuffer > 0) {
-    touchBorder = getTouchBorder(length, width, touchBorderBuffer);
+  if (drawBorderBuffer > 0) {
+    touchBorder = getTouchBorder(length, width, drawBorderBuffer);
   }
   return [points, arrowBorder, touchBorder, joinTail];
 }
@@ -630,12 +632,12 @@ function getBarbArrow(options: {
   length: number,
   width: number,
   barb: number,
-  touchBorderBuffer: number,
+  drawBorderBuffer: number,
   tailWidth: number,
   tail: boolean | number,
 }) {
   const {
-    length, touchBorderBuffer, tailWidth, barb, width, tail,
+    length, drawBorderBuffer, tailWidth, barb, width, tail,
   } = options;
   const [backIntersect, headX, tailX] = getBarbTail(options);
   let arrowBorder;
@@ -674,8 +676,8 @@ function getBarbArrow(options: {
     new Point(tailX, -tailWidth / 2),
   ];
   let touchBorder = arrowBorder;
-  if (touchBorderBuffer > 0) {
-    touchBorder = getTouchBorder(length, width, touchBorderBuffer);
+  if (drawBorderBuffer > 0) {
+    touchBorder = getTouchBorder(length, width, drawBorderBuffer);
   }
   return [points, arrowBorder, touchBorder, joinTail];
 }
@@ -793,12 +795,12 @@ function getRectArrow(options: {
   width: number,
   start: Point,
   end: Point,
-  touchBorderBuffer: number,
+  drawBorderBuffer: number,
   tailWidth: number,
   tail: number | boolean;
 }) {
   const {
-    length, touchBorderBuffer, tailWidth, width, tail,
+    length, drawBorderBuffer, tailWidth, width, tail,
   } = options;
   const [backIntersect, headX, tailX] = getRectTail(options);
   let arrowBorder;
@@ -837,8 +839,8 @@ function getRectArrow(options: {
     new Point(tailX, -tailWidth / 2),
   ];
   let touchBorder = arrowBorder;
-  if (touchBorderBuffer > 0) {
-    touchBorder = getTouchBorder(length, width, touchBorderBuffer);
+  if (drawBorderBuffer > 0) {
+    touchBorder = getTouchBorder(length, width, drawBorderBuffer);
   }
 
   return [points, arrowBorder, touchBorder, joinTail];
@@ -984,12 +986,12 @@ function getLineArrow(options: {
   width: number,
   start: Point,
   end: Point,
-  touchBorderBuffer: number,
+  drawBorderBuffer: number,
   tailWidth: number,
   tail: number | boolean,
 }) {
   const {
-    length, touchBorderBuffer, tailWidth, width, tail,
+    length, drawBorderBuffer, tailWidth, width, tail,
   } = options;
 
   const [
@@ -1057,8 +1059,8 @@ function getLineArrow(options: {
     new Point(tailX, -tailWidth / 2),
   ];
   let touchBorder = arrowBorder;
-  if (touchBorderBuffer > 0) {
-    touchBorder = getTouchBorder(length, width, touchBorderBuffer);
+  if (drawBorderBuffer > 0) {
+    touchBorder = getTouchBorder(length, width, drawBorderBuffer);
   }
   return [points, arrowBorder, touchBorder, joinTail];
 }
@@ -1190,14 +1192,14 @@ function getPolygonArrow(options: {
   radius: number,
   start: Point,
   end: Point,
-  touchBorderBuffer: number,
+  drawBorderBuffer: number,
   tailWidth: number,
   sides: number,
   rotation: number,
   tail: number | boolean,
 }) {
   const {
-    touchBorderBuffer, tailWidth, radius, tail,
+    drawBorderBuffer, tailWidth, radius, tail,
   } = options;
 
   const outline = getPolygonTail(options);
@@ -1221,8 +1223,8 @@ function getPolygonArrow(options: {
     tailJoin = [new Point(-radius - t, tailWidth / 2), new Point(-radius - t, -tailWidth / 2)];
   }
   let touchBorder = outline;
-  if (touchBorderBuffer > 0) {
-    touchBorder = getTouchBorder(radius * 2 + t, radius * 2, touchBorderBuffer);
+  if (drawBorderBuffer > 0) {
+    touchBorder = getTouchBorder(radius * 2 + t, radius * 2, drawBorderBuffer);
   }
   return [points, outline, touchBorder, tailJoin];
 }
@@ -1276,7 +1278,7 @@ function getArrow(options: {
   barb: number,
   start: Point,
   end: Point,
-  touchBorderBuffer: number,
+  drawBorderBuffer: number,
   tailWidth: number,
   radius: number,
   rotation: number,
@@ -1289,6 +1291,9 @@ function getArrow(options: {
   let touchBorder;
   let tail;
   const o = joinObjects({}, options);
+  if (o.drawPosition != null) {
+    o.drawPosition = getPoint(o.drawPosition);
+  }
   if (o.tailWidth > 0 && o.width < o.tailWidth) {
     o.width = o.tailWidth * 0.001;
   }
@@ -1306,9 +1311,50 @@ function getArrow(options: {
     [points, border, touchBorder, tail] = getTriangleArrow(o);
   }
   const [, joinLength, fullLength] = getArrowLength(o);
-  return orientArrow(
+  const [newPoints, newBorder, newTouchBorder, newTail] = orientArrow(
     points, border, touchBorder, tail, fullLength, joinLength, o,
   );
+
+  const { line } = o;
+
+  let lineDelta = 0;
+  if (line != null && line.widthIs === 'mid') {
+    lineDelta = line.width / 2;
+  }
+  if (line != null && (line.widthIs === 'outside' || line.widthIs === 'negative')) {
+    lineDelta = line.width;
+  }
+
+  const increaseArrowByOffset = (points: Array<Point>, delta) => {
+    const [, , outline] = makePolyLine(
+      points, delta, true, 'negative', 'auto', 0.1,
+      10, Math.PI / 7, [], false,
+      2, 'negative', 0, [],
+    );
+    // return [outline[0][0], outline[0][1], outline[0][3]];
+    return outline;
+  }
+
+  let outline: Array<Point>;
+  if (lineDelta > 0) {
+    console.log(lineDelta);
+    outline = increaseArrowByOffset(newBorder, lineDelta);
+  } else {  // $FlowFixMe
+    outline = newBorder.map(p => p._dup());
+  }
+  const borderOut = [outline];
+
+  const { drawBorderBuffer } = o;
+  let borderBuffer = drawBorderBuffer;
+  if (typeof drawBorderBuffer === 'number') {
+    borderBuffer = increaseArrowByOffset(newBorder, lineDelta + drawBorderBuffer);
+  }
+
+  let pointsToUse = newPoints;
+  if (line != null) {
+    pointsToUse = newBorder;
+  }
+  return [pointsToUse, borderOut, borderBuffer, newTail];
 }
 
 function defaultArrowOptions(
@@ -1322,26 +1368,26 @@ function defaultArrowOptions(
     scale: 1,
   };
   if (o.head === 'triangle' || o.head == null) {
-    return joinObjects({}, defaults, getTriangleDefaults(o), {
+    return joinObjects({}, defaults, o, getTriangleDefaults(o), {
       head: 'triangle',
     });
   }
   if (o.head === 'polygon' || o.head === 'circle') {
-    return joinObjects({}, defaults, getPolygonDefaults(o));
+    return joinObjects({}, defaults, o, getPolygonDefaults(o));
   }
   if (o.head === 'barb') {
-    return joinObjects({}, defaults, getBarbDefaults(o));
+    return joinObjects({}, defaults, o, getBarbDefaults(o));
   }
   if (o.head === 'reverseTriangle') {
-    return joinObjects({}, defaults, getReverseTriDefaults(o));
+    return joinObjects({}, defaults, o, getReverseTriDefaults(o));
   }
   if (o.head === 'bar') {
-    return joinObjects({}, defaults, getBarDefaults(o));
+    return joinObjects({}, defaults, o, getBarDefaults(o));
   }
   if (o.head === 'line') {
-    return joinObjects({}, defaults, getLineDefaults(o));
+    return joinObjects({}, defaults, o, getLineDefaults(o));
   }
-  return joinObjects({}, defaults, getRectDefaults(o));
+  return joinObjects({}, defaults, o, getRectDefaults(o));
 }
 
 function simplifyArrowOptions(

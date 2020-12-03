@@ -204,13 +204,17 @@ figure.add({
   options: {
     width: 0.5,
     height: 0.5,
-    line: {
-      width: 0.1,
-      widthIs: 0.9,
-    },
+    // line: {
+    //   width: 0.05,
+    //   widthIs: 0.5,
+    // },
+    tail: 0.1,
+    head: 'reverseTriangle',
+    tailWidth: 0.1,
     // xAlign: 'left',
     // yAlign: 'bottom',
     drawBorderBuffer: 0.1,
+    color: [1, 0, 0, 0.6],
   },
   mods: {
     isTouchable: true,
@@ -218,10 +222,10 @@ figure.add({
     touchBorder: 'buffer',
   },
 });
-console.log(Fig.round(figure.getElement('r').drawBorderBuffer, 3))
-console.log(Fig.round(figure.getElement('r').drawBorder, 3))
-console.log(Fig.round(figure.getElement('r').drawingObject.points))
-console.log(Fig.round(figure.getElement('r').getBorder('draw', 'border')))
+// console.log(Fig.round(figure.getElement('r').drawBorderBuffer, 3))
+// console.log(Fig.round(figure.getElement('r').drawBorder, 3))
+// console.log(Fig.round(figure.getElement('r').drawingObject.points))
+// console.log(Fig.round(figure.getElement('r').getBorder('draw', 'border')))
 console.log(figure.getElement('r'))
 // figure.getElement('r').custom.updatePoints({ width: 1.5, line: { width: 0.01 },height: 0.5, xAlign: 'left' });
 // console.log(Fig.round(figure.getElement('star').drawBorder))
@@ -239,6 +243,8 @@ figure.add({
     close: true,
   },
 });
+
+console.log(Fig.tools.misc.joinObjects({}, { a: false }, { a: 1 }));
 // // figure.getElement('p').angleToDraw = Math.PI * 2;
 // // figure.getElement('p').angleToDraw = Math.PI * 1;
 // // figure.getElement('p').custom.updatePoints({
