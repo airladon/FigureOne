@@ -198,6 +198,151 @@ figure.add([
 //   drawType: 'strip',
 // });
 
+const xValues = Fig.tools.math.range(-1.7, 2, 0.45);
+const yValues = Fig.tools.math.range(-1.25, 1.25, 0.5);
+let index = 0;
+const makeArrow = (options) => {
+  const x = xValues[index % xValues.length];
+  const y = yValues[Math.floor(index / xValues.length)];
+  const name = `_${index}`;
+  index += 1;
+  // console.log(x, y, xValues.length % index)
+  return {
+    name,
+    method: 'primitives.arrow',
+    options: Fig.tools.misc.joinObjects({}, options, {
+      width: 0.25,
+      length: 0.25,
+      drawBorderBuffer: 0.05,
+      color: [1, 0, 0, 0.6],
+      tailWidth: 0.15,
+      position: [x, y],
+    }),
+  };
+};
+
+const arrows = [
+  makeArrow({
+    head: 'triangle',
+  }),
+  makeArrow({
+    head: 'triangle',
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'triangle',
+    tail: 0.1,
+  }),
+  makeArrow({
+    head: 'triangle',
+    line: { width: 0.05, widthIs: 'mid' },
+  }),
+  makeArrow({
+    head: 'triangle',
+    line: { width: 0.05, widthIs: 'outside' },
+  }),
+  makeArrow({
+    head: 'triangle',
+    line: { width: 0.05, widthIs: 'inside' },
+  }),
+  makeArrow({
+    head: 'triangle',
+    line: { width: 0.05, widthIs: 'mid' },
+    tail: 0.1,
+  }),
+  makeArrow({
+    head: 'triangle',
+    line: { width: 0.05, widthIs: 'outside' },
+    tail: 0.1,
+  }),
+  makeArrow({
+    head: 'triangle',
+    line: { width: 0.05, widthIs: 'inside' },
+    tail: 0.1,
+  }),
+  //
+  makeArrow({
+    head: 'reverseTriangle',
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    tail: 0.05,
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    tail: -0.05,
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05, widthIs: 'mid' },
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05, widthIs: 'outside' },
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05, widthIs: 'inside' },
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05, widthIs: 'mid' },
+    tail: 0.05,
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05, widthIs: 'outside' },
+    tail: 0.05,
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05, widthIs: 'inside' },
+    tail: 0.05,
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05, widthIs: 'mid' },
+    tail: -0.05,
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05, widthIs: 'outside' },
+    tail: -0.05,
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05, widthIs: 'inside' },
+    tail: -0.05,
+  }),
+];
+figure.add(arrows);
+for (let i = 0; i < index; i += 1) {
+  const element = figure.elements.elements[`_${i}`];
+  figure.add([
+  {
+    name: `buffer${i}`,
+    method: 'polyline',
+    options: {
+      points: element.drawBorderBuffer[0],
+      width: 0.01,
+      color: [0, 0, 1, 1],
+      close: true,
+      position: element.getPosition(),
+    },
+  },
+  {
+    name: `border${i}`,
+    method: 'polyline',
+    options: {
+      points: element.drawBorder[0],
+      width: 0.01,
+      color: [0, 1, 0, 1],
+      close: true,
+      position: element.getPosition(),
+    },
+  },
+]);
+}
 figure.add({
   name: 'r',
   method: 'arrow',
@@ -205,17 +350,17 @@ figure.add({
     width: 0.5,
     // height: 0.5,
     line: {
-      width: 0.01,
+      width: 0.05,
       widthIs: 'mid',
       // dash: [0.01, 0.01],
     },
     // tail: 0.1,
-    head: 'barb',
+    head: 'triangle',
     barb: 0.1,
     tailWidth: 0.2,
     // xAlign: 'left',
     // yAlign: 'bottom',
-    drawBorderBuffer: 0.1,
+    drawBorderBuffer: 0.05,
     color: [1, 0, 0, 0.6],
   },
   mods: {
@@ -235,16 +380,28 @@ console.log(figure.getElement('r'))
 const points = figure.getElement('r').drawBorderBuffer;
 console.log(points)
 // console.log(points[0])
-figure.add({
-  name: 'asdf',
-  method: 'polyline',
-  options: {
-    points: points[0],
-    width: 0.01,
-    color: [0, 0, 1, 1],
-    close: true,
+figure.add([
+  {
+    name: 'buffer',
+    method: 'polyline',
+    options: {
+      points: points[0],
+      width: 0.01,
+      color: [0, 0, 1, 1],
+      close: true,
+    },
   },
-});
+  {
+    name: 'border',
+    method: 'polyline',
+    options: {
+      points: figure.getElement('r').drawBorder[0],
+      width: 0.01,
+      color: [0, 1, 0, 1],
+      close: true,
+    },
+  },
+]);
 
 // Point {x: -0.4166666666666667, y: 0, _type: "point"}
 // 1: Point {x: -0.5, y: -0.25, _type: "point"}
@@ -258,34 +415,34 @@ console.log(Fig.tools.misc.joinObjects({}, { a: false }, { a: 1 }));
 // //   line: null,
 // // })
 
-figure.add({
-  name: 'pp',
-  method: 'polyline',
-  options: {
-    points: [
-      [-0.3, 0],
-      [-0.5, -0.25],
-      [0, 0],
-      [-0.5, 0.25],
-    ],
-    close: true,
-    width: 0.1,
-    color: [1, 0, 0, 0.5],
-    // cornerStyle: 'fill',
-  },
-})
+// figure.add({
+//   name: 'pp',
+//   method: 'polyline',
+//   options: {
+//     points: [
+//       [-0.3, 0],
+//       [-0.5, -0.25],
+//       [0, 0],
+//       [-0.5, 0.25],
+//     ],
+//     close: true,
+//     width: 0.1,
+//     color: [1, 0, 0, 0.5],
+//     // cornerStyle: 'fill',
+//   },
+// })
 
-figure.add({
-  name: 'pp1',
-  method: 'polyline',
-  options: {
-    points: figure.getElement('pp').getBorder('draw', 'border')[0].slice(0, 3),
-    // close: true,
-    width: 0.01,
-    color: [0, 1, 0, 1],
-    // cornerStyle: 'fill',
-  },
-})
+// figure.add({
+//   name: 'pp1',
+//   method: 'polyline',
+//   options: {
+//     points: figure.getElement('pp').getBorder('draw', 'border')[0].slice(0, 3),
+//     // close: true,
+//     width: 0.01,
+//     color: [0, 1, 0, 1],
+//     // cornerStyle: 'fill',
+//   },
+// })
 
 
 

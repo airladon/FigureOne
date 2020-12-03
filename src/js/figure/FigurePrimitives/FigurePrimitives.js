@@ -2476,7 +2476,7 @@ export default class FigurePrimitives {
             // close: true,
           },
         ));
-        console.log(borderPoints, newDrawBorder, newDrawBorderBuffer)
+        // console.log(borderPoints, newDrawBorder, newDrawBorderBuffer)
         element.custom.options = o;
         element.custom.options.line = polylineOptions;
         drawBorder = [[newDrawBorder[0][0], ...newDrawBorder.map(b => b[1])]];
