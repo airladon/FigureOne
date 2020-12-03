@@ -1,4 +1,4 @@
-const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 // const figure = new Fig.Figure({ limits: [-3, -2.25, 6, 4.5], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 
 // // const figure = new Fig.Figure({ limits: [-8, -8, 16, 16], color: [1, 0, 0, 1]});
@@ -198,8 +198,8 @@ figure.add([
 //   drawType: 'strip',
 // });
 
-const xValues = Fig.tools.math.range(-1.7, 2, 0.45);
-const yValues = Fig.tools.math.range(-1.25, 1.25, 0.5);
+const xValues = Fig.tools.math.range(-2.5, 2.5, 0.5);
+const yValues = Fig.tools.math.range(2.5, -2.5, -0.5);
 let index = 0;
 const makeArrow = (options) => {
   const x = xValues[index % xValues.length];
@@ -319,30 +319,32 @@ figure.add(arrows);
 for (let i = 0; i < index; i += 1) {
   const element = figure.elements.elements[`_${i}`];
   figure.add([
-  {
-    name: `buffer${i}`,
-    method: 'polyline',
-    options: {
-      points: element.drawBorderBuffer[0],
-      width: 0.01,
-      color: [0, 0, 1, 1],
-      close: true,
-      position: element.getPosition(),
+    {
+      name: `buffer${i}`,
+      method: 'polyline',
+      options: {
+        points: element.drawBorderBuffer[0],
+        width: 0.01,
+        color: [0, 0, 1, 1],
+        close: true,
+        position: element.getPosition(),
+      },
     },
-  },
-  {
-    name: `border${i}`,
-    method: 'polyline',
-    options: {
-      points: element.drawBorder[0],
-      width: 0.01,
-      color: [0, 1, 0, 1],
-      close: true,
-      position: element.getPosition(),
+    {
+      name: `border${i}`,
+      method: 'polyline',
+      options: {
+        points: element.drawBorder[0],
+        width: 0.01,
+        color: [0, 1, 0, 1],
+        close: true,
+        position: element.getPosition(),
+      },
     },
-  },
-]);
+  ]);
 }
+
+
 figure.add({
   name: 'r',
   method: 'arrow',
@@ -369,6 +371,8 @@ figure.add({
     touchBorder: 'buffer',
   },
 });
+
+
 // console.log(Fig.round(figure.getElement('r').drawBorderBuffer, 3))
 // console.log(Fig.round(figure.getElement('r').drawBorder, 3))
 // console.log(Fig.round(figure.getElement('r').drawingObject.points))
