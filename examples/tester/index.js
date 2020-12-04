@@ -198,8 +198,8 @@ figure.add([
 //   drawType: 'strip',
 // });
 
-const xValues = Fig.tools.math.range(-2.5, 2.5, 0.5);
-const yValues = Fig.tools.math.range(2.5, -2.5, -0.5);
+const xValues = Fig.tools.math.range(-2.5, 2.5, 0.6);
+const yValues = Fig.tools.math.range(2.5, -2.5, -0.6);
 let index = 0;
 const makeArrow = (options) => {
   const x = xValues[index % xValues.length];
@@ -211,8 +211,8 @@ const makeArrow = (options) => {
     name,
     method: 'primitives.arrow',
     options: Fig.tools.misc.joinObjects({}, options, {
-      width: 0.25,
-      length: 0.25,
+      width: 0.35,
+      length: 0.35,
       drawBorderBuffer: 0.05,
       color: [1, 0, 0, 0.6],
       tailWidth: 0.15,
@@ -221,149 +221,247 @@ const makeArrow = (options) => {
   };
 };
 
-const arrows = [
-  makeArrow({
-    head: 'triangle',
-  }),
-  makeArrow({
-    head: 'triangle',
-    tail: 0,
-  }),
-  makeArrow({
-    head: 'triangle',
-    tail: 0.1,
-  }),
-  makeArrow({
-    head: 'triangle',
-    line: { width: 0.05, widthIs: 'mid' },
-  }),
-  makeArrow({
-    head: 'triangle',
-    line: { width: 0.05, widthIs: 'outside' },
-  }),
-  makeArrow({
-    head: 'triangle',
-    line: { width: 0.05, widthIs: 'inside' },
-  }),
-  makeArrow({
-    head: 'triangle',
-    line: { width: 0.05, widthIs: 'mid' },
-    tail: 0.1,
-  }),
-  makeArrow({
-    head: 'triangle',
-    line: { width: 0.05, widthIs: 'outside' },
-    tail: 0.1,
-  }),
-  makeArrow({
-    head: 'triangle',
-    line: { width: 0.05, widthIs: 'inside' },
-    tail: 0.1,
-  }),
-  //
-  makeArrow({
-    head: 'reverseTriangle',
-  }),
-  makeArrow({
-    head: 'reverseTriangle',
-    tail: 0.05,
-  }),
-  makeArrow({
-    head: 'reverseTriangle',
-    tail: -0.05,
-  }),
-  makeArrow({
-    head: 'reverseTriangle',
-    line: { width: 0.05, widthIs: 'mid' },
-  }),
-  makeArrow({
-    head: 'reverseTriangle',
-    line: { width: 0.05, widthIs: 'outside' },
-  }),
-  makeArrow({
-    head: 'reverseTriangle',
-    line: { width: 0.05, widthIs: 'inside' },
-  }),
-  makeArrow({
-    head: 'reverseTriangle',
-    line: { width: 0.05, widthIs: 'mid' },
-    tail: 0.05,
-  }),
-  makeArrow({
-    head: 'reverseTriangle',
-    line: { width: 0.05, widthIs: 'outside' },
-    tail: 0.05,
-  }),
-  makeArrow({
-    head: 'reverseTriangle',
-    line: { width: 0.05, widthIs: 'inside' },
-    tail: 0.05,
-  }),
-  makeArrow({
-    head: 'reverseTriangle',
-    line: { width: 0.05, widthIs: 'mid' },
-    tail: -0.05,
-  }),
-  makeArrow({
-    head: 'reverseTriangle',
-    line: { width: 0.05, widthIs: 'outside' },
-    tail: -0.05,
-  }),
-  makeArrow({
-    head: 'reverseTriangle',
-    line: { width: 0.05, widthIs: 'inside' },
-    tail: -0.05,
-  }),
-];
-figure.add(arrows);
-for (let i = 0; i < index; i += 1) {
-  const element = figure.elements.elements[`_${i}`];
-  figure.add([
-    {
-      name: `buffer${i}`,
-      method: 'polyline',
-      options: {
-        points: element.drawBorderBuffer[0],
-        width: 0.01,
-        color: [0, 0, 1, 1],
-        close: true,
-        position: element.getPosition(),
-      },
-    },
-    {
-      name: `border${i}`,
-      method: 'polyline',
-      options: {
-        points: element.drawBorder[0],
-        width: 0.01,
-        color: [0, 1, 0, 1],
-        close: true,
-        position: element.getPosition(),
-      },
-    },
-  ]);
-}
+// const arrows = [
+//   makeArrow({
+//     head: 'triangle',
+//   }),
+//   makeArrow({
+//     head: 'triangle',
+//     tail: 0,
+//   }),
+//   makeArrow({
+//     head: 'triangle',
+//     tail: 0.1,
+//   }),
+//   makeArrow({
+//     head: 'triangle',
+//     line: { width: 0.05, widthIs: 'mid' },
+//   }),
+//   makeArrow({
+//     head: 'triangle',
+//     line: { width: 0.05, widthIs: 'outside' },
+//   }),
+//   makeArrow({
+//     head: 'triangle',
+//     line: { width: 0.05, widthIs: 'inside' },
+//   }),
+//   makeArrow({
+//     head: 'triangle',
+//     line: { width: 0.05, widthIs: 'mid' },
+//     tail: 0.1,
+//   }),
+//   makeArrow({
+//     head: 'triangle',
+//     line: { width: 0.05, widthIs: 'outside' },
+//     tail: 0.1,
+//   }),
+//   makeArrow({
+//     head: 'triangle',
+//     line: { width: 0.05, widthIs: 'inside' },
+//     tail: 0.1,
+//   }),
+//   // Reverse Triangle
+//   makeArrow({
+//     head: 'reverseTriangle',
+//   }),
+//   makeArrow({
+//     head: 'reverseTriangle',
+//     tail: 0.05,
+//   }),
+//   makeArrow({
+//     head: 'reverseTriangle',
+//     tail: -0.05,
+//   }),
+//   makeArrow({
+//     head: 'reverseTriangle',
+//     line: { width: 0.05, widthIs: 'mid' },
+//   }),
+//   makeArrow({
+//     head: 'reverseTriangle',
+//     line: { width: 0.05, widthIs: 'outside' },
+//   }),
+//   makeArrow({
+//     head: 'reverseTriangle',
+//     line: { width: 0.05, widthIs: 'inside' },
+//   }),
+//   makeArrow({
+//     head: 'reverseTriangle',
+//     line: { width: 0.05, widthIs: 'mid' },
+//     tail: 0.05,
+//   }),
+//   makeArrow({
+//     head: 'reverseTriangle',
+//     line: { width: 0.05, widthIs: 'outside' },
+//     tail: 0.05,
+//   }),
+//   makeArrow({
+//     head: 'reverseTriangle',
+//     line: { width: 0.05, widthIs: 'inside' },
+//     tail: 0.05,
+//   }),
+//   makeArrow({
+//     head: 'reverseTriangle',
+//     line: { width: 0.05, widthIs: 'mid' },
+//     tail: -0.05,
+//   }),
+//   makeArrow({
+//     head: 'reverseTriangle',
+//     line: { width: 0.05, widthIs: 'outside' },
+//     tail: -0.05,
+//   }),
+//   makeArrow({
+//     head: 'reverseTriangle',
+//     line: { width: 0.05, widthIs: 'inside' },
+//     tail: -0.05,
+//   }),
+//   // Barb
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.05,
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.15,
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.05,
+//     tail: 0.05,
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.1,
+//     tail: -0.02,
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.05,
+//     line: { width: 0.05, widthIs: 'mid' },
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.05,
+//     line: { width: 0.05, widthIs: 'outside' },
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.05,
+//     line: { width: 0.05, widthIs: 'inside' },
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.15,
+//     line: { width: 0.05, widthIs: 'mid' },
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.15,
+//     line: { width: 0.05, widthIs: 'outside' },
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.15,
+//     line: { width: 0.05, widthIs: 'inside' },
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.05,
+//     line: { width: 0.05, widthIs: 'mid' },
+//     tail: 0.05,
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.05,
+//     line: { width: 0.05, widthIs: 'outside' },
+//     tail: 0.05,
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.05,
+//     line: { width: 0.05, widthIs: 'inside' },
+//     tail: 0.05,
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.15,
+//     line: { width: 0.05, widthIs: 'mid' },
+//     tail: 0.05,
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.15,
+//     line: { width: 0.05, widthIs: 'outside' },
+//     tail: 0.05,
+//   }),
+//   makeArrow({
+//     head: 'barb',
+//     barb: 0.15,
+//     line: { width: 0.05, widthIs: 'inside' },
+//     tail: 0.05,
+//   }),
+//   // line
+
+//   makeArrow({
+//     head: 'line',
+//     tailWidth: 0.01,
+//   }),
+//   makeArrow({
+//     head: 'line',
+//     tailWidth: 0.01,
+//   }),
+//   makeArrow({
+//     head: 'line',
+//     tail: 0.01,
+//     tailWidth: 0.01,
+//   }),
+//   makeArrow({
+//     head: 'line',
+//     tail: -0.02,
+//     tailWidth: 0.01,
+//   }),
+// ];
+// figure.add(arrows);
+// for (let i = 0; i < index; i += 1) {
+//   const element = figure.elements.elements[`_${i}`];
+//   figure.add([
+//     {
+//       name: `buffer${i}`,
+//       method: 'polyline',
+//       options: {
+//         points: element.drawBorderBuffer[0],
+//         width: 0.01,
+//         color: [0, 0, 1, 1],
+//         close: true,
+//         position: element.getPosition(),
+//       },
+//     },
+//     {
+//       name: `border${i}`,
+//       method: 'polyline',
+//       options: {
+//         points: element.drawBorder[0],
+//         width: 0.01,
+//         color: [0, 1, 0, 1],
+//         close: true,
+//         position: element.getPosition(),
+//       },
+//     },
+//   ]);
+// }
 
 
 figure.add({
   name: 'r',
   method: 'arrow',
   options: {
-    width: 0.5,
-    // height: 0.5,
-    line: {
-      width: 0.05,
-      widthIs: 'mid',
-      // dash: [0.01, 0.01],
-    },
-    // tail: 0.1,
-    head: 'triangle',
-    barb: 0.1,
-    tailWidth: 0.2,
-    // xAlign: 'left',
-    // yAlign: 'bottom',
+    width: 0.35,
+    length: 0.35,
     drawBorderBuffer: 0.05,
     color: [1, 0, 0, 0.6],
+    tailWidth: 0.15,
+    hhead: 'triangle',
+    line: { width: 0.05, widthIs: 'outside' },
+    tail: 0.1,
   },
   mods: {
     isTouchable: true,

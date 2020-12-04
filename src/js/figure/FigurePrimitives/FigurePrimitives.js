@@ -2479,9 +2479,21 @@ export default class FigurePrimitives {
         // console.log(borderPoints, newDrawBorder, newDrawBorderBuffer)
         element.custom.options = o;
         element.custom.options.line = polylineOptions;
-        drawBorder = [[newDrawBorder[0][0], ...newDrawBorder.map(b => b[1])]];
+        // drawBorder = [[newDrawBorder[0][0], ...newDrawBorder.map(b => b[1])]];
         // drawBorderBuffer = [[newDrawBorderBuffer[0][0], ...newDrawBorderBuffer.map(b => b[1])]];
         drawBorderBuffer = [];
+        drawBorder = [];
+        for (let i = 0; i < newDrawBorder.length; i += 1) {
+          if (i === 0) {
+            drawBorder.push(newDrawBorder[i][0]);
+            drawBorder.push(newDrawBorder[i][1]);
+          } else {
+            if (i > 0 && drawBorder.slice(-1)[0] !== newDrawBorder[i][0]) {
+              drawBorder.push(newDrawBorder[i][0]);
+            }
+            drawBorder.push(newDrawBorder[i][1]);
+          }
+        }
         for (let i = 0; i < newDrawBorderBuffer.length; i += 1) {
           if (i === 0) {
             drawBorderBuffer.push(newDrawBorderBuffer[i][0]);
@@ -2494,7 +2506,7 @@ export default class FigurePrimitives {
           }
         }
         // drawBorderBuffer = [[...newDrawBorderBuffer.map(b => [b[1], b[2]])]];
-        drawBorder[0].splice(-1, 1);
+        // drawBorder[0].splice(-1, 1);
         // drawBorderBuffer[0].splice(-1, 1);
         element.custom.updateGeneric(joinObjects({}, o, {
           points, drawBorder, drawBorderBuffer, drawType,
