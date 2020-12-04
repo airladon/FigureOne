@@ -213,7 +213,7 @@ const makeArrow = (options) => {
     options: Fig.tools.misc.joinObjects({}, {
       width: 0.35,
       length: 0.35,
-      drawBorderBuffer: 0.05,
+      drawBorderBuffer: 0.2,
       color: [1, 0, 0, 0.6],
       tailWidth: 0.15,
       position: [x, y],
@@ -591,9 +591,9 @@ figure.add({
   name: 'r',
   method: 'arrow',
   options: {
-    width: 0.35,
-    length: 0.35,
-    drawBorderBuffer: 0.05,
+    width: 1,
+    length: 1,
+    drawBorderBuffer: 0.3,
     color: [1, 0, 0, 0.6],
     tailWidth: 0.15,
     hhead: 'triangle',
