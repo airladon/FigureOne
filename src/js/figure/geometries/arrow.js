@@ -1003,55 +1003,55 @@ function getLineArrow(options: {
   if (tail === false || frontIntersect.x <= tailX) {
     arrowBorder = [
       new Point(outsideTop.x, -outsideTop.y),
-      new Point(insideTop.x, -insideTop.y),
-      new Point(zeroPoint, 0),
-      new Point(insideTop.x, insideTop.y),
-      new Point(outsideTop.x, outsideTop.y),
       new Point(0, 0),
+      new Point(outsideTop.x, outsideTop.y),
+      new Point(insideTop.x, insideTop.y),
+      new Point(zeroPoint, 0),
+      new Point(insideTop.x, -insideTop.y),
     ];
     points = [
       arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[5]._dup(),
-      arrowBorder[1]._dup(), arrowBorder[2]._dup(), arrowBorder[5]._dup(),
-      arrowBorder[2]._dup(), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
-      arrowBorder[2]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
+      arrowBorder[5]._dup(), arrowBorder[1]._dup(), arrowBorder[4]._dup(),
+      arrowBorder[4]._dup(), arrowBorder[1]._dup(), arrowBorder[3]._dup(),
+      arrowBorder[3]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
     ];
   } else if (stubTail) {
     arrowBorder = [
       new Point(outsideTop.x, -outsideTop.y),
-      new Point(insideTop.x, -insideTop.y),
-      new Point(insideIntersect.x, -insideIntersect.y),
-      new Point(insideIntersect.x, insideIntersect.y),
-      new Point(insideTop.x, insideTop.y),
-      new Point(outsideTop.x, outsideTop.y),
       new Point(0, 0),
+      new Point(outsideTop.x, outsideTop.y),
+      new Point(insideTop.x, insideTop.y),
+      new Point(insideIntersect.x, insideIntersect.y),
+      new Point(insideIntersect.x, -insideIntersect.y),
+      new Point(insideTop.x, -insideTop.y),
     ];
     points = [
+      arrowBorder[3]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
+      arrowBorder[3]._dup(), arrowBorder[4]._dup(), arrowBorder[1]._dup(),
       arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[6]._dup(),
-      arrowBorder[1]._dup(), arrowBorder[2]._dup(), arrowBorder[6]._dup(),
-      arrowBorder[2]._dup(), arrowBorder[3]._dup(), arrowBorder[6]._dup(),
-      arrowBorder[3]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
-      arrowBorder[3]._dup(), arrowBorder[5]._dup(), arrowBorder[6]._dup(),
+      arrowBorder[6]._dup(), arrowBorder[1]._dup(), arrowBorder[5]._dup(),
+      arrowBorder[5]._dup(), arrowBorder[1]._dup(), arrowBorder[4]._dup(),
     ];
   } else {
     arrowBorder = [
       new Point(outsideTop.x, -outsideTop.y),
-      new Point(insideTop.x, -insideTop.y),
-      new Point(insideIntersect.x, -insideIntersect.y),
-      new Point(tailX, -tailWidth / 2),
-      new Point(tailX, tailWidth / 2),
-      new Point(insideIntersect.x, insideIntersect.y),
-      new Point(insideTop.x, insideTop.y),
-      new Point(outsideTop.x, outsideTop.y),
       new Point(0, 0),
+      new Point(outsideTop.x, outsideTop.y),
+      new Point(insideTop.x, insideTop.y),
+      new Point(insideIntersect.x, insideIntersect.y),
+      new Point(tailX, tailWidth / 2),
+      new Point(tailX, -tailWidth / 2),
+      new Point(insideIntersect.x, -insideIntersect.y),
+      new Point(insideTop.x, -insideTop.y),
     ];
     points = [
-      arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
-      arrowBorder[0]._dup(), arrowBorder[2]._dup(), arrowBorder[8]._dup(),
-      arrowBorder[2]._dup(), arrowBorder[5]._dup(), arrowBorder[8]._dup(),
-      arrowBorder[2]._dup(), arrowBorder[3]._dup(), arrowBorder[4]._dup(),
-      arrowBorder[2]._dup(), arrowBorder[4]._dup(), arrowBorder[5]._dup(),
-      arrowBorder[5]._dup(), arrowBorder[6]._dup(), arrowBorder[7]._dup(),
-      arrowBorder[5]._dup(), arrowBorder[7]._dup(), arrowBorder[8]._dup(),
+      arrowBorder[0]._dup(), arrowBorder[1]._dup(), arrowBorder[8]._dup(),
+      arrowBorder[8]._dup(), arrowBorder[1]._dup(), arrowBorder[7]._dup(),
+      arrowBorder[7]._dup(), arrowBorder[1]._dup(), arrowBorder[4]._dup(),
+      arrowBorder[4]._dup(), arrowBorder[1]._dup(), arrowBorder[2]._dup(),
+      arrowBorder[3]._dup(), arrowBorder[4]._dup(), arrowBorder[2]._dup(),
+      arrowBorder[5]._dup(), arrowBorder[7]._dup(), arrowBorder[4]._dup(),
+      arrowBorder[6]._dup(), arrowBorder[7]._dup(), arrowBorder[5]._dup(),
     ];
   }
   const joinTail = [
