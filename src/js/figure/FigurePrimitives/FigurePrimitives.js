@@ -1,7 +1,7 @@
 // @flow
 import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
-  parseBorder, getPoints, getBoundingRect,
+  parseBorder, getPoints, getBoundingRect, Line, threePointAngle,
 } from '../../tools/g2';
 // import {
 //   round
@@ -2450,6 +2450,75 @@ export default class FigurePrimitives {
     return drawBorderBuffer;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getBufferBorder1(borderIn: Array<Point>, buffer: number) {
+    if (typeof buffer !== 'number') {
+      return buffer;
+    }
+    if (buffer === 0) {
+      return borderIn;
+    }
+    // First remove all points that are >180º
+    const border = [];
+    for (let i = 0; i < borderIn.length; i += 1) {
+      let prevPoint;
+      let nextPoint;
+      if (i === 0) {
+        prevPoint = borderIn[borderIn.length - 1];
+      } else {
+        prevPoint = borderIn[i - 1];
+      }
+      if (i === borderIn.length - 1) {
+        nextPoint = borderIn[0];
+      } else {
+        nextPoint = borderIn[i + 1];
+      }
+      // console.log(prevPoint, nextPoint)
+      const angle = threePointAngle(nextPoint, borderIn[i], prevPoint);
+      // console.log(i, angle, borderIn[i], border[border.length - 1])
+      if (angle < Math.PI && (border.length === 0 || borderIn[i].isNotEqualTo(border[border.length - 1]))) {
+        border.push(borderIn[i]);
+      }
+    }
+    // console.log(border)
+    const drawBorderBuffer = [];
+    const offsetLines = [];
+    for (let i = 0; i < border.length; i += 1) {
+      let line;
+      if (i === 0) {
+        line = new Line(border[border.length - 1], border[0]);
+      } else {
+        line = new Line(border[i - 1], border[i]);
+      }
+      offsetLines.push(line.offset('negative', buffer));
+    }
+    for (let i = 0; i < offsetLines.length; i += 1) {
+      let prevLine;
+      // let nextLine;
+      if (i === 0) {
+        prevLine = offsetLines[offsetLines.length - 1];
+      } else {
+        prevLine = offsetLines[i - 1];
+      }
+      // if (i === offsetLines.length - 1) {
+      //   nextLine = offsetLines[0];
+      // } else {
+      //   nextLine = offsetLines[i + 1];
+      // }
+      const currentLine = offsetLines[i];
+      const intersect = currentLine.intersectsWith(prevLine);
+      if (intersect.intersect != null) {
+        drawBorderBuffer.push(intersect.intersect);
+      }
+      // const prevIntersect = currentLine.intersectsWith(prevLine).intersect;
+      // console.log(i, currentLine, prevLine, currentLine.intersectsWith(prevLine))
+      // // const nextIntersect = currentLine.intersectsWith(prevLine).intersect;
+      // drawBorderBuffer.push(prevIntersect);
+    }
+    // console.log(drawBorderBuffer)
+    return drawBorderBuffer;
+  }
+
   genericBase(
     name: string,
     defaultOptions: Object,
@@ -2474,7 +2543,7 @@ export default class FigurePrimitives {
       const [o, borderPoints, db, dbb] =
         element.custom.getBorder(borderOptions);
       let drawBorder = db;
-      let drawBorderBuffer = this.getBufferBorder(db[0], o.drawBorderBuffer);
+      let drawBorderBuffer = this.getBufferBorder1(db[0], o.drawBorderBuffer);
       // let drawBorderBuffer = dbb;
       if (o.line == null) {
         const [
@@ -2515,13 +2584,15 @@ export default class FigurePrimitives {
             drawBorder.push(newDrawBorder[i][0]);
             drawBorder.push(newDrawBorder[i][1]);
           } else {
-            if (i > 0 && drawBorder.slice(-1)[0] !== newDrawBorder[i][0]) {
+            if (i > 0 && drawBorder.slice(-1)[0].isNotEqualTo(newDrawBorder[i][0])) {
               drawBorder.push(newDrawBorder[i][0]);
             }
-            drawBorder.push(newDrawBorder[i][1]);
+            if (i < newDrawBorder.length - 1) {
+              drawBorder.push(newDrawBorder[i][1]);
+            }
           }
         }
-        drawBorderBuffer = this.getBufferBorder(drawBorder, o.drawBorderBuffer);
+        drawBorderBuffer = this.getBufferBorder1(drawBorder, o.drawBorderBuffer);
         // if (typeof o.drawBorderBuffer === 'number' && o.drawBorderBuffer > 0) {
         //   const drawBorderBounds = getBoundingRect(drawBorder);
         //   const scaleX = (drawBorderBounds.width + o.drawBorderBuffer * 2) / drawBorderBounds.width;

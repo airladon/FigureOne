@@ -213,7 +213,7 @@ const makeArrow = (options) => {
     options: Fig.tools.misc.joinObjects({}, {
       width: 0.35,
       length: 0.35,
-      drawBorderBuffer: 0.2,
+      drawBorderBuffer: 0.1,
       color: [1, 0, 0, 0.6],
       tailWidth: 0.15,
       position: [x, y],
@@ -233,7 +233,7 @@ const makeEllipse = (options) => {
       width: 0.5,
       height: 0.4,
       sides: 20,
-      drawBorderBuffer: 0.05,
+      drawBorderBuffer: 0.1,
       color: [1, 0, 0, 0.6],
       position: [x, y],
     }, options),
@@ -501,51 +501,51 @@ const arrows = [
     tail: 0.05,
   }),
 
-  // line
-  makeArrow({
-    head: 'line',
-    tailWidth: 0.05,
-  }),
-  makeArrow({
-    head: 'line',
-    tailWidth: 0.05,
-    tail: 0,
-  }),
-  makeArrow({
-    head: 'line',
-    tailWidth: 0.05,
-    tail: -0.05,
-  }),
-  makeArrow({
-    head: 'line',
-    tailWidth: 0.05,
-    tail: 0.05,
-  }),
+  // // line
+  // makeArrow({
+  //   head: 'line',
+  //   tailWidth: 0.05,
+  // }),
+  // makeArrow({
+  //   head: 'line',
+  //   tailWidth: 0.05,
+  //   tail: 0,
+  // }),
+  // makeArrow({
+  //   head: 'line',
+  //   tailWidth: 0.05,
+  //   tail: -0.05,
+  // }),
+  // makeArrow({
+  //   head: 'line',
+  //   tailWidth: 0.05,
+  //   tail: 0.05,
+  // }),
 
-  // line
-  makeArrow({
-    head: 'line',
-    line: { width: 0.05 },
-    tailWidth: 0.05,
-  }),
-  makeArrow({
-    head: 'line',
-    line: { width: 0.05 },
-    tailWidth: 0.05,
-    tail: 0,
-  }),
-  makeArrow({
-    head: 'line',
-    line: { width: 0.05 },
-    tailWidth: 0.05,
-    tail: -0.05,
-  }),
-  makeArrow({
-    head: 'line',
-    line: { width: 0.05 },
-    tailWidth: 0.05,
-    tail: 0.05,
-  }),
+  // // line
+  // makeArrow({
+  //   head: 'line',
+  //   line: { width: 0.05 },
+  //   tailWidth: 0.05,
+  // }),
+  // makeArrow({
+  //   head: 'line',
+  //   line: { width: 0.05 },
+  //   tailWidth: 0.05,
+  //   tail: 0,
+  // }),
+  // makeArrow({
+  //   head: 'line',
+  //   line: { width: 0.05 },
+  //   tailWidth: 0.05,
+  //   tail: -0.05,
+  // }),
+  // makeArrow({
+  //   head: 'line',
+  //   line: { width: 0.05 },
+  //   tailWidth: 0.05,
+  //   tail: 0.05,
+  // }),
   
   // Elipse
   makeEllipse(),
