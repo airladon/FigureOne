@@ -76,11 +76,11 @@ import type {
  * @property {TypeColor} [color] line color
  */
 export type OBJ_LineStyleSimple = {
-  widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,
+  // widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,
   width?: number,
   dash?: TypeDash,
   color?: TypeColor,
-}
+};
 
 type OBJ_LineStyleSimple_Defined = {
   widthIs: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,

@@ -1,4 +1,4 @@
-const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({ limits: [-3, -4.5, 6, 9], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 // const figure = new Fig.Figure({ limits: [-3, -2.25, 6, 4.5], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 
 // // const figure = new Fig.Figure({ limits: [-8, -8, 16, 16], color: [1, 0, 0, 1]});
@@ -17,7 +17,7 @@ figure.add([
     name: 'grid',
     method: 'grid',
     options: {
-      bounds: [-3, -3, 6, 6],
+      bounds: [-3, -4.5, 6, 9],
       yStep: 0.1,
       xStep: 0.1,
       color: [0.9, 0.9, 0.9, 1],
@@ -28,7 +28,7 @@ figure.add([
     name: 'gridMajor',
     method: 'grid',
     options: {
-      bounds: [-3, -3, 6, 6],
+      bounds: [-3, -4.5, 6, 9],
       yStep: 0.5,
       xStep: 0.5,
       color: [0.7, 0.7, 0.7, 1],
@@ -198,8 +198,8 @@ figure.add([
 //   drawType: 'strip',
 // });
 
-const xValues = Fig.tools.math.range(-2.5, 2.5, 0.6);
-const yValues = Fig.tools.math.range(2.5, -2.5, -0.6);
+const xValues = Fig.tools.math.range(-2.5, 2.5, 0.7);
+const yValues = Fig.tools.math.range(4, -4, -0.7);
 let index = 0;
 const makeArrow = (options) => {
   const x = xValues[index % xValues.length];
@@ -210,244 +210,381 @@ const makeArrow = (options) => {
   return {
     name,
     method: 'primitives.arrow',
-    options: Fig.tools.misc.joinObjects({}, options, {
+    options: Fig.tools.misc.joinObjects({}, {
       width: 0.35,
       length: 0.35,
       drawBorderBuffer: 0.05,
       color: [1, 0, 0, 0.6],
       tailWidth: 0.15,
       position: [x, y],
-    }),
+    }, options),
   };
 };
 
-// const arrows = [
-//   makeArrow({
-//     head: 'triangle',
-//   }),
-//   makeArrow({
-//     head: 'triangle',
-//     tail: 0,
-//   }),
-//   makeArrow({
-//     head: 'triangle',
-//     tail: 0.1,
-//   }),
-//   makeArrow({
-//     head: 'triangle',
-//     line: { width: 0.05, widthIs: 'mid' },
-//   }),
-//   makeArrow({
-//     head: 'triangle',
-//     line: { width: 0.05, widthIs: 'outside' },
-//   }),
-//   makeArrow({
-//     head: 'triangle',
-//     line: { width: 0.05, widthIs: 'inside' },
-//   }),
-//   makeArrow({
-//     head: 'triangle',
-//     line: { width: 0.05, widthIs: 'mid' },
-//     tail: 0.1,
-//   }),
-//   makeArrow({
-//     head: 'triangle',
-//     line: { width: 0.05, widthIs: 'outside' },
-//     tail: 0.1,
-//   }),
-//   makeArrow({
-//     head: 'triangle',
-//     line: { width: 0.05, widthIs: 'inside' },
-//     tail: 0.1,
-//   }),
-//   // Reverse Triangle
-//   makeArrow({
-//     head: 'reverseTriangle',
-//   }),
-//   makeArrow({
-//     head: 'reverseTriangle',
-//     tail: 0.05,
-//   }),
-//   makeArrow({
-//     head: 'reverseTriangle',
-//     tail: -0.05,
-//   }),
-//   makeArrow({
-//     head: 'reverseTriangle',
-//     line: { width: 0.05, widthIs: 'mid' },
-//   }),
-//   makeArrow({
-//     head: 'reverseTriangle',
-//     line: { width: 0.05, widthIs: 'outside' },
-//   }),
-//   makeArrow({
-//     head: 'reverseTriangle',
-//     line: { width: 0.05, widthIs: 'inside' },
-//   }),
-//   makeArrow({
-//     head: 'reverseTriangle',
-//     line: { width: 0.05, widthIs: 'mid' },
-//     tail: 0.05,
-//   }),
-//   makeArrow({
-//     head: 'reverseTriangle',
-//     line: { width: 0.05, widthIs: 'outside' },
-//     tail: 0.05,
-//   }),
-//   makeArrow({
-//     head: 'reverseTriangle',
-//     line: { width: 0.05, widthIs: 'inside' },
-//     tail: 0.05,
-//   }),
-//   makeArrow({
-//     head: 'reverseTriangle',
-//     line: { width: 0.05, widthIs: 'mid' },
-//     tail: -0.05,
-//   }),
-//   makeArrow({
-//     head: 'reverseTriangle',
-//     line: { width: 0.05, widthIs: 'outside' },
-//     tail: -0.05,
-//   }),
-//   makeArrow({
-//     head: 'reverseTriangle',
-//     line: { width: 0.05, widthIs: 'inside' },
-//     tail: -0.05,
-//   }),
-//   // Barb
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.05,
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.15,
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.05,
-//     tail: 0.05,
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.1,
-//     tail: -0.02,
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.05,
-//     line: { width: 0.05, widthIs: 'mid' },
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.05,
-//     line: { width: 0.05, widthIs: 'outside' },
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.05,
-//     line: { width: 0.05, widthIs: 'inside' },
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.15,
-//     line: { width: 0.05, widthIs: 'mid' },
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.15,
-//     line: { width: 0.05, widthIs: 'outside' },
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.15,
-//     line: { width: 0.05, widthIs: 'inside' },
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.05,
-//     line: { width: 0.05, widthIs: 'mid' },
-//     tail: 0.05,
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.05,
-//     line: { width: 0.05, widthIs: 'outside' },
-//     tail: 0.05,
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.05,
-//     line: { width: 0.05, widthIs: 'inside' },
-//     tail: 0.05,
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.15,
-//     line: { width: 0.05, widthIs: 'mid' },
-//     tail: 0.05,
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.15,
-//     line: { width: 0.05, widthIs: 'outside' },
-//     tail: 0.05,
-//   }),
-//   makeArrow({
-//     head: 'barb',
-//     barb: 0.15,
-//     line: { width: 0.05, widthIs: 'inside' },
-//     tail: 0.05,
-//   }),
-//   // line
+const makeEllipse = (options) => {
+  const x = xValues[index % xValues.length];
+  const y = yValues[Math.floor(index / xValues.length)];
+  const name = `_${index}`;
+  index += 1;
+  return {
+    name,
+    method: 'primitives.ellipse',
+    options: Fig.tools.misc.joinObjects({}, {
+      width: 0.5,
+      height: 0.4,
+      sides: 20,
+      drawBorderBuffer: 0.05,
+      color: [1, 0, 0, 0.6],
+      position: [x, y],
+    }, options),
+  };
+}
 
-//   makeArrow({
-//     head: 'line',
-//     tailWidth: 0.01,
-//   }),
-//   makeArrow({
-//     head: 'line',
-//     tailWidth: 0.01,
-//   }),
-//   makeArrow({
-//     head: 'line',
-//     tail: 0.01,
-//     tailWidth: 0.01,
-//   }),
-//   makeArrow({
-//     head: 'line',
-//     tail: -0.02,
-//     tailWidth: 0.01,
-//   }),
-// ];
-// figure.add(arrows);
-// for (let i = 0; i < index; i += 1) {
-//   const element = figure.elements.elements[`_${i}`];
-//   figure.add([
-//     {
-//       name: `buffer${i}`,
-//       method: 'polyline',
-//       options: {
-//         points: element.drawBorderBuffer[0],
-//         width: 0.01,
-//         color: [0, 0, 1, 1],
-//         close: true,
-//         position: element.getPosition(),
-//       },
-//     },
-//     {
-//       name: `border${i}`,
-//       method: 'polyline',
-//       options: {
-//         points: element.drawBorder[0],
-//         width: 0.01,
-//         color: [0, 1, 0, 1],
-//         close: true,
-//         position: element.getPosition(),
-//       },
-//     },
-//   ]);
-// }
+const arrows = [
+  makeArrow({
+    head: 'triangle',
+  }),
+  makeArrow({
+    head: 'triangle',
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'triangle',
+    tail: -0.1,
+  }),
+  makeArrow({
+    head: 'triangle',
+    tail: 0.1,
+  }),
+  makeArrow({
+    head: 'triangle',
+    line: { width: 0.05 },
+  }),
+  makeArrow({
+    head: 'triangle',
+    line: { width: 0.05 },
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'triangle',
+    line: { width: 0.05 },
+    tail: -0.1,
+  }),
+  makeArrow({
+    head: 'triangle',
+    line: { width: 0.05 },
+    tail: 0.1,
+  }),
+
+  // Reverse Triangle
+  makeArrow({
+    head: 'reverseTriangle',
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    tail: -0.05,
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    tail: 0.05,
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05 },
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05 },
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05 },
+    tail: -0.05,
+  }),
+  makeArrow({
+    head: 'reverseTriangle',
+    line: { width: 0.05, widthIs: 'mid' },
+    tail: 0.05,
+  }),
+  // Barb not sharp
+  makeArrow({
+    head: 'barb',
+    barb: 0.05,
+  }),
+  makeArrow({
+    head: 'barb',
+    barb: 0.05,
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'barb',
+    barb: 0.05,
+    tail: -0.02,
+  }),
+  makeArrow({
+    head: 'barb',
+    barb: 0.05,
+    tail: 0.05,
+  }),
+
+  makeArrow({
+    head: 'barb',
+    barb: 0.05,
+    line: { width: 0.05 },
+  }),
+  makeArrow({
+    head: 'barb',
+    barb: 0.05,
+    tail: 0,
+    line: { width: 0.05 },
+  }),
+  makeArrow({
+    head: 'barb',
+    barb: 0.05,
+    tail: -0.02,
+    line: { width: 0.05 },
+  }),
+  makeArrow({
+    head: 'barb',
+    barb: 0.05,
+    tail: 0.05,
+    line: { width: 0.05 },
+  }),
+
+  // Barb sharp
+  makeArrow({
+    head: 'barb',
+    barb: 0.15,
+  }),
+  makeArrow({
+    head: 'barb',
+    barb: 0.15,
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'barb',
+    barb: 0.15,
+    tail: -0.02,
+  }),
+  makeArrow({
+    head: 'barb',
+    barb: 0.15,
+    tail: 0.05,
+  }),
+
+  makeArrow({
+    head: 'barb',
+    barb: 0.15,
+    line: { width: 0.05 },
+  }),
+  makeArrow({
+    head: 'barb',
+    barb: 0.15,
+    tail: 0,
+    line: { width: 0.05 },
+  }),
+  makeArrow({
+    head: 'barb',
+    barb: 0.15,
+    tail: -0.02,
+    line: { width: 0.05 },
+  }),
+  makeArrow({
+    head: 'barb',
+    barb: 0.15,
+    tail: 0.05,
+    line: { width: 0.05 },
+  }),
+
+  // polygon
+  makeArrow({
+    head: 'polygon',
+    radius: 0.2,
+    sides: 6,
+  }),
+  makeArrow({
+    head: 'polygon',
+    radius: 0.2,
+    sides: 6,
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'polygon',
+    radius: 0.2,
+    sides: 6,
+    tail: -0.05,
+  }),
+  makeArrow({
+    head: 'polygon',
+    radius: 0.2,
+    sides: 6,
+    tail: 0.05,
+  }),
+
+  // polygon Line
+  makeArrow({
+    head: 'polygon',
+    radius: 0.2,
+    sides: 6,
+    line: { width: 0.05 },
+  }),
+  makeArrow({
+    head: 'polygon',
+    radius: 0.2,
+    sides: 6,
+    line: { width: 0.05 },
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'polygon',
+    radius: 0.2,
+    sides: 6,
+    line: { width: 0.05 },
+    tail: -0.05,
+  }),
+  makeArrow({
+    head: 'polygon',
+    radius: 0.2,
+    sides: 6,
+    line: { width: 0.05 },
+    tail: 0.05,
+  }),
+
+  // bar
+  makeArrow({
+    head: 'bar',
+    length: 0.1,
+  }),
+  makeArrow({
+    head: 'bar',
+    length: 0.1,
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'bar',
+    length: 0.1,
+    tail: -0.05,
+  }),
+  makeArrow({
+    head: 'bar',
+    length: 0.1,
+    tail: 0.05,
+  }),
+
+  // bar line
+  makeArrow({
+    head: 'bar',
+    line: { width: 0.05 },
+    length: 0.1,
+  }),
+  makeArrow({
+    head: 'bar',
+    line: { width: 0.05 },
+    length: 0.1,
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'bar',
+    line: { width: 0.05 },
+    length: 0.1,
+    tail: -0.05,
+  }),
+  makeArrow({
+    head: 'bar',
+    line: { width: 0.05 },
+    length: 0.1,
+    tail: 0.05,
+  }),
+
+  // line
+  makeArrow({
+    head: 'line',
+    tailWidth: 0.05,
+  }),
+  makeArrow({
+    head: 'line',
+    tailWidth: 0.05,
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'line',
+    tailWidth: 0.05,
+    tail: -0.05,
+  }),
+  makeArrow({
+    head: 'line',
+    tailWidth: 0.05,
+    tail: 0.05,
+  }),
+
+  // line
+  makeArrow({
+    head: 'line',
+    line: { width: 0.05 },
+    tailWidth: 0.05,
+  }),
+  makeArrow({
+    head: 'line',
+    line: { width: 0.05 },
+    tailWidth: 0.05,
+    tail: 0,
+  }),
+  makeArrow({
+    head: 'line',
+    line: { width: 0.05 },
+    tailWidth: 0.05,
+    tail: -0.05,
+  }),
+  makeArrow({
+    head: 'line',
+    line: { width: 0.05 },
+    tailWidth: 0.05,
+    tail: 0.05,
+  }),
+  
+  // Elipse
+  makeEllipse(),
+  makeEllipse({ height: 0.1 }),
+  makeEllipse({ line: { width: 0.05 } }),
+  makeEllipse({ height: 0.1, line: { width: 0.05 } }),
+  makeEllipse({ sides: 4 }),
+  makeEllipse({ height: 0.1, sides: 4 }),
+  makeEllipse({ line: { width: 0.05 }, sides: 4 }),
+  makeEllipse({ height: 0.1, line: { width: 0.05 }, sides: 4 }),
+];
+figure.add(arrows);
+for (let i = 0; i < index; i += 1) {
+  const element = figure.elements.elements[`_${i}`];
+  figure.add([
+    {
+      name: `buffer${i}`,
+      method: 'polyline',
+      options: {
+        points: element.drawBorderBuffer[0],
+        width: 0.01,
+        color: [0, 0, 1, 1],
+        close: true,
+        position: element.getPosition(),
+      },
+    },
+    {
+      name: `border${i}`,
+      method: 'polyline',
+      options: {
+        points: element.drawBorder[0],
+        width: 0.01,
+        color: [0, 1, 0, 1],
+        close: true,
+        position: element.getPosition(),
+      },
+    },
+  ]);
+}
 
 
 figure.add({
@@ -460,7 +597,7 @@ figure.add({
     color: [1, 0, 0, 0.6],
     tailWidth: 0.15,
     hhead: 'triangle',
-    line: { width: 0.05, widthIs: 'outside' },
+    line: { width: 0.05, widthIs: 'mid' },
     tail: 0.1,
   },
   mods: {
@@ -548,17 +685,17 @@ console.log(Fig.tools.misc.joinObjects({}, { a: false }, { a: 1 }));
 
 
 
-// // figure.add({
-// //   name: 'line',
-// //   method: 'line',
-// //   options: {
-// //     p1: [0, -1],
-// //     length: 1,
-// //     angle: 0,
-// //     width: 0.05,
-// //     arrow: 'triangle'
-// //   },
-// // });
+// figure.add({
+//   name: 'line',
+//   method: 'line',
+//   options: {
+//     p1: [0, -1],
+//     length: 1,
+//     angle: 0,
+//     width: 0.05,
+//     arrow: 'barb'
+//   },
+// });
 // figure.add({
 //   name: 'tester',
 //   method: 'polyline',
