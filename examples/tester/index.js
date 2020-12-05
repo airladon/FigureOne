@@ -294,6 +294,18 @@ const makeTriangle = (options) => {
   );
 }
 
+const makeStar = (options) => {
+  return makeShape(
+    'primitives.star',
+    Fig.tools.misc.joinObjects({}, {
+      radius: 0.2,
+      innerRadius: 0.1,
+      drawBorderBuffer: 0.1,
+      color: [1, 0, 0, 0.6],
+    }, options),
+  );
+}
+
 const arrows = [
   triArrow(),
   triArrow({ tail: -0.1 }),
@@ -396,6 +408,19 @@ const arrows = [
   makeRectangle({ line: { width: 0.02, dash: [0.03, 0.01] }, corner: { radius: 0.1, sides: 3 }}),
   makeTriangle({ width: 0.4, height: 0.3, top: 'left' }),
   makeTriangle({ width: 0.4, height: 0.1, top: 'left' }),
+  makeTriangle({ width: 0.4, height: 0.3, top: 'left', line: { width: 0.05 } }),
+  makeTriangle({ width: 0.4, height: 0.1, top: 'left', line: { width: 0.05 } }),
+  makeTriangle({ width: 0.4, height: 0.3, top: 'left', line: { width: 0.02, dash: [0.03, 0.01] } }),
+  makeTriangle({ width: 0.4, height: 0.1, top: 'left', line: { width: 0.02, dash: [0.03, 0.01] } }),
+  makeStar(),
+  makeStar({ line: { width: 0.05 } }),
+  makeStar({ line: { width: 0.02, dash: [0.03, 0.01] } }),
+  makeStar({ sides: 10 }),
+  makeStar({ line: { width: 0.05 }, sides: 10 }),
+  makeStar({ line: { width: 0.02, dash: [0.03, 0.01] }, sides: 10 }),
+  makeStar({ sides: 15 }),
+  makeStar({ line: { width: 0.05 }, sides: 15 }),
+  makeStar({ line: { width: 0.02, dash: [0.03, 0.01] }, sides: 15 }),
   makeEllipse(),
   makeEllipse({ height: 0.1 }),
   makeEllipse({ sides: 4 }),

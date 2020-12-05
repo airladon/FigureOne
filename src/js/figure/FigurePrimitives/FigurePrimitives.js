@@ -2470,21 +2470,23 @@ export default class FigurePrimitives {
         prevPoint = borderIn[i - 1];
       }
       if (i === borderIn.length - 1) {
-        nextPoint = borderIn[0];
+        [nextPoint] = borderIn;
       } else {
         nextPoint = borderIn[i + 1];
       }
-      // console.log(prevPoint, nextPoint)
       const angle = threePointAngle(nextPoint, borderIn[i], prevPoint);
-      // console.log(i, angle, borderIn[i], border[border.length - 1])
-      if (angle < Math.PI && (border.length === 0 || borderIn[i].isNotEqualTo(border[border.length - 1]))) {
+      if (
+        angle < Math.PI
+        && (
+          border.length === 0
+          || borderIn[i].isNotEqualTo(border[border.length - 1])
+        )
+      ) {
         border.push(borderIn[i]);
         borderIndex.push(i);
       }
     }
-    // console.log(border)
     const drawBorderBuffer = [];
-    // const bufferIndex
     const offsetLines = [];
     for (let i = 0; i < border.length; i += 1) {
       let line;
@@ -2503,11 +2505,6 @@ export default class FigurePrimitives {
       } else {
         prevLine = offsetLines[i - 1];
       }
-      // if (i === offsetLines.length - 1) {
-      //   nextLine = offsetLines[0];
-      // } else {
-      //   nextLine = offsetLines[i + 1];
-      // }
       const currentLine = offsetLines[i];
       const intersect = currentLine.intersectsWith(prevLine);
       if (intersect.intersect != null) {
@@ -2517,9 +2514,7 @@ export default class FigurePrimitives {
         } else {
           borderPoint = border[i - 1];
         }
-        // console.log(intersect.intersect.distance(borderPoint) > buffer * 1.001, intersect.intersect, borderPoint, buffer)
         if (intersect.intersect.distance(borderPoint) > buffer * 1.2) {
-        //   debugger;
           const borderToBuffer = new Line(borderPoint, intersect.intersect);
           const perpLine = new Line(
             borderToBuffer.pointAtLength(buffer * 1.2),
@@ -2528,12 +2523,6 @@ export default class FigurePrimitives {
           );
           const prevIntersect = prevLine.intersectsWith(perpLine);
           const nextIntersect = currentLine.intersectsWith(perpLine);
-          // console.log(prevLine)
-          // console.log(currentLine)
-          // console.log(borderToBuffer)
-          // console.log(perpLine)
-          // console.log(prevIntersect)
-          // console.log(nextIntersect)
           if (prevIntersect.intersect != null && nextIntersect.intersect != null) {
             drawBorderBuffer.push(prevIntersect.intersect);
             drawBorderBuffer.push(nextIntersect.intersect);
@@ -2543,14 +2532,9 @@ export default class FigurePrimitives {
         } else {
           drawBorderBuffer.push(intersect.intersect);
         }
-
       }
-      // const prevIntersect = currentLine.intersectsWith(prevLine).intersect;
-      // console.log(i, currentLine, prevLine, currentLine.intersectsWith(prevLine))
-      // // const nextIntersect = currentLine.intersectsWith(prevLine).intersect;
-      // drawBorderBuffer.push(prevIntersect);
     }
-    // console.log(drawBorderBuffer)
+
     return drawBorderBuffer;
   }
 
@@ -2716,30 +2700,57 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Star} for options and examples.
    */
   star(...options: Array<OBJ_Star>) {
-    const element = this.polygon({});
-    element.custom.options = {
+    const element = this.genericBase('star', {
       radius: 1,
       sides: 5,
       direction: 1,
       rotation: 0,
       offset: new Point(0, 0),
-      transform: new Transform('star').standard(),
-    };
-
-    element.custom.updatePolygonPoints = element.custom.updatePoints;
-    element.custom.updatePoints = (optionsIn: OBJ_Star_Defined) => {
-      const o = joinObjects({}, element.custom.options, optionsIn);
-      o.offset = getPoint(o.offset);
+    }, joinObjects({}, ...options));
+    element.custom.getBorder = (o: OBJ_Polygon_Defined) => {
       if (o.innerRadius == null) {
         o.innerRadius = o.radius / 3;
       }
       o.rotation += Math.PI / 2;
       o.sidesToDraw = o.sides;
-      element.custom.updatePolygonPoints(o);
+      const result = this.getPolygonBorder(o);
+      result[0].rotation -= Math.PI / 2;
+      return result;
     };
+    element.custom.getFill = (border: Array<Point>, fillOptions: OBJ_Polygon_Defined) => [
+      getTrisFillPolygon(
+        fillOptions.offset, border,
+        fillOptions.sides, fillOptions.sidesToDraw,
+      ),
+      'triangles',
+    ];
+
     element.custom.updatePoints(joinObjects({}, ...options));
-    element.custom.options.rotation -= Math.PI / 2;
     return element;
+    // const element = this.polygon({});
+    // element.custom.options = {
+    //   radius: 1,
+    //   sides: 5,
+    //   direction: 1,
+    //   rotation: 0,
+    //   offset: new Point(0, 0),
+    //   transform: new Transform('star').standard(),
+    // };
+
+    // element.custom.updatePolygonPoints = element.custom.updatePoints;
+    // element.custom.updatePoints = (optionsIn: OBJ_Star_Defined) => {
+    //   const o = joinObjects({}, element.custom.options, optionsIn);
+    //   o.offset = getPoint(o.offset);
+    //   if (o.innerRadius == null) {
+    //     o.innerRadius = o.radius / 3;
+    //   }
+    //   o.rotation += Math.PI / 2;
+    //   o.sidesToDraw = o.sides;
+    //   element.custom.updatePolygonPoints(o);
+    // };
+    // element.custom.updatePoints(joinObjects({}, ...options));
+    // element.custom.options.rotation -= Math.PI / 2;
+    // return element;
   }
 
   /**
