@@ -138,14 +138,24 @@ function joinLinesInTangent(
 ) {
   const angle = threePointAngleMin(mid.p1, mid.p2, midNext.p2);
   const tangent = new Line(mid.p2, 1, mid.angle() + angle / 2 + Math.PI / 2);
-  let intercept = tangent.intersectsWith(outside);
+  const intercept = outside.intersectsWith(tangent);
+  const interceptNext = outsideNext.intersectsWith(tangent);
+  if (intercept.withinLine === false && interceptNext.withinLine === false) {
+    const i = outside.intersectsWith(outsideNext);
+    if (i.intersect != null) {
+      outside.setP2(i.intersect);
+      outsideNext.setP1(interceptNext.intersect);
+      return;
+    }
+  }
+  // let intercept = tangent.intersectsWith(outside);
   if (intercept.intersect != null) {
     outside.setP2(intercept.intersect);
   }
 
-  intercept = tangent.intersectsWith(outsideNext);
-  if (intercept.intersect != null) {
-    outsideNext.setP1(intercept.intersect);
+  // intercept = tangent.intersectsWith(outsideNext);
+  if (interceptNext.intersect != null) {
+    outsideNext.setP1(interceptNext.intersect);
   }
 }
 
@@ -369,6 +379,7 @@ function makeThickLine(
   if (typeof widthIs === 'number') {
     widthIs = 'mid';
   }
+  // console.log(points, idealLines, lineSegments)
 
   // Join line segments based on the angle between them
   const minAngle = minAngleIn == null ? 0 : minAngleIn;

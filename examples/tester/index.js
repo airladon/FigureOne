@@ -198,6 +198,10 @@ figure.add([
 //   drawType: 'strip',
 // });
 
+
+// ***************************************************
+// ***************************************************
+// ***************************************************
 const xValues = Fig.tools.math.range(-4, 4, 0.7);
 const yValues = Fig.tools.math.range(4, -4, -0.7);
 let index = 0;
@@ -397,6 +401,7 @@ const arrows = [
   makePolygon(),
   makePolygon({ sides: 3 }),
   makePolygon({ line: { width: 0.05 } }),
+  makePolygon({ line: { width: 0.05, widthIs: 'inside' } }),
   makePolygon({ line: { width: 0.05 }, sides: 3 }),
   makePolygon({ line: { width: 0.02, dash: [0.03, 0.01] } }),
   makePolygon({ line: { width: 0.02, dash: [0.03, 0.01] }, sides: 3 }),
@@ -463,6 +468,20 @@ for (let i = 0; i < index; i += 1) {
   ]);
 }
 
+// ***************************************************
+// ***************************************************
+// ***************************************************
+
+
+// figure.add({
+//   name: 'ppp',
+//   method: 'polyline',
+//   options: {
+//     points: [[0, 0], [1, 0], [0, 0.3]],
+//     width: 0.1,
+//     color: [1, 0, 0, 0.6],
+//   },
+// })
 
 // figure.add({
 //   name: 'r',
