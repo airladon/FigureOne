@@ -165,6 +165,12 @@ function joinLinesAcuteInside(
   inside: Line,
   insideNext: Line,
 ) {
+  const insideIntercept = inside.intersectsWith(insideNext);
+  if (insideIntercept.withinLine && insideIntercept.intersect != null) {
+    inside.setP2(insideIntercept.intersect);
+    insideNext.setP1(insideIntercept.intersect);
+    return;
+  }
   let intercept = inside.intersectsWith(midNext);
   if (intercept.intersect != null) {
     inside.setP2(intercept.intersect);
@@ -181,6 +187,12 @@ function joinLinesObtuseInside(
   inside: Line,
   insideNext: Line,
 ) {
+  const insideIntercept = inside.intersectsWith(insideNext);
+  if (insideIntercept.withinLine && insideIntercept.intersect != null) {
+    inside.setP2(insideIntercept.intersect);
+    insideNext.setP1(insideIntercept.intersect);
+    return;
+  }
   let intercept = inside.intersectsWith(midNext);
   if (intercept.intersect != null && intercept.intersect.isWithinLine(midNext, 8)) {
     inside.setP2(intercept.intersect);

@@ -449,7 +449,7 @@ for (let i = 0; i < index; i += 1) {
       options: {
         points: element.drawBorderBuffer[0],
         width: 0.01,
-        color: [0, 0, 1, 1],
+        color: [0, 0, 1, 0.5],
         close: true,
         position: element.getPosition(),
       },
@@ -460,7 +460,7 @@ for (let i = 0; i < index; i += 1) {
       options: {
         points: element.drawBorder[0],
         width: 0.01,
-        color: [0, 1, 0, 1],
+        color: [0, 0.7, 0, 0.8],
         close: true,
         position: element.getPosition(),
       },
@@ -473,15 +473,35 @@ for (let i = 0; i < index; i += 1) {
 // ***************************************************
 
 
-// figure.add({
-//   name: 'ppp',
-//   method: 'polyline',
-//   options: {
-//     points: [[0, 0], [1, 0], [0, 0.3]],
-//     width: 0.1,
-//     color: [1, 0, 0, 0.6],
+// figure.add([
+//   {
+//     name: 'ppp',
+//     method: 'polyline',
+//     options: {
+//       points: [[0, 0], [1, 0], [0, 0.3]],
+//       width: 0.1,
+//       widthIs: 'outside',
+//       color: [1, 0, 0, 0.6],
+//     },
 //   },
-// })
+//   {
+//     name: 'pad',
+//     method: 'polygon',
+//     options: {
+//       radius: 0.5,
+//       sides: 20,
+//       line: { width: 0.004 },
+//       color: [0, 0, 1, 0.4],
+//     },
+//     mods: {
+//       isMovable: true,
+//       setTransformCallback: (t) => {
+//         const ppp = figure.getElement('ppp');
+//         ppp.custom.updatePoints({ points: [[0, 0], [1, 0], t.t()] });
+//       }
+//     },
+//   },
+// ])
 
 // figure.add({
 //   name: 'r',
