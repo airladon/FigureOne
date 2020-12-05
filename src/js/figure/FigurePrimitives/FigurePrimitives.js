@@ -2603,10 +2603,13 @@ export default class FigurePrimitives {
             drawBorder.push(newDrawBorder[i][0]);
             drawBorder.push(newDrawBorder[i][1]);
           } else {
-            if (i > 0 && drawBorder.slice(-1)[0].isNotEqualTo(newDrawBorder[i][0])) {
+            if (drawBorder.slice(-1)[0].isNotEqualTo(newDrawBorder[i][0])) {
               drawBorder.push(newDrawBorder[i][0]);
             }
             if (i < newDrawBorder.length - 1) {
+              drawBorder.push(newDrawBorder[i][1]);
+            }
+            if (i === newDrawBorder.length - 1 && drawBorder[0].isNotEqualTo(newDrawBorder[i][1])) {
               drawBorder.push(newDrawBorder[i][1]);
             }
           }
