@@ -2460,6 +2460,7 @@ export default class FigurePrimitives {
     }
     // First remove all points that are >180º
     const border = [];
+    const borderIndex = [];
     for (let i = 0; i < borderIn.length; i += 1) {
       let prevPoint;
       let nextPoint;
@@ -2478,10 +2479,12 @@ export default class FigurePrimitives {
       // console.log(i, angle, borderIn[i], border[border.length - 1])
       if (angle < Math.PI && (border.length === 0 || borderIn[i].isNotEqualTo(border[border.length - 1]))) {
         border.push(borderIn[i]);
+        borderIndex.push(i);
       }
     }
     // console.log(border)
     const drawBorderBuffer = [];
+    // const bufferIndex
     const offsetLines = [];
     for (let i = 0; i < border.length; i += 1) {
       let line;
@@ -2508,7 +2511,39 @@ export default class FigurePrimitives {
       const currentLine = offsetLines[i];
       const intersect = currentLine.intersectsWith(prevLine);
       if (intersect.intersect != null) {
-        drawBorderBuffer.push(intersect.intersect);
+        let borderPoint;
+        if (i === 0) {
+          borderPoint = border[border.length - 1];
+        } else {
+          borderPoint = border[i - 1];
+        }
+        // console.log(intersect.intersect.distance(borderPoint) > buffer * 1.001, intersect.intersect, borderPoint, buffer)
+        if (intersect.intersect.distance(borderPoint) > buffer * 1.2) {
+        //   debugger;
+          const borderToBuffer = new Line(borderPoint, intersect.intersect);
+          const perpLine = new Line(
+            borderToBuffer.pointAtLength(buffer * 1.2),
+            1,
+            borderToBuffer.angle() + Math.PI / 2,
+          );
+          const prevIntersect = prevLine.intersectsWith(perpLine);
+          const nextIntersect = currentLine.intersectsWith(perpLine);
+          // console.log(prevLine)
+          // console.log(currentLine)
+          // console.log(borderToBuffer)
+          // console.log(perpLine)
+          // console.log(prevIntersect)
+          // console.log(nextIntersect)
+          if (prevIntersect.intersect != null && nextIntersect.intersect != null) {
+            drawBorderBuffer.push(prevIntersect.intersect);
+            drawBorderBuffer.push(nextIntersect.intersect);
+          } else {
+            drawBorderBuffer.push(intersect.intersect);
+          }
+        } else {
+          drawBorderBuffer.push(intersect.intersect);
+        }
+
       }
       // const prevIntersect = currentLine.intersectsWith(prevLine).intersect;
       // console.log(i, currentLine, prevLine, currentLine.intersectsWith(prevLine))
