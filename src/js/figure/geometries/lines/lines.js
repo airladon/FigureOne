@@ -761,9 +761,9 @@ function makePolyLine(
     let widthIsBuffer = 0.5;
     const widthBuffer = width + touchBorderBuffer * 2;
     if (widthIs === 'positive' || widthIs === 'inside') {
-      widthIsBuffer = touchBorderBuffer / widthBuffer;
+      widthIsBuffer = (touchBorderBuffer + width) / widthBuffer;
     } else if (widthIs === 'negative' || widthIs === 'outside') {
-      widthIsBuffer = (width + touchBorderBuffer) / widthBuffer;
+      widthIsBuffer = touchBorderBuffer / widthBuffer;
     } else if (widthIs === 'mid') {
       widthIsBuffer = 0.5;
     } else {
