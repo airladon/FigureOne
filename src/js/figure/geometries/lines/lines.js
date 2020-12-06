@@ -792,6 +792,9 @@ function makePolyLine(
       onLine,
     );
   }
+  if (close === false) {
+
+  }
   return [trisToUse, border, touchBorder, hole];
 }
 
@@ -844,8 +847,8 @@ function addArrows(
       tailWidth: number,
     },
   },
-  startArrow: [Point, Point],
-  endArrow: [Point, Point],
+  startArrowIn: [Point, Point],
+  endArrowIn: [Point, Point],
   existingTriangles: Array<Point>,
   existingBorder: Array<Array<Point>>,
   existingTouchBorder: Array<Array<Point>>,
@@ -863,6 +866,10 @@ function addArrows(
   let updatedTouchBorder = existingTouchBorder;
   const count = updatedTriangles.length;
   if (arrow.start != null) {
+    let startArrowLine = new Line(startArrowIn[0], startArrowIn[1]);
+    const startLineMid = new Line(updatedTriangles[0], updatedTriangles[2]).midPoint();
+    startArrowLine = new Line(startLineMid, startArrowLine.length(), startArrowLine.angle());
+    const startArrow = [startArrowLine.p1, startArrowLine.p2];
     const [border, touchBorder, tail] = getArrow(joinObjects(
       {},
       arrow.start,
@@ -879,13 +886,18 @@ function addArrows(
     const points = getArrowTris(border, arrow.start);
     updatedTriangles = [
       ...updatedTriangles, ...points,
-      updatedTriangles[0]._dup(), updatedTriangles[1]._dup(), tail[0]._dup(),
-      tail[0]._dup(), updatedTriangles[1]._dup(), tail[1]._dup(),
+      updatedTriangles[0]._dup(), updatedTriangles[2]._dup(), tail[0]._dup(),
+      tail[0]._dup(), updatedTriangles[2]._dup(), tail[1]._dup(),
     ];
     updatedBorder = [...updatedBorder, border];
-    updatedTouchBorder = [...updatedTouchBorder, touchBorder];
+    updatedTouchBorder = [...updatedTouchBorder, touchBorder[0]];
   }
   if (arrow.end != null) {
+    const l = count;
+    let endArrowLine = new Line(endArrowIn[0], endArrowIn[1]);
+    const endLineMid = new Line(updatedTriangles[l - 2], updatedTriangles[l - 1]).midPoint();
+    endArrowLine = new Line(endLineMid, endArrowLine.length(), endArrowLine.angle());
+    const endArrow = [endArrowLine.p1, endArrowLine.p2];
     const [border, touchBorder, tail] = getArrow(joinObjects(
       {},
       arrow.end,
@@ -902,7 +914,6 @@ function addArrows(
     const points = getArrowTris(border, arrow.end);
     let connection = [];
     if (onLine) {
-      const l = count;
       connection = [
         updatedTriangles[l - 2]._dup(), updatedTriangles[l - 1]._dup(), tail[0]._dup(),
         tail[0]._dup(), updatedTriangles[l - 1]._dup(), tail[1]._dup(),
@@ -912,7 +923,7 @@ function addArrows(
       ...updatedTriangles, ...points, ...connection,
     ];
     updatedBorder = [...updatedBorder, border];
-    updatedTouchBorder = [...updatedTouchBorder, touchBorder];
+    updatedTouchBorder = [...updatedTouchBorder, touchBorder[0]];
   }
   return [
     updatedTriangles,
