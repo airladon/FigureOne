@@ -43,7 +43,7 @@ function getEllipsePoints(
 
 function getEllipseBorder(options: OBJ_Ellipse_Defined) {
   const {
-    width, height, xAlign, yAlign, line, sides,
+    width, height, xAlign, yAlign, sides,
   } = options;
   let x = 0;
   let y = 0;
@@ -63,36 +63,36 @@ function getEllipseBorder(options: OBJ_Ellipse_Defined) {
   }
 
   const points = getEllipsePoints(width, height, sides, x, y);
-  let lineDelta = 0;
-  if (line != null && line.widthIs === 'mid') {
-    lineDelta = line.width / 2;
-  }
-  if (line != null && (line.widthIs === 'outside' || line.widthIs === 'negative')) {
-    lineDelta = line.width;
-  }
-  let outline: Array<Point>;
-  if (lineDelta > 0) {
-    outline = getEllipsePoints(
-      width + lineDelta * 2,
-      height + lineDelta * 2,
-      sides, x, y,
-    );
-  } else {  // $FlowFixMe
-    outline = points.map(p => p._dup());
-  }
+  // let lineDelta = 0;
+  // if (line != null && line.widthIs === 'mid') {
+  //   lineDelta = line.width / 2;
+  // }
+  // if (line != null && (line.widthIs === 'outside' || line.widthIs === 'negative')) {
+  //   lineDelta = line.width;
+  // }
+  // let outline: Array<Point>;
+  // if (lineDelta > 0) {
+  //   outline = getEllipsePoints(
+  //     width + lineDelta * 2,
+  //     height + lineDelta * 2,
+  //     sides, x, y,
+  //   );
+  // } else {  // $FlowFixMe
+  //   outline = points.map(p => p._dup());
+  // }
 
-  const border = [outline];
-  const { drawBorderBuffer } = options;
-  let borderBuffer = drawBorderBuffer;
-  if (typeof drawBorderBuffer === 'number') {
-    borderBuffer = [getEllipsePoints(
-      width + lineDelta * 2 + drawBorderBuffer * 2,
-      height + lineDelta * 2 + drawBorderBuffer * 2,
-      sides, x, y,
-    )];
-  }
+  // const border = [outline];
+  // const { drawBorderBuffer } = options;
+  // let borderBuffer = drawBorderBuffer;
+  // if (typeof drawBorderBuffer === 'number') {
+  //   borderBuffer = [getEllipsePoints(
+  //     width + lineDelta * 2 + drawBorderBuffer * 2,
+  //     height + lineDelta * 2 + drawBorderBuffer * 2,
+  //     sides, x, y,
+  //   )];
+  // }
 
-  return [points, border, borderBuffer];
+  return [points];
 }
 
 function ellipseBorderToTris(border: Array<Point>) {

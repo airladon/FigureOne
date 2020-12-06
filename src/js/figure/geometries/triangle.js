@@ -2,9 +2,9 @@
 import {
   Point, Transform, Line, minAngleDiff, threePointAngle, getPoints, getTriangleCenter,
 } from '../../tools/g2';
-import {
-  makePolyLine,
-} from './lines/lines';
+// import {
+//   makePolyLine,
+// } from './lines/lines';
 import type { TypeParsablePoint } from '../../tools/g2';
 
 
@@ -17,15 +17,15 @@ function getTriangleDirection(points: Array<Point>) {
   return 1;
 }
 
-function increaseTriangleByOffset(points: Array<Point>, delta) {
-  const direction = getTriangleDirection(points);
-  const [, , outline] = makePolyLine(
-    points, delta, true, direction === -1 ? 'negative' : 'positive', 'auto', 0.1,
-    10, Math.PI / 7, [], false,
-    2, direction === -1 ? 'negative' : 'positive', 0, [],
-  );
-  return [outline[0][0], outline[0][1], outline[0][3]];
-}
+// function increaseTriangleByOffset(points: Array<Point>, delta) {
+//   const direction = getTriangleDirection(points);
+//   const [, , outline] = makePolyLine(
+//     points, delta, true, direction === -1 ? 'negative' : 'positive', 'auto', 0.1,
+//     10, Math.PI / 7, [], false,
+//     2, direction === -1 ? 'negative' : 'positive', 0, [],
+//   );
+//   return [outline[0][0], outline[0][1], outline[0][3]];
+// }
 
 function alignTriangle(
   pointsIn: Array<Point>,
@@ -250,9 +250,6 @@ export type OBJ_Triangle_Defined = {
 };
 
 function getTriangleBorder(options: OBJ_Triangle_Defined) {
-  // if (options.points != null) {
-  //   return options.points;
-  // }
   let points;
   const { direction } = options;
   if (options.points != null) {
@@ -286,32 +283,7 @@ function getTriangleBorder(options: OBJ_Triangle_Defined) {
   } else {
     alignedTriangle = alignTriangle(points, options.xAlign, options.yAlign, options.rotation);
   }
-  // console.log(alignedTriangle, points)
-
-  const { line } = options;
-
-  let lineDelta = 0;
-  if (line != null && line.widthIs === 'mid') {
-    lineDelta = line.width / 2;
-  }
-  if (line != null && (line.widthIs === 'outside' || line.widthIs === 'negative')) {
-    lineDelta = line.width;
-  }
-  let outline: Array<Point>;
-  if (lineDelta > 0) {
-    outline = increaseTriangleByOffset(alignedTriangle, lineDelta);
-  } else {  // $FlowFixMe
-    outline = alignedTriangle.map(p => p._dup());
-  }
-  const border = [outline];
-
-  const { drawBorderBuffer } = options;
-  let borderBuffer = drawBorderBuffer;
-  if (typeof drawBorderBuffer === 'number') {
-    borderBuffer = [increaseTriangleByOffset(alignedTriangle, lineDelta + drawBorderBuffer)];
-  }
-
-  return [alignedTriangle, border, borderBuffer];
+  return [alignedTriangle];
 }
 
 

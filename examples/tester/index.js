@@ -438,6 +438,7 @@ const arrows = [
   makeEllipse({ line: { width: 0.02, dash: [0.03, 0.01] }, height: 0.1 }),
   makeEllipse({ line: { width: 0.02, dash: [0.03, 0.01] }, sides: 4 }),
   makeEllipse({ line: { width: 0.02, dash: [0.03, 0.01] }, height: 0.1, sides: 4 }),
+  barbArrow({ align: 'mid', angle: Math.PI / 2 }),
 ];
 figure.add(arrows);
 for (let i = 0; i < index; i += 1) {
@@ -472,6 +473,18 @@ for (let i = 0; i < index; i += 1) {
 // ***************************************************
 // ***************************************************
 
+// figure.add({
+//   name: 'asdf',
+//   method: 'arrow',
+//   options: {
+//     length: 1,
+//     width: 1,
+//     head: 'barb',
+//     tail: 0.2,
+//     color: [0, 0, 1, 0.5],
+//     align: 'mid',
+//   }
+// })
 
 // figure.add([
 //   {

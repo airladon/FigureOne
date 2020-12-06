@@ -8,7 +8,7 @@ import {
   joinObjects,
 } from '../../../tools/tools';
 import {
-  getArrow, getArrowLength, simplifyArrowOptions,
+  getArrow, getArrowLength, simplifyArrowOptions, getArrowTris,
 } from '../arrow';
 import type { TypeDash } from '../../../tools/types';
 import type { TypeArrowHead } from '../arrow';
@@ -863,7 +863,7 @@ function addArrows(
   let updatedTouchBorder = existingTouchBorder;
   const count = updatedTriangles.length;
   if (arrow.start != null) {
-    const [points, border, touchBorder, tail] = getArrow(joinObjects(
+    const [border, touchBorder, tail] = getArrow(joinObjects(
       {},
       arrow.start,
       {
@@ -876,6 +876,7 @@ function addArrows(
         tailWidth: lineWidth,
       },
     ));
+    const points = getArrowTris(border, arrow.start);
     updatedTriangles = [
       ...updatedTriangles, ...points,
       updatedTriangles[0]._dup(), updatedTriangles[1]._dup(), tail[0]._dup(),
@@ -885,7 +886,7 @@ function addArrows(
     updatedTouchBorder = [...updatedTouchBorder, touchBorder];
   }
   if (arrow.end != null) {
-    const [points, border, touchBorder, tail] = getArrow(joinObjects(
+    const [border, touchBorder, tail] = getArrow(joinObjects(
       {},
       arrow.end,
       {
@@ -898,6 +899,7 @@ function addArrows(
         tailWidth: lineWidth,
       },
     ));
+    const points = getArrowTris(border, arrow.end);
     let connection = [];
     if (onLine) {
       const l = count;

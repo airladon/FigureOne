@@ -55,7 +55,7 @@ import { ellipseBorderToTris, getEllipseBorder } from '../geometries/ellipse';
 import type { OBJ_Ellipse_Defined } from '../geometries/ellipse';
 import { getTriangleBorder } from '../geometries/triangle';
 import type { OBJ_Triangle_Defined } from '../geometries/triangle';
-import { getArrow, defaultArrowOptions } from '../geometries/arrow';
+import { getArrow, defaultArrowOptions, getArrowTris } from '../geometries/arrow';
 import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
 import getLine from '../geometries/line';
 // import type {
@@ -2423,35 +2423,35 @@ export default class FigurePrimitives {
     return [o, points, drawBorder, drawBorderBuffer];
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getBufferBorder(border: Array<Point>, buffer: number) {
-    if (typeof buffer !== 'number') {
-      return buffer;
-    }
-    if (buffer === 0) {
-      return border;
-    }
-    const drawBorderBounds = getBoundingRect(border);
-    const scaleX = (drawBorderBounds.width + buffer * 2) / drawBorderBounds.width;
-    const scaleY = (drawBorderBounds.height + buffer * 2) / drawBorderBounds.height;
-    const matrix = new Transform()
-      .translate(-drawBorderBounds.left, -drawBorderBounds.bottom)
-      .scale(scaleX, scaleY).matrix();
-    let drawBorderBuffer: Array<Point> = border.map(p => p.transformBy(matrix));
-    const bufferBounds = getBoundingRect(drawBorderBuffer);
-    const targetX = drawBorderBounds.left - (bufferBounds.width - drawBorderBounds.width) / 2;
-    const targetY = drawBorderBounds.bottom
-      - (bufferBounds.height - drawBorderBounds.height) / 2;
-    const offset = new Point(
-      targetX - bufferBounds.left,
-      targetY - bufferBounds.bottom,
-    );
-    drawBorderBuffer = drawBorderBuffer.map(p => p.add(offset));
-    return drawBorderBuffer;
-  }
+  // // eslint-disable-next-line class-methods-use-this
+  // getBufferBorder(border: Array<Point>, buffer: number) {
+  //   if (typeof buffer !== 'number') {
+  //     return buffer;
+  //   }
+  //   if (buffer === 0) {
+  //     return border;
+  //   }
+  //   const drawBorderBounds = getBoundingRect(border);
+  //   const scaleX = (drawBorderBounds.width + buffer * 2) / drawBorderBounds.width;
+  //   const scaleY = (drawBorderBounds.height + buffer * 2) / drawBorderBounds.height;
+  //   const matrix = new Transform()
+  //     .translate(-drawBorderBounds.left, -drawBorderBounds.bottom)
+  //     .scale(scaleX, scaleY).matrix();
+  //   let drawBorderBuffer: Array<Point> = border.map(p => p.transformBy(matrix));
+  //   const bufferBounds = getBoundingRect(drawBorderBuffer);
+  //   const targetX = drawBorderBounds.left - (bufferBounds.width - drawBorderBounds.width) / 2;
+  //   const targetY = drawBorderBounds.bottom
+  //     - (bufferBounds.height - drawBorderBounds.height) / 2;
+  //   const offset = new Point(
+  //     targetX - bufferBounds.left,
+  //     targetY - bufferBounds.bottom,
+  //   );
+  //   drawBorderBuffer = drawBorderBuffer.map(p => p.add(offset));
+  //   return drawBorderBuffer;
+  // }
 
   // eslint-disable-next-line class-methods-use-this
-  getBufferBorder1(borderIn: Array<Point>, buffer: number) {
+  getBufferBorder(borderIn: Array<Point>, buffer: number) {
     if (typeof buffer !== 'number') {
       return buffer;
     }
@@ -2559,18 +2559,17 @@ export default class FigurePrimitives {
     element.custom.close = true;
     element.custom.updatePoints = (updateOptions: Object) => {
       const borderOptions = joinObjects({}, element.custom.options, updateOptions);
-      const [o, borderPoints, db, dbb] =
-        element.custom.getBorder(borderOptions);
-      let drawBorder = db;
-      let drawBorderBuffer = this.getBufferBorder1(db[0], o.drawBorderBuffer);
-      // let drawBorderBuffer = dbb;
+      const [o, border] = element.custom.getBorder(borderOptions);
       if (o.line == null) {
         const [
           points, drawType,
-        ] = element.custom.getFill(borderPoints, o);
+        ] = element.custom.getFill(border, o);
         element.custom.options = o;
         element.custom.updateGeneric(joinObjects({}, o, {
-          points, drawBorder, drawBorderBuffer, drawType,
+          points,
+          drawBorder: border,
+          drawBorderBuffer: this.getBufferBorder(border, o.drawBorderBuffer),
+          drawType,
         }));
       } else {
         if (
@@ -2582,22 +2581,17 @@ export default class FigurePrimitives {
           o.line.close = true;
         }
         const [
-          polylineOptions, points, newDrawBorder, newDrawBorderBuffer, drawType,
+          polylineOptions, points, newDrawBorder,, drawType,
         ] = element.custom.getLine(joinObjects(
           {},
           o.line,
           {
-            points: borderPoints,
-            // drawBorderBuffer: o.drawBorderBuffer,
-            // close: true,
+            points: border,
           },
         ));
-        // console.log(borderPoints, newDrawBorder, newDrawBorderBuffer)
         element.custom.options = o;
         element.custom.options.line = polylineOptions;
-        // drawBorder = [[newDrawBorder[0][0], ...newDrawBorder.map(b => b[1])]];
-        // drawBorderBuffer = [[newDrawBorderBuffer[0][0], ...newDrawBorderBuffer.map(b => b[1])]];
-        drawBorder = [];
+        const drawBorder = [];
         for (let i = 0; i < newDrawBorder.length; i += 1) {
           if (i === 0) {
             drawBorder.push(newDrawBorder[i][0]);
@@ -2614,47 +2608,12 @@ export default class FigurePrimitives {
             }
           }
         }
-        drawBorderBuffer = this.getBufferBorder1(drawBorder, o.drawBorderBuffer);
-        // if (typeof o.drawBorderBuffer === 'number' && o.drawBorderBuffer > 0) {
-        //   const drawBorderBounds = getBoundingRect(drawBorder);
-        //   const scaleX = (drawBorderBounds.width + o.drawBorderBuffer * 2) / drawBorderBounds.width;
-        //   const scaleY = (drawBorderBounds.height + o.drawBorderBuffer * 2) / drawBorderBounds.height;
-        //   const matrix = new Transform()
-        //     .translate(-drawBorderBounds.left, -drawBorderBounds.bottom)
-        //     .scale(scaleX, scaleY).matrix();
-        //   drawBorderBuffer = drawBorder.map(p => p.transformBy(matrix));
-        //   const bufferBounds = getBoundingRect(drawBorderBuffer);
-        //   const targetX = drawBorderBounds.left - (bufferBounds.width - drawBorderBounds.width) / 2;
-        //   const targetY = drawBorderBounds.bottom
-        //     - (bufferBounds.height - drawBorderBounds.height) / 2;
-        //   const offset = new Point(
-        //     targetX - bufferBounds.left,
-        //     targetY - bufferBounds.bottom,
-        //   );
-        //   drawBorderBuffer = drawBorderBuffer.map(p => p.add(offset));
-          
-        // } else if (
-        //   typeof o.drawBorderBuffer === 'number' && o.drawBorderBuffer === 0
-        // ) {
-        //   drawBorderBuffer = drawBorder;
-        // }
-        // for (let i = 0; i < newDrawBorderBuffer.length; i += 1) {
-        //   if (i === 0) {
-        //     drawBorderBuffer.push(newDrawBorderBuffer[i][0]);
-        //     drawBorderBuffer.push(newDrawBorderBuffer[i][1]);
-        //   } else {
-        //     if (i > 0 && drawBorderBuffer.slice(-1)[0] !== newDrawBorderBuffer[i][0]) {
-        //       drawBorderBuffer.push(newDrawBorderBuffer[i][0]);
-        //     }
-        //     drawBorderBuffer.push(newDrawBorderBuffer[i][1]);
-        //   }
-        // }
+        const drawBorderBuffer = this.getBufferBorder(drawBorder, o.drawBorderBuffer);
         element.custom.updateGeneric(joinObjects({}, o, {
           points, drawBorder, drawBorderBuffer, drawType,
         }));
       }
     };
-    // element.custom.updatePoints(joinObjects({}, ...optionsIn));
     return element;
   }
 
@@ -2855,62 +2814,17 @@ export default class FigurePrimitives {
 
     element.custom.getBorder = (o: OBJ_Triangle_Defined) => {
       const optionsWithDefaultArrow = defaultArrowOptions(o);
-      const [points, border, borderBuffer] = getArrow(optionsWithDefaultArrow);
+      const [border, borderBuffer] = getArrow(optionsWithDefaultArrow);
       return [
-        optionsWithDefaultArrow, points, border, borderBuffer,
+        optionsWithDefaultArrow, border, borderBuffer,
       ];
     };
-    element.custom.getFill = (border: Array<Point>) => [
-      border,
+    element.custom.getFill = (border: Array<Point>, o: Object) => [
+      getArrowTris(border, o),
       'triangles',
     ];
     element.custom.updatePoints(joinObjects({}, ...options));
     return element;
-    // const defaultOptions = joinObjects(
-    //   {},
-    //   defaultArrowOptions(joinObjects({}, ...options)),
-    //   {
-    //     head: 'triangle',
-    //     sides: 20,
-    //     radius: 0.5,
-    //     rotation: 0,
-    //     angle: 0,
-    //     transform: new Transform('line').standard(),
-    //     border: 'outline',
-    //     touchBorder: 'border',
-    //     align: 'tip',
-    //     tail: false,
-    //     drawPosition: new Point(0, 0),
-    //   },
-    // );
-
-    // const optionsToUse = processOptions(defaultOptions, ...options);
-
-    // if (optionsToUse.drawPosition != null) {
-    //   optionsToUse.drawPosition = getPoint(optionsToUse.drawPosition);
-    // }
-    // const [points, border] = getArrow(optionsToUse);
-    // let borderToUse = optionsToUse.border;
-
-    // if (optionsToUse.border === 'outline') {
-    //   borderToUse = [border];
-    // }
-    // const element = this.generic({}, optionsToUse, {
-    //   points, // $FlowFixMe
-    //   border: borderToUse,
-    // });
-
-    // element.custom.update = (updateOptions) => {
-    //   const o = joinObjects({}, optionsToUse, updateOptions);
-    //   if (o.drawPosition != null) {
-    //     o.drawPosition = getPoint(o.drawPosition);
-    //   }
-    //   const [updatedPoints, updatedBorder, updatedTouchBorder] = getArrow(o);
-    //   element.drawingObject.change( // $FlowFixMe
-    //     updatedPoints, updatedBorder, updatedTouchBorder, o.holeBorder,
-    //   );
-    // };
-    // return element;
   }
 
   /**
