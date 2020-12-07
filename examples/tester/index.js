@@ -2,40 +2,40 @@ const figure = new Fig.Figure({ limits: [-4.5, -4.5, 9, 9], color: [1, 0, 0, 1],
 // const figure = new Fig.Figure({ limits: [-3, -2.25, 6, 4.5], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 
 // // const figure = new Fig.Figure({ limits: [-8, -8, 16, 16], color: [1, 0, 0, 1]});
-figure.add([
-  {
-    name: 'origin',
-    method: 'polygon',
-    options: {
-      radius: 0.01,
-      line: { width: 0.01 },
-      sides: 10,
-      color: [0.7, 0.7, 0.7, 1]
-    },
-  },
-  {
-    name: 'grid',
-    method: 'grid',
-    options: {
-      bounds: [-4.5, -4.5, 9, 9],
-      yStep: 0.1,
-      xStep: 0.1,
-      color: [0.9, 0.9, 0.9, 1],
-      line: { width: 0.004 },
-    },
-  },
-  {
-    name: 'gridMajor',
-    method: 'grid',
-    options: {
-      bounds: [-4.5, -4.5, 9, 9],
-      yStep: 0.5,
-      xStep: 0.5,
-      color: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.004 }
-    },
-  },
-]);
+// figure.add([
+//   {
+//     name: 'origin',
+//     method: 'polygon',
+//     options: {
+//       radius: 0.01,
+//       line: { width: 0.01 },
+//       sides: 10,
+//       color: [0.7, 0.7, 0.7, 1]
+//     },
+//   },
+//   {
+//     name: 'grid',
+//     method: 'grid',
+//     options: {
+//       bounds: [-4.5, -4.5, 9, 9],
+//       yStep: 0.1,
+//       xStep: 0.1,
+//       color: [0.9, 0.9, 0.9, 1],
+//       line: { width: 0.004 },
+//     },
+//   },
+//   {
+//     name: 'gridMajor',
+//     method: 'grid',
+//     options: {
+//       bounds: [-4.5, -4.5, 9, 9],
+//       yStep: 0.5,
+//       xStep: 0.5,
+//       color: [0.7, 0.7, 0.7, 1],
+//       line: { width: 0.004 }
+//     },
+//   },
+// ]);
 // const figure = new Fig.Figure();
 
 // const p = [[1.2, 0.3], [1, 1], [0.2, 1], [0.6, 0.5], [0, 0], [1, 0]];
@@ -477,24 +477,24 @@ const arrows = [
   // makeEllipse({ line: { width: 0.02, dash: [0.03, 0.01] }, height: 0.1 }),
   // makeEllipse({ line: { width: 0.02, dash: [0.03, 0.01] }, sides: 4 }),
   // makeEllipse({ line: { width: 0.02, dash: [0.03, 0.01] }, height: 0.1, sides: 4 }),
-  // makeLine(),
-  // makeLine({
-  //   arrow: {
-  //     head: 'triangle',
-  //     length: 0.1,
-  //     width: 0.1,
-  //   },
-  //   widthIs: 'outside',
-  // }),
-  // makeLine({
-  //   arrow: {
-  //     head: 'triangle',
-  //     length: 0.1,
-  //     width: 0.1,
-  //     tail: 0.05,
-  //   },
-  // }),
-  // makePolyline(),
+  makeLine(),
+  makeLine({
+    arrow: {
+      head: 'triangle',
+      length: 0.1,
+      width: 0.1,
+    },
+    widthIs: 'outside',
+  }),
+  makeLine({
+    arrow: {
+      head: 'triangle',
+      length: 0.1,
+      width: 0.1,
+      tail: 0.05,
+    },
+  }),
+  makePolyline(),
   makePolyline({
     widthIs: 'outside',
     width: 0.07,
@@ -503,29 +503,29 @@ const arrows = [
       length: 0.1,
       width: 0.1,
     },
-    cornerStyle: 'auto',
-    linePrimitives: true,
-    lineNum: 5,
+    cornerStyle: 'fill',
+    // linePrimitives: true,
+    // lineNum: 5,
   }),
-  // makePolyline({
-  //   widthIs: 'outside',
-  //   arrow: {
-  //     head: 'triangle',
-  //     length: 0.1,
-  //     width: 0.1,
-  //     tail: 0.05,
-  //   },
-  // }),
-  // makePolyline({
-  //   points: [[-0.4, 0], [0, 0], [-0.1, -0.1], [0.2, -0.1]],
-  //   widthIs: 'outside',
-  //   arrow: {
-  //     head: 'triangle',
-  //     length: 0.1,
-  //     width: 0.1,
-  //     tail: 0.05,
-  //   },
-  // }),
+  makePolyline({
+    widthIs: 'outside',
+    arrow: {
+      head: 'triangle',
+      length: 0.1,
+      width: 0.1,
+      tail: 0.05,
+    },
+  }),
+  makePolyline({
+    points: [[-0.4, 0], [0, 0], [-0.1, -0.1], [0.2, -0.1]],
+    widthIs: 'outside',
+    arrow: {
+      head: 'triangle',
+      length: 0.1,
+      width: 0.1,
+      tail: 0.05,
+    },
+  }),
   // makeGrid(),
 ];
 figure.add(arrows);
@@ -607,10 +607,19 @@ for (let i = 0; i < index; i += 1) {
 //     name: 'ppp',
 //     method: 'polyline',
 //     options: {
-//       points: [[0, 0], [1, 0], [0, 0.3]],
+//       points: [[0, 0], [1, 0], [0.5, 0.02]],
 //       width: 0.1,
-//       widthIs: 'outside',
+//       widthIs: 'mid',
 //       color: [1, 0, 0, 0.6],
+//       cornerStyle: 'none',
+//     },
+//   },
+//   {
+//     name: 'border',
+//     method: 'polyline',
+//     options: {
+//       width: 0.01,
+//       color: [0, 0.6, 0, 1],
 //     },
 //   },
 //   {
@@ -619,7 +628,7 @@ for (let i = 0; i < index; i += 1) {
 //     options: {
 //       radius: 0.5,
 //       sides: 20,
-//       line: { width: 0.004 },
+//       // line: { width: 0.004 },
 //       color: [0, 0, 1, 0.4],
 //     },
 //     mods: {
@@ -627,10 +636,13 @@ for (let i = 0; i < index; i += 1) {
 //       setTransformCallback: (t) => {
 //         const ppp = figure.getElement('ppp');
 //         ppp.custom.updatePoints({ points: [[0, 0], [1, 0], t.t()] });
-//       }
+//         figure.getElement('border').custom.updatePoints({
+//           points: ppp.drawBorder[0],
+//         });
+//       },
 //     },
 //   },
-// ])
+// ]);
 
 // figure.add({
 //   name: 'r',

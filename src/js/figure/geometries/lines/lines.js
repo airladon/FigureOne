@@ -67,7 +67,7 @@ function lineSegmentsToPoints(
     }
     positiveBorder.push(positive.p1._dup(), positive.p2._dup());
     negativeBorder.push(negative.p1._dup(), negative.p2._dup());
-    if (corner === 'fill' ) {
+    if (corner === 'fill' || corner === 'auto') {
       let nextLineSegment;
       if (index < lineSegments.length - 1) {
         nextLineSegment = lineSegments[index + 1];
@@ -77,8 +77,6 @@ function lineSegmentsToPoints(
       if (nextLineSegment != null) {
         const nextNegative = nextLineSegment[0];
         const nextPositive = nextLineSegment.slice(-1)[0];
-        console.log(negative, nextNegative)
-        console.log(positive, nextPositive)
         if (nextNegative.p1.isNotEqualTo(negative.p2, 10)) {
           tris.push(negative.p2._dup());
           tris.push(positive.p2._dup());
@@ -134,7 +132,7 @@ function lineSegmentsToPoints(
   if (Array.isArray(holeIs)) {
     hole = holeIs;
   }
-  console.log(borderIs, border)
+  // console.log(borderIs, border)
   return [tris, border, hole];
 }
 
@@ -222,11 +220,11 @@ function joinLinesAcuteInside(
     return;
   }
   let intercept = inside.intersectsWith(midNext);
-  if (intercept.intersect != null) {
+  if (intercept.intersect != null && intercept.withinLine) {
     inside.setP2(intercept.intersect);
   }
   intercept = insideNext.intersectsWith(mid);
-  if (intercept.intersect != null) {
+  if (intercept.intersect != null && intercept.withinLine) {
     insideNext.setP1(intercept.intersect);
   }
 }
@@ -261,7 +259,7 @@ function makeLineSegments(
   widthIs: 'mid' | 'positive' | 'negative' | number,
   isInside: boolean,
   numLines: number = 2,
-): [Array<Line>, Array<Array<Line>>] {
+): [Array<Line>, Array<Array<Line>>, Array<Array<'negative' | 'positive' | 'mid'>>] {
   const idealLines = [];
   const makeLine = (p1, p2) => new Line(p1, p2);
   for (let i = 0; i < points.length - 1; i += 1) {
@@ -270,6 +268,10 @@ function makeLineSegments(
   if (close) {
     idealLines.push(makeLine(points[points.length - 1], points[0]));
   }
+  const segmentSides = [];
+  const neg = 'negative';
+  const pos = 'positive';
+  const mid = 'mid';
 
   // lineSegments should be more negative to more positive
   const lineSegments: Array<Array<Line>> = [];
@@ -350,31 +352,44 @@ function makeLineSegments(
       next = idealLines[0];
     }
     lineSegments.push([]);
+    segmentSides.push([]);
     if (widthIs === 'negative' || widthIs === 'positive') {
       lineSegments[i].push(current._dup());
+      segmentSides[i].push(mid);
     } else if (numLines === 1) {
       lineSegments[i].push(current._dup());
+      segmentSides[i].push(mid);
     } else if (typeof widthIs === 'number') {
       const offsetLine = current.offset('negative', widthIs * width);
       lineSegments[i].push(offsetLine);
+      segmentSides[i].push(neg);
     } else {
       const offsetLine = current.offset('negative', width / 2);
       lineSegments[i].push(offsetLine);
+      segmentSides[i].push(neg);
     }
     for (let l = 1; l < numLines; l += 1) {
-      if (widthIs === 'negative' || widthIs === 'positive') {
+      if (widthIs === 'negative') {
         makeOffset(prev, current, next, l * step, i);
+        segmentSides[i].push(neg);
+      } else if (widthIs === 'positive') {
+        makeOffset(prev, current, next, l * step, i);
+        segmentSides[i].push(pos);
       } else if (typeof widthIs === 'number') {
         makeOffset(prev, current, next, -widthIs * width + l * step, i);
+        segmentSides[i].push(-widthIs * width + l * step > 0 ? pos : neg);
       } else {
         makeOffset(prev, current, next, -width / 2 + l * step, i);
+        segmentSides[i].push(-width / 2 + l * step > 0 ? pos : neg);
       }
     }
     if (widthIs === 'negative') {
       lineSegments[i].reverse();
+      segmentSides[i].reverse();
     }
   }
-  return [idealLines, lineSegments];
+  // console.log(idealLines, lineSegments, segmentSides)
+  return [idealLines, lineSegments, segmentSides];
 }
 
 function getWidthIs(
@@ -435,7 +450,7 @@ function makeThickLine(
   //   widthToUse = width / 2;
   // }
   let widthIs = getWidthIs(points, close, widthIsIn);
-  const [idealLines, lineSegments] = makeLineSegments(
+  const [idealLines, lineSegments, segmentSides] = makeLineSegments(
     points, widthToUse, close, corner, widthIs, widthIsIn === 'inside', lineNum,
   );
   if (typeof widthIs === 'number') {
@@ -456,43 +471,44 @@ function makeThickLine(
     // If the angle is less than 180, then the 'negative' line segments are
     // on the outside of the angle.
     // console.log(currentIndex, lineIndex, angle)
+    const segmentSide = segmentSides[currentIndex][lineIndex];
     if (0 < angle && angle < minAngle) {
-      if (widthIs === 'mid' && corner) {
+      if (segmentSide === 'mid') {
         joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
         // joinLinesInTangent(mid, midNext, positive, positiveNext);
-      } else if (widthIs === 'negative') {
+      } else if (segmentSide === 'negative') {
         joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
-      } else if (widthIs === 'positive') {
+      } else if (segmentSide === 'positive') {
         joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
       }
     } else if (minAngle <= angle && angle <= Math.PI / 2) {
-      if (widthIs === 'mid') {
+      if (segmentSide === 'mid') {
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
         // joinLinesInPoint(lineSegment, lineSegmentNext);
-      } else if (widthIs === 'negative') {
+      } else if (segmentSide === 'negative') {
         joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
-      } else if (widthIs === 'positive') {
+      } else if (segmentSide === 'positive') {
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
       }
     // If the angle is greater than the minAngle, then the line segments can
     // be connected directly
     } else if (Math.PI / 2 <= angle && angle < Math.PI) {
-      if (widthIs === 'mid') {
+      if (segmentSide === 'mid' || typeof widthIs === 'number') {
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
         // joinLinesInPoint(lineSegment, lineSegmentNext);
-      } else if (widthIs === 'negative') {
+      } else if (segmentSide === 'negative') {
         joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
-      } else if (widthIs === 'positive') {
+      } else if (segmentSide === 'positive') {
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
       }
     } else if (angle === Math.PI) {
-      if (widthIs === 'negative') {
+      if (segmentSide === 'negative') {
         if (widthIsIn === 'inside') {
           joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
         } else {
           joinLinesInPoint(lineSegment, lineSegmentNext, corner);
         }
-      } else if (widthIs === 'positive') {
+      } else if (segmentSide === 'positive') {
         if (widthIsIn === 'inside') {
           joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
         } else {
@@ -502,32 +518,32 @@ function makeThickLine(
     // If the angle is greater than 180, then the positive side is on the
     // inside of the angle
     } else if (Math.PI < angle && angle < Math.PI / 2 * 3) {
-      if (widthIs === 'mid') {
+      if (segmentSide === 'mid') {
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
-      } else if (widthIs === 'negative') {
+      } else if (segmentSide === 'negative') {
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
-      } else if (widthIs === 'positive') {
+      } else if (segmentSide === 'positive') {
         joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
       }
     //
     } else if (Math.PI / 2 * 3 <= angle && angle <= Math.PI * 2 - minAngle) {
-      if (widthIs === 'mid') {
+      if (segmentSide === 'mid') {
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
         // joinLinesInPoint(lineSegment, lineSegmentNext);
-      } else if (widthIs === 'negative') {
+      } else if (segmentSide === 'negative') {
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
-      } else if (widthIs === 'positive') {
+      } else if (segmentSide === 'positive') {
         joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       }
     //
     } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
-      if (widthIs === 'mid') {
+      if (segmentSide === 'mid') {
         joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
         // joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
-      } else if (widthIs === 'negative') {
+      } else if (segmentSide === 'negative') {
         joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
-      } else if (widthIs === 'positive') {
+      } else if (segmentSide === 'positive') {
         joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       }
     } else if ((angle === Math.PI * 2 || angle === 0)) {
@@ -818,22 +834,22 @@ function makePolyLine(
   // Get touch border if there is a buffer
   let touchBorder = border;
   if (touchBorderBuffer !== 0) {
-    // touchBorder = getBufferBorder(border[0], touchBorderBuffer);
-    let widthIsBuffer = 0.5;
-    const widthBuffer = width + touchBorderBuffer * 2;
-    if (widthIs === 'positive' || widthIs === 'inside') {
-      widthIsBuffer = (touchBorderBuffer + width) / widthBuffer;
-    } else if (widthIs === 'negative' || widthIs === 'outside') {
-      widthIsBuffer = touchBorderBuffer / widthBuffer;
-    } else if (widthIs === 'mid') {
-      widthIsBuffer = 0.5;
-    } else {
-      widthIsBuffer = (touchBorderBuffer + widthIs * width) / widthBuffer;
-    }
-    [, touchBorder] = makeThickLine(
-      points, widthBuffer, widthIsBuffer, close, cornerStyleToUse, minAutoCornerAngle,
-      linePrimitives, lineNum, borderIs, holeIs,
-    );
+    touchBorder = getBufferBorder(border[0], touchBorderBuffer);
+    // let widthIsBuffer = 0.5;
+    // const widthBuffer = width + touchBorderBuffer * 2;
+    // if (widthIs === 'positive' || widthIs === 'inside') {
+    //   widthIsBuffer = (touchBorderBuffer + width) / widthBuffer;
+    // } else if (widthIs === 'negative' || widthIs === 'outside') {
+    //   widthIsBuffer = touchBorderBuffer / widthBuffer;
+    // } else if (widthIs === 'mid') {
+    //   widthIsBuffer = 0.5;
+    // } else {
+    //   widthIsBuffer = (touchBorderBuffer + widthIs * width) / widthBuffer;
+    // }
+    // [, touchBorder] = makeThickLine(
+    //   points, widthBuffer, widthIsBuffer, close, cornerStyleToUse, minAutoCornerAngle,
+    //   linePrimitives, lineNum, borderIs, holeIs,
+    // );
     // if (close === false) {
 
     // }
