@@ -1,7 +1,9 @@
+document.getElementById('aa').innerHTML = 'asdfasdf';
+
 const figure = new Fig.Figure({
   limits: [-3, -3, 6, 6],
   color: [1, 0, 0, 1],
-  lineWidth: 0.01,
+  lineWidth: 0.1,
   font: { size: 0.1 },
 });
 
