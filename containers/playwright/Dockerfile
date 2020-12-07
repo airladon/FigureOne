@@ -1,3 +1,5 @@
 FROM mcr.microsoft.com/playwright:bionic
 
-RUN npm init -y && npm install playwright --save
+COPY containers/playwright/package.json package.json
+
+RUN npm install

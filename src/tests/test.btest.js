@@ -5,8 +5,8 @@ const playwright = require('playwright');
   const context = await browser.newContext();
   const page = await context.newPage();
   page.on('console', msg => {
-  for (let i = 0; i < msg.args().length; ++i)
-      console.log(`${i}: ${msg.args()[i]}`);
+    for (let i = 0; i < msg.args().length; ++i)
+        console.log(`${i}: ${msg.args()[i]}`);
   });
   await page.goto('file:///src/tests/index.html');
   page.on('console', msg => {

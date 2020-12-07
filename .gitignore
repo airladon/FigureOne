@@ -2,3 +2,4 @@ node_modules/
 package
 *code-workspace
 reports/
+node_modules
