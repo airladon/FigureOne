@@ -85,30 +85,58 @@ const makePolygon = (options, lineOptions = null) => makeShape(
 
 
 const arrows = [
-  makePolygon(),
   makePolygon({ radius: 0.3 }),
+  makePolygon({ radius: 0.3 }, {}),
   makePolygon({ rotation: Math.PI / 2 }),
+  makePolygon({ rotation: Math.PI / 2 }, {}),
   makePolygon({ offset: [0.1, 0.1] }),
-  makePolygon({ sides: 40, sidesToDraw: 10 }),
-  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 }),
-  // makePolygon({ sides: 100, sidesToDraw: 25, direction: -1 }),
+  makePolygon({ offset: [0.1, 0.1] }, {}),
+
+  // line specific
   makePolygon({}, { widthIs: 'inside' }),
   makePolygon({}, { widthIs: 'mid' }),
   makePolygon({}, { widthIs: 'outside' }),
   makePolygon({}, { cornerStyle: 'none' }),
   makePolygon({}, { cornerStyle: 'fill' }),
-  makePolygon({}, { cornerStyle: 'radius', cornerSides: 2 }),
-  makePolygon({ sides: 40, sidesToDraw: 10 }, {}),
-  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 }, {}),
-  // makePolygon(),
-  // makePolygon({}, { widthIs: 'inside' }),
-  // makePolygon({}, { widthIs: 'mid' }),
-  // makePolygon({}, { widthIs: 'outside' }),
-  // makePolygon({}, { width: 0.1 }),
-  // makePolygon({ line: { width: 0.05, widthIs: 'inside' } }),
-  // makePolygon({ line: { width: 0.05 }, sides: 3 }),
-  // makePolygon({ line: { width: 0.02, dash: [0.03, 0.01] } }),
-  // makePolygon({ line: { width: 0.02, dash: [0.03, 0.01] }, sides: 3 }),
+  makePolygon({}, { cornerStyle: 'radius', cornerSides: 2, cornerSize: 0.05 }),
+
+  // dash
+  makePolygon({}, { widthIs: 'inside', dash: [0.03, 0.02] }),
+  makePolygon({}, { widthIs: 'mid', dash: [0.03, 0.02] }),
+  makePolygon({}, { widthIs: 'outside', dash: [0.03, 0.02] }),
+  makePolygon({}, { cornerStyle: 'none', dash: [0.03, 0.02] }),
+  makePolygon({}, { cornerStyle: 'fill', dash: [0.03, 0.02] }),
+  makePolygon({}, {
+    cornerStyle: 'radius', cornerSides: 2, dash: [0.03, 0.02], cornerSize: 0.05,
+  }),
+
+  // Angle to draws
+  makePolygon({ sides: 40, sidesToDraw: 10 }),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 }),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 0.5 }),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 1 }),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 1.5 }),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 2 }),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 2.5 }),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 3 }),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 3.5 }),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 4 }),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 0.5 }, {}),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 1 }, {}),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 1.5 }, {}),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 2 }, {}),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 2.5 }, {}),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 3 }, {}),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 3.5 }, {}),
+  makePolygon({ sides: 40, angleToDraw: Math.PI / 2 * 4 }, {}),
+
+  // Line Primitives
+  makePolygon({}, { linePrimitives: true, lineNum: 5 }),
+  makePolygon({}, { linePrimitives: true, lineNum: 5, cornerStyle: 'none' }),
+  makePolygon({}, { linePrimitives: true, lineNum: 5, cornerStyle: 'fill' }),
+
+  // Corners Only
+  makePolygon({}, { cornersOnly: true, cornerLength: 0.1 }),
 ];
 figure.add(arrows);
 

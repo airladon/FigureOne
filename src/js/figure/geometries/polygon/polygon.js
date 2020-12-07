@@ -80,6 +80,7 @@ function getTrisFillPolygon(
   sidesToDraw: number,
 ): Array<Point> {
   const points = [];
+  // const center = border.slice(-1)[0];
   for (let i = 1; i < border.length; i += 1) {
     points.push(center._dup());
     points.push(border[i]._dup());

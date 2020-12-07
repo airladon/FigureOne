@@ -4,7 +4,7 @@ import {
 } from '../../tools/g2';
 
 
-function getBufferBorder(borderIn: Array<Point>, buffer: number) {
+function getBufferBorder(borderIn: Array<Point>, buffer: number, skipConcave: boolean = true) {
   if (typeof buffer !== 'number') {
     return buffer;
   }
@@ -29,7 +29,7 @@ function getBufferBorder(borderIn: Array<Point>, buffer: number) {
     }
     const angle = threePointAngle(nextPoint, borderIn[i], prevPoint);
     if (
-      angle < Math.PI
+      ((skipConcave && angle < Math.PI) || skipConcave === false)
       && (
         border.length === 0
         || borderIn[i].isNotEqualTo(border[border.length - 1])

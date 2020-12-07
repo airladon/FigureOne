@@ -2363,7 +2363,7 @@ export default class FigurePrimitives {
       o.sidesToDraw = o.sides;
     }
     const points = getPolygonPoints(o);
-    let { drawBorderBuffer } = o;
+    // let { drawBorderBuffer } = o;
     let drawBorderOffset = 0;
     let drawBorder;
     if (o.line != null) {
@@ -2396,6 +2396,8 @@ export default class FigurePrimitives {
       } else {
         o.line.close = false;
       }
+    } else if (o.sidesToDraw !== o.sides && o.line == null) {
+      points.push(o.offset);
     }
     if (drawBorderOffset === 0) {
       drawBorder = [points];
@@ -2405,23 +2407,23 @@ export default class FigurePrimitives {
       ))];
     }
 
-    if (typeof drawBorderBuffer === 'number') {
-      if (drawBorderBuffer !== 0) {
-        if (drawBorderBuffer > 0) {
-          const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
-          drawBorderBuffer /= Math.sin(cornerAngle / 2);
-        }
-        drawBorderBuffer = [getPolygonPoints(joinObjects(
-          {}, o, {
-            radius: o.radius + drawBorderOffset + drawBorderBuffer,
-            innerRadius: null,
-          },
-        ))];
-      } else {
-        drawBorderBuffer = drawBorder;
-      }
-    }
-    return [o, points, drawBorder, drawBorderBuffer];
+    // if (typeof drawBorderBuffer === 'number') {
+    //   if (drawBorderBuffer !== 0) {
+    //     if (drawBorderBuffer > 0) {
+    //       const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
+    //       drawBorderBuffer /= Math.sin(cornerAngle / 2);
+    //     }
+    //     drawBorderBuffer = [getPolygonPoints(joinObjects(
+    //       {}, o, {
+    //         radius: o.radius + drawBorderOffset + drawBorderBuffer,
+    //         innerRadius: null,
+    //       },
+    //     ))];
+    //   } else {
+    //     drawBorderBuffer = drawBorder;
+    //   }
+    // }
+    return [o, points, drawBorder]; //, drawBorderBuffer];
   }
 
   // // eslint-disable-next-line class-methods-use-this
@@ -2555,9 +2557,15 @@ export default class FigurePrimitives {
 
     element.custom.getFill = () => [];
     // element.custom.getLine = () => [];
-    element.custom.getLine = (o: OBJ_PolyLineTris) => this.getPolylineTris(o);
-    element.custom.getBorder = () => [];
     element.custom.close = true;
+    element.custom.skipConcave = true;
+    element.custom.getLine = (o: OBJ_PolyLineTris) => {
+      if (!element.custom.close && o.drawBorder == null) {
+        o.drawBorder = 'line';
+      }
+      return this.getPolylineTris(o);
+    };
+    element.custom.getBorder = () => [];
     element.custom.updatePoints = (updateOptions: Object) => {
       const borderOptions = joinObjects({}, element.custom.options, updateOptions);
       const [o, border] = element.custom.getBorder(borderOptions);
@@ -2569,7 +2577,7 @@ export default class FigurePrimitives {
         element.custom.updateGeneric(joinObjects({}, o, {
           points,
           drawBorder: border,
-          drawBorderBuffer: getBufferBorder(border, o.drawBorderBuffer),
+          drawBorderBuffer: getBufferBorder(border, o.drawBorderBuffer, element.custom.skipConcave),
           drawType,
         }));
       } else {
@@ -2610,7 +2618,7 @@ export default class FigurePrimitives {
         //   }
         // }
         // console.log(drawBorder)
-        const drawBorderBuffer = getBufferBorder(drawBorder, o.drawBorderBuffer);
+        const drawBorderBuffer = getBufferBorder(drawBorder, o.drawBorderBuffer, element.custom.skipConcave);
         // console.log(drawBorder, drawBorderBuffer);
         element.custom.updateGeneric(joinObjects({}, o, {
           points, drawBorder, drawBorderBuffer, drawType,
@@ -2632,10 +2640,20 @@ export default class FigurePrimitives {
       rotation: 0,
       offset: new Point(0, 0),
     }, joinObjects({}, ...options));
-    element.custom.getBorder = (o: OBJ_Polygon_Defined) => this.getPolygonBorder(o);
+    element.custom.getBorder = (o: OBJ_Polygon_Defined) => {
+      const border = this.getPolygonBorder(o);
+      if (o.sidesToDraw !== o.sides) {
+        element.custom.close = false;
+      } else {
+        element.custom.close = true;
+      }
+      element.custom.skipConcave = false;
+      return border;
+    };
     element.custom.getFill = (border: Array<Point>, fillOptions: OBJ_Polygon_Defined) => [
       getTrisFillPolygon(
-        fillOptions.offset, border,
+        fillOptions.offset,
+        border,
         fillOptions.sides, fillOptions.sidesToDraw,
       ),
       'triangles',
