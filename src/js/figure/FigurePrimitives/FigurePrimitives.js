@@ -2612,6 +2612,7 @@ export default class FigurePrimitives {
         // }
         const drawBorder = [];
         for (let i = 0; i < newDrawBorder[0].length - 1; i += 1) {
+          console.log(newDrawBorder[0][i])
           if (
             i === 0
             || (
