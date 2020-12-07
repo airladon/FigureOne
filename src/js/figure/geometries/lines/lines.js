@@ -214,14 +214,14 @@ function joinLinesInTangent(
   const tangent = new Line(mid.p2, 1, mid.angle() + angle / 2 + Math.PI / 2);
   const intercept = outside.intersectsWith(tangent);
   const interceptNext = outsideNext.intersectsWith(tangent);
-  if (intercept.withinLine === false && interceptNext.withinLine === false) {
-    const i = outside.intersectsWith(outsideNext);
-    if (i.intersect != null) {
-      outside.setP2(i.intersect);
-      outsideNext.setP1(interceptNext.intersect);
-      return;
-    }
-  }
+  // if (intercept.withinLine === false && interceptNext.withinLine === false) {
+  //   const i = outside.intersectsWith(outsideNext);
+  //   if (i.intersect != null) {
+  //     outside.setP2(i.intersect);
+  //     outsideNext.setP1(interceptNext.intersect);
+  //     return;
+  //   }
+  // }
   if (corner === 'fill') {
     return;
   }
@@ -567,6 +567,7 @@ function makeThickLine(
       }
     //
     } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
+      // console.log('asdf', segmentSide);
       if (segmentSide === 'mid') {
         joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
         // joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
@@ -575,6 +576,7 @@ function makeThickLine(
       } else if (segmentSide === 'positive') {
         joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       }
+      // console.log(lineSegment)
     } else if ((angle === Math.PI * 2 || angle === 0)) {
       // do nothing
 
@@ -845,6 +847,7 @@ function makePolyLine(
     if (dashes.length === 1) {
       closeDashes = close;
     }
+    // console.log('Dashes Start')
     dashes.forEach((d) => {
       const [tris] = makeThickLine(
         d, width, widthIs, closeDashes, cornerStyleToUse, minAutoCornerAngle,
@@ -852,6 +855,7 @@ function makePolyLine(
       );
       dashedTris = [...dashedTris, ...tris];
     });
+    // console.log('Dashes Done')
   }
 
   // Get tris and border of solid line

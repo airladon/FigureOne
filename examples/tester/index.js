@@ -607,11 +607,12 @@ for (let i = 0; i < index; i += 1) {
 //     name: 'ppp',
 //     method: 'polyline',
 //     options: {
-//       points: [[0, 0], [1, 0], [0.5, 0.02]],
+//       points: [[0, 0], [0.774, -0.006], [0, 0.2]],
 //       width: 0.1,
 //       widthIs: 'mid',
 //       color: [1, 0, 0, 0.6],
-//       cornerStyle: 'none',
+//       cornerStyle: 'auto',
+//       dash: [0.02, 0.02],
 //     },
 //   },
 //   {
@@ -635,76 +636,67 @@ for (let i = 0; i < index; i += 1) {
 //       isMovable: true,
 //       setTransformCallback: (t) => {
 //         const ppp = figure.getElement('ppp');
-//         ppp.custom.updatePoints({ points: [[0, 0], [1, 0], t.t()] });
+//         ppp.custom.updatePoints({ points: [[0, 0], t.t(), [0, 0.2]] });
 //         figure.getElement('border').custom.updatePoints({
 //           points: ppp.drawBorder[0],
 //         });
+//         console.log(t.t())
 //       },
 //     },
 //   },
 // ]);
 
-figure.add({
-  name: 'r',
-  method: 'triangle',
-  options: {
-    // points: [[0, 0], [1, 0], [1, 0.3]],
-    // close: true,
-    width: 1,
-    height: 0.2,
-    // border: 'negative',
-    // width: 1,
-    // length: 1,
-    drawBorderBuffer: 0.4,
-    color: [1, 0, 0, 0.6],
-    // tailWidth: 0.15,
-    // head: 'barb',
-    line: { width: 0.1, widthIs: 'mid' },
-    // tail: -0.11,
-    // radius: 1,
-    // sides: 15,
-  },
-  mods: {
-    isTouchable: true,
-    onClick: () => console.log('touched'),
-    touchBorder: 'buffer',
-  },
-});
+// figure.add({
+//   name: 'r',
+//   method: 'star',
+//   options: {
+//     // points: [[0, 0], [1, 0], [1, 0.3]],
+//     // close: true,
+//     // width: 1,
+//     // height: 0.2,
+//     // border: 'negative',
+//     // width: 1,
+//     // length: 1,
+//     drawBorderBuffer: 0.4,
+//     color: [1, 0, 0, 0.6],
+//     // tailWidth: 0.15,
+//     // head: 'barb',
+//     line: { width: 0.1, widthIs: 'mid', dash: [0.01, 0.01], cornerStyle: 'auto' },
+//     // tail: -0.11,
+//     radius: 1,
+//     sides: 20,
+//   },
+//   mods: {
+//     isTouchable: true,
+//     onClick: () => console.log('touched'),
+//     touchBorder: 'buffer',
+//   },
+// });
 
 
-// // console.log(Fig.round(figure.getElement('r').drawBorderBuffer, 3))
-// // console.log(Fig.round(figure.getElement('r').drawBorder, 3))
-// // console.log(Fig.round(figure.getElement('r').drawingObject.points))
-// // console.log(Fig.round(figure.getElement('r').getBorder('draw', 'border')))
-// console.log(figure.getElement('r'))
-// // figure.getElement('r').custom.updatePoints({ width: 1.5, line: { width: 0.01 },height: 0.5, xAlign: 'left' });
-// // console.log(Fig.round(figure.getElement('star').drawBorder))
-
-const points = figure.getElement('r').drawBorderBuffer;
-// // console.log(points)
-// // // console.log(points[0])
-figure.add([
-  {
-    name: 'buffer',
-    method: 'polyline',
-    options: {
-      points: points[0],
-      width: 0.01,
-      color: [0, 0, 1, 1],
-      close: true,
-    },
-  },
-  {
-    name: 'border',
-    method: 'polyline',
-    options: {
-      points: figure.getElement('r').drawBorder[0],
-      width: 0.01,
-      color: [0, 1, 0, 1],
-      close: true,
-    },
-  },
-]);
+// const points = figure.getElement('r').drawBorderBuffer;
+// figure.add([
+//   {
+//     name: 'buffer',
+//     method: 'polyline',
+//     options: {
+//       points: points[0],
+//       width: 0.01,
+//       color: [0, 0, 1, 1],
+//       close: true,
+//     },
+//   },
+//   {
+//     name: 'border',
+//     method: 'polyline',
+//     options: {
+//       points: figure.getElement('r').drawBorder[0],
+//       width: 0.01,
+//       color: [0, 1, 0, 1],
+//       close: true,
+//     },
+//   },
+// ]);
 
 // // Point {x: -0.4166666666666667, y: 0, _type: "point"}
 // // 1: Point {x: -0.5, y: -0.25, _type: "point"}
