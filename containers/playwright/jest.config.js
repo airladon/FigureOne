@@ -1,3 +1,3 @@
-// module.exports = {
-//   preset: 'jest-playwright-preset',
-// };
+module.exports = {
+  preset: 'jest-playwright-preset',
+};

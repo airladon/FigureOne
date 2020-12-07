@@ -16,5 +16,17 @@ figure.add({
       { label: { text: 'b' } },
       { label: { text: 'c' } },
     ],
+    color: [1, 0, 0, 0.5],
   },
 });
+
+figure.add({
+  name: 'e',
+  method: 'equation',
+  options: {
+    forms: {
+      0: ['a', 'b', 'c'],
+    },
+  },
+});
+figure.getElement('e').showForm('0');
