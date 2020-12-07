@@ -526,59 +526,31 @@ const arrows = [
       tail: 0.05,
     },
   }),
-  makeLine({ linePrimitives: true, lineNum: 3 }),
+  makeLine({ linePrimitives: true, lineNum: 5 }),
   makeLine({
-    arrow: {
-      head: 'triangle',
-      length: 0.1,
-      width: 0.1,
-    },
     widthIs: 'outside',
-    linePrimitives: true, lineNum: 3,
+    linePrimitives: true, lineNum: 5,
   }),
   makeLine({
-    arrow: {
-      head: 'triangle',
-      length: 0.1,
-      width: 0.1,
-      tail: 0.05,
-    },
-    linePrimitives: true, lineNum: 3,
+    linePrimitives: true, lineNum: 5,
   }),
-  makePolyline({ linePrimitives: true, lineNum: 3 }),
+  makePolyline({ linePrimitives: true, lineNum: 5 }),
   makePolyline({
     widthIs: 'outside',
     width: 0.07,
-    arrow: {
-      head: 'triangle',
-      length: 0.1,
-      width: 0.1,
-    },
     cornerStyle: 'fill',
-    linePrimitives: true, lineNum: 3,
+    linePrimitives: true, lineNum: 5,
     // linePrimitives: true,
     // lineNum: 5,
   }),
   makePolyline({
     widthIs: 'outside',
-    linePrimitives: true, lineNum: 3,
-    arrow: {
-      head: 'triangle',
-      length: 0.1,
-      width: 0.1,
-      tail: 0.05,
-    },
+    linePrimitives: true, lineNum: 5,
   }),
   makePolyline({
     points: [[-0.4, 0], [0, 0], [-0.2, -0.1], [0.2, -0.1]],
     widthIs: 'mid',
-    linePrimitives: true, lineNum: 3,
-    arrow: {
-      head: 'triangle',
-      length: 0.1,
-      width: 0.1,
-      tail: 0.05,
-    },
+    linePrimitives: true, lineNum: 5,
   }),
   makeGrid(),
   makeGrid({ line: { linePrimitives: true, lineNum: 1 } }),
@@ -663,12 +635,14 @@ for (let i = 0; i < index; i += 1) {
 //     name: 'ppp',
 //     method: 'polyline',
 //     options: {
-//       points: [[0, 0], [0.774, -0.006], [0, 0.2]],
-//       width: 0.1,
+//       points: [[0, 0], [1, 0], [0, 0.05]],
+//       width: 0.08,
 //       widthIs: 'mid',
 //       color: [1, 0, 0, 0.6],
 //       cornerStyle: 'auto',
-//       dash: [0.02, 0.02],
+//       // linePrimitives: true,
+//       // lineNum: 3,
+//       // dash: [0.02, 0.02],
 //     },
 //   },
 //   {
@@ -676,7 +650,7 @@ for (let i = 0; i < index; i += 1) {
 //     method: 'polyline',
 //     options: {
 //       width: 0.01,
-//       color: [0, 0.6, 0, 1],
+//       color: [0, 0.6, 0, 0],
 //     },
 //   },
 //   {
@@ -692,11 +666,11 @@ for (let i = 0; i < index; i += 1) {
 //       isMovable: true,
 //       setTransformCallback: (t) => {
 //         const ppp = figure.getElement('ppp');
-//         ppp.custom.updatePoints({ points: [[0, 0], t.t(), [0, 0.2]] });
+//         ppp.custom.updatePoints({ points: [[0, 0], [1, 0], t.t(),] });
 //         figure.getElement('border').custom.updatePoints({
 //           points: ppp.drawBorder[0],
 //         });
-//         console.log(t.t())
+//         // console.log(t.t())
 //       },
 //     },
 //   },

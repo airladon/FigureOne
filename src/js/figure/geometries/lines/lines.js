@@ -105,15 +105,26 @@ function lineSegmentsToPoints(
       if (nextLineSegment != null) {
         const nextNegative = nextLineSegment[0];
         const nextPositive = nextLineSegment.slice(-1)[0];
-        if (nextNegative.p1.isNotEqualTo(negative.p2, 10)) {
-          tris.push(negative.p2._dup());
-          tris.push(positive.p2._dup());
-          tris.push(nextNegative.p1._dup());
-        }
-        if (nextPositive.p1.isNotEqualTo(positive.p2, 10)) {
-          tris.push(positive.p2._dup());
-          tris.push(nextPositive.p1._dup());
-          tris.push(negative.p2._dup());
+        if (linePrimitives) {
+          if (nextNegative.p1.isNotEqualTo(negative.p2, 10)) {
+            tris.push(negative.p2._dup());
+            tris.push(nextNegative.p1._dup());
+          }
+          if (nextPositive.p1.isNotEqualTo(positive.p2, 10)) {
+            tris.push(positive.p2._dup());
+            tris.push(nextPositive.p1._dup());
+          }
+        } else {
+          if (nextNegative.p1.isNotEqualTo(negative.p2, 10)) {
+            tris.push(negative.p2._dup());
+            tris.push(positive.p2._dup());
+            tris.push(nextNegative.p1._dup());
+          }
+          if (nextPositive.p1.isNotEqualTo(positive.p2, 10)) {
+            tris.push(positive.p2._dup());
+            tris.push(nextPositive.p1._dup());
+            tris.push(negative.p2._dup());
+          }
         }
       }
     }
@@ -241,6 +252,7 @@ function joinLinesAcuteInside(
   midNext: Line,
   inside: Line,
   insideNext: Line,
+  linePrimitives: boolean,
 ) {
   const insideIntercept = inside.intersectsWith(insideNext);
   if (insideIntercept.withinLine && insideIntercept.intersect != null) {
@@ -248,13 +260,15 @@ function joinLinesAcuteInside(
     insideNext.setP1(insideIntercept.intersect);
     return;
   }
-  let intercept = inside.intersectsWith(midNext);
-  if (intercept.intersect != null && intercept.withinLine) {
-    inside.setP2(intercept.intersect);
-  }
-  intercept = insideNext.intersectsWith(mid);
-  if (intercept.intersect != null && intercept.withinLine) {
-    insideNext.setP1(intercept.intersect);
+  if (!linePrimitives) {
+    let intercept = inside.intersectsWith(midNext);
+    if (intercept.intersect != null && intercept.withinLine) {
+      inside.setP2(intercept.intersect);
+    }
+    intercept = insideNext.intersectsWith(mid);
+    if (intercept.intersect != null && intercept.withinLine) {
+      insideNext.setP1(intercept.intersect);
+    }
   }
 }
 
@@ -506,7 +520,7 @@ function makeThickLine(
         joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
         // joinLinesInTangent(mid, midNext, positive, positiveNext);
       } else if (segmentSide === 'negative') {
-        joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
+        joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext, linePrimitives);
       } else if (segmentSide === 'positive') {
         joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
       }
@@ -515,7 +529,7 @@ function makeThickLine(
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
         // joinLinesInPoint(lineSegment, lineSegmentNext);
       } else if (segmentSide === 'negative') {
-        joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
+        joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext, linePrimitives);
       } else if (segmentSide === 'positive') {
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
       }
@@ -563,18 +577,19 @@ function makeThickLine(
       } else if (segmentSide === 'negative') {
         joinLinesInPoint(lineSegment, lineSegmentNext, corner);
       } else if (segmentSide === 'positive') {
-        joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
+        joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext, linePrimitives);
       }
     //
     } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
       // console.log('asdf', segmentSide);
+      // console.log(segmentSide)
       if (segmentSide === 'mid') {
         joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
         // joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
       } else if (segmentSide === 'negative') {
         joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
       } else if (segmentSide === 'positive') {
-        joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
+        joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext, linePrimitives);
       }
       // console.log(lineSegment)
     } else if ((angle === Math.PI * 2 || angle === 0)) {
@@ -629,11 +644,11 @@ function makeThickLine(
   if (corner !== 'none') {
     for (let l = 0; l < lineNum; l += 1) {
       for (let i = 0; i < lineSegments.length - 1; i += 1) {
-        if (l === 0 && linePrimitives) {
-          createFill(i, i + 1);
-        } else {
+        // if (l === 0 && linePrimitives) {
+        //   createFill(i, i + 1);
+        // } else {
           joinLineSegments(i, i + 1, l);
-        }
+        // }
         // if (corner === 'auto') {
         //   joinLineSegments(i, i + 1, l);
         // } else if (l === 0 && linePrimitives) {
@@ -641,11 +656,11 @@ function makeThickLine(
         // }
       }
       if (close) {
-        if (l === 0 && linePrimitives) {
-          createFill(lineSegments.length - 1, 0);
-        } else {
+        // if (l === 0 && linePrimitives) {
+        //   createFill(lineSegments.length - 1, 0);
+        // } else {
           joinLineSegments(lineSegments.length - 1, 0, l);
-        }
+        // }
         // if (corner === 'auto') {
         //   joinLineSegments(lineSegments.length - 1, 0, l);
         // } else if (l === 0 && linePrimitives) {
