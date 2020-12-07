@@ -24,6 +24,8 @@ docker run -it --rm \
   -v $PROJECT_PATH/.stylelintignore:/opt/app/.stylelintignore \
   -v $PROJECT_PATH/.eslintignore:/opt/app/.eslintignore \
   -v $PROJECT_PATH/browser.sh:/opt/app/browser.sh \
+  -v $PROJECT_PATH/containers:/opt/app/containers \
+  -v $PROJECT_PATH/.dockerignore:/opt/app/.dockerignore \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e LOCAL_PROJECT_PATH=$PROJECT_PATH \
   -p 8080:8080 \
