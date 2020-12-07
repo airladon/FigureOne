@@ -2600,7 +2600,7 @@ export default class FigurePrimitives {
         ));
         element.custom.options = o;
         element.custom.options.line = polylineOptions;
-        const drawBorder = newDrawBorder[0];
+        const drawBorder = newDrawBorder;
         // const drawBorder = [];
         // for (let i = 0; i < newDrawBorder[0].length; i += 1) {
         //   if (

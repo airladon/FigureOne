@@ -4,7 +4,7 @@ import {
 } from '../../tools/g2';
 
 
-function getBufferBorder(borderIn: Array<Point>, buffer: number, skipConcave: boolean = true) {
+function getBufferBorder(borderIn: Array<Array<Point>>, buffer: number, skipConcave: boolean = true) {
   if (typeof buffer !== 'number') {
     return buffer;
   }

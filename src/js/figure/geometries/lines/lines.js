@@ -647,7 +647,7 @@ function makeThickLine(
         // if (l === 0 && linePrimitives) {
         //   createFill(i, i + 1);
         // } else {
-          joinLineSegments(i, i + 1, l);
+        joinLineSegments(i, i + 1, l);
         // }
         // if (corner === 'auto') {
         //   joinLineSegments(i, i + 1, l);
@@ -659,7 +659,7 @@ function makeThickLine(
         // if (l === 0 && linePrimitives) {
         //   createFill(lineSegments.length - 1, 0);
         // } else {
-          joinLineSegments(lineSegments.length - 1, 0, l);
+        joinLineSegments(lineSegments.length - 1, 0, l);
         // }
         // if (corner === 'auto') {
         //   joinLineSegments(lineSegments.length - 1, 0, l);
