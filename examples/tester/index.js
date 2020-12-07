@@ -478,40 +478,54 @@ const arrows = [
   // makeEllipse({ line: { width: 0.02, dash: [0.03, 0.01] }, sides: 4 }),
   // makeEllipse({ line: { width: 0.02, dash: [0.03, 0.01] }, height: 0.1, sides: 4 }),
   // makeLine(),
-  makeLine({
-    arrow: {
-      head: 'triangle',
-      length: 0.1,
-      width: 0.1,
-    },
-    widthIs: 'outside',
-  }),
-  makeLine({
-    arrow: {
-      head: 'triangle',
-      length: 0.1,
-      width: 0.1,
-      tail: 0.05,
-    },
-  }),
-  makePolyline(),
-  makePolyline({
-    widthIs: 'inside',
-    arrow: {
-      head: 'triangle',
-      length: 0.1,
-      width: 0.1,
-    },
-  }),
+  // makeLine({
+  //   arrow: {
+  //     head: 'triangle',
+  //     length: 0.1,
+  //     width: 0.1,
+  //   },
+  //   widthIs: 'outside',
+  // }),
+  // makeLine({
+  //   arrow: {
+  //     head: 'triangle',
+  //     length: 0.1,
+  //     width: 0.1,
+  //     tail: 0.05,
+  //   },
+  // }),
+  // makePolyline(),
   makePolyline({
     widthIs: 'outside',
+    width: 0.07,
     arrow: {
       head: 'triangle',
       length: 0.1,
       width: 0.1,
-      tail: 0.05,
     },
+    cornerStyle: 'auto',
+    linePrimitives: true,
+    lineNum: 5,
   }),
+  // makePolyline({
+  //   widthIs: 'outside',
+  //   arrow: {
+  //     head: 'triangle',
+  //     length: 0.1,
+  //     width: 0.1,
+  //     tail: 0.05,
+  //   },
+  // }),
+  // makePolyline({
+  //   points: [[-0.4, 0], [0, 0], [-0.1, -0.1], [0.2, -0.1]],
+  //   widthIs: 'outside',
+  //   arrow: {
+  //     head: 'triangle',
+  //     length: 0.1,
+  //     width: 0.1,
+  //     tail: 0.05,
+  //   },
+  // }),
   // makeGrid(),
 ];
 figure.add(arrows);

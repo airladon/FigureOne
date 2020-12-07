@@ -13,6 +13,7 @@ import {
 import type { TypeDash } from '../../../tools/types';
 import type { TypeArrowHead } from '../arrow';
 import type { OBJ_Arrow } from '../../FigurePrimitives/FigurePrimitives';
+import { getBufferBorder } from '../buffer';
 
 /* eslint-disable yoda */
 
@@ -40,11 +41,15 @@ function lineSegmentsToPoints(
   linePrimitives: boolean,
   borderIs: 'negative' | 'positive' | 'line' | Array<Array<Point>> = 'line',
   holeIs: 'negative' | 'positive' | Array<Array<Point>> = [[]],
+  corner: 'auto' | 'fill' | 'none',
+  close: boolean,
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   const tris = [];
-  let border = [];
+  // let border = [];
   let hole = [[]];
-  lineSegments.forEach((lineSegment) => {
+  let positiveBorder = [];
+  let negativeBorder = [];
+  lineSegments.forEach((lineSegment, index) => {
     const negative = lineSegment[0];
     const positive = lineSegment.slice(-1)[0];
     if (linePrimitives) {
@@ -60,48 +65,89 @@ function lineSegmentsToPoints(
       tris.push(positive.p2._dup());
       tris.push(negative.p2._dup());
     }
-    if (borderIs === 'line') {
-      border.push([
-        negative.p1._dup(),
-        negative.p2._dup(),
-        positive.p2._dup(),
-        positive.p1._dup(),
-      ]);
-    } else if (borderIs === 'negative') {
-      if (border.length === 0) {
-        border.push([]);
+    positiveBorder.push(positive.p1._dup(), positive.p2._dup());
+    negativeBorder.push(negative.p1._dup(), negative.p2._dup());
+    if (corner === 'fill' ) {
+      let nextLineSegment;
+      if (index < lineSegments.length - 1) {
+        nextLineSegment = lineSegments[index + 1];
+      } else if (close) {
+        nextLineSegment = lineSegments[0];
       }
-      border[0].push(
-        negative.p1._dup(),
-        negative.p2._dup(),
-      );
-    } else if (borderIs === 'positive') {
-      if (border.length === 0) {
-        border.push([]);
+      if (nextLineSegment != null) {
+        const nextNegative = nextLineSegment[0];
+        const nextPositive = nextLineSegment.slice(-1)[0];
+        console.log(negative, nextNegative)
+        console.log(positive, nextPositive)
+        if (nextNegative.p1.isNotEqualTo(negative.p2, 10)) {
+          tris.push(negative.p2._dup());
+          tris.push(positive.p2._dup());
+          tris.push(nextNegative.p1._dup());
+        }
+        if (nextPositive.p1.isNotEqualTo(positive.p2, 10)) {
+          tris.push(positive.p2._dup());
+          tris.push(nextPositive.p1._dup());
+          tris.push(negative.p2._dup());
+        }
       }
-      border[0].push(
-        positive.p1._dup(),
-        positive.p2._dup(),
-      );
     }
+    // if (borderIs === 'line') {
+    //   border.push([
+    //     negative.p1._dup(),
+    //     negative.p2._dup(),
+    //     positive.p2._dup(),
+    //     positive.p1._dup(),
+    //   ]);
+    // } else if (borderIs === 'negative') {
+    //   if (border.length === 0) {
+    //     border.push([]);
+    //   }
+    //   border[0].push(
+    //     negative.p1._dup(),
+    //     negative.p2._dup(),
+    //   );
+    // } else if (borderIs === 'positive') {
+    //   if (border.length === 0) {
+    //     border.push([]);
+    //   }
+    //   border[0].push(
+    //     positive.p1._dup(),
+    //     positive.p2._dup(),
+    //   );
+    // }
     if (holeIs === 'positive') {
       hole[0].push(positive.p1._dup(), positive.p2._dup());
     } else if (holeIs === 'negative') {
       hole[0].push(negative.p1._dup(), negative.p2._dup());
     }
   });
-  if (Array.isArray(borderIs)) {
+  let border = [[]];
+  if (borderIs === 'positive') {
+    border = [positiveBorder];
+  } else if (borderIs === 'negative') {
+    border = [negativeBorder];
+  } else if (borderIs === 'line') {
+    border = [[...negativeBorder, ...(positiveBorder.reverse())]];
+  } else if (Array.isArray(borderIs)) {
     border = borderIs;
   }
   if (Array.isArray(holeIs)) {
     hole = holeIs;
   }
+  console.log(borderIs, border)
   return [tris, border, hole];
 }
 
 // Extend two lines to their intersection point
-function joinLinesInPoint(line1: Line, lineNext: Line) {
+function joinLinesInPoint(
+  line1: Line,
+  lineNext: Line,
+  corner: 'fill' | 'auto' | 'none',
+) {
   const intersect = line1.intersectsWith(lineNext);
+  if (!intersect.withinLine && corner === 'fill') {
+    return;
+  }
   if (intersect.intersect != null) {
     line1.setP2(intersect.intersect._dup());  // $FlowFixMe
     lineNext.setP1(intersect.intersect._dup());
@@ -135,6 +181,7 @@ function joinLinesInTangent(
   midNext: Line,
   outside: Line,
   outsideNext: Line,
+  corner: 'fill' | 'auto' | 'none',
 ) {
   const angle = threePointAngleMin(mid.p1, mid.p2, midNext.p2);
   const tangent = new Line(mid.p2, 1, mid.angle() + angle / 2 + Math.PI / 2);
@@ -147,6 +194,9 @@ function joinLinesInTangent(
       outsideNext.setP1(interceptNext.intersect);
       return;
     }
+  }
+  if (corner === 'fill') {
+    return;
   }
   // let intercept = tangent.intersectsWith(outside);
   if (intercept.intersect != null) {
@@ -407,76 +457,76 @@ function makeThickLine(
     // on the outside of the angle.
     // console.log(currentIndex, lineIndex, angle)
     if (0 < angle && angle < minAngle) {
-      if (widthIs === 'mid') {
-        joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
+      if (widthIs === 'mid' && corner) {
+        joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
         // joinLinesInTangent(mid, midNext, positive, positiveNext);
       } else if (widthIs === 'negative') {
         joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       } else if (widthIs === 'positive') {
-        joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
+        joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
       }
     } else if (minAngle <= angle && angle <= Math.PI / 2) {
       if (widthIs === 'mid') {
-        joinLinesInPoint(lineSegment, lineSegmentNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext, corner);
         // joinLinesInPoint(lineSegment, lineSegmentNext);
       } else if (widthIs === 'negative') {
         joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       } else if (widthIs === 'positive') {
-        joinLinesInPoint(lineSegment, lineSegmentNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext, corner);
       }
     // If the angle is greater than the minAngle, then the line segments can
     // be connected directly
     } else if (Math.PI / 2 <= angle && angle < Math.PI) {
       if (widthIs === 'mid') {
-        joinLinesInPoint(lineSegment, lineSegmentNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext, corner);
         // joinLinesInPoint(lineSegment, lineSegmentNext);
       } else if (widthIs === 'negative') {
         joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
       } else if (widthIs === 'positive') {
-        joinLinesInPoint(lineSegment, lineSegmentNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext, corner);
       }
     } else if (angle === Math.PI) {
       if (widthIs === 'negative') {
         if (widthIsIn === 'inside') {
           joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
         } else {
-          joinLinesInPoint(lineSegment, lineSegmentNext);
+          joinLinesInPoint(lineSegment, lineSegmentNext, corner);
         }
       } else if (widthIs === 'positive') {
         if (widthIsIn === 'inside') {
           joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
         } else {
-          joinLinesInPoint(lineSegment, lineSegmentNext);
+          joinLinesInPoint(lineSegment, lineSegmentNext, corner);
         }
       }
     // If the angle is greater than 180, then the positive side is on the
     // inside of the angle
     } else if (Math.PI < angle && angle < Math.PI / 2 * 3) {
       if (widthIs === 'mid') {
-        joinLinesInPoint(lineSegment, lineSegmentNext);
-        joinLinesInPoint(lineSegment, lineSegmentNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext, corner);
+        joinLinesInPoint(lineSegment, lineSegmentNext, corner);
       } else if (widthIs === 'negative') {
-        joinLinesInPoint(lineSegment, lineSegmentNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext, corner);
       } else if (widthIs === 'positive') {
         joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
       }
     //
     } else if (Math.PI / 2 * 3 <= angle && angle <= Math.PI * 2 - minAngle) {
       if (widthIs === 'mid') {
-        joinLinesInPoint(lineSegment, lineSegmentNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext, corner);
         // joinLinesInPoint(lineSegment, lineSegmentNext);
       } else if (widthIs === 'negative') {
-        joinLinesInPoint(lineSegment, lineSegmentNext);
+        joinLinesInPoint(lineSegment, lineSegmentNext, corner);
       } else if (widthIs === 'positive') {
         joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       }
     //
     } else if (Math.PI * 2 - minAngle < angle && angle < Math.PI * 2) {
       if (widthIs === 'mid') {
-        joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
+        joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
         // joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
       } else if (widthIs === 'negative') {
-        joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext);
+        joinLinesInTangent(mid, midNext, lineSegment, lineSegmentNext, corner);
       } else if (widthIs === 'positive') {
         joinLinesAcuteInside(mid, midNext, lineSegment, lineSegmentNext);
       }
@@ -532,23 +582,33 @@ function makeThickLine(
   if (corner !== 'none') {
     for (let l = 0; l < lineNum; l += 1) {
       for (let i = 0; i < lineSegments.length - 1; i += 1) {
-        if (corner === 'auto') {
-          joinLineSegments(i, i + 1, l);
-        } else if (l === 0) {
+        if (l === 0 && linePrimitives) {
           createFill(i, i + 1);
+        } else {
+          joinLineSegments(i, i + 1, l);
         }
+        // if (corner === 'auto') {
+        //   joinLineSegments(i, i + 1, l);
+        // } else if (l === 0 && linePrimitives) {
+        //   createFill(i, i + 1);
+        // }
       }
       if (close) {
-        if (corner === 'auto') {
-          joinLineSegments(lineSegments.length - 1, 0, l);
-        } else if (l === 0) {
+        if (l === 0 && linePrimitives) {
           createFill(lineSegments.length - 1, 0);
+        } else {
+          joinLineSegments(lineSegments.length - 1, 0, l);
         }
+        // if (corner === 'auto') {
+        //   joinLineSegments(lineSegments.length - 1, 0, l);
+        // } else if (l === 0 && linePrimitives) {
+        //   createFill(lineSegments.length - 1, 0);
+        // }
       }
     }
   }
   const [tris, border, hole] = lineSegmentsToPoints(
-    lineSegments, linePrimitives, borderIs, holeIs,
+    lineSegments, linePrimitives, borderIs, holeIs, corner, close,
   );
   // if (close === false) {
   //   return [[...tris, ...cornerFills], [[...border[0]], [...hole]];
@@ -758,6 +818,7 @@ function makePolyLine(
   // Get touch border if there is a buffer
   let touchBorder = border;
   if (touchBorderBuffer !== 0) {
+    // touchBorder = getBufferBorder(border[0], touchBorderBuffer);
     let widthIsBuffer = 0.5;
     const widthBuffer = width + touchBorderBuffer * 2;
     if (widthIs === 'positive' || widthIs === 'inside') {
@@ -773,6 +834,9 @@ function makePolyLine(
       points, widthBuffer, widthIsBuffer, close, cornerStyleToUse, minAutoCornerAngle,
       linePrimitives, lineNum, borderIs, holeIs,
     );
+    // if (close === false) {
+
+    // }
   }
 
   const trisToUse = dash.length > 1 ? dashedTris : tris;
