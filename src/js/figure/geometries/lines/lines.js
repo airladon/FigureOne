@@ -847,7 +847,6 @@ function makePolyLine(
     if (dashes.length === 1) {
       closeDashes = close;
     }
-    // console.log('Dashes Start')
     dashes.forEach((d) => {
       const [tris] = makeThickLine(
         d, width, widthIs, closeDashes, cornerStyleToUse, minAutoCornerAngle,
@@ -855,7 +854,6 @@ function makePolyLine(
       );
       dashedTris = [...dashedTris, ...tris];
     });
-    // console.log('Dashes Done')
   }
 
   // Get tris and border of solid line
@@ -917,9 +915,9 @@ function makePolyLine(
       onLine,
     );
   }
-  if (close === false) {
+  // if (close === false) {
 
-  }
+  // }
   return [trisToUse, border, touchBorder, hole];
 }
 

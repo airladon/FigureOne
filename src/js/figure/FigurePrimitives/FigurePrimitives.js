@@ -2592,40 +2592,23 @@ export default class FigurePrimitives {
         ));
         element.custom.options = o;
         element.custom.options.line = polylineOptions;
-        // const [newDrawBorder] = newDrawBorderIn;
+        const drawBorder = newDrawBorder[0];
         // const drawBorder = [];
-        // for (let i = 0; i < newDrawBorder.length; i += 1) {
-        //   if (i === 0) {
-        //     drawBorder.push(newDrawBorder[i][0]);
-        //     drawBorder.push(newDrawBorder[i][1]);
-        //   } else {
-        //     if (drawBorder.slice(-1)[0].isNotEqualTo(newDrawBorder[i][0])) {
-        //       drawBorder.push(newDrawBorder[i][0]);
-        //     }
-        //     if (i < newDrawBorder.length - 1) {
-        //       drawBorder.push(newDrawBorder[i][1]);
-        //     }
-        //     if (i === newDrawBorder.length - 1 && drawBorder[0].isNotEqualTo(newDrawBorder[i][1])) {
-        //       drawBorder.push(newDrawBorder[i][1]);
-        //     }
+        // for (let i = 0; i < newDrawBorder[0].length; i += 1) {
+        //   if (
+        //     i === 0
+        //     || (
+        //       i < newDrawBorder[0].length - 1
+        //       && drawBorder.slice(-1)[0].isNotEqualTo(newDrawBorder[0][i])
+        //     )
+        //     || (
+        //       i === newDrawBorder[0].length - 1
+        //       && drawBorder[0].isNotEqualTo(newDrawBorder[0][i])
+        //     )
+        //   ) {
+        //     drawBorder.push(newDrawBorder[0][i]);
         //   }
         // }
-        const drawBorder = [];
-        for (let i = 0; i < newDrawBorder[0].length; i += 1) {
-          if (
-            i === 0
-            || (
-              i < newDrawBorder[0].length - 1
-              && drawBorder.slice(-1)[0].isNotEqualTo(newDrawBorder[0][i])
-            )
-            || (
-              i === newDrawBorder[0].length - 1
-              && drawBorder[0].isNotEqualTo(newDrawBorder[0][i])
-            )
-          ) {
-            drawBorder.push(newDrawBorder[0][i]);
-          }
-        }
         // console.log(drawBorder)
         const drawBorderBuffer = getBufferBorder(drawBorder, o.drawBorderBuffer);
         // console.log(drawBorder, drawBorderBuffer);
@@ -2709,30 +2692,6 @@ export default class FigurePrimitives {
 
     element.custom.updatePoints(joinObjects({}, ...options));
     return element;
-    // const element = this.polygon({});
-    // element.custom.options = {
-    //   radius: 1,
-    //   sides: 5,
-    //   direction: 1,
-    //   rotation: 0,
-    //   offset: new Point(0, 0),
-    //   transform: new Transform('star').standard(),
-    // };
-
-    // element.custom.updatePolygonPoints = element.custom.updatePoints;
-    // element.custom.updatePoints = (optionsIn: OBJ_Star_Defined) => {
-    //   const o = joinObjects({}, element.custom.options, optionsIn);
-    //   o.offset = getPoint(o.offset);
-    //   if (o.innerRadius == null) {
-    //     o.innerRadius = o.radius / 3;
-    //   }
-    //   o.rotation += Math.PI / 2;
-    //   o.sidesToDraw = o.sides;
-    //   element.custom.updatePolygonPoints(o);
-    // };
-    // element.custom.updatePoints(joinObjects({}, ...options));
-    // element.custom.options.rotation -= Math.PI / 2;
-    // return element;
   }
 
   /**
@@ -2852,9 +2811,19 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Grid} for options and examples.
    */
   grid(...optionsIn: Array<OBJ_Grid>) {
-    const defaultOptions = {
-      bounds: new Rect(-1, -1, 2, 2),
+    const element = this.generic({
       transform: new Transform('grid').standard(),
+      border: 'draw',
+      touchBorder: 'border',
+      holeBorder: [[]],
+    }, ...optionsIn);
+
+    element.custom.options = {
+      bounds: new Rect(
+        this.limits.left + this.limits.width / 4,
+        this.limits.bottom + this.limits.height / 4,
+        this.limits.width / 2, this.limits.height / 2,
+      ),
       line: {
         linePrimitives: false,
         width: this.defaultLineWidth,
@@ -2862,89 +2831,200 @@ export default class FigurePrimitives {
         dash: [],
       },
     };
-    const options = processOptions(defaultOptions, ...optionsIn);
-    parsePoints(options, []);
-    options.bounds = getRect(options.bounds); // $FlowFixMe
+
     const getTris = points => makePolyLine(
       points,
-      options.line.width,
+      element.custom.options.line.width,
       false,
       'mid',
       'auto', // cornerStyle doesn't matter
       0.1,    // cornerSize doesn't matter
       1,      // cornerSides,
       Math.PI / 7, // minAutoCornerAngle,
-      options.line.dash,
-      options.line.linePrimitives,
-      options.line.lineNum,
+      element.custom.options.line.dash,
+      element.custom.options.line.linePrimitives,
+      element.custom.options.line.lineNum,
       [[]],
       0,
     );
 
-    // Prioritize Num over Step. Only define Num from Step if Num is undefined.
-    const { bounds } = options;
-    let {
-      xStep, xNum, yStep, yNum,
-    } = options;
-    let { width } = options.line;
-    if (options.line.linePrimitives && options.line.lineNum === 1) {
-      width = 0;
-    }
-    const totWidth = bounds.width;
-    const totHeight = bounds.height;
-    if (xStep != null && xNum == null) {
-      xNum = xStep === 0 ? 1 : 1 + Math.floor((totWidth + xStep * 0.1) / xStep);
-    }
-    if (yStep != null && yNum == null) {
-      yNum = yStep === 0 ? 1 : 1 + Math.floor((totHeight + yStep * 0.1) / yStep);
-    }
+    element.custom.updatePoints = (updateOptions: Object) => {
+      const o = joinObjects({}, element.custom.options, updateOptions);
+      element.custom.options = o;
+      // Prioritize Num over Step. Only define Num from Step if Num is undefined.
+      const bounds = getRect(o.bounds);
+      let {
+        xStep, xNum, yStep, yNum,
+      } = o;
+      let { width } = o.line;
+      if (o.line.linePrimitives && o.line.lineNum === 1) {
+        width = 0;
+      }
+      const totWidth = bounds.width;
+      const totHeight = bounds.height;
+      if (xStep != null && xNum == null) {
+        xNum = xStep === 0 ? 1 : 1 + Math.floor((totWidth + xStep * 0.1) / xStep);
+      }
+      if (yStep != null && yNum == null) {
+        yNum = yStep === 0 ? 1 : 1 + Math.floor((totHeight + yStep * 0.1) / yStep);
+      }
 
-    if (xNum == null) {
-      xNum = 2;
-    }
-    if (yNum == null) {
-      yNum = 2;
-    }
+      if (xNum == null) {
+        xNum = 2;
+      }
+      if (yNum == null) {
+        yNum = 2;
+      }
+      xStep = xNum < 2 ? 0 : totWidth / (xNum - 1);
+      yStep = yNum < 2 ? 0 : totHeight / (yNum - 1);
 
-    xStep = xNum < 2 ? 0 : totWidth / (xNum - 1);
-    yStep = yNum < 2 ? 0 : totHeight / (yNum - 1);
+      const start = new Point(
+        bounds.left,
+        bounds.bottom,
+      );
+      const xLineStart = start.add(-width / 2, 0);
+      const xLineStop = start.add(totWidth + width / 2, 0);
+      const yLineStart = start.add(0, -width / 2);
+      const yLineStop = start.add(0, totHeight + width / 2);
 
-    const start = new Point(
-      bounds.left,
-      bounds.bottom,
-    );
-    const xLineStart = start.add(-width / 2, 0);
-    const xLineStop = start.add(totWidth + width / 2, 0);
-    const yLineStart = start.add(0, -width / 2);
-    const yLineStop = start.add(0, totHeight + width / 2);
+      let xTris = [];
+      let yTris = [];
+      if (xNum > 0) {
+        const [yLine] = getTris([yLineStart, yLineStop]);
+        yTris = copyPoints(yLine, [
+          { along: 'x', num: xNum - 1, step: xStep },
+        ]);
+      }
 
-    let xTris = [];
-    let yTris = [];
-    if (xNum > 0) {
-      const [yLine] = getTris([yLineStart, yLineStop]);
-      yTris = copyPoints(yLine, [
-        { along: 'x', num: xNum - 1, step: xStep },
-      ]);
-    }
-
-    if (yNum > 0) {
-      const [xLine] = getTris([xLineStart, xLineStop]);
-      xTris = copyPoints(xLine, [
-        { along: 'y', num: yNum - 1, step: yStep },
-      ]);
-    }
-
-    const element = this.generic(options, {
-      drawType: options.line.linePrimitives ? 'lines' : 'triangles', // $FlowFixMe
-      points: [...xTris, ...yTris],
-      border: [[
+      if (yNum > 0) {
+        const [xLine] = getTris([xLineStart, xLineStop]);
+        xTris = copyPoints(xLine, [
+          { along: 'y', num: yNum - 1, step: yStep },
+        ]);
+      }
+      const drawBorder = [[
         start.add(-width / 2, -width / 2),
         start.add(totWidth + width / 2, -width / 2),
         start.add(totWidth + width / 2, totHeight + width / 2),
         start.add(-width / 2, totHeight + width / 2),
-      ]],
-    });
+      ]];
+      let { drawBorderBuffer } = o;
+      if (typeof o.drawBorderBuffer === 'number') {
+        drawBorderBuffer = drawBorder;
+        if (o.drawBorderBuffer !== 0) {
+          const buf = o.drawBorderBuffer;
+          drawBorderBuffer = [[
+            drawBorder[0][0].add(-buf, -buf),
+            drawBorder[0][1].add(buf, -buf),
+            drawBorder[0][2].add(buf, buf),
+            drawBorder[0][3].add(-buf, buf),
+          ]];
+        }
+      }
+      element.custom.updateGeneric(joinObjects({}, o, {
+        points: [...xTris, ...yTris],
+        drawBorder,
+        drawBorderBuffer,
+        drawType: o.line.linePrimitives ? 'lines' : 'triangles',
+      }));
+    };
+    element.custom.updatePoints(joinObjects({}, ...optionsIn));
     return element;
+    // element.custom.updatePoints()
+
+    // const defaultOptions = {
+    //   bounds: new Rect(-1, -1, 2, 2),
+    //   transform: new Transform('grid').standard(),
+    //   line: {
+    //     linePrimitives: false,
+    //     width: this.defaultLineWidth,
+    //     lineNum: 2,
+    //     dash: [],
+    //   },
+    // };
+    // const options = processOptions(defaultOptions, ...optionsIn);
+    // parsePoints(options, []);
+    // options.bounds = getRect(options.bounds); // $FlowFixMe
+    // const getTris = points => makePolyLine(
+    //   points,
+    //   options.line.width,
+    //   false,
+    //   'mid',
+    //   'auto', // cornerStyle doesn't matter
+    //   0.1,    // cornerSize doesn't matter
+    //   1,      // cornerSides,
+    //   Math.PI / 7, // minAutoCornerAngle,
+    //   options.line.dash,
+    //   options.line.linePrimitives,
+    //   options.line.lineNum,
+    //   [[]],
+    //   0,
+    // );
+
+    // // Prioritize Num over Step. Only define Num from Step if Num is undefined.
+    // const { bounds } = options;
+    // let {
+    //   xStep, xNum, yStep, yNum,
+    // } = options;
+    // let { width } = options.line;
+    // if (options.line.linePrimitives && options.line.lineNum === 1) {
+    //   width = 0;
+    // }
+    // const totWidth = bounds.width;
+    // const totHeight = bounds.height;
+    // if (xStep != null && xNum == null) {
+    //   xNum = xStep === 0 ? 1 : 1 + Math.floor((totWidth + xStep * 0.1) / xStep);
+    // }
+    // if (yStep != null && yNum == null) {
+    //   yNum = yStep === 0 ? 1 : 1 + Math.floor((totHeight + yStep * 0.1) / yStep);
+    // }
+
+    // if (xNum == null) {
+    //   xNum = 2;
+    // }
+    // if (yNum == null) {
+    //   yNum = 2;
+    // }
+
+    // xStep = xNum < 2 ? 0 : totWidth / (xNum - 1);
+    // yStep = yNum < 2 ? 0 : totHeight / (yNum - 1);
+
+    // const start = new Point(
+    //   bounds.left,
+    //   bounds.bottom,
+    // );
+    // const xLineStart = start.add(-width / 2, 0);
+    // const xLineStop = start.add(totWidth + width / 2, 0);
+    // const yLineStart = start.add(0, -width / 2);
+    // const yLineStop = start.add(0, totHeight + width / 2);
+
+    // let xTris = [];
+    // let yTris = [];
+    // if (xNum > 0) {
+    //   const [yLine] = getTris([yLineStart, yLineStop]);
+    //   yTris = copyPoints(yLine, [
+    //     { along: 'x', num: xNum - 1, step: xStep },
+    //   ]);
+    // }
+
+    // if (yNum > 0) {
+    //   const [xLine] = getTris([xLineStart, xLineStop]);
+    //   xTris = copyPoints(xLine, [
+    //     { along: 'y', num: yNum - 1, step: yStep },
+    //   ]);
+    // }
+
+    // const element = this.generic(options, {
+    //   drawType: options.line.linePrimitives ? 'lines' : 'triangles', // $FlowFixMe
+    //   points: [...xTris, ...yTris],
+    //   border: [[
+    //     start.add(-width / 2, -width / 2),
+    //     start.add(totWidth + width / 2, -width / 2),
+    //     start.add(totWidth + width / 2, totHeight + width / 2),
+    //     start.add(-width / 2, totHeight + width / 2),
+    //   ]],
+    // });
+    // return element;
   }
 
   /**

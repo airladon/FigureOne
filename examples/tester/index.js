@@ -342,7 +342,7 @@ const makeGrid = (options) => {
       bounds: [-0.4, -0.4, 0.4, 0.4],
       xStep: 0.1,
       yStep: 0.1,
-      line: { width: 0.02 },
+      line: { width: 0.05 },
       drawBorderBuffer: 0.1,
       color: [1, 0, 0, 0.6],
     }, options),
@@ -526,7 +526,63 @@ const arrows = [
       tail: 0.05,
     },
   }),
+  makeLine({ linePrimitives: true, lineNum: 3 }),
+  makeLine({
+    arrow: {
+      head: 'triangle',
+      length: 0.1,
+      width: 0.1,
+    },
+    widthIs: 'outside',
+    linePrimitives: true, lineNum: 3,
+  }),
+  makeLine({
+    arrow: {
+      head: 'triangle',
+      length: 0.1,
+      width: 0.1,
+      tail: 0.05,
+    },
+    linePrimitives: true, lineNum: 3,
+  }),
+  makePolyline({ linePrimitives: true, lineNum: 3 }),
+  makePolyline({
+    widthIs: 'outside',
+    width: 0.07,
+    arrow: {
+      head: 'triangle',
+      length: 0.1,
+      width: 0.1,
+    },
+    cornerStyle: 'fill',
+    linePrimitives: true, lineNum: 3,
+    // linePrimitives: true,
+    // lineNum: 5,
+  }),
+  makePolyline({
+    widthIs: 'outside',
+    linePrimitives: true, lineNum: 3,
+    arrow: {
+      head: 'triangle',
+      length: 0.1,
+      width: 0.1,
+      tail: 0.05,
+    },
+  }),
+  makePolyline({
+    points: [[-0.4, 0], [0, 0], [-0.2, -0.1], [0.2, -0.1]],
+    widthIs: 'mid',
+    linePrimitives: true, lineNum: 3,
+    arrow: {
+      head: 'triangle',
+      length: 0.1,
+      width: 0.1,
+      tail: 0.05,
+    },
+  }),
   makeGrid(),
+  makeGrid({ line: { linePrimitives: true, lineNum: 1 } }),
+  // DONT FORGET LINEPRIMITIVES TRUE
 ];
 figure.add(arrows);
 
