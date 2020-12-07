@@ -46,6 +46,7 @@ function lineSegmentsToPoints(
 ): [Array<Point>, Array<Array<Point>>, Array<Array<Point>>] {
   const tris = [];
   // let border = [];
+  // console.log(lineSegments)
   let hole = [[]];
   let positiveBorder = [];
   let negativeBorder = [];
@@ -68,32 +69,32 @@ function lineSegmentsToPoints(
     if (index === 0 || positiveBorder[positiveBorder.length - 1].isNotEqualTo(positive.p1)) {
       positiveBorder.push(positive.p1._dup());
     }
-    // if (
-    //   close === false
-    //   || index < lineSegments.length - 1
-    //   || (
-    //     index === lineSegments.length - 1
-    //     && positiveBorder[0].isNotEqualTo(positive.p2)
-    //   )
-    // ) {
-    //   positive.p2._dup();
-    // }
-    // if (index === 0 || negativeBorder[negativeBorder.length - 1].isNotEqualTo(negative.p1)) {
-    //   negativeBorder.push(negative.p1._dup());
-    // }
-    // // negative.p2._dup();
-    // if (
-    //   close === false
-    //   || index < lineSegments.length - 1
-    //   || (
-    //     index === lineSegments.length - 1
-    //     && negativeBorder[0].isNotEqualTo(negative.p2)
-    //   )
-    // ) {
-    //   negative.p2._dup();
-    // }
-    positiveBorder.push(positive.p1._dup(), positive.p2._dup());
-    negativeBorder.push(negative.p1._dup(), negative.p2._dup());
+    if (
+      close === false
+      || index < lineSegments.length - 1
+      || (
+        index === lineSegments.length - 1
+        && positiveBorder[0].isNotEqualTo(positive.p2)
+      )
+    ) {
+      positiveBorder.push(positive.p2._dup());
+    }
+    if (index === 0 || negativeBorder[negativeBorder.length - 1].isNotEqualTo(negative.p1)) {
+      negativeBorder.push(negative.p1._dup());
+    }
+    // negative.p2._dup();
+    if (
+      close === false
+      || index < lineSegments.length - 1
+      || (
+        index === lineSegments.length - 1
+        && negativeBorder[0].isNotEqualTo(negative.p2)
+      )
+    ) {
+      negativeBorder.push(negative.p2._dup());
+    }
+    // positiveBorder.push(positive.p1._dup(), positive.p2._dup());
+    // negativeBorder.push(negative.p1._dup(), negative.p2._dup());
     if (corner === 'fill' || corner === 'auto') {
       let nextLineSegment;
       if (index < lineSegments.length - 1) {
@@ -156,6 +157,7 @@ function lineSegmentsToPoints(
   } else if (Array.isArray(borderIs)) {
     border = borderIs;
   }
+  // console.log(border)
   if (Array.isArray(holeIs)) {
     hole = holeIs;
   }
