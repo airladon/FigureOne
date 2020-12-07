@@ -2577,7 +2577,7 @@ export default class FigurePrimitives {
         element.custom.updateGeneric(joinObjects({}, o, {
           points,
           drawBorder: border,
-          drawBorderBuffer: getBufferBorder(border, o.drawBorderBuffer, element.custom.skipConcave),
+          drawBorderBuffer: getBufferBorder([border], o.drawBorderBuffer, element.custom.skipConcave),
           drawType,
         }));
       } else {
