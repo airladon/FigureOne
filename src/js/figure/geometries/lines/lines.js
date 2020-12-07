@@ -65,6 +65,33 @@ function lineSegmentsToPoints(
       tris.push(positive.p2._dup());
       tris.push(negative.p2._dup());
     }
+    if (index === 0 || positiveBorder[positiveBorder.length - 1].isNotEqualTo(positive.p1)) {
+      positiveBorder.push(positive.p1._dup());
+    }
+    // if (
+    //   close === false
+    //   || index < lineSegments.length - 1
+    //   || (
+    //     index === lineSegments.length - 1
+    //     && positiveBorder[0].isNotEqualTo(positive.p2)
+    //   )
+    // ) {
+    //   positive.p2._dup();
+    // }
+    // if (index === 0 || negativeBorder[negativeBorder.length - 1].isNotEqualTo(negative.p1)) {
+    //   negativeBorder.push(negative.p1._dup());
+    // }
+    // // negative.p2._dup();
+    // if (
+    //   close === false
+    //   || index < lineSegments.length - 1
+    //   || (
+    //     index === lineSegments.length - 1
+    //     && negativeBorder[0].isNotEqualTo(negative.p2)
+    //   )
+    // ) {
+    //   negative.p2._dup();
+    // }
     positiveBorder.push(positive.p1._dup(), positive.p2._dup());
     negativeBorder.push(negative.p1._dup(), negative.p2._dup());
     if (corner === 'fill' || corner === 'auto') {
@@ -834,22 +861,34 @@ function makePolyLine(
   // Get touch border if there is a buffer
   let touchBorder = border;
   if (touchBorderBuffer !== 0) {
-    touchBorder = getBufferBorder(border[0], touchBorderBuffer);
-    // let widthIsBuffer = 0.5;
-    // const widthBuffer = width + touchBorderBuffer * 2;
-    // if (widthIs === 'positive' || widthIs === 'inside') {
-    //   widthIsBuffer = (touchBorderBuffer + width) / widthBuffer;
-    // } else if (widthIs === 'negative' || widthIs === 'outside') {
-    //   widthIsBuffer = touchBorderBuffer / widthBuffer;
-    // } else if (widthIs === 'mid') {
-    //   widthIsBuffer = 0.5;
-    // } else {
-    //   widthIsBuffer = (touchBorderBuffer + widthIs * width) / widthBuffer;
+    touchBorder = [];
+    // for (let i = 0; i < border.length; i += 1) {
+    //   touchBorder.push(getBufferBorder(border[i], touchBorderBuffer));
     // }
-    // [, touchBorder] = makeThickLine(
-    //   points, widthBuffer, widthIsBuffer, close, cornerStyleToUse, minAutoCornerAngle,
-    //   linePrimitives, lineNum, borderIs, holeIs,
-    // );
+    // touchBorder = getBufferBorder(border[0], touchBorderBuffer);
+    let widthIsBuffer = 0.5;
+    const widthBuffer = width + touchBorderBuffer * 2;
+    if (widthIs === 'positive' || widthIs === 'inside') {
+      widthIsBuffer = (touchBorderBuffer + width) / widthBuffer;
+    } else if (widthIs === 'negative' || widthIs === 'outside') {
+      widthIsBuffer = touchBorderBuffer / widthBuffer;
+    } else if (widthIs === 'mid') {
+      widthIsBuffer = 0.5;
+    } else {
+      widthIsBuffer = (touchBorderBuffer + widthIs * width) / widthBuffer;
+    }
+    let pointsToUse = points;
+    if (close === false) {
+      const firstLine = new Line(points[0], points[1]);
+      const firstPoint = firstLine.pointAtLength(-touchBorderBuffer);
+      const lastLine = new Line(points[points.length - 2], points[points.length - 1]);
+      const lastPoint = lastLine.pointAtLength(lastLine.length() + touchBorderBuffer);
+      pointsToUse = [firstPoint, ...points, lastPoint];
+    }
+    [, touchBorder] = makeThickLine(
+      pointsToUse, widthBuffer, widthIsBuffer, close, cornerStyleToUse, minAutoCornerAngle,
+      linePrimitives, lineNum, borderIs, holeIs,
+    );
     // if (close === false) {
 
     // }

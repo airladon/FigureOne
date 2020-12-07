@@ -2253,7 +2253,7 @@ export default class FigurePrimitives {
       dash: [],
       linePrimitives: false,
       lineNum: 1,
-      drawBorder: 'line',
+      drawBorder: 'negative',
       holeBorder: [[]],
       drawBorderBuffer: 0,
     };
@@ -2592,24 +2592,43 @@ export default class FigurePrimitives {
         ));
         element.custom.options = o;
         element.custom.options.line = polylineOptions;
+        // const [newDrawBorder] = newDrawBorderIn;
+        // const drawBorder = [];
+        // for (let i = 0; i < newDrawBorder.length; i += 1) {
+        //   if (i === 0) {
+        //     drawBorder.push(newDrawBorder[i][0]);
+        //     drawBorder.push(newDrawBorder[i][1]);
+        //   } else {
+        //     if (drawBorder.slice(-1)[0].isNotEqualTo(newDrawBorder[i][0])) {
+        //       drawBorder.push(newDrawBorder[i][0]);
+        //     }
+        //     if (i < newDrawBorder.length - 1) {
+        //       drawBorder.push(newDrawBorder[i][1]);
+        //     }
+        //     if (i === newDrawBorder.length - 1 && drawBorder[0].isNotEqualTo(newDrawBorder[i][1])) {
+        //       drawBorder.push(newDrawBorder[i][1]);
+        //     }
+        //   }
+        // }
         const drawBorder = [];
-        for (let i = 0; i < newDrawBorder.length; i += 1) {
-          if (i === 0) {
-            drawBorder.push(newDrawBorder[i][0]);
-            drawBorder.push(newDrawBorder[i][1]);
-          } else {
-            if (drawBorder.slice(-1)[0].isNotEqualTo(newDrawBorder[i][0])) {
-              drawBorder.push(newDrawBorder[i][0]);
-            }
-            if (i < newDrawBorder.length - 1) {
-              drawBorder.push(newDrawBorder[i][1]);
-            }
-            if (i === newDrawBorder.length - 1 && drawBorder[0].isNotEqualTo(newDrawBorder[i][1])) {
-              drawBorder.push(newDrawBorder[i][1]);
-            }
+        for (let i = 0; i < newDrawBorder[0].length - 1; i += 1) {
+          if (
+            i === 0
+            || (
+              i < newDrawBorder[0].length - 1
+              && drawBorder.slice(-1)[0].isNotEqualTo(newDrawBorder[0][i])
+            )
+            || (
+              i === newDrawBorder[0].length - 1
+              && drawBorder[0].isNotEqualTo(newDrawBorder[0][i])
+            )
+          ) {
+            drawBorder.push(newDrawBorder[0][i]);
           }
         }
+        // console.log(drawBorder)
         const drawBorderBuffer = getBufferBorder(drawBorder, o.drawBorderBuffer);
+        // console.log(drawBorder, drawBorderBuffer);
         element.custom.updateGeneric(joinObjects({}, o, {
           points, drawBorder, drawBorderBuffer, drawType,
         }));
