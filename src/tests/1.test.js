@@ -3,24 +3,12 @@ const { toMatchImageSnapshot } = require('jest-image-snapshot');
 
 expect.extend({ toMatchImageSnapshot });
 
-// beforeAll(async () => {
-//   await page.goto('https://whatismybrowser.com/')
-// })
-
-// const fullPath = module.parent.filename.split('/').slice(0, -1).join('/');
-console.log(__dirname);
-
 test('should display "google" text on page', async () => {
   await page.goto('file:///src/tests/index.html');
-  // const browser = await page.$eval('.string-major', (el) => el.innerHTML)
-  // expect(browser).toContain('Chrome')
-  // await page.screenshot({ path: `example-${1}.png`, fullPage: true });
+  // await page.goto(`file:/${__dirname}/index.html`);
   const image = await page.screenshot({ fullPage: true });
-  expect(image).toMatchImageSnapshot({
-    // customSnapshotIdentifier: fileName,
-  });
+  expect(image).toMatchImageSnapshot();
   await browser.close();
-  // assert(false)
 });
 
 

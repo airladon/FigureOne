@@ -9,9 +9,6 @@
   "scripts": {
     "jest": "jest"
   },
-  "jest": {
-    "preset": "jest-playwright-preset"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
