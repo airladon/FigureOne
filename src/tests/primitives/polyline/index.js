@@ -47,7 +47,7 @@ const figure = new Figure({
 // ***************************************************
 // ***************************************************
 // ***************************************************
-const xValues = tools.math.range(-4, 4, 1);
+const xValues = tools.math.range(-4, 3.5, 1);
 const yValues = tools.math.range(3.5, -4.5, -1);
 let index = 0;
 const makeShape = (method, options, mods) => {
@@ -140,7 +140,31 @@ const arrows = [
   }),
   makePolyline({ touchBorder: 'border', border: 0.1 }),
 
+  // Corner Style
+  makePolyline({ cornerStyle: 'none' }),
+  makePolyline({ cornerStyle: 'auto' }),
+  makePolyline({ cornerStyle: 'fill' }),
+  makePolyline({ cornerStyle: 'radius', cornerSize: 0.1, cornerSides: 3 }),
+  makePolyline({ cornerStyle: 'none', close: true }),
+  makePolyline({ cornerStyle: 'auto', close: true }),
+  makePolyline({ cornerStyle: 'fill', close: true }),
+  makePolyline({ cornerStyle: 'radius', cornerSize: 0.1, cornerSides: 3, close: true }),
 
+  // Corners Only
+  makePolyline({ cornersOnly: 'true', cornerLength: 0.15, close: true }),
+
+  // Min Auto Corner Angle
+  makePolyline({
+    points: [[0, 0], [0.5, 0], [0, 0.5]],
+    minAutoCornerAngle: Math.PI / 6,
+  }),
+  makePolyline({
+    points: [[0, 0], [0.5, 0], [0, 0.2]],
+    minAutoCornerAngle: Math.PI / 6,
+  }),
+
+  // Dash
+  makePolyline({ dash: [0.05, 0.02] }),
 
   // makePolyline({ drawBorder: 'negative' }),
   // makePolyline({ drawBorder: 'positive' }),

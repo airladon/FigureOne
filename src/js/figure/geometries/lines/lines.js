@@ -887,7 +887,7 @@ function makePolyLine(
 
   // Get touch border if there is a buffer
   let touchBorder = border;
-  if (touchBorderBuffer !== 0) {
+  if (typeof touchBorderBuffer === 'number' && touchBorderBuffer !== 0) {
     touchBorder = [];
     // for (let i = 0; i < border.length; i += 1) {
     //   touchBorder.push(getBufferBorder(border[i], touchBorderBuffer));
@@ -961,6 +961,8 @@ function makePolyLineCorners(
   minAutoCornerAngle: number = Math.PI / 7,
   linePrimitives: boolean = false,
   lineNum: number = 1,
+  // borderIs: 'positive' | 'negative' | 'line' | Array<Array<Point>> = 'line',
+  drawBorderBuffer: number = 0,
 ) {
   // split line into corners
   const corners = lineToCorners(pointsIn, close, cornerLength, false);
@@ -968,16 +970,23 @@ function makePolyLineCorners(
   let tris = [];
   let borders = [];
   let holes = [];
+  let borderBuffers = [];
+  let drawBorderBufferToUse = 0;
+  if (typeof drawBorderBuffer === 'number') {
+    drawBorderBufferToUse = drawBorderBuffer;
+  }
+
   corners.forEach((corner) => {
-    const [t, b, h] = makePolyLine(
+    const [t, b, dbb, h] = makePolyLine(
       corner, width, false, widthIs, cornerStyle, cornerSize,
-      cornerSides, minAutoCornerAngle, [], linePrimitives, lineNum, 'line', 0, 'none',
+      cornerSides, minAutoCornerAngle, [], linePrimitives, lineNum, 'line', drawBorderBufferToUse, 'none',
     );
     tris = [...tris, ...t];
     borders = [...borders, ...b];
+    borderBuffers = [...borderBuffers, ...dbb];
     holes = [...holes, ...h];
   });
-  return [tris, borders, holes];
+  return [tris, borders, borderBuffers, holes];
 }
 
 function addArrows(

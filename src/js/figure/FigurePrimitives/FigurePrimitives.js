@@ -2306,13 +2306,12 @@ export default class FigurePrimitives {
     let holeBorder;
     let drawBorderBuffer;
     if (o.cornersOnly) {
-      [points, drawBorder, holeBorder] = makePolyLineCorners(
+      [points, drawBorder, drawBorderBuffer, holeBorder] = makePolyLineCorners(
         o.points, o.width, o.close, o.cornerLength, o.widthIs, o.cornerStyle,
         o.cornerSize, o.cornerSides, o.minAutoCornerAngle, o.linePrimitives,
-        o.lineNum,
+        o.lineNum, o.drawBorderBuffer,
       );
     } else {
-      console.log(o.drawBorderBuffer);
       [points, drawBorder, drawBorderBuffer, holeBorder] = makePolyLine(
         o.points, o.width, o.close, o.widthIs, o.cornerStyle, o.cornerSize,
         o.cornerSides, o.minAutoCornerAngle, o.dash, o.linePrimitives,
@@ -2321,6 +2320,9 @@ export default class FigurePrimitives {
     }
     if (Array.isArray(o.drawBorderBuffer)) {
       drawBorderBuffer = getBorder(o.drawBorderBuffer);
+    }
+    if (Array.isArray(o.drawBorder)) {
+      drawBorder = getBorder(o.drawBorder);
     }
     if (drawBorderBuffer == null) {
       drawBorderBuffer = drawBorder;
@@ -2368,10 +2370,6 @@ export default class FigurePrimitives {
       drawBorderBuffer: 0,
     };
     element.custom.updatePoints = (updateOptions: OBJ_Polyline) => {
-      // if (updateOptions.close) {
-      //   updateOptions.drawBorder = 'negative';
-      // }      
-      console.log(updateOptions)
       const [o, points, drawBorder, drawBorderBuffer, drawType] =
         this.getPolylineTris(joinObjects({}, element.custom.options, updateOptions));
       element.custom.options = o;
