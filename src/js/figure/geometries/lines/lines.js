@@ -159,12 +159,20 @@ function lineSegmentsToPoints(
     }
   });
   let border = [[]];
+  // console.log(borderIs)
   if (borderIs === 'positive') {
     border = [positiveBorder];
   } else if (borderIs === 'negative') {
     border = [negativeBorder];
   } else if (borderIs === 'line') {
-    border = [[...negativeBorder, ...(positiveBorder.reverse())]];
+    if (close === false) {
+      border = [[...negativeBorder, ...(positiveBorder.reverse())]];
+    } else {
+      border = [[
+        ...negativeBorder, negativeBorder[0],
+        positiveBorder[0], ...(positiveBorder.reverse()),
+      ]];
+    }
   } else if (Array.isArray(borderIs)) {
     border = borderIs;
   }
@@ -904,9 +912,13 @@ function makePolyLine(
       const lastPoint = lastLine.pointAtLength(lastLine.length() + touchBorderBuffer);
       pointsToUse = [firstPoint, ...points, lastPoint];
     }
+    let borderIsToUse = borderIs;
+    if (Array.isArray(borderIs)) {
+      borderIsToUse = 'line';
+    }
     [, touchBorder] = makeThickLine(
       pointsToUse, widthBuffer, widthIsBuffer, close, cornerStyleToUse, minAutoCornerAngle,
-      linePrimitives, lineNum, borderIs, holeIs,
+      linePrimitives, lineNum, borderIsToUse, holeIs,
     );
     // if (close === false) {
 

@@ -15461,11 +15461,49 @@ where the mapping between the two are:</p>
 </ul>
 <p>The most useful, common and generic <code>drawType</code> is <code>'triangles'</code>
 which can be used to create any shape.</p>
-<p>The shape is colored with either <code>color</code> or <code>texture</code>.</p>
 <p>The shape's points can be duplicated using the <code>copy</code> property
 to conveniently create multiple copies (like grids) of shapes.</p>
-<p>The shape will have a touch <code>border</code> which may also have <code>holes</code>
-or areas where touching has no effect.</p>
+<p>The shape is colored with either <code>color</code> or <code>texture</code>.</p>
+<p>A shape can have several kinds of borders. "Draw borders" (<code>drawBorder</code> and
+<code>drawBorderBuffer</code>) are sets of points that define reference
+borders for a shape. The shapes higher level borders <code>border</code> and
+<code>touchBorder</code> may then use these draw borders to define how a shape will
+interact with a figure's bounds, or where a shape can be touched.</p>
+<p><code>drawBorder</code> and <code>drawBorderBuffer</code> are each point arrays
+that define the outer limits of the shape. For non-contigous shapes
+(like islands of shapes), an array of point arrays can be used.
+Both borders can be anything, but typically a <code>drawBorder</code> would define the
+border of the visible shape, and a <code>drawBorderBuffer</code> would define some
+extra space, or buffer, around the visible shape (particulaly useful for
+defining the <code>touchBorder</code> later).</p>
+<p><code>border</code> is used for checking if the shape is within some bounds. When
+shapes are moved, if their bounds are limited, this border will define when
+the shape is at a limit. The <code>border</code> property can be:</p>
+<ul>
+<li><code>draw</code>: use <code>drawBorder</code> points</li>
+<li><code>buffer</code>: use <code>drawBorderBuffer</code> points</li>
+<li><code>rect</code>: use a rectangle bounding <code>drawBorder</code></li>
+<li><code>number</code>: use a rectangle that is <code>number</code> larger than the rectangle
+bounding <code>drawBorder</code></li>
+<li><code>Array&#x3C;TypeParsablePoint></code>: a custom contiguous border</li>
+<li><code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>: a custom border of several contiguous
+portions</li>
+</ul>
+<p><code>touchBorder</code> is used for checking if a shape is touched. The <code>touchBorder</code>
+property can be:</p>
+<ul>
+<li><code>draw</code>: use <code>drawBorder</code> points</li>
+<li><code>buffer</code>: use <code>drawBorderBuffer</code> points</li>
+<li><code>border</code>: use same as <code>border</code></li>
+<li><code>rect</code>: use a rectangle bounding <code>border</code></li>
+<li><code>number</code>: use a rectangle that is <code>number</code> larger than the rectangle
+bounding <code>border</code></li>
+<li><code>Array&#x3C;TypeParsablePoint></code>: a custom contiguous border</li>
+<li><code>Array&#x3C;Array&#x3C;TypeParsablePoint>></code>: a custom border of several contiguous
+portions</li>
+</ul>
+<p>A <code>holeBorder</code> can be used to override the <code>touchBorder</code> with areas where
+touch is disabled.</p>
 
   
   
@@ -15531,7 +15569,21 @@ or areas where touching has no effect.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | null)?)</code>
+          <span class='code bold'>drawBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          : ,
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          : ,
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>> | <code>"buffer"</code> | <code>"draw"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
           : border used for
 keeping shape within limits
 
@@ -15539,7 +15591,7 @@ keeping shape within limits
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"rect"</code> | <code>"border"</code> | null)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>> | <code>"rect"</code> | <code>"border"</code> | <code>"buffer"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"draw"</code>)?)</code>
           : border used for touching
 
           
@@ -15578,18 +15630,6 @@ transform of
 <code>number</code>
 )
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>drawBorder</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>?)</code>
-          
           
         </div>
       
@@ -16072,21 +16112,6 @@ drawBorderBuffer the same as the line with additional
 on either side (
 <code>0</code>
 )
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
-          : override OBJ_Generic 
-<code>holeBorder</code>
- with 
-<code>'positive'</code>
- to make holeBorder the
-points on the positive side of the line, and with 
-<code>'negative'</code>
- to make
-the holdBorder with points on the negative side of the line.
 
           
         </div>
@@ -46641,8 +46666,12 @@ used by the user.
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?)</code>
-          : defines how the width is grown from the polyline's points.
+          <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : defines how the width is grown from the polyline's points. When using
+
+<code>number</code>
+, 0 is the equivalent of 'inside' and 1 is the equivalent of
+'outside'.
 
           
         </div>

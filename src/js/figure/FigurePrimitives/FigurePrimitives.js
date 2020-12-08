@@ -277,6 +277,7 @@ export type OBJ_PulseScale = {
   frequency?: number,
 };
 
+/* eslint-disable max-len */
 /**
  * ![](./apiassets/generic.png)
  *
@@ -296,13 +297,51 @@ export type OBJ_PulseScale = {
  * The most useful, common and generic `drawType` is `'triangles'`
  * which can be used to create any shape.
  *
- * The shape is colored with either `color` or `texture`.
- *
  * The shape's points can be duplicated using the `copy` property
  * to conveniently create multiple copies (like grids) of shapes.
  *
- * The shape will have a touch `border` which may also have `holes`
- * or areas where touching has no effect.
+ * The shape is colored with either `color` or `texture`.
+ *
+ * A shape can have several kinds of borders. "Draw borders" (`drawBorder` and
+ * `drawBorderBuffer`) are sets of points that define reference
+ * borders for a shape. The shapes higher level borders `border` and
+ * `touchBorder` may then use these draw borders to define how a shape will
+ * interact with a figure's bounds, or where a shape can be touched.
+ *
+ * `drawBorder` and `drawBorderBuffer` are each point arrays
+ * that define the outer limits of the shape. For non-contigous shapes
+ * (like islands of shapes), an array of point arrays can be used.
+ * Both borders can be anything, but typically a `drawBorder` would define the
+ * border of the visible shape, and a `drawBorderBuffer` would define some
+ * extra space, or buffer, around the visible shape (particulaly useful for
+ * defining the `touchBorder` later).
+ *
+ * `border` is used for checking if the shape is within some bounds. When
+ * shapes are moved, if their bounds are limited, this border will define when
+ * the shape is at a limit. The `border` property can be:
+ * - `draw`: use `drawBorder` points
+ * - `buffer`: use `drawBorderBuffer` points
+ * - `rect`: use a rectangle bounding `drawBorder`
+ * - `number`: use a rectangle that is `number` larger than the rectangle
+ *    bounding `drawBorder`
+ * - `Array<TypeParsablePoint>`: a custom contiguous border
+ * - `Array<Array<TypeParsablePoint>>`: a custom border of several contiguous
+ *    portions
+ *
+ * `touchBorder` is used for checking if a shape is touched. The `touchBorder`
+ * property can be:
+ * - `draw`: use `drawBorder` points
+ * - `buffer`: use `drawBorderBuffer` points
+ * - `border`: use same as `border`
+ * - `rect`: use a rectangle bounding `border`
+ * - `number`: use a rectangle that is `number` larger than the rectangle
+ *    bounding `border`
+ * - `Array<TypeParsablePoint>`: a custom contiguous border
+ * - `Array<Array<TypeParsablePoint>>`: a custom border of several contiguous
+ *    portions
+ *
+ * A `holeBorder` can be used to override the `touchBorder` with areas where
+ * touch is disabled. 
  *
  * @property {Array<TypeParsablePoint>} points
  * @property {'triangles' | 'strip' | 'fan' | 'lines'} [drawType]
@@ -311,12 +350,15 @@ export type OBJ_PulseScale = {
  * `'triangles'` when using copy (`[]`)
  * @property {TypeColor} [color] (`[1, 0, 0, 1])
  * @property {OBJ_Texture} [texture] override `color` with a texture if defined
- * @property {Array<Array<TypeParsablePoint>> | null} [border] border used for
+ * @property {Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint>} [drawBorder],
+ * @property {Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint>} [drawBorderBuffer],
+ * @property {Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'buffer' | 'draw' | 'rect' | number} [border]
+ * border used for
  * keeping shape within limits
- * @property {Array<Array<TypeParsablePoint>> | 'rect' | 'border' | null} [touchBorder]
- * border used for touching
- * @property {Array<Array<TypeParsablePoint>> | null} [holeBorder] borders where
- * touching will not work
+ * @property {Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
+ * border used for determining shape was touched
+ * @property {Array<Array<TypeParsablePoint>> | null} [holeBorder] areas where
+ * touching is disabled
  * @property {TypeParsablePoint} [position] will overwrite first translation
  * transform of `transform` chain
  * @property {Transform} [transform]
@@ -377,6 +419,7 @@ export type OBJ_PulseScale = {
  *   },
  * });
  */
+ /* eslint-enable max-len */
 export type OBJ_Generic = {
   points?: Array<TypeParsablePoint> | Array<Point>,
   drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
@@ -392,19 +435,6 @@ export type OBJ_Generic = {
   transform?: TypeParsableTransform,
   pulse?: number,
 }
-
-// generic
-// polyline
-// rectangle
-// polygon
-// polygonSweep
-// repeat
-// grid
-
-// Special
-// box (surround)
-// shape
-
 
 /**
  * Polyline shape options object that extends {@link OBJ_Generic} (without
@@ -464,10 +494,6 @@ export type OBJ_Generic = {
  * override OBJ_Generic `drawBorderBuffer` with `number` to make the
  * drawBorderBuffer the same as the line with additional `number` thickness
  * on either side (`0`)
- * @property {'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [holeBorder]
- * override OBJ_Generic `holeBorder` with `'positive'` to make holeBorder the
- * points on the positive side of the line, and with `'negative'` to make
- * the holdBorder with points on the negative side of the line.
  * @property {'auto' | 'none' | 'radius' | 'fill'} [cornerStyle] - `"auto"`:
  * sharp corners sharp when angle is less than `minAutoCornerAngle`, `"none"`: no
  * corners, `"radius"`: curved corners, `"fill"`: fills the gapes between the line
@@ -570,7 +596,6 @@ export type OBJ_Polyline = {
   widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
   drawBorder?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
   drawBorderBuffer?: number | Array<Array<TypeParsablePoint>>,
-  holeBorder?: 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
   cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize?: number,
   cornerSides?: number,
@@ -2283,11 +2308,15 @@ export default class FigurePrimitives {
         o.lineNum,
       );
     } else {
+      console.log(o.drawBorderBuffer);
       [points, drawBorder, drawBorderBuffer, holeBorder] = makePolyLine(
         o.points, o.width, o.close, o.widthIs, o.cornerStyle, o.cornerSize,
         o.cornerSides, o.minAutoCornerAngle, o.dash, o.linePrimitives,
         o.lineNum, o.drawBorder, o.drawBorderBuffer, o.hole, o.arrow,
       );
+    }
+    if (Array.isArray(o.drawBorderBuffer)) {
+      drawBorderBuffer = parseBorder(o.drawBorderBuffer);
     }
     if (drawBorderBuffer == null) {
       drawBorderBuffer = drawBorder;
@@ -2299,7 +2328,7 @@ export default class FigurePrimitives {
     if (o.linePrimitives) {
       drawType = 'lines';
     }
-    return [o, points, drawBorder, drawType];
+    return [o, points, drawBorder, drawBorderBuffer, drawType];
   }
 
   /**
@@ -2334,12 +2363,14 @@ export default class FigurePrimitives {
       holeBorder: [[]],
       drawBorderBuffer: 0,
     };
-
     element.custom.updatePoints = (updateOptions: OBJ_Polyline) => {
+      // if (updateOptions.close) {
+      //   updateOptions.drawBorder = 'negative';
+      // }      
+      console.log(updateOptions)
       const [o, points, drawBorder, drawBorderBuffer, drawType] =
         this.getPolylineTris(joinObjects({}, element.custom.options, updateOptions));
       element.custom.options = o;
-
       element.custom.updateGeneric(joinObjects({}, o, {
         points, drawBorder, drawBorderBuffer, drawType,
       }));
@@ -2353,14 +2384,6 @@ export default class FigurePrimitives {
   }
 
   getPolygonBorder(optionsIn: OBJ_Polygon_Defined) {
-    // const defaultOptions = {
-    //   radius: 1,
-    //   sides: 4,
-    //   direction: 1,
-    //   rotation: 0,
-    //   offset: new Point(0, 0),
-    // };
-    // const o = joinObjects({}, defaultOptions, getBorderOptionsIn);
     const o = optionsIn;
     parsePoints(o, ['offset']);
     if (o.angleToDraw != null) {
@@ -2415,143 +2438,9 @@ export default class FigurePrimitives {
         {}, o, { radius: o.radius + drawBorderOffset },
       ))];
     }
-    // if (o.direction === -1) {
-    //   drawBorder.reverse();
-    // }
-
-    // if (typeof drawBorderBuffer === 'number') {
-    //   if (drawBorderBuffer !== 0) {
-    //     if (drawBorderBuffer > 0) {
-    //       const cornerAngle = (o.sides - 2) * Math.PI / o.sides;
-    //       drawBorderBuffer /= Math.sin(cornerAngle / 2);
-    //     }
-    //     drawBorderBuffer = [getPolygonPoints(joinObjects(
-    //       {}, o, {
-    //         radius: o.radius + drawBorderOffset + drawBorderBuffer,
-    //         innerRadius: null,
-    //       },
-    //     ))];
-    //   } else {
-    //     drawBorderBuffer = drawBorder;
-    //   }
-    // }
-    return [o, points, drawBorder, 'triangles']; //, drawBorderBuffer];
+    return [o, points, drawBorder, 'triangles'];
   }
 
-  // // eslint-disable-next-line class-methods-use-this
-  // getBufferBorder(border: Array<Point>, buffer: number) {
-  //   if (typeof buffer !== 'number') {
-  //     return buffer;
-  //   }
-  //   if (buffer === 0) {
-  //     return border;
-  //   }
-  //   const drawBorderBounds = getBoundingRect(border);
-  //   const scaleX = (drawBorderBounds.width + buffer * 2) / drawBorderBounds.width;
-  //   const scaleY = (drawBorderBounds.height + buffer * 2) / drawBorderBounds.height;
-  //   const matrix = new Transform()
-  //     .translate(-drawBorderBounds.left, -drawBorderBounds.bottom)
-  //     .scale(scaleX, scaleY).matrix();
-  //   let drawBorderBuffer: Array<Point> = border.map(p => p.transformBy(matrix));
-  //   const bufferBounds = getBoundingRect(drawBorderBuffer);
-  //   const targetX = drawBorderBounds.left - (bufferBounds.width - drawBorderBounds.width) / 2;
-  //   const targetY = drawBorderBounds.bottom
-  //     - (bufferBounds.height - drawBorderBounds.height) / 2;
-  //   const offset = new Point(
-  //     targetX - bufferBounds.left,
-  //     targetY - bufferBounds.bottom,
-  //   );
-  //   drawBorderBuffer = drawBorderBuffer.map(p => p.add(offset));
-  //   return drawBorderBuffer;
-  // }
-
-  // // eslint-disable-next-line class-methods-use-this
-  // getBufferBorder(borderIn: Array<Point>, buffer: number) {
-  //   if (typeof buffer !== 'number') {
-  //     return buffer;
-  //   }
-  //   if (buffer === 0) {
-  //     return borderIn;
-  //   }
-  //   // First remove all points that are >180º
-  //   const border = [];
-  //   const borderIndex = [];
-  //   for (let i = 0; i < borderIn.length; i += 1) {
-  //     let prevPoint;
-  //     let nextPoint;
-  //     if (i === 0) {
-  //       prevPoint = borderIn[borderIn.length - 1];
-  //     } else {
-  //       prevPoint = borderIn[i - 1];
-  //     }
-  //     if (i === borderIn.length - 1) {
-  //       [nextPoint] = borderIn;
-  //     } else {
-  //       nextPoint = borderIn[i + 1];
-  //     }
-  //     const angle = threePointAngle(nextPoint, borderIn[i], prevPoint);
-  //     if (
-  //       angle < Math.PI
-  //       && (
-  //         border.length === 0
-  //         || borderIn[i].isNotEqualTo(border[border.length - 1])
-  //       )
-  //     ) {
-  //       border.push(borderIn[i]);
-  //       borderIndex.push(i);
-  //     }
-  //   }
-  //   const drawBorderBuffer = [];
-  //   const offsetLines = [];
-  //   for (let i = 0; i < border.length; i += 1) {
-  //     let line;
-  //     if (i === 0) {
-  //       line = new Line(border[border.length - 1], border[0]);
-  //     } else {
-  //       line = new Line(border[i - 1], border[i]);
-  //     }
-  //     offsetLines.push(line.offset('negative', buffer));
-  //   }
-  //   for (let i = 0; i < offsetLines.length; i += 1) {
-  //     let prevLine;
-  //     // let nextLine;
-  //     if (i === 0) {
-  //       prevLine = offsetLines[offsetLines.length - 1];
-  //     } else {
-  //       prevLine = offsetLines[i - 1];
-  //     }
-  //     const currentLine = offsetLines[i];
-  //     const intersect = currentLine.intersectsWith(prevLine);
-  //     if (intersect.intersect != null) {
-  //       let borderPoint;
-  //       if (i === 0) {
-  //         borderPoint = border[border.length - 1];
-  //       } else {
-  //         borderPoint = border[i - 1];
-  //       }
-  //       if (intersect.intersect.distance(borderPoint) > buffer * 1.2) {
-  //         const borderToBuffer = new Line(borderPoint, intersect.intersect);
-  //         const perpLine = new Line(
-  //           borderToBuffer.pointAtLength(buffer * 1.2),
-  //           1,
-  //           borderToBuffer.angle() + Math.PI / 2,
-  //         );
-  //         const prevIntersect = prevLine.intersectsWith(perpLine);
-  //         const nextIntersect = currentLine.intersectsWith(perpLine);
-  //         if (prevIntersect.intersect != null && nextIntersect.intersect != null) {
-  //           drawBorderBuffer.push(prevIntersect.intersect);
-  //           drawBorderBuffer.push(nextIntersect.intersect);
-  //         } else {
-  //           drawBorderBuffer.push(intersect.intersect);
-  //         }
-  //       } else {
-  //         drawBorderBuffer.push(intersect.intersect);
-  //       }
-  //     }
-  //   }
-
-  //   return drawBorderBuffer;
-  // }
 
   genericBase(
     name: string,
@@ -2611,7 +2500,7 @@ export default class FigurePrimitives {
           o.line.close = true;
         }
         const [
-          polylineOptions, points, drawBorder, drawType,
+          polylineOptions, points, drawBorder, , drawType,
         ] = element.custom.getLine(joinObjects(
           {},
           o.line,
