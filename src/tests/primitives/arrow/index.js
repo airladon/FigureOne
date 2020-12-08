@@ -2,7 +2,7 @@
 const { Figure, tools } = Fig;
 
 const figure = new Figure({
-  limits: [-4.5, -4.5, 9, 9],
+  limits: [-4.5, -9, 9, 18],
   color: [1, 0, 0, 1],
   lineWidth: 0.01,
   font: { size: 0.1 },
@@ -23,7 +23,7 @@ figure.add([
     name: 'grid',
     method: 'grid',
     options: {
-      bounds: [-4.5, -4.5, 9, 9],
+      bounds: [-4.5, -9, 9, 18],
       yStep: 0.1,
       xStep: 0.1,
       color: [0.9, 0.9, 0.9, 1],
@@ -34,7 +34,7 @@ figure.add([
     name: 'gridMajor',
     method: 'grid',
     options: {
-      bounds: [-4.5, -4.5, 9, 9],
+      bounds: [-4.5, -9, 9, 18],
       yStep: 0.5,
       xStep: 0.5,
       color: [0.7, 0.7, 0.7, 1],
@@ -48,7 +48,7 @@ figure.add([
 // ***************************************************
 // ***************************************************
 const xValues = tools.math.range(-4, 4, 1);
-const yValues = tools.math.range(4, -4, -1);
+const yValues = tools.math.range(8.5, -8.5, -1);
 let index = 0;
 const makeShape = (method, options, lineOptions = null) => {
   const x = xValues[index % xValues.length];
@@ -117,22 +117,6 @@ const barArrow = (options = {}, lineOptions = null) => makeArrow(
 const lineArrow = (options = {}, lineOptions = null) => makeArrow(
   tools.misc.joinObjects({}, { head: 'line', tailWidth: 0.05 }, options), lineOptions,
 );
-
-// const revtriArrow = (options = {}) => {
-//   return makeArrow({ head: 'reverseTriangle' }, options);
-// };
-// const barbArrow = (options = {}) => {
-//   return makeArrow({ head: 'barb' }, options);
-// };
-// const polygonArrow = (options = {}) => {
-//   return makeArrow({ head: 'polygon', sides: 6, radius: 0.2 }, options);
-// };
-// const barArrow = (options = {}) => {
-//   return makeArrow({ head: 'bar', length: 0.1 }, options);
-// };
-// const lineArrow = (options = {}) => {
-//   return makeArrow({ head: 'line', tailWidth: 0.05 }, options);
-// };
 
 /* eslint-disable object-curly-newline */
 const arrows = [
@@ -217,6 +201,70 @@ const arrows = [
   revtriArrow({ tail: 0.1 }, { widthIs: 'inside' }),
   revtriArrow({ tail: 0.1 }, { widthIs: 'outside' }),
 
+  // Line Arrow
+  lineArrow(),
+  lineArrow({ tail: -0.05 }),
+  lineArrow({ tail: 0 }),
+  lineArrow({ tail: 0.1 }),
+  lineArrow({ tailWidth: 0.1 }, {}),
+  lineArrow({ tailWidth: 0.1, tail: -0.05 }, {}),
+  lineArrow({ tailWidth: 0.1, tail: 0 }, {}),
+  lineArrow({ tailWidth: 0.1, tail: 0.1 }, {}),
+  lineArrow({ tailWidth: 0.1 }, { width: 0.02, dash: [0.03, 0.02] }),
+  lineArrow({ tailWidth: 0.1, tail: -0.05 }, { width: 0.02, dash: [0.03, 0.02] }),
+  lineArrow({ tailWidth: 0.1, tail: 0 }, { width: 0.02, dash: [0.03, 0.02] }),
+  lineArrow({ tailWidth: 0.1, tail: 0.1 }, { width: 0.02, dash: [0.03, 0.02] }),
+
+  lineArrow({ align: 'start', tail: -0.05 }),
+  lineArrow({ align: 'tail', tail: -0.05 }),
+  lineArrow({ align: 'mid', tail: -0.05 }),
+  lineArrow({ align: 'tip', tail: -0.05 }),
+
+  lineArrow({ tailWidth: 0.1, tail: -0.05 }, { width: 0.04, widthIs: 'inside' }),
+  lineArrow({ tailWidth: 0.1, tail: -0.05 }, { width: 0.04, widthIs: 'outside' }),
+  lineArrow({ tailWidth: 0.1, tail: 0 }, { width: 0.04, widthIs: 'inside' }),
+  lineArrow({ tailWidth: 0.1, tail: 0 }, { width: 0.04, widthIs: 'outside' }),
+
+  // Polygon Arrow
+  polygonArrow({ radius: 0.3, sides: 4 }),
+  polygonArrow(),
+  polygonArrow({ tail: -0.05 }),
+  polygonArrow({ tail: 0 }),
+  polygonArrow({ tail: 0.1 }),
+  polygonArrow({}, {}),
+  polygonArrow({ tail: -0.05 }, {}),
+  polygonArrow({ tail: 0 }, {}),
+  polygonArrow({ tail: 0.1 }, {}),
+  polygonArrow({}, { width: 0.02, dash: [0.03, 0.01] }),
+  polygonArrow({ tail: -0.05 }, { width: 0.02, dash: [0.03, 0.01] }),
+  polygonArrow({ tail: 0 }, { width: 0.02, dash: [0.03, 0.01] }),
+  polygonArrow({ tail: 0.1 }, { width: 0.02, dash: [0.03, 0.01] }),
+
+  polygonArrow({ align: 'start', tail: -0.05 }),
+  polygonArrow({ align: 'tail', tail: -0.05 }),
+  polygonArrow({ align: 'mid', tail: -0.05 }),
+  polygonArrow({ align: 'tip', tail: -0.05 }),
+
+  polygonArrow({}, { widthIs: 'inside' }),
+  polygonArrow({}, { widthIs: 'outside' }),
+  polygonArrow({ tail: 0.1 }, { widthIs: 'inside' }),
+  polygonArrow({ tail: 0.1 }, { widthIs: 'outside' }),
+
+  // Bar Arrow
+  barArrow({ radius: 0.3, sides: 4 }),
+  barArrow(),
+  barArrow({ tail: -0.05 }),
+  barArrow({ tail: 0 }),
+  barArrow({ tail: 0.05 }),
+  barArrow({}, { width: 0.02, dash: [0.03, 0.01] }),
+  barArrow({ tail: -0.05 }, { width: 0.02, dash: [0.03, 0.01] }),
+  barArrow({ tail: 0 }, { width: 0.02, dash: [0.03, 0.01] }),
+  barArrow({ tail: 0.05 }, { width: 0.02, dash: [0.03, 0.01] }),
+
+  barArrow({ align: 'start', tail: 0.05 }),
+  barArrow({ align: 'tail', tail: 0.05 }),
+  barArrow({ align: 'mid', tail: 0.05 }),
+  barArrow({ align: 'tip', tail: 0.05 }),
 ];
 figure.add(arrows);
 

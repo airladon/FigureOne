@@ -7,7 +7,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "jest": "jest"
+    "jest": "jest --runInBand"
   },
   "keywords": [],
   "author": "",
