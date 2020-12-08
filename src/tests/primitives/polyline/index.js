@@ -82,198 +82,185 @@ const makePolyline = (options, mods = {}) => makeShape(
 
 /* eslint-disable object-curly-newline */
 const arrows = [
-  // // Definitions
-  // makePolyline(),
-  // makePolyline({ close: true, drawBorder: 'line' }),
-  // makePolyline({ close: true, drawBorder: 'negative' }),
-  // makePolyline({ close: true, drawBorder: 'positive' }),
+  // Definitions
+  makePolyline(),
+  makePolyline({ close: true, drawBorder: 'line' }),
+  makePolyline({ close: true, drawBorder: 'negative' }),
+  makePolyline({ close: true, drawBorder: 'positive' }),
 
-  // // DrawBorder
-  // makePolyline({ drawBorder: 'line' }),
-  // makePolyline({ drawBorder: 'negative' }),
-  // makePolyline({ drawBorder: 'positive' }),
-  // makePolyline({ drawBorder: [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]] }),
+  // DrawBorder
+  makePolyline({ drawBorder: 'line' }),
+  makePolyline({ drawBorder: 'negative' }),
+  makePolyline({ drawBorder: 'positive' }),
+  makePolyline({ drawBorder: [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]] }),
 
-  // // DrawBorderBuffer
-  // makePolyline({ drawBorder: 'line', drawBorderBuffer: 0.2 }),
-  // makePolyline({ drawBorder: 'line', drawBorderBuffer: 0 }),
-  // makePolyline({
-  //   drawBorder: 'line',
-  //   drawBorderBuffer: [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]],
-  // }),
-  // makePolyline({
-  //   drawBorder: 'line',
-  //   drawBorderBuffer: [[[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]]],
-  // }),
-  // makePolyline({
-  //   drawBorder: 'line',
-  //   drawBorderBuffer: [
-  //     [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]],
-  //     [[0.1, 0.4], [0.2, 0.4], [0.1, 0.5]],
-  //   ],
-  // }),
+  // DrawBorderBuffer
+  makePolyline({ drawBorder: 'line', drawBorderBuffer: 0.2 }),
+  makePolyline({ drawBorder: 'line', drawBorderBuffer: 0 }),
+  makePolyline({
+    drawBorder: 'line',
+    drawBorderBuffer: [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]],
+  }),
+  makePolyline({
+    drawBorder: 'line',
+    drawBorderBuffer: [[[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]]],
+  }),
+  makePolyline({
+    drawBorder: 'line',
+    drawBorderBuffer: [
+      [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]],
+      [[0.1, 0.4], [0.2, 0.4], [0.1, 0.5]],
+    ],
+  }),
 
-  // // border
-  // makePolyline({ border: 'draw' }),
-  // makePolyline({ border: 'buffer', touchBorder: 0.1 }),
-  // makePolyline({ border: 'rect' }),
-  // makePolyline({ border: 0.1 }),
-  // makePolyline({ border: [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]] }),
-  // makePolyline({
-  //   border: [
-  //     [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]],
-  //     [[0.1, 0.4], [0.2, 0.4], [0.1, 0.5]],
-  //   ],
-  // }),
+  // border
+  makePolyline({ border: 'draw' }),
+  makePolyline({ border: 'buffer', touchBorder: 0.1 }),
+  makePolyline({ border: 'rect' }),
+  makePolyline({ border: 0.1 }),
+  makePolyline({ border: [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]] }),
+  makePolyline({
+    border: [
+      [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]],
+      [[0.1, 0.4], [0.2, 0.4], [0.1, 0.5]],
+    ],
+  }),
 
-  // // touchBorder
-  // makePolyline({ touchBorder: 'draw', border: 0.1 }),
-  // makePolyline({ touchBorder: 'buffer' }),
-  // makePolyline({ touchBorder: 'rect' }),
-  // makePolyline({ touchBorder: 0.1 }),
-  // makePolyline({ touchBorder: [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]] }),
-  // makePolyline({
-  //   touchBorder: [
-  //     [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]],
-  //     [[0.1, 0.4], [0.2, 0.4], [0.1, 0.5]],
-  //   ],
-  // }),
-  // makePolyline({ touchBorder: 'border', border: 0.1 }),
+  // touchBorder
+  makePolyline({ touchBorder: 'draw', border: 0.1 }),
+  makePolyline({ touchBorder: 'buffer' }),
+  makePolyline({ touchBorder: 'rect' }),
+  makePolyline({ touchBorder: 0.1 }),
+  makePolyline({ touchBorder: [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]] }),
+  makePolyline({
+    touchBorder: [
+      [[-0.1, -0.1], [0.5, -0.1], [0.5, 0.5]],
+      [[0.1, 0.4], [0.2, 0.4], [0.1, 0.5]],
+    ],
+  }),
+  makePolyline({ touchBorder: 'border', border: 0.1 }),
 
-  // // Corner Style
-  // makePolyline({ cornerStyle: 'none' }),
-  // makePolyline({ cornerStyle: 'auto' }),
-  // makePolyline({ cornerStyle: 'fill' }),
-  // makePolyline({ cornerStyle: 'radius', cornerSize: 0.1, cornerSides: 3 }),
-  // makePolyline({ cornerStyle: 'none', close: true }),
-  // makePolyline({ cornerStyle: 'auto', close: true }),
-  // makePolyline({ cornerStyle: 'fill', close: true }),
-  // makePolyline({ cornerStyle: 'radius', cornerSize: 0.1, cornerSides: 3, close: true }),
+  // Corner Style
+  makePolyline({ cornerStyle: 'none' }),
+  makePolyline({ cornerStyle: 'auto' }),
+  makePolyline({ cornerStyle: 'fill' }),
+  makePolyline({ cornerStyle: 'radius', cornerSize: 0.1, cornerSides: 3 }),
+  makePolyline({ cornerStyle: 'none', close: true }),
+  makePolyline({ cornerStyle: 'auto', close: true }),
+  makePolyline({ cornerStyle: 'fill', close: true }),
+  makePolyline({ cornerStyle: 'radius', cornerSize: 0.1, cornerSides: 3, close: true }),
 
-  // // Corners Only
-  // makePolyline({ cornersOnly: 'true', cornerLength: 0.15, close: true }),
+  // Corners Only
+  makePolyline({ cornersOnly: 'true', cornerLength: 0.15, close: true }),
 
-  // // Min Auto Corner Angle
-  // makePolyline({
-  //   points: [[0, 0], [0.5, 0], [0, 0.5]],
-  //   minAutoCornerAngle: Math.PI / 6,
-  // }),
-  // makePolyline({
-  //   points: [[0, 0], [0.5, 0], [0, 0.2]],
-  //   minAutoCornerAngle: Math.PI / 6,
-  // }),
+  // Min Auto Corner Angle
+  makePolyline({
+    points: [[0, 0], [0.5, 0], [0, 0.5]],
+    minAutoCornerAngle: Math.PI / 6,
+  }),
+  makePolyline({
+    points: [[0, 0], [0.5, 0], [0, 0.2]],
+    minAutoCornerAngle: Math.PI / 6,
+  }),
 
-  // // Dash
-  // makePolyline({ dash: [0.05, 0.02] }),
-  // makePolyline({ dash: [0.05, 0.02], close: true }),
-  // makePolyline({
-  //   points: [[0, 0], [0.5, 0]],
-  //   dash: [0.05, 0.05],
-  // }),
-  // makePolyline({
-  //   points: [[0, 0], [0.5, 0]],
-  //   dash: [0.025, 0.05, 0.05],
-  // }),
+  // Dash
+  makePolyline({ dash: [0.05, 0.02] }),
+  makePolyline({ dash: [0.05, 0.02], close: true }),
+  makePolyline({
+    points: [[0, 0], [0.5, 0]],
+    dash: [0.05, 0.05],
+  }),
+  makePolyline({
+    points: [[0, 0], [0.5, 0]],
+    dash: [0.025, 0.05, 0.05],
+  }),
 
-  // // WidthIs
-  // makePolyline({ widthIs: 'mid' }),
-  // makePolyline({ widthIs: 'positive' }),
-  // makePolyline({ widthIs: 'negative' }),
-  // makePolyline({ widthIs: 'mid', close: true }),
-  // makePolyline({ widthIs: 'positive', close: true }),
-  // makePolyline({ widthIs: 'negative', close: true }),
-  // makePolyline({ widthIs: 0.3 }),
-  // makePolyline({ widthIs: 0.3, close: true }),
-  // makePolyline({ points: [[0, 0], [0.5, 0], [0, 0.5]], widthIs: 'inside' }),
-  // makePolyline({ points: [[0, 0.5], [0.5, 0], [0, 0]], widthIs: 'inside' }),
-  // makePolyline({
-  //   points: [[0, 0], [0.5, 0], [0, 0.5]],
-  //   widthIs: 'inside',
-  //   close: true,
-  // }),
-  // makePolyline({
-  //   points: [[0, 0.5], [0.5, 0], [0, 0]],
-  //   widthIs: 'inside',
-  //   close: true,
-  // }),
+  // WidthIs
+  makePolyline({ widthIs: 'mid' }),
+  makePolyline({ widthIs: 'positive' }),
+  makePolyline({ widthIs: 'negative' }),
+  makePolyline({ widthIs: 'mid', close: true }),
+  makePolyline({ widthIs: 'positive', close: true }),
+  makePolyline({ widthIs: 'negative', close: true }),
+  makePolyline({ widthIs: 0.3 }),
+  makePolyline({ widthIs: 0.3, close: true }),
+  makePolyline({ points: [[0, 0], [0.5, 0], [0, 0.5]], widthIs: 'inside' }),
+  makePolyline({ points: [[0, 0.5], [0.5, 0], [0, 0]], widthIs: 'inside' }),
+  makePolyline({
+    points: [[0, 0], [0.5, 0], [0, 0.5]],
+    widthIs: 'inside',
+    close: true,
+  }),
+  makePolyline({
+    points: [[0, 0.5], [0.5, 0], [0, 0]],
+    widthIs: 'inside',
+    close: true,
+  }),
 
-  // makePolyline({ points: [[0, 0], [0.5, 0], [0, 0.5]], widthIs: 'outside' }),
-  // makePolyline({ points: [[0, 0.5], [0.5, 0], [0, 0]], widthIs: 'outside' }),
-  // makePolyline({
-  //   points: [[0, 0], [0.5, 0], [0, 0.5]],
-  //   widthIs: 'outside',
-  //   close: true,
-  // }),
-  // makePolyline({
-  //   points: [[0, 0.5], [0.5, 0], [0, 0]],
-  //   widthIs: 'outside',
-  //   close: true,
-  // }),
+  makePolyline({ points: [[0, 0], [0.5, 0], [0, 0.5]], widthIs: 'outside' }),
+  makePolyline({ points: [[0, 0.5], [0.5, 0], [0, 0]], widthIs: 'outside' }),
+  makePolyline({
+    points: [[0, 0], [0.5, 0], [0, 0.5]],
+    widthIs: 'outside',
+    close: true,
+  }),
+  makePolyline({
+    points: [[0, 0.5], [0.5, 0], [0, 0]],
+    widthIs: 'outside',
+    close: true,
+  }),
 
   // // Arrow
-  // makePolyline({ width: 0.025, arrow: 'triangle' }),
-  // makePolyline({ width: 0.025, arrow: 'barb' }),
-  // makePolyline({ width: 0.025, arrow: 'reverseTriangle' }),
-  // makePolyline({ width: 0.025, arrow: 'polygon' }),
-  // makePolyline({ width: 0.025, arrow: 'circle' }),
-  // makePolyline({ width: 0.025, arrow: 'bar' }),
-  // makePolyline({ width: 0.025, arrow: 'line' }),
-
-  // makePolyline({ arrow: { head: 'triangle', tail: 0, scale: 0.5 } }),
-  // makePolyline({ arrow: { head: 'barb', tail: 0, scale: 0.5 } }),
-  // makePolyline({ arrow: { head: 'reverseTriangle', tail: 0, scale: 0.5 } }),
-  makePolyline({ arrow: { head: 'polygon', tail: 0, scale: 0.5, sides: 6 } }),
-  // makePolyline({ arrow: { head: 'circle', tail: 0, scale: 0.5 } }),
-  // makePolyline({ arrow: { head: 'bar', tail: 0, scale: 0.5 } }),
-  // makePolyline({ arrow: { head: 'line', tail: 0, scale: 0.6 } }),
+  makePolyline({ width: 0.025, arrow: 'triangle' }),
+  makePolyline({ width: 0.025, arrow: 'barb' }),
+  makePolyline({ width: 0.025, arrow: 'reverseTriangle' }),
+  makePolyline({ width: 0.025, arrow: 'polygon' }),
+  makePolyline({ width: 0.025, arrow: 'circle' }),
+  makePolyline({ width: 0.025, arrow: 'bar' }),
+  makePolyline({ width: 0.025, arrow: 'line' }),
 
 
+  makePolyline({ width: 0.025, arrow: { head: 'triangle', tail: false } }),
+  makePolyline({ width: 0.025, arrow: { head: 'barb', tail: false } }),
+  makePolyline({ width: 0.025, arrow: { head: 'reverseTriangle', tail: false } }),
+  makePolyline({ width: 0.025, arrow: { head: 'polygon', tail: false } }),
+  makePolyline({ width: 0.025, arrow: { head: 'circle', tail: false } }),
+  makePolyline({ width: 0.025, arrow: { head: 'bar', tail: false } }),
+  makePolyline({ width: 0.025, arrow: { head: 'line', tail: false } }),
 
 
-
-  // makePolyline({ drawBorder: 'negative' }),
-  // makePolyline({ drawBorder: 'positive' }),
-  // makeEllipse({ height: 0.3, width: 0.2, sides: 4 }),
-  // makeEllipse({ height: 0.1, width: 0.6 }),
-
-  // // Line specific
-  // makeEllipse({}, { widthIs: 'inside' }),
-  // makeEllipse({}, { widthIs: 'mid' }),
-  // makeEllipse({}, { widthIs: 'outside' }),
-  // makeEllipse({ height: 0.1, width: 0.6 }, {}),
-
-  // // Alignment
-  // makeEllipse({ xAlign: 'left', yAlign: 'bottom' }),
-  // makeEllipse({ xAlign: 'center', yAlign: 'middle' }),
-  // makeEllipse({ xAlign: 'right', yAlign: 'top' }),
-  // makeEllipse({ xAlign: 0.2, yAlign: 0.2 }),
-
-  // // Alignment line
-  // makeEllipse({ xAlign: 'left', yAlign: 'bottom' }, { widthIs: 'mid' }),
-  // makeEllipse({ xAlign: 'center', yAlign: 'middle' }, { widthIs: 'mid' }),
-  // makeEllipse({ xAlign: 0.2, yAlign: 0.2 }, { widthIs: 'mid' }),
-  // makeEllipse({ xAlign: 'right', yAlign: 'top' }, { widthIs: 'mid' }),
-  // makeEllipse({ xAlign: 'right', yAlign: 'top' }, { widthIs: 'inside' }),
-  // makeEllipse({ xAlign: 'right', yAlign: 'top' }, { widthIs: 'outside' }),
+  makePolyline({ arrow: { head: 'triangle', scale: 0.5 } }),
+  makePolyline({ arrow: { head: 'barb', scale: 0.5 } }),
+  makePolyline({ arrow: { head: 'reverseTriangle', scale: 0.5 } }),
+  makePolyline({ arrow: { head: 'polygon', scale: 0.5, sides: 6, align: 'mid' } }),
+  makePolyline({ arrow: { head: 'polygon', scale: 0.5, sides: 6, align: 'mid', tail: false } }),
+  makePolyline({ arrow: { head: 'polygon', scale: 0.5, sides: 6, align: 'tip', tail: 0.1 } }),
+  makePolyline({ arrow: { head: 'polygon', scale: 0.5, sides: 6, align: 'mid', tail: 0.1 } }),
+  makePolyline({ arrow: { head: 'circle', scale: 0.5 } }),
+  makePolyline({ arrow: { head: 'bar', align: 'tip' } }),
+  makePolyline({ arrow: { head: 'bar', align: 'mid' } }),
+  makePolyline({ arrow: { head: 'bar', align: 'mid', scale: 0.5 } }),
+  makePolyline({ arrow: { head: 'line', scale: 0.6 } }),
 
 
-  // // Corner
-  // makeEllipse({}, { cornerStyle: 'none' }),
-  // makeEllipse({}, { cornerStyle: 'fill' }),
+  makePolyline({ arrow: { start: 'triangle', end: 'reverseTriangle', scale: 0.5 } }),
 
+  makePolyline({ arrow: {
+    start: { head: 'triangle', length: 0.2 },
+    end: { head: 'reverseTriangle', length: 0.1 },
+    scale: 0.5,
+  } }),
 
-  // // dash
-  // makeEllipse({}, { dash: [0.03, 0.02], widthIs: 'inside' }),
-  // makeEllipse({}, { dash: [0.03, 0.02], widthIs: 'mid' }),
-  // makeEllipse({}, { dash: [0.03, 0.02], widthIs: 'outside' }),
+  // Line Primitives
+  makePolyline({ linePrimitives: true, lineNum: 5 }),
+  makePolyline({ linePrimitives: true, lineNum: 5, close: true }),
 
-  // // Line Primitives
-  // makeEllipse({}, { linePrimitives: true, lineNum: 5, widthIs: 'inside' }),
-  // makeEllipse({}, { linePrimitives: true, lineNum: 5, widthIs: 'mid' }),
-  // makeEllipse({}, { linePrimitives: true, lineNum: 5, widthIs: 'outside' }),
-  // makeEllipse({}, { linePrimitives: true, lineNum: 5, cornerStyle: 'none' }),
-  // makeEllipse({}, { linePrimitives: true, lineNum: 5, cornerStyle: 'fill' }),
-  // makeEllipse({}, { linePrimitives: true, lineNum: 5, cornerStyle: 'auto' }),
+  // Special case inside
+  makePolyline({
+    points: [[0, 0], [1, 0], [0.5, 0.1]],
+    widthIs: 'inside',
+    close: true,
+  }),
 ];
 figure.add(arrows);
 

@@ -815,7 +815,6 @@ function shortenLineForArrows(
       }
     }
   }
-
   return shortenedPoints;
 }
 
@@ -844,7 +843,7 @@ function makePolyLine(
   let cornerStyleToUse;
   let orderedPoints = pointsIn;
 
-  const arrow = simplifyArrowOptions(arrowIn, width);
+  const arrow = simplifyArrowOptions(arrowIn, width, true);
 
   if (close === false && arrowIn != null) { // $FlowFixMe
     orderedPoints = shortenLineForArrows(pointsIn, arrow);

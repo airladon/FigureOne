@@ -505,7 +505,7 @@ export type OBJ_Generic = {
  * @property {Array<TypeParsablePoint>} points
  * @property {number} [width] (`0.01`)
  * @property {boolean} [close] close the polyline on itself (`false`)
- * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative'} [widthIs]
+ * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number} [widthIs]
  * defines how the width is grown from the polyline's points.
  * Only `"mid"` is fully compatible with all options in
  * `cornerStyle` and `dash`. (`"mid"`)

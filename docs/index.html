@@ -4387,6 +4387,26 @@
               
                 
                 <li><a
+                  href='#typeparsableborder'
+                  class="">
+                  TypeParsableBorder
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeborder'
+                  class="">
+                  TypeBorder
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_trianglesiderotationalignment'
                   class="">
                   OBJ_TriangleSideRotationAlignment
@@ -15464,6 +15484,9 @@ which can be used to create any shape.</p>
 <p>The shape's points can be duplicated using the <code>copy</code> property
 to conveniently create multiple copies (like grids) of shapes.</p>
 <p>The shape is colored with either <code>color</code> or <code>texture</code>.</p>
+<p>When shapes move, or are touched, borders are needed to bound their
+movement, and figure out if a touch happened within the shape. Shapes
+that do not move, or are not interactive, do not need borders.</p>
 <p>A shape can have several kinds of borders. "Draw borders" (<code>drawBorder</code> and
 <code>drawBorderBuffer</code>) are sets of points that define reference
 borders for a shape. The shapes higher level borders <code>border</code> and
@@ -15569,21 +15592,21 @@ touch is disabled.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>drawBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          <span class='code bold'>drawBorder</span> <code class='quiet'>(<a href="#typeparsableborder">TypeParsableBorder</a>?)</code>
           : ,
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>(<a href="#typeparsableborder">TypeParsableBorder</a>?)</code>
           : ,
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>> | <code>"buffer"</code> | <code>"draw"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          <span class='code bold'>border</span> <code class='quiet'>((<a href="#typeparsableborder">TypeParsableBorder</a> | <code>"buffer"</code> | <code>"draw"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
           : border used for
 keeping shape within limits
 
@@ -15591,16 +15614,16 @@ keeping shape within limits
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>> | <code>"rect"</code> | <code>"border"</code> | <code>"buffer"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"draw"</code>)?)</code>
-          : border used for touching
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeparsableborder">TypeParsableBorder</a> | <code>"rect"</code> | <code>"border"</code> | <code>"buffer"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"draw"</code>)?)</code>
+          : border used for determining shape was touched
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | null)?)</code>
-          : borders where
-touching will not work
+          <span class='code bold'>holeBorder</span> <code class='quiet'>(<a href="#typeparsableborder">TypeParsableBorder</a>?)</code>
+          : areas where
+touching is disabled
 
           
         </div>
@@ -15984,15 +16007,31 @@ figure.add({
 <p>A polyline is a series of lines that are connected end to end. It is defined
 by a series of points which are the ends and corners of the polyline.</p>
 <p>The series of points is a zero width ideal polyline, and so to see it we must
-give it some width. This width can either be grown on one side of the
-ideal polyline or grown on both sides of it equally.</p>
-<p>Here we define a line's side as either the <em>positive</em> side, or <em>negative</em>
-side. If a line is defined from p1 to p2, then the <em>positive</em> side is the
+give it some <code>width</code>. This width can either be grown on one side of the
+ideal polyline or grown on both sides of it equally using <code>widthIs</code>.</p>
+<p>A polyline can have a "positive" or "negative" side, and an "inside" or "outside".</p>
+<p>If a line is defined from p1 to p2, then the <em>positive</em> side is the
 side where the line moves if it is rotated around p1 in the positive (counter
 clockwise) direction. Thus the order of the points that define the line
 defines which side is positive and negative. A polyline is made up of many
 lines end to end, and thus itself will have a positive and negative side
 dependent on the order of points.</p>
+<p>Similarly we can define a line's side as either <em>inside</em> or <em>outside</em>. Each
+corner in the polyline will have an angle on the negative side of the line
+and a explementary angle on the positive side of the line. The <em>inside</em> side
+of the line is the same as the <em>negative</em> side if the sum of all the negative
+side angles is smaller than the sum of all <em>positive</em> side angles.</p>
+<p>Both positive/negative and inside/outside are provided to define a line's
+side as different situations make different side definitions more intuitive.
+For instance, a closed, simple polygon has an obvious "inside" and "outside",
+but how the points are ordered would define if the "inside" is "positive" or
+"negative". In comparison, it would be more intuitive to use "positive" or
+"negative" for a polyline that has an overall trend in a single direction.</p>
+<p>Therefore, the polyline width can be grown on either the <code>'positive'</code>,
+<code>'negative'</code>, <code>'inside'</code>, or <code>'outside'</code> side of the line or around the
+middle of the line with <code>'mid'</code>. In addition, a <code>number</code> between 0 and 1 can
+be used where <code>0</code> is the same as <code>'positive'</code>, <code>1</code> the same as <code>'negative'</code>
+and <code>0.5</code> the same as <code>'mid'</code>.</p>
 <p>Each point, or line connection, creates a corner that will have an <em>inside</em>
 angle (&#x3C;180º) and an <em>outside</em> angle (>180º or reflex angle).</p>
 <p>Growing width on an outside corner can be challenging. As the corner becomes
@@ -16080,7 +16119,7 @@ Only
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>drawBorder</span> <code class='quiet'>((<code>"line"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>drawBorder</span> <code class='quiet'>((<code>"line"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
           : override OBJ_Generic 
 <code>drawBorder</code>
  with 
@@ -16100,7 +16139,7 @@ of the line. Use array definition for custom drawBorder (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
           : override OBJ_Generic 
 <code>drawBorderBuffer</code>
  with 
@@ -16980,7 +17019,7 @@ figure.add({
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
           : override the OBJ_Generic 
 <code>drawBorderBuffer</code>
  with 
@@ -17180,7 +17219,7 @@ figure.add({
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
           : override the OBJ_Generic 
 <code>drawBorderBuffer</code>
  with 
@@ -17401,7 +17440,7 @@ vertices on each draw. (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
           : override the OBJ_Generic 
 <code>drawBorderBuffer</code>
  with 
@@ -17594,7 +17633,7 @@ during vertex definition (different to a translation step in a transform)
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
           : override the OBJ_Generic 
 <code>drawBorderBuffer</code>
  with 
@@ -17969,7 +18008,7 @@ translation of
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          <span class='code bold'>border</span> <code class='quiet'>((<a href="#typeparsableborder">TypeParsableBorder</a> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
           : defines border of collection. Use 
 <code>'children'</code>
  for the borders of the
@@ -17987,7 +18026,7 @@ for the bounding rectangle with some buffer. Use
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeparsableborder">TypeParsableBorder</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code>)?)</code>
           : defines the touch border of the collection. Use 
 <code>'border'</code>
  to use the same
@@ -18008,7 +18047,7 @@ border (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>> | <code>"children"</code>)?)</code>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>((<a href="#typeparsableborder">TypeParsableBorder</a> | <code>"children"</code>)?)</code>
           : Hole
 border of the collection. Use 
 <code>'children'</code>
@@ -23016,7 +23055,7 @@ in transform
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
           : border can be custom (
 <code>Array&#x3C;TypeParsablePoint></code>
 ), set to 
@@ -23033,7 +23072,7 @@ or set to
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
           : touch border can be custom (
 <code>Array&#x3C;TypeParsablePoint></code>
 ), set to 
@@ -23228,7 +23267,7 @@ in transform
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
           : border can be custom (
 <code>Array&#x3C;TypeParsablePoint></code>
 ), set to 
@@ -23245,7 +23284,7 @@ or set to
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
           : touch border can be custom (
 <code>Array&#x3C;TypeParsablePoint></code>
 ), set to 
@@ -23464,7 +23503,7 @@ in transform
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>border</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
           : border can be custom (
 <code>Array&#x3C;TypeParsablePoint></code>
 ), set to 
@@ -23481,7 +23520,7 @@ or set to
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
           : touch border can be custom (
 <code>Array&#x3C;TypeParsablePoint></code>
 ), set to 
@@ -42828,6 +42867,10 @@ figure.add({
 <p>Use array of numbers for a dashed line where indexes 0, 2, 4... are line
 lengths and indexes 1, 3, 5... are gap lengths. If line is longer than
 cumulative length of line and gap lengths, then pattern will repeat.</p>
+<p>If array length is odd, then the first element will be the offset of the
+dash pattern - the length where the dash pattern starts. In this case index
+0 is the offset, indexes 1, 3, 5... are the dash lengths and indexes 2, 4,
+6... are the gap lengths.</p>
 <p>For example [0.1, 0.01, 0.02, 0.01] produces 0.1 length dash, then a 0.01
 length gap, then a 0.02 length dash, then a 0.01 length gap. This pattern
 will repeat for the length of the line.</p>
@@ -48074,19 +48117,19 @@ translation of
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          <span class='code bold'>border</span> <code class='quiet'>((<a href="#typeborder">TypeBorder</a> | <code>"children"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeborder">TypeBorder</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code>)?)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>holeBorder</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>>?)</code>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>(<a href="#typeborder">TypeBorder</a>?)</code>
           
           
         </div>
@@ -55006,6 +55049,118 @@ e.animations.new()
   .goToForm({ <span class="hljs-attr">target</span>: <span class="hljs-string">'2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
   .start();</pre>
     
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeparsableborder'>
+      TypeParsableBorder
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A border is an array of points defining a contigous, closed border.</p>
+<p><code>Array&#x3C;TypeParsablePoint> | Array&#x3C;Array&#x3C;TypeParsablePoint>></code></p>
+<p>If a border is not contigous, but rather is several "islands" of contigous,
+closed borders, then an array of point arrays can be used, where each point
+array is one island.</p>
+
+  
+    <p style="display: none;">      Type:
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeborder'>
+      TypeBorder
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A border is an array of point arrays. Each point array is a contigous, closed
+border. Several pointa arrays represent a border that is several separate
+borders.</p>
+
+  
+    <p style="display: none;">      Type:
+      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#point">Point</a>>>
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
   
 
   

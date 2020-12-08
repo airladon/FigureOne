@@ -1240,12 +1240,12 @@ function getPolygonLength(o: {
   }
   if (o.align === 'mid') {
     if (o.tail === false) {
-      return [0, 0, o.radius * 2 + t];
+      return [o.radius, o.radius, o.radius * 2 + t];
     }
     return [o.radius, o.radius, o.radius * 2 + t];
   }
   if (typeof o.tail === 'boolean') {
-    return [o.radius, o.radius, o.radius];
+    return [o.radius * 2, o.radius * 2, o.radius * 2];
   }
   const l = o.radius * 2 + t;
   return [l, l, l];
@@ -1309,12 +1309,15 @@ function getPolygonArrow(options: {
   let t = 0;
   let tailJoin;
   if (tail === false) {
-    tailJoin = [new Point(-radius, tailWidth / 2), new Point(-radius, -tailWidth / 2)];
+    tailJoin = [new Point(-radius * 2, tailWidth / 2), new Point(-radius * 2, -tailWidth / 2)];
   } else {
     if (typeof tail === 'number') {
       t = Math.max(tail, 0);
     }
-    tailJoin = [new Point(-radius - t, tailWidth / 2), new Point(-radius - t, -tailWidth / 2)];
+    tailJoin = [
+      new Point(-radius * 2 - t, tailWidth / 2),
+      new Point(-radius * 2 - t, -tailWidth / 2),
+    ];
   }
   let touchBorder = outline;
   if (drawBorderBuffer > 0) {
@@ -1330,6 +1333,7 @@ function getPolygonTris(b: Array<Point>) {
     points.push(b[i - 1]);
     points.push(b[i]);
   }
+  // console.log(points)
   // points.push(new Point(-radius, 0));
   // points.push(b[b.length - 1]);
   // points.push(b[0]);
@@ -1525,6 +1529,7 @@ function simplifyArrowOptions(
     end: OBJ_Arrow | TypeArrowHead,
   } & OBJ_Arrow,
   tailWidth: number | null,
+  includeTailByDefault: boolean = false, 
 ) {
   if (arrowIn == null) {
     return undefined;
@@ -1558,12 +1563,16 @@ function simplifyArrowOptions(
       arrow[startOrEnd] != null
       || (arrow.start == null && arrow.end == null)
     ) {
-      let defaultTailWidth = {};
+      const defaults = {};
+      // let defaultTailWidth = {};
       if (tailWidth != null) {
-        defaultTailWidth = { tailWidth };
+        defaults.tailWidth = tailWidth;
+      }
+      if (includeTailByDefault) {
+        defaults.tail = true;
       }
       const o = joinObjectsWithOptions(
-        { except: ['end', 'start'] }, defaultTailWidth, arrow[startOrEnd],
+        { except: ['end', 'start'] }, defaults, arrow[startOrEnd],
       );
       out[startOrEnd] = joinObjects(
         defaultArrowOptions(o),
