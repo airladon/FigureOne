@@ -11,6 +11,11 @@
  * lengths and indexes 1, 3, 5... are gap lengths. If line is longer than
  * cumulative length of line and gap lengths, then pattern will repeat.
  *
+ * If array length is odd, then the first element will be the offset of the
+ * dash pattern - the length where the dash pattern starts. In this case index
+ * 0 is the offset, indexes 1, 3, 5... are the dash lengths and indexes 2, 4,
+ * 6... are the gap lengths.
+ *
  * For example [0.1, 0.01, 0.02, 0.01] produces 0.1 length dash, then a 0.01
  * length gap, then a 0.02 length dash, then a 0.01 length gap. This pattern
  * will repeat for the length of the line.

@@ -105,11 +105,17 @@ function lineToDash(
   points: Array<Point>,
   dash: TypeDash,
   close: boolean = false,
-  offset: number = 0,
+  // offset: number = 0,
   precision: number = 8,
 ) {
+  let dashToUse = dash;
+  let offset = 0;
+  if (dash.length % 2 === 1) {
+    dashToUse = dash.slice(1);
+    [offset] = dash;
+  }
   let out = [];
-  const dd = makeDashDefinition(dash);
+  const dd = makeDashDefinition(dashToUse);
   let cumLength = offset;
   let lastContinue = false;
   let onLine = true;

@@ -450,16 +450,36 @@ export type OBJ_Generic = {
  * by a series of points which are the ends and corners of the polyline.
  *
  * The series of points is a zero width ideal polyline, and so to see it we must
- * give it some width. This width can either be grown on one side of the
- * ideal polyline or grown on both sides of it equally.
+ * give it some `width`. This width can either be grown on one side of the
+ * ideal polyline or grown on both sides of it equally using `widthIs`.
  *
- * Here we define a line's side as either the *positive* side, or *negative*
- * side. If a line is defined from p1 to p2, then the *positive* side is the
+ * A polyline can have a "positive" or "negative" side, and an "inside" or "outside".
+ *
+ * If a line is defined from p1 to p2, then the *positive* side is the
  * side where the line moves if it is rotated around p1 in the positive (counter
  * clockwise) direction. Thus the order of the points that define the line
  * defines which side is positive and negative. A polyline is made up of many
  * lines end to end, and thus itself will have a positive and negative side
  * dependent on the order of points.
+ *
+ * Similarly we can define a line's side as either *inside* or *outside*. Each
+ * corner in the polyline will have an angle on the negative side of the line
+ * and a explementary angle on the positive side of the line. The *inside* side
+ * of the line is the same as the *negative* side if the sum of all the negative
+ * side angles is smaller than the sum of all *positive* side angles.
+ *
+ * Both positive/negative and inside/outside are provided to define a line's
+ * side as different situations make different side definitions more intuitive.
+ * For instance, a closed, simple polygon has an obvious "inside" and "outside",
+ * but how the points are ordered would define if the "inside" is "positive" or
+ * "negative". In comparison, it would be more intuitive to use "positive" or
+ * "negative" for a polyline that has an overall trend in a single direction.
+ *
+ * Therefore, the polyline width can be grown on either the `'positive'`,
+ * `'negative'`, `'inside'`, or `'outside'` side of the line or around the
+ * middle of the line with `'mid'`. In addition, a `number` between 0 and 1 can
+ * be used where `0` is the same as `'positive'`, `1` the same as `'negative'`
+ * and `0.5` the same as `'mid'`.
  *
  * Each point, or line connection, creates a corner that will have an *inside*
  * angle (<180º) and an *outside* angle (>180º or reflex angle).
@@ -597,7 +617,7 @@ export type OBJ_Polyline = {
   points?: Array<TypeParsablePoint> | Array<Point>,
   width?: number,
   close?: boolean,
-  widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
+  widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,
   drawBorder?: 'line' | 'positive' | 'negative' | TypeParsableBorder,
   drawBorderBuffer?: number | TypeParsableBorder,
   cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',

@@ -2,46 +2,46 @@
 const { Figure, tools } = Fig;
 
 const figure = new Figure({
-  limits: [-4.5, -4.5, 9, 9],
+  limits: [-4.5, -13.5 / 2, 9, 13.5],
   color: [1, 0, 0, 1],
   lineWidth: 0.01,
   font: { size: 0.1 },
 });
 
-// figure.add([
-//   {
-//     name: 'origin',
-//     method: 'polygon',
-//     options: {
-//       radius: 0.01,
-//       line: { width: 0.01 },
-//       sides: 10,
-//       color: [0.7, 0.7, 0.7, 1],
-//     },
-//   },
-//   {
-//     name: 'grid',
-//     method: 'grid',
-//     options: {
-//       bounds: [-4.5, -4.5, 9, 9],
-//       yStep: 0.1,
-//       xStep: 0.1,
-//       color: [0.9, 0.9, 0.9, 1],
-//       line: { width: 0.004 },
-//     },
-//   },
-//   {
-//     name: 'gridMajor',
-//     method: 'grid',
-//     options: {
-//       bounds: [-4.5, -4.5, 9, 9],
-//       yStep: 0.5,
-//       xStep: 0.5,
-//       color: [0.7, 0.7, 0.7, 1],
-//       line: { width: 0.004 },
-//     },
-//   },
-// ]);
+figure.add([
+  {
+    name: 'origin',
+    method: 'polygon',
+    options: {
+      radius: 0.01,
+      line: { width: 0.01 },
+      sides: 10,
+      color: [0.7, 0.7, 0.7, 1],
+    },
+  },
+  {
+    name: 'grid',
+    method: 'grid',
+    options: {
+      bounds: [-4.5, -13.5 / 2, 9, 13.5],
+      yStep: 0.1,
+      xStep: 0.1,
+      color: [0.9, 0.9, 0.9, 1],
+      line: { width: 0.004 },
+    },
+  },
+  {
+    name: 'gridMajor',
+    method: 'grid',
+    options: {
+      bounds: [-4.5, -13.5 / 2, 9, 13.5],
+      yStep: 0.5,
+      xStep: 0.5,
+      color: [0.7, 0.7, 0.7, 1],
+      line: { width: 0.004 },
+    },
+  },
+]);
 
 
 // ***************************************************
@@ -165,6 +165,59 @@ const arrows = [
 
   // Dash
   makePolyline({ dash: [0.05, 0.02] }),
+  makePolyline({ dash: [0.05, 0.02], close: true }),
+  makePolyline({
+    points: [[0, 0], [0.5, 0]],
+    dash: [0.05, 0.05],
+  }),
+  makePolyline({
+    points: [[0, 0], [0.5, 0]],
+    dash: [0.025, 0.05, 0.05],
+  }),
+
+  // WidthIs
+  makePolyline({ widthIs: 'mid' }),
+  makePolyline({ widthIs: 'positive' }),
+  makePolyline({ widthIs: 'negative' }),
+  makePolyline({ widthIs: 'mid', close: true }),
+  makePolyline({ widthIs: 'positive', close: true }),
+  makePolyline({ widthIs: 'negative', close: true }),
+  makePolyline({ widthIs: 0.3 }),
+  makePolyline({ widthIs: 0.3, close: true }),
+  makePolyline({ points: [[0, 0], [0.5, 0], [0, 0.5]], widthIs: 'inside' }),
+  makePolyline({ points: [[0, 0.5], [0.5, 0], [0, 0]], widthIs: 'inside' }),
+  makePolyline({
+    points: [[0, 0], [0.5, 0], [0, 0.5]],
+    widthIs: 'inside',
+    close: true,
+  }),
+  makePolyline({
+    points: [[0, 0.5], [0.5, 0], [0, 0]],
+    widthIs: 'inside',
+    close: true,
+  }),
+
+  makePolyline({ points: [[0, 0], [0.5, 0], [0, 0.5]], widthIs: 'outside' }),
+  makePolyline({ points: [[0, 0.5], [0.5, 0], [0, 0]], widthIs: 'outside' }),
+  makePolyline({
+    points: [[0, 0], [0.5, 0], [0, 0.5]],
+    widthIs: 'outside',
+    close: true,
+  }),
+  makePolyline({
+    points: [[0, 0.5], [0.5, 0], [0, 0]],
+    widthIs: 'outside',
+    close: true,
+  }),
+
+  // Arrow
+  makePolyline({ width: 0.025, arrow: 'triangle' }),
+  makePolyline({ width: 0.025, arrow: 'barb' }),
+  makePolyline({ width: 0.025, arrow: 'reverseTriangle' }),
+  makePolyline({ width: 0.025, arrow: 'polygon' }),
+  makePolyline({ width: 0.025, arrow: 'circle' }),
+  makePolyline({ width: 0.025, arrow: 'bar' }),
+  makePolyline({ width: 0.025, arrow: 'line' }),
 
   // makePolyline({ drawBorder: 'negative' }),
   // makePolyline({ drawBorder: 'positive' }),

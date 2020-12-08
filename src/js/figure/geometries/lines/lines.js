@@ -487,7 +487,8 @@ function getWidthIs(
 function makeThickLine(
   points: Array<Point>,
   width: number = 0.01,
-  widthIsIn: 'mid' | 'negative' | 'positive' | 'outside' | 'inside' | number,
+  widthIsIn: 'mid' | 'negative' | 'positive' | number,
+  widthIsInside: boolean,
   close: boolean = false,
   corner: 'auto' | 'fill' | 'none',
   minAngleIn: ?number = Math.PI / 7,
@@ -500,10 +501,11 @@ function makeThickLine(
   // if (widthIsIn === 'mid') {
   //   widthToUse = width / 2;
   // }
-  let widthIs = getWidthIs(points, close, widthIsIn);
+  // let widthIs = getWidthIs(points, close, widthIsIn);
   const [idealLines, lineSegments, segmentSides] = makeLineSegments(
-    points, widthToUse, close, corner, widthIs, widthIsIn === 'inside', lineNum,
+    points, widthToUse, close, corner, widthIsIn, widthIsInside, lineNum,
   );
+  let widthIs = widthIsIn;
   if (typeof widthIs === 'number') {
     widthIs = 'mid';
   }
@@ -821,7 +823,7 @@ function makePolyLine(
   pointsIn: Array<Point>,
   width: number = 0.01,
   close: boolean = false,
-  widthIs: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number = 'mid',
+  widthIsIn: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number = 'mid',
   cornerStyle: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize: number = 0.1,
   cornerSides: number = 10,
@@ -860,11 +862,12 @@ function makePolyLine(
     points = orderedPoints.map(p => p._dup());
   }
 
+  const widthIs = getWidthIs(points, close, widthIsIn);
   // Convert line to dashed line
   let dashedTris = [];
   let onLine = true;
   if (dash.length > 1) {
-    const [dashes, onDash] = lineToDash(points, dash, close, 0, precision);
+    const [dashes, onDash] = lineToDash(points, dash, close, precision);
     onLine = onDash;
     let closeDashes = false;
     if (dashes.length === 1) {
@@ -872,7 +875,7 @@ function makePolyLine(
     }
     dashes.forEach((d) => {
       const [tris] = makeThickLine(
-        d, width, widthIs, closeDashes, cornerStyleToUse, minAutoCornerAngle,
+        d, width, widthIs, widthIsIn === 'inside', closeDashes, cornerStyleToUse, minAutoCornerAngle,
         linePrimitives, lineNum, borderIs, holeIs,
       );
       dashedTris = [...dashedTris, ...tris];
@@ -881,7 +884,7 @@ function makePolyLine(
 
   // Get tris and border of solid line
   const [tris, border, hole] = makeThickLine(
-    points, width, widthIs, close, cornerStyleToUse, minAutoCornerAngle,
+    points, width, widthIs, widthIsIn === 'inside', close, cornerStyleToUse, minAutoCornerAngle,
     linePrimitives, lineNum, borderIs, holeIs,
   );
 
@@ -895,10 +898,10 @@ function makePolyLine(
     // touchBorder = getBufferBorder(border[0], touchBorderBuffer);
     let widthIsBuffer = 0.5;
     const widthBuffer = width + touchBorderBuffer * 2;
-    if (widthIs === 'positive' || widthIs === 'inside') {
-      widthIsBuffer = (touchBorderBuffer + width) / widthBuffer;
-    } else if (widthIs === 'negative' || widthIs === 'outside') {
+    if (widthIs === 'positive') {
       widthIsBuffer = touchBorderBuffer / widthBuffer;
+    } else if (widthIs === 'negative') {
+      widthIsBuffer = (touchBorderBuffer + width) / widthBuffer;
     } else if (widthIs === 'mid') {
       widthIsBuffer = 0.5;
     } else {
@@ -917,7 +920,7 @@ function makePolyLine(
       borderIsToUse = 'line';
     }
     [, touchBorder] = makeThickLine(
-      pointsToUse, widthBuffer, widthIsBuffer, close, cornerStyleToUse, minAutoCornerAngle,
+      pointsToUse, widthBuffer, widthIsBuffer, widthIsIn === 'inside', close, cornerStyleToUse, minAutoCornerAngle,
       linePrimitives, lineNum, borderIsToUse, holeIs,
     );
     // if (close === false) {
