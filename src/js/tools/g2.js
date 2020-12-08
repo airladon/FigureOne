@@ -5889,7 +5889,26 @@ function isParsablePoint(value: any) {
   return false;
 }
 
-function parseBorder(
+
+/**
+ * A border is an array of points defining a contigous, closed border.
+ *
+ * `Array<TypeParsablePoint> | Array<Array<TypeParsablePoint>>`
+ *
+ * If a border is not contigous, but rather is several "islands" of contigous,
+ * closed borders, then an array of point arrays can be used, where each point
+ * array is one island.
+ */
+export type TypeParsableBorder = Array<TypeParsablePoint> | Array<Array<TypeParsablePoint>>;
+
+/**
+ * A border is an array of point arrays. Each point array is a contigous, closed
+ * border. Several pointa arrays represent a border that is several separate
+ * borders.
+ */
+export type TypeBorder = Array<Array<Point>>;
+
+function getBorder(
   border: Array<TypeParsablePoint> | Array<Array<TypeParsablePoint>>
           | string | number,
 ) {
@@ -5902,7 +5921,7 @@ function parseBorder(
   return border.map(b => b.map(p => getPoint(p)));
 }
 
-// function parseBorder(borders: Array<Array<TypeParsablePoint>>) {
+// function getBorder(borders: Array<Array<TypeParsablePoint>>) {
 //   if (!Array.isArray(borders)) {
 //     return borders;
 //   }
@@ -5966,6 +5985,6 @@ export {
   Bounds,
   getTriangleCenter,
   getBoundingBorder,
-  parseBorder,
+  getBorder,
   comparePoints,
 };

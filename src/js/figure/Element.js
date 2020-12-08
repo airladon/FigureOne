@@ -12,6 +12,7 @@ import { getState } from './Recorder/state';
 import type {
   TypeParsablePoint, TypeParsableTransform,
   TypeTransformValue, TypeTransformBoundsDefinition,
+  TypeBorder,
 } from '../tools/g2';
 import { Recorder } from './Recorder/Recorder';
 import * as m2 from '../tools/m2';
@@ -2906,12 +2907,13 @@ class FigureElement {
     return getPoint(point).transformBy(this.spaceTransformMatrix(fromSpace, toSpace));
   }
 
-  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  /* eslint-disable class-methods-use-this, no-unused-vars */
   getBorderPoints(
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
-  ): Array<Array<Point>> {
+  ): TypeBorder {
     return [[]];
   }
+  /* eslint-enable class-methods-use-this, no-unused-vars */
 
   // A DrawingObject has borders, touchBorders and and holeBorders
   //
@@ -3542,11 +3544,11 @@ class FigureElementPrimitive extends FigureElement {
   cannotTouchHole: boolean;
   pointsDefinition: Object;
   setPointsFromDefinition: ?(() => void);
-  border: Array<Array<Point>> | 'draw' | 'buffer' | 'rect' | number;
-  touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'draw' | 'buffer';
-  holeBorder: Array<Array<Point>>;
-  drawBorder: Array<Array<Point>>;
-  drawBorderBuffer: Array<Array<Point>>;
+  border: TypeBorder | 'draw' | 'buffer' | 'rect' | number;
+  touchBorder: TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer';
+  holeBorder: TypeBorder;
+  drawBorder: TypeBorder;
+  drawBorderBuffer: TypeBorder;
   // +pulse: (?(mixed) => void) => void;
 
   /**
@@ -3815,7 +3817,7 @@ class FigureElementPrimitive extends FigureElement {
 
   getBorderPoints(
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
-  ): Array<Array<Point>> {
+  ): TypeBorder {
     if (border === 'border') {
       if (this.border === 'draw') {
         return this.drawBorder;
@@ -4022,9 +4024,9 @@ class FigureElementPrimitive extends FigureElement {
  * @property {Rect} [limits] figure limits
  * @property {TypeColor} [color] default color
  * @property {FigureElement | null} [parent] parent of collection
- * @property {Array<Array<Point>> | 'children' | 'rect' | number} [border]
- * @property {Array<Array<Point>> | 'border' | number | 'rect'} [touchBorder]
- * @property {Array<Array<Point>>} [holeBorder]
+ * @property {TypeBorder | 'children' | 'rect' | number} [border]
+ * @property {TypeBorder | 'border' | number | 'rect'} [touchBorder]
+ * @property {TypeBorder} [holeBorder]
  */
 export type OBJ_FigureElementCollection = {
   transform?: TypeParsableTransform,
@@ -4032,9 +4034,9 @@ export type OBJ_FigureElementCollection = {
   limits?: Rect,
   color?: TypeColor,
   parent?: FigureElement | null,
-  border?: Array<Array<Point>> | 'children' | 'rect' | number,
-  touchBorder?: Array<Array<Point>> | 'border' | number | 'rect',
-  holeBorder?: Array<Array<Point>>,
+  border?: TypeBorder | 'children' | 'rect' | number,
+  touchBorder?: TypeBorder | 'border' | number | 'rect',
+  holeBorder?: TypeBorder,
 };
 
 /**
@@ -4052,15 +4054,11 @@ class FigureElementCollection extends FigureElement {
   elements: Object;
   drawOrder: Array<string>;
   // touchInBoundingRect: boolean;
+  border: TypeBorder | 'children' | 'rect' | number;
   // $FlowFixMe
-  border: Array<Array<Point>> | 'children' | 'rect' | number;
+  touchBorder: TypeBorder | 'border' | 'children' | 'rect' | number;
   // $FlowFixMe
-  touchBorder: Array<Array<Point>> | 'border' | 'children' | 'rect' | number;
-  // $FlowFixMe
-  holeBorder: Array<Array<Point>> | 'children';
-  // border: Array<Array<Point>> | 'draw' | 'rect' | 'buffer' | number;
-  // touchBorder: Array<Array<Point>> | 'border' | number | 'rect' | 'draw' | 'buffer';
-  // holeBorder: Array<Array<Point>>;
+  holeBorder: TypeBorder | 'children';
   eqns: Object;
   // +pulse: (?({
   //     x?: 'left' | 'center' | 'right' | 'origin' | number,
@@ -5007,7 +5005,7 @@ class FigureElementCollection extends FigureElement {
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
     children: Array<string | FigureElement> | null = null,
     shownOnly: boolean = true,
-  ): Array<Array<Point>> {
+  ): TypeBorder {
     const getBorderFromChildren = (b) => {
       const childrenBorder = [];
       let childrenToUse = children;
@@ -5073,8 +5071,6 @@ class FigureElementCollection extends FigureElement {
     if (shownOnly && this.isShown === false) {
       return [[]];
     }
-    // const bordersToUse: Array<Array<Point>> = [[]];
-    // const transformedBorders = [];
     let matrix;
     if (Array.isArray(space)) {
       matrix = m2.mul(space, this.getTransform().matrix());

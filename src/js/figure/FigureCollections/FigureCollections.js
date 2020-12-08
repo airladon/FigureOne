@@ -1,7 +1,7 @@
 // @flow
 import WebGLInstance from '../webgl/webgl';
 import {
-  Rect, parseBorder, Transform, Point,
+  Rect, getBorder, Transform, Point,
 } from '../../tools/g2';
 
 import { joinObjects } from '../../tools/tools';
@@ -98,13 +98,13 @@ export default class FigureCollections {
       optionsToUse = joinObjects({}, defaultOptions, transformOrPointOrOptions, ...moreOptions);
     }
     if (optionsToUse.border != null) {
-      optionsToUse.border = parseBorder(optionsToUse.border);
+      optionsToUse.border = getBorder(optionsToUse.border);
     }
     if (optionsToUse.touchBorder != null) {
-      optionsToUse.touchBorder = parseBorder(optionsToUse.touchBorder);
+      optionsToUse.touchBorder = getBorder(optionsToUse.touchBorder);
     }
     if (optionsToUse.holeBorder != null) {
-      optionsToUse.holeBorder = parseBorder(optionsToUse.holeBorder);
+      optionsToUse.holeBorder = getBorder(optionsToUse.holeBorder);
     }
     // console.log(optionsToUse.transform, transformOrPointOrOptions)
     const element = new FigureElementCollection(optionsToUse);

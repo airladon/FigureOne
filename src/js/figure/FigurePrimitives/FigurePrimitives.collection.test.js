@@ -1,5 +1,5 @@
 import {
-  Point, getPoint, parseBorder,
+  Point, getPoint, getBorder,
 } from '../../tools/g2';
 import {
   round,
@@ -19,7 +19,7 @@ describe('Figure Primitives - Grid', () => {
   beforeEach(() => {
     figure = makeFigure();
     const customBorder = [[0, 0], [2, 1], [1, 2], [0, 1]];
-    custom = parseBorder(customBorder);
+    custom = getBorder(customBorder);
     const options = {
       default: {},  // border = touchBorder = 'children'
       position: {

@@ -1,13 +1,13 @@
 // @flow
 import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
-  parseBorder, getPoints, getBoundingRect, Line, threePointAngle,
+  getBorder, getPoints, getBoundingRect, Line, threePointAngle,
 } from '../../tools/g2';
 // import {
 //   round
 // } from '../../tools/math';
 import type {
-  TypeParsablePoint, TypeParsableRect, TypeParsableTransform,
+  TypeParsablePoint, TypeParsableRect, TypeParsableTransform, TypeParsableBorder,
 } from '../../tools/g2';
 import { setHTML } from '../../tools/htmlGenerator';
 import {
@@ -105,18 +105,18 @@ type OBJ_LineStyleSimple_Defined = {
  * translation of `transform`
  * @property {TypeColor} [color] default color
  * @property {FigureElement | null} [parent] parent of collection
- * @property {Array<Array<TypeParsablePoint>> | 'children' | 'rect' | number} [border]
+ * @property {TypeParsableBorder | 'children' | 'rect' | number} [border]
  * defines border of collection. Use `'children'` for the borders of the
  * children. Use 'rect' for bounding rectangle of children. Use `number`
  * for the bounding rectangle with some buffer. Use
  * `Array<Array<TypeParsablePoint>` for a custom border. (`'children'`)
- * @property {Array<Array<TypeParsablePoint>> | 'border' | number | 'rect'} [touchBorder]
+ * @property {TypeParsableBorder | 'border' | number | 'rect'} [touchBorder]
  * defines the touch border of the collection. Use `'border'` to use the same
  * as the border of the collection. Use `'rect'` for the bounding rectangle
  * of the border. Use `number` for the bounding rectangle of the border plus
  * some buffer. Use `Array<Array<TypeParsablePoint>` for a custom touch
  * border (`'border'`).
- * @property {Array<Array<TypeParsablePoint>> | 'children'} [holeBorder] Hole
+ * @property {TypeParsableBorder | 'children'} [holeBorder] Hole
  * border of the collection. Use `'children'` to use the children element hole
  * borders, otherwise use `Array<Array<TypeParsablePoint>` for a customizable
  * border.
@@ -184,9 +184,9 @@ export type OBJ_Collection = {
   limits?: Rect,
   color?: TypeColor,
   parent?: FigureElement | null,
-  border?: Array<Array<TypeParsablePoint>> | 'children' | 'rect' | number,
-  touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | number | 'rect',
-  holeBorder?: Array<Array<TypeParsablePoint>> | 'children',
+  border?: TypeParsableBorder | 'children' | 'rect' | number,
+  touchBorder?: TypeParsableBorder | 'border' | number | 'rect',
+  holeBorder?: TypeParsableBorder | 'children',
 };
 
 /**
@@ -302,6 +302,10 @@ export type OBJ_PulseScale = {
  *
  * The shape is colored with either `color` or `texture`.
  *
+ * When shapes move, or are touched, borders are needed to bound their
+ * movement, and figure out if a touch happened within the shape. Shapes
+ * that do not move, or are not interactive, do not need borders.
+ *
  * A shape can have several kinds of borders. "Draw borders" (`drawBorder` and
  * `drawBorderBuffer`) are sets of points that define reference
  * borders for a shape. The shapes higher level borders `border` and
@@ -341,7 +345,7 @@ export type OBJ_PulseScale = {
  *    portions
  *
  * A `holeBorder` can be used to override the `touchBorder` with areas where
- * touch is disabled. 
+ * touch is disabled.
  *
  * @property {Array<TypeParsablePoint>} points
  * @property {'triangles' | 'strip' | 'fan' | 'lines'} [drawType]
@@ -350,14 +354,14 @@ export type OBJ_PulseScale = {
  * `'triangles'` when using copy (`[]`)
  * @property {TypeColor} [color] (`[1, 0, 0, 1])
  * @property {OBJ_Texture} [texture] override `color` with a texture if defined
- * @property {Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint>} [drawBorder],
- * @property {Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint>} [drawBorderBuffer],
- * @property {Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'buffer' | 'draw' | 'rect' | number} [border]
+ * @property {TypeParsableBorder} [drawBorder],
+ * @property {TypeParsableBorder} [drawBorderBuffer],
+ * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
  * border used for
  * keeping shape within limits
- * @property {Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
+ * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
  * border used for determining shape was touched
- * @property {Array<Array<TypeParsablePoint>> | null} [holeBorder] areas where
+ * @property {TypeParsableBorder} [holeBorder] areas where
  * touching is disabled
  * @property {TypeParsablePoint} [position] will overwrite first translation
  * transform of `transform` chain
@@ -426,11 +430,11 @@ export type OBJ_Generic = {
   copy?: Array<CPY_Step | string> | CPY_Step,
   color?: TypeColor,
   texture?: OBJ_Texture,
-  drawBorder?: Array<Array<TypeParsablePoint>>,
-  drawBorderBuffer?: Array<Array<TypeParsablePoint>>,
-  border?: Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'buffer' | 'draw' | 'rect' | number,
-  touchBorder?: Array<Array<TypeParsablePoint>> | Array<TypeParsablePoint> | 'rect' | 'border' | 'buffer' | number | 'draw',
-  holeBorder?: Array<Array<TypeParsablePoint>>,
+  drawBorder?: TypeParsableBorder,
+  drawBorderBuffer?: TypeParsableBorder,
+  border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
+  touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
+  holeBorder?: TypeParsableBorder,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
   pulse?: number,
@@ -485,12 +489,12 @@ export type OBJ_Generic = {
  * defines how the width is grown from the polyline's points.
  * Only `"mid"` is fully compatible with all options in
  * `cornerStyle` and `dash`. (`"mid"`)
- * @property {'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>} [drawBorder]
+ * @property {'line' | 'positive' | 'negative' | TypeParsableBorder} [drawBorder]
  * override OBJ_Generic `drawBorder` with `'line'` to make the drawBorder just
  * the line itself, `'positive'` to make the drawBorder the positive side
  * of the line, and `'negative'` to make the drawBorder the negative side
  * of the line. Use array definition for custom drawBorder (`'line'`)
- * @property {number | Array<Array<TypeParsablePoint>>} [drawBorderBuffer]
+ * @property {number | TypeParsableBorder} [drawBorderBuffer]
  * override OBJ_Generic `drawBorderBuffer` with `number` to make the
  * drawBorderBuffer the same as the line with additional `number` thickness
  * on either side (`0`)
@@ -594,8 +598,8 @@ export type OBJ_Polyline = {
   width?: number,
   close?: boolean,
   widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative',
-  drawBorder?: 'line' | 'positive' | 'negative' | Array<Array<TypeParsablePoint>>,
-  drawBorderBuffer?: number | Array<Array<TypeParsablePoint>>,
+  drawBorder?: 'line' | 'positive' | 'negative' | TypeParsableBorder,
+  drawBorderBuffer?: number | TypeParsableBorder,
   cornerStyle?: 'auto' | 'none' | 'radius' | 'fill',
   cornerSize?: number,
   cornerSides?: number,
@@ -675,7 +679,7 @@ export type OBJ_LineStyle = {
  * center. This is different to position or transform as these translate the
  * vertices on each draw. (`[0, 0]`)
  * @property {OBJ_LineStyleSimple} [line] line style options
- * @property {number | Array<Array<TypeParsablePoint>>} [drawBorderBuffer]
+ * @property {number | TypeParsableBorder} [drawBorderBuffer]
  * override the OBJ_Generic `drawBorderBuffer` with `number` to make the
  * drawBorderBuffer a polygon that is wider by `number` (`0`)
  *
@@ -733,7 +737,7 @@ export type OBJ_Polygon = {
   angleToDraw?: number,
   direction?: -1 | 1,
   line?: OBJ_LineStyleSimple,
-  drawBorderBuffer?: number | Array<Array<TypeParsablePoint>>,
+  drawBorderBuffer?: number | TypeParsableBorder,
 } & OBJ_Generic;
 
 type OBJ_Polygon_Defined = {
@@ -746,7 +750,7 @@ type OBJ_Polygon_Defined = {
   direction: -1 | 1,
   line?: OBJ_LineStyleSimple,
   innerRadius?: number,
-  drawBorderBuffer: number | Array<Array<TypeParsablePoint>>,
+  drawBorderBuffer: number | TypeParsableBorder,
 } & OBJ_Generic;
 
 /**
@@ -764,7 +768,7 @@ type OBJ_Polygon_Defined = {
  * during vertex definition (different to a translation step in a transform)
  * (`[0, 0]`)
  * @property {OBJ_LineStyleSimple} [line] line style options
- * @property {number | Array<Array<TypeParsablePoint>>} [drawBorderBuffer]
+ * @property {number | TypeParsableBorder} [drawBorderBuffer]
  * override the OBJ_Generic `drawBorderBuffer` with `number` to make the
  * drawBorderBuffer a polygon that is `number` thicker than the radius (`0`)
  *
@@ -837,7 +841,7 @@ export type OBJ_Star = {
   rotation?: number,
   offset?: TypeParsablePoint,
   line?: OBJ_LineStyleSimple,
-  drawBorderBuffer?: Array<Array<TypeParsablePoint>> | number,
+  drawBorderBuffer?: TypeParsableBorder | number,
 } & OBJ_Generic;
 
 type OBJ_Star_Defined = {
@@ -847,7 +851,7 @@ type OBJ_Star_Defined = {
   rotation: number,
   offset: Point,
   line?: OBJ_LineStyleSimple,
-  drawBorderBuffer: Array<Array<TypeParsablePoint>> | number,
+  drawBorderBuffer: TypeParsableBorder | number,
 } & OBJ_Generic;
 
 /**
@@ -862,7 +866,7 @@ type OBJ_Star_Defined = {
  * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
  * @property {OBJ_CurvedCorner} [corner] define for rounded corners
  * @property {OBJ_LineStyleSimple} [line] line style options
- * @property {number | Array<Array<TypeParsablePoint>>} [drawBorderBuffer]
+ * @property {number | TypeParsableBorder} [drawBorderBuffer]
  * override the OBJ_Generic `drawBorderBuffer` with `number` to make the
  * drawBorderBuffer a rectangle that is `number` wider and higher on each side
  * (`0`)
@@ -928,7 +932,7 @@ export type OBJ_Rectangle = {
   yAlign?: 'bottom' | 'middle' | 'top' | number,
   corner?: OBJ_CurvedCorner,
   line?: OBJ_LineStyleSimple,
-  drawBorderBuffer?: Array<Array<TypeParsablePoint>> | number,
+  drawBorderBuffer?: TypeParsableBorder | number,
 } & OBJ_Generic;
 
 type OBJ_Rectangle_Defined = {
@@ -962,7 +966,7 @@ type OBJ_Rectangle_Defined = {
  * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
  * @property {number} [sides] number of sides to draw ellipse with (`20`)
  * @property {OBJ_LineStyleSimple} [line] line style options
- * @property {number | Array<Array<TypeParsablePoint>>} [drawBorderBuffer]
+ * @property {number | TypeParsableBorder} [drawBorderBuffer]
  * override the OBJ_Generic `drawBorderBuffer` with `number` to make the
  * drawBorderBuffer a ellipse that is `number` thicker around its border (`0`)
  *
@@ -1022,7 +1026,7 @@ export type OBJ_Ellipse = {
   yAlign?: 'bottom' | 'middle' | 'top' | number,
   sides?: number,
   line?: OBJ_LineStyleSimple,
-  drawBorderBuffer?: Array<Array<TypeParsablePoint>> | number,
+  drawBorderBuffer?: TypeParsableBorder | number,
 } & OBJ_Generic;
 
 /**
@@ -1582,11 +1586,11 @@ export type OBJ_TextDefinition = {
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (default: `Transform('text').standard()`)
- * @property {'text' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
+ * @property {'text' | 'rect' | TypeParsableBorder} [border]
  * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
  * encompassing rectangle around all text borders combined,
  * or set to `'text'` for the individual text borders (default: `'text'`)
- * @property {'text' | 'rect' | number | 'border' | Array<Array<TypeParsablePoint>>} [touchBorder]
+ * @property {'text' | 'rect' | number | 'border' | TypeParsableBorder} [touchBorder]
  * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
  * the encompassing rectangle around all text touch borders, set to `'text'`
  * for the individual text touch borders (`'text'`), set to `'border'` to be the
@@ -1646,8 +1650,8 @@ export type OBJ_Text = {
   color?: TypeColor,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
-  border?: 'text' | 'rect' | Array<Array<TypeParsablePoint>>,
-  touchBorder?: 'text' | 'rect' | number | 'border' | Array<Array<TypeParsablePoint>>,
+  border?: 'text' | 'rect' | TypeParsableBorder,
+  touchBorder?: 'text' | 'rect' | number | 'border' | TypeParsableBorder,
 }
 
 
@@ -1706,11 +1710,11 @@ export type OBJ_TextLineDefinition = {
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (`Transform('text').standard()`)
- * @property {'text' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
+ * @property {'text' | 'rect' | TypeParsableBorder} [border]
  * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
  * encompassing rectangle around all text borders combined,
  * or set to `'text'` for the individual text borders (`'rect'`)
- * @property {'text' | 'rect' | number | 'border' | Array<Array<TypeParsablePoint>>} [touchBorder]
+ * @property {'text' | 'rect' | number | 'border' | TypeParsableBorder} [touchBorder]
  * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
  * the encompassing rectangle around all text touch borders, set to `'text'`
  * for the individual text touch borders (`'text'`), set to `'border'` to be the
@@ -1872,11 +1876,11 @@ export type OBJ_TextModifiersDefinition = {
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (`Transform('text').standard()`)
- * @property {'text' | 'rect' | Array<Array<TypeParsablePoint>>} [border]
+ * @property {'text' | 'rect' | TypeParsableBorder} [border]
  * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
  * encompassing rectangle around all text borders combined,
  * or set to `'text'` for the individual text borders (`'rect'`)
- * @property {'text' | 'rect' | number | 'border' | Array<Array<TypeParsablePoint>>} [touchBorder]
+ * @property {'text' | 'rect' | number | 'border' | TypeParsableBorder} [touchBorder]
  * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
  * the encompassing rectangle around all text touch borders, set to `'text'`
  * for the individual text touch borders (`'text'`), set to `'border'` to be the
@@ -2229,11 +2233,11 @@ export default class FigurePrimitives {
 
     element.custom.updateGeneric = function update(updateOptions: {
       points?: Array<TypeParsablePoint>,
-      drawBorder?: Array<Array<TypeParsablePoint>>,
-      drawBorderBuffer?: Array<Array<TypeParsablePoint>>,
-      border?: Array<Array<TypeParsablePoint>> | 'drawBorder' | 'buffer',
-      touchBorder?: Array<Array<TypeParsablePoint>> | 'border' | 'rect' | number | 'buffer',
-      holeBorder?: Array<Array<TypeParsablePoint>>,
+      drawBorder?: TypeParsableBorder,
+      drawBorderBuffer?: TypeParsableBorder,
+      border?: TypeParsableBorder | 'draw' | 'buffer' | 'rect' | number,
+      touchBorder?: TypeParsableBorder | 'draw' | 'border' | 'rect' | number | 'buffer',
+      holeBorder?: TypeParsableBorder,
       copy?: Array<CPY_Step>,
       drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
     }) {
@@ -2245,21 +2249,21 @@ export default class FigurePrimitives {
         o.points = getPoints(o.points);
       }
       if (o.drawBorder != null) {
-        element.drawBorder = parseBorder(o.drawBorder)
+        element.drawBorder = getBorder(o.drawBorder);
       } else if (o.points != null) {
         element.drawBorder = [o.points];
       }
       if (o.drawBorderBuffer != null) {
-        element.drawBorderBuffer = parseBorder(o.drawBorderBuffer);
+        element.drawBorderBuffer = getBorder(o.drawBorderBuffer);
       } else element.drawBorderBuffer = element.drawBorder;
       if (o.border != null) {
-        element.border = parseBorder(o.border);
+        element.border = getBorder(o.border);
       }
       if (o.touchBorder != null) {
-        element.touchBorder = parseBorder(o.touchBorder);
+        element.touchBorder = getBorder(o.touchBorder);
       }
       if (o.holeBorder != null) {
-        element.holeBorder = parseBorder(o.holeBorder);
+        element.holeBorder = getBorder(o.holeBorder);
       }
       element.drawingObject.change(o);
     };
@@ -2316,7 +2320,7 @@ export default class FigurePrimitives {
       );
     }
     if (Array.isArray(o.drawBorderBuffer)) {
-      drawBorderBuffer = parseBorder(o.drawBorderBuffer);
+      drawBorderBuffer = getBorder(o.drawBorderBuffer);
     }
     if (drawBorderBuffer == null) {
       drawBorderBuffer = drawBorder;
