@@ -3,7 +3,7 @@ const { toMatchImageSnapshot } = require('jest-image-snapshot');
 
 expect.extend({ toMatchImageSnapshot });
 jest.setTimeout(60000);
-test('Primitives: Rectangle', async () => {
+test('Primitives: Arrow', async () => {
   // eslint-disable-next-line no-undef
   await page.goto(`file:/${__dirname}/index.html`);
   // eslint-disable-next-line no-undef

@@ -2,7 +2,7 @@
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
 
 expect.extend({ toMatchImageSnapshot });
-
+jest.setTimeout(60000);
 test('Primitives: Ellipse', async () => {
   // eslint-disable-next-line no-undef
   await page.goto(`file:/${__dirname}/index.html`);

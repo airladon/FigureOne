@@ -8,7 +8,7 @@ function getBufferBorder(
   bordersIn: Array<Array<Point>>,
   buffer: number,
   skipConcave: boolean = true,
-  bufferOffset: 'positive' | 'negative' = 'negative',
+  // bufferOffset: 'positive' | 'negative' = 'negative',
 ) {
   if (typeof buffer !== 'number') {
     return buffer;
@@ -101,6 +101,6 @@ function getBufferBorder(
   return drawBorderBuffers;
 }
 
-export {
+export {  // eslint-disable-next-line import/prefer-default-export
   getBufferBorder,
 };

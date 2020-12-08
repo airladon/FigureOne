@@ -70,8 +70,10 @@ import { getBufferBorder } from '../geometries/buffer';
 
 /**
  * Line style definition object.
- * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative'} [widthIs]
- * defines how the width is grown from the polyline's points.
+ * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number} [widthIs]
+ * defines how the width is grown from the polyline's points. When using
+ * `number`, 0 is the equivalent of 'inside' and 1 is the equivalent of
+ * 'outside'.
  * @property {number} [width] line width
  * @property {TypeDash} [dash] select solid or dashed line
  * @property {TypeColor} [color] line color
@@ -2868,6 +2870,12 @@ export default class FigurePrimitives {
     }, joinObjects({}, ...options));
 
     element.custom.getBorder = (o: OBJ_Triangle_Defined) => {
+      if (o.line != null && o.line.widthIs === 'inside') {
+        o.line.widthIs = 'positive';
+      }
+      if (o.line != null && o.line.widthIs === 'outside') {
+        o.line.widthIs = 'negative';
+      }
       const optionsWithDefaultArrow = defaultArrowOptions(o);
       const [border, borderBuffer] = getArrow(optionsWithDefaultArrow);
       return [
