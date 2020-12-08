@@ -2290,7 +2290,7 @@ export default class FigurePrimitives {
     if (o.linePrimitives) {
       drawType = 'lines';
     }
-    return [o, points, drawBorder, drawBorderBuffer, drawType];
+    return [o, points, drawBorder, drawType];
   }
 
   /**
@@ -2406,6 +2406,9 @@ export default class FigurePrimitives {
         {}, o, { radius: o.radius + drawBorderOffset },
       ))];
     }
+    // if (o.direction === -1) {
+    //   drawBorder.reverse();
+    // }
 
     // if (typeof drawBorderBuffer === 'number') {
     //   if (drawBorderBuffer !== 0) {
@@ -2423,7 +2426,7 @@ export default class FigurePrimitives {
     //     drawBorderBuffer = drawBorder;
     //   }
     // }
-    return [o, points, drawBorder]; //, drawBorderBuffer];
+    return [o, points, drawBorder, 'triangles']; //, drawBorderBuffer];
   }
 
   // // eslint-disable-next-line class-methods-use-this
@@ -2559,6 +2562,7 @@ export default class FigurePrimitives {
     // element.custom.getLine = () => [];
     element.custom.close = true;
     element.custom.skipConcave = true;
+    element.custom.bufferOffset = 'negative';
     element.custom.getLine = (o: OBJ_PolyLineTris) => {
       if (!element.custom.close && o.drawBorder == null) {
         o.drawBorder = 'line';
@@ -2569,6 +2573,9 @@ export default class FigurePrimitives {
     element.custom.updatePoints = (updateOptions: Object) => {
       const borderOptions = joinObjects({}, element.custom.options, updateOptions);
       const [o, border] = element.custom.getBorder(borderOptions);
+      if (element.custom.bufferOffset === 'positive') {
+        border.reverse();
+      }
       if (o.line == null) {
         const [
           points, drawType,
@@ -2577,7 +2584,12 @@ export default class FigurePrimitives {
         element.custom.updateGeneric(joinObjects({}, o, {
           points,
           drawBorder: border,
-          drawBorderBuffer: getBufferBorder([border], o.drawBorderBuffer, element.custom.skipConcave),
+          drawBorderBuffer: getBufferBorder(
+            [border],
+            o.drawBorderBuffer,
+            element.custom.skipConcave,
+            element.custom.bufferOffset,
+          ),
           drawType,
         }));
       } else {
@@ -2590,7 +2602,7 @@ export default class FigurePrimitives {
           o.line.close = true;
         }
         const [
-          polylineOptions, points, newDrawBorder,, drawType,
+          polylineOptions, points, drawBorder, drawType,
         ] = element.custom.getLine(joinObjects(
           {},
           o.line,
@@ -2600,7 +2612,9 @@ export default class FigurePrimitives {
         ));
         element.custom.options = o;
         element.custom.options.line = polylineOptions;
-        const drawBorder = newDrawBorder;
+        // const drawBorder = newDrawBorder;
+        // console.log(element.custom.bufferOffset)
+        // console.log(newDrawBorder)
         // const drawBorder = [];
         // for (let i = 0; i < newDrawBorder[0].length; i += 1) {
         //   if (
@@ -2618,7 +2632,12 @@ export default class FigurePrimitives {
         //   }
         // }
         // console.log(drawBorder)
-        const drawBorderBuffer = getBufferBorder(drawBorder, o.drawBorderBuffer, element.custom.skipConcave);
+        const drawBorderBuffer = getBufferBorder(
+          drawBorder,
+          o.drawBorderBuffer,
+          element.custom.skipConcave,
+          element.custom.bufferOffset,
+        );
         // console.log(drawBorder, drawBorderBuffer);
         element.custom.updateGeneric(joinObjects({}, o, {
           points, drawBorder, drawBorderBuffer, drawType,
@@ -2648,6 +2667,11 @@ export default class FigurePrimitives {
         element.custom.close = true;
       }
       element.custom.skipConcave = false;
+      if (o.direction === -1) {
+        element.custom.bufferOffset = 'positive';
+      } else {
+        element.custom.bufferOffset = 'negative';
+      }
       return border;
     };
     element.custom.getFill = (border: Array<Point>, fillOptions: OBJ_Polygon_Defined) => [
@@ -2728,9 +2752,15 @@ export default class FigurePrimitives {
       },
     }, joinObjects({}, ...options));
 
-    element.custom.getBorder = (o: OBJ_Rectangle_Defined) => [
-      o, ...getRectangleBorder(o),
-    ];
+    element.custom.getBorder = (o: OBJ_Rectangle_Defined) => {
+      if (o.line != null && o.line.widthIs === 'inside') {
+        o.line.widthIs = 'positive';
+      }
+      if (o.line != null && o.line.widthIs === 'outside') {
+        o.line.widthIs = 'negative';
+      }
+      return [o, getRectangleBorder(o)]
+    };
     element.custom.getFill = (border: Array<Point>) => [
       rectangleBorderToTris(border),
       'triangles',

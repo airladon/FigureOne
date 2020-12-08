@@ -8,6 +8,7 @@ function getBufferBorder(
   bordersIn: Array<Array<Point>>,
   buffer: number,
   skipConcave: boolean = true,
+  bufferOffset: 'positive' | 'negative' = 'negative',
 ) {
   if (typeof buffer !== 'number') {
     return buffer;
@@ -15,7 +16,7 @@ function getBufferBorder(
   if (buffer === 0) {
     return bordersIn;
   }
-  let drawBorderBuffers = [];
+  const drawBorderBuffers = [];
   bordersIn.forEach((borderIn) => {
     // First remove all points that are >180º
     const border = [];
@@ -54,6 +55,7 @@ function getBufferBorder(
       } else {
         line = new Line(border[i - 1], border[i]);
       }
+      // console.log(bufferOffset)
       offsetLines.push(line.offset('negative', buffer));
     }
     for (let i = 0; i < offsetLines.length; i += 1) {

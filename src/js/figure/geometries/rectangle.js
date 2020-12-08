@@ -117,8 +117,8 @@ function getRectangleBorder(
   // } else {
   //   bufferBorder = drawBorderBuffer;
   // }
-
-  return [points];
+  // console.log(points)
+  return points;
 }
 
 function rectangleBorderToTris(border: Array<Point>) {
