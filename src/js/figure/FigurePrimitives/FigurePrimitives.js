@@ -77,7 +77,7 @@ import { getBufferBorder } from '../geometries/buffer';
  * @property {TypeColor} [color] line color
  */
 export type OBJ_LineStyleSimple = {
-  // widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,
+  widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,
   width?: number,
   dash?: TypeDash,
   color?: TypeColor,
@@ -2790,9 +2790,15 @@ export default class FigurePrimitives {
       sides: 20,
     }, joinObjects({}, ...options));
 
-    element.custom.getBorder = (o: OBJ_Ellipse_Defined) => [
-      o, ...getEllipseBorder(o),
-    ];
+    element.custom.getBorder = (o: OBJ_Ellipse_Defined) => {
+      if (o.line != null && o.line.widthIs === 'inside') {
+        o.line.widthIs = 'positive';
+      }
+      if (o.line != null && o.line.widthIs === 'outside') {
+        o.line.widthIs = 'negative';
+      }
+      return [o, getEllipseBorder(o)];
+    };
     element.custom.getFill = (border: Array<Point>) => [
       ellipseBorderToTris(border),
       'triangles',

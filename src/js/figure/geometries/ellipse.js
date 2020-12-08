@@ -59,10 +59,10 @@ function getEllipseBorder(options: OBJ_Ellipse_Defined) {
   } else if (yAlign === 'top') {
     y = -height / 2;
   } else if (typeof yAlign === 'number') {
-    y = -height / 2 + height * yAlign;
+    y = height / 2 - height * yAlign;
   }
 
-  const points = getEllipsePoints(width, height, sides, x, y);
+  return getEllipsePoints(width, height, sides, x, y);
   // let lineDelta = 0;
   // if (line != null && line.widthIs === 'mid') {
   //   lineDelta = line.width / 2;
@@ -92,7 +92,7 @@ function getEllipseBorder(options: OBJ_Ellipse_Defined) {
   //   )];
   // }
 
-  return [points];
+  // return [points;
 }
 
 function ellipseBorderToTris(border: Array<Point>) {

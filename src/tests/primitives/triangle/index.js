@@ -84,7 +84,7 @@ const makeTriangle = (options, lineOptions = null) => makeShape(
   lineOptions,
 );
 
-
+/* eslint-disable object-curly-newline */
 const arrows = [
   // Definitions
   makeTriangle({ width: 0.3, height: 0.3, top: 'left' }),
@@ -109,6 +109,9 @@ const arrows = [
   makeTriangle({}, { widthIs: 'inside' }),
   makeTriangle({}, { widthIs: 'mid' }),
   makeTriangle({}, { widthIs: 'outside' }),
+  makeTriangle({ direction: -1 }, { widthIs: 'inside' }),
+  makeTriangle({ direction: -1 }, { widthIs: 'mid' }),
+  makeTriangle({ direction: -1 }, { widthIs: 'outside' }),
 
   // Rotation alignments
   makeTriangle({ rotation: 0.1 }),
@@ -165,6 +168,7 @@ const arrows = [
 
   // Line Primitives
   makeTriangle({}, { linePrimitives: true, lineNum: 5, cornerStyle: 'none' }),
+  makeTriangle({}, { linePrimitives: true, lineNum: 5, cornerStyle: 'auto' }),
   makeTriangle({}, { linePrimitives: true, lineNum: 5, cornerStyle: 'fill' }),
   makeTriangle({ height: 0.5 }, {
     linePrimitives: true, lineNum: 5, cornerStyle: 'radius', cornerSize: 0.07, cornerSides: 5,
