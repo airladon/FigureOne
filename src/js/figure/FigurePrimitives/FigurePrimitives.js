@@ -998,7 +998,14 @@ export type OBJ_Ellipse = {
   drawBorderBuffer?: Array<Array<TypeParsablePoint>> | number,
 } & OBJ_Generic;
 
-
+/**
+ * @property {'s1' | 's2' | 's3'} [side] ('s1')
+ * @property {number} [angle] (0)
+ */
+export type OBJ_TriangleSideRotationAlignment = {
+  side?: 's1' | 's2' | 's3',
+  angle?: number,
+};
 
 /* eslint-disable max-len */
 /**
@@ -1050,7 +1057,7 @@ export type OBJ_Ellipse = {
  * can either be a `number` rotating it relative to its definition, or relative
  * to one of its sides: s1, s2 or s3.
  *
- * Finally, the triangle can be positioned (in vertex space) using `xAlign` and
+ * Finally, the triangle can be positioned (in draw space) using `xAlign` and
  * `yAlign`. An `xAlign` of `'left'` will position the triangle so that it's
  * left most point will be at (0, 0). Similarly, a `yAlign` of `'top'` will
  * position the triangle so its top most point is at (0, 0). Triangles
@@ -1079,9 +1086,9 @@ export type OBJ_Ellipse = {
  * @property {[number, number, number]} [AAS]
  * @property {[number, number, number]} [SAS]
  * @property {1 | -1} [direction]
- * @property {number | { side: 's1' | 's2' | 's3', angle: number }} [rotation]
- * @property {'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid'} [xAlign] (`'centroid'`)
- * @property {'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1'| 's2' | 's3' | 'centroid'} [yAlign] (`'centroid'`)
+ * @property {number | 's1' | 's2' | 's3' | OBJ_TriangleSideRotationAlignment} [rotation]
+ * @property {'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points'} [xAlign] (`'centroid'`)
+ * @property {'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1'| 's2' | 's3' | 'centroid' | 'points'} [yAlign] (`'centroid'`)
  * @property {OBJ_LineStyleSimple} [line] line style options - do not use any corner
  * options
  *
@@ -1142,9 +1149,9 @@ export type OBJ_Triangle = {
   SAS?: [number, number, number],
   direction?: 1 | -1,
   points?: Array<Point>,
-  rotation?: number | { side: number, angle: number },
-  xAlign: 'left' | 'center' | 'right' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
-  yAlign: 'bottom' | 'middle' | 'top' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid',
+  rotation?: number | 's1' | 's2' | 's3' | { side?: 's1' | 's2' | 's3', angle?: number },
+  xAlign: 'left' | 'center' | 'right' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid' | 'points',
+  yAlign: 'bottom' | 'middle' | 'top' | number | 'c1' | 'c2' | 'c3' | 's1' | 's2' | 's3' | 'centroid' | 'points',
   line?: OBJ_LineStyleSimple,
 } & OBJ_Generic;
 /* eslint-enable max-len */
@@ -2810,9 +2817,24 @@ export default class FigurePrimitives {
       rotation: 0,
     }, joinObjects({}, ...options));
 
-    element.custom.getBorder = (o: OBJ_Triangle_Defined) => [
-      o, ...getTriangleBorder(o),
-    ];
+    element.custom.getBorder = (o: OBJ_Triangle_Defined) => {
+      if (o.line != null && o.line.widthIs === 'inside') {
+        o.line.widthIs = 'positive';
+      }
+      if (o.line != null && o.line.widthIs === 'outside') {
+        o.line.widthIs = 'negative';
+      }
+      if (o.direction === -1) {
+        element.custom.bufferOffset = 'positive';
+      } else {
+        element.custom.bufferOffset = 'negative';
+      }
+      return [o, getTriangleBorder(o)];
+    };
+
+    // element.custom.getBorder = (o: OBJ_Triangle_Defined) => [
+    //   o, ...getTriangleBorder(o),
+    // ];
     element.custom.getFill = (border: Array<Point>) => [
       border,
       'triangles',

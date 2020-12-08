@@ -2954,6 +2954,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#figureprimitivesarrow'
+                        class='regular pre-open'>
+                        #arrow
+                      </a></li>
+                      
+                      <li><a
                         href='#figureprimitivesgrid'
                         class='regular pre-open'>
                         #grid
@@ -2963,12 +2969,6 @@
                         href='#figureprimitivesline'
                         class='regular pre-open'>
                         #line
-                      </a></li>
-                      
-                      <li><a
-                        href='#figureprimitivesarrow'
-                        class='regular pre-open'>
-                        #arrow
                       </a></li>
                       
                       <li><a
@@ -4387,6 +4387,16 @@
               
                 
                 <li><a
+                  href='#obj_trianglesiderotationalignment'
+                  class="">
+                  OBJ_TriangleSideRotationAlignment
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#figurecollections'
                   class=" toggle-sibling">
                   FigureCollections
@@ -4472,6 +4482,16 @@
                   href='#obj_buttoncolor'
                   class="">
                   OBJ_ButtonColor
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeequationelement'
+                  class="">
+                  TypeEquationElement
                   
                 </a>
                 
@@ -15561,6 +15581,18 @@ transform of
           
         </div>
       
+        <div class='space-bottom0'>
+          <span class='code bold'>drawBorder</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>?)</code>
+          
+          
+        </div>
+      
     </div>
   
 
@@ -16003,6 +16035,58 @@ Only
 . (
 <code>"mid"</code>
 )
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>drawBorder</span> <code class='quiet'>((<code>"line"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : override OBJ_Generic 
+<code>drawBorder</code>
+ with 
+<code>'line'</code>
+ to make the drawBorder just
+the line itself, 
+<code>'positive'</code>
+ to make the drawBorder the positive side
+of the line, and 
+<code>'negative'</code>
+ to make the drawBorder the negative side
+of the line. Use array definition for custom drawBorder (
+<code>'line'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : override OBJ_Generic 
+<code>drawBorderBuffer</code>
+ with 
+<code>number</code>
+ to make the
+drawBorderBuffer the same as the line with additional 
+<code>number</code>
+ thickness
+on either side (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>holeBorder</span> <code class='quiet'>((<code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : override OBJ_Generic 
+<code>holeBorder</code>
+ with 
+<code>'positive'</code>
+ to make holeBorder the
+points on the positive side of the line, and with 
+<code>'negative'</code>
+ to make
+the holdBorder with points on the negative side of the line.
 
           
         </div>
@@ -16556,7 +16640,7 @@ s1 is the width, and the top point is either aligned with the <code>left</code>,
 the x axis. Next, a <code>rotation</code> can be applied to the triangle. A <code>rotation</code>
 can either be a <code>number</code> rotating it relative to its definition, or relative
 to one of its sides: s1, s2 or s3.</p>
-<p>Finally, the triangle can be positioned (in vertex space) using <code>xAlign</code> and
+<p>Finally, the triangle can be positioned (in draw space) using <code>xAlign</code> and
 <code>yAlign</code>. An <code>xAlign</code> of <code>'left'</code> will position the triangle so that it's
 left most point will be at (0, 0). Similarly, a <code>yAlign</code> of <code>'top'</code> will
 position the triangle so its top most point is at (0, 0). Triangles
@@ -16665,7 +16749,13 @@ all other ways to define a triangle.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"a1"</code> | <code>"a2"</code> | <code>"a3"</code> | <code>"s1"</code> | <code>"s2"</code> | <code>"s3"</code> | <code>"centroid"</code>)?)</code>
+          <span class='code bold'>rotation</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"s1"</code> | <code>"s2"</code> | <code>"s3"</code> | <a href="#obj_trianglesiderotationalignment">OBJ_TriangleSideRotationAlignment</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"a1"</code> | <code>"a2"</code> | <code>"a3"</code> | <code>"s1"</code> | <code>"s2"</code> | <code>"s3"</code> | <code>"centroid"</code> | <code>"points"</code>)?)</code>
           : (
 <code>'centroid'</code>
 )
@@ -16674,7 +16764,7 @@ all other ways to define a triangle.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"a1"</code> | <code>"a2"</code> | <code>"a3"</code> | <code>"s1"</code> | <code>"s2"</code> | <code>"s3"</code> | <code>"centroid"</code>)?)</code>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"a1"</code> | <code>"a2"</code> | <code>"a3"</code> | <code>"s1"</code> | <code>"s2"</code> | <code>"s3"</code> | <code>"centroid"</code> | <code>"points"</code>)?)</code>
           : (
 <code>'centroid'</code>
 )
@@ -16865,9 +16955,18 @@ figure.add({
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
-          : make copies of
-the rectangle
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : override the OBJ_Generic 
+<code>drawBorderBuffer</code>
+ with 
+<code>number</code>
+ to make the
+drawBorderBuffer a rectangle that is 
+<code>number</code>
+ wider and higher on each side
+(
+<code>0</code>
+)
 
           
         </div>
@@ -17051,6 +17150,22 @@ figure.add({
         <div class='space-bottom0'>
           <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestylesimple">OBJ_LineStyleSimple</a>?)</code>
           : line style options
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : override the OBJ_Generic 
+<code>drawBorderBuffer</code>
+ with 
+<code>number</code>
+ to make the
+drawBorderBuffer a ellipse that is 
+<code>number</code>
+ thicker around its border (
+<code>0</code>
+)
 
           
         </div>
@@ -17260,6 +17375,22 @@ vertices on each draw. (
           
         </div>
       
+        <div class='space-bottom0'>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : override the OBJ_Generic 
+<code>drawBorderBuffer</code>
+ with 
+<code>number</code>
+ to make the
+drawBorderBuffer a polygon that is wider by 
+<code>number</code>
+ (
+<code>0</code>
+)
+
+          
+        </div>
+      
     </div>
   
 
@@ -17438,12 +17569,17 @@ during vertex definition (different to a translation step in a transform)
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>copy</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#cpy_step">CPY_Step</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)> | <a href="#cpy_step">CPY_Step</a>)?)</code>
-          : make copies of
-the polygon if defined. If using fill and copying, use 
-<code>fill</code>
-: 
-<code>'tris'</code>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>>)?)</code>
+          : override the OBJ_Generic 
+<code>drawBorderBuffer</code>
+ with 
+<code>number</code>
+ to make the
+drawBorderBuffer a polygon that is 
+<code>number</code>
+ thicker than the radius (
+<code>0</code>
+)
 
           
         </div>
@@ -39813,6 +39949,76 @@ touched
       </div>
     </div>
   
+    <div class='border-bottom' id='figureprimitivesarrow'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>arrow(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p><a href="#figureelementprimitive">FigureElementPrimitive</a> that draws a line.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_arrow">OBJ_Arrow</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#obj_arrow">OBJ_Arrow</a>
+ for options and examples.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='figureprimitivesgrid'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -39931,76 +40137,6 @@ touched
     
       
         <a href="#obj_line">OBJ_Line</a>
- for options and examples.
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='figureprimitivesarrow'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>arrow(options)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p><a href="#figureelementprimitive">FigureElementPrimitive</a> that draws a line.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_arrow">OBJ_Arrow</a>>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        <a href="#obj_arrow">OBJ_Arrow</a>
  for options and examples.
 
       
@@ -53275,6 +53411,17 @@ annotate: {
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>_elementName</span> <code class='quiet'>(<a href="#typeequationelement">TypeEquationElement</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
 
   
 
@@ -54849,6 +54996,73 @@ e.animations.new()
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_trianglesiderotationalignment'>
+      OBJ_TriangleSideRotationAlignment
+    </h3>
+    
+    
+  </div>
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>side</span> <code class='quiet'>((<code>"s1"</code> | <code>"s2"</code> | <code>"s3"</code>)?)</code>
+          : ('s1')
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : (0)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='figurecollections'>
       FigureCollections
     </h3>
@@ -55569,6 +55783,58 @@ e.animations.new()
         </div>
       
     </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeequationelement'>
+      TypeEquationElement
+    </h3>
+    
+    
+  </div>
+  
+
+  
+  
+    <p style="display: none;">      Type:
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a> | <a href="#typeequationtextelement">TypeEquationTextElement</a> | TypeEquationSymbolAngleBracket | TypeEquationSymbolArrowBracket)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
   
 
   

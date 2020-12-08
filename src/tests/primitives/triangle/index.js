@@ -77,6 +77,9 @@ const makeTriangle = (options, lineOptions = null) => makeShape(
   tools.misc.joinObjects({}, {
     drawBorderBuffer: 0.1,
     color: [1, 0, 0, 0.6],
+    width: 0.4,
+    height: 0.2,
+    top: 'left',
   }, options),
   lineOptions,
 );
@@ -85,68 +88,87 @@ const makeTriangle = (options, lineOptions = null) => makeShape(
 const arrows = [
   // Definitions
   makeTriangle({ width: 0.3, height: 0.3, top: 'left' }),
+  makeTriangle({ width: 0.3, height: 0.3, top: 'center' }),
+  makeTriangle({ width: 0.3, height: 0.3, top: 'right' }),
   makeTriangle({ SSS: [0.3, Math.sqrt(0.18), 0.3] }),
   makeTriangle({ ASA: [Math.PI / 2, 0.3, Math.PI / 4] }),
   makeTriangle({ AAS: [Math.PI / 2, Math.PI / 4, Math.sqrt(0.18)] }),
   makeTriangle({ SAS: [0.3, Math.PI / 4, Math.sqrt(0.18)] }),
-  // makeRectangle({ width: 0.3, height: 0.6 }, {}),
+  makeTriangle({ points: [[0, 0], [0.3, 0], [0, 0.3]] }),
 
-  // // Line specific
-  // makeRectangle({}, { widthIs: 'inside' }),
-  // makeRectangle({}, { widthIs: 'mid' }),
-  // makeRectangle({}, { widthIs: 'outside' }),
+  // Direction
+  makeTriangle({ width: 0.3, height: 0.3, top: 'left', direction: -1 }),
+  makeTriangle({ width: 0.3, height: 0.3, top: 'center', direction: -1 }),
+  makeTriangle({ width: 0.3, height: 0.3, top: 'right', direction: -1 }),
+  makeTriangle({ SSS: [0.3, Math.sqrt(0.18), 0.3], direction: -1 }),
+  makeTriangle({ ASA: [Math.PI / 2, 0.3, Math.PI / 4], direction: -1 }),
+  makeTriangle({ AAS: [Math.PI / 2, Math.PI / 4, Math.sqrt(0.18)], direction: -1 }),
+  makeTriangle({ SAS: [0.3, Math.PI / 4, Math.sqrt(0.18)], direction: -1 }),
 
-  // // Alignment
-  // makeRectangle({ xAlign: 'left', width: 0.4, height: 0.2 }),
-  // makeRectangle({ xAlign: 0.2, width: 0.4, height: 0.2 }),
-  // makeRectangle({ xAlign: 'center', width: 0.4, height: 0.2 }),
-  // makeRectangle({ xAlign: 'right', width: 0.4, height: 0.2 }),
-  // makeRectangle({ yAlign: 'bottom', width: 0.4, height: 0.2 }),
-  // makeRectangle({ yAlign: 0.2, width: 0.4, height: 0.2 }),
-  // makeRectangle({ yAlign: 'middle', width: 0.4, height: 0.2 }),
-  // makeRectangle({ yAlign: 'top', width: 0.4, height: 0.2 }),
+  // Line specific
+  makeTriangle({}, { widthIs: 'inside' }),
+  makeTriangle({}, { widthIs: 'mid' }),
+  makeTriangle({}, { widthIs: 'outside' }),
 
-  // // Alignment bottom, left line
-  // makeRectangle({
-  //   xAlign: 'left', yAlign: 'bottom', width: 0.3, height: 0.2,
-  // }, { widthIs: 'inside' }),
-  // makeRectangle({
-  //   xAlign: 'left', yAlign: 'bottom', width: 0.3, height: 0.2,
-  // }, { widthIs: 'mid' }),
-  // makeRectangle({
-  //   xAlign: 'left', yAlign: 'bottom', width: 0.3, height: 0.2,
-  // }, { widthIs: 'outside' }),
+  // Rotation alignments
+  makeTriangle({ rotation: 0.1 }),
+  makeTriangle({ rotation: 's1' }),
+  makeTriangle({ rotation: 's2' }),
+  makeTriangle({ rotation: 's3' }),
+  makeTriangle({ rotation: { side: 's1', angle: 0.1 } }),
+  makeTriangle({ rotation: { side: 's2', angle: 0.1 } }),
+  makeTriangle({ rotation: { side: 's3', angle: 0.1 } }),
+  makeTriangle({ rotation: { side: 's1', angle: -0.1 } }),
+  makeTriangle({ rotation: { side: 's2', angle: -0.1 } }),
+  makeTriangle({ rotation: { side: 's3', angle: -0.1 } }),
+  makeTriangle({ rotation: 's2' }, { widthIs: 'mid' }),
+  makeTriangle({ rotation: 's2' }, { widthIs: 'inside' }),
+  makeTriangle({ rotation: 's2' }, { widthIs: 'outside' }),
 
-  // // Alignment top right line
-  // makeRectangle({
-  //   xAlign: 'right', yAlign: 'top', width: 0.3, height: 0.2,
-  // }, { widthIs: 'inside' }),
-  // makeRectangle({
-  //   xAlign: 'right', yAlign: 'top', width: 0.3, height: 0.2,
-  // }, { widthIs: 'mid' }),
-  // makeRectangle({
-  //   xAlign: 'right', yAlign: 'top', width: 0.3, height: 0.2,
-  // }, { widthIs: 'outside' }),
+  // x-y alignments
+  makeTriangle({ xAlign: 'left', yAlign: 'bottom' }),
+  makeTriangle({ xAlign: 'center', yAlign: 'middle' }),
+  makeTriangle({ xAlign: 'right', yAlign: 'top' }),
+  makeTriangle({ xAlign: 0.2, yAlign: 0.2 }),
+  makeTriangle({ xAlign: 'a1', yAlign: 'a1' }),
+  makeTriangle({ xAlign: 'a3', yAlign: 'a3' }),
+  makeTriangle({ xAlign: 'a2', yAlign: 'a2' }),
+  makeTriangle({ xAlign: 's1', yAlign: 's1' }),
+  makeTriangle({ xAlign: 's3', yAlign: 's3' }),
+  makeTriangle({ xAlign: 's2', yAlign: 's2' }),
+  makeTriangle({ points: [[0, 0], [0.3, 0], [0, 0.3]], xAlign: 'points', yAlign: 'points' }),
+
+  // x-y alignment line
+  makeTriangle({ xAlign: 'left', yAlign: 'bottom' }, { widthIs: 'mid' }),
+  makeTriangle({ xAlign: 'center', yAlign: 'middle' }, { widthIs: 'mid' }),
+  makeTriangle({ xAlign: 'right', yAlign: 'top' }, { widthIs: 'mid' }),
+  makeTriangle({ xAlign: 0.2, yAlign: 0.2 }, { widthIs: 'mid' }),
+  makeTriangle({ xAlign: 'a1', yAlign: 'a1' }, { widthIs: 'mid' }),
+  makeTriangle({ xAlign: 'a3', yAlign: 'a3' }, { widthIs: 'mid' }),
+  makeTriangle({ xAlign: 'a2', yAlign: 'a2' }, { widthIs: 'mid' }),
+  makeTriangle({ xAlign: 's1', yAlign: 's1' }, { widthIs: 'mid' }),
+  makeTriangle({ xAlign: 's3', yAlign: 's3' }, { widthIs: 'mid' }),
+  makeTriangle({ xAlign: 's2', yAlign: 's2' }, { widthIs: 'mid' }),
+  makeTriangle({ xAlign: 's3', yAlign: 's3' }, { widthIs: 'mid' }),
+  makeTriangle({ xAlign: 's3', yAlign: 's3' }, { widthIs: 'inside' }),
+  makeTriangle({ xAlign: 's3', yAlign: 's3' }, { widthIs: 'outside' }),
 
   // // Corner
-  // makeRectangle({ corner: { style: 'radius', radius: 0.1, sides: 3 } }),
-  // makeRectangle({ corner: { style: 'radius', radius: 0.1, sides: 3 } }, {}),
+  makeTriangle({}, { cornerStyle: 'none' }),
+  makeTriangle({}, { cornerStyle: 'fill' }),
+  makeTriangle({ height: 0.5 }, { cornerStyle: 'radius', cornerSize: 0.07, cornerSides: 5 }),
 
-  // // dash
-  // makeRectangle({}, { widthIs: 'inside', dash: [0.03, 0.02] }),
-  // makeRectangle({}, { widthIs: 'mid', dash: [0.03, 0.02] }),
-  // makeRectangle({}, { widthIs: 'outside', dash: [0.03, 0.02] }),
-  // makeRectangle({ corner: { style: 'radius', radius: 0.1, sides: 3 } }, { widthIs: 'inside', dash: [0.03, 0.02] }),
-  // makeRectangle({ corner: { style: 'radius', radius: 0.1, sides: 3 } }, { widthIs: 'mid', dash: [0.03, 0.02] }),
-  // makeRectangle({ corner: { style: 'radius', radius: 0.1, sides: 3 } }, { widthIs: 'outside', dash: [0.03, 0.02] }),
+  // dash
+  makeTriangle({}, { dash: [0.03, 0.02], widthIs: 'inside' }),
+  makeTriangle({}, { dash: [0.03, 0.02], widthIs: 'mid' }),
+  makeTriangle({}, { dash: [0.03, 0.02], widthIs: 'outside' }),
 
-  // // Line Primitives
-  // makeRectangle({}, { linePrimitives: true, lineNum: 5 }),
-  // makeRectangle({}, { linePrimitives: true, lineNum: 5, cornerStyle: 'none' }),
-  // makeRectangle({}, { linePrimitives: true, lineNum: 5, cornerStyle: 'fill' }),
-
-  // // Corners Only
-  // makeRectangle({}, { cornersOnly: true, cornerLength: 0.1 }),
+  // Line Primitives
+  makeTriangle({}, { linePrimitives: true, lineNum: 5, cornerStyle: 'none' }),
+  makeTriangle({}, { linePrimitives: true, lineNum: 5, cornerStyle: 'fill' }),
+  makeTriangle({ height: 0.5 }, {
+    linePrimitives: true, lineNum: 5, cornerStyle: 'radius', cornerSize: 0.07, cornerSides: 5,
+  }),
 ];
 figure.add(arrows);
 

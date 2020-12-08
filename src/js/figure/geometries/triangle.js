@@ -2,6 +2,9 @@
 import {
   Point, Transform, Line, minAngleDiff, threePointAngle, getPoints, getTriangleCenter,
 } from '../../tools/g2';
+import {
+  joinObjects,
+} from '../../tools/tools';
 // import {
 //   makePolyLine,
 // } from './lines/lines';
@@ -29,15 +32,22 @@ function getTriangleDirection(points: Array<Point>) {
 
 function alignTriangle(
   pointsIn: Array<Point>,
-  xAlign: 'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid',
-  yAlign: 'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid',
-  rotation: number | { side: number, angle: number },
+  xAlign: 'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points',
+  yAlign: 'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points',
+  rotation: number | 's1' | 's2' | 's3' | { side?: 's1' | 's2' | 's3', angle?: number },
+  // definedWithPoints: boolean,
 ): Array<Point> {
   let rotationMatrix;
   if (typeof rotation === 'number') {
     rotationMatrix = new Transform().rotate(rotation).matrix();
   } else {
-    const { side, angle } = rotation;
+    let side = 's1';
+    let angle = 0;
+    if (typeof rotation === 'string') {
+      side = rotation;
+    } else {
+      ({ side, angle } = joinObjects({}, { side: 's1', angle: 0 }, rotation));
+    }
     let r = 0;
     if (side === 's1') {
       const sideRot = new Line(pointsIn[0], pointsIn[1]).angle();
@@ -232,8 +242,8 @@ function getSSSPoints(
 export type OBJ_Triangle_Defined = {
   width: number,
   height: number,
-  xAlign: 'left' | 'center' | 'right' | number,
-  yAlign: 'bottom' | 'middle' | 'top' | number,
+  // xAlign: 'left' | 'center' | 'right' | number,
+  // yAlign: 'bottom' | 'middle' | 'top' | number,
   top: 'left' | 'right' | 'center',
   points?: Array<TypeParsablePoint>,
   SSS?: [number, number, number],
@@ -241,7 +251,10 @@ export type OBJ_Triangle_Defined = {
   AAS?: [number, number, number],
   SAS?: [number, number, number],
   direction: 1 | -1,
-  rotation: number | { side: number, angle: number },
+  // rotation: number | { side: number, angle: number },
+  xAlign: 'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points',
+  yAlign: 'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points',
+  rotation: number | 's1' | 's2' | 's3' | { side?: 's1' | 's2' | 's3', angle: number },
   line?: {
     widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
     width: number,
@@ -277,13 +290,7 @@ function getTriangleBorder(options: OBJ_Triangle_Defined) {
     }
   }
 
-  let alignedTriangle;
-  if (options.points != null) {
-    alignedTriangle = points;
-  } else {
-    alignedTriangle = alignTriangle(points, options.xAlign, options.yAlign, options.rotation);
-  }
-  return [alignedTriangle];
+  return alignTriangle(points, options.xAlign, options.yAlign, options.rotation);
 }
 
 
