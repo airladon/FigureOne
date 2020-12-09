@@ -1343,6 +1343,10 @@ export type OBJ_Line = {
  * and right lines - overrides yStep
  * @property {OBJ_LineStyle} [line] line style options - do not use any corner
  * options
+ * @property {number | TypeParsableBorder} [drawBorderBuffer]
+ * override OBJ_Generic `drawBorderBuffer` with `number` to make the
+ * drawBorderBuffer the same as the grid outline with additional `number`
+ * buffer each side (`0`)
  *
  * @extends OBJ_Generic
  *
@@ -1403,6 +1407,7 @@ export type OBJ_Grid = {
   xNum?: number,
   yNum?: number,
   line?: OBJ_LineStyleSimple,
+  drawBorderBuffer?: number | TypeParsableBorder,
 } & OBJ_Generic;
 
 /**
@@ -2899,22 +2904,28 @@ export default class FigurePrimitives {
           { along: 'y', num: yNum - 1, step: yStep },
         ]);
       }
-      const drawBorder = [[
+      const border = [
         start.add(-width / 2, -width / 2),
         start.add(totWidth + width / 2, -width / 2),
         start.add(totWidth + width / 2, totHeight + width / 2),
         start.add(-width / 2, totHeight + width / 2),
-      ]];
+      ];
+      let drawBorder;
+      if (o.drawBorder != null) {
+        drawBorder = getBorder(o.drawBorder);
+      } else {
+        drawBorder = [border];
+      }
       let { drawBorderBuffer } = o;
       if (typeof o.drawBorderBuffer === 'number') {
         drawBorderBuffer = drawBorder;
         if (o.drawBorderBuffer !== 0) {
           const buf = o.drawBorderBuffer;
           drawBorderBuffer = [[
-            drawBorder[0][0].add(-buf, -buf),
-            drawBorder[0][1].add(buf, -buf),
-            drawBorder[0][2].add(buf, buf),
-            drawBorder[0][3].add(-buf, buf),
+            border[0].add(-buf, -buf),
+            border[1].add(buf, -buf),
+            border[2].add(buf, buf),
+            border[3].add(-buf, buf),
           ]];
         }
       }
