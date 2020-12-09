@@ -2,6 +2,7 @@
 import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
   getBorder, getPoints, getBoundingRect, Line, threePointAngle,
+  getBoundingBorder,
 } from '../../tools/g2';
 // import {
 //   round
@@ -1613,16 +1614,11 @@ export type OBJ_TextDefinition = {
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (default: `Transform('text').standard()`)
- * @property {'text' | 'rect' | TypeParsableBorder} [border]
- * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
- * encompassing rectangle around all text borders combined,
- * or set to `'text'` for the individual text borders (default: `'text'`)
- * @property {'text' | 'rect' | number | 'border' | TypeParsableBorder} [touchBorder]
- * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
- * the encompassing rectangle around all text touch borders, set to `'text'`
- * for the individual text touch borders (`'text'`), set to `'border'` to be the
- * same as the element border or a (`number`) for a rectangle with some buffer
- * around all text touch borders combined into an encompassing rect (default: `'text'`)
+ * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
+ * border used for keeping shape within limits (`'draw'`)
+ * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
+ * border used for determining shape was touched. `number` and `'rect'` use
+ * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -1677,8 +1673,11 @@ export type OBJ_Text = {
   color?: TypeColor,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
-  border?: 'text' | 'rect' | TypeParsableBorder,
-  touchBorder?: 'text' | 'rect' | number | 'border' | TypeParsableBorder,
+  defaultTextTouchBorder?: number,
+  // border?: 'text' | 'rect' | TypeParsableBorder,
+  // touchBorder?: 'text' | 'rect' | number | 'border' | TypeParsableBorder,
+  border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
+  touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
 }
 
 
@@ -2974,101 +2973,6 @@ export default class FigurePrimitives {
     };
     element.custom.updatePoints(joinObjects({}, ...optionsIn));
     return element;
-    // element.custom.updatePoints()
-
-    // const defaultOptions = {
-    //   bounds: new Rect(-1, -1, 2, 2),
-    //   transform: new Transform('grid').standard(),
-    //   line: {
-    //     linePrimitives: false,
-    //     width: this.defaultLineWidth,
-    //     lineNum: 2,
-    //     dash: [],
-    //   },
-    // };
-    // const options = processOptions(defaultOptions, ...optionsIn);
-    // parsePoints(options, []);
-    // options.bounds = getRect(options.bounds); // $FlowFixMe
-    // const getTris = points => makePolyLine(
-    //   points,
-    //   options.line.width,
-    //   false,
-    //   'mid',
-    //   'auto', // cornerStyle doesn't matter
-    //   0.1,    // cornerSize doesn't matter
-    //   1,      // cornerSides,
-    //   Math.PI / 7, // minAutoCornerAngle,
-    //   options.line.dash,
-    //   options.line.linePrimitives,
-    //   options.line.lineNum,
-    //   [[]],
-    //   0,
-    // );
-
-    // // Prioritize Num over Step. Only define Num from Step if Num is undefined.
-    // const { bounds } = options;
-    // let {
-    //   xStep, xNum, yStep, yNum,
-    // } = options;
-    // let { width } = options.line;
-    // if (options.line.linePrimitives && options.line.lineNum === 1) {
-    //   width = 0;
-    // }
-    // const totWidth = bounds.width;
-    // const totHeight = bounds.height;
-    // if (xStep != null && xNum == null) {
-    //   xNum = xStep === 0 ? 1 : 1 + Math.floor((totWidth + xStep * 0.1) / xStep);
-    // }
-    // if (yStep != null && yNum == null) {
-    //   yNum = yStep === 0 ? 1 : 1 + Math.floor((totHeight + yStep * 0.1) / yStep);
-    // }
-
-    // if (xNum == null) {
-    //   xNum = 2;
-    // }
-    // if (yNum == null) {
-    //   yNum = 2;
-    // }
-
-    // xStep = xNum < 2 ? 0 : totWidth / (xNum - 1);
-    // yStep = yNum < 2 ? 0 : totHeight / (yNum - 1);
-
-    // const start = new Point(
-    //   bounds.left,
-    //   bounds.bottom,
-    // );
-    // const xLineStart = start.add(-width / 2, 0);
-    // const xLineStop = start.add(totWidth + width / 2, 0);
-    // const yLineStart = start.add(0, -width / 2);
-    // const yLineStop = start.add(0, totHeight + width / 2);
-
-    // let xTris = [];
-    // let yTris = [];
-    // if (xNum > 0) {
-    //   const [yLine] = getTris([yLineStart, yLineStop]);
-    //   yTris = copyPoints(yLine, [
-    //     { along: 'x', num: xNum - 1, step: xStep },
-    //   ]);
-    // }
-
-    // if (yNum > 0) {
-    //   const [xLine] = getTris([xLineStart, xLineStop]);
-    //   xTris = copyPoints(xLine, [
-    //     { along: 'y', num: yNum - 1, step: yStep },
-    //   ]);
-    // }
-
-    // const element = this.generic(options, {
-    //   drawType: options.line.linePrimitives ? 'lines' : 'triangles', // $FlowFixMe
-    //   points: [...xTris, ...yTris],
-    //   border: [[
-    //     start.add(-width / 2, -width / 2),
-    //     start.add(totWidth + width / 2, -width / 2),
-    //     start.add(totWidth + width / 2, totHeight + width / 2),
-    //     start.add(-width / 2, totHeight + width / 2),
-    //   ]],
-    // });
-    // return element;
   }
 
   /**
@@ -3137,217 +3041,8 @@ export default class FigurePrimitives {
 
     element.custom.updatePoints(joinedOptions);
     return element;
-    // const element = this.generic({
-    //   transform: new Transform('line').standard(),
-    //   border: 'draw',
-    //   touchBorder: 'border',
-    //   holeBorder: [[]],
-    // }, ...optionsIn);
-
-    // element.custom.options = {
-    //   p1: [0, 0],
-    //   angle: 0,
-    //   length: this.defaultLength,
-    //   width: this.defaultLineWidth,
-    //   widthIs: 'mid',
-    //   dash: [],
-    //   color: this.defaultColor,
-    //   // close: false,
-    //   // widthIs: 'mid',
-    //   // cornerStyle: 'auto',
-    //   // cornerSize: 0.01,
-    //   // cornerSides: 10,
-    //   // cornersOnly: false,
-    //   // cornerLength: 0.1,
-    //   // minAutoCornerAngle: Math.PI / 7,
-    //   // dash: [],
-    //   // linePrimitives: false,
-    //   // lineNum: 1,
-    //   // drawBorder: 'line',
-    //   // holeBorder: [[]],
-    //   // drawBorderBuffer: 0,
-    // };
-    // element.custom.updatePoints = (updateOptions: OBJ_Polyline) => {
-    //   const [o, points, drawBorder, drawBorderBuffer, drawType] =
-    //     this.getPolylineTris(joinObjects({}, element.custom.options, updateOptions));
-    //   element.custom.options = o;
-    //   element.custom.updateGeneric(joinObjects({}, o, {
-    //     points, drawBorder, drawBorderBuffer, drawType,
-    //   }));
-    // };
-
-    // element.custom.updatePoints(options);
-
-    // // getTris(options);
-    // // setupPulse(element, options);
-    // return element;
-
-    // const defaultOptions = {
-    //   p1: [0, 0],
-    //   angle: 0,
-    //   length: 1,
-    //   width: this.defaultLineWidth,
-    //   widthIs: 'mid',
-    //   dash: [],
-    //   transform: new Transform('line').standard(),
-    //   border: 'outline',
-    //   touchBorder: 'border',
-    // };  // $FlowFixMe
-    // const optionsToUse = processOptions(defaultOptions, ...options);
-    // const [points, border, touchBorder] = getLine(optionsToUse);
-
-    // const element = this.polyline(optionsToUse, {
-    //   points, // $FlowFixMe
-    //   border,
-    //   touchBorder,
-    // });
-
-    // element.custom.setupLine = (p, o) => {
-    //   if (o.dash.length > 1) {
-    //     const maxLength = p[0].distance(p[1]);
-    //     const dashCumLength = [];
-    //     let cumLength = 0;
-    //     if (o.dash) {
-    //       while (cumLength < maxLength) {
-    //         for (let i = 0; i < o.dash.length && cumLength < maxLength; i += 1) {
-    //           let length = o.dash[i];
-    //           if (length + cumLength > maxLength) {
-    //             length = maxLength - cumLength;
-    //           }
-    //           cumLength += length;
-    //           dashCumLength.push(cumLength);
-    //         }
-    //       }
-    //       element.custom.dashCumLength = dashCumLength;
-    //       element.custom.maxLength = maxLength;
-    //     }
-    //   }
-    // };
-    // element.custom.setupLine(points, optionsToUse);
-    // element.custom.update = (updateOptions) => {
-    //   const o = joinObjects({}, optionsToUse, updateOptions);
-    //   const [updatedPoints, updatedBorder, updatedTouchBorder] = getLine(o);
-    //   element.custom.setupLine(updatedPoints, o);
-    //   element.custom.updatePoints(joinObjects({}, o, {
-    //     points: updatedPoints,
-    //     border: updatedBorder,
-    //     touchBorder: updatedTouchBorder,
-    //     holeBorder: o.holeBorder,
-    //   }));
-    // };
-
-    // // $FlowFixMe
-    // element.drawingObject.getPointCountForLength = (drawLength: number = this.maxLength) => {
-    //   if (drawLength >= element.custom.maxLength) { // $FlowFixMe
-    //     return element.drawingObject.numPoints;
-    //   }
-    //   if (drawLength < element.custom.dashCumLength[0]) {
-    //     return 0;
-    //   }
-    //   for (let i = 0; i < element.custom.dashCumLength.length; i += 1) {
-    //     const cumLength = element.custom.dashCumLength[i];
-    //     if (cumLength > drawLength) {
-    //       return (Math.floor((i - 1) / 2) + 1) * 6;
-    //     }
-    //   } // $FlowFixMe
-    //   return element.drawingObject.numPoints;
-    // };
-
-    // return element;
   }
 
- 
-
-  // polygonSweep(...optionsIn: Array<{
-  //   radius?: number,
-  //   rotation?: number,
-  //   sides?: number,
-  //   offset?: TypeParsablePoint,
-  //   width?: number,
-  //   direction?: -1 | 1,
-  //   fill?: boolean,
-  //   color?: TypeColor,
-  //   texture?: OBJ_Texture,
-  //   position?: TypeParsablePoint,
-  //   transform?: Transform,
-  //   pulse?: number,
-  // }>) {
-  //   const defaultOptions = {
-  //     sides: 4,
-  //     fill: false,
-  //     transform: new Transform('polygonSweep').standard(),
-  //     line: {
-  //       linePrimitives: false,
-  //       lineNum: 2,
-  //     },
-  //   };
-  //   const forceOptions = {
-  //     line: {
-  //       cornerStyle: 'auto',
-  //       cornersOnly: false,
-  //     },
-  //   };
-  //   const options = processOptions(defaultOptions, ...optionsIn, forceOptions);
-  //   const element = this.polygon(options);
-  //   // $FlowFixMe
-  //   element.drawingObject.getPointCountForAngle = (angle: number) => {
-  //     const sidesToDraw = Math.floor(
-  //       tools.round(angle, 8) / tools.round(Math.PI * 2, 8) * options.sides,
-  //     );
-  //     if (options.fill) {
-  //       return sidesToDraw + 2;
-  //     }
-  //     if (options.line && options.line.linePrimitives) {
-  //       return sidesToDraw * options.line.lineNum * 2;
-  //     }
-  //     return sidesToDraw * 6;
-  //   };
-  //   return element;
-  // }
-
-  // // deprecated
-  // fan(...optionsIn: Array<{
-  //   points?: Array<Point>,
-  //   color?: TypeColor,
-  //   transform?: Transform,
-  //   position?: Point,
-  //   pulse?: number,
-  //   mods?: {},
-  // }>) {
-  //   const defaultOptions = {
-  //     points: [],
-  //     color: this.defaultColor,
-  //     transform: new Transform('fan').standard(),
-  //     position: null,
-  //   };
-  //   const options = Object.assign({}, defaultOptions, ...optionsIn);
-
-  //   if (options.position != null) {
-  //     const p = getPoint(options.position);
-  //     options.transform.updateTranslation(p);
-  //   }
-
-  //   const element = Fan(
-  //     this.webgl,
-  //     options.points.map(p => getPoint(p)),
-  //     options.color,
-  //     options.transform,
-  //     this.limits,
-  //   );
-
-  //   // if (options.pulse != null) {
-  //   //   if (typeof element.pulseDefault !== 'function') {
-  //   //     element.pulseDefault.scale = options.pulse;
-  //   //   }
-  //   // }
-  //   setupPulse(element, options);
-
-  //   if (options.mods != null && options.mods !== {}) {
-  //     element.setProperties(options.mods);
-  //   }
-
-  //   return element;
-  // }
 
   textGL(options: Object) {
     return Text(
@@ -3356,6 +3051,7 @@ export default class FigurePrimitives {
       options,
     );
   }
+
 
   // eslint-disable-next-line class-methods-use-this
   parseTextOptions(...optionsIn: Object) {
@@ -3369,8 +3065,9 @@ export default class FigurePrimitives {
       },
       xAlign: 'left',
       yAlign: 'baseline',
-      border: 'text',
-      touchBorder: 'text',
+      border: 'draw',
+      touchBorder: 'buffer',
+      defaultTextTouchBorder: 0,
     };
     const options = joinObjects({}, defaultOptions, ...optionsIn);
 
@@ -3409,11 +3106,13 @@ export default class FigurePrimitives {
     }
 
     if (options.touchBorder != null && Array.isArray(options.touchBorder)) {
-      parsePoints(options, ['touchBorder']);
+      // parsePoints(options, ['touchBorder']);
+      options.touchBorder = getBorder(options.touchBorder);
     }
 
     if (options.border != null && Array.isArray(options.border)) {
-      parsePoints(options, ['border']);
+      // parsePoints(options, ['border']);
+      options.border = getBorder(options.border);
     }
 
     return options;
@@ -3433,7 +3132,6 @@ export default class FigurePrimitives {
     if (options.mods != null && options.mods !== {}) {
       element.setProperties(options.mods);
     }
-
     return element;
   }
 
@@ -3481,109 +3179,60 @@ export default class FigurePrimitives {
     );
     to.loadText(options);
     // console.log(to.text[0].font)
-    return this.createPrimitive(to, options);
+    const element = this.createPrimitive(to, options);
+    element.updateBorders = (o) => {
+      element.drawBorder = element.drawingObject.textBorder;
+      if (o.drawBorder != null) {
+        element.drawBorder = o.drawBorder;
+      }
+      element.drawBorderBuffer = element.drawingObject.textBorderBuffer;
+      if (o.drawBorderBuffer != null) {
+        element.drawBorderBuffer = o.drawBorderBuffer;
+      }
+      if (o.border != null) {
+        element.border = o.border;
+      }
+      if (o.touchBorder != null) {
+        element.touchBorder = o.touchBorder;
+      }
+    };
+    element.getBorderPointsSuper = element.getBorderPoints;
+    element.getBorderPoints = (border: 'border' | 'touchBorder' | 'holeBorder' = 'border') => {
+      if (border === 'border') {
+        return element.getBorderPointsSuper(border);
+      }
+      if (border === 'touchBorder') {
+        if (element.touchBorder === 'draw') {
+          return element.drawBorder;
+        }
+        if (element.touchBorder === 'buffer') {
+          return element.drawBorderBuffer;
+        }
+        if (element.touchBorder === 'border') {
+          return element.getBorderPoints('border');
+        }
+        if (element.touchBorder === 'rect') {
+          return [getBoundingBorder(element.drawBorderBuffer)];
+        }
+        if (typeof element.touchBorder === 'number') {
+          const b = element.drawBorderBuffer;
+          return [getBoundingBorder(b, element.touchBorder)];
+        }
+        return element.touchBorder;
+      }
+      return element.holeBorder;
+    };
+    element.custom.setText = (o: string | OBJ_TextDefinition, index: number = 0) => {
+      element.drawingObject.updateText(o, index);
+      element.updateBorders({});
+    };
+    element.custom.updateText = (o: OBJ_Text) => {
+      element.drawingObject.loadText(this.parseTextOptions(o));
+      element.updateBorders({});
+    };
+    element.updateBorders(options);
+    return element;
   }
-
-  // arrowLegacy(...optionsIn: Array<{
-  //   width?: number;
-  //   legWidth?: number;
-  //   height?: number;
-  //   legHeight?: number;
-  //   color?: TypeColor;
-  //   transform?: Transform;
-  //   position?: Point;
-  //   tip?: Point;
-  //   rotation?: number;
-  //   pulse?: number,
-  //   mods?: {},
-  // }>) {
-  //   const defaultOptions = {
-  //     width: 0.5,
-  //     legWidth: 0,
-  //     height: 0.5,
-  //     legHeight: 0,
-  //     color: this.defaultColor,
-  //     transform: new Transform('arrow').standard(),
-  //     tip: new Point(0, 0),
-  //     rotation: 0,
-  //   };
-  //   const options = Object.assign({}, defaultOptions, ...optionsIn);
-
-  //   if (options.position != null) {
-  //     const p = getPoint(options.position);
-  //     options.transform.updateTranslation(p);
-  //   }
-  //   const element = new Arrow(
-  //     this.webgl,
-  //     options.width,
-  //     options.legWidth,
-  //     options.height,
-  //     options.legHeight,
-  //     getPoint(options.tip),
-  //     options.rotation,
-  //     options.color,
-  //     options.transform,
-  //     this.limits,
-  //   );
-
-  //   // if (options.pulse != null) {
-  //   //   if (typeof element.pulseDefault !== 'function') {
-  //   //     element.pulseDefault.scale = options.pulse;
-  //   //   }
-  //   // }
-  //   setupPulse(element, options);
-
-  //   if (options.mods != null && options.mods !== {}) {
-  //     element.setProperties(options.mods);
-  //   }
-
-  //   return element;
-  // }
-
-
-  // arrowLegacy(
-  //   width: number = 1,
-  //   legWidth: number = 0.5,
-  //   height: number = 1,
-  //   legHeight: number = 0.5,
-  //   color: TypeColor,
-  //   transform: Transform | Point = new Transform(),
-  //   tip: Point = new Point(0, 0),
-  //   rotation: number = 0,
-  // ) {
-  //   return Arrow(
-  //     this.webgl, width, legWidth, height, legHeight,
-  //     tip, rotation, color, transform, this.limits,
-  //   );
-  // }
-
-  // textLegacy(
-  //   textInput: string,
-  //   location: Point,
-  //   color: TypeColor,
-  //   fontInput: FigureFont | null = null,
-  // ) {
-  //   let font = new FigureFont(
-  //     'Times New Roman',
-  //     'italic',
-  //     0.2,
-  //     '200',
-  //     'center',
-  //     'middle',
-  //     color,
-  //   );
-  //   if (fontInput !== null) {
-  //     font = fontInput;
-  //   }
-  //   const dT = new FigureText(new Point(0, 0), textInput, font);
-  //   const to = new TextObject(this.draw2D, [dT]);
-  //   return new FigureElementPrimitive(
-  //     to,
-  //     new Transform().scale(1, 1).translate(location.x, location.y),
-  //     color,
-  //     this.limits,
-  //   );
-  // }
 
   html(optionsIn: {
     element: HTMLElement | Array<HTMLElement>,

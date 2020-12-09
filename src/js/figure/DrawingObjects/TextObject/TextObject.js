@@ -126,10 +126,12 @@ class FigureTextBase {
   yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline';
   lastDrawRect: Rect;
   bounds: Rect;
-  borderSetup: 'rect' | Array<Point>;
-  border: Array<Point>;
-  touchBorder: Array<Point>;
-  touchBorderSetup: 'rect' | number | 'border' | Array<Point>;
+  // borderSetup: 'rect' | Array<Point>;
+  textBorder: Array<Point>;
+  textBorderBuffer: Array<Point>;
+  touchBorder: number | Array<Point>;
+  // touchBorderSetup: 'rect' | number | 'border' | Array<Point>;
+  // touchBorderSetup: 'rect'
   onClick: null | (() => void) | string;
   measure: {
     ascent: number,
@@ -144,8 +146,10 @@ class FigureTextBase {
     font: OBJ_Font = new FigureFont().definition(),
     xAlign: 'left' | 'center' | 'right' = 'left',
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
-    border: 'rect' | Array<Point> = 'rect',
-    touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
+    // border: 'rect' | Array<Point> = 'rect',
+    // number | Array<Point>
+    // touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
+    touchBorder: number | Array<Point>,
     onClick?: string | (() => void) | null = null,
     // runUpdate: boolean = true,
   ) {
@@ -161,8 +165,9 @@ class FigureTextBase {
     } else {
       this.drawContext2D = [drawContext2D];
     }
-    this.touchBorderSetup = touchBorder;
-    this.borderSetup = border;
+    // this.touchBorderSetup = touchBorder;
+    this.touchBorder = touchBorder;
+    // this.borderSetup = border;
     this.onClick = onClick;
   }
 
@@ -177,18 +182,21 @@ class FigureTextBase {
     this.calcTouchBorder();
   }
 
+  // deprecated
   setText(text: string) {
     this.text = text.slice();
     this.measureAndAlignText();
     this.calcBorderAndBounds();
   }
 
+  // deprecated
   setFont(font: OBJ_Font) {
     const newFont = joinObjects({}, this.font.definition(), font);
     this.font = new FigureFont(newFont);
     this.measureAndAlignText();
   }
 
+  // deprecated
   setXAlign(xAlign: 'left' | 'center' | 'right') {
     this.xAlign = xAlign;
     this.alignText();
@@ -197,6 +205,7 @@ class FigureTextBase {
     this.calcTouchBorder();
   }
 
+  // deprecated
   setYAlign(yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline') {
     this.yAlign = yAlign;
     this.alignText();
@@ -322,39 +331,50 @@ class FigureTextBase {
   }
 
   calcBorder() {
-    if (this.borderSetup === 'rect') {
-      this.border = [
-        new Point(this.bounds.left, this.bounds.bottom),
-        new Point(this.bounds.right, this.bounds.bottom),
-        new Point(this.bounds.right, this.bounds.top),
-        new Point(this.bounds.left, this.bounds.top),
-      ];
-    } else {
-      this.border = this.borderSetup;
-    }
+    // if (this.borderSetup === 'rect') {
+    this.textBorder = [
+      new Point(this.bounds.left, this.bounds.bottom),
+      new Point(this.bounds.right, this.bounds.bottom),
+      new Point(this.bounds.right, this.bounds.top),
+      new Point(this.bounds.left, this.bounds.top),
+    ];
+    // } else {
+    //   this.border = this.borderSetup;
+    // }
   }
 
   calcTouchBorder() {
-    if (this.touchBorderSetup === 'border') {
-      this.touchBorder = this.border;
-    } else if (this.touchBorderSetup === 'rect') {
-      this.touchBorder = [
-        new Point(this.bounds.left, this.bounds.bottom),
-        new Point(this.bounds.right, this.bounds.bottom),
-        new Point(this.bounds.right, this.bounds.top),
-        new Point(this.bounds.left, this.bounds.top),
-      ];
-    } else if (typeof this.touchBorderSetup === 'number') {
-      const buffer = this.touchBorderSetup;
-      this.touchBorder = [
+    if (typeof this.touchBorder === 'number') {
+      const buffer = this.touchBorder;
+      this.textBorderBuffer = [
         new Point(this.bounds.left - buffer, this.bounds.bottom - buffer),
         new Point(this.bounds.right + buffer, this.bounds.bottom - buffer),
         new Point(this.bounds.right + buffer, this.bounds.top + buffer),
         new Point(this.bounds.left - buffer, this.bounds.top + buffer),
       ];
     } else {
-      this.touchBorder = this.touchBorderSetup;
+      this.textBorderBuffer = this.touchBorder;
     }
+    // if (this.touchBorderSetup === 'border') {
+    //   this.touchBorder = this.border;
+    // } else if (this.touchBorderSetup === 'rect') {
+    //   this.touchBorder = [
+    //     new Point(this.bounds.left, this.bounds.bottom),
+    //     new Point(this.bounds.right, this.bounds.bottom),
+    //     new Point(this.bounds.right, this.bounds.top),
+    //     new Point(this.bounds.left, this.bounds.top),
+    //   ];
+    // } else if (typeof this.touchBorderSetup === 'number') {
+    //   const buffer = this.touchBorderSetup;
+    //   this.touchBorder = [
+    //     new Point(this.bounds.left - buffer, this.bounds.bottom - buffer),
+    //     new Point(this.bounds.right + buffer, this.bounds.bottom - buffer),
+    //     new Point(this.bounds.right + buffer, this.bounds.top + buffer),
+    //     new Point(this.bounds.left - buffer, this.bounds.top + buffer),
+    //   ];
+    // } else {
+    //   this.touchBorder = this.touchBorderSetup;
+    // }
   }
 }
 
@@ -368,12 +388,34 @@ class FigureText extends FigureTextBase {
     font: OBJ_Font = new FigureFont().definition(),
     xAlign: 'left' | 'center' | 'right' = 'left',
     yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline' = 'baseline',
-    border: 'rect' | Array<Point> = 'rect',
-    touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
+    // border: 'rect' | Array<Point> = 'rect',
+    // touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
+    touchBorder: number | Array<Point> = 0,
     onClick?: string | (() => void) | null = null,
     // runUpdate: boolean = true,
   ) {
-    super(drawContext2D, location, text, font, xAlign, yAlign, border, touchBorder, onClick);
+    super(drawContext2D, location, text, font, xAlign, yAlign, touchBorder, onClick);
+    this.measureAndAlignText();
+    this.calcBorderAndBounds();
+  }
+
+  updateText(options: string | {
+    location?: TypeParsablePoint,
+    text?: string,
+    font?: OBJ_Font,
+    xAlign?: 'left' | 'center' | 'right',
+    yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline',
+    touchBorder?: number | Array<Point>,
+    onClick?: string | (() => void) | null,
+  }) {
+    if (typeof options === 'string') {
+      this.text = options.slice();
+    } else {
+      if (options.location != null) {
+        options.location = getPoint(options.location);
+      }
+      joinObjects(this, options);
+    }
     this.measureAndAlignText();
     this.calcBorderAndBounds();
   }
@@ -390,11 +432,12 @@ class FigureTextLine extends FigureTextBase {
     font: OBJ_Font = new FigureFont().definition(),
     offset: TypeParsablePoint = new Point(0, 0),
     inLine: boolean = true,
-    border: 'rect' | Array<Point> = 'rect',
-    touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
+    // border: 'rect' | Array<Point> = 'rect',
+    // touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
+    touchBorder: number | Array<Point> = 0,
     onClick?: string | (() => void) | null = null,
   ) {
-    super(drawContext2D, location, text, font, 'left', 'baseline', border, touchBorder, onClick);
+    super(drawContext2D, location, text, font, 'left', 'baseline', touchBorder, onClick);
     this.offset = getPoint(offset);
     this.inLine = inLine;
     this.measureAndAlignText();
@@ -429,11 +472,12 @@ class FigureTextLines extends FigureTextLine {
     offset: TypeParsablePoint = new Point(0, 0),
     inLine: boolean = true,
     line: number,
-    border: 'rect' | Array<Point> = 'rect',
-    touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
+    // border: 'rect' | Array<Point> = 'rect',
+    // touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
+    touchBorder: number | Array<Point> = 0,
     onClick?: string | (() => void) | null = null,
   ) {
-    super(drawContext2D, location, text, font, offset, inLine, border, touchBorder, onClick);
+    super(drawContext2D, location, text, font, offset, inLine, touchBorder, onClick);
     this.line = line;
     // this.update();
   }
@@ -462,8 +506,10 @@ class TextObjectBase extends DrawingObject {
   text: Array<FigureTextBase>;
   scalingFactor: number;
   lastDrawTransform: Array<number>;
-  borderSetup: 'text' | 'rect' | Array<Point>;
-  touchBorderSetup: 'text' | 'rect' | 'border' | number | Array<Point>;
+  textBorder: Array<Point>;
+  textBorderBuffer: Array<Point>;
+  // borderSetup: 'text' | 'rect' | Array<Point>;
+  // touchBorderSetup: 'text' | 'rect' | 'border' | number | Array<Point>;
 
   constructor(
     drawContext2D: Array<DrawContext2D> | DrawContext2D,
@@ -506,7 +552,7 @@ class TextObjectBase extends DrawingObject {
         // console.log(text.touchBorder, lastDrawTransformMatrix)
         // const glBorder = this.transformBorder([text.touchBorder], lastDrawTransformMatrix);
         // console.log(glBorder)
-        if (p.isInPolygon(text.touchBorder)) {
+        if (p.isInPolygon(text.textBorderBuffer)) {
           fnMap.exec(text.onClick, fnMap);
         }
       }
@@ -525,6 +571,12 @@ class TextObjectBase extends DrawingObject {
       scalingFactor = 20 / minSize;
     }
     this.scalingFactor = scalingFactor;
+  }
+
+  updateText(textOrOptions: string | OBJ_TextDefinition, index: number = 1) {
+    this.text[index].updateText(textOrOptions);
+    this.setBorder();
+    this.setTouchBorder();
   }
 
   setText(text: string, index: number = 0) {
@@ -578,50 +630,60 @@ class TextObjectBase extends DrawingObject {
     this.setTouchBorder();
   }
 
-  setGenericBorder(name: string) {  // $FlowFixMe
-    if (Array.isArray(this[`${name}Setup`])) {  // $FlowFixMe
-      this[name] = this[`${name}Setup`];
-      return;
-    }
-    const border = [];
-    this.text.forEach((text) => {
-      border.push(  // $FlowFixMe
-        text[name],
-      );
-    });  // $FlowFixMe
-    if (this[`${name}Setup`] === 'text') {  // $FlowFixMe
-      this[name] = border;
-      return;
-    }  // $FlowFixMe
-    const bounds = getBoundingRect(border);  // $FlowFixMe
-    if (this[`${name}Setup`] === 'rect') {  // $FlowFixMe
-      this[name] = [[
-        new Point(bounds.left, bounds.bottom),
-        new Point(bounds.right, bounds.bottom),
-        new Point(bounds.right, bounds.top),
-        new Point(bounds.left, bounds.top),
-      ]];
-      return;
-    }  // $FlowFixMe
-    const buffer = this[`${name}Setup`];  // $FlowFixMe
-    this[name] = [[
-      new Point(bounds.left - buffer, bounds.bottom - buffer),
-      new Point(bounds.right + buffer, bounds.bottom - buffer),
-      new Point(bounds.right + buffer, bounds.top + buffer),
-      new Point(bounds.left - buffer, bounds.top + buffer),
-    ]];
-  }
+  // setGenericBorder(name: string) {
+  //   // $FlowFixMe
+  //   if (Array.isArray(this[`${name}Setup`])) {  // $FlowFixMe
+  //     this[name] = this[`${name}Setup`];
+  //     return;
+  //   }
+  //   const border = [];
+  //   this.text.forEach((text) => {
+  //     border.push(  // $FlowFixMe
+  //       text[name],
+  //     );
+  //   }); // $FlowFixMe
+  //   if (this[`${name}Setup`] === 'text') {  // $FlowFixMe
+  //     this[name] = border;
+  //     return;
+  //   }  // $FlowFixMe
+  //   const bounds = getBoundingRect(border);  // $FlowFixMe
+  //   if (this[`${name}Setup`] === 'rect') {  // $FlowFixMe
+  //     this[name] = [[
+  //       new Point(bounds.left, bounds.bottom),
+  //       new Point(bounds.right, bounds.bottom),
+  //       new Point(bounds.right, bounds.top),
+  //       new Point(bounds.left, bounds.top),
+  //     ]];
+  //     return;
+  //   }  // $FlowFixMe
+  //   const buffer = this[`${name}Setup`];  // $FlowFixMe
+  //   this[name] = [[
+  //     new Point(bounds.left - buffer, bounds.bottom - buffer),
+  //     new Point(bounds.right + buffer, bounds.bottom - buffer),
+  //     new Point(bounds.right + buffer, bounds.top + buffer),
+  //     new Point(bounds.left - buffer, bounds.top + buffer),
+  //   ]];
+  // }
 
   setBorder() {
-    this.setGenericBorder('border');
+    // this.setGenericBorder('border');
+    this.textBorder = [];
+    this.text.forEach((text) => {
+      this.textBorder.push(text.textBorder);
+    });
   }
 
   setTouchBorder() {
-    if (this.touchBorderSetup === 'border') {
-      this.touchBorder = this.border;
-      return;
-    }
-    this.setGenericBorder('touchBorder');
+    this.textBorderBuffer = [];
+    this.text.forEach((text) => {
+      this.textBorderBuffer.push(text.textBorderBuffer);
+    });
+
+    // if (this.touchBorderSetup === 'border') {
+    //   this.touchBorder = this.border;
+    //   return;
+    // }
+    // this.setGenericBorder('touchBorder');
     // console.log(this.touchBorderSetup, this.touchBorder)
   }
 
@@ -802,8 +864,9 @@ class TextObject extends TextObjectBase {
             location?: TypeParsablePoint,
             xAlign?: 'left' | 'right' | 'center',
             yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-            border?: 'rect' | Array<Point>,
-            touchBorder?: 'rect' | number | 'border' | Array<Point>,
+            // border?: 'rect' | Array<Point>,
+            // touchBorder?: 'rect' | number | 'border' | Array<Point>,
+            touchBorder?: number | Array<Point>,
             onClick?: string | () => void,
         }
         | Array<string | {
@@ -812,15 +875,17 @@ class TextObject extends TextObjectBase {
         location?: TypeParsablePoint,
         xAlign?: 'left' | 'right' | 'center',
         yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-        border?: 'rect' | Array<Point>,
-          touchBorder?: 'rect' | number | 'border' | Array<Point>,
+        // border?: 'rect' | Array<Point>,
+        // touchBorder?: 'rect' | number | 'border' | Array<Point>,
+        touchBorder?: number | Array<Point>,
         onClick?: string | () => void,
       }>;
       font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-      border?: 'text' | 'rect' | Array<Point>,
-      touchBorder?: 'text' | 'rect' | number | 'border' | Array<Point>,
+      // border?: 'text' | 'rect' | Array<Point>,
+      // touchBorder?: 'text' | 'rect' | number | 'border' | Array<Point>,
+      defaultTextTouchBorder?: number,
       color: TypeColor
     },
   ) {
@@ -870,16 +935,16 @@ class TextObject extends TextObjectBase {
         fontDefinition,
         xAlign || options.xAlign,
         yAlign || options.yAlign,
-        border || 'rect',
-        touchBorder || 'border',
+        // border || 'rect',
+        touchBorder || options.defaultTextTouchBorder,
         onClick,
       ));
     });
     this.text = figureTextArray;
     // super.loadText();
     this.calcScalingFactor();
-    this.borderSetup = options.border || [];
-    this.touchBorderSetup = options.touchBorder || [];
+    // this.borderSetup = options.border || [];
+    // this.touchBorderSetup = options.touchBorder || [];
     this.layoutText();
   }
 
