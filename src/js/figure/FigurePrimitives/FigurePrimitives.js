@@ -53,7 +53,7 @@ import { getPolygonPoints, getTrisFillPolygon } from '../geometries/polygon/poly
 import { rectangleBorderToTris, getRectangleBorder } from '../geometries/rectangle';
 import { ellipseBorderToTris, getEllipseBorder } from '../geometries/ellipse';
 import type { OBJ_Ellipse_Defined } from '../geometries/ellipse';
-import { getTriangleBorder } from '../geometries/triangle';
+import { getTriangleBorder, getTriangleDirection } from '../geometries/triangle';
 import type { OBJ_Triangle_Defined } from '../geometries/triangle';
 import { getArrow, defaultArrowOptions, getArrowTris } from '../geometries/arrow';
 import type { OBJ_LineArrows, TypeArrowHead } from '../geometries/arrow';
@@ -2423,6 +2423,9 @@ export default class FigurePrimitives {
     if (o.sidesToDraw == null) {
       o.sidesToDraw = o.sides;
     }
+    if (o.sidesToDraw > o.sides) {
+      o.sidesToDraw = o.sides;
+    }
     const points = getPolygonPoints(o);
     // let { drawBorderBuffer } = o;
     let drawBorderOffset = 0;
@@ -2432,11 +2435,15 @@ export default class FigurePrimitives {
         width: this.defaultLineWidth,
         widthIs: 'mid',
       }, o.line);
-      if (o.line.widthIs === 'inside') {
+      if (o.line.widthIs === 'inside' && o.direction === 1) {
         o.line.widthIs = 'positive';
-      }
-      if (o.line.widthIs === 'outside') {
+      } else if (o.line.widthIs === 'inside' && o.direction === -1) {
         o.line.widthIs = 'negative';
+      }
+      if (o.line.widthIs === 'outside' && o.direction === 1) {
+        o.line.widthIs = 'negative';
+      } else if (o.line.widthIs === 'outside' && o.direction === -1) {
+        o.line.widthIs = 'positive';
       }
       const { width, widthIs } = o.line;
       const dir = o.direction;
@@ -2500,9 +2507,10 @@ export default class FigurePrimitives {
     element.custom.updatePoints = (updateOptions: Object) => {
       const borderOptions = joinObjects({}, element.custom.options, updateOptions);
       const [o, border] = element.custom.getBorder(borderOptions);
-      if (element.custom.bufferOffset === 'positive') {
-        border.reverse();
-      }
+      // console.log(element.custom.bufferOffset)
+      // if (element.custom.bufferOffset === 'positive') {
+      //   border.reverse();
+      // }
       if (o.line == null) {
         const [
           points, drawType,
@@ -2528,6 +2536,12 @@ export default class FigurePrimitives {
         if (element.custom.close) {
           o.line.close = true;
         }
+        let bufferOffsetToUse = 'negative';
+        if (element.custom.bufferOffset === 'positive' && o.line.close) {
+          o.line.drawBorder = 'positive';
+          bufferOffsetToUse = 'positive';
+        }
+        // console.log(o)
         const [
           polylineOptions, points, drawBorder, , drawType,
         ] = element.custom.getLine(joinObjects(
@@ -2539,6 +2553,9 @@ export default class FigurePrimitives {
         ));
         element.custom.options = o;
         element.custom.options.line = polylineOptions;
+        if (element.custom.bufferOffset === 'positive') {
+          drawBorder.reverse();
+        }
         // const drawBorder = newDrawBorder;
         // console.log(element.custom.bufferOffset)
         // console.log(newDrawBorder)
@@ -2563,7 +2580,7 @@ export default class FigurePrimitives {
           drawBorder,
           o.drawBorderBuffer,
           element.custom.skipConcave,
-          element.custom.bufferOffset,
+          bufferOffsetToUse,
         );
         // console.log(drawBorder, drawBorderBuffer);
         element.custom.updateGeneric(joinObjects({}, o, {
@@ -2736,26 +2753,45 @@ export default class FigurePrimitives {
     const element = this.genericBase('triangle', {
       width: this.defaultLength,
       height: this.defaultLength,
-      xAlign: 'centroid',
-      yAlign: 'centroid',
+      // xAlign: 'centroid',
+      // yAlign: 'centroid',
       top: 'center',
       direction: 1,
       rotation: 0,
     }, joinObjects({}, ...options));
 
     element.custom.getBorder = (o: OBJ_Triangle_Defined) => {
-      if (o.line != null && o.line.widthIs === 'inside') {
-        o.line.widthIs = 'positive';
+      if (o.xAlign == null) {
+        if (o.points != null) {
+          o.xAlign = 'points';
+        } else {
+          o.xAlign = 'centroid';
+        }
       }
-      if (o.line != null && o.line.widthIs === 'outside') {
-        o.line.widthIs = 'negative';
+      if (o.yAlign == null) {
+        if (o.points != null) {
+          o.yAlign = 'points';
+        } else {
+          o.yAlign = 'centroid';
+        }
       }
-      if (o.direction === -1) {
-        element.custom.bufferOffset = 'positive';
-      } else {
-        element.custom.bufferOffset = 'negative';
+      // if (o.line != null && o.line.widthIs === 'inside') {
+      //   o.line.widthIs = 'positive';
+      // }
+      // if (o.line != null && o.line.widthIs === 'outside') {
+      //   o.line.widthIs = 'negative';
+      // }
+      // if (o.direction === -1) {
+      //   element.custom.bufferOffset = 'positive';
+      // } else {
+      //   element.custom.bufferOffset = 'negative';
+      // }
+      const border = getTriangleBorder(o);
+      if (o.direction === -1 || getTriangleDirection(border) === -1) {
+        border.reverse();
       }
-      return [o, getTriangleBorder(o)];
+
+      return [o, border];
     };
 
     // element.custom.getBorder = (o: OBJ_Triangle_Defined) => [

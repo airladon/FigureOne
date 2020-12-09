@@ -69,6 +69,10 @@ const makeShape = (method, options, lineOptions = null) => {
       position: [x, y],
       line,
     }, options),
+    mods: tools.misc.joinObjects({}, {
+      isTouchable: true,
+      onClick: () => tools.misc.Console(name),
+    }),
   };
 };
 
@@ -173,6 +177,10 @@ const arrows = [
   makeTriangle({ height: 0.5 }, {
     linePrimitives: true, lineNum: 5, cornerStyle: 'radius', cornerSize: 0.07, cornerSides: 5,
   }),
+
+  // direction
+  makeTriangle({ points: [[0, 0.3], [0.3, 0], [0, 0]] }),
+  makeTriangle({ points: [[0, 0.3], [0.3, 0], [0, 0]] }, {}),
 ];
 figure.add(arrows);
 

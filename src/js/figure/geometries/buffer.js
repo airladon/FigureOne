@@ -8,7 +8,7 @@ function getBufferBorder(
   bordersIn: Array<Array<Point>>,
   buffer: number,
   skipConcave: boolean = true,
-  // bufferOffset: 'positive' | 'negative' = 'negative',
+  bufferOffset: 'positive' | 'negative' = 'negative',
 ) {
   if (typeof buffer !== 'number') {
     return buffer;
@@ -56,7 +56,8 @@ function getBufferBorder(
         line = new Line(border[i - 1], border[i]);
       }
       // console.log(bufferOffset)
-      offsetLines.push(line.offset('negative', buffer));
+      // offsetLines.push(line.offset('negative', buffer));
+      offsetLines.push(line.offset(bufferOffset, buffer));
     }
     for (let i = 0; i < offsetLines.length; i += 1) {
       let prevLine;

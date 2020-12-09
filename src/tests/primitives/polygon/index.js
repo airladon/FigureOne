@@ -69,6 +69,10 @@ const makeShape = (method, options, lineOptions = null) => {
       position: [x, y],
       line,
     }, options),
+    mods: tools.misc.joinObjects({}, {
+      isTouchable: true,
+      onClick: () => tools.misc.Console(name),
+    }),
   };
 };
 
@@ -86,6 +90,16 @@ const makePolygon = (options, lineOptions = null) => makeShape(
 
 
 const arrows = [
+  // Update
+  makePolygon({ sides: 40 }),
+  makePolygon({ sides: 40 }, {}),
+
+  // Angle to draw
+  makePolygon({ sides: 40 }),
+  makePolygon({ sides: 40, direction: -1 }),
+  makePolygon({ sides: 40 }, {}),
+  makePolygon({ sides: 40, direction: -1 }, {}),
+
   makePolygon({ radius: 0.3 }),
   makePolygon({ radius: 0.3 }, {}),
   makePolygon({ rotation: Math.PI / 2 }),
@@ -195,6 +209,12 @@ const arrows = [
   ),
 ];
 figure.add(arrows);
+figure.getElement('_0').custom.updatePoints({ sides: 4 });
+figure.getElement('_1').custom.updatePoints({ sides: 4 });
+figure.getElement('_2').angleToDraw = Math.PI / 2;
+figure.getElement('_3').angleToDraw = Math.PI / 2;
+figure.getElement('_4').angleToDraw = Math.PI / 2;
+figure.getElement('_5').angleToDraw = Math.PI / 2;
 
 for (let i = 0; i < index; i += 1) {
   const element = figure.elements.elements[`_${i}`];

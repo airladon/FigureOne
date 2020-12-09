@@ -15,9 +15,9 @@ function getTriangleDirection(points: Array<Point>) {
   const [p1, p2, p3] = points;
   const angle = threePointAngle(p1, p2, p3);
   if (angle > Math.PI) {
-    return -1;
+    return 1;
   }
-  return 1;
+  return -1;
 }
 
 // function increaseTriangleByOffset(points: Array<Point>, delta) {
@@ -292,7 +292,6 @@ function getTriangleBorder(options: OBJ_Triangle_Defined) {
 
   return alignTriangle(points, options.xAlign, options.yAlign, options.rotation);
 }
-
 
 export {
   getTriangleBorder,
