@@ -1557,14 +1557,9 @@ export type OBJ_Arrow = {
  * text vertically relative to `location` (default: from {@link OBJ_Text})
  * @property {string | function(): void} [onClick] function to execute on click
  * within the `touchBorder`
- * @property {'rect' | Array<TypeParsablePoint>} [border] border can be custom
- * points (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
- * rectangle of the text (default: `"rect"`)
  * @property {'rect' | number | 'border' | Array<TypeParsablePoint>} [touchBorder]
  * touch border can be custom points (`Array<TypeParsablePoint>`), set to
- * `'rect'` for the encompassing rectangle of the text, set to `'border'` to be
- * the same as the border of the text, or set to some buffer (`number`) around
- * the rectangle (default: `"rect"`)
+ * or set to some buffer (`number`) around the rext (default: `0`)
  */
 export type OBJ_TextDefinition = {
   text: string,
@@ -1573,8 +1568,7 @@ export type OBJ_TextDefinition = {
   xAlign?: 'left' | 'right' | 'center',
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
   onClick?: string | () => void,
-  border?: 'rect' | Array<TypeParsablePoint>,
-  touchBorder?: 'rect' | number | 'border' | Array<TypeParsablePoint>,
+  touchBorder?: number | Array<TypeParsablePoint>,
 };
 
 /**
