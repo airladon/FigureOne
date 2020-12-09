@@ -3870,7 +3870,12 @@ function rectToPolar(x: number | Point, y: number = 0) {
 
 function getBoundingRect(
   pointArrays: Array<Point> | Array<Array<Point>>,
-  buffer: number = 0,
+  buffer: number | [number, number] | [number, number, number, number] | {
+    left?: number,
+    right?: number,
+    top?: number,
+    bottom?: number,
+  } = 0,
 ) {
   let firstPoint = true;
   let result = { min: new Point(0, 0), max: new Point(0, 0) };
@@ -3887,17 +3892,45 @@ function getBoundingRect(
 
     firstPoint = false;
   });
+  let left;
+  let right;
+  let top;
+  let bottom;
+  if (typeof buffer === 'number') {
+    left = buffer;
+    right = buffer;
+    top = buffer;
+    bottom = buffer;
+  } else if (Array.isArray(buffer)) {
+    if (buffer.length === 2) {
+      [left, top] = buffer;
+      right = left;
+      bottom = top;
+    } else {
+      [left, bottom, right, top] = buffer;
+    }
+  } else {
+    const o = joinObjects({
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+    }, buffer);
+    ({
+      left, right, top, bottom,
+    } = o);
+  }
   return new Rect(
-    result.min.x - buffer,
-    result.min.y - buffer,
-    result.max.x - result.min.x + buffer * 2,
-    result.max.y - result.min.y + buffer * 2,
+    result.min.x - left,
+    result.min.y - bottom,
+    result.max.x - result.min.x + right + left,
+    result.max.y - result.min.y + top + bottom,
   );
 }
 
 function getBoundingBorder(
   pointArrays: Array<Point> | Array<Array<Point>>,
-  buffer: number = 0,
+  buffer: number | [number, number] | [number, number, number, number] = 0,
 ) {
   const r = getBoundingRect(pointArrays, buffer);
   return [

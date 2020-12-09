@@ -15913,7 +15913,7 @@ triangle primitives to draw the line (
 drawBorderBuffer the same as the line with additional 
 <code>number</code>
  thickness
-on either side (
+on each side and the ends (
 <code>0</code>
 )
 
@@ -17852,6 +17852,23 @@ and right lines - overrides yStep
           <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestyle">OBJ_LineStyle</a>?)</code>
           : line style options - do not use any corner
 options
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
+          : override OBJ_Generic 
+<code>drawBorderBuffer</code>
+ with 
+<code>number</code>
+ to make the
+drawBorderBuffer the same as the grid outline with additional 
+<code>number</code>
+
+buffer each side (
+<code>0</code>
+)
 
           
         </div>
@@ -23067,44 +23084,33 @@ in transform
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
-          : border can be custom (
-<code>Array&#x3C;TypeParsablePoint></code>
-), set to 
-<code>'rect'</code>
- for the
-encompassing rectangle around all text borders combined,
-or set to 
-<code>'text'</code>
- for the individual text borders (default: 
-<code>'text'</code>
+          <span class='code bold'>border</span> <code class='quiet'>((<a href="#typeparsableborder">TypeParsableBorder</a> | <code>"buffer"</code> | <code>"draw"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : border used for keeping shape within limits (
+<code>'draw'</code>
 )
 
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
-          : touch border can be custom (
-<code>Array&#x3C;TypeParsablePoint></code>
-), set to 
-<code>'rect'</code>
- for
-the encompassing rectangle around all text touch borders, set to 
-<code>'text'</code>
-
-for the individual text touch borders (
-<code>'text'</code>
-), set to 
-<code>'border'</code>
- to be the
-same as the element border or a (
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeparsableborder">TypeParsableBorder</a> | <code>"rect"</code> | <code>"border"</code> | <code>"buffer"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"draw"</code>)?)</code>
+          : border used for determining shape was touched. 
 <code>number</code>
-) for a rectangle with some buffer
-around all text touch borders combined into an encompassing rect (default: 
-<code>'text'</code>
-)
+ and 
+<code>'rect'</code>
+ use
+the the points in 
+<code>'buffer'</code>
+ to calculate the bounding rects (
+<code>'buffer'</code>
+).
 
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
           
         </div>
       
@@ -41631,35 +41637,14 @@ within the
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
-          : border can be custom
-points (
-<code>Array&#x3C;TypeParsablePoint></code>
-) or set to 
-<code>'rect'</code>
- for the encompassing
-rectangle of the text (default: 
-<code>"rect"</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
           <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
           : touch border can be custom points (
 <code>Array&#x3C;TypeParsablePoint></code>
 ), set to
-
-<code>'rect'</code>
- for the encompassing rectangle of the text, set to 
-<code>'border'</code>
- to be
-the same as the border of the text, or set to some buffer (
+or set to some buffer (
 <code>number</code>
-) around
-the rectangle (default: 
-<code>"rect"</code>
+) around the rext (default: 
+<code>0</code>
 )
 
           

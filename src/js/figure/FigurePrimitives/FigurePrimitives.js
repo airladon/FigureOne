@@ -1603,6 +1603,8 @@ export type OBJ_TextDefinition = {
  * alignment for `text` relative to `location` (default: `"left"`)
  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] default
  * vertical text alignment for `text` relative to `location` (default: `"baseline"`)
+ * @property {number} [defaultTextTouchBorder]?: default value for `touchBorder`
+ * property in `text`
  * @property {TypeColor} [color] (default: `[1, 0, 0, 1`])
  * @property {TypeParsablePoint} [position] if defined, overrides translation
  * in transform
@@ -1664,10 +1666,10 @@ export type OBJ_Text = {
   font?: OBJ_Font,                    // default font
   xAlign?: 'left' | 'right' | 'center',                // default xAlign
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
+  defaultTextTouchBorder?: number,
   color?: TypeColor,
   position?: TypeParsablePoint,
   transform?: TypeParsableTransform,
-  defaultTextTouchBorder?: number,
   // border?: 'text' | 'rect' | TypeParsableBorder,
   // touchBorder?: 'text' | 'rect' | number | 'border' | TypeParsableBorder,
   border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
@@ -3126,54 +3128,6 @@ export default class FigurePrimitives {
     if (options.mods != null && options.mods !== {}) {
       element.setProperties(options.mods);
     }
-    return element;
-  }
-
-  /**
-   * {@link FigureElementPrimitive} that draws a line of text.
-   * @see {@link OBJ_TextLine} for options and examples.
-   */
-  textLine(...optionsIn: Array<OBJ_TextLine>) {
-    const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsIn);
-    const to = new TextLineObject(this.draw2D);
-    to.loadText(options);
-    return this.createPrimitive(to, options);
-  }
-
-  /**
-   * {@link FigureElementPrimitive} that draws text lines.
-   * @see {@link OBJ_TextLines} for options and examples.
-   */
-  textLines(...optionsIn: Array<OBJ_TextLines | string>) {
-    let optionsToUse = optionsIn;
-    if (optionsIn.length === 1 && typeof optionsIn[0] === 'string') {
-      optionsToUse = [{ text: [optionsIn[0]] }];
-    }
-    const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsToUse);
-    if (options.justify == null) {
-      options.justify = 'left';
-    }
-    if (options.lineSpace == null) {
-      options.lineSpace = options.font.size * 1.2;
-    }
-    // console.log('qwerty')
-    const to = new TextLinesObject(this.draw2D);
-    to.loadText(options);
-    return this.createPrimitive(to, options);
-  }
-
-  /**
-   * {@link FigureElementPrimitive} that draws text.
-   * @see {@link OBJ_Text} for options and examples.
-   */
-  text(...optionsIn: Array<OBJ_Text>) {
-    const options = this.parseTextOptions(...optionsIn);
-    const to = new TextObject(
-      this.draw2D,
-    );
-    to.loadText(options);
-    // console.log(to.text[0].font)
-    const element = this.createPrimitive(to, options);
     element.updateBorders = (o) => {
       element.drawBorder = element.drawingObject.textBorder;
       if (o.drawBorder != null) {
@@ -3220,6 +3174,56 @@ export default class FigurePrimitives {
       element.drawingObject.updateText(o, index);
       element.updateBorders({});
     };
+    return element;
+  }
+
+  /**
+   * {@link FigureElementPrimitive} that draws a line of text.
+   * @see {@link OBJ_TextLine} for options and examples.
+   */
+  textLine(...optionsIn: Array<OBJ_TextLine>) {
+    const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsIn);
+    const to = new TextLineObject(this.draw2D);
+    to.loadText(options);
+    const element = this.createPrimitive(to, options);
+    element.updateBorders(options);
+    return element;
+  }
+
+  /**
+   * {@link FigureElementPrimitive} that draws text lines.
+   * @see {@link OBJ_TextLines} for options and examples.
+   */
+  textLines(...optionsIn: Array<OBJ_TextLines | string>) {
+    let optionsToUse = optionsIn;
+    if (optionsIn.length === 1 && typeof optionsIn[0] === 'string') {
+      optionsToUse = [{ text: [optionsIn[0]] }];
+    }
+    const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsToUse);
+    if (options.justify == null) {
+      options.justify = 'left';
+    }
+    if (options.lineSpace == null) {
+      options.lineSpace = options.font.size * 1.2;
+    }
+    // console.log('qwerty')
+    const to = new TextLinesObject(this.draw2D);
+    to.loadText(options);
+    return this.createPrimitive(to, options);
+  }
+
+  /**
+   * {@link FigureElementPrimitive} that draws text.
+   * @see {@link OBJ_Text} for options and examples.
+   */
+  text(...optionsIn: Array<OBJ_Text>) {
+    const options = this.parseTextOptions(...optionsIn);
+    const to = new TextObject(
+      this.draw2D,
+    );
+    to.loadText(options);
+    // console.log(to.text[0].font)
+    const element = this.createPrimitive(to, options);
     element.custom.updateText = (o: OBJ_Text) => {
       element.drawingObject.loadText(this.parseTextOptions(o));
       element.updateBorders({});
