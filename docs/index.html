@@ -15763,16 +15763,13 @@ figure.add({
 <code>drawType</code>)</p>
 <p><img src="./apiassets/line.png"></p>
 <p>A line can either be defined as two points <code>p1</code> and <code>p2</code>, or
-a single points <code>p1</code>, a <code>length</code> and an <code>angle</code>.</p>
+a single point <code>p1</code>, a <code>length</code> and an <code>angle</code>.</p>
 <p>The line has some <code>width</code> that will be filled on both sides
 of the line points evenly (<code>'mid'</code>), or on one side only.
 The line's <code>'positive'</code> side is the side to which it rotates toward
 when rotating in the positive angle direction around <code>p1</code>.
 Similarly the line's <code>'negative'</code> side is the opposite.</p>
-<p>The line can be solid or dashed where dashing is defined as an
-array of numbers. The first number is the length of solid line and the
-second is the length of the gap. If a third number is defined, then it is
-the length of the next solid line, and so on. The dash pattern will repeat.</p>
+<p>The line can be solid or dashed using the <code>dash</code> property.</p>
 <p>The line can have arrows at one or both ends using the <code>arrow</code> property.</p>
 
   
@@ -15842,15 +15839,13 @@ the length of the next solid line, and so on. The dash pattern will repeat.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?)</code>
+          <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
           : defines how the width is grown from the polyline's points.
 Only 
 <code>"mid"</code>
  is fully compatible with all options in
 
 <code>arrow</code>
- and 
-<code>dash</code>
 . (
 <code>"mid"</code>
 )
@@ -15903,6 +15898,23 @@ triangle primitives to draw the line (
 <code>true</code>
  (
 <code>2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>drawBorderBuffer</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
+          : override OBJ_Generic 
+<code>drawBorderBuffer</code>
+ with 
+<code>number</code>
+ to make the
+drawBorderBuffer the same as the line with additional 
+<code>number</code>
+ thickness
+on either side (
+<code>0</code>
 )
 
           
@@ -16102,7 +16114,7 @@ of the line.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code>)?)</code>
+          <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
           : defines how the width is grown from the polyline's points.
 Only 
 <code>"mid"</code>

@@ -1214,7 +1214,7 @@ export type OBJ_Triangle = {
  * ![](./apiassets/line.png)
  *
  * A line can either be defined as two points `p1` and `p2`, or
- * a single points `p1`, a `length` and an `angle`.
+ * a single point `p1`, a `length` and an `angle`.
  *
  * The line has some `width` that will be filled on both sides
  * of the line points evenly (`'mid'`), or on one side only.
@@ -1222,10 +1222,7 @@ export type OBJ_Triangle = {
  * when rotating in the positive angle direction around `p1`.
  * Similarly the line's `'negative'` side is the opposite.
  *
- * The line can be solid or dashed where dashing is defined as an
- * array of numbers. The first number is the length of solid line and the
- * second is the length of the gap. If a third number is defined, then it is
- * the length of the next solid line, and so on. The dash pattern will repeat.
+ * The line can be solid or dashed using the `dash` property.
  *
  * The line can have arrows at one or both ends using the `arrow` property.
  *
@@ -1234,10 +1231,10 @@ export type OBJ_Triangle = {
  * @property {number} [length] length of line from `p1`
  * @property {number} [angle] angle of line from `p1`
  * @property {number} [width] (`0.01`)
- * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative'} [widthIs]
+ * @property {'mid' | 'positive' | 'negative' | number} [widthIs]
  * defines how the width is grown from the polyline's points.
  * Only `"mid"` is fully compatible with all options in
- * `arrow` and `dash`. (`"mid"`)
+ * `arrow`. (`"mid"`)
  * @property {TypeDash} [dash] leave empty for solid line - use array of
  * numbers for dash line where first number is length of line, second number is
  * length of gap and then the pattern repeats - can use more than one dash length
@@ -1251,6 +1248,10 @@ export type OBJ_Triangle = {
  * triangle primitives to draw the line (`false`)
  * @property {number} [lineNum] Number of line primitives to use when
  * `linePrimitivs`: `true` (`2`)
+ * @property {number | TypeParsableBorder} [drawBorderBuffer]
+ * override OBJ_Generic `drawBorderBuffer` with `number` to make the
+ * drawBorderBuffer the same as the line with additional `number` thickness
+ * on each side and the ends (`0`)
  *
  * @extends OBJ_Generic
  *
@@ -1305,11 +1306,12 @@ export type OBJ_Line = {
   length?: number,
   angle?: number,
   width?: number,
-  widthIs?: 'positive' | 'negative' | 'mid',
+  widthIs?: 'positive' | 'negative' | 'mid' | number,
   dash?: TypeDash,
   arrow?: OBJ_LineArrows | TypeArrowHead,
   linePrimitives?: boolean,
   lineNum?: number,
+  drawBorderBuffer?: number | TypeParsableBorder,
 } & OBJ_Generic;
 
 /**
@@ -3027,25 +3029,29 @@ export default class FigurePrimitives {
    * @see {@link OBJ_Line} for options and examples.
    */
   line(...options: OBJ_Line) {
-    const defaultOptions = {
-      p1: [0, 0],
-      angle: 0,
-      length: 1,
-      width: this.defaultLineWidth,
-      widthIs: 'mid',
-      dash: [],
-      transform: new Transform('line').standard(),
-      border: 'outline',
-      touchBorder: 'border',
-    };  // $FlowFixMe
-    const optionsToUse = processOptions(defaultOptions, ...options);
-    const [points, border, touchBorder] = getLine(optionsToUse);
-
-    const element = this.polyline(optionsToUse, {
-      points, // $FlowFixMe
-      border,
-      touchBorder,
-    });
+    const element = this.polyline(joinObjects(
+      {},
+      {
+        transform: new Transform('line').standard(),
+      },
+      ...options,
+      {
+        points: [[0, 0], [0, 1]],
+        dash: [],
+        arrow: null,
+      },
+    ));
+    const joinedOptions = joinObjects({}, ...options);
+    element.custom.options = joinObjects(
+      {},
+      element.custom.options,
+      {
+        p1: [0, 0],
+        angle: 0,
+        length: this.defaultLength,
+        width: this.defaultLineWidth,
+      },
+    );
 
     element.custom.setupLine = (p, o) => {
       if (o.dash.length > 1) {
@@ -3068,37 +3074,139 @@ export default class FigurePrimitives {
         }
       }
     };
-    element.custom.setupLine(points, optionsToUse);
-    element.custom.update = (updateOptions) => {
-      const o = joinObjects({}, optionsToUse, updateOptions);
+
+    element.custom.updatePolyline = element.custom.updatePoints;
+    element.custom.updatePoints = (updateOptions) => {
+      const o = joinObjects({}, element.custom.options, updateOptions);
       const [updatedPoints, updatedBorder, updatedTouchBorder] = getLine(o);
       element.custom.setupLine(updatedPoints, o);
-      element.custom.updatePoints(joinObjects({}, o, {
+      element.custom.updatePolyline(joinObjects({}, o, {
         points: updatedPoints,
         border: updatedBorder,
         touchBorder: updatedTouchBorder,
         holeBorder: o.holeBorder,
       }));
-    };
+    }
 
-    // $FlowFixMe
-    element.drawingObject.getPointCountForLength = (drawLength: number = this.maxLength) => {
-      if (drawLength >= element.custom.maxLength) { // $FlowFixMe
-        return element.drawingObject.numPoints;
-      }
-      if (drawLength < element.custom.dashCumLength[0]) {
-        return 0;
-      }
-      for (let i = 0; i < element.custom.dashCumLength.length; i += 1) {
-        const cumLength = element.custom.dashCumLength[i];
-        if (cumLength > drawLength) {
-          return (Math.floor((i - 1) / 2) + 1) * 6;
-        }
-      } // $FlowFixMe
-      return element.drawingObject.numPoints;
-    };
-
+    element.custom.updatePoints(joinedOptions);
     return element;
+    // const element = this.generic({
+    //   transform: new Transform('line').standard(),
+    //   border: 'draw',
+    //   touchBorder: 'border',
+    //   holeBorder: [[]],
+    // }, ...optionsIn);
+
+    // element.custom.options = {
+    //   p1: [0, 0],
+    //   angle: 0,
+    //   length: this.defaultLength,
+    //   width: this.defaultLineWidth,
+    //   widthIs: 'mid',
+    //   dash: [],
+    //   color: this.defaultColor,
+    //   // close: false,
+    //   // widthIs: 'mid',
+    //   // cornerStyle: 'auto',
+    //   // cornerSize: 0.01,
+    //   // cornerSides: 10,
+    //   // cornersOnly: false,
+    //   // cornerLength: 0.1,
+    //   // minAutoCornerAngle: Math.PI / 7,
+    //   // dash: [],
+    //   // linePrimitives: false,
+    //   // lineNum: 1,
+    //   // drawBorder: 'line',
+    //   // holeBorder: [[]],
+    //   // drawBorderBuffer: 0,
+    // };
+    // element.custom.updatePoints = (updateOptions: OBJ_Polyline) => {
+    //   const [o, points, drawBorder, drawBorderBuffer, drawType] =
+    //     this.getPolylineTris(joinObjects({}, element.custom.options, updateOptions));
+    //   element.custom.options = o;
+    //   element.custom.updateGeneric(joinObjects({}, o, {
+    //     points, drawBorder, drawBorderBuffer, drawType,
+    //   }));
+    // };
+
+    // element.custom.updatePoints(options);
+
+    // // getTris(options);
+    // // setupPulse(element, options);
+    // return element;
+
+    // const defaultOptions = {
+    //   p1: [0, 0],
+    //   angle: 0,
+    //   length: 1,
+    //   width: this.defaultLineWidth,
+    //   widthIs: 'mid',
+    //   dash: [],
+    //   transform: new Transform('line').standard(),
+    //   border: 'outline',
+    //   touchBorder: 'border',
+    // };  // $FlowFixMe
+    // const optionsToUse = processOptions(defaultOptions, ...options);
+    // const [points, border, touchBorder] = getLine(optionsToUse);
+
+    // const element = this.polyline(optionsToUse, {
+    //   points, // $FlowFixMe
+    //   border,
+    //   touchBorder,
+    // });
+
+    // element.custom.setupLine = (p, o) => {
+    //   if (o.dash.length > 1) {
+    //     const maxLength = p[0].distance(p[1]);
+    //     const dashCumLength = [];
+    //     let cumLength = 0;
+    //     if (o.dash) {
+    //       while (cumLength < maxLength) {
+    //         for (let i = 0; i < o.dash.length && cumLength < maxLength; i += 1) {
+    //           let length = o.dash[i];
+    //           if (length + cumLength > maxLength) {
+    //             length = maxLength - cumLength;
+    //           }
+    //           cumLength += length;
+    //           dashCumLength.push(cumLength);
+    //         }
+    //       }
+    //       element.custom.dashCumLength = dashCumLength;
+    //       element.custom.maxLength = maxLength;
+    //     }
+    //   }
+    // };
+    // element.custom.setupLine(points, optionsToUse);
+    // element.custom.update = (updateOptions) => {
+    //   const o = joinObjects({}, optionsToUse, updateOptions);
+    //   const [updatedPoints, updatedBorder, updatedTouchBorder] = getLine(o);
+    //   element.custom.setupLine(updatedPoints, o);
+    //   element.custom.updatePoints(joinObjects({}, o, {
+    //     points: updatedPoints,
+    //     border: updatedBorder,
+    //     touchBorder: updatedTouchBorder,
+    //     holeBorder: o.holeBorder,
+    //   }));
+    // };
+
+    // // $FlowFixMe
+    // element.drawingObject.getPointCountForLength = (drawLength: number = this.maxLength) => {
+    //   if (drawLength >= element.custom.maxLength) { // $FlowFixMe
+    //     return element.drawingObject.numPoints;
+    //   }
+    //   if (drawLength < element.custom.dashCumLength[0]) {
+    //     return 0;
+    //   }
+    //   for (let i = 0; i < element.custom.dashCumLength.length; i += 1) {
+    //     const cumLength = element.custom.dashCumLength[i];
+    //     if (cumLength > drawLength) {
+    //       return (Math.floor((i - 1) / 2) + 1) * 6;
+    //     }
+    //   } // $FlowFixMe
+    //   return element.drawingObject.numPoints;
+    // };
+
+    // return element;
   }
 
  
