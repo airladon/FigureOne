@@ -78,6 +78,7 @@ const makeShape = (name, method, options, lineOptions = null) => {
   };
 };
 
+const click = text => tools.misc.Console.bind(this, text);
 const txt = (name, options, lineOptions = null) => makeShape(
   name,
   'primitives.textLine',
@@ -88,17 +89,18 @@ const txt = (name, options, lineOptions = null) => makeShape(
     // height: 0.2,
     // top: 'left',
     touchBorder: 'buffer',
+    defaultTextTouchBorder: [0, 0.1],
+    text: [
+      { text: 'hello ', onClick: click('hello') },
+      { text: 'world', onClick: click('world') },
+    ],
   }, options),
   lineOptions,
 );
 
-// function clk(text) { tools.misc.Console(text); }
-const click = text => tools.misc.Console.bind(this, text);
+
 /* eslint-disable object-curly-newline */
 const arrows = [
-  // txt('a1', {
-  //   text: ['Hello ', 'world'],
-  // }),
   /*
   .......########...#######..########..########..########.########...######.
   .......##.....##.##.....##.##.....##.##.....##.##.......##.....##.##....##
@@ -108,148 +110,35 @@ const arrows = [
   .......##.....##.##.....##.##....##..##.....##.##.......##....##..##....##
   .......########...#######..##.....##.########..########.##.....##..######.
   */
-  // Test default border: 'draw', touchBorder: 'buffer'
-  txt('b1', {
+  // Default border: 'draw', touchBorder: 'buffer'
+  txt('b1', {}),
+  txt('b2', { border: 'rect' }),
+  txt('b3', { border: 0.1 }),
+  txt('b4', { border: 'buffer' }),
+  txt('b5', { border: [[0, 0], [0.5, 0], [0, 0.5]] }),
+
+  // TouchBorder
+  txt('tb1', { border: 0.05, touchBorder: 'border' }),
+  txt('tb2', { border: 0.05, touchBorder: 'rect' }),
+  txt('tb3', { border: 0.05, touchBorder: 0.1 }),
+  txt('tb4', { border: 0.05, touchBorder: 'draw' }),
+  txt('tb5', { border: 0.05, touchBorder: 'buffer' }),
+  txt('tb6', { border: 0.05, touchBorder: [[0, 0], [0.5, 0], [0, 0.5]] }),
+
+  // Test individual touch borders
+  txt('itb1', {
     text: [
-      { text: 'hello', onClick: click('hello') },
-      ' ',
+      { text: 'hello ', onClick: click('hello'), touchBorder: [0, 0.15] },
       { text: 'world', onClick: click('world') },
     ],
-    defaultTextTouchBorder: [0, 0.1],
   }),
 
-  // // Test border: 'rect'
-  // txt('b2', {
-  //   border: 'rect',
-  //   text: [
-  //     { text: 'a', onClick: click('a') },
-  //     { text: 'b', onClick: click('b'), location: [0.2, 0.1] },
-  //   ],
-  //   defaultTextTouchBorder: 0.1,
-  // }),
-
-  // // Test border: number
-  // txt('b3', {
-  //   border: 0.1,
-  //   text: [
-  //     { text: 'a', onClick: click('a') },
-  //     { text: 'b', onClick: click('b'), location: [0.2, 0.1] },
-  //   ],
-  //   defaultTextTouchBorder: 0.1,
-  // }),
-
-  // // Test border: 'buffer'
-  // txt('b4', {
-  //   border: 'buffer',
-  //   text: [
-  //     { text: 'a', onClick: click('a') },
-  //     { text: 'b', onClick: click('b'), location: [0.2, 0.1] },
-  //   ],
-  //   defaultTextTouchBorder: 0.1,
-  // }),
-
-  // // Test border: 'custom'
-  // txt('b5', {
-  //   border: [[0, 0], [0.5, 0], [0, 0.5]],
-  //   text: [
-  //     { text: 'a', onClick: click('a') },
-  //     { text: 'b', onClick: click('b'), location: [0.2, 0.1] },
-  //   ],
-  //   defaultTextTouchBorder: 0.1,
-  // }),
-
-  // // Test TouchBorder: 'border'
-  // txt('tb1', {
-  //   border: 0.05,
-  //   touchBorder: 'border',
-  //   text: [
-  //     { text: 'a', onClick: click('a') },
-  //     { text: 'b', onClick: click('b'), location: [0.2, 0.1] },
-  //   ],
-  //   defaultTextTouchBorder: 0.1,
-  // }),
-
-  // // Test TouchBorder: 'rect'
-  // txt('tb2', {
-  //   border: 0.05,
-  //   touchBorder: 'rect',
-  //   text: [
-  //     { text: 'a', onClick: click('a') },
-  //     { text: 'b', onClick: click('b'), location: [0.2, 0.1] },
-  //   ],
-  //   defaultTextTouchBorder: 0.1,
-  // }),
-
-  // // Test TouchBorder: number
-  // txt('tb3', {
-  //   border: 0.05,
-  //   touchBorder: 0.1,
-  //   text: [
-  //     { text: 'a', onClick: click('a') },
-  //     { text: 'b', onClick: click('b'), location: [0.2, 0.1] },
-  //   ],
-  //   defaultTextTouchBorder: 0.1,
-  // }),
-
-  // // Test TouchBorder: draw
-  // txt('tb4', {
-  //   border: 0.05,
-  //   touchBorder: 'draw',
-  //   text: [
-  //     { text: 'a', onClick: click('a') },
-  //     { text: 'b', onClick: click('b'), location: [0.2, 0.1] },
-  //   ],
-  //   defaultTextTouchBorder: 0.1,
-  // }),
-
-  // // Test TouchBorder: buffer
-  // txt('tb5', {
-  //   border: 0.05,
-  //   touchBorder: 'buffer',
-  //   text: [
-  //     { text: 'a', onClick: click('a') },
-  //     { text: 'b', onClick: click('b'), location: [0.2, 0.1] },
-  //   ],
-  //   defaultTextTouchBorder: 0.1,
-  // }),
-
-  // // Test TouchBorder: custom
-  // txt('tb6', {
-  //   border: 0.05,
-  //   touchBorder: [[0, 0], [0.5, 0], [0, 0.5]],
-  //   text: [
-  //     { text: 'a', onClick: click('a') },
-  //     { text: 'b', onClick: click('b'), location: [0.2, 0.1] },
-  //   ],
-  //   defaultTextTouchBorder: 0.1,
-  // }),
-
-  // // Test individual touch borders
-  // txt('itb1', {
-  //   text: [
-  //     { text: 'a', onClick: click('a'), touchBorder: 0.15 },
-  //     { text: 'b', onClick: click('b'), location: [0.2, 0.1], touchBorder: 0.05 },
-  //   ],
-  //   defaultTextTouchBorder: 0.1,
-  // }),
-
-  // // Test individual touch custom
-  // txt('itb2', {
-  //   text: [
-  //     {
-  //       text: 'a',
-  //       onClick: click('a'),
-  //       touchBorder: [[-0.1, -0.1], [0.2, -0.1], [-0.1, 0.2]],
-  //     },
-  //     {
-  //       text: 'b',
-  //       onClick: click('b'),
-  //       location: [0.2, 0.1],
-  //       touchBorder: [[0.1, 0], [0.3, 0], [0.3, 0.3]],
-  //     },
-  //   ],
-  //   defaultTextTouchBorder: 0.1,
-  // }),
+  txt('itb2', {
+    text: [
+      { text: 'hello ', onClick: click('hello'), touchBorder: [0, 0.15] },
+      { text: 'world', onClick: click('world'), touchBorder: [[0.1, 0], [0.3, 0], [0.3, 0.3]] },
+    ],
+  }),
 
   // /*
   // ..........###....##.......####..######...##....##
@@ -366,7 +255,7 @@ figure.add(arrows);
 //   xAlign: 'right',
 // });
 
-console.log(figure.getElement('b1'))
+// console.log(figure.getElement('itb1'))
 
 for (let i = 0; i < index; i += 1) {
   const element = figure.elements.elements[figure.elements.drawOrder[i + 3]];

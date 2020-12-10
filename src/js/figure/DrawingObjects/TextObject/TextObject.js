@@ -907,22 +907,22 @@ class TextObject extends TextObjectBase {
       let xAlign;
       let yAlign;
       let textToUse;
-      let border;
+      // let border;
       let touchBorder;
       let onClick;
       if (typeof textDefinition === 'string') {
         textToUse = textDefinition;
       } else {
         ({
-          font, location, xAlign, yAlign, touchBorder, border, onClick,
+          font, location, xAlign, yAlign, touchBorder, onClick,
         } = textDefinition);
         textToUse = textDefinition.text;
-        if (Array.isArray(border)) {  // $FlowFixMe
-          border = getPoints(border);
-        }
-        if (Array.isArray(touchBorder)) {  // $FlowFixMe
-          touchBorder = getPoints(touchBorder);
-        }
+        // if (Array.isArray(border)) {  // $FlowFixMe
+        //   border = getPoints(border);
+        // }
+        // if (Array.isArray(touchBorder)) {  // $FlowFixMe
+        //   touchBorder = getPoints(touchBorder);
+        // }
       }
       let locationToUse;
       if (location == null) {
@@ -1057,22 +1057,22 @@ class TextLineObject extends TextObjectBase {
       let offset;
       let inLine;
       let textToUse;
-      let border;
+      // let border;
       let touchBorder;
       let onClick;
       if (typeof textDefinition === 'string') {
         textToUse = textDefinition;
       } else {
         ({
-          font, offset, inLine, border, touchBorder, onClick,
+          font, offset, inLine, touchBorder, onClick,
         } = textDefinition);
         textToUse = textDefinition.text;
-        if (Array.isArray(border)) {  // $FlowFixMe
-          border = getPoints(border);
-        }
-        if (Array.isArray(touchBorder)) {  // $FlowFixMe
-          touchBorder = getPoints(touchBorder);
-        }
+        // if (Array.isArray(border)) {  // $FlowFixMe
+        //   border = getPoints(border);
+        // }
+        // if (Array.isArray(touchBorder)) {  // $FlowFixMe
+        //   touchBorder = getPoints(touchBorder);
+        // }
       }
       let offsetToUse;
       if (offset == null) {
