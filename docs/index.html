@@ -4387,6 +4387,36 @@
               
                 
                 <li><a
+                  href='#obj_buffer'
+                  class="">
+                  OBJ_Buffer
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeparsablebuffer'
+                  class="">
+                  TypeParsableBuffer
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#getbuffer'
+                  class="">
+                  getBuffer
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#typeparsableborder'
                   class="">
                   TypeParsableBorder
@@ -23058,27 +23088,21 @@ vertical text alignment for
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(TypeBuffer?)</code>
+          : ?: default buffer for
+
+<code>touchBorder</code>
+ property in 
+<code>text</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : (default: 
 <code>[1, 0, 0, 1</code>
 ])
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          : if defined, overrides translation
-in transform
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
-          : (default: 
-<code>Transform('text').standard()</code>
-)
 
           
         </div>
@@ -23109,8 +23133,19 @@ the the points in
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : if defined, overrides translation
+in transform
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transform</span> <code class='quiet'>(<a href="#typeparsabletransform">TypeParsableTransform</a>?)</code>
+          : (default: 
+<code>Transform('text').standard()</code>
+)
+
           
         </div>
       
@@ -23256,6 +23291,29 @@ to layout into a line
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(TypeBuffer?)</code>
+          : ?: default buffer for
+
+<code>touchBorder</code>
+ property in 
+<code>text</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          : horizontal alignment of
+line with 
+<code>position</code>
+ (
+<code>left</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code>)?)</code>
           : vertical
 alignment of line with 
@@ -23263,6 +23321,31 @@ alignment of line with
  (
 <code>baseline</code>
 )
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<a href="#typeparsableborder">TypeParsableBorder</a> | <code>"buffer"</code> | <code>"draw"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : border used for keeping shape within limits (
+<code>'draw'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeparsableborder">TypeParsableBorder</a> | <code>"rect"</code> | <code>"border"</code> | <code>"buffer"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"draw"</code>)?)</code>
+          : border used for determining shape was touched. 
+<code>number</code>
+ and 
+<code>'rect'</code>
+ use
+the the points in 
+<code>'buffer'</code>
+ to calculate the bounding rects (
+<code>'buffer'</code>
+).
 
           
         </div>
@@ -23281,54 +23364,6 @@ in transform
 <code>Transform('text').standard()</code>
 )
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
-          : border can be custom (
-<code>Array&#x3C;TypeParsablePoint></code>
-), set to 
-<code>'rect'</code>
- for the
-encompassing rectangle around all text borders combined,
-or set to 
-<code>'text'</code>
- for the individual text borders (
-<code>'rect'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
-          : touch border can be custom (
-<code>Array&#x3C;TypeParsablePoint></code>
-), set to 
-<code>'rect'</code>
- for
-the encompassing rectangle around all text touch borders, set to 
-<code>'text'</code>
-
-for the individual text touch borders (
-<code>'text'</code>
-), set to 
-<code>'border'</code>
- to be the
-same as the element border or a (
-<code>number</code>
-) for a rectangle with some buffer
-around all text touch borders combined into an encompassing rect (
-<code>'rect'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>))</code>
-          
           
         </div>
       
@@ -23482,10 +23517,33 @@ strings
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(TypeBuffer?)</code>
+          : ?: default buffer for
+
+<code>touchBorder</code>
+ property in 
+<code>text</code>
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>lineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : Space between baselines of lines
 (
 <code>font.size * 1.2</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>)?)</code>
+          : horizontal alignment of
+lines with 
+<code>position</code>
+ (
+<code>left</code>
 )
 
           
@@ -23499,6 +23557,31 @@ alignment of lines with
  (
 <code>baseline</code>
 )
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>border</span> <code class='quiet'>((<a href="#typeparsableborder">TypeParsableBorder</a> | <code>"buffer"</code> | <code>"draw"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : border used for keeping shape within limits (
+<code>'draw'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeparsableborder">TypeParsableBorder</a> | <code>"rect"</code> | <code>"border"</code> | <code>"buffer"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"draw"</code>)?)</code>
+          : border used for determining shape was touched. 
+<code>number</code>
+ and 
+<code>'rect'</code>
+ use
+the the points in 
+<code>'buffer'</code>
+ to calculate the bounding rects (
+<code>'buffer'</code>
+).
 
           
         </div>
@@ -23521,55 +23604,7 @@ in transform
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
-          : border can be custom (
-<code>Array&#x3C;TypeParsablePoint></code>
-), set to 
-<code>'rect'</code>
- for the
-encompassing rectangle around all text borders combined,
-or set to 
-<code>'text'</code>
- for the individual text borders (
-<code>'rect'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"text"</code> | <code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="#typeparsableborder">TypeParsableBorder</a>)?)</code>
-          : touch border can be custom (
-<code>Array&#x3C;TypeParsablePoint></code>
-), set to 
-<code>'rect'</code>
- for
-the encompassing rectangle around all text touch borders, set to 
-<code>'text'</code>
-
-for the individual text touch borders (
-<code>'text'</code>
-), set to 
-<code>'border'</code>
- to be the
-same as the element border or a (
-<code>number</code>
-) for a rectangle with some buffer
-around all text touch borders combined into an encompassing rect (
-<code>'rect'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
           <span class='code bold'>justify</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"right"</code> | <code>"center"</code>))</code>
           
           
         </div>
@@ -41637,7 +41672,7 @@ within the
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((TypeBuffer | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
           : touch border can be custom points (
 <code>Array&#x3C;TypeParsablePoint></code>
 ), set to
@@ -41888,35 +41923,14 @@ within the
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
-          : border can be custom
-(
-<code>Array&#x3C;TypeParsablePoint></code>
-) or set to 
-<code>'rect'</code>
- for the encompassing
-rectangle of the text (default: 
-<code>'rect'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((TypeBuffer | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
           : touch border can be custom (
 <code>Array&#x3C;TypeParsablePoint></code>
-), set to 
-<code>'rect'</code>
- for
-the encompassing rectangle of the text, set to 
-<code>'border'</code>
- to be the same as
-the border of the text, or set to some buffer (
-<code>number</code>
-) around
-the rectangle (default: 
-<code>'rect'</code>
+), or be set to some
+buffer (
+<code>TypeBuffer</code>
+) around the rectangle (default: 
+<code>'0'</code>
 )
 
           
@@ -41978,7 +41992,7 @@ the rectangle (default:
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>line</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
           : string representing a line of text
 
           
@@ -42120,20 +42134,14 @@ encompassing rectangle of the text (default:
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((TypeBuffer | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
           : touch border can be custom (
 <code>Array&#x3C;TypeParsablePoint></code>
-), set to 
-<code>'rect'</code>
- for
-the encompassing rectangle of the text, set to 
-<code>'border'</code>
- to be the same as
-the border of the text, or set to some buffer (
-<code>number</code>
-) around
-the rectangle (default: 
-<code>'rect'</code>
+), or be set to some
+buffer (
+<code>TypeBuffer</code>
+) around the rectangle (default: 
+<code>'0'</code>
 )
 
           
@@ -55046,6 +55054,218 @@ e.animations.new()
   .goToForm({ <span class="hljs-attr">target</span>: <span class="hljs-string">'2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
   .start();</pre>
     
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_buffer'>
+      OBJ_Buffer
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Buffer for rectangle, where <code>left</code>, <code>bottom</code>, <code>right</code> and <code>top</code> are
+the buffer values for a rectangle's left, bottom, right and top sides
+respectively.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>left</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>right</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>top</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeparsablebuffer'>
+      TypeParsableBuffer
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Buffer for rectangle can be:</p>
+<ul>
+<li><code>number</code>: left, bottom, right, top buffer all the same</li>
+<li>[<code>number</code>, <code>number</code>]: left/right and bottom/top buffer values</li>
+<li>[<code>number</code>, <code>number</code>, <code>number</code>, <code>number</code>]: left, bottom, right,
+top buffer values</li>
+<li><code>{ left? number, bottom?: number, right?: number, top?: number}</code>:
+object definition where default values are <code>0</code>.</li>
+</ul>
+<p>Can use <a href="#getbuffer">getBuffer</a> to convert the parsable buffer into</p>
+
+  
+    <p style="display: none;">      Type:
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | {left: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, right: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, top: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottom: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?})
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getbuffer'>
+      getBuffer
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Convert a parsable buffer into a buffer.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>buffer</span> <code class='quiet'>(<a href="#typeparsablebuffer">TypeParsableBuffer</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#obj_buffer">OBJ_Buffer</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
   
 
   

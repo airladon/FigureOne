@@ -1557,7 +1557,7 @@ export type OBJ_Arrow = {
  * text vertically relative to `location` (default: from {@link OBJ_Text})
  * @property {string | function(): void} [onClick] function to execute on click
  * within the `touchBorder`
- * @property {'rect' | number | 'border' | Array<TypeParsablePoint>} [touchBorder]
+ * @property {TypeBuffer | Array<TypeParsablePoint>} [touchBorder]
  * touch border can be custom points (`Array<TypeParsablePoint>`), set to
  * or set to some buffer (`number`) around the rext (default: `0`)
  */
@@ -1568,7 +1568,7 @@ export type OBJ_TextDefinition = {
   xAlign?: 'left' | 'right' | 'center',
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
   onClick?: string | () => void,
-  touchBorder?: number | Array<TypeParsablePoint>,
+  touchBorder?: TypeBuffer | Array<TypeParsablePoint>,
 };
 
 /**
@@ -1603,18 +1603,18 @@ export type OBJ_TextDefinition = {
  * alignment for `text` relative to `location` (default: `"left"`)
  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] default
  * vertical text alignment for `text` relative to `location` (default: `"baseline"`)
- * @property {number} [defaultTextTouchBorder]?: default value for `touchBorder`
- * property in `text`
+ * @property {TypeBuffer} [defaultTextTouchBorder]?: default buffer for
+ * `touchBorder` property in `text`
  * @property {TypeColor} [color] (default: `[1, 0, 0, 1`])
- * @property {TypeParsablePoint} [position] if defined, overrides translation
- * in transform
- * @property {TypeParsableTransform} [transform]
- * (default: `Transform('text').standard()`)
  * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
  * border used for keeping shape within limits (`'draw'`)
  * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
  * border used for determining shape was touched. `number` and `'rect'` use
  * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
+ * @property {TypeParsablePoint} [position] if defined, overrides translation
+ * in transform
+ * @property {TypeParsableTransform} [transform]
+ * (default: `Transform('text').standard()`)
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -1666,14 +1666,12 @@ export type OBJ_Text = {
   font?: OBJ_Font,                    // default font
   xAlign?: 'left' | 'right' | 'center',                // default xAlign
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-  defaultTextTouchBorder?: number,
+  defaultTextTouchBorder?: TypeBuffer,
   color?: TypeColor,
-  position?: TypeParsablePoint,
-  transform?: TypeParsableTransform,
-  // border?: 'text' | 'rect' | TypeParsableBorder,
-  // touchBorder?: 'text' | 'rect' | number | 'border' | TypeParsableBorder,
   border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
   touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
+  position?: TypeParsablePoint,
+  transform?: TypeParsableTransform,
 }
 
 
@@ -1689,14 +1687,9 @@ export type OBJ_Text = {
  * and not this (default: `true`)
  * @property {string | function(): void} [onClick] function to execute on click
  * within the `touchBorder` of string
- * @property {'rect' | Array<TypeParsablePoint>} [border] border can be custom
- * (`Array<TypeParsablePoint>`) or set to `'rect'` for the encompassing
- * rectangle of the text (default: `'rect'`)
- * @property {'rect' | number | 'border' | Array<TypeParsablePoint>} [touchBorder]
- * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
- * the encompassing rectangle of the text, set to `'border'` to be the same as
- * the border of the text, or set to some buffer (`number`) around
- * the rectangle (default: `'rect'`)
+ * @property {TypeBuffer | Array<TypeParsablePoint>} [touchBorder]
+ * touch border can be custom (`Array<TypeParsablePoint>`), or be set to some
+ * buffer (`TypeBuffer`) around the rectangle (default: `'0'`)
  */
 export type OBJ_TextLineDefinition = {
   text: string,
@@ -1704,8 +1697,7 @@ export type OBJ_TextLineDefinition = {
   offset?: TypeParsablePoint,
   inLine?: boolean,
   onClick?: string | () => void,
-  border?: 'rect' | Array<TypeParsablePoint>,
-  touchBorder?: 'rect' | number | 'border' | Array<TypeParsablePoint>,
+  touchBorder?: TypeBuffer | Array<TypeParsablePoint>,
 };
 
 /**
@@ -1724,24 +1716,21 @@ export type OBJ_TextLineDefinition = {
  * @property {OBJ_Font} [font] Default font for strings in line
  * @property {TypeColor} [color] Default color for strings in line
  * (`[1, 0, 0, 1`])
- * @property {'left' | 'right' | 'center} [xAlign] horizontal alignment of
+ * @property {TypeBuffer} [defaultTextTouchBorder]?: default buffer for
+ * `touchBorder` property in `text`
+ * @property {'left' | 'right' | 'center'} [xAlign] horizontal alignment of
  * line with `position` (`left`)
  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] vertical
  * alignment of line with `position` (`baseline`)
+ * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
+ * border used for keeping shape within limits (`'draw'`)
+ * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
+ * border used for determining shape was touched. `number` and `'rect'` use
+ * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
  * @property {TypeParsablePoint} [position] if defined, overrides translation
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (`Transform('text').standard()`)
- * @property {'text' | 'rect' | TypeParsableBorder} [border]
- * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
- * encompassing rectangle around all text borders combined,
- * or set to `'text'` for the individual text borders (`'rect'`)
- * @property {'text' | 'rect' | number | 'border' | TypeParsableBorder} [touchBorder]
- * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
- * the encompassing rectangle around all text touch borders, set to `'text'`
- * for the individual text touch borders (`'text'`), set to `'border'` to be the
- * same as the element border or a (`number`) for a rectangle with some buffer
- * around all text touch borders combined into an encompassing rect (`'rect'`)
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -1784,12 +1773,13 @@ export type OBJ_TextLine = {
   text: Array<string | OBJ_TextLineDefinition>;
   font: OBJ_Font,
   color: TypeColor,
+  defaultTextTouchBorder?: TypeBuffer,
   xAlign: 'left' | 'right' | 'center',
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
+  border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
+  touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
   position: TypeParsablePoint,
   transform: TypeParsableTransform,
-  border?: 'rect' | 'text' | Array<TypeParsablePoint>,
-  touchBorder?: 'rect' | number | 'border' | 'text' | Array<TypeParsablePoint>,
 }
 
 /**
@@ -1826,11 +1816,9 @@ export type OBJ_TextLinesDefinition = {
  * @property {'rect' | Array<TypeParsablePoint>} [border] border of modified
  * text can be custom (`Array<TypeParsablePoint>`) or set to `'rect'` for the
  * encompassing rectangle of the text (default: `'rect'`)
- * @property {'rect' | number | 'border' | Array<TypeParsablePoint>} [touchBorder]
- * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
- * the encompassing rectangle of the text, set to `'border'` to be the same as
- * the border of the text, or set to some buffer (`number`) around
- * the rectangle (default: `'rect'`)
+ * @property {TypeBuffer | Array<TypeParsablePoint>} [touchBorder]
+ * touch border can be custom (`Array<TypeParsablePoint>`), or be set to some
+ * buffer (`TypeBuffer`) around the rectangle (default: `'0'`)
  */
 export type OBJ_TextModifierDefinition = {
   text?: string,
@@ -1838,7 +1826,7 @@ export type OBJ_TextModifierDefinition = {
   inLine?: boolean,
   font?: OBJ_Font,
   border?: 'rect' | Array<TypeParsablePoint>,
-  touchBorder?: 'rect' | number | 'border' | Array<TypeParsablePoint>,
+  touchBorder?: TypeBuffer | Array<TypeParsablePoint>,
   onClick?: string | () => void,
 }
 
@@ -1886,28 +1874,25 @@ export type OBJ_TextModifiersDefinition = {
  * @property {OBJ_Font} [font] Default font to use in lines
  * @property {TypeColor} [color] Default color to use in lines
  * (`[1, 0, 0, 1`])
+ * @property {TypeBuffer} [defaultTextTouchBorder]?: default buffer for
+ * `touchBorder` property in `text`
  * @property {'left' | 'right' | 'center} [justify] justification of lines
  * (`left`)
  * @property {number} [lineSpace] Space between baselines of lines
  * (`font.size * 1.2`)
- * @property {'left' | 'right' | 'center} [xAlign] horizontal alignment of
+ * @property {'left' | 'right' | 'center'} [xAlign] horizontal alignment of
  * lines with `position` (`left`)
  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] vertical
  * alignment of lines with `position` (`baseline`)
+ * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
+ * border used for keeping shape within limits (`'draw'`)
+ * @property {TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw'} [touchBorder]
+ * border used for determining shape was touched. `number` and `'rect'` use
+ * the the points in `'buffer'` to calculate the bounding rects (`'buffer'`).
  * @property {TypeParsablePoint} [position] if defined, overrides translation
  * in transform
  * @property {TypeParsableTransform} [transform]
  * (`Transform('text').standard()`)
- * @property {'text' | 'rect' | TypeParsableBorder} [border]
- * border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for the
- * encompassing rectangle around all text borders combined,
- * or set to `'text'` for the individual text borders (`'rect'`)
- * @property {'text' | 'rect' | number | 'border' | TypeParsableBorder} [touchBorder]
- * touch border can be custom (`Array<TypeParsablePoint>`), set to `'rect'` for
- * the encompassing rectangle around all text touch borders, set to `'text'`
- * for the individual text touch borders (`'text'`), set to `'border'` to be the
- * same as the element border or a (`number`) for a rectangle with some buffer
- * around all text touch borders combined into an encompassing rect (`'rect'`)
  *
  * @see To test examples, append them to the
  * <a href="#text-boilerplate">boilerplate</a>
@@ -1984,15 +1969,16 @@ export type OBJ_TextLines = {
   text: Array<string | OBJ_TextLinesDefinition>,
   modifiers: OBJ_TextModifiersDefinition,
   font?: OBJ_Font,
+  defaultTextTouchBorder?: TypeBuffer,
   justify?: 'left' | 'center' | 'right',
   lineSpace?: number,
-  position: TypeParsablePoint,
-  transform: TypeParsableTransform,
   xAlign: 'left' | 'right' | 'center',
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
   color: TypeColor,
-  border?: 'rect' | 'text' | Array<TypeParsablePoint>,
-  touchBorder?: 'rect' | number | 'border' | 'text' | Array<TypeParsablePoint>,
+  border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
+  touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
+  position: TypeParsablePoint,
+  transform: TypeParsableTransform,
 };
 
 // export type TypeGridOptions = {
