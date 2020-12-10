@@ -66,7 +66,7 @@ export default class Box extends Symbol {
         new Point(lineWidth, lineWidth),
       ];
     }
-    return [points, width, height];
+    return [points, width, height, 'strip'];
   }
 
   /* eslint-disable class-methods-use-this */

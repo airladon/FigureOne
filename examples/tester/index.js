@@ -196,7 +196,14 @@ figure.add({
   options: {
     elements: {
       s: {
-        symbol: 'sum',
+        symbol: 'radical',
+        // lineWidth: 0.1,
+        // side: 'left',
+        // color: [1, 0, 0, 1],
+        // fill: true, 
+        // lineWidth: 0.1,
+        // arrowWidth: 0.2,
+        // arrowHeight: 0.2,
         // drawBorderBuffer: 0.1,
         touchBorder: [0, 0.1],
         draw: 'dynamic',
@@ -212,19 +219,22 @@ figure.add({
         mods: {
           isTouchable: true,
           onClick: () => console.log('d'),
-        }
+        },
+        size: 3,
       }
     },
     forms: {
-      0: { sumOf: ['s', 'c', 'a', 'b'] },
-      1: { sumOf: ['s', {
-        frac: {
-          numerator: 'c',
-          symbol: 'vinculum',
-          denominator: 'd',
-          scale: 4,
-        },
-      }, 'a', 'b' ] },
+      // 0: { bar: ['c', 's']}
+      0: { root: ['s', 'c'] },
+      // 0: { sumOf: ['s', 'c', 'a', 'b'] },
+      // 1: { sumOf: ['s', {
+      //   frac: {
+      //     numerator: 'c',
+      //     symbol: 'vinculum',
+      //     denominator: 'd',
+      //     scale: 4,
+      //   },
+      // }, 'a', 'b' ] },
     },
   },
 });

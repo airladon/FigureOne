@@ -196,7 +196,7 @@ export default class Product extends Symbol {
       ...transition,
       ...leg2,
     ];
-    return [points, width, height];
+    return [points, width, height, 'strip'];
   }
 
   // Linewidths that look good:

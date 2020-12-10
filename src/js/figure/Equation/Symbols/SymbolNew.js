@@ -89,7 +89,7 @@ export default class Symbol extends FigureElementPrimitive {
         let points;
         let width = 0;
         let height = 0;
-        let drawType = 'triangles';
+        let drawType = 'strip';
         if (
           this.custom.options.staticHeight === 'first'
           || this.custom.options.staticWidth === 'first'

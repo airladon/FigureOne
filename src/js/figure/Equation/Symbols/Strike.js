@@ -148,7 +148,7 @@ export default class Strike extends Symbol {
         h0, h3, h1,
       ];
     }
-    return [points, width, height];
+    return [points, width, height, 'triangles'];
   }
 
   /* eslint-disable class-methods-use-this */

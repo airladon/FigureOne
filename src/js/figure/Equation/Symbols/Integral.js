@@ -227,7 +227,7 @@ export default class Integral extends Symbol {
       );
       points = [...points, ...lineIntegralEllipsePoints];
     }
-    return [points, width, height];
+    return [points, width, height, 'triangles'];
   }
 
   // eslint-disable-next-line class-methods-use-this
