@@ -356,8 +356,7 @@ function getTriangleArrow(options: {
       new Point(-length, -width / 2),
       new Point(0, 0),
       new Point(-length, width / 2),
-    ];  // $FlowFixMe
-    // points = arrowBorder.map(p => p._dup());
+    ];
   } else {
     arrowBorder = [
       new Point(tailX, -tailWidth / 2),
@@ -1529,7 +1528,7 @@ function simplifyArrowOptions(
     end: OBJ_Arrow | TypeArrowHead,
   } & OBJ_Arrow,
   tailWidth: number | null,
-  includeTailByDefault: boolean = false, 
+  includeTailByDefault: boolean = false,
 ) {
   if (arrowIn == null) {
     return undefined;

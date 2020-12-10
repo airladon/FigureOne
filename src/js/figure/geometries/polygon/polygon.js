@@ -29,7 +29,7 @@ function getPolygonPoints(options: {
   const points = [];
   if (sidesToDraw === 0) {
     return [];
-  } 
+  }
   for (let i = 0; i < sidesToDraw * sidesMultiplier; i += sidesMultiplier) {
     points.push(new Point(
       radius * Math.cos(deltaAngle * i * direction + rotation) + offset.x,

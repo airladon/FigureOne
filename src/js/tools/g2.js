@@ -3886,7 +3886,7 @@ export type OBJ_Buffer = {
  * - [`number`, `number`]: left/right and bottom/top buffer values
  * - [`number`, `number`, `number`, `number`]: left, bottom, right,
  *   top buffer values
- * - `{ left? number, bottom?: number, right?: number, top?: number}`: 
+ * - `{ left? number, bottom?: number, right?: number, top?: number}`:
  *   object definition where default values are `0`.
  *
  * Can use {@link getBuffer} to convert the parsable buffer into

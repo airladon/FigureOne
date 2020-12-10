@@ -195,6 +195,7 @@ class FigureTextBase {
       this.text = options.slice();
     } else {
       if (options.location != null) {
+        // eslint-disable-next-line no-param-reassign
         options.location = getPoint(options.location);
       }
       joinObjects(this, options);
@@ -210,12 +211,11 @@ class FigureTextBase {
   //   this.calcBorderAndBounds();
   // }
 
-  // // deprecated
-  // setFont(font: OBJ_Font) {
-  //   const newFont = joinObjects({}, this.font.definition(), font);
-  //   this.font = new FigureFont(newFont);
-  //   this.measureAndAlignText();
-  // }
+  setFont(font: OBJ_Font) {
+    const newFont = joinObjects({}, this.font.definition(), font);
+    this.font = new FigureFont(newFont);
+    this.measureAndAlignText();
+  }
 
   // // deprecated
   // setXAlign(xAlign: 'left' | 'center' | 'right') {
