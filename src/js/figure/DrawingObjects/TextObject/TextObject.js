@@ -182,37 +182,58 @@ class FigureTextBase {
     this.calcTouchBorder();
   }
 
-  // deprecated
-  setText(text: string) {
-    this.text = text.slice();
+  setText(options: string | {
+    location?: TypeParsablePoint,
+    text?: string,
+    font?: OBJ_Font,
+    xAlign?: 'left' | 'center' | 'right',
+    yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline',
+    touchBorder?: number | Array<Point>,
+    onClick?: string | (() => void) | null,
+  }) {
+    if (typeof options === 'string') {
+      this.text = options.slice();
+    } else {
+      if (options.location != null) {
+        options.location = getPoint(options.location);
+      }
+      joinObjects(this, options);
+    }
     this.measureAndAlignText();
     this.calcBorderAndBounds();
   }
 
   // deprecated
-  setFont(font: OBJ_Font) {
-    const newFont = joinObjects({}, this.font.definition(), font);
-    this.font = new FigureFont(newFont);
-    this.measureAndAlignText();
-  }
+  // setText(text: string) {
+  //   this.text = text.slice();
+  //   this.measureAndAlignText();
+  //   this.calcBorderAndBounds();
+  // }
 
-  // deprecated
-  setXAlign(xAlign: 'left' | 'center' | 'right') {
-    this.xAlign = xAlign;
-    this.alignText();
-    this.calcBounds();
-    this.calcBorder();
-    this.calcTouchBorder();
-  }
+  // // deprecated
+  // setFont(font: OBJ_Font) {
+  //   const newFont = joinObjects({}, this.font.definition(), font);
+  //   this.font = new FigureFont(newFont);
+  //   this.measureAndAlignText();
+  // }
 
-  // deprecated
-  setYAlign(yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline') {
-    this.yAlign = yAlign;
-    this.alignText();
-    this.calcBounds();
-    this.calcBorder();
-    this.calcTouchBorder();
-  }
+  // // deprecated
+  // setXAlign(xAlign: 'left' | 'center' | 'right') {
+  //   this.xAlign = xAlign;
+  //   this.alignText();
+  //   this.calcBounds();
+  //   this.calcBorder();
+  //   this.calcTouchBorder();
+  // }
+
+  // // deprecated
+  // setYAlign(yAlign: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline') {
+  //   this.yAlign = yAlign;
+  //   this.alignText();
+  //   this.calcBounds();
+  //   this.calcBorder();
+  //   this.calcTouchBorder();
+  // }
 
   _dup() {
     return new this.constructor(
@@ -405,27 +426,6 @@ class FigureText extends FigureTextBase {
     this.measureAndAlignText();
     this.calcBorderAndBounds();
   }
-
-  updateText(options: string | {
-    location?: TypeParsablePoint,
-    text?: string,
-    font?: OBJ_Font,
-    xAlign?: 'left' | 'center' | 'right',
-    yAlign?: 'top' | 'bottom' | 'middle' | 'alphabetic' | 'baseline',
-    touchBorder?: number | Array<Point>,
-    onClick?: string | (() => void) | null,
-  }) {
-    if (typeof options === 'string') {
-      this.text = options.slice();
-    } else {
-      if (options.location != null) {
-        options.location = getPoint(options.location);
-      }
-      joinObjects(this, options);
-    }
-    this.measureAndAlignText();
-    this.calcBorderAndBounds();
-  }
 }
 
 class FigureTextLine extends FigureTextBase {
@@ -580,17 +580,17 @@ class TextObjectBase extends DrawingObject {
     this.scalingFactor = scalingFactor;
   }
 
-  updateText(textOrOptions: string | OBJ_TextDefinition, index: number = 1) {
-    this.text[index].updateText(textOrOptions);
+  setText(textOrOptions: string | OBJ_TextDefinition, index: number = 1) {
+    this.text[index].setText(textOrOptions);
     this.setBorder();
     this.setTouchBorder();
   }
 
-  setText(text: string, index: number = 0) {
-    this.text[index].setText(text);
-    this.setBorder();
-    this.setTouchBorder();
-  }
+  // setText(text: string, index: number = 0) {
+  //   this.text[index].setText(text);
+  //   this.setBorder();
+  //   this.setTouchBorder();
+  // }
 
   _dup() {
     const c = new TextObjectBase(this.drawContext2D);
@@ -1108,6 +1108,13 @@ class TextLineObject extends TextObjectBase {
     // this.borderSetup = options.border || [];
     // this.touchBorderSetup = options.touchBorder || [];
     this.layoutText();
+  }
+
+  setText(textOrOptions: string | OBJ_TextDefinition, index: number = 1) {
+    this.text[index].setText(textOrOptions);
+    this.layoutText();
+    // this.setBorder();
+    // this.setTouchBorder();
   }
 
   setTextLocations() {

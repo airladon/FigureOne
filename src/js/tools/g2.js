@@ -3867,31 +3867,45 @@ function rectToPolar(x: number | Point, y: number = 0) {
   };
 }
 
+/**
+ * Buffer for rectangle, where `left`, `bottom`, `right` and `top` are
+ * the buffer values for a rectangle's left, bottom, right and top sides
+ * respectively.
+ */
+export type OBJ_Buffer = {
+  left: number,
+  bottom: number,
+  right: number,
+  top: number,
+};
 
-function getBoundingRect(
-  pointArrays: Array<Point> | Array<Array<Point>>,
-  buffer: number | [number, number] | [number, number, number, number] | {
+/**
+ * Buffer for rectangle can be:
+ *
+ * - `number`: left, bottom, right, top buffer all the same
+ * - [`number`, `number`]: left/right and bottom/top buffer values
+ * - [`number`, `number`, `number`, `number`]: left, bottom, right,
+ *   top buffer values
+ * - `{ left? number, bottom?: number, right?: number, top?: number}`: 
+ *   object definition where default values are `0`.
+ *
+ * Can use {@link getBuffer} to convert the parsable buffer into
+ */
+export type TypeParsableBuffer = number
+  | [number, number]
+  | [number, number, number, number]
+  | {
     left?: number,
     right?: number,
     top?: number,
     bottom?: number,
-  } = 0,
-) {
-  let firstPoint = true;
-  let result = { min: new Point(0, 0), max: new Point(0, 0) };
+  };
 
-  pointArrays.forEach((pointOrArray) => {
-    if (Array.isArray(pointOrArray)) {
-      pointOrArray.forEach((p) => {
-        result = comparePoints(p, result.min, result.max, firstPoint);
-        firstPoint = false;
-      });
-    } else {
-      result = comparePoints(pointOrArray, result.min, result.max, firstPoint);
-    }
-
-    firstPoint = false;
-  });
+/**
+ * Convert a parsable buffer into a buffer.
+ * @return {OBJ_Buffer}
+ */
+function getBuffer(buffer: TypeParsableBuffer): OBJ_Buffer {
   let left;
   let right;
   let top;
@@ -3920,6 +3934,34 @@ function getBoundingRect(
       left, right, top, bottom,
     } = o);
   }
+  return {
+    left, right, top, bottom,
+  };
+}
+
+function getBoundingRect(
+  pointArrays: Array<Point> | Array<Array<Point>>,
+  buffer: TypeParsableBuffer = 0,
+) {
+  let firstPoint = true;
+  let result = { min: new Point(0, 0), max: new Point(0, 0) };
+
+  pointArrays.forEach((pointOrArray) => {
+    if (Array.isArray(pointOrArray)) {
+      pointOrArray.forEach((p) => {
+        result = comparePoints(p, result.min, result.max, firstPoint);
+        firstPoint = false;
+      });
+    } else {
+      result = comparePoints(pointOrArray, result.min, result.max, firstPoint);
+    }
+
+    firstPoint = false;
+  });
+  const {
+    left, right, top, bottom,
+  } = getBuffer(buffer);
+
   return new Rect(
     result.min.x - left,
     result.min.y - bottom,
@@ -3930,7 +3972,7 @@ function getBoundingRect(
 
 function getBoundingBorder(
   pointArrays: Array<Point> | Array<Array<Point>>,
-  buffer: number | [number, number] | [number, number, number, number] = 0,
+  buffer: TypeParsableBuffer = 0,
 ) {
   const r = getBoundingRect(pointArrays, buffer);
   return [

@@ -91,8 +91,8 @@ const txt = (name, options, lineOptions = null) => makeShape(
     touchBorder: 'buffer',
     defaultTextTouchBorder: [0, 0.1],
     text: [
-      { text: 'hello ', onClick: click('hello') },
-      { text: 'world', onClick: click('world') },
+      { text: 'great ', onClick: click('great') },
+      { text: 'scott', onClick: click('scott') },
     ],
   }, options),
   lineOptions,
@@ -128,15 +128,15 @@ const arrows = [
   // Test individual touch borders
   txt('itb1', {
     text: [
-      { text: 'hello ', onClick: click('hello'), touchBorder: [0, 0.15] },
-      { text: 'world', onClick: click('world') },
+      { text: 'great ', onClick: click('great'), touchBorder: [0, 0.15] },
+      { text: 'scott', onClick: click('scott') },
     ],
   }),
 
   txt('itb2', {
     text: [
-      { text: 'hello ', onClick: click('hello'), touchBorder: [0, 0.15] },
-      { text: 'world', onClick: click('world'), touchBorder: [[0.1, 0], [0.3, 0], [0.3, 0.3]] },
+      { text: 'great ', onClick: click('great'), touchBorder: [0, 0.15] },
+      { text: 'scott', onClick: click('scott'), touchBorder: [[0.1, 0], [0.3, 0], [0.3, 0.3]] },
     ],
   }),
 
@@ -149,28 +149,11 @@ const arrows = [
   // .......##.....##.##........##..##....##..##...###
   // .......##.....##.########.####..######...##....##
   // */
-  // // Default Align
-  // txt('a1', { text: 'gG', xAlign: 'left', yAlign: 'bottom' }),
-  // txt('a2', { text: 'gG', xAlign: 'left', yAlign: 'baseline' }),
-  // txt('a3', { text: 'gG', xAlign: 'center', yAlign: 'middle' }),
-  // txt('a4', { text: 'gG', xAlign: 'right', yAlign: 'top' }),
-
-  // // Custom Align
-  // txt('a5', {
-  //   text: [
-  //     {
-  //       text: 'gG',
-  //       xAlign: 'right',
-  //       yAlign: 'top',
-  //     },
-  //     {
-  //       text: 'gG',
-  //       location: [0.1, 0.1],
-  //     },
-  //   ],
-  //   xAlign: 'left',
-  //   yAlign: 'bottom',
-  // }),
+  // Default Align
+  txt('a1', { xAlign: 'left', yAlign: 'bottom' }),
+  txt('a2', { xAlign: 'left', yAlign: 'baseline' }),
+  txt('a3', { xAlign: 'center', yAlign: 'middle' }),
+  txt('a4', { xAlign: 'right', yAlign: 'top' }),
 
   // /*
   // .......########..#######..##....##.########
@@ -182,78 +165,121 @@ const arrows = [
   // .......##........#######..##....##....##...
   // */
   // // Default Fonts
-  // txt('f1', { text: 'gG', font: { size: 0.2, style: 'italic' } }),
-  // txt('f2', { text: 'gG', font: { color: [0, 0, 1, 1], weight: 'bold' } }),
+  txt('f1', { font: { size: 0.2, style: 'italic' }, xAlign: 'center' }),
+  txt('f2', { font: { color: [0, 0, 1, 1], weight: 'bold' } }),
 
-  // // Custom Fonts
-  // txt('f3', {
-  //   text: [
-  //     {
-  //       text: 'gG',
-  //       font: { size: 0.1, style: 'normal', color: [0, 0, 1, 1] },
-  //     },
-  //     {
-  //       text: 'gG',
-  //       location: [0.15, 0.15],
-  //     },
-  //   ],
-  //   font: { size: 0.2, style: 'italic' },
-  // }),
+  // Custom Fonts
+  txt('f3', {
+    text: [
+      {
+        text: 'great',
+        font: { size: 0.1, style: 'normal', color: [0, 0, 1, 1] },
+        onClick: click('great'),
+      },
+      {
+        text: 'scott',
+        onClick: click('scott'),
+      },
+    ],
+    font: { size: 0.2, style: 'italic' },
+  }),
 
-  // /*
-  // ........######...#######..##........#######..########.
-  // .......##....##.##.....##.##.......##.....##.##.....##
-  // .......##.......##.....##.##.......##.....##.##.....##
-  // .......##.......##.....##.##.......##.....##.########.
-  // .......##.......##.....##.##.......##.....##.##...##..
-  // .......##....##.##.....##.##.......##.....##.##....##.
-  // ........######...#######..########..#######..##.....##
-  // */
-  // txt('c1', { text: 'gG', color: [0, 0, 1, 1] }),
-  // // font overrides color
-  // txt('c2', { text: 'gG', font: { color: [0, 1, 0, 1] }, color: [0, 0, 1, 1] }),
+  /*
+  ........######...#######..##........#######..########.
+  .......##....##.##.....##.##.......##.....##.##.....##
+  .......##.......##.....##.##.......##.....##.##.....##
+  .......##.......##.....##.##.......##.....##.########.
+  .......##.......##.....##.##.......##.....##.##...##..
+  .......##....##.##.....##.##.......##.....##.##....##.
+  ........######...#######..########..#######..##.....##
+  */
+  txt('c1', { color: [0, 0, 1, 1] }),
+  // font overrides color
+  txt('c2', { font: { color: [0, 1, 0, 1] }, color: [0, 0, 1, 1] }),
 
-  // /*
-  // .##.....##.########..########.....###....########.########
-  // .##.....##.##.....##.##.....##...##.##......##....##......
-  // .##.....##.##.....##.##.....##..##...##.....##....##......
-  // .##.....##.########..##.....##.##.....##....##....######..
-  // .##.....##.##........##.....##.#########....##....##......
-  // .##.....##.##........##.....##.##.....##....##....##......
-  // ..#######..##........########..##.....##....##....########
-  // */
-  // txt('u1', { text: 'gG', xAlign: 'right' }),
-  // txt('u2', { text: 'gG' }),
-  // txt('u3', {
-  //   text: [
-  //     'gG',
-  //     { text: 'gB', location: [0.2, 0.2] },
-  //   ],
-  // }),
-  // txt('u4', { text: 'gG', xAlign: 'right' }),
+  /*
+  ........#######..########.########..######..########.########
+  .......##.....##.##.......##.......##....##.##..........##...
+  .......##.....##.##.......##.......##.......##..........##...
+  .......##.....##.######...######....######..######......##...
+  .......##.....##.##.......##.............##.##..........##...
+  .......##.....##.##.......##.......##....##.##..........##...
+  ........#######..##.......##........######..########....##...
+  */
+  txt('o1', {
+    text: [
+      {
+        text: 'great',
+        onClick: click('great'),
+      },
+      {
+        text: 'question',
+        offset: [0.05, 0.05],
+        onClick: click('question'),
+      },
+      ' batman ',
+      {
+        text: 'its the',
+        offset: [0, -0.05],
+        onClick: click('its the'),
+      },
+      {
+        text: 'crazy',
+        offset: [-0.05, 0.1],
+        inLine: false,
+        onClick: click('crazy'),
+      },
+      {
+        text: 'riddler',
+        inLine: false,
+        onClick: click('riddler'),
+      },
+    ],
+    font: { size: 0.06 },
+    xAlign: 'center',
+  }),
+
+  /*
+  .##.....##.########..########.....###....########.########
+  .##.....##.##.....##.##.....##...##.##......##....##......
+  .##.....##.##.....##.##.....##..##...##.....##....##......
+  .##.....##.########..##.....##.##.....##....##....######..
+  .##.....##.##........##.....##.#########....##....##......
+  .##.....##.##........##.....##.##.....##....##....##......
+  ..#######..##........########..##.....##....##....########
+  */
+  txt('u1', { xAlign: 'center' }),
+  txt('u2', { xAlign: 'center' }),
+  txt('u3', {
+    text: [
+      'gG',
+      { text: 'gB', location: [0.2, 0.2] },
+    ],
+    xAlign: 'center',
+  }),
+  txt('u4', { text: 'gG', xAlign: 'right' }),
   // txt('u5', { text: 'gG', xAlign: 'right' }),
 ];
 figure.add(arrows);
-// figure.getElement('u1').custom.setText('updated');
-// figure.getElement('u2').custom.setText({
-//   text: 'updated',
-//   touchBorder: 0.1,
-//   xAlign: 'right',
-//   yAlign: 'top',
-//   location: [0.1, 0.1],
-//   font: { color: [0, 0.5, 0, 1], size: 0.2 },
-//   onClick: () => tools.misc.Console('Updated!!'),
-// });
-// figure.getElement('u3').custom.setText('updated', 1);
-// figure.getElement('u4').custom.updateText({ text: 'hello' });
-// figure.getElement('u5').custom.updateText({
-//   text: [
-//     { text: 'updated' },
-//     { text: 'now', location: [0, -0.2] },
-//   ],
-//   color: [0, 0, 1, 1],
-//   xAlign: 'right',
-// });
+figure.getElement('u1').custom.setText('updated ');
+figure.getElement('u2').custom.setText({
+  text: 'updated',
+  touchBorder: [0, 0.1, 0.1, 0.1],
+  xAlign: 'right',
+  yAlign: 'top',
+  location: [0.1, 0.1],
+  font: { color: [0, 0.5, 0, 1], size: 0.2 },
+  onClick: () => tools.misc.Console('Updated!!'),
+}, 1);
+figure.getElement('u3').custom.updateText({ text: 'hello' });
+figure.getElement('u4').custom.updateText({
+  text: [
+    { text: 'updated ' },
+    { text: 'now' },
+  ],
+  color: [0, 0, 1, 1],
+  xAlign: 'right',
+});
 
 // console.log(figure.getElement('itb1'))
 

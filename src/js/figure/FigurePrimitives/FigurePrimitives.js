@@ -3049,6 +3049,15 @@ export default class FigurePrimitives {
   }
 
 
+  /*
+  .......########.########.##.....##.########
+  ..........##....##........##...##.....##...
+  ..........##....##.........##.##......##...
+  ..........##....######......###.......##...
+  ..........##....##.........##.##......##...
+  ..........##....##........##...##.....##...
+  ..........##....########.##.....##....##...
+  */
   // eslint-disable-next-line class-methods-use-this
   parseTextOptions(...optionsIn: Object) {
     const defaultOptions = {
@@ -3171,7 +3180,11 @@ export default class FigurePrimitives {
       return element.holeBorder;
     };
     element.custom.setText = (o: string | OBJ_TextDefinition, index: number = 0) => {
-      element.drawingObject.updateText(o, index);
+      element.drawingObject.setText(o, index);
+      element.updateBorders({});
+    };
+    element.custom.updateText = (o: OBJ_Text) => {
+      element.drawingObject.loadText(this.parseTextOptions(o));
       element.updateBorders({});
     };
     return element;
@@ -3224,10 +3237,10 @@ export default class FigurePrimitives {
     to.loadText(options);
     // console.log(to.text[0].font)
     const element = this.createPrimitive(to, options);
-    element.custom.updateText = (o: OBJ_Text) => {
-      element.drawingObject.loadText(this.parseTextOptions(o));
-      element.updateBorders({});
-    };
+    // element.custom.updateText = (o: OBJ_Text) => {
+    //   element.drawingObject.loadText(this.parseTextOptions(o));
+    //   element.updateBorders({});
+    // };
     element.updateBorders(options);
     return element;
   }
