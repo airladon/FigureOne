@@ -2,7 +2,7 @@
 
 import * as m2 from '../../../tools/m2';
 import {
-  Point, getPoint, Rect, getBoundingBorder,
+  Point, getPoint, Rect, getBoundingBorder, getBorder, isBuffer,
 } from '../../../tools/g2';
 import type { TypeParsablePoint, TypeBuffer } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
@@ -934,6 +934,9 @@ class TextObject extends TextObjectBase {
       if (font != null) {
         fontToUse = font;
       }
+      if (!isBuffer(touchBorder)) {
+        [touchBorder] = getBorder(touchBorder);
+      }
       const fontDefinition = joinObjects({}, options.font, fontToUse);
       figureTextArray.push(new FigureText(
         this.drawContext2D,
@@ -1041,7 +1044,7 @@ class TextLineObject extends TextObjectBase {
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
       color: TypeColor,
-      defaultTextTouchBorder?: number,
+      defaultTextTouchBorder?: TypeBuffer,
       // border?: 'rect' | Array<Point>,
       // touchBorder?: 'rect' | number | 'border' | Array<Point>,
       // onClick?: string | () => void,
@@ -1071,8 +1074,11 @@ class TextLineObject extends TextObjectBase {
         //   border = getPoints(border);
         // }
         // if (Array.isArray(touchBorder)) {  // $FlowFixMe
-        //   touchBorder = getPoints(touchBorder);
+        //   touchBorder = getBorder(touchBorder);
         // }
+        if (!isBuffer(touchBorder)) {
+          [touchBorder] = getBorder(touchBorder);
+        }
       }
       let offsetToUse;
       if (offset == null) {
@@ -1251,6 +1257,9 @@ class TextLinesObject extends TextObjectBase {
           // }
           if (mod.touchBorder != null) {
             touchBorder = mod.touchBorder;
+            if (!isBuffer(touchBorder)) {
+              [touchBorder] = getBorder(touchBorder);
+            }
           }
           if (mod.onClick != null) {
             onClick = mod.onClick;

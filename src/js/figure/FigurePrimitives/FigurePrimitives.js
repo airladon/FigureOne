@@ -1813,9 +1813,6 @@ export type OBJ_TextLinesDefinition = {
  * to line layout (defqult: `true`)
  * @property {string | function(): void} [onClick] function to execute on click
  * within the `touchBorder` of the modified text
- * @property {'rect' | Array<TypeParsablePoint>} [border] border of modified
- * text can be custom (`Array<TypeParsablePoint>`) or set to `'rect'` for the
- * encompassing rectangle of the text (default: `'rect'`)
  * @property {TypeBuffer | Array<TypeParsablePoint>} [touchBorder]
  * touch border can be custom (`Array<TypeParsablePoint>`), or be set to some
  * buffer (`TypeBuffer`) around the rectangle (default: `'0'`)
@@ -1825,7 +1822,6 @@ export type OBJ_TextModifierDefinition = {
   offset?: TypeParsablePoint,
   inLine?: boolean,
   font?: OBJ_Font,
-  border?: 'rect' | Array<TypeParsablePoint>,
   touchBorder?: TypeBuffer | Array<TypeParsablePoint>,
   onClick?: string | () => void,
 }
