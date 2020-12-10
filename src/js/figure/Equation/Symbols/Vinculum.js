@@ -37,7 +37,7 @@ export default class Bracket extends Symbol {
       new Point(width, 0),
       new Point(width, lineWidth),
     ];
-    return [points, width, height];
+    return [points, width, height, 'strip'];
   }
 
   /* eslint-disable class-methods-use-this */

@@ -2,7 +2,7 @@
 import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
   getBorder, getPoints, getBoundingRect, Line, threePointAngle,
-  getBoundingBorder,
+  getBoundingBorder, isBuffer,
 } from '../../tools/g2';
 // import {
 //   round
@@ -3171,7 +3171,7 @@ export default class FigurePrimitives {
         if (element.touchBorder === 'rect') {
           return [getBoundingBorder(element.drawBorderBuffer)];
         }
-        if (typeof element.touchBorder === 'number') {
+        if (isBuffer(element.touchBorder)) {
           const b = element.drawBorderBuffer;
           return [getBoundingBorder(b, element.touchBorder)];
         }

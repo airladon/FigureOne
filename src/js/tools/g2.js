@@ -3939,6 +3939,41 @@ function getBuffer(buffer: TypeParsableBuffer): OBJ_Buffer {
   };
 }
 
+function isBuffer(input: any) {
+  if (typeof input === 'number') {
+    return true;
+  }
+  if (Array.isArray(input)) {
+    if (
+      (input.length === 4 || input.length === 2)
+      && typeof input[0] === 'number'
+    ) {
+      return true;
+    }
+  } else {
+    return false;
+  }
+  if (typeof input === 'object') {
+    const keys = Object.keys(input);
+    if (keys.length > 4) {
+      return false;
+    }
+    for (let i = 0; i < keys.length; i += 1) {
+      const key = keys[i]
+      if (
+        key !== 'left'
+        && key !== 'right'
+        && key !== 'top'
+        && key !== 'bottom'
+      ) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 function getBoundingRect(
   pointArrays: Array<Point> | Array<Array<Point>>,
   buffer: TypeParsableBuffer = 0,
@@ -6062,4 +6097,5 @@ export {
   getBoundingBorder,
   getBorder,
   comparePoints,
+  isBuffer,
 };

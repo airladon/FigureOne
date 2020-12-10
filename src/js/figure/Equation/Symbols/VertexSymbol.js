@@ -19,12 +19,12 @@ class VertexSymbol extends VertexObject {
       this.points.push(p.y);
     });
 
-    this.border[0] = [
-      new Point(0, 0),
-      new Point(width, 0),
-      new Point(width, height),
-      new Point(0, height),
-    ];
+    // this.border[0] = [
+    //   new Point(0, 0),
+    //   new Point(width, 0),
+    //   new Point(width, height),
+    //   new Point(0, height),
+    // ];
 
     if (initialize) {
       this.setupBuffer();

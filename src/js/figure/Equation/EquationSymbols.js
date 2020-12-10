@@ -1074,6 +1074,8 @@ export default class EquationSymbols {
       staticHeight: null,          // not definable by user
       draw: 'dynamic',
       staticWidth: 'first',
+      drawBorderBuffer: 0,
+      touchBorder: 0,
     };
     const optionsToUse = joinObjects(defaultOptions, options);
     return (new VinculumNew(
@@ -1143,6 +1145,8 @@ export default class EquationSymbols {
       staticHeight: 'first',
       draw: 'static',
       staticWidth: null,          // not definable by user
+      drawBorderBuffer: 0,
+      touchBorder: 0,
     };
     const optionsToUse = joinObjects(defaultOptions, options);
 

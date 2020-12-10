@@ -5,7 +5,7 @@ import {
   spaceToSpaceTransform, getBoundingRect,
   clipAngle, getPoint, getTransform, getScale,
   TransformBounds, RectBounds, RangeBounds, getBounds,
-  getBoundingBorder,
+  getBoundingBorder, isBuffer,
 } from '../tools/g2';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './Recorder/state';
@@ -2930,6 +2930,9 @@ class FigureElement {
     space: TypeSpace = 'local',
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
   ) {
+    // if (this.name === 'c' && border === 'touchBorder') {
+    //   debugger;
+    // }
     const borderPoints = this.getBorderPoints(border);
     if (space === 'draw') {
       return borderPoints;
@@ -2941,6 +2944,7 @@ class FigureElement {
     } else {
       matrix = this.spaceTransformMatrix('draw', space);
     }
+
     borderPoints.forEach((b) => {
       transformedBorders.push(
         b.map(p => p.transformBy(matrix)),
@@ -3828,11 +3832,13 @@ class FigureElementPrimitive extends FigureElement {
       if (this.border === 'rect') {
         return [getBoundingBorder(this.drawBorder)];
       }
-      if (typeof this.border === 'number') {
+      if (isBuffer(this.border)) {
+      // if (typeof this.border === 'number') {
         return [getBoundingBorder(this.drawBorder, this.border)];
       }
       return this.border;
     }
+
     if (border === 'touchBorder') {
       if (this.touchBorder === 'draw') {
         return this.drawBorder;
@@ -3847,7 +3853,8 @@ class FigureElementPrimitive extends FigureElement {
         const b = this.getBorderPoints('border');
         return [getBoundingBorder(b)];
       }
-      if (typeof this.touchBorder === 'number') {
+      // if (typeof this.touchBorder === 'number') {
+      if (isBuffer(this.touchBorder)) {
         const b = this.getBorderPoints('border');
         return [getBoundingBorder(b, this.touchBorder)];
       }
@@ -4057,6 +4064,10 @@ class FigureElementCollection extends FigureElement {
   border: TypeBorder | 'children' | 'rect' | number;
   // $FlowFixMe
   touchBorder: TypeBorder | 'border' | 'children' | 'rect' | number;
+  // border is whatever border is
+  // children is touch borders of children
+  // rect is rect of children touchBorder
+  // number is buffer of rect of children touch border
   // $FlowFixMe
   holeBorder: TypeBorder | 'children';
   eqns: Object;
@@ -5001,6 +5012,10 @@ class FigureElementCollection extends FigureElement {
     this.checkMoveBounds();
   }
 
+  // border is whatever border is
+  // children is touch borders of children
+  // rect is rect of children touchBorder
+  // number is buffer of rect of children touch border
   getBorderPoints(
     border: 'border' | 'touchBorder' | 'holeBorder' = 'border',
     children: Array<string | FigureElement> | null = null,
@@ -5024,7 +5039,7 @@ class FigureElementCollection extends FigureElement {
           return;
         }
         // $FlowFixMe
-        childrenBorder.push(...e.getBorder(matrix, b, null, shownOnly));
+        childrenBorder.push(...e.getBorder(this.getTransform().matrix(), b, null, shownOnly));
       });
       return childrenBorder;
     };
@@ -5036,7 +5051,7 @@ class FigureElementCollection extends FigureElement {
       if (this.border === 'rect') {
         return [getBoundingBorder(getBorderFromChildren('border'))];
       }
-      if (typeof this.border === 'number') {
+      if (isBuffer(this.border)) {
         return [getBoundingBorder(getBorderFromChildren('border'), this.border)];
       }
       return this.border;
@@ -5051,7 +5066,7 @@ class FigureElementCollection extends FigureElement {
       if (this.touchBorder === 'rect') {
         return [getBoundingBorder(getBorderFromChildren('touchBorder'))];
       }
-      if (typeof this.touchBorder === 'number') {
+      if (isBuffer(this.touchBorder)) {
         return [getBoundingBorder(getBorderFromChildren('touchBorder'), this.touchBorder)];
       }
       return this.touchBorder;

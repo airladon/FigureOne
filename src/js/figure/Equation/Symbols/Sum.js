@@ -177,7 +177,7 @@ export default class Sum extends Symbol {
       p12,
       p13,
     ];
-    return [points, width, height];
+    return [points, width, height, 'strip'];
   }
 
   /* eslint-disable class-methods-use-this */

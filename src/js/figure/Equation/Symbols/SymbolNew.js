@@ -1,12 +1,13 @@
 // @flow
 import { FigureElementPrimitive } from '../../Element';
 import {
-  Point, Transform, Rect,
+  Point, Transform, Rect, getBoundingBorder, getBorder,
 } from '../../../tools/g2';
 import {
   duplicate,
 } from '../../../tools/tools';
-import VertexSymbol from './VertexSymbol';
+// import VertexSymbol from './VertexSymbol';
+import VertexGeneric from '../../DrawingObjects/VertexObject/VertexGeneric';
 import WebGLInstance from '../../webgl/webgl';
 import Bounds from '../Elements/Bounds';
 import type {
@@ -21,9 +22,9 @@ export default class Symbol extends FigureElementPrimitive {
     transformOrLocation: Transform | Point,
     figureLimits: Rect,
     symbolOptions: Object,
-    triangles: 'strip' | 'triangles' | 'fan',
+    // triangles: 'strip' | 'triangles' | 'fan',
   ) {
-    const vertexObject = new VertexSymbol(webgl, triangles);
+    const vertexObject = new VertexGeneric(webgl);
 
     let initialT;
     if (transformOrLocation instanceof Transform) {
@@ -32,6 +33,18 @@ export default class Symbol extends FigureElementPrimitive {
       initialT = new Transform('Symbol').scale(1, 1).translate(0, 0);
     }
     super(vertexObject, initialT, color, figureLimits);
+    if (symbolOptions.touchBorder != null) {
+      this.touchBorder = symbolOptions.touchBorder;
+    }
+    if (symbolOptions.border != null) {
+      this.border = symbolOptions.border;
+    }
+    if (symbolOptions.onClick != null) {
+      this.onClick = symbolOptions.onClick;
+    }
+    if (symbolOptions.isTouchable != null) {
+      this.isTouchable = symbolOptions.isTouchable;
+    }
     this.custom.options = symbolOptions;
     if (this.custom.options.draw === 'dynamic') {
       this.custom.scale = new Point(1, 1);
@@ -39,19 +52,28 @@ export default class Symbol extends FigureElementPrimitive {
         const s = this.getScale();
         if (this.custom.scale.isNotEqualTo(s, 8)) {
           const [
-            pointsNew, widthNew, heightNew,
+            pointsNew, widthNew, heightNew, drawType,
           ] = this.getPoints(this.custom.options, s.x, s.y);
           this.pointsDefinition = {
             points: duplicate(pointsNew),
             width: widthNew,
             height: heightNew,
+            drawType,
           };
           // $FlowFixMe
-          this.drawingObject.updatePoints(
-            pointsNew,
-            widthNew,
-            heightNew,
-          );
+          // this.drawingObject.change(pointsNew);
+          // this.drawBorder = [
+          //   new Point(0, 0),
+          //   new Point(widthNew, 0),
+          //   new Point(widthNew, heightNew),
+          //   new Point(0, heightNew),
+          // ];
+          this.updateSymbol(pointsNew, widthNew, heightNew, drawType);
+          // this.drawingObject.updatePoints(
+          //   pointsNew,
+          //   widthNew,
+          //   heightNew,
+          // );
           this.custom.scale = s;
         }
       };
@@ -67,14 +89,15 @@ export default class Symbol extends FigureElementPrimitive {
         let points;
         let width = 0;
         let height = 0;
+        let drawType = 'triangles';
         if (
           this.custom.options.staticHeight === 'first'
           || this.custom.options.staticWidth === 'first'
         ) {
-          ([points, width, height] = this.getPoints(symbolOptions, widthIn, heightIn));
+          ([points, width, height, drawType] = this.getPoints(symbolOptions, widthIn, heightIn));
         } else if (this.custom.options.staticHeight != null
           || this.custom.options.staticWidth != null) {
-          ([points, width, height] = this.getPoints(
+          ([points, width, height, drawType] = this.getPoints(
             symbolOptions,
             this.custom.options.staticWidth,
             this.custom.options.staticHeight,
@@ -84,28 +107,32 @@ export default class Symbol extends FigureElementPrimitive {
           points: duplicate(points),
           width,
           height,
+          drawType,
         };
         // $FlowFixMe
-        this.drawingObject.updatePoints(points, width, height);
+        // this.drawingObject.updatePoints(points, width, height);
+        this.updateSymbol(points, width, height, drawType);
         this.custom.options.staticHeight = height;
         this.custom.options.staticWidth = width;
         // console.log('a', width, height)
         t.updateScale(width, height);
       } else {
         const [
-          pointsNew, widthNew, heightNew,
+          pointsNew, widthNew, heightNew, drawType,
         ] = this.getPoints(this.custom.options, widthIn, heightIn);
         this.pointsDefinition = {
           points: duplicate(pointsNew),
           width: widthNew,
           height: heightNew,
+          drawType,
         };
         // $FlowFixMe
-        this.drawingObject.updatePoints(
-          pointsNew,
-          widthNew,
-          heightNew,
-        );
+        this.updateSymbol(pointsNew, widthNew, heightNew, drawType);
+        // this.drawingObject.updatePoints(
+        //   pointsNew,
+        //   widthNew,
+        //   heightNew,
+        // );
         this.custom.scale = new Point(widthIn, heightIn);
         // console.log('b', widthIn, heightIn, this.getPath())
         t.updateScale(widthIn, heightIn);
@@ -118,14 +145,45 @@ export default class Symbol extends FigureElementPrimitive {
       if (Object.keys(this.pointsDefinition).length === 0) {
         return;
       }
-      const { points, width, height } = this.pointsDefinition;
+      const {
+        points, width, height, drawType,
+      } = this.pointsDefinition;
       // $FlowFixMe
-      this.drawingObject.updatePoints(points, width, height);
+      this.updateSymbol(points, width, height, drawType);
+      // this.drawingObject.updatePoints(points, width, height);
       // // if (width == null || height == null || location == null) {
       // //   return;
       // // }
       // this.custom.setSize(this.getPosition(), width, height);
     };
+  }
+
+  updateSymbol(
+    pointsIn: Array<Point>,
+    width: number,
+    height: number,
+    drawType: 'strip' | 'triangles' | 'fan',
+  ) {
+    this.drawingObject.change({ points: pointsIn, drawType });
+    this.drawBorder = [[
+      new Point(0, 0),
+      new Point(width, 0),
+      new Point(width, height),
+      new Point(0, height),
+    ]];
+    if (
+      typeof this.custom.options.drawBorderBuffer === 'number'
+      || (
+        Array.isArray(this.custom.options.drawBorderBuffer)
+        && typeof this.custom.options.drawBorderBuffer[0] === 'number'
+      )
+    ) {
+      this.drawBorderBuffer = [getBoundingBorder(this.drawBorder, this.custom.options.drawBorderBuffer)];
+    } else if (Array.isArray(this.custom.options.drawBorderBuffer)) {
+      this.drawBorderBuffer = getBorder(this.custom.options.drawBorderBuffer);
+    } else {
+      this.drawBorderBuffer = this.drawBorder;
+    }
   }
 
   // // eslint-disable-next-line class-methods-use-this, no-unused-vars

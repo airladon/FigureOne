@@ -844,6 +844,8 @@ export class Equation extends FigureElementCollection {
     // }
     this.shapes = shapes;
     this.setColor(optionsToUse.color);
+    this.touchBorder = 'rect';
+    this.border = 'children';
     // this.isTouchDevice = isTouchDevice;
     // this.animateNextFrame = animateNextFrame;
 
@@ -1018,7 +1020,10 @@ export class Equation extends FigureElementCollection {
       size?: number,
       family?: string,
       color?: TypeColor,
-      touchBorder?: number,
+      touchBorder?: TypeBuffer | Array<Point>,
+      onClick?: () => void | 'string' | null,
+      isTouchable?: boolean,
+      mods?: Object,
     },
     defaultText: string = '',
   ) {
@@ -1065,14 +1070,33 @@ export class Equation extends FigureElementCollection {
     // const font = new FigureFont(fontDefinition);
     const p = this.shapes.text(
       {
-        text: textToUse,
+        text: {
+          text: textToUse,
+          touchBorder: 0,
+          // touchBorder: options.touchBorder == null ? 0 : options.touchBorder,
+        },
         position: new Point(0, 0),
         font: fontDefinition,
         xAlign: 'left',
         yAlign: 'baseline',
-        touchBorder: options.touchBorder,
+        touchBorder: 'buffer',
+        // border: 'draw',
+        // touchBorder: options.touchBorder == null ? 'buffer' : options.touchBorder,
+        // defaultTextTouchBorder: options.defaultTextTouchBorder,
       },
     );
+    if (options.touchBorder != null) {
+      p.touchBorder = options.touchBorder;
+    }
+    if (options.isTouchable != null) {
+      p.isTouchable = options.isTouchable;
+    }
+    if (options.onClick != null) {
+      p.onClick = options.onClick;
+    }
+    if (options.mods != null) {
+      p.setProperties(options.mods);
+    }
     return p;
   }
 
@@ -1115,6 +1139,9 @@ export class Equation extends FigureElementCollection {
     let symbol = this.eqn.symbols.get(cleanKey, options);
     if (symbol != null) {
       symbol.setColor(this.color);
+      if (options.mods != null) {
+        symbol.setProperties(options.mods);
+      }
       this.add(key, symbol);
       return symbol;
     }
@@ -1123,6 +1150,9 @@ export class Equation extends FigureElementCollection {
       symbol = this.eqn.symbols.get(ending[0].replace(/_/, ''), options);
       if (symbol != null) {
         symbol.setColor(this.color);
+        if (options.mods != null) {
+          symbol.setProperties(options.mods);
+        }
         this.add(key.replace(/_[^_]*$/, ''), symbol);
         return symbol;
       }
@@ -1170,6 +1200,9 @@ export class Equation extends FigureElementCollection {
     }
     if (options.color == null) {
       symbol.setColor(this.color);
+    }
+    if (options.mods != null) {
+      symbol.setProperties(options.mods);
     }
     return symbol;
   }
