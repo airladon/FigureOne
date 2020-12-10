@@ -1,11 +1,9 @@
-// import { tools } from '../../../index';
 import makeFigure from '../../../js/__mocks__/makeFigure';
-// import { cleanUIDs } from '../../../js/tools/tools';
 
 const { shapes } = require('./shapes.js');
+const { updates } = require('./updates.js');
 
-let tests = shapes.map(s => [s.name, s]);
-tests = tests.slice(0, 3);
+const tests = shapes.map(s => [s.name, s]);
 
 describe('line tests', () => {
   let figure;
@@ -17,6 +15,9 @@ describe('line tests', () => {
     (name, shape) => {
       figure.add(shape);
       const element = figure.getElement(name);
+      if (updates[name] != null) {
+        element.custom.updatePoints(updates[name]);
+      }
       element.uid = '';
       element.parent = null;
       element.figure = null;
@@ -24,5 +25,6 @@ describe('line tests', () => {
       element.anim = null;
       element.recorder = null;
       expect(element).toMatchSnapshot();
-    });
+    },
+  );
 });
