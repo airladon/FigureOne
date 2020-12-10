@@ -20,11 +20,9 @@ import type {
 // import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import * as html from '../../tools/htmlGenerator';
 import EquationSymbols from './EquationSymbols';
-import type { TypeSymbolOptions } from './EquationSymbols';
+// import type { TypeSymbolOptions } from './EquationSymbols';
 import { getFigureElement, EquationFunctions } from './EquationFunctions';
 import type { TypeEquationPhrase } from './EquationFunctions';
-import type { TypeEquationSymbolAngleBracket } from './Symbols/AngleBracket';
-import type { TypeEquationSymbolArrowBracket } from './Symbols/Arrow';
 import type {
   TypeColor, OBJ_Font,
 } from '../../tools/types';
@@ -33,43 +31,90 @@ import type {
 } from '../../tools/g2';
 import type { OBJ_TriggerAnimationStep } from '../Animation/Animation';
 import { AnimationManager, TriggerAnimationStep } from '../Animation/Animation';
-
+import type {
+  EQN_VinculumSymbol, EQN_BoxSymbol, EQN_ArrowSymbol, EQN_SumSymbol,
+  EQN_ProdSymbol, EQN_IntegralSymbol, EQN_StrikeSymbol, EQN_BracketSymbol,
+  EQN_AngleBracketSymbol, EQN_BraceSymbol, EQN_BarSymbol,
+  EQN_SquareBracketSymbol, EQN_RadicalSymbol, TypeSymbolOptions,
+} from './EquationSymbols';
 
 // Priority:
 //   1. symbol
 //   2. text
 
 /**
- * Definition of a text or symbol equation element. Symbol properties take
- * receive priority over text properties, so if 'symbol' is defined, then 'text'
- * will be ignored.
+ * Definition of a text or equation element.
+ *
+ * The properties 'color', 'isTouchable', 'onClick' and `touchBorder`
+ * modify the corresponding properties on the {@link FigureElementPrimitive}
+ * itself, and so could equally be set in `mods`. They are provided in the
+ * root object for convenience as they are commonly used.
+ *
  * @property {string} [text] - Text element only
  * @property {FigureFont} [font] - Text element only
  * @property {'italic' | 'normal'} [style] - Text element only
- * @property {string} [symbol] - Symbol element only
  * @property {'top' | 'left' | 'bottom' | 'right'} [side] - Symbol element only
  * @property {object} [mods] - Properties to set on instantiated element
  * @property {TypeColor} [color] - Color to set the element
+ * @property {boolean} [isTouchable] - make the element touchable
+ * @property {() => void | 'string' | null} [onClick] - called when touched
+ * @property {TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer'} [touchBorder]
+ * set the element's touch border
+ * @property {Object} [mods]
  */
-
-export type TypeEquationTextElement = string | {
+export type EQN_TextElement = string | {
     text?: string;
     font?: FigureFont | OBJ_Font;
     style?: 'italic' | 'normal' | null;
     weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
     size?: number,
     color?: TypeColor;
+    isTouchable?: boolean,
+    onClick?: () => void | 'string' | null,
+    touchBorder?: TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer',
     mods?: Object;
   } | FigureElementPrimitive | FigureElementCollection;
 
 /**
+ * An equation element can be any of the below. If `string`, then a
+ * {@link EQN_TextElement} will be used where the `text` property is the
+ * `string`.
+ *
+ * - `string`
+ * - {@link FigureElementPrimitive}
+ * - {@link FigureElementCollection}
+ * - {@link EQN_TextElement}
+ * - {@link EQN_VinculumSymbol}
+ * - {@link EQN_BoxSymbol}
+ * - {@link EQN_ArrowSymbol}
+ * - {@link EQN_SumSymbol}
+ * - {@link EQN_ProdSymbol}
+ * - {@link EQN_IntegralSymbol}
+ * - {@link EQN_StrikeSymbol}
+ * - {@link EQN_BracketSymbol}
+ * - {@link EQN_AngleBracketSymbol}
+ * - {@link EQN_BraceSymbol}
+ * - {@link EQN_BarSymbol}
+ * - {@link EQN_SquareBracketSymbol}
+ * - {@link EQN_RadicalSymbol}
  */
 export type TypeEquationElement = string
   | FigureElementPrimitive
   | FigureElementCollection
-  | TypeEquationTextElement
-  | TypeEquationSymbolAngleBracket
-  | TypeEquationSymbolArrowBracket;
+  | EQN_TextElement
+  | EQN_VinculumSymbol
+  | EQN_BoxSymbol
+  | EQN_ArrowSymbol
+  | EQN_SumSymbol
+  | EQN_ProdSymbol
+  | EQN_IntegralSymbol
+  | EQN_StrikeSymbol
+  | EQN_BracketSymbol
+  | EQN_AngleBracketSymbol
+  | EQN_BraceSymbol
+  | EQN_BarSymbol
+  | EQN_SquareBracketSymbol
+  | EQN_RadicalSymbol;
 
 
 /**

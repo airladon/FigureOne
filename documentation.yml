@@ -95,6 +95,7 @@ toc:
   - EQN_Container
   - EQN_Annotate
   - name: Equation Symbols
+  - EQN_Symbol
   - EQN_VinculumSymbol
   - EQN_BoxSymbol
   - EQN_ArrowSymbol
@@ -250,7 +251,7 @@ toc:
   - TypeEquationForms
   - TypeFormRestart
   - OBJ_EquationGoToForm
-  - TypeEquationTextElement
+  - EQN_TextElement
   - EquationLabel
   - OBJ_NextFormAnimationStep
   - OBJ_GoToFormAnimationStep

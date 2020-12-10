@@ -3,18 +3,7 @@ import {
   Point, Line,
 } from '../../../tools/g2';
 import Bracket from './Bracket';
-import type { TypeColor } from '../../../tools/types';
 
-export type TypeEquationSymbolAngleBracket = {
-  symbol: 'angleBracket',
-  side?: 'left' | 'right' | 'top' | 'bottom',
-  lineWidth?: number,
-  width?: number,
-  draw?: 'static' | 'dynamic',
-  staticHeight?: 'first' | number,
-  color?: TypeColor;
-  mods?: {};
-};
 export default class Bar extends Bracket {
   // eslint-disable-next-line class-methods-use-this
 

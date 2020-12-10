@@ -2519,6 +2519,16 @@
               
                 
                 <li><a
+                  href='#eqn_symbol'
+                  class="">
+                  EQN_Symbol
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#eqn_vinculumsymbol'
                   class="">
                   EQN_VinculumSymbol
@@ -4327,9 +4337,9 @@
               
                 
                 <li><a
-                  href='#typeequationtextelement'
+                  href='#eqn_textelement'
                   class="">
-                  TypeEquationTextElement
+                  EQN_TextElement
                   
                 </a>
                 
@@ -35234,6 +35244,94 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='eqn_symbol'>
+      EQN_Symbol
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Base object options for all equation symbols</p>
+<p><code>isTouchable</code>, <code>touchBorder</code>, <code>color</code> and <code>onClick</code> change the corresponding
+properties on the <a href="#figureelementprimitive">FigureElementPrimitive</a>, and could therefore also
+be set in <code>mods</code>. However, as these are commonly used, they are included in
+the root object for convenience.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isTouchable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeborder">TypeBorder</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code> | <code>"draw"</code> | <code>"buffer"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>onClick</span> <code class='quiet'>(function (): (void | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>mods</span> <code class='quiet'>(OBJ_ElementMods?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='eqn_vinculumsymbol'>
       EQN_VinculumSymbol
     </h3>
@@ -35255,6 +35353,17 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -35273,13 +35382,6 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"vinculum"</code>)</code>
           
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (equation color)
-
           
         </div>
       
@@ -35321,12 +35423,6 @@ based on first use (
 <code>'first'</code>
 )
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
-          
           
         </div>
       
@@ -35401,6 +35497,17 @@ based on first use (
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -35419,13 +35526,6 @@ based on first use (
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"box"</code>)</code>
           
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (equation color)
-
           
         </div>
       
@@ -35592,6 +35692,17 @@ based on first use
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -35610,13 +35721,6 @@ based on first use
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"arrow"</code>)</code>
           
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (equation color)
-
           
         </div>
       
@@ -35783,6 +35887,17 @@ based on first use (
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -35801,13 +35916,6 @@ based on first use (
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"sum"</code>)</code>
           
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (equation color)
-
           
         </div>
       
@@ -35950,6 +36058,17 @@ based on first use (
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -35968,13 +36087,6 @@ based on first use (
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"prod"</code>)</code>
           
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (equation color)
-
           
         </div>
       
@@ -36114,6 +36226,17 @@ based on first use (
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -36132,13 +36255,6 @@ based on first use (
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"int"</code>)</code>
           
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (equation color)
-
           
         </div>
       
@@ -36328,6 +36444,17 @@ based on first use (
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -36346,13 +36473,6 @@ based on first use (
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"strike"</code>)</code>
           
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (equation default)
-
           
         </div>
       
@@ -36529,6 +36649,17 @@ eqn.addElements({
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -36547,13 +36678,6 @@ eqn.addElements({
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"bracket"</code>)</code>
           
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (equation default)
-
           
         </div>
       
@@ -36710,6 +36834,17 @@ eqn.addElements({
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -36728,13 +36863,6 @@ eqn.addElements({
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"angleBracket"</code>)</code>
           
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (equation default)
-
           
         </div>
       
@@ -36895,6 +37023,17 @@ eqn.addElements({
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -36913,13 +37052,6 @@ eqn.addElements({
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"brace"</code>)</code>
           
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (equation default)
-
           
         </div>
       
@@ -37073,6 +37205,17 @@ eqn.addElements({
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -37091,13 +37234,6 @@ eqn.addElements({
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"bar"</code>)</code>
           
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (equation default)
-
           
         </div>
       
@@ -37239,6 +37375,17 @@ eqn.addElements({
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -37257,13 +37404,6 @@ eqn.addElements({
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"squareBracket"</code>)</code>
           
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
-          : (equation default)
-
           
         </div>
       
@@ -37443,6 +37583,17 @@ it will not be needed, but for edge case equation layouts it may be useful.</p>
 </pre>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -37460,12 +37611,6 @@ it will not be needed, but for edge case equation layouts it may be useful.</p>
       
         <div class='space-bottom0'>
           <span class='code bold'>symbol</span> <code class='quiet'>(<code>"radical"</code>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           
           
         </div>
@@ -54490,21 +54635,23 @@ Default:
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='typeequationtextelement'>
-      TypeEquationTextElement
+    <h3 class='fl m0' id='eqn_textelement'>
+      EQN_TextElement
     </h3>
     
     
   </div>
   
 
-  <p>Definition of a text or symbol equation element. Symbol properties take
-receive priority over text properties, so if 'symbol' is defined, then 'text'
-will be ignored.</p>
+  <p>Definition of a text or equation element.</p>
+<p>The properties 'color', 'isTouchable', 'onClick' and <code>touchBorder</code>
+modify the corresponding properties on the <a href="#figureelementprimitive">FigureElementPrimitive</a>
+itself, and so could equally be set in <code>mods</code>. They are provided in the
+root object for convenience as they are commonly used.</p>
 
   
     <p style="display: none;">      Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, font: (FigureFont | <a href="#obj_font">OBJ_Font</a>)?, style: (<code>"italic"</code> | <code>"normal"</code> | null)?, weight: (<code>"normal"</code> | <code>"bold"</code> | <code>"lighter"</code> | <code>"bolder"</code> | <code>"100"</code> | <code>"200"</code> | <code>"300"</code> | <code>"400"</code> | <code>"500"</code> | <code>"600"</code> | <code>"700"</code> | <code>"800"</code> | <code>"900"</code>)?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="#typecolor">TypeColor</a>?, mods: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?} | <a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a>)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, font: (FigureFont | <a href="#obj_font">OBJ_Font</a>)?, style: (<code>"italic"</code> | <code>"normal"</code> | null)?, weight: (<code>"normal"</code> | <code>"bold"</code> | <code>"lighter"</code> | <code>"bolder"</code> | <code>"100"</code> | <code>"200"</code> | <code>"300"</code> | <code>"400"</code> | <code>"500"</code> | <code>"600"</code> | <code>"700"</code> | <code>"800"</code> | <code>"900"</code>)?, size: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, color: <a href="#typecolor">TypeColor</a>?, isTouchable: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, onClick: function (): (void | <code>"string"</code> | null)?, touchBorder: (<a href="#typeborder">TypeBorder</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code> | <code>"draw"</code> | <code>"buffer"</code>)?, mods: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?} | <a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a>)
     </p>
   
   
@@ -54544,13 +54691,6 @@ will be ignored.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
-          : Symbol element only
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
           <span class='code bold'>side</span> <code class='quiet'>((<code>"top"</code> | <code>"left"</code> | <code>"bottom"</code> | <code>"right"</code>)?)</code>
           : Symbol element only
 
@@ -54568,6 +54708,26 @@ will be ignored.</p>
           <span class='code bold'>color</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           : Color to set the element
 
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>isTouchable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : make the element touchable
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeborder">TypeBorder</a> | <code>"border"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"rect"</code> | <code>"draw"</code> | <code>"buffer"</code>)?)</code>
+          : set the element's touch border
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>mods</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
+          
           
         </div>
       
@@ -56219,10 +56379,27 @@ borders.</p>
   </div>
   
 
-  
+  <p><code>string</code>
+| <a href="#figureelementprimitive">FigureElementPrimitive</a>
+| <a href="#figureelementcollection">FigureElementCollection</a>
+| <a href="#eqn_textelement">EQN_TextElement</a>
+| <a href="#eqn_vinculumsymbol">EQN_VinculumSymbol</a>
+| <a href="#eqn_boxsymbol">EQN_BoxSymbol</a>
+| <a href="#eqn_arrowsymbol">EQN_ArrowSymbol</a>
+| <a href="#eqn_sumsymbol">EQN_SumSymbol</a>
+| <a href="#eqn_prodsymbol">EQN_ProdSymbol</a>
+| <a href="#eqn_integralsymbol">EQN_IntegralSymbol</a>
+| <a href="#eqn_strikesymbol">EQN_StrikeSymbol</a>
+| <a href="#eqn_bracketsymbol">EQN_BracketSymbol</a>
+| <a href="#eqn_anglebracketsymbol">EQN_AngleBracketSymbol</a>
+| <a href="#eqn_bracesymbol">EQN_BraceSymbol</a>
+| <a href="#eqn_barsymbol">EQN_BarSymbol</a>
+| <a href="#eqn_squarebracketsymbol">EQN_SquareBracketSymbol</a>
+| <a href="#eqn_radicalsymbol">EQN_RadicalSymbol</a></p>
+
   
     <p style="display: none;">      Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a> | <a href="#typeequationtextelement">TypeEquationTextElement</a> | TypeEquationSymbolAngleBracket | TypeEquationSymbolArrowBracket)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a> | <a href="#eqn_textelement">EQN_TextElement</a> | <a href="#eqn_vinculumsymbol">EQN_VinculumSymbol</a> | <a href="#eqn_boxsymbol">EQN_BoxSymbol</a> | <a href="#eqn_arrowsymbol">EQN_ArrowSymbol</a> | <a href="#eqn_sumsymbol">EQN_SumSymbol</a> | <a href="#eqn_prodsymbol">EQN_ProdSymbol</a> | <a href="#eqn_integralsymbol">EQN_IntegralSymbol</a> | <a href="#eqn_strikesymbol">EQN_StrikeSymbol</a> | <a href="#eqn_bracketsymbol">EQN_BracketSymbol</a> | <a href="#eqn_anglebracketsymbol">EQN_AngleBracketSymbol</a> | <a href="#eqn_bracesymbol">EQN_BraceSymbol</a> | <a href="#eqn_barsymbol">EQN_BarSymbol</a> | <a href="#eqn_squarebracketsymbol">EQN_SquareBracketSymbol</a> | <a href="#eqn_radicalsymbol">EQN_RadicalSymbol</a>)
     </p>
   
   

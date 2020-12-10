@@ -178,7 +178,9 @@ export default class Symbol extends FigureElementPrimitive {
         && typeof this.custom.options.drawBorderBuffer[0] === 'number'
       )
     ) {
-      this.drawBorderBuffer = [getBoundingBorder(this.drawBorder, this.custom.options.drawBorderBuffer)];
+      this.drawBorderBuffer = [getBoundingBorder(
+        this.drawBorder, this.custom.options.drawBorderBuffer,
+      )];
     } else if (Array.isArray(this.custom.options.drawBorderBuffer)) {
       this.drawBorderBuffer = getBorder(this.custom.options.drawBorderBuffer);
     } else {

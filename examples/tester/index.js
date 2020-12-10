@@ -196,7 +196,7 @@ figure.add({
   options: {
     elements: {
       s: {
-        symbol: 'radical',
+        symbol: 'sum',
         // lineWidth: 0.1,
         // side: 'left',
         // color: [1, 0, 0, 1],
@@ -205,7 +205,8 @@ figure.add({
         // arrowWidth: 0.2,
         // arrowHeight: 0.2,
         // drawBorderBuffer: 0.1,
-        touchBorder: [0, 0.1],
+        // touchBorder: [0, 0.1],
+        touchBorder: 'border',
         draw: 'dynamic',
         // mods: {
           isTouchable: true,
@@ -224,10 +225,10 @@ figure.add({
       }
     },
     forms: {
-      // 0: { bar: ['c', 's']}
-      0: { root: ['s', 'c'] },
+      0: { sumOf: ['s', 'c']}
+      // 0: { root: ['s', 'c'] },
       // 0: { sumOf: ['s', 'c', 'a', 'b'] },
-      // 1: { sumOf: ['s', {
+      // 0: { sumOf: ['s', {
       //   frac: {
       //     numerator: 'c',
       //     symbol: 'vinculum',

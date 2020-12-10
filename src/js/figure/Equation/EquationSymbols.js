@@ -54,6 +54,22 @@ import type {
 // }
 
 /**
+ * Base object options for all equation symbols
+ *
+ * `isTouchable`, `touchBorder`, `color` and `onClick` change the corresponding
+ * properties on the {@link FigureElementPrimitive}, and could therefore also
+ * be set in `mods`. However, as these are commonly used, they are included in
+ * the root object for convenience.
+ */
+export type EQN_Symbol = {
+  color?: TypeColor,
+  isTouchable?: boolean,
+  touchBorder?: TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer',
+  onClick?: () => void | string | null,
+  mods?: OBJ_ElementMods,
+};
+
+/**
  * Vinculum equation symbol
  *
  * <pre>
@@ -67,13 +83,14 @@ import type {
  *
  * </pre>
  * @property {'vinculum'} symbol
- * @property {TypeColor} [color] (equation color)
  * @property {number} [lineWidth] (`0.01`)
  * @property {'static' | 'dynamic'} [draw] `'dynamic'` updates vertices on
  * resize, `'static'` only changes scale transform (`dynamic`)
  * @property {number | 'first'} [staticWidth] used when `draw`=`static`.
  * `number` sets width of static symbol - `'first'` calculates and sets width
  * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
  *
  * @example
  * eqn.addElements({
@@ -85,12 +102,12 @@ import type {
  * })
  */
 type EQN_VinculumSymbol = {
-  color?: TypeColor,
+  symbol: 'vinculum',
   lineWidth?: number,
   draw?: 'static' | 'dynamic',
   staticWidth?: number | 'first',
   staticHeight?: number | 'first',
-}
+} & EQN_Symbol;
 
 /**
  * Box equation symbol
@@ -117,7 +134,6 @@ type EQN_VinculumSymbol = {
  * </pre>
  *
  * @property {'box'} symbol
- * @property {TypeColor} [color] (equation color)
  * @property {number} [lineWidth] (`0.01`)
  * @property {boolean} [fill] (`false`)
  * @property {number} [width] force width instead of auto calculation
@@ -131,6 +147,8 @@ type EQN_VinculumSymbol = {
  * `number` sets height of static symbol - `'first'` calculates and sets height
  * based on first use
  *
+ * @extends EQN_Symbol
+ *
  * @example
  * eqn.addElements({
  *   b: {
@@ -142,7 +160,7 @@ type EQN_VinculumSymbol = {
  * })
  */
 type EQN_BoxSymbol = {
-  color?: TypeColor,
+  symbol: 'box',
   fill?: boolean,
   width?: number,
   height?: number,
@@ -150,7 +168,7 @@ type EQN_BoxSymbol = {
   draw?: 'static' | 'dynamic',
   staticWidth?: number | 'first',
   staticHeight?: number | 'first',
-}
+} & EQN_Symbol;
 
 /**
  * Arrow equation symbol
@@ -187,7 +205,6 @@ type EQN_BoxSymbol = {
  *                              lineWidth
  * </pre>
  * @property {'arrow'} symbol
- * @property {TypeColor} [color] (equation color)
  * @property {'up' | 'down' | 'left' | 'right'} [direction] (`'right'`)
  * @property {number} [lineWidth] (`0.01`)
  * @property {number} [arrowWidth] (`0.01`)
@@ -198,6 +215,8 @@ type EQN_BoxSymbol = {
  * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
  * `number` sets height of static symbol - `'first'` calculates and sets height
  * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
  *
  * @example
  * eqn.addElements({
@@ -212,14 +231,14 @@ type EQN_BoxSymbol = {
  * })
  */
 type EQN_ArrowSymbol = {
-  color?: TypeColor,
+  symbol: 'arrow',
   direction?: 'up' | 'down' | 'left' | 'right',
   lineWidth?: number,
   arrowHeight?: number,
   arrowWidth?: number,
   draw?: 'static' | 'dynamic',
   staticHeight?: number | 'first',
-};
+} & EQN_Symbol;
 
 /**
  * Sum equation symbol
@@ -256,7 +275,6 @@ type EQN_ArrowSymbol = {
  *                   |<------------------------------------>|
  * </pre>
  * @property {'sum'} symbol
- * @property {TypeColor} [color] (equation color)
  * @property {number} [lineWidth] (`height * 0.88 / (25 * height + 15)`)
  * @property {number} [sides] number of sides that make up serif curve (`5`)
  * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
@@ -264,6 +282,8 @@ type EQN_ArrowSymbol = {
  * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
  * `number` sets height of static symbol - `'first'` calculates and sets height
  * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
  *
  * @example
  * eqn.addElements({
@@ -276,12 +296,12 @@ type EQN_ArrowSymbol = {
  * })
  */
 type EQN_SumSymbol ={
-  color?: TypeColor,
+  symbol: 'sum',
   lineWidth?: number,
   sides?: number,
   draw?: 'static' | 'dynamic',
   staticHeight?: number | 'first',
-};
+} & EQN_Symbol;
 
 /**
  * Product equation symbol used in {@link EQN_ProdOf}
@@ -323,7 +343,6 @@ type EQN_SumSymbol ={
  *          ----- 0000000000000000000000000           00000000000000000000000000
  * </pre>
  * @property {'prod'} symbol
- * @property {TypeColor} [color] (equation color)
  * @property {number} [lineWidth] (related to height)
  * @property {number} [sides] number of sides that make up serif curve (`5`)
  * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
@@ -331,6 +350,8 @@ type EQN_SumSymbol ={
  * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
  * `number` sets height of static symbol - `'first'` calculates and sets height
  * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
  *
  * @example
  * eqn.addElements({
@@ -343,12 +364,12 @@ type EQN_SumSymbol ={
  * })
  */
 type EQN_ProdSymbol = {
-  color?: TypeColor,
+  symbol: 'prod',
   lineWidth?: number,
   sides?: number,
   draw?: 'static' | 'dynamic',
   staticHeight?: number | 'first',
-};
+} & EQN_Symbol;
 
 /**
  * Integral equation symbol used in {@link EQN_Integral}
@@ -389,7 +410,6 @@ type EQN_ProdSymbol = {
  *     -------  0000000
 * </pre>
  * @property {'int'} symbol
- * @property {TypeColor} [color] (equation color)
  * @property {number} [lineWidth] (related to height)
  * @property {number} [sides] number of sides that make up s curve (`30`)
  * @property {number} [num] number of integral symbols (`1`)
@@ -405,6 +425,8 @@ type EQN_ProdSymbol = {
  * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
  * `number` sets height of static symbol - `'first'` calculates and sets height
  * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
  *
  * @example
  * eqn.addElements({
@@ -424,10 +446,9 @@ type EQN_ProdSymbol = {
  * },
  */
 type EQN_IntegralSymbol = {
-  color?: TypeColor,
+  symbol: 'int',
   lineWidth?: number,
   sides?: number,
-  // width?: ?number,
   tipWidth?: number,
   draw?: 'static' | 'dynamic',
   staticHeight?: number | 'first',
@@ -436,7 +457,7 @@ type EQN_IntegralSymbol = {
   type?: 'line' | 'generic',
   serifSides?: number,
   lineIntegralSides?: number,
-};
+} & EQN_Symbol;
 
 /**
  * Radical equation symbol used in {@link EQN_Root}.
@@ -473,7 +494,6 @@ type EQN_IntegralSymbol = {
 * </pre>
 
  * @property {'radical'} symbol
- * @property {TypeColor} [color]
  * @property {number} [lineWidth] (`0.01`)
  * @property {number} [width] force width of content area (normally defined by content size)
  * @property {number} [height] force height of content area (normally defined by content size)
@@ -496,6 +516,9 @@ type EQN_IntegralSymbol = {
  * @property {number | 'first'} [staticWidth] used when `draw`=`static`.
  * `number` sets width of static symbol - `'first'` calculates and sets width
  * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
+ *
  * @example
  * // Typical
  * eqn.addElements({
@@ -527,7 +550,7 @@ type EQN_IntegralSymbol = {
  *  });
  */
 type EQN_RadicalSymbol = {
-  color?: TypeColor,
+  symbol: 'radical',
   lineWidth?: number,
   width?: number,
   height?: number,
@@ -543,7 +566,7 @@ type EQN_RadicalSymbol = {
   draw: 'static' | 'dynamic',
   staticHeight?: number | 'first',
   staticWidth?: number | 'first',
-};
+} & EQN_Symbol;
 
 /**
  * Strike equation symbol used in {@link EQN_Strike}.
@@ -574,7 +597,6 @@ type EQN_RadicalSymbol = {
  * </pre>
  *
  * @property {'strike'} symbol
- * @property {TypeColor} [color] (equation default)
  * @property {'cross' | 'forward' | 'back' | 'horizontal'} [style] (`'cross'`)
  * @property {number} [lineWidth] (`0.015`)
  * @property {number} [width] force width of strike (normally defined by
@@ -589,6 +611,9 @@ type EQN_RadicalSymbol = {
  * @property {number | 'first'} [staticWidth] used when `draw`=`static`.
  * `number` sets width of static symbol - `'first'` calculates and sets width
  * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
+ *
  * @example
  * // Typical
  * eqn.addElements({
@@ -610,7 +635,7 @@ type EQN_RadicalSymbol = {
  *  });
  */
 type EQN_StrikeSymbol = {
-  color?: TypeColor,
+  symbol: 'strike',
   style?: 'cross' | 'forward' | 'back' | 'horizontal',
   lineWidth?: number,
   width?: number,
@@ -618,7 +643,7 @@ type EQN_StrikeSymbol = {
   draw: 'static' | 'dynamic',
   staticHeight?: number | 'first',
   staticWidth?: number | 'first',
-}
+} & EQN_Symbol;
 
 /**
  * Bracket equation symbol
@@ -649,7 +674,6 @@ type EQN_StrikeSymbol = {
  * </pre>
  *
  * @property {'bracket'} symbol
- * @property {TypeColor} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
  * bracket ('left')
  * @property {number} [sides] number of sides in bracket curve (`10`)
@@ -661,6 +685,9 @@ type EQN_StrikeSymbol = {
  * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
  * `number` sets height of static symbol - `'first'` calculates and sets height
  * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
+ *
  * @example
  * // Typical
  * eqn.addElements({
@@ -682,15 +709,15 @@ type EQN_StrikeSymbol = {
  *  });
  */
 type EQN_BracketSymbol = {
+  symbol: 'bracket',
   side?: 'left' | 'right' | 'top' | 'bottom',
-  color?: TypeColor,
   lineWidth?: number,
   sides?: number,
   width?: number,
   tipWidth?: number,
   draw?: 'static' | 'dynamic',
   staticHeight?: number | 'first',
-}
+} & EQN_Symbol;
 
 /**
  * Angle bracket equation symbol
@@ -717,7 +744,6 @@ type EQN_BracketSymbol = {
  * </pre>
  *
  * @property {'angleBracket'} symbol
- * @property {TypeColor} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
  * angle bracket ('left')
  * @property {number} [lineWidth] (depends on height)
@@ -727,6 +753,9 @@ type EQN_BracketSymbol = {
  * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
  * `number` sets height of static symbol - `'first'` calculates and sets height
  * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
+ *
  * @example
  * // Typical
  * eqn.addElements({
@@ -746,13 +775,13 @@ type EQN_BracketSymbol = {
  *  });
  */
  type EQN_AngleBracketSymbol = {
+  symbol: 'angleBracket',
   side?: 'left' | 'right' | 'top' | 'bottom',
-  color?: TypeColor,
   lineWidth?: number,
   width?: number,
   draw?: 'dynamic' | 'static',
   staticHeight?: number | 'first',
-}
+} & EQN_Symbol;
 
 /**
  * Brace equation symbol
@@ -801,7 +830,6 @@ type EQN_BracketSymbol = {
  * </pre>
  *
  * @property {'brace'} symbol
- * @property {TypeColor} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
  * brace ('left')
  * @property {number} [lineWidth] (depends on height)
@@ -813,6 +841,9 @@ type EQN_BracketSymbol = {
  * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
  * `number` sets height of static symbol - `'first'` calculates and sets height
  * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
+ *
  * @example
  * // Typical
  * eqn.addElements({
@@ -833,15 +864,15 @@ type EQN_BracketSymbol = {
  *  });
  */
 type EQN_BraceSymbol = {
+  symbol: 'brace',
   side?: 'left' | 'right' | 'top' | 'bottom',
-  color?: TypeColor,
   lineWidth?: number,
   sides?: number,
   width?: number,
   tipWidth?: number,
   draw?: 'dynamic' | 'static',
   staticHeight?: number | 'first',
-}
+} & EQN_Symbol;
 
 /**
  * Bar equation symbol
@@ -866,7 +897,6 @@ type EQN_BraceSymbol = {
  * </pre>
  *
  * @property {'bar'} symbol
- * @property {TypeColor} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
  * bar ('left')
  * @property {number} [lineWidth] (`0.01`)
@@ -875,6 +905,9 @@ type EQN_BraceSymbol = {
  * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
  * `number` sets height of static symbol - `'first'` calculates and sets height
  * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
+ *
  * @example
  * // Typical
  * eqn.addElements({
@@ -893,12 +926,12 @@ type EQN_BraceSymbol = {
  *  });
  */
 type EQN_BarSymbol = {
+  symbol: 'bar',
   side?: 'left' | 'right' | 'top' | 'bottom',
-  color?: TypeColor,
   lineWidth?: number,
   draw?: 'dynamic' | 'static',
   staticHeight?: number | 'first',
-}
+} & EQN_Symbol;
 
 
 /**
@@ -935,7 +968,6 @@ type EQN_BarSymbol = {
  * </pre>
  *
  * @property {'squareBracket'} symbol
- * @property {TypeColor} [color] (equation default)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] how to orient the
  * square bracket ('left')
  * @property {number} [lineWidth] (`0.01`)
@@ -948,6 +980,9 @@ type EQN_BarSymbol = {
  * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
  * `number` sets height of static symbol - `'first'` calculates and sets height
  * based on first use (`'first'`)
+ *
+ * @extends EQN_Symbol
+ *
  * @example
  * // Typical
  * eqn.addElements({
@@ -970,7 +1005,7 @@ type EQN_BarSymbol = {
  *  });
  */
 type EQN_SquareBracketSymbol = {
-  color?: TypeColor,
+  symbol: 'squareBracket',
   side?: 'left' | 'right' | 'top' | 'bottom',
   lineWidth?: number,
   width?: number,
@@ -979,7 +1014,7 @@ type EQN_SquareBracketSymbol = {
   sides?: number,
   draw?: 'dynamic' | 'static',
   staticHeight?: number | 'first',
-}
+} & EQN_Symbol;
 
 export type TypeSymbolOptions = EQN_VinculumSymbol
   & EQN_VinculumSymbol
