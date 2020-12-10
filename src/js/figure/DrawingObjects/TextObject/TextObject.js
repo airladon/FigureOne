@@ -2,9 +2,9 @@
 
 import * as m2 from '../../../tools/m2';
 import {
-  Point, getPoint, Rect, getBoundingBorder, getPoints,
+  Point, getPoint, Rect, getBoundingBorder,
 } from '../../../tools/g2';
-import type { TypeParsablePoint } from '../../../tools/g2';
+import type { TypeParsablePoint, TypeBuffer } from '../../../tools/g2';
 import DrawingObject from '../DrawingObject';
 import DrawContext2D from '../../DrawContext2D';
 import { joinObjects, splitString } from '../../../tools/tools';
@@ -441,7 +441,7 @@ class FigureTextLine extends FigureTextBase {
     inLine: boolean = true,
     // border: 'rect' | Array<Point> = 'rect',
     // touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
-    touchBorder: number | Array<Point> = 0,
+    touchBorder: TypeBuffer | Array<Point> = 0,
     onClick?: string | (() => void) | null = null,
   ) {
     super(drawContext2D, location, text, font, 'left', 'baseline', touchBorder, onClick);
@@ -481,7 +481,7 @@ class FigureTextLines extends FigureTextLine {
     line: number,
     // border: 'rect' | Array<Point> = 'rect',
     // touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
-    touchBorder: number | Array<Point> = 0,
+    touchBorder: TypeBuffer | Array<Point> = 0,
     onClick?: string | (() => void) | null = null,
   ) {
     super(drawContext2D, location, text, font, offset, inLine, touchBorder, onClick);
@@ -1151,8 +1151,9 @@ class TextLinesObject extends TextObjectBase {
         offset?: TypeParsablePoint,
         inLine?: boolean,
         font?: OBJ_Font,
-        border?: 'rect' | Array<Point>,
-        touchBorder?: 'border' | 'rect' | number | Array<Point>,
+        // border?: 'rect' | Array<Point>,
+        // touchBorder?: 'border' | 'rect' | number | Array<Point>,
+        touchBorder?: TypeBuffer | Array<Point>,
         onClick?: () => void,
     },
   };
@@ -1173,18 +1174,19 @@ class TextLinesObject extends TextObjectBase {
         inLine?: boolean,
         font?: OBJ_Font,
         border?: 'rect' | Array<Point>,
-        touchBorder?: 'border' | 'rect' | number | Array<Point>,
+        touchBorder?: TypeBuffer | Array<Point>,
         onClick?: () => void,
       },
     },
+    defaultTextTouchBorder?: number,
     font: OBJ_Font,
     justify: 'left' | 'center' | 'right',
     lineSpace: number,
     xAlign: 'left' | 'right' | 'center',
     yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
     color: TypeColor,
-    border?: 'rect' | Array<Point>,
-    touchBorder?: 'rect' | number | 'border' | Array<Point>,
+    // border?: 'rect' | Array<Point>,
+    // touchBorder?: 'rect' | number | 'border' | Array<Point>,
   },
   ) {
     // console.log('asdfasdf')
@@ -1227,7 +1229,7 @@ class TextLinesObject extends TextObjectBase {
         let textFont = lineFont;
         let offset = new Point(0, 0);
         let inLine = true;
-        let border;
+        // let border;
         let touchBorder;
         let onClick;
         if (this.modifiers[s] != null) {
@@ -1244,21 +1246,21 @@ class TextLinesObject extends TextObjectBase {
           if (mod.offset != null) {
             offset = mod.offset;
           }
-          if (mod.border != null) {
-            border = mod.border;
-          }
+          // if (mod.border != null) {
+          //   border = mod.border;
+          // }
           if (mod.touchBorder != null) {
             touchBorder = mod.touchBorder;
           }
           if (mod.onClick != null) {
             onClick = mod.onClick;
           }
-          if (Array.isArray(border)) {  // $FlowFixMe
-            border = getPoints(border);
-          }
-          if (Array.isArray(touchBorder)) {  // $FlowFixMe
-            touchBorder = getPoints(touchBorder);
-          }
+          // if (Array.isArray(border)) {  // $FlowFixMe
+          //   border = getPoints(border);
+          // }
+          // if (Array.isArray(touchBorder)) {  // $FlowFixMe
+          //   touchBorder = getBorder(touchBorder);
+          // }
         }
         const t = new FigureTextLines(
           this.drawContext2D,
@@ -1268,8 +1270,8 @@ class TextLinesObject extends TextObjectBase {
           offset,
           inLine,
           lineIndex,
-          border || 'rect',
-          touchBorder || 'border',
+          // border || 'rect',
+          touchBorder || options.defaultTextTouchBorder,
           onClick,
         );
         figureTextArray.push(t);
@@ -1287,8 +1289,13 @@ class TextLinesObject extends TextObjectBase {
     this.yAlign = options.yAlign;
     // super.super.loadText();
     this.calcScalingFactor();
-    this.borderSetup = options.border || [];
-    this.touchBorderSetup = options.touchBorder || [];
+    // this.borderSetup = options.border || [];
+    // this.touchBorderSetup = options.touchBorder || [];
+    this.layoutText();
+  }
+
+  setText(textOrOptions: string | OBJ_TextDefinition, index: number = 1) {
+    this.text[index].setText(textOrOptions);
     this.layoutText();
   }
 

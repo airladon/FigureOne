@@ -69,7 +69,6 @@ const makeShape = (name, method, options, lineOptions = null) => {
     options: tools.misc.joinObjects({}, {
       position: [x, y],
       line,
-      touchBorder: 'buffer',
     }, options),
     mods: tools.misc.joinObjects({}, {
       isTouchable: true,
@@ -81,19 +80,26 @@ const makeShape = (name, method, options, lineOptions = null) => {
 const click = text => tools.misc.Console.bind(this, text);
 const txt = (name, options, lineOptions = null) => makeShape(
   name,
-  'primitives.textLine',
+  'primitives.textLines',
   tools.misc.joinObjects({}, {
-    // drawBorderBuffer: 0.1,
     color: [1, 0, 0, 1],
-    // width: 0.4,
-    // height: 0.2,
-    // top: 'left',
-    touchBorder: 'buffer',
     defaultTextTouchBorder: [0, 0.1],
     text: [
-      { text: 'great ', onClick: click('great') },
-      { text: 'scott', onClick: click('scott') },
+      { text: 'Make it |so|' },
+      { text: '|engage|' },
+      'Sir',
     ],
+    modifiers: {
+      so: {
+        onClick: click('so'),
+        font: { color: [0, 0, 1, 1] },
+      },
+      engage: {
+        text: 'Engage',
+        onClick: click('Engage'),
+        font: { color: [0, 0, 1, 1] },
+      },
+    },
   }, options),
   lineOptions,
 );
@@ -110,9 +116,9 @@ const arrows = [
   .......##.....##.##.....##.##....##..##.....##.##.......##....##..##....##
   .......########...#######..##.....##.########..########.##.....##..######.
   */
-  // Default border: 'draw', touchBorder: 'buffer'
+  // Default border: 'rect', touchBorder: 'rect'
   txt('b1', {}),
-  txt('b2', { border: 'rect' }),
+  txt('b2', { border: 'draw' }),
   txt('b3', { border: 0.1 }),
   txt('b4', { border: 'buffer' }),
   txt('b5', { border: [[0, 0], [0.5, 0], [0, 0.5]] }),
@@ -127,17 +133,30 @@ const arrows = [
 
   // Test individual touch borders
   txt('itb1', {
-    text: [
-      { text: 'great ', onClick: click('great'), touchBorder: [0, 0.15] },
-      { text: 'scott', onClick: click('scott') },
-    ],
+    modifiers: {
+      so: {
+        touchBorder: [0, 0.35],
+        onClick: click('so'),
+      },
+      // engage: {
+      //   text: 'Engage',
+      //   onClick: click('Engage'),
+      // },
+    },
   }),
 
   txt('itb2', {
-    text: [
-      { text: 'great ', onClick: click('great'), touchBorder: [0, 0.15] },
-      { text: 'scott', onClick: click('scott'), touchBorder: [[0.1, 0], [0.3, 0], [0.3, 0.3]] },
-    ],
+    modifiers: {
+      so: {
+        touchBorder: [0, 0.35],
+        onClick: click('so'),
+      },
+      engage: {
+        text: 'Engage',
+        touchBorder: [[0.1, 0], [0.3, 0], [0.3, 0.3]],
+        onClick: click('Engage'),
+      },
+    },
   }),
 
   // /*
@@ -149,11 +168,39 @@ const arrows = [
   // .......##.....##.##........##..##....##..##...###
   // .......##.....##.########.####..######...##....##
   // */
-  // Default Align
   txt('a1', { xAlign: 'left', yAlign: 'bottom' }),
   txt('a2', { xAlign: 'left', yAlign: 'baseline' }),
   txt('a3', { xAlign: 'center', yAlign: 'middle' }),
   txt('a4', { xAlign: 'right', yAlign: 'top' }),
+
+  /*
+  .............##.##.....##..######..########.####.########.##....##
+  .............##.##.....##.##....##....##.....##..##........##..##.
+  .............##.##.....##.##..........##.....##..##.........####..
+  .............##.##.....##..######.....##.....##..######......##...
+  .......##....##.##.....##.......##....##.....##..##..........##...
+  .......##....##.##.....##.##....##....##.....##..##..........##...
+  ........######...#######...######.....##....####.##..........##...
+  */
+  txt('a5', { justify: 'center', xAlign: 'left', yAlign: 'bottom' }),
+  txt('a6', { justify: 'center', xAlign: 'left', yAlign: 'baseline' }),
+  txt('a7', { justify: 'center', xAlign: 'center', yAlign: 'middle' }),
+  txt('a8', { justify: 'center', xAlign: 'right', yAlign: 'top' }),
+  txt('a9', { justify: 'right', xAlign: 'left', yAlign: 'bottom' }),
+  txt('a10', { justify: 'right', xAlign: 'left', yAlign: 'baseline' }),
+  txt('a11', { justify: 'right', xAlign: 'center', yAlign: 'middle' }),
+  txt('a12', { justify: 'right', xAlign: 'right', yAlign: 'top' }),
+  txt('a13', {
+    text: [
+      'Make it |so|',
+      {
+        text: '|engage|',
+        justify: 'center',
+      },
+      'Sir',
+    ],
+    xAlign: 'center',
+  }),
 
   // /*
   // .......########..#######..##....##.########
@@ -166,20 +213,17 @@ const arrows = [
   // */
   // // Default Fonts
   txt('f1', { font: { size: 0.2, style: 'italic' }, xAlign: 'center' }),
-  txt('f2', { font: { color: [0, 0, 1, 1], weight: 'bold' } }),
+  txt('f2', { font: { color: [0, 1, 0, 1], weight: 'bold' } }),
 
   // Custom Fonts
   txt('f3', {
     text: [
       {
-        text: 'great',
+        text: 'Make it |so| ',
         font: { size: 0.1, style: 'normal', color: [0, 0, 1, 1] },
-        onClick: click('great'),
       },
-      {
-        text: 'scott',
-        onClick: click('scott'),
-      },
+      { text: '|engage|' },
+      'Sir',
     ],
     font: { size: 0.2, style: 'italic' },
   }),
@@ -198,87 +242,65 @@ const arrows = [
   txt('c2', { font: { color: [0, 1, 0, 1] }, color: [0, 0, 1, 1] }),
 
   /*
-  ........#######..########.########..######..########.########
-  .......##.....##.##.......##.......##....##.##..........##...
-  .......##.....##.##.......##.......##.......##..........##...
-  .......##.....##.######...######....######..######......##...
-  .......##.....##.##.......##.............##.##..........##...
-  .......##.....##.##.......##.......##....##.##..........##...
-  ........#######..##.......##........######..########....##...
+  .......##.......####.##....##.########.....######..########...######.
+  .......##........##..###...##.##..........##....##.##.....##.##....##
+  .......##........##..####..##.##..........##.......##.....##.##......
+  .......##........##..##.##.##.######.......######..########..##......
+  .......##........##..##..####.##................##.##........##......
+  .......##........##..##...###.##..........##....##.##........##....##
+  .......########.####.##....##.########.....######..##.........######.
   */
-  txt('o1', {
+  txt('ls1', { lineSpace: 0.2 }),
+  txt('ls2', {
     text: [
-      {
-        text: 'great',
-        onClick: click('great'),
-      },
-      {
-        text: 'question',
-        offset: [0.05, 0.05],
-        onClick: click('question'),
-      },
-      ' batman ',
-      {
-        text: 'its the',
-        offset: [0, -0.05],
-        onClick: click('its the'),
-      },
-      {
-        text: 'crazy',
-        offset: [-0.05, 0.1],
-        inLine: false,
-        onClick: click('crazy'),
-      },
-      {
-        text: 'riddler',
-        inLine: false,
-        onClick: click('riddler'),
-      },
+      'Make it |so|',
+      { text: '|engage|', lineSpace: 0.2 },
+      'Sir',
     ],
-    font: { size: 0.06 },
-    xAlign: 'center',
   }),
 
-  /*
-  .##.....##.########..########.....###....########.########
-  .##.....##.##.....##.##.....##...##.##......##....##......
-  .##.....##.##.....##.##.....##..##...##.....##....##......
-  .##.....##.########..##.....##.##.....##....##....######..
-  .##.....##.##........##.....##.#########....##....##......
-  .##.....##.##........##.....##.##.....##....##....##......
-  ..#######..##........########..##.....##....##....########
-  */
+  // /*
+  // .##.....##.########..########.....###....########.########
+  // .##.....##.##.....##.##.....##...##.##......##....##......
+  // .##.....##.##.....##.##.....##..##...##.....##....##......
+  // .##.....##.########..##.....##.##.....##....##....######..
+  // .##.....##.##........##.....##.#########....##....##......
+  // .##.....##.##........##.....##.##.....##....##....##......
+  // ..#######..##........########..##.....##....##....########
+  // */
   txt('u1', { xAlign: 'center' }),
   txt('u2', { xAlign: 'center' }),
-  txt('u3', {
-    text: [
-      'gG',
-      { text: 'gB', location: [0.2, 0.2] },
-    ],
-    xAlign: 'center',
-  }),
-  txt('u4', { text: 'gG', xAlign: 'right' }),
-  // txt('u5', { text: 'gG', xAlign: 'right' }),
+  txt('u3', { xAlign: 'center' }),
+  txt('u4', { xAlign: 'center' }),
+  txt('u5', { xAlign: 'center' }),
+  txt('u6', { xAlign: 'center' }),
 ];
 figure.add(arrows);
 figure.getElement('u1').custom.setText('updated ');
-figure.getElement('u2').custom.setText({
+figure.getElement('u2').custom.setText('updated ', 2);
+figure.getElement('u2').custom.setText('updated ', 3);
+figure.getElement('u3').custom.setText({
   text: 'updated',
   touchBorder: [0, 0.1, 0.1, 0.1],
   font: { color: [0, 0.5, 0, 1], size: 0.2 },
   onClick: () => tools.misc.Console('Updated!!'),
-}, 1);
-figure.getElement('u3').custom.updateText({ text: 'hello' });
-figure.getElement('u4').custom.updateText({
+}, 3);
+figure.getElement('u4').custom.updateText({ text: 'updated' });
+figure.getElement('u5').custom.updateText({ text: 'updated |so| there' });
+figure.getElement('u6').custom.updateText({
   text: [
-    { text: 'updated ' },
-    { text: 'now' },
+    'A |line|',
+    {
+      text: 'A second |line|',
+      font: { size: 0.1, style: 'normal', color: [1, 0, 1, 1] },
+    },
   ],
+  modifiers: {
+    line: { font: { size: 0.15, color: [1, 0, 0, 1] } },
+  },
   color: [0, 0, 1, 1],
-  xAlign: 'right',
+  xAlign: 'left',
 });
-
-// console.log(figure.getElement('itb1'))
 
 for (let i = 0; i < index; i += 1) {
   const element = figure.elements.elements[figure.elements.drawOrder[i + 3]];

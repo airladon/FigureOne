@@ -1797,14 +1797,14 @@ export type OBJ_TextLine = {
  *
  * Used to define a string within a text lines primitive {@link OBJ_TextLines}.
  *
- * @property {string} [line] string representing a line of text
+ * @property {string} [text] string representing a line of text
  * @property {OBJ_Font} [font] line specific default font
  * @property {'left' | 'right' | 'center'} [justify] line specific justification
  * @property {number} [lineSpace] line specific separation from baseline of
  * this line to baseline of previous line
  */
 export type OBJ_TextLinesDefinition = {
-  line: string,
+  text: string,
   font?: OBJ_Font,
   justify?: 'left' | 'right' | 'center',
   lineSpace?: number,
@@ -3087,18 +3087,18 @@ export default class FigurePrimitives {
       options.color = this.defaultFont.color;
     }
 
-    // Define standard transform if no transform was input
-    if (options.transform == null) {
-      options.transform = new Transform('text').standard();
-    } else {
-      options.transform = getTransform(options.transform);
-    }
+    // // Define standard transform if no transform was input
+    // if (options.transform == null) {
+    //   options.transform = new Transform('text').standard();
+    // } else {
+    //   options.transform = getTransform(options.transform);
+    // }
 
-    // Override transform if position is defined
-    if (options.position != null) {
-      const p = getPoint(options.position);
-      options.transform.updateTranslation(p);
-    }
+    // // Override transform if position is defined
+    // if (options.position != null) {
+    //   const p = getPoint(options.position);
+    //   options.transform.updateTranslation(p);
+    // }
 
     if (options.text != null && !Array.isArray(options.text)) {
       options.text = [options.text];
@@ -3123,9 +3123,23 @@ export default class FigurePrimitives {
     return options;
   }
 
-  createPrimitive(
-    drawingObject: DrawingObject, options: Object,
+  genericTextPrimitive(
+    drawingObject: DrawingObject, optionsIn: Object,
   ) {
+    const options = optionsIn;
+    // Define standard transform if no transform was input
+    if (options.transform == null) {
+      options.transform = new Transform('text').standard();
+    } else {
+      options.transform = getTransform(options.transform);
+    }
+
+    // Override transform if position is defined
+    if (options.position != null) {
+      const p = getPoint(options.position);
+      options.transform.updateTranslation(p);
+    }
+
     const element = new FigureElementPrimitive(
       drawingObject,
       options.transform,
@@ -3183,10 +3197,6 @@ export default class FigurePrimitives {
       element.drawingObject.setText(o, index);
       element.updateBorders({});
     };
-    element.custom.updateText = (o: OBJ_Text) => {
-      element.drawingObject.loadText(this.parseTextOptions(o));
-      element.updateBorders({});
-    };
     return element;
   }
 
@@ -3198,7 +3208,13 @@ export default class FigurePrimitives {
     const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsIn);
     const to = new TextLineObject(this.draw2D);
     to.loadText(options);
-    const element = this.createPrimitive(to, options);
+    const element = this.genericTextPrimitive(to, options);
+    element.custom.updateText = (o: OBJ_Text) => {
+      element.drawingObject.loadText(
+        this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, o),
+      );
+      element.updateBorders({});
+    };
     element.updateBorders(options);
     return element;
   }
@@ -3208,21 +3224,26 @@ export default class FigurePrimitives {
    * @see {@link OBJ_TextLines} for options and examples.
    */
   textLines(...optionsIn: Array<OBJ_TextLines | string>) {
-    let optionsToUse = optionsIn;
-    if (optionsIn.length === 1 && typeof optionsIn[0] === 'string') {
-      optionsToUse = [{ text: [optionsIn[0]] }];
-    }
-    const options = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, ...optionsToUse);
-    if (options.justify == null) {
-      options.justify = 'left';
-    }
-    if (options.lineSpace == null) {
-      options.lineSpace = options.font.size * 1.2;
-    }
-    // console.log('qwerty')
+    const joinedOptions = joinObjects({}, ...optionsIn);
     const to = new TextLinesObject(this.draw2D);
-    to.loadText(options);
-    return this.createPrimitive(to, options);
+    const element = this.genericTextPrimitive(to, joinedOptions);
+    element.custom.updateText = (oIn: OBJ_Text) => {
+      let oToUse = oIn;
+      if (oIn.length === 1 && typeof oIn[0] === 'string') {
+        oToUse = [{ text: [optionsIn[0]] }];
+      }
+      const o = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, oToUse);
+      if (o.justify == null) {
+        o.justify = 'left';
+      }
+      if (o.lineSpace == null) {
+        o.lineSpace = o.font.size * 1.2;
+      }
+      element.drawingObject.loadText(o);
+      element.updateBorders(o);
+    };
+    element.custom.updateText(joinedOptions);
+    return element;
   }
 
   /**
@@ -3235,12 +3256,11 @@ export default class FigurePrimitives {
       this.draw2D,
     );
     to.loadText(options);
-    // console.log(to.text[0].font)
-    const element = this.createPrimitive(to, options);
-    // element.custom.updateText = (o: OBJ_Text) => {
-    //   element.drawingObject.loadText(this.parseTextOptions(o));
-    //   element.updateBorders({});
-    // };
+    const element = this.genericTextPrimitive(to, options);
+    element.custom.updateText = (o: OBJ_Text) => {
+      element.drawingObject.loadText(this.parseTextOptions(o));
+      element.updateBorders({});
+    };
     element.updateBorders(options);
     return element;
   }
