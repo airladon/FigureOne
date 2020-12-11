@@ -33,7 +33,7 @@ import EquationForm from './js/figure/Equation/EquationForm';
 import type { TypeRotationDirection, TypeParsablePoint } from './js/tools/g2';
 import type {
   COL_Line,
-  TypeLineLabelOptions, TypeLabelledLine,
+  OBJ_LineLabel, TypeLabelledLine,
 } from './js/figure/FigureCollections/Line';
 import type {
   TypeLabelLocation, TypeLabelSubLocation, TypeLabelOrientation,
@@ -58,7 +58,7 @@ export type {
   TypeLabelLocation, TypeLabelSubLocation, TypeLabelOrientation,
   COL_Line,
   COL_Angle, OBJ_Figure,
-  TypeLineLabelOptions, TypeAngleLabelOptions,
+  OBJ_LineLabel, TypeAngleLabelOptions,
   COL_Polyline, OBJ_PolylinePad, TypeParsablePoint,
   TypeLabelledAngle, TypeLabelledLine,
 };

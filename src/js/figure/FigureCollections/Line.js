@@ -96,6 +96,8 @@ export type OBJ_PulseWidth = {
  * To automatically update the label location and orientation as the line
  * transform (translation, rotation or scale) changes then use `update: true`.
  *
+ * @see {@link COL_Line}
+ *
  * @property {null | string | Array<string> | Equation | EQN_Equation } text
  * @property {number} [precision]
  * @property {number} [offset]
@@ -107,7 +109,7 @@ export type OBJ_PulseWidth = {
  * @property {number} [scale] size of the label
  * @property {TypeColor} [color]
  */
-export type TypeLineLabelOptions = {
+export type OBJ_LineLabel = {
   text: null | string | Array<string> | Equation | EQN_Equation,
   precision?: number,
   offset?: number,
@@ -208,7 +210,7 @@ export type OBJ_MovableLine = {
  * @property {'start' | 'end' | 'center' | number} [align] rotation center of
  * line (only needed if rotating line)
  * @property {number} [width] line width
- * @property {TypeLineLabelOptions} [label] label annotation
+ * @property {OBJ_LineLabel} [label] label annotation
  * @property {OBJ_LineArrows | TypeArrowHead} [arrow] line arrow(s)
  * @property {TypeDash} [dash] make the line dashed
  * @property {OBJ_PulseWidth} [pulseWidth] default options for pulseWidth pulse
@@ -223,7 +225,7 @@ export type COL_Line = {
   offset?: number,
   align?: 'start' | 'end' | 'center' | number,
   width?: number,
-  label?: TypeLineLabelOptions,
+  label?: OBJ_LineLabel,
   arrow?: OBJ_LineArrows | TypeArrowHead;
   dash?: TypeDash,
   pulseWidth?: OBJ_PulseWidth,
@@ -505,9 +507,6 @@ export default class CollectionsLine extends FigureElementCollection {
   arrow1: ?{ height: number; };
   arrow2: ?{ height: number; };
 
-  /**
-   * {@link Line} object that represents the line.
-   */
   line: Line;
 
   width: number;
@@ -1620,6 +1619,15 @@ export default class CollectionsLine extends FigureElementCollection {
     if (this._label) {
       this._label.hideAll();
     }
+  }
+
+
+  /**
+   * Return a geometric {@link Line} object that represents the line
+   * @return {Line}
+   */
+  getLine(space: TypePace = 'local') {
+    return new Line(this.getP1(space), this.getP2(space));
   }
 
   /**

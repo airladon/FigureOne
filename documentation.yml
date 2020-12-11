@@ -175,7 +175,7 @@ toc:
   - OBJ_AngleSet
   - OBJ_AngleAnimationStep
   - OBJ_PulseAngleAnimationStep
-  - TypeLineLabelOptions
+  - OBJ_LineLabel
   - OBJ_PulseWidth
   - OBJ_MovableLine
   - OBJ_LengthAnimationStep

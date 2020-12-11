@@ -1,12 +1,4 @@
 const updates = {
-  // 'Update-a': (e) => {
-  //   e.getElement('a').custom.updatePoints({
-  //     radius: 0.2,
-  //   });
-  // },
-  // 'Update-touchBorder': (e) => {
-  //   e.touchBorder = 'rect';
-  // },
   'align-start': (e) => {
     e.setRotation(Math.PI / 4);
   },
@@ -22,6 +14,32 @@ const updates = {
   'label-autoForm': (e) => {
     e.label.eqn.showForm('1');
   },
+  'label-updateOff': (e) => {
+    e.setRotation(Math.PI / 4);
+  },
+  'label-updateOn': (e) => {
+    e.setRotation(Math.PI / 4);
+  },
+  setLength: (e) => {
+    e.setLength(0.7);
+  },
+  'setLength-dash': (e) => {
+    e.setLength(0.7);
+  },
+  setLabelToRealLength: (e) => {
+    e.setLabelToRealLength();
+  },
+  setLabel: (e) => {
+    e.setLabel('b');
+  },
+  setEndPoints: (e) => {
+    const p = e.getPosition('figure');
+    e.setEndPoints(
+      [-0.2 + p.x, -0.2 + p.y],
+      [-0.2 + p.x, 0.2 + p.y],
+      -0.1,
+    );
+  },
 };
 
 
@@ -34,6 +52,7 @@ if (typeof process === 'object') {
   Object.keys(updates).forEach((name) => {
     // eslint-disable-next-line no-undef
     updates[name](figure.getElement(name));
+    // eslint-disable-next-line no-undef
     figure.setFirstTransform();
   });
 }
