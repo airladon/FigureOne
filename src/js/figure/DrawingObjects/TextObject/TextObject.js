@@ -934,7 +934,7 @@ class TextObject extends TextObjectBase {
       if (font != null) {
         fontToUse = font;
       }
-      if (!isBuffer(touchBorder)) {
+      if (touchBorder != null && Array.isArray(touchBorder) && !isBuffer(touchBorder)) {
         [touchBorder] = getBorder(touchBorder);
       }
       const fontDefinition = joinObjects({}, options.font, fontToUse);
@@ -1076,7 +1076,7 @@ class TextLineObject extends TextObjectBase {
         // if (Array.isArray(touchBorder)) {  // $FlowFixMe
         //   touchBorder = getBorder(touchBorder);
         // }
-        if (!isBuffer(touchBorder)) {
+        if (touchBorder != null && Array.isArray(touchBorder) && !isBuffer(touchBorder)) {
           [touchBorder] = getBorder(touchBorder);
         }
       }
@@ -1257,7 +1257,8 @@ class TextLinesObject extends TextObjectBase {
           // }
           if (mod.touchBorder != null) {
             touchBorder = mod.touchBorder;
-            if (!isBuffer(touchBorder)) {
+            if (touchBorder != null && Array.isArray(touchBorder) && !isBuffer(touchBorder)
+            ) {
               [touchBorder] = getBorder(touchBorder);
             }
           }
