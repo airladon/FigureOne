@@ -250,19 +250,22 @@ figure.elements._eqn.showForm('1')
 
 figure.add({
   name: 'ttt',
-  method: 'rectangle',
+  method: 'triangle',
   options: {
             width: 2,
             height: 1,
-            corner: {
-              radius: 0.3,
-              sides: 1,
-            },
+            top: 'left',
             line: {
               width: 0.1,
-              widthIs: 'inside',
+              widthIs: 'outside',
             },
-            // default is border: 'outline'
+            xAlign: 'left',
+            yAlign: 'bottom',
+            // border: 'outline',
+            drawBorderBuffer: 0.1,
+          },
+          mods: {
+            touchBorder: 'buffer',
           },
 })
 console.log(figure.getElement('ttt'));
