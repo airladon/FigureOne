@@ -37,10 +37,17 @@ describe('Polyline', () => {
       new Point(0, -0.5),
     ];
     buffer = [
-      new Point(1.1, 0),
-      new Point(0, 0.6),
-      new Point(-1.1, 0),
-      new Point(0, -0.6),
+      new Point(0, -0.612),
+      new Point(1.12, -0.052),
+      new Point(1.12, 0.052),
+      new Point(0, 0.612),
+      new Point(-1.12, 0.052),
+      new Point(-1.12, -0.052),
+    // buffer = [
+    //   new Point(1.1, 0),
+    //   new Point(0, 0.6),
+    //   new Point(-1.1, 0),
+    //   new Point(0, -0.6),
     ];
     rect = [
       new Point(-1, -0.5),
@@ -92,7 +99,7 @@ describe('Polyline', () => {
       expect(round(pd.points, 3)).toEqual(points);
       expect(round(p.getBorder('draw', 'border'), 3)).toEqual([rect]);
       expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([buffer]);
-      expect(round(p.drawBorderBuffer)).toEqual([buffer]);
+      expect(round(p.drawBorderBuffer, 3)).toEqual([buffer]);
       expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Update', () => {
@@ -123,18 +130,8 @@ describe('Polyline', () => {
       addElement('buffer');
       // expect(round(pd.points, 3)).toEqual(points);
       expect(round(p.getBorder('draw', 'border'), 3)).toEqual([border]);
-      expect(round(p.getBorder('draw', 'touchBorder'), 5)).toEqual([[
-        new Point(1.22361, 0),
-        new Point(0, 0.6118),
-        new Point(-1.22361, 0),
-        new Point(0, -0.6118),
-      ]]);
-      expect(round(p.drawBorderBuffer)).toEqual([[
-        new Point(1.22361, 0),
-        new Point(0, 0.6118),
-        new Point(-1.22361, 0),
-        new Point(0, -0.6118),
-      ]]);
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([buffer]);
+      expect(round(p.drawBorderBuffer, 3)).toEqual([buffer]);
       expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Update', () => {

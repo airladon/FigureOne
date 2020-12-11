@@ -247,6 +247,22 @@ figure.elements._eqn.touchBorder = 'children';
 //   .start();
 
 figure.elements._eqn.showForm('1')
+
+figure.add({
+  name: 'ellipse',
+  method: 'ellipse',
+  options: {
+    width: 2,
+    height: 1,
+    sides: 4,
+    drawBorderBuffer: 0.1,
+    line: { width: 0.1, widthIs: 'inside' },
+  },
+  mods: {
+    // border: 'rect',
+    touchBorder: 'buffer',
+  },
+})
 const len = figure.elements.drawOrder.length;
 for (let i = 3; i < len; i += 1) {
   const name = figure.elements.drawOrder[i];
