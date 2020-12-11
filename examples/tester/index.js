@@ -250,16 +250,12 @@ figure.elements._eqn.showForm('1')
 
 figure.add({
   name: 'ttt',
-  method: 'polygon',
+  method: 'polyline',
   options: {
-            radius: 1 * Math.sqrt(2),
-            rotation: Math.PI / 4,
-            line: { width: 0.1, widthIs: 'mid' },
-            // border: 'outline',
-            drawBorderBuffer: 0.1,
-          },
-          mods: {
-            touchBorder: 'buffer',
+            points: [[0, 0], [1, 0], [0, 1]],
+            width: 0.2,
+            close: true,
+            dash: [0.3, 0.3],
           },
 })
 console.log(figure.getElement('ttt'));

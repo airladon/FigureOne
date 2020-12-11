@@ -86,7 +86,7 @@ describe('Polyline', () => {
         [0, -0.1], [1, -0.1], [1, 0.1], [0, 0.1],
       ])]);
       expect(round(p.getBorder('draw', 'touchBorder'))).toEqual([getPoints([
-        [0, -0.2], [1, -0.2], [1, 0.2], [0, 0.2],
+        [-0.1, -0.2], [1.1, -0.2], [1.1, 0.2], [-0.1, 0.2],
       ])]);
       expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
@@ -184,43 +184,27 @@ describe('Polyline', () => {
         -0.1, 1.241, 0.1, 0.1, -0.1, -0.1,
       ]);
 
-      expect(round(p.getBorder('draw', 'border')[0], 3)).toEqual(getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [-0.1, -0.1],
         [1.241, -0.1],
-        [0.759, 0.1],
-        [0.1, 0.1],
-      ]));
-      expect(round(p.getBorder('draw', 'border')[1], 3)).toEqual(getPoints([
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [0.1, 0.759],
-        [0.759, 0.1],
-      ]));
-      expect(round(p.getBorder('draw', 'border')[2], 3)).toEqual(getPoints([
         [-0.1, 1.241],
         [-0.1, -0.1],
         [0.1, 0.1],
         [0.1, 0.759],
-      ]));
+        [0.759, 0.1],
+        [0.1, 0.1],
+      ])]);
 
-      expect(round(p.getBorder('draw', 'touchBorder')[0], 3)).toEqual(getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-0.1, -0.1],
         [1.241, -0.1],
-        [0.759, 0.1],
-        [0.1, 0.1],
-      ]));
-      expect(round(p.getBorder('draw', 'touchBorder')[1], 3)).toEqual(getPoints([
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [0.1, 0.759],
-        [0.759, 0.1],
-      ]));
-      expect(round(p.getBorder('draw', 'touchBorder')[2], 3)).toEqual(getPoints([
         [-0.1, 1.241],
         [-0.1, -0.1],
         [0.1, 0.1],
         [0.1, 0.759],
-      ]));
+        [0.759, 0.1],
+        [0.1, 0.1],
+      ])]);
 
       expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
@@ -237,19 +221,13 @@ describe('Polyline', () => {
       expect(round(p.getBorder('draw', 'border')[0], 3)).toEqual(getPoints([
         [-0.1, -0.1],
         [1.241, -0.1],
-        [1.241, -0.1],
         [-0.1, 1.241],
-        [-0.1, 1.241],
-        [-0.1, -0.1],
       ]));
 
       expect(round(p.getBorder('draw', 'touchBorder')[0], 3)).toEqual(getPoints([
         [-0.1, -0.1],
         [1.241, -0.1],
-        [1.241, -0.1],
         [-0.1, 1.241],
-        [-0.1, 1.241],
-        [-0.1, -0.1],
       ]));
 
       expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
@@ -268,19 +246,13 @@ describe('Polyline', () => {
       expect(round(p.getBorder('draw', 'border')[0], 3)).toEqual(getPoints([
         [0.1, 0.1],
         [0.759, 0.1],
-        [0.759, 0.1],
         [0.1, 0.759],
-        [0.1, 0.759],
-        [0.1, 0.1],
       ]));
 
       expect(round(p.getBorder('draw', 'touchBorder')[0], 3)).toEqual(getPoints([
         [0.1, 0.1],
         [0.759, 0.1],
-        [0.759, 0.1],
         [0.1, 0.759],
-        [0.1, 0.759],
-        [0.1, 0.1],
       ]));
 
       expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
@@ -323,31 +295,23 @@ describe('Polyline', () => {
         -0.1, 1.241, 0.1, 0.1, -0.1, -0.1,
       ]);
 
-      expect(round(p.getBorder('draw', 'border')[0], 3)).toEqual(getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [-0.1, -0.1],
         [1.241, -0.1],
-        [0.759, 0.1],
-        [0.1, 0.1],
-      ]));
-      expect(round(p.getBorder('draw', 'border')[1], 3)).toEqual(getPoints([
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [0.1, 0.759],
-        [0.759, 0.1],
-      ]));
-      expect(round(p.getBorder('draw', 'border')[2], 3)).toEqual(getPoints([
         [-0.1, 1.241],
         [-0.1, -0.1],
         [0.1, 0.1],
         [0.1, 0.759],
-      ]));
+        [0.759, 0.1],
+        [0.1, 0.1],
+      ])]);
 
-      expect(round(p.getBorder('draw', 'touchBorder')[0], 3)).toEqual(getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-0.1, -0.1],
         [1.241, -0.1],
         [1.241, 1.241],
         [-0.1, 1.241],
-      ]));
+      ])]);
 
       expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
@@ -362,102 +326,105 @@ describe('Polyline', () => {
         -0.1, 1.241, 0.1, 0.1, -0.1, -0.1,
       ]);
 
-      expect(round(p.getBorder('draw', 'border')[0], 3)).toEqual(getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [-0.1, -0.1],
         [1.241, -0.1],
-        [0.759, 0.1],
-        [0.1, 0.1],
-      ]));
-      expect(round(p.getBorder('draw', 'border')[1], 3)).toEqual(getPoints([
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [0.1, 0.759],
-        [0.759, 0.1],
-      ]));
-      expect(round(p.getBorder('draw', 'border')[2], 3)).toEqual(getPoints([
         [-0.1, 1.241],
         [-0.1, -0.1],
         [0.1, 0.1],
         [0.1, 0.759],
-      ]));
+        [0.759, 0.1],
+        [0.1, 0.1],
+      ])]);
 
-      expect(round(p.getBorder('draw', 'touchBorder')[0], 3)).toEqual(getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-0.2, -0.2],
         [1.483, -0.2],
-        [0.517, 0.2],
-        [0.2, 0.2],
-      ]));
-      expect(round(p.getBorder('draw', 'touchBorder')[1], 3)).toEqual(getPoints([
-        [1.483, -0.2],
-        [-0.2, 1.483],
-        [0.2, 0.517],
-        [0.517, 0.2],
-      ]));
-      expect(round(p.getBorder('draw', 'touchBorder')[2], 3)).toEqual(getPoints([
         [-0.2, 1.483],
         [-0.2, -0.2],
         [0.2, 0.2],
         [0.2, 0.517],
-      ]));
+        [0.517, 0.2],
+        [0.2, 0.2],
+      ])]);
 
       expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });
     test('Dashed Border', () => {
       addElement('dashedBorder');
       expect(round(pd.points, 3)).toEqual([
-        0, 0.1, 0.3, 0.1, 0, -0.1,
-        0, -0.1, 0.3, 0.1, 0.3, -0.1,
-        0.6, 0.1, 0.9, 0.1, 0.6, -0.1,
-        0.6, -0.1, 0.9, 0.1, 0.9, -0.1,
-        0.788, 0.071, 0.576, 0.283, 0.929, 0.212,
-        0.929, 0.212, 0.576, 0.283, 0.717, 0.424,
-        0.364, 0.495, 0.151, 0.707, 0.505, 0.636,
-        0.505, 0.636, 0.151, 0.707, 0.293, 0.849,
-        -0.061, 0.919, 0.1, 0.759, 0.081, 1.061,
-        0.081, 1.061, 0.1, 0.759, -0.1, 1.241,
-        0.1, 0.759, 0.1, 0.714, -0.1, 1.241,
-        -0.1, 1.241, 0.1, 0.714, -0.1, 0.714,
-        0.1, 0.414, 0.1, 0.114, -0.1, 0.414,
-        -0.1, 0.414, 0.1, 0.114, -0.1, 0.114,
+        0, 0.1, 0.3, 0.1, 0, -0.1, 0, -0.1,
+        0.3, 0.1, 0.3, -0.1, 0.6, 0.1, 0.9, 0.1,
+        0.6, -0.1, 0.6, -0.1, 0.9, 0.1, 0.9, -0.1,
+        0.788, 0.071, 0.576, 0.283, 0.929, 0.212, 0.929, 0.212,
+        0.576, 0.283, 0.717, 0.424, 0.364, 0.495, 0.151, 0.707,
+        0.505, 0.636, 0.505, 0.636, 0.151, 0.707, 0.293, 0.849,
+        -0.061, 0.919, -0.071, 0.929, 0.081, 1.061, 0.081, 1.061,
+        -0.071, 0.929, -0.1, 1.241, -0.071, 0.929, 0.1, 1,
+        -0.1, 1.241, 0.1, 1, 0.1, 0.714, -0.1, 1.241,
+        -0.1, 1.241, 0.1, 0.714, -0.1, 0.714, 0.1, 0.414,
+        0.1, 0.114, -0.1, 0.414, -0.1, 0.414, 0.1, 0.114,
+        -0.1, 0.114,
       ]);
 
-      expect(round(p.getBorder('draw', 'border')[0], 3)).toEqual(getPoints([
+      expect(round(p.getBorder('draw', 'border'), 3)).toEqual([getPoints([
         [-0.1, -0.1],
         [1.241, -0.1],
-        [0.759, 0.1],
-        [0.1, 0.1],
-      ]));
-      expect(round(p.getBorder('draw', 'border')[1], 3)).toEqual(getPoints([
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [0.1, 0.759],
-        [0.759, 0.1],
-      ]));
-      expect(round(p.getBorder('draw', 'border')[2], 3)).toEqual(getPoints([
         [-0.1, 1.241],
         [-0.1, -0.1],
         [0.1, 0.1],
         [0.1, 0.759],
-      ]));
+        [0.759, 0.1],
+        [0.1, 0.1],
+      ])]);
 
-      expect(round(p.getBorder('draw', 'touchBorder')[0], 3)).toEqual(getPoints([
+      expect(round(p.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
         [-0.1, -0.1],
         [1.241, -0.1],
-        [0.759, 0.1],
-        [0.1, 0.1],
-      ]));
-      expect(round(p.getBorder('draw', 'touchBorder')[1], 3)).toEqual(getPoints([
-        [1.241, -0.1],
-        [-0.1, 1.241],
-        [0.1, 0.759],
-        [0.759, 0.1],
-      ]));
-      expect(round(p.getBorder('draw', 'touchBorder')[2], 3)).toEqual(getPoints([
         [-0.1, 1.241],
         [-0.1, -0.1],
         [0.1, 0.1],
         [0.1, 0.759],
-      ]));
+        [0.759, 0.1],
+        [0.1, 0.1],
+      ])]);
+      // expect(round(p.getBorder('draw', 'border')[0], 3)).toEqual(getPoints([
+      //   [-0.1, -0.1],
+      //   [1.241, -0.1],
+      //   [0.759, 0.1],
+      //   [0.1, 0.1],
+      // ]));
+      // expect(round(p.getBorder('draw', 'border')[1], 3)).toEqual(getPoints([
+      //   [1.241, -0.1],
+      //   [-0.1, 1.241],
+      //   [0.1, 0.759],
+      //   [0.759, 0.1],
+      // ]));
+      // expect(round(p.getBorder('draw', 'border')[2], 3)).toEqual(getPoints([
+      //   [-0.1, 1.241],
+      //   [-0.1, -0.1],
+      //   [0.1, 0.1],
+      //   [0.1, 0.759],
+      // ]));
+
+      // expect(round(p.getBorder('draw', 'touchBorder')[0], 3)).toEqual(getPoints([
+      //   [-0.1, -0.1],
+      //   [1.241, -0.1],
+      //   [0.759, 0.1],
+      //   [0.1, 0.1],
+      // ]));
+      // expect(round(p.getBorder('draw', 'touchBorder')[1], 3)).toEqual(getPoints([
+      //   [1.241, -0.1],
+      //   [-0.1, 1.241],
+      //   [0.1, 0.759],
+      //   [0.759, 0.1],
+      // ]));
+      // expect(round(p.getBorder('draw', 'touchBorder')[2], 3)).toEqual(getPoints([
+      //   [-0.1, 1.241],
+      //   [-0.1, -0.1],
+      //   [0.1, 0.1],
+      //   [0.1, 0.759],
+      // ]));
 
       expect(p.getBorder('draw', 'holeBorder')).toEqual([[]]);
     });

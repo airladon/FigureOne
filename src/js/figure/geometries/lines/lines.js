@@ -912,7 +912,7 @@ function makePolyLine(
       const firstPoint = firstLine.pointAtLength(-touchBorderBuffer);
       const lastLine = new Line(points[points.length - 2], points[points.length - 1]);
       const lastPoint = lastLine.pointAtLength(lastLine.length() + touchBorderBuffer);
-      pointsToUse = [firstPoint, ...points, lastPoint];
+      pointsToUse = [firstPoint, ...points.slice(1, -1), lastPoint];
     }
     let borderIsToUse = borderIs;
     if (Array.isArray(borderIs)) {
