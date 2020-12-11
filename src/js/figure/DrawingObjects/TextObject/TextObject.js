@@ -580,7 +580,7 @@ class TextObjectBase extends DrawingObject {
     this.scalingFactor = scalingFactor;
   }
 
-  setText(textOrOptions: string | OBJ_TextDefinition, index: number = 1) {
+  setText(textOrOptions: string | OBJ_TextDefinition, index: number = 0) {
     this.text[index].setText(textOrOptions);
     this.setBorder();
     this.setTouchBorder();

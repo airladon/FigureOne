@@ -5,7 +5,7 @@ import {
   spaceToSpaceTransform, getBoundingRect,
   clipAngle, getPoint, getTransform, getScale,
   TransformBounds, RectBounds, RangeBounds, getBounds,
-  getBoundingBorder, isBuffer,
+  getBoundingBorder, isBuffer, getBorder,
 } from '../tools/g2';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './Recorder/state';
@@ -4100,7 +4100,7 @@ class FigureElementCollection extends FigureElement {
       limits: new Rect(-1, 1, 2, 2),
       parent: null,
       border: 'children',
-      touchBorder: 'border',
+      touchBorder: 'children',
       holeBorder: [[]],
       color: [0, 0, 0, 1],
       name: generateUniqueId('collection_'),
@@ -4116,10 +4116,37 @@ class FigureElementCollection extends FigureElement {
     // this.touchInBoundingRect = false;
     this.eqns = {};
     this.type = 'collection';
-    this.border = o.border;
-    this.touchBorder = o.touchBorder;
-    this.holeBorder = o.holeBorder;
+    // this.border = o.border;
+    // this.touchBorder = o.touchBorder;
+    // this.holeBorder = o.holeBorder;
     this.setColor(o.color);
+
+    // if (transformOrPointOrOptions instanceof Point) {
+    //   defaultOptions.transform.updateTranslation(transformOrPointOrOptions);
+    //   optionsToUse = joinObjects({}, defaultOptions, ...moreOptions);
+    // } else if (transformOrPointOrOptions instanceof Transform) {
+    //   defaultOptions.transform = transformOrPointOrOptions._dup();
+    //   optionsToUse = joinObjects({}, defaultOptions, ...moreOptions);
+    // } else {
+    //   optionsToUse = joinObjects({}, defaultOptions, transformOrPointOrOptions, ...moreOptions);
+    // }
+    if (o.border != null) {
+      if (!isBuffer(o.border)) {
+        this.border = getBorder(o.border);
+      } else {
+        this.border = o.border;
+      }
+    }
+    if (o.touchBorder != null) {
+      if (!isBuffer(o.touchBorder)) {
+        this.touchBorder = getBorder(o.touchBorder);
+      } else {
+        this.touchBorder = o.touchBorder;
+      }
+    }
+    if (o.holeBorder != null) {
+      this.holeBorder = getBorder(o.holeBorder);
+    }
   }
 
   _getStateProperties(options: { ignoreShown?: boolean }) {
@@ -5092,7 +5119,6 @@ class FigureElementCollection extends FigureElement {
     } else {
       matrix = this.spaceTransformMatrix('draw', space);
     }
-
     const borderPoints = this.getBorderPoints(border, children, shownOnly);
     return borderPoints.map(b => b.map(p => getPoint(p).transformBy(matrix)));
   }

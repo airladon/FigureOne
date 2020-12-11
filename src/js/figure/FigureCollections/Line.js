@@ -20,7 +20,7 @@ import { joinObjects } from '../../tools/tools';
 import { Equation } from '../Equation/Equation';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
 import { simplifyArrowOptions, getArrowLength } from '../geometries/arrow';
-import type { OBJ_LineArrows, OBJ_LineArrow } from '../geometries/arrow';
+import type { OBJ_LineArrows, OBJ_LineArrow, TypeArrowHead } from '../geometries/arrow';
 import type { OBJ_Pulse, FigureElement } from '../Element';
 import type { EQN_Equation } from '../Equation/Equation';
 import * as animation from '../Animation/Animation';
@@ -120,6 +120,40 @@ export type TypeLineLabelOptions = {
   color?: TypeColor,
 };
 
+
+/**
+ * Line move options object.
+ *
+ * The `'centerTranslateEndRotation`' movement will move the line
+ * when touched within the `middleLength` percentage of the line
+ * and rotate it otherwise.
+ *
+ * @property {boolean} [movable] `true` to make movable (`true`)
+ * @property {'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scale'} [type]
+ * @property {number} [middleLength] length of the middle section of line that
+ * allows for translation movement in percent of total length (`0.333`)
+ * @property {boolean} [includeLabelInTouchBoundary] `true` to include the
+ * line's label in the touch boundary for `'centerTranslateEndRotation'`
+ * ('false`)
+ */
+export type OBJ_LineMove = {
+  // movable?: boolean,
+  type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scale',
+  middleLength?: number,
+  includeLabelInTouchBoundary?: boolean,
+}
+
+/**
+ * setMovable options object for {@link COL_Line}.
+ *
+ * @extends OBJ_LineMove
+ *
+ * @property {boolean} [movable] `true` to make movable (`true`)
+ */
+export type OBJ_MovableLine = {
+  movable?: boolean,
+} & OBJ_LineMove;
+
 /**
  * {@link CollectionsLine} options object that extends {@link OBJ_Collection}
  * options object (without `parent`).
@@ -139,7 +173,9 @@ export type TypeLineLabelOptions = {
  *
  * The line also has a control point which is positioned on the line with the
  * `align` property. The control point is the line's center of rotation, and
- * fixes the point from which the line changes length.
+ * fixes the point from which the line changes length. This is also the point
+ * where the line collection position will be if `getPosition` is called on the
+ * element.
  *
  * For instance, setting the control point at `align: 'start'` will mean that
  * if the line can rotate, it will rotate around `p1`, and if the length is
@@ -163,51 +199,39 @@ export type TypeLineLabelOptions = {
  * Default pulse values can then be specified with the `pulse` property.
  *
  * @extends OBJ_Collection
+ *
+ * @property {TypeParsablePoint} [p1] First point of line
+ * @property {TypeParsablePoint} [p2] Will override `length`/`angle` definition
+ * @property {number} [angle] line angle
+ * @property {number} [length]  line length
+ * @property {number} [offset] line offset
+ * @property {'start' | 'end' | 'center' | number} [align] rotation center of
+ * line (only needed if rotating line)
+ * @property {number} [width] line width
+ * @property {TypeLineLabelOptions} [label] label annotation
+ * @property {OBJ_LineArrows | TypeArrowHead} [arrow] line arrow(s)
+ * @property {TypeDash} [dash] make the line dashed
+ * @property {OBJ_PulseWidth} [pulseWidth] default options for pulseWidth pulse
+ * @property {OBJ_Pulse} [pulse] default options for normal pulse
+ * @property {OBJ_LineMove} [move] line move options
  */
 export type COL_Line = {
   p1?: TypeParsablePoint,
   p2?: TypeParsablePoint,
-  position?: TypeParsablePoint,
   length?: number,
   angle?: number,
   offset?: number,
   align?: 'start' | 'end' | 'center' | number,
   width?: number,
   label?: TypeLineLabelOptions,
-  arrow: OBJ_LineArrows;
-  dash: TypeDash,
+  arrow?: OBJ_LineArrows | TypeArrowHead;
+  dash?: TypeDash,
   pulseWidth?: OBJ_PulseWidth,
-  pulse: OBJ_Pulse;
-
-  move?: {
-    type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scale';
-    middleLength?: number;
-    includeLabelInTouchBoundary?: boolean;
-  }
+  pulse?: OBJ_Pulse;
+  move?: OBJ_LineMove;
 } & OBJ_Collection;
 
 
-/**
- * Line move options object.
- *
- * The `'centerTranslateEndRotation`' movement will move the line
- * when touched within the `middleLength` percentage of the line
- * and rotate it otherwise.
- *
- * @property {boolean} [movable] `true` to make movable (`true`)
- * @property {'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scale'} [type]
- * @property {number} [middleLength] length of the middle section of line that
- * allows for translation movement in percent of total length (`0.333`)
- * @property {boolean} [includeLabelInTouchBoundary] `true` to include the
- * line's label in the touch boundary for `'centerTranslateEndRotation'`
- * ('false`)
- */
-export type OBJ_MovableLine = {
-  movable?: boolean,
-  type?: 'translation' | 'rotation' | 'centerTranslateEndRotation' | 'scale',
-  middleLength?: number,
-  includeLabelInTouchBoundary?: boolean,
-}
 // Line is a class that manages:
 //   A straight line
 //   Arrows
@@ -488,7 +512,6 @@ export default class CollectionsLine extends FigureElementCollection {
 
   width: number;
   localXPosition: number;
-  maxLength: number;
   alignDraw: 'start' | 'end' | 'center' | number;
   dash: TypeDash;
   arrow: ?{
@@ -569,29 +592,30 @@ export default class CollectionsLine extends FigureElementCollection {
       },
       transform: new Transform('Line').scale(1, 1).rotate(0).translate(0, 0),
       limits: collections.primitives.limits,
+      // touchBorder: 'children',
     };
     const optionsToUse = joinObjects({}, defaultOptions, options);
-    if (optionsToUse.touchBorder == null) {
-      if (isTouchDevice) {
-        optionsToUse.touchBorder = optionsToUse.width * 16;
-      } else {
-        optionsToUse.touchBorder = optionsToUse.width * 8;
-      }
-    }
+    // if (optionsToUse.touchBorder == null) {
+    //   if (isTouchDevice) {
+    //     optionsToUse.touchBorder = optionsToUse.width * 16;
+    //   } else {
+    //     optionsToUse.touchBorder = optionsToUse.width * 8;
+    //   }
+    // }
     super(optionsToUse);
     this.setColor(optionsToUse.color);
 
     // this.shapes = shapes;
     // this.equation = equation;
     this.collections = collections;
-    this.touchBorder = optionsToUse.touchBorder;
+    // this.touchBorder = optionsToUse.touchBorder;
     this.isTouchDevice = isTouchDevice;
     this.dash = optionsToUse.dash;
     this.width = optionsToUse.width;
     this.line = getLineFromOptions(optionsToUse);
     this.alignDraw = optionsToUse.align;
     this.localXPosition = 0;
-    this.maxLength = optionsToUse.maxLength != null ? optionsToUse.maxLength : this.line.length();
+    // this.maxLength = optionsToUse.maxLength != null ? optionsToUse.maxLength : this.line.length();
     this.autoUpdateSubscriptionId = -1;
     this.lastParentRotationOffset = 0;
 
@@ -643,7 +667,7 @@ export default class CollectionsLine extends FigureElementCollection {
     this._line = null;
     if (this.width > 0) {
       const straightLine = makeStraightLine(
-        this.collections.primitives, this.maxLength, this.width,
+        this.collections.primitives, this.line.length, this.width,
         optionsToUse.color, this.dash, // this.maxLength,
       );
       const scaleTransformMethod = s => new Transform().scale(1, s);
@@ -1370,7 +1394,10 @@ export default class CollectionsLine extends FigureElementCollection {
   /**
    * Set the length of the line
    */
-  setLength(length: number, align: 'start' | 'end' | 'center' | number = this.alignDraw) {
+  setLength(
+    length: number,
+    align: 'start' | 'end' | 'center' | number = this.alignDraw,
+  ) {
     let newLen = length;
     if (length === 0) {
       newLen = 0.0000001;
@@ -1394,6 +1421,7 @@ export default class CollectionsLine extends FigureElementCollection {
         newLen, this.line.angle(),
       );
     }
+    this.alignDraw = align;
     this.setupLine();
   }
 
@@ -1406,7 +1434,8 @@ export default class CollectionsLine extends FigureElementCollection {
     };
     let xPosition = 0;
     let position = this.line.p1._dup();
-    const { align } = this;
+    // const { align } = this;
+    const align = this.alignDraw;
     if (typeof align === 'number') {
       xPosition = -this.line.length() * align;
       position = this.line.pointAtPercent(align);
@@ -1435,18 +1464,19 @@ export default class CollectionsLine extends FigureElementCollection {
     const line = this._line;
     if (line) {
       line.transform.updateTranslation(xPosition + startOffset);
-      if (Array.isArray(this.dash) && this.dash.length > 0) {
-        line.lengthToDraw = straightLineLength;
-        line.drawingObject.border = [[
-          new Point(0, -this.width / 2),
-          new Point(straightLineLength, -this.width / 2),
-          new Point(straightLineLength, this.width / 2),
-          new Point(0, this.width / 2),
-        ]];
-        line.drawingObject.touchBorder = line.drawingObject.border;
-      } else {
-        line.transform.updateScale(straightLineLength, 1);
-      }
+      line.custom.updatePoints({ p1: [0, 0], p2: [straightLineLength, 0], dash: this.dash });
+      // if (Array.isArray(this.dash) && this.dash.length > 0) {
+      //   line.lengthToDraw = straightLineLength;
+      //   line.drawBorder = [[
+      //     new Point(0, -this.width / 2),
+      //     new Point(straightLineLength, -this.width / 2),
+      //     new Point(straightLineLength, this.width / 2),
+      //     new Point(0, this.width / 2),
+      //   ]];
+      //   line.drawBorderBuffer = line.drawingObject.border;
+      // } else {
+      //   line.transform.updateScale(straightLineLength, 1);
+      // }
     }
 
     this.transform.updateRotation(this.line.angle());
@@ -1596,20 +1626,22 @@ export default class CollectionsLine extends FigureElementCollection {
    * Return the start point of the line
    * @return {Point}
    */
-  getP1() {
-    // const m = this.transform.matrix();
-    // return this.line.p1.transformBy(m);
-    return this.line.p1._dup();
+  getP1(space: TypeSpace = 'local') {
+    if (space === 'draw') {
+      return this.line.p1._dup();
+    }
+    return this.line.p1.transformBy(this.spaceTransformMatrix('draw', space));
   }
 
   /**
    * Return the end point of the line
    * @return {Point}
    */
-  getP2() {
-    // const m = this.transform.matrix();
-    // return this.p2.transformBy(m);
-    return this.line.p2._dup();
+  getP2(space: TypeSpace = 'local') {
+    if (space === 'draw') {
+      return this.line.p2._dup();
+    }
+    return this.line.p2.transformBy(this.spaceTransformMatrix('draw', space));
   }
 }
 

@@ -190,90 +190,115 @@ figure.add([
 // console.log(figure.getElement('eqn.box1'))
 
 
-figure.add({
-  name: 'eqn',
-  method: 'equation',
-  options: {
-    elements: {
-      s: {
-        symbol: 'sum',
-        // lineWidth: 0.1,
-        // side: 'left',
-        // color: [1, 0, 0, 1],
-        // fill: true, 
-        // lineWidth: 0.1,
-        // arrowWidth: 0.2,
-        // arrowHeight: 0.2,
-        // drawBorderBuffer: 0.1,
-        // touchBorder: [0, 0.1],
-        touchBorder: 'border',
-        draw: 'dynamic',
-        // mods: {
-          isTouchable: true,
-          onClick: () => console.log('asdfasdf')
-        // }
-      },
-      c: {
-        touchBorder: [0, 0.1], // touchBorder: 'buffer',
-        isTouchable: true,
-        onClick: () => console.log('c'),
-        mods: {
-          isTouchable: true,
-          onClick: () => console.log('d'),
-        },
-        size: 3,
-      }
-    },
-    forms: {
-      0: { sumOf: ['s', 'c']}
-      // 0: { root: ['s', 'c'] },
-      // 0: { sumOf: ['s', 'c', 'a', 'b'] },
-      // 0: { sumOf: ['s', {
-      //   frac: {
-      //     numerator: 'c',
-      //     symbol: 'vinculum',
-      //     denominator: 'd',
-      //     scale: 4,
-      //   },
-      // }, 'a', 'b' ] },
-    },
-  },
-});
-console.log(figure.elements._eqn)
-console.log(figure.elements._eqn._s.getBorder('diagram', 'touchBorder'))
-figure.elements._eqn.touchBorder = 'children';
-// figure.elements._eqn.animations.new()
-//   .goToForm({ start: '0', target: '1', duration: 2, animate: 'move' })
-//   .start();
+// figure.add({
+//   name: 'eqn',
+//   method: 'equation',
+//   options: {
+//     elements: {
+//       s: {
+//         symbol: 'sum',
+//         // lineWidth: 0.1,
+//         // side: 'left',
+//         // color: [1, 0, 0, 1],
+//         // fill: true, 
+//         // lineWidth: 0.1,
+//         // arrowWidth: 0.2,
+//         // arrowHeight: 0.2,
+//         // drawBorderBuffer: 0.1,
+//         // touchBorder: [0, 0.1],
+//         touchBorder: 'border',
+//         draw: 'dynamic',
+//         // mods: {
+//           isTouchable: true,
+//           onClick: () => console.log('asdfasdf')
+//         // }
+//       },
+//       c: {
+//         touchBorder: [0, 0.1], // touchBorder: 'buffer',
+//         isTouchable: true,
+//         onClick: () => console.log('c'),
+//         mods: {
+//           isTouchable: true,
+//           onClick: () => console.log('d'),
+//         },
+//         size: 3,
+//       }
+//     },
+//     forms: {
+//       0: { sumOf: ['s', 'c']}
+//       // 0: { root: ['s', 'c'] },
+//       // 0: { sumOf: ['s', 'c', 'a', 'b'] },
+//       // 0: { sumOf: ['s', {
+//       //   frac: {
+//       //     numerator: 'c',
+//       //     symbol: 'vinculum',
+//       //     denominator: 'd',
+//       //     scale: 4,
+//       //   },
+//       // }, 'a', 'b' ] },
+//     },
+//   },
+// });
+// console.log(figure.elements._eqn)
+// console.log(figure.elements._eqn._s.getBorder('diagram', 'touchBorder'))
+// figure.elements._eqn.touchBorder = 'children';
+// // figure.elements._eqn.animations.new()
+// //   .goToForm({ start: '0', target: '1', duration: 2, animate: 'move' })
+// //   .start();
 
-figure.elements._eqn.showForm('1')
+// figure.elements._eqn.showForm('1')
 
 figure.add({
   name: 'ttt',
-  method: 'triangle',
+  method: 'collections.line',
   options: {
-            width: 2,
-            height: 1,
-            top: 'left',
-            line: {
-              width: 0.1,
-              widthIs: 'outside',
-            },
-            xAlign: 'left',
-            yAlign: 'bottom',
-            // border: 'outline',
-            drawBorderBuffer: 0.1,
-          },
-          mods: {
-            touchBorder: 'buffer',
-          },
+            p1: [-0.5, 0],
+        p2: [0.5, 0],
+        width: 0.1,
+        // dash: [0.1, 0.1],
+        maxLength: 2,
+        move: {
+          type: 'centerTranslateEndRotation',
+        },
+        touchBorder: 0.2,
+        align: 'center',
+        label: {
+          text: ['a', 'basdf', 'c'],
+          update: true, 
+          offset: 0.1,
+        },
+  }
 })
-console.log(figure.getElement('ttt'));
+// figure.getElement('ttt').setLength(1, 'center')
+const t = figure.getElement('ttt');
+t._label.showForm('1');
+// t.setLabel('asdf')
+// console.log(figure.getElement('ttt'));
+// console.log(t.getP1())
+// console.log(t.getP2())
+// t.subscriptions.add('setTransform', () => {
+//   console.log(t.getP1('figure').round(1))
+//   console.log(t.getP2('figure').round(1))
+//   console.log(t.getPosition('figure'))
+// })
+// t.animations.new()
+//   .length({
+//     start: 0,
+//     target: 2,
+//     duration: 4,
+//     afterFrame: () => {
+//       const e = figure.getElement('buffer40');
+//       e.custom.updatePoints({
+//         points: t.getBorder('figure', 'border')[0],
+//       });
+//     },
+//   })
+//   .start();
 const len = figure.elements.drawOrder.length;
 for (let i = 3; i < len; i += 1) {
   const name = figure.elements.drawOrder[i];
   const element = figure.elements.elements[name];
-  const border = element.getBorder('draw', 'border');
+  const border = element.getBorder('figure', 'border');
   for (let j = 0; j < border.length; j += 1) {
     figure.add({
       name: `border${i}${j}`,
@@ -283,11 +308,11 @@ for (let i = 3; i < len; i += 1) {
         width: 0.01,
         color: [0, 0.7, 0, 1],
         close: true,
-        position: element.getPosition(),
+        // position: element.getPosition(),
       },
     });
   }
-  const touchBorder = element.getBorder('draw', 'touchBorder');
+  const touchBorder = element.getBorder('figure', 'touchBorder');
   for (let j = 0; j < touchBorder.length; j += 1) {
     figure.add({
       name: `buffer${i}${j}`,
@@ -298,12 +323,12 @@ for (let i = 3; i < len; i += 1) {
         dash: [0.05, 0.03],
         color: [0, 0, 1, 1],
         close: true,
-        position: element.getPosition(),
+        // position: element.getPosition(),
       },
     });
   }
 }
-
+console.log(figure.elements.elements)
 
 // ***************************************************
 // ***************************************************

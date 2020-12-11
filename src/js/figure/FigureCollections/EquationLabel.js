@@ -186,6 +186,8 @@ export default class EquationLabel {
       const textObject = form.elements[key].drawingObject;
       if (textObject != null) {
         textObject.setText(text);
+        form.elements[key].drawBorder = form.elements[key].drawingObject.textBorder;
+        form.elements[key].drawBorderBuffer = form.elements[key].drawingObject.textBorderBuffer;
       }
       // console.log(form)
       form.arrange(

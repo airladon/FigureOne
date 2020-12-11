@@ -97,15 +97,15 @@ export default class FigureCollections {
     } else {
       optionsToUse = joinObjects({}, defaultOptions, transformOrPointOrOptions, ...moreOptions);
     }
-    if (optionsToUse.border != null) {
-      optionsToUse.border = getBorder(optionsToUse.border);
-    }
-    if (optionsToUse.touchBorder != null) {
-      optionsToUse.touchBorder = getBorder(optionsToUse.touchBorder);
-    }
-    if (optionsToUse.holeBorder != null) {
-      optionsToUse.holeBorder = getBorder(optionsToUse.holeBorder);
-    }
+    // if (optionsToUse.border != null) {
+    //   optionsToUse.border = getBorder(optionsToUse.border);
+    // }
+    // if (optionsToUse.touchBorder != null) {
+    //   optionsToUse.touchBorder = getBorder(optionsToUse.touchBorder);
+    // }
+    // if (optionsToUse.holeBorder != null) {
+    //   optionsToUse.holeBorder = getBorder(optionsToUse.holeBorder);
+    // }
     // console.log(optionsToUse.transform, transformOrPointOrOptions)
     const element = new FigureElementCollection(optionsToUse);
     // console.log(element)

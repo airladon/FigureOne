@@ -182,7 +182,6 @@ type OBJ_LineStyleSimple_Defined = {
 export type OBJ_Collection = {
   transform?: TypeParsableTransform,
   position?: TypeParsablePoint,
-  limits?: Rect,
   color?: TypeColor,
   parent?: FigureElement | null,
   border?: TypeParsableBorder | 'children' | 'rect' | number,
@@ -2982,40 +2981,62 @@ export default class FigurePrimitives {
       },
     );
 
-    element.custom.setupLine = (p, o) => {
-      if (o.dash.length > 1) {
-        const maxLength = p[0].distance(p[1]);
-        const dashCumLength = [];
-        let cumLength = 0;
-        if (o.dash) {
-          while (cumLength < maxLength) {
-            for (let i = 0; i < o.dash.length && cumLength < maxLength; i += 1) {
-              let length = o.dash[i];
-              if (length + cumLength > maxLength) {
-                length = maxLength - cumLength;
-              }
-              cumLength += length;
-              dashCumLength.push(cumLength);
-            }
-          }
-          element.custom.dashCumLength = dashCumLength;
-          element.custom.maxLength = maxLength;
-        }
-      }
-    };
+    // element.custom.setupLine = (p, o) => {
+    //   if (o.dash.length > 1) {
+    //     const maxLength = p[0].distance(p[1]);
+    //     const dashCumLength = [];
+    //     let cumLength = 0;
+    //     if (o.dash) {
+    //       let dashToUse = o.dash;
+    //       let offset = 0;
+    //       if (o.dash % 2 === 1) {
+    //         dashToUse = o.dash.slice(1);
+    //         [offset] = o.dash;
+    //         // cumLength = offset;
+    //       }
+    //       while (cumLength < maxLength) {
+    //         for (let i = 0; i < dashToUse.length && cumLength < maxLength; i += 1) {
+    //           let length = dashToUse[i];
+    //           if (length + cumLength > maxLength) {
+    //             length = maxLength - cumLength;
+    //           }
+    //           cumLength += length;
+    //           dashCumLength.push(cumLength);
+    //         }
+    //       }
+    //       element.custom.dashCumLength = dashCumLength;
+    //       element.custom.maxLength = maxLength;
+    //     }
+    //   }
+    // };
 
     element.custom.updatePolyline = element.custom.updatePoints;
     element.custom.updatePoints = (updateOptions) => {
       const o = joinObjects({}, element.custom.options, updateOptions);
       const [updatedPoints, updatedBorder, updatedTouchBorder] = getLine(o);
-      element.custom.setupLine(updatedPoints, o);
+      // element.custom.setupLine(updatedPoints, o);
       element.custom.updatePolyline(joinObjects({}, o, {
         points: updatedPoints,
         border: updatedBorder,
         touchBorder: updatedTouchBorder,
         holeBorder: o.holeBorder,
       }));
-    }
+    };
+    // element.drawingObject.getPointCountForLength = (drawLength: number = this.maxLength) => {
+    //   if (drawLength >= element.custom.maxLength) { // $FlowFixMe
+    //     return element.drawingObject.numPoints;
+    //   }
+    //   if (drawLength < element.custom.dashCumLength[0]) {
+    //     return 0;
+    //   }
+    //   for (let i = 0; i < element.custom.dashCumLength.length; i += 1) {
+    //     const cumLength = element.custom.dashCumLength[i];
+    //     if (cumLength > drawLength) {
+    //       return (Math.floor((i - 1) / 2) + 1) * 6;
+    //     }
+    //   } // $FlowFixMe
+    //   return element.drawingObject.numPoints;
+    // };
 
     element.custom.updatePoints(joinedOptions);
     return element;

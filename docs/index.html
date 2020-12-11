@@ -4549,6 +4549,16 @@
               
                 
                 <li><a
+                  href='#obj_linemove'
+                  class="">
+                  OBJ_LineMove
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#typeequationelement'
                   class="">
                   TypeEquationElement
@@ -18129,12 +18139,6 @@ border.
           
         </div>
       
-        <div class='space-bottom0'>
-          <span class='code bold'>limits</span> <code class='quiet'>(<a href="#rect">Rect</a>?)</code>
-          
-          
-        </div>
-      
     </div>
   
 
@@ -19438,6 +19442,95 @@ options object can define the default values for pulseWidth if desired.</p>
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>p1</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>p2</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>align</span> <code class='quiet'>((<code>"start"</code> | <code>"end"</code> | <code>"center"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>label</span> <code class='quiet'>(<a href="#typelinelabeloptions">TypeLineLabelOptions</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>arrow</span> <code class='quiet'>(<a href="#obj_linearrows">OBJ_LineArrows</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulseWidth</span> <code class='quiet'>(<a href="#obj_pulsewidth">OBJ_PulseWidth</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>pulse</span> <code class='quiet'>(<a href="#obj_pulse">OBJ_Pulse</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>move</span> <code class='quiet'>(<a href="#obj_linemove">OBJ_LineMove</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
   
 
   
@@ -42264,21 +42357,6 @@ within the
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>border</span> <code class='quiet'>((<code>"rect"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
-          : border of modified
-text can be custom (
-<code>Array&#x3C;TypeParsablePoint></code>
-) or set to 
-<code>'rect'</code>
- for the
-encompassing rectangle of the text (default: 
-<code>'rect'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
           <span class='code bold'>touchBorder</span> <code class='quiet'>((TypeBuffer | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
           : touch border can be custom (
 <code>Array&#x3C;TypeParsablePoint></code>
@@ -45026,12 +45104,20 @@ if the label should be pulsed from its bottom rather than its center).
   </div>
   
 
-  <p>Line move options object.</p>
-<p>The <code>'centerTranslateEndRotation</code>' movement will move the line
-when touched within the <code>middleLength</code> percentage of the line
-and rotate it otherwise.</p>
+  <p>setMovable options object for <a href="#col_line">COL_Line</a>.</p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_linemove">OBJ_LineMove</a>
+      
+    </p>
   
 
   
@@ -45053,34 +45139,6 @@ and rotate it otherwise.</p>
  to make movable (
 <code>true</code>
 )
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>type</span> <code class='quiet'>((<code>"translation"</code> | <code>"rotation"</code> | <code>"centerTranslateEndRotation"</code> | <code>"scale"</code>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>middleLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : length of the middle section of line that
-allows for translation movement in percent of total length (
-<code>0.333</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>includeLabelInTouchBoundary</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- to include the
-line's label in the touch boundary for 
-<code>'centerTranslateEndRotation'</code>
-
-('false`)
 
           
         </div>
@@ -56340,6 +56398,101 @@ borders.</p>
         <div class='space-bottom0'>
           <span class='code bold'>label</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_linemove'>
+      OBJ_LineMove
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Line move options object.</p>
+<p>The <code>'centerTranslateEndRotation</code>' movement will move the line
+when touched within the <code>middleLength</code> percentage of the line
+and rotate it otherwise.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>movable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ to make movable (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>type</span> <code class='quiet'>((<code>"translation"</code> | <code>"rotation"</code> | <code>"centerTranslateEndRotation"</code> | <code>"scale"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>middleLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : length of the middle section of line that
+allows for translation movement in percent of total length (
+<code>0.333</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>includeLabelInTouchBoundary</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ to include the
+line's label in the touch boundary for 
+<code>'centerTranslateEndRotation'</code>
+
+('false`)
+
           
         </div>
       
