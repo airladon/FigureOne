@@ -131,7 +131,7 @@ describe('Text Borders', () => {
         },
         xAlign: 'left',
         yAlign: 'baseline',
-        touchBorder: 'text',
+        // touchBorder: 'text',
       },
       textAndDrawingObjectBuffer: {
         text: {
@@ -269,10 +269,10 @@ describe('Text Borders', () => {
     expect(round(tr.bottom, 3)).toBe(a.bottom);
     expect(round(tr.right, 3)).toBe(a.right);
     expect(round(tr.top, 3)).toBe(a.top);
-    expect(td.border).toEqual([getPoints([
+    expect(td.textBorder).toEqual([getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ])]);
-    expect(td.touchBorder).toEqual([getPoints([
+    expect(td.textBorderBuffer).toEqual([getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ])]);
   });
@@ -284,17 +284,17 @@ describe('Text Borders', () => {
     expect(round(tr.top, 3)).toBe(a.top);
 
     // FigureText borders
-    expect(td.text[0].border).toEqual(getPoints([
+    expect(td.text[0].textBorder).toEqual(getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ]));
-    expect(td.text[0].touchBorder).toEqual(getPoints([
+    expect(td.text[0].textBorderBuffer).toEqual(getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ]));
 
-    expect(td.border).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'border'), 3)).toEqual([getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ])]);
-    expect(td.touchBorder).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
       [-buffer, a.bottom - buffer],
       [a.width + buffer, a.bottom - buffer],
       [a.width + buffer, a.top + buffer],
@@ -309,10 +309,10 @@ describe('Text Borders', () => {
     expect(round(tr.top, 3)).toBe(a.top);
 
     // FigureText borders
-    expect(td.text[0].border).toEqual(getPoints([
+    expect(round(td.text[0].textBorder, 3)).toEqual(getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ]));
-    expect(td.text[0].touchBorder).toEqual(getPoints([
+    expect(round(td.text[0].textBorderBuffer, 3)).toEqual(getPoints([
       [-buffer, a.bottom - buffer],
       [a.width + buffer, a.bottom - buffer],
       [a.width + buffer, a.top + buffer],
@@ -320,10 +320,10 @@ describe('Text Borders', () => {
     ]));
 
     // DrawingObject borders
-    expect(td.border).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'border'), 3)).toEqual([getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ])]);
-    expect(td.touchBorder).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
       [-buffer, a.bottom - buffer],
       [a.width + buffer, a.bottom - buffer],
       [a.width + buffer, a.top + buffer],
@@ -333,20 +333,20 @@ describe('Text Borders', () => {
   test('Text and DrawingObject Buffer', () => {
     addElement('textAndDrawingObjectBuffer');
     // FigureText borders
-    expect(td.text[0].border).toEqual(getPoints([
+    expect(td.text[0].textBorder).toEqual(getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ]));
-    expect(td.text[0].touchBorder).toEqual(getPoints([
+    expect(td.text[0].textBorderBuffer).toEqual(getPoints([
       [-buffer, a.bottom - buffer],
       [a.width + buffer, a.bottom - buffer],
       [a.width + buffer, a.top + buffer],
       [-buffer, a.top + buffer],
     ]));
 
-    expect(td.border).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'border'), 3)).toEqual([getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ])]);
-    expect(td.touchBorder).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
       [-buffer * 2, a.bottom - buffer * 2],
       [a.width + buffer * 2, a.bottom - buffer * 2],
       [a.width + buffer * 2, a.top + buffer * 2],
@@ -356,17 +356,17 @@ describe('Text Borders', () => {
   test('Text custom border, DrawingObject touch buffer', () => {
     addElement('textCustomBorderDrawingObjectTouchBuffer');
     // FigureText borders
-    expect(td.text[0].border).toEqual(getPoints([
+    expect(td.text[0].textBorder).toEqual(getPoints([
       [-1, -1], [-1, 1], [1, 1], [-1, 1],
     ]));
-    expect(td.text[0].touchBorder).toEqual(getPoints([
+    expect(td.text[0].textBorderBuffer).toEqual(getPoints([
       [-1, -1], [-1, 1], [1, 1], [-1, 1],
     ]));
 
-    expect(td.border).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'border'), 3)).toEqual([getPoints([
       [-1, -1], [-1, 1], [1, 1], [-1, 1],
     ])]);
-    expect(td.touchBorder).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
       [-1 - buffer, -1 - buffer],
       [1 + buffer, -1 - buffer],
       [1 + buffer, 1 + buffer],
@@ -376,44 +376,44 @@ describe('Text Borders', () => {
   test('Text custom touch border, DrawingObject custom border', () => {
     addElement('textCustomTouchBorderDrawingObjectCustomBorder');
     // FigureText borders
-    expect(td.text[0].border).toEqual(getPoints([
+    expect(td.text[0].textBorder).toEqual(getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ]));
-    expect(td.text[0].touchBorder).toEqual(getPoints([
+    expect(td.text[0].textBorderBuffer).toEqual(getPoints([
       [-1, -1], [1, -1], [1, 1], [-1, 1],
     ]));
 
-    expect(td.border).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'border'), 3)).toEqual([getPoints([
       [-2, -2], [2, -2], [2, 2], [-2, 2],
     ])]);
-    expect(td.touchBorder).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
       [-1, -1], [1, -1], [1, 1], [-1, 1],
     ])]);
   });
   test('Text custom touch border, DrawingObject custom border and touch border same as border', () => {
     addElement('textCustomTouchBorderDrawingObjectCustomBorderTouchBorderBorder');
     // FigureText borders
-    expect(td.text[0].border).toEqual(getPoints([
+    expect(td.text[0].textBorder).toEqual(getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ]));
-    expect(td.text[0].touchBorder).toEqual(getPoints([
+    expect(td.text[0].textBorderBuffer).toEqual(getPoints([
       [-2, -2], [2, -2], [2, 2], [-2, 2],
     ]));
 
-    expect(td.border).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'border'), 3)).toEqual([getPoints([
       [-1, -1], [1, -1], [1, 1], [-1, 1],
     ])]);
-    expect(td.touchBorder).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
       [-1, -1], [1, -1], [1, 1], [-1, 1],
     ])]);
   });
   test('Two text', () => {
     addElement('twoText');
     // FigureText borders
-    expect(td.text[0].border).toEqual(getPoints([
+    expect(td.text[0].textBorder).toEqual(getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ]));
-    expect(td.text[0].touchBorder).toEqual(getPoints([
+    expect(td.text[0].textBorderBuffer).toEqual(getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ]));
 
@@ -424,11 +424,11 @@ describe('Text Borders', () => {
       [1, a.bottom], [1 + a.width, a.bottom], [1 + a.width, a.top], [1, a.top],
     ]));
 
-    expect(td.border).toEqual([
+    expect(round(t.getBorder('draw', 'border'), 3)).toEqual([
       getPoints([[0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top]]),
       getPoints([[1, a.bottom], [1 + a.width, a.bottom], [1 + a.width, a.top], [1, a.top]]),
     ]);
-    expect(td.touchBorder).toEqual([
+    expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([
       getPoints([[0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top]]),
       getPoints([[1, a.bottom], [1 + a.width, a.bottom], [1 + a.width, a.top], [1, a.top]]),
     ]);
@@ -436,10 +436,10 @@ describe('Text Borders', () => {
   test('Two text border rect', () => {
     addElement('twoTextBorderRect');
     // FigureText borders
-    expect(td.text[0].border).toEqual(getPoints([
+    expect(td.text[0].textBorder).toEqual(getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ]));
-    expect(td.text[0].touchBorder).toEqual(getPoints([
+    expect(td.text[0].textBorderBuffer).toEqual(getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ]));
 
@@ -450,21 +450,21 @@ describe('Text Borders', () => {
       [1, a.bottom], [1 + a.width, a.bottom], [1 + a.width, a.top], [1, a.top],
     ]));
 
-    expect(td.border).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'border'), 3)).toEqual([getPoints([
       [0, a.bottom], [1 + a.width, a.bottom], [1 + a.width, a.top], [0, a.top],
     ])]);
 
-    expect(td.touchBorder).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
       [0, a.bottom], [1 + a.width, a.bottom], [1 + a.width, a.top], [0, a.top],
     ])]);
   });
   test('Two text border rect with buffer', () => {
     addElement('twoTextBorderRectWithBuffer');
     // FigureText borders
-    expect(td.text[0].border).toEqual(getPoints([
+    expect(td.text[0].textBorder).toEqual(getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ]));
-    expect(td.text[0].touchBorder).toEqual(getPoints([
+    expect(td.text[0].textBorderBuffer).toEqual(getPoints([
       [0, a.bottom], [a.width, a.bottom], [a.width, a.top], [0, a.top],
     ]));
 
@@ -478,11 +478,11 @@ describe('Text Borders', () => {
       [1 - buffer, a.top + buffer],
     ]));
 
-    expect(td.border).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'border'), 3)).toEqual([getPoints([
       [0, a.bottom], [1 + a.width, a.bottom], [1 + a.width, a.top], [0, a.top],
     ])]);
 
-    expect(td.touchBorder).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
       [-buffer, a.bottom - buffer * 2],
       [1 + a.width + buffer * 2, a.bottom - buffer * 2],
       [1 + a.width + buffer * 2, a.top + buffer * 2],
@@ -492,10 +492,10 @@ describe('Text Borders', () => {
   test('Two text custom border text', () => {
     addElement('twoTextCustomBorderText');
     // FigureText borders
-    expect(td.text[0].border).toEqual(getPoints([
+    expect(td.text[0].textBorder).toEqual(getPoints([
       [-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5],
     ]));
-    expect(td.text[0].touchBorder).toEqual(getPoints([
+    expect(td.text[0].textBorderBuffer).toEqual(getPoints([
       [-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5],
     ]));
 
@@ -506,11 +506,11 @@ describe('Text Borders', () => {
       [1, a.bottom], [1 + a.width, a.bottom], [1 + a.width, a.top], [1, a.top],
     ]));
 
-    expect(td.border).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'border'), 3)).toEqual([getPoints([
       [-0.5, -0.5], [1 + a.width, -0.5], [1 + a.width, 0.5], [-0.5, 0.5],
     ])]);
 
-    expect(td.touchBorder).toEqual([getPoints([
+    expect(round(t.getBorder('draw', 'touchBorder'), 3)).toEqual([getPoints([
       [-0.5, -0.5], [1 + a.width, -0.5], [1 + a.width, 0.5], [-0.5, 0.5],
     ])]);
   });

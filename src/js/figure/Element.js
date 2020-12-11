@@ -5039,7 +5039,7 @@ class FigureElementCollection extends FigureElement {
           return;
         }
         // $FlowFixMe
-        childrenBorder.push(...e.getBorder(this.getTransform().matrix(), b, null, shownOnly));
+        childrenBorder.push(...e.getBorder('local', b, null, shownOnly));
       });
       return childrenBorder;
     };
