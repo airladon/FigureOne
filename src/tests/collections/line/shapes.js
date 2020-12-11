@@ -222,11 +222,9 @@ const shapes = [
     label: { text: ['form1', 'form2'] },
   }),
   line('label-updateOff', {
-    // angle: Math.PI / 4,
     label: { text: 'a', orientation: 'horizontal', update: false },
   }),
   line('label-updateOn', {
-    // angle: Math.PI / 4,
     label: { text: 'a', orientation: 'horizontal', update: true },
   }),
 
@@ -244,10 +242,6 @@ const shapes = [
   line('setLabelToRealLength', { label: 'a' }),
   line('setLabel', { label: 'a' }),
   line('setEndPoints', { p1: [0, 0], align: 'start' }),
-
-
-  // coll('Update-a'),
-  // coll('Update-touchBorder'),
 ];
 
 if (typeof process === 'object') {
