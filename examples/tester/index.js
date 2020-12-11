@@ -250,12 +250,19 @@ figure.elements._eqn.showForm('1')
 
 figure.add({
   name: 'ttt',
-  method: 'polyline',
+  method: 'rectangle',
   options: {
-            points: [[0, 0], [1, 0], [0, 1]],
-            width: 0.2,
-            close: true,
-            dash: [0.3, 0.3],
+            width: 2,
+            height: 1,
+            corner: {
+              radius: 0.3,
+              sides: 1,
+            },
+            line: {
+              width: 0.1,
+              widthIs: 'inside',
+            },
+            // default is border: 'outline'
           },
 })
 console.log(figure.getElement('ttt'));
