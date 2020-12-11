@@ -249,20 +249,20 @@ figure.elements._eqn.touchBorder = 'children';
 figure.elements._eqn.showForm('1')
 
 figure.add({
-  name: 'ellipse',
-  method: 'ellipse',
+  name: 'ttt',
+  method: 'polygon',
   options: {
-    width: 2,
-    height: 1,
-    sides: 4,
-    drawBorderBuffer: 0.1,
-    line: { width: 0.1, widthIs: 'inside' },
-  },
-  mods: {
-    // border: 'rect',
-    touchBorder: 'buffer',
-  },
+            radius: 1 * Math.sqrt(2),
+            rotation: Math.PI / 4,
+            line: { width: 0.1, widthIs: 'mid' },
+            // border: 'outline',
+            drawBorderBuffer: 0.1,
+          },
+          mods: {
+            touchBorder: 'buffer',
+          },
 })
+console.log(figure.getElement('ttt'));
 const len = figure.elements.drawOrder.length;
 for (let i = 3; i < len; i += 1) {
   const name = figure.elements.drawOrder[i];
