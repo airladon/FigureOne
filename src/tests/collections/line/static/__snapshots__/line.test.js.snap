@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collection: Line align-center 1`] = `undefined`;
+
+exports[`Collection: Line align-end 1`] = `undefined`;
+
+exports[`Collection: Line align-neg 1`] = `undefined`;
+
+exports[`Collection: Line align-start 1`] = `undefined`;
+
+exports[`Collection: Line arrow 1`] = `undefined`;
+
+exports[`Collection: Line arrow-detail 1`] = `undefined`;
+
+exports[`Collection: Line arrow-start 1`] = `undefined`;
+
+exports[`Collection: Line border-arrow 1`] = `undefined`;
+
+exports[`Collection: Line border-bufferRect 1`] = `undefined`;
+
+exports[`Collection: Line border-bufferX 1`] = `undefined`;
+
+exports[`Collection: Line border-bufferY 1`] = `undefined`;
+
+exports[`Collection: Line border-children 1`] = `undefined`;
+
+exports[`Collection: Line border-custom1d 1`] = `undefined`;
+
+exports[`Collection: Line border-custom2d 1`] = `undefined`;
+
+exports[`Collection: Line border-default 1`] = `undefined`;
+
+exports[`Collection: Line border-diagonal-angle 1`] = `undefined`;
+
+exports[`Collection: Line border-diagonal-arrow 1`] = `undefined`;
+
+exports[`Collection: Line border-diagonal-p2 1`] = `undefined`;
+
+exports[`Collection: Line border-label 1`] = `undefined`;
+
+exports[`Collection: Line border-label-diagonal 1`] = `undefined`;
+
+exports[`Collection: Line border-number 1`] = `undefined`;
+
+exports[`Collection: Line border-rect 1`] = `undefined`;
+
+exports[`Collection: Line dash 1`] = `undefined`;
+
+exports[`Collection: Line dash-offset 1`] = `undefined`;
+
+exports[`Collection: Line label 1`] = `undefined`;
+
+exports[`Collection: Line label-autoForm 1`] = `undefined`;
+
+exports[`Collection: Line label-color 1`] = `undefined`;
+
+exports[`Collection: Line label-equation 1`] = `undefined`;
+
+exports[`Collection: Line label-linePosition 1`] = `undefined`;
+
+exports[`Collection: Line label-location-bottom-upright 1`] = `undefined`;
+
+exports[`Collection: Line label-location-left-horizontal 1`] = `undefined`;
+
+exports[`Collection: Line label-location-right-baseToLine 1`] = `undefined`;
+
+exports[`Collection: Line label-location-top-baseAway 1`] = `undefined`;
+
+exports[`Collection: Line label-null 1`] = `undefined`;
+
+exports[`Collection: Line label-offset 1`] = `undefined`;
+
+exports[`Collection: Line label-scale 1`] = `undefined`;
+
+exports[`Collection: Line label-subLocation-horizontal-bottom 1`] = `undefined`;
+
+exports[`Collection: Line label-subLocation-horizontal-top 1`] = `undefined`;
+
+exports[`Collection: Line label-subLocation-vertical-left 1`] = `undefined`;
+
+exports[`Collection: Line label-subLocation-vertical-right 1`] = `undefined`;
+
+exports[`Collection: Line label-updateOff 1`] = `undefined`;
+
+exports[`Collection: Line label-updateOn 1`] = `undefined`;
+
+exports[`Collection: Line offset-net 1`] = `undefined`;
+
+exports[`Collection: Line offset-pos 1`] = `undefined`;
+
+exports[`Collection: Line override 1`] = `undefined`;
+
+exports[`Collection: Line p1LengthAngle 1`] = `undefined`;
+
+exports[`Collection: Line p1p2 1`] = `undefined`;
+
+exports[`Collection: Line setEndPoints 1`] = `undefined`;
+
+exports[`Collection: Line setLabel 1`] = `undefined`;
+
+exports[`Collection: Line setLabelToRealLength 1`] = `undefined`;
+
+exports[`Collection: Line setLength 1`] = `undefined`;
+
+exports[`Collection: Line setLength-dash 1`] = `undefined`;
+
+exports[`Collection: Line touchBorder-arrow-label 1`] = `undefined`;
+
+exports[`Collection: Line touchBorder-bufferRect 1`] = `undefined`;
+
+exports[`Collection: Line touchBorder-bufferX 1`] = `undefined`;
+
+exports[`Collection: Line touchBorder-bufferY 1`] = `undefined`;
+
+exports[`Collection: Line touchBorder-children 1`] = `undefined`;
+
+exports[`Collection: Line touchBorder-custom1d 1`] = `undefined`;
+
+exports[`Collection: Line touchBorder-custom2d 1`] = `undefined`;
+
+exports[`Collection: Line touchBorder-number 1`] = `undefined`;
+
+exports[`Collection: Line touchBorder-rect 1`] = `undefined`;
+
+exports[`Collection: Line touchBorder-rect-arrow-label 1`] = `undefined`;
+
+exports[`Collection: Line touchBorder-rect-arrow-label1 1`] = `undefined`;
+
+exports[`Collection: Line width 1`] = `undefined`;

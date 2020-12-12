@@ -1,3 +1,5 @@
+/* global figure */
+
 const updates = {
   'align-start': (e) => {
     e.setRotation(Math.PI / 4);
@@ -48,11 +50,8 @@ if (typeof process === 'object') {
     updates,
   };
 } else {
-  // figure.setFirstTransform();
   Object.keys(updates).forEach((name) => {
-    // eslint-disable-next-line no-undef
     updates[name](figure.getElement(name));
-    // eslint-disable-next-line no-undef
     figure.setFirstTransform();
   });
 }
