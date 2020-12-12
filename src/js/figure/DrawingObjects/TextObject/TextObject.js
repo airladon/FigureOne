@@ -822,6 +822,7 @@ class TextObjectBase extends DrawingObject {
     this.text.forEach((figureText) => {
       figureText.font.setFontInContext(ctx, scalingFactor);
       figureText.font.setColorInContext(ctx, color);
+      console.log('fill', figureText.text)
       ctx.fillText(
         figureText.text,
         (figureText.locationAligned.x) * scalingFactor,
@@ -832,6 +833,7 @@ class TextObjectBase extends DrawingObject {
   }
 
   clear(contextIndex: number = 0) {
+    console.log('clear')
     const { ctx } = this.drawContext2D[contextIndex];
     const t = this.lastDrawTransform;
     ctx.save();

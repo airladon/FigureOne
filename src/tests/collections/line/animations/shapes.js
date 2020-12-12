@@ -24,7 +24,7 @@ const line = (name, options, mods) => {
     name,
     method: 'collections.line',
     options: tools.misc.joinObjects({}, {
-      color: [1, 0, 0, 1],
+      color: [1, 0, 0, 0.8],
       p1: [-0.2, 0],
       width: 0.05,
       length: 0.4,
@@ -53,20 +53,20 @@ const shapes = [
   .......##.....##.##.....##.##....##..##.....##.##.......##....##.
   .......########...#######..##.....##.########..########.##.....##
   */
-  line('grow'),
+  // line('grow'),
   line('pulse-defaults', {
-    label: { text: 'a', offset: 0.05 },
+    label: { text: 'a', offset: 0.05, color: [1, 0, 1, 1] },
     arrow: { head: 'barb', scale: 1 },
     width: 0.01,
     pulseWidth: {
       line: 5, arrow: 2, label: { scale: 3, yAlign: 'bottom' }, duration: 2,
     },
   }),
-  line('pulseWidth', {
-    label: { text: 'a', offset: 0.05 },
-    arrow: { head: 'barb', scale: 1 },
-    width: 0.01,
-  }),
+  // line('pulseWidth', {
+  //   label: { text: 'a', offset: 0.05 },
+  //   arrow: { head: 'barb', scale: 1 },
+  //   width: 0.01,
+  // }),
 ];
 
 
