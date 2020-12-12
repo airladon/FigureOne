@@ -1,25 +1,35 @@
+/* globals figure */
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "timeoutId" }] */
+
+let timeoutId;
 const updates = {
   grow: (e) => {
     e.animations.new()
-      .length({ start: 0, target: 1, duration: 2 })
+      .length({ start: 0, target: 0.5, duration: 2 })
       .start();
   },
+  'pulse-defaults': (e) => {
+    e.pulseWidth();
+  },
+  pulseWidth: (e) => {
+    e.pulseWidth({
+      line: 3, arrow: 1.5, label: 2, duration: 2,
+    });
+  },
 };
-
 
 if (typeof process === 'object') {
   module.exports = {
     updates,
   };
 } else {
-  // figure.setFirstTransform();
+  figure.globalAnimation.setManualFrames();
+  figure.globalAnimation.frame(0);
   Object.keys(updates).forEach((name) => {
-    // eslint-disable-next-line no-undef
     updates[name](figure.getElement(name));
-    // eslint-disable-next-line no-undef
     figure.setFirstTransform();
-    // figure.pause();
-    figure.globalAnimation.setManualFrames();
-    figure.globalAnimation.frame(0);
   });
+  timeoutId = setTimeout(() => {
+    figure.globalAnimation.disableDebugFrameRate();
+  }, (1000));
 }

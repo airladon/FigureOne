@@ -913,7 +913,7 @@ export default class CollectionsLine extends FigureElementCollection {
     if (label != null) {
       // label.pulseScaleNow(o.duration, o.label, 0, done);
       let labelOptions;
-      if (typeof label === 'number') {
+      if (typeof o.label === 'number') {
         labelOptions = joinObjects({}, o, { scale: o.label, callback: done });
       } else {
         labelOptions = joinObjects({}, o, o.label, { callback: done });
