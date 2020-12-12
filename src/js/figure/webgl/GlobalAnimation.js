@@ -116,6 +116,21 @@ class GlobalAnimation {
     this.queueNextDebugFrame();
   }
 
+  setManualFrames() {
+    if (this.timeoutId != null) {
+      clearTimeout(this.timeoutId);
+    }
+    cancelAnimationFrame(this.animationId);
+    this.debug = true;
+    this.nowTime = performance.now();
+    this.now = () => this.nowTime;
+  }
+
+  frame(duration: number) {
+    this.nowTime += duration * 1000;
+    this.draw(this.nowTime);
+  }
+
   queueNextDebugFrame() {
     if (this.debugFrameTime != null) {
       this.timeoutId = setTimeout(() => {
