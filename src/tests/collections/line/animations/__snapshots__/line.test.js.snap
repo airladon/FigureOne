@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collection: Line grow 1`] = `undefined`;
+
+exports[`Collection: Line lengthAnimation 1`] = `undefined`;
+
+exports[`Collection: Line lengthAnimationStep 1`] = `undefined`;
+
+exports[`Collection: Line pulse-defaults 1`] = `undefined`;
+
+exports[`Collection: Line pulseWidth 1`] = `undefined`;
