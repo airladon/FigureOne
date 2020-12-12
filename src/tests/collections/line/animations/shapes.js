@@ -54,6 +54,8 @@ const shapes = [
   .......########...#######..##.....##.########..########.##.....##
   */
   line('grow'),
+  line('lengthAnimation'),
+  line('lengthAnimationStep'),
   line('pulse-defaults', {
     label: { text: 'a', offset: 0.05, color: [1, 0, 1, 1] },
     arrow: { head: 'barb', scale: 1 },
