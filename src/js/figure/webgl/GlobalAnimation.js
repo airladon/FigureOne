@@ -40,6 +40,7 @@ class GlobalAnimation {
   updateSyncNow: boolean;
   timers: Array<TimeoutID>;
   syncNowTimer: TimeoutID;
+  manual: boolean;
 
   constructor() {
     // If the instance alread exists, then don't create a new instance.
@@ -74,6 +75,7 @@ class GlobalAnimation {
     this.timeoutId = null;
     this.now = () => performance.now();
     this.updateSyncNow = true;
+    this.manual = false;
   }
 
   getWhen(when: TypeWhen) {
@@ -117,13 +119,14 @@ class GlobalAnimation {
   }
 
   setManualFrames() {
-    if (this.timeoutId != null) {
-      clearTimeout(this.timeoutId);
-    }
-    cancelAnimationFrame(this.animationId);
-    this.debug = true;
+    this.manual = true;
     this.nowTime = performance.now();
     this.now = () => this.nowTime;
+  }
+
+  endManualFrames() {
+    this.manual = false;
+    this.now = () => performance.now;
   }
 
   frame(duration: number) {
@@ -197,7 +200,10 @@ class GlobalAnimation {
     this.updateSyncNow = true;
     this.drawQueue = this.nextDrawQueue;
     this.nextDrawQueue = [];
-    const nowSeconds = now * 0.001;
+    let nowSeconds = now * 0.001;
+    if (this.manual) {
+      nowSeconds = this.now() * 0.001;
+    }
     for (let i = 0; i < this.drawQueue.length; i += 1) {
       this.drawQueue[i](nowSeconds);
     }

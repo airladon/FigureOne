@@ -53,7 +53,7 @@ const shapes = [
   .......##.....##.##.....##.##....##..##.....##.##.......##....##.
   .......########...#######..##.....##.########..########.##.....##
   */
-  // line('grow'),
+  line('grow'),
   line('pulse-defaults', {
     label: { text: 'a', offset: 0.05, color: [1, 0, 1, 1] },
     arrow: { head: 'barb', scale: 1 },
@@ -62,11 +62,11 @@ const shapes = [
       line: 5, arrow: 2, label: { scale: 3, yAlign: 'bottom' }, duration: 2,
     },
   }),
-  // line('pulseWidth', {
-  //   label: { text: 'a', offset: 0.05 },
-  //   arrow: { head: 'barb', scale: 1 },
-  //   width: 0.01,
-  // }),
+  line('pulseWidth', {
+    label: { text: 'a', offset: 0.05 },
+    arrow: { head: 'barb', scale: 1 },
+    width: 0.01,
+  }),
 ];
 
 

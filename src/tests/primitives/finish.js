@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-console.log(figure.elements)
+// console.log(figure.elements)
 const len = figure.elements.drawOrder.length;
 for (let i = 3; i < len; i += 1) {
   const name = figure.elements.drawOrder[i];
