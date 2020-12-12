@@ -38,6 +38,7 @@ if (typeof process === 'object') {
     updates,
   };
 } else {
+  // figure.add(getShapes(index => getPosition(index)));
   startUpdates = () => {
     Object.keys(updates).forEach((name) => {
       updates[name](figure.getElement(name));

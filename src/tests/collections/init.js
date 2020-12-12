@@ -1,5 +1,9 @@
-/* eslint-disable no-undef */
-const { Figure, tools } = Fig;
+/* eslint-disable no-undef, no-var */
+/* eslint no-unused-vars: ["error", {
+  "varsIgnorePattern": "getPosition",
+  }] */
+var { tools } = Fig;
+const { Figure } = Fig;
 const canvas = document.getElementById('figureOneContainer');
 const width = canvas.offsetWidth;
 const height = canvas.offsetHeight;

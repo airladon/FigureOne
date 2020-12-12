@@ -1,7 +1,7 @@
-/* global tools */
+
 if (typeof process === 'object') {
   // eslint-disable-next-line global-require no-unused-vars vars-on-top no-var
-  var  { tools } = require('../../../../index.js').default;
+  var { tools } = require('../../../../index.js').default;
 } else {
   // eslint-disable-next-line no-undef
   // tools = Fig.tools;
@@ -18,8 +18,6 @@ function getShapes(getPos) {
   let index = 0;
   const line = (name, options, mods) => {
     const { x, y } = getPos(index);
-    // const x = xValues[index % xValues.length];
-    // const y = yValues[Math.floor(index / xValues.length)];
     const indexName = `${index}`;
     index += 1;
     const o = {
