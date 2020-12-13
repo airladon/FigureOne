@@ -1634,22 +1634,26 @@ export default class CollectionsLine extends FigureElementCollection {
    * Return the start point of the line
    * @return {Point}
    */
-  getP1(space: TypeSpace = 'local') {
-    if (space === 'draw') {
-      return this.line.p1._dup();
-    }
-    return this.line.p1.transformBy(this.spaceTransformMatrix('draw', space));
+  getP1(space: TypeSpace) {
+    // return this.line.p1._dup();
+    // // if (space === 'draw') {
+    // //   return this.line.p1._dup();
+    // // }
+    // // return this.line.p1.transformBy(this.spaceTransformMatrix('draw', space));
+    return new Point(0, 0).transformBy(this.spaceTransformMatrix('draw', space));
   }
 
   /**
    * Return the end point of the line
    * @return {Point}
    */
-  getP2(space: TypeSpace = 'local') {
-    if (space === 'draw') {
-      return this.line.p2._dup();
-    }
-    return this.line.p2.transformBy(this.spaceTransformMatrix('draw', space));
+  getP2(space: TypeSpace) {
+    // return this.line.p2._dup();
+    // if (space === 'draw') {
+    //   return this.line.p2._dup();
+    // }
+    // return this.line.p2.transformBy(this.spaceTransformMatrix('draw', space));
+    return new Point(this.line.length(), 0).transformBy(this.spaceTransformMatrix('draw', space));
   }
 }
 

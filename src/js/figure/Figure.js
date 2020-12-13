@@ -5,6 +5,7 @@ import WebGLInstance from './webgl/webgl';
 import {
   Rect, Point, Transform, getRect,
   spaceToSpaceTransform, minAngleDiff, getTransform,
+  getPoint,
 } from '../tools/g2';
 import type { TypeParsableRect } from '../tools/g2';
 // import * as math from '../tools/math';
@@ -284,6 +285,7 @@ class Figure {
   isTouchDown: boolean;
   setStateCallback: ?(string | (() => void));
   subscriptions: SubscriptionManager;
+  mockPreviousTouchPoint: Point;
 
   state: {
     pause: 'paused' | 'preparingToPause' | 'preparingToUnpause' | 'unpaused';
@@ -311,6 +313,7 @@ class Figure {
     this.scrolled = false;
     this.cursorElementName = 'cursor';
     this.setStateCallback = null;
+    this.mockPreviousTouchPoint = new Point(0, 0);
     // this.oldScrollY = 0;
     const optionsToUse = joinObjects({}, defaultOptions, options);
     const {
@@ -2071,6 +2074,26 @@ class Figure {
     this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
     this.animateNextFrame();
     this.subscriptions.publish('unpaused');
+  }
+
+  touchDown(figurePosition: TypeParsablePoint) {
+    const p = getPoint(figurePosition);
+    const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
+    const clientPoint = this.pixelToClient(pixelPoint);
+    this.touchDownHandler(clientPoint);
+    this.mockPreviousTouchPoint = clientPoint;
+  }
+
+  touchUp() {
+    this.touchUpHandler();
+  }
+
+  touchMove(figurePosition: TypeParsablePoint) {
+    const p = getPoint(figurePosition);
+    const pixelPoint = p.transformBy(this.spaceTransforms.figureToPixel.m());
+    const clientPoint = this.pixelToClient(pixelPoint);
+    this.touchMoveHandler(this.mockPreviousTouchPoint, clientPoint);
+    this.mockPreviousTouchPoint = clientPoint;
   }
 
   // unpauseLegacy() {

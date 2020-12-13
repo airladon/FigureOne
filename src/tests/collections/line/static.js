@@ -295,10 +295,38 @@ const getValues = {
     expect: 0.4,
     when: e => tools.math.round(e.getLength(), 3),
   },
-  'getAngle - default': {
+  'getAngle - rad': {
     element: 'border-diagonal-angle',
     expect: tools.math.round(Math.PI / 4, 3),
     when: e => tools.math.round(e.getAngle(), 3),
+  },
+  'getAngle - degrees': {
+    element: 'border-diagonal-angle',
+    expect: tools.math.round(45, 3),
+    when: e => tools.math.round(e.getAngle('deg'), 3),
+  },
+  getLabel: {
+    element: 'label',
+    expect: 'a',
+    when: e => e.getLabel(),
+  },
+  'getP1-local': {
+    element: 'p1LengthAngle',
+    expect: [0, 0],
+    when: (e) => {
+      const offset = e.getPosition('figure');
+      const p = e.getP1('figure').sub(offset).round(3);
+      return [p.x, p.y];
+    },
+  },
+  'getP2-local': {
+    element: 'p1LengthAngle',
+    expect: [0, 0.4],
+    when: (e) => {
+      const offset = e.getPosition('figure');
+      const p = e.getP2('figure').sub(offset).round(3);
+      return [p.x, p.y];
+    },
   },
 };
 
@@ -323,10 +351,11 @@ if (typeof process === 'object') {
       const value = getValues[title].when(figure.getElement(getValues[title].element));
       const expected = getValues[title].expect;
       // eslint-disable-next-line eqeqeq
-      const result = expected == value;
+      const result = JSON.stringify(expected) === JSON.stringify(value);
       if (result) {
         tools.misc.Console(`pass: ${title}`);
       } else {
+        // console.log(expected, value, expected == value)
         tools.misc.Console(`fail: ${title}: Expected: ${getValues[title].expect} - Got: ${value}`);
       }
     });
