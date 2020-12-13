@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Collection: Line grow 1`] = `
+exports[`Collection: Line - Animations grow 1`] = `
 Object {
   "border": Array [
     Array [
@@ -103,7 +103,7 @@ Object {
 }
 `;
 
-exports[`Collection: Line lengthAnimation 1`] = `
+exports[`Collection: Line - Animations lengthAnimation 1`] = `
 Object {
   "border": Array [
     Array [
@@ -206,7 +206,7 @@ Object {
 }
 `;
 
-exports[`Collection: Line lengthAnimationStep 1`] = `
+exports[`Collection: Line - Animations lengthAnimationStep 1`] = `
 Object {
   "border": Array [
     Array [
@@ -309,7 +309,7 @@ Object {
 }
 `;
 
-exports[`Collection: Line pulse-defaults 1`] = `
+exports[`Collection: Line - Animations pulse-defaults 1`] = `
 Object {
   "border": Array [
     Array [
@@ -718,7 +718,7 @@ Object {
 }
 `;
 
-exports[`Collection: Line pulseWidth 1`] = `
+exports[`Collection: Line - Animations pulseWidth 1`] = `
 Object {
   "border": Array [
     Array [

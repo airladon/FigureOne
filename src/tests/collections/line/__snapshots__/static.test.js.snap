@@ -1,0 +1,11221 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collection: Line - Static align-center 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static align-end 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static align-neg 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static align-start 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static arrow 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.14,
+        -0.005,
+      ],
+      Array [
+        0.14,
+        -0.005,
+      ],
+      Array [
+        0.14,
+        0.005,
+      ],
+      Array [
+        -0.14,
+        0.005,
+      ],
+    ],
+    Array [
+      Array [
+        -0.14,
+        0.03,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        -0.14,
+        -0.03,
+      ],
+    ],
+    Array [
+      Array [
+        0.14,
+        -0.03,
+      ],
+      Array [
+        0.2,
+        0,
+      ],
+      Array [
+        0.14,
+        0.03,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "arrow1": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.14,
+            0.03,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.14,
+            -0.03,
+          ],
+        ],
+      ],
+      "points": Array [
+        0.06,
+        0.03,
+        0,
+        0,
+        0.06,
+        -0.03,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.14,
+            0.03,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.14,
+            -0.03,
+          ],
+        ],
+      ],
+    },
+    "arrow2": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.14,
+            -0.03,
+          ],
+          Array [
+            0.2,
+            0,
+          ],
+          Array [
+            0.14,
+            0.03,
+          ],
+        ],
+      ],
+      "points": Array [
+        -0.06,
+        -0.03,
+        0,
+        0,
+        -0.06,
+        0.03,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.14,
+            -0.03,
+          ],
+          Array [
+            0.2,
+            0,
+          ],
+          Array [
+            0.14,
+            0.03,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.005,
+          ],
+          Array [
+            0.14,
+            -0.005,
+          ],
+          Array [
+            0.14,
+            0.005,
+          ],
+          Array [
+            -0.14,
+            0.005,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.005,
+        0.28,
+        0.005,
+        0,
+        -0.005,
+        0,
+        -0.005,
+        0.28,
+        0.005,
+        0.28,
+        -0.005,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.14,
+            -0.005,
+          ],
+          Array [
+            0.14,
+            -0.005,
+          ],
+          Array [
+            0.14,
+            0.005,
+          ],
+          Array [
+            -0.14,
+            0.005,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.14,
+        -0.005,
+      ],
+      Array [
+        0.14,
+        -0.005,
+      ],
+      Array [
+        0.14,
+        0.005,
+      ],
+      Array [
+        -0.14,
+        0.005,
+      ],
+    ],
+    Array [
+      Array [
+        -0.14,
+        0.03,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        -0.14,
+        -0.03,
+      ],
+    ],
+    Array [
+      Array [
+        0.14,
+        -0.03,
+      ],
+      Array [
+        0.2,
+        0,
+      ],
+      Array [
+        0.14,
+        0.03,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static arrow-detail 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.08,
+        -0.025,
+      ],
+      Array [
+        0.08,
+        -0.025,
+      ],
+      Array [
+        0.08,
+        0.025,
+      ],
+      Array [
+        -0.08,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.08,
+        0.025,
+      ],
+      Array [
+        -0.092,
+        0.025,
+      ],
+      Array [
+        -0.08,
+        0.06,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        -0.08,
+        -0.06,
+      ],
+      Array [
+        -0.092,
+        -0.025,
+      ],
+      Array [
+        -0.08,
+        -0.025,
+      ],
+    ],
+    Array [
+      Array [
+        0.08,
+        -0.025,
+      ],
+      Array [
+        0.092,
+        -0.025,
+      ],
+      Array [
+        0.08,
+        -0.06,
+      ],
+      Array [
+        0.2,
+        0,
+      ],
+      Array [
+        0.08,
+        0.06,
+      ],
+      Array [
+        0.092,
+        0.025,
+      ],
+      Array [
+        0.08,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "arrow1": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.08,
+            0.025,
+          ],
+          Array [
+            -0.092,
+            0.025,
+          ],
+          Array [
+            -0.08,
+            0.06,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.08,
+            -0.06,
+          ],
+          Array [
+            -0.092,
+            -0.025,
+          ],
+          Array [
+            -0.08,
+            -0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0.12,
+        0.025,
+        0.108,
+        0.025,
+        0.108,
+        -0.025,
+        0.12,
+        0.025,
+        0.108,
+        -0.025,
+        0.12,
+        -0.025,
+        0.12,
+        0.06,
+        0,
+        0,
+        0.108,
+        0.025,
+        0.108,
+        -0.025,
+        0.108,
+        0.025,
+        0,
+        0,
+        0.108,
+        -0.025,
+        0,
+        0,
+        0.12,
+        -0.06,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.08,
+            0.025,
+          ],
+          Array [
+            -0.092,
+            0.025,
+          ],
+          Array [
+            -0.08,
+            0.06,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.08,
+            -0.06,
+          ],
+          Array [
+            -0.092,
+            -0.025,
+          ],
+          Array [
+            -0.08,
+            -0.025,
+          ],
+        ],
+      ],
+    },
+    "arrow2": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.08,
+            -0.025,
+          ],
+          Array [
+            0.092,
+            -0.025,
+          ],
+          Array [
+            0.08,
+            -0.06,
+          ],
+          Array [
+            0.2,
+            0,
+          ],
+          Array [
+            0.08,
+            0.06,
+          ],
+          Array [
+            0.092,
+            0.025,
+          ],
+          Array [
+            0.08,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        -0.12,
+        -0.025,
+        -0.108,
+        -0.025,
+        -0.108,
+        0.025,
+        -0.12,
+        -0.025,
+        -0.108,
+        0.025,
+        -0.12,
+        0.025,
+        -0.12,
+        -0.06,
+        0,
+        0,
+        -0.108,
+        -0.025,
+        -0.108,
+        0.025,
+        -0.108,
+        -0.025,
+        0,
+        0,
+        -0.108,
+        0.025,
+        0,
+        0,
+        -0.12,
+        0.06,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.08,
+            -0.025,
+          ],
+          Array [
+            0.092,
+            -0.025,
+          ],
+          Array [
+            0.08,
+            -0.06,
+          ],
+          Array [
+            0.2,
+            0,
+          ],
+          Array [
+            0.08,
+            0.06,
+          ],
+          Array [
+            0.092,
+            0.025,
+          ],
+          Array [
+            0.08,
+            0.025,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.08,
+            -0.025,
+          ],
+          Array [
+            0.08,
+            -0.025,
+          ],
+          Array [
+            0.08,
+            0.025,
+          ],
+          Array [
+            -0.08,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.16,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.16,
+        0.025,
+        0.16,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.08,
+            -0.025,
+          ],
+          Array [
+            0.08,
+            -0.025,
+          ],
+          Array [
+            0.08,
+            0.025,
+          ],
+          Array [
+            -0.08,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.08,
+        -0.025,
+      ],
+      Array [
+        0.08,
+        -0.025,
+      ],
+      Array [
+        0.08,
+        0.025,
+      ],
+      Array [
+        -0.08,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.08,
+        0.025,
+      ],
+      Array [
+        -0.092,
+        0.025,
+      ],
+      Array [
+        -0.08,
+        0.06,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        -0.08,
+        -0.06,
+      ],
+      Array [
+        -0.092,
+        -0.025,
+      ],
+      Array [
+        -0.08,
+        -0.025,
+      ],
+    ],
+    Array [
+      Array [
+        0.08,
+        -0.025,
+      ],
+      Array [
+        0.092,
+        -0.025,
+      ],
+      Array [
+        0.08,
+        -0.06,
+      ],
+      Array [
+        0.2,
+        0,
+      ],
+      Array [
+        0.08,
+        0.06,
+      ],
+      Array [
+        0.092,
+        0.025,
+      ],
+      Array [
+        0.08,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static arrow-start 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        0.1,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        0.1,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        0.1,
+        0.15,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        0.1,
+        -0.15,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "arrow1": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.1,
+            0.15,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            0.1,
+            -0.15,
+          ],
+        ],
+      ],
+      "points": Array [
+        0.3,
+        0.15,
+        0,
+        0,
+        0.3,
+        -0.15,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.1,
+            0.15,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            0.1,
+            -0.15,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.1,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            0.1,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.1,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.1,
+        0.025,
+        0.1,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.1,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            0.1,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        0.1,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        0.1,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        0.1,
+        0.15,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        0.1,
+        -0.15,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-arrow 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.11,
+        -0.025,
+      ],
+      Array [
+        0.11,
+        -0.025,
+      ],
+      Array [
+        0.11,
+        0.025,
+      ],
+      Array [
+        -0.11,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.11,
+        0.045,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        -0.11,
+        -0.045,
+      ],
+    ],
+    Array [
+      Array [
+        0.11,
+        -0.045,
+      ],
+      Array [
+        0.2,
+        0,
+      ],
+      Array [
+        0.11,
+        0.045,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "arrow1": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.11,
+            0.045,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.11,
+            -0.045,
+          ],
+        ],
+      ],
+      "points": Array [
+        0.09,
+        0.045,
+        0,
+        0,
+        0.09,
+        -0.045,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.11,
+            0.045,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.11,
+            -0.045,
+          ],
+        ],
+      ],
+    },
+    "arrow2": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.11,
+            -0.045,
+          ],
+          Array [
+            0.2,
+            0,
+          ],
+          Array [
+            0.11,
+            0.045,
+          ],
+        ],
+      ],
+      "points": Array [
+        -0.09,
+        -0.045,
+        0,
+        0,
+        -0.09,
+        0.045,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.11,
+            -0.045,
+          ],
+          Array [
+            0.2,
+            0,
+          ],
+          Array [
+            0.11,
+            0.045,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.11,
+            -0.025,
+          ],
+          Array [
+            0.11,
+            -0.025,
+          ],
+          Array [
+            0.11,
+            0.025,
+          ],
+          Array [
+            -0.11,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.22,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.22,
+        0.025,
+        0.22,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.11,
+            -0.025,
+          ],
+          Array [
+            0.11,
+            -0.025,
+          ],
+          Array [
+            0.11,
+            0.025,
+          ],
+          Array [
+            -0.11,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.11,
+        -0.025,
+      ],
+      Array [
+        0.11,
+        -0.025,
+      ],
+      Array [
+        0.11,
+        0.025,
+      ],
+      Array [
+        -0.11,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.11,
+        0.045,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        -0.11,
+        -0.045,
+      ],
+    ],
+    Array [
+      Array [
+        0.11,
+        -0.045,
+      ],
+      Array [
+        0.2,
+        0,
+      ],
+      Array [
+        0.11,
+        0.045,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-bufferRect 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.147,
+        -0.053,
+      ],
+      Array [
+        0.207,
+        0.301,
+      ],
+      Array [
+        0.03,
+        0.477,
+      ],
+      Array [
+        -0.324,
+        0.124,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-bufferX 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.218,
+        -0.053,
+      ],
+      Array [
+        0.136,
+        0.301,
+      ],
+      Array [
+        0.101,
+        0.336,
+      ],
+      Array [
+        -0.253,
+        -0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-bufferY 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.147,
+        -0.053,
+      ],
+      Array [
+        0.136,
+        0.23,
+      ],
+      Array [
+        0.03,
+        0.336,
+      ],
+      Array [
+        -0.253,
+        0.053,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-children 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-custom1d 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        0.012,
+        0.212,
+      ],
+      Array [
+        -0.412,
+        0.212,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-custom2d 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        0.012,
+        0.212,
+      ],
+      Array [
+        -0.412,
+        0.212,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-default 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-diagonal-angle 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-diagonal-arrow 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.119,
+        0.046,
+      ],
+      Array [
+        0.037,
+        0.202,
+      ],
+      Array [
+        0.002,
+        0.237,
+      ],
+      Array [
+        -0.154,
+        0.081,
+      ],
+    ],
+    Array [
+      Array [
+        -0.168,
+        0.095,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        -0.105,
+        0.032,
+      ],
+    ],
+    Array [
+      Array [
+        0.051,
+        0.187,
+      ],
+      Array [
+        0.083,
+        0.283,
+      ],
+      Array [
+        -0.013,
+        0.251,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "arrow1": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.168,
+            0.095,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.105,
+            0.032,
+          ],
+        ],
+      ],
+      "points": Array [
+        0.09,
+        0.045,
+        0,
+        0,
+        0.09,
+        -0.045,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.168,
+            0.095,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.105,
+            0.032,
+          ],
+        ],
+      ],
+    },
+    "arrow2": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.051,
+            0.187,
+          ],
+          Array [
+            0.083,
+            0.283,
+          ],
+          Array [
+            -0.013,
+            0.251,
+          ],
+        ],
+      ],
+      "points": Array [
+        -0.09,
+        -0.045,
+        0,
+        0,
+        -0.09,
+        0.045,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.051,
+            0.187,
+          ],
+          Array [
+            0.083,
+            0.283,
+          ],
+          Array [
+            -0.013,
+            0.251,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.119,
+            0.046,
+          ],
+          Array [
+            0.037,
+            0.202,
+          ],
+          Array [
+            0.002,
+            0.237,
+          ],
+          Array [
+            -0.154,
+            0.081,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.22,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.22,
+        0.025,
+        0.22,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.119,
+            0.046,
+          ],
+          Array [
+            0.037,
+            0.202,
+          ],
+          Array [
+            0.002,
+            0.237,
+          ],
+          Array [
+            -0.154,
+            0.081,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.119,
+        0.046,
+      ],
+      Array [
+        0.037,
+        0.202,
+      ],
+      Array [
+        0.002,
+        0.237,
+      ],
+      Array [
+        -0.154,
+        0.081,
+      ],
+    ],
+    Array [
+      Array [
+        -0.168,
+        0.095,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        -0.105,
+        0.032,
+      ],
+    ],
+    Array [
+      Array [
+        0.051,
+        0.187,
+      ],
+      Array [
+        0.083,
+        0.283,
+      ],
+      Array [
+        -0.013,
+        0.251,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-diagonal-p2 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.218,
+        0.382,
+      ],
+      Array [
+        0.182,
+        0.418,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.218,
+            0.382,
+          ],
+          Array [
+            0.182,
+            0.418,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.566,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.566,
+        0.025,
+        0.566,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.218,
+            0.382,
+          ],
+          Array [
+            0.182,
+            0.418,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.218,
+        0.382,
+      ],
+      Array [
+        0.182,
+        0.418,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-label 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.087,
+      ],
+      Array [
+        -0.035,
+        0.087,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.087,
+          ],
+          Array [
+            -0.035,
+            0.087,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.087,
+              ],
+              Array [
+                -0.035,
+                0.087,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.087,
+              ],
+              Array [
+                -0.035,
+                0.087,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.087,
+          ],
+          Array [
+            -0.035,
+            0.087,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.087,
+      ],
+      Array [
+        -0.035,
+        0.087,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-label-diagonal 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+    Array [
+      Array [
+        -0.128,
+        0.142,
+      ],
+      Array [
+        -0.058,
+        0.142,
+      ],
+      Array [
+        -0.058,
+        0.214,
+      ],
+      Array [
+        -0.128,
+        0.214,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.128,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.214,
+          ],
+          Array [
+            -0.128,
+            0.214,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.128,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.214,
+              ],
+              Array [
+                -0.128,
+                0.214,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.128,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.214,
+              ],
+              Array [
+                -0.128,
+                0.214,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.128,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.214,
+          ],
+          Array [
+            -0.128,
+            0.214,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+    Array [
+      Array [
+        -0.128,
+        0.142,
+      ],
+      Array [
+        -0.058,
+        0.142,
+      ],
+      Array [
+        -0.058,
+        0.214,
+      ],
+      Array [
+        -0.128,
+        0.214,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-number 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.088,
+      ],
+      Array [
+        0.171,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.371,
+      ],
+      Array [
+        -0.288,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static border-rect 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static dash 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.05,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.05,
+        0.025,
+        0.05,
+        -0.025,
+        0.1,
+        0.025,
+        0.15,
+        0.025,
+        0.1,
+        -0.025,
+        0.1,
+        -0.025,
+        0.15,
+        0.025,
+        0.15,
+        -0.025,
+        0.2,
+        0.025,
+        0.25,
+        0.025,
+        0.2,
+        -0.025,
+        0.2,
+        -0.025,
+        0.25,
+        0.025,
+        0.25,
+        -0.025,
+        0.3,
+        0.025,
+        0.35,
+        0.025,
+        0.3,
+        -0.025,
+        0.3,
+        -0.025,
+        0.35,
+        0.025,
+        0.35,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static dash-offset 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.025,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.025,
+        0.025,
+        0.025,
+        -0.025,
+        0.075,
+        0.025,
+        0.125,
+        0.025,
+        0.075,
+        -0.025,
+        0.075,
+        -0.025,
+        0.125,
+        0.025,
+        0.125,
+        -0.025,
+        0.175,
+        0.025,
+        0.225,
+        0.025,
+        0.175,
+        -0.025,
+        0.175,
+        -0.025,
+        0.225,
+        0.025,
+        0.225,
+        -0.025,
+        0.275,
+        0.025,
+        0.325,
+        0.025,
+        0.275,
+        -0.025,
+        0.275,
+        -0.025,
+        0.325,
+        0.025,
+        0.325,
+        -0.025,
+        0.375,
+        0.025,
+        0.4,
+        0.025,
+        0.375,
+        -0.025,
+        0.375,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.087,
+      ],
+      Array [
+        -0.035,
+        0.087,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.087,
+          ],
+          Array [
+            -0.035,
+            0.087,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.087,
+              ],
+              Array [
+                -0.035,
+                0.087,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.087,
+              ],
+              Array [
+                -0.035,
+                0.087,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.087,
+          ],
+          Array [
+            -0.035,
+            0.087,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.087,
+      ],
+      Array [
+        -0.035,
+        0.087,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-autoForm 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.175,
+        0.049,
+      ],
+      Array [
+        0.175,
+        0.049,
+      ],
+      Array [
+        0.175,
+        0.182,
+      ],
+      Array [
+        -0.175,
+        0.182,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.175,
+            0.049,
+          ],
+          Array [
+            0.175,
+            0.049,
+          ],
+          Array [
+            0.175,
+            0.182,
+          ],
+          Array [
+            -0.175,
+            0.182,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "_0": Object {
+          "border": Array [
+            Array [
+              Array [
+                0,
+                0.066,
+              ],
+              Array [
+                0.5,
+                0.066,
+              ],
+              Array [
+                0.5,
+                0.256,
+              ],
+              Array [
+                0,
+                0.256,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                0,
+                0.066,
+              ],
+              Array [
+                0.5,
+                0.066,
+              ],
+              Array [
+                0.5,
+                0.256,
+              ],
+              Array [
+                0,
+                0.256,
+              ],
+            ],
+          ],
+        },
+        "_1": Object {
+          "border": Array [
+            Array [
+              Array [
+                0,
+                0.066,
+              ],
+              Array [
+                0.5,
+                0.066,
+              ],
+              Array [
+                0.5,
+                0.256,
+              ],
+              Array [
+                0,
+                0.256,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                0,
+                0.066,
+              ],
+              Array [
+                0.5,
+                0.066,
+              ],
+              Array [
+                0.5,
+                0.256,
+              ],
+              Array [
+                0,
+                0.256,
+              ],
+            ],
+          ],
+        },
+        "form1": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.175,
+                0.049,
+              ],
+              Array [
+                0.175,
+                0.049,
+              ],
+              Array [
+                0.175,
+                0.182,
+              ],
+              Array [
+                -0.175,
+                0.182,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.175,
+                0.049,
+              ],
+              Array [
+                0.175,
+                0.049,
+              ],
+              Array [
+                0.175,
+                0.182,
+              ],
+              Array [
+                -0.175,
+                0.182,
+              ],
+            ],
+          ],
+        },
+        "form2": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.122,
+                0.059,
+              ],
+              Array [
+                0.227,
+                0.059,
+              ],
+              Array [
+                0.227,
+                0.192,
+              ],
+              Array [
+                -0.122,
+                0.192,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.122,
+                0.059,
+              ],
+              Array [
+                0.227,
+                0.059,
+              ],
+              Array [
+                0.227,
+                0.192,
+              ],
+              Array [
+                -0.122,
+                0.192,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.175,
+            0.049,
+          ],
+          Array [
+            0.175,
+            0.049,
+          ],
+          Array [
+            0.175,
+            0.182,
+          ],
+          Array [
+            -0.175,
+            0.182,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.175,
+        0.049,
+      ],
+      Array [
+        0.175,
+        0.049,
+      ],
+      Array [
+        0.175,
+        0.182,
+      ],
+      Array [
+        -0.175,
+        0.182,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-color 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.087,
+      ],
+      Array [
+        -0.035,
+        0.087,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.087,
+          ],
+          Array [
+            -0.035,
+            0.087,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.087,
+              ],
+              Array [
+                -0.035,
+                0.087,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.087,
+              ],
+              Array [
+                -0.035,
+                0.087,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.087,
+          ],
+          Array [
+            -0.035,
+            0.087,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.087,
+      ],
+      Array [
+        -0.035,
+        0.087,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-equation 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+    Array [
+      Array [
+        -0.156,
+        0.339,
+      ],
+      Array [
+        -0.086,
+        0.339,
+      ],
+      Array [
+        -0.086,
+        0.412,
+      ],
+      Array [
+        -0.156,
+        0.412,
+      ],
+    ],
+    Array [
+      Array [
+        -0.156,
+        0.156,
+      ],
+      Array [
+        -0.086,
+        0.156,
+      ],
+      Array [
+        -0.086,
+        0.259,
+      ],
+      Array [
+        -0.156,
+        0.259,
+      ],
+    ],
+    Array [
+      Array [
+        -0.191,
+        0.294,
+      ],
+      Array [
+        -0.051,
+        0.294,
+      ],
+      Array [
+        -0.051,
+        0.304,
+      ],
+      Array [
+        -0.191,
+        0.304,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.156,
+            0.339,
+          ],
+          Array [
+            -0.086,
+            0.339,
+          ],
+          Array [
+            -0.086,
+            0.412,
+          ],
+          Array [
+            -0.156,
+            0.412,
+          ],
+        ],
+        Array [
+          Array [
+            -0.156,
+            0.156,
+          ],
+          Array [
+            -0.086,
+            0.156,
+          ],
+          Array [
+            -0.086,
+            0.259,
+          ],
+          Array [
+            -0.156,
+            0.259,
+          ],
+        ],
+        Array [
+          Array [
+            -0.191,
+            0.294,
+          ],
+          Array [
+            -0.051,
+            0.294,
+          ],
+          Array [
+            -0.051,
+            0.304,
+          ],
+          Array [
+            -0.191,
+            0.304,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "a": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.156,
+                0.339,
+              ],
+              Array [
+                -0.086,
+                0.339,
+              ],
+              Array [
+                -0.086,
+                0.412,
+              ],
+              Array [
+                -0.156,
+                0.412,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.156,
+                0.339,
+              ],
+              Array [
+                -0.086,
+                0.339,
+              ],
+              Array [
+                -0.086,
+                0.412,
+              ],
+              Array [
+                -0.156,
+                0.412,
+              ],
+            ],
+          ],
+        },
+        "b": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.156,
+                0.156,
+              ],
+              Array [
+                -0.086,
+                0.156,
+              ],
+              Array [
+                -0.086,
+                0.259,
+              ],
+              Array [
+                -0.156,
+                0.259,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.156,
+                0.156,
+              ],
+              Array [
+                -0.086,
+                0.156,
+              ],
+              Array [
+                -0.086,
+                0.259,
+              ],
+              Array [
+                -0.156,
+                0.259,
+              ],
+            ],
+          ],
+        },
+        "vinculum": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.191,
+                0.294,
+              ],
+              Array [
+                -0.051,
+                0.294,
+              ],
+              Array [
+                -0.051,
+                0.304,
+              ],
+              Array [
+                -0.191,
+                0.304,
+              ],
+            ],
+          ],
+          "points": Array [
+            0,
+            0,
+            0,
+            0.01,
+            0.14,
+            0,
+            0.14,
+            0.01,
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.191,
+                0.294,
+              ],
+              Array [
+                -0.051,
+                0.294,
+              ],
+              Array [
+                -0.051,
+                0.304,
+              ],
+              Array [
+                -0.191,
+                0.304,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.191,
+            0.156,
+          ],
+          Array [
+            -0.051,
+            0.156,
+          ],
+          Array [
+            -0.051,
+            0.412,
+          ],
+          Array [
+            -0.191,
+            0.412,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+    Array [
+      Array [
+        -0.191,
+        0.156,
+      ],
+      Array [
+        -0.051,
+        0.156,
+      ],
+      Array [
+        -0.051,
+        0.412,
+      ],
+      Array [
+        -0.191,
+        0.412,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-linePosition 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.115,
+        0.065,
+      ],
+      Array [
+        -0.045,
+        0.065,
+      ],
+      Array [
+        -0.045,
+        0.137,
+      ],
+      Array [
+        -0.115,
+        0.137,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.115,
+            0.065,
+          ],
+          Array [
+            -0.045,
+            0.065,
+          ],
+          Array [
+            -0.045,
+            0.137,
+          ],
+          Array [
+            -0.115,
+            0.137,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.115,
+                0.065,
+              ],
+              Array [
+                -0.045,
+                0.065,
+              ],
+              Array [
+                -0.045,
+                0.137,
+              ],
+              Array [
+                -0.115,
+                0.137,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.115,
+                0.065,
+              ],
+              Array [
+                -0.045,
+                0.065,
+              ],
+              Array [
+                -0.045,
+                0.137,
+              ],
+              Array [
+                -0.115,
+                0.137,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.115,
+            0.065,
+          ],
+          Array [
+            -0.045,
+            0.065,
+          ],
+          Array [
+            -0.045,
+            0.137,
+          ],
+          Array [
+            -0.115,
+            0.137,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.115,
+        0.065,
+      ],
+      Array [
+        -0.045,
+        0.065,
+      ],
+      Array [
+        -0.045,
+        0.137,
+      ],
+      Array [
+        -0.115,
+        0.137,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-location-bottom-upright 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+    Array [
+      Array [
+        0.013,
+        0.02,
+      ],
+      Array [
+        0.063,
+        0.069,
+      ],
+      Array [
+        0.012,
+        0.12,
+      ],
+      Array [
+        -0.038,
+        0.071,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.013,
+            0.02,
+          ],
+          Array [
+            0.063,
+            0.069,
+          ],
+          Array [
+            0.012,
+            0.12,
+          ],
+          Array [
+            -0.038,
+            0.071,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                0.013,
+                0.02,
+              ],
+              Array [
+                0.063,
+                0.069,
+              ],
+              Array [
+                0.012,
+                0.12,
+              ],
+              Array [
+                -0.038,
+                0.071,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                0.013,
+                0.02,
+              ],
+              Array [
+                0.063,
+                0.069,
+              ],
+              Array [
+                0.012,
+                0.12,
+              ],
+              Array [
+                -0.038,
+                0.071,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.013,
+            0.02,
+          ],
+          Array [
+            0.063,
+            0.069,
+          ],
+          Array [
+            0.012,
+            0.12,
+          ],
+          Array [
+            -0.038,
+            0.071,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+    Array [
+      Array [
+        0.013,
+        0.02,
+      ],
+      Array [
+        0.063,
+        0.069,
+      ],
+      Array [
+        0.012,
+        0.12,
+      ],
+      Array [
+        -0.038,
+        0.071,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-location-left-horizontal 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+    Array [
+      Array [
+        -0.164,
+        0.177,
+      ],
+      Array [
+        -0.094,
+        0.177,
+      ],
+      Array [
+        -0.094,
+        0.249,
+      ],
+      Array [
+        -0.164,
+        0.249,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.164,
+            0.177,
+          ],
+          Array [
+            -0.094,
+            0.177,
+          ],
+          Array [
+            -0.094,
+            0.249,
+          ],
+          Array [
+            -0.164,
+            0.249,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.164,
+                0.177,
+              ],
+              Array [
+                -0.094,
+                0.177,
+              ],
+              Array [
+                -0.094,
+                0.249,
+              ],
+              Array [
+                -0.164,
+                0.249,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.164,
+                0.177,
+              ],
+              Array [
+                -0.094,
+                0.177,
+              ],
+              Array [
+                -0.094,
+                0.249,
+              ],
+              Array [
+                -0.164,
+                0.249,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.164,
+            0.177,
+          ],
+          Array [
+            -0.094,
+            0.177,
+          ],
+          Array [
+            -0.094,
+            0.249,
+          ],
+          Array [
+            -0.164,
+            0.249,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+    Array [
+      Array [
+        -0.164,
+        0.177,
+      ],
+      Array [
+        -0.094,
+        0.177,
+      ],
+      Array [
+        -0.094,
+        0.249,
+      ],
+      Array [
+        -0.164,
+        0.249,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-location-right-baseToLine 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+    Array [
+      Array [
+        0.012,
+        0.12,
+      ],
+      Array [
+        -0.038,
+        0.071,
+      ],
+      Array [
+        0.013,
+        0.02,
+      ],
+      Array [
+        0.063,
+        0.069,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.012,
+            0.12,
+          ],
+          Array [
+            -0.038,
+            0.071,
+          ],
+          Array [
+            0.013,
+            0.02,
+          ],
+          Array [
+            0.063,
+            0.069,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                0.012,
+                0.12,
+              ],
+              Array [
+                -0.038,
+                0.071,
+              ],
+              Array [
+                0.013,
+                0.02,
+              ],
+              Array [
+                0.063,
+                0.069,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                0.012,
+                0.12,
+              ],
+              Array [
+                -0.038,
+                0.071,
+              ],
+              Array [
+                0.013,
+                0.02,
+              ],
+              Array [
+                0.063,
+                0.069,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.012,
+            0.12,
+          ],
+          Array [
+            -0.038,
+            0.071,
+          ],
+          Array [
+            0.013,
+            0.02,
+          ],
+          Array [
+            0.063,
+            0.069,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+    Array [
+      Array [
+        0.012,
+        0.12,
+      ],
+      Array [
+        -0.038,
+        0.071,
+      ],
+      Array [
+        0.013,
+        0.02,
+      ],
+      Array [
+        0.063,
+        0.069,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-location-top-baseAway 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+    Array [
+      Array [
+        -0.131,
+        0.263,
+      ],
+      Array [
+        -0.18,
+        0.213,
+      ],
+      Array [
+        -0.129,
+        0.162,
+      ],
+      Array [
+        -0.08,
+        0.212,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.131,
+            0.263,
+          ],
+          Array [
+            -0.18,
+            0.213,
+          ],
+          Array [
+            -0.129,
+            0.162,
+          ],
+          Array [
+            -0.08,
+            0.212,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.131,
+                0.263,
+              ],
+              Array [
+                -0.18,
+                0.213,
+              ],
+              Array [
+                -0.129,
+                0.162,
+              ],
+              Array [
+                -0.08,
+                0.212,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.131,
+                0.263,
+              ],
+              Array [
+                -0.18,
+                0.213,
+              ],
+              Array [
+                -0.129,
+                0.162,
+              ],
+              Array [
+                -0.08,
+                0.212,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.131,
+            0.263,
+          ],
+          Array [
+            -0.18,
+            0.213,
+          ],
+          Array [
+            -0.129,
+            0.162,
+          ],
+          Array [
+            -0.08,
+            0.212,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+    Array [
+      Array [
+        -0.131,
+        0.263,
+      ],
+      Array [
+        -0.18,
+        0.213,
+      ],
+      Array [
+        -0.129,
+        0.162,
+      ],
+      Array [
+        -0.08,
+        0.212,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-null 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.105,
+        0.031,
+      ],
+      Array [
+        0.105,
+        0.031,
+      ],
+      Array [
+        0.105,
+        0.134,
+      ],
+      Array [
+        -0.105,
+        0.134,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.105,
+            0.031,
+          ],
+          Array [
+            0.105,
+            0.031,
+          ],
+          Array [
+            0.105,
+            0.134,
+          ],
+          Array [
+            -0.105,
+            0.134,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.105,
+                0.031,
+              ],
+              Array [
+                0.105,
+                0.031,
+              ],
+              Array [
+                0.105,
+                0.134,
+              ],
+              Array [
+                -0.105,
+                0.134,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.105,
+                0.031,
+              ],
+              Array [
+                0.105,
+                0.031,
+              ],
+              Array [
+                0.105,
+                0.134,
+              ],
+              Array [
+                -0.105,
+                0.134,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.105,
+            0.031,
+          ],
+          Array [
+            0.105,
+            0.031,
+          ],
+          Array [
+            0.105,
+            0.134,
+          ],
+          Array [
+            -0.105,
+            0.134,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.105,
+        0.031,
+      ],
+      Array [
+        0.105,
+        0.031,
+      ],
+      Array [
+        0.105,
+        0.134,
+      ],
+      Array [
+        -0.105,
+        0.134,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-offset 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.065,
+      ],
+      Array [
+        0.035,
+        0.065,
+      ],
+      Array [
+        0.035,
+        0.137,
+      ],
+      Array [
+        -0.035,
+        0.137,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.035,
+            0.065,
+          ],
+          Array [
+            0.035,
+            0.065,
+          ],
+          Array [
+            0.035,
+            0.137,
+          ],
+          Array [
+            -0.035,
+            0.137,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.035,
+                0.065,
+              ],
+              Array [
+                0.035,
+                0.065,
+              ],
+              Array [
+                0.035,
+                0.137,
+              ],
+              Array [
+                -0.035,
+                0.137,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.035,
+                0.065,
+              ],
+              Array [
+                0.035,
+                0.065,
+              ],
+              Array [
+                0.035,
+                0.137,
+              ],
+              Array [
+                -0.035,
+                0.137,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.035,
+            0.065,
+          ],
+          Array [
+            0.035,
+            0.065,
+          ],
+          Array [
+            0.035,
+            0.137,
+          ],
+          Array [
+            -0.035,
+            0.137,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.065,
+      ],
+      Array [
+        0.035,
+        0.065,
+      ],
+      Array [
+        0.035,
+        0.137,
+      ],
+      Array [
+        -0.035,
+        0.137,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-scale 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.1,
+        0.092,
+      ],
+      Array [
+        0.1,
+        0.092,
+      ],
+      Array [
+        0.1,
+        0.298,
+      ],
+      Array [
+        -0.1,
+        0.298,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.1,
+            0.092,
+          ],
+          Array [
+            0.1,
+            0.092,
+          ],
+          Array [
+            0.1,
+            0.298,
+          ],
+          Array [
+            -0.1,
+            0.298,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.1,
+                0.092,
+              ],
+              Array [
+                0.1,
+                0.092,
+              ],
+              Array [
+                0.1,
+                0.298,
+              ],
+              Array [
+                -0.1,
+                0.298,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.1,
+                0.092,
+              ],
+              Array [
+                0.1,
+                0.092,
+              ],
+              Array [
+                0.1,
+                0.298,
+              ],
+              Array [
+                -0.1,
+                0.298,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.1,
+            0.092,
+          ],
+          Array [
+            0.1,
+            0.092,
+          ],
+          Array [
+            0.1,
+            0.298,
+          ],
+          Array [
+            -0.1,
+            0.298,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.1,
+        0.092,
+      ],
+      Array [
+        0.1,
+        0.092,
+      ],
+      Array [
+        0.1,
+        0.298,
+      ],
+      Array [
+        -0.1,
+        0.298,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-subLocation-horizontal-bottom 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        -0.137,
+      ],
+      Array [
+        0.035,
+        -0.137,
+      ],
+      Array [
+        0.035,
+        -0.065,
+      ],
+      Array [
+        -0.035,
+        -0.065,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.035,
+            -0.137,
+          ],
+          Array [
+            0.035,
+            -0.137,
+          ],
+          Array [
+            0.035,
+            -0.065,
+          ],
+          Array [
+            -0.035,
+            -0.065,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.035,
+                -0.137,
+              ],
+              Array [
+                0.035,
+                -0.137,
+              ],
+              Array [
+                0.035,
+                -0.065,
+              ],
+              Array [
+                -0.035,
+                -0.065,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.035,
+                -0.137,
+              ],
+              Array [
+                0.035,
+                -0.137,
+              ],
+              Array [
+                0.035,
+                -0.065,
+              ],
+              Array [
+                -0.035,
+                -0.065,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.035,
+            -0.137,
+          ],
+          Array [
+            0.035,
+            -0.137,
+          ],
+          Array [
+            0.035,
+            -0.065,
+          ],
+          Array [
+            -0.035,
+            -0.065,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        -0.137,
+      ],
+      Array [
+        0.035,
+        -0.137,
+      ],
+      Array [
+        0.035,
+        -0.065,
+      ],
+      Array [
+        -0.035,
+        -0.065,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-subLocation-horizontal-top 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.065,
+      ],
+      Array [
+        0.035,
+        0.065,
+      ],
+      Array [
+        0.035,
+        0.137,
+      ],
+      Array [
+        -0.035,
+        0.137,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.035,
+            0.065,
+          ],
+          Array [
+            0.035,
+            0.065,
+          ],
+          Array [
+            0.035,
+            0.137,
+          ],
+          Array [
+            -0.035,
+            0.137,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.035,
+                0.065,
+              ],
+              Array [
+                0.035,
+                0.065,
+              ],
+              Array [
+                0.035,
+                0.137,
+              ],
+              Array [
+                -0.035,
+                0.137,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.035,
+                0.065,
+              ],
+              Array [
+                0.035,
+                0.065,
+              ],
+              Array [
+                0.035,
+                0.137,
+              ],
+              Array [
+                -0.035,
+                0.137,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.035,
+            0.065,
+          ],
+          Array [
+            0.035,
+            0.065,
+          ],
+          Array [
+            0.035,
+            0.137,
+          ],
+          Array [
+            -0.035,
+            0.137,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.065,
+      ],
+      Array [
+        0.035,
+        0.065,
+      ],
+      Array [
+        0.035,
+        0.137,
+      ],
+      Array [
+        -0.035,
+        0.137,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-subLocation-vertical-left 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.175,
+        0,
+      ],
+      Array [
+        -0.175,
+        0.4,
+      ],
+      Array [
+        -0.225,
+        0.4,
+      ],
+      Array [
+        -0.225,
+        0,
+      ],
+    ],
+    Array [
+      Array [
+        -0.335,
+        0.164,
+      ],
+      Array [
+        -0.265,
+        0.164,
+      ],
+      Array [
+        -0.265,
+        0.236,
+      ],
+      Array [
+        -0.335,
+        0.236,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.335,
+            0.164,
+          ],
+          Array [
+            -0.265,
+            0.164,
+          ],
+          Array [
+            -0.265,
+            0.236,
+          ],
+          Array [
+            -0.335,
+            0.236,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.335,
+                0.164,
+              ],
+              Array [
+                -0.265,
+                0.164,
+              ],
+              Array [
+                -0.265,
+                0.236,
+              ],
+              Array [
+                -0.335,
+                0.236,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.335,
+                0.164,
+              ],
+              Array [
+                -0.265,
+                0.164,
+              ],
+              Array [
+                -0.265,
+                0.236,
+              ],
+              Array [
+                -0.335,
+                0.236,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.335,
+            0.164,
+          ],
+          Array [
+            -0.265,
+            0.164,
+          ],
+          Array [
+            -0.265,
+            0.236,
+          ],
+          Array [
+            -0.335,
+            0.236,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.175,
+            0,
+          ],
+          Array [
+            -0.175,
+            0.4,
+          ],
+          Array [
+            -0.225,
+            0.4,
+          ],
+          Array [
+            -0.225,
+            0,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.175,
+            0,
+          ],
+          Array [
+            -0.175,
+            0.4,
+          ],
+          Array [
+            -0.225,
+            0.4,
+          ],
+          Array [
+            -0.225,
+            0,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.175,
+        0,
+      ],
+      Array [
+        -0.175,
+        0.4,
+      ],
+      Array [
+        -0.225,
+        0.4,
+      ],
+      Array [
+        -0.225,
+        0,
+      ],
+    ],
+    Array [
+      Array [
+        -0.335,
+        0.164,
+      ],
+      Array [
+        -0.265,
+        0.164,
+      ],
+      Array [
+        -0.265,
+        0.236,
+      ],
+      Array [
+        -0.335,
+        0.236,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-subLocation-vertical-right 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.175,
+        0,
+      ],
+      Array [
+        -0.175,
+        0.4,
+      ],
+      Array [
+        -0.225,
+        0.4,
+      ],
+      Array [
+        -0.225,
+        0,
+      ],
+    ],
+    Array [
+      Array [
+        -0.135,
+        0.164,
+      ],
+      Array [
+        -0.065,
+        0.164,
+      ],
+      Array [
+        -0.065,
+        0.236,
+      ],
+      Array [
+        -0.135,
+        0.236,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.135,
+            0.164,
+          ],
+          Array [
+            -0.065,
+            0.164,
+          ],
+          Array [
+            -0.065,
+            0.236,
+          ],
+          Array [
+            -0.135,
+            0.236,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.135,
+                0.164,
+              ],
+              Array [
+                -0.065,
+                0.164,
+              ],
+              Array [
+                -0.065,
+                0.236,
+              ],
+              Array [
+                -0.135,
+                0.236,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.135,
+                0.164,
+              ],
+              Array [
+                -0.065,
+                0.164,
+              ],
+              Array [
+                -0.065,
+                0.236,
+              ],
+              Array [
+                -0.135,
+                0.236,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.135,
+            0.164,
+          ],
+          Array [
+            -0.065,
+            0.164,
+          ],
+          Array [
+            -0.065,
+            0.236,
+          ],
+          Array [
+            -0.135,
+            0.236,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.175,
+            0,
+          ],
+          Array [
+            -0.175,
+            0.4,
+          ],
+          Array [
+            -0.225,
+            0.4,
+          ],
+          Array [
+            -0.225,
+            0,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.175,
+            0,
+          ],
+          Array [
+            -0.175,
+            0.4,
+          ],
+          Array [
+            -0.225,
+            0.4,
+          ],
+          Array [
+            -0.225,
+            0,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.175,
+        0,
+      ],
+      Array [
+        -0.175,
+        0.4,
+      ],
+      Array [
+        -0.225,
+        0.4,
+      ],
+      Array [
+        -0.225,
+        0,
+      ],
+    ],
+    Array [
+      Array [
+        -0.135,
+        0.164,
+      ],
+      Array [
+        -0.065,
+        0.164,
+      ],
+      Array [
+        -0.065,
+        0.236,
+      ],
+      Array [
+        -0.135,
+        0.236,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-updateOff 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.087,
+      ],
+      Array [
+        -0.035,
+        0.087,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.087,
+          ],
+          Array [
+            -0.035,
+            0.087,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.087,
+              ],
+              Array [
+                -0.035,
+                0.087,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.087,
+              ],
+              Array [
+                -0.035,
+                0.087,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.087,
+          ],
+          Array [
+            -0.035,
+            0.087,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.015,
+      ],
+      Array [
+        0.035,
+        0.087,
+      ],
+      Array [
+        -0.035,
+        0.087,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static label-updateOn 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.049,
+        0.05,
+      ],
+      Array [
+        0,
+        0,
+      ],
+      Array [
+        0.051,
+        0.051,
+      ],
+      Array [
+        0.002,
+        0.1,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.087,
+          ],
+          Array [
+            -0.035,
+            0.087,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.087,
+              ],
+              Array [
+                -0.035,
+                0.087,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.015,
+              ],
+              Array [
+                0.035,
+                0.087,
+              ],
+              Array [
+                -0.035,
+                0.087,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.015,
+          ],
+          Array [
+            0.035,
+            0.087,
+          ],
+          Array [
+            -0.035,
+            0.087,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.049,
+        0.05,
+      ],
+      Array [
+        0,
+        0,
+      ],
+      Array [
+        0.051,
+        0.051,
+      ],
+      Array [
+        0.002,
+        0.1,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static offset-net 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        0.359,
+        -0.041,
+      ],
+      Array [
+        -0.041,
+        0.359,
+      ],
+      Array [
+        -0.076,
+        0.324,
+      ],
+      Array [
+        0.324,
+        -0.076,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.359,
+            -0.041,
+          ],
+          Array [
+            -0.041,
+            0.359,
+          ],
+          Array [
+            -0.076,
+            0.324,
+          ],
+          Array [
+            0.324,
+            -0.076,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.566,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.566,
+        0.025,
+        0.566,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.359,
+            -0.041,
+          ],
+          Array [
+            -0.041,
+            0.359,
+          ],
+          Array [
+            -0.076,
+            0.324,
+          ],
+          Array [
+            0.324,
+            -0.076,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        0.359,
+        -0.041,
+      ],
+      Array [
+        -0.041,
+        0.359,
+      ],
+      Array [
+        -0.076,
+        0.324,
+      ],
+      Array [
+        0.324,
+        -0.076,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static offset-pos 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        0.076,
+        -0.324,
+      ],
+      Array [
+        -0.324,
+        0.076,
+      ],
+      Array [
+        -0.359,
+        0.041,
+      ],
+      Array [
+        0.041,
+        -0.359,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.076,
+            -0.324,
+          ],
+          Array [
+            -0.324,
+            0.076,
+          ],
+          Array [
+            -0.359,
+            0.041,
+          ],
+          Array [
+            0.041,
+            -0.359,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.566,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.566,
+        0.025,
+        0.566,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.076,
+            -0.324,
+          ],
+          Array [
+            -0.324,
+            0.076,
+          ],
+          Array [
+            -0.359,
+            0.041,
+          ],
+          Array [
+            0.041,
+            -0.359,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        0.076,
+        -0.324,
+      ],
+      Array [
+        -0.324,
+        0.076,
+      ],
+      Array [
+        -0.359,
+        0.041,
+      ],
+      Array [
+        0.041,
+        -0.359,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static override 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        0.218,
+        -0.182,
+      ],
+      Array [
+        -0.182,
+        0.218,
+      ],
+      Array [
+        -0.218,
+        0.182,
+      ],
+      Array [
+        0.182,
+        -0.218,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.218,
+            -0.182,
+          ],
+          Array [
+            -0.182,
+            0.218,
+          ],
+          Array [
+            -0.218,
+            0.182,
+          ],
+          Array [
+            0.182,
+            -0.218,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.566,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.566,
+        0.025,
+        0.566,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.218,
+            -0.182,
+          ],
+          Array [
+            -0.182,
+            0.218,
+          ],
+          Array [
+            -0.218,
+            0.182,
+          ],
+          Array [
+            0.182,
+            -0.218,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        0.218,
+        -0.182,
+      ],
+      Array [
+        -0.182,
+        0.218,
+      ],
+      Array [
+        -0.218,
+        0.182,
+      ],
+      Array [
+        0.182,
+        -0.218,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static p1LengthAngle 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        0.225,
+        -0.2,
+      ],
+      Array [
+        0.225,
+        0.2,
+      ],
+      Array [
+        0.175,
+        0.2,
+      ],
+      Array [
+        0.175,
+        -0.2,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.225,
+            -0.2,
+          ],
+          Array [
+            0.225,
+            0.2,
+          ],
+          Array [
+            0.175,
+            0.2,
+          ],
+          Array [
+            0.175,
+            -0.2,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.225,
+            -0.2,
+          ],
+          Array [
+            0.225,
+            0.2,
+          ],
+          Array [
+            0.175,
+            0.2,
+          ],
+          Array [
+            0.175,
+            -0.2,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        0.225,
+        -0.2,
+      ],
+      Array [
+        0.225,
+        0.2,
+      ],
+      Array [
+        0.175,
+        0.2,
+      ],
+      Array [
+        0.175,
+        -0.2,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static p1p2 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        0.218,
+        -0.182,
+      ],
+      Array [
+        -0.182,
+        0.218,
+      ],
+      Array [
+        -0.218,
+        0.182,
+      ],
+      Array [
+        0.182,
+        -0.218,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.218,
+            -0.182,
+          ],
+          Array [
+            -0.182,
+            0.218,
+          ],
+          Array [
+            -0.218,
+            0.182,
+          ],
+          Array [
+            0.182,
+            -0.218,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.566,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.566,
+        0.025,
+        0.566,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.218,
+            -0.182,
+          ],
+          Array [
+            -0.182,
+            0.218,
+          ],
+          Array [
+            -0.218,
+            0.182,
+          ],
+          Array [
+            0.182,
+            -0.218,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        0.218,
+        -0.182,
+      ],
+      Array [
+        -0.182,
+        0.218,
+      ],
+      Array [
+        -0.218,
+        0.182,
+      ],
+      Array [
+        0.182,
+        -0.218,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static setEndPoints 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        0,
+        -0.025,
+      ],
+      Array [
+        0.4,
+        -0.025,
+      ],
+      Array [
+        0.4,
+        0.025,
+      ],
+      Array [
+        0,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            0,
+            -0.025,
+          ],
+          Array [
+            0.4,
+            -0.025,
+          ],
+          Array [
+            0.4,
+            0.025,
+          ],
+          Array [
+            0,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0,
+            -0.025,
+          ],
+          Array [
+            0.4,
+            -0.025,
+          ],
+          Array [
+            0.4,
+            0.025,
+          ],
+          Array [
+            0,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        0,
+        -0.025,
+      ],
+      Array [
+        0.4,
+        -0.025,
+      ],
+      Array [
+        0.4,
+        0.025,
+      ],
+      Array [
+        0,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static setLabel 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.018,
+      ],
+      Array [
+        0.035,
+        0.018,
+      ],
+      Array [
+        0.035,
+        0.122,
+      ],
+      Array [
+        -0.035,
+        0.122,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.035,
+            -0.001,
+          ],
+          Array [
+            0.035,
+            -0.001,
+          ],
+          Array [
+            0.035,
+            0.103,
+          ],
+          Array [
+            -0.035,
+            0.103,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.024,
+                0.013,
+              ],
+              Array [
+                0.046,
+                0.013,
+              ],
+              Array [
+                0.046,
+                0.116,
+              ],
+              Array [
+                -0.024,
+                0.116,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.024,
+                0.013,
+              ],
+              Array [
+                0.046,
+                0.013,
+              ],
+              Array [
+                0.046,
+                0.116,
+              ],
+              Array [
+                -0.024,
+                0.116,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.035,
+            -0.001,
+          ],
+          Array [
+            0.035,
+            -0.001,
+          ],
+          Array [
+            0.035,
+            0.103,
+          ],
+          Array [
+            -0.035,
+            0.103,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.035,
+        0.018,
+      ],
+      Array [
+        0.035,
+        0.018,
+      ],
+      Array [
+        0.035,
+        0.122,
+      ],
+      Array [
+        -0.035,
+        0.122,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static setLabelToRealLength 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.105,
+        0.031,
+      ],
+      Array [
+        0.105,
+        0.031,
+      ],
+      Array [
+        0.105,
+        0.134,
+      ],
+      Array [
+        -0.105,
+        0.134,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.105,
+            -0.001,
+          ],
+          Array [
+            0.105,
+            -0.001,
+          ],
+          Array [
+            0.105,
+            0.103,
+          ],
+          Array [
+            -0.105,
+            0.103,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.073,
+                0.013,
+              ],
+              Array [
+                0.137,
+                0.013,
+              ],
+              Array [
+                0.137,
+                0.116,
+              ],
+              Array [
+                -0.073,
+                0.116,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.073,
+                0.013,
+              ],
+              Array [
+                0.137,
+                0.013,
+              ],
+              Array [
+                0.137,
+                0.116,
+              ],
+              Array [
+                -0.073,
+                0.116,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.105,
+            -0.001,
+          ],
+          Array [
+            0.105,
+            -0.001,
+          ],
+          Array [
+            0.105,
+            0.103,
+          ],
+          Array [
+            -0.105,
+            0.103,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            -0.025,
+          ],
+          Array [
+            0.2,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+    Array [
+      Array [
+        -0.105,
+        0.031,
+      ],
+      Array [
+        0.105,
+        0.031,
+      ],
+      Array [
+        0.105,
+        0.134,
+      ],
+      Array [
+        -0.105,
+        0.134,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static setLength 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.5,
+        -0.025,
+      ],
+      Array [
+        0.5,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.5,
+            -0.025,
+          ],
+          Array [
+            0.5,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.7,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.7,
+        0.025,
+        0.7,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.5,
+            -0.025,
+          ],
+          Array [
+            0.5,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.5,
+        -0.025,
+      ],
+      Array [
+        0.5,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static setLength-dash 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.5,
+        -0.025,
+      ],
+      Array [
+        0.5,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.5,
+            -0.025,
+          ],
+          Array [
+            0.5,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.025,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.025,
+        0.025,
+        0.025,
+        -0.025,
+        0.075,
+        0.025,
+        0.125,
+        0.025,
+        0.075,
+        -0.025,
+        0.075,
+        -0.025,
+        0.125,
+        0.025,
+        0.125,
+        -0.025,
+        0.175,
+        0.025,
+        0.225,
+        0.025,
+        0.175,
+        -0.025,
+        0.175,
+        -0.025,
+        0.225,
+        0.025,
+        0.225,
+        -0.025,
+        0.275,
+        0.025,
+        0.325,
+        0.025,
+        0.275,
+        -0.025,
+        0.275,
+        -0.025,
+        0.325,
+        0.025,
+        0.325,
+        -0.025,
+        0.375,
+        0.025,
+        0.425,
+        0.025,
+        0.375,
+        -0.025,
+        0.375,
+        -0.025,
+        0.425,
+        0.025,
+        0.425,
+        -0.025,
+        0.475,
+        0.025,
+        0.525,
+        0.025,
+        0.475,
+        -0.025,
+        0.475,
+        -0.025,
+        0.525,
+        0.025,
+        0.525,
+        -0.025,
+        0.575,
+        0.025,
+        0.625,
+        0.025,
+        0.575,
+        -0.025,
+        0.575,
+        -0.025,
+        0.625,
+        0.025,
+        0.625,
+        -0.025,
+        0.675,
+        0.025,
+        0.7,
+        0.025,
+        0.675,
+        -0.025,
+        0.675,
+        -0.025,
+        0.7,
+        0.025,
+        0.7,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.025,
+          ],
+          Array [
+            0.5,
+            -0.025,
+          ],
+          Array [
+            0.5,
+            0.025,
+          ],
+          Array [
+            -0.2,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.5,
+        -0.025,
+      ],
+      Array [
+        0.5,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static touchBorder-arrow-label 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.119,
+        0.046,
+      ],
+      Array [
+        0.037,
+        0.202,
+      ],
+      Array [
+        0.002,
+        0.237,
+      ],
+      Array [
+        -0.154,
+        0.081,
+      ],
+    ],
+    Array [
+      Array [
+        -0.168,
+        0.095,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        -0.105,
+        0.032,
+      ],
+    ],
+    Array [
+      Array [
+        0.051,
+        0.187,
+      ],
+      Array [
+        0.083,
+        0.283,
+      ],
+      Array [
+        -0.013,
+        0.251,
+      ],
+    ],
+    Array [
+      Array [
+        -0.128,
+        0.142,
+      ],
+      Array [
+        -0.058,
+        0.142,
+      ],
+      Array [
+        -0.058,
+        0.214,
+      ],
+      Array [
+        -0.128,
+        0.214,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "arrow1": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.168,
+            0.095,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.105,
+            0.032,
+          ],
+        ],
+      ],
+      "points": Array [
+        0.09,
+        0.045,
+        0,
+        0,
+        0.09,
+        -0.045,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.168,
+            0.095,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.105,
+            0.032,
+          ],
+        ],
+      ],
+    },
+    "arrow2": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.051,
+            0.187,
+          ],
+          Array [
+            0.083,
+            0.283,
+          ],
+          Array [
+            -0.013,
+            0.251,
+          ],
+        ],
+      ],
+      "points": Array [
+        -0.09,
+        -0.045,
+        0,
+        0,
+        -0.09,
+        0.045,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.051,
+            0.187,
+          ],
+          Array [
+            0.083,
+            0.283,
+          ],
+          Array [
+            -0.013,
+            0.251,
+          ],
+        ],
+      ],
+    },
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.128,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.214,
+          ],
+          Array [
+            -0.128,
+            0.214,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.128,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.214,
+              ],
+              Array [
+                -0.128,
+                0.214,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.128,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.214,
+              ],
+              Array [
+                -0.128,
+                0.214,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.128,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.214,
+          ],
+          Array [
+            -0.128,
+            0.214,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.119,
+            0.046,
+          ],
+          Array [
+            0.037,
+            0.202,
+          ],
+          Array [
+            0.002,
+            0.237,
+          ],
+          Array [
+            -0.154,
+            0.081,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.22,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.22,
+        0.025,
+        0.22,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.119,
+            0.046,
+          ],
+          Array [
+            0.037,
+            0.202,
+          ],
+          Array [
+            0.002,
+            0.237,
+          ],
+          Array [
+            -0.154,
+            0.081,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.119,
+        0.046,
+      ],
+      Array [
+        0.037,
+        0.202,
+      ],
+      Array [
+        0.002,
+        0.237,
+      ],
+      Array [
+        -0.154,
+        0.081,
+      ],
+    ],
+    Array [
+      Array [
+        -0.168,
+        0.095,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        -0.105,
+        0.032,
+      ],
+    ],
+    Array [
+      Array [
+        0.051,
+        0.187,
+      ],
+      Array [
+        0.083,
+        0.283,
+      ],
+      Array [
+        -0.013,
+        0.251,
+      ],
+    ],
+    Array [
+      Array [
+        -0.128,
+        0.142,
+      ],
+      Array [
+        -0.058,
+        0.142,
+      ],
+      Array [
+        -0.058,
+        0.214,
+      ],
+      Array [
+        -0.128,
+        0.214,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static touchBorder-bufferRect 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.147,
+        -0.053,
+      ],
+      Array [
+        0.207,
+        0.301,
+      ],
+      Array [
+        0.03,
+        0.477,
+      ],
+      Array [
+        -0.324,
+        0.124,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static touchBorder-bufferX 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.218,
+        -0.053,
+      ],
+      Array [
+        0.136,
+        0.301,
+      ],
+      Array [
+        0.101,
+        0.336,
+      ],
+      Array [
+        -0.253,
+        -0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static touchBorder-bufferY 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.147,
+        -0.053,
+      ],
+      Array [
+        0.136,
+        0.23,
+      ],
+      Array [
+        0.03,
+        0.336,
+      ],
+      Array [
+        -0.253,
+        0.053,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static touchBorder-children 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static touchBorder-custom1d 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        0.012,
+        0.212,
+      ],
+      Array [
+        -0.412,
+        0.212,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static touchBorder-custom2d 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        0.012,
+        0.212,
+      ],
+      Array [
+        -0.412,
+        0.212,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static touchBorder-number 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.088,
+      ],
+      Array [
+        0.171,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.371,
+      ],
+      Array [
+        -0.288,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static touchBorder-rect 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.182,
+            -0.018,
+          ],
+          Array [
+            0.101,
+            0.265,
+          ],
+          Array [
+            0.065,
+            0.301,
+          ],
+          Array [
+            -0.218,
+            0.018,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.182,
+        -0.018,
+      ],
+      Array [
+        0.101,
+        0.265,
+      ],
+      Array [
+        0.065,
+        0.301,
+      ],
+      Array [
+        -0.218,
+        0.018,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static touchBorder-rect-arrow-label 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.119,
+        0.046,
+      ],
+      Array [
+        0.037,
+        0.202,
+      ],
+      Array [
+        0.002,
+        0.237,
+      ],
+      Array [
+        -0.154,
+        0.081,
+      ],
+    ],
+    Array [
+      Array [
+        -0.168,
+        0.095,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        -0.105,
+        0.032,
+      ],
+    ],
+    Array [
+      Array [
+        0.051,
+        0.187,
+      ],
+      Array [
+        0.083,
+        0.283,
+      ],
+      Array [
+        -0.013,
+        0.251,
+      ],
+    ],
+    Array [
+      Array [
+        -0.128,
+        0.142,
+      ],
+      Array [
+        -0.058,
+        0.142,
+      ],
+      Array [
+        -0.058,
+        0.214,
+      ],
+      Array [
+        -0.128,
+        0.214,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "arrow1": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.168,
+            0.095,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.105,
+            0.032,
+          ],
+        ],
+      ],
+      "points": Array [
+        0.09,
+        0.045,
+        0,
+        0,
+        0.09,
+        -0.045,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.168,
+            0.095,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.105,
+            0.032,
+          ],
+        ],
+      ],
+    },
+    "arrow2": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.051,
+            0.187,
+          ],
+          Array [
+            0.083,
+            0.283,
+          ],
+          Array [
+            -0.013,
+            0.251,
+          ],
+        ],
+      ],
+      "points": Array [
+        -0.09,
+        -0.045,
+        0,
+        0,
+        -0.09,
+        0.045,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.051,
+            0.187,
+          ],
+          Array [
+            0.083,
+            0.283,
+          ],
+          Array [
+            -0.013,
+            0.251,
+          ],
+        ],
+      ],
+    },
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.128,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.214,
+          ],
+          Array [
+            -0.128,
+            0.214,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.128,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.214,
+              ],
+              Array [
+                -0.128,
+                0.214,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.128,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.214,
+              ],
+              Array [
+                -0.128,
+                0.214,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.128,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.214,
+          ],
+          Array [
+            -0.128,
+            0.214,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.119,
+            0.046,
+          ],
+          Array [
+            0.037,
+            0.202,
+          ],
+          Array [
+            0.002,
+            0.237,
+          ],
+          Array [
+            -0.154,
+            0.081,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.22,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.22,
+        0.025,
+        0.22,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.119,
+            0.046,
+          ],
+          Array [
+            0.037,
+            0.202,
+          ],
+          Array [
+            0.002,
+            0.237,
+          ],
+          Array [
+            -0.154,
+            0.081,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.168,
+        -0.032,
+      ],
+      Array [
+        0.115,
+        0.251,
+      ],
+      Array [
+        0.012,
+        0.354,
+      ],
+      Array [
+        -0.271,
+        0.071,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static touchBorder-rect-arrow-label1 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.119,
+        0.046,
+      ],
+      Array [
+        0.037,
+        0.202,
+      ],
+      Array [
+        0.002,
+        0.237,
+      ],
+      Array [
+        -0.154,
+        0.081,
+      ],
+    ],
+    Array [
+      Array [
+        -0.168,
+        0.095,
+      ],
+      Array [
+        -0.2,
+        0,
+      ],
+      Array [
+        -0.105,
+        0.032,
+      ],
+    ],
+    Array [
+      Array [
+        0.051,
+        0.187,
+      ],
+      Array [
+        0.083,
+        0.283,
+      ],
+      Array [
+        -0.013,
+        0.251,
+      ],
+    ],
+    Array [
+      Array [
+        -0.128,
+        0.142,
+      ],
+      Array [
+        -0.058,
+        0.142,
+      ],
+      Array [
+        -0.058,
+        0.214,
+      ],
+      Array [
+        -0.128,
+        0.214,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "arrow1": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.168,
+            0.095,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.105,
+            0.032,
+          ],
+        ],
+      ],
+      "points": Array [
+        0.09,
+        0.045,
+        0,
+        0,
+        0.09,
+        -0.045,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.168,
+            0.095,
+          ],
+          Array [
+            -0.2,
+            0,
+          ],
+          Array [
+            -0.105,
+            0.032,
+          ],
+        ],
+      ],
+    },
+    "arrow2": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.051,
+            0.187,
+          ],
+          Array [
+            0.083,
+            0.283,
+          ],
+          Array [
+            -0.013,
+            0.251,
+          ],
+        ],
+      ],
+      "points": Array [
+        -0.09,
+        -0.045,
+        0,
+        0,
+        -0.09,
+        0.045,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.051,
+            0.187,
+          ],
+          Array [
+            0.083,
+            0.283,
+          ],
+          Array [
+            -0.013,
+            0.251,
+          ],
+        ],
+      ],
+    },
+    "label": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.128,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.214,
+          ],
+          Array [
+            -0.128,
+            0.214,
+          ],
+        ],
+      ],
+      "elements": Object {
+        "base": Object {
+          "border": Array [
+            Array [
+              Array [
+                -0.128,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.214,
+              ],
+              Array [
+                -0.128,
+                0.214,
+              ],
+            ],
+          ],
+          "touchBorder": Array [
+            Array [
+              Array [
+                -0.128,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.142,
+              ],
+              Array [
+                -0.058,
+                0.214,
+              ],
+              Array [
+                -0.128,
+                0.214,
+              ],
+            ],
+          ],
+        },
+      },
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.128,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.142,
+          ],
+          Array [
+            -0.058,
+            0.214,
+          ],
+          Array [
+            -0.128,
+            0.214,
+          ],
+        ],
+      ],
+    },
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.119,
+            0.046,
+          ],
+          Array [
+            0.037,
+            0.202,
+          ],
+          Array [
+            0.002,
+            0.237,
+          ],
+          Array [
+            -0.154,
+            0.081,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.22,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.22,
+        0.025,
+        0.22,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.119,
+            0.046,
+          ],
+          Array [
+            0.037,
+            0.202,
+          ],
+          Array [
+            0.002,
+            0.237,
+          ],
+          Array [
+            -0.154,
+            0.081,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.168,
+        -0.032,
+      ],
+      Array [
+        0.115,
+        0.251,
+      ],
+      Array [
+        0.012,
+        0.354,
+      ],
+      Array [
+        -0.271,
+        0.071,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static width 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.05,
+      ],
+      Array [
+        0.2,
+        -0.05,
+      ],
+      Array [
+        0.2,
+        0.05,
+      ],
+      Array [
+        -0.2,
+        0.05,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.05,
+          ],
+          Array [
+            0.2,
+            -0.05,
+          ],
+          Array [
+            0.2,
+            0.05,
+          ],
+          Array [
+            -0.2,
+            0.05,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.05,
+        0.4,
+        0.05,
+        0,
+        -0.05,
+        0,
+        -0.05,
+        0.4,
+        0.05,
+        0.4,
+        -0.05,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            -0.2,
+            -0.05,
+          ],
+          Array [
+            0.2,
+            -0.05,
+          ],
+          Array [
+            0.2,
+            0.05,
+          ],
+          Array [
+            -0.2,
+            0.05,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.05,
+      ],
+      Array [
+        0.2,
+        -0.05,
+      ],
+      Array [
+        0.2,
+        0.05,
+      ],
+      Array [
+        -0.2,
+        0.05,
+      ],
+    ],
+  ],
+}
+`;
