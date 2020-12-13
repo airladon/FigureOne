@@ -1,5 +1,5 @@
-import { testAnimation } from '../../../tools';
+import { testElements } from '../../../tools';
 
 const { getShapes, updates } = require('./animations.js');
 
-testAnimation('Collection: Line', getShapes, updates);
+testElements('Collection: Line', getShapes, updates);

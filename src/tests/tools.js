@@ -20,7 +20,7 @@ const simpleElement = (element) => {
   return out;
 };
 
-function testAnimation(title, getShapes, updates) {
+function testElements(title, getShapes, updates) {
   const tests = getShapes(() => ({ x: 0, y: 0 })).map(s => [s.name, s]);
   describe(title, () => {
     let figure;
@@ -41,8 +41,7 @@ function testAnimation(title, getShapes, updates) {
   });
 }
 
-
 export {
   // simpleElement,
-  testAnimation,
+  testElements,
 };
