@@ -1,5 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-import makeFigure from '../js/__mocks__/makeFigure';
 import { round } from '../js/tools/math';
 
 const simpleElement = (element) => {
@@ -20,28 +19,6 @@ const simpleElement = (element) => {
   return out;
 };
 
-function testElements(title, getShapes, updates) {
-  const tests = getShapes(() => ({ x: 0, y: 0 })).map(s => [s.name, s]);
-  describe(title, () => {
-    let figure;
-    beforeEach(() => {
-      figure = makeFigure();
-    });
-    test.each(tests)(
-      '%s',
-      (name, shape) => {
-        figure.add(shape);
-        const element = figure.getElement(name);
-        if (updates[name] != null) {
-          updates[name](element);
-        }
-        expect(simpleElement(element)).toMatchSnapshot();
-      },
-    );
-  });
-}
-
 export {
-  // simpleElement,
-  testElements,
+  simpleElement,
 };

@@ -1,5 +1,5 @@
-import { testElements } from '../../tools';
+import { staticTester } from '../../staticTester';
 
 const { getShapes, updates } = require('./animations.js');
 
-testElements('Collection: Line - Animations', getShapes, updates);
+staticTester('Collection: Line - Animations', getShapes, updates);
