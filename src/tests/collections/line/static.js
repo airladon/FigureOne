@@ -292,7 +292,7 @@ const updates = {
 const getValues = {
   getLength: {
     element: 'border-default',
-    expect: 0.5,
+    expect: 0.4,
     when: e => tools.math.round(e.getLength(), 3),
   },
   'getAngle - default': {

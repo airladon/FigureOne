@@ -5,17 +5,13 @@ import { simpleElement } from './tools';
 
 function staticTester(title, getShapes, updates, getValues) {
   const tests = getShapes(() => ({ x: 0, y: 0 })).map(s => [s.name, s]);
-  const valueTitles = {};
+  const valueTests = [];
   tests.forEach((test) => {
     const [name] = test;
     Object.keys(getValues).forEach((valueTitle) => {
       const { element } = getValues[valueTitle];
       if (element === name) {
-        // valueTitles.push(title)
-        if (valueTitles[name] == null) {
-          valueTitles[name] = [];
-        }
-        valueTitles[name].push(valueTitle);
+        valueTests.push([valueTitle, test[0], test[1]]);
       }
     });
   });
@@ -34,13 +30,19 @@ function staticTester(title, getShapes, updates, getValues) {
           updates[name](element);
         }
         expect(simpleElement(element)).toMatchSnapshot();
-        if (valueTitles[name] != null) {
-          valueTitles[name].forEach((valueTitle) => {
-            const result = getValues[valueTitle].when(element);
-            const expected = getValues[valueTitle].expect;
-            expect(result).toEqual(expected);
-          });
+      },
+    );
+    test.each(valueTests)(
+      '%s',
+      (valueTitle, name, shape) => {
+        figure.add(shape);
+        const element = figure.getElement(name);
+        if (updates[name] != null) {
+          updates[name](element);
         }
+        const result = getValues[valueTitle].when(element);
+        const expected = getValues[valueTitle].expect;
+        expect(result).toEqual(expected);
       },
     );
   });
