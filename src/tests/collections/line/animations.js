@@ -88,6 +88,7 @@ const updates = {
   },
 };
 
+
 if (typeof process === 'object') {
   module.exports = {
     getShapes,

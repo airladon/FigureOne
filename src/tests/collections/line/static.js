@@ -243,6 +243,7 @@ function getShapes(getPos) {
 
 let timeoutId;
 let startUpdates;
+let startGetValues;
 
 const updates = {
   'align-start': (e) => {
@@ -288,6 +289,19 @@ const updates = {
   },
 };
 
+const getValues = {
+  getLength: {
+    element: 'border-default',
+    expect: 0.4,
+    when: e => tools.math.round(e.getLength(), 3),
+  },
+  'getAngle - default': {
+    element: 'border-diagonal-angle',
+    expect: tools.math.round(Math.PI / 4, 3),
+    when: e => tools.math.round(e.getAngle(), 3),
+  },
+};
+
 if (typeof process === 'object') {
   module.exports = {
     getShapes,
@@ -302,5 +316,19 @@ if (typeof process === 'object') {
     });
   };
   startUpdates();
-}
 
+  startGetValues = () => {
+    Object.keys(getValues).forEach((title) => {
+      const value = getValues[title].when(figure.getElement(getValues[title].element));
+      const expected = getValues[title].expect;
+      // eslint-disable-next-line eqeqeq
+      const result = expected == value;
+      if (result) {
+        tools.misc.Console(`pass: ${title}`);
+      } else {
+        tools.misc.Console(`fail: ${title}: Expected: ${getValues[title].expect} - Got: ${value}`);
+      }
+    });
+  };
+  startGetValues();
+}
