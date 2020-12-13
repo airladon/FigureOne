@@ -7,7 +7,7 @@ expect.extend({ toMatchImageSnapshot });
 jest.setTimeout(60000);
 
 // function delay(time) {
-//   return new Promise(function(resolve) { 
+//   return new Promise(function(resolve) {
 //       setTimeout(resolve, time)
 //   });
 // }

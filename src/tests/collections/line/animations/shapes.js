@@ -1,19 +1,11 @@
 
 if (typeof process === 'object') {
-  // eslint-disable-next-line global-require no-unused-vars vars-on-top no-var
+  /* eslint-disable block-scoped-var */
+  // eslint-disable-next-line global-require, no-unused-vars, vars-on-top, no-var
   var { tools } = require('../../../../index.js').default;
-} else {
-  // eslint-disable-next-line no-undef
-  // tools = Fig.tools;
 }
 
 
-// ***************************************************
-// ***************************************************
-// ***************************************************
-// const xValues = tools.math.range(-4, 3.5, 1);
-// const yValues = tools.math.range(3.5, -3.5, -1);
-// let index = 0;
 function getShapes(getPos) {
   let index = 0;
   const line = (name, options, mods) => {
@@ -42,7 +34,6 @@ function getShapes(getPos) {
   };
 
   /* eslint-disable object-curly-newline */
-  // eslint-disable-next-line no-unused-vars
   return [
     /*
     .......########...#######..########..########..########.########.
@@ -76,6 +67,4 @@ if (typeof process === 'object') {
   module.exports = {
     getShapes,
   };
-} else {
-  // getShapes(index => getPosition(index));
 }
