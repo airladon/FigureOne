@@ -23,7 +23,7 @@ const duration = 2;
 
 test('Collections: Line', async () => {
   let image;
-  await page.goto(`file:/${__dirname}/index.html`);
+  await page.goto(`file:/${__dirname}/animations.html`);
   await page.evaluate(() => {
     clearTimeout(timeoutId);
     figure.globalAnimation.setManualFrames();
