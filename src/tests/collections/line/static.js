@@ -94,6 +94,14 @@ function getShapes(getPos) {
       angle: Math.PI / 4,
       touchBorder: 'rect',
     }),
+    line('translateRotate', {
+      align: 'center',
+      move: { type: 'centerTranslateEndRotation' },
+    }, { isTouchable: false }),
+    line('translateRotateMid', {
+      align: 'center',
+      move: { type: 'centerTranslateEndRotation', middleLength: 0.6 },
+    }, { isTouchable: false }),
 
     /*
     .......########..########.########.####.##....##.########
@@ -417,6 +425,8 @@ if (typeof process === 'object') {
   startUpdates();
 
   startGetValues = () => {
+    tools.misc.Console('');
+    tools.misc.Console('Get Values');
     Object.keys(getValues).forEach((title) => {
       const value = getValues[title].when(figure.getElement(getValues[title].element));
       const expected = getValues[title].expect;
@@ -431,6 +441,8 @@ if (typeof process === 'object') {
   startGetValues();
 
   startMove = () => {
+    tools.misc.Console('');
+    tools.misc.Console('Move');
     Object.keys(move).forEach((name) => {
       const element = figure.getElement(move[name].element);
       const p = element.getPosition('figure');
