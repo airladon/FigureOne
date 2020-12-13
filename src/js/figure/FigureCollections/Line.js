@@ -21,7 +21,7 @@ import { Equation } from '../Equation/Equation';
 import type { TypeWhen } from '../webgl/GlobalAnimation';
 import { simplifyArrowOptions, getArrowLength } from '../geometries/arrow';
 import type { OBJ_LineArrows, OBJ_LineArrow, TypeArrowHead } from '../geometries/arrow';
-import type { OBJ_Pulse, FigureElement } from '../Element';
+import type { OBJ_Pulse, FigureElement, TypeSpace } from '../Element';
 import type { EQN_Equation } from '../Equation/Equation';
 import * as animation from '../Animation/Animation';
 import type { OBJ_CustomAnimationStep, OBJ_TriggerAnimationStep } from '../Animation/Animation';
@@ -614,7 +614,6 @@ export default class CollectionsLine extends FigureElementCollection {
     this.line = getLineFromOptions(optionsToUse);
     this.alignDraw = optionsToUse.align;
     this.localXPosition = 0;
-    // this.maxLength = optionsToUse.maxLength != null ? optionsToUse.maxLength : this.line.length();
     this.autoUpdateSubscriptionId = -1;
     this.lastParentRotationOffset = 0;
 
@@ -1626,7 +1625,7 @@ export default class CollectionsLine extends FigureElementCollection {
    * Return a geometric {@link Line} object that represents the line
    * @return {Line}
    */
-  getLine(space: TypePace = 'local') {
+  getLine(space: TypeSpace = 'local') {
     return new Line(this.getP1(space), this.getP2(space));
   }
 

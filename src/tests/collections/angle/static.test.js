@@ -4,4 +4,4 @@ const {
   getShapes, updates, getValues, move,
 } = require('./static.js');
 
-staticTester('Collection: Line - Static', getShapes, updates, getValues, move);
+staticTester('Collection: Angle - Static', getShapes, updates, getValues, move);
