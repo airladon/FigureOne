@@ -292,7 +292,7 @@ const updates = {
 const getValues = {
   getLength: {
     element: 'border-default',
-    expect: 0.4,
+    expect: 0.5,
     when: e => tools.math.round(e.getLength(), 3),
   },
   'getAngle - default': {
@@ -306,6 +306,7 @@ if (typeof process === 'object') {
   module.exports = {
     getShapes,
     updates,
+    getValues,
   };
 } else {
   figure.add(getShapes(index => getPosition(index)));
