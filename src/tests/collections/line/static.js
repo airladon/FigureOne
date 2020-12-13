@@ -238,12 +238,28 @@ function getShapes(getPos) {
     line('setLabelToRealLength', { label: 'a' }),
     line('setLabel', { label: 'a' }),
     line('setEndPoints', { p1: [0, 0], align: 'start' }),
+
+    /*
+    .............##.....##..#######..##.....##.########
+    .............###...###.##.....##.##.....##.##......
+    .............####.####.##.....##.##.....##.##......
+    .............##.###.##.##.....##.##.....##.######..
+    .............##.....##.##.....##..##...##..##......
+    .............##.....##.##.....##...##.##...##......
+    .............##.....##..#######.....###....########
+    */
+    line('translator', { move: { type: 'translation' } }),
+    line('start-rotator', { align: 'start', move: { type: 'rotation' } }),
+    line('center-rotator', { align: 'center', move: { type: 'rotation' } }),
+    line('end-rotator', { align: 'end', move: { type: 'rotation' } }),
+    line('translate-rotate', { align: 'center', move: { type: 'centerTranslateEndRotation' } }, { isTouchable: false }),
   ];
 }
 
 let timeoutId;
 let startUpdates;
 let startGetValues;
+let startMove;
 
 const updates = {
   'align-start': (e) => {
@@ -330,11 +346,65 @@ const getValues = {
   },
 };
 
+
+const move = {
+  translate: {
+    element: 'translator',
+    events: [
+      ['touchDown', [0.1, 0]],
+      ['touchMove', [0.2, 0]],
+      ['touchMove', [0.2, 0]],
+      ['touchUp'],
+    ],
+  },
+  rotateStart: {
+    element: 'start-rotator',
+    events: [
+      ['touchDown', [0.3, 0]],
+      ['touchMove', [0.3, 0.1]],
+      ['touchMove', [0.3, 0.1]],
+      ['touchUp'],
+    ],
+  },
+  rotateCenter: {
+    element: 'center-rotator',
+    events: [
+      ['touchDown', [0.1, 0]],
+      ['touchMove', [0.1, 0.1]],
+      ['touchMove', [0.1, 0.1]],
+      ['touchUp'],
+    ],
+  },
+  rotateEnd: {
+    element: 'end-rotator',
+    events: [
+      ['touchDown', [-0.3, 0]],
+      ['touchMove', [-0.3, 0.1]],
+      ['touchMove', [-0.3, 0.1]],
+      ['touchUp'],
+    ],
+  },
+  translateRotate: {
+    element: 'translate-rotate',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchMove', [0.2, 0]],
+      ['touchMove', [0.2, 0]],
+      ['touchUp'],
+      ['touchDown', [0.1, 0]],
+      ['touchMove', [0.1, 0.1]],
+      ['touchMove', [0.1, 0.1]],
+      ['touchUp'],
+    ],
+  },
+};
+
 if (typeof process === 'object') {
   module.exports = {
     getShapes,
     updates,
     getValues,
+    move,
   };
 } else {
   figure.add(getShapes(index => getPosition(index)));
@@ -350,15 +420,27 @@ if (typeof process === 'object') {
     Object.keys(getValues).forEach((title) => {
       const value = getValues[title].when(figure.getElement(getValues[title].element));
       const expected = getValues[title].expect;
-      // eslint-disable-next-line eqeqeq
       const result = JSON.stringify(expected) === JSON.stringify(value);
       if (result) {
         tools.misc.Console(`pass: ${title}`);
       } else {
-        // console.log(expected, value, expected == value)
         tools.misc.Console(`fail: ${title}: Expected: ${getValues[title].expect} - Got: ${value}`);
       }
     });
   };
   startGetValues();
+
+  startMove = () => {
+    Object.keys(move).forEach((name) => {
+      const element = figure.getElement(move[name].element);
+      const p = element.getPosition('figure');
+      move[name].events.forEach((event) => {
+        const [action] = event;
+        const loc = tools.g2.getPoint(event[1] || [0, 0]);
+        figure[action]([loc.x + p.x, loc.y + p.y]);
+      });
+    });
+    figure.setFirstTransform();
+  };
+  startMove();
 }

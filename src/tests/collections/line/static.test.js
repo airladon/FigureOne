@@ -1,5 +1,5 @@
 import { staticTester } from '../../staticTester';
 
-const { getShapes, updates, getValues } = require('./static.js');
+const { getShapes, updates, getValues, move } = require('./static.js');
 
-staticTester('Collection: Line - Static', getShapes, updates, getValues);
+staticTester('Collection: Line - Static', getShapes, updates, getValues, move);
