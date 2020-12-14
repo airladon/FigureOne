@@ -1,3 +1,4 @@
+/* eslint-disable block-scoped-var */
 
 if (typeof process === 'object') {
   // eslint-disable-next-line global-require, no-unused-vars, vars-on-top, no-var
@@ -5,7 +6,7 @@ if (typeof process === 'object') {
 }
 
 let index = 0;
-function makeAngle (name, options, mods, getPos) {
+function makeAngle(name, options, mods, getPos) {
   const { x, y } = getPos(index);
   const indexName = `${index}`;
   index += 1;
