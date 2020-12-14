@@ -3,10 +3,10 @@
   "vars": "local",
   }] */
 /* global figure getShapes getPosition */
-/* eslint-disable block-scoped-var */
+/* eslint-disable block-scoped-var, object-property-newline */
 
 if (typeof process === 'object') {
-  // eslint-disable-next-line global-require, no-unused-vars, vars-on-top, no-var
+  /* eslint-disable global-require, no-unused-vars, vars-on-top, no-var */
   var { tools } = require('../../../index.js').default;
   var { makeAngle } = require('./angle.js');
 }
@@ -18,6 +18,39 @@ function getShapes(getPos) {
   /* eslint-disable object-curly-newline */
   return [
     /*
+    .............########..########.########.####.##....##.########
+    .............##.....##.##.......##........##..###...##.##......
+    .............##.....##.##.......##........##..####..##.##......
+    .............##.....##.######...######....##..##.##.##.######..
+    .............##.....##.##.......##........##..##..####.##......
+    .............##.....##.##.......##........##..##...###.##......
+    .............########..########.##.......####.##....##.########
+    */
+    angle('define-angle', {
+      position: [0, 0], angle: Math.PI / 4, startAngle: Math.PI / 4,
+    }),
+    angle('define-p1p2p3', {
+      p1: [0.3 / Math.sqrt(2), 0.3 / Math.sqrt(2)], p2: [0, 0], p3: [0, 0.3],
+    }),
+    angle('define-override', {
+      position: [0.1, 0.2], angle: 0.1, startAngle: Math.PI / 3,
+      p1: [0.3 / Math.sqrt(2), 0.3 / Math.sqrt(2)], p2: [0, 0], p3: [0, 0.3],
+    }),
+
+    angle('direction-1-pos', {
+      direction: 1, angle: Math.PI / 4, startAngle: 0.1, label: { text: null, offset: 0.01 },
+    }),
+    angle('direction--1-pos', {
+      direction: -1, angle: Math.PI / 4, startAngle: 0.1, label: { text: null, offset: 0.01 },
+    }),
+    angle('direction-1-neg', {
+      direction: 1, angle: -Math.PI / 4, startAngle: 0.1, label: { text: null, offset: 0.01 },
+    }),
+    angle('direction--1-neg', {
+      direction: -1, angle: -Math.PI / 4, startAngle: 0.1, label: { text: null, offset: 0.01 },
+    }),
+
+    /*
     .......########...#######..########..########..########.########.
     .......##.....##.##.....##.##.....##.##.....##.##.......##.....##
     .......##.....##.##.....##.##.....##.##.....##.##.......##.....##
@@ -27,78 +60,72 @@ function getShapes(getPos) {
     .......########...#######..##.....##.########..########.##.....##
     */
     angle('border-default'),
-    // line('border-diagonal-p2', { p2: [0.2, 0.4] }),
-    // line('border-diagonal-angle', { angle: Math.PI / 4 }),
-    // line('border-arrow', { arrow: { head: 'triangle', scale: 0.3 } }),
-    // line('border-diagonal-arrow', { angle: Math.PI / 4, arrow: { head: 'triangle', scale: 0.3 } }),
-    // line('border-label', { label: 'a' }),
-    // line('border-label-diagonal', { label: 'a', angle: Math.PI / 4 }),
+    angle('border-label', { label: { text: null, offset: 0.01 } }),
+    angle('border-arrows', { arrow: 'barb', curve: { width: 0.01 } }),
 
-    // line('border-children', { border: 'children', angle: Math.PI / 4 }),
-    // line('border-rect', { border: 'rect', angle: Math.PI / 4 }),
-    // line('border-number', { border: 0.05, angle: Math.PI / 4 }),
-    // line('border-bufferX', { border: [0.05, 0], angle: Math.PI / 4 }),
-    // line('border-bufferY', { border: [0, 0.05], angle: Math.PI / 4 }),
-    // line('border-bufferRect', { border: [0, 0.05, 0.1, 0.15], angle: Math.PI / 4 }),
-    // line('border-custom1d', { border: [[0, 0], [0.3, 0], [0, 0.3]], angle: Math.PI / 4 }),
-    // line('border-custom2d', { border: [[[0, 0], [0.3, 0], [0, 0.3]]], angle: Math.PI / 4 }),
+    angle('border-children', {
+      border: 'children', label: { text: null, offset: 0.01 },
+    }),
+    angle('border-rect', {
+      border: 'rect', label: { text: null, offset: 0.01 },
+    }),
+    angle('border-number', {
+      border: 0.1, label: { text: null, offset: 0.01 },
+    }),
+    angle('border-bufferX', {
+      border: [0.05, 0],
+      label: { text: null, offset: 0.01 },
+    }),
+    angle('border-bufferY', {
+      border: [0, 0.05],
+      label: { text: null, offset: 0.01 },
+    }),
+    angle('border-bufferRect', {
+      border: [0, 0.05, 0.1, 0.15],
+      label: { text: null, offset: 0.01 },
+    }),
+    angle('border-custom1d', {
+      border: [[0, 0], [0.3, 0], [0, 0.3]],
+      label: { text: null, offset: 0.01 },
+    }),
+    angle('border-custom2d', {
+      border: [[[0, 0], [0.3, 0], [0, 0.3]]],
+      label: { text: null, offset: 0.01 },
+    }),
 
-    // line('touchBorder-children', { touchBorder: 'children', angle: Math.PI / 4 }),
-    // line('touchBorder-rect', { touchBorder: 'rect', angle: Math.PI / 4 }),
-    // line('touchBorder-number', { touchBorder: 0.05, angle: Math.PI / 4 }),
-    // line('touchBorder-bufferX', { touchBorder: [0.05, 0], angle: Math.PI / 4 }),
-    // line('touchBorder-bufferY', { touchBorder: [0, 0.05], angle: Math.PI / 4 }),
-    // line('touchBorder-bufferRect', { touchBorder: [0, 0.05, 0.1, 0.15], angle: Math.PI / 4 }),
-    // line('touchBorder-custom1d', { touchBorder: [[0, 0], [0.3, 0], [0, 0.3]], angle: Math.PI / 4 }),
-    // line('touchBorder-custom2d', { touchBorder: [[[0, 0], [0.3, 0], [0, 0.3]]], angle: Math.PI / 4 }),
-    // line('touchBorder-arrow-label', {
-    //   arrow: { head: 'triangle', scale: 0.3 },
-    //   label: 'a',
-    //   angle: Math.PI / 4,
-    // }),
-    // line('touchBorder-rect-arrow-label', {
-    //   arrow: { head: 'triangle', scale: 0.3 },
-    //   label: 'a',
-    //   angle: Math.PI / 4,
-    //   touchBorder: 'rect',
-    // }),
-    // line('touchBorder-rect-arrow-label1', {
-    //   arrow: { head: 'triangle', scale: 0.3 },
-    //   label: {
-    //     text: 'a',
-    //     touchBorder: [[]],
-    //   },
-    //   angle: Math.PI / 4,
-    //   touchBorder: 'rect',
-    // }),
-    // line('translateRotate', {
-    //   align: 'center',
-    //   move: { type: 'centerTranslateEndRotation' },
-    // }, { isTouchable: false }),
-    // line('translateRotateMid', {
-    //   align: 'center',
-    //   move: { type: 'centerTranslateEndRotation', middleLength: 0.6 },
-    // }, { isTouchable: false }),
+    angle('touchBorder-children', {
+      touchBorder: 'children', label: { text: null, offset: 0.01 },
+    }),
+    angle('touchBorder-rect', {
+      touchBorder: 'rect', label: { text: null, offset: 0.01 },
+    }),
+    angle('touchBorder-number', {
+      touchBorder: 0.1, label: { text: null, offset: 0.01 },
+    }),
+    angle('touchBorder-bufferX', {
+      touchBorder: [0.05, 0],
+      label: { text: null, offset: 0.01 },
+    }),
+    angle('touchBorder-bufferY', {
+      touchBorder: [0, 0.05],
+      label: { text: null, offset: 0.01 },
+    }),
+    angle('touchBorder-bufferRect', {
+      touchBorder: [0, 0.05, 0.1, 0.15],
+      label: { text: null, offset: 0.01 },
+    }),
+    angle('touchBorder-custom1d', {
+      touchBorder: [[0, 0], [0.3, 0], [0, 0.3]],
+      label: { text: null, offset: 0.01 },
+    }),
+    angle('touchBorder-custom2d', {
+      touchBorder: [[[0, 0], [0.3, 0], [0, 0.3]]],
+      label: { text: null, offset: 0.01 },
+    }),
 
-    // /*
-    // .......########..########.########.####.##....##.########
-    // .......##.....##.##.......##........##..###...##.##......
-    // .......##.....##.##.......##........##..####..##.##......
-    // .......##.....##.######...######....##..##.##.##.######..
-    // .......##.....##.##.......##........##..##..####.##......
-    // .......##.....##.##.......##........##..##...###.##......
-    // .......########..########.##.......####.##....##.########
-    // */
-    // line('p1p2', { p1: [0.2, -0.2], p2: [-0.2, 0.2] }),
-    // line('p1LengthAngle', { p1: [0.2, -0.2], length: 0.4, angle: Math.PI / 2 }),
-    // line('override', { p1: [0.2, -0.2], p2: [-0.2, 0.2], length: 0.4, angle: Math.PI / 2 }),
-    // line('offset-pos', { offset: 0.2, p1: [0.2, -0.2], p2: [-0.2, 0.2] }),
-    // line('offset-net', { offset: -0.2, p1: [0.2, -0.2], p2: [-0.2, 0.2] }),
-    // line('align-start', { align: 'start' }),
-    // line('align-center', { align: 'center' }),
-    // line('align-end', { align: 'end' }),
-    // line('align-neg', { align: -0.2 }),
-    // line('width', { width: 0.1 }),
+    angle('touchBorder-label', {
+      touchBorder: 'children', label: { text: null, offset: 0.01, touchBorder: 0.1 },
+    }),
 
     // /*
     // .......########.....###.....######..##.....##
@@ -109,105 +136,108 @@ function getShapes(getPos) {
     // .......##.....##.##.....##.##....##.##.....##
     // .......########..##.....##..######..##.....##
     // */
-    // line('dash', { dash: [0.05, 0.05] }),
-    // line('dash-offset', { dash: [0.025, 0.05, 0.05] }),
+    // angle('dash', { curve: { dash: [0.05, 0.05] } }),
+    // angle('dash-offset', { curve: { dash: [0.025, 0.05, 0.05] } }),
 
 
-    // /*
-    // ..........###....########..########...#######..##......##
-    // .........##.##...##.....##.##.....##.##.....##.##..##..##
-    // ........##...##..##.....##.##.....##.##.....##.##..##..##
-    // .......##.....##.########..########..##.....##.##..##..##
-    // .......#########.##...##...##...##...##.....##.##..##..##
-    // .......##.....##.##....##..##....##..##.....##.##..##..##
-    // .......##.....##.##.....##.##.....##..#######...###..###.
-    // */
-    // line('arrow', { width: 0.01, arrow: 'triangle' }),
-    // line('arrow-start', { arrow: {
-    //   start: 'triangle',
-    // } }),
-    // line('arrow-detail', { arrow: {
-    //   head: 'barb',
-    //   scale: 0.4,
-    //   tail: 0,
-    // } }),
+    /*
+    ..........###....########..########...#######..##......##
+    .........##.##...##.....##.##.....##.##.....##.##..##..##
+    ........##...##..##.....##.##.....##.##.....##.##..##..##
+    .......##.....##.########..########..##.....##.##..##..##
+    .......#########.##...##...##...##...##.....##.##..##..##
+    .......##.....##.##....##..##....##..##.....##.##..##..##
+    .......##.....##.##.....##.##.....##..#######...###..###.
+    */
+    angle('arrow', { curve: { width: 0.01 }, arrow: 'triangle' }),
+    angle('arrow-start', { curve: { width: 0.01 }, arrow: {
+      start: 'triangle',
+    } }),
+    angle('arrow-detail', { curve: { width: 0.02 }, arrow: {
+      head: 'barb',
+      tail: 0,
+    } }),
 
-    // /*
-    // .......##..........###....########..########.##......
-    // .......##.........##.##...##.....##.##.......##......
-    // .......##........##...##..##.....##.##.......##......
-    // .......##.......##.....##.########..######...##......
-    // .......##.......#########.##.....##.##.......##......
-    // .......##.......##.....##.##.....##.##.......##......
-    // .......########.##.....##.########..########.########
-    // */
-    // line('label', { label: 'a' }),
-    // line('label-null', { label: null }),
-    // line('label-offset', { label: { text: 'a', offset: 0.05 } }),
-    // line('label-scale', { label: { text: 'a', scale: 2, offset: 0.05 } }),
-    // line('label-color', { label: { text: 'a', color: [1, 0, 1, 1] } }),
-    // line('label-linePosition', { label: { text: 'a', offset: 0.05, linePosition: 0.3 } }),
-    // line('label-location-left-horizontal', {
-    //   angle: Math.PI / 4,
-    //   label: {
-    //     text: 'a', location: 'left', orientation: 'horizontal', offset: 0.05,
-    //   },
-    // }),
-    // line('label-location-right-baseToLine', {
-    //   angle: Math.PI / 4,
-    //   label: {
-    //     text: 'a', location: 'right', orientation: 'baseToLine', offset: 0.05,
-    //   },
-    // }),
-    // line('label-location-top-baseAway', {
-    //   angle: Math.PI / 4,
-    //   label: {
-    //     text: 'a', location: 'top', orientation: 'baseAway', offset: 0.05,
-    //   },
-    // }),
-    // line('label-location-bottom-upright', {
-    //   angle: Math.PI / 4,
-    //   label: {
-    //     text: 'a', location: 'bottom', orientation: 'upright', offset: 0.05,
-    //   },
-    // }),
-    // line('label-subLocation-horizontal-bottom', {
-    //   angle: 0,
-    //   label: {
-    //     text: 'a', location: 'right', subLocation: 'bottom', offset: 0.05,
-    //   },
-    // }),
-    // line('label-subLocation-horizontal-top', {
-    //   angle: 0,
-    //   label: {
-    //     text: 'a', location: 'right', subLocation: 'top', offset: 0.05,
-    //   },
-    // }),
-    // line('label-subLocation-vertical-left', {
-    //   angle: Math.PI / 2,
-    //   label: {
-    //     text: 'a', location: 'top', subLocation: 'left', offset: 0.05,
-    //   },
-    // }),
-    // line('label-subLocation-vertical-right', {
-    //   angle: Math.PI / 2,
-    //   label: {
-    //     text: 'a', location: 'top', subLocation: 'right', offset: 0.05,
-    //   },
-    // }),
-    // line('label-equation', {
-    //   angle: Math.PI / 4,
-    //   label: { text: { forms: { 0: { frac: ['a', 'vinculum', 'b'] } } } },
-    // }),
-    // line('label-autoForm', {
-    //   label: { text: ['form1', 'form2'] },
-    // }),
-    // line('label-updateOff', {
-    //   label: { text: 'a', orientation: 'horizontal', update: false },
-    // }),
-    // line('label-updateOn', {
-    //   label: { text: 'a', orientation: 'horizontal', update: true },
-    // }),
+    /*
+    .......##..........###....########..########.##......
+    .......##.........##.##...##.....##.##.......##......
+    .......##........##...##..##.....##.##.......##......
+    .......##.......##.....##.########..######...##......
+    .......##.......#########.##.....##.##.......##......
+    .......##.......##.....##.##.....##.##.......##......
+    .......########.##.....##.########..########.########
+    */
+    angle('label', { label: 'a' }),
+    angle('label-null', { label: null }),
+    angle('label-offset', { label: { text: 'a', offset: 0.05 } }),
+    angle('label-scale', { label: { text: 'a', scale: 2, offset: 0.05 } }),
+    angle('label-color', { label: { text: 'a', color: [0, 0, 1, 1] } }),
+    angle('label-curvePosition', { label: { text: 'a', offset: 0.05, curvePosition: 0.3 } }),
+    angle('label-location-start', { label: { text: 'a', offset: 0.05, location: 'start' } }),
+    angle('label-location-end', { label: { text: 'a', offset: 0.05, location: 'end' } }),
+    angle('label-location-left-horizontal', {
+      angle: Math.PI / 4,
+      label: {
+        text: 'a', location: 'left', orientation: 'horizontal', offset: 0.05,
+      },
+    }),
+    angle('label-location-right-baseToLine', {
+      angle: Math.PI / 4,
+      label: {
+        text: 'a', location: 'right', orientation: 'baseToLine', offset: 0.05,
+      },
+    }),
+    angle('label-location-top-baseAway', {
+      angle: Math.PI / 4,
+      label: {
+        text: 'a', location: 'top', orientation: 'baseAway', offset: 0.05,
+      },
+    }),
+    angle('label-location-bottom-upright', {
+      angle: Math.PI / 4,
+      label: {
+        text: 'a', location: 'bottom', orientation: 'upright', offset: 0.05,
+      },
+    }),
+    angle('label-location-outside-positive', {
+      angle: Math.PI / 4,
+      label: {
+        text: 'a', location: 'outside', offset: 0.05,
+      },
+    }),
+    angle('label-location-outside-negative', {
+      angle: -Math.PI / 4,
+      direction: 1,
+      label: {
+        text: 'a', location: 'outside', offset: 0.05,
+      },
+    }),
+    angle('label-location-inside-positive', {
+      angle: Math.PI / 4,
+      label: {
+        text: 'a', location: 'inside', offset: 0.05,
+      },
+    }),
+    angle('label-location-inside-negative', {
+      angle: -Math.PI / 4,
+      direction: 1,
+      label: {
+        text: 'a', location: 'inside', offset: 0.05,
+      },
+    }),
+    angle('label-equation', {
+      angle: Math.PI / 4,
+      label: { text: { forms: { 0: { frac: ['a', 'vinculum', 'b'] } } } },
+    }),
+    angle('label-autoForm', {
+      label: { text: ['form1', 'form2'] },
+    }),
+    angle('label-updateOff', {
+      label: { text: 'a', orientation: 'horizontal', update: false },
+    }),
+    angle('label-updateOn', {
+      label: { text: 'a', orientation: 'horizontal', update: true },
+    }),
 
     // /*
     // .......##.....##.########.########.##.....##..#######..########...######.
@@ -259,15 +289,15 @@ const updates = {
   // 'align-neg': (e) => {
   //   e.setRotation(Math.PI / 4);
   // },
-  // 'label-autoForm': (e) => {
-  //   e.label.eqn.showForm('1');
-  // },
-  // 'label-updateOff': (e) => {
-  //   e.setRotation(Math.PI / 4);
-  // },
-  // 'label-updateOn': (e) => {
-  //   e.setRotation(Math.PI / 4);
-  // },
+  'label-autoForm': (e) => {
+    e.label.eqn.showForm('1');
+  },
+  'label-updateOff': (e) => {
+    e.setRotation(Math.PI / 4);
+  },
+  'label-updateOn': (e) => {
+    e.setRotation(Math.PI / 4);
+  },
   // setLength: (e) => {
   //   e.setLength(0.7);
   // },

@@ -1160,7 +1160,7 @@ class CollectionsAngle extends FigureElementCollection {
       text: null,
       radius: 0.4,
       curvePosition: 0.5,
-      offset: 0,
+      offset: 0.0001,
       showRealAngle: false,
       units: 'degrees',
       precision: 0,
@@ -1242,9 +1242,13 @@ class CollectionsAngle extends FigureElementCollection {
         color: this.color,
         direction,
         transform: new Transform('AngleCurve').rotate(0),
+        // dash: optionsToUse.dash,
       };
       if (optionsToUse.fill === false) {  // $FlowFixMe
-        o.line = { width: optionsToUse.width };
+        o.line = {
+          width: optionsToUse.width,
+          // dash: optionsToUse.dash,
+        };
       }
 
       const curve = this.collections.primitives.polygon(o);

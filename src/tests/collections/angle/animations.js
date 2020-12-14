@@ -6,9 +6,9 @@
 /* eslint-disable block-scoped-var */
 
 if (typeof process === 'object') {
-  // eslint-disable-next-line global-require, no-unused-vars, vars-on-top, no-var
+  /* eslint-disable global-require, no-unused-vars, vars-on-top, no-var */
   var { tools } = require('../../../index.js').default;
-   var { makeAngle } = require('./angle.js');
+  var { makeAngle } = require('./angle.js');
 }
 
 
@@ -18,21 +18,6 @@ function getShapes(getPos) {
   /* eslint-disable object-curly-newline */
   return [
     angle('angleAnimation'),
-    // line('lengthAnimation'),
-    // line('lengthAnimationStep'),
-    // line('pulse-defaults', {
-    //   label: { text: 'a', offset: 0.05, color: [1, 0, 1, 1] },
-    //   arrow: { head: 'barb', scale: 1 },
-    //   width: 0.01,
-    //   pulseWidth: {
-    //     line: 5, arrow: 2, label: { scale: 3, yAlign: 'bottom' }, duration: 2,
-    //   },
-    // }),
-    // line('pulseWidth', {
-    //   label: { text: 'a', offset: 0.05 },
-    //   arrow: { head: 'barb', scale: 1 },
-    //   width: 0.01,
-    // }),
   ];
 }
 
