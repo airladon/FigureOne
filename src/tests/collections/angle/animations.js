@@ -17,7 +17,12 @@ function getShapes(getPos) {
 
   /* eslint-disable object-curly-newline */
   return [
-    angle('angleAnimation'),
+    angle('angleAnimation', { curve: { width: 0.02 }, arrow: 'triangle' }),
+    angle('angleAnimationStep', { curve: { width: 0.02 }, arrow: 'triangle' }),
+    angle('pulse-scale-default', { label: 'a', curve: { width: 0.02 }, arrow: 'triangle' }),
+    angle('pulse-scale', { label: 'a', curve: { width: 0.02 }, arrow: 'triangle' }),
+    angle('pulse-thick', { label: 'a', curve: { width: 0.02 }, arrow: 'triangle' }),
+    angle('pulseAnimation', { label: 'a', curve: { width: 0.02 }, arrow: 'triangle' }),
   ];
 }
 
@@ -30,24 +35,40 @@ const updates = {
       .angle({ start: 0, target: 1, duration: 2 })
       .start();
   },
-  // 'pulse-defaults': (e) => {
-  //   e.pulseWidth();
-  // },
-  // pulseWidth: (e) => {
-  //   e.pulseWidth({
-  //     line: 3, arrow: 1.5, label: 2, duration: 2,
-  //   });
-  // },
-  // lengthAnimation: (e) => {
-  //   e.animations.new()
-  //     .length({ start: 0, target: 0.5, duration: 2 })
-  //     .start();
-  // },
-  // lengthAnimationStep: (e) => {
-  //   e.animations.new()
-  //     .then(e.animations.length({ start: 0, target: 0.5, duration: 2 }))
-  //     .start();
-  // },
+  angleAnimationStep: (e) => {
+    e.animations.new()
+      .then(e.animations.angle({ start: 0, target: 1, duration: 2 }))
+      .start();
+  },
+  'pulse-scale-default': (e) => {
+    e.pulseAngle({ duration: 2 });
+  },
+  'pulse-scale': (e) => {
+    e.pulseAngle({ curve: 1.3, corner: 1.5, label: 2, duration: 2 });
+  },
+  'pulse-thick': (e) => {
+    e.pulseAngle({
+      curve: 1.1,
+      arrow: 1.2,
+      duration: 2,
+      thick: 4,
+    });
+  },
+  pulseAnimation: (e) => {
+    e.animations.new()
+      .pulseAngle({
+        curve: 1.3,
+        corner: 1.5,
+        label: 1.2,
+        duration: 2,
+      })
+      .start();
+  },
+  pulseAnimationStep: (e) => {
+    e.animations.new()
+      .then(e.animations.pulseAngle({ duration: 2 }))
+      .start();
+  },
 };
 
 

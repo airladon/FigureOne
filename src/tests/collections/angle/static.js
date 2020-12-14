@@ -337,9 +337,6 @@ function getShapes(getPos) {
     angle('setLabelToRealAngle', { label: 'a' }),
     angle('updateLabel', { label: 'a' }),
     angle('updateLabelCustom', { label: 'a' }),
-    // angle('test', { p1: [0, 0.3], p2: [0, 0], p3: [-0.3, 0] }),
-    // line('setLength-dash', { dash: [0.025, 0.05, 0.05] }),
-    // line('setEndPoints', { p1: [0, 0], align: 'start' }),
 
     /*
     .............##.....##..#######..##.....##.########
@@ -427,44 +424,26 @@ const updates = {
 };
 
 const getValues = {
-  // getLength: {
-  //   element: 'border-default',
-  //   expect: 0.4,
-  //   when: e => tools.math.round(e.getLength(), 3),
-  // },
-  // 'getAngle - rad': {
-  //   element: 'border-diagonal-angle',
-  //   expect: tools.math.round(Math.PI / 4, 3),
-  //   when: e => tools.math.round(e.getAngle(), 3),
-  // },
-  // 'getAngle - degrees': {
-  //   element: 'border-diagonal-angle',
-  //   expect: tools.math.round(45, 3),
-  //   when: e => tools.math.round(e.getAngle('deg'), 3),
-  // },
-  // getLabel: {
-  //   element: 'label',
-  //   expect: 'a',
-  //   when: e => e.getLabel(),
-  // },
-  // 'getP1-local': {
-  //   element: 'p1LengthAngle',
-  //   expect: [0, 0],
-  //   when: (e) => {
-  //     const offset = e.getPosition('figure');
-  //     const p = e.getP1('figure').sub(offset).round(3);
-  //     return [p.x, p.y];
-  //   },
-  // },
-  // 'getP2-local': {
-  //   element: 'p1LengthAngle',
-  //   expect: [0, 0.4],
-  //   when: (e) => {
-  //     const offset = e.getPosition('figure');
-  //     const p = e.getP2('figure').sub(offset).round(3);
-  //     return [p.x, p.y];
-  //   },
-  // },
+  getAngle: {
+    element: 'border-children',
+    expect: 1,
+    when: e => tools.math.round(e.getAngle(), 3),
+  },
+  getAngleDegrees: {
+    element: 'border-children',
+    expect: 57.296,
+    when: e => tools.math.round(e.getAngle('deg'), 3),
+  },
+  getLabelReal: {
+    element: 'border-children',
+    expect: '57\u00b0',
+    when: e => e.getLabel(),
+  },
+  getLabelText: {
+    element: 'label-scale',
+    expect: 'a',
+    when: e => e.getLabel(),
+  },
 };
 
 
@@ -616,8 +595,8 @@ if (typeof process === 'object') {
     if (getValues == null || Object.keys(getValues).length === 0) {
       return;
     }
-    tools.misc.Console('');
-    tools.misc.Console('Get Values');
+    // tools.misc.Console('');
+    // tools.misc.Console('Get Values');
     Object.keys(getValues).forEach((title) => {
       const value = getValues[title].when(figure.getElement(getValues[title].element));
       const expected = getValues[title].expect;
@@ -635,8 +614,6 @@ if (typeof process === 'object') {
     if (move == null || Object.keys(move).length === 0) {
       return;
     }
-    tools.misc.Console('');
-    tools.misc.Console('Move');
     Object.keys(move).forEach((name) => {
       const element = figure.getElement(move[name].element);
       const p = element.getPosition('figure');

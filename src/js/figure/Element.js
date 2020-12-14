@@ -7,6 +7,7 @@ import {
   TransformBounds, RectBounds, RangeBounds, getBounds,
   getBoundingBorder, isBuffer, getBorder,
 } from '../tools/g2';
+import { round } from '../tools/math';
 // import { areColorsSame } from '../tools/color';
 import { getState } from './Recorder/state';
 import type {
@@ -2468,10 +2469,11 @@ class FigureElement {
       this.pulseSettings.C = CArray;
     } else {
       const mid = range / 2 + min;
-      const startNormalized = (start - mid) / (range / 2);
+      const startNormalized = range !== 0 ? (start - mid) / (range / 2) : start;
       this.pulseSettings.A = mid;
       this.pulseSettings.B = range / 2;
-      this.pulseSettings.C = Math.asin(startNormalized);
+      this.pulseSettings.C = Math.asin(round(startNormalized, 10));
+      // console.log(this.name, this.pulseSettings, range, min, mid, start, startNormalized)
     }
 
     this.pulseSettings.time = duration;

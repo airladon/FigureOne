@@ -543,7 +543,7 @@ export type OBJ_PulseAngleAnimationStep = {
  * and <a href="#animationmanagerbuilder">animations.builder</a>).
  *
  * Some of the useful methods included in an collections angle are:
- * - <a href="#collectionsanglepulseangle">pulseangle</a> - customize pulsing the
+ * - <a href="#collectionsanglepulseangle">pulseAngle</a> - customize pulsing the
  *   angle without
  * - <a href="#collectionsanglesetmovable">setMovable</a> - overrides
  *    <a href="#figureelementsetmovable">FigureElement.setMovable</a> and
@@ -1687,7 +1687,7 @@ class CollectionsAngle extends FigureElementCollection {
               a = 0;
             }
             angleText = a.toFixed(label.precision);
-            angleText = `${angleText}º`;
+            angleText = `${angleText}\u00b0`;
           }
           label.setText(angleText);
         }
