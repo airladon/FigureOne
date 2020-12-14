@@ -23,6 +23,7 @@ function getShapes(getPos) {
     angle('pulse-scale', { label: 'a', curve: { width: 0.02 }, arrow: 'triangle' }),
     angle('pulse-thick', { label: 'a', curve: { width: 0.02 }, arrow: 'triangle' }),
     angle('pulseAnimation', { label: 'a', curve: { width: 0.02 }, arrow: 'triangle' }),
+    angle('pulseAnimationStep', { label: 'a', curve: { width: 0.02 }, arrow: 'triangle' }),
   ];
 }
 
@@ -71,11 +72,15 @@ const updates = {
   },
 };
 
+// const getValues = {};
+// const move = {};
 
 if (typeof process === 'object') {
   module.exports = {
     getShapes,
     updates,
+    // getValues,
+    // move,
   };
 } else {
   figure.add(getShapes(index => getPosition(index)));

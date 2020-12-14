@@ -1,5 +1,5 @@
 import { staticTester } from '../../staticTester';
 
-const { getShapes, updates, move } = require('./animations.js');
+const { getShapes, updates } = require('./animations.js');
 
-staticTester('Collection: Angle - Animations', getShapes, updates, move);
+staticTester('Collection: Angle - Animations', getShapes, updates);
