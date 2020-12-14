@@ -890,6 +890,7 @@ type OBJ_Star_Defined = {
  * override the OBJ_Generic `drawBorderBuffer` with `number` to make the
  * drawBorderBuffer a rectangle that is `number` wider and higher on each side
  * (`0`)
+ * @property {TypeParsablePoint} [offset]
  *
  * @extends OBJ_Generic
  *
@@ -953,6 +954,7 @@ export type OBJ_Rectangle = {
   corner?: OBJ_CurvedCorner,
   line?: OBJ_LineStyleSimple,
   drawBorderBuffer?: TypeParsableBorder | number,
+  offset: TypeParsablePoint,
 } & OBJ_Generic;
 
 type OBJ_Rectangle_Defined = {
@@ -2670,6 +2672,7 @@ export default class FigurePrimitives {
         radius: 0,
         sides: 1,
       },
+      offset: [0, 0],
     }, joinObjects({}, ...options));
 
     element.custom.getBorder = (o: OBJ_Rectangle_Defined) => {
@@ -2679,7 +2682,10 @@ export default class FigurePrimitives {
       if (o.line != null && o.line.widthIs === 'outside') {
         o.line.widthIs = 'negative';
       }
-      return [o, getRectangleBorder(o)]
+      if (o.offset != null) {
+        o.offset = getPoint(o.offset);
+      }
+      return [o, getRectangleBorder(o)];
     };
     element.custom.getFill = (border: Array<Point>) => [
       rectangleBorderToTris(border),

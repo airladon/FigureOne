@@ -154,7 +154,7 @@ export type TypeAngleLabelOptions = {
  * @property {number} [radius] Curve radius (`0.5`)
  * @property {number} [num] Number of curves (`1`)
  * @property {number} [step] Step radius of curves if curve num > 1 (`0`)
- * @property {?number} [autoHideM] if angle is less than this, hide curve
+ * @property {?number} [autoHide] if angle is less than this, hide curve
  * (`null`)
  * @property {?number} [autoHideMax] if angle is less than this, hide curve
  * (`null`)
@@ -786,9 +786,10 @@ class CollectionsAngle extends FigureElementCollection {
     startAngle?: number,
     angle?: number,
   }) {
+    // console.log(this.lastLabelRotationOffset)
     const defaultOptions = {
       angle: 1,
-      startAngle: this.lastLabelRotationOffset,
+      startAngle: this.startAngle,
     };
     const o = joinObjects({}, defaultOptions, options);
     let { angle, startAngle, position } = o;
@@ -804,13 +805,13 @@ class CollectionsAngle extends FigureElementCollection {
       startAngle = line21.angle();
       angle = threePointAngle(p1, p2, p3);
     }
-    this.startAngle = startAngle;
-    this.nextStartAngle = this.startAngle;
+    // this.startAngle = startAngle;
+    this.nextStartAngle = startAngle;
     if (position != null) {
       this.nextPosition = position;
     }
     this.angle = angle;
-    this.startAngle = startAngle;
+    // this.startAngle = startAngle;
   }
 
   /**
@@ -1089,6 +1090,7 @@ class CollectionsAngle extends FigureElementCollection {
     }
     if (this.nextStartAngle != null) {
       this.transform.updateRotation(this.nextStartAngle);
+      this.startAngle = this.nextStartAngle || 0;
     }
     this.nextPosition = null;
     this.nextStartAngle = null;
@@ -1262,7 +1264,7 @@ class CollectionsAngle extends FigureElementCollection {
 
     // Right Angle
     if (this.curve != null && this.curve.autoRightAngle) {
-      const right = this.collections.primitives.collection();
+      const right = this.collections.collection();
       const rightLength = optionsToUse.radius * 0.707; // / Math.sqrt(2);
       right.add('line1', this.collections.primitives.line({
         p1: [rightLength, 0],
@@ -1903,6 +1905,7 @@ class CollectionsAngle extends FigureElementCollection {
       const length = this.getLength();
       const anglePad = this.collections.primitives.rectangle({
         offset: [length * (1 - percentLength), 0],
+        // position: [length * (1 - percentLength), 0],
         xAlign: 'left',
         yAlign: 'middle',
         width: length * percentLength + width,
@@ -1940,12 +1943,12 @@ class CollectionsAngle extends FigureElementCollection {
     if (this._rotPad == null) {
       const length = this.getLength();
       const rotPad = this.collections.primitives.rectangle({
-        offset: [length * (1 - percentLength), 0],
         xAlign: 'left',
         yAlign: 'middle',
         width: length * percentLength + width,
         height: width,
         color: [1, 0, 1, 0.005],
+        offset: [length * (1 - percentLength), 0],
       });
       this.add('rotPad', rotPad);
       rotPad.setMovable();

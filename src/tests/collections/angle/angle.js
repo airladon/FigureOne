@@ -42,7 +42,7 @@ function makeAngle (name, options, mods, getPos) {
     o.options.p3 = tools.g2.getPoint(o.options.p3).add(x, y);
   }
   return o;
-};
+}
 
 if (typeof process === 'object') {
   // eslint-disable-next-line global-require, no-unused-vars, vars-on-top, no-var
