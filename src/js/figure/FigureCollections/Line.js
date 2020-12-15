@@ -4,6 +4,9 @@
 import {
   Transform, Point, Line, normAngle, getBoundingBorder,
 } from '../../tools/g2';
+import {
+  mul,
+} from '../../tools/m2';
 import type { TypeParsablePoint } from '../../tools/g2';
 import {
   roundNum,
@@ -1633,26 +1636,39 @@ export default class CollectionsLine extends FigureElementCollection {
    * Return the start point of the line
    * @return {Point}
    */
-  getP1(space: TypeSpace) {
+  getP1(
+    // space: TypeSpace = 'local'
+  ) {
     // return this.line.p1._dup();
+    // const matrix = this.spaceTransformMatrix('draw', space);
+    // if (this._line != null) {
+    //   matrix = mul(matrix, this._line.spaceTransformMatrix('draw', 'local'));
+    //   // return this._line.getPosition(space);
+    // }
+    // return this.getPosition(space);
+
     // // if (space === 'draw') {
     // //   return this.line.p1._dup();
     // // }
     // // return this.line.p1.transformBy(this.spaceTransformMatrix('draw', space));
-    return new Point(0, 0).transformBy(this.spaceTransformMatrix('draw', space));
+    // return new Point(0, 0).transformBy(matrix);
+    return this.line.p1._dup();
   }
 
   /**
    * Return the end point of the line
    * @return {Point}
    */
-  getP2(space: TypeSpace) {
-    // return this.line.p2._dup();
+  getP2(
+    // space: TypeSpace = 'local'
+  ) {
+    return this.line.p2._dup();
     // if (space === 'draw') {
     //   return this.line.p2._dup();
     // }
     // return this.line.p2.transformBy(this.spaceTransformMatrix('draw', space));
-    return new Point(this.line.length(), 0).transformBy(this.spaceTransformMatrix('draw', space));
+    // return new Point(this.line.length(), 0)
+    //   .transformBy(this.spaceTransformMatrix('draw', space));
   }
 }
 

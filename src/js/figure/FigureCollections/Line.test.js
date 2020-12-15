@@ -247,8 +247,8 @@ describe('Collections line tests', () => {
     create('diagonal');
     expect(round(l.getLength(), 3)).toBe(round(2 * Math.sqrt(2), 3));
     expect(round(l.getAngle(), 3)).toBe(round(Math.PI / 4, 3));
-    expect(l.getP1()).toEqual(new Point(-1, -1));
-    expect(l.getP2()).toEqual(new Point(1, 1));
+    expect(l.getP1().round(3)).toEqual(new Point(-1, -1));
+    expect(l.getP2().round(3)).toEqual(new Point(1, 1));
   });
   test('Align Start', () => {
     create('alignStart');
@@ -332,7 +332,8 @@ describe('Collections line tests', () => {
       new Point(1, 0.1),
       new Point(0, 0.1),
     ]]);
-    expect(l._line.getScale().round(3)).toEqual(new Point(0.6, 1));
+    // expect(l._line.getScale().round(3)).toEqual(new Point(0.6, 1));
+    expect(round(l._line.drawingObject.points[2], 3)).toEqual(0.6);
     expect(l._line.getPosition().round(3)).toEqual(new Point(0.2, 0));
     expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(l._arrow2.getPosition().round(3)).toEqual(new Point(1, 0));
@@ -540,11 +541,13 @@ describe('Collections line tests', () => {
     figure.mock.timeStep(0);
     expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(l._arrow2.getPosition().round(3)).toEqual(new Point(0, 0));
-    expect(l._line.getScale().round(3).x).toBe(0);
+    // expect(l._line.getScale().round(3).x).toBe(0);
+    expect(round(l._line.drawingObject.points[2], 3)).toEqual(0);
     figure.mock.timeStep(1);
     expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(l._arrow2.getPosition().round(3)).toEqual(new Point(0.5, 0));
-    expect(l._line.getScale().round(3).x).toBe(0.1);
+    // expect(l._line.getScale().round(3).x).toBe(0.1);
+    expect(round(l._line.drawingObject.points[2], 3)).toEqual(0.1);
   });
   test('length animation', () => {
     create('everything');
@@ -557,11 +560,13 @@ describe('Collections line tests', () => {
     figure.mock.timeStep(0);
     expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(l._arrow2.getPosition().round(3)).toEqual(new Point(0, 0));
-    expect(l._line.getScale().round(3).x).toBe(0);
+    // expect(l._line.getScale().round(3).x).toBe(0);
+    expect(round(l._line.drawingObject.points[2], 3)).toEqual(0);
     figure.mock.timeStep(1);
     expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(l._arrow2.getPosition().round(3)).toEqual(new Point(0.5, 0));
-    expect(l._line.getScale().round(3).x).toBe(0.1);
+    // expect(l._line.getScale().round(3).x).toBe(0.1);
+    expect(round(l._line.drawingObject.points[2], 3)).toEqual(0.1);
   });
   test('length grow', () => {
     create('everything');
@@ -570,11 +575,13 @@ describe('Collections line tests', () => {
     figure.mock.timeStep(0);
     expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(l._arrow2.getPosition().round(3)).toEqual(new Point(0, 0));
-    expect(l._line.getScale().round(3).x).toBe(0);
+    // expect(l._line.getScale().round(3).x).toBe(0);
+    expect(round(l._line.drawingObject.points[2], 3)).toEqual(0);
     figure.mock.timeStep(1);
     expect(l._arrow1.getPosition().round(3)).toEqual(new Point(0, 0));
     expect(l._arrow2.getPosition().round(3)).toEqual(new Point(0.5, 0));
-    expect(l._line.getScale().round(3).x).toBe(0.1);
+    // expect(l._line.getScale().round(3).x).toBe(0.1);
+    expect(round(l._line.drawingObject.points[2], 3)).toEqual(0.1);
   });
   test('dash', () => {
     create('dash');
@@ -585,7 +592,7 @@ describe('Collections line tests', () => {
       new Point(1, 0.05),
       new Point(0, 0.05),
     ]]);
-    expect(l._line.lengthToDraw).toBe(1);
+    // expect(l._line.lengthToDraw).toBe(1);
     l.setLength(2);
     border = l._line.getBorder();
     expect(round(border, 3)).toEqual([[
@@ -594,7 +601,7 @@ describe('Collections line tests', () => {
       new Point(2, 0.05),
       new Point(0, 0.05),
     ]]);
-    expect(l._line.lengthToDraw).toBe(2);
+    // expect(l._line.lengthToDraw).toBe(2);
     l.setLength(3);
     border = l._line.getBorder();
     expect(round(border, 3)).toEqual([[
@@ -603,7 +610,7 @@ describe('Collections line tests', () => {
       new Point(3, 0.05),
       new Point(0, 0.05),
     ]]);
-    expect(l._line.lengthToDraw).toBe(3);
+    // expect(l._line.lengthToDraw).toBe(3);
     l.setLength(0);
     border = l._line.getBorder();
     expect(round(border, 3)).toEqual([[
@@ -612,6 +619,6 @@ describe('Collections line tests', () => {
       new Point(0, 0.05),
       new Point(0, 0.05),
     ]]);
-    expect(round(l._line.lengthToDraw, 3)).toBe(0);
+    // expect(round(l._line.lengthToDraw, 3)).toBe(0);
   });
 });

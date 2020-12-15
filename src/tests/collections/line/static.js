@@ -243,6 +243,8 @@ function getShapes(getPos) {
     */
     line('setLength'),
     line('setLength-dash', { dash: [0.025, 0.05, 0.05] }),
+    line('setLength-align-center', { align: 'center', p1: [0, 0], p2: [0.2, 0] }),
+    line('setLength-align-end', { align: 'end', p1: [0, 0], p2: [0.2, 0] }),
     line('setLabelToRealLength', { label: 'a' }),
     line('setLabel', { label: 'a' }),
     line('setEndPoints', { p1: [0, 0], align: 'start' }),
@@ -311,6 +313,12 @@ const updates = {
       -0.1,
     );
   },
+  'setLength-align-center': (e) => {
+    e.setLength(0.4);
+  },
+  'setLength-align-end': (e) => {
+    e.setLength(0.4);
+  },
 };
 
 const getValues = {
@@ -349,6 +357,24 @@ const getValues = {
     when: (e) => {
       const offset = e.getPosition('figure');
       const p = e.getP2('figure').sub(offset).round(3);
+      return [p.x, p.y];
+    },
+  },
+  'getP1-setLength-align-center': {
+    element: 'setLength-align-center',
+    expect: [-0.2, 0],
+    when: (e) => {
+      const offset = e.getPosition('figure');
+      const p = e.getP1('figure').sub(offset).round(3);
+      return [p.x, p.y];
+    },
+  },
+  'getP1-setLength-align-end': {
+    element: 'setLength-align-end',
+    expect: [-0.4, 0],
+    when: (e) => {
+      const offset = e.getPosition('figure');
+      const p = e.getP1('figure').sub(offset).round(3);
       return [p.x, p.y];
     },
   },

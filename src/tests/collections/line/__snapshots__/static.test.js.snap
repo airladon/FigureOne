@@ -10016,6 +10016,212 @@ Object {
 }
 `;
 
+exports[`Collection: Line - Static Shape setLength-align-center 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.1,
+        -0.025,
+      ],
+      Array [
+        0.3,
+        -0.025,
+      ],
+      Array [
+        0.3,
+        0.025,
+      ],
+      Array [
+        -0.1,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            0,
+            -0.025,
+          ],
+          Array [
+            0.4,
+            -0.025,
+          ],
+          Array [
+            0.4,
+            0.025,
+          ],
+          Array [
+            0,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0,
+            -0.025,
+          ],
+          Array [
+            0.4,
+            -0.025,
+          ],
+          Array [
+            0.4,
+            0.025,
+          ],
+          Array [
+            0,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.1,
+        -0.025,
+      ],
+      Array [
+        0.3,
+        -0.025,
+      ],
+      Array [
+        0.3,
+        0.025,
+      ],
+      Array [
+        -0.1,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Line - Static Shape setLength-align-end 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "line": Object {
+      "border": Array [
+        Array [
+          Array [
+            0,
+            -0.025,
+          ],
+          Array [
+            0.4,
+            -0.025,
+          ],
+          Array [
+            0.4,
+            0.025,
+          ],
+          Array [
+            0,
+            0.025,
+          ],
+        ],
+      ],
+      "points": Array [
+        0,
+        0.025,
+        0.4,
+        0.025,
+        0,
+        -0.025,
+        0,
+        -0.025,
+        0.4,
+        0.025,
+        0.4,
+        -0.025,
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0,
+            -0.025,
+          ],
+          Array [
+            0.4,
+            -0.025,
+          ],
+          Array [
+            0.4,
+            0.025,
+          ],
+          Array [
+            0,
+            0.025,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        -0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        -0.025,
+      ],
+      Array [
+        0.2,
+        0.025,
+      ],
+      Array [
+        -0.2,
+        0.025,
+      ],
+    ],
+  ],
+}
+`;
+
 exports[`Collection: Line - Static Shape setLength-dash 1`] = `
 Object {
   "border": Array [

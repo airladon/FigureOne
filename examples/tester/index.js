@@ -250,20 +250,18 @@ figure.add([
 
 figure.add({
   name: 'ttt',
-  method: 'collections.polyline',
+  method: 'collections.line',
   options: {
-        points: [[1, 0], [0, 0], [0.5, 1], [1.5, 1]],
-    arrow: 'triangle',
-    angle: {
-      label: null,
-      curve: {
-        radius: 0.3,
-      },
-    },
+    p1: [0, 0.1],
+    p2: [1, 0.1],
+    // width: 0.1,
+    align: 'center',
   }
 })
 // figure.getElement('ttt').setLength(1, 'center')
 const t = figure.getElement('ttt');
+t.setLength(2);
+console.log(t.getP1())
 // t._label.showForm('1');
 // t.setLabel('asdf')
 // console.log(figure.getElement('ttt'));
