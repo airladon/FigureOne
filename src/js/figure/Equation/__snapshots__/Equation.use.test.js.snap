@@ -51,6 +51,7 @@ FigureElementPrimitive {
     },
   },
   "beforeDrawCallback": null,
+  "border": "draw",
   "cancelSetTransform": false,
   "cannotTouchHole": false,
   "color": Array [
@@ -60,7 +61,10 @@ FigureElementPrimitive {
     1,
   ],
   "copyTransforms": Array [],
-  "custom": Object {},
+  "custom": Object {
+    "setText": [Function],
+    "updateText": [Function],
+  },
   "defaultColor": Array [
     0.95,
     0,
@@ -74,34 +78,58 @@ FigureElementPrimitive {
     0.5,
     1,
   ],
+  "drawBorder": Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": -0.008,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.1,
+        "y": -0.008,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.1,
+        "y": 0.095,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.095,
+      },
+    ],
+  ],
+  "drawBorderBuffer": Array [
+    Array [
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": -0.008,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.1,
+        "y": -0.008,
+      },
+      Point {
+        "_type": "point",
+        "x": 0.1,
+        "y": 0.095,
+      },
+      Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0.095,
+      },
+    ],
+  ],
   "drawPriority": 1,
+  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": TextObject {
-    "border": Array [
-      Array [
-        Point {
-          "_type": "point",
-          "x": 0,
-          "y": -0.008,
-        },
-        Point {
-          "_type": "point",
-          "x": 0.1,
-          "y": -0.008,
-        },
-        Point {
-          "_type": "point",
-          "x": 0.1,
-          "y": 0.095,
-        },
-        Point {
-          "_type": "point",
-          "x": 0,
-          "y": 0.095,
-        },
-      ],
-    ],
-    "borderSetup": "text",
     "drawContext2D": Array [
       DrawContext2D {
         "canvas": Object {
@@ -143,9 +171,6 @@ FigureElementPrimitive {
         "resize": [Function],
       },
     ],
-    "hole": Array [
-      Array [],
-    ],
     "lastDrawTransform": Array [],
     "location": Point {
       "_type": "point",
@@ -155,29 +180,6 @@ FigureElementPrimitive {
     "scalingFactor": 100,
     "text": Array [
       FigureText {
-        "border": Array [
-          Point {
-            "_type": "point",
-            "x": 0,
-            "y": -0.008,
-          },
-          Point {
-            "_type": "point",
-            "x": 0.1,
-            "y": -0.008,
-          },
-          Point {
-            "_type": "point",
-            "x": 0.1,
-            "y": 0.095,
-          },
-          Point {
-            "_type": "point",
-            "x": 0,
-            "y": 0.095,
-          },
-        ],
-        "borderSetup": "rect",
         "bounds": Rect {
           "bottom": -0.008,
           "height": 0.10300000000000001,
@@ -265,7 +267,7 @@ FigureElementPrimitive {
         },
         "onClick": null,
         "text": "a",
-        "touchBorder": Array [
+        "textBorder": Array [
           Point {
             "_type": "point",
             "x": 0,
@@ -287,12 +289,34 @@ FigureElementPrimitive {
             "y": 0.095,
           },
         ],
-        "touchBorderSetup": "border",
+        "textBorderBuffer": Array [
+          Point {
+            "_type": "point",
+            "x": 0,
+            "y": -0.008,
+          },
+          Point {
+            "_type": "point",
+            "x": 0.1,
+            "y": -0.008,
+          },
+          Point {
+            "_type": "point",
+            "x": 0.1,
+            "y": 0.095,
+          },
+          Point {
+            "_type": "point",
+            "x": 0,
+            "y": 0.095,
+          },
+        ],
+        "touchBorder": 0,
         "xAlign": "left",
         "yAlign": "baseline",
       },
     ],
-    "touchBorder": Array [
+    "textBorder": Array [
       Array [
         Point {
           "_type": "point",
@@ -316,7 +340,30 @@ FigureElementPrimitive {
         },
       ],
     ],
-    "touchBorderSetup": "text",
+    "textBorderBuffer": Array [
+      Array [
+        Point {
+          "_type": "point",
+          "x": 0,
+          "y": -0.008,
+        },
+        Point {
+          "_type": "point",
+          "x": 0.1,
+          "y": -0.008,
+        },
+        Point {
+          "_type": "point",
+          "x": 0.1,
+          "y": 0.095,
+        },
+        Point {
+          "_type": "point",
+          "x": 0,
+          "y": 0.095,
+        },
+      ],
+    ],
     "type": "drawingObject",
   },
   "figureLimits": Rect {
@@ -353,7 +400,12 @@ FigureElementPrimitive {
     },
   },
   "frozenPulseTransforms": Array [],
+  "getBorderPoints": [Function],
+  "getBorderPointsSuper": [Function],
   "hasTouchableElements": false,
+  "holeBorder": Array [
+    Array [],
+  ],
   "interactiveLocation": Point {
     "_type": "point",
     "x": 0,
@@ -735,6 +787,7 @@ FigureElementPrimitive {
       "width": 2,
     },
   },
+  "touchBorder": "buffer",
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -772,6 +825,7 @@ FigureElementPrimitive {
   "type": "primitive",
   "uid": "0000000000",
   "unrenderNextDraw": false,
+  "updateBorders": [Function],
 }
 `;
 

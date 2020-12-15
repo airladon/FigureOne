@@ -19,12 +19,12 @@ describe('Tools Lines', () => {
         new Point(0.1, 0),
         new Point(0.1, 0),
         new Point(0, 1),
-        new Point(0.1, 1), // 5 - inside corner line 1
+        new Point(0.1, 0.9), // 5 - inside corner line 1
         //
         new Point(0, 1),
         new Point(1, 1),
-        new Point(0, 0.9),  // 8 - inside corner line 1
-        new Point(0, 0.9),
+        new Point(0.1, 0.9),  // 8 - inside corner line 1
+        new Point(0.1, 0.9),
         new Point(1, 1),
         new Point(1, 0.9),
       ]);
@@ -42,10 +42,12 @@ describe('Tools Lines', () => {
       expect(round(outsideCorner)).toEqual(round(line1.intersectsWith(line2).intersect));
 
       const insideCorner1 = tris[5];
-      expect(round(insideCorner1)).toEqual(round(offsetLine1.intersectsWith(line2).intersect));
+      expect(round(insideCorner1))
+        .toEqual(round(offsetLine1.intersectsWith(offsetLine2).intersect));
 
       const insideCorner2 = tris[8];
-      expect(round(insideCorner2)).toEqual(round(offsetLine2.intersectsWith(line1).intersect));
+      expect(round(insideCorner2))
+        .toEqual(round(offsetLine2.intersectsWith(offsetLine1).intersect));
     });
   });
   describe('makePolyLine', () => {
@@ -81,16 +83,14 @@ describe('Tools Lines', () => {
         expect(round(border[0])).toEqual([
           new Point(0, -0.1),
           new Point(1, -0.1),
+          new Point(1.1, 0),
+          new Point(1.1, 1),
+          new Point(1, 1.1),
+          new Point(0, 1.1),
+          new Point(0, 1),
+          new Point(1, 1),
           new Point(1, 0),
           new Point(0, 0),
-          // new Point(1, 1.1),
-          // new Point(0, 1.1),
-          // new Point(0, 1),
-          // new Point(1, 1),
-          // new Point(1, 1),
-          // new Point(1, 0),
-          // new Point(1, 0),
-          // new Point(0, 0),
         ]);
         expect(hole).toEqual([[]]);
       });
@@ -124,13 +124,18 @@ describe('Tools Lines', () => {
         expect(round(border[0])).toEqual([
           new Point(0, -0.1),
           new Point(1, -0.1),
+          new Point(1.1, 0),
+          new Point(1.1, 1),
+          new Point(1, 1.1),
+          new Point(0, 1.1),
+          new Point(-0.1, 1),
+          new Point(-0.1, 0),
+          new Point(0, -0.1),
+          new Point(0, 0),
+          new Point(0, 1),
+          new Point(1, 1),
           new Point(1, 0),
           new Point(0, 0),
-          // new Point(1.1, 1),
-          // new Point(1, 1.1),
-          // new Point(0, 1.1),
-          // new Point(-0.1, 1),
-          // new Point(-0.1, 0),
         ]);
         // expect(round(hole[0])).toEqual([
         //   new Point(0, 0),
