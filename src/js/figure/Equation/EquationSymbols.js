@@ -2,6 +2,9 @@
 import {
   Point, Transform,
 } from '../../tools/g2';
+import type {
+  TypeBorder,
+} from '../../tools/g2';
 import { joinObjects } from '../../tools/tools';
 import FigurePrimitives from '../FigurePrimitives/FigurePrimitives';
 // import { FigureElementCollection } from '../Element';
@@ -66,7 +69,7 @@ export type EQN_Symbol = {
   isTouchable?: boolean,
   touchBorder?: TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer',
   onClick?: () => void | string | null,
-  mods?: OBJ_ElementMods,
+  mods?: Object,
 };
 
 /**
@@ -101,7 +104,7 @@ export type EQN_Symbol = {
  *   },
  * })
  */
-type EQN_VinculumSymbol = {
+export type EQN_VinculumSymbol = {
   symbol: 'vinculum',
   lineWidth?: number,
   draw?: 'static' | 'dynamic',
@@ -159,7 +162,7 @@ type EQN_VinculumSymbol = {
  *   },
  * })
  */
-type EQN_BoxSymbol = {
+export type EQN_BoxSymbol = {
   symbol: 'box',
   fill?: boolean,
   width?: number,
@@ -230,7 +233,7 @@ type EQN_BoxSymbol = {
  *   },
  * })
  */
-type EQN_ArrowSymbol = {
+export type EQN_ArrowSymbol = {
   symbol: 'arrow',
   direction?: 'up' | 'down' | 'left' | 'right',
   lineWidth?: number,
@@ -295,7 +298,7 @@ type EQN_ArrowSymbol = {
  *   },
  * })
  */
-type EQN_SumSymbol ={
+export type EQN_SumSymbol ={
   symbol: 'sum',
   lineWidth?: number,
   sides?: number,
@@ -363,7 +366,7 @@ type EQN_SumSymbol ={
  *   },
  * })
  */
-type EQN_ProdSymbol = {
+export type EQN_ProdSymbol = {
   symbol: 'prod',
   lineWidth?: number,
   sides?: number,
@@ -445,7 +448,7 @@ type EQN_ProdSymbol = {
  *   staticHeight: 'first',
  * },
  */
-type EQN_IntegralSymbol = {
+export type EQN_IntegralSymbol = {
   symbol: 'int',
   lineWidth?: number,
   sides?: number,
@@ -549,7 +552,7 @@ type EQN_IntegralSymbol = {
  *    },
  *  });
  */
-type EQN_RadicalSymbol = {
+export type EQN_RadicalSymbol = {
   symbol: 'radical',
   lineWidth?: number,
   width?: number,
@@ -634,7 +637,7 @@ type EQN_RadicalSymbol = {
  *    },
  *  });
  */
-type EQN_StrikeSymbol = {
+export type EQN_StrikeSymbol = {
   symbol: 'strike',
   style?: 'cross' | 'forward' | 'back' | 'horizontal',
   lineWidth?: number,
@@ -708,7 +711,7 @@ type EQN_StrikeSymbol = {
  *    },
  *  });
  */
-type EQN_BracketSymbol = {
+export type EQN_BracketSymbol = {
   symbol: 'bracket',
   side?: 'left' | 'right' | 'top' | 'bottom',
   lineWidth?: number,
@@ -774,7 +777,7 @@ type EQN_BracketSymbol = {
  *    },
  *  });
  */
- type EQN_AngleBracketSymbol = {
+export type EQN_AngleBracketSymbol = {
   symbol: 'angleBracket',
   side?: 'left' | 'right' | 'top' | 'bottom',
   lineWidth?: number,
@@ -863,7 +866,7 @@ type EQN_BracketSymbol = {
  *    },
  *  });
  */
-type EQN_BraceSymbol = {
+export type EQN_BraceSymbol = {
   symbol: 'brace',
   side?: 'left' | 'right' | 'top' | 'bottom',
   lineWidth?: number,
@@ -925,7 +928,7 @@ type EQN_BraceSymbol = {
  *    },
  *  });
  */
-type EQN_BarSymbol = {
+export type EQN_BarSymbol = {
   symbol: 'bar',
   side?: 'left' | 'right' | 'top' | 'bottom',
   lineWidth?: number,
@@ -1004,7 +1007,7 @@ type EQN_BarSymbol = {
  *    },
  *  });
  */
-type EQN_SquareBracketSymbol = {
+export type EQN_SquareBracketSymbol = {
   symbol: 'squareBracket',
   side?: 'left' | 'right' | 'top' | 'bottom',
   lineWidth?: number,
@@ -1119,7 +1122,7 @@ export default class EquationSymbols {
       new Transform('VinculumSymbol').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      'strip',
+      // 'strip',
     ));
   }
 
@@ -1141,7 +1144,7 @@ export default class EquationSymbols {
       new Transform('Box').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      'strip',
+      // 'strip',
     ));
   }
 
@@ -1168,7 +1171,7 @@ export default class EquationSymbols {
       new Transform('ArrowSymbol').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      'strip',
+      // 'strip',
     ));
   }
 
@@ -1191,7 +1194,7 @@ export default class EquationSymbols {
       new Transform('sum').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      'strip',
+      // 'strip',
     ));
   }
 
@@ -1212,7 +1215,7 @@ export default class EquationSymbols {
       new Transform('Sum').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      'strip',
+      // 'strip',
     ));
   }
 
@@ -1244,7 +1247,7 @@ export default class EquationSymbols {
       this.shapes.limits,
       // optionsToUse.staticSize,
       optionsToUse,
-      'triangles',
+      // 'triangles',
       // {
       //   lineWidth: optionsToUse.lineWidth,
       //   minLineWidth: optionsToUse.minLineWidth,
@@ -1297,7 +1300,7 @@ export default class EquationSymbols {
       new Transform('bracket').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      'strip',
+      // 'strip',
     );
   }
 
@@ -1319,7 +1322,7 @@ export default class EquationSymbols {
       new Transform('bracket').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      'triangles',
+      // 'triangles',
     );
     // let { color } = options;
     // if (color == null) {
@@ -1372,7 +1375,7 @@ export default class EquationSymbols {
       new Transform('bracket').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      'strip',
+      // 'strip',
     ));
   }
 
@@ -1392,7 +1395,7 @@ export default class EquationSymbols {
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      'strip',
+      // 'strip',
     ));
   }
 
@@ -1415,7 +1418,7 @@ export default class EquationSymbols {
       new Transform('brace').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      'strip',
+      // 'strip',
     ));
   }
 
@@ -1434,7 +1437,7 @@ export default class EquationSymbols {
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      'strip',
+      // 'strip',
     ));
   }
 
@@ -1460,7 +1463,7 @@ export default class EquationSymbols {
       new Transform('bar').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      'strip',
+      // 'strip',
     ));
   }
 }

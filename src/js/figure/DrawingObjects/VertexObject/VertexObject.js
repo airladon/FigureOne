@@ -243,11 +243,9 @@ class VertexObject extends DrawingObject {
 
   /* eslint-disable no-unused-vars */
   change(
-    coords: Array<Point>,
-    // border: Array<Array<Point>> | 'points' | 'rect',
-    // touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none',
-    // holes: Array<Array<Point>> | 'none',
-    copy: Array<CPY_Step> = [],
+    points?: Array<Point>,
+    copy?: Array<CPY_Step>,
+    drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
   ) {
     this.resetBuffer();
   }

@@ -8,6 +8,7 @@ import {
 // } from '../../tools/g2';
 import { getState } from '../Recorder/state';
 import type { TypeColor } from '../../tools/types';
+import type { CPY_Step } from '../geometries/copy/copy';
 
 // A Drawing object can be:
 //  - GL primitive vertices
@@ -179,7 +180,7 @@ class DrawingObject {
     // border: Array<Array<Point>> | 'points' | 'rect',
     // touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none',
     // holes: Array<Array<Point>> | 'none',
-    copy: Object | Array<Object>,
+    copy: Array<CPY_Step>,
   ) {
   }
   /* eslint-enable no-unused-vars, class-methods-use-this */

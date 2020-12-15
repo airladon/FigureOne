@@ -254,7 +254,7 @@ export type OBJ_Triangle_Defined = {
   // rotation: number | { side: number, angle: number },
   xAlign: 'left' | 'center' | 'right' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points',
   yAlign: 'bottom' | 'middle' | 'top' | number | 'a1' | 'a2' | 'a3' | 's1' | 's2' | 's3' | 'centroid' | 'points',
-  rotation: number | 's1' | 's2' | 's3' | { side?: 's1' | 's2' | 's3', angle: number },
+  rotation: number | 's1' | 's2' | 's3' | { side?: 's1' | 's2' | 's3', angle?: number },
   line?: {
     widthIs: 'inside' | 'outside' | 'positive' | 'negative' | 'mid',
     width: number,

@@ -185,8 +185,8 @@ export default class EquationLabel {
       // $FlowFixMe
       const textObject = form.elements[key].drawingObject;
       if (textObject != null) {
-        textObject.setText(text);
-        form.elements[key].drawBorder = form.elements[key].drawingObject.textBorder;
+        textObject.setText(text); // $FlowFixMe
+        form.elements[key].drawBorder = form.elements[key].drawingObject.textBorder; // $FlowFixMe
         form.elements[key].drawBorderBuffer = form.elements[key].drawingObject.textBorderBuffer;
       }
       // console.log(form)

@@ -1,14 +1,14 @@
 // @flow
 import {
   Rect, Point, Transform, getPoint, getRect, getTransform,
-  getBorder, getPoints, getBoundingRect, Line, threePointAngle,
+  getBorder, getPoints,
   getBoundingBorder, isBuffer,
 } from '../../tools/g2';
 // import {
 //   round
 // } from '../../tools/math';
 import type {
-  TypeParsablePoint, TypeParsableRect, TypeParsableTransform, TypeParsableBorder,
+  TypeParsablePoint, TypeParsableRect, TypeParsableTransform, TypeParsableBorder, TypeParsableBuffer,
 } from '../../tools/g2';
 import { setHTML } from '../../tools/htmlGenerator';
 import {
@@ -86,7 +86,7 @@ export type OBJ_LineStyleSimple = {
   color?: TypeColor,
 };
 
-type OBJ_LineStyleSimple_Defined = {
+export type OBJ_LineStyleSimple_Defined = {
   widthIs: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,
   width: number,
   dash?: TypeDash,
@@ -423,7 +423,7 @@ export type OBJ_PulseScale = {
  *   },
  * });
  */
- /* eslint-enable max-len */
+/* eslint-enable max-len */
 export type OBJ_Generic = {
   points?: Array<TypeParsablePoint> | Array<Point>,
   drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
@@ -864,7 +864,7 @@ export type OBJ_Star = {
   drawBorderBuffer?: TypeParsableBorder | number,
 } & OBJ_Generic;
 
-type OBJ_Star_Defined = {
+export type OBJ_Star_Defined = {
   sides: number,
   radius: number,
   innerRadius: number,
@@ -1558,7 +1558,7 @@ export type OBJ_Arrow = {
  * text vertically relative to `location` (default: from {@link OBJ_Text})
  * @property {string | function(): void} [onClick] function to execute on click
  * within the `touchBorder`
- * @property {TypeBuffer | Array<TypeParsablePoint>} [touchBorder]
+ * @property {TypeParsableBuffer | Array<TypeParsablePoint>} [touchBorder]
  * touch border can be custom points (`Array<TypeParsablePoint>`), set to
  * or set to some buffer (`number`) around the rext (default: `0`)
  */
@@ -1569,7 +1569,7 @@ export type OBJ_TextDefinition = {
   xAlign?: 'left' | 'right' | 'center',
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
   onClick?: string | () => void,
-  touchBorder?: TypeBuffer | Array<TypeParsablePoint>,
+  touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
 };
 
 /**
@@ -1604,7 +1604,7 @@ export type OBJ_TextDefinition = {
  * alignment for `text` relative to `location` (default: `"left"`)
  * @property {'bottom' | 'baseline' | 'middle' | 'top'} [yAlign] default
  * vertical text alignment for `text` relative to `location` (default: `"baseline"`)
- * @property {TypeBuffer} [defaultTextTouchBorder]?: default buffer for
+ * @property {TypeParsableBuffer} [defaultTextTouchBorder]?: default buffer for
  * `touchBorder` property in `text`
  * @property {TypeColor} [color] (default: `[1, 0, 0, 1`])
  * @property {TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number} [border]
@@ -1667,7 +1667,7 @@ export type OBJ_Text = {
   font?: OBJ_Font,                    // default font
   xAlign?: 'left' | 'right' | 'center',                // default xAlign
   yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
-  defaultTextTouchBorder?: TypeBuffer,
+  defaultTextTouchBorder?: TypeParsableBuffer,
   color?: TypeColor,
   border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
   touchBorder?: TypeParsableBorder | 'rect' | 'border' | 'buffer' | number | 'draw',
@@ -1688,9 +1688,9 @@ export type OBJ_Text = {
  * and not this (default: `true`)
  * @property {string | function(): void} [onClick] function to execute on click
  * within the `touchBorder` of string
- * @property {TypeBuffer | Array<TypeParsablePoint>} [touchBorder]
+ * @property {TypeParsableBuffer | Array<TypeParsablePoint>} [touchBorder]
  * touch border can be custom (`Array<TypeParsablePoint>`), or be set to some
- * buffer (`TypeBuffer`) around the rectangle (default: `'0'`)
+ * buffer (`TypeParsableBuffer`) around the rectangle (default: `'0'`)
  */
 export type OBJ_TextLineDefinition = {
   text: string,
@@ -1698,7 +1698,7 @@ export type OBJ_TextLineDefinition = {
   offset?: TypeParsablePoint,
   inLine?: boolean,
   onClick?: string | () => void,
-  touchBorder?: TypeBuffer | Array<TypeParsablePoint>,
+  touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
 };
 
 /**
@@ -1717,7 +1717,7 @@ export type OBJ_TextLineDefinition = {
  * @property {OBJ_Font} [font] Default font for strings in line
  * @property {TypeColor} [color] Default color for strings in line
  * (`[1, 0, 0, 1`])
- * @property {TypeBuffer} [defaultTextTouchBorder]?: default buffer for
+ * @property {TypeParsableBuffer} [defaultTextTouchBorder]?: default buffer for
  * `touchBorder` property in `text`
  * @property {'left' | 'right' | 'center'} [xAlign] horizontal alignment of
  * line with `position` (`left`)
@@ -1774,7 +1774,7 @@ export type OBJ_TextLine = {
   text: Array<string | OBJ_TextLineDefinition>;
   font: OBJ_Font,
   color: TypeColor,
-  defaultTextTouchBorder?: TypeBuffer,
+  defaultTextTouchBorder?: TypeParsableBuffer,
   xAlign: 'left' | 'right' | 'center',
   yAlign: 'bottom' | 'baseline' | 'middle' | 'top',
   border?: TypeParsableBorder | 'buffer' | 'draw' | 'rect' | number,
@@ -1814,16 +1814,16 @@ export type OBJ_TextLinesDefinition = {
  * to line layout (defqult: `true`)
  * @property {string | function(): void} [onClick] function to execute on click
  * within the `touchBorder` of the modified text
- * @property {TypeBuffer | Array<TypeParsablePoint>} [touchBorder]
+ * @property {TypeParsableBuffer | Array<TypeParsablePoint>} [touchBorder]
  * touch border can be custom (`Array<TypeParsablePoint>`), or be set to some
- * buffer (`TypeBuffer`) around the rectangle (default: `'0'`)
+ * buffer (`TypeParsableBuffer`) around the rectangle (default: `'0'`)
  */
 export type OBJ_TextModifierDefinition = {
   text?: string,
   offset?: TypeParsablePoint,
   inLine?: boolean,
   font?: OBJ_Font,
-  touchBorder?: TypeBuffer | Array<TypeParsablePoint>,
+  touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
   onClick?: string | () => void,
 }
 
@@ -1871,7 +1871,7 @@ export type OBJ_TextModifiersDefinition = {
  * @property {OBJ_Font} [font] Default font to use in lines
  * @property {TypeColor} [color] Default color to use in lines
  * (`[1, 0, 0, 1`])
- * @property {TypeBuffer} [defaultTextTouchBorder]?: default buffer for
+ * @property {TypeParsableBuffer} [defaultTextTouchBorder]?: default buffer for
  * `touchBorder` property in `text`
  * @property {'left' | 'right' | 'center} [justify] justification of lines
  * (`left`)
@@ -1966,7 +1966,7 @@ export type OBJ_TextLines = {
   text: Array<string | OBJ_TextLinesDefinition>,
   modifiers: OBJ_TextModifiersDefinition,
   font?: OBJ_Font,
-  defaultTextTouchBorder?: TypeBuffer,
+  defaultTextTouchBorder?: TypeParsableBuffer,
   justify?: 'left' | 'center' | 'right',
   lineSpace?: number,
   xAlign: 'left' | 'right' | 'center',
@@ -2111,17 +2111,17 @@ function parsePoints(
   }
 }
 
-function processOptions(...optionsIn: Array<Object>) {
-  const options = joinObjects({}, ...optionsIn);
-  if (options.position != null) {
-    const p = getPoint(options.position);
-    if (options.transform == null) {
-      options.transform = new Transform('processOptions').translate(0, 0);
-    }
-    options.transform.updateTranslation(p);
-  }
-  return options;
-}
+// function processOptions(...optionsIn: Array<Object>) {
+//   const options = joinObjects({}, ...optionsIn);
+//   if (options.position != null) {
+//     const p = getPoint(options.position);
+//     if (options.transform == null) {
+//       options.transform = new Transform('processOptions').translate(0, 0);
+//     }
+//     options.transform.updateTranslation(p);
+//   }
+//   return options;
+// }
 
 function setupPulse(element: FigureElement, options: Object) {
   if (options.pulse != null) {

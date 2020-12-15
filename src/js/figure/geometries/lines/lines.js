@@ -13,7 +13,7 @@ import {
 import type { TypeDash } from '../../../tools/types';
 import type { TypeArrowHead } from '../arrow';
 import type { OBJ_Arrow } from '../../FigurePrimitives/FigurePrimitives';
-import { getBufferBorder } from '../buffer';
+// import { getBufferBorder } from '../buffer';
 
 /* eslint-disable yoda */
 
@@ -48,8 +48,8 @@ function lineSegmentsToPoints(
   // let border = [];
   // console.log(lineSegments)
   let hole = [[]];
-  let positiveBorder = [];
-  let negativeBorder = [];
+  const positiveBorder = [];
+  const negativeBorder = [];
   lineSegments.forEach((lineSegment, index) => {
     const negative = lineSegment[0];
     const positive = lineSegment.slice(-1)[0];
@@ -100,7 +100,7 @@ function lineSegmentsToPoints(
       if (index < lineSegments.length - 1) {
         nextLineSegment = lineSegments[index + 1];
       } else if (close) {
-        nextLineSegment = lineSegments[0];
+        [nextLineSegment] = lineSegments;
       }
       if (nextLineSegment != null) {
         const nextNegative = nextLineSegment[0];
@@ -263,9 +263,10 @@ function joinLinesAcuteInside(
   linePrimitives: boolean,
 ) {
   const insideIntercept = inside.intersectsWith(insideNext);
-  if (insideIntercept.withinLine && insideIntercept.intersect != null) {
-    inside.setP2(insideIntercept.intersect);
-    insideNext.setP1(insideIntercept.intersect);
+  const { withinLine, intersect } = insideIntercept;
+  if (withinLine && intersect != null) {
+    inside.setP2(intersect);
+    insideNext.setP1(intersect);
     return;
   }
   if (!linePrimitives) {
@@ -287,9 +288,10 @@ function joinLinesObtuseInside(
   insideNext: Line,
 ) {
   const insideIntercept = inside.intersectsWith(insideNext);
-  if (insideIntercept.withinLine && insideIntercept.intersect != null) {
-    inside.setP2(insideIntercept.intersect);
-    insideNext.setP1(insideIntercept.intersect);
+  const { withinLine, intersect } = insideIntercept;
+  if (withinLine && intersect != null) {
+    inside.setP2(intersect);
+    insideNext.setP1(intersect);
     return;
   }
   let intercept = inside.intersectsWith(midNext);
@@ -621,33 +623,33 @@ function makeThickLine(
 
   // Create fill triangles between the positive & mid, and negative and mid lines
   const cornerFills = [];
-  const createFill = (currentIndex, nextIndex) => {
-    const mid = idealLines[currentIndex];
-    const midNext = idealLines[nextIndex];
-    const positive = lineSegments[currentIndex].slice(-1)[0];
-    const positiveNext = lineSegments[nextIndex].slice(-1)[0];
-    const negative = lineSegments[currentIndex][0];
-    const negativeNext = lineSegments[nextIndex][0];
-    const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
-    if (linePrimitives) {
-      for (let i = 0; i < lineSegments[currentIndex].length; i += 1) {
-        cornerFills.push(lineSegments[currentIndex][i].p2._dup());
-        cornerFills.push(lineSegments[nextIndex][i].p1._dup());
-      }
-    } else if (angle < Math.PI) {
-      if (widthIsIn !== 'inside') {
-        cornerFills.push(positive.p2._dup());
-        cornerFills.push(mid.p2._dup());
-        cornerFills.push(positiveNext.p1._dup());
-      }
-    } else if (angle > Math.PI) {
-      if (widthIsIn !== 'inside') {
-        cornerFills.push(negative.p2._dup());
-        cornerFills.push(mid.p2._dup());
-        cornerFills.push(negativeNext.p1._dup());
-      }
-    }
-  };
+  // const createFill = (currentIndex, nextIndex) => {
+  //   const mid = idealLines[currentIndex];
+  //   const midNext = idealLines[nextIndex];
+  //   const positive = lineSegments[currentIndex].slice(-1)[0];
+  //   const positiveNext = lineSegments[nextIndex].slice(-1)[0];
+  //   const negative = lineSegments[currentIndex][0];
+  //   const negativeNext = lineSegments[nextIndex][0];
+  //   const angle = threePointAngle(mid.p1, mid.p2, midNext.p2);
+  //   if (linePrimitives) {
+  //     for (let i = 0; i < lineSegments[currentIndex].length; i += 1) {
+  //       cornerFills.push(lineSegments[currentIndex][i].p2._dup());
+  //       cornerFills.push(lineSegments[nextIndex][i].p1._dup());
+  //     }
+  //   } else if (angle < Math.PI) {
+  //     if (widthIsIn !== 'inside') {
+  //       cornerFills.push(positive.p2._dup());
+  //       cornerFills.push(mid.p2._dup());
+  //       cornerFills.push(positiveNext.p1._dup());
+  //     }
+  //   } else if (angle > Math.PI) {
+  //     if (widthIsIn !== 'inside') {
+  //       cornerFills.push(negative.p2._dup());
+  //       cornerFills.push(mid.p2._dup());
+  //       cornerFills.push(negativeNext.p1._dup());
+  //     }
+  //   }
+  // };
 
   // NB: this all assumes the GL primitive is TRIANGLES. Thus the order the
   // triangles is drawn is not important, and so fills can happen in chunks.
@@ -981,7 +983,7 @@ function makePolyLineCorners(
   corners.forEach((corner) => {
     const [t, b, dbb, h] = makePolyLine(
       corner, width, false, widthIs, cornerStyle, cornerSize,
-      cornerSides, minAutoCornerAngle, [], linePrimitives, lineNum, 'line', drawBorderBufferToUse, 'none',
+      cornerSides, minAutoCornerAngle, [], linePrimitives, lineNum, 'line', drawBorderBufferToUse, [[]],
     );
     tris = [...tris, ...t];
     borders = [...borders, ...b];
@@ -1026,14 +1028,15 @@ function addArrows(
   let updatedBorder = existingBorder;
   let updatedTouchBorder = existingTouchBorder;
   const count = updatedTriangles.length;
-  if (arrow.start != null) {
+  const { start } = arrow;
+  if (start != null) {
     let startArrowLine = new Line(startArrowIn[0], startArrowIn[1]);
     const startLineMid = new Line(updatedTriangles[0], updatedTriangles[2]).midPoint();
     startArrowLine = new Line(startLineMid, startArrowLine.length(), startArrowLine.angle());
     const startArrow = [startArrowLine.p1, startArrowLine.p2];
     const [border, touchBorder, tail] = getArrow(joinObjects(
       {},
-      arrow.start,
+      start,
       {
         // start: startArrow[0],
         // end: startArrow[1],
@@ -1044,7 +1047,7 @@ function addArrows(
         tailWidth: lineWidth,
       },
     ));
-    const points = getArrowTris(border, arrow.start);
+    const points = getArrowTris(border, start);
     updatedTriangles = [
       ...updatedTriangles, ...points,
       updatedTriangles[0]._dup(), updatedTriangles[2]._dup(), tail[0]._dup(),
@@ -1053,7 +1056,8 @@ function addArrows(
     updatedBorder = [...updatedBorder, border];
     updatedTouchBorder = [...updatedTouchBorder, touchBorder[0]];
   }
-  if (arrow.end != null) {
+  const { end } = arrow;
+  if (end != null) {
     const l = count;
     let endArrowLine = new Line(endArrowIn[0], endArrowIn[1]);
     const endLineMid = new Line(updatedTriangles[l - 2], updatedTriangles[l - 1]).midPoint();
@@ -1061,7 +1065,7 @@ function addArrows(
     const endArrow = [endArrowLine.p1, endArrowLine.p2];
     const [border, touchBorder, tail] = getArrow(joinObjects(
       {},
-      arrow.end,
+      end,
       {
         // start: endArrow[0],
         // end: endArrow[1],
@@ -1072,7 +1076,7 @@ function addArrows(
         tailWidth: lineWidth,
       },
     ));
-    const points = getArrowTris(border, arrow.end);
+    const points = getArrowTris(border, end);
     let connection = [];
     if (onLine) {
       connection = [

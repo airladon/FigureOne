@@ -3,11 +3,11 @@ let tools;
 let Figure;
 let figure;
 if (typeof process === 'object') {
-  // eslint-disable-next-line global-require
+  /* eslint-disable global-require */
   tools = require('../../../index.js').default.tools;
   Figure = require('../../../index.js').default.Figure;
 } else {
-  // eslint-disable-next-line no-undef
+  /* global Fig */
   tools = Fig.tools;
   Figure = Fig.Figure;
   const canvas = document.getElementById('figureOneContainer');

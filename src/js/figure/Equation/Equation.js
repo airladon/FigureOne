@@ -27,7 +27,7 @@ import type {
   TypeColor, OBJ_Font,
 } from '../../tools/types';
 import type {
-  TypeParsablePoint,
+  TypeParsablePoint, TypeBorder, TypeParsableBuffer,
 } from '../../tools/g2';
 import type { OBJ_TriggerAnimationStep } from '../Animation/Animation';
 import { AnimationManager, TriggerAnimationStep } from '../Animation/Animation';
@@ -1065,7 +1065,7 @@ export class Equation extends FigureElementCollection {
       size?: number,
       family?: string,
       color?: TypeColor,
-      touchBorder?: TypeBuffer | Array<Point>,
+      touchBorder?: TypeParsableBuffer | Array<Point>,
       onClick?: () => void | 'string' | null,
       isTouchable?: boolean,
       mods?: Object,
@@ -1271,7 +1271,7 @@ export class Equation extends FigureElementCollection {
       } else if (elem instanceof FigureElementCollection) {
         this.add(key, elem);
       } else {
-        let figureElem;
+        let figureElem; // $FlowFixMe
         if (elem.symbol != null && typeof elem.symbol === 'string') {
           // console.log(elem.symbol)
           // $FlowFixMe
