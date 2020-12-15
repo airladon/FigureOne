@@ -9,6 +9,7 @@ import {
 import { getState } from '../Recorder/state';
 import type { TypeColor } from '../../tools/types';
 import type { CPY_Step } from '../geometries/copy/copy';
+import type { OBJ_TextDefinition } from '../FigurePrimitives/FigurePrimitives';
 
 // A Drawing object can be:
 //  - GL primitive vertices
@@ -68,6 +69,8 @@ class DrawingObject {
   // numPoints: number;           // Number of primative vertices
   location: Point;
   border: Array<Array<Point>>; // Border vertices
+  textBorder: Array<Array<Point>>; // Border vertices
+  textBorderBuffer: Array<Array<Point>>;
   // touchBorder: Array<Array<Point>>;
   // hole: Array<Array<Point>>;  // Border of any holes inside of main border
   // +change: (any, any, any) => void;
@@ -101,7 +104,7 @@ class DrawingObject {
   // }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  setText(text: string) {
+  setText(textOrOptions: string | OBJ_TextDefinition, index: number = 1) {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
@@ -180,7 +183,7 @@ class DrawingObject {
     // border: Array<Array<Point>> | 'points' | 'rect',
     // touchBorder: Array<Array<Point>> | 'border' | 'rect' | 'none',
     // holes: Array<Array<Point>> | 'none',
-    copy: Array<CPY_Step>,
+    copy: Array<CPY_Step> = [],
   ) {
   }
   /* eslint-enable no-unused-vars, class-methods-use-this */

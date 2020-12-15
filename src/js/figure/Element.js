@@ -688,12 +688,12 @@ class FigureElement {
     this.lastDrawTime = 0;
     this.cancelSetTransform = false;
     this.onAdd = null;
-    this.border = 'draw';
-    this.touchBorder = 'border';
-    this.holeBorder = [[]];
-    this.drawBorder = [[]];
-    this.drawBorderBuffer = [[]];
-    this.drawRect = [];
+    // this.border = 'draw';
+    // this.touchBorder = 'border';
+    // this.holeBorder = [[]];
+    // this.drawBorder = [[]];
+    // this.drawBorderBuffer = [[]];
+    // this.drawRect = [];
     // this.noRotationFromParent = false;
     // this.pulseDefault = (callback: ?() => void = null) => {
     //   this.pulseScaleNow(1, 2, 0, callback);
@@ -3836,8 +3836,9 @@ class FigureElementPrimitive extends FigureElement {
       }
       if (isBuffer(this.border)) {
       // if (typeof this.border === 'number') {
+        // $FlowFixMe
         return [getBoundingBorder(this.drawBorder, this.border)];
-      }
+      } // $FlowFixMe
       return this.border;
     }
 
@@ -3857,9 +3858,9 @@ class FigureElementPrimitive extends FigureElement {
       }
       // if (typeof this.touchBorder === 'number') {
       if (isBuffer(this.touchBorder)) {
-        const b = this.getBorderPoints('border');
+        const b = this.getBorderPoints('border'); // $FlowFixMe
         return [getBoundingBorder(b, this.touchBorder)];
-      }
+      } // $FlowFixMe
       return this.touchBorder;
     }
     return this.holeBorder;
@@ -4133,20 +4134,20 @@ class FigureElementCollection extends FigureElement {
     //   optionsToUse = joinObjects({}, defaultOptions, transformOrPointOrOptions, ...moreOptions);
     // }
     if (o.border != null) {
-      if (!isBuffer(o.border)) {
+      if (!isBuffer(o.border)) { // $FlowFixMe
         this.border = getBorder(o.border);
       } else {
         this.border = o.border;
       }
     }
     if (o.touchBorder != null) {
-      if (!isBuffer(o.touchBorder)) {
+      if (!isBuffer(o.touchBorder)) { // $FlowFixMe
         this.touchBorder = getBorder(o.touchBorder);
       } else {
         this.touchBorder = o.touchBorder;
       }
     }
-    if (o.holeBorder != null) {
+    if (o.holeBorder != null) { // $FlowFixMe
       this.holeBorder = getBorder(o.holeBorder);
     }
   }
@@ -5077,12 +5078,12 @@ class FigureElementCollection extends FigureElement {
       if (this.border === 'children') {
         return getBorderFromChildren('border');
       }
-      if (this.border === 'rect') {
+      if (this.border === 'rect') { // $FlowFixMe
         return [getBoundingBorder(getBorderFromChildren('border'))];
       }
-      if (isBuffer(this.border)) {
+      if (isBuffer(this.border)) { // $FlowFixMe
         return [getBoundingBorder(getBorderFromChildren('border'), this.border)];
-      }
+      } // $FlowFixMe
       return this.border;
     }
     if (border === 'touchBorder') {
@@ -5092,12 +5093,12 @@ class FigureElementCollection extends FigureElement {
       if (this.touchBorder === 'children') {
         return getBorderFromChildren('touchBorder');
       }
-      if (this.touchBorder === 'rect') {
+      if (this.touchBorder === 'rect') { // $FlowFixMe
         return [getBoundingBorder(getBorderFromChildren('touchBorder'))];
       }
-      if (isBuffer(this.touchBorder)) {
+      if (isBuffer(this.touchBorder)) { // $FlowFixMe
         return [getBoundingBorder(getBorderFromChildren('touchBorder'), this.touchBorder)];
-      }
+      } // $FlowFixMe
       return this.touchBorder;
     }
     if (this.holeBorder === 'children') {

@@ -86,7 +86,7 @@ export default class Symbol extends FigureElementPrimitive {
         this.custom.options.draw === 'static'
         // && this.drawingObject.points.length === 0
       ) {
-        let points;
+        let points = [];
         let width = 0;
         let height = 0;
         let drawType = 'strip';
@@ -178,10 +178,11 @@ export default class Symbol extends FigureElementPrimitive {
         && typeof this.custom.options.drawBorderBuffer[0] === 'number'
       )
     ) {
-      this.drawBorderBuffer = [getBoundingBorder(
+      this.drawBorderBuffer = [getBoundingBorder( // $FlowFixMe
         this.drawBorder, this.custom.options.drawBorderBuffer,
       )];
     } else if (Array.isArray(this.custom.options.drawBorderBuffer)) {
+      // $FlowFixMe
       this.drawBorderBuffer = getBorder(this.custom.options.drawBorderBuffer);
     } else {
       this.drawBorderBuffer = this.drawBorder;
@@ -300,7 +301,7 @@ export default class Symbol extends FigureElementPrimitive {
       new Point(0, height),
     ];
 
-    return [points, width, height];
+    return [points, width, height, 'strip'];
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars

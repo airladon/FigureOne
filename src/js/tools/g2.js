@@ -3959,7 +3959,7 @@ function isBuffer(input: any) {
       return false;
     }
     for (let i = 0; i < keys.length; i += 1) {
-      const key = keys[i]
+      const key = keys[i];
       if (
         key !== 'left'
         && key !== 'right'
@@ -5989,10 +5989,11 @@ function isParsablePoint(value: any) {
     return true;
   }
   if (typeof value === 'string' && value.charAt(0) === '[') {
+    let newValue;
     try {
       newValue = JSON.parse(value);
     } catch {
-      return false
+      return false;
     }
     return isParsablePoint(newValue);
   }
@@ -6021,13 +6022,13 @@ export type TypeBorder = Array<Array<Point>>;
 function getBorder(
   border: Array<TypeParsablePoint> | Array<Array<TypeParsablePoint>>
           | string | number,
-) {
+): Array<Array<Point>> | string | number {
   if (typeof border === 'string' || typeof border === 'number') {
     return border;
-  }
-  if (isParsablePoint(border[0])) {
+  } // $FlowFixMe
+  if (isParsablePoint(border[0])) {  // $FlowFixMe
     return [border.map(p => getPoint(p))];
-  }
+  } // $FlowFixMe
   return border.map(b => b.map(p => getPoint(p)));
 }
 
