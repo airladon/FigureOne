@@ -1309,12 +1309,6 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
-                        href='#collectionslineline'
-                        class='regular pre-open'>
-                        #line
-                      </a></li>
-                      
-                      <li><a
                         href='#collectionslinepulsewidth'
                         class='regular pre-open'>
                         #pulseWidth
@@ -1390,6 +1384,12 @@
                         href='#collectionslinegrow'
                         class='regular pre-open'>
                         #grow
+                      </a></li>
+                      
+                      <li><a
+                        href='#collectionslinegetline'
+                        class='regular pre-open'>
+                        #getLine
                       </a></li>
                       
                       <li><a
@@ -3409,7 +3409,7 @@
               
                 
                 <li><a
-                  href='#typelinelabeloptions'
+                  href='#obj_linelabel'
                   class="">
                   OBJ_LineLabel
                   
@@ -4457,6 +4457,16 @@
               
                 
                 <li><a
+                  href='#obj_linemove'
+                  class="">
+                  OBJ_LineMove
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#figurecollections'
                   class=" toggle-sibling">
                   FigureCollections
@@ -4542,16 +4552,6 @@
                   href='#obj_buttoncolor'
                   class="">
                   OBJ_ButtonColor
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#obj_linemove'
-                  class="">
-                  OBJ_LineMove
                   
                 </a>
                 
@@ -17097,6 +17097,12 @@ drawBorderBuffer a rectangle that is
           
         </div>
       
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          
+          
+        </div>
+      
     </div>
   
 
@@ -18382,58 +18388,6 @@ l.setAutoUpdate();</pre>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='border-bottom' id='collectionslineline'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>line</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p><a href="#line">Line</a> object that represents the line.</p>
-
-  
-    <p style="display: none;">      Type:
-      <a href="#line">Line</a>
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='collectionslinepulsewidth'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -19252,6 +19206,62 @@ it will rotate toward with positive rotation.</p>
       </div>
     </div>
   
+    <div class='border-bottom' id='collectionslinegetline'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getLine()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return a geometric <a href="#line">Line</a> object that represents the line</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#line">Line</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='collectionslinegetp1'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -19402,7 +19412,9 @@ rotates toward when rotating in the positive direction. This is especially
 useful for creating lines that show dimensions of shapes.</p>
 <p>The line also has a control point which is positioned on the line with the
 <code>align</code> property. The control point is the line's center of rotation, and
-fixes the point from which the line changes length.</p>
+fixes the point from which the line changes length. This is also the point
+where the line collection position will be if <code>getPosition</code> is called on the
+element.</p>
 <p>For instance, setting the control point at <code>align: 'start'</code> will mean that
 if the line can rotate, it will rotate around <code>p1</code>, and if the length is
 changed, then <code>p1</code> will remain fixed while <code>p2</code> changes.</p>
@@ -19448,85 +19460,97 @@ options object can define the default values for pulseWidth if desired.</p>
       
         <div class='space-bottom0'>
           <span class='code bold'>p1</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
+          : First point of line
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>p2</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>position</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
+          : Will override 
+<code>length</code>
+/
+<code>angle</code>
+ definition
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : line angle
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>length</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : line length
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
+          : line offset
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>align</span> <code class='quiet'>((<code>"start"</code> | <code>"end"</code> | <code>"center"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
-          
+          : rotation center of
+line (only needed if rotating line)
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>label</span> <code class='quiet'>(<a href="#typelinelabeloptions">OBJ_LineLabel</a>?)</code>
-          
+          : line width
+
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>arrow</span> <code class='quiet'>(<a href="#obj_linearrows">OBJ_LineArrows</a>?)</code>
+          <span class='code bold'>label</span> <code class='quiet'>(<a href="#obj_linelabel">OBJ_LineLabel</a>?)</code>
+          : label annotation
+
           
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>arrow</span> <code class='quiet'>((<a href="#obj_linearrows">OBJ_LineArrows</a> | <a href="#typearrowhead">TypeArrowHead</a>)?)</code>
+          : line arrow(s)
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>?)</code>
-          
+          : make the line dashed
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>pulseWidth</span> <code class='quiet'>(<a href="#obj_pulsewidth">OBJ_PulseWidth</a>?)</code>
-          
+          : default options for pulseWidth pulse
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>pulse</span> <code class='quiet'>(<a href="#obj_pulse">OBJ_Pulse</a>?)</code>
-          
+          : default options for normal pulse
+
           
         </div>
       
         <div class='space-bottom0'>
           <span class='code bold'>move</span> <code class='quiet'>(<a href="#obj_linemove">OBJ_LineMove</a>?)</code>
-          
+          : line move options
+
           
         </div>
       
@@ -19585,7 +19609,7 @@ and in the animation builder
 and <a href="#animationmanagerbuilder">animations.builder</a>).</p>
 <p>Some of the useful methods included in an collections angle are:</p>
 <ul>
-<li><a href="#collectionsanglepulseangle">pulseangle</a> - customize pulsing the
+<li><a href="#collectionsanglepulseangle">pulseAngle</a> - customize pulsing the
 angle without</li>
 <li><a href="#collectionsanglesetmovable">setMovable</a> - overrides
 <a href="#figureelementsetmovable">FigureElement.setMovable</a> and
@@ -20897,6 +20921,8 @@ transform that includes a translation, or position, transform element.</p>
 everything in the collection. This method instead changes the position
 without moving everything by updating the polyline points with an
 offset that is the opposite new position.</p>
+<p>As an example, if a rotation around the second point of a polyline is
+desired, then setPositionWithoutMoving at the point before rotating.</p>
 
   
   
@@ -23191,7 +23217,7 @@ vertical text alignment for
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(TypeBuffer?)</code>
+          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(<a href="#typeparsablebuffer">TypeParsableBuffer</a>?)</code>
           : ?: default buffer for
 
 <code>touchBorder</code>
@@ -23394,7 +23420,7 @@ to layout into a line
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(TypeBuffer?)</code>
+          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(<a href="#typeparsablebuffer">TypeParsableBuffer</a>?)</code>
           : ?: default buffer for
 
 <code>touchBorder</code>
@@ -23620,7 +23646,7 @@ strings
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(TypeBuffer?)</code>
+          <span class='code bold'>defaultTextTouchBorder</span> <code class='quiet'>(<a href="#typeparsablebuffer">TypeParsableBuffer</a>?)</code>
           : ?: default buffer for
 
 <code>touchBorder</code>
@@ -35392,7 +35418,7 @@ the root object for convenience.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>mods</span> <code class='quiet'>(OBJ_ElementMods?)</code>
+          <span class='code bold'>mods</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?)</code>
           
           
         </div>
@@ -41910,7 +41936,7 @@ within the
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((TypeBuffer | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeparsablebuffer">TypeParsableBuffer</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
           : touch border can be custom points (
 <code>Array&#x3C;TypeParsablePoint></code>
 ), set to
@@ -42161,12 +42187,12 @@ within the
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((TypeBuffer | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeparsablebuffer">TypeParsableBuffer</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
           : touch border can be custom (
 <code>Array&#x3C;TypeParsablePoint></code>
 ), or be set to some
 buffer (
-<code>TypeBuffer</code>
+<code>TypeParsableBuffer</code>
 ) around the rectangle (default: 
 <code>'0'</code>
 )
@@ -42357,12 +42383,12 @@ within the
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>touchBorder</span> <code class='quiet'>((TypeBuffer | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
+          <span class='code bold'>touchBorder</span> <code class='quiet'>((<a href="#typeparsablebuffer">TypeParsableBuffer</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)?)</code>
           : touch border can be custom (
 <code>Array&#x3C;TypeParsablePoint></code>
 ), or be set to some
 buffer (
-<code>TypeBuffer</code>
+<code>TypeParsableBuffer</code>
 ) around the rectangle (default: 
 <code>'0'</code>
 )
@@ -44088,7 +44114,7 @@ angle, in percent of curve from the start of the angle (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>autoHideM</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??)</code>
+          <span class='code bold'>autoHide</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??)</code>
           : if angle is less than this, hide curve
 (
 <code>null</code>
@@ -44124,12 +44150,6 @@ display (
 <code>0.01745329...</code>
  or 1 degree)
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>autoHide</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>??)</code>
-          
           
         </div>
       
@@ -44838,7 +44858,7 @@ properties.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='typelinelabeloptions'>
+    <h3 class='fl m0' id='obj_linelabel'>
       OBJ_LineLabel
     </h3>
     
@@ -44966,6 +44986,14 @@ transform (translation, rotation or scale) changes then use <code>update: true</
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#col_line">COL_Line</a>
+
+      
+    
   
 
   
@@ -45483,12 +45511,18 @@ options.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>_padIndex</span> <code class='quiet'>((<a href="#col_angle">COL_Angle</a> | <a href="#col_line">COL_Line</a> | <a href="#obj_polylinepadsingle">OBJ_PolylinePadSingle</a>)?)</code>
+          <span class='code bold'>_index</span> <code class='quiet'>((<a href="#col_angle">COL_Angle</a> | <a href="#col_line">COL_Line</a> | <a href="#obj_polylinepadsingle">OBJ_PolylinePadSingle</a>)?)</code>
           : Customizations of annotation or pad by index where 
-<code>_padIndex</code>
+<code>_index</code>
  should be an
 object key name that is the index
 
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>_padIndex</span> <code class='quiet'>(<a href="#obj_polygon">OBJ_Polygon</a>)</code>
+          
           
         </div>
       
@@ -46090,7 +46124,7 @@ points are updated. No payload is passed to subscriber.</p>
     <p>
       Extends
       
-        COL_Polygon
+        <a href="#obj_polygon">OBJ_Polygon</a>
       
     </p>
   
@@ -55682,6 +55716,101 @@ borders.</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='obj_linemove'>
+      OBJ_LineMove
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Line move options object.</p>
+<p>The <code>'centerTranslateEndRotation</code>' movement will move the line
+when touched within the <code>middleLength</code> percentage of the line
+and rotate it otherwise.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>movable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ to make movable (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>type</span> <code class='quiet'>((<code>"translation"</code> | <code>"rotation"</code> | <code>"centerTranslateEndRotation"</code> | <code>"scale"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>middleLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : length of the middle section of line that
+allows for translation movement in percent of total length (
+<code>0.333</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>includeLabelInTouchBoundary</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ to include the
+line's label in the touch boundary for 
+<code>'centerTranslateEndRotation'</code>
+
+('false`)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='figurecollections'>
       FigureCollections
     </h3>
@@ -56398,101 +56527,6 @@ borders.</p>
         <div class='space-bottom0'>
           <span class='code bold'>label</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='obj_linemove'>
-      OBJ_LineMove
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Line move options object.</p>
-<p>The <code>'centerTranslateEndRotation</code>' movement will move the line
-when touched within the <code>middleLength</code> percentage of the line
-and rotate it otherwise.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>movable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- to make movable (
-<code>true</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>type</span> <code class='quiet'>((<code>"translation"</code> | <code>"rotation"</code> | <code>"centerTranslateEndRotation"</code> | <code>"scale"</code>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>middleLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : length of the middle section of line that
-allows for translation movement in percent of total length (
-<code>0.333</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>includeLabelInTouchBoundary</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- to include the
-line's label in the touch boundary for 
-<code>'centerTranslateEndRotation'</code>
-
-('false`)
-
           
         </div>
       
