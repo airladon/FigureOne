@@ -30,7 +30,7 @@ import type { OBJ_Polyline, OBJ_Polygon, OBJ_Collection } from '../FigurePrimiti
  *
  * Each pad is associated with a point of the polyline.
  *
- * @extends COL_Polygon
+ * @extends OBJ_Polygon
  *
  * @property {boolean} [isMovable] `true` allows moving the pad and the
  * associated polyline point (`false`)
@@ -86,8 +86,8 @@ export type OBJ_PolylinePad = {};
  *
  * @property {Array<number>} [show] list of indexes to show
  * @property {Array<number>} [hide] list of indexes to hide
- * @property {COL_Angle | COL_Line | OBJ_PolylinePadSingle} [_padIndex]
- * Customizations of annotation or pad by index where `_padIndex` should be an
+ * @property {COL_Angle | COL_Line | OBJ_PolylinePadSingle} [_index]
+ * Customizations of annotation or pad by index where `_index` should be an
  * object key name that is the index
  *
  * @example
@@ -204,7 +204,7 @@ export type OBJ_PolylineAngle = {}
 export type OBJ_PolylineSide = {}
 
 // /**
-//  * @extends COL_Polygon
+//  * @extends OBJ_Polygon
 //  * @extends OBJ_PolylineCustomization
 //  */
 // export type COL_PolylinePad = {}

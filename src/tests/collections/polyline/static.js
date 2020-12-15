@@ -205,84 +205,91 @@ function getShapes(getPos) {
     ..............######..####.########..########
     */
     shape('side-labels', { side: { label: { text: 'a', location: 'negative' } } }),
-    shape('side-labels-value', { side: { label: { text: null, location: 'negative' } } }),
+    shape('side-labels-value', { side: {
+      label: { text: null, location: 'negative' },
+    } }),
+    shape('side-labels-line', {
+      close: true,
+      side: {
+        label: { text: null, location: 'negative' },
+        showLine: true,
+        width: 0.02,
+        offset: -0.1,
+        arrow: 'triangle',
+        show: [1, 2],
+        1: { label: { text: 'a' } },
+      },
+    }),
 
-    // /*
-    // ........######...#######..########..##....##.########.########.
-    // .......##....##.##.....##.##.....##.###...##.##.......##.....##
-    // .......##.......##.....##.##.....##.####..##.##.......##.....##
-    // .......##.......##.....##.########..##.##.##.######...########.
-    // .......##.......##.....##.##...##...##..####.##.......##...##..
-    // .......##....##.##.....##.##....##..##...###.##.......##....##.
-    // ........######...#######..##.....##.##....##.########.##.....##
-    // */
-    // angle('corner-width', { corner: { width: 0.02 } }),
-    // angle('corner-length', { corner: { length: 0.5 } }),
-    // angle('corner-color', { corner: { color: [0, 1, 0, 1] } }),
-    // angle('corner-corner-auto', { corner: { style: 'auto' } }),
-    // angle('corner-corner-none', { corner: { style: 'none' } }),
-    // angle('corner-corner-fill', { corner: { style: 'fill' } }),
+    /*
+    ................###....##....##..######...##.......########
+    ...............##.##...###...##.##....##..##.......##......
+    ..............##...##..####..##.##........##.......##......
+    .............##.....##.##.##.##.##...####.##.......######..
+    .............#########.##..####.##....##..##.......##......
+    .............##.....##.##...###.##....##..##.......##......
+    .............##.....##.##....##..######...########.########
+    */
+    shape('side-angle-value', {
+      angle: {
+        label: { text: null },
+        curve: { width: 0.03, radius: 0.2 },
+        direction: -1,
+      },
+    }),
+    shape('side-angle-line', {
+      points: [[-0.3, -0.3], [0.5, -0.3], [-0.3, 0.3]],
+      close: true,
+      angle: {
+        label: { text: null },
+        curve: { width: 0.03, radius: 0.15 },
+        show: [1, 2],
+        1: { label: { text: 'a' } },
+        direction: -1,
+      },
+    }),
 
-    // /*
-    // ..............######..##.....##.########..##.....##.########
-    // .............##....##.##.....##.##.....##.##.....##.##......
-    // .............##.......##.....##.##.....##.##.....##.##......
-    // .............##.......##.....##.########..##.....##.######..
-    // .............##.......##.....##.##...##....##...##..##......
-    // .............##....##.##.....##.##....##....##.##...##......
-    // ..............######...#######..##.....##....###....########
-    // */
-    // angle('curve-fill', { curve: { fill: true } }),
-    // angle('curve-radius', { curve: { radius: 0.2 } }),
-    // angle('curve-num', {
-    //   curve: { radius: 0.2, width: 0.02, num: 3, step: 0.05 },
-    // }),
-    // angle('curve-num-neg', {
-    //   curve: { radius: 0.4, width: 0.02, num: 3, step: -0.05 },
-    // }),
-    // angle('curve-autoHide-show', { curve: { autoHide: 1 }, angle: 1 }),
-    // angle('curve-autoHide-hide', { curve: { autoHide: 1.1 }, angle: 1 }),
-    // angle('curve-autoHideMax-hide', { curve: { autoHideMax: 0.9 }, angle: 1 }),
-    // angle('curve-rightAngle', { curve: { autoRightAngle: true }, angle: Math.PI / 2 }),
-    // angle('curve-rightAngleRange-default', { curve: { autoRightAngle: true }, angle: Math.PI / 2 - 0.05 }),
-    // angle('curve-rightAngleRange', {
-    //   curve: { autoRightAngle: true, rightAngleRange: 0.1 },
-    //   angle: Math.PI / 2 - 0.05,
-    // }),
 
-    // // /*
-    // // .......##.....##.########.########.##.....##..#######..########...######.
-    // // .......###...###.##..........##....##.....##.##.....##.##.....##.##....##
-    // // .......####.####.##..........##....##.....##.##.....##.##.....##.##......
-    // // .......##.###.##.######......##....#########.##.....##.##.....##..######.
-    // // .......##.....##.##..........##....##.....##.##.....##.##.....##.......##
-    // // .......##.....##.##..........##....##.....##.##.....##.##.....##.##....##
-    // // .......##.....##.########....##....##.....##..#######..########...######.
-    // // */
-    // angle('setAngle'),
-    // angle('setAngle-P1P2P3'),
-    // angle('setLabel', { label: 'a' }),
-    // angle('setLabelToRealAngle', { label: 'a' }),
-    // angle('updateLabel', { label: 'a' }),
-    // angle('updateLabelCustom', { label: 'a' }),
+    /*
+    .............########.....###....########.
+    .............##.....##...##.##...##.....##
+    .............##.....##..##...##..##.....##
+    .............########..##.....##.##.....##
+    .............##........#########.##.....##
+    .............##........##.....##.##.....##
+    .............##........##.....##.########.
+    */
+    shape('side-pad-value', {
+      pad: {
+        radius: 0.15,
+        line: { width: 0.01 },
+      },
+    }),
+    shape('side-pad-line', {
+      points: [[-0.3, -0.3], [0.5, -0.3], [-0.3, 0.3]],
+      close: true,
+      pad: {
+        show: [1, 2],
+        radius: 0.1,
+      },
+    }),
 
-    // /*
-    // .............##.....##..#######..##.....##.########
-    // .............###...###.##.....##.##.....##.##......
-    // .............####.####.##.....##.##.....##.##......
-    // .............##.###.##.##.....##.##.....##.######..
-    // .............##.....##.##.....##..##...##..##......
-    // .............##.....##.##.....##...##.##...##......
-    // .............##.....##..#######.....###....########
-    // */
-    // angle('move-start-rotation', {}, { isTouchable: false }),
-    // angle('move-start-angle', {}, { isTouchable: false }),
-    // angle('move-end-rotation', {}, { isTouchable: false }),
-    // angle('move-end-angle', {}, { isTouchable: false }),
-    // angle('move-translate', {}, { isTouchable: false }),
-    // angle('move-all', {}, { isTouchable: false }),
-    // angle('move-all-reverse', {}, { isTouchable: false }),
-    // angle('move-all-angle', {}, { isTouchable: false }),
+    /*
+    .............##.....##..#######..##.....##.########
+    .............###...###.##.....##.##.....##.##......
+    .............####.####.##.....##.##.....##.##......
+    .............##.###.##.##.....##.##.....##.######..
+    .............##.....##.##.....##..##...##..##......
+    .............##.....##.##.....##...##.##...##......
+    .............##.....##..#######.....###....########
+    */
+    shape('move-pad', {
+      pad: {
+        radius: 0.15,
+        line: { width: 0.01 },
+        isMovable: true,
+      },
+    }, { isTouchable: false }),
   ];
 }
 
@@ -292,63 +299,9 @@ let startGetValues;
 let startMove;
 
 const updates = {
-  // 'label-autoForm': (e) => {
-  //   e.label.eqn.showForm('1');
-  // },
-  // 'label-updateOff': (e) => {
-  //   e.setRotation(Math.PI / 4);
-  // },
-  // 'label-updateOn': (e) => {
-  //   e.setRotation(Math.PI / 4);
-  // },
-  // setAngle: (e) => {
-  //   e.setAngle({ startAngle: 1, angle: 2 });
-  // },
-  // 'setAngle-P1P2P3': (e) => {
-  //   const p = e.getPosition('figure');
-  //   e.setAngle({
-  //     p1: [0 + p.x, 0.3 + p.y],
-  //     p2: [0 + p.x, 0 + p.y],
-  //     p3: [-0.3 + p.x, 0 + p.y] });
-  // },
-  // setLabel: (e) => {
-  //   e.setLabel('b');
-  // },
-  // setLabelToRealAngle: (e) => {
-  //   e.setLabelToRealAngle();
-  // },
-  // updateLabel: (e) => {
-  //   e.setRotation(1);
-  //   e.updateLabel();
-  // },
-  // updateLabelCustom: (e) => {
-  //   e.setRotation(1);
-  //   e.updateLabel(2.57);
-  // },
-  // 'move-start-rotation': (e) => {
-  //   e.setMovable({ startArm: 'rotation', width: 0.1 });
-  // },
-  // 'move-start-angle': (e) => {
-  //   e.setMovable({ startArm: 'angle', movePadRadius: 0.2, width: 0.1 });
-  // },
-  // 'move-end-rotation': (e) => {
-  //   e.setMovable({ endArm: 'rotation', width: 0.1 });
-  // },
-  // 'move-end-angle': (e) => {
-  //   e.setMovable({ endArm: 'angle', movePadRadius: 0.2, width: 0.1 });
-  // },
-  // 'move-translate': (e) => {
-  //   e.setMovable({ movePadRadius: 0.2 });
-  // },
-  // 'move-all': (e) => {
-  //   e.setMovable({ startArm: 'rotation', endArm: 'angle', movePadRadius: 0.2, width: 0.1 });
-  // },
-  // 'move-all-reverse': (e) => {
-  //   e.setMovable({ startArm: 'angle', endArm: 'rotation', movePadRadius: 0.2, width: 0.1 });
-  // },
-  // 'move-all-angle': (e) => {
-  //   e.setMovable({ startArm: 'angle', endArm: 'angle', movePadRadius: 0.2, width: 0.1 });
-  // },
+  'move-pad': (e) => {
+    e.setPositionWithoutMoving(e.points[0]);
+  },
 };
 
 const getValues = {
@@ -357,109 +310,27 @@ const getValues = {
   //   expect: 1,
   //   when: e => tools.math.round(e.getAngle(), 3),
   // },
-  // getAngleDegrees: {
-  //   element: 'border-children',
-  //   expect: 57.296,
-  //   when: e => tools.math.round(e.getAngle('deg'), 3),
-  // },
-  // getLabelReal: {
-  //   element: 'border-children',
-  //   expect: '57\u00b0',
-  //   when: e => e.getLabel(),
-  // },
-  // getLabelText: {
-  //   element: 'label-scale',
-  //   expect: 'a',
-  //   when: e => e.getLabel(),
-  // },
 };
 
 
 const move = {
-  // moveStartRotation: {
-  //   element: 'move-start-rotation',
-  //   events: [
-  //     ['touchDown', [0.2, 0]],
-  //     ['touchMove', [0.2, 0.1]],
-  //     ['touchMove', [0.2, 0.1]],
-  //     ['touchUp'],
-  //   ],
-  // },
-  // moveStartAngle: {
-  //   element: 'move-start-angle',
-  //   events: [
-  //     ['touchDown', [0.2, 0]],
-  //     ['touchMove', [0.2, -0.1]],
-  //     ['touchMove', [0.2, -0.1]],
-  //     ['touchUp'],
-  //   ],
-  // },
-  // moveEndRotation: {
-  //   element: 'move-end-rotation',
-  //   events: [
-  //     ['touchDown', [0.1, 0.15]],
-  //     ['touchMove', [0, 0.15]],
-  //     ['touchMove', [0, 0.15]],
-  //     ['touchUp'],
-  //   ],
-  // },
-  // moveEndAngle: {
-  //   element: 'move-end-angle',
-  //   events: [
-  //     ['touchDown', [0.1, 0.15]],
-  //     ['touchMove', [0, 0.15]],
-  //     ['touchMove', [0, 0.15]],
-  //     ['touchUp'],
-  //   ],
-  // },
-  // moveTranslate: {
-  //   element: 'move-translate',
-  //   events: [
-  //     ['touchDown', [0.0, 0]],
-  //     ['touchMove', [0.0, -0.1]],
-  //     ['touchMove', [0.0, -0.1]],
-  //     ['touchUp'],
-  //   ],
-  // },
-  // moveAll: {
-  //   element: 'move-all',
-  //   events: [
-  //     ['touchDown', [0.1, 0.15]],
-  //     ['touchMove', [0, 0.15]],
-  //     ['touchMove', [0, 0.15]],
-  //     ['touchUp'],
-  //     ['touchDown', [0.3, 0]],
-  //     ['touchMove', [0.3, -0.1]],
-  //     ['touchMove', [0.3, -0.1]],
-  //     ['touchUp'],
-  //   ],
-  // },
-  // moveAllReverse: {
-  //   element: 'move-all-reverse',
-  //   events: [
-  //     ['touchDown', [0.3, 0]],
-  //     ['touchMove', [0.3, -0.2]],
-  //     ['touchMove', [0.3, -0.2]],
-  //     ['touchUp'],
-  //     ['touchDown', [0.1, 0.15]],
-  //     ['touchMove', [0.2, 0.15]],
-  //     ['touchMove', [0.2, 0.15]],
-  //     ['touchUp'],
-  //   ],
-  // },
-  // moveAllAngle: {
-  //   element: 'move-all-angle',
-  //   events: [
-  //     ['touchDown', [0.3, 0]],
-  //     ['touchMove', [0.3, -0.2]],
-  //     ['touchMove', [0.3, -0.2]],
-  //     ['touchUp'],
-  //     ['touchDown', [0.1, 0.15]],
-  //     ['touchMove', [0, 0.15]],
-  //     ['touchMove', [0, 0.15]],
-  //     ['touchUp'],
-  //   ],
-  // },
+  movePad: {
+    element: 'move-pad',
+    events: [
+      ['touchDown', [0, 0]],
+      ['touchMove', [-0.1, -0.1]],
+      ['touchMove', [-0.1, -0.1]],
+      ['touchUp'],
+      ['touchDown', [0.3, 0]],
+      ['touchMove', [0.4, 0.1]],
+      ['touchMove', [0.4, 0.1]],
+      ['touchUp'],
+      ['touchDown', [0, 0.3]],
+      ['touchMove', [-0.1, 0.4]],
+      ['touchMove', [-0.1, 0.4]],
+      ['touchUp'],
+    ],
+  },
 };
 
 if (typeof process === 'object') {
