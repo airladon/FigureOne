@@ -165,33 +165,33 @@ describe('Angle', () => {
     });
     test('Positive angle, positive direction', () => {
       create('positivePositive');
-      expect(a.getLabel()).toBe('90º');
+      expect(a.getLabel()).toBe('90\u00b0');
       expect(a._label.getPosition('figure').round(3)).toEqual(new Point(1, 1));
     });
     test('Positive angle, negative direction', () => {
       create('positiveNegative');
-      expect(a.getLabel()).toBe('270º');
+      expect(a.getLabel()).toBe('270\u00b0');
       expect(a._label.getPosition('figure').round(3)).toEqual(new Point(-1, -1));
     });
     test('Negative angle, negative direction', () => {
       create('negativeNegative');
-      expect(a.getLabel()).toBe('270º');
+      expect(a.getLabel()).toBe('270\u00b0');
       expect(a._label.getPosition('figure').round(3)).toEqual(new Point(-1, 1));
     });
     test('Negative angle, positive direction', () => {
       create('negativePositive');
-      expect(a.getLabel()).toBe('90º');
+      expect(a.getLabel()).toBe('90\u00b0');
       expect(a._label.getPosition('figure').round(3)).toEqual(new Point(1, -1));
     });
     test('Horiztonal, outside, Positive angle, positive direction', () => {
       create('horizontalOutsidePP');
-      expect(a.getLabel()).toBe('90º');
+      expect(a.getLabel()).toBe('90\u00b0');
       expect(a._label.getPosition('figure').round(2)).toEqual(new Point(0, 1.18));
       expect(round(a._label.getRotation(), 3)).toBe(round(-Math.PI / 4, 3));
     });
     test('Horiztonal, outside, Positive angle, negative direction', () => {
       create('horizontalOutsidePN');
-      expect(a.getLabel()).toBe('270º');
+      expect(a.getLabel()).toBe('270\u00b0');
       expect(a._label.getPosition('figure').round(2)).toEqual(new Point(0, -1.18));
       expect(round(a._label.getRotation(), 3)).toBe(round(-Math.PI / 4, 3));
     });
