@@ -966,6 +966,9 @@ export default class CollectionsPolyline extends FigureElementCollection {
    * everything in the collection. This method instead changes the position
    * without moving everything by updating the polyline points with an
    * offset that is the opposite new position.
+   *
+   * As an example, if a rotation around the second point of a polyline is
+   * desired, then move 
    */
   setPositionWithoutMoving(
     newPositionPointOrX: Point | number,

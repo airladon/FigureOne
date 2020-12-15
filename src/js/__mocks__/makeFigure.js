@@ -101,6 +101,8 @@ export default function makeFigure(
   figure.collections = figure.collectionsLow;
   figure.setSpaceTransforms();
   figure.createFigureElements();
+  figure.defaultLineWidth = 0.01;
+  figure.primitives.defaultLineWidth = 0.01;
   // needed as the first element needs to be set with the space Transforms
   figure.initElements();
   figure.mock = {

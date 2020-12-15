@@ -194,6 +194,7 @@ describe('Figure Objects PolyLine', () => {
   });
   test('Number of points in line close', () => {
     const poly = ways.numPointsClose();
+    // expect(poly._line.drawingObject.points).toHaveLength(points.length * 12);
     expect(tools.cleanUIDs(poly._line)).toMatchSnapshot();
     expect(poly._line.drawingObject.points).toHaveLength(points.length * 12);
     expect(Object.keys(poly.elements)).toHaveLength(1);
@@ -325,7 +326,7 @@ describe('Figure Objects PolyLine', () => {
       const base20 = poly.elements.angle2.label.eqn._base;
       expect(base01.drawingObject.text[0].text).toBe('a');
       expect(base12.drawingObject.text[0].text).toBe('b');
-      expect(base20.drawingObject.text[0].text).toBe('315º');
+      expect(base20.drawingObject.text[0].text).toBe('315\u00b0');
     });
   });
   describe('Figure Level', () => {
