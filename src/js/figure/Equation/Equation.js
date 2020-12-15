@@ -1164,6 +1164,7 @@ export class Equation extends FigureElementCollection {
   // 'id_id_symbol'
   // 'symbol'
   getExistingOrAddSymbolFromKey(key: string, options: Object = {}) {
+    console.log(key)
     const existingElement = this.getElement(key);
     if (existingElement != null) {
       return existingElement;
@@ -1178,12 +1179,14 @@ export class Equation extends FigureElementCollection {
         return symbol;
       }
     }
-
     // Check the key is a symbol
     const cleanKey = key.replace(/^_*/, '');
+    // console.log(cleanKey)
     let symbol = this.eqn.symbols.get(cleanKey, options);
     if (symbol != null) {
-      symbol.setColor(this.color);
+      if (symbol.color[3] > 0.01) {
+        symbol.setColor(this.color);
+      }
       if (options.mods != null) {
         symbol.setProperties(options.mods);
       }
@@ -1191,10 +1194,13 @@ export class Equation extends FigureElementCollection {
       return symbol;
     }
     const ending = cleanKey.match(/_[^_]*$/);
+    // console.log(ending)
     if (ending != null) {
       symbol = this.eqn.symbols.get(ending[0].replace(/_/, ''), options);
       if (symbol != null) {
-        symbol.setColor(this.color);
+        if (symbol.color[3] > 0.01) {
+          symbol.setColor(this.color);
+        }
         if (options.mods != null) {
           symbol.setProperties(options.mods);
         }
@@ -1243,7 +1249,7 @@ export class Equation extends FigureElementCollection {
         text: `Symbol ${options.symbol} not valid`,
       });
     }
-    if (options.color == null) {
+    if (options.color == null && symbol.color[3] > 0.01) {
       symbol.setColor(this.color);
     }
     if (options.mods != null) {

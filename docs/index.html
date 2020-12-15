@@ -4100,6 +4100,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#equationfunctionstouchbox'
+                        class='regular pre-open'>
+                        #touchBox
+                      </a></li>
+                      
+                      <li><a
                         href='#equationfunctionsbox'
                         class='regular pre-open'>
                         #box
@@ -4562,6 +4568,16 @@
                   href='#typeequationelement'
                   class="">
                   TypeEquationElement
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eqn_touchbox'
+                  class="">
+                  EQN_TouchBox
                   
                 </a>
                 
@@ -51929,6 +51945,76 @@ start times.</p>
       </div>
     </div>
   
+    <div class='border-bottom' id='equationfunctionstouchbox'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>touchBox(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Equation touch box function</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#eqn_touchbox">EQN_TouchBox</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#eqn_touchbox">EQN_TouchBox</a>
+ for description and examples
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='equationfunctionsbox'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -53781,7 +53867,7 @@ phrases.</p>
 
   
     <p style="display: none;">      Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#eqn_fraction">EQN_Fraction</a>} | {strike: <a href="#eqn_strike">EQN_Strike</a>} | {box: <a href="#eqn_box">EQN_Box</a>} | {root: <a href="#eqn_root">EQN_Root</a>} | {brac: <a href="#eqn_bracket">EQN_Bracket</a>} | {sub: <a href="#eqn_subscript">EQN_Subscript</a>} | {sup: <a href="#eqn_superscript">EQN_Superscript</a>} | {supSub: <a href="#eqn_superscriptsubscript">EQN_SuperscriptSubscript</a>} | {topBar: <a href="#eqn_bar">EQN_Bar</a>} | {bottomBar: <a href="#eqn_bar">EQN_Bar</a>} | {annotate: <a href="#eqn_annotate">EQN_Annotate</a>} | {topComment: <a href="#eqn_comment">EQN_Comment</a>} | {bottomComment: <a href="#eqn_comment">EQN_Comment</a>} | {pad: <a href="#eqn_pad">EQN_Pad</a>} | {bar: <a href="#eqn_bar">EQN_Bar</a>} | {scale: <a href="#eqn_scale">EQN_Scale</a>} | {container: <a href="#eqn_container">EQN_Container</a>} | {matrix: <a href="#eqn_matrix">EQN_Matrix</a>} | {int: <a href="#eqn_integral">EQN_Integral</a>} | {sumOf: <a href="#eqn_sumof">EQN_SumOf</a>} | {prodOf: <a href="#eqn_prodof">EQN_ProdOf</a>} | {topStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | {bottomStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | <a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a> | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | {frac: <a href="#eqn_fraction">EQN_Fraction</a>} | {strike: <a href="#eqn_strike">EQN_Strike</a>} | {box: <a href="#eqn_box">EQN_Box</a>} | {tBox: <a href="#eqn_touchbox">EQN_TouchBox</a>} | {root: <a href="#eqn_root">EQN_Root</a>} | {brac: <a href="#eqn_bracket">EQN_Bracket</a>} | {sub: <a href="#eqn_subscript">EQN_Subscript</a>} | {sup: <a href="#eqn_superscript">EQN_Superscript</a>} | {supSub: <a href="#eqn_superscriptsubscript">EQN_SuperscriptSubscript</a>} | {topBar: <a href="#eqn_bar">EQN_Bar</a>} | {bottomBar: <a href="#eqn_bar">EQN_Bar</a>} | {annotate: <a href="#eqn_annotate">EQN_Annotate</a>} | {topComment: <a href="#eqn_comment">EQN_Comment</a>} | {bottomComment: <a href="#eqn_comment">EQN_Comment</a>} | {pad: <a href="#eqn_pad">EQN_Pad</a>} | {bar: <a href="#eqn_bar">EQN_Bar</a>} | {scale: <a href="#eqn_scale">EQN_Scale</a>} | {container: <a href="#eqn_container">EQN_Container</a>} | {matrix: <a href="#eqn_matrix">EQN_Matrix</a>} | {int: <a href="#eqn_integral">EQN_Integral</a>} | {sumOf: <a href="#eqn_sumof">EQN_SumOf</a>} | {prodOf: <a href="#eqn_prodof">EQN_ProdOf</a>} | {topStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | {bottomStrike: <a href="#eqn_strikecomment">EQN_StrikeComment</a>} | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeequationphrase">TypeEquationPhrase</a>> | <a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a> | Elements | <a href="https://developer.mozilla.org/docs/Web/API/Element">Element</a> | BaseAnnotationFunction)
     </p>
   
   
@@ -56609,6 +56695,149 @@ line's label in the touch boundary for
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_touchbox'>
+      EQN_TouchBox
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation touch box</p>
+<p><img src="./apiassets/eqn_touch_pad.gif"></p>
+<p>Place a box symbol around an equation phrase</p>
+<p>Options can be an object, or an array in the property order below</p>
+
+  
+    <p style="display: none;">      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between box symbol and content on
+the left, right, bottom and top sides (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use when top space between content and
+box should be different thant 
+<code>space</code>
+ property (
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rightSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use when right space between content and
+box should be different thant 
+<code>space</code>
+ property (
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use when bottom space between content and
+box should be different thant 
+<code>space</code>
+ property (
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>leftSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use when left space between content and
+box should be different thant 
+<code>space</code>
+ property (
+<code>space</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
   
 
   

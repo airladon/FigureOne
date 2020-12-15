@@ -3253,6 +3253,7 @@ class FigureElement {
         this.parent.show();
       }
     }
+    this.animateNextFrame();
   }
 
   // /**
@@ -3356,6 +3357,7 @@ class FigureElement {
    */
   hide(): void {
     this.isShown = false;
+    this.animateNextFrame();
   }
 
   hideAll(): void {

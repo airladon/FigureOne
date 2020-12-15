@@ -78,6 +78,7 @@ export type TypeEquationPhrase =
   | { frac: EQN_Fraction }
   | { strike: EQN_Strike }
   | { box: EQN_Box }
+  | { tBox: EQN_TouchBox }
   | { root: EQN_Root }
   | { brac: EQN_Bracket }
   | { sub: EQN_Subscript }
@@ -901,6 +902,52 @@ export type EQN_Box = {
   ?number,
   ?boolean,
   ?boolean,
+];
+
+
+/**
+ * Equation touch box
+ *
+ * ![](./apiassets/eqn_touch_pad.gif)
+ *
+ * Place a box symbol around an equation phrase
+ *
+ * Options can be an object, or an array in the property order below
+ *
+ * @property {TypeEquationPhrase} content
+ * @property {string} symbol
+ * @property {number} [space] space between box symbol and content on
+ * the left, right, bottom and top sides (`0`)
+ * @property {number} [topSpace] use when top space between content and
+ *  box should be different thant `space` property (`space`)
+ * @property {number} [rightSpace] use when right space between content and
+ *  box should be different thant `space` property (`space`)
+ * @property {number} [bottomSpace] use when bottom space between content and
+ *  box should be different thant `space` property (`space`)
+ * @property {number} [leftSpace] use when left space between content and
+ *  box should be different thant `space` property (`space`)
+ *
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
+ */
+export type EQN_TouchBox = {
+  content: TypeEquationPhrase,
+  symbol: string,
+  space?: number,
+  topSpace?: number,
+  rightSpace?: number,
+  bottomSpace?: number,
+  leftSpace?: number,
+} | [
+  TypeEquationPhrase,
+  string,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
+  ?number,
 ];
 
 /**
@@ -2733,6 +2780,7 @@ export class EquationFunctions {
     if (name === 'frac') { return this.frac(params); }  // $FlowFixMe
     if (name === 'strike') { return this.strike(params); }    // $FlowFixMe
     if (name === 'box') { return this.box(params); }          // $FlowFixMe
+    if (name === 'tBox') { return this.touchBox(params); }          // $FlowFixMe
     if (name === 'root') { return this.root(params); }        // $FlowFixMe
     if (name === 'brac') { return this.brac(params); }        // $FlowFixMe
     if (name === 'sub') { return this.sub(params); }          // $FlowFixMe
@@ -3464,6 +3512,66 @@ export class EquationFunctions {
     });
   }
 
+  /**
+   * Equation touch box function
+   * @see {@link EQN_TouchBox} for description and examples
+   */
+  touchBox(
+    options: EQN_TouchBox,
+  ) {
+    let content;
+    let symbol;
+    let space;
+    let topSpace;
+    let bottomSpace;
+    let leftSpace;
+    let rightSpace;
+    const defaultOptions = {
+      inSize: false,
+      space: 0,
+      topSpace: null,
+      bottomSpace: null,
+      leftSpace: null,
+      rightSpace: null,
+    };
+    if (Array.isArray(options)) {
+      [
+        content, symbol, space, topSpace,
+        rightSpace, bottomSpace, leftSpace,
+      ] = options;
+    } else {
+      ({
+        content, symbol, space, topSpace,
+        rightSpace, bottomSpace, leftSpace,
+      } = options);
+    }
+    const optionsIn = {
+      content,
+      symbol,
+      space,
+      topSpace,
+      rightSpace,
+      bottomSpace,
+      leftSpace,
+    };
+    const o = joinObjects(defaultOptions, optionsIn);
+    return this.annotate({
+      content,
+      inSize: false,
+      fullContentBounds: false,
+      useFullBounds: false,
+      glyphs: {
+        encompass: {
+          symbol,
+          space: o.space,
+          leftSpace: o.leftSpace,
+          rightSpace: o.rightSpace,
+          topSpace: o.topSpace,
+          bottomSpace: o.bottomSpace,
+        },
+      },
+    });
+  }
 
   /**
    * Equation box function

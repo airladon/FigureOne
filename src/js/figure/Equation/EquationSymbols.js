@@ -1068,6 +1068,9 @@ export default class EquationSymbols {
     if (name === 'bar') {                   // $FlowFixMe
       return this.bar(options);
     }
+    if (name === 'tBox') {                   // $FlowFixMe
+      return this.touchBox(options);
+    }
     if (name === 'box') {                   // $FlowFixMe
       return this.box(options);
     }
@@ -1142,6 +1145,30 @@ export default class EquationSymbols {
       this.shapes.webgl,
       optionsToUse.color,
       new Transform('Box').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse,
+      // 'strip',
+    ));
+  }
+
+  touchBox(optionsIn: EQN_BoxSymbol) {
+    const defaultOptions = {
+      color: [0, 0, 0, 0.0001],
+      fill: false,
+      width: null,
+      height: null,
+      lineWidth: 0.01,
+      draw: 'static',
+      staticHeight: 'first',
+      staticWidth: 'first',
+      isTouchable: true,
+    };
+    const optionsToUse = joinObjects(defaultOptions, optionsIn);
+
+    return (new Box(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('TouchBox').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
       // 'strip',

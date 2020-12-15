@@ -2,10 +2,10 @@
 
 // import Figure from '../Figure';
 import {
-  Transform, Point,
+  Transform, Point, getBoundingRect,
   // getPoint, getTransform,
 } from '../../tools/g2';
-// import type { TypeParsablePoint } from '../../tools/g2';
+import type { TypeParsableBuffer } from '../../tools/g2';
 // import {
 //   round,
 // } from '../../tools/math';
@@ -506,12 +506,22 @@ class CollectionsRectangle extends FigureElementCollection {
     this.add('label', label);
   }
 
-  getSurround(element: FigureElement, space: number = 0) {
-    const bounds = element.getBoundingRect('figure');
+  getSurround(element: FigureElement | Array<FigureElement>, space: TypeParsableBuffer = 0) {
+    let bounds;
+    if (Array.isArray(element)) {
+      const borders: Array<Array<Point>> = [];
+      element.forEach((e) => {
+        const b = e.getBorder('figure');
+        borders.push(...b);
+      });
+      bounds = getBoundingRect(borders, space);
+    } else {
+      bounds = getBoundingRect(element.getBorder('figure'), space);
+    }
     const matrix = this.spaceTransformMatrix('figure', 'draw');
     const scale = matrix[0];
-    const newWidth = (bounds.width + space * 2) * scale;
-    const newHeight = (bounds.height + space * 2) * scale;
+    const newWidth = bounds.width * scale;
+    const newHeight = bounds.height * scale;
     const center = new Point(
       bounds.left + bounds.width / 2,
       bounds.bottom + bounds.height / 2,
@@ -534,7 +544,7 @@ class CollectionsRectangle extends FigureElementCollection {
     return [position, newWidth, newHeight];
   }
 
-  surround(element: FigureElement, space: number = 0) {
+  surround(element: FigureElement | Array<FigureElement>, space: TypeParsableBuffer = 0) {
     const [position, width, height] = this.getSurround(element, space);
     this.setSurround(position, width, height);
   }
@@ -543,10 +553,10 @@ class CollectionsRectangle extends FigureElementCollection {
     this.width = width;
     this.height = height;
     if (this._line) {
-      this._line.custom.update({ width, height });
+      this._line.custom.updatePoints({ width, height });
     }
     if (this._fill) {
-      this._fill.custom.update({ width, height });
+      this._fill.custom.updatePoints({ width, height });
     }
     // if (this._label) {
     //   this._label.
