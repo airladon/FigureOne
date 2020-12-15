@@ -902,6 +902,7 @@ class CollectionsAngle extends FigureElementCollection {
         curveOverlap = optionsToUse.arrow.curveOverlap;
       }
       const arrowOptions = simplifyArrowOptions(optionsToUse.arrow, width);
+      // $FlowFixMe
       this.arrow = arrowOptions;
       if (this.arrow == null) {
         return;

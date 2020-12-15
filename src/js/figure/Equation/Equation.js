@@ -1164,7 +1164,6 @@ export class Equation extends FigureElementCollection {
   // 'id_id_symbol'
   // 'symbol'
   getExistingOrAddSymbolFromKey(key: string, options: Object = {}) {
-    console.log(key)
     const existingElement = this.getElement(key);
     if (existingElement != null) {
       return existingElement;

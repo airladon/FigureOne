@@ -67,7 +67,7 @@ const angles = {
     new: threePointAngle(p[5], p[4], p[3]),
   },
   c: {
-    old: Math.PI * 2,
+    old: 0,
     new: threePointAngle(p[4], p[3], p[2]),
   },
 }
@@ -89,24 +89,24 @@ figure.add([
     name: 'shape',
     method: 'collections.collection',
     elements: [
-      {
-        name: 'newShapeFill',
-        method: 'generic',
-        options: {
-          points: p,
-          drawType: 'fan',
-          color: [1, 0, 0, 0.5],
-        },
-      },
-      {
-        name: 'oldShapeFill',
-        method: 'generic',
-        options: {
-          points: [p[0], p[1], p[2], p[4], p[5]],
-          drawType: 'fan',
-          color: [1, 0, 0, 0.5],
-        },
-      },
+      // {
+      //   name: 'newShapeFill',
+      //   method: 'generic',
+      //   options: {
+      //     points: p,
+      //     drawType: 'fan',
+      //     color: [1, 0, 0, 0.5],
+      //   },
+      // },
+      // {
+      //   name: 'oldShapeFill',
+      //   method: 'generic',
+      //   options: {
+      //     points: [p[0], p[1], p[2], p[4], p[5]],
+      //     drawType: 'fan',
+      //     color: [1, 0, 0, 0.5],
+      //   },
+      // },
       {
         name: 'highlightRect',
         method: 'collections.rectangle',
@@ -123,21 +123,33 @@ figure.add([
       angle(p[3], p[4], p[2], 'angleB', 'b'),
       angle(p[2], p[3], p[4], 'angleC', 'c'),
       {
-        name: 'newShape',
-        method: 'primitives.polyline',
+        name: 'oldShape',
+        method: 'collections.polyline',
         options: {
           points: [p[0], p[1], p[2], p[4], p[5]],
           close: true,
           width: 0.015,
           cornerStyle: 'fill',
+          angle: {
+            direction: -1,
+            curve: { fill: true, radius: 0.3 },
+            color: [1, 0, 0, 0.7]
+          },
         },
       },
       {
-        name: 'line',
-        method: 'primitives.polyline',
+        name: 'newShape',
+        method: 'collections.polyline',
         options: {
-          points: [p[2], p[3], p[4]],
+          points: [p[0], p[1], p[2], p[3], p[4], p[5]],
           dash: [0.05, 0.02],
+          angle: {
+            direction: -1,
+            curve: { fill: true, radius: 0.3 },
+            color: [1, 0, 0, 0.7]
+          },
+          close: true,
+          cornerStyle: 'fill',
         },
       },
     ],
@@ -178,11 +190,6 @@ figure.add([
 ]);
 
 const get = (name) => figure.getElement(name);
-const a = get('eqn.a');
-const b = get('eqn.b');
-const c = get('eqn.c');
-const oldBox = get('eqn.b2');
-const newBox = get('eqn.b1');
 const highlighter = get('shape.highlightRect')
 
 const showFill = (name = null) => {
@@ -190,55 +197,50 @@ const showFill = (name = null) => {
   get('shape.angleAf').hide();
   get('shape.angleBf').hide();
   get('shape.angleCf').hide();
-  get('shape.oldShapeFill').hide();
-  get('shape.newShapeFill').hide();
+  // get('shape.oldShapeFill').hide();
+  // get('shape.newShapeFill').hide();
+  get('shape.newShape').hideAngles();
+  get('shape.oldShape').hideAngles();
   if (name != null) {
     get(name).show();
   }
 }
-showFill();
-get('eqn').showForm('0');
-a.onClick = () => {
-  highlighter.surround([a, get('eqn.minus1')], [0, 0.08, 0.05, 0.05]);
-  highlighter.pulse({ scale: 1.2 });
-  showFill('shape.angleAf');
-  get('shape.angleAf').animations.new()
-    .angle({ target: angles.a.old, duration: 0 })
-    .angle({ target: angles.a.new, duration: 1 })
-    .pulse({ scale: 1.5, duration: 1 })
-    .start();
+
+const setAngleClick = (ang, eqnElement, angleFill, surround) => {
+  const element = get(`${eqnElement}`);
+  element.onClick = () => {
+    highlighter.surround([element, get(surround)], [0, 0.08, 0.05, 0.05]);
+    highlighter.pulse({ scale: 1.2 });
+    showFill(angleFill);
+    get(angleFill).animations.new()
+      .angle({ target: ang.old, duration: 0 })
+      .angle({ target: ang.new, duration: 1 })
+      .pulse({ scale: 1.5, duration: 1 })
+      .start();
+  }
 }
-b.onClick = () => {
-  highlighter.surround([b, get('eqn.minus2')], [0, 0.08, 0.05, 0.05]);
-  highlighter.pulse({ scale: 1.2 });
-  showFill('shape.angleBf');
-  get('shape.angleBf').animations.new()
-    .angle({ target: angles.b.old, duration: 0 })
-    .angle({ target: angles.b.new, duration: 1 })
-    .pulse({ scale: 1.5, duration: 1 })
-    .start();
-}
-c.onClick = () => {
-  highlighter.surround([c, get('eqn.plus')], [0, 0.08, 0.05, 0.05]);
-  highlighter.pulse({ scale: 1.2 });
-  showFill('shape.angleCf');
-  get('shape.angleCf').animations.new()
-    .angle({ target: angles.c.old, duration: 0 })
-    .angle({ target: angles.c.new, duration: 1.5 })
-    .pulse({ scale: 1.5, duration: 1 })
-    .start();
-}
+
+setAngleClick(angles.a, 'eqn.a', 'shape.angleAf', 'eqn.minus1');
+setAngleClick(angles.b, 'eqn.b', 'shape.angleBf', 'eqn.minus2');
+setAngleClick(angles.c, 'eqn.c', 'shape.angleCf', 'eqn.plus');
+
+const newBox = get('eqn.b1');
 newBox.onClick = () => {
-  get('shape.oldShapeFill').hide();
-  showFill('shape.newShapeFill')
+  // get('shape.oldShapeFill').hide();
+  showFill()
+  get('shape.newShape').showAngles();
   highlighter.surround(newBox, -0.02);
   highlighter.pulse({ scale: 1.2 });
 };
+const oldBox = get('eqn.b2');
 oldBox.onClick = () => {
-  get('shape.newShapeFill').hide();
-  showFill('shape.oldShapeFill')
+  // get('shape.newShapeFill').hide();
+  showFill();
+  get('shape.oldShape').showAngles();
   highlighter.surround(oldBox, -0.02);
   highlighter.pulse({ scale: 1.2 });
 };
-console.log(get('eqn'))
 
+
+showFill();
+get('eqn').showForm('0');

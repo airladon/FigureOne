@@ -1597,10 +1597,28 @@
                 
                 <li><a
                   href='#collectionsrectangle'
-                  class="">
+                  class=" toggle-sibling">
                   CollectionsRectangle
-                  
+                  <span class='icon'>▸</span>
                 </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#collectionsrectanglesurround'
+                        class='regular pre-open'>
+                        #surround
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -4463,16 +4481,6 @@
               
                 
                 <li><a
-                  href='#obj_linemove'
-                  class="">
-                  OBJ_LineMove
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#figurecollections'
                   class=" toggle-sibling">
                   FigureCollections
@@ -4558,6 +4566,16 @@
                   href='#obj_buttoncolor'
                   class="">
                   OBJ_ButtonColor
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_linemove'
+                  class="">
+                  OBJ_LineMove
                   
                 </a>
                 
@@ -21636,6 +21654,82 @@ figure.add([
   
 
   
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='collectionsrectanglesurround'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>surround(element, space)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Surround element of elements with the rectangle.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>element</span> <code class='quiet'>((<a href="#figureelement">FigureElement</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#figureelement">FigureElement</a>>))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>space</span> <code class='quiet'>(<a href="#typeparsablebuffer">TypeParsableBuffer</a>
+            = <code>0</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
@@ -48123,7 +48217,7 @@ or the name of the trace. See examples in <a href="#collectionsplotlegend">Colle
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="#typeparsablebuffer">TypeParsableBuffer</a>?)</code>
           : space between rectangle and element (
 <code>0</code>
 )
@@ -55802,101 +55896,6 @@ borders.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='obj_linemove'>
-      OBJ_LineMove
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Line move options object.</p>
-<p>The <code>'centerTranslateEndRotation</code>' movement will move the line
-when touched within the <code>middleLength</code> percentage of the line
-and rotate it otherwise.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>movable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- to make movable (
-<code>true</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>type</span> <code class='quiet'>((<code>"translation"</code> | <code>"rotation"</code> | <code>"centerTranslateEndRotation"</code> | <code>"scale"</code>)?)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>middleLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : length of the middle section of line that
-allows for translation movement in percent of total length (
-<code>0.333</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>includeLabelInTouchBoundary</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
-          : <code>true</code>
- to include the
-line's label in the touch boundary for 
-<code>'centerTranslateEndRotation'</code>
-
-('false`)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='figurecollections'>
       FigureCollections
     </h3>
@@ -56613,6 +56612,101 @@ line's label in the touch boundary for
         <div class='space-bottom0'>
           <span class='code bold'>label</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
           
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_linemove'>
+      OBJ_LineMove
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Line move options object.</p>
+<p>The <code>'centerTranslateEndRotation</code>' movement will move the line
+when touched within the <code>middleLength</code> percentage of the line
+and rotate it otherwise.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>movable</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ to make movable (
+<code>true</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>type</span> <code class='quiet'>((<code>"translation"</code> | <code>"rotation"</code> | <code>"centerTranslateEndRotation"</code> | <code>"scale"</code>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>middleLength</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : length of the middle section of line that
+allows for translation movement in percent of total length (
+<code>0.333</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>includeLabelInTouchBoundary</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ to include the
+line's label in the touch boundary for 
+<code>'centerTranslateEndRotation'</code>
+
+('false`)
+
           
         </div>
       

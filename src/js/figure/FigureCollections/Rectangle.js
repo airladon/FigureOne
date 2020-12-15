@@ -29,7 +29,7 @@ import type FigureCollections from './FigureCollections';
  *
  * @property {FigureElement} [start] start element to surround (`this`)
  * @property {FigureElement} [target] target element to surround (`this`)
- * @property {number} [space] space between rectangle and element (`0`)
+ * @property {TypeParsableBuffer} [space] space between rectangle and element (`0`)
  * @extends OBJ_CustomAnimationStep
  */
 export type OBJ_SurroundAnimationStep = {
@@ -544,6 +544,9 @@ class CollectionsRectangle extends FigureElementCollection {
     return [position, newWidth, newHeight];
   }
 
+  /**
+   * Surround element of elements with the rectangle.
+   */
   surround(element: FigureElement | Array<FigureElement>, space: TypeParsableBuffer = 0) {
     const [position, width, height] = this.getSurround(element, space);
     this.setSurround(position, width, height);
