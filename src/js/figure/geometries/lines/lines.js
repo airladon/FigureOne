@@ -558,17 +558,17 @@ function makeThickLine(
       }
     } else if (angle === Math.PI) {
       if (segmentSide === 'negative') {
-        if (widthIsIn === 'inside') {
-          joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
-        } else {
-          joinLinesInPoint(lineSegment, lineSegmentNext, corner);
-        }
+        // if (widthIsIn === 'inside') {
+        //   joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
+        // } else {
+        joinLinesInPoint(lineSegment, lineSegmentNext, corner);
+        // }
       } else if (segmentSide === 'positive') {
-        if (widthIsIn === 'inside') {
-          joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
-        } else {
-          joinLinesInPoint(lineSegment, lineSegmentNext, corner);
-        }
+        // if (widthIsIn === 'inside') {
+        //   joinLinesObtuseInside(mid, midNext, lineSegment, lineSegmentNext);
+        // } else {
+        joinLinesInPoint(lineSegment, lineSegmentNext, corner);
+        // }
       }
     // If the angle is greater than 180, then the positive side is on the
     // inside of the angle

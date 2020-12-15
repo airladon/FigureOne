@@ -242,11 +242,11 @@ class VertexObject extends DrawingObject {
   }
 
   /* eslint-disable no-unused-vars */
-  change(
+  change(options: {
     points?: Array<Point>,
     copy?: Array<CPY_Step>,
     drawType?: 'triangles' | 'strip' | 'fan' | 'lines',
-  ) {
+  }) {
     this.resetBuffer();
   }
   /* eslint-enable no-unused-vars */
