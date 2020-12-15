@@ -2836,7 +2836,7 @@ export default class FigurePrimitives {
     const element = this.generic({
       transform: new Transform('grid').standard(),
       border: 'draw',
-      touchBorder: 'border',
+      touchBorder: 'border', // $FlowFixMe
       holeBorder: [[]],
     }, ...optionsIn);
 
@@ -2964,7 +2964,7 @@ export default class FigurePrimitives {
    * {@link FigureElementPrimitive} that draws a line.
    * @see {@link OBJ_Line} for options and examples.
    */
-  line(...options: OBJ_Line) {
+  line(...options: OBJ_Line) { // $FlowFixMe
     const element = this.polyline(joinObjects(
       {},
       {
@@ -2976,7 +2976,7 @@ export default class FigurePrimitives {
         dash: [],
         arrow: null,
       },
-    ));
+    )); // $FlowFixMe
     const joinedOptions = joinObjects({}, ...options);
     element.custom.options = joinObjects(
       {},
@@ -3177,10 +3177,10 @@ export default class FigurePrimitives {
       if (o.touchBorder != null) {
         element.touchBorder = o.touchBorder;
       }
-    };
-    element.getBorderPointsSuper = element.getBorderPoints;
+    }; // $FlowFixMe
+    element.getBorderPointsSuper = element.getBorderPoints; // $FlowFixMe
     element.getBorderPoints = (border: 'border' | 'touchBorder' | 'holeBorder' = 'border') => {
-      if (border === 'border') {
+      if (border === 'border') { // $FlowFixMe
         return element.getBorderPointsSuper(border);
       }
       if (border === 'touchBorder') {
@@ -3197,7 +3197,7 @@ export default class FigurePrimitives {
           return [getBoundingBorder(element.drawBorderBuffer)];
         }
         if (isBuffer(element.touchBorder)) {
-          const b = element.drawBorderBuffer;
+          const b = element.drawBorderBuffer; // $FlowFixMe
           return [getBoundingBorder(b, element.touchBorder)];
         }
         return element.touchBorder;
@@ -3220,7 +3220,7 @@ export default class FigurePrimitives {
     const to = new TextLineObject(this.draw2D);
     to.loadText(options);
     const element = this.genericTextPrimitive(to, options);
-    element.custom.updateText = (o: OBJ_Text) => {
+    element.custom.updateText = (o: OBJ_Text) => { // $FlowFixMe
       element.drawingObject.loadText(
         this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, o),
       );
@@ -3239,7 +3239,7 @@ export default class FigurePrimitives {
     const to = new TextLinesObject(this.draw2D);
     const element = this.genericTextPrimitive(to, joinedOptions);
     element.custom.updateText = (oIn: OBJ_Text) => {
-      let oToUse = oIn;
+      let oToUse = oIn; // $FlowFixMe
       if (oIn.length === 1 && typeof oIn[0] === 'string') {
         oToUse = [{ text: [optionsIn[0]] }];
       }
@@ -3249,7 +3249,7 @@ export default class FigurePrimitives {
       }
       if (o.lineSpace == null) {
         o.lineSpace = o.font.size * 1.2;
-      }
+      } // $FlowFixMe
       element.drawingObject.loadText(o);
       element.custom.updateBorders(o);
     };
@@ -3268,7 +3268,7 @@ export default class FigurePrimitives {
     );
     to.loadText(options);
     const element = this.genericTextPrimitive(to, options);
-    element.custom.updateText = (o: OBJ_Text) => {
+    element.custom.updateText = (o: OBJ_Text) => { // $FlowFixMe
       element.drawingObject.loadText(this.parseTextOptions(o));
       element.custom.updateBorders({});
     };

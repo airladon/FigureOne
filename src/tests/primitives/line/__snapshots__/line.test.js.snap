@@ -173,7 +173,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -972,7 +971,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -1969,7 +1967,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -3352,7 +3349,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -5629,7 +5625,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -7096,7 +7091,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -9343,7 +9337,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -10384,7 +10377,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -11244,7 +11236,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -12012,7 +12003,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -12793,7 +12783,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -13504,7 +13493,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -14215,7 +14203,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -14926,7 +14913,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -15640,7 +15626,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -16522,7 +16507,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -17405,7 +17389,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -18287,7 +18270,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -19169,7 +19151,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -20048,7 +20029,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -20759,7 +20739,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -21470,7 +21449,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -22198,7 +22176,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -22909,7 +22886,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -23637,7 +23613,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -24348,7 +24323,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -25119,7 +25093,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -25984,7 +25957,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -26723,7 +26695,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -27434,7 +27405,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -28161,7 +28131,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -28925,7 +28894,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -29671,7 +29639,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -30405,7 +30372,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -31139,7 +31105,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -31850,7 +31815,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -32561,7 +32525,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -33272,7 +33235,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [
@@ -33983,7 +33945,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": VertexGeneric {
     "buffer": Array [

@@ -63,6 +63,7 @@ FigureElementPrimitive {
   "copyTransforms": Array [],
   "custom": Object {
     "setText": [Function],
+    "updateBorders": [Function],
     "updateText": [Function],
   },
   "defaultColor": Array [
@@ -127,7 +128,6 @@ FigureElementPrimitive {
     ],
   ],
   "drawPriority": 1,
-  "drawRect": Array [],
   "drawTransforms": Array [],
   "drawingObject": TextObject {
     "drawContext2D": Array [
@@ -825,7 +825,6 @@ FigureElementPrimitive {
   "type": "primitive",
   "uid": "0000000000",
   "unrenderNextDraw": false,
-  "updateBorders": [Function],
 }
 `;
 
