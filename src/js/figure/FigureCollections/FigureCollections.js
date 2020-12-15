@@ -1,7 +1,7 @@
 // @flow
 import WebGLInstance from '../webgl/webgl';
 import {
-  Rect, getBorder, Transform, Point,
+  Rect, Transform, Point,
 } from '../../tools/g2';
 
 import { joinObjects } from '../../tools/tools';

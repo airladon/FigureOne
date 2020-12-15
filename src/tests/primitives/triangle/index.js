@@ -54,7 +54,7 @@ const makeShape = (name, method, options, lineOptions = null) => {
   const x = xValues[index % xValues.length];
   const y = yValues[Math.floor(index / xValues.length)];
   // const name = `_${index}`;
-  const indexName = `${index}`
+  const indexName = `${index}`;
   index += 1;
   let line;
   if (lineOptions != null) {

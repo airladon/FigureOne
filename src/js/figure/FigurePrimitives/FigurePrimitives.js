@@ -3241,7 +3241,7 @@ export default class FigurePrimitives {
     const to = new TextLinesObject(this.draw2D);
     const element = this.genericTextPrimitive(to, joinedOptions);
     element.custom.updateText = (oIn: OBJ_Text) => {
-      let oToUse = oIn;
+      let oToUse = oIn; // $FlowFixMe
       if (oIn.length === 1 && typeof oIn[0] === 'string') {
         oToUse = [{ text: [optionsIn[0]] }];
       }

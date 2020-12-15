@@ -968,7 +968,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
    * offset that is the opposite new position.
    *
    * As an example, if a rotation around the second point of a polyline is
-   * desired, then move 
+   * desired, then setPositionWithoutMoving at the point before rotating.
    */
   setPositionWithoutMoving(
     newPositionPointOrX: Point | number,
