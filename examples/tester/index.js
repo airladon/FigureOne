@@ -250,28 +250,21 @@ figure.add([
 
 figure.add({
   name: 'ttt',
-  method: 'collections.line',
+  method: 'collections.polyline',
   options: {
-            p1: [-0.5, 0],
-        p2: [0.5, 0],
-        width: 0.1,
-        // dash: [0.1, 0.1],
-        maxLength: 2,
-        move: {
-          type: 'centerTranslateEndRotation',
-        },
-        touchBorder: 0.2,
-        align: 'center',
-        label: {
-          text: ['a', 'basdf', 'c'],
-          update: true, 
-          offset: 0.1,
-        },
+        points: [[1, 0], [0, 0], [0.5, 1], [1.5, 1]],
+    arrow: 'triangle',
+    angle: {
+      label: null,
+      curve: {
+        radius: 0.3,
+      },
+    },
   }
 })
 // figure.getElement('ttt').setLength(1, 'center')
 const t = figure.getElement('ttt');
-t._label.showForm('1');
+// t._label.showForm('1');
 // t.setLabel('asdf')
 // console.log(figure.getElement('ttt'));
 // console.log(t.getP1())

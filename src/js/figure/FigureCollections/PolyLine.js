@@ -300,8 +300,10 @@ function processArray(
   let show;
   if (toProcessDefaults.show != null) {
     ({ show } = toProcessDefaults);
-  } else {
+  } else if (total > 1) {
     show = range(0, total - 1, 1);
+  } else {
+    show = [0];
   }
   if (toProcessDefaults.hide != null) {
     toProcessDefaults.hide.forEach((index) => {
@@ -600,7 +602,8 @@ export default class CollectionsPolyline extends FigureElementCollection {
         color: options.color,
         pulse: options.pulse,
         arrow: options.arrow,
-        touchBorder: options.touchBorder,
+        drawBorderBuffer: options.drawBorderBuffer,
+        touchBorder: 'buffer',
       });
       this.add('line', line);
     }
@@ -673,6 +676,7 @@ export default class CollectionsPolyline extends FigureElementCollection {
       pCount -= 2;
     }
     const angleArray = processArray(angle, defaultAngleOptions, defaultAngleLabelOptions, pCount);
+
     for (let i = 0; i < pCount; i += 1) {
       let p1 = i;
       let p2 = i + 1;
