@@ -137,16 +137,6 @@ describe('Tools Lines', () => {
           new Point(1, 0),
           new Point(0, 0),
         ]);
-        // expect(round(hole[0])).toEqual([
-        //   new Point(0, 0),
-        //   new Point(1, 0),
-        //   new Point(1, 0),
-        //   new Point(1, 1),
-        //   new Point(1, 1),
-        //   new Point(0, 1),
-        //   new Point(0, 1),
-        //   new Point(0, 0),
-        // ]);
       });
       test('radius', () => {
         const out = makePolyLine(points, 0.1, true, 'negative', 'radius', 0.015, 10);

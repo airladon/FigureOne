@@ -1,4 +1,5 @@
 import makeFigure from '../../../js/__mocks__/makeFigure';
+import { simpleElement } from '../../tools';
 
 const { shapes } = require('./shapes.js');
 const { updates } = require('./updates.js');
@@ -19,13 +20,13 @@ describe('Collection: Collection', () => {
         updates[name](element);
         // element.custom.updatePoints(updates[name]);
       }
-      element.uid = '';
-      element.parent = null;
-      element.figure = null;
-      element.animations = null;
-      element.anim = null;
-      element.recorder = null;
-      expect(element).toMatchSnapshot();
+      // element.uid = '';
+      // element.parent = null;
+      // element.figure = null;
+      // element.animations = null;
+      // element.anim = null;
+      // element.recorder = null;
+      expect(simpleElement(element)).toMatchSnapshot();
     },
   );
 });
