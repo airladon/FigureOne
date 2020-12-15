@@ -13,7 +13,7 @@ import {
 // import {
 //   FigureElementPrimitive,
 // } from '../../Element';
-import VertexSymbol from './Symbols/VertexSymbol';
+import VertexGeneric from '../DrawingObjects/VertexObject/VertexGeneric';
 
 tools.isTouchDevice = jest.fn();
 
@@ -193,15 +193,15 @@ describe('Figure Equations From Object', () => {
   test('Symbol', () => {
     eqn.addElements(addElements.symbols);
     expect(eqn._a.drawingObject.text[0].text).toBe('a');
-    expect(eqn._v.drawingObject).toBeInstanceOf(VertexSymbol);
-    expect(eqn._v1.drawingObject).toBeInstanceOf(VertexSymbol);
+    expect(eqn._v.drawingObject).toBeInstanceOf(VertexGeneric);
+    expect(eqn._v1.drawingObject).toBeInstanceOf(VertexGeneric);
     // expect(eqn._v2.drawingObject).toBeInstanceOf(VertexHorizontalLine);
   });
   test('ElementOptions', () => {
     eqn.addElements(addElements.elementOptions);
     expect(eqn._a.drawingObject.text[0].text).toBe('a');
     expect(eqn._b.drawingObject.text[0].text).toBe('b');
-    expect(eqn._v.drawingObject).toBeInstanceOf(VertexSymbol);
+    expect(eqn._v.drawingObject).toBeInstanceOf(VertexGeneric);
 
     expect(eqn._a.isTouchable).toBe(false);
     expect(eqn._b.isTouchable).toBe(true);
@@ -222,17 +222,17 @@ describe('Figure Equations From Object', () => {
   });
   test('Symbol: Vinculum', () => {
     eqn.addElements(addElements.vinculum);
-    expect(eqn._v.drawingObject).toBeInstanceOf(VertexSymbol);
+    expect(eqn._v.drawingObject).toBeInstanceOf(VertexGeneric);
     expect(eqn._v.color).toEqual(color1);
   });
   test('Symbol: Strike', () => {
     eqn.addElements(addElements.strike);
-    expect(eqn._s.drawingObject).toBeInstanceOf(VertexSymbol);
+    expect(eqn._s.drawingObject).toBeInstanceOf(VertexGeneric);
     expect(eqn._s.color).toEqual(color1);
   });
   test('Symbol: xStrike', () => {
     eqn.addElements(addElements.xStrike);
-    expect(eqn._x.drawingObject).toBeInstanceOf(VertexSymbol);
+    expect(eqn._x.drawingObject).toBeInstanceOf(VertexGeneric);
     expect(eqn._x.color).toEqual(color1);
   });
 });

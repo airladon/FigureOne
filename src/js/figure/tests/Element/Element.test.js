@@ -375,7 +375,7 @@ describe('Animationa and Movement', () => {
         pulseTransform = new Transform()
           .scale(1.1, 1.1).rotate(0).translate(0, 0);
         expectM = m2.mul(element.transform.matrix(), pulseTransform.matrix());
-        expect(element.lastDrawPulseTransform.matrix()).toEqual(expectM);
+        expect(round(element.lastDrawPulseTransform.matrix())).toEqual(expectM);
 
         // element.setupDraw(identity, 1);
         figure.mock.timeStep(0.5);
