@@ -106,9 +106,13 @@ The tutorials introduce how to use FigureOne and many of the main concepts.
 
 ![](examples/Pythagorean%20Theorem/example.gif)
 
-### **[Create a Sine Wave](https://github.com/airladon/FigureOne/tree/master/examples/Sine%Wave)**
+### **[Create a Sine Wave](https://github.com/airladon/FigureOne/tree/master/examples/Sine%20Wave)**
 
 ![](examples/Sine%20Wave/example.gif)
+
+### **[Total Angle of a Polygon](https://github.com/airladon/FigureOne/tree/master/examples/Total%20Angle%20of%20a%20Polygon)**
+
+![](examples/Total%20Angle%20of%20a%20Polygon/example.gif)
 
 
 ## NPM Package
