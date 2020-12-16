@@ -52,11 +52,14 @@ const figure = new Fig.Figure({ limits: [-4.5, -4.5, 9, 9], color: [1, 0, 0, 1],
 ....########.##.....##.##.....##.##.....##.##........########.########
 */
 
+// Define the polyline points
 const { getPoints, threePointAngle } = Fig.tools.g2;
 const points = [
   [2, 0.5], [1.4, 1.3], [-0.4, 1.5], [0.5, 0.7], [-0.4, 0], [1.5, 0]
 ];
 const p = getPoints(points);
+
+// Calculate the sizes of the angles of interest
 const angles = {
   a: {
     old: Math.PI * 2 - threePointAngle(p[4], p[2], p[1]),
@@ -72,6 +75,7 @@ const angles = {
   },
 }
 
+// Helper function to create angle definition objects
 const angle = (p1, p2, p3, name, label, alpha = 1, fill = false, direction = 1) => ({
   name,
   method: 'collections.angle',
@@ -84,6 +88,7 @@ const angle = (p1, p2, p3, name, label, alpha = 1, fill = false, direction = 1) 
   },
 });
 
+// Helper function to get figure elements succinctly
 const get = (name) => figure.getElement(name);
 
 figure.add([
@@ -91,6 +96,7 @@ figure.add([
     name: 'shape',
     method: 'collections.collection',
     elements: [
+      // Rectangle that will be used to highlight different equation elements
       {
         name: 'highlightRect',
         method: 'collections.rectangle',
@@ -100,14 +106,16 @@ figure.add([
           height: 0,
         },
       },
+      // Angle annotations on the polygon
       angle(p[1], p[2], p[4], 'angleAf', '', 0.7, true, -1),
       angle(p[5], p[4], p[2], 'angleBf', '', 0.7, true),
       angle(p[4], p[3], p[2], 'angleCf', '', 0.7, true),
       angle(p[4], p[2], p[3], 'angleA', 'a'),
       angle(p[3], p[4], p[2], 'angleB', 'b'),
       angle(p[2], p[3], p[4], 'angleC', 'c'),
+      // The old polygon
       {
-        name: 'oldShape',
+        name: 'old',
         method: 'collections.polyline',
         options: {
           points: [p[0], p[1], p[2], p[4], p[5]],
@@ -121,8 +129,9 @@ figure.add([
           },
         },
       },
+      // The new polygon
       {
-        name: 'newShape',
+        name: 'new',
         method: 'collections.polyline',
         options: {
           points: [p[0], p[1], p[2], p[3], p[4], p[5]],
@@ -136,6 +145,7 @@ figure.add([
           cornerStyle: 'fill',
         },
       },
+      // A button to step through the equation
       {
         name: 'button',
         method: 'collections.rectangle',
@@ -168,32 +178,38 @@ figure.add([
     method: 'collections.equation',
     options: {
       elements: {
+        // Define equation elements 'a', 'b', and 'c' to be touchable with
+        // some touchBorder buffer around them
         a: { mods: { touchBorder: 0.2, isTouchable: true } },
         b: { mods: { touchBorder: 0.2, isTouchable: true } },
         c: { mods: { touchBorder: [1, 0.3, 0.3, 0.3], isTouchable: true } },
+        // Other equation elements and symbols
         equals: '   =   ',
         _360: '360\u00b0',
+        plus180: ' +  180\u00b0',
+        minus180: ' \u2212 180\u00b0 ',
         minus1: ' \u2212 ',
         minus2: ' \u2212 ',
         minus3: ' \u2212 ',
-        minus180: ' \u2212 180\u00b0 ',
         plus: '  +  ',
         newBox: { symbol: 'tBox' },
         oldBox: { symbol: 'tBox' },
         brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.01 },
-        plus180: ' +  180\u00b0',
       },
       phrases: {
         tAngleOld: { bottomComment: ['total angle_1', 'old shape'] },
         tAngleNew: { bottomComment: ['total angle_2', 'new shape'] },
         new: { box: ['tAngleNew', 'newBox', false, 0.1] },
         old: { box: ['tAngleOld', 'oldBox', false, 0.1] },
+        minusA: ['  ', 'minus1', 'a'],
+        minusB: ['  ', 'minus2', 'b'],
+        minusC: ['  ', 'minus3', 'c'],
       },
       forms: {
         0: {
           content: [
-            'new', 'equals', 'old', '  ', 'minus1', 'a', '  ', 'minus2', 'b',
-            '  ', 'plus', '_360', '  ', 'minus3', 'c',
+            'new', 'equals', 'old', 'minusA', 'minusB',
+            '  ', 'plus', '_360', 'minusC',
           ],
           onShow: () => {
             get('eqn.a').isTouchable = true;
@@ -205,8 +221,8 @@ figure.add([
         },
         1: {
           content: [
-            'new', 'equals', 'old', '  ', 'minus1', 'a', '  ', 'minus2', 'b',
-            '  ', 'minus3', 'c', '  ', 'plus', '_360',
+            'new', 'equals', 'old', 'minusA', 'minusB',
+            'minusC', '  ', 'plus', '_360',
           ],
           animation: {
             translation: {
@@ -283,9 +299,9 @@ const setAngleClick = (ang, eqnElement, angleFill, surround, oldAngle, newAngle)
     highlighter.surround([element, get(surround)], [0, 0.08, 0.05, 0.05]);
     highlighter.pulse({ scale: 1.2 });
     if (oldAngle != null) {
-      get(`shape.oldShape.angle${oldAngle}`).hide();
+      get(`shape.old.angle${oldAngle}`).hide();
     }
-    get(`shape.newShape.angle${newAngle}`).hide();
+    get(`shape.new.angle${newAngle}`).hide();
     get(angleFill).show();
     get(angleFill).animations.new()
       .angle({ target: ang.old, duration: 0 })
@@ -301,9 +317,9 @@ setAngleClick(angles.c, 'eqn.c', 'shape.angleCf', 'eqn.plus', null, 2);
 
 const newBox = get('eqn.newBox');
 newBox.onClick = () => {
-  get('shape.oldShape').hideAngles();
+  get('shape.old').hideAngles();
   hideAngles()
-  get('shape.newShape').showAngles();
+  get('shape.new').showAngles();
   highlighter.show();
   highlighter.surround(newBox, -0.02);
   highlighter.pulse({ scale: 1.2 });
@@ -311,9 +327,9 @@ newBox.onClick = () => {
 };
 const oldBox = get('eqn.oldBox');
 oldBox.onClick = () => {
-  get('shape.newShape').hideAngles();
+  get('shape.new').hideAngles();
   hideAngles();
-  get('shape.oldShape').showAngles();
+  get('shape.old').showAngles();
   highlighter.show();
   highlighter.surround(oldBox, -0.02);
   highlighter.pulse({ scale: 1.2 });
@@ -338,8 +354,8 @@ get('shape.button').onClick = () => {
 }
 
 hideAngles();
-get('shape.newShape').hideAngles();
-get('shape.oldShape').hideAngles();
+get('shape.new').hideAngles();
+get('shape.old').hideAngles();
 get('eqn').showForm('0');
 // console.log(figure.elements._shape)
 
