@@ -75,6 +75,9 @@ const angles = {
   },
 }
 
+// Helper function to get figure elements succinctly
+const get = (name) => figure.getElement(name);
+
 // Helper function to create angle definition objects
 const angle = (p1, p2, p3, name, label, alpha = 1, fill = false, direction = 1) => ({
   name,
@@ -88,8 +91,16 @@ const angle = (p1, p2, p3, name, label, alpha = 1, fill = false, direction = 1) 
   },
 });
 
-// Helper function to get figure elements succinctly
-const get = (name) => figure.getElement(name);
+// Helper function that sets equation elements as touchable or not
+const setTouchable = (touchable, justBoxes = false) => {
+  if (!justBoxes) {
+    get('eqn.negA').isTouchable = touchable;
+    get('eqn.negB').isTouchable = touchable;
+    get('eqn.negC').isTouchable = touchable;
+  }
+  get('eqn.newBox').isTouchable = touchable;
+  get('eqn.oldBox').isTouchable = touchable;
+};
 
 figure.add([
   {
@@ -173,6 +184,7 @@ figure.add([
       position: [-0.5, -0.5],
     },
   },
+  // Equation Definition
   {
     name: 'eqn',
     method: 'collections.equation',
@@ -180,91 +192,66 @@ figure.add([
       elements: {
         // Define equation elements 'a', 'b', and 'c' to be touchable with
         // some touchBorder buffer around them
-        a: { mods: { touchBorder: 0.2, isTouchable: true } },
-        b: { mods: { touchBorder: 0.2, isTouchable: true } },
-        c: { mods: { touchBorder: [1, 0.3, 0.3, 0.3], isTouchable: true } },
+        negA: { text: ' \u2212  a', touchBorder: [0.01, 0.3, 0.02, 0.3] },
+        negB: { text: ' \u2212  b', touchBorder: [0.01, 0.3, 0.06, 0.3] },
+        negC: { text: ' \u2212  c', touchBorder: [0.65, 0.3, 0.3, 0.3] },
         // Other equation elements and symbols
         equals: '   =   ',
-        _360: '360\u00b0',
+        plus360: ' +  360\u00b0',
         plus180: ' +  180\u00b0',
         minus180: ' \u2212 180\u00b0 ',
-        minus1: ' \u2212 ',
-        minus2: ' \u2212 ',
-        minus3: ' \u2212 ',
-        plus: '  +  ',
         newBox: { symbol: 'tBox' },
         oldBox: { symbol: 'tBox' },
         brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.01 },
       },
       phrases: {
-        tAngleOld: { bottomComment: ['total angle_1', 'old shape'] },
-        tAngleNew: { bottomComment: ['total angle_2', 'new shape'] },
-        new: { box: ['tAngleNew', 'newBox', false, 0.1] },
-        old: { box: ['tAngleOld', 'oldBox', false, 0.1] },
-        minusA: ['  ', 'minus1', 'a'],
-        minusB: ['  ', 'minus2', 'b'],
-        minusC: ['  ', 'minus3', 'c'],
+        totalAngleOld: { bottomComment: ['total angle_1', 'old shape'] },
+        totalAngleNew: { bottomComment: ['total angle_2', 'new shape'] },
+        new: { box: ['totalAngleNew', 'newBox', false, 0.08] },
+        old: { box: ['totalAngleOld', 'oldBox', false, 0.08] },
+        newEqOld: ['new', 'equals', 'old', '   '],
       },
       forms: {
         0: {
-          content: [
-            'new', 'equals', 'old', 'minusA', 'minusB',
-            '  ', 'plus', '_360', 'minusC',
-          ],
-          onShow: () => {
-            get('eqn.a').isTouchable = true;
-            get('eqn.b').isTouchable = true;
-            get('eqn.c').isTouchable = true;
-            get('eqn.newBox').isTouchable = true;
-            get('eqn.oldBox').isTouchable = true;
-          },
+          content: [ 'newEqOld', 'negA', ' ', 'negB', '  ', 'plus360', 'negC'],
+          onShow: () => setTouchable(true),
         },
         1: {
           content: [
-            'new', 'equals', 'old', 'minusA', 'minusB',
-            'minusC', '  ', 'plus', '_360',
+            'newEqOld', 'negA', ' ', 'negB', ' ', 'negC', '  ', 'plus360',
           ],
           animation: {
             translation: {
-              c: { style: 'curve', direction: 'up', mag: 0.8 },
-              minus3: { style: 'curve', direction: 'up', mag: 0.8 },
+              negC: { style: 'curve', direction: 'up', mag: 0.9 }
             },
-            onStart: () => {
-              get('eqn.a').isTouchable = false;
-              get('eqn.b').isTouchable = false;
-              get('eqn.c').isTouchable = false;
-              get('eqn.newBox').isTouchable = false;
-              get('eqn.oldBox').isTouchable = false;
-            }
+            onStart: () => setTouchable(false),
           },
         },
         2: {
           content: [
-            'new', 'equals', 'old', '  ',
+            'newEqOld',
             {
               bottomComment: {
-                content: ['minus1', 'a', '  ', 'minus2', 'b', '  ', 'minus3', 'c'],
+                content: ['negA', ' ', 'negB', ' ', 'negC'],
                 symbol: 'brace',
                 comment: 'minus180',
+                contentSpace: 0.07,
               },
             },
-            '  ', 'plus', '_360',
+            '  ', 'plus360',
           ],
         },
-        3: [
-          'new', 'equals', 'old', '  ', 'minus180', 'plus', '_360',
-        ],
+        3: ['newEqOld', '  ', 'minus180', 'plus360'],
         4: [
-          'new', 'equals', 'old', '  ', {
-            bottomComment: [['minus180', 'plus', '_360'], 'plus180', 'brace'],
+          'newEqOld', '  ', {
+            bottomComment: [['minus180', 'plus360'], 'plus180', 'brace'],
           },
         ],
         5: {
-          content: ['new', 'equals', 'old', '  ', 'plus180'],
+          content: ['newEqOld', '  ', 'plus180'],
           onShow: () => {
             get('eqn.newBox').isTouchable = true;
             get('eqn.oldBox').isTouchable = true;
-            // get('shape.button.label').drawingObject.setText('Why?');
           }
         },
       },
@@ -296,7 +283,11 @@ const setAngleClick = (ang, eqnElement, angleFill, surround, oldAngle, newAngle)
     figure.setFirstTransform();
     // surround([element, get(surround)], [0, 0.08, 0.05, 0.05])
     highlighter.show();
-    highlighter.surround([element, get(surround)], [0, 0.08, 0.05, 0.05]);
+    const elements = [element];
+    if (surround != null) {
+      elements.push(get(surround));
+    }
+    highlighter.surround(elements, [0, 0.08, 0.03, 0.05]);
     highlighter.pulse({ scale: 1.2 });
     if (oldAngle != null) {
       get(`shape.old.angle${oldAngle}`).hide();
@@ -311,9 +302,9 @@ const setAngleClick = (ang, eqnElement, angleFill, surround, oldAngle, newAngle)
   }
 }
 
-setAngleClick(angles.a, 'eqn.a', 'shape.angleAf', 'eqn.minus1', 1, 1);
-setAngleClick(angles.b, 'eqn.b', 'shape.angleBf', 'eqn.minus2', 2, 3);
-setAngleClick(angles.c, 'eqn.c', 'shape.angleCf', 'eqn.plus', null, 2);
+setAngleClick(angles.a, 'eqn.negA', 'shape.angleAf', null, 1, 1);
+setAngleClick(angles.b, 'eqn.negB', 'shape.angleBf', null, 2, 3);
+setAngleClick(angles.c, 'eqn.negC', 'shape.angleCf', 'eqn.plus360', null, 2);
 
 const newBox = get('eqn.newBox');
 newBox.onClick = () => {
