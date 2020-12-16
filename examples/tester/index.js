@@ -55,7 +55,7 @@ const figure = new Fig.Figure({ limits: [-4.5, -4.5, 9, 9], color: [1, 0, 0, 1],
 // Define the polyline points
 const { getPoints, threePointAngle } = Fig.tools.g2;
 const points = [
-  [2, 0.5], [1.4, 1.3], [-0.4, 1.5], [0.5, 0.7], [-0.4, 0], [1.5, 0]
+  [1, 1], [0.4, 1.8], [-1.7, 2], [-0.5, 1.2], [-1.4, 0], [0.5, 0]
 ];
 const p = getPoints(points);
 
@@ -102,88 +102,108 @@ const setTouchable = (touchable, justBoxes = false) => {
   get('eqn.oldBox').isTouchable = touchable;
 };
 
+// Helper function to hide all special fill angles
+const hideAngles = () => {
+  figure.stop();
+  get('angleAf').hide();
+  get('angleBf').hide();
+  get('angleCf').hide();
+}
+
 figure.add([
   {
-    name: 'shape',
-    method: 'collections.collection',
-    elements: [
-      // Rectangle that will be used to highlight different equation elements
-      {
-        name: 'highlightRect',
-        method: 'collections.rectangle',
-        options: {
-          line: { width: 0.01 },
-          width: 0,
-          height: 0,
-        },
-      },
-      // Angle annotations on the polygon
-      angle(p[1], p[2], p[4], 'angleAf', '', 0.7, true, -1),
-      angle(p[5], p[4], p[2], 'angleBf', '', 0.7, true),
-      angle(p[4], p[3], p[2], 'angleCf', '', 0.7, true),
-      angle(p[4], p[2], p[3], 'angleA', 'a'),
-      angle(p[3], p[4], p[2], 'angleB', 'b'),
-      angle(p[2], p[3], p[4], 'angleC', 'c'),
-      // The old polygon
-      {
-        name: 'old',
-        method: 'collections.polyline',
-        options: {
-          points: [p[0], p[1], p[2], p[4], p[5]],
-          close: true,
-          width: 0.015,
-          cornerStyle: 'fill',
-          angle: {
-            direction: -1,
-            curve: { fill: true, radius: 0.3 },
-            color: [1, 0, 0, 0.7]
-          },
-        },
-      },
-      // The new polygon
-      {
-        name: 'new',
-        method: 'collections.polyline',
-        options: {
-          points: [p[0], p[1], p[2], p[3], p[4], p[5]],
-          dash: [0.05, 0.02],
-          angle: {
-            direction: -1,
-            curve: { fill: true, radius: 0.3 },
-            color: [1, 0, 0, 0.7]
-          },
-          close: true,
-          cornerStyle: 'fill',
-        },
-      },
-      // A button to step through the equation
-      {
-        name: 'button',
-        method: 'collections.rectangle',
-        options: {
-          width: 0.6,
-          height: 0.3,
-          color: [0.5, 0.5, 0.5, 1],
-          line: {
-            width: 0.004,
-          },
-          button: true,
-          label: {
-            text: 'Simplify',
-            font: { size: 0.12, color: [0.3, 0.3, 0.3, 1] },
-          },
-          corner: { radius: 0.05, sides: 10 },
-          position: [1.75, -1],
-        },
-        mods: {
-          isTouchable: true,
-        },
-      },
-    ],
+    name: 'instructions',
+    method: 'primitives.textLines',
     options: {
-      position: [-0.5, -0.5],
+      text: [
+        'Touch the equation\'s terms to understand where they',
+        'come from.',
+        '',
+        'Then press the |simplify| button several times to rearrange',
+        'the equation.',
+      ],
+      color: [0.5, 0.5, 0.5, 1],
+      font: { size: 0.12 },
+      modifiers: {
+        simplify: { font: { style: 'italic' } },
+      },
+      position: [-1.7, 2.8],
     },
   },
+  // Rectangle that highlights equation elements
+  {
+    name: 'highlightRect',
+    method: 'collections.rectangle',
+    options: {
+      line: { width: 0.01 },
+      width: 0,
+      height: 0,
+    },
+  },
+
+  // Angles to consider in the polygons
+  angle(p[1], p[2], p[4], 'angleAf', '', 0.7, true, -1),
+  angle(p[5], p[4], p[2], 'angleBf', '', 0.7, true),
+  angle(p[4], p[3], p[2], 'angleCf', '', 0.7, true),
+  angle(p[4], p[2], p[3], 'angleA', 'a'),
+  angle(p[3], p[4], p[2], 'angleB', 'b'),
+  angle(p[2], p[3], p[4], 'angleC', 'c'),
+
+  // The old polygon
+  {
+    name: 'old',
+    method: 'collections.polyline',
+    options: {
+      points: [p[0], p[1], p[2], p[4], p[5]],
+      close: true,
+      width: 0.015,
+      cornerStyle: 'fill',
+      angle: {
+        direction: -1,
+        curve: { fill: true, radius: 0.3 },
+        color: [1, 0, 0, 0.7]
+      },
+    },
+  },
+  // The new polygon
+  {
+    name: 'new',
+    method: 'collections.polyline',
+    options: {
+      points: [p[0], p[1], p[2], p[3], p[4], p[5]],
+      dash: [0.05, 0.02],
+      angle: {
+        direction: -1,
+        curve: { fill: true, radius: 0.3 },
+        color: [1, 0, 0, 0.7]
+      },
+      close: true,
+      cornerStyle: 'fill',
+    },
+  },
+  // A button to step through the equation
+  {
+    name: 'button',
+    method: 'collections.rectangle',
+    options: {
+      width: 0.6,
+      height: 0.3,
+      color: [0.3, 0.3, 0.3, 1],
+      dimColor: [0.7, 0.7, 0.7, 1],
+      line: { width: 0.004 },
+      button: true,
+      label: {
+        text: 'Simplify',
+        font: { size: 0.12, color: [0.3, 0.3, 0.3, 1] },
+      },
+      corner: { radius: 0.05, sides: 10 },
+      position: [1, -1],
+    },
+    mods: {
+      isTouchable: true,
+    },
+  },
+
   // Equation Definition
   {
     name: 'eqn',
@@ -214,7 +234,20 @@ figure.add([
       forms: {
         0: {
           content: [ 'newEqOld', 'negA', ' ', 'negB', '  ', 'plus360', 'negC'],
-          onShow: () => setTouchable(true),
+          onShow: () => {
+            setTouchable(true);
+            get('button')._label.drawingObject.setText('Simplify');
+            get('new').hideAngles();
+            get('old').hideAngles();
+            hideAngles();
+          },
+          animation: {
+            onStart: () => {
+              get('new').hideAngles();
+              get('old').hideAngles();
+              hideAngles();
+            },
+          },
         },
         1: {
           content: [
@@ -252,36 +285,25 @@ figure.add([
           onShow: () => {
             get('eqn.newBox').isTouchable = true;
             get('eqn.oldBox').isTouchable = true;
+            get('button')._label.drawingObject.setText('Restart');
           }
         },
       },
       formSeries: ['0', '1', '2', '3', '4', '5'],
-      position: [-1.2, -1],
+      position: [-1.7, -0.5],
     },
   },
 ]);
 
+// The highlighter element will be used frequently
+const highlighter = get('highlightRect')
 
-const highlighter = get('shape.highlightRect')
-// const surround = (elementOrElements, space) => {
-//   highlighter.show();
-//   highlighter.surround(elementOrElements, space);
-//   highlighter.pulse({ scale: 1.2 });
-// };
-
-const hideAngles = () => {
-  figure.stop();
-  get('shape.angleAf').hide();
-  get('shape.angleBf').hide();
-  get('shape.angleCf').hide();
-}
-
+// When angle a, b or c is pressed in the equation, then surround the element
+// and highlight the angle on the figure
 const setAngleClick = (ang, eqnElement, angleFill, surround, oldAngle, newAngle) => {
   const element = get(`${eqnElement}`);
   element.onClick = () => {
     figure.stop('complete');
-    figure.setFirstTransform();
-    // surround([element, get(surround)], [0, 0.08, 0.05, 0.05])
     highlighter.show();
     const elements = [element];
     if (surround != null) {
@@ -290,9 +312,9 @@ const setAngleClick = (ang, eqnElement, angleFill, surround, oldAngle, newAngle)
     highlighter.surround(elements, [0, 0.08, 0.03, 0.05]);
     highlighter.pulse({ scale: 1.2 });
     if (oldAngle != null) {
-      get(`shape.old.angle${oldAngle}`).hide();
+      get(`old.angle${oldAngle}`).hide();
     }
-    get(`shape.new.angle${newAngle}`).hide();
+    get(`new.angle${newAngle}`).hide();
     get(angleFill).show();
     get(angleFill).animations.new()
       .angle({ target: ang.old, duration: 0 })
@@ -302,51 +324,35 @@ const setAngleClick = (ang, eqnElement, angleFill, surround, oldAngle, newAngle)
   }
 }
 
-setAngleClick(angles.a, 'eqn.negA', 'shape.angleAf', null, 1, 1);
-setAngleClick(angles.b, 'eqn.negB', 'shape.angleBf', null, 2, 3);
-setAngleClick(angles.c, 'eqn.negC', 'shape.angleCf', 'eqn.plus360', null, 2);
+// Setup click callbacks for each angle term in the equation
+setAngleClick(angles.a, 'eqn.negA', 'angleAf', null, 1, 1);
+setAngleClick(angles.b, 'eqn.negB', 'angleBf', null, 2, 3);
+setAngleClick(angles.c, 'eqn.negC', 'angleCf', 'eqn.plus360', null, 2);
 
-const newBox = get('eqn.newBox');
-newBox.onClick = () => {
-  get('shape.old').hideAngles();
+// Setup click callbacks for the "Total Angle" terms in the equation
+get('eqn.newBox').onClick = () => {
+  get('old').hideAngles();
   hideAngles()
-  get('shape.new').showAngles();
+  get('new').showAngles();
   highlighter.show();
-  highlighter.surround(newBox, -0.02);
+  highlighter.surround(get('eqn.newBox'), -0.02);
   highlighter.pulse({ scale: 1.2 });
-  // surround(newBox, -0.02)
 };
-const oldBox = get('eqn.oldBox');
-oldBox.onClick = () => {
-  get('shape.new').hideAngles();
+get('eqn.oldBox').onClick = () => {
+  get('new').hideAngles();
   hideAngles();
-  get('shape.old').showAngles();
+  get('old').showAngles();
   highlighter.show();
-  highlighter.surround(oldBox, -0.02);
+  highlighter.surround(get('eqn.oldBox'), -0.02);
   highlighter.pulse({ scale: 1.2 });
-  // surround(oldBox, -0.02)
-  console.log('asdf')
 };
 
-get('shape.button').onClick = () => {
+// When butotn is pressed, progress through the equations forms
+get('button').onClick = () => {
   highlighter.hide();
   get('eqn').nextForm({ animate: 'move', duration: 2 });
-  // if (get('shape.button.label').drawingObject.text[0].text === 'Simplify') {
-  //   get('eqn').animations.new()
-  //     .goToForm({ target: '1', animate: 'move', duration: 2 })
-  //     .goToForm({ delay: 1, target: '2', animate: 'move', duration: 2 })
-  //     .goToForm({ delay: 1, target: '3', animate: 'move', duration: 2 })
-  //     .goToForm({ delay: 1, target: '4', animate: 'move', duration: 2 })
-  //     .goToForm({ delay: 1, target: '5', animate: 'move', duration: 2 })
-  //     .start();
-  // } else {
-  //   get('eqn').nextForm({ animate: 'move', duration: 2 });
-  // }
 }
 
-hideAngles();
-get('shape.new').hideAngles();
-get('shape.old').hideAngles();
+// Start by showing form ('0')
 get('eqn').showForm('0');
-// console.log(figure.elements._shape)
 

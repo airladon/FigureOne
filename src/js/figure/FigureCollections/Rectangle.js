@@ -265,7 +265,7 @@ class CollectionsRectangle extends FigureElementCollection {
       },
       transform: new Transform('Rectangle').scale(1, 1).rotate(0).translate(0, 0),
       limits: collections.primitives.limits,
-      button: {},
+      // button: {},
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     if (options.fill == null && options.line == null) {
@@ -481,7 +481,7 @@ class CollectionsRectangle extends FigureElementCollection {
 
   addlabel(textOptions: OBJ_TextLines | string) {
     const defaultOptions = {
-      font: this.collections.primitives.defaultFont,
+      font: joinObjects({}, this.collections.primitives.defaultFont),
       xAlign: 'center',
       yAlign: 'baseline',
       justify: 'center',

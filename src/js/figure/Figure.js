@@ -320,11 +320,11 @@ class Figure {
       htmlId, limits,
     } = optionsToUse;
     this.defaultColor = optionsToUse.color;
-    this.defaultFont = optionsToUse.font;
     // this.defaultLineWidth = optionsToUse.lineWidth;
     if (optionsToUse.font.color == null) {
       optionsToUse.font.color = this.defaultColor.slice();
     }
+    this.defaultFont = optionsToUse.font;
     this.htmlId = htmlId;
     this.animationFinishedCallback = null;
     // this.layout = layout;

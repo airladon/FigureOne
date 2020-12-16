@@ -36,6 +36,7 @@ export type TypeEquationForm = {
   description: string | null;
   modifiers: Object;
   type: string;
+  onShow: string | (() => void);
   elementMods: {
     [string]: {
       element: FigureElementPrimitive | FigureElementCollection,
@@ -90,10 +91,12 @@ export default class EquationForm extends Elements {
   // They are used by external classes using this form
   description: string | null;
   modifiers: Object;
+  onShow: string | (() => void);
   // subForm: string;
   animation: {
     duration: ?number;
     translation: TypeElementTranslationOptions;
+    onStart: string | (() => void);
   };
 
   fromForm: {
