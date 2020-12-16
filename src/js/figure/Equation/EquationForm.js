@@ -91,16 +91,18 @@ export default class EquationForm extends Elements {
   // They are used by external classes using this form
   description: string | null;
   modifiers: Object;
-  onShow: string | (() => void);
+  onTransition: null | string | (() => void);
+  onShow: null | string | (() => void);
   // subForm: string;
   animation: {
     duration: ?number;
     translation: TypeElementTranslationOptions;
-    onStart: string | (() => void);
   };
 
   fromForm: {
     [formName: string]: {
+      onTransition?: string | (() => void),
+      onShow?: string | (() => void),
       animation?: {
         duration?: number,
         translation?: TypeElementTranslationOptions,

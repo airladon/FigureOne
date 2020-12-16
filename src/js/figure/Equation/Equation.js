@@ -345,18 +345,31 @@ type TypeEquationFormObject = {
   subForm?: string,
   description?: string,           // For equation navigation
   modifiers?: {},                 // Modifiers for description
-  // First Priority
-  // fromPrev?: TypeFormAnimationProperties,
-  // fromNext?: TypeFormAnimationProperties,
-  // Last Priority
+  duration?: number,
+  onTransition?: string | (() => void),
+  onShow?: string | (() => void),
   animation?: {
     duration?: ?number,               // null means to use velocity
     translation?: TypeFormTranslationProperties,
   },
+  fromForm: {
+    [formName: string]: {
+      onTransition?: string | (() => void),
+      onShow?: string | (() => void),
+      animation?: {
+        duration?: number,
+        translation?: TypeFormTranslationProperties,
+      },
+      elementMods: {
+        [elementName: string]: Object,
+      },
+    },
+  };
   elementMods?: {
     [elementName: string]: Object
   },
 };
+
 
 /**
  * A single form definition can either be:
@@ -1404,7 +1417,7 @@ export class Equation extends FigureElementCollection {
       const {   // $FlowFixMe
         elementMods, duration, alignment, scale, // $FlowFixMe
         description, modifiers, animation, // $FlowFixMe
-        fromForm, onShow,
+        fromForm, onShow, onTransition,
       } = form;
       const options = {
         // subForm,
@@ -1417,6 +1430,7 @@ export class Equation extends FigureElementCollection {
         description,
         modifiers,
         onShow,
+        onTransition,
         // fromPrev,
         // fromNext,
         fromForm,
@@ -1512,14 +1526,16 @@ export class Equation extends FigureElementCollection {
       elementMods?: {
         [elementName: string]: Object,
       },
+      onTransition?: null | string | (() => void),
+      onShow?: null | string | (() => void),
       animation?: {
         duration?: number,
         translation?: { [elementName: string]: TypeFormTranslationProperties },
-        onStart?: string | (() => void),
       },
-      onShow?: string | (() => void),
       fromForm: {
         [formName: string]: {
+          onTransition?: null | string | (() => void),
+          onShow?: null | string | (() => void),
           animation?: {
             duration?: number,
             translation?: { [elementName: string]: TypeFormTranslationProperties },
@@ -1546,6 +1562,7 @@ export class Equation extends FigureElementCollection {
       },
       fromForm: {},
       onShow: null,
+      onTransition: null,
     }, this.eqn.formDefaults);
     let optionsToUse = defaultOptions;
     if (options) {
@@ -1553,7 +1570,7 @@ export class Equation extends FigureElementCollection {
     }
     const {
       description, modifiers, animation, fromForm,
-      onShow,
+      onShow, onTransition,
     } = optionsToUse;
     // this.eqn.forms[name].name = name;
     // const form = this.eqn.forms[name];
@@ -1566,6 +1583,7 @@ export class Equation extends FigureElementCollection {
     form.animation = animation;
     form.fromForm = fromForm;
     form.onShow = onShow;
+    form.onTransition = onTransition;
 
     // Populate element mods
     form.elementMods = {};
@@ -1707,7 +1725,8 @@ export class Equation extends FigureElementCollection {
     }
     if (form) {
       this.setCurrentForm(form);
-      this.render(animationStop);
+      this.render(animationStop);         // $FlowFixMe
+      this.fnMap.exec(form.onTransition); // $FlowFixMe
       this.fnMap.exec(form.onShow);
     }
   }
@@ -1814,7 +1833,7 @@ export class Equation extends FigureElementCollection {
       options.fromWhere = this.eqn.currentForm;
     }
     // if (form.animation.onStart != null) {
-    this.fnMap.exec(form.animation.onStart);
+    // this.fnMap.exec(form.animation.onTransition);
     // }
 
     let { duration } = options;
@@ -1831,6 +1850,14 @@ export class Equation extends FigureElementCollection {
       ) {
         duration = form.fromForm[options.fromWhere].animation.duration;
       }
+    }
+    let { onTransition } = form;
+    if (
+      form.fromForm != null
+      && form.fromForm[options.fromWhere] != null
+      && form.fromForm[options.fromWhere].onTransition !== undefined
+    ) {
+      ({ onTransition } = form.fromForm[options.fromWhere]);
     }
 
     if (duration != null && duration > 0 && options.animate === 'dissolve') {
@@ -1861,12 +1888,14 @@ export class Equation extends FigureElementCollection {
       //   options.callback();
       // }
       // if (form.onShow != null) {
-      this.fnMap.exec(form.onShow);
+      // this.fnMap.exec(form.onTransition);
+      // this.fnMap.exec(form.onShow);
       // }
     } else {
       this.eqn.isAnimating = true;
+      this.fnMap.exec(onTransition);
       const end = () => {
-        // if (form.onShow != null) {
+        // $FlowFixMe
         this.fnMap.exec(form.onShow);
         // }
         this.eqn.isAnimating = false;
