@@ -8,6 +8,7 @@
     "url": "git+https://github.com/airladon/figureone.git"
   },
   "scripts": {
+    "browser": "./browser.sh",
     "webpack": "webpack",
     "flow": "flow",
     "jest": "jest",

@@ -87,8 +87,8 @@ figure.add([
     options: {
       text: [
         'A polygon\'s total angle will increase by 180\u00b0 when one side is split into two new sides.',
-        'The two new sides can either be split inside or outside the polygon. This example shows',
-        'the inside case',
+        'The two new sides can be constructed either inside or outside the polygon. This example',
+        'shows the inside case.',
         '',
         'Touch the equation\'s terms to understand where they come from.',
         '',

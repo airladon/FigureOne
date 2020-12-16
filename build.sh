@@ -151,6 +151,15 @@ cat package.json | \
   sed '/^  "scripts/,/}/d' > package/package.json
 check_status "Packaging"
 
+
+if [ $TESTING = 1 ];
+then
+  # Lint and type check
+  echo "${bold}${cyan}============ Browser Tests =============${reset}"
+  docker_run "Browser Tests" npm run browser
+  check_status "Browser Tests"
+fi
+
 if [ $1 ];
 then
   if [ $1 = "deploy" ];
