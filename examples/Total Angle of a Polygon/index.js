@@ -190,24 +190,19 @@ figure.add([
       forms: {
         0: {
           content: [ 'newEqOld', 'negA', ' ', 'negB', '  ', 'plus360', 'negC'],
+          // When animating to this form, just hide the angles at the start of
+          // the animation - wait to change the button text and touchability
+          // until the form is fully shown
+          onTransition: () => {
+            get('new').hideAngles();
+            get('old').hideAngles();
+            hideAngles();
+          },
           // When form 0 is shown, hide all angles, make equation touchable,
           // and set button text to "Simplify"
           onShow: () => {
             setTouchable(true);
             get('button').setLabel('Simplify');
-            get('new').hideAngles();
-            get('old').hideAngles();
-            hideAngles();
-          },
-          // When animating to this form, just hide the angles at the start of
-          // the animation - wait to change the button text and touchability
-          // until the form is fully shown
-          animation: {
-            onStart: () => {
-              get('new').hideAngles();
-              get('old').hideAngles();
-              hideAngles();
-            },
           },
         },
         // From this form, the equation should not be touchable
@@ -219,8 +214,8 @@ figure.add([
             translation: {
               negC: { style: 'curve', direction: 'up', mag: 0.9 }
             },
-            onStart: () => setTouchable(false),
           },
+          onTransition: () => setTouchable(false),
         },
         2: {
           content: [
