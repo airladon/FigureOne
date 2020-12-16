@@ -567,6 +567,31 @@ class CollectionsRectangle extends FigureElementCollection {
     this.setPositions();
     this.setPosition(position);
   }
+
+  /**
+   * Set button label.
+   */
+  setLabel(text: string | OBJ_TextLines) {
+    if (this._label != null) {
+      let textToUse;
+      if (typeof text === 'string') {
+        textToUse = { text };
+      } else {
+        textToUse = text;
+      }
+      this._label.custom.updateText(textToUse);
+    }
+  }
+
+  /**
+   * Get button label.
+   */
+  getLabel() {
+    if (this._label != null) {  // $FlowFixMe
+      return this._label.drawingObject.text[0].text;
+    }
+    return '';
+  }
 }
 
 export default CollectionsRectangle;

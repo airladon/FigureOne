@@ -194,7 +194,7 @@ figure.add([
           // and set button text to "Simplify"
           onShow: () => {
             setTouchable(true);
-            get('button')._label.drawingObject.setText('Simplify');
+            get('button').setLabel('Simplify');
             get('new').hideAngles();
             get('old').hideAngles();
             hideAngles();
@@ -249,7 +249,7 @@ figure.add([
           onShow: () => {
             get('eqn.newBox').isTouchable = true;
             get('eqn.oldBox').isTouchable = true;
-            get('button')._label.drawingObject.setText('Restart');
+            get('button').setLabel('Restart');
           }
         },
       },

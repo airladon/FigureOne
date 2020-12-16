@@ -3220,10 +3220,15 @@ export default class FigurePrimitives {
     const to = new TextLineObject(this.draw2D);
     to.loadText(options);
     const element = this.genericTextPrimitive(to, options);
+    element.custom.options = to;
     element.custom.updateText = (o: OBJ_Text) => { // $FlowFixMe
-      element.drawingObject.loadText(
-        this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, o),
-      );
+      const parsed = this.parseTextOptions(
+        { border: 'rect', touchBorder: 'rect' },
+        element.custom.options,
+        o,
+      ); // $FlowFixMe
+      element.drawingObject.loadText(parsed);
+      element.custom.options = parsed;
       element.custom.updateBorders({});
     };
     element.custom.updateBorders(options);
@@ -3238,18 +3243,24 @@ export default class FigurePrimitives {
     const joinedOptions = joinObjects({}, ...optionsIn);
     const to = new TextLinesObject(this.draw2D);
     const element = this.genericTextPrimitive(to, joinedOptions);
+    element.custom.options = joinedOptions;
     element.custom.updateText = (oIn: OBJ_Text) => {
       let oToUse = oIn; // $FlowFixMe
       if (oIn.length === 1 && typeof oIn[0] === 'string') {
         oToUse = [{ text: [optionsIn[0]] }];
       }
-      const o = this.parseTextOptions({ border: 'rect', touchBorder: 'rect' }, oToUse);
+      const o = this.parseTextOptions(
+        { border: 'rect', touchBorder: 'rect' },
+        element.custom.options,
+        oToUse,
+      );
       if (o.justify == null) {
         o.justify = 'left';
       }
       if (o.lineSpace == null) {
         o.lineSpace = o.font.size * 1.2;
-      } // $FlowFixMe
+      }
+      element.custom.options = o;  // $FlowFixMe
       element.drawingObject.loadText(o);
       element.custom.updateBorders(o);
     };
