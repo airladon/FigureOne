@@ -1404,7 +1404,7 @@ export class Equation extends FigureElementCollection {
       const {   // $FlowFixMe
         elementMods, duration, alignment, scale, // $FlowFixMe
         description, modifiers, animation, // $FlowFixMe
-        fromForm,
+        fromForm, onShow,
       } = form;
       const options = {
         // subForm,
@@ -1416,6 +1416,7 @@ export class Equation extends FigureElementCollection {
         scale,
         description,
         modifiers,
+        onShow,
         // fromPrev,
         // fromNext,
         fromForm,
@@ -1514,7 +1515,9 @@ export class Equation extends FigureElementCollection {
       animation?: {
         duration?: number,
         translation?: { [elementName: string]: TypeFormTranslationProperties },
+        onStart?: string | (() => void),
       },
+      onShow?: string | (() => void),
       fromForm: {
         [formName: string]: {
           animation?: {
@@ -1539,8 +1542,10 @@ export class Equation extends FigureElementCollection {
       scale: this.eqn.scale,
       animation: {
         duration: undefined,    // use null for velocities
+        onStart: null,
       },
       fromForm: {},
+      onShow: null,
     }, this.eqn.formDefaults);
     let optionsToUse = defaultOptions;
     if (options) {
@@ -1548,6 +1553,7 @@ export class Equation extends FigureElementCollection {
     }
     const {
       description, modifiers, animation, fromForm,
+      onShow,
     } = optionsToUse;
     // this.eqn.forms[name].name = name;
     // const form = this.eqn.forms[name];
@@ -1559,6 +1565,7 @@ export class Equation extends FigureElementCollection {
     form.name = name;
     form.animation = animation;
     form.fromForm = fromForm;
+    form.onShow = onShow;
 
     // Populate element mods
     form.elementMods = {};
@@ -1701,6 +1708,7 @@ export class Equation extends FigureElementCollection {
     if (form) {
       this.setCurrentForm(form);
       this.render(animationStop);
+      this.fnMap.exec(form.onShow);
     }
   }
 
@@ -1805,6 +1813,9 @@ export class Equation extends FigureElementCollection {
     if (options.fromWhere === '_current') {
       options.fromWhere = this.eqn.currentForm;
     }
+    // if (form.animation.onStart != null) {
+    this.fnMap.exec(form.animation.onStart);
+    // }
 
     let { duration } = options;
     // console.log(options)
@@ -1849,9 +1860,15 @@ export class Equation extends FigureElementCollection {
       // if (options.callback != null) {
       //   options.callback();
       // }
+      // if (form.onShow != null) {
+      this.fnMap.exec(form.onShow);
+      // }
     } else {
       this.eqn.isAnimating = true;
       const end = () => {
+        // if (form.onShow != null) {
+        this.fnMap.exec(form.onShow);
+        // }
         this.eqn.isAnimating = false;
         this.fnMap.exec(options.callback);
         // if (options.callback != null) {

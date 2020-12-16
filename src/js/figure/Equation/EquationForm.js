@@ -620,6 +620,7 @@ export default class EquationForm extends Elements {
     this.applyElementMods(fromWhere);
 
     let translationToUse = {};
+
     if (
       typeof fromWhere === 'string'
       && fromWhere.length !== 0

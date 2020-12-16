@@ -1284,7 +1284,7 @@ class TextLinesObject extends TextObjectBase {
     this.layoutText();
   }
 
-  setText(textOrOptions: string | OBJ_TextDefinition, index: number = 1) {
+  setText(textOrOptions: string | OBJ_TextDefinition, index: number = 0) {
     this.text[index].setText(textOrOptions);
     this.layoutText();
   }
