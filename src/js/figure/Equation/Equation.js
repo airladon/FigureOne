@@ -837,7 +837,11 @@ export class Equation extends FigureElementCollection {
         yAlign: TypeVAlign,
       },
       elementMods: OBJ_ElementMods,
-    } & EQN_FormDefaults;
+      duration?: number,
+      translation?: EQN_TranslationStyle,
+      onShow?: null | string | (() => void),
+      onTransition?: null | string | (() => void),
+    };
 
     isAnimating: boolean;
 

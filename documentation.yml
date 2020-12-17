@@ -161,6 +161,11 @@ toc:
   - getTransform
   - OBJ_QuadraticBezier
   - Intersect
+  - OBJ_Buffer
+  - TypeParsableBuffer
+  - getBuffer
+  - TypeParsableBorder
+  - TypeBorder
   - name: Misc Shapes
   - OBJ_Texture
   - OBJ_TextDefinition
@@ -222,6 +227,10 @@ toc:
   - TypeColor
   - OBJ_AddElement
   - OBJ_FigureElementCollection
+  - OBJ_TriangleSideRotationAlignment
+  - FigureCollections ▸
+  - OBJ_ButtonColor
+  - OBJ_LineMove
   - name: Misc Animation
   - AnimationStep
   - ElementAnimationStep
