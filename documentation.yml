@@ -77,16 +77,16 @@ toc:
   - OBJ_EquationElements
   - TypeEquationElement
   - EQN_TextElement
-  - OBJ_Forms
+  - EQN_Forms
   - TypeEquationForm
-  - OBJ_FormObjectDefinition
+  - EQN_FormObjectDefinition
   - TypeEquationPhrase
-  - OBJ_FormAlignment
-  - OBJ_FromForms
-  - OBJ_FromForm
-  - OBJ_TranslationStyle
-  - OBJ_FormDefaults
-  - OBJ_FormRestart
+  - EQN_FormAlignment
+  - EQN_FromForms
+  - EQN_FromForm
+  - EQN_TranslationStyle
+  - EQN_FormDefaults
+  - EQN_FormRestart
   - name: Equation Layout
   - EQN_Fraction
   - EQN_Root
@@ -254,7 +254,7 @@ toc:
   - EQN_LeftRightGlyph
   - EQN_TopBottomGlyph
   - EQN_Glyphs
-  - OBJ_EquationGoToForm
+  - EQN_EquationGoToForm
   - EquationLabel
   - OBJ_NextFormAnimationStep
   - OBJ_GoToFormAnimationStep
