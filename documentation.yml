@@ -1,6 +1,6 @@
 toc:
   - name: FigureOn API Reference
-    file: ./docs/tutorials/intro.md
+    file: ./docs/api/tutorials/intro.md
   - name: Figure
   - Figure
   - OBJ_Figure
@@ -9,7 +9,7 @@ toc:
   - FigureElementPrimitive
   - FigureElementCollection
   - name: Geometric Classes
-    file: ./docs/tutorials/geometric/geometric.md
+    file: ./docs/api/tutorials/geometric/geometric.md
   - Point
   - Rect
   - Line
@@ -18,7 +18,7 @@ toc:
   - Scale
   - Transform
   - name: Shape Primitives
-    file: ./docs/tutorials/draw/draw.md
+    file: ./docs/api/tutorials/draw/draw.md
   - OBJ_Generic
   - OBJ_Line
   - OBJ_Polyline
@@ -30,7 +30,7 @@ toc:
   - OBJ_Star
   - OBJ_Grid
   - name: Collections
-    file: ./docs/tutorials/collections/collections.md
+    file: ./docs/api/tutorials/collections/collections.md
   - OBJ_Collection
   - CollectionsLine
   - COL_Line
@@ -45,12 +45,12 @@ toc:
   - CollectionsPlot
   - COL_Plot
   - name: Text
-    file: ./docs/tutorials/text/text.md
+    file: ./docs/api/tutorials/text/text.md
   - OBJ_Text
   - OBJ_TextLine
   - OBJ_TextLines
   - name: Animation
-    file: ./docs/tutorials/animation/animation.md
+    file: ./docs/api/tutorials/animation/animation.md
   - AnimationManager
   - AnimationBuilder
   - PositionAnimationStep
@@ -71,7 +71,7 @@ toc:
   - ParallelAnimationStep
   - DelayAnimationStep
   - name: Equations
-    file: ./docs/tutorials/equation/equation.md
+    file: ./docs/api/tutorials/equation/equation.md
   - Equation
   - EQN_Equation
   - EQN_EquationElements

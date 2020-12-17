@@ -1,9 +1,9 @@
-documentation build src/index.js -f html -o ./docs --config documentation.yml
+documentation build src/index.js -f html -o ./docs/api --config documentation.yml
 
-cat docs/assets/style.css docs/custom.css > docs/assets/style1.css
-mv docs/assets/style1.css docs/assets/style.css
+cat docs/api/assets/style.css docs/api/custom.css > docs/api/assets/style1.css
+mv docs/api/assets/style1.css docs/api/assets/style.css
 
-python ./docs/tools/html_cleaner.py
+python ./docs/api/tools/html_cleaner.py
 
 if [ "$1" = "html" ];
 then

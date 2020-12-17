@@ -1,0 +1,34 @@
+body {
+  max-width: 1000px;
+  background: white;
+}
+
+#wrapper {
+  padding: 10px;
+  box-sizing: border-box;
+  resize: horizontal; 
+  overflow: auto;
+  max-width: 100%;
+  height: calc(100vh - 16px);
+}
+
+#figureOneContainer {
+  width: 100%;
+  padding-bottom: 75%;
+}
+
+.title {
+  padding-top: 20px;
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: 100;
+  color: rgb(80, 80, 80);
+}
+
+.description {
+  padding: 10px;
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: 100;
+  color: grey;
+}
