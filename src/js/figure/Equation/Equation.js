@@ -889,7 +889,7 @@ export class Equation extends FigureElementCollection {
   ) {
     let { color } = options;
     if (color == null) {
-      color = [1, 0, 0, 1];
+      color = shapes.defaultColor;
     }
     const defaultFont = {
       family: 'Times New Roman',

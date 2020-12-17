@@ -1,6 +1,8 @@
 body {
   max-width: 1000px;
   background: white;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #wrapper {

@@ -1,12 +1,39 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <title>HTML Document</title>
-   </head>
+  <head>
+    <meta charset='utf-8'>
+    <title>FigureOne</title>
+    <meta name='description' content='Javascript library to draw, animate and interact with shapes, text, plots and equations.'>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link href='style.css' rel='stylesheet'>
+  </head>
    <body>
-     <a href="api/index.html">API Referece</a>
-     <a href="../examples/Sine%20Wave/index.html">Example - Sine Wave</a>
-     <a href="../examples/Pythagorean%20Theorem/index.html">Example - Pythagorean Theorm</a>
-     <a href="../examples/Interactive%20Angle/index.html">Example - Interactive Angle</a>
+     <h1 class="title-text">FigureOne</h1>
+     <h2 class="title-text">Draw, animate and interact with shapes, text, plots and equations.</h2>
+     <p class='title-text sub-text' class="title-text">A Javascript library</p>
+     <div class="links">
+       <div class="title-link link">
+        <a href="https://github.com/airladon/figureone">GitHub page</a>
+       </div>
+       <div class="title-link link">
+        <a href="https://github.com/airladon/FigureOne/tree/master/tutorials">Tutorials</a>
+       </div>
+       <div class="title-link link">
+        <a href="api/index.html">API Reference</a>
+       </div>
+       <div class="title-link link">
+        <a href="https://github.com/airladon/FigureOne/tree/master/examples">Examples</a>
+       </div>
+     </div>
+      <div id='wrapper'>
+        <div id="figureOneContainer" style="background-color: white;">
+        </div>
+      </div>
+      <div class="footer">
+        <p>Built for and used by <a class="link" href="https://www.thisiget.com">www.thisiget.com</a></p>
+      </div>
+      <script type="text/javascript" src='../package/index.js'></script>
+      <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.11/figureone.min.js'></script> -->
+      <script type="text/javascript" src='./index.js'></script>
    </body>
 </html>
