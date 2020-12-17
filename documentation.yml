@@ -74,7 +74,7 @@ toc:
     file: ./docs/tutorials/equation/equation.md
   - Equation
   - EQN_Equation
-  - OBJ_EquationElements
+  - EQN_EquationElements
   - TypeEquationElement
   - EQN_TextElement
   - EQN_Forms

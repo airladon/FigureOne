@@ -144,7 +144,7 @@ export type TypeEquationElement = string
  *
  * @property {TypeEquationElement} [_elementName]
  */
-export type OBJ_EquationElements = {
+export type EQN_EquationElements = {
   [elementName: string]: TypeEquationElement;
 };
 
@@ -526,7 +526,7 @@ export type EQN_FormDefaults = {
  * @property {TypeColor} [color] default equation color
  * @property {OBJ_Font} [font] default {@link FigureFont} for the equation
  * @property {number} [scale] equation scale (`0.7`)
- * @property {OBJ_EquationElements} [elements] equation element definitions
+ * @property {EQN_EquationElements} [elements] equation element definitions
  * @property {EQN_Forms} [forms] form definitions
  * @property {string} [initialForm] form to show when first added to a figure
  * @property {EQN_FormDefaults} [formDefaults] default form options applied to
@@ -548,7 +548,7 @@ export type EQN_Equation = {
   color?: TypeColor;
   font?: OBJ_Font;
   scale?: number,
-  elements?: OBJ_EquationElements;
+  elements?: EQN_EquationElements;
   formDefaults: EQN_FormDefaults;
   forms?: EQN_Forms;
   initialForm?: string;
@@ -773,13 +773,10 @@ class GoToFormAnimationStep extends TriggerAnimationStep {
  *     },
  *   },
  * });
- * // `eqn` is the instance of `Equation`
- * const eqn = figure.elements._eqn;
- * eqn.showForm('1');
  *
  * @example
  * // Create with methods
- * const eqn = figure.primitives.equation();
+ * const eqn = figure.collections.equation();
  * eqn.addElements({
  *   a: 'a',
  *   b: { color: [0, 0, 1, 1] },
@@ -1336,7 +1333,7 @@ export class Equation extends FigureElementCollection {
    * Add elements to equation.
    */
   addElements(
-    elems: OBJ_EquationElements,
+    elems: EQN_EquationElements,
   ) {
     // Go through each element and add it
     Object.keys(elems).forEach((key) => {
@@ -1795,7 +1792,6 @@ export class Equation extends FigureElementCollection {
 
   /**
    * Start an animation to an equation form
-   * @memberof Equation
    */
   goToForm(optionsIn: EQN_EquationGoToForm = {}) {
     const defaultOptions = {
