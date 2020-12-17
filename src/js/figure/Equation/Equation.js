@@ -528,6 +528,7 @@ export type EQN_FormDefaults = {
  * @property {number} [scale] equation scale (`0.7`)
  * @property {OBJ_EquationElements} [elements] equation element definitions
  * @property {EQN_Forms} [forms] form definitions
+ * @property {string} [initialForm] form to show when first added to a figure
  * @property {EQN_FormDefaults} [formDefaults] default form options applied to
  * all forms
  * @property {Array<string> | Object.<Array<string>>} [formSeries] an object
@@ -550,6 +551,7 @@ export type EQN_Equation = {
   elements?: OBJ_EquationElements;
   formDefaults: EQN_FormDefaults;
   forms?: EQN_Forms;
+  initialForm?: string;
   formSeries?: Array<string> | {};
   defaultFormSeries?: string;
   formRestart?: EQN_FormRestart;
@@ -854,6 +856,8 @@ export class Equation extends FigureElementCollection {
     // formRestartAnimation: 'dissolve' | 'moveFrom' | 'pulse';
   };
 
+  initialForm: string | null;
+
   /**
    * {@link AnimationManager} extended to include additional animation steps
    * specific to equations
@@ -995,6 +999,10 @@ export class Equation extends FigureElementCollection {
       this.addForms(optionsToUse.forms);
     }
 
+    if (optionsToUse.initialForm != null) {
+      this.initialForm = optionsToUse.initialForm;
+    }
+
     if (optionsToUse.formSeries != null) {
       if (Array.isArray(optionsToUse.formSeries)) {
         this.eqn.formSeries = { base: optionsToUse.formSeries };
@@ -1064,6 +1072,13 @@ export class Equation extends FigureElementCollection {
       step: this.animations.nextForm.bind(this),
       name: 'nextForm',
     });
+  }
+
+  setFigure(figure: OBJ_FigureForElement) {
+    super.setFigure(figure);
+    if (this.initialForm != null) {
+      this.showForm(this.initialForm);
+    }
   }
 
   _getStateProperties(options: Object) {  // eslint-disable-line class-methods-use-this
@@ -1441,17 +1456,6 @@ export class Equation extends FigureElementCollection {
     };
     // eslint-disable-next-line max-len
     const isFormElements = form => (form instanceof Elements || form instanceof BaseAnnotationFunction);
-    // const isFormFullObject = (form) => {
-    //   if (isFormString(form) || isFormArray(form)
-    //     || isFormMethodDefinition(form) || isFormElements(form)
-    //   ) {
-    //     return false;
-    //   }
-    //   if (form != null && typeof form === 'object' && form.content != null) {
-    //     return true;
-    //   }
-    //   return false;
-    // };
     const addFormNormal = (name: string, form: TypeEquationForm) => {
       // $FlowFixMe
       const formContent = [this.eqn.functions.contentToElement(form)];
@@ -1490,23 +1494,10 @@ export class Equation extends FigureElementCollection {
       } else {
         addFormFullObject(name, form);
       }
-      // } else if (isFormFullObject(form)) {
-      //   addFormFullObject(name, form);
-      // } else {
-      //   Object.entries(form).forEach((subFormEntry) => {
-      //     const [subFormName: string, subFormValue] = subFormEntry;
-      //     // const subFormOption = { subForm: subFormName };
-      //     if (isFormString(subFormValue) || isFormArray(subFormValue)
-      //       || isFormMethodDefinition(subFormValue) || isFormElements(subFormValue)
-      //     ) { // $FlowFixMe
-      //       addFormFullObject(name, { content: subFormValue, subForm: subFormName });
-      //     } else {
-      //       // $FlowFixMe
-      //       addFormFullObject(name, joinObjects(subFormValue, { subForm: subFormName }));
-      //     }
-      //   });
-      // }
     });
+    if (this.initialForm == null && Object.keys(this.eqn.forms).length > 0) {
+      [this.initialForm] = Object.keys(this.eqn.forms);
+    }
   }
 
   checkFixTo(
