@@ -228,7 +228,7 @@ toc:
   - OBJ_AddElement
   - OBJ_FigureElementCollection
   - OBJ_TriangleSideRotationAlignment
-  - FigureCollections ▸
+  - FigureCollections
   - OBJ_ButtonColor
   - OBJ_LineMove
   - name: Misc Animation
