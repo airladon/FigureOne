@@ -1204,6 +1204,7 @@ class CollectionsAngle extends FigureElementCollection {
       optionsToUse.subLocation,
       optionsToUse.scale,
     );
+    this.label.eqn.initialForm = null;
     if (this.label != null) {
       this.add('label', this.label.eqn);
     }

@@ -1154,6 +1154,7 @@ export default class CollectionsLine extends FigureElementCollection {
       offset, location, subLocation, orientation, linePosition, scale,
       precision,
     );
+    this.label.eqn.initialForm = null;
     if (this.label != null) {
       this.add('label', this.label.eqn);
     }

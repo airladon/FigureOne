@@ -117,6 +117,8 @@ rm Dockerfile
 
 FAIL=0
 
+docker_run "Dev Packaging" npm run webpack
+
 if [ $TESTING = 1 ];
 then
   # Lint and type check
@@ -130,6 +132,8 @@ then
   echo "${bold}${cyan}===================== Testing ======================${reset}"
   docker_run "JS Testing" npm run jest
   check_status "Tests"
+  docker_run "Browser Tests" npm run browser
+  check_status "Browser Tests"
 else
   echo "${bold}${cyan}============ Linting and Type Checking =============${reset}"
   echo "${bold}${yellow}Skipping linting${reset} - cannot deploy, but can build"
@@ -141,7 +145,7 @@ fi
 
 # # Package
 # echo "${bold}${cyan}==================== Packaging =====================${reset}"
-docker_run "Dev Packaging" npm run webpack
+# docker_run "Dev Packaging" npm run webpack
 docker_run "Dev Flow Packaging" npm run flowcopysource
 docker_run "Prod Packaging" npm run webpack -- --env.mode=prod --env.clean=0
 echo "${bold}${cyan}" moving package.json "${reset}"

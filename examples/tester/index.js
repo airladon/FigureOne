@@ -54,16 +54,18 @@ const figure = new Fig.Figure({ limits: [-4.5, -4.5, 9, 9], color: [1, 0, 0, 1],
 //     },
 //   },
 // });
-const eqn = figure.collections.equation();
-eqn.addElements({
-  a: 'a',
-  b: { color: [0, 0, 1, 1] },
-  c: 'c',
-  equals: ' = ',
-  plus: ' + ',
-});
-eqn.addForms({
-  1: ['a', 'equals', 'b', 'plus', 'c'],
-});
-figure.add('eqn', eqn);
-eqn.showForm('1');
+figure.add({
+  name: 'angle',
+  method: 'collections.angle',
+  options: {
+    curve: { width: 0.01 },
+    label: {
+      text: 'a',
+      angle: 1,
+      autoHide: 1.1,
+    },
+    corner: true,
+    angle: Math.PI / 4,
+  },
+})
+figure.getElement('angle').setMovable({ startArm: 'angle' })
