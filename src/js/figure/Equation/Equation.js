@@ -37,6 +37,7 @@ import type {
   EQN_AngleBracketSymbol, EQN_BraceSymbol, EQN_BarSymbol,
   EQN_SquareBracketSymbol, EQN_RadicalSymbol, TypeSymbolOptions,
 } from './EquationSymbols';
+import type { OBJ_FigureForElement } from '../Figure';
 
 // Priority:
 //   1. symbol
@@ -830,11 +831,13 @@ export class Equation extends FigureElementCollection {
     // };
 
     formDefaults: {
-      alignment: EQN_FormAlignment,
-      elementMods: {
-        [elementName: string]: Object,
+      alignment: {
+        fixTo: (FigureElementPrimitive | FigureElementCollection | Point),
+        xAlign: TypeHAlign,
+        yAlign: TypeVAlign,
       },
-    } & TypeFormAnimationProperties;
+      elementMods: OBJ_ElementMods,
+    } & EQN_FormDefaults;
 
     isAnimating: boolean;
 
@@ -1494,7 +1497,8 @@ export class Equation extends FigureElementCollection {
       }
     });
     if (this.initialForm == null && Object.keys(this.eqn.forms).length > 0) {
-      [this.initialForm] = Object.keys(this.eqn.forms);
+      // eslint-disable-next-line prefer-destructuring
+      this.initialForm = Object.keys(this.eqn.forms)[0];
     }
   }
 
