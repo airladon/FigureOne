@@ -29398,7 +29398,7 @@ more readable.</p>
 </ul>
 <p>An equation can have different <strong>forms</strong>. One form is above, but it can be rearranged into a different form:</p>
 <p><code>a - b = c</code></p>
-<p>If FigureOne, an equation is a collection (<a href="#figureelementcollection">FigureElementCollection</a>) of <strong>terms</strong> and <strong>operators</strong> (which are <a href="#figureelementprimitive">FigureElementPrimitive</a>s). A <strong>form</strong> defines the layout of terms and operators to create an equation. An equation can have many forms, and animation can be used to move between forms.</p>
+<p>In FigureOne, an equation is a collection (<a href="#figureelementcollection">FigureElementCollection</a>) of <strong>terms</strong> and <strong>operators</strong> (which are <a href="#figureelementprimitive">FigureElementPrimitive</a>s). A <strong>form</strong> defines the layout of terms and operators to create an equation. An equation can have many forms, and animation can be used to move between forms.</p>
 <p>As the equation, terms and operators are all <a href="#figureelement">FigureElement</a>s, then they have all the same interactivety and animation abilities as shapes and text.</p>
 <h3><a id="equation-boilerplate"></a> Equation Boilerplate</h3>
 <p>To test examples within the 'Equation' section of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
@@ -29417,8 +29417,8 @@ more readable.</p>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });</pre>
 <h3>Quick Start</h3>
 <p>First let's create an equation, with red as the default color:</p>
-<pre class='hljs'><span class="hljs-keyword">const</span> equation = figure.primitives.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });</pre>
-<p>Next lets add the definitions for the terms and operators, or the equation elements. The keys of the object are unique identifiers that will be used in the equation forms to layout the elements appropriately. The values of the object are the text to display in the equation, or objects that define the text with additional options including formatting.</p>
+<pre class='hljs'><span class="hljs-keyword">const</span> equation = figure.collections.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });</pre>
+<p>Next lets add the definitions for the terms and operators, or the equation elements. The keys of the object are <em>unique identifiers</em> that will be used in the equation forms to layout the elements appropriately. The values of the object are the text to display in the equation, or objects that define the text with additional options including formatting.</p>
 <pre class='hljs'>equation.addElements({
   <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">b</span>: <span class="hljs-string">'b'</span>,
@@ -29436,7 +29436,7 @@ more readable.</p>
 equation.showForm(<span class="hljs-string">'b'</span>);</pre>
 <p><img src="./tutorials/equation/simple.png"></p>
 <h3>Symbols and Equation Functions</h3>
-<p>Mathematics has many special symbols that operate on terms, or annotate an equation. These symbols usually have a special layout relative to the terms they operate on.</p>
+<p>Mathematics has many special symbols that operate on terms, or annotate an equation. These symbols and their associated terms usually have a special layout.</p>
 <p>FigureOne treats symbols like any other equation element, and uses <a href="#figureelementprimitive">FigureElementPrimitive</a>s to draw them. FigureOne then provides a series of functions that can layout terms around these symbols.</p>
 <p>Let's take the equation from the last example, and show the form as a fraction.</p>
 <p>Start by adding a vinculum symbol (with id 'v') to the equation's elements:</p>
@@ -29452,11 +29452,11 @@ equation.addForms({
 <pre class='hljs'>equation.showForm(<span class="hljs-string">'b'</span>);</pre>
 <p><img src="./tutorials/equation/fraction.png"></p>
 <p>Combine all the steps above gives:</p>
-<pre class='hljs'><span class="hljs-keyword">const</span> equation = figure.primitives.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });
+<pre class='hljs'><span class="hljs-keyword">const</span> equation = figure.collections.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });
 equation.addElements({
   <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
   <span class="hljs-attr">b</span>: <span class="hljs-string">'b'</span>,
-  <span class="hljs-attr">c</span>: <span class="hljs-string">'c'</span>,
+  <span class="hljs-attr">c</span>: { <span class="hljs-attr">text</span>: <span class="hljs-string">'c'</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
   <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span>},
   <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
   <span class="hljs-attr">times</span>: <span class="hljs-string">' \u00D7 '</span>,
@@ -29483,11 +29483,9 @@ equation.goToForm({
 <pre class='hljs'>equation.addForms({
   <span class="hljs-attr">bCurve</span>: {
     <span class="hljs-attr">content</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>] }],
-    <span class="hljs-attr">animation</span>: {
-      <span class="hljs-attr">translation</span>: {
-        <span class="hljs-attr">a</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'curve'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'up'</span>, <span class="hljs-attr">mag</span>: <span class="hljs-number">0.8</span> },
-        <span class="hljs-attr">b</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'curve'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'down'</span>, <span class="hljs-attr">mag</span>: <span class="hljs-number">1.2</span> },
-      },
+    <span class="hljs-attr">translation</span>: {
+      <span class="hljs-attr">a</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'curve'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'up'</span>, <span class="hljs-attr">mag</span>: <span class="hljs-number">0.8</span> },
+      <span class="hljs-attr">b</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'curve'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'down'</span>, <span class="hljs-attr">mag</span>: <span class="hljs-number">1.2</span> },
     },
   },
 });
@@ -29512,7 +29510,7 @@ equation.goToForm({
       <span class="hljs-attr">elements</span>: {
         <span class="hljs-attr">a</span>: <span class="hljs-string">'a'</span>,
         <span class="hljs-attr">b</span>: <span class="hljs-string">'b'</span>,
-        <span class="hljs-attr">c</span>: <span class="hljs-string">'c'</span>,
+        <span class="hljs-attr">c</span>: { <span class="hljs-attr">text</span>: <span class="hljs-string">'c'</span>, <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
         <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span>},
         <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
         <span class="hljs-attr">times</span>: <span class="hljs-string">' \u00D7 '</span>,  <span class="hljs-comment">// unicode times symbol</span>
@@ -29521,12 +29519,10 @@ equation.goToForm({
         <span class="hljs-attr">a</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, <span class="hljs-string">'c'</span>],
         <span class="hljs-attr">b</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>] }],
         <span class="hljs-attr">bCurve</span>: {
-          <span class="hljs-attr">content</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>] }],
-          <span class="hljs-attr">animation</span>: {
-            <span class="hljs-attr">translation</span>: {
-              <span class="hljs-attr">a</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'curve'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'up'</span>, <span class="hljs-attr">mag</span>: <span class="hljs-number">0.8</span> },
-              <span class="hljs-attr">b</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'curve'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'down'</span>, <span class="hljs-attr">mag</span>: <span class="hljs-number">1.2</span> },
-            },
+        <span class="hljs-attr">content</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'c'</span>] }],
+          <span class="hljs-attr">translation</span>: {
+            <span class="hljs-attr">a</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'curve'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'up'</span>, <span class="hljs-attr">mag</span>: <span class="hljs-number">0.8</span> },
+            <span class="hljs-attr">b</span>: { <span class="hljs-attr">style</span>: <span class="hljs-string">'curve'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'down'</span>, <span class="hljs-attr">mag</span>: <span class="hljs-number">1.2</span> },
           },
         },
       },
@@ -29540,25 +29536,22 @@ equation.showForm(<span class="hljs-string">'a'</span>);</pre>
 <p>For example, an element can be pulsed:</p>
 <pre class='hljs'><span class="hljs-comment">// Pulse the c element</span>
 equation.showForm(<span class="hljs-string">'b'</span>)
-equation._c.pulse({ <span class="hljs-attr">scale</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'top'</span> });</pre>
+<span class="hljs-keyword">const</span> c = figure.getElement(<span class="hljs-string">'equation.c'</span>);
+c.pulse({ <span class="hljs-attr">scale</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'top'</span> });</pre>
 <p><img src="./tutorials/equation/pulse.gif"></p>
 <p>An element can be touched:</p>
-<pre class='hljs'>equation.showForm(<span class="hljs-string">'b'</span>)
-equation._c.setTouchable();
-equation._c.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'c was touched'</span>) }</pre>
+<pre class='hljs'>c.setTouchable();
+c.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'c was touched'</span>) }</pre>
 <p><img src="./tutorials/equation/touch.gif"></p>
 <p>And the equation can be moved:</p>
-<pre class='hljs'>equation.showForm(<span class="hljs-string">'b'</span>)
-equation.setTouchableRect(<span class="hljs-number">0.5</span>);
-equation.setMovable();</pre>
+<pre class='hljs'>equation.setMovable();</pre>
 <p><img src="./tutorials/equation/move.gif"></p>
-<p>Here we are putting a buffer of 0.5 around the bounding rect of the equation to make it easy to touch and drag around.</p>
 <h3>Managing Equations</h3>
-<p>Complicated equations can have long, complicated definitions that are hard to read.</p>
+<p>Complicated equations can have long definitions that may be hard to read.</p>
 <p>Therefore there are several useful shortcuts when defining equations that are useful to improve readability.</p>
 <h4>Inline element definitions</h4>
-<p>Equation elements can all be defined in the <code>elements</code> property. However, simple elements that have the same text as the unique id that would be used to identify it can be defined inline.</p>
-<p>For instance, we can recreate an example above as:</p>
+<p>Equation elements can all be defined in the <code>elements</code> property. However, simple elements that have the same text as its <em>unique identifier</em> can be defined inline.</p>
+<p>For instance, we can recreate the example above as:</p>
 <pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
@@ -29566,14 +29559,15 @@ equation.setMovable();</pre>
     <span class="hljs-attr">elements</span>: {
       <span class="hljs-attr">times</span>: <span class="hljs-string">' \u00D7 '</span>,
       <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
+      <span class="hljs-attr">c</span>: { <span class="hljs-attr">color</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>] },
     },
     <span class="hljs-attr">forms</span>: {
       <span class="hljs-comment">// 'a', 'b', and 'c' are defined inline</span>
       <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, <span class="hljs-string">'c'</span>],
     },
   },
-});
-figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+});</pre>
+<p>Elements 'a' and 'b' are defined inline. 'c' is still defined in the <code>elements</code> as it has a color customization. Its definition is shorter however, as the <code>text</code> property is not required if the text is the same as the unique identifier.</p>
 <p><img src="./tutorials/equation/inline.png"></p>
 <p>Elements defined inline can be used in other forms:</p>
 <pre class='hljs'>figure.add({
@@ -29597,7 +29591,7 @@ figure.elements._eqn.goToForm({
   <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span>,
   <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>,
 });</pre>
-<p><img src="./tutorials/equation/inline_same.gif"></p>
+<p><img src="./tutorials/equation/simple.gif"></p>
 <p>Even symbols can be defined inline:</p>
 <pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
@@ -29610,8 +29604,7 @@ figure.elements._eqn.goToForm({
       <span class="hljs-number">1</span>: [<span class="hljs-string">'b'</span>, <span class="hljs-string">'equals'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'c'</span>] }],
     },
   },
-});
-figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+});</pre>
 <p>Underscores have a special meaning for inline definitions.</p>
 <p>Underscores before text will be hidden when rendered, but can make unique ids that are valid javascript object keys (a requirement for a unique id). In javascript, a space cannot be the first character of an object key, but it can be after the first character.</p>
 <p>Underscores after text can be used to create unique identifiers and therefore used to make multiple elements with the same text. The underscore, and all text after it will not be rendered.</p>
@@ -29623,8 +29616,7 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
       <span class="hljs-number">1</span>: [<span class="hljs-string">'2'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'_ = '</span>, <span class="hljs-string">'a_1'</span>, <span class="hljs-string">'_ + '</span>, <span class="hljs-string">'a_2'</span>],
     },
   },
-});
-figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+});</pre>
 <p><img src="./tutorials/equation/valid_key.png"></p>
 <p>Underscores can also be used to give inline symbol definitions unqiue identifiers. In this case, the text before the underscore is the unique identifier, and the text after defines the symbol.</p>
 <pre class='hljs'>figure.add({
@@ -29637,9 +29629,8 @@ figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     },
   },
 });
-figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);
 figure.elements._eqn.goToForm({
-  <span class="hljs-attr">form</span>: <span class="hljs-number">2</span>,
+  <span class="hljs-attr">form</span>: <span class="hljs-string">'2'</span>,
   <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span>,
   <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>,
 });</pre>
@@ -29688,12 +29679,15 @@ figure.elements._eqn.goToForm({
     },
     <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>],
   },
-});
-figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);
-<span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
-eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
-eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+  <span class="hljs-attr">mods</span>: {
+    <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> figure.getElement(<span class="hljs-string">'eqn'</span>).nextForm(),
+    <span class="hljs-attr">touchBorder</span>: <span class="hljs-number">0.5</span>,
+  }
+});</pre>
+<p>Here, the touchability of the equation is setup in the <code>mods</code> property. The keys in <code>mods</code> represent property names of the equation <a href="#figureelementcollection">FigureElementCollection</a>.</p>
+<p>The above example also uses a <em>form series</em>. A form series allows animation between equation forms using the
+<a href="#equationnextform">equation.nextForm</a> and <a href="#equationprevform">equation.prevForm</a> methods.</p>
 <p><img src="./tutorials/equation/readability.gif"></p>
 <h4>Phrases</h4>
 <p>Often different forms of an equation reuse equation phrases, like fractions. To make equation forms more readable, it can be useful to define a phrase once, and then refer to its identifier throughout the forms.</p>
@@ -29720,16 +29714,40 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     },
     <span class="hljs-attr">formSeries</span>: [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>],
   },
-});
-figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);
-<span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
-eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
-eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+  <span class="hljs-attr">mods</span>: {
+    <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> figure.getElement(<span class="hljs-string">'eqn'</span>).nextForm(),
+    <span class="hljs-attr">touchBorder</span>: <span class="hljs-number">0.5</span>,
+    <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>,
+  },
+});</pre>
 <p><img src="./tutorials/equation/phrases.gif"></p>
-<h3>Form Series</h3>
-<p>The above example uses a <em>form series</em>. A form series allows animation between equation forms using the
-<a href="#equationnextform">equation.nextForm</a> and <a href="#equationprevform">equation.prevForm</a> methods.</p>
+<h3>Element interaction</h3>
+<p>In the last two examples, equation touchability was setup in the <code>mods</code> property of the equation definition object. Similarly, equation elements can be set up in a similar way.</p>
+<pre class='hljs'>figure.add({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">a</span>: {
+        <span class="hljs-attr">mods</span>: {
+          <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">touchBorder</span>: <span class="hljs-number">0.1</span>, <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'a'</span>),
+        },
+      },
+      <span class="hljs-attr">b</span>: {
+        <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">touchBorder</span>: <span class="hljs-number">0.1</span>, <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'b'</span>),
+      },
+      <span class="hljs-attr">c</span>: {
+        <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">touchBorder</span>: <span class="hljs-number">0.1</span>, <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'c'</span>),
+      },
+      <span class="hljs-attr">times</span>: <span class="hljs-string">' \u00d7 '</span>,
+      <span class="hljs-attr">equals</span>: <span class="hljs-string">' = '</span>,
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'equals'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'times'</span>, <span class="hljs-string">'c'</span>],
+    },
+  },
+});</pre>
+<p>Element <code>'a'</code> is setup with the <code>mods</code> property. However, as <code>isTouchable</code>, <code>touchBorder</code> and <code>onClick</code> are frequenty used, they are also native options in the element definition object. As such, elements <code>'b'</code> and <code>'c'</code> do not use the <code>mods</code> property.</p>
 
   
 </section></div>
@@ -30837,6 +30855,13 @@ specific to equations</p>
         <div class='space-bottom0'>
           <span class='code bold'>forms</span> <code class='quiet'>(<a href="#eqn_forms">EQN_Forms</a>?)</code>
           : form definitions
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>initialForm</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : form to show when first added to a figure
 
           
         </div>

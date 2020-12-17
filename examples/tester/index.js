@@ -37,20 +37,49 @@ const figure = new Fig.Figure({ limits: [-4.5, -4.5, 9, 9], color: [1, 0, 0, 1],
 //   },
 // ]);
 
+// figure.add({
+//   name: 'eqn',
+//   method: 'equation',
+//   options: {
+//     elements: {
+//       a: 'a',
+//       b: { color: [0, 0, 1, 1] },
+//       c: 'c',
+//       equals: ' = ',
+//       plus: ' + ',
+//     },
+//     forms: {
+//       1: ['a', 'equals', 'b', 'plus', 'c'],
+//       2: ['a', 'equals', 'c', 'plus', 'd'],
+//     },
+//   },
+// });
 figure.add({
   name: 'eqn',
   method: 'equation',
   options: {
     elements: {
-      a: 'a',
-      b: { color: [0, 0, 1, 1] },
-      c: 'c',
+      a: {
+        mods: {
+          isTouchable: true, touchBorder: 0.1, onClick: () => console.log('a'),
+        },
+      },
+      b: {
+        isTouchable: true, touchBorder: 0.1, onClick: () => console.log('b'),
+      },
+      c: {
+        isTouchable: true, touchBorder: 0.1, onClick: () => console.log('c'),
+      },
+      times: ' \u00d7 ',
       equals: ' = ',
-      plus: ' + ',
     },
     forms: {
-      1: ['a', 'equals', 'b', 'plus', 'c'],
-      2: ['a', 'equals', 'c', 'plus', 'd'],
+      1: ['a', 'equals', 'b', 'times', 'c'],
     },
   },
 });
+// figure.elements._eqn.showForm('1');
+// const eqn = figure.elements._eqn;
+// eqn.onClick = () => eqn.nextForm();
+// eqn.setTouchableRect(0.5);
+// eqn.showForm('1');

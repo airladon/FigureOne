@@ -16,6 +16,7 @@ function makeShape(name, options, mods, getPos) {
     options: tools.misc.joinObjects({}, {
       color: [1, 0, 0, 0.8],
       position: [0, 0],
+      scale: 0.5,
     }, options),
     mods: tools.misc.joinObjects({}, mods),
     // mods: tools.misc.joinObjects({}, {

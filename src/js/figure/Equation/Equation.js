@@ -911,6 +911,7 @@ export class Equation extends FigureElementCollection {
       formSeries: {},
       formRestart: null,
       limits: shapes.limits,
+      touchBorder: 'rect',
       transform: new Transform('Equation').scale(1, 1).rotate(0).translate(0, 0),
     };
 
@@ -950,8 +951,8 @@ export class Equation extends FigureElementCollection {
     // }
     this.shapes = shapes;
     this.setColor(optionsToUse.color);
-    this.touchBorder = 'rect';
-    this.border = 'children';
+    // this.touchBorder = 'rect';
+    // this.border = 'children';
     // this.isTouchDevice = isTouchDevice;
     // this.animateNextFrame = animateNextFrame;
 
