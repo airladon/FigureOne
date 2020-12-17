@@ -42,6 +42,27 @@ import type {
 //   1. symbol
 //   2. text
 
+
+/**
+ * Object where keys are property names of a {@link FigureElement} and values
+ * are the values to set the properties to.
+ *
+ * @property {any} [_propertyName]
+ */
+export type OBJ_ElementPropertyMod = {
+  [propertyName: string]: any,
+}
+
+/**
+ * Object where keys are equation element names, and values are objects
+ * describing which element properties to modify after creation.
+ *
+ * @property {OBJ_ElementPropertyMod} [_elementName]
+ */
+export type OBJ_ElementMods = {
+  [elementName: string]: OBJ_ElementPropertyMod,
+}
+
 /**
  * Definition of a text or equation element.
  *
@@ -51,20 +72,19 @@ import type {
  * root object for convenience as they are commonly used.
  *
  * @property {string} [text] - Text element only
- * @property {FigureFont} [font] - Text element only
+ * @property {OBJ_Font} [font] - Text element only
  * @property {'italic' | 'normal'} [style] - Text element only
- * @property {'top' | 'left' | 'bottom' | 'right'} [side] - Symbol element only
  * @property {object} [mods] - Properties to set on instantiated element
  * @property {TypeColor} [color] - Color to set the element
  * @property {boolean} [isTouchable] - make the element touchable
  * @property {() => void | 'string' | null} [onClick] - called when touched
  * @property {TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer'} [touchBorder]
  * set the element's touch border
- * @property {Object} [mods]
+ * @property {OBJ_ElementMods} [mods]
  */
 export type EQN_TextElement = string | {
     text?: string;
-    font?: FigureFont | OBJ_Font;
+    font?: OBJ_Font;
     style?: 'italic' | 'normal' | null;
     weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900',
     size?: number,
@@ -72,7 +92,7 @@ export type EQN_TextElement = string | {
     isTouchable?: boolean,
     onClick?: () => void | 'string' | null,
     touchBorder?: TypeBorder | 'border' | number | 'rect' | 'draw' | 'buffer',
-    mods?: Object;
+    mods?: OBJ_ElementMods;
   } | FigureElementPrimitive | FigureElementCollection;
 
 /**
@@ -118,25 +138,21 @@ export type TypeEquationElement = string
 
 
 /**
- * Object with multiple equation elements.
+ * Object where keys are element names, and values are the element definitions
+ *
+ * @see {@link Equation}
  *
  * @property {TypeEquationElement} [_elementName]
  */
-export type TypeEquationElements = {
+export type OBJ_EquationElements = {
   [elementName: string]: TypeEquationElement;
 };
 
-// type TypeFormAlignment = {
-//   fixTo?: Point | string,
-//   xAlign?: TypeHAlign | null,
-//   yAlign?: TypeVAlign | null,
-// };
-
 /**
- * Defines how to align a form
+ * Form alignment object definition.
  */
-type TypeFormAlignment = {
-  fixTo: FigureElementPrimitive | FigureElementCollection | Point;
+type OBJ_FormAlignment = {
+  fixTo: FigureElementPrimitive | FigureElementCollection | TypeParsablePoint;
   xAlign: TypeHAlign;
   yAlign: TypeVAlign;
 };
@@ -150,43 +166,101 @@ type TypeFormAlignment = {
  * through an up or down curve
  * @property {number} [mag] - the magnitude of the curve
  */
-type TypeFormTranslationProperties = {
+type OBJ_TranslationStyle = {
   style: 'curved' | 'linear',
   direction?: 'up' | 'down',
   mag: number,
 };
 
 /**
- * Duration and translation options for form animation
+ * Object where keys are element names and values are tranlation definition
+ * objects.
  *
- * @property {number} [duration] in seconds
- * @property {Object.<TypeFormTranslationProperties>} [translation]
- * @example
- * // for an equation with two of its elements named 'a' and 'b'
- * {
- *   duration: 1,
- *   translation: {
- *     a: {
- *       direction: 'up',
- *       style: 'curved',
- *       mag: 0.5,
- *     },
- *     b: {
- *       direction: 'down',
- *       style: 'curved',
- *       mag: 0.2,
- *     },
- *   },
- * }
- * // Note, not all elements need to be defined - only those that need a custom
- * duration or shouldn't have a linear path
+ * `[elementName: string]: TypeEquationElement`
+ *
+ * @see {@link OBJ_TranslationStyle}, {@link OBJ_FormObjectDefinition}, {@link OBJ_FromForm}.
+ *
+ * @property {OBJ_TranslationStyle} [_elementName]
  */
-type TypeFormAnimationProperties = {
-  duration?: ?number,
-  translation?: {
-    [elementName: string]: TypeFormTranslationProperties,
-  },
-}
+export type OBJ_TranslationStyles = {
+  [elementName: string]: OBJ_TranslationStyle;
+};
+
+
+// /**
+//  * Duration and translation options for form animation
+//  *
+//  * @property {number} [duration] in seconds
+//  * @property {Object.<OBJ_TranslationStyle>} [translation]
+//  * @example
+//  * // for an equation with two of its elements named 'a' and 'b'
+//  * {
+//  *   duration: 1,
+//  *   translation: {
+//  *     a: {
+//  *       direction: 'up',
+//  *       style: 'curved',
+//  *       mag: 0.5,
+//  *     },
+//  *     b: {
+//  *       direction: 'down',
+//  *       style: 'curved',
+//  *       mag: 0.2,
+//  *     },
+//  *   },
+//  * }
+//  * // Note, not all elements need to be defined - only those that need a custom
+//  * duration or shouldn't have a linear path
+//  */
+// type TypeFormAnimationProperties = {
+//   duration?: ?number,
+//   translation?: {
+//     [elementName: string]: OBJ_TranslationStyle,
+//   },
+// }
+
+/**
+ * From form options object.
+ *
+ * Any defined properties will override the corrsponding properties of the form
+ * if it being animated to from a specific form.
+ *
+ * @property {?number} [duration] duration if animating to this form, use
+ * `null` for velocity based duration
+ * @property {OBJ_TranslationStyle} [translation] translation style
+ * when animating to this form
+ * @property {string | (() => void)} [onTransition] called at the start of
+ * animating to this form, or when `showForm` is used.
+ * @property {string | (() => void)} [onShow] called after animation is finished
+ * or when `showForm` is used
+ * @property {TypeElementMods} [elementMods] properties to set in the equation element
+ * (@FigureElementPrimitive) when this form is shown
+ */
+export type OBJ_FromForm = {
+  onTransition?: null | string | (() => void),
+  onShow?: null | string | (() => void),
+  duration?: number,
+  translation?: { [elementName: string]: OBJ_TranslationStyle },
+  elementMods?: OBJ_ElementMods,
+};
+
+/**
+ * Equation form FromForm definition.
+ *
+ * When animating from a specific form, it can be useful to customize some of
+ * the form properties specific to that transition.
+ *
+ * To do so, use this options object where each key is the specific form from
+ * which the equation is animating from, and the value is the specific
+ * properties.
+ *
+ * @property {OBJ_FromForm} [_formName]
+ *
+ * @see {@link OBJ_FromForm}, {@link OBJ_FormObjectDefinition}
+ */
+export type OBJ_FromForms = {
+  [formName: string]: OBJ_FromForm,
+};
 
 // A form is a steady state arrangement of elements
 // A form's elements can have different properties, but these properties
@@ -210,43 +284,33 @@ type TypeFormAnimationProperties = {
  *
  * a = c - b
  *
- * From the figure's perspective, a form is a specific layout of equation
- * elements.
+ * From a FigureOne figure's perspective, a form is a specific layout of
+ * equation elements.
  *
  * This object defines a how the elements are laid out, what properties the
  * elements have, and some animation properties for when animating to this form.
  *
- * In the {@link Equation} object, forms are defined with form names, and
- * subForm names. Most of the time, the subForm name can be ignored.
- * However, it is useful when dealing with units. Sometimes you will have a
- * series of forms you want to animate through, that will be slightly different
- * depending on the units (for example degrees vs radians). Defining one subForm
- * as degrees, and a second as radians allows switching between subForms without
- * complicating the overall equation navigation logic.
+ * @see {@link Equation}
  *
- * See the examples below for how to define subForms.
- *
- * {@link Equation#addForms}.
- *
- * @property {TypeEquationPhrase} content - the equation phrase of the form
+ * @property {TypeEquationPhrase} content The equation phrase of the form
  * defines how the elements are laid out
- * @property {number} [scale] - a scaling factor for this form
- * @property {TypeFormAlignment} [alignment] - how the Equation's position is aligned with
- * this form
- * @property {string} [subForm] - subForm name - default: `"base"`
- * @property {string} [description] - a description associated with this form -
- * used in equation navigator elements (@EquationNavigator)
- * @property {object} [modifiers] - string modifiers for the description
- * @property {TypeFormAnimationProperties} [fromPrev] - form animation
- * properties if animating forward from the previous form in a formSeries
- * @property {TypeFormAnimationProperties} [fromNext] - form animation
- * properties if animating backward from the next form in a formSeries
- * @property {TypeFormAnimationProperties} [duration] - animation move duration
- *  (fromNext and fromPrev are prioritized over this)
- * @property {TypeFormTranslationProperties} [translation] - animation move
- * style (fromNext and fromPrev are prioritized over this)
- * @property {object} [elementMods] - properties to set in the equation element
+ * @property {number} [scale] scaling factor for this form
+ * @property {OBJ_FormAlignment} [alignment] how the equation's position
+ * is aligned with this form
+ * @property {string} [description] description of this form
+ * @property {{}} [modifiers] description modifiers
+ * @property {?number} [duration] duration if animating to this form, use
+ * `null` for velocity based duration
+ * @property {OBJ_TranslationStyle} [translation] translation style
+ * when animating to this form
+ * @property {string | (() => void)} [onTransition] called at the start of
+ * animating to this form, or when `showForm` is used.
+ * @property {string | (() => void)} [onShow] called after animation is finished
+ * or when `showForm` is used
+ * @property {OBJ_ElementMods} [elementMods] properties to set in the equation element
  * (@FigureElementPrimitive) when this form is shown
+ * @property {OBJ_FromForms} [fromForm] override `duration`, `translation`
+ * `onTransition` and/or `onShow` with this if coming from specific forms
  *
  * @example
  * // Simple form definition of two different forms of the same equation and one
@@ -338,68 +402,39 @@ type TypeFormAnimationProperties = {
  *   },
  * }
  */
-type TypeEquationFormObject = {
+type OBJ_FormObjectDefinition = {
   content: TypeEquationPhrase,
   scale?: number,
-  alignment?: TypeFormAlignment,
-  subForm?: string,
-  description?: string,           // For equation navigation
+  alignment?: OBJ_FormAlignment,
+  description?: string,
   modifiers?: {},                 // Modifiers for description
-  duration?: number,
-  onTransition?: string | (() => void),
+  duration?: ?number,               // null means to use velocity
+  translation?: OBJ_TranslationStyle,
   onShow?: string | (() => void),
-  animation?: {
-    duration?: ?number,               // null means to use velocity
-    translation?: TypeFormTranslationProperties,
-  },
-  fromForm: {
-    [formName: string]: {
-      onTransition?: string | (() => void),
-      onShow?: string | (() => void),
-      animation?: {
-        duration?: number,
-        translation?: TypeFormTranslationProperties,
-      },
-      elementMods: {
-        [elementName: string]: Object,
-      },
-    },
-  };
-  elementMods?: {
-    [elementName: string]: Object
-  },
+  onTransition?: string | (() => void),
+  elementMods?: OBJ_ElementMods,
+  fromForm: OBJ_FromForms,
 };
 
 
 /**
- * A single form definition can either be:
+ * A form definition can either be:
  *
+ * * an equation form object {@link OBJ_FormObjectDefinition}
  * * an equation phrase {@link TypeEquationPhrase}
- * * or an equation form object {@link TypeEquationFormObject}
- * * or an object of subforms:
  *
- *    {
- *       subform1: ({@link TypeEquationPhrase} | {@link TypeEquationFormObject}),
- *       subform2: ...
- *    },
- *
- * @type {TypeEquationPhrase | TypeEquationFormObject |
- *   Object.<TypeEquationFormObject | TypeEquationPhrase>}
+ * @type {TypeEquationPhrase | OBJ_FormObjectDefinition}
  */
 type TypeEquationForm = TypeEquationPhrase
-                        | TypeEquationFormObject
-                        | {
-                          [subFormName: string]: TypeEquationFormObject
-                                                 | TypeEquationPhrase;
-                        };
+                        | OBJ_FormObjectDefinition
 
 /**
  * An object of equation forms where each key is the form name and each value
  * is a form defintion {@link TypeEquationForm}
  *
- * @type {Object.<TypeEquationForm>}
+ * @property {TypeEquationForm} [_formName]
  */
-export type TypeEquationForms = {
+export type OBJ_Forms = {
   [formName: string]: TypeEquationForm
 };
 
@@ -413,14 +448,12 @@ export type TypeEquationForms = {
  * * `duration`: 1s
  * * `scale`: 1.1
  */
-type TypeFormRestart = {
-  formRestart?: {
-    moveFrom?: ?Point | FigureElementCollection;
-    pulse?: {
-      duration?: number;
-      scale?: number;
-      element?: ?FigureElement;
-    }
+type OBJ_FormRestart = {
+  moveFrom?: ?Point | FigureElementCollection;
+  pulse?: {
+    duration?: number;
+    scale?: number;
+    element?: ?FigureElement;
   }
 }
 
@@ -472,44 +505,55 @@ export type OBJ_GoToFormAnimationStep = {
 
 
 /**
- * Options objects to construct an {@link Equation} class. All properties are optional.
+ * Default form values applied to all forms
  *
- * @property {TypeColor} [color] - default: [0.5, 0.5, 0.5, 1]
- * @property {number} [scale] - default: 0.7
- * @property {TypeEquationElements} [elements] - default: {}
- * @property {TypeFormAlignment} [defaultFormAlignment] - default:
- * { fixTo: new {@link Point}(0, 0), xAlign: 'left', yAlign: 'baseline}
- * @property {TypeEquationForms} [forms] - default: {}
- * @property {Array<string> | Object.<Array<string>>} [formSeries] - an object
+ * @see {@link OBJ_FormObjectDefinition}
+ */
+export type OBJ_FormDefaults = {
+  alignment?: OBJ_FormAlignment,
+  elementMods?: OBJ_ElementMods,
+  duration?: number,
+  translation?: OBJ_TranslationStyle,
+  onShow?: null | string | (() => void),
+  onTransition?: null | string | (() => void),
+}
+
+/**
+ * Options objects to construct an {@link Equation} class.
+ *
+ * All properties are optional.
+ *
+ * @property {TypeColor} [color] default equation color
+ * @property {OBJ_Font} [font] default {@link FigureFont} for the equation
+ * @property {number} [scale] equation scale (`0.7`)
+ * @property {OBJ_EquationElements} [elements] equation element definitions
+ * @property {OBJ_Forms} [forms] form definitions
+ * @property {OBJ_FormDefaults} [formDefaults] default form options applied to
+ * all forms
+ * @property {Array<string> | Object.<Array<string>>} [formSeries] an object
  * with each key being a form series name, and each value an array for form
  * names. If defined as an array, then a form series object is created where
  * the form series name is 'base'. Default: {}
- * @property {string} [defaultFormSeries] - If more than one form series is
+ * @property {string} [defaultFormSeries] If more than one form series is
  * defined, then a default must be chosen to be the first current one. Default:
  * first form defined
- * @property {TypeFormRestart} [formRestart] - default: null
- * @property {FigureFont} [font] - default {@link FigureFont}('Times
- * New Roman', 'normal', 0.2, '200', 'left', 'alphabetic', color)
- * @property {Point} [position] - default: new {@link Point}(0, 0)
+ * @property {?OBJ_FormRestart} [formRestart] behavior when form transitions
+ * from last in form series back to first
+ * @property {TypeParsablePoint} [position] position will override first
+ * translation element of transform
+ * @property {Transform} [transform]
  */
 export type EQN_Equation = {
   color?: TypeColor;
+  font?: OBJ_Font;
   scale?: number,
-  elements?: TypeEquationElements;
-  // defaultFormAlignment?: TypeFormAlignment;
-  formDefaults: {
-    alignment?: TypeFormAlignment,
-    elementMods?: {
-      [elementName: string]: Object,
-    },
-    animation?: TypeFormAnimationProperties;
-  };
-  forms?: TypeEquationForms;
+  elements?: OBJ_EquationElements;
+  formDefaults: OBJ_FormDefaults;
+  forms?: OBJ_Forms;
   formSeries?: Array<string> | {};
   defaultFormSeries?: string;
-  formRestart?: TypeFormRestart;
-  font?: FigureFont | OBJ_Font;
-  position?: Point;
+  formRestart?: OBJ_FormRestart;
+  position?: TypeParsablePoint;
   transform?: Transform;
 };
 
@@ -562,9 +606,9 @@ export type EQN_Equation = {
  * @property {number} [dissolveInTime] - Default: 0.4 of duration, or 0.4s if
  * no duration
  * @property {boolean} [prioritizeFormDuration] - use duration from the form
- * definition {@link TypeEquationFormObject}. Default: `true`
+ * definition {@link OBJ_FormObjectDefinition}. Default: `true`
  * @property {'fromPrev' | 'fromNext'} [fromWhere] - prioritze *fromPrev* or
- * *fromNext* duration from the form definition. {@link TypeEquationFormObject}
+ * *fromNext* duration from the form definition. {@link OBJ_FormObjectDefinition}
  * Default: `null`
  * @property {{cancelGoTo?: boolean, skipToTarget?: boolean}} [ifAnimating] -
  * behavior for if currently animating between forms. Default:
@@ -787,7 +831,7 @@ export class Equation extends FigureElementCollection {
     // };
 
     formDefaults: {
-      alignment: TypeFormAlignment,
+      alignment: OBJ_FormAlignment,
       elementMods: {
         [elementName: string]: Object,
       },
@@ -921,7 +965,9 @@ export class Equation extends FigureElementCollection {
       formDefaults: {
         alignment: optionsToUse.formDefaults.alignment,
         elementMods: optionsToUse.formDefaults.elementMods,
-        animation: optionsToUse.formDefaults.animation,
+        // animation: optionsToUse.formDefaults.animation,
+        duration: optionsToUse.formDefaults.duration,
+        translation: optionsToUse.formDefaults.translation,
       },
       functions: new EquationFunctions(
         this.elements,
@@ -1274,7 +1320,7 @@ export class Equation extends FigureElementCollection {
    * Add elements to equation.
    */
   addElements(
-    elems: TypeEquationElements,
+    elems: OBJ_EquationElements,
   ) {
     // Go through each element and add it
     Object.keys(elems).forEach((key) => {
@@ -1377,7 +1423,7 @@ export class Equation extends FigureElementCollection {
   /**
    * Add forms to equation.
    */
-  addForms(forms: TypeEquationForms) {
+  addForms(forms: OBJ_Forms) {
     const isFormString = form => typeof form === 'string';
     const isFormArray = form => Array.isArray(form);
     const isFormMethodDefinition = (form) => {
@@ -1416,24 +1462,20 @@ export class Equation extends FigureElementCollection {
       const formContent = [this.eqn.functions.contentToElement(form.content)];
       const {   // $FlowFixMe
         elementMods, duration, alignment, scale, // $FlowFixMe
-        description, modifiers, animation, // $FlowFixMe
+        description, modifiers, translation,  // $FlowFixMe
         fromForm, onShow, onTransition,
       } = form;
       const options = {
-        // subForm,
-        // addToSeries,
         elementMods,
-        duration,
-        animation,
         alignment,
         scale,
         description,
         modifiers,
+        fromForm,
+        duration,
+        translation,
         onShow,
         onTransition,
-        // fromPrev,
-        // fromNext,
-        fromForm,
       };
       // $FlowFixMe
       this.addForm(name, formContent, options);
@@ -1520,7 +1562,7 @@ export class Equation extends FigureElementCollection {
     options: {
       // subForm?: string,
       scale?: number,
-      alignment?: TypeFormAlignment,
+      alignment?: OBJ_FormAlignment,
       description?: string,
       modifiers?: Object,
       elementMods?: {
@@ -1528,18 +1570,16 @@ export class Equation extends FigureElementCollection {
       },
       onTransition?: null | string | (() => void),
       onShow?: null | string | (() => void),
-      animation?: {
-        duration?: number,
-        translation?: { [elementName: string]: TypeFormTranslationProperties },
-      },
+      // animation?: {
+      duration?: number,
+      translation?: { [elementName: string]: OBJ_TranslationStyle },
+      // },
       fromForm: {
         [formName: string]: {
           onTransition?: null | string | (() => void),
           onShow?: null | string | (() => void),
-          animation?: {
-            duration?: number,
-            translation?: { [elementName: string]: TypeFormTranslationProperties },
-          },
+          duration?: number,
+          translation?: { [elementName: string]: OBJ_TranslationStyle },
           elementMods?: {
             [elementName: string]: Object,
           },
@@ -1556,10 +1596,10 @@ export class Equation extends FigureElementCollection {
       description: '',
       modifiers: {},
       scale: this.eqn.scale,
-      animation: {
-        duration: undefined,    // use null for velocities
-        onStart: null,
-      },
+      // animation: {
+      duration: undefined,    // use null for velocities
+      onStart: null,
+      // },
       fromForm: {},
       onShow: null,
       onTransition: null,
@@ -1569,8 +1609,8 @@ export class Equation extends FigureElementCollection {
       optionsToUse = joinObjects({}, defaultOptions, options);
     }
     const {
-      description, modifiers, animation, fromForm,
-      onShow, onTransition,
+      description, modifiers, fromForm,
+      onShow, onTransition, duration, translation,
     } = optionsToUse;
     // this.eqn.forms[name].name = name;
     // const form = this.eqn.forms[name];
@@ -1580,7 +1620,9 @@ export class Equation extends FigureElementCollection {
     form.description = description;
     form.modifiers = modifiers;
     form.name = name;
-    form.animation = animation;
+    form.duration = duration;
+    form.translation = translation;
+    // form.animation = animation;
     form.fromForm = fromForm;
     form.onShow = onShow;
     form.onTransition = onTransition;
@@ -1600,11 +1642,11 @@ export class Equation extends FigureElementCollection {
       return newMods;
     };
 
-    const transformTranslation = (translation) => {
+    const transformTranslation = (trans) => {
       const newTranslation = {};
-      Object.keys(translation).forEach((elementName) => {
+      Object.keys(trans).forEach((elementName) => {
         const figureElement = getFigureElement(this, elementName);
-        const mods = translation[elementName];
+        const mods = trans[elementName];
         let direction;
         let style;
         let mag;
@@ -1623,8 +1665,8 @@ export class Equation extends FigureElementCollection {
     };
 
     form.elementMods = transformElementMods(optionsToUse.elementMods);
-    if (form.animation.translation != null) {
-      form.animation.translation = transformTranslation(form.animation.translation);
+    if (form.translation != null) {
+      form.translation = transformTranslation(form.translation);
     }
     if (form.fromForm != null) {
       Object.keys(form.fromForm).forEach((fromFormKey) => {
@@ -1632,8 +1674,8 @@ export class Equation extends FigureElementCollection {
         if (f.elementMods != null) {
           f.elementMods = transformElementMods(f.elementMods);
         }
-        if (f.animation != null && f.animation.translation != null) { // $FlowFixMe
-          f.animation.translation = transformTranslation(f.animation.translation);
+        if (f.translation != null) { // $FlowFixMe
+          f.translation = transformTranslation(f.translation);
         }
       });
     }
@@ -1832,23 +1874,22 @@ export class Equation extends FigureElementCollection {
     if (options.fromWhere === '_current') {
       options.fromWhere = this.eqn.currentForm;
     }
-    // if (form.animation.onStart != null) {
-    // this.fnMap.exec(form.animation.onTransition);
+    // if (form.onStart != null) {
+    // this.fnMap.exec(form.onTransition);
     // }
 
     let { duration } = options;
     // console.log(options)
     if (options.prioritizeFormDuration) {
-      if (form.animation.duration !== undefined) {
-        duration = form.animation.duration;
+      if (form.duration !== undefined) {
+        duration = form.duration;
       }
       if (
         options.fromWhere != null
         && form.fromForm[options.fromWhere] != null
-        && form.fromForm[options.fromWhere].animation !== undefined
-        && form.fromForm[options.fromWhere].animation.duration !== undefined
+        && form.fromForm[options.fromWhere].duration !== undefined
       ) {
-        duration = form.fromForm[options.fromWhere].animation.duration;
+        duration = form.fromForm[options.fromWhere].duration;
       }
     }
     let { onTransition } = form;

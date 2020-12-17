@@ -94,19 +94,19 @@ export default class EquationForm extends Elements {
   onTransition: null | string | (() => void);
   onShow: null | string | (() => void);
   // subForm: string;
-  animation: {
-    duration: ?number;
-    translation: TypeElementTranslationOptions;
-  };
+  // animation: {
+  duration: ?number;
+  translation: TypeElementTranslationOptions;
+  // };
 
   fromForm: {
     [formName: string]: {
       onTransition?: string | (() => void),
       onShow?: string | (() => void),
-      animation?: {
-        duration?: number,
-        translation?: TypeElementTranslationOptions,
-      },
+      // animation?: {
+      duration?: number,
+      translation?: TypeElementTranslationOptions,
+      // },
       elementMods: {
         [elementName: string]: {
           element: FigureElementPrimitive | FigureElementCollection;
@@ -126,9 +126,11 @@ export default class EquationForm extends Elements {
     this.description = null;
     this.modifiers = {};
     this.elementMods = {};
+    this.onShow = null;
+    this.onTransition = null;
     // this.duration = null;
     // this.translation = {};
-    this.animation = {};
+    // this.animation = {};
     this.fromForm = {};
     // this.subForm = '';
   }
@@ -631,16 +633,16 @@ export default class EquationForm extends Elements {
       && fromWhere.length !== 0
       && this.fromForm != null
       && this.fromForm[fromWhere] != null
-      && this.fromForm[fromWhere].animation != null
-      && this.fromForm[fromWhere].animation.translation !== undefined
+      // && this.fromForm[fromWhere].animation != null
+      && this.fromForm[fromWhere].translation !== undefined
     ) {
       translationToUse = joinObjects(
         {},
-        this.animation.translation,
-        this.fromForm[fromWhere].animation.translation,
+        this.translation,
+        this.fromForm[fromWhere].translation,
       );
     } else {
-      translationToUse = joinObjects({}, this.animation.translation);
+      translationToUse = joinObjects({}, this.translation);
     }
 
     Object.keys(translationToUse).forEach((key) => {

@@ -74,6 +74,19 @@ toc:
     file: ./docs/tutorials/equation/equation.md
   - Equation
   - EQN_Equation
+  - OBJ_EquationElements
+  - TypeEquationElement
+  - EQN_TextElement
+  - OBJ_Forms
+  - TypeEquationForm
+  - OBJ_FormObjectDefinition
+  - TypeEquationPhrase
+  - OBJ_FormAlignment
+  - OBJ_FromForms
+  - OBJ_FromForm
+  - OBJ_TranslationStyle
+  - OBJ_FormDefaults
+  - OBJ_FormRestart
   - name: Equation Layout
   - EQN_Fraction
   - EQN_Root
@@ -241,17 +254,7 @@ toc:
   - EQN_LeftRightGlyph
   - EQN_TopBottomGlyph
   - EQN_Glyphs
-  - TypeEquationElements
-  - TypeEquationPhrase
-  - TypeFormAlignment
-  - TypeFormAnimationProperties
-  - TypeFormTranslationProperties
-  - TypeEquationFormObject
-  - TypeEquationForm
-  - TypeEquationForms
-  - TypeFormRestart
   - OBJ_EquationGoToForm
-  - EQN_TextElement
   - EquationLabel
   - OBJ_NextFormAnimationStep
   - OBJ_GoToFormAnimationStep

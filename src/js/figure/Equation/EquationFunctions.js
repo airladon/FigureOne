@@ -50,15 +50,38 @@ export function getFigureElement(
 
 /* eslint-disable no-use-before-define */
 /**
- * An equation phrase is used to define an equation form. An equation phrase
- * can either be the entirety of the form definition, or a series of nested
- * phrases.
+ * An equation phrase is used to define an equation form and can be any of the
+ * below:
  *
- *  * An object or array definition (e.g. {@link EQN_Fraction})
- *  * A string that represents an equation element
- *  * An array of {@link TypeEquationPhrase}
+ *  - `string` (which represents the unique identifier of an equation element)
+ *  - `{ frac: `{@link EQN_Fraction} `}`
+ *  - `{ strike: `{@link EQN_Strike} `}`
+ *  - `{ box: `{@link EQN_Box} `}`
+ *  - `{ tBox: `{@link EQN_TouchBox} `}`
+ *  - `{ root: `{@link EQN_Root} `}`
+ *  - `{ brac: `{@link EQN_Bracket} `}`
+ *  - `{ sub: `{@link EQN_Subscript} `}`
+ *  - `{ sup: `{@link EQN_Superscript} `}`
+ *  - `{ supSub: `{@link EQN_SuperscriptSubscript} `}`
+ *  - `{ topBar: `{@link EQN_Bar} `}`
+ *  - `{ bottomBar: `{@link EQN_Bar} `}`
+ *  - `{ annotate: `{@link EQN_Annotate} `}`
+ *  - `{ topComment: `{@link EQN_Comment} `}`
+ *  - `{ bottomComment: `{@link EQN_Comment} `}`
+ *  - `{ pad: `{@link EQN_Pad} `}`
+ *  - `{ bar: `{@link EQN_Bar} `}`
+ *  - `{ scale: `{@link EQN_Scale} `}`
+ *  - `{ container: `{@link EQN_Container} `}`
+ *  - `{ matrix: `{@link EQN_Matrix} `}`
+ *  - `{ int: `{@link EQN_Integral} `}`
+ *  - `{ sumOf: `{@link EQN_SumOf} `}`
+ *  - `{ prodOf: `{@link EQN_ProdOf} `}`
+ *  - `{ topStrike: `{@link EQN_StrikeComment} `}`
+ *  - `{ bottomStrike: `{@link EQN_StrikeComment} `}`
+ *  - `Array<TypeEquationPhrase>`
  *
- * @example:
+ *
+ * @example
  * forms: {
  *   form1: 'a'
  *   form2: ['a', 'equals', 'b']

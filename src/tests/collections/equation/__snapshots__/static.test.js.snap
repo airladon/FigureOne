@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collection: Angle - Static Shape simple 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        0,
+        -0.006,
+      ],
+      Array [
+        0.07,
+        -0.006,
+      ],
+      Array [
+        0.07,
+        0.066,
+      ],
+      Array [
+        0,
+        0.066,
+      ],
+    ],
+    Array [
+      Array [
+        0.07,
+        -0.006,
+      ],
+      Array [
+        0.14,
+        -0.006,
+      ],
+      Array [
+        0.14,
+        0.098,
+      ],
+      Array [
+        0.07,
+        0.098,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "a": Object {
+      "border": Array [
+        Array [
+          Array [
+            0,
+            -0.006,
+          ],
+          Array [
+            0.07,
+            -0.006,
+          ],
+          Array [
+            0.07,
+            0.066,
+          ],
+          Array [
+            0,
+            0.066,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0,
+            -0.006,
+          ],
+          Array [
+            0.07,
+            -0.006,
+          ],
+          Array [
+            0.07,
+            0.066,
+          ],
+          Array [
+            0,
+            0.066,
+          ],
+        ],
+      ],
+    },
+    "b": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.07,
+            -0.006,
+          ],
+          Array [
+            0.14,
+            -0.006,
+          ],
+          Array [
+            0.14,
+            0.098,
+          ],
+          Array [
+            0.07,
+            0.098,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.07,
+            -0.006,
+          ],
+          Array [
+            0.14,
+            -0.006,
+          ],
+          Array [
+            0.14,
+            0.098,
+          ],
+          Array [
+            0.07,
+            0.098,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        0,
+        -0.006,
+      ],
+      Array [
+        0.14,
+        -0.006,
+      ],
+      Array [
+        0.14,
+        0.098,
+      ],
+      Array [
+        0,
+        0.098,
+      ],
+    ],
+  ],
+}
+`;

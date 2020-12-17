@@ -1,0 +1,719 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collection: Angle - Animations Shape gotToForm-single 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        0,
+        -0.006,
+      ],
+      Array [
+        0.07,
+        -0.006,
+      ],
+      Array [
+        0.07,
+        0.066,
+      ],
+      Array [
+        0,
+        0.066,
+      ],
+    ],
+    Array [
+      Array [
+        0.07,
+        -0.006,
+      ],
+      Array [
+        0.28,
+        -0.006,
+      ],
+      Array [
+        0.28,
+        0.098,
+      ],
+      Array [
+        0.07,
+        0.098,
+      ],
+    ],
+    Array [
+      Array [
+        0.28,
+        -0.006,
+      ],
+      Array [
+        0.35,
+        -0.006,
+      ],
+      Array [
+        0.35,
+        0.098,
+      ],
+      Array [
+        0.28,
+        0.098,
+      ],
+    ],
+    Array [
+      Array [
+        0.35,
+        -0.006,
+      ],
+      Array [
+        0.56,
+        -0.006,
+      ],
+      Array [
+        0.56,
+        0.098,
+      ],
+      Array [
+        0.35,
+        0.098,
+      ],
+    ],
+    Array [
+      Array [
+        0.56,
+        -0.006,
+      ],
+      Array [
+        0.63,
+        -0.006,
+      ],
+      Array [
+        0.63,
+        0.066,
+      ],
+      Array [
+        0.56,
+        0.066,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "_ + ": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.049,
+            -0.006,
+          ],
+          Array [
+            0.259,
+            -0.006,
+          ],
+          Array [
+            0.259,
+            0.098,
+          ],
+          Array [
+            0.049,
+            0.098,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.049,
+            -0.006,
+          ],
+          Array [
+            0.259,
+            -0.006,
+          ],
+          Array [
+            0.259,
+            0.098,
+          ],
+          Array [
+            0.049,
+            0.098,
+          ],
+        ],
+      ],
+    },
+    "_ - ": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.245,
+            -0.006,
+          ],
+          Array [
+            0.455,
+            -0.006,
+          ],
+          Array [
+            0.455,
+            0.098,
+          ],
+          Array [
+            0.245,
+            0.098,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.245,
+            -0.006,
+          ],
+          Array [
+            0.455,
+            -0.006,
+          ],
+          Array [
+            0.455,
+            0.098,
+          ],
+          Array [
+            0.245,
+            0.098,
+          ],
+        ],
+      ],
+    },
+    "a": Object {
+      "border": Array [
+        Array [
+          Array [
+            0,
+            -0.006,
+          ],
+          Array [
+            0.07,
+            -0.006,
+          ],
+          Array [
+            0.07,
+            0.066,
+          ],
+          Array [
+            0,
+            0.066,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0,
+            -0.006,
+          ],
+          Array [
+            0.07,
+            -0.006,
+          ],
+          Array [
+            0.07,
+            0.066,
+          ],
+          Array [
+            0,
+            0.066,
+          ],
+        ],
+      ],
+    },
+    "b": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.196,
+            -0.006,
+          ],
+          Array [
+            0.266,
+            -0.006,
+          ],
+          Array [
+            0.266,
+            0.098,
+          ],
+          Array [
+            0.196,
+            0.098,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.196,
+            -0.006,
+          ],
+          Array [
+            0.266,
+            -0.006,
+          ],
+          Array [
+            0.266,
+            0.098,
+          ],
+          Array [
+            0.196,
+            0.098,
+          ],
+        ],
+      ],
+    },
+    "c": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.392,
+            -0.006,
+          ],
+          Array [
+            0.462,
+            -0.006,
+          ],
+          Array [
+            0.462,
+            0.066,
+          ],
+          Array [
+            0.392,
+            0.066,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.392,
+            -0.006,
+          ],
+          Array [
+            0.462,
+            -0.006,
+          ],
+          Array [
+            0.462,
+            0.066,
+          ],
+          Array [
+            0.392,
+            0.066,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        0,
+        -0.006,
+      ],
+      Array [
+        0.63,
+        -0.006,
+      ],
+      Array [
+        0.63,
+        0.098,
+      ],
+      Array [
+        0,
+        0.098,
+      ],
+    ],
+  ],
+}
+`;
+
+exports[`Collection: Angle - Animations Shape nextForm-multi 1`] = `
+Object {
+  "border": Array [
+    Array [
+      Array [
+        0,
+        -0.006,
+      ],
+      Array [
+        0.07,
+        -0.006,
+      ],
+      Array [
+        0.07,
+        0.066,
+      ],
+      Array [
+        0,
+        0.066,
+      ],
+    ],
+    Array [
+      Array [
+        0.07,
+        -0.006,
+      ],
+      Array [
+        0.35,
+        -0.006,
+      ],
+      Array [
+        0.35,
+        0.098,
+      ],
+      Array [
+        0.07,
+        0.098,
+      ],
+    ],
+    Array [
+      Array [
+        0.35,
+        -0.006,
+      ],
+      Array [
+        0.63,
+        -0.006,
+      ],
+      Array [
+        0.63,
+        0.098,
+      ],
+      Array [
+        0.35,
+        0.098,
+      ],
+    ],
+    Array [
+      Array [
+        0.63,
+        -0.006,
+      ],
+      Array [
+        0.91,
+        -0.006,
+      ],
+      Array [
+        0.91,
+        0.098,
+      ],
+      Array [
+        0.63,
+        0.098,
+      ],
+    ],
+    Array [
+      Array [
+        0.91,
+        -0.006,
+      ],
+      Array [
+        1.19,
+        -0.006,
+      ],
+      Array [
+        1.19,
+        0.098,
+      ],
+      Array [
+        0.91,
+        0.098,
+      ],
+    ],
+    Array [
+      Array [
+        1.19,
+        -0.035,
+      ],
+      Array [
+        1.47,
+        -0.035,
+      ],
+      Array [
+        1.47,
+        0.098,
+      ],
+      Array [
+        1.19,
+        0.098,
+      ],
+    ],
+  ],
+  "elements": Object {
+    "_ + b": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.049,
+            -0.006,
+          ],
+          Array [
+            0.329,
+            -0.006,
+          ],
+          Array [
+            0.329,
+            0.098,
+          ],
+          Array [
+            0.049,
+            0.098,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.049,
+            -0.006,
+          ],
+          Array [
+            0.329,
+            -0.006,
+          ],
+          Array [
+            0.329,
+            0.098,
+          ],
+          Array [
+            0.049,
+            0.098,
+          ],
+        ],
+      ],
+    },
+    "_ + d": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.441,
+            -0.006,
+          ],
+          Array [
+            0.721,
+            -0.006,
+          ],
+          Array [
+            0.721,
+            0.098,
+          ],
+          Array [
+            0.441,
+            0.098,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.441,
+            -0.006,
+          ],
+          Array [
+            0.721,
+            -0.006,
+          ],
+          Array [
+            0.721,
+            0.098,
+          ],
+          Array [
+            0.441,
+            0.098,
+          ],
+        ],
+      ],
+    },
+    "_ + f": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.833,
+            -0.035,
+          ],
+          Array [
+            1.113,
+            -0.035,
+          ],
+          Array [
+            1.113,
+            0.098,
+          ],
+          Array [
+            0.833,
+            0.098,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.833,
+            -0.035,
+          ],
+          Array [
+            1.113,
+            -0.035,
+          ],
+          Array [
+            1.113,
+            0.098,
+          ],
+          Array [
+            0.833,
+            0.098,
+          ],
+        ],
+      ],
+    },
+    "_ - c": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.245,
+            -0.006,
+          ],
+          Array [
+            0.525,
+            -0.006,
+          ],
+          Array [
+            0.525,
+            0.098,
+          ],
+          Array [
+            0.245,
+            0.098,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.245,
+            -0.006,
+          ],
+          Array [
+            0.525,
+            -0.006,
+          ],
+          Array [
+            0.525,
+            0.098,
+          ],
+          Array [
+            0.245,
+            0.098,
+          ],
+        ],
+      ],
+    },
+    "_ - e": Object {
+      "border": Array [
+        Array [
+          Array [
+            0.637,
+            -0.006,
+          ],
+          Array [
+            0.917,
+            -0.006,
+          ],
+          Array [
+            0.917,
+            0.098,
+          ],
+          Array [
+            0.637,
+            0.098,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0.637,
+            -0.006,
+          ],
+          Array [
+            0.917,
+            -0.006,
+          ],
+          Array [
+            0.917,
+            0.098,
+          ],
+          Array [
+            0.637,
+            0.098,
+          ],
+        ],
+      ],
+    },
+    "a": Object {
+      "border": Array [
+        Array [
+          Array [
+            0,
+            -0.006,
+          ],
+          Array [
+            0.07,
+            -0.006,
+          ],
+          Array [
+            0.07,
+            0.066,
+          ],
+          Array [
+            0,
+            0.066,
+          ],
+        ],
+      ],
+      "touchBorder": Array [
+        Array [
+          Array [
+            0,
+            -0.006,
+          ],
+          Array [
+            0.07,
+            -0.006,
+          ],
+          Array [
+            0.07,
+            0.066,
+          ],
+          Array [
+            0,
+            0.066,
+          ],
+        ],
+      ],
+    },
+  },
+  "touchBorder": Array [
+    Array [
+      Array [
+        0,
+        -0.035,
+      ],
+      Array [
+        1.47,
+        -0.035,
+      ],
+      Array [
+        1.47,
+        0.098,
+      ],
+      Array [
+        0,
+        0.098,
+      ],
+    ],
+  ],
+}
+`;
