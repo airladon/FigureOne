@@ -160,12 +160,12 @@ describe('Different ways to make an equation', () => {
               yAlign: 'middle',
             },
             // Default way to animate between forms
-            animation: {
-              duration: 1,      // Use `null` for velocity
-              translation: {    // How elements translate during animation
-                c: { style: 'curved', direction: 'up', mag: 0.5 },
-              },
+            // animation: {
+            duration: 1,      // Use `null` for velocity
+            translation: {    // How elements translate during animation
+              c: { style: 'curved', direction: 'up', mag: 0.5 },
             },
+            // },
             // What mods to apply to the individual elements
             // These mods will be set every time the form is shown (as
             // opposed to element definition mods above which are set
@@ -280,13 +280,13 @@ describe('Different ways to make an equation', () => {
                 Form: html.highlight([1, 0, 0, 0]),
               },
               // A form can have its own animation definition
-              animation: {
-                duration: 4,     // use null for velocity
-                translation: {
-                  b: ['curved', 'up', 0.3],
-                  c: { style: 'curved', direction: 'down', mag: 1 },
-                },
+              // animation: {
+              duration: 4,     // use null for velocity
+              translation: {
+                b: ['curved', 'up', 0.3],
+                c: { style: 'curved', direction: 'down', mag: 1 },
               },
+              // },
               // A form can have it's own alignment definition
               alignment: {
                 fixTo: 'b',
@@ -297,12 +297,12 @@ describe('Different ways to make an equation', () => {
               // animating from specific forms.
               fromForm: {
                 objectDef2: {
-                  animation: {
-                    duration: 2,
-                    translation: {
-                      c: { style: 'linear' },
-                    },
+                  // animation: {
+                  duration: 2,
+                  translation: {
+                    c: { style: 'linear' },
                   },
+                  // },
                   elementMods: {
                     b: { color: [0.5, 0, 1, 1] },
                     c: { color: [0.5, 0.5, 1, 1] },

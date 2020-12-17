@@ -91,17 +91,17 @@ describe('Figure Equations From Object', () => {
 
           //   },
           // }
-          animation: {
-            duration: 1,
-            translation: {
-              a: {
-                style: 'curved',
-                direction: 'up',
-                mag: 0.95,
-              },
-              b: ['curved', 'down', 0.45],
+          // animation: {
+          duration: 1,
+          translation: {
+            a: {
+              style: 'curved',
+              direction: 'up',
+              mag: 0.95,
             },
+            b: ['curved', 'down', 0.45],
           },
+          // },
           // fromPrev: {
           //   duration: null,
           //   translation: {
@@ -233,21 +233,21 @@ describe('Figure Equations From Object', () => {
         },
         1: {
           content: ['b', 'a', 'c'],
-          animation: { duration: 10 },
+          duration: 10,
         },
         2: {
           content: ['b', 'a', 'c'],
-          animation: { duration: 10 },
+          duration: 10,
           fromForm: {
-            prev: { animation: { duration: 20 } },
-            next: { animation: { duration: 30 } },
+            prev: { duration: 20 },
+            next: { duration: 30 },
           },
           // time: { fromPrev: 20, fromNext: 30, fromAny: 40 },
         },
         3: {
           content: ['b', 'a', 'c'],
           fromForm: {
-            prev: { animation: { duration: 20 } },
+            prev: { duration: 20 },
           },
         },
       },
@@ -401,18 +401,18 @@ describe('Figure Equations From Object', () => {
   });
   test('Time', () => {
     eqn.addForms(addForms.time);
-    expect(forms['0'].animation.duration).toBe(undefined);
+    expect(forms['0'].duration).toBe(undefined);
     expect(forms['0'].fromForm).toEqual({});
     // expect(forms['0'].fromNext).toBe(undefined);
-    expect(forms['1'].animation.duration).toBe(10);
+    expect(forms['1'].duration).toBe(10);
     // expect(forms['1'].fromPrev).toBe(undefined);
     // expect(forms['1'].fromNext).toBe(undefined);
     expect(forms['1'].fromForm).toEqual({});
-    expect(forms['2'].animation.duration).toBe(10);
-    expect(forms['2'].fromForm.prev.animation.duration).toBe(20);
-    expect(forms['2'].fromForm.next.animation.duration).toBe(30);
+    expect(forms['2'].duration).toBe(10);
+    expect(forms['2'].fromForm.prev.duration).toBe(20);
+    expect(forms['2'].fromForm.next.duration).toBe(30);
     expect(forms['3'].duration).toBe(undefined);
-    expect(forms['2'].fromForm.prev.animation.duration).toBe(20);
+    expect(forms['2'].fromForm.prev.duration).toBe(20);
     // expect(forms['3'].fromNext).toBe(undefined);
   });
   test('Element Modifications', () => {
@@ -455,13 +455,13 @@ describe('Figure Equations From Object', () => {
     const form = forms['0'];
     expect(form.elementMods.a.mods.color).toEqual(color1);
     expect(form.elementMods.a.mods.isTouchable).toEqual(true);
-    expect(form.animation.duration).toEqual(1);
-    expect(form.animation.translation.a.style).toBe('curved');
-    expect(form.animation.translation.a.direction).toBe('up');
-    expect(form.animation.translation.a.mag).toBe(0.95);
-    expect(form.animation.translation.b.style).toBe('curved');
-    expect(form.animation.translation.b.direction).toBe('down');
-    expect(form.animation.translation.b.mag).toBe(0.45);
+    expect(form.duration).toEqual(1);
+    expect(form.translation.a.style).toBe('curved');
+    expect(form.translation.a.direction).toBe('up');
+    expect(form.translation.a.mag).toBe(0.95);
+    expect(form.translation.b.style).toBe('curved');
+    expect(form.translation.b.direction).toBe('down');
+    expect(form.translation.b.mag).toBe(0.45);
 
     eqn.showForm('0');
     // FixTo is b, 'center'. As 'a' and 'b' are both 0.1 width, and the scale
