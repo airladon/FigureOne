@@ -75,6 +75,10 @@ docker_run() {
     docker run -it --rm \
       -v $HOST_PATH/src:/opt/app/src \
       -v $HOST_PATH/package:/opt/app/package \
+      -v $HOST_PATH/browser.sh:/opt/app/browser.sh \
+      -v $HOST_PATH/containers:/opt/app/containers \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      -e LOCAL_PROJECT_PATH=$HOST_PATH \
       --name figureone_dev \
       --entrypoint $2 \
       figureone_dev \
