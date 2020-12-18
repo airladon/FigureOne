@@ -7,7 +7,7 @@ import {
 // import {
 //   mul,
 // } from '../../tools/m2';
-import type { TypeParsablePoint } from '../../tools/g2';
+import type { TypeParsablePoint, TypeParsableBuffer, TypeBorder } from '../../tools/g2';
 import {
   roundNum,
 } from '../../tools/math';

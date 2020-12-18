@@ -9,7 +9,27 @@ const radius = 2;
 // Create the shape
 figure.add([
   {
-    name: 'line',
+    name: 'movePad',
+    method: 'collections.line',
+    options: {
+      p1: origin,
+      length: radius,
+      angle: 1,
+      touchBorder: 0.5,
+      width: 0.001,
+    },
+    mods: {
+      isMovable: true,
+      move: {
+        type: 'rotation',
+        bounds: {
+          rotation: { min: 0.07, max: 1.1 },
+        },
+      },
+    },
+  },
+  {
+    name: 'radius',
     method: 'collections.line',
     options: {
       p1: origin,
@@ -22,15 +42,8 @@ figure.add([
         text: '1',
         offset: 0.05,
         update: true,
-      },
-    },
-    mods: {
-      isMovable: true,
-      move: {
-        type: 'rotation',
-        bounds: {
-          rotation: { min: 0.07, max: 1.1 },
-        },
+        isTouchable: true,
+        touchBorder: 0.1,
       },
     },
   },
@@ -48,6 +61,8 @@ figure.add([
         text: 'x',
         offset: 0.05,
         autoHide: 0.2,
+        touchBorder: 0.1,
+        isTouchable: true,
       },
       position: origin,
     },
@@ -131,7 +146,7 @@ figure.add([
         'vertical component approach equality',
       ],
       font: { color: [0.5, 0.5, 1, 1], size: 0.08 },
-      justify: 'center',
+      justify: 'left',
       xAlign: 'center',
       position: [0, origin.y - 0.8],
       modifiers: {
@@ -167,54 +182,73 @@ figure.add([
 
 const angle = figure.getElement('angle');
 const arc = figure.getElement('arc');
-const line = figure.getElement('line');
+const movePad = figure.getElement('movePad');
 const sine = figure.getElement('sine');
 const rect = figure.getElement('rect');
-// const dLine = figure.getElement('descriptionLine');
-const arcLabel = figure.getElement('arc.label');
 const description = figure.getElement('description');
-const sineLabel = figure.getElement('sine.label');
+const radiusLine = figure.getElement('radius');
+const oneLabel = figure.getElement('radius.label');
 
-line.subscriptions.add('setTransform', () => {
-  const a = line.getRotation();
+movePad.subscriptions.add('setTransform', () => {
+  const a = movePad.getRotation();
   angle.setAngle({ angle: a });
   arc.setAngle({ angle: a });
-  sine.setEndPoints(
-    new Point(radius * Math.cos(a) - 0.005, 0).add(origin),
-    new Point(radius * Math.cos(a) - 0.005, radius * Math.sin(a)).add(origin),
+  const end = new Point(
+    radius * Math.cos(a), radius * Math.sin(a),
   );
+  sine.setEndPoints(
+    new Point(end.x - 0.005, 0).add(origin),
+    new Point(end.x - 0.005, end.y).add(origin),
+  );
+  figure.setFirstTransform();
   if (rect.isShown && rect.custom.tieTo != null) {
-    rect.setPosition(rect.custom.tieTo.transform.t().add(rect.custom.tieTo.offset));
+    rect.setPosition(rect.custom.tieTo.getPosition('figure'));
   }
+  radiusLine.setEndPoints(origin, end.add(origin));
 });
 
 
-const highlight = (element, offset) => {
+const highlight = (element, position, text) => {
   rect.show();
+  description.drawingObject.clear();
   rect.custom.tieTo = element;
-  rect.custom.offset = offset;
-  rect.surround(arcLabel, 0.05);
-  description.pulse({ scale: 1.4, duration: 1 });
+  rect.surround(element, 0.05);
+  description.pulse({ scale: 1.2, duration: 1 });
   rect.pulse({ scale: 1.4, duration: 1 });
+  description.setPosition(position);
+  description.custom.updateText({ text });
 };
 
+const arcLabel = figure.getElement('arc.label');
 arcLabel.onClick = () => {
-  highlight(arcLabel, origin);
-  description.custom.updateText({
-    text: [
-      'Arc length is the product of radius and angle.',
-      'When the radius is 1, then arc length has the same value as the angle.',
-    ],
-  });
+  highlight(arcLabel, [1.2, 1], [
+    'The arc length and angle have the',
+    'same value as the radius is 1',
+  ]);
 };
 
+const sineLabel = figure.getElement('sine.label');
 sineLabel.onClick = () => {
-  highlight(sineLabel, origin);
-  description.custom.updateText({
-    text: [
-      'The sine of the angle is the vertical component of the arc',
-    ],
-  });
+  highlight(sineLabel, [-1.2, 0.7], [
+    'The sine of the angle is the vertical',
+    'component of the arc',
+  ]);
 };
 
-line.setRotation(1);
+oneLabel.onClick = () => {
+  highlight(oneLabel, [-1.2, 0.9], [
+    'As arc length is the product of angle',
+    'and radius, having a radius of 1',
+    'means the values of arc length and',
+    'angle are equal (x)',
+  ]);
+};
+
+const angleLabel = figure.getElement('angle.label');
+angleLabel.onClick = () => {
+  highlight(angleLabel, [-1.3, 0], [
+    'The angle of the arc is x',
+  ]);
+};
+
+movePad.setRotation(1);
