@@ -4,7 +4,7 @@ Each figure element has its own {@link AnimationManager} (`animations` property)
 
 An animation is a number of {@link AnimationStep}s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.
 
-### <a id="animation-boilerplate"></a> Animation Boilerplate
+#### <a id="animation-boilerplate"></a> Animation Boilerplate
 To test examples within the 'Animation' section of the API reference create an `index.html` file and `index.js` file.
 
 All examples are snippets which can be appended to the end of the `index.js` file.
@@ -78,7 +78,7 @@ figure.add(
 const p = figure.getElement('p');
 ```
 
-### Animation Examples
+#### Animation Examples
 
 Let's create a simple animation. Start by defining a figure and retrieving the element to animate by creating the boilerplate files [above](#animation-boilerplate).
 
@@ -175,7 +175,7 @@ p.animations.new()
 
 <p style="text-align: center"><img src="./tutorials/animation/ex5.gif"></p>
 
-### Stopping animations
+#### Stopping animations
 
 Animations can be stopped from the animation, element and figure levels.
 

@@ -1205,6 +1205,15 @@ class CollectionsAngle extends FigureElementCollection {
       optionsToUse.scale,
     );
     this.label.eqn.initialForm = null;
+    if (optionsToUse.isTouchable != null) {
+      this.label.eqn.isTouchable = optionsToUse.isTouchable;
+    }
+    if (optionsToUse.touchBorder != null) {
+      this.label.eqn.touchBorder = optionsToUse.touchBorder;
+    }
+    if (optionsToUse.onClick != null) {
+      this.label.eqn.onClick = optionsToUse.onClick;
+    }
     if (this.label != null) {
       this.add('label', this.label.eqn);
     }

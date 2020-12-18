@@ -65,6 +65,8 @@ figure.add([
       label: {
         text: 'x',
         offset: 0.05,
+        touchBorder: 0.1,
+        isTouchable: true,
       },
       color: [1, 0, 0, 1],
       position: origin,
@@ -76,7 +78,13 @@ figure.add([
     options: {
       p1: [0, 0],
       p2: [0, 1],
-      label: { text: 'sin x', offset: 0.05, linePosition: 0.5 },
+      label: {
+        text: 'sin x',
+        offset: 0.05,
+        linePosition: 0.5,
+        touchBorder: 0.1,
+        isTouchable: true,
+      },
       width: 0.01,
       color: [1, 0, 0, 1],
     },
@@ -116,28 +124,43 @@ figure.add([
   },
   {
     name: 'description',
-    method: 'textLines',
+    method: 'primitives.textLines',
     options: {
       text: [
-        'As the angle x gets very small, the |arc length| and the',
+        'As the |angle x| gets very small, the |arc length| and the',
         'vertical component approach equality',
       ],
-      font: {
-        size: 0.08,
-      },
+      font: { color: [0.5, 0.5, 1, 1], size: 0.08 },
       justify: 'center',
       xAlign: 'center',
       position: [0, origin.y - 0.8],
-    },
-    modifiers: {
-      'arc length': {
-        color: [1, 0, 0, 1],
-        isTouchable: true,
-        onClick: () => figure.getElement('arc').pulse(),
+      modifiers: {
+        'angle x': {
+          font: { weight: 'bold' },
+          onClick: () => figure.getElement('angle.label').pulse(),
+          touchBorder: 0.1,
+        },
+        'arc length': {
+          font: { color: [1, 0, 0, 1] },
+          onClick: () => figure.getElement('arc.label').pulse(),
+          touchBorder: 0.1,
+        },
       },
     },
     mods: {
       isTouchable: true,
+    },
+  },
+  {
+    name: 'rect',
+    method: 'collections.rectangle',
+    options: {
+      line: { width: 0.005 },
+      color: [0.5, 0.5, 1, 1],
+    },
+    mods: {
+      custom: { tieTo: null, offset: [0, 0] },
+      isShown: false,
     },
   },
 ]);
@@ -146,6 +169,11 @@ const angle = figure.getElement('angle');
 const arc = figure.getElement('arc');
 const line = figure.getElement('line');
 const sine = figure.getElement('sine');
+const rect = figure.getElement('rect');
+// const dLine = figure.getElement('descriptionLine');
+const arcLabel = figure.getElement('arc.label');
+const description = figure.getElement('description');
+const sineLabel = figure.getElement('sine.label');
 
 line.subscriptions.add('setTransform', () => {
   const a = line.getRotation();
@@ -155,5 +183,38 @@ line.subscriptions.add('setTransform', () => {
     new Point(radius * Math.cos(a) - 0.005, 0).add(origin),
     new Point(radius * Math.cos(a) - 0.005, radius * Math.sin(a)).add(origin),
   );
+  if (rect.isShown && rect.custom.tieTo != null) {
+    rect.setPosition(rect.custom.tieTo.transform.t().add(rect.custom.tieTo.offset));
+  }
 });
+
+
+const highlight = (element, offset) => {
+  rect.show();
+  rect.custom.tieTo = element;
+  rect.custom.offset = offset;
+  rect.surround(arcLabel, 0.05);
+  description.pulse({ scale: 1.4, duration: 1 });
+  rect.pulse({ scale: 1.4, duration: 1 });
+};
+
+arcLabel.onClick = () => {
+  highlight(arcLabel, origin);
+  description.custom.updateText({
+    text: [
+      'Arc length is the product of radius and angle.',
+      'When the radius is 1, then arc length has the same value as the angle.',
+    ],
+  });
+};
+
+sineLabel.onClick = () => {
+  highlight(sineLabel, origin);
+  description.custom.updateText({
+    text: [
+      'The sine of the angle is the vertical component of the arc',
+    ],
+  });
+};
+
 line.setRotation(1);

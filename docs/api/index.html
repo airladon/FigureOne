@@ -29,9 +29,9 @@
               
                 
                 <li><a
-                  href='#figureon-api-reference'
+                  href='#figureone-api-reference'
                   class="h5 bold black caps">
-                  FigureOn API Reference
+                  FigureOne API Reference
                   
                 </a>
                 
@@ -4670,15 +4670,13 @@
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-  <h2 id='figureon-api-reference' class='mt0'>
-    FigureOn API Reference
+  <h2 id='figureone-api-reference' class='mt0'>
+    FigureOne API Reference
   </h2>
 
   
-    <p>This is the <a href="https://github.com/airladon/FigureOne">FigureOne</a> API refence. This is a work in progress and the entire API is not yet documented.</p>
-<p>First, it is useful to introduce some key terms and concepts that are found frequently throughout the documentation.</p>
-<h4>Figures, Primitives and Collections</h4>
-<p><strong>FigureOne</strong> allows you to create a <em>figure</em> that can be both interactive and animated.</p>
+    <h4>Figures, Primitives and Collections</h4>
+<p><a href="https://github.com/airladon/FigureOne">FigureOne</a> allows you to create a <em>figure</em> that can be both interactive and animated.</p>
 <p>A figure has one or more <em>figure elements</em>. A figure element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.</p>
 <p>In the language of <strong>FigureOne</strong>, there are two types of <a href="FigureElements">FigureElements</a>:</p>
 <ul>
@@ -15461,7 +15459,7 @@ identity transforms.</p>
   
     <p>Each <a href="#figureelementprimitive">FigureElementPrimitive</a> element manages drawing a shape, drawing text, or manipulating a HTML element.</p>
 <p>FigureOne's built-in shapes are drawn using WebGL, which uses triangles to create different shapes. To draw a shape, you define the verticies of the triangles. Every drawing frame (animation or screen refresh), the color of the vertices and the transform that moves them around is used to render the final shape to the screen.</p>
-<h3><a id="drawing-boilerplate"></a> Shapes Boilerplate</h3>
+<h4><a id="drawing-boilerplate"></a> Shapes Boilerplate</h4>
 <p>To test examples within the 'Shapes' sections of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
 <p>All examples are snippets which can be appended to the end of the <code>index.js</code> file.</p>
 <pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
@@ -15476,7 +15474,7 @@ identity transforms.</p>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });</pre>
-<h3>Quick Start</h3>
+<h4>Quick Start</h4>
 <p>Let's start by creating a <a href="#figureelementprimitive">FigureElementPrimitive</a> element that draws a polygon and adding it to the figure.</p>
 <pre class='hljs'><span class="hljs-comment">// create the `FigureElementPrimitive`</span>
 <span class="hljs-keyword">const</span> p = figure.primitives.polygon({
@@ -15499,7 +15497,7 @@ figure.add(p);</pre>
 });</pre>
 <p>Both ways create the same element. The first way is especially useful when extending shape creation classes, or creating elements dynamically. The second way can allow you to layout an entire figure in a single object that is compatible with JSON. This means it is relatively straight forward to share figure elements between projects. When using code folding in an IDE, the second way also makes it easy to work with a figure's with many elements by hiding elements that aren't being worked on.</p>
 <p>For most of the API reference, the second way will be used.</p>
-<h3>Built-in Shapes</h3>
+<h4>Built-in Shapes</h4>
 <p>There are several built in primitive shape methods that can be used to create complex figures:</p>
 <ul>
 <li><a href="#obj_line">line</a></li>
@@ -15512,7 +15510,7 @@ figure.add(p);</pre>
 <li><a href="#obj_star">star</a></li>
 <li><a href="#obj_grid">grid</a></li>
 </ul>
-<h3>Drawing a generic shape</h3>
+<h4>Drawing a generic shape</h4>
 <p>While there are several built-in shapes such as polygons, rectangles and polylines in FigureOne, there is also a 'generic' method that will allow creation of any shape. In fact, all the built in shapes use this generic method themselves.</p>
 <p>To use the generic method however, it is important to understand how WebGL uses triangles to create shapes.</p>
 <p>Any shape approximated with triangles. For instance, the figure below shows a rectangle broken into two triangles with vertices labeled.</p>
@@ -15535,7 +15533,7 @@ figure.add(p);</pre>
 });</pre>
 <p>This method will be able to draw almost anything.</p>
 <p>However, for some shapes there are simpler ways to draw the same thing with fewer repeated vertices.</p>
-<h4>drawType: 'strip'</h4>
+<h5>drawType: 'strip'</h5>
 <p>A strip starts with one triangle, and then every subsequent vertex will create a triangle with the last two vertices.</p>
 <p>Therefore, to draw the same rectangle we would draw the first triangle with the vertices 2, 1 and then 3. Then 1 and 3 could be used with 4 to create the second triangle.</p>
 <pre class='hljs'>figure.add({
@@ -15552,7 +15550,7 @@ figure.add(p);</pre>
 <p>This method works well for continuous shapes, but will not work for shapes that have gaps.</p>
 <p>A good example of a shape that works with <code>'strip'</code> is below. The vertices are labeled in the order they would be defined.</p>
 <p style="text-align: center"><img src="./tutorials/draw/strip.png"></p>
-<h4>drawType: 'fan'</h4>
+<h5>drawType: 'fan'</h5>
 <p>A fan starts with one point. The next two points create the first triangle, and then every subsequent point uses the first and last point to create the next triangle.</p>
 <p>Therefore, to draw the same rectangle we would draw the first point 1, then complete the first triangle with 2 and 3. Then we would draw point 4 to make the second triangle with points 1 and 3.</p>
 <pre class='hljs'>figure.add({
@@ -15571,7 +15569,7 @@ figure.add(p);</pre>
 <p style="text-align: center"><img src="./tutorials/draw/fan.png"></p>
 <p>Note, <code>'strip'</code> can create any shape <code>'fan'</code> can, but it can be a little more involved. For instance, the shape above would need to duplicate one of the vertices to fully fill it:</p>
 <p style="text-align: center"><img src="./tutorials/draw/strip-fan.png"></p>
-<h4>drawType: 'lines'</h4>
+<h5>drawType: 'lines'</h5>
 <p><code>'lines'</code> is the final style that WebGL accepts for drawing primitives. In this case vertex pairs are used to create lines.</p>
 <p>This is not useful for drawing filled shapes, but is useful for drawing thin outlines.</p>
 <p>For instance, to draw a rectangle outline:</p>
@@ -24130,7 +24128,7 @@ figure.add(
     <p>Animations change figure elements over time.</p>
 <p>Each figure element has its own <a href="#animationmanager">AnimationManager</a> (<code>animations</code> property) that can coordinate animations for any element.</p>
 <p>An animation is a number of <a href="#animationstep">AnimationStep</a>s in either series or parallel. The animation manager provides a way to create these steps, as well as build them into a complete animation.</p>
-<h3><a id="animation-boilerplate"></a> Animation Boilerplate</h3>
+<h4><a id="animation-boilerplate"></a> Animation Boilerplate</h4>
 <p>To test examples within the 'Animation' section of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
 <p>All examples are snippets which can be appended to the end of the <code>index.js</code> file.</p>
 <pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
@@ -24196,7 +24194,7 @@ figure.add(
   },
 );
 <span class="hljs-keyword">const</span> p = figure.getElement(<span class="hljs-string">'p'</span>);</pre>
-<h3>Animation Examples</h3>
+<h4>Animation Examples</h4>
 <p>Let's create a simple animation. Start by defining a figure and retrieving the element to animate by creating the boilerplate files <a href="#animation-boilerplate">above</a>.</p>
 <p>A <a href="#positionanimationstep">PositionAnimationStep</a> can be created to translate the shape, and a <a href="#rotationanimationstep">RotationAnimationStep</a> to rotate it</p>
 <pre class='hljs'><span class="hljs-keyword">const</span> translate = p.animations.position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">2</span> });
@@ -24259,7 +24257,7 @@ p.animations.new()
   .whenFinished(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> { <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'animation done'</span>) })
   .start();</pre>
 <p style="text-align: center"><img src="./tutorials/animation/ex5.gif"></p>
-<h3>Stopping animations</h3>
+<h4>Stopping animations</h4>
 <p>Animations can be stopped from the animation, element and figure levels.</p>
 <pre class='hljs'>p.animations.new(<span class="hljs-string">'mover'</span>)
   .position({ <span class="hljs-attr">target</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-attr">duration</span>: <span class="hljs-number">4</span>})
@@ -29395,7 +29393,7 @@ more readable.</p>
 <p><code>a - b = c</code></p>
 <p>In FigureOne, an equation is a collection (<a href="#figureelementcollection">FigureElementCollection</a>) of <strong>terms</strong> and <strong>operators</strong> (which are <a href="#figureelementprimitive">FigureElementPrimitive</a>s). A <strong>form</strong> defines the layout of terms and operators to create an equation. An equation can have many forms, and animation can be used to move between forms.</p>
 <p>As the equation, terms and operators are all <a href="#figureelement">FigureElement</a>s, then they have all the same interactivety and animation abilities as shapes and text.</p>
-<h3><a id="equation-boilerplate"></a> Equation Boilerplate</h3>
+<h4><a id="equation-boilerplate"></a> Equation Boilerplate</h4>
 <p>To test examples within the 'Equation' section of the API reference create an <code>index.html</code> file and <code>index.js</code> file.</p>
 <p>All examples are snippets which can be appended to the end of the <code>index.js</code> file.</p>
 <pre class='hljs'><span class="hljs-comment">&lt;!-- index.html --&gt;</span>
@@ -29410,7 +29408,7 @@ more readable.</p>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></pre>
 <pre class='hljs'><span class="hljs-comment">// index.js</span>
 <span class="hljs-keyword">const</span> figure = <span class="hljs-keyword">new</span> Fig.Figure({ <span class="hljs-attr">limits</span>: [<span class="hljs-number">-3</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>], <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>], <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>, <span class="hljs-attr">font</span>: { <span class="hljs-attr">size</span>: <span class="hljs-number">0.1</span> } });</pre>
-<h3>Quick Start</h3>
+<h4>Quick Start</h4>
 <p>First let's create an equation, with red as the default color:</p>
 <pre class='hljs'><span class="hljs-keyword">const</span> equation = figure.collections.equation({ <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>] });</pre>
 <p>Next lets add the definitions for the terms and operators, or the equation elements. The keys of the object are <em>unique identifiers</em> that will be used in the equation forms to layout the elements appropriately. The values of the object are the text to display in the equation, or objects that define the text with additional options including formatting.</p>
@@ -29430,7 +29428,7 @@ more readable.</p>
 <pre class='hljs'>figure.add(<span class="hljs-string">'equation'</span>, equation);
 equation.showForm(<span class="hljs-string">'b'</span>);</pre>
 <p><img src="./tutorials/equation/simple.png"></p>
-<h3>Symbols and Equation Functions</h3>
+<h4>Symbols and Equation Functions</h4>
 <p>Mathematics has many special symbols that operate on terms, or annotate an equation. These symbols and their associated terms usually have a special layout.</p>
 <p>FigureOne treats symbols like any other equation element, and uses <a href="#figureelementprimitive">FigureElementPrimitive</a>s to draw them. FigureOne then provides a series of functions that can layout terms around these symbols.</p>
 <p>Let's take the equation from the last example, and show the form as a fraction.</p>
@@ -29465,7 +29463,7 @@ equation.addForms({
 
 figure.add(<span class="hljs-string">'equation'</span>, equation);
 equation.showForm(<span class="hljs-string">'a'</span>);</pre>
-<h3>Equation Animation</h3>
+<h4>Equation Animation</h4>
 <p>Equations can animate between forms. For example, to animate from form <code>a</code> to <code>b</code> in the equation above:</p>
 <pre class='hljs'>equation.showForm(<span class="hljs-string">'a'</span>);
 equation.goToForm({
@@ -29493,7 +29491,7 @@ equation.goToForm({
   <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>,
 });</pre>
 <p><img src="./tutorials/equation/curved.gif"></p>
-<h3>Object Definition</h3>
+<h4>Object Definition</h4>
 <p>Similar to shapes and text, the same equation above can be defined with an options object. For complicated equations, options objects can be used with code folding in an IDE to more easily read and navigate an equation definition. Also, because object form is JSON compatible, complex equations can be easily shared.</p>
 <pre class='hljs'>figure.add(
   {
@@ -29526,7 +29524,7 @@ equation.goToForm({
 );
 <span class="hljs-keyword">const</span> equation = figure.getElement(<span class="hljs-string">'equation'</span>)
 equation.showForm(<span class="hljs-string">'a'</span>);</pre>
-<h3>Equation highlighting and interactivity</h3>
+<h4>Equation highlighting and interactivity</h4>
 <p>Just like any <a href="#figureelement">FigureElement</a>, an equation or its elements can be pulsed, touched or moved.</p>
 <p>For example, an element can be pulsed:</p>
 <pre class='hljs'><span class="hljs-comment">// Pulse the c element</span>
@@ -29541,10 +29539,10 @@ c.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt
 <p>And the equation can be moved:</p>
 <pre class='hljs'>equation.setMovable();</pre>
 <p><img src="./tutorials/equation/move.gif"></p>
-<h3>Managing Equations</h3>
+<h4>Managing Equations</h4>
 <p>Complicated equations can have long definitions that may be hard to read.</p>
 <p>Therefore there are several useful shortcuts when defining equations that are useful to improve readability.</p>
-<h4>Inline element definitions</h4>
+<h5>Inline element definitions</h5>
 <p>Equation elements can all be defined in the <code>elements</code> property. However, simple elements that have the same text as its <em>unique identifier</em> can be defined inline.</p>
 <p>For instance, we can recreate the example above as:</p>
 <pre class='hljs'>figure.add({
@@ -29630,7 +29628,7 @@ figure.elements._eqn.goToForm({
   <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>,
 });</pre>
 <p><img src="./tutorials/equation/reuse_symbol.gif"></p>
-<h4>Function Definitions</h4>
+<h5>Function Definitions</h5>
 <p>Function definitions can either be array definitions (an equation phrase) or object definitions. Array definitions are useful in simple definitions with minimal layout customizations. Object definitions are more readable when many options are required to customize a layout, or the input to the functions are more complicated equation phrases.</p>
 <p>Array definitions, or equation phrases, can also be spread over several lines to increase readability.</p>
 <pre class='hljs'>figure.add({
@@ -29684,7 +29682,7 @@ figure.elements._eqn.goToForm({
 <p>The above example also uses a <em>form series</em>. A form series allows animation between equation forms using the
 <a href="#equationnextform">equation.nextForm</a> and <a href="#equationprevform">equation.prevForm</a> methods.</p>
 <p><img src="./tutorials/equation/readability.gif"></p>
-<h4>Phrases</h4>
+<h5>Phrases</h5>
 <p>Often different forms of an equation reuse equation phrases, like fractions. To make equation forms more readable, it can be useful to define a phrase once, and then refer to its identifier throughout the forms.</p>
 <pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
@@ -29716,7 +29714,7 @@ figure.elements._eqn.goToForm({
   },
 });</pre>
 <p><img src="./tutorials/equation/phrases.gif"></p>
-<h3>Element interaction</h3>
+<h4>Element interaction</h4>
 <p>In the last two examples, equation touchability was setup in the <code>mods</code> property of the equation definition object. Similarly, equation elements can be set up in a similar way.</p>
 <pre class='hljs'>figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,

@@ -730,6 +730,7 @@ export default class CollectionsLine extends FigureElementCollection {
         labelOptions.color,
         labelOptions.precision,
         labelOptions.update,
+        labelOptions,
       );
     }
 
@@ -1148,6 +1149,11 @@ export default class CollectionsLine extends FigureElementCollection {
     color: TypeColor = this.color,
     precision: number = 1,
     update: boolean = false,
+    otherOptions: {
+      isTouchable?: boolean,
+      touchBorder?: TypeParsableBuffer | TypeBorder,
+      onClick?: null | string | (() => void)
+    } = {},
   ) {
     this.label = new LineLabel(
       this.collections, labelText, color,
@@ -1155,6 +1161,15 @@ export default class CollectionsLine extends FigureElementCollection {
       precision,
     );
     this.label.eqn.initialForm = null;
+    if (otherOptions.isTouchable != null) {
+      this.label.eqn.isTouchable = otherOptions.isTouchable;
+    }
+    if (otherOptions.touchBorder != null) {
+      this.label.eqn.touchBorder = otherOptions.touchBorder;
+    }
+    if (otherOptions.onClick != null) {
+      this.label.eqn.onClick = otherOptions.onClick;
+    }
     if (this.label != null) {
       this.add('label', this.label.eqn);
     }

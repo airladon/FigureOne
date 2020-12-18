@@ -1,11 +1,7 @@
 
-This is the [FigureOne](https://github.com/airladon/FigureOne) API refence. This is a work in progress and the entire API is not yet documented.
-
-First, it is useful to introduce some key terms and concepts that are found frequently throughout the documentation.
-
 #### Figures, Primitives and Collections
 
-**FigureOne** allows you to create a *figure* that can be both interactive and animated.
+[FigureOne](https://github.com/airladon/FigureOne) allows you to create a *figure* that can be both interactive and animated.
 
 A figure has one or more *figure elements*. A figure element is a simple shape, some text, or it may be a collection of other elements. These elements combine to create a complex drawing, graph or equation.
 

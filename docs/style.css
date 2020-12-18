@@ -15,6 +15,10 @@ a:visited {
   color: blue;
 }
 
+li {
+  padding-bottom: 0.4em;
+}
+
 #wrapper {
   margin-left: auto;
   margin-right: auto;
@@ -31,7 +35,6 @@ a:visited {
 #figureOneContainer {
   width: 100%;
   padding-bottom: 75%;
-  /* border: 1px solid lightgray; */
 }
 
 .title-text {
@@ -84,9 +87,7 @@ h2 {
 .links {
   text-align: center;
   padding-bottom: 2em;
-  /* margin-bottom: 30px; */
   margin-top: 30px;
-  /* border-top: 1px solid lightgrey; */
   border-bottom: 1px solid lightgrey;
 }
 
@@ -103,7 +104,7 @@ h2 {
   color: grey;
   text-align: center;
   padding-bottom: 20px;
-  padding-top: 20px;
+  padding-top: 3em;
 }
 
 .other-examples {

@@ -152,7 +152,8 @@ table {
 }
 
 .hljs {
-  background: #e5e5e5 !important;
+  /* background: #e5e5e5 !important; */
+  background: #f9f9f9 !important;
 }
 
 /* .inline_gif {
@@ -161,4 +162,34 @@ table {
 
 .inline_gif_image {
   max-width: 350px;
+}
+
+body {
+  background-color: white;
+}
+
+.gutter {
+  background-color: white !important;
+}
+
+h2 {
+  font-weight: 100;
+  font-size: 3em;
+  margin-bottom: 0;
+}
+
+h4 {
+  font-weight: 100;
+  font-size: 1.5em;
+  padding-top: 1em;
+  padding-bottom: 0.5em;
+  /* color: #555 !important; */
+}
+
+h4:first {
+  padding-top: 0em;
+}
+
+.documentation {
+  background: white;
 }

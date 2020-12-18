@@ -17,7 +17,7 @@ In FigureOne, an equation is a collection ({@link FigureElementCollection}) of *
 As the equation, terms and operators are all {@link FigureElement}s, then they have all the same interactivety and animation abilities as shapes and text.
 
 
-### <a id="equation-boilerplate"></a> Equation Boilerplate
+#### <a id="equation-boilerplate"></a> Equation Boilerplate
 To test examples within the 'Equation' section of the API reference create an `index.html` file and `index.js` file.
 
 All examples are snippets which can be appended to the end of the `index.js` file.
@@ -40,7 +40,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 ```
 
-### Quick Start
+#### Quick Start
 
 First let's create an equation, with red as the default color:
 ```javascript
@@ -77,7 +77,7 @@ equation.showForm('b');
 
 ![](./tutorials/equation/simple.png)
 
-### Symbols and Equation Functions
+#### Symbols and Equation Functions
 
 Mathematics has many special symbols that operate on terms, or annotate an equation. These symbols and their associated terms usually have a special layout.
 
@@ -131,7 +131,7 @@ figure.add('equation', equation);
 equation.showForm('a');
 ```
 
-### Equation Animation
+#### Equation Animation
 
 Equations can animate between forms. For example, to animate from form `a` to `b` in the equation above:
 
@@ -171,7 +171,7 @@ equation.goToForm({
 ![](./tutorials/equation/curved.gif)
 
 
-### Object Definition
+#### Object Definition
 Similar to shapes and text, the same equation above can be defined with an options object. For complicated equations, options objects can be used with code folding in an IDE to more easily read and navigate an equation definition. Also, because object form is JSON compatible, complex equations can be easily shared.
 
 ```javascript
@@ -208,7 +208,7 @@ const equation = figure.getElement('equation')
 equation.showForm('a');
 ```
 
-### Equation highlighting and interactivity
+#### Equation highlighting and interactivity
 
 Just like any {@link FigureElement}, an equation or its elements can be pulsed, touched or moved.
 
@@ -237,13 +237,13 @@ equation.setMovable();
 
 ![](./tutorials/equation/move.gif)
 
-### Managing Equations
+#### Managing Equations
 
 Complicated equations can have long definitions that may be hard to read.
 
 Therefore there are several useful shortcuts when defining equations that are useful to improve readability.
 
-#### Inline element definitions
+##### Inline element definitions
 
 Equation elements can all be defined in the `elements` property. However, simple elements that have the same text as its *unique identifier* can be defined inline.
 
@@ -355,7 +355,7 @@ figure.elements._eqn.goToForm({
 
 ![](./tutorials/equation/reuse_symbol.gif)
 
-#### Function Definitions
+##### Function Definitions
 
 Function definitions can either be array definitions (an equation phrase) or object definitions. Array definitions are useful in simple definitions with minimal layout customizations. Object definitions are more readable when many options are required to customize a layout, or the input to the functions are more complicated equation phrases.
 
@@ -419,7 +419,7 @@ The above example also uses a *form series*. A form series allows animation betw
 
 ![](./tutorials/equation/readability.gif)
 
-#### Phrases
+##### Phrases
 
 Often different forms of an equation reuse equation phrases, like fractions. To make equation forms more readable, it can be useful to define a phrase once, and then refer to its identifier throughout the forms.
 
@@ -457,7 +457,7 @@ figure.add({
 
 ![](./tutorials/equation/phrases.gif)
 
-### Element interaction
+#### Element interaction
 
 In the last two examples, equation touchability was setup in the `mods` property of the equation definition object. Similarly, equation elements can be set up in a similar way.
 

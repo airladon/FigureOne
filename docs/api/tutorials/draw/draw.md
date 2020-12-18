@@ -3,7 +3,7 @@ Each {@link FigureElementPrimitive} element manages drawing a shape, drawing tex
 FigureOne's built-in shapes are drawn using WebGL, which uses triangles to create different shapes. To draw a shape, you define the verticies of the triangles. Every drawing frame (animation or screen refresh), the color of the vertices and the transform that moves them around is used to render the final shape to the screen.
 
 
-### <a id="drawing-boilerplate"></a> Shapes Boilerplate
+#### <a id="drawing-boilerplate"></a> Shapes Boilerplate
 To test examples within the 'Shapes' sections of the API reference create an `index.html` file and `index.js` file.
 
 All examples are snippets which can be appended to the end of the `index.js` file.
@@ -26,7 +26,7 @@ All examples are snippets which can be appended to the end of the `index.js` fil
 const figure = new Fig.Figure({ limits: [-3, -3, 6, 6], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 ```
 
-### Quick Start
+#### Quick Start
 
 Let's start by creating a {@link FigureElementPrimitive} element that draws a polygon and adding it to the figure.
 
@@ -60,7 +60,7 @@ Both ways create the same element. The first way is especially useful when exten
 
 For most of the API reference, the second way will be used.
 
-### Built-in Shapes
+#### Built-in Shapes
 
 There are several built in primitive shape methods that can be used to create complex figures:
 * <a href="#obj_line">line</a>
@@ -73,7 +73,7 @@ There are several built in primitive shape methods that can be used to create co
 * <a href="#obj_star">star</a>
 * <a href="#obj_grid">grid</a>
 
-### Drawing a generic shape
+#### Drawing a generic shape
 
 While there are several built-in shapes such as polygons, rectangles and polylines in FigureOne, there is also a 'generic' method that will allow creation of any shape. In fact, all the built in shapes use this generic method themselves.
 
@@ -105,7 +105,7 @@ This method will be able to draw almost anything.
 
 However, for some shapes there are simpler ways to draw the same thing with fewer repeated vertices.
 
-#### drawType: 'strip'
+##### drawType: 'strip'
 
 A strip starts with one triangle, and then every subsequent vertex will create a triangle with the last two vertices.
 
@@ -131,7 +131,7 @@ A good example of a shape that works with `'strip'` is below. The vertices are l
 
 <p style="text-align: center"><img src="./tutorials/draw/strip.png"></p>
 
-#### drawType: 'fan'
+##### drawType: 'fan'
 
 A fan starts with one point. The next two points create the first triangle, and then every subsequent point uses the first and last point to create the next triangle.
 
@@ -160,7 +160,7 @@ Note, `'strip'` can create any shape `'fan'` can, but it can be a little more in
 
 <p style="text-align: center"><img src="./tutorials/draw/strip-fan.png"></p>
 
-#### drawType: 'lines'
+##### drawType: 'lines'
 
 `'lines'` is the final style that WebGL accepts for drawing primitives. In this case vertex pairs are used to create lines.
 
