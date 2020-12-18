@@ -8,13 +8,16 @@ body {
 }
 
 #wrapper {
-  padding: 10px;
-  box-sizing: border-box;
-  resize: horizontal; 
-  overflow: auto;
+  margin-left: auto;
+  margin-right: auto;
+  width: calc(100vw - 20px);
   max-width: 100%;
-  height: calc(100vh - 16px);
-  max-height: calc(100vw - 20px);
+}
+
+@media (min-aspect-ratio: 1/1) {
+  #wrapper {
+    width: calc((100vh - 20px)/0.75);
+  }
 }
 
 #figureOneContainer {
@@ -27,22 +30,6 @@ body {
   text-align: center;
   font-weight: 100;
 }
-
-
-/* @media (min-aspect-ratio: 1/1) {
-  #wrapper {
-    padding: 10px;
-    box-sizing: border-box;
-    resize: horizontal; 
-    overflow: auto;
-    max-width: 100%;
-    height: calc(100vh - 16px);
-    max-height: calc(100vh - 20px);
-  }
-  body {
-    background: red;
-  }
-} */
 
 h1 {
   padding-top: 20px;
