@@ -61,6 +61,7 @@ figure.add({
     points: [[0, 0], [1, 0], [0, 1]],
     width: 0.1,
     fast: true,
+    close: true,
   },
 })
 figure.getElement('angle').setMovable({ startArm: 'angle' })

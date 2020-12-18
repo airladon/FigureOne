@@ -1104,36 +1104,42 @@ function makeFastPolyLine(
   width: number,
   close: boolean,
 ) {
-  const len = close ? pointsIn.length * 2 + 2 : pointsIn.length * 2;
-  // const inside = Array(len);
-  // const outside = Array(len);
+  const len = close ? pointsIn.length * 4 + 2 : (pointsIn.length - 1) * 4;
   const points = Array(len);
   const half = width / 2;
   const orth = Math.PI / 2;
-  let lastAngle = 0
-  for (let i = 0; i < pointsIn.length; i += 1) {
-    const p = pointsIn[i];
-    let angle = lastAngle;
-    if (i < pointsIn.length - 1) {
-      const pNext = pointsIn[i + 1];
-      angle = Math.atan2(pNext.y - p.y, pNext.x - p.x);
-      lastAngle = angle;
-    }
-    points[i * 2] = new Point(
-      p.x + half * Math.cos(angle - orth),
-      p.y + half * Math.sin(angle - orth),
-    );
-    points[i * 2 + 1] = new Point(
-      p.x + half * Math.cos(angle + orth),
-      p.y + half * Math.sin(angle + orth),
-    );
+  const getPoints = (index1, index2) => {
+    const p1 = pointsIn[index1];
+    const p2 = pointsIn[index2];
+    const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+    const dx1 = half * Math.cos(angle - orth);
+    const dx2 = half * Math.cos(angle + orth);
+    const dy1 = half * Math.sin(angle - orth);
+    const dy2 = half * Math.sin(angle + orth);
+    return [
+      new Point(p1.x + dx1, p1.y + dy1),
+      new Point(p1.x + dx2, p1.y + dy2),
+      new Point(p2.x + dx1, p2.y + dy1),
+      new Point(p2.x + dx2, p2.y + dy2),
+    ];
+  };
+  for (let i = 0; i < pointsIn.length - 1; i += 1) {
+    const [p11, p12, p21, p22] = getPoints(i, i + 1);
+    points[i * 4] = p11;
+    points[i * 4 + 1] = p12;
+    points[i * 4 + 2] = p21;
+    points[i * 4 + 3] = p22;
   }
 
   if (close) {
+    const [p11, p12, p21, p22] = getPoints(pointsIn.length - 1, 0);
+    points[len - 6] = p11;
+    points[len - 5] = p12;
+    points[len - 4] = p21;
+    points[len - 3] = p22;
     points[len - 2] = points[0]._dup();
     points[len - 1] = points[1]._dup();
   }
-  // console.log(points)
   return [points, [[]], [[]], [[]]];
 }
 
