@@ -7,6 +7,14 @@ body {
   font-weight: 100;
 }
 
+a {
+  text-decoration: none;
+}
+
+a:visited {
+  color: blue;
+}
+
 #wrapper {
   margin-left: auto;
   margin-right: auto;
@@ -23,12 +31,13 @@ body {
 #figureOneContainer {
   width: 100%;
   padding-bottom: 75%;
-  border: 1px solid lightgray;
+  /* border: 1px solid lightgray; */
 }
 
 .title-text {
   text-align: center;
   font-weight: 100;
+  margin-top: 1.5em;
 }
 
 h1 {
@@ -44,6 +53,25 @@ h2 {
   color: grey;
 }
 
+.example-title {
+  color: #5a5a5a;
+  text-align: center;
+  padding: 10px;
+  font-weight: 100;
+  padding-top: 25px;
+  font-size: 1.6em;
+}
+
+.example-description {
+  padding-left: 3em;
+  padding-right: 3em;
+  font-size: 1em;
+  color: grey;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .sub-text{
   font-size: 1em;
   color: grey;
@@ -55,6 +83,11 @@ h2 {
 
 .links {
   text-align: center;
+  padding-bottom: 2em;
+  /* margin-bottom: 30px; */
+  margin-top: 30px;
+  /* border-top: 1px solid lightgrey; */
+  border-bottom: 1px solid lightgrey;
 }
 
 .title-link {
@@ -66,16 +99,32 @@ h2 {
   color: blue;
 }
 
+.see-the-code {
+  color: grey;
+  text-align: center;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.other-examples {
+  color: grey;
+  padding-bottom: 10px;
+}
+
+.examples {
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
+}
+
 .footer {
   padding: 20px;
   text-align: center;
   color: grey;
-}
-
-a {
-  text-decoration: none;
-}
-
-a:visited {
-  color: blue;
+  margin-bottom: 30px;
+  margin-top: 30px;
 }
