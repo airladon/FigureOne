@@ -322,7 +322,7 @@ class FigureTextBase {
     } else if (this.yAlign === 'top') {
       location.y -= this.measure.ascent;
     }
-    this.locationAligned = location;
+    this.locationAligned = location._dup();
   }
 
   calcBounds() {
@@ -583,10 +583,10 @@ class TextObjectBase extends DrawingObject {
   setOpacity(opacity: number, index: null | number = 0) {
     if (index === null) {
       for (let i = 0; i < this.text.length; i += 1) {
-        this.text[i].setFont({ opacity });
+        this.setFont({ opacity }, i);
       }
     } else {
-      this.text[index].setFont({ opacity });
+      this.setFont({ opacity }, index);
     }
   }
 

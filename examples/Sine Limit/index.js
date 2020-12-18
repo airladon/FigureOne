@@ -105,7 +105,7 @@ figure.add([
     },
   },
   {
-    name: 'buttonNext',
+    name: 'nextButton',
     method: 'collections.rectangle',
     options: {
       width: 0.5,
@@ -131,7 +131,7 @@ figure.add([
     }
   },
   {
-    name: 'buttonPrev',
+    name: 'prevButton',
     method: 'collections.rectangle',
     options: {
       width: 0.5,
@@ -247,7 +247,7 @@ figure.add([
       phrases: {
         sinx: { tBox: [['sin', ' ', 'x_1'], 'sinBox'] },
         sinx1: { tBox: [['sin', ' ', 'x_3'], 'sinBox'] },
-        limit: { tBox: [bot('lim', 'x \u2192 0'), 'limBox']},
+        limit: { tBox: [bot('lim', 'x \u2192 0', '   '), 'limBox']},
       },
       formDefaults: {
         alignment: {
@@ -255,138 +255,33 @@ figure.add([
         },
       },
       forms: {
-        0: {
-          content: [],
-          description: [
-            'Move the |blue line| and |observe|:',
-            {
-              text: 'As the |angle| gets smaller, the |arc| and',
-              lineSpace: 0.2,
-            },
-            '|vertical| line get closer in length',
+        0: [],
+        1: ['asXTo0', 'vert', 'equals', 'arc' ],
+        2: [
+            'asXTo0', frac('vert', 'vinculum', 'arc_1'),
+            'equals', frac('arc', 'v2_vinculum', 'arc_2'),
           ],
-          modifiers: {
-            'Observe': {
-              font: { style: 'italic' },
-            },
-            'blue line': {
-              font: { color: [0, 0.5, 1, 1] },
-              onClick: () => figure.getElement('radius').pulseWidth(),
-              touchBorder: 0.1,
-            },
-            'arc': {
-              font: { color: [1, 0, 0, 1] },
-              onClick: () => figure.getElement('arc.label').pulse(),
-              touchBorder: 0.1,
-            },
-            'angle': {
-              font: { color: [1, 0, 0, 1] },
-              onClick: () => figure.getElement('angle.label').pulse(),
-              touchBorder: 0.1,
-            },
-            'vertical': {
-              font: { color: [1, 0, 0, 1] },
-              onClick: () => figure.getElement('sine.label').pulse(),
-              touchBorder: 0.1,
-            },
-          },
-          onTransition: () => {
-            figure.getElement('arc.label').showForm('0');
-            figure.getElement('sine.label').showForm('0');
-          },
-        },
-        1: {
-          content: ['asXTo0', 'vert', 'equals', 'arc' ],
-          description: [
-            'Move the |blue line| and |observe|:',
-            {
-              text: 'As the |angle| gets smaller, the |arc| and',
-              lineSpace: 0.2,
-            },
-            '|vertical| line get closer in length',
-          ],
-          modifiers: {
-            'Observe': {
-              font: { style: 'italic' },
-            },
-            'blue line': {
-              font: { color: [0, 0.5, 1, 1] },
-              onClick: () => figure.getElement('radius').pulseWidth(),
-              touchBorder: 0.1,
-            },
-            'arc': {
-              font: { color: [1, 0, 0, 1] },
-              onClick: () => figure.getElement('arc.label').pulse(),
-              touchBorder: 0.1,
-            },
-            'angle': {
-              font: { color: [1, 0, 0, 1] },
-              onClick: () => figure.getElement('angle.label').pulse(),
-              touchBorder: 0.1,
-            },
-            'vertical': {
-              font: { color: [1, 0, 0, 1] },
-              onClick: () => figure.getElement('sine.label').pulse(),
-              touchBorder: 0.1,
-            },
-          },
-          onTransition: () => {
-            figure.getElement('arc.label').showForm('0');
-            figure.getElement('sine.label').showForm('0');
-          },
-        },
-        2: {
-          content: [
-            'asXTo0',
-            frac('vert', 'vinculum', 'arc_1'),
-            'equals',
-            frac('arc', 'v2_vinculum', 'arc_2'),
-          ],
-          description: 'Divide both sides by the |arc length|',
-          modifiers: {
-            'arc length': {
-              font: { color: [1, 0, 0, 1] },
-              onClick: () => {
-                figure.getElement('eqn').pulse({ elements: ['arc_1', 'arc_2'], yAlign: 'top'});
-              },
-              touchBorder: 0.1,
-            },
-          },
-        },
-        3: {
-          content: [
-            'asXTo0',
-            frac('vert', 'vinculum', 'arc_1'), 'equals', '_1'
-          ],
-          description: 'Simplify the right hand side to 1',
-        },
-        4: {
-          content: [
-            'limit',
-            '  ', frac('vert', 'vinculum', 'arc_1'),
-            'equals', '_1',
-          ],
-          description: 'Use mathematical notation for the limit'
-        },
+        3: ['asXTo0', frac('vert', 'vinculum', 'arc_1'), 'equals', '_1'],
+        4: ['limit', '  ', frac('vert', 'vinculum', 'arc_1'), 'equals', '_1'],
         5: {
           content: [
             'limit',
             '  ', frac('sinx1', 'vinculum', 'arc_1'),
             'equals', '_1',
           ],
-          onTransition: () => {            
-            figure.getElement('sine.label').nextForm();
-          },
-          onShow: () => {
-            figure.getElement('sine.label').pulse();
-            figure.getElement('eqn').pulse({
-              elements: ['sin', 'x_3'],
-              centerOn: figure.getElement('eqn.sin'),
-              xAlign: 'right',
-              yAlign: 'bottom',
-            });
-          },
-          description: 'The vertical line is actually the sine of x'
+          // onTransition: () => {            
+          //   figure.getElement('sine.label').nextForm();
+          // },
+          // onShow: () => {
+          //   figure.getElement('sine.label').pulse();
+          //   figure.getElement('eqn').pulse({
+          //     elements: ['sin', 'x_3'],
+          //     centerOn: figure.getElement('eqn.sin'),
+          //     xAlign: 'right',
+          //     yAlign: 'bottom',
+          //   });
+          // },
+          // description: 'The vertical line is actually the sine of x'
         },
         6: {
           content: [
@@ -394,14 +289,14 @@ figure.add([
             '  ', frac('sinx1', 'vinculum', 'x_2'),
             'equals', '_1',
           ],
-          onTransition: () => {            
-            figure.getElement('arc.label').nextForm();
-          },
-          onShow: () => {
-            figure.getElement('arc.label').pulse();
-            figure.getElement('eqn.x_2').pulse({ yAlign: 'top' });
-          },
-          description: 'The radius is 1, so the arc length equals the angle',
+          // onTransition: () => {            
+          //   figure.getElement('arc.label').nextForm();
+          // },
+          // onShow: () => {
+          //   figure.getElement('arc.label').pulse();
+          //   figure.getElement('eqn.x_2').pulse({ yAlign: 'top' });
+          // },
+          // description: 'The radius is 1, so the arc length equals the angle',
         },
         7: {
           content: [
@@ -409,11 +304,11 @@ figure.add([
             '  ', frac('sinx1', 'vinculum', 'x_2'),
             'equals', '_1',
           ],
-          description: [
-            'This can be read as:',
-            'For very small angles, the angle and',
-            'the sine of the angle are the same',
-          ],
+          // description: [
+          //   'This can be read as:',
+          //   'For very small angles, the angle and',
+          //   'the sine of the angle are the same',
+          // ],
         },
       },
       formSeries: ['0', '1', '2', '3', '4', '5', '6', '7'],
@@ -432,7 +327,8 @@ const sine = figure.getElement('sine');
 const rect = figure.getElement('rect');
 const description = figure.getElement('description');
 const radiusLine = figure.getElement('radius');
-const oneLabel = figure.getElement('radius.label');
+const eqn = figure.getElement('eqn');
+// const oneLabel = figure.getElement('radius.label');
 
 movePad.subscriptions.add('setTransform', () => {
   const a = movePad.getRotation();
@@ -454,7 +350,150 @@ movePad.subscriptions.add('setTransform', () => {
   radiusLine.setEndPoints(origin, end.add(origin));
 });
 
+const descriptions = [
+  {
+    text: [
+      'Move the |blue line| and |observe|:',
+      {
+        text: 'As the |angle| gets smaller, the |arc| and',
+        lineSpace: 0.2,
+      },
+      '|vertical| line get closer in length',
+    ],
+    modifiers: {
+      'Observe': {
+        font: { style: 'italic' },
+      },
+      'blue line': {
+        font: { color: [0, 0.5, 1, 1] },
+        onClick: () => figure.getElement('radius').pulseWidth(),
+        touchBorder: 0.1,
+      },
+      'arc': {
+        font: { color: [1, 0, 0, 1] },
+        onClick: () => figure.getElement('arc.label').pulse(),
+        touchBorder: 0.1,
+      },
+      'angle': {
+        font: { color: [1, 0, 0, 1] },
+        onClick: () => figure.getElement('angle.label').pulse(),
+        touchBorder: 0.1,
+      },
+      'vertical': {
+        font: { color: [1, 0, 0, 1] },
+        onClick: () => figure.getElement('sine.label').pulse(),
+        touchBorder: 0.1,
+      },
+    },
+  },
+  // { text: 'Lets make this an equation' },
+  {
+    text: 'Divide both sides by the |arc length|',
+    modifiers: {
+      'arc length': {
+        font: { color: [1, 0, 0, 1] },
+        onClick: () => {
+          figure.getElement('eqn').pulse({ elements: ['arc_1', 'arc_2'], yAlign: 'top'});
+        },
+        touchBorder: 0.1,
+      },
+    },
+  },
+  { text: 'The right hand side simplifies to 1', },
+  { text: 'Use mathematical notation for the limit' },
+  { text: 'The vertical line is actually the sine of x' },
+  { text: 'The radius is 1, so the arc length equals the angle' },
+  {
+    text: [
+      'This can be read as:',
+      'For very small angles, the angle and',
+      'the sine of the angle are the same',
+    ],
+  },
+];
 
+const slides = [
+  {
+    description: 0,
+    form: '0',
+    state: () => {
+      figure.getElement('arc.label').showForm('0');
+      figure.getElement('sine.label').showForm('0');
+    },
+  },
+  { form: '1' },
+  { description: 1 },
+  { form: '2' },
+  { description: 2 },
+  { form: '3' },
+  { description: 3 },
+  { form: '4' },
+  {
+    description: 4,
+    state: () => {
+      figure.getElement('sine.label').showForm('0');
+    },
+  },
+  {
+    form: '5',
+    state: () => {
+      figure.getElement('sine.label').nextForm();
+    },
+  },
+  {
+    description: 5,
+    state: () => {
+      figure.getElement('arc.label').showForm('0');
+    },
+  },
+  {
+    form: '6',
+    state: () => {
+      figure.getElement('arc.label').nextForm();
+    },
+  },
+  { description: 6, form: '6' },
+];
+
+let slideIndex = 0;
+const showSlide = (index) => {
+  const slide = slides[index];
+  console.log(slide)
+  if (slide.form != null) {
+    eqn.goToForm({ form: slide.form, animate: 'move' });
+  }
+  description.stop();
+  if (slide.description != null) {
+    description.custom.updateText({
+          text: descriptions[slide.description].text,
+          modifiers: descriptions[slide.description].modifiers,
+    })
+    description.animations.new()
+      .dissolveIn(0.4)
+      .start();
+  }
+  if (slide.state != null) {
+    slide.state();
+  }
+  console.log(index)
+}
+figure.getElement('nextButton').onClick = () => {
+  if (figure.isAnimating()) {
+    figure.stop();
+    return;
+  }
+  slideIndex = (slideIndex + 1) % slides.length;
+  showSlide(slideIndex);  
+}
+figure.getElement('prevButton').onClick = () => {
+  if (figure.isAnimating()) {
+    figure.stop();
+    return;
+  }
+  slideIndex = (slideIndex - 1) < 0 ? slides.length - 1 : slideIndex - 1;
+  showSlide(slideIndex);  
+}
+showSlide(0)
 // const highlight = (element, position, text) => {
 //   rect.animations.cancel();
 //   description.animations.cancel();
@@ -544,9 +583,9 @@ movePad.subscriptions.add('setTransform', () => {
 // };
 
 movePad.setRotation(1);
-const eqn = figure.getElement('eqn');
-const form = eqn.getCurrentForm();
-description.custom.updateText({
-  text: form.description,
-  modifiers: form.modifiers,
-});
+// const eqn = figure.getElement('eqn');
+// const form = eqn.getCurrentForm();
+// description.custom.updateText({
+//   text: form.description,
+//   modifiers: form.modifiers,
+// });

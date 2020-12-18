@@ -2,40 +2,40 @@ const figure = new Fig.Figure({ limits: [-4.5, -4.5, 9, 9], color: [1, 0, 0, 1],
 // const figure = new Fig.Figure({ limits: [-3, -2.25, 6, 4.5], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
 
 // // const figure = new Fig.Figure({ limits: [-8, -8, 16, 16], color: [1, 0, 0, 1]});
-// figure.add([
-//   {
-//     name: 'origin',
-//     method: 'polygon',
-//     options: {
-//       radius: 0.01,
-//       line: { width: 0.01 },
-//       sides: 10,
-//       color: [0.7, 0.7, 0.7, 1]
-//     },
-//   },
-//   {
-//     name: 'grid',
-//     method: 'grid',
-//     options: {
-//       bounds: [-4.5, -4.5, 9, 9],
-//       yStep: 0.1,
-//       xStep: 0.1,
-//       color: [0.9, 0.9, 0.9, 1],
-//       line: { width: 0.004 },
-//     },
-//   },
-//   {
-//     name: 'gridMajor',
-//     method: 'grid',
-//     options: {
-//       bounds: [-4.5, -4.5, 9, 9],
-//       yStep: 0.5,
-//       xStep: 0.5,
-//       color: [0.7, 0.7, 0.7, 1],
-//       line: { width: 0.004 }
-//     },
-//   },
-// ]);
+figure.add([
+  {
+    name: 'origin',
+    method: 'polygon',
+    options: {
+      radius: 0.01,
+      line: { width: 0.01 },
+      sides: 10,
+      color: [0.7, 0.7, 0.7, 1]
+    },
+  },
+  {
+    name: 'grid',
+    method: 'grid',
+    options: {
+      bounds: [-4.5, -4.5, 9, 9],
+      yStep: 0.1,
+      xStep: 0.1,
+      color: [0.9, 0.9, 0.9, 1],
+      line: { width: 0.004 },
+    },
+  },
+  {
+    name: 'gridMajor',
+    method: 'grid',
+    options: {
+      bounds: [-4.5, -4.5, 9, 9],
+      yStep: 0.5,
+      xStep: 0.5,
+      color: [0.7, 0.7, 0.7, 1],
+      line: { width: 0.004 }
+    },
+  },
+]);
 
 // figure.add({
 //   name: 'eqn',
@@ -55,13 +55,24 @@ const figure = new Fig.Figure({ limits: [-4.5, -4.5, 9, 9], color: [1, 0, 0, 1],
 //   },
 // });
 figure.add({
-  name: 'angle',
-  method: 'primitives.polyline',
+  name: 'text',
+  method: 'primitives.textLines',
   options: {
-    points: [[0, 0], [1, 0], [0, 1]],
-    width: 0.1,
-    fast: true,
-    close: true,
+    text: ['this is a test', 'so there'],
+    xAlign: 'center',
   },
 })
-figure.getElement('angle').setMovable({ startArm: 'angle' })
+// figure.getElement('angle').setMovable({ startArm: 'angle' })
+// debugger;
+const t = figure.getElement('text');
+console.log(t.drawingObject.text[0].locationAligned)
+
+// debugger;
+t.setOpacity(0.5)
+// figure.getElement('text').animations.new()
+//   .dissolveIn(0.4)
+//   // .opacity({ start: 1, target: 0.2, duration: 1 })
+//   .start();
+// // t.setPosition(-1, 0)
+// 
+console.log(t.drawingObject.text[0].locationAligned)
