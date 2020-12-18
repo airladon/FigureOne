@@ -507,6 +507,10 @@ export type OBJ_Generic = {
  * @property {Array<TypeParsablePoint>} points
  * @property {number} [width] (`0.01`)
  * @property {boolean} [close] close the polyline on itself (`false`)
+ * @property {boolean} [simple] simple and minimum computation polyline. Good
+ * for large numbers of points that need to be updated every animation frame.
+ * `widthIs`, `dash`, `arrow` and all corner and line primitive properties are
+ * not available when a polyline is simple. (`false`)
  * @property {'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number} [widthIs]
  * defines how the width is grown from the polyline's points.
  * Only `"mid"` is fully compatible with all options in
@@ -619,6 +623,7 @@ export type OBJ_Polyline = {
   points?: Array<TypeParsablePoint> | Array<Point>,
   width?: number,
   close?: boolean,
+  simple?: boolean,
   widthIs?: 'mid' | 'outside' | 'inside' | 'positive' | 'negative' | number,
   drawBorder?: 'line' | 'positive' | 'negative' | TypeParsableBorder,
   drawBorderBuffer?: number | TypeParsableBorder,
@@ -2301,7 +2306,7 @@ export default class FigurePrimitives {
       drawBorder: 'negative',
       holeBorder: [[]],
       drawBorderBuffer: 0,
-      fast: false,
+      simple: false,
     };
     const o = joinObjects({}, defaultOptions, optionsIn);
     if (o.linePrimitives === false) {
@@ -2313,8 +2318,7 @@ export default class FigurePrimitives {
     let drawBorder;
     let holeBorder;
     let drawBorderBuffer;
-    const t = performance.now();
-    if (o.fast) {
+    if (o.simple) {
       [points, drawBorder, drawBorderBuffer, holeBorder] = makeFastPolyLine(
         o.points, o.width, o.close,
       );
@@ -3231,6 +3235,7 @@ export default class FigurePrimitives {
     const element = this.genericTextPrimitive(to, options);
     element.custom.options = to;
     element.custom.updateText = (o: OBJ_Text) => { // $FlowFixMe
+      element.drawingObject.clear();
       const parsed = this.parseTextOptions(
         { border: 'rect', touchBorder: 'rect' },
         element.custom.options,
@@ -3254,6 +3259,7 @@ export default class FigurePrimitives {
     const element = this.genericTextPrimitive(to, joinedOptions);
     element.custom.options = joinedOptions;
     element.custom.updateText = (oIn: OBJ_Text) => {
+      element.drawingObject.clear();
       let oToUse = oIn; // $FlowFixMe
       if (oIn.length === 1 && typeof oIn[0] === 'string') {
         oToUse = [{ text: [optionsIn[0]] }];

@@ -4,7 +4,7 @@ const figure = new Figure({
   color: [0.5, 0.5, 0.5, 1],
 });
 
-const origin = new Point(-1, -0.5);
+const origin = new Point(-1, -0.4);
 const radius = 2;
 // Create the shape
 figure.add([
@@ -22,9 +22,7 @@ figure.add([
       isMovable: true,
       move: {
         type: 'rotation',
-        bounds: {
-          rotation: { min: 0.07, max: 1.1 },
-        },
+        bounds: { rotation: { min: 0.07, max: 1.1 } },
       },
     },
   },
@@ -36,10 +34,10 @@ figure.add([
       length: radius,
       angle: 1,
       touchBorder: 0.5,
-      width: 0.001,
-      // color: [0, 0, 0, 0],
+      width: 0.01,
+      color: [0, 0.5, 1, 1],
       label: {
-        text: '1',
+        text: ['', '1'],
         offset: 0.05,
         update: true,
         isTouchable: true,
@@ -56,6 +54,7 @@ figure.add([
         radius: 0.35,
         width: 0.005,
         sides: 200,
+        simple: true,
       },
       label: {
         text: 'x',
@@ -63,6 +62,7 @@ figure.add([
         autoHide: 0.2,
         touchBorder: 0.1,
         isTouchable: true,
+        color: [1, 0, 0, 1 ],
       },
       position: origin,
     },
@@ -75,10 +75,10 @@ figure.add([
         radius: radius - 0.005,
         width: 0.01,
         sides: 800,
-        dash: [0.1, 0.1],
+        simple: true,
       },
       label: {
-        text: 'x',
+        text: ['arc', 'x'],
         offset: 0.05,
         touchBorder: 0.1,
         isTouchable: true,
@@ -94,7 +94,7 @@ figure.add([
       p1: [0, 0],
       p2: [0, 1],
       label: {
-        text: 'sin x',
+        text: ['vert', 'sin x'],
         offset: 0.05,
         linePosition: 0.5,
         touchBorder: 0.1,
@@ -105,80 +105,97 @@ figure.add([
     },
   },
   {
-    name: 'eqn',
-    method: 'collections.equation',
+    name: 'buttonNext',
+    method: 'collections.rectangle',
     options: {
-      elements: {
-        lim: { style: 'normal' },
-        sin: { style: 'normal', color: [1, 0, 0, 1] },
-        x_1: { color: [1, 0, 0, 1] },
-        x_2: { color: [1, 0, 0, 1], isTouchable: true, touchBorder: 0.1 },
-        _1: { isTouchable: true, touchBorder: 0.1 },
-        equals: '   =   ',
-        limBox: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
-        sinBox: { symbol: 'tBox', touchBorder: [0.1, 0.02, 0.1, 0.1], isTouchable: true },
-      },
-      phrases: {
-        sinx: { tBox: [['sin', ' ', 'x_1'], 'sinBox'] },
-      },
-      forms: {
-        0: [
-          {
-            tBox: [
-              {
-                annotate: {
-                  content: 'lim',
-                  annotation: {
-                    content: 'x \u2192 0',
-                    xPosition: 'center',      // Position is relative to content
-                    xAlign: 'center',         // Alignment is relative to annotation
-                    yPosition: 'bottom',
-                    yAlign: 'top',
-                    scale: 0.6,
-                  },
-                },
-              },
-              'limBox',
-            ],
-          },
-          '  ', { frac: ['sinx', 'vinculum', 'x_2'] },
-          'equals', '_1',
-        ],
-      },
-      position: origin.add(0.5, -0.4),
+      width: 0.5,
+      height: 0.25,
+      line: { width: 0.005 },
+      corner: { radius: 0.03, sides: 5 },
+      button: true,
+      position: [1.5, -1.3],
+      label: 'Next'
     },
-    // mods: {
-    //   isTouchable: true,
-    // },
+    mods: {
+      isTouchable: true,
+      touchBorder: 0.1,
+      onClick: () => {
+        const eqn = figure.getElement('eqn');
+        eqn.nextForm({ animate: 'move' });
+        const { description, modifiers } = eqn.getCurrentForm();
+        figure.getElement('description').custom.updateText({
+          text: description,
+          modifiers,
+        });
+      }
+    }
+  },
+  {
+    name: 'buttonPrev',
+    method: 'collections.rectangle',
+    options: {
+      width: 0.5,
+      height: 0.25,
+      line: { width: 0.005 },
+      corner: { radius: 0.03, sides: 5 },
+      button: true,
+      position: [-1.5, -1.3],
+      label: 'Prev'
+    },
+    mods: {
+      isTouchable: true,
+      touchBorder: 0.1,
+      onClick: () => {
+        figure.getElement('eqn').prevForm({ animate: 'dissolve' });
+      }
+    }
   },
   {
     name: 'description',
     method: 'primitives.textLines',
     options: {
-      text: [
-        'As the |angle x| gets very small, the |arc length| and the',
-        'vertical component approach equality',
-      ],
-      font: { color: [1, 0, 0, 1], size: 0.08 },
+      // text: [
+      //   'Move the |blue line| and |observe|:',
+      //   {
+      //     text: 'As the |angle| gets smaller, the |arc| and',
+      //     lineSpace: 0.2,
+      //   },
+      //   '|vertical| line get closer in length',
+      // ],
+      font: { color: [0.5, 0.5, 0.5, 1], size: 0.1 },
       justify: 'left',
       xAlign: 'center',
-      position: [0, origin.y - 0.8],
-      modifiers: {
-        'angle x': {
-          font: { weight: 'bold' },
-          onClick: () => figure.getElement('angle.label').pulse(),
-          touchBorder: 0.1,
-        },
-        'arc length': {
-          font: { color: [1, 0, 0, 1] },
-          onClick: () => figure.getElement('arc.label').pulse(),
-          touchBorder: 0.1,
-        },
-      },
+      yAlign: 'middle',
+      position: [0, origin.y - 0.9],
+      // modifiers: {
+      //   'Observe': {
+      //     font: { style: 'italic' },
+      //   },
+      //   'blue line': {
+      //     font: { color: [0, 0.5, 1, 1] },
+      //     onClick: () => figure.getElement('radius').pulseWidth(),
+      //     touchBorder: 0.1,
+      //   },
+      //   'arc': {
+      //     font: { color: [1, 0, 0, 1] },
+      //     onClick: () => figure.getElement('arc.label').pulse(),
+      //     touchBorder: 0.1,
+      //   },
+      //   'angle': {
+      //     font: { color: [1, 0, 0, 1] },
+      //     onClick: () => figure.getElement('angle.label').pulse(),
+      //     touchBorder: 0.1,
+      //   },
+      //   'vertical': {
+      //     font: { color: [1, 0, 0, 1] },
+      //     onClick: () => figure.getElement('sine.label').pulse(),
+      //     touchBorder: 0.1,
+      //   },
+      // },
     },
     mods: {
       isTouchable: true,
-      isShown: false,
+      // isShown: false,
     },
   },
   {
@@ -192,6 +209,219 @@ figure.add([
       custom: { tieTo: null, offset: [0, 0] },
       isShown: false,
     },
+  },
+]);
+
+const bot = (content, comment, space = 0.05) => ({
+  bottomComment: {
+    content,
+    comment,
+    commenSpace: space,
+    inSize: false,
+  },
+});
+const frac = (numerator, symbol, denominator, offsetY = 0.07) => ({
+  frac: { numerator, denominator, symbol, offsetY },
+});
+figure.add([
+  {
+    name: 'eqn',
+    method: 'collections.equation',
+    options: {
+      elements: {
+        lim: { style: 'normal' },
+        sin: { style: 'normal', color: [1, 0, 0, 1] },
+        x_1: { color: [1, 0, 0, 1] },
+        x_3: { color: [1, 0, 0, 1] },
+        x_2: { color: [1, 0, 0, 1], isTouchable: true, touchBorder: 0.1 },
+        _1: { isTouchable: true, touchBorder: 0.1 },
+        equals: '   =  ',
+        limBox: { symbol: 'tBox', touchBorder: 0.1, isTouchable: true },
+        sinBox: { symbol: 'tBox', touchBorder: [0.1, 0.02, 0.1, 0.1], isTouchable: true },
+        vert: { color: [1, 0, 0, 1] },
+        arc: { color: [1, 0, 0, 1] },
+        arc_1: { color: [1, 0, 0, 1] },
+        arc_2: { color: [1, 0, 0, 1] },
+        asXTo0: 'as x \u2192 0:        ',
+      },
+      phrases: {
+        sinx: { tBox: [['sin', ' ', 'x_1'], 'sinBox'] },
+        sinx1: { tBox: [['sin', ' ', 'x_3'], 'sinBox'] },
+        limit: { tBox: [bot('lim', 'x \u2192 0'), 'limBox']},
+      },
+      formDefaults: {
+        alignment: {
+          fixTo: 'equals',
+        },
+      },
+      forms: {
+        0: {
+          content: [],
+          description: [
+            'Move the |blue line| and |observe|:',
+            {
+              text: 'As the |angle| gets smaller, the |arc| and',
+              lineSpace: 0.2,
+            },
+            '|vertical| line get closer in length',
+          ],
+          modifiers: {
+            'Observe': {
+              font: { style: 'italic' },
+            },
+            'blue line': {
+              font: { color: [0, 0.5, 1, 1] },
+              onClick: () => figure.getElement('radius').pulseWidth(),
+              touchBorder: 0.1,
+            },
+            'arc': {
+              font: { color: [1, 0, 0, 1] },
+              onClick: () => figure.getElement('arc.label').pulse(),
+              touchBorder: 0.1,
+            },
+            'angle': {
+              font: { color: [1, 0, 0, 1] },
+              onClick: () => figure.getElement('angle.label').pulse(),
+              touchBorder: 0.1,
+            },
+            'vertical': {
+              font: { color: [1, 0, 0, 1] },
+              onClick: () => figure.getElement('sine.label').pulse(),
+              touchBorder: 0.1,
+            },
+          },
+          onTransition: () => {
+            figure.getElement('arc.label').showForm('0');
+            figure.getElement('sine.label').showForm('0');
+          },
+        },
+        1: {
+          content: ['asXTo0', 'vert', 'equals', 'arc' ],
+          description: [
+            'Move the |blue line| and |observe|:',
+            {
+              text: 'As the |angle| gets smaller, the |arc| and',
+              lineSpace: 0.2,
+            },
+            '|vertical| line get closer in length',
+          ],
+          modifiers: {
+            'Observe': {
+              font: { style: 'italic' },
+            },
+            'blue line': {
+              font: { color: [0, 0.5, 1, 1] },
+              onClick: () => figure.getElement('radius').pulseWidth(),
+              touchBorder: 0.1,
+            },
+            'arc': {
+              font: { color: [1, 0, 0, 1] },
+              onClick: () => figure.getElement('arc.label').pulse(),
+              touchBorder: 0.1,
+            },
+            'angle': {
+              font: { color: [1, 0, 0, 1] },
+              onClick: () => figure.getElement('angle.label').pulse(),
+              touchBorder: 0.1,
+            },
+            'vertical': {
+              font: { color: [1, 0, 0, 1] },
+              onClick: () => figure.getElement('sine.label').pulse(),
+              touchBorder: 0.1,
+            },
+          },
+          onTransition: () => {
+            figure.getElement('arc.label').showForm('0');
+            figure.getElement('sine.label').showForm('0');
+          },
+        },
+        2: {
+          content: [
+            'asXTo0',
+            frac('vert', 'vinculum', 'arc_1'),
+            'equals',
+            frac('arc', 'v2_vinculum', 'arc_2'),
+          ],
+          description: 'Divide both sides by the |arc length|',
+          modifiers: {
+            'arc length': {
+              font: { color: [1, 0, 0, 1] },
+              onClick: () => {
+                figure.getElement('eqn').pulse({ elements: ['arc_1', 'arc_2'], yAlign: 'top'});
+              },
+              touchBorder: 0.1,
+            },
+          },
+        },
+        3: {
+          content: [
+            'asXTo0',
+            frac('vert', 'vinculum', 'arc_1'), 'equals', '_1'
+          ],
+          description: 'Simplify the right hand side to 1',
+        },
+        4: {
+          content: [
+            'limit',
+            '  ', frac('vert', 'vinculum', 'arc_1'),
+            'equals', '_1',
+          ],
+          description: 'Use mathematical notation for the limit'
+        },
+        5: {
+          content: [
+            'limit',
+            '  ', frac('sinx1', 'vinculum', 'arc_1'),
+            'equals', '_1',
+          ],
+          onTransition: () => {            
+            figure.getElement('sine.label').nextForm();
+          },
+          onShow: () => {
+            figure.getElement('sine.label').pulse();
+            figure.getElement('eqn').pulse({
+              elements: ['sin', 'x_3'],
+              centerOn: figure.getElement('eqn.sin'),
+              xAlign: 'right',
+              yAlign: 'bottom',
+            });
+          },
+          description: 'The vertical line is actually the sine of x'
+        },
+        6: {
+          content: [
+            'limit',
+            '  ', frac('sinx1', 'vinculum', 'x_2'),
+            'equals', '_1',
+          ],
+          onTransition: () => {            
+            figure.getElement('arc.label').nextForm();
+          },
+          onShow: () => {
+            figure.getElement('arc.label').pulse();
+            figure.getElement('eqn.x_2').pulse({ yAlign: 'top' });
+          },
+          description: 'The radius is 1, so the arc length equals the angle',
+        },
+        7: {
+          content: [
+            'limit',
+            '  ', frac('sinx1', 'vinculum', 'x_2'),
+            'equals', '_1',
+          ],
+          description: [
+            'This can be read as:',
+            'For very small angles, the angle and',
+            'the sine of the angle are the same',
+          ],
+        },
+      },
+      formSeries: ['0', '1', '2', '3', '4', '5', '6', '7'],
+      position: origin.add(1.3, -0.4),
+    },
+    // mods: {
+    //   isTouchable: true,
+    // },
   },
 ]);
 
@@ -225,92 +455,98 @@ movePad.subscriptions.add('setTransform', () => {
 });
 
 
-const highlight = (element, position, text) => {
-  rect.animations.cancel();
-  description.animations.cancel();
-  description.show();
-  rect.show();
-  description.drawingObject.clear();
-  rect.custom.tieTo = element;
-  rect.surround(element, 0.05);
-  description.pulse({ scale: 1.1, duration: 0.5 });
-  rect.pulse({ scale: 1.2, duration: 0.5 });
-  description.setPosition(position);
-  description.custom.updateText({ text });
-  rect.animations.new()
-    .dissolveOut({ delay: 3, duration: 0.5 })
-    .start();
-  description.animations.new()
-    .dissolveOut({ delay: 3, duration: 0.5 })
-    .start();
-};
+// const highlight = (element, position, text) => {
+//   rect.animations.cancel();
+//   description.animations.cancel();
+//   description.show();
+//   rect.show();
+//   description.drawingObject.clear();
+//   rect.custom.tieTo = element;
+//   rect.surround(element, 0.05);
+//   description.pulse({ scale: 1.1, duration: 0.5 });
+//   rect.pulse({ scale: 1.2, duration: 0.5 });
+//   description.setPosition(position);
+//   description.custom.updateText({ text });
+//   rect.animations.new()
+//     .dissolveOut({ delay: 3, duration: 0.5 })
+//     .start();
+//   description.animations.new()
+//     .dissolveOut({ delay: 3, duration: 0.5 })
+//     .start();
+// };
 
-const arcLabel = figure.getElement('arc.label');
-arcLabel.onClick = () => {
-  highlight(arcLabel, [1.2, 1], [
-    'arc length = angle',
-    {
-      text: 'as radius = 1',
-      font: { size: 0.06 },
-      justify: 'center',
-    },
-  ]);
-};
+// const arcLabel = figure.getElement('arc.label');
+// arcLabel.onClick = () => {
+//   highlight(arcLabel, [1.2, 1], [
+//     'arc length = angle',
+//     {
+//       text: 'as radius = 1',
+//       font: { size: 0.06 },
+//       justify: 'center',
+//     },
+//   ]);
+// };
 
-const sineLabel = figure.getElement('sine.label');
-sineLabel.onClick = () => {
-  highlight(sineLabel, [-1.2, 0.7], [
-    'The sine of the angle is the vertical',
-    'component of the arc',
-  ]);
-};
+// const sineLabel = figure.getElement('sine.label');
+// sineLabel.onClick = () => {
+//   highlight(sineLabel, [-1.2, 0.7], [
+//     'The sine of the angle is the vertical',
+//     'component of the arc',
+//   ]);
+// };
 
-oneLabel.onClick = () => {
-  highlight(oneLabel, [-1.2, 0.9], [
-    'As arc length is the product of angle',
-    'and radius, having a radius of 1',
-    'means the values of arc length and',
-    'angle are equal (x)',
-  ]);
-};
+// oneLabel.onClick = () => {
+//   highlight(oneLabel, [-1.2, 0.9], [
+//     'As arc length is the product of angle',
+//     'and radius, having a radius of 1',
+//     'means the values of arc length and',
+//     'angle are equal (x)',
+//   ]);
+// };
 
-const angleLabel = figure.getElement('angle.label');
-angleLabel.onClick = () => {
-  highlight(angleLabel, [-1.1, -0.2], [
-    'Arc angle x',
-  ]);
-};
+// const angleLabel = figure.getElement('angle.label');
+// angleLabel.onClick = () => {
+//   highlight(angleLabel, [-1.1, -0.2], [
+//     'Arc angle x',
+//   ]);
+// };
 
-const limit = figure.getElement('eqn.limBox');
-limit.onClick = () => {
-  highlight(limit, [0, -1.4], [
-    'As the angle x approaches 0',
-  ]);
-};
+// const limit = figure.getElement('eqn.limBox');
+// limit.onClick = () => {
+//   highlight(limit, [0, -1.4], [
+//     'As the angle x approaches 0',
+//   ]);
+// };
 
-const eqnSine = figure.getElement('eqn.sinBox');
-eqnSine.onClick = () => {
-  highlight(eqnSine, [0, -1.3], [
-    'Vertical component of the arc, and sine of angle x',
-  ]);
-  sineLabel.pulse({ scale: 1.5, duration: 1 });
-};
+// const eqnSine = figure.getElement('eqn.sinBox');
+// eqnSine.onClick = () => {
+//   highlight(eqnSine, [0, -1.3], [
+//     'Vertical component of the arc, and sine of angle x',
+//   ]);
+//   sineLabel.pulse({ scale: 1.5, duration: 1 });
+// };
 
-const eqnX = figure.getElement('eqn.x_2');
-eqnX.onClick = () => {
-  highlight(eqnX, [0, -1.3], [
-    'Arc length, which is equal to angle x',
-  ]);
-  arcLabel.pulse({ scale: 1.5, duration: 1 });
-};
+// const eqnX = figure.getElement('eqn.x_2');
+// eqnX.onClick = () => {
+//   highlight(eqnX, [0, -1.3], [
+//     'Arc length, which is equal to angle x',
+//   ]);
+//   arcLabel.pulse({ scale: 1.5, duration: 1 });
+// };
 
-const eqn1 = figure.getElement('eqn._1');
-eqn1.onClick = () => {
-  highlight(eqn1, [0, -1.3], [
-    'The ratio of arc length and sin x is 1',
-    'And so they are equal',
-  ]);
-  arcLabel.pulse({ scale: 1.5, duration: 1 });
-};
+// const eqn1 = figure.getElement('eqn._1');
+// eqn1.onClick = () => {
+//   highlight(eqn1, [0, -1.3], [
+//     'The ratio of arc length and sin x is 1',
+//     'And so they are equal',
+//   ]);
+//   arcLabel.pulse({ scale: 1.5, duration: 1 });
+// };
 
 movePad.setRotation(1);
+const eqn = figure.getElement('eqn');
+const form = eqn.getCurrentForm();
+description.custom.updateText({
+  text: form.description,
+  modifiers: form.modifiers,
+});

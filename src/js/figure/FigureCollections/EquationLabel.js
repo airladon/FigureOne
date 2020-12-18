@@ -127,9 +127,11 @@ export default class EquationLabel {
     } else if (Array.isArray(labelTextOrEquation)) {
       const elements = {};
       const forms = {};
+      const formSeries = [];
       labelTextOrEquation.forEach((labelText, index) => {
         elements[`_${index}`] = labelText;
         forms[index] = [labelText];
+        formSeries.push(`${index}`);
       });
 
       eqn = collections.equation({
@@ -145,6 +147,7 @@ export default class EquationLabel {
           },
         },
         scale,
+        formSeries,
       });
       eqn.showForm('0');
     } else {

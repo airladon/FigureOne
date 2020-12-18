@@ -177,8 +177,7 @@ figure.add([
         method: 'polyline',
         options: {
           width: 0.01,
-          cornerStyle: 'none',
-          fast: true,
+          simple: true,
         },
       },
     ],
@@ -200,11 +199,9 @@ function update() {
   sine.setEndPoints(endPoint, [r + space, endPoint.y]);
   signal.update(endPoint.y);
   const points = signal.getPoints()
-  // const t = performance.now()
   signalLine.custom.updatePoints({
     points,
-  })
-  // console.log(Fig.tools.math.round(performance.now() - t, 0))
+  });
   figure.animateNextFrame();
 };
 
