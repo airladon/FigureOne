@@ -1,4 +1,4 @@
-const figure = new Fig.Figure({ limits: [-2, -2, 4, 4], color: [1, 0, 0, 1] });
+const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] });
 
 // Movable angle
 figure.add({
@@ -21,7 +21,10 @@ figure.add({
       length: 1,
       color: [0, 0.5, 1, 1],
     },
-  }
+  },
+  mods: {
+    move: { bounds: 'figure' },
+  },
 });
 
 // Angle collection has a specific setMovable function that allows for

@@ -9,6 +9,7 @@ import {
 } from '../tools/g2';
 import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
 // import * as math from '../tools/math';
+import { round } from '../tools/math';
 import { FunctionMap } from '../tools/FunctionMap';
 import { setState, getState } from './Recorder/state';
 import parseState from './Recorder/parseState';
@@ -2171,6 +2172,7 @@ class Figure {
     this.clearContext(canvasIndex);
     // console.log('really drawing')
     // const startSetup = new Date().getTime();
+    this.subscriptions.publish('beforeDraw');
     this.elements.setupDraw(
       now,
       canvasIndex,
@@ -2188,6 +2190,7 @@ class Figure {
       this.drawAnimationFrames -= 1;
       this.animateNextFrame(true, 'queued frames');
     }
+    this.subscriptions.publish('afterDraw');
 
     // const end = new Date().getTime();
     // const total = end - start;
@@ -2245,6 +2248,18 @@ class Figure {
       this.globalAnimation.queueNextFrame(this.draw.bind(this));
     }
   }
+
+  // animateNextFrameContinuous(method: () => void) {
+  //   this.globalAnimation.queueNextFrame((now) => {
+  //     const t = performance.now();
+  //     const lastTime = t - this.lastTime
+  //     this.lastTime = t;
+  //     method(now);
+  //     this.draw(now);
+  //     console.log(round(lastTime, 1), round(performance.now() - t, 1));
+  //     this.animateNextFrameContinuous(method);
+  //   });
+  // }
 
   isAnimating(): boolean {
     // console.log('asdf')

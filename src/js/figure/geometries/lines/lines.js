@@ -892,6 +892,7 @@ function makePolyLine(
   // Get touch border if there is a buffer
   let touchBorder = border;
   if (typeof touchBorderBuffer === 'number' && touchBorderBuffer !== 0) {
+    // console.log(touchBorderBuffer)
     touchBorder = [];
     // for (let i = 0; i < border.length; i += 1) {
     //   touchBorder.push(getBufferBorder(border[i], touchBorderBuffer));
@@ -1098,6 +1099,44 @@ function addArrows(
   ];
 }
 
+function makeFastPolyLine(
+  pointsIn: Array<Point>,
+  width: number,
+  close: boolean,
+) {
+  const len = close ? pointsIn.length * 2 + 2 : pointsIn.length * 2;
+  // const inside = Array(len);
+  // const outside = Array(len);
+  const points = Array(len);
+  const half = width / 2;
+  const orth = Math.PI / 2;
+  let lastAngle = 0
+  for (let i = 0; i < pointsIn.length; i += 1) {
+    const p = pointsIn[i];
+    let angle = lastAngle;
+    if (i < pointsIn.length - 1) {
+      const pNext = pointsIn[i + 1];
+      angle = Math.atan2(pNext.y - p.y, pNext.x - p.x);
+      lastAngle = angle;
+    }
+    points[i * 2] = new Point(
+      p.x + half * Math.cos(angle - orth),
+      p.y + half * Math.sin(angle - orth),
+    );
+    points[i * 2 + 1] = new Point(
+      p.x + half * Math.cos(angle + orth),
+      p.y + half * Math.sin(angle + orth),
+    );
+  }
+
+  if (close) {
+    points[len - 2] = points[0]._dup();
+    points[len - 1] = points[1]._dup();
+  }
+  // console.log(points)
+  return [points, [[]], [[]], [[]]];
+}
+
 export {
   joinLinesInPoint,
   lineSegmentsToPoints,
@@ -1107,6 +1146,7 @@ export {
   makePolyLine,
   makePolyLineCorners,
   addArrows,
+  makeFastPolyLine,
 };
 
 

@@ -1,5 +1,5 @@
 const figure = new Fig.Figure({
-  limits: [-2.5, -1.8, 5, 5],
+  limits: [-3.33, -1.8, 6.667, 5],
   color: [1, 0, 0, 1] },
 );
 

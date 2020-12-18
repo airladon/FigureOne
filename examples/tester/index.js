@@ -56,16 +56,11 @@ const figure = new Fig.Figure({ limits: [-4.5, -4.5, 9, 9], color: [1, 0, 0, 1],
 // });
 figure.add({
   name: 'angle',
-  method: 'collections.angle',
+  method: 'primitives.polyline',
   options: {
-    curve: { width: 0.01 },
-    label: {
-      text: 'a',
-      angle: 1,
-      autoHide: 1.1,
-    },
-    corner: true,
-    angle: Math.PI / 4,
+    points: [[0, 0], [1, 0], [0, 1]],
+    width: 0.1,
+    fast: true,
   },
 })
 figure.getElement('angle').setMovable({ startArm: 'angle' })

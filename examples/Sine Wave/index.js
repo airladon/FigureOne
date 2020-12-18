@@ -177,6 +177,8 @@ figure.add([
         method: 'polyline',
         options: {
           width: 0.01,
+          cornerStyle: 'none',
+          fast: true,
         },
       },
     ],
@@ -197,22 +199,24 @@ function update() {
   const endPoint = Fig.polarToRect(r, angle);
   sine.setEndPoints(endPoint, [r + space, endPoint.y]);
   signal.update(endPoint.y);
+  const points = signal.getPoints()
+  // const t = performance.now()
   signalLine.custom.updatePoints({
-    points: signal.getPoints(),
+    points,
   })
+  // console.log(Fig.tools.math.round(performance.now() - t, 0))
   figure.animateNextFrame();
 };
 
-// Whenever the rotator line changes, call update
-rotator.subscriptions.add('setTransform', () => {
+// Before each draw, update the points
+figure.subscriptions.add('beforeDraw', () => {
   update();
 });
 
-// Also call update every 20ms
-function updateNext() {
-  update();
-  setTimeout(updateNext, 20);
-};
+// After each draw, call a next animation frame so udpates happen on each frame
+figure.subscriptions.add('afterDraw', () => {
+  figure.animateNextFrame();
+});
 
 
 // ////////////////////////////////////////////////////////////////////////
@@ -246,5 +250,5 @@ figure.getElement('stop').onClick = () => { rotator.stop(); };
 
 rotator.animations.new()
   .rotation({ target: Math.PI / 4, duration: 1.5 })
-  .trigger({ callback: updateNext })
+  // .trigger({ callback: updateNext })
   .start();

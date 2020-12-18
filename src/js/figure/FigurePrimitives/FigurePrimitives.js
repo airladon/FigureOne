@@ -51,7 +51,7 @@ import {
 } from '../DrawingObjects/TextObject/TextObject';
 import HTMLObject from '../DrawingObjects/HTMLObject/HTMLObject';
 import type { OBJ_SpaceTransforms } from '../Figure';
-import { makePolyLine, makePolyLineCorners } from '../geometries/lines/lines';
+import { makePolyLine, makePolyLineCorners, makeFastPolyLine } from '../geometries/lines/lines';
 import { getPolygonPoints, getTrisFillPolygon } from '../geometries/polygon/polygon';
 import { rectangleBorderToTris, getRectangleBorder } from '../geometries/rectangle';
 import { ellipseBorderToTris, getEllipseBorder } from '../geometries/ellipse';
@@ -2301,6 +2301,7 @@ export default class FigurePrimitives {
       drawBorder: 'negative',
       holeBorder: [[]],
       drawBorderBuffer: 0,
+      fast: false,
     };
     const o = joinObjects({}, defaultOptions, optionsIn);
     if (o.linePrimitives === false) {
@@ -2312,7 +2313,12 @@ export default class FigurePrimitives {
     let drawBorder;
     let holeBorder;
     let drawBorderBuffer;
-    if (o.cornersOnly) {
+    const t = performance.now();
+    if (o.fast) {
+      [points, drawBorder, drawBorderBuffer, holeBorder] = makeFastPolyLine(
+        o.points, o.width, o.close,
+      );
+    } else if (o.cornersOnly) {
       [points, drawBorder, drawBorderBuffer, holeBorder] = makePolyLineCorners(
         o.points, o.width, o.close, o.cornerLength, o.widthIs, o.cornerStyle,
         o.cornerSize, o.cornerSides, o.minAutoCornerAngle, o.linePrimitives,
@@ -2340,6 +2346,9 @@ export default class FigurePrimitives {
     let drawType = 'triangles';
     if (o.linePrimitives) {
       drawType = 'lines';
+    }
+    if (o.fast) {
+      drawType = 'strip';
     }
     return [o, points, drawBorder, drawBorderBuffer, drawType];
   }
