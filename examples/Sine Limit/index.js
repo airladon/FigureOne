@@ -1,9 +1,11 @@
 const { Point, Figure } = Fig;
 const figure = new Figure({ limits: [-2, -1.5, 4, 3], color: [0.5, 0.5, 0.5, 1] });
 
+// Values that will be reused frequently
 const origin = new Point(-1, -0.4);
 const radius = 2;
-// Create the shape
+
+// Helper function to make buttons
 const button = (name, position, label) => ({
   name,
   method: 'collections.rectangle',
@@ -19,6 +21,7 @@ const button = (name, position, label) => ({
   mods: { isTouchable: true, touchBorder: 0.1 },
 });
 
+// Create the shape
 figure.add([
   {
     name: 'radius',
@@ -107,8 +110,6 @@ figure.add([
       color: [1, 0, 0, 1],
     },
   },
-  button('nextButton', [1.5, -1.25], 'Next'),
-  button('prevButton', [-1.5, -1.25], 'Prev'),
   {
     name: 'description',
     method: 'primitives.textLines',
@@ -123,8 +124,13 @@ figure.add([
       isTouchable: true,
     },
   },
+  button('nextButton', [1.5, -1.25], 'Next'),
+  button('prevButton', [-1.5, -1.25], 'Prev'),
 ]);
 
+
+// Helper functions to make equation forms look cleaner
+// Bottom Comment
 const bot = (content, comment, space = 0.05) => ({
   bottomComment: {
     content,
@@ -133,17 +139,24 @@ const bot = (content, comment, space = 0.05) => ({
     inSize: false,
   },
 });
+
+// Fraction
 const frac = (numerator, symbol, denominator, offsetY = 0.07) => ({
   frac: { numerator, denominator, symbol, offsetY },
 });
+
+// Fixed width container
 const cont = (content, width) => ({
   container: { content, width },
 });
+
+// Add equation
 figure.add([
   {
     name: 'eqn',
     method: 'collections.equation',
     options: {
+      // Define the elements that require specific styling
       elements: {
         lim: { style: 'normal' },
         sin: { style: 'normal', color: [1, 0, 0, 1] },
@@ -160,6 +173,7 @@ figure.add([
         xTo: 'x \u2192 ',
         s: { symbol: 'strike', style: 'back' },
       },
+      // Phrases help keep forms readable
       phrases: {
         csinx: { container: [['sin', ' ', 'x_1'], 0.25] },
         sinx: { tBox: ['csinx', 'sinBox'] },
@@ -203,6 +217,7 @@ figure.add([
   },
 ]);
 
+// Figure elements that will be frequently used
 const angle = figure.getElement('angle');
 const arc = figure.getElement('arc');
 const sine = figure.getElement('sine');
@@ -211,6 +226,7 @@ const description = figure.getElement('description');
 const radiusLine = figure.getElement('radius');
 const eqn = figure.getElement('eqn');
 
+// Whenever the radius line moves, the angle, arc and sine line must be updated
 radiusLine.subscriptions.add('setTransform', () => {
   const a = radiusLine.getRotation();
   angle.setAngle({ angle: a });
@@ -222,18 +238,20 @@ radiusLine.subscriptions.add('setTransform', () => {
     new Point(end.x - 0.005, 0).add(origin),
     new Point(end.x - 0.005, end.y).add(origin),
   );
-  radiusLine.setEndPoints(origin, end.add(origin));
 });
 
+
+// Setup description modifiers for all specially formatted text (most of
+// which will pulse shape or equation elements when touched)
 const modifiers = {
   'blue line': {
     font: { color: [0, 0.5, 1, 1] },
-    onClick: () => figure.getElement('radius').pulseWidth(),
+    onClick: () => radius.pulseWidth(),
     touchBorder: [0.1, 0.03, 0.1, 0.1],
   },
   radius: {
     font: { color: [0, 0.5, 1, 1] },
-    onClick: () => figure.getElement('radius').pulseWidth(),
+    onClick: () => radius.pulseWidth(),
     touchBorder: [0.1, 0.03, 0.1, 0.1],
   },
   arc: {
@@ -322,11 +340,14 @@ const descriptions = [
   },
 ];
 
+// Pressing the "Next" and "Prev" buttons will navigate through a set of
+// description, equation form and shape states. We will call these states
+// slides (like presentation slides).
 const slides = [
   {
     description: 0,
     form: '0',
-    state: () => {
+    shapeState: () => {
       figure.getElement('arc.label').showForm('0');
       figure.getElement('sine.label').showForm('0');
     },
@@ -341,21 +362,21 @@ const slides = [
   { description: 4, form: '5' },
   {
     description: 5, form: '5',
-    state: () => figure.getElement('sine.label').showForm('0'),
+    shapeState: () => figure.getElement('sine.label').showForm('0'),
   },
   {
     description: 5, form: '6',
-    state: () => figure.getElement('sine.label').nextForm(),
+    shapeState: () => figure.getElement('sine.label').nextForm(),
   },
   {
     description: 6, form: '6',
-    state: () => {
+    shapeState: () => {
       figure.getElement('arc.label').showForm('0');
     },
   },
   {
     description: 6, form: '7',
-    state: () => {
+    shapeState: () => {
       figure.getElement('arc.label').nextForm();
     },
   },
@@ -363,26 +384,28 @@ const slides = [
 ];
 
 
-// Slide state management
+// Slide management
 let slideIndex = 0;
 const nextButton = figure.getElement('nextButton');
 const prevButton = figure.getElement('prevButton');
 
+// Each slide defines which equation form to show, which
+// description to use and what state the shape should be in
 const showSlide = (index) => {
   const slide = slides[index];
-  if (slide.form != null) {
-    eqn.goToForm({ form: slide.form, animate: 'move' });
-  }
+  // Set equation form
+  eqn.goToForm({ form: slide.form, animate: 'move' });
+  // Stop any description animations and set updated description
   description.stop();
-  if (slide.description != null) {
-    description.custom.updateText({
-          text: descriptions[slide.description].text,
-          modifiers: descriptions[slide.description].modifiers,
-    })
-  }
+  description.custom.updateText({
+        text: descriptions[slide.description].text,
+        modifiers: descriptions[slide.description].modifiers,
+  })
+  // Set the shape state
   if (slide.state != null) {
-    slide.state();
+    slide.shapeState();
   }
+  // Disable previous button if at first slide
   if (index === 0) {
     prevButton.setOpacity(0.7);
     prevButton.isTouchable = false;
@@ -392,7 +415,10 @@ const showSlide = (index) => {
   }
 }
 
+// When the Next button is clicked, progress to the next slide. 
 nextButton.onClick = () => {
+  // If the equation is still animating, then do not progress, simply
+  // complete the animation instantly
   if (eqn.eqn.isAnimating) {
     eqn.stop('complete');
     return;
@@ -400,6 +426,7 @@ nextButton.onClick = () => {
   const oldDescription = slides[slideIndex].description;
   slideIndex = (slideIndex + 1) % slides.length;
   showSlide(slideIndex);
+  // If the description changes, then dissolve it in
   const newDescription = slides[slideIndex].description;
   if (newDescription != oldDescription) {
     description.animations.new()
@@ -407,6 +434,8 @@ nextButton.onClick = () => {
       .start();
   }
 }
+
+// Go backwards through slides
 prevButton.onClick = () => {
   if (eqn.eqn.isAnimating) {
     eqn.stop('complete');
@@ -416,5 +445,6 @@ prevButton.onClick = () => {
   showSlide(slideIndex);  
 }
 
+// Setup initial radius line position and slide
 radiusLine.setRotation(1);
 showSlide(0);
