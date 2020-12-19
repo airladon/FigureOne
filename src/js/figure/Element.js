@@ -4698,6 +4698,12 @@ class FigureElementCollection extends FigureElement {
     ) = null,
     done: ?((mixed) => void) = null,
   ) {
+    if (
+      optionsOrElementsOrDone.centerOn != null
+      && typeof optionsOrElementsOrDone.centerOn === 'string'
+    ) {
+      optionsOrElementsOrDone.centerOn = this.getElement(optionsOrElementsOrDone.centerOn);
+    }
     if (optionsOrElementsOrDone == null
       || typeof optionsOrElementsOrDone === 'function'
       || typeof optionsOrElementsOrDone === 'string'
@@ -4705,31 +4711,7 @@ class FigureElementCollection extends FigureElement {
       super.pulse(optionsOrElementsOrDone);
       return;
     }
-    // const defaultPulseOptions = {
-    //   frequency: 0,
-    //   time: 1,
-    //   scale: 2,
-    // };
-    // if (
-    //   typeof this.pulseDefault !== 'function'
-    //   && typeof this.pulseDefault !== 'string'
-    // ) {
-    //   defaultPulseOptions.frequency = this.pulseDefault.frequency;
-    //   defaultPulseOptions.duration = this.pulseDefault.duration;
-    //   defaultPulseOptions.scale = this.pulseDefault.scale;
-    // }
-    // const defaultOptions = {
-    //   x: 'center',
-    //   y: 'middle',
-    //   space: 'figure',
-    //   centerOn: null,
-    //   frequency: defaultPulseOptions.frequency,
-    //   duration: defaultPulseOptions.duration,
-    //   scale: defaultPulseOptions.scale,
-    //   done: null,
-    //   elements: null,
-    //   progression: 'tools.math.sinusoid',
-    // };
+
     if (
       !Array.isArray(optionsOrElementsOrDone)
       && (
