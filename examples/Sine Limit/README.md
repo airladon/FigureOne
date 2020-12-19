@@ -32,6 +32,7 @@ Each of the shapes is customized for this particular example and so many propert
 As there are two button shapes (a previous and next button), then a helper function is used that sets all the common properties of the buttons.
 
 ```js
+// `index.js`
 const { Point, Figure } = Fig;
 const figure = new Figure({ limits: [-2, -1.5, 4, 3], color: [0.5, 0.5, 0.5, 1] });
 

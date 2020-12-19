@@ -1,21 +1,27 @@
 <!doctype html>
 <html>
-<head>
-    <meta charset='utf-8'>
-    <title>Example - Sine Wave</title>
-    <meta name='description' content='Interactive sine wave explorer'>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link href='style.css' rel='stylesheet'>
-</head>
+    <!-- Style the figureOne container to be 4:3 aspect ratio -->
+    <style>
+        #wrapper {
+            width: calc(100vw - 20px);
+            max-width: 100%;
+        }
+        @media (min-aspect-ratio: 1/1) {
+            #wrapper {
+              width: calc((100vh - 20px)/0.75);
+            }
+        } 
+        #figureOneContainer {
+            width: 100%;
+            padding-bottom: 75%;
+        }
+    </style>
 <body>
-    <h1 class="title">Example - Sine Wave</h1>
-    <p class="description">Records the vertical position of the radius line. Move or rotate the radius to see how the recoring changes over time. Press the <i>slow</i> and <i>fast</i> buttons to rotate the line with a constant velocity.</p>
-    <div id='wrapper'>
-        <div id="figureOneContainer" style="background-color: white;">
-        </div>
+    <div id="wrapper">
+        <div id="figureOneContainer"></div>
     </div>
 
-    <!-- Use CDN hosted library for simplicity-->
+    <!-- Use CDN hosted library-->
     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.11/figureone.min.js'></script>
     
     <!-- Comment line above, and uncomment line below to use local library instead of CDN -->

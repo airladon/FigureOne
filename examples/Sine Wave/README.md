@@ -8,8 +8,8 @@ Open `index.html` in a browser to view example.
 
 ## Code
 
-`index.js`
 ```js
+// `index.js`
 const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] });
 
 // ////////////////////////////////////////////////////////////////////////

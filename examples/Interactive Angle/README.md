@@ -9,7 +9,7 @@ Open `index.html` in a browser to view example.
 ## Code
 
 ```js
-// index.html
+// `index.js`
 
 const figure = new Fig.Figure({ limits: [-2, -2, 4, 4], color: [1, 0, 0, 1] });
 
