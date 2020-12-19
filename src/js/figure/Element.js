@@ -168,7 +168,7 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
  * pulse to (`1.5`)
  * @property {number} [angle] translation angle (`0`)
  * @property {number} [min] minimum value to pulse to
- * @property {null | FigureElement | TypeParsablePoint} [centerOn] center
+ * @property {null | FigureElement | TypeParsablePoint | string} [centerOn] center
  * of scale or rotation pulse. By default, the element calling the pulse
  * will be the default `centerOn`.
  * @property {'left' | 'center' | 'right' | 'location' | number} [xAlign]
@@ -246,7 +246,7 @@ export type OBJ_Pulse = {
   translation?: number,
   angle?: number,
   min?: number,
-  centerOn?: null | FigureElement | TypeParsablePoint,
+  centerOn?: null | FigureElement | TypeParsablePoint | string,
   x?: 'left' | 'center' | 'right' | 'origin' | number,
   y?: 'bottom' | 'middle' | 'top' | 'origin' | number,
   space?: 'figure' | 'gl' | 'local' | 'draw',
@@ -3895,6 +3895,7 @@ class FigureElementPrimitive extends FigureElement {
     canvasIndex: number = 0,
   ) {
     if (this.isShown) {
+      // const ttt = performance.now();
       let pointCount = -1;
       if (this.drawingObject instanceof VertexObject) {
         pointCount = this.drawingObject.numPoints;
@@ -3968,6 +3969,7 @@ class FigureElementPrimitive extends FigureElement {
       if (this.afterDrawCallback != null) {
         this.fnMap.exec(this.afterDrawCallback, now);
       }
+      // console.log(this.name, round(performance.now() - ttt, 2))
     }
   }
 
@@ -4623,6 +4625,10 @@ class FigureElementCollection extends FigureElement {
     canvasIndex: number = 0,
   ) {
     if (this.isShown) {
+      // const ttt = performance.now()
+      // if (this.name === 'eqn') {
+      //   console.log('start eqn')
+      // }
       // for (let k = 0; k < this.pulseTransforms.length; k += 1) {
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform[0].order.length,
@@ -4640,11 +4646,19 @@ class FigureElementCollection extends FigureElement {
 
       const opacityToUse = this.color[3] * this.opacity * parentOpacity;
       this.lastDrawOpacity = opacityToUse;
+      // console.log()
+      // let cum = performance.now() - ttt;
+      // console.log('cum start', round(cum, 2))
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+        // const tttt = performance.now()
         this.elements[this.drawOrder[i]].draw(
           now, this.drawTransforms, opacityToUse, canvasIndex,
         );
+        // const delta = performance.now() - tttt;
+        // cum += delta;
+        // console.log('---', this.elements[this.drawOrder[i]].name, round(delta, 2))
       }
+      // console.log(round(performance.now() - ttt, 2), round(cum, 2))
       // }
       if (this.unrenderNextDraw) {
         this.clearRender();
@@ -4661,6 +4675,7 @@ class FigureElementCollection extends FigureElement {
         // this.afterDrawCallback(now);
         this.fnMap.exec(this.afterDrawCallback, now);
       }
+      // console.log(this.name, round(performance.now() - ttt, 2))
     }
   }
 
@@ -4698,18 +4713,22 @@ class FigureElementCollection extends FigureElement {
     ) = null,
     done: ?((mixed) => void) = null,
   ) {
-    if (
-      optionsOrElementsOrDone.centerOn != null
-      && typeof optionsOrElementsOrDone.centerOn === 'string'
-    ) {
-      optionsOrElementsOrDone.centerOn = this.getElement(optionsOrElementsOrDone.centerOn);
-    }
     if (optionsOrElementsOrDone == null
       || typeof optionsOrElementsOrDone === 'function'
       || typeof optionsOrElementsOrDone === 'string'
     ) {
       super.pulse(optionsOrElementsOrDone);
       return;
+    }
+
+    if (
+      optionsOrElementsOrDone.centerOn != null
+      && typeof optionsOrElementsOrDone.centerOn === 'string'
+    ) {
+      const e = this.getElement(optionsOrElementsOrDone.centerOn);
+      if (e != null) {
+        optionsOrElementsOrDone.centerOn = e;
+      }
     }
 
     if (

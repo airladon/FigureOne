@@ -267,7 +267,7 @@ const modifiers = {
   'radius': {
     font: { color: [0, 0.5, 1, 1] },
     onClick: () => figure.getElement('radius').pulseWidth(),
-    touchBorder: 0.1,
+    touchBorder: [0.1, 0.03, 0.1, 0.1],
   },
   'arc': {
     font: { color: [1, 0, 0, 1] },
@@ -276,8 +276,14 @@ const modifiers = {
   },
   'angle': {
     font: { color: [1, 0, 0, 1] },
-    onClick: () => figure.getElement('angle.label').pulse({ scale: 1.8 }),
+    onClick: () => figure.getElement('angle.label').pulse({ scale: 2 }),
     touchBorder: [0.1, 0.01, 0.1, 0.1],
+  },
+  'angle1': {
+    text: 'angle',
+    font: { color: [1, 0, 0, 1] },
+    onClick: () => figure.getElement('angle.label').pulse({ scale: 2 }),
+    touchBorder: [0.1, 0.1, 0.1, 0.03],
   },
   'vertical': {
     font: { color: [1, 0, 0, 1] },
@@ -286,7 +292,7 @@ const modifiers = {
   },
   limit: {
     font: { color: [0, 0.5, 1, 1] },
-    onClick: () => eqn.pulse({ elements: ['as ', 'xTo', '_0'], centerOn: '_0', xAlign: 'right' }),
+    onClick: () => eqn.pulse({ elements: ['as ', 'xTo', '_0', 'lim'], centerOn: '_0', xAlign: 'right' }),
   }
 };
 
@@ -312,7 +318,7 @@ const descriptions = [
   { text: 'The right hand side simplifies to 1', },
   { text: 'Use mathematical notation for the |limit|' },
   { text: 'The vertical line is actually the sine of x' },
-  { text: ['The |radius| is 1, so the |arc length| equals', 'the |angle|'] },
+  { text: ['The |radius| is 1, so the |arc length| equals', 'the |angle1|'] },
   {
     text: [
       'In other words: for very small angles, the angle and',
@@ -395,16 +401,16 @@ const showSlide = (index) => {
   }
 }
 figure.getElement('nextButton').onClick = () => {
-  if (figure.isAnimating()) {
-    figure.stop('complete');
+  if (eqn.eqn.isAnimating) {
+    eqn.stop('complete');
     return;
   }
   slideIndex = (slideIndex + 1) % slides.length;
   showSlide(slideIndex);  
 }
 figure.getElement('prevButton').onClick = () => {
-  if (figure.isAnimating()) {
-    figure.stop('complete');
+  if (eqn.eqn.isAnimating) {
+    eqn.stop('complete');
     return;
   }
   slideIndex = (slideIndex - 1) < 0 ? slides.length - 1 : slideIndex - 1;

@@ -2137,6 +2137,7 @@ class Figure {
 
   draw(nowIn: number, canvasIndex: number = 0): void {
     // const start = new Date().getTime();
+    // const t = performance.now();
     if (this.state.pause === 'paused') {
       return;
     }
@@ -2177,6 +2178,7 @@ class Figure {
       now,
       canvasIndex,
     );
+    // const t2 = performance.now();
     // const endSetup = new Date().getTime();
     // const startDraw = endSetup;
     this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
@@ -2191,7 +2193,9 @@ class Figure {
       this.animateNextFrame(true, 'queued frames');
     }
     this.subscriptions.publish('afterDraw');
-
+    // const t3 = performance.now();
+    // console.log('Summary', round(t2 - t, 0), round(t3 - t2, 0), round(t - this.lastTime1, 0));
+    // this.lastTime1 = t;
     // const end = new Date().getTime();
     // const total = end - start;
     // const setup = endSetup - startSetup;
