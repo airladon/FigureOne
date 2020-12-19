@@ -113,7 +113,7 @@ figure.add([
     name: 'description',
     method: 'primitives.textLines',
     options: {
-      font: { color: [0.5, 0.5, 0.5, 1], size: 0.1 },
+      font: { color: [0.5, 0.5, 0.5, 1], size: 0.1, weight: 100 },
       xAlign: 'center',
       yAlign: 'middle',
       position: [0, origin.y - 0.85],
@@ -261,16 +261,32 @@ const modifiers = {
     font: { color: [0, 0.5, 1, 1] },
     onClick: () => eqn.pulse({ elements: ['as ', 'xTo', '_0', 'lim'], centerOn: '_0', xAlign: 'right' }),
   },
-  'sin x': {
-    font: { color: [1, 0, 0, 1] },
-    onClick: () => eqn.pulse({ elements: ['sin', 'x_1'], centerOn: 'sin', xAlign: 'right', yAlign: 'bottom' }),
+  sin: {
+    font: { color: [1, 0, 0, 1], family: 'Times New Roman', size: 0.12 },
+    onClick: () => {
+      eqn.pulse({ elements: ['sin', 'x_1'], centerOn: 'sin', xAlign: 'right', yAlign: 'bottom' });
+      figure.getElement('sine.label').pulse();
+    },
+    touchBorder: 0.1,
+  },
+  x1: {
+    text: 'x',
+    font: { color: [1, 0, 0, 1], family: 'Times New Roman', style: 'italic', size: 0.12 },
+    onClick: () => {
+      eqn.pulse({ elements: ['sin', 'x_1'], centerOn: 'sin', xAlign: 'right', yAlign: 'bottom' });
+      figure.getElement('sine.label').pulse();
+    },
     touchBorder: 0.1,
   },
   x: {
-    font: { color: [1, 0, 0, 1] },
-    onClick: () => figure.getElement('eqn.x_2').pulse({ yAlign: 'top' }),
+    font: { color: [1, 0, 0, 1], family: 'Times New Roman', style: 'italic', size: 0.12 },
+    onClick: () => {
+      figure.getElement('eqn.x_2').pulse({ yAlign: 'top' });
+      figure.getElement('angle.label').pulse();
+    },
     touchBorder: 0.1,
   },
+  sine: { font: { style: 'italic' } },
   equal: { font: { style: 'italic' } },
   'very small angles': { font: { style: 'italic' } },
 };
@@ -296,12 +312,12 @@ const descriptions = [
   },
   { text: 'The right hand side simplifies to 1', },
   { text: 'Use mathematical notation for the |limit|' },
-  { text: 'The vertical line is the sine of x' },
-  { text: ['The |radius| is 1, so the |arc length| equals', 'the |angle1|'] },
+  { text: 'The |vertical| line is the |sine| of |x|' },
+  { text: ['The |radius| is 1, so the |arc| length equals', 'the |angle1|'] },
   {
     text: [
-      'Summary: for |very small angles|, an angle |x|,',
-      'and |sin x| can often be considered |equal|',
+      'Summary: for |very small angles| |x|, the angle',
+      'and |sin| |x1| can often be considered |equal|',
     ],
   },
 ];
