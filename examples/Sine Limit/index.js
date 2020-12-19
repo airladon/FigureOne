@@ -93,7 +93,11 @@ figure.add([
       p1: [0, 0],
       p2: [0, 1],
       label: {
-        text: ['vert', 'sin x'],
+        text: {
+          elements: { sin: { font: { style: 'normal' } } },
+          forms: { 0: 'vert', 1: ['sin', ' ', 'x'] },
+          formSeries: ['0', '1'],
+        },
         offset: 0.05,
         linePosition: 0.5,
         touchBorder: 0.1,
@@ -154,24 +158,17 @@ figure.add([
         arc_1: { color: [1, 0, 0, 1] },
         arc_2: { color: [1, 0, 0, 1] },
         xTo: 'x \u2192 ',
-        _0: '0',
         s: { symbol: 'strike', style: 'back' },
-        // asXTo0: 'as       ',
       },
       phrases: {
-        sinx: { tBox: [
-          { container: [['sin', ' ', 'x_1'], 0.25] }, 'sinBox'
-        ] },
-        limit: { tBox: [bot('lim', 'xTo0', '   '), 'limBox']},
+        csinx: { container: [['sin', ' ', 'x_1'], 0.25] },
+        sinx: { tBox: ['csinx', 'sinBox'] },
+        limit: { tBox: [[bot('lim', 'xTo0'), '    '], 'limBox']},
         cvert: { container: { content: 'vert', width: 0.25 } },
         xTo0: ['xTo', '_0'],
         asXTo0: ['as ', 'xTo0', ':   ']
       },
-      formDefaults: {
-        alignment: {
-          fixTo: 'equals',
-        },
-      },
+      formDefaults: { alignment: { fixTo: 'equals' } },
       forms: {
         0: [],
         1: ['asXTo0', 'cvert', 'equals', 'arc' ],
@@ -195,10 +192,10 @@ figure.add([
           },
         ],
         4: ['asXTo0', frac('cvert', 'vinculum', 'arc_1'), 'equals', '_1'],
-        5: ['limit', '  ', frac('cvert', 'vinculum', 'arc_1'), 'equals', '_1'],
-        6: ['limit', '  ', frac('sinx', 'vinculum', 'arc_1'), 'equals', '_1'],
-        7: ['limit', '  ', frac('sinx', 'vinculum', 'x_2'), 'equals', '_1'],
-        8: ['limit', '  ', frac('sinx', 'vinculum', 'x_2'), 'equals', '_1'],
+        5: ['limit', frac('cvert', 'vinculum', 'arc_1'), 'equals', '_1'],
+        6: ['limit', frac('sinx', 'vinculum', 'arc_1'), 'equals', '_1'],
+        7: ['limit', frac('sinx', 'vinculum', 'x_2'), 'equals', '_1'],
+        8: ['limit', frac('sinx', 'vinculum', 'x_2'), 'equals', '_1'],
       },
       formSeries: ['0', '1', '2', '3', '4', '5', '6', '7', '8'],
       position: origin.add(1.3, -0.4),
@@ -234,28 +231,28 @@ const modifiers = {
     onClick: () => figure.getElement('radius').pulseWidth(),
     touchBorder: [0.1, 0.03, 0.1, 0.1],
   },
-  'radius': {
+  radius: {
     font: { color: [0, 0.5, 1, 1] },
     onClick: () => figure.getElement('radius').pulseWidth(),
     touchBorder: [0.1, 0.03, 0.1, 0.1],
   },
-  'arc': {
+  arc: {
     font: { color: [1, 0, 0, 1] },
     onClick: () => figure.getElement('arc.label').pulse(),
     touchBorder: 0.1,
   },
-  'angle': {
+  angle: {
     font: { color: [1, 0, 0, 1] },
     onClick: () => figure.getElement('angle.label').pulse({ scale: 2 }),
     touchBorder: [0.1, 0.01, 0.1, 0.1],
   },
-  'angle1': {
+  angle1: {
     text: 'angle',
     font: { color: [1, 0, 0, 1] },
     onClick: () => figure.getElement('angle.label').pulse({ scale: 2 }),
     touchBorder: [0.1, 0.1, 0.1, 0.03],
   },
-  'vertical': {
+  vertical: {
     font: { color: [1, 0, 0, 1] },
     onClick: () => figure.getElement('sine.label').pulse(),
     touchBorder: [0.1, 0.1, 0.1, 0.03],
@@ -263,7 +260,19 @@ const modifiers = {
   limit: {
     font: { color: [0, 0.5, 1, 1] },
     onClick: () => eqn.pulse({ elements: ['as ', 'xTo', '_0', 'lim'], centerOn: '_0', xAlign: 'right' }),
-  }
+  },
+  'sin x': {
+    font: { color: [1, 0, 0, 1] },
+    onClick: () => eqn.pulse({ elements: ['sin', 'x_1'], centerOn: 'sin', xAlign: 'right', yAlign: 'bottom' }),
+    touchBorder: 0.1,
+  },
+  x: {
+    font: { color: [1, 0, 0, 1] },
+    onClick: () => figure.getElement('eqn.x_2').pulse({ yAlign: 'top' }),
+    touchBorder: 0.1,
+  },
+  equal: { font: { style: 'italic' } },
+  'very small angles': { font: { style: 'italic' } },
 };
 
 const descriptions = [
@@ -291,8 +300,8 @@ const descriptions = [
   { text: ['The |radius| is 1, so the |arc length| equals', 'the |angle1|'] },
   {
     text: [
-      'In other words: for very small angles, the angle and',
-      'the sine of the angle are the same',
+      'Summary: for |very small angles|, an angle |x|,',
+      'and |sin x| can often be considered |equal|',
     ],
   },
 ];
@@ -337,9 +346,12 @@ const slides = [
   { description: 7, form: '8' },
 ];
 
+
+// Slide state management
 let slideIndex = 0;
 const nextButton = figure.getElement('nextButton');
 const prevButton = figure.getElement('prevButton');
+
 const showSlide = (index) => {
   const slide = slides[index];
   if (slide.form != null) {
@@ -363,7 +375,8 @@ const showSlide = (index) => {
     prevButton.isTouchable = true;
   }
 }
-figure.getElement('nextButton').onClick = () => {
+
+nextButton.onClick = () => {
   if (eqn.eqn.isAnimating) {
     eqn.stop('complete');
     return;
@@ -378,7 +391,7 @@ figure.getElement('nextButton').onClick = () => {
       .start();
   }
 }
-figure.getElement('prevButton').onClick = () => {
+prevButton.onClick = () => {
   if (eqn.eqn.isAnimating) {
     eqn.stop('complete');
     return;
