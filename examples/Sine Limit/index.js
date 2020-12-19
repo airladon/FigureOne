@@ -1,31 +1,25 @@
 const { Point, Figure } = Fig;
-const figure = new Figure({
-  limits: [-2, -1.5, 4, 3],
-  color: [0.5, 0.5, 0.5, 1],
-});
+const figure = new Figure({ limits: [-2, -1.5, 4, 3], color: [0.5, 0.5, 0.5, 1] });
 
 const origin = new Point(-1, -0.4);
 const radius = 2;
 // Create the shape
-figure.add([
-  {
-    name: 'movePad',
-    method: 'collections.line',
-    options: {
-      p1: origin,
-      length: radius,
-      angle: 1,
-      touchBorder: 0.5,
-      width: 0.001,
-    },
-    mods: {
-      isMovable: true,
-      move: {
-        type: 'rotation',
-        bounds: { rotation: { min: 0.07, max: 1.1 } },
-      },
-    },
+const button = (name, position, label) => ({
+  name,
+  method: 'collections.rectangle',
+  options: {
+    width: 0.4,
+    height: 0.2,
+    line: { width: 0.005 },
+    corner: { radius: 0.03, sides: 5 },
+    button: true,
+    position,
+    label,
   },
+  mods: { isTouchable: true, touchBorder: 0.1 },
+});
+
+figure.add([
   {
     name: 'radius',
     method: 'collections.line',
@@ -40,8 +34,13 @@ figure.add([
         text: '1',
         offset: 0.05,
         update: true,
-        isTouchable: true,
-        touchBorder: 0.1,
+      },
+      mods: {
+        isMovable: true,
+        move: {
+          type: 'rotation',
+          bounds: { rotation: { min: 0.07, max: 1.1 } },
+        },
       },
     },
   },
@@ -104,40 +103,13 @@ figure.add([
       color: [1, 0, 0, 1],
     },
   },
-  {
-    name: 'nextButton',
-    method: 'collections.rectangle',
-    options: {
-      width: 0.5,
-      height: 0.25,
-      line: { width: 0.005 },
-      corner: { radius: 0.03, sides: 5 },
-      button: true,
-      position: [1.5, -1.25],
-      label: 'Next'
-    },
-    mods: { isTouchable: true, touchBorder: 0.1 },
-  },
-  {
-    name: 'prevButton',
-    method: 'collections.rectangle',
-    options: {
-      width: 0.5,
-      height: 0.25,
-      line: { width: 0.005 },
-      corner: { radius: 0.03, sides: 5 },
-      button: true,
-      position: [-1.5, -1.25],
-      label: 'Prev'
-    },
-    mods: { isTouchable: true, touchBorder: 0.1 },
-  },
+  button('nextButton', [1.5, -1.25], 'Next'),
+  button('prevButton', [-1.5, -1.25], 'Prev'),
   {
     name: 'description',
     method: 'primitives.textLines',
     options: {
       font: { color: [0.5, 0.5, 0.5, 1], size: 0.1 },
-      justify: 'left',
       xAlign: 'center',
       yAlign: 'middle',
       position: [0, origin.y - 0.85],
@@ -236,16 +208,14 @@ figure.add([
 
 const angle = figure.getElement('angle');
 const arc = figure.getElement('arc');
-const movePad = figure.getElement('movePad');
 const sine = figure.getElement('sine');
 const rect = figure.getElement('rect');
 const description = figure.getElement('description');
 const radiusLine = figure.getElement('radius');
 const eqn = figure.getElement('eqn');
-// const oneLabel = figure.getElement('radius.label');
 
-movePad.subscriptions.add('setTransform', () => {
-  const a = movePad.getRotation();
+radiusLine.subscriptions.add('setTransform', () => {
+  const a = radiusLine.getRotation();
   angle.setAngle({ angle: a });
   arc.setAngle({ angle: a });
   const end = new Point(
@@ -317,7 +287,7 @@ const descriptions = [
   },
   { text: 'The right hand side simplifies to 1', },
   { text: 'Use mathematical notation for the |limit|' },
-  { text: 'The vertical line is actually the sine of x' },
+  { text: 'The vertical line is the sine of x' },
   { text: ['The |radius| is 1, so the |arc length| equals', 'the |angle1|'] },
   {
     text: [
@@ -336,34 +306,30 @@ const slides = [
       figure.getElement('sine.label').showForm('0');
     },
   },
-  { description: 1 },
-  { form: '1' },
-  { description: 2 },
-  { form: '2' },
+  { description: 1, form: '0' },
+  { description: 1, form: '1' },
+  { description: 2, form: '1' },
+  { description: 2, form: '2' },
   { description: 3, form: '3' },
-  { form: '4' },
-  { description: 4 },
-  { form: '5' },
+  { description: 3, form: '4' },
+  { description: 4, form: '4' },
+  { description: 4, form: '5' },
   {
-    description: 5,
-    state: () => {
-      figure.getElement('sine.label').showForm('0');
-    },
+    description: 5, form: '5',
+    state: () => figure.getElement('sine.label').showForm('0'),
   },
   {
-    form: '6',
-    state: () => {
-      figure.getElement('sine.label').nextForm();
-    },
+    description: 5, form: '6',
+    state: () => figure.getElement('sine.label').nextForm(),
   },
   {
-    description: 6,
+    description: 6, form: '6',
     state: () => {
       figure.getElement('arc.label').showForm('0');
     },
   },
   {
-    form: '7',
+    description: 6, form: '7',
     state: () => {
       figure.getElement('arc.label').nextForm();
     },
@@ -385,15 +351,12 @@ const showSlide = (index) => {
           text: descriptions[slide.description].text,
           modifiers: descriptions[slide.description].modifiers,
     })
-    description.animations.new()
-      .dissolveIn(0.2)
-      .start();
   }
   if (slide.state != null) {
     slide.state();
   }
   if (index === 0) {
-    prevButton.setOpacity(0.7)
+    prevButton.setOpacity(0.7);
     prevButton.isTouchable = false;
   } else if (prevButton.isTouchable === false) {
     prevButton.setOpacity(1)
@@ -405,8 +368,15 @@ figure.getElement('nextButton').onClick = () => {
     eqn.stop('complete');
     return;
   }
+  const oldDescription = slides[slideIndex].description;
   slideIndex = (slideIndex + 1) % slides.length;
-  showSlide(slideIndex);  
+  showSlide(slideIndex);
+  const newDescription = slides[slideIndex].description;
+  if (newDescription != oldDescription) {
+    description.animations.new()
+      .dissolveIn(0.2)
+      .start();
+  }
 }
 figure.getElement('prevButton').onClick = () => {
   if (eqn.eqn.isAnimating) {
@@ -417,5 +387,5 @@ figure.getElement('prevButton').onClick = () => {
   showSlide(slideIndex);  
 }
 
-movePad.setRotation(1);
+radiusLine.setRotation(1);
 showSlide(0);
