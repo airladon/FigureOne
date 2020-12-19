@@ -1,6 +1,9 @@
 const { Point, Figure } = Fig;
 const figure = new Figure({ limits: [-2, -1.5, 4, 3], color: [0.5, 0.5, 0.5, 1] });
 
+// //////////////////////////////////////////////////////////////////
+// Setup the Shape
+// //////////////////////////////////////////////////////////////////
 // Values that will be reused frequently
 const origin = new Point(-1, -0.4);
 const radius = 2;
@@ -128,7 +131,9 @@ figure.add([
   button('prevButton', [-1.5, -1.25], 'Prev'),
 ]);
 
-
+// //////////////////////////////////////////////////////////////////
+// Setup the Equation
+// //////////////////////////////////////////////////////////////////
 // Helper functions to make equation forms look cleaner
 // Bottom Comment
 const bot = (content, comment, space = 0.05) => ({
@@ -217,6 +222,10 @@ figure.add([
   },
 ]);
 
+// //////////////////////////////////////////////////////////////////
+// Set the Descriptions, Slides and Button Logic
+// //////////////////////////////////////////////////////////////////
+
 // Figure elements that will be frequently used
 const angle = figure.getElement('angle');
 const arc = figure.getElement('arc');
@@ -226,32 +235,37 @@ const description = figure.getElement('description');
 const radiusLine = figure.getElement('radius');
 const eqn = figure.getElement('eqn');
 
-// Whenever the radius line moves, the angle, arc and sine line must be updated
-radiusLine.subscriptions.add('setTransform', () => {
-  const a = radiusLine.getRotation();
-  angle.setAngle({ angle: a });
-  arc.setAngle({ angle: a });
-  const end = new Point(
-    radius * Math.cos(a), radius * Math.sin(a),
-  );
-  sine.setEndPoints(
-    new Point(end.x - 0.005, 0).add(origin),
-    new Point(end.x - 0.005, end.y).add(origin),
-  );
-});
+// Unique descriptions to use
+const descriptions = [
+  [
+      'Touch and move the |blue line|, and compare',
+      'the |arc| and |vertical| line lengths',
+  ],
+  [
+     'As the |angle| gets smaller, the |arc| and',
+      '|vertical| line get closer in length',
+  ],
+  'Divide both sides by the arc length',
+  'The right hand side simplifies to 1',
+  'Use mathematical notation for the |limit|',
+  'The |vertical| line is the |sine| of |x|',
+  'The |radius| is 1, so the |arc| length equals', 'the |angle1|',
+  [
+    'Summary: for |very small angles| |x|, the angle',
+    'and |sin| |x1| can often be considered |equal|',
+  ],
+];
 
-
-// Setup description modifiers for all specially formatted text (most of
-// which will pulse shape or equation elements when touched)
+// Setup description modifiers for all specially formatted text
 const modifiers = {
   'blue line': {
     font: { color: [0, 0.5, 1, 1] },
-    onClick: () => radius.pulseWidth(),
+    onClick: () => radiusLine.pulseWidth(),
     touchBorder: [0.1, 0.03, 0.1, 0.1],
   },
   radius: {
     font: { color: [0, 0.5, 1, 1] },
-    onClick: () => radius.pulseWidth(),
+    onClick: () => radiusLine.pulseWidth(),
     touchBorder: [0.1, 0.03, 0.1, 0.1],
   },
   arc: {
@@ -309,37 +323,6 @@ const modifiers = {
   'very small angles': { font: { style: 'italic' } },
 };
 
-const descriptions = [
-  {
-    text: [
-      'Touch and move the |blue line|, and compare',
-      'the |arc| and |vertical| line lengths',
-    ],
-    modifiers,
-  },
-  {
-    text: [
-     'As the |angle| gets smaller, the |arc| and',
-      '|vertical| line get closer in length',
-    ],
-    modifiers,
-  },
-  {
-    text: 'Divide both sides by the arc length',
-    modifiers,
-  },
-  { text: 'The right hand side simplifies to 1', },
-  { text: 'Use mathematical notation for the |limit|' },
-  { text: 'The |vertical| line is the |sine| of |x|' },
-  { text: ['The |radius| is 1, so the |arc| length equals', 'the |angle1|'] },
-  {
-    text: [
-      'Summary: for |very small angles| |x|, the angle',
-      'and |sin| |x1| can often be considered |equal|',
-    ],
-  },
-];
-
 // Pressing the "Next" and "Prev" buttons will navigate through a set of
 // description, equation form and shape states. We will call these states
 // slides (like presentation slides).
@@ -362,11 +345,11 @@ const slides = [
   { description: 4, form: '5' },
   {
     description: 5, form: '5',
-    shapeState: () => figure.getElement('sine.label').showForm('0'),
+    shapeState: () => figure.getElement('sine.label').showForm('0')
   },
   {
     description: 5, form: '6',
-    shapeState: () => figure.getElement('sine.label').nextForm(),
+    shapeState: () => figure.getElement('sine.label').nextForm()
   },
   {
     description: 6, form: '6',
@@ -398,11 +381,11 @@ const showSlide = (index) => {
   // Stop any description animations and set updated description
   description.stop();
   description.custom.updateText({
-        text: descriptions[slide.description].text,
-        modifiers: descriptions[slide.description].modifiers,
+        text: descriptions[slide.description],
+        modifiers,
   })
   // Set the shape state
-  if (slide.state != null) {
+  if (slide.shapeState != null) {
     slide.shapeState();
   }
   // Disable previous button if at first slide
@@ -444,6 +427,24 @@ prevButton.onClick = () => {
   slideIndex = (slideIndex - 1) < 0 ? slides.length - 1 : slideIndex - 1;
   showSlide(slideIndex);  
 }
+
+// //////////////////////////////////////////////////////////////////
+// Tie dependant elements together and set first positions
+// //////////////////////////////////////////////////////////////////
+
+// Whenever the radius line moves, the angle, arc and sine line must be updated
+radiusLine.subscriptions.add('setTransform', () => {
+  const a = radiusLine.getRotation();
+  angle.setAngle({ angle: a });
+  arc.setAngle({ angle: a });
+  const end = new Point(
+    radius * Math.cos(a), radius * Math.sin(a),
+  );
+  sine.setEndPoints(
+    new Point(end.x - 0.005, 0).add(origin),
+    new Point(end.x - 0.005, end.y).add(origin),
+  );
+});
 
 // Setup initial radius line position and slide
 radiusLine.setRotation(1);
