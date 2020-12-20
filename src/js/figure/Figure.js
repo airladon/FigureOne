@@ -2201,6 +2201,7 @@ class Figure {
     // const setup = endSetup - startSetup;
     // const draw = endDraw - startDraw;
     // console.log(total, setup, draw, total - setup - draw);
+    // console.log(performance.now() - t);
   }
 
   // renderToImages() {
