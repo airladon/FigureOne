@@ -13,7 +13,7 @@ import { getState } from './Recorder/state';
 import type {
   TypeParsablePoint, TypeParsableTransform,
   TypeTransformValue, TypeTransformBoundsDefinition,
-  TypeBorder,
+  TypeBorder, TypeParsableBuffer,
 } from '../tools/g2';
 import { Recorder } from './Recorder/Recorder';
 import * as m2 from '../tools/m2';
@@ -4070,7 +4070,7 @@ class FigureElementCollection extends FigureElement {
   // touchInBoundingRect: boolean;
   border: TypeBorder | 'children' | 'rect' | number;
   // $FlowFixMe
-  touchBorder: TypeBorder | 'border' | 'children' | 'rect' | number;
+  touchBorder: TypeParsableBuffer | TypeBorder | 'border' | 'children' | 'rect' | number;
   // border is whatever border is
   // children is touch borders of children
   // rect is rect of children touchBorder
@@ -4722,7 +4722,8 @@ class FigureElementCollection extends FigureElement {
     }
 
     if (
-      optionsOrElementsOrDone.centerOn != null
+      !Array.isArray(optionsOrElementsOrDone)
+      && optionsOrElementsOrDone.centerOn != null
       && typeof optionsOrElementsOrDone.centerOn === 'string'
     ) {
       const e = this.getElement(optionsOrElementsOrDone.centerOn);

@@ -3259,6 +3259,7 @@ export default class FigurePrimitives {
     const element = this.genericTextPrimitive(to, joinedOptions);
     element.custom.options = joinedOptions;
     element.custom.updateText = (oIn: OBJ_Text) => {
+      // $FlowFixMe
       element.drawingObject.clear();
       let oToUse = oIn; // $FlowFixMe
       if (oIn.length === 1 && typeof oIn[0] === 'string') {
