@@ -1,4 +1,4 @@
-const figure = new Fig.Figure({ limits: [-4, -3, 8, 6]});
+const figure = new Fig.Figure({ limits: [-4, -3, 8, 6], color: [1, 0, 0, 1] });
 
 
 // ////////////////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-# Example 9 - Pythagorean Theorm
+# Pythagorean Theorm
 
 Uses animation and animation between equation forms to show a proof for the pythagorean theorem.
 

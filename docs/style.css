@@ -35,6 +35,7 @@ li {
 #figureOneContainer {
   width: 100%;
   padding-bottom: 75%;
+  background-color: white;
 }
 
 .title-text {
@@ -63,6 +64,7 @@ h2 {
   font-weight: 100;
   padding-top: 25px;
   font-size: 1.6em;
+  margin-bottom: 0.2em;
 }
 
 .example-description {
@@ -103,8 +105,9 @@ h2 {
 .see-the-code {
   color: grey;
   text-align: center;
-  padding-bottom: 20px;
-  padding-top: 3em;
+  /* padding-bottom: 20px; */
+  /* padding-top: 4em; */
+  padding-bottom: 2em;
 }
 
 .other-examples {

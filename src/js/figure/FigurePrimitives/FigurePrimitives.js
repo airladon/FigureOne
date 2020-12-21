@@ -2351,7 +2351,7 @@ export default class FigurePrimitives {
     if (o.linePrimitives) {
       drawType = 'lines';
     }
-    if (o.fast) {
+    if (o.simple) {
       drawType = 'strip';
     }
     return [o, points, drawBorder, drawBorderBuffer, drawType];
