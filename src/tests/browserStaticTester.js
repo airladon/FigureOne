@@ -31,7 +31,7 @@ function browserStaticTester(title, file) {
         window.scroll(0, scrollY);
       }, [y]);
       const height = Math.min(remainingHeight, 1000);
-      const clipY = Math.max(0, 1000 - (dimensions.height - y))
+      const clipY = Math.max(0, 1000 - (dimensions.height - y));
       const image = await page.screenshot({
         // fullPage: true,
         clip: {

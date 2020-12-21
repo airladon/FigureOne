@@ -4727,6 +4727,7 @@ class FigureElementCollection extends FigureElement {
     ) {
       const e = this.getElement(optionsOrElementsOrDone.centerOn);
       if (e != null) {
+        // eslint-disable-next-line no-param-reassign
         optionsOrElementsOrDone.centerOn = e;
       }
     }

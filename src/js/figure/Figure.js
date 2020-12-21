@@ -9,7 +9,7 @@ import {
 } from '../tools/g2';
 import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
 // import * as math from '../tools/math';
-import { round } from '../tools/math';
+// import { round } from '../tools/math';
 import { FunctionMap } from '../tools/FunctionMap';
 import { setState, getState } from './Recorder/state';
 import parseState from './Recorder/parseState';

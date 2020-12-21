@@ -3,7 +3,7 @@
 // import Figure from '../Figure';
 import {
   Transform, Point,
-  getPoint, getTransform,
+  getPoint, // getTransform,
 } from '../../tools/g2';
 import type { TypeParsablePoint } from '../../tools/g2';
 import {
