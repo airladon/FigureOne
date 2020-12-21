@@ -69,6 +69,7 @@ FigureElementPrimitive {
         -4,
         3.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -779,6 +780,7 @@ FigureElementPrimitive {
         -1,
         -0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -1745,6 +1747,7 @@ FigureElementPrimitive {
         3,
         0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -2867,6 +2870,7 @@ FigureElementPrimitive {
         -2,
         -0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -5383,6 +5387,7 @@ FigureElementPrimitive {
         0,
         -0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -6609,6 +6614,7 @@ FigureElementPrimitive {
         -3,
         -0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -9125,6 +9131,7 @@ FigureElementPrimitive {
         -4,
         -0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -10195,6 +10202,7 @@ FigureElementPrimitive {
         2,
         0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -11109,6 +11117,7 @@ FigureElementPrimitive {
         -3,
         2.5,
       ],
+      "simple": false,
       "touchBorder": Array [
         Array [
           Point {
@@ -11899,6 +11908,7 @@ FigureElementPrimitive {
         0,
         2.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -12679,6 +12689,7 @@ FigureElementPrimitive {
         1,
         2.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -13389,6 +13400,7 @@ FigureElementPrimitive {
         -4,
         2.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -14099,6 +14111,7 @@ FigureElementPrimitive {
         -1,
         2.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -14809,6 +14822,7 @@ FigureElementPrimitive {
         -2,
         2.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -15522,6 +15536,7 @@ FigureElementPrimitive {
         1,
         1.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -16403,6 +16418,7 @@ FigureElementPrimitive {
         3,
         1.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -17285,6 +17301,7 @@ FigureElementPrimitive {
         2,
         1.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -18166,6 +18183,7 @@ FigureElementPrimitive {
         -4,
         0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -19047,6 +19065,7 @@ FigureElementPrimitive {
         -3,
         0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -19925,6 +19944,7 @@ FigureElementPrimitive {
         -2,
         3.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -20635,6 +20655,7 @@ FigureElementPrimitive {
         -1,
         3.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -21345,6 +21366,7 @@ FigureElementPrimitive {
         -3,
         3.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -22072,6 +22094,7 @@ FigureElementPrimitive {
         0,
         3.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -22782,6 +22805,7 @@ FigureElementPrimitive {
         2,
         3.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -23509,6 +23533,7 @@ FigureElementPrimitive {
         3,
         3.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -24219,6 +24244,7 @@ FigureElementPrimitive {
         1,
         3.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -24929,6 +24955,7 @@ FigureElementPrimitive {
         2,
         -0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -25853,6 +25880,7 @@ FigureElementPrimitive {
         1,
         -0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -26591,6 +26619,7 @@ FigureElementPrimitive {
         0,
         1.5,
       ],
+      "simple": false,
       "touchBorder": "border",
       "transform": Transform {
         "_type": "transform",
@@ -27301,6 +27330,7 @@ FigureElementPrimitive {
         3,
         2.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -28011,6 +28041,7 @@ FigureElementPrimitive {
         -2,
         1.5,
       ],
+      "simple": false,
       "touchBorder": Array [
         Point {
           "_type": "point",
@@ -28755,6 +28786,7 @@ FigureElementPrimitive {
         -1,
         1.5,
       ],
+      "simple": false,
       "touchBorder": Array [
         Array [
           Point {
@@ -29535,6 +29567,7 @@ FigureElementPrimitive {
         2,
         2.5,
       ],
+      "simple": false,
       "touchBorder": "draw",
       "transform": Transform {
         "_type": "transform",
@@ -30245,6 +30278,7 @@ FigureElementPrimitive {
         -3,
         1.5,
       ],
+      "simple": false,
       "touchBorder": Array [
         Array [
           Point {
@@ -31001,6 +31035,7 @@ FigureElementPrimitive {
         -4,
         1.5,
       ],
+      "simple": false,
       "touchBorder": "rect",
       "transform": Transform {
         "_type": "transform",
@@ -31711,6 +31746,7 @@ FigureElementPrimitive {
         -2,
         0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -32421,6 +32457,7 @@ FigureElementPrimitive {
         0,
         0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -33131,6 +33168,7 @@ FigureElementPrimitive {
         1,
         0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",
@@ -33841,6 +33879,7 @@ FigureElementPrimitive {
         -1,
         0.5,
       ],
+      "simple": false,
       "touchBorder": "buffer",
       "transform": Transform {
         "_type": "transform",

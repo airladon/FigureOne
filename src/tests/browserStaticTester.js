@@ -30,17 +30,19 @@ function browserStaticTester(title, file) {
       await page.evaluate((scrollY) => {
         window.scroll(0, scrollY);
       }, [y]);
+      const height = Math.min(remainingHeight, 1000);
+      const clipY = Math.max(0, 1000 - (dimensions.height - y))
       const image = await page.screenshot({
         // fullPage: true,
         clip: {
           x: 0,
-          y: 0,
+          y: clipY,
           width: dimensions.width,
-          height: Math.min(remainingHeight, 1000),
+          height: 1000,
         },
       });
-      y += 1000;
-      remainingHeight -= 1000;
+      y += height;
+      remainingHeight -= height;
       expect(image).toMatchImageSnapshot();
     }
     expect(failures).toEqual([]);

@@ -154,12 +154,64 @@ function getShapes(getPos) {
       close: true,
     }),
 
-    // shape('update'),
-    // shape('update-width'),
-    // // shape('update-arrow'),
+    // // Arrow
+    shape('arrow-tri', { width: 0.025, arrow: 'triangle' }),
+    shape('arrow-barb', { width: 0.025, arrow: 'barb' }),
+    shape('arrow-rev', { width: 0.025, arrow: 'reverseTriangle' }),
+    shape('arrow-pol', { width: 0.025, arrow: 'polygon' }),
+    shape('arrow-circ', { width: 0.025, arrow: 'circle' }),
+    shape('arrow-bar', { width: 0.025, arrow: 'bar' }),
+    shape('arrow-line', { width: 0.025, arrow: 'line' }),
 
-    // shape('simple', { simple: true }),
-    // shape('simple-close', { simple: true, close: true }),
+
+    shape('arrow-tail-false-tri', { width: 0.025, arrow: { head: 'triangle', tail: false } }),
+    shape('arrow-tail-false-barb', { width: 0.025, arrow: { head: 'barb', tail: false } }),
+    shape('arrow-tail-false-rev', { width: 0.025, arrow: { head: 'reverseTriangle', tail: false } }),
+    shape('arrow-tail-false-pol', { width: 0.025, arrow: { head: 'polygon', tail: false } }),
+    shape('arrow-tail-false-circ', { width: 0.025, arrow: { head: 'circle', tail: false } }),
+    shape('arrow-tail-false-bar', { width: 0.025, arrow: { head: 'bar', tail: false } }),
+    shape('arrow-tail-false-line', { width: 0.025, arrow: { head: 'line', tail: false } }),
+
+
+    shape('arrow-scale-tri', { arrow: { head: 'triangle', scale: 0.5 } }),
+    shape('arrow-scale-barb', { arrow: { head: 'barb', scale: 0.5 } }),
+    shape('arrow-scale-rev', { arrow: { head: 'reverseTriangle', scale: 0.5 } }),
+    shape('arrow-scale-poly', { arrow: { head: 'polygon', scale: 0.5, sides: 6, align: 'mid' } }),
+    shape('arrow-tail-false', { arrow: { head: 'polygon', scale: 0.5, sides: 6, align: 'mid', tail: false } }),
+    shape('arrow-tail-pos-tip', { arrow: { head: 'polygon', scale: 0.5, sides: 6, align: 'tip', tail: 0.1 } }),
+    shape('arrow-pos-mid', { arrow: { head: 'polygon', scale: 0.5, sides: 6, align: 'mid', tail: 0.1 } }),
+    shape('arrow-scale-circ', { arrow: { head: 'circle', scale: 0.5 } }),
+    shape('arrow-bar-tip', { arrow: { head: 'bar', align: 'tip' } }),
+    shape('arrow-bar-mid', { arrow: { head: 'bar', align: 'mid' } }),
+    shape('arrow-scale-bar', { arrow: { head: 'bar', align: 'mid', scale: 0.5 } }),
+    shape('arrow-scale-line', { arrow: { head: 'line', scale: 0.6 } }),
+
+
+    shape('arrow-diff', { arrow: { start: 'triangle', end: 'reverseTriangle', scale: 0.5 } }),
+
+    shape('arrow-diff2', { arrow: {
+      start: { head: 'triangle', length: 0.2 },
+      end: { head: 'reverseTriangle', length: 0.1 },
+      scale: 0.5,
+    } }),
+
+    // Line Primitives
+    shape('linePrimitives', { linePrimitives: true, lineNum: 5 }),
+    shape('linePrimitives-close', { linePrimitives: true, lineNum: 5, close: true }),
+
+    // Special case inside
+    shape('arrow-special-inside', {
+      points: [[0, 0], [1, 0], [0.5, 0.1]],
+      widthIs: 'inside',
+      close: true,
+    }),
+
+    shape('update'),
+    shape('update-width'),
+    // shape('update-arrow'),
+
+    shape('simple', { simple: true }),
+    shape('simple-close', { simple: true, close: true }),
   ];
 }
 
@@ -169,15 +221,12 @@ let startGetValues;
 let startMove;
 
 const updates = {
-  // update: (e) => {
-  //   e.custom.updatePoints({ points: [[0.3, 0.2], [-0.2, 0.2], [-0.2, -0.3]] });
-  // },
-  // 'update-width': (e) => {
-  //   e.custom.updatePoints({ width: 0.02 });
-  // },
-  // 'update-arrow': (e) => {
-  //   e.custom.updatePoints({ arrow: 'tri' });
-  // },
+  update: (e) => {
+    e.custom.updatePoints({ points: [[0.3, 0.2], [-0.2, 0.2], [-0.2, -0.3]] });
+  },
+  'update-width': (e) => {
+    e.custom.updatePoints({ width: 0.02 });
+  },
 };
 
 const getValues = {
