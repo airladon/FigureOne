@@ -629,12 +629,12 @@ class CollectionsAxis extends FigureElementCollection {
     if (options.ticks != null && options.labels === undefined) {
       options.labels = {};
     }
-    if (options.position != null) {
-      this.transform.updateTranslation(getPoint(options.position));
-    }
-    if (options.transform != null) {
-      this.transform = getTransform(options.transform);
-    }
+    // if (options.position != null) {
+    //   this.transform.updateTranslation(getPoint(options.position));
+    // }
+    // if (options.transform != null) {
+    //   this.transform = getTransform(options.transform);
+    // }
     this.setColor(options.color);
 
     this.ticks = [];
