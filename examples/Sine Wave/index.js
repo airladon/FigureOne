@@ -92,18 +92,16 @@ const button = (name, label, position) => ({
   options: {
     label: {
       text: label,
-      font: { size: 0.1 },
+      font: { size: 0.1, weight: 100 },
     },
     touchBorder: 0.1,
     position,
-    color: [0.4, 0.4, 0.4, 1],
+    color: [0.6, 0.6, 0.6, 1],
     width: 0.7,
     height: 0.25,
     corner: { radius: 0.05, sides: 10 },
-    fill: [0.9, 0.9, 0.9, 1],
-    button: {
-      fill: [0.95, 0.95, 0.95, 1],
-    },
+    button: true,
+    line: { width: 0.005 },
   },
   mods: {
     isTouchable: true,
@@ -199,9 +197,7 @@ function update() {
   sine.setEndPoints(endPoint, [r + space, endPoint.y]);
   signal.update(endPoint.y);
   const points = signal.getPoints()
-  signalLine.custom.updatePoints({
-    points,
-  });
+  signalLine.custom.updatePoints({ points });
   figure.animateNextFrame();
 };
 
@@ -247,5 +243,4 @@ figure.getElement('stop').onClick = () => { rotator.stop(); };
 
 rotator.animations.new()
   .rotation({ target: Math.PI / 4, duration: 1.5 })
-  // .trigger({ callback: updateNext })
   .start();

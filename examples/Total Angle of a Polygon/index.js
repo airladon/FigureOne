@@ -81,7 +81,7 @@ figure.add([
       modifiers: {
         simplify: { font: { style: 'italic' } },
       },
-      position: [-2.25, 2.8],
+      position: [-2.55, 2.8],
     },
   },
   // Rectangle that highlights equation elements
@@ -210,10 +210,8 @@ figure.add([
           content: [
             'newEqOld', 'negA', ' ', 'negB', ' ', 'negC', '  ', 'plus360',
           ],
-          animation: {
-            translation: {
-              negC: { style: 'curve', direction: 'up', mag: 0.9 }
-            },
+          translation: {
+            negC: { style: 'curve', direction: 'up', mag: 0.9 }
           },
           onTransition: () => setTouchable(false),
         },

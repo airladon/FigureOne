@@ -10,7 +10,7 @@ Open `index.html` in a browser to view example.
 
 ```js
 // `index.js`
-const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] });
+const figure = new Fig.Figure({ limits: [-2, -1.7, 4, 3], color: [1, 0, 0, 1] });
 
 // ////////////////////////////////////////////////////////////////////////
 // Radius and Space between radius and recorded signal
@@ -104,18 +104,16 @@ const button = (name, label, position) => ({
   options: {
     label: {
       text: label,
-      font: { size: 0.1 },
+      font: { size: 0.1, weight: 100 },
     },
     touchBorder: 0.1,
     position,
-    color: [0.4, 0.4, 0.4, 1],
+    color: [0.6, 0.6, 0.6, 1],
     width: 0.7,
     height: 0.25,
     corner: { radius: 0.05, sides: 10 },
-    fill: [0.9, 0.9, 0.9, 1],
-    button: {
-      fill: [0.95, 0.95, 0.95, 1],
-    },
+    button: true,
+    line: { width: 0.005 },
   },
   mods: {
     isTouchable: true,
@@ -189,6 +187,7 @@ figure.add([
         method: 'polyline',
         options: {
           width: 0.01,
+          simple: true,
         },
       },
     ],
@@ -209,22 +208,22 @@ function update() {
   const endPoint = Fig.polarToRect(r, angle);
   sine.setEndPoints(endPoint, [r + space, endPoint.y]);
   signal.update(endPoint.y);
+  const points = signal.getPoints()
   signalLine.custom.updatePoints({
-    points: signal.getPoints(),
-  })
+    points,
+  });
   figure.animateNextFrame();
 };
 
-// Whenever the rotator line changes, call update
-rotator.subscriptions.add('setTransform', () => {
+// Before each draw, update the points
+figure.subscriptions.add('beforeDraw', () => {
   update();
 });
 
-// Also call update every 20ms
-function updateNext() {
-  update();
-  setTimeout(updateNext, 20);
-};
+// After each draw, call a next animation frame so udpates happen on each frame
+figure.subscriptions.add('afterDraw', () => {
+  figure.animateNextFrame();
+});
 
 
 // ////////////////////////////////////////////////////////////////////////
@@ -257,8 +256,8 @@ figure.getElement('stop').onClick = () => { rotator.stop(); };
 // ////////////////////////////////////////////////////////////////////////
 
 rotator.animations.new()
+  .delay(1)
   .rotation({ target: Math.PI / 4, duration: 1.5 })
-  .trigger({ callback: updateNext })
   .start();
 ```
 
@@ -354,18 +353,16 @@ const button = (name, label, position) => ({
   options: {
     label: {
       text: label,
-      font: { size: 0.1 },
+      font: { size: 0.1, weight: 100 },
     },
     touchBorder: 0.1,
     position,
-    color: [0.4, 0.4, 0.4, 1],
+    color: [0.6, 0.6, 0.6, 1],
     width: 0.7,
     height: 0.25,
     corner: { radius: 0.05, sides: 10 },
-    fill: [0.9, 0.9, 0.9, 1],
-    button: {
-      fill: [0.95, 0.95, 0.95, 1],
-    },
+    button: true,
+    line: { width: 0.005 },
   },
   mods: {
     isTouchable: true,
@@ -445,6 +442,7 @@ figure.add([
         method: 'polyline',
         options: {
           width: 0.01,
+          simple: true,
         },
       },
     ],
@@ -471,28 +469,23 @@ function update() {
   const endPoint = Fig.polarToRect(r, angle);
   sine.setEndPoints(endPoint, [r + space, endPoint.y]);
   signal.update(endPoint.y);
-  signalLine.custom.updatePoints({
-    points: signal.getPoints(),
-  })
+  const points = signal.getPoints()
+  signalLine.custom.updatePoints({ points });
   figure.animateNextFrame();
 };
 ```
 
-Whenever the rotator is rotated, a `setTransfrom` will be fired. We can subscribe to this to attach the udpate function.
+Setup so we update is called on every animation frame
 ```js
-// Whenever the rotator line changes, call update
-rotator.subscriptions.add('setTransform', () => {
+// Before each draw, update the points
+figure.subscriptions.add('beforeDraw', () => {
   update();
 });
-```
 
-We also want to update the signal every 20ms even if the rotator is not moving.
-```js
-// Also call update every 20ms
-function updateNext() {
-  update();
-  setTimeout(updateNext, 20);
-};
+// After each draw, call a next animation frame so udpates happen on each frame
+figure.subscriptions.add('afterDraw', () => {
+  figure.animateNextFrame();
+});
 ```
 
 #### Button Setup
@@ -528,6 +521,5 @@ To initialize the figure, we start by animating a rotation to make it obvious th
 ```js
 rotator.animations.new()
   .rotation({ target: Math.PI / 4, duration: 1.5 })
-  .trigger({ callback: updateNext })
   .start();
 ```

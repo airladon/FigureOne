@@ -1922,6 +1922,8 @@ class CollectionsAngle extends FigureElementCollection {
         width: length * percentLength + width,
         height: width,
         color: [0, 0, 1, 0.005],
+        border: [[]],
+        touchBorder: 'buffer',
       });
       this.add('anglePad', anglePad);
       anglePad.setMovable();
@@ -1960,11 +1962,14 @@ class CollectionsAngle extends FigureElementCollection {
         height: width,
         color: [1, 0, 1, 0.005],
         offset: [length * (1 - percentLength), 0],
+        border: [[]],
+        touchBorder: 'buffer',
       });
       this.add('rotPad', rotPad);
       rotPad.setMovable();
       rotPad.move.type = 'rotation';
       rotPad.drawingObject.border = [[]];
+      // rotPad.touchBorder = 'drawBuffer';
       if (type === 'angle') {
         rotPad.move.element = this;
         this.subscriptions.add('beforeSetTransform', (transformToSet) => {
@@ -1994,6 +1999,8 @@ class CollectionsAngle extends FigureElementCollection {
         sides: 8,
         fill: true,
         color: [1, 0, 0, 0.005],
+        border: [[]],
+        touchBorder: 'buffer',
       });
       this.add('movePad', movePad);
       movePad.setMovable();

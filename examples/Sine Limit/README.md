@@ -304,7 +304,7 @@ const descriptions = [
   'The right hand side simplifies to 1',
   'Use mathematical notation for the |limit|',
   'The |vertical| line is the |sine| of |x|',
-  'The |radius| is 1, so the |arc| length equals', 'the |angle1|',
+  ['The |radius| is 1, so the |arc| length equals', 'the |angle1|'],
   [
     'Summary: for |very small angles| |x|, the angle',
     'and |sin| |x1| can often be considered |equal|',

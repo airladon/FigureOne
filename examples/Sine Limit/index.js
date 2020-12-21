@@ -249,7 +249,7 @@ const descriptions = [
   'The right hand side simplifies to 1',
   'Use mathematical notation for the |limit|',
   'The |vertical| line is the |sine| of |x|',
-  'The |radius| is 1, so the |arc| length equals', 'the |angle1|',
+  ['The |radius| is 1, so the |arc| length equals', 'the |angle1|'],
   [
     'Summary: for |very small angles| |x|, the angle',
     'and |sin| |x1| can often be considered |equal|',
@@ -270,7 +270,7 @@ const modifiers = {
   },
   arc: {
     font: { color: [1, 0, 0, 1] },
-    onClick: () => figure.getElement('arc.label').pulse(),
+    onClick: () => figure.getElement('arc.label').pulse({ xAlign: 'left' }),
     touchBorder: 0.1,
   },
   angle: {
@@ -286,7 +286,7 @@ const modifiers = {
   },
   vertical: {
     font: { color: [1, 0, 0, 1] },
-    onClick: () => figure.getElement('sine.label').pulse(),
+    onClick: () => figure.getElement('sine.label').pulse({ xAlign: 'right' }),
     touchBorder: [0.1, 0.1, 0.1, 0.03],
   },
   limit: {

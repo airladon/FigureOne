@@ -15,9 +15,10 @@ figure.add({
     },
     curve: {          // Curve of angle
       radius: 0.3,
+      width: 0.005,
     },
     corner: {         // Straight lines of angle
-      width: 0.02,
+      width: 0.01,
       length: 1,
       color: [0, 0.5, 1, 1],
     },

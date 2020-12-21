@@ -2138,6 +2138,9 @@ class Figure {
   draw(nowIn: number, canvasIndex: number = 0): void {
     // const start = new Date().getTime();
     // const t = performance.now();
+    // if ((nowIn - this.lastDrawTime ) * 1000 > 40) {
+    //   console.log((nowIn - this.lastDrawTime) * 1000)
+    // }
     if (this.state.pause === 'paused') {
       return;
     }
@@ -2202,6 +2205,7 @@ class Figure {
     // const draw = endDraw - startDraw;
     // console.log(total, setup, draw, total - setup - draw);
     // console.log(performance.now() - t);
+    // console.log(perfr)
   }
 
   // renderToImages() {
