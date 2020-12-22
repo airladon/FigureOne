@@ -94,7 +94,7 @@ class GlobalAnimation {
   syncNow() {
     if (this.updateSyncNow) {
       this.updateSyncNow = false;
-      this.synchronizedNow = performance.now();
+      this.synchronizedNow = this.now();
       this.syncNowTimer = setTimeout(() => { this.updateSyncNow = true; }, 100);
     }
     return this.synchronizedNow;

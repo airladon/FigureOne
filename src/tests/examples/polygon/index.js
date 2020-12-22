@@ -1,4 +1,4 @@
-const figure = new Fig.Figure({
+figure = new Fig.Figure({
   limits: [-3.33, -1.8, 6.667, 5],
   color: [1, 0, 0, 1] },
 );
@@ -163,6 +163,7 @@ figure.add([
     name: 'eqn',
     method: 'collections.equation',
     options: {
+      font: { family: 'Serif' },
       elements: {
         // Define equation elements 'a', 'b', and 'c' to be touchable with
         // some touchBorder buffer around them
@@ -313,3 +314,4 @@ get('button').onClick = () => {
 // Start by showing form ('0')
 get('eqn').showForm('0');
 
+console.log(get('eqn'))
