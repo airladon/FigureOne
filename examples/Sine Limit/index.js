@@ -292,6 +292,7 @@ const modifiers = {
   limit: {
     font: { color: [0, 0.5, 1, 1] },
     onClick: () => eqn.pulse({ elements: ['as ', 'xTo', '_0', 'lim'], centerOn: '_0', xAlign: 'right' }),
+    touchBorder: 0.1,
   },
   sin: {
     font: { color: [1, 0, 0, 1], family: 'Times New Roman', size: 0.12 },
@@ -306,7 +307,7 @@ const modifiers = {
     font: { color: [1, 0, 0, 1], family: 'Times New Roman', style: 'italic', size: 0.12 },
     onClick: () => {
       eqn.pulse({ elements: ['sin', 'x_1'], centerOn: 'sin', xAlign: 'right', yAlign: 'bottom' });
-      figure.getElement('sine.label').pulse();
+      figure.getElement('sine.label').pulse({ xAlign: 0.9 });
     },
     touchBorder: 0.1,
   },
@@ -349,7 +350,7 @@ const slides = [
   },
   {
     description: 5, form: '6',
-    shapeState: () => figure.getElement('sine.label').nextForm()
+    shapeState: () => figure.getElement('sine.label').goToForm({ form: '1', animate: 'move', duration: 1 }),
   },
   {
     description: 6, form: '6',
@@ -360,7 +361,7 @@ const slides = [
   {
     description: 6, form: '7',
     shapeState: () => {
-      figure.getElement('arc.label').nextForm();
+      figure.getElement('arc.label').goToForm({ form: '1', animate: 'move', duration: 1 });
     },
   },
   { description: 7, form: '8' },

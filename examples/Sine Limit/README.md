@@ -325,7 +325,7 @@ const modifiers = {
   },
   arc: {
     font: { color: [1, 0, 0, 1] },
-    onClick: () => figure.getElement('arc.label').pulse(),
+    onClick: () => figure.getElement('arc.label').pulse({ xAlign: 'left' }),
     touchBorder: 0.1,
   },
   angle: {
@@ -341,12 +341,13 @@ const modifiers = {
   },
   vertical: {
     font: { color: [1, 0, 0, 1] },
-    onClick: () => figure.getElement('sine.label').pulse(),
+    onClick: () => figure.getElement('sine.label').pulse({ xAlign: 'right' }),
     touchBorder: [0.1, 0.1, 0.1, 0.03],
   },
   limit: {
     font: { color: [0, 0.5, 1, 1] },
     onClick: () => eqn.pulse({ elements: ['as ', 'xTo', '_0', 'lim'], centerOn: '_0', xAlign: 'right' }),
+    touchBorder: 0.1,
   },
   sin: {
     font: { color: [1, 0, 0, 1], family: 'Times New Roman', size: 0.12 },
@@ -361,7 +362,7 @@ const modifiers = {
     font: { color: [1, 0, 0, 1], family: 'Times New Roman', style: 'italic', size: 0.12 },
     onClick: () => {
       eqn.pulse({ elements: ['sin', 'x_1'], centerOn: 'sin', xAlign: 'right', yAlign: 'bottom' });
-      figure.getElement('sine.label').pulse();
+      figure.getElement('sine.label').pulse({ xAlign: 0.9 });
     },
     touchBorder: 0.1,
   },
@@ -408,7 +409,7 @@ const slides = [
   },
   {
     description: 5, form: '6',
-    shapeState: () => figure.getElement('sine.label').nextForm()
+    shapeState: () => figure.getElement('sine.label').goToForm({ form: '1', animate: 'move', duration: 1 }),
   },
   {
     description: 6, form: '6',
@@ -419,15 +420,13 @@ const slides = [
   {
     description: 6, form: '7',
     shapeState: () => {
-      figure.getElement('arc.label').nextForm();
+      figure.getElement('arc.label').goToForm({ form: '1', animate: 'move', duration: 1 });
     },
   },
   { description: 7, form: '8' },
 ];
-```
 
-Finally the logic to make the buttons navigate through the slides is setup.
-```js
+
 // Slide management
 let slideIndex = 0;
 const nextButton = figure.getElement('nextButton');
@@ -488,6 +487,7 @@ prevButton.onClick = () => {
   slideIndex = (slideIndex - 1) < 0 ? slides.length - 1 : slideIndex - 1;
   showSlide(slideIndex);  
 }
+
 ```
 
 ### Tie dependent elements together and initialize
