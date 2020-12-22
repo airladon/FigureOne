@@ -1,35 +1,33 @@
 
-/* global touches steps */
-steps = [];
+/* global __touches __steps __duration __timeStep */
+__steps = [];
 let index = 0;
-let [time] = touches[0]
-const duration = 19;
-const step = 0.5;
-for (t = 0; t <= duration; t = Math.round((t + step) * 10) / 10) {
+let [time] = __touches[0]
+// const duration = 19;
+// const step = 0.5;
+for (t = 0; t <= __duration; t = Math.round((t + __timeStep) * 10) / 10) {
   let same = false;
   while (time <= t) {
-    steps.push(touches[index]);
+    __steps.push(__touches[index]);
     index += 1;
     if (time === t) {
       same = true;
     }
-    if (index < touches.length) {
-      [time] = touches[index];
+    if (index < __touches.length) {
+      [time] = __touches[index];
     } else {
-      time = duration + 1;
+      time = __duration + 1;
     }
   }
   if (!same) {
-    steps.push([t]);
+    __steps.push([t]);
   }
 }
 
-
 if (typeof process === 'object') {
-  // module.exports = { steps, title };
 } else {
   const startSteps = () => {
-    touches.forEach((touch) => {
+    __touches.forEach((touch) => {
       if (Array.isArray(touch)) {
         const [time, action, location] = touch;
         if (action != null) {

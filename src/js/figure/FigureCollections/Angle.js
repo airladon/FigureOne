@@ -1921,7 +1921,7 @@ class CollectionsAngle extends FigureElementCollection {
         yAlign: 'middle',
         width: length * percentLength + width,
         height: width,
-        color: [0, 0, 1, 0.005],
+        color: [0, 0, 1, 0],
         border: [[]],
         touchBorder: 'buffer',
       });
@@ -1960,7 +1960,7 @@ class CollectionsAngle extends FigureElementCollection {
         yAlign: 'middle',
         width: length * percentLength + width,
         height: width,
-        color: [1, 0, 1, 0.005],
+        color: [1, 0, 1, 0],
         offset: [length * (1 - percentLength), 0],
         border: [[]],
         touchBorder: 'buffer',
@@ -1998,7 +1998,7 @@ class CollectionsAngle extends FigureElementCollection {
         radius: length * percentLength,
         sides: 8,
         fill: true,
-        color: [1, 0, 0, 0.005],
+        color: [1, 0, 0, 0],
         border: [[]],
         touchBorder: 'buffer',
       });

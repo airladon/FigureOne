@@ -2083,10 +2083,20 @@ class Figure {
     const clientPoint = this.pixelToClient(pixelPoint);
     this.touchDownHandler(clientPoint);
     this.mockPreviousTouchPoint = clientPoint;
+    // $FlowFixMe
+    if (this.elements.elements[this.cursorElementName] != null) {
+      this.showCursor('down', p);
+      // cursor.setPosition(p);
+    }
   }
 
   touchUp() {
     this.touchUpHandler();
+    // $FlowFixMe
+    if (this.elements.elements[this.cursorElementName] != null) {
+      this.showCursor('up');
+      // cursor.setPosition(p);
+    }
   }
 
   touchMove(figurePosition: TypeParsablePoint) {
@@ -2095,6 +2105,11 @@ class Figure {
     const clientPoint = this.pixelToClient(pixelPoint);
     this.touchMoveHandler(this.mockPreviousTouchPoint, clientPoint);
     this.mockPreviousTouchPoint = clientPoint;
+    // $FlowFixMe
+    if (this.elements.elements[this.cursorElementName] != null) {
+      this.showCursor('down', p);
+      // cursor.setPosition(p);
+    }
   }
 
   // unpauseLegacy() {

@@ -19,6 +19,7 @@ function zeroPad(num, places) {
   return Array(+(zero > 0 && zero)).join('0') + num;
 }
 
+let lastTime = -1;
 function exampleTester(title, file, stepsIn) {
   jest.setTimeout(60000);
 
@@ -65,17 +66,17 @@ function exampleTester(title, file, stepsIn) {
             figure[t](loc);
           }
         }, [deltaTime, action, location]);
-        const image = await page.screenshot({ fullPage: true });
-        expect(image).toMatchImageSnapshot({
-          customSnapshotIdentifier: `${zeroPad(time * 1000, 5)}-${description}`,
-        });
+        if (time !== lastTime) {
+          const image = await page.screenshot({ fullPage: true });
+          expect(image).toMatchImageSnapshot({
+            customSnapshotIdentifier: `${zeroPad(time * 1000, 5)}-${description}`,
+          });
+          lastTime = time;
+        }
       });
   });
 }
 
-// export {
-//   exampleTester,
-// };
 
 module.exports = {
   exampleTester,
