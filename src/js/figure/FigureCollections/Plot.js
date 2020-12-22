@@ -223,7 +223,7 @@ function cleanTraces(
  *   },
  * });
  *
- * @example
+ * @example > collections.plot.multiple.grids.simple.titles
  * // Multiple grids and simple titles
  * figure.add({
  *   name: 'plot',

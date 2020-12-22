@@ -9,6 +9,6 @@ global.figure = {};
 require('../index.js');
 
 test('tester', () => {
-  console.log(figure.elements.drawOrder)
+  // console.log(figure.elements.drawOrder)
   expect(true).toBe(true);
 });

@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset='utf-8'>
-  <title>figureone 0.3.10 | Documentation</title>
-  <meta name='description' content='Interactive Figure Builder'>
+  <title>figureone 0.3.11 | Documentation</title>
+  <meta name='description' content='Draw, animate and interact with shapes, text, plots and equations in Javascript'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet'>
   <link href='assets/style.css' rel='stylesheet'>
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>figureone</h3>
-          <div class='mb1'><code>0.3.10</code></div>
+          <div class='mb1'><code>0.3.11</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -16253,6 +16253,24 @@ of the line.</p>
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>simple</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : simple and minimum computation polyline. Good
+for large numbers of points that need to be updated every animation frame.
+
+<code>widthIs</code>
+, 
+<code>dash</code>
+, 
+<code>arrow</code>
+ and all corner and line primitive properties are
+not available when a polyline is simple. (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>widthIs</span> <code class='quiet'>((<code>"mid"</code> | <code>"outside"</code> | <code>"inside"</code> | <code>"positive"</code> | <code>"negative"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
           : defines how the width is grown from the polyline's points.
 Only 
@@ -22808,7 +22826,8 @@ figure.add({
 });</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Multiple grids and simple titles</span>
+      <pre class='p1 overflow-auto round fill-light'>&gt; collections.plot.multiple.grids.simple.titles
+<span class="hljs-comment">// Multiple grids and simple titles</span>
 figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'plot'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.plot'</span>,
@@ -53086,7 +53105,7 @@ pulse to (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>centerOn</span> <code class='quiet'>((null | <a href="#figureelement">FigureElement</a> | <a href="#typeparsablepoint">TypeParsablePoint</a>)?)</code>
+          <span class='code bold'>centerOn</span> <code class='quiet'>((null | <a href="#figureelement">FigureElement</a> | <a href="#typeparsablepoint">TypeParsablePoint</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
           : center
 of scale or rotation pulse. By default, the element calling the pulse
 will be the default 

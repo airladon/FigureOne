@@ -1,5 +1,5 @@
 const { Point, Figure } = Fig;
-const figure = new Figure({ limits: [-2, -1.5, 4, 3], color: [0.5, 0.5, 0.5, 1] });
+figure = new Figure({ limits: [-2, -1.5, 4, 3], color: [0.5, 0.5, 0.5, 1] });
 
 // //////////////////////////////////////////////////////////////////
 // Setup the Shape
