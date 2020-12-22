@@ -36,7 +36,7 @@ function tester(htmlFile, framesFile) {
 
   const tests = [];
   let lastTime = 0;
-  __frames.forEach((step) => {
+  __steps.forEach((step) => {
     let time;
     let action;
     let location;
