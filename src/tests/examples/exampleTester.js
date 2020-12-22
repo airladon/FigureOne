@@ -57,13 +57,17 @@ function exampleTester(title, file, stepsIn) {
         figure.globalAnimation.frame(0);
       });
     });
-    test.each(tests)('%i %s',
+    test.each(tests)('%s %s',
       async (time, description, deltaTime, action, location) => {
         await page.evaluate(([delta, t, l]) => {
           figure.globalAnimation.frame(delta);
           if (t != null) {
-            const loc = Fig.tools.g2.getPoint(l || [0, 0]);
-            figure[t](loc);
+            if (t.startsWith('touch')) {
+              const loc = Fig.tools.g2.getPoint(l || [0, 0]);
+              figure[t](loc);
+            } else {
+              eval(t);
+            }
           }
         }, [deltaTime, action, location]);
         if (time !== lastTime) {

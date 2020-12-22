@@ -34,14 +34,14 @@ class DynamicSignal {
     this.data = [initialValue];
 
     // record the current time
-    this.lastTime = new Date().getTime();
+    this.lastTime = figure.globalAnimation.now();
   }
 
   // Update the signal data with the new value. Signal data is has a resolution
   // of 0.02s, so if this value comes in more than 0.04s after the last value
   // was recorder, then use interpolation to fill in the missing samples.
   update(value) {
-    const currentTime = new Date().getTime();
+    const currentTime = figure.globalAnimation.now();
     const deltaTime = (currentTime - this.lastTime) / 1000;
 
     // If the value has come in faster than the time resolution, then

@@ -31,10 +31,17 @@ if (typeof process === 'object') {
       if (Array.isArray(touch)) {
         const [time, action, location] = touch;
         if (action != null) {
-          const loc = Fig.tools.g2.getPoint(location || [0, 0]);
-          setTimeout(() => {
-            figure[action](location);
-          }, time * 1000);
+          if (action.startsWith('touch')) {
+            const loc = Fig.tools.g2.getPoint(location || [0, 0]);
+            setTimeout(() => {
+              figure[action](location);
+            }, time * 1000);
+          } else {
+            setTimeout(() => {
+              // action(figure);
+              eval(action);
+            }, time * 1000);
+          }
         }
       }
     });
