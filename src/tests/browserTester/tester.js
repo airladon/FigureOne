@@ -1,6 +1,12 @@
 /* global page figure timeoutId Fig */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable jest/no-export, no-await-in-loop */
+global.__frames = [];
+global.__title = '';
+global.__steps = [];
+global.__duration = 5;
+global.__timeStep = 0.5;
+
 // eslint-disable-next-line import/no-unresolved
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
 
@@ -20,12 +26,17 @@ function zeroPad(num, places) {
 }
 
 let lastTime = -1;
-function exampleTester(title, file, stepsIn) {
+function tester(htmlFile, framesFile) {
+  require('./start.js');
+  if (framesFile != null && framesFile !== '') {
+    require(framesFile);
+  }
+  require('./finish.js');
   jest.setTimeout(60000);
 
   const tests = [];
   let lastTime = 0;
-  stepsIn.forEach((step) => {
+  __steps.forEach((step) => {
     let time;
     let action;
     let location;
@@ -47,7 +58,9 @@ function exampleTester(title, file, stepsIn) {
     tests.push(test);
   });
 
-  describe(title, () => {
+  const file = `file:/${htmlFile}`;
+  lastTime = -1;
+  describe(__title, () => {
     beforeAll(async () => {
       await page.setViewportSize({ width: 500, height: 375 });
       await page.goto(file);
@@ -70,6 +83,7 @@ function exampleTester(title, file, stepsIn) {
             }
           }
         }, [deltaTime, action, location]);
+        // console.log(time, lastTime)
         if (time !== lastTime) {
           const image = await page.screenshot({ fullPage: true });
           expect(image).toMatchImageSnapshot({
@@ -83,6 +97,6 @@ function exampleTester(title, file, stepsIn) {
 
 
 module.exports = {
-  exampleTester,
+  tester,
 };
 
