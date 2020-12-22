@@ -163,6 +163,7 @@ figure.add([
     name: 'eqn',
     method: 'collections.equation',
     options: {
+      font: { family: 'Serif' },
       elements: {
         // Define equation elements 'a', 'b', and 'c' to be touchable with
         // some touchBorder buffer around them
@@ -313,4 +314,4 @@ get('button').onClick = () => {
 // Start by showing form ('0')
 get('eqn').showForm('0');
 
-console.log('poiuyt')
+console.log(get('eqn'))

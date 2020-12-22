@@ -1,8 +1,8 @@
-/* global page figure */
+/* global page figure timeoutId Fig */
+/* eslint-disable import/prefer-default-export */
 /* eslint-disable jest/no-export, no-await-in-loop */
 // eslint-disable-next-line import/no-unresolved
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
-const { steps } = require('./steps.js');
 
 expect.extend({ toMatchImageSnapshot });
 
@@ -11,28 +11,20 @@ page.on('console', (msg) => {
   for (let i = 0; i < msg.args().length; i += 1) {
     const result = `${msg.args()[i]}`;
     messages.push(result);
-    console.log(result)
   }
 });
 
 function zeroPad(num, places) {
-  var zero = places - num.toString().length + 1;
-  return Array(+(zero > 0 && zero)).join("0") + num;
+  const zero = places - num.toString().length + 1;
+  return Array(+(zero > 0 && zero)).join('0') + num;
 }
 
-let index = 0;
-function testBrowser(title, file, stepsIn) {
+function exampleTester(title, file, stepsIn) {
   jest.setTimeout(60000);
 
-  // function delay(time) {
-  //   return new Promise(function(resolve) {
-  //       setTimeout(resolve, time)
-  //   });
-  // }
   const tests = [];
   let lastTime = 0;
   stepsIn.forEach((step) => {
-    let test;
     let time;
     let action;
     let location;
@@ -43,7 +35,7 @@ function testBrowser(title, file, stepsIn) {
       time = step;
     }
     const delta = time - lastTime;
-    test = [
+    const test = [
       time,
       description || '',
       delta,
@@ -65,22 +57,27 @@ function testBrowser(title, file, stepsIn) {
       });
     });
     test.each(tests)('%i %s',
-    async (time, description, deltaTime, action, location) => {
-      await page.evaluate(([delta, t, l]) => {
-        figure.globalAnimation.frame(delta)
-        if (t != null) {
-          const loc = Fig.tools.g2.getPoint(l || [0, 0]);
-          figure[t](loc);
-        }
-      }, [deltaTime, action, location]);
-      image = await page.screenshot({ fullPage: true });
-      expect(image).toMatchImageSnapshot({
-        customSnapshotIdentifier: `${zeroPad(time * 1000, 5)}-${description}`,
+      async (time, description, deltaTime, action, location) => {
+        await page.evaluate(([delta, t, l]) => {
+          figure.globalAnimation.frame(delta);
+          if (t != null) {
+            const loc = Fig.tools.g2.getPoint(l || [0, 0]);
+            figure[t](loc);
+          }
+        }, [deltaTime, action, location]);
+        const image = await page.screenshot({ fullPage: true });
+        expect(image).toMatchImageSnapshot({
+          customSnapshotIdentifier: `${zeroPad(time * 1000, 5)}-${description}`,
+        });
       });
-      index += 1;
-    });
   });
 }
 
-console.log(`file:/${__dirname}/example.html`)
-testBrowser('Example 1', `file:/${__dirname}/example.html`, steps);
+// export {
+//   exampleTester,
+// };
+
+module.exports = {
+  exampleTester,
+};
+
