@@ -4,7 +4,7 @@ global.__steps = [];
 global.__duration = 5;
 global.__timeStep = 0.5;
 
-require('./touches.js');
+require('./frames.js');
 require('../../../src/tests/examples/finish.js');
 const { exampleTester } = require('../../../src/tests/examples/exampleTester.js')
 
