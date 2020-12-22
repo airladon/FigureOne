@@ -1,4 +1,4 @@
-
+/* global figure */
 figure.add({
   name: '__cursor',
   method: 'collections.cursor',

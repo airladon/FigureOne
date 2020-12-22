@@ -2305,7 +2305,6 @@ class FigureElement {
       // clip the elapsed time to the pulse time, and end pulsing (after this
       // draw). If the pulse time is 0, that means pulsing will loop
       // indefinitely.
-      // console.log(`${this.name}, ${round(now, 2)}, ${round(this.state.pulse.startTime, 2)}, ${round(deltaTime, 2)}, ${this.pulseSettings.time}`)
       if (deltaTime >= this.pulseSettings.time && this.pulseSettings.time !== 0) {
         // this.state.isPulsing = false;
         this.stopPulsing('complete');

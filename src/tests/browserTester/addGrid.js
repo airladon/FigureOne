@@ -1,3 +1,4 @@
+/* global figure */
 figure.add([
   {
     name: '__minorGrid',
@@ -8,7 +9,7 @@ figure.add([
       line: { width: 0.002 },
       xStep: 0.1,
       yStep: 0.1,
-      bounds: figure.limits._dup()
+      bounds: figure.limits._dup(),
     },
   },
   {
@@ -20,7 +21,7 @@ figure.add([
       line: { width: 0.005 },
       xStep: 0.5,
       yStep: 0.5,
-      bounds: figure.limits._dup()
+      bounds: figure.limits._dup(),
     },
   },
   {
@@ -33,4 +34,4 @@ figure.add([
     },
   },
 ]);
-figure.elements.toBack(['__origin', '__majorGrid', '__minorGrid'])
+figure.elements.toBack(['__origin', '__majorGrid', '__minorGrid']);

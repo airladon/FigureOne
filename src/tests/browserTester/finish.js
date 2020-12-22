@@ -1,11 +1,13 @@
 
-/* global __frames __steps __duration __timeStep */
+/* global __frames __steps __duration __timeStep figure timeoutId Fig */
+/* eslint-disable no-global-assign, no-eval */
+/* eslint no-unused-vars: ["error", { "vars": "local" }] */
 __steps = [];
 let index = 0;
 let [time] = __frames[0];
 // const duration = 19;
 // const step = 0.5;
-for (t = 0; t <= __duration; t = Math.round((t + __timeStep) * 10) / 10) {
+for (let t = 0; t <= __duration; t = Math.round((t + __timeStep) * 10) / 10) {
   let same = false;
   while (time <= t) {
     __steps.push(__frames[index]);
@@ -24,28 +26,27 @@ for (t = 0; t <= __duration; t = Math.round((t + __timeStep) * 10) / 10) {
   }
 }
 
-if (typeof process === 'object') {
-} else {
+if (typeof process !== 'object') {
   const startSteps = () => {
     __frames.forEach((touch) => {
       if (Array.isArray(touch)) {
-        const [time, action, location] = touch;
+        const [frameTime, action, location] = touch;
         if (action != null) {
           if (action.startsWith('touch')) {
             const loc = Fig.tools.g2.getPoint(location || [0, 0]);
             setTimeout(() => {
-              figure[action](location);
-            }, time * 1000);
+              figure[action](loc);
+            }, frameTime * 1000);
           } else {
             setTimeout(() => {
               // action(figure);
               eval(action);
-            }, time * 1000);
+            }, frameTime * 1000);
           }
         }
       }
     });
-  }
+  };
 
   timeoutId = setTimeout(() => {
     startSteps();

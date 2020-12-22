@@ -1,5 +1,6 @@
-/* global page figure timeoutId Fig */
-/* eslint-disable import/prefer-default-export */
+/* global page figure timeoutId Fig __steps __title */
+/* eslint-disable import/prefer-default-export, global-require */
+/* eslint-disable import/no-dynamic-require, no-eval */
 /* eslint-disable jest/no-export, no-await-in-loop */
 global.__frames = [];
 global.__title = '';
@@ -25,7 +26,7 @@ function zeroPad(num, places) {
   return Array(+(zero > 0 && zero)).join('0') + num;
 }
 
-let lastTime = -1;
+// let lastTime = -1;
 function tester(htmlFile, framesFile) {
   require('./start.js');
   if (framesFile != null && framesFile !== '') {
