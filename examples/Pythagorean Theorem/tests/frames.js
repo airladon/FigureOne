@@ -1,8 +1,8 @@
-/* global __title __touches __duration __timeStep */
+/* global __title __frames __duration __timeStep */
 __title = 'Example - Pythagorean Theorem';
 __duration = 32;
 __timeStep = 0.5;
-__touches = [
+__frames = [
   [0.1, 'touchDown', [0, -0.9], 'touch start'],
   [0.1, 'touchUp'],
   [10, 'touchDown', [-0.7, -2], 'touch eqn - a + b sqrd'],

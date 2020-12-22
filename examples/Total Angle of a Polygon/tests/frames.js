@@ -1,8 +1,8 @@
-/* global __title __touches __duration __timeStep */
+/* global __title __frames __duration __timeStep */
 __title = 'Example - Total Angle of a Polygon';
 __duration = 19;
 __timeStep = 0.5;
-__touches = [
+__frames = [
   [0.1, 'touchDown', [-1.5, -0.9], 'Touch Total Angle New'],
   [0.1, 'touchUp'],
   [1.5, 'touchDown', [-0.5, -0.9], 'Touch Total Angle Old'],

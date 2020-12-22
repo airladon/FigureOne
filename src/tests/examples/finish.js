@@ -1,20 +1,20 @@
 
-/* global __touches __steps __duration __timeStep */
+/* global __frames __steps __duration __timeStep */
 __steps = [];
 let index = 0;
-let [time] = __touches[0];
+let [time] = __frames[0];
 // const duration = 19;
 // const step = 0.5;
 for (t = 0; t <= __duration; t = Math.round((t + __timeStep) * 10) / 10) {
   let same = false;
   while (time <= t) {
-    __steps.push(__touches[index]);
+    __steps.push(__frames[index]);
     index += 1;
     if (time === t) {
       same = true;
     }
-    if (index < __touches.length) {
-      [time] = __touches[index];
+    if (index < __frames.length) {
+      [time] = __frames[index];
     } else {
       time = __duration + 1;
     }
@@ -27,7 +27,7 @@ for (t = 0; t <= __duration; t = Math.round((t + __timeStep) * 10) / 10) {
 if (typeof process === 'object') {
 } else {
   const startSteps = () => {
-    __touches.forEach((touch) => {
+    __frames.forEach((touch) => {
       if (Array.isArray(touch)) {
         const [time, action, location] = touch;
         if (action != null) {

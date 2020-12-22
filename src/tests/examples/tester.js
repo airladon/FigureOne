@@ -1,7 +1,7 @@
 /* global page figure timeoutId Fig */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable jest/no-export, no-await-in-loop */
-global.__touches = [];
+global.__frames = [];
 global.__title = '';
 global.__steps = [];
 global.__duration = 5;
@@ -26,17 +26,17 @@ function zeroPad(num, places) {
 }
 
 let lastTime = -1;
-function tester(htmlFile, touchesFile) {
+function tester(htmlFile, framesFile) {
   require('./start.js');
-  if (touchesFile != null && touchesFile !== '') {
-    require(touchesFile);
+  if (framesFile != null && framesFile !== '') {
+    require(framesFile);
   }
   require('./finish.js');
   jest.setTimeout(60000);
 
   const tests = [];
   let lastTime = 0;
-  __touches.forEach((step) => {
+  __frames.forEach((step) => {
     let time;
     let action;
     let location;
@@ -59,8 +59,8 @@ function tester(htmlFile, touchesFile) {
   });
 
   const file = `file:/${htmlFile}`;
-  console.log(tests)
-
+  // console.log(tests)
+  lastTime = -1;
   describe(__title, () => {
     beforeAll(async () => {
       await page.setViewportSize({ width: 500, height: 375 });
@@ -84,6 +84,7 @@ function tester(htmlFile, touchesFile) {
             }
           }
         }, [deltaTime, action, location]);
+        // console.log(time, lastTime)
         if (time !== lastTime) {
           const image = await page.screenshot({ fullPage: true });
           expect(image).toMatchImageSnapshot({

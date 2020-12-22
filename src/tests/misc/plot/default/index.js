@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-/* global Fig __touches */
+/* global Fig __frames */
 const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] });
 
 const pow = (power = 2, stop = 10, step = 0.05) => {

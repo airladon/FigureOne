@@ -1,9 +1,9 @@
-/* global __duration __touches __timeStep __title*/
+/* global __duration __frames __timeStep __title*/
 
 __title = 'Example - Sine Wave';
 __duration = 10;
 __timeStep = 0.2;
-__touches = [
+__frames = [
   [0,
     `
     figure.stop();

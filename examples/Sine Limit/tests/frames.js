@@ -1,8 +1,8 @@
-/* global __duration __touches __timeStep __title*/
+/* global __duration __frames __timeStep __title*/
 __title = 'Example - Sin Limit';
 __duration = 34;
 __timeStep = 0.5;
-__touches = [
+__frames = [
   [0.1, 'touchDown', [-0.4, 0.5], 'touch radius'],
   [0.5, 'touchMove', [-0.5, 0.6], 'move radius'],
   [1, 'touchMove', [-0.4, 0.5], 'move radius'],

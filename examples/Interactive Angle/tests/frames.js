@@ -1,8 +1,8 @@
-/* global __duration __touches __timeStep __title*/
+/* global __duration __frames __timeStep __title*/
 __title = 'Example - Interactive Angle';
 __duration = 4;
 __timeStep = 0.5;
-__touches = [
+__frames = [
   [0.1, 'touchDown', [-0.5, 0.5], 'Touch Down Angle Arm'],
   [0.5, 'touchMove', [-0.6, 0.4], 'Move Angle Arm 1'],
   [1, 'touchMove', [-0.7, 0.3], 'Move Angle Arm 2'],

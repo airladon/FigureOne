@@ -1,4 +1,4 @@
-global.__touches = [];
+global.__frames = [];
 global.__title = '';
 global.__steps = [];
 global.__duration = 5;
