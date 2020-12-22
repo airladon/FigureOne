@@ -1,4 +1,4 @@
 __title = 'Test Title';
-__duration = 1;
+__duration = 0;
 __timeStep = 1;
 __frames = [[0]];
