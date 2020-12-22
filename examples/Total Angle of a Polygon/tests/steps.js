@@ -1,11 +1,9 @@
-/* eslint no-unused-vars: ["error", {
-  "varsIgnorePattern": "[(timeoutId)|(step)|(duration)]",
-  "vars": "local",
-  }] */
 /* global figure steps */
-/* eslint-disable block-scoped-var, object-property-newline */
 
-
+// //////////////////////////////////////////////////////////////////
+// Customize this
+// //////////////////////////////////////////////////////////////////
+const title = 'Total Angle of a Polygon';
 const touches = [
   [0.1, 'touchDown', [-1.5, -1], 'Touch Total Angle New'],
   [0.11, 'touchUp'],
@@ -21,15 +19,22 @@ const touches = [
   [9.01, 'touchUp'],
   [11.5, 'touchDown', [1, -1.5], 'Touch simplify 2'],
   [11.51, 'touchUp'],
-  [12.5, 'touchDown', [1, -1.5], 'Touch simplify 2'],
+  [12.5, 'touchDown', [1, -1.5], 'Touch simplify 3'],
   [12.51, 'touchUp'],
+  [15, 'touchDown', [1, -1.5], 'Touch simplify 4'],
+  [15.01, 'touchUp'],
+  [16.5, 'touchDown', [1, -1.5], 'Touch simplify 5'],
+  [16.51, 'touchUp'],
 ];
+// //////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////
+
 
 var steps = [];
 let index = 0;
 let [time] = touches[0]
-const duration = 14;
-const step = 0.4;
+const duration = 19;
+const step = 0.5;
 for (t = 0; t <= duration; t = Math.round((t + step) * 10) / 10) {
   let same = false;
   while (time <= t) {
@@ -51,7 +56,7 @@ for (t = 0; t <= duration; t = Math.round((t + step) * 10) / 10) {
 
 
 if (typeof process === 'object') {
-  module.exports = { steps };
+  module.exports = { steps, title };
 } else {
   const startSteps = () => {
     steps.forEach((step) => {
