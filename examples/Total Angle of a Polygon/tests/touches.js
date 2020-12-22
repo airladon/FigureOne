@@ -1,5 +1,5 @@
 /* global __title __touches __duration __timeStep */
-__title = 'Total Angle of a Polygon';
+__title = 'Example - Total Angle of a Polygon';
 __duration = 19;
 __timeStep = 0.5;
 __touches = [

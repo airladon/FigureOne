@@ -23,5 +23,14 @@ figure.add([
       bounds: figure.limits._dup()
     },
   },
+  {
+    name: '__origin',
+    method: 'primitives.polygon',
+    options: {
+      color: [0.9, 0.9, 0.9, 1],
+      radius: 0.025,
+      sides: 10,
+    },
+  },
 ]);
-figure.elements.toBack(['__majorGrid', '__minorGrid'])
+figure.elements.toBack(['__origin', '__majorGrid', '__minorGrid'])
