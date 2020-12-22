@@ -2,7 +2,7 @@
 /* global __touches __steps __duration __timeStep */
 __steps = [];
 let index = 0;
-let [time] = __touches[0]
+let [time] = __touches[0];
 // const duration = 19;
 // const step = 0.5;
 for (t = 0; t <= __duration; t = Math.round((t + __timeStep) * 10) / 10) {
