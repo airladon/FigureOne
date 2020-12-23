@@ -19,13 +19,13 @@ Then, from the repository root, start the development container (you will need t
 
 The container will start and present a command prompt:
 ```bash
-cd tutorials/8\ -\ Texture/
+cd tutorials/08\ -\ Texture/
 python -m http.server 8080
 ```
 
 Alternately, a node server can also be used from the initial path
 ```bash
-http-server tutorials/8\ -\ Texture
+http-server tutorials/08\ -\ Texture
 ```
 
 You can then open a browser and go to http://localhost:8080.
@@ -69,4 +69,7 @@ Here we are using the `texture-rect.jpg` image. The image will be mapped directl
         mapTo: new Fig.Rect(-1, -0.667, 2, 1.333),
       },
 ```
-`texture-rect.jpg` has an aspect ratio of 2:1.333, and so here we are mapping the image to the shape's space with a rectangle that is a little larger than the shape.
+
+`texture-rect.jpg` has an aspect ratio of 1:0.667, and so here we are mapping the image to the shape's space with a rectangle that is a little larger than the shape.
+
+

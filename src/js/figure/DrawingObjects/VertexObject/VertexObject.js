@@ -114,6 +114,7 @@ class VertexObject extends DrawingObject {
 
   setupBuffer(numPoints: number = 0) {
     for (let glIndex = 0; glIndex < this.webgl.length; glIndex += 1) {
+      // console.log(glIndex)
       const gl = this.gl[glIndex];
       const webgl = this.webgl[glIndex];
       // const texture = this.texture[glIndex];
@@ -164,7 +165,7 @@ class VertexObject extends DrawingObject {
           );
           gl.bindTexture(gl.TEXTURE_2D, glTexture);
           const { src } = texture;
-          if (src) {
+          if (src && texture.data == null) {
             // Fill the texture with a 1x1 blue pixel.
             gl.texImage2D(
               gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0,
@@ -225,7 +226,9 @@ class VertexObject extends DrawingObject {
         // this.gl.activeTexture(this.gl.TEXTURE0 + texture.index);
         // this.gl.bindTexture(this.gl.TEXTURE_2D, null);
         if (webgl.textures[texture.id].glTexture != null) {
-          gl.deleteTexture(webgl.textures[texture.id].glTexture);
+          gl.activeTexture(gl.TEXTURE0 + webgl.textures[texture.id].index);
+          gl.bindTexture(gl.TEXTURE_2D, null);
+          // gl.deleteTexture(webgl.textures[texture.id].glTexture);
           webgl.textures[texture.id].glTexture = null;
         }
         if (texture.buffer != null) {

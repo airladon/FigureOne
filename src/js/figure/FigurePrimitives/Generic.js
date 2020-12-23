@@ -3,7 +3,7 @@
 import VertexGeneric from '../DrawingObjects/VertexObject/VertexGeneric';
 import { FigureElementPrimitive } from '../Element';
 import {
-  Point, Transform, Rect,
+  Point, Transform, Rect, getRect,
 } from '../../tools/g2';
 import WebGLInstance from '../webgl/webgl';
 // import type { CPY_Step } from '../geometries/copy/copy';
@@ -35,8 +35,8 @@ export default function Generic(
     // holeBorder,
     // drawType,
     textureLocation,
-    textureVertexSpace,
-    textureCoords,
+    getRect(textureVertexSpace),
+    getRect(textureCoords),
     textureRepeat,
     // copy,
   );
