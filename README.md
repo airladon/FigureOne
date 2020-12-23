@@ -4,7 +4,9 @@ Draw, animate and interact with shapes, text, plots and equations.
 
 The library used to draw interactive figures at <a href="https://www.thisiget.com">thisiget.com</a>.
 
-This library uses WebGL and therefore requires HTML5 support.
+See the [Examples](https://airladon.github.io/FigureOne/), [API Reference](https://airladon.github.io/FigureOne/api/) and the [Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials) and you'll be making beautiful, interactive figures in no time.
+
+![](examples/Sine%20Limit/example.gif)
 
 ## Getting Started
 
@@ -49,7 +51,6 @@ And you will see:
 
 ![](./docs/example.gif)
 
-Then, check out the **[Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials)**, **[API Reference](https://airladon.github.io/FigureOne/.)** and **[Examples](https://github.com/airladon/FigureOne/tree/master/tutorials)** and you'll be making beautiful, interactive figures in no time.
 
 ## Tutorials
 
