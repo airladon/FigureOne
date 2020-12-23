@@ -243,7 +243,7 @@ function cleanTraces(
  *     xAxis: {
  *       grid: [
  *         { step: 2, width: 0.005, dash: [], color: [0.7, 0.7, 1, 1] },
- *         { step: 0.5, width: 0.005, dash: [0.01, 0.01], color: [1, 0.7, 0.7, 1] } * ,
+ *         { step: 0.5, width: 0.005, dash: [0.01, 0.01], color: [1, 0.7, 0.7, 1] },
  *       ],
  *       title: 'time (s)',
  *     },
