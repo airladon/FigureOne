@@ -12,54 +12,57 @@ function zeroPad(num, places) {
   return Array(+(zero > 0 && zero)).join('0') + num;
 }
 
-function tester(path, initialization = '') {
+function tester(snapshots, path, initialization = '', threshold = 0) {
   const examples = getExamples(path);
   const start = `
-  const figure = new Fig.Figure({ limits: [-3, -2.25, 6, 4.5], color: [1, 0, 0, 1], lineWidth: 0.01, font: { size: 0.1 } });
+const figure = new Fig.Figure({
+  limits: [-3, -2.25, 6, 4.5],
+  color: [1, 0, 0, 1],
+  lineWidth: 0.01,
+  font: { size: 0.1 },
+});
 
-  figure.add([
-    {
-      name: '__minorGrid',
-      method: 'primitives.grid',
-      options: {
-        position: [0, 0],
-        color: [0.9, 0.9, 0.9, 1],
-        line: { width: 0.002 },
-        xStep: 0.1,
-        yStep: 0.1,
-        bounds: figure.limits._dup(),
-      },
+figure.add([
+  {
+    name: '__minorGrid',
+    method: 'primitives.grid',
+    options: {
+      position: [0, 0],
+      color: [0.9, 0.9, 0.9, 1],
+      line: { width: 0.002 },
+      xStep: 0.1,
+      yStep: 0.1,
+      bounds: figure.limits._dup(),
     },
-    {
-      name: '__majorGrid',
-      method: 'primitives.grid',
-      options: {
-        position: [0, 0],
-        color: [0.9, 0.9, 0.9, 1],
-        line: { width: 0.005 },
-        xStep: 0.5,
-        yStep: 0.5,
-        bounds: figure.limits._dup(),
-      },
+  },
+  {
+    name: '__majorGrid',
+    method: 'primitives.grid',
+    options: {
+      position: [0, 0],
+      color: [0.9, 0.9, 0.9, 1],
+      line: { width: 0.005 },
+      xStep: 0.5,
+      yStep: 0.5,
+      bounds: figure.limits._dup(),
     },
-    {
-      name: '__origin',
-      method: 'primitives.polygon',
-      options: {
-        color: [0.9, 0.9, 0.9, 1],
-        radius: 0.025,
-        sides: 10,
-      },
+  },
+  {
+    name: '__origin',
+    method: 'primitives.polygon',
+    options: {
+      color: [0.9, 0.9, 0.9, 1],
+      radius: 0.025,
+      sides: 10,
     },
-  ]);
+  },
+]);
 
-  ${initialization}
+${initialization}
 
-  figure.globalAnimation.setManualFrames();
-  figure.globalAnimation.frame(0);
-  `;
-
-  console.log(start)
+figure.globalAnimation.setManualFrames();
+figure.globalAnimation.frame(0);
+`;
 
   const tests = [];
   Object.keys(examples).forEach((key) => {
@@ -84,6 +87,8 @@ function tester(path, initialization = '') {
       let image = await page.screenshot({ fullPage: true });
       expect(image).toMatchImageSnapshot({
         customSnapshotIdentifier: `${id}-00000`,
+        failureThreshold: threshold,
+        customSnapshotsDir: `${__dirname}/${snapshots}`,
       });
       if (remainingDuration > 0) {
         // const num = 5;
@@ -97,12 +102,14 @@ function tester(path, initialization = '') {
           image = await page.screenshot({ fullPage: true });
           expect(image).toMatchImageSnapshot({
             customSnapshotIdentifier: `${id}-${zeroPad(Math.floor(timeStep * i * 1000), 5)}`,
+            failureThreshold: threshold,
+            customSnapshotsDir: `${__dirname}/${snapshots}`,
           });
         }
       }
-      if (id.endsWith('1ff30952')) {
-        fs.writeFileSync(`${__dirname}/index.js`, `${start}\n${code}`);
-      }
+      // if (id.endsWith('1ff30952')) {
+      //   fs.writeFileSync(`${__dirname}/index.js`, `${start}\n${code}`);
+      // }
     });
 }
 
