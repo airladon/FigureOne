@@ -1,4 +1,4 @@
-// Create figure and make it able to be touched
+// Create figure
 const figure = new Fig.Figure({ color: [1, 0, 0, 1] });
 
 // Add circle to figure
@@ -9,12 +9,13 @@ figure.add(
     options: {
       sides: 100,
       radius: 0.2,
-      touchBorder: 0.2,
+      touchBorder: 0.5,
     },
     mods: {
       isMovable: true,
       move: {
         bounds: 'figure',
+        freely: { deceleration: 0.5 },
       },
     },
   },

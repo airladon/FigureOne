@@ -272,7 +272,7 @@ figure.add([
 
 This example allows a user to step through a number of descriptions to build up the equation to its final form. Each step has a unique state: a description, equation form and shape state. We will call each of these states a slide (like in a presentation).
 
-We start by defining the descriptions. The descriptions are [TextLines](https://airladon.github.io/FigureOne/#obj_textlines) objects. This is an array of strings, where each string in the array represents a new line of text. Within the strings, words or phrases are enclosed with the special char "|". These words are then modified to have a custom color and style, and can also be made interactive.
+We start by defining the descriptions. The descriptions are [TextLines](https://airladon.github.io/FigureOne/api/#obj_textlines) objects. This is an array of strings, where each string in the array represents a new line of text. Within the strings, words or phrases are enclosed with the special char "|". These words are then modified to have a custom color and style, and can also be made interactive.
 
 Therefore, first the descriptions and their associated modifiers are defined.
 

@@ -272,7 +272,7 @@ export type OBJ_Pulse = {
  * @property {?(string | ((boolean) => void))} callback called each frame of
  * free movement
  */
-type FigureElementMoveFreely = {
+type OBJ_ElementMoveFreely = {
   zeroVelocityThreshold: TypeTransformValue,  // Velocity considered 0
   deceleration: TypeTransformValue,           // Deceleration
   bounceLoss: TypeTransformValue,
@@ -286,13 +286,13 @@ type FigureElementMoveFreely = {
  * @property {string | (?(Transform) => Transform)} transformClip user
  * defined method to clip velocity per frame
  * @property {TypeTransformValue} maxVelocity maximum velocity allowed (5)
- * @property {FigureElementMoveFreely} freely free movement parameters
+ * @property {OBJ_ElementMoveFreely} freely free movement parameters
  * @property {boolean} canBeMovedAfterLosingTouch touch or mouse dragging will
  * continue to move element even after the touch/cursor position is outside
  * the element boundary
  * @property {FigureElement | null} element
  */
-type FigureElementMove = {
+type OBJ_ElementMove = {
   bounds: TransformBounds | 'none' | 'figure',
   // boundsToUse: TransformBounds,
   sizeInBounds: boolean,
@@ -300,7 +300,7 @@ type FigureElementMove = {
   // includeSize: boolean,
   transformClip: string | (?(Transform) => Transform);
   maxVelocity: TypeTransformValue;
-  freely: FigureElementMoveFreely,
+  freely: OBJ_ElementMoveFreely,
   canBeMovedAfterLosingTouch: boolean;
   type: 'rotation' | 'translation' | 'scaleX' | 'scaleY' | 'scale';
   element: FigureElement | null;
@@ -431,7 +431,7 @@ type ElementState = {
  * dimming element
  * @property {number} opacity number between 0 and 1 that is multiplied with
  * `color` alpha channel to get final opacity
- * @property {FigureElementMove} move movement parameters
+ * @property {OBJ_ElementMove} move movement parameters
  * @property {Scenarios} scenarios scenario presets
  * @property {AnimationManager} animations element animation manager
  * @property {SubscriptionManager} subscriptions subscription manager for
@@ -503,7 +503,7 @@ class FigureElement {
   //   // eslint-disable-next-line no-use-before-define
   //   element: FigureElementCollection | FigureElementPrimitive | null;
   // };
-  move: FigureElementMove;
+  move: OBJ_ElementMove;
 
   onAdd: null | 'string' | () => void;
   // scenarios: {

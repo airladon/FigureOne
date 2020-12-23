@@ -199,19 +199,19 @@ export type OBJ_Collection = {
  * Textures can be used instead of colors to fill a shape in WebGL.
  *
  * Textures are effectively overlaid on a shape. Therefore, to overlay the
- * texture with the correct offset, magnification and aspect ratio the texture
- * must be mapped to the space the shape's vertices are defined in
- * (vertex space).
+ * texture with the correct offset, magnification and aspect ratio of the
+ * texture must be mapped to the space the shape's vertices are defined in
+ * (draw space).
  *
  * This is done by defining a window, or rectangle, for the texture file
- * (`mapFrom`) and a similar window in vertex space (`mapTo`).
+ * (`mapFrom`) and a similar window in draw space (`mapTo`).
  * The texture is then offset and scaled such that its window aligns with the
- * vertex space window.
+ * draw space window.
  *
  * The texture file has coordinates of (0, 0) in the bottom left corner and
  * (1, 1) in the top right corner.
  *
- * Therefore, to make a 1000 x 500 image fill a 2 x 1 rectangle in vertex space
+ * Therefore, to make a 1000 x 500 image fill a 2 x 1 rectangle in draw space
  * centered at (0, 0) you would define:
  *
  * ```
@@ -235,7 +235,7 @@ export type OBJ_Collection = {
  * ```
  *
  * Two ways of doing this are provided as sometimes it is more convenient to
- * think about the window on the image, and other times the window in vertex
+ * think about the window on the image, and other times the window in draw
  * space.
  *
  * If the shape has fill outside the texture boundaries then either the
@@ -249,8 +249,8 @@ export type OBJ_Collection = {
  * and then the rectangle repeated throughout the figure.
  *
  * @property {string} src The url or location of the image
- * @property {Rect} [mapTo] vertex space window (`new Rect(-1, -1, 2, 2)`)
- * @property {Rect} [mapFrom] image space window (`new Rect(0, 0, 1, 1)`)
+ * @property {TypeParsableRect} [mapTo] draw space window (`new TypeParsableRect(-1, -1, 2, 2)`)
+ * @property {TypeParsableRect} [mapFrom] image space window (`new Rect(0, 0, 1, 1)`)
  * @property {boolean} [repeat] `true` will tile the image. Only works with
  * images that are square whose number of side pixels is a power of 2 (`false`)
  * @property {() => void} [onLoad] textures are loaded asynchronously, so this

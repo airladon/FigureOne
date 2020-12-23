@@ -47,10 +47,10 @@ figure.getElement('c').animations.new()
 
 ## Explanation
 
-There are two types of figure elements (subclasses of [FigureElement](https://airladon.github.io/FigureOne/#figureelement)):
+There are two types of figure elements (subclasses of [FigureElement](https://airladon.github.io/FigureOne/api/#figureelement)):
 
-* [FigureElementPrimitive](https://airladon.github.io/FigureOne/#figureelementprimitive) - An object that manages a drawing primitive like a set of vertices, some text or a html element
-* [FigureElementCollection](https://airladon.github.io/FigureOne/#figureelementcollection) - An object that manages a group of drawing elements (can be both primitives and collections)
+* [FigureElementPrimitive](https://airladon.github.io/FigureOne/api/#figureelementprimitive) - An object that manages a drawing primitive like a set of vertices, some text or a html element
+* [FigureElementCollection](https://airladon.github.io/FigureOne/api/#figureelementcollection) - An object that manages a group of drawing elements (can be both primitives and collections)
 
 All drawing elements have their own `transform` that *translates*, *rotates* and/or *scales* the element.
 
@@ -60,7 +60,7 @@ That way, if drawing elements should be moved or scaled together, they can be ad
 
 Thus, a drawing element in a hierarchy of collections will be transformed by the chain of all its hierarchical parents.
 
-This example also shows how a figure element can be accessed. The main [Figure](https://airladon.github.io/FigureOne/#figure) and all [FigureElementCollection](https://airladon.github.io/FigureOne/#figureelementcollection)s have a `getElement` method, to which a string can be passed with the element's name. In the example above, the collection element is retrieved by:
+This example also shows how a figure element can be accessed. The main [Figure](https://airladon.github.io/FigureOne/api/#figure) and all [FigureElementCollection](https://airladon.github.io/FigureOne/api/#figureelementcollection)s have a `getElement` method, to which a string can be passed with the element's name. In the example above, the collection element is retrieved by:
 
 ```js
 figure.getElement('c')
@@ -74,7 +74,7 @@ figure.getElement('c.tri');
 
 ## Alternative element creation
 
-The above example uses an object hierarchy to define the figure elements. It is sometimes more useful to instantiate the elements separately. All figure elements can be created using methods within [figure.primitives](https://airladon.github.io/FigureOne/#figureprimitives) or [figure.collections](https://airladon.github.io/FigureOne/#figureprimitives).
+The above example uses an object hierarchy to define the figure elements. It is sometimes more useful to instantiate the elements separately. All figure elements can be created using methods within [figure.primitives](https://airladon.github.io/FigureOne/api/#figureprimitives) or [figure.collections](https://airladon.github.io/FigureOne/api/#figureprimitives).
 
 The above example can be rewritten as:
 

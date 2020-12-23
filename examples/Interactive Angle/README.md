@@ -50,4 +50,4 @@ figure.elements._a.setMovable({
 
 The FigureOne API includes a dynamic angle collection, and so most of the logic for this example already exists. All that needs to be done is setup the options to customize the look and behavior.
 
-The API reference documents the [angle collection](https://airladon.github.io/FigureOne/#collectionsangle), and its [options object](https://airladon.github.io/FigureOne/#col_angle).
+The API reference documents the [angle collection](https://airladon.github.io/FigureOne/api/#collectionsangle), and its [options object](https://airladon.github.io/FigureOne/api/#col_angle).

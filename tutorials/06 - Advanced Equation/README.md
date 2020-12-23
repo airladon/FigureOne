@@ -110,7 +110,7 @@ figure.add(
 ### Element Definition
 Equations are defined with two main keys, `elements` and `forms`.
 
-Each equation element is a [FigureElementPrimitive](https://airladon.github.io/FigureOne/#figureelementprimitive) with a unique name. Therefore, if you have an equation with several *x* elements, you will need to give them each unique names. This is so when equations are animated between forms, it is clear which *x* in the first form moves to which *x* in the second form.
+Each equation element is a [FigureElementPrimitive](https://airladon.github.io/FigureOne/api/#figureelementprimitive) with a unique name. Therefore, if you have an equation with several *x* elements, you will need to give them each unique names. This is so when equations are animated between forms, it is clear which *x* in the first form moves to which *x* in the second form.
 
 Therefore, one way to define multiple *x* elements would be:
 ```js

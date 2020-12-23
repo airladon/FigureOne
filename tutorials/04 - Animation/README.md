@@ -39,7 +39,7 @@ figure.getElement('hexagon').animations.new()
 
 ## Explanation
 
-Each [FigureElement](https://airladon.github.io/FigureOne/#figureelement) can manage its own animation, or another element's animation.
+Each [FigureElement](https://airladon.github.io/FigureOne/api/#figureelement) can manage its own animation, or another element's animation.
 
 A set of animation steps can be created using a fluid api (builder pattern). For instance the below code will animate an element to position (1, 1) over 1s, and then to (0, 0) over the next second.
 
@@ -52,4 +52,4 @@ element.animations.new()
 
 Each aniamtion step has a number of parameters. Parameters are custom to the type of animation step, but usually will contain a `target`, `delta`, and/or a `duration`/`velocity` parameter.
 
-For a full list of animation steps available, and a more detailed walkthrough on using animations see the animation section of the [API Reference](https://airladon.github.io/FigureOne/#animation).
+For a full list of animation steps available, and a more detailed walkthrough on using animations see the animation section of the [API Reference](https://airladon.github.io/FigureOne/api/#animation).

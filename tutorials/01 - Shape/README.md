@@ -75,7 +75,7 @@ First a figure is created. `Fig` is the FigureOne library and is globally availa
 const figure = new Fig.Figure();
 ```
 
-A [Figure](https://airladon.github.io/FigureOne/#figure) is an object that manages figure elements ([FigureElement](https://airladon.github.io/FigureOne/#figureelement)). By default it attaches to a HTML `div` element with id `figureOneContainer`. A custom id can also be used by using a `htmlId` parameter when creating the figure:
+A [Figure](https://airladon.github.io/FigureOne/api/#figure) is an object that manages figure elements ([FigureElement](https://airladon.github.io/FigureOne/api/#figureelement)). By default it attaches to a HTML `div` element with id `figureOneContainer`. A custom id can also be used by using a `htmlId` parameter when creating the figure:
 
 ```js
 const figure = new Fig.Figure({ htmlId: 'customId' });
@@ -102,7 +102,7 @@ We are defining a *triangle* figure element using the `triangle` method with the
 
 Options objects are used to define elements within a figure. Options objects can be as simple or complex as needed to customize the properties of an element. To keep options objects as small as possible, only the properties that need customization should be defined.
 
-The triangle's options object is [here](https://airladon.github.io/FigureOne/#obj_triangle).
+The triangle's options object is [here](https://airladon.github.io/FigureOne/api/#obj_triangle).
 
 
 

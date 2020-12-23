@@ -71,7 +71,7 @@ Here we are doing some customization to the automatically generated plot includi
 * Adding a legend
 
 These are only some of the customizations possible. To see all customizations, see
-* [Plot](https://airladon.github.io/FigureOne/#collectionsplot)
-* [Axis](https://airladon.github.io/FigureOne/#collectionsaxis)
-* [Trace](https://airladon.github.io/FigureOne/#collectionstrace)
-* [Legend](https://airladon.github.io/FigureOne/#collectionslegend)
+* [Plot](https://airladon.github.io/FigureOne/api/#collectionsplot)
+* [Axis](https://airladon.github.io/FigureOne/api/#collectionsaxis)
+* [Trace](https://airladon.github.io/FigureOne/api/#collectionstrace)
+* [Legend](https://airladon.github.io/FigureOne/api/#collectionslegend)
