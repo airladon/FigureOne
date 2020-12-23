@@ -3,6 +3,7 @@ module.exports = {
   testRegex: [
     '/src/.*\\.btest\\.js',
     '/examples/.*\\.btest\\.js',
+    '/tutorials/.*\\.btest\\.js',
   ],
   testPathIgnorePatterns: ['/node_modules/', '\\.snap$'],
 };

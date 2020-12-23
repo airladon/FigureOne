@@ -27,7 +27,7 @@ function zeroPad(num, places) {
 }
 
 // let lastTime = -1;
-function tester(htmlFile, framesFile) {
+function tester(htmlFile, framesFile, threshold = 0) {
   require('./start.js');
   if (framesFile != null && framesFile !== '') {
     require(framesFile);
@@ -89,6 +89,7 @@ function tester(htmlFile, framesFile) {
           const image = await page.screenshot({ fullPage: true });
           expect(image).toMatchImageSnapshot({
             customSnapshotIdentifier: `${zeroPad(time * 1000, 5)}-${description}`,
+            failureThreshold: threshold,
           });
           lastTime = time;
         }
