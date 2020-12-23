@@ -59,7 +59,7 @@ figure.add(
 
 ## Explanation
 
-Most shapes can use a [Texture Object](https://airladon.github.io/FigureOne/#obj_texture) to define a texture instead of a color.
+Most shapes can use a [Texture Object](https://airladon.github.io/FigureOne/api/#obj_texture) to define a texture instead of a color.
 
 Here we are using the `texture-rect.jpg` image. The image will be mapped directly to the shape, so if the shape's aspect ratio is different to that of the image you will need to either define a rectangle in the image to map to the shape (`mapFrom`), or define the coordinates in the space the shape is defined in that you want to map the image to (`mapTo`).
 
