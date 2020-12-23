@@ -48,7 +48,7 @@ export type OBJ_AnimationBuilder = {
  *   .delay(1)
  *   .position({ target: [1, 0], duration: 2 })
  *   .delay(1)
- *   .rotate({ target: Math.PI, duration: 2 })
+ *   .rotation({ target: Math.PI, duration: 2 })
  *   .start();
  */
 export default class AnimationBuilder extends animation.SerialAnimationStep {
