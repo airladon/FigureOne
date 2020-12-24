@@ -29,7 +29,11 @@ Press on the different terms of an equation to see where they come from, then st
 
 ![](Total%20Angle%20of%20a%20Polygon/example.gif)
 
-## **[Sine Limit](https://github.com/airladon/FigureOne/tree/master/examples/Sine%20Limit%20)**
+## **[Sine Limit](https://github.com/airladon/FigureOne/tree/master/examples/Sine%20Limit)**
 
 ![](Sine%20Limit/example.gif)
+
+## **[Holiday Equation](https://github.com/airladon/FigureOne/tree/master/examples/Holiday%20Equation)**
+
+![](Holiday%20Equation/example.gif)
 

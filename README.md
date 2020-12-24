@@ -117,6 +117,10 @@ The tutorials introduce how to use FigureOne and many of the main concepts.
 
 ![](examples/Total%20Angle%20of%20a%20Polygon/example.gif)
 
+### **[Holiday Equation](https://github.com/airladon/FigureOne/tree/master/examples/Holiday%20Equation)**
+
+![](examples/Holiday%20Equation/example.gif)
+
 
 ## NPM Package
 
