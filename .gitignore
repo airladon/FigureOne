@@ -3,3 +3,4 @@ package
 *code-workspace
 reports/
 node_modules
+src/tests/api-examples/index.js
