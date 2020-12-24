@@ -2,6 +2,8 @@
 
 For an introduction to FigureOne, see the tutorials.
 
+To interact with examples, either download the html and js files in the example, or go [here](https://airladon.github.io/FigureOne/).
+
 ## **[Interactive Angle](https://github.com/airladon/FigureOne/tree/master/examples/Interactive%20Angle)**
 
 A dynamic angle that changes its size, position and orientation with user interaction.
