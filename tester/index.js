@@ -186,12 +186,12 @@ figure.add([
 ]);
 
 
-const ball = (x, index) => ({
+const ball = (x, index, sides = 10) => ({
   name: `ball${index}`,
   method: 'primitives.polygon',
   path: 'balls',
   options: {
-    sides: 10,
+    sides,
     radius: 0.02,
     transform: new Transform().translate(x, 0),
     color: [1, 0, 0, 1],
@@ -203,15 +203,7 @@ const ball = (x, index) => ({
 
 
 const xValues = range(-1.46, 1.5, 0.04);
-figure.add(ball(-1.5, 0));
 const data = new Recording(0);
-
-const b0 = figure.getElement('balls.ball0');
-b0.setMovable();
-b0.touchBorder = 0.2;
-b0.move.bounds = {
-  translation: { left: startX, right: startX, bottom: -A, top: A }
-};
 
 xValues.forEach((x, index) => {
   figure.add(ball(x, index + 1));
@@ -219,6 +211,13 @@ xValues.forEach((x, index) => {
   b.custom.x = x;
 });
 
+figure.add(ball(-1.5, 0, 50));
+const b0 = figure.getElement('balls.ball0');
+b0.setMovable();
+b0.touchBorder = 0.2;
+b0.move.bounds = {
+  translation: { left: startX, right: startX, bottom: -A, top: A }
+};
 
 // Update function for everytime we want to update the signal
 function update() {
@@ -269,6 +268,19 @@ const disturbSine = () => {
 
 figure.elements._balls.dim();
 
+const brac1 = content => ({
+  brac: {
+    left: 'lb1', content, right: 'rb1', height: 0.2, descent: 0.05,
+  },
+});
+const brac2 = content => ({
+  brac: {
+    left: 'lb2', content, right: 'rb2', height: 0.2, descent: 0.05,
+  },
+});
+const scale = (content, s = 0.8) => ({
+  scale: { content, scale: s },
+});
 // Add equation
 figure.add([
   {
@@ -288,16 +300,38 @@ figure.add([
         w1: '\u03c9',
         w2: '\u03c9',
         min: ' \u2212 ',
+        comma1: ', ',
+        comma2: ', ',
+        v: { symbol: 'vinculum' },
       },
       phrases: {
-        ytx: ['y', { brac: ['lb1', ['t_1', 'comma', 'x_1'], 'rb1'] }],
-        sinkx: ['sin', { brac: ['lb2', ['w1', 't_2', 'min', 'k', 'x_2'], 'rb2'] }],
+        ytx: ['y_1', brac1(['x_3', 'comma1', 't_0'])],
+        sinkx: ['sin', brac2(['w1', 't_2', 'min', 'k', 'x_2'])],
+        t1: { sub: ['t_2', '_1_1'] },
+        t12: { sub: ['t_3', '_1_2'] },
+        x1: { sub: ['x_2', '_1_3'] },
+        x12: { sub: ['x_3', '_1_4'] },
+        x0: { sub: ['x_1', '_0'] },
+        yx1: ['y_1', brac1(['x12', 'comma1', 't_0'])],
+        yx0: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 't12'])],
+        x1OnC: { frac: ['x1', 'v', 'c'] },
+        xOnC: { frac: ['x_2', 'v', 'c'] },
+        sX1OnC: scale('x1OnC'),
+        sXOnC: scale('xOnC'),
+        yx1c: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 'sX1OnC'])],
+        yxc: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 'sXOnC'])],
       },
-      formDefaults: { alignment: { fixTo: 'equals' } },
+      formDefaults: {
+        alignment: { fixTo: 'equals' },
+        duration: 1,
+      },
       forms: {
         0: ['ytx', 'equals', 'sinkx'],
         1: [],
-        2: ['t', 'equals', { frac: ['x', 'vinculum', 'c'] }],
+        2: ['t1', 'equals', 'x1OnC'],
+        3: ['yx1', 'equals', 'yx0'],
+        4: ['yx1', 'equals', 'yx1c'],
+        5: ['ytx', 'equals', 'yxc'],
       },
       formSeries: ['0'],
       position: [-0.3, -A - 0.4],
@@ -306,7 +340,7 @@ figure.add([
 ]);
 // Unique descriptions to use
 const descriptions = [
-  [
+  [ // 0
     'Discover why a travelling sine wave can be',
     'defined by the equation above.',
     {
@@ -314,7 +348,7 @@ const descriptions = [
       text: 'And the relationship between frequency wavelength, and velocity.',
     },
   ],
-  [
+  [ // 1
     'A wave is a |disturbance| that propagates through',
     'a medium or field.',
     {
@@ -322,20 +356,31 @@ const descriptions = [
       text: 'The particles do not travel along |x| with the wave, they are just disturbed by it.',
     },
   ],
-  [
+  [ // 2
     'Make your own disturbance by moving the first',
     '|red particle|.',
   ],
-  [
+  [ // 3
     'If the |disturbance| propagates with a velocity |c|,',
-    'the time |t| it takes the disturbance to get to',
-    'point |x| can be calculated',
+    'the time |t||1|  it takes the disturbance to get to',
+    'point |x||1|  can be calculated',
   ],
-  [
+  [ // 4
+    'In other words, the disturbance at |x||1|  is the same',
+    'as the disturbance at |x||0| , |t||1|  seconds ago.',
+  ],
+  [ // 5
+    'We can substitute in (1)',
+  ],
+  [ // 6
+    '|x||1|  is arbitrary, so really this can be rewritten for',
+    'and |x|',
+  ],
+  [ // 7
     'A |disturbance| at x = 0 happens over time, and is thus',
     'a function of time ',
     'disturbance takes x/c to propagate to x, then the function',
-    'at x will be the same as at x=0, just x/c seconds ago'.
+    'at x will be the same as at x=0, just x/c seconds ago',
   ],
   'The right hand side simplifies to 1',
   'Use mathematical notation for the |limit|',
@@ -358,8 +403,18 @@ const modifiers = {
   'red particle': {
     font: { color: [1, 0, 0, 1] },
     onClick: () => {
-      b0.pulse();
+      b0.pulse({ scale: 4 });
     },
+  },
+  1: {
+    font: { family: 'Times New Roman', size: 0.06 },
+    offset: [0, -0.03],
+    inLine: false,
+  },
+  0: {
+    font: { family: 'Times New Roman', size: 0.06 },
+    offset: [0, -0.03],
+    inLine: false,
   },
   x: { font: { family: 'Times New Roman', style: 'italic' } },
   t: { font: { family: 'Times New Roman', style: 'italic' } },
@@ -401,14 +456,7 @@ const slides = [
       figure.elements._balls.highlight(['ball0']);
     },
   },
-  {
-    description: 3,
-    form: '1',
-    // shapeState: () => {
-    //   reset();
-    //   figure.elements._balls.highlight(['ball0']);
-    // },
-  },
+  { description: 3, form: '1' },
   {
     description: 3,
     form: '2',
@@ -417,6 +465,12 @@ const slides = [
       figure.elements._balls.highlight(['ball0']);
     },
   },
+  { description: 4, form: '2' },
+  { description: 4, form: '3' },
+  { description: 5, form: '3' },
+  { description: 5, form: '4' },
+  { description: 6, form: '4' },
+  { description: 6, form: '5' },
 ];
 
 // Slide management
