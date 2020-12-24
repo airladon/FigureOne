@@ -6,17 +6,20 @@ For an introduction to FigureOne, see the tutorials.
 
 A dynamic angle that changes its size, position and orientation with user interaction.
 
-![](Interactive%20Angle/example.gif)
+<img src="Interactive%20Angle/example.gif" alt="" style="max-width:500px;">
+<!-- ![](Interactive%20Angle/example.gif) -->
 
 ## **[Pythagorean Equation Animation](https://github.com/airladon/FigureOne/tree/master/examples/Pythagorean%20Theorem)**
 
 Setup the problem with animation, then step through the working at your own pace.
 
-![](Pythagorean%20Theorem/example.gif)
+<img src="Pythagorean%20Theorem/example.gif" alt="" style="max-width:500px;">
+<!-- ![](Pythagorean%20Theorem/example.gif) -->
 
 ## **[Create a Sine Wave](https://github.com/airladon/FigureOne/tree/master/examples/Sine%20Wave)**
 
 See how sine waves and rotation are related with interaction and animation.
+
 
 ![](Sine%20Wave/example.gif)
 
