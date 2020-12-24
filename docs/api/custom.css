@@ -46,3 +46,7 @@ h4:first {
 .documentation {
   background: white;
 }
+
+img {
+  max-width: 100%;
+}
