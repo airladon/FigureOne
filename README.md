@@ -13,7 +13,7 @@ See the [Examples](https://airladon.github.io/FigureOne/), [API Reference](https
 Load the FigureOne library into your HTML file:
 
 ```html
-<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.11/figureone.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script>
 ```
 
 Create a `div` element to attach the figure to:
