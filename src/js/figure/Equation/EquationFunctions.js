@@ -931,8 +931,6 @@ export type EQN_Box = {
 /**
  * Equation touch box
  *
- * ![](./apiassets/eqn_touch_pad.gif)
- *
  * Place a box symbol around an equation phrase
  *
  * Options can be an object, or an array in the property order below
