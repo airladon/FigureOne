@@ -6,7 +6,7 @@ The library used to draw interactive slides at <a href="https://www.thisiget.com
 
 See the [Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials), [API Reference](https://airladon.github.io/FigureOne/api/) and [Examples](https://github.com/airladon/FigureOne/tree/master/examples) and you'll be making beautiful, interactive figures in no time.
 
-All animations on github are gifs and thus not interactive. To interact with and experience the examples, go [here](https://airladon.github.io/FigureOne/), or clone/download them from this repository and run them locally.
+All animations on github are gifs. You can interact with and experience the examples [here](https://airladon.github.io/FigureOne/).
 
 ![](examples/Sine%20Limit/example.gif)
 
