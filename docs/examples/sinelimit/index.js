@@ -417,7 +417,7 @@ nextButton.onClick = () => {
       .dissolveIn(0.2)
       .start();
   }
-}
+};
 
 // Go backwards through slides
 prevButton.onClick = () => {
@@ -426,8 +426,8 @@ prevButton.onClick = () => {
     return;
   }
   slideIndex = (slideIndex - 1) < 0 ? slides.length - 1 : slideIndex - 1;
-  showSlide(slideIndex);  
-}
+  showSlide(slideIndex);
+};
 
 // //////////////////////////////////////////////////////////////////
 // Tie dependant elements together and set first positions
