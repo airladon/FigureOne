@@ -105,6 +105,7 @@ figure.add([
         duration: 1,
       },
       forms: {
+        blank: [],
         0: ['y', 'equals', 'logeOnr2'],
         1: ['r21', 'mul1', 'y', 'equals', 'logeOnr2', 'mul2', 'r22'],
         2: ['r21', 'mul1', 'y', 'equals', 'logeOnr2Strk', 'mul2', s('r22', 'st2')],
@@ -253,4 +254,5 @@ prevButton.onClick = () => {
   showSlide(slideIndex);
 };
 
+eqn.showForm('blank');
 showSlide(0);

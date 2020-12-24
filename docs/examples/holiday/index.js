@@ -253,4 +253,5 @@ prevButton.onClick = () => {
   showSlide(slideIndex);
 };
 
+eqn.showForm('blank');
 showSlide(0);
