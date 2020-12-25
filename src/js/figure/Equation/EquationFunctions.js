@@ -3176,6 +3176,7 @@ export class EquationFunctions {
 
     const fillAnnotation = (ann) => {
       const annCopy = joinObjects({}, defaultAnnotation, ann);  // $FlowFixMe
+      annCopy.offset = getPoint(annCopy.offset);
       annCopy.content = this.contentToElement(ann.content);
       return annCopy;
     };
