@@ -8,7 +8,7 @@ import Symbol from './SymbolNew';
 // import WebGLInstance from '../../../webgl/webgl';
 
 
-export default class Bracket extends Symbol {
+export default class EquationLine extends Symbol {
   symbol: FigureElementPrimitive;
 
   // constructor(

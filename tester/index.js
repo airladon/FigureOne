@@ -343,7 +343,31 @@ figure.add([
       },
       forms: {
         // 0: ['ytx', 'equals', 'sinkx'],
+        // 22: {
+        //   comment: {
+        //     content: [],
+        //     comment: [],
+        //     position: 'top' | 'bottom',
+        //     offset: Point,
+        //     symbol: { bracket | line },
+        //     contentSpace: number,
+        //     commentSpace: number,
+        //     scale: number,
+        //     insize
+        //     fullContentBounds,
+        //     useFullBounds,
+        //   }
+        // },
         0: {
+          topComment: {
+            content: 'abc',
+            comment: 'defg',
+            commentSpace: 0.2,
+            contentSpace: 0.2,
+            symbol: 'line',
+          },
+        },
+        aa0: {
           annotate: {
             content: 'abc',
             annotation: {

@@ -19,6 +19,7 @@ import Matrix from './Elements/Matrix';
 import Scale from './Elements/Scale';
 import Container from './Elements/Container';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
+import EquationLine from './Symbols/Line';
 // eslint-disable-next-line import/no-cycle
 // import type {
 //   EQN_Annotation, EQN_EncompassGlyph, EQN_LeftRightGlyph, EQN_TopBottomGlyph,
@@ -4231,6 +4232,27 @@ export class EquationFunctions {
       return this.annotate({
         content,           // $FlowFixMe
         annotations,
+        inSize,
+      });
+    }
+    const glyph = this.getExistingOrAddSymbol(symbol);
+    if (glyph instanceof EquationLine) {
+      annotations[0].offset = [0, commentSpaceToUse + contentSpaceToUse];
+      return this.annotate({
+        content,
+        fullContentBounds,
+        useFullBounds,
+        annotations,
+        glyphs: {
+          line: {
+            symbol,              // $FlowFixMe
+            content: { xAlign: 'center', yAlign: 'top' },
+            comment: { xAlign: 'center', yALign: 'bottom' },
+            annotation: 0,
+            // annotations,
+            // space: contentSpaceToUse,
+          },
+        },
         inSize,
       });
     }
