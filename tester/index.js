@@ -353,17 +353,17 @@ figure.add([
               xPosition: 'right',
             },
             glyphs: {
-              pointer: {
+              line: {
                 symbol: 'line',
                 annotation: 0,
-                p1: {
-                  xPosition: 'center',
-                  yPosition: 'top',
+                content: {
+                  xAlign: 'center',
+                  yAlign: 'top',
                   space: 0.02,
                 },
-                p2: {
-                  xPosition: 'center',
-                  yPosition: 'bottom',
+                comment: {
+                  xAlign: 'center',
+                  yAlign: 'bottom',
                   space: 0.02,
                 },
               },

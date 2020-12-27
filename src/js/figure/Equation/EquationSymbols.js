@@ -1159,6 +1159,7 @@ export default class EquationSymbols {
     const defaultOptions = {
       color: this.defaultColor,
       width: 0.01,
+      dash: [],
       arrow: null,
       draw: 'dynamic',
       staticHeight: 'first',

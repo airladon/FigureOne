@@ -1115,6 +1115,7 @@ export type EQN_Bar = {
   ?boolean,
 ];
 
+
 /**
  * Equation integral
  *
@@ -3181,15 +3182,15 @@ export class EquationFunctions {
         xOffset: 0,
         annotationsOverContent: false,
       },
-      pointer: {
-        p1: {
-          xPosition: 'left',
-          yPosition: 'bottom',
+      line: {
+        content: {
+          xAlign: 'left',
+          yAlign: 'bottom',
           space: 0,
         },
-        p2: {
-          xPosition: 'left',
-          yPosition: 'bottom',
+        comment: {
+          xAlign: 'left',
+          yAlign: 'bottom',
           space: 0,
         },
         annotation: 0,
@@ -3262,11 +3263,7 @@ export class EquationFunctions {
     fillGlyphAnnotation('right');
     fillGlyphAnnotation('top');
     fillGlyphAnnotation('bottom');
-    fillGlyphAnnotation('pointer');
-
-    // if (glyphs['pointer'] != null) {
-    //   glyphsToUse['pointer'] = joinObjects({}, defaultOptions[side], glyphs['pointer']);
-    // }
+    fillGlyphAnnotation('line');
 
     const o = joinObjects(defaultOptions, options);
     return new BaseAnnotationFunction(
