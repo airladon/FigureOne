@@ -6032,6 +6032,34 @@ function getBorder(
   return border.map(b => b.map(p => getPoint(p)));
 }
 
+function getPositionInRect(
+  r: TypeParsableRect,
+  xAlign: 'left' | 'right' | 'center' | 'string' | num = 0,
+  yAlign: 'bottom' | 'top' | 'middle' | 'string' |  num = 0,
+  // offset: TypeParsablePoint = new Point(0, 0),
+) {
+  const rect = getRect(r);
+  const position = new Point(rect.left, rect.bottom);
+  if (xAlign === 'center') {
+    position.x += rect.width / 2;
+  } else if (xAlign === 'right') {
+    position.x = rect.right;
+  } else if (typeof xAlign === 'number') {
+    position.x += rect.width * xAlign;
+  } else if (xAlign.startsWith('o')) {
+    position.x += parseFloat(xAlign.slice(1));
+  }
+  if (yAlign === 'middle') {
+    position.y += rect.height / 2;
+  } else if (yAlign === 'top') {
+    position.y = rect.top;
+  } else if (typeof yAlign === 'number') {
+    position.y += rect.height * yAlign;
+  } else if (yAlign.startsWith('o')) {
+    position.y += parseFloat(yAlign.slice(1));
+  }
+  return position;
+}
 // function getBorder(borders: Array<Array<TypeParsablePoint>>) {
 //   if (!Array.isArray(borders)) {
 //     return borders;
@@ -6099,4 +6127,5 @@ export {
   getBorder,
   comparePoints,
   isBuffer,
+  getPositionInRect,
 };

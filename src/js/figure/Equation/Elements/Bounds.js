@@ -1,7 +1,7 @@
 // @flow
 import { joinObjects } from '../../../tools/tools';
 import {
-  Point,
+  Point, Rect,
 } from '../../../tools/g2';
 
 type TypeBounds = {
@@ -55,6 +55,10 @@ export default class Bounds {
     };
     const bounds = joinObjects(defaultBounds, boundsIn);
     this.copyFrom(bounds);
+  }
+
+  toRect() {
+    return new Rect(this.left, this.bottom, this.width, this.height);
   }
 
   copyFrom(from: Object) {

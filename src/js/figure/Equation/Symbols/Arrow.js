@@ -53,20 +53,22 @@ export default class Arrow extends Bracket {
   //                     Line Width
 
   // eslint-disable-next-line class-methods-use-this
-  getLeftPoints(options: Object, widthIn: number, height: number) {
+  getLeftPoints(options: Object, widthIn: number, lengthIn: number) {
     const { direction } = options;
-
+    let length = lengthIn;
+    if (length == null) {
+      length = options.length;
+    }
     const {
-      lineWidth, arrowWidth, arrowHeight,
-    } = this.getVerticalDefaultValues(height, widthIn, options);
-
+      lineWidth, arrowWidth, arrowLength,
+    } = this.getVerticalDefaultValues(length, widthIn, options);
     const p0 = new Point(arrowWidth / 2 + lineWidth / 2, 0);
     const p1 = new Point(arrowWidth / 2 - lineWidth / 2, 0);
-    const p2 = new Point(p0.x, height - arrowHeight);
+    const p2 = new Point(p0.x, length - arrowLength);
     const p3 = new Point(p1.x, p2.y);
     const p4 = new Point(arrowWidth, p2.y);
     const p5 = new Point(0, p2.y);
-    const p6 = new Point(arrowWidth / 2, height);
+    const p6 = new Point(arrowWidth / 2, length);
 
     let leftPoints = [
       p1._dup(),
@@ -81,7 +83,7 @@ export default class Arrow extends Bracket {
       p6._dup(),
     ];
     if (direction === 'down' || direction === 'left') {
-      const m = new Transform().scale(1, -1).translate(0, height).m();
+      const m = new Transform().scale(1, -1).translate(0, length).m();
       // $FlowFixMe
       leftPoints = leftPoints.map((p: Point) => p.transformBy(m));
       // $FlowFixMe
@@ -93,22 +95,28 @@ export default class Arrow extends Bracket {
     // } else if (direction === 'left' || direction === 'right') {
     //   side = 'top';
     // }
-    // return [points, widthIn, height];
+    // return [points, widthIn, length];
     // $FlowFixMe
-    return [leftPoints, rightPoints, arrowWidth, height];
+    // if (direction === 'up' || direction === 'down') {
+    //   // console.log(length, arrowWidth)
+    //   return [leftPoints, rightPoints, length, arrowWidth];
+    // }
+    // $FlowFixMe
+    return [leftPoints, rightPoints, arrowWidth, length];
   }
 
   /* eslint-disable class-methods-use-this */
   // $FlowFixMe
-  getVerticalDefaultValues(height: number, width: ?number, options: {
+  getVerticalDefaultValues(length: number, width: ?number, options: {
       lineWidth?: number,
       arrowWidth?: number,
-      arrowHeight?: number,
+      arrowLength?: number,
+      length?: number,
     }) {
     const out = {};
     if (options.lineWidth == null) {
       out.lineWidth = (0.2933614 + (0.0001418178 - 0.2933614)
-                      / (1 + (height / 39.01413) ** 0.618041)) * 0.8;
+                      / (1 + (length / 39.01413) ** 0.618041)) * 0.8;
     } else {
       out.lineWidth = options.lineWidth;
     }
@@ -117,10 +125,10 @@ export default class Arrow extends Bracket {
     } else {
       out.arrowWidth = options.arrowWidth;
     }
-    if (options.arrowHeight == null) {
-      out.arrowHeight = out.lineWidth * 3;
+    if (options.arrowLength == null) {
+      out.arrowLength = out.lineWidth * 3;
     } else {
-      out.arrowHeight = options.arrowHeight;
+      out.arrowLength = options.arrowLength;
     }
     out.width = out.arrowWidth;
     // $FlowFixMe

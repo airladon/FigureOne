@@ -3114,6 +3114,35 @@ export class EquationFunctions {
     });
   }
 
+  // /**
+  //  */
+  // pointer(options: EQN_Pointer) {
+  //   const defaultOptions = {
+  //     xPosition: 'center',
+  //     yPosition: 'top',
+  //     xAlign: 'center',
+  //     yAlign: 'bottom',
+  //     offset: new Point(0, 0),
+  //     scale: 1,
+  //     inSize: true,
+  //     fullContentBounds: false,
+  //     glyph: {
+  //       content: {
+  //         xPosition: 'center',
+  //         yPosition: 'top',
+  //         offset: new Point(0, 0),
+  //         space: 0.05,
+  //       },
+  //       comment: {
+  //         xPosition: 'center',
+  //         yPosition: 'top',
+  //         offset: new Point(0, 0),
+  //         space: 0.05,
+  //       }
+  //     }
+  //   }
+  // }
+
   /**
    * Equation annotate function
    * @see {@link EQN_Annotate} for description and examples
@@ -3151,6 +3180,19 @@ export class EquationFunctions {
         overhang: 0,
         xOffset: 0,
         annotationsOverContent: false,
+      },
+      pointer: {
+        p1: {
+          xPosition: 'left',
+          yPosition: 'bottom',
+          space: 0,
+        },
+        p2: {
+          xPosition: 'left',
+          yPosition: 'bottom',
+          space: 0,
+        },
+        annotation: 0,
       },
     };
     const {
@@ -3220,6 +3262,12 @@ export class EquationFunctions {
     fillGlyphAnnotation('right');
     fillGlyphAnnotation('top');
     fillGlyphAnnotation('bottom');
+    fillGlyphAnnotation('pointer');
+
+    // if (glyphs['pointer'] != null) {
+    //   glyphsToUse['pointer'] = joinObjects({}, defaultOptions[side], glyphs['pointer']);
+    // }
+
     const o = joinObjects(defaultOptions, options);
     return new BaseAnnotationFunction(
       this.contentToElement(content),

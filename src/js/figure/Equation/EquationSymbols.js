@@ -27,6 +27,7 @@ import Arrow from './Symbols/Arrow';
 import VinculumNew from './Symbols/Vinculum';
 import Strike from './Symbols/Strike';
 import Radical from './Symbols/Radical';
+import Line from './Symbols/Line';
 import type {
   TypeColor,
 } from '../../tools/types';
@@ -1092,6 +1093,9 @@ export default class EquationSymbols {
     if (name === 'arrow') {                 // $FlowFixMe
       return this.arrow(options);
     }
+    if (name === 'line') {                 // $FlowFixMe
+      return this.line(options);
+    }
     return null;
   }
 
@@ -1151,6 +1155,26 @@ export default class EquationSymbols {
     ));
   }
 
+  line(optionsIn: EQN_LineSymbol) {
+    const defaultOptions = {
+      color: this.defaultColor,
+      width: 0.01,
+      arrow: null,
+      draw: 'dynamic',
+      staticHeight: 'first',
+      staticWidth: 'first',
+    };
+    const optionsToUse = joinObjects(defaultOptions, optionsIn);
+    return (new Line(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('Line').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse,
+      // 'strip',
+    ));
+  }
+
   touchBox(optionsIn: EQN_BoxSymbol) {
     const defaultOptions = {
       color: [0, 0, 0, 0.0001],
@@ -1181,7 +1205,8 @@ export default class EquationSymbols {
       direction: 'right',
       lineWidth: 0.01,
       arrowWidth: 0.03,
-      arrowHeight: 0.04,
+      arrowLength: 0.04,
+      length: 0.1,
       staticHeight: 'first',
       draw: 'static',
       staticWidth: null,          // not definable by user

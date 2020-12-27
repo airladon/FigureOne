@@ -253,7 +253,7 @@ const brac3 = content => ({
     left: 'lb3', content, right: 'rb3', height: 0.2, descent: 0.05,
   },
 });
-const scale = (content, s = 0.8) => ({
+const scale = (content, s = 0.7) => ({
   scale: { content, scale: s },
 });
 // Add equation
@@ -279,35 +279,103 @@ figure.add([
         comma1: ', ',
         comma2: ', ',
         v: { symbol: 'vinculum' },
+        arrow: {
+          symbol: 'arrow',
+          direction: 'up',
+          arrowLength: 0.05,
+          arrowWidth: 0.05,
+          length: 0.2,
+          // draw: 'static',
+          // staticHeight: 0.2,
+          lineWidth: 0.01,
+        },
+        line: { symbol: 'line', width: 0.007, dash: [0.01, 0.01], arrow: { start: { head: 'triangle', scale: 0.7 } } },
       },
       phrases: {
-        ytx: ['y_0', brac1(['x_3', 'comma1', 't_0'])],
+        ytx: ['y_1', brac1(['x_1', 'comma1', 't_1'])],
         sinkx: ['sin', brac2(['w1', 't_2', 'min', 'k', 'x_2'])],
         t1: { sub: ['t_2', '_1_1'] },
-        // t12: { sub: ['t_3', '_1_2'] },
-        x1: { sub: ['x_1', '_1_3'] },
-        x12: { sub: ['x_3', '_1_4'] },
-        x0: { sub: ['x_1', '_0'] },
-        yx1: ['y_0', brac1(['x12', 'comma1', 't_0'])],
-        // yx0: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 't12'])],
-        y0: ['y_0', brac1(['x0', 'comma1', 't_1'])],
-        x1OnC: { frac: ['x1', 'v', 'c'] },
-        xOnC: { frac: ['x_2', 'v', 'c'] },
+        x11: { sub: ['x_1', '_1_2'] },
+        x12: { sub: ['x_2', '_1_3'] },
+        x1OnC: { frac: ['x12', 'v', 'c'] },
         sX1OnC: scale('x1OnC'),
-        sXOnC: scale('xOnC'),
-        yx1c: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 'sX1OnC'])],
-        yxc: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 'sXOnC'])],
+        x0: { sub: ['x_1', '_0'] },
+        yx0t: ['y_0', brac1(['x0', 'comma1', 't_1'])],
+        yx1t: ['y_0', brac1(['x11', 'comma1', 't_1'])],
+        wt: ['w1', 't_3'],
+        tToTMinT1: {
+          bottomComment: {
+            content: 't_3',
+            comment: ['t_4', 'min', 't1'],
+            symbol: 'arrow',
+            contentSpace: 0.1,
+            inSize: false,
+          },
+        },
+        // tToTMinT1: {
+        //   annotate: {
+        //     content: 't_3',
+        //     glyphs: {
+        //       bottom: {
+        //         symbol: 'arrow',
+        //         annotation: {
+        //           content: ['t_4', 'min', 't1'],
+        //         },
+        //       },
+        //     },
+        //   },
+        // },
+        // wtmint1: ['w1', brac3(['t_3', 'min', 't1'])],
+        // wtminwt1:
+
+        // // t12: { sub: ['t_3', '_1_2'] },
+        // x12: { sub: ['x_3', '_1_4'] },
+        // // yx0: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 't12'])],
+        // xOnC: { frac: ['x_2', 'v', 'c'] },
+        // sX1OnC: scale('x1OnC'),
+        // sXOnC: scale('xOnC'),
+        // yx1c: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 'sX1OnC'])],
+        // yxc: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 'sXOnC'])],
       },
       formDefaults: {
         alignment: { fixTo: 'equals' },
         duration: 1,
       },
       forms: {
-        0: ['ytx', 'equals', 'sinkx'],
+        // 0: ['ytx', 'equals', 'sinkx'],
+        0: {
+          annotate: {
+            content: 'abc',
+            annotation: {
+              content: 'def',
+              offset: [0, 0.2],
+              scale: 0.6,
+              xPosition: 'right',
+            },
+            glyphs: {
+              pointer: {
+                symbol: 'line',
+                annotation: 0,
+                p1: {
+                  xPosition: 'center',
+                  yPosition: 'top',
+                  space: 0.02,
+                },
+                p2: {
+                  xPosition: 'center',
+                  yPosition: 'bottom',
+                  space: 0.02,
+                },
+              },
+            },
+          },
+        },
         1: [],
         2: ['t1', 'equals', 'x1OnC'],
-        3: ['y0', 'equals', 'A', 'sin', brac2(['w1', 't_3'])],
-        4: ['yx1', 'equals', 'A', 'sin', brac2(['w1', brac3(['t_3', 'min', 't1'])])],
+        3: ['yx0t', 'equals', 'A', 'sin', brac2(['w1', 't_3'])],
+        4: ['yx1t', 'equals', 'A', 'sin', brac2(['w1', 'tToTMinT1'])],
+        5: ['yx1t', 'equals', 'A', 'sin', brac2(['w1', brac3(['t_3', 'min', 't1'])])],
+        6: ['yx1t', 'equals', 'A', 'sin', brac2(['w1', brac3(['t_3', 'min', 'sX1OnC'])])],
         // 3: ['yx1', 'equals', 'yx0'],
         // 4: ['yx1', 'equals', 'yx1c'],
         // 5: ['ytx', 'equals', 'yxc'],
@@ -396,6 +464,13 @@ const modifiers = {
   y: { font: { family: 'Times New Roman', style: 'italic' } },
   t: { font: { family: 'Times New Roman', style: 'italic' } },
   c: { font: { family: 'Times New Roman', style: 'italic' } },
+  substitute: {
+    font: { color: [1, 0, 0, 1] },
+    onClick: () => {
+      eqn.pulse({ elements: ['t_2', '_1_1'], centerOn: 't_2', xAlign: 'right' });
+      sideEqn.pulse({ scale: 1.3 });
+    },
+  },
 };
 
 // /////////////////////////////////////////////////////////////////
@@ -542,402 +617,176 @@ slides.push({
   },
 });
 
+
 // /////////////////////////////////////////////////////////////////
 slides.push({
   text: [
-    'In other words, the disturbance at |x||1|  is',
-    'the disturabance at |x||0| |t||1| seconds ago',
+    'We can now |substitute| equation (1)',
   ],
   steadyState: () => {
-    eqn.showForm('1');
+    eqn.showForm('4');
     sideEqn.showForm('2');
-    figure.elements._balls.highlight(['ball0', 'ball50']);
-  },
-});
-
-// /////////////////////////////////////////////////////////////////
-slides.push({
-  text: [
-    'In this case our medium is a string made up of',
-    'particles.',
-  ],
-  steadyState: () => {
-    reset();
-    figure.elements._balls.dim();
-    eqn.showForm('1');
-  },
-});
-
-// /////////////////////////////////////////////////////////////////
-slides.push({
-  text: [
-    'The particles can only move in |y| as the',
-    '|disturbance| passes',
-  ],
-  steadyState: () => {
-    reset();
-    disturbPulse();
-    figure.elements._balls.highlight(['ball25', 'ball50']);
-    eqn.showForm('1');
-  },
-});
-
-// /////////////////////////////////////////////////////////////////
-slides.push({
-  text: [
-    'Make your own disturbance by moving the',
-    '|first particle| in different ways.',
-  ],
-  steadyState: () => {
-    reset();
-    figure.elements._balls.highlight(['ball0']);
-    eqn.showForm('1');
-  },
-});
-
-// /////////////////////////////////////////////////////////////////
-slides.push({
-  text: [
-    'The |disturbance| propagates with a velocity |c|',
-  ],
-  steadyState: () => { eqn.showForm('1'); },
-});
-
-// /////////////////////////////////////////////////////////////////
-slides.push({
-  text: [
-    'The time it takes for the disturbance to',
-    'travel some distance |x||1|  is then',
-  ],
-  steadyState: () => { eqn.showForm('1'); },
-});
-
-slides.push({
-  transitionFromPrev: done => eqn.goToForm({
-    form: '2', animate: 'move', duration: 1, callback: done,
-  }),
-  steadyState: () => { eqn.showForm('2'); },
-});
-
-// /////////////////////////////////////////////////////////////////
-slides.push({
-  text: [
-    'Let\'s remember this equation as (1)',
-  ],
-  steadyState: () => {
-    eqn.showForm('2');
-    sideEqn.hide();
-  },
-});
-
-slides.push({
-  transitionFromPrev: (done) => {
-    sideEqn.hide();
-    const p = eqn.getPosition();
-    figure.elements.animations.new()
-      .inParallel([
-        eqn.animations.position({ target: [0.91, -0.8], duration: 1 }),
-        eqn.animations.scale({ target: 0.714, duration: 1 }),
-      ])
-      .trigger(() => {
-        eqn.setPosition(p);
-        eqn.setScale(1);
-        eqn.showForm('1');
-        sideEqn.showForm('0');
-      })
-      .whenFinished(done)
-      .start();
-  },
-  steadyState: () => {
-    eqn.showForm('1');
-    sideEqn.showForm('0');
-  },
-});
-
-// /////////////////////////////////////////////////////////////////
-slides.push({
-  text: [
-    'It takes |t||1|  seconds for a disturbance to',
-    'travel from |x| = 0 to |x||1|, therefore |y| at |x||1|',
-    '|y| at |x||1|  is the same as at |x| = 0',
-    '|t||1|  seconds ago.',
-  ],
-  steadyState: () => {
-    eqn.showForm('1');
-    sideEqn.showForm('0');
   },
 });
 
 slides.push({
   transitionFromPrev: done => eqn.goToForm({
-    form: '3', animate: 'dissolve', callback: done,
+    form: '5', callback: done, animate: 'move', duration: 1,
   }),
   steadyState: () => {
-    eqn.showForm('3');
-    sideEqn.showForm('0');
+    eqn.showForm('5');
+    sideEqn.showForm('2');
   },
 });
+
+
+
+
+
+
+
+
+
+// // /////////////////////////////////////////////////////////////////
+// slides.push({
+//   text: [
+//     'In other words, the disturbance at |x||1|  is',
+//     'the disturabance at |x||0| |t||1| seconds ago',
+//   ],
+//   steadyState: () => {
+//     eqn.showForm('1');
+//     sideEqn.showForm('2');
+//     figure.elements._balls.highlight(['ball0', 'ball50']);
+//   },
+// });
+
+
+// // /////////////////////////////////////////////////////////////////
+// slides.push({
+//   text: [
+//     'In this case our medium is a string made up of',
+//     'particles.',
+//   ],
+//   steadyState: () => {
+//     reset();
+//     figure.elements._balls.dim();
+//     eqn.showForm('1');
+//   },
+// });
+
+// // /////////////////////////////////////////////////////////////////
+// slides.push({
+//   text: [
+//     'The particles can only move in |y| as the',
+//     '|disturbance| passes',
+//   ],
+//   steadyState: () => {
+//     reset();
+//     disturbPulse();
+//     figure.elements._balls.highlight(['ball25', 'ball50']);
+//     eqn.showForm('1');
+//   },
+// });
+
+// // /////////////////////////////////////////////////////////////////
+// slides.push({
+//   text: [
+//     'Make your own disturbance by moving the',
+//     '|first particle| in different ways.',
+//   ],
+//   steadyState: () => {
+//     reset();
+//     figure.elements._balls.highlight(['ball0']);
+//     eqn.showForm('1');
+//   },
+// });
+
+// // /////////////////////////////////////////////////////////////////
+// slides.push({
+//   text: [
+//     'The |disturbance| propagates with a velocity |c|',
+//   ],
+//   steadyState: () => { eqn.showForm('1'); },
+// });
+
+// // /////////////////////////////////////////////////////////////////
+// slides.push({
+//   text: [
+//     'The time it takes for the disturbance to',
+//     'travel some distance |x||1|  is then',
+//   ],
+//   steadyState: () => { eqn.showForm('1'); },
+// });
+
+// slides.push({
+//   transitionFromPrev: done => eqn.goToForm({
+//     form: '2', animate: 'move', duration: 1, callback: done,
+//   }),
+//   steadyState: () => { eqn.showForm('2'); },
+// });
+
+// // /////////////////////////////////////////////////////////////////
+// slides.push({
+//   text: [
+//     'Let\'s remember this equation as (1)',
+//   ],
+//   steadyState: () => {
+//     eqn.showForm('2');
+//     sideEqn.hide();
+//   },
+// });
+
+// slides.push({
+//   transitionFromPrev: (done) => {
+//     sideEqn.hide();
+//     const p = eqn.getPosition();
+//     figure.elements.animations.new()
+//       .inParallel([
+//         eqn.animations.position({ target: [0.91, -0.8], duration: 1 }),
+//         eqn.animations.scale({ target: 0.714, duration: 1 }),
+//       ])
+//       .trigger(() => {
+//         eqn.setPosition(p);
+//         eqn.setScale(1);
+//         eqn.showForm('1');
+//         sideEqn.showForm('0');
+//       })
+//       .whenFinished(done)
+//       .start();
+//   },
+//   steadyState: () => {
+//     eqn.showForm('1');
+//     sideEqn.showForm('0');
+//   },
+// });
+
+// // /////////////////////////////////////////////////////////////////
+// slides.push({
+//   text: [
+//     'It takes |t||1|  seconds for a disturbance to',
+//     'travel from |x| = 0 to |x||1|, therefore |y| at |x||1|',
+//     '|y| at |x||1|  is the same as at |x| = 0',
+//     '|t||1|  seconds ago.',
+//   ],
+//   steadyState: () => {
+//     eqn.showForm('1');
+//     sideEqn.showForm('0');
+//   },
+// });
+
+// slides.push({
+//   transitionFromPrev: done => eqn.goToForm({
+//     form: '3', animate: 'dissolve', callback: done,
+//   }),
+//   steadyState: () => {
+//     eqn.showForm('3');
+//     sideEqn.showForm('0');
+//   },
+// });
 
 
 // /////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////
 slideNav.loadSlides(slides, prevButton, nextButton, figure, description, modifiers);
 
-slideNav.goToSlide(5);
-// // Unique descriptions to use
-// const descriptions = [
-//   [ // 5
-//     'In other words, the disturbance at |x||1|  is the same',
-//     'as the disturbance at |x||0| , |t||1|  seconds ago.',
-//   ],
-//   [ // 6
-//     'We can substitute in (1)',
-//   ],
-//   [ // 7
-//     '|x||1|  is arbitrary, so really this can be rewritten for',
-//     'any |x|',
-//   ],
-//   [
-//     // 8
-//     'Let\'s remember this equation as (2)',
-//   ],
-//   [ // 9
-//     'A |disturbance| at x = 0 happens over time, and is thus',
-//     'a function of time ',
-//     'disturbance takes x/c to propagate to x, then the function',
-//     'at x will be the same as at x=0, just x/c seconds ago',
-//   ],
-//   'The right hand side simplifies to 1',
-//   'Use mathematical notation for the |limit|',
-//   'The |vertical| line is the |sine| of |x|',
-//   ['The |radius| is 1, so the |arc| length equals', 'the |angle1|'],
-//   [
-//     'Summary: for |very small angles| |x|, the angle',
-//     'and |sin| |x1| can often be considered |equal|',
-//   ],
-// ];
-
-// const modifiers = {
-//   disturbance: {
-//     font: { color: [0, 0.5, 1, 1] },
-//     onClick: () => {
-//       disturbPulse();
-//     },
-//     touchBorder: [0.1, 0.03, 0.1, 0.1],
-//   },
-//   'red particle': {
-//     font: { color: [1, 0, 0, 1] },
-//     onClick: () => {
-//       b0.pulse({ scale: 4 });
-//     },
-//   },
-//   1: {
-//     font: { family: 'Times New Roman', size: 0.06 },
-//     offset: [0, -0.03],
-//     inLine: false,
-//   },
-//   0: {
-//     font: { family: 'Times New Roman', size: 0.06 },
-//     offset: [0, -0.03],
-//     inLine: false,
-//   },
-//   x: { font: { family: 'Times New Roman', style: 'italic' } },
-//   t: { font: { family: 'Times New Roman', style: 'italic' } },
-//   c: { font: { family: 'Times New Roman', style: 'italic' } },
-//   // radius: {
-//   //   font: { color: [0, 0.5, 1, 1] },
-//   //   onClick: () => radiusLine.pulseWidth(),
-//   //   touchBorder: [0.1, 0.03, 0.1, 0.1],
-//   // },
-//   // arc: {
-//   //   font: { color: [1, 0, 0, 1] },
-//   //   onClick: () => figure.getElement('arc.label').pulse({ xAlign: 'left' }),
-//   //   touchBorder: 0.1,
-//   // },
-// };
-
-// const slides = [
-//   {
-//     description: 0,
-//     form: '0',
-//     shapeState: () => {
-//       reset();
-//       disturbSine();
-//       sideEqn.hide();
-//     },
-//   },
-//   {
-//     description: 1,
-//     form: '1',
-//     shapeState: () => {
-//       figure.elements._balls.dim();
-//       disturbPulse();
-//     },
-//   },
-//   {
-//     description: 2,
-//     form: '1',
-//     shapeState: () => {
-//       reset();
-//       figure.elements._balls.highlight(['ball0']);
-//     },
-//   },
-//   { description: 3, form: '1' },
-//   { description: 3, form: '2' },
-//   {
-//     description: 4,
-//     form: '2',
-//     shapeState: () => {
-//       sideEqn.hide();
-//     },
-//   },
-//   {
-//     description: 4,
-//     form: '2',
-//     shapeState: () => {
-//       sideEqn.hide();
-//       const p = eqn.getPosition();
-//       figure.elements.animations.new()
-//         .inParallel([
-//           eqn.animations.position({ target: [1.45, -0.8], duration: 1 }),
-//           eqn.animations.scale({ target: 0.714, duration: 1 }),
-//         ])
-//         .trigger(() => {
-//           eqn.setPosition(p);
-//           eqn.setScale(1);
-//           eqn.showForm('1');
-//           sideEqn.showForm('0');
-//         })
-//         .start();
-//     },
-//   },
-//   {
-//     description: 5,
-//     form: '1',
-//     shapeState: () => {
-//       reset();
-//       figure.elements._balls.highlight(['ball0']);
-//     },
-//   },
-//   { description: 5, form: '3' },
-//   { description: 6, form: '3' },
-//   {
-//     description: 6,
-//     form: '4',
-//     shapeState: () => {
-//       sideEqn.showForm('0');
-//     },
-//   },
-//   {
-//     description: 7,
-//     form: '4',
-//     shapeState: () => {
-//       sideEqn.animations.new()
-//         .dissolveOut(0.5)
-//         .start();
-//     },
-//   },
-//   { description: 7, form: '5' },
-//   { description: 8, form: '5' },
-//   {
-//     description: 8,
-//     form: '5',
-//     shapeState: () => {
-//       sideEqn.hide();
-//       const p = eqn.getPosition();
-//       figure.elements.animations.new()
-//         .inParallel([
-//           eqn.animations.position({ target: [1.45, -0.8], duration: 1 }),
-//           eqn.animations.scale({ target: 0.714, duration: 1 }),
-//         ])
-//         .trigger(() => {
-//           eqn.setPosition(p);
-//           eqn.setScale(1);
-//           eqn.showForm('1');
-//           sideEqn.showForm('5');
-//         })
-//         .start();
-//     },
-//   },
-// ];
-
-// // // Slide management
-// // let slideIndex = 0;
-// // // const eqn = figure.getElement('eqn');
-
-// // // Each slide defines which equation form to show, which
-// // // description to use and what state the shape should be in
-// // const showSlide = (index) => {
-// //   const slide = slides[index];
-// //   // Set equation form
-// //   if (slide.form) {
-// //     eqn.goToForm({ form: slide.form, animate: 'move' });
-// //   }
-// //   // Stop any description animations and set updated description
-// //   description.stop();
-// //   description.custom.updateText({
-// //     text: descriptions[slide.description],
-// //     modifiers,
-// //   });
-// //   // Set the shape state
-// //   if (slide.shapeState != null) {
-// //     slide.shapeState();
-// //   }
-// //   // Disable previous button if at first slide
-// //   if (index === 0) {
-// //     prevButton.setOpacity(0.7);
-// //     prevButton.isTouchable = false;
-// //   } else if (prevButton.isTouchable === false) {
-// //     prevButton.setOpacity(1)
-// //     prevButton.isTouchable = true;
-// //   }
-// // };
-
-// // // When the Next button is clicked, progress to the next slide.
-// // nextButton.onClick = () => {
-// //   // If the equation is still animating, then do not progress, simply
-// //   // complete the animation instantly
-// //   if (eqn.eqn.isAnimating) {
-// //     eqn.stop('complete');
-// //     return;
-// //   }
-// //   const oldDescription = slides[slideIndex].description;
-// //   slideIndex = (slideIndex + 1) % slides.length;
-// //   showSlide(slideIndex);
-// //   // If the description changes, then dissolve it in
-// //   const newDescription = slides[slideIndex].description;
-// //   if (newDescription != oldDescription) {
-// //     description.animations.new()
-// //       .dissolveIn(0.2)
-// //       .start();
-// //   }
-// // };
-
-// // // Go backwards through slides
-// // prevButton.onClick = () => {
-// //   if (eqn.eqn.isAnimating) {
-// //     eqn.stop('complete');
-// //     return;
-// //   }
-// //   slideIndex = (slideIndex - 1) < 0 ? slides.length - 1 : slideIndex - 1;
-// //   showSlide(slideIndex);
-// // };
-
-// // showSlide(0);
-
-// // const slides1 = [];
-
-// // slides1.push({
-// //   description: [
-// //     'Discover why a travelling sine wave can be',
-// //     'defined by the equation above.',
-// //     {
-// //       font: { size: 0.06 },
-// //       text: 'And the relationship between frequency wavelength, and velocity.',
-// //     },
-// //   ],
-// //   modifiers: {},
-// //   form: '1',
-// //   transitionFromPrev: (done) => {},
-// //   steadyState: () => {},
-// // });
+slideNav.goToSlide(0);

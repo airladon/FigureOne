@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, getPoint,
+  Point, getPoint, getPositionInRect, Line,
 } from '../../../tools/g2';
 // import { Elements } from './Element';
 import Bounds from './Bounds';
@@ -43,6 +43,28 @@ export type EQN_EncompassGlyph = {
   bottomSpace?: number;
   rightSpace?: number;
 };
+
+export type EQN_PointerGlyph = {
+  symbol?: string,
+  annotation: number,
+  p1: {
+    xPosition: 'left' | 'center' | 'right' | number,
+    yPosition: 'bottom' | 'baseline' | 'middle' | 'top' | number,
+    xAlign: 'left' | 'center' | 'right' | number,
+    yAlign: 'bottom' | 'baseline' | 'middle' | 'top' | number,
+    offset: Point,
+    space: number,
+  };
+  p2: {
+    xPosition: 'left' | 'center' | 'right' | number,
+    yPosition: 'bottom' | 'baseline' | 'middle' | 'top' | number,
+    xAlign: 'left' | 'center' | 'right' | number,
+    yAlign: 'bottom' | 'baseline' | 'middle' | 'top' | number,
+    offset: Point,
+    space: number,
+  };
+};
+
 export type EQN_LeftRightGlyph = {
   symbol?: string,
   annotations?: Array<EQN_Annotation>,
@@ -93,6 +115,7 @@ export type EQN_Glyphs = {
   top?: TypeAnnotatedGlyph & EQN_TopBottomGlyph;
   bottom?: TypeAnnotatedGlyph & EQN_TopBottomGlyph;
   encompass?: TypeAnnotatedGlyph & EQN_EncompassGlyph;
+  pointer?: EQN_PointerGlyph;
 };
 
 // export type EQN_GlyphsIn = {
@@ -358,13 +381,18 @@ export default class BaseAnnotationFunction implements ElementInterface {
     contentBounds.copyFrom(content.getBounds(fullContentBounds));
     inSizeBounds.copyFrom(contentBounds);
     fullBounds.copyFrom(contentBounds);
-    annotations.forEach((annotation) => {
+    annotations.forEach((annotation, index) => {
       annotation.content.calcSize(loc, scale * annotation.scale);
       this.setAnnotationPosition(contentBounds, annotation, scale);
       const annotationBounds = annotation.content.getBounds();
       inSizeBounds.growWithSameBaseline(annotationBounds);
       const fullSizeAnnotationBounds = annotation.content.getBounds(true);
       fullBounds.growWithSameBaseline(fullSizeAnnotationBounds);
+      if (this.glyphs.pointer != null && this.glyphs.pointer.annotation === index) {
+        this.setPointerGlyph(annotationBounds, contentBounds);
+        // inSizeBounds.growWithSameBaseline(encompassBounds);
+        // fullBounds.growWithSameBaseline(encompassFullBounds);
+      }
     });
     const [encompassBounds, encompassFullBounds] = this.setEncompassGlyph(scale, contentBounds);
     inSizeBounds.growWithSameBaseline(encompassBounds);
@@ -384,6 +412,10 @@ export default class BaseAnnotationFunction implements ElementInterface {
     const [bottomBounds, bottomFullBounds] = this.setHorizontalGlyph(scale, contentBounds, 'bottom');
     inSizeBounds.growWithSameBaseline(bottomBounds);
     fullBounds.growWithSameBaseline(bottomFullBounds);
+
+    // const [pointerBounds, pointerFullBounds] = this.setPointerGlyph(scale, contentBounds);
+    // inSizeBounds.growWithSameBaseline(pointerBounds);
+    // fullBounds.growWithSameBaseline(pointerFullBounds);
 
     let xLocationOffset = 0;
 
@@ -470,7 +502,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyph.width = glyphBounds.width;
     glyph.height = glyphBounds.height;
     glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
-    glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+    glyph.glyph.custom.setSize(glyph.location);
     glyph.annotations.forEach((annotation) => {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);
       this.setAnnotationPosition(glyphBounds, annotation, scale);
@@ -480,6 +512,76 @@ export default class BaseAnnotationFunction implements ElementInterface {
       fullBounds.growWithSameBaseline(fullAnnotationBounds);
     });
     return [inSizeBounds, fullBounds];
+  }
+
+  setPointerGlyph(annotationBounds: Bounds, contentBounds: Bounds) {
+    const {
+      p1, p2,
+    } = this.glyphs.pointer;
+    const glyph = this.glyphs.pointer;
+    const pStart = getPositionInRect(
+      contentBounds.toRect(), p1.xPosition, p1.yPosition,
+    ).add(getPoint(p1.offset));
+    const pEnd = getPositionInRect(
+      annotationBounds.toRect(), p2.xPosition, p2.yPosition,
+    ).add(getPoint(p2.offset));
+
+    const line = new Line(pStart, pEnd);
+    const spacedLine = new Line(
+      line.pointAtLength(p1.space),
+      line.pointAtLength(line.length() - p2.space),
+    );
+    glyph.glyph.custom.options.spacedLine = spacedLine._dup();
+    glyph.location = new Point(0, 0);
+    const sp1 = spacedLine.p1._dup();
+    const sp2 = spacedLine.p2._dup();
+    const glyphBounds = new Bounds({
+      left: Math.min(sp1.x, sp2.x),
+      bottom: Math.min(sp1.y, sp2.y),
+      width: Math.abs(sp1.x - sp2.x),
+      height: Math.abs(sp1.y - sp2.y),
+    });
+    glyph.width = glyphBounds.width;
+    glyph.height = glyphBounds.height;
+    glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+
+    // const inSizeBounds = new Bounds();
+    // const fullBounds = new Bounds();
+    // inSizeBounds.left = 
+    // glyph.setEndPoints
+    // const spaceToUse = space != null ? space : 0;
+    // const left = leftSpace != null ? leftSpace : spaceToUse;
+    // const right = rightSpace != null ? rightSpace : spaceToUse;
+    // const top = topSpace != null ? topSpace : spaceToUse;
+    // const bottom = bottomSpace != null ? bottomSpace : spaceToUse;
+    // const contentBounds = new Bounds();
+    // contentBounds.copyFrom(contentBoundsIn);
+    // contentBounds.offset(top * scale, right * scale, -bottom * scale, -left * scale);
+    // const glyphBounds = glyph.glyph.getBounds(
+    //   glyph.glyph.custom.options,
+    //   contentBounds.left,
+    //   contentBounds.bottom,
+    //   contentBounds.width,
+    //   contentBounds.height,
+    // );
+    // const inSizeBounds = new Bounds();
+    // const fullBounds = new Bounds();
+    // inSizeBounds.copyFrom(contentBounds);
+    // inSizeBounds.growWithSameBaseline(glyphBounds);
+    // fullBounds.copyFrom(inSizeBounds);
+    // glyph.width = glyphBounds.width;
+    // glyph.height = glyphBounds.height;
+    // glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
+    // glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+    // glyph.annotations.forEach((annotation) => {
+    //   annotation.content.calcSize(glyph.location, scale * annotation.scale);
+    //   this.setAnnotationPosition(glyphBounds, annotation, scale);
+    //   const annotationBounds = annotation.content.getBounds();
+    //   inSizeBounds.growWithSameBaseline(annotationBounds);
+    //   const fullAnnotationBounds = annotation.content.getBounds(true);
+    //   fullBounds.growWithSameBaseline(fullAnnotationBounds);
+    // });
+    // return [inSizeBounds, fullBounds];
   }
 
   setVerticalGlyph(scale: number, contentBounds: Bounds, glyphName: 'left' | 'right') {
