@@ -521,19 +521,26 @@ export default class BaseAnnotationFunction implements ElementInterface {
       line.pointAtLength(content.space),
       line.pointAtLength(line.length() - comment.space),
     );
-    glyph.glyph.custom.options.spacedLine = spacedLine._dup();
-    glyph.location = new Point(0, 0);
-    const sp1 = spacedLine.p1._dup();
-    const sp2 = spacedLine.p2._dup();
-    const glyphBounds = new Bounds({
-      left: Math.min(sp1.x, sp2.x),
-      bottom: Math.min(sp1.y, sp2.y),
-      width: Math.abs(sp1.x - sp2.x),
-      height: Math.abs(sp1.y - sp2.y),
-    });
-    glyph.width = glyphBounds.width;
-    glyph.height = glyphBounds.height;
+    // console.log(spacedLine)
+
+    glyph.width = spacedLine.angle();
+    glyph.height = spacedLine.length();
+    glyph.location = spacedLine.p1._dup();
     glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+
+    // glyph.glyph.custom.options.spacedLine = spacedLine._dup();
+    // glyph.location = new Point(0, 0);
+    // const sp1 = spacedLine.p1._dup();
+    // const sp2 = spacedLine.p2._dup();
+    // const glyphBounds = new Bounds({
+    //   left: Math.min(sp1.x, sp2.x),
+    //   bottom: Math.min(sp1.y, sp2.y),
+    //   width: Math.abs(sp1.x - sp2.x),
+    //   height: Math.abs(sp1.y - sp2.y),
+    // });
+    // glyph.width = glyphBounds.width;
+    // glyph.height = glyphBounds.height;
+    // glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
   }
 
   setVerticalGlyph(scale: number, contentBounds: Bounds, glyphName: 'left' | 'right') {

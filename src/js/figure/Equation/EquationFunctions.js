@@ -4167,6 +4167,8 @@ export class EquationFunctions {
     let symbol;
     let contentSpace;
     let commentSpace;
+    let contentLineSpace;
+    let commentLineSpace;
     let scale;
     let inSize;
     let fullContentBounds;
@@ -4174,12 +4176,12 @@ export class EquationFunctions {
     if (Array.isArray(optionsOrArray)) {
       [
         content, comment, symbol, contentSpace, commentSpace, scale, inSize,
-        fullContentBounds, useFullBounds,
+        contentLineSpace, commentLineSpace, fullContentBounds, useFullBounds,
       ] = optionsOrArray;
     } else {
       ({                                                      // $FlowFixMe
         content, comment, symbol, contentSpace, commentSpace, scale, inSize,
-        fullContentBounds, useFullBounds,
+        contentLineSpace, commentLineSpace, fullContentBounds, useFullBounds,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -4189,6 +4191,8 @@ export class EquationFunctions {
       inSize,
       useFullBounds,
       fullContentBounds,
+      contentLineSpace,
+      commentLineSpace,
     };
     const defaultOptions = {
       contentSpace: 0.03,
@@ -4197,13 +4201,16 @@ export class EquationFunctions {
       inSize: true,
       fullContentBounds: false,
       useFullBounds: false,
+      contentLineSpace: 0.03,
+      commentLineSpace: 0.03,
     };
 
     const options = joinObjects(defaultOptions, optionsIn);
     return [
       content, comment, symbol,
       options.contentSpace, options.commentSpace, options.scale,
-      options.inSize, options.fullContentBounds, options.useFullBounds,
+      options.inSize, options.contentLineSpace, options.commentLineSpace,
+      options.fullContentBounds, options.useFullBounds,
     ];
   }
 
@@ -4217,7 +4224,8 @@ export class EquationFunctions {
     const [
       content, comment, symbol,
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
-      inSize, fullContentBounds, useFullBounds,
+      inSize, contentLineSpace, commentLineSpace, fullContentBounds,
+      useFullBounds,
     ] = this.processComment(...args);
     const annotations = [{
       content: comment,
@@ -4246,11 +4254,9 @@ export class EquationFunctions {
         glyphs: {
           line: {
             symbol,              // $FlowFixMe
-            content: { xAlign: 'center', yAlign: 'top' },
-            comment: { xAlign: 'center', yALign: 'bottom' },
+            content: { xAlign: 'center', yAlign: 'top', space: contentLineSpace },
+            comment: { xAlign: 'center', yAlign: 'bottom', space: commentLineSpace },
             annotation: 0,
-            // annotations,
-            // space: contentSpaceToUse,
           },
         },
         inSize,
@@ -4281,7 +4287,8 @@ export class EquationFunctions {
     const [
       content, comment, symbol,
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
-      inSize, fullContentBounds, useFullBounds,
+      inSize, contentLineSpace, commentLineSpace, fullContentBounds,
+      useFullBounds,
     ] = this.processComment(...args);
 
     const annotations = [{
@@ -4300,7 +4307,25 @@ export class EquationFunctions {
         inSize,
       });
     }
-
+    const glyph = this.getExistingOrAddSymbol(symbol);
+    if (glyph instanceof EquationLine) {
+      annotations[0].offset = [0, -commentSpaceToUse - contentSpaceToUse];
+      return this.annotate({
+        content,
+        fullContentBounds,
+        useFullBounds,
+        annotations,
+        glyphs: {
+          line: {
+            symbol,              // $FlowFixMe
+            content: { xAlign: 'center', yAlign: 'bottom', space: contentLineSpace },
+            comment: { xAlign: 'center', yAlign: 'top', space: commentLineSpace },
+            annotation: 0,
+          },
+        },
+        inSize,
+      });
+    }
     return this.annotate({
       content,
       fullContentBounds,

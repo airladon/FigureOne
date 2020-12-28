@@ -151,7 +151,7 @@ figure.add([
 ]);
 
 
-const ball = (x, index, sides = 10) => ({
+const ball = (x, index, sides = 20) => ({
   name: `ball${index}`,
   method: 'primitives.polygon',
   path: 'balls',
@@ -250,12 +250,37 @@ const brac2 = content => ({
 });
 const brac3 = content => ({
   brac: {
-    left: 'lb3', content, right: 'rb3', height: 0.2, descent: 0.05,
+    left: 'lb3', content, right: 'rb3', descent: 0.05,
   },
 });
-const scale = (content, s = 0.7) => ({
+const scale = (content, s = 0.8) => ({
   scale: { content, scale: s },
 });
+
+const ann = (content, comment, symbol, space = 0.2) => ({
+  bottomComment: {
+    content,
+    comment,
+    commentSpace: space,
+    symbol,
+    inSize: false,
+  },
+});
+
+const tann = (content, comment, symbol, space = 0.2) => ({
+  topComment: {
+    content,
+    comment,
+    commentSpace: space,
+    symbol,
+    inSize: false,
+  },
+});
+
+const color0 = [1, 0, 0, 1];
+const color1 = [0, 0.5, 1, 1];
+// const color2 = [0, ]
+
 // Add equation
 figure.add([
   {
@@ -275,58 +300,46 @@ figure.add([
         equals: '  =  ',
         w1: '\u03c9',
         w2: '\u03c9',
+        w3: '\u03c9',
         min: ' \u2212 ',
+        min2: ' \u2212 ',
         comma1: ', ',
         comma2: ', ',
         v: { symbol: 'vinculum' },
-        arrow: {
-          symbol: 'arrow',
-          direction: 'up',
-          arrowLength: 0.05,
-          arrowWidth: 0.05,
-          length: 0.2,
-          // draw: 'static',
-          // staticHeight: 0.2,
-          lineWidth: 0.01,
-        },
-        line: { symbol: 'line', width: 0.007, dash: [0.01, 0.01], arrow: { start: { head: 'triangle', scale: 0.7 } } },
+        brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
+        line1: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
+        line2: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
+        x_4: { color: color0 },
+        _0_4: { color: color0 },
+        x_5: { color: color1 },
+        x_6: { color: color1 },
+        x_7: { color: color1 },
+        _1_5: { color: color1 },
+        _1_6: { color: color1 },
+        _1_7: { color: color1 },
       },
       phrases: {
         ytx: ['y_1', brac1(['x_1', 'comma1', 't_1'])],
         sinkx: ['sin', brac2(['w1', 't_2', 'min', 'k', 'x_2'])],
         t1: { sub: ['t_2', '_1_1'] },
-        x11: { sub: ['x_1', '_1_2'] },
-        x12: { sub: ['x_2', '_1_3'] },
-        x1OnC: { frac: ['x12', 'v', 'c'] },
-        sX1OnC: scale('x1OnC'),
-        x0: { sub: ['x_1', '_0'] },
+        t12: { sub: ['t_6', '_1_3'] },
+        x11: { sub: ['x_2', '_1_2'] },
+        x12: { sub: ['x_6', '_1_6'] },
+        x13: { sub: ['x_7', '_1_7'] },
+        x1OnC: { frac: ['x11', 'v', 'c'] },
+        x1OnCb: { frac: ['x13', 'v', 'c'] },
+        sX1OnC: scale('x1OnCb'),
+        swX1OnC: scale({ frac: [['w3', 'x13'], 'v', 'c'] }),
+        swX1ToXOnC: scale({ frac: [['w3', tann('x13', 'x_1', 'line2')], 'v', 'c'] }),
+        x0: { sub: ['x_4', '_0_4'] },
         yx0t: ['y_0', brac1(['x0', 'comma1', 't_1'])],
-        yx1t: ['y_0', brac1(['x11', 'comma1', 't_1'])],
+        yx0To1t: ['y_0', brac1([ann('x0', 'x12', 'line1'), 'comma1', 't_1'])],
+        yx1t: ['y_0', brac1(['x12', 'comma1', 't_1'])],
+        yx1ToXt: ['y_0', brac1([tann('x12', 'x_0', 'line1'), 'comma1', 't_1'])],
+        yxt: ['y_0', brac1(['x_0', 'comma1', 't_1'])],
+        sXOnC: scale({ frac: [['w3', 'x_1'], 'v', 'c'] }),
         wt: ['w1', 't_3'],
-        tToTMinT1: {
-          bottomComment: {
-            content: 't_3',
-            comment: ['t_4', 'min', 't1'],
-            symbol: 'arrow',
-            contentSpace: 0.1,
-            inSize: false,
-          },
-        },
-        // tToTMinT1: {
-        //   annotate: {
-        //     content: 't_3',
-        //     glyphs: {
-        //       bottom: {
-        //         symbol: 'arrow',
-        //         annotation: {
-        //           content: ['t_4', 'min', 't1'],
-        //         },
-        //       },
-        //     },
-        //   },
-        // },
-        // wtmint1: ['w1', brac3(['t_3', 'min', 't1'])],
-        // wtminwt1:
+        tToTMinT1: ann('t_3', ['t_4', 'min', 't1'], 'line2'),
 
         // // t12: { sub: ['t_3', '_1_2'] },
         // x12: { sub: ['x_3', '_1_4'] },
@@ -342,67 +355,38 @@ figure.add([
         duration: 1,
       },
       forms: {
-        // 0: ['ytx', 'equals', 'sinkx'],
-        // 22: {
-        //   comment: {
-        //     content: [],
-        //     comment: [],
-        //     position: 'top' | 'bottom',
-        //     offset: Point,
-        //     symbol: { bracket | line },
-        //     contentSpace: number,
-        //     commentSpace: number,
-        //     scale: number,
-        //     insize
-        //     fullContentBounds,
-        //     useFullBounds,
-        //   }
-        // },
-        0: {
-          topComment: {
-            content: 'abc',
-            comment: 'defg',
-            commentSpace: 0.2,
-            contentSpace: 0.2,
-            symbol: 'line',
-          },
-        },
-        aa0: {
-          annotate: {
-            content: 'abc',
-            annotation: {
-              content: 'def',
-              offset: [0, 0.2],
-              scale: 0.6,
-              xPosition: 'right',
-            },
-            glyphs: {
-              line: {
-                symbol: 'line',
-                annotation: 0,
-                content: {
-                  xAlign: 'center',
-                  yAlign: 'top',
-                  space: 0.02,
-                },
-                comment: {
-                  xAlign: 'center',
-                  yAlign: 'bottom',
-                  space: 0.02,
-                },
-              },
-            },
-          },
-        },
+        0: ['ytx', 'equals', 'sinkx'],
         1: [],
         2: ['t1', 'equals', 'x1OnC'],
         3: ['yx0t', 'equals', 'A', 'sin', brac2(['w1', 't_3'])],
-        4: ['yx1t', 'equals', 'A', 'sin', brac2(['w1', 'tToTMinT1'])],
-        5: ['yx1t', 'equals', 'A', 'sin', brac2(['w1', brac3(['t_3', 'min', 't1'])])],
-        6: ['yx1t', 'equals', 'A', 'sin', brac2(['w1', brac3(['t_3', 'min', 'sX1OnC'])])],
-        // 3: ['yx1', 'equals', 'yx0'],
-        // 4: ['yx1', 'equals', 'yx1c'],
-        // 5: ['ytx', 'equals', 'yxc'],
+        4: ['yx0To1t', 'equals', 'A', 'sin', brac2(['w1', 'tToTMinT1'])],
+        5: ['yx1t', 'equals', 'A', 'sin', brac2(['w1', brac3(['t_4', 'min', 't1'])])],
+        6: [
+          'yx1t', 'equals', 'A', 'sin', brac2(
+            {
+              bottomComment: [
+                ['w1', brac3(['t_4', 'min', 't1'])],
+                ['w2', 't_5', 'min2', 'w3', 't12'],
+                'brace',
+              ],
+            },
+          ),
+        ],
+        7: [
+          'yx1t', 'equals', 'A', 'sin', brac2(
+            ['w2', 't_5', 'min2', 'w3', 't12'],
+          ),
+        ],
+        8: [
+          'yx1t', 'equals', 'A', 'sin', brac2(
+            ['w2', 't_5', 'min2', 'w3', ann('t12', 'sX1OnC', 'line2')],
+          ),
+        ],
+        9: ['yx1t', 'equals', 'A', 'sin', brac2(['w2', 't_5', 'min2', 'w3', 'sX1OnC'])],
+        10: ['yx1t', 'equals', 'A', 'sin', brac2(['w2', 't_5', 'min2', 'swX1OnC'])],
+        11: ['yx1ToXt', 'equals', 'A', 'sin', brac2(['w2', 't_5', 'min2', 'swX1ToXOnC'])],
+        12: ['yxt', 'equals', 'A', 'sin', brac2(['w2', 't_5', 'min2', 'sXOnC'])],
+        13: ['w2', 't_5', 'min2', 'sXOnC'],
       },
       formSeries: ['0'],
       position: [-0.3, -A - 0.4],
@@ -450,6 +434,10 @@ const prevButton = figure.getElement('prevButton');
 const description = figure.getElement('description');
 const sideEqn = figure.getElement('sideEqn');
 const balls = figure.getElement('balls');
+// const ballx0 = figure.getElement('balls.ball0');
+const bx1 = figure.getElement('balls.ball25');
+bx1.setColor(color1);
+balls.toFront(bx1.name);
 
 nextButton.onClick = slideNav.nextSlide;
 prevButton.onClick = slideNav.prevSlide;
@@ -463,17 +451,17 @@ const modifiers = {
     touchBorder: [0.1, 0.03, 0.1, 0.1],
   },
   'first particle': {
-    font: { color: [1, 0, 0, 1] },
+    font: { color: color0 },
     onClick: () => b0.pulse({ scale: 4 }),
   },
   'sine function': {
-    font: { color: [1, 0, 0, 1] },
+    font: { color: [0, 0.5, 1, 1] },
     onClick: () => disturbSine(0, true),
   },
-  'some point': {
-    font: { color: [1, 0, 0, 1] },
-    onClick: () => figure.getElement('balls.ball50').pulse({ scale: 4 }),
-  },
+  // 'some point': {
+  //   font: { color: color1 },
+  //   onClick: () => figure.getElement('balls.ball50').pulse({ scale: 4 }),
+  // },
   1: {
     font: { family: 'Times New Roman', size: 0.06 },
     offset: [0, -0.03],
@@ -491,8 +479,49 @@ const modifiers = {
   substitute: {
     font: { color: [1, 0, 0, 1] },
     onClick: () => {
-      eqn.pulse({ elements: ['t_2', '_1_1'], centerOn: 't_2', xAlign: 'right' });
-      sideEqn.pulse({ scale: 1.3 });
+      eqn.pulse({ elements: ['t_6', '_1_3'], centerOn: 't_6', xAlign: 0.3 });
+      sideEqn.pulse({ elements: ['t', '_1_1'], centerOn: 't', xAlign: 'right' });
+    },
+    touchBorder: 0.1,
+  },
+  xr0: {
+    text: 'x',
+    font: { family: 'Times New Roman', style: 'italic', color: color0 },
+    onClick: () => b0.pulse({ scale: 4 }),
+    touchBorder: 0.1,
+  },
+  _0r: {
+    text: '0',
+    font: {
+      family: 'Times New Roman', color: color0, size: 0.06,
+    },
+    offset: [0, -0.03],
+    inLine: false,
+  },
+  xb1: {
+    text: 'x',
+    font: { family: 'Times New Roman', style: 'italic', color: color1 },
+    onClick: () => bx1.pulse({ scale: 4 }),
+    touchBorder: 0.1,
+  },
+  _1b: {
+    text: '1',
+    font: {
+      family: 'Times New Roman', color: color1, size: 0.06,
+    },
+    offset: [0, -0.03],
+    inLine: false,
+  },
+  w: {
+    text: '\u03c9',
+    font: {
+      family: 'Times New Roman', color: color0, style: 'italic',
+    },
+  },
+  w1: {
+    text: '\u03c9',
+    font: {
+      family: 'Times New Roman', style: 'italic',
     },
   },
 };
@@ -507,12 +536,12 @@ slides.push({
       text: 'And the relationship between frequency wavelength, and velocity.',
     },
   ],
+  form: '0',
   steadyState: () => {
     reset();
     disturbSine(1);
     figure.elements._balls.dim();
     sideEqn.hide();
-    eqn.showForm('0');
   },
 });
 
@@ -524,21 +553,12 @@ slides.push({
     {
       text: 'Touch the word |disturbance| or move the |first particle| manually.',
       font: { size: 0.07 },
-      // lineSpace: 0.2,
     },
-    // {
-    //   font: { size: 0.07 },
-    //   text: 'The medium above is a string of particles that move in |y|',
-    // },
-    // {
-    //   font: { size: 0.06 },
-    //   text: 'The particles do not travel along |x| with the wave, they are just disturbed by it.',
-    // },
   ],
+  form: null,
   steadyState: () => {
     reset();
     disturbPulse();
-    eqn.showForm('1');
     figure.elements._balls.highlight(['ball0']);
   },
 });
@@ -548,28 +568,23 @@ slides.push({
 slides.push({
   text: [
     'The |disturbance| moves with a constant velocity |c|.',
-    {
-      text: 'Thus, the time it takes to move some distance |x||1|',
-      lineSpace: 0.2,
-    },
+    { text: 'Thus, the time it takes to move some distance |x||1|', lineSpace: 0.2 },
     'can be calculated.',
   ],
   steadyState: () => {
     reset();
     disturbPulse();
-    eqn.showForm('1');
   },
 });
 
+slides.push({ form: '2' });
 slides.push({
-  transitionFromPrev: done => eqn.goToForm({
-    form: '2', callback: done,
-  }),
-  steadyState: () => { eqn.showForm('2'); },
+  form: '2',
+  text: 'Let\'s record this as equation (1)',
+  steadyState: () => { sideEqn.hide(); },
 });
-
 slides.push({
-  transitionFromPrev: (done) => {
+  transition: (done) => {
     sideEqn.hide();
     const p = eqn.getPosition();
     figure.elements.animations.new()
@@ -586,32 +601,25 @@ slides.push({
       .whenFinished(done)
       .start();
   },
-  steadyState: () => {
-    eqn.showForm('1');
-    sideEqn.showForm('2');
-  },
+  steadyStateCommon: () => { sideEqn.showForm('2'); },
+  steadyState: () => { eqn.hide(); },
 });
 
 // /////////////////////////////////////////////////////////////////
 slides.push({
+  form: null,
   text: [
     'Now, let\'s disturb the |first particle| with a',
     '|sine function|.',
   ],
-  steadyState: () => {
-    eqn.showForm('1');
-    sideEqn.showForm('2');
-  },
 });
 
 slides.push({
-  transitionFromPrev: done => eqn.goToForm({
-    form: '3', callback: done,
-  }),
+  form: '3',
   steadyState: () => {
-    eqn.showForm('3');
     sideEqn.showForm('2');
     balls.hasTouchableElements = false;
+    figure.elements._balls.highlight(['ball0']);
     if (!figure.getElement('balls.ball0').isAnimating()) {
       disturbSine(0, true);
     }
@@ -621,196 +629,102 @@ slides.push({
 // /////////////////////////////////////////////////////////////////
 slides.push({
   text: [
-    'The disturbance at |some point| |x||1|  is the',
-    'disturbance at |x||0|  from |t||1|  seconds ago.',
+    'The disturbance at some point |xb1||_1b|  is the',
+    'disturbance at |xr0||_0r|  from |t||1|  seconds ago.',
   ],
   steadyState: () => {
-    eqn.showForm('3');
-    sideEqn.showForm('2');
-    figure.elements._balls.highlight(['ball0', 'ball50']);
+    figure.elements._balls.highlight(['ball0', bx1.name]);
+    bx1.pulse({ scale: 4 });
   },
 });
 
+slides.push({ form: '4' });
+slides.push({ form: '5' });
+slides.push({ text: 'Multiply |w1| through' });
+slides.push({ form: '6' });
+slides.push({ form: '7' });
+slides.push({ text: 'We can now |substitute| equation (1)' });
+slides.push({ form: '8' });
+slides.push({ form: '9' });
 slides.push({
-  transitionFromPrev: done => eqn.goToForm({
-    form: '4', callback: done, animate: 'move', duration: 1,
-  }),
-  steadyState: () => {
-    eqn.showForm('4');
-    sideEqn.showForm('2');
-  },
+  text: [
+    '|xb1||_1b| was arbitrarily selected, so we',
+    'can say |x| more generally',
+  ],
 });
-
+slides.push({ form: '10' });
+slides.push({ form: '11' });
+slides.push({ form: '12' });
 
 // /////////////////////////////////////////////////////////////////
 slides.push({
   text: [
-    'We can now |substitute| equation (1)',
+    'This equation describes the string at any',
+    'position |x| at any time |t|.',
   ],
   steadyState: () => {
-    eqn.showForm('4');
-    sideEqn.showForm('2');
+    eqn.showForm('12');
+    sideEqn.hide();
   },
 });
 
+// /////////////////////////////////////////////////////////////////
 slides.push({
-  transitionFromPrev: done => eqn.goToForm({
-    form: '5', callback: done, animate: 'move', duration: 1,
-  }),
+  text: [
+    'Now let\'s examine the terms within the sine',
+    'function more closely.',
+  ],
   steadyState: () => {
-    eqn.showForm('5');
-    sideEqn.showForm('2');
+    eqn.showForm('12');
+    sideEqn.hide();
   },
 });
 
-
-
-
-
-
-
-
-
-// // /////////////////////////////////////////////////////////////////
-// slides.push({
-//   text: [
-//     'In other words, the disturbance at |x||1|  is',
-//     'the disturabance at |x||0| |t||1| seconds ago',
-//   ],
-//   steadyState: () => {
-//     eqn.showForm('1');
-//     sideEqn.showForm('2');
-//     figure.elements._balls.highlight(['ball0', 'ball50']);
-//   },
-// });
-
-
-// // /////////////////////////////////////////////////////////////////
-// slides.push({
-//   text: [
-//     'In this case our medium is a string made up of',
-//     'particles.',
-//   ],
-//   steadyState: () => {
-//     reset();
-//     figure.elements._balls.dim();
-//     eqn.showForm('1');
-//   },
-// });
-
-// // /////////////////////////////////////////////////////////////////
-// slides.push({
-//   text: [
-//     'The particles can only move in |y| as the',
-//     '|disturbance| passes',
-//   ],
-//   steadyState: () => {
-//     reset();
-//     disturbPulse();
-//     figure.elements._balls.highlight(['ball25', 'ball50']);
-//     eqn.showForm('1');
-//   },
-// });
-
-// // /////////////////////////////////////////////////////////////////
-// slides.push({
-//   text: [
-//     'Make your own disturbance by moving the',
-//     '|first particle| in different ways.',
-//   ],
-//   steadyState: () => {
-//     reset();
-//     figure.elements._balls.highlight(['ball0']);
-//     eqn.showForm('1');
-//   },
-// });
-
-// // /////////////////////////////////////////////////////////////////
-// slides.push({
-//   text: [
-//     'The |disturbance| propagates with a velocity |c|',
-//   ],
-//   steadyState: () => { eqn.showForm('1'); },
-// });
-
-// // /////////////////////////////////////////////////////////////////
-// slides.push({
-//   text: [
-//     'The time it takes for the disturbance to',
-//     'travel some distance |x||1|  is then',
-//   ],
-//   steadyState: () => { eqn.showForm('1'); },
-// });
+// /////////////////////////////////////////////////////////////////
+slides.push({
+  text: [
+    '|w| is the angular frequency and is the number of',
+    'times 2\u03c0 radians is cycled through per second',
+  ],
+  steadyState: () => {
+    eqn.showForm('wt');
+    // eqn.exec(['setColor', color0], ['w2', 't_5']);
+  },
+});
 
 // slides.push({
-//   transitionFromPrev: done => eqn.goToForm({
-//     form: '2', animate: 'move', duration: 1, callback: done,
-//   }),
-//   steadyState: () => { eqn.showForm('2'); },
-// });
+//   text: []
+// })
 
-// // /////////////////////////////////////////////////////////////////
-// slides.push({
-//   text: [
-//     'Let\'s remember this equation as (1)',
-//   ],
-//   steadyState: () => {
-//     eqn.showForm('2');
-//     sideEqn.hide();
-//   },
-// });
 
-// slides.push({
-//   transitionFromPrev: (done) => {
-//     sideEqn.hide();
-//     const p = eqn.getPosition();
-//     figure.elements.animations.new()
-//       .inParallel([
-//         eqn.animations.position({ target: [0.91, -0.8], duration: 1 }),
-//         eqn.animations.scale({ target: 0.714, duration: 1 }),
-//       ])
-//       .trigger(() => {
-//         eqn.setPosition(p);
-//         eqn.setScale(1);
-//         eqn.showForm('1');
-//         sideEqn.showForm('0');
-//       })
-//       .whenFinished(done)
-//       .start();
-//   },
-//   steadyState: () => {
-//     eqn.showForm('1');
-//     sideEqn.showForm('0');
-//   },
-// });
+// wt is constant, so this is just a normal sine wave dependent on f, c and x.
+// The wavelenght of the sine wave is the distance it takes for the angle to cycle
+// through 2π radians.
+// The 2πf term says how many times per second the angle moves through a full 2π
+// radians, therefore the time it takes to go through a single 2π radians must be 1/f.
+// If the velocity of the wave is c, then the distance it travels in 1/fs is c/fm.
+// In other words, the wavelength is equal to c/f,  or more commonly c = lamda f.
+// Knowning this we can rearrange 2πf/c = 2π/wavelength. This is often called
+// the phase term of the propagation constant, and is denoted as k.
+// In other words, the propagation constant describes how many radians per meter
+// are cycled through - which when finally multiplied by x gives a final angle term dependent on f, c, and x.
+// This also means, as our velocity gets faster, then our wavelength must
+// get smaller.
 
-// // /////////////////////////////////////////////////////////////////
-// slides.push({
-//   text: [
-//     'It takes |t||1|  seconds for a disturbance to',
-//     'travel from |x| = 0 to |x||1|, therefore |y| at |x||1|',
-//     '|y| at |x||1|  is the same as at |x| = 0',
-//     '|t||1|  seconds ago.',
-//   ],
-//   steadyState: () => {
-//     eqn.showForm('1');
-//     sideEqn.showForm('0');
-//   },
-// });
 
-// slides.push({
-//   transitionFromPrev: done => eqn.goToForm({
-//     form: '3', animate: 'dissolve', callback: done,
-//   }),
-//   steadyState: () => {
-//     eqn.showForm('3');
-//     sideEqn.showForm('0');
-//   },
-// });
+// 2πf says how many times per second the angle moves through a full 2π radians.
+// Therefore 2πft says how many times the angle has moved through 2π radians in time t, and leaves us with a resultant angle.
+// For 2πf x/c we similarly have 2πf saying how many times per second the angle
+// covers 2π radians, and then the x/c term is the time giving us a resultant
+// angle. Antoher way to think of this is 2πf revoltions per second per c m/s.
+// 2π f/c (1/s / m/s = 1/m) which is how many times does the angle traverse
+// through 2π radians per meter. Now the wavelength is how many meters is
+// 2π radians, 
+
 
 
 // /////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////
-slideNav.loadSlides(slides, prevButton, nextButton, figure, description, modifiers);
+slideNav.loadSlides(slides, prevButton, nextButton, figure, description, modifiers, eqn);
 
-slideNav.goToSlide(0);
+slideNav.goToSlide(15);

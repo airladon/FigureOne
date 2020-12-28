@@ -1,7 +1,7 @@
 // @flow
 import { FigureElementPrimitive } from '../../Element';
 import {
-  Point,
+  Point, Line,
 } from '../../../tools/g2';
 import { makePolyLine } from '../../geometries/lines/lines';
 import Symbol from './SymbolNew';
@@ -40,14 +40,17 @@ export default class EquationLine extends Symbol {
   //
 
   // eslint-disable-next-line class-methods-use-this
-  getPoints(options: Object) {
-    const { lineWidth, width, height } = this.getDefaultValues(
-      null, null, options,
-    );
-    const p1 = options.spacedLine.p1;
-    const p2 = options.spacedLine.p2;
+  getPoints(options: Object, angle: number, length: number) {
+    // const { lineWidth, width, height } = this.getDefaultValues(
+    //   null, null, options,
+    // );
+    // const p1 = options.spacedLine.p1;
+    // const p2 = options.spacedLine.p2;
+    // console.log(angle, length)
+    const line = new Line([0, 0], length, angle);
+    // console.log(line)
     const [points] = makePolyLine(
-      [p1, p2], options.width, false, 'mid', 'none', 0.1,
+      [new Point(0, 0), line.p2], options.width, false, 'mid', 'none', 0.1,
       1, 0, options.dash, false,
       2, [[]], [[]], [[]], options.arrow,
     );
@@ -58,7 +61,7 @@ export default class EquationLine extends Symbol {
     //   new Point(width, 0),
     //   new Point(width, lineWidth),
     // ];
-    return [points, width, height, 'triangles'];
+    return [points, angle, length, 'triangles'];
   }
 
   /* eslint-disable class-methods-use-this */
