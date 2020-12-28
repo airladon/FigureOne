@@ -59,8 +59,9 @@ function SlideNavigator() {
     } else {
       eqn.hide();
     }
-    if (slide.steadyStateCommon != null) {
-      slide.steadyStateCommon();
+    const steadyStateCommon = getProperty('steadyStateCommon', index);
+    if (steadyStateCommon != null) {
+      steadyStateCommon();
     }
     if (slide.steadyState != null) {
       slide.steadyState();
@@ -121,8 +122,9 @@ function SlideNavigator() {
     if (form === null) {
       eqn.hide();
     }
-    if (slide.enterStateCommon != null) {
-      slide.enterStateCommon();
+    const enterStateCommon = getProperty('enterStateCommon', index);
+    if (enterStateCommon != null) {
+      enterStateCommon();
     }
     if (slide.enterState != null) {
       slide.enterState();
@@ -135,6 +137,7 @@ function SlideNavigator() {
   };
 
   const setText = (index, fromPrev = false) => {
+    fig.stop('complete');
     description.stop();
     const m = getModifiers(index);
     description.custom.updateText({
@@ -146,12 +149,15 @@ function SlideNavigator() {
 
   const leaveState = (index, fromPrev = false) => {
     const slide = slides[currentSlideIndex];
-    const done = () => (setText(index, fromPrev));
-    slide.setLeaveState(done);
+    slide.leaveState();
+    setText(index, fromPrev);
   };
 
   const goToSlide = (index, fromPrev = false) => {
-    fig.stop('complete');
+    const leaveStateCommon = getProperty('leaveStateCommon', index);
+    if (leaveStateCommon != null) {
+      leaveStateCommon();
+    }
     if (slides[currentSlideIndex].leaveState != null) {
       leaveState(index, fromPrev);
     } else {

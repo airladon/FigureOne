@@ -686,9 +686,11 @@ export default class AnimationManager {
     }
   }
 
-  cancelAll(force: ?'complete' | 'freeze' = null) {
+  cancelAll(how: ?'complete' | 'freeze' = null, force: boolean = false) {
     for (let i = 0; i < this.animations.length; i += 1) {
-      this.animations[i].cancel(force);
+      if (force || !this.animations[i].name.startsWith('_noStop_')) {
+        this.animations[i].cancel(how);
+      }
     }
     this.cleanAnimations();
   }

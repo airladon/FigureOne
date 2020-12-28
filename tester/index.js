@@ -19,17 +19,40 @@ class Recording {
 
     // record the current time
     this.lastTime = new Date().getTime();
+    this.timeOffset = 0;
+    this.paused = false;
+    this.pauseStart = 0;
   }
 
   reset(value) {
     this.data = Array(this.len).fill(value);
   }
 
+  pause() {
+    this.pauseStart = this.now();
+    this.paused = true;
+  }
+
+  unPause() {
+    this.paused = false;
+    this.timeOffset += new Date().getTime() - this.pauseStart + this.timeOffset;
+  }
+
+  now() {
+    if (this.paused) {
+      return this.pauseStart;
+    }
+    return new Date().getTime() - this.timeOffset;
+  }
+
   // Update the signal data with the new value. Signal data is has a resolution
   // of 0.02s, so if this value comes in more than 0.04s after the last value
   // was recorder, then use interpolation to fill in the missing samples.
   update(value) {
-    const currentTime = new Date().getTime();
+    if (this.paused) {
+      return;
+    }
+    const currentTime = this.now();
     const deltaTime = (currentTime - this.lastTime) / 1000;
 
     // If the value has come in faster than the time resolution, then
@@ -65,9 +88,9 @@ class Recording {
 }
 
 const startX = -1.5;
-let f = 0.3; // Hz
+let f = 0.2; // Hz
 const A = 0.7;   // m
-let c = 1;   // m/s
+let c = 0.5;   // m/s
 
 // Helper function to make buttons
 const button = (name, position, label) => ({
@@ -221,15 +244,28 @@ const disturbPulse = () => {
     .start();
 };
 // disturbPulse();
-
+let lastTime = 0.0;
 const disturbSine = (delay = 0, resetSignal = true) => {
   if (resetSignal) {
     reset();
   }
-  b0.animations.new()
+  // let timeOffset = 0;
+  // if (useLastTime) {
+  //   timeOffset = lastTime;
+  // }
+  const startTime = data.now();
+  b0.animations.new('_noStop_sine')
     .delay(delay)
     .custom({
-      callback: p => b0.setPosition(startX, A * Math.sin(p * 10000 * 2 * Math.PI * f)),
+      callback: (p) => {
+        // const time = p * 10000 + timeOffset;
+        const time = (data.now() - startTime) / 1000;
+        // if (p < 1) {
+          // lastTime = time;
+        console.log(time)
+        b0.setPosition(startX, A * Math.sin(time * 2 * Math.PI * f));
+        // }
+      },
       duration: 10000,
     })
     .start();
@@ -238,12 +274,20 @@ const disturbSine = (delay = 0, resetSignal = true) => {
 
 figure.elements._balls.dim();
 
-const brac1 = content => ({
+const b1 = content => ({
   brac: {
     left: 'lb1', content, right: 'rb1', height: 0.2, descent: 0.05,
   },
 });
-const brac2 = content => ({
+const ASin = content => ([
+  'A', 'sin',
+  {
+    brac: {
+      left: 'lb2', content, right: 'rb2', height: 0.2, descent: 0.05,
+    },
+  },
+]);
+const b2 = content => ({
   brac: {
     left: 'lb2', content, right: 'rb2', height: 0.2, descent: 0.05,
   },
@@ -303,6 +347,8 @@ figure.add([
         w3: '\u03c9',
         min: ' \u2212 ',
         min2: ' \u2212 ',
+        _2pi1: '2\u03c0',
+        _2pi2: '2\u03c0',
         comma1: ', ',
         comma2: ', ',
         v: { symbol: 'vinculum' },
@@ -319,8 +365,8 @@ figure.add([
         _1_7: { color: color1 },
       },
       phrases: {
-        ytx: ['y_1', brac1(['x_1', 'comma1', 't_1'])],
-        sinkx: ['sin', brac2(['w1', 't_2', 'min', 'k', 'x_2'])],
+        ytx: ['y_1', b1(['x_1', 'comma1', 't_1'])],
+        sinkx: ['sin', b2(['w1', 't_2', 'min', 'k', 'x_2'])],
         t1: { sub: ['t_2', '_1_1'] },
         t12: { sub: ['t_6', '_1_3'] },
         x11: { sub: ['x_2', '_1_2'] },
@@ -329,26 +375,27 @@ figure.add([
         x1OnC: { frac: ['x11', 'v', 'c'] },
         x1OnCb: { frac: ['x13', 'v', 'c'] },
         sX1OnC: scale('x1OnCb'),
-        swX1OnC: scale({ frac: [['w3', 'x13'], 'v', 'c'] }),
-        swX1ToXOnC: scale({ frac: [['w3', tann('x13', 'x_1', 'line2')], 'v', 'c'] }),
+        sX1ToXOnC: scale({ frac: [tann('x13', 'x_1', 'line2'), 'v', 'c'] }),
+        // swX1OnC: scale({ frac: [['w3', 'x13'], 'v', 'c'] }),
+        // swX1ToXOnC: scale({ frac: [['w3', tann('x13', 'x_1', 'line2')], 'v', 'c'] }),
         x0: { sub: ['x_4', '_0_4'] },
-        yx0t: ['y_0', brac1(['x0', 'comma1', 't_1'])],
-        yx0To1t: ['y_0', brac1([ann('x0', 'x12', 'line1'), 'comma1', 't_1'])],
-        yx1t: ['y_0', brac1(['x12', 'comma1', 't_1'])],
-        yx1ToXt: ['y_0', brac1([tann('x12', 'x_0', 'line1'), 'comma1', 't_1'])],
-        yxt: ['y_0', brac1(['x_0', 'comma1', 't_1'])],
-        sXOnC: scale({ frac: [['w3', 'x_1'], 'v', 'c'] }),
+        yx0t: ['y_0', b1(['x0', 'comma1', 't_1'])],
+        yx0To1t: ['y_0', b1([ann('x0', 'x12', 'line1'), 'comma1', 't_1'])],
+        yx1t: ['y_0', b1(['x12', 'comma1', 't_1'])],
+        yx1ToXt: ['y_0', b1([tann('x12', 'x_0', 'line1'), 'comma1', 't_1'])],
+        yxt: ['y_0', b1(['x_0', 'comma1', 't_1'])],
+        sXOnC: scale({ frac: ['x_1', 'v', 'c'] }),
         wt: ['w1', 't_3'],
         tToTMinT1: ann('t_3', ['t_4', 'min', 't1'], 'line2'),
 
         // // t12: { sub: ['t_3', '_1_2'] },
         // x12: { sub: ['x_3', '_1_4'] },
-        // // yx0: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 't12'])],
+        // // yx0: ['y_0', b2(['x0', 'comma2', 't_1', 'min', 't12'])],
         // xOnC: { frac: ['x_2', 'v', 'c'] },
         // sX1OnC: scale('x1OnC'),
         // sXOnC: scale('xOnC'),
-        // yx1c: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 'sX1OnC'])],
-        // yxc: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 'sXOnC'])],
+        // yx1c: ['y_0', b2(['x0', 'comma2', 't_1', 'min', 'sX1OnC'])],
+        // yxc: ['y_0', b2(['x0', 'comma2', 't_1', 'min', 'sXOnC'])],
       },
       formDefaults: {
         alignment: { fixTo: 'equals' },
@@ -358,11 +405,11 @@ figure.add([
         0: ['ytx', 'equals', 'sinkx'],
         1: [],
         2: ['t1', 'equals', 'x1OnC'],
-        3: ['yx0t', 'equals', 'A', 'sin', brac2(['w1', 't_3'])],
-        4: ['yx0To1t', 'equals', 'A', 'sin', brac2(['w1', 'tToTMinT1'])],
-        5: ['yx1t', 'equals', 'A', 'sin', brac2(['w1', brac3(['t_4', 'min', 't1'])])],
+        3: ['yx0t', 'equals', ASin(['w1', 't_3'])],
+        4: ['yx0To1t', 'equals', ASin(['w1', 'tToTMinT1'])],
+        5: ['yx1t', 'equals', ASin(['w1', brac3(['t_4', 'min', 't1'])])],
         6: [
-          'yx1t', 'equals', 'A', 'sin', brac2(
+          'yx1t', 'equals', ASin(
             {
               bottomComment: [
                 ['w1', brac3(['t_4', 'min', 't1'])],
@@ -373,20 +420,32 @@ figure.add([
           ),
         ],
         7: [
-          'yx1t', 'equals', 'A', 'sin', brac2(
+          'yx1t', 'equals', ASin(
             ['w2', 't_5', 'min2', 'w3', 't12'],
           ),
         ],
         8: [
-          'yx1t', 'equals', 'A', 'sin', brac2(
+          'yx1t', 'equals', ASin(
             ['w2', 't_5', 'min2', 'w3', ann('t12', 'sX1OnC', 'line2')],
           ),
         ],
-        9: ['yx1t', 'equals', 'A', 'sin', brac2(['w2', 't_5', 'min2', 'w3', 'sX1OnC'])],
-        10: ['yx1t', 'equals', 'A', 'sin', brac2(['w2', 't_5', 'min2', 'swX1OnC'])],
-        11: ['yx1ToXt', 'equals', 'A', 'sin', brac2(['w2', 't_5', 'min2', 'swX1ToXOnC'])],
-        12: ['yxt', 'equals', 'A', 'sin', brac2(['w2', 't_5', 'min2', 'sXOnC'])],
-        13: ['w2', 't_5', 'min2', 'sXOnC'],
+        9: ['yx1t', 'equals', ASin(['w2', 't_5', 'min2', 'w3', 'sX1OnC'])],
+        10: ['yx1ToXt', 'equals', ASin(['w2', 't_5', 'min2', 'w3', 'sX1ToXOnC'])],
+        11: ['yxt', 'equals', ASin(['w2', 't_5', 'min2', 'w3', 'sXOnC'])],
+        12: [
+          'yxt', 'equals', ASin([
+            ann('w2', ['_2pi1', ' ', 'f_1'], 'line1'), 't_5',
+            'min2', ann('w3', ['_2pi2', ' ', 'f_2'], 'line2'), 'sXOnC']),
+        ],
+        13: [
+          'yxt', 'equals', ASin([
+            '_2pi1', ' ', 'f_1', ' ', 't_5', 'min2', '_2pi2', ' ', 'f_2', ' ', 'sXOnC',
+          ]),
+        ],
+        // 10: ['yx1t', 'equals', 'A', 'sin', b2(['w2', 't_5', 'min2', 'swX1OnC'])],
+        // 11: ['yx1ToXt', 'equals', 'A', 'sin', b2(['w2', 't_5', 'min2', 'swX1ToXOnC'])],
+        // 12: ['yxt', 'equals', 'A', 'sin', b2(['w2', 't_5', 'min2', 'sXOnC'])],
+        // 13: ['w2', 't_5', 'min2', 'sXOnC'],
       },
       formSeries: ['0'],
       position: [-0.3, -A - 0.4],
@@ -413,10 +472,10 @@ figure.add([
         t1: { sub: ['t', '_1_1'] },
         x1: { sub: ['x', '_1_2'] },
         x0: { sub: ['x_1', '_0'] },
-        ytx: ['y_1', brac1(['x_3', 'comma1', 't_0'])],
+        ytx: ['y_1', b1(['x_3', 'comma1', 't_0'])],
         xOnC: { frac: ['x_2', 'v', 'c'] },
         sXOnC: scale('xOnC'),
-        yxc: ['y_0', brac2(['x0', 'comma2', 't_1', 'min', 'sXOnC'])],
+        yxc: ['y_0', b2(['x0', 'comma2', 't_1', 'min', 'sXOnC'])],
       },
       formDefaults: { alignment: { xAlign: 'right' } }, // { fixTo: 'equals' } },
       forms: {
@@ -441,6 +500,14 @@ balls.toFront(bx1.name);
 
 nextButton.onClick = slideNav.nextSlide;
 prevButton.onClick = slideNav.prevSlide;
+
+prevButton.onClick = () => {
+  if (data.paused) {
+    data.unPause();
+  } else {
+    data.pause();
+  }
+}
 
 const slides = [];
 
@@ -515,17 +582,15 @@ const modifiers = {
   w: {
     text: '\u03c9',
     font: {
-      family: 'Times New Roman', color: color0, style: 'italic',
-    },
-  },
-  w1: {
-    text: '\u03c9',
-    font: {
       family: 'Times New Roman', style: 'italic',
     },
   },
 };
 
+// let lastPhase = 0;
+// const getPhase = () => {
+//   lastPhase = Math.asin(b0.getPosition().y / A);
+// };
 // /////////////////////////////////////////////////////////////////
 slides.push({
   text: [
@@ -543,6 +608,7 @@ slides.push({
     figure.elements._balls.dim();
     sideEqn.hide();
   },
+  // leaveStateCommon: () => { getPhase(); },
 });
 
 // /////////////////////////////////////////////////////////////////
@@ -558,6 +624,7 @@ slides.push({
   form: null,
   steadyState: () => {
     reset();
+    b0.animations.cancel('_noStop_sine');
     disturbPulse();
     figure.elements._balls.highlight(['ball0']);
   },
@@ -575,6 +642,7 @@ slides.push({
     reset();
     disturbPulse();
   },
+  leaveState: () => { reset(); },
 });
 
 slides.push({ form: '2' });
@@ -612,15 +680,25 @@ slides.push({
     'Now, let\'s disturb the |first particle| with a',
     '|sine function|.',
   ],
+  enterState: () => {
+    b0.isTouchable = true;
+    b0.animations.cancel('_noStop_sine');
+  },
 });
 
 slides.push({
+  enterStateCommon: () => {
+    if (!b0.isAnimating()) {
+      disturbSine(0, true);
+    }
+    b0.isTouchable = false;
+  },
   form: '3',
   steadyState: () => {
     sideEqn.showForm('2');
     balls.hasTouchableElements = false;
     figure.elements._balls.highlight(['ball0']);
-    if (!figure.getElement('balls.ball0').isAnimating()) {
+    if (!b0.isAnimating()) {
       disturbSine(0, true);
     }
   },
@@ -640,57 +718,44 @@ slides.push({
 
 slides.push({ form: '4' });
 slides.push({ form: '5' });
-slides.push({ text: 'Multiply |w1| through' });
+slides.push({ text: 'Multiply |w| through' });
 slides.push({ form: '6' });
 slides.push({ form: '7' });
 slides.push({ text: 'We can now |substitute| equation (1)' });
 slides.push({ form: '8' });
-slides.push({ form: '9' });
+slides.push({ form: '9', steadyState: () => sideEqn.hide() });
 slides.push({
   text: [
-    '|xb1||_1b| was arbitrarily selected, so we',
+    '|xb1||_1b|  was arbitrarily selected, so we',
     'can say |x| more generally',
   ],
+  steadyStateCommon: () => { sideEqn.hide(); },
 });
 slides.push({ form: '10' });
 slides.push({ form: '11' });
-slides.push({ form: '12' });
-
-// /////////////////////////////////////////////////////////////////
 slides.push({
   text: [
     'This equation describes the string at any',
     'position |x| at any time |t|.',
   ],
-  steadyState: () => {
-    eqn.showForm('12');
-    sideEqn.hide();
-  },
 });
-
-// /////////////////////////////////////////////////////////////////
 slides.push({
   text: [
     'Now let\'s examine the terms within the sine',
     'function more closely.',
   ],
-  steadyState: () => {
-    eqn.showForm('12');
-    sideEqn.hide();
-  },
 });
-
-// /////////////////////////////////////////////////////////////////
 slides.push({
   text: [
-    '|w| is the angular frequency and is the number of',
-    'times 2\u03c0 radians is cycled through per second',
+    '|w| is the angular frequency',
+    {
+      text: 'the number of times 2\u03c0 radians is cycled through per second',
+      font: { size: 0.07 },
+    },
   ],
-  steadyState: () => {
-    eqn.showForm('wt');
-    // eqn.exec(['setColor', color0], ['w2', 't_5']);
-  },
 });
+slides.push({ form: '12' });
+slides.push({ form: '13' });
 
 // slides.push({
 //   text: []
@@ -727,4 +792,4 @@ slides.push({
 // /////////////////////////////////////////////////////////////////
 slideNav.loadSlides(slides, prevButton, nextButton, figure, description, modifiers, eqn);
 
-slideNav.goToSlide(15);
+slideNav.goToSlide(5);
