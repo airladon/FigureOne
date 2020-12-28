@@ -14,42 +14,77 @@ class Recording {
     this.timeStep = 0.01;
     this.len = this.duration / this.timeStep;
     this.data = Array(this.len).fill(initialValue);
-    // this.data[0] = initialValue;
-    // console.log(this.data)
-
-    // record the current time
-    this.lastTime = new Date().getTime();
-    this.timeOffset = 0;
     this.paused = false;
-    this.pauseStart = 0;
+    this.startTime = new Date().getTime();
+    this.lastTime = 0;
+    this.cumPauseTime = 0;
+    this.focusPaused = false;
+    this.paused = false;
+  }
+
+  now() {
+    if (this.isPaused()) {
+      return this.pauseStart - this.startTime - this.cumPauseTime;
+    }
+    return new Date().getTime() - this.startTime - this.cumPauseTime;
   }
 
   reset(value) {
     this.data = Array(this.len).fill(value);
   }
 
+  isPaused() {
+    if (this.focusPaused || this.paused) {
+      return true;
+    }
+    return false;
+  }
+
+  focusPause() {
+    this.dataPause();
+    this.focusPaused = true;
+  }
+
+  focusUnpause() {
+    if (!this.paused) {
+      this.dataUnpause();
+    }
+    this.focusPaused = false;
+  }
+
   pause() {
-    this.pauseStart = this.now();
+    this.dataPause();
     this.paused = true;
   }
 
-  unPause() {
+  unpause() {
+    if (!this.focusPaused) {
+      this.dataUnpause();
+    }
     this.paused = false;
-    this.timeOffset += new Date().getTime() - this.pauseStart + this.timeOffset;
   }
 
-  now() {
-    if (this.paused) {
-      return this.pauseStart;
+  dataPause() {
+    if (this.isPaused()) {
+      return;
     }
-    return new Date().getTime() - this.timeOffset;
+    this.pauseStart = new Date().getTime();
+    // this.paused = true;
+  }
+
+  dataUnpause() {
+    if (!this.isPaused()) {
+      return;
+    }
+    // this.paused = false;
+    this.cumPauseTime += new Date().getTime() - this.pauseStart;
   }
 
   // Update the signal data with the new value. Signal data is has a resolution
   // of 0.02s, so if this value comes in more than 0.04s after the last value
   // was recorder, then use interpolation to fill in the missing samples.
   update(value) {
-    if (this.paused) {
+    if (this.isPaused()) {
       return;
     }
     const currentTime = this.now();
@@ -57,6 +92,7 @@ class Recording {
 
     // If the value has come in faster than the time resolution, then
     // do nothing
+    // console.log(deltaTime)
     if (deltaTime < this.timeStep) {
       return;
     }
@@ -73,11 +109,16 @@ class Recording {
       newValues.push(value + deltaValue * i);
     }
     this.data = [...newValues, ...this.data.slice(0, this.len - count)];
+    // console.log(this.data.length, deltaTime, count, this.len)
   }
 
   getY(timeDelta) {
     const index = Math.floor(timeDelta / this.timeStep + this.timeStep / 10);
+    // if (timeDelta < 0.1) {
+    //   console.log(timeDelta, index, this.data.length)
+    // }
     // console.log(index)
+    // console.log(timeDelta, this.timeStep)
     return this.data[index];
   }
 
@@ -193,6 +234,17 @@ const ball = (x, index, sides = 20) => ({
 const xValues = range(-1.46, 1.5, 0.04);
 const data = new Recording(0);
 
+// Active
+window.addEventListener('focus', () => {
+  data.focusUnpause();
+});
+
+// Inactive
+window.addEventListener('blur', () => {
+  data.focusPause();
+});
+
+
 xValues.forEach((x, index) => {
   figure.add(ball(x, index + 1));
   const b = figure.getElement(`balls.ball${index + 1}`);
@@ -214,6 +266,9 @@ function update() {
   for (let i = 1; i < xValues.length + 1; i += 1) {
     const b = figure.elements._balls[`_ball${i}`];
     const by = data.getY((b.custom.x - startX) / c);
+    // if (i === 1) {
+    //   console.log((b.custom.x - startX) / c)
+    // }
     b.setPosition(b.custom.x, by);
   }
 }
@@ -262,7 +317,7 @@ const disturbSine = (delay = 0, resetSignal = true) => {
         const time = (data.now() - startTime) / 1000;
         // if (p < 1) {
           // lastTime = time;
-        console.log(time)
+        // console.log(time)
         b0.setPosition(startX, A * Math.sin(time * 2 * Math.PI * f));
         // }
       },
@@ -503,11 +558,11 @@ prevButton.onClick = slideNav.prevSlide;
 
 prevButton.onClick = () => {
   if (data.paused) {
-    data.unPause();
+    data.unpause();
   } else {
     data.pause();
   }
-}
+};
 
 const slides = [];
 

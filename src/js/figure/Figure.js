@@ -2025,6 +2025,9 @@ class Figure {
   // }
 
   pause() {
+    if (this.state.pause === 'pause' || this.state.pause === 'preparingToPause' || this.state.pause === 'preparingToUnpause') {
+      return;
+    }
     this.state.pause = 'paused';
     this.pauseTime = this.globalAnimation.now() / 1000;
   }
@@ -2070,6 +2073,9 @@ class Figure {
   // }
 
   unpause() {
+    if (this.state.pause === 'unpaused' || this.state.pause === 'preparingToPause' || this.state.pause === 'preparingToUnpause') {
+      return;
+    }
     this.state.pause = 'unpaused';
     this.isPaused = false;
     this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
