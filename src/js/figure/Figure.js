@@ -32,6 +32,8 @@ import FigureCollections from './FigureCollections/FigureCollections';
 // import type { TypeAddElementObject } from './FigureAddElements/addElements';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import type { TypeColor, OBJ_Font } from '../tools/types';
+import SlideNavigator from './SlideNavigator';
+import type { OBJ_SlideNavigator } from './SlideNavigator';
 
 /**
  * Space Transforms
@@ -517,6 +519,10 @@ class Figure {
     //   smartPolyLine: this.collections.polyline.bind(this.collections),
     //   equation: this.equation.equation.bind(this.equation),
     // };
+  }
+
+  slideNavigator(options: OBJ_SlideNavigator) {
+    return new SlideNavigator(joinObjects({}, { collection: this.elements }, options));
   }
 
   bindRecorder() {

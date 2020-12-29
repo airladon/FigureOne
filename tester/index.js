@@ -1,5 +1,3 @@
-// const { prevSlide, nextSlide, loadSlides } = navigator();
-const slideNav = new SlideNavigator();
 const { Transform, Point } = Fig;
 const { range, rand, randSign } = Fig.tools.math;
 
@@ -14,13 +12,6 @@ class Recording {
     this.timeStep = 0.01;
     this.len = this.duration / this.timeStep;
     this.reset(initialValue);
-    // this.data = Array(this.len).fill(initialValue);
-    // this.paused = false;
-    // this.startTime = new Date().getTime();
-    // this.lastTime = 0;
-    // this.cumPauseTime = 0;
-    // this.focusPaused = false;
-    // this.paused = false;
   }
 
   now() {
@@ -79,14 +70,12 @@ class Recording {
       return;
     }
     this.pauseStart = new Date().getTime();
-    // this.paused = true;
   }
 
   dataUnpause() {
     if (!this.isPaused()) {
       return;
     }
-    // this.paused = false;
     this.cumPauseTime += new Date().getTime() - this.pauseStart;
   }
 
@@ -119,23 +108,12 @@ class Recording {
       newValues.push(value + deltaValue * i);
     }
     this.data = [...newValues, ...this.data.slice(0, this.len - count)];
-    // console.log(this.data.length, deltaTime, count, this.len)
   }
 
   getY(timeDelta) {
     const index = Math.floor(timeDelta / this.timeStep + this.timeStep / 10);
-    // if (timeDelta < 0.1) {
-    //   console.log(timeDelta, index, this.data.length)
-    // }
-    // console.log(index)
-    // console.log(timeDelta, this.timeStep)
     return this.data[index];
   }
-
-  // // Make an array of points where this.data is plotted against this.x
-  // getPoints() {
-  //   return this.data.map((value, index) => new Fig.Point(this.x[index], value));
-  // }
 }
 
 const startX = -1.5;
@@ -196,13 +174,10 @@ figure.add([
       stop: A + 0.1,
       length: A * 2 + 0.2,
       line: { width: 0.005, arrow: 'barb' },
-      // ticks: { step: 0.5, length: 0.1 },
-      // labels: { font: { size: 0.08 }, text: ['0'] },
       position: axisOrigin.add(0, -A - 0.1),
       title: {
         font: { style: 'italic', family: 'serif', size: 0.12 },
         text: ['y', { font: { size: 0.06 }, lineSpace: 0.08, text: 'meters' }],
-        // position: [1.2, 0],
         rotation: 0,
         offset: [0.1, A + 0.2],
       },
@@ -222,17 +197,6 @@ figure.add([
       isTouchable: true,
     },
   },
-  // {
-  //   name: 'time',
-  //   method: 'primitives.text',
-  //   options: {
-  //     xAlign: 'right',
-  //     yAlign: 'middle',
-  //     text: '0s',
-  //     position: [1.5, 0.9],
-  //     font: { color: [0.5, 0.5, 0.5, 1], size: 0.1, weight: 100 },
-  //   },
-  // },
   button('nextButton', [1.5, buttonY], 'Next'),
   button('prevButton', [-1.5, buttonY], 'Prev'),
   {
@@ -286,10 +250,11 @@ const b0 = figure.getElement('balls.ball0');
 b0.setMovable();
 b0.touchBorder = 0.2;
 b0.move.bounds = {
-  translation: { left: startX, right: startX, bottom: -A, top: A }
+  translation: {
+    left: startX, right: startX, bottom: -A, top: A,
+  },
 };
 
-// const timeText = figure.getElement('time');
 // Update function for everytime we want to update the signal
 function update() {
   const { y } = figure.elements._balls._ball0.transform.order[0];
@@ -297,14 +262,8 @@ function update() {
   for (let i = 1; i < xValues.length + 1; i += 1) {
     const b = figure.elements._balls[`_ball${i}`];
     const by = data.getY((b.custom.x - startX) / c);
-    // if (i === 1) {
-    //   console.log((b.custom.x - startX) / c)
-    // }
     b.setPosition(b.custom.x, by);
   }
-  // console.log((data.now() / 1000).toFixed(2))
-  // timeText.custom.updateText({ text: `${(data.now() / 1000).toFixed(1)}s` });
-  // const time = data.now();
 }
 
 // Before each draw, update the points
@@ -332,16 +291,11 @@ const disturbPulse = () => {
     .position({ duration: t, target: [startX, 0], progression: 'easein' })
     .start();
 };
-// disturbPulse();
-// let lastTime = 0.0;
+
 const disturbSine = (delay = 0, resetSignal = true) => {
   if (resetSignal) {
     reset();
   }
-  // let timeOffset = 0;
-  // if (useLastTime) {
-  //   timeOffset = lastTime;
-  // }
   const startTime = data.now();
   b0.animations.new('_noStop_sine')
     .delay(delay)
@@ -349,20 +303,14 @@ const disturbSine = (delay = 0, resetSignal = true) => {
     //   callback: () => { startTime = data.now(); }
     // })
     .custom({
-      callback: (p) => {
-        // const time = p * 10000 + timeOffset;
+      callback: () => {
         const time = (data.now() - startTime) / 1000;
-        // if (p < 1) {
-          // lastTime = time;
-        // console.log(time)
         b0.setPosition(startX, A * Math.sin(time * 2 * Math.PI * f));
-        // }
       },
       duration: 10000,
     })
     .start();
 };
-// disturbSine();
 
 figure.elements._balls.dim();
 
@@ -725,9 +673,6 @@ const bx1 = figure.getElement('balls.ball25');
 bx1.setColor(color1);
 balls.toFront(bx1.name);
 
-nextButton.onClick = slideNav.nextSlide;
-prevButton.onClick = slideNav.prevSlide;
-
 // prevButton.onClick = () => {
 //   if (data.paused) {
 //     data.unpause();
@@ -859,6 +804,7 @@ const modifiers = {
 // };
 // /////////////////////////////////////////////////////////////////
 slides.push({
+  modifiersCommon: modifiers,
   text: [
     'Explore the equation of a travelling sine wave and the relationship',
     'between velocity wavelength and frequency.',
@@ -1195,13 +1141,21 @@ slides.push({
 // through 2π radians per meter. Now the wavelength is how many meters is
 // 2π radians, 
 
+// const navigator = figure.navigator({
 
+// })
 
 // /////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////
-slideNav.loadSlides({
-  slides, prevButton, nextButton, collection: figure, text: description, equation: [eqn],
+// slideNav.loadSlides({
+//   slides, prevButton, nextButton, collection: figure, text: description, equation: [eqn],
+// });
+
+const slideNav = figure.slideNavigator({
+  slides, prevButton, nextButton, text: description, equation: [eqn],
 });
+// nextButton.onClick = slideNav.nextSlide;
+// prevButton.onClick = slideNav.prevSlide;
 
 slideNav.goToSlide(0);
 
