@@ -289,7 +289,7 @@ b0.move.bounds = {
   translation: { left: startX, right: startX, bottom: -A, top: A }
 };
 
-const timeText = figure.getElement('time');
+// const timeText = figure.getElement('time');
 // Update function for everytime we want to update the signal
 function update() {
   const { y } = figure.elements._balls._ball0.transform.order[0];
@@ -894,7 +894,7 @@ slides.push({
       lineSpace: 0.2,
     },
   ],
-  form: null,
+  form: [null],
   steadyState: () => {
     reset();
     b0.animations.cancel('_noStop_sine');
@@ -946,7 +946,7 @@ slides.push({
 
 // /////////////////////////////////////////////////////////////////
 slides.push({
-  form: null,
+  form: [],
   text: 'Now, let\'s disturb the |first particle| with a |sine function|.',
   enterState: () => {
     b0.isTouchable = true;
@@ -1199,7 +1199,9 @@ slides.push({
 
 // /////////////////////////////////////////////////////////////////
 // /////////////////////////////////////////////////////////////////
-slideNav.loadSlides(slides, prevButton, nextButton, figure, description, modifiers, eqn);
+slideNav.loadSlides({
+  slides, prevButton, nextButton, collection: figure, text: description, equation: [eqn],
+});
 
 slideNav.goToSlide(0);
 

@@ -4885,7 +4885,7 @@ class FigureElementCollection extends FigureElement {
         newParent = parent[ep[0]];
       }
       if (newParent == null) {
-        return null;
+        return undefined;
       }
       if (ep.length > 1) {
         return getElement(ep.slice(1).join('.'), newParent);

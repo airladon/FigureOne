@@ -1,207 +1,271 @@
+// enterStateCommon
+// enterState
+// showCommon
+// show
+// transition
+// showForm
+// steadyStateCommon
+// steadyState
+// leaveStateCommon
+// leaveState
+
+// export type OBJ_NavigatorSlide = {
+//   text?: OBJ_TextLines,
+//   modifiersCommon?: OBJ_TextModifiersDefinigion;
+//   modifiers?: OBJ_TextModifiersDefinition;
+//   enterStateCommon?: () => void,
+//   enterState?: () => void,
+//   showCommon?: Array<string | FigureElement>,
+//   show?: Array<string | FigureElement>,
+//   transition?: (() => void) => void;
+//   steadyStateCommon?: () => void;
+//   steadyState?: () => void;
+//   leaveStateCommon?: () => void;
+//   leaveState?: () => void;
+// }
+
+// export type OBJ_Navigator = {
+//   collection: Figure | FigureElementCollection,
+//   slides: Array<OBJ_NavigatorSlide>,
+//   prevButton?: FigureElement | string,
+//   nextButton?: FigureElement | string,
+//   text?: string | FigureElementCollection,
+//   equation?: Equation | string | Array<string | Equation>,
+//   equationDefaults: {
+//     duration?: number,
+//     animate?: 'move' | 'dissolve' | 'instant',
+//   },
+//   lastSlideCallback?: () => void,
+//   firstSlideCallback?: () => void,
+// }
+
 function SlideNavigator() {
   let currentSlideIndex = 0;
   let slides;
-  let prev;
-  let next;
-  let fig;
-  let description;
+  let prevButton;
+  let nextButton;
+  let textElement;
   let inTransition = false;
-  let modifiers = {};
-  let eqn;
+  let equations;
+  let equationDefaults;
+  let collection;
 
-  const loadSlides = (slidesIn, prevButton, nextButton, f, descript, globalModifiers, equation) => {
-    slides = slidesIn;
-    prev = prevButton;
-    next = nextButton;
-    fig = f;
-    description = descript;
-    modifiers = globalModifiers;
-    eqn = equation;
+  const loadSlides = (o) => {
+    if (o.collection instanceof Fig.Figure) {
+      collection = o.collection.elements;
+    } else {
+      ({ collection } = o);
+    }
+    ({ slides } = o);
+    if (typeof o.text === 'string') {
+      textElement = collection.getElement(o.text);
+    } else if (o.text != null) {
+      textElement = o.text;
+    } else {
+      textElement = null;
+    }
+    equations = [];
+    if (Array.isArray(o.equation)) {
+      o.equation.forEach((e) => {
+        equations.push(collection.getElement(e));
+      });
+    } else if (o.equation != null) {
+      equations = [o.equation];
+    }
+    equationDefaults = Fig.tools.misc.joinObjects({}, {
+      duration: 1,
+      animate: 'move',
+    }, o.equationDefaults || {});
+    prevButton = collection.getElement(o.prevButton);
+    nextButton = collection.getElement(o.nextButton);
   };
 
 
-  const getProperty = (property, indexIn) => {
+  const getProperty = (property, indexIn, defaultValue = null) => {
     let index = indexIn;
     let prop = slides[index][property];
     while (prop === undefined && index > 0) {
       index -= 1;
       prop = slides[index][property];
     }
+    if (prop === undefined) {
+      return defaultValue;
+    }
     return prop;
   };
 
-  const getText = (indexIn) => {
-    const text = getProperty('text', indexIn);
-    if (text == null) {
-      return '';
+  const getText = i => getProperty('text', i, '');
+  const getForm = (i) => {
+    const forms = getProperty('form', i, null);
+    if (forms == null) {
+      return [];
     }
-    return text;
-  };
-
-  const getModifiers = (indexIn) => {
-    const mods = getProperty('modifiers', indexIn);
-    if (mods == null) {
-      return {};
+    if (!Array.isArray(forms)) {
+      return [forms];
     }
-    return mods;
+    return forms;
   };
 
-  const getForm = (indexIn) => {
-    const form = getProperty('form', indexIn);
-    return form;
-  };
-
-  const setSteadyState = (index) => {
-    const slide = slides[index];
-    let form = getForm(index);
-    if (form != null) {
-      if (Array.isArray(form)) {
-        form = form.slice(-1)[0];
+  const showForms = (forms, hideOnly = false) => {
+    for (let i = 0; i < equations.length; i += 1) {
+      const e = equations[i];
+      if (forms.length > i && forms[i] != null) {
+        if (!hideOnly) {
+          e.showForm(forms[i]);
+        }
+      } else {
+        e.hide();
       }
-      eqn.showForm(form);
-    } else {
-      eqn.hide();
-    }
-    const steadyStateCommon = getProperty('steadyStateCommon', index);
-    if (steadyStateCommon != null) {
-      steadyStateCommon();
-    }
-    if (slide.steadyState != null) {
-      slide.steadyState();
-    }
-    inTransition = false;
-    if (currentSlideIndex === 0) {
-      prev.setOpacity(0.7);
-      prev.isTouchable = false;
-    } else if (prev.isTouchable === false) {
-      prev.setOpacity(1);
-      prev.isTouchable = true;
-    }
-    if (currentSlideIndex === slides.length - 1) {
-      next.setLabel('Restart');
-    } else {
-      next.setLabel('Next');
     }
   };
 
-  const transition = (index) => {
-    const slide = slides[index];
-    inTransition = true;
-    const done = () => setSteadyState(index);
-    if (typeof slide.transition === 'function') {
-      slide.transition(done);
-      return;
-    }
-
-    let form = getForm(index);
-    const currentForm = eqn.getCurrentForm().name;
-    if (
-      form == null
-      || (
-        typeof form === 'string'
-        && currentForm === form
-      )) {
-      done();
-      return;
-    }
-    if (!eqn.isShown) {
-      eqn.animations.new()
-        .inParallel([
-          eqn.animations.dissolveIn({ duration: 0.2, done }),
-          eqn.animations.trigger({
-            callback: () => {
-              eqn.showForm(form);
-            },
-          }),
-        ])
-        .whenFinished(done)
-        .start();
-      return;
-    }
-    if (!Array.isArray(form)) {
-      form = [form];
-    }
-    for (let i = 0; i < form.length; i += 1) {
-      eqn.animations.addTo('_navigatorTransition')
-        .goToForm({ target: form[i], animate: 'move', duration: 1 });
-    }
-    eqn.animations.addTo('_navigatorTransition')
-      .whenFinished(done)
-      .start();
-    // eqn.goToForm({
-    //   form, duration: 1, animate: 'move', callback: done,
-    // });
-  };
-
-  const enterState = (index, fromPrev = false) => {
-    currentSlideIndex = index;
+  const setSteadyState = (from) => {
+    const index = currentSlideIndex;
     const slide = slides[index];
     const form = getForm(index);
-    if (form === null) {
-      eqn.hide();
+    showForms(form);
+    getProperty('steadyStateCommon', index, () => {})(from);
+    if (slide.steadyState != null) {
+      slide.steadyState(from);
     }
-    const enterStateCommon = getProperty('enterStateCommon', index);
-    if (enterStateCommon != null) {
-      enterStateCommon();
+    if (prevButton != null) {
+      if (currentSlideIndex === 0) {
+        prevButton.setOpacity(0.7);
+        prevButton.isTouchable = false;
+      } else if (prevButton.isTouchable === false) {
+        prevButton.setOpacity(1);
+        prevButton.isTouchable = true;
+      }
     }
-    if (slide.enterState != null) {
-      slide.enterState();
-    }
-    if (fromPrev && (slide.transition || form)) {
-      transition(index);
-    } else {
-      setSteadyState(index);
+    if (nextButton != null) {
+      if (currentSlideIndex === slides.length - 1) {
+        nextButton.setLabel('Restart');
+      } else {
+        nextButton.setLabel('Next');
+      }
     }
   };
 
-  const setText = (index, fromPrev = false) => {
-    fig.stop('complete');
-    description.stop();
-    const m = getModifiers(index);
-    description.custom.updateText({
-      text: getText(index),
-      modifiers: Fig.tools.misc.joinObjects({}, modifiers, m),
-    });
-    enterState(index, fromPrev);
-  };
-
-  const leaveState = (index, fromPrev = false) => {
+  const transition = (from) => {
+    let done = () => {
+      setSteadyState(from);
+      inTransition = false;
+    };
+    if (from !== 'prev') {
+      return done();
+    }
+    inTransition = true;
     const slide = slides[currentSlideIndex];
-    slide.leaveState();
-    setText(index, fromPrev);
+    if (typeof slide.transition === 'function') {
+      return slide.transition(done, from);
+    }
+
+    const forms = getForm(currentSlideIndex);
+    for (let i = 0; i < equations.length; i += 1) {
+      const e = equations[i];
+      if (forms.length > i && forms[i] != null) {
+        const form = forms[i];
+        const currentForm = e.getCurrentForm().name;
+        if (!e.isShown) {
+          e.animations.new()
+            .inParallel([
+              e.animations.dissolveIn({ duration: 0.2 }),
+              e.animations.trigger({
+                callback: () => {
+                  e.showForm(form);
+                },
+              }),
+            ])
+            .whenFinished(done)
+            .start();
+          done = null;
+        } else if (form !== currentForm) {
+          const { animate, duration } = equationDefaults;
+          e.animations.new()
+            .goToForm({ target: form, animate, duration })
+            .whenFinished(done)
+            .start();
+          done = null;
+        }
+      }
+    }
+    if (done != null) {
+      return done();
+    }
+    return null;
   };
 
-  const goToSlide = (index, fromPrev = false) => {
-    const leaveStateCommon = getProperty('leaveStateCommon', currentSlideIndex);
-    if (leaveStateCommon != null) {
-      leaveStateCommon();
+  const setText = (index = false) => {
+    if (textElement == null) {
+      return;
     }
+    const mods = getProperty('modifiers', index, {});
+    const commonMods = getProperty('modifiersCommon', index, {});
+    textElement.custom.updateText({
+      text: getText(index),
+      modifiers: Fig.tools.misc.joinObjects({}, commonMods, mods),
+    });
+  };
+
+  // from: 'next' | 'prev' | number | null
+  const goToSlide = (index, fromIn = null) => {
+    let from = fromIn;
+    if (from == null) {
+      from = currentSlideIndex;
+      if (index === currentSlideIndex + 1) {
+        from = 'prev';
+      } else if (index === currentSlideIndex - 1) {
+        from = 'next';
+      }
+    }
+
+    // Leave States
+    getProperty('leaveStateCommon', currentSlideIndex, () => {})();
     if (slides[currentSlideIndex].leaveState != null) {
-      leaveState(index, fromPrev);
-    } else {
-      setText(index, fromPrev);
+      slides[currentSlideIndex].leaveState(index);
     }
+
+    // Reset and Set Text
+    collection.stop('complete');
+    setText(index);
+    // enterState(index, from);
+
+    // Enter new slide
+    currentSlideIndex = index;
+    const slide = slides[index];
+    const forms = getForm(index);
+    showForms(forms, true);
+    getProperty('enterStateCommon', index, () => {})(from);
+    if (slide.enterState != null) {
+      slide.enterState(from);
+    }
+
+    // Move to transition
+    transition(from);
   };
 
   const nextSlide = () => {
     if (inTransition) {
-      fig.stop('complete');
+      collection.stop('complete');
       inTransition = false;
       return;
     }
-    const oldDescription = getText(currentSlideIndex);
+    if (textElement == null) {
+      return;
+    }
+    const oldText = getText(currentSlideIndex);
     const nextSlideIndex = (currentSlideIndex + 1) % slides.length;
     goToSlide(nextSlideIndex, true);
-    const newDescription = getText(nextSlideIndex);
-    if (newDescription != oldDescription) {
-      description.animations.new()
+    const newText = getText(nextSlideIndex);
+    if (newText !== oldText) {
+      textElement.animations.new()
         .dissolveIn(0.2)
         .start();
     }
   };
 
   const prevSlide = () => {
-    fig.stop('cancel');
+    collection.stop('cancel');
     const prevSlideIndex = (currentSlideIndex - 1) < 0 ? slides.length - 1 : currentSlideIndex - 1;
     goToSlide(prevSlideIndex, false);
   };
