@@ -1333,7 +1333,6 @@ export class Equation extends FigureElementCollection {
     } & TypeSymbolOptions,
   ) {
     let symbol = this.eqn.symbols.get(options.symbol, options);
-    // console.log('got', symbol)
     if (symbol == null) {
       symbol = this.makeTextElem({
         text: `Symbol ${options.symbol} not valid`,

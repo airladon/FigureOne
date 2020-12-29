@@ -492,7 +492,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     glyph.width = glyphBounds.width;
     glyph.height = glyphBounds.height;
     glyph.location = new Point(glyphBounds.left, glyphBounds.bottom);
-    glyph.glyph.custom.setSize(glyph.location);
+    glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
     glyph.annotations.forEach((annotation) => {
       annotation.content.calcSize(glyph.location, scale * annotation.scale);
       this.setAnnotationPosition(glyphBounds, annotation, scale);

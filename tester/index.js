@@ -143,9 +143,9 @@ let f = 0.3; // Hz
 const A = 0.4;   // m
 let c = 0.5;   // m/s
 
-const axisOrigin = new Point(-1.5, A + 0.2 + 0.2);
-const descriptionPosition = new Point(0, 2.5);
-const buttonY = 2.5;
+const axisOrigin = new Point(-1.5, A + 0.2 + 0.3);
+const descriptionPosition = new Point(-1.5, 2.8);
+const buttonY = 0.15;
 const equationPosition = new Point(0, 1.9);
 const sideEquationPosition = new Point(1.4, 1.6);
 const colorText = [0.4, 0.4, 0.4, 1];
@@ -213,8 +213,8 @@ figure.add([
     method: 'primitives.textLines',
     options: {
       font: { color: colorText.slice(), size: 0.1, weight: 100 },
-      xAlign: 'center',
-      yAlign: 'middle',
+      xAlign: 'left',
+      yAlign: 'top',
       position: descriptionPosition,
       lineSpace: 0.15,
     },
@@ -419,6 +419,13 @@ const frac = (numerator, denominator) => ({
   },
 });
 
+const stk = (content, num) => ({
+  strike: {
+    content,
+    symbol: `strike${num}`,
+  },
+});
+
 const color0 = [1, 0, 0, 1];
 const color1 = [0, 0.5, 1, 1];
 // const colorDef = [0.4, 0.4, 0.4, 1];
@@ -444,6 +451,7 @@ figure.add([
         lb3: { symbol: 'squareBracket', side: 'left' },
         rb3: { symbol: 'squareBracket', side: 'right' },
         equals: '  =  ',
+        equals2: '  =  ',
         w1: '\u03c9',
         w2: '\u03c9',
         w3: '\u03c9',
@@ -455,6 +463,7 @@ figure.add([
         comma2: ', ',
         lambda: '\u03bb',
         v: { symbol: 'vinculum', lineWidth: 0.007 },
+        v2: { symbol: 'vinculum', lineWidth: 0.007 },
         brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
         line1: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
         line2: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
@@ -466,6 +475,8 @@ figure.add([
         _1_5: { color: color1 },
         _1_6: { color: color1 },
         _1_7: { color: color1 },
+        strike1: { symbol: 'strike', lineWidth: 0.007 },
+        strike2: { symbol: 'strike', lineWidth: 0.007 },
       },
       phrases: {
         ytx: ['y_1', b1(['x_1', 'comma1', 't_1'])],
@@ -545,6 +556,14 @@ figure.add([
             'sXOnC',
           ]),
         ],
+        '13a': [
+          'yxt', 'equals',
+          ASin([
+            'w2',
+            tann('t_5', 'constant', 'line1'), 'min2',
+            scale(frac(['w3', 'x_1'], 'c')),
+          ]),
+        ],
         14: [
           'yxt', 'equals',
           ASin([
@@ -569,42 +588,64 @@ figure.add([
             scale(frac(['_2pi2', ' ', 'f_2'], 'c')), ' ', 'x_1',
           ]),
         ],
-        lamdacf: ['lambda', 'equals', frac('c_1', 'f')],
-        clamdaf: {
-          content: ['c_1', 'equals', 'lambda', ' ', 'f'],
+        lambdacf: ['lambda', 'equals2', { frac: ['c_1', 'v2', 'f'] }],
+        clambdaf: {
+          content: ['c_1', 'equals2', 'lambda', ' ', 'f'],
           translation: {
             c_1: { style: 'curved', direction: 'up', mag: 0.8 },
             lambda: { style: 'curved', direction: 'down', mag: 0.8 },
           },
         },
-        '12a': [
+        17: [
+          'yxt', 'equals',
           ASin([
-            // ann('w2', ['_2pi1', ' ', 'f_1'], 'line1'),
             'w2',
-            't_5',
-            'min2', ann('w3', ['_2pi2', ' ', 'f_2'], 'line2'), 'sXOnC']),
+            tann('t_5', 'constant', 'line1'), 'min2',
+            scale(frac(['_2pi2', ' ', 'f_2'], ann('c', ['lambda', ' ', 'f'], 'line2'))), ' ', 'x_1',
+          ]),
         ],
-        '13a': [
+        18: [
+          'yxt', 'equals',
           ASin([
-            // '_2pi1', ' ', 'f_1', ' ',
             'w2',
-            't_5', 'min2', '_2pi2', ' ', 'f_2', ' ', 'sXOnC',
+            tann('t_5', 'constant', 'line1'), 'min2',
+            scale(frac(['_2pi2', ' ', 'f_2'], ['lambda', ' ', 'f'])), ' ', 'x_1',
           ]),
         ],
-        '14a': [
+        19: [
+          'yxt', 'equals',
           ASin([
-            ann(['w2', 't_5'], ['const', 'ant'], 'brace', 0.05), 'min2', '_2pi2', ' ', 'f_2', ' ', 'sXOnC',
+            'w2',
+            tann('t_5', 'constant', 'line1'), 'min2',
+            scale(frac(['_2pi2', ' ', stk('f_2', 1)], ['lambda', ' ', stk('f', 2)])), ' ', 'x_1',
           ]),
         ],
-        '15a': [
+        20: [
+          'yxt', 'equals',
           ASin([
-            ann(['_2pi1', ' ', 'f_1', ' ', 't_5'], ['const', 'ant'], 'brace', 0.05), 'min2', '_2pi2', ' ', 'f_2', ' ', 'sXOnC',
+            'w2',
+            tann('t_5', 'constant', 'line1'), 'min2',
+            scale(frac('_2pi2', 'lambda')), ' ', 'x_1',
           ]),
         ],
-        '16a': [
+        21: [
+          'yxt', 'equals',
           ASin([
-            'const', 'min2', '_2pi2', scale({ frac: ['f_2', 'v', 'c'] }), ' ', 'x_1',
+            'w2',
+            tann('t_5', 'constant', 'line1'), 'min2',
+            scale(ann(frac('_2pi2', 'lambda'), 'k', 'brace')), ' ', 'x_1',
           ]),
+        ],
+        22: [
+          'yxt', 'equals',
+          ASin([
+            'w2',
+            tann('t_5', 'constant', 'line1'), 'min2', 'k', ' ', 'x_1',
+          ]),
+        ],
+        23: [
+          'yxt', 'equals',
+          ASin(['w2', 't_5', 'min2', 'k', ' ', 'x_1']),
         ],
         // 10: ['yx1t', 'equals', 'A', 'sin', b2(['w2', 't_5', 'min2', 'swX1OnC'])],
         // 11: ['yx1ToXt', 'equals', 'A', 'sin', b2(['w2', 't_5', 'min2', 'swX1ToXOnC'])],
@@ -639,6 +680,7 @@ figure.add([
         lb2: { symbol: 'bracket', side: 'left' },
         rb2: { symbol: 'bracket', side: 'right' },
         equals: '  =  ',
+        lambda: '\u03bb',
       },
       phrases: {
         t1: { sub: ['t', '_1_1'] },
@@ -651,9 +693,10 @@ figure.add([
       },
       formDefaults: { alignment: { xAlign: 'equals' } }, // { fixTo: 'equals' } },
       forms: {
-        2: ['t1', 'equals', { frac: ['x1', 'vinculum', 'c'] }],
-        '2id': ['t1', 'equals', { frac: ['x1', 'vinculum', 'c'] }, 'id1'],
-        5: ['ytx', 'equals', 'yxc', 'id2'],
+        2: ['t1', 'equals', frac('x1', 'c')],
+        '2id': ['t1', 'equals', frac('x1', 'c'), 'id1'],
+        clambdaf: ['c', 'equals', 'lambda', ' ', 'f'],
+        clambdafid: ['c', 'equals', 'lambda', ' ', 'f', 'id2'],
       },
       // position: sideEquationPosition,
     },
@@ -723,11 +766,21 @@ const modifiers = {
   y: { font: { family: 'Times New Roman', style: 'italic' } },
   t: { font: { family: 'Times New Roman', style: 'italic' } },
   c: { font: { family: 'Times New Roman', style: 'italic' } },
+  k: { font: { family: 'Times New Roman', style: 'italic' } },
+  'wave number': { font: { style: 'italic' } },
   substitute: {
-    font: { color: [1, 0, 0, 1] },
+    font: { color: color1 },
     onClick: () => {
       eqn.pulse({ elements: ['t_6', '_1_3'], centerOn: 't_6', xAlign: 0.3 });
       sideEqn.pulse({ elements: ['t', '_1_1'], centerOn: 't', xAlign: 'right' });
+    },
+    touchBorder: 0.1,
+  },
+  substitued: {
+    font: { color: color1 },
+    onClick: () => {
+      eqn.pulse({ elements: ['c'] });
+      sideEqn.pulse({ elements: ['c'] });
     },
     touchBorder: 0.1,
   },
@@ -767,6 +820,10 @@ const modifiers = {
     text: '\u03c0',
     font: { family: 'Times New Roman', style: 'italic' },
   },
+  lambda: {
+    text: '\u03bb',
+    font: { family: 'Times New Roman', style: 'italic' },
+  },
   frequency: {
     font: { color: color1 },
     onClick: () => eqn.pulse({ elements: ['f_1', 'f_2'] }),
@@ -798,9 +855,8 @@ const modifiers = {
 // /////////////////////////////////////////////////////////////////
 slides.push({
   text: [
-    'Explore the equation of a travelling sine wave',
-    'and the relationship between velocity,',
-    'wavelength and frequency.',
+    'Explore the equation of a travelling sine wave and the relationship',
+    'between velocity wavelength and frequency.',
     // {
     //   font: { size: 0.06 },
     //   text: 'And the relationship between frequency wavelength, and velocity.',
@@ -826,11 +882,11 @@ slides.push({
 // /////////////////////////////////////////////////////////////////
 slides.push({
   text: [
-    'A wave is a |disturbance| that propagates through',
-    'a medium or field.',
+    'A wave is a |disturbance| that propagates through a medium or field',
     {
       text: 'Touch the word |disturbance| or move the |first particle| manually.',
-      font: { size: 0.07 },
+      font: { size: 0.08 },
+      lineSpace: 0.2,
     },
   ],
   form: null,
@@ -847,7 +903,8 @@ slides.push({
 slides.push({
   text: [
     'The |disturbance| moves with a constant velocity |c|.',
-    { text: 'Thus, the time it takes to move some distance |x||1|', lineSpace: 0.2 },
+    {
+      text: 'Thus, the time it takes to move some distance |x||1|', lineSpace: 0.2 },
     'can be calculated.',
   ],
   steadyState: () => {
@@ -969,7 +1026,7 @@ slides.push({ form: '13', steadyStateCommon: () => data.pause() });
 slides.push({
   enterStateCommon: () => eqn.highlight([
     'w3', 'x_1', 'v', 'c', 'min2', 'sin', 'lb2', 'rb2', 'line2', '_2pi2', 'f_2',
-    'c_1', 'lambda', 'f',
+    'c_1', 'lambda', 'f', 'equals2', 'v2', 'strike1', 'strike2', 'k', 'brace',
   ]),
 });
 slides.push({ text: 'We are left with a sine curve along |x|.' });
@@ -979,7 +1036,7 @@ slides.push({
     'the angular frequency gives:',
   ],
 });
-slides.push({ form: '14' });
+slides.push({ form: ['13a', '14'] });
 slides.push({ form: '15' });
 slides.push({ form: '16' });
 slides.push({
@@ -1028,23 +1085,53 @@ slides.push({
     'Thus, the wavelength is |c|//|f|.',
   ],
 });
-slides.push({ form: 'lamdacf' });
+slides.push({ form: 'lambdacf' });
 slides.push({
   text: [
     'Or more commonly rearranged for |c|.',
   ],
 });
-slides.push({ form: 'clamdaf' });
+slides.push({ form: 'clambdaf' });
 slides.push({
-  text: [
-    'Substituting (2) gives',
-  ],
+  transition: (done) => {
+    eqn.hide();
+    sideEqn.showForm('clambdaf');
+    sideEqn.setScenario('center');
+    sideEqn.animations.new()
+      .goToForm({ target: 'clamdafid', animate: 'move' })
+      .scenario({ start: 'center', target: 'side', duration: 1 })
+      .whenFinished(done)
+      .start();
+  },
+  steadyStateCommon: () => { sideEqn.showForm('clambdafid'); },
+  steadyState: () => { eqn.showForm('16'); },
 });
 slides.push({
+  form: '16',
   text: [
-    'The 2|pi|/|lambda| term is often called the wave number',
+    '(2) can now be |substitued| into our equation.',
+  ],
+});
+slides.push({ form: '17' });
+slides.push({ form: '18' });
+slides.push({ text: 'And now simplify' });
+slides.push({ form: '19' });
+slides.push({ form: '20' });
+slides.push({
+  text: [
+    'The 2|pi|//|lambda| term is often called the |wave number|',
     '|k| and gives the number of radians per unit distance',
   ],
+});
+slides.push({ form: '21' });
+slides.push({ form: '22' });
+slides.push({ form: '23', enterStateCommon: () => {} });
+slides.push({
+  text: [
+    'And so we see the equation for a travelling',
+    'sine wave is below.',
+  ],
+  steadyStateCommon: () => data.unpause(),
 });
 
 // slides.push({
@@ -1113,4 +1200,29 @@ slides.push({
 // /////////////////////////////////////////////////////////////////
 slideNav.loadSlides(slides, prevButton, nextButton, figure, description, modifiers, eqn);
 
-slideNav.goToSlide(20);
+slideNav.goToSlide(0);
+
+// // console.log('asdfasdf')
+// figure.add({
+//   name: 'eee',
+//   method: 'equation',
+//   options: {
+//     forms: {
+//       0: ['a', { strike: ['sadf', 'strike'] }],
+//     },
+//     position: [0, 1],
+//   },
+// });
+// figure.add({
+//   name: 'eqn12',
+//   method: 'equation',
+//   options: {
+//     elements: {
+//       x: { symbol: 'strike', color: [0.6, 0.6, 0.6, 1] },
+//     },
+//     forms: {
+//       1: { topStrike: ['radius', 'x', 'radius = 1'] },
+//     },
+//     position: [0, 1],
+//   },
+// });

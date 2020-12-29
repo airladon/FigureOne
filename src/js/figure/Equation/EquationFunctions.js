@@ -4399,6 +4399,7 @@ export class EquationFunctions {
       useFullBounds,
     };
     const o = joinObjects(defaultOptions, optionsIn);
+    // console.log(glyph, o)
     return this.annotate({
       content,
       inSize: o.inSize,

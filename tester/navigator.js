@@ -53,8 +53,11 @@ function SlideNavigator() {
 
   const setSteadyState = (index) => {
     const slide = slides[index];
-    const form = getForm(index);
+    let form = getForm(index);
     if (form != null) {
+      if (Array.isArray(form)) {
+        form = form.slice(-1)[0];
+      }
       eqn.showForm(form);
     } else {
       eqn.hide();
@@ -90,7 +93,7 @@ function SlideNavigator() {
       return;
     }
 
-    const form = getForm(index);
+    let form = getForm(index);
     const currentForm = eqn.getCurrentForm().name;
     if (
       form == null
@@ -115,10 +118,19 @@ function SlideNavigator() {
         .start();
       return;
     }
-    
-    eqn.goToForm({
-      form, duration: 1, animate: 'move', callback: done,
-    });
+    if (!Array.isArray(form)) {
+      form = [form];
+    }
+    for (let i = 0; i < form.length; i += 1) {
+      eqn.animations.addTo('_navigatorTransition')
+        .goToForm({ target: form[i], animate: 'move', duration: 1 });
+    }
+    eqn.animations.addTo('_navigatorTransition')
+      .whenFinished(done)
+      .start();
+    // eqn.goToForm({
+    //   form, duration: 1, animate: 'move', callback: done,
+    // });
   };
 
   const enterState = (index, fromPrev = false) => {
