@@ -1300,8 +1300,10 @@ class TextLinesObject extends TextObjectBase {
     let maxLinesWidth = 0;
     let y = 0;
     this.lines.forEach((line, index) => {
-      if (index > 0) {
+      if (index > 0 && line.text.length > 0) {
         y -= line.space;
+      } else if (index > 0 && line.text.length === 0) {
+        y -= line.space / 3;
       }
       const { width, minY, maxY } = createLine(line.text, new Point(0, y));
       minLinesY = minY < minLinesY ? minY : minLinesY;

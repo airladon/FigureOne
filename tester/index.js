@@ -541,7 +541,7 @@ figure.add([
         ],
         8: [
           'yx1t', 'equals', ASin(
-            ['w2', 't_5', 'min2', 'w3', tann('t12', 'sX1OnC', 'line2')],
+            ['w2', 't_5', 'min2', 'w3', tann('t12', 'x1OnCb', 'line2')],
           ),
         ],
         9: ['yx1t', 'equals', ASin(['w2', 't_5', 'min2', 'w3', 'sX1OnC'])],
@@ -604,14 +604,19 @@ figure.add([
             scale(frac(['_2pi2', ' ', 'f_2'], ann('c', ['lambda', ' ', 'f'], 'line2'))), ' ', 'x_1',
           ]),
         ],
-        18: [
-          'yxt', 'equals',
-          ASin([
-            'w2',
-            tann('t_5', 'constant', 'line1'), 'min2',
-            scale(frac(['_2pi2', ' ', 'f_2'], ['lambda', ' ', 'f'])), ' ', 'x_1',
-          ]),
-        ],
+        18: {
+          content: [
+            'yxt', 'equals',
+            ASin([
+              'w2',
+              tann('t_5', 'constant', 'line1'), 'min2',
+              scale(frac(['_2pi2', ' ', 'f_2'], ['lambda', ' ', 'f'])), ' ', 'x_1',
+            ]),
+          ],
+          translation: {
+            lambda: { style: 'linear' },
+          },
+        },
         19: [
           'yxt', 'equals',
           ASin([
@@ -671,7 +676,7 @@ figure.add([
       elements: {
         id1: '    (1)',
         id2: '    (2)',
-        v: { symbol: 'vinculum' },
+        v: { symbol: 'vinculum', lineWidth: 0.007 },
         comma1: ', ',
         comma2: ', ',
         min: ' \u2212 ',
@@ -903,15 +908,16 @@ slides.push({
 slides.push({
   text: [
     'The |disturbance| moves with a constant velocity |c|.',
+    '',
     {
-      text: 'Thus, the time it takes to move some distance |x||1|', lineSpace: 0.2 },
-    'can be calculated.',
+      text: 'Thus, the time it takes to move some distance |x||1|  can be calculated.',
+      // lineSpace: 0.2,
+    },
   ],
   steadyState: () => {
     reset();
     disturbPulse();
   },
-  leaveState: () => { reset(); },
 });
 
 slides.push({ form: '2' });
@@ -931,20 +937,21 @@ slides.push({
       .whenFinished(done)
       .start();
   },
-  steadyStateCommon: () => { sideEqn.showForm('2id'); },
+  steadyStateCommon: () => {
+    sideEqn.setScenario('side');
+    sideEqn.showForm('2id');
+  },
   steadyState: () => { eqn.hide(); },
 });
 
 // /////////////////////////////////////////////////////////////////
 slides.push({
   form: null,
-  text: [
-    'Now, let\'s disturb the |first particle| with a',
-    '|sine function|.',
-  ],
+  text: 'Now, let\'s disturb the |first particle| with a |sine function|.',
   enterState: () => {
     b0.isTouchable = true;
     b0.animations.cancel('_noStop_sine');
+    reset();
   },
 });
 
@@ -969,8 +976,8 @@ slides.push({
 // /////////////////////////////////////////////////////////////////
 slides.push({
   text: [
-    'The disturbance at some point |xb1||_1b|  is the',
-    'disturbance at |xr0||_0r|  from |t||1|  seconds ago.',
+    'The disturbance at some point |xb1||_1b|  is the disturbance at |xr0||_0r|  from',
+    '|t||1|  seconds ago.',
   ],
   steadyState: () => {
     figure.elements._balls.highlight(['ball0', bx1.name]);
@@ -980,7 +987,7 @@ slides.push({
 
 slides.push({ form: '4' });
 slides.push({ form: '5' });
-slides.push({ text: 'Multiply |w| through' });
+slides.push({ text: 'Multiply the angular frequency |w| through:' });
 slides.push({ form: '6' });
 slides.push({ form: '7' });
 slides.push({ text: 'We can now |substitute| equation (1)' });
@@ -988,8 +995,7 @@ slides.push({ form: '8' });
 slides.push({ form: '9', steadyState: () => sideEqn.hide() });
 slides.push({
   text: [
-    '|xb1||_1b|  was arbitrarily selected, so we',
-    'can say |x| more generally',
+    '|xb1||_1b|  was arbitrarily selected, so we can say |x| more generally.',
   ],
   steadyStateCommon: () => sideEqn.hide(),
 });
@@ -997,14 +1003,12 @@ slides.push({ form: '10' });
 slides.push({ form: '11' });
 slides.push({
   text: [
-    'This equation describes the string at any',
-    'position |x| at any time |t|.',
+    'This equation describes the string at any position |x| at any time |t|.',
   ],
 });
 slides.push({
   text: [
-    'Now let\'s examine the terms within the sine',
-    'function more closely.',
+    'Now let\'s examine the terms within the sine function more closely.',
   ],
 });
 slides.push({
@@ -1017,8 +1021,7 @@ slides.push({
 });
 slides.push({
   text: [
-    'If we |freeze| time, then |t| is constant',
-    '(and thus |w||t| is constant).',
+    'If we |freeze| time, then |t| is constant (and thus |w||t| is constant).',
   ],
   steadyState: () => data.unpause(),
 });
@@ -1032,8 +1035,7 @@ slides.push({
 slides.push({ text: 'We are left with a sine curve along |x|.' });
 slides.push({
   text: [
-    'Rearranging the last term and expanding',
-    'the angular frequency gives:',
+    'Rearranging the last term and expanding the angular frequency gives:',
   ],
 });
 slides.push({ form: ['13a', '14'] });
@@ -1041,42 +1043,42 @@ slides.push({ form: '15' });
 slides.push({ form: '16' });
 slides.push({
   text: [
-    'The sine function repeats, when the value it',
-    'operates on changes by 2|pi|.',
+    'The sine function repeats when the value it operates on changes by 2|pi|.',
   ],
 });
 slides.push({
   text: [
-    'The value of 2|pi||f| cycles through 2|pi|',
-    '|f|  times per second.',
-    {
-      text: 'Therefore it takes 1//|f| s to cycle through 2|pi|.',
-      lineSpace: 0.2,
+    'The term |two||pi1||f1|  says there are |f|  lots of 2|pi| cycles per second.',
+    '',
+    'Therefore it takes 1/ |f|  seconds to cycle through 2|pi|.',
+  ],
+  modifiers: {
+    two: {
+      text: '2',
+      font: { color: color1 },
+      touchBorder: [0.1, 0.1, 0.2, 0.1],
+      onClick: () => {
+        eqn.pulse({ elements: ['_2pi2', 'f_2'], centerOn: 'f_2', xAlign: 'left' });
+      },
     },
-  ],
+    pi1: { text: '\u03c0', font: { family: 'Times New Roman', style: 'italic', color: color1 } },
+    f1: { text: 'f', font: { family: 'Times New Roman', style: 'italic', color: color1 } },
+  },
+  steadyState: () => eqn.exec(['setColor', color1], ['_2pi2', 'f_2']),
+  leaveState: () => eqn.exec(['setColor', colorDef], ['_2pi2', 'f_2']),
 });
 slides.push({
   text: [
-    'In 1//|f| s, a wave travelling at velocity |c|',
-    'will cover a distance |c|//|f|.',
+    'In 1/ |f|  seconds, a wave with velocity |c| will cover a distance |c|//|f|.',
+    '',
+    '|c|//|f|  is therefore the distance the wave travels before it starts to repeat.',
   ],
 });
 
 slides.push({
   text: [
-    '|c|//|f| is therefore the distance the wave travels',
-    'before it starts to repeat.',
-  ],
-});
-
-slides.push({
-  text: [
-    'The wavelength of a sine wave is the distance',
-    'between repeated portions of the wave.',
-    {
-      text: 'For instance, the distance between peaks of the wave.',
-      font: { size: 0.06 },
-    },
+    'The wavelength |lambda| of a sine wave is the distance between repeated',
+    'portions of the wave - such as the distance between peaks.',
   ],
 });
 
@@ -1119,8 +1121,8 @@ slides.push({ form: '19' });
 slides.push({ form: '20' });
 slides.push({
   text: [
-    'The 2|pi|//|lambda| term is often called the |wave number|',
-    '|k| and gives the number of radians per unit distance',
+    'The 2|pi|//|lambda| term is often called the |wave number| |k| and gives',
+    'the number of radians per unit distance.',
   ],
 });
 slides.push({ form: '21' });
@@ -1128,8 +1130,7 @@ slides.push({ form: '22' });
 slides.push({ form: '23', enterStateCommon: () => {} });
 slides.push({
   text: [
-    'And so we see the equation for a travelling',
-    'sine wave is below.',
+    'And so we see the equation for a travelling sine wave.',
   ],
   steadyStateCommon: () => data.unpause(),
 });
