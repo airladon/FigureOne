@@ -92,7 +92,12 @@ function SlideNavigator() {
 
     const form = getForm(index);
     const currentForm = eqn.getCurrentForm().name;
-    if (form == null || currentForm === form) {
+    if (
+      form == null
+      || (
+        typeof form === 'string'
+        && currentForm === form
+      )) {
       done();
       return;
     }
@@ -110,6 +115,7 @@ function SlideNavigator() {
         .start();
       return;
     }
+    
     eqn.goToForm({
       form, duration: 1, animate: 'move', callback: done,
     });
@@ -154,7 +160,7 @@ function SlideNavigator() {
   };
 
   const goToSlide = (index, fromPrev = false) => {
-    const leaveStateCommon = getProperty('leaveStateCommon', index);
+    const leaveStateCommon = getProperty('leaveStateCommon', currentSlideIndex);
     if (leaveStateCommon != null) {
       leaveStateCommon();
     }
@@ -184,8 +190,8 @@ function SlideNavigator() {
 
   const prevSlide = () => {
     fig.stop('cancel');
-    currentSlideIndex = (currentSlideIndex - 1) < 0 ? slides.length - 1 : currentSlideIndex - 1;
-    goToSlide(currentSlideIndex, false);
+    const prevSlideIndex = (currentSlideIndex - 1) < 0 ? slides.length - 1 : currentSlideIndex - 1;
+    goToSlide(prevSlideIndex, false);
   };
 
   return {

@@ -1,10 +1,10 @@
 // const { prevSlide, nextSlide, loadSlides } = navigator();
 const slideNav = new SlideNavigator();
-const { Transform } = Fig;
+const { Transform, Point } = Fig;
 const { range, rand, randSign } = Fig.tools.math;
 
 const figure = new Fig.Figure({
-  limits: [-2, -1.9, 4, 3], color: [0.5, 0.5, 0.5, 1],
+  limits: [-2, 0, 4, 3], color: [0.5, 0.5, 0.5, 1],
 });
 class Recording {
   constructor(initialValue) {
@@ -13,13 +13,14 @@ class Recording {
     this.duration = 10;
     this.timeStep = 0.01;
     this.len = this.duration / this.timeStep;
-    this.data = Array(this.len).fill(initialValue);
-    this.paused = false;
-    this.startTime = new Date().getTime();
-    this.lastTime = 0;
-    this.cumPauseTime = 0;
-    this.focusPaused = false;
-    this.paused = false;
+    this.reset(initialValue);
+    // this.data = Array(this.len).fill(initialValue);
+    // this.paused = false;
+    // this.startTime = new Date().getTime();
+    // this.lastTime = 0;
+    // this.cumPauseTime = 0;
+    // this.focusPaused = false;
+    // this.paused = false;
   }
 
   now() {
@@ -29,8 +30,17 @@ class Recording {
     return new Date().getTime() - this.startTime - this.cumPauseTime;
   }
 
+  initialize(callback) {
+    this.data = callback(this.now(), this.timeStep, this.len);
+  }
+
   reset(value) {
     this.data = Array(this.len).fill(value);
+    this.lastTime = 0;
+    this.cumPauseTime = 0;
+    this.startTime = new Date().getTime();
+    this.focusPaused = false;
+    this.paused = false;
   }
 
   isPaused() {
@@ -129,10 +139,16 @@ class Recording {
 }
 
 const startX = -1.5;
-let f = 0.2; // Hz
-const A = 0.7;   // m
+let f = 0.3; // Hz
+const A = 0.4;   // m
 let c = 0.5;   // m/s
 
+const axisOrigin = new Point(-1.5, A + 0.2 + 0.2);
+const descriptionPosition = new Point(0, 2.5);
+const buttonY = 2.5;
+const equationPosition = new Point(0, 1.9);
+const sideEquationPosition = new Point(1.4, 1.6);
+const colorText = [0.4, 0.4, 0.4, 1];
 // Helper function to make buttons
 const button = (name, position, label) => ({
   name,
@@ -163,7 +179,7 @@ figure.add([
         { font: { size: 0.08 }, text: [''] },
         { values: 0, text: '0', offset: [-0.1, 0.13], font: { size: 0.08 } },
       ],
-      position: [-1.5, 0],
+      position: axisOrigin,
       title: {
         font: { style: 'italic', family: 'serif', size: 0.12 },
         text: ['x', { font: { size: 0.06 }, lineSpace: 0.08, text: 'meters' }],
@@ -182,7 +198,7 @@ figure.add([
       line: { width: 0.005, arrow: 'barb' },
       // ticks: { step: 0.5, length: 0.1 },
       // labels: { font: { size: 0.08 }, text: ['0'] },
-      position: [-1.5, -A - 0.1],
+      position: axisOrigin.add(0, -A - 0.1),
       title: {
         font: { style: 'italic', family: 'serif', size: 0.12 },
         text: ['y', { font: { size: 0.06 }, lineSpace: 0.08, text: 'meters' }],
@@ -196,21 +212,35 @@ figure.add([
     name: 'description',
     method: 'primitives.textLines',
     options: {
-      font: { color: [0.5, 0.5, 0.5, 1], size: 0.1, weight: 100 },
+      font: { color: colorText.slice(), size: 0.1, weight: 100 },
       xAlign: 'center',
       yAlign: 'middle',
-      position: [0, -A - 0.9],
+      position: descriptionPosition,
       lineSpace: 0.15,
     },
     mods: {
       isTouchable: true,
     },
   },
-  button('nextButton', [1.5, -A - 0.9], 'Next'),
-  button('prevButton', [-1.5, -A - 0.9], 'Prev'),
+  // {
+  //   name: 'time',
+  //   method: 'primitives.text',
+  //   options: {
+  //     xAlign: 'right',
+  //     yAlign: 'middle',
+  //     text: '0s',
+  //     position: [1.5, 0.9],
+  //     font: { color: [0.5, 0.5, 0.5, 1], size: 0.1, weight: 100 },
+  //   },
+  // },
+  button('nextButton', [1.5, buttonY], 'Next'),
+  button('prevButton', [-1.5, buttonY], 'Prev'),
   {
     name: 'balls',
     method: 'collection',
+    options: {
+      position: axisOrigin.add(1.5, 0),
+    },
   },
 ]);
 
@@ -259,6 +289,7 @@ b0.move.bounds = {
   translation: { left: startX, right: startX, bottom: -A, top: A }
 };
 
+const timeText = figure.getElement('time');
 // Update function for everytime we want to update the signal
 function update() {
   const { y } = figure.elements._balls._ball0.transform.order[0];
@@ -271,6 +302,9 @@ function update() {
     // }
     b.setPosition(b.custom.x, by);
   }
+  // console.log((data.now() / 1000).toFixed(2))
+  // timeText.custom.updateText({ text: `${(data.now() / 1000).toFixed(1)}s` });
+  // const time = data.now();
 }
 
 // Before each draw, update the points
@@ -291,7 +325,7 @@ const reset = () => {
 
 const disturbPulse = () => {
   reset();
-  const y = rand(0.1, 0.4) * randSign();
+  const y = rand(0.1, 0.3) * randSign();
   const t = rand(0.2, 0.4);
   b0.animations.new()
     .position({ duration: t, target: [startX, y], progression: 'easeout' })
@@ -299,7 +333,7 @@ const disturbPulse = () => {
     .start();
 };
 // disturbPulse();
-let lastTime = 0.0;
+// let lastTime = 0.0;
 const disturbSine = (delay = 0, resetSignal = true) => {
   if (resetSignal) {
     reset();
@@ -311,6 +345,9 @@ const disturbSine = (delay = 0, resetSignal = true) => {
   const startTime = data.now();
   b0.animations.new('_noStop_sine')
     .delay(delay)
+    // .trigger({
+    //   callback: () => { startTime = data.now(); }
+    // })
     .custom({
       callback: (p) => {
         // const time = p * 10000 + timeOffset;
@@ -376,8 +413,17 @@ const tann = (content, comment, symbol, space = 0.2) => ({
   },
 });
 
+const frac = (numerator, denominator) => ({
+  frac: {
+    numerator, denominator, symbol: 'v', overhang: 0.02,
+  },
+});
+
 const color0 = [1, 0, 0, 1];
 const color1 = [0, 0.5, 1, 1];
+// const colorDef = [0.4, 0.4, 0.4, 1];
+const colorDef = colorText.slice();
+const dimColor = [0.75, 0.75, 0.75, 1];
 // const color2 = [0, ]
 
 // Add equation
@@ -387,7 +433,8 @@ figure.add([
     method: 'collections.equation',
     options: {
       // Define the elements that require specific styling
-      color: [0.5, 0.5, 0.5, 1],
+      color: colorDef,
+      dimColor,
       elements: {
         sin: { style: 'normal' },
         lb1: { symbol: 'bracket', side: 'left' },
@@ -406,7 +453,8 @@ figure.add([
         _2pi2: '2\u03c0',
         comma1: ', ',
         comma2: ', ',
-        v: { symbol: 'vinculum' },
+        lambda: '\u03bb',
+        v: { symbol: 'vinculum', lineWidth: 0.007 },
         brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
         line1: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
         line2: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
@@ -427,10 +475,10 @@ figure.add([
         x11: { sub: ['x_2', '_1_2'] },
         x12: { sub: ['x_6', '_1_6'] },
         x13: { sub: ['x_7', '_1_7'] },
-        x1OnC: { frac: ['x11', 'v', 'c'] },
-        x1OnCb: { frac: ['x13', 'v', 'c'] },
+        x1OnC: frac('x11', 'c'),
+        x1OnCb: frac('x13', 'c'),
         sX1OnC: scale('x1OnCb'),
-        sX1ToXOnC: scale({ frac: [tann('x13', 'x_1', 'line2'), 'v', 'c'] }),
+        sX1ToXOnC: scale(frac(tann('x13', 'x_1', 'line2'), 'c')),
         // swX1OnC: scale({ frac: [['w3', 'x13'], 'v', 'c'] }),
         // swX1ToXOnC: scale({ frac: [['w3', tann('x13', 'x_1', 'line2')], 'v', 'c'] }),
         x0: { sub: ['x_4', '_0_4'] },
@@ -439,7 +487,8 @@ figure.add([
         yx1t: ['y_0', b1(['x12', 'comma1', 't_1'])],
         yx1ToXt: ['y_0', b1([tann('x12', 'x_0', 'line1'), 'comma1', 't_1'])],
         yxt: ['y_0', b1(['x_0', 'comma1', 't_1'])],
-        sXOnC: scale({ frac: ['x_1', 'v', 'c'] }),
+        sXOnC: scale(frac('x_1', 'c')),
+        _2pifOnC: scale(frac(['_2pi2', ' ', 'f_2'], 'c')),
         wt: ['w1', 't_3'],
         tToTMinT1: ann('t_3', ['t_4', 'min', 't1'], 'line2'),
 
@@ -453,7 +502,7 @@ figure.add([
         // yxc: ['y_0', b2(['x0', 'comma2', 't_1', 'min', 'sXOnC'])],
       },
       formDefaults: {
-        alignment: { fixTo: 'equals' },
+        alignment: { fixTo: 'sin' },
         duration: 1,
       },
       forms: {
@@ -481,20 +530,80 @@ figure.add([
         ],
         8: [
           'yx1t', 'equals', ASin(
-            ['w2', 't_5', 'min2', 'w3', ann('t12', 'sX1OnC', 'line2')],
+            ['w2', 't_5', 'min2', 'w3', tann('t12', 'sX1OnC', 'line2')],
           ),
         ],
         9: ['yx1t', 'equals', ASin(['w2', 't_5', 'min2', 'w3', 'sX1OnC'])],
         10: ['yx1ToXt', 'equals', ASin(['w2', 't_5', 'min2', 'w3', 'sX1ToXOnC'])],
         11: ['yxt', 'equals', ASin(['w2', 't_5', 'min2', 'w3', 'sXOnC'])],
-        12: [
-          'yxt', 'equals', ASin([
-            ann('w2', ['_2pi1', ' ', 'f_1'], 'line1'), 't_5',
+        12: ['yxt', 'equals', ASin(['w2', 't_5', 'min2', 'w3', 'sXOnC'])],
+        13: [
+          'yxt', 'equals',
+          ASin([
+            'w2',
+            tann('t_5', 'constant', 'line1'), 'min2', 'w3',
+            'sXOnC',
+          ]),
+        ],
+        14: [
+          'yxt', 'equals',
+          ASin([
+            'w2',
+            tann('t_5', 'constant', 'line1'), 'min2',
+            scale(frac('w3', 'c')), ' ', 'x_1',
+          ]),
+        ],
+        15: [
+          'yxt', 'equals',
+          ASin([
+            'w2',
+            tann('t_5', 'constant', 'line1'), 'min2',
+            scale(frac(tann('w3', ['_2pi2', ' ', 'f_2'], 'line2'), 'c')), ' ', 'x_1',
+          ]),
+        ],
+        16: [
+          'yxt', 'equals',
+          ASin([
+            'w2',
+            tann('t_5', 'constant', 'line1'), 'min2',
+            scale(frac(['_2pi2', ' ', 'f_2'], 'c')), ' ', 'x_1',
+          ]),
+        ],
+        lamdacf: ['lambda', 'equals', frac('c_1', 'f')],
+        clamdaf: {
+          content: ['c_1', 'equals', 'lambda', ' ', 'f'],
+          translation: {
+            c_1: { style: 'curved', direction: 'up', mag: 0.8 },
+            lambda: { style: 'curved', direction: 'down', mag: 0.8 },
+          },
+        },
+        '12a': [
+          ASin([
+            // ann('w2', ['_2pi1', ' ', 'f_1'], 'line1'),
+            'w2',
+            't_5',
             'min2', ann('w3', ['_2pi2', ' ', 'f_2'], 'line2'), 'sXOnC']),
         ],
-        13: [
-          'yxt', 'equals', ASin([
-            '_2pi1', ' ', 'f_1', ' ', 't_5', 'min2', '_2pi2', ' ', 'f_2', ' ', 'sXOnC',
+        '13a': [
+          ASin([
+            // '_2pi1', ' ', 'f_1', ' ',
+            'w2',
+            't_5', 'min2', '_2pi2', ' ', 'f_2', ' ', 'sXOnC',
+          ]),
+        ],
+        '14a': [
+          ASin([
+            ann(['w2', 't_5'], ['const', 'ant'], 'brace', 0.05), 'min2', '_2pi2', ' ', 'f_2', ' ', 'sXOnC',
+          ]),
+        ],
+        '15a': [
+          ASin([
+            ann(['_2pi1', ' ', 'f_1', ' ', 't_5'], ['const', 'ant'], 'brace', 0.05), 'min2', '_2pi2', ' ', 'f_2', ' ', 'sXOnC',
+          ]),
+        ],
+        '16a': [
+          ASin([
+            'const', 'min2', '_2pi2', scale({ frac: ['f_2', 'v', 'c'] }), ' ', 'x_1',
           ]),
         ],
         // 10: ['yx1t', 'equals', 'A', 'sin', b2(['w2', 't_5', 'min2', 'swX1OnC'])],
@@ -503,14 +612,21 @@ figure.add([
         // 13: ['w2', 't_5', 'min2', 'sXOnC'],
       },
       formSeries: ['0'],
-      position: [-0.3, -A - 0.4],
+      position: equationPosition,
     },
+    // mods: {
+    //   scenarios: {
+    //     center: { position: equationPosition, scale: 1 },
+    //     side: { position: sideEquationPosition, scale: 0.6 },
+    //   },
+    // },
   },
   {
     name: 'sideEqn',
     method: 'equation',
     options: {
-      scale: 0.5,
+      // scale: 0.5,
+      color: colorDef,
       elements: {
         id1: '    (1)',
         id2: '    (2)',
@@ -522,6 +638,7 @@ figure.add([
         rb1: { symbol: 'bracket', side: 'right' },
         lb2: { symbol: 'bracket', side: 'left' },
         rb2: { symbol: 'bracket', side: 'right' },
+        equals: '  =  ',
       },
       phrases: {
         t1: { sub: ['t', '_1_1'] },
@@ -532,12 +649,19 @@ figure.add([
         sXOnC: scale('xOnC'),
         yxc: ['y_0', b2(['x0', 'comma2', 't_1', 'min', 'sXOnC'])],
       },
-      formDefaults: { alignment: { xAlign: 'right' } }, // { fixTo: 'equals' } },
+      formDefaults: { alignment: { xAlign: 'equals' } }, // { fixTo: 'equals' } },
       forms: {
-        2: ['t1', '_  =  ', { frac: ['x1', 'vinculum', 'c'] }, 'id1'],
-        5: ['ytx', '_  =  ', 'yxc', 'id2'],
+        2: ['t1', 'equals', { frac: ['x1', 'vinculum', 'c'] }],
+        '2id': ['t1', 'equals', { frac: ['x1', 'vinculum', 'c'] }, 'id1'],
+        5: ['ytx', 'equals', 'yxc', 'id2'],
       },
-      position: [1.4, -0.8],
+      // position: sideEquationPosition,
+    },
+    mods: {
+      scenarios: {
+        center: { position: equationPosition, scale: 1 },
+        side: { position: sideEquationPosition, scale: 0.7 },
+      },
     },
   },
 ]);
@@ -556,13 +680,13 @@ balls.toFront(bx1.name);
 nextButton.onClick = slideNav.nextSlide;
 prevButton.onClick = slideNav.prevSlide;
 
-prevButton.onClick = () => {
-  if (data.paused) {
-    data.unpause();
-  } else {
-    data.pause();
-  }
-};
+// prevButton.onClick = () => {
+//   if (data.paused) {
+//     data.unpause();
+//   } else {
+//     data.pause();
+//   }
+// };
 
 const slides = [];
 
@@ -595,6 +719,7 @@ const modifiers = {
     inLine: false,
   },
   x: { font: { family: 'Times New Roman', style: 'italic' } },
+  f: { font: { family: 'Times New Roman', style: 'italic' } },
   y: { font: { family: 'Times New Roman', style: 'italic' } },
   t: { font: { family: 'Times New Roman', style: 'italic' } },
   c: { font: { family: 'Times New Roman', style: 'italic' } },
@@ -636,8 +761,32 @@ const modifiers = {
   },
   w: {
     text: '\u03c9',
-    font: {
-      family: 'Times New Roman', style: 'italic',
+    font: { family: 'Times New Roman', style: 'italic' },
+  },
+  pi: {
+    text: '\u03c0',
+    font: { family: 'Times New Roman', style: 'italic' },
+  },
+  frequency: {
+    font: { color: color1 },
+    onClick: () => eqn.pulse({ elements: ['f_1', 'f_2'] }),
+  },
+  time: {
+    font: { color: color1 },
+    onClick: () => {
+      eqn.pulse({ elements: ['t_5'] });
+      eqn.pulse({ elements: ['x_1', 'v'], translation: 0.04, angle: Math.PI / 2, frequency: 3, });
+    },
+  },
+  freeze: {
+    font: { color: color1 },
+    touchBorder: 0.1,
+    onClick: () => {
+      if (data.paused) {
+        data.unpause();
+      } else {
+        data.pause();
+      }
     },
   },
 };
@@ -649,17 +798,25 @@ const modifiers = {
 // /////////////////////////////////////////////////////////////////
 slides.push({
   text: [
-    'Discover why a travelling sine wave can be',
-    'defined by the equation above.',
-    {
-      font: { size: 0.06 },
-      text: 'And the relationship between frequency wavelength, and velocity.',
-    },
+    'Explore the equation of a travelling sine wave',
+    'and the relationship between velocity,',
+    'wavelength and frequency.',
+    // {
+    //   font: { size: 0.06 },
+    //   text: 'And the relationship between frequency wavelength, and velocity.',
+    // },
   ],
   form: '0',
   steadyState: () => {
     reset();
-    disturbSine(1);
+    disturbSine(0, false);
+    data.initialize((time, timeStep, num) => {
+      const y = Array(num);
+      for (let i = 0; i < num; i += 1) {
+        y[i] = A * Math.sin(2 * Math.PI * f * (time / 1000 + timeStep * i) + Math.PI);
+      }
+      return y;
+    });
     figure.elements._balls.dim();
     sideEqn.hide();
   },
@@ -708,23 +865,16 @@ slides.push({
 });
 slides.push({
   transition: (done) => {
-    sideEqn.hide();
-    const p = eqn.getPosition();
-    figure.elements.animations.new()
-      .inParallel([
-        eqn.animations.position({ target: [0.91, -0.8], duration: 1 }),
-        eqn.animations.scale({ target: 0.714, duration: 1 }),
-      ])
-      .trigger(() => {
-        eqn.setPosition(p);
-        eqn.setScale(1);
-        eqn.showForm('1');
-        sideEqn.showForm('2');
-      })
+    eqn.hide();
+    sideEqn.showForm('2');
+    sideEqn.setScenario('center');
+    sideEqn.animations.new()
+      .goToForm({ target: '2id', animate: 'move' })
+      .scenario({ start: 'center', target: 'side', duration: 1 })
       .whenFinished(done)
       .start();
   },
-  steadyStateCommon: () => { sideEqn.showForm('2'); },
+  steadyStateCommon: () => { sideEqn.showForm('2id'); },
   steadyState: () => { eqn.hide(); },
 });
 
@@ -750,7 +900,7 @@ slides.push({
   },
   form: '3',
   steadyState: () => {
-    sideEqn.showForm('2');
+    // sideEqn.showForm('2id');
     balls.hasTouchableElements = false;
     figure.elements._balls.highlight(['ball0']);
     if (!b0.isAnimating()) {
@@ -784,7 +934,7 @@ slides.push({
     '|xb1||_1b|  was arbitrarily selected, so we',
     'can say |x| more generally',
   ],
-  steadyStateCommon: () => { sideEqn.hide(); },
+  steadyStateCommon: () => sideEqn.hide(),
 });
 slides.push({ form: '10' });
 slides.push({ form: '11' });
@@ -801,21 +951,137 @@ slides.push({
   ],
 });
 slides.push({
+  form: '12',
+  enterStateCommon: () => eqn.highlight([
+    'w2', 't_5', 'w3', 'x_1', 'v', 'c', 'min2', 'line1',
+    'constant', 'sin', 'lb2', 'rb2',
+  ]),
+  leaveStateCommon: () => eqn.undim(),
+});
+slides.push({
   text: [
-    '|w| is the angular frequency',
+    'If we |freeze| time, then |t| is constant',
+    '(and thus |w||t| is constant).',
+  ],
+  steadyState: () => data.unpause(),
+});
+slides.push({ form: '13', steadyStateCommon: () => data.pause() });
+slides.push({
+  enterStateCommon: () => eqn.highlight([
+    'w3', 'x_1', 'v', 'c', 'min2', 'sin', 'lb2', 'rb2', 'line2', '_2pi2', 'f_2',
+    'c_1', 'lambda', 'f',
+  ]),
+});
+slides.push({ text: 'We are left with a sine curve along |x|.' });
+slides.push({
+  text: [
+    'Rearranging the last term and expanding',
+    'the angular frequency gives:',
+  ],
+});
+slides.push({ form: '14' });
+slides.push({ form: '15' });
+slides.push({ form: '16' });
+slides.push({
+  text: [
+    'The sine function repeats, when the value it',
+    'operates on changes by 2|pi|.',
+  ],
+});
+slides.push({
+  text: [
+    'The value of 2|pi||f| cycles through 2|pi|',
+    '|f|  times per second.',
     {
-      text: 'the number of times 2\u03c0 radians is cycled through per second',
-      font: { size: 0.07 },
+      text: 'Therefore it takes 1//|f| s to cycle through 2|pi|.',
+      lineSpace: 0.2,
     },
   ],
 });
-slides.push({ form: '12' });
-slides.push({ form: '13' });
+slides.push({
+  text: [
+    'In 1//|f| s, a wave travelling at velocity |c|',
+    'will cover a distance |c|//|f|.',
+  ],
+});
+
+slides.push({
+  text: [
+    '|c|//|f| is therefore the distance the wave travels',
+    'before it starts to repeat.',
+  ],
+});
+
+slides.push({
+  text: [
+    'The wavelength of a sine wave is the distance',
+    'between repeated portions of the wave.',
+    {
+      text: 'For instance, the distance between peaks of the wave.',
+      font: { size: 0.06 },
+    },
+  ],
+});
+
+slides.push({
+  text: [
+    'Thus, the wavelength is |c|//|f|.',
+  ],
+});
+slides.push({ form: 'lamdacf' });
+slides.push({
+  text: [
+    'Or more commonly rearranged for |c|.',
+  ],
+});
+slides.push({ form: 'clamdaf' });
+slides.push({
+  text: [
+    'Substituting (2) gives',
+  ],
+});
+slides.push({
+  text: [
+    'The 2|pi|/|lambda| term is often called the wave number',
+    '|k| and gives the number of radians per unit distance',
+  ],
+});
 
 // slides.push({
 //   text: []
 // })
 
+// The sine function repeats when the value it operates changes by 2π.
+//
+// The 2πf term is a value that cycles through 2π f times per second.
+//
+// Therefore, it takes 1/f seconds to cycle through 2π once.
+//
+// In 1/fs, a wave travelling at velocity c will cover a distance c/f.
+//
+// c/f is therefore the distance the wave travels before it starts
+// to repeat.
+//
+// The distance between repeated portions of a wave is the 'wavelength'.
+//
+// Therefore wavelength = c/f.
+//
+// We can no rearrange the equation to 2πf / c = 2π/L
+//
+// 2π/L is commonly called the wave number 'k'
+
+// When multiplied by a distance then, the resulting number of radians is found.
+//
+// k is a physical property of a wave that describes the number of radians
+// per unit distance.
+//
+// The 2πf term is a value that cycles through 2π f times per second.
+// Therefore, it will take 1/f seconds to cycle through 2π once.
+// If the wave is travelling at a velocity of c, then the distance
+// it covers in 1/fs is c/f.
+// c/f is therefore the distance the wave travels before it starts
+// to repeat.
+// 
 
 // wt is constant, so this is just a normal sine wave dependent on f, c and x.
 // The wavelenght of the sine wave is the distance it takes for the angle to cycle
@@ -847,4 +1113,4 @@ slides.push({ form: '13' });
 // /////////////////////////////////////////////////////////////////
 slideNav.loadSlides(slides, prevButton, nextButton, figure, description, modifiers, eqn);
 
-slideNav.goToSlide(5);
+slideNav.goToSlide(20);

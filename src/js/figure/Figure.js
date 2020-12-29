@@ -301,6 +301,7 @@ class Figure {
       limits: new Rect(-1, -1, 2, 2),
       fontScale: 1,
       color: [0, 0, 0, 1],
+      dimColor: [0.5, 0.5, 0.5, 1],
       font: {
         family: 'Helvetica',
         size: 0.2,
@@ -325,6 +326,7 @@ class Figure {
     if (optionsToUse.font.color == null) {
       optionsToUse.font.color = this.defaultColor.slice();
     }
+    this.defaultDimColor = optionsToUse.dimColor;
     this.defaultFont = optionsToUse.font;
     this.htmlId = htmlId;
     this.animationFinishedCallback = null;
@@ -1095,6 +1097,7 @@ class Figure {
       this.spaceTransforms,
       this.animateNextFrame.bind(this, true, 'getShapes'),
       this.defaultColor,
+      this.defaultDimColor,
       this.defaultFont,
       this.defaultLineWidth,
       this.defaultLength,

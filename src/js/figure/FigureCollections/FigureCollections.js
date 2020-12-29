@@ -108,6 +108,7 @@ export default class FigureCollections {
     // }
     // console.log(optionsToUse.transform, transformOrPointOrOptions)
     const element = new FigureElementCollection(optionsToUse);
+    element.dimColor = this.primitives.defaultDimColor.slice();
     // console.log(element)
     // element.setColor(color);
     if (

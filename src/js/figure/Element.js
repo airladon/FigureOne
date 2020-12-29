@@ -1007,6 +1007,7 @@ class FigureElement {
       }
       const x = mag * Math.cos(type);
       const y = mag * Math.sin(type);
+      // const s = this.getScale();
       return new Transform().translate(x, y);
     };
     this.fnMap.add('_elementPulseSettingsTransformMethod', pulseTransformMethod);
@@ -2331,6 +2332,7 @@ class FigureElement {
           getPoint(this.pulseSettings.delta),
           this.pulseSettings.type,
         );
+        // console.log(this.name, this.transform._dup(), pTransform.matrix());
         // if (this.name === 'p2') {
         //   console.log(pTransform._dup(), pulseMag)
         // }

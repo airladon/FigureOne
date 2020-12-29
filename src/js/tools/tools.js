@@ -1210,11 +1210,14 @@ function splitString(str: string, token: string = '|', escape: string = '') {
   const split = [];
   let currentSplit = [];
   let escaped = false;
+  let escapedEscape = false;
   let tokenStringIndex = 0;
   letters.forEach((letter) => {
     currentSplit.push(letter);
-    if (tokenStringIndex === 0 && letter === escape) {
+    if (tokenStringIndex === 0 && letter === escape && escaped === false) {
       escaped = true;
+    } else if (letter === escape && tokenStringIndex === 0 && escaped) {
+      escapedEscape = true;
     } else if (letter === token[tokenStringIndex]) {
       tokenStringIndex += 1;
     } else {
@@ -1235,6 +1238,11 @@ function splitString(str: string, token: string = '|', escape: string = '') {
       }
       escaped = false;
       tokenStringIndex = 0;
+    }
+    if (escapedEscape) {
+      escapedEscape = false;
+      escaped = false;
+      currentSplit = currentSplit.slice(0, -1);
     }
   });
   if (currentSplit.length > 0) {

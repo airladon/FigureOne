@@ -2161,6 +2161,7 @@ export default class FigurePrimitives {
   animateNextFrame: Function;
   draw2DFigures: Object;
   defaultColor: Array<number>;
+  defaultDimColor: Array<number>;
   defaultFont: OBJ_Font;
   defaultLineWidth: number;
   defaultLength: number;
@@ -2177,6 +2178,7 @@ export default class FigurePrimitives {
     spaceTransforms: OBJ_SpaceTransforms,
     animateNextFrame: Function,
     defaultColor: Array<number>,
+    defaultDimColor: Array<number>,
     defaultFont: OBJ_Font,
     defaultLineWidth: number,
     defaultLength: number,
@@ -2200,6 +2202,7 @@ export default class FigurePrimitives {
     this.animateNextFrame = animateNextFrame;
     this.spaceTransforms = spaceTransforms;
     this.defaultColor = defaultColor;
+    this.defaultDimColor = defaultDimColor;
     this.defaultFont = defaultFont;
     this.defaultLineWidth = defaultLineWidth;
     this.defaultLength = defaultLength;
@@ -2242,6 +2245,7 @@ export default class FigurePrimitives {
       options.texture.onLoad,
       options.name,
     );
+    element.dimColor = this.defaultDimColor.slice();
 
     element.custom.updateGeneric = function update(updateOptions: {
       points?: Array<TypeParsablePoint>,
@@ -3295,8 +3299,9 @@ export default class FigurePrimitives {
     );
     to.loadText(options);
     const element = this.genericTextPrimitive(to, options);
+    element.custom.options = options;
     element.custom.updateText = (o: OBJ_Text) => { // $FlowFixMe
-      element.drawingObject.loadText(this.parseTextOptions(o));
+      element.drawingObject.loadText(this.parseTextOptions(element.custom.options, o));
       element.custom.updateBorders({});
     };
     element.custom.updateBorders(options);

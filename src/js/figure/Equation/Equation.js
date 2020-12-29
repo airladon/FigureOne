@@ -891,6 +891,10 @@ export class Equation extends FigureElementCollection {
     if (color == null) {
       color = shapes.defaultColor;
     }
+    let { dimColor } = options;
+    if (dimColor == null) {
+      dimColor = shapes.defaultDimColor.slice();
+    }
     const defaultFont = {
       family: 'Times New Roman',
       style: 'normal',
@@ -900,6 +904,7 @@ export class Equation extends FigureElementCollection {
     };
     const defaultOptions = {
       color,
+      dimColor,
       position: new Point(0, 0),
       scale: 0.7,
       formDefaults: {
@@ -955,6 +960,7 @@ export class Equation extends FigureElementCollection {
     // }
     this.shapes = shapes;
     this.setColor(optionsToUse.color);
+    this.dimColor = optionsToUse.dimColor;
     // this.touchBorder = 'rect';
     // this.border = 'children';
     // this.isTouchDevice = isTouchDevice;
@@ -1181,7 +1187,7 @@ export class Equation extends FigureElementCollection {
         || options.font == null
       )
     ) {
-      if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
+      if (textToUse.match(/[A-Z,a-z,\u0370-\u03ff]/)) {
         fontDefinition.style = 'italic';
       } else {
         fontDefinition.style = 'normal';
@@ -1204,6 +1210,9 @@ export class Equation extends FigureElementCollection {
         xAlign: 'left',
         yAlign: 'baseline',
         touchBorder: 'buffer',
+        mods: {
+          dimColor: this.dimColor.slice(),
+        },
         // border: 'draw',
         // touchBorder: options.touchBorder == null ? 'buffer' : options.touchBorder,
         // defaultTextTouchBorder: options.defaultTextTouchBorder,
@@ -1247,12 +1256,13 @@ export class Equation extends FigureElementCollection {
     if (existingElement != null) {
       return existingElement;
     }
-
+    // console.log(this.name, key, this.dimColor.slice())
     // Check if the options has a symbol definition
     if (options.symbol != null && typeof options.symbol === 'string') {
       // debugger;
       const symbol = this.makeSymbolElem(options);
       if (symbol != null) {
+        // symbol.dimColor = this.dimColor.slice();
         this.add(key, symbol);
         return symbol;
       }
@@ -1262,6 +1272,7 @@ export class Equation extends FigureElementCollection {
     // console.log(cleanKey)
     let symbol = this.eqn.symbols.get(cleanKey, options);
     if (symbol != null) {
+      // symbol.dimColor = this.dimColor.slice();
       if (symbol.color[3] > 0.01) {
         symbol.setColor(this.color);
       }
@@ -1276,6 +1287,7 @@ export class Equation extends FigureElementCollection {
     if (ending != null) {
       symbol = this.eqn.symbols.get(ending[0].replace(/_/, ''), options);
       if (symbol != null) {
+        // symbol.dimColor = this.dimColor.slice();
         if (symbol.color[3] > 0.01) {
           symbol.setColor(this.color);
         }
@@ -1330,6 +1342,7 @@ export class Equation extends FigureElementCollection {
     if (options.color == null && symbol.color[3] > 0.01) {
       symbol.setColor(this.color);
     }
+    symbol.dimColor = this.dimColor.slice();
     if (options.mods != null) {
       symbol.setProperties(options.mods);
     }
