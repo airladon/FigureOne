@@ -126,6 +126,8 @@ toc:
   - SlideNavigator
   - OBJ_SlideNavigator
   - OBJ_SlideNavigatorSlide
+  - CollectionsSlideNavigator
+  - COL_SlideNavigator
   - TypeSlideFrom
   - TypeSlideLeaveStateCallback
   - TypeSlideStateCallback

@@ -181,11 +181,11 @@ export type OBJ_EquationDefaults = {
 /**
  * SlideNavigator options object
  *
- * The options here associate a number of FigureElements with the
- * SlideNavigator, which will be ustilized by the slide definitions in
+ * The options here associate a number of {@link FigureElement}s with the
+ * {@link SlideNavigator}, which will be ustilized by the slide definitions in
  * {@link OBJ_SlideNavigatorSlide}.
  *
- * The `collection` associates a {@link FigureElementCollection}. If a
+ * The `collection` property associates a {@link FigureElementCollection}. If a
  * {@link Figure} is passed in, then the root level collection will be
  * used. All animations in slide `transitions` should be attached to
  * this collection or its children as this is the collection that will be
@@ -241,6 +241,12 @@ export type OBJ_SlideNavigator = {
  *
  * This class is a simple slide navigator, providing a convenient way to define
  * slides and step through them.
+ *
+ * {@link CollectionsSlideNavigator} creates the navigation buttons, and
+ * `textElement` automatically, and will usually be more convenient than
+ * manually creating them (unless custom buttons are needed).
+ *
+ * @see {@link CollectionsSlideNavigator} for examples.
  */
 export default class SlideNavigator {
   currentSlideIndex: number;
@@ -268,11 +274,17 @@ export default class SlideNavigator {
     }
   }
 
+  /**
+   * Load options after object instantiation. Usefull for if the
+   * `collection`, `prevButton`, `nextButton`, `equation` and/or `text` figure
+   * elements are not available at instantiation.
+   *
+   * @param {OBJ_SlideNavigator} options
+   */
   load(options: OBJ_SlideNavigator) {
     const o = options;
     this.collection = o.collection;
     this.slides = o.slides;
-    console.log(this.slides)
     if (typeof o.text === 'string') {
       this.textElement = this.collection.getElement(o.text);
     } else if (o.text != null) {
