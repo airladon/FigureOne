@@ -4527,6 +4527,9 @@ class FigureElementCollection extends FigureElement {
 
   setFigure(figure: OBJ_FigureForElement) {
     super.setFigure(figure);
+    if (this.onAdd != null) {
+      this.fnMap.exec(this.onAdd);
+    }
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.setFigure(figure);

@@ -272,12 +272,11 @@ export default class SlideNavigator {
     }
     this.equations = [];
     if (Array.isArray(o.equation)) {
-      o.equation.forEach((e) => {
-        this.equations.push(this.collection.getElement(e));
-      });
+      this.equations = o.equation;
     } else if (o.equation != null) {
       this.equations = [o.equation];
     }
+    this.setEquations();
     this.equationDefaults = joinObjects({}, {
       duration: 1,
       animate: 'move',
@@ -298,6 +297,13 @@ export default class SlideNavigator {
     }
   }
 
+  setEquations() {
+    const equations = [];
+    this.equations.forEach((e) => {
+      equations.push(this.collection.getElement(e));
+    });
+    this.equations = equations;
+  }
 
   getProperty(property: string, indexIn: number, defaultValue: any = null) {
     let index = indexIn;
@@ -329,7 +335,7 @@ export default class SlideNavigator {
 
   showForms(forms: Array<string | null>, hideOnly = false) {
     for (let i = 0; i < this.equations.length; i += 1) {
-      const e = this.equations[i];
+      const e = this.collection.getElement(this.equations[i]);
       if (forms.length > i && forms[i] != null) {
         if (!hideOnly) {
           e.showForm(forms[i]);
@@ -383,7 +389,7 @@ export default class SlideNavigator {
 
     const forms = this.getForm(this.currentSlideIndex);
     for (let i = 0; i < this.equations.length; i += 1) {
-      const e = this.equations[i];
+      const e = this.collection.getElement(this.equations[i]);
       if (forms.length > i && forms[i] != null) {
         const form = forms[i];
         const currentForm = e.getCurrentForm().name;
@@ -474,12 +480,12 @@ export default class SlideNavigator {
     const slide = this.slides[index];
     const forms = this.getForm(index);
     this.showForms(forms, true);
-    this.getProperty('enterStateCommon', index, () => {})(index, from);
+    this.getProperty('enterStateCommon', index, () => {})(index, fromToUse);
     if (slide.enterState != null) {
-      slide.enterState(index, from);
+      slide.enterState(index, fromToUse);
     }
     // Move to transition
-    this.transition(from);
+    this.transition(fromToUse);
   }
 
   /**

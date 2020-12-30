@@ -31,8 +31,8 @@ export type COL_SlideNavigatorButton = {
 } & COL_Rectangle & OBJ_Arrow;
 
 /**
- * {@link CollectionsRectangle} options object that extends {@link OBJ_Collection}
- * options object (without `parent`).
+ * {@link CollectionsSlideNavigator} options object that extends
+ * {@link OBJ_Collection} options object (without `parent`).
  *
  * This rectangle is similar to {@link OBJ_Rectangle}, except it can accomodate
  * both a fill and a border or line simultaneously with different colors.
@@ -80,131 +80,28 @@ export type COL_SlideNavigator = {
 */
 /* eslint-disable max-len */
 /**
- * {@link FigureElementCollection} representing a rectangle.
+ * {@link FigureElementCollection} that creates elements to work with {@link SlideNavigator}.
  *
- * ![](./apiassets/advrectangle_ex1.png)
- * ![](./apiassets/advrectangle_ex2.png)
+ * <p class="inline_gif"><img src="./apiassets/slideNavigator1.gif" class="inline_gif_image"></p>
  *
- * <p class="inline_gif"><img src="./apiassets/advrectangle.gif" class="inline_gif_image"></p>
- *
- * <p class="inline_gif"><img src="./apiassets/advrectangle_button.gif" class="inline_gif_image"></p>
+ * <p class="inline_gif"><img src="./apiassets/slideNavigator2.gif" class="inline_gif_image"></p>
  *
  * This object defines a rectangle
  * {@link FigureElementCollection} that may include:
- * - border (line)
- * - fill
- * - label
- * - ability to surround another {@link FigureElement} with some space
- * - button behavior when clicked
+ * - previous button
+ * - next button
+ * - {@link OBJ_TextLines} object
  *
- * Surrounding another element can be executed through either the
- * <a href="#collectionsrectanglesurround">surround</a> method
- * or the {@link OBJ_SurroundAnimationStep} found in the in
- * the animation manager ({@link FigureElement}.animations),
- * and in the animation builder
- * (<a href="#animationmanagernew">animations.new</a>
- * and <a href="#animationmanagerbuilder">animations.builder</a>).
- *
- * Button behavior means the button will temporarily change a different color
- * when it is clicked. By default, the button will become a little more
- * transparent, but colors for the fill, label and border can also be
- * specified.
  *
  * @see
  *
- * See {@link COL_Rectangle} for setup options.
- *
- * See {@link OBJ_SurroundAnimationStep} for surround animation step options.
+ * See {@link SlideNavigator} for information about what a slide navigator is.
  *
  * To test examples below, append them to the
- * <a href="#drawing-boilerplate">boilerplate</a>.
+ * <a href="#equation-boilerplate">boilerplate</a>.
  *
  * @example
  * // Simple rectangle
- * figure.add({
- *   name: 'rect',
- *   method: 'collections.rectangle',
- *   options: {
- *     width: 2,
- *     height: 1,
- *   },
- * });
- *
- * @example
- * // Round corner rectangle with fill and outside line
- * const rect = figure.collections.rectangle({
- *   width: 2,
- *   height: 1,
- *   line: {
- *     width: 0.02,
- *     widthIs: 'outside',
- *     dash: [0.1, 0.02],
- *   },
- *   corner: {
- *     radius: 0.2,
- *     sides: 10,
- *   },
- *   fill: [0.7, 0.7, 1, 1],
- * });
- * figure.add('rect', rect);
- *
- * @example
- * // Rectangle surrounds elements of an equation
- * figure.add([
- *   {
- *     name: 'rect',
- *     method: 'collections.rectangle',
- *     options: {
- *       color: [0.3, 0.3, 1, 1],
- *       line: { width: 0.01 },
- *     },
- *   },
- *   {
- *     name: 'eqn',
- *     method: 'equation',
- *     options: {
- *       forms: { 0: [{ frac: ['a', 'vinculum', 'b'] }, ' ', 'c'] },
- *       position: [1, 0],
- *       scale: 1.5,
- *     },
- *   }
- * ]);
- *
- * const rect = figure.getElement('rect');
- * const eqn = figure.getElement('eqn');
- *
- * rect.surround(eqn._a, 0.03);
- * rect.animations.new()
- *   .pulse({ delay: 1, scale: 1.5 })
- *   .surround({ target: eqn._b, space: 0.03, duration: 1 })
- *   .pulse({ delay: 1, scale: 1.5 })
- *   .surround({ target: eqn._c, space: 0.03, duration: 1 })
- *   .pulse({ delay: 1, scale: 1.5 })
- *   .start();
- *
- * @example
- * // Make a rectangle that behaves like a button
- * figure.add([
- *   {
- *     name: 'rect',
- *     method: 'collections.rectangle',
- *     options: {
- *       width: 0.5,
- *       height: 0.3,
- *       color: [0.3, 0.3, 0.3, 1],
- *       label: 'Save',
- *       corner: { radius: 0.05, sides: 10 },
- *       fill: [0.9, 0.9, 0.9, 1],
- *       button: {
- *         fill: [0.95, 0.95, 0.95, 1],
- *       },
- *     },
- *     mods: {
- *       isTouchable: true,
- *       onClick: () => console.log('clicked'),
- *     },
- *   },
- * ]);
  */
 /* eslint-enable max-len */
 // $FlowFixMe
@@ -228,33 +125,45 @@ class CollectionsSlideNavigator extends FigureElementCollection {
       slides: [],
       color: collections.primitives.defaultColor,
     };
-    const options = joinObjects({}, defaultOptions, optionsIn);
-    super(options);
+    const o = joinObjects({}, defaultOptions, optionsIn);
+    super(o);
 
     this.collections = collections;
     this._nextButton = null;
     this._prevButton = null;
     this._text = null;
-    if (!options.prevButton !== null) {
-      this.addButton(options.prevButton || {}, 'Prev');
+    if (!o.prevButton !== null) {
+      this.addButton(o.prevButton || {}, 'Prev');
     }
-    if (!options.nextButton !== null) {
-      this.addButton(options.nextButton || {}, 'Next');
+    if (!o.nextButton !== null) {
+      this.addButton(o.nextButton || {}, 'Next');
     }
-    if (!options.text !== null) {
-      this.addText(options.text || {});
+    if (!o.text !== null) {
+      this.addText(o.text || {});
     }
 
     this.nav = new SlideNavigator(joinObjects({}, {
-      collection: options.collection || this,
-      slides: options.slides,
-      equation: options.equation,
-      equationDefaults: options.equationDefaults,
+      collection: o.collection || this,
+      slides: o.slides,
+      equation: o.equation,
+      equationDefaults: o.equationDefaults,
       prevButton: this._prevButton,
       nextButton: this._nextButton,
       text: this._text,
     }));
+
+    if (o.collection == null) {
+      this.nav.collection = null;
+    }
     this.hasTouchableElements = true;
+    this.onAdd = () => {
+      if (this.nav.collection == null && this.parent != null) {
+        this.nav.equations =
+          Array.isArray(o.equation) ? o.equation : [o.equation];
+        this.nav.collection = this.parent;
+        this.nav.setEquations();
+      }
+    };
   }
 
   setSlides(slides: Array<OBJ_SlideNavigatorSlides>) {
@@ -266,11 +175,13 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     this.nav.goToSlide(slideIndex);
   }
 
-  onAdd() {
-    if (this.nav.collection == null && this.parent != null) {
-      this.nav.collection = this.parent;
-    }
-  }
+  // onAdd() {
+  //   console.log('asdf', this.parent)
+  //   if (this.nav.collection == null && this.parent != null) {
+  //     this.nav.collection = this.parent;
+  //     this.nav.setEquations();
+  //   }
+  // }
 
   addText(textOptions: OBJ_TextLines | string) {
     const defaultOptions = {
