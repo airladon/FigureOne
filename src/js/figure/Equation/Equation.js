@@ -917,7 +917,7 @@ export class Equation extends FigureElementCollection {
       },
       elements: {},
       forms: {},
-      formSeries: {},
+      // formSeries: {},
       formRestart: null,
       limits: shapes.limits,
       touchBorder: 'rect',
@@ -1027,6 +1027,10 @@ export class Equation extends FigureElementCollection {
           this.setFormSeries(Object.keys(this.eqn.formSeries)[0]);
         }
       }
+    } else {
+      this.eqn.formSeries = { base: Object.keys(this.eqn.forms).slice() };
+      this.eqn.currentFormSeries = this.eqn.formSeries.base;
+      this.eqn.currentFormSeriesName = 'base';
     }
 
     this.animations.goToForm = (...opt) => {

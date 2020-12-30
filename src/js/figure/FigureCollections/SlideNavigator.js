@@ -101,7 +101,61 @@ export type COL_SlideNavigator = {
  * <a href="#equation-boilerplate">boilerplate</a>.
  *
  * @example
- * // Simple rectangle
+ * // At its simplest, the SlideNavigator can be used to navigate an equation
+ * figure.add([
+ *   {
+ *     name: 'eqn',
+ *     method: 'equation',
+ *     options: {
+ *       formDefaults: { alignment: { xAlign: 'center' } },
+ *       forms: {
+ *         0: ['a', '_ + ', 'b', '_ = ', 'c'],
+ *         1: ['a', '_ + ', 'b', '_ - b_1', '_ = ', 'c', '_ - ', 'b_2'],
+ *         2: ['a', '_ = ', 'c', '_ - ', 'b_2'],
+ *       },
+ *       formSeries: ['0', '1', '2'],
+ *     },
+ *   },
+ *   {
+ *     name: 'nav',
+ *     method: 'collections.slideNavigator',
+ *     options: {
+ *       equation: 'eqn',
+ *     },
+ *   },
+ * ]);
+ *
+ * @example
+ * // Text can be used to describe each slide
+ * figure.add([
+ *   {
+ *     name: 'eqn',
+ *     method: 'equation',
+ *     options: {
+ *       formDefaults: { alignment: { xAlign: 'center' } },
+ *       forms: {
+ *         0: ['a', '_ + ', 'b', '_ = ', 'c'],
+ *         1: ['a', '_ + ', 'b', '_ - b_1', '_ = ', 'c', '_ - ', 'b_2'],
+ *         2: ['a', '_ = ', 'c', '_ - ', 'b_2'],
+ *       },
+ *     },
+ *   },
+ *   {
+ *     name: 'nav',
+ *     method: 'collections.slideNavigator',
+ *     options: {
+ *       equation: 'eqn',
+ *       text: { position: [0, 0.3] },
+ *       slides: [
+ *         { text: 'Start with the equation', form: '0' },
+ *         { text: 'Subtract b from both sides' },
+ *         { form: '1' },
+ *         { text: 'The b terms cancel on the left hand side' },
+ *         { form: '2' },
+ *       ],
+ *     },
+ *   },
+ * ]);
  */
 /* eslint-enable max-len */
 // $FlowFixMe
@@ -122,7 +176,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     const defaultOptions = {
       transform: new Transform('SlideNavigator').scale(1, 1).rotate(0).translate(0, 0),
       limits: collections.primitives.limits,
-      slides: [],
+      // slides: [],
       color: collections.primitives.defaultColor,
     };
     const o = joinObjects({}, defaultOptions, optionsIn);
@@ -142,27 +196,40 @@ class CollectionsSlideNavigator extends FigureElementCollection {
       this.addText(o.text || {});
     }
 
-    this.nav = new SlideNavigator(joinObjects({}, {
-      collection: o.collection || this,
-      slides: o.slides,
-      equation: o.equation,
-      equationDefaults: o.equationDefaults,
-      prevButton: this._prevButton,
-      nextButton: this._nextButton,
-      text: this._text,
-    }));
+    this.nav = new SlideNavigator();
+    this.custom.options = o;
+    // this.nav = new SlideNavigator(joinObjects({}, {
+    //   collection: o.collection || this,
+    //   slides: o.slides,
+    //   equation: o.equation,
+    //   equationDefaults: o.equationDefaults,
+    //   prevButton: this._prevButton,
+    //   nextButton: this._nextButton,
+    //   text: this._text,
+    // }));
 
     if (o.collection == null) {
       this.nav.collection = null;
     }
     this.hasTouchableElements = true;
     this.onAdd = () => {
-      if (this.nav.collection == null && this.parent != null) {
-        this.nav.equations =
-          Array.isArray(o.equation) ? o.equation : [o.equation];
-        this.nav.collection = this.parent;
-        this.nav.setEquations();
-      }
+      this.nav.load({
+        collection: this.parent,
+        slides: o.slides,
+        equation: o.equation,
+        equationDefaults: o.equationDefaults,
+        prevButton: this._prevButton,
+        nextButton: this._nextButton,
+        text: this._text,
+      });
+      this.nav.goToSlide(0);
+      // if (this.nav.collection == null && this.parent != null) {
+      //   this.nav.equations =
+      //     Array.isArray(o.equation) ? o.equation : [o.equation];
+      //   this.nav.collection = this.parent;
+      //   this.nav.setEquations();
+      //   this.nav.goToSlide(0);
+      // }
     };
   }
 

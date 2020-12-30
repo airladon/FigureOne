@@ -945,7 +945,15 @@ class CollectionsAxis extends FigureElementCollection {
   calcAuto(auto: [number, number]) {
     const [min, max] = auto;
     const r = max - min;
-    let order = r >= 1 ? Math.ceil(Math.log10(r)) : Math.floor(Math.log10(r));
+    let order;
+    if (r < 1) {
+      order = Math.floor(Math.log10(r));
+    } else if (1 <= r && r < 3) {
+      order = Math.floor(Math.log10(r / 3));
+    } else {
+      order = Math.ceil(Math.log10(r));
+    }
+    // let order = r < 10 ? Math.floor(Math.log10(r)) : Math.ceil(Math.log10(r));
     if (order === 0) {
       order = 1;
     }

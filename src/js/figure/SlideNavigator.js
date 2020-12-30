@@ -191,7 +191,7 @@ export type OBJ_EquationDefaults = {
  * this collection or its children as this is the collection that will be
  * stopped when skipping slides. All string definitions of other elements
  * will be relative to this collection, and therefore must be children of
- * this collection.
+ * this collection. A collection must be passed in.
  *
  * `prevButton` and `nextButton` are buttons that can be used to progress
  * backwards and forwards through the slides. The SlideNavigator will
@@ -207,7 +207,7 @@ export type OBJ_EquationDefaults = {
  * set default equation animation properties when `form` creates slide
  * transitions.
  *
- * @property {Figure | FigureElementCollection} [collection]
+ * @property {Figure | FigureElementCollection} collection
  * @property {Array<OBJ_NavigatorSlide>} [slides]
  * @property {FigureElement | string} [prevButton]
  * @property {FigureElement | string} [nextButton]
@@ -216,7 +216,7 @@ export type OBJ_EquationDefaults = {
  * @property {OBJ_EquationDefaults} [equationDefaults]
  */
 export type OBJ_SlideNavigator = {
-  collection?: Figure | FigureElementCollection,
+  collection: Figure | FigureElementCollection,
   slides?: Array<OBJ_NavigatorSlide>,
   prevButton?: FigureElement | string,
   nextButton?: FigureElement | string,
@@ -257,12 +257,22 @@ export default class SlideNavigator {
   };
 
   /**
-   * @param {OBJ_SlideNavigator} options
+   * @param {OBJ_SlideNavigator | null} options use `null` to load options later
+   * with the `load` method. Options should only be loaded when an instantiated
+   * {@link FigureElementCollection} is available for the `collections`
+   * property.
    */
-  constructor(options: OBJ_SlideNavigator) {
+  constructor(options: OBJ_SlideNavigator | null = null) {
+    if (options != null) {
+      this.load(options);
+    }
+  }
+
+  load(options: OBJ_SlideNavigator) {
     const o = options;
     this.collection = o.collection;
     this.slides = o.slides;
+    console.log(this.slides)
     if (typeof o.text === 'string') {
       this.textElement = this.collection.getElement(o.text);
     } else if (o.text != null) {
@@ -294,6 +304,14 @@ export default class SlideNavigator {
     }
     if (this.nextButton != null) {
       this.nextButton.onClick = this.nextSlide.bind(this);
+    }
+
+    if (this.slides == null && this.equations.length === 1) {
+      const { eqn } = this.equations[0];
+      if (eqn.currentFormSeries != null && eqn.currentFormSeries.length > 0) {
+        this.slides = [];
+        eqn.currentFormSeries.forEach(f => this.slides.push({ form: `${f}` }));
+      }
     }
   }
 
@@ -441,7 +459,7 @@ export default class SlideNavigator {
    * and will be set automatically
    */
   goToSlide(index: number, from?: 'next' | 'prev' | number) {
-    if (this.slides.length === 0) {
+    if (this.slides == null || this.slides.length === 0) {
       return;
     }
     let fromToUse = from;
