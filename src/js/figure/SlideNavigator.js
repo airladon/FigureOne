@@ -244,7 +244,7 @@ export type OBJ_SlideNavigator = {
  *
  * {@link CollectionsSlideNavigator} creates the navigation buttons, and
  * `textElement` automatically, and will usually be more convenient than
- * manually creating them (unless custom buttons are needed).
+ * manually creating thema (unless custom buttons are needed).
  *
  * @see {@link CollectionsSlideNavigator} for examples.
  */
