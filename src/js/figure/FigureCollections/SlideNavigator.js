@@ -22,7 +22,7 @@ import type {
 } from '../../tools/types';
 import type FigureCollections from './FigureCollections';
 import SlideNavigator from '../SlideNavigator';
-import type { OBJ_SlideNavigator } from '../SlideNavigator';
+import type { OBJ_SlideNavigator, OBJ_SlideNavigatorSlides } from '../SlideNavigator';
 import type { COL_Rectangle } from './Rectangle';
 
 
@@ -226,6 +226,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
       transform: new Transform('SlideNavigator').scale(1, 1).rotate(0).translate(0, 0),
       limits: collections.primitives.limits,
       slides: [],
+      color: collections.primitives.defaultColor,
     };
     const options = joinObjects({}, defaultOptions, optionsIn);
     super(options);
@@ -234,14 +235,14 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     this._nextButton = null;
     this._prevButton = null;
     this._text = null;
-    if (options.prevButton != null) {
-      this.addButton(options.prevButton, 'Prev');
+    if (!options.prevButton !== null) {
+      this.addButton(options.prevButton || {}, 'Prev');
     }
-    if (options.nextButton != null) {
-      this.addButton(options.nextButton, 'Next');
+    if (!options.nextButton !== null) {
+      this.addButton(options.nextButton || {}, 'Next');
     }
-    if (options.text != null) {
-      this.addText(options.text);
+    if (!options.text !== null) {
+      this.addText(options.text || {});
     }
 
     this.nav = new SlideNavigator(joinObjects({}, {
@@ -253,6 +254,12 @@ class CollectionsSlideNavigator extends FigureElementCollection {
       nextButton: this._nextButton,
       text: this._text,
     }));
+    this.hasTouchableElements = true;
+  }
+
+  setSlides(slides: Array<OBJ_SlideNavigatorSlides>) {
+    this.nav.slides = slides;
+    this.nav.goToSlide(0);
   }
 
   goToSlide(slideIndex: number) {
@@ -268,7 +275,8 @@ class CollectionsSlideNavigator extends FigureElementCollection {
   addText(textOptions: OBJ_TextLines | string) {
     const defaultOptions = {
       font: joinObjects({}, this.collections.primitives.defaultFont),
-      text: 'asdf',
+      text: '',
+      xAlign: 'center',
     };
     // defaultOptions.font.size = this.collections.primti * 0.4;
     defaultOptions.font.color = this.color;
@@ -291,6 +299,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     } else {
       button = this.getRectangleButton(options, type);
     }
+    button.isTouchable = true;
     if (type === 'Next') {
       this.add('nextButton', button);
     } else {
@@ -300,28 +309,27 @@ class CollectionsSlideNavigator extends FigureElementCollection {
 
   getRectangleButton(options: COL_SlideNavigatorButton, type: 'Next' | 'Prev') {
     const length = this.collections.primitives.defaultLength;
-    const x = type === 'Next' ? length / 4 : -length / 4;
+    const x = type === 'Next' ? length / 3 : -length / 3;
 
     const defaultButtonOptions = {
-      width: length / 4,
+      width: length / 3,
       height: length / 5,
       line: { width: this.collections.primitives.defaultLineWidth },
       corner: { radius: length / 30, sides: 10 },
       button: true,
       label: type,
-      position: [x, -length],
-      isTouchable: true,
+      position: [x, -length / 4],
     };
     const buttonOptions = joinObjects({}, defaultButtonOptions, options);
     return this.collections.rectangle(buttonOptions);
   }
 
   getArrowButton(options: COL_SlideNavigatorButton, type: 'Next' | 'Prev') {
-    const length = this.collections.primitives.defaultLength;
-    let rotation = 0;
-    let x = length / 4;
+    const length = this.collections.primitives.defaultLength / 4;
+    let angle = 0;
+    let x = length;
     if (type === 'Prev') {
-      rotation = Math.PI;
+      angle = Math.PI;
       x = -x;
     }
 
@@ -329,9 +337,9 @@ class CollectionsSlideNavigator extends FigureElementCollection {
       head: 'triangle',
       length,
       width: length,
-      rotation,
+      angle,
       position: [x, -length],
-      isTouchable: true,
+      align: 'mid',
     };
     const buttonOptions = joinObjects({}, defaultButtonOptions, options);
     return this.collections.primitives.arrow(buttonOptions);

@@ -152,8 +152,7 @@ export default class SlideNavigator {
         this.prevButton.isTouchable = true;
       }
     }
-    if (this.nextButton != null) {
-      // console.log('asdfasdf',this.nextButton)
+    if (this.nextButton != null && this.nextButton.setLabel != null) {
       if (this.currentSlideIndex === this.slides.length - 1) {
         this.nextButton.setLabel('Restart');
       } else {
@@ -217,6 +216,7 @@ export default class SlideNavigator {
     }
     const mods = this.getProperty('modifiers', index, {});
     const commonMods = this.getProperty('modifiersCommon', index, {});
+
     this.textElement.custom.updateText({
       text: this.getText(index),
       modifiers: joinObjects({}, commonMods, mods),
@@ -246,14 +246,16 @@ export default class SlideNavigator {
 
     // Reset and Set Text
     this.collection.stop('complete');
-    this.setText(index);
-    if (this.textElement != null && from === 'prev') {
-      const oldText = this.getText(this.currentSlideIndex);
-      const newText = this.getText(index);
-      if (newText !== oldText) {
-        this.textElement.animations.new()
-          .dissolveIn(0.2)
-          .start();
+    if (this.textElement != null) {
+      this.setText(index);
+      if (from === 'prev') {
+        const oldText = this.getText(this.currentSlideIndex);
+        const newText = this.getText(index);
+        if (newText !== oldText) {
+          this.textElement.animations.new()
+            .dissolveIn(0.2)
+            .start();
+        }
       }
     }
 
@@ -266,7 +268,6 @@ export default class SlideNavigator {
     if (slide.enterState != null) {
       slide.enterState(from);
     }
-
     // Move to transition
     this.transition(from);
   }
@@ -274,23 +275,21 @@ export default class SlideNavigator {
   nextSlide() {
     if (this.inTransition) {
       this.collection.stop('complete');
-      // this.inTransition = false;
-      return;
-    }
-    if (this.textElement == null) {
       return;
     }
     const nextSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
     this.goToSlide(nextSlideIndex);
+    this.collection.animateNextFrame();
   }
 
   prevSlide() {
-    this.collection.stop('cancel');
+    this.collection.stop('complete');
     let prevSlideIndex = this.currentSlideIndex - 1;
     if (prevSlideIndex < 0) {
       prevSlideIndex = this.slides.length - 1;
     }
     this.goToSlide(prevSlideIndex);
+    this.collection.animateNextFrame();
   }
 }
 

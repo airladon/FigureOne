@@ -39,21 +39,15 @@ figure.add({
   name: 'nav',
   method: 'collections.slideNavigator',
   options: {
-    prevButton: {},
-    nextButton: {},
-    text: {},
-    // collection: figure.elements,
-    slides: [
-      { text: 'hello' },
-      { text: 'there' },
-    ],
+    // color: [1, 0, 0, 1],
+    prevButton: { position: [-0.5, -1] },
+    nextButton: { position: [0.5, -1] },
+    text: { position: [0, 0.5] },
   },
 });
-const nav = figure.getElement('nav');
-nav.goToSlide(0);
-console.log(nav._text.drawingObject)
-// nav.goToSlide(0)
-// figure.getElement('nav').slides = [
-//   { text: 'hello' },
-//   { text: 'there' },
-// ];
+
+// const nav = figure.getElement('nav');
+figure.getElement('nav').setSlides([
+  { text: 'hello' },
+  { text: 'there' },
+]);
