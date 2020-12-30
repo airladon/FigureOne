@@ -38,8 +38,6 @@ export type OBJ_SlideNavigator = {
     duration?: number,
     animate?: 'move' | 'dissolve' | 'instant',
   },
-  lastSlideCallback?: () => void,
-  firstSlideCallback?: () => void,
 }
 
 export default class SlideNavigator {
@@ -78,8 +76,12 @@ export default class SlideNavigator {
       duration: 1,
       animate: 'move',
     }, o.equationDefaults || {});
-    this.prevButton = this.collection.getElement(o.prevButton);
-    this.nextButton = this.collection.getElement(o.nextButton);
+    if (o.prevButton) {
+      this.prevButton = this.collection.getElement(o.prevButton);
+    }
+    if (o.nextButton) {
+      this.nextButton = this.collection.getElement(o.nextButton);
+    }
     this.currentSlideIndex = 0;
     this.inTransition = false;
     if (this.prevButton != null) {
@@ -151,6 +153,7 @@ export default class SlideNavigator {
       }
     }
     if (this.nextButton != null) {
+      // console.log('asdfasdf',this.nextButton)
       if (this.currentSlideIndex === this.slides.length - 1) {
         this.nextButton.setLabel('Restart');
       } else {
@@ -222,6 +225,9 @@ export default class SlideNavigator {
 
   // from: 'next' | 'prev' | number | null
   goToSlide(index: number, fromIn: 'next' | 'prev' | number) {
+    if (this.slides.length === 0) {
+      return;
+    }
     let from = fromIn;
     if (from == null) {
       from = this.currentSlideIndex;
