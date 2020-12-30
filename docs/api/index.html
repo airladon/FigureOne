@@ -2814,6 +2814,126 @@
               
                 
                 <li><a
+                  href='#slide-navigator'
+                  class="h5 bold black caps">
+                  Slide Navigator
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#slidenavigator'
+                  class=" toggle-sibling">
+                  SlideNavigator
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#slidenavigatorgotoslide'
+                        class='regular pre-open'>
+                        #goToSlide
+                      </a></li>
+                      
+                      <li><a
+                        href='#slidenavigatornextslide'
+                        class='regular pre-open'>
+                        #nextSlide
+                      </a></li>
+                      
+                      <li><a
+                        href='#slidenavigatorprevslide'
+                        class='regular pre-open'>
+                        #prevSlide
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_slidenavigator'
+                  class="">
+                  OBJ_SlideNavigator
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_slidenavigatorslide'
+                  class="">
+                  OBJ_SlideNavigatorSlide
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeslidefrom'
+                  class="">
+                  TypeSlideFrom
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeslideleavestatecallback'
+                  class="">
+                  TypeSlideLeaveStateCallback
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeslidestatecallback'
+                  class="">
+                  TypeSlideStateCallback
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeslidetransitioncallback'
+                  class="">
+                  TypeSlideTransitionCallback
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#obj_equationdefaults'
+                  class="">
+                  OBJ_EquationDefaults
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#2d-geometry-tools'
                   class="h5 bold black caps">
                   2D Geometry Tools
@@ -4007,6 +4127,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#figurecollectionsslidenavigator'
+                        class='regular pre-open'>
+                        #slideNavigator
+                      </a></li>
+                      
+                      <li><a
                         href='#figurecollectionsaxis'
                         class='regular pre-open'>
                         #axis
@@ -4613,6 +4739,26 @@
                   href='#gotoformanimationstep'
                   class="">
                   GoToFormAnimationStep
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#col_slidenavigator'
+                  class="">
+                  COL_SlideNavigator
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#collectionsslidenavigator'
+                  class="">
+                  CollectionsSlideNavigator
                   
                 </a>
                 
@@ -39481,6 +39627,928 @@ eqn.addElements({
           
             <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
+  <h2 id='slide-navigator' class='mt0'>
+    Slide Navigator
+  </h2>
+
+  
+    
+
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='slidenavigator'>
+      SlideNavigator
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Slide Navigator</p>
+<p>It is sometimes useful to break down a visualization into easier to consume
+parts.</p>
+<p>For example, a complex figure or concept can be made easier if built up
+from a simple begining. Each step along the way might change the elements
+within the figure, or the form of an equation, and be accompanied by a
+corresponding description giving context, reasoning or next steps.</p>
+<p>An analogy to this is a story or presentation, where each step along the way
+is a presentation slide.</p>
+<p>This class is a simple slide navigator, providing a convenient way to define
+slides and step through them.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_slidenavigator">OBJ_SlideNavigator</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='slidenavigatorgotoslide'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>goToSlide(index, from)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>index</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    slide index to go to
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>from</span> <code class='quiet'>((<code>"next"</code> | <code>"prev"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>))</code>
+	    this should generally not be used
+and will be set automatically
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='slidenavigatornextslide'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>nextSlide(ignoreTransition)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Progress to next slide.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>ignoreTransition</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>false</code>)</code>
+	    when 
+<code>false</code>
+, if the slide is still in
+a transition when nextSlide is called, then the transition will skip
+through to the end, without moving to the next slide - effectively skipping
+through to the steady state of the current slide. If 
+<code>true</code>
+, then the
+transition will instantly complete, setState and leaveStates called and the
+next slide will be progressed to.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='slidenavigatorprevslide'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>prevSlide()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Progress to the previous slide.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_slidenavigator'>
+      OBJ_SlideNavigator
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>SlideNavigator options object</p>
+<p>The options here associate a number of FigureElements with the
+SlideNavigator, which will be ustilized by the slide definitions in
+<a href="#obj_slidenavigatorslide">OBJ_SlideNavigatorSlide</a>.</p>
+<p>The <code>collection</code> associates a <a href="#figureelementcollection">FigureElementCollection</a>. If a
+<a href="#figure">Figure</a> is passed in, then the root level collection will be
+used. All animations in slide <code>transitions</code> should be attached to
+this collection or its children as this is the collection that will be
+stopped when skipping slides. All string definitions of other elements
+will be relative to this collection, and therefore must be children of
+this collection.</p>
+<p><code>prevButton</code> and <code>nextButton</code> are buttons that can be used to progress
+backwards and forwards through the slides. The SlideNavigator will
+disable <code>prevButton</code> on the first slide and update <code>nextButton</code> label
+(if it exists) with <code>'restart'</code> when at the last slide.</p>
+<p><code>text</code> is a <a href="#obj_textlines">OBJ_TextLines</a> figure element that will be updated
+with the <code>text</code> property in <a href="#obj_slidenavigatorslide">OBJ_SlideNavigatorSlide</a></p>
+<p><code>equation</code> is one or more <a href="#equation">Equation</a> elements to associate with the
+SlideNavigator. Each associated equation will be operated on by the <code>form</code>
+property in <a href="#obj_slidenavigatorslide">OBJ_SlideNavigatorSlide</a>. Use <code>OBJ_EquationDefaults</code> to
+set default equation animation properties when <code>form</code> creates slide
+transitions.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>collection</span> <code class='quiet'>((<a href="#figure">Figure</a> | <a href="#figureelementcollection">FigureElementCollection</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>slides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;OBJ_NavigatorSlide>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>prevButton</span> <code class='quiet'>((<a href="#figureelement">FigureElement</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>nextButton</span> <code class='quiet'>((<a href="#figureelement">FigureElement</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#figureelementcollection">FigureElementCollection</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>equation</span> <code class='quiet'>((<a href="#equation">Equation</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#equation">Equation</a>)>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>equationDefaults</span> <code class='quiet'>(<a href="#obj_equationdefaults">OBJ_EquationDefaults</a>?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_slidenavigatorslide'>
+      OBJ_SlideNavigatorSlide
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Slide definition options object.</p>
+<p>This object defines the state the figure should be set to when this slide
+is navigated to.</p>
+<p>A slide definition has several callback properties that can be used to set
+figure state including:</p>
+<ul>
+<li>enterState: set an initial state</li>
+<li>transition: define an animation for when moving to this slide</li>
+<li>steadyState: set steady state, then wait for next navigation event</li>
+<li>leaveState: set leave state when moving to another another slide</li>
+</ul>
+<p>It is good practice to try and make each slide's state independant of other
+slides. If a square is shown on slides 4 and 5, then it should be explicitly
+shown on both slides. If it is only shown on slide 4, then it will be fine
+when the user navigates from slide 4 to 5, but will not be shown if the user
+is navigating from slide 6 to 5. Allowing users to go to specific slides out
+of order makes slide dependencies even more difficult.</p>
+<p>Therefore, the enter, steady and leave states above should be used to fully
+define the figure's state on each slide.</p>
+<p>However, while this approach will yield a good user experience, developing
+many slides, complex figures or numerous equation forms can make slide
+definition verbose. Even though each slide is different, many slides may
+share largely the same state, all of which needs to be explicitly defined
+for each slide.</p>
+<p>The SlideNavigator tries to manage this by providing the fundamental state
+callbacks above, as well as properties that can be defined once, and shared
+between slides. Slides with shared, or common properties make copies of all
+the properties so each slide is independant, but require the developer to
+define them just once. If a slide doesn't define a common property, then it
+will use the definition in the last slide that defined it.</p>
+<p>For example, the <code>enterStateCommon</code> property is a common property. If it is
+defined in slides 4 and 7, then slides 0-3 will not have the property, slides
+4-6 will use the slide 4 definition, and slides 7 and after will all use
+slide 7's definition.</p>
+<p>Common state properties include:</p>
+<ul>
+<li>enterStateCommon</li>
+<li>steadyStateCommon</li>
+<li>leaveStateCommon</li>
+</ul>
+<p>The reason some states have both a common and slide specific property
+(such as steadyState and steadyStateCommon) is so the common property can
+be best leveraged. If all properties were common, then they would need to be
+redefined every time a small change was made. Having both common and slide
+specific properties allows a balance of defining some state for a group of
+slides once, while allowing specific changes to that state where needed.</p>
+<p>In addition to the above state properties, there are a number of short-cut
+properties, that make it easy to set state for common figure elements. When
+a SlideNavigator is instantiated, a text figure element, a figure collection
+and one or more equation elements can be associated with it.</p>
+<p>The <code>text</code>, <code>modifier</code> and <code>modifierCommon</code> properties can be used to set
+the text of the text figure element associated with the SlideNavigator.
+<code>text</code> and <code>modifierCommon</code> are common properties.</p>
+<p>The <code>form</code> property is also common and can be used to automatically set the
+form of the associated equation elements. A SlideNavigator can be associated
+with one or more equations. The <code>form</code> property defines the form each of the
+equations should be set to on this slide. If there is just one equation, then
+the form property can be a string that is the form name. For two or more
+equations, the form property should be an array of strings where each element
+is the form name for the corresponding equation. The order of equations
+passed into the SlideNavigator, needs to be the same as the order of strings
+in the <code>form</code> array. To hide an equation, use a <code>null</code> instead of a string.
+If the <code>form</code> property has less forms than equations, then all remaining
+equations will be hidden.</p>
+<p>The <code>form</code> property is a short cut with several consequences:</p>
+<ul>
+<li>All equations with <code>null</code> forms will be hidden prior to the <code>enterState</code>s.</li>
+<li>If the slide doesn't have a <code>transition</code> defined, and if an equation form
+is changed, then a transition will be added that animates the equation form
+change. If <code>transition</code> is defined, and equation animation is required,
+then it needs to be defined in the <code>transition</code> property explicity.</li>
+<li>Each equation with a defined form will have <code>showForm</code> called on that form
+prior to the <code>steadyState</code>s.</li>
+</ul>
+<p>The life cycle of a slide change is:</p>
+<ul>
+<li><code>leaveStateCommon</code> (for current slide)</li>
+<li><code>leaveState</code> (for current slide)</li>
+<li>stop all animations</li>
+<li>Update associated text element with <code>text</code> property</li>
+<li>Hide all equations with <code>null</code> forms</li>
+<li><code>enterStateCommon</code> (for new slide)</li>
+<li><code>enterState</code></li>
+<li><code>transition</code></li>
+<li>Show all equations with non-null forms</li>
+<li><code>steadyStateCommon</code></li>
+<li><code>steadyState</code></li>
+<li>Wait for next navigation event</li>
+</ul>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>text</span> <code class='quiet'>(<a href="#obj_textlines">OBJ_TextLines</a>?)</code>
+          : common property - With 
+<code>modifiersCommon</code>
+ and
+
+<code>modifiers</code>
+ define the text for the text element associated with the
+SlideNavigator
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>modifiersCommon</span> <code class='quiet'>(OBJ_TextModifiersDefinigion?)</code>
+          : common property
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>modifiers</span> <code class='quiet'>(<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?)</code>
+          : will
+overwrite any keys from 
+<code>modifiersCommon</code>
+ with the same name
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>enterStateCommon</span> <code class='quiet'>(<a href="#typeslidestatecallback">TypeSlideStateCallback</a>?)</code>
+          : common property
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>enterState</span> <code class='quiet'>(<a href="#typeslidestatecallback">TypeSlideStateCallback</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>transition</span> <code class='quiet'>(<a href="#typeslidetransitioncallback">TypeSlideTransitionCallback</a>?)</code>
+          : transititions are
+only called when moving between adjacent slides in the forward direction.
+Progressing backwards, or skipping around with 
+<code>goToSlide</code>
+ will not call
+
+<code>transition</code>
+. A transition is a callback where animations can be defined. A
+
+<code>done</code>
+ function is passed to the callback and must be called at the end of
+the animation to allow slide steadyStates to be set.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>steadyStateCommon</span> <code class='quiet'>(<a href="#typeslidestatecallback">TypeSlideStateCallback</a>?)</code>
+          : common property
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>steadyState</span> <code class='quiet'>(<a href="#typeslidestatecallback">TypeSlideStateCallback</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>leaveStateCommon</span> <code class='quiet'>(<a href="#typeslideleavestatecallback">TypeSlideLeaveStateCallback</a>?)</code>
+          : common property
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>leaveState</span> <code class='quiet'>(<a href="#typeslideleavestatecallback">TypeSlideLeaveStateCallback</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>form</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?)</code>
+          : common property
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeslidefrom'>
+      TypeSlideFrom
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Last slide shown</p>
+<p><code>'next'</code> | <code>'prev'</code> | number</p>
+
+  
+    <p style="display: none;">      Type:
+      (<code>"next"</code> | <code>"prev"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeslideleavestatecallback'>
+      TypeSlideLeaveStateCallback
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><code>(currentIndex: number, nextIndex: number) => void</code></p>
+
+  
+    <p style="display: none;">      Type:
+      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): void
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeslidestatecallback'>
+      TypeSlideStateCallback
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><code>(currentIndex: number, from:</code><a href="#typeslidefrom">TypeSlideFrom</a><code>) => void</code></p>
+
+  
+    <p style="display: none;">      Type:
+      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): void
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeslidetransitioncallback'>
+      TypeSlideTransitionCallback
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><code>(done: () => void, currentIndex: number, from:</code><a href="#typeslidefrom">TypeSlideFrom</a><code>) => void</code></p>
+<p>The <code>done</code> parameter must be called at the end of the transition.</p>
+
+  
+    <p style="display: none;">      Type:
+      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): void
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='obj_equationdefaults'>
+      OBJ_EquationDefaults
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Default equation animation properties for the <a href="#slidenavigator">SlideNavigator</a></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>duration</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default duration of equation animation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>animate</span> <code class='quiet'>((<code>"move"</code> | <code>"dissolve"</code> | <code>"moveFrom"</code> | <code>"pulse"</code> | <code>"dissolveInThenMove"</code>)?)</code>
+          : default style of equation animation
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
   <h2 id='2d-geometry-tools' class='mt0'>
     2D Geometry Tools
   </h2>
@@ -50677,6 +51745,67 @@ translation of
       </div>
     </div>
   
+    <div class='border-bottom' id='figurecollectionsslidenavigator'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>slideNavigator(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a <a href="CollectionSlideNavigator">CollectionSlideNavigator</a></p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(...<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#col_slidenavigator">COL_SlideNavigator</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='figurecollectionsaxis'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -57183,6 +58312,333 @@ e.animations.new()
   .delay(<span class="hljs-number">1</span>)
   .goToForm({ <span class="hljs-attr">target</span>: <span class="hljs-string">'2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
   .start();</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='col_slidenavigator'>
+      COL_SlideNavigator
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#collectionsrectangle">CollectionsRectangle</a> options object that extends <a href="#obj_collection">OBJ_Collection</a>
+options object (without <code>parent</code>).</p>
+<p>This rectangle is similar to <a href="#obj_rectangle">OBJ_Rectangle</a>, except it can accomodate
+both a fill and a border or line simultaneously with different colors.</p>
+
+  
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#obj_collection">OBJ_Collection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : rectangle width
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : rectangle height
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : horiztonal
+alignment of the rectangle
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : vertical alignment
+of the rectangle
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#obj_linestylesimple">OBJ_LineStyleSimple</a>?)</code>
+          : lines style - leave empty if only
+want fill
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fill</span> <code class='quiet'>((<a href="#typecolor">TypeColor</a> | <a href="#obj_texture">OBJ_Texture</a>)?)</code>
+          : fill color or texture
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>corner</span> <code class='quiet'>(<a href="#obj_curvedcorner">OBJ_CurvedCorner</a>?)</code>
+          : corner style of rectangle
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>label</span> <code class='quiet'>(<a href="#obj_textlines">OBJ_TextLines</a>?)</code>
+          : Rectangle label
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>button</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="#typecolor">TypeColor</a> | <a href="#obj_buttoncolor">OBJ_ButtonColor</a>)?)</code>
+          : <code>true</code>
+ to
+make the rectangle behave like a button when clicked. 
+<code>TypeColor</code>
+ to
+make fill, line and label the same color when clicked or 
+<code>OBJ_ButtonColor</code>
+
+to specify click colors for each (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='collectionsslidenavigator'>
+      CollectionsSlideNavigator
+    </h3>
+    
+    
+  </div>
+  
+
+  <p><a href="#figureelementcollection">FigureElementCollection</a> representing a rectangle.</p>
+<p><img src="./apiassets/advrectangle_ex1.png">
+<img src="./apiassets/advrectangle_ex2.png"></p>
+<p class="inline_gif"><img src="./apiassets/advrectangle.gif" class="inline_gif_image"></p>
+<p class="inline_gif"><img src="./apiassets/advrectangle_button.gif" class="inline_gif_image"></p>
+<p>This object defines a rectangle
+<a href="#figureelementcollection">FigureElementCollection</a> that may include:</p>
+<ul>
+<li>border (line)</li>
+<li>fill</li>
+<li>label</li>
+<li>ability to surround another <a href="#figureelement">FigureElement</a> with some space</li>
+<li>button behavior when clicked</li>
+</ul>
+<p>Surrounding another element can be executed through either the
+<a href="#collectionsrectanglesurround">surround</a> method
+or the <a href="#obj_surroundanimationstep">OBJ_SurroundAnimationStep</a> found in the in
+the animation manager (<a href="#figureelement">FigureElement</a>.animations),
+and in the animation builder
+(<a href="#animationmanagernew">animations.new</a>
+and <a href="#animationmanagerbuilder">animations.builder</a>).</p>
+<p>Button behavior means the button will temporarily change a different color
+when it is clicked. By default, the button will become a little more
+transparent, but colors for the fill, label and border can also be
+specified.</p>
+
+  
+  
+    <p>
+      Extends
+      
+        <a href="#figureelementcollection">FigureElementCollection</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        See 
+<a href="#col_rectangle">COL_Rectangle</a>
+ for setup options.
+<p>See <a href="#obj_surroundanimationstep">OBJ_SurroundAnimationStep</a> for surround animation step options.</p>
+<p>To test examples below, append them to the
+<a href="#drawing-boilerplate">boilerplate</a>.</p>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple rectangle</span>
+figure.add({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'rect'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.rectangle'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">width</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">height</span>: <span class="hljs-number">1</span>,
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Round corner rectangle with fill and outside line</span>
+<span class="hljs-keyword">const</span> rect = figure.collections.rectangle({
+  <span class="hljs-attr">width</span>: <span class="hljs-number">2</span>,
+  <span class="hljs-attr">height</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">line</span>: {
+    <span class="hljs-attr">width</span>: <span class="hljs-number">0.02</span>,
+    <span class="hljs-attr">widthIs</span>: <span class="hljs-string">'outside'</span>,
+    <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.02</span>],
+  },
+  <span class="hljs-attr">corner</span>: {
+    <span class="hljs-attr">radius</span>: <span class="hljs-number">0.2</span>,
+    <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span>,
+  },
+  <span class="hljs-attr">fill</span>: [<span class="hljs-number">0.7</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+});
+figure.add(<span class="hljs-string">'rect'</span>, rect);</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Rectangle surrounds elements of an equation</span>
+figure.add([
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'rect'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.rectangle'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0.3</span>, <span class="hljs-number">0.3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">width</span>: <span class="hljs-number">0.01</span> },
+    },
+  },
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">forms</span>: { <span class="hljs-number">0</span>: [{ <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'b'</span>] }, <span class="hljs-string">' '</span>, <span class="hljs-string">'c'</span>] },
+      <span class="hljs-attr">position</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>],
+      <span class="hljs-attr">scale</span>: <span class="hljs-number">1.5</span>,
+    },
+  }
+]);
+
+<span class="hljs-keyword">const</span> rect = figure.getElement(<span class="hljs-string">'rect'</span>);
+<span class="hljs-keyword">const</span> eqn = figure.getElement(<span class="hljs-string">'eqn'</span>);
+
+rect.surround(eqn._a, <span class="hljs-number">0.03</span>);
+rect.animations.new()
+  .pulse({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">scale</span>: <span class="hljs-number">1.5</span> })
+  .surround({ <span class="hljs-attr">target</span>: eqn._b, <span class="hljs-attr">space</span>: <span class="hljs-number">0.03</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> })
+  .pulse({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">scale</span>: <span class="hljs-number">1.5</span> })
+  .surround({ <span class="hljs-attr">target</span>: eqn._c, <span class="hljs-attr">space</span>: <span class="hljs-number">0.03</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span> })
+  .pulse({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">scale</span>: <span class="hljs-number">1.5</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Make a rectangle that behaves like a button</span>
+figure.add([
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'rect'</span>,
+    <span class="hljs-attr">method</span>: <span class="hljs-string">'collections.rectangle'</span>,
+    <span class="hljs-attr">options</span>: {
+      <span class="hljs-attr">width</span>: <span class="hljs-number">0.5</span>,
+      <span class="hljs-attr">height</span>: <span class="hljs-number">0.3</span>,
+      <span class="hljs-attr">color</span>: [<span class="hljs-number">0.3</span>, <span class="hljs-number">0.3</span>, <span class="hljs-number">0.3</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">label</span>: <span class="hljs-string">'Save'</span>,
+      <span class="hljs-attr">corner</span>: { <span class="hljs-attr">radius</span>: <span class="hljs-number">0.05</span>, <span class="hljs-attr">sides</span>: <span class="hljs-number">10</span> },
+      <span class="hljs-attr">fill</span>: [<span class="hljs-number">0.9</span>, <span class="hljs-number">0.9</span>, <span class="hljs-number">0.9</span>, <span class="hljs-number">1</span>],
+      <span class="hljs-attr">button</span>: {
+        <span class="hljs-attr">fill</span>: [<span class="hljs-number">0.95</span>, <span class="hljs-number">0.95</span>, <span class="hljs-number">0.95</span>, <span class="hljs-number">1</span>],
+      },
+    },
+    <span class="hljs-attr">mods</span>: {
+      <span class="hljs-attr">isTouchable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">onClick</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'clicked'</span>),
+    },
+  },
+]);</pre>
     
   
 
