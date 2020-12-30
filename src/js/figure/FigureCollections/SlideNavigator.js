@@ -2,10 +2,9 @@
 
 // import Figure from '../Figure';
 import {
-  Transform, Point, getBoundingRect,
+  Transform,
   // getPoint, getTransform,
 } from '../../tools/g2';
-import type { TypeParsableBuffer } from '../../tools/g2';
 // import {
 //   round,
 // } from '../../tools/math';
@@ -13,16 +12,13 @@ import { joinObjects } from '../../tools/tools';
 import {
   FigureElementCollection,
 } from '../Element';
-import type { FigureElement, FigureElementPrimitive } from '../Element';
+import type { FigureElement } from '../Element';
 import type {
-  OBJ_LineStyleSimple, OBJ_Texture, OBJ_Collection, OBJ_TextLines, OBJ_Arrow,
+  OBJ_Collection, OBJ_TextLines, OBJ_Arrow,
 } from '../FigurePrimitives/FigurePrimitives';
-import type {
-  TypeColor, OBJ_CurvedCorner,
-} from '../../tools/types';
 import type FigureCollections from './FigureCollections';
 import SlideNavigator from '../SlideNavigator';
-import type { OBJ_SlideNavigator, OBJ_SlideNavigatorSlides } from '../SlideNavigator';
+import type { OBJ_SlideNavigatorSlides } from '../SlideNavigator';
 import type { COL_Rectangle } from './Rectangle';
 
 

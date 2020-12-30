@@ -53,7 +53,6 @@ figure.add([
       formDefaults: {
         alignment: { xAlign: 'center' },
         translation: {
-          // a: { style: 'linear' },
           m_4: { style: 'linear' },
           s: { style: 'linear' },
         },
@@ -83,10 +82,6 @@ figure.add([
             m_4: { style: 'curved', direction: 'up', mag: 0.8 },
             s: { style: 'curved', direction: 'down', mag: 0.8 },
           },
-        },
-        13: {
-          content: ['m_2', 'erry', 'equals', 'x', 'min', 'm_4', 'a', 's'],
-          alignment: { fixTo: [0, 0] },
         },
       },
     },
@@ -155,5 +150,5 @@ figure.getElement('nav').setSlides([
     { text: 'Multiplication can happen in any order', font: { size: 0.06 } },
   ] },
   { form: '12' },
-  { text: 'Happy Holidays!!', form: '13' },
+  { text: 'Happy Holidays!!' },
 ]);
