@@ -354,6 +354,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     }
     const o = joinObjects({}, defaultOptions, optionsIn);
     const text = this.collections.primitives.textLines(o);
+    text.isTouchable = true;
     this.add('text', text);
   }
 
