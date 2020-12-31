@@ -1,7 +1,8 @@
 function Recorder() {
-  const duration = 10;
+  const duration = 5;
   const timeStep = 0.01;
   const num = duration / timeStep;
+  let buffered = false;
   let index;
   let data;
   const time = Array(num);
@@ -14,15 +15,20 @@ function Recorder() {
     if (index === num * 2) {
       data = [...data.slice(num), ...Array(num)];
       index = num;
+      buffered = true;
     }
   }
 
-  function record(value, deltaTime) {
+  let lastDelta = 0;
+  function record(value, deltaTimeIn) {
+    const deltaTime = deltaTimeIn + lastDelta;
     if (deltaTime < timeStep) {
+      lastDelta = deltaTime;
       return;
     }
     // Count the number of samples that need to be added to the signal
     const count = Math.floor(deltaTime / timeStep);
+    lastDelta = deltaTime - count * timeStep;
 
     const lastValue = data[index - 1];
     const deltaValue = (value - lastValue) / count; 
@@ -40,16 +46,22 @@ function Recorder() {
   //   };
   // }
 
-  function getRecording() {
+  function getRecording(fullBuffer = false) {
+    if (fullBuffer || buffered) {
+      return {
+        time: time.slice(),
+        data: data.slice(index - num, index),
+      };
+    }
     return {
-      time: time.slice(),
-      data: data.slice(index - num, index),
+      time: time.slice(0, index - num + 1),
+      data: data.slice(num, num + index),
     };
   }
 
-  function getData() {
-    return data;
-  }
+  // function getData() {
+  //   return data;
+  // }
 
   function getValueAtTimeAgo(timeDelta) {
     const deltaIndex = Math.floor(timeDelta / timeStep + timeStep / 10);
@@ -62,13 +74,14 @@ function Recorder() {
     } else {
       data = [...initialValueOrCallback(timeStep, num), ...Array(num)];
     }
+    buffered = false;
     index = num;
   }
   reset();
 
   return {
     record,
-    getData,
+    // getData,
     getRecording,
     // getRecentRecording,
     getValueAtTimeAgo,
@@ -82,6 +95,7 @@ function TimeKeeper() {
   let cumPauseTime = 0;
   let isPaused = false;
   let startPauseTime;
+  let isNotFocused = false;
 
   function machineNow() {
     return performance.now() / 1000;
@@ -94,9 +108,10 @@ function TimeKeeper() {
     cumPauseTime = 0;
   }
 
-  reset();
-
   function step(delta = null) {
+    if (delta === null && (isPaused || isNotFocused)) {
+      return 0;
+    }
     const lastTime = time;
     // let deltaTime = delta;
     if (delta == null) {
@@ -125,12 +140,12 @@ function TimeKeeper() {
 
   // Active
   window.addEventListener('focus', () => {
-    unpause();
+    isNotFocused = false;
   });
 
   // Inactive
   window.addEventListener('blur', () => {
-    pause();
+    isNotFocused = true;
   });
 
   function now() {

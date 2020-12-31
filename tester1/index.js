@@ -7,86 +7,110 @@ const figure = new Fig.Figure({
   font: { size: 0.1 },
 });
 
-const startX = -1.5;
+// const startX = -1.5;
 let f = 0.3; // Hz
-const A = 0.4;   // m
-let c = 0.5;   // m/s
+const A = 0.6;   // m
+let c = 1;   // m/s
 
-const axisOrigin = new Point(-1.5, A + 0.2 + 0.3);
-// const descriptionPosition = new Point(-1.5, 2.8);
-// const buttonY = 0.15;
 const equationPosition = new Point(0, 1.9);
 const sideEquationPosition = new Point(1.4, 1.6);
 const colorText = [0.4, 0.4, 0.4, 1];
 
-figure.add([
-  {
-    name: 'xAxis',
-    method: 'collections.axis',
-    options: {
-      start: 0,
-      stop: 3.2,
-      length: 3.2,
-      line: { width: 0.005, arrow: { end: 'barb' } },
-      ticks: { step: 0.5, length: 0.1 },
-      labels: [
-        { font: { size: 0.08 }, text: [''] },
-        { values: 0, text: '0', offset: [-0.1, 0.13], font: { size: 0.08 } },
-      ],
-      position: axisOrigin,
-      title: {
-        font: { style: 'italic', family: 'serif', size: 0.12 },
-        text: ['x', { font: { size: 0.06 }, lineSpace: 0.08, text: 'meters' }],
-        position: [3.3, 0.03],
+const xAxis = (name, title, units, length = 3) => ({
+  name,
+  method: 'collections.axis',
+  options: {
+    start: 0,
+    stop: 5.5,
+    length,
+    line: { width: 0.005, arrow: { end: 'barb' } },
+    ticks: { step: 1, length: 0.1 },
+    labels: [
+      { font: { size: 0.08 }, text: [''], precision: 0 },
+      {
+        values: 0, text: '0', offset: [-0.1, 0.13], font: { size: 0.08 },
       },
+    ],
+    title: {
+      font: { style: 'italic', family: 'serif', size: 0.12 },
+      text: [title, { font: { size: 0.06 }, lineSpace: 0.08, text: units }],
+      position: [length + 0.1, 0.04],
     },
   },
-  {
-    name: 'yAxis',
-    method: 'collections.axis',
-    options: {
-      axis: 'y',
-      start: -A - 0.1,
-      stop: A + 0.1,
-      length: A * 2 + 0.2,
-      line: { width: 0.005, arrow: 'barb' },
-      position: axisOrigin.add(0, -A - 0.1),
-      title: {
-        font: { style: 'italic', family: 'serif', size: 0.12 },
-        text: ['y', { font: { size: 0.06 }, lineSpace: 0.08, text: 'meters' }],
-        rotation: 0,
-        offset: [0.1, A + 0.2],
-      },
-    },
-  },
-  // {
-  //   name: 'description',
-  //   method: 'primitives.textLines',
-  //   options: {
-  //     font: { color: colorText.slice(), size: 0.1, weight: 100 },
-  //     xAlign: 'left',
-  //     yAlign: 'top',
-  //     position: descriptionPosition,
-  //     lineSpace: 0.15,
-  //   },
-  //   mods: {
-  //     isTouchable: true,
-  //   },
-  // },
-  {
-    name: 'balls',
-    method: 'collection',
-    options: {
-      position: axisOrigin.add(1.5, 0),
-    },
-  },
-]);
+});
 
+const yAxis = (name, title, units) => ({
+  name: 'yAxis',
+  method: 'collections.axis',
+  options: {
+    axis: 'y',
+    start: -A - 0.1,
+    stop: A + 0.1,
+    length: A * 2 + 0.2,
+    line: { width: 0.005, arrow: 'barb' },
+    position: [0, -A - 0.1],
+    title: {
+      font: { style: 'italic', family: 'serif', size: 0.12 },
+      text: [title, { font: { size: 0.06 }, lineSpace: 0.08, text: units }],
+      rotation: 0,
+      offset: [0.1, A + 0.15],
+    },
+  },
+});
+
+// Add the Space Axis
+figure.add({
+  name: 'spacePlot',
+  method: 'collection',
+  elements: [
+    xAxis('xAxis', 'x', 'meters'),
+    yAxis('yAxis', 'y', 'meters'),
+    { name: 'balls', method: 'collection' },
+  ],
+  mods: {
+    scenarios: {
+      default: { position: [-1.5, 1.2], scale: 1 },
+      small: { position: [-1.1, 1.9], scale: 0.7 },
+    },
+  },
+});
+
+// Add the Time Axis
+figure.add({
+  name: 'timePlot',
+  method: 'collection',
+  elements: [
+    xAxis('xAxis', 't', 'seconds'),
+    yAxis('yAxis', 'y', 'meters'),
+    {
+      name: 'trace',
+      method: 'polyline',
+      options: {
+        simple: true,
+        width: 0.01,
+      },
+    },
+  ],
+  mods: {
+    scenarios: {
+      default: { position: [-1.5, 2], scale: 1 },
+      small: { position: [-1.1, 0.7], scale: 0.7 },
+    },
+  },
+});
+
+
+const spacePlot = figure.getElement('spacePlot');
+const timePlot = figure.getElement('timePlot');
+const spaceX = spacePlot.getElement('xAxis');
+const timeX = timePlot.getElement('xAxis');
+const balls = spacePlot.getElement('balls');
+const timeTrace = timePlot.getElement('trace');
 
 const ball = (x, index, sides = 20) => ({
   name: `ball${index}`,
   method: 'primitives.polygon',
-  path: 'balls',
+  path: 'spacePlot.balls',    // And now you know why they weren't called particles
   options: {
     sides,
     radius: 0.02,
@@ -99,47 +123,68 @@ const ball = (x, index, sides = 20) => ({
 });
 
 
-const xValues = range(-1.46, 1.5, 0.04);
+const xValues = range(0.05, 5, 0.05);
 const data = new Recorder();
 const time = new TimeKeeper();
-
-// // Active
-// window.addEventListener('focus', () => {
-//   data.focusUnpause();
-// });
-
-// // Inactive
-// window.addEventListener('blur', () => {
-//   data.focusPause();
-// });
-
+time.pause();
+let enableMaxTime = false;
+let timeMax = false;
 
 xValues.forEach((x, index) => {
-  figure.add(ball(x, index + 1));
-  const b = figure.getElement(`balls.ball${index + 1}`);
+  const drawX = spaceX.valueToDraw(x);
+  figure.add(ball(drawX, index + 1));
+  const b = balls.getElement(`ball${index + 1}`);
   b.custom.x = x;
+  b.custom.drawX = drawX;
 });
 
-figure.add(ball(-1.5, 0, 50));
-const b0 = figure.getElement('balls.ball0');
+figure.add(ball(spaceX.valueToDraw(0), 0, 50));
+const b0 = balls.getElement('ball0');
 b0.setMovable();
 b0.touchBorder = 0.2;
 b0.move.bounds = {
   translation: {
-    left: startX, right: startX, bottom: -A, top: A,
+    left: 0, right: 0, bottom: -A, top: A,
   },
 };
+let timeoutId = null;
+b0.subscriptions.add('setTransform', () => {
+  if (enableMaxTime && timeMax) {
+    return;
+  }
+  time.unpause();
+  if (timeoutId != null) {
+    clearTimeout(timeoutId);
+    timeoutId = null;
+  }
+  if (enableMaxTime) {
+    timeoutId = setTimeout(() => time.pause(), 500);
+  }
+});
 
 
 // Update function for everytime we want to update the signal
 function update() {
   const deltaTime = time.step();
-  const { y } = figure.elements._balls._ball0.transform.order[0];
+  const { y } = b0.transform.order[0];
   data.record(y, deltaTime);
+  if (enableMaxTime && time.now() > 5) {
+    // b0.isTouchable = false;
+    timeMax = true;
+    time.pause();
+  }
   for (let i = 1; i < xValues.length + 1; i += 1) {
-    const b = figure.elements._balls[`_ball${i}`];
-    const by = data.getValueAtTimeAgo((b.custom.x - startX) / c);
-    b.setPosition(b.custom.x, by);
+    const b = balls[`_ball${i}`];
+    const by = data.getValueAtTimeAgo((b.custom.x) / c);
+    b.setPosition(b.custom.drawX, by);
+  }
+  if (timePlot.isShown) {
+    const trace = data.getRecording();
+    const points = Array(trace.time.length);
+    for (let i = 0; i < points.length; i += 1) {
+      points[i] = new Point(timeX.valueToDraw(trace.time[i]), trace.data[i]);
+    }
+    timeTrace.custom.updatePoints({ points });
   }
 }
 
@@ -155,9 +200,10 @@ figure.subscriptions.add('afterDraw', () => {
 
 const reset = () => {
   figure.stop();
-  b0.setPosition(startX, 0);
+  b0.setPosition(0, 0);
   time.reset();
   data.reset(0);
+  time.pause();
 };
 
 const disturbPulse = () => {
@@ -165,8 +211,8 @@ const disturbPulse = () => {
   const y = rand(0.1, 0.3) * randSign();
   const t = rand(0.2, 0.4);
   b0.animations.new()
-    .position({ duration: t, target: [startX, y], progression: 'easeout' })
-    .position({ duration: t, target: [startX, 0], progression: 'easein' })
+    .position({ duration: t, target: [0, y], progression: 'easeout' })
+    .position({ duration: t, target: [0, 0], progression: 'easein' })
     .start();
 };
 
@@ -179,14 +225,14 @@ const disturbSine = (delay = 0, resetSignal = true) => {
     .custom({
       callback: () => {
         const t = time.now();
-        b0.setPosition(startX, A * Math.sin(2 * Math.PI * f * t));
+        b0.setPosition(0, A * Math.sin(2 * Math.PI * f * t));
       },
       duration: 10000,
     })
     .start();
 };
 
-figure.elements._balls.dim();
+balls.dim();
 
 const b1 = content => ({
   brac: {
@@ -551,9 +597,9 @@ const eqn = figure.getElement('eqn');
 // const prevButton = figure.getElement('prevButton');
 // const description = figure.getElement('description');
 const sideEqn = figure.getElement('sideEqn');
-const balls = figure.getElement('balls');
+// const balls = figure.getElement('space.balls');
 // const ballx0 = figure.getElement('balls.ball0');
-const bx1 = figure.getElement('balls.ball25');
+const bx1 = balls.getElement('ball25');
 bx1.setColor(color1);
 balls.toFront(bx1.name);
 
@@ -688,6 +734,32 @@ const modifiers = {
 // };
 // /////////////////////////////////////////////////////////////////
 slides.push({
+  steadyState: () => {
+    spacePlot.setScenario('default');
+    timePlot.hide();
+    enableMaxTime = false;
+    // timePlot.setScenario('default');
+  },
+});
+slides.push({
+  enterState: () => {
+    time.pause();
+    reset();
+  },
+  transition: (done) => {
+    spacePlot.animations.new()
+      .scenario({ target: 'small', duration: 1 })
+      .whenFinished(done)
+      .start();
+  },
+  steadyState: () => {
+    spacePlot.setScenario('small');
+    timePlot.show();
+    timePlot.setScenario('small');
+    enableMaxTime = true;
+  },
+});
+slides.push({
   modifiersCommon: modifiers,
   text: [
     'Explore the equation of a travelling sine wave and the relationship',
@@ -709,7 +781,7 @@ slides.push({
       }
       return y.reverse();
     });
-    figure.elements._balls.dim();
+    balls.dim();
     sideEqn.hide();
   },
   // leaveStateCommon: () => { getPhase(); },
