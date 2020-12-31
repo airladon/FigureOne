@@ -2,7 +2,9 @@ const { Transform, Point } = Fig;
 const { range, rand, randSign } = Fig.tools.math;
 
 const figure = new Fig.Figure({
-  limits: [-2, 0, 4, 3], color: [0.5, 0.5, 0.5, 1],
+  limits: [-2, 0, 4, 3],
+  color: [0.5, 0.5, 0.5, 1],
+  font: { size: 0.1 },
 });
 
 const startX = -1.5;
@@ -12,7 +14,7 @@ let c = 0.5;   // m/s
 
 const axisOrigin = new Point(-1.5, A + 0.2 + 0.3);
 const descriptionPosition = new Point(-1.5, 2.8);
-const buttonY = 0.15;
+// const buttonY = 0.15;
 const equationPosition = new Point(0, 1.9);
 const sideEquationPosition = new Point(1.4, 1.6);
 const colorText = [0.4, 0.4, 0.4, 1];
@@ -57,20 +59,20 @@ figure.add([
       },
     },
   },
-  {
-    name: 'description',
-    method: 'primitives.textLines',
-    options: {
-      font: { color: colorText.slice(), size: 0.1, weight: 100 },
-      xAlign: 'left',
-      yAlign: 'top',
-      position: descriptionPosition,
-      lineSpace: 0.15,
-    },
-    mods: {
-      isTouchable: true,
-    },
-  },
+  // {
+  //   name: 'description',
+  //   method: 'primitives.textLines',
+  //   options: {
+  //     font: { color: colorText.slice(), size: 0.1, weight: 100 },
+  //     xAlign: 'left',
+  //     yAlign: 'top',
+  //     position: descriptionPosition,
+  //     lineSpace: 0.15,
+  //   },
+  //   mods: {
+  //     isTouchable: true,
+  //   },
+  // },
   {
     name: 'balls',
     method: 'collection',
@@ -532,12 +534,22 @@ figure.add([
       },
     },
   },
+  {
+    name: 'nav',
+    method: 'collections.slideNavigator',
+    options: {
+      prevButton: { position: [-1.5, 0.2] },
+      nextButton: { position: [1.5, 0.2] },
+      text: { font: { size: 0.1 }, position: [-1.5, 2.8], xAlign: 'left' },
+      equation: 'eqn',
+    },
+  },
 ]);
 
 const eqn = figure.getElement('eqn');
-const nextButton = figure.getElement('nextButton');
-const prevButton = figure.getElement('prevButton');
-const description = figure.getElement('description');
+// const nextButton = figure.getElement('nextButton');
+// const prevButton = figure.getElement('prevButton');
+// const description = figure.getElement('description');
 const sideEqn = figure.getElement('sideEqn');
 const balls = figure.getElement('balls');
 // const ballx0 = figure.getElement('balls.ball0');
@@ -953,6 +965,8 @@ slides.push({
   steadyStateCommon: () => data.unpause(),
 });
 
+figure.getElement('nav').setSlides(slides);
+
 // slides.push({
 //   text: []
 // })
@@ -1023,13 +1037,13 @@ slides.push({
 //   slides, prevButton, nextButton, collection: figure, text: description, equation: [eqn],
 // });
 
-const slideNav = figure.slideNavigator({
-  slides, prevButton, nextButton, text: description, equation: [eqn],
-});
-// nextButton.onClick = slideNav.nextSlide;
-// prevButton.onClick = slideNav.prevSlide;
+// const slideNav = figure.slideNavigator({
+//   slides, prevButton, nextButton, text: description, equation: [eqn],
+// });
+// // nextButton.onClick = slideNav.nextSlide;
+// // prevButton.onClick = slideNav.prevSlide;
 
-slideNav.goToSlide(0);
+// slideNav.goToSlide(0);
 
 // // console.log('asdfasdf')
 // figure.add({

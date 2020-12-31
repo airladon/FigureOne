@@ -1,3 +1,70 @@
+function RecorderNew() {
+  const duration = 10;
+  const timeStep = 0.01;
+  const num = duration / timeStep;
+  let index = num;
+  let data = [...Array(num).fill(0), ...Array(num)];
+  const time = Array(num);
+  for (let i = 0; i < num; i += 1) {
+    time[i] = i * timeStep;
+  }
+
+  function incrementIndex() {
+    index += 1;
+    if (index === num * 2) {
+      data = [...data.slice(num), ...Array(num)];
+      index = num;
+    }
+  }
+
+  function record(value, deltaTime) {
+    if (deltaTime < timeStep) {
+      return;
+    }
+    // Count the number of samples that need to be added to the signal
+    const count = Math.floor(deltaTime / timeStep);
+
+    const lastValue = data[index - 1];
+    const deltaValue = (value - lastValue) / count; 
+    for (let i = 0; i < count; i += 1) {
+      data[index] = lastValue + deltaValue * (i + 1);
+      incrementIndex();
+    }
+  }
+
+  function getRecentRecording(getDuration = duration) {
+    const count = Math.floor(getDuration / timeStep);
+    return {
+      time: time.slice(0, count),
+      data: data.slice(index - count, index).reverse(),
+    };
+  }
+
+  function getRecording() {
+    return {
+      time: time.slice(),
+      data: data.slice(index - num, index),
+    };
+  }
+
+  function getData() {
+    return data;
+  }
+
+  return {
+    record,
+    getData,
+    getRecording,
+    getRecentRecording,
+  };
+}
+
+// const a = Recorder1();
+// a.record(1, 3);
+
+// console.log(a.getData());
+// console.log(a.getRecording());
+
 function Recorder () {
   const duration = 10;
   const timeStep = 0.01;
