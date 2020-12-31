@@ -271,6 +271,7 @@ class Figure {
 
   drawAnimationFrames: number;
   defaultColor: Array<number>;
+  defaultDimColor: Array<number>;
   defaultFont: OBJ_Font;
   defaultLineWidth: number;
   defaultLength: number;

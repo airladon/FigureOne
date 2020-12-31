@@ -1807,6 +1807,10 @@ export type EQN_SuperscriptSubscript = {
  * @property {string} [symbol] optional symbol between content and comment
  * @property {number} [contentSpace] space from content to symbol (`0.03`)
  * @property {number} [commentSpace] space from symbol to comment (`0.03`)
+ * @property {number} [contentLineSpace] space between a line symbol and
+ * content (`0.03`)
+ * @property {number} [commentLineSpace] space between a line symbol and
+ * comment (`0.03`)
  * @property {number} [scale] comment scale (`0.6`)
  * @property {boolean} [inSize] `false` excludes the symbol and comment from
  * thre resulting size of the equation phrase (`true`)
@@ -1887,6 +1891,8 @@ export type EQN_Comment = {
   symbol?: string;
   contentSpace?: number;
   commentSpace?: number;
+  contentLineSpace?: number;
+  commentLineSpace?: number;
   scale?: number;
   inSize?: boolean;
   fullContentBounds?: boolean;
@@ -2473,6 +2479,92 @@ export type EQN_TopBottomGlyph = {
   annotationsOverContent?: boolean,
 };
 
+export type EQN_LineGlyphAlign = {
+  xAlign: 'left' | 'center' | 'right' | number | string,
+  yAlign: 'bottom' | 'middle' | 'top' | number | string,
+  space: 0,
+}
+
+/**
+ * A glyph can be a line between the content and an annotation
+ * <pre>
+ *
+ *            aaaaa
+ *            aaaaa
+ *              g
+ *              g
+ *              g
+ *          CCCCCCCCC
+ *          CCCCCCCCC
+ *          CCCCCCCCC
+ *          CCCCCCCCC
+ *
+ * </pre>
+ * @property {string} symbol
+ * @property {EQN_Annotation} [annotation] use for one annotation only instead
+ * of property `annotations`
+ * @property {Array<EQN_Annotation>} [annotations] use for one or more
+ * annotations
+ * @property {number} [space] vertical space between glyph and content (`0`)
+ * @property {number} [overhang] amount glyph extends above content top and
+ * below content bottom (`0`)
+ * @property {number} [width] force width of glyph
+ * @property {number} [leftSpace] amount glyph extends beyond content left
+ * @property {number} [rightSpace] amount glyph extends beyond content right
+ * @property {number} [xOffset] offset glyph in x (`0`)
+ * @property {boolean} [annotationsOverContent] `true` means only glyph is
+ * separated from content by `space` and not annotations (false`)
+ *
+ * @example
+ * figure.add({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       line: { symbol: 'line', width: 0.005, dash: [0.01, 0.01] },
+ *     },
+ *     forms: {
+ *       0: {
+ *         annotate: {
+ *           content: 'abc',
+ *           annotation: {
+ *             content: 'def',
+ *             xPosition: 'right',
+ *             yPosition: 'top',
+ *             xAlign: 'left',
+ *             yAlign: 'bottom',
+ *             scale: 0.6,
+ *             offset: [0.2, 0.2],
+ *           },
+ *           glyphs: {
+ *             line: {
+ *               annotation: 0,
+ *               symbol: 'line',
+ *               content: {
+ *                 xAlign: 'right',
+ *                 yAlign: 'top',
+ *                 space: 0.02,
+ *               },
+ *               comment: {
+ *                 xAlign: 'left',
+ *                 yAlign: 'bottom',
+ *                 space: 0.02,
+ *               },
+ *             },
+ *           },
+ *         },
+ *       },
+ *     },
+ *   },
+ * });
+ */
+export type EQN_LineGlyph = {
+  symbol?: string,
+  content: EQN_LineGlyphAlign,
+  comment: EQN_LineGlyphAlign,
+  annotation: 0,
+}
+
 /**
  * Object defining all the glyphs annotating some content.
  *
@@ -2483,6 +2575,7 @@ export type EQN_TopBottomGlyph = {
  * @property {EQN_LeftRightGlyph} [right]
  * @property {EQN_TopBottomGlyph} [bottom]
  * @property {EQN_LeftRightGlyph} [left]
+ * @property {EQN_LineGlyph} [line]
  */
 export type EQN_Glyphs = {
   left?: EQN_LeftRightGlyph;
@@ -2490,6 +2583,7 @@ export type EQN_Glyphs = {
   top?: EQN_TopBottomGlyph;
   bottom?: EQN_TopBottomGlyph;
   encompass?: EQN_EncompassGlyph;
+  line?: EQN_LineGlyph;
 };
 
 
@@ -4175,13 +4269,15 @@ export class EquationFunctions {
     let useFullBounds;
     if (Array.isArray(optionsOrArray)) {
       [
-        content, comment, symbol, contentSpace, commentSpace, scale, inSize,
-        contentLineSpace, commentLineSpace, fullContentBounds, useFullBounds,
+        content, comment, symbol, contentSpace, commentSpace,
+        scale, inSize, contentLineSpace, commentLineSpace,     // $FlowFixMe
+        fullContentBounds, useFullBounds,
       ] = optionsOrArray;
     } else {
-      ({                                                      // $FlowFixMe
-        content, comment, symbol, contentSpace, commentSpace, scale, inSize,
-        contentLineSpace, commentLineSpace, fullContentBounds, useFullBounds,
+      ({                                                       // $FlowFixMe
+        content, comment, symbol, contentSpace, commentSpace,
+        scale, inSize, contentLineSpace, commentLineSpace,     // $FlowFixMe
+        fullContentBounds, useFullBounds,
       } = optionsOrArray);
     }
     const optionsIn = {
@@ -4249,7 +4345,7 @@ export class EquationFunctions {
       return this.annotate({
         content,
         fullContentBounds,
-        useFullBounds,
+        useFullBounds,   // $FlowFixMe
         annotations,
         glyphs: {
           line: {
@@ -4313,7 +4409,7 @@ export class EquationFunctions {
       return this.annotate({
         content,
         fullContentBounds,
-        useFullBounds,
+        useFullBounds,    // $FlowFixMe
         annotations,
         glyphs: {
           line: {
