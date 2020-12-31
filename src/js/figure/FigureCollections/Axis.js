@@ -948,6 +948,7 @@ class CollectionsAxis extends FigureElementCollection {
     let order;
     if (r < 1) {
       order = Math.floor(Math.log10(r));
+    // eslint-disable-next-line yoda
     } else if (1 <= r && r < 3) {
       order = Math.floor(Math.log10(r / 3));
     } else {

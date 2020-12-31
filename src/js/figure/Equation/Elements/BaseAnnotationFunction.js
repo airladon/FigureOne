@@ -512,7 +512,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     if (this.glyphs.line == null) {
       return;
     }
-    const {
+    const { // $FlowFixMe
       content, annotation,
     } = this.glyphs.line;
     const glyph = this.glyphs.line;
