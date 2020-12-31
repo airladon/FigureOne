@@ -76,7 +76,7 @@ describe('Figure Text Object', () => {
         size: 0.2,
         color: null,
         style: 'normal',
-        weight: 'normal',
+        weight: '100',
         opacity: 1,
       });
       expect(t0.location).toEqual(new Point(0, 0));

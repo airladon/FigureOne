@@ -309,7 +309,7 @@ class Figure {
         family: 'Helvetica',
         size: 0.2,
         style: 'normal',
-        weight: 100,
+        weight: '100',
         opacity: 1,
       },
     };

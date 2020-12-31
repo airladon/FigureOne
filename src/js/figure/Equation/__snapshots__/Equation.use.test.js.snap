@@ -62,6 +62,85 @@ FigureElementPrimitive {
   ],
   "copyTransforms": Array [],
   "custom": Object {
+    "options": Object {
+      "border": "draw",
+      "color": Array [
+        0.95,
+        0,
+        0,
+        1,
+      ],
+      "defaultTextTouchBorder": 0,
+      "font": Object {
+        "color": Array [
+          0.95,
+          0,
+          0,
+          1,
+        ],
+        "family": "Times New Roman",
+        "opacity": 1,
+        "size": 0.2,
+        "style": "italic",
+        "weight": "200",
+      },
+      "mods": Object {
+        "dimColor": Array [
+          0.5,
+          0.5,
+          0.5,
+          1,
+        ],
+      },
+      "position": Point {
+        "_type": "point",
+        "x": 0,
+        "y": 0,
+      },
+      "text": Array [
+        Object {
+          "text": "a",
+          "touchBorder": 0,
+        },
+      ],
+      "touchBorder": "buffer",
+      "transform": Transform {
+        "_type": "transform",
+        "index": 3,
+        "mat": Array [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+        ],
+        "name": "text",
+        "order": Array [
+          Scale {
+            "_type": "point",
+            "name": "text",
+            "x": 1,
+            "y": 1,
+          },
+          Rotation {
+            "name": "text",
+            "r": 0,
+          },
+          Translation {
+            "_type": "point",
+            "name": "text",
+            "x": 0,
+            "y": 0,
+          },
+        ],
+      },
+      "xAlign": "left",
+      "yAlign": "baseline",
+    },
     "setText": [Function],
     "updateBorders": [Function],
     "updateText": [Function],
