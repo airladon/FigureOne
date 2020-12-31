@@ -2479,21 +2479,29 @@ export type EQN_TopBottomGlyph = {
   annotationsOverContent?: boolean,
 };
 
+/**
+ * Options object that aligns a line glyph with either the content or
+ * annotation.
+ *
+ * @property {'left' | 'center' | 'right' | number | string} [xAlign]
+ * @property {'bottom' | 'baseline' | 'middle' | 'top' | number | string,} [yAlign]
+ * @property {0} [space]
+ */
 export type EQN_LineGlyphAlign = {
-  xAlign: 'left' | 'center' | 'right' | number | string,
-  yAlign: 'bottom' | 'middle' | 'top' | number | string,
-  space: 0,
+  xAlign?: 'left' | 'center' | 'right' | number | string,
+  yAlign?: 'bottom' | 'baseline' | 'middle' | 'top' | number | string,
+  space?: 0,
 }
 
 /**
  * A glyph can be a line between the content and an annotation
  * <pre>
  *
- *            aaaaa
- *            aaaaa
- *              g
- *              g
- *              g
+ *                         aaaaa
+ *                         aaaaa
+ *                       g
+ *                     g
+ *                   g
  *          CCCCCCCCC
  *          CCCCCCCCC
  *          CCCCCCCCC
@@ -2501,19 +2509,9 @@ export type EQN_LineGlyphAlign = {
  *
  * </pre>
  * @property {string} symbol
- * @property {EQN_Annotation} [annotation] use for one annotation only instead
- * of property `annotations`
- * @property {Array<EQN_Annotation>} [annotations] use for one or more
- * annotations
- * @property {number} [space] vertical space between glyph and content (`0`)
- * @property {number} [overhang] amount glyph extends above content top and
- * below content bottom (`0`)
- * @property {number} [width] force width of glyph
- * @property {number} [leftSpace] amount glyph extends beyond content left
- * @property {number} [rightSpace] amount glyph extends beyond content right
- * @property {number} [xOffset] offset glyph in x (`0`)
- * @property {boolean} [annotationsOverContent] `true` means only glyph is
- * separated from content by `space` and not annotations (false`)
+ * @property {EQN_LineGlyphAlign} [content] alignment and spacing to content
+ * @property {EQN_LineGlyphAlign} [annotation] alignment and spacing to annotation
+ * @property {number} [annotationIndex] annotation index to draw line to
  *
  * @example
  * figure.add({
@@ -2559,10 +2557,10 @@ export type EQN_LineGlyphAlign = {
  * });
  */
 export type EQN_LineGlyph = {
-  symbol?: string,
-  content: EQN_LineGlyphAlign,
-  comment: EQN_LineGlyphAlign,
-  annotation: 0,
+  symbol: string,
+  content?: EQN_LineGlyphAlign,
+  annotation?: EQN_LineGlyphAlign,
+  annotationIndex?: number,
 }
 
 /**
@@ -3283,12 +3281,12 @@ export class EquationFunctions {
           yAlign: 'bottom',
           space: 0,
         },
-        comment: {
+        annotation: {
           xAlign: 'left',
           yAlign: 'bottom',
           space: 0,
         },
-        annotation: 0,
+        annotationIndex: 0,
       },
     };
     const {
@@ -3314,7 +3312,7 @@ export class EquationFunctions {
 
     const fillAnnotation = (ann) => {
       const annCopy = joinObjects({}, defaultAnnotation, ann);  // $FlowFixMe
-      annCopy.offset = getPoint(annCopy.offset);
+      annCopy.offset = getPoint(annCopy.offset);     // $FlowFixMe
       annCopy.content = this.contentToElement(ann.content);
       return annCopy;
     };
@@ -3341,7 +3339,7 @@ export class EquationFunctions {
       if (glyphSide == null) {
         return;
       }
-      glyphsToUse[side] = {};
+      glyphsToUse[side] = {}; // $FlowFixMe
       let glyphAnnotationsToProcess = glyphSide.annotations;
       // $FlowFixMe
       if (glyphSide.annotation != null) {      // $FlowFixMe
@@ -4351,8 +4349,8 @@ export class EquationFunctions {
           line: {
             symbol,              // $FlowFixMe
             content: { xAlign: 'center', yAlign: 'top', space: contentLineSpace },
-            comment: { xAlign: 'center', yAlign: 'bottom', space: commentLineSpace },
-            annotation: 0,
+            annotation: { xAlign: 'center', yAlign: 'bottom', space: commentLineSpace },
+            annotationIndex: 0,
           },
         },
         inSize,
@@ -4415,8 +4413,8 @@ export class EquationFunctions {
           line: {
             symbol,              // $FlowFixMe
             content: { xAlign: 'center', yAlign: 'bottom', space: contentLineSpace },
-            comment: { xAlign: 'center', yAlign: 'top', space: commentLineSpace },
-            annotation: 0,
+            annotation: { xAlign: 'center', yAlign: 'top', space: commentLineSpace },
+            annotationIndex: 0,
           },
         },
         inSize,

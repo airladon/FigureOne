@@ -52,7 +52,7 @@ export default class EquationLine extends Symbol {
     const [points] = makePolyLine(
       [new Point(0, 0), line.p2], options.width, false, 'mid', 'none', 0.1,
       1, 0, options.dash, false,
-      2, [[]], [[]], [[]], options.arrow,
+      2, [[]], 0, [[]], options.arrow,
     );
 
     // const points = [
@@ -66,21 +66,21 @@ export default class EquationLine extends Symbol {
 
   /* eslint-disable class-methods-use-this */
   // $FlowFixMe
-  getDefaultValues(height: number, width: ?number, options: {
-      lineWidth?: number,
-    }) {
-    const out = {};
-    if (options.lineWidth != null) {
-      out.lineWidth = options.lineWidth;
-    } else {
-      out.lineWidth = 0.01;
-    }
-    out.height = out.lineWidth;
-    if (width != null) {
-      out.width = width;
-    } else {
-      out.width = 1;
-    }
-    return out;
-  }
+  // getDefaultValues(height: number, width: ?number, options: {
+  //     lineWidth?: number,
+  //   }) {
+  //   const out = {};
+  //   if (options.lineWidth != null) {
+  //     out.lineWidth = options.lineWidth;
+  //   } else {
+  //     out.lineWidth = 0.01;
+  //   }
+  //   out.height = out.lineWidth;
+  //   if (width != null) {
+  //     out.width = width;
+  //   } else {
+  //     out.width = 1;
+  //   }
+  //   return out;
+  // }
 }

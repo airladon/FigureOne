@@ -24,12 +24,13 @@ import Product from './Symbols/Product';
 // import SimpleIntegral from './Symbols/SimpleIntegral';
 import Integral from './Symbols/Integral';
 import Arrow from './Symbols/Arrow';
+import type { OBJ_LineArrows } from '../geometries/arrow';
 import VinculumNew from './Symbols/Vinculum';
 import Strike from './Symbols/Strike';
 import Radical from './Symbols/Radical';
 import Line from './Symbols/Line';
 import type {
-  TypeColor,
+  TypeColor, TypeDash,
 } from '../../tools/types';
 
 // import BracketNew from './Symbols/BracketNew';
@@ -1020,6 +1021,30 @@ export type EQN_SquareBracketSymbol = {
   staticHeight?: number | 'first',
 } & EQN_Symbol;
 
+
+/**
+ * A line symbol to be used in {@link EQN_Annotate} as a {@link EQN_LineGlyph},
+ * or in {@link EQN_Comment}.
+ * @property {number} [width] line width
+ * @property {TypeDash} [dash] dash style of line
+ * @property {OBJ_LineArrows} [arrow] arrow styles of line where start is
+ * toward the content
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ * @property {number | 'first'} [staticWidth]
+ */
+export type EQN_LineSymbol = {
+  width?: number,
+  dash?: TypeDash,
+  arrow?: OBJ_LineArrows,
+  // draw?: 'dynamic' | 'static',
+  // staticHeight?: number | 'first',
+  // staticWidth?: number | 'first',
+}
+
 export type TypeSymbolOptions = EQN_VinculumSymbol
   & EQN_VinculumSymbol
   & EQN_BoxSymbol
@@ -1032,7 +1057,8 @@ export type TypeSymbolOptions = EQN_VinculumSymbol
   & EQN_AngleBracketSymbol
   & EQN_BraceSymbol
   & EQN_BarSymbol
-  & EQN_SquareBracketSymbol;
+  & EQN_SquareBracketSymbol
+  & EQN_LineSymbol;
 
 
 export default class EquationSymbols {
@@ -1172,7 +1198,6 @@ export default class EquationSymbols {
       new Transform('Line').scale(1, 1).translate(0, 0),
       this.shapes.limits,
       optionsToUse,
-      // 'strip',
     ));
   }
 

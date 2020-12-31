@@ -46,7 +46,7 @@ export type EQN_EncompassGlyph = {
 
 export type EQN_LineGlyph = {
   symbol?: string,
-  annotation: number,
+  annotationIndex: number,
   content: {
     xAlign: 'left' | 'center' | 'right' | number | string,
     yAlign: 'bottom' | 'baseline' | 'middle' | 'top' | number | string,
@@ -109,7 +109,7 @@ export type EQN_Glyphs = {
   top?: TypeAnnotatedGlyph & EQN_TopBottomGlyph;
   bottom?: TypeAnnotatedGlyph & EQN_TopBottomGlyph;
   encompass?: TypeAnnotatedGlyph & EQN_EncompassGlyph;
-  line?: EQN_LineGlyph;
+  line?: TypeAnnotatedGlyph & EQN_LineGlyph;
 };
 
 // export type EQN_GlyphsIn = {
@@ -375,6 +375,7 @@ export default class BaseAnnotationFunction implements ElementInterface {
     contentBounds.copyFrom(content.getBounds(fullContentBounds));
     inSizeBounds.copyFrom(contentBounds);
     fullBounds.copyFrom(contentBounds);
+
     annotations.forEach((annotation, index) => {
       annotation.content.calcSize(loc, scale * annotation.scale);
       this.setAnnotationPosition(contentBounds, annotation, scale);
@@ -382,7 +383,10 @@ export default class BaseAnnotationFunction implements ElementInterface {
       inSizeBounds.growWithSameBaseline(annotationBounds);
       const fullSizeAnnotationBounds = annotation.content.getBounds(true);
       fullBounds.growWithSameBaseline(fullSizeAnnotationBounds);
-      if (this.glyphs.line != null && this.glyphs.line.annotation === index) {
+      if (
+        this.glyphs.line != null
+        && this.glyphs.line.annotationIndex === index
+      ) {
         this.setLineGlyph(annotationBounds, contentBounds);
         // inSizeBounds.growWithSameBaseline(encompassBounds);
         // fullBounds.growWithSameBaseline(encompassFullBounds);
@@ -505,21 +509,24 @@ export default class BaseAnnotationFunction implements ElementInterface {
   }
 
   setLineGlyph(annotationBounds: Bounds, contentBounds: Bounds) {
+    if (this.glyphs.line == null) {
+      return;
+    }
     const {
-      content, comment,
+      content, annotation,
     } = this.glyphs.line;
     const glyph = this.glyphs.line;
-    const pStart = getPositionInRect(
+    const pStart = getPositionInRect( // $FlowFixMe
       contentBounds.toRect(), content.xAlign, content.yAlign,
     );
-    const pEnd = getPositionInRect(
-      annotationBounds.toRect(), comment.xAlign, comment.yAlign,
+    const pEnd = getPositionInRect( // $FlowFixMe
+      annotationBounds.toRect(), annotation.xAlign, annotation.yAlign,
     );
 
     const line = new Line(pStart, pEnd);
     const spacedLine = new Line(
       line.pointAtLength(content.space),
-      line.pointAtLength(line.length() - comment.space),
+      line.pointAtLength(line.length() - annotation.space),
     );
     // console.log(spacedLine)
 

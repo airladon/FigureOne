@@ -7,7 +7,14 @@ figure.add({
   method: 'equation',
   options: {
     elements: {
-      line: { symbol: 'line', width: 0.005, dash: [0.01, 0.01] },
+      line: {
+        symbol: 'line',
+        width: 0.005,
+        dash: [0.01, 0.01],
+        // draw: 'static',
+        // staticHeight: 'first',
+        // staticWidth: 'first',
+      },
     },
     forms: {
       0: {
@@ -24,15 +31,45 @@ figure.add({
           },
           glyphs: {
             line: {
-              annotation: 0,
+              annotationIndex: 0,
               symbol: 'line',
               content: {
                 xAlign: 'right',
                 yAlign: 'top',
                 space: 0.02,
               },
-              comment: {
+              annotation: {
                 xAlign: 'left',
+                yAlign: 'bottom',
+                space: 0.02,
+              },
+            },
+          },
+        },
+      },
+      1: {
+        annotate: {
+          content: 'abc',
+          annotation: {
+            content: 'def',
+            xPosition: 'right',
+            yPosition: 'top',
+            xAlign: 'left',
+            yAlign: 'bottom',
+            scale: 0.6,
+            offset: [-0.6, 0.6],
+          },
+          glyphs: {
+            line: {
+              annotationIndex: 0,
+              symbol: 'line',
+              content: {
+                xAlign: 'right',
+                yAlign: 'top',
+                space: 0.02,
+              },
+              annotation: {
+                xAlign: 'right',
                 yAlign: 'bottom',
                 space: 0.02,
               },
@@ -43,3 +80,8 @@ figure.add({
     },
   },
 });
+figure.getElement('eqn').showForm('0');
+figure.getElement('eqn').goToForm({
+  form: '1', duration: 1, delay: 1, animate: 'move',
+});
+

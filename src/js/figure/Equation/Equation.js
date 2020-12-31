@@ -525,6 +525,7 @@ export type EQN_FormDefaults = {
  * All properties are optional.
  *
  * @property {TypeColor} [color] default equation color
+ * @property {TypeColor} [dimColor] default equation dim color
  * @property {OBJ_Font} [font] default {@link FigureFont} for the equation
  * @property {number} [scale] equation scale (`0.7`)
  * @property {EQN_EquationElements} [elements] equation element definitions
@@ -547,6 +548,7 @@ export type EQN_FormDefaults = {
  */
 export type EQN_Equation = {
   color?: TypeColor;
+  dimColor?: TypeColor;
   font?: OBJ_Font;
   scale?: number,
   elements?: EQN_EquationElements;

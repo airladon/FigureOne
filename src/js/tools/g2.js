@@ -6032,10 +6032,14 @@ function getBorder(
   return border.map(b => b.map(p => getPoint(p)));
 }
 
+export type TypeXAlign = 'left' | 'right' | 'center' | 'string' | number;
+
+export type TypeYAlign = 'bottom' | 'top' | 'middle' | 'string' | number;
+
 function getPositionInRect(
   r: TypeParsableRect,
-  xAlign: 'left' | 'right' | 'center' | 'string' | num = 0,
-  yAlign: 'bottom' | 'top' | 'middle' | 'string' |  num = 0,
+  xAlign: TypeXAlign = 0,
+  yAlign: TypeYAlign = 0,
   // offset: TypeParsablePoint = new Point(0, 0),
 ) {
   const rect = getRect(r);

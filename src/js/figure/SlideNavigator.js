@@ -1,6 +1,12 @@
 // @flow
 import { joinObjects } from '../tools/tools';
-import type { FigureElementCollection, FigureElement } from './Element';
+import { FigureElementCollection } from './Element';
+import type { FigureElement } from './Element';
+import type {
+  OBJ_Collection, OBJ_TextModifiersDefinition, OBJ_TextLines,
+} from './FigurePrimitives/FigurePrimitives';
+import type Figure from './Figure';
+import { Equation } from './Equation/Equation';
 // enterStateCommon
 // enterState
 // showCommon
@@ -22,19 +28,19 @@ export type TypeSlideFrom = 'next' | 'prev' | number;
 /**
  * `(currentIndex: number, nextIndex: number) => void`
  */
-export type TypeSlideLeaveStateCallback = (number, number) => void;
+export type TypeSlideLeaveStateCallback = (number, TypeSlideFrom) => void;
 
 /**
  * `(currentIndex: number, from: `{@link TypeSlideFrom}`) => void`
  */
-export type TypeSlideStateCallback = (number, number) => void;
+export type TypeSlideStateCallback = (number, TypeSlideFrom) => void;
 
 /**
  * `(done: () => void, currentIndex: number, from: `{@link TypeSlideFrom}`) => void`
  *
  * The `done` parameter must be called at the end of the transition.
  */
-export type TypeSlideTransitionCallback = (number, number) => void;
+export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) => void;
 
 /**
  * Slide definition options object.
@@ -136,7 +142,7 @@ export type TypeSlideTransitionCallback = (number, number) => void;
  * @property {OBJ_TextLines} [text] common property - With `modifiersCommon` and
  * `modifiers` define the text for the text element associated with the
  * SlideNavigator
- * @property {OBJ_TextModifiersDefinigion} [modifiersCommon] common property
+ * @property {OBJ_TextModifiersDefinition} [modifiersCommon] common property
  * @property {OBJ_TextModifiersDefinition} [modifiers] will
  * overwrite any keys from `modifiersCommon` with the same name
  * @property {TypeSlideStateCallback} [enterStateCommon] common property
@@ -155,7 +161,7 @@ export type TypeSlideTransitionCallback = (number, number) => void;
  */
 export type OBJ_SlideNavigatorSlide = {
   text?: OBJ_TextLines,
-  modifiersCommon?: OBJ_TextModifiersDefinigion;
+  modifiersCommon?: OBJ_TextModifiersDefinition;
   modifiers?: OBJ_TextModifiersDefinition;
   enterStateCommon?: TypeSlideStateCallback,
   enterState?: TypeSlideStateCallback,
@@ -209,17 +215,17 @@ export type OBJ_EquationDefaults = {
  *
  * @property {Figure | FigureElementCollection} collection
  * @property {Array<OBJ_NavigatorSlide>} [slides]
- * @property {FigureElement | string} [prevButton]
- * @property {FigureElement | string} [nextButton]
- * @property {string | FigureElementCollection} [text]
+ * @property {null | FigureElement | string} [prevButton]
+ * @property {null | FigureElement | string} [nextButton]
+ * @property {null | string | FigureElementCollection} [text]
  * @property {Equation | string | Array<string | Equation>} [equation]
  * @property {OBJ_EquationDefaults} [equationDefaults]
  */
 export type OBJ_SlideNavigator = {
   collection: Figure | FigureElementCollection,
-  slides?: Array<OBJ_NavigatorSlide>,
-  prevButton?: FigureElement | string,
-  nextButton?: FigureElement | string,
+  slides?: Array<OBJ_SlideNavigatorSlide>,
+  prevButton?: ?FigureElement | string,
+  nextButton?: ?FigureElement | string,
   text?: string | FigureElementCollection,
   equation?: Equation | string | Array<string | Equation>,
   equationDefaults?: OBJ_EquationDefaults,
@@ -250,7 +256,7 @@ export type OBJ_SlideNavigator = {
  */
 export default class SlideNavigator {
   currentSlideIndex: number;
-  slides: Array<OBJ_SlideManagerSlides>;
+  slides: Array<OBJ_SlideNavigatorSlide>;
   prevButton: ?FigureElement;
   nextButton: ?FigureElement;
   textElement: ?FigureElement;
@@ -283,8 +289,14 @@ export default class SlideNavigator {
    */
   load(options: OBJ_SlideNavigator) {
     const o = options;
-    this.collection = o.collection;
-    this.slides = o.slides;
+    if (o.collection instanceof FigureElementCollection) {
+      this.collection = o.collection;
+    } else if (o.collection != null && o.collection.elements != null) {
+      this.collection = o.collection.elements;
+    }
+    if (o.slides != null) {
+      this.slides = o.slides;
+    }
     if (typeof o.text === 'string') {
       this.textElement = this.collection.getElement(o.text);
     } else if (o.text != null) {
@@ -292,13 +304,13 @@ export default class SlideNavigator {
     } else {
       this.textElement = null;
     }
-    this.equations = [];
+    let equations = [];
     if (Array.isArray(o.equation)) {
-      this.equations = o.equation;
+      equations = o.equation;
     } else if (o.equation != null) {
-      this.equations = [o.equation];
+      equations = [o.equation];
     }
-    this.setEquations();
+    this.setEquations(equations);
     this.equationDefaults = joinObjects({}, {
       duration: 1,
       animate: 'move',
@@ -311,26 +323,33 @@ export default class SlideNavigator {
     }
     this.currentSlideIndex = 0;
     this.inTransition = false;
-    if (this.prevButton != null) {
-      this.prevButton.onClick = this.prevSlide.bind(this);
+    const { prevButton, nextButton } = this;
+    if (prevButton != null) {
+      prevButton.onClick = this.prevSlide.bind(this);
     }
-    if (this.nextButton != null) {
-      this.nextButton.onClick = this.nextSlide.bind(this);
+    if (nextButton != null) {
+      nextButton.onClick = this.nextSlide.bind(this);
     }
 
     if (this.slides == null && this.equations.length === 1) {
-      const { eqn } = this.equations[0];
-      if (eqn.currentFormSeries != null && eqn.currentFormSeries.length > 0) {
-        this.slides = [];
-        eqn.currentFormSeries.forEach(f => this.slides.push({ form: `${f}` }));
+      const [equation] = this.equations;
+      if (equation instanceof Equation) {
+        const { eqn } = equation;
+        if (eqn.currentFormSeries != null && eqn.currentFormSeries.length > 0) {
+          this.slides = [];
+          eqn.currentFormSeries.forEach(f => this.slides.push({ form: `${f}` }));
+        }
       }
     }
   }
 
-  setEquations() {
+  setEquations(equationsIn: Array<string | Equation>) {
     const equations = [];
-    this.equations.forEach((e) => {
-      equations.push(this.collection.getElement(e));
+    equationsIn.forEach((e) => {
+      const element = this.collection.getElement(e);
+      if (element != null) {
+        equations.push(element);
+      }
     });
     this.equations = equations;
   }
@@ -363,15 +382,17 @@ export default class SlideNavigator {
     return forms;
   }
 
-  showForms(forms: Array<string | null>, hideOnly = false) {
+  showForms(forms: Array<string | null>, hideOnly: boolean = false) {
     for (let i = 0; i < this.equations.length; i += 1) {
       const e = this.collection.getElement(this.equations[i]);
-      if (forms.length > i && forms[i] != null) {
-        if (!hideOnly) {
-          e.showForm(forms[i]);
+      if (e != null) {
+        if (forms.length > i && forms[i] != null) {
+          if (!hideOnly) {  // $FlowFixMe
+            e.showForm(forms[i]);
+          }
+        } else {
+          e.hide();
         }
-      } else {
-        e.hide();
       }
     }
   }
@@ -385,20 +406,21 @@ export default class SlideNavigator {
     if (slide.steadyState != null) {
       slide.steadyState(index, from);
     }
-    if (this.prevButton != null) {
+    const { prevButton, nextButton } = this;
+    if (prevButton != null) {
       if (this.currentSlideIndex === 0) {
-        this.prevButton.setOpacity(0.7);
-        this.prevButton.isTouchable = false;
-      } else if (this.prevButton.isTouchable === false) {
-        this.prevButton.setOpacity(1);
-        this.prevButton.isTouchable = true;
+        prevButton.setOpacity(0.7);
+        prevButton.isTouchable = false;
+      } else if (prevButton.isTouchable === false) {
+        prevButton.setOpacity(1);
+        prevButton.isTouchable = true;
       }
     }
-    if (this.nextButton != null && this.nextButton.setLabel != null) {
-      if (this.currentSlideIndex === this.slides.length - 1) {
-        this.nextButton.setLabel('Restart');
-      } else {
-        this.nextButton.setLabel('Next');
+    if (nextButton != null) {
+      if (this.currentSlideIndex === this.slides.length - 1) {  // $FlowFixMe
+        nextButton.setLabel('Restart');
+      } else {  // $FlowFixMe
+        nextButton.setLabel('Next');
       }
     }
   }
@@ -420,9 +442,13 @@ export default class SlideNavigator {
     const forms = this.getForm(this.currentSlideIndex);
     for (let i = 0; i < this.equations.length; i += 1) {
       const e = this.collection.getElement(this.equations[i]);
-      if (forms.length > i && forms[i] != null) {
+      if (e != null && e instanceof Equation && forms.length > i && forms[i] != null) {
         const form = forms[i];
-        const currentForm = e.getCurrentForm().name;
+        const currentForm = e.getCurrentForm();
+        let currentFormName = '';
+        if (currentForm != null) {
+          currentFormName = currentForm.name;
+        }
         if (!e.isShown) {
           e.animations.new()
             .inParallel([
@@ -436,7 +462,7 @@ export default class SlideNavigator {
             .whenFinished(done)
             .start();
           done = null;
-        } else if (form !== currentForm) {
+        } else if (form !== currentFormName) {
           const { animate, duration } = this.equationDefaults;
           e.animations.new()
             .goToForm({ target: form, animate, duration })
@@ -453,13 +479,14 @@ export default class SlideNavigator {
   }
 
   setText(index: number) {
-    if (this.textElement == null) {
+    const { textElement } = this;
+    if (textElement == null) {
       return;
     }
     const mods = this.getProperty('modifiers', index, {});
     const commonMods = this.getProperty('modifiersCommon', index, {});
 
-    this.textElement.custom.updateText({
+    textElement.custom.updateText({
       text: this.getText(index),
       modifiers: joinObjects({}, commonMods, mods),
     });
@@ -492,13 +519,14 @@ export default class SlideNavigator {
 
     // Reset and Set Text
     this.collection.stop('complete');
-    if (this.textElement != null) {
+    const { textElement } = this;
+    if (textElement != null) {
       this.setText(index);
       if (fromToUse === 'prev') {
         const oldText = this.getText(this.currentSlideIndex);
         const newText = this.getText(index);
         if (newText !== oldText) {
-          this.textElement.animations.new()
+          textElement.animations.new()
             .dissolveIn(0.2)
             .start();
         }

@@ -18,8 +18,10 @@ import type {
 } from '../FigurePrimitives/FigurePrimitives';
 import type FigureCollections from './FigureCollections';
 import SlideNavigator from '../SlideNavigator';
-import type { OBJ_SlideNavigatorSlides } from '../SlideNavigator';
+import type { OBJ_SlideNavigatorSlide } from '../SlideNavigator';
 import type { COL_Rectangle } from './Rectangle';
+import type Figure from '../Figure';
+import type { Equation } from '../Equation/Equation';
 
 
 export type COL_SlideNavigatorButton = {
@@ -53,7 +55,7 @@ export type COL_SlideNavigatorButton = {
  */
 export type COL_SlideNavigator = {
   collection: Figure | FigureElementCollection | string,
-  slides: Array<OBJ_NavigatorSlide>,
+  slides: Array<OBJ_SlideNavigatorSlide>,
   prevButton?: COL_SlideNavigatorButton,
   nextButton?: COL_SlideNavigatorButton,
   text?: OBJ_TextLines,
@@ -295,18 +297,18 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     //   text: this._text,
     // }));
 
-    if (o.collection == null) {
-      this.nav.collection = null;
-    }
+    // if (o.collection == null) {
+    //   this.nav.collection = null;
+    // }
     this.hasTouchableElements = true;
     this.onAdd = () => {
-      this.nav.load({
+      this.nav.load({ // $FlowFixMe
         collection: this.parent,
         slides: o.slides,
         equation: o.equation,
         equationDefaults: o.equationDefaults,
         prevButton: this._prevButton,
-        nextButton: this._nextButton,
+        nextButton: this._nextButton,  // $FlowFixMe
         text: this._text,
       });
       this.nav.goToSlide(0);
@@ -320,7 +322,7 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     };
   }
 
-  setSlides(slides: Array<OBJ_SlideNavigatorSlides>) {
+  setSlides(slides: Array<OBJ_SlideNavigatorSlide>) {
     this.nav.slides = slides;
     this.nav.goToSlide(0);
   }
