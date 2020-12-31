@@ -2116,6 +2116,7 @@ class FigureElement {
     this.state.movement.previousTime = new GlobalAnimation().now() / 1000;
     this.state.isBeingMoved = true;
     this.unrender();
+    this.subscriptions.publish('startBeingMoved');
     if (this.recorder.state === 'recording') {
       this.recorder.recordEvent('startBeingMoved', [this.getPath()]);
     }
@@ -2172,6 +2173,7 @@ class FigureElement {
         this.state.movement.velocity = this.transform.zero();
       }
     }
+    this.subscriptions.publish('stopBeingMoved');
     if (this.recorder.state === 'recording' && this.state.isBeingMoved) {
       this.recorder.recordEvent(
         'stopBeingMoved',

@@ -126,7 +126,7 @@ const ball = (x, index, sides = 20) => ({
 const xValues = range(0.05, 5, 0.05);
 const data = new Recorder();
 const time = new TimeKeeper();
-time.pause();
+// time.pause();
 let enableMaxTime = false;
 let timeMax = false;
 
@@ -148,18 +148,23 @@ b0.move.bounds = {
   },
 };
 let timeoutId = null;
+b0.subscriptions.add('stopBeingMoved', () => {
+  if (enableMaxTime) {
+    if (timeoutId != null) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+    b0.subscriptions.add('stopBeingMoved', () => {
+      timeoutId = setTimeout(() => time.pause(), 500);
+    }, 1);
+  }
+});
+
 b0.subscriptions.add('setTransform', () => {
   if (enableMaxTime && timeMax) {
     return;
   }
   time.unpause();
-  if (timeoutId != null) {
-    clearTimeout(timeoutId);
-    timeoutId = null;
-  }
-  if (enableMaxTime) {
-    timeoutId = setTimeout(() => time.pause(), 500);
-  }
 });
 
 
@@ -225,6 +230,7 @@ const disturbSine = (delay = 0, resetSignal = true) => {
     .custom({
       callback: () => {
         const t = time.now();
+        // console.log(Math.floor(t * 10))
         b0.setPosition(0, A * Math.sin(2 * Math.PI * f * t));
       },
       duration: 10000,
@@ -728,11 +734,47 @@ const modifiers = {
   },
 };
 
-// let lastPhase = 0;
-// const getPhase = () => {
-//   lastPhase = Math.asin(b0.getPosition().y / A);
-// };
+
+/*
+........######..##.......####.########..########..######.
+.......##....##.##........##..##.....##.##.......##....##
+.......##.......##........##..##.....##.##.......##......
+........######..##........##..##.....##.######....######.
+.............##.##........##..##.....##.##.............##
+.......##....##.##........##..##.....##.##.......##....##
+........######..########.####.########..########..######.
+*/
 // /////////////////////////////////////////////////////////////////
+slides.push({
+  modifiersCommon: modifiers,
+  text: [
+    'Explore the equation of a travelling sine wave and the relationship',
+    'between velocity wavelength and frequency.',
+    // {
+    //   font: { size: 0.06 },
+    //   text: 'And the relationship between frequency wavelength, and velocity.',
+    // },
+  ],
+  form: '0',
+  steadyState: () => {
+    reset();
+    disturbSine(0, false);
+    spacePlot.setScenario('default');
+    timePlot.hide();
+    // const now = time.now();
+    data.reset((timeStep, num) => {
+      const y = Array(num);
+      for (let i = 0; i < num; i += 1) {
+        y[i] = A * Math.sin(2 * Math.PI * f * (timeStep * i) + Math.PI);
+      }
+      return y.reverse();
+    });
+    balls.dim();
+    sideEqn.hide();
+  },
+  // leaveStateCommon: () => { getPhase(); },
+});
+
 slides.push({
   steadyState: () => {
     spacePlot.setScenario('default');
@@ -758,33 +800,6 @@ slides.push({
     timePlot.setScenario('small');
     enableMaxTime = true;
   },
-});
-slides.push({
-  modifiersCommon: modifiers,
-  text: [
-    'Explore the equation of a travelling sine wave and the relationship',
-    'between velocity wavelength and frequency.',
-    // {
-    //   font: { size: 0.06 },
-    //   text: 'And the relationship between frequency wavelength, and velocity.',
-    // },
-  ],
-  form: '0',
-  steadyState: () => {
-    reset();
-    disturbSine(0, false);
-    // const now = time.now();
-    data.reset((timeStep, num) => {
-      const y = Array(num);
-      for (let i = 0; i < num; i += 1) {
-        y[i] = A * Math.sin(2 * Math.PI * f * (timeStep * i) + Math.PI);
-      }
-      return y.reverse();
-    });
-    balls.dim();
-    sideEqn.hide();
-  },
-  // leaveStateCommon: () => { getPhase(); },
 });
 
 // /////////////////////////////////////////////////////////////////

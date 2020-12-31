@@ -113,14 +113,11 @@ function TimeKeeper() {
       return 0;
     }
     const lastTime = time;
-    // let deltaTime = delta;
     if (delta == null) {
       time = (machineNow() - startTime - cumPauseTime) * timeSpeed;
-      // console.log(deltaTime)
     } else {
       time += delta;
     }
-    // time += deltaTime;
     return time - lastTime;
   }
 
@@ -138,22 +135,20 @@ function TimeKeeper() {
     }
   }
 
-  // Active
-  window.addEventListener('focus', () => {
-    isNotFocused = false;
-  });
-
-  // Inactive
-  window.addEventListener('blur', () => {
-    isNotFocused = true;
-  });
+  window.addEventListener('focus', () => { isNotFocused = false; });
+  window.addEventListener('blur', () => { isNotFocused = true; });
 
   function now() {
+    console.log(Math.floor(time * 10), Math.floor(cumPauseTime*10))
     return time;
   }
 
+  // function getIsPaused() {
+  //   return isPaused && isNotFocused;
+  // }
+
   return {
-    reset, now, step, pause, unpause,
+    reset, now, step, pause, unpause, isPaused,
   };
 }
 // const a = Recorder1();
