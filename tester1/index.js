@@ -13,7 +13,7 @@ const A = 0.4;   // m
 let c = 0.5;   // m/s
 
 const axisOrigin = new Point(-1.5, A + 0.2 + 0.3);
-const descriptionPosition = new Point(-1.5, 2.8);
+// const descriptionPosition = new Point(-1.5, 2.8);
 // const buttonY = 0.15;
 const equationPosition = new Point(0, 1.9);
 const sideEquationPosition = new Point(1.4, 1.6);
@@ -100,17 +100,18 @@ const ball = (x, index, sides = 20) => ({
 
 
 const xValues = range(-1.46, 1.5, 0.04);
-const data = new Recorder(0);
+const data = new Recorder();
+const time = new TimeKeeper();
 
-// Active
-window.addEventListener('focus', () => {
-  data.focusUnpause();
-});
+// // Active
+// window.addEventListener('focus', () => {
+//   data.focusUnpause();
+// });
 
-// Inactive
-window.addEventListener('blur', () => {
-  data.focusPause();
-});
+// // Inactive
+// window.addEventListener('blur', () => {
+//   data.focusPause();
+// });
 
 
 xValues.forEach((x, index) => {
@@ -129,13 +130,15 @@ b0.move.bounds = {
   },
 };
 
+
 // Update function for everytime we want to update the signal
 function update() {
+  const deltaTime = time.step();
   const { y } = figure.elements._balls._ball0.transform.order[0];
-  data.update(y);
+  data.record(y, deltaTime);
   for (let i = 1; i < xValues.length + 1; i += 1) {
     const b = figure.elements._balls[`_ball${i}`];
-    const by = data.getY((b.custom.x - startX) / c);
+    const by = data.getValueAtTimeAgo((b.custom.x - startX) / c);
     b.setPosition(b.custom.x, by);
   }
 }
@@ -152,8 +155,9 @@ figure.subscriptions.add('afterDraw', () => {
 
 const reset = () => {
   figure.stop();
-  data.reset(0);
   b0.setPosition(startX, 0);
+  time.reset();
+  data.reset(0);
 };
 
 const disturbPulse = () => {
@@ -170,16 +174,12 @@ const disturbSine = (delay = 0, resetSignal = true) => {
   if (resetSignal) {
     reset();
   }
-  const startTime = data.now();
   b0.animations.new('_noStop_sine')
     .delay(delay)
-    // .trigger({
-    //   callback: () => { startTime = data.now(); }
-    // })
     .custom({
       callback: () => {
-        const time = (data.now() - startTime) / 1000;
-        b0.setPosition(startX, A * Math.sin(time * 2 * Math.PI * f));
+        const t = time.now();
+        b0.setPosition(startX, A * Math.sin(2 * Math.PI * f * t));
       },
       duration: 10000,
     })
@@ -701,12 +701,13 @@ slides.push({
   steadyState: () => {
     reset();
     disturbSine(0, false);
-    data.initialize((time, timeStep, num) => {
+    // const now = time.now();
+    data.reset((timeStep, num) => {
       const y = Array(num);
       for (let i = 0; i < num; i += 1) {
-        y[i] = A * Math.sin(2 * Math.PI * f * (time / 1000 + timeStep * i) + Math.PI);
+        y[i] = A * Math.sin(2 * Math.PI * f * (timeStep * i) + Math.PI);
       }
-      return y;
+      return y.reverse();
     });
     figure.elements._balls.dim();
     sideEqn.hide();

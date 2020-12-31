@@ -1,9 +1,9 @@
-function RecorderNew() {
+function Recorder() {
   const duration = 10;
   const timeStep = 0.01;
   const num = duration / timeStep;
-  let index = num;
-  let data = [...Array(num).fill(0), ...Array(num)];
+  let index;
+  let data;
   const time = Array(num);
   for (let i = 0; i < num; i += 1) {
     time[i] = i * timeStep;
@@ -32,13 +32,13 @@ function RecorderNew() {
     }
   }
 
-  function getRecentRecording(getDuration = duration) {
-    const count = Math.floor(getDuration / timeStep);
-    return {
-      time: time.slice(0, count),
-      data: data.slice(index - count, index).reverse(),
-    };
-  }
+  // function getRecentRecording(getDuration = duration) {
+  //   const count = Math.floor(getDuration / timeStep);
+  //   return {
+  //     time: time.slice(0, count),
+  //     data: data.slice(index - count, index).reverse(),
+  //   };
+  // }
 
   function getRecording() {
     return {
@@ -51,21 +51,103 @@ function RecorderNew() {
     return data;
   }
 
+  function getValueAtTimeAgo(timeDelta) {
+    const deltaIndex = Math.floor(timeDelta / timeStep + timeStep / 10);
+    return data[index - deltaIndex];
+  }
+
+  function reset(initialValueOrCallback = 0) {
+    if (typeof initialValueOrCallback === 'number') {
+      data = [...Array(num).fill(initialValueOrCallback), ...Array(num)];
+    } else {
+      data = [...initialValueOrCallback(timeStep, num), ...Array(num)];
+    }
+    index = num;
+  }
+  reset();
+
   return {
     record,
     getData,
     getRecording,
-    getRecentRecording,
+    // getRecentRecording,
+    getValueAtTimeAgo,
+    reset,
   };
 }
 
+function TimeKeeper() {
+  let time = 0;
+  const timeSpeed = 1;
+  let cumPauseTime = 0;
+  let isPaused = false;
+  let startPauseTime;
+
+  function machineNow() {
+    return performance.now() / 1000;
+  }
+  let startTime = machineNow();
+
+  function reset() {
+    startTime = machineNow();
+    time = 0;
+    cumPauseTime = 0;
+  }
+
+  reset();
+
+  function step(delta = null) {
+    const lastTime = time;
+    // let deltaTime = delta;
+    if (delta == null) {
+      time = (machineNow() - startTime - cumPauseTime) * timeSpeed;
+      // console.log(deltaTime)
+    } else {
+      time += delta;
+    }
+    // time += deltaTime;
+    return time - lastTime;
+  }
+
+  function pause() {
+    if (!isPaused) {
+      startPauseTime = machineNow();
+      isPaused = true;
+    }
+  }
+
+  function unpause() {
+    if (isPaused) {
+      cumPauseTime += machineNow() - startPauseTime;
+      isPaused = false;
+    }
+  }
+
+  // Active
+  window.addEventListener('focus', () => {
+    unpause();
+  });
+
+  // Inactive
+  window.addEventListener('blur', () => {
+    pause();
+  });
+
+  function now() {
+    return time;
+  }
+
+  return {
+    reset, now, step, pause, unpause,
+  };
+}
 // const a = Recorder1();
 // a.record(1, 3);
 
 // console.log(a.getData());
 // console.log(a.getRecording());
 
-function Recorder () {
+function RecorderOld() {
   const duration = 10;
   const timeStep = 0.01;
   const len = duration / timeStep;
