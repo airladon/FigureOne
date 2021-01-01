@@ -12,7 +12,7 @@ let f = 0.3; // Hz
 const A = 0.6;   // m
 let c = 1;   // m/s
 
-const equationPosition = new Point(0, 1.9);
+const equationPosition = new Point(0, 2.2);
 const sideEquationPosition = new Point(1.4, 1.6);
 const colorText = [0.4, 0.4, 0.4, 1];
 
@@ -70,7 +70,7 @@ figure.add({
   mods: {
     scenarios: {
       default: { position: [-1.5, 1.2], scale: 1 },
-      small: { position: [-1.1, 1.9], scale: 0.7 },
+      small: { position: [-0.6, 2.2], scale: 0.8 },
     },
   },
 });
@@ -94,7 +94,7 @@ figure.add({
   mods: {
     scenarios: {
       default: { position: [-1.5, 2], scale: 1 },
-      small: { position: [-1.1, 0.7], scale: 0.7 },
+      small: { position: [-0.6, 0.8], scale: 0.8 },
     },
   },
 });
@@ -205,10 +205,11 @@ figure.subscriptions.add('afterDraw', () => {
 
 const reset = () => {
   figure.stop();
+  b0.animations.cancel('_noStop_sine');
   b0.setPosition(0, 0);
   time.reset();
   data.reset(0);
-  time.pause();
+  // time.pause();
 };
 
 const disturbPulse = () => {
@@ -230,7 +231,6 @@ const disturbSine = (delay = 0, resetSignal = true) => {
     .custom({
       callback: () => {
         const t = time.now();
-        // console.log(Math.floor(t * 10))
         b0.setPosition(0, A * Math.sin(2 * Math.PI * f * t));
       },
       duration: 10000,
@@ -775,33 +775,14 @@ slides.push({
   // leaveStateCommon: () => { getPhase(); },
 });
 
-slides.push({
-  steadyState: () => {
-    spacePlot.setScenario('default');
-    timePlot.hide();
-    enableMaxTime = false;
-    // timePlot.setScenario('default');
-  },
-});
-slides.push({
-  enterState: () => {
-    time.pause();
-    reset();
-  },
-  transition: (done) => {
-    spacePlot.animations.new()
-      .scenario({ target: 'small', duration: 1 })
-      .whenFinished(done)
-      .start();
-  },
-  steadyState: () => {
-    spacePlot.setScenario('small');
-    timePlot.show();
-    timePlot.setScenario('small');
-    enableMaxTime = true;
-  },
-});
-
+// slides.push({
+//   steadyState: () => {
+//     spacePlot.setScenario('default');
+//     timePlot.hide();
+//     enableMaxTime = false;
+//     // timePlot.setScenario('default');
+//   },
+// });
 // /////////////////////////////////////////////////////////////////
 slides.push({
   text: [
@@ -817,7 +798,7 @@ slides.push({
     reset();
     b0.animations.cancel('_noStop_sine');
     disturbPulse();
-    figure.elements._balls.highlight(['ball0']);
+    balls.highlight(['ball0']);
   },
 });
 
@@ -839,11 +820,15 @@ slides.push({
 });
 
 slides.push({ form: '2' });
+
+// /////////////////////////////////////////////////////////////////
 slides.push({
   form: '2',
   text: 'Let\'s record this as equation (1)',
   steadyState: () => { sideEqn.hide(); },
 });
+
+// /////////////////////////////////////////////////////////////////
 slides.push({
   transition: (done) => {
     eqn.hide();
@@ -860,6 +845,42 @@ slides.push({
     sideEqn.showForm('2id');
   },
   steadyState: () => { eqn.hide(); },
+});
+
+
+/*
+..........########.########..####.########
+..........##.......##.....##..##.....##...
+..........##.......##.....##..##.....##...
+..........######...##.....##..##.....##...
+..........##.......##.....##..##.....##...
+..........##.......##.....##..##.....##...
+..........########.########..####....##...
+*/
+// /////////////////////////////////////////////////////////////////
+slides.push({
+  text: ' ',
+  form: null,
+  enterState: () => {
+    figure.stop();
+    reset();
+    time.pause();
+    eqn.hide();
+    sideEqn.hide();
+  },
+  transition: (done) => {
+    spacePlot.animations.new()
+      .scenario({ target: 'small', duration: 1 })
+      .whenFinished(done)
+      .start();
+  },
+  steadyState: () => {
+    spacePlot.setScenario('small');
+    timePlot.show();
+    timePlot.setScenario('small');
+    enableMaxTime = true;
+  },
+  steadyStateCommon: () => {},
 });
 
 // /////////////////////////////////////////////////////////////////
@@ -884,7 +905,7 @@ slides.push({
   steadyState: () => {
     // sideEqn.showForm('2id');
     balls.hasTouchableElements = false;
-    figure.elements._balls.highlight(['ball0']);
+    balls.highlight(['ball0']);
     if (!b0.isAnimating()) {
       disturbSine(0, true);
     }
@@ -898,7 +919,7 @@ slides.push({
     '|t||1|  seconds ago.',
   ],
   steadyState: () => {
-    figure.elements._balls.highlight(['ball0', bx1.name]);
+    balls.highlight(['ball0', bx1.name]);
     bx1.pulse({ scale: 4 });
   },
 });
@@ -1054,7 +1075,7 @@ slides.push({
 });
 
 figure.getElement('nav').setSlides(slides);
-
+figure.getElement('nav').goToSlide(6);
 // slides.push({
 //   text: []
 // })
