@@ -65,7 +65,7 @@ function Recorder() {
 
   function getValueAtTimeAgo(timeDelta) {
     const deltaIndex = Math.floor(timeDelta / timeStep + timeStep / 10);
-    return data[index - deltaIndex];
+    return data[index - deltaIndex - 1];
   }
 
   function reset(initialValueOrCallback = 0) {
@@ -107,6 +107,7 @@ function TimeKeeper() {
     startTime = machineNow();
     time = 0;
     cumPauseTime = 0;
+    startPauseTime = 0;
   }
 
   function step(delta = null) {

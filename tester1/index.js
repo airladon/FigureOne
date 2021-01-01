@@ -66,6 +66,25 @@ figure.add({
     xAxis('xAxisSmall', 'x', 'meters', 1.5),
     yAxis('yAxis', 'y', 'meters'),
     { name: 'balls', method: 'collection' },
+    {
+      name: 'movePad',
+      method: 'primitives.polygon',
+      options: {
+        radius: 0.4,
+        sides: 8,
+        color: [0, 0, 0, 0],
+      },
+      mods: {
+        isMovable: true,
+        move: {
+          bounds: {
+            translation: {
+              left: 0, right: 0, bottom: -A, top: A,
+            },
+          },
+        },
+      },
+    },
   ],
   mods: {
     scenarios: {
@@ -100,19 +119,39 @@ figure.add({
   },
 });
 
+// Add reset button
+figure.add({
+  name: 'resetButton',
+  method: 'collections.rectangle',
+  options: {
+    button: true,
+    line: { width: 0.005 },
+    label: { text: 'Reset' },
+    width: 0.3,
+    height: 0.2,
+    corner: { radius: 0.03, sides: 3 },
+    position: [0, 0.5],
+  },
+  mods: {
+    isTouchable: true,
+  },
+});
+
 
 const spacePlot = figure.getElement('spacePlot');
-const timePlot = figure.getElement('timePlot');
 const spaceX = spacePlot.getElement('xAxis');
 const spaceXSmall = spacePlot.getElement('xAxisSmall');
+const timePlot = figure.getElement('timePlot');
+const timeTrace = timePlot.getElement('trace');
 const timeX = timePlot.getElement('xAxis');
 const balls = spacePlot.getElement('balls');
-const timeTrace = timePlot.getElement('trace');
+const movePad = spacePlot.getElement('movePad');
+const resetButton = figure.getElement('resetButton');
 
 const ball = (x, index, sides = 20) => ({
   name: `ball${index}`,
   method: 'primitives.polygon',
-  path: 'spacePlot.balls',    // And now you know why they weren't called particles
+  path: 'spacePlot.balls',
   options: {
     sides,
     radius: 0.02,
@@ -125,45 +164,46 @@ const ball = (x, index, sides = 20) => ({
 });
 
 
-const xValues = range(0.05, 5, 0.05);
 const data = new Recorder();
 const time = new TimeKeeper();
-// time.pause();
 let enableMaxTime = false;
 let timeMax = false;
 
+const xValues = range(0, 5, 0.05);
 xValues.forEach((x, index) => {
   const drawX = spaceX.valueToDraw(x);
-  figure.add(ball(drawX, index + 1));
-  const b = balls.getElement(`ball${index + 1}`);
+  figure.add(ball(drawX, index));
+  const b = balls.getElement(`ball${index}`);
   b.custom.x = x;
   b.custom.drawX = drawX;
   b.custom.drawXSmall = spaceXSmall.valueToDraw(x);
 });
+const b0 = balls.getElement('index0');
+balls.toFront(['ball0']);
 
-figure.add(ball(spaceX.valueToDraw(0), 0, 50));
-const b0 = balls.getElement('ball0');
-b0.setMovable();
-b0.touchBorder = 0.2;
-b0.move.bounds = {
-  translation: {
-    left: 0, right: 0, bottom: -A, top: A,
-  },
-};
+// figure.add(ball(spaceX.valueToDraw(0), 0, 50));
+// const b0 = balls.getElement('ball0');
+// b0.setMovable();
+// b0.touchBorder = 0.2;
+// b0.move.bounds = {
+//   translation: {
+//     left: 0, right: 0, bottom: -A, top: A,
+//   },
+// };
 let timeoutId = null;
-b0.subscriptions.add('stopBeingMoved', () => {
-  if (enableMaxTime) {
-    if (timeoutId != null) {
-      clearTimeout(timeoutId);
-      timeoutId = null;
-    }
-    b0.subscriptions.add('stopBeingMoved', () => {
-      timeoutId = setTimeout(() => time.pause(), 500);
-    }, 1);
-  }
+movePad.subscriptions.add('stopBeingMoved', () => {
+  // if (enableMaxTime) {
+  //   if (timeoutId != null) {
+  //     clearTimeout(timeoutId);
+  //     timeoutId = null;
+  //   }
+  //   movePad.subscriptions.add('stopBeingMoved', () => {
+  //     timeoutId = setTimeout(() => time.pause(), 500);
+  //   }, 1);
+  // }
 });
 
-b0.subscriptions.add('setTransform', () => {
+movePad.subscriptions.add('setTransform', () => {
   if (enableMaxTime && timeMax) {
     return;
   }
@@ -174,14 +214,16 @@ b0.subscriptions.add('setTransform', () => {
 // Update function for everytime we want to update the signal
 function update() {
   const deltaTime = time.step();
-  const { y } = b0.transform.order[0];
+  const { y } = movePad.transform.order[2];
   data.record(y, deltaTime);
-  if (enableMaxTime && time.now() > 5) {
+  // console.log(time.now())
+  if (enableMaxTime && time.now() > 5 && timeMax === false) {
     // b0.isTouchable = false;
     timeMax = true;
     time.pause();
+    resetButton.pulse({ scale: 1.2 });
   }
-  for (let i = 1; i < xValues.length + 1; i += 1) {
+  for (let i = 0; i < xValues.length; i += 1) {
     const b = balls[`_ball${i}`];
     const by = data.getValueAtTimeAgo((b.custom.x) / c);
     if (spaceX.isShown) {
@@ -212,18 +254,24 @@ figure.subscriptions.add('afterDraw', () => {
 
 const reset = () => {
   figure.stop();
-  b0.animations.cancel('_noStop_sine');
-  b0.setPosition(0, 0);
+  movePad.animations.cancel('_noStop_sine');
+  movePad.setPosition(0, 0);
   time.reset();
   data.reset(0);
-  // time.pause();
+  time.pause();
+};
+
+resetButton.onClick = () => {
+  reset();
+  timeMax = false;
+  time.pause();
 };
 
 const disturbPulse = () => {
   reset();
   const y = rand(0.1, 0.3) * randSign();
   const t = rand(0.2, 0.4);
-  b0.animations.new()
+  movePad.animations.new()
     .position({ duration: t, target: [0, y], progression: 'easeout' })
     .position({ duration: t, target: [0, 0], progression: 'easein' })
     .start();
@@ -233,12 +281,12 @@ const disturbSine = (delay = 0, resetSignal = true) => {
   if (resetSignal) {
     reset();
   }
-  b0.animations.new('_noStop_sine')
+  movePad.animations.new('_noStop_sine')
     .delay(delay)
     .custom({
       callback: () => {
         const t = time.now();
-        b0.setPosition(0, A * Math.sin(2 * Math.PI * f * t));
+        movePad.setPosition(0, A * Math.sin(2 * Math.PI * f * t));
       },
       duration: 10000,
     })
@@ -809,7 +857,7 @@ slides.push({
   form: [null],
   steadyState: () => {
     reset();
-    b0.animations.cancel('_noStop_sine');
+    movePad.animations.cancel('_noStop_sine');
     disturbPulse();
     balls.highlight(['ball0']);
   },
@@ -1090,7 +1138,7 @@ slides.push({
 });
 
 figure.getElement('nav').setSlides(slides);
-figure.getElement('nav').goToSlide(0);
+figure.getElement('nav').goToSlide(6);
 // slides.push({
 //   text: []
 // })
