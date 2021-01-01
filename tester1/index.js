@@ -7,10 +7,9 @@ const figure = new Fig.Figure({
   font: { size: 0.1 },
 });
 
-// const startX = -1.5;
-let f = 0.3; // Hz
+let f = 0.3;     // Hz
 const A = 0.6;   // m
-let c = 1;   // m/s
+let c = 1;       // m/s
 
 const equationPosition = new Point(0, 2.2);
 const sideEquationPosition = new Point(1.4, 1.6);
@@ -24,13 +23,13 @@ const xAxis = (name, title, units, length = 3) => ({
     stop: 5.5,
     length,
     line: { width: 0.005, arrow: { end: 'barb' } },
-    ticks: { step: 1, length: 0.1 },
-    labels: [
-      { font: { size: 0.08 }, text: [''], precision: 0 },
-      {
-        values: 0, text: '0', offset: [-0.1, 0.13], font: { size: 0.08 },
-      },
-    ],
+    // ticks: { step: 1, length: 0.1 },
+    // labels: [
+    //   { font: { size: 0.08 }, text: [''], precision: 0 },
+    //   {
+    //     values: 0, text: '0', offset: [-0.1, 0.13], font: { size: 0.08 },
+    //   },
+    // ],
     title: {
       font: { style: 'italic', family: 'serif', size: 0.12 },
       text: [title, { font: { size: 0.06 }, lineSpace: 0.08, text: units }],
@@ -63,14 +62,15 @@ figure.add({
   name: 'spacePlot',
   method: 'collection',
   elements: [
-    xAxis('xAxis', 'x', 'meters'),
+    xAxis('xAxis', 'x', 'meters', 3),
+    xAxis('xAxisSmall', 'x', 'meters', 1.5),
     yAxis('yAxis', 'y', 'meters'),
     { name: 'balls', method: 'collection' },
   ],
   mods: {
     scenarios: {
       default: { position: [-1.5, 1.2], scale: 1 },
-      small: { position: [-0.6, 2.2], scale: 0.8 },
+      small: { position: [0.3, 1.5], scale: 1 },
     },
   },
 });
@@ -80,7 +80,7 @@ figure.add({
   name: 'timePlot',
   method: 'collection',
   elements: [
-    xAxis('xAxis', 't', 'seconds'),
+    xAxis('xAxis', 't', 'seconds', 1.5),
     yAxis('yAxis', 'y', 'meters'),
     {
       name: 'trace',
@@ -94,7 +94,8 @@ figure.add({
   mods: {
     scenarios: {
       default: { position: [-1.5, 2], scale: 1 },
-      small: { position: [-0.6, 0.8], scale: 0.8 },
+      smallold: { position: [-0.6, 0.8], scale: 1 },
+      small: { position: [-1.7, 1.5], scale: 1 },
     },
   },
 });
@@ -103,6 +104,7 @@ figure.add({
 const spacePlot = figure.getElement('spacePlot');
 const timePlot = figure.getElement('timePlot');
 const spaceX = spacePlot.getElement('xAxis');
+const spaceXSmall = spacePlot.getElement('xAxisSmall');
 const timeX = timePlot.getElement('xAxis');
 const balls = spacePlot.getElement('balls');
 const timeTrace = timePlot.getElement('trace');
@@ -136,6 +138,7 @@ xValues.forEach((x, index) => {
   const b = balls.getElement(`ball${index + 1}`);
   b.custom.x = x;
   b.custom.drawX = drawX;
+  b.custom.drawXSmall = spaceXSmall.valueToDraw(x);
 });
 
 figure.add(ball(spaceX.valueToDraw(0), 0, 50));
@@ -181,7 +184,11 @@ function update() {
   for (let i = 1; i < xValues.length + 1; i += 1) {
     const b = balls[`_ball${i}`];
     const by = data.getValueAtTimeAgo((b.custom.x) / c);
-    b.setPosition(b.custom.drawX, by);
+    if (spaceX.isShown) {
+      b.setPosition(b.custom.drawX, by);
+    } else if (spaceXSmall.isShown) {
+      b.setPosition(b.custom.drawXSmall, by);
+    }
   }
   if (timePlot.isShown) {
     const trace = data.getRecording();
@@ -756,6 +763,12 @@ slides.push({
     // },
   ],
   form: '0',
+  enterStateCommon: () => {
+    spaceXSmall.hide();
+    spaceX.show();
+    spacePlot.setScenario('default');
+    timePlot.hide();
+  },
   steadyState: () => {
     reset();
     disturbSine(0, false);
@@ -868,14 +881,16 @@ slides.push({
     eqn.hide();
     sideEqn.hide();
   },
-  transition: (done) => {
-    spacePlot.animations.new()
-      .scenario({ target: 'small', duration: 1 })
-      .whenFinished(done)
-      .start();
-  },
+  // transition: (done) => {
+  //   spacePlot.animations.new()
+  //     .scenario({ target: 'small', duration: 1 })
+  //     .whenFinished(done)
+  //     .start();
+  // },
   steadyState: () => {
     spacePlot.setScenario('small');
+    spaceXSmall.show();
+    spaceX.hide();
     timePlot.show();
     timePlot.setScenario('small');
     enableMaxTime = true;
