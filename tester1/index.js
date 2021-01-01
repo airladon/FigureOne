@@ -1090,7 +1090,7 @@ slides.push({
 });
 
 figure.getElement('nav').setSlides(slides);
-figure.getElement('nav').goToSlide(6);
+figure.getElement('nav').goToSlide(0);
 // slides.push({
 //   text: []
 // })
