@@ -12,9 +12,19 @@ const A = 0.6;   // m
 let c = 1;       // m/s
 
 const equationPosition = new Point(0, 2.2);
-const sideEquationPosition = new Point(1.4, 1.6);
+const sideEquationPosition = new Point(1.4, 2.5);
 const colorText = [0.4, 0.4, 0.4, 1];
-
+const color0 = [1, 0, 0, 1];
+const color1 = [0, 0.5, 1, 1];
+/*
+..........###....##.....##.####..######.
+.........##.##....##...##...##..##....##
+........##...##....##.##....##..##......
+.......##.....##....###.....##...######.
+.......#########...##.##....##........##
+.......##.....##..##...##...##..##....##
+.......##.....##.##.....##.####..######.
+*/
 const xAxis = (name, title, units, length = 3) => ({
   name,
   method: 'collections.axis',
@@ -107,6 +117,7 @@ figure.add({
       options: {
         simple: true,
         width: 0.01,
+        color: color0,
       },
     },
   ],
@@ -130,7 +141,7 @@ figure.add({
     width: 0.3,
     height: 0.2,
     corner: { radius: 0.03, sides: 3 },
-    position: [0, 0.5],
+    position: [0, 0.2],
   },
   mods: {
     isTouchable: true,
@@ -156,7 +167,7 @@ const ball = (x, index, sides = 20) => ({
     sides,
     radius: 0.02,
     transform: new Transform().translate(x, 0),
-    color: [1, 0, 0, 1],
+    color: color1,
   },
   mods: {
     dimColor: [0.7, 0.7, 0.7, 1],
@@ -169,7 +180,7 @@ const time = new TimeKeeper();
 let enableMaxTime = false;
 let timeMax = false;
 
-const xValues = range(0, 5, 0.05);
+const xValues = range(0, 5, 0.07);
 xValues.forEach((x, index) => {
   const drawX = spaceX.valueToDraw(x);
   figure.add(ball(drawX, index));
@@ -178,8 +189,9 @@ xValues.forEach((x, index) => {
   b.custom.drawX = drawX;
   b.custom.drawXSmall = spaceXSmall.valueToDraw(x);
 });
-const b0 = balls.getElement('index0');
+const b0 = balls.getElement('ball0');
 balls.toFront(['ball0']);
+b0.setColor(color0);
 
 // figure.add(ball(spaceX.valueToDraw(0), 0, 50));
 // const b0 = balls.getElement('ball0');
@@ -190,18 +202,18 @@ balls.toFront(['ball0']);
 //     left: 0, right: 0, bottom: -A, top: A,
 //   },
 // };
-let timeoutId = null;
-movePad.subscriptions.add('stopBeingMoved', () => {
-  // if (enableMaxTime) {
-  //   if (timeoutId != null) {
-  //     clearTimeout(timeoutId);
-  //     timeoutId = null;
-  //   }
-  //   movePad.subscriptions.add('stopBeingMoved', () => {
-  //     timeoutId = setTimeout(() => time.pause(), 500);
-  //   }, 1);
-  // }
-});
+// let timeoutId = null;
+// movePad.subscriptions.add('stopBeingMoved', () => {
+//   if (enableMaxTime) {
+//     if (timeoutId != null) {
+//       clearTimeout(timeoutId);
+//       timeoutId = null;
+//     }
+//     movePad.subscriptions.add('stopBeingMoved', () => {
+//       timeoutId = setTimeout(() => time.pause(), 500);
+//     }, 1);
+//   }
+// });
 
 movePad.subscriptions.add('setTransform', () => {
   if (enableMaxTime && timeMax) {
@@ -213,15 +225,16 @@ movePad.subscriptions.add('setTransform', () => {
 
 // Update function for everytime we want to update the signal
 function update() {
+  if (!spacePlot.isShown) {
+    return;
+  }
   const deltaTime = time.step();
   const { y } = movePad.transform.order[2];
   data.record(y, deltaTime);
-  // console.log(time.now())
   if (enableMaxTime && time.now() > 5 && timeMax === false) {
-    // b0.isTouchable = false;
     timeMax = true;
     time.pause();
-    resetButton.pulse({ scale: 1.2 });
+    resetButton.pulse({ scale: 1.1, duration: 10000, frequency: 1.5 });
   }
   for (let i = 0; i < xValues.length; i += 1) {
     const b = balls[`_ball${i}`];
@@ -259,16 +272,17 @@ const reset = () => {
   time.reset();
   data.reset(0);
   time.pause();
+  timeMax = false;
 };
 
 resetButton.onClick = () => {
   reset();
-  timeMax = false;
   time.pause();
 };
 
 const disturbPulse = () => {
   reset();
+  time.unpause();
   const y = rand(0.1, 0.3) * randSign();
   const t = rand(0.2, 0.4);
   movePad.animations.new()
@@ -293,8 +307,27 @@ const disturbSine = (delay = 0, resetSignal = true) => {
     .start();
 };
 
+const disturbPulse1 = () => {
+  reset();
+  movePad.animations.new()
+    .position({ duration: 1.2, target: [0, 0.4], progression: 'easeout' })
+    .position({ duration: 0.7, target: [0, -0.2], progression: 'easeinout' })
+    .position({ duration: 0.5, target: [0, 0], progression: 'easein' })
+    .start();
+};
+
 balls.dim();
 
+
+/*
+.......########..#######..##.....##....###....########.####..#######..##....##
+.......##.......##.....##.##.....##...##.##......##.....##..##.....##.###...##
+.......##.......##.....##.##.....##..##...##.....##.....##..##.....##.####..##
+.......######...##.....##.##.....##.##.....##....##.....##..##.....##.##.##.##
+.......##.......##..##.##.##.....##.#########....##.....##..##.....##.##..####
+.......##.......##....##..##.....##.##.....##....##.....##..##.....##.##...###
+.......########..#####.##..#######..##.....##....##....####..#######..##....##
+*/
 const b1 = content => ({
   brac: {
     left: 'lb1', content, right: 'rb1', height: 0.2, descent: 0.05,
@@ -355,8 +388,6 @@ const stk = (content, num) => ({
   },
 });
 
-const color0 = [1, 0, 0, 1];
-const color1 = [0, 0.5, 1, 1];
 // const colorDef = [0.4, 0.4, 0.4, 1];
 const colorDef = colorText.slice();
 const dimColor = [0.75, 0.75, 0.75, 1];
@@ -811,15 +842,20 @@ slides.push({
     // },
   ],
   form: '0',
-  enterStateCommon: () => {
+  enterStateCommon: (from) => {
     spaceXSmall.hide();
     spaceX.show();
     spacePlot.setScenario('default');
     timePlot.hide();
+    resetButton.hide();
+    if (from !== 'prev') {
+      reset();
+    }
+    time.unpause();
+    enableMaxTime = false;
   },
   steadyState: () => {
     reset();
-    disturbSine(0, false);
     spacePlot.setScenario('default');
     timePlot.hide();
     // const now = time.now();
@@ -832,6 +868,7 @@ slides.push({
     });
     balls.dim();
     sideEqn.hide();
+    disturbSine(0, false);
   },
   // leaveStateCommon: () => { getPhase(); },
 });
@@ -877,6 +914,7 @@ slides.push({
   steadyState: () => {
     reset();
     disturbPulse();
+    balls.highlight(['ball0']);
   },
 });
 
@@ -920,7 +958,37 @@ slides.push({
 */
 // /////////////////////////////////////////////////////////////////
 slides.push({
-  text: ' ',
+  text: '|pulse|   |slow|   |normal|',
+  modifiers: {
+    pulse: {
+      onClick: () => disturbPulse1(),
+      isTouchable: true,
+      touchBorder: 0.05,
+      font: { color: color1 },
+    },
+    slow: {
+      onClick: () => {
+        figure.stop();
+        reset();
+        time.setTimeSpeed(0.3);
+        movePad.animations.setTimeSpeed(0.3);
+      },
+      isTouchable: true,
+      touchBorder: 0.05,
+      font: { color: color1 },
+    },
+    normal: {
+      onClick: () => {
+        figure.stop();
+        reset();
+        time.setTimeSpeed(1);
+        movePad.animations.setTimeSpeed(1);
+      },
+      isTouchable: true,
+      touchBorder: 0.05,
+      font: { color: color1 },
+    },
+  },
   form: null,
   enterState: () => {
     figure.stop();
@@ -928,6 +996,8 @@ slides.push({
     time.pause();
     eqn.hide();
     sideEqn.hide();
+    resetButton.show();
+    balls.highlight(['ball0']);
   },
   // transition: (done) => {
   //   spacePlot.animations.new()
@@ -1142,6 +1212,12 @@ figure.getElement('nav').goToSlide(6);
 // slides.push({
 //   text: []
 // })
+
+
+
+
+
+
 
 // The sine function repeats when the value it operates changes by 2π.
 //

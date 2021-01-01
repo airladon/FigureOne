@@ -91,20 +91,20 @@ function Recorder() {
 
 function TimeKeeper() {
   let time = 0;
-  const timeSpeed = 1;
+  let timeSpeed = 1;
   let cumPauseTime = 0;
   let startPauseTime = 0;
 
   let paused = false;
   let blurred = false;
 
-  function machineNow() {
+  function getNow() {
     return performance.now() / 1000;
   }
-  let startTime = machineNow();
+  let startTime = getNow();
 
   function reset() {
-    startTime = machineNow();
+    startTime = getNow();
     time = 0;
     cumPauseTime = 0;
     startPauseTime = 0;
@@ -116,7 +116,7 @@ function TimeKeeper() {
     }
     const lastTime = time;
     if (delta == null) {
-      time = (machineNow() - startTime - cumPauseTime) * timeSpeed;
+      time = (getNow() - startTime - cumPauseTime) * timeSpeed;
     } else {
       time += delta;
     }
@@ -125,12 +125,13 @@ function TimeKeeper() {
 
   function pauseTime() {
     if ((paused || blurred) && startPauseTime === 0) {
-      startPauseTime = machineNow();
+      startPauseTime = getNow();
     }
   }
+
   function unpauseTime() {
     if (!paused && !blurred && startPauseTime > 0) {
-      cumPauseTime += machineNow() - startPauseTime;
+      cumPauseTime += getNow() - startPauseTime;
       startPauseTime = 0;
     }
   }
@@ -148,12 +149,9 @@ function TimeKeeper() {
   function unpause() { paused = false; unpauseTime(); }
   function isPaused() { return paused || blurred; }
   function now() { return time; }
-
-  // function getIsPaused() {
-  //   return isPaused && isNotFocused;
-  // }
+  function setTimeSpeed(speed) { timeSpeed = speed; }
 
   return {
-    reset, now, step, pause, unpause, isPaused,
+    reset, now, step, pause, unpause, isPaused, setTimeSpeed,
   };
 }

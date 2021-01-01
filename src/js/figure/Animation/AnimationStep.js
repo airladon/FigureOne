@@ -246,12 +246,12 @@ export default class AnimationStep {
 
   // returns remaining time if this step completes
   // Return of 0 means this step is still going
-  nextFrame(now: number) {
+  nextFrame(now: number, speed: number) {
     if (this.startTime == null) {
       // console.log('new Start', this.startTime, now, this.startTimeOffset)
       this.startTime = now - this.startTimeOffset;
     }
-    const deltaTime = now - this.startTime;
+    const deltaTime = (now - this.startTime) * speed;
     // console.log(now, this.startTime, deltaTime, this.startDelay);
     let remainingTime = math.round(-(this.duration + this.startDelay - deltaTime), this.precision);
     if (deltaTime >= this.startDelay) {

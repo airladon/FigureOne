@@ -219,6 +219,8 @@ export default class AnimationManager {
     },
   };
 
+  animationSpeed: number;
+
   customSteps: Array<{
     step: (Object) => AnimationStep,
     name: string,
@@ -251,6 +253,7 @@ export default class AnimationManager {
     this.finishedCallback = options.finishedCallback;
     this.subscriptions = new SubscriptionManager();
     this.customSteps = [];
+    this.animationSpeed = 1;
     // this.setupAnimationSteps();
     return this;
   }
@@ -283,6 +286,15 @@ export default class AnimationManager {
     return animation;
   }
 
+  /**
+   * Set time speed of animation relative to real time, where 1 is real time,
+   * <1 is slower than real time and >1 is faster than real time.
+   *
+   * @param {number} speed
+   */
+  setTimeSpeed(speed: number = 1) {
+    this.animationSpeed = speed;
+  }
 
   /**
    * Animation builder object
@@ -595,7 +607,7 @@ export default class AnimationManager {
       let animationIsAnimating = false;
       // console.log(this.element.name, animation.state)
       if (animation.state === 'waitingToStart' || animation.state === 'animating') {
-        const stepRemaining = animation.nextFrame(now);
+        const stepRemaining = animation.nextFrame(now, this.animationSpeed);
         if (remaining === null) {
           remaining = stepRemaining;
         }
