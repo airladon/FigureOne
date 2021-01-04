@@ -287,10 +287,21 @@ class CollectionsTrace extends FigureElementCollection {
     }
   }
 
+  /**
+   * Update the trace with a new set of points.
+   * @param {Array<TypeParsablePoint>} points
+   */
   update(points: Array<TypeParsablePoint>) {
     this.removeLine();
+    this.removeMarkers();
     this.points = getPoints(points);
-    this.addLine();
+    if (this.line != null) {
+      this.addLine(this.line);
+    }
+    if (this.markers != null) {
+      this.markers.copy = [];
+      this.addMarkers(this.markers);
+    }
     // if (this._line != null) {
     //   this._line.updatePoints({ points: this.points });
     // }
@@ -433,6 +444,13 @@ class CollectionsTrace extends FigureElementCollection {
         this.remove(elementName);
       }
     });
+  }
+
+  removeMarkers() {
+    const index = this.drawOrder.indexOf('markers');
+    if (index !== -1) {
+      this.remove('markers');
+    }
   }
 
   addMarkers(options: OBJ_Polygon) {
