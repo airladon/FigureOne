@@ -5820,6 +5820,26 @@ class FigureElementCollection extends FigureElement {
     return false;
   }
 
+  remove(elementName: string) {
+    if (this.elements[elementName] == null) {
+      return;
+    }
+    const element = this.elements[elementName];
+    element.animations.cancelAll('freeze', true);
+    element.stop();
+    element.parent = null;
+    element.animations = null;
+    element.move.element = null;
+    element.recorder = null;
+    element.figure = null;
+    delete this.elements[`_${elementName}`];
+    delete this.elements[elementName];
+    const index = this.drawOrder.indexOf(elementName);
+    if (index !== -1) {
+      this.drawOrder.splice(index, 1);
+    }
+  }
+
   stopAnimating(
     how: 'freeze' | 'cancel' | 'complete' | 'animateToComplete' | 'dissolveToComplete' = 'cancel',
     name: string | null = null,

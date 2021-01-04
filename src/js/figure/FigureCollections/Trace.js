@@ -287,6 +287,15 @@ class CollectionsTrace extends FigureElementCollection {
     }
   }
 
+  update(points: Array<TypeParsablePoint>) {
+    this.removeLine();
+    this.points = getPoints(points);
+    this.addLine();
+    // if (this._line != null) {
+    //   this._line.updatePoints({ points: this.points });
+    // }
+  }
+
   pointToDraw(p: Point) {
     return new Point(this.xAxis.valueToDraw(p.x), this.yAxis.valueToDraw(p.y));
   }
@@ -334,6 +343,7 @@ class CollectionsTrace extends FigureElementCollection {
     this.polylines = [];
     this.drawPoints = this.points.map(p => this.pointToDraw(p));
     this.drawPoints = [];
+
     let sampling = false;
     if (this.xSampleDistance != null && this.ySampleDistance != null) {
       sampling = true;
@@ -413,7 +423,15 @@ class CollectionsTrace extends FigureElementCollection {
     this.line = joinObjects({}, defaultOptions, options);
     this.polylines.forEach((points, index) => {
       const line = this.collections.primitives.polyline(joinObjects({}, this.line, { points }));
-      this.add(`${line}${index}`, line);
+      this.add(`line${index}`, line);
+    });
+  }
+
+  removeLine() {
+    this.drawOrder.forEach((elementName) => {
+      if (elementName.startsWith('line')) {
+        this.remove(elementName);
+      }
     });
   }
 

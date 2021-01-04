@@ -179,6 +179,7 @@ const data = new Recorder();
 const time = new TimeKeeper();
 let enableMaxTime = false;
 let timeMax = false;
+let maxRecordTime = 5;
 
 const xValues = range(0, 5, 0.07);
 xValues.forEach((x, index) => {
@@ -231,7 +232,7 @@ function update() {
   const deltaTime = time.step();
   const { y } = movePad.transform.order[2];
   data.record(y, deltaTime);
-  if (enableMaxTime && time.now() > 5 && timeMax === false) {
+  if (enableMaxTime && time.now() > maxRecordTime && timeMax === false) {
     timeMax = true;
     time.pause();
     resetButton.pulse({ scale: 1.1, duration: 10000, frequency: 1.5 });
@@ -310,9 +311,11 @@ const disturbSine = (delay = 0, resetSignal = true) => {
 const disturbPulse1 = () => {
   reset();
   movePad.animations.new()
-    .position({ duration: 1.2, target: [0, 0.4], progression: 'easeout' })
-    .position({ duration: 0.7, target: [0, -0.2], progression: 'easeinout' })
-    .position({ duration: 0.5, target: [0, 0], progression: 'easein' })
+    // .position({ duration: 1.2, target: [0, 0.4], progression: 'easeout' })
+    // .position({ duration: 0.7, target: [0, -0.2], progression: 'easeinout' })
+    // .position({ duration: 0.5, target: [0, 0], progression: 'easein' })
+    .position({ duration: 0.6, target: [0, 0.4], progression: 'easein' })
+    .position({ duration: 1.9, target: [0, 0], progression: 'easeinout' })
     .start();
 };
 
@@ -832,6 +835,16 @@ const modifiers = {
 */
 // /////////////////////////////////////////////////////////////////
 slides.push({
+  steadyState: () => {
+    // figure.elements.hideAll();
+    // figure.getElement('plot').show();
+    spacePlot.hide();
+    timePlot.hide();
+    sideEqn.hide();
+    eqn.hide();
+  }
+});
+slides.push({
   modifiersCommon: modifiers,
   text: [
     'Explore the equation of a travelling sine wave and the relationship',
@@ -958,10 +971,52 @@ slides.push({
 */
 // /////////////////////////////////////////////////////////////////
 slides.push({
-  text: '|pulse|   |slow|   |normal|',
+  text: '|pulse|   |slow|   |normal|    |sin|   |slowv|   |fastv|   |normalv|',
   modifiers: {
+    normalv: {
+      onClick: () => {
+        figure.stop();
+        reset();
+        c = 1;
+        disturbPulse1();
+        maxRecordTime = 5;
+      },
+      isTouchable: true,
+      touchBorder: 0.05,
+      font: { color: color1 },
+    },
+    fastv: {
+      onClick: () => {
+        figure.stop();
+        reset();
+        c = 2;
+        disturbPulse1();
+        maxRecordTime = 2.5;
+      },
+      isTouchable: true,
+      touchBorder: 0.05,
+      font: { color: color1 },
+    },
+    slowv: {
+      onClick: () => {
+        figure.stop();
+        reset();
+        c = 0.5;
+        disturbPulse1();
+        maxRecordTime = 5;
+      },
+      isTouchable: true,
+      touchBorder: 0.05,
+      font: { color: color1 },
+    },
     pulse: {
       onClick: () => disturbPulse1(),
+      isTouchable: true,
+      touchBorder: 0.05,
+      font: { color: color1 },
+    },
+    sin: {
+      onClick: () => disturbSine(),
       isTouchable: true,
       touchBorder: 0.05,
       font: { color: color1 },
@@ -1208,15 +1263,61 @@ slides.push({
 });
 
 figure.getElement('nav').setSlides(slides);
-figure.getElement('nav').goToSlide(6);
+figure.getElement('nav').goToSlide(0);
 // slides.push({
 //   text: []
 // })
 
 
+// Now, let's consider a disturbance at x = 0. The disturbance happens over time, so let's record the disturbance in time, while watching it propagate through the medium.
+
+// There is a lot to unpack here. Experiment 
+
+// Let's look at these two plots. At x = 0, we have some function:
+// y(x = 0, t)
+// Can we find the equation for the right plot, in terms of the left plot?
+// y(x, y) = f(y(t))
+//
+// First we recongnize that a positive moving wave has stretched out y(t) in reverse, so let's plot y(x = 0, -t). Now, how can we move this plot to have the save x axis value as the space plot? we can shift the first point by t1 (x1/c), the second point by t2 (x2 / c), and so on:
+// y(x = x1) = y(-t + t1) = y(-t + x1/c)
+// y(x = x2) = y(-t + t2) = y(-t + x2/c)
+// NB: t1 != t2 as c may stretch out or shrink the curve
+// NB2: As x get's larger, the function offset x/c changes and either spreads out more or shrinks more?
+
+// at: t1:
+//    x1: y(x1, t1) = y(x0, t = t1)
+//    x2: y(x2, t1) = y(x0, t = t1 - t)
+
+/**
+ - for much of t, nothing happens
+ - Then at some time t0, at x0 a pulse happens, and at dt0 a second pulse happens
+ - point x1 will feel the first pulse x1/c = t1 seconds after t0 and the second pulse t1 + dt0 seconds after t0
+ - so at t = t1, x = x1, yx1 = y0(t0)
+ - when point x1 feels the first pulse, the point before it is feeling the second pulse already at point x2 = x1 - dx, in other words its is feeling y(x=0, t = t0 + dt0)
+ - yx1, t1 = y(t0)
+ - yx1-dx, t1 = y0(t0 + dt0)
+ - yx1+dx, t1 = y0(t0 - dt0)
+ - yx1+2dx, t1 = y0(t0 - 2dt0)
+ - therefore y=x, t1 = y0(t0 - x/c)
+
+ t1 = x1/c
+ - at t1, y(t=t0) is at x1 (t1c)
+          y(t=t0+dt) is at x1-dx, or another way of saying it is at yx1-dx we see the signal at t1+dt: yx1-dx(t1+dt)
+          y(t=t0+2dt) is at x1-2dx or yx1-2dx(t1+2dt)
+          y(t=t0-dt) is at x1+dx, or yx1+dx(t1-dt)
+          y(t=t0-2dt) is at x1+2dx, or yx1+2dx(t1-2dt)
+
+          So as x gets larger, at yx1+ndx we see the signal y = y(x1, t1 - ndt)
+        at t1, y(x) = y(t1-t) = y(x1/c - t)
+
+ */
 
 
+// Now let's look at the time function of the disturbance at x=0, and the wave it creates at the same time. Let's also dramatically slow things down.
 
+// We see that when the wave is travelling in the positive x direction, it spreads the time signal out in reverse.
+
+// When a wave is travelling to the right, the time function is stretched out in reverse
 
 
 // The sine function repeats when the value it operates changes by 2π.
@@ -1317,3 +1418,62 @@ figure.getElement('nav').goToSlide(6);
 //     position: [0, 1],
 //   },
 // });
+
+
+const x = Fig.tools.math.range(-10, 10, 0.01);
+const t = Fig.tools.math.range(0, 5, 0.01);
+const ft = (tt) => {
+  if (tt < 0) {
+    return 0;
+  }
+  if (tt < 1.5) {
+    return tt / 3;
+  }
+  if (tt < 2) {
+    return 1.5 / 3 - (tt - 1.5);
+  }
+  return 0;
+};
+const ftPoints = t.map(tt => new Point(tt, ft(tt)));
+const v = 2;
+const tNow = 4;
+// const fxPoints = x.map(xx => xx <= 0 ? new Point(xx, ft(tNow + xx / v)) : new Point(xx, ft(tNow - xx / v)));
+const fxPoints = x.map(xx => xx <= 1 ? new Point(xx, ft(tNow + (xx - 1) / v)) : new Point(xx, ft(tNow - (xx - 1) / v)));
+// const v = 1;
+// const tNow = 1;
+// const fxtNow = t.map(tt => {
+
+// });
+
+figure.add({
+  name: 'plot',
+  method: 'collections.plot',
+  options: {
+    trace: ftPoints,
+    width: 1,
+    yAxis: {
+      start: -0.5,
+      stop: 1,
+      ticks: { step: 0.25 },
+    },
+    xAxis: { ticks: { step: 0.5 }, labels: { precision: 1 } },
+    position: [-1.5, 1],
+  },
+});
+
+figure.add({
+  name: 'plotX',
+  method: 'collections.plot',
+  options: {
+    trace: fxPoints,
+    width: 2,
+    yAxis: {
+      start: -0.5,
+      stop: 1,
+      ticks: { step: 0.25 },
+      labels: { precision: 2 },
+    },
+    xAxis: { ticks: { step: 2 }, labels: { precision: 1 }, stop: 10 },
+    position: [0, 1],
+  },
+});
