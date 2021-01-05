@@ -10,30 +10,30 @@ const getFxSparse = (xMax, ox, oy) => xSparse.filter(xx => xx <= xMax + 0.001).m
 const plotPosition = new Point(-1.7, -0.8);
 const width = 2;
 const height = 1.8;
-const makeEqn = (name) => (
-  {
-    method: 'collections.equation',
-    options: {
-      elements: {
-        value1: '1',
-        value2: '1',
-        equals: ' = ',
-        sign: ' \u2212 ',
-      },
-      phrases: {
-        yx: ['y', '_(_1', 'value1', '_)_1'],
-        fx: ['f', ' ', '_(_2', 'value2', '_)_2'],
-      },
-      forms: {
-        0: ['yx', '_ = ', 'fx'],
-      },
-      formDefaults: {
-        alignment: { xAlign: 'left' },
-      },
-      // position: [-0.7, -1.1],
+const makeEqn = (name, position) => ({
+  name,
+  method: 'collections.equation',
+  options: {
+    elements: {
+      value1: '1',
+      value2: '1',
+      equals: ' = ',
+      sign: ' \u2212 ',
     },
+    phrases: {
+      yx: ['y', '_(_1', 'value1', '_)_1'],
+      fx: ['f', ' ', '_(_2', 'value2', '_)_2'],
+    },
+    forms: {
+      0: ['yx', '_ = ', 'fx'],
+    },
+    formDefaults: {
+      alignment: { xAlign: 'left' },
+    },
+    position,
+    scale: 0.5
   },
-)
+});
 
 // Movable angle
 figure.add([
@@ -60,7 +60,7 @@ figure.add([
               line: { width: 0.01, color: [1, 0, 0, 1] },
             },
             {
-              points: getFxSparse(-3, 0, 0),
+              points: [],
               name: 'marks',
               markers: { radius: 0.02, color: [1, 0, 0, 1], sides: 10 },
             }
@@ -113,7 +113,8 @@ figure.add([
         method: 'collections.line',
         options: {
           width: 0.003,
-          color: [0, 0, 1, 1],
+          dash: [0.02, 0.01],
+          color: [1, 0, 0, 1],
         }
       },
       {
@@ -121,25 +122,26 @@ figure.add([
         method: 'collections.line',
         options: {
           width: 0.003,
-          color: [0, 0, 1, 1],
+          dash: [0.02, 0.01],
+          color: [1, 0, 0, 1],
         }
       },
       {
         name: 'drawPoint',
         method: 'primitives.polygon',
         options: {
-          radius: 0.03,
+          radius: 0.02,
           sides: 20,
         }
       },
-      {
-        name: 'refPoint',
-        method: 'primitives.polygon',
-        options: {
-          radius: 0.03,
-          sides: 20,
-        }
-      }
+      // {
+      //   name: 'refPoint',
+      //   method: 'primitives.polygon',
+      //   options: {
+      //     radius: 0.03,
+      //     sides: 20,
+      //   }
+      // }
     ],
   },
   {
@@ -185,11 +187,13 @@ figure.add([
   //     position: [-0.7, -1.1],
   //   },
   // },
-  makeEqn('eqn1'),
-  makeEqn('eqn2'),
-  makeEqn('eqn3'),
-  makeEqn('eqn4'),
-  makeEqn('eqn5'),
+  makeEqn('eqn0', [0.8, 0.8]),
+  makeEqn('eqn1', [0.8, 0.6]),
+  makeEqn('eqn2', [0.8, 0.4]),
+  makeEqn('eqn3', [0.8, 0.2]),
+  makeEqn('eqn4', [0.8, 0]),
+  makeEqn('eqn5', [0.8, -0.2]),
+  makeEqn('eqn6', [0.8, -0.4]),
   // makeEqn('eqn6'),
   // makeEqn('eqn7'),
 ]);
@@ -205,8 +209,8 @@ const xAxis = figure.getElement('diagram.plot.x');
 const yAxis = figure.getElement('diagram.plot.y');
 // const xLine = figure.getElement('diagram.xLine');
 const drawPoint = figure.getElement('diagram.drawPoint');
-const refPoint = figure.getElement('diagram.refPoint');
-const eqn1 = figure.getElement('eqn1');
+// const refPoint = figure.getElement('diagram.refPoint');
+// const eqn1 = figure.getElement('eqn1');
 const vLine = figure.getElement('diagram.vLine')
 const hLine = figure.getElement('diagram.hLine')
 // console.log(eqn1)
@@ -232,36 +236,40 @@ const setLine = (xx, xOffset) => {
 //   //   .length({ start: 0, target: y, duration: 0.7 })
 // }
 
-setPoints = (xx, xOffset) => {
+setPoints = (xx, xOffset, index) => {
   const y = yAxis.valueToDraw(fx(xx, xOffset, 0).y);
   const drawX = xAxis.valueToDraw(xx);
   const drawXoffset = xAxis.valueToDraw(xx - xOffset);
   drawPoint.setPosition(drawXoffset, y);
-  refPoint.stop();
-  refPoint.setPosition(drawXoffset, y);
-  eqn1.hide();
+  // refPoint.stop();
+  // refPoint.setPosition(drawXoffset, y);
+  // eqn1.hide();
   vLine.setEndPoints([drawX, y], [drawX, 0]);
   hLine.setEndPoints([drawXoffset, y], [drawXoffset, y]);
   vLine.hide();
+  const eq = figure.getElement(`eqn${index}`);
   drawPoint.animations.new()
     .inParallel([
-      drawPoint.animations.position({ target: [drawX, y], duration: 2 }),
-      hLine.animations.length({ start: 0, target: drawX - drawXoffset, duration: 2 })
+      drawPoint.animations.position({ target: [drawX, y], duration: 1 }),
+      hLine.animations.length({ start: 0, target: drawX - drawXoffset, duration: 1, progression: 'easeinout' })
     ])
     .trigger(() => { vLine.show() })
-    .then(vLine.animations.length({ start: 0, length: y, duration: 0.5 }))
+    .then(vLine.animations.length({ start: 0, length: y, duration: 1 }))
     .trigger(() => {
       marks.update(getFxSparse(xx, xOffset, 0))
-      eqn1.show()
-      eqn1.setText({
+      eq.undim();
+      eq.show();
+      eq.setText({
         value1: `${xx}`,
         value2: `${xx - xOffset}`,
       })
-      // value1.custom.updateText({ text: `${xx}` })
-      // value2.custom.updateText({ text: `${xOffset}` })
     })
-    // .delay(2)
+    .delay(3)
+    .trigger(() => {
+      eq.dim();
+    })
     .start();
+  console.log(marks)
 }
 
 const update = () => {
@@ -285,14 +293,20 @@ movePad.subscriptions.add('setTransform', () => {
   update();
 });
 update();
-drawPoint.animations.new()
-  .trigger({ callback: () => setPoints(-2, 1), duration: 5 })
-  .trigger({ callback: () => setPoints(-1, 1), duration: 5 })
-  .trigger({ callback: () => setPoints(0, 1), duration: 5 })
-  .trigger({ callback: () => setPoints(1, 1), duration: 5 })
-  .trigger({ callback: () => setPoints(2, 1), duration: 5 })
-  .trigger({ callback: () => setPoints(3, 1), duration: 5 })
-  .trigger({ callback: () => setPoints(4, 1), duration: 5 })
+const hideEquations = () => {
+  for (let i = 0; i < 7; i += 1) {
+    figure.getElement(`eqn${i}`).hide();
+  }
+}
+hideEquations();
+trace.animations.new()
+  .trigger({ callback: () => setPoints(-2, 1, 0), duration: 5 })
+  .trigger({ callback: () => setPoints(-1, 1, 1), duration: 5 })
+  .trigger({ callback: () => setPoints(0, 1, 2), duration: 5 })
+  .trigger({ callback: () => setPoints(1, 1, 3), duration: 5 })
+  .trigger({ callback: () => setPoints(2, 1, 4), duration: 5 })
+  .trigger({ callback: () => setPoints(3, 1, 5), duration: 5 })
+  .trigger({ callback: () => setPoints(4, 1, 6), duration: 5 })
   .start();
 
   // .custom({

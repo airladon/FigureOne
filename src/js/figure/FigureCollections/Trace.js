@@ -459,11 +459,11 @@ class CollectionsTrace extends FigureElementCollection {
       color: this.color,
     };
     const markers = this.points.filter(p => this.inAxes(p));
+    const o = joinObjects({}, defaultOptions, options);
+    this.markers = o;
     if (markers.length === 0) {
       return;
     }
-    const o = joinObjects({}, defaultOptions, options);
-    this.markers = o;
     if (o.copy == null) {
       o.copy = [];
     } else if (Array.isArray(o.copy) === false) {
