@@ -1147,6 +1147,22 @@ export class Equation extends FigureElementCollection {
     return this.eqn.currentFormSeriesName;
   }
 
+  setText(elements: { [name: string]: string }) {
+    Object.keys(elements).forEach((elementName) => {
+      const e = this.getElement(elementName);
+      e.custom.updateText({ text: elements[elementName] });
+      // console.log(elementName, e)
+    });
+    Object.keys(this.eqn.forms).forEach((formName) => {
+      const form = this.eqn.forms[formName];
+      const {
+        scale, xAlign, yAlign, fixTo,
+      } = form.arranged;
+      // console.log(formName, form);
+      form.arrange(scale, xAlign, yAlign, fixTo);
+    });
+  }
+
   makeTextElem(
     options: {
       text?: string,

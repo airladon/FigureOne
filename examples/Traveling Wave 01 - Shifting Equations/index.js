@@ -2,12 +2,39 @@ figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] });
 
 const { Point } = Fig;
 const x = Fig.tools.math.range(-5, 5, 0.1);
+const xSparse = Fig.tools.math.range(-5, 5, 1);
 const fx = (xx, ox, oy) => new Point(xx, (xx - ox) ** 2 + oy);
 const getFx = (ox, oy) => x.map(xx => fx(xx, ox, oy));
+const getFxSparse = (xMax, ox, oy) => xSparse.filter(xx => xx <= xMax + 0.001).map(xx => fx(xx, ox, oy));
 
 const plotPosition = new Point(-1.7, -0.8);
 const width = 2;
-const height = 1.6;
+const height = 1.8;
+const makeEqn = (name) => (
+  {
+    method: 'collections.equation',
+    options: {
+      elements: {
+        value1: '1',
+        value2: '1',
+        equals: ' = ',
+        sign: ' \u2212 ',
+      },
+      phrases: {
+        yx: ['y', '_(_1', 'value1', '_)_1'],
+        fx: ['f', ' ', '_(_2', 'value2', '_)_2'],
+      },
+      forms: {
+        0: ['yx', '_ = ', 'fx'],
+      },
+      formDefaults: {
+        alignment: { xAlign: 'left' },
+      },
+      // position: [-0.7, -1.1],
+    },
+  },
+)
+
 // Movable angle
 figure.add([
   {
@@ -32,6 +59,11 @@ figure.add([
               name: 'powerCurver',
               line: { width: 0.01, color: [1, 0, 0, 1] },
             },
+            {
+              points: getFxSparse(-3, 0, 0),
+              name: 'marks',
+              markers: { radius: 0.02, color: [1, 0, 0, 1], sides: 10 },
+            }
           ],
           width,
           height,
@@ -42,7 +74,7 @@ figure.add([
           },
           yAxis: {
             start: 0,
-            stop: 8,
+            stop: 9,
             ticks: { step: 1 },
           },
         },
@@ -53,17 +85,14 @@ figure.add([
         options: {
           width: 2,
           height: height + 0.2,
-          // position: [plotPosition.x + width / 2, plotPosition.y + height / 2 + 0.1],
           position: [width / 2, height / 2],
-          color: [1, 0, 0, 0.3],
+          color: [1, 0, 0, 0.1],
         },
         mods: {
           isMovable: true,
           move: {
             style: 'translation',
             bounds: { translation: {
-              // left: -1, right: 1, bottom: -0.2, top: -0.2
-              // p1: plotPosition.add(0, height / 2 + 0.1),
               p1: [0, height / 2],
               mag: width,
               angle: 0,
@@ -71,13 +100,44 @@ figure.add([
           }
         }
       },
+      // {
+      //   name: 'xLine',
+      //   method: 'primitives.polyline',
+      //   options: {
+      //     width: 0.003,
+      //     color: [0, 0, 1, 1],
+      //   }
+      // },
       {
-        name: 'xLine',
-        method: 'primitives.polyline',
+        name: 'vLine',
+        method: 'collections.line',
         options: {
           width: 0.003,
-          // dash: [0.05, 0.01],
           color: [0, 0, 1, 1],
+        }
+      },
+      {
+        name: 'hLine',
+        method: 'collections.line',
+        options: {
+          width: 0.003,
+          color: [0, 0, 1, 1],
+        }
+      },
+      {
+        name: 'drawPoint',
+        method: 'primitives.polygon',
+        options: {
+          radius: 0.03,
+          sides: 20,
+        }
+      },
+      {
+        name: 'refPoint',
+        method: 'primitives.polygon',
+        options: {
+          radius: 0.03,
+          sides: 20,
         }
       }
     ],
@@ -102,15 +162,107 @@ figure.add([
       position: [0, -1.3],
     },
   },
+  // {
+  //   name: 'eqn1',
+  //   method: 'collections.equation',
+  //   options: {
+  //     elements: {
+  //       value1: '1',
+  //       value2: '1',
+  //       equals: ' = ',
+  //       sign: ' \u2212 ',
+  //     },
+  //     phrases: {
+  //       yx: ['y', '_(_1', 'value1', '_)_1'],
+  //       fx: ['f', ' ', '_(_2', 'value2', '_)_2'],
+  //     },
+  //     forms: {
+  //       0: ['yx', '_ = ', 'fx'],
+  //     },
+  //     formDefaults: {
+  //       alignment: { fixTo: '_ =', xAlign: 'center' },
+  //     },
+  //     position: [-0.7, -1.1],
+  //   },
+  // },
+  makeEqn('eqn1'),
+  makeEqn('eqn2'),
+  makeEqn('eqn3'),
+  makeEqn('eqn4'),
+  makeEqn('eqn5'),
+  // makeEqn('eqn6'),
+  // makeEqn('eqn7'),
 ]);
 
 const movePad = figure.getElement('diagram.movePad');
-const trace = figure.getElement('diagram.plot.powerCurver')
+const trace = figure.getElement('diagram.plot.powerCurver');
+const marks = figure.getElement('diagram.plot.marks');
 const value = figure.getElement('eqn.value');
+const value1 = figure.getElement('eqn1.value1');
+const value2 = figure.getElement('eqn1.value2');
 const sign = figure.getElement('eqn.sign');
 const xAxis = figure.getElement('diagram.plot.x');
 const yAxis = figure.getElement('diagram.plot.y');
-const xLine = figure.getElement('diagram.xLine');
+// const xLine = figure.getElement('diagram.xLine');
+const drawPoint = figure.getElement('diagram.drawPoint');
+const refPoint = figure.getElement('diagram.refPoint');
+const eqn1 = figure.getElement('eqn1');
+const vLine = figure.getElement('diagram.vLine')
+const hLine = figure.getElement('diagram.hLine')
+// console.log(eqn1)
+
+const setLine = (xx, xOffset) => {
+  const y = fx(xx, xOffset, 0);
+  const drawX = xAxis.valueToDraw(xx);
+  const drawXoffset = xAxis.valueToDraw(xx - xOffset);
+  const points = [
+    [drawX, 0],
+    [drawXoffset, 0],
+    [drawXoffset, Math.min(yAxis.valueToDraw(y.y), yAxis.valueToDraw(8))],
+  ];
+  // xLine.custom.updatePoints({ points });
+  drawPoint.setPosition(drawX, 0);
+}
+
+// const setVLine = (xx, xOffset) => {
+//   const y = yAxis.valueToDraw(fx(xx, xOffset, 0).y);
+//   const drawX = xAxis.valueToDraw(xx);
+//   vLine.setEndPoints([drawX, y], [drawX, 0]);
+//   // vLine.animations.new()
+//   //   .length({ start: 0, target: y, duration: 0.7 })
+// }
+
+setPoints = (xx, xOffset) => {
+  const y = yAxis.valueToDraw(fx(xx, xOffset, 0).y);
+  const drawX = xAxis.valueToDraw(xx);
+  const drawXoffset = xAxis.valueToDraw(xx - xOffset);
+  drawPoint.setPosition(drawXoffset, y);
+  refPoint.stop();
+  refPoint.setPosition(drawXoffset, y);
+  eqn1.hide();
+  vLine.setEndPoints([drawX, y], [drawX, 0]);
+  hLine.setEndPoints([drawXoffset, y], [drawXoffset, y]);
+  vLine.hide();
+  drawPoint.animations.new()
+    .inParallel([
+      drawPoint.animations.position({ target: [drawX, y], duration: 2 }),
+      hLine.animations.length({ start: 0, target: drawX - drawXoffset, duration: 2 })
+    ])
+    .trigger(() => { vLine.show() })
+    .then(vLine.animations.length({ start: 0, length: y, duration: 0.5 }))
+    .trigger(() => {
+      marks.update(getFxSparse(xx, xOffset, 0))
+      eqn1.show()
+      eqn1.setText({
+        value1: `${xx}`,
+        value2: `${xx - xOffset}`,
+      })
+      // value1.custom.updateText({ text: `${xx}` })
+      // value2.custom.updateText({ text: `${xOffset}` })
+    })
+    // .delay(2)
+    .start();
+}
 
 const update = () => {
   const p = movePad.getPosition('local');
@@ -124,13 +276,31 @@ const update = () => {
     sign.custom.updateText({ text: ' + ' });
   }
 
-  const lineRef = xAxis.valueToDraw(1);
-  const lineX = xAxis.valueToDraw(1 + xOffset);
-  const lineY = yAxis.valueToDraw(1);
-  // console.log(lineX, lineY, fx(1 + xOffset))
-  xLine.custom.updatePoints({ points: [[lineX, 0], [lineX, lineY], [lineRef, lineY]] })
+  // const lineRef = xAxis.valueToDraw(1);
+  // const lineX = xAxis.valueToDraw(1 + xOffset);
+  // const lineY = yAxis.valueToDraw(1);
+  // xLine.custom.updatePoints({ points: [[lineX, 0], [lineX, lineY], [lineRef, lineY]] })
 }
 movePad.subscriptions.add('setTransform', () => {
   update();
 });
 update();
+drawPoint.animations.new()
+  .trigger({ callback: () => setPoints(-2, 1), duration: 5 })
+  .trigger({ callback: () => setPoints(-1, 1), duration: 5 })
+  .trigger({ callback: () => setPoints(0, 1), duration: 5 })
+  .trigger({ callback: () => setPoints(1, 1), duration: 5 })
+  .trigger({ callback: () => setPoints(2, 1), duration: 5 })
+  .trigger({ callback: () => setPoints(3, 1), duration: 5 })
+  .trigger({ callback: () => setPoints(4, 1), duration: 5 })
+  .start();
+
+  // .custom({
+  //   callback: (p) => {
+  //     const xx = -4 + p * 8;
+  //     setLine(xx, 1);
+  //   },
+  //   duration: 10,
+  // })
+  // .start();
+

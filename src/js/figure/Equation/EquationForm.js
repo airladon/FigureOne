@@ -242,6 +242,12 @@ export default class EquationForm extends Elements {
     yAlign: TypeVAlign | null = 'baseline',
     fixTo: FigureElementPrimitive | FigureElementCollection | Point = new Point(0, 0),
   ) {
+    this.arranged = {
+      scale,
+      xAlign,
+      yAlign,
+      fixTo,
+    };
     const elementsInCollection = this.collectionMethods.getAllElements();
     const elementsCurrentlyShowing = elementsInCollection.filter(e => e.isShown);
     this.collectionMethods.hideAll();
