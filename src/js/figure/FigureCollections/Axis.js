@@ -701,13 +701,14 @@ class CollectionsAxis extends FigureElementCollection {
 
   processTicks(
     name: 'ticks' | 'grid',
-    o: { start?: number, stop?: number, step?: number},
+    o: { start?: number, stop?: number, step?: number, values?: Array<number>},
     index: number,
   ) {
     // let { start, stop } = this;
     let start = this.startValue;
     let stop = this.stopValue;
     let step;
+    let values;
     if (o.start != null) {
       start = o.start;
     }
@@ -716,6 +717,9 @@ class CollectionsAxis extends FigureElementCollection {
     }
     if (o.step != null) {
       step = o.step;
+    }
+    if (o.values != null) {
+      values = o.values;
     }
 
     if (name === 'grid' && this.ticks.length >= index + 1) {
@@ -728,6 +732,9 @@ class CollectionsAxis extends FigureElementCollection {
       if (o.step == null) {
         step = this.ticks[index].step;
       }
+      if (o.values == null) {
+        values = this.ticks[index].values;
+      }
     }
     if (step == null && this.autoStep != null && this.autoStep < (stop - start) / 2) {
       step = this.autoStep;
@@ -736,7 +743,9 @@ class CollectionsAxis extends FigureElementCollection {
     } else if (step == null) { // $FlowFixMe
       step = this[name].step / 2;
     }
-    return { start, stop, step };
+    return {
+      start, stop, step, values,
+    };
   }
 
   addTicks(optionsInOrBool: OBJ_AxisTicks | Array<OBJ_AxisTicks> | boolean, name: 'ticks' | 'grid' = 'ticks') {
@@ -764,7 +773,9 @@ class CollectionsAxis extends FigureElementCollection {
     const lengthSign = this.axis === 'x' ? 1 : -1;
     optionsToUse.forEach((options, index) => {
       const o = joinObjects({}, defaultOptions, options);
-      const { start, stop, step } = this.processTicks(name, o, index);
+      const {
+        start, stop, step, values,
+      } = this.processTicks(name, o, index);
       o.start = start;
       o.stop = stop;
       o.step = step;
@@ -781,8 +792,10 @@ class CollectionsAxis extends FigureElementCollection {
       }
       const num = Math.floor((o.stop + o.step / 10000 - o.start) / o.step);
       o.num = num;
-      if (o.values == null) {
+      if (values == null) {
         o.values = range(o.start, o.stop, o.step);
+      } else {
+        o.values = values;
       }
 
       if (this.axis === 'x') {

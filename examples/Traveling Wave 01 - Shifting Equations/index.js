@@ -1,4 +1,4 @@
-figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] });
+figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [0.5, 0.5, 0.5, 1], });
 
 const { Point } = Fig;
 const { round, range } = Fig.tools.math;
@@ -8,9 +8,9 @@ const fx = (xx, ox, oy) => new Point(xx, (xx - ox) ** 2 + oy);
 const getFx = (ox, oy) => x.map(xx => fx(xx, ox, oy));
 const getFxSparse = (xMax, ox, oy) => xSparse.filter(xx => xx <= xMax + 0.001).map(xx => fx(xx, ox, oy));
 
-const plotPosition = new Point(-1.1, -1);
-const width = 2.25;
-const height = 1.575;
+const plotPosition = new Point(-1.3, -1.1);
+const width = 2.67;
+const height = 1.66;
 const greyColor = [0.6, 0.6, 0.6, 1];
 const primaryColor = [1, 0, 0, 1];
 const makeEqn = (name, position, color = primaryColor) => ({
@@ -51,14 +51,15 @@ const makeFEqn = (name, label = '0') => ({
     scale: 0.4,
   },
 });
-const makeYEqn = (name, label = '0') => ({
+const makeYEqn = (name, xAlign) => ({
   name,
   method: 'collections.equation',
   options: {
     elements: {
-      value: label,
+      value: '0',
     },
     color: primaryColor,
+    formDefaults: { alignment: { xAlign } },
     forms: {
       0: ['y', ' ', '_(', 'value', '_)'],
     },
@@ -109,32 +110,59 @@ figure.add([
           width,
           height,
           xAxis: {
-            start: -5,
-            stop: 5,
-            ticks: { step: 1, width: 0 },
-            line: { width: 0 },
+            // start: -4.5,
+            // stop: 4.5,
+            // ticks: { values: [-4, -3, -2, -1, 1, 2, 3, 4], width: 0.003, offset: -0.015, length: 0.03 },
+            // labels: { offset: [0, 0.02], font: { size: 0.07, color: greyColor } },
+            // line: { width: 0.003, arrow: 'triangle' },
+            // // grid: false,
+            // title: {
+            //   text: 'x',
+            //   font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
+            //   offset: [1.2, 0.2],
+            // },
+            // position: [0, height / 8 * 1.5],
             grid: [
               { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
               { values: [0], width: 0.003, dash: [], },
             ],
+            line: { width: 0 },
+            start: -5,
+            stop: 5,
+            labels: { font: { size: 0.08 } },
+            ticks: { step: 1, width: 0, offset: [0, 0.02] },
             title: {
               text: 'x',
-              font: { family: 'Times New Roman', style: 'italic', size: 0.15 },
+              font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
             }
           },
           yAxis: {
+            // start: -1.5,
+            // stop: 5.5,
+            // ticks: { values: [-1, 1, 2, 3, 4, 5], width: 0.003, offset: -0.025, },
+            // // grid: false,
+            // line: { width: 0.003, arrow: 'triangle' },
+            // labels: { font: { size: 0.07, color: greyColor } },
+            // position: [width / 2, 0],
+            // title: {
+            //   text: 'y',
+            //   rotation: 0,
+            //   offset: [0.2, 0.85],
+            //   font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
+            // }
             start: -1,
-            stop: 6,
-            ticks: { step: 1, width: 0 },
-            line: { width: 0 },
+            stop: 5,
+            labels: { font: { size: 0.08 }, offset: [0.04, 0] },
             grid: [
               { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
               { values: [0], width: 0.003, dash: [], },
             ],
+            ticks: { step: 1, width: 0 },
+            line: { width: 0 },
             title: {
               text: 'y',
               rotation: 0,
-              font: { family: 'Times New Roman', style: 'italic', size: 0.15 },
+              font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
             }
           },
         },
@@ -203,9 +231,9 @@ figure.add([
       makeFEqn('eqnF2'),
       makeFEqn('eqnF3'),
       // makeYEqn('eqnY0', 'x'),
-      makeYEqn('eqnY1'),
-      makeYEqn('eqnY2'),
-      makeYEqn('eqnY3'),
+      makeYEqn('eqnY1', 'left'),
+      makeYEqn('eqnY2', 'center'),
+      makeYEqn('eqnY3', 'left'),
       makeMark('markF1', greyColor, 0.012),
       makeMark('markF2', greyColor, 0.012),
       makeMark('markF3', greyColor, 0.012),
@@ -372,7 +400,7 @@ const update = () => {
 
   // setElement('eqnY0', [xOffset + 1, 3], 'x');
   setElement('eqnY1', [xOffset - 1.8, 3.7], `${round(xOffset - 2, 1)}`);
-  setElement('eqnY2', [xOffset - 0.4, 0.3], `${round(xOffset, 1)}`);
+  setElement('eqnY2', [xOffset - 0, 0.3], `${round(xOffset, 1)}`);
   setElement('eqnY3', [xOffset + 1.2, 1.15], `${round(xOffset + 1, 1)}`);
   setElement('markY1', [xOffset - 2, 4]);
   setElement('markY2', [xOffset, 0]);
@@ -412,7 +440,7 @@ const animateShift = (offset) => {
 };
 // animateShift(-1);
 
-setElement('eqnF', [-3.9, 5.6]);
+setElement('eqnF', [2.4, 4.6]);
 setElement('eqnF1', [-2.8, 4.2], '-2');
 setElement('eqnF2', [-0.6, -0.3], '0');
 setElement('eqnF3', [1.1, 0.7], '1');
