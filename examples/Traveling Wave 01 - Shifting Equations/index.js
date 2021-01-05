@@ -8,9 +8,9 @@ const fx = (xx, ox, oy) => new Point(xx, (xx - ox) ** 2 + oy);
 const getFx = (ox, oy) => x.map(xx => fx(xx, ox, oy));
 const getFxSparse = (xMax, ox, oy) => xSparse.filter(xx => xx <= xMax + 0.001).map(xx => fx(xx, ox, oy));
 
-const plotPosition = new Point(-1.3, -0.8);
-const width = 2.5;
-const height = 1.75;
+const plotPosition = new Point(-1.1, -1);
+const width = 2.25;
+const height = 1.575;
 const greyColor = [0.6, 0.6, 0.6, 1];
 const primaryColor = [1, 0, 0, 1];
 const makeEqn = (name, position, color = primaryColor) => ({
@@ -66,11 +66,11 @@ const makeYEqn = (name, label = '0') => ({
   },
 });
 
-const makeMark = (name, color = greyColor) => ({
+const makeMark = (name, color = greyColor, radius = 0.017) => ({
   name,
   method: 'primitives.polygon',
   options: {
-    radius: 0.02,
+    radius,
     sides: 20,
     color,
   },
@@ -105,31 +105,37 @@ figure.add([
               name: 'marks',
               markers: { radius: 0.02, color: [1, 0, 0, 1], sides: 10 },
             },
-            // {
-            //   points: getFxSparse(5, 0, 0),
-            //   name: 'marksRef',
-            //   markers: { radius: 0.02, color: [1, 0, 0, 1], sides: 10 },
-            // }
           ],
           width,
           height,
           xAxis: {
             start: -5,
             stop: 5,
-            ticks: { step: 1 },
-            // grid: [
-            //   { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
-            //   { step: 0.2, width: 0.002, dash: [0.002, 0.002] },
-            // ],
+            ticks: { step: 1, width: 0 },
+            line: { width: 0 },
+            grid: [
+              { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
+              { values: [0], width: 0.003, dash: [], },
+            ],
+            title: {
+              text: 'x',
+              font: { family: 'Times New Roman', style: 'italic', size: 0.15 },
+            }
           },
           yAxis: {
             start: -1,
             stop: 6,
-            ticks: { step: 1 },
-            // grid: [
-            //   { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
-            //   { step: 0.2, width: 0.002, dash: [0.002, 0.002] },
-            // ],
+            ticks: { step: 1, width: 0 },
+            line: { width: 0 },
+            grid: [
+              { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
+              { values: [0], width: 0.003, dash: [], },
+            ],
+            title: {
+              text: 'y',
+              rotation: 0,
+              font: { family: 'Times New Roman', style: 'italic', size: 0.15 },
+            }
           },
         },
       },
@@ -200,9 +206,9 @@ figure.add([
       makeYEqn('eqnY1'),
       makeYEqn('eqnY2'),
       makeYEqn('eqnY3'),
-      makeMark('markF1'),
-      makeMark('markF2'),
-      makeMark('markF3'),
+      makeMark('markF1', greyColor, 0.012),
+      makeMark('markF2', greyColor, 0.012),
+      makeMark('markF3', greyColor, 0.012),
       makeMark('markY1', primaryColor),
       makeMark('markY2', primaryColor),
       makeMark('markY3', primaryColor),
@@ -217,14 +223,6 @@ figure.add([
           },
         },
       },
-      // {
-      //   name: 'refPoint',
-      //   method: 'primitives.polygon',
-      //   options: {
-      //     radius: 0.03,
-      //     sides: 20,
-      //   }
-      // }
     ],
   },
   {
@@ -244,7 +242,7 @@ figure.add([
       formDefaults: {
         alignment: { fixTo: '_ = ', xAlign: 'center' },
       },
-      position: [-0.3, -1.3],
+      position: [-0.3, 0.8],
     },
   },
   makeEqn('eqn0', [1.3, 0.6]),
@@ -252,10 +250,15 @@ figure.add([
   makeEqn('eqn2', [1.3, 0.2]),
   makeEqn('eqn3', [1.3, 0]),
   makeEqn('eqn4', [1.3, -0.2]),
-  // makeEqn('eqn5', [0.8, -0.2]),
-  // makeEqn('eqn6', [0.8, -0.4]),
-  // makeEqn('eqn6'),
-  // makeEqn('eqn7'),
+  {
+    name: 'nav',
+    method: 'collections.slideNavigator',
+    options: {
+      prevButton: { position: [-1.7, -1.4 ] },
+      nextButton: { position: [1.7, -1.4 ] },
+      // equation: 'eqn'
+    },
+  },
 ]);
 
 const movePad = figure.getElement('diagram.movePad');
@@ -369,17 +372,11 @@ const update = () => {
 
   // setElement('eqnY0', [xOffset + 1, 3], 'x');
   setElement('eqnY1', [xOffset - 1.8, 3.7], `${round(xOffset - 2, 1)}`);
-  setElement('eqnY2', [xOffset - 0.35, 0.3], `${round(xOffset, 1)}`);
-  setElement('eqnY3', [xOffset + 1.2, 0.7], `${round(xOffset + 1, 1)}`);
+  setElement('eqnY2', [xOffset - 0.4, 0.3], `${round(xOffset, 1)}`);
+  setElement('eqnY3', [xOffset + 1.2, 1.15], `${round(xOffset + 1, 1)}`);
   setElement('markY1', [xOffset - 2, 4]);
   setElement('markY2', [xOffset, 0]);
   setElement('markY3', [xOffset + 1, 1]);
-  // setElement('markF2', [0, 0]);
-  // setElement('markF3', [1, 1]);
-  // const lineRef = xAxis.valueToDraw(1);
-  // const lineX = xAxis.valueToDraw(1 + xOffset);
-  // const lineY = yAxis.valueToDraw(1);
-  // xLine.custom.updatePoints({ points: [[lineX, 0], [lineX, lineY], [lineRef, lineY]] })
 }
 movePad.subscriptions.add('setTransform', () => {
   update();
@@ -415,10 +412,10 @@ const animateShift = (offset) => {
 };
 // animateShift(-1);
 
-setElement('eqnF', [-3.2, 6.2]);
-setElement('eqnF1', [-1.8, 4.2], '-2');
+setElement('eqnF', [-3.9, 5.6]);
+setElement('eqnF1', [-2.8, 4.2], '-2');
 setElement('eqnF2', [-0.6, -0.3], '0');
-setElement('eqnF3', [1.3, 1.2], '1');
+setElement('eqnF3', [1.1, 0.7], '1');
 setElement('markF1', [-2, 4]);
 setElement('markF2', [0, 0]);
 setElement('markF3', [1, 1]);
