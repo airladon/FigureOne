@@ -8,8 +8,8 @@ const getFx = (ox, oy) => x.map(xx => fx(xx, ox, oy));
 const getFxSparse = (xMax, ox, oy) => xSparse.filter(xx => xx <= xMax + 0.001).map(xx => fx(xx, ox, oy));
 
 const plotPosition = new Point(-1.7, -0.8);
-const width = 2;
-const height = 1.8;
+const width = 2.5;
+const height = 1.5;
 const makeEqn = (name, position) => ({
   name,
   method: 'collections.equation',
@@ -17,7 +17,7 @@ const makeEqn = (name, position) => ({
     elements: {
       value1: '1',
       value2: '1',
-      equals: ' = ',
+      equals: '  =  ',
       sign: ' \u2212 ',
     },
     phrases: {
@@ -25,10 +25,10 @@ const makeEqn = (name, position) => ({
       fx: ['f', ' ', '_(_2', 'value2', '_)_2'],
     },
     forms: {
-      0: ['yx', '_ = ', 'fx'],
+      0: ['yx', 'equals', 'fx'],
     },
     formDefaults: {
-      alignment: { xAlign: 'left' },
+      alignment: { xAlign: 'center', fixTo: 'equals' },
     },
     position,
     scale: 0.5
@@ -63,7 +63,12 @@ figure.add([
               points: [],
               name: 'marks',
               markers: { radius: 0.02, color: [1, 0, 0, 1], sides: 10 },
-            }
+            },
+            // {
+            //   points: getFxSparse(5, 0, 0),
+            //   name: 'marksRef',
+            //   markers: { radius: 0.02, color: [1, 0, 0, 1], sides: 10 },
+            // }
           ],
           width,
           height,
@@ -71,11 +76,19 @@ figure.add([
             start: -5,
             stop: 5,
             ticks: { step: 1 },
+            // grid: [
+            //   { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
+            //   { step: 0.2, width: 0.002, dash: [0.002, 0.002] },
+            // ],
           },
           yAxis: {
             start: 0,
-            stop: 9,
+            stop: 6,
             ticks: { step: 1 },
+            // grid: [
+            //   { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
+            //   { step: 0.2, width: 0.002, dash: [0.002, 0.002] },
+            // ],
           },
         },
       },
@@ -124,6 +137,10 @@ figure.add([
           width: 0.003,
           dash: [0.02, 0.01],
           color: [1, 0, 0, 1],
+          // label: {
+          //   text: null,
+          //   scale: 0.4,
+          // }
         }
       },
       {
@@ -159,9 +176,9 @@ figure.add([
         0: ['yx', '_ = ', 'f', '_ (_', 'x_2', 'sign', 'value', '_)_'],
       },
       formDefaults: {
-        alignment: { fixTo: '_ =', xAlign: 'center' },
+        alignment: { fixTo: '_ = ', xAlign: 'center' },
       },
-      position: [0, -1.3],
+      position: [1.3, -0.5],
     },
   },
   // {
@@ -187,13 +204,13 @@ figure.add([
   //     position: [-0.7, -1.1],
   //   },
   // },
-  makeEqn('eqn0', [0.8, 0.8]),
-  makeEqn('eqn1', [0.8, 0.6]),
-  makeEqn('eqn2', [0.8, 0.4]),
-  makeEqn('eqn3', [0.8, 0.2]),
-  makeEqn('eqn4', [0.8, 0]),
-  makeEqn('eqn5', [0.8, -0.2]),
-  makeEqn('eqn6', [0.8, -0.4]),
+  makeEqn('eqn0', [1.3, 0.6]),
+  makeEqn('eqn1', [1.3, 0.4]),
+  makeEqn('eqn2', [1.3, 0.2]),
+  makeEqn('eqn3', [1.3, 0]),
+  makeEqn('eqn4', [1.3, -0.2]),
+  // makeEqn('eqn5', [0.8, -0.2]),
+  // makeEqn('eqn6', [0.8, -0.4]),
   // makeEqn('eqn6'),
   // makeEqn('eqn7'),
 ]);
@@ -210,7 +227,7 @@ const yAxis = figure.getElement('diagram.plot.y');
 // const xLine = figure.getElement('diagram.xLine');
 const drawPoint = figure.getElement('diagram.drawPoint');
 // const refPoint = figure.getElement('diagram.refPoint');
-// const eqn1 = figure.getElement('eqn1');
+const eqn = figure.getElement('eqn');
 const vLine = figure.getElement('diagram.vLine')
 const hLine = figure.getElement('diagram.hLine')
 // console.log(eqn1)
@@ -245,16 +262,27 @@ setPoints = (xx, xOffset, index) => {
   // refPoint.setPosition(drawXoffset, y);
   // eqn1.hide();
   vLine.setEndPoints([drawX, y], [drawX, 0]);
-  hLine.setEndPoints([drawXoffset, y], [drawXoffset, y]);
+  // hLine.setEndPoints([drawXoffset, y], [drawXoffset, y]);
   vLine.hide();
   const eq = figure.getElement(`eqn${index}`);
   drawPoint.animations.new()
+    .pulse({ scale: 3, duration: 0.9 })
     .inParallel([
       drawPoint.animations.position({ target: [drawX, y], duration: 1 }),
-      hLine.animations.length({ start: 0, target: drawX - drawXoffset, duration: 1, progression: 'easeinout' })
+      // hLine.animations.length({
+      //   start: 0,
+      //   target: drawX - drawXoffset,
+      //   duration: 1,
+      //   progression: 'easeinout',
+      //   // beforeFrame: () => {
+      //   //   const l = hLine.getLength();
+      //   //   const xLength = xAxis.drawToValue(l);
+      //   //   hLine.setLabel(`${Fig.tools.math.round(xLength, 1).toFixed(1)}`);
+      //   // }})
+      // })
     ])
     .trigger(() => { vLine.show() })
-    .then(vLine.animations.length({ start: 0, length: y, duration: 1 }))
+    .then(vLine.animations.length({ start: 0, length: y, duration: 0.3 }))
     .trigger(() => {
       marks.update(getFxSparse(xx, xOffset, 0))
       eq.undim();
@@ -262,7 +290,8 @@ setPoints = (xx, xOffset, index) => {
       eq.setText({
         value1: `${xx}`,
         value2: `${xx - xOffset}`,
-      })
+      });
+      eq.pulse({ scale: 1.3 });
     })
     .delay(3)
     .trigger(() => {
@@ -294,27 +323,31 @@ movePad.subscriptions.add('setTransform', () => {
 });
 update();
 const hideEquations = () => {
-  for (let i = 0; i < 7; i += 1) {
+  for (let i = 0; i < 5; i += 1) {
     figure.getElement(`eqn${i}`).hide();
   }
+  eqn.hide();
 }
 hideEquations();
-trace.animations.new()
-  .trigger({ callback: () => setPoints(-2, 1, 0), duration: 5 })
-  .trigger({ callback: () => setPoints(-1, 1, 1), duration: 5 })
-  .trigger({ callback: () => setPoints(0, 1, 2), duration: 5 })
-  .trigger({ callback: () => setPoints(1, 1, 3), duration: 5 })
-  .trigger({ callback: () => setPoints(2, 1, 4), duration: 5 })
-  .trigger({ callback: () => setPoints(3, 1, 5), duration: 5 })
-  .trigger({ callback: () => setPoints(4, 1, 6), duration: 5 })
-  .start();
 
-  // .custom({
-  //   callback: (p) => {
-  //     const xx = -4 + p * 8;
-  //     setLine(xx, 1);
-  //   },
-  //   duration: 10,
-  // })
-  // .start();
-
+const animateShift = (offset) => {
+  trace.animations.new()
+    .delay(1)
+    .trigger({ callback: () => setPoints(offset - 2, offset, 0), duration: 5 })
+    .trigger({ callback: () => setPoints(offset - 1, offset, 1), duration: 5 })
+    .trigger({ callback: () => setPoints(offset, offset, 2), duration: 5 })
+    .trigger({ callback: () => setPoints(offset + 1, offset, 3), duration: 5 })
+    .trigger({ callback: () => setPoints(offset + 2, offset, 4), duration: 5 })
+    .trigger(() => {
+      eqn.show();
+      eqn.setText({ 'value': `${Math.abs(offset)}`})
+      if (offset >= 0) {
+        sign.custom.updateText({ text: ' \u2212 ' });
+      } else {
+        sign.custom.updateText({ text: ' + ' });
+      }
+      eqn.pulse({ scale: 1.3 })
+    })
+    .start();
+};
+animateShift(-1);
