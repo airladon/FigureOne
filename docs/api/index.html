@@ -9,9 +9,6 @@
   <link href='assets/style.css' rel='stylesheet'>
   <link href='assets/github.css' rel='stylesheet'>
   <link href='assets/split.css' rel='stylesheet'>
-  <!-- <link rel="stylesheet" href="/path/to/styles/default.css">
-  <script src="/path/to/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script> -->
 </head>
 <body class='documentation m0'>
     <div class='flex'>
@@ -1785,6 +1782,12 @@
                         href='#animationmanagernew'
                         class='regular pre-open'>
                         #new
+                      </a></li>
+                      
+                      <li><a
+                        href='#animationmanagersettimespeed'
+                        class='regular pre-open'>
+                        #setTimeSpeed
                       </a></li>
                       
                       <li><a
@@ -4014,10 +4017,28 @@
                 
                 <li><a
                   href='#collectionstrace'
-                  class="">
+                  class=" toggle-sibling">
                   CollectionsTrace
-                  
+                  <span class='icon'>▸</span>
                 </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#collectionstraceupdate'
+                        class='regular pre-open'>
+                        #update
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -4805,9 +4826,39 @@
               
                 
                 <li><a
+                  href='#eqn_linesymbol'
+                  class="">
+                  EQN_LineSymbol
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#eqn_touchbox'
                   class="">
                   EQN_TouchBox
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eqn_lineglyphalign'
+                  class="">
+                  EQN_LineGlyphAlign
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eqn_lineglyph'
+                  class="">
+                  EQN_LineGlyph
                   
                 </a>
                 
@@ -24718,6 +24769,69 @@ p.animations.new()
       </div>
     </div>
   
+    <div class='border-bottom' id='animationmanagersettimespeed'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setTimeSpeed(speed)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set time speed of animation relative to real time, where 1 is real time,
+&#x3C;1 is slower than real time and >1 is faster than real time.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>speed</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>1</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='animationmanagerbuilder'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -30986,6 +31100,13 @@ specific to equations</p>
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>dimColor</span> <code class='quiet'>(<a href="#typecolor">TypeColor</a>?)</code>
+          : default equation dim color
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
           : default 
 <a href="FigureFont">FigureFont</a>
@@ -36010,7 +36131,7 @@ functions.</p>
 
   
     <p style="display: none;">      Type:
-      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, comment: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, contentSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, commentSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, comment: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?, contentSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, commentSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, contentLineSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, commentLineSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, scale: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, inSize: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, fullContentBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, useFullBounds: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?])
     </p>
   
   
@@ -36059,6 +36180,26 @@ functions.</p>
         <div class='space-bottom0'>
           <span class='code bold'>commentSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : space from symbol to comment (
+<code>0.03</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>contentLineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between a line symbol and
+content (
+<code>0.03</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>commentLineSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between a line symbol and
+comment (
 <code>0.03</code>
 )
 
@@ -39674,7 +39815,7 @@ is a presentation slide.</p>
 slides and step through them.</p>
 <p><a href="#collectionsslidenavigator">CollectionsSlideNavigator</a> creates the navigation buttons, and
 <code>textElement</code> automatically, and will usually be more convenient than
-manually creating them (unless custom buttons are needed).</p>
+manually creating thema (unless custom buttons are needed).</p>
 
   
   
@@ -40074,19 +40215,19 @@ transitions.</p>
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>prevButton</span> <code class='quiet'>((<a href="#figureelement">FigureElement</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          <span class='code bold'>prevButton</span> <code class='quiet'>((null | <a href="#figureelement">FigureElement</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>nextButton</span> <code class='quiet'>((<a href="#figureelement">FigureElement</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          <span class='code bold'>nextButton</span> <code class='quiet'>((null | <a href="#figureelement">FigureElement</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
           
           
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>text</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#figureelementcollection">FigureElementCollection</a>)?)</code>
+          <span class='code bold'>text</span> <code class='quiet'>((null | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#figureelementcollection">FigureElementCollection</a>)?)</code>
           
           
         </div>
@@ -40259,7 +40400,7 @@ SlideNavigator
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>modifiersCommon</span> <code class='quiet'>(OBJ_TextModifiersDefinigion?)</code>
+          <span class='code bold'>modifiersCommon</span> <code class='quiet'>(<a href="#obj_textmodifiersdefinition">OBJ_TextModifiersDefinition</a>?)</code>
           : common property
 
           
@@ -40805,7 +40946,7 @@ to specify click colors for each (
 
   
     <p style="display: none;">      Type:
-      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): void
+      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="#typeslidefrom">TypeSlideFrom</a>): void
     </p>
   
   
@@ -40858,7 +40999,7 @@ to specify click colors for each (
 
   
     <p style="display: none;">      Type:
-      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): void
+      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="#typeslidefrom">TypeSlideFrom</a>): void
     </p>
   
   
@@ -40912,7 +41053,7 @@ to specify click colors for each (
 
   
     <p style="display: none;">      Type:
-      function (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): void
+      function (function (): void, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, <a href="#typeslidefrom">TypeSlideFrom</a>): void
     </p>
   
   
@@ -51148,6 +51289,73 @@ figure.add({
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='collectionstraceupdate'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>update(points)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Update the trace with a new set of points.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>points</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeparsablepoint">TypeParsablePoint</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
 
   
 
@@ -58104,6 +58312,12 @@ annotate: {
           
         </div>
       
+        <div class='space-bottom0'>
+          <span class='code bold'>line</span> <code class='quiet'>(<a href="#eqn_lineglyph">EQN_LineGlyph</a>?)</code>
+          
+          
+        </div>
+      
     </div>
   
 
@@ -58998,6 +59212,121 @@ objects.</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='eqn_linesymbol'>
+      EQN_LineSymbol
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A line symbol to be used in <a href="#eqn_annotate">EQN_Annotate</a> as a <a href="#eqn_lineglyph">EQN_LineGlyph</a>,
+or in <a href="#eqn_comment">EQN_Comment</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : line width
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>?)</code>
+          : dash style of line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>arrow</span> <code class='quiet'>(<a href="#obj_linearrows">OBJ_LineArrows</a>?)</code>
+          : arrow styles of line where start is
+toward the content
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
+          : <code>'static'</code>
+ updates vertices on
+resize, 
+<code>'static'</code>
+ only changes scale transform (
+<code>dynamic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets height of static symbol - 
+<code>'first'</code>
+ calculates and sets height
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticWidth</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='eqn_touchbox'>
       EQN_TouchBox
     </h3>
@@ -59121,6 +59450,219 @@ boilerplate
 
   
 
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_lineglyphalign'>
+      EQN_LineGlyphAlign
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Options object that aligns a line glyph with either the content or
+annotation.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>xAlign</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<code>0</code>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"baseline"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_lineglyph'>
+      EQN_LineGlyph
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A glyph can be a line between the content and an annotation</p>
+<pre>
+
+                        aaaaa
+                        aaaaa
+                      g
+                    g
+                  g
+         CCCCCCCCC
+         CCCCCCCCC
+         CCCCCCCCC
+         CCCCCCCCC
+
+</pre>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#eqn_lineglyphalign">EQN_LineGlyphAlign</a>?)</code>
+          : alignment and spacing to content
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>annotation</span> <code class='quiet'>(<a href="#eqn_lineglyphalign">EQN_LineGlyphAlign</a>?)</code>
+          : alignment and spacing to annotation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>annotationIndex</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : annotation index to draw line to
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>figure.add({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">line</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'line'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span>, <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>] },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">0</span>: {
+        <span class="hljs-attr">annotate</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'abc'</span>,
+          <span class="hljs-attr">annotation</span>: {
+            <span class="hljs-attr">content</span>: <span class="hljs-string">'def'</span>,
+            <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'right'</span>,
+            <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'top'</span>,
+            <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
+            <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
+            <span class="hljs-attr">scale</span>: <span class="hljs-number">0.6</span>,
+            <span class="hljs-attr">offset</span>: [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>],
+          },
+          <span class="hljs-attr">glyphs</span>: {
+            <span class="hljs-attr">line</span>: {
+              <span class="hljs-attr">annotation</span>: <span class="hljs-number">0</span>,
+              <span class="hljs-attr">symbol</span>: <span class="hljs-string">'line'</span>,
+              <span class="hljs-attr">content</span>: {
+                <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
+                <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'top'</span>,
+                <span class="hljs-attr">space</span>: <span class="hljs-number">0.02</span>,
+              },
+              <span class="hljs-attr">comment</span>: {
+                <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
+                <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
+                <span class="hljs-attr">space</span>: <span class="hljs-number">0.02</span>,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+});</pre>
+    
   
 
   

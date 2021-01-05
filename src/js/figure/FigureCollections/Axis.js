@@ -1025,11 +1025,11 @@ class CollectionsAxis extends FigureElementCollection {
    *
    * @return {number} draw space position
    */
-  drawToValue<T: (number | Array<number>)>(value: T): T {
-    if (typeof value === 'number') { // $FlowFixMe
-      return value * this.drawToValueRatio;
+  drawToValue<T: (number | Array<number>)>(drawValue: T): T {
+    if (typeof drawValue === 'number') { // $FlowFixMe
+      return drawValue * this.drawToValueRatio + this.startValue;
     }
-    return value.map(v => v * this.drawToValueRatio);
+    return drawValue.map(v => v * this.drawToValueRatio + this.startValue);
   }
 
   /**
