@@ -43,6 +43,17 @@ import type { OBJ_FigureForElement } from '../Figure';
 //   1. symbol
 //   2. text
 
+/**
+ * Object that defines new text for a selection of equation elements.
+ *
+ * Each key in the object is the name of the equation element whose text is to
+ * be updated.
+ *
+ * @property {string | FigureElement} [_elementName]
+ */
+export type EQN_UpdateElementText = {
+  [elementName: string]: string | FigureElement
+};
 
 /**
  * Object where keys are property names of a {@link FigureElement} and values
@@ -1147,20 +1158,45 @@ export class Equation extends FigureElementCollection {
     return this.eqn.currentFormSeriesName;
   }
 
-  setText(elements: { [name: string]: string }) {
-    Object.keys(elements).forEach((elementName) => {
-      const e = this.getElement(elementName);
-      e.custom.updateText({ text: elements[elementName] });
-      // console.log(elementName, e)
-    });
-    Object.keys(this.eqn.forms).forEach((formName) => {
+  layoutForms(forms: 'none' | 'current' | 'all') {
+    if (forms === 'none') {
+      return;
+    }
+    const arrange = (formName) => {
       const form = this.eqn.forms[formName];
       const {
         scale, xAlign, yAlign, fixTo,
       } = form.arranged;
-      // console.log(formName, form);
       form.arrange(scale, xAlign, yAlign, fixTo);
+    };
+    if (forms === 'current') {
+      arrange(this.eqn.currentForm);
+      return;
+    }
+    Object.keys(this.eqn.forms).forEach((formName) => {
+      arrange(formName);
     });
+    this.showForm(this.eqn.currentForm);
+  }
+
+  /**
+   * Update text of equation element or elements
+   *
+   * @param {EQN_UpdateElementText} elements elements to update
+   * @param {'all' | 'current' | 'none'} [layoutForms] which forms to re-layout
+   * with the updated text
+   */
+  updateElementText(
+    elements: EQN_UpdateElementText,
+    layoutForms: 'all' | 'current' | 'none' = 'none',
+  ) {
+    Object.keys(elements).forEach((elementName) => {
+      const e = this.getElement(elementName);
+      const col = e.color.slice();
+      e.custom.updateText({ text: elements[elementName] });
+      e.setColor(col);
+    });
+    this.layoutForms(layoutForms);
   }
 
   makeTextElem(
@@ -1790,8 +1826,10 @@ export class Equation extends FigureElementCollection {
     formOrName: EquationForm | string,
     // subForm: ?string = null,
     animationStop: boolean = true,
+    // showCollection: boolean = true,
   ) {
     this.show();
+    // this.custom.settingForm = true;
     let form = formOrName;
     if (typeof formOrName === 'string') {
       form = this.getForm(formOrName);
@@ -1802,7 +1840,22 @@ export class Equation extends FigureElementCollection {
       this.fnMap.exec(form.onTransition); // $FlowFixMe
       this.fnMap.exec(form.onShow);
     }
+    // this.custom.settingForm = false;
   }
+
+  // show(
+  //   toShow: FigureElementPrimitive | FigureElementCollection | string
+  //     | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
+  // ) {
+  //   // if (!this.custom.settingForm) {
+  //   //   if (Array.isArray(toShow) && toShow.length === 0) {
+  //   //     // console.log(this.eqn.currentForm)
+  //   //     this.showForm(this.eqn.currentForm, true, false);
+  //   //     return;
+  //   //   }
+  //   // }
+  //   super.show(toShow);
+  // }
 
   /**
    * Get an equation form object from a form name

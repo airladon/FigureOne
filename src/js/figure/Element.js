@@ -4920,9 +4920,20 @@ class FigureElementCollection extends FigureElement {
     return elements;
   }
 
-  show(listToShow: Array<FigureElementPrimitive | FigureElementCollection> = []): void {
+  show(
+    toShow: FigureElementPrimitive | FigureElementCollection | string
+      | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
+  ): void {
     super.show();
-    listToShow.forEach((element) => {
+    let listToShow = toShow;
+    if (!Array.isArray(listToShow)) {
+      listToShow = [toShow];
+    }
+    listToShow.forEach((elementOrName) => {
+      let element = elementOrName;
+      if (typeof elementOrName === 'string') {
+        element = this.getElement(elementOrName);
+      }
       if (element instanceof FigureElementCollection) {
         element.showAll();
       } else {
@@ -4931,13 +4942,23 @@ class FigureElementCollection extends FigureElement {
     });
   }
 
-  hide(listToShow: Array<FigureElementPrimitive | FigureElementCollection> = []): void {
-    super.hide();
-    listToShow.forEach((element) => {
+  hide(
+    toHide: FigureElementPrimitive | FigureElementCollection | string
+      | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
+  ): void {
+    let listToHide = toHide;
+    if (!Array.isArray(listToHide)) {
+      listToHide = [toHide];
+    }
+    listToHide.forEach((elementOrName) => {
+      let element = elementOrName;
+      if (typeof elementOrName === 'string') {
+        element = this.getElement(elementOrName);
+      }
       if (element instanceof FigureElementCollection) {
         element.hideAll();
       } else {
-        element.show();
+        element.hide();
       }
     });
   }
