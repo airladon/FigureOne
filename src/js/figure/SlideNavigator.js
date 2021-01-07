@@ -463,6 +463,7 @@ export default class SlideNavigator {
             .start();
           done = null;
         } else if (form !== currentFormName) {
+          // console.log(form)
           const { animate, duration } = this.equationDefaults;
           e.animations.new()
             .goToForm({ target: form, animate, duration })
@@ -525,7 +526,7 @@ export default class SlideNavigator {
       if (fromToUse === 'prev') {
         const oldText = this.getText(this.currentSlideIndex);
         const newText = this.getText(index);
-        if (newText !== oldText) {
+        if (JSON.stringify(newText) !== JSON.stringify(oldText)) {
           textElement.animations.new()
             .dissolveIn(0.2)
             .start();

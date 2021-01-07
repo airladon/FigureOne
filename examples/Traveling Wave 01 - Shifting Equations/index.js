@@ -13,13 +13,29 @@ const width = 2.67;
 const height = 1.66;
 const greyColor = [0.6, 0.6, 0.6, 1];
 const actionColor = [0, 0.6, 1, 1];
-const primaryColor = [1, 0, 0, 1];
-const offsets = [
+const primaryCol = [1, 0, 0, 1];
+const offsetsValue = [
   [-2, [-1.35, -0.4], [0.2, 0.2]],
   [-1, [-1.35, -0.4], [0.2, 0.2]],
   [0, [-0.3, 0.3], [-0.4, -0.45]],
   [1, [-1.15, 0.15], [0.1, -0.4]],
   [2, [-1.15, 0.15], [0.1, -0.4]],
+];
+const offsetsXEquals = [
+  [-2, [-1.8, -0.1], [0.2, -0.1]],
+  [-1, [-1.8, -0.1], [0.2, -0.1]],
+  [0, [-0.7, -0.45], [-0.75, -0.45]],
+  [1, [-1.6, -0.1], [0.1, -0.1]],
+  [2, [-1.6, -0.1], [0.1, -0.1]],
+];
+const offsetsD = [
+  [-2.1],
+  [-1.4],
+  [-0.7],
+  [0],
+  [0.7],
+  [1.4],
+  [2.1],
 ];
 
 const makeEqn = (name, funcName, xAlign = 'left') => ({
@@ -28,15 +44,15 @@ const makeEqn = (name, funcName, xAlign = 'left') => ({
   options: {
     elements: {
       value: '0',
-      x: '',
-      equals: '',
+      equals: ' = ',
       func: funcName,
     },
-    color: funcName === 'f' ? greyColor : primaryColor,
+    color: funcName === 'f' ? greyColor : primaryCol,
     formDefaults: { alignment: { xAlign } },
     forms: {
-      0: ['func', ' ', '_(', { scale: [['x', 'equals'], 0.4] }, 'value', '_)'],
-      funcX: ['func', ' ', '_(', 'x_1', '_)'],
+      0: ['func', ' ', '_(', 'value', '_)'],
+      x: ['func', ' ', '_(', 'x', 'equals', 'value', '_)'],
+      funcX: ['func', ' ', '_(', 'x', '_)'],
     },
     scale: 0.6,
   },
@@ -52,13 +68,14 @@ const makeMark = (name, color = greyColor, radius = 0.02) => ({
   },
 });
 
-const brac = (left, content, right) => ({
+const brac = (left, content, right, outsideSpace = 0.025) => ({
   brac: {
     content,
     left,
     right,
     topSpace: 0.03,
     bottomSpace: 0.03,
+    outsideSpace,
   },
 });
 // Movable angle
@@ -81,18 +98,18 @@ figure.add([
           trace: [
             {
               points: getFx(-2, 0),
-              name: 'titleTrace',
-              line: { width: 0.01, dash: [0.05, 0.01], color: greyColor },
+              name: 'fxTrace',
+              line: { width: 0.01, color: greyColor },
             },
             {
               points: getFx(0, 0),
-              name: 'fxTrace',
+              name: 'fxTraceDash',
               line: { width: 0.005, dash: [0.05, 0.01], color: greyColor },
             },
             {
               points: getFx(0, 0),
               name: 'mainTrace',
-              line: { width: 0.01, color: primaryColor },
+              line: { width: 0.01, color: primaryCol },
             },
           ],
           width,
@@ -226,40 +243,84 @@ figure.add([
       makeEqn('eqnF0', 'f', 'left'),
       makeEqn('eqnY0', 'y', 'left'),
       makeMark('markF0', greyColor),
-      makeMark('markY0', primaryColor),
-      makeMark('markY1', primaryColor),
-      makeMark('markY2', primaryColor),
-      makeMark('markY3', primaryColor),
-      makeMark('markY4', primaryColor),
-      makeMark('markY5', primaryColor),
-      makeMark('markY6', primaryColor),
-      makeMark('markY7', primaryColor),
+      makeMark('markY0', primaryCol),
+      {
+        name: 'marks',
+        method: 'collection',
+        elements: [
+          makeMark('markY1', primaryCol),
+          makeMark('markY2', primaryCol),
+          makeMark('markY3', primaryCol),
+          makeMark('markY4', primaryCol),
+          makeMark('markY5', primaryCol),
+          makeMark('markY6', primaryCol),
+          makeMark('markY7', primaryCol),
+        ],
+      },
+      {
+        name: 'distance',
+        method: 'collections.line',
+        options: {
+          width: 0.004,
+          // dash: [0.02, 0.005],
+          arrow: {
+            head: 'circle',
+            align: 'mid',
+            radius: 0.02
+          },
+          color: actionColor,
+          label: 'd',
+        },
+      },
     ],
   },
   {
     name: 'eqn',
     method: 'collections.equation',
     options: {
-      color: primaryColor,
+      // color: primaryCol,
       elements: {
-        value1: { text: '0.0' },
+        value1: { text: '0.0', color: primaryCol },
         value2: '0.0',
         sign: ' \u2212 ',
+        min: ' \u2212 ',
+        min2: '\u2212',
         equals: ' = ',
         lb1: { symbol: 'bracket', side: 'left' },
         lb2: { symbol: 'bracket', side: 'left' },
         rb1: { symbol: 'bracket', side: 'right' },
         rb2: { symbol: 'bracket', side: 'right' },
+        unknown: '?',
+        y_r: { color: primaryCol },
+        lbr: { symbol: 'bracket', side: 'left', color: primaryCol },
+        rbr: { symbol: 'bracket', side: 'right', color: primaryCol },
+        x_r: { color: primaryCol },
       },
       phrases: {
         yx: ['y', brac('lb1', 'x_1', 'rb1')],
+        yxr: ['y_r', brac('lbr', 'x_r', 'rbr')],
         fx: ['f', brac('lb2', 'x_2', 'rb2')],
-        yValue: ['y', brac('lb1', 'value1', 'rb1')],
+        fxn: ['f', brac('lb2', { sub: ['x_2', 'n'] }, 'rb2')],
+        fxd: ['f', brac('lb2', ['x_2', 'min', 'd'], 'rb2', 0.04)],
+        fxValue: ['f', brac('lb2', ['x_2', 'sign', 'value2'], 'rb2', 0.04)],
+        fxd1: ['f', brac('lb2', ['x_2', 'min', brac('lb1', ['min2', 'd'], 'rb1')], 'rb2', 0.04)],
+        fxd2: ['f', brac('lb2', ['x_2', '_ + ', 'd'], 'rb2', 0.04)],
+        yValue: ['y_r', brac('lbr', 'value1', 'rbr')],
         fValue: ['f', brac('lb2', 'value2', 'rb2')],
       },
       forms: {
-        0: ['yx', 'equals', 'f', ' ', brac('lb2', ['x_2', ' ', 'sign', 'value'], 'rb2')],
+        0: ['yxr', 'equals', 'f', ' ', brac('lb2', ['x_2', ' ', 'sign', 'value'], 'rb2')],
         fx: ['yx', 'equals', 'fx'],
+        // fxn: ['yx', 'equals', 'fxn'],
+        fxd: ['yxr', 'equals', 'fxd'],
+        fxd1: ['yxr', 'equals', 'fxd1'],
+        fxd2: ['yxr', 'equals', 'fxd2'],
+        fxyx: {
+          content: ['fx', '               ', 'yx'],
+          alignment: { xAlign: 1.5, fixTo: 'f' },
+        },
+        yxUnknown: ['yxr', 'equals', 'unknown'],
+        value: ['yxr', 'equals', 'fxValue'],
       },
       formDefaults: {
         alignment: { fixTo: 'equals', xAlign: 'center' },
@@ -267,55 +328,57 @@ figure.add([
     },
     mods: { 
       scenarios: {
-        default: { position: [0, 0.75] },
-        title: { position: [-0.5, -1.05] },
+        default: { position: [0, -1.2], scale: 1.2 },
+        center: { position: [-0.1, -0.3], scale: 2.2 },
+        title: { position: [-0.5, -1.05], scale: 1 },
+        example: { position: [0, 0.7], scale: 1 },
       }
     }
   },
-  {
-    name: 'valueEqn',
-    method: 'collections.equation',
-    options: {
-      elements: {
-        value1: '0.0',
-        value2: '0.0',
-        equals: '  =  ',
-        equals1: { text: ' = ', color: primaryColor },
-        x: { color: primaryColor },
-        y: { color: primaryColor },
-        lb1: { symbol: 'bracket', side: 'left', color: primaryColor },
-        rb1: { symbol: 'bracket', side: 'right', color: primaryColor },
-        lb2: { symbol: 'bracket', side: 'left' },
-        rb2: { symbol: 'bracket', side: 'right' },
-        value1: { text: '0', color: primaryColor },
-        value2: '0',
-      },
-      phrases: {
-        yValue: ['y', brac('lb1', ['x', 'equals1', 'value1'], 'rb1')],
-        fValue: ['f', ' ', brac('lb2', ['x_2', '_ = _1', 'value2'], 'rb2')],
-      },
-      forms: {
-        0: ['yValue', 'equals', 'fValue'],
-      },
-      formDefaults: {
-        alignment: { fixTo: 'equals', xAlign: 'center' },
-      },
-    },
-    mods: { 
-      scenarios: {
-        default: { position: [0, 0.75 ] },
-      }
-    }
-  },
+  // {
+  //   name: 'valueEqn',
+  //   method: 'collections.equation',
+  //   options: {
+  //     elements: {
+  //       value1: '0.0',
+  //       value2: '0.0',
+  //       equals: '  =  ',
+  //       equals1: { text: ' = ', color: primaryCol },
+  //       x: { color: primaryCol },
+  //       y: { color: primaryCol },
+  //       lb1: { symbol: 'bracket', side: 'left', color: primaryCol },
+  //       rb1: { symbol: 'bracket', side: 'right', color: primaryCol },
+  //       lb2: { symbol: 'bracket', side: 'left' },
+  //       rb2: { symbol: 'bracket', side: 'right' },
+  //       value1: { text: '0', color: primaryCol },
+  //       value2: '0',
+  //     },
+  //     phrases: {
+  //       yValue: ['y', brac('lb1', ['x', 'equals1', 'value1'], 'rb1')],
+  //       fValue: ['f', ' ', brac('lb2', ['x_2', '_ = _1', 'value2'], 'rb2')],
+  //     },
+  //     forms: {
+  //       0: ['yValue', 'equals', 'fValue'],
+  //     },
+  //     formDefaults: {
+  //       alignment: { fixTo: 'equals', xAlign: 'center' },
+  //     },
+  //   },
+  //   mods: { 
+  //     scenarios: {
+  //       default: { position: [0, 0.7] },
+  //     }
+  //   }
+  // },
   {
     name: 'eqnTitle',
     method: 'collections.equation',
     options: {
-      color: primaryColor,
+      color: primaryCol,
       elements: {
         unknown: '?',
-        lb1: { symbol: 'bracket', side: 'left', color: primaryColor },
-        rb1: { symbol: 'bracket', side: 'right', color: primaryColor },
+        lb1: { symbol: 'bracket', side: 'left', color: primaryCol },
+        rb1: { symbol: 'bracket', side: 'right', color: primaryCol },
       },
       phrases: { yx: ['y', brac('lb1', 'x_1', 'rb1')] },
       forms: { title: ['yx', '_  =  ', 'unknown'] },
@@ -340,20 +403,24 @@ figure.add([
 ]);
 
 const trace = figure.getElement('diagram.plot.mainTrace');
+const fxTrace = figure.getElement('diagram.plot.fxTrace');
 // const fxTrace = figure.getElement('diagram.plot.fxTrace');
 // const titleTrace = figure.getElement('diagram.plot.titleTrace');
 const movePad = figure.getElement('diagram.movePad');
-const marks = figure.getElement('diagram.plot.marks');
+const marks = figure.getElement('diagram.marks');
 const xAxis = figure.getElement('diagram.plot.x');
 const yAxis = figure.getElement('diagram.plot.y');
 const diagram = figure.getElement('diagram');
 const plot = diagram.getElement('plot');
 // const drawPoint = figure.getElement('diagram.drawPoint');
 const eqn = figure.getElement('eqn');
-const valueEqn = figure.getElement('valueEqn')
+// const valueEqn = figure.getElement('valueEqn')
 const nav = figure.getElement('nav');
 const eqnF = diagram.getElement('eqnF0');
 const eqnY = diagram.getElement('eqnY0');
+const dist = diagram.getElement('distance');
+
+let precision = 0;
 
 const setElement = (name, position, label = null) => {
   const e = figure.getElement(`diagram.${name}`);
@@ -369,9 +436,9 @@ const setElement = (name, position, label = null) => {
     if (typeof label === 'number') {
       let value = round(label, 1);
       if (value < 0) {
-        value = `${value.toFixed(1)}`;
+        value = `${value.toFixed(precision)}`;
       } else if (value > 0) {
-        value = `${value.toFixed(1)}`;
+        value = `${value.toFixed(precision)}`;
       } else {
         value = '0';
       }
@@ -384,11 +451,13 @@ const setElement = (name, position, label = null) => {
 
 let cycler = 0;
 let whichX = 'fx';
+let offsets = offsetsXEquals;
 const cycle = () => {
   cycler = (cycler + 1) % offsets.length;
-  valueEqn.updateElementText({ value2: `${offsets[cycler][0]}` });
+  // valueEqn.updateElementText({ value2: `${offsets[cycler][0]}` });
   update();
 };
+let updateEqns = false;
 
 const update = () => {
   const p = movePad.getPosition('local');
@@ -399,27 +468,31 @@ const update = () => {
   const yY = fx(yX).y;
   const fX = whichX === 'fx' ? curveOffset : xPad + curveOffset;
   const y = whichX === 'fx' ? fx(fX).y : fx(yX).y;
-  valueEqn.updateElementText({
-    value1: `${yX.toFixed(1)}`,
-    value2: `${fX.toFixed(1)}`,
-  }, 'current');
-  setElement('eqnY0', [yX + yLabel[0], y + yLabel[1]], yX);
-  setElement('eqnF0', [fX + fLabel[0], y + fLabel[1]], fX);
-  setElement('markY0', [yX, y]);
-  setElement('markF0', [fX, y]);
-  // const sign = fX >= 0 ? ' \u2212 ' : ' + ';
+  let sign = xPad >= 0 ? ' \u2212 ' : ' + ';
+  let value2 = Math.abs(round(xPad, 1)).toFixed(precision);
+  // if (round(xPad, 1) === 0) {
+  //   value2 = '';
+  //   sign = '';
+  // }
+  // eqn.clear();
+  if (eqn.isShown) {
+    eqn.updateElementText({ sign, value2 }, 'current');
+  }
+  if (updateEqns) {
+    setElement('eqnY0', [yX + yLabel[0], y + yLabel[1]], yX);
+    setElement('eqnF0', [fX + fLabel[0], y + fLabel[1]], fX);
+    setElement('markY0', [yX, y]);
+    setElement('markF0', [fX, y]);
+  }
+  if (dist.isShown) {
+    dist.setEndPoints(plot.pointToDraw([fX, y]), plot.pointToDraw([yX, y]));
+  }
+  figure.animateNextFrame();
 }
 movePad.subscriptions.add('setTransform', () => {
   update();
 });
 update();
-// const hideEquations = () => {
-//   for (let i = 0; i < 5; i += 1) {
-//     figure.getElement(`eqn${i}`).hide();
-//   }
-//   // eqn.hide();
-// }
-// hideEquations();
 
 const animateShift = (offset) => {
   trace.animations.new()
@@ -446,21 +519,21 @@ setElement('eqnF0', [-2.2, 4.2], '-2');
 setElement('markF0', [-2, 4]);
 
 const setMark = (markName, xValue, xOffset) => {
-  const mark = diagram.getElement(markName);
+  const mark = marks.getElement(markName);
   mark.show();
   const py = yAxis.valueToDraw(fx(xValue).y);
   const px = xAxis.valueToDraw(xValue + xOffset);
   mark.setPosition(px, py);
 }
 
-const moveMark = (markName, xValue) => {
-  const mark = diagram.getElement(markName);
-  const target = plot.pointToDraw(fx(xValue));
-  mark.animations.new()
-    .pulse({ duration: 1})
-    .position({ target, duration: 1})
-    .start();
-}
+// const moveMark = (markName, xValue) => {
+//   const mark = diagram.getElement(markName);
+//   const target = plot.pointToDraw(fx(xValue));
+//   mark.animations.new()
+//     .pulse({ duration: 1})
+//     .position({ target, duration: 1})
+//     .start();
+// }
 
 const setMarks = (xOffset) => {
   for (i = 0; i < 7; i += 1) {
@@ -474,7 +547,7 @@ const moveMarks = (xOffsetFrom, xOffsetTo, skipAnimation = false) => {
     const pointX = i * 0.7 - 2.1;
     const from = plot.pointToDraw(fx(pointX + xOffsetFrom));
     const to = plot.pointToDraw(fx(pointX + xOffsetTo));
-    const mark = diagram.getElement(`markY${i + 1}`);
+    const mark = marks.getElement(`markY${i + 1}`);
     if (skipAnimation) {
       mark.setPosition(to.x, from.y);
       return;
@@ -489,8 +562,7 @@ const moveMarks = (xOffsetFrom, xOffsetTo, skipAnimation = false) => {
 
 
 const pulseMarks = () => {
-  diagram.show(['markY1', 'markY2', 'markY3', 'markY4', 'markY5', 'markY6', 'markY7']);
-  diagram.pulse({
+  marks.pulse({
     elements: ['markY1', 'markY2', 'markY3', 'markY4', 'markY5', 'markY6', 'markY7']},
   );
 }
@@ -502,6 +574,13 @@ const moveTrace = (xOffset, done = null, duration = 1) => {
     return;
   }
   setMarks(0);
+  eqnY.hide();
+  trace.hide();
+  fxTrace.show();
+  eqn.hide();
+  // eqn.showForm('fx')
+  // eqn.dim();
+  // eqnY.showForm('funcX');
   movePad.setPosition(xAxis.valueToDraw(0), 0);
   movePad.animations.new()
     .trigger({
@@ -513,100 +592,181 @@ const moveTrace = (xOffset, done = null, duration = 1) => {
     .trigger(() => {
       movePad.setPosition(xAxis.valueToDraw(xOffset), 0);
     })
-    .dissolveIn({ element: trace, duration: 0.4 })
+    .inParallel([
+      trace.animations.dissolveIn({ duration: 0.4 }),
+      fxTrace.animations.dissolveOut({ duration: 0.4 }),
+    ])
+    .trigger(() => {
+      eqnY.showForm('funcX')
+      // eqn.showForm('yxUnknown')
+    })
     .whenFinished(done)
+    // .dissolveOut({ element: eqn, duration: 0.4 })
+    // .trigger(() => {
+    //   eqn.highlight(['y', 'lb1', 'rb1', 'x_1']);
+    //   // eqn.showForm('fxyx');
+    // })
+    // .dissolveIn({ element: eqn, duration: 0.4 })
+    // .then(eqn.animations.goToForm({ target: 'fxyx' }))
     .start();
 }
 
 
-// const show = (elements = []) => {
-//   figure.elements.hideAll();
-//   if (elements.length > 0) {
-//     figure.elements.exec(['showAll'], elements);
-//   }
-//   figure.animateNextFrame();
-// }
-
 slides = [];
+const times = 'Times New Roman'
+// //////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////
 slides.push({
   text: [
-    '', '    How does an equation change when shifted?',
+    '', 'What happens when we shift an equation?',
   ],
   modifiersCommon: {
-    x: { font: { family: 'Times New Roman', style: 'italic' } },
-    f: { font: { family: 'Times New Roman', style: 'italic' } },
-    y: { font: { family: 'Times New Roman', style: 'italic' } },
+    x: { font: { family: times, style: 'italic' } },
+    d: { font: { family: times, style: 'italic' } },
+    
+    d1: {
+      font: { family: times, style: 'italic', color: actionColor },
+      onClick: () => { dist.show(); cycle(); },
+      touchBorder: 0.08,
+    },
+    f: { font: { family: times, style: 'italic' }, rSpace: 0.02 },
+    f1: {
+      touchBorder: 0.08,
+      text: 'f',
+      onClick: () => eqnF.pulse(),
+      font: { family: times, style: 'italic', color: actionColor },
+      rSpace: 0.02,
+    },
+    y: {
+      font: { family: times, style: 'italic', color: primaryCol },
+      touchBorder: [0.1, 0.1, 0.2, 0.1],
+      onClick: () => pulseMarks(),
+    },
+    lb: { text: '(', font: { family: times, color: primaryCol } },
+    rb: { text: ')', font: { family: times, color: primaryCol } },
+    xr: { text: 'x', font: { family: times, style: 'italic', color: primaryCol } },
+    positive: { font: { style: 'italic' } },
+    negative: { font: { style: 'italic' } },
+    n: { font: { family: times, style: 'italic', size: 0.1, }, offset: [0, -0.05 ] },
   },
   steadyState: () => {
     figure.showOnly([
-      'nav', trace, 'diagram.plot.titleTrace', 'eqnTitle',
+      'nav', trace, 'diagram.plot.fxTrace', 'eqnTitle',
       'diagram.plot.titleX', 'diagram.plot.titleY',
     ]);
     figure.setScenarios('title');
     trace.update(getFx(2, 0));
+    fxTrace.update(getFx(-2, 0));
     eqn.showForm('fx');
-    eqn.dim();
   },
+  leaveState: () => {
+    fxTrace.update(getFx(0, 0));
+  }
 });
 
 // //////////////////////////////////////////////////////////
-slides.push({
-  text: 'We start by plotting a function  |f| (|x|).',
-  steadyState: () => {
-    figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY']);
-    figure.setScenarios('default');
-  },
-});
-
-slides.push({
-  enterStateCommon: () => {
-    figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY']);
-    figure.setScenarios('default');
-    trace.update(getFx(0, 0));
-  },
-  transition: (done) => {
-    trace.show();
-    trace.animations.new()
-      .dissolveIn({ duration: 0.5 })
-      .whenFinished(done)
-      .start();
-  },
-  form: 'fx',
-  steadyState: () => {
-    trace.show()
-    eqn.highlight(['y', 'lb1', 'rb1', 'x_1'])
-    eqn.setPosition([0, -1]);
-  },
-});
-
 // //////////////////////////////////////////////////////////
 slides.push({
-  text: [
-    '|Shifting| the function in |x| moves each |value| of',
-    '|f| (|x|) to a new |x|.',
-  ],
-  modifiers: {
-    Shifting: { font: { color: actionColor }, onClick: () => nav.nextSlide() },
-    value: { font: { color: actionColor }, onClick: () => pulseMarks() },
-  },
-  enterStateCommon: () => {
-    setMarks(0);
-    figure.showOnly([
-      'nav', trace, 'diagram.plot.titleX', 'diagram.plot.middleY', movePad,
-      'diagram.plot.fxTrace',
-    ]);
+  text: 'We start by plotting a function |f|(|x|).',
+  steadyState: () => {
+    figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY']);
     figure.setScenarios('default');
-    trace.update(getFx(0, 0));
-    eqn.highlight(['y', 'lb1', 'rb1', 'x_1'])
-    eqn.showForm('fx');
-    eqn.setPosition([0, -1]);
-    movePad.isTouchable = false;
   },
 });
 
 slides.push({
   enterState: () => {
+    figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY', fxTrace]);
+    figure.setScenarios('default');
+    fxTrace.update(getFx(0, 0));
+    // eqn.showForm('fx');
+  },
+  transition: (done) => {
+    fxTrace.show();
+    fxTrace.animations.new()
+      .dissolveIn({ duration: 0.5 })
+      .whenFinished(done)
+      .start();
+  },
+  steadyState: () => {
+    fxTrace.show()
+    eqn.setScenario('initial');
+    eqnF.showForm('funcX')
+    setElement('eqnF0', [-0.3, -0.5]);
+  },
+  form: 'fx'
+});
+
+// //////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////
+slides.push({
+  enterStateCommon: () => {
+    figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY', fxTrace]);
+    figure.setScenarios('default');
+    fxTrace.update(getFx(0, 0));
+    eqn.showForm('fx');
+    eqn.setScenario('initial');
+    eqnF.showForm('funcX')
+    setElement('eqnF0', [-0.3, -0.5]);
+  },
+  text: [
+    'We can think of this function |f| as a number of',
+    '|values| at different |x| positions.'
+  ],
+  modifiers: {
+    values: { font: { color: actionColor }, onClick: () => nav.nextSlide() },
+  },
+});
+slides.push({
+  modifiers: {
+    values: { font: { color: actionColor }, onClick: () => pulseMarks() },
+  },
+  steadyState: () => {
+    marks.showAll();
+    marks.dim();
+    setMarks(0);
+    pulseMarks();
+  },
+  leaveStateCommon: () => { marks.undim(); },
+});
+
+// //////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////
+slides.push({
+  text: [
+    '|Shifting| |f| some distance +|d| moves each |value| of',
+    '|f| to the right by |d|.'
+  ],
+  modifiers: {
+    Shifting: { font: { color: actionColor }, onClick: () => nav.nextSlide() },
+    value: { font: { color: actionColor }, onClick: () => pulseMarks() },
+    d1: { text: 'd', font: { family: times, style: 'italic' } },
+  },
+  enterStateCommon: () => {
+    setMarks(0);
+    marks.dim();
+    figure.showOnly([
+      'nav', 'diagram.plot.titleX', 'diagram.plot.middleY', movePad,
+      eqn, 'diagram.plot.fxTraceDash', marks,
+    ]);
+    figure.setScenarios('default');
+    eqn.setScenario('initial');
+    eqnF.showForm('funcX')
+    setElement('eqnF0', [-0.3, -0.5]);
+    // updateEqns = false;
+  },
+  enterState: () => { fxTrace.showAll(); },
+  // steadyState: () => {
+  //   eqn.show()
+  // }
+});
+
+slides.push({
+  // fx: 'unknown',
+  enterState: () => {
     eqn.hide();
+    fxTrace.showAll();
+    marks.undim();
   },
   form: null,
   modifiers: {
@@ -619,51 +779,230 @@ slides.push({
   transition: (done) => {
     moveTrace(2, done);
   },
+  steadyStateCommon: () => {
+    trace.show();
+    fxTrace.hide();
+    moveTrace(2, null, 0);
+    setElement('eqnF0', [-0.3, -0.5]);
+    setElement('eqnY0', [1.7, -0.5]);
+    eqnY.showForm('funcX');
+    // eqn.hide();
+    // eqn.showForm('unknown')
+  },
+});
+
+// //////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////
+slides.push({
+  text: [
+    // 'A |positive| shift of |each| |y||lb||xr||rb| value is the same',
+    // 'as |f|(|x||n|) where |x||n| is on the negative side of |x|.',
+    // 'A |positive| shift |d| means each |y||lb||xr||rb| value',
+    // 'has a corresponding |f1| value distance |d| to the left.',
+    // 'Each |y||lb||xr||rb| value has a corresponding |f1| value',
+    // 'that is |d| more negative'
+    'In other words, each value of |f| is |d1| to the left of',
+    'the shifted function.'
+  ],
+  enterState: () => {
+    marks.undim();
+  },
   steadyState: () => {
+    offsets = offsetsD;
+    // updateEqns = false;
+    dist.showAll();
+    dist.setEndPoints([10, 10], [11, 11]);
+    trace.show();
+    setElement('eqnY0', [1.7, -0.5]);
+    eqnY.showForm('funcX');
+  },
+});
+slides.push({
+  enterState: () => {
+    eqn.setPosition([0, -1.3])
+    eqn.hide();
     moveTrace(2, null, 0);
     eqnF.showForm('funcX');
     eqnY.showForm('funcX');
-    setElement('eqnF0', [-0.3, -0.5])
-    setElement('eqnY0', [1.7, -0.5])
-    // eqnY.setPosition([1, 1]);
-    // console.log(eqnF)
+    setElement('eqnF0', [-0.3, -0.5]);
+    setElement('eqnY0', [1.7, -0.5]);
+    trace.show();
+    marks.undim();
+  },
+  form: 'fxd',
+  steadyState: () => {
+    offsets = offsetsD;
+    // updateEqns = false;
+    dist.showAll();
+    dist.setEndPoints([10, 10], [11, 11]);
   },
 });
+slides.push({
+  enterStateCommon: () => {},
+  steadyStateCommon: () => {},
+  transition: (done) => {
+    figure.showOnly([nav, 'eqn']);
+    eqn.showForm('fxd');
+    eqn.setPosition([0, -1.3]);
+    eqn.animations.new()
+      .scenario({ target: 'center', duration: 1 })
+      .whenFinished(done)
+      .start();
+  },
+  steadyState: () => {
+    eqn.showForm('fxd');
+    eqn.setScenario('center');
+  },
+});
+
+// //////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////
+slides.push({
+  text: [
+    'This holds for positive or negative shifts of |d|.',
+    '',
+    'When |d| is negative, the equation shows |f|',
+    'being to the right of a left shifted function.',
+  ],
+  enterStateCommon: () => {
+    figure.showOnly([nav, 'eqn']);
+    // eqn.showForm('fxd');
+    eqn.setScenario('center');
+  },
+});
+slides.push({
+  form: 'fxd1',
+  steadyState: () => { console.log(eqn.getCurrentForm()) },
+});
+slides.push({
+  form: 'fxd2',
+});
+
+
+// //////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////
 
 slides.push({
   enterStateCommon: () => {},
   text: [
-    'Let\'s look at |one| point at a time',
+    'Example: drag the curve to shift, and observe',
+    'the corresponding |points|.'
   ],
   modifiers: {
-    one: {
-      font: { color: actionColor },
-      onClick: () => cycle(),
+    points: {
+      font: { color: actionColor }, onClick: () => cycle(), touchBorder: 0.1,
     }
   },
-  steadyStateCommon: () => {
-    figure.showOnly([
-      'nav', trace,
-      'diagram.plot.fxTrace', 'diagram.plot.titleX', 'diagram.plot.middleY',
-    ]);
-    diagram.show([
-      movePad,
-      `markY0`, `markF0`, `eqnF0`, `eqnY0`,
-    ]);
-    movePad.setPosition(xAxis.valueToDraw(2), 0)
-    // eqn.highlight(['y', 'lb1', 'x_1', 'rb1'])
-    figure.elements.setScenarios('default');
-    movePad.isTouchable = true;
-    // trace.update(getFx(2, 0));
-    valueEqn.showForm('0');
+  steadyState: () => {
+    figure.showOnly([nav, diagram, eqn]);
+    diagram.hide(['distance', 'plot.titleX', 'plot.middleY', 'plot.titleY', 'plot.fxTrace', 'marks'])
+    offsets = offsetsValue;
+    cycler = 2;
+    precision = 1;
+    updateEqns = true;
+    movePad.setTouchable();
+    movePad.setPosition(width / 2, 0);
     diagram.getElement('eqnF0').showForm('0');
     diagram.getElement('eqnY0').showForm('0');
-    cycle();
+    figure.setScenarios('example');
+    eqn.showForm('value');
+  },
+  leaveState: () => {
+    precision = 0;
+    updateEqns = false;
   },
 });
 
+// // //////////////////////////////////////////////////////////
+// // //////////////////////////////////////////////////////////
+// slides.push({
+//   text: [
+//     'So if a function is shifted in |x| by |d| we have:',
+//   ],
+//   enterStateCommon: () => {},
+// });
+// slides.push({
+//   form: 'fxd',
+// });
+
+// slides.push({
+//   enterStateCommon: () => {},
+//   modifiers: {
+//     each: {
+//       onClick: () => cycle(),
+//       color: actionColor,
+//     },
+//   },
+//   steadyStateCommon: () => {
+//     setMarks(0);
+//     figure.showOnly(['nav']);
+//     diagram.showOnly([
+//       'plot.titleX', 'plot.middleY', 'plot.fxTrace',
+//       'markY0', 'markF0', 'eqnY0', 'eqnF0', trace, movePad,
+//     ]);
+//     offsets = offsetsXEquals;
+//     cycler = 2;
+//     precision = 0;
+//     figure.setScenarios('default');
+//     movePad.setPosition(xAxis.valueToDraw(2), 0);
+//     eqnF.showForm('x');
+//     eqnY.showForm('x');
+//     setElement('eqnF0', [-0.7, -0.5], '0')
+//     setElement('eqnY0', [1.3, -0.5], '2')
+//     setElement('markF0', [0, 0]);
+//     setElement('markY0', [2, 0]);
+//   },
+// });
+
+// // //////////////////////////////////////////////////////////
+// // //////////////////////////////////////////////////////////
+// // slides.push({
+// //   text: [
+// //     'A positive shift means |each| value |y||lb||x||rb| is the same',
+// //     'as |f| operating on a more negative value of |x|.',
+// //   ],
+// //   enterState: () => eqn.hide(),
+// // });
+
+
+// slides.push({
+//   enterStateCommon: () => {},
+//   text: [
+//     'Let\'s look at |one| point at a time',
+//   ],
+//   modifiers: {
+//     one: {
+//       font: { color: actionColor },
+//       onClick: () => cycle(),
+//     }
+//   },
+//   steadyStateCommon: () => {
+//     figure.showOnly([
+//       'nav', trace,
+//       'diagram.plot.fxTrace', 'diagram.plot.titleX', 'diagram.plot.middleY',
+//     ]);
+//     diagram.show([
+//       movePad,
+//       `markY0`, `markF0`, `eqnF0`, `eqnY0`,
+//     ]);
+//     movePad.setPosition(xAxis.valueToDraw(2), 0)
+//     // eqn.highlight(['y', 'lb1', 'x_1', 'rb1'])
+//     figure.elements.setScenarios('default');
+//     movePad.setMovable()
+//     // movePad.isTouchable = true;
+//     // trace.update(getFx(2, 0));
+//     valueEqn.showForm('0');
+//     diagram.getElement('eqnF0').showForm('0');
+//     diagram.getElement('eqnY0').showForm('0');
+//     cycle();
+//   },
+//   leaveState: () => {
+//     movePad.isTouchable = false;
+//   }
+// });
+
 figure.getElement('nav').loadSlides(slides);
-figure.getElement('nav').goToSlide(4);
+figure.getElement('nav').goToSlide(5);
 
 /*
 We start with some function g(x). Each value of g aligns with an x value.

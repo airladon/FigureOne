@@ -1691,6 +1691,8 @@ export type OBJ_Text = {
  * @property {string} [text] string to show
  * @property {OBJ_Font} [font] font to apply to string
  * @property {TypeParsablePoint} [offset] offset to draw text (default: `[0, 0]`)
+ * @property {boolean} [followOffsetY] `true` will make any subsequent text
+ * have the same y offset as a starting point (`false`)
  * @property {boolean} [inLine] `false` means next text will follow previous
  * and not this (default: `true`)
  * @property {string | function(): void} [onClick] function to execute on click
@@ -1703,6 +1705,7 @@ export type OBJ_TextLineDefinition = {
   text: string,
   font?: OBJ_Font,
   offset?: TypeParsablePoint,
+  followOffsetY?: boolean,
   inLine?: boolean,
   onClick?: string | () => void,
   touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
@@ -1816,6 +1819,9 @@ export type OBJ_TextLinesDefinition = {
  *
  * @property {string} [text] text to replace `modifierId` with - if `undefined`
  * then `modifierId` is used
+ * @property {TypeParsablePoint} [offset] text offset
+ * @property {boolean} [followOffsetY] `true` will make any subsequent text
+ * have the same y offset as a starting point (`false`)
  * @property {OBJ_Font} [font] font changes for modified text
  * @property {boolean} [inLine] `false` if modified text should not contribute
  * to line layout (defqult: `true`)
@@ -1832,6 +1838,7 @@ export type OBJ_TextModifierDefinition = {
   font?: OBJ_Font,
   touchBorder?: TypeParsableBuffer | Array<TypeParsablePoint>,
   onClick?: string | () => void,
+  followOffsetY?: boolean,
 }
 
 /**

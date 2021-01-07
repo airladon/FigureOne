@@ -403,6 +403,9 @@ class FigureText extends FigureTextBase {
 class FigureTextLine extends FigureTextBase {
   offset: Point;
   inLine: boolean;
+  followOffsetY: boolean;
+  rSpace: number;
+  lSpace: number;
 
   constructor(
     drawContext2D: Array<DrawContext2D> | DrawContext2D,
@@ -415,10 +418,16 @@ class FigureTextLine extends FigureTextBase {
     // touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
     touchBorder: TypeParsableBuffer | Array<Point> = 0,
     onClick?: string | (() => void) | null = null,
+    followOffsetY?: boolean = false,
+    lSpace?: number = 0,
+    rSpace?: number = 0,
   ) {
     super(drawContext2D, location, text, font, 'left', 'baseline', touchBorder, onClick);
     this.offset = getPoint(offset);
     this.inLine = inLine;
+    this.followOffsetY = followOffsetY;
+    this.lSpace = lSpace;
+    this.rSpace = rSpace;
     this.measureAndAlignText();
     this.calcBorderAndBounds();
   }
@@ -436,6 +445,10 @@ class FigureTextLine extends FigureTextBase {
       this.font.definition(),
       this.offset,
       this.inLine,
+      this.onClick,
+      this.followOffsetY,
+      this.rSpace,
+      this.lSpace,
     );
   }
 }
@@ -455,8 +468,14 @@ class FigureTextLines extends FigureTextLine {
     // touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
     touchBorder: TypeParsableBuffer | Array<Point> = 0,
     onClick?: string | (() => void) | null = null,
+    followOffsetY?: boolean = false,
+    lSpace?: number = 0,
+    rSpace?: number = 0,
   ) {
-    super(drawContext2D, location, text, font, offset, inLine, touchBorder, onClick);
+    super(
+      drawContext2D, location, text, font, offset, inLine, touchBorder,
+      onClick, followOffsetY, lSpace, rSpace,
+    );
     this.line = line;
     // this.update();
   }
@@ -470,6 +489,11 @@ class FigureTextLines extends FigureTextLine {
       this.offset,
       this.inLine,
       this.line,
+      this.touchBorder,
+      this.onClick,
+      this.followOffsetY,
+      this.lSpace,
+      this.rSpace,
     );
   }
 }
@@ -954,9 +978,13 @@ function createLine(
   let maxY = 0;
   let minY = 0;
   textArray.forEach((text) => {  // eslint-disable-next-line no-param-reassign
-    text.location = lastRight.add(text.offset);
+    text.location = lastRight.add(text.offset).add(text.lSpace);
     if (text.inLine) {
-      lastRight = text.location.add(text.measure.width, 0);
+      if (text.followOffsetY) {
+        lastRight = text.location.add(text.measure.width + text.rSpace, 0);
+      } else {
+        lastRight = text.location.add(text.measure.width + text.rSpace, -text.offset.y);
+      }
       const textMaxY = text.location.y + text.measure.ascent;
       const textMinY = text.location.y - text.measure.descent;
       if (textMaxY > maxY) {
@@ -1018,6 +1046,9 @@ class TextLineObject extends TextObjectBase {
         // border?: 'rect' | Array<Point>,
         touchBorder?: number | Array<Point>,
         onClick?: string | () => void,
+        followOffsetY?: boolean,
+        lSpace?: number,
+        rSpace?: number,
       }>;
       font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
@@ -1038,15 +1069,19 @@ class TextLineObject extends TextObjectBase {
       let font;
       let offset;
       let inLine;
+      let followOffsetY;
       let textToUse;
       // let border;
       let touchBorder;
       let onClick;
+      let lSpace;
+      let rSpace;
       if (typeof textDefinition === 'string') {
         textToUse = textDefinition;
       } else {
         ({
-          font, offset, inLine, touchBorder, onClick,
+          font, offset, inLine, touchBorder, onClick, followOffsetY,
+          lSpace, rSpace,
         } = textDefinition);
         textToUse = textDefinition.text;
         // if (Array.isArray(border)) {  // $FlowFixMe
@@ -1087,6 +1122,9 @@ class TextLineObject extends TextObjectBase {
         inLine, // $FlowFixMe
         touchBorder || options.defaultTextTouchBorder,
         onClick,
+        followOffsetY,
+        lSpace,
+        rSpace,
       ));
     });
     this.text = figureTextArray;
@@ -1143,6 +1181,9 @@ class TextLinesObject extends TextObjectBase {
         // touchBorder?: 'border' | 'rect' | number | Array<Point>,
         touchBorder?: TypeParsableBuffer | Array<Point>,
         onClick?: () => void,
+        lSpace?: number,
+        rSpace?: number,
+        followOffsetY?: boolean,
     },
   };
 
@@ -1164,6 +1205,9 @@ class TextLinesObject extends TextObjectBase {
         // border?: 'rect' | Array<Point>,
         touchBorder?: TypeParsableBuffer | Array<Point>,
         onClick?: () => void,
+        followOffsetY?: boolean,
+        lSpace?: number,
+        rSpace?: number,
       },
     },
     defaultTextTouchBorder?: number,
@@ -1220,6 +1264,9 @@ class TextLinesObject extends TextObjectBase {
         // let border;
         let touchBorder;
         let onClick;
+        let followOffsetY = false;
+        let rSpace = 0;
+        let lSpace = 0;
         if (this.modifiers[s] != null) {
           const mod = this.modifiers[s];
           if (mod.text != null) {
@@ -1228,12 +1275,8 @@ class TextLinesObject extends TextObjectBase {
           if (mod.font != null) {
             textFont = joinObjects({}, lineFont, mod.font);
           }
-          if (mod.inLine != null) {
-            inLine = mod.inLine;
-          }
-          if (mod.offset != null) {
-            offset = mod.offset;
-          }
+          if (mod.inLine != null) { inLine = mod.inLine; }
+          if (mod.offset != null) { offset = mod.offset; }
           // if (mod.border != null) {
           //   border = mod.border;
           // }
@@ -1247,9 +1290,10 @@ class TextLinesObject extends TextObjectBase {
               [touchBorder] = getBorder(touchBorder);
             }
           }
-          if (mod.onClick != null) {
-            onClick = mod.onClick;
-          }
+          if (mod.onClick != null) { onClick = mod.onClick; }
+          if (mod.followOffsetY != null) { followOffsetY = mod.followOffsetY; }
+          if (mod.lSpace != null) { lSpace = mod.lSpace; }
+          if (mod.rSpace != null) { rSpace = mod.rSpace; }
           // if (Array.isArray(border)) {  // $FlowFixMe
           //   border = getPoints(border);
           // }
@@ -1267,6 +1311,9 @@ class TextLinesObject extends TextObjectBase {
           lineIndex, // $FlowFixMe
           touchBorder || options.defaultTextTouchBorder,
           onClick,
+          followOffsetY,
+          lSpace,
+          rSpace,
         );
         figureTextArray.push(t);
         line.push(t);

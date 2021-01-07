@@ -4928,6 +4928,10 @@ class FigureElementCollection extends FigureElement {
       | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
   ): void {
     super.show();
+    // if (toShow == null) {
+    //   this.showAll();
+    //   return;
+    // }
     let listToShow = toShow;
     if (!Array.isArray(listToShow)) {
       listToShow = [toShow];
@@ -4963,7 +4967,7 @@ class FigureElementCollection extends FigureElement {
   }
 
   showAll(): void {
-    this.show();
+    super.show();
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       // if (typeof element.showAll === 'function') {
