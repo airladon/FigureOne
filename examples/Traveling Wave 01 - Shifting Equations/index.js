@@ -1,42 +1,19 @@
-figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [0.5, 0.5, 0.5, 1], });
-
 const { Point } = Fig;
 const { round, range } = Fig.tools.math;
-const x = range(-5, 5, 0.1);
-const xSparse = range(-5, 5, 1);
-const fx = (xx, ox = 0, oy = 0) => new Point(xx, (xx - ox) ** 2 + oy);
-const getFx = (ox, oy) => x.map(xx => fx(xx, ox, oy));
-const getFxSparse = (xMax, ox, oy) => xSparse.filter(xx => xx <= xMax + 0.001).map(xx => fx(xx, ox, oy));
 
-const plotPosition = new Point(-1.3, -1.1);
-const width = 2.67;
-const height = 1.66;
 const greyColor = [0.6, 0.6, 0.6, 1];
+const dGreyColor = [0.4, 0.4, 0.4, 1];
 const actionColor = [0, 0.6, 1, 1];
 const primaryCol = [1, 0, 0, 1];
-const offsetsValue = [
-  [-2, [-1.35, -0.4], [0.2, 0.2]],
-  [-1, [-1.35, -0.4], [0.2, 0.2]],
-  [0, [-0.3, 0.3], [-0.4, -0.45]],
-  [1, [-1.15, 0.15], [0.1, -0.4]],
-  [2, [-1.15, 0.15], [0.1, -0.4]],
-];
-const offsetsXEquals = [
-  [-2, [-1.8, -0.1], [0.2, -0.1]],
-  [-1, [-1.8, -0.1], [0.2, -0.1]],
-  [0, [-0.7, -0.45], [-0.75, -0.45]],
-  [1, [-1.6, -0.1], [0.1, -0.1]],
-  [2, [-1.6, -0.1], [0.1, -0.1]],
-];
-const offsetsD = [
-  [-2.1],
-  [-1.4],
-  [-0.7],
-  [0],
-  [0.7],
-  [1.4],
-  [2.1],
-];
+
+figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color:dGreyColor });
+
+const x = range(-5, 5, 0.1);
+const fx = (xx, ox = 0, oy = 0) => new Point(xx, (xx - ox) ** 2 + oy);
+const getFx = (ox, oy) => x.map(xx => fx(xx, ox, oy));
+
+const plotWidth = 2.67;
+const plotHeight = 1.66;
 
 const makeEqn = (name, funcName, xAlign = 'left') => ({
   name,
@@ -47,7 +24,7 @@ const makeEqn = (name, funcName, xAlign = 'left') => ({
       equals: ' = ',
       func: funcName,
     },
-    color: funcName === 'f' ? greyColor : primaryCol,
+    color: funcName === 'f' ? dGreyColor : primaryCol,
     formDefaults: { alignment: { xAlign } },
     forms: {
       0: ['func', ' ', '_(', 'value', '_)'],
@@ -61,21 +38,12 @@ const makeEqn = (name, funcName, xAlign = 'left') => ({
 const makeMark = (name, color = greyColor, radius = 0.02) => ({
   name,
   method: 'primitives.polygon',
-  options: {
-    radius,
-    sides: 20,
-    color,
-  },
+  options: { radius, sides: 20, color },
 });
 
 const brac = (left, content, right, outsideSpace = 0.025) => ({
   brac: {
-    content,
-    left,
-    right,
-    topSpace: 0.03,
-    bottomSpace: 0.03,
-    outsideSpace,
+    content, left, right, topSpace: 0.03, bottomSpace: 0.03, outsideSpace,
   },
 });
 // Movable angle
@@ -85,9 +53,7 @@ figure.add([
     method: 'collection',
     mods: {
       scenarios: {
-        default: { position: plotPosition, scale: 1 },
-        // title: { position: [-1.2, -1.25], scale: 0.9 },
-        title: { position: plotPosition, scale: 1 },
+        default: { position: [-1.3, -1.1], scale: 1 },
       },
     },
     elements: [
@@ -97,14 +63,14 @@ figure.add([
         options: {
           trace: [
             {
-              points: getFx(-2, 0),
-              name: 'fxTrace',
-              line: { width: 0.01, color: greyColor },
-            },
-            {
               points: getFx(0, 0),
               name: 'fxTraceDash',
               line: { width: 0.005, dash: [0.05, 0.01], color: greyColor },
+            },
+            {
+              points: getFx(-2, 0),
+              name: 'fxTrace',
+              line: { width: 0.01, color: dGreyColor },
             },
             {
               points: getFx(0, 0),
@@ -112,8 +78,8 @@ figure.add([
               line: { width: 0.01, color: primaryCol },
             },
           ],
-          width,
-          height,
+          width: plotWidth,
+          height: plotHeight,
           xAxis: {
             grid: [
               { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
@@ -135,7 +101,8 @@ figure.add([
               axis: 'x',
               ticks: null,
               grid: null,
-              position: [0, height / 6],
+              position: [0, plotHeight / 6],
+              color: greyColor,
               line: { arrow: { end: { head: 'triangle', scale: 2 } } },
               title: {
                 text: 'x',
@@ -143,30 +110,31 @@ figure.add([
                 offset: [1.45, 0.12],
               }
             },
-            {
-              name: 'titleY',
-              axis: 'y',
-              ticks: null,
-              grid: null,
-              length: height - height / 6,
-              // position: [0, height / 6],
-              position: [0, height/ 6],
-              line: { arrow: { end: { head: 'triangle', scale: 2 } } },
-              title: {
-                text: 'y',
-                font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
-                rotation: 0,
-                offset: [0.1, 0.75],
-              }
-            },
+            // {
+            //   name: 'titleY',
+            //   axis: 'y',
+            //   ticks: null,
+            //   grid: null,
+            //   length: height - height / 6,
+            //   // position: [0, height / 6],
+            //   position: [0, height/ 6],
+            //   line: { arrow: { end: { head: 'triangle', scale: 2 } } },
+            //   title: {
+            //     text: 'y',
+            //     font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
+            //     rotation: 0,
+            //     offset: [0.1, 0.75],
+            //   }
+            // },
             {
               name: 'middleY',
               axis: 'y',
               ticks: null,
               grid: null,
-              length: height - height / 6,
+              color: greyColor,
+              length: plotHeight - plotHeight / 6,
               // position: [0, height / 6],
-              position: [width / 2, height/ 6],
+              position: [plotWidth / 2, plotHeight/ 6],
               line: { arrow: { end: { head: 'triangle', scale: 2 } } },
               title: {
                 text: 'y',
@@ -199,26 +167,26 @@ figure.add([
         method: 'primitives.rectangle',
         options: {
           width: 2,
-          height: height + 0.2,
-          position: [width / 2, height / 2],
-          color: [1, 0, 0, 0.1],
+          height: plotHeight + 0.2,
+          position: [plotWidth / 2, plotHeight / 2],
+          color: [1, 0, 0, 0],
         },
         mods: {
           isMovable: true,
           move: {
             style: 'translation',
             bounds: { translation: {
-              p1: [width / 5, height / 2],
-              mag: width / 5 * 3,
+              p1: [plotWidth / 5, plotHeight / 2],
+              mag: plotWidth / 5 * 3,
               angle: 0,
             } },
           }
         }
       },
-      makeEqn('eqnF0', 'f', 'left'),
-      makeEqn('eqnY0', 'y', 'left'),
-      makeMark('markF0', greyColor),
-      makeMark('markY0', primaryCol),
+      makeEqn('eqnF', 'f', 'left'),
+      makeEqn('eqnY', 'y', 'left'),
+      makeMark('markF', greyColor),
+      makeMark('markY', primaryCol),
       {
         name: 'marks',
         method: 'collection',
@@ -249,6 +217,16 @@ figure.add([
     ],
   },
   {
+    name: 'title',
+    method: 'primitives.text',
+    options: {
+      text: 'Equation Shifting',
+      xAlign: 'center',
+      position: [0, 1],
+      font: { size: 0.2 },
+    },
+  },
+  {
     name: 'eqn',
     method: 'collections.equation',
     options: {
@@ -267,8 +245,6 @@ figure.add([
         rbr: { symbol: 'bracket', side: 'right', color: primaryCol },
         x_r: { color: primaryCol },
         line: { symbol: 'line', width: 0.005, arrow: { start: 'triangle' } },
-        // strike1: { symbol: 'strike', lineWidth: 0.005, style: 'forward' },
-        // strike2: { symbol: 'strike', lineWidth: 0.005, style: 'forward' },
         brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
       },
       phrases: {
@@ -276,8 +252,6 @@ figure.add([
         yxr: ['y_r', brac('lbr', 'x_r', 'rbr')],
         fx: ['f', brac('lb2', 'x_2', 'rb2')],
         xD: ['x_2', ' ', 'min', ' ', 'd'],
-        // minStrike: { strike: ['min', 'strike1'] },
-        // min2Strike: { strike: ['min2', 'strike2'] },
         xDToMinD: [
           'x_2', ' ', 'min', ' ',
           {
@@ -320,7 +294,7 @@ figure.add([
       scenarios: {
         default: { position: [0, -1.2], scale: 1.2 },
         center: { position: [-0.1, -0.3], scale: 2.2 },
-        title: { position: [-0.5, -1.05], scale: 1 },
+        title: { position: [-0.4, -1.05], scale: 1 },
         example: { position: [0, 0.7], scale: 1 },
       }
     }
@@ -338,8 +312,8 @@ figure.add([
       phrases: { yx: ['y', brac('lb1', 'x_1', 'rb1')] },
       forms: { title: ['yx', '_  =  ', 'unknown'] },
       formDefaults: { alignment: { xAlign: 'center' } },
+      position: [0.4, -1.05 ],
     },
-    mods: { scenarios: { title: { position: [0.5, -1.05 ] } } },
   },
   {
     name: 'nav',
@@ -367,8 +341,8 @@ const diagram = figure.getElement('diagram');
 const plot = diagram.getElement('plot');
 const eqn = figure.getElement('eqn');
 const nav = figure.getElement('nav');
-const eqnF = diagram.getElement('eqnF0');
-const eqnY = diagram.getElement('eqnY0');
+const eqnF = diagram.getElement('eqnF');
+const eqnY = diagram.getElement('eqnY');
 const dist = diagram.getElement('distance');
 
 let precision = 0;
@@ -400,9 +374,18 @@ const setElement = (name, position, label = null) => {
   }
 }
 
+const offsetsValue = [
+  [-2, [-1.35, -0.4], [0.2, 0.2]],
+  [-1, [-1.35, -0.4], [0.2, 0.2]],
+  [0, [-0.3, 0.3], [-0.4, -0.45]],
+  [1, [-1.15, 0.15], [0.1, -0.4]],
+  [2, [-1.15, 0.15], [0.1, -0.4]],
+];
+const offsetsD = [[-2.1], [-1.4], [-0.7], [0], [0.7], [1.4], [2.1]];
+
 let cycler = 0;
 let whichX = 'fx';
-let offsets = offsetsXEquals;
+let offsets = offsetsValue;
 const cycle = () => {
   cycler = (cycler + 1) % offsets.length;
   // valueEqn.updateElementText({ value2: `${offsets[cycler][0]}` });
@@ -430,10 +413,10 @@ const update = () => {
     eqn.updateElementText({ sign, value2 }, 'current');
   }
   if (updateEqns) {
-    setElement('eqnY0', [yX + yLabel[0], y + yLabel[1]], yX);
-    setElement('eqnF0', [fX + fLabel[0], y + fLabel[1]], fX);
-    setElement('markY0', [yX, y]);
-    setElement('markF0', [fX, y]);
+    setElement('eqnY', [yX + yLabel[0], y + yLabel[1]], yX);
+    setElement('eqnF', [fX + fLabel[0], y + fLabel[1]], fX);
+    setElement('markY', [yX, y]);
+    setElement('markF', [fX, y]);
   }
   if (dist.isShown) {
     dist.setEndPoints(plot.pointToDraw([fX, y]), plot.pointToDraw([yX, y]));
@@ -466,8 +449,8 @@ const animateShift = (offset) => {
     .start();
 };
 
-setElement('eqnF0', [-2.2, 4.2], '-2');
-setElement('markF0', [-2, 4]);
+setElement('eqnF', [-2.2, 4.2], '-2');
+setElement('markF', [-2, 4]);
 
 const setMark = (markName, xValue, xOffset) => {
   const mark = marks.getElement(markName);
@@ -568,12 +551,6 @@ const times = 'Times New Roman'
 // //////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////
 slides.push({
-  text: [
-    // '', 'What happens when we shift an equation?',
-    {
-      text: 'Equation shift - |x| axis',
-    }
-  ],
   modifiersCommon: {
     x: { font: { family: times, style: 'italic' } },
     d: { font: { family: times, style: 'italic' } },
@@ -599,18 +576,17 @@ slides.push({
     lb: { text: '(', font: { family: times, color: primaryCol } },
     rb: { text: ')', font: { family: times, color: primaryCol } },
     xr: { text: 'x', font: { family: times, style: 'italic', color: primaryCol } },
-    positive: { font: { style: 'italic' } },
-    negative: { font: { style: 'italic' } },
     n: { font: { family: times, style: 'italic', size: 0.1, }, offset: [0, -0.05 ] },
   },
   steadyState: () => {
     figure.showOnly([
       'nav', trace, 'diagram.plot.fxTrace', 'eqnTitle',
-      'diagram.plot.titleX', 'diagram.plot.titleY',
+      'diagram.plot.titleX', 'diagram.plot.middleY', 'title',
     ]);
+    figure.setScenarios('default');
     figure.setScenarios('title');
-    trace.update(getFx(2, 0));
-    fxTrace.update(getFx(-2, 0));
+    trace.update(getFx(1.6, 0));
+    fxTrace.update(getFx(-1.6, 0));
     eqn.showForm('fx');
   },
   leaveState: () => {
@@ -632,7 +608,7 @@ slides.push({
   enterState: () => {
     figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY', fxTrace]);
     figure.setScenarios('default');
-    fxTrace.update(getFx(0, 0));
+    // fxTrace.update(getFx(0, 0));
     // eqn.showForm('fx');
   },
   transition: (done) => {
@@ -646,7 +622,7 @@ slides.push({
     fxTrace.show()
     eqn.setScenario('initial');
     eqnF.showForm('funcX')
-    setElement('eqnF0', [-3.1, 4]);
+    setElement('eqnF', [-3.1, 4]);
   },
   form: 'fx'
 });
@@ -657,11 +633,11 @@ slides.push({
   enterStateCommon: () => {
     figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY', fxTrace]);
     figure.setScenarios('default');
-    fxTrace.update(getFx(0, 0));
+    // fxTrace.update(getFx(0, 0));
     eqn.showForm('fx');
     eqn.setScenario('initial');
     eqnF.showForm('funcX')
-    setElement('eqnF0', [-3.1, 4]);
+    setElement('eqnF', [-3.1, 4]);
   },
   text: [
     'We can think of this function |f| as a number of',
@@ -706,17 +682,12 @@ slides.push({
     figure.setScenarios('default');
     eqn.setScenario('initial');
     eqnF.showForm('funcX')
-    setElement('eqnF0', [-3.1, 4]);
-    // updateEqns = false;
+    setElement('eqnF', [-3.1, 4]);
   },
   enterState: () => { fxTrace.showAll(); },
-  // steadyState: () => {
-  //   eqn.show()
-  // }
 });
 
 slides.push({
-  // fx: 'unknown',
   enterState: () => {
     eqn.hide();
     fxTrace.showAll();
@@ -737,11 +708,9 @@ slides.push({
     trace.show();
     fxTrace.hide();
     moveTrace(2, null, 0);
-    setElement('eqnF0', [-3.1, 4]);
-    setElement('eqnY0', [4.4, 4]);
+    setElement('eqnF', [-3.1, 4]);
+    setElement('eqnY', [4.4, 4]);
     eqnY.showForm('funcX');
-    // eqn.hide();
-    // eqn.showForm('unknown')
   },
 });
 
@@ -767,7 +736,7 @@ slides.push({
     dist.showAll();
     dist.setEndPoints([10, 10], [11, 11]);
     trace.show();
-    setElement('eqnY0', [4.4, 4]);
+    setElement('eqnY', [4.4, 4]);
     eqnY.showForm('funcX');
   },
 });
@@ -778,8 +747,8 @@ slides.push({
     moveTrace(2, null, 0);
     eqnF.showForm('funcX');
     eqnY.showForm('funcX');
-    setElement('eqnF0', [-3.1, 4]);
-    setElement('eqnY0', [4.4, 4]);
+    setElement('eqnF', [-3.1, 4]);
+    setElement('eqnY', [4.4, 4]);
     trace.show();
     marks.undim();
   },
@@ -824,14 +793,10 @@ slides.push({
   ],
   enterStateCommon: () => {
     figure.showOnly([nav, 'eqn']);
-    // eqn.showForm('fxd');
     eqn.setScenario('center');
   },
 });
-slides.push({
-  form: 'fxd1',
-  steadyState: () => { console.log(eqn.getCurrentForm()) },
-});
+slides.push({ form: 'fxd1' });
 slides.push({ form: 'fxd2' });
 slides.push({ form: 'fxd3' });
 slides.push({ form: 'fxd4' });
@@ -852,16 +817,16 @@ slides.push({
   },
   steadyState: () => {
     figure.showOnly([nav, diagram, eqn]);
-    diagram.hide(['distance', 'plot.titleX', 'plot.middleY', 'plot.titleY', 'plot.fxTrace', 'marks'])
+    diagram.hide(['distance', 'plot.titleX', 'plot.middleY', fxTrace, 'marks'])
     offsets = offsetsValue;
     cycler = 2;
     precision = 1;
     updateEqns = true;
     eqn.showForm('value');
-    diagram.getElement('eqnF0').showForm('0');
-    diagram.getElement('eqnY0').showForm('0');
+    diagram.getElement('eqnF').showForm('0');
+    diagram.getElement('eqnY').showForm('0');
     movePad.setTouchable();
-    movePad.setPosition(width / 2, 0);
+    movePad.setPosition(plotWidth / 2, 0);
     figure.setScenarios('example');
   },
   leaveState: () => {
@@ -871,6 +836,9 @@ slides.push({
 });
 
 figure.getElement('nav').loadSlides(slides);
+
+
+
 // figure.getElement('nav').goToSlide(9);
 
 /*

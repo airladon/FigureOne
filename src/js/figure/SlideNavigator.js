@@ -486,9 +486,9 @@ export default class SlideNavigator {
     }
     const mods = this.getProperty('modifiers', index, {});
     const commonMods = this.getProperty('modifiersCommon', index, {});
-
+    const text = this.getText(index) || ' ';
     textElement.custom.updateText({
-      text: this.getText(index),
+      text,
       modifiers: joinObjects({}, commonMods, mods),
     });
   }
