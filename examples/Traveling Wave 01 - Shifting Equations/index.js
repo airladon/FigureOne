@@ -115,18 +115,6 @@ figure.add([
           width,
           height,
           xAxis: {
-            // start: -4.5,
-            // stop: 4.5,
-            // ticks: { values: [-4, -3, -2, -1, 1, 2, 3, 4], width: 0.003, offset: -0.015, length: 0.03 },
-            // labels: { offset: [0, 0.02], font: { size: 0.07, color: greyColor } },
-            // line: { width: 0.003, arrow: 'triangle' },
-            // // grid: false,
-            // title: {
-            //   text: 'x',
-            //   font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
-            //   offset: [1.2, 0.2],
-            // },
-            // position: [0, height / 8 * 1.5],
             grid: [
               { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
               { values: [0], width: 0.003, dash: [], },
@@ -189,19 +177,6 @@ figure.add([
             },
           ],
           yAxis: {
-            // start: -1.5,
-            // stop: 5.5,
-            // ticks: { values: [-1, 1, 2, 3, 4, 5], width: 0.003, offset: -0.025, },
-            // // grid: false,
-            // line: { width: 0.003, arrow: 'triangle' },
-            // labels: { font: { size: 0.07, color: greyColor } },
-            // position: [width / 2, 0],
-            // title: {
-            //   text: 'y',
-            //   rotation: 0,
-            //   offset: [0.2, 0.85],
-            //   font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
-            // }
             start: -1,
             stop: 5,
             labels: { font: { size: 0.08 }, offset: [0.04, 0] },
@@ -262,7 +237,6 @@ figure.add([
         method: 'collections.line',
         options: {
           width: 0.004,
-          // dash: [0.02, 0.005],
           arrow: {
             head: 'circle',
             align: 'mid',
@@ -278,48 +252,64 @@ figure.add([
     name: 'eqn',
     method: 'collections.equation',
     options: {
-      // color: primaryCol,
       elements: {
-        value1: { text: '0.0', color: primaryCol },
         value2: '0.0',
         sign: ' \u2212 ',
-        min: ' \u2212 ',
+        min: '\u2212',
         min2: '\u2212',
         equals: ' = ',
         lb1: { symbol: 'bracket', side: 'left' },
         lb2: { symbol: 'bracket', side: 'left' },
         rb1: { symbol: 'bracket', side: 'right' },
         rb2: { symbol: 'bracket', side: 'right' },
-        unknown: '?',
         y_r: { color: primaryCol },
         lbr: { symbol: 'bracket', side: 'left', color: primaryCol },
         rbr: { symbol: 'bracket', side: 'right', color: primaryCol },
         x_r: { color: primaryCol },
+        line: { symbol: 'line', width: 0.005, arrow: { start: 'triangle' } },
+        // strike1: { symbol: 'strike', lineWidth: 0.005, style: 'forward' },
+        // strike2: { symbol: 'strike', lineWidth: 0.005, style: 'forward' },
+        brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
       },
       phrases: {
         yx: ['y', brac('lb1', 'x_1', 'rb1')],
         yxr: ['y_r', brac('lbr', 'x_r', 'rbr')],
         fx: ['f', brac('lb2', 'x_2', 'rb2')],
-        fxn: ['f', brac('lb2', { sub: ['x_2', 'n'] }, 'rb2')],
-        fxd: ['f', brac('lb2', ['x_2', 'min', 'd'], 'rb2', 0.04)],
+        xD: ['x_2', ' ', 'min', ' ', 'd'],
+        // minStrike: { strike: ['min', 'strike1'] },
+        // min2Strike: { strike: ['min2', 'strike2'] },
+        xDToMinD: [
+          'x_2', ' ', 'min', ' ',
+          {
+            bottomComment: {
+              content: 'd',
+              comment: ['min2', 'd_1'],
+              symbol: 'line',
+              inSize: false,
+              commentSpace: 0.2,
+            },
+          },
+        ],
+        minToPlus: {
+          bottomComment: {
+            content: ['min', ' ', 'min2'],
+            comment: '_ + ',
+            symbol: 'brace',
+            inSize: false,
+          },
+        },
+        xDMinD: ['x_2', ' ', 'min', ' ', 'min2', 'd_1'],
+        xDMinStrikeD: ['x_2', ' ', 'minToPlus', 'd_1'],
+        xPlusD: ['x_2', '_ + ', 'd_1'],
         fxValue: ['f', brac('lb2', ['x_2', 'sign', 'value2'], 'rb2', 0.04)],
-        fxd1: ['f', brac('lb2', ['x_2', 'min', brac('lb1', ['min2', 'd'], 'rb1')], 'rb2', 0.04)],
-        fxd2: ['f', brac('lb2', ['x_2', '_ + ', 'd'], 'rb2', 0.04)],
-        yValue: ['y_r', brac('lbr', 'value1', 'rbr')],
-        fValue: ['f', brac('lb2', 'value2', 'rb2')],
       },
       forms: {
-        0: ['yxr', 'equals', 'f', ' ', brac('lb2', ['x_2', ' ', 'sign', 'value'], 'rb2')],
         fx: ['yx', 'equals', 'fx'],
-        // fxn: ['yx', 'equals', 'fxn'],
-        fxd: ['yxr', 'equals', 'fxd'],
-        fxd1: ['yxr', 'equals', 'fxd1'],
-        fxd2: ['yxr', 'equals', 'fxd2'],
-        fxyx: {
-          content: ['fx', '               ', 'yx'],
-          alignment: { xAlign: 1.5, fixTo: 'f' },
-        },
-        yxUnknown: ['yxr', 'equals', 'unknown'],
+        fxd: ['yxr', 'equals', 'f', brac('lb2', 'xD', 'rb2', 0.04)],
+        fxd1: ['yxr', 'equals', 'f', brac('lb2', 'xDToMinD', 'rb2', 0.04)],
+        fxd2: ['yxr', 'equals', 'f', brac('lb2', 'xDMinD', 'rb2', 0.04)],
+        fxd3: ['yxr', 'equals', 'f', brac('lb2', 'xDMinStrikeD', 'rb2', 0.04)],
+        fxd4: ['yxr', 'equals', 'f', brac('lb2', 'xPlusD', 'rb2', 0.04)],
         value: ['yxr', 'equals', 'fxValue'],
       },
       formDefaults: {
@@ -335,41 +325,6 @@ figure.add([
       }
     }
   },
-  // {
-  //   name: 'valueEqn',
-  //   method: 'collections.equation',
-  //   options: {
-  //     elements: {
-  //       value1: '0.0',
-  //       value2: '0.0',
-  //       equals: '  =  ',
-  //       equals1: { text: ' = ', color: primaryCol },
-  //       x: { color: primaryCol },
-  //       y: { color: primaryCol },
-  //       lb1: { symbol: 'bracket', side: 'left', color: primaryCol },
-  //       rb1: { symbol: 'bracket', side: 'right', color: primaryCol },
-  //       lb2: { symbol: 'bracket', side: 'left' },
-  //       rb2: { symbol: 'bracket', side: 'right' },
-  //       value1: { text: '0', color: primaryCol },
-  //       value2: '0',
-  //     },
-  //     phrases: {
-  //       yValue: ['y', brac('lb1', ['x', 'equals1', 'value1'], 'rb1')],
-  //       fValue: ['f', ' ', brac('lb2', ['x_2', '_ = _1', 'value2'], 'rb2')],
-  //     },
-  //     forms: {
-  //       0: ['yValue', 'equals', 'fValue'],
-  //     },
-  //     formDefaults: {
-  //       alignment: { fixTo: 'equals', xAlign: 'center' },
-  //     },
-  //   },
-  //   mods: { 
-  //     scenarios: {
-  //       default: { position: [0, 0.7] },
-  //     }
-  //   }
-  // },
   {
     name: 'eqnTitle',
     method: 'collections.equation',
@@ -404,17 +359,13 @@ figure.add([
 
 const trace = figure.getElement('diagram.plot.mainTrace');
 const fxTrace = figure.getElement('diagram.plot.fxTrace');
-// const fxTrace = figure.getElement('diagram.plot.fxTrace');
-// const titleTrace = figure.getElement('diagram.plot.titleTrace');
 const movePad = figure.getElement('diagram.movePad');
 const marks = figure.getElement('diagram.marks');
 const xAxis = figure.getElement('diagram.plot.x');
 const yAxis = figure.getElement('diagram.plot.y');
 const diagram = figure.getElement('diagram');
 const plot = diagram.getElement('plot');
-// const drawPoint = figure.getElement('diagram.drawPoint');
 const eqn = figure.getElement('eqn');
-// const valueEqn = figure.getElement('valueEqn')
 const nav = figure.getElement('nav');
 const eqnF = diagram.getElement('eqnF0');
 const eqnY = diagram.getElement('eqnY0');
@@ -618,13 +569,16 @@ const times = 'Times New Roman'
 // //////////////////////////////////////////////////////////
 slides.push({
   text: [
-    '', 'What happens when we shift an equation?',
+    // '', 'What happens when we shift an equation?',
+    {
+      text: 'Equation shift - |x| axis',
+    }
   ],
   modifiersCommon: {
     x: { font: { family: times, style: 'italic' } },
     d: { font: { family: times, style: 'italic' } },
-    
     d1: {
+      text: 'd',
       font: { family: times, style: 'italic', color: actionColor },
       onClick: () => { dist.show(); cycle(); },
       touchBorder: 0.08,
@@ -667,7 +621,7 @@ slides.push({
 // //////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////
 slides.push({
-  text: 'We start by plotting a function |f|(|x|).',
+  text: 'Start by plotting a function |f|(|x|).',
   steadyState: () => {
     figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY']);
     figure.setScenarios('default');
@@ -692,7 +646,7 @@ slides.push({
     fxTrace.show()
     eqn.setScenario('initial');
     eqnF.showForm('funcX')
-    setElement('eqnF0', [-0.3, -0.5]);
+    setElement('eqnF0', [-3.1, 4]);
   },
   form: 'fx'
 });
@@ -707,7 +661,7 @@ slides.push({
     eqn.showForm('fx');
     eqn.setScenario('initial');
     eqnF.showForm('funcX')
-    setElement('eqnF0', [-0.3, -0.5]);
+    setElement('eqnF0', [-3.1, 4]);
   },
   text: [
     'We can think of this function |f| as a number of',
@@ -752,7 +706,7 @@ slides.push({
     figure.setScenarios('default');
     eqn.setScenario('initial');
     eqnF.showForm('funcX')
-    setElement('eqnF0', [-0.3, -0.5]);
+    setElement('eqnF0', [-3.1, 4]);
     // updateEqns = false;
   },
   enterState: () => { fxTrace.showAll(); },
@@ -783,8 +737,8 @@ slides.push({
     trace.show();
     fxTrace.hide();
     moveTrace(2, null, 0);
-    setElement('eqnF0', [-0.3, -0.5]);
-    setElement('eqnY0', [1.7, -0.5]);
+    setElement('eqnF0', [-3.1, 4]);
+    setElement('eqnY0', [4.4, 4]);
     eqnY.showForm('funcX');
     // eqn.hide();
     // eqn.showForm('unknown')
@@ -813,7 +767,7 @@ slides.push({
     dist.showAll();
     dist.setEndPoints([10, 10], [11, 11]);
     trace.show();
-    setElement('eqnY0', [1.7, -0.5]);
+    setElement('eqnY0', [4.4, 4]);
     eqnY.showForm('funcX');
   },
 });
@@ -824,8 +778,8 @@ slides.push({
     moveTrace(2, null, 0);
     eqnF.showForm('funcX');
     eqnY.showForm('funcX');
-    setElement('eqnF0', [-0.3, -0.5]);
-    setElement('eqnY0', [1.7, -0.5]);
+    setElement('eqnF0', [-3.1, 4]);
+    setElement('eqnY0', [4.4, 4]);
     trace.show();
     marks.undim();
   },
@@ -840,6 +794,7 @@ slides.push({
 slides.push({
   enterStateCommon: () => {},
   steadyStateCommon: () => {},
+  enterState: () => figure.showOnly(['nav', eqn]),
   transition: (done) => {
     figure.showOnly([nav, 'eqn']);
     eqn.showForm('fxd');
@@ -852,6 +807,9 @@ slides.push({
   steadyState: () => {
     eqn.showForm('fxd');
     eqn.setScenario('center');
+  },
+  modifiers: {
+    d1: { font: { family: times, style: 'italic', color: [0.5, 0.5, 0.5, 1] } },
   },
 });
 
@@ -874,14 +832,13 @@ slides.push({
   form: 'fxd1',
   steadyState: () => { console.log(eqn.getCurrentForm()) },
 });
-slides.push({
-  form: 'fxd2',
-});
+slides.push({ form: 'fxd2' });
+slides.push({ form: 'fxd3' });
+slides.push({ form: 'fxd4' });
 
 
 // //////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////
-
 slides.push({
   enterStateCommon: () => {},
   text: [
@@ -900,12 +857,12 @@ slides.push({
     cycler = 2;
     precision = 1;
     updateEqns = true;
-    movePad.setTouchable();
-    movePad.setPosition(width / 2, 0);
+    eqn.showForm('value');
     diagram.getElement('eqnF0').showForm('0');
     diagram.getElement('eqnY0').showForm('0');
+    movePad.setTouchable();
+    movePad.setPosition(width / 2, 0);
     figure.setScenarios('example');
-    eqn.showForm('value');
   },
   leaveState: () => {
     precision = 0;
@@ -913,96 +870,8 @@ slides.push({
   },
 });
 
-// // //////////////////////////////////////////////////////////
-// // //////////////////////////////////////////////////////////
-// slides.push({
-//   text: [
-//     'So if a function is shifted in |x| by |d| we have:',
-//   ],
-//   enterStateCommon: () => {},
-// });
-// slides.push({
-//   form: 'fxd',
-// });
-
-// slides.push({
-//   enterStateCommon: () => {},
-//   modifiers: {
-//     each: {
-//       onClick: () => cycle(),
-//       color: actionColor,
-//     },
-//   },
-//   steadyStateCommon: () => {
-//     setMarks(0);
-//     figure.showOnly(['nav']);
-//     diagram.showOnly([
-//       'plot.titleX', 'plot.middleY', 'plot.fxTrace',
-//       'markY0', 'markF0', 'eqnY0', 'eqnF0', trace, movePad,
-//     ]);
-//     offsets = offsetsXEquals;
-//     cycler = 2;
-//     precision = 0;
-//     figure.setScenarios('default');
-//     movePad.setPosition(xAxis.valueToDraw(2), 0);
-//     eqnF.showForm('x');
-//     eqnY.showForm('x');
-//     setElement('eqnF0', [-0.7, -0.5], '0')
-//     setElement('eqnY0', [1.3, -0.5], '2')
-//     setElement('markF0', [0, 0]);
-//     setElement('markY0', [2, 0]);
-//   },
-// });
-
-// // //////////////////////////////////////////////////////////
-// // //////////////////////////////////////////////////////////
-// // slides.push({
-// //   text: [
-// //     'A positive shift means |each| value |y||lb||x||rb| is the same',
-// //     'as |f| operating on a more negative value of |x|.',
-// //   ],
-// //   enterState: () => eqn.hide(),
-// // });
-
-
-// slides.push({
-//   enterStateCommon: () => {},
-//   text: [
-//     'Let\'s look at |one| point at a time',
-//   ],
-//   modifiers: {
-//     one: {
-//       font: { color: actionColor },
-//       onClick: () => cycle(),
-//     }
-//   },
-//   steadyStateCommon: () => {
-//     figure.showOnly([
-//       'nav', trace,
-//       'diagram.plot.fxTrace', 'diagram.plot.titleX', 'diagram.plot.middleY',
-//     ]);
-//     diagram.show([
-//       movePad,
-//       `markY0`, `markF0`, `eqnF0`, `eqnY0`,
-//     ]);
-//     movePad.setPosition(xAxis.valueToDraw(2), 0)
-//     // eqn.highlight(['y', 'lb1', 'x_1', 'rb1'])
-//     figure.elements.setScenarios('default');
-//     movePad.setMovable()
-//     // movePad.isTouchable = true;
-//     // trace.update(getFx(2, 0));
-//     valueEqn.showForm('0');
-//     diagram.getElement('eqnF0').showForm('0');
-//     diagram.getElement('eqnY0').showForm('0');
-//     cycle();
-//   },
-//   leaveState: () => {
-//     movePad.isTouchable = false;
-//   }
-// });
-
 figure.getElement('nav').loadSlides(slides);
-figure.getElement('nav').goToSlide(5);
+// figure.getElement('nav').goToSlide(9);
 
 /*
 We start with some function g(x). Each value of g aligns with an x value.
