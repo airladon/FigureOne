@@ -333,7 +333,7 @@ const modifiersCommon = {
 };
 
 // Setup slides
-figure.getElement('nav').setSlides([
+figure.getElement('nav').loadSlides([
   {
     text: [
       'Touch and move the |blue line|, and compare',

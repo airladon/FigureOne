@@ -695,6 +695,34 @@ class CollectionsPlot extends FigureElementCollection {
     return null;
   }
 
+  pointToDraw(
+    point: TypeParsablePoint,
+    xAxisName: string = 'x',
+    yAxisName: string = 'y',
+  ) {
+    const xAxis = this.getAxis(xAxisName);
+    const yAxis = this.getAxis(yAxisName);
+    if (xAxis == null || yAxis == null) {
+      return null;
+    }
+    const p = getPoint(point);
+    return new Point(xAxis.valueToDraw(p.x), yAxis.valueToDraw(p.y));
+  }
+
+  drawToPoint(
+    point: TypeParsablePoint,
+    xAxisName: string = 'x',
+    yAxisName: string = 'y',
+  ) {
+    const xAxis = this.getAxis(xAxisName);
+    const yAxis = this.getAxis(yAxisName);
+    if (xAxis == null || yAxis == null) {
+      return null;
+    }
+    const p = getPoint(point);
+    return new Point(xAxis.drawToPoint(p.x), yAxis.drawToPoint(p.y));
+  }
+
   addTraces(traces: Array<COL_Trace>) {
     const theme = this.getTheme(this.theme);
     traces.forEach((traceOptions, index) => {

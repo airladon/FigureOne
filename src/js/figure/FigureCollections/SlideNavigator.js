@@ -223,7 +223,7 @@ export type COL_SlideNavigator = {
  * };
  *
  * // Add slides to the navigator
- * figure.getElement('nav').setSlides([
+ * figure.getElement('nav').loadSlides([
  *   {
  *     text: 'The area of a square is the side length squared',
  *     form: '0',
@@ -322,13 +322,33 @@ class CollectionsSlideNavigator extends FigureElementCollection {
     };
   }
 
-  setSlides(slides: Array<OBJ_SlideNavigatorSlide>) {
+  /**
+   * Load slides into navigator
+   */
+  loadSlides(slides: Array<OBJ_SlideNavigatorSlide>) {
     this.nav.slides = slides;
     this.nav.goToSlide(0);
   }
 
+  /**
+   * Jump to a specific slide.
+   */
   goToSlide(slideIndex: number) {
     this.nav.goToSlide(slideIndex);
+  }
+
+  /**
+   * Progress to the next slide.
+   */
+  nextSlide(ignoreTransition: boolean = false) {
+    this.nav.nextSlide(ignoreTransition);
+  }
+
+  /**
+   * Go to the previous slide.
+   */
+  prevSlide() {
+    this.nav.prevSlide();
   }
 
   // onAdd() {

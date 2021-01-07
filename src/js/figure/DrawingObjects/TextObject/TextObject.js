@@ -553,9 +553,11 @@ class TextObjectBase extends DrawingObject {
   }
 
   setText(textOrOptions: string | OBJ_TextDefinition, index: number = 0) {
+    this.clear();
     this.text[index].setText(textOrOptions);
     this.setBorder();
     this.setTouchBorder();
+    // this.layoutText();
   }
 
   // setText(text: string, index: number = 0) {
@@ -570,6 +572,7 @@ class TextObjectBase extends DrawingObject {
   }
 
   setFont(font: OBJ_Font, index: null | number = 0) {
+    this.clear();
     if (index === null) {
       for (let i = 0; i < this.text.length; i += 1) {
         this.text[i].setFont(font);
@@ -581,6 +584,7 @@ class TextObjectBase extends DrawingObject {
   }
 
   setOpacity(opacity: number, index: null | number = 0) {
+    this.clear();
     if (index === null) {
       for (let i = 0; i < this.text.length; i += 1) {
         this.setFont({ opacity }, i);

@@ -4,7 +4,7 @@ const { Point } = Fig;
 const { round, range } = Fig.tools.math;
 const x = range(-5, 5, 0.1);
 const xSparse = range(-5, 5, 1);
-const fx = (xx, ox, oy) => new Point(xx, (xx - ox) ** 2 + oy);
+const fx = (xx, ox = 0, oy = 0) => new Point(xx, (xx - ox) ** 2 + oy);
 const getFx = (ox, oy) => x.map(xx => fx(xx, ox, oy));
 const getFxSparse = (xMax, ox, oy) => xSparse.filter(xx => xx <= xMax + 0.001).map(xx => fx(xx, ox, oy));
 
@@ -14,31 +14,14 @@ const height = 1.66;
 const greyColor = [0.6, 0.6, 0.6, 1];
 const actionColor = [0, 0.6, 1, 1];
 const primaryColor = [1, 0, 0, 1];
-const refX = [-2, 0, 1];
-// const makeEqn = (name, position, color = primaryColor) => ({
-//   name,
-//   method: 'collections.equation',
-//   options: {
-//     elements: {
-//       value1: '1',
-//       value2: '1',
-//       equals: '  =  ',
-//       sign: ' \u2212 ',
-//     },
-//     phrases: {
-//       yx: ['y', '_(_1', 'value1', '_)_1'],
-//       fx: ['f', ' ', '_(_2', 'value2', '_)_2'],
-//     },
-//     forms: {
-//       0: ['yx', 'equals', 'fx'],
-//     },
-//     formDefaults: {
-//       alignment: { xAlign: 'center', fixTo: 'equals' },
-//     },
-//     position,
-//     scale: 0.5
-//   },
-// });
+const offsets = [
+  [-2, [-1.35, -0.4], [0.2, 0.2]],
+  [-1, [-1.35, -0.4], [0.2, 0.2]],
+  [0, [-0.3, 0.3], [-0.4, -0.45]],
+  [1, [-1.15, 0.15], [0.1, -0.4]],
+  [2, [-1.15, 0.15], [0.1, -0.4]],
+];
+
 const makeEqn = (name, funcName, xAlign = 'left') => ({
   name,
   method: 'collections.equation',
@@ -53,29 +36,13 @@ const makeEqn = (name, funcName, xAlign = 'left') => ({
     formDefaults: { alignment: { xAlign } },
     forms: {
       0: ['func', ' ', '_(', { scale: [['x', 'equals'], 0.4] }, 'value', '_)'],
-      // noX: ['func', ' ', '_(', 'value', '_)'],
-      // withX: ['func', ' ', '_(','x', '_ = ', 'value', '_)'],
+      funcX: ['func', ' ', '_(', 'x_1', '_)'],
     },
     scale: 0.6,
   },
 });
-// const makeYEqn = (name, xAlign) => ({
-//   name,
-//   method: 'collections.equation',
-//   options: {
-//     elements: {
-//       value: '0',
-//     },
-//     color: primaryColor,
-//     formDefaults: { alignment: { xAlign } },
-//     forms: {
-//       0: ['y', ' ', '_(', 'value', '_)'],
-//     },
-//     scale: 0.6,
-//   },
-// });
 
-const makeMark = (name, color = greyColor, radius = 0.017) => ({
+const makeMark = (name, color = greyColor, radius = 0.02) => ({
   name,
   method: 'primitives.polygon',
   options: {
@@ -102,7 +69,8 @@ figure.add([
     mods: {
       scenarios: {
         default: { position: plotPosition, scale: 1 },
-        title: { position: [-1.2, -1.25], scale: 0.9 },
+        // title: { position: [-1.2, -1.25], scale: 0.9 },
+        title: { position: plotPosition, scale: 1 },
       },
     },
     elements: [
@@ -119,18 +87,13 @@ figure.add([
             {
               points: getFx(0, 0),
               name: 'fxTrace',
-              line: { width: 0.005, dash: [0.01, 0.01], color: greyColor },
+              line: { width: 0.005, dash: [0.05, 0.01], color: greyColor },
             },
             {
               points: getFx(0, 0),
               name: 'mainTrace',
               line: { width: 0.01, color: primaryColor },
             },
-            // {
-            //   points: [],
-            //   name: 'marks',
-            //   markers: { radius: 0.02, color: [1, 0, 0, 1], sides: 10 },
-            // },
           ],
           width,
           height,
@@ -180,6 +143,7 @@ figure.add([
               axis: 'y',
               ticks: null,
               grid: null,
+              length: height - height / 6,
               // position: [0, height / 6],
               position: [0, height/ 6],
               line: { arrow: { end: { head: 'triangle', scale: 2 } } },
@@ -187,7 +151,23 @@ figure.add([
                 text: 'y',
                 font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
                 rotation: 0,
-                offset: [0.1, 0.85],
+                offset: [0.1, 0.75],
+              }
+            },
+            {
+              name: 'middleY',
+              axis: 'y',
+              ticks: null,
+              grid: null,
+              length: height - height / 6,
+              // position: [0, height / 6],
+              position: [width / 2, height/ 6],
+              line: { arrow: { end: { head: 'triangle', scale: 2 } } },
+              title: {
+                text: 'y',
+                font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
+                rotation: 0,
+                offset: [0.1, 0.75],
               }
             },
           ],
@@ -243,67 +223,9 @@ figure.add([
           }
         }
       },
-      {
-        name: 'arrow',
-        method: 'primitives.line',
-        options: {
-          p1: [0.8, 0.1],
-          p2: [1.9, 0.1],
-          width: 0.008,
-          color: primaryColor,
-          arrow: {
-            end: 'barb',
-          },
-        },
-      },
-      // {
-      //   name: 'xLine',
-      //   method: 'primitives.polyline',
-      //   options: {
-      //     width: 0.003,
-      //     color: [0, 0, 1, 1],
-      //   }
-      // },
-      // {
-      //   name: 'vLine',
-      //   method: 'collections.line',
-      //   options: {
-      //     width: 0.003,
-      //     dash: [0.02, 0.01],
-      //     color: [1, 0, 0, 1],
-      //   }
-      // },
-      // {
-      //   name: 'hLine',
-      //   method: 'collections.line',
-      //   options: {
-      //     width: 0.003,
-      //     dash: [0.02, 0.01],
-      //     color: [1, 0, 0, 1],
-      //     // label: {
-      //     //   text: null,
-      //     //   scale: 0.4,
-      //     // }
-      //   }
-      // },
-      // {
-      //   name: 'drawPoint',
-      //   method: 'primitives.polygon',
-      //   options: {
-      //     radius: 0.02,
-      //     sides: 20,
-      //   }
-      // },
-      // makeFEqn('eqnF0', 'x'),
-      makeEqn('eqnF0', 'f', 'right'),
-      makeEqn('eqnF1', 'f', 'center'),
-      makeEqn('eqnF2', 'f', 'right'),
+      makeEqn('eqnF0', 'f', 'left'),
       makeEqn('eqnY0', 'y', 'left'),
-      makeEqn('eqnY1', 'y', 'center'),
-      makeEqn('eqnY2', 'y', 'left'),
       makeMark('markF0', greyColor),
-      makeMark('markF1', greyColor),
-      makeMark('markF2', greyColor),
       makeMark('markY0', primaryColor),
       makeMark('markY1', primaryColor),
       makeMark('markY2', primaryColor),
@@ -311,17 +233,7 @@ figure.add([
       makeMark('markY4', primaryColor),
       makeMark('markY5', primaryColor),
       makeMark('markY6', primaryColor),
-      {
-        name: 'eqnF',
-        method: 'collections.equation',
-        options: {
-          color: greyColor,
-          scale: 0.5,
-          forms: {
-            0: ['f(', 'x', '_) = ', { sup: ['x_2', '_2'] }],
-          },
-        },
-      },
+      makeMark('markY7', primaryColor),
     ],
   },
   {
@@ -333,31 +245,30 @@ figure.add([
         value1: { text: '0.0' },
         value2: '0.0',
         sign: ' \u2212 ',
-        equals: '  =  ',
+        equals: ' = ',
         lb1: { symbol: 'bracket', side: 'left' },
         lb2: { symbol: 'bracket', side: 'left' },
         rb1: { symbol: 'bracket', side: 'right' },
         rb2: { symbol: 'bracket', side: 'right' },
       },
       phrases: {
-        yx: ['y', { brac: ['lb1', 'x_1', 'rb1'] }],
-        fx: ['f', { brac: ['lb2', 'x_2', 'rb2'] }],
-        yValue: ['y', { brac: ['lb1', 'value1', 'rb1'] }],
-        fValue: ['f', { brac: ['lb2', 'value2', 'rb2'] }],
+        yx: ['y', brac('lb1', 'x_1', 'rb1')],
+        fx: ['f', brac('lb2', 'x_2', 'rb2')],
+        yValue: ['y', brac('lb1', 'value1', 'rb1')],
+        fValue: ['f', brac('lb2', 'value2', 'rb2')],
       },
       forms: {
-        0: ['yx', 'equals', 'f', ' ', { brac: ['lb2', ['x_2', ' ', 'sign', 'value'], 'rb2'] }],
+        0: ['yx', 'equals', 'f', ' ', brac('lb2', ['x_2', ' ', 'sign', 'value'], 'rb2')],
         fx: ['yx', 'equals', 'fx'],
-        // values: ['yValue', 'equals', 'fValue'],
       },
       formDefaults: {
         alignment: { fixTo: 'equals', xAlign: 'center' },
       },
-      // position: [-0.3, 0.8],
     },
     mods: { 
       scenarios: {
-        default: { position: [0, 0.9 ] },
+        default: { position: [0, 0.75] },
+        title: { position: [-0.5, -1.05] },
       }
     }
   },
@@ -380,8 +291,8 @@ figure.add([
         value2: '0',
       },
       phrases: {
-        yValue: ['y', { brac: ['lb1', ['x', 'equals1', 'value1'], 'rb1'] }],
-        fValue: ['f', ' ', { brac: ['lb2', ['x_2', '_ = _1', 'value2'], 'rb2'] }],
+        yValue: ['y', brac('lb1', ['x', 'equals1', 'value1'], 'rb1')],
+        fValue: ['f', ' ', brac('lb2', ['x_2', '_ = _1', 'value2'], 'rb2')],
       },
       forms: {
         0: ['yValue', 'equals', 'fValue'],
@@ -406,17 +317,12 @@ figure.add([
         lb1: { symbol: 'bracket', side: 'left', color: primaryColor },
         rb1: { symbol: 'bracket', side: 'right', color: primaryColor },
       },
-      phrases: { yx: ['y', '_(', 'x_1', '_)'] },
+      phrases: { yx: ['y', brac('lb1', 'x_1', 'rb1')] },
       forms: { title: ['yx', '_  =  ', 'unknown'] },
       formDefaults: { alignment: { xAlign: 'center' } },
     },
-    mods: { scenarios: { title: { position: [0.5, 0 ] } } },
+    mods: { scenarios: { title: { position: [0.5, -1.05 ] } } },
   },
-  // makeEqn('eqn0', [1.3, 0.6]),
-  // makeEqn('eqn1', [1.3, 0.4]),
-  // makeEqn('eqn2', [1.3, 0.2]),
-  // makeEqn('eqn3', [1.3, 0]),
-  // makeEqn('eqn4', [1.3, -0.2]),
   {
     name: 'nav',
     method: 'collections.slideNavigator',
@@ -434,26 +340,20 @@ figure.add([
 ]);
 
 const trace = figure.getElement('diagram.plot.mainTrace');
-const fxTrace = figure.getElement('diagram.plot.fxTrace');
-const titleTrace = figure.getElement('diagram.plot.titleTrace');
+// const fxTrace = figure.getElement('diagram.plot.fxTrace');
+// const titleTrace = figure.getElement('diagram.plot.titleTrace');
 const movePad = figure.getElement('diagram.movePad');
 const marks = figure.getElement('diagram.plot.marks');
-// const value = figure.getElement('eqn.value');
-// const value1 = figure.getElement('eqn1.value1');
-// const value2 = figure.getElement('eqn1.value2');
-// const sign = figure.getElement('eqn.sign');
 const xAxis = figure.getElement('diagram.plot.x');
 const yAxis = figure.getElement('diagram.plot.y');
 const diagram = figure.getElement('diagram');
 const plot = diagram.getElement('plot');
-// const xLine = figure.getElement('diagram.xLine');
-const drawPoint = figure.getElement('diagram.drawPoint');
-// const refPoint = figure.getElement('diagram.refPoint');
+// const drawPoint = figure.getElement('diagram.drawPoint');
 const eqn = figure.getElement('eqn');
 const valueEqn = figure.getElement('valueEqn')
-// const vLine = figure.getElement('diagram.vLine')
-// const hLine = figure.getElement('diagram.hLine')
-// console.log(eqn1)
+const nav = figure.getElement('nav');
+const eqnF = diagram.getElement('eqnF0');
+const eqnY = diagram.getElement('eqnY0');
 
 const setElement = (name, position, label = null) => {
   const e = figure.getElement(`diagram.${name}`);
@@ -463,6 +363,7 @@ const setElement = (name, position, label = null) => {
   const p = Fig.tools.g2.getPoint(position);
   const px = xAxis.valueToDraw(p.x);
   const py = yAxis.valueToDraw(p.y);
+  e.clear();
   e.setPosition(px, py);
   if (label != null) {
     if (typeof label === 'number') {
@@ -478,126 +379,35 @@ const setElement = (name, position, label = null) => {
     } else {
       e.updateElementText({ value: label }, 'current');
     }
-    // if (label === '0') {
-    //   // e.showForm('noX');
-    //   e.setText({ x: '', equals: '' });
-    // } else {
-    //   // e.showForm('withX');
-    //   e.setText({ x: 'x', equals: ' = ' });
-    // }
   }
 }
 
-// const setLine = (xx, xOffset) => {
-//   const y = fx(xx, xOffset, 0);
-//   const drawX = xAxis.valueToDraw(xx);
-//   const drawXoffset = xAxis.valueToDraw(xx - xOffset);
-//   const points = [
-//     [drawX, 0],
-//     [drawXoffset, 0],
-//     [drawXoffset, Math.min(yAxis.valueToDraw(y.y), yAxis.valueToDraw(8))],
-//   ];
-//   // xLine.custom.updatePoints({ points });
-//   drawPoint.setPosition(drawX, 0);
-// }
-
-// const setVLine = (xx, xOffset) => {
-//   const y = yAxis.valueToDraw(fx(xx, xOffset, 0).y);
-//   const drawX = xAxis.valueToDraw(xx);
-//   vLine.setEndPoints([drawX, y], [drawX, 0]);
-//   // vLine.animations.new()
-//   //   .length({ start: 0, target: y, duration: 0.7 })
-// }
-
-// setPoints = (xx, xOffset, index) => {
-//   const y = yAxis.valueToDraw(fx(xx, xOffset, 0).y);
-//   const drawX = xAxis.valueToDraw(xx);
-//   const drawXoffset = xAxis.valueToDraw(xx - xOffset);
-//   drawPoint.setPosition(drawXoffset, y);
-//   // refPoint.stop();
-//   // refPoint.setPosition(drawXoffset, y);
-//   // eqn1.hide();
-//   vLine.setEndPoints([drawX, y], [drawX, 0]);
-//   // hLine.setEndPoints([drawXoffset, y], [drawXoffset, y]);
-//   vLine.hide();
-//   const eq = figure.getElement(`eqn${index}`);
-//   drawPoint.animations.new()
-//     .pulse({ scale: 3, duration: 0.9 })
-//     .inParallel([
-//       drawPoint.animations.position({ target: [drawX, y], duration: 1 }),
-//       // hLine.animations.length({
-//       //   start: 0,
-//       //   target: drawX - drawXoffset,
-//       //   duration: 1,
-//       //   progression: 'easeinout',
-//       //   // beforeFrame: () => {
-//       //   //   const l = hLine.getLength();
-//       //   //   const xLength = xAxis.drawToValue(l);
-//       //   //   hLine.setLabel(`${Fig.tools.math.round(xLength, 1).toFixed(1)}`);
-//       //   // }})
-//       // })
-//     ])
-//     .trigger(() => { vLine.show() })
-//     .then(vLine.animations.length({ start: 0, length: y, duration: 0.3 }))
-//     .trigger(() => {
-//       marks.update(getFxSparse(xx, xOffset, 0))
-//       eq.undim();
-//       eq.show();
-//       eq.setText({
-//         value1: `${xx}`,
-//         value2: `${xx - xOffset}`,
-//       });
-//       eq.pulse({ scale: 1.3 });
-//     })
-//     .delay(3)
-//     .trigger(() => {
-//       eq.dim();
-//     })
-//     .start();
-//   console.log(marks)
-// }
-
 let cycler = 0;
+let whichX = 'fx';
 const cycle = () => {
-  cycler = (cycler + 1) % 3;
-  diagram.hideAll();
-  diagram.show([
-    plot, movePad,
-    `markY${cycler}`, `markF${cycler}`, `eqnF${cycler}`, `eqnY${cycler}`,
-  ]);
-  plot.hide(['titleTrace', 'titleX', 'titleY']);
-  eqn.updateElementText({ value2: `${refX[cycler]}` });
-  valueEqn.updateElementText({ value2: `${refX[cycler]}` });
-  // eqn.highlight(['y', '_(', 'x_1', '_)', 'value1'])
+  cycler = (cycler + 1) % offsets.length;
+  valueEqn.updateElementText({ value2: `${offsets[cycler][0]}` });
   update();
 };
 
 const update = () => {
   const p = movePad.getPosition('local');
-  let xOffset = xAxis.drawToValue(p.x)
-  trace.update(getFx(xOffset, 0));
-  rxOffset = Fig.tools.math.round(xOffset + refX[cycler], 1);
-  // let eqnValue = `${Math.abs(rxOffset).toFixed(1)}`
-  const sign = rxOffset >= 0 ? ' \u2212 ' : ' + ';
-  eqn.updateElementText({
-    sign,
-    value: `${Math.abs(rxOffset).toFixed(1)}`,
-  }, 'current');
+  let xPad = xAxis.drawToValue(p.x)
+  trace.update(getFx(xPad, 0));
+  const [curveOffset, fLabel, yLabel] = offsets[cycler];
+  const yX = whichX === 'fx' ? xPad + curveOffset : curveOffset;
+  const yY = fx(yX).y;
+  const fX = whichX === 'fx' ? curveOffset : xPad + curveOffset;
+  const y = whichX === 'fx' ? fx(fX).y : fx(yX).y;
   valueEqn.updateElementText({
-    value1: `${rxOffset.toFixed(1)}`,
+    value1: `${yX.toFixed(1)}`,
+    value2: `${fX.toFixed(1)}`,
   }, 'current');
-  // value.custom.updateText({ text: `${Math.abs(rxOffset).toFixed(1)}`})
-  // if (rxOffset >= 0) {
-  //   sign.custom.updateText({ text: ' \u2212 ' });
-  // } else {
-  //   sign.custom.updateText({ text: ' + ' });
-  // }
-  setElement('eqnY0', [xOffset - 1.8, 3.65], xOffset - 2);
-  setElement('eqnY1', [xOffset, -0.45], xOffset);
-  setElement('eqnY2', [xOffset + 1.1, 0.65], xOffset + 1);
-  setElement('markY0', [xOffset - 2, 4]);
-  setElement('markY1', [xOffset, 0]);
-  setElement('markY2', [xOffset + 1, 1]);
+  setElement('eqnY0', [yX + yLabel[0], y + yLabel[1]], yX);
+  setElement('eqnF0', [fX + fLabel[0], y + fLabel[1]], fX);
+  setElement('markY0', [yX, y]);
+  setElement('markF0', [fX, y]);
+  // const sign = fX >= 0 ? ' \u2212 ' : ' + ';
 }
 movePad.subscriptions.add('setTransform', () => {
   update();
@@ -631,31 +441,91 @@ const animateShift = (offset) => {
     })
     .start();
 };
-// animateShift(-1);
 
-setElement('eqnF', [2.4, 4.6]);
 setElement('eqnF0', [-2.2, 4.2], '-2');
-setElement('eqnF1', [-0, 0.3], '0');
-setElement('eqnF2', [0.9, 1.15], '1');
 setElement('markF0', [-2, 4]);
-setElement('markF1', [0, 0]);
-setElement('markF2', [1, 1]);
 
-const showElements = (elements = []) => {
-  diagram.exec(['hide'], ['eqnF', 'eqnF1', 'eqnF2', 'eqnF3', 'markF1', 'markF2', 'markF3', 'eqnY1', 'eqnY2', 'eqnY3', 'markY1', 'markY2', 'markY3']);
-  if (elements.length > 0) {
-    diagram.exec(['show'], elements);
-  }
+const setMark = (markName, xValue, xOffset) => {
+  const mark = diagram.getElement(markName);
+  mark.show();
+  const py = yAxis.valueToDraw(fx(xValue).y);
+  const px = xAxis.valueToDraw(xValue + xOffset);
+  mark.setPosition(px, py);
 }
 
-const show = (elements = []) => {
-  figure.elements.hideAll();
-  if (elements.length > 0) {
-    console.log(elements)
-    figure.elements.exec(['showAll'], elements);
-  }
-  figure.animateNextFrame();
+const moveMark = (markName, xValue) => {
+  const mark = diagram.getElement(markName);
+  const target = plot.pointToDraw(fx(xValue));
+  mark.animations.new()
+    .pulse({ duration: 1})
+    .position({ target, duration: 1})
+    .start();
 }
+
+const setMarks = (xOffset) => {
+  for (i = 0; i < 7; i += 1) {
+    setMark(`markY${i + 1}`, i * 0.7 - 2.1, xOffset);
+  }
+};
+
+const moveMarks = (xOffsetFrom, xOffsetTo, skipAnimation = false) => {
+  setMarks(xOffsetFrom);
+  for (i = 0; i < 7; i += 1) {
+    const pointX = i * 0.7 - 2.1;
+    const from = plot.pointToDraw(fx(pointX + xOffsetFrom));
+    const to = plot.pointToDraw(fx(pointX + xOffsetTo));
+    const mark = diagram.getElement(`markY${i + 1}`);
+    if (skipAnimation) {
+      mark.setPosition(to.x, from.y);
+      return;
+    }
+    mark.setPosition(from);
+    mark.animations.new()
+      .pulse({ duration: 1})
+      .position({ target: [to.x, from.y], duration: 1})
+      .start();
+  }
+};
+
+
+const pulseMarks = () => {
+  diagram.show(['markY1', 'markY2', 'markY3', 'markY4', 'markY5', 'markY6', 'markY7']);
+  diagram.pulse({
+    elements: ['markY1', 'markY2', 'markY3', 'markY4', 'markY5', 'markY6', 'markY7']},
+  );
+}
+
+const moveTrace = (xOffset, done = null, duration = 1) => {
+  if (duration === 0) {
+    setMarks(xOffset);
+    movePad.setPosition(xAxis.valueToDraw(xOffset), 0);
+    return;
+  }
+  setMarks(0);
+  movePad.setPosition(xAxis.valueToDraw(0), 0);
+  movePad.animations.new()
+    .trigger({
+      duration: 2,
+      callback: () => moveMarks(0, xOffset),
+    })
+    // .position({ target: [xAxis.valueToDraw(xOffset), 0], duration })
+    .dissolveOut({ element: trace, duration: 0.4 })
+    .trigger(() => {
+      movePad.setPosition(xAxis.valueToDraw(xOffset), 0);
+    })
+    .dissolveIn({ element: trace, duration: 0.4 })
+    .whenFinished(done)
+    .start();
+}
+
+
+// const show = (elements = []) => {
+//   figure.elements.hideAll();
+//   if (elements.length > 0) {
+//     figure.elements.exec(['showAll'], elements);
+//   }
+//   figure.animateNextFrame();
+// }
 
 slides = [];
 slides.push({
@@ -664,84 +534,104 @@ slides.push({
   ],
   modifiersCommon: {
     x: { font: { family: 'Times New Roman', style: 'italic' } },
+    f: { font: { family: 'Times New Roman', style: 'italic' } },
+    y: { font: { family: 'Times New Roman', style: 'italic' } },
   },
   steadyState: () => {
-    show([
-      'nav', trace, titleTrace, 'eqnTitle',
+    figure.showOnly([
+      'nav', trace, 'diagram.plot.titleTrace', 'eqnTitle',
       'diagram.plot.titleX', 'diagram.plot.titleY',
-      'diagram.arrow',
     ]);
-    figure.elements.setScenarios('title');
-    movePad.isTouchable = false;
+    figure.setScenarios('title');
     trace.update(getFx(2, 0));
     eqn.showForm('fx');
     eqn.dim();
   },
 });
+
+// //////////////////////////////////////////////////////////
 slides.push({
-  text: 'We start by plotting f(x)',
+  text: 'We start by plotting a function  |f| (|x|).',
   steadyState: () => {
-    show([
-      'nav', trace,
-      'diagram.plot.titleX', 'diagram.plot.titleY',
-    ]);
-    // eqn.highlight(['y', '_(', 'x_1', '_)'])
-    figure.elements.setScenarios('default');
-    movePad.isTouchable = false;
-    trace.update(getFx(0, 0));
-    eqn.showForm('fx');
+    figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY']);
+    figure.setScenarios('default');
   },
 });
 
-const move = (markName, from, by) => {
-  const mark = diagram.getElement(markName);
-  const xFrom = xAxis.valueToDraw(from)
-  const xTo = xAxis.valueToDraw(from + by);
-  const y = yAxis.valueToDraw(fx(from, 0, 0).y);
-  mark.showAll();
-  mark.setPosition([xFrom, y]);
-  if (by != 0) {
-    mark.animations.new()
-      .pulse({ duration: 1})
-      .position({ target: [xTo, y], duration: 1})
+slides.push({
+  enterStateCommon: () => {
+    figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY']);
+    figure.setScenarios('default');
+    trace.update(getFx(0, 0));
+  },
+  transition: (done) => {
+    trace.show();
+    trace.animations.new()
+      .dissolveIn({ duration: 0.5 })
+      .whenFinished(done)
       .start();
-  }
-}
+  },
+  form: 'fx',
+  steadyState: () => {
+    trace.show()
+    eqn.highlight(['y', 'lb1', 'rb1', 'x_1'])
+    eqn.setPosition([0, -1]);
+  },
+});
 
+// //////////////////////////////////////////////////////////
 slides.push({
   text: [
-    '|Shifting| f(x) along x is the same as moving each',
-    'f values to a new x',
+    '|Shifting| the function in |x| moves each |value| of',
+    '|f| (|x|) to a new |x|.',
   ],
+  modifiers: {
+    Shifting: { font: { color: actionColor }, onClick: () => nav.nextSlide() },
+    value: { font: { color: actionColor }, onClick: () => pulseMarks() },
+  },
+  enterStateCommon: () => {
+    setMarks(0);
+    figure.showOnly([
+      'nav', trace, 'diagram.plot.titleX', 'diagram.plot.middleY', movePad,
+      'diagram.plot.fxTrace',
+    ]);
+    figure.setScenarios('default');
+    trace.update(getFx(0, 0));
+    eqn.highlight(['y', 'lb1', 'rb1', 'x_1'])
+    eqn.showForm('fx');
+    eqn.setPosition([0, -1]);
+    movePad.isTouchable = false;
+  },
+});
+
+slides.push({
+  enterState: () => {
+    eqn.hide();
+  },
+  form: null,
   modifiers: {
     Shifting: {
       font: { color: actionColor },
-      onClick: () => {
-        move('markY0', -2.1, 2);
-        move('markY1', -1.4, 2);
-        move('markY2', -0.7, 2);
-        move('markY3', 0, 2);
-        move('markY4', 0.7, 2);
-        move('markY5', 1.4, 2);
-        move('markY6', 2.1, 2);
-      }
-    }
+      onClick: () => moveTrace(2, null),
+    },
+    value: { font: { color: actionColor}, onClick: pulseMarks },
+  },
+  transition: (done) => {
+    moveTrace(2, done);
   },
   steadyState: () => {
-    show([
-      'nav', trace,
-      'diagram.plot.titleX', 'diagram.plot.titleY',
-    ]);
-    // eqn.highlight(['y', '_(', 'x_1', '_)'])
-    figure.elements.setScenarios('default');
-    movePad.isTouchable = false;
-    // trace.update(getFx(0, 0));
-    trace.update(getFx(0, 0));
-    eqn.showForm('fx');
+    moveTrace(2, null, 0);
+    eqnF.showForm('funcX');
+    eqnY.showForm('funcX');
+    setElement('eqnF0', [-0.3, -0.5])
+    setElement('eqnY0', [1.7, -0.5])
+    // eqnY.setPosition([1, 1]);
+    // console.log(eqnF)
   },
 });
 
 slides.push({
+  enterStateCommon: () => {},
   text: [
     'Let\'s look at |one| point at a time',
   ],
@@ -751,52 +641,29 @@ slides.push({
       onClick: () => cycle(),
     }
   },
-  // modifiers: {
-  //   couple: {
-  //     font: { color: actionColor },
-  //     onClick: () => {
-  //       const move = (name, from, by) => {
-  //         const e = diagram.getElement(name);
-  //         const xFrom = xAxis.valueToDraw(from)
-  //         const xTo = xAxis.valueToDraw(from + by);
-  //         const y = yAxis.valueToDraw(fx(from, 0, 0).y);
-  //         e.showAll();
-  //         e.setPosition([xFrom, y])
-  //         e.animations.new()
-  //           .pulse({ duration: 1})
-  //           .position({ target: [xTo, y], duration: 1})
-  //           .start();
-  //       }
-  //       move('markY1', -2, 2);
-  //       move('markY2', 0, 2);
-  //       move('markY3', 1, 2);
-  //     }
-  //   }
-  // },
-  steadyState: () => {
-    show([
+  steadyStateCommon: () => {
+    figure.showOnly([
       'nav', trace,
-      // 'diagram.plot.titleX', 'diagram.plot.titleY',
-      // diagram,
+      'diagram.plot.fxTrace', 'diagram.plot.titleX', 'diagram.plot.middleY',
     ]);
-    // diagram.show([plot, movePad, 'markY1', 'markF1', 'eqnF1', 'eqnY1'])
-    diagram.showAll();
-    // diagram.hide(['titleTrace', 'titleX', 'arrow'])
-    // eqn.hide()
-    plot.hide(['titleTrace', 'titleX', 'titleY']);
-    movePad.setPosition(width / 2, movePad.getPosition().y)
-    eqn.highlight(['y', 'lb1', 'x_1', 'rb1'])
+    diagram.show([
+      movePad,
+      `markY0`, `markF0`, `eqnF0`, `eqnY0`,
+    ]);
+    movePad.setPosition(xAxis.valueToDraw(2), 0)
+    // eqn.highlight(['y', 'lb1', 'x_1', 'rb1'])
     figure.elements.setScenarios('default');
     movePad.isTouchable = true;
-    trace.update(getFx(0, 0));
-    // eqn.showForm('0');
+    // trace.update(getFx(2, 0));
     valueEqn.showForm('0');
+    diagram.getElement('eqnF0').showForm('0');
+    diagram.getElement('eqnY0').showForm('0');
     cycle();
   },
 });
 
-figure.getElement('nav').setSlides(slides);
-figure.getElement('nav').goToSlide(3);
+figure.getElement('nav').loadSlides(slides);
+figure.getElement('nav').goToSlide(4);
 
 /*
 We start with some function g(x). Each value of g aligns with an x value.

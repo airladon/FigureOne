@@ -1262,7 +1262,7 @@ slides.push({
   steadyStateCommon: () => data.unpause(),
 });
 
-figure.getElement('nav').setSlides(slides);
+figure.getElement('nav').loadSlides(slides);
 figure.getElement('nav').goToSlide(0);
 // slides.push({
 //   text: []

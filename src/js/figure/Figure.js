@@ -1490,6 +1490,33 @@ class Figure {
   //   pointer.setPosition(figurePoint);
   // }
 
+  /**
+   * Show specific elements within the figure
+   */
+  show(
+    toShow: FigureElementPrimitive | FigureElementCollection | string
+      | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
+  ): void {
+    this.elements.show(toShow);
+  }
+
+  /**
+   * Show specific elements within a figure, while hiding all others
+   */
+  showOnly(
+    toShow: FigureElementPrimitive | FigureElementCollection | string
+      | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
+  ): void {
+    this.elements.showOnly(toShow);
+  }
+
+  /**
+   * Set scenarios of all elements with scenarioName defined
+   */
+  setScenarios(scenarioName: string, onlyIfVisible: boolean = false) {
+    this.elements.setScenarios(scenarioName, onlyIfVisible);
+  }
+
   toggleCursor() {
     this.cursorShown = !this.cursorShown;
     if (this.recorder.state === 'recording') {

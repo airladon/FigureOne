@@ -3935,7 +3935,7 @@ class FigureElementPrimitive extends FigureElement {
       // const newTransform = parentTransform.transform(this.getTransform());
       this.pulseTransforms = this.getPulseTransforms(now);
       this.drawTransforms = this.getDrawTransforms(newTransforms);
-      this.lastDrawTransform = parentTransform[0].transform(transform);
+      this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
       if (pointCount > 0) {
@@ -3983,7 +3983,7 @@ class FigureElementPrimitive extends FigureElement {
     };
     // const finalParentTransform = this.processParentTransform(parentTransform);
     const firstTransform = parentTransform.transform(this.getTransform());
-    this.lastDrawTransform = firstTransform;
+    this.lastDrawTransform = firstTransform._dup();
     if (this.drawingObject instanceof HTMLObject) {
       this.drawingObject.transformHtml(firstTransform.matrix());
     }
@@ -4643,7 +4643,7 @@ class FigureElementCollection extends FigureElement {
       const transform = this.getTransform();
       const newTransforms = transformBy(parentTransform, [transform]);
       // this.lastDrawTransform = transform._dup();
-      this.lastDrawTransform = parentTransform[0].transform(transform);
+      this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
       this.pulseTransforms = this.getPulseTransforms(now);
       this.drawTransforms = this.getDrawTransforms(newTransforms);
       // this.pulseTransforms
@@ -4920,6 +4920,9 @@ class FigureElementCollection extends FigureElement {
     return elements;
   }
 
+  /**
+   * Show collection or specific elements within the collection
+   */
   show(
     toShow: FigureElementPrimitive | FigureElementCollection | string
       | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
@@ -4934,14 +4937,46 @@ class FigureElementCollection extends FigureElement {
       if (typeof elementOrName === 'string') {
         element = this.getElement(elementOrName);
       }
-      if (element instanceof FigureElementCollection) {
-        element.showAll();
-      } else {
-        element.show();
-      }
+      element.showAll();
+      // if (element instanceof FigureElementCollection) {
+      //   element.showAll();
+      // } else {
+      //   element.show();
+      // }
     });
   }
 
+  showOnly(
+    toShow: FigureElementPrimitive | FigureElementCollection | string
+      | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
+  ): void {
+    this.hideAll();
+    this.show(toShow);
+    // for (let i = 0, j = toShow.length; i < j; i += 1) {
+    //   const element = toShow[i];
+    //   if (element) {
+    //     element.show();
+    //   } else {
+    //     throw Error(`Figure Element Error: Element does not exist at position ${i}`);
+    //   }
+    // }
+  }
+
+  showAll(): void {
+    this.show();
+    for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
+      const element = this.elements[this.drawOrder[i]];
+      // if (typeof element.showAll === 'function') {
+      element.showAll();
+      // } else {
+      //   element.show();
+      // }
+    }
+  }
+
+  /**
+   * Hide collection or specific elements within the collection
+   */
   hide(
     toHide: FigureElementPrimitive | FigureElementCollection | string
       | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
@@ -4949,6 +4984,10 @@ class FigureElementCollection extends FigureElement {
     let listToHide = toHide;
     if (!Array.isArray(listToHide)) {
       listToHide = [toHide];
+    }
+    if (listToHide.length === 0) {
+      super.hide();
+      return;
     }
     listToHide.forEach((elementOrName) => {
       let element = elementOrName;
@@ -4963,17 +5002,6 @@ class FigureElementCollection extends FigureElement {
     });
   }
 
-  showAll(): void {
-    this.show();
-    for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-      const element = this.elements[this.drawOrder[i]];
-      element.show();
-      if (typeof element.hideAll === 'function') {
-        element.showAll();
-      }
-    }
-  }
-
   hideAll(): void {
     this.hide();
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
@@ -4981,19 +5009,6 @@ class FigureElementCollection extends FigureElement {
       element.hide();
       if (typeof element.hideAll === 'function') {
         element.hideAll();
-      }
-    }
-  }
-
-  showOnly(listToShow: Array<FigureElementPrimitive | FigureElementCollection>): void {
-    this.hideAll();
-    this.show();
-    for (let i = 0, j = listToShow.length; i < j; i += 1) {
-      const element = listToShow[i];
-      if (element) {
-        element.show();
-      } else {
-        throw Error(`Figure Element Error: Element does not exist at position ${i}`);
       }
     }
   }
@@ -5065,7 +5080,7 @@ class FigureElementCollection extends FigureElement {
   setFirstTransform(parentTransform: Transform = new Transform()) {
     // const finalParentTransform = this.processParentTransform(parentTransform);
     const firstTransform = parentTransform.transform(this.getTransform());
-    this.lastDrawTransform = firstTransform;
+    this.lastDrawTransform = firstTransform._dup();
 
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];

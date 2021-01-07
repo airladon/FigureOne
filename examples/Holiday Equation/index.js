@@ -118,7 +118,7 @@ const modifiersCommon = {
   },
 };
 
-figure.getElement('nav').setSlides([
+figure.getElement('nav').loadSlides([
   {
     text: 'Multiply both sides by |r||2|',
     form: '0',
