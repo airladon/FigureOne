@@ -1,4 +1,4 @@
-const { Point } = Fig;
+const { Point, getPoint } = Fig;
 const { round, range } = Fig.tools.math;
 
 const greyColor = [0.6, 0.6, 0.6, 1];
@@ -61,6 +61,8 @@ figure.add([
         name: 'plot',
         method: 'collections.plot',
         options: {
+          width: plotWidth,
+          height: plotHeight,
           trace: [
             {
               points: getFx(0, 0),
@@ -78,8 +80,6 @@ figure.add([
               line: { width: 0.01, color: primaryCol },
             },
           ],
-          width: plotWidth,
-          height: plotHeight,
           xAxis: {
             grid: [
               { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
@@ -92,6 +92,22 @@ figure.add([
             ticks: { step: 1, width: 0, offset: [0, 0.02] },
             title: {
               text: 'x',
+              font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
+            }
+          },
+          yAxis: {
+            start: -1,
+            stop: 5,
+            labels: { font: { size: 0.08 }, offset: [0.04, 0] },
+            grid: [
+              { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
+              { values: [0], width: 0.003, dash: [], },
+            ],
+            ticks: { step: 1, width: 0 },
+            line: { width: 0 },
+            title: {
+              text: 'y',
+              rotation: 0,
               font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
             }
           },
@@ -110,22 +126,6 @@ figure.add([
                 offset: [1.45, 0.12],
               }
             },
-            // {
-            //   name: 'titleY',
-            //   axis: 'y',
-            //   ticks: null,
-            //   grid: null,
-            //   length: height - height / 6,
-            //   // position: [0, height / 6],
-            //   position: [0, height/ 6],
-            //   line: { arrow: { end: { head: 'triangle', scale: 2 } } },
-            //   title: {
-            //     text: 'y',
-            //     font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
-            //     rotation: 0,
-            //     offset: [0.1, 0.75],
-            //   }
-            // },
             {
               name: 'middleY',
               axis: 'y',
@@ -133,7 +133,6 @@ figure.add([
               grid: null,
               color: greyColor,
               length: plotHeight - plotHeight / 6,
-              // position: [0, height / 6],
               position: [plotWidth / 2, plotHeight/ 6],
               line: { arrow: { end: { head: 'triangle', scale: 2 } } },
               title: {
@@ -144,22 +143,6 @@ figure.add([
               }
             },
           ],
-          yAxis: {
-            start: -1,
-            stop: 5,
-            labels: { font: { size: 0.08 }, offset: [0.04, 0] },
-            grid: [
-              { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
-              { values: [0], width: 0.003, dash: [], },
-            ],
-            ticks: { step: 1, width: 0 },
-            line: { width: 0 },
-            title: {
-              text: 'y',
-              rotation: 0,
-              font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
-            }
-          },
         },
       },
       {
@@ -331,32 +314,32 @@ figure.add([
   },
 ]);
 
-const trace = figure.getElement('diagram.plot.mainTrace');
-const fxTrace = figure.getElement('diagram.plot.fxTrace');
-const movePad = figure.getElement('diagram.movePad');
-const marks = figure.getElement('diagram.marks');
-const xAxis = figure.getElement('diagram.plot.x');
-const yAxis = figure.getElement('diagram.plot.y');
-const diagram = figure.getElement('diagram');
-const plot = diagram.getElement('plot');
-const eqn = figure.getElement('eqn');
+// Common elements that will be used
 const nav = figure.getElement('nav');
+const eqn = figure.getElement('eqn');
+const diagram = figure.getElement('diagram');
+const movePad = diagram.getElement('movePad');
+const marks = diagram.getElement('marks');
+const plot = diagram.getElement('plot');
 const eqnF = diagram.getElement('eqnF');
 const eqnY = diagram.getElement('eqnY');
 const dist = diagram.getElement('distance');
+const trace = plot.getElement('mainTrace');
+const xAxis = plot.getElement('x');
+const yAxis = plot.getElement('y');
+const fxTrace = plot.getElement('fxTrace');
 
 let precision = 0;
 
+// Set a diagram element to a plot position with some label
 const setElement = (name, position, label = null) => {
-  const e = figure.getElement(`diagram.${name}`);
+  const e = diagram.getElement(name);
   if (e.isShown === false) {
     return;
   }
-  const p = Fig.tools.g2.getPoint(position);
-  const px = xAxis.valueToDraw(p.x);
-  const py = yAxis.valueToDraw(p.y);
+  const p = plot.pointToDraw(position);
   e.clear();
-  e.setPosition(px, py);
+  e.setPosition(p.x, p.y);
   if (label != null) {
     if (typeof label === 'number') {
       let value = round(label, 1);
