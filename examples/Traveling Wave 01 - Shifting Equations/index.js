@@ -155,7 +155,7 @@ figure.add([
           color: [1, 0, 0, 0],
         },
         mods: {
-          isMovable: true,
+          // isMovable: true,
           move: {
             style: 'translation',
             bounds: { translation: {
@@ -411,7 +411,6 @@ const moveMarks = (xOffsetFrom, xOffsetTo = 0, skipAnimation = true) => {
     const mark = marks.getElement(`markY${i + 1}`);
       mark.setPosition(from, y);
     if (!skipAnimation) {
-      console.log(from, y)
       mark.setPosition(from, y);
       mark.animations.new()
         .pulse({ duration: 1})
@@ -487,13 +486,13 @@ slides.push({
   modifiersCommon,
   steadyState: () => {
     figure.showOnly([
-      'nav', trace, 'diagram.plot.fxTrace', 'eqnTitle',
-      'diagram.plot.titleX', 'diagram.plot.middleY', 'title',
+      'nav', 'eqnTitle', 'title',
+      { 'diagram.plot': ['titleX', 'middleY', 'mainTrace', 'fxTrace'] },
     ]);
+    eqn.showForm('fx');
     figure.setScenarios(['default', 'title']);
     trace.update(getFx(1.6, 0));
     fxTrace.update(getFx(-1.6, 0));
-    eqn.showForm('fx');
   },
   leaveState: () => {
     fxTrace.update(getFx(0, 0));
@@ -505,17 +504,13 @@ slides.push({
 // //////////////////////////////////////////////////////////
 slides.push({
   text: 'Start by plotting a function |f|(|x|).',
-  steadyState: () => {
+  enterStateCommon: () => {
     figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY']);
-    figure.setScenarios('default');
+    figure.setScenarios(['default', 'initial']);
   },
 });
 
 slides.push({
-  enterState: () => {
-    figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY', fxTrace]);
-    figure.setScenarios('default');
-  },
   transition: (done) => {
     fxTrace.show();
     fxTrace.animations.new()
@@ -523,32 +518,31 @@ slides.push({
       .whenFinished(done)
       .start();
   },
+  form: 'fx',
   steadyState: () => {
     fxTrace.show()
-    eqn.setScenario('initial');
     eqnF.showForm('funcX')
     setElement('eqnF', [-3.1, 4]);
   },
-  form: 'fx'
 });
 
 // //////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////
 slides.push({
-  enterStateCommon: () => {
-    figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY', fxTrace]);
-    figure.setScenarios('default', 'initial');
-    eqn.showForm('fx');
-    // eqn.setScenario('initial');
-    eqnF.showForm('funcX')
-    setElement('eqnF', [-3.1, 4]);
-  },
   text: [
     'We can think of this function |f| as a number of',
     '|values| at different |x| positions.'
   ],
   modifiers: {
     values: { font: { color: actionColor }, onClick: () => nav.nextSlide() },
+  },
+  enterStateCommon: () => {
+    figure.showOnly([
+      'eqn', 'nav', { 'diagram.plot': ['titleX', 'middleY', 'fxTrace'] },
+    ]);
+    figure.setScenarios('default', 'initial');
+    eqnF.showForm('funcX')
+    setElement('eqnF', [-3.1, 4]);
   },
 });
 slides.push({

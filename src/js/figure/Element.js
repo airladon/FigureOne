@@ -107,6 +107,9 @@ export type OBJ_Scenario = {
   isShown?: boolean,
 };
 
+
+export type TypeElementPath = string | { [name: string]: TypeElementPath } | FigureElement | Array<string | Object | FigureElement>
+
 const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Transform>) => {
   const newTransforms = [];
   if (copyTransforms.length === 0) {
@@ -4880,9 +4883,9 @@ class FigureElementCollection extends FigureElement {
     if (typeof elementPath !== 'string') {
       return elementPath;
     }
-    // if (elementPath instanceof FigureElement) {
-    //   return elementPath;
-    // }
+    if (elementPath instanceof FigureElement) {
+      return elementPath;
+    }
     const getElement = (inputElementPath, parent) => {
       const ep = inputElementPath.split('.');
       let newParent = parent.elements[ep[0]];
@@ -4906,13 +4909,35 @@ class FigureElementCollection extends FigureElement {
    * [getElement](#figureelementcollectiongetelement) calls on an
    * array of paths.
    *
-   * @param {Array<string | FigureElement>} children
+   * @param {TypeElementPath} children
    * @return {Array<FigureElement>} Array of
    * [getElement](#figureelementcollectiongetelement) results
    */
-  getElements(children: Array<string | FigureElement>) {
+  getElements(children: TypeElementPath) {
+    // const paths = [];
+    const processPath = (path, prefix = '') => {
+      if (typeof path === 'string') {
+        return [`${prefix}${path}`];
+      }
+      if (path instanceof FigureElement) {
+        return [path];
+      }
+      if (Array.isArray(path)) {
+        const out = [];
+        path.forEach((p) => {
+          out.push(...processPath(p, prefix));
+        });
+        return out;
+      }
+      const out = [];
+      Object.keys(path).forEach((p) => {
+        out.push(...processPath(path[p], `${prefix}${p}.`));
+      });
+      return out;
+    };
+    const paths = processPath(children);
     const elements = [];
-    children.forEach((child) => {
+    paths.forEach((child) => {
       const element = this.getElement(child);
       if (element != null) {
         elements.push(element);
@@ -4921,61 +4946,51 @@ class FigureElementCollection extends FigureElement {
     return elements;
   }
 
+
   /**
    * Show collection or specific elements within the collection
    */
   show(
-    toShow: FigureElementPrimitive | FigureElementCollection | string
-      | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
+    toShow: TypeElementPath = [],
   ): void {
     super.show();
-    // if (toShow == null) {
-    //   this.showAll();
-    //   return;
-    // }
-    let listToShow = toShow;
-    if (!Array.isArray(listToShow)) {
-      listToShow = [toShow];
-    }
-    listToShow.forEach((elementOrName) => {
-      let element = elementOrName;
-      if (typeof elementOrName === 'string') {
-        element = this.getElement(elementOrName);
-      }
+    this.getElements(toShow).forEach((element) => {
       element.showAll();
-      // if (element instanceof FigureElementCollection) {
-      //   element.showAll();
-      // } else {
-      //   element.show();
-      // }
     });
+    // // if (toShow == null) {
+    // //   this.showAll();
+    // //   return;
+    // // }
+    // let listToShow = toShow;
+    // if (!Array.isArray(listToShow)) {
+    //   listToShow = [toShow];
+    // }
+    // listToShow.forEach((elementOrName) => {
+    //   let element = elementOrName;
+    //   if (typeof elementOrName === 'string') {
+    //     element = this.getElement(elementOrName);
+    //   }
+    //   element.showAll();
+    //   // if (element instanceof FigureElementCollection) {
+    //   //   element.showAll();
+    //   // } else {
+    //   //   element.show();
+    //   // }
+    // });
   }
 
   showOnly(
-    toShow: FigureElementPrimitive | FigureElementCollection | string
-      | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
+    toShow: TypeElementPath = [],
   ): void {
     this.hideAll();
     this.show(toShow);
-    // for (let i = 0, j = toShow.length; i < j; i += 1) {
-    //   const element = toShow[i];
-    //   if (element) {
-    //     element.show();
-    //   } else {
-    //     throw Error(`Figure Element Error: Element does not exist at position ${i}`);
-    //   }
-    // }
   }
 
   showAll(): void {
     super.show();
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      // if (typeof element.showAll === 'function') {
       element.showAll();
-      // } else {
-      //   element.show();
-      // }
     }
   }
 
@@ -4983,28 +4998,34 @@ class FigureElementCollection extends FigureElement {
    * Hide collection or specific elements within the collection
    */
   hide(
-    toHide: FigureElementPrimitive | FigureElementCollection | string
-      | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
+    toHide: TypeElementPath = [],
   ): void {
-    let listToHide = toHide;
-    if (!Array.isArray(listToHide)) {
-      listToHide = [toHide];
-    }
-    if (listToHide.length === 0) {
+    if (Array.isArray(toHide) && toHide.length === 0) {
       super.hide();
       return;
     }
-    listToHide.forEach((elementOrName) => {
-      let element = elementOrName;
-      if (typeof elementOrName === 'string') {
-        element = this.getElement(elementOrName);
-      }
-      if (element instanceof FigureElementCollection) {
-        element.hideAll();
-      } else {
-        element.hide();
-      }
+    this.getElements(toHide).forEach((element) => {
+      element.hide();
     });
+    // let listToHide = toHide;
+    // if (!Array.isArray(listToHide)) {
+    //   listToHide = [toHide];
+    // }
+    // if (listToHide.length === 0) {
+    //   super.hide();
+    //   return;
+    // }
+    // listToHide.forEach((elementOrName) => {
+    //   let element = elementOrName;
+    //   if (typeof elementOrName === 'string') {
+    //     element = this.getElement(elementOrName);
+    //   }
+    //   if (element instanceof FigureElementCollection) {
+    //     element.hideAll();
+    //   } else {
+    //     element.hide();
+    //   }
+    // });
   }
 
   hideAll(): void {
@@ -5018,12 +5039,13 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
-  hideOnly(listToHide: Array<FigureElementPrimitive | FigureElementCollection>): void {
+  hideOnly(listToHide: TypeElementPath): void {
     this.showAll();
-    for (let i = 0, j = listToHide.length; i < j; i += 1) {
-      const element = listToHide[i];
-      element.hide();
-    }
+    this.hide(listToHide);
+    // for (let i = 0, j = listToHide.length; i < j; i += 1) {
+    //   const element = listToHide[i];
+    //   element.hide();
+    // }
   }
 
   // // This will only search elements within the collection for a touch
