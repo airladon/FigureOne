@@ -5,7 +5,7 @@ const greyColor = [0.6, 0.6, 0.6, 1];
 const dGreyColor = [0.4, 0.4, 0.4, 1];
 const actionColor = [0, 0.6, 1, 1];
 const primaryCol = [1, 0, 0, 1];
-const secondaryCol = [0, 0.5, 0, 1];
+const secondaryCol = [0, 0.6, 1, 1];
 
 figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color:dGreyColor });
 
@@ -16,7 +16,7 @@ const getFx = (ox, oy) => x.map(xx => fx(xx, ox, oy));
 const plotWidth = 2.67;
 const plotHeight = 1.66;
 
-const makeEqn = (name, funcName, xAlign = 'left') => ({
+const makeEqn = (name, funcName, bottomX, color) => ({
   name,
   method: 'collections.equation',
   options: {
@@ -27,21 +27,26 @@ const makeEqn = (name, funcName, xAlign = 'left') => ({
       unknown: '?',
       lb: { symbol: 'bracket', side: 'left' },
       rb: { symbol: 'bracket', side: 'right' },
+      min: '\u2212',
     },
-    color: funcName === 'f' ? dGreyColor : primaryCol,
-    formDefaults: { alignment: { xAlign } },
+    color,
+    formDefaults: { alignment: { xAlign: 'left' } },
     forms: {
       0: ['func', ' ', brac('lb', 'value', 'rb')],
       x: ['func', ' ', brac('lb', ['x', 'equals', 'value'], 'rb')],
       funcX: ['func', ' ', brac('lb', 'x', 'rb')],
-      unknown: ['func', ' ', brac('lb', 'x', 'rb'), 'equals', 'unknown']
+      unknown: ['func', ' ', brac('lb', 'x', 'rb'), 'equals', 'unknown'],
+      left: ['f_1', ' ', brac('lb', ['x', '_+', 'd'], 'rb')],
+      right: ['f_1', ' ', brac('lb', ['x', 'min', 'd'], 'rb')],
     },
     scale: 0.6,
   },
   mods: {
     scenarios: {
       default: { position: [name === 'eqnF' ? 0.55 : 2.35, 1.3], scale: 1 },
+      left: { position: [name === 'eqnF' ? 0.55 : 0.1, 1.3], scale: 1 },
       title: { position: [name === 'eqnF' ? 0.75 : 1.5, 0.1], scale: 1.2 },
+      bottom: { position: [bottomX, 0.1], scale: 1.2 },
     }
   }
 });
@@ -89,6 +94,11 @@ figure.add([
               points: getFx(0, 0),
               name: 'mainTrace',
               line: { width: 0.01, color: primaryCol },
+            },
+            {
+              points: getFx(2.3, 0),
+              name: 'rightTrace',
+              line: { width: 0.01, color: secondaryCol },
             },
           ],
           xAxis: {
@@ -177,8 +187,9 @@ figure.add([
           }
         }
       },
-      makeEqn('eqnF', 'f', 'left'),
-      makeEqn('eqnY', 'g', 'left'),
+      makeEqn('eqnF', 'f', 1.2, dGreyColor),
+      makeEqn('eqnY', 'g', 0.5, primaryCol),
+      makeEqn('eqnH', 'f', 1.75, secondaryCol),
       makeMark('markF', greyColor),
       makeMark('markY', primaryCol),
       {
@@ -217,7 +228,15 @@ figure.add([
         options: {
           width: 0.003,
           dash: [0.02, 0.005],
-          label: { text: 'x\'\u2212d', location: 'start' },
+          label: {
+            text: {
+              forms: {
+                right: ['x\'', '\u2212', 'd'],
+                left: ['x\'', '+', 'd'],
+              }
+            },
+            location: 'start',
+          },
           color: dGreyColor,
         },
       },
@@ -232,7 +251,7 @@ figure.add([
             radius: 0.02
           },
           color: actionColor,
-          label: 'd',
+          label: { text: 'd', location: 'top' },
         },
       },
     ],
@@ -274,10 +293,13 @@ figure.add([
       phrases: {
         yx: ['y', brac('lb1', 'x_1', 'rb1')],
         yxr: ['y_r', brac('lbr', 'x_r', 'rbr')],
-        gxr: ['g_r', brac('lbr', 'xd_r', 'rbr')],
+        gxd: ['g_r', brac('lbr', 'xd_r', 'rbr')],
+        gx: ['g_r', brac('lbr', 'x_r', 'rbr')],
         fx: ['f', brac('lb2', 'x_2', 'rb2')],
         xD: ['x_2', ' ', 'min', ' ', 'd'],
+        xL: ['x_2', ' ', '_+', ' ', 'd'],
         xdD: ['xd', ' ', 'min', ' ', 'd'],
+        xdL: ['xd', ' ', '_+', ' ', 'd'],
         xDToMinD: [
           'x_2', ' ', 'min', ' ',
           {
@@ -311,7 +333,10 @@ figure.add([
         fxd3: ['yxr', 'equals', 'f', brac('lb2', 'xDMinStrikeD', 'rb2', 0.04)],
         fxd4: ['yxr', 'equals', 'f', brac('lb2', 'xPlusD', 'rb2', 0.04)],
         value: ['yxr', 'equals', 'fxValue'],
-        fEqualsG: ['gxr', 'equals', 'f', brac('lb2', 'xdD', 'rb2', 0.04)]
+        gRightDash: ['gxd', 'equals', 'f', brac('lb2', 'xdD', 'rb2', 0.04)],
+        gRight: ['gx', 'equals', 'f', brac('lb2', 'xD', 'rb2', 0.04)],
+        gLeftDash: ['gxd', 'equals', 'f', brac('lb2', 'xdL', 'rb2', 0.04)],
+        gLeft: ['gx', 'equals', 'f', brac('lb2', 'xL', 'rb2', 0.04)],
       },
       formDefaults: {
         alignment: { fixTo: 'equals', xAlign: 'center' },
@@ -655,7 +680,7 @@ slides.push({
   enterState: () => {
     eqn.hide();
     fxTrace.showAll();
-    marks.undim();
+    // marks.undim();
   },
   form: null,
   modifiers: {
@@ -669,7 +694,7 @@ slides.push({
   transition: (done) => {
     moveTrace(1.6, done);
   },
-  steadyStateCommon: () => {
+  steadyState: () => {
     trace.show();
     dist.showAll();
     moveTrace(1.6, null, 0);
@@ -727,6 +752,7 @@ slides.push({
   steadyState: () => {
     gLine.showAll();
     fLine.showAll();
+    fLine.label.showForm('right')
     updateLines = true;
     update();
   },
@@ -745,115 +771,193 @@ slides.push({
       'diagram.plot.fxTrace', trace, dist, gLine, fLine,
     ]);
     figure.setScenarios('default');
-    // setElement('eqnF', [-3.1, 4]);
-    // setElement('eqnY', [4.4, 4]);
     eqnF.showForm('funcX')
     eqnY.showForm('funcX');
-    moveTrace(1.6, null, 0);
+    fLine.label.showForm('right')
     updateLines = true;
+    moveTrace(1.6, null, 0);
   },
   leaveStateCommon: () => { updateLines = false; },
   form: null,
 });
 
 slides.push({
-  form: 'fEqualsG',
+  form: 'gRightDash',
 });
+
+slides.push({
+  text: 'As |x|\' is arbitrary, and can be any |x| value',
+});
+
+slides.push({
+  form: 'gRight',
+});
+
 
 // //////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////
+slides.push({
+  text: [
+    'Now what happens if we shift to the left instead?',
+  ],
+  enterState: () => eqn.show(),
+});
+
+slides.push({
+  form: null,
+  enterStateCommon: () => {
+    figure.showOnly([
+      'nav', 'diagram.plot.titleX', 'diagram.plot.middleY', movePad,
+      'diagram.plot.fxTrace', trace, dist, marks,
+    ]);
+    figure.setScenarios(['default', 'left']);
+    eqnF.showForm('funcX')
+    eqnY.showForm('funcX');
+    cycleIndex = 0;
+    updateLines = true;
+    moveTrace(-1.6, null, 0);
+  },
+  transition: (done) => {
+    moveTrace(-1.6, done);
+  },
+  steadyState: () => {
+    moveTrace(-1.6, null, 0);
+  },
+  leaveStateCommon: () => { updateLines = false; cycleIndex = 6; },
+});
+
+slides.push({
+  enterState: () => {
+    gLine.showAll();
+  },
+});
+
 slides.push({
   enterStateCommon: () => {
     figure.showOnly([
       'nav', 'diagram.plot.titleX', 'diagram.plot.middleY', movePad,
-      eqn, 'diagram.plot.fxTrace', marks, trace, dist,
+      'diagram.plot.fxTrace', trace, dist, marks,
     ]);
-    figure.setScenarios('default');
-    // setElement('eqnF', [-3.1, 4]);
-    // setElement('eqnY', [4.4, 4]);
+    figure.setScenarios(['default', 'left']);
     eqnF.showForm('funcX')
     eqnY.showForm('funcX');
-    moveTrace(1.6, null, 0);
+    cycleIndex = 0;
+    updateLines = true;
+    moveTrace(-1.6, null, 0);
+    gLine.showAll();
+    fLine.showAll();
+    fLine.label.showForm('left')
   },
-  text: [
-    'As these two points have the same y value we can say',
-  ],
+});
+
+slides.push({
+  form: 'gLeftDash',
+});
+slides.push({
+  form: 'gLeft',
 });
 
 // //////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////
 slides.push({
   text: [
-    'In other words, each value of |f| is |d1| to the left of',
-    'the shifted function.'
+    'We can now summarize a shift |d| in function |f||lb1||x||rb1|.',
   ],
-  enterState: () => {
-    marks.undim();
-  },
-  steadyState: () => {
-    // offsets = offsetsD;
-    dist.showAll();
-    trace.show();
-    setElement('eqnY', [4.4, 4]);
-    eqnY.showForm('funcX');
-  },
-});
-slides.push({
-  enterState: () => {
-    eqn.setPosition([0, -1.3])
-    eqn.hide();
-    moveTrace(1.6, null, 0);
-    eqnF.showForm('funcX');
-    eqnY.showForm('funcX');
-    setElement('eqnF', [-3.1, 4]);
-    setElement('eqnY', [4.4, 4]);
-    trace.show();
-    marks.undim();
-    // offsets = offsetsD;
-    dist.showAll();
-  },
-  form: 'fxd',
-});
-slides.push({
-  enterStateCommon: () => {},
-  steadyStateCommon: () => {},
-  enterState: () => figure.showOnly(['nav', eqn]),
-  transition: (done) => {
-    figure.showOnly([nav, 'eqn']);
-    eqn.showForm('fxd');
-    eqn.setPosition([0, -1.3]);
-    eqn.animations.new()
-      .scenario({ target: 'center', duration: 1 })
-      .whenFinished(done)
-      .start();
-  },
-  steadyState: () => {
-    eqn.showForm('fxd');
-    eqn.setScenario('center');
-  },
-  modifiers: {
-    d1: { font: { family: times, style: 'italic', color: [0.5, 0.5, 0.5, 1] } },
-  },
-});
-
-// //////////////////////////////////////////////////////////
-// //////////////////////////////////////////////////////////
-slides.push({
-  text: [
-    'This holds for positive or negative shifts of |d|.',
-    '',
-    'When |d| is negative, the equation shows |f|',
-    'being to the right of a left shifted function.',
-  ],
+  form: null,
   enterStateCommon: () => {
-    figure.showOnly([nav, 'eqn']);
-    eqn.setScenario('center');
+    figure.showOnly([
+      'nav', 'diagram.plot.titleX', 'diagram.plot.middleY', movePad,
+      'diagram.plot.fxTrace', trace, 'diagram.plot.rightTrace'
+    ]);
+    figure.setScenarios(['default', 'bottom']);
+    eqnF.showForm('funcX')
+    eqnY.showForm('left');
+    diagram.getElement('eqnH').showForm('right');
+    // cycleIndex = 0;
+    // updateLines = true;
+    moveTrace(-2.3, null, 0);
   },
 });
-slides.push({ form: 'fxd1' });
-slides.push({ form: 'fxd2' });
-slides.push({ form: 'fxd3' });
-slides.push({ form: 'fxd4' });
+// slides.push({
+//   steadyState: () => {
+
+//   }
+// });
+
+// // //////////////////////////////////////////////////////////
+// // //////////////////////////////////////////////////////////
+// slides.push({
+//   text: [
+//     'In other words, each value of |f| is |d1| to the left of',
+//     'the shifted function.'
+//   ],
+//   enterState: () => {
+//     marks.undim();
+//   },
+//   steadyState: () => {
+//     // offsets = offsetsD;
+//     dist.showAll();
+//     trace.show();
+//     setElement('eqnY', [4.4, 4]);
+//     eqnY.showForm('funcX');
+//   },
+// });
+// slides.push({
+//   enterState: () => {
+//     eqn.setPosition([0, -1.3])
+//     eqn.hide();
+//     moveTrace(1.6, null, 0);
+//     eqnF.showForm('funcX');
+//     eqnY.showForm('funcX');
+//     setElement('eqnF', [-3.1, 4]);
+//     setElement('eqnY', [4.4, 4]);
+//     trace.show();
+//     marks.undim();
+//     // offsets = offsetsD;
+//     dist.showAll();
+//   },
+//   form: 'fxd',
+// });
+// slides.push({
+//   enterStateCommon: () => {},
+//   steadyStateCommon: () => {},
+//   enterState: () => figure.showOnly(['nav', eqn]),
+//   transition: (done) => {
+//     figure.showOnly([nav, 'eqn']);
+//     eqn.showForm('fxd');
+//     eqn.setPosition([0, -1.3]);
+//     eqn.animations.new()
+//       .scenario({ target: 'center', duration: 1 })
+//       .whenFinished(done)
+//       .start();
+//   },
+//   steadyState: () => {
+//     eqn.showForm('fxd');
+//     eqn.setScenario('center');
+//   },
+//   modifiers: {
+//     d1: { font: { family: times, style: 'italic', color: [0.5, 0.5, 0.5, 1] } },
+//   },
+// });
+
+// // //////////////////////////////////////////////////////////
+// // //////////////////////////////////////////////////////////
+// slides.push({
+//   text: [
+//     'This holds for positive or negative shifts of |d|.',
+//     '',
+//     'When |d| is negative, the equation shows |f|',
+//     'being to the right of a left shifted function.',
+//   ],
+//   enterStateCommon: () => {
+//     figure.showOnly([nav, 'eqn']);
+//     eqn.setScenario('center');
+//   },
+// });
+// slides.push({ form: 'fxd1' });
+// slides.push({ form: 'fxd2' });
+// slides.push({ form: 'fxd3' });
+// slides.push({ form: 'fxd4' });
 
 
 // //////////////////////////////////////////////////////////
@@ -861,7 +965,7 @@ slides.push({ form: 'fxd4' });
 slides.push({
   enterStateCommon: () => {},
   text: [
-    'Example: drag the curve to shift, and observe',
+    'As an example, drag the curve to shift it, and observe',
     'the corresponding |points|.'
   ],
   modifiers: {
@@ -871,7 +975,10 @@ slides.push({
   },
   steadyState: () => {
     figure.showOnly([nav, diagram, eqn]);
-    diagram.hide(['distance', 'plot.titleX', 'plot.middleY', fxTrace, 'marks'])
+    diagram.hide([
+      'distance', 'plot.titleX', 'plot.middleY', fxTrace, 'marks',
+      'plot.rightTrace', 'gLine', 'fLine', 'eqnH',
+    ])
     offsets = offsetsValue;
     cycleIndex = 2;
     precision = 1;
@@ -879,7 +986,7 @@ slides.push({
     eqn.showForm('value');
     eqnF.showForm('0');
     eqnY.showForm('0');
-    movePad.setTouchable();
+    movePad.setMovable();
     movePad.setPosition(plotWidth / 2, 0);
     figure.setScenarios('example');
   },
@@ -891,6 +998,7 @@ slides.push({
   },
 });
 
-figure.getElement('nav').loadSlides(slides);
-
+// figure.getElement('nav').loadSlides(slides);
+nav.loadSlides(slides);
+nav.goToSlide(20);
 
