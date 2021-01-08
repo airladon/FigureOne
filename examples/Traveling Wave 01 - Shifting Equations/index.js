@@ -62,7 +62,7 @@ const brac = (left, content, right, outsideSpace = 0.025) => ({
     content, left, right, topSpace: 0.03, bottomSpace: 0.03, outsideSpace,
   },
 });
-// Movable angle
+
 figure.add([
   {
     name: 'diagram',
@@ -187,6 +187,16 @@ figure.add([
           }
         }
       },
+      {
+        name: 'distance',
+        method: 'collections.line',
+        options: {
+          width: 0.004,
+          dash: [0.01, 0.005],
+          color: greyColor,
+          label: { text: 'd', location: 'top' },
+        },
+      },
       makeEqn('eqnF', 'f', 1.2, dGreyColor),
       makeEqn('eqnY', 'g', 0.5, primaryCol),
       makeEqn('eqnH', 'f', 1.75, secondaryCol),
@@ -240,20 +250,6 @@ figure.add([
           color: dGreyColor,
         },
       },
-      {
-        name: 'distance',
-        method: 'collections.line',
-        options: {
-          width: 0.004,
-          arrow: {
-            head: 'circle',
-            align: 'mid',
-            radius: 0.02
-          },
-          color: actionColor,
-          label: { text: 'd', location: 'top' },
-        },
-      },
     ],
   },
   {
@@ -274,69 +270,49 @@ figure.add([
         value2: '0.0',
         sign: ' \u2212 ',
         min: '\u2212',
-        min2: '\u2212',
         equals: ' = ',
-        lb1: { symbol: 'bracket', side: 'left' },
-        lb2: { symbol: 'bracket', side: 'left' },
-        rb1: { symbol: 'bracket', side: 'right' },
-        rb2: { symbol: 'bracket', side: 'right' },
-        y_r: { color: primaryCol },
+        xd: 'x\'',
+        lb: { symbol: 'bracket', side: 'left' },
+        rb: { symbol: 'bracket', side: 'right' },
         g_r: { color: primaryCol },
+        x_r: { color: primaryCol },
+        xd_r: { text: 'x\'', color: primaryCol },
         lbr: { symbol: 'bracket', side: 'left', color: primaryCol },
         rbr: { symbol: 'bracket', side: 'right', color: primaryCol },
-        x_r: { color: primaryCol },
-        xd: 'x\'',
-        xd_r: { text: 'x\'', color: primaryCol },
         line: { symbol: 'line', width: 0.005, arrow: { start: 'triangle' } },
-        brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
+        lineR: { symbol: 'line', width: 0.005, arrow: { start: 'triangle' }, color: primaryCol },
+        // brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
       },
       phrases: {
-        yx: ['y', brac('lb1', 'x_1', 'rb1')],
-        yxr: ['y_r', brac('lbr', 'x_r', 'rbr')],
+        xdTox: { bottomComment: {
+          content: 'xd', comment: 'x', symbol: 'line', inSize: false, commentSpace: 0.2
+        }},
+        xrdToX: { bottomComment: {
+          content: 'xd_r', comment: 'x_r', symbol: 'lineR', inSize: false, commentSpace: 0.2
+        }},
         gxd: ['g_r', brac('lbr', 'xd_r', 'rbr')],
+        gxdToX: ['g_r', brac('lbr', 'xrdToX', 'rbr')],
         gx: ['g_r', brac('lbr', 'x_r', 'rbr')],
-        fx: ['f', brac('lb2', 'x_2', 'rb2')],
-        xD: ['x_2', ' ', 'min', ' ', 'd'],
-        xL: ['x_2', ' ', '_+', ' ', 'd'],
+        fx: ['f', brac('lb', 'x', 'rb')],
+        xD: ['x', ' ', 'min', ' ', 'd'],
+        xL: ['x', ' ', '_+', ' ', 'd'],
         xdD: ['xd', ' ', 'min', ' ', 'd'],
+        xdDToX: ['xdTox', ' ', 'min', ' ', 'd'],
         xdL: ['xd', ' ', '_+', ' ', 'd'],
-        xDToMinD: [
-          'x_2', ' ', 'min', ' ',
-          {
-            bottomComment: {
-              content: 'd',
-              comment: ['min2', 'd_1'],
-              symbol: 'line',
-              inSize: false,
-              commentSpace: 0.2,
-            },
-          },
-        ],
-        minToPlus: {
-          bottomComment: {
-            content: ['min', ' ', 'min2'],
-            comment: '_ + ',
-            symbol: 'brace',
-            inSize: false,
-          },
-        },
-        xDMinD: ['x_2', ' ', 'min', ' ', 'min2', 'd_1'],
-        xDMinStrikeD: ['x_2', ' ', 'minToPlus', 'd_1'],
+        xdLToX: ['xdTox', ' ', '_+', ' ', 'd'],
+        // xDMinD: ['x_2', ' ', 'min', ' ', 'min2', 'd_1'],
+        // xDMinStrikeD: ['x_2', ' ', 'minToPlus', 'd_1'],
         xPlusD: ['x_2', '_ + ', 'd_1'],
-        fxValue: ['f', brac('lb2', ['x_2', 'sign', 'value2'], 'rb2', 0.04)],
+        fxValue: ['f', brac('lb', ['x_2', 'sign', 'value2'], 'rb', 0.04)],
       },
       forms: {
-        fx: ['fx'],
-        fxd: ['yxr', 'equals', 'f', brac('lb2', 'xD', 'rb2', 0.04)],
-        fxd1: ['yxr', 'equals', 'f', brac('lb2', 'xDToMinD', 'rb2', 0.04)],
-        fxd2: ['yxr', 'equals', 'f', brac('lb2', 'xDMinD', 'rb2', 0.04)],
-        fxd3: ['yxr', 'equals', 'f', brac('lb2', 'xDMinStrikeD', 'rb2', 0.04)],
-        fxd4: ['yxr', 'equals', 'f', brac('lb2', 'xPlusD', 'rb2', 0.04)],
         value: ['yxr', 'equals', 'fxValue'],
-        gRightDash: ['gxd', 'equals', 'f', brac('lb2', 'xdD', 'rb2', 0.04)],
-        gRight: ['gx', 'equals', 'f', brac('lb2', 'xD', 'rb2', 0.04)],
-        gLeftDash: ['gxd', 'equals', 'f', brac('lb2', 'xdL', 'rb2', 0.04)],
-        gLeft: ['gx', 'equals', 'f', brac('lb2', 'xL', 'rb2', 0.04)],
+        gRightD: ['gxd', 'equals', 'f', brac('lb', 'xdD', 'rb', 0.04)],
+        gRightDToX: ['gxdToX', 'equals', 'f', brac('lb', 'xdDToX', 'rb', 0.04)],
+        gRight: ['gx', 'equals', 'f', brac('lb', 'xD', 'rb', 0.04)],
+        gLeftD: ['gxd', 'equals', 'f', brac('lb', 'xdL', 'rb', 0.04)],
+        gLeftDToX: ['gxdToX', 'equals', 'f', brac('lb', 'xdLToX', 'rb', 0.04)],
+        gLeft: ['gx', 'equals', 'f', brac('lb', 'xL', 'rb', 0.04)],
       },
       formDefaults: {
         alignment: { fixTo: 'equals', xAlign: 'center' },
@@ -371,8 +347,8 @@ figure.add([
     name: 'nav',
     method: 'collections.slideNavigator',
     options: {
-      prevButton: { position: [-1.7, -1.4 ] },
-      nextButton: { position: [1.7, -1.4 ] },
+      prevButton: { position: [-1.7, -1.3 ] },
+      nextButton: { position: [1.7, -1.3 ] },
       text: {
         font: { weight: '100', size: 0.15 },
         position: [-1.7, 1.2],
@@ -628,7 +604,7 @@ slides.push({
     'These pairs of values are |points|.'
   ],
   modifiers: {
-    'points': { font: { color: primaryCol }, onClick: () => nav.nextSlide() },
+    'points': { font: { color: actionColor }, onClick: () => nav.nextSlide() },
   },
   enterStateCommon: () => {
     figure.showOnly([
@@ -641,7 +617,7 @@ slides.push({
 });
 slides.push({
   modifiers: {
-    'points': { font: { color: primaryCol }, onClick: () => pulseMarks() },
+    'points': { font: { color: actionColor }, onClick: () => pulseMarks() },
   },
   steadyState: () => {
     marks.showAll();
@@ -659,7 +635,7 @@ slides.push({
     'shift to the right by |d|.',
   ],
   modifiers: {
-    points: { font: { color: primaryCol }, onClick: () => pulseMarks() },
+    points: { font: { color: actionColor }, onClick: () => pulseMarks() },
     d1:  { text: 'd', font: { family: times, style: 'italic' } },
   },
   enterStateCommon: () => {
@@ -671,7 +647,6 @@ slides.push({
     figure.setScenarios('default');
     eqn.setScenario('initial');
     eqnF.showForm('funcX')
-    // setElement('eqnF', [-3.1, 4]);
   },
   enterState: () => { fxTrace.showAll(); },
 });
@@ -680,7 +655,6 @@ slides.push({
   enterState: () => {
     eqn.hide();
     fxTrace.showAll();
-    // marks.undim();
   },
   form: null,
   modifiers: {
@@ -715,6 +689,7 @@ slides.push({
     figure.showOnly([
       'nav', 'diagram.plot.titleX', 'diagram.plot.middleY', movePad,
       eqn, 'diagram.plot.fxTrace', trace, dist,
+      'diagram.marks.markY7', 'diagram.marks.markF7',
     ]);
     figure.setScenarios('default');
     // setElement('eqnF', [-3.1, 4]);
@@ -768,7 +743,7 @@ slides.push({
   enterStateCommon: () => {
     figure.showOnly([
       'nav', 'diagram.plot.titleX', 'diagram.plot.middleY', movePad,
-      'diagram.plot.fxTrace', trace, dist, gLine, fLine,
+      'diagram.plot.fxTrace', trace, dist, gLine, fLine, eqn,
     ]);
     figure.setScenarios('default');
     eqnF.showForm('funcX')
@@ -777,21 +752,21 @@ slides.push({
     updateLines = true;
     moveTrace(1.6, null, 0);
   },
+  steadyState: () => { eqn.hide(); },
   leaveStateCommon: () => { updateLines = false; },
   form: null,
 });
 
 slides.push({
-  form: 'gRightDash',
+  form: 'gRightD',
 });
 
 slides.push({
   text: 'As |x|\' is arbitrary, and can be any |x| value',
 });
 
-slides.push({
-  form: 'gRight',
-});
+slides.push({ form: 'gRightDToX' });
+slides.push({ form: 'gRight' });
 
 
 // //////////////////////////////////////////////////////////
@@ -826,17 +801,13 @@ slides.push({
   leaveStateCommon: () => { updateLines = false; cycleIndex = 6; },
 });
 
-slides.push({
-  enterState: () => {
-    gLine.showAll();
-  },
-});
+slides.push({ enterState: () => gLine.showAll() });
 
 slides.push({
   enterStateCommon: () => {
     figure.showOnly([
       'nav', 'diagram.plot.titleX', 'diagram.plot.middleY', movePad,
-      'diagram.plot.fxTrace', trace, dist, marks,
+      'diagram.plot.fxTrace', trace, dist, marks, eqn,
     ]);
     figure.setScenarios(['default', 'left']);
     eqnF.showForm('funcX')
@@ -848,14 +819,12 @@ slides.push({
     fLine.showAll();
     fLine.label.showForm('left')
   },
+  form: null,
 });
 
-slides.push({
-  form: 'gLeftDash',
-});
-slides.push({
-  form: 'gLeft',
-});
+slides.push({ form: 'gLeftD' });
+slides.push({ form: 'gLeftDToX' });
+slides.push({ form: 'gLeft' });
 
 // //////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////
@@ -873,91 +842,9 @@ slides.push({
     eqnF.showForm('funcX')
     eqnY.showForm('left');
     diagram.getElement('eqnH').showForm('right');
-    // cycleIndex = 0;
-    // updateLines = true;
     moveTrace(-2.3, null, 0);
   },
 });
-// slides.push({
-//   steadyState: () => {
-
-//   }
-// });
-
-// // //////////////////////////////////////////////////////////
-// // //////////////////////////////////////////////////////////
-// slides.push({
-//   text: [
-//     'In other words, each value of |f| is |d1| to the left of',
-//     'the shifted function.'
-//   ],
-//   enterState: () => {
-//     marks.undim();
-//   },
-//   steadyState: () => {
-//     // offsets = offsetsD;
-//     dist.showAll();
-//     trace.show();
-//     setElement('eqnY', [4.4, 4]);
-//     eqnY.showForm('funcX');
-//   },
-// });
-// slides.push({
-//   enterState: () => {
-//     eqn.setPosition([0, -1.3])
-//     eqn.hide();
-//     moveTrace(1.6, null, 0);
-//     eqnF.showForm('funcX');
-//     eqnY.showForm('funcX');
-//     setElement('eqnF', [-3.1, 4]);
-//     setElement('eqnY', [4.4, 4]);
-//     trace.show();
-//     marks.undim();
-//     // offsets = offsetsD;
-//     dist.showAll();
-//   },
-//   form: 'fxd',
-// });
-// slides.push({
-//   enterStateCommon: () => {},
-//   steadyStateCommon: () => {},
-//   enterState: () => figure.showOnly(['nav', eqn]),
-//   transition: (done) => {
-//     figure.showOnly([nav, 'eqn']);
-//     eqn.showForm('fxd');
-//     eqn.setPosition([0, -1.3]);
-//     eqn.animations.new()
-//       .scenario({ target: 'center', duration: 1 })
-//       .whenFinished(done)
-//       .start();
-//   },
-//   steadyState: () => {
-//     eqn.showForm('fxd');
-//     eqn.setScenario('center');
-//   },
-//   modifiers: {
-//     d1: { font: { family: times, style: 'italic', color: [0.5, 0.5, 0.5, 1] } },
-//   },
-// });
-
-// // //////////////////////////////////////////////////////////
-// // //////////////////////////////////////////////////////////
-// slides.push({
-//   text: [
-//     'This holds for positive or negative shifts of |d|.',
-//     '',
-//     'When |d| is negative, the equation shows |f|',
-//     'being to the right of a left shifted function.',
-//   ],
-//   enterStateCommon: () => {
-//     figure.showOnly([nav, 'eqn']);
-//     eqn.setScenario('center');
-//   },
-// });
-// slides.push({ form: 'fxd1' });
-// slides.push({ form: 'fxd2' });
-// slides.push({ form: 'fxd3' });
-// slides.push({ form: 'fxd4' });
 
 
 // //////////////////////////////////////////////////////////
@@ -1000,5 +887,5 @@ slides.push({
 
 // figure.getElement('nav').loadSlides(slides);
 nav.loadSlides(slides);
-nav.goToSlide(20);
+nav.goToSlide(11);
 
