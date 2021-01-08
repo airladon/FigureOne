@@ -68,7 +68,7 @@ figure.add([
     method: 'collection',
     mods: {
       scenarios: {
-        default: { position: [-1.3, -1.1], scale: 1 },
+        default: { position: [-1.3, -1.3], scale: 1 },
       },
     },
     elements: [
@@ -197,21 +197,21 @@ figure.add([
         },
       },
       makeEqn('eqnF', 'f', 1.2, dGreyColor, 0.025),
-      makeEqn('eqnY', 'g', 0.5, primaryCol, 0),
+      makeEqn('eqnG', 'g', 0.5, primaryCol, 0),
       makeEqn('eqnH', 'f', 1.75, secondaryCol, 0.025),
-      makeMark('markF', greyColor),
-      makeMark('markY', primaryCol),
+      makeMark('markF', dGreyColor),
+      makeMark('markG', primaryCol),
       {
         name: 'marks',
         method: 'collection',
         elements: [
-          makeMark('markY1', primaryCol),
-          makeMark('markY2', primaryCol),
-          makeMark('markY3', primaryCol),
-          makeMark('markY4', primaryCol),
-          makeMark('markY5', primaryCol),
-          makeMark('markY6', primaryCol),
-          makeMark('markY7', primaryCol),
+          makeMark('markG1', primaryCol),
+          makeMark('markG2', primaryCol),
+          makeMark('markG3', primaryCol),
+          makeMark('markG4', primaryCol),
+          makeMark('markG5', primaryCol),
+          makeMark('markG6', primaryCol),
+          makeMark('markG7', primaryCol),
           makeMark('markF1', dGreyColor),
           makeMark('markF2', dGreyColor),
           makeMark('markF3', dGreyColor),
@@ -280,7 +280,6 @@ figure.add([
         rbr: { symbol: 'bracket', side: 'right', color: primaryCol },
         line: { symbol: 'line', width: 0.005, arrow: { start: 'triangle' } },
         lineR: { symbol: 'line', width: 0.005, arrow: { start: 'triangle' }, color: primaryCol },
-        // brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
       },
       phrases: {
         xdTox: { bottomComment: {
@@ -318,27 +317,10 @@ figure.add([
     mods: { 
       scenarios: {
         default: { position: [0, -1.2], scale: 1.2 },
-        center: { position: [-0.1, -0.3], scale: 2.2 },
         title: { position: [-0.5, -1.05], scale: 1 },
         example: { position: [0, 0.7], scale: 1 },
       }
     }
-  },
-  {
-    name: 'eqnTitle',
-    method: 'collections.equation',
-    options: {
-      color: primaryCol,
-      elements: {
-        unknown: '?',
-        lb1: { symbol: 'bracket', side: 'left', color: primaryCol },
-        rb1: { symbol: 'bracket', side: 'right', color: primaryCol },
-      },
-      phrases: { gx: ['g', brac('lb1', 'x_1', 'rb1')] },
-      forms: { title: ['gx', '_  =  ', 'unknown'] },
-      formDefaults: { alignment: { xAlign: 'center' } },
-      position: [0.4, -1.05 ],
-    },
   },
   {
     name: 'nav',
@@ -351,7 +333,7 @@ figure.add([
         position: [-1.7, 1.2],
         xAlign: 'left',
       },
-      equation: ['eqn', 'diagram.eqnF', 'diagram.eqnY']
+      equation: ['eqn', 'diagram.eqnF', 'diagram.eqnG']
     },
   },
 ]);
@@ -366,7 +348,7 @@ const gLine = diagram.getElement('gLine');
 const fLine = diagram.getElement('fLine');
 const plot = diagram.getElement('plot');
 const eqnF = diagram.getElement('eqnF');
-const eqnY = diagram.getElement('eqnY');
+const eqnG = diagram.getElement('eqnG');
 const dist = diagram.getElement('distance');
 const trace = plot.getElement('mainTrace');
 const xAxis = plot.getElement('x');
@@ -441,9 +423,9 @@ const update = () => {
     }, 'current');
   }
   if (updateEqns) {
-    setElement('eqnY', [xY + yLabel[0], y + yLabel[1]], xY);
+    setElement('eqnG', [xY + yLabel[0], y + yLabel[1]], xY);
     setElement('eqnF', [xF + fLabel[0], y + fLabel[1]], xF);
-    setElement('markY', [xY, y]);
+    setElement('markG', [xY, y]);
     setElement('markF', [xF, y]);
   }
   if (updateLines) {
@@ -456,7 +438,7 @@ const update = () => {
 movePad.subscriptions.add('setTransform', () => update());
 update();
 
-const moveMarks = (xOffsetFrom, xOffsetTo = 0, type = 'Y', skipAnimation = true) => {
+const moveMarks = (xOffsetFrom, xOffsetTo = 0, type = 'G', skipAnimation = true) => {
   for (i = 0; i < 7; i += 1) {
     const pointX = i * 0.7 - 2.1;
     const y = yAxis.valueToDraw(fx(pointX).y);
@@ -483,20 +465,20 @@ const moveTrace = (xOffset, done = null, duration = 1) => {
     return;
   }
   moveMarks(0);
-  eqnY.hide();
+  eqnG.hide();
   trace.hide();
   eqn.hide();
   dist.hide();
   movePad.setPosition(xAxis.valueToDraw(0), 0);
   movePad.animations.new()
-    .trigger({ duration: 2, callback: () => moveMarks(0, xOffset, 'Y', false) })
+    .trigger({ duration: 2, callback: () => moveMarks(0, xOffset, 'G', false) })
     .dissolveOut({ element: trace, duration: 0.4 })
     .trigger(() => movePad.setPosition(xAxis.valueToDraw(xOffset), 0))
     .inParallel([
       trace.animations.dissolveIn({ duration: 0.4 }),
       dist.animations.dissolveIn({ duration: 0.4 }),
     ])
-    .trigger(() => eqnY.showForm('funcX'))
+    .trigger(() => eqnG.showForm('funcX'))
     .whenFinished(done)
     .start();
 }
@@ -515,7 +497,7 @@ const modifiersCommon = {
     text: 'g',
     font: { family: times, style: 'italic', color: primaryCol },
     touchBorder: [0.1, 0.1, 0.25, 0.1],
-    onClick: () => marks.getElement('markY7').pulse({ scale: 2 }),
+    onClick: () => marks.getElement('markG7').pulse({ scale: 2 }),
   },
   f1: {
     text: 'f',
@@ -639,7 +621,7 @@ slides.push({
   ],
   showCommon: [
     { 'diagram.plot': ['titleX', 'middleY', 'fxTrace'] },
-    dist, trace, { 'diagram.marks': ['markY7', 'markF7'] },
+    dist, trace, { 'diagram.marks': ['markG7', 'markF7'] },
   ],
   scenarioCommon: 'default',
   enterStateCommon: () => {
@@ -689,7 +671,7 @@ slides.push({
   ],
   showCommon: [
     { 'diagram.plot': ['titleX', 'middleY', 'fxTrace'] },
-    dist, trace, { 'diagram.marks': ['markY7', 'markF7'] },
+    dist, trace, { 'diagram.marks': ['markG7', 'markF7'] },
     gLine, fLine,
   ],
   enterStateCommon: () => {
@@ -805,20 +787,26 @@ slides.push({
       font: { color: actionColor }, onClick: () => cycle(), touchBorder: 0.1,
     }
   },
-  scenario: 'example',
+  scenario: ['default', 'example'],
+  showCommon: [
+    { 'diagram.plot': ['titleX', 'middleY', 'fxTrace', ] },
+    { 'diagram': ['markG', 'markF'] },
+    movePad, trace,
+    // diagram,
+  ],
   steadyState: () => {
-    figure.showOnly([nav, diagram, eqn]);
-    diagram.hide([
-      'distance', 'plot.titleX', 'plot.middleY', fxTrace, 'marks',
-      'plot.rightTrace', 'gLine', 'fLine', 'eqnH',
-    ])
+    // figure.showOnly([nav, diagram, eqn]);
+    // diagram.hide([
+    //   'distance', 'plot.titleX', 'plot.middleY', fxTrace, 'marks',
+    //   'plot.rightTrace', 'gLine', 'fLine', 'eqnH',
+    // ])
     offsets = offsetsValue;
     cycleIndex = 2;
     precision = 1;
     updateEqns = true;
     eqn.showForm('value');
     eqnF.showForm('0');
-    eqnY.showForm('0');
+    eqnG.showForm('0');
     movePad.setMovable();
     movePad.setPosition(plotWidth / 2, 0);
     figure.setScenarios('example');
@@ -833,5 +821,5 @@ slides.push({
 });
 
 nav.loadSlides(slides);
-nav.goToSlide(20);
+nav.goToSlide(24);
 
