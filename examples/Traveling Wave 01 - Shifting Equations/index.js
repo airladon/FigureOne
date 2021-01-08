@@ -366,214 +366,138 @@ const offsetsValue = [
 ];
 const offsetsD = [[-2.1], [-1.4], [-0.7], [0], [0.7], [1.4], [2.1]];
 
-let cycler = 0;
-let whichX = 'fx';
-let offsets = offsetsValue;
+let cycleIndex = 0;
+let offsets = offsetsD;
 const cycle = () => {
-  cycler = (cycler + 1) % offsets.length;
-  // valueEqn.updateElementText({ value2: `${offsets[cycler][0]}` });
+  cycleIndex = (cycleIndex + 1) % offsets.length;
   update();
 };
 let updateEqns = false;
 
 const update = () => {
-  const p = movePad.getPosition('local');
-  let xPad = xAxis.drawToValue(p.x)
+  const [curvePosition, fLabel, yLabel] = offsets[cycleIndex];
+  const xPad = xAxis.drawToValue(movePad.getPosition('local').x)
+  const xY = xPad + curvePosition;
+  const xF = curvePosition;
+  const y = fx(xF).y;
   trace.update(getFx(xPad, 0));
-  const [curveOffset, fLabel, yLabel] = offsets[cycler];
-  const yX = whichX === 'fx' ? xPad + curveOffset : curveOffset;
-  const yY = fx(yX).y;
-  const fX = whichX === 'fx' ? curveOffset : xPad + curveOffset;
-  const y = whichX === 'fx' ? fx(fX).y : fx(yX).y;
-  let sign = xPad >= 0 ? ' \u2212 ' : ' + ';
-  let value2 = Math.abs(round(xPad, 1)).toFixed(precision);
-  // if (round(xPad, 1) === 0) {
-  //   value2 = '';
-  //   sign = '';
-  // }
-  // eqn.clear();
   if (eqn.isShown) {
-    eqn.updateElementText({ sign, value2 }, 'current');
+    eqn.updateElementText({
+      sign: xPad >= 0 ? ' \u2212 ' : ' + ',
+      value2: Math.abs(round(xPad, 1)).toFixed(precision),
+    }, 'current');
   }
   if (updateEqns) {
-    setElement('eqnY', [yX + yLabel[0], y + yLabel[1]], yX);
-    setElement('eqnF', [fX + fLabel[0], y + fLabel[1]], fX);
-    setElement('markY', [yX, y]);
-    setElement('markF', [fX, y]);
+    setElement('eqnY', [xY + yLabel[0], y + yLabel[1]], xY);
+    setElement('eqnF', [xF + fLabel[0], y + fLabel[1]], xF);
+    setElement('markY', [xY, y]);
+    setElement('markF', [xF, y]);
   }
-  if (dist.isShown) {
-    dist.setEndPoints(plot.pointToDraw([fX, y]), plot.pointToDraw([yX, y]));
-  }
+  dist.setEndPoints(plot.pointToDraw([xF, y]), plot.pointToDraw([xY, y]));
   figure.animateNextFrame();
 }
-movePad.subscriptions.add('setTransform', () => {
-  update();
-});
+movePad.subscriptions.add('setTransform', () => update());
 update();
-
-const animateShift = (offset) => {
-  trace.animations.new()
-    .delay(1)
-    .trigger({ callback: () => setPoints(offset - 2, offset, 0), duration: 5 })
-    .trigger({ callback: () => setPoints(offset - 1, offset, 1), duration: 5 })
-    .trigger({ callback: () => setPoints(offset, offset, 2), duration: 5 })
-    .trigger({ callback: () => setPoints(offset + 1, offset, 3), duration: 5 })
-    .trigger({ callback: () => setPoints(offset + 2, offset, 4), duration: 5 })
-    .trigger(() => {
-      eqn.show();
-      eqn.setText({ 'value': `${Math.abs(offset)}`})
-      if (offset >= 0) {
-        sign.custom.updateText({ text: ' \u2212 ' });
-      } else {
-        sign.custom.updateText({ text: ' + ' });
-      }
-      eqn.pulse({ scale: 1.3 })
-    })
-    .start();
-};
 
 setElement('eqnF', [-2.2, 4.2], '-2');
 setElement('markF', [-2, 4]);
 
-const setMark = (markName, xValue, xOffset) => {
-  const mark = marks.getElement(markName);
-  mark.show();
-  const py = yAxis.valueToDraw(fx(xValue).y);
-  const px = xAxis.valueToDraw(xValue + xOffset);
-  mark.setPosition(px, py);
-}
-
-// const moveMark = (markName, xValue) => {
-//   const mark = diagram.getElement(markName);
-//   const target = plot.pointToDraw(fx(xValue));
-//   mark.animations.new()
-//     .pulse({ duration: 1})
-//     .position({ target, duration: 1})
-//     .start();
-// }
-
-const setMarks = (xOffset) => {
-  for (i = 0; i < 7; i += 1) {
-    setMark(`markY${i + 1}`, i * 0.7 - 2.1, xOffset);
-  }
-};
-
-const moveMarks = (xOffsetFrom, xOffsetTo, skipAnimation = false) => {
-  setMarks(xOffsetFrom);
+const moveMarks = (xOffsetFrom, xOffsetTo = 0, skipAnimation = true) => {
   for (i = 0; i < 7; i += 1) {
     const pointX = i * 0.7 - 2.1;
-    const from = plot.pointToDraw(fx(pointX + xOffsetFrom));
-    const to = plot.pointToDraw(fx(pointX + xOffsetTo));
+    const y = yAxis.valueToDraw(fx(pointX).y);
+    const from = xAxis.valueToDraw(pointX + xOffsetFrom);
+    const to = xAxis.valueToDraw(pointX + xOffsetTo);
     const mark = marks.getElement(`markY${i + 1}`);
-    if (skipAnimation) {
-      mark.setPosition(to.x, from.y);
-      return;
+      mark.setPosition(from, y);
+    if (!skipAnimation) {
+      console.log(from, y)
+      mark.setPosition(from, y);
+      mark.animations.new()
+        .pulse({ duration: 1})
+        .position({ target: [to, y], duration: 1})
+        .start();
     }
-    mark.setPosition(from);
-    mark.animations.new()
-      .pulse({ duration: 1})
-      .position({ target: [to.x, from.y], duration: 1})
-      .start();
   }
 };
 
-
-const pulseMarks = () => {
-  marks.pulse({
-    elements: ['markY1', 'markY2', 'markY3', 'markY4', 'markY5', 'markY6', 'markY7']},
-  );
-}
+const pulseMarks = () => marks.pulse({ elements: marks.getChildren() });
 
 const moveTrace = (xOffset, done = null, duration = 1) => {
   if (duration === 0) {
-    setMarks(xOffset);
+    moveMarks(xOffset);
     movePad.setPosition(xAxis.valueToDraw(xOffset), 0);
     return;
   }
-  setMarks(0);
+  moveMarks(0);
   eqnY.hide();
   trace.hide();
   fxTrace.show();
   eqn.hide();
-  // eqn.showForm('fx')
-  // eqn.dim();
-  // eqnY.showForm('funcX');
+  dist.hide();
   movePad.setPosition(xAxis.valueToDraw(0), 0);
   movePad.animations.new()
-    .trigger({
-      duration: 2,
-      callback: () => moveMarks(0, xOffset),
-    })
-    // .position({ target: [xAxis.valueToDraw(xOffset), 0], duration })
+    .trigger({ duration: 2, callback: () => moveMarks(0, xOffset, false) })
     .dissolveOut({ element: trace, duration: 0.4 })
-    .trigger(() => {
-      movePad.setPosition(xAxis.valueToDraw(xOffset), 0);
-    })
+    .trigger(() => movePad.setPosition(xAxis.valueToDraw(xOffset), 0))
     .inParallel([
       trace.animations.dissolveIn({ duration: 0.4 }),
       fxTrace.animations.dissolveOut({ duration: 0.4 }),
+      dist.animations.dissolveIn({ duration: 0.4 }),
     ])
-    .trigger(() => {
-      eqnY.showForm('funcX')
-      // eqn.showForm('yxUnknown')
-    })
+    .trigger(() => eqnY.showForm('funcX'))
     .whenFinished(done)
-    // .dissolveOut({ element: eqn, duration: 0.4 })
-    // .trigger(() => {
-    //   eqn.highlight(['y', 'lb1', 'rb1', 'x_1']);
-    //   // eqn.showForm('fxyx');
-    // })
-    // .dissolveIn({ element: eqn, duration: 0.4 })
-    // .then(eqn.animations.goToForm({ target: 'fxyx' }))
     .start();
 }
 
 
 slides = [];
 const times = 'Times New Roman'
+const modifiersCommon = {
+  x: { font: { family: times, style: 'italic' } },
+  d: { font: { family: times, style: 'italic' } },
+  d1: {
+    text: 'd',
+    font: { family: times, style: 'italic', color: actionColor },
+    onClick: () => { dist.show(); cycle(); },
+    touchBorder: 0.08,
+  },
+  f: { font: { family: times, style: 'italic' }, rSpace: 0.02 },
+  f1: {
+    touchBorder: 0.08,
+    text: 'f',
+    onClick: () => eqnF.pulse(),
+    font: { family: times, style: 'italic', color: actionColor },
+    rSpace: 0.02,
+  },
+  y: {
+    font: { family: times, style: 'italic', color: primaryCol },
+    touchBorder: [0.1, 0.1, 0.2, 0.1],
+    onClick: () => pulseMarks(),
+  },
+  lb: { text: '(', font: { family: times, color: primaryCol } },
+  rb: { text: ')', font: { family: times, color: primaryCol } },
+  xr: { text: 'x', font: { family: times, style: 'italic', color: primaryCol } },
+  n: { font: { family: times, style: 'italic', size: 0.1, }, offset: [0, -0.05 ] },
+}
+
 // //////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////
 slides.push({
-  modifiersCommon: {
-    x: { font: { family: times, style: 'italic' } },
-    d: { font: { family: times, style: 'italic' } },
-    d1: {
-      text: 'd',
-      font: { family: times, style: 'italic', color: actionColor },
-      onClick: () => { dist.show(); cycle(); },
-      touchBorder: 0.08,
-    },
-    f: { font: { family: times, style: 'italic' }, rSpace: 0.02 },
-    f1: {
-      touchBorder: 0.08,
-      text: 'f',
-      onClick: () => eqnF.pulse(),
-      font: { family: times, style: 'italic', color: actionColor },
-      rSpace: 0.02,
-    },
-    y: {
-      font: { family: times, style: 'italic', color: primaryCol },
-      touchBorder: [0.1, 0.1, 0.2, 0.1],
-      onClick: () => pulseMarks(),
-    },
-    lb: { text: '(', font: { family: times, color: primaryCol } },
-    rb: { text: ')', font: { family: times, color: primaryCol } },
-    xr: { text: 'x', font: { family: times, style: 'italic', color: primaryCol } },
-    n: { font: { family: times, style: 'italic', size: 0.1, }, offset: [0, -0.05 ] },
-  },
+  modifiersCommon,
   steadyState: () => {
     figure.showOnly([
       'nav', trace, 'diagram.plot.fxTrace', 'eqnTitle',
       'diagram.plot.titleX', 'diagram.plot.middleY', 'title',
     ]);
-    figure.setScenarios('default');
-    figure.setScenarios('title');
+    figure.setScenarios(['default', 'title']);
     trace.update(getFx(1.6, 0));
     fxTrace.update(getFx(-1.6, 0));
     eqn.showForm('fx');
   },
   leaveState: () => {
     fxTrace.update(getFx(0, 0));
+    trace.update(getFx(0, 0));
   }
 });
 
@@ -591,8 +515,6 @@ slides.push({
   enterState: () => {
     figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY', fxTrace]);
     figure.setScenarios('default');
-    // fxTrace.update(getFx(0, 0));
-    // eqn.showForm('fx');
   },
   transition: (done) => {
     fxTrace.show();
@@ -615,10 +537,9 @@ slides.push({
 slides.push({
   enterStateCommon: () => {
     figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY', fxTrace]);
-    figure.setScenarios('default');
-    // fxTrace.update(getFx(0, 0));
+    figure.setScenarios('default', 'initial');
     eqn.showForm('fx');
-    eqn.setScenario('initial');
+    // eqn.setScenario('initial');
     eqnF.showForm('funcX')
     setElement('eqnF', [-3.1, 4]);
   },
@@ -637,7 +558,7 @@ slides.push({
   steadyState: () => {
     marks.showAll();
     marks.dim();
-    setMarks(0);
+    moveMarks(0);
     pulseMarks();
   },
   leaveStateCommon: () => { marks.undim(); },
@@ -656,7 +577,7 @@ slides.push({
     d1: { text: 'd', font: { family: times, style: 'italic' } },
   },
   enterStateCommon: () => {
-    setMarks(0);
+    moveMarks(0);
     marks.dim();
     figure.showOnly([
       'nav', 'diagram.plot.titleX', 'diagram.plot.middleY', movePad,
@@ -675,12 +596,14 @@ slides.push({
     eqn.hide();
     fxTrace.showAll();
     marks.undim();
+    // offsets = offsetsD;
   },
   form: null,
   modifiers: {
     Shifting: {
       font: { color: actionColor },
       onClick: () => moveTrace(2, null),
+      touchBorder: 0.1,
     },
     value: { font: { color: actionColor}, onClick: pulseMarks },
   },
@@ -701,12 +624,6 @@ slides.push({
 // //////////////////////////////////////////////////////////
 slides.push({
   text: [
-    // 'A |positive| shift of |each| |y||lb||xr||rb| value is the same',
-    // 'as |f|(|x||n|) where |x||n| is on the negative side of |x|.',
-    // 'A |positive| shift |d| means each |y||lb||xr||rb| value',
-    // 'has a corresponding |f1| value distance |d| to the left.',
-    // 'Each |y||lb||xr||rb| value has a corresponding |f1| value',
-    // 'that is |d| more negative'
     'In other words, each value of |f| is |d1| to the left of',
     'the shifted function.'
   ],
@@ -714,10 +631,8 @@ slides.push({
     marks.undim();
   },
   steadyState: () => {
-    offsets = offsetsD;
-    // updateEqns = false;
+    // offsets = offsetsD;
     dist.showAll();
-    dist.setEndPoints([10, 10], [11, 11]);
     trace.show();
     setElement('eqnY', [4.4, 4]);
     eqnY.showForm('funcX');
@@ -734,14 +649,10 @@ slides.push({
     setElement('eqnY', [4.4, 4]);
     trace.show();
     marks.undim();
+    // offsets = offsetsD;
+    dist.showAll();
   },
   form: 'fxd',
-  steadyState: () => {
-    offsets = offsetsD;
-    // updateEqns = false;
-    dist.showAll();
-    dist.setEndPoints([10, 10], [11, 11]);
-  },
 });
 slides.push({
   enterStateCommon: () => {},
@@ -802,12 +713,12 @@ slides.push({
     figure.showOnly([nav, diagram, eqn]);
     diagram.hide(['distance', 'plot.titleX', 'plot.middleY', fxTrace, 'marks'])
     offsets = offsetsValue;
-    cycler = 2;
+    cycleIndex = 2;
     precision = 1;
     updateEqns = true;
     eqn.showForm('value');
-    diagram.getElement('eqnF').showForm('0');
-    diagram.getElement('eqnY').showForm('0');
+    eqnF.showForm('0');
+    eqnY.showForm('0');
     movePad.setTouchable();
     movePad.setPosition(plotWidth / 2, 0);
     figure.setScenarios('example');
@@ -815,199 +726,11 @@ slides.push({
   leaveState: () => {
     precision = 0;
     updateEqns = false;
+    cycleIndex = 0;
+    offsets = offsetsD;
   },
 });
 
 figure.getElement('nav').loadSlides(slides);
 
 
-
-// figure.getElement('nav').goToSlide(9);
-
-/*
-We start with some function g(x). Each value of g aligns with an x value.
-
-To shift the function g(x) by distance d, we want to align g with new x values:
-h()
-If we align g(x) with different x values, we will have a new function:
-
-h(x + d)
-
-
-Shifting a function g(x) to the right along the x axis is the same as saying we wish to move each value of g to a new x
-Shifting a function g(x) along x is the same as saying we wish to move each value of g to a new x value.
-
-The shifted function h, will be the g function but aligned with new x values:
-
-h(x_new) = g(x)
-
-
-Shifting a function f(x) along x is the same as saying we wish to move each value of f to a new x value.
-
-The shifted function g will align the new x value with f(x)
-g(x_new) = f(x)
-
-If we shift f(x) to the right by distance d, then we are associating each value of f(x) with a new position x + d:
-
-g(x+d) = f(x)
-
-Similarly, if we shift f(x) to the left by distance d, then we are associating each value of f(x) with a new position x - d:
-g(x - d) = f(x)
-
-In summary, if function g is the same as f, just shifted to the right then:
-g(x + d) = f(x)
-
-When some function g is to the left of f, then
-g(x - d) = f(x).
-
-Now, we will plot out y(x) = f(x).
-
-If we shift y(x) to the right by distance d, then y(x) is now to the right of f(x), and so our plot is now:
-
-y(x) = f(x - d)
-
-If we shift y(x) to the left by distance d
-
-If we shift it right by distance d, then we are saying each value of f(x) should now be associated with position x + d.
-
-Our shifted function is then:
-y(x + d) = f(x)
-
-If we shift it left by distance d, then we are saying each value of f(x) should now be associated with an x to the left:
-y(x - d) = f(x)
-
-The function y(x+d) is to the right of f(x).
-The function y(x-d) is to the left of f(x).
-
-If y(x-d) is to the left of f(x), then f(x-d) must be to the left of y(x).
-
-
-How does an equation change when it is shifted?
-
-Let's start by plotting out some fuynction f(x) shuch that:
-
-y(x) = f(x)
-
-In other words, each value of f(x) appears at the corresponding x value on the plot.
-
-Now, if we move the plot by +d along the x axis, we are saying we want each value of f(x) to be at (a shifted value of x) x + d, instead of x.
-
-y(x + d) = f(x)
-
-In other words, each value of y is ahead of f by some distance along the x axis.
-Correspondingly, each value of f is the same distance behind y along the x axis.
-
-y(x) = f(x - d)
-
-This can be mathematically clear, but conceptually confusing, so another way to approach this is by looking at an example.
-
-
-
-
-Let's start with y(x) = f(x) = x^2.
-
-
-In other words the value of y leads the value of f along the x Axis.
-We can therefore also say the value of f lags the value of y along the x Axis.
-
-y(x) = f(x - d)
-
-
-In other words, each value of y comes from the value of f at x - d.
-
-In other words, each value of y(x) is the value of f for the x value x - d:
-
-
-y(x) = f(x - d)
-This says that each value of f(x) is plotted at x + d. It also says that each value of y(x) is the f(x - d) value.
-
-
-If we substitute:
-x_shift = x + d we get:
-y(x_shift) = f(x_shift - d)
-
-x_shift is all x, so we can just as easily write
-y(x) = f(x - d)
-
-
-How does an equation change when it is shifted?
-
-Let's start by plotting out some function f(x) such that:
-
-y(x) = f(x)
-
-We see at
-x=0: y(x = 0) = f(0)
-x=1: y(x = 1) = f(1)
-
-Now, what happens if y(x) moves distance d in the +x direction?
-
-Each point along f(x) moves distance d to the right meaning f(0) should now be at x = d, instead of x = 0.
-
-y(0 + d) = f(0)
-y(1 + d) = f(1)
-
-y(x + d) = f(x)
-
-if x + d = xShifted, then xShifted - d = x
-y(xShifted) = f(xShifted - d)
-y(x) = f(x - d)
-
-We can achieve this by transforming out input to f(x) to make x look like the unshifted x:
-
-y(x) = f(x - d)
-
-Let's look at an example.
-
-We have f(x) = x^2, and we will track three points along the curve.
-
-when y(x) has no shift, y(x) aligns with f(x).
-
-Now shift y(x) in the positive or negative direction. The y values at the new shifted location will now align with new x values.
-
-
-Now each y value looks like the y value when x was 1 unit before the current x.
-
-
-The function f(x) takes an x value as input, and outputs a y value.
-
-Plotting the function f(x) means inputting many values of x, and plotting the corresponsing y outputs.
-
-ie: at x=0, we have y(x = 0) = f(0)
-at x = 1, we have y(x = 1) = f(1)
-
-Now, let's say we want to move the plot 1 unit in the positive x direction.
-
-Let's compare the y values for the two functions:
-
-Now y(x = 0) = f(-1)
-y(x = 1) = f(0)
-y(x = 2) = f(1)
-
-In words, the x value has been transformed to look like the x value negative 1 unit away.
-
-y(x) = f(x-1)
-
-
-That means that y(x) for each x will look like the y value from corresponding x values 1 unit before.
-
-
-If we transform each x input to look like the x from distance a before, then 
-Each y value of x before the shift get's shifted by +a along x.
-That 
-
-
-when we shift the plot by +a, we want the y value for each x value to look like the y value for the x value that is a before.
-Now, if we shift the plot by +a, then that means we want the y value at each value of x to be the y value from the corresponding x value before the shift.
-
-i.e. at x = a, we have y(a) = f(0)
-
-
-Let's consider now a plot that is shifted by 
-Now, we can transform each value of x before we input it into f(x)
-When we shift the plot by +x, it means the 
-To shift a function by +x' then means all out input values need to be transformed to look like values from before the shift.
-
-Now shifting a function by +a along x means we for each input x, we want the function f(x) to see the unshifted value as an input
-To shift a function in the positive direction, each input to the function must look like the input from before the shift
-*/

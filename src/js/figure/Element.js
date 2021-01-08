@@ -1936,6 +1936,14 @@ class FigureElement {
     };
   }
 
+  /**
+   * Set transform, color and/or visibility to a predefined scenario.
+   *
+   * @param {string | Array<string>} [scenarioName] name of the scenario to
+   * set. Use an array of names to set multiple scenarios in the array's order.
+   * @param {boolean} [onlyIfVisible] `true` to only set scenario if element is
+   * visible
+   */
   setScenario(scenario: string | OBJ_Scenario) {
     const target = this.getScenarioTarget(scenario);
     if (target.transform != null) {
@@ -1954,32 +1962,25 @@ class FigureElement {
     }
   }
 
-  setScenarios(scenarioName: string) {
-    if (this.scenarios[scenarioName] != null) {
-      this.setScenario(scenarioName);
+  setScenarios(scenarioName: string | Array<string>) {
+    let scenarios = scenarioName;
+    if (!Array.isArray(scenarios)) {
+      scenarios = [scenarios];
     }
+    scenarios.forEach((scenario) => {
+      if (this.scenarios[scenario] != null) {
+        this.setScenario(scenario);
+      }
+    });
   }
 
+  /**
+   * Save the current transform, color and/or visibility to a scenario.
+   */
   saveScenario(
     scenarioName: string,
     keys: Array<string> = ['transform', 'color', 'isShown'],
   ) {
-    // const scenario = {};
-    // keys.forEach((key) => {
-    //   if (key === 'transform') {
-    //     scenario.transform = this.transform._dup();
-    //   } else if (key === 'position') {
-    //     scenario.position = this.getPosition();
-    //   } else if (key === 'rotation') {
-    //     scenario.rotation = this.getRotation();
-    //   } else if (key === 'scale') {
-    //     scenario.scale = this.getScale();
-    //   } else if (key === 'color') {
-    //     scenario.color = this.color.slice();
-    //   } else if (key === 'isShown') {
-    //     scenario.isShown = this.isShown;
-    //   }
-    // });
     const scenario = this.getCurrentScenario(keys);
     if (Object.keys(scenario).length > 0) {
       this.scenarios[scenarioName] = scenario;
@@ -5475,6 +5476,13 @@ class FigureElementCollection extends FigureElement {
     return timeToAnimate;
   }
 
+  /**
+   * Get all elements within the collection that are primitives, including
+   * any primitives that are children of this element, and any primitives that
+   * are children of this element's children and so forth.
+   *
+   * @return {Array<FigureElement>}
+   */
   getAllPrimitives() {
     let elements = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -5488,6 +5496,12 @@ class FigureElementCollection extends FigureElement {
     return elements;
   }
 
+  /**
+   * Get an array of all elements of in this collection, including this element,
+   * children, children of children and so forth.
+   *
+   * @return {Array<FigureElement>}
+   */
   getAllElements() {
     const elements = [this];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -5502,6 +5516,11 @@ class FigureElementCollection extends FigureElement {
     return elements;
   }
 
+  /**
+   * Get array of all children elements.
+   *
+   * @return {Array<FigureElement>}
+   */
   getChildren() {
     const elements = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -5701,7 +5720,18 @@ class FigureElementCollection extends FigureElement {
   //   }
   // }
 
-  setScenarios(scenarioName: string, onlyIfVisible: boolean = false) {
+  /**
+   * Set transform, color and/or visibility to a predefined scenario.
+   *
+   * @param {string | Array<string>} [scenarioName] name of the scenario to
+   * set. Use an array of names to set multiple scenarios in the array's order.
+   * @param {boolean} [onlyIfVisible] `true` to only set scenario if element is
+   * visible
+   */
+  setScenarios(
+    scenarioName: string | Array<string>,
+    onlyIfVisible: boolean = false,
+  ) {
     super.setScenarios(scenarioName);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
