@@ -24,16 +24,26 @@ const makeEqn = (name, funcName, xAlign = 'left') => ({
       value: '0',
       equals: ' = ',
       func: funcName,
+      unknown: '?',
+      lb: { symbol: 'bracket', side: 'left' },
+      rb: { symbol: 'bracket', side: 'right' },
     },
     color: funcName === 'f' ? dGreyColor : primaryCol,
     formDefaults: { alignment: { xAlign } },
     forms: {
-      0: ['func', ' ', '_(', 'value', '_)'],
-      x: ['func', ' ', '_(', 'x', 'equals', 'value', '_)'],
-      funcX: ['func', ' ', '_(', 'x', '_)'],
+      0: ['func', ' ', brac('lb', 'value', 'rb')],
+      x: ['func', ' ', brac('lb', ['x', 'equals', 'value'], 'rb')],
+      funcX: ['func', ' ', brac('lb', 'x', 'rb')],
+      unknown: ['func', ' ', brac('lb', 'x', 'rb'), 'equals', 'unknown']
     },
     scale: 0.6,
   },
+  mods: {
+    scenarios: {
+      default: { position: [name === 'eqnF' ? 0.55 : 2.35, 1.3], scale: 1 },
+      title: { position: [name === 'eqnF' ? 0.75 : 1.5, 0.1], scale: 1.2 },
+    }
+  }
 });
 
 const makeMark = (name, color = greyColor, radius = 0.02) => ({
@@ -448,8 +458,8 @@ const update = () => {
 movePad.subscriptions.add('setTransform', () => update());
 update();
 
-setElement('eqnF', [-2.2, 4.2], '-2');
-setElement('markF', [-2, 4]);
+// setElement('eqnF', [-2.2, 4.2], '-2');
+// setElement('markF', [-2, 4]);
 
 const moveMarks = (xOffsetFrom, xOffsetTo = 0, type = 'Y', skipAnimation = true) => {
   for (i = 0; i < 7; i += 1) {
@@ -543,13 +553,15 @@ slides.push({
   modifiersCommon,
   steadyState: () => {
     figure.showOnly([
-      'nav', 'eqnTitle', 'title',
+      'nav', 'title',
       { 'diagram.plot': ['titleX', 'middleY', 'mainTrace', 'fxTrace'] },
     ]);
-    eqn.showForm('fx');
+    // eqn.showForm('fx');
     figure.setScenarios(['default', 'title']);
     trace.update(getFx(1.6, 0));
     fxTrace.update(getFx(-1.6, 0));
+    eqnF.showForm('funcX')
+    eqnY.showForm('unknown')
   },
   leaveState: () => {
     fxTrace.update(getFx(0, 0));
@@ -563,7 +575,7 @@ slides.push({
   text: 'Start by plotting a function |f|(|x|).',
   enterStateCommon: () => {
     figure.showOnly(['nav', 'diagram.plot.titleX', 'diagram.plot.middleY']);
-    figure.setScenarios(['default', 'initial']);
+    figure.setScenarios(['default']);
   },
 });
 
@@ -579,7 +591,7 @@ slides.push({
   steadyState: () => {
     fxTrace.showAll()
     eqnF.showForm('funcX')
-    setElement('eqnF', [-3.1, 4]);
+    // setElement('eqnF', [-3.1, 4]);
   },
 });
 
@@ -599,7 +611,7 @@ slides.push({
     ]);
     figure.setScenarios('default', 'initial');
     eqnF.showForm('funcX')
-    setElement('eqnF', [-3.1, 4]);
+    // setElement('eqnF', [-3.1, 4]);
   },
 });
 slides.push({
@@ -634,7 +646,7 @@ slides.push({
     figure.setScenarios('default');
     eqn.setScenario('initial');
     eqnF.showForm('funcX')
-    setElement('eqnF', [-3.1, 4]);
+    // setElement('eqnF', [-3.1, 4]);
   },
   enterState: () => { fxTrace.showAll(); },
 });
@@ -661,8 +673,8 @@ slides.push({
     trace.show();
     dist.showAll();
     moveTrace(1.6, null, 0);
-    setElement('eqnF', [-3.1, 4]);
-    setElement('eqnY', [4.4, 4]);
+    // setElement('eqnF', [-3.1, 4]);
+    // setElement('eqnY', [4.4, 4]);
     eqnY.showForm('funcX');
   },
 });
@@ -680,8 +692,8 @@ slides.push({
       eqn, 'diagram.plot.fxTrace', trace, dist,
     ]);
     figure.setScenarios('default');
-    setElement('eqnF', [-3.1, 4]);
-    setElement('eqnY', [4.4, 4]);
+    // setElement('eqnF', [-3.1, 4]);
+    // setElement('eqnY', [4.4, 4]);
     eqnF.showForm('funcX')
     eqnY.showForm('funcX');
     moveTrace(1.6, null, 0);
@@ -733,8 +745,8 @@ slides.push({
       'diagram.plot.fxTrace', trace, dist, gLine, fLine,
     ]);
     figure.setScenarios('default');
-    setElement('eqnF', [-3.1, 4]);
-    setElement('eqnY', [4.4, 4]);
+    // setElement('eqnF', [-3.1, 4]);
+    // setElement('eqnY', [4.4, 4]);
     eqnF.showForm('funcX')
     eqnY.showForm('funcX');
     moveTrace(1.6, null, 0);
@@ -757,8 +769,8 @@ slides.push({
       eqn, 'diagram.plot.fxTrace', marks, trace, dist,
     ]);
     figure.setScenarios('default');
-    setElement('eqnF', [-3.1, 4]);
-    setElement('eqnY', [4.4, 4]);
+    // setElement('eqnF', [-3.1, 4]);
+    // setElement('eqnY', [4.4, 4]);
     eqnF.showForm('funcX')
     eqnY.showForm('funcX');
     moveTrace(1.6, null, 0);
