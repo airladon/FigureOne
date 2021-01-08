@@ -1,7 +1,7 @@
 // @flow
 import { joinObjects } from '../tools/tools';
 import { FigureElementCollection } from './Element';
-import type { FigureElement } from './Element';
+import type { FigureElement, TypeElementPath } from './Element';
 import type {
   OBJ_Collection, OBJ_TextModifiersDefinition, OBJ_TextLines,
 } from './FigurePrimitives/FigurePrimitives';
@@ -41,6 +41,11 @@ export type TypeSlideStateCallback = (number, TypeSlideFrom) => void;
  * The `done` parameter must be called at the end of the transition.
  */
 export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) => void;
+
+/**
+ * `(currentIndex: number, from: `{@link TypeSlideFrom}`) => void`
+ */
+export type TypeSlideShowCallback = (number, TypeSlideFrom) => void;
 
 /**
  * Slide definition options object.
@@ -130,11 +135,17 @@ export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) =>
  * - `leaveState` (for current slide)
  * - stop all animations
  * - Update associated text element with `text` property
- * - Hide all equations with `null` forms
+ * - Hide all elements in associated collection
+ * - `showCommon`
+ * - `show`
+ * - `scenarioCommon`
+ * - `scenario`
+ * - Show navigator buttons, text element and equations with defined forms
  * - `enterStateCommon` (for new slide)
  * - `enterState`
- * - `transition`
- * - Show all equations with non-null forms
+ * - show `fromForm`
+ * - `transition` or '`fromForm` to `form` animations
+ * - show `form`
  * - `steadyStateCommon`
  * - `steadyState`
  * - Wait for next navigation event
@@ -145,6 +156,8 @@ export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) =>
  * @property {OBJ_TextModifiersDefinition} [modifiersCommon] common property
  * @property {OBJ_TextModifiersDefinition} [modifiers] will
  * overwrite any keys from `modifiersCommon` with the same name
+ * @property {TypeElementPath | TypeSlideShowCallback} [showStateCommon] common property
+ * @property {TypeElementPath | TypeSlideShowCallback} [showState]
  * @property {TypeSlideStateCallback} [enterStateCommon] common property
  * @property {TypeSlideStateCallback} [enterState]
  * @property {TypeSlideTransitionCallback} [transition] transititions are
@@ -157,12 +170,17 @@ export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) =>
  * @property {TypeSlideStateCallback} [steadyState]
  * @property {TypeSlideLeaveStateCallback} [leaveStateCommon] common property
  * @property {TypeSlideLeaveStateCallback} [leaveState]
- * @property {string | Array<string>} [form] common property
+ * @property {string | Array<string | null> | null} [form] common property
+ * @property {string | Array<string | null> | null} [fromForm]
+ * @property {string | Array<string>} [scenarioCommon] common property
+ * @property {string | Array<string>} [scenario]
  */
 export type OBJ_SlideNavigatorSlide = {
   text?: OBJ_TextLines,
   modifiersCommon?: OBJ_TextModifiersDefinition;
   modifiers?: OBJ_TextModifiersDefinition;
+  showCommon?: TypeElementPath | TypeSlideShowCallback;
+  show?: TypeElementPath | TypeSlideShowCallback;
   enterStateCommon?: TypeSlideStateCallback,
   enterState?: TypeSlideStateCallback,
   transition?: TypeSlideTransitionCallback;
@@ -170,7 +188,10 @@ export type OBJ_SlideNavigatorSlide = {
   steadyState?: TypeSlideStateCallback;
   leaveStateCommon?: TypeSlideLeaveStateCallback;
   leaveState?: TypeSlideLeaveStateCallback;
-  form?: string | Array<string>;
+  fromForm?: string | Array<string | null> | null;
+  form?: string | Array<string | null> | null;
+  scenarioCommon?: string | Array<string>;
+  scenario?: string | Array<string>;
 }
 
 /**
@@ -328,7 +349,7 @@ export default class SlideNavigator {
       prevButton.onClick = this.prevSlide.bind(this);
     }
     if (nextButton != null) {
-      nextButton.onClick = this.nextSlide.bind(this);
+      nextButton.onClick = this.nextSlide.bind(this, false);
     }
 
     if (this.slides == null && this.equations.length === 1) {
@@ -373,13 +394,24 @@ export default class SlideNavigator {
 
   getForm(index: number) {
     const forms = this.getProperty('form', index, null);
-    if (forms == null) {
+    if (forms === undefined) {
       return [];
     }
     if (!Array.isArray(forms)) {
       return [forms];
     }
     return forms;
+  }
+
+  getFromForm(index: number): Array<string | null> {
+    const { fromForm } = this.slides[index];
+    if (fromForm === undefined) {
+      return [];
+    }
+    if (Array.isArray(fromForm)) {
+      return fromForm;
+    }
+    return [fromForm];
   }
 
   showForms(forms: Array<string | null>, hideOnly: boolean = false) {
@@ -440,16 +472,23 @@ export default class SlideNavigator {
     }
 
     const forms = this.getForm(this.currentSlideIndex);
+    const fromForms = this.getFromForm(this.currentSlideIndex);
+    if (forms.length === 0 || fromForms.length === 0) {
+      return done();
+    }
     for (let i = 0; i < this.equations.length; i += 1) {
       const e = this.collection.getElement(this.equations[i]);
-      if (e != null && e instanceof Equation && forms.length > i && forms[i] != null) {
+      if (
+        e != null
+        && e instanceof Equation
+        && forms.length > i
+        && fromForms.length > i
+        && forms[i] != null
+        && fromForms[i] !== forms[i]
+      ) {
         const form = forms[i];
-        const currentForm = e.getCurrentForm();
-        let currentFormName = '';
-        if (currentForm != null) {
-          currentFormName = currentForm.name;
-        }
-        if (!e.isShown) {
+        const fromForm = fromForms[i];
+        if (fromForm === null) {
           e.animations.new()
             .inParallel([
               e.animations.dissolveIn({ duration: 0.2 }),
@@ -462,8 +501,7 @@ export default class SlideNavigator {
             .whenFinished(done)
             .start();
           done = null;
-        } else if (form !== currentFormName) {
-          // console.log(form)
+        } else if (fromForm !== null) {
           const { animate, duration } = this.equationDefaults;
           e.animations.new()
             .goToForm({ target: form, animate, duration })
@@ -491,6 +529,33 @@ export default class SlideNavigator {
       text,
       modifiers: joinObjects({}, commonMods, mods),
     });
+  }
+
+  showElements(index: number, from: 'next' | 'prev' | number) {
+    const showCommon = this.getProperty('showCommon', index, []);
+    const show = this.slides[index].show || [];
+    if (typeof showCommon === 'function') {
+      showCommon(index, from);
+    } else {
+      this.collection.show(showCommon);
+    }
+    if (typeof show === 'function') {
+      show(index, from);
+    } else {
+      this.collection.show(show);
+    }
+    if (show != null && Array.isArray(show)) {
+      this.collection.show();
+    }
+    if (this.nextButton != null) {
+      this.nextButton.showAll();
+    }
+    if (this.prevButton != null) {
+      this.prevButton.showAll();
+    }
+    if (this.textElement != null) {
+      this.textElement.showAll();
+    }
   }
 
   /**
@@ -537,12 +602,16 @@ export default class SlideNavigator {
     // Enter new slide
     this.currentSlideIndex = index;
     const slide = this.slides[index];
-    const forms = this.getForm(index);
-    this.showForms(forms, true);
+    this.collection.hideAll();
+    this.showElements(index, fromToUse);
+    this.collection.setScenarios(this.getProperty('scenarioCommon', index, []));
+    this.collection.setScenarios(slide.scenario || []);
     this.getProperty('enterStateCommon', index, () => {})(index, fromToUse);
     if (slide.enterState != null) {
       slide.enterState(index, fromToUse);
     }
+    const fromForm = this.getFromForm(index);
+    this.showForms(fromForm);
     // Move to transition
     this.transition(fromToUse);
   }
