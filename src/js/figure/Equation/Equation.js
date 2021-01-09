@@ -1192,6 +1192,9 @@ export class Equation extends FigureElementCollection {
   ) {
     Object.keys(elements).forEach((elementName) => {
       const e = this.getElement(elementName);
+      if (e == null) {
+        return;
+      }
       const col = e.color.slice();
       e.custom.updateText({ text: elements[elementName] });
       e.setColor(col);
@@ -1823,12 +1826,12 @@ export class Equation extends FigureElementCollection {
    * Show equation form
    */
   showForm(
-    formOrName: EquationForm | string,
+    formOrName: EquationForm | string = this.eqn.currentForm,
     // subForm: ?string = null,
     animationStop: boolean = true,
     // showCollection: boolean = true,
   ) {
-    this.show();
+    super.show();
     // this.custom.settingForm = true;
     let form = formOrName;
     if (typeof formOrName === 'string') {
@@ -1841,6 +1844,10 @@ export class Equation extends FigureElementCollection {
       this.fnMap.exec(form.onShow);
     }
     // this.custom.settingForm = false;
+  }
+
+  showAll() {
+    this.showForm();
   }
 
   // show(

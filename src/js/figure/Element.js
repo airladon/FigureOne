@@ -3773,6 +3773,7 @@ class FigureElementPrimitive extends FigureElement {
         this.drawingObject.element.style.opacity = `${opacity}`;
       }
     }
+    this.animateNextFrame();
   }
 
   show() {
@@ -5428,14 +5429,14 @@ class FigureElementCollection extends FigureElement {
     this.exec('undim', elementsToHighlight);
   }
 
-  setOpacity(opacity: number) {
-    // for (let i = 0; i < this.drawOrder.length; i += 1) {
-    //   const element = this.elements[this.drawOrder[i]];
-    //   element.setOpacity(opacity);
-    // }
-    // this.color[3] = opacity;
-    this.opacity = opacity;
-  }
+  // setOpacity(opacity: number) {
+  //   // for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //   //   const element = this.elements[this.drawOrder[i]];
+  //   //   element.setOpacity(opacity);
+  //   // }
+  //   // this.color[3] = opacity;
+  //   this.opacity = opacity;
+  // }
 
   getElementTransforms() {
     const out = {};

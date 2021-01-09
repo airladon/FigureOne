@@ -494,10 +494,9 @@ const moveTrace = (xOffset, done = null, duration = 1) => {
     .trigger({ duration: 2, callback: () => moveMarks(0, xOffset, 'G', false) })
     .trigger(() => movePad.setPosition(xAxis.valueToDraw(xOffset), 0))
     .inParallel([
-      trace.animations.dissolveIn({ duration: 0.4 }),
-      dist.animations.dissolveIn({ duration: 0.4 }),
-      eqnG.animations.dissolveIn({ duration: 0.4 }),
-      eqnG.animations.trigger(() => eqnG.showForm('funcX')),
+      trace.animations.dissolveIn(0.4),
+      dist.animations.dissolveIn(0.4),
+      eqnG.animations.dissolveIn(0.4),
     ])
     .whenFinished(done)
     .start();
@@ -581,13 +580,18 @@ slides.push({
 });
 
 slides.push({
+  fromForm: [null, 'funcX', null],
   transition: (done) => {
     fxTrace.show();
     fxTrace.animations.new()
-      .dissolveIn({ duration: 0.5 })
+      .inParallel([
+        fxTrace.animations.dissolveIn(0.4),
+        eqnF.animations.dissolveIn(0.4),
+      ])
       .whenFinished(done)
       .start();
   },
+
   form: [null, 'funcX', null],
   steadyState: () => fxTrace.showAll(),
 });

@@ -87,6 +87,13 @@ export default class EquationForm extends Elements {
     }
   };
 
+  arranged: {
+    scale: number,
+    xAlign: TypeHAlign | null,
+    yAlign: TypeVAlign | null,
+    fixTo: FigureElementPrimitive | FigureElementCollection | Point,
+  };
+
   // These properties are just saved in the form and not used by this class
   // They are used by external classes using this form
   description: string | null;

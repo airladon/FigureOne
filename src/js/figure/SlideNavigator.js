@@ -490,15 +490,9 @@ export default class SlideNavigator {
         const form = forms[i];
         const fromForm = fromForms[i];
         if (fromForm === null) {
+          e.showForm(form);
           e.animations.new()
-            .inParallel([
-              e.animations.dissolveIn({ duration: 0.2 }),
-              e.animations.trigger({
-                callback: () => {
-                  e.showForm(form);
-                },
-              }),
-            ])
+            .dissolveIn(0.4)
             .whenFinished(done)
             .start();
           done = null;
