@@ -493,6 +493,14 @@ export default class SlideNavigator {
           e.showForm(form);
           e.animations.new()
             .dissolveIn(0.4)
+            // .inParallel([
+            //   e.animations.dissolveIn({ duration: 0.2 }),
+            //   e.animations.trigger({
+            //     callback: () => {
+            //       e.showForm(form);
+            //     },
+            //   }),
+            // ])
             .whenFinished(done)
             .start();
           done = null;

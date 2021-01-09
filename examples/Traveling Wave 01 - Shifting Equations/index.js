@@ -490,6 +490,8 @@ const moveTrace = (xOffset, done = null, duration = 1) => {
   moveMarks(0);
   diagram.hide([eqnG, trace, dist]);
   movePad.setPosition(xAxis.valueToDraw(0), 0);
+  eqnG.showForm('funcX');
+  eqnG.hide();
   movePad.animations.new()
     .trigger({ duration: 2, callback: () => moveMarks(0, xOffset, 'G', false) })
     .trigger(() => movePad.setPosition(xAxis.valueToDraw(xOffset), 0))
@@ -790,7 +792,7 @@ slides.push({
     moveTrace(-1.6, null, 0);
     update();
   },
-  leaveStateCommon: () => { updateLines = false; cycleIndex = 6; console.log(cycleIndex) },
+  leaveStateCommon: () => { updateLines = false; cycleIndex = 6; },
 });
 
 slides.push({ show: [gLine] });
@@ -881,7 +883,6 @@ slides.push({
   ],
   steadyState: () => {
     plot.hide('rightTrace');
-    console.log(plot)
     offsets = offsetsValue;
     cycleIndex = 2;
     precision = 1;

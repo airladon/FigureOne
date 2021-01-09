@@ -818,10 +818,15 @@ class TextObjectBase extends DrawingObject {
     ctx.transform(cA, cB, cC, cD, cE, cF);
     this.lastDrawTransform = elementToScaledPixelMatrix.slice();
 
+    // Some bug I don't understand in webgl is effectively cubing the alph
+    // channel. So make the same here to fade-ins happen at same rate
+    const c = color.slice();
+    c[3] *= c[3] * c[3];
+
     // Fill in all the text
     this.text.forEach((figureText) => {
       figureText.font.setFontInContext(ctx, scalingFactor);
-      figureText.font.setColorInContext(ctx, color);
+      figureText.font.setColorInContext(ctx, c);
       ctx.fillText(
         figureText.text,
         (figureText.locationAligned.x) * scalingFactor,
