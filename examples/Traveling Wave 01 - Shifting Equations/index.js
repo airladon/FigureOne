@@ -68,7 +68,10 @@ figure.add([
     name: 'diagram',
     method: 'collection',
     mods: {
-      scenarios: { default: { position: [-1.3, -0.8], scale: 1 } },
+      scenarios: {
+        default: { position: [-1.3, -0.8], scale: 1 },
+        low: { position: [-1.3, -1], scale: 1 },
+      },
     },
     elements: [
       {
@@ -227,6 +230,14 @@ figure.add([
     },
   },
   {
+    name: 'highlighter',
+    method: 'collections.rectangle',
+    options: {
+      line: { width: 0.005 },
+      color: greyColor,
+    },
+  },
+  {
     name: 'eqn',
     method: 'collections.equation',
     options: {
@@ -281,7 +292,8 @@ figure.add([
     },
     mods: { 
       scenarios: {
-        default: { position: [0, -1.25], scale: 1.2 },
+        // default: { position: [0, -1.25], scale: 1.2 },
+        default: { position: [0, 0.8], scale: 1.2 },
         title: { position: [-0.5, -1.05], scale: 1 },
         example: { position: [0, -1.25], scale: 1 },
       }
@@ -314,11 +326,13 @@ const fLine = diagram.getElement('fLine');
 const plot = diagram.getElement('plot');
 const eqnF = diagram.getElement('eqnF');
 const eqnG = diagram.getElement('eqnG');
+const eqnH = diagram.getElement('eqnH');
 const dist = diagram.getElement('distance');
 const trace = plot.getElement('mainTrace');
 const xAxis = plot.getElement('x');
 const yAxis = plot.getElement('y');
 const fxTrace = plot.getElement('fxTrace');
+const highlighter = figure.getElement('highlighter');
 
 let precision = 0;
 
@@ -650,11 +664,23 @@ slides.push({
 });
 
 slides.push({
-  fromForm: [null, 'funcX', 'funcX'],
+  // fromForm: [null, 'funcX', 'funcX'],
+  transition: (done) => {
+    eqnG.showForm('funcX');
+    eqnF.showForm('funcX');
+    diagram.animations.new()
+      .scenario({ target: 'low', duration: 1 })
+      .whenFinished(done)
+      .start();
+  },
   form: ['gRightD', 'funcX', 'funcX'],
+  steadyState: () => {
+    diagram.setScenario('low');
+  },
 });
 
 slides.push({
+  scenarioCommon: ['default', 'low'],
   text: 'As |xd| is arbitrary, we can replace it with |x|.',
 });
 slides.push({
@@ -665,12 +691,23 @@ slides.push({
   fromForm: ['gRightDToX', 'funcX', 'funcX'],
   form: ['gRight', 'funcX', 'funcX'],
 });
+slides.push({
+  steadyState: () => {
+    highlighter.showAll();
+    highlighter.surround(eqn, 0.07);
+    highlighter.pulse({ scale: 1.2 });
+  }
+});
 
 
 // //////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////
 slides.push({
   text: 'Now what happens if we shift to the left instead?',
+  steadyState: () => {
+    highlighter.showAll();
+    highlighter.surround(eqn, 0.07);
+  }
 });
 
 slides.push({
@@ -679,7 +716,7 @@ slides.push({
     { 'diagram': ['plot.mainTrace', 'movePad', 'distance'] },
   ],
   show: marks,
-  scenarioCommon: ['default', 'left'],
+  scenarioCommon: ['default', 'low', 'left'],
   enterStateCommon: () => {
     cycleIndex = 0;
     updateLines = true;
@@ -692,7 +729,7 @@ slides.push({
     moveTrace(-1.6, null, 0);
     update();
   },
-  leaveStateCommon: () => { updateLines = false; cycleIndex = 6; },
+  leaveStateCommon: () => { updateLines = false; cycleIndex = 6; console.log(cycleIndex) },
 });
 
 slides.push({ show: [gLine] });
@@ -723,13 +760,33 @@ slides.push({
   fromForm: ['gLeftDToX', 'funcX', 'funcX'],
   form: ['gLeft', 'funcX', 'funcX'],
 });
+slides.push({
+  steadyState: () => {
+    highlighter.showAll();
+    highlighter.surround(eqn, 0.07);
+    highlighter.pulse({ scale: 1.2 });
+  }
+});
 
 // //////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////
 slides.push({
   text: [
-    'We can now summarize a shift |d| in function |f||lb1||x||rb1|.',
+    'We can now summarize a shift of function |f||lb1||x||rb1|',
+    'by distance |d| to the |left| and |right| .',
   ],
+  modifiers: {
+    left: {
+      font: { color: primaryCol },
+      touchBorder: 0.1,
+      onClick: () => eqnG.pulse({ yAlign: 'top' }),
+    },
+    right: {
+      font: { color: secondaryCol },
+      touchBorder: 0.1,
+      onClick: () => eqnH.pulse({ yAlign: 'top' }),
+    },
+  },
   form: [null, 'funcX', 'left'],
   scenarioCommon: ['default', 'bottom'],
   showCommon: [
@@ -748,8 +805,8 @@ slides.push({
 slides.push({
   enterStateCommon: () => {},
   text: [
-    'Example: Drag the curve to shift, |change| observation',
-    'points, and compare |f||lb1||x||rb1| and |g1||lb||xr||rb|.'
+    'Interactive example: Drag the curve to shift',
+    '|change| points, and compare |f||lb1||x||rb1| and |g1||lb||xr||rb|.'
   ],
   modifiers: {
     change: {
@@ -778,12 +835,12 @@ slides.push({
   leaveState: () => {
     precision = 0;
     updateEqns = false;
-    cycleIndex = 0;
+    cycleIndex = 6;
     offsets = offsetsD;
   },
   form: ['value', '0', '0']
 });
 
 nav.loadSlides(slides);
-nav.goToSlide(24);
+// nav.goToSlide(24);
 
