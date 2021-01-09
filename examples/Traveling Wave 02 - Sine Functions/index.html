@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+    <!-- Style the figureOne container to be 4:3 aspect ratio -->
+    <style>
+        .wrapper {
+            width: calc(100vw - 20px);
+            max-width: 100%;
+            padding-bottom: 10px;
+            border: 1px solid lightgrey;
+        }
+        @media (min-aspect-ratio: 1/1) {
+            .wrapper {
+              width: calc((100vh - 20px)/0.75);
+            }
+        } 
+        #figureOneContainer1, #figureOneContainer2 {
+            width: 100%;
+            padding-bottom: 75%;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #444;
+            max-width: 1000px;
+        }
+        h1 {
+            font-weight: 100;
+        }
+    </style>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async
+                src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+    </head>
+    <body>
+        <h1>Sine Waves</h1>
+        <p>
+            In a right angle triangle, the sine function relates angle, hypotenuase and opposite side.
+            \[\sin\theta={opposite \over hypotenuse}\]
+        </p>
+        <p>
+            When the angle \(\theta\) is plotted on a Cartesian axis, the sine function “looks like” a wave.
+        </p>
+        <div class="wrapper">
+            <div id="figureOneContainer1"></div>
+        </div>
+        <p>
+            When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
+  \[x = {-b \pm \sqrt{b^2-4ac} \over 2a}.\]
+        </p>
+        <div class="wrapper">
+            <div id="figureOneContainer2"></div>
+        </div>
+        <div class="wrapper">
+            <div id="figureOneContainer3"></div>
+        </div>
+
+        <!-- Use CDN hosted library-->
+        <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script> -->
+        
+        <!-- Comment line above, and uncomment line below to use local library instead of CDN -->
+        <script type="text/javascript" src='../../package/index.js'></script>
+        <script type="text/javascript" src='./fig1.js'></script>
+        <script type="text/javascript" src='./fig2.js'></script>
+    </body>
+</html>
