@@ -1,4 +1,4 @@
-const { Point, getPoint } = Fig;
+const { Point } = Fig;
 const { round, range } = Fig.tools.math;
 
 const greyColor = [0.6, 0.6, 0.6, 1];
@@ -9,6 +9,15 @@ const secondaryCol = [0, 0.6, 1, 1];
 
 figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color:dGreyColor });
 
+/*
+.......##..........###....##....##..#######..##.....##.########
+.......##.........##.##....##..##..##.....##.##.....##....##...
+.......##........##...##....####...##.....##.##.....##....##...
+.......##.......##.....##....##....##.....##.##.....##....##...
+.......##.......#########....##....##.....##.##.....##....##...
+.......##.......##.....##....##....##.....##.##.....##....##...
+.......########.##.....##....##.....#######...#######.....##...
+*/
 const x = range(-5, 5, 0.1);
 const fx = (xx, ox = 0, oy = 0) => new Point(xx, (xx - ox) ** 2 + oy);
 const getFx = (ox, oy) => x.map(xx => fx(xx, ox, oy));
@@ -315,7 +324,17 @@ figure.add([
   },
 ]);
 
-// Common elements that will be used
+
+/*
+..........##........#######...######...####..######.
+..........##.......##.....##.##....##...##..##....##
+..........##.......##.....##.##.........##..##......
+..........##.......##.....##.##...####..##..##......
+..........##.......##.....##.##....##...##..##......
+..........##.......##.....##.##....##...##..##....##
+..........########..#######...######...####..######.
+*/
+// Common elements that will be used in LOGIC and SLIDES
 const nav = figure.getElement('nav');
 const eqn = figure.getElement('eqn');
 const diagram = figure.getElement('diagram');
@@ -334,10 +353,28 @@ const yAxis = plot.getElement('y');
 const fxTrace = plot.getElement('fxTrace');
 const highlighter = figure.getElement('highlighter');
 
-let precision = 0;
+// Predetermined offsets for positioning equations at different locations
+// on plots of g(x) and f(x)
+const offsetsValue = [
+  [-2, [-1.35, -0.4], [0.2, 0.2]],
+  [-1, [-1.35, -0.4], [0.2, 0.2]],
+  [0, [-0.3, -0.45], [-0.45, 0.4]],
+  [1, [-1.15, 0.15], [0.1, -0.4]],
+  [2, [-1.15, 0.15], [0.1, -0.4]],
+];
+const offsetsD = [[-2.1], [-1.4], [-0.7], [0], [0.7], [1.4], [2.1]];
 
-// Set a diagram element to a plot position with some label
-const setElement = (name, position, label = null) => {
+// Global variables that are changed within the slides to give different
+// behaviors to the update function
+let precision = 0;
+let cycleIndex = 6;
+let offsets = offsetsD;
+let updateEqns = false;
+let updateLines = false;
+
+// Position a mark or equation on the plot. Will also update the
+// equation with a value if 'label' is defined
+const setElementPosition = (name, position, label = null) => {
   const e = diagram.getElement(name);
   if (e.isShown === false) {
     return;
@@ -362,6 +399,7 @@ const setElement = (name, position, label = null) => {
   }
 }
 
+// Set end points of a line on the plot
 const setLine = (name, fX, offset) => {
   const yDraw = yAxis.valueToDraw(fx(fX).y);
   const yDraw0 = yAxis.valueToDraw(0);
@@ -370,53 +408,58 @@ const setLine = (name, fX, offset) => {
   e.setEndPoints([xDraw, yDraw0], [xDraw, yDraw]);
 };
 
-const offsetsValue = [
-  [-2, [-1.35, -0.4], [0.2, 0.2]],
-  [-1, [-1.35, -0.4], [0.2, 0.2]],
-  [0, [-0.3, -0.45], [-0.45, 0.4]],
-  [1, [-1.15, 0.15], [0.1, -0.4]],
-  [2, [-1.15, 0.15], [0.1, -0.4]],
-];
-const offsetsD = [[-2.1], [-1.4], [-0.7], [0], [0.7], [1.4], [2.1]];
-
-let cycleIndex = 6;
-let offsets = offsetsD;
+// Cycle which global offsets to use to determine where to draw
+// plot equations, marks and distance label.
 const cycle = () => {
   cycleIndex = (cycleIndex + 1) % offsets.length;
   update();
 };
-let updateEqns = false;
-let updateLines = false;
 
+// Main update function, called each time the plot changes
 const update = () => {
   const [curvePosition, fLabel, yLabel] = offsets[cycleIndex];
   const xPad = xAxis.drawToValue(movePad.getPosition('local').x)
   const xY = xPad + curvePosition;
   const xF = curvePosition;
   const y = fx(xF).y;
+
+  // Update the trace with a new x location
   trace.update(getFx(xPad, 0));
+
+  // Update the main equation on the interactive example slide to
+  // include the x offset value
   if (eqn.isShown) {
     eqn.updateElementText({
       sign: xPad >= 0 ? ' \u2212 ' : ' + ',
       value2: Math.abs(round(xPad, 1)).toFixed(precision),
     }, 'current');
   }
+
+  // Update mark and plot equations with a new position and value
   if (updateEqns) {
-    setElement('eqnG', [xY + yLabel[0], y + yLabel[1]], xY);
-    setElement('eqnF', [xF + fLabel[0], y + fLabel[1]], xF);
-    setElement('markG', [xY, y]);
-    setElement('markF', [xF, y]);
+    setElementPosition('eqnG', [xY + yLabel[0], y + yLabel[1]], xY);
+    setElementPosition('eqnF', [xF + fLabel[0], y + fLabel[1]], xF);
+    setElementPosition('markG', [xY, y]);
+    setElementPosition('markF', [xF, y]);
   }
+
+  // Update lines from plot points to x axis locations
   if (updateLines) {
     setLine('gLine', xF, xPad);
     setLine('fLine', xF, 0);
   }
+
+  // Update distance label
   dist.setEndPoints(plot.pointToDraw([xF, y]), plot.pointToDraw([xY, y]));
+
+  // Call an animation frame
   figure.animateNextFrame();
 }
-movePad.subscriptions.add('setTransform', () => update());
-update();
 
+// Everytime the movePad changes, the trace needs to be updated
+movePad.subscriptions.add('setTransform', () => update());
+
+// Helper function to animate moving marks in x
 const moveMarks = (xOffsetFrom, xOffsetTo = 0, type = 'G', skipAnimation = true) => {
   for (i = 0; i < 7; i += 1) {
     const pointX = i * 0.7 - 2.1;
@@ -433,10 +476,11 @@ const moveMarks = (xOffsetFrom, xOffsetTo = 0, type = 'G', skipAnimation = true)
     }
   }
 };
-moveMarks(0, 0, 'F');
 
+// Helper function to pulse individual marks
 const pulseMarks = () => marks.pulse({ elements: marks.getChildren() });
 
+// Helper function to animate moving marks and trace
 const moveTrace = (xOffset, done = null, duration = 1) => {
   if (duration === 0) {
     moveMarks(xOffset);
@@ -459,8 +503,22 @@ const moveTrace = (xOffset, done = null, duration = 1) => {
     .start();
 }
 
+// Initializiation
+update();
+moveMarks(0, 0, 'F');
 
+/*
+...........######..##.......####.########..########..######.
+..........##....##.##........##..##.....##.##.......##....##
+..........##.......##........##..##.....##.##.......##......
+...........######..##........##..##.....##.######....######.
+................##.##........##..##.....##.##.............##
+..........##....##.##........##..##.....##.##.......##....##
+...........######..########.####.########..########..######.
+*/
 slides = [];
+
+// Define common text modifiers that will be used on several slides
 const times = 'Times New Roman'
 const modifiersCommon = {
   x: { font: { family: times, style: 'italic' } },
@@ -490,8 +548,8 @@ const modifiersCommon = {
 }
 
 // //////////////////////////////////////////////////////////
+// Slide 1
 // //////////////////////////////////////////////////////////
-console.log(plot)
 slides.push({
   modifiersCommon,
   show: [
@@ -664,7 +722,6 @@ slides.push({
 });
 
 slides.push({
-  // fromForm: [null, 'funcX', 'funcX'],
   transition: (done) => {
     eqnG.showForm('funcX');
     eqnF.showForm('funcX');
@@ -841,6 +898,6 @@ slides.push({
   form: ['value', '0', '0']
 });
 
+// Load slides into slideNavigator
 nav.loadSlides(slides);
-// nav.goToSlide(24);
 
