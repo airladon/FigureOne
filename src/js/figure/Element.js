@@ -107,8 +107,34 @@ export type OBJ_Scenario = {
   isShown?: boolean,
 };
 
-
-export type TypeElementPath = string | { [name: string]: TypeElementPath } | FigureElement | Array<string | Object | FigureElement>
+/**
+ * Path to a {@link FigureElement} within a {@link FigureElementCollection}.
+ *
+ * `string | {[name: string]: TypeElementPath } | `{@link FigureElement}` | Array<TypeElementPath>}`
+ *
+ * Consider a collection with the below heirachy. The collection has two
+ * children `diagram` and `description` of which `diagram` is another
+ * collection:
+ * - diagram
+ *   - lineA
+ *   - lineB
+ *   - lines
+ *     - lineC
+ *     - lineD
+ * - description
+ *
+ * The ways to define lineC, lineD and description are:
+ *
+ * - `['description', 'diagram.lines.lineC', 'diagram.lines.lineD']`
+ * - `['description', { diagram: ['lines.lineC', 'lines.lineD'] }]`
+ * - `['description', { 'diagram.lines': ['lineC', 'lineD'] }]`
+ */
+/* eslint-disable no-use-before-define */
+export type TypeElementPath = string
+                              | { [name: string]: TypeElementPath }
+                              | FigureElement
+                              | Array<TypeElementPath>;
+/* eslint-enable no-use-before-define */
 
 const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Transform>) => {
   const newTransforms = [];
@@ -4950,9 +4976,7 @@ class FigureElementCollection extends FigureElement {
   /**
    * Show collection or specific elements within the collection
    */
-  show(
-    toShow: TypeElementPath = [],
-  ): void {
+  show(toShow: TypeElementPath = []): void {
     super.show();
     this.getElements(toShow).forEach((element) => {
       element.showAll();
@@ -4998,9 +5022,9 @@ class FigureElementCollection extends FigureElement {
    * Hide collection or specific elements within the collection
    */
   hide(
-    toHide: TypeElementPath = [],
+    toHide: TypeElementPath | null = null,
   ): void {
-    if (Array.isArray(toHide) && toHide.length === 0) {
+    if (toHide == null) {
       super.hide();
       return;
     }

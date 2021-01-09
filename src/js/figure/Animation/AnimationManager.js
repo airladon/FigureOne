@@ -335,13 +335,12 @@ export default class AnimationManager {
 
   /**
    * Create a Trigger animation step
-   * @param {OBJ_TriggerAnimationStep} options
+   * @param {OBJ_TriggerAnimationStep | function(): void} options
    * @return {TriggerAnimationStep}
    */
   // eslint-disable-next-line class-methods-use-this
-  trigger(...options: Array<OBJ_TriggerAnimationStep>) {
-    const optionsToUse = joinObjects({}, ...options);
-    return new anim.TriggerAnimationStep(optionsToUse);
+  trigger(options: (() => void) | Array<OBJ_TriggerAnimationStep>) {
+    return new anim.TriggerAnimationStep(options);
   }
 
   /**

@@ -43,11 +43,6 @@ export type TypeSlideStateCallback = (number, TypeSlideFrom) => void;
 export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) => void;
 
 /**
- * `(currentIndex: number, from: `{@link TypeSlideFrom}`) => void`
- */
-export type TypeSlideShowCallback = (number, TypeSlideFrom) => void;
-
-/**
  * Slide definition options object.
  *
  * This object defines the state the figure should be set to when this slide
@@ -138,6 +133,8 @@ export type TypeSlideShowCallback = (number, TypeSlideFrom) => void;
  * - Hide all elements in associated collection
  * - `showCommon`
  * - `show`
+ * - `hideCommon`
+ * - `hide`
  * - `scenarioCommon`
  * - `scenario`
  * - Show navigator buttons, text element and equations with defined forms
@@ -156,8 +153,10 @@ export type TypeSlideShowCallback = (number, TypeSlideFrom) => void;
  * @property {OBJ_TextModifiersDefinition} [modifiersCommon] common property
  * @property {OBJ_TextModifiersDefinition} [modifiers] will
  * overwrite any keys from `modifiersCommon` with the same name
- * @property {TypeElementPath | TypeSlideShowCallback} [showStateCommon] common property
- * @property {TypeElementPath | TypeSlideShowCallback} [showState]
+ * @property {TypeElementPath} [showCommon] common property
+ * @property {TypeElementPath} [show]
+ * @property {TypeElementPath} [hideCommon] common property
+ * @property {TypeElementPath} [hide]
  * @property {TypeSlideStateCallback} [enterStateCommon] common property
  * @property {TypeSlideStateCallback} [enterState]
  * @property {TypeSlideTransitionCallback} [transition] transititions are
@@ -179,8 +178,10 @@ export type OBJ_SlideNavigatorSlide = {
   text?: OBJ_TextLines,
   modifiersCommon?: OBJ_TextModifiersDefinition;
   modifiers?: OBJ_TextModifiersDefinition;
-  showCommon?: TypeElementPath | TypeSlideShowCallback;
-  show?: TypeElementPath | TypeSlideShowCallback;
+  showCommon?: TypeElementPath;
+  show?: TypeElementPath;
+  hideCommon?: TypeElementPath;
+  hide?: TypeElementPath;
   enterStateCommon?: TypeSlideStateCallback,
   enterState?: TypeSlideStateCallback,
   transition?: TypeSlideTransitionCallback;
@@ -531,19 +532,11 @@ export default class SlideNavigator {
     });
   }
 
-  showElements(index: number, from: 'next' | 'prev' | number) {
+  showElements(index: number) {
     const showCommon = this.getProperty('showCommon', index, []);
     const show = this.slides[index].show || [];
-    if (typeof showCommon === 'function') {
-      showCommon(index, from);
-    } else {
-      this.collection.show(showCommon);
-    }
-    if (typeof show === 'function') {
-      show(index, from);
-    } else {
-      this.collection.show(show);
-    }
+    this.collection.show(showCommon);
+    this.collection.show(show);
     if (show != null && Array.isArray(show)) {
       this.collection.show();
     }
@@ -556,6 +549,13 @@ export default class SlideNavigator {
     if (this.textElement != null) {
       this.textElement.showAll();
     }
+  }
+
+  hideElements(index: number) {
+    const hideCommon = this.getProperty('hideCommon', index, []);
+    const hide = this.slides[index].hide || [];
+    this.collection.hide(hideCommon);
+    this.collection.hide(hide);
   }
 
   /**
@@ -603,7 +603,8 @@ export default class SlideNavigator {
     this.currentSlideIndex = index;
     const slide = this.slides[index];
     this.collection.hideAll();
-    this.showElements(index, fromToUse);
+    this.showElements(index);
+    this.hideElements(index);
     this.collection.setScenarios(this.getProperty('scenarioCommon', index, []));
     this.collection.setScenarios(slide.scenario || []);
     this.getProperty('enterStateCommon', index, () => {})(index, fromToUse);

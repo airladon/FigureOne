@@ -82,6 +82,24 @@
                       </a></li>
                       
                       <li><a
+                        href='#show'
+                        class='regular pre-open'>
+                        #show
+                      </a></li>
+                      
+                      <li><a
+                        href='#showonly'
+                        class='regular pre-open'>
+                        #showOnly
+                      </a></li>
+                      
+                      <li><a
+                        href='#setscenarios'
+                        class='regular pre-open'>
+                        #setScenarios
+                      </a></li>
+                      
+                      <li><a
                         href='#stop'
                         class='regular pre-open'>
                         #stop
@@ -143,6 +161,24 @@
                         href='#getremaininganimationtime'
                         class='regular pre-open'>
                         #getRemainingAnimationTime
+                      </a></li>
+                      
+                      <li><a
+                        href='#show'
+                        class='regular pre-open'>
+                        #show
+                      </a></li>
+                      
+                      <li><a
+                        href='#showonly'
+                        class='regular pre-open'>
+                        #showOnly
+                      </a></li>
+                      
+                      <li><a
+                        href='#setscenarios'
+                        class='regular pre-open'>
+                        #setScenarios
                       </a></li>
                       
                       <li><a
@@ -245,6 +281,18 @@
                         href='#figureelementundim'
                         class='regular pre-open'>
                         #undim
+                      </a></li>
+                      
+                      <li><a
+                        href='#figureelementsetscenario'
+                        class='regular pre-open'>
+                        #setScenario
+                      </a></li>
+                      
+                      <li><a
+                        href='#figureelementsavescenario'
+                        class='regular pre-open'>
+                        #saveScenario
                       </a></li>
                       
                       <li><a
@@ -409,6 +457,42 @@
                         href='#figureelementcollectiongetelements'
                         class='regular pre-open'>
                         #getElements
+                      </a></li>
+                      
+                      <li><a
+                        href='#figureelementcollectionshow'
+                        class='regular pre-open'>
+                        #show
+                      </a></li>
+                      
+                      <li><a
+                        href='#figureelementcollectionhide'
+                        class='regular pre-open'>
+                        #hide
+                      </a></li>
+                      
+                      <li><a
+                        href='#figureelementcollectiongetallprimitives'
+                        class='regular pre-open'>
+                        #getAllPrimitives
+                      </a></li>
+                      
+                      <li><a
+                        href='#figureelementcollectiongetallelements'
+                        class='regular pre-open'>
+                        #getAllElements
+                      </a></li>
+                      
+                      <li><a
+                        href='#figureelementcollectiongetchildren'
+                        class='regular pre-open'>
+                        #getChildren
+                      </a></li>
+                      
+                      <li><a
+                        href='#figureelementcollectionsetscenarios'
+                        class='regular pre-open'>
+                        #setScenarios
                       </a></li>
                       
                     </ul>
@@ -2261,6 +2345,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#equationupdateelementtext'
+                        class='regular pre-open'>
+                        #updateElementText
+                      </a></li>
+                      
+                      <li><a
                         href='#equationaddelements'
                         class='regular pre-open'>
                         #addElements
@@ -2897,10 +2987,46 @@
                 
                 <li><a
                   href='#collectionsslidenavigator'
-                  class="">
+                  class=" toggle-sibling">
                   CollectionsSlideNavigator
-                  
+                  <span class='icon'>▸</span>
                 </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#collectionsslidenavigatorloadslides'
+                        class='regular pre-open'>
+                        #loadSlides
+                      </a></li>
+                      
+                      <li><a
+                        href='#collectionsslidenavigatorgotoslide'
+                        class='regular pre-open'>
+                        #goToSlide
+                      </a></li>
+                      
+                      <li><a
+                        href='#collectionsslidenavigatornextslide'
+                        class='regular pre-open'>
+                        #nextSlide
+                      </a></li>
+                      
+                      <li><a
+                        href='#collectionsslidenavigatorprevslide'
+                        class='regular pre-open'>
+                        #prevSlide
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -4796,6 +4922,26 @@
               
                 
                 <li><a
+                  href='#typeelementpath'
+                  class="">
+                  TypeElementPath
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eqn_updateelementtext'
+                  class="">
+                  EQN_UpdateElementText
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#obj_elementpropertymod'
                   class="">
                   OBJ_ElementPropertyMod
@@ -5540,6 +5686,210 @@ automatically set this.</p>
           <div>
             <span class='code bold'>nowIn</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
             = <code>this.globalAnimation.now()/1000</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='show'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>show(toShow)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Show specific elements within the figure</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>toShow</span> <code class='quiet'>((<a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)>)
+            = <code>[]</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>void</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='showonly'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>showOnly(toShow)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Show specific elements within a figure, while hiding all others</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>toShow</span> <code class='quiet'>((<a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#figureelementprimitive">FigureElementPrimitive</a> | <a href="#figureelementcollection">FigureElementCollection</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)>)
+            = <code>[]</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>void</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='setscenarios'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setScenarios(scenarioName, onlyIfVisible)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set scenarios of all elements with scenarioName defined</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>scenarioName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>onlyIfVisible</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>false</code>)</code>
 	    
           </div>
           
@@ -6516,6 +6866,158 @@ appropriately clipped.</p>
   
   
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figureelementsetscenario'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setScenario(scenario, scenarioName?, onlyIfVisible?)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set transform, color and/or visibility to a predefined scenario.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>scenario</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#obj_scenario">OBJ_Scenario</a>))</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>scenarioName</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?)</code>
+	    name of the scenario to
+set. Use an array of names to set multiple scenarios in the array's order.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>onlyIfVisible</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+	    <code>true</code>
+ to only set scenario if element is
+visible
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figureelementsavescenario'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>saveScenario(scenarioName, keys)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Save the current transform, color and/or visibility to a scenario.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>scenarioName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>keys</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>
+            = <code>[&#39;transform&#39;,&#39;color&#39;,&#39;isShown&#39;]</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -8098,7 +8600,7 @@ array of paths.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>children</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#figureelement">FigureElement</a>)>)</code>
+            <span class='code bold'>children</span> <code class='quiet'>(<a href="#typeelementpath">TypeElementPath</a>)</code>
 	    
           </div>
           
@@ -8120,6 +8622,386 @@ array of paths.</p>
 
       
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figureelementcollectionshow'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>show(toShow)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Show collection or specific elements within the collection</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>toShow</span> <code class='quiet'>(<a href="#typeelementpath">TypeElementPath</a>
+            = <code>[]</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>void</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figureelementcollectionhide'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>hide(toHide)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Hide collection or specific elements within the collection</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>toHide</span> <code class='quiet'>((<a href="#typeelementpath">TypeElementPath</a> | null)
+            = <code>null</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>void</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figureelementcollectiongetallprimitives'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getAllPrimitives()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get all elements within the collection that are primitives, including
+any primitives that are children of this element, and any primitives that
+are children of this element's children and so forth.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#figureelement">FigureElement</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figureelementcollectiongetallelements'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getAllElements()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get an array of all elements of in this collection, including this element,
+children, children of children and so forth.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#figureelement">FigureElement</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figureelementcollectiongetchildren'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getChildren()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get array of all children elements.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#figureelement">FigureElement</a>></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='figureelementcollectionsetscenarios'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setScenarios(scenarioName?, onlyIfVisible = false)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set transform, color and/or visibility to a predefined scenario.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>scenarioName</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?)</code>
+	    name of the scenario to
+set. Use an array of names to set multiple scenarios in the array's order.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>onlyIfVisible</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?
+            = <code>false</code>)</code>
+	    <code>true</code>
+ to only set scenario if element is
+visible
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
   
 
   
@@ -22520,7 +23402,7 @@ figure.add({
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>drawToValue(value)</span>
+            <span class='code strong strong truncate'>drawToValue(drawValue)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -22548,7 +23430,7 @@ figure.add({
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>value</span> <code class='quiet'>(T)</code>
+            <span class='code bold'>drawValue</span> <code class='quiet'>(T)</code>
 	    
           </div>
           
@@ -25078,7 +25960,7 @@ p.animations.new()
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a>)</code>
+            <span class='code bold'>options</span> <code class='quiet'>((<a href="#obj_triggeranimationstep">OBJ_TriggerAnimationStep</a> | function (): void))</code>
 	    
           </div>
           
@@ -30391,6 +31273,79 @@ specific to equations</p>
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='equationupdateelementtext'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>updateElementText(elements, layoutForms = 'none')</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Update text of equation element or elements</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>elements</span> <code class='quiet'>(<a href="#eqn_updateelementtext">EQN_UpdateElementText</a>)</code>
+	    elements to update
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>layoutForms</span> <code class='quiet'>((<code>"all"</code> | <code>"current"</code> | <code>"none"</code>)?
+            = <code>&#39;none&#39;</code>)</code>
+	    which forms to re-layout
+with the updated text
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
   
 
   
@@ -40360,11 +41315,19 @@ prior to the <code>steadyState</code>s.</li>
 <li><code>leaveState</code> (for current slide)</li>
 <li>stop all animations</li>
 <li>Update associated text element with <code>text</code> property</li>
-<li>Hide all equations with <code>null</code> forms</li>
+<li>Hide all elements in associated collection</li>
+<li><code>showCommon</code></li>
+<li><code>show</code></li>
+<li><code>hideCommon</code></li>
+<li><code>hide</code></li>
+<li><code>scenarioCommon</code></li>
+<li><code>scenario</code></li>
+<li>Show navigator buttons, text element and equations with defined forms</li>
 <li><code>enterStateCommon</code> (for new slide)</li>
 <li><code>enterState</code></li>
-<li><code>transition</code></li>
-<li>Show all equations with non-null forms</li>
+<li>show <code>fromForm</code></li>
+<li><code>transition</code> or '<code>fromForm</code> to <code>form</code> animations</li>
+<li>show <code>form</code></li>
 <li><code>steadyStateCommon</code></li>
 <li><code>steadyState</code></li>
 <li>Wait for next navigation event</li>
@@ -40413,6 +41376,32 @@ overwrite any keys from
 <code>modifiersCommon</code>
  with the same name
 
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>showCommon</span> <code class='quiet'>(<a href="#typeelementpath">TypeElementPath</a>?)</code>
+          : common property
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>show</span> <code class='quiet'>(<a href="#typeelementpath">TypeElementPath</a>?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>hideCommon</span> <code class='quiet'>(<a href="#typeelementpath">TypeElementPath</a>?)</code>
+          : common property
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>hide</span> <code class='quiet'>(<a href="#typeelementpath">TypeElementPath</a>?)</code>
+          
           
         </div>
       
@@ -40474,9 +41463,28 @@ the animation to allow slide steadyStates to be set.
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>form</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?)</code>
+          <span class='code bold'>form</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)> | null)?)</code>
           : common property
 
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fromForm</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | null)> | null)?)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scenarioCommon</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?)</code>
+          : common property
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>scenario</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?)</code>
+          
           
         </div>
       
@@ -40720,6 +41728,244 @@ figure.getElement('nav').loadSlides([
   
 
   
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='collectionsslidenavigatorloadslides'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>loadSlides(slides)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Load slides into navigator</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>slides</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#obj_slidenavigatorslide">OBJ_SlideNavigatorSlide</a>>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='collectionsslidenavigatorgotoslide'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>goToSlide(slideIndex)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Jump to a specific slide.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>slideIndex</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='collectionsslidenavigatornextslide'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>nextSlide(ignoreTransition)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Progress to the next slide.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>ignoreTransition</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>false</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='collectionsslidenavigatorprevslide'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>prevSlide()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Go to the previous slide.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
@@ -45697,6 +46943,17 @@ or set to some buffer (
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>followOffsetY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ will make any subsequent text
+have the same y offset as a starting point (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>inLine</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
           : <code>false</code>
  means next text will follow previous
@@ -45886,6 +47143,24 @@ then
         </div>
       
         <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
+          : text offset
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>followOffsetY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : <code>true</code>
+ will make any subsequent text
+have the same y offset as a starting point (
+<code>false</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
           <span class='code bold'>font</span> <code class='quiet'>(<a href="#obj_font">OBJ_Font</a>?)</code>
           : font changes for modified text
 
@@ -45924,12 +47199,6 @@ buffer (
 <code>'0'</code>
 )
 
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>offset</span> <code class='quiet'>(<a href="#typeparsablepoint">TypeParsablePoint</a>?)</code>
-          
           
         </div>
       
@@ -58996,6 +60265,148 @@ e.animations.new()
   .goToForm({ <span class="hljs-attr">target</span>: <span class="hljs-string">'2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
   .start();</pre>
     
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeelementpath'>
+      TypeElementPath
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Path to a <a href="#figureelement">FigureElement</a> within a <a href="#figureelementcollection">FigureElementCollection</a>.</p>
+<p><code>string | {[name: string]: TypeElementPath } |</code><a href="#figureelement">FigureElement</a><code>| Array&#x3C;TypeElementPath>}</code></p>
+<p>Consider a collection with the below heirachy. The collection has two
+children <code>diagram</code> and <code>description</code> of which <code>diagram</code> is another
+collection:</p>
+<ul>
+<li>
+<p>diagram</p>
+<ul>
+<li>lineA</li>
+<li>lineB</li>
+<li>
+<p>lines</p>
+<ul>
+<li>lineC</li>
+<li>lineD</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>description</li>
+</ul>
+<p>The ways to define lineC, lineD and description are:</p>
+<ul>
+<li><code>['description', 'diagram.lines.lineC', 'diagram.lines.lineD']</code></li>
+<li><code>['description', { diagram: ['lines.lineC', 'lines.lineD'] }]</code></li>
+<li><code>['description', { 'diagram.lines': ['lineC', 'lineD'] }]</code></li>
+</ul>
+
+  
+    <p style="display: none;">      Type:
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {} | <a href="#figureelement">FigureElement</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeelementpath">TypeElementPath</a>>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_updateelementtext'>
+      EQN_UpdateElementText
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Object that defines new text for a selection of equation elements.</p>
+<p>Each key in the object is the name of the equation element whose text is to
+be updated.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>_elementName</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="#figureelement">FigureElement</a>)?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
   
 
   

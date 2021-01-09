@@ -11,7 +11,7 @@ import type { FigureElement } from '../../Element';
  *
  * @extends OBJ_AnimationStep
  *
- * @property {string | function(): number | void} callback if desired, return
+ * @property {string | function(any): number | void} callback if desired, return
  * a number from `callback` to update the duration of the trigger animation
  * step. Doing so will make any previous calculations of remaining animation
  * time incorrect. Make sure to initialize this step with a non-zero duration
@@ -24,7 +24,7 @@ import type { FigureElement } from '../../Element';
  */
 export type OBJ_TriggerAnimationStep = {
   callback?: Function;      // default is element transform
-  payload?: Object;
+  payload?: any;
 } & OBJ_AnimationStep;
 
 /**

@@ -14,7 +14,7 @@ const fx = (xx, ox = 0, oy = 0) => new Point(xx, (xx - ox) ** 2 + oy);
 const getFx = (ox, oy) => x.map(xx => fx(xx, ox, oy));
 
 const plotWidth = 2.67;
-const plotHeight = 1.66;
+const plotHeight = 1.383;
 
 const makeEqn = (name, funcName, bottomX, color, space) => ({
   name,
@@ -42,10 +42,11 @@ const makeEqn = (name, funcName, bottomX, color, space) => ({
   },
   mods: {
     scenarios: {
-      default: { position: [name === 'eqnF' ? 0.55 : 2.35, 1.3], scale: 1 },
-      left: { position: [name === 'eqnF' ? 0.55 : 0.1, 1.3], scale: 1 },
-      title: { position: [name === 'eqnF' ? 0.75 : 1.5, 0.1], scale: 1.2 },
-      bottom: { position: [bottomX, 0.1], scale: 1.2 },
+      default: { position: [name === 'eqnF' ? 0.45 : 2.45, 1.3], scale: 1 },
+      left: { position: [name === 'eqnF' ? 0.9 : 0, 1.3], scale: 1 },
+      title: { position: [name === 'eqnF' ? 0.75 : 1.5, -0.15], scale: 1.2 },
+      bottom: { position: [bottomX, -0.15], scale: 1.2 },
+      example: { scale: 0.9 },
     }
   }
 });
@@ -67,9 +68,7 @@ figure.add([
     name: 'diagram',
     method: 'collection',
     mods: {
-      scenarios: {
-        default: { position: [-1.3, -1.3], scale: 1 },
-      },
+      scenarios: { default: { position: [-1.3, -0.8], scale: 1 } },
     },
     elements: [
       {
@@ -79,11 +78,6 @@ figure.add([
           width: plotWidth,
           height: plotHeight,
           trace: [
-            {
-              points: getFx(0, 0),
-              name: 'fxTraceDash',
-              line: { width: 0.005, dash: [0.05, 0.01], color: greyColor },
-            },
             {
               points: getFx(-2, 0),
               name: 'fxTrace',
@@ -101,68 +95,40 @@ figure.add([
             },
           ],
           xAxis: {
-            grid: [
-              { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
-              { values: [0], width: 0.003, dash: [], },
-            ],
-            line: { width: 0 },
+            line: { width: 0.003 },
             start: -5,
             stop: 5,
-            labels: { font: { size: 0.08 } },
-            ticks: { step: 1, width: 0, offset: [0, 0.02] },
+            labels: {
+              font: { size: 0.08, color: greyColor },
+              offset: [0, 0.03],
+            },
+            ticks: {
+              values: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5],
+              length: 0,
+            },
             title: {
               text: 'x',
               font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
-            }
+              offset: [1.45, 0.2],
+            },
           },
           yAxis: {
-            start: -1,
+            start: 0,
             stop: 5,
-            labels: { font: { size: 0.08 }, offset: [0.04, 0] },
-            grid: [
-              { step: 1, width: 0.002, line: [0.8, 0.8, 0.8, 1] },
-              { values: [0], width: 0.003, dash: [], },
-            ],
+            labels: {
+              font: { size: 0.08, color: greyColor },
+              offset: [-1.3, 0],
+            },
             ticks: { step: 1, width: 0 },
-            line: { width: 0 },
+            position: [plotWidth / 2, 0],
+            line: { width: 0.003 },
             title: {
               text: 'y',
               rotation: 0,
               font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
+              offset: [plotWidth / 2 + 0.15, 0.75],
             }
           },
-          axes: [
-            {
-              name: 'titleX',
-              axis: 'x',
-              ticks: null,
-              grid: null,
-              position: [0, plotHeight / 6],
-              color: greyColor,
-              line: { arrow: { end: { head: 'triangle', scale: 2 } } },
-              title: {
-                text: 'x',
-                font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
-                offset: [1.45, 0.12],
-              }
-            },
-            {
-              name: 'middleY',
-              axis: 'y',
-              ticks: null,
-              grid: null,
-              color: greyColor,
-              length: plotHeight - plotHeight / 6 + 0.06,
-              position: [plotWidth / 2, plotHeight/ 6],
-              line: { arrow: { end: { head: 'triangle', scale: 2 } } },
-              title: {
-                text: 'y',
-                font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
-                rotation: 0,
-                offset: [0.1, 0.75],
-              }
-            },
-          ],
         },
       },
       {
@@ -175,7 +141,6 @@ figure.add([
           color: [1, 0, 0, 0],
         },
         mods: {
-          // isMovable: true,
           move: {
             style: 'translation',
             bounds: { translation: {
@@ -316,9 +281,9 @@ figure.add([
     },
     mods: { 
       scenarios: {
-        default: { position: [0, -1.2], scale: 1.2 },
+        default: { position: [0, -1.25], scale: 1.2 },
         title: { position: [-0.5, -1.05], scale: 1 },
-        example: { position: [0, 0.7], scale: 1 },
+        example: { position: [0, -1.25], scale: 1 },
       }
     }
   },
@@ -394,7 +359,7 @@ const setLine = (name, fX, offset) => {
 const offsetsValue = [
   [-2, [-1.35, -0.4], [0.2, 0.2]],
   [-1, [-1.35, -0.4], [0.2, 0.2]],
-  [0, [-0.3, 0.3], [-0.4, -0.45]],
+  [0, [-0.3, -0.45], [-0.45, 0.4]],
   [1, [-1.15, 0.15], [0.1, -0.4]],
   [2, [-1.15, 0.15], [0.1, -0.4]],
 ];
@@ -465,20 +430,17 @@ const moveTrace = (xOffset, done = null, duration = 1) => {
     return;
   }
   moveMarks(0);
-  eqnG.hide();
-  trace.hide();
-  eqn.hide();
-  dist.hide();
+  diagram.hide([eqnG, trace, dist]);
   movePad.setPosition(xAxis.valueToDraw(0), 0);
   movePad.animations.new()
     .trigger({ duration: 2, callback: () => moveMarks(0, xOffset, 'G', false) })
-    .dissolveOut({ element: trace, duration: 0.4 })
     .trigger(() => movePad.setPosition(xAxis.valueToDraw(xOffset), 0))
     .inParallel([
       trace.animations.dissolveIn({ duration: 0.4 }),
       dist.animations.dissolveIn({ duration: 0.4 }),
+      eqnG.animations.dissolveIn({ duration: 0.4 }),
+      eqnG.animations.trigger(() => eqnG.showForm('funcX')),
     ])
-    .trigger(() => eqnG.showForm('funcX'))
     .whenFinished(done)
     .start();
 }
@@ -515,17 +477,20 @@ const modifiersCommon = {
 
 // //////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////
+console.log(plot)
 slides.push({
   modifiersCommon,
   show: [
-    'title', { 'diagram.plot': ['titleX', 'middleY', 'mainTrace', 'fxTrace'] },
+    'title',
+    { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title'] },
+    { 'diagram.plot': ['mainTrace', 'fxTrace'] },
   ],
+  scenarioCommon: ['default', 'title'],
+  form: [null, 'funcX', 'unknown'],
   steadyState: () => {
-    figure.setScenarios(['default', 'title']);
     trace.update(getFx(1.6, 0));
     fxTrace.update(getFx(-1.6, 0));
   },
-  form: [null, 'funcX', 'unknown'],
   leaveState: () => {
     fxTrace.update(getFx(0, 0));
     trace.update(getFx(0, 0));
@@ -536,7 +501,9 @@ slides.push({
 // //////////////////////////////////////////////////////////
 slides.push({
   text: 'Start by plotting a function |f|(|x|).',
-  showCommon: ['diagram.plot.titleX', 'diagram.plot.middleY'],
+  showCommon: [
+    { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title'] },
+  ],
   scenarioCommon: 'default',
   form: [null, null, null],
 });
@@ -563,8 +530,9 @@ slides.push({
   modifiers: {
     'points': { font: { color: actionColor }, onClick: () => nav.nextSlide() },
   },
-  showCommon: { 'diagram.plot': ['titleX', 'middleY', 'fxTrace'] },
-  scenarioCommon: ['default', 'initial'],
+  showCommon: [
+    { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
+  ],
 });
 slides.push({
   modifiers: {
@@ -592,7 +560,8 @@ slides.push({
 
 slides.push({
   showCommon: [
-    { 'diagram.plot': ['titleX', 'middleY', 'fxTrace'] }, marks, movePad,
+    { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
+    { 'diagram': ['marks', 'movePad'] },
   ],
   modifiers: {
     Shifting: {
@@ -620,10 +589,9 @@ slides.push({
     '|x| location.',
   ],
   showCommon: [
-    { 'diagram.plot': ['titleX', 'middleY', 'fxTrace'] },
-    dist, trace, { 'diagram.marks': ['markG7', 'markF7'] },
+    { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
+    { 'diagram': ['marks.markG7', 'marks.markF7', 'plot.mainTrace', 'distance'] },
   ],
-  scenarioCommon: 'default',
   enterStateCommon: () => {
     moveTrace(1.6, null, 0),
     updateLines = true;
@@ -670,9 +638,9 @@ slides.push({
     'we can say:',
   ],
   showCommon: [
-    { 'diagram.plot': ['titleX', 'middleY', 'fxTrace'] },
-    dist, trace, { 'diagram.marks': ['markG7', 'markF7'] },
-    gLine, fLine,
+    { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
+    { 'diagram': ['marks.markG7', 'marks.markF7', 'plot.mainTrace'] },
+    { 'diagram': ['distance', 'gLine', 'fLine'] },
   ],
   enterStateCommon: () => {
     fLine.label.showForm('right')
@@ -707,8 +675,8 @@ slides.push({
 
 slides.push({
   showCommon: [
-    { 'diagram.plot': ['titleX', 'middleY', 'fxTrace'] }, movePad, trace,
-    dist,
+    { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
+    { 'diagram': ['plot.mainTrace', 'movePad', 'distance'] },
   ],
   show: marks,
   scenarioCommon: ['default', 'left'],
@@ -731,8 +699,9 @@ slides.push({ show: [gLine] });
 
 slides.push({
   showCommon: [
-    { 'diagram.plot': ['titleX', 'middleY', 'fxTrace'] }, movePad, trace,
-    dist, gLine, fLine,
+    { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
+    { 'diagram': ['marks.markG0', 'marks.markF0', 'plot.mainTrace'] },
+    { 'diagram': ['distance', 'gLine', 'fLine'] },
   ],
   enterStateCommon: () => {
     cycleIndex = 0;
@@ -764,8 +733,8 @@ slides.push({
   form: [null, 'funcX', 'left'],
   scenarioCommon: ['default', 'bottom'],
   showCommon: [
-    { 'diagram.plot': ['titleX', 'middleY', 'fxTrace', 'rightTrace'] },
-    movePad, trace,
+    { 'diagram.plot': ['x.line', 'x.title', 'y.line', 'y.title', 'fxTrace'] },
+    { 'diagram.plot': ['mainTrace', 'rightTrace'] },
   ],
   enterStateCommon: () => {
     diagram.getElement('eqnH').showForm('right');
@@ -779,27 +748,22 @@ slides.push({
 slides.push({
   enterStateCommon: () => {},
   text: [
-    'As an example, drag the curve to shift it, and observe',
-    'the corresponding |points|.'
+    'Example: Drag the curve to shift, |change| observation',
+    'points, and compare |f||lb1||x||rb1| and |g1||lb||xr||rb|.'
   ],
   modifiers: {
-    points: {
+    change: {
       font: { color: actionColor }, onClick: () => cycle(), touchBorder: 0.1,
     }
   },
   scenario: ['default', 'example'],
   showCommon: [
-    { 'diagram.plot': ['titleX', 'middleY', 'fxTrace', ] },
-    { 'diagram': ['markG', 'markF'] },
+    { 'diagram': ['markG', 'markF', 'plot'] },
     movePad, trace,
-    // diagram,
   ],
   steadyState: () => {
-    // figure.showOnly([nav, diagram, eqn]);
-    // diagram.hide([
-    //   'distance', 'plot.titleX', 'plot.middleY', fxTrace, 'marks',
-    //   'plot.rightTrace', 'gLine', 'fLine', 'eqnH',
-    // ])
+    plot.hide('rightTrace');
+    console.log(plot)
     offsets = offsetsValue;
     cycleIndex = 2;
     precision = 1;
