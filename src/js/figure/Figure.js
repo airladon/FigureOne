@@ -2257,7 +2257,7 @@ class Figure {
     // const startDraw = endSetup;
     this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
     // const endDraw = new Date().getTime();
-
+    // const t3 = performance.now()
     if (this.elements.isAnyElementMoving()) {
       this.animateNextFrame(true, 'is moving');
     }
@@ -2275,7 +2275,7 @@ class Figure {
     // const setup = endSetup - startSetup;
     // const draw = endDraw - startDraw;
     // console.log(total, setup, draw, total - setup - draw);
-    // console.log(performance.now() - t);
+    // console.log(performance.now() - t, t2 - t, t3 - t2);
     // console.log(perfr)
   }
 
