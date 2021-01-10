@@ -6,24 +6,29 @@
             width: calc(100vw - 20px);
             max-width: 100%;
             padding-bottom: 10px;
-            border: 1px solid lightgrey;
+            <!-- border: 1px solid lightgrey; -->
         }
         @media (min-aspect-ratio: 1/1) {
             .wrapper {
               width: calc((100vh - 20px)/0.75);
             }
         } 
-        #figureOneContainer1, #figureOneContainer2 {
+        #figureOneContainer1, #figureOneContainer2, #figureOneContainer3 {
             width: 100%;
             padding-bottom: 75%;
         }
         body {
+            padding: 10px;
+            margin-left: auto;
+            margin-right: auto;
             font-family: Arial, Helvetica, sans-serif;
             color: #444;
             max-width: 1000px;
+            font-size: 2vw;
         }
         h1 {
             font-weight: 100;
+            text-align: center;
         }
     </style>
     <head>
@@ -36,25 +41,60 @@
     </head>
     <body>
         <h1>Sine Waves</h1>
-        <p>
-            In a right angle triangle, the sine function relates angle, hypotenuse and opposite side.
+        <!-- <p>
+            The <i>sine function</i> relates angle, hypotenuse and opposite side of a <i>right angle triangle</i>.
             \[\sin\theta={opposite \over hypotenuse}\]
         </p>
         <p>
-            When the angle \(\theta\) is plotted on a Cartesian axis, the sine function “looks like” a wave.
+            A right angle triangle and circle can then be used to show how the sine function responds to angles greater than a right angle.
         </p>
         <div class="wrapper">
             <div id="figureOneContainer1"></div>
-        </div>
+        </div> -->
         <p>
-            When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
-  \[x = {-b \pm \sqrt{b^2-4ac} \over 2a}.\]
+            When the sine function is plotted on a Cartesian axis it “looks like” a wave.
         </p>
         <div class="wrapper">
             <div id="figureOneContainer2"></div>
         </div>
+        <p>
+            This form of this wave is found in many physical phenomena, but it often needs to be compressed, stretched or shifted to properly model the phenomena. It is therefore useful to know how to change the equation to achieve these transformations.
+        </p>
+        <h2>
+            Horizontal Scaling
+        </h2>
+        <p>
+            The sine function repeats every time the input value \(\theta\) changes by \(2\pi\).
+        </p>
+        <p>
+            What happens if we multiply the input value by \(2\pi\)?
+        </p>
+        <p>
+            \[y=\sin(2\pi\theta)\]
+        </p>
+        <p>
+            Now, every time the value \(\theta\) changes by 1, the input to the sine function changes by \(2\pi\).
+        </p>
+        <p>
+            Instead of 1, if we want the function to repeat every change \(r\) we can:
+        </p>
+        <p>
+            \[y=\sin\left(2\pi{\theta \over r}\right)\]
+        </p>
+        <p>
+            Now every time \(\theta\) changes by \(r\), the input to the sine function changes by \(2\pi\).
+        </p>
+        <p>
+            Let's rewrite this as:
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=\sin\left({2\pi \over r}\theta\right)}\]
+        </p>
         <div class="wrapper">
             <div id="figureOneContainer3"></div>
+        </div>
+        <div class="wrapper">
+            <div id="figureOneContainer4"></div>
         </div>
 
         <!-- Use CDN hosted library-->
@@ -64,5 +104,6 @@
         <script type="text/javascript" src='../../package/index.js'></script>
         <script type="text/javascript" src='./fig1.js'></script>
         <script type="text/javascript" src='./fig2.js'></script>
+        <script type="text/javascript" src='./fig3.js'></script>
     </body>
 </html>

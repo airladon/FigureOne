@@ -30911,6 +30911,13 @@ figure.elements._eqn.goToForm({
   },
 });</pre>
 <p>Element <code>'a'</code> is setup with the <code>mods</code> property. However, as <code>isTouchable</code>, <code>touchBorder</code> and <code>onClick</code> are frequenty used, they are also native options in the element definition object. As such, elements <code>'b'</code> and <code>'c'</code> do not use the <code>mods</code> property.</p>
+<!-- #### Special Characters
+
+Unicode provides many special characters that may be useful when defining an equation.
+
+Some of the more common ones are:
+
+* Greek lowercase theta <html>&#952</html> `'\u038b'` -->
 
   
 </section></div>
@@ -31632,7 +31639,8 @@ with the updated text
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>formOrName</span> <code class='quiet'>((EquationForm | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>))</code>
+            <span class='code bold'>formOrName</span> <code class='quiet'>((EquationForm | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)
+            = <code>this.eqn.currentForm</code>)</code>
 	    
           </div>
           
@@ -56006,7 +56014,7 @@ whichever direction doesn't pass through angle 0.
     <div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>callback</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | void))</code>
+          <span class='code bold'>callback</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | function (any): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | void))</code>
           : if desired, return
 a number from 
 <code>callback</code>

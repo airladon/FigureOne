@@ -489,3 +489,11 @@ figure.add({
 ```
 
 Element `'a'` is setup with the `mods` property. However, as `isTouchable`, `touchBorder` and `onClick` are frequenty used, they are also native options in the element definition object. As such, elements `'b'` and `'c'` do not use the `mods` property.
+
+<!-- #### Special Characters
+
+Unicode provides many special characters that may be useful when defining an equation.
+
+Some of the more common ones are:
+
+* Greek lowercase theta <html>&#952</html> `'\u038b'` -->
