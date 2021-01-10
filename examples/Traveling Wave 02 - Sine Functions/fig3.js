@@ -11,7 +11,6 @@ function fig3() {
   const thetaValues = range(0, Math.PI * 4.12, 0.05);
   const sine = (r) => thetaValues.map(theta => new Point(theta, Math.sin(2 * Math.PI / r * theta)));
 
-
   fig.add({
     name: 'plot',
     method: 'collections.plot',
@@ -83,21 +82,6 @@ function fig3() {
         },
       },
     },
-    // {
-    //   name: 'rLine',
-    //   method: 'collections.line',
-    //   options: {
-    //     width: 0.005,
-    //     color: [0.4, 0.4, 0.4, 1],
-    //     arrow: 'triangle',
-    //     label: {
-    //       text: {
-    //         elements: { value: '1' },
-    //         forms: { 0: ['r = ', 'value'] },
-    //       },
-    //     },
-    //   },
-    // },
   ]);
 
   fig.add({
@@ -122,12 +106,14 @@ function fig3() {
   const [mover, trace, xAxis, eqn] = fig.elements.getElements(
     ['mover', 'plot.trace', 'plot.x', 'eqn']
   );
-  console.log(fig.elements._plot)
+
   mover.subscriptions.add('setTransform', () => {
     const newR = mover.getPosition().x * 3 + 5;
     trace.update(sine(newR));
     eqn.updateElementText({ value: `${newR.toFixed(1)}`});
   });
+
+  // Initialize
   mover.setPosition(0, 0);
 }
 fig3();
