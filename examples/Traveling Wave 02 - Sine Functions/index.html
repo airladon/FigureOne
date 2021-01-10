@@ -13,15 +13,11 @@
               width: calc((100vh - 20px)/0.75);
             }
         } 
-        #figureOneContainer1, #figureOneContainer2 {
+        .ar50 {
             width: 100%;
             padding-bottom: 50%;
         }
         
-        #figureOneContainer3 {
-            width: 100%;
-            padding-bottom: 75%;
-        }
         body {
             padding: 10px;
             margin-left: auto;
@@ -72,7 +68,7 @@
             Move the circle <a href="javascript:figure1.pulse();" >radius</a> to draw the <a href="javascript:figure1.drawFull();" >sine wave</a>.
         </p>
         <div class="wrapper">
-            <div id="figureOneContainer1"></div>
+            <div id="figureOneContainer1" class="ar50"></div>
         </div>
         <p>
             A form of this wave is found in many physical phenomena, but it often needs to be compressed, stretched or shifted to properly model the phenomena.
@@ -87,13 +83,13 @@
             To stretch or compress a sine function in \(y\), the function can be scaled with a constant \(A\).
         </p>
         <p>
-            \[y=A\sin\left(\theta\right)\]
+            \[\bbox[20px, border: 2px solid red]{y=A\sin\left(\theta\right)}\]
         </p>
         <p class="instruction">
-            Drag the <a href="javascript:figure2.pulseTrace();" >trace</a> up and down to see how the trace and <a href="javascript:figure2.pulseEqn();" >equation</a> are related.
+            Drag the <a href="javascript:figure2.pulseTrace();" >trace</a> up and down to see how the trace and <a href="javascript:figure2.pulseEqn();">equation</a> are related.
         </p>
         <div class="wrapper">
-            <div id="figureOneContainer2"></div>
+            <div id="figureOneContainer2" class="ar50"></div>
         </div>
         <h2>
             Horizontal Scaling
@@ -126,12 +122,51 @@
             \[\bbox[20px, border: 2px solid red]{y=\sin\left({2\pi \over r}\theta\right)} \ \ \ \ \ \ \ \ \ (1)\]
         </p>
         <p class="instruction">
-            Drag the below plot left and right to see how the equation changes. As \(2\pi\) is approximately 6.3, then dragging it to show 6.3 means the \(2\pi\) term cancels and we are left with \(\sin\left(\theta\right)\).
+            Drag the <a href="javascript:figure3.pulseTrace();" >trace</a> left and right to see how the <a href="javascript:figure3.pulseEqn();">equation</a> changes.
         </p>
         <div class="wrapper">
-            <div id="figureOneContainer3"></div>
+            <div id="figureOneContainer3" class="ar50"></div>
         </div>
 
+        <h2>
+            Horizontal Shift
+        </h2>
+        <p>
+            We have seen previously that a function \(f(x)\) can be shifted in \(x\) by subtracting the shift from \(x\). So, a shift of \(+d\) result in:
+        </p>
+        <p>
+            \[y=f\left(x-d\right)\]
+        </p>
+        <p>
+            And a shift of \(-d\) results in:
+        </p>
+        <p>
+            \[y=f\left(x-(-d)\right) = f\left(x + d\right)\]
+        </p>
+        <p>
+            Therefore we can shift a sine function by an angle \(\phi\):
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=\sin\left(\theta - \phi\right)}\]
+        </p>
+        <h2>
+            Vertical Shift
+        </h2>
+        <p>
+            To shift the plot in \(y\), we add our desired shift \(B\) to the sine function.
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y = \sin\left(\theta\right) + B}\]
+        </p>
+        <h2>
+            General Form
+        </h2>
+        <p>
+            The general equation to shift and scale a sine function is:
+        </p>
+        <p>
+            \[y=A\sin\left({2\pi \over r} -\phi\right) + B\]
+        </p>
         <h2>
             Sine Waves in Time
         </h2>
@@ -183,6 +218,18 @@
         </p>
         <p>
             Also, both \(kx\) and \(\omega t\) are unitless numbers as the distance and time units cancel respectively. A radian is a dimensionless unit, and therefore just a number as well. Therefore the sine and 
+        </p>
+        <p>
+            When a sine function is dependent on time then, we use:
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=A\sin\left(wt -t_0\right) + B}\]
+        </p>
+        <p>
+            And when it is distributed over space we use:
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=A\sin\left(kx - x_0\right) + B}\]
         </p>
         <!-- Use CDN hosted library-->
         <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script> -->

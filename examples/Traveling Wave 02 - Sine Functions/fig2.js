@@ -29,22 +29,20 @@ function fig2() {
           grid: false,
           position: [0, 0.75],
           start: 0,
-          stop: Math.PI * 4.25,
-          line: { arrow: { end: 'triangle'} },
+          stop: 13,
           title: {
             text: '\u03b8',
             font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
-            offset: [1.6, 0.2],
+            offset: [1.6, 0.22],
           },
           ticks: {
-            values: range(1, Math.PI * 4.2, 1),
+            values: range(1, 13, 1),
             length: 0.05,
             offset: -0.025,
           },
           labels: { precision: 0, offset: [0, 0] },
         },
         yAxis: {
-          ticks: false,
           start: -2,
           stop: 2,
           ticks: { values: range(-2, 2, 0.5), offset: -0.035, length: 0.07 },
@@ -103,7 +101,9 @@ function fig2() {
   // Initialize
   mover.setPosition(0, 0.5);
 
-  const pulseTrace = () => trace.pulse({ translation: 0.02, min: -0.02, angle: Math.PI / 2, frequency: 2 });
+  const pulseTrace = () => trace.pulse({
+    translation: 0.02, min: -0.02, angle: Math.PI / 2, frequency: 2,
+  });
   const pulseEqn = () => eqn.pulse({ scale: 1.5 });
   return { pulseTrace, pulseEqn };
 }
