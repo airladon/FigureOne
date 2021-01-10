@@ -3,7 +3,7 @@ function fig1() {
   const { round, range } = Fig.tools.math;
 
   fig = new Fig.Figure({
-    limits: [-2 * 0.9, -1 * 0.9, 4 * 0.9, 2 * 0.9],
+    limits: [-2, -1, 4, 2],
     htmlId: 'figureOneContainer1',
     color: [0.4, 0.4, 0.4, 1],
   });
@@ -59,7 +59,6 @@ function fig1() {
           options: {
             maxLength: 3,
             width: 0.003,
-            // dash: [0.03, 0.007],
             color: [1, 0, 0, 1],
             label: {
               text: {
@@ -143,8 +142,8 @@ function fig1() {
           stop: 7,
           title: {
             text: '\u03b8',
-            font: { family: 'Times New Roman', style: 'italic', size: 0.09 },
-            offset: [0.9, r * 1.3],
+            font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
+            offset: [0.9, r * 1.32],
           },
           ticks: [
             {
@@ -179,8 +178,8 @@ function fig1() {
           labels: { precision: 0 },
           title: {
             text: 'y',
-            font: { family: 'Times New Roman', style: 'italic', size: 0.09 },
-            offset: [0.05, 0.2],
+            font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
+            offset: [0.18, 0.65],
             rotation: 0,
           },
         },
