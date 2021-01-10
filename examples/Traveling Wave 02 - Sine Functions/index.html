@@ -13,7 +13,12 @@
               width: calc((100vh - 20px)/0.75);
             }
         } 
-        #figureOneContainer1, #figureOneContainer2, #figureOneContainer3 {
+        #figureOneContainer1 {
+            width: 100%;
+            padding-bottom: 50%;
+        }
+        
+        #figureOneContainer2, #figureOneContainer3 {
             width: 100%;
             padding-bottom: 75%;
         }
@@ -67,15 +72,19 @@
         <p>
             A right angle triangle and circle can then be used to show how the sine function responds to angles greater than a right angle.
         </p> -->
-        <div class="wrapper">
-            <div id="figureOneContainer1"></div>
-        </div>
         <p>
             When the sine function is plotted on a Cartesian axis it “looks like” a wave.
         </p>
+        <p class="instruction">
+            Move the circle <a href="javascript:figure1.pulse();" >radius</a> to draw the <a href="javascript:figure1.drawFull();" >sine wave</a>.
+        </p>
         <div class="wrapper">
-            <div id="figureOneContainer2"></div>
+            <div id="figureOneContainer1"></div>
         </div>
+        
+        <!-- <div class="wrapper">
+            <div id="figureOneContainer2"></div>
+        </div> -->
         <p>
             A form of this wave is found in many physical phenomena, but it often needs to be compressed, stretched or shifted to properly model the phenomena.
         </p>
@@ -186,7 +195,7 @@
         <!-- Comment line above, and uncomment line below to use local library instead of CDN -->
         <script type="text/javascript" src='../../package/index.js'></script>
         <script type="text/javascript" src='./fig1.js'></script>
-        <script type="text/javascript" src='./fig2.js'></script>
+        <!-- <script type="text/javascript" src='./fig2.js'></script> -->
         <script type="text/javascript" src='./fig3.js'></script>
     </body>
 </html>

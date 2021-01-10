@@ -3,7 +3,7 @@ function fig1() {
   const { round, range } = Fig.tools.math;
 
   fig = new Fig.Figure({
-    limits: [-2 * 0.9, -1.5 * 0.9, 4 * 0.9, 3 * 0.9],
+    limits: [-2 * 0.9, -1 * 0.9, 4 * 0.9, 2 * 0.9],
     htmlId: 'figureOneContainer1',
     color: [0.4, 0.4, 0.4, 1],
   });
@@ -81,12 +81,27 @@ function fig1() {
               width: 0.005,
               sides: 200,
             },
-            label: { text: '\u03b8', scale: 0.5, autoHide: 0.4 },
+            // label: { text: '\u03b8', scale: 0.5, autoHide: 0.4 },
+            label: {
+              text: {
+                elements: {
+                  theta: '\u03b8',
+                  equals: ' = ',
+                  value: '0.0',
+                },
+                forms: { 0: ['theta', 'equals', 'value'] },
+              },
+              scale: 0.4,
+              offset: 0.01,
+              // location: 'right',
+              curvePosition: 0.4,
+              autoHide: 0.3,
+            },
           },
         },
         {
           name: 'line',
-          method: 'line',
+          method: 'collections.line',
           options: {
             length: r,
             width: 0.015,
@@ -187,6 +202,23 @@ function fig1() {
     },
   ]);
 
+  fig.add({
+    name: 'eqn',
+    method: 'equation',
+    options: {
+      elements: {
+        sin: { style: 'normal' },
+        lb: { symbol: 'bracket', side: 'left' },
+        rb: { symbol: 'bracket', side: 'right' },
+        theta: '\u03b8',
+      },
+      forms: {
+        0: ['y', '_ = ', 'sin', { brac: ['lb', 'theta', 'rb'] }]
+      },
+      position: [-0.4, 0.7],
+    }
+  })
+
   const [line, theta, sineLine, tracer, sineWave, xAxis] = fig.getElements([
     { rotator: ['line', 'theta', 'sine', 'tracer'] },
     { plot: ['sineWave', 'x'] },
@@ -200,10 +232,22 @@ function fig1() {
     sineWave.update(getSine(angle));
     const xAxisDraw = xAxis.valueToDraw(angle);
     tracer.setEndPoints([xAxisDraw - 1.6 - 1, endY], [endX, endY]);
-    // trace.
+    // theta.label.eqn.updateElementText({ value: `${angle.toFixed(1)}` });
   };
   line.subscriptions.add('setTransform', () => update());
-  line.setRotation(1);
+  line.setRotation(5.2);
 
+  const pulse = () => line.pulseWidth({ line: 4 });
+  const drawFull = () => {
+    let start = line.getRotation('0to360');
+    if (start > Math.PI * 1.995) {
+      start = 0.001;
+    }
+    line.animations.new()
+    .rotation({ start, target: Math.PI * 1.999, velocity: 1, direction: 1 })
+    .start();
+  };
+  return { pulse, drawFull };
 }
-fig1();
+const figure1 = fig1();
+// figure1.pulse();
