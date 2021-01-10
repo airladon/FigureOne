@@ -21,14 +21,33 @@
             padding: 10px;
             margin-left: auto;
             margin-right: auto;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: Helvetica, Arial, sans-serif;
             color: #444;
             max-width: 1000px;
             font-size: 2vw;
         }
+        @media (min-width: 1000px) {
+            body {
+                font-size: 20px;
+            }
+        }
+        @media (max-width: 700px) {
+            body {
+                font-size: 14px;
+            }
+        }
         h1 {
             font-weight: 100;
             text-align: center;
+        }
+        h2 {
+            padding-top: 2em;
+        }
+        .instruction {
+            padding-top: 2em;
+            font-size: 0.9em;
+            font-style: italic;
+            color: #666;
         }
     </style>
     <head>
@@ -40,17 +59,17 @@
         </script>
     </head>
     <body>
-        <h1>Sine Waves</h1>
+        <h1>Sine Waves In Time and Space</h1>
         <!-- <p>
             The <i>sine function</i> relates angle, hypotenuse and opposite side of a <i>right angle triangle</i>.
             \[\sin\theta={opposite \over hypotenuse}\]
         </p>
         <p>
             A right angle triangle and circle can then be used to show how the sine function responds to angles greater than a right angle.
-        </p>
+        </p> -->
         <div class="wrapper">
             <div id="figureOneContainer1"></div>
-        </div> -->
+        </div>
         <p>
             When the sine function is plotted on a Cartesian axis it “looks like” a wave.
         </p>
@@ -58,7 +77,19 @@
             <div id="figureOneContainer2"></div>
         </div>
         <p>
-            This form of this wave is found in many physical phenomena, but it often needs to be compressed, stretched or shifted to properly model the phenomena. It is therefore useful to know how to change the equation to achieve these transformations.
+            A form of this wave is found in many physical phenomena, but it often needs to be compressed, stretched or shifted to properly model the phenomena.
+        </p>
+        <p>
+            It is therefore useful to know how to change the equation to achieve these transformations.
+        </p>
+        <h2>
+            Vertical Scaling
+        </h2>
+        <p>
+            To stretch or compress a sine function in \(y\), the function can be scaled with a constant \(A\).
+        </p>
+        <p>
+            \[y=A\sin\left(\theta\right)\]
         </p>
         <h2>
             Horizontal Scaling
@@ -90,16 +121,65 @@
         <p>
             \[\bbox[20px, border: 2px solid red]{y=\sin\left({2\pi \over r}\theta\right)} \ \ \ \ \ \ \ \ \ (1)\]
         </p>
-        <p>
+        <p class="instruction">
             Drag the below plot left and right to see how the equation changes. As \(2\pi\) is approximately 6.3, then dragging it to show 6.3 means the \(2\pi\) term cancels and we are left with \(\sin\left(\theta\right)\).
         </p>
         <div class="wrapper">
             <div id="figureOneContainer3"></div>
         </div>
+
+        <h2>
+            Sine Waves in Time
+        </h2>
+        <p>
+            On a time axis, equation (1) defines the <i>period of time</i> over which the sine function repeats. As the period is often written as \(T\) we have:
+        </p>
+        <p>
+            \[y=\sin\left({2\pi \over T}t\right)\]
+        </p>
+        <p>
+            If the sine function repeats every \(T\) seconds, then the frequency it repeats is:
+        </p>
+        <p>
+            \[f={1 \over T}\]
+        </p>
+        <p>
+            Therefore we have:
+        </p>
+        <p>
+            \[y=\sin\left(2\pi f t\right)\]
+        </p>
+        <p>
+            \(2\pi f\) is the number of times \(2\pi\) is cycled through per second, and therefore is often called the angular frequency \(\omega\).
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=\sin\left(\omega t\right)}\]
+        </p>
         <div class="wrapper">
             <div id="figureOneContainer4"></div>
         </div>
 
+        <h2>
+            Sine Waves in Space
+        </h2>
+        <p>
+            On a space axis (\(x\)), equation (1) defines the </i>distance</i> over which the sine function repeats. When dealing with physical lengths, this is usually called the <i>wavelength</i> \(\lambda\).
+        </p>
+        <p>
+            \[y=\sin\left({2\pi \over \lambda}x\right)\]
+        </p>
+        <p>
+            The \({2\pi \over \lambda}\) term describes how many radians per unit distance the sine wave progresses through, and is often called the <i>wave number</i> \(k\):
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=\sin\left(kx\right)}\]
+        </p>
+        <p>
+            Both \(k\) and \(\omega\) serve the same function for space and time respectively. Both give the number of times the sine function repeats per unit length or unit time.
+        </p>
+        <p>
+            Also, both \(kx\) and \(\omega t\) are unitless numbers as the distance and time units cancel respectively. A radian is a dimensionless unit, and therefore just a number as well. Therefore the sine and 
+        </p>
         <!-- Use CDN hosted library-->
         <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script> -->
         
