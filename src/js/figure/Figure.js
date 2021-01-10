@@ -18,7 +18,7 @@ import {
   FigureElementCollection, FigureElementPrimitive, FigureElement,
 } from './Element';
 import type {
-  OBJ_AddElement,
+  OBJ_AddElement, TypeElementPath,
 } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
 import { Recorder } from './Recorder/Recorder';
@@ -1067,6 +1067,19 @@ class Figure {
       return this.elements;
     }
     return this.elements.getElement(elementName);
+  }
+
+  /**
+   * Returns an array of result from
+   * [getElement](#figureelementcollectiongetelement) calls on an
+   * array of paths.
+   *
+   * @param {TypeElementPath} children
+   * @return {Array<FigureElement>} Array of
+   * [getElement](#figureelementcollectiongetelement) results
+   */
+  getElements(children: TypeElementPath) {
+    return this.elements.getElements(children);
   }
 
   /**

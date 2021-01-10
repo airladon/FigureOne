@@ -22,6 +22,7 @@ function fig3() {
         name: 'trace',
         points: sine(2),
         line: { width: 0.01 },
+        color: [1, 0, 0, 1],
       },
       xAxis: {
         grid: false,

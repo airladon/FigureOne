@@ -21,6 +21,7 @@ function fig2() {
       trace: {
         points,
         line: { width: 0.01 },
+        color: [1, 0, 0, 1],
       },
       xAxis: {
         grid: false,
