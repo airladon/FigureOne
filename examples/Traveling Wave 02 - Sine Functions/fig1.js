@@ -81,7 +81,6 @@ function fig1() {
               width: 0.005,
               sides: 200,
             },
-            // label: { text: '\u03b8', scale: 0.5, autoHide: 0.4 },
             label: {
               text: {
                 elements: {
@@ -93,7 +92,6 @@ function fig1() {
               },
               scale: 0.4,
               offset: 0.01,
-              // location: 'right',
               curvePosition: 0.4,
               autoHide: 0.3,
             },
@@ -140,15 +138,9 @@ function fig1() {
         },
         xAxis: {
           color: [0, 0.4, 1, 1],
-          // grid: false,
-          // grid: [
-            // { width: 0 },
-            // {},
-          // ],
           position: [0, r],
           start: 0,
           stop: 7,
-          // line: { arrow: { end: 'triangle'} },
           title: {
             text: '\u03b8',
             font: { family: 'Times New Roman', style: 'italic', size: 0.09 },
@@ -157,9 +149,6 @@ function fig1() {
           ticks: [
             {
               values: range(0, Math.PI * 2.1, Math.PI / 2),
-              // length: 0.1,
-              // offset: 0,
-              // dash: [0.01, 0.005],
               width: 0,
             },
             {
@@ -180,7 +169,6 @@ function fig1() {
           ],
         },
         yAxis: {
-          // grid: false,
           grid: {
             length: 1.6 + 1,
           },
@@ -189,8 +177,6 @@ function fig1() {
           stop: 1,
           ticks: { values: [-1, 0, 1], offset: -0.025, length: 0.05 },
           labels: { precision: 0 },
-          // labels: null,
-          // line: { arrow: 'triangle' },
           title: {
             text: 'y',
             font: { family: 'Times New Roman', style: 'italic', size: 0.09 },
@@ -215,6 +201,7 @@ function fig1() {
       forms: {
         0: ['y', '_ = ', 'sin', { brac: ['lb', 'theta', 'rb'] }]
       },
+      scale: 0.6,
       position: [-0.4, 0.7],
     }
   })
@@ -232,7 +219,7 @@ function fig1() {
     sineWave.update(getSine(angle));
     const xAxisDraw = xAxis.valueToDraw(angle);
     tracer.setEndPoints([xAxisDraw - 1.6 - 1, endY], [endX, endY]);
-    // theta.label.eqn.updateElementText({ value: `${angle.toFixed(1)}` });
+    theta.label.eqn.updateElementText({ value: `${angle.toFixed(1)}` });
   };
   line.subscriptions.add('setTransform', () => update());
   line.setRotation(5.2);
@@ -250,4 +237,3 @@ function fig1() {
   return { pulse, drawFull };
 }
 const figure1 = fig1();
-// figure1.pulse();
