@@ -3,7 +3,7 @@ function fig4() {
   const { round, range } = Fig.tools.math;
 
   fig = new Fig.Figure({
-    limits: [-2, -1.5, 4, 3],
+    limits: [-2, -1.75, 4, 3],
     htmlId: 'figureOneContainer4',
     color: [0.4, 0.4, 0.4, 1],
   });
@@ -21,7 +21,7 @@ function fig4() {
     },
     mods: {
       move: {
-        bounds: { translation: { left: -1.5, right: 1, bottom: -0.5, top: 1 } },
+        bounds: { translation: { left: -0.5, right: 0.5, bottom: -0.5, top: 0.5 } },
       },
     },
   });
@@ -29,9 +29,9 @@ function fig4() {
     name: 'plot',
     method: 'collections.plot',
     options: {
-      width: 3,
+      width: 3.5,
       height: 2,
-      position: [-1.75, -0.75],
+      position: [-1.75, -1],
       trace: {
         name: 'trace',
         points: sine(1, 4, 0, 0),
@@ -145,30 +145,30 @@ function fig4() {
   }
 
   AMover.subscriptions.add('setTransform', () => {
-    AValue = (AMover.getPosition().y + 0.5) / 1.5 * 1.8 + 0.2;
+    AValue = (AMover.getPosition().y + 0.5) * 1.8 + 0.2;
     update();
   });
 
   rMover.subscriptions.add('setTransform', () => {
-    rValue = (rMover.getPosition().x + 1.5) / 2.5 * 6 + 2;
+    rValue = (rMover.getPosition().x + 0.5) * 6 + 2;
     update();
   });
 
   phiMover.subscriptions.add('setTransform', () => {
-    phiValue = -((phiMover.getPosition().x + 1.5) / 2.5 * 8 - 4);
+    phiValue = -((phiMover.getPosition().x + 0.5) * 8 - 4);
     update();
   });
 
   BMover.subscriptions.add('setTransform', () => {
-    BValue = (BMover.getPosition().y - 0.25) * 2.667;
+    BValue = (BMover.getPosition().y + 0.5) * 4 - 2;
     update();
   });
 
   // Initialize
-  AMover.setPosition(-0.25, 0.25);
-  BMover.setPosition(-0.25, 0.25);
-  rMover.setPosition(-0.25, 0.25);
-  phiMover.setPosition(-0.25, 0.25);
+  AMover.setPosition(0, 0);
+  BMover.setPosition(0, 0);
+  rMover.setPosition(0, 0);
+  phiMover.setPosition(0, 0);
 
   // fig.debugShowTouchBorders(['eqn.A', 'eqn.B', 'eqn.phi', 'eqn.r']);
   console.log(fig)
