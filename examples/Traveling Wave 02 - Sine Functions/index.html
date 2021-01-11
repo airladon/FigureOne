@@ -49,6 +49,11 @@
         h2 {
             padding-top: 2em;
         }
+        h3 {
+            padding-top: 2em;
+            font-size: 1.4em;
+            font-weight: 100;
+        }
         .instruction {
             padding-top: 2em;
             font-size: 0.9em;
@@ -82,62 +87,34 @@
             It is therefore useful to know how to change the equation to achieve these transformations.
         </p>
         <h2>
-            Vertical Scaling
+            Vertical Shift
         </h2>
         <p>
-            To stretch or compress a sine function in \(y\), the function can be scaled with a constant \(A\).
+            To shift the plot in \(y\), we add our desired <i>offset</i> \(B\) to the sine function.
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y = \sin\left(\theta\right) + B}\]
+        </p>
+        <h2>
+            Vertical Scale
+        </h2>
+        <p>
+            To stretch or compress a sine function in \(y\), the function can be scaled with an <i>amplitude</i> \(A\).
         </p>
         <p>
             \[\bbox[20px, border: 2px solid red]{y=A\sin\left(\theta\right)}\]
         </p>
         <p class="instruction">
-            Drag the <a href="javascript:figure2.pulseTrace();" >trace</a> up and down to see how the trace and <a href="javascript:figure2.pulseEqn();">equation</a> are related.
+            Drag the <a href="javascript:figure2.pulseTrace();" >trace</a> up and down to change the <a href="javascript:figure2.pulseAmplitude();" >amplitude</a>.
         </p>
         <div class="wrapper">
             <div id="figureOneContainer2" class="ar50"></div>
         </div>
         <h2>
-            Horizontal Scaling
-        </h2>
-        <p>
-            The sine function repeats every time the input value \(\theta\) changes by \(2\pi\).
-        </p>
-        <p>
-            What happens if we multiply the input value by \(2\pi\)?
-        </p>
-        <p>
-            \[y=\sin(2\pi\theta)\]
-        </p>
-        <p>
-            Now, every time the value \(\theta\) changes by 1, the input to the sine function changes by \(2\pi\).
-        </p>
-        <p>
-            Instead of 1, if we want the function to repeat every change \(r\) we can:
-        </p>
-        <p>
-            \[y=\sin\left(2\pi{\theta \over r}\right)\]
-        </p>
-        <p>
-            Now every time \(\theta\) changes by \(r\), the input to the sine function changes by \(2\pi\).
-        </p>
-        <p>
-            Let's rewrite this as:
-        </p>
-        <p>
-            \[\bbox[20px, border: 2px solid red]{y=\sin\left({2\pi \over r}\theta\right)} \ \ \ \ \ \ \ \ \ (1)\]
-        </p>
-        <p class="instruction">
-            Drag the <a href="javascript:figure3.pulseTrace();" >trace</a> left and right to see how the <a href="javascript:figure3.pulseEqn();">equation</a> changes.
-        </p>
-        <div class="wrapper">
-            <div id="figureOneContainer3" class="ar50"></div>
-        </div>
-
-        <h2>
             Horizontal Shift
         </h2>
         <p>
-            We have seen previously that a function \(f(x)\) can be shifted in \(x\) by subtracting the shift from \(x\). So, a shift of \(+d\) result in:
+            We have seen previously that a function \(f(x)\) can be shifted in \(x\) by subtracting the shift from \(x\). So, a shift of \(+d\) results in:
         </p>
         <p>
             \[y=f\left(x-d\right)\]
@@ -154,36 +131,51 @@
         <p>
             \[\bbox[20px, border: 2px solid red]{y=\sin\left(\theta - \phi\right)}\]
         </p>
-        <h2>
-            Vertical Shift
-        </h2>
         <p>
-            To shift the plot in \(y\), we add our desired shift \(B\) to the sine function.
-        </p>
-        <p>
-            \[\bbox[20px, border: 2px solid red]{y = \sin\left(\theta\right) + B}\]
+            A horizontal shift in a sine function is often called a <i>phase shift</i>.
         </p>
         <h2>
-            General Form
+            Horizontal Scale
         </h2>
         <p>
-            The general equation to shift and scale a sine function is:
+            The sine function repeats every time the input value \(\theta\) changes by \(2\pi\) radians.
         </p>
         <p>
-            \[y=A\sin\left({2\pi \over r} -\phi\right) + B\]
+            What happens if we multiply the input value by \(2\pi\)?
+        </p>
+        <p>
+            \[y=\sin(2\pi\theta)\]
+        </p>
+        <p>
+            Now, every time the value \(\theta\) changes by 1 radian, the input to the sine function changes by \(2\pi\).
+        </p>
+        <p>
+            Instead of 1, if we want the function to repeat every change of \(r\) radians we can:
+        </p>
+        <p>
+            \[y=\sin\left(2\pi{\theta \over r}\right)\]
+        </p>
+        <p>
+            Now every time \(\theta\) changes by \(r\), the input to the sine function changes by \(2\pi\).
+        </p>
+        <p>
+            Let's rewrite this as:
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=\sin\left({2\pi \over r}\theta\right)} \ \ \ \ \ \ \ \ \ (1)\]
         </p>
         <p class="instruction">
-            Move the circle <a href="javascript:figure1.pulse();" >radius</a> to draw the <a href="javascript:figure1.drawFull();" >sine wave</a>.
+            Drag the <a href="javascript:figure3.pulseTrace();" >trace</a> left and right to change how often it repeats.
         </p>
         <div class="wrapper">
-            <div id="figureOneContainer4" class="ar75"></div>
+            <div id="figureOneContainer3" class="ar50"></div>
         </div>
-        <h2>
-            Sine Waves in Time
-        </h2>
         <p>
-            On a time axis, equation (1) defines the <i>period of time</i> over which the sine function repeats. As the period is often written as \(T\) we have:
+            The name and nomenclature for \(r\) changes depending on where the sine wave is being used.
         </p>
+        <h3>Time</h3>
+        <p>
+            If the sine wave is modeling a phenomena in time, then the \(r\) term in equation (1) represents the period of time over which the function repeats. As such, it is usually referred to as <i>period</i> or \(T\).
         <p>
             \[y=\sin\left({2\pi \over T}t\right)\]
         </p>
@@ -200,20 +192,14 @@
             \[y=\sin\left(2\pi f t\right)\]
         </p>
         <p>
-            \(2\pi f\) is the number of times \(2\pi\) is cycled through per second, and therefore is often called the angular frequency \(\omega\).
+            \(2\pi f\) is the number of times \(2\pi\) radians is cycled through per second, and therefore is often called the angular frequency \(\omega\).
         </p>
         <p>
             \[\bbox[20px, border: 2px solid red]{y=\sin\left(\omega t\right)}\]
         </p>
-        <div class="wrapper">
-            <div id="figureOneContainer4"></div>
-        </div>
-
-        <h2>
-            Sine Waves in Space
-        </h2>
+        <h3>Space</h3>
         <p>
-            On a space axis (\(x\)), equation (1) defines the </i>distance</i> over which the sine function repeats. When dealing with physical lengths, this is usually called the <i>wavelength</i> \(\lambda\).
+            On the other hand if the sine wave is modeling a phenomena in space, then \(r\) in equation (1) represents the distance over which the function repeats. As such, it is usually referred to as <i>wavelength</i> or \(\lambda\).
         </p>
         <p>
             \[y=\sin\left({2\pi \over \lambda}x\right)\]
@@ -227,21 +213,21 @@
         <p>
             Both \(k\) and \(\omega\) serve the same function for space and time respectively. Both give the number of times the sine function repeats per unit length or unit time.
         </p>
+        <h2>
+            General Form
+        </h2>
         <p>
-            Also, both \(kx\) and \(\omega t\) are unitless numbers as the distance and time units cancel respectively. A radian is a dimensionless unit, and therefore just a number as well. Therefore the sine and 
+            The general equation to shift and scale a sine function is:
         </p>
         <p>
-            When a sine function is dependent on time then, we use:
+            \[\bbox[20px, border: 2px solid red]{y=A\sin\left({2\pi \over r} -\phi\right) + B}\]
         </p>
-        <p>
-            \[\bbox[20px, border: 2px solid red]{y=A\sin\left(wt -t_0\right) + B}\]
+        <p class="instruction">
+            Touch the <a href="javascript:figure4.pulseAmplitude();" >amplitude</a>, <a href="javascript:figure4.pulseWavelength();" >wavelength</a>, <a href="javascript:figure4.pulsePhase();" >phase</a> or <a href="javascript:figure4.pulseOffset();" >y offset</a> terms of the equation and then move the <a href="javascript:figure4.pulseTrace();" >trace</a> in the direction of the arrows.
         </p>
-        <p>
-            And when it is distributed over space we use:
-        </p>
-        <p>
-            \[\bbox[20px, border: 2px solid red]{y=A\sin\left(kx - x_0\right) + B}\]
-        </p>
+        <div class="wrapper">
+            <div id="figureOneContainer4" class="ar75"></div>
+        </div>
         <!-- Use CDN hosted library-->
         <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script> -->
         

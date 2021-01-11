@@ -16,7 +16,7 @@ function fig2() {
       name: 'plot',
       method: 'collections.plot',
       options: {
-        width: 3,
+        width: 3.5,
         height: 1.5,
         position: [-1.75, -0.75],
         trace: {
@@ -33,7 +33,7 @@ function fig2() {
           title: {
             text: '\u03b8',
             font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
-            offset: [1.6, 0.22],
+            offset: [1.85, 0.22],
           },
           ticks: {
             values: range(1, 13, 1),
@@ -82,10 +82,11 @@ function fig2() {
           theta: '\u03b8',
           A: { text: '0.0', color: [1, 0, 0, 1] },
         },
+        formDefaults: { alignment: { xAlign: 'center' } },
         forms: {
-          0: ['y', '_ = ', 'A', 'sin', { brac: ['lb', 'theta', 'rb'] }]
+          0: ['y', '_  =  ', 'A', ' ', 'sin', { brac: ['lb', 'theta', 'rb'] }]
         },
-        position: [-0.4, -0.9],
+        position: [0, -0.9],
       }
     }
   ]);
@@ -104,8 +105,8 @@ function fig2() {
   const pulseTrace = () => trace.pulse({
     translation: 0.02, min: -0.02, angle: Math.PI / 2, frequency: 2,
   });
-  const pulseEqn = () => eqn.pulse({ scale: 1.5 });
-  return { pulseTrace, pulseEqn };
+  const pulseAmplitude = () => eqn.pulse({ elements: ['A'], scale: 2 });
+  return { pulseTrace, pulseAmplitude };
 }
 
 const figure2 = fig2();

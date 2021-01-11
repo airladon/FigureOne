@@ -228,7 +228,7 @@ class Figure {
 
   beingTouchedElements: Array<FigureElement>;
 
-  moveTopElementOnly: boolean;
+  touchTopElementOnly: boolean;
   previousCursorPoint: Point;
 
   limits: Rect;
@@ -447,7 +447,7 @@ class Figure {
     this.inTransition = false;
     this.beingMovedElements = [];
     this.beingTouchedElements = [];
-    this.moveTopElementOnly = true;
+    this.touchTopElementOnly = true;
     this.globalAnimation = new GlobalAnimation();
     this.subscriptions = new SubscriptionManager(this.fnMap);
     this.recorder = new Recorder();
@@ -1622,13 +1622,17 @@ class Figure {
     // must have isTouchable = true to be considered)
     this.beingTouchedElements = this.elements.getTouched(glPoint);
 
-    if (this.moveTopElementOnly && this.beingTouchedElements.length > 0) {
-      // if () {
-      this.beingTouchedElements[0].click(glPoint);
-      // }
-    } else {
-      this.beingTouchedElements.forEach(e => e.click(glPoint));
+    if (this.touchTopElementOnly && this.beingTouchedElements.length > 1) {
+      this.beingTouchedElements = [this.beingTouchedElements[0]];
     }
+
+    // if (this.touchTopElementOnly && this.beingTouchedElements.length > 0) {
+    //   // if () {
+    //   this.beingTouchedElements[0].click(glPoint);
+    //   // }
+    // } else {
+    this.beingTouchedElements.forEach(e => e.click(glPoint));
+    // }
 
     // Make a list of, and start moving elements that are being moved
     // (element must be touched and have isMovable = true to be in list)
@@ -1668,6 +1672,7 @@ class Figure {
   // happens, the default behavior is to let any elements being moved to move
   // freely until they decelerate to 0.
   touchUpHandler() {
+    // console.log(this.beingMovedElements)
     if (this.recorder.state === 'recording') {
       this.recorder.recordEvent('touch', ['up']);
       if (this.cursorShown) {
@@ -1939,7 +1944,7 @@ class Figure {
           }
         }
       }
-      if (this.moveTopElementOnly) {
+      if (this.touchTopElementOnly) {
         i = this.beingMovedElements.length;
       }
     }

@@ -490,6 +490,7 @@ class FigureElement {
 
   isMovable: boolean;             // Element is able to be moved
   isTouchable: boolean;           // Element can be touched
+  touchPriority: boolean;
   isInteractive: ?boolean;         // Touch event is not processed by Figure
   hasTouchableElements: boolean;
   // touchInBoundingRect: boolean | number;
@@ -686,6 +687,7 @@ class FigureElement {
     this.subscriptions = new SubscriptionManager(this.fnMap);
     this.isMovable = false;
     this.isTouchable = false;
+    this.touchPriority = false;
     // this.touchInBoundingRect = false;
     this.isInteractive = undefined;
     this.hasTouchableElements = false;

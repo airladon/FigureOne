@@ -15,9 +15,9 @@ function fig3() {
     name: 'plot',
     method: 'collections.plot',
     options: {
-      width: 3,
-      height: 1.5,
-      position: [-1.75, -0.75],
+      width: 3.5,
+      height: 1.3,
+      position: [-1.75, -0.5],
       trace: {
         name: 'trace',
         points: sine(2),
@@ -25,13 +25,13 @@ function fig3() {
         color: [1, 0, 0, 1],
       },
       xAxis: {
-        position: [0, 0.75],
+        position: [0, 0.65],
         start: 0,
         stop: 13,
         title: {
           text: '\u03b8',
           font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
-          offset: [1.6, 0.22],
+          offset: [1.85, 0.22],
         },
         ticks: {
           values: range(1, 13, 1),
@@ -49,7 +49,7 @@ function fig3() {
         title: {
           text: 'y',
           font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
-          offset: [0.27, 0.8],
+          offset: [0.25, 0.7],
           rotation: 0,
         },
       },
@@ -86,10 +86,11 @@ function fig3() {
         twoPi: '2\u03c0',
         value: { text: '0.0', color: [1, 0, 0, 1] },
       },
+      formDefaults: { alignment: { xAlign: 'center' } },
       forms: {
         0: ['y', '_ = ', 'sin', { brac: ['lb', [{ frac: ['twoPi', 'vinculum', 'value'] }, ' ', 'theta'], 'rb'] }]
       },
-      position: [0.87, -0.88],
+      position: [0, -0.88],
     }
   });
 

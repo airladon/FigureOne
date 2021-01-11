@@ -9,7 +9,9 @@ function fig4() {
   });
 
   const thetaValues = range(0, 12, 0.05);
-  const sine = (A, r, phi, B) => thetaValues.map(theta => new Point(theta, A * Math.sin(2 * Math.PI / r * theta + phi) + B));
+  const sine = (A, r, phi, B) => thetaValues.map(
+    theta => new Point(theta, A * Math.sin(2 * Math.PI / r * theta + phi) + B),
+  );
 
   const mover = (name) => ({
     name,
@@ -25,6 +27,34 @@ function fig4() {
       },
     },
   });
+  const arrow = (name, angle, position) => ({
+    name,
+    method: 'primitives.arrow',
+    options: {
+      color: [0.7, 0.7, 0.7, 1],
+      head: 'triangle',
+      tail: 0.1,
+      length: 0.4,
+      tailWidth: 0.2,
+      line: { width: 0.005 },
+      width: 0.4,
+      align: 'start',
+      angle,
+      position,
+    },
+  });
+
+  fig.add([
+    mover('AMover'),
+    mover('BMover'),
+    mover('rMover'),
+    mover('phiMover'),
+    arrow('up', Math.PI / 2, [0, 0.4]),
+    arrow('down', -Math.PI / 2, [0, -0.4]),
+    arrow('left', Math.PI, [-1.1, -0.7]),
+    arrow('right', 0, [1.1, -0.7]),
+  ]);
+
   fig.add({
     name: 'plot',
     method: 'collections.plot',
@@ -45,7 +75,7 @@ function fig4() {
         title: {
           text: '\u03b8',
           font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
-          offset: [1.6, 0.22],
+          offset: [1.85, 0.22],
         },
         ticks: {
           values: range(1, 12, 1),
@@ -69,13 +99,6 @@ function fig4() {
     },
   });
 
-  fig.add([
-    mover('AMover'),
-    mover('BMover'),
-    mover('rMover'),
-    mover('phiMover'),
-  ]);
-
 
   fig.add({
     name: 'eqn',
@@ -87,96 +110,88 @@ function fig4() {
         rb: { symbol: 'bracket', side: 'right' },
         theta: '\u03b8',
         twoPi: '2\u03c0',
-        plus: ' + ',
-        min: ' - ',
+        phiSign: ' + ',
+        BSign: ' + ',
         A: { text: '0.0', touchBorder: [0.2, 0.3], isTouchable: true },
         B: { text: '0.0', touchBorder: [0.16, 0.3], isTouchable: true },
         phi: { text: '0.0', touchBorder: [0.16, 0.3], isTouchable: true },
         r: { text: '0.0', touchBorder: [0.2, 0.2, 0.16, 0.4], isTouchable: true },
       },
       forms: {
-        0: ['y', '_ = ', 'A', ' ', 'sin', { brac: ['lb', [{ frac: ['twoPi', 'vinculum', 'r'] }, ' ', 'theta', 'min', 'phi'], 'rb'] }, 'plus', 'B'],
+        0: ['y', '_ = ', 'A', ' ', 'sin', { brac: ['lb', [{ frac: ['twoPi', 'vinculum', 'r'] }, ' ', 'theta', 'phiSign', 'phi', ' '], 'rb'] }, 'BSign', 'B'],
       },
-      position: [-1, -1.2],
+      position: [-1, -1.4],
     }
   });
-
-  let AValue = 1;
-  let BValue = 0;
-  let phiValue = 0;
-  let rValue = 2 * Math.PI;
+  const values = { A: 1, B: 0, phi: 0, r: 5 };
   const [A, B, phi, r] = fig.getElements({ eqn: ['A', 'B', 'phi', 'r'] });
-   const [AMover, BMover, phiMover, rMover] = fig.elements.getElements([
-    'AMover', 'BMover', 'phiMover', 'rMover',
+   const [AMover, BMover, phiMover, rMover, left, right, up, down] = fig.elements.getElements([
+    'AMover', 'BMover', 'phiMover', 'rMover', 'left', 'right', 'up', 'down',
   ]);
-  let selected = null;
+  const [trace, eqn] = fig.elements.getElements(['plot.trace', 'eqn']);
 
-  const setupElement = (element, name, mover) => {
+  const update = () => {
+    trace.update(sine(values.A, values.r, values.phi, values.B));
+    const BSign = values.B <= -0.1 ? ' \u2212 ' : ' + ';
+    const phiSign = values.phi <= 0.1 ? ' \u2212 ' : ' + ';
+    eqn.updateElementText({
+      A: `${values.A.toFixed(1)}`,
+      r: `${values.r.toFixed(1)}`,
+      B: `${Math.abs(values.B).toFixed(1)}`,
+      phi: `${Math.abs(values.phi).toFixed(1)}`,
+      BSign,
+      phiSign,
+    });
+  }
+
+  let selected = null;
+  const setupElement = (element, value, mover, initialPosition, moverFunc) => {
     element.onClick = () => {
+      console.log(value)
       if (selected != null) {
         selected.isTouchable = false;
       }
       eqn.setColor([0.4, 0.4, 0.4, 1]);
       element.setColor([1, 0, 0, 1]);
-      element.pulse();
+      element.pulse({ scale: 1.5 });
       selected = mover;
       selected.setMovable();
+      mover.setPosition(mover.getPosition());
       fig.animateNextFrame();
     };
-    selected = name;
-  }
-  setupElement(A, 'A', AMover);
-  setupElement(r, 'r', rMover);
-  setupElement(B, 'B', BMover);
-  setupElement(phi, 'phi', phiMover);
-
-  const [trace, xAxis, eqn] = fig.elements.getElements(
-    ['plot.trace', 'plot.x', 'eqn']
-  );
- 
-  const update = () => {
-    trace.update(sine(AValue, rValue, phiValue, BValue));
-    eqn.updateElementText({
-      A: `${AValue.toFixed(1)}`,
-      r: `${rValue.toFixed(1)}`,
-      B: `${BValue.toFixed(1)}`,
-      phi: `${phiValue.toFixed(1)}`,
+    mover.subscriptions.add('setTransform', () => {
+      const p = mover.getPosition().add(0.5, 0.5);
+      values[value] = moverFunc(p);
+      if (value === 'A' || value === 'B') {
+        left.hide();
+        right.hide();
+        p.y > 0.1 ? down.show() : down.hide();
+        p.y < 0.9 ? up.show() : up.hide();
+      }
+      if (value === 'phi' || value === 'r') {
+        down.hide();
+        up.hide();
+        p.x > 0.1 ? left.show() : left.hide();
+        p.x < 0.9 ? right.show() : right.hide();
+      }
+      update();
     });
+    mover.setPosition(initialPosition);
   }
+  setupElement(A, 'A', AMover, [0, -0.05], p => p.y * 1.8 + 0.2);
+  setupElement(r, 'r', rMover, [0, 0], p => p.x * 5 + 2);
+  setupElement(B, 'B', BMover, [0, 0], p => p.y * 4 - 2);
+  setupElement(phi, 'phi', phiMover, [0, 0], p => -(p.x * 8 - 4));
 
-  AMover.subscriptions.add('setTransform', () => {
-    AValue = (AMover.getPosition().y + 0.5) * 1.8 + 0.2;
-    update();
-  });
-
-  rMover.subscriptions.add('setTransform', () => {
-    rValue = (rMover.getPosition().x + 0.5) * 6 + 2;
-    update();
-  });
-
-  phiMover.subscriptions.add('setTransform', () => {
-    phiValue = -((phiMover.getPosition().x + 0.5) * 8 - 4);
-    update();
-  });
-
-  BMover.subscriptions.add('setTransform', () => {
-    BValue = (BMover.getPosition().y + 0.5) * 4 - 2;
-    update();
-  });
-
-  // Initialize
-  AMover.setPosition(0, 0);
-  BMover.setPosition(0, 0);
-  rMover.setPosition(0, 0);
-  phiMover.setPosition(0, 0);
-
-  // fig.debugShowTouchBorders(['eqn.A', 'eqn.B', 'eqn.phi', 'eqn.r']);
-  console.log(fig)
   const pulseTrace = () => trace.pulse({
     translation: 0.02, min: -0.02, frequency: 2,
   });
-  const pulseEqn = () => eqn.pulse({ scale: 1.5, yAlign: 'bottom' });
-  return { pulseTrace, pulseEqn };
+  const pulseEqn = () => eqn.pulse({ elements: ['phi', 'r', 'A', 'B'], scale: 1.5 });
+  const pulseAmplitude = () => A.onClick();
+  const pulseWavelength = () => r.onClick();
+  const pulsePhase = () => phi.onClick();
+  const pulseOffset = () => B.onClick();
+  return { pulseTrace, pulseEqn, pulseAmplitude, pulseWavelength, pulsePhase, pulseOffset };
 }
 
 const figure4 = fig4();

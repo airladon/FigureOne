@@ -121,7 +121,7 @@ describe('Figure', () => {
         collection.add(sKey, squareElement);
         collection.hasTouchableElements = true;
       });
-      figure.moveTopElementOnly = false;
+      figure.touchTopElementOnly = false;
       figure.elements = collection;
       figure.dToGL = (x, y) => new Point(x, y)
         .transformBy(figure.spaceTransforms.figureToGL.matrix());
