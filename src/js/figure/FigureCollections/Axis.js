@@ -1050,8 +1050,9 @@ class CollectionsAxis extends FigureElementCollection {
    *
    * @return {boolean} `true` if value is within length of axis.
    */
-  inAxis(value: number) {
-    if (value < this.startValue || value > this.stopValue) {
+  inAxis(value: number, precision: number = 8) {
+    const roundedValue = round(value, precision);
+    if (roundedValue < this.startValue || roundedValue > this.stopValue) {
       return false;
     }
     return true;

@@ -354,7 +354,6 @@ class CollectionsTrace extends FigureElementCollection {
     this.polylines = [];
     this.drawPoints = this.points.map(p => this.pointToDraw(p));
     this.drawPoints = [];
-
     let sampling = false;
     if (this.xSampleDistance != null && this.ySampleDistance != null) {
       sampling = true;
@@ -439,18 +438,21 @@ class CollectionsTrace extends FigureElementCollection {
   }
 
   removeLine() {
-    this.drawOrder.forEach((elementName) => {
-      if (elementName.startsWith('line')) {
-        this.remove(elementName);
-      }
+    const lines = this.drawOrder.filter(e => e.startsWith('line'));
+    lines.forEach((elementName) => {
+      this.remove(elementName);
     });
   }
 
   removeMarkers() {
-    const index = this.drawOrder.indexOf('markers');
-    if (index !== -1) {
-      this.remove('markers');
-    }
+    // const index = this.drawOrder.indexOf('markers');
+    // if (index !== -1) {
+    //   this.remove('markers');
+    // }
+    const markers = this.drawOrder.filter(e => e.startsWith('markers'));
+    markers.forEach((elementName) => {
+      this.remove(elementName);
+    });
   }
 
   addMarkers(options: OBJ_Polygon) {

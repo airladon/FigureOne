@@ -8,7 +8,7 @@ function fig4() {
     color: [0.4, 0.4, 0.4, 1],
   });
 
-  const thetaValues = range(0, 13, 0.05);
+  const thetaValues = range(0, 12, 0.05);
   const sine = (A, r, phi, B) => thetaValues.map(theta => new Point(theta, A * Math.sin(2 * Math.PI / r * theta + phi) + B));
 
   const mover = (name) => ({
@@ -118,8 +118,10 @@ function fig4() {
       }
       eqn.setColor([0.4, 0.4, 0.4, 1]);
       element.setColor([1, 0, 0, 1]);
+      element.pulse();
       selected = mover;
       selected.setMovable();
+      fig.animateNextFrame();
     };
     selected = name;
   }
@@ -153,7 +155,7 @@ function fig4() {
   });
 
   phiMover.subscriptions.add('setTransform', () => {
-    phiValue = (phiMover.getPosition().x + 1.5) / 2.5 * 8 - 4;
+    phiValue = -((phiMover.getPosition().x + 1.5) / 2.5 * 8 - 4);
     update();
   });
 
@@ -169,7 +171,7 @@ function fig4() {
   phiMover.setPosition(-0.25, 0.25);
 
   // fig.debugShowTouchBorders(['eqn.A', 'eqn.B', 'eqn.phi', 'eqn.r']);
-
+  console.log(fig)
   const pulseTrace = () => trace.pulse({
     translation: 0.02, min: -0.02, frequency: 2,
   });
