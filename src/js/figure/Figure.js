@@ -26,6 +26,7 @@ import { Recorder } from './Recorder/Recorder';
 import Gesture from './Gesture';
 import DrawContext2D from './DrawContext2D';
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
+import type { OBJ_Polyline } from './FigurePrimitives/FigurePrimitives';
 // import FigureEquation from './Equation/FigureEquation';
 import FigureCollections from './FigureCollections/FigureCollections';
 // import addElements from './FigureAddElements/addElements';
@@ -2360,6 +2361,22 @@ class Figure {
       pixelLocation.x + canvas.left,
       pixelLocation.y + canvas.top,
     );
+  }
+
+  debugShowTouchBorders(
+    elements: TypeElementPath,
+    lineOptions: OBJ_Polyline = { color: [0, 0, 1, 1], width: 0.005 },
+    startIndex: number = 0,
+  ) {
+    const elems = this.elements.getElements(elements);
+    elems.forEach((element, index) => {
+      const touchBorder = element.getBorder('figure', 'touchBorder');
+      const polyline = this.primitives.polyline(joinObjects({}, lineOptions, {
+        points: touchBorder[0],
+        close: true,
+      }));
+      this.add(`__touchBorder_${index + startIndex}`, polyline);
+    });
   }
 }
 

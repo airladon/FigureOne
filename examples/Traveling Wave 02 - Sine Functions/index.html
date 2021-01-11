@@ -17,6 +17,11 @@
             width: 100%;
             padding-bottom: 50%;
         }
+
+        .ar75 {
+            width: 100%;
+            padding-bottom: 75%;
+        }
         
         body {
             padding: 10px;
@@ -167,6 +172,12 @@
         <p>
             \[y=A\sin\left({2\pi \over r} -\phi\right) + B\]
         </p>
+        <p class="instruction">
+            Move the circle <a href="javascript:figure1.pulse();" >radius</a> to draw the <a href="javascript:figure1.drawFull();" >sine wave</a>.
+        </p>
+        <div class="wrapper">
+            <div id="figureOneContainer4" class="ar75"></div>
+        </div>
         <h2>
             Sine Waves in Time
         </h2>
@@ -239,5 +250,6 @@
         <script type="text/javascript" src='./fig1.js'></script>
         <script type="text/javascript" src='./fig2.js'></script>
         <script type="text/javascript" src='./fig3.js'></script>
+        <script type="text/javascript" src='./fig4.js'></script>
     </body>
 </html>
