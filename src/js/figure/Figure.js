@@ -1508,8 +1508,7 @@ class Figure {
    * Show specific elements within the figure
    */
   show(
-    toShow: FigureElementPrimitive | FigureElementCollection | string
-      | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
+    toShow: TypeElementPath = [],
   ): void {
     this.elements.show(toShow);
   }
@@ -1518,8 +1517,7 @@ class Figure {
    * Show specific elements within a figure, while hiding all others
    */
   showOnly(
-    toShow: FigureElementPrimitive | FigureElementCollection | string
-      | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
+    toShow: TypeElementPath = [],
   ): void {
     this.elements.showOnly(toShow);
   }
@@ -2370,7 +2368,7 @@ class Figure {
 
   debugShowTouchBorders(
     elements: TypeElementPath,
-    lineOptions: OBJ_Polyline = { color: [0, 0, 1, 1], width: 0.005 },
+    lineOptions: OBJ_Polyline = {},
     startIndex: number = 0,
   ) {
     const elems = this.elements.getElements(elements);

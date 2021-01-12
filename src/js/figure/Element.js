@@ -4129,7 +4129,7 @@ class FigureElementCollection extends FigureElement {
   collections: FigureCollections;
 
   +getElement: (?(string | FigureElement)) => ?FigureElement;
-  +getElements: (Array<string | FigureElement>) => Array<FigureElement>;
+  +getElements: (TypeElementPath) => Array<FigureElement>;
   +exec: (string | Array<string | Object>, ?Array<string | FigureElement>) => void;
   +highlight: (elementsToDim: ?Array<string | FigureElement>) => void;
 

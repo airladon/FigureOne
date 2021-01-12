@@ -2,15 +2,17 @@
 <html>
     <!-- Style the figureOne container to be 4:3 aspect ratio -->
     <style>
-        .wrapper {
+        .wrapper50, .wrapper75 {
             width: calc(100vw - 20px);
             max-width: 100%;
             padding-bottom: 10px;
-            <!-- border: 1px solid lightgrey; -->
         }
         @media (min-aspect-ratio: 1/1) {
-            .wrapper {
-              width: calc((100vh - 20px)/0.75);
+            .wrapper50 {
+                width: calc((100vh - 20px)/0.5);
+            }
+            .wrapper75 {
+                width: calc((100vh - 20px)/0.75);
             }
         } 
         .ar50 {
@@ -29,7 +31,7 @@
             margin-right: auto;
             font-family: Helvetica, Arial, sans-serif;
             color: #444;
-            max-width: 1000px;
+            max-width: 1200px;
             font-size: 2vw;
         }
         @media (min-width: 1000px) {
@@ -77,7 +79,7 @@
         <p class="instruction">
             Move the circle <a href="javascript:figure1.pulse();" >radius</a> to draw the <a href="javascript:figure1.drawFull();" >sine wave</a>.
         </p>
-        <div class="wrapper">
+        <div class="wrapper50">
             <div id="figureOneContainer1" class="ar50"></div>
         </div>
         <p>
@@ -107,7 +109,7 @@
         <p class="instruction">
             Drag the <a href="javascript:figure2.pulseTrace();" >trace</a> up and down to change the <a href="javascript:figure2.pulseAmplitude();" >amplitude</a>.
         </p>
-        <div class="wrapper">
+        <div class="wrapper50">
             <div id="figureOneContainer2" class="ar50"></div>
         </div>
         <h2>
@@ -167,7 +169,7 @@
         <p class="instruction">
             Drag the <a href="javascript:figure3.pulseTrace();" >trace</a> left and right to change how often it repeats.
         </p>
-        <div class="wrapper">
+        <div class="wrapper50">
             <div id="figureOneContainer3" class="ar50"></div>
         </div>
         <p>
@@ -225,7 +227,7 @@
         <p class="instruction">
             Touch the <a href="javascript:figure4.pulseAmplitude();" >amplitude</a>, <a href="javascript:figure4.pulseWavelength();" >wavelength</a>, <a href="javascript:figure4.pulsePhase();" >phase</a> or <a href="javascript:figure4.pulseOffset();" >y offset</a> terms of the equation and then move the <a href="javascript:figure4.pulseTrace();" >trace</a> in the direction of the arrows.
         </p>
-        <div class="wrapper">
+        <div class="wrapper75">
             <div id="figureOneContainer4" class="ar75"></div>
         </div>
         <!-- Use CDN hosted library-->

@@ -3,7 +3,7 @@ function fig4() {
   const { round, range } = Fig.tools.math;
 
   fig = new Fig.Figure({
-    limits: [-2, -1.75, 4, 3],
+    limits: [-2, -1.75 * 0.95, 4 * 0.95, 3 * 0.95],
     htmlId: 'figureOneContainer4',
     color: [0.4, 0.4, 0.4, 1],
   });
@@ -147,7 +147,6 @@ function fig4() {
   let selected = null;
   const setupElement = (element, value, mover, initialPosition, moverFunc) => {
     element.onClick = () => {
-      console.log(value)
       if (selected != null) {
         selected.isTouchable = false;
       }

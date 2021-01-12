@@ -453,6 +453,7 @@ class FigureTextLine extends FigureTextBase {
       this.font.definition(),
       this.offset,
       this.inLine,
+      this.touchBorder,
       this.onClick,
       this.followOffsetY,
       this.rSpace,
