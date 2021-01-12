@@ -3931,7 +3931,8 @@ class FigureElementPrimitive extends FigureElement {
     canvasIndex: number = 0,
   ) {
     if (this.isShown) {
-      // const ttt = performance.now();
+      const ttt = performance.now();
+      const tArray = [];
       let pointCount = -1;
       if (this.drawingObject instanceof VertexObject) {
         pointCount = this.drawingObject.numPoints;
@@ -3947,6 +3948,8 @@ class FigureElementPrimitive extends FigureElement {
       } else {
         pointCount = 1;
       }
+      const ttt1 = performance.now()
+      tArray.push(ttt1 - ttt)
 
       const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity * parentOpacity];
       // eslint-disable-next-line prefer-destructuring
@@ -3957,7 +3960,8 @@ class FigureElementPrimitive extends FigureElement {
       // }
       const transform = this.getTransform();
       const newTransforms = transformBy(parentTransform, [transform]);
-
+      const ttt2 = performance.now()
+      tArray.push(ttt2 - ttt1)
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform[0].order.length,
         elementCount: this.transform.order.length,
@@ -3967,8 +3971,14 @@ class FigureElementPrimitive extends FigureElement {
       // this.parentTransform = parentTransform._dup();
       // const newTransform = parentTransform.transform(this.getTransform());
       this.pulseTransforms = this.getPulseTransforms(now);
+      const ttt3 = performance.now()
+      tArray.push(ttt3 - ttt2)
       this.drawTransforms = this.getDrawTransforms(newTransforms);
+      const ttt4 = performance.now()
+      tArray.push(ttt4 - ttt3)
       this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
+      const ttt5 = performance.now()
+      tArray.push(ttt5 - ttt4)
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
       if (pointCount > 0) {
@@ -3990,6 +4000,8 @@ class FigureElementPrimitive extends FigureElement {
           // window.asdf = false;
         });
       }
+      const ttt6 = performance.now()
+      tArray.push(ttt6 - ttt5)
       if (this.unrenderNextDraw) {
         this.clearRender();
         this.unrenderNextDraw = false;
@@ -4005,7 +4017,9 @@ class FigureElementPrimitive extends FigureElement {
       if (this.afterDrawCallback != null) {
         this.fnMap.exec(this.afterDrawCallback, now);
       }
-      // console.log(this.name, round(performance.now() - ttt, 2))
+      const ttt7 = performance.now()
+      tArray.push(ttt7 - ttt6)
+      window.timeData.push([this.name, round(performance.now() - ttt, 2), tArray]);
     }
   }
 
@@ -4664,7 +4678,7 @@ class FigureElementCollection extends FigureElement {
     canvasIndex: number = 0,
   ) {
     if (this.isShown) {
-      // const ttt = performance.now()
+      const ttt = performance.now()
       // if (this.name === 'eqn') {
       //   console.log('start eqn')
       // }
@@ -4688,15 +4702,19 @@ class FigureElementCollection extends FigureElement {
       // console.log()
       // let cum = performance.now() - ttt;
       // console.log('cum start', round(cum, 2))
+      const ttt1 = performance.now()
+      const tArray = [];
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-        // const tttt = performance.now()
+        const tttt = performance.now()
         this.elements[this.drawOrder[i]].draw(
           now, this.drawTransforms, opacityToUse, canvasIndex,
         );
+        tArray.push([this.elements[this.drawOrder[i]].name, performance.now() - tttt])
         // const delta = performance.now() - tttt;
         // cum += delta;
         // console.log('---', this.elements[this.drawOrder[i]].name, round(delta, 2))
       }
+      const ttt2 = performance.now()
       // console.log(round(performance.now() - ttt, 2), round(cum, 2))
       // }
       if (this.unrenderNextDraw) {
@@ -4714,7 +4732,11 @@ class FigureElementCollection extends FigureElement {
         // this.afterDrawCallback(now);
         this.fnMap.exec(this.afterDrawCallback, now);
       }
-      // console.log(this.name, round(performance.now() - ttt, 2))
+      // console.log('>>', this.name, round(performance.now() - ttt, 2),
+      //   round(ttt1 - ttt, 2), round(ttt2 - ttt1, 2), round(performance.now() - ttt2, 2), tArray
+      // )
+      window.timeData.push(['>>', this.name, round(performance.now() - ttt, 2),
+        round(ttt1 - ttt, 2), round(ttt2 - ttt1, 2), round(performance.now() - ttt2, 2), tArray])
     }
   }
 

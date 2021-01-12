@@ -2212,10 +2212,11 @@ class Figure {
 
   draw(nowIn: number, canvasIndex: number = 0): void {
     // const start = new Date().getTime();
-    // const t = performance.now();
+    const t = performance.now();
     // if ((nowIn - this.lastDrawTime ) * 1000 > 40) {
     //   console.log((nowIn - this.lastDrawTime) * 1000)
     // }
+    window.timeData = [];
     if (this.state.pause === 'paused') {
       return;
     }
@@ -2256,12 +2257,12 @@ class Figure {
       now,
       canvasIndex,
     );
-    // const t2 = performance.now();
+    const t2 = performance.now();
     // const endSetup = new Date().getTime();
     // const startDraw = endSetup;
     this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
     // const endDraw = new Date().getTime();
-    // const t3 = performance.now()
+    const t3 = performance.now()
     if (this.elements.isAnyElementMoving()) {
       this.animateNextFrame(true, 'is moving');
     }
@@ -2279,7 +2280,8 @@ class Figure {
     // const setup = endSetup - startSetup;
     // const draw = endDraw - startDraw;
     // console.log(total, setup, draw, total - setup - draw);
-    // console.log(performance.now() - t, t2 - t, t3 - t2);
+    console.log(performance.now() - t, t2 - t, t3 - t2);
+    console.log(window.timeData);
     // console.log(perfr)
   }
 
