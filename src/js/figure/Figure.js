@@ -2280,8 +2280,18 @@ class Figure {
     // const setup = endSetup - startSetup;
     // const draw = endDraw - startDraw;
     // console.log(total, setup, draw, total - setup - draw);
-    console.log(performance.now() - t, t2 - t, t3 - t2);
+    const total = performance.now() - t;
+    console.log(total, t2 - t, t3 - t2);
     console.log(window.timeData);
+    if (window.runningTotal == null) {
+      window.runningTotal = [];
+    }
+    if (window.runningTotal.length > 50) {
+      console.log('>>>>>>>>>>> Total', (window.runningTotal.reduce((sum, time) => sum + time) / 50));
+      window.runningTotal = [];
+    } else {
+      window.runningTotal.push(total);
+    }
     // console.log(perfr)
   }
 
