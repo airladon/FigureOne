@@ -143,6 +143,13 @@ class FigureTextBase {
     width: number,
   };
 
+  lastDraw: {
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+  } | null;
+
   constructor(
     drawContext2D: Array<DrawContext2D> | DrawContext2D,
     location: TypeParsablePoint = new Point(0, 0),
@@ -163,6 +170,7 @@ class FigureTextBase {
     this.font = new FigureFont(font);
     this.xAlign = xAlign;
     this.yAlign = yAlign;
+    this.lastDraw = null;
     this.lastDrawRect = new Rect(0, 0, 1, 1);
     if (Array.isArray(drawContext2D)) {
       this.drawContext2D = drawContext2D;
@@ -509,6 +517,7 @@ class TextObjectBase extends DrawingObject {
   text: Array<FigureTextBase>;
   scalingFactor: number;
   lastDrawTransform: Array<number>;
+
   textBorder: Array<Array<Point>>;
   textBorderBuffer: Array<Array<Point>>;
   // borderSetup: 'text' | 'rect' | Array<Point>;
@@ -524,7 +533,7 @@ class TextObjectBase extends DrawingObject {
     } else {
       this.drawContext2D = [drawContext2D];
     }
-    this.lastDrawTransform = [];
+    this.lastDrawTransform = [1, 0, 0, 0, 1, 0, 0, 0, 1];
     this.text = [];
     // this.state = 'loaded';
   }
@@ -825,6 +834,13 @@ class TextObjectBase extends DrawingObject {
 
     // Fill in all the text
     this.text.forEach((figureText) => {
+      // eslint-disable-next-line no-param-reassign
+      figureText.lastDraw = {
+        x: (figureText.locationAligned.x) * scalingFactor,
+        y: (figureText.locationAligned.y) * -scalingFactor,
+        width: figureText.bounds.width * scalingFactor,
+        height: figureText.bounds.height * scalingFactor,
+      };
       figureText.font.setFontInContext(ctx, scalingFactor);
       figureText.font.setColorInContext(ctx, c);
       ctx.fillText(
@@ -843,16 +859,30 @@ class TextObjectBase extends DrawingObject {
     ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);
     // console.log('start clear');
     this.text.forEach((figureText) => {
-      const x = figureText.locationAligned.x * this.scalingFactor;
-      const y = figureText.locationAligned.y * -this.scalingFactor;
-      const width = figureText.bounds.width * this.scalingFactor;
-      const height = figureText.bounds.height * this.scalingFactor;
-      ctx.clearRect(
-        x - width * 1,
-        y + height * 1,
-        width * 3,
-        -height * 3,
-      );
+      // const x = figureText.locationAligned.x * this.scalingFactor;
+      // const y = figureText.locationAligned.y * -this.scalingFactor;
+      // const width = figureText.bounds.width * this.scalingFactor;
+      // const height = figureText.bounds.height * this.scalingFactor;
+      if (figureText.lastDraw != null) {
+        const {
+          x, y, width, height,
+        } = figureText.lastDraw;
+        ctx.clearRect(
+          x - width * 0.5, y + height * 0.5, width * 2, -height * 2,
+          // x - width * 1,
+          // y + height * 1,
+          // width * 3,
+          // -height * 3,\
+        );
+        // ctx.rect(
+        //   x - width * 0.5, y + height * 0.5, width * 2, -height * 2,
+        //   // (figureText.locationAligned.x) * scalingFactor,
+        //   // (figureText.locationAligned.y) * -scalingFactor,
+        // );
+        // ctx.fill();
+        // // eslint-disable-next-line no-param-reassign
+        figureText.lastDraw = null;
+      }
     });
     ctx.restore();
   }
@@ -1142,6 +1172,8 @@ class TextLineObject extends TextObjectBase {
   }
 
   setText(textOrOptions: string | OBJ_TextDefinition, index: number = 1) {
+    // if (textOrOptions.text.startsWith('abc')) {
+    // }
     this.text[index].setText(textOrOptions);
     this.layoutText();
     // this.setBorder();

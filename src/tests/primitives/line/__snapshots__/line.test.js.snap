@@ -692,6 +692,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -1680,6 +1681,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -2824,6 +2826,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -5362,6 +5365,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -6610,6 +6614,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -9148,6 +9153,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -10240,6 +10246,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -11176,6 +11183,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -11954,6 +11962,7 @@ FigureElementPrimitive {
       },
     ],
   ],
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -12720,6 +12729,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -13522,6 +13532,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -14254,6 +14265,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -14986,6 +14998,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -15718,6 +15731,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -16621,6 +16635,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -17524,6 +17539,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -18428,6 +18444,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -19331,6 +19348,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -20234,6 +20252,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -20966,6 +20985,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -21698,6 +21718,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -22430,6 +22451,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -23179,6 +23201,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -23911,6 +23934,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -24660,6 +24684,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -25392,6 +25417,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -26338,6 +26364,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -27098,6 +27125,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -27830,6 +27858,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "border",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -28562,6 +28591,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -29328,6 +29358,7 @@ FigureElementPrimitive {
       },
     ],
   ],
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -30130,6 +30161,7 @@ FigureElementPrimitive {
       },
     ],
   ],
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -30862,6 +30894,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "draw",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -31640,6 +31673,7 @@ FigureElementPrimitive {
       },
     ],
   ],
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -32372,6 +32406,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "rect",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -33104,6 +33139,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -33836,6 +33872,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -34568,6 +34605,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
@@ -35300,6 +35338,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,

@@ -3308,6 +3308,7 @@ export default class FigurePrimitives {
     const element = this.genericTextPrimitive(to, options);
     element.custom.options = options;
     element.custom.updateText = (o: OBJ_Text) => { // $FlowFixMe
+      element.drawingObject.clear(); // $FlowFixMe
       element.drawingObject.loadText(this.parseTextOptions(element.custom.options, o));
       element.custom.updateBorders({});
     };

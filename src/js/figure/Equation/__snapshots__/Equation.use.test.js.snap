@@ -26,6 +26,7 @@ FigureElementPrimitive {
   },
   "animationFinishedCallback": null,
   "animations": AnimationManager {
+    "animationSpeed": 1,
     "animations": Array [],
     "customSteps": Array [],
     "element": [Circular],
@@ -243,6 +244,11 @@ FigureElementPrimitive {
           "textBaseline": [Function],
           "transform": [Function],
           "transformMatrix": Array [
+            1,
+            0,
+            0,
+            1,
+            0,
             0,
           ],
         },
@@ -250,7 +256,17 @@ FigureElementPrimitive {
         "resize": [Function],
       },
     ],
-    "lastDrawTransform": Array [],
+    "lastDrawTransform": Array [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+    ],
     "location": Point {
       "_type": "point",
       "x": 0,
@@ -301,6 +317,11 @@ FigureElementPrimitive {
               "textBaseline": [Function],
               "transform": [Function],
               "transformMatrix": Array [
+                1,
+                0,
+                0,
+                1,
+                0,
                 0,
               ],
             },
@@ -321,6 +342,7 @@ FigureElementPrimitive {
           "style": "italic",
           "weight": "200",
         },
+        "lastDraw": null,
         "lastDrawRect": Rect {
           "bottom": 0,
           "height": 1,
@@ -867,6 +889,7 @@ FigureElementPrimitive {
     },
   },
   "touchBorder": "buffer",
+  "touchPriority": false,
   "transform": Transform {
     "_type": "transform",
     "index": 3,
