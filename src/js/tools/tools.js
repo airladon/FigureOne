@@ -3,8 +3,8 @@ import { roundNum } from './math';
 import { FunctionMap } from './FunctionMap';
 // import Worker from '../figure/recorder.worker.js';
 
-const Console = (text: string) => {
-  console.log(text); // eslint-disable-line no-console
+const Console = (...msg: Array<any>) => {
+  console.log(...msg); // eslint-disable-line no-console
 };
 
 // function add(a: number, b: number): number {

@@ -13,7 +13,9 @@ import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
 import { FunctionMap } from '../tools/FunctionMap';
 import { setState, getState } from './Recorder/state';
 import parseState from './Recorder/parseState';
-import { isTouchDevice, joinObjects, SubscriptionManager } from '../tools/tools';
+import {
+  isTouchDevice, joinObjects, SubscriptionManager, Console
+} from '../tools/tools';
 import {
   FigureElementCollection, FigureElementPrimitive, FigureElement,
 } from './Element';
@@ -35,6 +37,9 @@ import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnim
 import type { TypeColor, OBJ_Font } from '../tools/types';
 import SlideNavigator from './SlideNavigator';
 import type { OBJ_SlideNavigator } from './SlideNavigator';
+
+const FIGURE1DEBUG = true;
+
 
 /**
  * Space Transforms
@@ -334,6 +339,13 @@ class Figure {
     this.defaultFont = optionsToUse.font;
     this.htmlId = htmlId;
     this.animationFinishedCallback = null;
+    if (FIGURE1DEBUG) {
+      window.figureOneDebug = {
+        cumTimes: [],
+        draw: [],
+        frame: [],
+      };
+    }
     // this.layout = layout;
     if (typeof htmlId === 'string') {
       const container = document.getElementById(htmlId);
@@ -2212,11 +2224,15 @@ class Figure {
 
   draw(nowIn: number, canvasIndex: number = 0): void {
     // const start = new Date().getTime();
-    const t = performance.now();
+    if (FIGURE1DEBUG) {
+      window.figureOneDebug.frame = [];
+      window.figureOneDebug.frame.push(performance.now());
+      window.figureOneDebug.draw = [];
+    }
+    // const t = performance.now();
     // if ((nowIn - this.lastDrawTime ) * 1000 > 40) {
     //   console.log((nowIn - this.lastDrawTime) * 1000)
     // }
-    window.timeData = [];
     if (this.state.pause === 'paused') {
       return;
     }
@@ -2253,16 +2269,16 @@ class Figure {
     // console.log('really drawing')
     // const startSetup = new Date().getTime();
     this.subscriptions.publish('beforeDraw');
+    if (FIGURE1DEBUG) { window.figureOneDebug.frame.push(performance.now()); }
     this.elements.setupDraw(
       now,
       canvasIndex,
     );
-    const t2 = performance.now();
-    // const endSetup = new Date().getTime();
-    // const startDraw = endSetup;
+    if (FIGURE1DEBUG) { window.figureOneDebug.frame.push(performance.now()); }
+
     this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
-    // const endDraw = new Date().getTime();
-    const t3 = performance.now()
+    if (FIGURE1DEBUG) { window.figureOneDebug.frame.push(performance.now()); }
+
     if (this.elements.isAnyElementMoving()) {
       this.animateNextFrame(true, 'is moving');
     }
@@ -2272,27 +2288,24 @@ class Figure {
       this.animateNextFrame(true, 'queued frames');
     }
     this.subscriptions.publish('afterDraw');
-    // const t3 = performance.now();
-    // console.log('Summary', round(t2 - t, 0), round(t3 - t2, 0), round(t - this.lastTime1, 0));
-    // this.lastTime1 = t;
-    // const end = new Date().getTime();
-    // const total = end - start;
-    // const setup = endSetup - startSetup;
-    // const draw = endDraw - startDraw;
-    // console.log(total, setup, draw, total - setup - draw);
-    const total = performance.now() - t;
-    console.log(total, t2 - t, t3 - t2);
-    console.log(window.timeData);
-    if (window.runningTotal == null) {
-      window.runningTotal = [];
+
+    if (FIGURE1DEBUG) {
+      window.figureOneDebug.frame.push(performance.now());
+      const { frame } = window.figureOneDebug; 
+      const totalTime = frame.slice(-1)[0] - frame[0];
+      const deltas = frame.map((t, index) => (index === 0 ? 0 : t - frame[index - 1]));
+      window.figureOneDebug.frameTime = deltas;
+      if (window.figureOneDebug.cumTimes.length > 50) {
+        Console(
+          '>>>>>>>>>>> Total',
+          window.figureOneDebug.cumTimes.reduce((sum, time) => sum + time) / 50,
+          window.figureOneDebug.draw,
+        );
+        window.figureOneDebug.cumTimes = [];
+      } else {
+        window.figureOneDebug.cumTimes.push(totalTime);
+      }
     }
-    if (window.runningTotal.length > 50) {
-      console.log('>>>>>>>>>>> Total', (window.runningTotal.reduce((sum, time) => sum + time) / 50));
-      window.runningTotal = [];
-    } else {
-      window.runningTotal.push(total);
-    }
-    // console.log(perfr)
   }
 
   // renderToImages() {

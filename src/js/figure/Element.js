@@ -54,6 +54,7 @@ import type {
 // import type FigurePrimitives from './FigurePrimitives/FigurePrimitives';
 import type FigureCollections from './FigureCollections/FigureCollections';
 
+const FIGURE1DEBUG = true;
 // eslint-disable-next-line import/no-cycle
 // import {
 //   AnimationPhase, ColorAnimationPhase, CustomAnimationPhase,
@@ -3931,8 +3932,8 @@ class FigureElementPrimitive extends FigureElement {
     canvasIndex: number = 0,
   ) {
     if (this.isShown) {
-      const ttt = performance.now();
-      const tArray = [];
+      const debugTimes = [];
+      if (FIGURE1DEBUG) { debugTimes.push([performance.now(), '']); }
       let pointCount = -1;
       if (this.drawingObject instanceof VertexObject) {
         pointCount = this.drawingObject.numPoints;
@@ -3948,8 +3949,7 @@ class FigureElementPrimitive extends FigureElement {
       } else {
         pointCount = 1;
       }
-      const ttt1 = performance.now()
-      tArray.push(ttt1 - ttt)
+      if (FIGURE1DEBUG) { debugTimes.push([performance.now(), 'm1']); }
 
       const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity * parentOpacity];
       // eslint-disable-next-line prefer-destructuring
@@ -3960,8 +3960,9 @@ class FigureElementPrimitive extends FigureElement {
       // }
       const transform = this.getTransform();
       const newTransforms = transformBy(parentTransform, [transform]);
-      const ttt2 = performance.now()
-      tArray.push(ttt2 - ttt1)
+
+      if (FIGURE1DEBUG) { debugTimes.push([performance.now(), 'm2']); }
+
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform[0].order.length,
         elementCount: this.transform.order.length,
@@ -3971,14 +3972,14 @@ class FigureElementPrimitive extends FigureElement {
       // this.parentTransform = parentTransform._dup();
       // const newTransform = parentTransform.transform(this.getTransform());
       this.pulseTransforms = this.getPulseTransforms(now);
-      const ttt3 = performance.now()
-      tArray.push(ttt3 - ttt2)
+      if (FIGURE1DEBUG) { debugTimes.push([performance.now(), 'm3']); }
+
       this.drawTransforms = this.getDrawTransforms(newTransforms);
-      const ttt4 = performance.now()
-      tArray.push(ttt4 - ttt3)
+      if (FIGURE1DEBUG) { debugTimes.push([performance.now(), 'm4']); }
+
       this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
-      const ttt5 = performance.now()
-      tArray.push(ttt5 - ttt4)
+
+      if (FIGURE1DEBUG) { debugTimes.push([performance.now(), 'm5']); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
       if (pointCount > 0) {
@@ -4000,8 +4001,8 @@ class FigureElementPrimitive extends FigureElement {
           // window.asdf = false;
         });
       }
-      const ttt6 = performance.now()
-      tArray.push(ttt6 - ttt5)
+      if (FIGURE1DEBUG) { debugTimes.push([performance.now(), 'm6']); }
+
       if (this.unrenderNextDraw) {
         this.clearRender();
         this.unrenderNextDraw = false;
@@ -4017,9 +4018,28 @@ class FigureElementPrimitive extends FigureElement {
       if (this.afterDrawCallback != null) {
         this.fnMap.exec(this.afterDrawCallback, now);
       }
-      const ttt7 = performance.now()
-      tArray.push(ttt7 - ttt6)
-      window.timeData.push([this.name, round(performance.now() - ttt, 2), tArray]);
+
+      if (FIGURE1DEBUG) {
+        if (FIGURE1DEBUG) { debugTimes.push([performance.now(), 'm7']); }
+        // const drawTimes = window.figureOneDebug.temp;
+        // const deltas = drawTimes.map((t, index) => (index === 0 ? 0 : t - drawTimes[index - 1]));
+        const debugDeltas = [];
+        let lastTime;
+        debugTimes.forEach((timeRecord, index) => {
+          const [t, name] = timeRecord;
+          if (index > 0) {
+            debugDeltas.push([name, t - lastTime]);
+          }
+          lastTime = t;
+        });
+        window.figureOneDebug.draw.push([
+          this.getPath(),
+          round(debugTimes.slice(-1)[0][0] - debugTimes[0][0], 2),
+          debugDeltas,
+        ]);
+      }
+
+      // window.timeData.push([this.name, round(performance.now() - ttt, 2), tArray]);
     }
   }
 
@@ -4678,49 +4698,46 @@ class FigureElementCollection extends FigureElement {
     canvasIndex: number = 0,
   ) {
     if (this.isShown) {
-      const ttt = performance.now()
-      // if (this.name === 'eqn') {
-      //   console.log('start eqn')
-      // }
-      // for (let k = 0; k < this.pulseTransforms.length; k += 1) {
+      const debugTime = [];
+      const drawTime = [];
+      if (FIGURE1DEBUG) { debugTime.push([performance.now(), '']); }
+
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform[0].order.length,
         elementCount: this.transform.order.length,
       };
       const transform = this.getTransform();
       const newTransforms = transformBy(parentTransform, [transform]);
-      // this.lastDrawTransform = transform._dup();
+
+      if (FIGURE1DEBUG) { debugTime.push([performance.now(), 'm1']); }
       this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
+      if (FIGURE1DEBUG) { debugTime.push([performance.now(), 'm2']); }
       this.pulseTransforms = this.getPulseTransforms(now);
+      if (FIGURE1DEBUG) { debugTime.push([performance.now(), 'm3']); }
       this.drawTransforms = this.getDrawTransforms(newTransforms);
-      // this.pulseTransforms
+      if (FIGURE1DEBUG) { debugTime.push([performance.now(), 'm4']); }
+
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
 
       const opacityToUse = this.color[3] * this.opacity * parentOpacity;
       this.lastDrawOpacity = opacityToUse;
-      // console.log()
-      // let cum = performance.now() - ttt;
-      // console.log('cum start', round(cum, 2))
-      const ttt1 = performance.now()
-      const tArray = [];
+      if (FIGURE1DEBUG) { debugTime.push([performance.now(), 'm5']); }
+
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-        const tttt = performance.now()
         this.elements[this.drawOrder[i]].draw(
           now, this.drawTransforms, opacityToUse, canvasIndex,
         );
-        tArray.push([this.elements[this.drawOrder[i]].name, performance.now() - tttt])
-        // const delta = performance.now() - tttt;
-        // cum += delta;
-        // console.log('---', this.elements[this.drawOrder[i]].name, round(delta, 2))
+        if (FIGURE1DEBUG) {
+          drawTime.push([performance.now(), this.elements[this.drawOrder[i]].name]);
+        }
       }
-      const ttt2 = performance.now()
-      // console.log(round(performance.now() - ttt, 2), round(cum, 2))
-      // }
+      if (FIGURE1DEBUG) { debugTime.push([performance.now(), 'm6']); }
       if (this.unrenderNextDraw) {
         this.clearRender();
         this.unrenderNextDraw = false;
       }
+      if (FIGURE1DEBUG) { debugTime.push([performance.now(), 'm7']); }
       if (this.renderedOnNextDraw) {
         this.isRenderedAsImage = true;
         this.renderedOnNextDraw = false;
@@ -4729,14 +4746,37 @@ class FigureElementCollection extends FigureElement {
       //   element.draw(element.getParentLastDrawTransform(), now);
       // })
       if (this.afterDrawCallback != null) {
-        // this.afterDrawCallback(now);
         this.fnMap.exec(this.afterDrawCallback, now);
       }
-      // console.log('>>', this.name, round(performance.now() - ttt, 2),
-      //   round(ttt1 - ttt, 2), round(ttt2 - ttt1, 2), round(performance.now() - ttt2, 2), tArray
-      // )
-      window.timeData.push(['>>', this.name, round(performance.now() - ttt, 2),
-        round(ttt1 - ttt, 2), round(ttt2 - ttt1, 2), round(performance.now() - ttt2, 2), tArray])
+      if (FIGURE1DEBUG) {
+        debugTime.push([performance.now(), 'm8']);
+        const debugDeltas = [];
+        let lastTime;
+        debugTime.forEach((timeRecord, index) => {
+          const [t, name] = timeRecord;
+          if (index > 0) {
+            debugDeltas.push([name, t - lastTime]);
+          }
+          lastTime = t;
+        });
+        const drawDeltas = [];
+        // eslint-disable-next-line prefer-desctructuring
+        [lastTime] = debugTime[5];
+        drawTime.forEach((timeRecord) => {
+          const [t, name] = timeRecord;
+          const deltaTime = t - lastTime;
+          drawDeltas.push([name, round(deltaTime, 2)]);
+          // cumDraw += deltaTime;
+          lastTime = t;
+        });
+        window.figureOneDebug.draw.push([
+          '>>',
+          this.getPath(),
+          round(debugTime.slice(-1)[0][0] - debugTime[0][0], 2),
+          debugDeltas,
+          drawDeltas,
+        ]);
+      }
     }
   }
 
