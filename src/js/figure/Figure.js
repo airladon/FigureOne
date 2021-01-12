@@ -9,12 +9,12 @@ import {
 } from '../tools/g2';
 import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
 // import * as math from '../tools/math';
-// import { round } from '../tools/math';
+import { round } from '../tools/math';
 import { FunctionMap } from '../tools/FunctionMap';
 import { setState, getState } from './Recorder/state';
 import parseState from './Recorder/parseState';
 import {
-  isTouchDevice, joinObjects, SubscriptionManager, Console
+  isTouchDevice, joinObjects, SubscriptionManager, Console, PerformanceTimer,
 } from '../tools/tools';
 import {
   FigureElementCollection, FigureElementPrimitive, FigureElement,
@@ -343,7 +343,8 @@ class Figure {
       window.figureOneDebug = {
         cumTimes: [],
         draw: [],
-        frame: [],
+        setupDraw: [],
+        misc: [],
       };
     }
     // this.layout = layout;
@@ -2224,10 +2225,15 @@ class Figure {
 
   draw(nowIn: number, canvasIndex: number = 0): void {
     // const start = new Date().getTime();
+    let timer;
     if (FIGURE1DEBUG) {
-      window.figureOneDebug.frame = [];
-      window.figureOneDebug.frame.push(performance.now());
+      timer = new PerformanceTimer();
+      // window.figureOneDebug.frame = [];
+      // window.figureOneDebug.frame.push([performance.now(), '']);
+      // debugTimes.push([performance.now(), '']);
       window.figureOneDebug.draw = [];
+      window.figureOneDebug.setupDraw = [];
+      window.figureOneDebug.misc = [];
     }
     // const t = performance.now();
     // if ((nowIn - this.lastDrawTime ) * 1000 > 40) {
@@ -2265,19 +2271,21 @@ class Figure {
     }
     this.drawQueued = false;
 
+    if (FIGURE1DEBUG) { timer.stamp('m1'); }
     this.clearContext(canvasIndex);
     // console.log('really drawing')
     // const startSetup = new Date().getTime();
+    if (FIGURE1DEBUG) { timer.stamp('clearContext'); }
     this.subscriptions.publish('beforeDraw');
-    if (FIGURE1DEBUG) { window.figureOneDebug.frame.push(performance.now()); }
+    if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
     this.elements.setupDraw(
       now,
       canvasIndex,
     );
-    if (FIGURE1DEBUG) { window.figureOneDebug.frame.push(performance.now()); }
+    if (FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
     this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
-    if (FIGURE1DEBUG) { window.figureOneDebug.frame.push(performance.now()); }
+    if (FIGURE1DEBUG) { timer.stamp('draw'); }
 
     if (this.elements.isAnyElementMoving()) {
       this.animateNextFrame(true, 'is moving');
@@ -2288,22 +2296,26 @@ class Figure {
       this.animateNextFrame(true, 'queued frames');
     }
     this.subscriptions.publish('afterDraw');
-
     if (FIGURE1DEBUG) {
-      window.figureOneDebug.frame.push(performance.now());
-      const { frame } = window.figureOneDebug; 
-      const totalTime = frame.slice(-1)[0] - frame[0];
-      const deltas = frame.map((t, index) => (index === 0 ? 0 : t - frame[index - 1]));
-      window.figureOneDebug.frameTime = deltas;
+      timer.stamp('afterDraw');
+      const deltas = timer.deltas();
       if (window.figureOneDebug.cumTimes.length > 50) {
         Console(
           '>>>>>>>>>>> Total',
-          window.figureOneDebug.cumTimes.reduce((sum, time) => sum + time) / 50,
-          window.figureOneDebug.draw,
+          round(
+            window.figureOneDebug.cumTimes.reduce((sum, time) => sum + time) / 50,
+            2,
+          ),
+          // window.figureOneDebug.frameTime,
+          { frameTotal: deltas[0] },
+          { frame: deltas.slice(1) },
+          { setupDraw: window.figureOneDebug.setupDraw },
+          { draw: window.figureOneDebug.draw },
+          { misc: window.figureOneDebug.misc },
         );
         window.figureOneDebug.cumTimes = [];
       } else {
-        window.figureOneDebug.cumTimes.push(totalTime);
+        window.figureOneDebug.cumTimes.push(deltas[0]);
       }
     }
   }

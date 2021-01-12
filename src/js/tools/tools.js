@@ -1251,6 +1251,49 @@ function splitString(str: string, token: string = '|', escape: string = '') {
   return split;
 }
 
+class PerformanceTimer {
+  stamps: Array<[number, string]>;
+  index: number;
+
+  constructor() {
+    this.reset();
+  }
+
+  reset() {
+    this.stamps = [[performance.now(), 'init']];
+    this.index = 1;
+  }
+
+  stamp(label: string = `m${this.index}`) {
+    this.stamps.push([performance.now(), label]);
+    this.index += 1;
+  }
+
+  deltas() {
+    let lastTime;
+    const out = [0];
+    let cumTime = 0;
+    this.stamps.forEach((stamp, i) => {
+      const [t, label] = stamp;
+      if (i > 0) {
+        const delta = t - lastTime;
+        out.push([label, Math.round(delta * 100) / 100]);
+        cumTime += delta;
+      }
+      lastTime = t;
+    });
+    out[0] = Math.round(cumTime * 100) / 100;
+    return out;
+  }
+
+  log() {
+    if (window.figureOneDebug == null) {
+      window.figureOneDebug = { misc: [] };
+    }
+    window.figureOneDebug.misc.push(this.deltas());
+  }
+}
+
 export {
   diffPathsToObj, diffObjToPaths,
   Console,
@@ -1266,6 +1309,6 @@ export {
   Subscriber,
   SubscriptionManager,
   getFromObject,
-  splitString,
+  splitString, PerformanceTimer,
 };
 

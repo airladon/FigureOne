@@ -352,7 +352,7 @@ class CollectionsTrace extends FigureElementCollection {
 
   updatePoints() {
     this.polylines = [];
-    this.drawPoints = this.points.map(p => this.pointToDraw(p));
+    // this.drawPoints = this.points.map(p => this.pointToDraw(p));
     this.drawPoints = [];
     let sampling = false;
     if (this.xSampleDistance != null && this.ySampleDistance != null) {

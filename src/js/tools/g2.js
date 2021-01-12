@@ -2385,6 +2385,13 @@ class Rotation {
     this.name = nameToUse;
   }
 
+  isUnity() {
+    if (this.r !== 0) {
+      return false;
+    }
+    return true;
+  }
+
   _state(options: { precision: number }) {
     // const { precision } = options;
     const precision = getPrecision(options);
@@ -2501,6 +2508,13 @@ class Translation extends Point {
       super(0, 0);
     }
     this.name = nameToUse;
+  }
+
+  isUnity() {
+    if (this.x !== 0 || this.y !== 0) {
+      return false;
+    }
+    return true;
   }
 
   _state(options: { precision: number }) {
@@ -2654,6 +2668,13 @@ class Scale extends Point {
       super(1, 1);
     }
     this.name = name;
+  }
+
+  isUnity() {
+    if (this.x !== 1 || this.y !== 1) {
+      return false;
+    }
+    return true;
   }
 
   _state(options: { precision: number }) {
@@ -2943,7 +2964,9 @@ class Transform {
     }
     let m = m2.identity();
     for (let i = orderEndToUse; i >= orderStart; i -= 1) {
-      m = m2.mul(m, this.order[i].matrix());
+      if (!this.order[i].isUnity()) {
+        m = m2.mul(m, this.order[i].matrix());
+      }
     }
     return m;
     // this.mat = m2.copy(m);
