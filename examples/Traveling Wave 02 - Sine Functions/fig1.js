@@ -136,8 +136,10 @@ function fig1() {
           line: { simple: true, color: [1, 0, 0, 1], width: 0.01 },
         },
         xAxis: {
+          grid: { width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1] },
           color: [0, 0.4, 1, 1],
           position: [0, r],
+          line: { width: 0.006 },
           start: 0,
           stop: 7,
           title: {
@@ -169,12 +171,16 @@ function fig1() {
         },
         yAxis: {
           grid: {
-            length: 1.6 + 1,
+            length: 1.6 + 1, width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1],
+            values: [-1, 1],
           },
           ticks: false,
           start: -1,
           stop: 1,
-          ticks: { values: [-1, 0, 1], offset: -0.025, length: 0.05 },
+          line: { width: 0.006 },
+          ticks: [
+            { values: [-1, 0, 1], offset: -0.025, length: 0.05 },
+          ],
           labels: { precision: 0 },
           title: {
             text: 'y',

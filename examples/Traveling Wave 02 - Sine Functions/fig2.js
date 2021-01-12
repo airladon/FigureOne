@@ -26,8 +26,10 @@ function fig2() {
           color: [1, 0, 0, 1],
         },
         xAxis: {
-          grid: false,
+          // grid: false,
+          grid: { values: [0, 13], width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1] },
           position: [0, 0.75],
+          line: { width: 0.006 },
           start: 0,
           stop: 13,
           title: {
@@ -43,6 +45,8 @@ function fig2() {
           labels: { precision: 0, offset: [0, 0] },
         },
         yAxis: {
+          line: { width: 0.006 },
+          grid: { width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1] },
           start: -2,
           stop: 2,
           ticks: { values: range(-2, 2, 0.5), offset: -0.035, length: 0.07 },

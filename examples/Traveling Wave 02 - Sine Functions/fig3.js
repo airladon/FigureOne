@@ -25,6 +25,8 @@ function fig3() {
         color: [1, 0, 0, 1],
       },
       xAxis: {
+        line: { width: 0.006 },
+        grid: { width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1] },
         position: [0, 0.65],
         start: 0,
         stop: 13,
@@ -41,9 +43,10 @@ function fig3() {
         labels: { precision: 0, offset: [0, 0] },
       },
       yAxis: {
-        grid: false,
+        grid: { values: [-1, 1], width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1] },
         start: -1,
         stop: 1,
+        line: { width: 0.006 },
         ticks: { values: range(-1, 1, 1), offset: -0.035, length: 0.07 },
         labels: { precision: 1 },
         title: {

@@ -31,12 +31,12 @@ function fig4() {
     name,
     method: 'primitives.arrow',
     options: {
-      color: [0.7, 0.7, 0.7, 1],
+      color: [0.7, 0.7, 0.7, 0.9],
       head: 'triangle',
       tail: 0.1,
       length: 0.4,
       tailWidth: 0.2,
-      line: { width: 0.005 },
+      // line: { width: 0.007 },
       width: 0.4,
       align: 'start',
       angle,
@@ -72,6 +72,8 @@ function fig4() {
         position: [0, 1],
         start: 0,
         stop: 12,
+        line: { width: 0.006 },
+        grid: { width: 0.005, dash: [], color: [0.7, 0.7, 0.7, 1] },
         title: {
           text: '\u03b8',
           font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
@@ -87,6 +89,8 @@ function fig4() {
       yAxis: {
         start: -4,
         stop: 4,
+        line: { width: 0.006 },
+        grid: { width: 0.005, dash: [], color: [0.7, 0.7, 0.7, 1] },
         ticks: { values: range(-4, 4, 1), offset: -0.035, length: 0.07 },
         labels: { precision: 1, font: { size: 0.08 } },
         title: {
@@ -181,6 +185,7 @@ function fig4() {
   setupElement(r, 'r', rMover, [0, 0], p => p.x * 5 + 2);
   setupElement(B, 'B', BMover, [0, 0], p => p.y * 4 - 2);
   setupElement(phi, 'phi', phiMover, [0, 0], p => -(p.x * 8 - 4));
+  fig.elements.hide(['right', 'left', 'up', 'down']);
 
   const pulseTrace = () => trace.pulse({
     translation: 0.02, min: -0.02, frequency: 2,
