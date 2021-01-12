@@ -3,7 +3,7 @@ function fig1() {
   const { round, range } = Fig.tools.math;
 
   fig = new Fig.Figure({
-    limits: [-2 * 0.88, -1 * 0.85, 4 * 0.85, 2 * 0.85],
+    limits: [-2 * 0.86, -1 * 0.85, 4 * 0.85, 2 * 0.85],
     htmlId: 'figureOneContainer1',
     color: [0.4, 0.4, 0.4, 1],
   });
@@ -19,7 +19,7 @@ function fig1() {
       name: 'rotator',
       method: 'collection',
       options: {
-        position: [1, 0],
+        position: [0.9, 0],
       },
       elements: [
         {

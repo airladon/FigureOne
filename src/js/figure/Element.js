@@ -1605,9 +1605,18 @@ class FigureElement {
 
   getDrawTransforms(initialTransforms: Array<Transform>) {
     // let drawTransforms = [transform];
-    let drawTransforms = transformBy(initialTransforms, this.copyTransforms);
-    drawTransforms = transformBy(drawTransforms, this.pulseTransforms);
-    drawTransforms = transformBy(drawTransforms, this.frozenPulseTransforms);
+    let drawTransforms = initialTransforms;
+    if (this.copyTransforms.length > 0) {
+      drawTransforms = transformBy(drawTransforms, this.copyTransforms);
+    }
+    if (this.pulseTransforms.length > 0) {
+      drawTransforms = transformBy(drawTransforms, this.pulseTransforms);
+    }
+    if (this.frozenPulseTransforms.length > 0) {
+      drawTransforms = transformBy(drawTransforms, this.frozenPulseTransforms);
+    }
+    // drawTransforms = transformBy(drawTransforms, this.pulseTransforms);
+    // drawTransforms = transformBy(drawTransforms, this.frozenPulseTransforms);
     return drawTransforms;
   }
 
@@ -3954,11 +3963,7 @@ class FigureElementPrimitive extends FigureElement {
       const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity * parentOpacity];
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawOpacity = colorToUse[3];
-      // if (this.getPath().endsWith('eqn.elements._1')) {
-      // console.log(this.getPath(), this.opacity, colorToUse);
-      // colorToUse = [1, 0, 0, 1];
-      // }
-      const transform = this.getTransform();
+      const transform = this.getTransform()._dup();
       const newTransforms = transformBy(parentTransform, [transform]);
 
       if (FIGURE1DEBUG) { debugTimes.push([performance.now(), 'm2']); }
@@ -3977,7 +3982,9 @@ class FigureElementPrimitive extends FigureElement {
       this.drawTransforms = this.getDrawTransforms(newTransforms);
       if (FIGURE1DEBUG) { debugTimes.push([performance.now(), 'm4']); }
 
-      this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
+      // this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
+      // eslint-disable-next-line prefer-desctructuring
+      this.lastDrawTransform = newTransforms[0];
 
       if (FIGURE1DEBUG) { debugTimes.push([performance.now(), 'm5']); }
       // eslint-disable-next-line prefer-destructuring
@@ -4021,8 +4028,6 @@ class FigureElementPrimitive extends FigureElement {
 
       if (FIGURE1DEBUG) {
         if (FIGURE1DEBUG) { debugTimes.push([performance.now(), 'm7']); }
-        // const drawTimes = window.figureOneDebug.temp;
-        // const deltas = drawTimes.map((t, index) => (index === 0 ? 0 : t - drawTimes[index - 1]));
         const debugDeltas = [];
         let lastTime;
         debugTimes.forEach((timeRecord, index) => {
@@ -4710,7 +4715,9 @@ class FigureElementCollection extends FigureElement {
       const newTransforms = transformBy(parentTransform, [transform]);
 
       if (FIGURE1DEBUG) { debugTime.push([performance.now(), 'm1']); }
-      this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
+      // eslint-disable-next-line prefer-desctructuring
+      this.lastDrawTransform = newTransforms[0];
+      // this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
       if (FIGURE1DEBUG) { debugTime.push([performance.now(), 'm2']); }
       this.pulseTransforms = this.getPulseTransforms(now);
       if (FIGURE1DEBUG) { debugTime.push([performance.now(), 'm3']); }
