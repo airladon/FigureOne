@@ -3,7 +3,7 @@ function fig2() {
   const { range } = Fig.tools.math;
 
   fig = new Fig.Figure({
-    limits: [-2, -1, 4, 2],
+    limits: [-2, -1.1, 4, 2],
     htmlId: 'figureOneContainer2',
     color: [0.4, 0.4, 0.4, 1],
   });
@@ -64,14 +64,14 @@ function fig2() {
       name: 'mover',
       method: 'rectangle',
       options: {
-        width: 10,
-        height: 10,
+        width: 3.5,
+        height: 1.5,
         color: [0, 0, 0, 0],
       },
       mods: {
         isMovable: true,
         move: {
-          bounds: { translation: { p1: [0, 0], mag: 1, angle: Math.PI / 2 } },
+          bounds: { translation: { p1: [0, -1], mag: 2, angle: Math.PI / 2 } },
         },
       },
     },
@@ -85,26 +85,36 @@ function fig2() {
           rb: { symbol: 'bracket', side: 'right' },
           theta: '\u03b8',
           A: { text: '0.0', color: [1, 0, 0, 1] },
+          sign: { text: '\u2212', color: [1, 0, 0, 1] },
         },
         formDefaults: { alignment: { xAlign: 'center' } },
         forms: {
-          0: ['y', '_  =  ', 'A', ' ', 'sin', { brac: ['lb', 'theta', 'rb'] }]
+          0: ['y', '_  = ', 'sign', 'A', ' ', 'sin', { brac: ['lb', 'theta', 'rb'] }]
         },
-        position: [0, -0.9],
+        position: [0, -1],
       }
     }
   ]);
 
   const [mover, trace, eqn] = fig.getElements(['mover', 'plot.trace', 'eqn']);
 
+  let offset = 0.5;
   mover.subscriptions.add('setTransform', () => {
-    const newA = mover.getPosition().y * 1.8 + 0.2;
+    offset += mover.getPosition().y * 2;
+    mover.transform.updateTranslation(0, 0);
+    if (offset > 1) { offset = 1; }
+    if (offset < -1) { offset = -1; }
+    let sign = ' ';
+    if (offset < 0) {
+      sign = '\u2212';
+    }
+    const newA = offset * 2;
     trace.update(sine(newA));
-    eqn.updateElementText({ A: `${newA.toFixed(1)}`});
+    eqn.updateElementText({ A: `${Math.abs(newA).toFixed(1)}`, sign });
   });
 
   // Initialize
-  mover.setPosition(0, 0.5);
+  mover.setPosition(0, 0);
 
   const pulseTrace = () => trace.pulse({
     translation: 0.02, min: -0.02, angle: Math.PI / 2, frequency: 2,
