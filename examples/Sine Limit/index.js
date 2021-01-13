@@ -292,6 +292,7 @@ figure.getElement('nav').loadSlides([
       'the |arc| and |vertical| line lengths',
     ],
     modifiersCommon,
+    showCommon: ['radius', 'angle', 'arc', 'sine'],
     form: '0',
     steadyState: () => {
       figure.getElement('arc.label').showForm('0');
@@ -302,13 +303,13 @@ figure.getElement('nav').loadSlides([
      'As the |angle| gets smaller, the |arc| and',
       '|vertical| line get closer in length',
   ] },
-  { form: '1' },
+  { fromForm: '0', form: '1' },
   { text: 'Divide both sides by the arc length' },
-  { form: '2' },
-  { text: 'The right hand side simplifies to 1', form: '3' },
-  { form: '4' },
+  { fromForm: '1', form: '2' },
+  { text: 'The right hand side simplifies to 1', fromForm: '2', form: '3' },
+  { fromForm: '3', form: '4' },
   { text: 'Use mathematical notation for the |limit|' },
-  { form: '5' },
+  { fromForm: '4', form: '5' },
   {
     text: 'The |vertical| line is the |sine| of |x|',
     steadyState: () => figure.getElement('sine.label').showForm('0'),
@@ -340,6 +341,7 @@ figure.getElement('nav').loadSlides([
       'Summary: for |very small angles| |x|, the angle',
       'and |sin| |x1| can often be considered |equal|',
     ],
+    fromForm: '7',
     form: '8',
   },
 ]);

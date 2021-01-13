@@ -153,7 +153,7 @@ figure.add([
         options: {
           maxLength: 3,
           width: 0.005,
-          dash: [0.01, 0.02],
+          dash: [0.03, 0.01],
           color: [0.7, 0.7, 0.7, 1],
         },
       },
