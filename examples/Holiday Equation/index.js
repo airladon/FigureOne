@@ -1,5 +1,5 @@
 const figure = new Fig.Figure({
-  limits: [-2, -1.5, 4, 3], color: [0.5, 0.5, 0.5, 1], font: { size: 0.1 },
+  limits: [-2, -1.5, 4, 3], color: [0.4, 0.4, 0.4, 1], font: { size: 0.1 },
 });
 
 // Define some helper functions for making the equation
@@ -17,7 +17,7 @@ figure.add([
     method: 'collections.equation',
     options: {
       scale: 1.1,
-      color: [0.5, 0.5, 0.5, 1],
+      color: [0.4, 0.4, 0.4, 1],
       elements: {
         log: { font: { style: 'normal' } },
         min: ' \u2212 ',
@@ -124,31 +124,31 @@ figure.getElement('nav').loadSlides([
     form: '0',
     modifiersCommon,
   },
-  { form: '1' },
+  { fromForm: '0', form: '1' },
   { text: 'Cancel |r||2|   terms' },
-  { form: '2' },
-  { form: '3' },
+  { fromForm: '1', form: '2' },
+  { fromForm: '2', form: '3' },
   { text: [
     'As both sides are equal, then any value raised',
     'to the power of either side must also be equal',
   ] },
   { text: 'Raise Euler\'s number |e| to both sides' },
-  { form: '4' },
+  { fromForm: '3', form: '4' },
   { text: 'Cancel |e| to the power of |log||sube|' },
-  { form: '5' },
-  { form: '6' },
+  { fromForm: '4', form: '5' },
+  { fromForm: '5', form: '6' },
   { text: 'Muliply both sides by |m|' },
-  { form: '7' },
+  { fromForm: '6', form: '7' },
   { text: 'Cancel |m| terms' },
-  { form: '8' },
-  { form: '9' },
+  { fromForm: '7', form: '8' },
+  { fromForm: '8', form: '9' },
   { text: '|r||2|   is the same as |r|\u00d7|r|' },
-  { form: '10' },
-  { form: '11' },
+  { fromForm: '9', form: '10' },
+  { fromForm: '10', form: '11' },
   { text: [
     'Multiplication is commutative',
     { text: 'Multiplication can happen in any order', font: { size: 0.06 } },
   ] },
-  { form: '12' },
+  { fromForm: '11', form: '12' },
   { text: 'Happy Holidays!!' },
 ]);
