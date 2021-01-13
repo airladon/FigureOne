@@ -2,17 +2,16 @@
 <html>
     <!-- Style the figureOne container to be 4:3 aspect ratio -->
     <style>
-        .wrapper50, .wrapper75 {
+        .wrapper50 {
             width: calc(100vw - 20px);
             max-width: 100%;
             padding-bottom: 10px;
+            margin-left: auto;
+            margin-right: auto;
         }
         @media (min-aspect-ratio: 1/1) {
             .wrapper50 {
                 width: calc((100vh - 20px)/0.5);
-            }
-            .wrapper75 {
-                width: calc((100vh - 20px)/0.75);
             }
         } 
         .ar50 {
@@ -20,13 +19,9 @@
             padding-bottom: 50%;
         }
 
-        .ar75 {
-            width: 100%;
-            padding-bottom: 75%;
-        }
-        
         body {
-            padding: 10px;
+            padding-left: 20px;
+            padding-right: 20px;
             margin-left: auto;
             margin-right: auto;
             font-family: Helvetica, Arial, sans-serif;
@@ -72,7 +67,7 @@
         </script>
     </head>
     <body>
-        <h1>Sine Waves In Time and Space</h1>
+        <h1>Sine Waves in Time or Space</h1>
         <p>
             When the sine function is plotted on a Cartesian axis it “looks like” a wave.
         </p>
@@ -175,7 +170,7 @@
         <p>
             The name and nomenclature for \(r\) changes depending on where the sine wave is being used.
         </p>
-        <h3>Time</h3>
+        <h3>Horiztonal Scale - Time</h3>
         <p>
             If the sine wave is modeling a phenomena in time, then the \(r\) term in equation (1) represents the period of time over which the function repeats. As such, it is usually referred to as <i>period</i> or \(T\).
         <p>
@@ -199,7 +194,7 @@
         <p>
             \[\bbox[20px, border: 2px solid red]{y=\sin\left(\omega t\right)}\]
         </p>
-        <h3>Space</h3>
+        <h3>Horiztonal Scale - Space</h3>
         <p>
             On the other hand if the sine wave is modeling a phenomena in space, then \(r\) in equation (1) represents the distance over which the function repeats. As such, it is usually referred to as <i>wavelength</i> or \(\lambda\).
         </p>
@@ -227,8 +222,8 @@
         <p class="instruction">
             Touch the <a href="javascript:figure4.pulseAmplitude();" >amplitude</a>, <a href="javascript:figure4.pulseWavelength();" >wavelength</a>, <a href="javascript:figure4.pulsePhase();" >phase</a> or <a href="javascript:figure4.pulseOffset();" >y offset</a> terms of the equation and then move the <a href="javascript:figure4.pulseTrace();" >trace</a> in the direction of the arrows.
         </p>
-        <div class="wrapper75">
-            <div id="figureOneContainer4" class="ar75"></div>
+        <div class="wrapper50">
+            <div id="figureOneContainer4" class="ar50"></div>
         </div>
         <!-- Use CDN hosted library-->
         <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script> -->

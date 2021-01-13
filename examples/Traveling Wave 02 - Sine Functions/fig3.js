@@ -48,7 +48,7 @@ function fig3() {
         stop: 1,
         line: { width: 0.006 },
         ticks: { values: range(-1, 1, 1), offset: -0.035, length: 0.07 },
-        labels: { precision: 1 },
+        labels: { precision: 0 },
         title: {
           text: 'y',
           font: { family: 'Times New Roman', style: 'italic', size: 0.1 },
@@ -100,7 +100,7 @@ function fig3() {
 
   let offset = 0;
   mover.subscriptions.add('setTransform', () => {
-    offset += mover.getPosition().x * 2;
+    offset += mover.getPosition().x;
     mover.transform.updateTranslation(0, 0.15);
     if (offset > 1) { offset = 1; }
     if (offset < -1) { offset = -1; }

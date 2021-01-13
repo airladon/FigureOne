@@ -2534,6 +2534,7 @@ class FigureElement {
     this.startPulsing(when);
     // console.log(this.figure)
     // this.figure.animateNextFrame();
+    this.animateNextFrame();
   }
 
   // deprecate
