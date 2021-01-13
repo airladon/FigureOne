@@ -140,7 +140,7 @@ figure.add([
       height: 0.3,
       color: [0.3, 0.3, 0.3, 1],
       dimColor: [0.7, 0.7, 0.7, 1],
-      line: { width: 0.004 },
+      line: { width: 0.005 },
       button: true,
       label: {
         text: 'Simplify',
@@ -159,6 +159,7 @@ figure.add([
     name: 'eqn',
     method: 'collections.equation',
     options: {
+      scale: 0.8,
       elements: {
         // Define equation elements 'a', 'b', and 'c' to be touchable with
         // some touchBorder buffer around them
@@ -235,6 +236,7 @@ figure.add([
         // the button text to "Restart"
         5: {
           content: ['newEqOld', '  ', 'plus180'],
+          alignment: { xAlign: -0.1 },
           onShow: () => {
             get('eqn.newBox').isTouchable = true;
             get('eqn.oldBox').isTouchable = true;
@@ -243,7 +245,7 @@ figure.add([
         },
       },
       formSeries: ['0', '1', '2', '3', '4', '5'],
-      position: [-1.7, -1],
+      position: [-1.8, -0.9],
     },
   },
 ]);
