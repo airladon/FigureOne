@@ -38,7 +38,7 @@ import type { TypeColor, OBJ_Font } from '../tools/types';
 import SlideNavigator from './SlideNavigator';
 import type { OBJ_SlideNavigator } from './SlideNavigator';
 
-const FIGURE1DEBUG = true;
+const FIGURE1DEBUG = false;
 
 
 /**
@@ -2276,6 +2276,10 @@ class Figure {
     // console.log('really drawing')
     // const startSetup = new Date().getTime();
     if (FIGURE1DEBUG) { timer.stamp('clearContext'); }
+    // console.log(this.subscriptions.subscriptions.beforeDraw.order.length, this.subscriptions.asdf)
+    // if (this.subscriptions.subscriptions.beforeDraw != null) {
+    //   console.log(this.subscriptions.subscriptions.beforeDraw.asdf)
+    // }
     this.subscriptions.publish('beforeDraw');
     if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
     this.elements.setupDraw(

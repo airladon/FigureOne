@@ -97,6 +97,15 @@ function fig1() {
           },
         },
         {
+          name: 'tracer',
+          method: 'collections.line',
+          options: {
+            width: 0.003,
+            // dash: [0.01, 0.007],
+            color: [1, 0, 0, 1],
+          },
+        },
+        {
           name: 'line',
           method: 'collections.line',
           options: {
@@ -109,15 +118,6 @@ function fig1() {
             move: { type: 'rotation' },
           },
         },
-        {
-          name: 'tracer',
-          method: 'collections.line',
-          options: {
-            width: 0.003,
-            // dash: [0.01, 0.007],
-            color: [1, 0, 0, 1],
-          },
-        }
       ],
     },
   ]);
@@ -215,28 +215,23 @@ function fig1() {
     { rotator: ['line', 'theta', 'sine', 'tracer'] },
     { plot: ['sineWave', 'x'] },
   ]);
+  let updateNeeded = false;
   const update = () => {
-    const timer = new Fig.tools.misc.PerformanceTimer();
     const angle = line.getRotation('0to360');
-    timer.stamp('getRotation');
     theta.setAngle({ angle });
-    timer.stamp('setAngle');
     const endX = r * Math.cos(angle);
     const endY = r * Math.sin(angle);
     sineLine.setEndPoints([endX, 0], [endX, endY]);
-    timer.stamp('setEndPoints');
     const newTrace = getSine(angle + 0.01);
-    timer.stamp('newTrace');
     sineWave.update(newTrace);
-    timer.stamp('updateTrace');
     const xAxisDraw = xAxis.valueToDraw(angle);
     tracer.setEndPoints([xAxisDraw - 1.5 - 1, endY], [endX, endY]);
-    timer.stamp('setEndPoints');
     theta.label.eqn.updateElementText({ value: `${angle.toFixed(1)}` });
-    timer.stamp('updateText');
-    window.figureOneDebug.misc.push(timer.deltas())
   };
-  line.subscriptions.add('setTransform', () => update());
+
+  line.subscriptions.add('setTransform', () => {
+    update()
+  });
   line.setRotation(5.2);
 
   const pulse = () => line.pulseWidth({ line: 4 });

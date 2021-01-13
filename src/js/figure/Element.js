@@ -54,7 +54,8 @@ import type {
 // import type FigurePrimitives from './FigurePrimitives/FigurePrimitives';
 import type FigureCollections from './FigureCollections/FigureCollections';
 
-const FIGURE1DEBUG = true;
+const FIGURE1DEBUG = false;
+
 // eslint-disable-next-line import/no-cycle
 // import {
 //   AnimationPhase, ColorAnimationPhase, CustomAnimationPhase,
@@ -477,7 +478,7 @@ class FigureElement {
   lastDrawTransform: Transform; // Transform matrix used in last draw
   lastDrawPulseTransform: Transform; // Transform matrix used in last draw
   parentTransform: Transform;
-  transformUpdated: boolean;
+  // transformUpdated: boolean;
   // lastDrawParentTransform: Transform;
   // lastDrawElementTransform: Transform;
   // lastDrawPulseTransform: Transform;
@@ -699,7 +700,7 @@ class FigureElement {
     this.defaultColor = this.color.slice();
     this.opacity = 1;
     this.setTransformCallback = null;
-    this.transformUpdated = true;
+    // this.transformUpdated = true;
     this.beforeDrawCallback = null;
     this.afterDrawCallback = null;
     this.internalSetTransformCallback = null;
@@ -1789,7 +1790,7 @@ class FigureElement {
       this.subscriptions.publish('setTransform', [this.transform]);
       this.fnMap.exec(this.setTransformCallback, this.transform);
     }
-    this.transformUpdated = true;
+    // this.transformUpdated = true;
     this.animateNextFrame();
   }
 
@@ -3985,7 +3986,7 @@ class FigureElementPrimitive extends FigureElement {
       const transform = this.getTransform()._dup();
       const newTransforms = transformBy(parentTransform, [transform]);
       this.parentTransform = parentTransform;
-      this.transformUpdated = false;
+      // this.transformUpdated = false;
       // }
 
       if (FIGURE1DEBUG) { timer.stamp('m2'); }
