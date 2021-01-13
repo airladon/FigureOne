@@ -1,30 +1,17 @@
 figure = new Fig.Figure({
-  limits: [-3.33, -1.8, 6.667, 5],
+  limits: [-2.5, -1.7, 6.667 * 0.65, 5 * 0.65],
   color: [1, 0, 0, 1] },
 );
 
-// Define the polyline points
-const { getPoints, threePointAngle } = Fig.tools.g2;
-const points = [
-  [1, 0.5], [0.4, 1.3], [-1.7, 1.5], [-0.5, 0.7], [-1.4, -0.5], [0.5, -0.5]
-];
-const p = getPoints(points);
-
-// Calculate the sizes of the angles of interest
-const angles = {
-  a: {
-    old: Math.PI * 2 - threePointAngle(p[4], p[2], p[1]),
-    new: Math.PI * 2 - threePointAngle(p[3], p[2], p[1]),
-  },
-  b: {
-    old: threePointAngle(p[5], p[4], p[2]),
-    new: threePointAngle(p[5], p[4], p[3]),
-  },
-  c: {
-    old: 0,
-    new: threePointAngle(p[4], p[3], p[2]),
-  },
-}
+/*
+.##.....##.########.##.......########..########.########...######.
+.##.....##.##.......##.......##.....##.##.......##.....##.##....##
+.##.....##.##.......##.......##.....##.##.......##.....##.##......
+.#########.######...##.......########..######...########...######.
+.##.....##.##.......##.......##........##.......##...##.........##
+.##.....##.##.......##.......##........##.......##....##..##....##
+.##.....##.########.########.##........########.##.....##..######.
+*/
 
 // Helper function to get figure elements succinctly
 const get = (name) => figure.getElement(name);
@@ -36,7 +23,7 @@ const angle = (p1, p2, p3, name, label, alpha = 1, fill = false, direction = 1) 
   options: {
     p1, p2, p3,
     label: { offset: 0.01, text: label },
-    curve: { width: 0.01, radius: 0.3, fill },
+    curve: { width: 0.01, radius: 0.3, fill, sides: 200 },
     direction,
     color: [1, 0, 0, alpha],
   },
@@ -61,29 +48,38 @@ const hideAngles = () => {
   get('angleCf').hide();
 }
 
-figure.add([
-  // Instructions Text
-  {
-    name: 'instructions',
-    method: 'primitives.textLines',
-    options: {
-      text: [
-        'A polygon\'s total angle will increase by 180\u00b0 when one side is split into two new sides.',
-        'The two new sides can be constructed either inside or outside the polygon. This example',
-        'shows the inside case.',
-        '',
-        'Touch the equation\'s terms to understand where they come from.',
-        '',
-        'Then press the |simplify| button several times to rearrange the equation.',
-      ],
-      color: [0.5, 0.5, 0.5, 1],
-      font: { size: 0.12 },
-      modifiers: {
-        simplify: { font: { style: 'italic' } },
-      },
-      position: [-2.55, 2.8],
-    },
+/*
+.......##..........###....##....##..#######..##.....##.########
+.......##.........##.##....##..##..##.....##.##.....##....##...
+.......##........##...##....####...##.....##.##.....##....##...
+.......##.......##.....##....##....##.....##.##.....##....##...
+.......##.......#########....##....##.....##.##.....##....##...
+.......##.......##.....##....##....##.....##.##.....##....##...
+.......########.##.....##....##.....#######...#######.....##...
+*/
+// Define the polyline points
+const { getPoints, threePointAngle } = Fig.tools.g2;
+const points = [
+  [1, 0.5], [0.4, 1.3], [-1.7, 1.5], [-0.5, 0.7], [-1.4, -0.5], [0.5, -0.5]
+];
+const p = getPoints(points);
+
+// Calculate the sizes of the angles of interest
+const angles = {
+  a: {
+    old: Math.PI * 2 - threePointAngle(p[4], p[2], p[1]),
+    new: Math.PI * 2 - threePointAngle(p[3], p[2], p[1]),
   },
+  b: {
+    old: threePointAngle(p[5], p[4], p[2]),
+    new: threePointAngle(p[5], p[4], p[3]),
+  },
+  c: {
+    old: 0,
+    new: threePointAngle(p[4], p[3], p[2]),
+  },
+}
+figure.add([
   // Rectangle that highlights equation elements
   {
     name: 'highlightRect',
@@ -114,7 +110,7 @@ figure.add([
       cornerStyle: 'fill',
       angle: {
         direction: -1,
-        curve: { fill: true, radius: 0.3 },
+        curve: { fill: true, radius: 0.3, sides: 200 },
         color: [1, 0, 0, 0.7]
       },
     },
@@ -128,7 +124,7 @@ figure.add([
       dash: [0.05, 0.02],
       angle: {
         direction: -1,
-        curve: { fill: true, radius: 0.3 },
+        curve: { fill: true, radius: 0.3, sides: 200 },
         color: [1, 0, 0, 0.7]
       },
       close: true,
@@ -166,7 +162,7 @@ figure.add([
       elements: {
         // Define equation elements 'a', 'b', and 'c' to be touchable with
         // some touchBorder buffer around them
-        negA: { text: ' \u2212  a', touchBorder: [0.01, 0.3, 0.02, 0.3] },
+        negA: { text: ' \u2212  a', touchBorder: [-0.01, 0.3, 0.02, 0.3] },
         negB: { text: ' \u2212  b', touchBorder: [0.01, 0.3, 0.06, 0.3] },
         negC: { text: ' \u2212  c', touchBorder: [0.65, 0.3, 0.3, 0.3] },
         // Other equation elements and symbols
@@ -252,6 +248,15 @@ figure.add([
   },
 ]);
 
+/*
+..........##........#######...######...####..######.
+..........##.......##.....##.##....##...##..##....##
+..........##.......##.....##.##.........##..##......
+..........##.......##.....##.##...####..##..##......
+..........##.......##.....##.##....##...##..##......
+..........##.......##.....##.##....##...##..##....##
+..........########..#######...######...####..######.
+*/
 // The highlighter element will be used frequently
 const highlighter = get('highlightRect')
 
@@ -304,7 +309,7 @@ get('eqn.oldBox').onClick = () => {
   highlighter.pulse({ scale: 1.2 });
 };
 
-// When butotn is pressed, progress through the equations forms
+// When button is pressed, progress through the equations forms
 get('button').onClick = () => {
   highlighter.hide();
   get('eqn').nextForm({ animate: 'move', duration: 2 });

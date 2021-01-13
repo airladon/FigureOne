@@ -2412,6 +2412,7 @@ class Figure {
     lineOptions: OBJ_Polyline = {},
     startIndex: number = 0,
   ) {
+    this.setFirstTransform();
     const elems = this.elements.getElements(elements);
     elems.forEach((element, index) => {
       const touchBorder = element.getBorder('figure', 'touchBorder');

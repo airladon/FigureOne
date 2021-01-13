@@ -3,8 +3,11 @@
     <!-- Style the figureOne container to be 4:3 aspect ratio -->
     <style>
         #wrapper {
+            margin-top: 20px;
             width: calc(100vw - 20px);
             max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
         }
         @media (min-aspect-ratio: 1/1) {
             #wrapper {
@@ -15,17 +18,51 @@
             width: 100%;
             padding-bottom: 75%;
         }
+        body {
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            font-family: Helvetica, Arial, sans-serif;
+            color: #444;
+            max-width: 1200px;
+            font-size: 2vw;
+        }
+        .instruction {
+            padding-top: 2em;
+            font-size: 0.9em;
+            font-style: italic;
+            color: #666;
+            font-size: 1.5vw;
+        }
+        h1 {
+            font-weight: 100;
+            text-align: center;
+        }
     </style>
 <body>
+    <h1>
+        Total Angle of a Polygon
+    </h1>
+    <p>
+        A polygon's total angle will increase by 180&deg; when one side is split into two new sides.
+    </p>
+    <p>
+        The two new sides can be constructed either inside or outside the polygon. This example shows the inside case.
+    </p>
+    <p class="instruction">
+        Touch the equation's terms to understand where they come from.
+        Then press the <i>simplify</i> button several times to rearrange the equation.
+    </p>
     <div id="wrapper">
         <div id="figureOneContainer"></div>
     </div>
 
     <!-- Use CDN hosted library-->
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script>
+    <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script> -->
     
     <!-- Comment line above, and uncomment line below to use local library instead of CDN -->
-    <!-- <script type="text/javascript" src='../../package/figureone.min.js'></script> -->
+    <script type="text/javascript" src='../../package/index.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
