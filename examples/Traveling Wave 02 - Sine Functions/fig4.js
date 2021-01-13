@@ -17,9 +17,9 @@ function fig4() {
     name,
     method: 'rectangle',
     options: {
-      width: 10,
-      height: 10,
-      color: [0, 0, 0, 0],
+      width: 3.5,
+      height: 2,
+      color: [0, 0, 0, 0.5],
     },
     mods: {
       move: {
@@ -36,7 +36,6 @@ function fig4() {
       tail: 0.1,
       length: 0.4,
       tailWidth: 0.2,
-      // line: { width: 0.007 },
       width: 0.4,
       align: 'start',
       angle,

@@ -3,7 +3,7 @@ function fig2() {
   const { range } = Fig.tools.math;
 
   fig = new Fig.Figure({
-    limits: [-2, -1.1, 4, 2],
+    limits: [-2, -0.8, 4, 2],
     htmlId: 'figureOneContainer2',
     color: [0.4, 0.4, 0.4, 1],
   });
@@ -26,7 +26,6 @@ function fig2() {
           color: [1, 0, 0, 1],
         },
         xAxis: {
-          // grid: false,
           grid: { values: [0, 13], width: 0.004, dash: [], color: [0.7, 0.7, 0.7, 1] },
           position: [0, 0.75],
           line: { width: 0.006 },
@@ -70,9 +69,6 @@ function fig2() {
       },
       mods: {
         isMovable: true,
-        move: {
-          bounds: { translation: { p1: [0, -1], mag: 2, angle: Math.PI / 2 } },
-        },
       },
     },
     {
@@ -91,7 +87,7 @@ function fig2() {
         forms: {
           0: ['y', '_  = ', 'sign', 'A', ' ', 'sin', { brac: ['lb', 'theta', 'rb'] }]
         },
-        position: [0, -1],
+        position: [0, 0.9],
       }
     }
   ]);
@@ -104,7 +100,7 @@ function fig2() {
     mover.transform.updateTranslation(0, 0);
     if (offset > 1) { offset = 1; }
     if (offset < -1) { offset = -1; }
-    let sign = ' ';
+    let sign = '';
     if (offset < 0) {
       sign = '\u2212';
     }

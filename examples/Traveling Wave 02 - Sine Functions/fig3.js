@@ -3,7 +3,7 @@ function fig3() {
   const { round, range } = Fig.tools.math;
 
   fig = new Fig.Figure({
-    limits: [-2, -1, 4, 2],
+    limits: [-2, -0.6, 4, 2],
     htmlId: 'figureOneContainer3',
     color: [0.4, 0.4, 0.4, 1],
   });
@@ -64,15 +64,12 @@ function fig3() {
       name: 'mover',
       method: 'rectangle',
       options: {
-        width: 10,
-        height: 10,
+        width: 3.5,
+        height: 1.3,
         color: [0, 0, 0, 0],
       },
       mods: {
         isMovable: true,
-        move: {
-          bounds: { translation: { p1: [-1, 0], mag: 2, angle: 0 } },
-        },
       },
     },
   ]);
@@ -93,7 +90,7 @@ function fig3() {
       forms: {
         0: ['y', '_ = ', 'sin', { brac: ['lb', [{ frac: ['twoPi', 'vinculum', 'value'] }, ' ', 'theta'], 'rb'] }]
       },
-      position: [0, -0.88],
+      position: [0, 1.05],
     }
   });
 
@@ -101,14 +98,19 @@ function fig3() {
     ['mover', 'plot.trace', 'plot.x', 'eqn']
   );
 
+  let offset = 0;
   mover.subscriptions.add('setTransform', () => {
-    const newR = mover.getPosition().x * 3 + 5;
+    offset += mover.getPosition().x * 2;
+    mover.transform.updateTranslation(0, 0.15);
+    if (offset > 1) { offset = 1; }
+    if (offset < -1) { offset = -1; }
+    const newR = offset * 3 + 5;
     trace.update(sine(newR));
     eqn.updateElementText({ value: `${newR.toFixed(1)}`});
   });
 
   // Initialize
-  mover.setPosition(0, 0);
+  mover.setPosition(0, 0.15);
 
   const pulseTrace = () => trace.pulse({
     translation: 0.02, min: -0.02, frequency: 2,
