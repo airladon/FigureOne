@@ -869,14 +869,14 @@ class TextObjectBase extends DrawingObject {
           x, y, width, height,
         } = figureText.lastDraw;
         ctx.clearRect(
-          x - width * 0.5, y + height * 0.5, width * 2, -height * 2,
+          x - width * 1, y + height * 0.5, width * 3, -height * 2,
           // x - width * 1,
           // y + height * 1,
           // width * 3,
           // -height * 3,\
         );
         // ctx.rect(
-        //   x - width * 0.5, y + height * 0.5, width * 2, -height * 2,
+        //   x - width * 1, y + height * 0.5, width * 3, -height * 2,
         //   // (figureText.locationAligned.x) * scalingFactor,
         //   // (figureText.locationAligned.y) * -scalingFactor,
         // );

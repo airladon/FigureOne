@@ -83,3 +83,5 @@ Within the HTML body, links are added to execute the globally shared methods of 
 ```html
 <a href="javascript:figure1.pulse();" >trace</a>
 ```
+
+Splitting the four figures into separate files makes the example easier to code and read. However, as downloading separate files can be time consuming, in production it is recommended they be bundled into a single file.

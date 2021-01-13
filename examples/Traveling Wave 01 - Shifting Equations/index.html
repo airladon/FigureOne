@@ -1,31 +1,36 @@
 <!doctype html>
 <html>
-    <!-- Style the figureOne container to be 4:3 aspect ratio -->
-    <style>
-        #wrapper {
-            width: calc(100vw - 20px);
-            max-width: 100%;
-        }
-        @media (min-aspect-ratio: 1/1) {
+    <head>
+        <!-- Style the figureOne container to be 4:3 aspect ratio -->
+        <style>
             #wrapper {
-              width: calc((100vh - 20px)/0.75);
+                padding-top: 20px;
+                width: calc(100vw - 20px);
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
             }
-        } 
-        #figureOneContainer {
-            width: 100%;
-            padding-bottom: 75%;
-        }
-    </style>
-<body>
-    <div id="wrapper">
-        <div id="figureOneContainer"></div>
-    </div>
+            @media (min-aspect-ratio: 1/1) {
+                #wrapper {
+                width: calc((100vh - 20px)/0.75);
+                }
+            } 
+            #figureOneContainer {
+                width: 100%;
+                padding-bottom: 75%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="figureOneContainer"></div>
+        </div>
 
-    <!-- Use CDN hosted library-->
-    <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script> -->
-    
-    <!-- Comment line above, and uncomment line below to use local library instead of CDN -->
-    <script type="text/javascript" src='../../package/index.js'></script>
-    <script type="text/javascript" src='./index.js'></script>
-</body>
+        <!-- Use CDN hosted library-->
+        <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script> -->
+        
+        <!-- Comment line above, and uncomment line below to use local library instead of CDN -->
+        <script type="text/javascript" src='../../package/index.js'></script>
+        <script type="text/javascript" src='./index.js'></script>
+    </body>
 </html>

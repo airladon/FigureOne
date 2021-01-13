@@ -24,6 +24,7 @@ const getFx = (ox, oy) => x.map(xx => fx(xx, ox, oy));
 
 const plotWidth = 2.67;
 const plotHeight = 1.383;
+const mathFont = 'Times New Roman';
 
 const makeEqn = (name, funcName, bottomX, color, space) => ({
   name,
@@ -107,9 +108,11 @@ figure.add([
             },
           ],
           xAxis: {
-            line: { width: 0.003 },
+            color: greyColor,
+            line: { width: 0.006 },
             start: -5,
             stop: 5,
+            grid: { width: 0.005, dash: [], color: greyColor },
             labels: {
               font: { size: 0.08, color: greyColor },
               offset: [0, 0.03],
@@ -120,24 +123,26 @@ figure.add([
             },
             title: {
               text: 'x',
-              font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
+              font: { family: mathFont, style: 'italic', size: 0.12 },
               offset: [1.45, 0.2],
             },
           },
           yAxis: {
             start: 0,
             stop: 5,
+            grid: { width: 0.005, dash: [], color: greyColor },
             labels: {
-              font: { size: 0.08, color: greyColor },
+              font: { size: 0.08 },
               offset: [-1.3, 0],
             },
             ticks: { step: 1, width: 0 },
             position: [plotWidth / 2, 0],
-            line: { width: 0.003 },
+            color: greyColor,
+            line: { width: 0.006 },
             title: {
               text: 'y',
               rotation: 0,
-              font: { family: 'Times New Roman', style: 'italic', size: 0.12 },
+              font: { family: mathFont, style: 'italic', size: 0.12 },
               offset: [plotWidth / 2 + 0.15, 0.75],
             }
           },
@@ -167,7 +172,7 @@ figure.add([
         name: 'distance',
         method: 'collections.line',
         options: {
-          width: 0.004,
+          width: 0.006,
           dash: [0.01, 0.005],
           color: greyColor,
           label: { text: 'd', location: 'top' },
@@ -202,7 +207,7 @@ figure.add([
         name: 'gLine',
         method: 'collections.line',
         options: {
-          width: 0.003,
+          width: 0.006,
           dash: [0.02, 0.005],
           label: { text: 'x\'', location: 'start' },
           color: primaryCol,
@@ -212,7 +217,7 @@ figure.add([
         name: 'fLine',
         method: 'collections.line',
         options: {
-          width: 0.003,
+          width: 0.006,
           dash: [0.02, 0.005],
           label: {
             text: {
@@ -520,32 +525,31 @@ moveMarks(0, 0, 'F');
 slides = [];
 
 // Define common text modifiers that will be used on several slides
-const times = 'Times New Roman'
 const modifiersCommon = {
-  x: { font: { family: times, style: 'italic' } },
-  xd: { text: 'x\'', font: { family: times, style: 'italic' } },
-  d: { font: { family: times, style: 'italic' } },
-  y: { font: { family: times, style: 'italic' } },
-  f: { font: { family: times, style: 'italic' }, rSpace: 0.02 },
-  g: { font: { family: times, style: 'italic' }, rSpace: 0.02 },
+  x: { font: { family: mathFont, style: 'italic' } },
+  xd: { text: 'x\'', font: { family: mathFont, style: 'italic' } },
+  d: { font: { family: mathFont, style: 'italic' } },
+  y: { font: { family: mathFont, style: 'italic' } },
+  f: { font: { family: mathFont, style: 'italic' }, rSpace: 0.02 },
+  g: { font: { family: mathFont, style: 'italic' }, rSpace: 0.02 },
   g1: {
     text: 'g',
-    font: { family: times, style: 'italic', color: primaryCol },
+    font: { family: mathFont, style: 'italic', color: primaryCol },
     touchBorder: [0.1, 0.1, 0.25, 0.1],
     onClick: () => marks.getElement('markG7').pulse({ scale: 2 }),
   },
   f1: {
     text: 'f',
-    font: { family: times, style: 'italic' },
+    font: { family: mathFont, style: 'italic' },
     touchBorder: [0.1, 0.1, 0.25, 0.1],
     onClick: () => marks.getElement('markF7').pulse({ scale: 2 }),
     rSpace: 0.02,
   },
-  lb: { text: '(', font: { family: times, color: primaryCol } },
-  rb: { text: ')', font: { family: times, color: primaryCol } },
-  lb1: { text: '(', font: { family: times } },
-  rb1: { text: ')', font: { family: times } },
-  xr: { text: 'x', font: { family: times, style: 'italic', color: primaryCol } },
+  lb: { text: '(', font: { family: mathFont, color: primaryCol } },
+  rb: { text: ')', font: { family: mathFont, color: primaryCol } },
+  lb1: { text: '(', font: { family: mathFont } },
+  rb1: { text: ')', font: { family: mathFont } },
+  xr: { text: 'x', font: { family: mathFont, style: 'italic', color: primaryCol } },
 }
 
 // //////////////////////////////////////////////////////////
