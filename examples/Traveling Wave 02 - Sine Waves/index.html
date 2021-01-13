@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+    <!-- Style the figureOne container to be 2:1 aspect ratio -->
+    <style>
+        .wrapper50 {
+            width: calc(100vw - 20px);
+            max-width: 100%;
+            padding-bottom: 10px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-aspect-ratio: 1/1) {
+            .wrapper50 {
+                width: calc((100vh - 20px)/0.5);
+            }
+        } 
+        .ar50 {
+            width: 100%;
+            padding-bottom: 50%;
+        }
+
+        body {
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            font-family: Helvetica, Arial, sans-serif;
+            color: #444;
+            max-width: 1200px;
+            font-size: 2vw;
+        }
+        @media (min-width: 1000px) {
+            body {
+                font-size: 20px;
+            }
+        }
+        @media (max-width: 700px) {
+            body {
+                font-size: 14px;
+            }
+        }
+        h1 {
+            font-weight: 100;
+            text-align: center;
+        }
+        h2 {
+            padding-top: 2em;
+        }
+        h3 {
+            padding-top: 2em;
+            font-size: 1.4em;
+            font-weight: 100;
+        }
+        .instruction {
+            padding-top: 2em;
+            font-size: 0.9em;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async
+                src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+    </head>
+    <body>
+        <h1>Sine Waves in Time or Space</h1>
+        <p>
+            When the sine function is plotted on a Cartesian axis it “looks like” a wave.
+        </p>
+        <p class="instruction">
+            Move the circle <a href="javascript:figure1.pulse();" >radius</a> to draw the <a href="javascript:figure1.drawFull();" >sine wave</a>.
+        </p>
+        <div class="wrapper50">
+            <div id="figureOneContainer1" class="ar50"></div>
+        </div>
+        <p>
+            A form of this wave is found in many physical phenomena, but it often needs to be compressed, stretched or shifted to properly model the phenomena.
+        </p>
+        <p>
+            It is therefore useful to know how to change the equation to achieve these transformations.
+        </p>
+        <h2>
+            Vertical Shift
+        </h2>
+        <p>
+            To shift the plot in \(y\), we add our desired <i>offset</i> \(B\) to the sine function.
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y = \sin\left(\theta\right) + B}\]
+        </p>
+        <h2>
+            Vertical Scale
+        </h2>
+        <p>
+            To stretch or compress a sine function in \(y\), the function can be scaled with an <i>amplitude</i> \(A\).
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=A\sin\left(\theta\right)}\]
+        </p>
+        <p class="instruction">
+            Drag the <a href="javascript:figure2.pulseTrace();" >trace</a> up and down to change the <a href="javascript:figure2.pulseAmplitude();" >amplitude</a>.
+        </p>
+        <div class="wrapper50">
+            <div id="figureOneContainer2" class="ar50"></div>
+        </div>
+        <h2>
+            Horizontal Shift
+        </h2>
+        <p>
+            We have seen previously that a function \(f(x)\) can be shifted in \(x\) by subtracting the shift from \(x\). So, a shift of \(+d\) results in:
+        </p>
+        <p>
+            \[y=f\left(x-d\right)\]
+        </p>
+        <p>
+            And a shift of \(-d\) results in:
+        </p>
+        <p>
+            \[y=f\left(x-(-d)\right) = f\left(x + d\right)\]
+        </p>
+        <p>
+            Therefore we can shift a sine function by an angle \(\phi\):
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=\sin\left(\theta - \phi\right)}\]
+        </p>
+        <p>
+            A horizontal shift in a sine function is often called a <i>phase shift</i>.
+        </p>
+        <h2>
+            Horizontal Scale
+        </h2>
+        <p>
+            The sine function repeats every time the input value \(\theta\) changes by \(2\pi\) radians.
+        </p>
+        <p>
+            What happens if we multiply the input value by \(2\pi\)?
+        </p>
+        <p>
+            \[y=\sin(2\pi\theta)\]
+        </p>
+        <p>
+            Now, every time the value \(\theta\) changes by 1 radian, the input to the sine function changes by \(2\pi\).
+        </p>
+        <p>
+            Instead of 1, if we want the function to repeat every change of \(r\) radians we can:
+        </p>
+        <p>
+            \[y=\sin\left(2\pi{\theta \over r}\right)\]
+        </p>
+        <p>
+            Now every time \(\theta\) changes by \(r\), the input to the sine function changes by \(2\pi\).
+        </p>
+        <p>
+            Let's rewrite this as:
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=\sin\left({2\pi \over r}\theta\right)} \ \ \ \ \ \ \ \ \ (1)\]
+        </p>
+        <p class="instruction">
+            Drag the <a href="javascript:figure3.pulseTrace();" >trace</a> left and right to change how often it repeats.
+        </p>
+        <div class="wrapper50">
+            <div id="figureOneContainer3" class="ar50"></div>
+        </div>
+        <p>
+            The name and nomenclature for \(r\) changes depending on where the sine wave is being used.
+        </p>
+        <h3>Horiztonal Scale - Time</h3>
+        <p>
+            If the sine wave is modeling a phenomena in time, then the \(r\) term in equation (1) represents the period of time over which the function repeats. As such, it is usually referred to as <i>period</i> or \(T\).
+        <p>
+            \[y=\sin\left({2\pi \over T}t\right)\]
+        </p>
+        <p>
+            If the sine function repeats every \(T\) seconds, then the frequency it repeats is:
+        </p>
+        <p>
+            \[f={1 \over T}\]
+        </p>
+        <p>
+            Therefore we have:
+        </p>
+        <p>
+            \[y=\sin\left(2\pi f t\right)\]
+        </p>
+        <p>
+            \(2\pi f\) is the number of times \(2\pi\) radians is cycled through per second, and therefore is often called the angular frequency \(\omega\).
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=\sin\left(\omega t\right)}\]
+        </p>
+        <h3>Horiztonal Scale - Space</h3>
+        <p>
+            On the other hand if the sine wave is modeling a phenomena in space, then \(r\) in equation (1) represents the distance over which the function repeats. As such, it is usually referred to as <i>wavelength</i> or \(\lambda\).
+        </p>
+        <p>
+            \[y=\sin\left({2\pi \over \lambda}x\right)\]
+        </p>
+        <p>
+            The \({2\pi \over \lambda}\) term describes how many radians per unit distance the sine wave progresses through, and is often called the <i>wave number</i> \(k\):
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=\sin\left(kx\right)}\]
+        </p>
+        <p>
+            Both \(k\) and \(\omega\) serve the same function for space and time respectively. Both give the number of times the sine function repeats per unit length or unit time.
+        </p>
+        <h2>
+            General Form
+        </h2>
+        <p>
+            The general equation to shift and scale a sine function is:
+        </p>
+        <p>
+            \[\bbox[20px, border: 2px solid red]{y=A\sin\left({2\pi \over r} -\phi\right) + B}\]
+        </p>
+        <p class="instruction">
+            Touch the <a href="javascript:figure4.pulseAmplitude();" >amplitude</a>, <a href="javascript:figure4.pulseWavelength();" >wavelength</a>, <a href="javascript:figure4.pulsePhase();" >phase</a> or <a href="javascript:figure4.pulseOffset();" >y offset</a> terms of the equation and then move the <a href="javascript:figure4.pulseTrace();" >trace</a> in the direction of the arrows.
+        </p>
+        <div class="wrapper50">
+            <div id="figureOneContainer4" class="ar50"></div>
+        </div>
+        <!-- Use CDN hosted library-->
+        <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script> -->
+        
+        <!-- Comment line above, and uncomment line below to use local library instead of CDN -->
+        <script type="text/javascript" src='../../package/index.js'></script>
+        <script type="text/javascript" src='./fig1.js'></script>
+        <script type="text/javascript" src='./fig2.js'></script>
+        <script type="text/javascript" src='./fig3.js'></script>
+        <script type="text/javascript" src='./fig4.js'></script>
+    </body>
+</html>
