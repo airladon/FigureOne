@@ -1,5 +1,5 @@
 // @flow
-import { joinObjects } from '../tools/tools';
+import { joinObjects, SubscriptionManager } from '../tools/tools';
 import { FigureElementCollection } from './Element';
 import type { FigureElement, TypeElementPath } from './Element';
 import type {
@@ -285,6 +285,7 @@ export default class SlideNavigator {
   inTransition: boolean;
   equations: Array<FigureElement>;
   collection: FigureElementCollection;
+  subscriptions: SubscriptionManager;
   equationDefaults: {
     duration: number,
     animate: "move" | "dissolve" | "moveFrom" | "pulse" | "dissolveInThenMove",
@@ -297,6 +298,7 @@ export default class SlideNavigator {
    * property.
    */
   constructor(options: OBJ_SlideNavigator | null = null) {
+    this.subscriptions = new SubscriptionManager();
     if (options != null) {
       this.load(options);
     }
@@ -456,9 +458,11 @@ export default class SlideNavigator {
         nextButton.setLabel('Next');
       }
     }
+    this.subscriptions.publish('slideSteady');
   }
 
   transition(from: 'next' | 'prev' | number) {
+    this.subscriptions.publish('beforeTransition');
     let done = () => {
       this.setSteadyState(from);
       this.inTransition = false;
