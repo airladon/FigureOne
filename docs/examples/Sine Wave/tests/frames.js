@@ -16,11 +16,11 @@ __frames = [
     `
   ],
   [1.5, 'touchDown', [-0.7, 0.3], 'touch arm'],
-  [2, 'touchMove', [-0.8, 0.4], 'move arm'],
-  [2.5, 'touchMove', [-0.9, 0.4], 'mave arm 2'],
-  [2.6, 'touchMove', [-0.9, 0.4], 'stop arm move'],
-  [2.6, 'touchUp'],
-  [3, 'touchDown', [-1, -1.2], 'touch slow'],
-  [6, 'touchDown', [0, -1.2], 'touch fast'],
-  [9, 'touchDown', [1, -1.2], 'touch stop'],
+  [0.5, 'touchMove', [-0.8, 0.4], 'move arm'],
+  [0.5, 'touchMove', [-0.9, 0.4], 'mave arm 2'],
+  [0, 'touchMove', [-0.9, 0.4], 'stop arm move'],
+  [0, 'touchUp'],
+  [0.5, 'touchDown', [-1, -1.2], 'touch slow'],
+  [3, 'touchDown', [0, -1.2], 'touch fast'],
+  [3, 'touchDown', [1, -1.2], 'touch stop'],
 ];
