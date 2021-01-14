@@ -9,9 +9,10 @@ function __finish(__figure) {
   let [cumTime] = __frames[0];
   // const duration = 19;
   // const step = 0.5;
-  for (let t = 0; t <= __duration; t = Math.round((t + __timeStep) * 10) / 10) {
+  for (let t = 0; t <= __duration; t = Math.round((t + __timeStep) * 100) / 100) {
     let same = false;
     let cumTimeIncremental = 0;
+    console.log(cumTime, t)
     while (cumTime <= t) {
       __steps.push([
         Math.round((cumTime + cumTimeIncremental) * 1000) / 1000,
@@ -23,12 +24,12 @@ function __finish(__figure) {
       }
       if (index < __frames.length) {
         const [delta] = __frames[index];
-        cumTime += delta;
+        cumTime = Math.round((cumTime + delta) * 1000) / 1000;
         if (delta === 0) {
           cumTimeIncremental += 0.001;
         }
       } else {
-        cumTime = __duration + 1;
+        cumTime = Math.round((__duration + 1) * 1000) / 1000;
       }
     }
     if (!same) {
