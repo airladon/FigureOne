@@ -913,16 +913,16 @@ class TextObject extends TextObjectBase {
             onClick?: string | () => void,
         }
         | Array<string | {
-        text: string,
-        font?: OBJ_Font,
-        location?: TypeParsablePoint,
-        xAlign?: 'left' | 'right' | 'center',
-        yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-        // border?: 'rect' | Array<Point>,
-        // touchBorder?: 'rect' | number | 'border' | Array<Point>,
-        touchBorder?: TypeParsableBuffer | Array<Point>,
-        onClick?: string | () => void,
-      }>;
+            text: string,
+            font?: OBJ_Font,
+            location?: TypeParsablePoint,
+            xAlign?: 'left' | 'right' | 'center',
+            yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+            // border?: 'rect' | Array<Point>,
+            // touchBorder?: 'rect' | number | 'border' | Array<Point>,
+            touchBorder?: TypeParsableBuffer | Array<Point>,
+            onClick?: string | () => void,
+          }>;
       font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
