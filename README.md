@@ -4,7 +4,7 @@ Draw, animate and interact with shapes, text, plots and equations.
 
 The library used to draw interactive slides at <a href="https://www.thisiget.com">thisiget.com</a>.
 
-See the [Tutorials](https://github.com/airladon/FigureOne/tree/master/tutorials), [API Reference](https://airladon.github.io/FigureOne/api/) and [Examples](https://github.com/airladon/FigureOne/tree/master/examples) and you'll be making beautiful, interactive figures in no time.
+See the [Tutorials](https://github.com/airladon/FigureOne/tree/master/docs/tutorials), [API Reference](https://airladon.github.io/FigureOne/api/) and [Examples](https://github.com/airladon/FigureOne/tree/master/docs/examples) and you'll be making beautiful, interactive figures in no time.
 
 You can interact with and experience the examples [here](https://airladon.github.io/FigureOne/).
 

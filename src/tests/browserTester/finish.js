@@ -2,7 +2,8 @@
 /* global __frames __steps __duration __timeStep figure timeoutId Fig */
 /* eslint-disable no-global-assign, no-eval */
 /* eslint no-unused-vars: ["error", { "vars": "local" }] */
-function __finish() {
+// eslint-disable-next-line no-unused-vars
+function __finish(__figure) {
   __steps = [];
   let index = 0;
   let [cumTime] = __frames[0];
@@ -34,9 +35,10 @@ function __finish() {
       __steps.push([t]);
     }
   }
-  console.log(__steps);
 
   if (typeof process !== 'object') {
+    // eslint-disable-next-line no-console
+    console.log(__steps);
     const startSteps = () => {
       cumTime = 0;
       __frames.forEach((touch) => {
@@ -50,7 +52,7 @@ function __finish() {
             if (action.startsWith('touch')) {
               const loc = Fig.tools.g2.getPoint(location || [0, 0]);
               setTimeout(() => {
-                figure[action](loc);
+                __figure[action](loc);
               }, cumTime * 1000);
             } else {
               setTimeout(() => {
@@ -68,4 +70,6 @@ function __finish() {
     }, 1000);
   }
 }
-__finish();
+if (typeof process === 'object') {
+  module.exports = { __finish };
+}

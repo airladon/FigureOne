@@ -32,7 +32,8 @@ function tester(htmlFile, framesFile, threshold = 0) {
   if (framesFile != null && framesFile !== '') {
     require(framesFile);
   }
-  require('./finish.js');
+  const { __finish } = require('./finish.js');
+  __finish();
   jest.setTimeout(60000);
 
   const tests = [];
