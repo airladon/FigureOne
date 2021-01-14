@@ -12,7 +12,6 @@ function __finish(__figure) {
   for (let t = 0; t <= __duration; t = Math.round((t + __timeStep) * 100) / 100) {
     let same = false;
     let cumTimeIncremental = 0;
-    console.log(cumTime, t)
     while (cumTime <= t) {
       __steps.push([
         Math.round((cumTime + cumTimeIncremental) * 1000) / 1000,

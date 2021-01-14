@@ -117,7 +117,7 @@ export class SerialAnimationStep extends AnimationStep {
   //   return this;
   // }
 
-  setTimeDelta(delta: number) {
+  setTimeDelta(delta: ?number) {
     super.setTimeDelta(delta);
     if (this.steps != null) {
       this.steps.forEach((step) => {

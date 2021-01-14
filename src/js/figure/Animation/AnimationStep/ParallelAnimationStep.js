@@ -97,7 +97,7 @@ export class ParallelAnimationStep extends AnimationStep {
     return 'parallelAnimationStep';
   }
 
-  setTimeDelta(delta: number) {
+  setTimeDelta(delta: ?number) {
     super.setTimeDelta(delta);
     if (this.steps != null) {
       this.steps.forEach((step) => {

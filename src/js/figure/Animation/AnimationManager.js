@@ -563,7 +563,7 @@ export default class AnimationManager {
   //   // });
   // }
 
-  setTimeDelta(delta: number) {
+  setTimeDelta(delta: ?number) {
     this.animations.forEach((animation) => {
       animation.setTimeDelta(delta);
     });

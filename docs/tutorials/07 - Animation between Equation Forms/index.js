@@ -44,3 +44,8 @@ eqn.goToForm({
   duration: 1.5,
   animate: 'move',
 });
+
+// figure.getElement('eqn.a').animations.setTimeDelta(null)
+// figure.getElement('eqn.v').animations.setTimeDelta(null)
+// figure.getElement('eqn.b').animations.setTimeDelta(null)
+// figure.getElement('eqn.c').animations.setTimeDelta(null)

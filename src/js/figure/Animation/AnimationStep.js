@@ -184,9 +184,12 @@ export default class AnimationStep {
   //   return this.fnMap.exec(fn, ...args);
   // }
 
-  setTimeDelta(delta: number) {
-    if (this.startTime != null) {
+  setTimeDelta(delta: ?number) {
+    if (this.startTime != null && delta != null) {
       this.startTime += delta;
+    }
+    if (delta == null) {
+      this.startTime = null;
     }
     // if (this.steps != null) {
     //   this.steps.forEach((step) => {
