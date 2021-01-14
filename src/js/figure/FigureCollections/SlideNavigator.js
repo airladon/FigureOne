@@ -176,6 +176,7 @@ export type COL_SlideNavigator = {
  *     options: {
  *       yAlign: 'middle',
  *       position: [0.3, 0],
+ *       font: { size: 0.1 },
  *     },
  *   },
  *   {   // Equation
@@ -225,6 +226,7 @@ export type COL_SlideNavigator = {
  * // Add slides to the navigator
  * figure.getElement('nav').loadSlides([
  *   {
+ *     showCommon: ['square', 'label', 'eqn'],
  *     text: 'The area of a square is the side length squared',
  *     form: '0',
  *     steadyStateCommon: () => update(0.4),
