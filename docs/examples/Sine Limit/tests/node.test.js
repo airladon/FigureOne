@@ -1,5 +1,5 @@
-import makeFigure from '../../../src/js/__mocks__/makeFigure';
-import * as g2 from  '../../../src/js/tools/g2';
+import makeFigure from '../../../../src/js/__mocks__/makeFigure';
+import * as g2 from  '../../../../src/js/tools/g2';
 global.Fig = {
   Figure: () => makeFigure(),
   tools: { g2 },

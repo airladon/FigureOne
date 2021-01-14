@@ -1,5 +1,5 @@
 /* global __title __frames __duration __timeStep */
-__title = 'Example - Total Angle of a Polygon';
+__title = 'Example - Shifting Equations';
 __duration = 32;
 __timeStep = 0.5;
 __frames = [

@@ -466,7 +466,7 @@ movePad.subscriptions.add('setTransform', () => update());
 
 // Helper function to animate moving marks in x
 const moveMarks = (xOffsetFrom, xOffsetTo = 0, type = 'G', skipAnimation = true) => {
-  for (i = 0; i < 7; i += 1) {
+  for (let i = 0; i < 7; i += 1) {
     const pointX = i * 0.7 - 2.1;
     const y = yAxis.valueToDraw(fx(pointX).y);
     const from = xAxis.valueToDraw(pointX + xOffsetFrom);
@@ -522,7 +522,7 @@ moveMarks(0, 0, 'F');
 ..........##....##.##........##..##.....##.##.......##....##
 ...........######..########.####.########..########..######.
 */
-slides = [];
+const slides = [];
 
 // Define common text modifiers that will be used on several slides
 const modifiersCommon = {
