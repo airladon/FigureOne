@@ -96,7 +96,7 @@ const button = (name, label, position) => ({
     },
     touchBorder: 0.1,
     position,
-    color: [0.6, 0.6, 0.6, 1],
+    color: [0.3, 0.3, 0.3, 1],
     width: 0.7,
     height: 0.25,
     corner: { radius: 0.05, sides: 10 },
@@ -123,7 +123,7 @@ figure.add([
           length: 3.6,
           position: [-r, 0],
           width: 0.005,
-          color: [0.7, 0.7, 0.7, 1],
+          color: [0.4, 0.4, 0.4, 1],
         }
       },
       {
@@ -134,7 +134,7 @@ figure.add([
           position: [0, -r],
           width: 0.005,
           angle: Math.PI / 2,
-          color: [0.7, 0.7, 0.7, 1],
+          color: [0.4, 0.4, 0.4, 1],
         },
       },
       {
@@ -144,7 +144,7 @@ figure.add([
           radius: r,
           sides: 200,
           line: { width: 0.005 },
-          color: [0.7, 0.7, 0.7, 1],
+          color: [0.4, 0.4, 0.4, 1],
         },
       },
       {
@@ -153,8 +153,8 @@ figure.add([
         options: {
           maxLength: 3,
           width: 0.005,
-          dash: [0.01, 0.02],
-          color: [0.7, 0.7, 0.7, 1],
+          dash: [0.03, 0.01],
+          color: [0.4, 0.4, 0.4, 1],
         },
       },
       {
@@ -190,7 +190,9 @@ const rotator = figure.getElement('diagram.rotator');
 const sine = figure.getElement('diagram.sine');
 const signalLine = figure.getElement('diagram.signalLine');
 
-// Update function for everytime we want to update the signal
+// When the rotator is rotated, or as time passes, the 'signalLine' and 'sine'
+// line needs to be updated. This function finds the end point of the rotator,
+// whose y coordinate is the sine, to update both lines.
 function update() {
   const angle = rotator.getRotation();
   const endPoint = Fig.polarToRect(r, angle);
@@ -206,7 +208,7 @@ figure.subscriptions.add('beforeDraw', () => {
   update();
 });
 
-// After each draw, call a next animation frame so udpates happen on each frame
+// After each draw, call a next animation frame so updates happen on each frame
 figure.subscriptions.add('afterDraw', () => {
   figure.animateNextFrame();
 });
@@ -216,6 +218,8 @@ figure.subscriptions.add('afterDraw', () => {
 // Button Logic
 // ////////////////////////////////////////////////////////////////////////
 
+// Two buttons set the rotator to spin automatically, while the third stops all
+// rotation.
 function spinner(initialAngle, duration, frequency, percent) {
   const angle = initialAngle + 2 * Math.PI * frequency * percent * duration;
   rotator.setRotation(angle);
@@ -232,6 +236,8 @@ function startSpinning(frequency) {
     .start();
 }
 
+// Set the onClick behavior of the buttons to either start spinning
+// at some frequency, or to stop spinning
 figure.getElement('fast').onClick = () => startSpinning(0.7);
 figure.getElement('slow').onClick = () => startSpinning(0.2);
 figure.getElement('stop').onClick = () => { rotator.stop(); };
@@ -241,6 +247,14 @@ figure.getElement('stop').onClick = () => { rotator.stop(); };
 // Initialize
 // ////////////////////////////////////////////////////////////////////////
 
+// To initialize the figure, start by animating a rotation to make it obvious
+// that the signal is being recorded
 rotator.animations.new()
   .rotation({ target: Math.PI / 4, duration: 1.5 })
   .start();
+
+
+// ////////////////////////////////////////////////////////////////////////
+// Method used by
+// ////////////////////////////////////////////////////////////////////////
+const pulseRotator = () => rotator.pulse({ rotation: 0.1, min: -0.1, frequency: 3 });
