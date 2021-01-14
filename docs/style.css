@@ -42,25 +42,57 @@ li {
 .title-text {
   text-align: center;
   font-weight: 100;
-  padding-top: 1.5em;
+  padding-top: 30px;
   margin-top: 0;
+  font-size: 3em;
   margin-bottom: 0;
 }
 
-h1 {
+.sub-title-text {
+  text-align: center;
+  padding-top: 1em;
+  font-size: 1.2em;
+  font-weight: 100;
+}
+
+/* h1 {
   padding-top: 20px;
   text-align: center;
   color: #333;
   font-size: 3em;
-}
+} */
 
-h2 {
+/* h2 {
   padding: 10px;
   text-align: center;
   color: #333;
+} */
+/* h2 {
+  padding-top: 2em;
+  font-size: 1.4em;
+  font-weight: 400;
+}
+h3 {
+  padding-top: 2em;
+  font-size: 1.2em;
+  font-weight: 100;
+} */
+h1 {
+  padding-top: 20px;
+  font-weight: 100;
+  text-align: center;
+  /* font-size: 3em; */
+}
+h2 {
+  padding-top: 2em;
+}
+h3 {
+  padding-top: 2em;
+  font-size: 1.4em;
+  font-weight: 100;
 }
 
-.example-title {
+/* .example-title {
   color: #333;
   text-align: center;
   padding: 10px;
@@ -68,7 +100,7 @@ h2 {
   padding-top: 25px;
   font-size: 1.6em;
   margin-bottom: 0.2em;
-}
+} */
 
 .example-description {
   padding-left: 3em;
