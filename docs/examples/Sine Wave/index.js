@@ -142,7 +142,7 @@ figure.add([
         method: 'polygon',
         options: {
           radius: r,
-          sides: 200,
+          sides: 70,
           line: { width: 0.005 },
           color: [0.4, 0.4, 0.4, 1],
         },
@@ -190,7 +190,9 @@ const rotator = figure.getElement('diagram.rotator');
 const sine = figure.getElement('diagram.sine');
 const signalLine = figure.getElement('diagram.signalLine');
 
-// Update function for everytime we want to update the signal
+// When the rotator is rotated, or as time passes, the 'signalLine' and 'sine'
+// lines need to be updated. This function finds the end point of the rotator,
+// whose y coordinate is the sine, to update both lines.
 function update() {
   const angle = rotator.getRotation();
   const endPoint = Fig.polarToRect(r, angle);
@@ -201,12 +203,13 @@ function update() {
   figure.animateNextFrame();
 };
 
-// Before each draw, update the points
+// Update the signal to the latest rotator value before each draw
 figure.subscriptions.add('beforeDraw', () => {
   update();
 });
 
-// After each draw, call a next animation frame so udpates happen on each frame
+// After each draw, call, queue the next animation, forcing a redraw on it.
+// Therefore, every frame the signal is updated and drawn.
 figure.subscriptions.add('afterDraw', () => {
   figure.animateNextFrame();
 });
@@ -215,7 +218,7 @@ figure.subscriptions.add('afterDraw', () => {
 // ////////////////////////////////////////////////////////////////////////
 // Button Logic
 // ////////////////////////////////////////////////////////////////////////
-
+// Two buttons set the rotator to spin automatically, while the third stops all rotation.
 function spinner(initialAngle, duration, frequency, percent) {
   const angle = initialAngle + 2 * Math.PI * frequency * percent * duration;
   rotator.setRotation(angle);
@@ -240,7 +243,8 @@ figure.getElement('stop').onClick = () => { rotator.stop(); };
 // ////////////////////////////////////////////////////////////////////////
 // Initialize
 // ////////////////////////////////////////////////////////////////////////
-
+// To initialize the figure, we start by animating a rotation to make it
+// obvious that the signal is being recorded, and then start the 20ms updates.
 rotator.animations.new()
   .rotation({ target: Math.PI / 4, duration: 1.5 })
   .start();
