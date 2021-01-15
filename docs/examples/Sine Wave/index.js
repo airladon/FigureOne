@@ -251,6 +251,7 @@ rotator.animations.new()
   .start();
 
 // Globally available pulse function to be used from HTML page
+// eslint-disable-next-line no-unused-vars
 const pulseRotator = () => {
   rotator.pulse({ rotation: 0.1, min: -0.1, frequency: 3 });
 };
