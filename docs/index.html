@@ -5,20 +5,44 @@
     <title>FigureOne</title>
     <meta name='description' content='Javascript library to draw, animate and interact with shapes, text, plots and equations.'>
     <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link href='style.css' rel='stylesheet'>
+    <link href='./style.css' rel='stylesheet'>
     <link href='./examples/examples.css' rel='stylesheet'>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
   </head>
     <body>
       <div id="header"></div>
-      <div class='wrapper wrapper_4_3'>
-        <div id="figureOneContainer" class="container container_4_3">
+      <div class="example">
+        <!-- *************************************************************** -->
+        <!-- ************    Example Specific HTML Start     *************** -->
+        <!-- *************************************************************** -->
+
+        <p class="instructions">
+            Rotate the <a href="javascript:pulseRotator();">line</a>, and the recording will follow. Rotating the line at a constant rate produces a sine wave. Changing the speed of rotation, changes the frequency of the wave.
+          </p>
+
+        <div class="wrapper wrapper_4_3">
+            <div id="figureOneContainer" class="container container_4_3"></div>
         </div>
+
+        <!-- *************************************************************** -->
+        <!-- ************    Example Specific HTML End     *************** -->
+        <!-- *************************************************************** -->
+
       </div>
       <div id="footer"></div>
-      <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script>
+
+      <!-- **********    Choose local or remote package     *************** -->
+
+      <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min.js'></script> -->
+
+      <script type="text/javascript" src='../package/index.js'></script>
+      <!-- ***************************************************************** -->
+
       <script type="text/javascript" src="./fill.js"></script>
-      <script>fillHeader('Sine of Small Angles', 'Sine Limit');</script>
+      <script>fillHeader('Example - Sine Wave', 'Sine Wave');</script>
       <script>fillFooter('examples')</script>
+
+      <!-- ***************    Example Specific Scripts     ***************** -->
+      <script type="text/javascript" src='examples/Sine%20Wave/index.js'></script>
    </body>
 </html>

@@ -31,7 +31,17 @@ Press on the different terms of an equation to see where they come from, then st
 
 ## **[Sine Limit](https://github.com/airladon/FigureOne/tree/master/docs/examples/Sine%20Limit)**
 
+Interact with a 
+
 ![](Sine%20Limit/example.gif)
+
+## **[Travelling Waves 01 - Shifting Equations](https://github.com/airladon/FigureOne/tree/master/docs/examples/Travelling%20Waves%2001%20-%20Shifting%20Equations)**
+
+![](Travelling%20Waves%2001%20-%20Shifting%20Equations/example.gif)
+
+## **[Travelling Waves 02 - Sine Waves in Space or Time](https://github.com/airladon/FigureOne/tree/master/docs/examples/Travelling%20Waves%2001%20-%20Sine%20Waves)**
+
+![](Travelling%20Waves%2001%20-%20Shifting%20Equations/example.gif)
 
 ## **[Holiday Equation](https://github.com/airladon/FigureOne/tree/master/docs/examples/Holiday%20Equation)**
 
