@@ -13,7 +13,9 @@ Inside this container, you can:
 * `npm run lint` - to run lint checking
 * `flow` - to run type checking
 * `jest` - to run unit tests
+* `./browser.sh` - to run playwright browser based tests
 * `webpack` - to build dev packaging
+* `webpack --watch` - to build dev packaging with hot reloading
 * `webpack --env.mode=prod` - to build production packaging
 
 When it is time to deploy the build to NPM, exit the container and from the repository root run:
