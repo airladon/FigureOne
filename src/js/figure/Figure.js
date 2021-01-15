@@ -2276,7 +2276,6 @@ class Figure {
     // console.log('really drawing')
     // const startSetup = new Date().getTime();
     if (FIGURE1DEBUG) { timer.stamp('clearContext'); }
-    // console.log(this.subscriptions.subscriptions.beforeDraw.order.length, this.subscriptions.asdf)
     // if (this.subscriptions.subscriptions.beforeDraw != null) {
     //   console.log(this.subscriptions.subscriptions.beforeDraw.asdf)
     // }

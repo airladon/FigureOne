@@ -3955,7 +3955,7 @@ class FigureElementPrimitive extends FigureElement {
   ) {
     if (this.isShown) {
       let timer;
-      if (FIGURE1DEBUG) { timer = new PerformanceTimer() }
+      if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       // const debugTimes = [];
       // if (FIGURE1DEBUG) { debugTimes.push([performance.now(), '']); }
       let pointCount = -1;
@@ -4740,7 +4740,7 @@ class FigureElementCollection extends FigureElement {
       const newTransforms = transformBy(parentTransform, [transform]);
 
       if (FIGURE1DEBUG) { timer.stamp('m1'); }
-      // eslint-disable-next-line prefer-desctructuring
+      // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
       // this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
       if (FIGURE1DEBUG) { timer.stamp('m2'); }
