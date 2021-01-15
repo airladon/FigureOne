@@ -7,10 +7,10 @@ function fillHeader(title, path) {
 
     <div class="links">
       <div class="title-link link">
-        <a href="https://github.com/airladon/figureone">GitHub</a>
+        <a href="https://github.com/airladon/figureone/api">GitHub</a>
       </div>
       <div class="title-link link">
-        <a href="https://github.com/airladon/FigureOne/tree/master/tutorials">Tutorials</a>
+        <a href="https://github.com/airladon/FigureOne/tree/master/docs/tutorials">Tutorials</a>
       </div>
       <div class="title-link link">
         <a href="api/index.html">API Reference</a>
