@@ -117,7 +117,7 @@ The tutorials introduce how to use FigureOne and many of the main concepts.
 
 ![](docs/examples/Total%20Angle%20of%20a%20Polygon/example.gif)
 
-### **[Traveling Wave 01 - Shifting Equations](https://github.com/airladon/FigureOne/tree/master/docs/examples/Shifting%20Equations)**
+### **[Traveling Wave 01 - Shifting Equations](https://github.com/airladon/FigureOne/tree/master/docs/examples/Traveling%20Wave%2001%20-%20Shifting%20Equations)**
 
 ![](docs/examples/Traveling%20Wave%2001%20-%20Shifting%20Equations/example.gif)
 
