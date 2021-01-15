@@ -106,6 +106,7 @@ toc:
   - EQN_Pad
   - EQN_Scale
   - EQN_Container
+  - EQN_TouchBox
   - EQN_Annotate
   - name: Equation Symbols
   - EQN_Symbol
@@ -122,6 +123,7 @@ toc:
   - EQN_BarSymbol
   - EQN_SquareBracketSymbol
   - EQN_RadicalSymbol
+  - EQN_LineSymbol
   - name: Slide Navigator
   - SlideNavigator
   - OBJ_SlideNavigator
@@ -159,6 +161,7 @@ toc:
   - ElementState
   - DrawingObject
   - FigurePrimitives
+  - TypeElementPath
   - name: Misc Geometry
   - TypeParsablePoint
   - TypeParsableLine

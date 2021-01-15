@@ -35,17 +35,17 @@ Step through the reasoning behind why the sine of a small angle is approximately
 
 ![](Sine%20Limit/example.gif)
 
-## **[Travelling Waves 01 - Shifting Equations](https://github.com/airladon/FigureOne/tree/master/docs/examples/Travelling%20Waves%2001%20-%20Shifting%20Equations)**
+## **[Travelling Waves 01 - Shifting Equations](https://github.com/airladon/FigureOne/tree/master/docs/examples/Traveling%20Wave%2001%20-%20Shifting%20Equations)**
 
 See how equations change when they are shifted along the x axis.
 
-![](Travelling%20Waves%2001%20-%20Shifting%20Equations/example.gif)
+![](Traveling%20Waves%2001%20-%20Shifting%20Equations/example.gif)
 
-## **[Travelling Waves 02 - Sine Waves in Space or Time](https://github.com/airladon/FigureOne/tree/master/docs/examples/Travelling%20Waves%2001%20-%20Sine%20Waves)**
+## **[Traveling Waves 02 - Sine Waves in Space or Time](https://github.com/airladon/FigureOne/tree/master/docs/examples/Traveling%20Waves%2001%20-%20Sine%20Waves)**
 
 Find the general form of a sine wave, and look at how to define it in space or time.
 
-![](Travelling%20Waves%2001%20-%20Shifting%20Equations/example.gif)
+![](Traveling%20Waves%2001%20-%20Shifting%20Equations/example.gif)
 
 ## **[Holiday Equation](https://github.com/airladon/FigureOne/tree/master/docs/examples/Holiday%20Equation)**
 
