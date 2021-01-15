@@ -835,6 +835,7 @@ const modifiers = {
 */
 // /////////////////////////////////////////////////////////////////
 slides.push({
+  showCommon: [spacePlot, timePlot],
   steadyState: () => {
     // figure.elements.hideAll();
     // figure.getElement('plot').show();
@@ -1264,9 +1265,7 @@ slides.push({
 
 figure.getElement('nav').loadSlides(slides);
 figure.getElement('nav').goToSlide(0);
-// slides.push({
-//   text: []
-// })
+
 
 
 // Now, let's consider a disturbance at x = 0. The disturbance happens over time, so let's record the disturbance in time, while watching it propagate through the medium.
