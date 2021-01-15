@@ -17,7 +17,7 @@ figure.add(
     method: 'equation',
     options: {
       elements: {
-        v: { symbol: 'vinculum'},
+        v: { symbol: 'vinculum' },
         equals: ' = ',
         times: ' \u00D7 ',
         c: { color: [0, 0, 1, 1] },
@@ -32,10 +32,8 @@ figure.add(
         2: {
           content: ['c', 'times', 'a', 'equals', 'b'],
           // Define how the 'c' element will move to this form
-          animation: {
-            translation: {
-              c: { style: 'curved', direction: 'down', mag: 0.5 },
-            },
+          translation: {
+            c: { style: 'curved', direction: 'down', mag: 0.5 },
           },
         },
       },
@@ -68,15 +66,13 @@ In this example we are defining two different forms of the same equation.
         2: {
           content: ['c', 'times', 'a', 'equals', 'b'],
           // Define how the 'c' element will move to this form
-          animation: {
-            translation: {
-              c: { style: 'curved', direction: 'down', mag: 0.5 },
-            },
+          translation: {
+            c: { style: 'curved', direction: 'down', mag: 0.5 },
           },
         },
 ```
 
-The first form is defined in shorthand *Array* notation. The second form is defined in longer hand *Object* notation as we wish to include the form parameter `animation.translation`.
+The first form is defined in shorthand *Array* notation. The second form is defined in longer hand *Object* notation as we wish to include the form parameter `translation`.
 
 This parameter defines how elements will move when translated in an animation. In this case we want the element `c` to follow a `curved` path, in the `down` direction where the curve has a magnitude of `0.5`.
 
