@@ -2,7 +2,7 @@
 
 Interact with an equation to see where it's terms come from.
 
-Open `index.html` in a browser to view example.
+Open `index.html` in a browser to view example, or the example is hosted [here](https://airladon.github.io/FigureOne/examples/Total%20Angle%20of%20a%20Polygon/index.html).
 
 ![](./example.gif)
 

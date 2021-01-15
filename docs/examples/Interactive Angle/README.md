@@ -2,7 +2,7 @@
 
 Change the angle size, rotation and position.
 
-Open `index.html` in a browser to view example.
+Open `index.html` in a browser to view example, or the example is hosted [here](https://airladon.github.io/FigureOne/examples/Interactive%20Angle/index.html).
 
 ![](./example.gif)
 

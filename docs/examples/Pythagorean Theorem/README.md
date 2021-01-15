@@ -2,7 +2,7 @@
 
 Uses animation and animation between equation forms to show a proof for the pythagorean theorem.
 
-Open `index.html` in a browser to view example.
+Open `index.html` in a browser to view example, or the example is hosted [here](https://airladon.github.io/FigureOne/examples/Pythagorean%20Theorm/index.html).
 
 ![](./example.gif)
 
