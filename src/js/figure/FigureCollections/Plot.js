@@ -720,7 +720,7 @@ class CollectionsPlot extends FigureElementCollection {
       return null;
     }
     const p = getPoint(point);
-    return new Point(xAxis.drawToPoint(p.x), yAxis.drawToPoint(p.y));
+    return new Point(xAxis.drawToValue(p.x), yAxis.drawToValue(p.y));
   }
 
   addTraces(traces: Array<COL_Trace>) {

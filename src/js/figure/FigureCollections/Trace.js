@@ -295,11 +295,11 @@ class CollectionsTrace extends FigureElementCollection {
     this.removeLine();
     this.removeMarkers();
     this.points = getPoints(points);
-    if (this.line != null) {
+    if (this.line != null) { // $FlowFixMe
       this.addLine(this.line);
     }
     if (this.markers != null) {
-      this.markers.copy = [];
+      this.markers.copy = []; // $FlowFixMe
       this.addMarkers(this.markers);
     }
     // if (this._line != null) {

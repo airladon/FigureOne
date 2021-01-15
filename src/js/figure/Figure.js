@@ -2407,7 +2407,7 @@ class Figure {
   }
 
   debugShowTouchBorders(
-    elements: TypeElementPath,
+    elements: TypeElementPath, // $FlowFixMe
     lineOptions: OBJ_Polyline = {},
     startIndex: number = 0,
   ) {

@@ -3261,7 +3261,7 @@ class FigureElement {
     // }
   }
 
-  getMoveBounds() {
+  getMoveBounds(): Bounds {
     this.checkMoveBounds();  // $FlowFixMe
     if (this.move.bounds.isUnbounded()) {
       return this.move.bounds;
@@ -3923,19 +3923,19 @@ class FigureElementPrimitive extends FigureElement {
         } else {
           return;
         }
-      }
+      } // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m1'); }
       this.subscriptions.publish('beforeDraw', [now]);
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
-      }
+      } // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
 
-      this.animations.nextFrame(now);
+      this.animations.nextFrame(now); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('animations'); }
       this.nextMovingFreelyFrame(now);
 
-      if (FIGURE1DEBUG) {
+      if (FIGURE1DEBUG) { // $FlowFixMe
         timer.stamp('animations');
         const deltas = timer.deltas();
         window.figureOneDebug.setupDraw.push([
@@ -3972,7 +3972,7 @@ class FigureElementPrimitive extends FigureElement {
         }
       } else {
         pointCount = 1;
-      }
+      } // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m1'); }
 
       const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity * parentOpacity];
@@ -3989,7 +3989,7 @@ class FigureElementPrimitive extends FigureElement {
       this.parentTransform = parentTransform;
       // this.transformUpdated = false;
       // }
-
+       // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m2'); }
 
       this.lastDrawElementTransformPosition = {
@@ -4000,10 +4000,10 @@ class FigureElementPrimitive extends FigureElement {
       // const newTransform = parentTransform.transform(this.getTransform());
       // this.parentTransform = parentTransform._dup();
       // const newTransform = parentTransform.transform(this.getTransform());
-      this.pulseTransforms = this.getPulseTransforms(now);
+      this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m3'); }
 
-      this.drawTransforms = this.getDrawTransforms(newTransforms);
+      this.drawTransforms = this.getDrawTransforms(newTransforms); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m4'); }
 
       // this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
@@ -4011,7 +4011,7 @@ class FigureElementPrimitive extends FigureElement {
       this.lastDrawTransform = newTransforms[0];
       // this.lastDrawTransforms = newTransforms;
       // this.lastParentTransform
-
+       // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m5'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
@@ -4021,7 +4021,7 @@ class FigureElementPrimitive extends FigureElement {
             t.matrix(), colorToUse, canvasIndex, pointCount,
           );
         });
-      }
+      }  // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m6'); }
 
       if (this.unrenderNextDraw) {
@@ -4040,8 +4040,8 @@ class FigureElementPrimitive extends FigureElement {
         this.fnMap.exec(this.afterDrawCallback, now);
       }
 
-      if (FIGURE1DEBUG) {
-        timer.stamp('m7');
+      if (FIGURE1DEBUG) { // $FlowFixMe
+        timer.stamp('m7'); // $FlowFixMe
         const deltas = timer.deltas();
         window.figureOneDebug.draw.push([
           this.getPath(),
@@ -4658,12 +4658,12 @@ class FigureElementCollection extends FigureElement {
       }
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
-      }
+      } // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('beforePub'); }
       // console.l^ *consoleog(this.name, now);
-      this.animations.nextFrame(now);
+      this.animations.nextFrame(now); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('animations'); }
-      this.nextMovingFreelyFrame(now);
+      this.nextMovingFreelyFrame(now); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('moveFreely'); }
 
       // set next color can end up hiding an element when disolving out
@@ -4690,8 +4690,8 @@ class FigureElementCollection extends FigureElement {
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
         this.elements[this.drawOrder[i]].setupDraw(now, canvasIndex);
       }
-      if (FIGURE1DEBUG) {
-        timer.stamp('elements');
+      if (FIGURE1DEBUG) { // $FlowFixMe
+        timer.stamp('elements'); // $FlowFixMe
         const deltas = timer.deltas();
         window.figureOneDebug.setupDraw.push([
           '>>',
@@ -4738,22 +4738,23 @@ class FigureElementCollection extends FigureElement {
       };
       const transform = this.getTransform();
       const newTransforms = transformBy(parentTransform, [transform]);
-
+      // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m1'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawTransform = newTransforms[0];
       // this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
+      // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m2'); }
-      this.pulseTransforms = this.getPulseTransforms(now);
+      this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m3'); }
-      this.drawTransforms = this.getDrawTransforms(newTransforms);
+      this.drawTransforms = this.getDrawTransforms(newTransforms); // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m4'); }
 
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
 
       const opacityToUse = this.color[3] * this.opacity * parentOpacity;
-      this.lastDrawOpacity = opacityToUse;
+      this.lastDrawOpacity = opacityToUse; // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m5'); }
 
       let drawTimer;
@@ -4761,14 +4762,14 @@ class FigureElementCollection extends FigureElement {
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
         this.elements[this.drawOrder[i]].draw(
           now, this.drawTransforms, opacityToUse, canvasIndex,
-        );
+        ); // $FlowFixMe
         if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
-      }
+      } // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m6'); }
       if (this.unrenderNextDraw) {
         this.clearRender();
         this.unrenderNextDraw = false;
-      }
+      } // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m7'); }
       if (this.renderedOnNextDraw) {
         this.isRenderedAsImage = true;
@@ -4780,8 +4781,8 @@ class FigureElementCollection extends FigureElement {
       if (this.afterDrawCallback != null) {
         this.fnMap.exec(this.afterDrawCallback, now);
       }
-      if (FIGURE1DEBUG) {
-        timer.stamp('m8');
+      if (FIGURE1DEBUG) { // $FlowFixMe
+        timer.stamp('m8'); // $FlowFixMe
         const deltas = timer.deltas();
         const drawDeltas = drawTimer.deltas();
         window.figureOneDebug.draw.push([

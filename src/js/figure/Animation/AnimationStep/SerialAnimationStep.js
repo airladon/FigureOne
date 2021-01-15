@@ -171,7 +171,7 @@ export class SerialAnimationStep extends AnimationStep {
     }
   }
 
-  nextFrame(now: number, speed: number) {
+  nextFrame(now: number, speed: number = 1) {
     if (this.startTime === null) {
       this.startTime = now - this.startTimeOffset;
     }
