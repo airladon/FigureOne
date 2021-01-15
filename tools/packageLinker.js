@@ -1,3 +1,9 @@
+/**
+Usage:
+`node tools/packageLinker.js dev` - change links in html files to dev package
+`node tools/packageLinker.js prod` - change links in html files to prod package
+`node tools/packageLinker.js remote` - change links in html files to remote
+ */
 const Path = require('path');
 const fs = require('fs');
 const { getFiles } = require('./getFiles');

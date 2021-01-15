@@ -1,4 +1,1 @@
-app/app/static/*
-src/Lessons/boilerplate
-examples/
 src/tests/api-examples/index.js

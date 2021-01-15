@@ -5,16 +5,14 @@
 .travis.yml
 LICENSE
 README.md
-build.sh
 dev.sh
-docker_run.sh
 docs
 documentation.yml
 examples
-generate_docs.sh
 jsdoc-conf.json
 node_modules
 package
 reports
 src
 start_env.sh
+scratch

@@ -8,5 +8,4 @@ module.name_mapper.extension='css' -> 'empty/object'
 module.name_mapper.extension='scss' -> 'empty/object'
 
 [ignore]
-<PROJECT_ROOT>/src/Lessons/boilerplate/.*
 <PROJECT_ROOT>/package/.*
