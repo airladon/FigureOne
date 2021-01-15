@@ -2762,6 +2762,16 @@
               
                 
                 <li><a
+                  href='#eqn_touchbox'
+                  class="">
+                  EQN_TouchBox
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#eqn_annotate'
                   class="">
                   EQN_Annotate
@@ -2915,6 +2925,16 @@
                   href='#eqn_radicalsymbol'
                   class="">
                   EQN_RadicalSymbol
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eqn_linesymbol'
+                  class="">
+                  EQN_LineSymbol
                   
                 </a>
                 
@@ -3449,6 +3469,16 @@
                   
                   
                 </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#typeelementpath'
+                  class="">
+                  TypeElementPath
+                  
+                </a>
                 
                 </li>
               
@@ -4934,16 +4964,6 @@
               
                 
                 <li><a
-                  href='#typeelementpath'
-                  class="">
-                  TypeElementPath
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#eqn_updateelementtext'
                   class="">
                   EQN_UpdateElementText
@@ -4977,26 +4997,6 @@
                   href='#eqn_translationstyles'
                   class="">
                   EQN_TranslationStyles
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#eqn_linesymbol'
-                  class="">
-                  EQN_LineSymbol
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#eqn_touchbox'
-                  class="">
-                  EQN_TouchBox
                   
                 </a>
                 
@@ -37937,6 +37937,148 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='eqn_touchbox'>
+      EQN_TouchBox
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation touch box</p>
+<p>Place a box symbol around an equation phrase</p>
+<p>Options can be an object, or an array in the property order below</p>
+
+  
+    <p style="display: none;">      Type:
+      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?])
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : space between box symbol and content on
+the left, right, bottom and top sides (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use when top space between content and
+box should be different thant 
+<code>space</code>
+ property (
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>rightSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use when right space between content and
+box should be different thant 
+<code>space</code>
+ property (
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use when bottom space between content and
+box should be different thant 
+<code>space</code>
+ property (
+<code>space</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>leftSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : use when left space between content and
+box should be different thant 
+<code>space</code>
+ property (
+<code>space</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='eqn_annotate'>
       EQN_Annotate
     </h3>
@@ -40828,6 +40970,121 @@ eqn.addElements({
    },
  });</pre>
     
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_linesymbol'>
+      EQN_LineSymbol
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A line symbol to be used in <a href="#eqn_annotate">EQN_Annotate</a> as a <a href="#eqn_lineglyph">EQN_LineGlyph</a>,
+or in <a href="#eqn_comment">EQN_Comment</a>.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : line width
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>?)</code>
+          : dash style of line
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>arrow</span> <code class='quiet'>(<a href="#obj_linearrows">OBJ_LineArrows</a>?)</code>
+          : arrow styles of line where start is
+toward the content
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
+          : <code>'static'</code>
+ updates vertices on
+resize, 
+<code>'static'</code>
+ only changes scale transform (
+<code>dynamic</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          : used when 
+<code>draw</code>
+=
+<code>static</code>
+.
+
+<code>number</code>
+ sets height of static symbol - 
+<code>'first'</code>
+ calculates and sets height
+based on first use (
+<code>'first'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>staticWidth</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
+          
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
   
 
   
@@ -45318,6 +45575,86 @@ touched
     </div>
   
 </div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='typeelementpath'>
+      TypeElementPath
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Path to a <a href="#figureelement">FigureElement</a> within a <a href="#figureelementcollection">FigureElementCollection</a>.</p>
+<p><code>string | {[name: string]: TypeElementPath } |</code><a href="#figureelement">FigureElement</a><code>| Array&#x3C;TypeElementPath>}</code></p>
+<p>Consider a collection with the below heirachy. The collection has two
+children <code>diagram</code> and <code>description</code> of which <code>diagram</code> is another
+collection:</p>
+<ul>
+<li>
+<p>diagram</p>
+<ul>
+<li>lineA</li>
+<li>lineB</li>
+<li>
+<p>lines</p>
+<ul>
+<li>lineC</li>
+<li>lineD</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>description</li>
+</ul>
+<p>The ways to define lineC, lineD and description are:</p>
+<ul>
+<li><code>['description', 'diagram.lines.lineC', 'diagram.lines.lineD']</code></li>
+<li><code>['description', { diagram: ['lines.lineC', 'lines.lineD'] }]</code></li>
+<li><code>['description', { 'diagram.lines': ['lineC', 'lineD'] }]</code></li>
+</ul>
+
+  
+    <p style="display: none;">      Type:
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {} | <a href="#figureelement">FigureElement</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeelementpath">TypeElementPath</a>>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 
@@ -60398,86 +60735,6 @@ e.animations.new()
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='typeelementpath'>
-      TypeElementPath
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Path to a <a href="#figureelement">FigureElement</a> within a <a href="#figureelementcollection">FigureElementCollection</a>.</p>
-<p><code>string | {[name: string]: TypeElementPath } |</code><a href="#figureelement">FigureElement</a><code>| Array&#x3C;TypeElementPath>}</code></p>
-<p>Consider a collection with the below heirachy. The collection has two
-children <code>diagram</code> and <code>description</code> of which <code>diagram</code> is another
-collection:</p>
-<ul>
-<li>
-<p>diagram</p>
-<ul>
-<li>lineA</li>
-<li>lineB</li>
-<li>
-<p>lines</p>
-<ul>
-<li>lineC</li>
-<li>lineD</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>description</li>
-</ul>
-<p>The ways to define lineC, lineD and description are:</p>
-<ul>
-<li><code>['description', 'diagram.lines.lineC', 'diagram.lines.lineD']</code></li>
-<li><code>['description', { diagram: ['lines.lineC', 'lines.lineD'] }]</code></li>
-<li><code>['description', { 'diagram.lines': ['lineC', 'lineD'] }]</code></li>
-</ul>
-
-  
-    <p style="display: none;">      Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | {} | <a href="#figureelement">FigureElement</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#typeelementpath">TypeElementPath</a>>)
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='eqn_updateelementtext'>
       EQN_UpdateElementText
     </h3>
@@ -60711,263 +60968,6 @@ objects.</p>
 , 
 <a href="#eqn_fromform">EQN_FromForm</a>
 .
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eqn_linesymbol'>
-      EQN_LineSymbol
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>A line symbol to be used in <a href="#eqn_annotate">EQN_Annotate</a> as a <a href="#eqn_lineglyph">EQN_LineGlyph</a>,
-or in <a href="#eqn_comment">EQN_Comment</a>.</p>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : line width
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>dash</span> <code class='quiet'>(<a href="#typedash">TypeDash</a>?)</code>
-          : dash style of line
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>arrow</span> <code class='quiet'>(<a href="#obj_linearrows">OBJ_LineArrows</a>?)</code>
-          : arrow styles of line where start is
-toward the content
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
-          : <code>'static'</code>
- updates vertices on
-resize, 
-<code>'static'</code>
- only changes scale transform (
-<code>dynamic</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
-          : used when 
-<code>draw</code>
-=
-<code>static</code>
-.
-
-<code>number</code>
- sets height of static symbol - 
-<code>'first'</code>
- calculates and sets height
-based on first use (
-<code>'first'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>staticWidth</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
-          
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eqn_touchbox'>
-      EQN_TouchBox
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Equation touch box</p>
-<p>Place a box symbol around an equation phrase</p>
-<p>Options can be an object, or an array in the property order below</p>
-
-  
-    <p style="display: none;">      Type:
-      ({content: <a href="#typeequationphrase">TypeEquationPhrase</a>, symbol: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, space: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, topSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, rightSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, bottomSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, leftSpace: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?} | [<a href="#typeequationphrase">TypeEquationPhrase</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?, <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?])
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : space between box symbol and content on
-the left, right, bottom and top sides (
-<code>0</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : use when top space between content and
-box should be different thant 
-<code>space</code>
- property (
-<code>space</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>rightSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : use when right space between content and
-box should be different thant 
-<code>space</code>
- property (
-<code>space</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : use when bottom space between content and
-box should be different thant 
-<code>space</code>
- property (
-<code>space</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>leftSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : use when left space between content and
-box should be different thant 
-<code>space</code>
- property (
-<code>space</code>
-)
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Related</div>
-    
-      
-        To test examples, append them to the
-
-<a href="#equation-boilerplate">
-boilerplate
-</a>
 
       
     
