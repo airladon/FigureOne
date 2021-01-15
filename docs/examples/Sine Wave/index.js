@@ -96,7 +96,7 @@ const button = (name, label, position) => ({
     },
     touchBorder: 0.1,
     position,
-    color: [0.6, 0.6, 0.6, 1],
+    color: [0.4, 0.4, 0.4, 1],
     width: 0.7,
     height: 0.25,
     corner: { radius: 0.05, sides: 10 },
@@ -123,7 +123,7 @@ figure.add([
           length: 3.6,
           position: [-r, 0],
           width: 0.005,
-          color: [0.7, 0.7, 0.7, 1],
+          color: [0.4, 0.4, 0.4, 1],
         }
       },
       {
@@ -134,7 +134,7 @@ figure.add([
           position: [0, -r],
           width: 0.005,
           angle: Math.PI / 2,
-          color: [0.7, 0.7, 0.7, 1],
+          color: [0.4, 0.4, 0.4, 1],
         },
       },
       {
@@ -144,7 +144,7 @@ figure.add([
           radius: r,
           sides: 200,
           line: { width: 0.005 },
-          color: [0.7, 0.7, 0.7, 1],
+          color: [0.4, 0.4, 0.4, 1],
         },
       },
       {
@@ -154,7 +154,7 @@ figure.add([
           maxLength: 3,
           width: 0.005,
           dash: [0.03, 0.01],
-          color: [0.7, 0.7, 0.7, 1],
+          color: [0.4, 0.4, 0.4, 1],
         },
       },
       {

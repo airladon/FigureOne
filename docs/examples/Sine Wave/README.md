@@ -1,8 +1,10 @@
 # Example - Sine Wave
 
-Rotate the line manually, or press 'fast' or 'slow' to make a sine wave.
+See how sine waves and rotation are related with interaction and animation.
 
-Open `index.html` in a browser to view example.
+Open `index.html` in a browser to view example, or the example is hosted [here](https://airladon.github.io/FigureOne/examples/Sine%20Wave/index.html).
+
+Rotate the line manually, or press 'fast' or 'slow' to make a sine wave.
 
 ![](./example.gif)
 
