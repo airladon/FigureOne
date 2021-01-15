@@ -6,7 +6,7 @@ The library used to draw interactive slides at <a href="https://www.thisiget.com
 
 See the [Tutorials](https://github.com/airladon/FigureOne/tree/master/docs/tutorials), [API Reference](https://airladon.github.io/FigureOne/api/) and [Examples](https://github.com/airladon/FigureOne/tree/master/docs/examples) and you'll be making beautiful, interactive figures in no time.
 
-You can interact with and experience the examples [here](https://airladon.github.io/FigureOne/).
+The examples are also hosted on this repository's GitHub Pages site [here](https://airladon.github.io/FigureOne/).
 
 ![](./docs/examples/Sine%20Limit/example.gif)
 
@@ -58,68 +58,76 @@ And you will see:
 
 The tutorials introduce how to use FigureOne and many of the main concepts.
 
-### **[Simple shape](https://github.com/airladon/FigureOne/tree/master/tutorials/01%20-%20Shape)** - Simple creation and drawing of figure element
+### **[Simple shape](https://github.com/airladon/FigureOne/tree/master/docs/tutorials/01%20-%20Shape)** - Simple creation and drawing of figure element
 
-![](tutorials/01%20-%20Shape/example.png)
+![](docs/tutorials/01%20-%20Shape/example.png)
 
-### **[Collections](https://github.com/airladon/FigureOne/tree/master/tutorials/02%20-%20Collections)** - Collections of figure elements all move together
+### **[Collections](https://github.com/airladon/FigureOne/tree/master/docs/tutorials/02%20-%20Collections)** - Collections of figure elements all move together
 
-![](tutorials/02%20-%20Collections/example.gif)
+![](docs/tutorials/02%20-%20Collections/example.gif)
 
-### **[Interactive Shape](https://github.com/airladon/FigureOne/tree/master/tutorials/03%20-%20Interactive%20Shape)** - A shape that can be moved by the user
+### **[Interactive Shape](https://github.com/airladon/FigureOne/tree/master/docs/tutorials/03%20-%20Interactive%20Shape)** - A shape that can be moved by the user
 
-![](tutorials/03%20-%20Interactive%20Shape/example.gif)
+![](docs/tutorials/03%20-%20Interactive%20Shape/example.gif)
 
-### **[Animation](https://github.com/airladon/FigureOne/tree/master/tutorials/04%20-%20Animation)** - Animating a shape
+### **[Animation](https://github.com/airladon/FigureOne/tree/master/docs/tutorials/04%20-%20Animation)** - Animating a shape
 
-![](tutorials/04%20-%20Animation/example.gif)
+![](docs/tutorials/04%20-%20Animation/example.gif)
 
-### **[Simple Equation](https://github.com/airladon/FigureOne/tree/master/tutorials/05%20-%20Simple%20Equation)** - Render a simple fraction
+### **[Simple Equation](https://github.com/airladon/FigureOne/tree/master/docs/tutorials/05%20-%20Simple%20Equation)** - Render a simple fraction
 
-![](tutorials/05%20-%20Simple%20Equation/example.png)
+![](docs/tutorials/05%20-%20Simple%20Equation/example.png)
 
-### **[Advanced Equation](https://github.com/airladon/FigureOne/tree/master/tutorials/06%20-%20Advanced%20Equation)** - Render an equation with an integral, sum operator, subscripts and color
+### **[Advanced Equation](https://github.com/airladon/FigureOne/tree/master/docs/tutorials/06%20-%20Advanced%20Equation)** - Render an equation with an integral, sum operator, subscripts and color
 
-![](tutorials/06%20-%20Advanced%20Equation/example.png)
+![](docs/tutorials/06%20-%20Advanced%20Equation/example.png)
 
-### **[Equation Animation](https://github.com/airladon/FigureOne/tree/master/tutorials/07%20-%20Animation%20between%20Equation%20Forms)** - Animation between two forms of an equation
+### **[Equation Animation](https://github.com/airladon/FigureOne/tree/master/docs/tutorials/07%20-%20Animation%20between%20Equation%20Forms)** - Animation between two forms of an equation
 
-![](tutorials/07%20-%20Animation%20between%20Equation%20Forms/example.gif)
+![](docs/tutorials/07%20-%20Animation%20between%20Equation%20Forms/example.gif)
 
-### **[Texture](https://github.com/airladon/FigureOne/tree/master/tutorials/08%20-%20Texture)** - Using a texture instead of a color
+### **[Texture](https://github.com/airladon/FigureOne/tree/master/docs/tutorials/08%20-%20Texture)** - Using a texture instead of a color
 
-![](tutorials/08%20-%20Texture/example.png)
+![](docs/tutorials/08%20-%20Texture/example.png)
 
-### **[Plot](https://github.com/airladon/FigureOne/tree/master/tutorials/09%20-%20Plot)** - Automatically generated plot
+### **[Plot](https://github.com/airladon/FigureOne/tree/master/docs/tutorials/09%20-%20Plot)** - Automatically generated plot
 
-![](tutorials/09%20-%20Plot/example.png)
+![](docs/tutorials/09%20-%20Plot/example.png)
 
-### **[Customized Plot](https://github.com/airladon/FigureOne/tree/master/tutorials/10%20-%20Customized%20Plot)** - Plot with title, axis, trace and legend customizations
+### **[Customized Plot](https://github.com/airladon/FigureOne/tree/master/docs/tutorials/10%20-%20Customized%20Plot)** - Plot with title, axis, trace and legend customizations
 
-![](tutorials/10%20-%20Customized%20Plot/example.png)
+![](docs/tutorials/10%20-%20Customized%20Plot/example.png)
 
 
 ## Examples
 
-### **[Interactive Angle](https://github.com/airladon/FigureOne/tree/master/examples/Interactive%20Angle)**
+### **[Interactive Angle](https://github.com/airladon/FigureOne/tree/master/docs/examples/Interactive%20Angle)**
 
-![](examples/Interactive%20Angle/example.gif)
+![](docs/examples/Interactive%20Angle/example.gif)
 
-### **[Pythagorean Equation Animation](https://github.com/airladon/FigureOne/tree/master/examples/Pythagorean%20Theorem)**
+### **[Pythagorean Equation Animation](https://github.com/airladon/FigureOne/tree/master/docs/examples/Pythagorean%20Theorem)**
 
-![](examples/Pythagorean%20Theorem/example.gif)
+![](docs/examples/Pythagorean%20Theorem/example.gif)
 
-### **[Create a Sine Wave](https://github.com/airladon/FigureOne/tree/master/examples/Sine%20Wave)**
+### **[Create a Sine Wave](https://github.com/airladon/FigureOne/tree/master/docs/examples/Sine%20Wave)**
 
-![](examples/Sine%20Wave/example.gif)
+![](docs/examples/Sine%20Wave/example.gif)
 
-### **[Total Angle of a Polygon](https://github.com/airladon/FigureOne/tree/master/examples/Total%20Angle%20of%20a%20Polygon)**
+### **[Total Angle of a Polygon](https://github.com/airladon/FigureOne/tree/master/docs/examples/Total%20Angle%20of%20a%20Polygon)**
 
-![](examples/Total%20Angle%20of%20a%20Polygon/example.gif)
+![](docs/examples/Total%20Angle%20of%20a%20Polygon/example.gif)
 
-### **[Holiday Equation](https://github.com/airladon/FigureOne/tree/master/examples/Holiday%20Equation)**
+### **[Traveling Wave 01 - Shifting Equations](https://github.com/airladon/FigureOne/tree/master/docs/examples/Total%20Angle%20of%20a%20Polygon)**
 
-![](examples/Holiday%20Equation/example.gif)
+![](docs/examples/Traveling%20Wave%2001%20-%20Shifting%20Equations/example.gif)
+
+### **[Traveling Wave 02 - Sine Wave](https://github.com/airladon/FigureOne/tree/master/docs/examples/Traveling%20Wave%2002%20-%20Sine%20Wave)**
+
+![](docs/examples/Traveling%20Wave%2001%20-%20Shifting%20Equations/example.gif)
+
+### **[Holiday Equation](https://github.com/airladon/FigureOne/tree/master/docs/examples/Holiday%20Equation)**
+
+![](docs/examples/Holiday%20Equation/example.gif)
 
 
 ## NPM Package

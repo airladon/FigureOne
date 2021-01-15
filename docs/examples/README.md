@@ -1,6 +1,6 @@
 # Examples
 
-For an introduction to FigureOne, see the tutorials.
+For an introduction to FigureOne, see the [tutorials](https://github.com/airladon/FigureOne/tree/master/docs/tutorials/).
 
 To interact with examples, either download the html and js files in the example, or go [here](https://airladon.github.io/FigureOne/).
 

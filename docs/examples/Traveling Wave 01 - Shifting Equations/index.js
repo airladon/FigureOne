@@ -306,7 +306,6 @@ figure.add([
     },
     mods: { 
       scenarios: {
-        // default: { position: [0, -1.25], scale: 1.2 },
         default: { position: [0, 0.8], scale: 1.2 },
         title: { position: [-0.5, -1.05], scale: 1 },
         example: { position: [0, -1.25], scale: 1 },
