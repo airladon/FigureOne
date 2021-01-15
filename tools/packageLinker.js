@@ -5,11 +5,12 @@ const pjson = require('../package.json');
 
 const to = process.argv.slice(2)[0] || 'dev';
 
-const files = getFiles('./docs/tutorials/', /html$/, /test.html$/);
+const files = getFiles('./docs/tutorials', /html$/, /test.html$/);
 
 const remote = `https://cdn.jsdelivr.net/npm/figureone@${pjson.version}/figureone.min.js`;
 for (let i = 0; i < files.length; i += 1) {
   const file = files[i];
+  // eslint-disable-next-line no-console
   console.log(file);
   const figOne = {
     dev: Path.relative(Path.dirname(file), './package/index.js'),
