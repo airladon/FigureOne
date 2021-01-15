@@ -804,6 +804,7 @@ const modifiers = {
 // };
 // /////////////////////////////////////////////////////////////////
 slides.push({
+  showCommon: [figure.elements],
   modifiersCommon: modifiers,
   text: [
     'Explore the equation of a travelling sine wave and the relationship',
