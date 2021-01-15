@@ -11,38 +11,6 @@ Open `index.html` in a browser to view example, or the example is hosted [here](
 
 ## Explanation
 
-### HTML Styling
-
-For simplicity, the html file contains the styling and content of the page.
-
-In general, the style customizes the look and feel with vanilla css. The specific styling of the figure is however interesting to note, as its goal is to ensure a figure is able to be fully viewed on any screen size, no matter the aspect ratio of the screen. This is particularly useful for interactive figures.
-
-Each figure is defined in the HTML code as a `figureOneContainer` div wrapped in a `wrapper` div. The width of the wrapper is defined by the width of the screen when the aspect ratio is <1:1 (e.g. portrait orientation on a mobile device) and the height of the screen when the aspect ratio is >1:1 (landscape).
-
-```html
-<div class="wrapper50">
-    <div id="figureOneContainer1" class="ar50"></div>
-</div>
-```
-
-```css
-.wrapper50 {
-    width: calc(100vw - 20px);
-    max-width: 100%;
-    padding-bottom: 10px;
-    margin-left: auto;
-    margin-right: auto;
-}
-@media (min-aspect-ratio: 1/1) {
-    .wrapper50 {
-        width: calc((100vh - 20px)/0.5);
-    }
-} 
-.ar50 {
-    width: 100%;
-    padding-bottom: 50%;
-}
-```
 
 ### HTML Equations using MathJax
 
