@@ -1,4 +1,5 @@
-figure = new Fig.Figure({ limits: [-2, -1.7, 4, 3], color: [1, 0, 0, 1] });
+/* globals Fig */
+const figure = new Fig.Figure({ limits: [-2, -1.7, 4, 3], color: [1, 0, 0, 1] });
 
 // ////////////////////////////////////////////////////////////////////////
 // Radius and Space between radius and recorded signal
@@ -22,7 +23,7 @@ class DynamicSignal {
     this.duration = 10;
     this.timeStep = 0.01;
     const time = Fig.range(0, this.duration, this.timeStep);
-    
+
     // The xRange is the x distance the duration will be plotted over
     const xRange = 2 - space;
 
@@ -124,7 +125,7 @@ figure.add([
           position: [-r, 0],
           width: 0.005,
           color: [0.4, 0.4, 0.4, 1],
-        }
+        },
       },
       {
         name: 'y',
@@ -198,10 +199,10 @@ function update() {
   const endPoint = Fig.polarToRect(r, angle);
   sine.setEndPoints(endPoint, [r + space, endPoint.y]);
   signal.update(endPoint.y);
-  const points = signal.getPoints()
+  const points = signal.getPoints();
   signalLine.custom.updatePoints({ points });
   figure.animateNextFrame();
-};
+}
 
 // Update the signal to the latest rotator value before each draw
 figure.subscriptions.add('beforeDraw', () => {
@@ -229,9 +230,9 @@ function startSpinning(frequency) {
   const angle = rotator.getRotation();
   rotator.animations.new()
     .custom({
-      callback: this.spinner.bind(this, angle, 100, frequency),
+      callback: spinner.bind(this, angle, 100, frequency),
       duration: 100,
-      })
+    })
     .start();
 }
 
@@ -248,3 +249,8 @@ figure.getElement('stop').onClick = () => { rotator.stop(); };
 rotator.animations.new()
   .rotation({ target: Math.PI / 4, duration: 1.5 })
   .start();
+
+// Globally available pulse function to be used from HTML page
+const pulseRotator = () => {
+  rotator.pulse({ rotation: 0.1, min: -0.1, frequency: 3 });
+};
