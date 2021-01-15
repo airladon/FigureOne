@@ -450,7 +450,7 @@ export default class SlideNavigator {
         prevButton.setOpacity(1);
         prevButton.isTouchable = true;
       }
-    }
+    } // $FlowFixMe
     if (nextButton != null && nextButton.setLabel != null) {
       if (this.currentSlideIndex === this.slides.length - 1) {  // $FlowFixMe
         nextButton.setLabel('Restart');

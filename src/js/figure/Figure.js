@@ -2270,24 +2270,28 @@ class Figure {
       return;
     }
     this.drawQueued = false;
-
+    // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('m1'); }
     this.clearContext(canvasIndex);
     // console.log('really drawing')
     // const startSetup = new Date().getTime();
+    // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('clearContext'); }
     // if (this.subscriptions.subscriptions.beforeDraw != null) {
     //   console.log(this.subscriptions.subscriptions.beforeDraw.asdf)
     // }
     this.subscriptions.publish('beforeDraw');
+    // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
     this.elements.setupDraw(
       now,
       canvasIndex,
     );
+    // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('setupDraw'); }
 
     this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
+    // $FlowFixMe
     if (FIGURE1DEBUG) { timer.stamp('draw'); }
 
     if (this.elements.isAnyElementMoving()) {
@@ -2299,8 +2303,8 @@ class Figure {
       this.animateNextFrame(true, 'queued frames');
     }
     this.subscriptions.publish('afterDraw');
-    if (FIGURE1DEBUG) {
-      timer.stamp('afterDraw');
+    if (FIGURE1DEBUG) { // $FlowFixMe
+      timer.stamp('afterDraw'); // $FlowFixMe
       const deltas = timer.deltas();
       if (window.figureOneDebug.cumTimes.length > 50) {
         Console(

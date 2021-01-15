@@ -13,7 +13,7 @@ import { getState } from './Recorder/state';
 import type {
   TypeParsablePoint, TypeParsableTransform,
   TypeTransformValue, TypeTransformBoundsDefinition,
-  TypeBorder, TypeParsableBuffer,
+  TypeBorder, TypeParsableBuffer, Bounds,
 } from '../tools/g2';
 import { Recorder } from './Recorder/Recorder';
 import * as m2 from '../tools/m2';
@@ -477,7 +477,7 @@ class FigureElement {
 
   lastDrawTransform: Transform; // Transform matrix used in last draw
   lastDrawPulseTransform: Transform; // Transform matrix used in last draw
-  parentTransform: Transform;
+  parentTransform: Array<Transform>;
   // transformUpdated: boolean;
   // lastDrawParentTransform: Transform;
   // lastDrawElementTransform: Transform;
@@ -705,7 +705,7 @@ class FigureElement {
     this.afterDrawCallback = null;
     this.internalSetTransformCallback = null;
     this.lastDrawTransform = this.transform._dup();
-    this.parentTransform = new Transform();
+    this.parentTransform = [new Transform()];
     this.lastDrawPulseTransform = this.transform._dup();
     this.onClick = null;
     this.lastDrawElementTransformPosition = {
@@ -1774,7 +1774,7 @@ class FigureElement {
         }
       }
     } else {
-      const bounds = this.getMoveBounds();
+      const bounds = this.getMoveBounds(); // $FlowFixMe
       const clip = bounds.clip(transform);
       this.subscriptions.publish('beforeSetTransform', [clip]);
       if (this.cancelSetTransform === false) {
@@ -3263,7 +3263,7 @@ class FigureElement {
 
   getMoveBounds(): Bounds {
     this.checkMoveBounds();  // $FlowFixMe
-    if (this.move.bounds.isUnbounded()) {
+    if (this.move.bounds.isUnbounded()) { // $FlowFixMe
       return this.move.bounds;
     }
 
@@ -3281,7 +3281,7 @@ class FigureElement {
         dup.updateTranslation(b);
         return dup;
       }
-    }
+    } // $FlowFixMe
     return this.move.bounds;
   }
 
@@ -3936,7 +3936,7 @@ class FigureElementPrimitive extends FigureElement {
       this.nextMovingFreelyFrame(now);
 
       if (FIGURE1DEBUG) { // $FlowFixMe
-        timer.stamp('animations');
+        timer.stamp('animations'); // $FlowFixMe
         const deltas = timer.deltas();
         window.figureOneDebug.setupDraw.push([
           this.getPath(),
@@ -3949,7 +3949,7 @@ class FigureElementPrimitive extends FigureElement {
 
   draw(
     now: number,
-    parentTransform: Array<Transform> | null = [new Transform()],
+    parentTransform: Array<Transform> = [new Transform()],
     parentOpacity: number = 1,
     canvasIndex: number = 0,
   ) {
@@ -3989,7 +3989,7 @@ class FigureElementPrimitive extends FigureElement {
       this.parentTransform = parentTransform;
       // this.transformUpdated = false;
       // }
-       // $FlowFixMe
+      // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m2'); }
 
       this.lastDrawElementTransformPosition = {
@@ -4011,7 +4011,7 @@ class FigureElementPrimitive extends FigureElement {
       this.lastDrawTransform = newTransforms[0];
       // this.lastDrawTransforms = newTransforms;
       // this.lastParentTransform
-       // $FlowFixMe
+      // $FlowFixMe
       if (FIGURE1DEBUG) { timer.stamp('m5'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
@@ -4783,7 +4783,7 @@ class FigureElementCollection extends FigureElement {
       }
       if (FIGURE1DEBUG) { // $FlowFixMe
         timer.stamp('m8'); // $FlowFixMe
-        const deltas = timer.deltas();
+        const deltas = timer.deltas(); // $FlowFixMe
         const drawDeltas = drawTimer.deltas();
         window.figureOneDebug.draw.push([
           '>>',
