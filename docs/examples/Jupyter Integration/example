@@ -98,7 +98,7 @@
       "application/javascript": [
        "require.config({ \n",
        "  paths: { \n",
-       "    Fig: 'https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min'\n",
+       "    Fig: 'https://cdn.jsdelivr.net/npm/figureone@0.4.0/figureone.min'\n",
        "  },\n",
        "  scriptType: 'text/javascript'\n",
        "});\n",
@@ -116,7 +116,7 @@
     "%%javascript\n",
     "require.config({ \n",
     "  paths: { \n",
-    "    Fig: 'https://cdn.jsdelivr.net/npm/figureone@0.3.12/figureone.min'\n",
+    "    Fig: 'https://cdn.jsdelivr.net/npm/figureone@0.4.0/figureone.min'\n",
     "  },\n",
     "  scriptType: 'text/javascript'\n",
     "});\n",
