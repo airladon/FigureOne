@@ -6,7 +6,7 @@ figure.add(
     method: 'equation',
     options: {
       elements: {
-        v: { symbol: 'vinculum'},
+        v: { symbol: 'vinculum' },
         equals: ' = ',
         times: ' \u00D7 ',
         c: { color: [0, 0, 1, 1] },
@@ -21,10 +21,8 @@ figure.add(
         2: {
           content: ['c', 'times', 'a', 'equals', 'b'],
           // Define how the 'c' element will move to this form
-          animation: {
-            translation: {
-              c: { style: 'curved', direction: 'down', mag: 0.5 },
-            },
+          translation: {
+            c: { style: 'curved', direction: 'down', mag: 0.5 },
           },
         },
       },
@@ -44,8 +42,3 @@ eqn.goToForm({
   duration: 1.5,
   animate: 'move',
 });
-
-// figure.getElement('eqn.a').animations.setTimeDelta(null)
-// figure.getElement('eqn.v').animations.setTimeDelta(null)
-// figure.getElement('eqn.b').animations.setTimeDelta(null)
-// figure.getElement('eqn.c').animations.setTimeDelta(null)
