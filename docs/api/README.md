@@ -1,0 +1,1 @@
+The API reference is hosted on this repository's GitHub Pages page [here](https://airladon.github.io/FigureOne/api/).
