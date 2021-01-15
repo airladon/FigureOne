@@ -143,6 +143,13 @@ class FigureTextBase {
     width: number,
   };
 
+  lastDraw: {
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+  } | null;
+
   constructor(
     drawContext2D: Array<DrawContext2D> | DrawContext2D,
     location: TypeParsablePoint = new Point(0, 0),
@@ -163,6 +170,7 @@ class FigureTextBase {
     this.font = new FigureFont(font);
     this.xAlign = xAlign;
     this.yAlign = yAlign;
+    this.lastDraw = null;
     this.lastDrawRect = new Rect(0, 0, 1, 1);
     if (Array.isArray(drawContext2D)) {
       this.drawContext2D = drawContext2D;
@@ -403,6 +411,9 @@ class FigureText extends FigureTextBase {
 class FigureTextLine extends FigureTextBase {
   offset: Point;
   inLine: boolean;
+  followOffsetY: boolean;
+  rSpace: number;
+  lSpace: number;
 
   constructor(
     drawContext2D: Array<DrawContext2D> | DrawContext2D,
@@ -415,10 +426,16 @@ class FigureTextLine extends FigureTextBase {
     // touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
     touchBorder: TypeParsableBuffer | Array<Point> = 0,
     onClick?: string | (() => void) | null = null,
+    followOffsetY?: boolean = false,
+    lSpace?: number = 0,
+    rSpace?: number = 0,
   ) {
     super(drawContext2D, location, text, font, 'left', 'baseline', touchBorder, onClick);
     this.offset = getPoint(offset);
     this.inLine = inLine;
+    this.followOffsetY = followOffsetY;
+    this.lSpace = lSpace;
+    this.rSpace = rSpace;
     this.measureAndAlignText();
     this.calcBorderAndBounds();
   }
@@ -436,6 +453,11 @@ class FigureTextLine extends FigureTextBase {
       this.font.definition(),
       this.offset,
       this.inLine,
+      this.touchBorder,
+      this.onClick,
+      this.followOffsetY,
+      this.rSpace,
+      this.lSpace,
     );
   }
 }
@@ -455,8 +477,14 @@ class FigureTextLines extends FigureTextLine {
     // touchBorder: 'rect' | number | 'border' | Array<Point> = 'border',
     touchBorder: TypeParsableBuffer | Array<Point> = 0,
     onClick?: string | (() => void) | null = null,
+    followOffsetY?: boolean = false,
+    lSpace?: number = 0,
+    rSpace?: number = 0,
   ) {
-    super(drawContext2D, location, text, font, offset, inLine, touchBorder, onClick);
+    super(
+      drawContext2D, location, text, font, offset, inLine, touchBorder,
+      onClick, followOffsetY, lSpace, rSpace,
+    );
     this.line = line;
     // this.update();
   }
@@ -470,6 +498,11 @@ class FigureTextLines extends FigureTextLine {
       this.offset,
       this.inLine,
       this.line,
+      this.touchBorder,
+      this.onClick,
+      this.followOffsetY,
+      this.lSpace,
+      this.rSpace,
     );
   }
 }
@@ -485,6 +518,7 @@ class TextObjectBase extends DrawingObject {
   text: Array<FigureTextBase>;
   scalingFactor: number;
   lastDrawTransform: Array<number>;
+
   textBorder: Array<Array<Point>>;
   textBorderBuffer: Array<Array<Point>>;
   // borderSetup: 'text' | 'rect' | Array<Point>;
@@ -500,7 +534,7 @@ class TextObjectBase extends DrawingObject {
     } else {
       this.drawContext2D = [drawContext2D];
     }
-    this.lastDrawTransform = [];
+    this.lastDrawTransform = [1, 0, 0, 0, 1, 0, 0, 0, 1];
     this.text = [];
     // this.state = 'loaded';
   }
@@ -553,9 +587,11 @@ class TextObjectBase extends DrawingObject {
   }
 
   setText(textOrOptions: string | OBJ_TextDefinition, index: number = 0) {
+    this.clear();
     this.text[index].setText(textOrOptions);
     this.setBorder();
     this.setTouchBorder();
+    // this.layoutText();
   }
 
   // setText(text: string, index: number = 0) {
@@ -570,6 +606,7 @@ class TextObjectBase extends DrawingObject {
   }
 
   setFont(font: OBJ_Font, index: null | number = 0) {
+    this.clear();
     if (index === null) {
       for (let i = 0; i < this.text.length; i += 1) {
         this.text[i].setFont(font);
@@ -581,6 +618,7 @@ class TextObjectBase extends DrawingObject {
   }
 
   setOpacity(opacity: number, index: null | number = 0) {
+    this.clear();
     if (index === null) {
       for (let i = 0; i < this.text.length; i += 1) {
         this.setFont({ opacity }, i);
@@ -790,10 +828,22 @@ class TextObjectBase extends DrawingObject {
     ctx.transform(cA, cB, cC, cD, cE, cF);
     this.lastDrawTransform = elementToScaledPixelMatrix.slice();
 
+    // Some bug I don't understand in webgl is effectively cubing the alph
+    // channel. So make the same here to fade-ins happen at same rate
+    const c = color.slice();
+    c[3] *= c[3] * c[3];
+
     // Fill in all the text
     this.text.forEach((figureText) => {
+      // eslint-disable-next-line no-param-reassign
+      figureText.lastDraw = {
+        x: (figureText.locationAligned.x) * scalingFactor,
+        y: (figureText.locationAligned.y) * -scalingFactor,
+        width: figureText.bounds.width * scalingFactor,
+        height: figureText.bounds.height * scalingFactor,
+      };
       figureText.font.setFontInContext(ctx, scalingFactor);
-      figureText.font.setColorInContext(ctx, color);
+      figureText.font.setColorInContext(ctx, c);
       ctx.fillText(
         figureText.text,
         (figureText.locationAligned.x) * scalingFactor,
@@ -810,16 +860,30 @@ class TextObjectBase extends DrawingObject {
     ctx.transform(t[0], t[3], t[1], t[4], t[2], t[5]);
     // console.log('start clear');
     this.text.forEach((figureText) => {
-      const x = figureText.locationAligned.x * this.scalingFactor;
-      const y = figureText.locationAligned.y * -this.scalingFactor;
-      const width = figureText.bounds.width * this.scalingFactor;
-      const height = figureText.bounds.height * this.scalingFactor;
-      ctx.clearRect(
-        x - width * 1,
-        y + height * 1,
-        width * 3,
-        -height * 3,
-      );
+      // const x = figureText.locationAligned.x * this.scalingFactor;
+      // const y = figureText.locationAligned.y * -this.scalingFactor;
+      // const width = figureText.bounds.width * this.scalingFactor;
+      // const height = figureText.bounds.height * this.scalingFactor;
+      if (figureText.lastDraw != null) {
+        const {
+          x, y, width, height,
+        } = figureText.lastDraw;
+        ctx.clearRect(
+          x - width * 1, y + height * 0.5, width * 3, -height * 2,
+          // x - width * 1,
+          // y + height * 1,
+          // width * 3,
+          // -height * 3,\
+        );
+        // ctx.rect(
+        //   x - width * 1, y + height * 0.5, width * 3, -height * 2,
+        //   // (figureText.locationAligned.x) * scalingFactor,
+        //   // (figureText.locationAligned.y) * -scalingFactor,
+        // );
+        // ctx.fill();
+        // eslint-disable-next-line no-param-reassign
+        figureText.lastDraw = null;
+      }
     });
     ctx.restore();
   }
@@ -849,16 +913,16 @@ class TextObject extends TextObjectBase {
             onClick?: string | () => void,
         }
         | Array<string | {
-        text: string,
-        font?: OBJ_Font,
-        location?: TypeParsablePoint,
-        xAlign?: 'left' | 'right' | 'center',
-        yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
-        // border?: 'rect' | Array<Point>,
-        // touchBorder?: 'rect' | number | 'border' | Array<Point>,
-        touchBorder?: TypeParsableBuffer | Array<Point>,
-        onClick?: string | () => void,
-      }>;
+            text: string,
+            font?: OBJ_Font,
+            location?: TypeParsablePoint,
+            xAlign?: 'left' | 'right' | 'center',
+            yAlign?: 'bottom' | 'baseline' | 'middle' | 'top',
+            // border?: 'rect' | Array<Point>,
+            // touchBorder?: 'rect' | number | 'border' | Array<Point>,
+            touchBorder?: TypeParsableBuffer | Array<Point>,
+            onClick?: string | () => void,
+          }>;
       font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
       yAlign: 'bottom' | 'baseline' | 'middle' | 'top',   // default yAlign
@@ -950,9 +1014,13 @@ function createLine(
   let maxY = 0;
   let minY = 0;
   textArray.forEach((text) => {  // eslint-disable-next-line no-param-reassign
-    text.location = lastRight.add(text.offset);
+    text.location = lastRight.add(text.offset).add(text.lSpace);
     if (text.inLine) {
-      lastRight = text.location.add(text.measure.width, 0);
+      if (text.followOffsetY) {
+        lastRight = text.location.add(text.measure.width + text.rSpace, 0);
+      } else {
+        lastRight = text.location.add(text.measure.width + text.rSpace, -text.offset.y);
+      }
       const textMaxY = text.location.y + text.measure.ascent;
       const textMinY = text.location.y - text.measure.descent;
       if (textMaxY > maxY) {
@@ -1014,6 +1082,9 @@ class TextLineObject extends TextObjectBase {
         // border?: 'rect' | Array<Point>,
         touchBorder?: number | Array<Point>,
         onClick?: string | () => void,
+        followOffsetY?: boolean,
+        lSpace?: number,
+        rSpace?: number,
       }>;
       font: OBJ_Font,                    // default font
       xAlign: 'left' | 'right' | 'center',                // default xAlign
@@ -1034,15 +1105,19 @@ class TextLineObject extends TextObjectBase {
       let font;
       let offset;
       let inLine;
+      let followOffsetY;
       let textToUse;
       // let border;
       let touchBorder;
       let onClick;
+      let lSpace;
+      let rSpace;
       if (typeof textDefinition === 'string') {
         textToUse = textDefinition;
       } else {
         ({
-          font, offset, inLine, touchBorder, onClick,
+          font, offset, inLine, touchBorder, onClick, followOffsetY,
+          lSpace, rSpace,
         } = textDefinition);
         textToUse = textDefinition.text;
         // if (Array.isArray(border)) {  // $FlowFixMe
@@ -1083,6 +1158,9 @@ class TextLineObject extends TextObjectBase {
         inLine, // $FlowFixMe
         touchBorder || options.defaultTextTouchBorder,
         onClick,
+        followOffsetY,
+        lSpace,
+        rSpace,
       ));
     });
     this.text = figureTextArray;
@@ -1095,6 +1173,8 @@ class TextLineObject extends TextObjectBase {
   }
 
   setText(textOrOptions: string | OBJ_TextDefinition, index: number = 1) {
+    // if (textOrOptions.text.startsWith('abc')) {
+    // }
     this.text[index].setText(textOrOptions);
     this.layoutText();
     // this.setBorder();
@@ -1139,6 +1219,9 @@ class TextLinesObject extends TextObjectBase {
         // touchBorder?: 'border' | 'rect' | number | Array<Point>,
         touchBorder?: TypeParsableBuffer | Array<Point>,
         onClick?: () => void,
+        lSpace?: number,
+        rSpace?: number,
+        followOffsetY?: boolean,
     },
   };
 
@@ -1160,6 +1243,9 @@ class TextLinesObject extends TextObjectBase {
         // border?: 'rect' | Array<Point>,
         touchBorder?: TypeParsableBuffer | Array<Point>,
         onClick?: () => void,
+        followOffsetY?: boolean,
+        lSpace?: number,
+        rSpace?: number,
       },
     },
     defaultTextTouchBorder?: number,
@@ -1216,6 +1302,9 @@ class TextLinesObject extends TextObjectBase {
         // let border;
         let touchBorder;
         let onClick;
+        let followOffsetY = false;
+        let rSpace = 0;
+        let lSpace = 0;
         if (this.modifiers[s] != null) {
           const mod = this.modifiers[s];
           if (mod.text != null) {
@@ -1224,12 +1313,8 @@ class TextLinesObject extends TextObjectBase {
           if (mod.font != null) {
             textFont = joinObjects({}, lineFont, mod.font);
           }
-          if (mod.inLine != null) {
-            inLine = mod.inLine;
-          }
-          if (mod.offset != null) {
-            offset = mod.offset;
-          }
+          if (mod.inLine != null) { inLine = mod.inLine; }
+          if (mod.offset != null) { offset = mod.offset; }
           // if (mod.border != null) {
           //   border = mod.border;
           // }
@@ -1243,9 +1328,10 @@ class TextLinesObject extends TextObjectBase {
               [touchBorder] = getBorder(touchBorder);
             }
           }
-          if (mod.onClick != null) {
-            onClick = mod.onClick;
-          }
+          if (mod.onClick != null) { onClick = mod.onClick; }
+          if (mod.followOffsetY != null) { followOffsetY = mod.followOffsetY; }
+          if (mod.lSpace != null) { lSpace = mod.lSpace; }
+          if (mod.rSpace != null) { rSpace = mod.rSpace; }
           // if (Array.isArray(border)) {  // $FlowFixMe
           //   border = getPoints(border);
           // }
@@ -1263,6 +1349,9 @@ class TextLinesObject extends TextObjectBase {
           lineIndex, // $FlowFixMe
           touchBorder || options.defaultTextTouchBorder,
           onClick,
+          followOffsetY,
+          lSpace,
+          rSpace,
         );
         figureTextArray.push(t);
         line.push(t);
@@ -1300,8 +1389,10 @@ class TextLinesObject extends TextObjectBase {
     let maxLinesWidth = 0;
     let y = 0;
     this.lines.forEach((line, index) => {
-      if (index > 0) {
+      if (index > 0 && line.text.length > 0) {
         y -= line.space;
+      } else if (index > 0 && line.text.length === 0) {
+        y -= line.space / 3;
       }
       const { width, minY, maxY } = createLine(line.text, new Point(0, y));
       minLinesY = minY < minLinesY ? minY : minLinesY;

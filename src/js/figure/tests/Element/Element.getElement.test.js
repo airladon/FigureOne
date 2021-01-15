@@ -49,7 +49,7 @@ describe('GetElement', () => {
       expect(collection.getElement('squares.s1')).toBe(collection._squares._s1);
     });
     test('Get invalid', () => {
-      expect(collection.getElement('squares.s5')).toBe(null);
+      expect(collection.getElement('squares.s5')).toBe(undefined);
     });
   });
 });

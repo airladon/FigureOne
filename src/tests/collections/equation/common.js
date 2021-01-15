@@ -14,7 +14,7 @@ function makeShape(name, options, mods, getPos) {
     name,
     method: 'collections.equation',
     options: tools.misc.joinObjects({}, {
-      color: [1, 0, 0, 0.8],
+      color: [1, 0, 0, 0.9],
       position: [0, 0],
       scale: 0.5,
     }, options),

@@ -43,6 +43,17 @@ import type { OBJ_FigureForElement } from '../Figure';
 //   1. symbol
 //   2. text
 
+/**
+ * Object that defines new text for a selection of equation elements.
+ *
+ * Each key in the object is the name of the equation element whose text is to
+ * be updated.
+ *
+ * @property {string | FigureElement} [_elementName]
+ */
+export type EQN_UpdateElementText = {
+  [elementName: string]: string | FigureElement
+};
 
 /**
  * Object where keys are property names of a {@link FigureElement} and values
@@ -525,6 +536,7 @@ export type EQN_FormDefaults = {
  * All properties are optional.
  *
  * @property {TypeColor} [color] default equation color
+ * @property {TypeColor} [dimColor] default equation dim color
  * @property {OBJ_Font} [font] default {@link FigureFont} for the equation
  * @property {number} [scale] equation scale (`0.7`)
  * @property {EQN_EquationElements} [elements] equation element definitions
@@ -547,6 +559,7 @@ export type EQN_FormDefaults = {
  */
 export type EQN_Equation = {
   color?: TypeColor;
+  dimColor?: TypeColor;
   font?: OBJ_Font;
   scale?: number,
   elements?: EQN_EquationElements;
@@ -891,6 +904,10 @@ export class Equation extends FigureElementCollection {
     if (color == null) {
       color = shapes.defaultColor;
     }
+    let { dimColor } = options;
+    if (dimColor == null) {
+      dimColor = shapes.defaultDimColor.slice();
+    }
     const defaultFont = {
       family: 'Times New Roman',
       style: 'normal',
@@ -900,6 +917,7 @@ export class Equation extends FigureElementCollection {
     };
     const defaultOptions = {
       color,
+      dimColor,
       position: new Point(0, 0),
       scale: 0.7,
       formDefaults: {
@@ -912,7 +930,7 @@ export class Equation extends FigureElementCollection {
       },
       elements: {},
       forms: {},
-      formSeries: {},
+      // formSeries: {},
       formRestart: null,
       limits: shapes.limits,
       touchBorder: 'rect',
@@ -955,6 +973,7 @@ export class Equation extends FigureElementCollection {
     // }
     this.shapes = shapes;
     this.setColor(optionsToUse.color);
+    this.dimColor = optionsToUse.dimColor;
     // this.touchBorder = 'rect';
     // this.border = 'children';
     // this.isTouchDevice = isTouchDevice;
@@ -1021,6 +1040,10 @@ export class Equation extends FigureElementCollection {
           this.setFormSeries(Object.keys(this.eqn.formSeries)[0]);
         }
       }
+    } else {
+      this.eqn.formSeries = { base: Object.keys(this.eqn.forms).slice() };
+      this.eqn.currentFormSeries = this.eqn.formSeries.base;
+      this.eqn.currentFormSeriesName = 'base';
     }
 
     this.animations.goToForm = (...opt) => {
@@ -1135,6 +1158,50 @@ export class Equation extends FigureElementCollection {
     return this.eqn.currentFormSeriesName;
   }
 
+  layoutForms(forms: 'none' | 'current' | 'all') {
+    if (forms === 'none') {
+      return;
+    }
+    const arrange = (formName) => {
+      const form = this.eqn.forms[formName];
+      const {
+        scale, xAlign, yAlign, fixTo,
+      } = form.arranged;
+      form.arrange(scale, xAlign, yAlign, fixTo);
+    };
+    if (forms === 'current') {
+      arrange(this.eqn.currentForm);
+      return;
+    }
+    Object.keys(this.eqn.forms).forEach((formName) => {
+      arrange(formName);
+    });
+    this.showForm(this.eqn.currentForm);
+  }
+
+  /**
+   * Update text of equation element or elements
+   *
+   * @param {EQN_UpdateElementText} elements elements to update
+   * @param {'all' | 'current' | 'none'} [layoutForms] which forms to re-layout
+   * with the updated text
+   */
+  updateElementText(
+    elements: EQN_UpdateElementText,
+    layoutForms: 'all' | 'current' | 'none' = 'none',
+  ) {
+    Object.keys(elements).forEach((elementName) => {
+      const e = this.getElement(elementName);
+      if (e == null) {
+        return;
+      }
+      const col = e.color.slice();
+      e.custom.updateText({ text: elements[elementName] });
+      e.setColor(col);
+    });
+    this.layoutForms(layoutForms);
+  }
+
   makeTextElem(
     options: {
       text?: string,
@@ -1181,7 +1248,7 @@ export class Equation extends FigureElementCollection {
         || options.font == null
       )
     ) {
-      if (textToUse.match(/[A-Z,a-z,\u03B8]/)) {
+      if (textToUse.match(/[A-Z,a-z,\u0370-\u03ff]/)) {
         fontDefinition.style = 'italic';
       } else {
         fontDefinition.style = 'normal';
@@ -1204,6 +1271,9 @@ export class Equation extends FigureElementCollection {
         xAlign: 'left',
         yAlign: 'baseline',
         touchBorder: 'buffer',
+        mods: {
+          dimColor: this.dimColor.slice(),
+        },
         // border: 'draw',
         // touchBorder: options.touchBorder == null ? 'buffer' : options.touchBorder,
         // defaultTextTouchBorder: options.defaultTextTouchBorder,
@@ -1247,12 +1317,13 @@ export class Equation extends FigureElementCollection {
     if (existingElement != null) {
       return existingElement;
     }
-
+    // console.log(this.name, key, this.dimColor.slice())
     // Check if the options has a symbol definition
     if (options.symbol != null && typeof options.symbol === 'string') {
       // debugger;
       const symbol = this.makeSymbolElem(options);
       if (symbol != null) {
+        // symbol.dimColor = this.dimColor.slice();
         this.add(key, symbol);
         return symbol;
       }
@@ -1262,6 +1333,7 @@ export class Equation extends FigureElementCollection {
     // console.log(cleanKey)
     let symbol = this.eqn.symbols.get(cleanKey, options);
     if (symbol != null) {
+      // symbol.dimColor = this.dimColor.slice();
       if (symbol.color[3] > 0.01) {
         symbol.setColor(this.color);
       }
@@ -1276,6 +1348,7 @@ export class Equation extends FigureElementCollection {
     if (ending != null) {
       symbol = this.eqn.symbols.get(ending[0].replace(/_/, ''), options);
       if (symbol != null) {
+        // symbol.dimColor = this.dimColor.slice();
         if (symbol.color[3] > 0.01) {
           symbol.setColor(this.color);
         }
@@ -1321,7 +1394,6 @@ export class Equation extends FigureElementCollection {
     } & TypeSymbolOptions,
   ) {
     let symbol = this.eqn.symbols.get(options.symbol, options);
-    // console.log('got', symbol)
     if (symbol == null) {
       symbol = this.makeTextElem({
         text: `Symbol ${options.symbol} not valid`,
@@ -1330,6 +1402,7 @@ export class Equation extends FigureElementCollection {
     if (options.color == null && symbol.color[3] > 0.01) {
       symbol.setColor(this.color);
     }
+    symbol.dimColor = this.dimColor.slice();
     if (options.mods != null) {
       symbol.setProperties(options.mods);
     }
@@ -1753,11 +1826,13 @@ export class Equation extends FigureElementCollection {
    * Show equation form
    */
   showForm(
-    formOrName: EquationForm | string,
+    formOrName: EquationForm | string = this.eqn.currentForm,
     // subForm: ?string = null,
     animationStop: boolean = true,
+    // showCollection: boolean = true,
   ) {
-    this.show();
+    super.show();
+    // this.custom.settingForm = true;
     let form = formOrName;
     if (typeof formOrName === 'string') {
       form = this.getForm(formOrName);
@@ -1768,7 +1843,26 @@ export class Equation extends FigureElementCollection {
       this.fnMap.exec(form.onTransition); // $FlowFixMe
       this.fnMap.exec(form.onShow);
     }
+    // this.custom.settingForm = false;
   }
+
+  showAll() {
+    this.showForm();
+  }
+
+  // show(
+  //   toShow: FigureElementPrimitive | FigureElementCollection | string
+  //     | Array<FigureElementPrimitive | FigureElementCollection | string> = [],
+  // ) {
+  //   // if (!this.custom.settingForm) {
+  //   //   if (Array.isArray(toShow) && toShow.length === 0) {
+  //   //     // console.log(this.eqn.currentForm)
+  //   //     this.showForm(this.eqn.currentForm, true, false);
+  //   //     return;
+  //   //   }
+  //   // }
+  //   super.show(toShow);
+  // }
 
   /**
    * Get an equation form object from a form name

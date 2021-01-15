@@ -122,6 +122,17 @@ toc:
   - EQN_BarSymbol
   - EQN_SquareBracketSymbol
   - EQN_RadicalSymbol
+  - name: Slide Navigator
+  - SlideNavigator
+  - OBJ_SlideNavigator
+  - OBJ_SlideNavigatorSlide
+  - CollectionsSlideNavigator
+  - COL_SlideNavigator
+  - TypeSlideFrom
+  - TypeSlideLeaveStateCallback
+  - TypeSlideStateCallback
+  - TypeSlideTransitionCallback
+  - OBJ_EquationDefaults
   - name: 2D Geometry Tools
   - minAngleDiff
   - getTriangleCenter

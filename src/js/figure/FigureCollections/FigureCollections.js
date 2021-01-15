@@ -33,6 +33,8 @@ import { Equation } from '../Equation/Equation';
 import type { OBJ_Collection } from '../FigurePrimitives/FigurePrimitives';
 import EqnNavigator from './EqnNavigator';
 import type { TypeNavigatorOptions } from './EqnNavigator';
+import SlideNavigator from './SlideNavigator';
+import type { COL_SlideNavigator } from './SlideNavigator';
 import {
   FigureElementCollection,
 } from '../Element';
@@ -108,6 +110,7 @@ export default class FigureCollections {
     // }
     // console.log(optionsToUse.transform, transformOrPointOrOptions)
     const element = new FigureElementCollection(optionsToUse);
+    element.dimColor = this.primitives.defaultDimColor.slice();
     // console.log(element)
     // element.setColor(color);
     if (
@@ -170,50 +173,42 @@ export default class FigureCollections {
    * Create a {@link CollectionsRectangle}.
    */
   rectangle(...options: Array<COL_Rectangle>) {
-    const optionsToUse = joinObjects({}, ...options);
-    return new CollectionsRectangle(
-      this, optionsToUse,
-    );
+    return new CollectionsRectangle(this, joinObjects({}, ...options));
+  }
+
+  /**
+   * Create a {@link CollectionSlideNavigator}
+   */
+  slideNavigator(...options: Array<COL_SlideNavigator>) {
+    return new SlideNavigator(this, joinObjects({}, ...options));
   }
 
   /**
    * Create a {@link CollectionsAixs}.
    */
   axis(...options: Array<COL_Axis>) {
-    const optionsToUse = joinObjects({}, ...options);
-    return new CollectionsAxis(
-      this, optionsToUse,
-    );
+    return new CollectionsAxis(this, joinObjects({}, ...options));
   }
 
   /**
    * Create a {@link CollectionsTrace}.
    */
   trace(...options: Array<COL_Trace>) {
-    const optionsToUse = joinObjects({}, ...options);
-    return new CollectionsTrace(
-      this, optionsToUse,
-    );
+    return new CollectionsTrace(this, joinObjects({}, ...options));
   }
 
   /**
    * Create a {@link CollectionsPlot}.
    */
   plot(...options: Array<COL_Plot>) {
-    const optionsToUse = joinObjects({}, ...options);
-    return new CollectionsPlot(
-      this, optionsToUse,
-    );
+    return new CollectionsPlot(this, joinObjects({}, ...options));
   }
 
   /**
    * Create a {@link CollectionsLegend}.
    */
   plotLegend(...options: Array<COL_Plot>) {
-    const optionsToUse = joinObjects({}, ...options);
-    return new CollectionsPlotLegend(
-      this, optionsToUse,
-    );
+    return new CollectionsPlotLegend(this, joinObjects({}, ...options));
   }
 
   /**

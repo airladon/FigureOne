@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>FigureOne</title>
+    <meta name='description' content='Javascript library to draw, animate and interact with shapes, text, plots and equations.'>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link href='../../style.css' rel='stylesheet'>
+    <link href='../examples.css' rel='stylesheet'>
+  </head>
+    <body>
+      <div id="header"></div>
+      <div class="example">
+        <!-- *************************************************************** -->
+        <!-- ************    Example Specific HTML Start     *************** -->
+        <!-- *************************************************************** -->
+
+        <p class="instructions">
+            Move the arms of the angle to change the angle size and orientation. Move the corner of the angle to change it's location.
+        </p>
+
+        <div class="wrapper wrapper_4_3">
+            <div id="figureOneContainer" class="container container_4_3"></div>
+        </div>
+
+        <!-- *************************************************************** -->
+        <!-- ************    Example Specific HTML End     *************** -->
+        <!-- *************************************************************** -->
+
+      </div>
+      <div id="footer"></div>
+
+      <!-- **********    Choose local or remote package     *************** -->
+
+      <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.4.0/figureone.min.js'></script>
+
+      <!-- <script type="text/javascript" src='../../../package/index.js'></script> -->
+      <!-- ***************************************************************** -->
+
+      <script type="text/javascript" src="../../fill.js"></script>
+      <script>fillHeader('Example - Interactive Angle', 'Interactive Angle');</script>
+      <script>fillFooter('..')</script>
+
+      <!-- ***************    Example Specific Scripts     ***************** -->
+      <script type="text/javascript" src='./index.js'></script>
+   </body>
+</html>

@@ -24,11 +24,13 @@ import Product from './Symbols/Product';
 // import SimpleIntegral from './Symbols/SimpleIntegral';
 import Integral from './Symbols/Integral';
 import Arrow from './Symbols/Arrow';
+import type { OBJ_LineArrows } from '../geometries/arrow';
 import VinculumNew from './Symbols/Vinculum';
 import Strike from './Symbols/Strike';
 import Radical from './Symbols/Radical';
+import Line from './Symbols/Line';
 import type {
-  TypeColor,
+  TypeColor, TypeDash,
 } from '../../tools/types';
 
 // import BracketNew from './Symbols/BracketNew';
@@ -1019,6 +1021,30 @@ export type EQN_SquareBracketSymbol = {
   staticHeight?: number | 'first',
 } & EQN_Symbol;
 
+
+/**
+ * A line symbol to be used in {@link EQN_Annotate} as a {@link EQN_LineGlyph},
+ * or in {@link EQN_Comment}.
+ * @property {number} [width] line width
+ * @property {TypeDash} [dash] dash style of line
+ * @property {OBJ_LineArrows} [arrow] arrow styles of line where start is
+ * toward the content
+ * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
+ * resize, `'static'` only changes scale transform (`dynamic`)
+ * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
+ * `number` sets height of static symbol - `'first'` calculates and sets height
+ * based on first use (`'first'`)
+ * @property {number | 'first'} [staticWidth]
+ */
+export type EQN_LineSymbol = {
+  width?: number,
+  dash?: TypeDash,
+  arrow?: OBJ_LineArrows,
+  // draw?: 'dynamic' | 'static',
+  // staticHeight?: number | 'first',
+  // staticWidth?: number | 'first',
+}
+
 export type TypeSymbolOptions = EQN_VinculumSymbol
   & EQN_VinculumSymbol
   & EQN_BoxSymbol
@@ -1031,7 +1057,8 @@ export type TypeSymbolOptions = EQN_VinculumSymbol
   & EQN_AngleBracketSymbol
   & EQN_BraceSymbol
   & EQN_BarSymbol
-  & EQN_SquareBracketSymbol;
+  & EQN_SquareBracketSymbol
+  & EQN_LineSymbol;
 
 
 export default class EquationSymbols {
@@ -1092,6 +1119,9 @@ export default class EquationSymbols {
     if (name === 'arrow') {                 // $FlowFixMe
       return this.arrow(options);
     }
+    if (name === 'line') {                 // $FlowFixMe
+      return this.line(options);
+    }
     return null;
   }
 
@@ -1151,6 +1181,26 @@ export default class EquationSymbols {
     ));
   }
 
+  line(optionsIn: EQN_LineSymbol) {
+    const defaultOptions = {
+      color: this.defaultColor,
+      width: 0.01,
+      dash: [],
+      arrow: null,
+      draw: 'dynamic',
+      staticHeight: 'first',
+      staticWidth: 'first',
+    };
+    const optionsToUse = joinObjects(defaultOptions, optionsIn);
+    return (new Line(
+      this.shapes.webgl,
+      optionsToUse.color,
+      new Transform('Line').scale(1, 1).translate(0, 0),
+      this.shapes.limits,
+      optionsToUse,
+    ));
+  }
+
   touchBox(optionsIn: EQN_BoxSymbol) {
     const defaultOptions = {
       color: [0, 0, 0, 0.0001],
@@ -1181,7 +1231,8 @@ export default class EquationSymbols {
       direction: 'right',
       lineWidth: 0.01,
       arrowWidth: 0.03,
-      arrowHeight: 0.04,
+      arrowLength: 0.04,
+      length: 0.1,
       staticHeight: 'first',
       draw: 'static',
       staticWidth: null,          // not definable by user

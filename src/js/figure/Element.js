@@ -13,7 +13,7 @@ import { getState } from './Recorder/state';
 import type {
   TypeParsablePoint, TypeParsableTransform,
   TypeTransformValue, TypeTransformBoundsDefinition,
-  TypeBorder, TypeParsableBuffer,
+  TypeBorder, TypeParsableBuffer, Bounds,
 } from '../tools/g2';
 import { Recorder } from './Recorder/Recorder';
 import * as m2 from '../tools/m2';
@@ -26,7 +26,7 @@ import { TextObjectBase } from './DrawingObjects/TextObject/TextObject';
 // import type { OBJ_Font } from './DrawingObjects/TextObject/TextObject';
 import {
   duplicateFromTo, joinObjects, joinObjectsWithOptions, SubscriptionManager,
-  generateUniqueId,
+  generateUniqueId, PerformanceTimer,
 } from '../tools/tools';
 import { colorArrayToRGBA, areColorsWithinDelta } from '../tools/color';
 import GlobalAnimation from './webgl/GlobalAnimation';
@@ -53,6 +53,8 @@ import type {
 } from '../tools/types';
 // import type FigurePrimitives from './FigurePrimitives/FigurePrimitives';
 import type FigureCollections from './FigureCollections/FigureCollections';
+
+const FIGURE1DEBUG = false;
 
 // eslint-disable-next-line import/no-cycle
 // import {
@@ -107,6 +109,35 @@ export type OBJ_Scenario = {
   isShown?: boolean,
 };
 
+/**
+ * Path to a {@link FigureElement} within a {@link FigureElementCollection}.
+ *
+ * `string | {[name: string]: TypeElementPath } | `{@link FigureElement}` | Array<TypeElementPath>}`
+ *
+ * Consider a collection with the below heirachy. The collection has two
+ * children `diagram` and `description` of which `diagram` is another
+ * collection:
+ * - diagram
+ *   - lineA
+ *   - lineB
+ *   - lines
+ *     - lineC
+ *     - lineD
+ * - description
+ *
+ * The ways to define lineC, lineD and description are:
+ *
+ * - `['description', 'diagram.lines.lineC', 'diagram.lines.lineD']`
+ * - `['description', { diagram: ['lines.lineC', 'lines.lineD'] }]`
+ * - `['description', { 'diagram.lines': ['lineC', 'lineD'] }]`
+ */
+/* eslint-disable no-use-before-define */
+export type TypeElementPath = string
+                              | { [name: string]: TypeElementPath }
+                              | FigureElement
+                              | Array<TypeElementPath>;
+/* eslint-enable no-use-before-define */
+
 const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Transform>) => {
   const newTransforms = [];
   if (copyTransforms.length === 0) {
@@ -119,8 +150,8 @@ const transformBy = (inputTransforms: Array<Transform>, copyTransforms: Array<Tr
   });
   if (newTransforms.length > 0) {
     // TODO Test without duping this
-    return newTransforms.map(t => t._dup());
-    // return newTransforms;
+    // return newTransforms.map(t => t._dup());
+    return newTransforms;
   }
   return inputTransforms.map(t => t._dup());
 };
@@ -446,7 +477,8 @@ class FigureElement {
 
   lastDrawTransform: Transform; // Transform matrix used in last draw
   lastDrawPulseTransform: Transform; // Transform matrix used in last draw
-  parentTransform: Transform;
+  parentTransform: Array<Transform>;
+  // transformUpdated: boolean;
   // lastDrawParentTransform: Transform;
   // lastDrawElementTransform: Transform;
   // lastDrawPulseTransform: Transform;
@@ -461,6 +493,7 @@ class FigureElement {
 
   isMovable: boolean;             // Element is able to be moved
   isTouchable: boolean;           // Element can be touched
+  touchPriority: boolean;
   isInteractive: ?boolean;         // Touch event is not processed by Figure
   hasTouchableElements: boolean;
   // touchInBoundingRect: boolean | number;
@@ -657,6 +690,7 @@ class FigureElement {
     this.subscriptions = new SubscriptionManager(this.fnMap);
     this.isMovable = false;
     this.isTouchable = false;
+    this.touchPriority = false;
     // this.touchInBoundingRect = false;
     this.isInteractive = undefined;
     this.hasTouchableElements = false;
@@ -666,11 +700,12 @@ class FigureElement {
     this.defaultColor = this.color.slice();
     this.opacity = 1;
     this.setTransformCallback = null;
+    // this.transformUpdated = true;
     this.beforeDrawCallback = null;
     this.afterDrawCallback = null;
     this.internalSetTransformCallback = null;
     this.lastDrawTransform = this.transform._dup();
-    this.parentTransform = new Transform();
+    this.parentTransform = [new Transform()];
     this.lastDrawPulseTransform = this.transform._dup();
     this.onClick = null;
     this.lastDrawElementTransformPosition = {
@@ -1007,6 +1042,7 @@ class FigureElement {
       }
       const x = mag * Math.cos(type);
       const y = mag * Math.sin(type);
+      // const s = this.getScale();
       return new Transform().translate(x, y);
     };
     this.fnMap.add('_elementPulseSettingsTransformMethod', pulseTransformMethod);
@@ -1572,9 +1608,18 @@ class FigureElement {
 
   getDrawTransforms(initialTransforms: Array<Transform>) {
     // let drawTransforms = [transform];
-    let drawTransforms = transformBy(initialTransforms, this.copyTransforms);
-    drawTransforms = transformBy(drawTransforms, this.pulseTransforms);
-    drawTransforms = transformBy(drawTransforms, this.frozenPulseTransforms);
+    let drawTransforms = initialTransforms;
+    if (this.copyTransforms.length > 0) {
+      drawTransforms = transformBy(drawTransforms, this.copyTransforms);
+    }
+    if (this.pulseTransforms.length > 0) {
+      drawTransforms = transformBy(drawTransforms, this.pulseTransforms);
+    }
+    if (this.frozenPulseTransforms.length > 0) {
+      drawTransforms = transformBy(drawTransforms, this.frozenPulseTransforms);
+    }
+    // drawTransforms = transformBy(drawTransforms, this.pulseTransforms);
+    // drawTransforms = transformBy(drawTransforms, this.frozenPulseTransforms);
     return drawTransforms;
   }
 
@@ -1717,7 +1762,7 @@ class FigureElement {
    * appropriately clipped.
    * @param {Transform} transform
    */
-  setTransform(transform: Transform): void {
+  setTransform(transform: Transform, publish: boolean = true): void {
     if (this.move.transformClip != null) {
       const clip = this.fnMap.exec(this.move.transformClip, transform);
       if (clip instanceof Transform) {
@@ -1729,12 +1774,7 @@ class FigureElement {
         }
       }
     } else {
-      // this.checkMoveBounds();
-      const bounds = this.getMoveBounds();
-      // console.log(bounds)
-      // if (this.move.bounds instanceof TransformBounds) {
-      // this.subscriptions.publish('beforeSetTransform', [clip]);
-      // $FlowFixMe
+      const bounds = this.getMoveBounds(); // $FlowFixMe
       const clip = bounds.clip(transform);
       this.subscriptions.publish('beforeSetTransform', [clip]);
       if (this.cancelSetTransform === false) {
@@ -1742,16 +1782,15 @@ class FigureElement {
       } else {
         this.cancelSetTransform = false;
       }
-      // } else {
-      //   this.transform = transform._dup();
-      // }
-      // }
     }
     if (this.internalSetTransformCallback) {
       this.fnMap.exec(this.internalSetTransformCallback, this.transform);
     }
-    this.subscriptions.publish('setTransform', [this.transform]);
-    this.fnMap.exec(this.setTransformCallback, this.transform);
+    if (publish) {
+      this.subscriptions.publish('setTransform', [this.transform]);
+      this.fnMap.exec(this.setTransformCallback, this.transform);
+    }
+    // this.transformUpdated = true;
     this.animateNextFrame();
   }
 
@@ -1935,6 +1974,14 @@ class FigureElement {
     };
   }
 
+  /**
+   * Set transform, color and/or visibility to a predefined scenario.
+   *
+   * @param {string | Array<string>} [scenarioName] name of the scenario to
+   * set. Use an array of names to set multiple scenarios in the array's order.
+   * @param {boolean} [onlyIfVisible] `true` to only set scenario if element is
+   * visible
+   */
   setScenario(scenario: string | OBJ_Scenario) {
     const target = this.getScenarioTarget(scenario);
     if (target.transform != null) {
@@ -1953,32 +2000,25 @@ class FigureElement {
     }
   }
 
-  setScenarios(scenarioName: string) {
-    if (this.scenarios[scenarioName] != null) {
-      this.setScenario(scenarioName);
+  setScenarios(scenarioName: string | Array<string>) {
+    let scenarios = scenarioName;
+    if (!Array.isArray(scenarios)) {
+      scenarios = [scenarios];
     }
+    scenarios.forEach((scenario) => {
+      if (this.scenarios[scenario] != null) {
+        this.setScenario(scenario);
+      }
+    });
   }
 
+  /**
+   * Save the current transform, color and/or visibility to a scenario.
+   */
   saveScenario(
     scenarioName: string,
     keys: Array<string> = ['transform', 'color', 'isShown'],
   ) {
-    // const scenario = {};
-    // keys.forEach((key) => {
-    //   if (key === 'transform') {
-    //     scenario.transform = this.transform._dup();
-    //   } else if (key === 'position') {
-    //     scenario.position = this.getPosition();
-    //   } else if (key === 'rotation') {
-    //     scenario.rotation = this.getRotation();
-    //   } else if (key === 'scale') {
-    //     scenario.scale = this.getScale();
-    //   } else if (key === 'color') {
-    //     scenario.color = this.color.slice();
-    //   } else if (key === 'isShown') {
-    //     scenario.isShown = this.isShown;
-    //   }
-    // });
     const scenario = this.getCurrentScenario(keys);
     if (Object.keys(scenario).length > 0) {
       this.scenarios[scenarioName] = scenario;
@@ -2115,6 +2155,7 @@ class FigureElement {
     this.state.movement.previousTime = new GlobalAnimation().now() / 1000;
     this.state.isBeingMoved = true;
     this.unrender();
+    this.subscriptions.publish('startBeingMoved');
     if (this.recorder.state === 'recording') {
       this.recorder.recordEvent('startBeingMoved', [this.getPath()]);
     }
@@ -2171,6 +2212,7 @@ class FigureElement {
         this.state.movement.velocity = this.transform.zero();
       }
     }
+    this.subscriptions.publish('stopBeingMoved');
     if (this.recorder.state === 'recording' && this.state.isBeingMoved) {
       this.recorder.recordEvent(
         'stopBeingMoved',
@@ -2331,6 +2373,7 @@ class FigureElement {
           getPoint(this.pulseSettings.delta),
           this.pulseSettings.type,
         );
+        // console.log(this.name, this.transform._dup(), pTransform.matrix());
         // if (this.name === 'p2') {
         //   console.log(pTransform._dup(), pulseMag)
         // }
@@ -2491,6 +2534,7 @@ class FigureElement {
     this.startPulsing(when);
     // console.log(this.figure)
     // this.figure.animateNextFrame();
+    this.animateNextFrame();
   }
 
   // deprecate
@@ -3217,9 +3261,9 @@ class FigureElement {
     // }
   }
 
-  getMoveBounds() {
+  getMoveBounds(): Bounds {
     this.checkMoveBounds();  // $FlowFixMe
-    if (this.move.bounds.isUnbounded()) {
+    if (this.move.bounds.isUnbounded()) { // $FlowFixMe
       return this.move.bounds;
     }
 
@@ -3237,7 +3281,7 @@ class FigureElement {
         dup.updateTranslation(b);
         return dup;
       }
-    }
+    } // $FlowFixMe
     return this.move.bounds;
   }
 
@@ -3739,6 +3783,7 @@ class FigureElementPrimitive extends FigureElement {
         this.drawingObject.element.style.opacity = `${opacity}`;
       }
     }
+    this.animateNextFrame();
   }
 
   show() {
@@ -3869,6 +3914,8 @@ class FigureElementPrimitive extends FigureElement {
 
   setupDraw(now: number = 0) {
     if (this.isShown) {
+      let timer;
+      if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
       this.lastDrawTime = now;
       if (this.isRenderedAsImage === true) {
         if (this.willStartAnimating()) {
@@ -3876,14 +3923,27 @@ class FigureElementPrimitive extends FigureElement {
         } else {
           return;
         }
-      }
+      } // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m1'); }
       this.subscriptions.publish('beforeDraw', [now]);
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
-      }
+      } // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
 
-      this.animations.nextFrame(now);
+      this.animations.nextFrame(now); // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('animations'); }
       this.nextMovingFreelyFrame(now);
+
+      if (FIGURE1DEBUG) { // $FlowFixMe
+        timer.stamp('animations'); // $FlowFixMe
+        const deltas = timer.deltas();
+        window.figureOneDebug.setupDraw.push([
+          this.getPath(),
+          deltas[0],
+          deltas.slice(1),
+        ]);
+      }
     }
   }
 
@@ -3894,7 +3954,10 @@ class FigureElementPrimitive extends FigureElement {
     canvasIndex: number = 0,
   ) {
     if (this.isShown) {
-      // const ttt = performance.now();
+      let timer;
+      if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
+      // const debugTimes = [];
+      // if (FIGURE1DEBUG) { debugTimes.push([performance.now(), '']); }
       let pointCount = -1;
       if (this.drawingObject instanceof VertexObject) {
         pointCount = this.drawingObject.numPoints;
@@ -3909,17 +3972,25 @@ class FigureElementPrimitive extends FigureElement {
         }
       } else {
         pointCount = 1;
-      }
+      } // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m1'); }
 
       const colorToUse = [...this.color.slice(0, 3), this.color[3] * this.opacity * parentOpacity];
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawOpacity = colorToUse[3];
-      // if (this.getPath().endsWith('eqn.elements._1')) {
-      // console.log(this.getPath(), this.opacity, colorToUse);
-      // colorToUse = [1, 0, 0, 1];
+      // let newTransforms = this.lastDrawTransforms;
+      // let parentTransform = this.parentTransform;
+      // if (parentTransform != null) {
+      //   this.parentTransform = parentTransform._dup();
       // }
-      const transform = this.getTransform();
+      // if (parentTransform != null || this.transformUpdated) {
+      const transform = this.getTransform()._dup();
       const newTransforms = transformBy(parentTransform, [transform]);
+      this.parentTransform = parentTransform;
+      // this.transformUpdated = false;
+      // }
+      // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m2'); }
 
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform[0].order.length,
@@ -3929,30 +4000,30 @@ class FigureElementPrimitive extends FigureElement {
       // const newTransform = parentTransform.transform(this.getTransform());
       // this.parentTransform = parentTransform._dup();
       // const newTransform = parentTransform.transform(this.getTransform());
-      this.pulseTransforms = this.getPulseTransforms(now);
-      this.drawTransforms = this.getDrawTransforms(newTransforms);
-      this.lastDrawTransform = parentTransform[0].transform(transform);
+      this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m3'); }
+
+      this.drawTransforms = this.getDrawTransforms(newTransforms); // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m4'); }
+
+      // this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
+      // eslint-disable-next-line prefer-destructuring
+      this.lastDrawTransform = newTransforms[0];
+      // this.lastDrawTransforms = newTransforms;
+      // this.lastParentTransform
+      // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m5'); }
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
       if (pointCount > 0) {
-        // console.log(this.pulseTransforms, pointCount)
         this.drawTransforms.forEach((t) => {
-          // let t = t2;
-          // console.log(t.matrix().slice(), t._dup().matrix().slice())
-          // const m = t._dup().matrix();
-          // if (this.getPath() === 'circle.line1.line') {
-          //   // colorToUse = [1, 0, 0, 1];
-          //   // t = t2._dup();
-          //   console.log(t.matrix().slice(), t._dup().matrix().slice())
-          // }
-          // console.log(t.matrix(), colorToUse, canvasIndex, pointCount)
           this.drawingObject.drawWithTransformMatrix(
-            // m, colorToUse, canvasIndex, pointCount,
             t.matrix(), colorToUse, canvasIndex, pointCount,
           );
-          // window.asdf = false;
         });
-      }
+      }  // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m6'); }
+
       if (this.unrenderNextDraw) {
         this.clearRender();
         this.unrenderNextDraw = false;
@@ -3968,7 +4039,18 @@ class FigureElementPrimitive extends FigureElement {
       if (this.afterDrawCallback != null) {
         this.fnMap.exec(this.afterDrawCallback, now);
       }
-      // console.log(this.name, round(performance.now() - ttt, 2))
+
+      if (FIGURE1DEBUG) { // $FlowFixMe
+        timer.stamp('m7'); // $FlowFixMe
+        const deltas = timer.deltas();
+        window.figureOneDebug.draw.push([
+          this.getPath(),
+          deltas[0],
+          deltas.slice(1),
+        ]);
+      }
+
+      // window.timeData.push([this.name, round(performance.now() - ttt, 2), tArray]);
     }
   }
 
@@ -3979,7 +4061,7 @@ class FigureElementPrimitive extends FigureElement {
     };
     // const finalParentTransform = this.processParentTransform(parentTransform);
     const firstTransform = parentTransform.transform(this.getTransform());
-    this.lastDrawTransform = firstTransform;
+    this.lastDrawTransform = firstTransform._dup();
     if (this.drawingObject instanceof HTMLObject) {
       this.drawingObject.transformHtml(firstTransform.matrix());
     }
@@ -4092,7 +4174,7 @@ class FigureElementCollection extends FigureElement {
   collections: FigureCollections;
 
   +getElement: (?(string | FigureElement)) => ?FigureElement;
-  +getElements: (Array<string | FigureElement>) => Array<FigureElement>;
+  +getElements: (TypeElementPath) => Array<FigureElement>;
   +exec: (string | Array<string | Object>, ?Array<string | FigureElement>) => void;
   +highlight: (elementsToDim: ?Array<string | FigureElement>) => void;
 
@@ -4525,6 +4607,9 @@ class FigureElementCollection extends FigureElement {
 
   setFigure(figure: OBJ_FigureForElement) {
     super.setFigure(figure);
+    if (this.onAdd != null) {
+      this.fnMap.exec(this.onAdd);
+    }
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
       const element = this.elements[this.drawOrder[i]];
       element.setFigure(figure);
@@ -4554,6 +4639,11 @@ class FigureElementCollection extends FigureElement {
   ) {
     // console.log('draw', this.name)
     if (this.isShown) {
+      // const debugTimes = [];
+      // if (FIGURE1DEBUG) { debugTimes.push([performance.now(), '']); }
+      let timer;
+      if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
+
       this.lastDrawTime = now;
       // if (this.pulseSettings.clearFrozenTransforms) {
       //   this.frozenPulseTransforms = [];
@@ -4568,11 +4658,13 @@ class FigureElementCollection extends FigureElement {
       }
       if (this.beforeDrawCallback != null) {
         this.fnMap.exec(this.beforeDrawCallback, now);
-      }
-
+      } // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('beforePub'); }
       // console.l^ *consoleog(this.name, now);
-      this.animations.nextFrame(now);
-      this.nextMovingFreelyFrame(now);
+      this.animations.nextFrame(now); // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('animations'); }
+      this.nextMovingFreelyFrame(now); // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('moveFreely'); }
 
       // set next color can end up hiding an element when disolving out
       if (!this.isShown) {
@@ -4597,6 +4689,16 @@ class FigureElementCollection extends FigureElement {
       // for (let k = 0; k < this.drawTransforms.length; k += 1) {
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
         this.elements[this.drawOrder[i]].setupDraw(now, canvasIndex);
+      }
+      if (FIGURE1DEBUG) { // $FlowFixMe
+        timer.stamp('elements'); // $FlowFixMe
+        const deltas = timer.deltas();
+        window.figureOneDebug.setupDraw.push([
+          '>>',
+          this.getPath(),
+          deltas[0],
+          deltas.slice(1),
+        ]);
       }
       // }
       // if (this.unrenderNextDraw) {
@@ -4624,45 +4726,51 @@ class FigureElementCollection extends FigureElement {
     canvasIndex: number = 0,
   ) {
     if (this.isShown) {
-      // const ttt = performance.now()
-      // if (this.name === 'eqn') {
-      //   console.log('start eqn')
-      // }
-      // for (let k = 0; k < this.pulseTransforms.length; k += 1) {
+      // const debugTime = [];
+      // const drawTime = [];
+      // if (FIGURE1DEBUG) { debugTime.push([performance.now(), '']); }
+      let timer;
+      if (FIGURE1DEBUG) { timer = new PerformanceTimer(); }
+
       this.lastDrawElementTransformPosition = {
         parentCount: parentTransform[0].order.length,
         elementCount: this.transform.order.length,
       };
       const transform = this.getTransform();
       const newTransforms = transformBy(parentTransform, [transform]);
-      // this.lastDrawTransform = transform._dup();
-      this.lastDrawTransform = parentTransform[0].transform(transform);
-      this.pulseTransforms = this.getPulseTransforms(now);
-      this.drawTransforms = this.getDrawTransforms(newTransforms);
-      // this.pulseTransforms
+      // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m1'); }
+      // eslint-disable-next-line prefer-destructuring
+      this.lastDrawTransform = newTransforms[0];
+      // this.lastDrawTransform = parentTransform[0].transform(transform)._dup();
+      // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m2'); }
+      this.pulseTransforms = this.getPulseTransforms(now); // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m3'); }
+      this.drawTransforms = this.getDrawTransforms(newTransforms); // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m4'); }
+
       // eslint-disable-next-line prefer-destructuring
       this.lastDrawPulseTransform = this.drawTransforms[0];
 
       const opacityToUse = this.color[3] * this.opacity * parentOpacity;
-      this.lastDrawOpacity = opacityToUse;
-      // console.log()
-      // let cum = performance.now() - ttt;
-      // console.log('cum start', round(cum, 2))
+      this.lastDrawOpacity = opacityToUse; // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m5'); }
+
+      let drawTimer;
+      if (FIGURE1DEBUG) { drawTimer = new PerformanceTimer(); }
       for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
-        // const tttt = performance.now()
         this.elements[this.drawOrder[i]].draw(
           now, this.drawTransforms, opacityToUse, canvasIndex,
-        );
-        // const delta = performance.now() - tttt;
-        // cum += delta;
-        // console.log('---', this.elements[this.drawOrder[i]].name, round(delta, 2))
-      }
-      // console.log(round(performance.now() - ttt, 2), round(cum, 2))
-      // }
+        ); // $FlowFixMe
+        if (FIGURE1DEBUG) { drawTimer.stamp(this.elements[this.drawOrder[i]].name); }
+      } // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m6'); }
       if (this.unrenderNextDraw) {
         this.clearRender();
         this.unrenderNextDraw = false;
-      }
+      } // $FlowFixMe
+      if (FIGURE1DEBUG) { timer.stamp('m7'); }
       if (this.renderedOnNextDraw) {
         this.isRenderedAsImage = true;
         this.renderedOnNextDraw = false;
@@ -4671,10 +4779,20 @@ class FigureElementCollection extends FigureElement {
       //   element.draw(element.getParentLastDrawTransform(), now);
       // })
       if (this.afterDrawCallback != null) {
-        // this.afterDrawCallback(now);
         this.fnMap.exec(this.afterDrawCallback, now);
       }
-      // console.log(this.name, round(performance.now() - ttt, 2))
+      if (FIGURE1DEBUG) { // $FlowFixMe
+        timer.stamp('m8'); // $FlowFixMe
+        const deltas = timer.deltas(); // $FlowFixMe
+        const drawDeltas = drawTimer.deltas();
+        window.figureOneDebug.draw.push([
+          '>>',
+          this.getPath(),
+          deltas[0],
+          deltas.slice(1),
+          drawDeltas,
+        ]);
+      }
     }
   }
 
@@ -4872,9 +4990,9 @@ class FigureElementCollection extends FigureElement {
     if (typeof elementPath !== 'string') {
       return elementPath;
     }
-    // if (elementPath instanceof FigureElement) {
-    //   return elementPath;
-    // }
+    if (elementPath instanceof FigureElement) {
+      return elementPath;
+    }
     const getElement = (inputElementPath, parent) => {
       const ep = inputElementPath.split('.');
       let newParent = parent.elements[ep[0]];
@@ -4883,7 +5001,7 @@ class FigureElementCollection extends FigureElement {
         newParent = parent[ep[0]];
       }
       if (newParent == null) {
-        return null;
+        return undefined;
       }
       if (ep.length > 1) {
         return getElement(ep.slice(1).join('.'), newParent);
@@ -4898,13 +5016,35 @@ class FigureElementCollection extends FigureElement {
    * [getElement](#figureelementcollectiongetelement) calls on an
    * array of paths.
    *
-   * @param {Array<string | FigureElement>} children
+   * @param {TypeElementPath} children
    * @return {Array<FigureElement>} Array of
    * [getElement](#figureelementcollectiongetelement) results
    */
-  getElements(children: Array<string | FigureElement>) {
+  getElements(children: TypeElementPath) {
+    // const paths = [];
+    const processPath = (path, prefix = '') => {
+      if (typeof path === 'string') {
+        return [`${prefix}${path}`];
+      }
+      if (path instanceof FigureElement) {
+        return [path];
+      }
+      if (Array.isArray(path)) {
+        const out = [];
+        path.forEach((p) => {
+          out.push(...processPath(p, prefix));
+        });
+        return out;
+      }
+      const out = [];
+      Object.keys(path).forEach((p) => {
+        out.push(...processPath(path[p], `${prefix}${p}.`));
+      });
+      return out;
+    };
+    const paths = processPath(children);
     const elements = [];
-    children.forEach((child) => {
+    paths.forEach((child) => {
       const element = this.getElement(child);
       if (element != null) {
         elements.push(element);
@@ -4913,37 +5053,84 @@ class FigureElementCollection extends FigureElement {
     return elements;
   }
 
-  show(listToShow: Array<FigureElementPrimitive | FigureElementCollection> = []): void {
+
+  /**
+   * Show collection or specific elements within the collection
+   */
+  show(toShow: TypeElementPath = []): void {
     super.show();
-    listToShow.forEach((element) => {
-      if (element instanceof FigureElementCollection) {
-        element.showAll();
-      } else {
-        element.show();
-      }
+    this.getElements(toShow).forEach((element) => {
+      element.showAll();
     });
+    // // if (toShow == null) {
+    // //   this.showAll();
+    // //   return;
+    // // }
+    // let listToShow = toShow;
+    // if (!Array.isArray(listToShow)) {
+    //   listToShow = [toShow];
+    // }
+    // listToShow.forEach((elementOrName) => {
+    //   let element = elementOrName;
+    //   if (typeof elementOrName === 'string') {
+    //     element = this.getElement(elementOrName);
+    //   }
+    //   element.showAll();
+    //   // if (element instanceof FigureElementCollection) {
+    //   //   element.showAll();
+    //   // } else {
+    //   //   element.show();
+    //   // }
+    // });
   }
 
-  hide(listToShow: Array<FigureElementPrimitive | FigureElementCollection> = []): void {
-    super.hide();
-    listToShow.forEach((element) => {
-      if (element instanceof FigureElementCollection) {
-        element.hideAll();
-      } else {
-        element.show();
-      }
-    });
+  showOnly(
+    toShow: TypeElementPath = [],
+  ): void {
+    this.hideAll();
+    this.show(toShow);
   }
 
   showAll(): void {
-    this.show();
+    super.show();
     for (let i = 0, j = this.drawOrder.length; i < j; i += 1) {
       const element = this.elements[this.drawOrder[i]];
-      element.show();
-      if (typeof element.hideAll === 'function') {
-        element.showAll();
-      }
+      element.showAll();
     }
+  }
+
+  /**
+   * Hide collection or specific elements within the collection
+   */
+  hide(
+    toHide: TypeElementPath | null = null,
+  ): void {
+    if (toHide == null) {
+      super.hide();
+      return;
+    }
+    this.getElements(toHide).forEach((element) => {
+      element.hide();
+    });
+    // let listToHide = toHide;
+    // if (!Array.isArray(listToHide)) {
+    //   listToHide = [toHide];
+    // }
+    // if (listToHide.length === 0) {
+    //   super.hide();
+    //   return;
+    // }
+    // listToHide.forEach((elementOrName) => {
+    //   let element = elementOrName;
+    //   if (typeof elementOrName === 'string') {
+    //     element = this.getElement(elementOrName);
+    //   }
+    //   if (element instanceof FigureElementCollection) {
+    //     element.hideAll();
+    //   } else {
+    //     element.hide();
+    //   }
+    // });
   }
 
   hideAll(): void {
@@ -4957,25 +5144,13 @@ class FigureElementCollection extends FigureElement {
     }
   }
 
-  showOnly(listToShow: Array<FigureElementPrimitive | FigureElementCollection>): void {
-    this.hideAll();
-    this.show();
-    for (let i = 0, j = listToShow.length; i < j; i += 1) {
-      const element = listToShow[i];
-      if (element) {
-        element.show();
-      } else {
-        throw Error(`Figure Element Error: Element does not exist at position ${i}`);
-      }
-    }
-  }
-
-  hideOnly(listToHide: Array<FigureElementPrimitive | FigureElementCollection>): void {
+  hideOnly(listToHide: TypeElementPath): void {
     this.showAll();
-    for (let i = 0, j = listToHide.length; i < j; i += 1) {
-      const element = listToHide[i];
-      element.hide();
-    }
+    this.hide(listToHide);
+    // for (let i = 0, j = listToHide.length; i < j; i += 1) {
+    //   const element = listToHide[i];
+    //   element.hide();
+    // }
   }
 
   // // This will only search elements within the collection for a touch
@@ -5037,7 +5212,7 @@ class FigureElementCollection extends FigureElement {
   setFirstTransform(parentTransform: Transform = new Transform()) {
     // const finalParentTransform = this.processParentTransform(parentTransform);
     const firstTransform = parentTransform.transform(this.getTransform());
-    this.lastDrawTransform = firstTransform;
+    this.lastDrawTransform = firstTransform._dup();
 
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
@@ -5334,14 +5509,14 @@ class FigureElementCollection extends FigureElement {
     this.exec('undim', elementsToHighlight);
   }
 
-  setOpacity(opacity: number) {
-    // for (let i = 0; i < this.drawOrder.length; i += 1) {
-    //   const element = this.elements[this.drawOrder[i]];
-    //   element.setOpacity(opacity);
-    // }
-    // this.color[3] = opacity;
-    this.opacity = opacity;
-  }
+  // setOpacity(opacity: number) {
+  //   // for (let i = 0; i < this.drawOrder.length; i += 1) {
+  //   //   const element = this.elements[this.drawOrder[i]];
+  //   //   element.setOpacity(opacity);
+  //   // }
+  //   // this.color[3] = opacity;
+  //   this.opacity = opacity;
+  // }
 
   getElementTransforms() {
     const out = {};
@@ -5428,6 +5603,13 @@ class FigureElementCollection extends FigureElement {
     return timeToAnimate;
   }
 
+  /**
+   * Get all elements within the collection that are primitives, including
+   * any primitives that are children of this element, and any primitives that
+   * are children of this element's children and so forth.
+   *
+   * @return {Array<FigureElement>}
+   */
   getAllPrimitives() {
     let elements = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -5441,6 +5623,12 @@ class FigureElementCollection extends FigureElement {
     return elements;
   }
 
+  /**
+   * Get an array of all elements of in this collection, including this element,
+   * children, children of children and so forth.
+   *
+   * @return {Array<FigureElement>}
+   */
   getAllElements() {
     const elements = [this];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -5455,6 +5643,11 @@ class FigureElementCollection extends FigureElement {
     return elements;
   }
 
+  /**
+   * Get array of all children elements.
+   *
+   * @return {Array<FigureElement>}
+   */
   getChildren() {
     const elements = [];
     for (let i = 0; i < this.drawOrder.length; i += 1) {
@@ -5654,7 +5847,18 @@ class FigureElementCollection extends FigureElement {
   //   }
   // }
 
-  setScenarios(scenarioName: string, onlyIfVisible: boolean = false) {
+  /**
+   * Set transform, color and/or visibility to a predefined scenario.
+   *
+   * @param {string | Array<string>} [scenarioName] name of the scenario to
+   * set. Use an array of names to set multiple scenarios in the array's order.
+   * @param {boolean} [onlyIfVisible] `true` to only set scenario if element is
+   * visible
+   */
+  setScenarios(
+    scenarioName: string | Array<string>,
+    onlyIfVisible: boolean = false,
+  ) {
     super.setScenarios(scenarioName);
     for (let i = 0; i < this.drawOrder.length; i += 1) {
       const element = this.elements[this.drawOrder[i]];
@@ -5811,6 +6015,26 @@ class FigureElementCollection extends FigureElement {
       }
     }
     return false;
+  }
+
+  remove(elementName: string) {
+    if (this.elements[elementName] == null) {
+      return;
+    }
+    const element = this.elements[elementName];
+    element.animations.cancelAll('freeze', true);
+    element.stop();
+    element.parent = null;
+    element.animations = null;
+    element.move.element = null;
+    element.recorder = null;
+    element.figure = null;
+    delete this.elements[`_${elementName}`];
+    delete this.elements[elementName];
+    const index = this.drawOrder.indexOf(elementName);
+    if (index !== -1) {
+      this.drawOrder.splice(index, 1);
+    }
   }
 
   stopAnimating(

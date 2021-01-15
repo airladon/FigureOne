@@ -19,6 +19,7 @@ import Matrix from './Elements/Matrix';
 import Scale from './Elements/Scale';
 import Container from './Elements/Container';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
+import EquationLine from './Symbols/Line';
 // eslint-disable-next-line import/no-cycle
 // import type {
 //   EQN_Annotation, EQN_EncompassGlyph, EQN_LeftRightGlyph, EQN_TopBottomGlyph,
@@ -1115,6 +1116,7 @@ export type EQN_Bar = {
   ?boolean,
 ];
 
+
 /**
  * Equation integral
  *
@@ -1805,6 +1807,10 @@ export type EQN_SuperscriptSubscript = {
  * @property {string} [symbol] optional symbol between content and comment
  * @property {number} [contentSpace] space from content to symbol (`0.03`)
  * @property {number} [commentSpace] space from symbol to comment (`0.03`)
+ * @property {number} [contentLineSpace] space between a line symbol and
+ * content (`0.03`)
+ * @property {number} [commentLineSpace] space between a line symbol and
+ * comment (`0.03`)
  * @property {number} [scale] comment scale (`0.6`)
  * @property {boolean} [inSize] `false` excludes the symbol and comment from
  * thre resulting size of the equation phrase (`true`)
@@ -1885,6 +1891,8 @@ export type EQN_Comment = {
   symbol?: string;
   contentSpace?: number;
   commentSpace?: number;
+  contentLineSpace?: number;
+  commentLineSpace?: number;
   scale?: number;
   inSize?: boolean;
   fullContentBounds?: boolean;
@@ -2472,6 +2480,90 @@ export type EQN_TopBottomGlyph = {
 };
 
 /**
+ * Options object that aligns a line glyph with either the content or
+ * annotation.
+ *
+ * @property {'left' | 'center' | 'right' | number | string} [xAlign]
+ * @property {'bottom' | 'baseline' | 'middle' | 'top' | number | string,} [yAlign]
+ * @property {0} [space]
+ */
+export type EQN_LineGlyphAlign = {
+  xAlign?: 'left' | 'center' | 'right' | number | string,
+  yAlign?: 'bottom' | 'baseline' | 'middle' | 'top' | number | string,
+  space?: 0,
+}
+
+/**
+ * A glyph can be a line between the content and an annotation
+ * <pre>
+ *
+ *                         aaaaa
+ *                         aaaaa
+ *                       g
+ *                     g
+ *                   g
+ *          CCCCCCCCC
+ *          CCCCCCCCC
+ *          CCCCCCCCC
+ *          CCCCCCCCC
+ *
+ * </pre>
+ * @property {string} symbol
+ * @property {EQN_LineGlyphAlign} [content] alignment and spacing to content
+ * @property {EQN_LineGlyphAlign} [annotation] alignment and spacing to annotation
+ * @property {number} [annotationIndex] annotation index to draw line to
+ *
+ * @example
+ * figure.add({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       line: { symbol: 'line', width: 0.005, dash: [0.01, 0.01] },
+ *     },
+ *     forms: {
+ *       0: {
+ *         annotate: {
+ *           content: 'abc',
+ *           annotation: {
+ *             content: 'def',
+ *             xPosition: 'right',
+ *             yPosition: 'top',
+ *             xAlign: 'left',
+ *             yAlign: 'bottom',
+ *             scale: 0.6,
+ *             offset: [0.2, 0.2],
+ *           },
+ *           glyphs: {
+ *             line: {
+ *               annotation: 0,
+ *               symbol: 'line',
+ *               content: {
+ *                 xAlign: 'right',
+ *                 yAlign: 'top',
+ *                 space: 0.02,
+ *               },
+ *               comment: {
+ *                 xAlign: 'left',
+ *                 yAlign: 'bottom',
+ *                 space: 0.02,
+ *               },
+ *             },
+ *           },
+ *         },
+ *       },
+ *     },
+ *   },
+ * });
+ */
+export type EQN_LineGlyph = {
+  symbol: string,
+  content?: EQN_LineGlyphAlign,
+  annotation?: EQN_LineGlyphAlign,
+  annotationIndex?: number,
+}
+
+/**
  * Object defining all the glyphs annotating some content.
  *
  * Multiple glyphs are ok, but only one per position.
@@ -2481,6 +2573,7 @@ export type EQN_TopBottomGlyph = {
  * @property {EQN_LeftRightGlyph} [right]
  * @property {EQN_TopBottomGlyph} [bottom]
  * @property {EQN_LeftRightGlyph} [left]
+ * @property {EQN_LineGlyph} [line]
  */
 export type EQN_Glyphs = {
   left?: EQN_LeftRightGlyph;
@@ -2488,6 +2581,7 @@ export type EQN_Glyphs = {
   top?: EQN_TopBottomGlyph;
   bottom?: EQN_TopBottomGlyph;
   encompass?: EQN_EncompassGlyph;
+  line?: EQN_LineGlyph;
 };
 
 
@@ -3114,6 +3208,35 @@ export class EquationFunctions {
     });
   }
 
+  // /**
+  //  */
+  // pointer(options: EQN_Pointer) {
+  //   const defaultOptions = {
+  //     xPosition: 'center',
+  //     yPosition: 'top',
+  //     xAlign: 'center',
+  //     yAlign: 'bottom',
+  //     offset: new Point(0, 0),
+  //     scale: 1,
+  //     inSize: true,
+  //     fullContentBounds: false,
+  //     glyph: {
+  //       content: {
+  //         xPosition: 'center',
+  //         yPosition: 'top',
+  //         offset: new Point(0, 0),
+  //         space: 0.05,
+  //       },
+  //       comment: {
+  //         xPosition: 'center',
+  //         yPosition: 'top',
+  //         offset: new Point(0, 0),
+  //         space: 0.05,
+  //       }
+  //     }
+  //   }
+  // }
+
   /**
    * Equation annotate function
    * @see {@link EQN_Annotate} for description and examples
@@ -3152,6 +3275,19 @@ export class EquationFunctions {
         xOffset: 0,
         annotationsOverContent: false,
       },
+      line: {
+        content: {
+          xAlign: 'left',
+          yAlign: 'bottom',
+          space: 0,
+        },
+        annotation: {
+          xAlign: 'left',
+          yAlign: 'bottom',
+          space: 0,
+        },
+        annotationIndex: 0,
+      },
     };
     const {
       content, annotation, annotations, glyphs,
@@ -3176,6 +3312,7 @@ export class EquationFunctions {
 
     const fillAnnotation = (ann) => {
       const annCopy = joinObjects({}, defaultAnnotation, ann);  // $FlowFixMe
+      annCopy.offset = getPoint(annCopy.offset);     // $FlowFixMe
       annCopy.content = this.contentToElement(ann.content);
       return annCopy;
     };
@@ -3202,7 +3339,7 @@ export class EquationFunctions {
       if (glyphSide == null) {
         return;
       }
-      glyphsToUse[side] = {};
+      glyphsToUse[side] = {}; // $FlowFixMe
       let glyphAnnotationsToProcess = glyphSide.annotations;
       // $FlowFixMe
       if (glyphSide.annotation != null) {      // $FlowFixMe
@@ -3219,6 +3356,8 @@ export class EquationFunctions {
     fillGlyphAnnotation('right');
     fillGlyphAnnotation('top');
     fillGlyphAnnotation('bottom');
+    fillGlyphAnnotation('line');
+
     const o = joinObjects(defaultOptions, options);
     return new BaseAnnotationFunction(
       this.contentToElement(content),
@@ -4120,18 +4259,22 @@ export class EquationFunctions {
     let symbol;
     let contentSpace;
     let commentSpace;
+    let contentLineSpace;
+    let commentLineSpace;
     let scale;
     let inSize;
     let fullContentBounds;
     let useFullBounds;
     if (Array.isArray(optionsOrArray)) {
       [
-        content, comment, symbol, contentSpace, commentSpace, scale, inSize,
+        content, comment, symbol, contentSpace, commentSpace,
+        scale, inSize, contentLineSpace, commentLineSpace,     // $FlowFixMe
         fullContentBounds, useFullBounds,
       ] = optionsOrArray;
     } else {
-      ({                                                      // $FlowFixMe
-        content, comment, symbol, contentSpace, commentSpace, scale, inSize,
+      ({                                                       // $FlowFixMe
+        content, comment, symbol, contentSpace, commentSpace,
+        scale, inSize, contentLineSpace, commentLineSpace,     // $FlowFixMe
         fullContentBounds, useFullBounds,
       } = optionsOrArray);
     }
@@ -4142,6 +4285,8 @@ export class EquationFunctions {
       inSize,
       useFullBounds,
       fullContentBounds,
+      contentLineSpace,
+      commentLineSpace,
     };
     const defaultOptions = {
       contentSpace: 0.03,
@@ -4150,13 +4295,16 @@ export class EquationFunctions {
       inSize: true,
       fullContentBounds: false,
       useFullBounds: false,
+      contentLineSpace: 0.03,
+      commentLineSpace: 0.03,
     };
 
     const options = joinObjects(defaultOptions, optionsIn);
     return [
       content, comment, symbol,
       options.contentSpace, options.commentSpace, options.scale,
-      options.inSize, options.fullContentBounds, options.useFullBounds,
+      options.inSize, options.contentLineSpace, options.commentLineSpace,
+      options.fullContentBounds, options.useFullBounds,
     ];
   }
 
@@ -4170,7 +4318,8 @@ export class EquationFunctions {
     const [
       content, comment, symbol,
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
-      inSize, fullContentBounds, useFullBounds,
+      inSize, contentLineSpace, commentLineSpace, fullContentBounds,
+      useFullBounds,
     ] = this.processComment(...args);
     const annotations = [{
       content: comment,
@@ -4185,6 +4334,25 @@ export class EquationFunctions {
       return this.annotate({
         content,           // $FlowFixMe
         annotations,
+        inSize,
+      });
+    }
+    const glyph = this.getExistingOrAddSymbol(symbol);
+    if (glyph instanceof EquationLine) {
+      annotations[0].offset = [0, commentSpaceToUse + contentSpaceToUse];
+      return this.annotate({
+        content,
+        fullContentBounds,
+        useFullBounds,   // $FlowFixMe
+        annotations,
+        glyphs: {
+          line: {
+            symbol,              // $FlowFixMe
+            content: { xAlign: 'center', yAlign: 'top', space: contentLineSpace },
+            annotation: { xAlign: 'center', yAlign: 'bottom', space: commentLineSpace },
+            annotationIndex: 0,
+          },
+        },
         inSize,
       });
     }
@@ -4213,7 +4381,8 @@ export class EquationFunctions {
     const [
       content, comment, symbol,
       contentSpaceToUse, commentSpaceToUse, scaleToUse,
-      inSize, fullContentBounds, useFullBounds,
+      inSize, contentLineSpace, commentLineSpace, fullContentBounds,
+      useFullBounds,
     ] = this.processComment(...args);
 
     const annotations = [{
@@ -4232,7 +4401,25 @@ export class EquationFunctions {
         inSize,
       });
     }
-
+    const glyph = this.getExistingOrAddSymbol(symbol);
+    if (glyph instanceof EquationLine) {
+      annotations[0].offset = [0, -commentSpaceToUse - contentSpaceToUse];
+      return this.annotate({
+        content,
+        fullContentBounds,
+        useFullBounds,    // $FlowFixMe
+        annotations,
+        glyphs: {
+          line: {
+            symbol,              // $FlowFixMe
+            content: { xAlign: 'center', yAlign: 'bottom', space: contentLineSpace },
+            annotation: { xAlign: 'center', yAlign: 'top', space: commentLineSpace },
+            annotationIndex: 0,
+          },
+        },
+        inSize,
+      });
+    }
     return this.annotate({
       content,
       fullContentBounds,
@@ -4306,6 +4493,7 @@ export class EquationFunctions {
       useFullBounds,
     };
     const o = joinObjects(defaultOptions, optionsIn);
+    // console.log(glyph, o)
     return this.annotate({
       content,
       inSize: o.inSize,

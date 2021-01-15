@@ -1341,7 +1341,7 @@ describe('ObjectTracker', () => {
       ]);
     });
     test('Print escape sequence', () => {
-      const s = 'This //|is |a| test';
+      const s = 'This ///|is |a| test';
       const split = tools.splitString(s, '|', '/');
       expect(split).toEqual([
         'This /|is ', 'a', ' test',
@@ -1359,6 +1359,14 @@ describe('ObjectTracker', () => {
       const split = tools.splitString(s, '|');
       expect(split).toEqual([
         'This is ', 'a', ' test', ' for this',
+      ]);
+    });
+    test('Escape escape', () => {
+      const s = 'This is //|a test| for this';
+      // debugger;
+      const split = tools.splitString(s, '|', '/');
+      expect(split).toEqual([
+        'This is /', 'a test', ' for this',
       ]);
     });
     // 'This is |a| test'

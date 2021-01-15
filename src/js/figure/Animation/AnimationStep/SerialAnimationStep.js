@@ -117,7 +117,7 @@ export class SerialAnimationStep extends AnimationStep {
   //   return this;
   // }
 
-  setTimeDelta(delta: number) {
+  setTimeDelta(delta: ?number) {
     super.setTimeDelta(delta);
     if (this.steps != null) {
       this.steps.forEach((step) => {
@@ -171,7 +171,7 @@ export class SerialAnimationStep extends AnimationStep {
     }
   }
 
-  nextFrame(now: number) {
+  nextFrame(now: number, speed: number = 1) {
     if (this.startTime === null) {
       this.startTime = now - this.startTimeOffset;
     }
@@ -180,7 +180,7 @@ export class SerialAnimationStep extends AnimationStep {
       this.beforeFrame(now - this.startTime);
     }
     if (this.index <= this.steps.length - 1) {
-      remaining = this.steps[this.index].nextFrame(now);
+      remaining = this.steps[this.index].nextFrame(now, speed);
       if (this.afterFrame != null) { // $FlowFixMe - as this has been confirmed
         this.afterFrame(now - this.startTime);
       }
@@ -192,7 +192,7 @@ export class SerialAnimationStep extends AnimationStep {
         }
         this.index += 1;
         this.steps[this.index].start(now - remaining);
-        return this.nextFrame(now);
+        return this.nextFrame(now, speed);
       }
     }
     return remaining;

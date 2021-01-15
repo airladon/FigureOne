@@ -219,6 +219,8 @@ export default class AnimationManager {
     },
   };
 
+  animationSpeed: number;
+
   customSteps: Array<{
     step: (Object) => AnimationStep,
     name: string,
@@ -251,6 +253,7 @@ export default class AnimationManager {
     this.finishedCallback = options.finishedCallback;
     this.subscriptions = new SubscriptionManager();
     this.customSteps = [];
+    this.animationSpeed = 1;
     // this.setupAnimationSteps();
     return this;
   }
@@ -283,6 +286,15 @@ export default class AnimationManager {
     return animation;
   }
 
+  /**
+   * Set time speed of animation relative to real time, where 1 is real time,
+   * <1 is slower than real time and >1 is faster than real time.
+   *
+   * @param {number} speed
+   */
+  setTimeSpeed(speed: number = 1) {
+    this.animationSpeed = speed;
+  }
 
   /**
    * Animation builder object
@@ -323,13 +335,12 @@ export default class AnimationManager {
 
   /**
    * Create a Trigger animation step
-   * @param {OBJ_TriggerAnimationStep} options
+   * @param {OBJ_TriggerAnimationStep | function(): void} options
    * @return {TriggerAnimationStep}
    */
   // eslint-disable-next-line class-methods-use-this
-  trigger(...options: Array<OBJ_TriggerAnimationStep>) {
-    const optionsToUse = joinObjects({}, ...options);
-    return new anim.TriggerAnimationStep(optionsToUse);
+  trigger(options: (() => void) | Array<OBJ_TriggerAnimationStep>) {
+    return new anim.TriggerAnimationStep(options);
   }
 
   /**
@@ -552,7 +563,7 @@ export default class AnimationManager {
   //   // });
   // }
 
-  setTimeDelta(delta: number) {
+  setTimeDelta(delta: ?number) {
     this.animations.forEach((animation) => {
       animation.setTimeDelta(delta);
     });
@@ -595,7 +606,7 @@ export default class AnimationManager {
       let animationIsAnimating = false;
       // console.log(this.element.name, animation.state)
       if (animation.state === 'waitingToStart' || animation.state === 'animating') {
-        const stepRemaining = animation.nextFrame(now);
+        const stepRemaining = animation.nextFrame(now, this.animationSpeed);
         if (remaining === null) {
           remaining = stepRemaining;
         }
@@ -686,9 +697,11 @@ export default class AnimationManager {
     }
   }
 
-  cancelAll(force: ?'complete' | 'freeze' = null) {
+  cancelAll(how: ?'complete' | 'freeze' = null, force: boolean = false) {
     for (let i = 0; i < this.animations.length; i += 1) {
-      this.animations[i].cancel(force);
+      if (force || !this.animations[i].name.startsWith('_noStop_')) {
+        this.animations[i].cancel(how);
+      }
     }
     this.cleanAnimations();
   }

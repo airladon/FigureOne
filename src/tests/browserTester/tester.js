@@ -32,7 +32,8 @@ function tester(htmlFile, framesFile, threshold = 0) {
   if (framesFile != null && framesFile !== '') {
     require(framesFile);
   }
-  require('./finish.js');
+  const { __finish } = require('./finish.js');
+  __finish();
   jest.setTimeout(60000);
 
   const tests = [];
@@ -88,7 +89,7 @@ function tester(htmlFile, framesFile, threshold = 0) {
         if (time !== lastTime) {
           const image = await page.screenshot({ fullPage: true });
           expect(image).toMatchImageSnapshot({
-            customSnapshotIdentifier: `${zeroPad(time * 1000, 5)}-${description}`,
+            customSnapshotIdentifier: `${zeroPad(Math.round(time * 1000), 5)}-${description}`,
             failureThreshold: threshold,
           });
           lastTime = time;

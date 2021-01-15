@@ -15,7 +15,7 @@ import {
 } from '../Element';
 import type CollectionsAxis, { COL_Axis } from './Axis';
 import type {
-  OBJ_Line, OBJ_Polygon, OBJ_Star, OBJ_Polyline, OBJ_Collection,
+  OBJ_Line, OBJ_Polygon, OBJ_Star, OBJ_LineStyleSimple, OBJ_Collection,
 } from '../FigurePrimitives/FigurePrimitives';
 import type { TypeColor, OBJ_Font_Fixed } from '../../tools/types';
 import type { CPY_Steps } from '../geometries/copy/copy';
@@ -59,7 +59,7 @@ import type FigureCollections from './FigureCollections';
  * @property {COL_Axis | string} [yAxis] The y axis associated with the trace,
  * if this is a string, the trace must be part of a plot with an axis with the
  * same name. In plots, this will default to the string `'y'`.
- * @property {OBJ_Line} [line] line style of the trace - if neither `line` nor
+ * @property {OBJ_LineStyleSimple} [line] line style of the trace - if neither `line` nor
  * `markers` is defined, then `line` will default to a solid line. If `line`
  * is not defined, but `markers` is, then only markers will be used to represent
  * the line
@@ -86,7 +86,7 @@ export type COL_Trace = {
   yAxis?: COL_Axis | string,
   x?: Array<TypeParsablePoint>,
   y?: Array<TypeParsablePoint>,
-  line?: OBJ_Line,
+  line?: OBJ_LineStyleSimple,
   markers?: OBJ_Polygon | OBJ_Star,
   color?: TypeColor,
   name?: string,
@@ -287,6 +287,26 @@ class CollectionsTrace extends FigureElementCollection {
     }
   }
 
+  /**
+   * Update the trace with a new set of points.
+   * @param {Array<TypeParsablePoint>} points
+   */
+  update(points: Array<TypeParsablePoint>) {
+    this.removeLine();
+    this.removeMarkers();
+    this.points = getPoints(points);
+    if (this.line != null) { // $FlowFixMe
+      this.addLine(this.line);
+    }
+    if (this.markers != null) {
+      this.markers.copy = []; // $FlowFixMe
+      this.addMarkers(this.markers);
+    }
+    // if (this._line != null) {
+    //   this._line.updatePoints({ points: this.points });
+    // }
+  }
+
   pointToDraw(p: Point) {
     return new Point(this.xAxis.valueToDraw(p.x), this.yAxis.valueToDraw(p.y));
   }
@@ -332,7 +352,7 @@ class CollectionsTrace extends FigureElementCollection {
 
   updatePoints() {
     this.polylines = [];
-    this.drawPoints = this.points.map(p => this.pointToDraw(p));
+    // this.drawPoints = this.points.map(p => this.pointToDraw(p));
     this.drawPoints = [];
     let sampling = false;
     if (this.xSampleDistance != null && this.ySampleDistance != null) {
@@ -404,7 +424,7 @@ class CollectionsTrace extends FigureElementCollection {
     }
   }
 
-  addLine(options: OBJ_Polyline) {
+  addLine(options: OBJ_LineStyleSimple) {
     const defaultOptions = {
       color: this.color,
       width: this.collections.primitives.defaultLineWidth,
@@ -413,21 +433,39 @@ class CollectionsTrace extends FigureElementCollection {
     this.line = joinObjects({}, defaultOptions, options);
     this.polylines.forEach((points, index) => {
       const line = this.collections.primitives.polyline(joinObjects({}, this.line, { points }));
-      this.add(`${line}${index}`, line);
+      this.add(`line${index}`, line);
     });
   }
 
-  addMarkers(options: OBJ_Polygon) {
+  removeLine() {
+    const lines = this.drawOrder.filter(e => e.startsWith('line'));
+    lines.forEach((elementName) => {
+      this.remove(elementName);
+    });
+  }
+
+  removeMarkers() {
+    // const index = this.drawOrder.indexOf('markers');
+    // if (index !== -1) {
+    //   this.remove('markers');
+    // }
+    const markers = this.drawOrder.filter(e => e.startsWith('markers'));
+    markers.forEach((elementName) => {
+      this.remove(elementName);
+    });
+  }
+
+  addMarkers(options: OBJ_Polygon | OBJ_Star) {
     const defaultOptions = {
       radius: 0.02,
       color: this.color,
     };
     const markers = this.points.filter(p => this.inAxes(p));
+    const o = joinObjects({}, defaultOptions, options);
+    this.markers = o;
     if (markers.length === 0) {
       return;
     }
-    const o = joinObjects({}, defaultOptions, options);
-    this.markers = o;
     if (o.copy == null) {
       o.copy = [];
     } else if (Array.isArray(o.copy) === false) {

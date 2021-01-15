@@ -2385,6 +2385,13 @@ class Rotation {
     this.name = nameToUse;
   }
 
+  isUnity() {
+    if (this.r !== 0) {
+      return false;
+    }
+    return true;
+  }
+
   _state(options: { precision: number }) {
     // const { precision } = options;
     const precision = getPrecision(options);
@@ -2501,6 +2508,13 @@ class Translation extends Point {
       super(0, 0);
     }
     this.name = nameToUse;
+  }
+
+  isUnity() {
+    if (this.x !== 0 || this.y !== 0) {
+      return false;
+    }
+    return true;
   }
 
   _state(options: { precision: number }) {
@@ -2654,6 +2668,13 @@ class Scale extends Point {
       super(1, 1);
     }
     this.name = name;
+  }
+
+  isUnity() {
+    if (this.x !== 1 || this.y !== 1) {
+      return false;
+    }
+    return true;
   }
 
   _state(options: { precision: number }) {
@@ -2943,7 +2964,9 @@ class Transform {
     }
     let m = m2.identity();
     for (let i = orderEndToUse; i >= orderStart; i -= 1) {
-      m = m2.mul(m, this.order[i].matrix());
+      if (!this.order[i].isUnity()) {
+        m = m2.mul(m, this.order[i].matrix());
+      }
     }
     return m;
     // this.mat = m2.copy(m);
@@ -6032,6 +6055,38 @@ function getBorder(
   return border.map(b => b.map(p => getPoint(p)));
 }
 
+export type TypeXAlign = 'left' | 'right' | 'center' | 'string' | number;
+
+export type TypeYAlign = 'bottom' | 'top' | 'middle' | 'string' | number;
+
+function getPositionInRect(
+  r: TypeParsableRect,
+  xAlign: TypeXAlign = 0,
+  yAlign: TypeYAlign = 0,
+  // offset: TypeParsablePoint = new Point(0, 0),
+) {
+  const rect = getRect(r);
+  const position = new Point(rect.left, rect.bottom);
+  if (xAlign === 'center') {
+    position.x += rect.width / 2;
+  } else if (xAlign === 'right') {
+    position.x = rect.right;
+  } else if (typeof xAlign === 'number') {
+    position.x += rect.width * xAlign;
+  } else if (xAlign.startsWith('o')) {
+    position.x += parseFloat(xAlign.slice(1));
+  }
+  if (yAlign === 'middle') {
+    position.y += rect.height / 2;
+  } else if (yAlign === 'top') {
+    position.y = rect.top;
+  } else if (typeof yAlign === 'number') {
+    position.y += rect.height * yAlign;
+  } else if (yAlign.startsWith('o')) {
+    position.y += parseFloat(yAlign.slice(1));
+  }
+  return position;
+}
 // function getBorder(borders: Array<Array<TypeParsablePoint>>) {
 //   if (!Array.isArray(borders)) {
 //     return borders;
@@ -6099,4 +6154,5 @@ export {
   getBorder,
   comparePoints,
   isBuffer,
+  getPositionInRect,
 };

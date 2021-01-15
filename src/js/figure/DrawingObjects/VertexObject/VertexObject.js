@@ -341,6 +341,8 @@ class VertexObject extends DrawingObject {
     // if (window.asdf) {
     //   console.log(transformMatrix, color, glIndex, count);
     // }
+    // const tt = performance.now();
+    // const ttt = [];
     const gl = this.gl[glIndex];
     const webglInstance = this.webgl[glIndex];
 
@@ -366,6 +368,7 @@ class VertexObject extends DrawingObject {
       gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     }
+    // ttt.push(performance.now()-tt)
     // Turn on the attribute
     gl.enableVertexAttribArray(locations.a_position);
 
@@ -376,6 +379,7 @@ class VertexObject extends DrawingObject {
       locations.a_position,
       size, type, normalize, stride, offset,
     );
+    // ttt.push(performance.now()-tt)
 
     gl.uniformMatrix3fv(
       locations.u_matrix,
@@ -389,7 +393,7 @@ class VertexObject extends DrawingObject {
       locations.u_color,
       color[0], color[1], color[2], color[3],
     );  // Translate
-
+    // ttt.push(performance.now()-tt)
     const { texture } = this;
     if (texture != null) {
       // Textures
@@ -424,6 +428,8 @@ class VertexObject extends DrawingObject {
     if (texture) {
       gl.disableVertexAttribArray(locations.a_texcoord);
     }
+    // ttt.push(performance.now()-tt)
+    // window.timeData.push(ttt);
   }
 
   transform(transformMatrix: Array<number>) {
@@ -439,6 +445,7 @@ class VertexObject extends DrawingObject {
       }
     }
   }
+
 
   // calcBorder(lastDrawTransformMatrix: Array<number>) {
   //   const glBorders = [];

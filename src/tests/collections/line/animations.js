@@ -21,7 +21,7 @@ function getShapes(getPos) {
       name,
       method: 'collections.line',
       options: tools.misc.joinObjects({}, {
-        color: [1, 0, 0, 0.8],
+        color: [1, 0, 0, 0.9],
         p1: [-0.2, 0],
         width: 0.05,
         length: 0.4,

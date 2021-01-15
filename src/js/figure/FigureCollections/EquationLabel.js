@@ -179,6 +179,10 @@ export default class EquationLabel {
   // setEqn() {
   // }
 
+  showForm(formName: string) {
+    this.eqn.showForm(formName);
+  }
+
   setText(text: string) {
     const form = this.eqn.getCurrentForm();
     if (form != null) {

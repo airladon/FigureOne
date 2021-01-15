@@ -97,7 +97,7 @@ export class ParallelAnimationStep extends AnimationStep {
     return 'parallelAnimationStep';
   }
 
-  setTimeDelta(delta: number) {
+  setTimeDelta(delta: ?number) {
     super.setTimeDelta(delta);
     if (this.steps != null) {
       this.steps.forEach((step) => {
@@ -113,7 +113,7 @@ export class ParallelAnimationStep extends AnimationStep {
     return this;
   }
 
-  nextFrame(now: number) {
+  nextFrame(now: number, speed: number = 1) {
     if (this.startTime === null) {
       this.startTime = now - this.startTimeOffset;
     }
@@ -124,7 +124,7 @@ export class ParallelAnimationStep extends AnimationStep {
     this.steps.forEach((step) => {
       // console.log(step.state, step)
       if (step.state === 'animating' || step.state === 'waitingToStart') {
-        const stepRemaining = step.nextFrame(now);
+        const stepRemaining = step.nextFrame(now, speed);
         // console.log(step.element.uid, stepRemaining)
         if (remaining === null) {
           remaining = stepRemaining;

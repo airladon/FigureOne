@@ -1,6 +1,6 @@
 // @flow
 import {
-  Point, getPoint,
+  Point, getPoint, getPositionInRect, Line,
 } from '../../../tools/g2';
 // import { Elements } from './Element';
 import Bounds from './Bounds';
@@ -43,6 +43,22 @@ export type EQN_EncompassGlyph = {
   bottomSpace?: number;
   rightSpace?: number;
 };
+
+export type EQN_LineGlyph = {
+  symbol?: string,
+  annotationIndex: number,
+  content: {
+    xAlign: 'left' | 'center' | 'right' | number | string,
+    yAlign: 'bottom' | 'baseline' | 'middle' | 'top' | number | string,
+    space: number,
+  };
+  annotation: {
+    xAlign: 'left' | 'center' | 'right' | number | string,
+    yAlign: 'bottom' | 'baseline' | 'middle' | 'top' | number | string,
+    space: number,
+  };
+};
+
 export type EQN_LeftRightGlyph = {
   symbol?: string,
   annotations?: Array<EQN_Annotation>,
@@ -93,6 +109,7 @@ export type EQN_Glyphs = {
   top?: TypeAnnotatedGlyph & EQN_TopBottomGlyph;
   bottom?: TypeAnnotatedGlyph & EQN_TopBottomGlyph;
   encompass?: TypeAnnotatedGlyph & EQN_EncompassGlyph;
+  line?: TypeAnnotatedGlyph & EQN_LineGlyph;
 };
 
 // export type EQN_GlyphsIn = {
@@ -358,13 +375,22 @@ export default class BaseAnnotationFunction implements ElementInterface {
     contentBounds.copyFrom(content.getBounds(fullContentBounds));
     inSizeBounds.copyFrom(contentBounds);
     fullBounds.copyFrom(contentBounds);
-    annotations.forEach((annotation) => {
+
+    annotations.forEach((annotation, index) => {
       annotation.content.calcSize(loc, scale * annotation.scale);
       this.setAnnotationPosition(contentBounds, annotation, scale);
       const annotationBounds = annotation.content.getBounds();
       inSizeBounds.growWithSameBaseline(annotationBounds);
       const fullSizeAnnotationBounds = annotation.content.getBounds(true);
       fullBounds.growWithSameBaseline(fullSizeAnnotationBounds);
+      if (
+        this.glyphs.line != null
+        && this.glyphs.line.annotationIndex === index
+      ) {
+        this.setLineGlyph(annotationBounds, contentBounds);
+        // inSizeBounds.growWithSameBaseline(encompassBounds);
+        // fullBounds.growWithSameBaseline(encompassFullBounds);
+      }
     });
     const [encompassBounds, encompassFullBounds] = this.setEncompassGlyph(scale, contentBounds);
     inSizeBounds.growWithSameBaseline(encompassBounds);
@@ -480,6 +506,48 @@ export default class BaseAnnotationFunction implements ElementInterface {
       fullBounds.growWithSameBaseline(fullAnnotationBounds);
     });
     return [inSizeBounds, fullBounds];
+  }
+
+  setLineGlyph(annotationBounds: Bounds, contentBounds: Bounds) {
+    if (this.glyphs.line == null) {
+      return;
+    }
+    const { // $FlowFixMe
+      content, annotation,
+    } = this.glyphs.line;
+    const glyph = this.glyphs.line;
+    const pStart = getPositionInRect( // $FlowFixMe
+      contentBounds.toRect(), content.xAlign, content.yAlign,
+    );
+    const pEnd = getPositionInRect( // $FlowFixMe
+      annotationBounds.toRect(), annotation.xAlign, annotation.yAlign,
+    );
+
+    const line = new Line(pStart, pEnd);
+    const spacedLine = new Line(
+      line.pointAtLength(content.space),
+      line.pointAtLength(line.length() - annotation.space),
+    );
+    // console.log(spacedLine)
+
+    glyph.width = spacedLine.angle();
+    glyph.height = spacedLine.length();
+    glyph.location = spacedLine.p1._dup();
+    glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
+
+    // glyph.glyph.custom.options.spacedLine = spacedLine._dup();
+    // glyph.location = new Point(0, 0);
+    // const sp1 = spacedLine.p1._dup();
+    // const sp2 = spacedLine.p2._dup();
+    // const glyphBounds = new Bounds({
+    //   left: Math.min(sp1.x, sp2.x),
+    //   bottom: Math.min(sp1.y, sp2.y),
+    //   width: Math.abs(sp1.x - sp2.x),
+    //   height: Math.abs(sp1.y - sp2.y),
+    // });
+    // glyph.width = glyphBounds.width;
+    // glyph.height = glyphBounds.height;
+    // glyph.glyph.custom.setSize(glyph.location, glyph.width, glyph.height);
   }
 
   setVerticalGlyph(scale: number, contentBounds: Bounds, glyphName: 'left' | 'right') {

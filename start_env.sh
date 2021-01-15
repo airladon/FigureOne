@@ -16,8 +16,6 @@ docker run -it --rm \
   -v $PROJECT_PATH/jest.config.js:/opt/app/jest.config.js \
   -v $PROJECT_PATH/docs:/opt/app/docs \
   -v $PROJECT_PATH/reports:/opt/app/reports \
-  -v $PROJECT_PATH/examples:/opt/app/examples \
-  -v $PROJECT_PATH/tutorials:/opt/app/tutorials \
   -v $PROJECT_PATH/generate_docs.sh:/opt/app/generate_docs.sh \
   -v $PROJECT_PATH/jsdoc-conf.json:/opt/app/jsdoc-conf.json \
   -v $PROJECT_PATH/.stylelintrc:/opt/app/.stylelintrc \

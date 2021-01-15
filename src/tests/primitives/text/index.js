@@ -267,7 +267,7 @@ figure.getElement('u5').custom.updateText({
     { text: 'updated' },
     { text: 'now', location: [0, -0.2] },
   ],
-  color: [0, 0, 1, 1],
+  font: { color: [0, 0, 1, 1] },
   xAlign: 'right',
 });
 

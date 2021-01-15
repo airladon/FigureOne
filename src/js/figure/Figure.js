@@ -9,16 +9,18 @@ import {
 } from '../tools/g2';
 import type { TypeParsableRect, TypeParsablePoint } from '../tools/g2';
 // import * as math from '../tools/math';
-// import { round } from '../tools/math';
+import { round } from '../tools/math';
 import { FunctionMap } from '../tools/FunctionMap';
 import { setState, getState } from './Recorder/state';
 import parseState from './Recorder/parseState';
-import { isTouchDevice, joinObjects, SubscriptionManager } from '../tools/tools';
+import {
+  isTouchDevice, joinObjects, SubscriptionManager, Console, PerformanceTimer,
+} from '../tools/tools';
 import {
   FigureElementCollection, FigureElementPrimitive, FigureElement,
 } from './Element';
 import type {
-  OBJ_AddElement,
+  OBJ_AddElement, TypeElementPath,
 } from './Element';
 import GlobalAnimation from './webgl/GlobalAnimation';
 import { Recorder } from './Recorder/Recorder';
@@ -26,12 +28,18 @@ import { Recorder } from './Recorder/Recorder';
 import Gesture from './Gesture';
 import DrawContext2D from './DrawContext2D';
 import FigurePrimitives from './FigurePrimitives/FigurePrimitives';
+import type { OBJ_Polyline } from './FigurePrimitives/FigurePrimitives';
 // import FigureEquation from './Equation/FigureEquation';
 import FigureCollections from './FigureCollections/FigureCollections';
 // import addElements from './FigureAddElements/addElements';
 // import type { TypeAddElementObject } from './FigureAddElements/addElements';
 import type { OBJ_ScenarioVelocity } from './Animation/AnimationStep/ElementAnimationStep/ScenarioAnimationStep';
 import type { TypeColor, OBJ_Font } from '../tools/types';
+import SlideNavigator from './SlideNavigator';
+import type { OBJ_SlideNavigator } from './SlideNavigator';
+
+const FIGURE1DEBUG = false;
+
 
 /**
  * Space Transforms
@@ -169,7 +177,7 @@ export type OBJ_Figure = {
  * <body>
  *     <div id="figureOneContainer" style="width: 800px; height: 800px; background-color: white;">
  *     </div>
- *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.3.12/figureone.min.js'></script>
+ *     <script type="text/javascript" src='https://cdn.jsdelivr.net/npm figureone@0.4.0/figureone.min.js'></script>
  *     <script type="text/javascript" src='./index.js'></script>
  * </body>
  * </html>
@@ -225,7 +233,7 @@ class Figure {
 
   beingTouchedElements: Array<FigureElement>;
 
-  moveTopElementOnly: boolean;
+  touchTopElementOnly: boolean;
   previousCursorPoint: Point;
 
   limits: Rect;
@@ -269,6 +277,7 @@ class Figure {
 
   drawAnimationFrames: number;
   defaultColor: Array<number>;
+  defaultDimColor: Array<number>;
   defaultFont: OBJ_Font;
   defaultLineWidth: number;
   defaultLength: number;
@@ -301,11 +310,12 @@ class Figure {
       limits: new Rect(-1, -1, 2, 2),
       fontScale: 1,
       color: [0, 0, 0, 1],
+      dimColor: [0.5, 0.5, 0.5, 1],
       font: {
         family: 'Helvetica',
         size: 0.2,
         style: 'normal',
-        weight: 'normal',
+        weight: '100',
         opacity: 1,
       },
     };
@@ -325,9 +335,18 @@ class Figure {
     if (optionsToUse.font.color == null) {
       optionsToUse.font.color = this.defaultColor.slice();
     }
+    this.defaultDimColor = optionsToUse.dimColor;
     this.defaultFont = optionsToUse.font;
     this.htmlId = htmlId;
     this.animationFinishedCallback = null;
+    if (FIGURE1DEBUG) {
+      window.figureOneDebug = {
+        cumTimes: [],
+        draw: [],
+        setupDraw: [],
+        misc: [],
+      };
+    }
     // this.layout = layout;
     if (typeof htmlId === 'string') {
       const container = document.getElementById(htmlId);
@@ -441,7 +460,7 @@ class Figure {
     this.inTransition = false;
     this.beingMovedElements = [];
     this.beingTouchedElements = [];
-    this.moveTopElementOnly = true;
+    this.touchTopElementOnly = true;
     this.globalAnimation = new GlobalAnimation();
     this.subscriptions = new SubscriptionManager(this.fnMap);
     this.recorder = new Recorder();
@@ -515,6 +534,10 @@ class Figure {
     //   smartPolyLine: this.collections.polyline.bind(this.collections),
     //   equation: this.equation.equation.bind(this.equation),
     // };
+  }
+
+  slideNavigator(options: OBJ_SlideNavigator) {
+    return new SlideNavigator(joinObjects({}, { collection: this.elements }, options));
   }
 
   bindRecorder() {
@@ -1061,6 +1084,19 @@ class Figure {
   }
 
   /**
+   * Returns an array of result from
+   * [getElement](#figureelementcollectiongetelement) calls on an
+   * array of paths.
+   *
+   * @param {TypeElementPath} children
+   * @return {Array<FigureElement>} Array of
+   * [getElement](#figureelementcollectiongetelement) results
+   */
+  getElements(children: TypeElementPath) {
+    return this.elements.getElements(children);
+  }
+
+  /**
    * Set the figure to be touchable.
    *
    * Using <a href="#figureelementsettouchable">element.setTouchable</a> will
@@ -1095,6 +1131,7 @@ class Figure {
       this.spaceTransforms,
       this.animateNextFrame.bind(this, true, 'getShapes'),
       this.defaultColor,
+      this.defaultDimColor,
       this.defaultFont,
       this.defaultLineWidth,
       this.defaultLength,
@@ -1480,6 +1517,31 @@ class Figure {
   //   pointer.setPosition(figurePoint);
   // }
 
+  /**
+   * Show specific elements within the figure
+   */
+  show(
+    toShow: TypeElementPath = [],
+  ): void {
+    this.elements.show(toShow);
+  }
+
+  /**
+   * Show specific elements within a figure, while hiding all others
+   */
+  showOnly(
+    toShow: TypeElementPath = [],
+  ): void {
+    this.elements.showOnly(toShow);
+  }
+
+  /**
+   * Set scenarios of all elements with scenarioName defined
+   */
+  setScenarios(scenarioName: string, onlyIfVisible: boolean = false) {
+    this.elements.setScenarios(scenarioName, onlyIfVisible);
+  }
+
   toggleCursor() {
     this.cursorShown = !this.cursorShown;
     if (this.recorder.state === 'recording') {
@@ -1571,13 +1633,17 @@ class Figure {
     // must have isTouchable = true to be considered)
     this.beingTouchedElements = this.elements.getTouched(glPoint);
 
-    if (this.moveTopElementOnly && this.beingTouchedElements.length > 0) {
-      // if () {
-      this.beingTouchedElements[0].click(glPoint);
-      // }
-    } else {
-      this.beingTouchedElements.forEach(e => e.click(glPoint));
+    if (this.touchTopElementOnly && this.beingTouchedElements.length > 1) {
+      this.beingTouchedElements = [this.beingTouchedElements[0]];
     }
+
+    // if (this.touchTopElementOnly && this.beingTouchedElements.length > 0) {
+    //   // if () {
+    //   this.beingTouchedElements[0].click(glPoint);
+    //   // }
+    // } else {
+    this.beingTouchedElements.forEach(e => e.click(glPoint));
+    // }
 
     // Make a list of, and start moving elements that are being moved
     // (element must be touched and have isMovable = true to be in list)
@@ -1617,6 +1683,7 @@ class Figure {
   // happens, the default behavior is to let any elements being moved to move
   // freely until they decelerate to 0.
   touchUpHandler() {
+    // console.log(this.beingMovedElements)
     if (this.recorder.state === 'recording') {
       this.recorder.recordEvent('touch', ['up']);
       if (this.cursorShown) {
@@ -1888,7 +1955,7 @@ class Figure {
           }
         }
       }
-      if (this.moveTopElementOnly) {
+      if (this.touchTopElementOnly) {
         i = this.beingMovedElements.length;
       }
     }
@@ -2025,6 +2092,9 @@ class Figure {
   // }
 
   pause() {
+    if (this.state.pause === 'pause' || this.state.pause === 'preparingToPause' || this.state.pause === 'preparingToUnpause') {
+      return;
+    }
     this.state.pause = 'paused';
     this.pauseTime = this.globalAnimation.now() / 1000;
   }
@@ -2070,6 +2140,9 @@ class Figure {
   // }
 
   unpause() {
+    if (this.state.pause === 'unpaused' || this.state.pause === 'preparingToPause' || this.state.pause === 'preparingToUnpause') {
+      return;
+    }
     this.state.pause = 'unpaused';
     this.isPaused = false;
     this.elements.setTimeDelta(this.globalAnimation.now() / 1000 - this.pauseTime);
@@ -2152,6 +2225,16 @@ class Figure {
 
   draw(nowIn: number, canvasIndex: number = 0): void {
     // const start = new Date().getTime();
+    let timer;
+    if (FIGURE1DEBUG) {
+      timer = new PerformanceTimer();
+      // window.figureOneDebug.frame = [];
+      // window.figureOneDebug.frame.push([performance.now(), '']);
+      // debugTimes.push([performance.now(), '']);
+      window.figureOneDebug.draw = [];
+      window.figureOneDebug.setupDraw = [];
+      window.figureOneDebug.misc = [];
+    }
     // const t = performance.now();
     // if ((nowIn - this.lastDrawTime ) * 1000 > 40) {
     //   console.log((nowIn - this.lastDrawTime) * 1000)
@@ -2187,20 +2270,29 @@ class Figure {
       return;
     }
     this.drawQueued = false;
-
+    // $FlowFixMe
+    if (FIGURE1DEBUG) { timer.stamp('m1'); }
     this.clearContext(canvasIndex);
     // console.log('really drawing')
     // const startSetup = new Date().getTime();
+    // $FlowFixMe
+    if (FIGURE1DEBUG) { timer.stamp('clearContext'); }
+    // if (this.subscriptions.subscriptions.beforeDraw != null) {
+    //   console.log(this.subscriptions.subscriptions.beforeDraw.asdf)
+    // }
     this.subscriptions.publish('beforeDraw');
+    // $FlowFixMe
+    if (FIGURE1DEBUG) { timer.stamp('beforeDraw'); }
     this.elements.setupDraw(
       now,
       canvasIndex,
     );
-    // const t2 = performance.now();
-    // const endSetup = new Date().getTime();
-    // const startDraw = endSetup;
+    // $FlowFixMe
+    if (FIGURE1DEBUG) { timer.stamp('setupDraw'); }
+
     this.elements.draw(now, [this.spaceTransforms.figureToGL], 1, canvasIndex);
-    // const endDraw = new Date().getTime();
+    // $FlowFixMe
+    if (FIGURE1DEBUG) { timer.stamp('draw'); }
 
     if (this.elements.isAnyElementMoving()) {
       this.animateNextFrame(true, 'is moving');
@@ -2211,16 +2303,28 @@ class Figure {
       this.animateNextFrame(true, 'queued frames');
     }
     this.subscriptions.publish('afterDraw');
-    // const t3 = performance.now();
-    // console.log('Summary', round(t2 - t, 0), round(t3 - t2, 0), round(t - this.lastTime1, 0));
-    // this.lastTime1 = t;
-    // const end = new Date().getTime();
-    // const total = end - start;
-    // const setup = endSetup - startSetup;
-    // const draw = endDraw - startDraw;
-    // console.log(total, setup, draw, total - setup - draw);
-    // console.log(performance.now() - t);
-    // console.log(perfr)
+    if (FIGURE1DEBUG) { // $FlowFixMe
+      timer.stamp('afterDraw'); // $FlowFixMe
+      const deltas = timer.deltas();
+      if (window.figureOneDebug.cumTimes.length > 50) {
+        Console(
+          '>>>>>>>>>>> Total',
+          round(
+            window.figureOneDebug.cumTimes.reduce((sum, time) => sum + time) / 50,
+            2,
+          ),
+          // window.figureOneDebug.frameTime,
+          { frameTotal: deltas[0] },
+          { frame: deltas.slice(1) },
+          { setupDraw: window.figureOneDebug.setupDraw },
+          { draw: window.figureOneDebug.draw },
+          { misc: window.figureOneDebug.misc },
+        );
+        window.figureOneDebug.cumTimes = [];
+      } else {
+        window.figureOneDebug.cumTimes.push(deltas[0]);
+      }
+    }
   }
 
   // renderToImages() {
@@ -2304,6 +2408,23 @@ class Figure {
       pixelLocation.x + canvas.left,
       pixelLocation.y + canvas.top,
     );
+  }
+
+  debugShowTouchBorders(
+    elements: TypeElementPath, // $FlowFixMe
+    lineOptions: OBJ_Polyline = {},
+    startIndex: number = 0,
+  ) {
+    this.setFirstTransform();
+    const elems = this.elements.getElements(elements);
+    elems.forEach((element, index) => {
+      const touchBorder = element.getBorder('figure', 'touchBorder');
+      const polyline = this.primitives.polyline(joinObjects({}, lineOptions, {
+        points: touchBorder[0],
+        close: true,
+      }));
+      this.add(`__touchBorder_${index + startIndex}`, polyline);
+    });
   }
 }
 

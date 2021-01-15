@@ -3,8 +3,8 @@ import { roundNum } from './math';
 import { FunctionMap } from './FunctionMap';
 // import Worker from '../figure/recorder.worker.js';
 
-const Console = (text: string) => {
-  console.log(text); // eslint-disable-line no-console
+const Console = (...msg: Array<any>) => {
+  console.log(...msg); // eslint-disable-line no-console
 };
 
 // function add(a: number, b: number): number {
@@ -1210,11 +1210,14 @@ function splitString(str: string, token: string = '|', escape: string = '') {
   const split = [];
   let currentSplit = [];
   let escaped = false;
+  let escapedEscape = false;
   let tokenStringIndex = 0;
   letters.forEach((letter) => {
     currentSplit.push(letter);
-    if (tokenStringIndex === 0 && letter === escape) {
+    if (tokenStringIndex === 0 && letter === escape && escaped === false) {
       escaped = true;
+    } else if (letter === escape && tokenStringIndex === 0 && escaped) {
+      escapedEscape = true;
     } else if (letter === token[tokenStringIndex]) {
       tokenStringIndex += 1;
     } else {
@@ -1236,11 +1239,59 @@ function splitString(str: string, token: string = '|', escape: string = '') {
       escaped = false;
       tokenStringIndex = 0;
     }
+    if (escapedEscape) {
+      escapedEscape = false;
+      escaped = false;
+      currentSplit = currentSplit.slice(0, -1);
+    }
   });
   if (currentSplit.length > 0) {
     split.push(currentSplit.join(''));
   }
   return split;
+}
+
+class PerformanceTimer {
+  stamps: Array<[number, string]>;
+  index: number;
+
+  constructor() {
+    this.reset();
+  }
+
+  reset() {
+    this.stamps = [[performance.now(), 'init']];
+    this.index = 1;
+  }
+
+  stamp(label: string = `m${this.index}`) {
+    this.stamps.push([performance.now(), label]);
+    this.index += 1;
+  }
+
+  deltas() {
+    let lastTime;
+    const out = [0];
+    let cumTime = 0;
+    this.stamps.forEach((stamp, i) => {
+      const [t, label] = stamp;
+      if (i > 0) {
+        const delta = t - lastTime;
+        out.push([label, Math.round(delta * 100) / 100]);
+        cumTime += delta;
+      }
+      lastTime = t;
+    });
+    out[0] = Math.round(cumTime * 100) / 100;
+    return out;
+  }
+
+  log() {
+    if (window.figureOneDebug == null) {
+      window.figureOneDebug = { misc: [] };
+    }
+    window.figureOneDebug.misc.push(this.deltas());
+  }
 }
 
 export {
@@ -1258,6 +1309,6 @@ export {
   Subscriber,
   SubscriptionManager,
   getFromObject,
-  splitString,
+  splitString, PerformanceTimer,
 };
 
