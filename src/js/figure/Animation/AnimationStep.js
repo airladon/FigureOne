@@ -247,6 +247,14 @@ export default class AnimationStep {
     return this;
   }
 
+  setTimeSpeed(oldSpeed: number, newSpeed: number, now: number) {
+    if (this.startTime != null) {
+      const deltaTime = (now - this.startTime) * oldSpeed;
+      const newDeltaTime = deltaTime / newSpeed;
+      this.startTime = now - newDeltaTime;
+    }
+  }
+
   // returns remaining time if this step completes
   // Return of 0 means this step is still going
   nextFrame(now: number, speed: number = 1) {

@@ -113,6 +113,11 @@ export class ParallelAnimationStep extends AnimationStep {
     return this;
   }
 
+  setTimeSpeed(oldSpeed: number, newSpeed: number, now: number) {
+    super.setTimeSpeed(oldSpeed, newSpeed, now);
+    this.steps.forEach(step => step.setTimeSpeed(oldSpeed, newSpeed, now));
+  }
+
   nextFrame(now: number, speed: number = 1) {
     if (this.startTime === null) {
       this.startTime = now - this.startTimeOffset;

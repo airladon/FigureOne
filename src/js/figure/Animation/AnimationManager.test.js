@@ -7,9 +7,11 @@ import makeFigure from '../../__mocks__/makeFigure';
 
 tools.isTouchDevice = jest.fn();
 
-jest.mock('../Gesture');
-jest.mock('../webgl/webgl');
-jest.mock('../DrawContext2D');
+// jest.mock('../Gesture');
+// jest.mock('../webgl/webgl');
+// jest.mock('../DrawContext2D');
+
+jest.useFakeTimers();
 
 const point = value => new Point(value, value);
 
@@ -133,5 +135,29 @@ describe('Animation Manager', () => {
     expect(elem.getPosition().round()).toEqual(point(1));
     expect(math.round(elem.opacity, 2)).toEqual(1);
     expect(elem.isShown).toBe(false);
+  });
+  test('Time Speed', () => {
+    elem.animations.new()
+      .position({ target: [1, 0], duration: 5, progression: 'linear' })
+      .start();
+    figure.mock.timeStep(0);
+    expect(elem.getPosition().x).toEqual(0);
+    figure.mock.timeStep(1);
+    expect(elem.getPosition().x).toEqual(0.2);
+    elem.animations.setTimeSpeed(0.5);
+    figure.mock.timeStep(1);
+    expect(elem.getPosition().x).toEqual(0.3);
+    figure.mock.timeStep(1);
+    expect(elem.getPosition().x).toEqual(0.4);
+
+    elem.animations.setTimeSpeed(2);
+    figure.mock.timeStep(0.5);
+    expect(elem.getPosition().x).toEqual(0.6);
+    figure.mock.timeStep(0.25);
+    expect(elem.getPosition().x).toEqual(0.7);
+
+    elem.animations.setTimeSpeed(1);
+    figure.mock.timeStep(1);
+    expect(elem.getPosition().x).toEqual(0.9);
   });
 });

@@ -148,7 +148,7 @@ const button = (name, position, text) => ({
     button: true,
     line: { width: 0.005 },
     label: { text },
-    width: 0.3,
+    width: 0.35,
     height: 0.2,
     corner: { radius: 0.03, sides: 3 },
     position,
@@ -173,10 +173,10 @@ figure.add([
   button('pulseButton', [-1.7, 0.2], 'Pulse'),
   button('sineButton', [-1.3, 0.2], 'Sine'),
   button('resetButton', [-0.9, 0.2], 'Reset'),
-  button('freezeTimeButton', [-0.2, 0.2], 'Freeze'),
-  button('slowTimeButton', [0.2, 0.2], 'Slow'),
+  button('freezeTimeButton', [-0.2, 0.2], 'Running'),
+  button('slowTimeButton', [0.2, 0.2], 'Normal'),
   button('showTimeButton', [0.6, 0.2], 'Show'),
-  button('slowVelocityButton', [1.3, 0.2], 'Slow'),
+  button('velocityButton', [1.3, 0.2], 'Normal'),
   label('disturbanceLabel', [-1.3, 0.4], 'Disturbance'),
   label('timeLabel', [0.2, 0.4], 'Time'),
   label('velocityLabel', [1.3, 0.4], 'Velocity'),
@@ -196,6 +196,7 @@ const pulseButton = figure.getElement('pulseButton');
 const sineButton = figure.getElement('sineButton');
 const freezeButton = figure.getElement('freezeTimeButton');
 const slowTimeButton = figure.getElement('slowTimeButton');
+const velocityButton = figure.getElement('velocityButton');
 const recordingLine = spacePlot.getElement('recordingLine');
 
 const ball = (x, index, sides = 20) => ({
@@ -318,25 +319,41 @@ resetButton.onClick = () => {
 
 freezeButton.onClick = () => {
   if (time.isPaused()) {
-    freezeButton.setLabel('Freeze');
+    freezeButton.setLabel('Running');
     time.unpause();
   } else {
     time.pause();
-    freezeButton.setLabel('Resume');
+    freezeButton.setLabel('Frozen');
   }
 };
 
 slowTimeButton.onClick = () => {
   time.unpause();
-  freezeButton.setLabel('Freeze');
+  freezeButton.setLabel('Running');
   if (time.getTimeSpeed() === 1) {
-    time.setTimeSpeed(0.5);
-    movePad.animations.setTimeSpeed(0.5);
-    slowTimeButton.setLabel('Normal');
+    time.setTimeSpeed(0.3);
+    movePad.animations.setTimeSpeed(0.3);
+    slowTimeButton.setLabel('Slow');
   } else {
     time.setTimeSpeed(1);
     movePad.animations.setTimeSpeed(1);
-    slowTimeButton.setLabel('Slow');
+    slowTimeButton.setLabel('Normal');
+  }
+};
+
+velocityButton.onClick = () => {
+  reset();
+  time.pause();
+  freezeButton.setLabel('Frozen');
+  if (c === 0.5) {
+    velocityButton.setLabel('Normal');
+    c = 1;
+  } else if(c === 1) {
+    velocityButton.setLabel('Fast');
+    c = 2;
+  } else {
+    velocityButton.setLabel('Slow');
+    c = 0.5;
   }
 };
 
@@ -356,6 +373,7 @@ const disturbSine = (delay = 0, resetSignal = true) => {
     reset();
   }
   time.unpause();
+  freezeButton.setLabel('Running');
   movePad.animations.new('_noStop_sine')
     .delay(delay)
     .custom({
@@ -373,6 +391,7 @@ const disturbSine = (delay = 0, resetSignal = true) => {
 const disturbPulse1 = () => {
   // reset();
   time.unpause();
+  freezeButton.setLabel('Running');
   stop();
   const startTime = time.now();
   movePad.animations.new()

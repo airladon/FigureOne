@@ -149,7 +149,14 @@ function TimeKeeper() {
   function unpause() { paused = false; unpauseTime(); }
   function isPaused() { return paused || blurred; }
   function now() { return time; }
-  function setTimeSpeed(speed) { timeSpeed = speed; }
+  function setTimeSpeed(speed) {
+    const n = getNow();
+    const deltaTime = (n - startTime) * timeSpeed;
+    const cumPauseTimeNorm = cumPauseTime * timeSpeed;
+    startTime = n - deltaTime / speed;
+    cumPauseTime = cumPauseTimeNorm / speed;
+    timeSpeed = speed;
+  }
   function getTimeSpeed() { return timeSpeed; }
 
   return {

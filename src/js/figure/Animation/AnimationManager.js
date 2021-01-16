@@ -293,6 +293,13 @@ export default class AnimationManager {
    * @param {number} speed
    */
   setTimeSpeed(speed: number = 1) {
+    this.animations.forEach((animation) => {
+      animation.setTimeSpeed(
+        this.animationSpeed,
+        speed,
+        new GlobalAnimation().now() / 1000,
+      );
+    });
     this.animationSpeed = speed;
   }
 
