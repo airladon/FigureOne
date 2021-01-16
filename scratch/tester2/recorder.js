@@ -96,8 +96,7 @@ function Recorder() {
 function TimeKeeper() {
   let time = 0;
   let timeSpeed = 1;
-  let cumPauseTime = 0;
-  let startPauseTime = 0;
+  let internalPaused = false;
 
   let paused = false;
   let blurred = false;
@@ -105,38 +104,37 @@ function TimeKeeper() {
   function getNow() {
     return performance.now() / 1000;
   }
-  let startTime = getNow();
+  // let startTime = getNow();
+  let lastTime = getNow();
 
   function reset() {
-    startTime = getNow();
+    lastTime = getNow();
     time = 0;
-    cumPauseTime = 0;
-    startPauseTime = 0;
+    // startPauseTime = 0;
+    internalPaused = false;
   }
 
   function step(delta = null) {
-    if (delta === null && startPauseTime > 0) {
+    if (delta === null && internalPaused) {
       return 0;
     }
-    const lastTime = time;
-    if (delta == null) {
-      time = (getNow() - startTime - cumPauseTime) * timeSpeed;
-    } else {
-      time += delta;
-    }
-    return time - lastTime;
+    const n = getNow();
+    const timeDelta = delta == null ? (n - lastTime) * timeSpeed : delta;
+    time += timeDelta;
+    lastTime = n;
+    return timeDelta;
   }
 
   function pauseTime() {
-    if ((paused || blurred) && startPauseTime === 0) {
-      startPauseTime = getNow();
+    if ((paused || blurred) && !internalPaused) {
+      internalPaused = true;
     }
   }
 
   function unpauseTime() {
-    if (!paused && !blurred && startPauseTime > 0) {
-      cumPauseTime += getNow() - startPauseTime;
-      startPauseTime = 0;
+    if (!paused && !blurred && internalPaused) {
+      internalPaused = false;
+      lastTime = getNow();
     }
   }
 
@@ -154,12 +152,6 @@ function TimeKeeper() {
   function isPaused() { return paused || blurred; }
   function now() { return time; }
   function setTimeSpeed(speed) {
-    const n = getNow();
-    
-    const deltaTime = (n - startTime) * timeSpeed;
-    const cumPauseTimeNorm = cumPauseTime * timeSpeed;
-    startTime = n - deltaTime / speed;
-    cumPauseTime = cumPauseTimeNorm / speed;
     timeSpeed = speed;
   }
   function getTimeSpeed() { return timeSpeed; }
