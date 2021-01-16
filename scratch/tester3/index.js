@@ -60,7 +60,6 @@ figure.add([
   button('resetButton', [-0.9, 0.2], 'Reset'),
   button('freezeTimeButton', [-0.2, 0.2], 'Running'),
   button('slowTimeButton', [0.2, 0.2], 'Normal'),
-  button('showTimeButton', [0.6, 0.2], 'Show'),
   button('velocityButton', [1.3, 0.2], 'Normal'),
   button('frequencyButton', [1.7, 0.2], '3s'),
   label('disturbanceLabel', [-1.3, 0.4], 'Disturbance'),
@@ -76,7 +75,6 @@ const freezeButton = figure.getElement('freezeTimeButton');
 const slowTimeButton = figure.getElement('slowTimeButton');
 const velocityButton = figure.getElement('velocityButton');
 const frequencyButton = figure.getElement('frequencyButton');
-const showTimeButton = figure.getElement('showTimeButton');
 // const recordingLine = spacePlot.getElement('recordingLine');
 
 const pause = () => {
@@ -212,13 +210,13 @@ const addMedium = (name, length, maxValue) => {
     f: 0.3,
     A: 0.6,
     c: 1,
-    data: new Recorder(maxValue / minVelocity),
+    recording: new Recorder(maxValue / minVelocity),
     update: (deltaTime) => {
       const { y } = movePad.transform.order[2];
-      medium.custom.data.record(y, deltaTime);
+      medium.custom.recording.record(y, deltaTime);
       for (let i = 0; i < xValues.length; i += 1) {
         const b = balls[`_ball${i}`];
-        const by = medium.custom.data.getValueAtTimeAgo((b.custom.x) / medium.custom.c);
+        const by = medium.custom.recording.getValueAtTimeAgo((b.custom.x) / medium.custom.c);
         b.setPosition(b.custom.drawX, by);
       }
     },
@@ -229,7 +227,7 @@ const addMedium = (name, length, maxValue) => {
     reset: () => {
       medium.custom.stop();
       movePad.setPosition(0, 0);
-      medium.custom.data.reset(0);
+      medium.custom.recording.reset(0);
     },
     setTimeSpeed: (speed) => {
       movePad.animations.setTimeSpeed(speed);
@@ -251,7 +249,7 @@ const addMedium = (name, length, maxValue) => {
   return medium;
 };
 
-const addTimePlot = (name, length, maxValue) => {
+const addTimePlot = (name, length, maxValue, recording) => {
   figure.add({
     name,
     method: 'collection',
@@ -279,9 +277,9 @@ const addTimePlot = (name, length, maxValue) => {
   const timePlot = figure.getElement(name);
   const axis = timePlot.getElement('xAxis');
   const trace = timePlot.getElement('trace');
-  timePlot.custom.recording = new Recorder(maxValue);
+  // timePlot.custom.recording = new Recorder(maxValue);
   timePlot.custom.update = () => {
-    const recorded = timePlot.custom.recording.getRecording();
+    const recorded = recording.getRecording();
     const points = Array(recorded.time.length);
     for (let i = 0; i < points.length; i += 1) {
       points[i] = new Point(axis.valueToDraw(recorded.time[i]), recorded.data[i]);
@@ -407,17 +405,19 @@ const addTimePlot = (name, length, maxValue) => {
 
 const medium1 = addMedium('medium1', 1.8, 5);
 const medium2 = addMedium('medium2', 1.8, 5);
-const timePlot1 = addTimePlot('timePlot1', 2, 5);
-medium1.setPosition(0.1, 1.9);
-medium2.setPosition(0.1, 0.8);
+const timePlot1 = addTimePlot('timePlot1', 2, 5, medium1.custom.recording);
+const timePlot2 = addTimePlot('timePlot2', 2, 5, medium2.custom.recording);
+medium1.setPosition(0.2, 1.9);
+medium2.setPosition(0.2, 0.8);
 medium1.custom.movePad.setMovable();
 medium2.custom.movePad.setMovable();
-// medium1.custom.c = 2;
-medium1.custom.f = 0.5;
-timePlot1.setPosition(0, 0);
+medium1.custom.c = 2;
+// medium1.custom.f = 0.5;
+timePlot1.setPosition(-1.9, 1.9);
+timePlot2.setPosition(-1.9, 0.8);
 // medium1.hide();
 // medium2.hide();
-timePlot1.hide();
+// timePlot1.hide();
 /*
 ........######...#######..##....##.########.########...#######..##......
 .......##....##.##.....##.###...##....##....##.....##.##.....##.##......
@@ -512,6 +512,9 @@ function update() {
   }
   if (timePlot1.isShown) {
     timePlot1.custom.update();
+  }
+  if (timePlot2.isShown) {
+    timePlot2.custom.update();
   }
   // const { y } = movePad.transform.order[2];
   // data.record(y, deltaTime);
