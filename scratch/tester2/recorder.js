@@ -96,6 +96,7 @@ function Recorder() {
 function TimeKeeper() {
   let time = 0;
   let timeSpeed = 1;
+  let targetSpeed = 1;
   let internalPaused = false;
 
   let paused = false;
@@ -104,13 +105,11 @@ function TimeKeeper() {
   function getNow() {
     return performance.now() / 1000;
   }
-  // let startTime = getNow();
   let lastTime = getNow();
 
   function reset() {
     lastTime = getNow();
     time = 0;
-    // startPauseTime = 0;
     internalPaused = false;
   }
 
@@ -119,6 +118,11 @@ function TimeKeeper() {
       return 0;
     }
     const n = getNow();
+    if (targetSpeed > timeSpeed) {
+      timeSpeed += Math.min(targetSpeed - timeSpeed, 0.05);
+    } else if (targetSpeed < timeSpeed) {
+      timeSpeed += Math.max(targetSpeed - timeSpeed, -0.05);
+    }
     const timeDelta = delta == null ? (n - lastTime) * timeSpeed : delta;
     time += timeDelta;
     lastTime = n;
@@ -152,7 +156,8 @@ function TimeKeeper() {
   function isPaused() { return paused || blurred; }
   function now() { return time; }
   function setTimeSpeed(speed) {
-    timeSpeed = speed;
+    // oldSpeed = timeSpeed;
+    targetSpeed = speed;
   }
   function getTimeSpeed() { return timeSpeed; }
 
