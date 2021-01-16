@@ -47,16 +47,19 @@ function Recorder() {
   //   };
   // }
 
-  function getRecording(fullBuffer = false) {
-    if (fullBuffer || buffered) {
+  function getRecording(fullBuffer = false, timeDuration = 5) {
+    const n = timeDuration / timeStep;
+    const i = index - num;
+    if (fullBuffer || buffered || i > n) {
       return {
-        time: time.slice(),
-        data: data.slice(index - num, index),
+        time: time.slice(0, n),
+        data: data.slice(index - n, index),
       };
     }
+    // console.log(i, time.length)
     return {
-      time: time.slice(0, index - num + 1),
-      data: data.slice(num, num + index),
+      time: time.slice(0, i + 1),
+      data: data.slice(num, num + i),
     };
   }
 
@@ -152,6 +155,7 @@ function TimeKeeper() {
   function now() { return time; }
   function setTimeSpeed(speed) {
     const n = getNow();
+    
     const deltaTime = (n - startTime) * timeSpeed;
     const cumPauseTimeNorm = cumPauseTime * timeSpeed;
     startTime = n - deltaTime / speed;
