@@ -1,5 +1,5 @@
 function Recorder() {
-  const duration = 5;
+  const duration = 18;
   const timeStep = 0.01;
   const num = duration / timeStep;
   let buffered = false;
@@ -12,6 +12,7 @@ function Recorder() {
 
   function incrementIndex() {
     index += 1;
+    // console.log(index)
     if (index === num * 2) {
       data = [...data.slice(num), ...Array(num)];
       index = num;

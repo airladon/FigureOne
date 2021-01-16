@@ -1,4 +1,5 @@
 
+/* globals Fig, Recorder, TimeKeeper */
 const { Transform, Point } = Fig;
 const { range, rand, randSign } = Fig.tools.math;
 // const figure = new Fig.Figure({ limits: [-2, -1.5, 4, 3], color: [1, 0, 0, 1] });
@@ -10,15 +11,19 @@ const figure = new Fig.Figure({
   font: { size: 0.1 },
 });
 
-let f = 0.3;     // Hz
+const f = 0.3;     // Hz
 const A = 0.6;   // m
 let c = 1;       // m/s
 
+const shortXRange = 5;
+const longXRange = 5 / 1.75 * 3;
 const equationPosition = new Point(0, 2.2);
 const sideEquationPosition = new Point(1.4, 2.5);
 const colorText = [0.3, 0.3, 0.3, 1];
 const color0 = [1, 0, 0, 1];
 const color1 = [0, 0.5, 1, 1];
+const color2 = [0.4, 0.4, 0.4, 1];
+
 /*
 ..........###....##.....##.####..######.
 .........##.##....##...##...##..##....##
@@ -28,12 +33,12 @@ const color1 = [0, 0.5, 1, 1];
 .......##.....##..##...##...##..##....##
 .......##.....##.##.....##.####..######.
 */
-const xAxis = (name, title, units, length = 3) => ({
+const xAxis = (name, title, units, length, stop) => ({
   name,
   method: 'collections.axis',
   options: {
     start: 0,
-    stop: 5.5,
+    stop: stop + 0.5,
     length,
     line: { width: 0.005 },
     // ticks: { step: 1, length: 0.1 },
@@ -75,8 +80,8 @@ figure.add({
   name: 'spacePlot',
   method: 'collection',
   elements: [
-    xAxis('xAxis', 'x', 'meters', 3),
-    xAxis('xAxisSmall', 'x', 'meters', 1.75),
+    xAxis('xAxis', 'x', 'meters', 3, longXRange),
+    xAxis('xAxisSmall', 'x', 'meters', 1.75, shortXRange),
     yAxis('yAxis', 'y', 'meters'),
     { name: 'balls', method: 'collection' },
     {
@@ -109,7 +114,7 @@ figure.add({
   ],
   mods: {
     scenarios: {
-      default: { position: [-1.5, 1.2], scale: 1 },
+      default: { position: [-1.5, 1.5], scale: 1 },
       small: { position: [0.1, 1.5], scale: 1 },
     },
   },
@@ -120,7 +125,7 @@ figure.add({
   name: 'timePlot',
   method: 'collection',
   elements: [
-    xAxis('xAxis', 't', 'seconds', 1.75),
+    xAxis('xAxis', 't', 'seconds', 1.75, 18),
     yAxis('yAxis', 'y', 'meters'),
     {
       name: 'trace',
@@ -168,7 +173,7 @@ const label = (name, position, text) => ({
     xAlign: 'center',
   },
 });
-// Add reset button
+
 figure.add([
   button('pulseButton', [-1.7, 0.2], 'Pulse'),
   button('sineButton', [-1.3, 0.2], 'Sine'),
@@ -197,6 +202,7 @@ const sineButton = figure.getElement('sineButton');
 const freezeButton = figure.getElement('freezeTimeButton');
 const slowTimeButton = figure.getElement('slowTimeButton');
 const velocityButton = figure.getElement('velocityButton');
+const showTimeButton = figure.getElement('showTimeButton');
 const recordingLine = spacePlot.getElement('recordingLine');
 
 const ball = (x, index, sides = 20) => ({
@@ -207,7 +213,7 @@ const ball = (x, index, sides = 20) => ({
     sides,
     radius: 0.02,
     transform: new Transform().translate(x, 0),
-    color: color1,
+    color: color2,
   },
   mods: {
     dimColor: [0.7, 0.7, 0.7, 1],
@@ -221,7 +227,8 @@ let enableMaxTime = false;
 let timeMax = false;
 let maxRecordTime = 5;
 
-const xValues = range(0, 5, 0.12);
+const ballSize = 0.12;
+const xValues = range(0, longXRange, ballSize);
 xValues.forEach((x, index) => {
   const drawX = spaceX.valueToDraw(x);
   figure.add(ball(drawX, index));
@@ -233,8 +240,31 @@ xValues.forEach((x, index) => {
 const b0 = balls.getElement('ball0');
 balls.toFront(['ball0']);
 b0.setColor(color0);
+const longBalls = [];
+const minIndex = Math.floor(shortXRange / ballSize) + 1;
+const maxIndex = Math.floor(longXRange / ballSize);
+for (let i = minIndex; i <= maxIndex; i += 1) {
+  longBalls.push(balls.getElement(`ball${i}`));
+}
 
 
+/*
+........######...#######..##....##.########.########...#######..##......
+.......##....##.##.....##.###...##....##....##.....##.##.....##.##......
+.......##.......##.....##.####..##....##....##.....##.##.....##.##......
+.......##.......##.....##.##.##.##....##....########..##.....##.##......
+.......##.......##.....##.##..####....##....##...##...##.....##.##......
+.......##....##.##.....##.##...###....##....##....##..##.....##.##......
+........######...#######..##....##....##....##.....##..#######..########
+*/
+const pause = () => {
+  time.pause();
+  freezeButton.setLabel('Frozen');
+};
+const unpause = () => {
+  freezeButton.setLabel('Running');
+  time.unpause();
+};
 const stop = () => {
   figure.stop();
   movePad.animations.cancel('_noStop_sine');
@@ -244,19 +274,52 @@ const reset = () => {
   movePad.setPosition(0, 0);
   time.reset();
   data.reset(0);
-  time.pause();
+  pause();
   timeMax = false;
 };
+const timeAxisShow = () => {
+  pause();
+  spaceX.hide();
+  spaceXSmall.showAll();
+  showTimeButton.setLabel('Hide');
+  spacePlot.setScenario('small');
+  timePlot.showAll();
+  longBalls.forEach(b => b.hide());
+  reset();
+  recordingLine.show();
+};
+const timeAxisHide = () => {
+  pause();
+  spaceX.showAll();
+  spaceXSmall.hide();
+  timePlot.hide();
+  showTimeButton.setLabel('Show');
+  spacePlot.setScenario('default');
+  longBalls.forEach(b => b.show());
+  reset();
+  recordingLine.hide();
+};
+const setTimeSpeed = (timeSpeed, label) => {
+  unpause();
+  time.setTimeSpeed(timeSpeed);
+  movePad.animations.setTimeSpeed(timeSpeed);
+  slowTimeButton.setLabel(label);
+};
+const setVelocity = (velocity, label) => {
+  reset();
+  c = velocity;
+  velocityButton.setLabel(label);
+};
+
 
 movePad.subscriptions.add('setTransform', () => {
   if (enableMaxTime && timeMax) {
     return;
   }
-
   if (movePad.state.isBeingMoved && movePad.isAnimating()) {
     stop();
   }
-  time.unpause();
+  unpause();
 });
 
 
@@ -270,16 +333,18 @@ function update() {
   data.record(y, deltaTime);
   if (enableMaxTime && time.now() > maxRecordTime && timeMax === false) {
     timeMax = true;
-    time.pause();
+    pause();
     resetButton.pulse({ scale: 1.1, duration: 10000, frequency: 1.5 });
   }
   for (let i = 0; i < xValues.length; i += 1) {
     const b = balls[`_ball${i}`];
-    const by = data.getValueAtTimeAgo((b.custom.x) / c);
-    if (spaceX.isShown) {
-      b.setPosition(b.custom.drawX, by);
-    } else if (spaceXSmall.isShown) {
-      b.setPosition(b.custom.drawXSmall, by);
+    if (b.isShown) {
+      const by = data.getValueAtTimeAgo((b.custom.x) / c);
+      if (spaceX.isShown) {
+        b.setPosition(b.custom.drawX, by);
+      } else if (spaceXSmall.isShown) {
+        b.setPosition(b.custom.drawXSmall, by);
+      }
     }
   }
   if (timePlot.isShown) {
@@ -312,75 +377,56 @@ figure.subscriptions.add('afterDraw', () => {
 });
 
 
-resetButton.onClick = () => {
+resetButton.onClick = () => reset();
+
+showTimeButton.onClick = () => {
+  pause();
+  if (spaceX.isShown) {
+    timeAxisShow();
+  } else {
+    timeAxisHide();
+  }
   reset();
-  time.pause();
 };
 
 freezeButton.onClick = () => {
-  if (time.isPaused()) {
-    freezeButton.setLabel('Running');
-    time.unpause();
-  } else {
-    time.pause();
-    freezeButton.setLabel('Frozen');
-  }
+  if (time.isPaused()) unpause(); else pause();
 };
 
 slowTimeButton.onClick = () => {
-  time.unpause();
-  freezeButton.setLabel('Running');
+  unpause();
   if (time.getTimeSpeed() === 1) {
-    time.setTimeSpeed(0.3);
-    movePad.animations.setTimeSpeed(0.3);
-    slowTimeButton.setLabel('Slow');
+    setTimeSpeed(0.3, 'Slow');
   } else {
-    time.setTimeSpeed(1);
-    movePad.animations.setTimeSpeed(1);
-    slowTimeButton.setLabel('Normal');
+    setTimeSpeed(1, 'Normal');
   }
 };
 
 velocityButton.onClick = () => {
   reset();
   time.pause();
-  freezeButton.setLabel('Frozen');
   if (c === 0.5) {
-    velocityButton.setLabel('Normal');
-    c = 1;
-  } else if(c === 1) {
-    velocityButton.setLabel('Fast');
-    c = 2;
+    setVelocity(1, 'Normal');
+  } else if (c === 1) {
+    setVelocity(2, 'Fast');
   } else {
-    velocityButton.setLabel('Slow');
-    c = 0.5;
+    setVelocity(0.5, 'Slow');
   }
 };
+timeAxisShow();
 
-const disturbPulse = () => {
-  reset();
-  time.unpause();
-  const y = rand(0.1, 0.3) * randSign();
-  const t = rand(0.2, 0.4);
-  movePad.animations.new()
-    .position({ duration: t, target: [0, y], progression: 'easeout' })
-    .position({ duration: t, target: [0, 0], progression: 'easein' })
-    .start();
-};
-
-const disturbSine = (delay = 0, resetSignal = true) => {
+const symmetricPulse = (resetSignal, amplitude = randSign() * rand(0.3, 0.6)) => {
   if (resetSignal) {
     reset();
   }
-  time.unpause();
-  freezeButton.setLabel('Running');
+  unpause();
+  const startTime = time.now();
   movePad.animations.new('_noStop_sine')
-    .delay(delay)
     .custom({
       callback: () => {
         if (!time.isPaused()) {
-          const t = time.now();
-          movePad.setPosition(0, A * Math.sin(2 * Math.PI * f * t));
+          const t = time.now() - startTime;
+          movePad.setPosition(0, A * amplitude * Math.exp(-(((t - 0.6) * 4 - t) ** 2)));
         }
       },
       duration: 10000,
@@ -388,10 +434,30 @@ const disturbSine = (delay = 0, resetSignal = true) => {
     .start();
 };
 
-const disturbPulse1 = () => {
-  // reset();
-  time.unpause();
-  freezeButton.setLabel('Running');
+const sineWave = (delay = 0, resetSignal = true) => {
+  if (resetSignal) {
+    reset();
+  }
+  unpause();
+  movePad.animations.new('_noStop_sine')
+    .delay(delay)
+    .custom({
+      callback: () => {
+        if (!time.isPaused()) {
+          const t = time.now();
+          movePad.setPosition(0, A * 0.8 * Math.sin(2 * Math.PI * f * t));
+        }
+      },
+      duration: 10000,
+    })
+    .start();
+};
+
+const assymetricPulse = (resetSignal = true) => {
+  if (resetSignal) {
+    reset();
+  }
+  unpause();
   stop();
   const startTime = time.now();
   movePad.animations.new()
@@ -418,10 +484,12 @@ const disturbPulse1 = () => {
     .start();
 };
 
-pulseButton.onClick = () => disturbPulse1();
-sineButton.onClick = () => disturbSine(true);
+pulseButton.onClick = () => symmetricPulse(false, 0.5);
+sineButton.onClick = () => sineWave(true);
 
-balls.highlight(['ball0', 'ball50']);
+balls.highlight([
+  'ball0', 'ball10', 'ball20', 'ball30', 'ball40', 'ball50', 'ball60', 'ball70',
+]);
 
 spacePlot.setScenario('small');
 spaceXSmall.show();
@@ -505,3 +573,63 @@ timePlot.setScenario('small');
 
 
  */
+
+ 
+// const x = Fig.tools.math.range(-10, 10, 0.01);
+// const t = Fig.tools.math.range(0, 5, 0.01);
+// const ft = (tt) => Math.exp(-((tt*2 - 2) ** 2));
+// // const ft = (tt) => {
+// //   if (tt < 0) {
+// //     return 0;
+// //   }
+// //   if (tt < 1.5) {
+// //     return tt / 3;
+// //   }
+// //   if (tt < 2) {
+// //     return 1.5 / 3 - (tt - 1.5);
+// //   }
+// //   return 0;
+// // };
+// const ftPoints = t.map(tt => new Point(tt, ft(tt)));
+// // const v = 2;
+// // const tNow = 4;
+// // // const fxPoints = x.map(xx => xx <= 0 ? new Point(xx, ft(tNow + xx / v)) : new Point(xx, ft(tNow - xx / v)));
+// // const fxPoints = x.map(xx => xx <= 1 ? new Point(xx, ft(tNow + (xx - 1) / v)) : new Point(xx, ft(tNow - (xx - 1) / v)));
+// // const v = 1;
+// // const tNow = 1;
+// // const fxtNow = t.map(tt => {
+
+// // });
+
+// figure.add({
+//   name: 'plot',
+//   method: 'collections.plot',
+//   options: {
+//     trace: ftPoints,
+//     width: 1,
+//     yAxis: {
+//       start: -0.5,
+//       stop: 1,
+//       ticks: { step: 0.25 },
+//     },
+//     xAxis: { ticks: { step: 0.5 }, labels: { precision: 1 } },
+//     position: [-1.5, 1],
+//   },
+// });
+
+// figure.add({
+//   name: 'plotX',
+//   method: 'collections.plot',
+//   options: {
+//     trace: fxPoints,
+//     width: 2,
+//     yAxis: {
+//       start: -0.5,
+//       stop: 1,
+//       ticks: { step: 0.25 },
+//       labels: { precision: 2 },
+//     },
+//     xAxis: { ticks: { step: 2 }, labels: { precision: 1 }, stop: 10 },
+//     position: [0, 1],
+//   },
+// });
