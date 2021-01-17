@@ -56,13 +56,15 @@ function setupFigure() {
     },
   });
 
-  const label = (name, position, text) => ({
+  const axisLabel = (name, position, col, text) => ({
     name,
-    method: 'primitives.text',
+    method: 'primitives.textLine',
     options: {
       text,
       position,
-      font: { size: 0.08, color: [0.5, 0.5, 0.5, 1] },
+      font: {
+        size: 0.13, color: col, family: 'Times New Roman', style: 'italic',
+      },
       xAlign: 'center',
     },
   });
@@ -75,8 +77,16 @@ function setupFigure() {
     button('slowTimeButton', [0.2, 0.2], 'Normal'),
     // button('velocityButton', [1.3, 0.2], 'Normal'),
     // button('frequencyButton', [1.7, 0.2], '3s'),
-    label('disturbanceLabel', [-1.3, 0.4], 'Disturbance'),
-    label('timeLabel', [0.2, 0.4], 'Time'),
+    // label('disturbanceLabel', [-1.3, 0.4], 'Disturbance'),
+    // label('timeLabel', [0.2, 0.4], 'Time'),
+    axisLabel('x0', [-2.1, 0.77], color0, [
+      'x',
+      { text: '0', font: { size: 0.1 }, offset: [0, -0.04] },
+    ]),
+    axisLabel('x1', [-0.38, 0.77], color1, [
+      'x',
+      { text: '1', font: { size: 0.1 }, offset: [0, -0.04] },
+    ]),
     // label('velocityLabel', [1.3, 0.4], 'Velocity'),
     // label('frequencyLabel', [1.7, 0.4], 'Period'),
   ]);
@@ -228,6 +238,7 @@ function setupFigure() {
       if (index % 10 === 0) { b.setColor(color1); }
       if (index === 0) { b.setColor(color0); }
     });
+    balls.toFront(['ball0', 'ball40']);
     const movePad = medium.getElement('movePad');
     medium.custom = {
       f: 0.2,

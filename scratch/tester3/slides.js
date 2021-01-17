@@ -5,6 +5,7 @@ function addSlides() {
   const medium = figure.getElement('medium');
   // const title = figure.getElement('title');
   const sideEqn = figure.getElement('sideEqn');
+  const eqn = figure.getElement('eqn');
 
   const slides = [];
 
@@ -16,12 +17,12 @@ function addSlides() {
       clearTimeout(timerId);
     }
     const now = layout.time.now();
-    if (now - lastDisturbance > 4) {
+    if (now - lastDisturbance > 10) {
       disturb();
     }
     timerId = setTimeout(() => {
       startDisturbances(m);
-    }, 5000);
+    }, 1000);
   };
 
   const stopDisturbances = () => {
@@ -49,11 +50,21 @@ function addSlides() {
     v: { font: { family: 'Times New Roman', style: 'italic', size: 0.17 } },
     k: { font: { family: 'Times New Roman', style: 'italic', size: 0.17 } },
     1: {
-      font: { family: 'Times New Roman', size: 0.06 },
+      font: { family: 'Times New Roman', size: 0.09 },
       offset: [0, -0.03],
     },
     0: {
-      font: { family: 'Times New Roman', size: 0.06 },
+      font: { family: 'Times New Roman', size: 0.09 },
+      offset: [0, -0.03],
+    },
+    r0: {
+      text: '0',
+      font: { family: 'Times New Roman', size: 0.09, color: color0 },
+      offset: [0, -0.03],
+    },
+    r1: {
+      text: '1',
+      font: { family: 'Times New Roman', size: 0.09, color: color1 },
       offset: [0, -0.03],
     },
     disturbance: {
@@ -108,14 +119,20 @@ function addSlides() {
       },
     ],
     form: null,
-    steadyState: () => {
+    enterStateCommon: () => {
       medium.custom.movePad.setMovable(true);
       medium.custom.balls.highlight(['ball0']);
-      // layout.pulse(medium, 0.6);
+      layout.unpause();
+    },
+    steadyState: () => {
       disturb(medium);
       startDisturbances(medium);
     },
     leaveState: () => stopDisturbances(),
+    leaveStateCommon: () => {
+      stopDisturbances();
+      medium.custom.balls.undim();
+    },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
@@ -130,15 +147,17 @@ function addSlides() {
       },
     ],
     steadyState: () => {
-      // layout.reset();
       startDisturbances(medium);
-      // layout.pulse(medium, 0.6);
     },
     leaveState: () => stopDisturbances(),
   });
   slides.push({
     fromForm: null,
     form: 't1',
+    steadyState: () => {
+      startDisturbances(medium);
+    },
+    leaveState: () => stopDisturbances(),
   });
   slides.push({
     form: null,
@@ -153,11 +172,88 @@ function addSlides() {
     steadyState: () => {
       sideEqn.showForm('t11');
       sideEqn.setScenario('side');
-    }
+      startDisturbances(medium);
+    },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      x0: {
+        text: 'x',
+        font: { family: 'Times New Roman', style: 'italic', size: 0.17, color: color0 },
+        onClick: () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 }),
+        touchBorder: 0.2,
+      },
+    },
+    text: [
+      'Now, let\'s say we know how the |disturbance| changes with time at |x0||r0|.',
+      '',
+    ],
+    show: ['x0'],
+    steadyState: () => {
+      eqn.getElement('x0Box').onClick = () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 });
+      startDisturbances(medium);
+      sideEqn.showForm('t11');
+      sideEqn.setScenario('side');
+    },
+  });
+  slides.push({
+    fromForm: null,
+    form: 'yx0t',
+    show: ['x0'],
+    enterState: () => {
+      sideEqn.showForm('t11');
+      sideEqn.setScenario('side');
+    },
+    steadyState: () => {
+      eqn.getElement('x0Box').onClick = () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 });
+      startDisturbances(medium);
+    },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      x0: {
+        text: 'x',
+        font: {
+          family: 'Times New Roman', style: 'italic', size: 0.17, color: color0,
+        },
+        onClick: () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 }),
+        touchBorder: 0.2,
+      },
+      x1: {
+        text: 'x',
+        font: {
+          family: 'Times New Roman', style: 'italic', size: 0.17, color: color1,
+        },
+        onClick: () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 }),
+        touchBorder: 0.2,
+      },
+    },
+    text: [
+      'The |disturbance| at some position |x1||r1| is the disturbance at |x0||r0|',
+      'from |t||1| time ago.',
+    ],
+    show: ['x0', 'x1'],
+    enterState: () => {
+      sideEqn.showForm('t11');
+      sideEqn.setScenario('side');
+      medium.custom.balls.highlight(['ball0', 'ball40']);
+    },
+    steadyState: () => {
+      eqn.getElement('x0Box').onClick = () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 });
+      startDisturbances(medium);
+      sideEqn.showForm('t11');
+      sideEqn.setScenario('side');
+    },
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(1);
+  nav.goToSlide(7);
 }
 
 addSlides();
