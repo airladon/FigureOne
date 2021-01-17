@@ -1,8 +1,51 @@
 <!doctype html>
 <html>
+    <style>
+        .wrapper {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 100%;
+          }
+          
+          .wrapper_2_1, .wrapper_4_3, .wrapper_3_2 {
+            width: calc(100vw - 20px);
+          }
+          
+          @media (min-aspect-ratio: 1/1) {
+            .wrapper_2_1 {
+              width: calc((100vh - 20px)/0.5);
+            }
+            .wrapper_3_2 {
+              width: calc((100vh - 20px)/0.667);
+            }
+            .wrapper_4_3 {
+              width: calc((100vh - 20px)/0.75);
+            }
+          }
+          
+          .container {
+            width: 100%;
+            background-color: white;
+          }
+          
+          .container_2_1 {
+            padding-bottom: 50%;
+          }
+          
+          .container_3_2 {
+            padding-bottom: 66.67%;
+          }
+          
+          .container_4_3 {
+            padding-bottom: 75%;
+          }
+    </style>
 <body>
     <!-- <img src="1.jpg" id="img1"> -->
-    <div id="figureOneContainer" style="width: 1000px; height: 750px; background-color: white;">
+    <!-- <div id="figureOneContainer" style="width: 1500px; height: 750px; background-color: white;">
+    </div> -->
+    <div class="wrapper wrapper_2_1">
+        <div id="figureOneContainer" class="container container_2_1"></div>
     </div>
     <!-- <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.4.0/figureone.min.js'></script> -->
     <script type="text/javascript" src='../../package/index.js'></script>

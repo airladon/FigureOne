@@ -4,7 +4,7 @@
 
 
 const figure = new Fig.Figure({
-  limits: [-2, 0, 4, 3],
+  limits: [-3, 0, 6, 3],
   color: [0.3, 0.3, 0.3, 1],
   font: { size: 0.1 },
 });
@@ -19,7 +19,7 @@ function setupFigure() {
   const { range, rand, randSign } = Fig.tools.math;
 
   // let f = 0.3;     // Hz
-  const A = 0.4;   // m
+  // const A = 0.4;   // m
   // let c = 1;       // m/s
   const minVelocity = 0.5;
   const time = new TimeKeeper();
@@ -29,7 +29,16 @@ function setupFigure() {
   // const equationPosition = new Point(0, 2.2);
   // const sideEquationPosition = new Point(1.4, 2.5);
   // const colorText = [0.3, 0.3, 0.3, 1];
-
+  figure.add({
+    name: 'title',
+    method: 'primitives.textLines',
+    options: {
+      text: 'Traveling Sine Waves',
+      font: { size: 0.25, color: colorText },
+      xAlign: 'center',
+      position: [0, 2.4],
+    },
+  });
   const button = (name, position, text) => ({
     name,
     method: 'collections.rectangle',
@@ -96,9 +105,9 @@ function setupFigure() {
     method: 'collections.axis',
     options: {
       start: 0,
-      stop: maxValue + 0.5,
+      stop: maxValue + 0.1,
       length,
-      line: { width: 0.005 },
+      line: { width: 0.008, arrow: { end: 'barb' } },
       // ticks: { step: 1, length: 0.1 },
       // labels: [
       //   { font: { size: 0.08 }, text: [''], precision: 0 },
@@ -109,12 +118,12 @@ function setupFigure() {
       title: {
         font: { style: 'italic', family: 'serif', size: 0.12 },
         text: [title, { font: { size: 0.06 }, lineSpace: 0.06, text: units }],
-        position: [length - 0.08, -0.04],
+        position: [length - 0.03, -0.04],
       },
     },
   });
 
-  const yAxis = (name, title, units) => ({
+  const yAxis = (name, title, units, A) => ({
     name: 'yAxis',
     method: 'collections.axis',
     options: {
@@ -122,7 +131,7 @@ function setupFigure() {
       start: -A - 0.05,
       stop: A + 0.05,
       length: A * 2 + 0.1,
-      line: { width: 0.005 },
+      line: { width: 0.008, arrow: 'barb' },
       position: [0, -A - 0.05],
       title: {
         font: { style: 'italic', family: 'serif', size: 0.12 },
@@ -152,20 +161,20 @@ function setupFigure() {
       position: [x, 0],
     },
     mods: {
-      dimColor: [0.7, 0.7, 0.7, 1],
+      dimColor: [0.5, 0.5, 0.5, 1],
     },
   });
 
-  const addMedium = (name, length, maxValue) => {
+  const addMedium = (name, length, maxValue, A) => {
     figure.add({
       name,
       method: 'collection',
       options: {
-        transform: new Transform().translate(0, 0),
+        transform: new Transform().scale(1, 1).translate(0, 0),
       },
       elements: [
         xAxis('xAxis', 'x', '', length, maxValue),
-        yAxis('yAxis', 'y', ''),
+        yAxis('yAxis', 'y', '', A),
         {
           name: 'balls',
           method: 'collection',
@@ -195,34 +204,36 @@ function setupFigure() {
       ],
       mods: {
         scenarios: {
-          default: { position: [-1.5, 1.5], scale: 1 },
+          default: { position: [-2, 0.9], scale: 1 },
+          title: { position: [-2, 0.9], scale: 1 },
           small: { position: [0.1, 1.5], scale: 1 },
         },
       },
     });
     const medium = figure.getElement(name);
-    medium.custom.constants = {
-      f: 0.3,
-      A: 0.6,
-      c: 1,
-    };
+    // medium.custom.constants = {
+    //   f: 0.3,
+    //   A: 0.6,
+    //   c: 1,
+    // };
     const axis = medium.getElement('xAxis');
     const ballSize = 0.02;
-    const xValues = range(0, length * 0.9, ballSize * 2);
+    const xValues = range(0, length - 0.1, ballSize * 2);
     const balls = medium.getElement('balls');
     xValues.forEach((x, index) => {
       balls.add(ball(x, index, ballSize));
       const b = balls.getElement(`ball${index}`);
       b.custom.x = axis.drawToValue(x);
       b.custom.drawX = x;
-      if (index % 10 === 0) { b.setColor([0, 0.8, 0, 1]); }
+      if (index % 10 === 0) { b.setColor(color1); }
       if (index === 0) { b.setColor(color0); }
     });
     const movePad = medium.getElement('movePad');
     medium.custom = {
-      f: 0.3,
-      A: 0.6,
+      f: 0.2,
       c: 1,
+      A,
+      balls,
       recording: new Recorder(maxValue / minVelocity),
       update: (deltaTime) => {
         const { y } = movePad.transform.order[2];
@@ -265,13 +276,13 @@ function setupFigure() {
     return medium;
   };
 
-  const addTimePlot = (name, length, maxValue, recording) => {
+  const addTimePlot = (name, length, maxValue, recording, A) => {
     figure.add({
       name,
       method: 'collection',
       elements: [
         xAxis('xAxis', 't', '', length, maxValue),
-        yAxis('yAxis', 'y', ''),
+        yAxis('yAxis', 'y', '', A),
         {
           name: 'trace',
           method: 'polyline',
@@ -306,11 +317,11 @@ function setupFigure() {
   };
 
 
-  const medium1 = addMedium('medium1', 2.2, 5);
-  const medium2 = addMedium('medium2', 2.2, 5);
-  const medium = addMedium('medium', 3, 10);
-  const timePlot1 = addTimePlot('timePlot1', 1.5, 5, medium1.custom.recording);
-  const timePlot2 = addTimePlot('timePlot2', 1.5, 5, medium2.custom.recording);
+  const medium1 = addMedium('medium1', 2.2, 5, 0.6);
+  const medium2 = addMedium('medium2', 2.2, 5, 0.6);
+  const medium = addMedium('medium', 4, 10, 0.6);
+  const timePlot1 = addTimePlot('timePlot1', 1.5, 5, medium1.custom.recording, 0.6);
+  const timePlot2 = addTimePlot('timePlot2', 1.5, 5, medium2.custom.recording, 0.6);
   medium1.setPosition(-0.3, 1.9);
   medium2.setPosition(-0.3, 0.8);
   medium1.custom.movePad.setMovable();
@@ -329,6 +340,7 @@ function setupFigure() {
   const reset = () => {
     stop();
     maxTimeReached = false;
+    medium.custom.reset();
     medium1.custom.reset();
     medium2.custom.reset();
     time.reset();
@@ -336,7 +348,7 @@ function setupFigure() {
   };
   const setTimeSpeed = (timeSpeed, buttonLabel) => {
     time.setTimeSpeed(timeSpeed);
-    slowTimeButton.setLabel(buttonLabel);
+    // slowTimeButton.setLabel(buttonLabel);
   };
   // const setVelocity = (velocity, buttonLabel) => {
   //   reset();
@@ -434,8 +446,10 @@ function setupFigure() {
   // };
   // timeAxisShow();
 
-  const pulse = (movePad, amplitude = randSign() * rand(0.3, 0.6)) => {
+  const pulse = (med, amplitude = randSign() * rand(0.3, 0.6)) => {
+    unpause();
     const startTime = time.now();
+    const { movePad, A } = med.custom;
     movePad.animations.new('_noStop_sine')
       .custom({
         callback: () => {
@@ -450,7 +464,8 @@ function setupFigure() {
   };
 
   const sineWave = (med, delay = 0) => {
-    const { movePad } = med.custom;
+    unpause();
+    const { movePad, A } = med.custom;
     movePad.animations.new('_noStop_sine')
       .delay(delay)
       .custom({
@@ -465,8 +480,10 @@ function setupFigure() {
       .start();
   };
 
-  const assymetricPulse = (movePad) => {
+  const assymetricPulse = (med) => {
+    unpause();
     const startTime = time.now();
+    const { movePad, A } = med.custom;
     movePad.animations.new()
       .custom({
         callback: () => {
@@ -506,6 +523,11 @@ function setupFigure() {
     sineWave,
     assymetricPulse,
     pulse,
+    reset,
+    pause,
+    unpause,
+    setTimeSpeed,
+    time,
   };
 }
 

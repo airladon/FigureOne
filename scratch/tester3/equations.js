@@ -28,6 +28,10 @@ function addEquation() {
     scale: { content, scale: s },
   });
 
+  const brac = (content, id) => ({
+    brac: { left: `lb${id}`, content, right: `rb${id}` },
+  });
+
   const ann = (content, comment, symbol, space = 0.2) => ({
     bottomComment: {
       content,
@@ -48,9 +52,9 @@ function addEquation() {
     },
   });
 
-  const frac = (numerator, denominator) => ({
+  const frac = (numerator, symbol, denominator) => ({
     frac: {
-      numerator, denominator, symbol: 'v', overhang: 0.02,
+      numerator, denominator, symbol, overhang: 0.02,
     },
   });
 
@@ -81,15 +85,15 @@ function addEquation() {
           w1: '\u03c9',
           w2: '\u03c9',
           w3: '\u03c9',
-          min: ' \u2212 ',
+          min1: ' \u2212 ',
           min2: ' \u2212 ',
           _2pi1: '2\u03c0',
           _2pi2: '2\u03c0',
           comma1: ', ',
           comma2: ', ',
           lambda: '\u03bb',
-          v: { symbol: 'vinculum', lineWidth: 0.007 },
-          v2: { symbol: 'vinculum', lineWidth: 0.007 },
+          vin1: { symbol: 'vinculum', lineWidth: 0.007 },
+          vin2: { symbol: 'vinculum', lineWidth: 0.007 },
           brace: { symbol: 'brace', side: 'bottom', lineWidth: 0.005 },
           line1: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
           line2: { symbol: 'line', width: 0.005, arrow: { start: { head: 'triangle' } } },
@@ -108,6 +112,9 @@ function addEquation() {
           f1: { container: ['f_1', 0.08] },
           yxt: ['y_1', { brac: ['lb1', ['x_y1', 'comma1', 't_y1'], 'rb1'] }],
           fxt: ['f1', { brac: ['lb2', ['x_2', 'comma2', 't_2'], 'rb2'] }],
+          x11: { sub: ['x_1', '_1_1'] },
+          t11: { sub: ['t_1', '_1_2'] },
+          // x12: { sub: ['x_2', '_1_2'] },
           // ytx: ['y_1', b1(['x_1', 'comma1', 't_1'])],
           // sinkx: ['sin', b2(['w1', 't_2', 'min', 'k', 'x_2'])],
           // t1: { sub: ['t_2', '_1_1'] },
@@ -135,7 +142,9 @@ function addEquation() {
           // duration: 1,
         },
         forms: {
-          0: ['yxt', 'equals', 'fxt']
+          title: ['yxt', 'equals', 'sin', brac(['k', 'x', 'min1', 'w1', 't'], 2)],
+          t1: ['t11', 'equals', frac('x11', 'vin1', 'v_1')],
+          // 0: ['yxt', 'equals', 'fxt']
           // 0: ['ytx', 'equals', 'sinkx'],
         //   1: [],
         //   2: ['t1', 'equals', 'x1OnC'],
@@ -275,6 +284,36 @@ function addEquation() {
         // formSeries: ['0'],
         position: [0, 1],
       },
+      mods: {
+        scenarios: {
+          title: { position: [-0.8, 1.9], scale: 1.3 },
+          default: { position: [-0.5, 1.9], scale: 1.3 },
+        },
+      },
+    },
+    {
+      name: 'sideEqn',
+      method: 'equation',
+      options: {
+        elements: {
+          equals: '  =  ',
+          vin1: { symbol: 'vinculum', lineWidth: 0.007 },
+        },
+        phrases: {
+          x11: { sub: ['x_1', '_1_1'] },
+          t11: { sub: ['t_1', '_1_2'] },
+        },
+        forms: {
+          t1: ['t11', 'equals', frac('x11', 'vin1', 'v_1')],
+          t11: ['t11', 'equals', frac('x11', 'vin1', 'v_1'), '_      (1)'],
+        },
+      },
+      mods: {
+        scenarios: {
+          side: { position: [2, 0.4], scale: 1 },
+          default: { position: [-0.5, 1.9], scale: 1.3 },
+        },
+      },
     },
     // {
     //   name: 'sideEqn',
@@ -325,9 +364,9 @@ function addEquation() {
       name: 'nav',
       method: 'collections.slideNavigator',
       options: {
-        prevButton: { position: [-1.5, 0.2] },
-        nextButton: { position: [1.5, 0.2] },
-        text: { font: { size: 0.1 }, position: [-1.5, 2.8], xAlign: 'left' },
+        prevButton: { position: [-2.75, 1.5], type: 'arrow', length: 0.4, width: 0.8 },
+        nextButton: { position: [2.75, 1.5], type: 'arrow', length: 0.4, width: 0.8 },
+        text: { font: { size: 0.15 }, position: [-2.4, 2.7], xAlign: 'left' },
         equation: 'eqn',
       },
     },

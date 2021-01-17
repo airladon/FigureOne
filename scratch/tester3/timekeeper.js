@@ -38,6 +38,7 @@ function TimeKeeper() {
   function pauseTime() {
     if ((paused || blurred) && !internalPaused) {
       internalPaused = true;
+      // console.log(internalPaused)
     }
   }
 
@@ -45,6 +46,7 @@ function TimeKeeper() {
     if (!paused && !blurred && internalPaused) {
       internalPaused = false;
       lastTime = getNow();
+      // console.log(internalPaused)
     }
   }
 
