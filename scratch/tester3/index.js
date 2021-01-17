@@ -11,14 +11,14 @@ const figure = new Fig.Figure({
   font: { size: 0.1 },
 });
 
-let f = 0.3;     // Hz
-const A = 0.5;   // m
-let c = 1;       // m/s
+// let f = 0.3;     // Hz
+const A = 0.4;   // m
+// let c = 1;       // m/s
 const minVelocity = 0.5;
 const time = new TimeKeeper();
+let maxTime = 0;
+let maxTimeReached = false;
 
-const shortXRange = 5;
-const longXRange = 5 / 1.75 * 3;
 const equationPosition = new Point(0, 2.2);
 const sideEquationPosition = new Point(1.4, 2.5);
 const colorText = [0.3, 0.3, 0.3, 1];
@@ -60,12 +60,12 @@ figure.add([
   button('resetButton', [-0.9, 0.2], 'Reset'),
   button('freezeTimeButton', [-0.2, 0.2], 'Running'),
   button('slowTimeButton', [0.2, 0.2], 'Normal'),
-  button('velocityButton', [1.3, 0.2], 'Normal'),
-  button('frequencyButton', [1.7, 0.2], '3s'),
+  // button('velocityButton', [1.3, 0.2], 'Normal'),
+  // button('frequencyButton', [1.7, 0.2], '3s'),
   label('disturbanceLabel', [-1.3, 0.4], 'Disturbance'),
   label('timeLabel', [0.2, 0.4], 'Time'),
-  label('velocityLabel', [1.3, 0.4], 'Velocity'),
-  label('frequencyLabel', [1.7, 0.4], 'Period'),
+  // label('velocityLabel', [1.3, 0.4], 'Velocity'),
+  // label('frequencyLabel', [1.7, 0.4], 'Period'),
 ]);
 
 const resetButton = figure.getElement('resetButton');
@@ -73,8 +73,8 @@ const pulseButton = figure.getElement('pulseButton');
 const sineButton = figure.getElement('sineButton');
 const freezeButton = figure.getElement('freezeTimeButton');
 const slowTimeButton = figure.getElement('slowTimeButton');
-const velocityButton = figure.getElement('velocityButton');
-const frequencyButton = figure.getElement('frequencyButton');
+// const velocityButton = figure.getElement('velocityButton');
+// const frequencyButton = figure.getElement('frequencyButton');
 // const recordingLine = spacePlot.getElement('recordingLine');
 
 const pause = () => {
@@ -104,8 +104,8 @@ const xAxis = (name, title, units, length, maxValue) => ({
     // ],
     title: {
       font: { style: 'italic', family: 'serif', size: 0.12 },
-      text: [title, { font: { size: 0.06 }, lineSpace: 0.08, text: units }],
-      position: [length - 0.05, -0.04],
+      text: [title, { font: { size: 0.06 }, lineSpace: 0.06, text: units }],
+      position: [length - 0.08, -0.04],
     },
   },
 });
@@ -122,9 +122,17 @@ const yAxis = (name, title, units) => ({
     position: [0, -A - 0.05],
     title: {
       font: { style: 'italic', family: 'serif', size: 0.12 },
-      text: [title, { font: { size: 0.06 }, lineSpace: 0.08, text: units }],
+      // text: [title, { font: { size: 0.06 }, lineSpace: 0.08, text: units }],
+      text: {
+        text: `${title} |unitsText|`,
+        // text: title,
+      },
+      modifiers: {
+        unitsText: { text: units, font: { size: 0.06 } },
+      },
+      xAlign: 'left',
       rotation: 0,
-      offset: [0.1, A + 0.1],
+      offset: [0.05, A + 0.06],
     },
   },
 });
@@ -152,8 +160,8 @@ const addMedium = (name, length, maxValue) => {
       transform: new Transform().translate(0, 0),
     },
     elements: [
-      xAxis('xAxis', 'x', 'meters', length, maxValue),
-      yAxis('yAxis', 'y', 'meters'),
+      xAxis('xAxis', 'x', '', length, maxValue),
+      yAxis('yAxis', 'y', ''),
       {
         name: 'balls',
         method: 'collection',
@@ -204,6 +212,8 @@ const addMedium = (name, length, maxValue) => {
     const b = balls.getElement(`ball${index}`);
     b.custom.x = axis.drawToValue(x);
     b.custom.drawX = x;
+    if (index % 10 === 0) { b.setColor(color1); }
+    if (index === 0) { b.setColor(color0); }
   });
   const movePad = medium.getElement('movePad');
   medium.custom = {
@@ -241,6 +251,9 @@ const addMedium = (name, length, maxValue) => {
     movePad,
   };
   movePad.subscriptions.add('setTransform', () => {
+    if (maxTimeReached) {
+      return;
+    }
     if (movePad.state.isBeingMoved && movePad.isAnimating()) {
       medium.custom.stop();
     }
@@ -254,8 +267,8 @@ const addTimePlot = (name, length, maxValue, recording) => {
     name,
     method: 'collection',
     elements: [
-      xAxis('xAxis', 't', 'seconds', length, maxValue),
-      yAxis('yAxis', 'y', 'meters'),
+      xAxis('xAxis', 't', '', length, maxValue),
+      yAxis('yAxis', 'y', ''),
       {
         name: 'trace',
         method: 'polyline',
@@ -288,191 +301,38 @@ const addTimePlot = (name, length, maxValue, recording) => {
   };
   return timePlot;
 };
-/*
-.......##..........###....##....##..#######..##.....##.########
-.......##.........##.##....##..##..##.....##.##.....##....##...
-.......##........##...##....####...##.....##.##.....##....##...
-.......##.......##.....##....##....##.....##.##.....##....##...
-.......##.......#########....##....##.....##.##.....##....##...
-.......##.......##.....##....##....##.....##.##.....##....##...
-.......########.##.....##....##.....#######...#######.....##...
-*/
 
 
-// // Add the Space Axis
-// figure.add({
-//   name: 'spacePlot',
-//   method: 'collection',
-//   elements: [
-//     xAxis('xAxis', 'x', 'meters', 3, longXRange),
-//     xAxis('xAxisSmall', 'x', 'meters', 1.75, shortXRange),
-//     yAxis('yAxis', 'y', 'meters'),
-//     { name: 'balls', method: 'collection' },
-//     {
-//       name: 'movePad',
-//       method: 'primitives.polygon',
-//       options: {
-//         radius: 0.4,
-//         sides: 8,
-//         color: [0, 0, 0, 0],
-//       },
-//       mods: {
-//         isMovable: true,
-//         move: {
-//           bounds: {
-//             translation: {
-//               left: 0, right: 0, bottom: -A, top: A,
-//             },
-//           },
-//         },
-//       },
-//     },
-//     {
-//       name: 'recordingLine',
-//       method: 'primitives.line',
-//       options: {
-//         width: 0.005,
-//         color: color0,
-//       },
-//     },
-//   ],
-//   mods: {
-//     scenarios: {
-//       default: { position: [-1.5, 1.5], scale: 1 },
-//       small: { position: [0.1, 1.5], scale: 1 },
-//     },
-//   },
-// });
-
-// // Add the Time Axis
-// figure.add({
-//   name: 'timePlot',
-//   method: 'collection',
-//   elements: [
-//     xAxis('xAxis', 't', 'seconds', 1.75, 5),
-//     yAxis('yAxis', 'y', 'meters'),
-//     {
-//       name: 'trace',
-//       method: 'polyline',
-//       options: {
-//         simple: true,
-//         width: 0.01,
-//         color: color0,
-//       },
-//     },
-//   ],
-//   mods: {
-//     scenarios: {
-//       default: { position: [-1.5, 2], scale: 1 },
-//       smallold: { position: [-0.6, 0.8], scale: 1 },
-//       small: { position: [-1.85, 1.5], scale: 1 },
-//     },
-//   },
-// });
-
-
-// const spacePlot = figure.getElement('spacePlot');
-// const spaceX = spacePlot.getElement('xAxis');
-// const spaceXSmall = spacePlot.getElement('xAxisSmall');
-// const balls = spacePlot.getElement('balls');
-
-
-
-// const data = new Recorder();
-// let enableMaxTime = false;
-// let timeMax = false;
-// let maxRecordTime = 5;
-
-// const ballSize = 0.12;
-// const xValues = range(0, longXRange, ballSize);
-// xValues.forEach((x, index) => {
-//   const drawX = spaceX.valueToDraw(x);
-//   figure.add(ball(drawX, index));
-//   const b = balls.getElement(`ball${index}`);
-//   b.custom.x = x;
-//   b.custom.drawX = drawX;
-//   b.custom.drawXSmall = spaceXSmall.valueToDraw(x);
-// });
-// const b0 = balls.getElement('ball0');
-// balls.toFront(['ball0']);
-// b0.setColor(color0);
-// const longBalls = [];
-// const minIndex = Math.floor(shortXRange / ballSize) + 1;
-// const maxIndex = Math.floor(longXRange / ballSize);
-// for (let i = minIndex; i <= maxIndex; i += 1) {
-//   longBalls.push(balls.getElement(`ball${i}`));
-// }
-
-const medium1 = addMedium('medium1', 1.8, 5);
-const medium2 = addMedium('medium2', 1.8, 5);
-const timePlot1 = addTimePlot('timePlot1', 2, 5, medium1.custom.recording);
-const timePlot2 = addTimePlot('timePlot2', 2, 5, medium2.custom.recording);
-medium1.setPosition(0.2, 1.9);
-medium2.setPosition(0.2, 0.8);
+const medium1 = addMedium('medium1', 2.2, 5);
+const medium2 = addMedium('medium2', 2.2, 5);
+// const medium3 = addMedium('medium2', 3, 10);
+const timePlot1 = addTimePlot('timePlot1', 1.5, 5, medium1.custom.recording);
+const timePlot2 = addTimePlot('timePlot2', 1.5, 5, medium2.custom.recording);
+medium1.setPosition(-0.3, 1.9);
+medium2.setPosition(-0.3, 0.8);
 medium1.custom.movePad.setMovable();
 medium2.custom.movePad.setMovable();
 medium1.custom.c = 2;
 // medium1.custom.f = 0.5;
 timePlot1.setPosition(-1.9, 1.9);
 timePlot2.setPosition(-1.9, 0.8);
-// medium1.hide();
-// medium2.hide();
-// timePlot1.hide();
-/*
-........######...#######..##....##.########.########...#######..##......
-.......##....##.##.....##.###...##....##....##.....##.##.....##.##......
-.......##.......##.....##.####..##....##....##.....##.##.....##.##......
-.......##.......##.....##.##.##.##....##....########..##.....##.##......
-.......##.......##.....##.##..####....##....##...##...##.....##.##......
-.......##....##.##.....##.##...###....##....##....##..##.....##.##......
-........######...#######..##....##....##....##.....##..#######..########
-*/
-// const timePlot = figure.getElement('timePlot');
-// const timeTrace = timePlot.getElement('trace');
-// const timeX = timePlot.getElement('xAxis');
-// const movePad = spacePlot.getElement('movePad');
+
 
 const stop = () => {
   medium1.custom.stop();
   medium2.custom.stop();
   figure.stop();
-  // movePad.animations.cancel('_noStop_sine');
 };
 const reset = () => {
   stop();
+  maxTimeReached = false;
   medium1.custom.reset();
   medium2.custom.reset();
   time.reset();
   pause();
 };
-// const timeAxisShow = () => {
-//   pause();
-//   spaceX.hide();
-//   spaceXSmall.showAll();
-//   showTimeButton.setLabel('Hide');
-//   spacePlot.setScenario('small');
-//   timePlot.showAll();
-//   longBalls.forEach(b => b.hide());
-//   reset();
-//   recordingLine.show();
-// };
-// const timeAxisHide = () => {
-//   pause();
-//   spaceX.showAll();
-//   spaceXSmall.hide();
-//   timePlot.hide();
-//   showTimeButton.setLabel('Show');
-//   spacePlot.setScenario('default');
-//   longBalls.forEach(b => b.show());
-//   reset();
-//   recordingLine.hide();
-// };
 const setTimeSpeed = (timeSpeed, buttonLabel) => {
-  // unpause();
   time.setTimeSpeed(timeSpeed);
-  // medium1.setTimeSpeed(timeSpeed);
-  // medium2.setTimeSpeed(timeSpeed);
-  // movePad.animations.setTimeSpeed(timeSpeed);
   slowTimeButton.setLabel(buttonLabel);
 };
 // const setVelocity = (velocity, buttonLabel) => {
@@ -500,9 +360,11 @@ const setTimeSpeed = (timeSpeed, buttonLabel) => {
 
 // Update function for everytime we want to update the signal
 function update() {
-  // if (!spacePlot.isShown) {
-  //   return;
-  // }
+  if (maxTime > 0 && time.now() > maxTime) {
+    maxTimeReached = true;
+    pause();
+    resetButton.pulse({ scale: 1.1, duration: 10000, frequency: 1.5 });
+  }
   const deltaTime = time.step();
   if (medium1.isShown) {
     medium1.custom.update(deltaTime);
@@ -516,42 +378,6 @@ function update() {
   if (timePlot2.isShown) {
     timePlot2.custom.update();
   }
-  // const { y } = movePad.transform.order[2];
-  // data.record(y, deltaTime);
-  // if (enableMaxTime && time.now() > maxRecordTime && timeMax === false) {
-  //   timeMax = true;
-  //   pause();
-  //   resetButton.pulse({ scale: 1.1, duration: 10000, frequency: 1.5 });
-  // }
-  // for (let i = 0; i < xValues.length; i += 1) {
-  //   const b = balls[`_ball${i}`];
-  //   if (b.isShown) {
-  //     const by = data.getValueAtTimeAgo((b.custom.x) / c);
-  //     if (spaceX.isShown) {
-  //       b.setPosition(b.custom.drawX, by);
-  //     } else if (spaceXSmall.isShown) {
-  //       b.setPosition(b.custom.drawXSmall, by);
-  //     }
-  //   }
-  // }
-  // if (timePlot.isShown) {
-  //   const trace = data.getRecording();
-  //   const points = Array(trace.time.length);
-  //   // console.log(trace.time.slice(-3, -1))
-  //   for (let i = 0; i < points.length; i += 1) {
-  //     points[i] = new Point(timeX.valueToDraw(trace.time[i]), trace.data[i]);
-  //   }
-  //   timeTrace.custom.updatePoints({ points });
-
-  //   if (Math.abs(y) < 0.01) {
-  //     recordingLine.hide();
-  //   } else {
-  //     recordingLine.show();
-  //     const lastTime = trace.time.slice(-1)[0];
-  //     const draw = timeX.valueToDraw(lastTime) - 1.95;
-  //     recordingLine.custom.updatePoints({ p1: [draw, y], p2: [0, y] });
-  //   }
-  // }
 }
 
 // Before each draw, update the points
@@ -566,16 +392,6 @@ figure.subscriptions.add('afterDraw', () => {
 
 
 resetButton.onClick = () => reset();
-
-// showTimeButton.onClick = () => {
-//   pause();
-//   if (spaceX.isShown) {
-//     timeAxisShow();
-//   } else {
-//     timeAxisHide();
-//   }
-//   reset();
-// };
 
 freezeButton.onClick = () => {
   if (time.isPaused()) unpause(); else pause();
@@ -612,11 +428,7 @@ slowTimeButton.onClick = () => {
 // };
 // timeAxisShow();
 
-const symmetricPulse = (movePad, resetSignal, amplitude = randSign() * rand(0.3, 0.6)) => {
-  if (resetSignal) {
-    reset();
-  }
-  unpause();
+const symmetricPulse = (movePad, amplitude = randSign() * rand(0.3, 0.6)) => {
   const startTime = time.now();
   movePad.animations.new('_noStop_sine')
     .custom({
@@ -631,12 +443,8 @@ const symmetricPulse = (movePad, resetSignal, amplitude = randSign() * rand(0.3,
     .start();
 };
 
-const sineWave = (med, delay = 0, resetSignal = true) => {
-  // if (resetSignal) {
-  //   reset();
-  // }
-  // unpause();
-  const movePad = med.custom.movePad;
+const sineWave = (med, delay = 0) => {
+  const { movePad } = med.custom;
   movePad.animations.new('_noStop_sine')
     .delay(delay)
     .custom({
@@ -651,12 +459,7 @@ const sineWave = (med, delay = 0, resetSignal = true) => {
     .start();
 };
 
-const assymetricPulse = (movePad, resetSignal = true) => {
-  // if (resetSignal) {
-  //   reset();
-  // }
-  // unpause();
-  // stop();
+const assymetricPulse = (movePad) => {
   const startTime = time.now();
   movePad.animations.new()
     .custom({
@@ -675,34 +478,13 @@ const assymetricPulse = (movePad, resetSignal = true) => {
       duration: 10000,
     })
     .start();
-  // movePad.animations.new()
-  //   .custom({
-  //     callback: () => {
-  //       if (!time.isPaused()) {
-  //         const deltaT = time.now() - startTime;
-  //         const Y = 0.3;
-  //         const t1 = 0.4;
-  //         const t2 = 1.5;
-  //         if (deltaT < t1) {
-  //           movePad.setPosition(0, Y * (deltaT / t1));
-  //         } else if (deltaT < t2 + t1) {
-  //           movePad.setPosition(0, Y - (Y * (deltaT - t1) / t2));
-  //         }
-  //       }
-  //     },
-  //     duration: 10000,
-  //   })
-  //   .start();
 };
 
 pulseButton.onClick = () => {
-  // if (resetSignal) {
-  //   reset();
-  // }
-  unpause();
   stop();
-  symmetricPulse(medium1.custom.movePad, false, 0.5);
-  symmetricPulse(medium2.custom.movePad, false, 0.5);
+  unpause();
+  symmetricPulse(medium1.custom.movePad, 0.5);
+  symmetricPulse(medium2.custom.movePad, 0.5);
 };
 sineButton.onClick = () => {
   reset();
