@@ -235,8 +235,7 @@ function addSlides() {
       },
     },
     text: [
-      'The |disturbance| at some position |x1||r1| is the disturbance at |x0||r0|',
-      'from |t||1| time ago.',
+      'Then the |disturbance| at |x1||r1| is the disturbance at |x0||r0| from time |t||1| ago.',
     ],
     show: ['x0', 'x1'],
     enterState: () => {
