@@ -10,10 +10,7 @@ function addSlides() {
 
   let lastDisturbance = 0;
   let timerId = null;
-  const disturb = (m) => {
-    layout.pulse(medium, 0.6);
-    lastDisturbance = layout.time.now();
-  };
+
   const startDisturbances = (m) => {
     if (timerId != null) {
       clearTimeout(timerId);
@@ -32,6 +29,17 @@ function addSlides() {
       clearTimeout(timerId);
     }
   };
+  const disturb = (m) => {
+    layout.pulse(medium, 0.6);
+    lastDisturbance = layout.time.now();
+    // stopDisturbances();
+    // startDisturbances();
+  };
+  medium.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium.custom.movePad.state.isBeingMoved) {
+      stopDisturbances();
+    }
+  });
 
   const modifiersCommon = {
     x: { font: { family: 'Times New Roman', style: 'italic', size: 0.17 } },
