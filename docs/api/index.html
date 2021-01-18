@@ -8561,6 +8561,14 @@ element to the end of the draw order,
   
 
   
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#figureelement">FigureElement</a>></code>:
+        Array of added elements
+
+      
+    
+  
 
   
 
@@ -31090,7 +31098,7 @@ Some of the more common ones are:
   <p>An Equation is a collection of elements that can be arranged into different
 forms.</p>
 <p><code>Equation</code> should be instantiated from an <em>object definition</em>, or from
-the <code>figure.primitives.equation</code> method.</p>
+the <code>figure.collections.equation</code> method.</p>
 <p>Equation includes two additional animation steps in <a href="Equation.animations">Equation.animations</a>:</p>
 <ul>
 <li><a href="#gotoformanimationstep">GoToFormAnimationStep</a></li>
@@ -33299,8 +33307,6 @@ figure.add([
       },
     },
   },
-]);
-
 ]);</pre>
     
   
@@ -33937,12 +33943,12 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to figure</span>
-<span class="hljs-keyword">const</span> eqn = figure.primitives.equation({
+<span class="hljs-keyword">const</span> eqn = figure.collections.equation({
   <span class="hljs-attr">elements</span>: {
       <span class="hljs-attr">v1</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
       <span class="hljs-attr">v2</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
@@ -33969,7 +33975,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 });
 figure.add(<span class="hljs-string">'eqn'</span>, eqn);
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -34215,12 +34221,12 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to figure</span>
-<span class="hljs-keyword">const</span> eqn = figure.primitives.equation({
+<span class="hljs-keyword">const</span> eqn = figure.collections.equation({
   <span class="hljs-attr">elements</span>: {
     <span class="hljs-attr">r</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'radical'</span> },
     <span class="hljs-attr">plus</span>: <span class="hljs-string">'  +  '</span>,
@@ -34242,7 +34248,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 });
 figure.add(<span class="hljs-string">'eqn'</span>, eqn);
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -34405,7 +34411,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -34560,7 +34566,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -34731,7 +34737,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -34991,7 +34997,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -35482,7 +35488,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -35793,7 +35799,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -36104,7 +36110,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -36439,7 +36445,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -36713,7 +36719,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -37176,7 +37182,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -37416,7 +37422,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -37606,7 +37612,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -37847,7 +37853,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -38010,7 +38016,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -38155,7 +38161,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -38342,12 +38348,12 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Create equation object then add to figure</span>
-<span class="hljs-keyword">const</span> eqn = figure.primitives.equation({
+<span class="hljs-keyword">const</span> eqn = figure.collections.equation({
   <span class="hljs-attr">forms</span>: {
     <span class="hljs-number">1</span>: [
       <span class="hljs-string">'length'</span>,
@@ -38361,7 +38367,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 });
 figure.add(<span class="hljs-string">'eqn'</span>, eqn);
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -38807,7 +38813,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
+eqn.setTouchable();
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
   
@@ -59770,7 +59776,10 @@ start times.</p>
   </div>
   
 
-  <p>An annotation's layout is defined by its <em>position</em> and <em>alignement</em>.
+  <p>Annotation options object.</p>
+<p><img src="./apiassets/eqn_annotation_1.png"></p>
+<p><img src="./apiassets/eqn_annotation_2.png"></p>
+<p>An annotation's layout is defined by its <em>position</em> and <em>alignement</em>.
 For instance, an annotation at the top right of the content:</p>
 <pre>
                  AAAA
@@ -59928,21 +59937,54 @@ and
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>annotate: {
-   <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-   <span class="hljs-attr">annotation</span>: {
-     <span class="hljs-attr">content</span>: <span class="hljs-string">'b'</span>,
-     <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'right'</span>,
-     <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'top'</span>,
-     <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
-     <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
-     <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>],
-     <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
-     <span class="hljs-attr">inSize</span>: <span class="hljs-literal">true</span>,
-     <span class="hljs-attr">fullContentBounds</span>: <span class="hljs-literal">false</span>,
-     <span class="hljs-comment">// reference: 'root'       // only used when annotating special glyphs</span>
-   },
- },</pre>
+      <pre class='p1 overflow-auto round fill-light'>figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: {
+        <span class="hljs-attr">annotate</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+          <span class="hljs-attr">annotation</span>: {
+            <span class="hljs-attr">content</span>: <span class="hljs-string">'b'</span>,
+            <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'left'</span>,
+            <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'top'</span>,
+            <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
+            <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
+            <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
+          },
+        },
+      },
+    },
+  },
+});
+
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: {
+        <span class="hljs-attr">annotate</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+          <span class="hljs-attr">annotations</span>: [
+            {
+              <span class="hljs-attr">content</span>: <span class="hljs-string">'b'</span>,
+              <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'left'</span>,
+              <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'bottom'</span>,
+              <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
+              <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'top'</span>,
+              <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
+            },
+            {
+              <span class="hljs-attr">content</span>: <span class="hljs-string">'c'</span>,
+              <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.05</span>],
+              <span class="hljs-attr">scale</span>: <span class="hljs-number">0.5</span>,
+            },
+          ],
+        },
+      },
+    },
+  },
+});</pre>
     
   
 
@@ -59971,7 +60013,9 @@ and
   </div>
   
 
-  <p>A glyph can encompass (surround or overlay) an equation phrase (<em>content</em>). The glyph
+  <p>Encompass glyph options object.</p>
+<p><img src="./apiassets/eqn_encompass_glyph.png"></p>
+<p>A glyph can encompass (surround or overlay) an equation phrase (<em>content</em>). The glyph
 can also be annotated.</p>
 <pre>
 
@@ -60078,19 +60122,31 @@ left
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// surrounding content with a box glyph</span>
-<span class="hljs-attr">annotate</span>: {
-  <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-  <span class="hljs-attr">glyphs</span>: {
-    <span class="hljs-attr">encompass</span>: {
-      <span class="hljs-attr">symbol</span>: <span class="hljs-string">'box'</span>,
-      <span class="hljs-attr">space</span>: <span class="hljs-number">0.1</span>,     <span class="hljs-comment">// e.g. only, this will be overwritten by next props</span>
-      <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">rightSpace</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">leftSpace</span>: <span class="hljs-number">0.1</span>,
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">box</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'box'</span>, <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.005</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: {
+        <span class="hljs-attr">annotate</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+          <span class="hljs-attr">glyphs</span>: {
+            <span class="hljs-attr">encompass</span>: {
+              <span class="hljs-attr">symbol</span>: <span class="hljs-string">'box'</span>,
+              <span class="hljs-attr">space</span>: <span class="hljs-number">0.1</span>, <span class="hljs-comment">// e.g. only, this will be overwritten by next props</span>
+              <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.1</span>,
+              <span class="hljs-attr">rightSpace</span>: <span class="hljs-number">0.1</span>,
+              <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.1</span>,
+              <span class="hljs-attr">leftSpace</span>: <span class="hljs-number">0.1</span>,
+            },
+          },
+        },
+      },
     },
   },
-},</pre>
+});</pre>
     
   
 
@@ -60119,7 +60175,11 @@ left
   </div>
   
 
-  <p>A glyph can be to the left or right of an equation phrase (<em>content</em>).
+  <p>Left/Right glyph options object.</p>
+<p><img src="./apiassets/eqn_leftrightglyph1.png"></p>
+<p><img src="./apiassets/eqn_leftrightglyph2.png"></p>
+<p><img src="./apiassets/eqn_leftrightglyph3.png"></p>
+<p>A glyph can be to the left or right of an equation phrase (<em>content</em>).
 The glyph can also be annotated.</p>
 <pre>
 
@@ -60191,6 +60251,9 @@ below content bottom (
         <div class='space-bottom0'>
           <span class='code bold'>topSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : amount glyph extends above content top
+(overrids 
+<code>overhang</code>
+)
 
           
         </div>
@@ -60198,6 +60261,9 @@ below content bottom (
         <div class='space-bottom0'>
           <span class='code bold'>bottomSpace</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : amount glyph extends below content bottom
+(overrids 
+<code>overhang</code>
+)
 
           
         </div>
@@ -60235,7 +60301,14 @@ scaling
       
         <div class='space-bottom0'>
           <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : force height of glyph
+          : force height of glyph (overrides 
+<code>overhang</code>
+,
+
+<code>topSpace</code>
+, 
+<code>bottomSpace</code>
+)
 
           
         </div>
@@ -60273,28 +60346,114 @@ separated from content by
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define glyph symbol</span>
-eqn.addElements({
-  <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
-});
- <span class="hljs-comment">// surrounding content with a box glyph</span>
-annotate: {
-  <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-  <span class="hljs-attr">glyphs</span>: {
-    <span class="hljs-attr">left</span>: {
-      <span class="hljs-attr">symbol</span>: <span class="hljs-string">'lb'</span>,
-      <span class="hljs-attr">space</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.2</span>,
-      <span class="hljs-attr">topSpace</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">bottomSpace</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">minContentHeight</span>: <span class="hljs-number">0.3</span>,
-      <span class="hljs-attr">minContentDescent</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">descent</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">height</span>: <span class="hljs-number">0.3</span>,
-      <span class="hljs-attr">yOffset</span>: <span class="hljs-number">0</span>,
-      <span class="hljs-attr">annotationsOverContent</span>: <span class="hljs-literal">true</span>,
+      <pre class='p1 overflow-auto round fill-light'>figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">rb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'angleBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.1</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: {
+        <span class="hljs-attr">annotate</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+          <span class="hljs-attr">glyphs</span>: {
+            <span class="hljs-attr">right</span>: {
+              <span class="hljs-attr">symbol</span>: <span class="hljs-string">'rb'</span>,
+              <span class="hljs-attr">space</span>: <span class="hljs-number">0.05</span>,
+              <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.1</span>,
+            },
+          },
+        },
+      },
+    },
   },
-},</pre>
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">arrow</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'arrow'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'down'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: {
+        <span class="hljs-attr">annotate</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+          <span class="hljs-attr">glyphs</span>: {
+            <span class="hljs-attr">left</span>: {
+              <span class="hljs-attr">symbol</span>: <span class="hljs-string">'arrow'</span>,
+              <span class="hljs-attr">space</span>: <span class="hljs-number">0.05</span>,
+              <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.1</span>,
+              <span class="hljs-attr">annotations</span>: [
+                {
+                  <span class="hljs-attr">content</span>: <span class="hljs-string">'b'</span>,
+                  <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'center'</span>,
+                  <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'top'</span>,
+                  <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+                  <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
+                  <span class="hljs-attr">scale</span>: <span class="hljs-number">0.7</span>,
+                  <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">0.05</span>],
+                },
+                {
+                  <span class="hljs-attr">content</span>: <span class="hljs-string">'n'</span>,
+                  <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'center'</span>,
+                  <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'bottom'</span>,
+                  <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+                  <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'top'</span>,
+                  <span class="hljs-attr">scale</span>: <span class="hljs-number">0.7</span>,
+                  <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">-0.05</span>],
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">brace</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'brace'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.05</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: {
+        <span class="hljs-attr">annotate</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'c'</span>,
+          <span class="hljs-attr">glyphs</span>: {
+            <span class="hljs-attr">left</span>: {
+              <span class="hljs-attr">symbol</span>: <span class="hljs-string">'brace'</span>,
+              <span class="hljs-attr">space</span>: <span class="hljs-number">0.05</span>,
+              <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.2</span>,
+              <span class="hljs-attr">annotations</span>: [
+                {
+                  <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+                  <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'left'</span>,
+                  <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'top'</span>,
+                  <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
+                  <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+                  <span class="hljs-attr">offset</span>: [<span class="hljs-number">-0.05</span>, <span class="hljs-number">0</span>],
+                },
+                {
+                  <span class="hljs-attr">content</span>: <span class="hljs-string">'b'</span>,
+                  <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'left'</span>,
+                  <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'bottom'</span>,
+                  <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
+                  <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'middle'</span>,
+                  <span class="hljs-attr">offset</span>: [<span class="hljs-number">-0.05</span>, <span class="hljs-number">0</span>],
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
+});</pre>
     
   
 
@@ -60323,7 +60482,10 @@ annotate: {
   </div>
   
 
-  <p>A glyph can be to the top or bottom of an equation phrase (<em>content</em>).
+  <p>Top/Bottom glyph options object.</p>
+<p><img src="./apiassets/eqn_topbottomglyph1.png"></p>
+<p><img src="./apiassets/eqn_topbottomglyph2.png"></p>
+<p>A glyph can be to the top or bottom of an equation phrase (<em>content</em>).
 The glyph can also be annotated.</p>
 <pre>
 
@@ -60452,25 +60614,76 @@ separated from content by
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define glyph symbol</span>
-eqn.addElements({
-  <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'squareBracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> },
-});
- <span class="hljs-comment">// surrounding content with a box glyph</span>
-annotate: {
-  <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
-  <span class="hljs-attr">glyphs</span>: {
-    <span class="hljs-attr">left</span>: {
-      <span class="hljs-attr">symbol</span>: <span class="hljs-string">'lb'</span>,
-      <span class="hljs-attr">space</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.2</span>,
-      <span class="hljs-attr">width</span>: <span class="hljs-number">0.3</span>,
-      <span class="hljs-attr">leftSpace</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">rightSpace</span>: <span class="hljs-number">0.1</span>,
-      <span class="hljs-attr">xOffset</span>: <span class="hljs-number">0</span>,
-      <span class="hljs-attr">annotationsOverContent</span>: <span class="hljs-literal">true</span>,
+      <pre class='p1 overflow-auto round fill-light'>figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">rarrow</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'arrow'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'right'</span> },
+      <span class="hljs-attr">larrow</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'arrow'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'left'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: {
+        <span class="hljs-attr">annotate</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+          <span class="hljs-attr">glyphs</span>: {
+            <span class="hljs-attr">top</span>: {
+              <span class="hljs-attr">symbol</span>: <span class="hljs-string">'rarrow'</span>,
+              <span class="hljs-attr">space</span>: <span class="hljs-number">0.05</span>,
+              <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.1</span>,
+            },
+            <span class="hljs-attr">bottom</span>: {
+              <span class="hljs-attr">symbol</span>: <span class="hljs-string">'larrow'</span>,
+              <span class="hljs-attr">space</span>: <span class="hljs-number">0.05</span>,
+              <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.02</span>,
+            },
+          },
+        },
+      },
+    },
   },
-},</pre>
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">brace</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'brace'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'top'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: {
+        <span class="hljs-attr">annotate</span>: {
+          <span class="hljs-attr">content</span>: [<span class="hljs-string">'2_1'</span>, <span class="hljs-string">'x_1'</span>],
+          <span class="hljs-attr">glyphs</span>: {
+            <span class="hljs-attr">bottom</span>: {
+              <span class="hljs-attr">symbol</span>: <span class="hljs-string">'brace'</span>,
+              <span class="hljs-attr">space</span>: <span class="hljs-number">0.05</span>,
+              <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.2</span>,
+              <span class="hljs-attr">annotations</span>: [
+                {
+                  <span class="hljs-attr">content</span>: <span class="hljs-string">'2_2'</span>,
+                  <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'left'</span>,
+                  <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'bottom'</span>,
+                  <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+                  <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'baseline'</span>,
+                  <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">-0.2</span>],
+                },
+                {
+                  <span class="hljs-attr">content</span>: <span class="hljs-string">'x_2'</span>,
+                  <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'right'</span>,
+                  <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'bottom'</span>,
+                  <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'center'</span>,
+                  <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'baseline'</span>,
+                  <span class="hljs-attr">offset</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">-0.2</span>],
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
+});</pre>
     
   
 

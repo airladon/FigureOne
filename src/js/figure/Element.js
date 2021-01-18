@@ -4425,6 +4425,7 @@ class FigureElementCollection extends FigureElement {
     }
     element.setFirstTransform(this.lastDrawTransform);
     this.animateNextFrame();
+    return element;
   }
 
 
@@ -4435,6 +4436,8 @@ class FigureElementCollection extends FigureElement {
    * @param {FigureElement} element element to add
    * @param {number} index index to add in the `drawOrder` where -1 appends the
    * element to the end of the draw order,
+   *
+   * @return {Array<FigureElement>} Array of added elements
    */
   add(
     nameOrElementOrElementDefinition: string
@@ -4443,8 +4446,7 @@ class FigureElementCollection extends FigureElement {
     elementToAdd: FigureElement,
   ) {
     if (typeof nameOrElementOrElementDefinition === 'string') {
-      this.addElementWithName(nameOrElementOrElementDefinition, elementToAdd);
-      return;
+      return [this.addElementWithName(nameOrElementOrElementDefinition, elementToAdd)];
     }
     let elements;
     if (!Array.isArray(nameOrElementOrElementDefinition)) {
@@ -4454,9 +4456,10 @@ class FigureElementCollection extends FigureElement {
     }
 
     const rootCollection = this;
+    const addedElements = [];
     elements.forEach((elementDefinition, index) => {
       if (elementDefinition instanceof FigureElement) {
-        this.add(elementDefinition.name, elementDefinition);
+        addedElements.push(...this.add(elementDefinition.name, elementDefinition));
         return;
       }
       // Extract the parameters from the layout object
@@ -4527,6 +4530,7 @@ class FigureElementCollection extends FigureElement {
         }
         if (collectionPath instanceof FigureElementCollection) {
           collectionPath.add(nameToUse, newElement);
+          addedElements.push(newElement);
         }
       }
 
@@ -4541,8 +4545,10 @@ class FigureElementCollection extends FigureElement {
           && (addElementsToUse != null && addElementsToUse !== {})
       ) {
         newElement.add(addElementsToUse);
+        addedElements.push(addElementsToUse);
       }
     });
+    return addedElements;
   }
 
   getMethod(method: string) {

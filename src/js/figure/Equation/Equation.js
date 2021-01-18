@@ -312,8 +312,6 @@ export type EQN_EquationElements = {
  *     },
  *   },
  * ]);
- * 
-]);
  */
 type EQN_FormAlignment = {
   fixTo: FigureElement | TypeParsablePoint | string;
@@ -898,7 +896,7 @@ class GoToFormAnimationStep extends TriggerAnimationStep {
  * forms.
  *
  * `Equation` should be instantiated from an *object definition*, or from
- * the `figure.primitives.equation` method.
+ * the `figure.collections.equation` method.
  *
  * Equation includes two additional animation steps in {@link Equation.animations}:
  * * {@link GoToFormAnimationStep}

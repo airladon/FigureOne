@@ -1025,7 +1025,7 @@ class Figure {
         | Array<FigureElement | OBJ_AddElement>,
     elementToAdd: FigureElement,
   ) {
-    this.elements.add(nameOrElementOrElementDefinition, elementToAdd);
+    return this.elements.add(nameOrElementOrElementDefinition, elementToAdd);
   }
 
 
