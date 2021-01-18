@@ -11,8 +11,28 @@ import { Elements } from './Elements/Element';
 // eslint-disable-next-line import/no-cycle
 // import { getFigureElement } from './EquationFunctions';
 
+/**
+ * Horizontal Alignment
+ *
+ * `TypeHAlign = 'left' | 'right' | 'center' | number`
+ *
+ * Where `number` is a percentage of the width from the left. So
+ * `0` would be equivalent to `'left'`, 0.5 equivalent to
+ * `'center'` and 1 equivalent to `'right'`.
+ */
 export type TypeHAlign = 'left' | 'right' | 'center' | number;
+
+/**
+ * Vertical Alignment
+ *
+ * `TypeHAlign = 'left' | 'right' | 'center' | 'baseline' | number`
+ *
+ * Where `number` is a percentage of the width from the left. So
+ * `0` would be equivalent to `'left'`, 0.5 equivalent to
+ * `'center'` and 1 equivalent to `'right'`.
+ */
 export type TypeVAlign = 'top' | 'bottom' | 'middle' | 'baseline' | number;
+
 export type TypeEquationForm = {
   collection: FigureElementCollection;
   // createEq: (Array<Elements | Element | string>) => void;

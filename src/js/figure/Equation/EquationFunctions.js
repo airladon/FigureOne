@@ -74,7 +74,8 @@ export function getFigureElement(
  *  - `{ bar: `{@link EQN_Bar} `}`
  *  - `{ scale: `{@link EQN_Scale} `}`
  *  - `{ container: `{@link EQN_Container} `}`
- *  - `{ matrix: `{@link EQN_Matrix} `}`
+ *  - `{ matrix: `{@link EQN_Matrix} `}
+ *  - `{ lines: `{@link EQN_Lines} `}`
  *  - `{ int: `{@link EQN_Integral} `}`
  *  - `{ sumOf: `{@link EQN_SumOf} `}`
  *  - `{ prodOf: `{@link EQN_ProdOf} `}`
@@ -84,18 +85,31 @@ export function getFigureElement(
  *
  *
  * @example
- * forms: {
- *   form1: 'a'
- *   form2: ['a', 'equals', 'b']
- *   form3: [{
- *     frac: {
- *       numerator: 'a',
- *       symbol: 'v',
- *       denominator: '1'
+ * figure.add({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: { equals: ' = ' },
+ *     forms: {
+ *       form1: 'a',
+ *       form2: ['a', 'equals', 'b'],
+ *       form3: [{
+ *         frac: {
+ *           numerator: 'a',
+ *           symbol: 'vinculum',
+ *           denominator: 'c',
+ *         },
+ *       }, 'equals', 'b'],
+ *       form4: { frac: ['a', 'vinculum', 'c'] },
  *     },
- *   }, 'equals', 'b'],
- *   form4: [{ frac: ['a', 'v', '1'], 'equals', 'b'}],
- * },
+ *   },
+ * });
+ *
+ * figure.getElement('eqn').animations.new()
+ *   .goToForm({ target: 'form2', animate: 'move', delay: 1 })
+ *   .goToForm({ target: 'form3', animate: 'move', delay: 1 })
+ *   .goToForm({ target: 'form4', animate: 'move', delay: 1 })
+ *   .start();
  */
 export type TypeEquationPhrase =
   string
@@ -119,6 +133,7 @@ export type TypeEquationPhrase =
   | { scale: EQN_Scale }
   | { container: EQN_Container }
   | { matrix: EQN_Matrix }
+  | { matrix: EQN_Lines }
   | { int: EQN_Integral }
   | { sumOf: EQN_SumOf }
   | { prodOf: EQN_ProdOf }

@@ -36,6 +36,7 @@ import type {
   EQN_ProdSymbol, EQN_IntegralSymbol, EQN_StrikeSymbol, EQN_BracketSymbol,
   EQN_AngleBracketSymbol, EQN_BraceSymbol, EQN_BarSymbol,
   EQN_SquareBracketSymbol, EQN_RadicalSymbol, TypeSymbolOptions,
+  EQN_LineSymbol,
 } from './EquationSymbols';
 import type { OBJ_FigureForElement } from '../Figure';
 
@@ -128,6 +129,7 @@ export type EQN_TextElement = string | {
  * - {@link EQN_BraceSymbol}
  * - {@link EQN_BarSymbol}
  * - {@link EQN_SquareBracketSymbol}
+ * - {@link EQN_LineSymbol}
  * - {@link EQN_RadicalSymbol}
  */
 export type TypeEquationElement = string
@@ -146,6 +148,7 @@ export type TypeEquationElement = string
   | EQN_BraceSymbol
   | EQN_BarSymbol
   | EQN_SquareBracketSymbol
+  | EQN_LineSymbol
   | EQN_RadicalSymbol;
 
 
@@ -162,9 +165,158 @@ export type EQN_EquationElements = {
 
 /**
  * Form alignment object definition.
+ *
+ * ![](./apiassets/eqn_formalignment_1.png)
+ *
+ * ![](./apiassets/eqn_formalignment_2.png)
+ *
+ * ![](./apiassets/eqn_formalignment_3.png)
+ *
+ * ![](./apiassets/eqn_formalignment_4.png)
+ *
+ * Each equation form is positioned within the {@link Equation}
+ * {@link FigureElementCollection} draw space (0, 0) point. This object
+ * defines how the form is aligned with this (0, 0) point.
+ *
+ * Using the `fixTo` property forms can either be aligned relative to the
+ * bounds of the form itself, or to an element within the form, or to a
+ * position other than the (0, 0) in in the equation's collection draw space.
+ *
+ * If `fixTo` is an element in the equation:
+ *    - the `fixTo` element is positioned at (0, 0), and all other elements
+ *      repositioned relative to that.
+ *    - The equation collection setPosition (or translation transform) can
+ *      then be used to position the equation in the figure (or relative
+ *      collection space)
+ *    - if `xAlign` is:
+ *        - `'center'`: the `fixTo` element is centered in x around (0, 0)
+ *        - `'right'`: the `fixTo` element right most point is at x = 0
+ *        - `'left'`: default - the `fixTo` element x position at 0
+ *    - if `yAlign` is:
+ *        - `'middle'`: the `fixTo` element is centered in y around (0, 0)
+ *        - `'bottom'`: the `fixTo` element bottom most point is at y = 0
+ *        - `'top'`: the `fixTo` element top most point is at y = 0
+ *        - `'baseline'`: default - the `fixTo` element y position at 0
+ *
+ * If `fixTo` is a Point, the equation is positioned at that point in the
+ * equation's vertex space.
+ *  - xAlign:
+ *    - `'left'`: The equation's left most element's left most point is at
+ *              Point.x
+ *    - `'right'`: The equation's right most element's right most point is at
+ *              Point.x
+ *    - `'center'`: The equation is centered horizontally around Point.x
+ *  - `yAlign`:
+ *    - `'baseline'`: The equation's baseline is at Point.y
+ *    - `'top'`: The equation's top most element's top most point is at Point.y
+ *    - `'bottom'`: The equation's top most element's top most point is at
+ *                Point.y
+ *    - `'middle'`: The equation is centered vertically around Point.y
+ *
+ * @property {FigureElement | TypeParsablePoint | string } [fixTo] (`[0, 0]`)
+ * @property {TypeHAlign} [xAlign] (`'left'`)
+ * @property {TypeVAlign} [yAlign] (`'baseline'`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Note - the points are drawn in the figure's draw space, but as the
+ * // equation collection is at (0, 0) and it has not scaling applied, then
+ * // the equation's draw space is the same as the figure's draw space.
+ *
+ * // Draw (0, 0) point in equation collection
+ * figure.add({
+ *   method: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
+ * });
+ * // Default alignment is left, baseline
+ * figure.add([
+ *   {
+ *     method: 'equation',
+ *     options: {
+ *       forms: { 0: ['a', '_ = ', 'bg'] },
+ *     },
+ *   },
+ * ]);
+ *
+ * @example
+ * // Draw (0, 0) point in equation collection
+ * figure.add({
+ *   method: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
+ * });
+ * // Align with right, middle
+ * figure.add([
+ *   {
+ *     method: 'equation',
+ *     options: {
+ *       forms: { 0: ['a', '_ = ', 'bg'] },
+ *       formDefaults: {
+ *         alignment: {
+ *           xAlign: 'right',
+ *           yAlign: 'middle',
+ *         },
+ *       },
+ *     },
+ *   },
+ * ]);
+ *
+ * @example
+ * // Draw (0, 0) point in equation collection
+ * figure.add({
+ *   method: 'polygon', options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 },
+ * });
+ * // Align with center of equals sign
+ * figure.add([
+ *   {
+ *     method: 'equation',
+ *     options: {
+ *       forms: { 0: ['a', '_ = ', 'bg'] },
+ *       formDefaults: {
+ *         alignment: {
+ *           fixTo: '_ = ',
+ *           xAlign: 'center',
+ *           yAlign: 'baseline',
+ *         },
+ *       },
+ *     },
+ *   },
+ * ]);
+ *
+ * @example
+ * // Draw (0, 0) and (0.2, 0.1) points
+ * figure.add([
+ *   {
+ *     method: 'polygon',
+ *     options: { radius: 0.01, color: [0, 0, 1, 1], sides: 9 }
+ *   },
+ *   {
+ *     method: 'polygon',
+ *     options: {
+ *       radius: 0.01, color: [0, 0.8, 0, 1], sides: 9, position: [0.2, 0.1],
+ *     },
+ *   },
+ * ]);
+ * // Align with point (0.2, 0.1) in the equation collection
+ * figure.add([
+ *   {
+ *     method: 'equation',
+ *     options: {
+ *       forms: { 0: ['a', '_ = ', 'bg'] },
+ *       formDefaults: {
+ *         alignment: {
+ *           fixTo: [0.2, 0.1],
+ *           xAlign: 'right',
+ *           yAlign: 'baseline',
+ *         },
+ *       },
+ *     },
+ *   },
+ * ]);
+ * 
+]);
  */
 type EQN_FormAlignment = {
-  fixTo: FigureElementPrimitive | FigureElementCollection | TypeParsablePoint;
+  fixTo: FigureElement | TypeParsablePoint | string;
   xAlign: TypeHAlign;
   yAlign: TypeVAlign;
 };
@@ -245,7 +397,7 @@ export type EQN_TranslationStyles = {
  * animating to this form, or when `showForm` is used.
  * @property {string | (() => void)} [onShow] called after animation is finished
  * or when `showForm` is used
- * @property {TypeElementMods} [elementMods] properties to set in the equation element
+ * @property {OBJ_ElementMods} [elementMods] properties to set in the equation element
  * (@FigureElementPrimitive) when this form is shown
  */
 export type EQN_FromForm = {
@@ -274,7 +426,7 @@ export type EQN_FromForms = {
   [formName: string]: EQN_FromForm,
 };
 
-// A form is a steady state arrangement of elements
+// A form is an arrangement of elements
 // A form's elements can have different properties, but these properties
 // are generally the same independent on which form was shown before the
 // current form.
@@ -284,9 +436,9 @@ export type EQN_FromForms = {
 
 /**
  * In mathematics, an equation form is a specific arrangement of an equation's
- * terms and operators. Different forms will have different arrangements, that
- * that can be achieved by performing a series of operations to both sides of
- * the equation.
+ * terms and operators. Different forms will have different
+ * arrangements, that can be achieved by performing a series of operations to
+ * both sides of the equation.
  *
  * For instance, the equation:
  *
@@ -327,92 +479,81 @@ export type EQN_FromForms = {
  * @example
  * // Simple form definition of two different forms of the same equation and one
  * // of the elements is colored blue in one form and red in the other
- * forms: {
- *   form1: {
- *     content: ['a', 'plus', 'b', 'equals', 'c'],
- *     elementMods: {
- *       'a': { color: [0, 0, 1, 1] },
- *     }
+ * figure.add({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: { equals: ' = ', plus: ' + ', minus: ' \u2212 ' },
+ *     forms: {
+ *       form1: {
+ *         content: ['a', 'plus', 'b', 'equals', 'c'],
+ *         elementMods: {
+ *           a: { color: [0, 0, 1, 1] },
+ *         },
+ *       },
+ *       form2: {
+ *         content: ['a', 'equals', 'c', 'minus', 'b'],
+ *         elementMods: {
+ *           a: { color: [1, 0, 0, 1] },
+ *         },
+ *       },
+ *     },
  *   },
- *   form2: {
- *     content: ['a', 'equals', 'c', 'minus', 'b'],
- *     elementMods: {
- *       'a': { color: [1, 0, 0, 1] },
- *     }
- *   },
- * }
- *
- * @example
- * // Example using subForms all defined at once
- * forms: {
- *   form1: {
- *     deg: ['a', 'deg'],
- *     rad: ['a', 'rad'],
- *   },
- * }
- *
- * @example
- * // Example using subForms all defined separately
- * const eqn = new Equation();
- * eqn.addForms({
- *   deg: {
- *     content: ['a', 'deg'],
- *     subForm:'deg',
- *   }
  * });
- * eqn.addForms({
- *   rad: {
- *     content: ['a', 'rad'],
- *     subForm:'rad',
- *   }
- * });
+ *
  * @example
  * // Example showing all form options
- * forms: {
- *   form1: {
- *     content: ['a', 'b', 'c'],
- *     subForm: 'deg',
- *     scale: 1.2,
- *     alignment: {
- *       fixTo: 'b',
- *       xAlign: 'center',
- *       yAlign: 'bottom',
- *     },
- *     description: '|Form| 1 |description|',
- *     modifiers: {
- *       Form: html.highlight([1, 0, 0, 0]),
- *     },
- *     elementMods: {
- *       a: {
- *         color: color1,
- *         isTouchable: true,
- *       },
- *     },
- *     duration: 1,
- *     translation: {
- *       a: {
- *         style: 'curved',
- *         direction: 'up',
- *         mag: 0.95,
- *       },
- *       b: ['curved', 'down', 0.45],
- *     },
- *     fromPrev: {
- *       duration: null,
- *       translation: {
- *         a: ['curved', 'down', 0.2],
- *         b: ['curved', 'down', 0.2],
- *       },
- *     },
- *     fromNext: {
- *       duration: 2,
- *       translation: {
- *         a: ['curved', 'down', 0.2],
- *         b: ['curved', 'down', 0.2],
+ * figure.add({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: {
+ *         content: ['a', 'b', 'c'],
+ *         subForm: 'deg',
+ *         scale: 1.2,
+ *         alignment: {
+ *           fixTo: 'b',
+ *           xAlign: 'center',
+ *           yAlign: 'bottom',
+ *         },
+ *         description: '|Form| 1 |description|',
+ *         modifiers: {
+ *           Form: { font: { color: [0, 0, 1, 0] } },
+ *         },
+ *         elementMods: {
+ *           a: {
+ *             color: [0, 0, 1, 1],
+ *             isTouchable: true,
+ *           },
+ *         },
+ *         duration: 1,
+ *         translation: {
+ *           a: {
+ *             style: 'curved',
+ *             direction: 'up',
+ *             mag: 0.95,
+ *           },
+ *           b: ['curved', 'down', 0.45],
+ *         },
+ *         fromPrev: {
+ *           duration: null,
+ *           translation: {
+ *             a: ['curved', 'down', 0.2],
+ *             b: ['curved', 'down', 0.2],
+ *           },
+ *         },
+ *         fromNext: {
+ *           duration: 2,
+ *           translation: {
+ *             a: ['curved', 'down', 0.2],
+ *             b: ['curved', 'down', 0.2],
+ *           },
+ *         },
  *       },
  *     },
  *   },
- * }
+ * });
  */
 type EQN_FormObjectDefinition = {
   content: TypeEquationPhrase,

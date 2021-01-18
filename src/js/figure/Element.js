@@ -4464,7 +4464,7 @@ class FigureElementCollection extends FigureElement {
         throw Error(`Add elements index ${index} does not exist in layout`);
       }
       const addElementsKey = 'elements';
-      const nameToUse = elementDefinition.name;
+      const nameToUse = elementDefinition.name || generateUniqueId('primitive_');
       const pathToUse = elementDefinition.path;
       const optionsToUse = elementDefinition.options;
       const addElementsToUse = elementDefinition[addElementsKey];
