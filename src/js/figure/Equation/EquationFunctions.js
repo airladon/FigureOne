@@ -1151,6 +1151,8 @@ export type EQN_Bar = {
  *
  * Place an integral (with optional limits) before an equation phrase
  *
+ * Use with a {@link EQN_IntegralSymbol} symbol.
+ *
  * Options can be an object, or an array in the property order below.
  *
  * @property {string} symbol
@@ -1462,7 +1464,8 @@ export type EQN_SumOf = {
 ];
 
 /**
- * Equation product of
+ * Place an equation phrase in a product of operation with the symbol
+ * {@link EQN_ProdSymbol}.
  *
  * ![](./apiassets/eqn_prodof.gif)
  *

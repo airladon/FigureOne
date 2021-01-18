@@ -11,10 +11,36 @@ const figure = new Fig.Figure({
 //   method: 'equation',
 //   options: {
 //     elements: {
-//       sigma: { symbol: 'sum' },
+//       int: { symbol: 'int' },
 //     },
 //     forms: {
-//       form1: { sumOf: ['sigma', 'a', 'a = 0', 'n'] },
+//       form1: { int: ['int', 'x dx', 'a', 'b'] },
+//     },
+//   },
+// });
+
+// // Triple Integral
+// figure.add({
+//   method: 'equation',
+//   options: {
+//     elements: {
+//       int: { symbol: 'int', num: 3 },
+//     },
+//     forms: {
+//       form1: { int: ['int', 'dx dy dz'] },
+//     },
+//   },
+// });
+
+// // Line Integral
+// figure.add({
+//   method: 'equation',
+//   options: {
+//     elements: {
+//       int: { symbol: 'int', type: 'line' },
+//     },
+//     forms: {
+//       form1: { int: ['int', 'r dr'] },
 //     },
 //   },
 // });
@@ -24,7 +50,7 @@ const figure = new Fig.Figure({
 //   method: 'equation',
 //   options: {
 //     forms: {
-//       form1: { sumOf: ['sum', 'a', 'a = 0', 'n'] },
+//       form1: { int: ['int', 'x dx', 'a', 'b'] },
 //     },
 //   },
 // });
@@ -34,8 +60,8 @@ const figure = new Fig.Figure({
 //   method: 'equation',
 //   options: {
 //     forms: {
-//       form1: { sumOf: ['sum', 'a', 'a = 0', 'n'] },
-//       form2: { sumOf: ['sum', 'a', 'a = 0', 'm'] },
+//       form1: { int: ['int', 'x dx', 'a', 'b'] },
+//       form2: { int: ['int', 'y dy', 'a', 'b'] },
 //     },
 //   },
 // });
@@ -49,7 +75,7 @@ figure.add({
   method: 'equation',
   options: {
     forms: {
-      form1: { sumOf: [{ sum: { lineWidth: 0.01 } }, 'a', 'a = 0', 'n'] },
+      form1: { int: [{ int: { serif: false } }, 'x dx', 'a', 'b'] },
     },
   },
 });

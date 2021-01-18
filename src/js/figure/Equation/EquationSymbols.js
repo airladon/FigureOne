@@ -500,7 +500,11 @@ export type EQN_SumSymbol ={
 } & EQN_Symbol;
 
 /**
- * Product equation symbol used in {@link EQN_ProdOf}
+ * Product equation symbol used with the {@link EQN_ProdOf} equation function.
+ *
+ * ![](./apiassets/eqn_symbol_prod.png)
+ *
+ *
  * <pre>
  *                                          width
  *                |<--------------------------------------------------------->|
@@ -550,14 +554,55 @@ export type EQN_SumSymbol ={
  * @extends EQN_Symbol
  *
  * @example
- * eqn.addElements({
- *   p: {
- *     symbol: 'prod',
- *     color: [1, 0, 0, 1],
- *     lineWidth: 0.01
- *     sides: 5,
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       sigma: { symbol: 'prod' },
+ *     },
+ *     forms: {
+ *       form1: { prodOf: ['sigma', 'a', 'a = 0', 'n'] },
+ *     },
  *   },
- * })
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { prodOf: ['prod', 'a', 'a = 0', 'n'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { prodOf: ['prod', 'a', 'a = 0', 'n'] },
+ *       form2: { prodOf: ['prod', 'a', 'a = 0', 'm'] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { prodOf: [{ prod: { lineWidth: 0.01 } }, 'a', 'a = 0', 'n'] },
+ *     },
+ *   },
+ * });
  */
 export type EQN_ProdSymbol = {
   symbol: 'prod',
@@ -568,7 +613,16 @@ export type EQN_ProdSymbol = {
 } & EQN_Symbol;
 
 /**
- * Integral equation symbol used in {@link EQN_Integral}
+ * Integral equation symbol used with the {@link EQN_Integral} equation
+ * function.
+ *
+ * ![](./apiassets/eqn_symbol_int1.png)
+ *
+ * ![](./apiassets/eqn_symbol_int2.png)
+ *
+ * ![](./apiassets/eqn_symbol_int3.png)
+ *
+ *
  * <pre>
  *      --------------------------------------------------   0000000
  *     A                                              000000011111111
@@ -625,21 +679,84 @@ export type EQN_ProdSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * eqn.addElements({
- * int: {
- *   symbol: 'int',
- *   color: [0.95, 0, 0, 1],
- *   lineWidth: 0.01,
- *   sides: 20,
- *   num: 2,
- *   type: 'generic',
- *   tipWidth: null,
- *   serif: true,
- *   serifSides: 10,
- *   lineIntegralSides: 20,
- *   draw: 'static',
- *   staticHeight: 'first',
- * },
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       int: { symbol: 'int' },
+ *     },
+ *     forms: {
+ *       form1: { int: ['int', 'x dx', 'a', 'b'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Triple Integral
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       int: { symbol: 'int', num: 3 },
+ *     },
+ *     forms: {
+ *       form1: { int: ['int', 'dx dy dz'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Line Integral
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       int: { symbol: 'int', type: 'line' },
+ *     },
+ *     forms: {
+ *       form1: { int: ['int', 'r dr'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { int: ['int', 'x dx', 'a', 'b'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { int: ['int', 'x dx', 'a', 'b'] },
+ *       form2: { int: ['int', 'y dy', 'a', 'b'] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { int: [{ int: { serif: false } }, 'x dx', 'a', 'b'] },
+ *     },
+ *   },
+ * });
+ * 
  */
 export type EQN_IntegralSymbol = {
   symbol: 'int',
