@@ -257,3 +257,58 @@ function addSlides() {
 
 addSlides();
 // nav.goToSlide()
+
+
+figure.add({
+  name: 'eqn__',
+  method: 'equation',
+  options: {
+    forms: {
+      0: {
+        lines: [
+          [
+            ['a', '_ = ', 'b', '_ + _1', 'c', '_ - _1', 'd'],
+            ['_ + _2', 'e', '_ - _2', 'f'],
+          ],
+          'right',
+          0.2,
+        ],
+      },
+    },
+  },
+});
+
+// figure.add({
+//   name: 'eqn1',
+//   method: 'equation',
+//   options: {
+//     elements: {
+//       equals1: ' = ',
+//       equals2: ' = ',
+//     },
+//     forms: {
+//       0: {
+//         lines: {
+//           content: [
+//             {
+//               content: ['a_1', 'equals1', 'b', '_ + ', 'c'],
+//               justify: 'equals1',
+//             },
+//             {
+//               content: ['d', '_ - ', 'e', 'equals2', 'a_2'],
+//               justify: 'equals2',
+//             },
+//           ],
+//           space: 0.08,
+//           justify: 'element',
+//         },
+//       },
+//       1: ['d', '_ - ', 'e', 'equals1', 'b', '_ + ', 'c'],
+//     },
+//     position: [0, 1],
+//   },
+// });
+// figure.getElement('eqn1').showForm(0);
+// figure.getElement('eqn1').animations.new()
+//   .goToForm({ delay: 1, target: '1', duration: 1, animate: 'move' })
+//   .start();

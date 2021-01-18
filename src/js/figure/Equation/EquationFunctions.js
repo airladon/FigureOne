@@ -16,6 +16,7 @@ import Fraction from './Elements/Fraction';
 // eslint-disable-next-line import/no-cycle
 import EquationForm from './EquationForm';
 import Matrix from './Elements/Matrix';
+import Lines from './Elements/Lines';
 import Scale from './Elements/Scale';
 import Container from './Elements/Container';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
@@ -2132,7 +2133,7 @@ export type EQN_Pad = {
  * figure.elements._eqn.showForm('1');
  *
  * @example
- * // Some different bar examples
+ * // Some different equation examples
  * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
@@ -2212,6 +2213,153 @@ export type EQN_Matrix = {
   ?boolean,
 ];
 
+
+/**
+ * Single equation line definition
+ *
+ * Overrides default values of `baselineSpace` and `space` from
+ * {@link EQN_Lines}.
+ *
+ * Use `justify` to define a specific element of the line to align the other
+ * lines with.
+ *
+ * @property {TypeEquationPhrase} content Array of equation
+ * phrases or equation line objects
+ * @property {string} [justify] when {@link EQN_Lines}`.justify` is `'element'`,
+ * use this property to define which element of the line to justify with. If
+ * no element is specified, then left justification will be used.
+ * @property {number} [space] default space between descent of previous line and
+ * ascent of the this line (`0`).
+ * @property {number | null} [baselineSpace] default space between baseline of
+ * previous line and ascent of this line. If not `null` then will override
+ * `space` (`null`).
+ * @property {number} [offset] x Offset of line from justification position
+ * (`0`)
+ *
+ * @see {@link EQN_Lines}
+ *
+ */
+export type EQN_Line = {
+  content: TypeEquationPhrase,
+  baselineSpace?: null | number,
+  space?: number,
+  justify?: string,
+  offset?: number,
+}
+
+/**
+ * Equation lines
+ *
+ * ![](./apiassets/eqn_lines.png)
+ *
+ * ![](./apiassets/eqn_lines_anim.gif)
+ *
+ * Options can be an object, or an array in the property order below
+ *
+ * The equation lines function can split an equation into multiple lines.
+ * This might be because one line is too long, or it might be convenient to
+ * display different forms of the same equation simultaneously on different
+ * lines and then animate between them.
+ *
+ * Lines can be justified to the left, center or right, or lines can be aligned
+ * with a specific element from each line (for instance an equals sign). To
+ * justify to a specific element, use `justify: 'element'` and then define the
+ * element name in the `justify` property of each line.
+ *
+ * Lines can be aligned in y with either the top most part of the top line, the
+ * bottom most part of the bottom line, the middle of the lines or any of the
+ * line's baselines.
+ *
+ * Spacing between lines is defined as either the space between the lowest
+ * point (descent) of one line to the highest point (ascent) of the next,
+ * or as the space between line baselines.
+ * @property {Array<EQN_Line | TypeEquationPhrase>} content Array of equation
+ * phrases or equation line objects
+ * @property {'left' | 'center' | 'right' | 'element'} [justify] how to align
+ * the lines in x. Use 'element' to align the lines with a specific element
+ * from each line (that is defined with the `justify` property in each line)
+ * (`'left'`)
+ * @property {number | null} [baselineSpace] default space between baselines
+ * of lines. If not `null` then will override `space` (`null`).
+ * @property {number} [space] default space between descent of one line and
+ * ascent of the next line (`0`).
+ * @property {'bottom' | 'middle' | 'top' | number} [yAlign] How to align the
+ * lines in y. `number` can be any line index, and it will align the baseline
+ * of that line. So, using `0` will align the first line's baseline. (`0`)
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Two lines, array definition
+ * figure.add({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       0: {
+ *         lines: [
+ *           [
+ *             ['a', '_ = ', 'b', '_ + _1', 'c', '_ - _1', 'd'],
+ *             ['_ + _2', 'e', '_ - _2', 'f'],
+ *           ],
+ *           'right',
+ *           0.2,
+ *         ],
+ *       },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Two lines animating to 1
+ * figure.add({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       equals1: ' = ',
+ *       equals2: ' = ',
+ *     },
+ *     forms: {
+ *       0: {
+ *         lines: {
+ *           content: [
+ *             {
+ *               content: ['a_1', 'equals1', 'b', '_ + ', 'c'],
+ *               justify: 'equals1',
+ *             },
+ *             {
+ *               content: ['d', '_ - ', 'e', 'equals2', 'a_2'],
+ *               justify: 'equals2',
+ *             },
+ *           ],
+ *           space: 0.08,
+ *           justify: 'element',
+ *         },
+ *       },
+ *       1: ['d', '_ - ', 'e', 'equals1', 'b', '_ + ', 'c'],
+ *     },
+ *   },
+ * });
+ *
+ * figure.getElement('eqn').showForm(0);
+ * figure.getElement('eqn').animations.new()
+ *   .goToForm({
+ *     delay: 1, target: '1', duration: 1, animate: 'move',
+ *   })
+ *   .start();
+ */
+export type EQN_Lines = {
+  content: Array<TypeEquationPhrase | EQN_Line>,
+  justify?: 'left' | 'right' | 'center' | 'element',
+  baselineSpace?: null | number,
+  space?: number,
+  yAlign?: 'bottom' | 'top' | 'middle' | number,
+  fullContentBounds?: boolean,
+};
 
 /**
  * An annotation's layout is defined by its *position* and *alignement*.
@@ -2914,6 +3062,7 @@ export class EquationFunctions {
     if (name === 'sumOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'prodOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'matrix') { return this.matrix(params); }   // $FlowFixMe
+    if (name === 'lines') { return this.lines(params); }   // $FlowFixMe
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
     if (name === 'container') { return this.container(params); }
     return null;
@@ -3933,6 +4082,78 @@ export class EquationFunctions {
       }));
     }
     return matrixContent;
+  }
+
+  /**
+   * Equation matrix function
+   * @see {@link EQN_Matrix} for description and examples
+   */
+  lines(options: EQN_Lines) {
+    let content;
+    let justify;
+    let yAlign;
+    let baselineSpace;
+    let space;
+    let fullContentBounds;
+    const defaultOptions = {
+      justify: 'center',
+      yAlign: 0,
+      baselineSpace: null,
+      space: 0,
+      // offset: 0,
+      fullContentBounds: false,
+    };
+    if (Array.isArray(options)) {
+      [
+        content, justify, baselineSpace, space, yAlign, fullContentBounds,
+      ] = options;
+    } else {
+      ({
+        content, justify, baselineSpace, space, yAlign, fullContentBounds,
+      } = options);
+    }
+    const optionsIn = {
+      justify,
+      baselineSpace,
+      space,
+      yAlign,
+      fullContentBounds,
+    };
+    const o = joinObjects({}, defaultOptions, optionsIn);
+    const contentArray = [];
+    const lineArray = [];
+    if (content != null) {      // $FlowFixMe
+      content.forEach((c) => {
+        let baselineSpaceLine = o.baselineSpace;
+        let spaceLine = o.space;
+        let justifyLine = null;
+        if (Array.isArray(c)) {
+          contentArray.push(this.contentToElement(c));
+        } else {
+          contentArray.push(this.contentToElement(c.content));
+          if (c.baselineSpace != null) { baselineSpaceLine = c.baselineSpace; }
+          if (c.space != null) { spaceLine = c.space; }
+          if (c.justify != null) {
+            justifyLine = this.elements[c.justify];
+          }
+        }
+        lineArray.push({
+          baselineSpace: baselineSpaceLine,
+          space: spaceLine,
+          justify: justifyLine,
+          offset: c.offset || 0,
+        });
+      });
+      // contentArray = content.map(c => this.contentToElement(c));
+      o.lineOptions = lineArray;
+    }
+
+    const lines = new Lines(
+      contentArray,
+      [],
+      o,
+    );
+    return lines;
   }
 
   /**

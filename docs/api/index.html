@@ -2692,6 +2692,16 @@
               
                 
                 <li><a
+                  href='#eqn_lines'
+                  class="">
+                  EQN_Lines
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#eqn_box'
                   class="">
                   EQN_Box
@@ -4797,6 +4807,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#equationfunctionslines'
+                        class='regular pre-open'>
+                        #lines
+                      </a></li>
+                      
+                      <li><a
                         href='#equationfunctionsint'
                         class='regular pre-open'>
                         #int
@@ -4997,6 +5013,16 @@
                   href='#eqn_translationstyles'
                   class="">
                   EQN_TranslationStyles
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eqn_line'
+                  class="">
+                  EQN_Line
                   
                 </a>
                 
@@ -34711,7 +34737,7 @@ figure.add({
 figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different bar examples</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different equation examples</span>
 figure.add({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
@@ -36488,6 +36514,225 @@ figure.add({
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
 eqn.setTouchableRect(<span class="hljs-number">0.5</span>);
 eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_lines'>
+      EQN_Lines
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Equation lines</p>
+<p><img src="./apiassets/eqn_lines.png"></p>
+<p><img src="./apiassets/eqn_lines_anim.gif"></p>
+<p>Options can be an object, or an array in the property order below</p>
+<p>The equation lines function can split an equation into multiple lines.
+This might be because one line is too long, or it might be convenient to
+display different forms of the same equation simultaneously on different
+lines and then animate between them.</p>
+<p>Lines can be justified to the left, center or right, or lines can be aligned
+with a specific element from each line (for instance an equals sign). To
+justify to a specific element, use <code>justify: 'element'</code> and then define the
+element name in the <code>justify</code> property of each line.</p>
+<p>Lines can be aligned in y with either the top most part of the top line, the
+bottom most part of the bottom line, the middle of the lines or any of the
+line's baselines.</p>
+<p>Spacing between lines is defined as either the space between the lowest
+point (descent) of one line to the highest point (ascent) of the next,
+or as the space between line baselines.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;(<a href="#eqn_line">EQN_Line</a> | <a href="#typeequationphrase">TypeEquationPhrase</a>)>)</code>
+          : Array of equation
+phrases or equation line objects
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>justify</span> <code class='quiet'>((<code>"left"</code> | <code>"center"</code> | <code>"right"</code> | <code>"element"</code>)?)</code>
+          : how to align
+the lines in x. Use 'element' to align the lines with a specific element
+from each line (that is defined with the 
+<code>justify</code>
+ property in each line)
+(
+<code>'left'</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>baselineSpace</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)?)</code>
+          : default space between baselines
+of lines. If not 
+<code>null</code>
+ then will override 
+<code>space</code>
+ (
+<code>null</code>
+).
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default space between descent of one line and
+ascent of the next line (
+<code>0</code>
+).
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>yAlign</span> <code class='quiet'>((<code>"bottom"</code> | <code>"middle"</code> | <code>"top"</code> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)?)</code>
+          : How to align the
+lines in y. 
+<code>number</code>
+ can be any line index, and it will align the baseline
+of that line. So, using 
+<code>0</code>
+ will align the first line's baseline. (
+<code>0</code>
+)
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>fullContentBounds</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?)</code>
+          : use full bounds of content,
+overriding any 
+<code>inSize=false</code>
+ properties in the content (
+<code>false</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        To test examples, append them to the
+
+<a href="#equation-boilerplate">
+boilerplate
+</a>
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Two lines, array definition</span>
+figure.add({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">0</span>: {
+        <span class="hljs-attr">lines</span>: [
+          [
+            [<span class="hljs-string">'a'</span>, <span class="hljs-string">'_ = '</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'_ + _1'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'_ - _1'</span>, <span class="hljs-string">'d'</span>],
+            [<span class="hljs-string">'_ + _2'</span>, <span class="hljs-string">'e'</span>, <span class="hljs-string">'_ - _2'</span>, <span class="hljs-string">'f'</span>],
+          ],
+          <span class="hljs-string">'right'</span>,
+          <span class="hljs-number">0.2</span>,
+        ],
+      },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Two lines animating to 1</span>
+figure.add({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">equals1</span>: <span class="hljs-string">' = '</span>,
+      <span class="hljs-attr">equals2</span>: <span class="hljs-string">' = '</span>,
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">0</span>: {
+        <span class="hljs-attr">lines</span>: {
+          <span class="hljs-attr">content</span>: [
+            {
+              <span class="hljs-attr">content</span>: [<span class="hljs-string">'a_1'</span>, <span class="hljs-string">'equals1'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'_ + '</span>, <span class="hljs-string">'c'</span>],
+              <span class="hljs-attr">justify</span>: <span class="hljs-string">'equals1'</span>,
+            },
+            {
+              <span class="hljs-attr">content</span>: [<span class="hljs-string">'d'</span>, <span class="hljs-string">'_ - '</span>, <span class="hljs-string">'e'</span>, <span class="hljs-string">'equals2'</span>, <span class="hljs-string">'a_2'</span>],
+              <span class="hljs-attr">justify</span>: <span class="hljs-string">'equals2'</span>,
+            },
+          ],
+          <span class="hljs-attr">space</span>: <span class="hljs-number">0.08</span>,
+          <span class="hljs-attr">justify</span>: <span class="hljs-string">'element'</span>,
+        },
+      },
+      <span class="hljs-number">1</span>: [<span class="hljs-string">'d'</span>, <span class="hljs-string">'_ - '</span>, <span class="hljs-string">'e'</span>, <span class="hljs-string">'equals1'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'_ + '</span>, <span class="hljs-string">'c'</span>],
+    },
+  },
+});
+
+figure.getElement(<span class="hljs-string">'eqn'</span>).showForm(<span class="hljs-number">0</span>);
+figure.getElement(<span class="hljs-string">'eqn'</span>).animations.new()
+  .goToForm({
+    <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">target</span>: <span class="hljs-string">'1'</span>, <span class="hljs-attr">duration</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span>,
+  })
+  .start();</pre>
     
   
 
@@ -58637,6 +58882,76 @@ start times.</p>
       </div>
     </div>
   
+    <div class='border-bottom' id='equationfunctionslines'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>lines(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Equation matrix function</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="#eqn_lines">EQN_Lines</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#eqn_matrix">EQN_Matrix</a>
+ for description and examples
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='equationfunctionsint'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -60968,6 +61283,129 @@ objects.</p>
 , 
 <a href="#eqn_fromform">EQN_FromForm</a>
 .
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eqn_line'>
+      EQN_Line
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Single equation line definition</p>
+<p>Overrides default values of <code>baselineSpace</code> and <code>space</code> from
+<a href="#eqn_lines">EQN_Lines</a>.</p>
+<p>Use <code>justify</code> to define a specific element of the line to align the other
+lines with.</p>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#typeequationphrase">TypeEquationPhrase</a>)</code>
+          : Array of equation
+phrases or equation line objects
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>justify</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?)</code>
+          : when 
+<a href="#eqn_lines">EQN_Lines</a>
+<code>.justify</code>
+ is 
+<code>'element'</code>
+,
+use this property to define which element of the line to justify with. If
+no element is specified, then left justification will be used.
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>space</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : default space between descent of previous line and
+ascent of the this line (
+<code>0</code>
+).
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>baselineSpace</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | null)?)</code>
+          : default space between baseline of
+previous line and ascent of this line. If not 
+<code>null</code>
+ then will override
+
+<code>space</code>
+ (
+<code>null</code>
+).
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>offset</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : x Offset of line from justification position
+(
+<code>0</code>
+)
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Related</div>
+    
+      
+        <a href="#eqn_lines">EQN_Lines</a>
 
       
     
