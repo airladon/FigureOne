@@ -33773,7 +33773,8 @@ in the series, then two special animations can be defined with this object:</p>
 
   <p>Equation fraction options</p>
 <p><img src="./apiassets/eqn_fraction.gif"></p>
-<p>A fraction has a numerator, denominator and vinculum symbol (line).</p>
+<p>A fraction has a numerator and denominator separated by a vinculum
+symbol <a href="#eqn_vinculumsymbol">EQN_VinculumSymbol</a>.</p>
 <p>Options can be an object, or an array in the property order below</p>
 
   
@@ -35520,7 +35521,8 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 
   <p>Equation sum of</p>
 <p><img src="./apiassets/eqn_sumof.gif"></p>
-<p>Place an equation phrase in a sum of operation</p>
+<p>Place an equation phrase in a sum of operation with the symbol
+<a href="#eqn_sumsymbol">EQN_SumSymbol</a>.</p>
 <p>Options can be an object, or an array in the property order below</p>
 
   
@@ -36142,7 +36144,16 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 
   <p>Equation bar</p>
 <p><img src="./apiassets/eqn_bar.gif"></p>
-<p>Place a bar (or bracket) symbol to the side of an equation phrase</p>
+<p>Place a bar (or bracket) symbol to the side of an equation phrase.</p>
+<p>Symbols that can be used with bar are:</p>
+<ul>
+<li><a href="#eqn_barsymbol">EQN_BarSymbol</a></li>
+<li><a href="#eqn_arrowsymbol">EQN_ArrowSymbol</a></li>
+<li><a href="#eqn_bracesymbol">EQN_BraceSymbol</a></li>
+<li><a href="#eqn_bracketsymbol">EQN_BracketSymbol</a></li>
+<li><a href="#eqn_squarebracketsymbol">EQN_SquareBracketSymbol</a></li>
+<li><a href="#eqn_anglebracketsymbol">EQN_AngleBracketSymbol</a></li>
+</ul>
 <p>Options can be an object, or an array in the property order below</p>
 
   
@@ -36232,7 +36243,7 @@ resulting phrase (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>left</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          <span class='code bold'>right</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
           : amount symbol extends beyond content to the right
 (overrides 
 <code>overhang</code>
@@ -36264,15 +36275,16 @@ resulting phrase (
         </div>
       
         <div class='space-bottom0'>
-          <span class='code bold'>top</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : amount symbol extends beyond content to the bottom
-(overrides 
+          <span class='code bold'>bottom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : amount symbol extends beyond content to the
+bottom (overrides 
 <code>overhang</code>
  and 
 <code>length</code>
 , and only for side 
 <code>'left'</code>
- or 
+ or
+
 <code>'right'</code>
 )
 
@@ -36970,7 +36982,7 @@ figure.getElement(<span class="hljs-string">'eqn'</span>).animations.new()
 
   <p>Equation box</p>
 <p><img src="./apiassets/eqn_box.gif"></p>
-<p>Place a box symbol around an equation phrase</p>
+<p>Place a <a href="#eqn_boxsymbol">EQN_BoxSymbol</a> around an equation phrase</p>
 <p>Options can be an object, or an array in the property order below</p>
 
   
@@ -38945,7 +38957,8 @@ the root object for convenience.</p>
   </div>
   
 
-  <p>Vinculum equation symbol</p>
+  <p>Vinculum symbol used in fractions (<a href="#eqn_fraction">EQN_Fraction</a> equation function).</p>
+<p><img src="./apiassets/eqn_symbol_vinculum.png"></p>
 <pre>
                          width
       |<---------------------------------------->|
@@ -39006,7 +39019,7 @@ the root object for convenience.</p>
 resize, 
 <code>'static'</code>
  only changes scale transform (
-<code>dynamic</code>
+<code>'dynamic'</code>
 )
 
           
@@ -39044,13 +39057,54 @@ based on first use (
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>eqn.addElements({
-  <span class="hljs-attr">v</span>: {
-    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define as element</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">v</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'vinculum'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v'</span>, <span class="hljs-string">'b'</span>] },
+    },
   },
-})</pre>
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline simple one use</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'vinculum'</span>, <span class="hljs-string">'b'</span>] },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline with reuse</span>
+<span class="hljs-keyword">const</span> [eqn] = figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v1_vinculum'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'c'</span>, <span class="hljs-string">'v2_vinculum'</span>, <span class="hljs-string">'b'</span>] }] } * ,
+      <span class="hljs-attr">form2</span>: { <span class="hljs-attr">frac</span>: [[<span class="hljs-string">'a'</span>, <span class="hljs-string">'ef'</span>], <span class="hljs-string">'v1'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'c'</span>, <span class="hljs-string">'v2'</span>, <span class="hljs-string">'d'</span>] }] },
+    },
+  },
+});
+eqn.animations.new()
+  .goToForm({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">target</span>: <span class="hljs-string">'form2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
+  .start();
+
+<span class="hljs-comment">// Define inline with customization</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, { <span class="hljs-attr">vinculum</span>: { <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.004</span> } }, <span class="hljs-string">'b'</span>] },
+    },
+  },
+});</pre>
     
   
 
@@ -39079,7 +39133,9 @@ based on first use (
   </div>
   
 
-  <p>Box equation symbol</p>
+  <p>Box equation symbol used in <a href="#eqn_box">EQN_Box</a> and as a
+<a href="#eqn_encompassglyph">EQN_EncompassGlyph</a>.</p>
+<p><img src="./apiassets/eqn_symbol_box.png"></p>
 <pre>
                                          width
                 |<--------------------------------------------------->|
@@ -39226,14 +39282,55 @@ based on first use
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>eqn.addElements({
-  <span class="hljs-attr">b</span>: {
-    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'box'</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
-    <span class="hljs-attr">fill</span>: <span class="hljs-literal">false</span>,
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define in element</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">b</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'box'</span>, <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.008</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">box</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-literal">true</span>, <span class="hljs-number">0.1</span>] },
+    },
   },
-})</pre>
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline simple one use</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">box</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'box'</span>, <span class="hljs-literal">true</span>, <span class="hljs-number">0.1</span>] },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline with reuse</span>
+<span class="hljs-keyword">const</span> [eqn] = figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">box</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b_box'</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0.1</span>] },
+      <span class="hljs-attr">form2</span>: { <span class="hljs-attr">box</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0.2</span>] },
+    },
+  },
+});
+eqn.animations.new()
+  .goToForm({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">target</span>: <span class="hljs-string">'form2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline with customization</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">box</span>: [<span class="hljs-string">'a'</span>, { <span class="hljs-attr">box</span>: { <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.004</span> } }, <span class="hljs-literal">true</span>, <span class="hljs-number">0.1</span>] },
+    },
+  },
+});</pre>
     
   
 
@@ -39262,7 +39359,18 @@ based on first use
   </div>
   
 
-  <p>Arrow equation symbol</p>
+  <p>Arrow equation symbol.</p>
+<p>The arrow direction defines where it can be used:</p>
+<ul>
+<li><code>'left'</code>, <code>'right'</code>: <a href="#eqn_bar">EQN_Bar</a> (top and bottom sides),
+<a href="#eqn_comment">EQN_Comment</a>, and <a href="#eqn_leftrightglyph">EQN_LeftRightGlyph</a></li>
+<li><code>'up'</code>, <code>'down'</code>: <a href="#eqn_bracket">EQN_Bracket</a>, <a href="#eqn_bar">EQN_Bar</a> (left and right
+sides), and <a href="#eqn_topbottomglyph">EQN_TopBottomGlyph</a></li>
+</ul>
+<p>Note, as the default direciton is <code>'right'</code>, using the inline definition of
+arrow will only work with <a href="#eqn_bar">EQN_Bar</a> (top and bottom sides),
+<a href="#eqn_comment">EQN_Comment</a>, and <a href="#eqn_leftrightglyph">EQN_LeftRightGlyph</a>.</p>
+<p><img src="./apiassets/eqn_symbol_arrow.png"></p>
 <pre>
                             arrowWidth
                         |<--------------->|
@@ -39419,16 +39527,62 @@ based on first use (
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>eqn.addElements({
-  <span class="hljs-attr">a</span>: {
-    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'arrow'</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-    <span class="hljs-attr">direction</span>: <span class="hljs-string">'right'</span>
-    <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
-    <span class="hljs-attr">arrowHeight</span>: <span class="hljs-number">0.02</span>,
-    <span class="hljs-attr">arrowWidth</span>: <span class="hljs-number">0.02</span>,
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define in element</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">rightArrow</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'arrow'</span>, <span class="hljs-attr">direction</span>: <span class="hljs-string">'right'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">bar</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'rightArrow'</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.03</span>] },
+    },
   },
-})</pre>
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline simple one use</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">bar</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'arrow'</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.03</span>] },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline with reuse</span>
+<span class="hljs-keyword">const</span> [eqn] = figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">bar</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'ar_arrow'</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0</span>] },
+      <span class="hljs-attr">form2</span>: { <span class="hljs-attr">bar</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'ar'</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>] },
+    },
+  },
+});
+eqn.animations.new()
+  .goToForm({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">target</span>: <span class="hljs-string">'form2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline with customization</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: {
+        <span class="hljs-attr">bar</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'a'</span>,
+          <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span>,
+          <span class="hljs-attr">symbol</span>: { <span class="hljs-attr">arrow</span>: { <span class="hljs-attr">direction</span>: <span class="hljs-string">'up'</span> } },
+          <span class="hljs-attr">overhang</span>: <span class="hljs-number">0.1</span>,
+        },
+      },
+    },
+  },
+});</pre>
     
   
 
@@ -39457,7 +39611,8 @@ based on first use (
   </div>
   
 
-  <p>Sum equation symbol</p>
+  <p>Sum equation symbol used with the <a href="#eqn_sumof">EQN_SumOf</a> equation function.</p>
+<p><img src="./apiassets/eqn_symbol_sum.png"></p>
 <pre>
          ---------- 00000000000000000000000000000000000
          A            0000000                     000000

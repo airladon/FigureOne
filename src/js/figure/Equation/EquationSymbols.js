@@ -75,7 +75,9 @@ export type EQN_Symbol = {
 };
 
 /**
- * Vinculum equation symbol
+ * Vinculum symbol used in fractions ({@link EQN_Fraction} equation function).
+ *
+ * ![](./apiassets/eqn_symbol_vinculum.png)
  *
  * <pre>
  *                          width
@@ -90,7 +92,7 @@ export type EQN_Symbol = {
  * @property {'vinculum'} symbol
  * @property {number} [lineWidth] (`0.01`)
  * @property {'static' | 'dynamic'} [draw] `'dynamic'` updates vertices on
- * resize, `'static'` only changes scale transform (`dynamic`)
+ * resize, `'static'` only changes scale transform (`'dynamic'`)
  * @property {number | 'first'} [staticWidth] used when `draw`=`static`.
  * `number` sets width of static symbol - `'first'` calculates and sets width
  * based on first use (`'first'`)
@@ -98,13 +100,54 @@ export type EQN_Symbol = {
  * @extends EQN_Symbol
  *
  * @example
- * eqn.addElements({
- *   v: {
- *     symbol: 'vinculum',
- *     color: [1, 0, 0, 1],
- *     lineWidth: 0.01,
+ * // Define as element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       v: { symbol: 'vinculum' },
+ *     },
+ *     forms: {
+ *       form1: { frac: ['a', 'v', 'b'] },
+ *     },
  *   },
- * })
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { frac: ['a', 'vinculum', 'b'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { frac: ['a', 'v1_vinculum', { frac: ['c', 'v2_vinculum', 'b'] }] } * ,
+ *       form2: { frac: [['a', 'ef'], 'v1', { frac: ['c', 'v2', 'd'] }] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { frac: ['a', { vinculum: { lineWidth: 0.004 } }, 'b'] },
+ *     },
+ *   },
+ * });
  */
 export type EQN_VinculumSymbol = {
   symbol: 'vinculum',
@@ -115,7 +158,11 @@ export type EQN_VinculumSymbol = {
 } & EQN_Symbol;
 
 /**
- * Box equation symbol
+ * Box equation symbol used in {@link EQN_Box} and as a
+ * {@link EQN_EncompassGlyph}.
+ *
+ * ![](./apiassets/eqn_symbol_box.png)
+ *
  *
  * <pre>
  *                                          width
@@ -155,14 +202,55 @@ export type EQN_VinculumSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * eqn.addElements({
- *   b: {
- *     symbol: 'box',
- *     color: [1, 0, 0, 1],
- *     lineWidth: 0.01,
- *     fill: false,
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       b: { symbol: 'box', lineWidth: 0.008 },
+ *     },
+ *     forms: {
+ *       form1: { box: ['a', 'b', true, 0.1] },
+ *     },
  *   },
- * })
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { box: ['a', 'box', true, 0.1] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { box: ['a', 'b_box', false, 0.1] },
+ *       form2: { box: ['a', 'b', false, 0.2] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { box: ['a', { box: { lineWidth: 0.004 } }, true, 0.1] },
+ *     },
+ *   },
+ * });
  */
 export type EQN_BoxSymbol = {
   symbol: 'box',
@@ -176,7 +264,20 @@ export type EQN_BoxSymbol = {
 } & EQN_Symbol;
 
 /**
- * Arrow equation symbol
+ * Arrow equation symbol.
+ *
+ * The arrow direction defines where it can be used:
+ * - `'left'`, `'right'`: {@link EQN_Bar} (top and bottom sides),
+ *   {@link EQN_Comment}, and {@link EQN_LeftRightGlyph}
+ * - `'up'`, `'down'`: {@link EQN_Bracket}, {@link EQN_Bar} (left and right
+ *   sides), and {@link EQN_TopBottomGlyph}
+ *
+ * Note, as the default direciton is `'right'`, using the inline definition of
+ * arrow will only work with {@link EQN_Bar} (top and bottom sides),
+ * {@link EQN_Comment}, and {@link EQN_LeftRightGlyph}.
+ *
+ * ![](./apiassets/eqn_symbol_arrow.png)
+ *
  * <pre>
  *                             arrowWidth
  *                         |<--------------->|
@@ -224,16 +325,62 @@ export type EQN_BoxSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * eqn.addElements({
- *   a: {
- *     symbol: 'arrow',
- *     color: [1, 0, 0, 1],
- *     direction: 'right'
- *     lineWidth: 0.01,
- *     arrowHeight: 0.02,
- *     arrowWidth: 0.02,
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       rightArrow: { symbol: 'arrow', direction: 'right' },
+ *     },
+ *     forms: {
+ *       form1: { bar: ['a', 'rightArrow', false, 0.05, 0.03] },
+ *     },
  *   },
- * })
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { bar: ['a', 'arrow', false, 0.05, 0.03] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { bar: ['a', 'ar_arrow', false, 0.05, 0] },
+ *       form2: { bar: ['a', 'ar', false, 0.05, 0.1] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: {
+ *         bar: {
+ *           content: 'a',
+ *           side: 'left',
+ *           symbol: { arrow: { direction: 'up' } },
+ *           overhang: 0.1,
+ *         },
+ *       },
+ *     },
+ *   },
+ * });
  */
 export type EQN_ArrowSymbol = {
   symbol: 'arrow',
@@ -246,7 +393,10 @@ export type EQN_ArrowSymbol = {
 } & EQN_Symbol;
 
 /**
- * Sum equation symbol
+ * Sum equation symbol used with the {@link EQN_SumOf} equation function.
+ *
+ * ![](./apiassets/eqn_symbol_sum.png)
+ *
  * <pre>
  *          ---------- 00000000000000000000000000000000000
  *          A            0000000                     000000
@@ -291,14 +441,55 @@ export type EQN_ArrowSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * eqn.addElements({
- *   s: {
- *     symbol: 'sum',
- *     color: [1, 0, 0, 1],
- *     lineWidth: 0.01
- *     sides: 5,
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       sigma: { symbol: 'sum' },
+ *     },
+ *     forms: {
+ *       form1: { sumOf: ['sigma', 'a', 'a = 0', 'n'] },
+ *     },
  *   },
- * })
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { sumOf: ['sum', 'a', 'a = 0', 'n'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { sumOf: ['sum', 'a', 'a = 0', 'n'] },
+ *       form2: { sumOf: ['sum', 'a', 'a = 0', 'm'] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { sumOf: [{ sum: { lineWidth: 0.01 } }, 'a', 'a = 0', 'n'] },
+ *     },
+ *   },
+ * });
  */
 export type EQN_SumSymbol ={
   symbol: 'sum',
@@ -1234,7 +1425,7 @@ export default class EquationSymbols {
       arrowLength: 0.04,
       length: 0.1,
       staticHeight: 'first',
-      draw: 'static',
+      draw: 'dynamic',
       staticWidth: null,          // not definable by user
     };
     const optionsToUse = joinObjects(defaultOptions, options);

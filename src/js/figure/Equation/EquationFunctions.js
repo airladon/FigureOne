@@ -247,7 +247,8 @@ export type EQN_Container = {
  *
  * ![](./apiassets/eqn_fraction.gif)
  *
- * A fraction has a numerator, denominator and vinculum symbol (line).
+ * A fraction has a numerator and denominator separated by a vinculum
+ * symbol {@link EQN_VinculumSymbol}.
  *
  * Options can be an object, or an array in the property order below
  *
@@ -830,7 +831,8 @@ export type EQN_Strike = {
  *
  * ![](./apiassets/eqn_box.gif)
  *
- * Place a box symbol around an equation phrase
+ * Place a {@link EQN_BoxSymbol} around an equation phrase
+ *
  *
  * Options can be an object, or an array in the property order below
  *
@@ -993,7 +995,15 @@ export type EQN_TouchBox = {
  *
  * ![](./apiassets/eqn_bar.gif)
  *
- * Place a bar (or bracket) symbol to the side of an equation phrase
+ * Place a bar (or bracket) symbol to the side of an equation phrase.
+ *
+ * Symbols that can be used with bar are:
+ * - {@link EQN_BarSymbol}
+ * - {@link EQN_ArrowSymbol}
+ * - {@link EQN_BraceSymbol}
+ * - {@link EQN_BracketSymbol}
+ * - {@link EQN_SquareBracketSymbol}
+ * - {@link EQN_AngleBracketSymbol}
  *
  * Options can be an object, or an array in the property order below
  *
@@ -1006,12 +1016,13 @@ export type EQN_TouchBox = {
  * @property {number} [length] total length of symbol (overrides `overhang`)
  * @property {number} [left] amount symbol extends beyond content to the left
  * (overrides `overhang` and `length`, and only for side `'top'` or `'bottom'`)
- * @property {number} [left] amount symbol extends beyond content to the right
+ * @property {number} [right] amount symbol extends beyond content to the right
  * (overrides `overhang` and `length`, and only for side `'top'` or `'bottom'`)
  * @property {number} [top] amount symbol extends beyond content to the top
  * (overrides `overhang` and `length`, and only for side `'left'` or `'right'`)
- * @property {number} [top] amount symbol extends beyond content to the bottom
- * (overrides `overhang` and `length`, and only for side `'left'` or `'right'`)
+ * @property {number} [bottom] amount symbol extends beyond content to the
+ * bottom (overrides `overhang` and `length`, and only for side `'left'` or
+ * `'right'`)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] (`top`)
  * @property {number} [minContentHeight] custom min content height for auto
  * symbol sizing when side is `'top'` or `'bottom'`
@@ -1320,7 +1331,8 @@ export type EQN_Integral = {
  *
  * ![](./apiassets/eqn_sumof.gif)
  *
- * Place an equation phrase in a sum of operation
+ * Place an equation phrase in a sum of operation with the symbol
+ * {@link EQN_SumSymbol}.
  *
  * Options can be an object, or an array in the property order below
  *
