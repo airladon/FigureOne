@@ -81,7 +81,7 @@ describe('Figure Recorder', () => {
     expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
     expect(a.getScale()).toEqual(new Point(1.5, 1.5));
     expect(a.getRotation()).toBe(0.5);
-    expect(a.opacity).toBe(0.5.15);
+    expect(a.opacity).toBe(0.5005);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([0.5, 0.5, 0, 1]);
     figure.mock.timeStep(1);
@@ -124,7 +124,7 @@ describe('Figure Recorder', () => {
     expect(a.getPosition()).toEqual(new Point(1.5, 1.5));
     expect(a.getScale()).toEqual(new Point(2.5, 2.5));
     expect(a.getRotation()).toBe(1.5);
-    expect(a.opacity).toBe(0.5.15);
+    expect(a.opacity).toBe(0.5005);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([0, 0.5, 0.5, 0.75]);
     figure.mock.timeStep(1);
@@ -219,7 +219,7 @@ describe('Figure Recorder', () => {
     expect(a.opacity).toEqual(0.001);
     expect(a.isShown).toBe(true);
     figure.mock.timeStep(1);
-    expect(a.opacity).toEqual(0.5.15);
+    expect(a.opacity).toEqual(0.5005);
     expect(a.isShown).toBe(true);
     figure.mock.timeStep(2);
     expect(a.opacity).toEqual(1);
@@ -234,7 +234,7 @@ describe('Figure Recorder', () => {
     expect(a.opacity).toEqual(1);
     expect(a.isShown).toBe(true);
     figure.mock.timeStep(1);
-    expect(a.opacity).toEqual(0.5.15);
+    expect(a.opacity).toEqual(0.5005);
     expect(a.isShown).toBe(true);
     figure.mock.timeStep(2);
     expect(a.opacity).toEqual(1);
@@ -302,7 +302,7 @@ describe('Figure Recorder', () => {
     expect(a.getPosition()).toEqual(new Point(0.5, 0.5));
     expect(a.getScale()).toEqual(new Point(1.5, 1.5));
     expect(a.getRotation()).toBe(0.5);
-    expect(a.opacity).toBe(0.5.15);
+    expect(a.opacity).toBe(0.5005);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([0.5, 0.5, 0, 1]);
     figure.mock.timeStep(10);
@@ -348,7 +348,7 @@ describe('Figure Recorder', () => {
     expect(a.getPosition()).toEqual(new Point(0.1, 0.1));
     expect(a.getScale()).toEqual(new Point(1.1, 1.1));
     expect(a.getRotation()).toBe(0.1);
-    expect(a.opacity).toBe(0.5.15);
+    expect(a.opacity).toBe(0.5005);
     expect(a.isShown).toBe(true);
     expect(a.color).toEqual([0.6, 0.4, 0, 1]);
     figure.mock.timeStep(10);

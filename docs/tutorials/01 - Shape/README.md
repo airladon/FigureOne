@@ -15,7 +15,7 @@ Download `index.html` and `index.js` into the same folder and open `index.html` 
 <body>
     <div id="figureOneContainer" style="width: 500px; height: 500px; background-color: black;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.5.1/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.5.0/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
@@ -52,7 +52,7 @@ In the HTML file, a `div` is created the figure will attach to.
 
 Then the FigureOne library is loaded.
 ```html
-<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.5.1/figureone.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.5.0/figureone.min.js'></script>
 ```
 In this case, the library is loaded from a CDN, but you could also run it from a local copy of the FigureOne library as well. For instance, if you cloned this repository, and wanted to run the local version you could use the line:
 ```html

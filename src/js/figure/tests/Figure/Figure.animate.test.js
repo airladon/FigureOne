@@ -113,9 +113,9 @@ describe('Animate To State', () => {
       expect(p2.getPosition('figure').round(3)).toEqual(new Point(1, 1));
       expect(p3.getPosition('figure').round(3)).toEqual(new Point(1, 1));
       expect(c.getPosition('figure').round(3)).toEqual(new Point(0.5, 0.5));
-      expect(p1.opacity).toBe(0.5.15);
+      expect(p1.opacity).toBe(0.5005);
       expect(p1.isShown).toBe(true);
-      expect(p3.opacity).toBe(0.5.15);
+      expect(p3.opacity).toBe(0.5005);
       expect(p3.isShown).toBe(true);
 
       // figure.draw(0.9);

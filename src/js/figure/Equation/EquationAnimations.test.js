@@ -228,7 +228,7 @@ describe('Equation Animation', () => {
     expect(c.isShown).toBe(true);
     expect(a.opacity).toEqual(1);
     expect(b.opacity).toEqual(1);
-    expect(round(c.opacity, 4)).toEqual(0.5.15);
+    expect(round(c.opacity, 4)).toEqual(0.5005);
 
     // Interrupt by moving to next form while previous was animating
     // 'c' skips to be fully shown

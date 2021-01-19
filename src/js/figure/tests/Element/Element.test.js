@@ -763,7 +763,7 @@ describe('Animationa and Movement', () => {
       expect(collection.state.movement.velocity.isEqualTo(velocity)).toEqual(true);
 
       // After one second, should have rotated to:
-      //  rotation: 0.1 + 0.1*1 - 0.5.1.01*1*1
+      //  rotation: 0.1 + 0.1*1 - 0.5*0.01*1*1
       //  with velocity: 0.1 - 0.01*1*1
       // collection.setupDraw(new Transform(), 11);
       // collection.draw(11);
@@ -774,7 +774,7 @@ describe('Animationa and Movement', () => {
         .scale(1, 1).rotate(0.195).translate(0.38, 0));
 
       // At 5 seconds, velocity becomes 0, so rotation is
-      //  rotation: 0.1 + 0.1*5 - 0.5.1.01*5*5
+      //  rotation: 0.1 + 0.1*5 - 0.5*0.01*5*5
       //  with velocity: 0.1 - 0.01*1*1
       // collection.setupDraw(new Transform(), 15.1);
       // collection.draw(15.1);
