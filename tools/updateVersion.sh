@@ -1,1 +1,0 @@
-grep -rli 'figureone@' src/* docs/* scratch/* | xargs -i@ sed -i 's/figureone@[^"]*/figureone@$1/g' @
