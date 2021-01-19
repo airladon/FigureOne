@@ -9,7 +9,7 @@ docker run -it --rm \
   -v $PROJECT_PATH/package:/opt/app/package \
   -v $PROJECT_PATH/src:/opt/app/src \
   -v $PROJECT_PATH/containers/figureone/webpack.config.js:/opt/app/webpack.config.js \
-  -v $PROJECT_PATH/containers/figureone/build.sh:/opt/app/build.sh \
+  -v $PROJECT_PATH/build.sh:/opt/app/build.sh \
   -v $PROJECT_PATH/containers/figureone/generate_docs.sh:/opt/app/generate_docs.sh \
   -v $PROJECT_PATH/containers/figureone/browser.sh:/opt/app/browser.sh \
   -v $PROJECT_PATH/.eslintrc.json:/opt/app/.eslintrc.json \
