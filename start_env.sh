@@ -24,6 +24,8 @@ docker run -it --rm \
   -v $PROJECT_PATH/reports:/opt/app/reports \
   -v $PROJECT_PATH/jsdoc-conf.json:/opt/app/jsdoc-conf.json \
   -v $PROJECT_PATH/.eslintignore:/opt/app/.eslintignore \
+  -v $PROJECT_PATH/readme.md:/opt/app/readme.md \
+  -v $PROJECT_PATH/scratch:/opt/app/scratch \
   -v $PROJECT_PATH/containers:/opt/app/containers \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e LOCAL_PROJECT_PATH=$PROJECT_PATH \

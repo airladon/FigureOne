@@ -1,6 +1,6 @@
 /**
 Usage:
-`node tools/updateVersion.js 0.1.1`
+`node tools/updateVersion.js`
  */
 // const Path = require('path');
 const fs = require('fs');
@@ -9,7 +9,7 @@ const pjson = require('../package.json');
 
 
 const files = getFiles(
-  ['./src', './scratch', './docs'],
+  ['./src', './docs', './scratch', 'readme.md', './docs/examples/Jupyter Integration/example'],
   /(html$|md$|js$)/,
 );
 
@@ -25,8 +25,8 @@ for (let i = 0; i < files.length; i += 1) {
       const newLine = line.replace(/figureone@[^/]*/, `figureone@${pjson.version}`);
       lines[l] = newLine;
     }
-    if (toUpdate) {
-      fs.writeFileSync(file, lines.join('\n'), 'UTF-8');
-    }
+  }
+  if (toUpdate) {
+    fs.writeFileSync(file, lines.join('\n'), 'UTF-8');
   }
 }
