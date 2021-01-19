@@ -2,9 +2,9 @@
 
 # MODE=prod
 HOST_PATH=`pwd`
-DEPLOY_PROD_BRANCH=master           # Branch to test and deploy to prod
-DEPLOY_DEV_BRANCH=release-candidate # Branch to test and deploy to dev
-TRAVIS_DEBUG_BRANCH=travis          # Branch for fast travis debug
+# DEPLOY_PROD_BRANCH=master           # Branch to test and deploy to prod
+# DEPLOY_DEV_BRANCH=release-candidate # Branch to test and deploy to dev
+# TRAVIS_DEBUG_BRANCH=travis          # Branch for fast travis debug
 TESTING=1
 
 # Setup colors and text formatting
@@ -15,30 +15,30 @@ yellow=`tput setaf 3`
 bold=`tput bold`
 reset=`tput sgr0`
 
-# If pull requesting to master, check that it is coming from release-candidate
-# branch only. If not, fail the build.
-if [ $TRAVIS_PULL_REQUEST ];
-  then
-  if [ "$TRAVIS_PULL_REQUEST" != "false" ];
-    then
-    if [ $TRAVIS_BRANCH = $DEPLOY_PROD_BRANCH -a $TRAVIS_PULL_REQUEST_BRANCH != $DEPLOY_DEV_BRANCH ];
-      then
-      echo "Tried to merge branch${bold}${red}" $TRAVIS_PULL_REQUEST_BRANCH "${reset}into${bold}${cyan}" $DEPLOY_PROD_BRANCH "${reset}"
-      echo "Can only merge branch${bold}${cyan}" $DEPLOY_DEV_BRANCH "${reset}into${bold}${cyan}" $DEPLOY_PROD_BRANCH
-      echo "${bold}${red}Build Failed.${reset}"
-      exit 1
-    fi
-  fi
-fi
+# # If pull requesting to master, check that it is coming from release-candidate
+# # branch only. If not, fail the build.
+# if [ $TRAVIS_PULL_REQUEST ];
+#   then
+#   if [ "$TRAVIS_PULL_REQUEST" != "false" ];
+#     then
+#     if [ $TRAVIS_BRANCH = $DEPLOY_PROD_BRANCH -a $TRAVIS_PULL_REQUEST_BRANCH != $DEPLOY_DEV_BRANCH ];
+#       then
+#       echo "Tried to merge branch${bold}${red}" $TRAVIS_PULL_REQUEST_BRANCH "${reset}into${bold}${cyan}" $DEPLOY_PROD_BRANCH "${reset}"
+#       echo "Can only merge branch${bold}${cyan}" $DEPLOY_DEV_BRANCH "${reset}into${bold}${cyan}" $DEPLOY_PROD_BRANCH
+#       echo "${bold}${red}Build Failed.${reset}"
+#       exit 1
+#     fi
+#   fi
+# fi
 
 
-# Get the current branch - if it is not yet defined, then get it from git.
-# Note, that this git command will not work in a Heroku Environment, so BRANCH
-# already be set as env variable before calling this script on Heroku.
-if [ -z "${BRANCH}" ];
-  then
-  BRANCH=`git rev-parse --abbrev-ref HEAD`
-fi
+# # Get the current branch - if it is not yet defined, then get it from git.
+# # Note, that this git command will not work in a Heroku Environment, so BRANCH
+# # already be set as env variable before calling this script on Heroku.
+# if [ -z "${BRANCH}" ];
+#   then
+#   BRANCH=`git rev-parse --abbrev-ref HEAD`
+# fi
 
 # Check first command line argument to see how to build javascript
 # if [ $1 = "dev" ];
