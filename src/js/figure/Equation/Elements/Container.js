@@ -12,7 +12,7 @@ export default class Container extends BaseEquationFunction {
     this.location = location._dup();
     const loc = location._dup();
     const {
-      width, descent, ascent, xAlign, yAlign, fit, scaleModifier,
+      width, descent, ascent, xAlign, yAlign, fit, scaleModifier, inSize,
       fullContentBounds,
     } = this.options;
     const [mainContent] = this.contents;
@@ -87,10 +87,17 @@ export default class Container extends BaseEquationFunction {
       fullBounds.copyFrom(containerBounds);
     }
 
-    this.width = containerBounds.width;
-    this.height = containerBounds.height;
-    this.descent = containerBounds.descent;
-    this.ascent = containerBounds.ascent;
+    if (inSize) {
+      this.width = containerBounds.width;
+      this.height = containerBounds.height;
+      this.descent = containerBounds.descent;
+      this.ascent = containerBounds.ascent;
+    } else {
+      this.width = 0;
+      this.height = 0;
+      this.descent = 0;
+      this.ascent = 0;
+    }
     this.fullSize = {
       leftOffset: this.location.x - fullBounds.left,
       width: fullBounds.width,

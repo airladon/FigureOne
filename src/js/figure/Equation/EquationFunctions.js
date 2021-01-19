@@ -158,6 +158,7 @@ export type TypeEquationPhrase =
  *
  * @property {TypeEquationPhrase} content
  * @property {number} [width] (`null`)
+ * @property {boolean} [inSize] (`true)
  * @property {number} [descent] (`null`)
  * @property {number} [ascent] (`null`)
  * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
@@ -223,6 +224,7 @@ export type TypeEquationPhrase =
 export type EQN_Container = {
   content: TypeEquationPhrase,
   width?: number,
+  inSize?: boolean,
   descent?: number,
   ascent?: number,
   xAlign?: 'left' | 'center' | 'right' | number,
@@ -233,6 +235,7 @@ export type EQN_Container = {
 } | [
   TypeEquationPhrase,
   ?number,
+  ?boolean,
   ?number,
   ?number,
   ?'left' | 'center' | 'right' | number,
@@ -3331,6 +3334,7 @@ export class EquationFunctions {
     let descent;
     let xAlign; // left, center, right, multiplier (to left)
     let yAlign; // bottom, baseline, middle, top, multiplier (to bottom)
+    let inSize;
     let fullContentBounds;
 
     const defaultOptions = {
@@ -3341,16 +3345,17 @@ export class EquationFunctions {
       descent: null,
       xAlign: 'center',
       yAlign: 'baseline',
+      inSize: true,
       fullContentBounds: false,
     };
     if (Array.isArray(options)) {
       [
-        content, width, descent, ascent, xAlign, yAlign, fit, scale,
+        content, width, inSize, descent, ascent, xAlign, yAlign, fit, scale,
         fullContentBounds,
       ] = options;
     } else {
       ({
-        content, width, descent, ascent, xAlign, yAlign, fit, scale,
+        content, width, inSize, descent, ascent, xAlign, yAlign, fit, scale,
         fullContentBounds,
       } = options);
     }
@@ -3362,6 +3367,7 @@ export class EquationFunctions {
       descent,
       xAlign,
       yAlign,
+      inSize,
       fullContentBounds,
     };
     const o = joinObjects(defaultOptions, optionsIn);

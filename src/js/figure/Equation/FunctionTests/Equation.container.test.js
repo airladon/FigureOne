@@ -86,6 +86,7 @@ describe('Equation Functions - Container', () => {
               container: {
                 content: ['b'],
                 width: null,
+                inSize: true,
                 descent: null,
                 ascent: null,
                 xAlign: 'left',
@@ -97,67 +98,67 @@ describe('Equation Functions - Container', () => {
             scale: 1,
           },
           widthLeft: {
-            content: ['a', { container: ['b', 1, null, null, 'left', 'baseline', null, 1] }, 'c'],
+            content: ['a', { container: ['b', 1, true, null, null, 'left', 'baseline', null, 1] }, 'c'],
             scale: 1,
           },
           widthCenter: {
-            content: ['a', { container: ['b', 1, null, null, 'center', 'baseline', null, 1] }, 'c'],
+            content: ['a', { container: ['b', 1, true, null, null, 'center', 'baseline', null, 1] }, 'c'],
             scale: 1,
           },
           widthRight: {
-            content: ['a', { container: ['b', 1, null, null, 'right', 'baseline', null, 1] }, 'c'],
+            content: ['a', { container: ['b', 1, true, null, null, 'right', 'baseline', null, 1] }, 'c'],
             scale: 1,
           },
           widthMultiplier: {
-            content: ['a', { container: ['b', 1, null, null, 0.2, 'baseline', null, 1] }, 'c'],
+            content: ['a', { container: ['b', 1, true, null, null, 0.2, 'baseline', null, 1] }, 'c'],
             scale: 1,
           },
           smallWidthCenter: {
-            content: ['a', { container: ['b', 0.01, null, null, 'center', 'baseline', null, 1] }, 'c'],
+            content: ['a', { container: ['b', 0.01, true, null, null, 'center', 'baseline', null, 1] }, 'c'],
             scale: 1,
           },
           descentAscentBaseline: {
-            content: ['a', { container: ['b', null, 1, 1, 'left', 'baseline', null, 1] }, 'c'],
+            content: ['a', { container: ['b', null, true, 1, 1, 'left', 'baseline', null, 1] }, 'c'],
             scale: 1,
           },
           descentAscentBottom: {
-            content: ['a', { container: ['b', null, 1, 1, 'left', 'bottom', null, 1] }, 'c'],
+            content: ['a', { container: ['b', null, true, 1, 1, 'left', 'bottom', null, 1] }, 'c'],
             scale: 1,
           },
           descentAscentMiddle: {
-            content: ['a', { container: ['b', null, 1, 1, 'left', 'middle', null, 1] }, 'c'],
+            content: ['a', { container: ['b', null, true, 1, 1, 'left', 'middle', null, 1] }, 'c'],
             scale: 1,
           },
           descentAscentTop: {
-            content: ['a', { container: ['b', null, 1, 1, 'left', 'top', null, 1] }, 'c'],
+            content: ['a', { container: ['b', null, true, 1, 1, 'left', 'top', null, 1] }, 'c'],
             scale: 1,
           },
           descentAscentMultiplier: {
-            content: ['a', { container: ['b', null, 1, 1, 'left', 0.2, null, 1] }, 'c'],
+            content: ['a', { container: ['b', null, true, 1, 1, 'left', 0.2, null, 1] }, 'c'],
             scale: 1,
           },
           fitWidth: {
-            content: ['a', { container: ['b', 1, null, null, 'left', 'baseline', 'width', 1] }, 'c'],
+            content: ['a', { container: ['b', 1, true, null, null, 'left', 'baseline', 'width', 1] }, 'c'],
             scale: 1,
           },
           fitHeight: {
-            content: ['a', { container: ['b', null, 1, 1, 'left', 'baseline', 'height', 1] }, 'c'],
+            content: ['a', { container: ['b', null, true, 1, 1, 'left', 'baseline', 'height', 1] }, 'c'],
             scale: 1,
           },
           fitContainWidth: {
-            content: ['a', { container: ['b', 1, 10, 10, 'left', 'baseline', 'contain', 1] }, 'c'],
+            content: ['a', { container: ['b', 1, true, 10, 10, 'left', 'baseline', 'contain', 1] }, 'c'],
             scale: 1,
           },
           fitContainHeight: {
-            content: ['a', { container: ['b', 10, 1, 1, 'left', 'baseline', 'contain', 1] }, 'c'],
+            content: ['a', { container: ['b', 10, true, 1, 1, 'left', 'baseline', 'contain', 1] }, 'c'],
             scale: 1,
           },
           scaleDefault: {
-            content: ['a', { container: ['b', null, null, null, 'left', 'baseline', null, 0.5] }, 'c'],
+            content: ['a', { container: ['b', null, true, null, null, 'left', 'baseline', null, 0.5] }, 'c'],
             scale: 1,
           },
           scaleFixedContainer: {
-            content: ['a', { container: ['b', 1, 1, 1, 'left', 'baseline', null, 0.5] }, 'c'],
+            content: ['a', { container: ['b', 1, true, 1, 1, 'left', 'baseline', null, 0.5] }, 'c'],
             scale: 1,
           },
         });
