@@ -61,6 +61,7 @@ docker_run() {
       --entrypoint $2 \
       figureone_dev
   fi
+}
 # title() {
 #   echo "${bold}${cyan}" $1 "Starting${reset}"
 # }
