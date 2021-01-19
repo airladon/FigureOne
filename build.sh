@@ -70,6 +70,8 @@ check_status() {
     then
     echo "${bold}${red}Build failed at${bold}${cyan}" $1 "${reset}"
     exit 1
+  else
+    echo "${bold}${green}Passed:${bold}" $1 "${reset}"
   fi
 }
 
