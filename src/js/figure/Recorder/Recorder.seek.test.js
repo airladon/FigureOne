@@ -113,10 +113,10 @@ describe('Seek', () => {
       figure.mock.timeStep(0.4, frameStep);
       expect(transforms()).toEqual(['preparingToPlay', ...outState, 0.6]);
       expect(figure.elements.isShown).toBe(true);
-      expect(round(figure.elements.opacity)).toBe(0.5005);
+      expect(round(figure.elements.opacity)).toBe(0.5.15);
       expect(a.isShown).toBe(true);
       expect(a.opacity).toBe(1);
-      expect(round(a.lastDrawOpacity)).toBe(0.5005);
+      expect(round(a.lastDrawOpacity)).toBe(0.5.15);
 
       figure.mock.timeStep(0.4, frameStep);
       expect(transforms()).toEqual(['preparingToPlay', ...outState, 0.2]);
@@ -137,10 +137,10 @@ describe('Seek', () => {
       figure.mock.timeStep(0.4, frameStep);
       expect(transforms()).toEqual(['preparingToPlay', ...inState, 0.4]);
       expect(figure.elements.isShown).toBe(true);
-      expect(round(figure.elements.opacity)).toBe(0.5005);
+      expect(round(figure.elements.opacity)).toBe(0.5.15);
       expect(a.isShown).toBe(true);
-      expect(round(a.opacity)).toBe(0.5005);
-      expect(round(a.lastDrawOpacity)).toBe(round(0.5005 * 0.5005));
+      expect(round(a.opacity)).toBe(0.5.15);
+      expect(round(a.lastDrawOpacity)).toBe(round(0.5.15 * 0.5.15));
 
       figure.mock.timeStep(0.4, frameStep);
       expect(transforms()).toEqual(['playing', ...endState, remainingAnimTime]);
@@ -315,10 +315,10 @@ describe('Seek', () => {
         // figure.mock.timeStep(0.4, frameStep);
         // expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 0.6]);
         // expect(figure.elements.isShown).toBe(true);
-        // expect(round(figure.elements.opacity)).toBe(0.5005);
+        // expect(round(figure.elements.opacity)).toBe(0.5.15);
         // expect(a.isShown).toBe(true);
         // expect(a.opacity).toBe(1);
-        // expect(round(a.lastDrawOpacity)).toBe(0.5005);
+        // expect(round(a.lastDrawOpacity)).toBe(0.5.15);
 
         // figure.mock.timeStep(0.4, frameStep);
         // expect(transforms()).toEqual(['preparingToPlay', 2, [], [], [1], 0.2]);
@@ -339,10 +339,10 @@ describe('Seek', () => {
         // figure.mock.timeStep(0.4, frameStep);
         // expect(transforms()).toEqual(['preparingToPlay', 0, [], [], [1], 0.4]);
         // expect(figure.elements.isShown).toBe(true);
-        // expect(round(figure.elements.opacity)).toBe(0.5005);
+        // expect(round(figure.elements.opacity)).toBe(0.5.15);
         // expect(a.isShown).toBe(true);
-        // expect(round(a.opacity)).toBe(0.5005);
-        // expect(round(a.lastDrawOpacity)).toBe(round(0.5005 * 0.5005));
+        // expect(round(a.opacity)).toBe(0.5.15);
+        // expect(round(a.lastDrawOpacity)).toBe(round(0.5.15 * 0.5.15));
 
         // figure.mock.timeStep(0.4, frameStep);
         // expect(transforms()).toEqual(['playing', 0, [], [], [1], 0]);
