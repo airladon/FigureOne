@@ -62,31 +62,40 @@ docker_run() {
       figureone_dev
   fi
 }
-# title() {
-#   echo "${bold}${cyan}" $1 "Starting${reset}"
-# }
-
-# check_build() {
-#   if [ $? != 0 ];
-#     then
-#     echo "${bold}${cyan}" $1 "${bold}${red}Failed${reset}"
-#     echo
-#     FAIL=1
-#     else
-#     echo "${bold}${cyan}" $1 "${bold}${green}Succeeded${reset}"
-#     echo
-#   fi
-# }
 
 
 # Check current build status and exit if in failure state
 check_status() {
-  if [ $FAIL != 0 ];
+  if [ "$FAIL" != "0" ];
     then
     echo "${bold}${red}Build failed at${bold}${cyan}" $1 "${reset}"
-    exit 1    
+    exit 1
   fi
 }
+
+if [ $1 ];
+then
+  echo "${bold}${cyan}==================== Version Check =====================${reset}"
+  if [ "$1" = "deploy" ];
+  then
+    DEPLOYED_VERSION=`npm show figureone version`
+    CURRENT_VERSION=`cat package.json \
+      | grep version \
+      | head -1 \
+      | awk -F: '{ print $2 }' \
+      | sed 's/[", ]//g'`
+    if [ "$CURRENT_VERSION" = "$DEPLOYED_VERSION" ];
+    then
+      echo
+      echo "Version No: " $CURRENT_VERSION " is the same as published version. Change it in package.json if you want to deploy."
+      echo
+      FAIL=1
+    fi
+    check_status "Version Check"
+  fi
+fi
+
+
 
 # Build docker image
 echo "${bold}${cyan}================= Building Image ===================${reset}"
@@ -137,6 +146,7 @@ check_status "Packaging"
 
 if [ $1 ];
 then
+  echo "${bold}${cyan}==================== Deploying =====================${reset}"
   if [ $1 = "deploy" ];
   then
     DEPLOYED_VERSION=`npm show figureone version`
