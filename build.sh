@@ -63,7 +63,7 @@ docker_run() {
   fi
 }
 
-
+FAIL=0
 # Check current build status and exit if in failure state
 check_status() {
   if [ "$FAIL" != "0" ];
@@ -102,8 +102,6 @@ echo "${bold}${cyan}================= Building Image ===================${reset}
 cp containers/figureone/Dockerfile Dockerfile
 docker build -t figureone_dev .
 rm Dockerfile
-
-FAIL=0
 
 docker_run "Dev Packaging" npm run webpack -- --env.mode=dev
 check_status "Dev Build"
