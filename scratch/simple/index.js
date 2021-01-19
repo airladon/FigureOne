@@ -5,15 +5,34 @@ const figure = new Fig.Figure({
   font: { size: 0.1 },
 });
 
-const [eqn] = figure.add({
+figure.add({ method: 'polygon', options: { radius: 0.01 } });
+figure.add({
+  name: 'eqn',
   method: 'equation',
   options: {
+    elements: {
+      equals1: ' = ',
+      equals2: ' = ',
+    },
+    formDefaults: { alignment: { fixTo: 'equals1', yAlign: -1.5 } },
     forms: {
-      form1: { frac: ['a', 'v1_vinculum', { frac: ['c', 'v2_vinculum', 'b'] }] },
-      form2: { frac: [['a', 'ef'], 'v1', { frac: ['c', 'v2', 'd'] }] },
+      0: {
+        lines: {
+          content: [
+            {
+              content: ['a_1', 'equals1', 'b', '_ + ', 'c'],
+              justify: 'equals1',
+            },
+            {
+              content: ['d', '_ - ', 'e', 'equals2', 'a_2'],
+              justify: 'equals2',
+            },
+          ],
+          space: 0.08,
+          justify: 'element',
+          yAlign: 'bottom',
+        },
+      },
     },
   },
 });
-eqn.animations.new()
-  .goToForm({ delay: 1, target: 'form2', animate: 'move' })
-  .start();

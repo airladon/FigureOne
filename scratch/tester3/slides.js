@@ -70,12 +70,12 @@ function addSlides() {
     disturbance: {
       onClick: () => disturb(medium),
       font: { color: color1 },
-      touchBorder: 0.2,
+      touchBorder: 0.1,
     },
     'first particle': {
       onClick: () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 }),
       font: { color: color0 },
-      touchBorder: 0.2,
+      touchBorder: 0.15,
     },
   };
   // ///////////////////////////////////////////////////////////////////////////
@@ -112,13 +112,13 @@ function addSlides() {
       disturbance: {
         onClick: () => disturb(medium),
         font: { color: color1 },
-        touchBorder: 0.2,
+        touchBorder: 0.15,
       },
     },
     text: [
       'A wave is a |disturbance| that propagates through a medium or field.',
       {
-        text: 'Touch the word |disturbance| or move the |first particle| manually.',
+        text: 'Touch the word |disturbance| or manually move the |first particle|.',
         font: { size: 0.08 },
         lineSpace: 0.2,
       },
@@ -230,7 +230,7 @@ function addSlides() {
           family: 'Times New Roman', style: 'italic', size: 0.17, color: color0,
         },
         onClick: () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 }),
-        touchBorder: 0.2,
+        touchBorder: 0.15,
       },
       x1: {
         text: 'x',
@@ -238,28 +238,44 @@ function addSlides() {
           family: 'Times New Roman', style: 'italic', size: 0.17, color: color1,
         },
         onClick: () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 }),
-        touchBorder: 0.2,
+        touchBorder: 0.15,
       },
     },
     text: [
       'Then the |disturbance| at |x1||r1| is the disturbance at |x0||r0| from time |t||1| ago.',
     ],
     show: ['x0', 'x1'],
-    enterState: () => {
+    enterStateCommon: () => {
       sideEqn.showForm('t11');
       sideEqn.setScenario('side');
       medium.custom.balls.highlight(['ball0', 'ball40']);
+      eqn.getElement('x0Box').onClick = () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 });
     },
     steadyState: () => {
-      eqn.getElement('x0Box').onClick = () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 });
       startDisturbances(medium);
-      sideEqn.showForm('t11');
-      sideEqn.setScenario('side');
+    },
+  });
+
+  slides.push({
+    show: ['x0', 'x1'],
+    fromForm: 'yx0t',
+    form: 'yx0tAndyx1t',
+    steadyState: () => {
+      startDisturbances(medium);
+    },
+  });
+
+  slides.push({
+    show: ['x0', 'x1'],
+    fromForm: 'yx0tAndyx1t',
+    form: 'yx0tAndft',
+    steadyState: () => {
+      startDisturbances(medium);
     },
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(1);
+  nav.goToSlide(7);
 }
 
 addSlides();

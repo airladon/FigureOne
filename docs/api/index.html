@@ -4910,6 +4910,16 @@
               
                 
                 <li><a
+                  href='#eqn_lineglyph'
+                  class="">
+                  EQN_LineGlyph
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#eqn_glyphs'
                   class="">
                   EQN_Glyphs
@@ -5033,16 +5043,6 @@
                   href='#eqn_lineglyphalign'
                   class="">
                   EQN_LineGlyphAlign
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#eqn_lineglyph'
-                  class="">
-                  EQN_LineGlyph
                   
                 </a>
                 
@@ -34704,15 +34704,13 @@ boilerplate
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
 figure.add({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
     <span class="hljs-attr">forms</span>: {
       <span class="hljs-number">1</span>: { <span class="hljs-attr">supSub</span>: [<span class="hljs-string">'x'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'a'</span>] },
     },
   },
-});
-figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>); *</pre>
+});</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example showing different super-sub script options</span>
@@ -34738,8 +34736,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchable();
-eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+eqn.setTouchable();</pre>
     
   
 
@@ -36687,16 +36684,8 @@ boilerplate
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// For examples, two bracket symbols are defined as equation elements</span>
-eqn.addElements({
-  <span class="hljs-attr">lb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'left'</span> }
-  <span class="hljs-attr">rb</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'bracket'</span>, <span class="hljs-attr">side</span>: <span class="hljs-string">'right'</span> }
-});</pre>
-    
-      
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Simple</span>
 figure.add({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
     <span class="hljs-attr">elements</span>: {
@@ -36707,8 +36696,7 @@ figure.add({
       <span class="hljs-number">1</span>: [<span class="hljs-string">'a'</span>, { <span class="hljs-attr">brac</span>: [<span class="hljs-string">'lb'</span>, [<span class="hljs-string">'b'</span>, <span class="hljs-string">'_ + '</span>, <span class="hljs-string">'c'</span>], <span class="hljs-string">'rb'</span>] }],
     },
   },
-});
-figure.elements._eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+});</pre>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Some different bracket examples</span>
@@ -36742,8 +36730,7 @@ figure.add({
 });
 <span class="hljs-keyword">const</span> eqn = figure.elements._eqn;
 eqn.onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> eqn.nextForm();
-eqn.setTouchable();
-eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
+eqn.setTouchable();</pre>
     
   
 
@@ -36772,8 +36759,7 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
   </div>
   
 
-  <p>Equation lines</p>
-<p><img src="./apiassets/eqn_lines.png"></p>
+  <p>Equation lines.</p>
 <p><img src="./apiassets/eqn_lines_anim.gif"></p>
 <p>Options can be an object, or an array in the property order below</p>
 <p>The equation lines function can split an equation into multiple lines.
@@ -39100,16 +39086,17 @@ figure.add({
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
     <span class="hljs-attr">forms</span>: {
-      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v1_vinculum'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'c'</span>, <span class="hljs-string">'v2_vinculum'</span>, <span class="hljs-string">'b'</span>] }] } * ,
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'v1_vinculum'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'c'</span>, <span class="hljs-string">'v2_vinculum'</span>, <span class="hljs-string">'b'</span>] }] },
       <span class="hljs-attr">form2</span>: { <span class="hljs-attr">frac</span>: [[<span class="hljs-string">'a'</span>, <span class="hljs-string">'ef'</span>], <span class="hljs-string">'v1'</span>, { <span class="hljs-attr">frac</span>: [<span class="hljs-string">'c'</span>, <span class="hljs-string">'v2'</span>, <span class="hljs-string">'d'</span>] }] },
     },
   },
 });
 eqn.animations.new()
   .goToForm({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">target</span>: <span class="hljs-string">'form2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
-  .start();
-
-<span class="hljs-comment">// Define inline with customization</span>
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline with customization</span>
 figure.add({
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
@@ -41391,7 +41378,7 @@ figure.add({
   <span class="hljs-attr">options</span>: {
     <span class="hljs-attr">forms</span>: {
       <span class="hljs-attr">form1</span>: { <span class="hljs-attr">bar</span>: [<span class="hljs-string">'a'</span>, { <span class="hljs-attr">bar</span>: { <span class="hljs-attr">side</span>: <span class="hljs-string">'top'</span> } }, <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.03</span>] },
-      <span class="hljs-attr">form2</span>: { <span class="hljs-attr">bar</span>: [[<span class="hljs-string">'a'</span>, <span class="hljs-string">'bc'</span>], { <span class="hljs-attr">bar</span>: { <span class="hljs-attr">side</span>: <span class="hljs-string">'top'</span> } }, <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.03</span>] } * ,
+      <span class="hljs-attr">form2</span>: { <span class="hljs-attr">bar</span>: [[<span class="hljs-string">'a'</span>, <span class="hljs-string">'bc'</span>], { <span class="hljs-attr">bar</span>: { <span class="hljs-attr">side</span>: <span class="hljs-string">'top'</span> } }, <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.03</span>] },
     },
   },
 });
@@ -61271,6 +61258,153 @@ separated from content by
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='eqn_lineglyph'>
+      EQN_LineGlyph
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>A glyph can be a line <a href="#eqn_linesymbol">EQN_LineSymbol</a> between some content and an
+annotation.</p>
+<p><img src="./apiassets/eqn_lineglyph.png"></p>
+<pre>
+
+                        aaaaa
+                        aaaaa
+                      g
+                    g
+                  g
+         CCCCCCCCC
+         CCCCCCCCC
+         CCCCCCCCC
+         CCCCCCCCC
+
+</pre>
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Properties</div>
+    <div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+          
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>content</span> <code class='quiet'>(<a href="#eqn_lineglyphalign">EQN_LineGlyphAlign</a>?)</code>
+          : alignment and spacing to content
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>annotation</span> <code class='quiet'>(<a href="#eqn_lineglyphalign">EQN_LineGlyphAlign</a>?)</code>
+          : alignment and spacing to annotation
+
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <span class='code bold'>annotationIndex</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
+          : annotation index to draw line to
+
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>figure.add({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">l</span>: {
+        <span class="hljs-attr">symbol</span>: <span class="hljs-string">'line'</span>,
+        <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span>,
+        <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.005</span>, <span class="hljs-number">0.005</span>],
+        <span class="hljs-attr">arrow</span>: { <span class="hljs-attr">start</span>: <span class="hljs-string">'barb'</span> },
+      },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-number">0</span>: {
+        <span class="hljs-attr">annotate</span>: {
+          <span class="hljs-attr">content</span>: <span class="hljs-string">'abc'</span>,
+          <span class="hljs-attr">annotation</span>: {
+            <span class="hljs-attr">content</span>: <span class="hljs-string">'def'</span>,
+            <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'right'</span>,
+            <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'top'</span>,
+            <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
+            <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
+            <span class="hljs-attr">scale</span>: <span class="hljs-number">0.6</span>,
+            <span class="hljs-attr">offset</span>: [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>],
+          },
+          <span class="hljs-attr">glyphs</span>: {
+            <span class="hljs-attr">line</span>: {
+              <span class="hljs-attr">annotationIndex</span>: <span class="hljs-number">0</span>,
+              <span class="hljs-attr">symbol</span>: <span class="hljs-string">'l'</span>,
+              <span class="hljs-attr">content</span>: {
+                <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
+                <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'top'</span>,
+                <span class="hljs-attr">space</span>: <span class="hljs-number">0.02</span>,
+              },
+              <span class="hljs-attr">annotation</span>: {
+                <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
+                <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
+                <span class="hljs-attr">space</span>: <span class="hljs-number">0.02</span>,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+});</pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='eqn_glyphs'>
       EQN_Glyphs
     </h3>
@@ -62467,153 +62601,6 @@ annotation.</p>
 
   
 
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='eqn_lineglyph'>
-      EQN_LineGlyph
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>A glyph can be a line <a href="#eqn_linesymbol">EQN_LineSymbol</a> between some content and an
-annotation.</p>
-<p><img src="./apiassets/eqn_lineglyph.png"></p>
-<pre>
-
-                        aaaaa
-                        aaaaa
-                      g
-                    g
-                  g
-         CCCCCCCCC
-         CCCCCCCCC
-         CCCCCCCCC
-         CCCCCCCCC
-
-</pre>
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>symbol</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-          
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>content</span> <code class='quiet'>(<a href="#eqn_lineglyphalign">EQN_LineGlyphAlign</a>?)</code>
-          : alignment and spacing to content
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>annotation</span> <code class='quiet'>(<a href="#eqn_lineglyphalign">EQN_LineGlyphAlign</a>?)</code>
-          : alignment and spacing to annotation
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>annotationIndex</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?)</code>
-          : annotation index to draw line to
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'>figure.add({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'eqn'</span>,
-  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
-  <span class="hljs-attr">options</span>: {
-    <span class="hljs-attr">elements</span>: {
-      <span class="hljs-attr">l</span>: {
-        <span class="hljs-attr">symbol</span>: <span class="hljs-string">'line'</span>,
-        <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span>,
-        <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.005</span>, <span class="hljs-number">0.005</span>],
-        <span class="hljs-attr">arrow</span>: { <span class="hljs-attr">start</span>: <span class="hljs-string">'barb'</span> },
-      },
-    },
-    <span class="hljs-attr">forms</span>: {
-      <span class="hljs-number">0</span>: {
-        <span class="hljs-attr">annotate</span>: {
-          <span class="hljs-attr">content</span>: <span class="hljs-string">'abc'</span>,
-          <span class="hljs-attr">annotation</span>: {
-            <span class="hljs-attr">content</span>: <span class="hljs-string">'def'</span>,
-            <span class="hljs-attr">xPosition</span>: <span class="hljs-string">'right'</span>,
-            <span class="hljs-attr">yPosition</span>: <span class="hljs-string">'top'</span>,
-            <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
-            <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
-            <span class="hljs-attr">scale</span>: <span class="hljs-number">0.6</span>,
-            <span class="hljs-attr">offset</span>: [<span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>],
-          },
-          <span class="hljs-attr">glyphs</span>: {
-            <span class="hljs-attr">line</span>: {
-              <span class="hljs-attr">annotationIndex</span>: <span class="hljs-number">0</span>,
-              <span class="hljs-attr">symbol</span>: <span class="hljs-string">'l'</span>,
-              <span class="hljs-attr">content</span>: {
-                <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
-                <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'top'</span>,
-                <span class="hljs-attr">space</span>: <span class="hljs-number">0.02</span>,
-              },
-              <span class="hljs-attr">annotation</span>: {
-                <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
-                <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
-                <span class="hljs-attr">space</span>: <span class="hljs-number">0.02</span>,
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-});</pre>
-    
   
 
   
