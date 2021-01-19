@@ -450,7 +450,15 @@ export type EQN_Scale = {
  *
  * ![](./apiassets/eqn_bracket.gif)
  *
- * Surround an equation phrase with brackets
+ * Surround an equation phrase with brackets.
+ *
+ * Symbols that can be used with bracket are:
+ * - {@link EQN_BarSymbol}
+ * - {@link EQN_ArrowSymbol}
+ * - {@link EQN_BraceSymbol}
+ * - {@link EQN_BracketSymbol}
+ * - {@link EQN_SquareBracketSymbol}
+ * - {@link EQN_AngleBracketSymbol}
  *
  * Options can be an object, or an array in the property order below
  *
@@ -717,7 +725,9 @@ export type EQN_Root = {
  *
  * ![](./apiassets/eqn_strike.gif)
  *
- * Overlay a strike symbol on an equation phrase
+ * Overlay a strike symbol on an equation phrase.
+ *
+ * Use with {@link EQN_Strike} symbol.
  *
  * Options can be an object, or an array in the property order below
  *
@@ -1945,6 +1955,8 @@ export type EQN_Comment = {
  * functions.
  *
  * ![](./apiassets/eqn_strikecomment.gif)
+ *
+ * Use with {@link EQN_Strike} symbol.
  *
  * Options can be an object, or an array in the property order below
  *

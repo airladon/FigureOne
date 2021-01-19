@@ -5,42 +5,15 @@ const figure = new Fig.Figure({
   font: { size: 0.1 },
 });
 
-
 // // Define in element
 // figure.add({
 //   method: 'equation',
 //   options: {
 //     elements: {
-//       int: { symbol: 'int' },
+//       r: { symbol: 'radical' },
 //     },
 //     forms: {
-//       form1: { int: ['int', 'x dx', 'a', 'b'] },
-//     },
-//   },
-// });
-
-// // Triple Integral
-// figure.add({
-//   method: 'equation',
-//   options: {
-//     elements: {
-//       int: { symbol: 'int', num: 3 },
-//     },
-//     forms: {
-//       form1: { int: ['int', 'dx dy dz'] },
-//     },
-//   },
-// });
-
-// // Line Integral
-// figure.add({
-//   method: 'equation',
-//   options: {
-//     elements: {
-//       int: { symbol: 'int', type: 'line' },
-//     },
-//     forms: {
-//       form1: { int: ['int', 'r dr'] },
+//       form1: { root: ['r', 'a', false, 0.05] },
 //     },
 //   },
 // });
@@ -50,7 +23,7 @@ const figure = new Fig.Figure({
 //   method: 'equation',
 //   options: {
 //     forms: {
-//       form1: { int: ['int', 'x dx', 'a', 'b'] },
+//       form1: { root: ['radical', 'a', false, 0.05] },
 //     },
 //   },
 // });
@@ -60,8 +33,8 @@ const figure = new Fig.Figure({
 //   method: 'equation',
 //   options: {
 //     forms: {
-//       form1: { int: ['int', 'x dx', 'a', 'b'] },
-//       form2: { int: ['int', 'y dy', 'a', 'b'] },
+//       form1: { root: ['r1_radical', 'a', false, 0.05] },
+//       form2: { root: ['r1', ['a', 'b'], false, 0.05] },
 //     },
 //   },
 // });
@@ -69,13 +42,12 @@ const figure = new Fig.Figure({
 //   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
 //   .start();
 
-
 // Define inline with customization
 figure.add({
   method: 'equation',
   options: {
     forms: {
-      form1: { int: [{ int: { serif: false } }, 'x dx', 'a', 'b'] },
+      form1: { root: [{ radical: { lineWidth: 0.005 } }, 'a', false, 0.05] },
     },
   },
 });
