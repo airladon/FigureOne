@@ -23,12 +23,18 @@ function searchPath(directory, matcher = null, notMatcher = null) {
   });
 }
 
-function getFiles(path, matcher = null, notMatcher = null) {
-  if (!fs.statSync(path).isDirectory()) {
-    files.push(Path.resolve(path));
-  } else {
-    searchPath(path, matcher, notMatcher);
+function getFiles(pathOrPaths, matcher = null, notMatcher = null) {
+  let paths = pathOrPaths;
+  if (!Array.isArray(pathOrPaths)) {
+    paths = [pathOrPaths];
   }
+  paths.forEach((path) => {
+    if (!fs.statSync(path).isDirectory()) {
+      files.push(Path.resolve(path));
+    } else {
+      searchPath(path, matcher, notMatcher);
+    }
+  });
   return files;
 }
 

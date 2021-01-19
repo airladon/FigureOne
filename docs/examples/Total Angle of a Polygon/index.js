@@ -241,7 +241,7 @@ figure.add([
             get('eqn.newBox').isTouchable = true;
             get('eqn.oldBox').isTouchable = true;
             get('button').setLabel('Restart');
-          }
+          },
         },
       },
       formSeries: ['0', '1', '2', '3', '4', '5'],

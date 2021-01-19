@@ -16,6 +16,7 @@ import Fraction from './Elements/Fraction';
 // eslint-disable-next-line import/no-cycle
 import EquationForm from './EquationForm';
 import Matrix from './Elements/Matrix';
+import Lines from './Elements/Lines';
 import Scale from './Elements/Scale';
 import Container from './Elements/Container';
 import BaseAnnotationFunction from './Elements/BaseAnnotationFunction';
@@ -73,7 +74,8 @@ export function getFigureElement(
  *  - `{ bar: `{@link EQN_Bar} `}`
  *  - `{ scale: `{@link EQN_Scale} `}`
  *  - `{ container: `{@link EQN_Container} `}`
- *  - `{ matrix: `{@link EQN_Matrix} `}`
+ *  - `{ matrix: `{@link EQN_Matrix} `}
+ *  - `{ lines: `{@link EQN_Lines} `}`
  *  - `{ int: `{@link EQN_Integral} `}`
  *  - `{ sumOf: `{@link EQN_SumOf} `}`
  *  - `{ prodOf: `{@link EQN_ProdOf} `}`
@@ -83,18 +85,31 @@ export function getFigureElement(
  *
  *
  * @example
- * forms: {
- *   form1: 'a'
- *   form2: ['a', 'equals', 'b']
- *   form3: [{
- *     frac: {
- *       numerator: 'a',
- *       symbol: 'v',
- *       denominator: '1'
+ * figure.add({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: { equals: ' = ' },
+ *     forms: {
+ *       form1: 'a',
+ *       form2: ['a', 'equals', 'b'],
+ *       form3: [{
+ *         frac: {
+ *           numerator: 'a',
+ *           symbol: 'vinculum',
+ *           denominator: 'c',
+ *         },
+ *       }, 'equals', 'b'],
+ *       form4: { frac: ['a', 'vinculum', 'c'] },
  *     },
- *   }, 'equals', 'b'],
- *   form4: [{ frac: ['a', 'v', '1'], 'equals', 'b'}],
- * },
+ *   },
+ * });
+ *
+ * figure.getElement('eqn').animations.new()
+ *   .goToForm({ target: 'form2', animate: 'move', delay: 1 })
+ *   .goToForm({ target: 'form3', animate: 'move', delay: 1 })
+ *   .goToForm({ target: 'form4', animate: 'move', delay: 1 })
+ *   .start();
  */
 export type TypeEquationPhrase =
   string
@@ -118,6 +133,7 @@ export type TypeEquationPhrase =
   | { scale: EQN_Scale }
   | { container: EQN_Container }
   | { matrix: EQN_Matrix }
+  | { matrix: EQN_Lines }
   | { int: EQN_Integral }
   | { sumOf: EQN_SumOf }
   | { prodOf: EQN_ProdOf }
@@ -142,6 +158,7 @@ export type TypeEquationPhrase =
  *
  * @property {TypeEquationPhrase} content
  * @property {number} [width] (`null`)
+ * @property {boolean} [inSize] (`true)
  * @property {number} [descent] (`null`)
  * @property {number} [ascent] (`null`)
  * @property {'left' | 'center' | 'right' | number} [xAlign] (`'center'`)
@@ -182,12 +199,12 @@ export type TypeEquationPhrase =
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  *
  * @example
  * // Create equation object then add to figure
- * const eqn = figure.primitives.equation({
+ * const eqn = figure.collections.equation({
  *   forms: {
  *     1: [
  *       'length',
@@ -201,12 +218,13 @@ export type TypeEquationPhrase =
  * });
  * figure.add('eqn', eqn);
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Container = {
   content: TypeEquationPhrase,
   width?: number,
+  inSize?: boolean,
   descent?: number,
   ascent?: number,
   xAlign?: 'left' | 'center' | 'right' | number,
@@ -217,6 +235,7 @@ export type EQN_Container = {
 } | [
   TypeEquationPhrase,
   ?number,
+  ?boolean,
   ?number,
   ?number,
   ?'left' | 'center' | 'right' | number,
@@ -231,7 +250,8 @@ export type EQN_Container = {
  *
  * ![](./apiassets/eqn_fraction.gif)
  *
- * A fraction has a numerator, denominator and vinculum symbol (line).
+ * A fraction has a numerator and denominator separated by a vinculum
+ * symbol {@link EQN_VinculumSymbol}.
  *
  * Options can be an object, or an array in the property order below
  *
@@ -298,12 +318,12 @@ export type EQN_Container = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  *
  * @example
  * // Create equation object then add to figure
- * const eqn = figure.primitives.equation({
+ * const eqn = figure.collections.equation({
  *   elements: {
  *       v1: { symbol: 'vinculum' },
  *       v2: { symbol: 'vinculum' },
@@ -330,7 +350,7 @@ export type EQN_Container = {
  * });
  * figure.add('eqn', eqn);
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Fraction = {
@@ -415,7 +435,7 @@ export type EQN_Fraction = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Scale = {
@@ -433,7 +453,15 @@ export type EQN_Scale = {
  *
  * ![](./apiassets/eqn_bracket.gif)
  *
- * Surround an equation phrase with brackets
+ * Surround an equation phrase with brackets.
+ *
+ * Symbols that can be used with bracket are:
+ * - {@link EQN_BarSymbol}
+ * - {@link EQN_ArrowSymbol}
+ * - {@link EQN_BraceSymbol}
+ * - {@link EQN_BracketSymbol}
+ * - {@link EQN_SquareBracketSymbol}
+ * - {@link EQN_AngleBracketSymbol}
  *
  * Options can be an object, or an array in the property order below
  *
@@ -462,12 +490,6 @@ export type EQN_Scale = {
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
- * @example
- * // For examples, two bracket symbols are defined as equation elements
- * eqn.addElements({
- *   lb: { symbol: 'bracket', side: 'left' }
- *   rb: { symbol: 'bracket', side: 'right' }
- * });
  *
  * @see To test examples, append them to the
  * <a href="#equation-boilerplate">boilerplate</a>
@@ -475,7 +497,6 @@ export type EQN_Scale = {
  * @example
  * // Simple
  * figure.add({
- *   name: 'eqn',
  *   method: 'equation',
  *   options: {
  *     elements: {
@@ -487,7 +508,6 @@ export type EQN_Scale = {
  *     },
  *   },
  * });
- * figure.elements._eqn.showForm('1');
  *
  * @example
  * // Some different bracket examples
@@ -521,8 +541,7 @@ export type EQN_Scale = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
- * eqn.showForm('1');
+ * eqn.setTouchable();
  */
 
 export type EQN_Bracket = {
@@ -561,8 +580,8 @@ export type EQN_Bracket = {
  *
  * ![](./apiassets/eqn_root.gif)
  *
- * Surround an equation phrase with a radical symbol and add a custom root if
- * needed
+ * Surround an equation phrase with a radical symbol {@link EQN_RadicalSymbol}
+ * and add a custom root if needed
  *
  * Options can be an object, or an array in the property order below.
  *
@@ -634,12 +653,12 @@ export type EQN_Bracket = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  *
  * @example
  * // Create equation object then add to figure
- * const eqn = figure.primitives.equation({
+ * const eqn = figure.collections.equation({
  *   elements: {
  *     r: { symbol: 'radical' },
  *     plus: '  +  ',
@@ -661,7 +680,7 @@ export type EQN_Bracket = {
  * });
  * figure.add('eqn', eqn);
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 
@@ -700,7 +719,9 @@ export type EQN_Root = {
  *
  * ![](./apiassets/eqn_strike.gif)
  *
- * Overlay a strike symbol on an equation phrase
+ * Overlay a strike symbol on an equation phrase.
+ *
+ * Use with {@link EQN_Strike} symbol.
  *
  * Options can be an object, or an array in the property order below
  *
@@ -782,7 +803,7 @@ export type EQN_Root = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Strike = {
@@ -814,7 +835,8 @@ export type EQN_Strike = {
  *
  * ![](./apiassets/eqn_box.gif)
  *
- * Place a box symbol around an equation phrase
+ * Place a {@link EQN_BoxSymbol} around an equation phrase
+ *
  *
  * Options can be an object, or an array in the property order below
  *
@@ -901,7 +923,7 @@ export type EQN_Strike = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Box = {
@@ -977,7 +999,15 @@ export type EQN_TouchBox = {
  *
  * ![](./apiassets/eqn_bar.gif)
  *
- * Place a bar (or bracket) symbol to the side of an equation phrase
+ * Place a bar (or bracket) symbol to the side of an equation phrase.
+ *
+ * Symbols that can be used with bar are:
+ * - {@link EQN_BarSymbol}
+ * - {@link EQN_ArrowSymbol}
+ * - {@link EQN_BraceSymbol}
+ * - {@link EQN_BracketSymbol}
+ * - {@link EQN_SquareBracketSymbol}
+ * - {@link EQN_AngleBracketSymbol}
  *
  * Options can be an object, or an array in the property order below
  *
@@ -990,12 +1020,13 @@ export type EQN_TouchBox = {
  * @property {number} [length] total length of symbol (overrides `overhang`)
  * @property {number} [left] amount symbol extends beyond content to the left
  * (overrides `overhang` and `length`, and only for side `'top'` or `'bottom'`)
- * @property {number} [left] amount symbol extends beyond content to the right
+ * @property {number} [right] amount symbol extends beyond content to the right
  * (overrides `overhang` and `length`, and only for side `'top'` or `'bottom'`)
  * @property {number} [top] amount symbol extends beyond content to the top
  * (overrides `overhang` and `length`, and only for side `'left'` or `'right'`)
- * @property {number} [top] amount symbol extends beyond content to the bottom
- * (overrides `overhang` and `length`, and only for side `'left'` or `'right'`)
+ * @property {number} [bottom] amount symbol extends beyond content to the
+ * bottom (overrides `overhang` and `length`, and only for side `'left'` or
+ * `'right'`)
  * @property {'left' | 'right' | 'top' | 'bottom'} [side] (`top`)
  * @property {number} [minContentHeight] custom min content height for auto
  * symbol sizing when side is `'top'` or `'bottom'`
@@ -1075,7 +1106,7 @@ export type EQN_TouchBox = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Bar = {
@@ -1123,6 +1154,8 @@ export type EQN_Bar = {
  * ![](./apiassets/eqn_integral.gif)
  *
  * Place an integral (with optional limits) before an equation phrase
+ *
+ * Use with a {@link EQN_IntegralSymbol} symbol.
  *
  * Options can be an object, or an array in the property order below.
  *
@@ -1238,7 +1271,7 @@ export type EQN_Bar = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Integral = {
@@ -1304,7 +1337,8 @@ export type EQN_Integral = {
  *
  * ![](./apiassets/eqn_sumof.gif)
  *
- * Place an equation phrase in a sum of operation
+ * Place an equation phrase in a sum of operation with the symbol
+ * {@link EQN_SumSymbol}.
  *
  * Options can be an object, or an array in the property order below
  *
@@ -1388,7 +1422,7 @@ export type EQN_Integral = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_SumOf = {
@@ -1434,7 +1468,8 @@ export type EQN_SumOf = {
 ];
 
 /**
- * Equation product of
+ * Place an equation phrase in a product of operation with the symbol
+ * {@link EQN_ProdSymbol}.
  *
  * ![](./apiassets/eqn_prodof.gif)
  *
@@ -1522,7 +1557,7 @@ export type EQN_SumOf = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_ProdOf = {
@@ -1628,7 +1663,7 @@ export type EQN_ProdOf = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Subscript = {
@@ -1698,7 +1733,7 @@ export type EQN_Subscript = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Superscript = {
@@ -1737,7 +1772,6 @@ export type EQN_Superscript = {
  * @example
  * // Simple
  * figure.add({
- *   name: 'eqn',
  *   method: 'equation',
  *   options: {
  *     forms: {
@@ -1745,7 +1779,6 @@ export type EQN_Superscript = {
  *     },
  *   },
  * });
- * figure.elements._eqn.showForm('1'); *
  *
  * @example
  * // Example showing different super-sub script options
@@ -1771,8 +1804,7 @@ export type EQN_Superscript = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
- * eqn.showForm('1');
+ * eqn.setTouchable();
  */
 export type EQN_SuperscriptSubscript = {
   content: TypeEquationPhrase;
@@ -1882,7 +1914,7 @@ export type EQN_SuperscriptSubscript = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Comment = {
@@ -1914,6 +1946,8 @@ export type EQN_Comment = {
  * functions.
  *
  * ![](./apiassets/eqn_strikecomment.gif)
+ *
+ * Use with {@link EQN_Strike} symbol.
  *
  * Options can be an object, or an array in the property order below
  *
@@ -1983,7 +2017,7 @@ export type EQN_Comment = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_StrikeComment = {
@@ -2065,7 +2099,7 @@ export type EQN_StrikeComment = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Pad = {
@@ -2132,7 +2166,7 @@ export type EQN_Pad = {
  * figure.elements._eqn.showForm('1');
  *
  * @example
- * // Some different bar examples
+ * // Some different equation examples
  * figure.add({
  *   name: 'eqn',
  *   method: 'equation',
@@ -2185,7 +2219,7 @@ export type EQN_Pad = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Matrix = {
@@ -2214,6 +2248,157 @@ export type EQN_Matrix = {
 
 
 /**
+ * Single equation line definition
+ *
+ * Overrides default values of `baselineSpace` and `space` from
+ * {@link EQN_Lines}.
+ *
+ * Use `justify` to define a specific element of the line to align the other
+ * lines with.
+ *
+ * @property {TypeEquationPhrase} content Array of equation
+ * phrases or equation line objects
+ * @property {string} [justify] when {@link EQN_Lines}`.justify` is `'element'`,
+ * use this property to define which element of the line to justify with. If
+ * no element is specified, then left justification will be used.
+ * @property {number} [space] default space between descent of previous line and
+ * ascent of the this line (`0`).
+ * @property {number | null} [baselineSpace] default space between baseline of
+ * previous line and ascent of this line. If not `null` then will override
+ * `space` (`null`).
+ * @property {number} [offset] x Offset of line from justification position
+ * (`0`)
+ *
+ * @see {@link EQN_Lines}
+ *
+ */
+export type EQN_Line = {
+  content: TypeEquationPhrase,
+  baselineSpace?: null | number,
+  space?: number,
+  justify?: string,
+  offset?: number,
+}
+
+/**
+ * Equation lines.
+ *
+ * ![](./apiassets/eqn_lines_anim.gif)
+ *
+ * Options can be an object, or an array in the property order below
+ *
+ * The equation lines function can split an equation into multiple lines.
+ * This might be because one line is too long, or it might be convenient to
+ * display different forms of the same equation simultaneously on different
+ * lines and then animate between them.
+ *
+ * Lines can be justified to the left, center or right, or lines can be aligned
+ * with a specific element from each line (for instance an equals sign). To
+ * justify to a specific element, use `justify: 'element'` and then define the
+ * element name in the `justify` property of each line.
+ *
+ * Lines can be aligned in y with either the top most part of the top line, the
+ * bottom most part of the bottom line, the middle of the lines or any of the
+ * line's baselines.
+ *
+ * Spacing between lines is defined as either the space between the lowest
+ * point (descent) of one line to the highest point (ascent) of the next,
+ * or as the space between line baselines.
+ * @property {Array<EQN_Line | TypeEquationPhrase>} content Array of equation
+ * phrases or equation line objects
+ * @property {'left' | 'center' | 'right' | 'element'} [justify] how to align
+ * the lines in x. Use 'element' to align the lines with a specific element
+ * from each line (that is defined with the `justify` property in each line)
+ * (`'left'`)
+ * @property {number | null} [baselineSpace] default space between baselines
+ * of lines. If not `null` then will override `space` (`null`).
+ * @property {number} [space] default space between descent of one line and
+ * ascent of the next line (`0`).
+ * @property {'bottom' | 'middle' | 'top' | number} [yAlign] How to align the
+ * lines in y. `number` can be any line index, and it will align the baseline
+ * of that line. So, using `0` will align the first line's baseline. (`0`)
+ * @property {boolean} [fullContentBounds] use full bounds of content,
+ * overriding any `inSize=false` properties in the content (`false`)
+ *
+ * @see To test examples, append them to the
+ * <a href="#equation-boilerplate">boilerplate</a>
+ *
+ * @example
+ * // Two lines, array definition
+ * figure.add({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       0: {
+ *         lines: [
+ *           [
+ *             ['a', '_ = ', 'b', '_ + _1', 'c', '_ - _1', 'd'],
+ *             ['_ + _2', 'e', '_ - _2', 'f'],
+ *           ],
+ *           'right',
+ *           0.2,
+ *         ],
+ *       },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Two lines animating to 1
+ * figure.add({
+ *   name: 'eqn',
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       equals1: ' = ',
+ *       equals2: ' = ',
+ *     },
+ *     forms: {
+ *       0: {
+ *         lines: {
+ *           content: [
+ *             {
+ *               content: ['a_1', 'equals1', 'b', '_ + ', 'c'],
+ *               justify: 'equals1',
+ *             },
+ *             {
+ *               content: ['d', '_ - ', 'e', 'equals2', 'a_2'],
+ *               justify: 'equals2',
+ *             },
+ *           ],
+ *           space: 0.08,
+ *           justify: 'element',
+ *         },
+ *       },
+ *       1: ['d', '_ - ', 'e', 'equals1', 'b', '_ + ', 'c'],
+ *     },
+ *   },
+ * });
+ *
+ * figure.getElement('eqn').showForm(0);
+ * figure.getElement('eqn').animations.new()
+ *   .goToForm({
+ *     delay: 1, target: '1', duration: 1, animate: 'move',
+ *   })
+ *   .start();
+ */
+export type EQN_Lines = {
+  content: Array<TypeEquationPhrase | EQN_Line>,
+  justify?: 'left' | 'right' | 'center' | 'element',
+  baselineSpace?: null | number,
+  space?: number,
+  yAlign?: 'bottom' | 'top' | 'middle' | number,
+  fullContentBounds?: boolean,
+};
+
+/**
+ * Annotation options object.
+ *
+ * ![](./apiassets/eqn_annotation_1.png)
+ *
+ * ![](./apiassets/eqn_annotation_2.png)
+ *
  * An annotation's layout is defined by its *position* and *alignement*.
  * For instance, an annotation at the top right of the content:
  * <pre>
@@ -2257,22 +2442,56 @@ export type EQN_Matrix = {
  * suggested position, alignment and offset of an annotation with some name. If
  * this name is defined here, then `xPosition`, `yPosition`, `xAlign`, `yAlign`
  * and `offset` will be overwritten with the glyph's suggestion.
+ *
  * @example
- *  annotate: {
- *    content: 'a',
- *    annotation: {
- *      content: 'b',
- *      xPosition: 'right',
- *      yPosition: 'top',
- *      xAlign: 'left',
- *      yAlign: 'bottom',
- *      offset: [0, 0],
- *      scale: 0.5,
- *      inSize: true,
- *      fullContentBounds: false,
- *      // reference: 'root'       // only used when annotating special glyphs
- *    },
- *  },
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: {
+ *         annotate: {
+ *           content: 'a',
+ *           annotation: {
+ *             content: 'b',
+ *             xPosition: 'left',
+ *             yPosition: 'top',
+ *             xAlign: 'right',
+ *             yAlign: 'bottom',
+ *             scale: 0.5,
+ *           },
+ *         },
+ *       },
+ *     },
+ *   },
+ * });
+ *
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: {
+ *         annotate: {
+ *           content: 'a',
+ *           annotations: [
+ *             {
+ *               content: 'b',
+ *               xPosition: 'left',
+ *               yPosition: 'bottom',
+ *               xAlign: 'right',
+ *               yAlign: 'top',
+ *               scale: 0.5,
+ *             },
+ *             {
+ *               content: 'c',
+ *               offset: [0, 0.05],
+ *               scale: 0.5,
+ *             },
+ *           ],
+ *         },
+ *       },
+ *     },
+ *   },
+ * });
  */
 export type EQN_Annotation = {
   xPosition: 'left' | 'center' | 'right' | number,
@@ -2288,6 +2507,10 @@ export type EQN_Annotation = {
 };
 
 /**
+ * Encompass glyph options object.
+ *
+ * ![](./apiassets/eqn_encompass_glyph.png)
+ *
  * A glyph can encompass (surround or overlay) an equation phrase (*content*). The glyph
  * can also be annotated.
  * <pre>
@@ -2316,19 +2539,31 @@ export type EQN_Annotation = {
  * left
  * @example
  *  // surrounding content with a box glyph
- * annotate: {
- *   content: 'a',
- *   glyphs: {
- *     encompass: {
- *       symbol: 'box',
- *       space: 0.1,     // e.g. only, this will be overwritten by next props
- *       topSpace: 0.1,
- *       rightSpace: 0.1,
- *       bottomSpace: 0.1,
- *       leftSpace: 0.1,
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       box: { symbol: 'box', lineWidth: 0.005 },
+ *     },
+ *     forms: {
+ *       form1: {
+ *         annotate: {
+ *           content: 'a',
+ *           glyphs: {
+ *             encompass: {
+ *               symbol: 'box',
+ *               space: 0.1, // e.g. only, this will be overwritten by next props
+ *               topSpace: 0.1,
+ *               rightSpace: 0.1,
+ *               bottomSpace: 0.1,
+ *               leftSpace: 0.1,
+ *             },
+ *           },
+ *         },
+ *       },
  *     },
  *   },
- * },
+ * });
  */
 export type EQN_EncompassGlyph = {
   symbol?: string,
@@ -2342,6 +2577,14 @@ export type EQN_EncompassGlyph = {
 };
 
 /**
+ * Left/Right glyph options object.
+ *
+ * ![](./apiassets/eqn_leftrightglyph1.png)
+ *
+ * ![](./apiassets/eqn_leftrightglyph2.png)
+ *
+ * ![](./apiassets/eqn_leftrightglyph3.png)
+ *
  * A glyph can be to the left or right of an equation phrase (*content*).
  * The glyph can also be annotated.
  * <pre>
@@ -2361,7 +2604,9 @@ export type EQN_EncompassGlyph = {
  * @property {number} [overhang] amount glyph extends above content top and
  * below content bottom (`0`)
  * @property {number} [topSpace] amount glyph extends above content top
+ * (overrids `overhang`)
  * @property {number} [bottomSpace] amount glyph extends below content bottom
+ * (overrids `overhang`)
  * @property {number} [minContentHeight] force min content height for auto
  * glyph scaling
  * @property {number} [minContentDescent] force min content descent for auto
@@ -2369,33 +2614,121 @@ export type EQN_EncompassGlyph = {
  * @property {number} [minContentAscent] force min content ascent for auto
  * scaling
  * @property {number} [descent] force descent of glyph
- * @property {number} [height] force height of glyph
+ * @property {number} [height] force height of glyph (overrides `overhang`,
+ * `topSpace`, `bottomSpace`)
  * @property {number} [yOffset] offset glyph in y (`0`)
  * @property {boolean} [annotationsOverContent] `true` means only glyph is
  * separated from content by `space` and not annotations (false`)
+ *
  * @example
- * // Define glyph symbol
- * eqn.addElements({
- *   lb: { symbol: 'squareBracket', side: 'left' },
- * });
- *  // surrounding content with a box glyph
- * annotate: {
- *   content: 'a',
- *   glyphs: {
- *     left: {
- *       symbol: 'lb',
- *       space: 0.1,
- *       overhang: 0.2,
- *       topSpace: 0.1,
- *       bottomSpace: 0.1,
- *       minContentHeight: 0.3,
- *       minContentDescent: 0.1,
- *       descent: 0.1,
- *       height: 0.3,
- *       yOffset: 0,
- *       annotationsOverContent: true,
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       rb: { symbol: 'angleBracket', side: 'right', width: 0.1 },
+ *     },
+ *     forms: {
+ *       form1: {
+ *         annotate: {
+ *           content: 'a',
+ *           glyphs: {
+ *             right: {
+ *               symbol: 'rb',
+ *               space: 0.05,
+ *               overhang: 0.1,
+ *             },
+ *           },
+ *         },
+ *       },
+ *     },
  *   },
- * },
+ * });
+ *
+ * @example
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       arrow: { symbol: 'arrow', direction: 'down' },
+ *     },
+ *     forms: {
+ *       form1: {
+ *         annotate: {
+ *           content: 'a',
+ *           glyphs: {
+ *             left: {
+ *               symbol: 'arrow',
+ *               space: 0.05,
+ *               overhang: 0.1,
+ *               annotations: [
+ *                 {
+ *                   content: 'b',
+ *                   xPosition: 'center',
+ *                   yPosition: 'top',
+ *                   xAlign: 'center',
+ *                   yAlign: 'bottom',
+ *                   scale: 0.7,
+ *                   offset: [0, 0.05],
+ *                 },
+ *                 {
+ *                   content: 'n',
+ *                   xPosition: 'center',
+ *                   yPosition: 'bottom',
+ *                   xAlign: 'center',
+ *                   yAlign: 'top',
+ *                   scale: 0.7,
+ *                   offset: [0, -0.05],
+ *                 },
+ *               ],
+ *             },
+ *           },
+ *         },
+ *       },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       brace: { symbol: 'brace', side: 'right', width: 0.05 },
+ *     },
+ *     forms: {
+ *       form1: {
+ *         annotate: {
+ *           content: 'c',
+ *           glyphs: {
+ *             left: {
+ *               symbol: 'brace',
+ *               space: 0.05,
+ *               overhang: 0.2,
+ *               annotations: [
+ *                 {
+ *                   content: 'a',
+ *                   xPosition: 'left',
+ *                   yPosition: 'top',
+ *                   xAlign: 'right',
+ *                   yAlign: 'middle',
+ *                   offset: [-0.05, 0],
+ *                 },
+ *                 {
+ *                   content: 'b',
+ *                   xPosition: 'left',
+ *                   yPosition: 'bottom',
+ *                   xAlign: 'right',
+ *                   yAlign: 'middle',
+ *                   offset: [-0.05, 0],
+ *                 },
+ *               ],
+ *             },
+ *           },
+ *         },
+ *       },
+ *     },
+ *   },
+ * });
  */
 export type EQN_LeftRightGlyph = {
   symbol?: string,
@@ -2415,6 +2748,12 @@ export type EQN_LeftRightGlyph = {
 };
 
 /**
+ * Top/Bottom glyph options object.
+ *
+ * ![](./apiassets/eqn_topbottomglyph1.png)
+ *
+ * ![](./apiassets/eqn_topbottomglyph2.png)
+ *
  * A glyph can be to the top or bottom of an equation phrase (*content*).
  * The glyph can also be annotated.
  * <pre>
@@ -2446,25 +2785,76 @@ export type EQN_LeftRightGlyph = {
  * @property {boolean} [annotationsOverContent] `true` means only glyph is
  * separated from content by `space` and not annotations (false`)
  * @example
- * // Define glyph symbol
- * eqn.addElements({
- *   lb: { symbol: 'squareBracket', side: 'left' },
- * });
- *  // surrounding content with a box glyph
- * annotate: {
- *   content: 'a',
- *   glyphs: {
- *     left: {
- *       symbol: 'lb',
- *       space: 0.1,
- *       overhang: 0.2,
- *       width: 0.3,
- *       leftSpace: 0.1,
- *       rightSpace: 0.1,
- *       xOffset: 0,
- *       annotationsOverContent: true,
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       rarrow: { symbol: 'arrow', direction: 'right' },
+ *       larrow: { symbol: 'arrow', direction: 'left' },
+ *     },
+ *     forms: {
+ *       form1: {
+ *         annotate: {
+ *           content: 'a',
+ *           glyphs: {
+ *             top: {
+ *               symbol: 'rarrow',
+ *               space: 0.05,
+ *               overhang: 0.1,
+ *             },
+ *             bottom: {
+ *               symbol: 'larrow',
+ *               space: 0.05,
+ *               overhang: 0.02,
+ *             },
+ *           },
+ *         },
+ *       },
+ *     },
  *   },
- * },
+ * });
+ *
+ * @example
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       brace: { symbol: 'brace', side: 'top' },
+ *     },
+ *     forms: {
+ *       form1: {
+ *         annotate: {
+ *           content: ['2_1', 'x_1'],
+ *           glyphs: {
+ *             bottom: {
+ *               symbol: 'brace',
+ *               space: 0.05,
+ *               overhang: 0.2,
+ *               annotations: [
+ *                 {
+ *                   content: '2_2',
+ *                   xPosition: 'left',
+ *                   yPosition: 'bottom',
+ *                   xAlign: 'center',
+ *                   yAlign: 'baseline',
+ *                   offset: [0, -0.2],
+ *                 },
+ *                 {
+ *                   content: 'x_2',
+ *                   xPosition: 'right',
+ *                   yPosition: 'bottom',
+ *                   xAlign: 'center',
+ *                   yAlign: 'baseline',
+ *                   offset: [0, -0.2],
+ *                 },
+ *               ],
+ *             },
+ *           },
+ *         },
+ *       },
+ *     },
+ *   },
+ * });
  */
 export type EQN_TopBottomGlyph = {
   symbol?: string,
@@ -2494,7 +2884,11 @@ export type EQN_LineGlyphAlign = {
 }
 
 /**
- * A glyph can be a line between the content and an annotation
+ * A glyph can be a line {@link EQN_LineSymbol} between some content and an
+ * annotation.
+ *
+ * ![](./apiassets/eqn_lineglyph.png)
+ *
  * <pre>
  *
  *                         aaaaa
@@ -2519,7 +2913,12 @@ export type EQN_LineGlyphAlign = {
  *   method: 'equation',
  *   options: {
  *     elements: {
- *       line: { symbol: 'line', width: 0.005, dash: [0.01, 0.01] },
+ *       l: {
+ *         symbol: 'line',
+ *         width: 0.005,
+ *         dash: [0.005, 0.005],
+ *         arrow: { start: 'barb' },
+ *       },
  *     },
  *     forms: {
  *       0: {
@@ -2536,14 +2935,14 @@ export type EQN_LineGlyphAlign = {
  *           },
  *           glyphs: {
  *             line: {
- *               annotation: 0,
- *               symbol: 'line',
+ *               annotationIndex: 0,
+ *               symbol: 'l',
  *               content: {
  *                 xAlign: 'right',
  *                 yAlign: 'top',
  *                 space: 0.02,
  *               },
- *               comment: {
+ *               annotation: {
  *                 xAlign: 'left',
  *                 yAlign: 'bottom',
  *                 space: 0.02,
@@ -2740,7 +3139,7 @@ export type EQN_Glyphs = {
  * });
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
- * eqn.setTouchableRect(0.5);
+ * eqn.setTouchable();
  * eqn.showForm('1');
  */
 export type EQN_Annotate = {
@@ -2914,6 +3313,7 @@ export class EquationFunctions {
     if (name === 'sumOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'prodOf') { return this.sumProd(params); }   // $FlowFixMe
     if (name === 'matrix') { return this.matrix(params); }   // $FlowFixMe
+    if (name === 'lines') { return this.lines(params); }   // $FlowFixMe
     if (name === 'scale') { return this.scale(params); }   // $FlowFixMe
     if (name === 'container') { return this.container(params); }
     return null;
@@ -2934,6 +3334,7 @@ export class EquationFunctions {
     let descent;
     let xAlign; // left, center, right, multiplier (to left)
     let yAlign; // bottom, baseline, middle, top, multiplier (to bottom)
+    let inSize;
     let fullContentBounds;
 
     const defaultOptions = {
@@ -2944,16 +3345,17 @@ export class EquationFunctions {
       descent: null,
       xAlign: 'center',
       yAlign: 'baseline',
+      inSize: true,
       fullContentBounds: false,
     };
     if (Array.isArray(options)) {
       [
-        content, width, descent, ascent, xAlign, yAlign, fit, scale,
+        content, width, inSize, descent, ascent, xAlign, yAlign, fit, scale,
         fullContentBounds,
       ] = options;
     } else {
       ({
-        content, width, descent, ascent, xAlign, yAlign, fit, scale,
+        content, width, inSize, descent, ascent, xAlign, yAlign, fit, scale,
         fullContentBounds,
       } = options);
     }
@@ -2965,6 +3367,7 @@ export class EquationFunctions {
       descent,
       xAlign,
       yAlign,
+      inSize,
       fullContentBounds,
     };
     const o = joinObjects(defaultOptions, optionsIn);
@@ -3933,6 +4336,78 @@ export class EquationFunctions {
       }));
     }
     return matrixContent;
+  }
+
+  /**
+   * Equation matrix function
+   * @see {@link EQN_Matrix} for description and examples
+   */
+  lines(options: EQN_Lines) {
+    let content;
+    let justify;
+    let yAlign;
+    let baselineSpace;
+    let space;
+    let fullContentBounds;
+    const defaultOptions = {
+      justify: 'center',
+      yAlign: 0,
+      baselineSpace: null,
+      space: 0,
+      // offset: 0,
+      fullContentBounds: false,
+    };
+    if (Array.isArray(options)) {
+      [
+        content, justify, baselineSpace, space, yAlign, fullContentBounds,
+      ] = options;
+    } else {
+      ({
+        content, justify, baselineSpace, space, yAlign, fullContentBounds,
+      } = options);
+    }
+    const optionsIn = {
+      justify,
+      baselineSpace,
+      space,
+      yAlign,
+      fullContentBounds,
+    };
+    const o = joinObjects({}, defaultOptions, optionsIn);
+    const contentArray = [];
+    const lineArray = [];
+    if (content != null) {      // $FlowFixMe
+      content.forEach((c) => {
+        let baselineSpaceLine = o.baselineSpace;
+        let spaceLine = o.space;
+        let justifyLine = null;
+        if (Array.isArray(c) || c.content == null) { // $FlowFixMe
+          contentArray.push(this.contentToElement(c));
+        } else {      // $FlowFixMe
+          contentArray.push(this.contentToElement(c.content));
+          if (c.baselineSpace != null) { baselineSpaceLine = c.baselineSpace; }
+          if (c.space != null) { spaceLine = c.space; }
+          if (c.justify != null) { // $FlowFixMe
+            justifyLine = this.elements[c.justify];
+          }
+        }
+        lineArray.push({
+          baselineSpace: baselineSpaceLine,
+          space: spaceLine,
+          justify: justifyLine,
+          offset: c.offset || 0,
+        });
+      });
+      // contentArray = content.map(c => this.contentToElement(c));
+      o.lineOptions = lineArray;
+    }
+
+    const lines = new Lines(
+      contentArray,
+      [],
+      o,
+    );
+    return lines;
   }
 
   /**

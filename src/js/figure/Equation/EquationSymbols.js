@@ -75,7 +75,9 @@ export type EQN_Symbol = {
 };
 
 /**
- * Vinculum equation symbol
+ * Vinculum symbol used in fractions ({@link EQN_Fraction} equation function).
+ *
+ * ![](./apiassets/eqn_symbol_vinculum.png)
  *
  * <pre>
  *                          width
@@ -90,7 +92,7 @@ export type EQN_Symbol = {
  * @property {'vinculum'} symbol
  * @property {number} [lineWidth] (`0.01`)
  * @property {'static' | 'dynamic'} [draw] `'dynamic'` updates vertices on
- * resize, `'static'` only changes scale transform (`dynamic`)
+ * resize, `'static'` only changes scale transform (`'dynamic'`)
  * @property {number | 'first'} [staticWidth] used when `draw`=`static`.
  * `number` sets width of static symbol - `'first'` calculates and sets width
  * based on first use (`'first'`)
@@ -98,13 +100,55 @@ export type EQN_Symbol = {
  * @extends EQN_Symbol
  *
  * @example
- * eqn.addElements({
- *   v: {
- *     symbol: 'vinculum',
- *     color: [1, 0, 0, 1],
- *     lineWidth: 0.01,
+ * // Define as element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       v: { symbol: 'vinculum' },
+ *     },
+ *     forms: {
+ *       form1: { frac: ['a', 'v', 'b'] },
+ *     },
  *   },
- * })
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { frac: ['a', 'vinculum', 'b'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { frac: ['a', 'v1_vinculum', { frac: ['c', 'v2_vinculum', 'b'] }] },
+ *       form2: { frac: [['a', 'ef'], 'v1', { frac: ['c', 'v2', 'd'] }] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { frac: ['a', { vinculum: { lineWidth: 0.004 } }, 'b'] },
+ *     },
+ *   },
+ * });
  */
 export type EQN_VinculumSymbol = {
   symbol: 'vinculum',
@@ -115,7 +159,11 @@ export type EQN_VinculumSymbol = {
 } & EQN_Symbol;
 
 /**
- * Box equation symbol
+ * Box equation symbol used in {@link EQN_Box} and as a
+ * {@link EQN_EncompassGlyph}.
+ *
+ * ![](./apiassets/eqn_symbol_box.png)
+ *
  *
  * <pre>
  *                                          width
@@ -155,14 +203,55 @@ export type EQN_VinculumSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * eqn.addElements({
- *   b: {
- *     symbol: 'box',
- *     color: [1, 0, 0, 1],
- *     lineWidth: 0.01,
- *     fill: false,
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       b: { symbol: 'box', lineWidth: 0.008 },
+ *     },
+ *     forms: {
+ *       form1: { box: ['a', 'b', true, 0.1] },
+ *     },
  *   },
- * })
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { box: ['a', 'box', true, 0.1] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { box: ['a', 'b_box', false, 0.1] },
+ *       form2: { box: ['a', 'b', false, 0.2] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { box: ['a', { box: { lineWidth: 0.004 } }, true, 0.1] },
+ *     },
+ *   },
+ * });
  */
 export type EQN_BoxSymbol = {
   symbol: 'box',
@@ -176,7 +265,20 @@ export type EQN_BoxSymbol = {
 } & EQN_Symbol;
 
 /**
- * Arrow equation symbol
+ * Arrow equation symbol.
+ *
+ * The arrow direction defines where it can be used:
+ * - `'left'`, `'right'`: {@link EQN_Bar} (top and bottom sides),
+ *   {@link EQN_Comment}, and {@link EQN_LeftRightGlyph}
+ * - `'up'`, `'down'`: {@link EQN_Bracket}, {@link EQN_Bar} (left and right
+ *   sides), and {@link EQN_TopBottomGlyph}
+ *
+ * Note, as the default direciton is `'right'`, using the inline definition of
+ * arrow will only work with {@link EQN_Bar} (top and bottom sides),
+ * {@link EQN_Comment}, and {@link EQN_LeftRightGlyph}.
+ *
+ * ![](./apiassets/eqn_symbol_arrow.png)
+ *
  * <pre>
  *                             arrowWidth
  *                         |<--------------->|
@@ -224,16 +326,62 @@ export type EQN_BoxSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * eqn.addElements({
- *   a: {
- *     symbol: 'arrow',
- *     color: [1, 0, 0, 1],
- *     direction: 'right'
- *     lineWidth: 0.01,
- *     arrowHeight: 0.02,
- *     arrowWidth: 0.02,
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       rightArrow: { symbol: 'arrow', direction: 'right' },
+ *     },
+ *     forms: {
+ *       form1: { bar: ['a', 'rightArrow', false, 0.05, 0.03] },
+ *     },
  *   },
- * })
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { bar: ['a', 'arrow', false, 0.05, 0.03] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { bar: ['a', 'ar_arrow', false, 0.05, 0] },
+ *       form2: { bar: ['a', 'ar', false, 0.05, 0.1] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: {
+ *         bar: {
+ *           content: 'a',
+ *           side: 'left',
+ *           symbol: { arrow: { direction: 'up' } },
+ *           overhang: 0.1,
+ *         },
+ *       },
+ *     },
+ *   },
+ * });
  */
 export type EQN_ArrowSymbol = {
   symbol: 'arrow',
@@ -246,7 +394,10 @@ export type EQN_ArrowSymbol = {
 } & EQN_Symbol;
 
 /**
- * Sum equation symbol
+ * Sum equation symbol used with the {@link EQN_SumOf} equation function.
+ *
+ * ![](./apiassets/eqn_symbol_sum.png)
+ *
  * <pre>
  *          ---------- 00000000000000000000000000000000000
  *          A            0000000                     000000
@@ -291,14 +442,55 @@ export type EQN_ArrowSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * eqn.addElements({
- *   s: {
- *     symbol: 'sum',
- *     color: [1, 0, 0, 1],
- *     lineWidth: 0.01
- *     sides: 5,
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       sigma: { symbol: 'sum' },
+ *     },
+ *     forms: {
+ *       form1: { sumOf: ['sigma', 'a', 'a = 0', 'n'] },
+ *     },
  *   },
- * })
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { sumOf: ['sum', 'a', 'a = 0', 'n'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { sumOf: ['s1_sum', 'a', 'a = 0', 'n'] },
+ *       form2: { sumOf: ['s1', 'a', 'a = 0', 'm'] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { sumOf: [{ sum: { lineWidth: 0.01 } }, 'a', 'a = 0', 'n'] },
+ *     },
+ *   },
+ * });
  */
 export type EQN_SumSymbol ={
   symbol: 'sum',
@@ -309,7 +501,11 @@ export type EQN_SumSymbol ={
 } & EQN_Symbol;
 
 /**
- * Product equation symbol used in {@link EQN_ProdOf}
+ * Product equation symbol used with the {@link EQN_ProdOf} equation function.
+ *
+ * ![](./apiassets/eqn_symbol_prod.png)
+ *
+ *
  * <pre>
  *                                          width
  *                |<--------------------------------------------------------->|
@@ -359,14 +555,55 @@ export type EQN_SumSymbol ={
  * @extends EQN_Symbol
  *
  * @example
- * eqn.addElements({
- *   p: {
- *     symbol: 'prod',
- *     color: [1, 0, 0, 1],
- *     lineWidth: 0.01
- *     sides: 5,
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       sigma: { symbol: 'prod' },
+ *     },
+ *     forms: {
+ *       form1: { prodOf: ['sigma', 'a', 'a = 0', 'n'] },
+ *     },
  *   },
- * })
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { prodOf: ['prod', 'a', 'a = 0', 'n'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { prodOf: ['p1_prod', 'a', 'a = 0', 'n'] },
+ *       form2: { prodOf: ['p1', 'a', 'a = 0', 'm'] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { prodOf: [{ prod: { lineWidth: 0.01 } }, 'a', 'a = 0', 'n'] },
+ *     },
+ *   },
+ * });
  */
 export type EQN_ProdSymbol = {
   symbol: 'prod',
@@ -377,7 +614,16 @@ export type EQN_ProdSymbol = {
 } & EQN_Symbol;
 
 /**
- * Integral equation symbol used in {@link EQN_Integral}
+ * Integral equation symbol used with the {@link EQN_Integral} equation
+ * function.
+ *
+ * ![](./apiassets/eqn_symbol_int1.png)
+ *
+ * ![](./apiassets/eqn_symbol_int2.png)
+ *
+ * ![](./apiassets/eqn_symbol_int3.png)
+ *
+ *
  * <pre>
  *      --------------------------------------------------   0000000
  *     A                                              000000011111111
@@ -434,21 +680,83 @@ export type EQN_ProdSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * eqn.addElements({
- * int: {
- *   symbol: 'int',
- *   color: [0.95, 0, 0, 1],
- *   lineWidth: 0.01,
- *   sides: 20,
- *   num: 2,
- *   type: 'generic',
- *   tipWidth: null,
- *   serif: true,
- *   serifSides: 10,
- *   lineIntegralSides: 20,
- *   draw: 'static',
- *   staticHeight: 'first',
- * },
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       int: { symbol: 'int' },
+ *     },
+ *     forms: {
+ *       form1: { int: ['int', 'x dx', 'a', 'b'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Triple Integral
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       int: { symbol: 'int', num: 3 },
+ *     },
+ *     forms: {
+ *       form1: { int: ['int', 'dx dy dz'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Line Integral
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       int: { symbol: 'int', type: 'line' },
+ *     },
+ *     forms: {
+ *       form1: { int: ['int', 'r dr'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { int: ['int', 'x dx', 'a', 'b'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { int: ['i1_int', 'x dx', 'a', 'b'] },
+ *       form2: { int: ['i1', 'y dy', 'a', 'b'] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { int: [{ int: { serif: false } }, 'x dx', 'a', 'b'] },
+ *     },
+ *   },
+ * });
  */
 export type EQN_IntegralSymbol = {
   symbol: 'int',
@@ -469,6 +777,8 @@ export type EQN_IntegralSymbol = {
  *
  * The radical symbol allows customization on how to draw the radical. Mostly
  * it will not be needed, but for edge case equation layouts it may be useful.
+ *
+ * ![](./apiassets/eqn_symbol_radical.png)
  *
  * <pre>
  *
@@ -525,34 +835,55 @@ export type EQN_IntegralSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * // Typical
- * eqn.addElements({
- *   rad: {
- *     symbol: 'radical',
- *     color: [1, 0, 0, 1],
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       r: { symbol: 'radical' },
+ *     },
+ *     forms: {
+ *       form1: { root: ['r', 'a', false, 0.05] },
+ *     },
  *   },
  * });
+ *
  * @example
- * // All options
- *  eqn.addElements({
- *    rad: {
- *      symbol: 'radical',
- *      color: [1, 0, 0, 1],
- *      lineWidth: 0.01,
- *      lineWidth2: 0.02,
- *      width: 1.2,
- *      height: 0.8,
- *      startWidth: 0.04,
- *      startHeight: 0.04,
- *      tickHeight: 0.01,
- *      tickWidth: 0.01,
- *      downWidth: 0.01,
- *      maxStartWidth: 0.03,
- *      maxStartHeight: 0.03,
- *      proportionalToHeight: false,
- *      draw: 'dynamic',
- *    },
- *  });
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { root: ['radical', 'a', false, 0.05] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { root: ['r1_radical', 'a', false, 0.05] },
+ *       form2: { root: ['r1', ['a', 'b'], false, 0.05] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { root: [{ radical: { lineWidth: 0.005 } }, 'a', false, 0.05] },
+ *     },
+ *   },
+ * });
  */
 export type EQN_RadicalSymbol = {
   symbol: 'radical',
@@ -576,6 +907,17 @@ export type EQN_RadicalSymbol = {
 /**
  * Strike equation symbol used in {@link EQN_Strike}.
  *
+ * Integral equation symbol used with the {@link EQN_Strike} and
+ * {@link EQN_StrikeComment} equation functions.
+ *
+ * ![](./apiassets/eqn_symbol_strike1.png)
+ *
+ * ![](./apiassets/eqn_symbol_strike2.png)
+ *
+ * ![](./apiassets/eqn_symbol_strike3.png)
+ *
+ * ![](./apiassets/eqn_symbol_strike4.png)
+ *
  * Four styles of strike symbol are available:
  * <pre>
  *
@@ -597,7 +939,7 @@ export type EQN_RadicalSymbol = {
  *              000                                 000
  *            000                                     000
  *          000                                         000
- *             forward                        backward
+ *             forward                        back
  *
  * </pre>
  *
@@ -620,24 +962,97 @@ export type EQN_RadicalSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * // Typical
- * eqn.addElements({
- *   s: { symbol: 'strike', style: 'forward' },
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       s: { symbol: 'strike', style: 'cross', lineWidth: 0.01 },
+ *     },
+ *     forms: {
+ *       form1: { strike: ['ABC', 's'] },
+ *     },
+ *   },
  * });
+ *
  * @example
- * // All options
- *  eqn.addElements({
- *    s: {
- *      symbol: 'strike',
- *      style: 'cross',
- *      lineWidth: 0.01,
- *      width: 0.5,
- *      height: 0.5,
- *      draw: 'static',
- *      staticHeight: 'first',
- *      staticWidth: 'first',
- *    },
- *  });
+ * // Forward Strike
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       s: { symbol: 'strike', style: 'forward', lineWidth: 0.01 },
+ *     },
+ *     forms: {
+ *       form1: { strike: ['ABC', 's'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Back Strike
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       s: { symbol: 'strike', style: 'back', lineWidth: 0.01 },
+ *     },
+ *     forms: {
+ *       form1: { strike: ['ABC', 's'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Horizontal Slash
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       s: { symbol: 'strike', style: 'horizontal', lineWidth: 0.01 },
+ *     },
+ *     forms: {
+ *       form1: { strike: ['ABC', 's'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { strike: ['ABC', 'strike'] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { strike: ['ABC', 's1_strike'] },
+ *       form2: { strike: ['DEFGH', 's1'] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { strike: ['ABC', { strike: { style: 'forward' } }] },
+ *     },
+ *   },
+ * });
  */
 export type EQN_StrikeSymbol = {
   symbol: 'strike',
@@ -651,7 +1066,13 @@ export type EQN_StrikeSymbol = {
 } & EQN_Symbol;
 
 /**
- * Bracket equation symbol
+ *
+ * Bracket equation symbol used in {@link EQN_Bracket}, {@link EQN_Bar},
+ * {@link EQN_Matrix}, and {@link EQN_Comment}.
+ *
+ *
+ * ![](./apiassets/eqn_symbol_bracket.png)
+ *
  *<pre>
  *                    tipWidth
  *                      ----->| |<---
@@ -694,24 +1115,36 @@ export type EQN_StrikeSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * // Typical
- * eqn.addElements({
- *   lb: { symbol: 'bracket', side: 'left' },
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       lb: { symbol: 'bracket', side: 'left' },
+ *       rb: { symbol: 'bracket', side: 'right' },
+ *     },
+ *     forms: {
+ *       form1: { brac: ['lb', 'a', 'rb'] },
+ *     },
+ *   },
  * });
+ *
  * @example
- * // All options
- *  eqn.addElements({
- *    rb: {
- *      symbol: 'bracket',
- *      side: 'right',
- *      sides: 20,
- *      lineWidth: 0.01,
- *      tipWidth: 0.05,
- *      width: 0.5,
- *      draw: 'static',
- *      staticHeight: 'first',
- *    },
- *  });
+ * // Define inline
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: {
+ *         brac: [
+ *           { lb_bracket: { side: 'left' } },
+ *           'a',
+ *           { rb_bracket: { side: 'right' } },
+ *         ],
+ *       },
+ *     },
+ *   },
+ * });
  */
 export type EQN_BracketSymbol = {
   symbol: 'bracket',
@@ -725,7 +1158,11 @@ export type EQN_BracketSymbol = {
 } & EQN_Symbol;
 
 /**
- * Angle bracket equation symbol
+ * Angle bracket equation symbol used in {@link EQN_Bracket}, {@link EQN_Bar},
+ * {@link EQN_Matrix}, and {@link EQN_Comment}.
+ *
+ *
+ * ![](./apiassets/eqn_symbol_angleBracket.png)
  *
  * <pre>
  *                      width
@@ -762,22 +1199,36 @@ export type EQN_BracketSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * // Typical
- * eqn.addElements({
- *   lb: { symbol: 'angleBracket', side: 'left' },
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       lb: { symbol: 'angleBracket', side: 'left' },
+ *       rb: { symbol: 'angleBracket', side: 'right' },
+ *     },
+ *     forms: {
+ *       form1: { brac: ['lb', 'a', 'rb'] },
+ *     },
+ *   },
  * });
+ *
  * @example
- * // All options
- *  eqn.addElements({
- *    rb: {
- *      symbol: 'angleBracket',
- *      side: 'right',
- *      lineWidth: 0.01,
- *      width: 0.5,
- *      draw: 'static',
- *      staticHeight: 'first',
- *    },
- *  });
+ * // Define inline
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: {
+ *         brac: [
+ *           { lb_angleBracket: { side: 'left' } },
+ *           'a',
+ *           { rb_angleBracket: { side: 'right' } },
+ *         ],
+ *       },
+ *     },
+ *   },
+ * });
  */
 export type EQN_AngleBracketSymbol = {
   symbol: 'angleBracket',
@@ -789,7 +1240,11 @@ export type EQN_AngleBracketSymbol = {
 } & EQN_Symbol;
 
 /**
- * Brace equation symbol
+ * Brace equation symbol used in {@link EQN_Bracket}, {@link EQN_Bar},
+ * {@link EQN_Matrix}, and {@link EQN_Comment}.
+ *
+ *
+ * ![](./apiassets/eqn_symbol_brace.png)
  *
  * <pre>
  *                width
@@ -850,23 +1305,36 @@ export type EQN_AngleBracketSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * // Typical
- * eqn.addElements({
- *   lb: { symbol: 'brace', side: 'left' },
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       lb: { symbol: 'brace', side: 'left' },
+ *       rb: { symbol: 'brace', side: 'right' },
+ *     },
+ *     forms: {
+ *       form1: { brac: ['lb', 'a', 'rb'] },
+ *     },
+ *   },
  * });
+ *
  * @example
- * // All options
- *  eqn.addElements({
- *    rb: {
- *      symbol: 'brace',
- *      side: 'right',
- *      lineWidth: 0.01,
- *      tipWidth: 0.01,
- *      width: 0.5,
- *      draw: 'static',
- *      staticHeight: 0.5,
- *    },
- *  });
+ * // Define inline
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: {
+ *         brac: [
+ *           { lb_brace: { side: 'left' } },
+ *           'a',
+ *           { rb_brace: { side: 'right' } },
+ *         ],
+ *       },
+ *     },
+ *   },
+ * });
  */
 export type EQN_BraceSymbol = {
   symbol: 'brace',
@@ -880,7 +1348,21 @@ export type EQN_BraceSymbol = {
 } & EQN_Symbol;
 
 /**
- * Bar equation symbol
+ * Bar equation symbol.
+ *
+ * The bar side defines where it can be used:
+ * - `'top'`, `'bottom'`: {@link EQN_Bar} (top and bottom sides),
+ *   {@link EQN_Comment}, and {@link EQN_LeftRightGlyph}
+ * - `'left'`, `'right'`: {@link EQN_Bracket}, {@link EQN_Bar} (left and right
+ *   sides), {@link EQN_Matrix} and {@link EQN_TopBottomGlyph}
+ *
+ * Note, as the default direciton is `'right'`, using the inline definition of
+ * arrow will only work with {@link EQN_Bar} (top and bottom sides),
+ * {@link EQN_Comment}, and {@link EQN_LeftRightGlyph}.
+ *
+ * ![](./apiassets/eqn_symbol_bar1.png)
+ *
+ * ![](./apiassets/eqn_symbol_bar2.png)
  *
  * <pre>
  *
@@ -914,21 +1396,62 @@ export type EQN_BraceSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * // Typical
- * eqn.addElements({
- *   lb: { symbol: 'bar', side: 'left' },
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       b: { symbol: 'bar', side: 'top' },
+ *     },
+ *     forms: {
+ *       form1: { bar: ['a', 'b', false, 0.05, 0.03] },
+ *     },
+ *   },
  * });
+ *
  * @example
- * // All options
- *  eqn.addElements({
- *    rb: {
- *      symbol: 'bar',
- *      side: 'right',
- *      lineWidth: 0.01,
- *      draw: 'static',
- *      staticHeight: 0.5,
- *    },
- *  });
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: {
+ *         bar: {
+ *           content: 'a',
+ *           symbol: 'bar',
+ *           side: 'left',
+ *           overhang: 0.1,
+ *         },
+ *       },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { bar: ['a', { bar: { side: 'top' } }, false, 0.05, 0.03] },
+ *       form2: { bar: [['a', 'bc'], { bar: { side: 'top' } }, false, 0.05, 0.03] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { bar: ['a', { bar: { side: 'top' } }, false, 0.05, 0.03] },
+ *     },
+ *   },
+ * });
  */
 export type EQN_BarSymbol = {
   symbol: 'bar',
@@ -940,7 +1463,11 @@ export type EQN_BarSymbol = {
 
 
 /**
- * Square bracket equation symbol
+ * Square bracket equation symbol used in {@link EQN_Bracket}, {@link EQN_Bar},
+ * {@link EQN_Matrix}, and {@link EQN_Comment}.
+ *
+ *
+ * ![](./apiassets/eqn_symbol_squarebracket.png)
  *
  * <pre>
  *
@@ -989,25 +1516,36 @@ export type EQN_BarSymbol = {
  * @extends EQN_Symbol
  *
  * @example
- * // Typical
- * eqn.addElements({
- *   lb: { symbol: 'squareBracket', side: 'left' },
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       lb: { symbol: 'squareBracket', side: 'left' },
+ *       rb: { symbol: 'squareBracket', side: 'right' },
+ *     },
+ *     forms: {
+ *       form1: { brac: ['lb', 'a', 'rb'] },
+ *     },
+ *   },
  * });
+ *
  * @example
- * // All options
- *  eqn.addElements({
- *    rb: {
- *      symbol: 'squareBracket',
- *      side: 'right',
- *      lineWidth: 0.01,
- *      tipWidth: 0.01,
- *      width: 0.03
- *      radius: 0.05,
- *      sides: 10,
- *      draw: 'static',
- *      staticHeight: 0.5,
- *    },
- *  });
+ * // Define inline
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: {
+ *         brac: [
+ *           { lb_squareBracket: { side: 'left' } },
+ *           'a',
+ *           { rb_squareBracket: { side: 'right' } },
+ *         ],
+ *       },
+ *     },
+ *   },
+ * });
  */
 export type EQN_SquareBracketSymbol = {
   symbol: 'squareBracket',
@@ -1023,27 +1561,94 @@ export type EQN_SquareBracketSymbol = {
 
 
 /**
- * A line symbol to be used in {@link EQN_Annotate} as a {@link EQN_LineGlyph},
- * or in {@link EQN_Comment}.
+ * A line symbol to be used in {@link EQN_Annotate} and {@link EQN_Comment} as
+ * an {@link EQN_LineGlyph} to draw a line between the content and an
+ * annotation.
+ *
+ * The line can be solid or dashed, and have arrows on either or both ends.
+ *
+ * ![](./apiassets/eqn_symbol_line1.png)
+ *
+ * ![](./apiassets/eqn_symbol_line2.png)
+ *
  * @property {number} [width] line width
  * @property {TypeDash} [dash] dash style of line
  * @property {OBJ_LineArrows} [arrow] arrow styles of line where start is
  * toward the content
- * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
- * resize, `'static'` only changes scale transform (`dynamic`)
- * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
- * `number` sets height of static symbol - `'first'` calculates and sets height
- * based on first use (`'first'`)
- * @property {number | 'first'} [staticWidth]
+ *
+ * @extends EQN_Symbol
+ *
+ * @example
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       l: { symbol: 'line', arrow: 'barb', width: 0.005 },
+ *     },
+ *     forms: {
+ *       form1: { topComment: ['a', 'b', 'l', 0.2, 0.2] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Dashed line
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       l: { symbol: 'line', dash: [0.01, 0.01], width: 0.005 },
+ *     },
+ *     forms: {
+ *       form1: { topComment: ['a', 'b', 'l', 0.2, 0.2] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { topComment: ['a', 'b', 'line', 0.2, 0.2] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { topComment: ['a', 'b', 'l1_line', 0.2, 0.2] },
+ *       form2: { topComment: ['a', 'b', 'l1', 0.2, 0.2] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { topComment: ['a', 'b', { line: { arrow: 'barb' } }, 0.2, 0.2] },
+ *     },
+ *   },
+ * });
+ *
  */
 export type EQN_LineSymbol = {
   width?: number,
   dash?: TypeDash,
   arrow?: OBJ_LineArrows,
-  // draw?: 'dynamic' | 'static',
-  // staticHeight?: number | 'first',
-  // staticWidth?: number | 'first',
-}
+} & EQN_Symbol;
 
 export type TypeSymbolOptions = EQN_VinculumSymbol
   & EQN_VinculumSymbol
@@ -1234,7 +1839,7 @@ export default class EquationSymbols {
       arrowLength: 0.04,
       length: 0.1,
       staticHeight: 'first',
-      draw: 'static',
+      draw: 'dynamic',
       staticWidth: null,          // not definable by user
     };
     const optionsToUse = joinObjects(defaultOptions, options);

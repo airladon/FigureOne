@@ -99,6 +99,7 @@ toc:
   - EQN_ProdOf
   - EQN_Bar
   - EQN_Bracket
+  - EQN_Lines
   - EQN_Box
   - EQN_Strike
   - EQN_StrikeComment
@@ -276,6 +277,7 @@ toc:
   - EQN_EncompassGlyph
   - EQN_LeftRightGlyph
   - EQN_TopBottomGlyph
+  - EQN_LineGlyph
   - EQN_Glyphs
   - EQN_EquationGoToForm
   - EquationLabel

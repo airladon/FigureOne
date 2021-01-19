@@ -1,6 +1,6 @@
 {
   "name": "figureone",
-  "version": "0.4.0",
+  "version": "0.5.2",
   "description": "Draw, animate and interact with shapes, text, plots and equations in Javascript",
   "main": "index.js",
   "repository": {
@@ -20,10 +20,11 @@
     "interactive",
     "figure",
     "webgl",
-    "equations"
+    "equations",
+    "animation"
   ],
   "author": "airladon",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/airladon/figureone/issues"
   },
