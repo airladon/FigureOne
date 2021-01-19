@@ -92,7 +92,7 @@ Finally, let's see the code for the example above. Two files, `index.html` and `
 <body>
     <div id="figureOneContainer" style="width: 1200px; height: 800px; background-color: white;">
     </div>
-    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.4.0/figureone.min.js'></script>
+    <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/figureone@0.5.0/figureone.min.js'></script>
     <script type="text/javascript" src='./index.js'></script>
 </body>
 </html>
