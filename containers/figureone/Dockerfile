@@ -25,8 +25,6 @@ ADD package-lock.json .
 
 RUN npm install
 
-
-
 # Update path so eslint can be run from anywhere
 ENV PATH="/opt/app/node_modules/.bin:${PATH}"
 

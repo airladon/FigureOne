@@ -2,9 +2,6 @@
 
 # MODE=prod
 HOST_PATH=`pwd`
-# DEPLOY_PROD_BRANCH=master           # Branch to test and deploy to prod
-# DEPLOY_DEV_BRANCH=release-candidate # Branch to test and deploy to dev
-# TRAVIS_DEBUG_BRANCH=travis          # Branch for fast travis debug
 TESTING=1
 
 # Setup colors and text formatting
@@ -15,42 +12,6 @@ yellow=`tput setaf 3`
 bold=`tput bold`
 reset=`tput sgr0`
 
-# # If pull requesting to master, check that it is coming from release-candidate
-# # branch only. If not, fail the build.
-# if [ $TRAVIS_PULL_REQUEST ];
-#   then
-#   if [ "$TRAVIS_PULL_REQUEST" != "false" ];
-#     then
-#     if [ $TRAVIS_BRANCH = $DEPLOY_PROD_BRANCH -a $TRAVIS_PULL_REQUEST_BRANCH != $DEPLOY_DEV_BRANCH ];
-#       then
-#       echo "Tried to merge branch${bold}${red}" $TRAVIS_PULL_REQUEST_BRANCH "${reset}into${bold}${cyan}" $DEPLOY_PROD_BRANCH "${reset}"
-#       echo "Can only merge branch${bold}${cyan}" $DEPLOY_DEV_BRANCH "${reset}into${bold}${cyan}" $DEPLOY_PROD_BRANCH
-#       echo "${bold}${red}Build Failed.${reset}"
-#       exit 1
-#     fi
-#   fi
-# fi
-
-
-# # Get the current branch - if it is not yet defined, then get it from git.
-# # Note, that this git command will not work in a Heroku Environment, so BRANCH
-# # already be set as env variable before calling this script on Heroku.
-# if [ -z "${BRANCH}" ];
-#   then
-#   BRANCH=`git rev-parse --abbrev-ref HEAD`
-# fi
-
-# Check first command line argument to see how to build javascript
-# if [ $1 = "dev" ];
-# then
-#   MODE=dev
-# fi
-
-# if [ $1 = "stage" ];
-# then
-#   MODE=stage
-# fi
-
 if [ $1 ];
 then
   if [ $1 = "skip-test" ];
@@ -59,41 +20,50 @@ then
   fi
 fi
 
-# From https://github.com/travis-ci/travis-ci/issues/4704 to fix an issue 
-# where Travis errors out if too much information goes on stdout and some
-# npm package is blocking stdout.
-python -c 'import os,sys,fcntl; flags = fcntl.fcntl(sys.stdout, fcntl.F_GETFL); fcntl.fcntl(sys.stdout, fcntl.F_SETFL, flags&~os.O_NONBLOCK);'
-
 # First cleanup package folder
 rm -rf package/*
 
 # Run a container while binding the appropriate volumes
-# docker_run() {
-#   echo "${bold}${cyan}" $1 "Starting${reset}"
-#   if [ $3 ];
-#     then
-#     docker run -it --rm \
-#       -v $HOST_PATH/src:/opt/app/src \
-#       -v $HOST_PATH/package:/opt/app/package \
-#       -v $HOST_PATH/browser.sh:/opt/app/browser.sh \
-#       -v $HOST_PATH/containers:/opt/app/containers \
-#       -v /var/run/docker.sock:/var/run/docker.sock \
-#       -e LOCAL_PROJECT_PATH=$HOST_PATH \
-#       --name figureone_dev \
-#       --entrypoint $2 \
-#       figureone_dev \
-#       -c $3 $4 $5 $6
-#     else
-#     docker run -it --rm \
-#       -v $HOST_PATH/package:/opt/app/package \
-#       -v $HOST_PATH/src:/opt/app/src \
-#       --name figureone_dev \
-#       --entrypoint $2 \
-#       figureone_dev
-#   fi
-title() {
+docker_run() {
   echo "${bold}${cyan}" $1 "Starting${reset}"
-}
+  if [ $3 ];
+    then
+    docker run -it --rm \
+      -v $HOST_PATH/src:/opt/app/src \
+      -v $HOST_PATH/package:/opt/app/package \
+      -v $HOST_PATH/docs:/opt/app/docs \
+      -v $HOST_PATH/containers/figureone/browser.sh:/opt/app/browser.sh \
+      -v $HOST_PATH/containers:/opt/app/containers \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      -v $HOST_PATH/containers/figureone/webpack.config.js:/opt/app/webpack.config.js \
+      -v $HOST_PATH/containers/figureone/generate_docs.sh:/opt/app/generate_docs.sh \
+      -v $HOST_PATH/.eslintrc.json:/opt/app/.eslintrc.json \
+      -v $HOST_PATH/.dockerignore:/opt/app/.dockerignore \
+      -v $HOST_PATH/.eslintignore:/opt/app/.eslintignore \
+      -v $HOST_PATH/.flowconfig:/opt/app/.flowconfig \
+      -v $HOST_PATH/.babelrc:/opt/app/.babelrc \
+      -v $HOST_PATH/documentation.yml:/opt/app/documentation.yml \
+      -v $HOST_PATH/jest.config.js:/opt/app/jest.config.js \
+      -v $HOST_PATH/docs:/opt/app/docs \
+      -v $HOST_PATH/reports:/opt/app/reports \
+      -v $HOST_PATH/jsdoc-conf.json:/opt/app/jsdoc-conf.json \
+      -v $HOST_PATH/.eslintignore:/opt/app/.eslintignore \
+      -e LOCAL_PROJECT_PATH=$HOST_PATH \
+      --name figureone_dev \
+      --entrypoint $2 \
+      figureone_dev \
+      -c $3 $4 $5 $6
+    else
+    docker run -it --rm \
+      -v $HOST_PATH/package:/opt/app/package \
+      -v $HOST_PATH/src:/opt/app/src \
+      --name figureone_dev \
+      --entrypoint $2 \
+      figureone_dev
+  fi
+# title() {
+#   echo "${bold}${cyan}" $1 "Starting${reset}"
+# }
 
 # check_build() {
 #   if [ $? != 0 ];
@@ -125,33 +95,22 @@ rm Dockerfile
 
 FAIL=0
 
-# docker_run "Dev Packaging" npm run webpack -- --env.mode=dev
-title "Dev Packaging"
-npm run webpack
+docker_run "Dev Packaging" npm run webpack -- --env.mode=dev
 check_status "Dev Build"
 
 if [ $TESTING = 1 ];
 then
   # Lint and type check
   echo "${bold}${cyan}============ Linting and Type Checking =============${reset}"
-  title "JS Linting"
-  npm run lint
-  # docker_run "JS Linting" npm run lint
-  # docker_run "CSS and SCSS Linting" npm run css
-  # docker_run "Flow" npm run flow
-  title "Flow"
-  flow
+  docker_run "JS Linting" npm run lint
+  docker_run "Flow" npm run flow
   check_status "Linting and Type Checking"
 
   # Test
   echo "${bold}${cyan}===================== Testing ======================${reset}"
-  # docker_run "JS Testing" npm run jest
-  title "JS Testing"
-  npm run jest
+  docker_run "JS Testing" npm run jest
   check_status "Tests"
-  title "Browser Tests"
-  npm run browser
-  # docker_run "Browser Tests" npm run browser
+  docker_run "Browser Tests" npm run browser
   check_status "Browser Tests"
 else
   echo "${bold}${cyan}============ Linting and Type Checking =============${reset}"
@@ -162,15 +121,11 @@ else
   echo
 fi
 
-# # Package
-# echo "${bold}${cyan}==================== Packaging =====================${reset}"
+# Package
+echo "${bold}${cyan}==================== Packaging =====================${reset}"
 # docker_run "Dev Packaging" npm run webpack
-title "Dev Flow Packaging"
-npm run flowcopysource
-# docker_run "Dev Flow Packaging" npm run flowcopysource
-title "Prod Packaging"
-npm run webpack -- --env.mode=prod --env.clean=0
-# docker_run "Prod Packaging" npm run webpack -- --env.mode=prod --env.clean=0
+docker_run "Dev Flow Packaging" npm run flowcopysource
+docker_run "Prod Packaging" npm run webpack -- --env.mode=prod --env.clean=0
 echo "${bold}${cyan}" moving package.json "${reset}"
 cat package.json | \
   sed '/devDependencies/,/}/d' | \
