@@ -4375,13 +4375,13 @@ export class EquationFunctions {
         let baselineSpaceLine = o.baselineSpace;
         let spaceLine = o.space;
         let justifyLine = null;
-        if (Array.isArray(c)) {
+        if (Array.isArray(c) || c.content == null) { // $FlowFixMe
           contentArray.push(this.contentToElement(c));
-        } else {
+        } else {      // $FlowFixMe
           contentArray.push(this.contentToElement(c.content));
           if (c.baselineSpace != null) { baselineSpaceLine = c.baselineSpace; }
           if (c.space != null) { spaceLine = c.space; }
-          if (c.justify != null) {
+          if (c.justify != null) { // $FlowFixMe
             justifyLine = this.elements[c.justify];
           }
         }

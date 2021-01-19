@@ -93,7 +93,7 @@ figure.globalAnimation.frame(0);
       if (remainingDuration > 0) {
         // const num = 5;
         const timeStep = 0.5;
-        const steps = Math.ceil(remainingDuration / timeStep);
+        const steps = Math.ceil(remainingDuration / timeStep) + 1;
         for (let i = 1; i <= steps; i += 1) {
           if (id.endsWith('1ff30952')) {
             // console.log(timeStep, timeStep * i * 1000)

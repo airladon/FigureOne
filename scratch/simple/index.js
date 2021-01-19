@@ -5,16 +5,41 @@ const figure = new Fig.Figure({
   font: { size: 0.1 },
 });
 
-// Define inline with reuse
-const [eqn] = figure.add({
+// Two lines animating to 1
+figure.add({
+  name: 'eqn',
   method: 'equation',
   options: {
+    elements: {
+      equals1: ' = ',
+      equals2: ' = ',
+    },
     forms: {
-      form1: { frac: ['a', 'v1_vinculum', { frac: ['c', 'v2_vinculum', 'b'] }] },
-      form2: { frac: [['a', 'ef'], 'v1', { frac: ['c', 'v2', 'd'] }] },
+      0: {
+        lines: {
+          content: [
+            {
+              content: ['a_1', 'equals1', 'b', '_ + ', 'c'],
+              justify: 'equals1',
+            },
+            {
+              content: ['d', '_ - ', 'e', 'equals2', 'a_2'],
+              justify: 'equals2',
+            },
+            { frac: ['a', 'vinculum', 'b'] },
+          ],
+          space: 0.08,
+          justify: 'element',
+        },
+      },
+      1: ['d', '_ - ', 'e', 'equals1', 'b', '_ + ', 'c'],
     },
   },
 });
-eqn.animations.new()
-  .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+
+figure.getElement('eqn').showForm(0);
+figure.getElement('eqn').animations.new()
+  .goToForm({
+    delay: 1, target: '1', duration: 1, animate: 'move',
+  })
   .start();

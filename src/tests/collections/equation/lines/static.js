@@ -272,7 +272,7 @@ if (typeof process === 'object') {
     move,
   };
 } else {
-  figure.add(getShapes(index => getPosition(index)));
+  figure.add(getShapes(i => getPosition(i)));
   startUpdates = () => {
     Object.keys(updates).forEach((name) => {
       updates[name](figure.getElement(name));
