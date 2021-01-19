@@ -1,0 +1,1 @@
+grep -rli 'figureone@' * | xargs -I@ sed -i '' 's/figureone@[^\/]*/figureone@$1/g' @

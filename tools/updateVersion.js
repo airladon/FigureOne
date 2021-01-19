@@ -9,7 +9,7 @@ const pjson = require('../package.json');
 
 
 const files = getFiles(
-  ['./src', './scratch'],
+  ['./src', './scratch', './docs'],
   /(html$|md$|js$)/,
 );
 
