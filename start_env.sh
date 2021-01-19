@@ -13,6 +13,7 @@ docker run -it --rm \
   -v $PROJECT_PATH/containers/figureone/generate_docs.sh:/opt/app/generate_docs.sh \
   -v $PROJECT_PATH/containers/figureone/browser.sh:/opt/app/browser.sh \
   -v $PROJECT_PATH/.eslintrc.json:/opt/app/.eslintrc.json \
+  -v $PROJECT_PATH/.dockerignore:/opt/app/.dockerignore \
   -v $PROJECT_PATH/.eslintignore:/opt/app/.eslintignore \
   -v $PROJECT_PATH/.flowconfig:/opt/app/.flowconfig \
   -v $PROJECT_PATH/.babelrc:/opt/app/.babelrc \

@@ -68,40 +68,44 @@ python -c 'import os,sys,fcntl; flags = fcntl.fcntl(sys.stdout, fcntl.F_GETFL); 
 rm -rf package/*
 
 # Run a container while binding the appropriate volumes
-docker_run() {
+# docker_run() {
+#   echo "${bold}${cyan}" $1 "Starting${reset}"
+#   if [ $3 ];
+#     then
+#     docker run -it --rm \
+#       -v $HOST_PATH/src:/opt/app/src \
+#       -v $HOST_PATH/package:/opt/app/package \
+#       -v $HOST_PATH/browser.sh:/opt/app/browser.sh \
+#       -v $HOST_PATH/containers:/opt/app/containers \
+#       -v /var/run/docker.sock:/var/run/docker.sock \
+#       -e LOCAL_PROJECT_PATH=$HOST_PATH \
+#       --name figureone_dev \
+#       --entrypoint $2 \
+#       figureone_dev \
+#       -c $3 $4 $5 $6
+#     else
+#     docker run -it --rm \
+#       -v $HOST_PATH/package:/opt/app/package \
+#       -v $HOST_PATH/src:/opt/app/src \
+#       --name figureone_dev \
+#       --entrypoint $2 \
+#       figureone_dev
+#   fi
+title() {
   echo "${bold}${cyan}" $1 "Starting${reset}"
-  if [ $3 ];
-    then
-    docker run -it --rm \
-      -v $HOST_PATH/src:/opt/app/src \
-      -v $HOST_PATH/package:/opt/app/package \
-      -v $HOST_PATH/browser.sh:/opt/app/browser.sh \
-      -v $HOST_PATH/containers:/opt/app/containers \
-      -v /var/run/docker.sock:/var/run/docker.sock \
-      -e LOCAL_PROJECT_PATH=$HOST_PATH \
-      --name figureone_dev \
-      --entrypoint $2 \
-      figureone_dev \
-      -c $3 $4 $5 $6
-    else
-    docker run -it --rm \
-      -v $HOST_PATH/package:/opt/app/package \
-      -v $HOST_PATH/src:/opt/app/src \
-      --name figureone_dev \
-      --entrypoint $2 \
-      figureone_dev
-  fi
-
-  if [ $? != 0 ];
-    then
-    echo "${bold}${cyan}" $1 "${bold}${red}Failed${reset}"
-    echo
-    FAIL=1
-    else
-    echo "${bold}${cyan}" $1 "${bold}${green}Succeeded${reset}"
-    echo
-  fi
 }
+
+# check_build() {
+#   if [ $? != 0 ];
+#     then
+#     echo "${bold}${cyan}" $1 "${bold}${red}Failed${reset}"
+#     echo
+#     FAIL=1
+#     else
+#     echo "${bold}${cyan}" $1 "${bold}${green}Succeeded${reset}"
+#     echo
+#   fi
+# }
 
 
 # Check current build status and exit if in failure state
@@ -121,22 +125,33 @@ rm Dockerfile
 
 FAIL=0
 
-docker_run "Dev Packaging" npm run webpack
+# docker_run "Dev Packaging" npm run webpack -- --env.mode=dev
+title "Dev Packaging"
+npm run webpack
+check_status "Dev Build"
 
 if [ $TESTING = 1 ];
 then
   # Lint and type check
   echo "${bold}${cyan}============ Linting and Type Checking =============${reset}"
-  docker_run "JS Linting" npm run lint
+  title "JS Linting"
+  npm run lint
+  # docker_run "JS Linting" npm run lint
   # docker_run "CSS and SCSS Linting" npm run css
-  docker_run "Flow" npm run flow
+  # docker_run "Flow" npm run flow
+  title "Flow"
+  flow
   check_status "Linting and Type Checking"
 
   # Test
   echo "${bold}${cyan}===================== Testing ======================${reset}"
-  docker_run "JS Testing" npm run jest
+  # docker_run "JS Testing" npm run jest
+  title "JS Testing"
+  npm run jest
   check_status "Tests"
-  docker_run "Browser Tests" npm run browser
+  title "Browser Tests"
+  npm run browser
+  # docker_run "Browser Tests" npm run browser
   check_status "Browser Tests"
 else
   echo "${bold}${cyan}============ Linting and Type Checking =============${reset}"
@@ -150,8 +165,12 @@ fi
 # # Package
 # echo "${bold}${cyan}==================== Packaging =====================${reset}"
 # docker_run "Dev Packaging" npm run webpack
-docker_run "Dev Flow Packaging" npm run flowcopysource
-docker_run "Prod Packaging" npm run webpack -- --env.mode=prod --env.clean=0
+title "Dev Flow Packaging"
+npm run flowcopysource
+# docker_run "Dev Flow Packaging" npm run flowcopysource
+title "Prod Packaging"
+npm run webpack -- --env.mode=prod --env.clean=0
+# docker_run "Prod Packaging" npm run webpack -- --env.mode=prod --env.clean=0
 echo "${bold}${cyan}" moving package.json "${reset}"
 cat package.json | \
   sed '/devDependencies/,/}/d' | \
