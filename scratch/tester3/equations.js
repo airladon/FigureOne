@@ -108,7 +108,9 @@ function addEquation() {
           r01: { text: '0', color: color0 },
           r02: { text: '0', color: color0 },
           bx1: { text: 'x', color: color1 },
+          bx2: { text: 'x', color: color1 },
           b11: { text: '1', color: color1 },
+          b12: { text: '1', color: color1 },
           // _0_4: { color: color0 },
           // x_5: { color: color1 },
           // x_6: { color: color1 },
@@ -129,215 +131,82 @@ function addEquation() {
           x0y: { tBox: [{ sub: ['rx1', 'r01'] }, 'x0Box'] },
           x0y2: { tBox: [{ sub: ['rx2', 'r02'] }, 'x1Box'] },
           x1y: { tBox: [{ sub: ['bx1', 'b11'] }, 'x2Box'] },
+          x1y2: { tBox: [{ sub: ['bx2', 'b12'] }, 'x1Box'] },
+          x1OnV: frac(['x11'], 'vin1', 'v_1'),
+          xOnV: frac(['x_2'], 'vin1', 'v_1'),
+          x1OnVb: { scale: [frac('x1y2', 'vin1', 'v_1'), 0.8] },
+          // x1OnVb: { scale: [frac('x11', 'vin1', 'v_1'), 0.8] },
+          
           t11: { sub: ['t_1', '_1_2'] },
           t12: { sub: ['t_2', '_1_3'] },
-          yxt: ['y_1', brac(['x_y1', 'comma1', 't_y1'], 1)],
+          // yxt: ['y_1', brac(['x_y1', 'comma1', 't_y1'], 1)],
           yx0t: ['y_1', brac(['x0y', 'comma1', 't_y1'], 1)],
           yx0tt1: ['y_2', brac(['x0y2', 'comma2', 't_y2', 'min1', 't11'], 4)],
           yx1t: ['y_3', brac(['x1y', 'comma3', 't_y3'], 3)],
+          yxt: ['y_3', brac(['x_1', 'comma3', 't_y3'], 3)],
           ft: ['f1', brac('t', 2)],
           ftt1: ['f2', brac(['t_3', 'min2', 't12'], 5)],
-          // fxt: ['f1', { brac: ['lb2', ['x_2', 'comma2', 't_2'], 'rb2'] }],
-          // x12: { sub: ['x_2', '_1_2'] },
-          // ytx: ['y_1', b1(['x_1', 'comma1', 't_1'])],
-          // sinkx: ['sin', b2(['w1', 't_2', 'min', 'k', 'x_2'])],
-          // t1: { sub: ['t_2', '_1_1'] },
-          // t12: { sub: ['t_6', '_1_3'] },
-          // x11: { sub: ['x_2', '_1_2'] },
-          // x12: { sub: ['x_6', '_1_6'] },
-          // x13: { sub: ['x_7', '_1_7'] },
-          // x1OnC: frac('x11', 'c'),
-          // x1OnCb: frac('x13', 'c'),
-          // sX1OnC: scale('x1OnCb'),
-          // sX1ToXOnC: scale(frac(tann('x13', 'x_1', 'line2'), 'c')),
-          // x0: { sub: ['x_4', '_0_4'] },
-          // yx0t: ['y_0', b1(['x0', 'comma1', 't_1'])],
-          // yx0To1t: ['y_0', b1([ann('x0', 'x12', 'line1'), 'comma1', 't_1'])],
-          // yx1t: ['y_0', b1(['x12', 'comma1', 't_1'])],
-          // yx1ToXt: ['y_0', b1([tann('x12', 'x_0', 'line1'), 'comma1', 't_1'])],
-          // yxt: ['y_0', b1(['x_0', 'comma1', 't_1'])],
-          // sXOnC: scale(frac('x_1', 'c')),
-          // _2pifOnC: scale(frac(['_2pi2', ' ', 'f_2'], 'c')),
-          // wt: ['w1', 't_3'],
-          // tToTMinT1: ann('t_3', ['t_4', 'min', 't1'], 'line2'),
+          ftt1Sub: ['f2', brac(['t_3', 'min2', {
+            topComment: {
+              content: 't12',
+              comment: 'x1OnVb',
+              symbol: 'line1',
+              commentSpace: 0.2,
+              inSize: false,
+              scale: 0.8,
+            },
+          }], 5)],
+          ftx1: ['f2', brac(['t_3', 'min2', 'x1OnVb'], 5)],
+          ftx: ['f2', brac(['t_3', 'min2', 'xOnV'], 5)],
         },
         formDefaults: {
           alignment: { fixTo: 'equals' },
-          // duration: 1,
         },
         forms: {
           title: ['yxt', 'equals', 'sin', brac(['k', 'x', 'min1', 'w1', 't'], 2)],
-          t1: ['t11', 'equals', frac('x11', 'vin1', 'v_1')],
+          t1: ['t11', 'equals', 'x1OnV'],
           yx0t: ['yx0t', 'equals', 'ft'],
-          yx0tAndyx1t: {
-            content: {
-              lines: {
-                content: [
-                  { content: ['yx0t', 'equals', 'ft'], justify: 'equals' },
-                  { content: ['yx1t', 'equals2', 'yx0tt1'], justify: 'equals2' },
-                ],
-                justify: 'element',
-                space: 0.1,
-              },
-            },
-            alignment: { yAlign: -3 },
-          },
+          // yx0tAndyx1t: {
+          //   content: {
+          //     lines: {
+          //       content: [
+          //         { content: ['yx0t', 'equals', 'ft'], justify: 'equals' },
+          //         { content: ['yx1t', 'equals2', 'yx0tt1'], justify: 'equals2' },
+          //       ],
+          //       justify: 'element',
+          //       space: 0.1,
+          //     },
+          //   },
+          //   alignment: { yAlign: -2.9 },
+          // },
           yx0tAndft: {
             content: {
               lines: {
                 content: [
                   { content: ['yx0t', 'equals', 'ft'], justify: 'equals' },
-                  { content: ['yx1t', 'equals2', 'yx0tt1', 'equals3', 'ftt1'], justify: 'equals2' },
+                  { content: ['yx1t', 'equals2', 'ftt1'], justify: 'equals2' },
                 ],
                 justify: 'element',
                 space: 0.1,
               },
             },
-            alignment: { yAlign: -3 },
+            alignment: { yAlign: -2.9 },
           },
-          // 0: ['yxt', 'equals', 'fxt']
-          // 0: ['ytx', 'equals', 'sinkx'],
-        //   1: [],
-        //   2: ['t1', 'equals', 'x1OnC'],
-        //   3: ['yx0t', 'equals', ASin(['w1', 't_3'])],
-        //   4: ['yx0To1t', 'equals', ASin(['w1', 'tToTMinT1'])],
-        //   5: ['yx1t', 'equals', ASin(['w1', brac3(['t_4', 'min', 't1'])])],
-        //   6: [
-        //     'yx1t', 'equals', ASin(
-        //       {
-        //         bottomComment: [
-        //           ['w1', brac3(['t_4', 'min', 't1'])],
-        //           ['w2', 't_5', 'min2', 'w3', 't12'],
-        //           'brace',
-        //         ],
-        //       },
-        //     ),
-        //   ],
-        //   7: [
-        //     'yx1t', 'equals', ASin(
-        //       ['w2', 't_5', 'min2', 'w3', 't12'],
-        //     ),
-        //   ],
-        //   8: [
-        //     'yx1t', 'equals', ASin(
-        //       ['w2', 't_5', 'min2', 'w3', tann('t12', 'x1OnCb', 'line2')],
-        //     ),
-        //   ],
-        //   9: ['yx1t', 'equals', ASin(['w2', 't_5', 'min2', 'w3', 'sX1OnC'])],
-        //   10: ['yx1ToXt', 'equals', ASin(['w2', 't_5', 'min2', 'w3', 'sX1ToXOnC'])],
-        //   11: ['yxt', 'equals', ASin(['w2', 't_5', 'min2', 'w3', 'sXOnC'])],
-        //   12: ['yxt', 'equals', ASin(['w2', 't_5', 'min2', 'w3', 'sXOnC'])],
-        //   13: [
-        //     'yxt', 'equals',
-        //     ASin([
-        //       'w2',
-        //       tann('t_5', 'constant', 'line1'), 'min2', 'w3',
-        //       'sXOnC',
-        //     ]),
-        //   ],
-        //   '13a': [
-        //     'yxt', 'equals',
-        //     ASin([
-        //       'w2',
-        //       tann('t_5', 'constant', 'line1'), 'min2',
-        //       scale(frac(['w3', 'x_1'], 'c')),
-        //     ]),
-        //   ],
-        //   14: [
-        //     'yxt', 'equals',
-        //     ASin([
-        //       'w2',
-        //       tann('t_5', 'constant', 'line1'), 'min2',
-        //       scale(frac('w3', 'c')), ' ', 'x_1',
-        //     ]),
-        //   ],
-        //   15: [
-        //     'yxt', 'equals',
-        //     ASin([
-        //       'w2',
-        //       tann('t_5', 'constant', 'line1'), 'min2',
-        //       scale(frac(tann('w3', ['_2pi2', ' ', 'f_2'], 'line2'), 'c')), ' ', 'x_1',
-        //     ]),
-        //   ],
-        //   16: [
-        //     'yxt', 'equals',
-        //     ASin([
-        //       'w2',
-        //       tann('t_5', 'constant', 'line1'), 'min2',
-        //       scale(frac(['_2pi2', ' ', 'f_2'], 'c')), ' ', 'x_1',
-        //     ]),
-        //   ],
-        //   lambdacf: ['lambda', 'equals2', { frac: ['c_1', 'v2', 'f'] }],
-        //   clambdaf: {
-        //     content: ['c_1', 'equals2', 'lambda', ' ', 'f'],
-        //     translation: {
-        //       c_1: { style: 'curved', direction: 'up', mag: 0.8 },
-        //       lambda: { style: 'curved', direction: 'down', mag: 0.8 },
-        //     },
-        //   },
-        //   17: [
-        //     'yxt', 'equals',
-        //     ASin([
-        //       'w2',
-        //       tann('t_5', 'constant', 'line1'), 'min2',
-        //       scale(frac(['_2pi2', ' ', 'f_2'], ann('c', ['lambda', ' ', 'f'], 'line2'))), ' ', 'x_1',
-        //     ]),
-        //   ],
-        //   18: {
-        //     content: [
-        //       'yxt', 'equals',
-        //       ASin([
-        //         'w2',
-        //         tann('t_5', 'constant', 'line1'), 'min2',
-        //         scale(frac(['_2pi2', ' ', 'f_2'], ['lambda', ' ', 'f'])), ' ', 'x_1',
-        //       ]),
-        //     ],
-        //     translation: {
-        //       lambda: { style: 'linear' },
-        //     },
-        //   },
-        //   19: [
-        //     'yxt', 'equals',
-        //     ASin([
-        //       'w2',
-        //       tann('t_5', 'constant', 'line1'), 'min2',
-        //       scale(frac(['_2pi2', ' ', stk('f_2', 1)], ['lambda', ' ', stk('f', 2)])), ' ', 'x_1',
-        //     ]),
-        //   ],
-        //   20: [
-        //     'yxt', 'equals',
-        //     ASin([
-        //       'w2',
-        //       tann('t_5', 'constant', 'line1'), 'min2',
-        //       scale(frac('_2pi2', 'lambda')), ' ', 'x_1',
-        //     ]),
-        //   ],
-        //   21: [
-        //     'yxt', 'equals',
-        //     ASin([
-        //       'w2',
-        //       tann('t_5', 'constant', 'line1'), 'min2',
-        //       scale(ann(frac('_2pi2', 'lambda'), 'k', 'brace')), ' ', 'x_1',
-        //     ]),
-        //   ],
-        //   22: [
-        //     'yxt', 'equals',
-        //     ASin([
-        //       'w2',
-        //       tann('t_5', 'constant', 'line1'), 'min2', 'k', ' ', 'x_1',
-        //     ]),
-        //   ],
-        //   23: [
-        //     'yxt', 'equals',
-        //     ASin(['w2', 't_5', 'min2', 'k', ' ', 'x_1']),
-        //   ],
+          yx1tTemp: {
+            content: ['yx1t', 'equals2', 'ftt1'],
+            alignment: { fixTo: 'equals2' },
+          },
+          yx1t: ['yx1t', 'equals', 'ftt1'],
+          yx1tSub: ['yx1t', 'equals', 'ftt1Sub'],
+          yx1tx1: ['yx1t', 'equals', 'ftx1'],
+          yxtx: ['yxt', 'equals', 'ftx'],
         },
         // formSeries: ['0'],
         position: [0, 1],
       },
       mods: {
         scenarios: {
-          title: { position: [-0.8, 1.9], scale: 1.3 },
+          title: { position: [-0.4, 1.9], scale: 1.3 },
           default: { position: [-0.1, 1.9], scale: 1.3 },
         },
       },
@@ -358,11 +227,14 @@ function addEquation() {
           t1: ['t11', 'equals', frac('x11', 'vin1', 'v_1')],
           t11: ['t11', 'equals', frac('x11', 'vin1', 'v_1'), '_      (1)'],
         },
+        formDefaults: {
+          alignment: { fixTo: 'equals' },
+        },
       },
       mods: {
         scenarios: {
           side: { position: [2, 0.4], scale: 1 },
-          default: { position: [-0.5, 1.9], scale: 1.3 },
+          default: { position: [-0.1, 1.9], scale: 1.3 },
         },
       },
     },
