@@ -487,12 +487,6 @@ export type EQN_Scale = {
  * @property {boolean} [useFullBounds] make the bounds of this phrase equal to
  * the full bounds of the content even if `fullContentBounds=false` and the
  * brackets only surround a portion of the content (`false`)
- * @example
- * // For examples, two bracket symbols are defined as equation elements
- * eqn.addElements({
- *   lb: { symbol: 'bracket', side: 'left' }
- *   rb: { symbol: 'bracket', side: 'right' }
- * });
  *
  * @see To test examples, append them to the
  * <a href="#equation-boilerplate">boilerplate</a>
@@ -500,7 +494,6 @@ export type EQN_Scale = {
  * @example
  * // Simple
  * figure.add({
- *   name: 'eqn',
  *   method: 'equation',
  *   options: {
  *     elements: {
@@ -512,7 +505,6 @@ export type EQN_Scale = {
  *     },
  *   },
  * });
- * figure.elements._eqn.showForm('1');
  *
  * @example
  * // Some different bracket examples
@@ -547,7 +539,6 @@ export type EQN_Scale = {
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
- * eqn.showForm('1');
  */
 
 export type EQN_Bracket = {
@@ -586,8 +577,8 @@ export type EQN_Bracket = {
  *
  * ![](./apiassets/eqn_root.gif)
  *
- * Surround an equation phrase with a radical symbol and add a custom root if
- * needed
+ * Surround an equation phrase with a radical symbol {@link EQN_RadicalSymbol}
+ * and add a custom root if needed
  *
  * Options can be an object, or an array in the property order below.
  *
@@ -1778,7 +1769,6 @@ export type EQN_Superscript = {
  * @example
  * // Simple
  * figure.add({
- *   name: 'eqn',
  *   method: 'equation',
  *   options: {
  *     forms: {
@@ -1786,7 +1776,6 @@ export type EQN_Superscript = {
  *     },
  *   },
  * });
- * figure.elements._eqn.showForm('1'); *
  *
  * @example
  * // Example showing different super-sub script options
@@ -1813,7 +1802,6 @@ export type EQN_Superscript = {
  * const eqn = figure.elements._eqn;
  * eqn.onClick = () => eqn.nextForm();
  * eqn.setTouchable();
- * eqn.showForm('1');
  */
 export type EQN_SuperscriptSubscript = {
   content: TypeEquationPhrase;
@@ -2290,9 +2278,7 @@ export type EQN_Line = {
 }
 
 /**
- * Equation lines
- *
- * ![](./apiassets/eqn_lines.png)
+ * Equation lines.
  *
  * ![](./apiassets/eqn_lines_anim.gif)
  *
@@ -2895,7 +2881,11 @@ export type EQN_LineGlyphAlign = {
 }
 
 /**
- * A glyph can be a line between the content and an annotation
+ * A glyph can be a line {@link EQN_LineSymbol} between some content and an
+ * annotation.
+ *
+ * ![](./apiassets/eqn_lineglyph.png)
+ *
  * <pre>
  *
  *                         aaaaa
@@ -2920,7 +2910,12 @@ export type EQN_LineGlyphAlign = {
  *   method: 'equation',
  *   options: {
  *     elements: {
- *       line: { symbol: 'line', width: 0.005, dash: [0.01, 0.01] },
+ *       l: {
+ *         symbol: 'line',
+ *         width: 0.005,
+ *         dash: [0.005, 0.005],
+ *         arrow: { start: 'barb' },
+ *       },
  *     },
  *     forms: {
  *       0: {
@@ -2937,14 +2932,14 @@ export type EQN_LineGlyphAlign = {
  *           },
  *           glyphs: {
  *             line: {
- *               annotation: 0,
- *               symbol: 'line',
+ *               annotationIndex: 0,
+ *               symbol: 'l',
  *               content: {
  *                 xAlign: 'right',
  *                 yAlign: 'top',
  *                 space: 0.02,
  *               },
- *               comment: {
+ *               annotation: {
  *                 xAlign: 'left',
  *                 yAlign: 'bottom',
  *                 space: 0.02,

@@ -130,7 +130,7 @@ export type EQN_Symbol = {
  *   method: 'equation',
  *   options: {
  *     forms: {
- *       form1: { frac: ['a', 'v1_vinculum', { frac: ['c', 'v2_vinculum', 'b'] }] } * ,
+ *       form1: { frac: ['a', 'v1_vinculum', { frac: ['c', 'v2_vinculum', 'b'] }] },
  *       form2: { frac: [['a', 'ef'], 'v1', { frac: ['c', 'v2', 'd'] }] },
  *     },
  *   },
@@ -139,6 +139,7 @@ export type EQN_Symbol = {
  *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
  *   .start();
  *
+ * @example
  * // Define inline with customization
  * figure.add({
  *   method: 'equation',
@@ -1433,7 +1434,7 @@ export type EQN_BraceSymbol = {
  *   options: {
  *     forms: {
  *       form1: { bar: ['a', { bar: { side: 'top' } }, false, 0.05, 0.03] },
- *       form2: { bar: [['a', 'bc'], { bar: { side: 'top' } }, false, 0.05, 0.03] } * ,
+ *       form2: { bar: [['a', 'bc'], { bar: { side: 'top' } }, false, 0.05, 0.03] },
  *     },
  *   },
  * });
@@ -1560,27 +1561,94 @@ export type EQN_SquareBracketSymbol = {
 
 
 /**
- * A line symbol to be used in {@link EQN_Annotate} as a {@link EQN_LineGlyph},
- * or in {@link EQN_Comment}.
+ * A line symbol to be used in {@link EQN_Annotate} and {@link EQN_Comment} as
+ * an {@link EQN_LineGlyph} to draw a line between the content and an
+ * annotation.
+ *
+ * The line can be solid or dashed, and have arrows on either or both ends.
+ *
+ * ![](./apiassets/eqn_symbol_line1.png)
+ *
+ * ![](./apiassets/eqn_symbol_line2.png)
+ *
  * @property {number} [width] line width
  * @property {TypeDash} [dash] dash style of line
  * @property {OBJ_LineArrows} [arrow] arrow styles of line where start is
  * toward the content
- * @property {'static' | 'dynamic'} [draw] `'static'` updates vertices on
- * resize, `'static'` only changes scale transform (`dynamic`)
- * @property {number | 'first'} [staticHeight] used when `draw`=`static`.
- * `number` sets height of static symbol - `'first'` calculates and sets height
- * based on first use (`'first'`)
- * @property {number | 'first'} [staticWidth]
+ *
+ * @extends EQN_Symbol
+ *
+ * @example
+ * // Define in element
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       l: { symbol: 'line', arrow: 'barb', width: 0.005 },
+ *     },
+ *     forms: {
+ *       form1: { topComment: ['a', 'b', 'l', 0.2, 0.2] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Dashed line
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     elements: {
+ *       l: { symbol: 'line', dash: [0.01, 0.01], width: 0.005 },
+ *     },
+ *     forms: {
+ *       form1: { topComment: ['a', 'b', 'l', 0.2, 0.2] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline simple one use
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { topComment: ['a', 'b', 'line', 0.2, 0.2] },
+ *     },
+ *   },
+ * });
+ *
+ * @example
+ * // Define inline with reuse
+ * const [eqn] = figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { topComment: ['a', 'b', 'l1_line', 0.2, 0.2] },
+ *       form2: { topComment: ['a', 'b', 'l1', 0.2, 0.2] },
+ *     },
+ *   },
+ * });
+ * eqn.animations.new()
+ *   .goToForm({ delay: 1, target: 'form2', animate: 'move' })
+ *   .start();
+ *
+ * @example
+ * // Define inline with customization
+ * figure.add({
+ *   method: 'equation',
+ *   options: {
+ *     forms: {
+ *       form1: { topComment: ['a', 'b', { line: { arrow: 'barb' } }, 0.2, 0.2] },
+ *     },
+ *   },
+ * });
+ *
  */
 export type EQN_LineSymbol = {
   width?: number,
   dash?: TypeDash,
   arrow?: OBJ_LineArrows,
-  // draw?: 'dynamic' | 'static',
-  // staticHeight?: number | 'first',
-  // staticWidth?: number | 'first',
-}
+} & EQN_Symbol;
 
 export type TypeSymbolOptions = EQN_VinculumSymbol
   & EQN_VinculumSymbol

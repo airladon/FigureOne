@@ -277,6 +277,7 @@ toc:
   - EQN_EncompassGlyph
   - EQN_LeftRightGlyph
   - EQN_TopBottomGlyph
+  - EQN_LineGlyph
   - EQN_Glyphs
   - EQN_EquationGoToForm
   - EquationLabel

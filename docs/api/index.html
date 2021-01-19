@@ -34008,8 +34008,8 @@ eqn.showForm(<span class="hljs-string">'1'</span>);</pre>
 
   <p>Equation root</p>
 <p><img src="./apiassets/eqn_root.gif"></p>
-<p>Surround an equation phrase with a radical symbol and add a custom root if
-needed</p>
+<p>Surround an equation phrase with a radical symbol <a href="#eqn_radicalsymbol">EQN_RadicalSymbol</a>
+and add a custom root if needed</p>
 <p>Options can be an object, or an array in the property order below.</p>
 
   
@@ -41660,6 +41660,7 @@ figure.add({
   <p>Radical equation symbol used in <a href="#eqn_root">EQN_Root</a>.</p>
 <p>The radical symbol allows customization on how to draw the radical. Mostly
 it will not be needed, but for edge case equation layouts it may be useful.</p>
+<p><img src="./apiassets/eqn_symbol_radical.png"></p>
 <pre>
 
   height
@@ -41893,35 +41894,55 @@ based on first use (
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Typical</span>
-eqn.addElements({
-  <span class="hljs-attr">rad</span>: {
-    <span class="hljs-attr">symbol</span>: <span class="hljs-string">'radical'</span>,
-    <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define in element</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">r</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'radical'</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">root</span>: [<span class="hljs-string">'r'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>] },
+    },
   },
 });</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// All options</span>
- eqn.addElements({
-   <span class="hljs-attr">rad</span>: {
-     <span class="hljs-attr">symbol</span>: <span class="hljs-string">'radical'</span>,
-     <span class="hljs-attr">color</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>],
-     <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.01</span>,
-     <span class="hljs-attr">lineWidth2</span>: <span class="hljs-number">0.02</span>,
-     <span class="hljs-attr">width</span>: <span class="hljs-number">1.2</span>,
-     <span class="hljs-attr">height</span>: <span class="hljs-number">0.8</span>,
-     <span class="hljs-attr">startWidth</span>: <span class="hljs-number">0.04</span>,
-     <span class="hljs-attr">startHeight</span>: <span class="hljs-number">0.04</span>,
-     <span class="hljs-attr">tickHeight</span>: <span class="hljs-number">0.01</span>,
-     <span class="hljs-attr">tickWidth</span>: <span class="hljs-number">0.01</span>,
-     <span class="hljs-attr">downWidth</span>: <span class="hljs-number">0.01</span>,
-     <span class="hljs-attr">maxStartWidth</span>: <span class="hljs-number">0.03</span>,
-     <span class="hljs-attr">maxStartHeight</span>: <span class="hljs-number">0.03</span>,
-     <span class="hljs-attr">proportionalToHeight</span>: <span class="hljs-literal">false</span>,
-     <span class="hljs-attr">draw</span>: <span class="hljs-string">'dynamic'</span>,
-   },
- });</pre>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline simple one use</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">root</span>: [<span class="hljs-string">'radical'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>] },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline with reuse</span>
+<span class="hljs-keyword">const</span> [eqn] = figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">root</span>: [<span class="hljs-string">'r1_radical'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>] },
+      <span class="hljs-attr">form2</span>: { <span class="hljs-attr">root</span>: [<span class="hljs-string">'r1'</span>, [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>], <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>] },
+    },
+  },
+});
+eqn.animations.new()
+  .goToForm({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">target</span>: <span class="hljs-string">'form2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline with customization</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">root</span>: [{ <span class="hljs-attr">radical</span>: { <span class="hljs-attr">lineWidth</span>: <span class="hljs-number">0.005</span> } }, <span class="hljs-string">'a'</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0.05</span>] },
+    },
+  },
+});</pre>
     
   
 
@@ -41950,10 +41971,25 @@ eqn.addElements({
   </div>
   
 
-  <p>A line symbol to be used in <a href="#eqn_annotate">EQN_Annotate</a> as a <a href="#eqn_lineglyph">EQN_LineGlyph</a>,
-or in <a href="#eqn_comment">EQN_Comment</a>.</p>
+  <p>A line symbol to be used in <a href="#eqn_annotate">EQN_Annotate</a> and <a href="#eqn_comment">EQN_Comment</a> as
+an <a href="#eqn_lineglyph">EQN_LineGlyph</a> to draw a line between the content and an
+annotation.</p>
+<p>The line can be solid or dashed, and have arrows on either or both ends.</p>
+<p><img src="./apiassets/eqn_symbol_line1.png"></p>
+<p><img src="./apiassets/eqn_symbol_line2.png"></p>
 
   
+    <p style="display: none;">      Type:
+      any
+    </p>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#eqn_symbol">EQN_Symbol</a>
+      
+    </p>
   
 
   
@@ -41991,44 +42027,6 @@ toward the content
           
         </div>
       
-        <div class='space-bottom0'>
-          <span class='code bold'>draw</span> <code class='quiet'>((<code>"static"</code> | <code>"dynamic"</code>)?)</code>
-          : <code>'static'</code>
- updates vertices on
-resize, 
-<code>'static'</code>
- only changes scale transform (
-<code>dynamic</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>staticHeight</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
-          : used when 
-<code>draw</code>
-=
-<code>static</code>
-.
-
-<code>number</code>
- sets height of static symbol - 
-<code>'first'</code>
- calculates and sets height
-based on first use (
-<code>'first'</code>
-)
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>staticWidth</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <code>"first"</code>)?)</code>
-          
-          
-        </div>
-      
     </div>
   
 
@@ -42038,6 +42036,74 @@ based on first use (
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define in element</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">l</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'line'</span>, <span class="hljs-attr">arrow</span>: <span class="hljs-string">'barb'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'l'</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>] },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Dashed line</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">elements</span>: {
+      <span class="hljs-attr">l</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'line'</span>, <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>], <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span> },
+    },
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'l'</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>] },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline simple one use</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'line'</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>] },
+    },
+  },
+});</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline with reuse</span>
+<span class="hljs-keyword">const</span> [eqn] = figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'l1_line'</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>] },
+      <span class="hljs-attr">form2</span>: { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'l1'</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>] },
+    },
+  },
+});
+eqn.animations.new()
+  .goToForm({ <span class="hljs-attr">delay</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">target</span>: <span class="hljs-string">'form2'</span>, <span class="hljs-attr">animate</span>: <span class="hljs-string">'move'</span> })
+  .start();</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Define inline with customization</span>
+figure.add({
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
+  <span class="hljs-attr">options</span>: {
+    <span class="hljs-attr">forms</span>: {
+      <span class="hljs-attr">form1</span>: { <span class="hljs-attr">topComment</span>: [<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, { <span class="hljs-attr">line</span>: { <span class="hljs-attr">arrow</span>: <span class="hljs-string">'barb'</span> } }, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.2</span>] },
+    },
+  },
+});</pre>
+    
   
 
   
@@ -62428,7 +62494,9 @@ annotation.</p>
   </div>
   
 
-  <p>A glyph can be a line between the content and an annotation</p>
+  <p>A glyph can be a line <a href="#eqn_linesymbol">EQN_LineSymbol</a> between some content and an
+annotation.</p>
+<p><img src="./apiassets/eqn_lineglyph.png"></p>
 <pre>
 
                         aaaaa
@@ -62504,7 +62572,12 @@ annotation.</p>
   <span class="hljs-attr">method</span>: <span class="hljs-string">'equation'</span>,
   <span class="hljs-attr">options</span>: {
     <span class="hljs-attr">elements</span>: {
-      <span class="hljs-attr">line</span>: { <span class="hljs-attr">symbol</span>: <span class="hljs-string">'line'</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span>, <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.01</span>, <span class="hljs-number">0.01</span>] },
+      <span class="hljs-attr">l</span>: {
+        <span class="hljs-attr">symbol</span>: <span class="hljs-string">'line'</span>,
+        <span class="hljs-attr">width</span>: <span class="hljs-number">0.005</span>,
+        <span class="hljs-attr">dash</span>: [<span class="hljs-number">0.005</span>, <span class="hljs-number">0.005</span>],
+        <span class="hljs-attr">arrow</span>: { <span class="hljs-attr">start</span>: <span class="hljs-string">'barb'</span> },
+      },
     },
     <span class="hljs-attr">forms</span>: {
       <span class="hljs-number">0</span>: {
@@ -62521,14 +62594,14 @@ annotation.</p>
           },
           <span class="hljs-attr">glyphs</span>: {
             <span class="hljs-attr">line</span>: {
-              <span class="hljs-attr">annotation</span>: <span class="hljs-number">0</span>,
-              <span class="hljs-attr">symbol</span>: <span class="hljs-string">'line'</span>,
+              <span class="hljs-attr">annotationIndex</span>: <span class="hljs-number">0</span>,
+              <span class="hljs-attr">symbol</span>: <span class="hljs-string">'l'</span>,
               <span class="hljs-attr">content</span>: {
                 <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'right'</span>,
                 <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'top'</span>,
                 <span class="hljs-attr">space</span>: <span class="hljs-number">0.02</span>,
               },
-              <span class="hljs-attr">comment</span>: {
+              <span class="hljs-attr">annotation</span>: {
                 <span class="hljs-attr">xAlign</span>: <span class="hljs-string">'left'</span>,
                 <span class="hljs-attr">yAlign</span>: <span class="hljs-string">'bottom'</span>,
                 <span class="hljs-attr">space</span>: <span class="hljs-number">0.02</span>,
