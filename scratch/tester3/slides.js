@@ -19,29 +19,48 @@ function addSlides() {
       clearTimeout(timerId);
     }
   };
-  const disturb = (m) => {
-    layout.pulse(m, 0.6);
+  const disturb = (med) => {
+    if (Array.isArray(med)) {
+      med.forEach(m => layout.pulse(m, 0.6));
+    } else {
+      layout.pulse(med, 0.6);
+    }
     lastDisturbance = layout.time.now();
     // stopDisturbances();
     // startDisturbances();
   };
 
-  const startDisturbances = (m) => {
+  const startDisturbances = (m, timeTillNext = 10) => {
     if (timerId != null) {
       clearTimeout(timerId);
     }
     const now = layout.time.now();
-    if (now - lastDisturbance > 10) {
+    if (now - lastDisturbance > timeTillNext) {
       disturb(m);
     }
     timerId = setTimeout(() => {
-      startDisturbances(m);
+      startDisturbances(m, timeTillNext);
     }, 1000);
   };
 
   medium.custom.movePad.subscriptions.add('setTransform', () => {
     if (medium.custom.movePad.state.isBeingMoved) {
-      stopDisturbances();
+      // stopDisturbances();
+      lastDisturbance = layout.time.now();
+    }
+  });
+
+  medium1.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium1.custom.movePad.state.isBeingMoved) {
+      // stopDisturbances();
+      lastDisturbance = layout.time.now();
+    }
+  });
+
+  medium2.custom.movePad.subscriptions.add('setTransform', () => {
+    if (medium2.custom.movePad.state.isBeingMoved) {
+      // stopDisturbances();
+      lastDisturbance = layout.time.now();
     }
   });
 
@@ -159,40 +178,41 @@ function addSlides() {
     modifiers: {
       disturbance: {
         onClick: () => {
-          disturb(medium1);
-          disturb(medium2);
+          disturb([medium1, medium2]);
+          // disturb(medium2);
         },
         font: { color: color1 },
         touchBorder: 0.15,
       },
     },
     text: [
-      'The velocity of the |disturbance| changes how the disturbance is distirbuted',
-      'through space.',
+      'The velocity of the |disturbance| changes how the disturbance is',
+      'distirbuted through space.',
     ],
     form: null,
-    showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow', 'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel'],
+    showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow', 'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel', 'freezeTimeLabel'],
     scenario: 'default',
-    steadyState: () => {
-      console.log(figure.elements)
-      // console.log(figure.elements._velocityFast)
-      // figure.elements._velocityFast.showAll();
-    }
+    // steadyState: () => {
+    //   console.log(figure.elements)
+    //   // console.log(figure.elements._velocityFast)
+    //   // figure.elements._velocityFast.showAll();
+    // }
     // form: null,
     // enterStateCommon: () => {
     //   medium.custom.movePad.setMovable(true);
     //   medium.custom.balls.highlight(['ball0']);
     //   layout.unpause();
     // },
-    // steadyState: () => {
-    //   // disturb(medium);
-    //   // startDisturbances(medium);
-    // },
+    steadyState: () => {
+      disturb([medium1, medium2]);
+      startDisturbances([medium1, medium2], 5.5);
+      // startDisturbances(medium2);
+    },
     // // leaveState: () => stopDisturbances(),
-    // leaveStateCommon: () => {
-    //   // stopDisturbances();
-    //   medium.custom.balls.undim();
-    // },
+    leaveStateCommon: () => {
+      stopDisturbances();
+      medium.custom.balls.undim();
+    },
   });
 
   slides.push({
@@ -422,7 +442,7 @@ function addSlides() {
 
 
   nav.loadSlides(slides);
-  nav.goToSlide(3);
+  nav.goToSlide(2);
 }
 
 addSlides();

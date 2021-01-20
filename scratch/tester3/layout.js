@@ -46,13 +46,14 @@ function setupFigure() {
       button: true,
       line: { width: 0.005 },
       label: { text },
-      width: 0.35,
+      width: 0.3,
       height: 0.2,
       corner: { radius: 0.03, sides: 3 },
       position,
     },
     mods: {
       isTouchable: true,
+      touchBorder: [0.15, 0.05, 0.15, 0.15],
     },
   });
 
@@ -71,12 +72,13 @@ function setupFigure() {
 
   const label = (name, position, col, text) => ({
     name,
-    method: 'primitives.textLine',
+    method: 'primitives.textLines',
     options: {
       text,
       position,
-      font: { size: 0.13, color: col },
+      font: { size: 0.09, color: col },
       xAlign: 'center',
+      yAlign: 'middle',
     },
   });
 
@@ -84,8 +86,10 @@ function setupFigure() {
     button('pulseButton', [-1.7, 0.2], 'Pulse'),
     button('sineButton', [-1.3, 0.2], 'Sine'),
     button('resetButton', [-0.9, 0.2], 'Reset'),
-    button('freezeTimeButton', [-0.2, 0.2], 'Running'),
-    button('slowTimeButton', [0.2, 0.2], 'Normal'),
+    button('freezeTimeButton', [-1.6, 0.15], 'Off'),
+    label('freezeTimeLabel', [-1.95, 0.15], colorText, 'Freeze:'),
+    button('slowTimeButton', [-0.6, 0.15], 'Off'),
+    label('slowTimeLabel', [-1.05, 0.15], colorText, ['Slow Motion:']),
     // button('velocityButton', [1.3, 0.2], 'Normal'),
     // button('frequencyButton', [1.7, 0.2], '3s'),
     // label('disturbanceLabel', [-1.3, 0.4], 'Disturbance'),
@@ -98,13 +102,12 @@ function setupFigure() {
       'x',
       { text: '1', font: { size: 0.1 }, offset: [0, -0.04] },
     ]),
-    axisLabel('vFast', [2.1, 1.8], color1, [
+    axisLabel('vFast', [2.1, 1.77], color1, [
       'fast',
     ]),
-    axisLabel('vSlow', [2.1, 0.7], color1, [
+    axisLabel('vSlow', [2.1, 0.9], color1, [
       'slow',
     ]),
-    label('slowTimeLabel', [-1, 1], colorText, 'Slow Motion'),
   ]);
 
   const resetButton = figure.getElement('resetButton');
@@ -118,10 +121,10 @@ function setupFigure() {
 
   const pause = () => {
     time.pause();
-    freezeButton.setLabel('Frozen');
+    freezeButton.setLabel('On');
   };
   const unpause = () => {
-    freezeButton.setLabel('Running');
+    freezeButton.setLabel('Off');
     time.unpause();
   };
 
@@ -149,7 +152,7 @@ function setupFigure() {
     },
   });
 
-  const yAxis = (name, title, units, A) => ({
+  const yAxis = (name, title, units, A, yAxisTitleSide) => ({
     name: 'yAxis',
     method: 'collections.axis',
     options: {
@@ -171,7 +174,7 @@ function setupFigure() {
         },
         xAlign: 'left',
         rotation: 0,
-        offset: [0.05, A + 0.06],
+        offset: yAxisTitleSide ? [0, A - 0.06] : [0.05, A + 0.06],
       },
     },
   });
@@ -191,7 +194,7 @@ function setupFigure() {
     },
   });
 
-  const addMedium = (name, length, maxValue, A, defaultPosition) => {
+  const addMedium = (name, length, maxValue, A, defaultPosition, yAxisTitle) => {
     figure.add({
       name,
       method: 'collection',
@@ -200,7 +203,7 @@ function setupFigure() {
       },
       elements: [
         xAxis('xAxis', 'x', '', length, maxValue),
-        yAxis('yAxis', 'y', '', A),
+        yAxis('yAxis', 'y', '', A, yAxisTitle),
         {
           name: 'balls',
           method: 'collection',
@@ -214,7 +217,7 @@ function setupFigure() {
           options: {
             radius: 0.4,
             sides: 8,
-            color: [0, 0, 0, 0.5],
+            color: [0, 0, 0, 0],
           },
           mods: {
             // isMovable: true,
@@ -309,7 +312,7 @@ function setupFigure() {
       method: 'collection',
       elements: [
         xAxis('xAxis', 't', '', length, maxValue),
-        yAxis('yAxis', 'y', '', A),
+        yAxis('yAxis', 'y', '', A, true),
         {
           name: 'trace',
           method: 'polyline',
@@ -344,11 +347,11 @@ function setupFigure() {
   };
 
 
-  const medium1 = addMedium('medium1', 2.2, 5, 0.4, [-0, 1.7]);
-  const medium2 = addMedium('medium2', 2.2, 5, 0.4, [-0, 0.6]);
-  const medium = addMedium('medium', 4, 10, 0.6, [-2, 0.9]);
-  const timePlot1 = addTimePlot('timePlot1', 1.5, 5, medium1.custom.recording, 0.4, [-2, 1.7]);
-  const timePlot2 = addTimePlot('timePlot2', 1.5, 5, medium2.custom.recording, 0.4, [-2, 0.6]);
+  const medium = addMedium('medium', 4, 10, 0.6, [-2, 0.9], false);
+  const medium1 = addMedium('medium1', 2.2, 5, 0.35, [-0, 1.65], true);
+  const medium2 = addMedium('medium2', 2.2, 5, 0.35, [-0, 0.8], true);
+  const timePlot1 = addTimePlot('timePlot1', 1.5, 5, medium1.custom.recording, 0.35, [-2, 1.65]);
+  const timePlot2 = addTimePlot('timePlot2', 1.5, 5, medium2.custom.recording, 0.35, [-2, 0.8]);
   // medium1.setPosition(-0.3, 1.9);
   // medium2.setPosition(-0.3, 0.8);
   medium1.custom.movePad.setMovable();
@@ -457,9 +460,9 @@ function setupFigure() {
   slowTimeButton.onClick = () => {
     // unpause();
     if (time.getTimeSpeed() === 1) {
-      setTimeSpeed(0.3, 'Slow');
+      setTimeSpeed(0.3, 'On');
     } else {
-      setTimeSpeed(1, 'Normal');
+      setTimeSpeed(1, 'Off');
     }
   };
 
