@@ -1,4 +1,4 @@
-/* globals figure, layout, color0, color1 */
+/* globals figure, layout, color0, color1, colorText */
 
 function addSlides() {
   const nav = figure.getElement('nav');
@@ -12,6 +12,11 @@ function addSlides() {
   const freezeTimeButton = figure.getElement('freezeTimeButton');
   const ballx0 = medium.custom.balls.getElement('ball0');
   const ballx1 = medium.custom.balls.getElement('ball40');
+
+  eqn.getElement('x1Box1').onClick = () => ballx1.pulse({ scale: 4 });
+  eqn.getElement('x1Box2').onClick = () => ballx1.pulse({ scale: 4 });
+  eqn.getElement('x0Box').onClick = () => ballx0.pulse({ scale: 4 });
+  sideEqn.getElement('x1Box').onClick = () => ballx1.pulse({ scale: 4 });
 
   const slides = [];
 
@@ -68,49 +73,55 @@ function addSlides() {
     }
   });
 
+  const action = (text, onClick, touchBorder = 0, color = color1) => ({
+    text, font: { color }, onClick, touchBorder,
+  });
+  const actionMath = (text, onClick, touchBorder = 0, color = color1) => ({
+    text,
+    font: {
+      family: 'Times New Roman', style: 'italic', size: 0.17, color,
+    },
+    onClick,
+    touchBorder,
+  });
+  const pulse = (text, element, scale = 1.5, touchBorder = 0, xAlign = 'center', yAlign = 'middle', color = color1) => ({
+    text,
+    font: { color },
+    touchBorder,
+    onClick: () => figure.getElement(element).pulse({ scale, xAlign, yAlign }),
+  });
+  const highlight = text => ({
+    text, font: { style: 'italic' },
+  });
+  const math = (text, color = colorText) => ({
+    text,
+    font: {
+      family: 'Times New Roman', style: 'italic', size: 0.17, color,
+    },
+  });
+  const subMath = (text, color = colorText) => ({
+    text,
+    font: {
+      family: 'Times New Roman', style: 'italic', size: 0.09, color,
+    },
+    offset: [0, -0.03],
+  });
+
   const modifiersCommon = {
-    x: { font: { family: 'Times New Roman', style: 'italic', size: 0.17 } },
-    f: { font: { family: 'Times New Roman', style: 'italic', size: 0.17 } },
-    y: { font: { family: 'Times New Roman', style: 'italic', size: 0.17 } },
-    t: { font: { family: 'Times New Roman', style: 'italic', size: 0.17 } },
-    v: { font: { family: 'Times New Roman', style: 'italic', size: 0.17 } },
-    k: { font: { family: 'Times New Roman', style: 'italic', size: 0.17 } },
-    1: {
-      font: { family: 'Times New Roman', size: 0.09 },
-      offset: [0, -0.03],
-    },
-    0: {
-      font: { family: 'Times New Roman', size: 0.09 },
-      offset: [0, -0.03],
-    },
-    r0: {
-      text: '0',
-      font: { family: 'Times New Roman', size: 0.09, color: color0 },
-      offset: [0, -0.03],
-    },
-    b1: {
-      text: '1',
-      font: { family: 'Times New Roman', size: 0.09, color: color1 },
-      offset: [0, -0.03],
-    },
-    disturbance: {
-      onClick: () => disturb(medium),
-      font: { color: color1 },
-      touchBorder: 0.1,
-    },
-    'first particle': {
-      onClick: () => ballx0.pulse({ scale: 4 }),
-      font: { color: color0 },
-      touchBorder: 0.15,
-    },
-    x1: {
-      text: 'x',
-      font: {
-        family: 'Times New Roman', style: 'italic', size: 0.17, color: color1,
-      },
-      onClick: () => ballx1.pulse({ scale: 4 }),
-      touchBorder: 0.15,
-    },
+    x: math('x'),
+    f: math('f'),
+    y: math('y'),
+    t: math('t'),
+    v: math('v'),
+    k: math('k'),
+    1: subMath('1'),
+    0: subMath('1'),
+    r0: subMath('0', color0),
+    b1: subMath('1', color1),
+    disturbance: action('disturbance', () => disturb(medium), 0.03),
+    'first particle': action('first particle', () => medium.custom.ball0.pulse({ scale: 4 }), 0.15, color0),
+    x1: actionMath('x', () => ballx1.pulse({ scale: 4 }, 0.15, color1)),
+    x0: actionMath('x', () => ballx0.pulse({ scale: 4 }), 0.2, color0),
   };
   // ///////////////////////////////////////////////////////////////////////////
   /*
@@ -152,20 +163,16 @@ function addSlides() {
   slides.push({
     scenarioCommon: ['default'],
     modifiers: {
-      disturbance: {
-        onClick: () => disturb(medium),
-        font: { color: color1 },
-        touchBorder: 0.15,
-      },
+      string: action('string', () => medium.custom.balls.pulse({
+        translation: 0.02, angle: Math.PI / 2, min: -0.02, frequency: 3,
+      })),
+      particle: action('particle', () => medium.custom.ball0.pulse({ scale: 4 }), 0.15, color0),
+      medium: highlight('medium'),
+      disturbing: highlight('disturbing'),
     },
     text: [
-      'A wave is a |disturbance| that propagates through a medium or field',
-      'with some velocity.',
-      {
-        text: 'Touch the word |disturbance| or manually move the |first particle|.',
-        font: { size: 0.08 },
-        lineSpace: 0.2,
-      },
+      'This |string| of connected particles represent a |medium|. Moving or',
+      '|disturbing| one |particle| pulls its neighbor in the same direction.',
     ],
     form: null,
     enterStateCommon: () => {
@@ -175,26 +182,124 @@ function addSlides() {
     },
     steadyState: () => {
       layout.reset();
+      // startDisturbances(medium, 10, true);
+    },
+    // leaveState: () => stopDisturbances(),
+    leaveState: () => {
+      medium.custom.balls.undim();
+    },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    // modifiers: {
+    // },
+    text: [
+      'How quickly particles pull their neighbors defines how quickly the',
+      '|disturbance| propagates through the medium.',
+    ],
+    enterStateCommon: () => {
+      medium.custom.movePad.setMovable(true);
+      medium.custom.balls.highlight(['ball0']);
+      layout.unpause();
+    },
+    steadyState: () => {
+      layout.reset();
       startDisturbances(medium, 10, true);
     },
-    leaveState: () => stopDisturbances(),
+    // leaveState: () => stopDisturbances(),
     leaveStateCommon: () => {
       stopDisturbances();
       medium.custom.balls.undim();
     },
   });
 
-  const action = (text, onClick, touchBorder = 0, color = color1) => ({
-    text, font: { color }, onClick, touchBorder,
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      wave: highlight('wave'),
+      velocity: highlight('velocity'),
+    },
+    text: [
+      'A |wave| is a |disturbance| that propagates through a medium or field',
+      'with some |velocity|.',
+      // {
+      //   text: 'Touch the word |disturbance| or manually move the |first particle|.',
+      //   font: { size: 0.08 },
+      //   lineSpace: 0.2,
+      // },
+    ],
+    steadyStateCommon: () => {
+      startDisturbances(medium, 10, false);
+    },
   });
-  const pulse = (text, element, scale = 1.5, touchBorder = 0, xAlign = 'center', yAlign = 'middle', color = color1) => ({
-    text,
-    font: { color },
-    touchBorder,
-    onClick: () => figure.getElement(element).pulse({ scale, xAlign, yAlign }),
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      wave: highlight('wave'),
+    },
+    text: [
+      'The velocity of the |disturbance| changes how the disturbance is',
+      'distributed in space.',
+    ],
   });
-  const highlight = text => ({
-    text, font: { style: 'italic' },
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      'two mediums': highlight('two mediums'),
+      different: highlight('different'),
+    },
+    text: [
+      'To see this, let\'s look at |two mediums| where disturbances propagate',
+      'with |different| velocities.',
+    ],
+  });
+
+  slides.push({
+    showCommon: ['medium1', 'medium2', 'vFast', 'vSlow'],
+    steadyStateCommon: (index, from) => {
+      if (from === 'prev') {
+        layout.reset();
+        startDisturbances([medium1, medium2], 5.5, true);
+      } else {
+        startDisturbances([medium1, medium2], 5.5, false);
+      }
+    },
+  });
+
+  slides.push({
+    modifiers: {
+      'first particle': action('first particle', () => {
+        medium1.custom.ball0.pulse({ scale: 4 });
+        medium2.custom.ball0.pulse({ scale: 4 });
+      }, 0.03, color0),
+      disturbance: action('disturbance', () => disturb([medium1, medium2]), 0.03),
+    },
+    text: [
+      'To help compare, we can plot the disturbance of the |first particle|',
+      'over time to see both mediums are being |disturbed| in the same way.',
+    ],
+    steadyStateCommon: () => {
+      startDisturbances([medium1, medium2], 5.5, false);
+    },
+  });
+
+  slides.push({
+    showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow'],
+    steadyStateCommon: (index, from) => {
+      if (from === 'prev') {
+        layout.reset();
+        startDisturbances([medium1, medium2], 5.5, true);
+      } else {
+        startDisturbances([medium1, medium2], 5.5, false);
+      }
+    },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
@@ -208,33 +313,33 @@ function addSlides() {
   ..........###....########.########..#######...######..####....##.......##...
   */
   // ///////////////////////////////////////////////////////////////////////////
-  slides.push({
-    scenarioCommon: ['default'],
-    modifiers: {
-      disturbance: action('disturbance', () => disturb([medium1, medium2]), 0.15),
-    },
-    text: [
-      'The velocity of the |disturbance| changes how the disturbance is',
-      'distirbuted in space.',
-    ],
-    form: null,
-    showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow'],
-    scenario: 'default',
-    steadyState: (index, from) => {
-      if (from === 'prev') {
-        layout.reset();
-        startDisturbances([medium1, medium2], 5.5, true);
-      } else {
-        startDisturbances([medium1, medium2], 5.5, false);
-      }
-    },
-    leaveStateCommon: () => {
-      stopDisturbances();
-      medium.custom.balls.undim();
-      layout.normalMotion();
-      layout.unpause();
-    },
-  });
+  // slides.push({
+  //   scenarioCommon: ['default'],
+  //   modifiers: {
+  //     disturbance: action('disturbance', () => disturb([medium1, medium2]), 0.15),
+  //   },
+  //   text: [
+  //     'The velocity of the |disturbance| changes how the disturbance is',
+  //     'distributed in space.',
+  //   ],
+  //   form: null,
+  //   showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow'],
+  //   scenario: 'default',
+  //   steadyState: (index, from) => {
+  //     if (from === 'prev') {
+  //       layout.reset();
+  //       startDisturbances([medium1, medium2], 5.5, true);
+  //     } else {
+  //       startDisturbances([medium1, medium2], 5.5, false);
+  //     }
+  //   },
+  //   leaveStateCommon: () => {
+  //     stopDisturbances();
+  //     medium.custom.balls.undim();
+  //     layout.normalMotion();
+  //     layout.unpause();
+  //   },
+  // });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
@@ -262,9 +367,28 @@ function addSlides() {
     ],
     showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow', 'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel', 'freezeTimeLabel'],
     scenario: 'default',
-    steadyState: () => {
+    steadyStateCommon: () => {
       startDisturbances([medium1, medium2], 5.5, false);
     },
+    leaveStateCommon: () => {
+      stopDisturbances();
+      medium.custom.balls.undim();
+      layout.normalMotion();
+      layout.unpause();
+    },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      faster: pulse('faster', 'vFast', 2.5, 0.05, 'right'),
+      disturbance: action('disturbance', () => disturb([medium1, medium2]), 0.03),
+    },
+    text: [
+      'For a |faster| velocity, when the |disturbance| finishes the start of the',
+      'disturbance has travelled |further| from the source.',
+    ],
   });
 
   // ///////////////////////////////////////////////////////////////////////////
@@ -276,10 +400,10 @@ function addSlides() {
       'spread out': highlight('spread out'),
     },
     text: [
-      'And so we see, for |faster| velocities, the |disturbance| is more  ',
-      '|spread out| in space.',
+      'As such, for |faster| velocities, the |disturbance| is wider, or',
+      'more |spread out| in space.',
     ],
-    steadyState: (index, from) => {
+    steadyStateCommon: (index, from) => {
       if (from === 'prev') {
         startDisturbances([medium1, medium2], 5.5, false);
       } else {
@@ -307,7 +431,7 @@ function addSlides() {
       position: action('position', () => ballx1.pulse({ scale: 4 })),
     },
     text: [
-      'The velocity also determines |when| the |disturbance| will reach some |position|.',
+      'The velocity also determines |when| the |disturbance| will reach a |position|.',
     ],
     showCommon: ['medium'],
     enterStateCommon: () => {
@@ -315,7 +439,7 @@ function addSlides() {
       medium.custom.movePad.setMovable(true);
       layout.unpause();
     },
-    steadyState: (index, from) => {
+    steadyStateCommon: (index, from) => {
       if (from === 'prev') {
         layout.reset();
         startDisturbances(medium, 10, true);
@@ -337,7 +461,7 @@ function addSlides() {
       'to travel distance |x1||b1| can be calculated.',
     ],
     showCommon: ['medium', 'x1'],
-    steadyState: () => {
+    steadyStateCommon: () => {
       startDisturbances(medium, 10, false);
     },
   });
@@ -345,9 +469,6 @@ function addSlides() {
   slides.push({
     fromForm: null,
     form: 't1',
-    steadyState: () => {
-      startDisturbances(medium, 10, false);
-    },
   });
 
   slides.push({
@@ -360,10 +481,10 @@ function addSlides() {
         .whenFinished(done)
         .start();
     },
-    steadyState: () => {
+    steadyStateCommon: () => {
+      startDisturbances(medium, 10, false);
       sideEqn.showForm('t11');
       sideEqn.setScenario('side');
-      startDisturbances(medium, 10, false);
     },
   });
 
@@ -379,182 +500,94 @@ function addSlides() {
   */
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
-    modifiers: {
-      x0: {
-        text: 'x',
-        font: {
-          family: 'Times New Roman', style: 'italic', size: 0.17, color: color0,
-        },
-        onClick: () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 }),
-        touchBorder: 0.2,
-      },
-    },
-    text: [
-      'Now, let\'s say we know the |disturbance| as a function of time at |x0||r0|.',
-      '',
-    ],
-    show: ['x0'],
-    steadyState: () => {
-      eqn.getElement('x0Box').onClick = () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 });
-      startDisturbances(medium, 10, false);
+    text: 'Now, let\'s say we know the |disturbance| as a function of time at |x0||r0|.',
+    showCommon: ['medium', 'x0', 'x1'],
+    enterStateCommon: () => {
       sideEqn.showForm('t11');
       sideEqn.setScenario('side');
+      medium.custom.balls.highlight(['ball0', 'ball40']);
+    },
+    steadyStateCommon: () => {
+      startDisturbances(medium, 10, false);
     },
   });
+
   slides.push({
     fromForm: null,
     form: 'yx0t',
-    showCommon: ['medium', 'x0', 'x1'],
-    enterState: () => {
-      sideEqn.showForm('t11');
-      sideEqn.setScenario('side');
-    },
-    steadyState: () => {
-      eqn.getElement('x0Box').onClick = () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 });
-      eqn.getElement('x2Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
-      startDisturbances(medium, 10, false);
-    },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
-    modifiers: {
-      x0: {
-        text: 'x',
-        font: {
-          family: 'Times New Roman', style: 'italic', size: 0.17, color: color0,
-        },
-        onClick: () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 }),
-        touchBorder: 0.15,
-      },
-    },
-    text: [
-      'Then the |disturbance| at |x1||b1| is the disturbance at |x0||r0| from time |t||1| ago.',
-    ],
-    // show: ['x0', 'x1'],
-    enterStateCommon: () => {
-      sideEqn.showForm('t11');
-      sideEqn.setScenario('side');
-      medium.custom.balls.highlight(['ball0', 'ball40']);
-      eqn.getElement('x0Box').onClick = () => medium.custom.balls.getElement('ball0').pulse({ scale: 4 });
-      eqn.getElement('x2Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
-    },
-    steadyState: () => {
-      startDisturbances(medium, 10, false);
-    },
+    text: 'Then the |disturbance| at |x1||b1| is the disturbance at |x0||r0| from time |t||1| ago.',
   });
 
   slides.push({
-    // show: ['x0', 'x1'],
     fromForm: 'yx0t',
     form: 'yx0tAndft',
-    steadyState: () => {
-      startDisturbances(medium, 10, false);
-    },
   });
 
   slides.push({
-    // show: ['x0', 'x1'],
     fromForm: 'yx0tAndft',
     form: 'yx1tTemp',
-    steadyState: () => {
-      startDisturbances(medium, 10, false);
-    },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     modifiers: {
-      one: {
-        text: '(1)',
-        font: {
-          family: 'Times New Roman', size: 0.17,
-        },
-        onClick: () => sideEqn.pulse({ xAlign: 'right' }),
-        touchBorder: 0.15,
-      },
+      one: action('(1)', () => sideEqn.pulse({ xAlign: 'right' }), 0.15),
     },
-    text: [
-      'We can now substitute in equation |one|.',
-    ],
+    text: 'We can now substitute in equation |one|.',
     form: 'yx1t',
-    // show: ['x0', 'x1'],
-    enterStateCommon: () => {
-      sideEqn.showForm('t11');
-      sideEqn.setScenario('side');
-      medium.custom.balls.highlight(['ball0', 'ball40']);
-      eqn.getElement('x2Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
-      eqn.getElement('x1Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
-    },
-    steadyState: () => {
-      startDisturbances(medium, 10, false);
-    },
   });
 
   slides.push({
-    // show: ['x0', 'x1'],
     fromForm: 'yx1t',
     form: 'yx1tSub',
-    steadyState: () => {
-      startDisturbances(medium, 10, false);
-    },
   });
 
   slides.push({
-    // show: ['x0', 'x1'],
     fromForm: 'yx1tSub',
     form: 'yx1tx1',
-    steadyState: () => {
-      startDisturbances(medium, 10, false);
-    },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
-    modifiers: {
-      one: {
-        text: '(1)',
-        font: {
-          family: 'Times New Roman', size: 0.17,
-        },
-        onClick: () => sideEqn.pulse({ xAlign: 'right' }),
-        touchBorder: 0.15,
-      },
-    },
     text: [
       '|x1||b1| can be any point, and so we can generalize it by simply calling it |x|.',
     ],
     form: 'yx1tx1HiddenX',
     // show: ['x0', 'x1'],
-    enterStateCommon: () => {
-      // sideEqn.showForm('t11');
-      // sideEqn.setScenario('side');
-      medium.custom.balls.highlight(['ball0', 'ball40']);
-      eqn.getElement('x2Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
-      eqn.getElement('x1Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
-    },
-    steadyState: () => {
-      startDisturbances(medium, 10, false);
-    },
+    // enterStateCommon: () => {
+    //   // sideEqn.showForm('t11');
+    //   // sideEqn.setScenario('side');
+    //   medium.custom.balls.highlight(['ball0', 'ball40']);
+    //   // eqn.getElement('x2Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
+    //   // eqn.getElement('x1Box').onClick = () => medium.custom.balls.getElement('ball40').pulse({ scale: 4 });
+    // },
+    // steadyState: () => {
+    //   startDisturbances(medium, 10, false);
+    // },
   });
 
   slides.push({
+    modifiers: {
+      x1: actionMath('x', () => {}, 0, colorText),
+      b1: subMath('1'),
+    },
     showCommon: ['medium', 'x0'],
     fromForm: 'yx1tx1HiddenX',
     form: 'yxtx',
     enterStateCommon: () => {
       medium.custom.balls.highlight(['ball0']);
     },
-    steadyState: () => {
-      startDisturbances(medium, 10, false);
-    },
   });
 
   nav.loadSlides(slides);
-  nav.goToSlide(17);
+  nav.goToSlide(15);
 }
 
 addSlides();

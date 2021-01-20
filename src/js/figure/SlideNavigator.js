@@ -151,7 +151,7 @@ export type TypeSlideTransitionCallback = (() => void, number, TypeSlideFrom) =>
  * `modifiers` define the text for the text element associated with the
  * SlideNavigator
  * @property {OBJ_TextModifiersDefinition} [modifiersCommon] common property
- * @property {OBJ_TextModifiersDefinition} [modifiers] will
+ * @property {OBJ_TextModifiersDefinition} [modifiers] common property - will
  * overwrite any keys from `modifiersCommon` with the same name
  * @property {TypeElementPath} [showCommon] common property
  * @property {TypeElementPath} [show]
