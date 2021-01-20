@@ -264,6 +264,7 @@ function setupFigure() {
       c: 1,
       A,
       balls,
+      ball0: balls.getElement('ball0'),
       recording: new Recorder(maxValue / minVelocity),
       update: (deltaTime) => {
         const { y } = movePad.transform.order[2];

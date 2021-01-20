@@ -171,58 +171,87 @@ function addSlides() {
     },
   });
 
+  const action = (text, onClick, touchBorder = 0, color = color1) => ({
+    text, font: { color }, onClick, touchBorder,
+  });
+  const pulse = (text, element, scale = 1.5, touchBorder = 0, xAlign = 'center', yAlign = 'middle', color = color1) => ({
+    text,
+    font: { color },
+    touchBorder,
+    onClick: () => figure.getElement(element).pulse({ scale, xAlign, yAlign }),
+  });
+  const highlight = (text) => ({
+    text, font: { style: 'italic' },
+  });
+
   // ///////////////////////////////////////////////////////////////////////////
   // ///////////////////////////////////////////////////////////////////////////
   slides.push({
     scenarioCommon: ['default'],
     modifiers: {
-      disturbance: {
-        onClick: () => {
-          disturb([medium1, medium2]);
-          // disturb(medium2);
-        },
-        font: { color: color1 },
-        touchBorder: 0.15,
-      },
+      disturbance: action('disturbance', () => disturb([medium1, medium2]), 0.15),
     },
     text: [
       'The velocity of the |disturbance| changes how the disturbance is',
-      'distirbuted through space.',
+      'distirbuted in space.',
     ],
     form: null,
-    showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow', 'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel', 'freezeTimeLabel'],
+    showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow'],
     scenario: 'default',
-    // steadyState: () => {
-    //   console.log(figure.elements)
-    //   // console.log(figure.elements._velocityFast)
-    //   // figure.elements._velocityFast.showAll();
-    // }
-    // form: null,
-    // enterStateCommon: () => {
-    //   medium.custom.movePad.setMovable(true);
-    //   medium.custom.balls.highlight(['ball0']);
-    //   layout.unpause();
-    // },
     steadyState: () => {
       disturb([medium1, medium2]);
       startDisturbances([medium1, medium2], 5.5);
-      // startDisturbances(medium2);
     },
-    // // leaveState: () => stopDisturbances(),
     leaveStateCommon: () => {
       stopDisturbances();
       medium.custom.balls.undim();
     },
   });
 
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
   slides.push({
-    showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow', 'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel'],
+    modifiers: {
+      fast: pulse('fast', 'vFast', 2.5, 0.05, 'right'),
+      slow: pulse('slow', 'vSlow', 2.5, 0.05, 'right'),
+      slowing: pulse('slowing', 'slowTimeButton', 1.8, 0.05, 0.3, 0.3),
+      freezing: pulse('freezing', 'freezeTimeButton', 1.8, 0.05, 0.3, 0.3),
+      Pulse: action('Pulse', () => disturb([medium1, medium2]), 0.03),
+      particle: action('particle', () => {
+        medium1.custom.ball0.pulse({ scale: 4 });
+        medium2.custom.ball0.pulse({ scale: 4 });
+      }, 0.03, color0),
+    },
+    text: [
+      '|Pulse| a disturbance, or drag the first |particle|. Compare |fast| and',
+      '|slow| disturbance velocities while |slowing| or |freezing| time.',
+    ],
+    showCommon: ['medium1', 'medium2', 'timePlot1', 'timePlot2', 'vFast', 'vSlow', 'freezeTimeButton', 'slowTimeButton', 'slowTimeLabel', 'freezeTimeLabel'],
     scenario: 'default',
     steadyState: () => {
-      console.log(figure.elements)
-      // console.log(figure.elements._velocityFast)
-      // figure.elements._velocityFast.showAll();
-    }
+      startDisturbances([medium1, medium2], 5.5);
+    },
+    leaveStateCommon: () => {
+      stopDisturbances();
+      medium.custom.balls.undim();
+    },
+  });
+
+  // ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
+  slides.push({
+    modifiers: {
+      faster: pulse('faster', 'vFast', 2.5, 0.05, 'right'),
+      disturbance: action('disturbance', () => disturb([medium1, medium2]), 0.03),
+      'spread out': highlight('spread out'),
+    },
+    text: [
+      'And so we see, for |faster| velocities, the |disturbance| is more  ',
+      '|spread out| in space.',
+    ],
+    steadyState: () => {
+      startDisturbances([medium1, medium2], 5.5);
+    },
   });
 
   // ///////////////////////////////////////////////////////////////////////////
